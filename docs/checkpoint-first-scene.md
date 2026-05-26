@@ -161,7 +161,7 @@ Results:
 - `pnpm test`: pass, 13 tests
 - `pnpm exec tsc --noEmit`: pass
 - `pnpm dev`: pass, served `http://127.0.0.1:5173/` with generated tutorial status
-- `pnpm test:replay`: pass, uploaded Replay recording
+- `pnpm test:review`: pass, writes local video/trace artifacts
 - Generated JSON safety scan: pass
 
 ## Known Limitations

@@ -352,7 +352,7 @@ async function readTutorialStatus(
       ? "Ignored local ROM output was compiled and boot-verified in an emulator."
       : "ROM compilation and emulator testing require explicit permission and local-only proof.",
     path: "tutorial-run-proof.json",
-    actual: runProof?.replayUrl ?? "missing"
+    actual: runProof?.reviewUrl ?? "local proof only"
   });
 
   return TutorialStatusSchema.parse({
@@ -401,7 +401,7 @@ type TutorialRunProof = {
   compileSucceeded: boolean;
   bootVerified: boolean;
   emulator: string;
-  replayUrl?: string;
+  reviewUrl?: string;
 };
 
 async function readScripts(
@@ -654,7 +654,7 @@ async function readTutorialRunProof(projectAbs: string): Promise<TutorialRunProo
     compileSucceeded: parsed.compileSucceeded,
     bootVerified: parsed.bootVerified,
     emulator: typeof parsed.emulator === "string" ? parsed.emulator : "unknown",
-    ...(typeof parsed.replayUrl === "string" ? { replayUrl: parsed.replayUrl } : {})
+    ...(typeof parsed.reviewUrl === "string" ? { reviewUrl: parsed.reviewUrl } : {})
   };
 }
 

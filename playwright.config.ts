@@ -1,14 +1,10 @@
-import { defineConfig } from "@playwright/test";
-import { devices as replayDevices, replayReporter } from "@replayio/playwright";
+import { defineConfig, devices } from "@playwright/test";
 
 export default defineConfig({
-  testDir: "tests/replay",
+  testDir: "tests/review",
   timeout: 30_000,
   reporter: [
-    replayReporter({
-      apiKey: process.env.REPLAY_API_KEY,
-      upload: Boolean(process.env.REPLAY_API_KEY)
-    }),
+    ["html", { outputFolder: "playwright-report", open: "never" }],
     ["line"]
   ],
   webServer: {
@@ -19,11 +15,14 @@ export default defineConfig({
   },
   projects: [
     {
-      name: "replay-chromium",
+      name: "review-chromium",
       use: {
-        ...replayDevices["Replay Chromium"],
+        ...devices["Desktop Chrome"],
         baseURL: "http://127.0.0.1:5173/",
-        viewport: { width: 1000, height: 760 }
+        viewport: { width: 1000, height: 760 },
+        trace: "on",
+        video: "on",
+        screenshot: "on"
       }
     }
   ]

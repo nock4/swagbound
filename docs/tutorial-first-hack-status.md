@@ -24,8 +24,7 @@ and outputs remain ignored local files.
 - Generated tutorial audit status in `tutorial-status.json`.
 - Ignored local ROM output compiled successfully.
 - Compiled ROM boot-verified in Snes9x.
-- Replay.io recording captured the playable Phaser verification path:
-  `https://app.replay.io/recording/cad40929-4a5a-41ed-89f0-3c38caf27546`
+- Local Playwright video/trace review verifies the playable Phaser path.
 
 ## Generated Contract
 
@@ -92,8 +91,8 @@ Passing evidence:
 - Ignored local ROM output compiled successfully after expanding an ignored
   working base ROM copy.
 - Compiled ROM booted in Snes9x.
-- Replay.io captured a deterministic browser verification of the generated data
-  and imported dialogue playback.
+- Playwright captures a deterministic local browser verification of the
+  generated data and imported dialogue playback.
 
 ## Fixture-Only Proof
 
@@ -135,7 +134,7 @@ pnpm validate
 pnpm test
 pnpm exec tsc --noEmit
 pnpm dev
-pnpm test:replay
+pnpm test:review
 ```
 
 Results:
@@ -146,7 +145,7 @@ Results:
 - `pnpm test`: pass, 13 tests.
 - `pnpm exec tsc --noEmit`: pass.
 - `pnpm dev`: pass, served `http://127.0.0.1:5173/` with generated tutorial status.
-- `pnpm test:replay`: pass, uploaded Replay recording.
+- `pnpm test:review`: pass, writes local video/trace artifacts.
 
 Generated JSON safety scan:
 
@@ -164,7 +163,7 @@ Tracked source safety scan:
 Next safest milestone:
 
 1. Commit and push only tracked source/docs/test changes.
-2. Keep ROMs, generated JSON, local CoilSnake fixture files, and Replay/browser
+2. Keep ROMs, generated JSON, local CoilSnake fixture files, and review/browser
    caches ignored.
 3. Continue with real map/NPC metadata discovery only after this checkpoint is
    reviewed.

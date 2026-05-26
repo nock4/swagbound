@@ -267,7 +267,7 @@ describe("tutorial status", () => {
         compileSucceeded: true,
         bootVerified: true,
         emulator: "Snes9x",
-        replayUrl: "https://app.replay.io/recording/example"
+        reviewUrl: "https://github.com/example/repo/pull/1#issuecomment-1"
       }), "utf8");
       await writeFile(path.join(project, "npc_config_table.yml"), [
         "744:",
@@ -286,7 +286,7 @@ describe("tutorial status", () => {
 
       expect(compileStep).toMatchObject({
         status: "pass",
-        actual: "https://app.replay.io/recording/example"
+        actual: "https://github.com/example/repo/pull/1#issuecomment-1"
       });
       expect(result.tutorialStatus.counts.blocked).toBe(0);
     } finally {

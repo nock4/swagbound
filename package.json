@@ -7,12 +7,12 @@
     "convert": "pnpm --filter @eb/converter convert",
     "validate": "pnpm --filter @eb/converter validate",
     "test": "vitest run",
-    "pretest:replay": "pnpm convert && pnpm validate",
-    "test:replay": "playwright test --project replay-chromium"
+    "pretest:review": "pnpm convert && pnpm validate",
+    "test:review": "playwright test --project review-chromium",
+    "show:review": "playwright show-report playwright-report"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
-    "@replayio/playwright": "^5.0.3",
     "@types/node": "^20.14.11",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",
