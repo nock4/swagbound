@@ -1,0 +1,35 @@
+{
+  "schemaVersion": "0.1.0",
+  "generatedAt": "2026-05-26T00:47:11.720Z",
+  "sourceProject": {
+    "path": "external/coilsnake-project",
+    "exists": false,
+    "hasProjectSnake": false,
+    "detectedFolders": [],
+    "tutorialFixtureHints": {
+      "hasRobotCcs": false,
+      "hasHelloWorldLabel": false,
+      "hasRobotHelloWorldContent": false,
+      "hasSpriteGroup005": false,
+      "npcReferencesRobotHelloWorld": false
+    }
+  },
+  "generatedFiles": [
+    "manifest.json",
+    "scripts.json",
+    "sprite-groups.json",
+    "validation-report.json"
+  ],
+  "issues": [
+    {
+      "severity": "warning",
+      "code": "missing_project",
+      "message": "CoilSnake project path is missing.",
+      "path": "external/coilsnake-project"
+    }
+  ],
+  "counts": {
+    "warnings": 1,
+    "errors": 0
+  }
+}

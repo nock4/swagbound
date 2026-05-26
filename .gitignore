@@ -1,0 +1,37 @@
+# Local source checkouts
+external/coilsnake-project/
+CoilSnake-master/
+phaser-4.1.0/
+
+# Generated game assets
+apps/game/public/generated/*
+!apps/game/public/generated/.gitkeep
+
+# Node workspace output
+node_modules/
+dist/
+coverage/
+.vite/
+*.tsbuildinfo
+
+# Local environment and Codex artifacts
+.DS_Store
+.env.local
+.env.*.local
+.codex/
+.playwright-cli/
+
+# ROMs and emulator state
+*.smc
+*.sfc
+*.nes
+*.gb
+*.gbc
+*.gba
+*.rom
+*.bin
+*.sav
+*.srm
+*.state
+*.state*
+*.zst
