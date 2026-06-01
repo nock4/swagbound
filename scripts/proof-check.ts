@@ -52,6 +52,18 @@ type ProofStatus = {
   emulatorProofComplete: false;
   recommendedCommand: string;
   nextAction: string;
+  runtimeState: {
+    snes9xSram: RuntimeFileState;
+    aresRam: RuntimeFileState;
+    saveBytesMatch: boolean | "unknown";
+  };
+};
+
+type RuntimeFileState = {
+  path: string;
+  exists: boolean;
+  bytes?: number;
+  sha256?: string;
 };
 
 const projectRoot = process.cwd();
@@ -64,6 +76,8 @@ const placementPresets: Record<string, NpcPlacement> = {
   "roadblock-707": { line: 0, outer: "27", inner: "31", x: "168", y: "200" }
 };
 const forbiddenProofArtifactPattern = /EarthBound \(USA\)|first-hack|\.sfc|\/Users\//;
+const snes9xSramPath = path.join(process.env.HOME ?? "", "Library", "Application Support", "Snes9x", "SRAMs", "first-hack.srm");
+const aresRamPath = path.join(projectRoot, ".codex", "rom-output", "first-hack.ram");
 
 function add(name: string, ok: boolean, detail: string): void {
   checks.push({ name, ok, detail });
@@ -81,8 +95,28 @@ function lineNumber(source: string, index: number): number {
   return source.slice(0, index).split(/\r?\n/).length;
 }
 
-function sha256(source: string): string {
+function sha256(source: string | Buffer): string {
   return createHash("sha256").update(source).digest("hex");
+}
+
+async function runtimeFileState(filePath: string, displayPath: string): Promise<RuntimeFileState> {
+  if (!existsSync(filePath)) {
+    return { path: displayPath, exists: false };
+  }
+  const data = await readFile(filePath);
+  return {
+    path: displayPath,
+    exists: true,
+    bytes: data.length,
+    sha256: sha256(data)
+  };
+}
+
+function saveBytesMatch(left: RuntimeFileState, right: RuntimeFileState): boolean | "unknown" {
+  if (!left.exists || !right.exists || !left.sha256 || !right.sha256) {
+    return "unknown";
+  }
+  return left.sha256 === right.sha256;
 }
 
 function parseNpc744Fields(source: string): Record<string, string> {
@@ -284,11 +318,18 @@ async function runProofStatus(): Promise<void> {
   const mapSprites = await readText("map_sprites.yml") ?? "";
   const proofTarget = classifyProofTarget(findNpc744Placements(mapSprites));
   const recommendation = proofRecommendation(proofTarget);
+  const snes9xSram = await runtimeFileState(snes9xSramPath, "Snes9x/SRAMs/first-hack.srm");
+  const aresRam = await runtimeFileState(aresRamPath, ".codex/rom-output/first-hack.ram");
   const status: ProofStatus = {
     ok: true,
     proofTarget,
     emulatorProofComplete: false,
-    ...recommendation
+    ...recommendation,
+    runtimeState: {
+      snes9xSram,
+      aresRam,
+      saveBytesMatch: saveBytesMatch(snes9xSram, aresRam)
+    }
   };
   console.log(JSON.stringify(status, null, 2));
 }

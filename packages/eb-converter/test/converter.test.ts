@@ -354,8 +354,10 @@ describe("proof invariant helpers", () => {
   });
 
   it("recommends the next proof command for classified targets", () => {
-    expect(proofRecommendation("bedroom").recommendedCommand).toBe("pnpm proof:packet:bedroom");
-    expect(proofRecommendation("roadblock-706").recommendedCommand).toBe("pnpm proof:packet:roadblock-706");
+    const bedroom = proofRecommendation("bedroom");
+    const roadblock = proofRecommendation("roadblock-706");
+    expect(bedroom.recommendedCommand).toBe("pnpm proof:packet:bedroom");
+    expect(roadblock.recommendedCommand).toBe("pnpm proof:packet:roadblock-706");
     expect(proofRecommendation("custom").nextAction).toContain("custom");
   });
 });

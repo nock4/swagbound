@@ -652,7 +652,8 @@ Fresh verification after the successful bedroom proof fixture:
     packets for ROM filename, `.sfc`, and `/Users/` leakage
 - `pnpm proof:status`
   - reports the active fixture target classification, the next proof packet
-    command, and whether emulator proof is complete
+    command, whether emulator proof is complete, and relative save/RAM hashes
+    for Snes9x and ares state comparison
 - ignored local CoilSnake compile to `.codex/rom-output/first-hack.sfc`
 
 ## Safety Notes
@@ -696,7 +697,8 @@ separate roadblock/original-placement investigation.
 - run `pnpm proof:safety` after generating proof packets or snapshots.
 - run `pnpm proof:status` when resuming work to see whether the current local
   fixture is a bedroom proof fixture, a roadblock fixture, or an unclassified
-  diagnostic state.
+  diagnostic state. It also reports whether the Snes9x SRAM and ares adjacent
+  `.ram` bytes currently match without printing absolute local paths.
 - run `pnpm proof:packet:bedroom` before recording a bedroom proof clip, or
   `pnpm proof:packet:roadblock-706` / `pnpm proof:packet:roadblock-707` before
   a roadblock proof attempt. Packets are ignored local markdown under
@@ -750,6 +752,9 @@ separate roadblock/original-placement investigation.
     were verified in Settings > Input, but it did not expose a usable existing
     save for the route and also fell back into title/attract flow when timing
     missed.
+  - `pnpm proof:status` now reports relative Snes9x/ares save hashes because
+    ares auto-save behavior can leave `.codex/rom-output/first-hack.ram` on a
+    different hash from the Snes9x SRAM after a test run.
   - the pre-retry SRAM was restored after this diagnostic.
   - no roadblock-706 success clip was recorded from this retry.
 - 2026-06-01 successful exact-NPC bedroom proof:
