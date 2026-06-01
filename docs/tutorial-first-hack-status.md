@@ -8,9 +8,12 @@ Objective source:
 https://github.com/pk-hack/CoilSnake/wiki/Tutorial%3A-Your-First-Hack
 ```
 
-This project now completes the tutorial locally. ROM compilation and emulator
-verification were performed only after explicit permission, and all ROM inputs
-and outputs remain ignored local files.
+This project completes the local Phaser/tutorial-data slice and has one
+successful narrowed Snes9x NPC `744` proof in a bedroom fixture. The original
+roadblock/original-placement NPC targeting proof remains unresolved and is not
+claimed complete. ROM compilation and emulator verification were performed only
+after explicit permission, and all ROM inputs and outputs remain ignored local
+files.
 
 ## Implemented
 
@@ -20,10 +23,11 @@ and outputs remain ignored local files.
 - Dialogue playback in the Phaser first scene.
 - Metadata-only `SpriteGroups/005.png` detection.
 - Text/YML scanner proof for `robot.hello_world`.
-- Tutorial NPC `744` values applied to ignored local fixture text/YML.
+- Tutorial NPC `744` text pointer applied to ignored local fixture text/YML.
 - Generated tutorial audit status in `tutorial-status.json`.
 - Ignored local ROM output compiled successfully.
 - Compiled ROM boot-verified in Snes9x.
+- Narrowed local-only bedroom NPC `744` proof recorded in Snes9x.
 - Local Playwright video/trace review verifies the playable Phaser path.
 
 ## Generated Contract
@@ -66,8 +70,8 @@ Step statuses are:
 Current generated status after `pnpm convert`:
 
 - Steps: 16
-- Passed: 16
-- Failed: 0
+- Passed: 13
+- Failed: 3
 - Blocked: 0
 - Unknown: 0
 
@@ -81,9 +85,6 @@ Passing evidence:
 - `SpriteGroups/005.png` is indexed as metadata only.
 - `robot.hello_world` is found by the text/YML scanner.
 - `npc_config_table.yml` has entry `744`.
-- NPC `744` `Sprite` is `5`.
-- NPC `744` `Movement` is `605`.
-- NPC `744` `Event Flag` is `0x0`.
 - NPC `744` `Show Sprite` is `always`.
 - NPC `744` `Text Pointer 1` is `robot.hello_world`.
 - NPC `744` `Type` is `person`.
@@ -94,6 +95,17 @@ Passing evidence:
 - Playwright captures a deterministic local browser verification of the
   generated data and imported dialogue playback.
 
+Expected current fixture deviations:
+
+- NPC `744` `Sprite` is `171`, not tutorial baseline `5`.
+- NPC `744` `Movement` is `8`, not tutorial baseline `605`.
+- NPC `744` `Event Flag` is `0`, while the converter tutorial check expects
+  the baseline string form `0x0`.
+
+These are intentional local-only proof fixture differences for the successful
+bedroom Snes9x proof. They should not be used to claim original roadblock or
+original tutorial-coordinate proof.
+
 ## Fixture-Only Proof
 
 `external/coilsnake-project/tutorial-fixture-npc-reference.yml` is synthetic
@@ -103,6 +115,10 @@ by git with the rest of `external/coilsnake-project`.
 `external/coilsnake-project/tutorial-run-proof.json` is local-only proof that the
 compile/boot step was completed. It contains no ROM path and no ROM bytes, and
 it remains ignored by git with the rest of `external/coilsnake-project`.
+
+`.codex/videos/npc744-bedroom-hello-world-proof-snes9x-labeled.mov` is the
+strongest current emulator proof artifact. It is ignored local output and is
+documented in `docs/tutorial-rom-video-verification.md`.
 
 ## Safety Boundaries
 
@@ -140,9 +156,9 @@ pnpm test:review
 Results:
 
 - `pnpm install --frozen-lockfile`: pass.
-- `pnpm convert`: pass, emits `tutorial-status.json` with 16 passed, 0 failed, 0 blocked.
+- `pnpm convert`: pass, emits `tutorial-status.json` with 13 passed, 3 failed, 0 blocked.
 - `pnpm validate`: pass, validates `tutorial-status.json`.
-- `pnpm test`: pass, 13 tests.
+- `pnpm test`: pass, 14 tests.
 - `pnpm exec tsc --noEmit`: pass.
 - `pnpm dev`: pass, served `http://127.0.0.1:5173/` with generated tutorial status.
 - `pnpm test:review`: pass, writes local video/trace artifacts.
@@ -162,10 +178,12 @@ Tracked source safety scan:
 
 Next safest milestone:
 
-1. Commit and push only tracked source/docs/test changes.
-2. Keep ROMs, generated JSON, local CoilSnake fixture files, and review/browser
-   caches ignored.
-3. Continue with real map/NPC metadata discovery only after this checkpoint is
-   reviewed.
+1. Keep the bedroom NPC `744` proof as the current defensible Snes9x proof.
+2. Continue original roadblock/original-placement investigation only as a
+   separate diagnostic lane.
+3. Do not broaden object routing or all-NPC routing to produce proof clips.
+4. Keep ROMs, generated JSON, local CoilSnake fixture files, videos, and
+   review/browser caches ignored.
 
-The CoilSnake "Your First Hack" tutorial is complete for this local project.
+The Phaser/tutorial-data slice is complete for this local project. The original
+roadblock/original-placement NPC targeting proof is not complete.
