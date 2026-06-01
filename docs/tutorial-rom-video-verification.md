@@ -684,6 +684,10 @@ separate roadblock/original-placement investigation.
   after a local roadblock fixture edit; those commands are expected to fail
   against the current bedroom proof fixture.
 - run `pnpm proof:snapshot` immediately before recording any new proof clip.
+- run `pnpm proof:packet:bedroom` before recording a bedroom proof clip, or
+  `pnpm proof:packet:roadblock-706` / `pnpm proof:packet:roadblock-707` before
+  a roadblock proof attempt. Packets are ignored local markdown under
+  `.codex/proof-packets/` and include command outputs plus a fixture snapshot.
 - the roadblock/shack target remains unresolved:
   - original slot `706` is `27/29`, `X: 192`, `Y: 216`.
   - original slot `707` is `27/31`, `X: 168`, `Y: 200`.

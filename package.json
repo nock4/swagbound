@@ -12,6 +12,10 @@
     "proof:check:roadblock-706": "tsx scripts/proof-check.ts --expect-placement roadblock-706",
     "proof:check:roadblock-707": "tsx scripts/proof-check.ts --expect-placement roadblock-707",
     "proof:snapshot": "tsx scripts/proof-check.ts --snapshot",
+    "proof:packet": "tsx scripts/proof-packet.ts",
+    "proof:packet:bedroom": "tsx scripts/proof-packet.ts --mode bedroom",
+    "proof:packet:roadblock-706": "tsx scripts/proof-packet.ts --mode roadblock-706",
+    "proof:packet:roadblock-707": "tsx scripts/proof-packet.ts --mode roadblock-707",
     "pretest:review": "pnpm convert && pnpm validate",
     "test:review": "playwright test --project review-chromium",
     "show:review": "playwright show-report playwright-report"

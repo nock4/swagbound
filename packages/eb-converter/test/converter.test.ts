@@ -6,6 +6,7 @@ import { buildDialoguePages, ManifestSchema, resolveScriptReference, TutorialSta
 import { convertProject, parseCcsFile, readNpcReferences } from "../src/index";
 import { validateGeneratedOutput } from "../src/validate";
 import { findNpc744Placements, isNeutralizedMapDoorPointer } from "../../../scripts/proof-check";
+import { sanitizePacketOutput } from "../../../scripts/proof-packet";
 
 describe("schemas", () => {
   it("validates generated manifests", async () => {
@@ -324,6 +325,11 @@ describe("proof invariant helpers", () => {
     expect(placements).toEqual([
       { line: 8, outer: "27", inner: "31", x: "168", y: "200" }
     ]);
+  });
+
+  it("sanitizes absolute repo paths from local proof packets", () => {
+    const output = sanitizePacketOutput(`${process.cwd()}/packages/eb-converter`);
+    expect(output).toBe("<repo>/packages/eb-converter");
   });
 });
 
