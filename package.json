@@ -26,10 +26,12 @@
     "proof:packet:roadblock-707:diagnostic": "tsx scripts/proof-packet.ts --mode roadblock-707 --allow-fail --out .codex/proof-packets/roadblock-707-diagnostic.md",
     "pretest:review": "pnpm convert && pnpm validate",
     "test:review": "playwright test --project review-chromium",
+    "test:replay": "playwright test --project replay-chromium",
     "show:review": "playwright show-report playwright-report"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",
+    "@replayio/playwright": "^5.0.3",
     "@types/node": "^20.14.11",
     "tsx": "^4.16.2",
     "typescript": "^5.5.3",

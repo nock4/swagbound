@@ -24,7 +24,7 @@ test("first scene loads tutorial data and plays imported dialogue", async ({ pag
     message: "first scene debug state should load generated data"
   }).toMatchObject({
     targetReference: "robot.hello_world",
-    tutorial: { steps: 16, passed: 14, failed: 2, blocked: 0, unknown: 0 }
+    tutorial: { steps: 16, passed: 15, failed: 1, blocked: 0, unknown: 0 }
   });
 
   await page.keyboard.down("ArrowRight");

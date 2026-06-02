@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "replay-cli": {
+      "source": "replayio/skills",
+      "sourceType": "github",
+      "skillPath": "skills/replay-cli/SKILL.md",
+      "computedHash": "df418357824fd96d7b51f0eab59ba547d801344866e66043add2c9e3803356c0"
+    },
+    "replay-cypress": {
+      "source": "replayio/skills",
+      "sourceType": "github",
+      "skillPath": "skills/replay-cypress/SKILL.md",
+      "computedHash": "221c7add52cd13fda4a4fdbb333c39ce29141ef6d409990c83870e5eaabb2253"
+    },
+    "replay-mcp": {
+      "source": "replayio/skills",
+      "sourceType": "github",
+      "skillPath": "skills/replay-mcp/SKILL.md",
+      "computedHash": "1fed93f1b1eeada0e13a5f04d6c2f4d648546a8e516a39bde386251b8221b696"
+    },
+    "replay-playwright": {
+      "source": "replayio/skills",
+      "sourceType": "github",
+      "skillPath": "skills/replay-playwright/SKILL.md",
+      "computedHash": "52253b4cfd3051e29d87fe3336b2eb8f82300be41bf15cbd1233d5c1b6d613b2"
+    }
+  }
+}
