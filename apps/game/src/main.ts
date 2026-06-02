@@ -215,12 +215,14 @@ class DebugScene extends Phaser.Scene {
 
   private updatePrompt(): void {
     if (!this.promptText || !this.player || !this.npcMarker) {
+      this.publishDebugState();
       return;
     }
     const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.npcMarker.x, this.npcMarker.y);
     this.promptText.setText(distance < INTERACTION_DISTANCE
       ? "Space/Enter: talk to the imported script marker"
       : "Move with Arrow keys/WASD. Approach the marker to interact.");
+    this.publishDebugState();
   }
 
   private handleAdvance(): void {
@@ -290,10 +292,23 @@ class DebugScene extends Phaser.Scene {
   }
 
   private publishDebugState(): void {
+    const distance = this.player && this.npcMarker
+      ? Phaser.Math.Distance.Between(this.player.x, this.player.y, this.npcMarker.x, this.npcMarker.y)
+      : undefined;
     (globalThis as Record<string, unknown>).__firstSceneDebug = {
       dialogueOpen: this.dialogueOpen,
       dialogueText: this.dialoguePages[this.pageIndex]?.text ?? "",
+      dialoguePageIndex: this.pageIndex,
+      dialoguePageCount: this.dialoguePages.length,
       targetReference: this.targetReference,
+      player: this.player ? { x: this.player.x, y: this.player.y } : undefined,
+      npc: this.npcMarker ? { x: this.npcMarker.x, y: this.npcMarker.y } : undefined,
+      prompt: this.promptText?.text ?? "",
+      distanceToNpc: distance,
+      inInteractionRange: distance === undefined ? false : distance < INTERACTION_DISTANCE,
+      movementBounds: { minX: 70, maxX: 730, minY: 180, maxY: 360 },
+      statusLines: this.buildStatusLines(),
+      metadataLines: this.buildMetadataLines(),
       tutorial: this.dataSet?.tutorialStatus?.counts,
       resolveStatus: resolveStatus(this.dataSet?.scripts, this.dataSet?.npcs)
     };

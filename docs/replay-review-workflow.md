@@ -36,6 +36,19 @@ The first successful setup run uploaded:
 https://app.replay.io/recording/8082e720-18f7-41c0-968e-92434bf8221e
 ```
 
+The expanded UX QA suite uploaded these recordings:
+
+```text
+first scene loads import status and plays imported dialogue
+https://app.replay.io/recording/d7cffeba-e436-41f0-98b9-94b7db8080be
+
+dialogue advances, closes, and prevents movement while open
+https://app.replay.io/recording/1304cfb9-28a1-4e39-a6b6-607331bfdf18
+
+exploratory input sweep keeps the player bounded and stable
+https://app.replay.io/recording/75966b4b-18ca-4d4f-991d-bfa5992dc6a7
+```
+
 ## MCP Follow-Up
 
 Replay MCP is not attached dynamically to the current Codex session. To inspect
