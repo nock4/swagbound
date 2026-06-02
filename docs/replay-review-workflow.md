@@ -22,6 +22,14 @@ Use the 1Password item already stored in `Dev Secrets`:
 REPLAY_API_KEY="$(op item get 'Replay.io workspace API Credentials' --vault 'Dev Secrets' --fields label=credential --reveal)" pnpm test:replay
 ```
 
+Or save `REPLAY_API_KEY` in ignored `.env.local`; `playwright.config.ts` loads
+that file automatically. With `.env.local` present, this exact Replay quickstart
+command works:
+
+```sh
+npx playwright test --project replay-chromium
+```
+
 The first successful setup run uploaded:
 
 ```text

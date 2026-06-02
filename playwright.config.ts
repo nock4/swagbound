@@ -1,5 +1,8 @@
 import { defineConfig, devices, type ReporterDescription } from "@playwright/test";
 import { devices as replayDevices, replayReporter } from "@replayio/playwright";
+import { config as loadEnv } from "dotenv";
+
+loadEnv({ path: ".env.local", quiet: true });
 
 const baseReporters: ReporterDescription[] = [
   ["html", { outputFolder: "playwright-report", open: "never" }],
