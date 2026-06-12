@@ -129,6 +129,7 @@ export const WorldNpcSchema = z.object({
   movement: z.string().optional(),
   showSprite: z.string().optional(),
   textPointer: z.string().optional(),
+  textPointer2: z.string().optional(),
   interactable: z.boolean(),
   visible: z.boolean(),
   worldPixel: z.object({ x: z.number().int().nonnegative(), y: z.number().int().nonnegative() }),

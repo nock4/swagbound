@@ -230,7 +230,17 @@ describe("world artifact build (synthetic project)", () => {
     await mkdir(path.join(project, "Tilesets"), { recursive: true });
     await mkdir(path.join(project, "SpriteGroups"), { recursive: true });
     await writeFile(path.join(project, "Project.snake"), "CoilSnakeVersion: 4\n", "utf8");
-    await writeFile(path.join(project, "ccscript", "robot.ccs"), 'hello_world:\n    "@Hello World!" end\n', "utf8");
+    await writeFile(
+      path.join(project, "ccscript", "robot.ccs"),
+      [
+        "hello_world:",
+        '    "@Hello World!" end',
+        "follow_up:",
+        '    "@Still here." end',
+        ""
+      ].join("\n"),
+      "utf8"
+    );
 
     const mapRow = Array.from({ length: 64 }, () => "001").join(" ");
     await writeFile(path.join(project, "map_tiles.map"), `${Array.from({ length: 64 }, () => mapRow).join("\n")}\n`, "utf8");
@@ -268,7 +278,7 @@ describe("world artifact build (synthetic project)", () => {
       "  Show Sprite: always",
       "  Sprite: 5",
       "  Text Pointer 1: robot.hello_world",
-      "  Text Pointer 2: $0",
+      "  Text Pointer 2: robot.follow_up",
       "  Type: person",
       ""
     ].join("\n"), "utf8");
@@ -307,6 +317,7 @@ describe("world artifact build (synthetic project)", () => {
         interactable: true,
         visible: true,
         textPointer: "robot.hello_world",
+        textPointer2: "robot.follow_up",
         spriteGroup: 5,
         worldPixel: { x: 896, y: 896 },
         regionPixel: { x: 640, y: 640 },

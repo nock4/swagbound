@@ -23,13 +23,22 @@ const MAP_29_APPLIED = ["  29:", ...NPC_744_BLOCK, ...NPC_745_BLOCK];
 const MAP_30_BASE = ["  30: "];
 const MAP_30_APPLIED = ["  30:", ...NPC_746_BLOCK];
 
-const GREETER_BLOCK = [
+const GREETER_V1_BLOCK = [
   "greeter:",
   '    "@Beep boop. I greet, therefore I am." end'
+];
+const GREETER_V2_BLOCK = [
+  "greeter:",
+  '    "@Beep boop. I greet, therefore I am." next',
+  '    "@New parts arrive tomorrow. Come back then." end'
 ];
 const PATROLLER_BLOCK = [
   "patroller:",
   '    "@Patrolling this canyon. Step aside, hero." end'
+];
+const GREETER_AGAIN_BLOCK = [
+  "greeter_again:",
+  '    "@Told you already. Parts. Tomorrow." end'
 ];
 
 type TextFile = {
@@ -90,17 +99,23 @@ function sameLines(actual: string[], expected: string[]): boolean {
   return actual.length === expected.length && actual.every((line, index) => line === expected[index]);
 }
 
-function containsBlock(lines: string[], block: string[]): boolean {
-  return findBlock(lines, block) >= 0;
+function isLabelLine(line: string): boolean {
+  return /^[A-Za-z_][\w.]*:\s*$/.test(line);
 }
 
-function findBlock(lines: string[], block: string[]): number {
-  for (let index = 0; index <= lines.length - block.length; index += 1) {
-    if (sameLines(lines.slice(index, index + block.length), block)) {
-      return index;
-    }
+function findLabelBlock(lines: string[], label: string): { start: number; end: number; block: string[] } | undefined {
+  const start = lines.findIndex((line) => line === `${label}:`);
+  if (start < 0) {
+    return undefined;
   }
-  return -1;
+
+  const next = lines.findIndex((line, index) => index > start && isLabelLine(line));
+  const end = next >= 0 ? next : lines.length;
+  return { start, end, block: lines.slice(start, end) };
+}
+
+function formatBlockForError(block: string[] | undefined): string {
+  return block === undefined ? "<missing>" : `\n${block.join("\n")}`;
 }
 
 function findOuterBlock(lines: string[], key: number): { start: number; end: number } {
@@ -194,7 +209,8 @@ function applyNpcConfigHack(file: TextFile): { changed: boolean; after: string }
       Movement: "0",
       "Show Sprite": "always",
       Sprite: "2",
-      "Text Pointer 1": "robot.greeter"
+      "Text Pointer 1": "robot.greeter",
+      "Text Pointer 2": "robot.greeter_again"
     }],
     [746, {
       Direction: "left",
@@ -219,18 +235,47 @@ function applyRobotCcsHack(file: TextFile): { changed: boolean; after: string } 
     throw new HackError("Precondition failed: missing hello_world label in ccscript/robot.ccs");
   }
 
-  const hasGreeter = containsBlock(lines, GREETER_BLOCK);
-  const hasPatroller = containsBlock(lines, PATROLLER_BLOCK);
-  if (hasGreeter && hasPatroller) {
-    return { changed: false, after: file.source };
+  let changed = false;
+  const greeter = findLabelBlock(lines, "greeter");
+  if (!greeter) {
+    if (lines.some((line) => line === "patroller:") || lines.some((line) => line === "greeter_again:")) {
+      throw new HackError("Precondition failed: greeter label is missing but v2 companion labels already exist in ccscript/robot.ccs");
+    }
+
+    lines.push(...GREETER_V2_BLOCK, ...PATROLLER_BLOCK, ...GREETER_AGAIN_BLOCK);
+    return { changed: true, after: joinText({ ...file, lines }) };
   }
 
-  if (lines.some((line) => line === "greeter:") || lines.some((line) => line === "patroller:")) {
-    throw new HackError("Precondition failed: greeter/patroller label exists but does not match the requested text.");
+  if (sameLines(greeter.block, GREETER_V1_BLOCK)) {
+    lines.splice(greeter.start, greeter.end - greeter.start, ...GREETER_V2_BLOCK);
+    changed = true;
+  } else if (!sameLines(greeter.block, GREETER_V2_BLOCK)) {
+    throw new HackError(
+      `Precondition failed: greeter label exists but matches neither the v1 nor v2 block in ccscript/robot.ccs. Actual block:${formatBlockForError(greeter.block)}`
+    );
   }
 
-  lines.push(...GREETER_BLOCK, ...PATROLLER_BLOCK);
-  return { changed: true, after: joinText({ ...file, lines }) };
+  const patroller = findLabelBlock(lines, "patroller");
+  if (!patroller) {
+    throw new HackError("Precondition failed: patroller label is missing from an already-hacked ccscript/robot.ccs");
+  }
+  if (!sameLines(patroller.block, PATROLLER_BLOCK)) {
+    throw new HackError(
+      `Precondition failed: patroller label exists but does not match the requested block in ccscript/robot.ccs. Actual block:${formatBlockForError(patroller.block)}`
+    );
+  }
+
+  const greeterAgain = findLabelBlock(lines, "greeter_again");
+  if (!greeterAgain) {
+    lines.push(...GREETER_AGAIN_BLOCK);
+    changed = true;
+  } else if (!sameLines(greeterAgain.block, GREETER_AGAIN_BLOCK)) {
+    throw new HackError(
+      `Precondition failed: greeter_again label exists but does not match the requested block in ccscript/robot.ccs. Actual block:${formatBlockForError(greeterAgain.block)}`
+    );
+  }
+
+  return { changed, after: changed ? joinText({ ...file, lines }) : file.source };
 }
 
 async function backupIfNeeded(absolutePath: string): Promise<boolean> {

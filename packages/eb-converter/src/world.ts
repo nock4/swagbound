@@ -490,6 +490,7 @@ export async function buildWorldArtifacts(options: {
     const config = npcConfig.get(placement.npcId);
     const spriteGroup = config ? Number.parseInt(config.Sprite ?? "", 10) : Number.NaN;
     const textPointer = config?.["Text Pointer 1"];
+    const textPointer2 = config?.["Text Pointer 2"];
     const showSprite = config?.["Show Sprite"];
     const isTutorialNpc = placement.npcId === TUTORIAL_NPC_ID;
     npcs.push({
@@ -500,6 +501,7 @@ export async function buildWorldArtifacts(options: {
       ...(config?.Movement ? { movement: config.Movement } : {}),
       ...(showSprite ? { showSprite } : {}),
       ...(textPointer ? { textPointer } : {}),
+      ...(textPointer2 ? { textPointer2 } : {}),
       interactable: isCcsReference(textPointer),
       visible: isTutorialNpc || showSprite === "always",
       worldPixel: world,

@@ -19,7 +19,7 @@ test("world scene renders imported map and plays imported dialogue", async ({ pa
   expect(initial.statusLines.join("\n")).toContain("Your First Hack: CoilSnake Import");
   expect(initial.statusLines.join("\n")).toContain("Project: found");
   expect(initial.statusLines.join("\n")).toContain("Scripts: 1 files");
-  expect(initial.statusLines.join("\n")).toContain("NPC refs: 4");
+  expect(initial.statusLines.join("\n")).toContain("NPC refs: 5");
   expect(initial.resolveStatus).toBe("script + npc ref");
   expect(initial.world).toMatchObject({ available: true, assetsLoaded: true });
   expect(initial.npc, "tutorial NPC should be placed in the scene").toBeDefined();
