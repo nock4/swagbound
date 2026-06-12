@@ -9,6 +9,14 @@ import {
   TARGET_REFERENCE,
   type GameData
 } from "./loader";
+import { interactionEvents, type GameEvent } from "./eventRunner";
+import { behaviorForNpc } from "./npcBehaviors";
+import {
+  createNpcState,
+  facingToward,
+  stepNpc,
+  type NpcRuntimeState
+} from "./npcController";
 import {
   CANONICAL_DIRECTION_FRAMES,
   createPlayerState,
@@ -19,6 +27,7 @@ import {
   toFacing,
   unlockPlayer,
   type DirectionFrames,
+  type Facing,
   type InteractionCandidate,
   type MoveInput,
   type PlayerState
@@ -30,7 +39,20 @@ export const INTERACTION_DISTANCE = 28; // world pixels between feet positions
 
 type NpcRuntime = {
   data: WorldNpc;
+  state: NpcRuntimeState;
+  frames: DirectionFrames;
   sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+};
+
+type ActiveNpcDialogue = {
+  id: number;
+  restoreFacing: Facing;
+};
+
+type BlockedOptions = {
+  ignoreNpcId?: number;
+  includePlayer?: boolean;
+  includeNpcs?: boolean;
 };
 
 export class WorldScene extends Phaser.Scene {
@@ -40,6 +62,7 @@ export class WorldScene extends Phaser.Scene {
   private playerState!: PlayerState;
   private playerFrames: DirectionFrames = CANONICAL_DIRECTION_FRAMES;
   private npcRuntimes: NpcRuntime[] = [];
+  private activeNpcDialogue?: ActiveNpcDialogue;
   private solidRows: string[] = [];
   private collisionCellSize = 8;
   private collisionWidth = 0;
@@ -105,8 +128,12 @@ export class WorldScene extends Phaser.Scene {
       if (!npc.visible) {
         continue;
       }
+      const frames = this.framesForGroup(npc.spriteGroup);
+      const facing = toFacing(npc.direction);
       this.npcRuntimes.push({
         data: npc,
+        state: createNpcState(npc.regionPixel.x, npc.regionPixel.y, facing, behaviorForNpc(npc.npcId), frames),
+        frames,
         sprite: this.spawnActor(npc.regionPixel.x, npc.regionPixel.y, npc.spriteGroup, npc.direction)
       });
     }
@@ -166,8 +193,8 @@ export class WorldScene extends Phaser.Scene {
       sprite.setDepth(y);
       return sprite;
     }
-    const placeholder = this.add.rectangle(x, y - 12, 16, 24, 0x9aa7b8).setStrokeStyle(1, 0xe2e8f0);
-    placeholder.setOrigin(0.5, 0.5);
+    const placeholder = this.add.rectangle(x, y, 16, 24, 0x9aa7b8).setStrokeStyle(1, 0xe2e8f0);
+    placeholder.setOrigin(0.5, 1);
     placeholder.setDepth(y);
     return placeholder;
   }
@@ -176,6 +203,8 @@ export class WorldScene extends Phaser.Scene {
     if (!this.player) {
       return;
     }
+    this.stepNpcs(delta);
+
     // Dialogue owns the input: freeze movement and animation while open.
     if (this.dialogue.open && !this.playerState.inputLocked) {
       lockPlayer(this.playerState, this.playerFrames);
@@ -187,7 +216,7 @@ export class WorldScene extends Phaser.Scene {
       deltaMs: delta,
       speed: PLAYER_SPEED,
       bounds: this.movementBounds(),
-      blocked: (x, y) => this.blocked(x, y),
+      blocked: (x, y) => this.blocked(x, y, { includeNpcs: true }),
       frames: this.playerFrames
     });
 
@@ -199,6 +228,35 @@ export class WorldScene extends Phaser.Scene {
     this.player.setDepth(this.player.y);
     this.updatePrompt();
     this.publish();
+  }
+
+  private stepNpcs(deltaMs: number): void {
+    for (const npc of this.npcRuntimes) {
+      stepNpc(npc.state, {
+        deltaMs,
+        bounds: this.movementBounds(),
+        blocked: (x, y) => this.blocked(x, y, {
+          ignoreNpcId: npc.data.npcId,
+          includePlayer: true,
+          includeNpcs: true
+        }),
+        frames: npc.frames
+      });
+      this.syncNpc(npc);
+    }
+  }
+
+  private syncNpc(npc: NpcRuntime): void {
+    const actor = npc.sprite;
+    if (!actor) {
+      return;
+    }
+    actor.x = npc.state.player.x;
+    actor.y = npc.state.player.y;
+    if (actor instanceof Phaser.GameObjects.Sprite) {
+      actor.setFrame(npc.state.player.animFrame);
+    }
+    actor.setDepth(npc.state.player.y);
   }
 
   private readInput(): MoveInput {
@@ -216,8 +274,28 @@ export class WorldScene extends Phaser.Scene {
     return { minX: 8, maxX: width - 8, minY: 12, maxY: height - 1 };
   }
 
-  /** Feet-box collision against the imported surface grid plus NPC bodies. */
-  private blocked(x: number, y: number): boolean {
+  /** Feet-box collision against the imported surface grid plus actor bodies. */
+  private blocked(x: number, y: number, options: BlockedOptions = {}): boolean {
+    if (this.surfaceBlocked(x, y)) {
+      return true;
+    }
+    if (options.includePlayer && this.player && this.actorBodyBlocked(x, y, this.playerState.x, this.playerState.y)) {
+      return true;
+    }
+    if (options.includeNpcs ?? true) {
+      for (const npc of this.npcRuntimes) {
+        if (npc.data.npcId === options.ignoreNpcId) {
+          continue;
+        }
+        if (this.actorBodyBlocked(x, y, npc.state.player.x, npc.state.player.y)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private surfaceBlocked(x: number, y: number): boolean {
     const corners: Array<[number, number]> = [
       [x - 7, y - 10],
       [x + 6, y - 10],
@@ -234,21 +312,18 @@ export class WorldScene extends Phaser.Scene {
         return true;
       }
     }
-    for (const npc of this.npcRuntimes) {
-      const nx = npc.data.regionPixel.x;
-      const ny = npc.data.regionPixel.y;
-      if (Math.abs(x - nx) < 14 && y > ny - 18 && y < ny + 10) {
-        return true;
-      }
-    }
     return false;
+  }
+
+  private actorBodyBlocked(x: number, y: number, bodyX: number, bodyY: number): boolean {
+    return Math.abs(x - bodyX) < 14 && y > bodyY - 18 && y < bodyY + 10;
   }
 
   private interactionCandidates(): InteractionCandidate[] {
     return this.npcRuntimes.map((npc) => ({
       id: npc.data.npcId,
-      x: npc.data.regionPixel.x,
-      y: npc.data.regionPixel.y,
+      x: npc.state.player.x,
+      y: npc.state.player.y,
       interactable: npc.data.interactable
     }));
   }
@@ -269,7 +344,7 @@ export class WorldScene extends Phaser.Scene {
     if (!npc || !this.player) {
       return undefined;
     }
-    return Phaser.Math.Distance.Between(this.playerState.x, this.playerState.y, npc.data.regionPixel.x, npc.data.regionPixel.y);
+    return Phaser.Math.Distance.Between(this.playerState.x, this.playerState.y, npc.state.player.x, npc.state.player.y);
   }
 
   /** Radius-only proximity (facing not required) — used for prompts/debug. */
@@ -302,19 +377,63 @@ export class WorldScene extends Phaser.Scene {
       // here (not in the next update tick) so the published state never shows
       // dialogueOpen=false with inputLocked=true.
       unlockPlayer(this.playerState);
+      this.restoreActiveNpc();
     }
     this.publish();
   }
 
   private openDialogue(): void {
     const target = this.interactionTarget();
-    const npc = this.npcRuntimes.find((runtime) => runtime.data.npcId === target?.id) ?? this.tutorialNpc();
-    const pointer = npc?.data.textPointer;
-    const reference = pointer && /^[A-Za-z_][\w-]*\.[A-Za-z_][\w-]*$/.test(pointer) ? pointer : this.targetReference;
-    this.dialogue.start(buildDialogueForReference(this.data_.scripts, reference));
+    const npc = this.npcRuntimes.find((runtime) => runtime.data.npcId === target?.id);
+    if (!npc) {
+      return;
+    }
+    this.pauseNpcForDialogue(npc);
+    this.runEvents(interactionEvents(npc.data, this.targetReference));
     lockPlayer(this.playerState, this.playerFrames);
     this.updatePrompt();
     this.publish();
+  }
+
+  private runEvents(events: GameEvent[]): void {
+    for (const event of events) {
+      switch (event.kind) {
+        case "dialogue":
+          this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference));
+          return;
+      }
+    }
+  }
+
+  private pauseNpcForDialogue(npc: NpcRuntime): void {
+    this.restoreActiveNpc();
+    this.activeNpcDialogue = { id: npc.data.npcId, restoreFacing: npc.state.player.facing };
+    npc.state.paused = true;
+    this.setNpcIdleFacing(npc, facingToward(npc.state.player.x, npc.state.player.y, this.playerState.x, this.playerState.y));
+  }
+
+  private restoreActiveNpc(): void {
+    if (!this.activeNpcDialogue) {
+      return;
+    }
+    const active = this.activeNpcDialogue;
+    const npc = this.npcRuntimes.find((runtime) => runtime.data.npcId === active.id);
+    if (npc) {
+      this.setNpcIdleFacing(npc, active.restoreFacing);
+      npc.state.paused = false;
+    }
+    this.activeNpcDialogue = undefined;
+  }
+
+  private setNpcIdleFacing(npc: NpcRuntime, facing: Facing): void {
+    npc.state.player.facing = facing;
+    npc.state.player.moving = false;
+    npc.state.player.velocityX = 0;
+    npc.state.player.velocityY = 0;
+    npc.state.player.walkClockMs = 0;
+    npc.state.player.animKey = `idle-${facing}`;
+    npc.state.player.animFrame = npc.frames[facing][0];
+    this.syncNpc(npc);
   }
 
   closeDialogue(): void {
@@ -323,6 +442,7 @@ export class WorldScene extends Phaser.Scene {
     }
     this.dialogue.close();
     unlockPlayer(this.playerState);
+    this.restoreActiveNpc();
     this.updatePrompt();
     this.publish();
   }
@@ -351,13 +471,20 @@ export class WorldScene extends Phaser.Scene {
     const npc744 = this.tutorialNpc();
     const distance = this.distanceToTutorialNpc();
     const target = this.interactionTarget();
-    const npcs: DebugNpc[] = world.npcs.map((npc) => ({
-      id: npc.npcId,
-      x: npc.regionPixel.x,
-      y: npc.regionPixel.y,
-      interactable: npc.interactable,
-      visible: npc.visible
-    }));
+    const npcs: DebugNpc[] = world.npcs.map((npc) => {
+      const runtime = this.npcRuntimes.find((item) => item.data.npcId === npc.npcId);
+      return {
+        id: npc.npcId,
+        x: runtime?.state.player.x ?? npc.regionPixel.x,
+        y: runtime?.state.player.y ?? npc.regionPixel.y,
+        interactable: npc.interactable,
+        visible: npc.visible,
+        facing: runtime?.state.player.facing ?? toFacing(npc.direction),
+        moving: runtime?.state.player.moving ?? false,
+        behaviorKind: runtime?.state.behavior.kind ?? "static",
+        paused: runtime?.state.paused ?? false
+      };
+    });
     const state: FirstSceneDebug = {
       mode: "world",
       dialogueOpen: this.dialogue.open,
@@ -366,7 +493,7 @@ export class WorldScene extends Phaser.Scene {
       dialoguePageCount: this.dialogue.pages.length,
       targetReference: this.targetReference,
       player: this.player ? { x: this.playerState.x, y: this.playerState.y } : undefined,
-      npc: npc744 ? { x: npc744.data.regionPixel.x, y: npc744.data.regionPixel.y } : undefined,
+      npc: npc744 ? { x: npc744.state.player.x, y: npc744.state.player.y } : undefined,
       npcs,
       prompt: this.prompt,
       facing: this.playerState.facing,
@@ -376,6 +503,7 @@ export class WorldScene extends Phaser.Scene {
       inputLocked: this.playerState.inputLocked,
       canInteract: Boolean(target),
       interactionTargetId: target?.id,
+      activeNpcId: this.dialogue.open ? this.activeNpcDialogue?.id : undefined,
       distanceToNpc: distance,
       inInteractionRange: this.inRange(),
       movementBounds: this.movementBounds(),

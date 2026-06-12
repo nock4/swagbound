@@ -8,6 +8,10 @@ export type DebugNpc = {
   y: number;
   interactable: boolean;
   visible: boolean;
+  facing: string;
+  moving: boolean;
+  behaviorKind: string;
+  paused: boolean;
 };
 
 export type FirstSceneDebug = {
@@ -29,6 +33,7 @@ export type FirstSceneDebug = {
   /** Facing-aware: an interactable NPC is in front and in range. */
   canInteract?: boolean;
   interactionTargetId?: number;
+  activeNpcId?: number;
   distanceToNpc?: number;
   /** Radius-only proximity to the nearest interactable NPC. */
   inInteractionRange: boolean;

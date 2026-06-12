@@ -9,7 +9,17 @@ export type FirstSceneDebug = {
   targetReference: string;
   player?: { x: number; y: number };
   npc?: { x: number; y: number };
-  npcs?: Array<{ id: number; x: number; y: number; interactable: boolean; visible: boolean }>;
+  npcs?: Array<{
+    id: number;
+    x: number;
+    y: number;
+    interactable: boolean;
+    visible: boolean;
+    facing: string;
+    moving: boolean;
+    behaviorKind: string;
+    paused: boolean;
+  }>;
   prompt: string;
   facing?: string;
   moving?: boolean;
@@ -19,6 +29,7 @@ export type FirstSceneDebug = {
   /** Facing-aware: an interactable NPC is in front and in range. */
   canInteract?: boolean;
   interactionTargetId?: number;
+  activeNpcId?: number;
   distanceToNpc?: number;
   /** Radius-only proximity to the nearest interactable NPC. */
   inInteractionRange: boolean;
