@@ -6,8 +6,10 @@ import {
   NpcReferenceCollectionSchema,
   ScriptCollectionSchema,
   SpriteGroupCollectionSchema,
+  SpriteSheetCollectionSchema,
   TutorialStatusSchema,
-  ValidationReportSchema
+  ValidationReportSchema,
+  WorldRegionSchema
 } from "@eb/schemas";
 
 const DEFAULT_OUT = "apps/game/public/generated";
@@ -31,6 +33,10 @@ export type GeneratedValidationResult = {
   scriptFiles?: number;
   npcReferences?: number;
   spriteImages?: number;
+  worldAvailable?: boolean;
+  worldNpcs?: number;
+  spriteSheets?: number;
+  worldAssetsChecked?: number;
 };
 
 export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<GeneratedValidationResult> {
@@ -57,6 +63,10 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
   const tutorialStatus = TutorialStatusSchema.parse(tutorialStatusRaw);
   const validationReportRaw = await readJson(path.join(out, manifest.files.validationReport));
   const validationReport = ValidationReportSchema.parse(validationReportRaw);
+  const worldRaw = await readJson(path.join(out, manifest.files.world));
+  const world = WorldRegionSchema.parse(worldRaw);
+  const spritesRaw = await readJson(path.join(out, manifest.files.sprites));
+  const sprites = SpriteSheetCollectionSchema.parse(spritesRaw);
 
   assertNoPublicPathLeaks({
     "manifest.json": manifestRaw,
@@ -64,8 +74,12 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
     [manifest.files.npcs]: npcsRaw,
     [manifest.files.spriteGroups]: spriteGroupsRaw,
     [manifest.files.tutorialStatus]: tutorialStatusRaw,
-    [manifest.files.validationReport]: validationReportRaw
+    [manifest.files.validationReport]: validationReportRaw,
+    [manifest.files.world]: worldRaw,
+    [manifest.files.sprites]: spritesRaw
   });
+
+  const worldAssetsChecked = assertWorldAssetsExist(out, world, sprites);
 
   return {
     ok: true,
@@ -76,15 +90,54 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
       manifest.files.npcs,
       manifest.files.spriteGroups,
       manifest.files.tutorialStatus,
-      manifest.files.validationReport
+      manifest.files.validationReport,
+      manifest.files.world,
+      manifest.files.sprites
     ],
     counts: manifest.counts,
     validation: validationReport.counts,
     tutorial: tutorialStatus.counts,
     scriptFiles: scripts.counts.files,
     npcReferences: npcs.counts.references,
-    spriteImages: spriteGroups.counts.images
+    spriteImages: spriteGroups.counts.images,
+    worldAvailable: world.available,
+    worldNpcs: world.counts.npcs,
+    spriteSheets: sprites.counts.sheets,
+    worldAssetsChecked
   };
+}
+
+function assertWorldAssetsExist(
+  out: string,
+  world: { available: boolean; images?: { background: string; foreground: string } },
+  sprites: { sheets: Array<{ file: string }> }
+): number {
+  if (!world.available) {
+    return 0;
+  }
+  const assetPaths = [
+    ...(world.images ? [world.images.background, world.images.foreground] : []),
+    ...sprites.sheets.map((sheet) => sheet.file)
+  ];
+  for (const assetPath of assetPaths) {
+    if (assetPath.includes("..") || path.isAbsolute(assetPath)) {
+      throw new Error(JSON.stringify({
+        severity: "error",
+        code: "unsafe_asset_path",
+        message: `Generated asset path escapes the generated directory: ${assetPath}`,
+        path: assetPath
+      }));
+    }
+    if (!existsSync(path.join(out, assetPath))) {
+      throw new Error(JSON.stringify({
+        severity: "error",
+        code: "missing_world_asset",
+        message: `world/sprites JSON references a missing local asset: ${assetPath}`,
+        path: assetPath
+      }));
+    }
+  }
+  return assetPaths.length;
 }
 
 function assertNoPublicPathLeaks(files: Record<string, unknown>): void {

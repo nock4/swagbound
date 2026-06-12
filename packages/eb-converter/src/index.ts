@@ -14,10 +14,13 @@ import {
   type ScriptCollection,
   type ScriptCommand,
   type SpriteGroupCollection,
+  type SpriteSheetCollection,
   type TutorialStatus,
   type ValidationIssue,
-  type ValidationReport
+  type ValidationReport,
+  type WorldRegion
 } from "@eb/schemas";
+import { buildWorldArtifacts, TUTORIAL_NPC_ID } from "./world";
 
 const DEFAULT_PROJECT = "external/coilsnake-project";
 const DEFAULT_OUT = "apps/game/public/generated";
@@ -26,7 +29,9 @@ const GENERATED_FILES = {
   npcs: "npcs.json",
   spriteGroups: "sprite-groups.json",
   tutorialStatus: "tutorial-status.json",
-  validationReport: "validation-report.json"
+  validationReport: "validation-report.json",
+  world: "world.json",
+  sprites: "sprites.json"
 } as const;
 
 const TUTORIAL_URL = "https://github.com/pk-hack/CoilSnake/wiki/Tutorial%3A-Your-First-Hack";
@@ -43,6 +48,8 @@ type ConvertResult = {
   spriteGroups: SpriteGroupCollection;
   tutorialStatus: TutorialStatus;
   validationReport: ValidationReport;
+  world: WorldRegion;
+  sprites: SpriteSheetCollection;
 };
 
 export function parseArgs(argv: string[]): CliArgs {
@@ -148,6 +155,14 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   const scripts = await readScripts(projectAbs, project, projectExists, warnings);
   const npcs = await readNpcReferences(projectAbs, project, projectExists);
   const spriteGroups = await readSpriteGroups(projectAbs, project, projectExists, warnings);
+  const worldBuild = await buildWorldArtifacts({
+    projectAbs,
+    outAbs,
+    displayPath: makeDisplayPath(project),
+    projectExists
+  });
+  const world = worldBuild.world;
+  const sprites = worldBuild.sprites;
   const referencesRobotHelloWorld = npcs.references.some((reference) => reference.reference === "robot.hello_world");
   const robotFile = scripts.files.find((file) => file.path === "ccscript/robot.ccs");
   const helloWorldIndex = robotFile?.commands.findIndex(
@@ -184,7 +199,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     warnings.push(issue("info", "missing_robot_hello_world_reference", "No text/YML NPC reference to robot.hello_world was found.", "robot.hello_world"));
   }
 
-  const tutorialStatus = await readTutorialStatus(projectAbs, project, projectExists, scripts, npcs, spriteGroups);
+  const tutorialStatus = await readTutorialStatus(projectAbs, project, projectExists, scripts, npcs, spriteGroups, world);
 
   const manifest: Manifest = ManifestSchema.parse({
     schemaVersion: SCHEMA_VERSION,
@@ -199,10 +214,12 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
       unknownCommands: scripts.counts.unknownCommands,
       npcReferences: npcs.counts.references,
       spriteImages: spriteGroups.counts.images,
-      warnings: warnings.length + scripts.warnings.length + npcs.warnings.length + spriteGroups.warnings.length + tutorialStatus.warnings.length,
+      worldNpcs: world.counts.npcs,
+      spriteSheets: sprites.counts.sheets,
+      warnings: warnings.length + scripts.warnings.length + npcs.warnings.length + spriteGroups.warnings.length + tutorialStatus.warnings.length + world.warnings.length,
       errors: errors.length
     },
-    warnings: [...warnings, ...scripts.warnings, ...npcs.warnings, ...spriteGroups.warnings, ...tutorialStatus.warnings],
+    warnings: [...warnings, ...scripts.warnings, ...npcs.warnings, ...spriteGroups.warnings, ...tutorialStatus.warnings, ...world.warnings],
     errors
   });
 
@@ -216,7 +233,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
       GENERATED_FILES.npcs,
       GENERATED_FILES.spriteGroups,
       GENERATED_FILES.tutorialStatus,
-      GENERATED_FILES.validationReport
+      GENERATED_FILES.validationReport,
+      GENERATED_FILES.world,
+      GENERATED_FILES.sprites
     ],
     issues: [...manifest.warnings, ...manifest.errors],
     counts: {
@@ -231,8 +250,10 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   await writeJson(path.join(outAbs, GENERATED_FILES.spriteGroups), spriteGroups);
   await writeJson(path.join(outAbs, GENERATED_FILES.tutorialStatus), tutorialStatus);
   await writeJson(path.join(outAbs, GENERATED_FILES.validationReport), validationReport);
+  await writeJson(path.join(outAbs, GENERATED_FILES.world), world);
+  await writeJson(path.join(outAbs, GENERATED_FILES.sprites), sprites);
 
-  return { manifest, scripts, npcs, spriteGroups, tutorialStatus, validationReport };
+  return { manifest, scripts, npcs, spriteGroups, tutorialStatus, validationReport, world, sprites };
 }
 
 async function readTutorialStatus(
@@ -241,7 +262,8 @@ async function readTutorialStatus(
   projectExists: boolean,
   scripts: ScriptCollection,
   npcs: NpcReferenceCollection,
-  spriteGroups: SpriteGroupCollection
+  spriteGroups: SpriteGroupCollection,
+  world?: WorldRegion
 ): Promise<TutorialStatus> {
   const steps: TutorialStatus["steps"] = [];
   const warnings: ValidationIssue[] = [];
@@ -343,6 +365,17 @@ async function readTutorialStatus(
       : "No map_sprites.yml reference to NPC 744 was found.",
     path: "map_sprites.yml",
     actual: mapNpc744?.raw ?? "missing"
+  });
+  const worldNpc744 = world?.npcs.find((npc) => npc.npcId === TUTORIAL_NPC_ID);
+  addStep({
+    id: "world_region_rendered",
+    label: "Map region around NPC 744 renders from imported data",
+    status: world?.available && worldNpc744 ? "pass" : "fail",
+    evidence: world?.available
+      ? "world.json includes a rendered region and the tutorial NPC placement."
+      : "World region rendering was skipped; see world.json warnings.",
+    path: "world.json",
+    actual: worldNpc744 ? `region pixel ${worldNpc744.regionPixel.x},${worldNpc744.regionPixel.y}` : "missing"
   });
   addStep({
     id: "rom_compile_run",
@@ -762,9 +795,16 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           GENERATED_FILES.npcs,
           GENERATED_FILES.spriteGroups,
           GENERATED_FILES.tutorialStatus,
-          GENERATED_FILES.validationReport
+          GENERATED_FILES.validationReport,
+          GENERATED_FILES.world,
+          GENERATED_FILES.sprites
         ],
         counts: result.manifest.counts,
+        world: {
+          available: result.world.available,
+          npcs: result.world.counts.npcs,
+          spriteSheets: result.sprites.counts.sheets
+        },
         tutorial: result.tutorialStatus.counts,
         warnings: result.manifest.warnings,
         errors: result.manifest.errors

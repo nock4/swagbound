@@ -1,5 +1,13 @@
 # Next Milestones
 
+> **Status update (full romhack slice):** Milestones 2-4 below have been
+> delivered by the full romhack slice — real map/NPC metadata parsing
+> (`world.json`), a real tile/map renderer, and a local-only gitignored
+> asset-preview pipeline (rendered region PNGs + copied sprite sheets), plus
+> the Milestone 5 dialogue playback for `robot.hello_world`. See
+> `docs/full-romhack-slice-report.md`. The next milestone is doors/teleport
+> interpretation, region streaming, and a minimal event-flag model.
+
 ## Milestone 2: Real Map/NPC Metadata Discovery, No Rendering Yet
 
 Implemented now:
