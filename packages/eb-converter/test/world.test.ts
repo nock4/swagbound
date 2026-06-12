@@ -18,7 +18,7 @@ import {
   parseMapTiles,
   placementToWorldPixel
 } from "../src/coilsnakeYaml";
-import { chooseRegion, encodeCollisionRows, findSpawn } from "../src/world";
+import { chooseRegion, encodeCollisionRows, findSpawn, spriteGroupAnimations } from "../src/world";
 import { encodePngRgba, readPngHeader } from "../src/png";
 
 /** Builds a fully synthetic .fts source (no extracted game data). */
@@ -177,6 +177,15 @@ describe("region selection and collision encoding", () => {
     expect(withVoid.solidCells).toBe(2);
   });
 
+  it("maps CoilSnake sprite-group frames to per-direction walk pairs", () => {
+    // 16-frame sheets follow the decompiled pair order N, E, S, W, NE, SE, SW, NW.
+    expect(spriteGroupAnimations(16)).toEqual({ up: [0, 1], right: [2, 3], down: [4, 5], left: [6, 7] });
+    expect(spriteGroupAnimations(8)).toEqual({ up: [0, 1], right: [2, 3], down: [4, 5], left: [6, 7] });
+    // Short sheets cannot encode directions; all facings reuse the lead pair.
+    expect(spriteGroupAnimations(4)).toEqual({ up: [0, 1], right: [0, 1], down: [0, 1], left: [0, 1] });
+    expect(spriteGroupAnimations(1)).toEqual({ up: [0, 0], right: [0, 0], down: [0, 0], left: [0, 0] });
+  });
+
   it("finds a deterministic walkable spawn near the anchor", () => {
     const solidAt = (cellX: number) => cellX < 80; // everything west of cell 80 is solid
     const spawn = findSpawn(solidAt, 200, 200, { x: 640, y: 640 });
@@ -312,6 +321,14 @@ describe("world artifact build (synthetic project)", () => {
 
       expect(result.sprites.sheets.map((sheet) => sheet.groupId)).toEqual([1, 5]);
       expect(result.sprites.sheets[0]).toMatchObject({ frameWidth: 16, frameHeight: 24, columns: 4, rows: 4, frames: 16 });
+      for (const sheet of result.sprites.sheets) {
+        expect(sheet.animations, `sheet ${sheet.groupId} should carry walk-frame metadata`).toEqual({
+          up: [0, 1],
+          right: [2, 3],
+          down: [4, 5],
+          left: [6, 7]
+        });
+      }
 
       for (const asset of ["assets/world/background.png", "assets/world/foreground.png", "assets/sprites/001.png", "assets/sprites/005.png"]) {
         expect(existsSync(path.join(out, asset)), `${asset} should exist`).toBe(true);

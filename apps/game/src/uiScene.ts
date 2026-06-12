@@ -75,7 +75,8 @@ export class UiScene extends Phaser.Scene {
       ? (world.dialogue.isLastPage ? "Space/Enter: close" : "Space/Enter: next")
       : "";
     const panelVisible = world.debugPanelVisible;
-    const signature = `${open}|${text}|${footer}|${world.prompt}|${panelVisible}`;
+    const runtimeLines = panelVisible ? world.runtimeLines() : [];
+    const signature = `${open}|${text}|${footer}|${world.prompt}|${panelVisible}|${runtimeLines.join("/")}`;
     if (signature === this.lastSignature) {
       return;
     }
@@ -83,7 +84,7 @@ export class UiScene extends Phaser.Scene {
 
     this.promptText?.setText(world.prompt);
     this.drawDialogue(open, text, footer);
-    this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines()] : []);
+    this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);
   }
 
   private drawDialogue(open: boolean, text: string, footer: string): void {

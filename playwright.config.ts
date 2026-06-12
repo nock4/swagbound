@@ -21,7 +21,11 @@ const reporter: ReporterDescription[] = process.env.REPLAY_API_KEY
 
 export default defineConfig({
   testDir: "tests/review",
-  timeout: 30_000,
+  timeout: 60_000,
+  // The game tests are CPU-heavy (canvas rendering + video/trace capture per
+  // worker). More than two concurrent browsers starves the render loop and
+  // produces blank-canvas/slow-input flakes, so cap parallelism.
+  workers: 2,
   reporter,
   webServer: {
     command: "pnpm dev",

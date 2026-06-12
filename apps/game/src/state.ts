@@ -22,7 +22,15 @@ export type FirstSceneDebug = {
   npcs?: DebugNpc[];
   prompt: string;
   facing?: string;
+  moving?: boolean;
+  animKey?: string;
+  animFrame?: number;
+  inputLocked?: boolean;
+  /** Facing-aware: an interactable NPC is in front and in range. */
+  canInteract?: boolean;
+  interactionTargetId?: number;
   distanceToNpc?: number;
+  /** Radius-only proximity to the nearest interactable NPC. */
   inInteractionRange: boolean;
   movementBounds: { minX: number; maxX: number; minY: number; maxY: number };
   statusLines: string[];

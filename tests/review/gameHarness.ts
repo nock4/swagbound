@@ -12,7 +12,15 @@ export type FirstSceneDebug = {
   npcs?: Array<{ id: number; x: number; y: number; interactable: boolean; visible: boolean }>;
   prompt: string;
   facing?: string;
+  moving?: boolean;
+  animKey?: string;
+  animFrame?: number;
+  inputLocked?: boolean;
+  /** Facing-aware: an interactable NPC is in front and in range. */
+  canInteract?: boolean;
+  interactionTargetId?: number;
   distanceToNpc?: number;
+  /** Radius-only proximity to the nearest interactable NPC. */
   inInteractionRange: boolean;
   movementBounds: { minX: number; maxX: number; minY: number; maxY: number };
   statusLines: string[];
@@ -56,10 +64,11 @@ export async function gotoFirstScene(page: Page): Promise<void> {
 /**
  * Walks the player toward the tutorial NPC using the published debug state,
  * axis by axis, with a stuck detector that tries the perpendicular axis.
- * Works in both the world scene (collision) and the fallback scene.
+ * Stops once the player can actually interact: in range AND facing the NPC
+ * in the world scene (canInteract), radius-only in the fallback scene.
  */
 export async function walkToNpc(page: Page): Promise<void> {
-  const deadline = Date.now() + 20_000;
+  const deadline = Date.now() + 30_000;
   let lastPosition = "";
   let stuckRetries = 0;
 
@@ -69,7 +78,7 @@ export async function walkToNpc(page: Page): Promise<void> {
       await page.waitForTimeout(200);
       continue;
     }
-    if (state.inInteractionRange) {
+    if (state.canInteract ?? state.inInteractionRange) {
       return;
     }
     const dx = state.npc.x - state.player.x;
@@ -79,13 +88,22 @@ export async function walkToNpc(page: Page): Promise<void> {
     lastPosition = positionKey;
 
     let key: string;
+    // In radius the player only needs to turn/nudge, so tap briefly; from
+    // farther away, hold longer to cover ground.
+    let holdMs = state.inInteractionRange ? 70 : 240;
     const preferHorizontal = Math.abs(dx) >= Math.abs(dy);
-    if (stuck && stuckRetries < 6) {
-      // Try the perpendicular axis to slide around an obstacle.
+    if (stuck) {
+      // Cycle through detours: perpendicular toward the NPC, perpendicular
+      // away from it, then backtrack. Concave map pockets (a cliff between
+      // player and NPC) need the away/backtrack moves to get around. This
+      // also applies in radius: the dominant-axis nudge can be wall-blocked
+      // right under a ledge, and only a detour breaks the livelock.
       stuckRetries += 1;
-      key = preferHorizontal
-        ? (dy > 0 ? "ArrowDown" : "ArrowUp")
-        : (dx > 0 ? "ArrowRight" : "ArrowLeft");
+      const detours = preferHorizontal
+        ? [dy >= 0 ? "ArrowDown" : "ArrowUp", dy >= 0 ? "ArrowUp" : "ArrowDown", dx > 0 ? "ArrowLeft" : "ArrowRight"]
+        : [dx >= 0 ? "ArrowRight" : "ArrowLeft", dx >= 0 ? "ArrowLeft" : "ArrowRight", dy > 0 ? "ArrowUp" : "ArrowDown"];
+      key = detours[(stuckRetries - 1) % detours.length];
+      holdMs = 320; // long enough to clear a tile-sized obstacle corner
     } else {
       stuckRetries = 0;
       key = preferHorizontal
@@ -94,11 +112,52 @@ export async function walkToNpc(page: Page): Promise<void> {
     }
 
     await page.keyboard.down(key);
-    await page.waitForTimeout(240);
+    await page.waitForTimeout(holdMs);
     await page.keyboard.up(key);
+    if (state.inInteractionRange) {
+      await page.waitForTimeout(120); // let facing/canInteract publish settle
+    }
   }
   const finalState = await readDebug(page);
-  expect(finalState?.inInteractionRange, "player should reach the tutorial NPC interaction range").toBe(true);
+  expect(
+    finalState?.canInteract ?? finalState?.inInteractionRange,
+    "player should reach the tutorial NPC and face it"
+  ).toBe(true);
+}
+
+/** Holds a key for `ms`, samples the debug state mid-hold, then releases. */
+export async function sampleWhileHolding(page: Page, key: string, ms: number): Promise<FirstSceneDebug> {
+  await page.keyboard.down(key);
+  await page.waitForTimeout(ms);
+  const state = await readRequiredDebug(page);
+  await page.keyboard.up(key);
+  return state;
+}
+
+/**
+ * Taps a key in short presses until the debug state satisfies the predicate,
+ * then returns the latest state (callers assert on it). A single timed tap
+ * can be swallowed when the render loop is starved (both key events land
+ * between frames), so retry instead of holding longer.
+ */
+export async function tapKeyUntil(
+  page: Page,
+  key: string,
+  predicate: (state: FirstSceneDebug) => boolean,
+  attempts = 8
+): Promise<FirstSceneDebug> {
+  let state: FirstSceneDebug = await readRequiredDebug(page);
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    await page.keyboard.down(key);
+    await page.waitForTimeout(70);
+    await page.keyboard.up(key);
+    await page.waitForTimeout(130);
+    state = await readRequiredDebug(page);
+    if (predicate(state)) {
+      return state;
+    }
+  }
+  return state;
 }
 
 export function attachRuntimeIssueCapture(page: Page): RuntimeIssues {

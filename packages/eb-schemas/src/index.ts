@@ -194,6 +194,14 @@ export const WorldRegionSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+export const SpriteFacingSchema = z.enum(["up", "right", "down", "left"]);
+
+/** Two walk frames (sheet frame indices) per cardinal facing. */
+export const SpriteAnimationsSchema = z.record(
+  SpriteFacingSchema,
+  z.tuple([z.number().int().nonnegative(), z.number().int().nonnegative()])
+);
+
 export const SpriteSheetSchema = z.object({
   groupId: z.number().int().nonnegative(),
   file: z.string(),
@@ -202,7 +210,8 @@ export const SpriteSheetSchema = z.object({
   frameHeight: z.number().int().positive(),
   columns: z.number().int().positive(),
   rows: z.number().int().positive(),
-  frames: z.number().int().positive()
+  frames: z.number().int().positive(),
+  animations: SpriteAnimationsSchema.optional()
 });
 
 export const SpriteSheetCollectionSchema = z.object({
@@ -277,6 +286,8 @@ export type Manifest = z.infer<typeof ManifestSchema>;
 export type WorldRegion = z.infer<typeof WorldRegionSchema>;
 export type WorldNpc = z.infer<typeof WorldNpcSchema>;
 export type SpriteSheet = z.infer<typeof SpriteSheetSchema>;
+export type SpriteFacing = z.infer<typeof SpriteFacingSchema>;
+export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;
 export type SpriteSheetCollection = z.infer<typeof SpriteSheetCollectionSchema>;
 export type ScriptCollection = z.infer<typeof ScriptCollectionSchema>;
 export type ScriptCommand = z.infer<typeof ScriptCommandSchema>;

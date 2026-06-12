@@ -287,6 +287,22 @@ export function findSpawn(
   return undefined;
 }
 
+/**
+ * Walk-frame pairs per cardinal facing for a CoilSnake sprite-group sheet.
+ * CoilSnake decompiles sprite groups in pair order N, E, S, W, NE, SE, SW, NW
+ * (CoilSnake sprites.py SPRITE_COMPILATION_ORDER inverted), so frames 0-7 are
+ * up, up, right, right, down, down, left, left. Sheets with fewer than 8
+ * frames cannot encode per-direction walks; every facing then reuses the
+ * first frame pair (or a single frame).
+ */
+export function spriteGroupAnimations(frameCount: number): Record<"up" | "right" | "down" | "left", [number, number]> {
+  if (frameCount >= 8) {
+    return { up: [0, 1], right: [2, 3], down: [4, 5], left: [6, 7] };
+  }
+  const second = frameCount >= 2 ? 1 : 0;
+  return { up: [0, second], right: [0, second], down: [0, second], left: [0, second] };
+}
+
 /** True when a text pointer looks like a resolvable ccscript "file.label" reference. */
 export function isCcsReference(pointer: string | undefined): pointer is string {
   return Boolean(pointer && /^[A-Za-z_][\w-]*\.[A-Za-z_][\w-]*$/.test(pointer));
@@ -547,7 +563,8 @@ export async function buildWorldArtifacts(options: {
       frameHeight,
       columns,
       rows,
-      frames
+      frames,
+      animations: spriteGroupAnimations(frames)
     });
   }
 

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import type { WorldNpc, WorldRegion } from "@eb/schemas";
+import type { SpriteSheet, WorldNpc, WorldRegion } from "@eb/schemas";
 import {
   buildDialogueForReference,
   buildMetadataLines,
@@ -9,23 +9,24 @@ import {
   TARGET_REFERENCE,
   type GameData
 } from "./loader";
+import {
+  CANONICAL_DIRECTION_FRAMES,
+  createPlayerState,
+  findInteractionTarget,
+  lockPlayer,
+  nearestInteractable,
+  stepPlayer,
+  toFacing,
+  unlockPlayer,
+  type DirectionFrames,
+  type InteractionCandidate,
+  type MoveInput,
+  type PlayerState
+} from "./playerController";
 import { DialogueController, publishDebug, type DebugNpc, type FirstSceneDebug } from "./state";
 
 export const PLAYER_SPEED = 110; // world pixels per second
 export const INTERACTION_DISTANCE = 28; // world pixels between feet positions
-const WALK_FRAME_MS = 150;
-
-/**
- * Frame layout of CoilSnake sprite-group sheets (4 columns of 16x24 frames):
- * two walk frames per facing — up, down, left, right, then diagonals.
- * Verified visually against the locally rendered sheets (groups 1 and 5).
- */
-const DIRECTION_FRAMES: Record<string, [number, number]> = {
-  up: [0, 1],
-  down: [2, 3],
-  left: [4, 5],
-  right: [6, 7]
-};
 
 type NpcRuntime = {
   data: WorldNpc;
@@ -36,10 +37,8 @@ export class WorldScene extends Phaser.Scene {
   private data_!: GameData;
   private world_!: WorldRegion;
   private player?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
-  private playerFrames: [number, number] = DIRECTION_FRAMES.down;
-  private facing: "up" | "down" | "left" | "right" = "down";
-  private walkClock = 0;
-  private moving = false;
+  private playerState!: PlayerState;
+  private playerFrames: DirectionFrames = CANONICAL_DIRECTION_FRAMES;
   private npcRuntimes: NpcRuntime[] = [];
   private solidRows: string[] = [];
   private collisionCellSize = 8;
@@ -106,10 +105,15 @@ export class WorldScene extends Phaser.Scene {
       if (!npc.visible) {
         continue;
       }
-      this.npcRuntimes.push({ data: npc, sprite: this.spawnActor(npc.regionPixel.x, npc.regionPixel.y, npc.spriteGroup, npc.direction ?? "down") });
+      this.npcRuntimes.push({
+        data: npc,
+        sprite: this.spawnActor(npc.regionPixel.x, npc.regionPixel.y, npc.spriteGroup, npc.direction)
+      });
     }
 
     const spawn = world.player?.spawnRegionPixel ?? { x: 64, y: 64 };
+    this.playerFrames = this.framesForGroup(world.player?.spriteGroup);
+    this.playerState = createPlayerState(spawn.x, spawn.y, "down", this.playerFrames);
     this.player = this.spawnActor(spawn.x, spawn.y, world.player?.spriteGroup, "down");
 
     const width = world.region?.widthPixels ?? 1024;
@@ -133,16 +137,31 @@ export class WorldScene extends Phaser.Scene {
     this.publish();
   }
 
+  /** Walk-frame mapping for a sprite group: generated metadata, else canonical. */
+  private framesForGroup(spriteGroup: number | undefined): DirectionFrames {
+    const sheet: SpriteSheet | undefined = this.data_.sprites?.sheets.find((item) => item.groupId === spriteGroup);
+    const animations = sheet?.animations;
+    if (animations?.up && animations.right && animations.down && animations.left) {
+      return {
+        up: animations.up,
+        right: animations.right,
+        down: animations.down,
+        left: animations.left
+      };
+    }
+    return CANONICAL_DIRECTION_FRAMES;
+  }
+
   private spawnActor(
     x: number,
     y: number,
     spriteGroup: number | undefined,
-    direction: string
+    direction: string | undefined
   ): Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle {
     const key = spriteGroup !== undefined ? `sheet-${spriteGroup}` : undefined;
     if (key && this.textures.exists(key)) {
-      const frames = DIRECTION_FRAMES[direction] ?? DIRECTION_FRAMES.down;
-      const sprite = this.add.sprite(x, y, key, frames[0]);
+      const frames = this.framesForGroup(spriteGroup);
+      const sprite = this.add.sprite(x, y, key, frames[toFacing(direction)][0]);
       sprite.setOrigin(0.5, 1);
       sprite.setDepth(y);
       return sprite;
@@ -157,56 +176,44 @@ export class WorldScene extends Phaser.Scene {
     if (!this.player) {
       return;
     }
-    if (!this.dialogue.open) {
-      this.movePlayer(delta);
-    } else {
-      this.moving = false;
+    // Dialogue owns the input: freeze movement and animation while open.
+    if (this.dialogue.open && !this.playerState.inputLocked) {
+      lockPlayer(this.playerState, this.playerFrames);
+    } else if (!this.dialogue.open && this.playerState.inputLocked) {
+      unlockPlayer(this.playerState);
     }
-    this.animatePlayer(delta);
+
+    stepPlayer(this.playerState, this.readInput(), {
+      deltaMs: delta,
+      speed: PLAYER_SPEED,
+      bounds: this.movementBounds(),
+      blocked: (x, y) => this.blocked(x, y),
+      frames: this.playerFrames
+    });
+
+    this.player.x = this.playerState.x;
+    this.player.y = this.playerState.y;
+    if (this.player instanceof Phaser.GameObjects.Sprite) {
+      this.player.setFrame(this.playerState.animFrame);
+    }
     this.player.setDepth(this.player.y);
     this.updatePrompt();
     this.publish();
   }
 
-  private movePlayer(delta: number): void {
-    const player = this.player as Phaser.GameObjects.Sprite;
-    const left = this.cursors?.left?.isDown || this.keys?.A?.isDown;
-    const right = this.cursors?.right?.isDown || this.keys?.D?.isDown;
-    const up = this.cursors?.up?.isDown || this.keys?.W?.isDown;
-    const down = this.cursors?.down?.isDown || this.keys?.S?.isDown;
+  private readInput(): MoveInput {
+    return {
+      left: Boolean(this.cursors?.left?.isDown || this.keys?.A?.isDown),
+      right: Boolean(this.cursors?.right?.isDown || this.keys?.D?.isDown),
+      up: Boolean(this.cursors?.up?.isDown || this.keys?.W?.isDown),
+      down: Boolean(this.cursors?.down?.isDown || this.keys?.S?.isDown)
+    };
+  }
 
-    let dx = (right ? 1 : 0) - (left ? 1 : 0);
-    let dy = (down ? 1 : 0) - (up ? 1 : 0);
-    this.moving = dx !== 0 || dy !== 0;
-    if (!this.moving) {
-      return;
-    }
-
-    if (dx !== 0 && dy !== 0) {
-      const inv = Math.SQRT1_2;
-      dx *= inv;
-      dy *= inv;
-    }
-    const step = (PLAYER_SPEED * delta) / 1000;
-
-    // Facing follows the dominant axis.
-    if (Math.abs(dx) >= Math.abs(dy) && dx !== 0) {
-      this.facing = dx > 0 ? "right" : "left";
-    } else if (dy !== 0) {
-      this.facing = dy > 0 ? "down" : "up";
-    }
-    this.playerFrames = DIRECTION_FRAMES[this.facing];
-
+  private movementBounds(): { minX: number; maxX: number; minY: number; maxY: number } {
     const width = this.world_.region?.widthPixels ?? 0;
     const height = this.world_.region?.heightPixels ?? 0;
-    const tryX = Phaser.Math.Clamp(player.x + dx * step, 8, width - 8);
-    if (!this.blocked(tryX, player.y)) {
-      player.x = tryX;
-    }
-    const tryY = Phaser.Math.Clamp(player.y + dy * step, 12, height - 1);
-    if (!this.blocked(player.x, tryY)) {
-      player.y = tryY;
-    }
+    return { minX: 8, maxX: width - 8, minY: 12, maxY: height - 1 };
   }
 
   /** Feet-box collision against the imported surface grid plus NPC bodies. */
@@ -237,19 +244,20 @@ export class WorldScene extends Phaser.Scene {
     return false;
   }
 
-  private animatePlayer(delta: number): void {
-    const player = this.player;
-    if (!player || !(player instanceof Phaser.GameObjects.Sprite)) {
-      return;
-    }
-    if (this.moving) {
-      this.walkClock += delta;
-      const frame = this.playerFrames[Math.floor(this.walkClock / WALK_FRAME_MS) % 2];
-      player.setFrame(frame);
-    } else {
-      this.walkClock = 0;
-      player.setFrame(this.playerFrames[0]);
-    }
+  private interactionCandidates(): InteractionCandidate[] {
+    return this.npcRuntimes.map((npc) => ({
+      id: npc.data.npcId,
+      x: npc.data.regionPixel.x,
+      y: npc.data.regionPixel.y,
+      interactable: npc.data.interactable
+    }));
+  }
+
+  /** The NPC the player is currently facing and close enough to talk to. */
+  private interactionTarget(): InteractionCandidate | undefined {
+    return findInteractionTarget(this.playerState, this.interactionCandidates(), {
+      maxDistance: INTERACTION_DISTANCE
+    })?.candidate;
   }
 
   private tutorialNpc(): NpcRuntime | undefined {
@@ -261,19 +269,21 @@ export class WorldScene extends Phaser.Scene {
     if (!npc || !this.player) {
       return undefined;
     }
-    return Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.data.regionPixel.x, npc.data.regionPixel.y);
+    return Phaser.Math.Distance.Between(this.playerState.x, this.playerState.y, npc.data.regionPixel.x, npc.data.regionPixel.y);
   }
 
+  /** Radius-only proximity (facing not required) — used for prompts/debug. */
   private inRange(): boolean {
-    const distance = this.distanceToTutorialNpc();
-    return distance !== undefined && distance < INTERACTION_DISTANCE;
+    return Boolean(nearestInteractable(this.playerState, this.interactionCandidates(), INTERACTION_DISTANCE));
   }
 
   private updatePrompt(): void {
     if (this.dialogue.open) {
       this.prompt = "Space/Enter: advance | Esc/Backspace: close";
+    } else if (this.interactionTarget()) {
+      this.prompt = "Space/Enter: talk to the robot";
     } else if (this.inRange()) {
-      this.prompt = "Space/Enter: talk to the imported script marker";
+      this.prompt = "Turn toward the robot, then press Space/Enter";
     } else {
       this.prompt = "Move with Arrow keys/WASD. Approach the robot to talk.";
     }
@@ -281,19 +291,28 @@ export class WorldScene extends Phaser.Scene {
 
   handleAdvance(): void {
     if (!this.dialogue.open) {
-      if (this.inRange() && this.dialogue.canOpen()) {
+      if (this.interactionTarget() && this.dialogue.canOpen()) {
         this.openDialogue();
       }
       return;
     }
     this.dialogue.advance();
+    if (!this.dialogue.open) {
+      // Advancing past the last page closed the dialogue: release the lock
+      // here (not in the next update tick) so the published state never shows
+      // dialogueOpen=false with inputLocked=true.
+      unlockPlayer(this.playerState);
+    }
     this.publish();
   }
 
   private openDialogue(): void {
-    const npc = this.tutorialNpc();
-    const reference = npc?.data.textPointer && npc.data.npcId === 744 ? npc.data.textPointer : this.targetReference;
+    const target = this.interactionTarget();
+    const npc = this.npcRuntimes.find((runtime) => runtime.data.npcId === target?.id) ?? this.tutorialNpc();
+    const pointer = npc?.data.textPointer;
+    const reference = pointer && /^[A-Za-z_][\w-]*\.[A-Za-z_][\w-]*$/.test(pointer) ? pointer : this.targetReference;
     this.dialogue.start(buildDialogueForReference(this.data_.scripts, reference));
+    lockPlayer(this.playerState, this.playerFrames);
     this.updatePrompt();
     this.publish();
   }
@@ -303,6 +322,7 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
     this.dialogue.close();
+    unlockPlayer(this.playerState);
     this.updatePrompt();
     this.publish();
   }
@@ -315,10 +335,22 @@ export class WorldScene extends Phaser.Scene {
     return buildMetadataLines(this.data_);
   }
 
+  /** Live controller state for the hidden F1 panel. */
+  runtimeLines(): string[] {
+    const state = this.playerState;
+    return [
+      "Player Runtime",
+      `facing: ${state.facing} | moving: ${state.moving} | locked: ${state.inputLocked}`,
+      `anim: ${state.animKey} frame ${state.animFrame}`,
+      `feet: ${Math.round(state.x)},${Math.round(state.y)} | target: ${this.interactionTarget()?.id ?? "none"}`
+    ];
+  }
+
   private publish(): void {
     const world = this.world_;
     const npc744 = this.tutorialNpc();
     const distance = this.distanceToTutorialNpc();
+    const target = this.interactionTarget();
     const npcs: DebugNpc[] = world.npcs.map((npc) => ({
       id: npc.npcId,
       x: npc.regionPixel.x,
@@ -333,19 +365,20 @@ export class WorldScene extends Phaser.Scene {
       dialoguePageIndex: this.dialogue.pageIndex,
       dialoguePageCount: this.dialogue.pages.length,
       targetReference: this.targetReference,
-      player: this.player ? { x: this.player.x, y: this.player.y } : undefined,
+      player: this.player ? { x: this.playerState.x, y: this.playerState.y } : undefined,
       npc: npc744 ? { x: npc744.data.regionPixel.x, y: npc744.data.regionPixel.y } : undefined,
       npcs,
       prompt: this.prompt,
-      facing: this.facing,
+      facing: this.playerState.facing,
+      moving: this.playerState.moving,
+      animKey: this.playerState.animKey,
+      animFrame: this.playerState.animFrame,
+      inputLocked: this.playerState.inputLocked,
+      canInteract: Boolean(target),
+      interactionTargetId: target?.id,
       distanceToNpc: distance,
       inInteractionRange: this.inRange(),
-      movementBounds: {
-        minX: 8,
-        maxX: (world.region?.widthPixels ?? 0) - 8,
-        minY: 12,
-        maxY: (world.region?.heightPixels ?? 0) - 1
-      },
+      movementBounds: this.movementBounds(),
       statusLines: this.statusLines(),
       metadataLines: this.metadataLines(),
       tutorial: this.data_.tutorialStatus?.counts,
