@@ -43,6 +43,7 @@ export type FirstSceneDebug = {
   tutorial?: TutorialStatus["counts"];
   resolveStatus: string;
   dialogueCounters?: { opens: number; advances: number; closes: number };
+  flags?: string[];
   world?: {
     available: boolean;
     originTile?: { x: number; y: number };

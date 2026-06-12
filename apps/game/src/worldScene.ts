@@ -10,6 +10,7 @@ import {
   type GameData
 } from "./loader";
 import { interactionEvents, type GameEvent } from "./eventRunner";
+import { GameFlags } from "./gameFlags";
 import { behaviorForNpc } from "./npcBehaviors";
 import {
   createNpcState,
@@ -70,6 +71,7 @@ export class WorldScene extends Phaser.Scene {
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
   readonly dialogue = new DialogueController();
+  private readonly gameFlags = new GameFlags();
   targetReference = TARGET_REFERENCE;
   prompt = "";
   assetsLoaded = false;
@@ -389,7 +391,7 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
     this.pauseNpcForDialogue(npc);
-    this.runEvents(interactionEvents(npc.data, this.targetReference));
+    this.runEvents(interactionEvents(npc.data, this.targetReference, this.gameFlags));
     lockPlayer(this.playerState, this.playerFrames);
     this.updatePrompt();
     this.publish();
@@ -400,7 +402,10 @@ export class WorldScene extends Phaser.Scene {
       switch (event.kind) {
         case "dialogue":
           this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference));
-          return;
+          break;
+        case "setFlag":
+          this.gameFlags.set(event.flag);
+          break;
       }
     }
   }
@@ -512,6 +517,7 @@ export class WorldScene extends Phaser.Scene {
       tutorial: this.data_.tutorialStatus?.counts,
       resolveStatus: resolveStatus(this.data_),
       dialogueCounters: { opens: this.dialogue.opens, advances: this.dialogue.advances, closes: this.dialogue.closes },
+      flags: this.gameFlags.list(),
       world: {
         available: world.available,
         originTile: world.region?.originTile,

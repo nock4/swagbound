@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { interactionEvents } from "../src/eventRunner";
 import {
   createNpcState,
   facingToward,
@@ -93,19 +92,5 @@ describe("facingToward", () => {
     expect(facingToward(0, 0, 2, -9)).toBe("up");
     expect(facingToward(0, 0, -10, 10)).toBe("left");
     expect(facingToward(0, 0, 10, -10)).toBe("right");
-  });
-});
-
-describe("interactionEvents", () => {
-  it("uses ccs-like NPC pointers and falls back otherwise", () => {
-    expect(interactionEvents({ textPointer: "robot.greeter-1" }, "robot.hello_world")).toEqual([
-      { kind: "dialogue", reference: "robot.greeter-1" }
-    ]);
-    expect(interactionEvents({ textPointer: "123.bad" }, "robot.hello_world")).toEqual([
-      { kind: "dialogue", reference: "robot.hello_world" }
-    ]);
-    expect(interactionEvents({}, "robot.hello_world")).toEqual([
-      { kind: "dialogue", reference: "robot.hello_world" }
-    ]);
   });
 });

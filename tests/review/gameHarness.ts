@@ -44,6 +44,7 @@ export type FirstSceneDebug = {
     unknown: number;
   };
   resolveStatus: string;
+  flags?: string[];
   world?: {
     available: boolean;
     originTile?: { x: number; y: number };
