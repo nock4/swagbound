@@ -69,7 +69,7 @@ test("interaction requires facing the NPC, not just standing near it", async ({ 
   const facingState = await readRequiredDebug(page);
   expect(facingState.canInteract, "after walking up, the NPC should be in front").toBe(true);
   expect(facingState.interactionTargetId).toBe(744);
-  expect(facingState.prompt).toContain("talk to the robot");
+  expect(facingState.prompt).toContain("Space/Enter: talk");
 
   // Turn away on the perpendicular axis: the facing changes while the player
   // barely moves. If the tap drifts the player out of the radius (the walker
@@ -90,7 +90,7 @@ test("interaction requires facing the NPC, not just standing near it", async ({ 
   }
   expect(turnedAway, "player should end up near the NPC while facing away").toBeDefined();
   expect(turnedAway?.inInteractionRange, "player should still be within radius").toBe(true);
-  expect(turnedAway?.prompt).toContain("Turn toward the robot");
+  expect(turnedAway?.prompt).toContain("Turn to face them");
 
   // Confirm press while facing away must NOT open dialogue.
   await page.keyboard.press("Space");

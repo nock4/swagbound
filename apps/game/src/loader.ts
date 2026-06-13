@@ -181,7 +181,7 @@ export function buildStatusLines(data: GameData): string[] {
     ? `World: ${world.region.widthTiles}x${world.region.heightTiles} tiles @ (${world.region.originTile.x},${world.region.originTile.y}) | NPCs: ${world.counts.visibleNpcs}/${world.counts.npcs}`
     : "World: unavailable (run pnpm convert with the local fixture)";
   return [
-    "Your First Hack: CoilSnake Import",
+    statusPanelTitle(data),
     `Project: ${manifest.sourceProject.exists ? "found" : "missing"} | Project.snake: ${manifest.sourceProject.hasProjectSnake ? "found" : "missing"}`,
     `Scripts: ${manifest.counts.scriptFiles} files, ${manifest.counts.scriptCommands} commands`,
     `Labels: ${manifest.counts.labels} | Text: ${manifest.counts.textCommands} | Unknown: ${manifest.counts.unknownCommands}`,
@@ -190,6 +190,12 @@ export function buildStatusLines(data: GameData): string[] {
     `Tutorial: ${tutorialSummary(data.tutorialStatus)}`,
     `Validation issues: ${data.validationReport?.issues.length ?? manifest.counts.warnings + manifest.counts.errors}`
   ];
+}
+
+export function statusPanelTitle(data: GameData): string {
+  const manifest = data.manifest as { title?: unknown; name?: unknown };
+  const world = data.world as { title?: unknown; name?: unknown } | undefined;
+  return firstText(world?.title, manifest.title, world?.name, manifest.name) ?? "Game Status";
 }
 
 export function buildMetadataLines(data: GameData): string[] {
@@ -211,4 +217,13 @@ export function tutorialSummary(tutorialStatus: TutorialStatus | undefined): str
   }
   const counts = tutorialStatus.counts;
   return `${counts.passed}/${counts.steps} pass, ${counts.failed} gaps, ${counts.blocked} blocked`;
+}
+
+function firstText(...values: unknown[]): string | undefined {
+  for (const value of values) {
+    if (typeof value === "string" && value.trim().length > 0) {
+      return value.trim();
+    }
+  }
+  return undefined;
 }

@@ -50,7 +50,7 @@ export class UiScene extends Phaser.Scene {
       backgroundColor: "#0f172acc",
       padding: { x: 6, y: 3 }
     }).setDepth(11);
-    this.badgeText = this.add.text(this.scale.width - 12, 10, "F1: import status", {
+    this.badgeText = this.add.text(this.scale.width - 12, 10, "F1: debug", {
       fontFamily: MONO,
       fontSize: "10px",
       color: "#94a3b8",

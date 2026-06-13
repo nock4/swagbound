@@ -460,17 +460,29 @@ export class WorldScene extends Phaser.Scene {
   }
 
   private updatePrompt(): void {
+    const target = this.interactionTarget();
     if (this.menuState.open) {
       this.prompt = "Arrows: choose | Space/Enter: select | Esc/Backspace: back";
     } else if (this.dialogue.open) {
       this.prompt = "Space/Enter: advance | Esc/Backspace: close";
-    } else if (this.interactionTarget()) {
-      this.prompt = "Space/Enter: talk to the robot";
+    } else if (target) {
+      this.prompt = this.talkPrompt(target.id);
     } else if (this.inRange()) {
-      this.prompt = "Turn toward the robot, then press Space/Enter";
+      this.prompt = "Turn to face them, then Space/Enter";
     } else {
-      this.prompt = "Move with Arrow keys/WASD. Approach the robot to talk.";
+      this.prompt = "Move with Arrow keys / WASD. Approach someone to talk.";
     }
+  }
+
+  private talkPrompt(npcId: number): string {
+    const name = this.npcName(npcId);
+    return name ? `Space/Enter: talk to ${name}` : "Space/Enter: talk";
+  }
+
+  private npcName(npcId: number): string | undefined {
+    const npc = this.npcRuntimes.find((runtime) => runtime.data.npcId === npcId);
+    const name = (npc?.data as { name?: unknown } | undefined)?.name;
+    return typeof name === "string" && name.trim().length > 0 ? name.trim() : undefined;
   }
 
   private handleConfirm(): void {

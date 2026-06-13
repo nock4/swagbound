@@ -5,6 +5,7 @@ import {
   buildStatusLines,
   chooseReference,
   resolveStatus,
+  statusPanelTitle,
   type GameData
 } from "./loader";
 import { DialogueController, publishDebug, type FirstSceneDebug } from "./state";
@@ -15,8 +16,7 @@ const INTERACTION_DISTANCE = 128;
 
 /**
  * Primitive bounded scene used only when world.json (or its assets) are
- * unavailable — e.g. when the local CoilSnake fixture is missing. Keeps the
- * original import-status behavior so the app never hard-fails.
+ * unavailable. Keeps a minimal observable scene so the app never hard-fails.
  */
 export class FallbackScene extends Phaser.Scene {
   private data_!: GameData;
@@ -51,7 +51,7 @@ export class FallbackScene extends Phaser.Scene {
     graphics.lineStyle(2, 0x4b6478, 0.8);
     graphics.strokeRoundedRect(24, 64, width - 48, 240, 8);
 
-    this.add.text(24, 14, "Your First Hack: CoilSnake Import", {
+    this.add.text(24, 14, statusPanelTitle(this.data_), {
       fontFamily: MONO,
       fontSize: "15px",
       color: "#f8fafc"
@@ -142,8 +142,8 @@ export class FallbackScene extends Phaser.Scene {
     this.promptText?.setText(this.dialogue.open
       ? "Space/Enter: advance | Esc/Backspace: close"
       : this.inRange()
-        ? "Space/Enter: talk to the imported script marker"
-        : "Move with Arrow keys/WASD. Approach the marker to interact.");
+        ? "Space/Enter: talk"
+        : "Move with Arrow keys / WASD. Approach someone to talk.");
     const state: FirstSceneDebug = {
       mode: "fallback",
       dialogueOpen: this.dialogue.open,

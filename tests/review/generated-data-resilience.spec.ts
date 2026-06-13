@@ -101,7 +101,7 @@ test("scene remains observable on a narrow review viewport", async ({ page }) =>
   expect(canvasBox?.height).toBeGreaterThan(200);
 
   const state = await waitForDebug(page);
-  expect(state.statusLines.join("\n")).toContain("Your First Hack: CoilSnake Import");
+  expect(state.statusLines.join("\n")).toContain("Game Status");
   expect(state.metadataLines.join("\n")).toContain("Asset rendering: local-only");
   assertNoRuntimeIssues(issues);
 });

@@ -16,7 +16,7 @@ test("world scene renders imported map and plays imported dialogue", async ({ pa
   await gotoFirstScene(page);
 
   const initial = await waitForDebug(page, (state) => state.mode === "world" && Boolean(state.player));
-  expect(initial.statusLines.join("\n")).toContain("Your First Hack: CoilSnake Import");
+  expect(initial.statusLines.join("\n")).toContain("Game Status");
   expect(initial.statusLines.join("\n")).toContain("Project: found");
   expect(initial.statusLines.join("\n")).toContain("Scripts: 1 files");
   expect(initial.statusLines.join("\n")).toContain("NPC refs: 5");
