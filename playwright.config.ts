@@ -9,7 +9,7 @@ const baseReporters: ReporterDescription[] = [
   ["line"]
 ];
 
-const reporter: ReporterDescription[] = process.env.REPLAY_API_KEY
+const reporter: ReporterDescription[] = process.env.PLAYWRIGHT_ENABLE_REPLAY === "1" && process.env.REPLAY_API_KEY && process.env.PLAYWRIGHT_DISABLE_REPLAY !== "1"
   ? [
       replayReporter({
         apiKey: process.env.REPLAY_API_KEY,
@@ -19,6 +19,15 @@ const reporter: ReporterDescription[] = process.env.REPLAY_API_KEY
     ]
   : baseReporters;
 
+const webServer = process.env.PLAYWRIGHT_SKIP_WEBSERVER === "1"
+  ? undefined
+  : {
+      command: "pnpm dev",
+      url: "http://127.0.0.1:5173/",
+      reuseExistingServer: !process.env.CI,
+      timeout: 30_000
+    };
+
 export default defineConfig({
   testDir: "tests/review",
   timeout: 60_000,
@@ -27,15 +36,11 @@ export default defineConfig({
   // produces blank-canvas/slow-input flakes, so cap parallelism.
   workers: 2,
   reporter,
-  webServer: {
-    command: "pnpm dev",
-    url: "http://127.0.0.1:5173/",
-    reuseExistingServer: !process.env.CI,
-    timeout: 30_000
-  },
+  webServer,
   projects: [
     {
       name: "review-chromium",
+      testIgnore: /full-world\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://127.0.0.1:5173/",
@@ -49,7 +54,20 @@ export default defineConfig({
       }
     },
     {
+      name: "full-world-chromium",
+      testMatch: /full-world\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "http://127.0.0.1:5173/",
+        viewport: { width: 1000, height: 760 },
+        trace: "retain-on-failure",
+        video: "retain-on-failure",
+        screenshot: "only-on-failure"
+      }
+    },
+    {
       name: "replay-chromium",
+      testIgnore: /full-world\.spec\.ts/,
       use: {
         ...replayDevices["Replay Chromium"],
         baseURL: "http://127.0.0.1:5173/",
