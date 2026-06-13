@@ -40,7 +40,7 @@ export default defineConfig({
   projects: [
     {
       name: "review-chromium",
-      testIgnore: /full-world\.spec\.ts/,
+      testIgnore: [/full-world\.spec\.ts/, /battle\.spec\.ts/],
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://127.0.0.1:5173/",
@@ -48,6 +48,18 @@ export default defineConfig({
         // retain-on-failure: keep artifacts for failures only. "on" wrote a
         // video + multi-MB trace for every passing test across every run,
         // which filled the disk during the parity campaign.
+        trace: "retain-on-failure",
+        video: "retain-on-failure",
+        screenshot: "only-on-failure"
+      }
+    },
+    {
+      name: "battle-chromium",
+      testMatch: /battle\.spec\.ts/,
+      use: {
+        ...devices["Desktop Chrome"],
+        baseURL: "http://127.0.0.1:5173/",
+        viewport: { width: 1000, height: 760 },
         trace: "retain-on-failure",
         video: "retain-on-failure",
         screenshot: "only-on-failure"
@@ -67,7 +79,7 @@ export default defineConfig({
     },
     {
       name: "replay-chromium",
-      testIgnore: /full-world\.spec\.ts/,
+      testIgnore: [/full-world\.spec\.ts/, /battle\.spec\.ts/],
       use: {
         ...replayDevices["Replay Chromium"],
         baseURL: "http://127.0.0.1:5173/",

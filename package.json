@@ -31,6 +31,7 @@
     "test:review": "playwright test --project review-chromium",
     "test:mantis": "playwright test --project review-chromium",
     "test:fullworld": "node --import tsx scripts/run-fullworld-test.ts",
+    "test:battle": "node --import tsx scripts/run-battle-test.ts",
     "test:replay": "PLAYWRIGHT_ENABLE_REPLAY=1 playwright test --project replay-chromium",
     "show:review": "playwright show-report playwright-report",
     "verify": "pnpm install --frozen-lockfile && pnpm convert && pnpm validate && pnpm test && pnpm exec tsc --noEmit && pnpm test:review"
