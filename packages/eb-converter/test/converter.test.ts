@@ -225,6 +225,36 @@ describe("CCScript parser v0", () => {
       { kind: "control", code: "goto", raw: "{goto(other.target)}", target: "other.target" }
     ]);
   });
+
+  it("captures branch targets from dumped pointer byte controls", () => {
+    expect(tokenizeCcsString("[1B 02 {e(other.false_path)}][1B 03 {e(other.true_path)}]")).toEqual([
+      { kind: "control", code: "branch_false", raw: "[1B 02 {e(other.false_path)}]", target: "other.false_path" },
+      { kind: "control", code: "branch_true", raw: "[1B 03 {e(other.true_path)}]", target: "other.true_path" }
+    ]);
+  });
+
+  it("captures high-level inline conditional block markers", () => {
+    const parsed = parseCcsFile("ccscript/example.ccs", [
+      "start:",
+      "if isset(7)",
+      '"Then synthetic text."',
+      "else",
+      '"Else synthetic text."',
+      "endif"
+    ].join("\n"));
+
+    expect(parsed.commands.map((command) => command.cmd)).toEqual([
+      "label",
+      "control",
+      "text",
+      "control",
+      "text",
+      "control"
+    ]);
+    expect(parsed.commands[1]).toMatchObject({ code: "if", raw: "if isset(7)" });
+    expect(parsed.commands[3]).toMatchObject({ code: "else" });
+    expect(parsed.commands[5]).toMatchObject({ code: "endif" });
+  });
 });
 
 describe("CCScript text segments", () => {

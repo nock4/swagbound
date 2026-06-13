@@ -41,11 +41,24 @@ function control(file: string, code: string, line: number, target?: string): Scr
   };
 }
 
+function branchControl(file: string, code: "branch_true" | "branch_false", line: number, target: string): ScriptCommand {
+  return control(file, code, line, target);
+}
+
 function flagControl(file: string, code: "set" | "unset" | "isset", flag: number, line: number): ScriptCommand {
   return {
     cmd: "control",
     code,
     raw: `${code}(${flag})`,
+    sourceLocation: location(file, line)
+  };
+}
+
+function hasItemControl(file: string, line: number): ScriptCommand {
+  return {
+    cmd: "control",
+    code: "hasitem",
+    raw: "hasitem(255, 202)",
     sourceLocation: location(file, line)
   };
 }
@@ -57,6 +70,11 @@ function resultControl(file: string, code: "result_is" | "result_not", value: nu
     raw: `${code}(${value})`,
     sourceLocation: location(file, line)
   };
+}
+
+function inlineControl(file: string, raw: string, line: number): ScriptCommand {
+  const code = raw.startsWith("if ") ? "if" : raw === "else" ? "else" : "endif";
+  return { cmd: "control", code, raw, sourceLocation: location(file, line) };
 }
 
 function flagState(initial: number[] = []): NumericFlagState & { listNums(): number[] } {
@@ -294,6 +312,216 @@ describe("resolveScriptReferenceFlow", () => {
 
     expect(flow?.truncated).toBe(false);
     expect(buildDialoguePages(flow?.commands ?? []).map((page) => page.text)).toEqual(["Clear synthetic path."]);
+  });
+
+  it("follows a branch-false opcode when an isset condition is false", () => {
+    const file = "ccscript/alpha.ccs";
+    const flow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        flagControl(file, "isset", 7, 2),
+        branchControl(file, "branch_false", 3, "else_path"),
+        text(file, "Then synthetic path.", 4),
+        runtimeCommand(file, "end", 5),
+        label(file, "else_path", 6),
+        text(file, "Else synthetic path.", 7),
+        runtimeCommand(file, "end", 8)
+      ]
+    }), "alpha.start", { flags: flagState() });
+
+    expect(flow?.truncated).toBe(false);
+    expect(buildDialoguePages(flow?.commands ?? []).map((page) => page.text)).toEqual(["Else synthetic path."]);
+  });
+
+  it("falls through a branch-false opcode when an isset condition is true", () => {
+    const file = "ccscript/alpha.ccs";
+    const flow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        flagControl(file, "isset", 7, 2),
+        branchControl(file, "branch_false", 3, "else_path"),
+        text(file, "Then synthetic path.", 4),
+        runtimeCommand(file, "end", 5),
+        label(file, "else_path", 6),
+        text(file, "Else synthetic path.", 7),
+        runtimeCommand(file, "end", 8)
+      ]
+    }), "alpha.start", { flags: flagState([7]) });
+
+    expect(flow?.truncated).toBe(false);
+    expect(buildDialoguePages(flow?.commands ?? []).map((page) => page.text)).toEqual(["Then synthetic path."]);
+  });
+
+  it("follows branch-true opcodes for result_is and result_not conditions", () => {
+    const file = "ccscript/alpha.ccs";
+    const resultIsFlow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        flagControl(file, "isset", 4, 2),
+        resultControl(file, "result_is", 1, 3),
+        branchControl(file, "branch_true", 4, "matched"),
+        text(file, "Unmatched synthetic path.", 5),
+        runtimeCommand(file, "end", 6),
+        label(file, "matched", 7),
+        text(file, "Matched synthetic path.", 8),
+        runtimeCommand(file, "end", 9)
+      ]
+    }), "alpha.start", { flags: flagState([4]) });
+    const resultNotFlow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        flagControl(file, "isset", 4, 2),
+        resultControl(file, "result_not", 1, 3),
+        branchControl(file, "branch_true", 4, "matched"),
+        text(file, "Unmatched synthetic path.", 5),
+        runtimeCommand(file, "end", 6),
+        label(file, "matched", 7),
+        text(file, "Matched synthetic path.", 8),
+        runtimeCommand(file, "end", 9)
+      ]
+    }), "alpha.start", { flags: flagState() });
+
+    expect(resultIsFlow?.truncated).toBe(false);
+    expect(resultNotFlow?.truncated).toBe(false);
+    expect(buildDialoguePages(resultIsFlow?.commands ?? []).map((page) => page.text)).toEqual(["Matched synthetic path."]);
+    expect(buildDialoguePages(resultNotFlow?.commands ?? []).map((page) => page.text)).toEqual(["Matched synthetic path."]);
+  });
+
+  it("treats hasitem as false for an all-clear no-inventory runtime", () => {
+    const file = "ccscript/alpha.ccs";
+    const flow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        hasItemControl(file, 2),
+        branchControl(file, "branch_false", 3, "no_item"),
+        text(file, "Item synthetic path.", 4),
+        runtimeCommand(file, "end", 5),
+        label(file, "no_item", 6),
+        text(file, "No item synthetic path.", 7),
+        runtimeCommand(file, "end", 8)
+      ]
+    }), "alpha.start", { flags: flagState() });
+
+    expect(flow?.truncated).toBe(false);
+    expect(buildDialoguePages(flow?.commands ?? []).map((page) => page.text)).toEqual(["No item synthetic path."]);
+  });
+
+  it("keeps unknown result comparisons on deterministic fall-through", () => {
+    const file = "ccscript/alpha.ccs";
+    const flow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        resultControl(file, "result_is", 1, 2),
+        branchControl(file, "branch_false", 3, "unknown_branch"),
+        text(file, "Fall-through synthetic path.", 4),
+        runtimeCommand(file, "end", 5),
+        label(file, "unknown_branch", 6),
+        text(file, "Unknown synthetic branch.", 7),
+        runtimeCommand(file, "end", 8)
+      ]
+    }), "alpha.start", { flags: flagState() });
+
+    expect(flow?.truncated).toBe(false);
+    expect(buildDialoguePages(flow?.commands ?? []).map((page) => page.text)).toEqual(["Fall-through synthetic path."]);
+  });
+
+  it("collects the then block from an inline if/else", () => {
+    const file = "ccscript/alpha.ccs";
+    const flow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        inlineControl(file, "if isset(2)", 2),
+        text(file, "Then synthetic block.", 3),
+        inlineControl(file, "else", 4),
+        text(file, "Else synthetic block.", 5),
+        inlineControl(file, "endif", 6),
+        runtimeCommand(file, "end", 7)
+      ]
+    }), "alpha.start", { flags: flagState([2]) });
+
+    expect(flow?.truncated).toBe(false);
+    expect(buildDialoguePages(flow?.commands ?? []).map((page) => page.text)).toEqual(["Then synthetic block."]);
+  });
+
+  it("collects the else block from an inline if/else", () => {
+    const file = "ccscript/alpha.ccs";
+    const flow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        inlineControl(file, "if isset(2)", 2),
+        text(file, "Then synthetic block.", 3),
+        inlineControl(file, "else", 4),
+        text(file, "Else synthetic block.", 5),
+        inlineControl(file, "endif", 6),
+        runtimeCommand(file, "end", 7)
+      ]
+    }), "alpha.start", { flags: flagState() });
+
+    expect(flow?.truncated).toBe(false);
+    expect(buildDialoguePages(flow?.commands ?? []).map((page) => page.text)).toEqual(["Else synthetic block."]);
+  });
+
+  it("handles nested inline conditionals", () => {
+    const file = "ccscript/alpha.ccs";
+    const flow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        inlineControl(file, "if isset(1)", 2),
+        inlineControl(file, "if isset(2)", 3),
+        text(file, "Nested then synthetic block.", 4),
+        inlineControl(file, "else", 5),
+        text(file, "Nested else synthetic block.", 6),
+        inlineControl(file, "endif", 7),
+        inlineControl(file, "else", 8),
+        text(file, "Outer else synthetic block.", 9),
+        inlineControl(file, "endif", 10),
+        runtimeCommand(file, "end", 11)
+      ]
+    }), "alpha.start", { flags: flagState([1]) });
+
+    expect(flow?.truncated).toBe(false);
+    expect(buildDialoguePages(flow?.commands ?? []).map((page) => page.text)).toEqual(["Nested else synthetic block."]);
+  });
+
+  it("applies side effects in a taken inline path before a later conditional", () => {
+    const file = "ccscript/alpha.ccs";
+    const flags = flagState([1]);
+    const flow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        inlineControl(file, "if isset(1)", 2),
+        flagControl(file, "set", 8, 3),
+        inlineControl(file, "else", 4),
+        flagControl(file, "unset", 8, 5),
+        inlineControl(file, "endif", 6),
+        flagControl(file, "isset", 8, 7),
+        branchControl(file, "branch_true", 8, "after_effect"),
+        text(file, "No effect synthetic path.", 9),
+        runtimeCommand(file, "end", 10),
+        label(file, "after_effect", 11),
+        text(file, "Effect synthetic path.", 12),
+        runtimeCommand(file, "end", 13)
+      ]
+    }), "alpha.start", { flags });
+
+    expect(flow?.truncated).toBe(false);
+    expect(buildDialoguePages(flow?.commands ?? []).map((page) => page.text)).toEqual(["Effect synthetic path."]);
+    expect(flags.listNums()).toEqual([1, 8]);
+  });
+
+  it("detects cycles through conditional branches", () => {
+    const file = "ccscript/alpha.ccs";
+    const flow = resolveScriptReferenceFlow(scripts({
+      [file]: [
+        label(file, "start", 1),
+        flagControl(file, "isset", 1, 2),
+        branchControl(file, "branch_true", 3, "start"),
+        runtimeCommand(file, "end", 4)
+      ]
+    }), "alpha.start", { flags: flagState([1]) });
+
+    expect(flow?.truncated).toBe(true);
+    expect(flow?.truncatedReason).toBe("cycle");
   });
 
   it("detects cycles and truncates safely", () => {

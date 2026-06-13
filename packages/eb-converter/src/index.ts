@@ -118,6 +118,12 @@ export function parseCcsFile(relativePath: string, source: string): {
     const column = Math.max(1, withoutComment.search(/\S/) + 1);
     const sourceLocation = { file: relativePath, line: index + 1, column };
 
+    const inlineControl = scriptInlineControlFromRaw(trimmed, sourceLocation);
+    if (inlineControl) {
+      commands.push(inlineControl);
+      return;
+    }
+
     const labelMatch = trimmed.match(/^([A-Za-z_][\w.]*)\s*:\s*$/);
     if (labelMatch) {
       const name = labelMatch[1];
@@ -330,6 +336,8 @@ export const CCS_TEXT_CODE_REGISTRY: CcsTextCodeRegistryEntry[] = [
   prefixCode("0C", 2, [0x0C], (_bytes, raw) => controlSegment("result_not", raw)),
   fixedCode("1B 00", [0x1B, 0x00], (_bytes, raw) => controlSegment("store_registers", raw)),
   fixedCode("1B 01", [0x1B, 0x01], (_bytes, raw) => controlSegment("load_registers", raw)),
+  prefixCode("1B 02", 6, [0x1B, 0x02], (_bytes, raw) => controlSegment("branch_false", raw)),
+  prefixCode("1B 03", 6, [0x1B, 0x03], (_bytes, raw) => controlSegment("branch_true", raw)),
   fixedCode("1B 04", [0x1B, 0x04], (_bytes, raw) => controlSegment("swap", raw)),
   prefixCode("1B", 2, [0x1B], (_bytes, raw) => controlSegment("register", raw))
 ];
@@ -350,6 +358,14 @@ export function tokenizeCcsString(value: string): DialogueSegment[] {
       const close = value.indexOf("]", index + 1);
       if (close >= 0) {
         const raw = value.slice(index, close + 1);
+        const branchSegment = branchSegmentForPointerBlock(raw);
+        if (branchSegment) {
+          flushText(index);
+          segments.push(branchSegment);
+          index = close + 1;
+          textStart = index;
+          continue;
+        }
         const bytes = parseHexByteBlock(raw);
         if (bytes) {
           flushText(index);
@@ -378,6 +394,14 @@ export function tokenizeCcsString(value: string): DialogueSegment[] {
 
   flushText(value.length);
   return segments;
+}
+
+function branchSegmentForPointerBlock(raw: string): DialogueSegment | undefined {
+  const match = /^\[1B\s+(0[23])\s+\{e\(([A-Za-z_][\w.-]*)\)\}\]$/iu.exec(raw.trim());
+  if (!match) {
+    return undefined;
+  }
+  return controlSegment(match[1].toUpperCase() === "03" ? "branch_true" : "branch_false", raw, match[2]);
 }
 
 function decodeByteSegments(bytes: number[], raw: string): DialogueSegment[] {
@@ -487,6 +511,8 @@ function segmentForMacro(raw: string): DialogueSegment | undefined {
     case "result_is":
     case "result_not":
     case "hasitem":
+    case "branch_true":
+    case "branch_false":
     case "store_registers":
     case "load_registers":
     case "swap":
@@ -988,6 +1014,10 @@ function stripComment(line: string): string {
 }
 
 function scriptCommandFromRaw(raw: string, sourceLocation: ScriptCommand["sourceLocation"]): ScriptCommand {
+  const inlineControl = scriptInlineControlFromRaw(raw, sourceLocation);
+  if (inlineControl) {
+    return inlineControl;
+  }
   const control = parseControlCommand(raw);
   if (control) {
     return {
@@ -1005,6 +1035,23 @@ function scriptCommandFromRaw(raw: string, sourceLocation: ScriptCommand["source
   };
 }
 
+function scriptInlineControlFromRaw(
+  raw: string,
+  sourceLocation: ScriptCommand["sourceLocation"]
+): ScriptCommand | undefined {
+  const trimmed = raw.trim();
+  if (/^if\b/i.test(trimmed)) {
+    return { cmd: "control", raw: trimmed, sourceLocation, code: "if" };
+  }
+  if (/^else\b/i.test(trimmed)) {
+    return { cmd: "control", raw: trimmed, sourceLocation, code: "else" };
+  }
+  if (/^(?:endif|\})$/i.test(trimmed)) {
+    return { cmd: "control", raw: trimmed, sourceLocation, code: "endif" };
+  }
+  return undefined;
+}
+
 function parseControlCommand(raw: string): { code: string; target?: string } | undefined {
   const match = raw.trim().match(/^([A-Za-z_][\w.]*)\s*(?:\((.*)\))?$/);
   if (!match) {
@@ -1014,7 +1061,9 @@ function parseControlCommand(raw: string): { code: string; target?: string } | u
   if (!isKnownControlCommand(code)) {
     return undefined;
   }
-  const target = code === "call" || code === "goto" ? parseFlowTarget(match[2]) : undefined;
+  const target = code === "call" || code === "goto" || code === "branch_true" || code === "branch_false"
+    ? parseFlowTarget(match[2])
+    : undefined;
   return { code, ...(target ? { target } : {}) };
 }
 
@@ -1024,7 +1073,12 @@ function parseFlowTarget(argsText: string | undefined): string | undefined {
 }
 
 function isStructuredCommandPart(raw: string): boolean {
-  return Boolean(parseControlCommand(raw)) || isKnownRuntimeCommand(raw.trim().toLowerCase());
+  return Boolean(parseInlineControlCommand(raw) || parseControlCommand(raw)) || isKnownRuntimeCommand(raw.trim().toLowerCase());
+}
+
+function parseInlineControlCommand(raw: string): boolean {
+  const trimmed = raw.trim();
+  return /^if\b/i.test(trimmed) || /^else\b/i.test(trimmed) || /^(?:endif|\})$/i.test(trimmed);
 }
 
 function isKnownControlCommand(cmd: string): boolean {
@@ -1040,6 +1094,8 @@ const CONTROL_COMMANDS = new Set([
   "result_is",
   "result_not",
   "hasitem",
+  "branch_true",
+  "branch_false",
   "store_registers",
   "load_registers",
   "swap"

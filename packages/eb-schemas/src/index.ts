@@ -434,7 +434,7 @@ export type NumericFlagState = {
 };
 
 export type ConditionalJumpEvent = {
-  control: "call" | "goto";
+  control: "call" | "goto" | "branch_true" | "branch_false" | "if";
   target?: string;
   condition: boolean;
   action: "taken" | "fallthrough";
@@ -511,9 +511,18 @@ type FlowPointer = {
 
 type FlowFrame = FlowPointer;
 
+type FlowCondition = {
+  known: boolean;
+  value: boolean;
+  result?: boolean;
+};
+
 type FlowControl =
   | { kind: "call" | "goto"; target?: string }
-  | { kind: "conditional"; condition: boolean; result?: boolean }
+  | { kind: "branch"; branchWhen: boolean; code: "branch_true" | "branch_false"; target?: string }
+  | { kind: "conditional"; condition: FlowCondition }
+  | { kind: "inline_if"; condition: FlowCondition }
+  | { kind: "inline_else" | "inline_endif" }
   | { kind: "set" | "unset"; flag?: number };
 
 type FlowAction =
@@ -537,7 +546,7 @@ export function resolveScriptReferenceFlow(
   const callStack: FlowFrame[] = [];
   const activeLabels = new Set<string>([start.labelKey]);
   let current: FlowPointer = start;
-  let pendingCondition: boolean | undefined;
+  let pendingCondition: FlowCondition | undefined;
   let lastFlagResult: boolean | undefined;
   let commandsVisited = 0;
   let jumps = 0;
@@ -565,13 +574,15 @@ export function resolveScriptReferenceFlow(
     if (pendingCondition !== undefined) {
       const condition = pendingCondition;
       pendingCondition = undefined;
-      options.onConditionalJump?.({
-        control: control.kind,
-        ...(control.target ? { target: control.target } : {}),
-        condition,
-        action: condition ? "taken" : "fallthrough"
-      });
-      if (!condition) {
+      if (condition.known) {
+        options.onConditionalJump?.({
+          control: control.kind,
+          ...(control.target ? { target: control.target } : {}),
+          condition: condition.value,
+          action: condition.value ? "taken" : "fallthrough"
+        });
+      }
+      if (!condition.known || !condition.value) {
         return { kind: "next" };
       }
     }
@@ -607,6 +618,44 @@ export function resolveScriptReferenceFlow(
     return { kind: "jumped" };
   };
 
+  const followBranch = (control: Extract<FlowControl, { kind: "branch" }>): FlowAction => {
+    const condition = pendingCondition;
+    pendingCondition = undefined;
+    if (!condition?.known) {
+      return { kind: "next" };
+    }
+
+    const shouldJump = condition.value === control.branchWhen;
+    options.onConditionalJump?.({
+      control: control.code,
+      ...(control.target ? { target: control.target } : {}),
+      condition: condition.value,
+      action: shouldJump ? "taken" : "fallthrough"
+    });
+    if (!shouldJump) {
+      return { kind: "next" };
+    }
+    if (!control.target) {
+      return markTruncated("missing_target");
+    }
+    const target = resolveTargetPointer(scripts, current.file, control.target);
+    if (!target) {
+      return markTruncated("missing_target");
+    }
+    if (activeLabels.has(target.labelKey)) {
+      return markTruncated("cycle");
+    }
+    jumps += 1;
+    if (jumps > maxJumps) {
+      return markTruncated("jump_budget");
+    }
+
+    activeLabels.delete(current.labelKey);
+    activeLabels.add(target.labelKey);
+    current = target;
+    return { kind: "jumped" };
+  };
+
   const applyFlagSideEffect = (control: Extract<FlowControl, { kind: "set" | "unset" }>): void => {
     if (control.flag === undefined) {
       return;
@@ -616,6 +665,52 @@ export function resolveScriptReferenceFlow(
     } else {
       options.flags?.unsetNum?.(control.flag);
     }
+  };
+
+  const skipInlineConditionalBlock = (
+    pointer: FlowPointer
+  ): { kind: "found"; pointer: FlowPointer } | { kind: "stop" } => {
+    let depth = 0;
+    for (let index = pointer.index + 1; index < pointer.file.commands.length; index += 1) {
+      const command = pointer.file.commands[index];
+      if (command.cmd === "label") {
+        return { kind: "stop" };
+      }
+      const flow = flowControlFromCommand(command, options.flags, lastFlagResult);
+      if (flow?.kind === "inline_if") {
+        depth += 1;
+      } else if (flow?.kind === "inline_endif") {
+        if (depth === 0) {
+          return { kind: "found", pointer: { ...pointer, index: index + 1 } };
+        }
+        depth -= 1;
+      } else if (flow?.kind === "inline_else" && depth === 0) {
+        return { kind: "found", pointer: { ...pointer, index: index + 1 } };
+      }
+    }
+    return { kind: "stop" };
+  };
+
+  const skipInlineElseBlock = (
+    pointer: FlowPointer
+  ): { kind: "found"; pointer: FlowPointer } | { kind: "stop" } => {
+    let depth = 0;
+    for (let index = pointer.index + 1; index < pointer.file.commands.length; index += 1) {
+      const command = pointer.file.commands[index];
+      if (command.cmd === "label") {
+        return { kind: "stop" };
+      }
+      const flow = flowControlFromCommand(command, options.flags, lastFlagResult);
+      if (flow?.kind === "inline_if") {
+        depth += 1;
+      } else if (flow?.kind === "inline_endif") {
+        if (depth === 0) {
+          return { kind: "found", pointer: { ...pointer, index: index + 1 } };
+        }
+        depth -= 1;
+      }
+    }
+    return { kind: "stop" };
   };
 
   const collectTextCommand = (command: ScriptCommand, segments: DialogueSegment[]) => {
@@ -645,10 +740,18 @@ export function resolveScriptReferenceFlow(
       const flow = flowControlFromSegment(segment, options.flags, lastFlagResult);
       if (flow?.kind === "conditional") {
         pendingCondition = flow.condition;
-        if (flow.result !== undefined) {
-          lastFlagResult = flow.result;
+        if (flow.condition.result !== undefined) {
+          lastFlagResult = flow.condition.result;
         }
         continue;
+      }
+      if (flow?.kind === "branch") {
+        collectTextCommand(command, collectedSegments);
+        const action = followBranch(flow);
+        if (action.kind === "next") {
+          continue;
+        }
+        return action;
       }
       if (flow?.kind === "call" || flow?.kind === "goto") {
         collectTextCommand(command, collectedSegments);
@@ -718,10 +821,56 @@ export function resolveScriptReferenceFlow(
     const flow = flowControlFromCommand(command, options.flags, lastFlagResult);
     if (flow?.kind === "conditional") {
       pendingCondition = flow.condition;
-      if (flow.result !== undefined) {
-        lastFlagResult = flow.result;
+      if (flow.condition.result !== undefined) {
+        lastFlagResult = flow.condition.result;
       }
       current = { ...current, index: current.index + 1 };
+      continue;
+    }
+    if (flow?.kind === "branch") {
+      const action = followBranch(flow);
+      if (action.kind === "stop") {
+        break;
+      }
+      if (action.kind === "next") {
+        current = { ...current, index: current.index + 1 };
+      }
+      continue;
+    }
+    if (flow?.kind === "inline_if") {
+      if (flow.condition.known) {
+        options.onConditionalJump?.({
+          control: "if",
+          condition: flow.condition.value,
+          action: flow.condition.value ? "taken" : "fallthrough"
+        });
+      }
+      if (!flow.condition.known || flow.condition.value) {
+        current = { ...current, index: current.index + 1 };
+      } else {
+        const skipped = skipInlineConditionalBlock(current);
+        if (skipped.kind === "stop") {
+          markTruncated("missing_target");
+          break;
+        }
+        current = skipped.pointer;
+      }
+      pendingCondition = undefined;
+      continue;
+    }
+    if (flow?.kind === "inline_else") {
+      const skipped = skipInlineElseBlock(current);
+      if (skipped.kind === "stop") {
+        markTruncated("missing_target");
+        break;
+      }
+      current = skipped.pointer;
+      pendingCondition = undefined;
+      continue;
+    }
+    if (flow?.kind === "inline_endif") {
+      current = { ...current, index: current.index + 1 };
+      pendingCondition = undefined;
       continue;
     }
     if (flow?.kind === "call" || flow?.kind === "goto") {
@@ -871,11 +1020,28 @@ function flowControlFromCommand(
   if (!code) {
     return undefined;
   }
+  if (code === "if") {
+    return { kind: "inline_if", condition: evaluateInlineIfControl(command.raw, flags, lastFlagResult) };
+  }
+  if (code === "else") {
+    return { kind: "inline_else" };
+  }
+  if (code === "endif") {
+    return { kind: "inline_endif" };
+  }
   if (code === "set" || code === "unset") {
     return { kind: code, flag: numericArgumentFromRaw(code, command.raw) };
   }
   if (isConditionalControl(code)) {
-    return evaluateConditionalControl(code, command.raw, flags, lastFlagResult);
+    return { kind: "conditional", condition: evaluateConditionalControl(code, command.raw, flags, lastFlagResult) };
+  }
+  if (code === "branch_true" || code === "branch_false") {
+    return {
+      kind: "branch",
+      code,
+      branchWhen: code === "branch_true",
+      target: command.target
+    };
   }
   if (code === "call" || code === "goto") {
     return { kind: code, target: command.target };
@@ -895,7 +1061,15 @@ function flowControlFromSegment(
     return { kind: segment.code, flag: numericArgumentFromRaw(segment.code, segment.raw) };
   }
   if (isConditionalControl(segment.code)) {
-    return evaluateConditionalControl(segment.code, segment.raw, flags, lastFlagResult);
+    return { kind: "conditional", condition: evaluateConditionalControl(segment.code, segment.raw, flags, lastFlagResult) };
+  }
+  if (segment.code === "branch_true" || segment.code === "branch_false") {
+    return {
+      kind: "branch",
+      code: segment.code,
+      branchWhen: segment.code === "branch_true",
+      target: segment.target
+    };
   }
   if (segment.code === "call" || segment.code === "goto") {
     return { kind: segment.code, target: segment.target };
@@ -916,25 +1090,55 @@ function evaluateConditionalControl(
   raw: string,
   flags?: NumericFlagState,
   lastFlagResult?: boolean
-): Extract<FlowControl, { kind: "conditional" }> {
+): FlowCondition {
   if (code === "isset") {
     const flag = numericArgumentFromRaw(code, raw);
     if (flag === undefined || !flags) {
-      return { kind: "conditional", condition: false };
+      return { known: false, value: false };
     }
     const result = flags.isSet(flag);
-    return { kind: "conditional", condition: result, result };
+    return { known: true, value: result, result };
+  }
+  if (code === "hasitem" || code === "has_item") {
+    if (!flags) {
+      return { known: false, value: false };
+    }
+    return { known: true, value: false, result: false };
   }
   if (code === "result_is" || code === "result_not") {
     const expected = booleanArgumentFromRaw(code, raw) ?? true;
-    const condition = lastFlagResult === undefined
-      ? false
-      : code === "result_is"
-        ? lastFlagResult === expected
-        : lastFlagResult !== expected;
-    return { kind: "conditional", condition };
+    if (lastFlagResult === undefined) {
+      return { known: false, value: false };
+    }
+    const condition = code === "result_is"
+      ? lastFlagResult === expected
+      : lastFlagResult !== expected;
+    return { known: true, value: condition };
   }
-  return { kind: "conditional", condition: false };
+  return { known: false, value: false };
+}
+
+function evaluateInlineIfControl(
+  raw: string,
+  flags?: NumericFlagState,
+  lastFlagResult?: boolean
+): FlowCondition {
+  const expression = raw.trim().replace(/^if\b/i, "").replace(/\{\s*$/u, "").trim();
+  const negated = expression.startsWith("not ");
+  const normalized = negated ? expression.slice(4).trim() : expression;
+  const match = /^([A-Za-z_][\w.]*)\s*(?:\((.*)\))?$/u.exec(normalized);
+  if (!match) {
+    return { known: false, value: false };
+  }
+  const condition = evaluateConditionalControl(match[1].toLowerCase(), `${match[1]}(${match[2] ?? ""})`, flags, lastFlagResult);
+  if (!negated || !condition.known) {
+    return condition;
+  }
+  return {
+    known: true,
+    value: !condition.value,
+    ...(condition.result !== undefined ? { result: condition.result } : {})
+  };
 }
 
 function numericArgumentFromRaw(code: string, raw: string): number | undefined {
@@ -970,6 +1174,10 @@ function rawBytes(raw: string): number[] | undefined {
 }
 
 function parseNumericLiteral(value: string): number | undefined {
+  const flagMatch = /^flag\s+(0x[0-9a-f]+|\d+)$/i.exec(value);
+  if (flagMatch) {
+    return parseNumericLiteral(flagMatch[1]);
+  }
   if (/^0x[0-9a-f]+$/i.test(value)) {
     return Number.parseInt(value.slice(2), 16);
   }
