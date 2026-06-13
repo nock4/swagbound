@@ -239,6 +239,51 @@ describe("battle turn resolution", () => {
     expect(result.state.party[0].hp.target).toBe(72);
     expect(result.state.enemies[0].nextActionIndex).toBe(1);
   });
+
+  it("builds a boss-flagged action enemy and defeats it with existing party turns", () => {
+    const boss = enemy(14, "OPPONENT_H", {
+      bossFlag: true,
+      hp: 96,
+      defense: 6,
+      offense: 10,
+      level: 7,
+      actions: actionSet(
+        enemyAction(120, 1, 1),
+        enemyAction(121, 2, 4),
+        enemyAction(122, 5, 1),
+        enemyAction(123, 0, 0)
+      )
+    });
+    let battle = createBattleState(boss, {
+      characters: characters([
+        partyCharacterA,
+        partyCharacterB,
+        character(2, "PARTY_C", { maxHp: 52, maxPp: 0, offense: 18, defense: 7, speed: 3 }),
+        character(3, "PARTY_D", { maxHp: 44, maxPp: 0, offense: 14, defense: 6, speed: 2 })
+      ])
+    });
+
+    expect(boss.bossFlag).toBe(true);
+    expect(battle.enemies[0].actions?.[0]).toMatchObject({ actionId: 120, actionType: 1, target: 1 });
+
+    const enemyResult = resolveEnemyActionTurn(battle, actor("enemy", 0), () => 0.5);
+    expect(enemyResult.skipped).toBe(false);
+    expect(enemyResult.effectKind).toBe("physical");
+    expect(enemyResult.targets).toEqual([actor("party", 0)]);
+    battle = tickBattleMeters(enemyResult.state, 15_000);
+
+    let turns = 0;
+    while (outcome(battle) !== "win" && turns < 12) {
+      const partyIndex = turns % battle.party.length;
+      const result = resolveTurn(battle, actor("party", partyIndex), () => 0.5, { targetIndex: 0 });
+      expect(result.skipped).toBe(false);
+      battle = tickBattleMeters(result.state, 15_000);
+      turns += 1;
+    }
+
+    expect(outcome(battle)).toBe("win");
+    expect(battle.enemies[0].hp.displayed).toBe(0);
+  });
 });
 
 describe("battle PSI and goods resolution", () => {
@@ -426,7 +471,7 @@ function actor(side: "party" | "enemy", index: number): BattleActor {
 function enemy(
   id: number,
   name: string,
-  stats: Partial<Pick<BattleEnemy, "hp" | "defense" | "offense" | "level" | "actions">> = {}
+  stats: Partial<Pick<BattleEnemy, "hp" | "defense" | "offense" | "level" | "bossFlag" | "actions">> = {}
 ): BattleEnemy {
   return {
     id,
@@ -438,7 +483,7 @@ function enemy(
     offense: stats.offense ?? 8,
     experience: 0,
     money: 0,
-    bossFlag: false,
+    bossFlag: stats.bossFlag ?? false,
     actions: stats.actions ?? actionSet(),
     itemDropped: null,
     itemRarity: null

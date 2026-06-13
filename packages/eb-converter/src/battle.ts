@@ -14,9 +14,12 @@ export const BATTLE_FILE = "battle.json";
 export const BATTLE_SPRITE_DIR = "assets/battle/sprites";
 export const BATTLE_BACKGROUND_DIR = "assets/battle/backgrounds";
 
-const MAX_ENEMIES = 6;
+const MAX_NON_BOSS_ENEMIES = 6;
 const MAX_BATTLE_GROUPS = 3;
 const LOW_LEVEL_MAX = 10;
+const LOW_LEVEL_BOSS_MAX = 12;
+const MAX_LOW_LEVEL_BOSS_ENEMIES = 5;
+const MAX_BOSS_GROUPS_PER_ENEMY = 1;
 const TOWN_MAP = "onett";
 const MAP_ENEMY_PLACEMENT_WIDTH = 128;
 const ENCOUNTER_CELLS_PER_SECTOR_X = 4;
@@ -81,6 +84,12 @@ type Candidate = {
   battleGroupIds: number[];
 };
 
+type BossSelection = {
+  enemyIds: number[];
+  groupIds: number[];
+  ungroupedEnemyIds: number[];
+};
+
 type BattleSourceTables = {
   enemyConfig: ReturnType<typeof parseIntKeyedYaml>;
   battleActions: Map<number, BattleActionRecord>;
@@ -121,9 +130,14 @@ export async function buildBattleData(options: BattleBuildOptions): Promise<Batt
   };
 
   const warnings: ValidationIssue[] = [];
-  const selected = selectOnettBattleGroups(tables) ?? selectFallbackBattleGroups(tables, warnings);
+  const baseSelected = selectOnettBattleGroups(tables) ?? selectFallbackBattleGroups(tables, warnings);
+  const bossSelection = selectLowLevelBosses(tables, warnings);
+  const selected = mergeBattleSelections(baseSelected, bossSelection);
   const battleGroupRecords = selected.battleGroupIds.map((id) => requireMapEntry(tables.enemyGroups, id, "enemy_groups.yml"));
-  const enemyIds = uniqueSorted(battleGroupRecords.flatMap((group) => positiveEnemyIds(group))).slice(0, MAX_ENEMIES);
+  const enemyIds = uniqueSorted([
+    ...battleGroupRecords.flatMap((group) => positiveEnemyIds(group)),
+    ...bossSelection.enemyIds
+  ]);
 
   const enemies = enemyIds.map((id) =>
     enemyToBattleEnemy(id, requireMapEntry(tables.enemyConfig, id, "enemy_configuration_table.yml"), tables.battleActions)
@@ -255,7 +269,7 @@ function selectOnettBattleGroups(tables: BattleSourceTables): Candidate | undefi
       const allNonBoss = enemyIds.every((id) => !booleanField(requireMapEntry(tables.enemyConfig, id, "enemy_configuration_table.yml"), "Boss Flag"));
       if (
         enemyIds.length === 0 ||
-        enemyIds.length > MAX_ENEMIES ||
+        enemyIds.length > MAX_NON_BOSS_ENEMIES ||
         levels.some((level) => Number.isNaN(level)) ||
         levels.some((level) => level < 1) ||
         Math.max(...levels) > LOW_LEVEL_MAX ||
@@ -319,7 +333,7 @@ function selectFallbackBattleGroups(tables: BattleSourceTables, warnings: Valida
   const enemyIds = new Set<number>();
   for (const candidate of candidates) {
     const nextEnemyIds = new Set([...enemyIds, ...candidate.enemyIds]);
-    if (nextEnemyIds.size > MAX_ENEMIES) {
+    if (nextEnemyIds.size > MAX_NON_BOSS_ENEMIES) {
       continue;
     }
     battleGroupIds.push(candidate.group.id);
@@ -337,6 +351,61 @@ function selectFallbackBattleGroups(tables: BattleSourceTables, warnings: Valida
     mapEnemyGroupIds: [],
     battleGroupIds
   };
+}
+
+function selectLowLevelBosses(tables: BattleSourceTables, warnings: ValidationIssue[]): BossSelection {
+  const bosses = [...tables.enemyConfig.entries()]
+    .map(([id, entry]) => ({
+      id,
+      level: numericField(entry, "Level"),
+      bossFlag: booleanField(entry, "Boss Flag")
+    }))
+    .filter((enemy) => enemy.bossFlag && enemy.level >= 1 && enemy.level <= LOW_LEVEL_BOSS_MAX)
+    .sort((a, b) => a.level - b.level || a.id - b.id)
+    .slice(0, MAX_LOW_LEVEL_BOSS_ENEMIES);
+
+  const groupIds: number[] = [];
+  const ungroupedEnemyIds: number[] = [];
+  for (const boss of bosses) {
+    const groups = groupsReferencingEnemy(tables.enemyGroups, boss.id);
+    if (groups.length === 0) {
+      ungroupedEnemyIds.push(boss.id);
+      continue;
+    }
+    groupIds.push(...groups.slice(0, MAX_BOSS_GROUPS_PER_ENEMY).map((group) => group.id));
+  }
+
+  if (ungroupedEnemyIds.length > 0) {
+    warnings.push(issue(
+      "warning",
+      "battle_low_level_boss_without_group",
+      `Low-level boss-flag enemy ids without positive enemy_groups.yml references: ${ungroupedEnemyIds.join(", ")}.`,
+      "enemy_groups.yml"
+    ));
+  }
+
+  return {
+    enemyIds: bosses.map((boss) => boss.id),
+    groupIds: uniqueInOrder(groupIds),
+    ungroupedEnemyIds
+  };
+}
+
+function mergeBattleSelections(base: Candidate, bosses: BossSelection): Candidate {
+  return {
+    ...base,
+    method: bosses.enemyIds.length > 0 ? `${base.method}+low-level-boss-flag-groups` : base.method,
+    battleGroupIds: uniqueInOrder([...base.battleGroupIds, ...bosses.groupIds])
+  };
+}
+
+function groupsReferencingEnemy(enemyGroups: Map<number, EnemyGroupRecord>, enemyId: number): EnemyGroupRecord[] {
+  return [...enemyGroups.values()]
+    .filter((group) => positiveEnemyIds(group).includes(enemyId))
+    .sort((a, b) =>
+      positiveEnemyIds(a).length - positiveEnemyIds(b).length ||
+      a.id - b.id
+    );
 }
 
 function enemyToBattleEnemy(id: number, entry: Record<string, string>, battleActions: Map<number, BattleActionRecord>) {

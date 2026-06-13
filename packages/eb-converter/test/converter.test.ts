@@ -196,15 +196,17 @@ describe("generated validation", () => {
       const battle = generated.battle;
 
       expect(battle?.selection).toMatchObject({
-        method: "town-map-sector-intersection",
+        method: "town-map-sector-intersection+low-level-boss-flag-groups",
         mapEnemyGroupIds: [2],
-        battleGroupIds: [20, 21],
+        battleGroupIds: [20, 21, 30, 31],
         fallbackUsed: false
       });
-      expect(battle?.enemies).toHaveLength(2);
+      expect(battle?.enemies.map((enemy) => enemy.id)).toEqual([10, 11, 30, 31, 33]);
       expect(battle?.groups).toEqual([
         { id: 20, background1: 3, background2: 0, enemyIds: [10] },
-        { id: 21, background1: 4, background2: 0, enemyIds: [11] }
+        { id: 21, background1: 4, background2: 0, enemyIds: [11] },
+        { id: 30, background1: 6, background2: 0, enemyIds: [30] },
+        { id: 31, background1: 7, background2: 0, enemyIds: [31] }
       ]);
       expect(battle?.enemies.find((enemy) => enemy.id === 10)).toMatchObject({
         name: "Neutral One",
@@ -225,18 +227,44 @@ describe("generated validation", () => {
           { id: 4, arg: 1, actionId: 4, actionType: 5, target: 0 }
         ]
       });
+      expect(battle?.enemies.find((enemy) => enemy.id === 30)).toMatchObject({
+        name: "Neutral Flag A",
+        spriteId: 30,
+        level: 6,
+        hp: 80,
+        bossFlag: true,
+        actions: [
+          { id: 1, arg: 0, actionId: 1, actionType: 1, target: 1 },
+          { id: 2, arg: 0, actionId: 2, actionType: 2, target: 4 },
+          { id: 3, arg: 0, actionId: 3, actionType: 3, target: 1 },
+          { id: 4, arg: 0, actionId: 4, actionType: 5, target: 0 }
+        ]
+      });
+      expect(battle?.enemies.find((enemy) => enemy.id === 32)).toBeUndefined();
+      expect(battle?.warnings).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          code: "battle_low_level_boss_without_group",
+          path: "enemy_groups.yml"
+        })
+      ]));
       expect(existsSync(path.join(out, "assets/battle/sprites/010.png"))).toBe(true);
       expect(existsSync(path.join(out, "assets/battle/sprites/011.png"))).toBe(true);
       expect(existsSync(path.join(out, "assets/battle/sprites/012.png"))).toBe(false);
+      expect(existsSync(path.join(out, "assets/battle/sprites/030.png"))).toBe(true);
+      expect(existsSync(path.join(out, "assets/battle/sprites/031.png"))).toBe(true);
+      expect(existsSync(path.join(out, "assets/battle/sprites/032.png"))).toBe(false);
+      expect(existsSync(path.join(out, "assets/battle/sprites/033.png"))).toBe(true);
       expect(existsSync(path.join(out, "assets/battle/backgrounds/000.png"))).toBe(true);
       expect(existsSync(path.join(out, "assets/battle/backgrounds/003.png"))).toBe(true);
       expect(existsSync(path.join(out, "assets/battle/backgrounds/004.png"))).toBe(true);
       expect(existsSync(path.join(out, "assets/battle/backgrounds/005.png"))).toBe(false);
+      expect(existsSync(path.join(out, "assets/battle/backgrounds/006.png"))).toBe(true);
+      expect(existsSync(path.join(out, "assets/battle/backgrounds/007.png"))).toBe(true);
       expect(result.ok).toBe(true);
       expect(result.generatedFiles).toContain("battle.json");
-      expect(result.battleEnemies).toBe(2);
-      expect(result.battleGroups).toBe(2);
-      expect(result.battleAssetsChecked).toBe(5);
+      expect(result.battleEnemies).toBe(5);
+      expect(result.battleGroups).toBe(4);
+      expect(result.battleAssetsChecked).toBe(10);
     } finally {
       await rm(temp, { recursive: true, force: true });
     }
@@ -474,6 +502,82 @@ async function writeBattleFixture(project: string): Promise<void> {
     "  Action 4 Argument: 0",
     "  Item Dropped: 0",
     "  Item Rarity: 1/128",
+    "30:",
+    "  Name: Neutral Flag A",
+    "  HP: 80",
+    "  Defense: 7",
+    "  Offense: 12",
+    "  Experience points: 20",
+    "  Money: 3",
+    "  Level: 6",
+    "  Boss Flag: True",
+    "  Action 1: 1",
+    "  Action 1 Argument: 0",
+    "  Action 2: 2",
+    "  Action 2 Argument: 0",
+    "  Action 3: 3",
+    "  Action 3 Argument: 0",
+    "  Action 4: 4",
+    "  Action 4 Argument: 0",
+    "  Item Dropped: 0",
+    "  Item Rarity: 1/128",
+    "31:",
+    "  Name: Neutral Flag B",
+    "  HP: 120",
+    "  Defense: 8",
+    "  Offense: 14",
+    "  Experience points: 25",
+    "  Money: 4",
+    "  Level: 12",
+    "  Boss Flag: True",
+    "  Action 1: 5",
+    "  Action 1 Argument: 0",
+    "  Action 2: 6",
+    "  Action 2 Argument: 0",
+    "  Action 3: 7",
+    "  Action 3 Argument: 0",
+    "  Action 4: 8",
+    "  Action 4 Argument: 0",
+    "  Item Dropped: 0",
+    "  Item Rarity: 1/128",
+    "32:",
+    "  Name: Neutral Flag High",
+    "  HP: 240",
+    "  Defense: 20",
+    "  Offense: 20",
+    "  Experience points: 50",
+    "  Money: 5",
+    "  Level: 13",
+    "  Boss Flag: True",
+    "  Action 1: 9",
+    "  Action 1 Argument: 0",
+    "  Action 2: 9",
+    "  Action 2 Argument: 0",
+    "  Action 3: 9",
+    "  Action 3 Argument: 0",
+    "  Action 4: 9",
+    "  Action 4 Argument: 0",
+    "  Item Dropped: 0",
+    "  Item Rarity: 1/128",
+    "33:",
+    "  Name: Neutral Flag Ungrouped",
+    "  HP: 90",
+    "  Defense: 7",
+    "  Offense: 12",
+    "  Experience points: 21",
+    "  Money: 3",
+    "  Level: 7",
+    "  Boss Flag: True",
+    "  Action 1: 1",
+    "  Action 1 Argument: 0",
+    "  Action 2: 1",
+    "  Action 2 Argument: 0",
+    "  Action 3: 1",
+    "  Action 3 Argument: 0",
+    "  Action 4: 1",
+    "  Action 4 Argument: 0",
+    "  Item Dropped: 0",
+    "  Item Rarity: 1/128",
     ""
   ].join("\n"), "utf8");
   await writeFile(path.join(project, "battle_action_table.yml"), [
@@ -522,6 +626,16 @@ async function writeBattleFixture(project: string): Promise<void> {
     "  Background 2: 0",
     "  Enemies:",
     "  - {Amount: 1, Enemy: 12}",
+    "30:",
+    "  Background 1: 6",
+    "  Background 2: 0",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 30}",
+    "31:",
+    "  Background 1: 7",
+    "  Background 2: 0",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 31}",
     ""
   ].join("\n"), "utf8");
   await writeFile(path.join(project, "map_enemy_groups.yml"), [
@@ -550,10 +664,15 @@ async function writeBattleFixture(project: string): Promise<void> {
   await writeFile(path.join(project, "BattleSprites", "010.png"), TINY_PNG);
   await writeFile(path.join(project, "BattleSprites", "011.png"), TINY_PNG);
   await writeFile(path.join(project, "BattleSprites", "012.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleSprites", "030.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleSprites", "031.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleSprites", "033.png"), TINY_PNG);
   await writeFile(path.join(project, "BattleBGs", "000.png"), TINY_PNG);
   await writeFile(path.join(project, "BattleBGs", "003.png"), TINY_PNG);
   await writeFile(path.join(project, "BattleBGs", "004.png"), TINY_PNG);
   await writeFile(path.join(project, "BattleBGs", "005.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleBGs", "006.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleBGs", "007.png"), TINY_PNG);
 }
 
 async function writeCharacterFixture(project: string): Promise<void> {
