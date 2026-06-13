@@ -43,6 +43,15 @@ export type EventHostDebug = {
   running: boolean;
   currentEffectKind?: EventEffectKind;
   effectsDispatched: number;
+  effectsByKind: Partial<Record<EventEffectKind, number>>;
+  result?: {
+    status: "completed" | "aborted";
+    truncated: boolean;
+    truncatedReason?: "cycle" | "command_budget" | "jump_budget" | "missing_target";
+    commandsVisited: number;
+    jumps: number;
+    reason?: string;
+  };
   records: {
     warps: number;
     warpNoops: number;
@@ -64,13 +73,13 @@ export type RuntimeEventHostOptions = {
   partyState: PartyState;
   scene?: FadeScene;
   resolveWarpDestination?: (dest: number, style?: number) => EventWarpDestination | undefined;
-  applyWarpDestination?: (destination: EventWarpDestination) => void;
+  applyWarpDestination?: (destination: EventWarpDestination) => boolean | void;
   startBattle?: (group: number) => boolean;
-  openShop?: (storeId: number) => void;
+  openShop?: (storeId: number) => boolean | void;
 };
 
 export type EventSequenceOptions = {
-  onComplete?: () => void;
+  onComplete?: (result: NonNullable<EventHostDebug["result"]>) => void;
 };
 
 export function dialoguePagesForConfirmEffects(
@@ -131,6 +140,7 @@ export class RuntimeEventHost implements EventExecutorHost {
   private readonly coveredConfirmIndexes = new Set<number>();
   private debugState: EventHostDebug = emptyDebug();
   private transitionRequested = false;
+  private abortRequested = false;
 
   constructor(private readonly options: RuntimeEventHostOptions) {}
 
@@ -150,31 +160,41 @@ export class RuntimeEventHost implements EventExecutorHost {
     this.executor = executor;
     this.coveredConfirmIndexes.clear();
     this.transitionRequested = false;
+    this.abortRequested = false;
     this.debugState = { ...emptyDebug(), running: true };
   }
 
-  finish(): void {
+  finish(result?: NonNullable<EventHostDebug["result"]>): void {
     this.debugState = {
       ...this.debugState,
       running: false,
-      currentEffectKind: undefined
+      currentEffectKind: undefined,
+      ...(result ? { result } : {})
     };
     this.transitionRequested = false;
+    this.abortRequested = false;
     this.executor = undefined;
     this.coveredConfirmIndexes.clear();
   }
 
   recordEffect(effect: EventEffect): void {
+    const effectsByKind = {
+      ...this.debugState.effectsByKind,
+      [effect.kind]: (this.debugState.effectsByKind[effect.kind] ?? 0) + 1
+    };
     this.debugState = {
       ...this.debugState,
       currentEffectKind: effect.kind,
-      effectsDispatched: this.executor?.dispatchedEffects.length ?? this.debugState.effectsDispatched
+      effectsDispatched: this.executor?.dispatchedEffects.length ?? this.debugState.effectsDispatched,
+      effectsByKind
     };
   }
 
   debug(): EventHostDebug {
     return {
       ...this.debugState,
+      effectsByKind: { ...this.debugState.effectsByKind },
+      ...(this.debugState.result ? { result: { ...this.debugState.result } } : {}),
       records: { ...this.debugState.records }
     };
   }
@@ -190,6 +210,12 @@ export class RuntimeEventHost implements EventExecutorHost {
   consumeTransitionRequested(): boolean {
     const requested = this.transitionRequested;
     this.transitionRequested = false;
+    return requested;
+  }
+
+  consumeAbortRequested(): boolean {
+    const requested = this.abortRequested;
+    this.abortRequested = false;
     return requested;
   }
 
@@ -259,13 +285,13 @@ export class RuntimeEventHost implements EventExecutorHost {
   }
 
   openShop(storeId: number): void {
-    this.options.openShop?.(storeId);
+    const opened = this.options.openShop?.(storeId) !== false;
     this.debugState.records = {
       ...this.debugState.records,
       shops: this.debugState.records.shops + 1,
       lastShopStoreId: storeId
     };
-    this.transitionRequested = true;
+    this.transitionRequested = opened;
   }
 
   music(effect: Extract<EventEffect, { kind: "music" }>): void {
@@ -309,10 +335,14 @@ export class RuntimeEventHost implements EventExecutorHost {
       return;
     }
     this.recordWarp(dest, style);
+    const applied = this.options.applyWarpDestination(destination);
+    if (applied === false) {
+      this.abortRequested = true;
+      return;
+    }
     if (this.shouldFadeWarp(destination, style)) {
       this.fade();
     }
-    this.options.applyWarpDestination(destination);
   }
 
   private shouldFadeWarp(destination: EventWarpDestination, style?: number): boolean {
@@ -369,7 +399,7 @@ export class RuntimeEventHost implements EventExecutorHost {
 
 export class RuntimeEventSequence {
   private executor?: EventExecutor;
-  private onComplete?: () => void;
+  private onComplete?: EventSequenceOptions["onComplete"];
 
   constructor(
     private readonly scripts: ScriptCollection | undefined,
@@ -410,12 +440,18 @@ export class RuntimeEventSequence {
     this.pump({ frames: deltaMs / (1000 / 60) });
   }
 
-  abort(): void {
+  abort(reason = "aborted"): void {
     if (!this.running) {
       return;
     }
     this.executor = undefined;
-    this.host.finish();
+    this.host.finish({
+      status: "aborted",
+      truncated: false,
+      commandsVisited: 0,
+      jumps: 0,
+      reason
+    });
     this.onComplete = undefined;
   }
 
@@ -441,13 +477,17 @@ export class RuntimeEventSequence {
 
   private handleResult(result: EventExecutorAdvanceResult): boolean {
     if (result.done) {
-      this.finish();
+      this.finish(result);
       return false;
     }
     if ("effect" in result) {
       this.host.recordEffect(result.effect);
+      if (this.host.consumeAbortRequested()) {
+        this.finishAborted("host_abort_requested");
+        return false;
+      }
       if (this.host.consumeTransitionRequested()) {
-        this.finish();
+        this.finishAborted("transition_requested");
         return false;
       }
     }
@@ -460,12 +500,34 @@ export class RuntimeEventSequence {
     return false;
   }
 
-  private finish(): void {
+  private finish(result: Extract<EventExecutorAdvanceResult, { done: true }>): void {
     const onComplete = this.onComplete;
+    const finishResult: NonNullable<EventHostDebug["result"]> = {
+      status: "completed",
+      truncated: result.truncated,
+      ...(result.truncatedReason ? { truncatedReason: result.truncatedReason } : {}),
+      commandsVisited: result.commandsVisited,
+      jumps: result.jumps
+    };
     this.executor = undefined;
     this.onComplete = undefined;
-    this.host.finish();
-    onComplete?.();
+    this.host.finish(finishResult);
+    onComplete?.(finishResult);
+  }
+
+  private finishAborted(reason: string): void {
+    const onComplete = this.onComplete;
+    const finishResult: NonNullable<EventHostDebug["result"]> = {
+      status: "aborted",
+      truncated: false,
+      commandsVisited: 0,
+      jumps: 0,
+      reason
+    };
+    this.executor = undefined;
+    this.onComplete = undefined;
+    this.host.finish(finishResult);
+    onComplete?.(finishResult);
   }
 }
 
@@ -499,6 +561,7 @@ function emptyDebug(): EventHostDebug {
   return {
     running: false,
     effectsDispatched: 0,
+    effectsByKind: {},
     records: {
       warps: 0,
       warpNoops: 0,

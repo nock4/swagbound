@@ -26,9 +26,12 @@ import { chooseRegion, encodeCollisionRows, findSpawn, spriteGroupAnimations } f
 import { encodePngRgba, readPngHeader } from "../src/png";
 import {
   EB_ROM_SIZE_BYTES,
+  NEW_GAME_STARTUP_BANK_FILE_OFFSET,
+  NEW_GAME_STARTUP_LOW16_FILE_OFFSET,
   NEW_GAME_START_X_FILE_OFFSET,
   NEW_GAME_START_Y_FILE_OFFSET,
-  ROM_NEW_GAME_START_DERIVATION
+  ROM_NEW_GAME_START_DERIVATION,
+  ROM_NEW_GAME_STARTUP_DERIVATION
 } from "../src/romStart";
 
 /** Builds a fully synthetic .fts source (no extracted game data). */
@@ -720,12 +723,20 @@ describe("world artifact build (synthetic project)", () => {
       const out = path.join(temp, "generated");
       const rom = path.join(temp, "synthetic.sfc");
       await writeSyntheticChunkProject(project);
+      await writeFile(path.join(project, "ccscript", "data_00.ccs"), [
+        "l_0xc01234:",
+        "    end",
+        ""
+      ].join("\n"), "utf8");
 
       const bytes = new Uint8Array(EB_ROM_SIZE_BYTES);
       bytes[NEW_GAME_START_X_FILE_OFFSET] = 0x20;
       bytes[NEW_GAME_START_X_FILE_OFFSET + 1] = 0x01;
       bytes[NEW_GAME_START_Y_FILE_OFFSET] = 0x80;
       bytes[NEW_GAME_START_Y_FILE_OFFSET + 1] = 0x01;
+      bytes[NEW_GAME_STARTUP_LOW16_FILE_OFFSET] = 0x34;
+      bytes[NEW_GAME_STARTUP_LOW16_FILE_OFFSET + 1] = 0x12;
+      bytes[NEW_GAME_STARTUP_BANK_FILE_OFFSET] = 0xC0;
       await writeFile(rom, bytes);
 
       const romResult = await convertProject({ project, out, worldMode: "full", romPath: rom });
@@ -734,6 +745,8 @@ describe("world artifact build (synthetic project)", () => {
       }
       expect(romResult.world.player.spawnWorldPixel).toEqual({ x: 0x0120, y: 0x0180 });
       expect(romResult.world.player.spawnDerivation).toBe(ROM_NEW_GAME_START_DERIVATION);
+      expect(romResult.world.player.newGameStartupRef).toBe("data_00.l_0xc01234");
+      expect(romResult.world.player.newGameStartupDerivation).toBe(ROM_NEW_GAME_STARTUP_DERIVATION);
 
       const fallbackResult = await convertProject({ project, out, worldMode: "full", romPath: path.join(temp, "missing.sfc") });
       if (!("mode" in fallbackResult.world)) {
@@ -741,6 +754,7 @@ describe("world artifact build (synthetic project)", () => {
       }
       expect(fallbackResult.world.player.spawnWorldPixel).not.toEqual({ x: 0x0120, y: 0x0180 });
       expect(fallbackResult.world.player.spawnDerivation).toContain("nearest walkable point near NPC 744");
+      expect(fallbackResult.world.player.newGameStartupRef).toBeUndefined();
     } finally {
       await rm(temp, { recursive: true, force: true });
     }

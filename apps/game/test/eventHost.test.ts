@@ -42,6 +42,10 @@ function runtime(file: string, cmd: "next" | "end", line: number): ScriptCommand
   return { cmd, raw: cmd, sourceLocation: location(file, line) };
 }
 
+function unknown(file: string, raw: string, line: number): ScriptCommand {
+  return { cmd: "unknown", raw, sourceLocation: location(file, line) };
+}
+
 function effect(file: string, line: number, segment: DialogueSegment): ScriptCommand {
   return {
     cmd: "control",
@@ -222,9 +226,13 @@ describe("RuntimeEventHost", () => {
         time: { delayedCall: (_delay, callback) => callback() }
       },
       resolveWarpDestination: () => ({ x: 40, y: 50, direction: "left" }),
-      applyWarpDestination: (destination) => applied.push(destination),
+      applyWarpDestination: (destination) => {
+        applied.push(destination);
+      },
       startBattle: () => false,
-      openShop: (storeId) => shops.push(storeId)
+      openShop: (storeId) => {
+        shops.push(storeId);
+      }
     });
     const sequence = new RuntimeEventSequence(collection, host);
 
@@ -266,7 +274,9 @@ describe("RuntimeEventHost", () => {
       flags: new GameFlags(),
       partyState: new PartyState(),
       resolveWarpDestination: (dest, style) => resolveTeleportDestination(teleportDestinations(), dest, style),
-      applyWarpDestination: (destination) => applied.push(destination)
+      applyWarpDestination: (destination) => {
+        applied.push(destination);
+      }
     });
     const sequence = new RuntimeEventSequence(collection, host);
 
@@ -305,7 +315,9 @@ describe("RuntimeEventHost", () => {
         time: { delayedCall: (_delay, callback) => callback() }
       },
       resolveWarpDestination: (dest, style) => resolveTeleportDestination(teleportDestinations(), dest, style),
-      applyWarpDestination: (destination) => applied.push(destination)
+      applyWarpDestination: (destination) => {
+        applied.push(destination);
+      }
     });
     const sequence = new RuntimeEventSequence(collection, host);
 
@@ -324,6 +336,40 @@ describe("RuntimeEventHost", () => {
       warpNoops: 0,
       lastWarpDest: 5,
       lastTeleportStyle: 4
+    });
+  });
+
+  it("treats unknown event controls as safe no-ops and ends controllable", () => {
+    const file = "ccscript/unknown.ccs";
+    const collection = scripts({
+      [file]: [
+        label(file, "start", 1),
+        unknown(file, "synthetic_unknown()", 2),
+        runtime(file, "end", 3)
+      ]
+    });
+    const dialogue = new DialogueController();
+    const host = new RuntimeEventHost({
+      dialogue,
+      flags: new GameFlags(),
+      partyState: new PartyState()
+    });
+    const sequence = new RuntimeEventSequence(collection, host);
+    let inputLocked = true;
+
+    expect(sequence.start("unknown.start", {
+      onComplete: () => {
+        inputLocked = false;
+      }
+    })).toBe(true);
+
+    expect(sequence.running).toBe(false);
+    expect(dialogue.open).toBe(false);
+    expect(inputLocked).toBe(false);
+    expect(host.debug().effectsByKind.control).toBe(1);
+    expect(host.debug().result).toMatchObject({
+      status: "completed",
+      truncated: false
     });
   });
 });

@@ -124,17 +124,58 @@ export type FirstSceneDebug = {
     running: boolean;
     currentEffectKind?: string;
     effectsDispatched: number;
+    effectsByKind?: Record<string, number>;
+    result?: {
+      status: "completed" | "aborted";
+      truncated: boolean;
+      truncatedReason?: string;
+      commandsVisited: number;
+      jumps: number;
+      reason?: string;
+    };
     records: {
       warps: number;
       warpNoops: number;
       battles: number;
       battleNoops: number;
+      shops?: number;
       audio: number;
       lastWarpDest?: number;
       lastTeleportStyle?: number;
       lastBattleGroup?: number;
+      lastShopStoreId?: number;
       lastAudioKind?: string;
     };
+  };
+  newGameStartup?: {
+    attempted: boolean;
+    started: boolean;
+    reference?: string;
+    skippedReason?: string;
+    status: "skipped" | "running" | "completed" | "aborted";
+    truncated: boolean;
+    truncatedReason?: string;
+    abortedReason?: string;
+    fallbackApplied: boolean;
+    fallbackReason?: string;
+    effectsDispatched: number;
+    effectsByKind: Record<string, number>;
+    records: {
+      warps: number;
+      warpNoops: number;
+      battles: number;
+      battleNoops: number;
+      shops: number;
+      audio: number;
+      lastWarpDest?: number;
+      lastTeleportStyle?: number;
+      lastBattleGroup?: number;
+      lastShopStoreId?: number;
+      lastAudioKind?: string;
+    };
+    initialPlayer?: { x: number; y: number };
+    finalPlayer?: { x: number; y: number };
+    finalPlayerControllable: boolean;
   };
   partyState?: {
     wallet: number;

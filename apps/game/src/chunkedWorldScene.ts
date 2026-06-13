@@ -27,6 +27,7 @@ import {
   resolveTeleportDestination,
   RuntimeEventHost,
   RuntimeEventSequence,
+  type EventHostDebug,
   type EventWarpDestination
 } from "./eventHost";
 import { GameFlags } from "./gameFlags";
@@ -53,7 +54,15 @@ import {
   type PlayerState
 } from "./playerController";
 import { PLAYER_SPEED, INTERACTION_DISTANCE } from "./worldScene";
-import { DialogueController, publishDebug, type DebugNpc, type FirstSceneDebug } from "./state";
+import {
+  DialogueController,
+  publishDebug,
+  publishNewGameStartupRecord,
+  shouldRunNewGameStartup,
+  type DebugNpc,
+  type FirstSceneDebug,
+  type NewGameStartupRunDebug
+} from "./state";
 import { createDialogueResolver, textSpeedCpsFromSearch } from "./dialogueRenderer";
 import { PartyState } from "./partyState";
 import {
@@ -157,6 +166,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private hasSave = false;
   private lastSavedAt?: string;
   private restoredFromSave = false;
+  private newGameStartupRecord?: NewGameStartupRunDebug;
+  private startupRunActive = false;
+  private startupRunFinalized = false;
+  private startupInitialSpawn?: { x: number; y: number };
+  private startupFallbackReason?: string;
   targetReference = TARGET_REFERENCE;
   prompt = "";
   assetsLoaded = false;
@@ -264,6 +278,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.refreshStreaming(true);
     this.updatePrompt();
     this.scene.launch("ui", { worldSceneKey: "chunked-world" });
+    this.maybeStartNewGameStartup(spawn);
     this.publish();
   }
 
@@ -1153,9 +1168,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       partyState: this.partyState,
       scene: this,
       resolveWarpDestination: (dest, style) => this.resolveEventWarpDestination(dest, style),
-      applyWarpDestination: (destination) => this.applyDoorWarp(destination),
-      startBattle: (group) => this.startEventBattle(group),
-      openShop: (storeId) => this.openShopMenu(storeId)
+      applyWarpDestination: (destination) => this.applyEventWarpDestination(destination),
+      startBattle: (group) => this.startEventBattleForCurrentMode(group),
+      openShop: (storeId) => this.openShopForCurrentMode(storeId)
     });
     this.eventSequence = new RuntimeEventSequence(this.data_.scripts, host);
   }
@@ -1164,6 +1179,151 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.eventSequence?.start(reference, {
       onComplete: () => this.afterDialogueClosed()
     }) ?? false;
+  }
+
+  private maybeStartNewGameStartup(spawn: { x: number; y: number }): void {
+    const decision = shouldRunNewGameStartup({
+      hasSave: this.hasSave,
+      startupRef: this.world_.player.newGameStartupRef
+    });
+    if (!decision.run) {
+      this.newGameStartupRecord = this.startupRecord({
+        attempted: false,
+        started: false,
+        status: "skipped",
+        skippedReason: decision.skippedReason,
+        initialPlayer: spawn,
+        finalPlayer: this.currentPlayerPoint(),
+        finalPlayerControllable: this.isPlayerControllable()
+      });
+      publishNewGameStartupRecord(this.newGameStartupRecord);
+      return;
+    }
+
+    this.startupRunActive = true;
+    this.startupRunFinalized = false;
+    this.startupInitialSpawn = spawn;
+    this.startupFallbackReason = undefined;
+    lockPlayer(this.playerState, this.playerFrames);
+    this.newGameStartupRecord = this.startupRecord({
+      attempted: true,
+      started: true,
+      reference: decision.reference,
+      status: "running",
+      initialPlayer: spawn,
+      finalPlayer: this.currentPlayerPoint(),
+      finalPlayerControllable: false
+    });
+
+    const started = this.eventSequence?.start(decision.reference, {
+      onComplete: (result) => this.finalizeNewGameStartup(result)
+    }) ?? false;
+    if (!started) {
+      this.startupRunActive = false;
+      unlockPlayer(this.playerState);
+      this.newGameStartupRecord = this.startupRecord({
+        attempted: true,
+        started: false,
+        reference: decision.reference,
+        status: "skipped",
+        skippedReason: "unresolved_ref",
+        fallbackApplied: true,
+        fallbackReason: "unresolved_ref",
+        initialPlayer: spawn,
+        finalPlayer: this.currentPlayerPoint(),
+        finalPlayerControllable: this.isPlayerControllable()
+      });
+      publishNewGameStartupRecord(this.newGameStartupRecord);
+      return;
+    }
+
+    if (this.startupRunActive) {
+      this.newGameStartupRecord = this.startupRecord({
+        attempted: true,
+        started: true,
+        reference: decision.reference,
+        status: "running",
+        initialPlayer: spawn,
+        finalPlayer: this.currentPlayerPoint(),
+        finalPlayerControllable: false,
+        eventDebug: this.eventSequence?.debug()
+      });
+    }
+    this.updatePrompt();
+  }
+
+  private finalizeNewGameStartup(result: NonNullable<EventHostDebug["result"]>): void {
+    if (this.startupRunFinalized) {
+      return;
+    }
+    this.startupRunFinalized = true;
+    const reference = this.newGameStartupRecord?.reference ?? this.world_.player.newGameStartupRef;
+    let fallbackApplied = false;
+    let fallbackReason = this.startupFallbackReason;
+    if (fallbackReason || !this.isPlayableWorldPoint(this.currentPlayerPoint())) {
+      fallbackApplied = true;
+      fallbackReason ??= "unsafe_final_player_position";
+      this.restoreStartupSpawn();
+    }
+    this.startupRunActive = false;
+    if (this.dialogue.open && result.status === "aborted") {
+      this.dialogue.close();
+    }
+    this.afterDialogueClosed();
+    const finalPlayer = this.currentPlayerPoint();
+    this.newGameStartupRecord = this.startupRecord({
+      attempted: true,
+      started: true,
+      ...(reference ? { reference } : {}),
+      status: result.status,
+      truncated: result.truncated,
+      ...(result.truncatedReason ? { truncatedReason: result.truncatedReason } : {}),
+      abortedReason: result.status === "aborted" ? result.reason : undefined,
+      fallbackApplied,
+      ...(fallbackReason ? { fallbackReason } : {}),
+      initialPlayer: this.startupInitialSpawn,
+      finalPlayer,
+      finalPlayerControllable: this.isPlayerControllable(),
+      eventDebug: this.eventSequence?.debug()
+    });
+    publishNewGameStartupRecord(this.newGameStartupRecord);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private applyEventWarpDestination(destination: EventWarpDestination): boolean | void {
+    if (this.startupRunActive) {
+      return this.applyStartupWarpDestination(destination);
+    }
+    this.applyDoorWarp(destination);
+  }
+
+  private applyStartupWarpDestination(destination: EventWarpDestination): boolean {
+    const to = this.clampSpawn(destination.worldPixel ?? destination);
+    if (!this.isPlayableWorldPoint(to)) {
+      this.startupFallbackReason = "unsafe_warp_destination";
+      return false;
+    }
+    this.applyDoorWarp(destination);
+    if (!this.isPlayableWorldPoint(this.currentPlayerPoint())) {
+      this.startupFallbackReason = "unsafe_warp_result";
+      return false;
+    }
+    return true;
+  }
+
+  private startEventBattleForCurrentMode(group: number): boolean {
+    if (this.startupRunActive) {
+      return false;
+    }
+    return this.startEventBattle(group);
+  }
+
+  private openShopForCurrentMode(storeId: number): boolean | void {
+    if (this.startupRunActive) {
+      return false;
+    }
+    this.openShopMenu(storeId);
   }
 
   private resolveEventWarpDestination(dest: number, style?: number): EventWarpDestination | undefined {
@@ -1199,6 +1359,99 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.restoreActiveNpc();
     this.refreshStreaming(true);
     this.updatePrompt();
+  }
+
+  private startupRecord(options: {
+    attempted: boolean;
+    started: boolean;
+    reference?: string;
+    skippedReason?: NewGameStartupRunDebug["skippedReason"];
+    status: NewGameStartupRunDebug["status"];
+    truncated?: boolean;
+    truncatedReason?: string;
+    abortedReason?: string;
+    fallbackApplied?: boolean;
+    fallbackReason?: string;
+    eventDebug?: EventHostDebug;
+    initialPlayer?: { x: number; y: number };
+    finalPlayer?: { x: number; y: number };
+    finalPlayerControllable: boolean;
+  }): NewGameStartupRunDebug {
+    const debug = options.eventDebug;
+    const records = debug?.records ?? {
+      warps: 0,
+      warpNoops: 0,
+      battles: 0,
+      battleNoops: 0,
+      shops: 0,
+      audio: 0
+    };
+    return {
+      attempted: options.attempted,
+      started: options.started,
+      ...(options.reference ? { reference: options.reference } : {}),
+      ...(options.skippedReason ? { skippedReason: options.skippedReason } : {}),
+      status: options.status,
+      truncated: options.truncated ?? debug?.result?.truncated ?? false,
+      ...(options.truncatedReason ?? debug?.result?.truncatedReason
+        ? { truncatedReason: options.truncatedReason ?? debug?.result?.truncatedReason }
+        : {}),
+      ...(options.abortedReason ? { abortedReason: options.abortedReason } : {}),
+      fallbackApplied: options.fallbackApplied ?? false,
+      ...(options.fallbackReason ? { fallbackReason: options.fallbackReason } : {}),
+      effectsDispatched: debug?.effectsDispatched ?? 0,
+      effectsByKind: startupCoverageByKind(debug?.effectsByKind ?? {}),
+      records: { ...records },
+      ...(options.initialPlayer ? { initialPlayer: { ...options.initialPlayer } } : {}),
+      ...(options.finalPlayer ? { finalPlayer: { ...options.finalPlayer } } : {}),
+      finalPlayerControllable: options.finalPlayerControllable
+    };
+  }
+
+  private currentPlayerPoint(): { x: number; y: number } {
+    return { x: this.playerState.x, y: this.playerState.y };
+  }
+
+  private isPlayerControllable(): boolean {
+    return !this.menuState.open && !this.dialogue.open && !this.eventSequence?.running && !this.playerState.inputLocked;
+  }
+
+  private isPlayableWorldPoint(point: { x: number; y: number }): boolean {
+    const clamped = this.clampSpawn(point);
+    if (clamped.x !== point.x || clamped.y !== point.y) {
+      return false;
+    }
+    const chunk = this.chunkByKey.get(chunkKey(chunkForWorldPixel(point, this.grid())));
+    if (!chunk || chunk.void) {
+      return false;
+    }
+    return !this.surfaceBlocked(point.x, point.y);
+  }
+
+  private restoreStartupSpawn(): void {
+    const spawn = this.startupInitialSpawn;
+    if (!spawn) {
+      return;
+    }
+    this.playerState.x = spawn.x;
+    this.playerState.y = spawn.y;
+    this.playerState.velocityX = 0;
+    this.playerState.velocityY = 0;
+    this.playerState.moving = false;
+    this.playerState.walkClockMs = 0;
+    this.playerState.animKey = `idle-${this.playerState.facing}`;
+    this.playerState.animFrame = this.playerFrames[this.playerState.facing][0];
+    this.currentChunk = undefined;
+    this.refreshStreaming(true);
+    this.cameras.main.centerOn(spawn.x, spawn.y);
+    if (this.player) {
+      this.player.x = spawn.x;
+      this.player.y = spawn.y;
+      if (this.player instanceof Phaser.GameObjects.Sprite) {
+        this.player.setFrame(this.playerState.animFrame);
+      }
+      this.player.setDepth(spawn.y);
+    }
   }
 
   private setNpcIdleFacing(npc: NpcRuntime, facing: Facing): void {
@@ -1330,6 +1583,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       ...(this.lastSavedAt ? { lastSavedAt: this.lastSavedAt } : {}),
       restoredFromSave: this.restoredFromSave,
       eventExecutor: this.eventSequence?.debug(),
+      newGameStartup: this.newGameStartupRecord,
       partyState: this.partyState.counts(),
       shopOpen: this.menuState.open && this.activeShopStoreId !== undefined,
       ...(this.activeShopStoreId !== undefined ? { activeShopStoreId: this.activeShopStoreId } : {}),
@@ -1365,4 +1619,52 @@ function vitalsForPartyMember(member: PartyMember | undefined): {
 
 function fallbackShopItem(itemId: number): Pick<ItemData, "id" | "cost"> {
   return { id: itemId, cost: 0 };
+}
+
+function startupCoverageByKind(effectsByKind: Partial<Record<string, number>>): Partial<Record<string, number>> {
+  const coverage: Partial<Record<string, number>> = {};
+  for (const [kind, count] of Object.entries(effectsByKind)) {
+    if (!count) {
+      continue;
+    }
+    const bucket = startupCoverageBucket(kind);
+    coverage[bucket] = (coverage[bucket] ?? 0) + count;
+  }
+  return coverage;
+}
+
+function startupCoverageBucket(kind: string): string {
+  switch (kind) {
+    case "setFlag":
+    case "unsetFlag":
+    case "event":
+      return "flag";
+    case "warp":
+    case "teleport":
+    case "anchorWarp":
+      return "warp";
+    case "give":
+    case "take":
+    case "money":
+    case "atm":
+    case "party":
+    case "partyStat":
+    case "inflict":
+    case "learnPsi":
+      return "party";
+    case "music":
+    case "sound":
+    case "musicEffect":
+      return "audio";
+    case "text":
+    case "prompt":
+    case "pause":
+    case "control":
+    case "battle":
+    case "shop":
+    case "terminator":
+      return kind;
+    default:
+      return "other";
+  }
 }

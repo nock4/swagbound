@@ -520,8 +520,20 @@ export async function buildWorldArtifacts(options: {
   worldMode?: WorldMode;
   spawnWorldPixel?: { x: number; y: number };
   spawnWorldPixelDerivation?: string;
+  newGameStartupRef?: string;
+  newGameStartupDerivation?: string;
 }): Promise<WorldBuildResult> {
-  const { projectAbs, outAbs, displayPath, projectExists, worldMode = "region", spawnWorldPixel, spawnWorldPixelDerivation } = options;
+  const {
+    projectAbs,
+    outAbs,
+    displayPath,
+    projectExists,
+    worldMode = "region",
+    spawnWorldPixel,
+    spawnWorldPixelDerivation,
+    newGameStartupRef,
+    newGameStartupDerivation
+  } = options;
   const warnings: Issue[] = [];
 
   if (!projectExists) {
@@ -649,6 +661,8 @@ export async function buildWorldArtifacts(options: {
       tilesetForMapTileset,
       spawnWorldPixel,
       spawnWorldPixelDerivation,
+      newGameStartupRef,
+      newGameStartupDerivation,
       anchorWorld
     });
   }
@@ -763,7 +777,9 @@ export async function buildWorldArtifacts(options: {
       spawnRegionPixel: spawn,
       spawnWorldPixel: { x: spawn.x + regionPixelOrigin.x, y: spawn.y + regionPixelOrigin.y },
       spawnDerivation:
-        "Derived, not fixture data: nearest walkable point near the tutorial NPC placement (deterministic ring search). CoilSnake projects do not define a player start for this slice."
+        "Derived, not fixture data: nearest walkable point near the tutorial NPC placement (deterministic ring search). CoilSnake projects do not define a player start for this slice.",
+      ...(newGameStartupRef ? { newGameStartupRef } : {}),
+      ...(newGameStartupRef && newGameStartupDerivation ? { newGameStartupDerivation } : {})
     },
     sources,
     counts: {
@@ -803,6 +819,8 @@ async function buildFullWorldArtifacts(options: {
   tilesetForMapTileset: (mapTileset: number) => { tileset: FtsTileset; palettes: Map<number, FtsPalette> } | undefined;
   spawnWorldPixel: { x: number; y: number } | undefined;
   spawnWorldPixelDerivation: string | undefined;
+  newGameStartupRef: string | undefined;
+  newGameStartupDerivation: string | undefined;
   anchorWorld: { x: number; y: number };
 }): Promise<WorldBuildResult> {
   const {
@@ -822,6 +840,8 @@ async function buildFullWorldArtifacts(options: {
     tilesetForMapTileset,
     spawnWorldPixel,
     spawnWorldPixelDerivation,
+    newGameStartupRef,
+    newGameStartupDerivation,
     anchorWorld
   } = options;
 
@@ -970,7 +990,9 @@ async function buildFullWorldArtifacts(options: {
       spawnWorldPixel: spawn,
       spawnDerivation: spawnWorldPixel
         ? spawnWorldPixelDerivation ?? "Configured from EB_SPAWN world pixels."
-        : `Derived, not fixture data: nearest walkable point near NPC ${TUTORIAL_NPC_ID}'s placement (deterministic ring search). Vanilla new-game spawn location is Phase-2 scope.`
+        : `Derived, not fixture data: nearest walkable point near NPC ${TUTORIAL_NPC_ID}'s placement (deterministic ring search). Vanilla new-game spawn location is Phase-2 scope.`,
+      ...(newGameStartupRef ? { newGameStartupRef } : {}),
+      ...(newGameStartupRef && newGameStartupDerivation ? { newGameStartupDerivation } : {})
     },
     sources,
     counts: {

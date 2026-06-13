@@ -366,7 +366,9 @@ export const WorldRegionSchema = z.object({
       sheet: z.string().optional(),
       spawnRegionPixel: z.object({ x: z.number().int(), y: z.number().int() }),
       spawnWorldPixel: z.object({ x: z.number().int(), y: z.number().int() }),
-      spawnDerivation: z.string()
+      spawnDerivation: z.string(),
+      newGameStartupRef: z.string().optional(),
+      newGameStartupDerivation: z.string().optional()
     })
     .optional(),
   sources: WorldSourcesSchema,
@@ -430,7 +432,9 @@ export const WorldChunkedSchema = z.object({
     spriteGroup: z.number().int().nonnegative(),
     sheet: z.string().optional(),
     spawnWorldPixel: PixelSchema,
-    spawnDerivation: z.string()
+    spawnDerivation: z.string(),
+    newGameStartupRef: z.string().optional(),
+    newGameStartupDerivation: z.string().optional()
   }),
   sources: WorldSourcesSchema,
   counts: WorldCountsSchema.extend({

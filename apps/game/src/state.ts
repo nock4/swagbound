@@ -108,6 +108,43 @@ export type DebugNpc = {
   paused: boolean;
 };
 
+export type NewGameStartupSkipReason = "save_present" | "missing_ref";
+
+export type NewGameStartupDecision =
+  | { run: true; reference: string }
+  | { run: false; skippedReason: NewGameStartupSkipReason };
+
+export type NewGameStartupRunDebug = {
+  attempted: boolean;
+  started: boolean;
+  reference?: string;
+  skippedReason?: NewGameStartupSkipReason | "unresolved_ref";
+  status: "skipped" | "running" | "completed" | "aborted";
+  truncated: boolean;
+  truncatedReason?: string;
+  abortedReason?: string;
+  fallbackApplied: boolean;
+  fallbackReason?: string;
+  effectsDispatched: number;
+  effectsByKind: Partial<Record<string, number>>;
+  records: {
+    warps: number;
+    warpNoops: number;
+    battles: number;
+    battleNoops: number;
+    shops: number;
+    audio: number;
+    lastWarpDest?: number;
+    lastTeleportStyle?: number;
+    lastBattleGroup?: number;
+    lastShopStoreId?: number;
+    lastAudioKind?: string;
+  };
+  initialPlayer?: { x: number; y: number };
+  finalPlayer?: { x: number; y: number };
+  finalPlayerControllable: boolean;
+};
+
 export type OverworldDebug = {
   mode: Exclude<SceneMode, "battle">;
   dialogueOpen: boolean;
@@ -152,6 +189,15 @@ export type OverworldDebug = {
     running: boolean;
     currentEffectKind?: string;
     effectsDispatched: number;
+    effectsByKind: Partial<Record<string, number>>;
+    result?: {
+      status: "completed" | "aborted";
+      truncated: boolean;
+      truncatedReason?: string;
+      commandsVisited: number;
+      jumps: number;
+      reason?: string;
+    };
     records: {
       warps: number;
       warpNoops: number;
@@ -166,6 +212,7 @@ export type OverworldDebug = {
       lastAudioKind?: string;
     };
   };
+  newGameStartup?: NewGameStartupRunDebug;
   partyState?: {
     wallet: number;
     bank: number;
@@ -192,8 +239,25 @@ export type OverworldDebug = {
 
 export type FirstSceneDebug = OverworldDebug | BattleDebug;
 
+export function shouldRunNewGameStartup(options: {
+  hasSave: boolean;
+  startupRef?: string;
+}): NewGameStartupDecision {
+  if (options.hasSave) {
+    return { run: false, skippedReason: "save_present" };
+  }
+  if (!options.startupRef) {
+    return { run: false, skippedReason: "missing_ref" };
+  }
+  return { run: true, reference: options.startupRef };
+}
+
 export function publishDebug(state: FirstSceneDebug): void {
   (globalThis as Record<string, unknown>).__firstSceneDebug = state;
+}
+
+export function publishNewGameStartupRecord(record: NewGameStartupRunDebug): void {
+  (globalThis as Record<string, unknown>).__newGameStartupRun = record;
 }
 
 export function publishBattleDebug(state: BattleDebug): void {

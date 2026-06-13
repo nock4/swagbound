@@ -34,7 +34,13 @@ import { ITEMS_FILE, PSI_FILE, buildItemPsiData } from "./itemsPsi";
 import { SHOPS_FILE, buildShopData } from "./shops";
 import { buildWorldArtifacts, TUTORIAL_NPC_ID, type WorldMode } from "./world";
 import { parseTeleportDestinationTable } from "./coilsnakeYaml";
-import { DEFAULT_EB_ROM_PATH, ROM_NEW_GAME_START_DERIVATION, readEbNewGameStartFromRom } from "./romStart";
+import {
+  DEFAULT_EB_ROM_PATH,
+  ROM_NEW_GAME_START_DERIVATION,
+  ROM_NEW_GAME_STARTUP_DERIVATION,
+  readEbRomStartMetadata,
+  scriptReferenceForSnesLabel
+} from "./romStart";
 
 const DEFAULT_PROJECT = "external/coilsnake-project";
 const DEFAULT_FULL_WORLD_PROJECT = "external/coilsnake-full";
@@ -834,8 +840,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   const projectAbs = resolveFromRoot(project);
   const outAbs = resolveFromRoot(out);
   const configuredSpawnWorldPixel = options.spawnWorldPixel ?? (process.env.EB_SPAWN ? parseSpawn(process.env.EB_SPAWN) : undefined);
-  const romStartPath = configuredSpawnWorldPixel ? undefined : defaultFullWorldRomPath(worldMode, projectAbs, options.romPath ?? process.env.EB_ROM);
-  const romStartWorldPixel = romStartPath ? await readEbNewGameStartFromRom(resolveFromRoot(romStartPath)) : undefined;
+  const romStartPath = defaultFullWorldRomPath(worldMode, projectAbs, options.romPath ?? process.env.EB_ROM);
+  const romStartMetadata = romStartPath ? await readEbRomStartMetadata(resolveFromRoot(romStartPath)) : undefined;
+  const romStartWorldPixel = configuredSpawnWorldPixel ? undefined : romStartMetadata?.spawnWorldPixel;
   const spawnWorldPixel = configuredSpawnWorldPixel ?? romStartWorldPixel;
   const spawnWorldPixelDerivation = configuredSpawnWorldPixel
     ? options.spawnWorldPixelDerivation
@@ -861,6 +868,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   }
 
   const scripts = await readScripts(projectAbs, project, projectExists, warnings);
+  const newGameStartupRef = scriptReferenceForSnesLabel(scripts, romStartMetadata?.startupTargetSnesAddress);
   const npcs = await readNpcReferences(projectAbs, project, projectExists);
   const spriteGroups = await readSpriteGroups(projectAbs, project, projectExists, warnings);
   const worldBuild = await buildWorldArtifacts({
@@ -870,7 +878,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     projectExists,
     worldMode,
     spawnWorldPixel,
-    spawnWorldPixelDerivation
+    spawnWorldPixelDerivation,
+    newGameStartupRef,
+    newGameStartupDerivation: newGameStartupRef ? ROM_NEW_GAME_STARTUP_DERIVATION : undefined
   });
   const world = worldBuild.world;
   const sprites = worldBuild.sprites;
