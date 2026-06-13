@@ -16,6 +16,7 @@ import {
   parseIntKeyedYaml,
   parseMapSprites,
   parseMapTiles,
+  parseYamlInteger,
   placementToWorldPixel
 } from "../src/coilsnakeYaml";
 import { chooseRegion, encodeCollisionRows, findSpawn, spriteGroupAnimations } from "../src/world";
@@ -133,6 +134,12 @@ describe("coilsnake yaml readers", () => {
     const entries = parseIntKeyedYaml(["744:", "  Sprite: 5", "  Text Pointer 1: robot.hello_world", "745:", "  Sprite: 6", ""].join("\n"));
     expect(entries.get(744)).toMatchObject({ Sprite: "5", "Text Pointer 1": "robot.hello_world" });
     expect(entries.get(745)).toMatchObject({ Sprite: "6" });
+  });
+
+  it("parses hex-formatted numeric tokens", () => {
+    const entries = parseIntKeyedYaml(["0x10:", "  Event Flag: 0x274", ""].join("\n"));
+    expect(entries.get(16)).toMatchObject({ "Event Flag": "0x274" });
+    expect(parseYamlInteger("0x274")).toBe(628);
   });
 
   it("parses nested and flow map sprite placements with world math", () => {
@@ -298,6 +305,107 @@ describe("world artifact build (synthetic project)", () => {
     await writeFile(path.join(project, "SpriteGroups", "005.png"), sheet);
   }
 
+  async function writeSyntheticChunkProject(project: string): Promise<void> {
+    await mkdir(path.join(project, "ccscript"), { recursive: true });
+    await mkdir(path.join(project, "Tilesets"), { recursive: true });
+    await mkdir(path.join(project, "SpriteGroups"), { recursive: true });
+    await writeFile(path.join(project, "Project.snake"), "CoilSnakeVersion: 4\n", "utf8");
+    await writeFile(
+      path.join(project, "ccscript", "robot.ccs"),
+      [
+        "hello_world:",
+        '    "@Hello World!" end',
+        "follow_up:",
+        '    "@Still here." end',
+        ""
+      ].join("\n"),
+      "utf8"
+    );
+
+    const rows: string[] = [];
+    for (let y = 0; y < 32; y += 1) {
+      const row: string[] = [];
+      for (let x = 0; x < 32; x += 1) {
+        if (x >= 16 && y < 16) {
+          row.push("000"); // void chunk
+        } else if (x < 16 && y >= 16) {
+          row.push("003"); // foreground-bearing chunk
+        } else if (x >= 16 && y >= 16) {
+          row.push("002"); // visible solid chunk
+        } else {
+          row.push("001"); // visible walkable chunk
+        }
+      }
+      rows.push(row.join(" "));
+    }
+    await writeFile(path.join(project, "map_tiles.map"), `${rows.join("\n")}\n`, "utf8");
+
+    const sectors: string[] = [];
+    for (let i = 0; i < 32; i += 1) {
+      sectors.push(`${i}:`, "  Palette: 0", "  Tileset: 0");
+    }
+    await writeFile(path.join(project, "map_sectors.yml"), `${sectors.join("\n")}\n`, "utf8");
+    await writeFile(path.join(project, "Tilesets", "00.fts"), syntheticFts(), "utf8");
+
+    await writeFile(path.join(project, "map_sprites.yml"), [
+      "0:",
+      "  0:",
+      "  - {NPC ID: 744, X: 64, Y: 64}",
+      "  2:",
+      "  - {NPC ID: 100, X: 32, Y: 96}",
+      "2:",
+      "  2:",
+      "  - {NPC ID: 101, X: 32, Y: 32}",
+      ""
+    ].join("\n"), "utf8");
+
+    await writeFile(path.join(project, "npc_config_table.yml"), [
+      "100:",
+      "  Direction: left",
+      "  Show Sprite: when event flag set",
+      "  Sprite: 7",
+      "  Text Pointer 1: $0",
+      "  Type: person",
+      "101:",
+      "  Direction: up",
+      "  Show Sprite: always",
+      "  Sprite: 6",
+      "  Text Pointer 1: robot.follow_up",
+      "  Type: person",
+      "744:",
+      "  Direction: down",
+      "  Event Flag: 0x0",
+      "  Movement: 605",
+      "  Show Sprite: always",
+      "  Sprite: 5",
+      "  Text Pointer 1: robot.hello_world",
+      "  Text Pointer 2: robot.follow_up",
+      "  Type: person",
+      ""
+    ].join("\n"), "utf8");
+
+    await writeFile(path.join(project, "sprite_groups.yml"), [
+      "1:",
+      "  Length: 16",
+      "  Size: 16x24",
+      "5:",
+      "  Length: 16",
+      "  Size: 16x24",
+      "6:",
+      "  Length: 16",
+      "  Size: 16x24",
+      "7:",
+      "  Length: 16",
+      "  Size: 16x24",
+      ""
+    ].join("\n"), "utf8");
+
+    const sheet = encodePngRgba(64, 96, new Uint8Array(64 * 96 * 4).fill(128));
+    await writeFile(path.join(project, "SpriteGroups", "001.png"), sheet);
+    await writeFile(path.join(project, "SpriteGroups", "005.png"), sheet);
+    await writeFile(path.join(project, "SpriteGroups", "006.png"), sheet);
+  }
+
   it("emits a renderable world with NPC placement, spawn, and assets", async () => {
     const temp = await mkdtemp(path.join(os.tmpdir(), "eb-world-"));
     try {
@@ -307,6 +415,10 @@ describe("world artifact build (synthetic project)", () => {
 
       const result = await convertProject({ project, out });
       const world = result.world;
+      expect("mode" in world).toBe(false);
+      if ("mode" in world) {
+        throw new Error("expected region world");
+      }
 
       expect(world.available).toBe(true);
       expect(world.region).toMatchObject({ originTile: { x: 8, y: 8 }, widthTiles: 48, heightTiles: 44 });
@@ -355,6 +467,84 @@ describe("world artifact build (synthetic project)", () => {
       expect(validated.worldNpcs).toBe(2);
       expect(validated.spriteSheets).toBe(2);
       expect(validated.worldAssetsChecked).toBe(4);
+    } finally {
+      await rm(temp, { recursive: true, force: true });
+    }
+  }, 30_000);
+
+  it("emits a streamable chunked world in full mode", async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), "eb-world-full-"));
+    try {
+      const project = path.join(temp, "project");
+      const out = path.join(temp, "generated");
+      await writeSyntheticChunkProject(project);
+
+      const result = await convertProject({ project, out, worldMode: "full" });
+      const world = result.world;
+      expect("mode" in world && world.mode).toBe("full");
+      if (!("mode" in world)) {
+        throw new Error("expected chunked world");
+      }
+
+      expect(world).toMatchObject({
+        available: true,
+        mapWidthTiles: 32,
+        mapHeightTiles: 32,
+        chunkSizeTiles: 16
+      });
+      expect(world.chunks).toHaveLength(4);
+      const byChunk = new Map(world.chunks.map((chunk) => [`${chunk.cx},${chunk.cy}`, chunk]));
+      expect(byChunk.get("0,0")).toMatchObject({ background: "assets/world/chunks/background-0-0.png", foreground: null, void: false });
+      expect(byChunk.get("1,0")).toMatchObject({ background: null, foreground: null, void: true });
+      expect(byChunk.get("0,1")).toMatchObject({
+        background: "assets/world/chunks/background-0-1.png",
+        foreground: "assets/world/chunks/foreground-0-1.png",
+        void: false
+      });
+      expect(byChunk.get("1,1")).toMatchObject({ background: "assets/world/chunks/background-1-1.png", foreground: null, void: false });
+      expect(world.counts).toMatchObject({ chunks: 4, chunksWritten: 3, voidChunks: 1, chunkFiles: 4 });
+
+      expect(world.collision.width).toBe(128);
+      expect(world.collision.height).toBe(128);
+      expect(world.collision.solidRows).toHaveLength(128);
+      expect(world.collision.surfaceRows).toHaveLength(128);
+      expect(world.collision.solidRows[0]).toHaveLength(128);
+      expect(world.collision.surfaceRows[0]).toHaveLength(256);
+
+      expect(world.npcs).toHaveLength(3);
+      expect(world.counts.visibleNpcs).toBe(2);
+      const hidden = world.npcs.find((npc) => npc.npcId === 100);
+      expect(hidden).toMatchObject({ visible: false, interactable: false, spriteGroup: 7, worldPixel: { x: 544, y: 96 } });
+      expect(hidden?.sheet).toBeUndefined();
+      expect(world.npcs.find((npc) => npc.npcId === 744)).toMatchObject({
+        visible: true,
+        interactable: true,
+        spriteGroup: 5,
+        worldPixel: { x: 64, y: 64 },
+        sheet: "assets/sprites/005.png"
+      });
+
+      expect(result.sprites.sheets.map((sheet) => sheet.groupId)).toEqual([1, 5, 6]);
+      for (const asset of [
+        "assets/world/chunks/background-0-0.png",
+        "assets/world/chunks/background-0-1.png",
+        "assets/world/chunks/foreground-0-1.png",
+        "assets/world/chunks/background-1-1.png",
+        "assets/sprites/001.png",
+        "assets/sprites/005.png",
+        "assets/sprites/006.png"
+      ]) {
+        expect(existsSync(path.join(out, asset)), `${asset} should exist`).toBe(true);
+      }
+      expect(existsSync(path.join(out, "assets/world/chunks/background-1-0.png"))).toBe(false);
+      expect(existsSync(path.join(out, "assets/sprites/007.png"))).toBe(false);
+
+      const validated = await validateGeneratedOutput(out);
+      expect(validated.ok).toBe(true);
+      expect(validated.worldAvailable).toBe(true);
+      expect(validated.worldNpcs).toBe(3);
+      expect(validated.spriteSheets).toBe(3);
+      expect(validated.worldAssetsChecked).toBe(7);
     } finally {
       await rm(temp, { recursive: true, force: true });
     }

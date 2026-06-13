@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "convert": "tsx src/index.ts",
-    "validate": "tsx src/validate.ts"
+    "convert": "node --import tsx src/index.ts",
+    "validate": "node --import tsx src/validate.ts"
   },
   "dependencies": {
     "@eb/schemas": "workspace:*",

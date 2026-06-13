@@ -4,9 +4,12 @@ import path from "node:path";
 import {
   SCHEMA_VERSION,
   SpriteSheetCollectionSchema,
+  WorldChunkedSchema,
+  type WorldArtifact,
   WorldRegionSchema,
   type SpriteSheetCollection,
   type ValidationIssue,
+  type WorldChunkedNpc,
   type WorldNpc,
   type WorldRegion
 } from "@eb/schemas";
@@ -15,6 +18,7 @@ import {
   parseIntKeyedYaml,
   parseMapSprites,
   parseMapTiles,
+  parseYamlInteger,
   placementToWorldPixel,
   type SpritePlacement
 } from "./coilsnakeYaml";
@@ -28,10 +32,12 @@ export const DEFAULT_MAP_WIDTH_TILES = 256;
 export const DEFAULT_MAP_HEIGHT_TILES = 320;
 export const REGION_WIDTH_TILES = 48;
 export const REGION_HEIGHT_TILES = 44;
+export const FULL_CHUNK_SIZE_TILES = 16;
 export const TUTORIAL_NPC_ID = 744;
 export const PLAYER_SPRITE_GROUP = 1;
 
 const WORLD_ASSET_DIR = "assets/world";
+const WORLD_CHUNK_ASSET_DIR = `${WORLD_ASSET_DIR}/chunks`;
 const SPRITE_ASSET_DIR = "assets/sprites";
 
 type Issue = ValidationIssue;
@@ -309,10 +315,12 @@ export function isCcsReference(pointer: string | undefined): pointer is string {
 }
 
 export type WorldBuildResult = {
-  world: WorldRegion;
+  world: WorldArtifact;
   sprites: SpriteSheetCollection;
   warnings: Issue[];
 };
+
+export type WorldMode = "region" | "full";
 
 function emptyWorld(displayPath: string, reasons: Issue[]): WorldRegion {
   return WorldRegionSchema.parse({
@@ -344,6 +352,119 @@ function emptySprites(displayPath: string): SpriteSheetCollection {
   });
 }
 
+function parseOptionalInteger(value: string | undefined): number {
+  return parseYamlInteger(value);
+}
+
+function sectorInfoFromEntry(entry: Record<string, string> | undefined): SectorInfo | undefined {
+  if (!entry) {
+    return undefined;
+  }
+  const tileset = parseOptionalInteger(entry.Tileset);
+  const palette = parseOptionalInteger(entry.Palette);
+  if (Number.isNaN(tileset) || Number.isNaN(palette)) {
+    return undefined;
+  }
+  return { tileset, palette };
+}
+
+function isLayerTransparent(rgba: Uint8Array): boolean {
+  for (let index = 3; index < rgba.length; index += 4) {
+    if (rgba[index] !== 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function isAllVoid(voidSolid: Uint8Array): boolean {
+  for (const value of voidSolid) {
+    if (value !== 1) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function pushUniqueIssues(target: Issue[], additions: Issue[]): void {
+  const seen = new Set(target.map((item) => `${item.severity}:${item.code}:${item.message}:${item.path ?? ""}`));
+  for (const item of additions) {
+    const key = `${item.severity}:${item.code}:${item.message}:${item.path ?? ""}`;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    target.push(item);
+  }
+}
+
+async function copySpriteSheets(options: {
+  projectAbs: string;
+  outAbs: string;
+  displayPath: string;
+  neededGroups: Set<number>;
+  spriteGroupsMeta: Map<number, Record<string, string>>;
+}): Promise<{ sprites: SpriteSheetCollection; sheets: SpriteSheetCollection["sheets"]; warnings: Issue[] }> {
+  const { projectAbs, outAbs, displayPath, neededGroups, spriteGroupsMeta } = options;
+  const sheets: SpriteSheetCollection["sheets"] = [];
+  const spriteWarnings: Issue[] = [];
+  const spriteOutDir = path.join(outAbs, SPRITE_ASSET_DIR);
+  await mkdir(spriteOutDir, { recursive: true });
+  for (const groupId of [...neededGroups].sort((a, b) => a - b)) {
+    const padded = String(groupId).padStart(3, "0");
+    const sourceRelative = `SpriteGroups/${padded}.png`;
+    const sourceFile = path.join(projectAbs, sourceRelative);
+    if (!existsSync(sourceFile)) {
+      spriteWarnings.push(issue("warning", "world_missing_sprite_png", `Sprite sheet ${sourceRelative} is missing; affected sprites use a placeholder.`, sourceRelative));
+      continue;
+    }
+    const header = readPngHeader(await readFile(sourceFile));
+    const meta = spriteGroupsMeta.get(groupId);
+    const sizeMatch = /^(\d+)x(\d+)$/.exec(meta?.Size ?? "");
+    const frameWidth = sizeMatch ? Number.parseInt(sizeMatch[1], 10) : 16;
+    const frameHeight = sizeMatch ? Number.parseInt(sizeMatch[2], 10) : 24;
+    const parsedFrames = parseOptionalInteger(meta?.Length);
+    const frames = Number.isNaN(parsedFrames) || parsedFrames <= 0 ? 16 : parsedFrames;
+    const columns = header ? Math.max(1, Math.floor(header.width / frameWidth)) : 4;
+    const rows = Math.max(1, Math.ceil(frames / columns));
+    const targetRelative = `${SPRITE_ASSET_DIR}/${padded}.png`;
+    await copyFile(sourceFile, path.join(outAbs, targetRelative));
+    sheets.push({
+      groupId,
+      file: targetRelative,
+      sourcePath: sourceRelative,
+      frameWidth,
+      frameHeight,
+      columns,
+      rows,
+      frames,
+      animations: spriteGroupAnimations(frames)
+    });
+  }
+
+  return {
+    sheets,
+    warnings: spriteWarnings,
+    sprites: SpriteSheetCollectionSchema.parse({
+      schemaVersion: SCHEMA_VERSION,
+      sourceProjectPath: displayPath,
+      sheets,
+      counts: { sheets: sheets.length },
+      warnings: spriteWarnings
+    })
+  };
+}
+
+function attachSheetsToNpcs(npcs: Array<{ spriteGroup?: number; sheet?: string }>, sheets: SpriteSheetCollection["sheets"]): Map<number, string> {
+  const sheetByGroup = new Map(sheets.map((sheet) => [sheet.groupId, sheet.file]));
+  for (const npc of npcs) {
+    if (npc.spriteGroup !== undefined && sheetByGroup.has(npc.spriteGroup)) {
+      npc.sheet = sheetByGroup.get(npc.spriteGroup);
+    }
+  }
+  return sheetByGroup;
+}
+
 /**
  * Builds world.json, sprites.json, and the local-only rendered/copied PNG
  * assets under the (gitignored) generated output directory.
@@ -353,8 +474,10 @@ export async function buildWorldArtifacts(options: {
   outAbs: string;
   displayPath: string;
   projectExists: boolean;
+  worldMode?: WorldMode;
+  spawnWorldPixel?: { x: number; y: number };
 }): Promise<WorldBuildResult> {
-  const { projectAbs, outAbs, displayPath, projectExists } = options;
+  const { projectAbs, outAbs, displayPath, projectExists, worldMode = "region", spawnWorldPixel } = options;
   const warnings: Issue[] = [];
 
   if (!projectExists) {
@@ -407,7 +530,7 @@ export async function buildWorldArtifacts(options: {
 
   const placements = parseMapSprites(mapSpritesSource as string);
   const tutorialPlacements = placements.filter((placement) => placement.npcId === TUTORIAL_NPC_ID);
-  if (tutorialPlacements.length === 0) {
+  if (tutorialPlacements.length === 0 && worldMode === "region") {
     const world = emptyWorld(displayPath, [
       issue("warning", "world_missing_npc_744", `No map_sprites.yml placement found for NPC ${TUTORIAL_NPC_ID}; world rendering skipped.`, "map_sprites.yml")
     ]);
@@ -416,14 +539,19 @@ export async function buildWorldArtifacts(options: {
   if (tutorialPlacements.length > 1) {
     warnings.push(issue("warning", "world_multiple_npc_744", `Found ${tutorialPlacements.length} placements for NPC ${TUTORIAL_NPC_ID}; using the first.`, "map_sprites.yml"));
   }
-  const anchorPlacement = tutorialPlacements[0];
-  const anchorWorld = placementToWorldPixel(anchorPlacement);
 
   const mapRows = parseMapTiles(mapTilesSource as string);
   const mapHeightTiles = mapRows.length || DEFAULT_MAP_HEIGHT_TILES;
   const mapWidthTiles = mapRows[0]?.length || DEFAULT_MAP_WIDTH_TILES;
   const sectorsPerRow = Math.max(1, Math.floor(mapWidthTiles / SECTOR_WIDTH_TILES));
   const sectorEntries = parseIntKeyedYaml(mapSectorsSource as string);
+  const anchorPlacement = tutorialPlacements[0];
+  const anchorWorld = anchorPlacement
+    ? placementToWorldPixel(anchorPlacement)
+    : { x: Math.floor(mapWidthTiles * TILE_SIZE / 2), y: Math.floor(mapHeightTiles * TILE_SIZE / 2) };
+  if (!anchorPlacement && worldMode === "full" && !spawnWorldPixel) {
+    warnings.push(issue("warning", "world_missing_npc_744_spawn_anchor", `No map_sprites.yml placement found for NPC ${TUTORIAL_NPC_ID}; using the map center as full-world spawn anchor.`, "map_sprites.yml"));
+  }
 
   // Parse every available tileset file and index palettes by map tileset id.
   const tilesetDir = path.join(projectAbs, "Tilesets");
@@ -454,23 +582,36 @@ export async function buildWorldArtifacts(options: {
     return { world, sprites: emptySprites(displayPath), warnings };
   }
 
+  const sectorLookup = (sectorCol: number, sectorRow: number): SectorInfo | undefined =>
+    sectorInfoFromEntry(sectorEntries.get(sectorRow * sectorsPerRow + sectorCol));
+  const tilesetForMapTileset = (mapTileset: number) => tilesetByMapTileset.get(mapTileset);
+
+  if (worldMode === "full") {
+    return buildFullWorldArtifacts({
+      projectAbs,
+      outAbs,
+      displayPath,
+      mapRows,
+      mapWidthTiles,
+      mapHeightTiles,
+      placements,
+      npcConfigSource,
+      spriteGroupsSource,
+      sources,
+      warnings,
+      sectorLookup,
+      tilesetForMapTileset,
+      spawnWorldPixel,
+      anchorWorld
+    });
+  }
+
   const bounds = chooseRegion(anchorWorld, mapWidthTiles, mapHeightTiles);
   const composed = composeRegion({
     bounds,
     mapRows,
-    sectorLookup: (sectorCol, sectorRow) => {
-      const entry = sectorEntries.get(sectorRow * sectorsPerRow + sectorCol);
-      if (!entry) {
-        return undefined;
-      }
-      const tileset = Number.parseInt(entry.Tileset ?? "", 10);
-      const palette = Number.parseInt(entry.Palette ?? "", 10);
-      if (Number.isNaN(tileset) || Number.isNaN(palette)) {
-        return undefined;
-      }
-      return { tileset, palette };
-    },
-    tilesetForMapTileset: (mapTileset) => tilesetByMapTileset.get(mapTileset)
+    sectorLookup,
+    tilesetForMapTileset
   });
   warnings.push(...composed.warnings);
 
@@ -488,7 +629,7 @@ export async function buildWorldArtifacts(options: {
       continue;
     }
     const config = npcConfig.get(placement.npcId);
-    const spriteGroup = config ? Number.parseInt(config.Sprite ?? "", 10) : Number.NaN;
+    const spriteGroup = config ? parseOptionalInteger(config.Sprite) : Number.NaN;
     const textPointer = config?.["Text Pointer 1"];
     const textPointer2 = config?.["Text Pointer 2"];
     const showSprite = config?.["Show Sprite"];
@@ -535,47 +676,8 @@ export async function buildWorldArtifacts(options: {
       neededGroups.add(npc.spriteGroup);
     }
   }
-  const sheets: SpriteSheetCollection["sheets"] = [];
-  const spriteWarnings: Issue[] = [];
-  const spriteOutDir = path.join(outAbs, SPRITE_ASSET_DIR);
-  await mkdir(spriteOutDir, { recursive: true });
-  for (const groupId of [...neededGroups].sort((a, b) => a - b)) {
-    const padded = String(groupId).padStart(3, "0");
-    const sourceRelative = `SpriteGroups/${padded}.png`;
-    const sourceFile = path.join(projectAbs, sourceRelative);
-    if (!existsSync(sourceFile)) {
-      spriteWarnings.push(issue("warning", "world_missing_sprite_png", `Sprite sheet ${sourceRelative} is missing; affected sprites use a placeholder.`, sourceRelative));
-      continue;
-    }
-    const header = readPngHeader(await readFile(sourceFile));
-    const meta = spriteGroupsMeta.get(groupId);
-    const sizeMatch = /^(\d+)x(\d+)$/.exec(meta?.Size ?? "");
-    const frameWidth = sizeMatch ? Number.parseInt(sizeMatch[1], 10) : 16;
-    const frameHeight = sizeMatch ? Number.parseInt(sizeMatch[2], 10) : 24;
-    const frames = Number.parseInt(meta?.Length ?? "16", 10) || 16;
-    const columns = header ? Math.max(1, Math.floor(header.width / frameWidth)) : 4;
-    const rows = Math.max(1, Math.ceil(frames / columns));
-    const targetRelative = `${SPRITE_ASSET_DIR}/${padded}.png`;
-    await copyFile(sourceFile, path.join(outAbs, targetRelative));
-    sheets.push({
-      groupId,
-      file: targetRelative,
-      sourcePath: sourceRelative,
-      frameWidth,
-      frameHeight,
-      columns,
-      rows,
-      frames,
-      animations: spriteGroupAnimations(frames)
-    });
-  }
-
-  const sheetByGroup = new Map(sheets.map((sheet) => [sheet.groupId, sheet.file]));
-  for (const npc of npcs) {
-    if (npc.spriteGroup !== undefined && sheetByGroup.has(npc.spriteGroup)) {
-      npc.sheet = sheetByGroup.get(npc.spriteGroup);
-    }
-  }
+  const spriteBuild = await copySpriteSheets({ projectAbs, outAbs, displayPath, neededGroups, spriteGroupsMeta });
+  const sheetByGroup = attachSheetsToNpcs(npcs, spriteBuild.sheets);
 
   // Write the rendered (local-only, gitignored) region images.
   const worldOutDir = path.join(outAbs, WORLD_ASSET_DIR);
@@ -622,16 +724,209 @@ export async function buildWorldArtifacts(options: {
       mapTilesetsUsed: composed.mapTilesetsUsed.size,
       palettesUsed: composed.palettesUsed.size
     },
-    warnings: [...warnings, ...spriteWarnings]
+    warnings: [...warnings, ...spriteBuild.warnings]
   });
 
-  const sprites = SpriteSheetCollectionSchema.parse({
+  return { world, sprites: spriteBuild.sprites, warnings };
+}
+
+async function buildFullWorldArtifacts(options: {
+  projectAbs: string;
+  outAbs: string;
+  displayPath: string;
+  mapRows: number[][];
+  mapWidthTiles: number;
+  mapHeightTiles: number;
+  placements: SpritePlacement[];
+  npcConfigSource: string | undefined;
+  spriteGroupsSource: string | undefined;
+  sources: {
+    mapTiles: boolean;
+    mapSectors: boolean;
+    tilesetFiles: number;
+    mapSprites: boolean;
+    npcConfig: boolean;
+    spriteGroupsYml: boolean;
+  };
+  warnings: Issue[];
+  sectorLookup: (sectorCol: number, sectorRow: number) => SectorInfo | undefined;
+  tilesetForMapTileset: (mapTileset: number) => { tileset: FtsTileset; palettes: Map<number, FtsPalette> } | undefined;
+  spawnWorldPixel: { x: number; y: number } | undefined;
+  anchorWorld: { x: number; y: number };
+}): Promise<WorldBuildResult> {
+  const {
+    projectAbs,
+    outAbs,
+    displayPath,
+    mapRows,
+    mapWidthTiles,
+    mapHeightTiles,
+    placements,
+    npcConfigSource,
+    spriteGroupsSource,
+    sources,
+    warnings,
+    sectorLookup,
+    tilesetForMapTileset,
+    spawnWorldPixel,
+    anchorWorld
+  } = options;
+
+  const chunkSizeTiles = FULL_CHUNK_SIZE_TILES;
+  const chunkColumns = Math.ceil(mapWidthTiles / chunkSizeTiles);
+  const chunkRows = Math.ceil(mapHeightTiles / chunkSizeTiles);
+  const collisionWidth = mapWidthTiles * (TILE_SIZE / COLLISION_CELL_SIZE);
+  const collisionHeight = mapHeightTiles * (TILE_SIZE / COLLISION_CELL_SIZE);
+  const fullSurface = new Uint8Array(collisionWidth * collisionHeight);
+  const fullVoidSolid = new Uint8Array(collisionWidth * collisionHeight).fill(1);
+  const chunks: Array<{ cx: number; cy: number; background: string | null; foreground: string | null; void: boolean }> = [];
+  const mapTilesetsUsed = new Set<number>();
+  const palettesUsed = new Set<string>();
+  let chunkFiles = 0;
+  let chunksWritten = 0;
+  let voidChunks = 0;
+
+  const chunkOutDir = path.join(outAbs, WORLD_CHUNK_ASSET_DIR);
+  await mkdir(chunkOutDir, { recursive: true });
+
+  for (let cy = 0; cy < chunkRows; cy += 1) {
+    for (let cx = 0; cx < chunkColumns; cx += 1) {
+      const bounds: RegionBounds = {
+        originTileX: cx * chunkSizeTiles,
+        originTileY: cy * chunkSizeTiles,
+        widthTiles: Math.min(chunkSizeTiles, mapWidthTiles - cx * chunkSizeTiles),
+        heightTiles: Math.min(chunkSizeTiles, mapHeightTiles - cy * chunkSizeTiles)
+      };
+      const composed = composeRegion({ bounds, mapRows, sectorLookup, tilesetForMapTileset });
+      pushUniqueIssues(warnings, composed.warnings);
+      for (const mapTileset of composed.mapTilesetsUsed) {
+        mapTilesetsUsed.add(mapTileset);
+      }
+      for (const palette of composed.palettesUsed) {
+        palettesUsed.add(palette);
+      }
+
+      for (let row = 0; row < composed.collisionHeight; row += 1) {
+        const sourceStart = row * composed.collisionWidth;
+        const sourceEnd = sourceStart + composed.collisionWidth;
+        const targetStart = (bounds.originTileY * 4 + row) * collisionWidth + bounds.originTileX * 4;
+        fullSurface.set(composed.surface.subarray(sourceStart, sourceEnd), targetStart);
+        fullVoidSolid.set(composed.voidSolid.subarray(sourceStart, sourceEnd), targetStart);
+      }
+
+      const allVoid = isAllVoid(composed.voidSolid);
+      const backgroundRelative = `${WORLD_CHUNK_ASSET_DIR}/background-${cx}-${cy}.png`;
+      const foregroundRelative = `${WORLD_CHUNK_ASSET_DIR}/foreground-${cx}-${cy}.png`;
+      let background: string | null = null;
+      let foreground: string | null = null;
+      if (!allVoid && !isLayerTransparent(composed.background)) {
+        await writeFile(path.join(outAbs, backgroundRelative), encodePngRgba(composed.widthPixels, composed.heightPixels, composed.background));
+        background = backgroundRelative;
+        chunkFiles += 1;
+      }
+      if (!allVoid && !isLayerTransparent(composed.foreground)) {
+        await writeFile(path.join(outAbs, foregroundRelative), encodePngRgba(composed.widthPixels, composed.heightPixels, composed.foreground));
+        foreground = foregroundRelative;
+        chunkFiles += 1;
+      }
+
+      const voidChunk = background === null && foreground === null;
+      if (voidChunk) {
+        voidChunks += 1;
+      } else {
+        chunksWritten += 1;
+      }
+      chunks.push({ cx, cy, background, foreground, void: voidChunk });
+    }
+  }
+
+  const { solidRows, surfaceRows, solidCells } = encodeCollisionRows(
+    fullSurface,
+    collisionWidth,
+    collisionHeight,
+    fullVoidSolid
+  );
+
+  const npcConfig = npcConfigSource ? parseIntKeyedYaml(npcConfigSource) : new Map<number, Record<string, string>>();
+  const spriteGroupsMeta = spriteGroupsSource ? parseIntKeyedYaml(spriteGroupsSource) : new Map<number, Record<string, string>>();
+  const npcs: WorldChunkedNpc[] = placements.map((placement) => {
+    const world = placementToWorldPixel(placement);
+    const config = npcConfig.get(placement.npcId);
+    const spriteGroup = config ? parseOptionalInteger(config.Sprite) : Number.NaN;
+    const textPointer = config?.["Text Pointer 1"];
+    const textPointer2 = config?.["Text Pointer 2"];
+    const showSprite = config?.["Show Sprite"];
+    return {
+      npcId: placement.npcId,
+      ...(Number.isNaN(spriteGroup) ? {} : { spriteGroup }),
+      ...(config?.Direction ? { direction: config.Direction } : {}),
+      ...(config?.Type ? { type: config.Type } : {}),
+      ...(config?.Movement ? { movement: config.Movement } : {}),
+      ...(showSprite ? { showSprite } : {}),
+      ...(textPointer ? { textPointer } : {}),
+      ...(textPointer2 ? { textPointer2 } : {}),
+      interactable: isCcsReference(textPointer),
+      visible: showSprite === "always",
+      worldPixel: world,
+      sourceLocation: { file: "map_sprites.yml", line: placement.line, column: 1 }
+    };
+  });
+  npcs.sort((a, b) => a.npcId - b.npcId || a.worldPixel.y - b.worldPixel.y || a.worldPixel.x - b.worldPixel.x);
+
+  const solidAt = (cellX: number, cellY: number): boolean => solidRows[cellY]?.[cellX] === "1";
+  const spawn = spawnWorldPixel
+    ?? findSpawn(solidAt, collisionWidth, collisionHeight, anchorWorld)
+    ?? anchorWorld;
+
+  const neededGroups = new Set<number>([PLAYER_SPRITE_GROUP]);
+  for (const npc of npcs) {
+    if (npc.visible && npc.spriteGroup !== undefined) {
+      neededGroups.add(npc.spriteGroup);
+    }
+  }
+  const spriteBuild = await copySpriteSheets({ projectAbs, outAbs, displayPath, neededGroups, spriteGroupsMeta });
+  const sheetByGroup = attachSheetsToNpcs(npcs, spriteBuild.sheets);
+
+  const world = WorldChunkedSchema.parse({
     schemaVersion: SCHEMA_VERSION,
     sourceProjectPath: displayPath,
-    sheets,
-    counts: { sheets: sheets.length },
-    warnings: spriteWarnings
+    available: true,
+    mode: "full",
+    tileSize: TILE_SIZE,
+    mapWidthTiles,
+    mapHeightTiles,
+    chunkSizeTiles,
+    chunks,
+    collision: {
+      cellSize: COLLISION_CELL_SIZE,
+      width: collisionWidth,
+      height: collisionHeight,
+      solidRows,
+      surfaceRows
+    },
+    npcs,
+    player: {
+      spriteGroup: PLAYER_SPRITE_GROUP,
+      ...(sheetByGroup.has(PLAYER_SPRITE_GROUP) ? { sheet: sheetByGroup.get(PLAYER_SPRITE_GROUP) } : {}),
+      spawnWorldPixel: spawn,
+      spawnDerivation: spawnWorldPixel
+        ? "Configured from EB_SPAWN world pixels."
+        : `Derived, not fixture data: nearest walkable point near NPC ${TUTORIAL_NPC_ID}'s placement (deterministic ring search). Vanilla new-game spawn (Ness's bedroom) is Phase-2 scope.`
+    },
+    sources,
+    counts: {
+      npcs: npcs.length,
+      visibleNpcs: npcs.filter((npc) => npc.visible).length,
+      solidCells,
+      mapTilesetsUsed: mapTilesetsUsed.size,
+      palettesUsed: palettesUsed.size,
+      chunks: chunks.length,
+      chunksWritten,
+      voidChunks,
+      chunkFiles
+    },
+    warnings: [...warnings, ...spriteBuild.warnings]
   });
 
-  return { world, sprites, warnings };
+  return { world, sprites: spriteBuild.sprites, warnings };
 }

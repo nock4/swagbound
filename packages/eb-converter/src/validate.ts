@@ -9,7 +9,7 @@ import {
   SpriteSheetCollectionSchema,
   TutorialStatusSchema,
   ValidationReportSchema,
-  WorldRegionSchema
+  WorldArtifactSchema
 } from "@eb/schemas";
 
 const DEFAULT_OUT = "apps/game/public/generated";
@@ -64,7 +64,7 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
   const validationReportRaw = await readJson(path.join(out, manifest.files.validationReport));
   const validationReport = ValidationReportSchema.parse(validationReportRaw);
   const worldRaw = await readJson(path.join(out, manifest.files.world));
-  const world = WorldRegionSchema.parse(worldRaw);
+  const world = WorldArtifactSchema.parse(worldRaw);
   const spritesRaw = await readJson(path.join(out, manifest.files.sprites));
   const sprites = SpriteSheetCollectionSchema.parse(spritesRaw);
 
@@ -109,7 +109,11 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
 
 function assertWorldAssetsExist(
   out: string,
-  world: { available: boolean; images?: { background: string; foreground: string } },
+  world: {
+    available: boolean;
+    images?: { background: string; foreground: string };
+    chunks?: Array<{ background: string | null; foreground: string | null }>;
+  },
   sprites: { sheets: Array<{ file: string }> }
 ): number {
   if (!world.available) {
@@ -117,6 +121,7 @@ function assertWorldAssetsExist(
   }
   const assetPaths = [
     ...(world.images ? [world.images.background, world.images.foreground] : []),
+    ...(world.chunks ? world.chunks.flatMap((chunk) => [chunk.background, chunk.foreground].filter((item): item is string => item !== null)) : []),
     ...sprites.sheets.map((sheet) => sheet.file)
   ];
   for (const assetPath of assetPaths) {
@@ -170,7 +175,21 @@ function resolveFromRoot(inputPath: string): string {
   if (path.isAbsolute(inputPath)) {
     return inputPath;
   }
-  return path.resolve(process.env.INIT_CWD ?? process.cwd(), inputPath);
+  return path.resolve(process.env.INIT_CWD ?? findWorkspaceRoot(process.cwd()), inputPath);
+}
+
+function findWorkspaceRoot(start: string): string {
+  let current = start;
+  while (true) {
+    if (existsSync(path.join(current, "pnpm-workspace.yaml"))) {
+      return current;
+    }
+    const parent = path.dirname(current);
+    if (parent === current) {
+      return start;
+    }
+    current = parent;
+  }
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) {

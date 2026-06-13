@@ -121,6 +121,8 @@ export const TutorialStatusSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+const PixelSchema = z.object({ x: z.number().int().nonnegative(), y: z.number().int().nonnegative() });
+
 export const WorldNpcSchema = z.object({
   npcId: z.number().int().nonnegative(),
   spriteGroup: z.number().int().nonnegative().optional(),
@@ -132,10 +134,37 @@ export const WorldNpcSchema = z.object({
   textPointer2: z.string().optional(),
   interactable: z.boolean(),
   visible: z.boolean(),
-  worldPixel: z.object({ x: z.number().int().nonnegative(), y: z.number().int().nonnegative() }),
+  worldPixel: PixelSchema,
   regionPixel: z.object({ x: z.number().int(), y: z.number().int() }),
   sheet: z.string().optional(),
   sourceLocation: SourceLocationSchema.optional()
+});
+
+export const WorldChunkedNpcSchema = WorldNpcSchema.omit({ regionPixel: true });
+
+export const WorldCollisionSchema = z.object({
+  cellSize: z.number().int().positive(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  solidRows: z.array(z.string()),
+  surfaceRows: z.array(z.string())
+});
+
+export const WorldSourcesSchema = z.object({
+  mapTiles: z.boolean(),
+  mapSectors: z.boolean(),
+  tilesetFiles: z.number().int().nonnegative(),
+  mapSprites: z.boolean(),
+  npcConfig: z.boolean(),
+  spriteGroupsYml: z.boolean()
+});
+
+export const WorldCountsSchema = z.object({
+  npcs: z.number().int().nonnegative(),
+  visibleNpcs: z.number().int().nonnegative(),
+  solidCells: z.number().int().nonnegative(),
+  mapTilesetsUsed: z.number().int().nonnegative(),
+  palettesUsed: z.number().int().nonnegative()
 });
 
 export const WorldRegionSchema = z.object({
@@ -158,15 +187,7 @@ export const WorldRegionSchema = z.object({
       foreground: z.string()
     })
     .optional(),
-  collision: z
-    .object({
-      cellSize: z.number().int().positive(),
-      width: z.number().int().positive(),
-      height: z.number().int().positive(),
-      solidRows: z.array(z.string()),
-      surfaceRows: z.array(z.string())
-    })
-    .optional(),
+  collision: WorldCollisionSchema.optional(),
   npcs: z.array(WorldNpcSchema),
   player: z
     .object({
@@ -177,23 +198,48 @@ export const WorldRegionSchema = z.object({
       spawnDerivation: z.string()
     })
     .optional(),
-  sources: z.object({
-    mapTiles: z.boolean(),
-    mapSectors: z.boolean(),
-    tilesetFiles: z.number().int().nonnegative(),
-    mapSprites: z.boolean(),
-    npcConfig: z.boolean(),
-    spriteGroupsYml: z.boolean()
+  sources: WorldSourcesSchema,
+  counts: WorldCountsSchema,
+  warnings: z.array(ValidationIssueSchema)
+});
+
+export const WorldChunkSchema = z.object({
+  cx: z.number().int().nonnegative(),
+  cy: z.number().int().nonnegative(),
+  background: z.string().nullable(),
+  foreground: z.string().nullable(),
+  void: z.boolean()
+});
+
+export const WorldChunkedSchema = z.object({
+  schemaVersion: z.string(),
+  sourceProjectPath: z.string(),
+  available: z.literal(true),
+  mode: z.literal("full"),
+  tileSize: z.number().int().positive(),
+  mapWidthTiles: z.number().int().positive(),
+  mapHeightTiles: z.number().int().positive(),
+  chunkSizeTiles: z.number().int().positive(),
+  chunks: z.array(WorldChunkSchema),
+  collision: WorldCollisionSchema,
+  npcs: z.array(WorldChunkedNpcSchema),
+  player: z.object({
+    spriteGroup: z.number().int().nonnegative(),
+    sheet: z.string().optional(),
+    spawnWorldPixel: PixelSchema,
+    spawnDerivation: z.string()
   }),
-  counts: z.object({
-    npcs: z.number().int().nonnegative(),
-    visibleNpcs: z.number().int().nonnegative(),
-    solidCells: z.number().int().nonnegative(),
-    mapTilesetsUsed: z.number().int().nonnegative(),
-    palettesUsed: z.number().int().nonnegative()
+  sources: WorldSourcesSchema,
+  counts: WorldCountsSchema.extend({
+    chunks: z.number().int().nonnegative(),
+    chunksWritten: z.number().int().nonnegative(),
+    voidChunks: z.number().int().nonnegative(),
+    chunkFiles: z.number().int().nonnegative()
   }),
   warnings: z.array(ValidationIssueSchema)
 });
+
+export const WorldArtifactSchema = z.union([WorldChunkedSchema, WorldRegionSchema]);
 
 export const SpriteFacingSchema = z.enum(["up", "right", "down", "left"]);
 
@@ -285,7 +331,10 @@ export const ValidationReportSchema = z.object({
 
 export type Manifest = z.infer<typeof ManifestSchema>;
 export type WorldRegion = z.infer<typeof WorldRegionSchema>;
+export type WorldChunked = z.infer<typeof WorldChunkedSchema>;
+export type WorldArtifact = z.infer<typeof WorldArtifactSchema>;
 export type WorldNpc = z.infer<typeof WorldNpcSchema>;
+export type WorldChunkedNpc = z.infer<typeof WorldChunkedNpcSchema>;
 export type SpriteSheet = z.infer<typeof SpriteSheetSchema>;
 export type SpriteFacing = z.infer<typeof SpriteFacingSchema>;
 export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;

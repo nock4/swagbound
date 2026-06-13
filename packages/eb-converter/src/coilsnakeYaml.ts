@@ -7,15 +7,25 @@
 
 export type IntKeyedEntries = Map<number, Record<string, string>>;
 
+const INTEGER_TOKEN = "(?:0x[0-9a-fA-F]+|\\d+)";
+
+export function parseYamlInteger(value: string | undefined): number {
+  const trimmed = value?.trim() ?? "";
+  if (!new RegExp(`^${INTEGER_TOKEN}$`).test(trimmed)) {
+    return Number.NaN;
+  }
+  return Number.parseInt(trimmed, trimmed.toLowerCase().startsWith("0x") ? 16 : 10);
+}
+
 /** Parses "<int>:" blocks with two-space-indented "Key: value" fields. */
 export function parseIntKeyedYaml(source: string): IntKeyedEntries {
   const entries: IntKeyedEntries = new Map();
   let current: Record<string, string> | undefined;
   for (const line of source.split(/\r?\n/)) {
-    const blockMatch = /^(\d+):\s*$/.exec(line);
+    const blockMatch = new RegExp(`^(${INTEGER_TOKEN}):\\s*$`).exec(line);
     if (blockMatch) {
       current = {};
-      entries.set(Number.parseInt(blockMatch[1], 10), current);
+      entries.set(parseYamlInteger(blockMatch[1]), current);
       continue;
     }
     if (!current) {
@@ -63,51 +73,57 @@ export function parseMapSprites(source: string): SpritePlacement[] {
   const lines = source.split(/\r?\n/);
   let areaY: number | undefined;
   let areaX: number | undefined;
+  const outerPattern = new RegExp(`^(${INTEGER_TOKEN}):\\s*$`);
+  const innerPattern = new RegExp(`^ {2}(${INTEGER_TOKEN}):\\s*$`);
+  const flowPattern = new RegExp(`-\\s*\\{\\s*NPC ID:\\s*(${INTEGER_TOKEN})\\s*,\\s*X:\\s*(${INTEGER_TOKEN})\\s*,\\s*Y:\\s*(${INTEGER_TOKEN})\\s*\\}`);
+  const blockPattern = new RegExp(`^\\s*-\\s*NPC ID:\\s*(${INTEGER_TOKEN})\\s*$`);
+  const xPattern = new RegExp(`^\\s+X:\\s*(${INTEGER_TOKEN})\\s*$`);
+  const yPattern = new RegExp(`^\\s+Y:\\s*(${INTEGER_TOKEN})\\s*$`);
 
   for (let index = 0; index < lines.length; index += 1) {
     const line = lines[index];
-    const outerMatch = /^(\d+):\s*$/.exec(line);
+    const outerMatch = outerPattern.exec(line);
     if (outerMatch) {
-      areaY = Number.parseInt(outerMatch[1], 10);
+      areaY = parseYamlInteger(outerMatch[1]);
       areaX = undefined;
       continue;
     }
-    const innerMatch = /^ {2}(\d+):\s*$/.exec(line);
+    const innerMatch = innerPattern.exec(line);
     if (innerMatch) {
-      areaX = Number.parseInt(innerMatch[1], 10);
+      areaX = parseYamlInteger(innerMatch[1]);
       continue;
     }
 
-    const flowMatch = /-\s*\{\s*NPC ID:\s*(\d+)\s*,\s*X:\s*(\d+)\s*,\s*Y:\s*(\d+)\s*\}/.exec(line);
+    const flowMatch = flowPattern.exec(line);
     if (flowMatch) {
       placements.push({
         areaY: areaY ?? 0,
         areaX: areaX ?? 0,
-        npcId: Number.parseInt(flowMatch[1], 10),
-        x: Number.parseInt(flowMatch[2], 10),
-        y: Number.parseInt(flowMatch[3], 10),
+        npcId: parseYamlInteger(flowMatch[1]),
+        x: parseYamlInteger(flowMatch[2]),
+        y: parseYamlInteger(flowMatch[3]),
         line: index + 1
       });
       continue;
     }
 
-    const blockMatch = /^\s*-\s*NPC ID:\s*(\d+)\s*$/.exec(line);
+    const blockMatch = blockPattern.exec(line);
     if (blockMatch) {
       let x: number | undefined;
       let y: number | undefined;
       for (let offset = 1; offset <= 4 && index + offset < lines.length; offset += 1) {
         const lookahead = lines[index + offset];
         // Never read past the start of the next placement or area key.
-        if (/^\s*-\s*NPC ID:/.test(lookahead) || /^\s*\d+:\s*$/.test(lookahead)) {
+        if (/^\s*-\s*NPC ID:/.test(lookahead) || new RegExp(`^\\s*${INTEGER_TOKEN}:\\s*$`).test(lookahead)) {
           break;
         }
-        const xMatch = /^\s+X:\s*(\d+)\s*$/.exec(lookahead);
-        const yMatch = /^\s+Y:\s*(\d+)\s*$/.exec(lookahead);
+        const xMatch = xPattern.exec(lookahead);
+        const yMatch = yPattern.exec(lookahead);
         if (xMatch) {
-          x = Number.parseInt(xMatch[1], 10);
+          x = parseYamlInteger(xMatch[1]);
         }
         if (yMatch) {
-          y = Number.parseInt(yMatch[1], 10);
+          y = parseYamlInteger(yMatch[1]);
         }
         if (x !== undefined && y !== undefined) {
           break;
@@ -117,7 +133,7 @@ export function parseMapSprites(source: string): SpritePlacement[] {
         placements.push({
           areaY: areaY ?? 0,
           areaX: areaX ?? 0,
-          npcId: Number.parseInt(blockMatch[1], 10),
+          npcId: parseYamlInteger(blockMatch[1]),
           x,
           y,
           line: index + 1

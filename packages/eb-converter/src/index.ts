@@ -18,9 +18,9 @@ import {
   type TutorialStatus,
   type ValidationIssue,
   type ValidationReport,
-  type WorldRegion
+  type WorldArtifact
 } from "@eb/schemas";
-import { buildWorldArtifacts, TUTORIAL_NPC_ID } from "./world";
+import { buildWorldArtifacts, TUTORIAL_NPC_ID, type WorldMode } from "./world";
 
 const DEFAULT_PROJECT = "external/coilsnake-project";
 const DEFAULT_OUT = "apps/game/public/generated";
@@ -39,6 +39,8 @@ const TUTORIAL_URL = "https://github.com/pk-hack/CoilSnake/wiki/Tutorial%3A-Your
 type CliArgs = {
   project: string;
   out: string;
+  worldMode: WorldMode;
+  spawnWorldPixel?: { x: number; y: number };
 };
 
 type ConvertResult = {
@@ -48,12 +50,17 @@ type ConvertResult = {
   spriteGroups: SpriteGroupCollection;
   tutorialStatus: TutorialStatus;
   validationReport: ValidationReport;
-  world: WorldRegion;
+  world: WorldArtifact;
   sprites: SpriteSheetCollection;
 };
 
 export function parseArgs(argv: string[]): CliArgs {
-  const args = { project: DEFAULT_PROJECT, out: DEFAULT_OUT };
+  const args: CliArgs = {
+    project: process.env.EB_PROJECT ?? DEFAULT_PROJECT,
+    out: DEFAULT_OUT,
+    worldMode: parseWorldMode(process.env.EB_WORLD_MODE),
+    ...(process.env.EB_SPAWN ? { spawnWorldPixel: parseSpawn(process.env.EB_SPAWN) } : {})
+  };
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
     if (arg === "--project") {
@@ -62,9 +69,33 @@ export function parseArgs(argv: string[]): CliArgs {
     } else if (arg === "--out") {
       args.out = argv[index + 1] ?? args.out;
       index += 1;
+    } else if (arg === "--world-mode") {
+      args.worldMode = parseWorldMode(argv[index + 1]);
+      index += 1;
+    } else if (arg === "--spawn") {
+      args.spawnWorldPixel = parseSpawn(argv[index + 1]);
+      index += 1;
     }
   }
   return args;
+}
+
+function parseWorldMode(value: string | undefined): WorldMode {
+  if (!value || value === "region") {
+    return "region";
+  }
+  if (value === "full") {
+    return "full";
+  }
+  throw new Error(`Unsupported EB_WORLD_MODE "${value}". Expected "region" or "full".`);
+}
+
+function parseSpawn(value: string | undefined): { x: number; y: number } {
+  const match = /^(\d+),(\d+)$/.exec(value ?? "");
+  if (!match) {
+    throw new Error(`Invalid EB_SPAWN "${value ?? ""}". Expected "x,y" world pixels.`);
+  }
+  return { x: Number.parseInt(match[1], 10), y: Number.parseInt(match[2], 10) };
 }
 
 export function parseCcsFile(relativePath: string, source: string): {
@@ -130,8 +161,10 @@ export function parseCcsFile(relativePath: string, source: string): {
 }
 
 export async function convertProject(options: Partial<CliArgs> = {}): Promise<ConvertResult> {
-  const project = options.project ?? DEFAULT_PROJECT;
+  const project = options.project ?? process.env.EB_PROJECT ?? DEFAULT_PROJECT;
   const out = options.out ?? DEFAULT_OUT;
+  const worldMode = options.worldMode ?? parseWorldMode(process.env.EB_WORLD_MODE);
+  const spawnWorldPixel = options.spawnWorldPixel ?? (process.env.EB_SPAWN ? parseSpawn(process.env.EB_SPAWN) : undefined);
   const projectAbs = resolveFromRoot(project);
   const outAbs = resolveFromRoot(out);
   const warnings: ValidationIssue[] = [];
@@ -159,7 +192,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     projectAbs,
     outAbs,
     displayPath: makeDisplayPath(project),
-    projectExists
+    projectExists,
+    worldMode,
+    spawnWorldPixel
   });
   const world = worldBuild.world;
   const sprites = worldBuild.sprites;
@@ -263,7 +298,7 @@ async function readTutorialStatus(
   scripts: ScriptCollection,
   npcs: NpcReferenceCollection,
   spriteGroups: SpriteGroupCollection,
-  world?: WorldRegion
+  world?: WorldArtifact
 ): Promise<TutorialStatus> {
   const steps: TutorialStatus["steps"] = [];
   const warnings: ValidationIssue[] = [];
@@ -367,6 +402,14 @@ async function readTutorialStatus(
     actual: mapNpc744?.raw ?? "missing"
   });
   const worldNpc744 = world?.npcs.find((npc) => npc.npcId === TUTORIAL_NPC_ID);
+  const worldNpc744RegionPixel = world && !("mode" in world)
+    ? world.npcs.find((npc) => npc.npcId === TUTORIAL_NPC_ID)?.regionPixel
+    : undefined;
+  const worldNpc744Pixel = worldNpc744RegionPixel
+    ? `region pixel ${worldNpc744RegionPixel.x},${worldNpc744RegionPixel.y}`
+    : worldNpc744?.worldPixel
+      ? `world pixel ${worldNpc744.worldPixel.x},${worldNpc744.worldPixel.y}`
+      : "missing";
   addStep({
     id: "world_region_rendered",
     label: "Map region around NPC 744 renders from imported data",
@@ -375,7 +418,7 @@ async function readTutorialStatus(
       ? "world.json includes a rendered region and the tutorial NPC placement."
       : "World region rendering was skipped; see world.json warnings.",
     path: "world.json",
-    actual: worldNpc744 ? `region pixel ${worldNpc744.regionPixel.x},${worldNpc744.regionPixel.y}` : "missing"
+    actual: worldNpc744Pixel
   });
   addStep({
     id: "rom_compile_run",
@@ -773,11 +816,25 @@ function resolveFromRoot(inputPath: string): string {
   if (path.isAbsolute(inputPath)) {
     return inputPath;
   }
-  return path.resolve(process.env.INIT_CWD ?? process.cwd(), inputPath);
+  return path.resolve(process.env.INIT_CWD ?? findWorkspaceRoot(process.cwd()), inputPath);
 }
 
 function toPosix(inputPath: string): string {
   return inputPath.split(path.sep).join("/");
+}
+
+function findWorkspaceRoot(start: string): string {
+  let current = start;
+  while (true) {
+    if (existsSync(path.join(current, "pnpm-workspace.yaml"))) {
+      return current;
+    }
+    const parent = path.dirname(current);
+    if (parent === current) {
+      return start;
+    }
+    current = parent;
+  }
 }
 
 function sum<T>(items: T[], getter: (item: T) => number): number {
@@ -803,7 +860,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         world: {
           available: result.world.available,
           npcs: result.world.counts.npcs,
-          spriteSheets: result.sprites.counts.sheets
+          spriteSheets: result.sprites.counts.sheets,
+          ...("mode" in result.world && result.world.mode === "full" ? {
+            chunks: result.world.counts.chunks,
+            chunksWritten: result.world.counts.chunksWritten,
+            voidChunks: result.world.counts.voidChunks,
+            chunkFiles: result.world.counts.chunkFiles
+          } : {})
         },
         tutorial: result.tutorialStatus.counts,
         warnings: result.manifest.warnings,
