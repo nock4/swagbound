@@ -80,6 +80,9 @@ export type OverworldDebug = {
   dialogueCounters?: { opens: number; advances: number; closes: number };
   flags?: string[];
   flagsNumCount?: number;
+  hasSave?: boolean;
+  lastSavedAt?: string;
+  restoredFromSave?: boolean;
   eventExecutor?: {
     running: boolean;
     currentEffectKind?: string;

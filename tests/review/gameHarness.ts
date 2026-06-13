@@ -67,6 +67,9 @@ export type FirstSceneDebug = {
   resolveStatus: string;
   flags?: string[];
   flagsNumCount?: number;
+  hasSave?: boolean;
+  lastSavedAt?: string;
+  restoredFromSave?: boolean;
   eventExecutor?: {
     running: boolean;
     currentEffectKind?: string;

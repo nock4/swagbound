@@ -9,6 +9,7 @@ import {
   buildEquipViewModel,
   buildGoodsActionScreens,
   buildGoodsViewModel,
+  buildMainMenuScreen,
   buildMenuScreens,
   buildPsiViewModel,
   buildStatusScreen,
@@ -106,6 +107,17 @@ describe("menuModel navigation", () => {
 
     expect(result.actionId).toBe("use-selected");
     expect(result.state).toEqual(state);
+  });
+
+  it("exposes save as a concrete main-menu action", () => {
+    const screen = buildMainMenuScreen();
+
+    expect(screen.items.find((item) => item.id === "save")).toMatchObject({
+      label: "Save",
+      enabled: true,
+      actionId: "save"
+    });
+    expect(parseMenuAction("save")).toEqual({ kind: "save" });
   });
 });
 

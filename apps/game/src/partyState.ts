@@ -17,6 +17,23 @@ export type EquipmentSlot = "weapon" | "body" | "arms" | "other";
 
 export type EquippedSlots = Partial<Record<EquipmentSlot, number>>;
 
+export type PartyInventorySnapshot = {
+  charId: number;
+  itemIds: number[];
+};
+
+export type PartyEquipmentSnapshot = {
+  charId: number;
+  slots: EquippedSlots;
+};
+
+export type PartyStateSnapshot = {
+  wallet: number;
+  partyIds: number[];
+  inventory: PartyInventorySnapshot[];
+  equipped: PartyEquipmentSnapshot[];
+};
+
 export type PartyVitalsInput = {
   hp: number;
   maxHp: number;
@@ -74,6 +91,7 @@ export type EquipResult =
 
 const HP_RATE_PER_SEC = 36;
 const ITEM_DISAPPEARS_FLAG = "item disappears when used";
+const EQUIPMENT_SLOTS: EquipmentSlot[] = ["weapon", "body", "arms", "other"];
 
 const FIELD_STAT_ACTIONS = {
   healHpPercent: new Set([0x00, 0x1e00]),
@@ -243,6 +261,41 @@ export class PartyState {
     };
   }
 
+  snapshot(): PartyStateSnapshot {
+    return {
+      wallet: this.walletValue,
+      partyIds: this.party(),
+      inventory: [...this.inventoryByChar.entries()]
+        .sort(([a], [b]) => a - b)
+        .map(([charId, itemIds]) => ({ charId, itemIds: [...itemIds] })),
+      equipped: [...this.equippedByChar.entries()]
+        .sort(([a], [b]) => a - b)
+        .map(([charId, slots]) => ({ charId, slots: cloneEquippedSlots(slots) }))
+    };
+  }
+
+  restore(snapshot: PartyStateSnapshot): void {
+    this.walletValue = stat(snapshot.wallet);
+    this.inventoryByChar.clear();
+    this.partyIds.clear();
+    this.equippedByChar.clear();
+    this.vitalsByChar.clear();
+
+    for (const charId of snapshot.partyIds) {
+      this.partyIds.add(normalizeId(charId));
+    }
+    for (const entry of snapshot.inventory) {
+      const charId = normalizeId(entry.charId);
+      const itemIds = entry.itemIds.map(normalizeId);
+      if (itemIds.length > 0) {
+        this.inventoryByChar.set(charId, itemIds);
+      }
+    }
+    for (const entry of snapshot.equipped) {
+      this.setEquippedSlots(normalizeId(entry.charId), cloneEquippedSlots(entry.slots));
+    }
+  }
+
   private ensureVitals(char: number, base: PartyVitalsInput): PartyVitals {
     const existing = this.vitalsByChar.get(char);
     if (existing) {
@@ -380,6 +433,17 @@ function cloneVitals(vitals: PartyVitals): PartyVitals {
     ...vitals,
     hp: { ...vitals.hp }
   };
+}
+
+function cloneEquippedSlots(slots: EquippedSlots): EquippedSlots {
+  const next: EquippedSlots = {};
+  for (const slot of EQUIPMENT_SLOTS) {
+    const itemId = slots[slot];
+    if (itemId !== undefined) {
+      next[slot] = normalizeId(itemId);
+    }
+  }
+  return next;
 }
 
 function normalizeId(value: number): number {

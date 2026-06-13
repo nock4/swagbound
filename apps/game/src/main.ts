@@ -6,9 +6,18 @@ import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
 import { FallbackScene } from "./fallbackScene";
 import { BattleScene } from "./battleScene";
+import { deserializeSaveState, type SaveSlotPersistence } from "./saveState";
 import "./style.css";
 
 const MONO = "Menlo, Consolas, monospace";
+const DEFAULT_SAVE_SLOT = 0;
+const SAVE_KEY_PREFIX = "coilsnake-tutorial-experiment:save:";
+const SAVE_SLOTS: SaveSlotPersistence = {
+  saveToSlot,
+  loadFromSlot,
+  hasSave,
+  clearSlot
+};
 
 /**
  * Boot: fetches and validates the generated JSON pipeline, then starts the
@@ -40,12 +49,23 @@ class BootScene extends Phaser.Scene {
       this.scene.start("battle", { battleData: data.battle, groupId: battleGroupId, characters: data.characters });
       return;
     }
+    const saveState = deserializeSaveState(loadFromSlot(DEFAULT_SAVE_SLOT));
     if (data.world?.available && "mode" in data.world && data.world.mode === "full") {
-      this.scene.start("chunked-world", { gameData: data });
+      this.scene.start("chunked-world", {
+        gameData: data,
+        saveState,
+        saveSlot: DEFAULT_SAVE_SLOT,
+        saveSlots: SAVE_SLOTS
+      });
       return;
     }
     if (data.world?.available && !("mode" in data.world) && data.world.images) {
-      this.scene.start("world", { gameData: data });
+      this.scene.start("world", {
+        gameData: data,
+        saveState,
+        saveSlot: DEFAULT_SAVE_SLOT,
+        saveSlots: SAVE_SLOTS
+      });
       return;
     }
     this.scene.start("fallback", {
@@ -82,6 +102,72 @@ class BootScene extends Phaser.Scene {
       fontSize: "14px",
       color: "#fca5a5"
     });
+  }
+}
+
+export function saveToSlot(slot: number, blob: string): boolean {
+  const key = saveKey(slot);
+  const storage = localStorageOrNull();
+  if (!key || !storage) {
+    return false;
+  }
+  try {
+    storage.setItem(key, blob);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+export function loadFromSlot(slot: number): string | null {
+  const key = saveKey(slot);
+  const storage = localStorageOrNull();
+  if (!key || !storage) {
+    return null;
+  }
+  try {
+    return storage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+export function hasSave(slot: number): boolean {
+  const key = saveKey(slot);
+  const storage = localStorageOrNull();
+  if (!key || !storage) {
+    return false;
+  }
+  try {
+    return storage.getItem(key) !== null;
+  } catch {
+    return false;
+  }
+}
+
+export function clearSlot(slot: number): boolean {
+  const key = saveKey(slot);
+  const storage = localStorageOrNull();
+  if (!key || !storage) {
+    return false;
+  }
+  try {
+    storage.removeItem(key);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function saveKey(slot: number): string | null {
+  return Number.isInteger(slot) && slot >= 0 ? `${SAVE_KEY_PREFIX}${slot}` : null;
+}
+
+function localStorageOrNull(): Storage | null {
+  try {
+    return typeof globalThis.localStorage === "undefined" ? null : globalThis.localStorage;
+  } catch {
+    return null;
   }
 }
 

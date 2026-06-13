@@ -38,6 +38,14 @@ import { DialogueController, publishDebug, type DebugNpc, type FirstSceneDebug }
 import { createDialogueResolver, textSpeedCpsFromSearch } from "./dialogueRenderer";
 import { PartyState } from "./partyState";
 import {
+  applySaveState,
+  captureSaveState,
+  serializeSaveState,
+  type SavePlayerSnapshot,
+  type SaveSlotPersistence,
+  type SaveState
+} from "./saveState";
+import {
   buildMenuScreens,
   buildStatusViewModel,
   cancelMenu,
@@ -97,6 +105,12 @@ export class WorldScene extends Phaser.Scene {
   private menuState: MenuState = closedMenu();
   private menuScreens = new Map<string, MenuScreen>();
   private eventSequence?: RuntimeEventSequence;
+  private bootSaveState?: SaveState;
+  private saveSlot = 0;
+  private saveSlots?: SaveSlotPersistence;
+  private hasSave = false;
+  private lastSavedAt?: string;
+  private restoredFromSave = false;
   targetReference = TARGET_REFERENCE;
   prompt = "";
   assetsLoaded = false;
@@ -106,9 +120,20 @@ export class WorldScene extends Phaser.Scene {
     super("world");
   }
 
-  init(data: { gameData: GameData }): void {
+  init(data: {
+    gameData: GameData;
+    saveState?: SaveState | null;
+    saveSlot?: number;
+    saveSlots?: SaveSlotPersistence;
+  }): void {
     this.data_ = data.gameData;
     this.world_ = data.gameData.world as WorldRegion;
+    this.bootSaveState = data.saveState ?? undefined;
+    this.saveSlot = Number.isInteger(data.saveSlot) && (data.saveSlot as number) >= 0 ? data.saveSlot as number : 0;
+    this.saveSlots = data.saveSlots;
+    this.hasSave = Boolean(this.bootSaveState) || Boolean(this.saveSlots?.hasSave(this.saveSlot));
+    this.lastSavedAt = this.bootSaveState?.savedAt;
+    this.restoredFromSave = false;
   }
 
   preload(): void {
@@ -152,6 +177,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     this.targetReference = chooseReference(this.data_);
+    const restoredPlayer = this.applyInitialSave();
     this.configureEventRuntime();
 
     for (const npc of world.npcs) {
@@ -163,8 +189,10 @@ export class WorldScene extends Phaser.Scene {
 
     const spawn = world.player?.spawnRegionPixel ?? { x: 64, y: 64 };
     this.playerFrames = this.framesForGroup(world.player?.spriteGroup);
-    this.playerState = createPlayerState(spawn.x, spawn.y, "down", this.playerFrames);
-    this.player = this.spawnActor(spawn.x, spawn.y, world.player?.spriteGroup, "down");
+    const playerSpawn = restoredPlayer ? this.clampPlayerPosition(restoredPlayer) : spawn;
+    const playerFacing = restoredPlayer?.facing ?? "down";
+    this.playerState = createPlayerState(playerSpawn.x, playerSpawn.y, playerFacing, this.playerFrames);
+    this.player = this.spawnActor(playerSpawn.x, playerSpawn.y, world.player?.spriteGroup, playerFacing);
 
     const width = world.region?.widthPixels ?? 1024;
     const height = world.region?.heightPixels ?? 1024;
@@ -183,6 +211,7 @@ export class WorldScene extends Phaser.Scene {
     this.input.keyboard?.on("keydown-ENTER", () => this.handleConfirm());
     this.input.keyboard?.on("keydown-ESC", () => this.handleCancel());
     this.input.keyboard?.on("keydown-BACKSPACE", () => this.handleCancel());
+    this.input.keyboard?.on("keydown-P", () => this.handleSaveKey());
     this.input.keyboard?.on("keydown-F1", () => {
       this.debugPanelVisible = !this.debugPanelVisible;
     });
@@ -520,6 +549,10 @@ export class WorldScene extends Phaser.Scene {
       this.showMenuResult("Nothing happened.");
       return;
     }
+    if (action.kind === "save") {
+      this.saveGame(true);
+      return;
+    }
     if (action.kind === "itemUse") {
       this.handleItemUseAction(action);
       return;
@@ -606,6 +639,90 @@ export class WorldScene extends Phaser.Scene {
 
   menuDebugState(): MenuDebugState {
     return menuDebugState(this.menuState);
+  }
+
+  private handleSaveKey(): void {
+    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running || !this.player) {
+      return;
+    }
+    this.saveGame(false);
+  }
+
+  private saveGame(showResult: boolean): void {
+    const savedAt = new Date().toISOString();
+    const save = captureSaveState({
+      flags: this.gameFlags,
+      partyState: this.partyState,
+      player: this.currentPlayerSnapshot(),
+      savedAt
+    });
+    const blob = serializeSaveState(save);
+    const saved = blob ? this.saveSlots?.saveToSlot(this.saveSlot, blob) ?? false : false;
+    if (saved) {
+      this.hasSave = true;
+      this.lastSavedAt = savedAt;
+    } else {
+      this.hasSave = Boolean(this.saveSlots?.hasSave(this.saveSlot));
+    }
+    if (showResult) {
+      this.showMenuResult(saved ? "Saved." : "Save unavailable.");
+      return;
+    }
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private applyInitialSave(): SavePlayerSnapshot | undefined {
+    if (!this.bootSaveState || !this.isCompatibleSavePlayer(this.bootSaveState.player)) {
+      return undefined;
+    }
+    const player = applySaveState(this.bootSaveState, {
+      flags: this.gameFlags,
+      partyState: this.partyState
+    });
+    if (!player) {
+      return undefined;
+    }
+    this.restoredFromSave = true;
+    this.hasSave = true;
+    this.lastSavedAt = this.bootSaveState.savedAt;
+    return player;
+  }
+
+  private isCompatibleSavePlayer(player: SavePlayerSnapshot): boolean {
+    return player.mode === "region" && player.mapId === this.saveMapId();
+  }
+
+  private currentPlayerSnapshot(): SavePlayerSnapshot {
+    const region = this.world_.region;
+    return {
+      mode: "region",
+      mapId: this.saveMapId(),
+      region: {
+        ...(region?.originTile ? { originTile: { ...region.originTile } } : {}),
+        ...(region?.widthPixels !== undefined ? { widthPixels: region.widthPixels } : {}),
+        ...(region?.heightPixels !== undefined ? { heightPixels: region.heightPixels } : {})
+      },
+      x: this.playerState.x,
+      y: this.playerState.y,
+      facing: this.playerState.facing
+    };
+  }
+
+  private saveMapId(): string {
+    const region = this.world_.region;
+    const origin = region?.originTile ?? { x: 0, y: 0 };
+    const width = region?.widthPixels ?? 0;
+    const height = region?.heightPixels ?? 0;
+    return `region:${origin.x},${origin.y}:${width}x${height}`;
+  }
+
+  private clampPlayerPosition(position: { x: number; y: number }): { x: number; y: number } {
+    const bounds = this.movementBounds();
+    return {
+      x: Math.min(Math.max(position.x, bounds.minX), bounds.maxX),
+      y: Math.min(Math.max(position.y, bounds.minY), bounds.maxY)
+    };
   }
 
   private openDialogue(): void {
@@ -761,7 +878,8 @@ export class WorldScene extends Phaser.Scene {
       "Player Runtime",
       `facing: ${state.facing} | moving: ${state.moving} | locked: ${state.inputLocked}`,
       `anim: ${state.animKey} frame ${state.animFrame}`,
-      `feet: ${Math.round(state.x)},${Math.round(state.y)} | target: ${this.interactionTarget()?.id ?? "none"}`
+      `feet: ${Math.round(state.x)},${Math.round(state.y)} | target: ${this.interactionTarget()?.id ?? "none"}`,
+      `save: ${this.hasSave ? "yes" : "no"} | restored: ${this.restoredFromSave ? "yes" : "no"}`
     ];
   }
 
@@ -815,6 +933,9 @@ export class WorldScene extends Phaser.Scene {
       dialogueCounters: { opens: this.dialogue.opens, advances: this.dialogue.advances, closes: this.dialogue.closes },
       flags: this.gameFlags.list(),
       flagsNumCount: this.gameFlags.listNums().length,
+      hasSave: this.hasSave,
+      ...(this.lastSavedAt ? { lastSavedAt: this.lastSavedAt } : {}),
+      restoredFromSave: this.restoredFromSave,
       eventExecutor: this.eventSequence?.debug(),
       partyState: this.partyState.counts(),
       menu: this.menuDebugState(),

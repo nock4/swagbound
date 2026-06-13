@@ -141,6 +141,9 @@ export type CheckViewModel = {
 
 export type MenuAction =
   | {
+      kind: "save";
+    }
+  | {
       kind: "itemUse";
       ownerChar: number;
       inventorySlot: number;
@@ -162,16 +165,18 @@ export type PartyMenuViewModelInput = StatusViewModelInput & {
 
 export const MAIN_MENU_ID = "main";
 export const STATUS_MENU_ID = "status";
+export const SAVE_MENU_ACTION_ID = "save";
 const ITEM_USE_ACTION_PREFIX = "item-use";
 const EQUIP_ACTION_PREFIX = "equip";
 
-const MAIN_COMMANDS: Array<{ id: string; label: string; childScreenId: string }> = [
+const MAIN_COMMANDS: Array<Omit<MenuItem, "enabled">> = [
   { id: "talk", label: "Talk", childScreenId: "talk" },
   { id: "goods", label: "Goods", childScreenId: "goods" },
   { id: "psi", label: "PSI", childScreenId: "psi" },
   { id: STATUS_MENU_ID, label: "Status", childScreenId: STATUS_MENU_ID },
   { id: "equip", label: "Equip", childScreenId: "equip" },
-  { id: "check", label: "Check", childScreenId: "check" }
+  { id: "check", label: "Check", childScreenId: "check" },
+  { id: SAVE_MENU_ACTION_ID, label: "Save", actionId: SAVE_MENU_ACTION_ID }
 ];
 
 export function closedMenu(): MenuState {
@@ -613,6 +618,9 @@ export function buildEquipActionId(char: number, inventorySlot: number, itemId: 
 }
 
 export function parseMenuAction(actionId: string): MenuAction | undefined {
+  if (actionId === SAVE_MENU_ACTION_ID) {
+    return { kind: "save" };
+  }
   const [prefix, ...rawParts] = actionId.split(":");
   const parts = rawParts.map((part) => Number(part));
   if (parts.some((part) => !Number.isInteger(part) || part < 0)) {
