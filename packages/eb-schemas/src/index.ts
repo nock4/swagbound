@@ -341,6 +341,77 @@ export const SpriteSheetCollectionSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+export const BattleActionSchema = z.object({
+  id: z.number().int().nonnegative(),
+  arg: z.number().int().nonnegative()
+});
+
+export const BattleEnemySchema = z.object({
+  id: z.number().int().nonnegative(),
+  name: z.string(),
+  spriteId: z.number().int().nonnegative(),
+  level: z.number().int().nonnegative(),
+  hp: z.number().int().nonnegative(),
+  defense: z.number().int().nonnegative(),
+  offense: z.number().int().nonnegative(),
+  experience: z.number().int().nonnegative(),
+  bossFlag: z.boolean(),
+  actions: z.array(BattleActionSchema).length(4),
+  itemDropped: z.number().int().nonnegative().nullable()
+});
+
+export const BattleGroupSchema = z.object({
+  id: z.number().int().nonnegative(),
+  background1: z.number().int().nonnegative(),
+  background2: z.number().int().nonnegative(),
+  enemyIds: z.array(z.number().int().nonnegative()).min(1)
+});
+
+export const BattleDataSchema = z.object({
+  schemaVersion: z.string(),
+  sourceProjectPath: z.string(),
+  selection: z.object({
+    method: z.string(),
+    townMap: z.string().optional(),
+    mapEnemyGroupIds: z.array(z.number().int().nonnegative()),
+    battleGroupIds: z.array(z.number().int().nonnegative()),
+    placementCellMapping: z.string(),
+    fallbackUsed: z.boolean()
+  }),
+  statMapping: z.object({
+    level: z.string(),
+    hp: z.string(),
+    defense: z.string(),
+    offense: z.string(),
+    experience: z.string(),
+    bossFlag: z.string(),
+    actions: z.string(),
+    itemDropped: z.string()
+  }),
+  spriteFormat: z.object({
+    source: z.string(),
+    fileType: z.string(),
+    indexedPaletteBits: z.number().int().positive(),
+    transparentPaletteIndex: z.number().int().nonnegative(),
+    allowedSizes: z.array(z.tuple([z.number().int().positive(), z.number().int().positive()]))
+  }),
+  assetLayout: z.object({
+    spriteDir: z.string(),
+    backgroundDir: z.string(),
+    spriteFilePattern: z.string(),
+    backgroundFilePattern: z.string()
+  }),
+  enemies: z.array(BattleEnemySchema),
+  groups: z.array(BattleGroupSchema),
+  counts: z.object({
+    enemies: z.number().int().nonnegative(),
+    groups: z.number().int().nonnegative(),
+    spriteFiles: z.number().int().nonnegative(),
+    backgroundFiles: z.number().int().nonnegative()
+  }),
+  warnings: z.array(ValidationIssueSchema)
+});
+
 export const TutorialFixtureHintsSchema = z.object({
   hasRobotCcs: z.boolean(),
   hasHelloWorldLabel: z.boolean(),
@@ -368,7 +439,8 @@ export const ManifestSchema = z.object({
     tutorialStatus: z.string(),
     validationReport: z.string(),
     world: z.string(),
-    sprites: z.string()
+    sprites: z.string(),
+    battle: z.string().optional()
   }),
   counts: z.object({
     scriptFiles: z.number().int().nonnegative(),
@@ -380,6 +452,8 @@ export const ManifestSchema = z.object({
     spriteImages: z.number().int().nonnegative(),
     worldNpcs: z.number().int().nonnegative(),
     spriteSheets: z.number().int().nonnegative(),
+    battleEnemies: z.number().int().nonnegative().optional(),
+    battleGroups: z.number().int().nonnegative().optional(),
     warnings: z.number().int().nonnegative(),
     errors: z.number().int().nonnegative()
   }),
@@ -410,6 +484,9 @@ export type SpriteSheet = z.infer<typeof SpriteSheetSchema>;
 export type SpriteFacing = z.infer<typeof SpriteFacingSchema>;
 export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;
 export type SpriteSheetCollection = z.infer<typeof SpriteSheetCollectionSchema>;
+export type BattleData = z.infer<typeof BattleDataSchema>;
+export type BattleEnemy = z.infer<typeof BattleEnemySchema>;
+export type BattleGroup = z.infer<typeof BattleGroupSchema>;
 export type DialogueSegment = z.infer<typeof DialogueSegmentSchema>;
 export type ScriptCollection = z.infer<typeof ScriptCollectionSchema>;
 export type ScriptCommand = z.infer<typeof ScriptCommandSchema>;

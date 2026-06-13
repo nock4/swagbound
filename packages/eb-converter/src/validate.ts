@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import path from "node:path";
 import {
+  BattleDataSchema,
   ManifestSchema,
   NpcReferenceCollectionSchema,
   ScriptCollectionSchema,
@@ -37,6 +38,9 @@ export type GeneratedValidationResult = {
   worldNpcs?: number;
   spriteSheets?: number;
   worldAssetsChecked?: number;
+  battleEnemies?: number;
+  battleGroups?: number;
+  battleAssetsChecked?: number;
 };
 
 export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<GeneratedValidationResult> {
@@ -67,6 +71,10 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
   const world = WorldArtifactSchema.parse(worldRaw);
   const spritesRaw = await readJson(path.join(out, manifest.files.sprites));
   const sprites = SpriteSheetCollectionSchema.parse(spritesRaw);
+  const battleFile = manifest.files.battle ?? "battle.json";
+  const battlePath = path.join(out, battleFile);
+  const battleRaw = existsSync(battlePath) ? await readJson(battlePath) : undefined;
+  const battle = battleRaw ? BattleDataSchema.parse(battleRaw) : undefined;
 
   assertNoPublicPathLeaks({
     "manifest.json": manifestRaw,
@@ -76,10 +84,12 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
     [manifest.files.tutorialStatus]: tutorialStatusRaw,
     [manifest.files.validationReport]: validationReportRaw,
     [manifest.files.world]: worldRaw,
-    [manifest.files.sprites]: spritesRaw
+    [manifest.files.sprites]: spritesRaw,
+    ...(battleRaw ? { [battleFile]: battleRaw } : {})
   });
 
   const worldAssetsChecked = assertWorldAssetsExist(out, world, sprites);
+  const battleAssetsChecked = battle ? assertBattleAssetsExist(out, battle) : 0;
 
   return {
     ok: true,
@@ -92,7 +102,8 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
       manifest.files.tutorialStatus,
       manifest.files.validationReport,
       manifest.files.world,
-      manifest.files.sprites
+      manifest.files.sprites,
+      ...(battle ? [battleFile] : [])
     ],
     counts: manifest.counts,
     validation: validationReport.counts,
@@ -103,7 +114,12 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
     worldAvailable: world.available,
     worldNpcs: world.counts.npcs,
     spriteSheets: sprites.counts.sheets,
-    worldAssetsChecked
+    worldAssetsChecked,
+    ...(battle ? {
+      battleEnemies: battle.counts.enemies,
+      battleGroups: battle.counts.groups,
+      battleAssetsChecked
+    } : {})
   };
 }
 
@@ -125,24 +141,54 @@ function assertWorldAssetsExist(
     ...sprites.sheets.map((sheet) => sheet.file)
   ];
   for (const assetPath of assetPaths) {
-    if (assetPath.includes("..") || path.isAbsolute(assetPath)) {
-      throw new Error(JSON.stringify({
-        severity: "error",
-        code: "unsafe_asset_path",
-        message: `Generated asset path escapes the generated directory: ${assetPath}`,
-        path: assetPath
-      }));
-    }
-    if (!existsSync(path.join(out, assetPath))) {
-      throw new Error(JSON.stringify({
-        severity: "error",
-        code: "missing_world_asset",
-        message: `world/sprites JSON references a missing local asset: ${assetPath}`,
-        path: assetPath
-      }));
-    }
+    assertLocalAssetExists(out, assetPath, "missing_world_asset", "world/sprites JSON references a missing local asset");
   }
   return assetPaths.length;
+}
+
+function assertBattleAssetsExist(
+  out: string,
+  battle: {
+    assetLayout: { spriteDir: string; backgroundDir: string };
+    enemies: Array<{ spriteId: number }>;
+    groups: Array<{ background1: number; background2: number }>;
+  }
+): number {
+  const assetPaths = new Set<string>();
+  for (const enemy of battle.enemies) {
+    assetPaths.add(`${battle.assetLayout.spriteDir}/${pad3(enemy.spriteId)}.png`);
+  }
+  for (const group of battle.groups) {
+    assetPaths.add(`${battle.assetLayout.backgroundDir}/${pad3(group.background1)}.png`);
+    assetPaths.add(`${battle.assetLayout.backgroundDir}/${pad3(group.background2)}.png`);
+  }
+  for (const assetPath of assetPaths) {
+    assertLocalAssetExists(out, assetPath, "missing_battle_asset", "battle JSON references a missing local asset");
+  }
+  return assetPaths.size;
+}
+
+function assertLocalAssetExists(out: string, assetPath: string, code: string, message: string): void {
+  if (assetPath.includes("..") || path.isAbsolute(assetPath)) {
+    throw new Error(JSON.stringify({
+      severity: "error",
+      code: "unsafe_asset_path",
+      message: `Generated asset path escapes the generated directory: ${assetPath}`,
+      path: assetPath
+    }));
+  }
+  if (!existsSync(path.join(out, assetPath))) {
+    throw new Error(JSON.stringify({
+      severity: "error",
+      code,
+      message: `${message}: ${assetPath}`,
+      path: assetPath
+    }));
+  }
+}
+
+function pad3(value: number): string {
+  return String(value).padStart(3, "0");
 }
 
 function assertNoPublicPathLeaks(files: Record<string, unknown>): void {

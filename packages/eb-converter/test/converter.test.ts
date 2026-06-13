@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { mkdtemp, readFile, rm, writeFile, mkdir } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
@@ -14,6 +15,11 @@ import { convertProject, parseCcsFile, readNpcReferences, tokenizeCcsString } fr
 import { validateGeneratedOutput } from "../src/validate";
 import { classifyProofTarget, findForbiddenProofArtifactText, findNpc744Placements, isNeutralizedMapDoorPointer, proofRecommendation } from "../../../scripts/proof-check";
 import { checkCommandForMode, sanitizePacketOutput } from "../../../scripts/proof-packet";
+
+const TINY_PNG = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAAAAAA6fptVAAAACklEQVR42mP8z8AABQMBgBL9v7kAAAAASUVORK5CYII=",
+  "base64"
+);
 
 describe("schemas", () => {
   it("validates generated manifests", async () => {
@@ -165,7 +171,178 @@ describe("generated validation", () => {
       await rm(temp, { recursive: true, force: true });
     }
   });
+
+  it("extracts a bounded battle fixture only when opted in", async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), "eb-battle-"));
+    try {
+      const project = path.join(temp, "project");
+      const out = path.join(temp, "generated");
+      await writeBattleFixture(project);
+
+      const defaultResult = await convertProject({ project, out });
+      const defaultValidation = await validateGeneratedOutput(out);
+
+      expect(defaultResult.battle).toBeUndefined();
+      expect(existsSync(path.join(out, "battle.json"))).toBe(false);
+      expect(defaultValidation.generatedFiles).not.toContain("battle.json");
+
+      const generated = await convertProject({ project, out, battle: true });
+      const result = await validateGeneratedOutput(out);
+      const battle = generated.battle;
+
+      expect(battle?.selection).toMatchObject({
+        method: "town-map-sector-intersection",
+        mapEnemyGroupIds: [2],
+        battleGroupIds: [20, 21],
+        fallbackUsed: false
+      });
+      expect(battle?.enemies).toHaveLength(2);
+      expect(battle?.groups).toEqual([
+        { id: 20, background1: 3, background2: 0, enemyIds: [10] },
+        { id: 21, background1: 4, background2: 0, enemyIds: [11] }
+      ]);
+      expect(battle?.enemies.find((enemy) => enemy.id === 10)).toMatchObject({
+        name: "Neutral One",
+        spriteId: 10,
+        level: 3,
+        hp: 12,
+        defense: 2,
+        offense: 4,
+        experience: 7,
+        bossFlag: false,
+        itemDropped: 0,
+        actions: [
+          { id: 1, arg: 0 },
+          { id: 2, arg: 3 },
+          { id: 3, arg: 0 },
+          { id: 4, arg: 1 }
+        ]
+      });
+      expect(existsSync(path.join(out, "assets/battle/sprites/010.png"))).toBe(true);
+      expect(existsSync(path.join(out, "assets/battle/sprites/011.png"))).toBe(true);
+      expect(existsSync(path.join(out, "assets/battle/sprites/012.png"))).toBe(false);
+      expect(existsSync(path.join(out, "assets/battle/backgrounds/000.png"))).toBe(true);
+      expect(existsSync(path.join(out, "assets/battle/backgrounds/003.png"))).toBe(true);
+      expect(existsSync(path.join(out, "assets/battle/backgrounds/004.png"))).toBe(true);
+      expect(existsSync(path.join(out, "assets/battle/backgrounds/005.png"))).toBe(false);
+      expect(result.ok).toBe(true);
+      expect(result.generatedFiles).toContain("battle.json");
+      expect(result.battleEnemies).toBe(2);
+      expect(result.battleGroups).toBe(2);
+      expect(result.battleAssetsChecked).toBe(5);
+    } finally {
+      await rm(temp, { recursive: true, force: true });
+    }
+  });
 });
+
+async function writeBattleFixture(project: string): Promise<void> {
+  await mkdir(path.join(project, "BattleSprites"), { recursive: true });
+  await mkdir(path.join(project, "BattleBGs"), { recursive: true });
+  await writeFile(path.join(project, "Project.snake"), "CoilSnakeVersion: 4\n", "utf8");
+  await writeFile(path.join(project, "enemy_configuration_table.yml"), [
+    "10:",
+    "  Name: Neutral One",
+    "  HP: 0x0c",
+    "  Defense: 2",
+    "  Offense: 0x04",
+    "  Experience points: 7",
+    "  Level: 3",
+    "  Boss Flag: False",
+    "  Action 1: 1",
+    "  Action 1 Argument: 0",
+    "  Action 2: 2",
+    "  Action 2 Argument: 3",
+    "  Action 3: 3",
+    "  Action 3 Argument: 0",
+    "  Action 4: 4",
+    "  Action 4 Argument: 1",
+    "  Item Dropped: 0",
+    "11:",
+    "  Name: Neutral Two",
+    "  HP: 14",
+    "  Defense: 3",
+    "  Offense: 5",
+    "  Experience points: 8",
+    "  Level: 4",
+    "  Boss Flag: False",
+    "  Action 1: 5",
+    "  Action 1 Argument: 0",
+    "  Action 2: 6",
+    "  Action 2 Argument: 0",
+    "  Action 3: 7",
+    "  Action 3 Argument: 0",
+    "  Action 4: 8",
+    "  Action 4 Argument: 0",
+    "  Item Dropped: 0",
+    "12:",
+    "  Name: Neutral Extra",
+    "  HP: 99",
+    "  Defense: 9",
+    "  Offense: 9",
+    "  Experience points: 9",
+    "  Level: 9",
+    "  Boss Flag: False",
+    "  Action 1: 9",
+    "  Action 1 Argument: 0",
+    "  Action 2: 9",
+    "  Action 2 Argument: 0",
+    "  Action 3: 9",
+    "  Action 3 Argument: 0",
+    "  Action 4: 9",
+    "  Action 4 Argument: 0",
+    "  Item Dropped: 0",
+    ""
+  ].join("\n"), "utf8");
+  await writeFile(path.join(project, "enemy_groups.yml"), [
+    "20:",
+    "  Background 1: 3",
+    "  Background 2: 0",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 10}",
+    "21:",
+    "  Background 1: 4",
+    "  Background 2: 0",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 11}",
+    "22:",
+    "  Background 1: 5",
+    "  Background 2: 0",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 12}",
+    ""
+  ].join("\n"), "utf8");
+  await writeFile(path.join(project, "map_enemy_groups.yml"), [
+    "2:",
+    "  Event Flag: 0x0",
+    "  Sub-Group 1:",
+    "    0: {Enemy Group: 20, Probability: 4}",
+    "    1: {Enemy Group: 21, Probability: 4}",
+    "  Sub-Group 1 Rate: 8",
+    "  Sub-Group 2: {}",
+    "  Sub-Group 2 Rate: 0",
+    ""
+  ].join("\n"), "utf8");
+  await writeFile(path.join(project, "map_enemy_placement.yml"), [
+    "260:",
+    "  Enemy Map Group: 2",
+    ""
+  ].join("\n"), "utf8");
+  await writeFile(path.join(project, "map_sectors.yml"), [
+    "33:",
+    "  Town Map: onett",
+    "  Town Map Image: onett",
+    ""
+  ].join("\n"), "utf8");
+
+  await writeFile(path.join(project, "BattleSprites", "010.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleSprites", "011.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleSprites", "012.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleBGs", "000.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleBGs", "003.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleBGs", "004.png"), TINY_PNG);
+  await writeFile(path.join(project, "BattleBGs", "005.png"), TINY_PNG);
+}
 
 describe("CCScript parser v0", () => {
   it("parses tutorial-style hello_world text and end command", () => {

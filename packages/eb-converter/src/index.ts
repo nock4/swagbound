@@ -17,10 +17,12 @@ import {
   type SpriteGroupCollection,
   type SpriteSheetCollection,
   type TutorialStatus,
+  type BattleData,
   type ValidationIssue,
   type ValidationReport,
   type WorldArtifact
 } from "@eb/schemas";
+import { BATTLE_FILE, buildBattleData } from "./battle";
 import { buildWorldArtifacts, TUTORIAL_NPC_ID, type WorldMode } from "./world";
 
 const DEFAULT_PROJECT = "external/coilsnake-project";
@@ -41,6 +43,7 @@ type CliArgs = {
   project: string;
   out: string;
   worldMode: WorldMode;
+  battle: boolean;
   spawnWorldPixel?: { x: number; y: number };
 };
 
@@ -53,6 +56,7 @@ type ConvertResult = {
   validationReport: ValidationReport;
   world: WorldArtifact;
   sprites: SpriteSheetCollection;
+  battle?: BattleData;
 };
 
 export function parseArgs(argv: string[]): CliArgs {
@@ -60,6 +64,7 @@ export function parseArgs(argv: string[]): CliArgs {
     project: process.env.EB_PROJECT ?? DEFAULT_PROJECT,
     out: DEFAULT_OUT,
     worldMode: parseWorldMode(process.env.EB_WORLD_MODE),
+    battle: parseBattleMode(process.env.EB_BATTLE),
     ...(process.env.EB_SPAWN ? { spawnWorldPixel: parseSpawn(process.env.EB_SPAWN) } : {})
   };
   for (let index = 0; index < argv.length; index += 1) {
@@ -73,6 +78,8 @@ export function parseArgs(argv: string[]): CliArgs {
     } else if (arg === "--world-mode") {
       args.worldMode = parseWorldMode(argv[index + 1]);
       index += 1;
+    } else if (arg === "--battle") {
+      args.battle = true;
     } else if (arg === "--spawn") {
       args.spawnWorldPixel = parseSpawn(argv[index + 1]);
       index += 1;
@@ -89,6 +96,16 @@ function parseWorldMode(value: string | undefined): WorldMode {
     return "full";
   }
   throw new Error(`Unsupported EB_WORLD_MODE "${value}". Expected "region" or "full".`);
+}
+
+function parseBattleMode(value: string | undefined): boolean {
+  if (!value || value === "0" || value.toLowerCase() === "false" || value.toLowerCase() === "no") {
+    return false;
+  }
+  if (value === "1" || value.toLowerCase() === "true" || value.toLowerCase() === "yes") {
+    return true;
+  }
+  throw new Error(`Unsupported EB_BATTLE "${value}". Expected "1" or "0".`);
 }
 
 function parseSpawn(value: string | undefined): { x: number; y: number } {
@@ -549,6 +566,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   const project = options.project ?? process.env.EB_PROJECT ?? DEFAULT_PROJECT;
   const out = options.out ?? DEFAULT_OUT;
   const worldMode = options.worldMode ?? parseWorldMode(process.env.EB_WORLD_MODE);
+  const battleEnabled = options.battle ?? parseBattleMode(process.env.EB_BATTLE);
   const spawnWorldPixel = options.spawnWorldPixel ?? (process.env.EB_SPAWN ? parseSpawn(process.env.EB_SPAWN) : undefined);
   const projectAbs = resolveFromRoot(project);
   const outAbs = resolveFromRoot(out);
@@ -620,12 +638,40 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   }
 
   const tutorialStatus = await readTutorialStatus(projectAbs, project, projectExists, scripts, npcs, spriteGroups, world);
+  const battle = battleEnabled
+    ? await buildBattleData({
+      projectAbs,
+      outAbs,
+      displayPath: makeDisplayPath(project)
+    })
+    : undefined;
+  const manifestFiles = battle ? { ...GENERATED_FILES, battle: BATTLE_FILE } : GENERATED_FILES;
+  const manifestWarnings = [
+    ...warnings,
+    ...scripts.warnings,
+    ...npcs.warnings,
+    ...spriteGroups.warnings,
+    ...tutorialStatus.warnings,
+    ...world.warnings,
+    ...(battle?.warnings ?? [])
+  ];
+  const generatedFiles = [
+    "manifest.json",
+    GENERATED_FILES.scripts,
+    GENERATED_FILES.npcs,
+    GENERATED_FILES.spriteGroups,
+    GENERATED_FILES.tutorialStatus,
+    GENERATED_FILES.validationReport,
+    GENERATED_FILES.world,
+    GENERATED_FILES.sprites,
+    ...(battle ? [BATTLE_FILE] : [])
+  ];
 
   const manifest: Manifest = ManifestSchema.parse({
     schemaVersion: SCHEMA_VERSION,
     generatedAt,
     sourceProject,
-    files: GENERATED_FILES,
+    files: manifestFiles,
     counts: {
       scriptFiles: scripts.counts.files,
       scriptCommands: scripts.counts.commands,
@@ -636,10 +682,14 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
       spriteImages: spriteGroups.counts.images,
       worldNpcs: world.counts.npcs,
       spriteSheets: sprites.counts.sheets,
-      warnings: warnings.length + scripts.warnings.length + npcs.warnings.length + spriteGroups.warnings.length + tutorialStatus.warnings.length + world.warnings.length,
+      ...(battle ? {
+        battleEnemies: battle.counts.enemies,
+        battleGroups: battle.counts.groups
+      } : {}),
+      warnings: manifestWarnings.length,
       errors: errors.length
     },
-    warnings: [...warnings, ...scripts.warnings, ...npcs.warnings, ...spriteGroups.warnings, ...tutorialStatus.warnings, ...world.warnings],
+    warnings: manifestWarnings,
     errors
   });
 
@@ -647,16 +697,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     schemaVersion: SCHEMA_VERSION,
     generatedAt,
     sourceProject,
-    generatedFiles: [
-      "manifest.json",
-      GENERATED_FILES.scripts,
-      GENERATED_FILES.npcs,
-      GENERATED_FILES.spriteGroups,
-      GENERATED_FILES.tutorialStatus,
-      GENERATED_FILES.validationReport,
-      GENERATED_FILES.world,
-      GENERATED_FILES.sprites
-    ],
+    generatedFiles,
     issues: [...manifest.warnings, ...manifest.errors],
     counts: {
       warnings: manifest.warnings.filter((item) => item.severity !== "info").length,
@@ -672,8 +713,11 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   await writeJson(path.join(outAbs, GENERATED_FILES.validationReport), validationReport);
   await writeJson(path.join(outAbs, GENERATED_FILES.world), world);
   await writeJson(path.join(outAbs, GENERATED_FILES.sprites), sprites);
+  if (battle) {
+    await writeJson(path.join(outAbs, BATTLE_FILE), battle);
+  }
 
-  return { manifest, scripts, npcs, spriteGroups, tutorialStatus, validationReport, world, sprites };
+  return { manifest, scripts, npcs, spriteGroups, tutorialStatus, validationReport, world, sprites, ...(battle ? { battle } : {}) };
 }
 
 async function readTutorialStatus(
@@ -1327,7 +1371,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           GENERATED_FILES.tutorialStatus,
           GENERATED_FILES.validationReport,
           GENERATED_FILES.world,
-          GENERATED_FILES.sprites
+          GENERATED_FILES.sprites,
+          ...(result.battle ? [BATTLE_FILE] : [])
         ],
         counts: result.manifest.counts,
         world: {
