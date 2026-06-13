@@ -167,6 +167,7 @@ function cloneRegionSnapshot(region: SaveRegionSnapshot): SaveRegionSnapshot {
 function clonePartyStateSnapshot(snapshot: PartyStateSnapshot): PartyStateSnapshot {
   return {
     wallet: snapshot.wallet,
+    ...(snapshot.bank !== undefined ? { bank: snapshot.bank } : {}),
     partyIds: [...snapshot.partyIds],
     inventory: snapshot.inventory.map((entry) => ({
       charId: entry.charId,
@@ -193,13 +194,14 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
     return null;
   }
   const wallet = validateId(value.wallet);
+  const bank = value.bank === undefined ? undefined : validateId(value.bank);
   const partyIds = validateIdArray(value.partyIds, { unique: true });
   const inventory = validateInventory(value.inventory);
   const equipped = validateEquipment(value.equipped);
-  if (wallet === undefined || !partyIds || !inventory || !equipped) {
+  if (wallet === undefined || (value.bank !== undefined && bank === undefined) || !partyIds || !inventory || !equipped) {
     return null;
   }
-  return { wallet, partyIds, inventory, equipped };
+  return { wallet, ...(bank !== undefined ? { bank } : {}), partyIds, inventory, equipped };
 }
 
 function validatePlayerSnapshot(value: unknown): SavePlayerSnapshot | null {

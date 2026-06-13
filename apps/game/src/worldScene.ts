@@ -47,6 +47,8 @@ import {
 } from "./saveState";
 import {
   buildMenuScreens,
+  buildShopMenuScreens,
+  buildShopViewModel,
   buildStatusViewModel,
   cancelMenu,
   closedMenu,
@@ -57,6 +59,8 @@ import {
   openMenu,
   parseMenuAction,
   MAIN_MENU_ID,
+  shopRootScreenId,
+  type MenuAction,
   type MenuDebugState,
   type MenuRenderScreen,
   type MenuScreen,
@@ -104,6 +108,7 @@ export class WorldScene extends Phaser.Scene {
   private readonly partyState = new PartyState();
   private menuState: MenuState = closedMenu();
   private menuScreens = new Map<string, MenuScreen>();
+  private activeShopStoreId?: number;
   private eventSequence?: RuntimeEventSequence;
   private bootSaveState?: SaveState;
   private saveSlot = 0;
@@ -553,11 +558,56 @@ export class WorldScene extends Phaser.Scene {
       this.saveGame(true);
       return;
     }
+    if (action.kind === "atm") {
+      this.handleAtmAction(action);
+      return;
+    }
+    if (action.kind === "shopBuy") {
+      this.handleShopBuyAction(action);
+      return;
+    }
+    if (action.kind === "shopSell") {
+      this.handleShopSellAction(action);
+      return;
+    }
+    if (action.kind === "shopCancel") {
+      this.closeMenu();
+      return;
+    }
     if (action.kind === "itemUse") {
       this.handleItemUseAction(action);
       return;
     }
     this.handleEquipAction(action);
+  }
+
+  private handleAtmAction(action: Extract<MenuAction, { kind: "atm" }>): void {
+    const amount = action.all
+      ? (action.op === "deposit" ? this.partyState.wallet : this.partyState.bank)
+      : action.amount ?? 0;
+    const moved = this.partyState.applyAtm(action.op, amount);
+    this.showMenuResult(moved > 0 ? "Done." : "No funds moved.");
+  }
+
+  private handleShopBuyAction(action: Extract<MenuAction, { kind: "shopBuy" }>): void {
+    const shop = this.data_.shops?.shops.find((entry) => entry.id === action.storeId);
+    if (!shop?.itemIds.includes(action.itemId)) {
+      this.showMenuResult("Not for sale.");
+      return;
+    }
+    const item = this.itemById(action.itemId) ?? fallbackShopItem(action.itemId);
+    const result = this.partyState.buyItem(action.char, item);
+    this.showMenuResult(result.ok ? "Bought." : "Not enough money.");
+  }
+
+  private handleShopSellAction(action: Extract<MenuAction, { kind: "shopSell" }>): void {
+    if (this.partyState.inventory(action.char)[action.inventorySlot] !== action.itemId) {
+      this.showMenuResult("You can't sell that.");
+      return;
+    }
+    const item = this.itemById(action.itemId) ?? fallbackShopItem(action.itemId);
+    const result = this.partyState.sellItem(action.char, item);
+    this.showMenuResult(result.ok ? "Sold." : "You can't sell that.");
   }
 
   private handleItemUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "itemUse" }>): void {
@@ -596,6 +646,7 @@ export class WorldScene extends Phaser.Scene {
 
   private showMenuResult(message: string): void {
     this.menuState = closedMenu();
+    this.activeShopStoreId = undefined;
     this.refreshMenuScreens();
     this.dialogue.start([{
       text: message,
@@ -612,7 +663,21 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
     this.menuState = cancelMenu(this.menuState);
+    if (!this.menuState.open) {
+      this.activeShopStoreId = undefined;
+    }
     if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running) {
+      unlockPlayer(this.playerState);
+    }
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private closeMenu(): void {
+    this.menuState = closedMenu();
+    this.activeShopStoreId = undefined;
+    this.refreshMenuScreens();
+    if (!this.dialogue.open && !this.eventSequence?.running) {
       unlockPlayer(this.playerState);
     }
     this.updatePrompt();
@@ -621,16 +686,42 @@ export class WorldScene extends Phaser.Scene {
 
   private refreshMenuScreens(): void {
     const resolver = createDialogueResolver(this.data_);
-    this.menuScreens = new Map(buildMenuScreens(buildStatusViewModel({
+    const screens = buildMenuScreens(buildStatusViewModel({
       characters: this.data_.characters,
       partyState: this.partyState
     }), {
       characters: this.data_.characters,
       items: this.data_.items,
       psi: this.data_.psi,
+      shops: this.data_.shops,
       partyState: this.partyState,
       resolver
-    }).map((screen) => [screen.id, screen]));
+    });
+    if (this.activeShopStoreId !== undefined) {
+      screens.push(...buildShopMenuScreens(buildShopViewModel({
+        characters: this.data_.characters,
+        items: this.data_.items,
+        shops: this.data_.shops,
+        partyState: this.partyState,
+        resolver,
+        storeId: this.activeShopStoreId
+      })));
+    }
+    this.menuScreens = new Map(screens.map((screen) => [screen.id, screen]));
+  }
+
+  private openShopMenu(storeId: number): void {
+    this.activeShopStoreId = Math.max(0, Math.floor(storeId));
+    this.refreshMenuScreens();
+    const root = this.menuScreens.get(shopRootScreenId(this.activeShopStoreId));
+    if (!root) {
+      this.activeShopStoreId = undefined;
+      return;
+    }
+    this.menuState = openMenu(root);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
   }
 
   menuRenderStack(): MenuRenderScreen[] {
@@ -768,7 +859,8 @@ export class WorldScene extends Phaser.Scene {
       scene: this,
       resolveWarpDestination: (dest, style) => this.resolveEventWarpDestination(dest, style),
       applyWarpDestination: (destination) => this.applyEventWarpDestination(destination),
-      startBattle: (group) => this.startEventBattle(group)
+      startBattle: (group) => this.startEventBattle(group),
+      openShop: (storeId) => this.openShopMenu(storeId)
     });
     this.eventSequence = new RuntimeEventSequence(this.data_.scripts, host);
   }
@@ -834,7 +926,9 @@ export class WorldScene extends Phaser.Scene {
 
   private afterDialogueClosed(): void {
     // Release the lock before publish so debug never shows closed dialogue with locked input.
-    unlockPlayer(this.playerState);
+    if (!this.menuState.open) {
+      unlockPlayer(this.playerState);
+    }
     this.restoreActiveNpc();
     this.refreshNpcVisibility();
     this.updatePrompt();
@@ -879,6 +973,7 @@ export class WorldScene extends Phaser.Scene {
       `facing: ${state.facing} | moving: ${state.moving} | locked: ${state.inputLocked}`,
       `anim: ${state.animKey} frame ${state.animFrame}`,
       `feet: ${Math.round(state.x)},${Math.round(state.y)} | target: ${this.interactionTarget()?.id ?? "none"}`,
+      `wallet: ${this.partyState.wallet} | bank: ${this.partyState.bank} | shop: ${this.activeShopStoreId ?? "none"}`,
       `save: ${this.hasSave ? "yes" : "no"} | restored: ${this.restoredFromSave ? "yes" : "no"}`
     ];
   }
@@ -938,6 +1033,8 @@ export class WorldScene extends Phaser.Scene {
       restoredFromSave: this.restoredFromSave,
       eventExecutor: this.eventSequence?.debug(),
       partyState: this.partyState.counts(),
+      shopOpen: this.menuState.open && this.activeShopStoreId !== undefined,
+      ...(this.activeShopStoreId !== undefined ? { activeShopStoreId: this.activeShopStoreId } : {}),
       menu: this.menuDebugState(),
       world: {
         available: world.available,
@@ -967,4 +1064,8 @@ function vitalsForPartyMember(member: PartyMember | undefined): {
     pp: member?.pp ?? 0,
     maxPp: member?.maxPp ?? 0
   };
+}
+
+function fallbackShopItem(itemId: number): Pick<ItemData, "id" | "cost"> {
+  return { id: itemId, cost: 0 };
 }

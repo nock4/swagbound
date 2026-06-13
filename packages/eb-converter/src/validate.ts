@@ -9,6 +9,7 @@ import {
   NpcReferenceCollectionSchema,
   PsiCollectionSchema,
   ScriptCollectionSchema,
+  ShopDataSchema,
   SpriteGroupCollectionSchema,
   SpriteSheetCollectionSchema,
   TutorialStatusSchema,
@@ -20,6 +21,7 @@ const DEFAULT_OUT = "apps/game/public/generated";
 const DEFAULT_CHARACTERS_FILE = "characters.json";
 const DEFAULT_ITEMS_FILE = "items.json";
 const DEFAULT_PSI_FILE = "psi.json";
+const DEFAULT_SHOPS_FILE = "shops.json";
 
 function parseOut(argv: string[]): string {
   const outIndex = argv.indexOf("--out");
@@ -53,6 +55,8 @@ export type GeneratedValidationResult = {
   equippableItems?: number;
   psi?: number;
   psiLearnedByEntries?: number;
+  shops?: number;
+  shopItemEntries?: number;
 };
 
 export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<GeneratedValidationResult> {
@@ -102,6 +106,11 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
   const shouldReadPsi = Boolean(manifest.files.psi) || existsSync(psiPath);
   const psiRaw = shouldReadPsi ? await readJson(psiPath) : undefined;
   const psi = psiRaw ? PsiCollectionSchema.parse(psiRaw) : undefined;
+  const shopFile = manifest.files.shops ?? DEFAULT_SHOPS_FILE;
+  const shopPath = path.join(out, shopFile);
+  const shouldReadShops = Boolean(manifest.files.shops) || existsSync(shopPath);
+  const shopsRaw = shouldReadShops ? await readJson(shopPath) : undefined;
+  const shops = shopsRaw ? ShopDataSchema.parse(shopsRaw) : undefined;
 
   assertNoPublicPathLeaks({
     "manifest.json": manifestRaw,
@@ -115,7 +124,8 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
     ...(battleRaw ? { [battleFile]: battleRaw } : {}),
     ...(charactersRaw ? { [characterFile]: charactersRaw } : {}),
     ...(itemsRaw ? { [itemFile]: itemsRaw } : {}),
-    ...(psiRaw ? { [psiFile]: psiRaw } : {})
+    ...(psiRaw ? { [psiFile]: psiRaw } : {}),
+    ...(shopsRaw ? { [shopFile]: shopsRaw } : {})
   });
 
   const worldAssetsChecked = assertWorldAssetsExist(out, world, sprites);
@@ -136,7 +146,8 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
       ...(battle ? [battleFile] : []),
       ...(characters ? [characterFile] : []),
       ...(items ? [itemFile] : []),
-      ...(psi ? [psiFile] : [])
+      ...(psi ? [psiFile] : []),
+      ...(shops ? [shopFile] : [])
     ],
     counts: manifest.counts,
     validation: validationReport.counts,
@@ -164,6 +175,10 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
     ...(psi ? {
       psi: psi.counts.psi,
       psiLearnedByEntries: psi.counts.learnedBy
+    } : {}),
+    ...(shops ? {
+      shops: shops.counts.shops,
+      shopItemEntries: shops.counts.entries
     } : {})
   };
 }

@@ -12,6 +12,7 @@ import {
   CharacterCollectionSchema,
   ItemCollectionSchema,
   PsiCollectionSchema,
+  ShopDataSchema,
   TutorialStatusSchema,
   type ScriptCollection
 } from "@eb/schemas";
@@ -311,15 +312,19 @@ describe("generated validation", () => {
 
       expect(defaultResult.items).toBeUndefined();
       expect(defaultResult.psi).toBeUndefined();
+      expect(defaultResult.shops).toBeUndefined();
       expect(existsSync(path.join(out, "items.json"))).toBe(false);
       expect(existsSync(path.join(out, "psi.json"))).toBe(false);
+      expect(existsSync(path.join(out, "shops.json"))).toBe(false);
       expect(defaultValidation.generatedFiles).not.toContain("items.json");
       expect(defaultValidation.generatedFiles).not.toContain("psi.json");
+      expect(defaultValidation.generatedFiles).not.toContain("shops.json");
 
       const generated = await convertProject({ project, out, items: true });
       const result = await validateGeneratedOutput(out);
       const items = ItemCollectionSchema.parse(generated.items);
       const psi = PsiCollectionSchema.parse(generated.psi);
+      const shops = ShopDataSchema.parse(generated.shops);
 
       expect(items.counts).toEqual({ items: 2, equippable: 1 });
       expect(items.items.map((item) => item.id)).toEqual([10, 11]);
@@ -365,10 +370,18 @@ describe("generated validation", () => {
       expect(result.ok).toBe(true);
       expect(result.generatedFiles).toContain("items.json");
       expect(result.generatedFiles).toContain("psi.json");
+      expect(result.generatedFiles).toContain("shops.json");
       expect(result.items).toBe(2);
       expect(result.equippableItems).toBe(1);
       expect(result.psi).toBe(2);
       expect(result.psiLearnedByEntries).toBe(3);
+      expect(shops.counts).toEqual({ shops: 2, entries: 3 });
+      expect(shops.shops).toEqual([
+        { id: 2, itemIds: [10, 11] },
+        { id: 3, itemIds: [11] }
+      ]);
+      expect(result.shops).toBe(2);
+      expect(result.shopItemEntries).toBe(3);
     } finally {
       await rm(temp, { recursive: true, force: true });
     }
@@ -607,6 +620,17 @@ async function writeItemPsiFixture(project: string): Promise<void> {
     "  Name: \"[psi 1 data]\"",
     ""
   ].join("\n"), "utf8");
+  await writeFile(path.join(project, "store_table.yml"), [
+    "0x02:",
+    "  Item 1: 10",
+    "  Item 2: $0B",
+    "  Item 3: 0",
+    "  Item 4: 0",
+    "3:",
+    "  Item 1: 11",
+    "  Item 2: 0",
+    ""
+  ].join("\n"), "utf8");
 }
 
 describe("CCScript parser v0", () => {
@@ -763,18 +787,24 @@ describe("CCScript text segments", () => {
   });
 
   it("types functional event byte codes without losing raw bytes", () => {
-    expect(tokenizeCcsString("[1D 00 02 09][1F 00 00 07][1F 21 03][1F 23 34 12]")).toEqual([
+    expect(tokenizeCcsString("[1D 00 02 09][1D 06 05 00 00 00][1D 07 03 00 00 00][1F 00 00 07][1F 21 03][1F 23 34 12][1F 83 02 00]")).toEqual([
       { kind: "give", char: 2, item: 9, raw: "[1D 00 02 09]" },
+      { kind: "atm", op: "deposit", amount: 5, raw: "[1D 06 05 00 00 00]" },
+      { kind: "atm", op: "withdraw", amount: 3, raw: "[1D 07 03 00 00 00]" },
       { kind: "music", op: "play", track: 7, raw: "[1F 00 00 07]" },
       { kind: "warp", dest: 3, raw: "[1F 21 03]" },
-      { kind: "battle", group: 0x1234, raw: "[1F 23 34 12]" }
+      { kind: "battle", group: 0x1234, raw: "[1F 23 34 12]" },
+      { kind: "shop", storeId: 2, raw: "[1F 83 02 00]" }
     ]);
   });
 
   it("types functional event macros and top-level command parts", () => {
-    expect(tokenizeCcsString("{set(0x22)}{party_add(3)}{music_stop}{anchor_warp}")).toEqual([
+    expect(tokenizeCcsString("{set(0x22)}{party_add(3)}{deposit(50)}{withdraw(10)}{shop(2)}{music_stop}{anchor_warp}")).toEqual([
       { kind: "setFlag", flag: 0x22, raw: "{set(0x22)}" },
       { kind: "party", op: "add", char: 3, raw: "{party_add(3)}" },
+      { kind: "atm", op: "deposit", amount: 50, raw: "{deposit(50)}" },
+      { kind: "atm", op: "withdraw", amount: 10, raw: "{withdraw(10)}" },
+      { kind: "shop", storeId: 2, raw: "{shop(2)}" },
       { kind: "music", op: "stop", raw: "{music_stop}" },
       { kind: "anchorWarp", raw: "{anchor_warp}" }
     ]);

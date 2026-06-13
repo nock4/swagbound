@@ -42,10 +42,12 @@ export type EventHostDebug = {
     warpNoops: number;
     battles: number;
     battleNoops: number;
+    shops: number;
     audio: number;
     lastWarpDest?: number;
     lastTeleportStyle?: number;
     lastBattleGroup?: number;
+    lastShopStoreId?: number;
     lastAudioKind?: "music" | "sound" | "musicEffect";
   };
 };
@@ -58,6 +60,7 @@ export type RuntimeEventHostOptions = {
   resolveWarpDestination?: (dest: number, style?: number) => EventWarpDestination | undefined;
   applyWarpDestination?: (destination: EventWarpDestination) => void;
   startBattle?: (group: number) => boolean;
+  openShop?: (storeId: number) => void;
 };
 
 export type EventSequenceOptions = {
@@ -180,6 +183,10 @@ export class RuntimeEventHost implements EventExecutorHost {
     this.options.partyState.applyMoney(op, amount);
   }
 
+  atm(op: "deposit" | "withdraw", amount: number): void {
+    this.options.partyState.applyAtm(op, amount);
+  }
+
   party(op: "add" | "remove", char: number): void {
     this.options.partyState.partyOp(op, char);
   }
@@ -205,6 +212,16 @@ export class RuntimeEventHost implements EventExecutorHost {
       lastBattleGroup: group
     };
     this.transitionRequested = started;
+  }
+
+  openShop(storeId: number): void {
+    this.options.openShop?.(storeId);
+    this.debugState.records = {
+      ...this.debugState.records,
+      shops: this.debugState.records.shops + 1,
+      lastShopStoreId: storeId
+    };
+    this.transitionRequested = true;
   }
 
   music(effect: Extract<EventEffect, { kind: "music" }>): void {
@@ -431,6 +448,7 @@ function emptyDebug(): EventHostDebug {
       warpNoops: 0,
       battles: 0,
       battleNoops: 0,
+      shops: 0,
       audio: 0
     }
   };

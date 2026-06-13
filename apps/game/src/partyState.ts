@@ -8,6 +8,7 @@ import {
 
 export type PartyStateCounts = {
   wallet: number;
+  bank: number;
   inventoryChars: number;
   inventoryItems: number;
   partyCount: number;
@@ -29,6 +30,7 @@ export type PartyEquipmentSnapshot = {
 
 export type PartyStateSnapshot = {
   wallet: number;
+  bank?: number;
   partyIds: number[];
   inventory: PartyInventorySnapshot[];
   equipped: PartyEquipmentSnapshot[];
@@ -89,6 +91,40 @@ export type EquipResult =
       reason: "notEquippable";
     };
 
+export type ShopBuyResult =
+  | {
+      ok: true;
+      char: number;
+      itemId: number;
+      cost: number;
+      previousWallet: number;
+      nextWallet: number;
+    }
+  | {
+      ok: false;
+      char: number;
+      itemId: number;
+      cost: number;
+      reason: "insufficientFunds";
+    };
+
+export type ShopSellResult =
+  | {
+      ok: true;
+      char: number;
+      itemId: number;
+      price: number;
+      previousWallet: number;
+      nextWallet: number;
+    }
+  | {
+      ok: false;
+      char: number;
+      itemId: number;
+      price: number;
+      reason: "missingItem";
+    };
+
 const HP_RATE_PER_SEC = 36;
 const ITEM_DISAPPEARS_FLAG = "item disappears when used";
 const EQUIPMENT_SLOTS: EquipmentSlot[] = ["weapon", "body", "arms", "other"];
@@ -106,6 +142,7 @@ const FIELD_STAT_ACTIONS = {
  */
 export class PartyState {
   private walletValue = 0;
+  private bankValue = 0;
   private readonly inventoryByChar = new Map<number, number[]>();
   private readonly partyIds = new Set<number>();
   private readonly equippedByChar = new Map<number, EquippedSlots>();
@@ -113,6 +150,10 @@ export class PartyState {
 
   get wallet(): number {
     return this.walletValue;
+  }
+
+  get bank(): number {
+    return this.bankValue;
   }
 
   inventory(char: number): number[] {
@@ -239,6 +280,63 @@ export class PartyState {
     this.money(op === "give" ? amount : -amount);
   }
 
+  deposit(amount: number): number {
+    const moved = Math.min(stat(amount), this.walletValue);
+    this.walletValue -= moved;
+    this.bankValue += moved;
+    return moved;
+  }
+
+  withdraw(amount: number): number {
+    const moved = Math.min(stat(amount), this.bankValue);
+    this.bankValue -= moved;
+    this.walletValue += moved;
+    return moved;
+  }
+
+  applyAtm(op: "deposit" | "withdraw", amount: number): number {
+    return op === "deposit" ? this.deposit(amount) : this.withdraw(amount);
+  }
+
+  buyItem(char: number, item: Pick<ItemData, "id" | "cost">): ShopBuyResult {
+    const normalizedChar = normalizeId(char);
+    const itemId = normalizeId(item.id);
+    const cost = stat(item.cost);
+    const previousWallet = this.walletValue;
+    if (previousWallet < cost) {
+      return { ok: false, char: normalizedChar, itemId, cost, reason: "insufficientFunds" };
+    }
+    this.walletValue = previousWallet - cost;
+    this.give(normalizedChar, itemId);
+    return {
+      ok: true,
+      char: normalizedChar,
+      itemId,
+      cost,
+      previousWallet,
+      nextWallet: this.walletValue
+    };
+  }
+
+  sellItem(char: number, item: Pick<ItemData, "id" | "cost">): ShopSellResult {
+    const normalizedChar = normalizeId(char);
+    const itemId = normalizeId(item.id);
+    const price = sellPriceForItem(item);
+    const previousWallet = this.walletValue;
+    if (!this.take(normalizedChar, itemId)) {
+      return { ok: false, char: normalizedChar, itemId, price, reason: "missingItem" };
+    }
+    this.walletValue = previousWallet + price;
+    return {
+      ok: true,
+      char: normalizedChar,
+      itemId,
+      price,
+      previousWallet,
+      nextWallet: this.walletValue
+    };
+  }
+
   partyOp(op: "add" | "remove", char: number): void {
     const normalizedChar = normalizeId(char);
     if (op === "add") {
@@ -255,6 +353,7 @@ export class PartyState {
     }
     return {
       wallet: this.walletValue,
+      bank: this.bankValue,
       inventoryChars: this.inventoryByChar.size,
       inventoryItems,
       partyCount: this.partyIds.size
@@ -264,6 +363,7 @@ export class PartyState {
   snapshot(): PartyStateSnapshot {
     return {
       wallet: this.walletValue,
+      bank: this.bankValue,
       partyIds: this.party(),
       inventory: [...this.inventoryByChar.entries()]
         .sort(([a], [b]) => a - b)
@@ -276,6 +376,7 @@ export class PartyState {
 
   restore(snapshot: PartyStateSnapshot): void {
     this.walletValue = stat(snapshot.wallet);
+    this.bankValue = stat(snapshot.bank ?? 0);
     this.inventoryByChar.clear();
     this.partyIds.clear();
     this.equippedByChar.clear();
@@ -379,6 +480,11 @@ export function equipmentSlotForItemType(type: number): EquipmentSlot | undefine
     return "other";
   }
   return undefined;
+}
+
+export function sellPriceForItem(item: Pick<ItemData, "cost">): number {
+  // Phase 5 shop rule: selling returns half of item cost, rounded down.
+  return Math.floor(stat(item.cost) / 2);
 }
 
 function applyUseEffect(vitals: PartyVitals, effect: ItemUseEffect): {

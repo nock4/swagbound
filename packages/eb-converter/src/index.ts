@@ -21,6 +21,7 @@ import {
   type CharacterCollection,
   type ItemCollection,
   type PsiCollection,
+  type ShopData,
   type ValidationIssue,
   type ValidationReport,
   type WorldArtifact
@@ -28,6 +29,7 @@ import {
 import { BATTLE_FILE, buildBattleData } from "./battle";
 import { CHARACTERS_FILE, buildCharacterData } from "./characters";
 import { ITEMS_FILE, PSI_FILE, buildItemPsiData } from "./itemsPsi";
+import { SHOPS_FILE, buildShopData } from "./shops";
 import { buildWorldArtifacts, TUTORIAL_NPC_ID, type WorldMode } from "./world";
 
 const DEFAULT_PROJECT = "external/coilsnake-project";
@@ -51,6 +53,7 @@ type CliArgs = {
   battle: boolean;
   characters: boolean;
   items: boolean;
+  shops: boolean;
   spawnWorldPixel?: { x: number; y: number };
 };
 
@@ -67,16 +70,19 @@ type ConvertResult = {
   characters?: CharacterCollection;
   items?: ItemCollection;
   psi?: PsiCollection;
+  shops?: ShopData;
 };
 
 export function parseArgs(argv: string[]): CliArgs {
+  const itemsEnabled = parseItemMode(process.env.EB_ITEMS);
   const args: CliArgs = {
     project: process.env.EB_PROJECT ?? DEFAULT_PROJECT,
     out: DEFAULT_OUT,
     worldMode: parseWorldMode(process.env.EB_WORLD_MODE),
     battle: parseBattleMode(process.env.EB_BATTLE),
     characters: parseCharacterMode(process.env.EB_CHARS),
-    items: parseItemMode(process.env.EB_ITEMS),
+    items: itemsEnabled,
+    shops: parseShopMode(process.env.EB_SHOPS) || itemsEnabled,
     ...(process.env.EB_SPAWN ? { spawnWorldPixel: parseSpawn(process.env.EB_SPAWN) } : {})
   };
   for (let index = 0; index < argv.length; index += 1) {
@@ -96,6 +102,9 @@ export function parseArgs(argv: string[]): CliArgs {
       args.characters = true;
     } else if (arg === "--items" || arg === "--item-data") {
       args.items = true;
+      args.shops = true;
+    } else if (arg === "--shops" || arg === "--shop-data") {
+      args.shops = true;
     } else if (arg === "--spawn") {
       args.spawnWorldPixel = parseSpawn(argv[index + 1]);
       index += 1;
@@ -142,6 +151,16 @@ function parseItemMode(value: string | undefined): boolean {
     return true;
   }
   throw new Error(`Unsupported EB_ITEMS "${value}". Expected "1" or "0".`);
+}
+
+function parseShopMode(value: string | undefined): boolean {
+  if (!value || value === "0" || value.toLowerCase() === "false" || value.toLowerCase() === "no") {
+    return false;
+  }
+  if (value === "1" || value.toLowerCase() === "true" || value.toLowerCase() === "yes") {
+    return true;
+  }
+  throw new Error(`Unsupported EB_SHOPS "${value}". Expected "1" or "0".`);
 }
 
 function parseSpawn(value: string | undefined): { x: number; y: number } {
@@ -355,6 +374,14 @@ const moneySegment = (
   raw: string
 ): DialogueSegment => ({ kind: "money", op, amount, raw });
 
+const atmSegment = (
+  op: Extract<DialogueSegment, { kind: "atm" }>["op"],
+  amount: number,
+  raw: string
+): DialogueSegment => ({ kind: "atm", op, amount, raw });
+
+const shopSegment = (storeId: number, raw: string): DialogueSegment => ({ kind: "shop", storeId, raw });
+
 const musicPlaySegment = (track: number, raw: string): DialogueSegment => ({ kind: "music", op: "play", track, raw });
 
 const musicSimpleSegment = (
@@ -449,6 +476,8 @@ export const CCS_TEXT_CODE_REGISTRY: CcsTextCodeRegistryEntry[] = [
   ),
   prefixCode("1D 00", 4, [0x1D, 0x00], (bytes, raw) => giveSegment(bytes[2], bytes[3], raw)),
   prefixCode("1D 01", 4, [0x1D, 0x01], (bytes, raw) => takeSegment(bytes[2], bytes[3], raw)),
+  prefixCode("1D 06", 6, [0x1D, 0x06], (bytes, raw) => atmSegment("deposit", readLittleEndian(bytes.slice(2)), raw)),
+  prefixCode("1D 07", 6, [0x1D, 0x07], (bytes, raw) => atmSegment("withdraw", readLittleEndian(bytes.slice(2)), raw)),
   prefixCode("1D 08", 4, [0x1D, 0x08], (bytes, raw) => moneySegment("give", readLittleEndian(bytes.slice(2)), raw)),
   prefixCode("1D 09", 4, [0x1D, 0x09], (bytes, raw) => moneySegment("take", readLittleEndian(bytes.slice(2)), raw)),
   prefixCode("1E 00", 4, [0x1E, 0x00], (bytes, raw) => partyStatSegment("heal_percent", bytes[2], bytes[3], raw)),
@@ -488,6 +517,7 @@ export const CCS_TEXT_CODE_REGISTRY: CcsTextCodeRegistryEntry[] = [
   prefixCode("1F 41", 3, [0x1F, 0x41], (bytes, raw) => eventSegment(bytes[2], raw)),
   fixedCode("1F 69", [0x1F, 0x69], (_bytes, raw) => anchorWarpSegment(raw)),
   prefixCode("1F 71", 4, [0x1F, 0x71], (bytes, raw) => learnPsiSegment(bytes[2], bytes[3], raw)),
+  prefixCode("1F 83", 4, [0x1F, 0x83], (bytes, raw) => shopSegment(readLittleEndian(bytes.slice(2)), raw)),
   prefixCode("04", 3, [0x04], (bytes, raw) => setFlagSegment(readLittleEndian(bytes.slice(1)), raw)),
   prefixCode("05", 3, [0x05], (bytes, raw) => unsetFlagSegment(readLittleEndian(bytes.slice(1)), raw)),
   prefixCode("07", 3, [0x07], (_bytes, raw) => controlSegment("isset", raw)),
@@ -675,6 +705,14 @@ function segmentForMacro(raw: string): DialogueSegment | undefined {
       return args && args[0] !== undefined ? moneySegment("give", args[0], raw) : controlSegment(name, raw);
     case "takemoney":
       return args && args[0] !== undefined ? moneySegment("take", args[0], raw) : controlSegment(name, raw);
+    case "deposit":
+    case "atm_deposit":
+      return args && args[0] !== undefined ? atmSegment("deposit", args[0], raw) : controlSegment(name, raw);
+    case "withdraw":
+    case "atm_withdraw":
+      return args && args[0] !== undefined ? atmSegment("withdraw", args[0], raw) : controlSegment(name, raw);
+    case "shop":
+      return args && args[0] !== undefined ? shopSegment(args[0], raw) : controlSegment(name, raw);
     case "inflict":
       return args && args[0] !== undefined && args[1] !== undefined
         ? inflictSegment(args[0], args[1], raw)
@@ -779,12 +817,13 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   const battleEnabled = options.battle ?? parseBattleMode(process.env.EB_BATTLE);
   const charactersEnabled = options.characters ?? parseCharacterMode(process.env.EB_CHARS);
   const itemsEnabled = options.items ?? parseItemMode(process.env.EB_ITEMS);
+  const shopsEnabled = options.shops ?? (parseShopMode(process.env.EB_SHOPS) || itemsEnabled);
   const spawnWorldPixel = options.spawnWorldPixel ?? (process.env.EB_SPAWN ? parseSpawn(process.env.EB_SPAWN) : undefined);
   const projectAbs = resolveFromRoot(project);
   const outAbs = resolveFromRoot(out);
   const warnings: ValidationIssue[] = [];
   const errors: ValidationIssue[] = [];
-  const generatedAt = new Date().toISOString();
+  const generatedAt = await readPreviousGeneratedAt(outAbs) ?? new Date().toISOString();
 
   await mkdir(outAbs, { recursive: true });
   await clearGeneratedOutput(outAbs);
@@ -871,11 +910,18 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     : undefined;
   const items = itemPsi?.items;
   const psi = itemPsi?.psi;
+  const shops = shopsEnabled
+    ? await buildShopData({
+      projectAbs,
+      displayPath: makeDisplayPath(project)
+    })
+    : undefined;
   const manifestFiles = {
     ...GENERATED_FILES,
     ...(battle ? { battle: BATTLE_FILE } : {}),
     ...(characters ? { characters: CHARACTERS_FILE } : {}),
-    ...(items ? { items: ITEMS_FILE, psi: PSI_FILE } : {})
+    ...(items ? { items: ITEMS_FILE, psi: PSI_FILE } : {}),
+    ...(shops ? { shops: SHOPS_FILE } : {})
   };
   const manifestWarnings = [
     ...warnings,
@@ -887,7 +933,8 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     ...(battle?.warnings ?? []),
     ...(characters?.warnings ?? []),
     ...(items?.warnings ?? []),
-    ...(psi?.warnings ?? [])
+    ...(psi?.warnings ?? []),
+    ...(shops?.warnings ?? [])
   ];
   const generatedFiles = [
     "manifest.json",
@@ -900,7 +947,8 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     GENERATED_FILES.sprites,
     ...(battle ? [BATTLE_FILE] : []),
     ...(characters ? [CHARACTERS_FILE] : []),
-    ...(items ? [ITEMS_FILE, PSI_FILE] : [])
+    ...(items ? [ITEMS_FILE, PSI_FILE] : []),
+    ...(shops ? [SHOPS_FILE] : [])
   ];
 
   const manifest: Manifest = ManifestSchema.parse({
@@ -931,6 +979,10 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
         equippableItems: items.counts.equippable,
         psi: psi.counts.psi,
         psiLearnedByEntries: psi.counts.learnedBy
+      } : {}),
+      ...(shops ? {
+        shops: shops.counts.shops,
+        shopItemEntries: shops.counts.entries
       } : {}),
       warnings: manifestWarnings.length,
       errors: errors.length
@@ -969,6 +1021,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     await writeJson(path.join(outAbs, ITEMS_FILE), items);
     await writeJson(path.join(outAbs, PSI_FILE), psi);
   }
+  if (shops) {
+    await writeJson(path.join(outAbs, SHOPS_FILE), shops);
+  }
 
   return {
     manifest,
@@ -982,7 +1037,8 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     ...(battle ? { battle } : {}),
     ...(characters ? { characters } : {}),
     ...(items ? { items } : {}),
-    ...(psi ? { psi } : {})
+    ...(psi ? { psi } : {}),
+    ...(shops ? { shops } : {})
   };
 }
 
@@ -1395,6 +1451,8 @@ function isExecutableCommandSegment(segment: DialogueSegment): boolean {
     case "give":
     case "take":
     case "money":
+    case "atm":
+    case "shop":
     case "music":
     case "sound":
     case "musicEffect":
@@ -1594,6 +1652,19 @@ async function writeJson(file: string, value: unknown): Promise<void> {
   await writeFile(file, `${JSON.stringify(value, null, 2)}\n`, "utf8");
 }
 
+async function readPreviousGeneratedAt(outAbs: string): Promise<string | undefined> {
+  const file = path.join(outAbs, "manifest.json");
+  if (!existsSync(file)) {
+    return undefined;
+  }
+  try {
+    const parsed = JSON.parse(await readFile(file, "utf8")) as { generatedAt?: unknown };
+    return typeof parsed.generatedAt === "string" ? parsed.generatedAt : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 async function clearGeneratedOutput(outAbs: string): Promise<void> {
   const entries = await readdir(outAbs, { withFileTypes: true });
   await Promise.all(entries.map(async (entry) => {
@@ -1701,7 +1772,8 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           GENERATED_FILES.sprites,
           ...(result.battle ? [BATTLE_FILE] : []),
           ...(result.characters ? [CHARACTERS_FILE] : []),
-          ...(result.items ? [ITEMS_FILE, PSI_FILE] : [])
+          ...(result.items ? [ITEMS_FILE, PSI_FILE] : []),
+          ...(result.shops ? [SHOPS_FILE] : [])
         ],
         counts: result.manifest.counts,
         world: {
@@ -1721,6 +1793,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
             equippableItems: result.items.counts.equippable,
             psi: result.psi.counts.psi,
             learnedByEntries: result.psi.counts.learnedBy
+          }
+        } : {}),
+        ...(result.shops ? {
+          shops: {
+            shops: result.shops.counts.shops,
+            itemEntries: result.shops.counts.entries
           }
         } : {}),
         tutorial: result.tutorialStatus.counts,

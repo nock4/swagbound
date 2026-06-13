@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { ItemData } from "@eb/schemas";
-import { PartyState } from "../src/partyState";
+import { PartyState, sellPriceForItem } from "../src/partyState";
 
 describe("PartyState", () => {
   it("tracks wallet deltas without going below zero", () => {
@@ -12,6 +12,50 @@ describe("PartyState", () => {
 
     expect(state.wallet).toBe(0);
     expect(state.counts()).toMatchObject({ wallet: 0 });
+  });
+
+  it("clamps ATM deposits and withdrawals to available balances", () => {
+    const state = new PartyState();
+
+    state.money(30);
+    expect(state.deposit(50)).toBe(30);
+    expect(state.wallet).toBe(0);
+    expect(state.bank).toBe(30);
+
+    expect(state.withdraw(12)).toBe(12);
+    expect(state.wallet).toBe(12);
+    expect(state.bank).toBe(18);
+
+    expect(state.applyAtm("withdraw", 99)).toBe(18);
+    expect(state.counts()).toMatchObject({ wallet: 30, bank: 0 });
+  });
+
+  it("buys and sells items with wallet and inventory deltas", () => {
+    const state = new PartyState();
+    const item = itemData(10, { cost: 21 });
+
+    expect(sellPriceForItem(item)).toBe(10);
+    expect(state.buyItem(1, item)).toMatchObject({ ok: false, reason: "insufficientFunds" });
+    expect(state.inventory(1)).toEqual([]);
+
+    state.money(25);
+    expect(state.buyItem(1, item)).toMatchObject({
+      ok: true,
+      cost: 21,
+      previousWallet: 25,
+      nextWallet: 4
+    });
+    expect(state.wallet).toBe(4);
+    expect(state.inventory(1)).toEqual([10]);
+
+    expect(state.sellItem(1, item)).toMatchObject({
+      ok: true,
+      price: 10,
+      previousWallet: 4,
+      nextWallet: 14
+    });
+    expect(state.wallet).toBe(14);
+    expect(state.inventory(1)).toEqual([]);
   });
 
   it("keeps inventory arrays by character id", () => {
@@ -139,13 +183,14 @@ function itemData(id: number, options: {
   type?: number;
   action?: number;
   argument?: number;
+  cost?: number;
   consumable?: boolean;
 } = {}): ItemData {
   return {
     id,
     name: `[item ${id}]`,
     type: options.type ?? 0x30,
-    cost: 0,
+    cost: options.cost ?? 0,
     action: options.action ?? 0,
     argument: options.argument ?? 0,
     equippable: (options.type ?? 0x30) >= 0x10 && (options.type ?? 0x30) <= 0x1f,

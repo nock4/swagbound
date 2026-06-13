@@ -9,6 +9,7 @@ import {
   resolveScriptReference,
   resolveScriptReferenceFlow,
   ScriptCollectionSchema,
+  ShopDataSchema,
   SpriteGroupCollectionSchema,
   SpriteSheetCollectionSchema,
   TutorialStatusSchema,
@@ -23,6 +24,7 @@ import {
   type NpcReferenceCollection,
   type PsiCollection,
   type ScriptCollection,
+  type ShopData,
   type SpriteGroupCollection,
   type SpriteSheetCollection,
   type TutorialStatus,
@@ -45,6 +47,7 @@ export type GameData = {
   characters?: CharacterCollection;
   items?: ItemCollection;
   psi?: PsiCollection;
+  shops?: ShopData;
 };
 
 async function loadJson<T>(url: string, schema: { parse: (value: unknown) => T }): Promise<T | undefined> {
@@ -58,7 +61,7 @@ async function loadJson<T>(url: string, schema: { parse: (value: unknown) => T }
 
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
-  const [scripts, npcs, spriteGroups, tutorialStatus, validationReport, world, sprites, battle, characters, items, psi] = await Promise.all([
+  const [scripts, npcs, spriteGroups, tutorialStatus, validationReport, world, sprites, battle, characters, items, psi, shops] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
     loadJson(`/generated/${manifest.files.spriteGroups}`, SpriteGroupCollectionSchema),
@@ -77,9 +80,12 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       : Promise.resolve(undefined),
     manifest.files.psi
       ? loadJson(`/generated/${manifest.files.psi}`, PsiCollectionSchema)
+      : Promise.resolve(undefined),
+    manifest.files.shops
+      ? loadJson(`/generated/${manifest.files.shops}`, ShopDataSchema)
       : Promise.resolve(undefined)
   ]);
-  return { manifest, scripts, npcs, spriteGroups, tutorialStatus, validationReport, world, sprites, battle, characters, items, psi };
+  return { manifest, scripts, npcs, spriteGroups, tutorialStatus, validationReport, world, sprites, battle, characters, items, psi, shops };
 }
 
 export function parseManifest(raw: unknown): Manifest | undefined {

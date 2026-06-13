@@ -92,19 +92,24 @@ export type OverworldDebug = {
       warpNoops: number;
       battles: number;
       battleNoops: number;
+      shops: number;
       audio: number;
       lastWarpDest?: number;
       lastTeleportStyle?: number;
       lastBattleGroup?: number;
+      lastShopStoreId?: number;
       lastAudioKind?: string;
     };
   };
   partyState?: {
     wallet: number;
+    bank: number;
     inventoryChars: number;
     inventoryItems: number;
     partyCount: number;
   };
+  shopOpen?: boolean;
+  activeShopStoreId?: number;
   menu?: MenuDebugState;
   world?: {
     available: boolean;

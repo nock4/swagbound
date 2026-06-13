@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
-import type { CharacterCollection, ItemCollection, PsiCollection } from "@eb/schemas";
+import type { CharacterCollection, ItemCollection, PsiCollection, ShopData } from "@eb/schemas";
 import type { PartyMember } from "../src/characterModel";
 import {
+  buildAtmScreen,
   buildCheckDetailScreens,
   buildCheckScreen,
   buildCheckViewModel,
@@ -12,6 +13,8 @@ import {
   buildMainMenuScreen,
   buildMenuScreens,
   buildPsiViewModel,
+  buildShopMenuScreens,
+  buildShopViewModel,
   buildStatusScreen,
   buildStatusViewModel,
   cancelMenu,
@@ -132,6 +135,7 @@ describe("Status view model", () => {
     const screen = buildStatusScreen(status);
 
     expect(status.wallet).toBe(77);
+    expect(status.bank).toBe(0);
     expect(status.members).toHaveLength(2);
     expect(status.members[0]).toMatchObject({
       id: 1,
@@ -145,6 +149,7 @@ describe("Status view model", () => {
     });
     expect(screen.items.map((item) => item.id)).toEqual([
       "wallet",
+      "bank",
       "member-0-vitals",
       "member-0-stats",
       "member-1-vitals",
@@ -205,11 +210,13 @@ describe("Status view model", () => {
       characters,
       partyState: {
         wallet: 125,
+        bank: 50,
         party: () => [2]
       }
     });
 
     expect(status.wallet).toBe(125);
+    expect(status.bank).toBe(50);
     expect(status.members).toHaveLength(1);
     expect(status.members[0]).toMatchObject({
       id: 2,
@@ -241,6 +248,7 @@ describe("item and PSI menu view models", () => {
       partyMembers: [partyMember(1, "MEMBER_A", 5)],
       partyState: {
         wallet: 0,
+        bank: 0,
         party: () => [1],
         inventory: () => [10, 11, 12]
       },
@@ -306,6 +314,7 @@ describe("item and PSI menu view models", () => {
       partyMembers: [partyMember(1, "MEMBER_A", 5)],
       partyState: {
         wallet: 0,
+        bank: 0,
         party: () => [1],
         inventory: () => [10, 11, 12]
       },
@@ -320,6 +329,72 @@ describe("item and PSI menu view models", () => {
     expect(byId.get("equip")?.items[0]?.id).not.toBe("equip-stub");
     expect(byId.get("equip")?.items[0]?.childScreenId).toBe("equip-item-1-0-10");
     expect(byId.get("check")?.items[0]?.id).not.toBe("check-stub");
+    expect(byId.get("atm")?.items[0]?.id).toBe("atm-wallet");
+  });
+
+  it("builds shop and ATM menu actions with neutral item labels", () => {
+    const input = {
+      partyMembers: [partyMember(1, "MEMBER_A", 5)],
+      partyState: {
+        wallet: 25,
+        bank: 40,
+        party: () => [1],
+        inventory: () => [10, 11]
+      },
+      items: syntheticItems(),
+      shops: syntheticShops(),
+      resolver: {
+        itemName: (id: number) => `[item ${id} data]`,
+        psiName: (id: number) => `[psi ${id} data]`
+      }
+    };
+
+    const shop = buildShopViewModel({ ...input, storeId: 2 });
+    expect(shop.buyEntries.map((entry) => ({ itemId: entry.itemId, cost: entry.cost }))).toEqual([
+      { itemId: 10, cost: 20 },
+      { itemId: 11, cost: 7 }
+    ]);
+    expect(shop.sellEntries.map((entry) => ({ itemId: entry.itemId, price: entry.price }))).toEqual([
+      { itemId: 10, price: 10 },
+      { itemId: 11, price: 3 }
+    ]);
+
+    const screens = buildShopMenuScreens(shop);
+    expect(screens[0]).toMatchObject({
+      id: "shop-2",
+      items: [
+        { id: "shop-wallet-2", enabled: false },
+        { label: "Buy", childScreenId: "shop-2-buy" },
+        { label: "Sell", childScreenId: "shop-2-sell" },
+        { label: "Cancel", actionId: "shop-cancel" }
+      ]
+    });
+    expect(parseMenuAction(screens[1].items[0]?.actionId ?? "")).toEqual({
+      kind: "shopBuy",
+      storeId: 2,
+      char: 1,
+      itemId: 10
+    });
+    expect(parseMenuAction(screens[2].items[1]?.actionId ?? "")).toEqual({
+      kind: "shopSell",
+      storeId: 2,
+      char: 1,
+      inventorySlot: 1,
+      itemId: 11
+    });
+
+    const atm = buildAtmScreen(input);
+    expect(parseMenuAction(atm.items[2].actionId ?? "")).toEqual({
+      kind: "atm",
+      op: "deposit",
+      amount: 100,
+      all: false
+    });
+    expect(parseMenuAction(atm.items[5].actionId ?? "")).toEqual({
+      kind: "atm",
+      op: "withdraw",
+      all: true
+    });
   });
 });
 
@@ -366,12 +441,29 @@ function itemData(id: number, equippable: boolean, helpText?: string): ItemColle
     id,
     name: `[item ${id} data]`,
     type: equippable ? 0x10 : 0x20,
-    cost: 0,
+    cost: id === 10 ? 20 : id === 11 ? 7 : 9,
     action: 0,
     argument: 0,
     equippable,
     miscFlags: [],
     ...(helpText ? { helpText } : {})
+  };
+}
+
+function syntheticShops(): ShopData {
+  return {
+    schemaVersion: "test",
+    sourceProjectPath: "synthetic",
+    derivation: {
+      source: "synthetic",
+      slots: "synthetic",
+      unusedFields: "synthetic"
+    },
+    shops: [
+      { id: 2, itemIds: [10, 11] }
+    ],
+    counts: { shops: 1, entries: 2 },
+    warnings: []
   };
 }
 

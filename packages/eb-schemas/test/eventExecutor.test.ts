@@ -213,6 +213,30 @@ describe("EventExecutor", () => {
     expect(groups).toEqual([0x1234]);
   });
 
+  it("dispatches ATM and shop effects with numeric arguments", () => {
+    const file = "ccscript/alpha.ccs";
+    const log: string[] = [];
+    const collection = scripts({
+      [file]: [
+        label(file, "start", 1),
+        effectCommand(file, 2, "atm", { kind: "atm", op: "deposit", amount: 50, raw: "deposit(50)" }),
+        effectCommand(file, 3, "atm", { kind: "atm", op: "withdraw", amount: 10, raw: "withdraw(10)" }),
+        effectCommand(file, 4, "shop", { kind: "shop", storeId: 2, raw: "shop(2)" }),
+        runtime(file, "end", 5)
+      ]
+    });
+    const executor = new EventExecutor(collection, {
+      atm: (op, amount) => log.push(`atm:${op}:${amount}`),
+      openShop: (storeId) => log.push(`shop:${storeId}`)
+    });
+    executor.start("alpha.start");
+
+    expect(executor.advance()).toMatchObject({ done: false, effect: { kind: "atm", op: "deposit", amount: 50 } });
+    expect(executor.advance()).toMatchObject({ done: false, effect: { kind: "atm", op: "withdraw", amount: 10 } });
+    expect(executor.advance()).toMatchObject({ done: false, effect: { kind: "shop", storeId: 2 } });
+    expect(log).toEqual(["atm:deposit:50", "atm:withdraw:10", "shop:2"]);
+  });
+
   it("keeps cycle and command-budget guards on event resolution", () => {
     const cycleFile = "ccscript/cycle.ccs";
     const cycle = new EventExecutor(scripts({

@@ -141,17 +141,21 @@ describe("RuntimeEventHost", () => {
         effect(file, 2, { kind: "setFlag", flag: 7, raw: "set" }),
         effect(file, 3, { kind: "give", char: 1, item: 4, raw: "give" }),
         effect(file, 4, { kind: "money", op: "give", amount: 25, raw: "money" }),
-        effect(file, 5, { kind: "party", op: "add", char: 1, raw: "party" }),
-        effect(file, 6, { kind: "warp", dest: 3, raw: "warp" }),
-        effect(file, 7, { kind: "sound", id: 2, raw: "sound" }),
-        effect(file, 8, { kind: "battle", group: 9, raw: "battle" }),
-        runtime(file, "end", 9)
+        effect(file, 5, { kind: "atm", op: "deposit", amount: 10, raw: "deposit" }),
+        effect(file, 6, { kind: "atm", op: "withdraw", amount: 4, raw: "withdraw" }),
+        effect(file, 7, { kind: "party", op: "add", char: 1, raw: "party" }),
+        effect(file, 8, { kind: "warp", dest: 3, raw: "warp" }),
+        effect(file, 9, { kind: "sound", id: 2, raw: "sound" }),
+        effect(file, 10, { kind: "battle", group: 9, raw: "battle" }),
+        effect(file, 11, { kind: "shop", storeId: 2, raw: "shop" }),
+        runtime(file, "end", 12)
       ]
     });
     const flags = new GameFlags();
     const partyState = new PartyState();
     const applied: EventWarpDestination[] = [];
     const fadeCalls: string[] = [];
+    const shops: number[] = [];
     const host = new RuntimeEventHost({
       dialogue: new DialogueController(),
       flags,
@@ -167,7 +171,8 @@ describe("RuntimeEventHost", () => {
       },
       resolveWarpDestination: () => ({ x: 40, y: 50, direction: "left" }),
       applyWarpDestination: (destination) => applied.push(destination),
-      startBattle: () => false
+      startBattle: () => false,
+      openShop: (storeId) => shops.push(storeId)
     });
     const sequence = new RuntimeEventSequence(collection, host);
 
@@ -176,15 +181,19 @@ describe("RuntimeEventHost", () => {
     expect(sequence.running).toBe(false);
     expect(flags.isSet(7)).toBe(true);
     expect(partyState.inventory(1)).toEqual([4]);
-    expect(partyState.wallet).toBe(25);
+    expect(partyState.wallet).toBe(19);
+    expect(partyState.bank).toBe(6);
     expect(partyState.party()).toEqual([1]);
     expect(applied).toEqual([{ x: 40, y: 50, direction: "left" }]);
     expect(fadeCalls).toEqual(["out", "in"]);
+    expect(shops).toEqual([2]);
     expect(host.debug().records).toMatchObject({
       warps: 1,
       warpNoops: 0,
       battles: 1,
       battleNoops: 1,
+      shops: 1,
+      lastShopStoreId: 2,
       audio: 1,
       lastBattleGroup: 9
     });

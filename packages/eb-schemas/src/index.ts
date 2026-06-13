@@ -78,6 +78,15 @@ const FunctionalEventSegmentSchema = z.union([
     amount: z.number().int().nonnegative()
   }),
   RawEffectMetadataSchema.extend({
+    kind: z.literal("atm"),
+    op: z.enum(["deposit", "withdraw"]),
+    amount: z.number().int().nonnegative()
+  }),
+  RawEffectMetadataSchema.extend({
+    kind: z.literal("shop"),
+    storeId: z.number().int().nonnegative()
+  }),
+  RawEffectMetadataSchema.extend({
     kind: z.literal("music"),
     op: z.literal("play"),
     track: z.number().int().nonnegative()
@@ -613,6 +622,27 @@ export const PsiCollectionSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+export const ShopEntrySchema = z.object({
+  id: z.number().int().nonnegative(),
+  itemIds: z.array(z.number().int().nonnegative())
+});
+
+export const ShopDataSchema = z.object({
+  schemaVersion: z.string(),
+  sourceProjectPath: z.string(),
+  derivation: z.object({
+    source: z.string(),
+    slots: z.string(),
+    unusedFields: z.string()
+  }),
+  shops: z.array(ShopEntrySchema),
+  counts: z.object({
+    shops: z.number().int().nonnegative(),
+    entries: z.number().int().nonnegative()
+  }),
+  warnings: z.array(ValidationIssueSchema)
+});
+
 export const TutorialFixtureHintsSchema = z.object({
   hasRobotCcs: z.boolean(),
   hasHelloWorldLabel: z.boolean(),
@@ -644,7 +674,8 @@ export const ManifestSchema = z.object({
     battle: z.string().optional(),
     characters: z.string().optional(),
     items: z.string().optional(),
-    psi: z.string().optional()
+    psi: z.string().optional(),
+    shops: z.string().optional()
   }),
   counts: z.object({
     scriptFiles: z.number().int().nonnegative(),
@@ -664,6 +695,8 @@ export const ManifestSchema = z.object({
     equippableItems: z.number().int().nonnegative().optional(),
     psi: z.number().int().nonnegative().optional(),
     psiLearnedByEntries: z.number().int().nonnegative().optional(),
+    shops: z.number().int().nonnegative().optional(),
+    shopItemEntries: z.number().int().nonnegative().optional(),
     warnings: z.number().int().nonnegative(),
     errors: z.number().int().nonnegative()
   }),
@@ -703,6 +736,8 @@ export type ItemCollection = z.infer<typeof ItemCollectionSchema>;
 export type ItemData = z.infer<typeof ItemDataSchema>;
 export type PsiCollection = z.infer<typeof PsiCollectionSchema>;
 export type PsiData = z.infer<typeof PsiDataSchema>;
+export type ShopData = z.infer<typeof ShopDataSchema>;
+export type ShopEntry = z.infer<typeof ShopEntrySchema>;
 export type DialogueSegment = z.infer<typeof DialogueSegmentSchema>;
 export type EventEffect = z.infer<typeof EventEffectSchema>;
 export type ScriptCollection = z.infer<typeof ScriptCollectionSchema>;
@@ -782,6 +817,8 @@ export type EventExecutorHost = {
   give?(char: number, item: number): void;
   take?(char: number, item: number): void;
   money?(op: "give" | "take", amount: number): void;
+  atm?(op: "deposit" | "withdraw", amount: number): void;
+  openShop?(storeId: number): void;
   party?(op: "add" | "remove", char: number): void;
   warp?(dest: number): void;
   teleport?(dest: number, style: number): void;
@@ -1429,6 +1466,12 @@ export class EventExecutor {
       case "money":
         this.host.money?.(effect.op, effect.amount);
         break;
+      case "atm":
+        this.host.atm?.(effect.op, effect.amount);
+        break;
+      case "shop":
+        this.host.openShop?.(effect.storeId);
+        break;
       case "party":
         this.host.party?.(effect.op, effect.char);
         break;
@@ -1633,6 +1676,8 @@ function eventEffectFromSegment(segment: DialogueSegment): EventEffect | undefin
     case "give":
     case "take":
     case "money":
+    case "atm":
+    case "shop":
     case "music":
     case "sound":
     case "musicEffect":
@@ -1699,6 +1744,14 @@ function eventEffectFromControlCode(code: string, raw: string): EventEffect | un
       return args && args[0] !== undefined ? { kind: "money", op: "give", amount: args[0], raw } : undefined;
     case "takemoney":
       return args && args[0] !== undefined ? { kind: "money", op: "take", amount: args[0], raw } : undefined;
+    case "deposit":
+    case "atm_deposit":
+      return args && args[0] !== undefined ? { kind: "atm", op: "deposit", amount: args[0], raw } : undefined;
+    case "withdraw":
+    case "atm_withdraw":
+      return args && args[0] !== undefined ? { kind: "atm", op: "withdraw", amount: args[0], raw } : undefined;
+    case "shop":
+      return args && args[0] !== undefined ? { kind: "shop", storeId: args[0], raw } : undefined;
     case "music":
       return args && args[0] !== undefined ? { kind: "music", op: "play", track: args[0], raw } : undefined;
     case "music_stop":
