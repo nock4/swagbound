@@ -1,0 +1,16 @@
+{
+  "name": "@eb/content-builder",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:slice": "node --import tsx src/index.ts"
+  },
+  "dependencies": {
+    "@eb/schemas": "workspace:*"
+  },
+  "devDependencies": {
+    "tsx": "^4.16.2",
+    "vitest": "^1.6.0"
+  }
+}

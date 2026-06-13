@@ -59,6 +59,19 @@ importers:
         specifier: ^5.3.4
         version: 5.4.21(@types/node@20.19.41)
 
+  packages/content-builder:
+    dependencies:
+      '@eb/schemas':
+        specifier: workspace:*
+        version: link:../eb-schemas
+    devDependencies:
+      tsx:
+        specifier: ^4.16.2
+        version: 4.22.3
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.1(@types/node@20.19.41)
+
   packages/eb-converter:
     dependencies:
       '@eb/schemas':
