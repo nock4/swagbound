@@ -1,4 +1,4 @@
-import type { BattleEnemy, CharacterCollection, CharacterData } from "@eb/schemas";
+import type { BattleEnemy, CharacterCollection, CharacterData, ItemData, PsiData } from "@eb/schemas";
 import {
   createRollingMeter,
   isDepleted,
@@ -12,6 +12,12 @@ import {
   type PartyMember,
   type PartyMemberStatBonuses
 } from "./characterModel";
+import {
+  applyUseEffectToVitals,
+  decodeItemUseEffect,
+  type ItemUseEffect,
+  type PartyVitals
+} from "./partyState";
 
 export type Rng = () => number;
 export type BattleSide = "party" | "enemy";
@@ -22,11 +28,13 @@ export type BattleActor = {
 export type BattleOutcome = "ongoing" | "win" | "lose";
 
 export type Combatant = {
+  charId: number;
   name: string;
   level: number;
   maxHp: number;
   maxPp: number;
   pp: number;
+  inventory: number[];
   hp: RollingMeterState;
   offense: number;
   defense: number;
@@ -67,12 +75,37 @@ export type TurnResolution = {
   skipped: boolean;
 };
 
+export type BattleActionBlockReason =
+  | "invalidActor"
+  | "noTarget"
+  | "unsupportedPsi"
+  | "insufficientPp"
+  | "missingItem"
+  | "notConsumable"
+  | "unknownEffect";
+
+export type BattleActionResolution = {
+  state: BattleState;
+  actor: BattleActor;
+  target: BattleActor | null;
+  amount: number;
+  outcome: BattleOutcome;
+  skipped: boolean;
+  blockedReason?: BattleActionBlockReason;
+  ppCost?: number;
+  itemConsumed?: boolean;
+};
+
+export type PsiBattleKind = "offense" | "recovery" | "assist" | "other";
+
 export const PLAYER_DEFAULTS = {
+  charId: 0,
   name: "PLAYER",
   level: 1,
   maxHp: 40,
   maxPp: 0,
   pp: 0,
+  inventory: [] as number[],
   offense: 12,
   defense: 6,
   speed: 5,
@@ -80,6 +113,22 @@ export const PLAYER_DEFAULTS = {
 } as const;
 
 const ENEMY_HP_RATE_PER_SEC = 42;
+const STRENGTH_RANK: Record<string, number> = {
+  none: 0,
+  alpha: 1,
+  beta: 2,
+  gamma: 3,
+  sigma: 4,
+  omega: 5
+};
+const STRENGTH_PP_COST: Record<string, number> = {
+  none: 0,
+  alpha: 4,
+  beta: 8,
+  gamma: 13,
+  sigma: 18,
+  omega: 24
+};
 
 export function buildPlayerCombatant(options: PlayerCombatantOptions = {}): Combatant {
   const member = options.partyMember ?? (options.character ? buildPartyMember(options.character) : undefined);
@@ -92,11 +141,13 @@ export function buildPlayerCombatant(options: PlayerCombatantOptions = {}): Comb
 
   const maxHp = stat(options.maxHp ?? PLAYER_DEFAULTS.maxHp);
   return {
+    charId: PLAYER_DEFAULTS.charId,
     name: options.name ?? PLAYER_DEFAULTS.name,
     level: stat(options.level ?? PLAYER_DEFAULTS.level),
     maxHp,
     maxPp: PLAYER_DEFAULTS.maxPp,
     pp: PLAYER_DEFAULTS.pp,
+    inventory: [...PLAYER_DEFAULTS.inventory],
     hp: createRollingMeter(maxHp, options.hpRatePerSec ?? PLAYER_DEFAULTS.hpRatePerSec),
     offense: stat(options.offense ?? PLAYER_DEFAULTS.offense) + stat(options.statBonuses?.offense ?? 0),
     defense: stat(options.defense ?? PLAYER_DEFAULTS.defense) + stat(options.statBonuses?.defense ?? 0),
@@ -108,11 +159,13 @@ export function buildPlayerCombatant(options: PlayerCombatantOptions = {}): Comb
 export function buildEnemyCombatant(enemy: BattleEnemy, options: EnemyCombatantOptions = {}): Combatant {
   const maxHp = stat(enemy.hp);
   return {
+    charId: enemy.id,
     name: enemy.name,
     level: stat(enemy.level),
     maxHp,
     maxPp: 0,
     pp: 0,
+    inventory: [],
     hp: createRollingMeter(maxHp, options.hpRatePerSec ?? ENEMY_HP_RATE_PER_SEC),
     offense: stat(enemy.offense),
     defense: stat(enemy.defense),
@@ -216,6 +269,168 @@ export function resolveTurn(
   };
 }
 
+export function resolvePsiTurn(
+  state: BattleState,
+  actorInput: BattleActor | "player",
+  psi: PsiData,
+  rng: Rng,
+  options: { targetIndex?: number } = {}
+): BattleActionResolution {
+  const actor = normalizeActor(actorInput);
+  const currentOutcome = outcome(state);
+  if (currentOutcome !== "ongoing") {
+    return blockedAction(state, actor, currentOutcome, "invalidActor");
+  }
+  if (actor.side !== "party") {
+    return blockedAction(state, actor, currentOutcome, "invalidActor");
+  }
+
+  const caster = combatantFor(state, actor);
+  if (!caster || !isCombatantAlive(caster)) {
+    return blockedAction(state, actor, currentOutcome, "invalidActor");
+  }
+
+  const kind = psiBattleKind(psi);
+  if (kind !== "offense" && kind !== "recovery") {
+    return blockedAction(state, actor, currentOutcome, "unsupportedPsi");
+  }
+
+  const ppCost = psiPpCost(psi);
+  if (caster.pp < ppCost) {
+    return {
+      ...blockedAction(state, actor, currentOutcome, "insufficientPp"),
+      ppCost
+    };
+  }
+
+  const target = kind === "offense"
+    ? livingTarget(state.enemies, "enemy", options.targetIndex)
+    : livingTarget(state.party, "party", options.targetIndex);
+  if (!target) {
+    return {
+      ...blockedAction(state, actor, currentOutcome, "noTarget"),
+      ppCost
+    };
+  }
+
+  const targetCombatant = combatantFor(state, target);
+  if (!targetCombatant) {
+    return {
+      ...blockedAction(state, actor, currentOutcome, "noTarget"),
+      ppCost
+    };
+  }
+
+  const amount = psiEffectAmount(psi, kind, rng);
+  const nextTarget = kind === "offense"
+    ? applyDamage(targetCombatant, amount)
+    : applyHeal(targetCombatant, amount);
+  const withTarget = withCombatant(state, target, nextTarget);
+  const nextState = spendPp(withTarget, actor, ppCost);
+  return {
+    state: nextState,
+    actor,
+    target,
+    amount,
+    outcome: outcome(nextState),
+    skipped: false,
+    ppCost
+  };
+}
+
+export function resolveItemTurn(
+  state: BattleState,
+  actorInput: BattleActor | "player",
+  item: Pick<ItemData, "id" | "action" | "argument" | "miscFlags">,
+  options: { inventorySlot?: number; targetIndex?: number } = {}
+): BattleActionResolution {
+  const actor = normalizeActor(actorInput);
+  const currentOutcome = outcome(state);
+  if (currentOutcome !== "ongoing") {
+    return blockedAction(state, actor, currentOutcome, "invalidActor");
+  }
+  if (actor.side !== "party") {
+    return blockedAction(state, actor, currentOutcome, "invalidActor");
+  }
+
+  const user = combatantFor(state, actor);
+  if (!user || !isCombatantAlive(user)) {
+    return blockedAction(state, actor, currentOutcome, "invalidActor");
+  }
+
+  const itemId = stat(item.id);
+  const slot = options.inventorySlot ?? user.inventory.indexOf(itemId);
+  if (slot < 0 || user.inventory[slot] !== itemId) {
+    return blockedAction(state, actor, currentOutcome, "missingItem");
+  }
+
+  const effect = decodeItemUseEffect(item);
+  if (!effect) {
+    const maybeConsumable = item.miscFlags.some((flag) => flag.trim().toLowerCase() === "item disappears when used");
+    return blockedAction(state, actor, currentOutcome, maybeConsumable ? "unknownEffect" : "notConsumable");
+  }
+
+  const target = livingTarget(state.party, "party", options.targetIndex);
+  if (!target) {
+    return blockedAction(state, actor, currentOutcome, "noTarget");
+  }
+  const targetCombatant = combatantFor(state, target);
+  if (!targetCombatant) {
+    return blockedAction(state, actor, currentOutcome, "noTarget");
+  }
+
+  const applied = applyItemEffectToCombatant(targetCombatant, effect);
+  const withTarget = withCombatant(state, target, applied.combatant);
+  const nextState = removeInventoryItem(withTarget, actor, slot, itemId);
+  return {
+    state: nextState,
+    actor,
+    target,
+    amount: Math.max(0, applied.nextValue - applied.previousValue),
+    outcome: outcome(nextState),
+    skipped: false,
+    itemConsumed: true
+  };
+}
+
+export function learnedPsiForCombatant(psiList: PsiData[], combatant: Pick<Combatant, "charId" | "level">): PsiData[] {
+  const charId = stat(combatant.charId);
+  const level = stat(combatant.level);
+  return psiList.filter((psi) =>
+    psi.learnedBy.some((entry) => stat(entry.charId) === charId && stat(entry.level) <= level)
+  );
+}
+
+export function psiBattleKind(psi: Pick<PsiData, "type">): PsiBattleKind | undefined {
+  const tokens = psiTypeTokens(psi.type);
+  if (tokens.has("offense")) {
+    return "offense";
+  }
+  if (tokens.has("recovery") || tokens.has("recover")) {
+    return "recovery";
+  }
+  if (tokens.has("assist")) {
+    return "assist";
+  }
+  if (tokens.has("other")) {
+    return "other";
+  }
+  return undefined;
+}
+
+export function psiPpCost(psi: Pick<PsiData, "strength">): number {
+  return STRENGTH_PP_COST[normalizedStrength(psi.strength)] ?? STRENGTH_PP_COST.none;
+}
+
+export function psiEffectAmount(psi: Pick<PsiData, "strength">, kind: "offense" | "recovery", rng: Rng = () => 0.5): number {
+  const rank = STRENGTH_RANK[normalizedStrength(psi.strength)] ?? 0;
+  const base = kind === "offense"
+    ? 18 + rank * 12
+    : 24 + rank * 16;
+  const spread = kind === "offense" ? 0.95 + normalizedRoll(rng()) * 0.1 : 1;
+  return Math.max(1, Math.floor(base * spread));
+}
+
 export function tickBattleMeters(state: BattleState, dtMs: number): BattleState {
   return {
     party: state.party.map((combatant) => ({ ...combatant, hp: tick(combatant.hp, dtMs) })),
@@ -274,6 +489,13 @@ function applyDamage(combatant: Combatant, amount: number): Combatant {
   };
 }
 
+function applyHeal(combatant: Combatant, amount: number): Combatant {
+  return {
+    ...combatant,
+    hp: setTarget(combatant.hp, Math.min(combatant.maxHp, combatant.hp.target + Math.max(0, Math.floor(amount))))
+  };
+}
+
 function combatantFor(state: BattleState, actor: BattleActor): Combatant | undefined {
   return actor.side === "party" ? state.party[actor.index] : state.enemies[actor.index];
 }
@@ -317,6 +539,82 @@ function replaceAt<T>(items: T[], index: number, item: T): T[] {
     return items;
   }
   return items.map((current, currentIndex) => (currentIndex === index ? item : current));
+}
+
+function blockedAction(
+  state: BattleState,
+  actor: BattleActor,
+  currentOutcome: BattleOutcome,
+  blockedReason: BattleActionBlockReason
+): BattleActionResolution {
+  return {
+    state,
+    actor,
+    target: null,
+    amount: 0,
+    outcome: currentOutcome,
+    skipped: true,
+    blockedReason
+  };
+}
+
+function spendPp(state: BattleState, actor: BattleActor, ppCost: number): BattleState {
+  if (ppCost <= 0) {
+    return state;
+  }
+  const combatant = combatantFor(state, actor);
+  if (!combatant) {
+    return state;
+  }
+  return withCombatant(state, actor, {
+    ...combatant,
+    pp: Math.max(0, combatant.pp - stat(ppCost))
+  });
+}
+
+function removeInventoryItem(state: BattleState, actor: BattleActor, slot: number, itemId: number): BattleState {
+  const combatant = combatantFor(state, actor);
+  if (!combatant || combatant.inventory[slot] !== itemId) {
+    return state;
+  }
+  return withCombatant(state, actor, {
+    ...combatant,
+    inventory: combatant.inventory.filter((_, index) => index !== slot)
+  });
+}
+
+function applyItemEffectToCombatant(combatant: Combatant, effect: ItemUseEffect): {
+  combatant: Combatant;
+  previousValue: number;
+  nextValue: number;
+} {
+  const applied = applyUseEffectToVitals(combatantVitals(combatant), effect);
+  return {
+    combatant: {
+      ...combatant,
+      hp: applied.vitals.hp,
+      pp: applied.vitals.pp
+    },
+    previousValue: applied.previousValue,
+    nextValue: applied.nextValue
+  };
+}
+
+function combatantVitals(combatant: Combatant): PartyVitals {
+  return {
+    hp: combatant.hp,
+    maxHp: combatant.maxHp,
+    pp: combatant.pp,
+    maxPp: combatant.maxPp
+  };
+}
+
+function psiTypeTokens(type: string): Set<string> {
+  return new Set(type.toLowerCase().split(/[^a-z]+/).filter(Boolean));
+}
+
+function normalizedStrength(strength: string): string {
+  return strength.trim().toLowerCase();
 }
 
 function normalizedRoll(value: number): number {

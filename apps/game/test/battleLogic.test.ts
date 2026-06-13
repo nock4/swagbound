@@ -1,12 +1,16 @@
 import { describe, expect, it } from "vitest";
-import type { BattleEnemy, CharacterCollection, CharacterData } from "@eb/schemas";
+import type { BattleEnemy, CharacterCollection, CharacterData, ItemData, PsiData } from "@eb/schemas";
 import {
   buildEnemyCombatant,
   buildPlayerCombatant,
   createBattleState,
   damage,
+  learnedPsiForCombatant,
   outcome,
   PLAYER_DEFAULTS,
+  psiPpCost,
+  resolveItemTurn,
+  resolvePsiTurn,
   resolveTurn,
   tickBattleMeters,
   turnOrder,
@@ -144,6 +148,103 @@ describe("battle turn resolution", () => {
 
     expect(result.defender).toEqual(actor("party", 1));
     expect(result.state.party[1].hp.target).toBeLessThan(result.state.party[1].hp.displayed);
+  });
+});
+
+describe("battle PSI and goods resolution", () => {
+  it("applies offensive PSI to an enemy rolling meter and consumes PP", () => {
+    const battle = createBattleState(opponentA, {
+      characters: characters([partyCharacterA])
+    });
+    const psi = syntheticPsi(100, "offense", "beta", [{ charId: 0, level: 1 }]);
+
+    const result = resolvePsiTurn(battle, actor("party", 0), psi, () => 0.5, { targetIndex: 0 });
+
+    expect(result.skipped).toBe(false);
+    expect(result.target).toEqual(actor("enemy", 0));
+    expect(result.amount).toBe(42);
+    expect(result.ppCost).toBe(psiPpCost(psi));
+    expect(result.state.party[0].pp).toBe(18 - psiPpCost(psi));
+    expect(result.state.enemies[0].hp.displayed).toBe(24);
+    expect(result.state.enemies[0].hp.target).toBe(0);
+    expect(result.state.enemies[0].hp.isRolling).toBe(true);
+  });
+
+  it("applies recovery PSI to a party member rolling meter and consumes PP", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([partyCharacterA, partyCharacterB])
+    });
+    battle = withCombatant(battle, actor("party", 1), {
+      ...battle.party[1],
+      hp: { ...battle.party[1].hp, displayed: 20, target: 20, isRolling: false }
+    });
+    const psi = syntheticPsi(101, "recovery", "alpha", [{ charId: 0, level: 1 }]);
+
+    const result = resolvePsiTurn(battle, actor("party", 0), psi, () => 0.5, { targetIndex: 1 });
+
+    expect(result.skipped).toBe(false);
+    expect(result.target).toEqual(actor("party", 1));
+    expect(result.amount).toBe(40);
+    expect(result.state.party[0].pp).toBe(18 - psiPpCost(psi));
+    expect(result.state.party[1].hp.displayed).toBe(20);
+    expect(result.state.party[1].hp.target).toBe(48);
+    expect(result.state.party[1].hp.isRolling).toBe(true);
+  });
+
+  it("blocks PSI when the actor does not have enough PP", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([partyCharacterA])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      pp: 1
+    });
+    const psi = syntheticPsi(102, "offense", "gamma", [{ charId: 0, level: 1 }]);
+
+    const result = resolvePsiTurn(battle, actor("party", 0), psi, () => 0.5, { targetIndex: 0 });
+
+    expect(result.skipped).toBe(true);
+    expect(result.blockedReason).toBe("insufficientPp");
+    expect(result.state).toBe(battle);
+    expect(result.state.party[0].pp).toBe(1);
+    expect(result.state.enemies[0].hp.target).toBe(24);
+  });
+
+  it("uses a consumable good in battle, heals, and removes it from inventory", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([character(0, "PARTY_A", { maxHp: 72, maxPp: 18 })])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      inventory: [200],
+      hp: { ...battle.party[0].hp, displayed: 32, target: 32, isRolling: false }
+    });
+    const item = syntheticItem(200, 0x02, 30);
+
+    const result = resolveItemTurn(battle, actor("party", 0), item, { inventorySlot: 0, targetIndex: 0 });
+
+    expect(result.skipped).toBe(false);
+    expect(result.itemConsumed).toBe(true);
+    expect(result.target).toEqual(actor("party", 0));
+    expect(result.amount).toBe(30);
+    expect(result.state.party[0].inventory).toEqual([]);
+    expect(result.state.party[0].hp.displayed).toBe(32);
+    expect(result.state.party[0].hp.target).toBe(62);
+    expect(result.state.party[0].hp.isRolling).toBe(true);
+  });
+
+  it("filters the in-battle PSI list by learned character and level", () => {
+    const battle = createBattleState(opponentA, {
+      characters: characters([partyCharacterA, partyCharacterB])
+    });
+    const psiList = [
+      syntheticPsi(110, "offense", "alpha", [{ charId: 0, level: 1 }]),
+      syntheticPsi(111, "offense", "beta", [{ charId: 0, level: 9 }]),
+      syntheticPsi(112, "recovery", "alpha", [{ charId: 1, level: 1 }])
+    ];
+
+    expect(learnedPsiForCombatant(psiList, battle.party[0]).map((psi) => psi.id)).toEqual([110]);
+    expect(learnedPsiForCombatant(psiList, battle.party[1]).map((psi) => psi.id)).toEqual([112]);
   });
 });
 
@@ -297,5 +398,34 @@ function characters(characterList: CharacterData[]): CharacterCollection {
       statFieldsPopulated: characterList.length * 7
     },
     warnings: []
+  };
+}
+
+function syntheticPsi(
+  id: number,
+  type: string,
+  strength: string,
+  learnedBy: PsiData["learnedBy"]
+): PsiData {
+  return {
+    id,
+    name: `PSI_${id}`,
+    type,
+    strength,
+    usableOutsideBattle: type === "recovery",
+    learnedBy
+  };
+}
+
+function syntheticItem(id: number, action: number, argument: number): ItemData {
+  return {
+    id,
+    name: `ITEM_${id}`,
+    type: 0,
+    cost: 0,
+    action,
+    argument,
+    equippable: false,
+    miscFlags: ["item disappears when used"]
   };
 }

@@ -4,7 +4,13 @@ export type FirstSceneDebug = {
   mode: "world" | "fallback" | "error" | "battle";
   phase?: "menu" | "enemy-rolling" | "player-rolling" | "win" | "lose" | "flee";
   menuIndex?: number;
+  commandIndex?: number;
+  command?: "BASH" | "PSI" | "GOODS" | "RUN";
+  submenu?: "command" | "psi" | "goods" | "target";
+  submenuIndex?: number;
+  selection?: string;
   targetIndex?: number;
+  partyTargetIndex?: number;
   turnOrder?: Array<{ side: "party" | "enemy"; index: number }>;
   currentActor?: { side: "party" | "enemy"; index: number } | null;
   party?: Array<{
@@ -12,12 +18,18 @@ export type FirstSceneDebug = {
     hpTarget: number;
     isRolling: boolean;
     alive: boolean;
+    pp?: number;
+    maxPp?: number;
+    inventoryCount?: number;
   }>;
   enemies?: Array<{
     hpDisplayed: number;
     hpTarget: number;
     isRolling: boolean;
     alive: boolean;
+    pp?: number;
+    maxPp?: number;
+    inventoryCount?: number;
   }>;
   dialogueOpen: boolean;
   dialogueText: string;

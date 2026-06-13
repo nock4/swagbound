@@ -66,11 +66,13 @@ export function buildCombatantFromPartyMember(
   const maxHp = Math.max(1, stat(member.maxHp));
   const effectiveStats = effectivePartyMemberStats(member, options.statBonuses);
   return {
+    charId: member.id,
     name: member.name,
     level: Math.max(1, stat(member.level)),
     maxHp,
     maxPp: stat(member.maxPp),
     pp: stat(member.pp),
+    inventory: member.inventory.map(stat),
     hp: createRollingMeter(maxHp, options.hpRatePerSec ?? DEFAULT_HP_RATE_PER_SEC),
     offense: effectiveStats.offense,
     defense: effectiveStats.defense,

@@ -1,11 +1,27 @@
 import Phaser from "phaser";
-import type { BattleData, BattleEnemy, BattleGroup, CharacterCollection } from "@eb/schemas";
+import {
+  ItemCollectionSchema,
+  PsiCollectionSchema,
+  type BattleData,
+  type BattleEnemy,
+  type BattleGroup,
+  type CharacterCollection,
+  type ItemCollection,
+  type ItemData,
+  type PsiCollection,
+  type PsiData
+} from "@eb/schemas";
 import {
   combatantAt,
   createBattleState,
   firstLivingIndex,
   isCombatantAlive,
+  learnedPsiForCombatant,
   outcome,
+  psiBattleKind,
+  psiPpCost,
+  resolveItemTurn,
+  resolvePsiTurn,
   resolveTurn,
   tickBattleMeters,
   turnOrder,
@@ -17,19 +33,37 @@ import {
 import { publishBattleDebug, type BattlePhase } from "./state";
 
 const MONO = "Menlo, Consolas, monospace";
-const COMMANDS = ["BASH", "RUN"] as const;
+const COMMANDS = ["BASH", "PSI", "GOODS", "RUN"] as const;
 const STATUS_TOP = 326;
 const PADDED_HP_DIGITS = 3;
 const ACTION_ADVANCE_DELAY_MS = 350;
+const MENU_MAX_ROWS = 4;
+
+type BattleCommand = typeof COMMANDS[number];
+type BattleSubmenu = "command" | "psi" | "goods" | "target";
+type BattleTargetMode = "bash" | "psi-offense" | "psi-recovery" | "goods";
+type PendingItemUse = {
+  itemId: number;
+  inventorySlot: number;
+};
 
 export class BattleScene extends Phaser.Scene {
   private battleData_!: BattleData;
   private group_!: BattleGroup;
   private battle_!: BattleState;
+  private items_?: ItemCollection;
+  private psi_?: PsiCollection;
   private rng_: Rng = () => 0.5;
   private phase_: BattlePhase = "menu";
-  private menuIndex_ = 0;
+  private commandIndex_ = 0;
+  private submenu_: BattleSubmenu = "command";
+  private submenuIndex_ = 0;
   private targetIndex_ = 0;
+  private partyTargetIndex_ = 0;
+  private targetMode_: BattleTargetMode = "bash";
+  private pendingPsiId_: number | null = null;
+  private pendingItem_: PendingItemUse | null = null;
+  private menuMessage_ = "";
   private roundOrder_: BattleActor[] = [];
   private roundCursor_ = 0;
   private currentActor_: BattleActor | null = null;
@@ -44,9 +78,17 @@ export class BattleScene extends Phaser.Scene {
     super("battle");
   }
 
-  init(data: { battleData: BattleData; groupId?: number; characters?: CharacterCollection }): void {
+  init(data: {
+    battleData: BattleData;
+    groupId?: number;
+    characters?: CharacterCollection;
+    items?: ItemCollection;
+    psi?: PsiCollection;
+  }): void {
     this.battleData_ = data.battleData;
     this.group_ = selectBattleGroup(data.battleData, data.groupId);
+    this.items_ = data.items;
+    this.psi_ = data.psi;
     const enemies = enemiesForGroup(data.battleData, this.group_);
     if (enemies.length === 0) {
       throw new Error(`Battle group ${this.group_.id} has no matching runtime enemy.`);
@@ -54,8 +96,15 @@ export class BattleScene extends Phaser.Scene {
     this.battle_ = createBattleState(enemies, { characters: data.characters });
     this.rng_ = createSeededRng((this.group_.id + 1) * 65537 + enemies.reduce((sum, enemy) => sum + enemy.id, 0));
     this.phase_ = "menu";
-    this.menuIndex_ = 0;
+    this.commandIndex_ = 0;
+    this.submenu_ = "command";
+    this.submenuIndex_ = 0;
     this.targetIndex_ = 0;
+    this.partyTargetIndex_ = 0;
+    this.targetMode_ = "bash";
+    this.pendingPsiId_ = null;
+    this.pendingItem_ = null;
+    this.menuMessage_ = "";
     this.roundOrder_ = [];
     this.roundCursor_ = 0;
     this.currentActor_ = null;
@@ -82,6 +131,9 @@ export class BattleScene extends Phaser.Scene {
     this.input.keyboard?.on("keydown-RIGHT", () => this.moveTarget(1));
     this.input.keyboard?.on("keydown-SPACE", () => this.confirmMenu());
     this.input.keyboard?.on("keydown-ENTER", () => this.confirmMenu());
+    this.input.keyboard?.on("keydown-ESC", () => this.cancelMenu());
+    this.input.keyboard?.on("keydown-BACKSPACE", () => this.cancelMenu());
+    void this.loadOptionalGeneratedMenuData();
     this.advanceToNextActor();
     this.renderStatus();
     this.publish();
@@ -101,21 +153,49 @@ export class BattleScene extends Phaser.Scene {
     if (this.phase_ !== "menu") {
       return;
     }
-    this.menuIndex_ = (this.menuIndex_ + direction + COMMANDS.length) % COMMANDS.length;
+    this.menuMessage_ = "";
+    if (this.submenu_ === "command") {
+      this.commandIndex_ = (this.commandIndex_ + direction + COMMANDS.length) % COMMANDS.length;
+      this.targetMode_ = this.currentCommand() === "BASH" ? "bash" : this.targetMode_;
+    } else if (this.submenu_ === "psi") {
+      const count = this.learnedPsiForCurrentActor().length;
+      if (count > 0) {
+        this.submenuIndex_ = clampIndex(this.submenuIndex_ + direction, count);
+      }
+    } else if (this.submenu_ === "goods") {
+      const count = this.goodsForCurrentActor().length;
+      if (count > 0) {
+        this.submenuIndex_ = clampIndex(this.submenuIndex_ + direction, count);
+      }
+    } else if (this.submenu_ === "target") {
+      this.moveTarget(direction);
+      return;
+    }
     this.renderStatus();
     this.publish();
   }
 
   private moveTarget(direction: -1 | 1): void {
-    if (this.phase_ !== "menu" || COMMANDS[this.menuIndex_] !== "BASH") {
+    if (this.phase_ !== "menu") {
       return;
     }
-    const living = livingEnemyIndices(this.battle_);
+    const side = this.activeTargetSide();
+    if (!side) {
+      return;
+    }
+    const living = side === "enemy" ? livingEnemyIndices(this.battle_) : livingPartyIndices(this.battle_);
     if (living.length === 0) {
       return;
     }
-    const current = living.includes(this.targetIndex_) ? living.indexOf(this.targetIndex_) : 0;
-    this.targetIndex_ = living[(current + direction + living.length) % living.length];
+    const currentIndex = side === "enemy" ? this.targetIndex_ : this.partyTargetIndex_;
+    const current = living.includes(currentIndex) ? living.indexOf(currentIndex) : 0;
+    const next = living[(current + direction + living.length) % living.length];
+    if (side === "enemy") {
+      this.targetIndex_ = next;
+    } else {
+      this.partyTargetIndex_ = next;
+    }
+    this.menuMessage_ = "";
     this.renderStatus();
     this.publish();
   }
@@ -124,17 +204,205 @@ export class BattleScene extends Phaser.Scene {
     if (this.phase_ !== "menu" || this.currentActor_?.side !== "party") {
       return;
     }
-    const command = COMMANDS[this.menuIndex_];
+    const command = this.currentCommand();
+    this.menuMessage_ = "";
+    if (this.submenu_ === "psi") {
+      this.confirmPsi();
+      return;
+    }
+    if (this.submenu_ === "goods") {
+      this.confirmGoods();
+      return;
+    }
+    if (this.submenu_ === "target") {
+      this.confirmTarget();
+      return;
+    }
     if (command === "RUN") {
       this.phase_ = "flee";
       this.renderStatus();
       this.publish();
       return;
     }
+    if (command === "PSI") {
+      this.openSubmenu("psi");
+      return;
+    }
+    if (command === "GOODS") {
+      this.openSubmenu("goods");
+      return;
+    }
 
     this.normalizeTargetIndex();
     const result = resolveTurn(this.battle_, this.currentActor_, this.rng_, { targetIndex: this.targetIndex_ });
-    this.battle_ = result.state;
+    this.applyTurnResult(result.state);
+  }
+
+  private cancelMenu(): void {
+    if (this.phase_ !== "menu") {
+      return;
+    }
+    this.menuMessage_ = "";
+    if (this.submenu_ === "target") {
+      this.submenu_ = this.pendingPsiId_ !== null ? "psi" : "goods";
+      this.pendingPsiId_ = null;
+      this.pendingItem_ = null;
+    } else if (this.submenu_ === "psi" || this.submenu_ === "goods") {
+      this.submenu_ = "command";
+      this.submenuIndex_ = 0;
+      this.pendingPsiId_ = null;
+      this.pendingItem_ = null;
+      this.targetMode_ = "bash";
+    }
+    this.renderStatus();
+    this.publish();
+  }
+
+  private openSubmenu(submenu: "psi" | "goods"): void {
+    this.submenu_ = submenu;
+    this.submenuIndex_ = 0;
+    this.pendingPsiId_ = null;
+    this.pendingItem_ = null;
+    this.targetMode_ = "bash";
+    if (submenu === "psi" && this.learnedPsiForCurrentActor().length === 0) {
+      this.menuMessage_ = "No learned PSI.";
+    } else if (submenu === "goods" && this.goodsForCurrentActor().length === 0) {
+      this.menuMessage_ = "No goods.";
+    }
+    this.renderStatus();
+    this.publish();
+  }
+
+  private confirmPsi(): void {
+    const psi = this.learnedPsiForCurrentActor()[this.submenuIndex_];
+    const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
+    if (!psi || !actor) {
+      this.menuMessage_ = "No learned PSI.";
+      this.renderStatus();
+      this.publish();
+      return;
+    }
+
+    const kind = psiBattleKind(psi);
+    if (kind !== "offense" && kind !== "recovery") {
+      this.menuMessage_ = "Cannot use that PSI here.";
+      this.renderStatus();
+      this.publish();
+      return;
+    }
+
+    const ppCost = psiPpCost(psi);
+    if (actor.pp < ppCost) {
+      this.menuMessage_ = "Not enough PP.";
+      this.renderStatus();
+      this.publish();
+      return;
+    }
+
+    this.pendingPsiId_ = psi.id;
+    this.pendingItem_ = null;
+    this.targetMode_ = kind === "offense" ? "psi-offense" : "psi-recovery";
+    this.submenu_ = "target";
+    if (kind === "offense") {
+      this.normalizeTargetIndex();
+    } else {
+      this.normalizePartyTargetIndex();
+    }
+    this.renderStatus();
+    this.publish();
+  }
+
+  private confirmGoods(): void {
+    const entry = this.goodsForCurrentActor()[this.submenuIndex_];
+    if (!entry) {
+      this.menuMessage_ = "No goods.";
+      this.renderStatus();
+      this.publish();
+      return;
+    }
+
+    const item = this.itemById(entry.itemId);
+    if (!item) {
+      this.menuMessage_ = "Cannot use that item.";
+      this.renderStatus();
+      this.publish();
+      return;
+    }
+
+    this.pendingItem_ = {
+      itemId: entry.itemId,
+      inventorySlot: entry.inventorySlot
+    };
+    this.pendingPsiId_ = null;
+    this.targetMode_ = "goods";
+    this.submenu_ = "target";
+    this.normalizePartyTargetIndex();
+    this.renderStatus();
+    this.publish();
+  }
+
+  private confirmTarget(): void {
+    if (!this.currentActor_) {
+      return;
+    }
+
+    if (this.pendingPsiId_ !== null) {
+      const psi = this.psiById(this.pendingPsiId_);
+      if (!psi) {
+        this.menuMessage_ = "Cannot use that PSI here.";
+        this.submenu_ = "psi";
+        this.renderStatus();
+        this.publish();
+        return;
+      }
+      const targetIndex = this.targetMode_ === "psi-recovery" ? this.partyTargetIndex_ : this.targetIndex_;
+      const result = resolvePsiTurn(this.battle_, this.currentActor_, psi, this.rng_, { targetIndex });
+      if (result.skipped) {
+        this.menuMessage_ = messageForBlockedAction(result.blockedReason);
+        this.submenu_ = "psi";
+        this.pendingPsiId_ = null;
+        this.renderStatus();
+        this.publish();
+        return;
+      }
+      this.applyTurnResult(result.state);
+      return;
+    }
+
+    if (this.pendingItem_) {
+      const item = this.itemById(this.pendingItem_.itemId);
+      if (!item) {
+        this.menuMessage_ = "Cannot use that item.";
+        this.submenu_ = "goods";
+        this.pendingItem_ = null;
+        this.renderStatus();
+        this.publish();
+        return;
+      }
+      const result = resolveItemTurn(this.battle_, this.currentActor_, item, {
+        inventorySlot: this.pendingItem_.inventorySlot,
+        targetIndex: this.partyTargetIndex_
+      });
+      if (result.skipped) {
+        this.menuMessage_ = messageForBlockedAction(result.blockedReason);
+        this.submenu_ = "goods";
+        this.pendingItem_ = null;
+        this.renderStatus();
+        this.publish();
+        return;
+      }
+      this.applyTurnResult(result.state);
+    }
+  }
+
+  private applyTurnResult(state: BattleState): void {
+    this.battle_ = state;
+    this.submenu_ = "command";
+    this.submenuIndex_ = 0;
+    this.pendingPsiId_ = null;
+    this.pendingItem_ = null;
+    this.targetMode_ = "bash";
+    this.menuMessage_ = "";
     this.phase_ = "enemy-rolling";
     this.actionDelayMs_ = ACTION_ADVANCE_DELAY_MS;
     this.renderStatus();
@@ -154,7 +422,11 @@ export class BattleScene extends Phaser.Scene {
         this.advanceToNextActor();
         return;
       }
-      this.normalizeTargetIndex();
+      if (this.activeTargetSide() === "party") {
+        this.normalizePartyTargetIndex();
+      } else {
+        this.normalizeTargetIndex();
+      }
       return;
     }
 
@@ -186,7 +458,9 @@ export class BattleScene extends Phaser.Scene {
       this.currentActor_ = actor;
       if (actor.side === "party") {
         this.phase_ = "menu";
+        this.resetMenuForActor();
         this.normalizeTargetIndex();
+        this.normalizePartyTargetIndex();
         return;
       }
 
@@ -253,7 +527,7 @@ export class BattleScene extends Phaser.Scene {
     graphics.clear();
     graphics.fillStyle(0x050914, 0.98);
     graphics.fillRect(0, STATUS_TOP, this.scale.width, this.scale.height - STATUS_TOP);
-    this.drawWindow(24, STATUS_TOP + 16, 120, 78);
+    this.drawWindow(24, STATUS_TOP + 16, 120, 102);
     this.drawWindow(160, STATUS_TOP + 16, 328, 118);
   }
 
@@ -272,11 +546,7 @@ export class BattleScene extends Phaser.Scene {
 
   private renderStatus(): void {
     const menuVisible = this.phase_ === "menu" && this.currentActor_?.side === "party";
-    this.commandText?.setText(
-      menuVisible
-        ? COMMANDS.map((command, index) => `${index === this.menuIndex_ ? ">" : " "} ${command}`).join("\n")
-        : ""
-    );
+    this.commandText?.setText(menuVisible ? this.menuTextLines().join("\n") : "");
     this.partyText?.setText(this.partyStatusLines().join("\n"));
     this.enemySprites.forEach((sprite, index) => {
       sprite?.setAlpha(isCombatantAlive(this.battle_.enemies[index]) ? 1 : 0.25);
@@ -291,8 +561,14 @@ export class BattleScene extends Phaser.Scene {
     publishBattleDebug({
       mode: "battle",
       phase: this.phase_,
-      menuIndex: this.menuIndex_,
+      menuIndex: this.commandIndex_,
+      commandIndex: this.commandIndex_,
+      command: this.currentCommand(),
+      submenu: this.submenu_,
+      submenuIndex: this.submenuIndex_,
+      selection: this.activeSelectionId(),
       targetIndex: this.targetIndex_,
+      partyTargetIndex: this.partyTargetIndex_,
       turnOrder: this.roundOrder_.map(debugActor),
       currentActor: this.currentActor_ ? debugActor(this.currentActor_) : null,
       party,
@@ -329,12 +605,141 @@ export class BattleScene extends Phaser.Scene {
     this.targetIndex_ = firstLiving >= 0 ? firstLiving : 0;
   }
 
+  private normalizePartyTargetIndex(): void {
+    if (this.battle_.party[this.partyTargetIndex_] && isCombatantAlive(this.battle_.party[this.partyTargetIndex_])) {
+      return;
+    }
+    const firstLiving = firstLivingIndex(this.battle_.party);
+    this.partyTargetIndex_ = firstLiving >= 0 ? firstLiving : 0;
+  }
+
   private partyStatusLines(): string[] {
+    const targetParty = this.phase_ === "menu" && this.currentActor_?.side === "party" && this.activeTargetSide() === "party";
     return this.battle_.party.map((member, index) => {
-      const cursor = this.phase_ === "menu" && this.currentActor_?.side === "party" && this.currentActor_.index === index ? ">" : " ";
+      const actorCursor = this.phase_ === "menu" && this.currentActor_?.side === "party" && this.currentActor_.index === index;
+      const targetCursor = targetParty && this.partyTargetIndex_ === index;
+      const cursor = targetCursor || actorCursor ? ">" : " ";
       const marker = isCombatantAlive(member) ? " " : "X";
       return `${cursor}${marker} ${fitName(member.name, 9)} HP ${odometer(member.hp.displayed)} PP ${odometer(member.pp)}`;
     });
+  }
+
+  private menuTextLines(): string[] {
+    if (this.submenu_ === "command") {
+      return COMMANDS.map((command, index) => `${index === this.commandIndex_ ? ">" : " "} ${command}`);
+    }
+    if (this.submenu_ === "psi") {
+      const entries = this.learnedPsiForCurrentActor();
+      if (entries.length === 0) {
+        return [this.menuMessage_ || "No learned PSI."];
+      }
+      return fitMenuRows(entries.map((psi, index) => {
+        const cost = psiPpCost(psi);
+        return `${index === this.submenuIndex_ ? ">" : " "} ${fitName(psi.name || `[psi ${psi.id}]`, 8)} ${cost}`;
+      }), this.submenuIndex_, this.menuMessage_);
+    }
+    if (this.submenu_ === "goods") {
+      const entries = this.goodsForCurrentActor();
+      if (entries.length === 0) {
+        return [this.menuMessage_ || "No goods."];
+      }
+      return fitMenuRows(entries.map((entry, index) => {
+        const item = this.itemById(entry.itemId);
+        return `${index === this.submenuIndex_ ? ">" : " "} ${fitName(item?.name || `[item ${entry.itemId}]`, 10)}`;
+      }), this.submenuIndex_, this.menuMessage_);
+    }
+
+    const prompt = this.activeTargetSide() === "party" ? "To whom?" : "To enemy?";
+    return [prompt, this.menuMessage_].filter(Boolean);
+  }
+
+  private currentCommand(): BattleCommand {
+    return COMMANDS[this.commandIndex_] ?? "BASH";
+  }
+
+  private resetMenuForActor(): void {
+    this.commandIndex_ = 0;
+    this.submenu_ = "command";
+    this.submenuIndex_ = 0;
+    this.pendingPsiId_ = null;
+    this.pendingItem_ = null;
+    this.targetMode_ = "bash";
+    this.menuMessage_ = "";
+  }
+
+  private activeTargetSide(): "enemy" | "party" | null {
+    if (this.submenu_ === "target") {
+      return this.targetMode_ === "psi-recovery" || this.targetMode_ === "goods" ? "party" : "enemy";
+    }
+    if (this.submenu_ === "command" && this.currentCommand() === "BASH") {
+      return "enemy";
+    }
+    return null;
+  }
+
+  private activeSelectionId(): string {
+    if (this.submenu_ === "command") {
+      return this.currentCommand();
+    }
+    if (this.submenu_ === "psi") {
+      const psi = this.learnedPsiForCurrentActor()[this.submenuIndex_];
+      return psi ? `psi:${psi.id}` : "psi:none";
+    }
+    if (this.submenu_ === "goods") {
+      const item = this.goodsForCurrentActor()[this.submenuIndex_];
+      return item ? `item:${item.inventorySlot}:${item.itemId}` : "item:none";
+    }
+    if (this.pendingPsiId_ !== null) {
+      return `target:psi:${this.pendingPsiId_}`;
+    }
+    if (this.pendingItem_) {
+      return `target:item:${this.pendingItem_.inventorySlot}:${this.pendingItem_.itemId}`;
+    }
+    return "target:none";
+  }
+
+  private learnedPsiForCurrentActor(): PsiData[] {
+    const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
+    if (!actor || actor.isEnemy) {
+      return [];
+    }
+    return learnedPsiForCombatant(this.psi_?.psi ?? [], actor);
+  }
+
+  private goodsForCurrentActor(): Array<{ itemId: number; inventorySlot: number }> {
+    const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
+    if (!actor || actor.isEnemy) {
+      return [];
+    }
+    return actor.inventory.map((itemId, inventorySlot) => ({ itemId, inventorySlot }));
+  }
+
+  private psiById(psiId: number): PsiData | undefined {
+    return this.psi_?.psi.find((psi) => psi.id === psiId);
+  }
+
+  private itemById(itemId: number): ItemData | undefined {
+    return this.items_?.items.find((item) => item.id === itemId);
+  }
+
+  private async loadOptionalGeneratedMenuData(): Promise<void> {
+    if (this.items_ && this.psi_) {
+      return;
+    }
+    const manifest = await fetchJson<{ files?: { items?: string; psi?: string } }>("/generated/manifest.json");
+    const files = manifest?.files;
+    const [items, psi] = await Promise.all([
+      this.items_ || !files?.items ? Promise.resolve(undefined) : fetchParsed(`/generated/${files.items}`, ItemCollectionSchema),
+      this.psi_ || !files?.psi ? Promise.resolve(undefined) : fetchParsed(`/generated/${files.psi}`, PsiCollectionSchema)
+    ]);
+    if (items) {
+      this.items_ = items;
+    }
+    if (psi) {
+      this.psi_ = psi;
+    }
+    this.renderStatus();
+    this.publish();
   }
 
   private renderTargetCursor(menuVisible: boolean): void {
@@ -343,7 +748,7 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     cursor.clear();
-    if (!menuVisible || COMMANDS[this.menuIndex_] !== "BASH") {
+    if (!menuVisible || this.activeTargetSide() !== "enemy") {
       return;
     }
     this.normalizeTargetIndex();
@@ -391,12 +796,18 @@ function debugCombatant(combatant: BattleState["party"][number]): {
   hpTarget: number;
   isRolling: boolean;
   alive: boolean;
+  pp: number;
+  maxPp: number;
+  inventoryCount: number;
 } {
   return {
     hpDisplayed: combatant.hp.displayed,
     hpTarget: combatant.hp.target,
     isRolling: combatant.hp.isRolling,
-    alive: isCombatantAlive(combatant)
+    alive: isCombatantAlive(combatant),
+    pp: combatant.pp,
+    maxPp: combatant.maxPp,
+    inventoryCount: combatant.inventory.length
   };
 }
 
@@ -417,6 +828,66 @@ function fitName(name: string, width: number): string {
 
 function livingEnemyIndices(state: BattleState): number[] {
   return state.enemies.flatMap((enemy, index) => (isCombatantAlive(enemy) ? [index] : []));
+}
+
+function livingPartyIndices(state: BattleState): number[] {
+  return state.party.flatMap((member, index) => (isCombatantAlive(member) ? [index] : []));
+}
+
+function clampIndex(index: number, length: number): number {
+  if (length <= 0) {
+    return 0;
+  }
+  return (index + length) % length;
+}
+
+function fitMenuRows(rows: string[], selectedIndex: number, message: string): string[] {
+  const availableRows = message ? MENU_MAX_ROWS - 1 : MENU_MAX_ROWS;
+  const start = Math.min(
+    Math.max(0, selectedIndex - availableRows + 1),
+    Math.max(0, rows.length - availableRows)
+  );
+  const visible = rows.slice(start, start + availableRows);
+  if (!message) {
+    return visible;
+  }
+  return [...visible, message];
+}
+
+function messageForBlockedAction(reason: string | undefined): string {
+  switch (reason) {
+    case "insufficientPp":
+      return "Not enough PP.";
+    case "missingItem":
+      return "No item.";
+    case "notConsumable":
+    case "unknownEffect":
+      return "Cannot use that item.";
+    case "unsupportedPsi":
+      return "Cannot use that PSI here.";
+    case "noTarget":
+      return "No target.";
+    default:
+      return "Cannot act.";
+  }
+}
+
+async function fetchJson<T>(url: string): Promise<T | undefined> {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      return undefined;
+    }
+    return await response.json() as T;
+  } catch {
+    return undefined;
+  }
+}
+
+async function fetchParsed<T>(url: string, schema: { safeParse: (value: unknown) => { success: true; data: T } | { success: false } }): Promise<T | undefined> {
+  const raw = await fetchJson<unknown>(url);
+  const parsed = schema.safeParse(raw);
+  return parsed.success ? parsed.data : undefined;
 }
 
 function odometer(value: number): string {

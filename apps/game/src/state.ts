@@ -23,13 +23,22 @@ export type BattleCombatantDebug = {
   hpTarget: number;
   isRolling: boolean;
   alive: boolean;
+  pp: number;
+  maxPp: number;
+  inventoryCount: number;
 };
 
 export type BattleDebug = {
   mode: "battle";
   phase: BattlePhase;
   menuIndex: number;
+  commandIndex: number;
+  command: "BASH" | "PSI" | "GOODS" | "RUN";
+  submenu: "command" | "psi" | "goods" | "target";
+  submenuIndex: number;
+  selection: string;
   targetIndex: number;
+  partyTargetIndex: number;
   turnOrder: BattleActorDebug[];
   currentActor: BattleActorDebug | null;
   party: BattleCombatantDebug[];

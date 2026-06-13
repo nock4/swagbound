@@ -220,7 +220,7 @@ export class PartyState {
     }
 
     const vitals = this.ensureVitals(targetChar, options.targetVitals);
-    const applied = applyUseEffect(vitals, effect);
+    const applied = applyUseEffectToVitals(vitals, effect);
     this.vitalsByChar.set(targetChar, applied.vitals);
     this.take(ownerChar, itemId);
     return {
@@ -487,7 +487,7 @@ export function sellPriceForItem(item: Pick<ItemData, "cost">): number {
   return Math.floor(stat(item.cost) / 2);
 }
 
-function applyUseEffect(vitals: PartyVitals, effect: ItemUseEffect): {
+export function applyUseEffectToVitals(vitals: PartyVitals, effect: ItemUseEffect): {
   vitals: PartyVitals;
   previousValue: number;
   nextValue: number;
