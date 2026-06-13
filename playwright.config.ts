@@ -40,7 +40,7 @@ export default defineConfig({
   projects: [
     {
       name: "review-chromium",
-      testIgnore: [/[/\\]eb[/\\]/, /full-world\.spec\.ts/, /battle\.spec\.ts/],
+      testMatch: /full-world\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://127.0.0.1:5173/",
@@ -56,18 +56,6 @@ export default defineConfig({
     {
       name: "battle-chromium",
       testMatch: /battle\.spec\.ts/,
-      use: {
-        ...devices["Desktop Chrome"],
-        baseURL: "http://127.0.0.1:5173/",
-        viewport: { width: 1000, height: 760 },
-        trace: "retain-on-failure",
-        video: "retain-on-failure",
-        screenshot: "only-on-failure"
-      }
-    },
-    {
-      name: "full-world-chromium",
-      testMatch: /full-world\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://127.0.0.1:5173/",
@@ -103,7 +91,7 @@ export default defineConfig({
     },
     {
       name: "replay-chromium",
-      testIgnore: [/[/\\]eb[/\\]/, /full-world\.spec\.ts/, /battle\.spec\.ts/],
+      testMatch: /full-world\.spec\.ts/,
       use: {
         ...replayDevices["Replay Chromium"],
         baseURL: "http://127.0.0.1:5173/",
