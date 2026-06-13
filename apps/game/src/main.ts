@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { loadGameData, parseManifest, type GameData } from "./loader";
 import { publishDebug } from "./state";
+import { ChunkedWorldScene } from "./chunkedWorldScene";
 import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
 import { FallbackScene } from "./fallbackScene";
@@ -33,7 +34,11 @@ class BootScene extends Phaser.Scene {
       return;
     }
     const data: GameData = await loadGameData(manifest);
-    if (data.world?.available && data.world.images) {
+    if (data.world?.available && "mode" in data.world && data.world.mode === "full") {
+      this.scene.start("chunked-world", { gameData: data });
+      return;
+    }
+    if (data.world?.available && !("mode" in data.world) && data.world.images) {
       this.scene.start("world", { gameData: data });
       return;
     }
@@ -81,7 +86,7 @@ new Phaser.Game({
   height: 448,
   backgroundColor: "#000000",
   pixelArt: true,
-  scene: [BootScene, WorldScene, UiScene, FallbackScene],
+  scene: [BootScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH

@@ -8,7 +8,7 @@ import {
   SpriteSheetCollectionSchema,
   TutorialStatusSchema,
   ValidationReportSchema,
-  WorldRegionSchema,
+  WorldArtifactSchema,
   type DialoguePage,
   type Manifest,
   type NpcReferenceCollection,
@@ -17,7 +17,7 @@ import {
   type SpriteSheetCollection,
   type TutorialStatus,
   type ValidationReport,
-  type WorldRegion
+  type WorldArtifact
 } from "@eb/schemas";
 
 export const TARGET_REFERENCE = "robot.hello_world";
@@ -29,7 +29,7 @@ export type GameData = {
   spriteGroups?: SpriteGroupCollection;
   tutorialStatus?: TutorialStatus;
   validationReport?: ValidationReport;
-  world?: WorldRegion;
+  world?: WorldArtifact;
   sprites?: SpriteSheetCollection;
 };
 
@@ -50,7 +50,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${manifest.files.spriteGroups}`, SpriteGroupCollectionSchema),
     loadJson(`/generated/${manifest.files.tutorialStatus}`, TutorialStatusSchema),
     loadJson(`/generated/${manifest.files.validationReport}`, ValidationReportSchema),
-    loadJson(`/generated/${manifest.files.world}`, WorldRegionSchema),
+    loadJson(`/generated/${manifest.files.world}`, WorldArtifactSchema),
     loadJson(`/generated/${manifest.files.sprites}`, SpriteSheetCollectionSchema)
   ]);
   return { manifest, scripts, npcs, spriteGroups, tutorialStatus, validationReport, world, sprites };
@@ -104,7 +104,9 @@ export function resolveStatus(data: GameData): string {
 export function buildStatusLines(data: GameData): string[] {
   const manifest = data.manifest;
   const world = data.world;
-  const worldLine = world?.available && world.region
+  const worldLine = world?.available && "mode" in world && world.mode === "full"
+    ? `World: full ${world.mapWidthTiles}x${world.mapHeightTiles} tiles | chunks: ${world.counts.chunksWritten}/${world.counts.chunks} | NPCs: ${world.counts.visibleNpcs}/${world.counts.npcs}`
+    : world?.available && !("mode" in world) && world.region
     ? `World: ${world.region.widthTiles}x${world.region.heightTiles} tiles @ (${world.region.originTile.x},${world.region.originTile.y}) | NPCs: ${world.counts.visibleNpcs}/${world.counts.npcs}`
     : "World: unavailable (run pnpm convert with the local fixture)";
   return [
@@ -127,7 +129,7 @@ export function buildMetadataLines(data: GameData): string[] {
     `Sprite PNGs indexed: ${spriteGroups?.counts.images ?? 0}`,
     `SpriteGroups/005.png: ${sprite005 ? "detected" : "not detected"}`,
     `Sheets copied: ${data.sprites?.counts.sheets ?? 0}`,
-    `World render: ${data.world?.available ? "background + foreground PNG" : "skipped"}`,
+    `World render: ${data.world?.available && "mode" in data.world && data.world.mode === "full" ? "chunked PNGs" : data.world?.available ? "background + foreground PNG" : "skipped"}`,
     "Asset rendering: local-only, gitignored"
   ];
 }

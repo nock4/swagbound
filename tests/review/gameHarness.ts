@@ -26,6 +26,9 @@ export type FirstSceneDebug = {
   animKey?: string;
   animFrame?: number;
   inputLocked?: boolean;
+  loadedChunkCount?: number;
+  activeNpcCount?: number;
+  currentChunk?: { cx: number; cy: number };
   /** Facing-aware: an interactable NPC is in front and in range. */
   canInteract?: boolean;
   interactionTargetId?: number;
