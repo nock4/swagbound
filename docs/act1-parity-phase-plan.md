@@ -18,8 +18,9 @@ layer in. Audio (7) is independent and can run in parallel anytime.
 ### Phase 3 — Scripted-event / cutscene engine  ·  ~4-6 packages  ·  RISK: HIGH
 The backbone of every set piece (the intro, every triggered event). Today's event runner does
 dialogue + setFlag; Act 1 needs *sequenced* multi-step events.
-- Decode EarthBound action scripts / event sequencing from the data (research-heavy, like the
-  conditional-branch decode but larger).
+- Decode EarthBound action scripts / event sequencing from the ROM data (research-heavy, like the
+  conditional-branch decode but larger). CoilSnake does not decompile NPC movement/action scripts for
+  us; the current runtime only approximates behavior from the numeric `Movement` id.
 - Sequenced event runner: ordered steps (move actor, wait, text, set flag, camera move, screen
   effect, start battle, give item).
 - NPC/actor movement scripting (paths, timed moves) on the shared movement state machine.

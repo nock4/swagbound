@@ -16,6 +16,7 @@ const FRAMES: DirectionFrames = {
   left: [40, 41]
 };
 const PATROL: NpcBehavior = { kind: "patrol", axis: "x", rangePx: 24, speedPxPerSec: 40 };
+const WANDER: NpcBehavior = { kind: "wander", radiusPx: 16, speedPxPerSec: 32, seed: 0, stepMs: 1000 };
 
 function step(state: NpcRuntimeState, deltaMs = 150, blocked: (x: number, y: number) => boolean = () => false): void {
   stepNpc(state, { deltaMs, bounds: BOUNDS, blocked, frames: FRAMES });
@@ -81,6 +82,59 @@ describe("NPC patrol controller", () => {
 
     expect(state.player.x).toBeGreaterThan(pausedAt.x);
     expect(state.player.animKey).toBe("walk-right");
+  });
+});
+
+describe("NPC wander controller", () => {
+  it("stays inside its home radius", () => {
+    const state = createNpcState(50, 50, "up", { ...WANDER, stepMs: 200 }, FRAMES);
+    let minX = state.player.x;
+    let maxX = state.player.x;
+    let minY = state.player.y;
+    let maxY = state.player.y;
+
+    for (let i = 0; i < 80; i += 1) {
+      step(state, 100);
+      minX = Math.min(minX, state.player.x);
+      maxX = Math.max(maxX, state.player.x);
+      minY = Math.min(minY, state.player.y);
+      maxY = Math.max(maxY, state.player.y);
+    }
+
+    expect(minX).toBeGreaterThanOrEqual(34);
+    expect(maxX).toBeLessThanOrEqual(66);
+    expect(minY).toBeGreaterThanOrEqual(34);
+    expect(maxY).toBeLessThanOrEqual(66);
+  });
+
+  it("advances to another deterministic direction after a collision", () => {
+    const state = createNpcState(50, 50, "up", WANDER, FRAMES);
+
+    step(state, 500, (_x, y) => y < 50);
+
+    expect(state.player.x).toBe(50);
+    expect(state.player.y).toBe(50);
+    expect(state.wanderStepIndex).toBe(1);
+
+    step(state, 500);
+
+    expect(state.player.x).toBeGreaterThan(50);
+    expect(state.player.y).toBe(50);
+    expect(state.player.facing).toBe("right");
+  });
+
+  it("replays the same path for the same seed inputs", () => {
+    const trace = (seed: number): Array<[number, number, Facing]> => {
+      const state = createNpcState(50, 50, "down", { ...WANDER, seed, stepMs: 250 }, FRAMES);
+      const points: Array<[number, number, Facing]> = [];
+      for (let i = 0; i < 12; i += 1) {
+        step(state, 125);
+        points.push([state.player.x, state.player.y, state.player.facing]);
+      }
+      return points;
+    };
+
+    expect(trace(17)).toEqual(trace(17));
   });
 });
 

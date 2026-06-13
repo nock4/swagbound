@@ -11,7 +11,8 @@ import {
 
 export type NpcBehavior =
   | { kind: "static" }
-  | { kind: "patrol"; axis: "x" | "y"; rangePx: number; speedPxPerSec: number };
+  | { kind: "patrol"; axis: "x" | "y"; rangePx: number; speedPxPerSec: number }
+  | { kind: "wander"; radiusPx: number; speedPxPerSec: number; seed: number; stepMs?: number };
 
 export type NpcRuntimeState = {
   player: PlayerState;
@@ -19,6 +20,8 @@ export type NpcRuntimeState = {
   patrolOriginX: number;
   patrolOriginY: number;
   patrolDirection: -1 | 1;
+  wanderStepIndex: number;
+  wanderElapsedMs: number;
   paused: boolean;
   homeFacing: Facing;
 };
@@ -31,6 +34,13 @@ export type NpcStepOptions = {
 };
 
 const EPSILON = 0.000001;
+const DEFAULT_WANDER_STEP_MS = 650;
+const WANDER_DIRECTION_ORDERS: ReadonlyArray<readonly Facing[]> = [
+  ["up", "right", "down", "left"],
+  ["right", "down", "left", "up"],
+  ["down", "left", "up", "right"],
+  ["left", "up", "right", "down"]
+];
 
 export function createNpcState(
   x: number,
@@ -45,6 +55,8 @@ export function createNpcState(
     patrolOriginX: x,
     patrolOriginY: y,
     patrolDirection: initialPatrolDirection(behavior, facing),
+    wanderStepIndex: initialWanderStepIndex(behavior),
+    wanderElapsedMs: 0,
     paused: false,
     homeFacing: facing
   };
@@ -64,6 +76,11 @@ export function stepNpc(state: NpcRuntimeState, options: NpcStepOptions): NpcRun
   }
 
   const behavior = state.behavior;
+  if (behavior.kind === "wander") {
+    stepWander(state, behavior, options, frames);
+    return state;
+  }
+
   normalizePatrolDirectionAtEdge(state);
   const beforeX = state.player.x;
   const beforeY = state.player.y;
@@ -111,6 +128,10 @@ function initialPatrolDirection(behavior: NpcBehavior, facing: Facing): -1 | 1 {
   return facing === "up" ? -1 : 1;
 }
 
+function initialWanderStepIndex(behavior: NpcBehavior): number {
+  return behavior.kind === "wander" ? behavior.seed % 4 : 0;
+}
+
 function normalizePatrolDirectionAtEdge(state: NpcRuntimeState): void {
   if (state.behavior.kind !== "patrol") {
     return;
@@ -125,6 +146,39 @@ function normalizePatrolDirectionAtEdge(state: NpcRuntimeState): void {
   }
 }
 
+function stepWander(
+  state: NpcRuntimeState,
+  behavior: Extract<NpcBehavior, { kind: "wander" }>,
+  options: NpcStepOptions,
+  frames: DirectionFrames
+): void {
+  const stepMs = behavior.stepMs ?? DEFAULT_WANDER_STEP_MS;
+  state.wanderElapsedMs += options.deltaMs;
+  if (state.wanderElapsedMs >= stepMs) {
+    state.wanderStepIndex += Math.floor(state.wanderElapsedMs / stepMs);
+    state.wanderElapsedMs %= stepMs;
+  }
+
+  const beforeX = state.player.x;
+  const beforeY = state.player.y;
+  const input = facingInput(wanderFacing(behavior.seed, state.wanderStepIndex));
+  stepPlayer(state.player, input, {
+    deltaMs: options.deltaMs,
+    speed: behavior.speedPxPerSec,
+    bounds: wanderBounds(state, behavior, options.bounds),
+    blocked: options.blocked,
+    frames
+  });
+
+  const blockedWithoutMoving =
+    Math.abs(state.player.x - beforeX) <= EPSILON &&
+    Math.abs(state.player.y - beforeY) <= EPSILON;
+  if (blockedWithoutMoving || reachedWanderEdge(state, behavior)) {
+    state.wanderStepIndex += 1;
+    state.wanderElapsedMs = 0;
+  }
+}
+
 function patrolInput(axis: "x" | "y", sign: -1 | 1): MoveInput {
   return {
     left: axis === "x" && sign < 0,
@@ -132,6 +186,20 @@ function patrolInput(axis: "x" | "y", sign: -1 | 1): MoveInput {
     up: axis === "y" && sign < 0,
     down: axis === "y" && sign > 0
   };
+}
+
+function facingInput(facing: Facing): MoveInput {
+  return {
+    left: facing === "left",
+    right: facing === "right",
+    up: facing === "up",
+    down: facing === "down"
+  };
+}
+
+function wanderFacing(seed: number, stepIndex: number): Facing {
+  const order = WANDER_DIRECTION_ORDERS[seed % WANDER_DIRECTION_ORDERS.length] ?? WANDER_DIRECTION_ORDERS[0];
+  return order[stepIndex % order.length];
 }
 
 function patrolBounds(
@@ -151,4 +219,30 @@ function patrolBounds(
     minY: Math.max(bounds.minY, state.patrolOriginY - behavior.rangePx),
     maxY: Math.min(bounds.maxY, state.patrolOriginY + behavior.rangePx)
   };
+}
+
+function wanderBounds(
+  state: NpcRuntimeState,
+  behavior: Extract<NpcBehavior, { kind: "wander" }>,
+  bounds: NpcStepOptions["bounds"]
+): NpcStepOptions["bounds"] {
+  return {
+    minX: Math.max(bounds.minX, state.patrolOriginX - behavior.radiusPx),
+    maxX: Math.min(bounds.maxX, state.patrolOriginX + behavior.radiusPx),
+    minY: Math.max(bounds.minY, state.patrolOriginY - behavior.radiusPx),
+    maxY: Math.min(bounds.maxY, state.patrolOriginY + behavior.radiusPx)
+  };
+}
+
+function reachedWanderEdge(state: NpcRuntimeState, behavior: Extract<NpcBehavior, { kind: "wander" }>): boolean {
+  const minX = state.patrolOriginX - behavior.radiusPx;
+  const maxX = state.patrolOriginX + behavior.radiusPx;
+  const minY = state.patrolOriginY - behavior.radiusPx;
+  const maxY = state.patrolOriginY + behavior.radiusPx;
+  return (
+    state.player.x <= minX + EPSILON ||
+    state.player.x >= maxX - EPSILON ||
+    state.player.y <= minY + EPSILON ||
+    state.player.y >= maxY - EPSILON
+  );
 }

@@ -47,8 +47,9 @@ runtime, then e2e.
 
 ### 2.2 Entity / NPC grammar
 - Entities are placements (id, position, sprite group, facing) plus a behavior and a visibility rule.
-- Behaviors are a small set today (static, patrol with range/speed) built on the shared movement state
-  machine — NPCs reuse the player's step/facing/animation logic with synthetic input.
+- Behaviors are a small set today (static, patrol with range/speed, bounded wander) built on the
+  shared movement state machine — NPCs reuse the player's step/facing/animation logic with synthetic
+  input.
 - Visibility is dynamic, driven by event-flag state via three rules (always / visible-when-flag-set /
   visible-when-flag-unset). This is the hook for world state changing who is present.
 - Interaction is facing-aware (in front + in range), not radius-only.
@@ -142,8 +143,11 @@ them rather than chased for parity.
 - **Traversal:** full overworld streams; all placements, doors/stairways/escalators; facing-aware
   interaction. Gaps: ropes/ladders, interiors-as-separate-maps semantics, canonical new-game spawn.
 - **Script:** text engine + flow + event flags + conditionals; ~99.7% of NPC pointers resolve to real
-  text; flag-gated branches evaluate and flip on real data. Gaps: full action-script/movement
-  decoding, the long tail of control codes, save/persistence of flags.
+  text; flag-gated branches evaluate and flip on real data. NPC movement/action scripts are not
+  decompiled by CoilSnake: `npc_config_table.yml` carries only a numeric `Movement` id, so the runtime
+  uses an explicit-author override plus a conservative approximation keyed off that id. True movement
+  fidelity would require ROM-level movement-bytecode reverse engineering outside this pipeline. Other
+  gaps: the long tail of control codes, save/persistence of flags.
 - **Battle:** one real encounter with the rolling odometer, turn loop, BASH/RUN. Gaps: full command
   set (PSI, items, status), party of more than one, multi-enemy targeting, swirl/transition, balance.
 - **Not started (by design):** menus/inventory/equipment, money/ATM/phone/save, party followers,

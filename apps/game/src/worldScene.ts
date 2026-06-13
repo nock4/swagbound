@@ -190,7 +190,7 @@ export class WorldScene extends Phaser.Scene {
     const facing = toFacing(npc.direction);
     return {
       data: npc,
-      state: createNpcState(npc.regionPixel.x, npc.regionPixel.y, facing, behaviorForNpc(npc.npcId), frames),
+      state: createNpcState(npc.regionPixel.x, npc.regionPixel.y, facing, behaviorForNpc(npc.npcId, npc.movement), frames),
       frames,
       sprite: this.spawnActor(npc.regionPixel.x, npc.regionPixel.y, npc.spriteGroup, npc.direction)
     };

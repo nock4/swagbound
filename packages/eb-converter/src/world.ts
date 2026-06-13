@@ -679,13 +679,14 @@ export async function buildWorldArtifacts(options: {
     const textPointer = config?.["Text Pointer 1"];
     const textPointer2 = config?.["Text Pointer 2"];
     const showSprite = config?.["Show Sprite"];
+    const movement = parseOptionalInteger(config?.Movement);
     npcs.push({
       npcId: placement.npcId,
       ...(Number.isNaN(spriteGroup) ? {} : { spriteGroup }),
       ...(eventFlag === undefined ? {} : { eventFlag }),
       ...(config?.Direction ? { direction: config.Direction } : {}),
       ...(config?.Type ? { type: config.Type } : {}),
-      ...(config?.Movement ? { movement: config.Movement } : {}),
+      ...(Number.isNaN(movement) ? {} : { movement }),
       ...(showSprite ? { showSprite } : {}),
       ...(textPointer ? { textPointer } : {}),
       ...(textPointer2 ? { textPointer2 } : {}),
@@ -905,13 +906,14 @@ async function buildFullWorldArtifacts(options: {
     const textPointer = config?.["Text Pointer 1"];
     const textPointer2 = config?.["Text Pointer 2"];
     const showSprite = config?.["Show Sprite"];
+    const movement = parseOptionalInteger(config?.Movement);
     return {
       npcId: placement.npcId,
       ...(Number.isNaN(spriteGroup) ? {} : { spriteGroup }),
       ...(eventFlag === undefined ? {} : { eventFlag }),
       ...(config?.Direction ? { direction: config.Direction } : {}),
       ...(config?.Type ? { type: config.Type } : {}),
-      ...(config?.Movement ? { movement: config.Movement } : {}),
+      ...(Number.isNaN(movement) ? {} : { movement }),
       ...(showSprite ? { showSprite } : {}),
       ...(textPointer ? { textPointer } : {}),
       ...(textPointer2 ? { textPointer2 } : {}),

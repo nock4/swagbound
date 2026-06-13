@@ -290,7 +290,7 @@ export const WorldNpcSchema = z.object({
   eventFlag: z.number().int().nonnegative().optional(),
   direction: z.string().optional(),
   type: z.string().optional(),
-  movement: z.string().optional(),
+  movement: z.number().int().nonnegative().optional(),
   showSprite: z.string().optional(),
   textPointer: z.string().optional(),
   textPointer2: z.string().optional(),

@@ -432,7 +432,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return {
       key: placement.key,
       data: npc,
-      state: createNpcState(npc.worldPixel.x, npc.worldPixel.y, facing, behaviorForNpc(npc.npcId), frames),
+      state: createNpcState(npc.worldPixel.x, npc.worldPixel.y, facing, behaviorForNpc(npc.npcId, npc.movement), frames),
       frames,
       sprite: this.spawnActor(npc.worldPixel.x, npc.worldPixel.y, npc.spriteGroup, npc.direction)
     };
