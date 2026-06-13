@@ -89,6 +89,12 @@ export type FirstSceneDebug = {
     inventoryItems: number;
     partyCount: number;
   };
+  menu?: {
+    open: boolean;
+    stack: string[];
+    cursorIndex: number;
+    currentItemId?: string;
+  };
   world?: {
     available: boolean;
     originTile?: { x: number; y: number };

@@ -1,4 +1,5 @@
 import type { DialoguePage, TutorialStatus } from "@eb/schemas";
+import type { MenuDebugState } from "./menuModel";
 import {
   DefaultResolver,
   INSTANT_TEXT_SPEED_CPS,
@@ -101,6 +102,7 @@ export type OverworldDebug = {
     inventoryItems: number;
     partyCount: number;
   };
+  menu?: MenuDebugState;
   world?: {
     available: boolean;
     originTile?: { x: number; y: number };

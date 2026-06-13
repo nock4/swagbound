@@ -51,6 +51,22 @@ import { PLAYER_SPEED, INTERACTION_DISTANCE } from "./worldScene";
 import { DialogueController, publishDebug, type DebugNpc, type FirstSceneDebug } from "./state";
 import { textSpeedCpsFromSearch } from "./dialogueRenderer";
 import { PartyState } from "./partyState";
+import {
+  buildMenuScreens,
+  buildStatusViewModel,
+  cancelMenu,
+  closedMenu,
+  confirmMenu,
+  menuDebugState,
+  menuRenderStack,
+  moveMenu,
+  openMenu,
+  MAIN_MENU_ID,
+  type MenuDebugState,
+  type MenuRenderScreen,
+  type MenuScreen,
+  type MenuState
+} from "./menuModel";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -112,6 +128,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   readonly dialogue = new DialogueController();
   private readonly gameFlags = new GameFlags();
   private readonly partyState = new PartyState();
+  private menuState: MenuState = closedMenu();
+  private menuScreens = new Map<string, MenuScreen>();
   private eventSequence?: RuntimeEventSequence;
   targetReference = TARGET_REFERENCE;
   prompt = "";
@@ -170,10 +188,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     this.cursors = this.input.keyboard?.createCursorKeys();
     this.keys = this.input.keyboard?.addKeys("W,A,S,D") as Record<string, Phaser.Input.Keyboard.Key>;
-    this.input.keyboard?.on("keydown-SPACE", () => this.handleAdvance());
-    this.input.keyboard?.on("keydown-ENTER", () => this.handleAdvance());
-    this.input.keyboard?.on("keydown-ESC", () => this.closeDialogue());
-    this.input.keyboard?.on("keydown-BACKSPACE", () => this.closeDialogue());
+    this.refreshMenuScreens();
+    this.input.keyboard?.on("keydown-M", () => this.openCommandMenu());
+    this.input.keyboard?.on("keydown-UP", () => this.moveMenuCursor(-1));
+    this.input.keyboard?.on("keydown-DOWN", () => this.moveMenuCursor(1));
+    this.input.keyboard?.on("keydown-SPACE", () => this.handleConfirm());
+    this.input.keyboard?.on("keydown-ENTER", () => this.handleConfirm());
+    this.input.keyboard?.on("keydown-ESC", () => this.handleCancel());
+    this.input.keyboard?.on("keydown-BACKSPACE", () => this.handleCancel());
     this.input.keyboard?.on("keydown-F1", () => {
       this.debugPanelVisible = !this.debugPanelVisible;
     });
@@ -206,6 +228,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   update(_: number, delta: number): void {
     if (!this.player) {
+      return;
+    }
+    if (this.menuState.open) {
+      if (!this.playerState.inputLocked) {
+        lockPlayer(this.playerState, this.playerFrames);
+      }
+      this.updatePrompt();
+      this.publish();
       return;
     }
     this.stepNpcs(delta);
@@ -682,7 +712,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private updatePrompt(): void {
-    if (this.dialogue.open) {
+    if (this.menuState.open) {
+      this.prompt = "Arrows: choose | Space/Enter: select | Esc/Backspace: back";
+    } else if (this.dialogue.open) {
       this.prompt = "Space/Enter: advance | Esc/Backspace: close";
     } else if (this.interactionTarget()) {
       this.prompt = "Space/Enter: talk";
@@ -691,6 +723,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
     } else {
       this.prompt = "Move with Arrow keys/WASD. Approach an NPC to talk.";
     }
+  }
+
+  private handleConfirm(): void {
+    if (this.menuState.open) {
+      this.confirmCommandMenu();
+      return;
+    }
+    this.handleAdvance();
+  }
+
+  private handleCancel(): void {
+    if (this.menuState.open) {
+      this.cancelCommandMenu();
+      return;
+    }
+    this.closeDialogue();
   }
 
   handleAdvance(): void {
@@ -712,6 +760,67 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
     }
     this.publish();
+  }
+
+  private openCommandMenu(): void {
+    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running) {
+      return;
+    }
+    this.refreshMenuScreens();
+    const root = this.menuScreens.get(MAIN_MENU_ID);
+    if (!root) {
+      return;
+    }
+    this.menuState = openMenu(root);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private moveMenuCursor(delta: number): void {
+    if (!this.menuState.open) {
+      return;
+    }
+    this.menuState = moveMenu(this.menuState, delta);
+    this.publish();
+  }
+
+  private confirmCommandMenu(): void {
+    if (!this.menuState.open) {
+      return;
+    }
+    this.refreshMenuScreens();
+    const result = confirmMenu(this.menuState, (id) => this.menuScreens.get(id));
+    this.menuState = result.state;
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private cancelCommandMenu(): void {
+    if (!this.menuState.open) {
+      return;
+    }
+    this.menuState = cancelMenu(this.menuState);
+    if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running) {
+      unlockPlayer(this.playerState);
+    }
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private refreshMenuScreens(): void {
+    this.menuScreens = new Map(buildMenuScreens(buildStatusViewModel({
+      characters: this.data_.characters,
+      partyState: this.partyState
+    })).map((screen) => [screen.id, screen]));
+  }
+
+  menuRenderStack(): MenuRenderScreen[] {
+    return menuRenderStack(this.menuState);
+  }
+
+  menuDebugState(): MenuDebugState {
+    return menuDebugState(this.menuState);
   }
 
   private openDialogue(): void {
@@ -929,6 +1038,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       flagsNumCount: this.gameFlags.listNums().length,
       eventExecutor: this.eventSequence?.debug(),
       partyState: this.partyState.counts(),
+      menu: this.menuDebugState(),
       world: {
         available: world.available,
         widthPixels: world.mapWidthTiles * world.tileSize,

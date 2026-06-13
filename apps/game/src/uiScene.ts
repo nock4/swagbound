@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import type { WorldScene } from "./worldScene";
+import type { MenuRenderScreen } from "./menuModel";
 
 const MONO = "Menlo, Consolas, monospace";
 
@@ -16,6 +17,8 @@ export class UiScene extends Phaser.Scene {
   private panelGraphics?: Phaser.GameObjects.Graphics;
   private panelText?: Phaser.GameObjects.Text;
   private badgeText?: Phaser.GameObjects.Text;
+  private menuGraphics?: Phaser.GameObjects.Graphics;
+  private menuTexts: Phaser.GameObjects.Text[] = [];
   private lastSignature = "";
 
   constructor() {
@@ -61,6 +64,7 @@ export class UiScene extends Phaser.Scene {
       color: "#d8e4ef",
       lineSpacing: 3
     }).setDepth(13);
+    this.menuGraphics = this.add.graphics().setDepth(14);
   }
 
   update(): void {
@@ -78,7 +82,8 @@ export class UiScene extends Phaser.Scene {
       : "";
     const panelVisible = world.debugPanelVisible;
     const runtimeLines = panelVisible ? world.runtimeLines() : [];
-    const signature = `${open}|${text}|${footer}|${world.dialogue.revealComplete}|${world.prompt}|${panelVisible}|${runtimeLines.join("/")}`;
+    const menuScreens = world.menuRenderStack();
+    const signature = `${open}|${text}|${footer}|${world.dialogue.revealComplete}|${world.prompt}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}`;
     if (signature === this.lastSignature) {
       return;
     }
@@ -87,6 +92,7 @@ export class UiScene extends Phaser.Scene {
     this.promptText?.setText(world.prompt);
     this.drawDialogue(open, text, footer);
     this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);
+    this.drawMenu(menuScreens);
   }
 
   private drawDialogue(open: boolean, text: string, footer: string): void {
@@ -107,13 +113,7 @@ export class UiScene extends Phaser.Scene {
     const x = 24;
     const y = height - boxHeight - 18;
 
-    // Retro double-border window using plain shapes and system fonts only.
-    graphics.fillStyle(0x0a0f1e, 0.97);
-    graphics.fillRoundedRect(x, y, boxWidth, boxHeight, 6);
-    graphics.lineStyle(3, 0xf8fafc, 1);
-    graphics.strokeRoundedRect(x + 2, y + 2, boxWidth - 4, boxHeight - 4, 5);
-    graphics.lineStyle(1, 0x64748b, 1);
-    graphics.strokeRoundedRect(x + 7, y + 7, boxWidth - 14, boxHeight - 14, 4);
+    this.drawWindow(graphics, x, y, boxWidth, boxHeight, 6);
 
     this.dialogueText.setPosition(x + 20, y + 18);
     this.dialogueText.setText(text);
@@ -133,11 +133,79 @@ export class UiScene extends Phaser.Scene {
     }
     const width = Math.min(this.scale.width - 24, 470);
     const height = lines.length * 15 + 22;
-    graphics.fillStyle(0x0b1220, 0.93);
-    graphics.fillRoundedRect(12, 30, width, height, 6);
-    graphics.lineStyle(1, 0x4b6478, 0.9);
-    graphics.strokeRoundedRect(12, 30, width, height, 6);
+    this.drawWindow(graphics, 12, 30, width, height, 6);
     this.panelText.setPosition(24, 41);
     this.panelText.setText(lines.join("\n"));
+  }
+
+  private drawMenu(screens: MenuRenderScreen[]): void {
+    const graphics = this.menuGraphics;
+    if (!graphics) {
+      return;
+    }
+    graphics.clear();
+    for (const text of this.menuTexts) {
+      text.destroy();
+    }
+    this.menuTexts = [];
+    if (screens.length === 0) {
+      return;
+    }
+
+    const margin = 24;
+    const gap = 10;
+    const top = 46;
+    let x = margin;
+    screens.forEach((screen, index) => {
+      const remaining = this.scale.width - x - margin;
+      const boxWidth = index === 0 ? Math.min(136, remaining) : Math.max(160, remaining);
+      const compact = screen.id === "status";
+      const fontSize = compact ? "10px" : "13px";
+      const lineHeight = compact ? 15 : 18;
+      const boxHeight = Math.min(
+        this.scale.height - top - 20,
+        38 + Math.max(1, screen.items.length) * lineHeight + 12
+      );
+      this.drawWindow(graphics, x, top, boxWidth, boxHeight, 6);
+
+      this.menuTexts.push(this.add.text(x + 14, top + 10, screen.title, {
+        fontFamily: MONO,
+        fontSize: "12px",
+        color: "#f8fafc"
+      }).setDepth(15));
+
+      const itemTop = top + 32;
+      const maxItems = Math.max(0, Math.floor((boxHeight - 44) / lineHeight));
+      const visibleItems = screen.items.slice(0, maxItems);
+      visibleItems.forEach((item, itemIndex) => {
+        const selected = item.selected && item.enabled;
+        const prefix = selected ? ">" : " ";
+        const label = `${prefix} ${item.label}`;
+        this.menuTexts.push(this.add.text(x + 14, itemTop + itemIndex * lineHeight, label, {
+          fontFamily: MONO,
+          fontSize,
+          color: item.enabled ? "#f8fafc" : "#94a3b8",
+          fixedWidth: boxWidth - 28
+        }).setDepth(15));
+      });
+
+      x += boxWidth + gap;
+    });
+  }
+
+  private drawWindow(
+    graphics: Phaser.GameObjects.Graphics,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    radius: number
+  ): void {
+    graphics.fillStyle(0x0a0f1e, 0.97);
+    graphics.fillRoundedRect(x, y, width, height, radius);
+    graphics.lineStyle(3, 0xf8fafc, 1);
+    graphics.strokeRoundedRect(x + 2, y + 2, width - 4, height - 4, Math.max(1, radius - 1));
+    graphics.lineStyle(1, 0x64748b, 1);
+    graphics.strokeRoundedRect(x + 7, y + 7, width - 14, height - 14, Math.max(1, radius - 2));
   }
 }
