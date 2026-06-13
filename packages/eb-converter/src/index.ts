@@ -9,6 +9,7 @@ import {
   SpriteGroupCollectionSchema,
   TutorialStatusSchema,
   ValidationReportSchema,
+  type DialogueSegment,
   type Manifest,
   type NpcReferenceCollection,
   type ScriptCollection,
@@ -125,29 +126,28 @@ export function parseCcsFile(relativePath: string, source: string): {
       return;
     }
 
-    const textAndCommand = trimmed.match(/^"([^"]*)"\s+([A-Za-z_][\w.]*)\s*$/);
-    if (textAndCommand) {
+    const quotedLine = trimmed.match(/^"([^"]*)"\s*(.*)$/);
+    if (quotedLine) {
+      const text = quotedLine[1];
+      const trailingCommand = quotedLine[2].trim();
       commands.push({
         cmd: "text",
-        value: textAndCommand[1],
-        raw: `"${textAndCommand[1]}"`,
+        value: text,
+        segments: tokenizeCcsString(text),
+        raw: `"${text}"`,
         sourceLocation
       });
-      commands.push({
-        cmd: normalizeKnownCommand(textAndCommand[2]),
-        raw: textAndCommand[2],
-        sourceLocation: {
-          ...sourceLocation,
-          column: line.indexOf(textAndCommand[2]) + 1
-        }
-      });
-      addUnknownWarning(commands.at(-1), warnings);
-      return;
-    }
-
-    const textMatch = trimmed.match(/^"([^"]*)"\s*$/);
-    if (textMatch) {
-      commands.push({ cmd: "text", value: textMatch[1], raw: trimmed, sourceLocation });
+      if (trailingCommand) {
+        commands.push({
+          cmd: normalizeKnownCommand(trailingCommand),
+          raw: trailingCommand,
+          sourceLocation: {
+            ...sourceLocation,
+            column: line.indexOf(trailingCommand) + 1
+          }
+        });
+        addUnknownWarning(commands.at(-1), warnings);
+      }
       return;
     }
 
@@ -158,6 +158,301 @@ export function parseCcsFile(relativePath: string, source: string): {
   });
 
   return { commands, labels, warnings };
+}
+
+type CcsTextCodeRegistryEntry = {
+  opcode: string;
+  length: number;
+  matches: (bytes: number[], offset: number) => boolean;
+  toSegment: (bytes: number[], raw: string) => DialogueSegment;
+};
+
+const byte = (value: number) => value.toString(16).toUpperCase().padStart(2, "0");
+
+function signature(...values: number[]) {
+  return (bytes: number[], offset: number) =>
+    values.every((value, index) => bytes[offset + index] === value);
+}
+
+function prefixed(...values: number[]) {
+  return (bytes: number[], offset: number) =>
+    values.every((value, index) => bytes[offset + index] === value);
+}
+
+const controlSegment = (code: string, raw: string): DialogueSegment => ({ kind: "control", code, raw });
+
+const substitutionSegment = (
+  name: Extract<DialogueSegment, { kind: "substitution" }>["name"],
+  args: number[]
+): DialogueSegment => ({ kind: "substitution", name, args });
+
+const styleSegment = (
+  style: Extract<DialogueSegment, { kind: "style" }>["style"],
+  args: number[] = [],
+  value?: string
+): DialogueSegment => ({
+  kind: "style",
+  style,
+  ...(value ? { value } : {}),
+  ...(args.length > 0 ? { args } : {})
+});
+
+const windowSegment = (
+  op: Extract<DialogueSegment, { kind: "window" }>["op"],
+  args: number[] = []
+): DialogueSegment => ({ kind: "window", op, args });
+
+function fixedCode(
+  opcode: string,
+  values: number[],
+  toSegment: (bytes: number[], raw: string) => DialogueSegment
+): CcsTextCodeRegistryEntry {
+  return {
+    opcode,
+    length: values.length,
+    matches: (bytes, offset) => offset + values.length <= bytes.length && signature(...values)(bytes, offset),
+    toSegment
+  };
+}
+
+function prefixCode(
+  opcode: string,
+  length: number,
+  values: number[],
+  toSegment: (bytes: number[], raw: string) => DialogueSegment
+): CcsTextCodeRegistryEntry {
+  return {
+    opcode,
+    length,
+    matches: (bytes, offset) => offset + length <= bytes.length && prefixed(...values)(bytes, offset),
+    toSegment
+  };
+}
+
+// Derived from CoilSnake-master/coilsnake/assets/mobile-sprout/lib/std.ccs.
+export const CCS_TEXT_CODE_REGISTRY: CcsTextCodeRegistryEntry[] = [
+  fixedCode("13 02", [0x13, 0x02], (_bytes, raw) => controlSegment("end", raw)),
+  fixedCode("03 00", [0x03, 0x00], (_bytes, raw) => controlSegment("next", raw)),
+  fixedCode("00", [0x00], () => ({ kind: "break", break: "line" })),
+  fixedCode("01", [0x01], () => ({ kind: "break", break: "newline" })),
+  fixedCode("02", [0x02], (_bytes, raw) => controlSegment("eob", raw)),
+  fixedCode("13", [0x13], () => ({ kind: "prompt" })),
+  fixedCode("14", [0x14], () => ({ kind: "prompt" })),
+  prefixCode("10", 2, [0x10], (bytes) => ({ kind: "pause", frames: bytes[1] })),
+  fixedCode("12", [0x12], () => ({ kind: "break", break: "clear" })),
+  fixedCode("18 00", [0x18, 0x00], () => windowSegment("closeTop")),
+  prefixCode("18 01", 3, [0x18, 0x01], (bytes) => windowSegment("open", [bytes[2]])),
+  prefixCode("18 03", 3, [0x18, 0x03], (bytes) => windowSegment("switch", [bytes[2]])),
+  fixedCode("18 04", [0x18, 0x04], () => windowSegment("closeAll")),
+  fixedCode("18 06", [0x18, 0x06], () => windowSegment("clear")),
+  prefixCode("1C 00", 3, [0x1C, 0x00], (bytes) => styleSegment("color", [bytes[2]])),
+  prefixCode("1C 01", 3, [0x1C, 0x01], (bytes) => substitutionSegment("stat", [bytes[2]])),
+  prefixCode("1C 02", 3, [0x1C, 0x02], (bytes) =>
+    substitutionSegment(bytes[2] === 0 ? "playerName" : "partyChar", [bytes[2]])
+  ),
+  prefixCode("1C 05", 3, [0x1C, 0x05], (bytes) => substitutionSegment("item", [bytes[2]])),
+  prefixCode("1C 06", 3, [0x1C, 0x06], (bytes) => substitutionSegment("teleport", [bytes[2]])),
+  prefixCode("1C 0A", 6, [0x1C, 0x0A], (bytes) => substitutionSegment("number", [readLittleEndian(bytes.slice(2))])),
+  prefixCode("1C 0B", 6, [0x1C, 0x0B], (bytes) => substitutionSegment("money", [readLittleEndian(bytes.slice(2))])),
+  fixedCode("1C 0D", [0x1C, 0x0D], () => substitutionSegment("user", [])),
+  fixedCode("1C 0E", [0x1C, 0x0E], () => substitutionSegment("target", [])),
+  prefixCode("1C 12", 3, [0x1C, 0x12], (bytes) => substitutionSegment("psi", [bytes[2]])),
+  prefixCode("1F 04", 3, [0x1F, 0x04], (bytes) => styleSegment("blips", [bytes[2]])),
+  fixedCode("1F 30", [0x1F, 0x30], () => styleSegment("font", [], "normal")),
+  fixedCode("1F 31", [0x1F, 0x31], () => styleSegment("font", [], "saturn")),
+  prefixCode("04", 3, [0x04], (_bytes, raw) => controlSegment("set", raw)),
+  prefixCode("05", 3, [0x05], (_bytes, raw) => controlSegment("unset", raw)),
+  prefixCode("07", 3, [0x07], (_bytes, raw) => controlSegment("isset", raw)),
+  prefixCode("08", 5, [0x08], (_bytes, raw) => controlSegment("call", raw)),
+  prefixCode("0A", 5, [0x0A], (_bytes, raw) => controlSegment("goto", raw)),
+  prefixCode("0B", 2, [0x0B], (_bytes, raw) => controlSegment("result_is", raw)),
+  prefixCode("0C", 2, [0x0C], (_bytes, raw) => controlSegment("result_not", raw)),
+  fixedCode("1B 00", [0x1B, 0x00], (_bytes, raw) => controlSegment("store_registers", raw)),
+  fixedCode("1B 01", [0x1B, 0x01], (_bytes, raw) => controlSegment("load_registers", raw)),
+  fixedCode("1B 04", [0x1B, 0x04], (_bytes, raw) => controlSegment("swap", raw)),
+  prefixCode("1B", 2, [0x1B], (_bytes, raw) => controlSegment("register", raw))
+];
+
+export function tokenizeCcsString(value: string): DialogueSegment[] {
+  const segments: DialogueSegment[] = [];
+  let textStart = 0;
+  let index = 0;
+
+  const flushText = (end: number) => {
+    if (end > textStart) {
+      segments.push({ kind: "text", value: value.slice(textStart, end) });
+    }
+  };
+
+  while (index < value.length) {
+    if (value[index] === "[") {
+      const close = value.indexOf("]", index + 1);
+      if (close >= 0) {
+        const raw = value.slice(index, close + 1);
+        const bytes = parseHexByteBlock(raw);
+        if (bytes) {
+          flushText(index);
+          segments.push(...decodeByteSegments(bytes, raw));
+          index = close + 1;
+          textStart = index;
+          continue;
+        }
+      }
+    } else if (value[index] === "{") {
+      const close = value.indexOf("}", index + 1);
+      if (close >= 0) {
+        const raw = value.slice(index, close + 1);
+        const segment = segmentForMacro(raw);
+        if (segment) {
+          flushText(index);
+          segments.push(segment);
+          index = close + 1;
+          textStart = index;
+          continue;
+        }
+      }
+    }
+    index += 1;
+  }
+
+  flushText(value.length);
+  return segments;
+}
+
+function decodeByteSegments(bytes: number[], raw: string): DialogueSegment[] {
+  const segments: DialogueSegment[] = [];
+  let offset = 0;
+
+  while (offset < bytes.length) {
+    const entry = CCS_TEXT_CODE_REGISTRY.find((item) => item.matches(bytes, offset));
+    if (!entry) {
+      segments.push({
+        kind: "control",
+        code: "unknown",
+        raw: offset === 0 ? raw : `[${bytes.slice(offset).map(byte).join(" ")}]`
+      });
+      break;
+    }
+
+    const chunk = bytes.slice(offset, offset + entry.length);
+    segments.push(entry.toSegment(chunk, `[${chunk.map(byte).join(" ")}]`));
+    offset += entry.length;
+  }
+
+  return segments;
+}
+
+function parseHexByteBlock(raw: string): number[] | undefined {
+  const inner = raw.slice(1, -1).trim();
+  if (!inner) {
+    return undefined;
+  }
+  const parts = inner.split(/\s+/);
+  if (!parts.every((part) => /^[0-9a-f]{2}$/i.test(part))) {
+    return undefined;
+  }
+  return parts.map((part) => Number.parseInt(part, 16));
+}
+
+function segmentForMacro(raw: string): DialogueSegment | undefined {
+  const match = raw.match(/^\{([A-Za-z_][\w.]*)\s*(?:\((.*)\))?\}$/);
+  if (!match) {
+    return undefined;
+  }
+  const name = match[1].toLowerCase();
+  const args = parseNumericArgs(match[2]);
+
+  switch (name) {
+    case "linebreak":
+      return { kind: "break", break: "line" };
+    case "newline":
+      return { kind: "break", break: "newline" };
+    case "clearline":
+      return { kind: "break", break: "clear" };
+    case "pause":
+      return args ? { kind: "pause", frames: args[0] ?? 0 } : controlSegment(name, raw);
+    case "wait":
+    case "prompt":
+      return { kind: "prompt" };
+    case "next":
+    case "end":
+    case "eob":
+      return controlSegment(name, raw);
+    case "window_open":
+      return args ? windowSegment("open", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "window_closetop":
+      return windowSegment("closeTop");
+    case "window_switch":
+      return args ? windowSegment("switch", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "window_closeall":
+      return windowSegment("closeAll");
+    case "window_clear":
+      return windowSegment("clear");
+    case "text_color":
+      return args ? styleSegment("color", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "text_blips":
+      return args ? styleSegment("blips", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "font_normal":
+      return styleSegment("font", [], "normal");
+    case "font_saturn":
+      return styleSegment("font", [], "saturn");
+    case "stat":
+      return args ? substitutionSegment("stat", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "name":
+      return args
+        ? substitutionSegment((args[0] ?? 0) === 0 ? "playerName" : "partyChar", [args[0] ?? 0])
+        : controlSegment(name, raw);
+    case "itemname":
+      return args ? substitutionSegment("item", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "teleportname":
+      return args ? substitutionSegment("teleport", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "number":
+      return args ? substitutionSegment("number", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "money":
+      return args ? substitutionSegment("money", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "user":
+      return substitutionSegment("user", []);
+    case "target":
+      return substitutionSegment("target", []);
+    case "psiname":
+      return args ? substitutionSegment("psi", [args[0] ?? 0]) : controlSegment(name, raw);
+    case "set":
+    case "unset":
+    case "isset":
+    case "call":
+    case "goto":
+    case "result_is":
+    case "result_not":
+    case "store_registers":
+    case "load_registers":
+    case "swap":
+      return controlSegment(name, raw);
+    default:
+      return controlSegment("unknown_macro", raw);
+  }
+}
+
+function parseNumericArgs(argsText: string | undefined): number[] | undefined {
+  if (!argsText?.trim()) {
+    return [];
+  }
+  const args = argsText.split(",").map((item) => item.trim()).filter(Boolean);
+  const parsed = args.map(parseNumericLiteral);
+  return parsed.every((item): item is number => item !== undefined) ? parsed : undefined;
+}
+
+function parseNumericLiteral(value: string): number | undefined {
+  if (/^0x[0-9a-f]+$/i.test(value)) {
+    return Number.parseInt(value.slice(2), 16);
+  }
+  if (/^-?\d+$/.test(value)) {
+    return Number.parseInt(value, 10);
+  }
+  return undefined;
+}
+
+function readLittleEndian(bytes: number[]): number {
+  return bytes.reduce((total, value, index) => total + value * (256 ** index), 0);
 }
 
 export async function convertProject(options: Partial<CliArgs> = {}): Promise<ConvertResult> {

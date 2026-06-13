@@ -10,6 +10,56 @@ export const SourceLocationSchema = z.object({
   column: z.number().int().positive()
 });
 
+export const DialogueSegmentSchema = z.union([
+  z.object({
+    kind: z.literal("text"),
+    value: z.string()
+  }),
+  z.object({
+    kind: z.literal("break"),
+    break: z.enum(["line", "newline", "clear"])
+  }),
+  z.object({
+    kind: z.literal("pause"),
+    frames: z.number().int().nonnegative()
+  }),
+  z.object({
+    kind: z.literal("prompt")
+  }),
+  z.object({
+    kind: z.literal("substitution"),
+    name: z.enum([
+      "playerName",
+      "partyChar",
+      "item",
+      "psi",
+      "number",
+      "money",
+      "user",
+      "target",
+      "teleport",
+      "stat"
+    ]),
+    args: z.array(z.number().int())
+  }),
+  z.object({
+    kind: z.literal("style"),
+    style: z.enum(["color", "font", "blips"]),
+    value: z.string().optional(),
+    args: z.array(z.number().int()).optional()
+  }),
+  z.object({
+    kind: z.literal("window"),
+    op: z.enum(["open", "closeTop", "switch", "closeAll", "clear"]),
+    args: z.array(z.number().int())
+  }),
+  z.object({
+    kind: z.literal("control"),
+    code: z.string(),
+    raw: z.string()
+  })
+]);
+
 export const ValidationIssueSchema = z.object({
   severity: ValidationSeveritySchema,
   code: z.string(),
@@ -22,6 +72,7 @@ export const ScriptCommandSchema = z.object({
   raw: z.string(),
   sourceLocation: SourceLocationSchema,
   value: z.string().optional(),
+  segments: z.array(DialogueSegmentSchema).optional(),
   name: z.string().optional()
 });
 
@@ -355,6 +406,7 @@ export type SpriteSheet = z.infer<typeof SpriteSheetSchema>;
 export type SpriteFacing = z.infer<typeof SpriteFacingSchema>;
 export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;
 export type SpriteSheetCollection = z.infer<typeof SpriteSheetCollectionSchema>;
+export type DialogueSegment = z.infer<typeof DialogueSegmentSchema>;
 export type ScriptCollection = z.infer<typeof ScriptCollectionSchema>;
 export type ScriptCommand = z.infer<typeof ScriptCommandSchema>;
 export type NpcReferenceCollection = z.infer<typeof NpcReferenceCollectionSchema>;
@@ -371,11 +423,14 @@ export type ResolvedScript = {
   commands: ScriptCommand[];
 };
 
-export type DialoguePage = {
-  text: string;
-  ended: boolean;
-  unknownCommands: ScriptCommand[];
-};
+export const DialoguePageSchema = z.object({
+  text: z.string(),
+  ended: z.boolean(),
+  unknownCommands: z.array(ScriptCommandSchema),
+  segments: z.array(DialogueSegmentSchema).default([])
+});
+
+export type DialoguePage = z.input<typeof DialoguePageSchema>;
 
 export function resolveScriptReference(scripts: ScriptCollection, reference: string): ResolvedScript | undefined {
   const [scriptFileStem, label] = reference.split(".");
@@ -416,27 +471,56 @@ export function resolveScriptReference(scripts: ScriptCollection, reference: str
 
 export function buildDialoguePages(commands: ScriptCommand[]): DialoguePage[] {
   const pages: DialoguePage[] = [];
-  let currentText: string[] = [];
+  let currentText = "";
+  let currentSegments: DialogueSegment[] = [];
   let currentUnknowns: ScriptCommand[] = [];
   let ended = false;
+  let lastTextCommand: ScriptCommand | undefined;
 
   const pushPage = () => {
-    if (currentText.length === 0 && currentUnknowns.length === 0 && !ended) {
+    if (currentText.length === 0 && currentSegments.length === 0 && currentUnknowns.length === 0 && !ended) {
       return;
     }
     pages.push({
-      text: currentText.join("\n"),
+      text: currentText,
       ended,
-      unknownCommands: currentUnknowns
+      unknownCommands: currentUnknowns,
+      segments: currentSegments
     });
-    currentText = [];
+    currentText = "";
+    currentSegments = [];
     currentUnknowns = [];
     ended = false;
+    lastTextCommand = undefined;
+  };
+
+  const appendFlattenedText = (command: ScriptCommand, value: string) => {
+    if (lastTextCommand && lastTextCommand !== command && currentText.length > 0) {
+      currentText += "\n";
+    }
+    currentText += value;
+    lastTextCommand = command;
   };
 
   for (const command of commands) {
     if (command.cmd === "text") {
-      currentText.push(command.value ?? command.raw);
+      const segments = command.segments ?? [{ kind: "text" as const, value: command.value ?? command.raw }];
+      for (const segment of segments) {
+        currentSegments.push(segment);
+        if (segment.kind === "text") {
+          appendFlattenedText(command, segment.value);
+        } else if (segment.kind === "break") {
+          appendFlattenedText(command, "\n");
+        }
+
+        if (segment.kind === "prompt" || (segment.kind === "control" && segment.code === "next")) {
+          pushPage();
+        } else if (segment.kind === "control" && (segment.code === "end" || segment.code === "eob")) {
+          ended = true;
+          pushPage();
+          return pages;
+        }
+      }
     } else if (command.cmd === "next") {
       pushPage();
     } else if (command.cmd === "end" || command.cmd === "eob") {
@@ -449,5 +533,7 @@ export function buildDialoguePages(commands: ScriptCommand[]): DialoguePage[] {
   }
   pushPage();
 
-  return pages.length > 0 ? pages : [{ text: "No imported script text was found.", ended: true, unknownCommands: [] }];
+  return pages.length > 0
+    ? pages
+    : [{ text: "No imported script text was found.", ended: true, unknownCommands: [], segments: [] }];
 }

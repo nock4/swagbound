@@ -3,7 +3,7 @@ import os from "node:os";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { buildDialoguePages, ManifestSchema, resolveScriptReference, TutorialStatusSchema } from "@eb/schemas";
-import { convertProject, parseCcsFile, readNpcReferences } from "../src/index";
+import { convertProject, parseCcsFile, readNpcReferences, tokenizeCcsString } from "../src/index";
 import { validateGeneratedOutput } from "../src/validate";
 import { classifyProofTarget, findForbiddenProofArtifactText, findNpc744Placements, isNeutralizedMapDoorPointer, proofRecommendation } from "../../../scripts/proof-check";
 import { checkCommandForMode, sanitizePacketOutput } from "../../../scripts/proof-packet";
@@ -188,6 +188,120 @@ describe("CCScript parser v0", () => {
 
     expect(parsed.commands.map((command) => command.cmd)).toEqual(["label", "text", "next", "end"]);
     expect(parsed.commands[1]).toMatchObject({ value: "http://example.test//kept" });
+  });
+});
+
+describe("CCScript text segments", () => {
+  it("keeps plain text backward-compatible while adding one text segment", () => {
+    const parsed = parseCcsFile("ccscript/example.ccs", 'label:\n"Alpha words" end\n');
+    const pages = buildDialoguePages(parsed.commands.slice(1));
+
+    expect(parsed.commands[1]).toMatchObject({
+      cmd: "text",
+      value: "Alpha words",
+      segments: [{ kind: "text", value: "Alpha words" }]
+    });
+    expect(pages).toEqual([
+      {
+        text: "Alpha words",
+        ended: true,
+        unknownCommands: [],
+        segments: [{ kind: "text", value: "Alpha words" }]
+      }
+    ]);
+  });
+
+  it("flattens linebreak and newline segments to newlines", () => {
+    const parsed = parseCcsFile("ccscript/example.ccs", 'label:\n"Alpha[00]Beta[01]Gamma" end\n');
+    const pages = buildDialoguePages(parsed.commands.slice(1));
+
+    expect(pages[0]).toMatchObject({
+      text: "Alpha\nBeta\nGamma",
+      segments: [
+        { kind: "text", value: "Alpha" },
+        { kind: "break", break: "line" },
+        { kind: "text", value: "Beta" },
+        { kind: "break", break: "newline" },
+        { kind: "text", value: "Gamma" }
+      ]
+    });
+  });
+
+  it("splits pages on prompt and wait segments", () => {
+    const promptParsed = parseCcsFile("ccscript/example.ccs", 'label:\n"Alpha[14]Beta" end\n');
+    const waitParsed = parseCcsFile("ccscript/example.ccs", 'label:\n"One[13]Two" end\n');
+
+    expect(buildDialoguePages(promptParsed.commands.slice(1)).map((page) => page.text)).toEqual(["Alpha", "Beta"]);
+    expect(buildDialoguePages(waitParsed.commands.slice(1)).map((page) => page.text)).toEqual(["One", "Two"]);
+  });
+
+  it("parses pause frame counts", () => {
+    expect(tokenizeCcsString("Alpha[10 2A]Beta")).toContainEqual({ kind: "pause", frames: 42 });
+  });
+
+  it("parses name, number, and item substitutions with numeric args", () => {
+    const substitutions = tokenizeCcsString("[1C 02 02][1C 0A 2A 00 00 00][1C 05 07]")
+      .filter((segment) => segment.kind === "substitution");
+
+    expect(substitutions).toEqual([
+      { kind: "substitution", name: "partyChar", args: [2] },
+      { kind: "substitution", name: "number", args: [42] },
+      { kind: "substitution", name: "item", args: [7] }
+    ]);
+  });
+
+  it("preserves unknown byte codes as raw control segments", () => {
+    expect(tokenizeCcsString("[FE AA]")).toEqual([{ kind: "control", code: "unknown", raw: "[FE AA]" }]);
+  });
+
+  it("stops dialogue pages on embedded terminators", () => {
+    const parsed = parseCcsFile("ccscript/example.ccs", 'label:\n"Alpha[13 02]Beta"\n"Gamma" end\n');
+    const pages = buildDialoguePages(parsed.commands.slice(1));
+
+    expect(pages).toHaveLength(1);
+    expect(pages[0]).toMatchObject({ text: "Alpha", ended: true });
+  });
+
+  it("builds multiple pages via bare next and embedded next", () => {
+    const bareNext = parseCcsFile("ccscript/example.ccs", 'label:\n"Alpha" next\n"Beta" end\n');
+    const embeddedNext = parseCcsFile("ccscript/example.ccs", 'label:\n"One[03 00]Two" end\n');
+
+    expect(buildDialoguePages(bareNext.commands.slice(1)).map((page) => page.text)).toEqual(["Alpha", "Beta"]);
+    expect(buildDialoguePages(embeddedNext.commands.slice(1)).map((page) => page.text)).toEqual(["One", "Two"]);
+  });
+
+  it("keeps the tutorial robot and greeter pages stable", async () => {
+    const source = await readFile("external/coilsnake-project/ccscript/robot.ccs", "utf8");
+    const parsed = parseCcsFile("ccscript/robot.ccs", source);
+
+    const pagesForLabel = (label: string) => {
+      const start = parsed.commands.findIndex((command) => command.cmd === "label" && command.name === label);
+      const nextLabel = parsed.commands.findIndex((command, index) => index > start && command.cmd === "label");
+      return buildDialoguePages(parsed.commands.slice(start + 1, nextLabel < 0 ? undefined : nextLabel));
+    };
+
+    expect(pagesForLabel("hello_world")).toEqual([
+      {
+        text: "@Hello World!",
+        ended: true,
+        unknownCommands: [],
+        segments: [{ kind: "text", value: "@Hello World!" }]
+      }
+    ]);
+    expect(pagesForLabel("greeter")).toEqual([
+      {
+        text: "@Beep boop. I greet, therefore I am.",
+        ended: false,
+        unknownCommands: [],
+        segments: [{ kind: "text", value: "@Beep boop. I greet, therefore I am." }]
+      },
+      {
+        text: "@New parts arrive tomorrow. Come back then.",
+        ended: true,
+        unknownCommands: [],
+        segments: [{ kind: "text", value: "@New parts arrive tomorrow. Come back then." }]
+      }
+    ]);
   });
 });
 
