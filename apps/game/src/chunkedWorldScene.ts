@@ -23,6 +23,7 @@ import {
   type ChunkGrid
 } from "./chunkStreaming";
 import { interactionEvents, type GameEvent } from "./eventRunner";
+import { RuntimeEventHost, RuntimeEventSequence, type EventWarpDestination } from "./eventHost";
 import { GameFlags } from "./gameFlags";
 import { behaviorForNpc } from "./npcBehaviors";
 import {
@@ -49,6 +50,7 @@ import {
 import { PLAYER_SPEED, INTERACTION_DISTANCE } from "./worldScene";
 import { DialogueController, publishDebug, type DebugNpc, type FirstSceneDebug } from "./state";
 import { textSpeedCpsFromSearch } from "./dialogueRenderer";
+import { PartyState } from "./partyState";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -109,6 +111,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private lastDoor?: { from: { x: number; y: number }; to: { x: number; y: number } };
   readonly dialogue = new DialogueController();
   private readonly gameFlags = new GameFlags();
+  private readonly partyState = new PartyState();
+  private eventSequence?: RuntimeEventSequence;
   targetReference = TARGET_REFERENCE;
   prompt = "";
   assetsLoaded = false;
@@ -144,6 +148,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     this.cameras.main.setBackgroundColor("#000000");
     this.targetReference = chooseReference(this.data_);
+    this.configureEventRuntime();
     this.indexChunks();
     this.indexNpcPlacements();
 
@@ -204,10 +209,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.stepNpcs(delta);
+    this.eventSequence?.update(delta);
 
-    if (this.dialogue.open && !this.playerState.inputLocked) {
+    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running);
+    if (inputOwned && !this.playerState.inputLocked) {
       lockPlayer(this.playerState, this.playerFrames);
-    } else if (!this.dialogue.open && this.playerState.inputLocked) {
+    } else if (!inputOwned && this.playerState.inputLocked) {
       unlockPlayer(this.playerState);
     }
 
@@ -394,6 +401,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.npcRuntimes.delete(key);
       if (this.activeNpcDialogue?.key === key) {
         this.dialogue.close();
+        this.eventSequence?.abort();
         unlockPlayer(this.playerState);
         this.activeNpcDialogue = undefined;
       }
@@ -410,6 +418,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.npcRuntimes.delete(key);
       if (this.activeNpcDialogue?.key === key) {
         this.dialogue.close();
+        this.eventSequence?.abort();
         unlockPlayer(this.playerState);
         this.activeNpcDialogue = undefined;
       }
@@ -603,14 +612,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
+    this.applyDoorWarp({
+      x: result.door.destinationWorldPixel.x,
+      y: result.door.destinationWorldPixel.y,
+      direction: result.door.direction
+    });
+  }
+
+  private applyDoorWarp(destination: EventWarpDestination): void {
     const from = { x: this.playerState.x, y: this.playerState.y };
-    const to = this.clampSpawn(result.door.destinationWorldPixel);
+    const to = this.clampSpawn(destination);
     this.playerState.x = to.x;
     this.playerState.y = to.y;
     this.playerState.velocityX = 0;
     this.playerState.velocityY = 0;
     this.playerState.moving = false;
-    this.playerState.facing = toFacing(result.door.direction, this.playerState.facing);
+    this.playerState.facing = toFacing(destination.direction, this.playerState.facing);
     this.playerState.walkClockMs = 0;
     this.playerState.animKey = `idle-${this.playerState.facing}`;
     this.playerState.animFrame = this.playerFrames[this.playerState.facing][0];
@@ -618,6 +635,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.currentChunk = undefined;
     this.refreshStreaming(true);
     this.cameras.main.centerOn(to.x, to.y);
+    if (this.player) {
+      this.player.x = to.x;
+      this.player.y = to.y;
+      if (this.player instanceof Phaser.GameObjects.Sprite) {
+        this.player.setFrame(this.playerState.animFrame);
+      }
+      this.player.setDepth(to.y);
+    }
   }
 
   private actorBodyBlocked(x: number, y: number, bodyX: number, bodyY: number): boolean {
@@ -670,6 +695,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   handleAdvance(): void {
     if (!this.dialogue.open) {
+      if (this.eventSequence?.running) {
+        return;
+      }
       if (this.interactionTarget() && this.dialogue.canOpen()) {
         this.openDialogue();
       }
@@ -677,7 +705,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.dialogue.advance();
     if (!this.dialogue.open) {
-      this.afterDialogueClosed();
+      if (this.eventSequence?.running) {
+        this.eventSequence.confirm();
+      } else {
+        this.afterDialogueClosed();
+      }
     }
     this.publish();
   }
@@ -689,8 +721,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.pauseNpcForDialogue(npc);
-    this.runEvents(interactionEvents(npc.data, this.targetReference, this.gameFlags));
     lockPlayer(this.playerState, this.playerFrames);
+    this.runEvents(interactionEvents(npc.data, this.targetReference, this.gameFlags));
     this.updatePrompt();
     this.publish();
   }
@@ -699,7 +731,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const event of events) {
       switch (event.kind) {
         case "dialogue":
-          this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference, this.gameFlags));
+          if (!this.startEventSequence(event.reference)) {
+            this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference, this.gameFlags));
+          }
           break;
         case "setFlag":
           this.gameFlags.set(event.flag);
@@ -713,6 +747,41 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.activeNpcDialogue = { key: npc.key, id: npc.data.npcId, restoreFacing: npc.state.player.facing };
     npc.state.paused = true;
     this.setNpcIdleFacing(npc, facingToward(npc.state.player.x, npc.state.player.y, this.playerState.x, this.playerState.y));
+  }
+
+  private configureEventRuntime(): void {
+    const host = new RuntimeEventHost({
+      dialogue: this.dialogue,
+      flags: this.gameFlags,
+      partyState: this.partyState,
+      scene: this,
+      resolveWarpDestination: (dest, style) => this.resolveEventWarpDestination(dest, style),
+      applyWarpDestination: (destination) => this.applyDoorWarp(destination),
+      startBattle: (group) => this.startEventBattle(group)
+    });
+    this.eventSequence = new RuntimeEventSequence(this.data_.scripts, host);
+  }
+
+  private startEventSequence(reference: string): boolean {
+    return this.eventSequence?.start(reference, {
+      onComplete: () => this.afterDialogueClosed()
+    }) ?? false;
+  }
+
+  private resolveEventWarpDestination(dest: number, style?: number): EventWarpDestination | undefined {
+    void dest;
+    void style;
+    // Generated effects carry teleport table ids; world.json does not yet expose that table.
+    return undefined;
+  }
+
+  private startEventBattle(group: number): boolean {
+    if (!this.data_.battle) {
+      return false;
+    }
+    this.scene.stop("ui");
+    this.scene.start("battle", { battleData: this.data_.battle, groupId: group });
+    return true;
   }
 
   private restoreActiveNpc(): void {
@@ -747,10 +816,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   closeDialogue(): void {
-    if (!this.dialogue.open) {
+    if (!this.dialogue.open && !this.eventSequence?.running) {
       return;
     }
-    this.dialogue.close();
+    if (this.dialogue.open) {
+      this.dialogue.close();
+    }
+    this.eventSequence?.abort();
     this.afterDialogueClosed();
     this.publish();
   }
@@ -844,7 +916,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       currentChunk: this.currentChunk,
       canInteract: Boolean(target),
       interactionTargetId: target?.id,
-      activeNpcId: this.dialogue.open ? this.activeNpcDialogue?.id : undefined,
+      activeNpcId: (this.dialogue.open || this.eventSequence?.running) ? this.activeNpcDialogue?.id : undefined,
       distanceToNpc: distance,
       inInteractionRange: this.inRange(),
       movementBounds: this.movementBounds(),
@@ -855,6 +927,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       dialogueCounters: { opens: this.dialogue.opens, advances: this.dialogue.advances, closes: this.dialogue.closes },
       flags: this.gameFlags.list(),
       flagsNumCount: this.gameFlags.listNums().length,
+      eventExecutor: this.eventSequence?.debug(),
+      partyState: this.partyState.counts(),
       world: {
         available: world.available,
         widthPixels: world.mapWidthTiles * world.tileSize,

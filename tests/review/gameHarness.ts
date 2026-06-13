@@ -67,6 +67,28 @@ export type FirstSceneDebug = {
   resolveStatus: string;
   flags?: string[];
   flagsNumCount?: number;
+  eventExecutor?: {
+    running: boolean;
+    currentEffectKind?: string;
+    effectsDispatched: number;
+    records: {
+      warps: number;
+      warpNoops: number;
+      battles: number;
+      battleNoops: number;
+      audio: number;
+      lastWarpDest?: number;
+      lastTeleportStyle?: number;
+      lastBattleGroup?: number;
+      lastAudioKind?: string;
+    };
+  };
+  partyState?: {
+    wallet: number;
+    inventoryChars: number;
+    inventoryItems: number;
+    partyCount: number;
+  };
   world?: {
     available: boolean;
     originTile?: { x: number; y: number };

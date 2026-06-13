@@ -10,6 +10,7 @@ import {
   type GameData
 } from "./loader";
 import { interactionEvents, type GameEvent } from "./eventRunner";
+import { RuntimeEventHost, RuntimeEventSequence, type EventWarpDestination } from "./eventHost";
 import { GameFlags } from "./gameFlags";
 import { behaviorForNpc } from "./npcBehaviors";
 import {
@@ -35,6 +36,7 @@ import {
 } from "./playerController";
 import { DialogueController, publishDebug, type DebugNpc, type FirstSceneDebug } from "./state";
 import { textSpeedCpsFromSearch } from "./dialogueRenderer";
+import { PartyState } from "./partyState";
 
 export const PLAYER_SPEED = 110; // world pixels per second
 export const INTERACTION_DISTANCE = 28; // world pixels between feet positions
@@ -73,6 +75,8 @@ export class WorldScene extends Phaser.Scene {
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
   readonly dialogue = new DialogueController();
   private readonly gameFlags = new GameFlags();
+  private readonly partyState = new PartyState();
+  private eventSequence?: RuntimeEventSequence;
   targetReference = TARGET_REFERENCE;
   prompt = "";
   assetsLoaded = false;
@@ -127,6 +131,7 @@ export class WorldScene extends Phaser.Scene {
     }
 
     this.targetReference = chooseReference(this.data_);
+    this.configureEventRuntime();
 
     for (const npc of world.npcs) {
       if (!this.isNpcVisible(npc)) {
@@ -236,11 +241,13 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
     this.stepNpcs(delta);
+    this.eventSequence?.update(delta);
 
-    // Dialogue owns the input: freeze movement and animation while open.
-    if (this.dialogue.open && !this.playerState.inputLocked) {
+    // Dialogue/event execution owns input while any scripted sequence is active.
+    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running);
+    if (inputOwned && !this.playerState.inputLocked) {
       lockPlayer(this.playerState, this.playerFrames);
-    } else if (!this.dialogue.open && this.playerState.inputLocked) {
+    } else if (!inputOwned && this.playerState.inputLocked) {
       unlockPlayer(this.playerState);
     }
 
@@ -398,6 +405,9 @@ export class WorldScene extends Phaser.Scene {
 
   handleAdvance(): void {
     if (!this.dialogue.open) {
+      if (this.eventSequence?.running) {
+        return;
+      }
       if (this.interactionTarget() && this.dialogue.canOpen()) {
         this.openDialogue();
       }
@@ -405,7 +415,11 @@ export class WorldScene extends Phaser.Scene {
     }
     this.dialogue.advance();
     if (!this.dialogue.open) {
-      this.afterDialogueClosed();
+      if (this.eventSequence?.running) {
+        this.eventSequence.confirm();
+      } else {
+        this.afterDialogueClosed();
+      }
     }
     this.publish();
   }
@@ -417,8 +431,8 @@ export class WorldScene extends Phaser.Scene {
       return;
     }
     this.pauseNpcForDialogue(npc);
-    this.runEvents(interactionEvents(npc.data, this.targetReference, this.gameFlags));
     lockPlayer(this.playerState, this.playerFrames);
+    this.runEvents(interactionEvents(npc.data, this.targetReference, this.gameFlags));
     this.updatePrompt();
     this.publish();
   }
@@ -427,7 +441,9 @@ export class WorldScene extends Phaser.Scene {
     for (const event of events) {
       switch (event.kind) {
         case "dialogue":
-          this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference, this.gameFlags));
+          if (!this.startEventSequence(event.reference)) {
+            this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference, this.gameFlags));
+          }
           break;
         case "setFlag":
           this.gameFlags.set(event.flag);
@@ -441,6 +457,65 @@ export class WorldScene extends Phaser.Scene {
     this.activeNpcDialogue = { id: npc.data.npcId, restoreFacing: npc.state.player.facing };
     npc.state.paused = true;
     this.setNpcIdleFacing(npc, facingToward(npc.state.player.x, npc.state.player.y, this.playerState.x, this.playerState.y));
+  }
+
+  private configureEventRuntime(): void {
+    const host = new RuntimeEventHost({
+      dialogue: this.dialogue,
+      flags: this.gameFlags,
+      partyState: this.partyState,
+      scene: this,
+      resolveWarpDestination: (dest, style) => this.resolveEventWarpDestination(dest, style),
+      applyWarpDestination: (destination) => this.applyEventWarpDestination(destination),
+      startBattle: (group) => this.startEventBattle(group)
+    });
+    this.eventSequence = new RuntimeEventSequence(this.data_.scripts, host);
+  }
+
+  private startEventSequence(reference: string): boolean {
+    return this.eventSequence?.start(reference, {
+      onComplete: () => this.afterDialogueClosed()
+    }) ?? false;
+  }
+
+  private resolveEventWarpDestination(dest: number, style?: number): EventWarpDestination | undefined {
+    void dest;
+    void style;
+    // Region mode has no generated teleport table yet; the host records a no-op.
+    return undefined;
+  }
+
+  private applyEventWarpDestination(destination: EventWarpDestination): void {
+    const bounds = this.movementBounds();
+    const x = Math.min(Math.max(destination.x, bounds.minX), bounds.maxX);
+    const y = Math.min(Math.max(destination.y, bounds.minY), bounds.maxY);
+    this.playerState.x = x;
+    this.playerState.y = y;
+    this.playerState.velocityX = 0;
+    this.playerState.velocityY = 0;
+    this.playerState.moving = false;
+    this.playerState.facing = toFacing(destination.direction, this.playerState.facing);
+    this.playerState.walkClockMs = 0;
+    this.playerState.animKey = `idle-${this.playerState.facing}`;
+    this.playerState.animFrame = this.playerFrames[this.playerState.facing][0];
+    if (this.player) {
+      this.player.x = x;
+      this.player.y = y;
+      if (this.player instanceof Phaser.GameObjects.Sprite) {
+        this.player.setFrame(this.playerState.animFrame);
+      }
+      this.player.setDepth(y);
+    }
+    this.cameras.main.centerOn(x, y);
+  }
+
+  private startEventBattle(group: number): boolean {
+    if (!this.data_.battle) {
+      return false;
+    }
+    this.scene.stop("ui");
+    this.scene.start("battle", { battleData: this.data_.battle, groupId: group });
+    return true;
   }
 
   private restoreActiveNpc(): void {
@@ -476,10 +551,13 @@ export class WorldScene extends Phaser.Scene {
   }
 
   closeDialogue(): void {
-    if (!this.dialogue.open) {
+    if (!this.dialogue.open && !this.eventSequence?.running) {
       return;
     }
-    this.dialogue.close();
+    if (this.dialogue.open) {
+      this.dialogue.close();
+    }
+    this.eventSequence?.abort();
     this.afterDialogueClosed();
     this.publish();
   }
@@ -542,7 +620,7 @@ export class WorldScene extends Phaser.Scene {
       inputLocked: this.playerState.inputLocked,
       canInteract: Boolean(target),
       interactionTargetId: target?.id,
-      activeNpcId: this.dialogue.open ? this.activeNpcDialogue?.id : undefined,
+      activeNpcId: (this.dialogue.open || this.eventSequence?.running) ? this.activeNpcDialogue?.id : undefined,
       distanceToNpc: distance,
       inInteractionRange: this.inRange(),
       movementBounds: this.movementBounds(),
@@ -553,6 +631,8 @@ export class WorldScene extends Phaser.Scene {
       dialogueCounters: { opens: this.dialogue.opens, advances: this.dialogue.advances, closes: this.dialogue.closes },
       flags: this.gameFlags.list(),
       flagsNumCount: this.gameFlags.listNums().length,
+      eventExecutor: this.eventSequence?.debug(),
+      partyState: this.partyState.counts(),
       world: {
         available: world.available,
         originTile: world.region?.originTile,
