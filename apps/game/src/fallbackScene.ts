@@ -161,6 +161,8 @@ export class FallbackScene extends Phaser.Scene {
       movementBounds: { minX: 44, maxX: this.scale.width - 44, minY: 88, maxY: 284 },
       statusLines: buildStatusLines(this.data_),
       metadataLines: buildMetadataLines(this.data_),
+      fontLoaded: Boolean(this.data_.font),
+      ...(this.data_.font ? { primaryFontId: this.data_.font.primaryFontId } : {}),
       tutorial: this.data_.tutorialStatus?.counts,
       resolveStatus: resolveStatus(this.data_),
       world: this.data_.world

@@ -19,6 +19,7 @@ import {
   type SpriteSheetCollection,
   type TutorialStatus,
   type BattleData,
+  type FontCollection,
   type CharacterCollection,
   type ItemCollection,
   type PsiCollection,
@@ -29,6 +30,7 @@ import {
   type WorldArtifact
 } from "@eb/schemas";
 import { BATTLE_FILE, buildBattleData } from "./battle";
+import { FONT_FILE, buildFontData } from "./font";
 import { CHARACTERS_FILE, buildCharacterData } from "./characters";
 import { ITEMS_FILE, PSI_FILE, buildItemPsiData } from "./itemsPsi";
 import { SHOPS_FILE, buildShopData } from "./shops";
@@ -63,6 +65,7 @@ type CliArgs = {
   out: string;
   worldMode: WorldMode;
   battle: boolean;
+  font: boolean;
   characters: boolean;
   items: boolean;
   shops: boolean;
@@ -82,6 +85,7 @@ type ConvertResult = {
   sprites: SpriteSheetCollection;
   teleportDestinations?: TeleportDestinations;
   battle?: BattleData;
+  font?: FontCollection;
   characters?: CharacterCollection;
   items?: ItemCollection;
   psi?: PsiCollection;
@@ -90,11 +94,14 @@ type ConvertResult = {
 
 export function parseArgs(argv: string[]): CliArgs {
   const itemsEnabled = parseItemMode(process.env.EB_ITEMS);
+  const worldMode = parseWorldMode(process.env.EB_WORLD_MODE);
+  let fontOverridden = false;
   const args: CliArgs = {
     project: process.env.EB_PROJECT ?? DEFAULT_PROJECT,
     out: DEFAULT_OUT,
-    worldMode: parseWorldMode(process.env.EB_WORLD_MODE),
+    worldMode,
     battle: parseBattleMode(process.env.EB_BATTLE),
+    font: parseFontMode(process.env.EB_FONT, worldMode),
     characters: parseCharacterMode(process.env.EB_CHARS),
     items: itemsEnabled,
     shops: parseShopMode(process.env.EB_SHOPS) || itemsEnabled,
@@ -111,9 +118,18 @@ export function parseArgs(argv: string[]): CliArgs {
       index += 1;
     } else if (arg === "--world-mode") {
       args.worldMode = parseWorldMode(argv[index + 1]);
+      if (!fontOverridden && process.env.EB_FONT === undefined) {
+        args.font = parseFontMode(undefined, args.worldMode);
+      }
       index += 1;
     } else if (arg === "--battle") {
       args.battle = true;
+    } else if (arg === "--font") {
+      args.font = true;
+      fontOverridden = true;
+    } else if (arg === "--no-font") {
+      args.font = false;
+      fontOverridden = true;
     } else if (arg === "--characters" || arg === "--chars") {
       args.characters = true;
     } else if (arg === "--items" || arg === "--item-data") {
@@ -150,6 +166,19 @@ function parseBattleMode(value: string | undefined): boolean {
     return true;
   }
   throw new Error(`Unsupported EB_BATTLE "${value}". Expected "1" or "0".`);
+}
+
+function parseFontMode(value: string | undefined, worldMode: WorldMode): boolean {
+  if (!value) {
+    return worldMode === "full";
+  }
+  if (value === "0" || value.toLowerCase() === "false" || value.toLowerCase() === "no") {
+    return false;
+  }
+  if (value === "1" || value.toLowerCase() === "true" || value.toLowerCase() === "yes") {
+    return true;
+  }
+  throw new Error(`Unsupported EB_FONT "${value}". Expected "1" or "0".`);
 }
 
 function parseCharacterMode(value: string | undefined): boolean {
@@ -834,6 +863,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   const out = options.out ?? DEFAULT_OUT;
   const worldMode = options.worldMode ?? parseWorldMode(process.env.EB_WORLD_MODE);
   const battleEnabled = options.battle ?? parseBattleMode(process.env.EB_BATTLE);
+  const fontEnabled = options.font ?? parseFontMode(process.env.EB_FONT, worldMode);
   const charactersEnabled = options.characters ?? parseCharacterMode(process.env.EB_CHARS);
   const itemsEnabled = options.items ?? parseItemMode(process.env.EB_ITEMS);
   const shopsEnabled = options.shops ?? (parseShopMode(process.env.EB_SHOPS) || itemsEnabled);
@@ -928,6 +958,12 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
       displayPath: makeDisplayPath(project)
     })
     : undefined;
+  const font = fontEnabled
+    ? await buildFontData({
+      projectAbs,
+      outAbs
+    })
+    : undefined;
   const characters = charactersEnabled
     ? await buildCharacterData({
       projectAbs,
@@ -953,6 +989,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     ...GENERATED_FILES,
     ...(teleportDestinations ? { teleportDestinations: TELEPORT_DESTINATIONS_FILE } : {}),
     ...(battle ? { battle: BATTLE_FILE } : {}),
+    ...(font ? { font: FONT_FILE } : {}),
     ...(characters ? { characters: CHARACTERS_FILE } : {}),
     ...(items ? { items: ITEMS_FILE, psi: PSI_FILE } : {}),
     ...(shops ? { shops: SHOPS_FILE } : {})
@@ -981,6 +1018,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     GENERATED_FILES.sprites,
     ...(teleportDestinations ? [TELEPORT_DESTINATIONS_FILE] : []),
     ...(battle ? [BATTLE_FILE] : []),
+    ...(font ? [FONT_FILE] : []),
     ...(characters ? [CHARACTERS_FILE] : []),
     ...(items ? [ITEMS_FILE, PSI_FILE] : []),
     ...(shops ? [SHOPS_FILE] : [])
@@ -1005,6 +1043,10 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
       ...(battle ? {
         battleEnemies: battle.counts.enemies,
         battleGroups: battle.counts.groups
+      } : {}),
+      ...(font ? {
+        fontSheets: font.fonts.length,
+        fontGlyphs: sum(font.fonts, (sheet) => sheet.glyphCount)
       } : {}),
       ...(characters ? {
         characters: characters.counts.characters,
@@ -1053,6 +1095,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   if (battle) {
     await writeJson(path.join(outAbs, BATTLE_FILE), battle);
   }
+  if (font) {
+    await writeJson(path.join(outAbs, FONT_FILE), font);
+  }
   if (characters) {
     await writeJson(path.join(outAbs, CHARACTERS_FILE), characters);
   }
@@ -1075,6 +1120,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     sprites,
     ...(teleportDestinations ? { teleportDestinations } : {}),
     ...(battle ? { battle } : {}),
+    ...(font ? { font } : {}),
     ...(characters ? { characters } : {}),
     ...(items ? { items } : {}),
     ...(psi ? { psi } : {}),
@@ -1852,6 +1898,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           GENERATED_FILES.sprites,
           ...(result.teleportDestinations ? [TELEPORT_DESTINATIONS_FILE] : []),
           ...(result.battle ? [BATTLE_FILE] : []),
+          ...(result.font ? [FONT_FILE] : []),
           ...(result.characters ? [CHARACTERS_FILE] : []),
           ...(result.items ? [ITEMS_FILE, PSI_FILE] : []),
           ...(result.shops ? [SHOPS_FILE] : [])
@@ -1883,6 +1930,13 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           shops: {
             shops: result.shops.counts.shops,
             itemEntries: result.shops.counts.entries
+          }
+        } : {}),
+        ...(result.font ? {
+          font: {
+            sheets: result.font.fonts.length,
+            glyphs: sum(result.font.fonts, (sheet) => sheet.glyphCount),
+            primaryFontId: result.font.primaryFontId
           }
         } : {}),
         tutorial: result.tutorialStatus.counts,

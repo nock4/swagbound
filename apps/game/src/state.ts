@@ -177,6 +177,8 @@ export type OverworldDebug = {
   movementBounds: { minX: number; maxX: number; minY: number; maxY: number };
   statusLines: string[];
   metadataLines: string[];
+  fontLoaded?: boolean;
+  primaryFontId?: number;
   tutorial?: TutorialStatus["counts"];
   resolveStatus: string;
   dialogueCounters?: { opens: number; advances: number; closes: number };

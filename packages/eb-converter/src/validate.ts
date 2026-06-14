@@ -4,6 +4,7 @@ import path from "node:path";
 import {
   BattleDataSchema,
   CharacterCollectionSchema,
+  FontCollectionSchema,
   ItemCollectionSchema,
   ManifestSchema,
   NpcReferenceCollectionSchema,
@@ -50,6 +51,9 @@ export type GeneratedValidationResult = {
   battleEnemies?: number;
   battleGroups?: number;
   battleAssetsChecked?: number;
+  fontSheets?: number;
+  fontGlyphs?: number;
+  fontAssetsChecked?: number;
   characters?: number;
   characterStatFieldsPopulated?: number;
   items?: number;
@@ -100,6 +104,11 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
   const battlePath = path.join(out, battleFile);
   const battleRaw = existsSync(battlePath) ? await readJson(battlePath) : undefined;
   const battle = battleRaw ? BattleDataSchema.parse(battleRaw) : undefined;
+  const fontFile = manifest.files.font ?? "font.json";
+  const fontPath = path.join(out, fontFile);
+  const shouldReadFont = Boolean(manifest.files.font) || existsSync(fontPath);
+  const fontRaw = shouldReadFont ? await readJson(fontPath) : undefined;
+  const font = fontRaw ? FontCollectionSchema.parse(fontRaw) : undefined;
   const characterFile = manifest.files.characters ?? DEFAULT_CHARACTERS_FILE;
   const characterPath = path.join(out, characterFile);
   const shouldReadCharacters = Boolean(manifest.files.characters) || existsSync(characterPath);
@@ -132,6 +141,7 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
     [manifest.files.sprites]: spritesRaw,
     ...(teleportDestinationsRaw ? { [teleportDestinationsFile]: teleportDestinationsRaw } : {}),
     ...(battleRaw ? { [battleFile]: battleRaw } : {}),
+    ...(fontRaw ? { [fontFile]: fontRaw } : {}),
     ...(charactersRaw ? { [characterFile]: charactersRaw } : {}),
     ...(itemsRaw ? { [itemFile]: itemsRaw } : {}),
     ...(psiRaw ? { [psiFile]: psiRaw } : {}),
@@ -140,6 +150,7 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
 
   const worldAssetsChecked = assertWorldAssetsExist(out, world, sprites);
   const battleAssetsChecked = battle ? assertBattleAssetsExist(out, battle) : 0;
+  const fontAssetsChecked = font ? assertFontAssetsExist(out, font) : 0;
 
   return {
     ok: true,
@@ -153,7 +164,9 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
       manifest.files.validationReport,
       manifest.files.world,
       manifest.files.sprites,
+      ...(teleportDestinations ? [teleportDestinationsFile] : []),
       ...(battle ? [battleFile] : []),
+      ...(font ? [fontFile] : []),
       ...(characters ? [characterFile] : []),
       ...(items ? [itemFile] : []),
       ...(psi ? [psiFile] : []),
@@ -176,6 +189,11 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
       battleEnemies: battle.counts.enemies,
       battleGroups: battle.counts.groups,
       battleAssetsChecked
+    } : {}),
+    ...(font ? {
+      fontSheets: font.fonts.length,
+      fontGlyphs: font.fonts.reduce((total, sheet) => total + sheet.glyphCount, 0),
+      fontAssetsChecked
     } : {}),
     ...(characters ? {
       characters: characters.counts.characters,
@@ -239,6 +257,13 @@ function assertBattleAssetsExist(
     assertLocalAssetExists(out, assetPath, "missing_battle_asset", "battle JSON references a missing local asset");
   }
   return assetPaths.size;
+}
+
+function assertFontAssetsExist(out: string, font: { fonts: Array<{ file: string }> }): number {
+  for (const sheet of font.fonts) {
+    assertLocalAssetExists(out, sheet.file, "missing_font_asset", "font JSON references a missing local asset");
+  }
+  return font.fonts.length;
 }
 
 function assertLocalAssetExists(out: string, assetPath: string, code: string, message: string): void {

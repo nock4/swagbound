@@ -2,6 +2,7 @@ import {
   buildDialoguePages,
   BattleDataSchema,
   CharacterCollectionSchema,
+  FontCollectionSchema,
   ItemCollectionSchema,
   ManifestSchema,
   NpcReferenceCollectionSchema,
@@ -19,6 +20,7 @@ import {
   type DialoguePage,
   type BattleData,
   type CharacterCollection,
+  type FontCollection,
   type ItemCollection,
   type Manifest,
   type NumericFlagState,
@@ -47,6 +49,7 @@ export type GameData = {
   sprites?: SpriteSheetCollection;
   teleportDestinations?: TeleportDestinations;
   battle?: BattleData;
+  font?: FontCollection;
   characters?: CharacterCollection;
   items?: ItemCollection;
   psi?: PsiCollection;
@@ -74,6 +77,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     sprites,
     teleportDestinations,
     battle,
+    font,
     characters,
     items,
     psi,
@@ -91,6 +95,9 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       : Promise.resolve(undefined),
     manifest.files.battle
       ? loadJson(`/generated/${manifest.files.battle}`, BattleDataSchema)
+      : Promise.resolve(undefined),
+    manifest.files.font
+      ? loadJson(`/generated/${manifest.files.font}`, FontCollectionSchema)
       : Promise.resolve(undefined),
     manifest.files.characters
       ? loadJson(`/generated/${manifest.files.characters}`, CharacterCollectionSchema)
@@ -116,6 +123,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     sprites,
     teleportDestinations,
     battle,
+    font,
     characters,
     items,
     psi,
@@ -206,6 +214,7 @@ export function buildMetadataLines(data: GameData): string[] {
     `Sprite PNGs indexed: ${spriteGroups?.counts.images ?? 0}`,
     `SpriteGroups/005.png: ${sprite005 ? "detected" : "not detected"}`,
     `Sheets copied: ${data.sprites?.counts.sheets ?? 0}`,
+    `Font data: ${data.font ? `${data.font.fonts.length} sheets` : "not loaded"}`,
     `World render: ${data.world?.available && "mode" in data.world && data.world.mode === "full" ? "chunked PNGs" : data.world?.available ? "background + foreground PNG" : "skipped"}`,
     "Asset rendering: local-only, gitignored"
   ];

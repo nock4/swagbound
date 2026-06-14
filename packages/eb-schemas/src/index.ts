@@ -564,6 +564,30 @@ export const BattleDataSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+export const FontGlyphSheetSchema = z.object({
+  id: z.number().int().nonnegative(),
+  file: z.string(),
+  imageWidth: z.number().int().positive(),
+  imageHeight: z.number().int().positive(),
+  columns: z.number().int().positive(),
+  glyphCount: z.number().int().positive(),
+  cellWidth: z.number().int().positive(),
+  cellHeight: z.number().int().positive(),
+  widths: z.array(z.number().int().nonnegative())
+}).refine((sheet) => sheet.widths.length === sheet.glyphCount, {
+  message: "widths length must match glyphCount",
+  path: ["widths"]
+});
+
+export const FontCollectionSchema = z.object({
+  primaryFontId: z.number().int().nonnegative(),
+  charCodeOffset: z.number().int().nonnegative(),
+  fonts: z.array(FontGlyphSheetSchema)
+}).refine((collection) => collection.fonts.some((font) => font.id === collection.primaryFontId), {
+  message: "primaryFontId must reference an emitted font",
+  path: ["primaryFontId"]
+});
+
 export const CharacterGrowthSchema = z.object({
   offense: z.number().int().nonnegative(),
   defense: z.number().int().nonnegative(),
@@ -729,6 +753,7 @@ export const ManifestSchema = z.object({
     sprites: z.string(),
     teleportDestinations: z.string().optional(),
     battle: z.string().optional(),
+    font: z.string().optional(),
     characters: z.string().optional(),
     items: z.string().optional(),
     psi: z.string().optional(),
@@ -747,6 +772,8 @@ export const ManifestSchema = z.object({
     teleportDestinations: z.number().int().nonnegative().optional(),
     battleEnemies: z.number().int().nonnegative().optional(),
     battleGroups: z.number().int().nonnegative().optional(),
+    fontSheets: z.number().int().nonnegative().optional(),
+    fontGlyphs: z.number().int().nonnegative().optional(),
     characters: z.number().int().nonnegative().optional(),
     characterStatFieldsPopulated: z.number().int().nonnegative().optional(),
     items: z.number().int().nonnegative().optional(),
@@ -791,6 +818,8 @@ export type BattleData = z.infer<typeof BattleDataSchema>;
 export type BattleEnemy = z.infer<typeof BattleEnemySchema>;
 export type BattleGroup = z.infer<typeof BattleGroupSchema>;
 export type BattleDropRarity = z.infer<typeof BattleDropRaritySchema>;
+export type FontGlyphSheet = z.infer<typeof FontGlyphSheetSchema>;
+export type FontCollection = z.infer<typeof FontCollectionSchema>;
 export type CharacterCollection = z.infer<typeof CharacterCollectionSchema>;
 export type CharacterData = z.infer<typeof CharacterDataSchema>;
 export type CharacterGrowth = z.infer<typeof CharacterGrowthSchema>;

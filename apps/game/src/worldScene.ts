@@ -1035,6 +1035,8 @@ export class WorldScene extends Phaser.Scene {
       movementBounds: this.movementBounds(),
       statusLines: this.statusLines(),
       metadataLines: this.metadataLines(),
+      fontLoaded: Boolean(this.data_.font),
+      ...(this.data_.font ? { primaryFontId: this.data_.font.primaryFontId } : {}),
       tutorial: this.data_.tutorialStatus?.counts,
       resolveStatus: resolveStatus(this.data_),
       dialogueCounters: { opens: this.dialogue.opens, advances: this.dialogue.advances, closes: this.dialogue.closes },
