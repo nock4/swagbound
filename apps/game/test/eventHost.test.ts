@@ -290,6 +290,43 @@ describe("RuntimeEventHost", () => {
     });
   });
 
+  it("aborts the sequence when the host rejects a warp destination", () => {
+    const file = "ccscript/rejected-warp.ccs";
+    const collection = scripts({
+      [file]: [
+        label(file, "start", 1),
+        effect(file, 2, { kind: "setFlag", flag: 7, raw: "set" }),
+        effect(file, 3, { kind: "warp", dest: 2, raw: "warp" }),
+        effect(file, 4, { kind: "setFlag", flag: 8, raw: "set" }),
+        runtime(file, "end", 5)
+      ]
+    });
+    const flags = new GameFlags();
+    const host = new RuntimeEventHost({
+      dialogue: new DialogueController(),
+      flags,
+      partyState: new PartyState(),
+      resolveWarpDestination: (dest, style) => resolveTeleportDestination(teleportDestinations(), dest, style),
+      applyWarpDestination: () => false
+    });
+    const sequence = new RuntimeEventSequence(collection, host);
+
+    expect(sequence.start("rejected-warp.start")).toBe(true);
+
+    expect(sequence.running).toBe(false);
+    expect(host.debug().result).toMatchObject({
+      status: "aborted",
+      reason: "host_abort_requested"
+    });
+    expect(flags.isSet(7)).toBe(true);
+    expect(flags.isSet(8)).toBe(false);
+    expect(host.debug().records).toMatchObject({
+      warps: 1,
+      warpNoops: 0,
+      lastWarpDest: 2
+    });
+  });
+
   it("fades teleport styles while applying the resolved destination", () => {
     const file = "ccscript/teleport.ccs";
     const collection = scripts({

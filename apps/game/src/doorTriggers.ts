@@ -43,3 +43,34 @@ export function resolveDoorTrigger(
   }
   return { door: currentDoor, suppressUntilClear: true };
 }
+
+export function resolveDoorIntentTrigger(
+  currentFeet: { x: number; y: number },
+  intendedFeet: { x: number; y: number },
+  doors: readonly WorldDoor[],
+  state: DoorTriggerState,
+  cellSize: number
+): DoorTriggerResult {
+  const currentDoor = doorAtFeet(currentFeet, doors, cellSize);
+  if (state.suppressUntilClear && currentDoor) {
+    return { suppressUntilClear: true };
+  }
+
+  const intendedDoor = doorAtFeet(intendedFeet, doors, cellSize);
+  if (!intendedDoor) {
+    return { suppressUntilClear: false };
+  }
+  if (sameDoorCell(currentFeet, intendedFeet, cellSize) || currentDoor) {
+    return { suppressUntilClear: Boolean(currentDoor) };
+  }
+  return { door: intendedDoor, suppressUntilClear: true };
+}
+
+function sameDoorCell(
+  a: { x: number; y: number },
+  b: { x: number; y: number },
+  cellSize: number
+): boolean {
+  return Math.floor(a.x / cellSize) === Math.floor(b.x / cellSize)
+    && Math.floor(a.y / cellSize) === Math.floor(b.y / cellSize);
+}

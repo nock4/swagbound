@@ -3,7 +3,7 @@ import { isNpcVisibleForEventFlags, type ItemData, type SpriteSheet, type WorldC
 import { rollEncounter, sectorIndexForTile } from "./encounterLogic";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
 import type { BattleReturnContext, BattleReturnSource, ChunkedWorldRestore } from "./battleReturn";
-import { resolveDoorTrigger, type DoorTriggerState } from "./doorTriggers";
+import { resolveDoorIntentTrigger, type DoorTriggerState } from "./doorTriggers";
 import {
   buildDialogueForReference,
   buildMetadataLines,
@@ -111,6 +111,11 @@ import {
 } from "./menuModel";
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import { activeWindowFlavorId } from "./windowSettings";
+import {
+  footBoxCornersClear,
+  resolveWalkableFootprintDestination,
+  walkableFootprintClear
+} from "./collisionFootprint";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -384,23 +389,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
       unlockPlayer(this.playerState);
     }
 
-    stepPlayer(this.playerState, this.readInput(), {
+    const input = this.readInput();
+    if (this.handleDoorIntentTrigger(input, delta)) {
+      this.syncPlayerObject();
+      this.updateCollisionOverlay();
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
+
+    stepPlayer(this.playerState, input, {
       deltaMs: delta,
       speed: PLAYER_SPEED,
       bounds: this.movementBounds(),
       blocked: (x, y) => this.blocked(x, y, { includeNpcs: true }),
       frames: this.playerFrames
     });
-    if (!this.isDoorFadeActive()) {
-      this.handleDoorTrigger();
-    }
-
-    this.player.x = this.playerState.x;
-    this.player.y = this.playerState.y;
-    if (this.player instanceof Phaser.GameObjects.Sprite) {
-      this.player.setFrame(this.playerState.animFrame);
-    }
-    this.player.setDepth(this.player.y);
+    this.syncPlayerObject();
     this.refreshStreaming();
     this.updateCollisionOverlay();
     if (this.handleEncounterStep()) {
@@ -934,47 +939,57 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private surfaceBlocked(x: number, y: number): boolean {
-    const corners: Array<[number, number]> = [
-      [x - 7, y - 10],
-      [x + 6, y - 10],
-      [x - 7, y - 1],
-      [x + 6, y - 1]
-    ];
-    for (const [px, py] of corners) {
-      const cx = Math.floor(px / this.collisionCellSize);
-      const cy = Math.floor(py / this.collisionCellSize);
-      if (cx < 0 || cy < 0 || cx >= this.collisionWidth || cy >= this.collisionHeight) {
-        return true;
-      }
-      if (this.solidRows[cy]?.[cx] === "1") {
-        return true;
-      }
-    }
-    return false;
+    return !footBoxCornersClear({ x, y }, this.solidRows, this.collisionGrid());
   }
 
-  private handleDoorTrigger(): void {
-    if (this.isDoorFadeActive()) {
-      return;
+  private walkableFootprint(point: { x: number; y: number }): boolean {
+    return walkableFootprintClear(point, this.solidRows, this.collisionGrid());
+  }
+
+  private handleDoorIntentTrigger(input: MoveInput, deltaMs: number): boolean {
+    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running || this.isDoorFadeActive()) {
+      return false;
     }
-    // Phase-2 owns eventFlag gating. This slice treats every imported trigger as active.
-    const result = resolveDoorTrigger(
+    const intendedFeet = this.intendedMoveFeet(input, deltaMs);
+    if (!intendedFeet) {
+      return false;
+    }
+    const result = resolveDoorIntentTrigger(
       this.playerState,
+      intendedFeet,
       this.world_.doors,
       this.doorTriggerState,
       this.collisionCellSize
     );
     this.doorTriggerState = { suppressUntilClear: result.suppressUntilClear };
     if (!result.door) {
-      return;
+      return false;
     }
-
     this.applyDoorWarp({
       x: result.door.destinationWorldPixel.x,
       y: result.door.destinationWorldPixel.y,
       worldPixel: result.door.destinationWorldPixel,
       direction: result.door.direction
     });
+    return true;
+  }
+
+  private intendedMoveFeet(input: MoveInput, deltaMs: number): { x: number; y: number } | undefined {
+    if (this.playerState.inputLocked) {
+      return undefined;
+    }
+    const dx = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+    const dy = (input.down ? 1 : 0) - (input.up ? 1 : 0);
+    if (dx === 0 && dy === 0) {
+      return undefined;
+    }
+    const scale = dx !== 0 && dy !== 0 ? Math.SQRT1_2 : 1;
+    const step = (PLAYER_SPEED * deltaMs) / 1000;
+    const bounds = this.movementBounds();
+    return {
+      x: clamp(this.playerState.x + dx * scale * step, bounds.minX, bounds.maxX),
+      y: clamp(this.playerState.y + dy * scale * step, bounds.minY, bounds.maxY)
+    };
   }
 
   private applyDoorWarp(destination: EventWarpDestination, options: { instant?: boolean } = {}): void {
@@ -989,7 +1004,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private applyDoorWarpInstant(destination: EventWarpDestination): void {
     const from = { x: this.playerState.x, y: this.playerState.y };
-    const to = this.clampSpawn(destination.worldPixel ?? destination);
+    const to = this.resolveWalkableWarpPoint(destination.worldPixel ?? destination);
     this.doorTriggerState = { suppressUntilClear: true };
     this.playerState.x = to.x;
     this.playerState.y = to.y;
@@ -1638,17 +1653,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
-    if (this.startupRunActive) {
-      this.newGameStartupRecord = this.startupRecord({
-        attempted: true,
-        started: true,
-        reference: decision.reference,
-        status: "running",
-        initialPlayer: spawn,
-        finalPlayer: this.currentPlayerPoint(),
-        finalPlayerControllable: false,
-        eventDebug: this.eventSequence?.debug()
-      });
+    if (this.startupRunActive && this.eventSequence?.running) {
+      this.abortStartupAtControlStart(decision.reference);
+      return;
     }
     this.updatePrompt();
   }
@@ -1700,17 +1707,40 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private applyStartupWarpDestination(destination: EventWarpDestination): boolean {
-    const to = this.clampSpawn(destination.worldPixel ?? destination);
-    if (!this.isPlayableWorldPoint(to)) {
-      this.startupFallbackReason = "unsafe_warp_destination";
-      return false;
+    void destination;
+    // New-game startup scripts may contain setup warps, but control starts at
+    // the resolved spawn (?spawn override or generated canonical start).
+    // Abort on the first position warp so input is released at the start point.
+    return false;
+  }
+
+  private abortStartupAtControlStart(reference: string): void {
+    if (this.startupRunFinalized) {
+      return;
     }
-    this.applyDoorWarp(destination, { instant: true });
-    if (!this.isPlayableWorldPoint(this.currentPlayerPoint())) {
-      this.startupFallbackReason = "unsafe_warp_result";
-      return false;
+    this.startupRunFinalized = true;
+    this.eventSequence?.abort("startup_control_start");
+    this.startupRunActive = false;
+    if (this.dialogue.open) {
+      this.dialogue.close();
     }
-    return true;
+    this.afterDialogueClosed();
+    const eventDebug = this.eventSequence?.debug();
+    const result = eventDebug?.result;
+    this.newGameStartupRecord = this.startupRecord({
+      attempted: true,
+      started: true,
+      reference,
+      status: "aborted",
+      abortedReason: result?.reason ?? "startup_control_start",
+      initialPlayer: this.startupInitialSpawn,
+      finalPlayer: this.currentPlayerPoint(),
+      finalPlayerControllable: this.isPlayerControllable(),
+      eventDebug
+    });
+    publishNewGameStartupRecord(this.newGameStartupRecord);
+    this.updatePrompt();
+    this.publish();
   }
 
   private startEventBattleForCurrentMode(group: number): boolean {
@@ -1968,7 +1998,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!chunk || chunk.void) {
       return false;
     }
-    return !this.surfaceBlocked(point.x, point.y);
+    return this.walkableFootprint(point);
   }
 
   private restoreStartupSpawn(): void {
@@ -2062,6 +2092,27 @@ export class ChunkedWorldScene extends Phaser.Scene {
       x: Math.min(Math.max(spawn.x, bounds.minX), bounds.maxX),
       y: Math.min(Math.max(spawn.y, bounds.minY), bounds.maxY)
     };
+  }
+
+  private resolveWalkableWarpPoint(destination: { x: number; y: number }): { x: number; y: number } {
+    return resolveWalkableFootprintDestination(
+      this.clampSpawn(destination),
+      this.solidRows,
+      this.collisionGrid(),
+      { maxRingCells: 8 }
+    );
+  }
+
+  private syncPlayerObject(): void {
+    if (!this.player) {
+      return;
+    }
+    this.player.x = this.playerState.x;
+    this.player.y = this.playerState.y;
+    if (this.player instanceof Phaser.GameObjects.Sprite) {
+      this.player.setFrame(this.playerState.animFrame);
+    }
+    this.player.setDepth(this.player.y);
   }
 
   private loadedChunkCount(): number {
@@ -2237,6 +2288,10 @@ function normalizeOptionalGroupId(value: number | undefined): number | undefined
   }
   const group = Math.floor(value);
   return group >= 0 ? group : undefined;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(Math.max(value, min), max);
 }
 
 function startupCoverageByKind(effectsByKind: Partial<Record<string, number>>): Partial<Record<string, number>> {

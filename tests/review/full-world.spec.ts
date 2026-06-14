@@ -8,8 +8,23 @@ import {
 } from "./gameHarness";
 
 const DEFAULT_FULL_SPAWN = { x: 2296, y: 3040 };
+const CANONICAL_FULL_SPAWN = { x: 2112, y: 1768 };
 const DOOR_APPROACH_SPAWN = { x: 5484, y: 6900 };
-const DOOR_DESTINATION = { x: 643, y: 68 };
+const DOOR_TRIGGER = { x: 5480, y: 6872 };
+const RAW_DOOR_DESTINATION = { x: 643, y: 68 };
+const SNAPPED_DOOR_DESTINATION = { x: 651, y: 100 };
+
+test("fresh full-world boot stays at the canonical control start", async ({ page }) => {
+  const issues = attachRuntimeIssueCapture(page);
+  const initial = await gotoFullWorld(page);
+
+  expect(initial.player).toEqual(CANONICAL_FULL_SPAWN);
+  expect(initial.lastDoor).toBeUndefined();
+  expect(initial.newGameStartup?.status).not.toBe("running");
+  expect(initial.newGameStartup?.finalPlayer).toEqual(CANONICAL_FULL_SPAWN);
+  expect(initial.newGameStartup?.finalPlayerControllable).toBe(true);
+  assertNoRuntimeIssues(issues);
+});
 
 test("boots the chunked full-world scene and streams chunks while walking", async ({ page }) => {
   const issues = attachRuntimeIssueCapture(page);
@@ -57,18 +72,27 @@ test("streams visible NPCs in and out as the player moves", async ({ page }) => 
   assertNoRuntimeIssues(issues);
 });
 
-test("door trigger teleports from Onett exterior into the destination map area", async ({ page }) => {
+test("solid-cell door trigger teleports from Onett exterior onto walkable ground", async ({ page }) => {
   const issues = attachRuntimeIssueCapture(page);
   const initial = await gotoFullWorld(page, DOOR_APPROACH_SPAWN);
   const initialChunk = requireChunk(initial);
 
+  expect(initial.player).toEqual(DOOR_APPROACH_SPAWN);
+  expect(initial.lastDoor).toBeUndefined();
+
   const teleported = await holdKeyUntil(page, "ArrowUp", (state) =>
-    state.lastDoor?.to.x === DOOR_DESTINATION.x &&
-    state.lastDoor.to.y === DOOR_DESTINATION.y,
-    "walking up should trigger the known Onett door"
+    state.lastDoor?.to.x === SNAPPED_DOOR_DESTINATION.x &&
+    state.lastDoor.to.y === SNAPPED_DOOR_DESTINATION.y,
+    "walking up should trigger the known solid-celled Onett door"
   );
 
-  expect(teleported.lastDoor?.to).toEqual(DOOR_DESTINATION);
+  expect(teleported.lastDoor).toBeDefined();
+  const lastDoor = teleported.lastDoor!;
+  await expectSolidAt(page, DOOR_TRIGGER, true);
+  await expectSolidAt(page, RAW_DOOR_DESTINATION, true);
+  expect(lastDoor.to).toEqual(SNAPPED_DOOR_DESTINATION);
+  await expectSolidAt(page, lastDoor.to, false);
+  expect(teleported.player).toEqual(lastDoor.to);
   expect(requireChunk(teleported)).not.toEqual(initialChunk);
   assertNoRuntimeIssues(issues);
 });
@@ -116,4 +140,12 @@ async function holdKeyUntil(
 function requireChunk(state: FirstSceneDebug): { cx: number; cy: number } {
   expect(state.currentChunk, "debug state should include currentChunk").toBeDefined();
   return state.currentChunk as { cx: number; cy: number };
+}
+
+async function expectSolidAt(page: Page, point: { x: number; y: number }, expected: boolean): Promise<void> {
+  const solid = await page.evaluate(({ x, y }) => {
+    const hook = (globalThis as typeof globalThis & { __solidAt?: (px: number, py: number) => boolean }).__solidAt;
+    return hook?.(x, y);
+  }, point);
+  expect(solid, `expected solidAt(${point.x},${point.y}) to be ${expected}`).toBe(expected);
 }

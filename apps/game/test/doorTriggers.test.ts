@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { WorldDoor } from "@eb/schemas";
-import { doorAtFeet, feetInDoorCell, resolveDoorTrigger } from "../src/doorTriggers";
+import { doorAtFeet, feetInDoorCell, resolveDoorIntentTrigger, resolveDoorTrigger } from "../src/doorTriggers";
 
 const door: WorldDoor = {
   type: "door",
@@ -56,5 +56,98 @@ describe("door retrigger suppression", () => {
 
     expect(suppressed.door).toBeUndefined();
     expect(suppressed.suppressUntilClear).toBe(true);
+  });
+});
+
+describe("door movement intent", () => {
+  it("does not trigger without active movement into a door cell", () => {
+    const result = resolveDoorIntentTrigger(
+      { x: 552, y: 292 },
+      { x: 552, y: 292 },
+      [door],
+      { suppressUntilClear: false },
+      8
+    );
+
+    expect(result.door).toBeUndefined();
+    expect(result.suppressUntilClear).toBe(false);
+  });
+
+  it("does not trigger when the player was placed inside a door cell", () => {
+    const result = resolveDoorIntentTrigger(
+      { x: 540, y: 292 },
+      { x: 541, y: 292 },
+      [door],
+      { suppressUntilClear: false },
+      8
+    );
+
+    expect(result.door).toBeUndefined();
+    expect(result.suppressUntilClear).toBe(true);
+  });
+
+  it("triggers when intended movement enters a door cell", () => {
+    const result = resolveDoorIntentTrigger(
+      { x: 540, y: 296 },
+      { x: 540, y: 295.5 },
+      [door],
+      { suppressUntilClear: false },
+      8
+    );
+
+    expect(result.door).toBe(door);
+    expect(result.suppressUntilClear).toBe(true);
+  });
+
+  it("keeps walkable door cells reachable through active entry", () => {
+    const result = resolveDoorIntentTrigger(
+      { x: 535.5, y: 292 },
+      { x: 536, y: 292 },
+      [door],
+      { suppressUntilClear: false },
+      8
+    );
+
+    expect(result.door).toBe(door);
+    expect(result.suppressUntilClear).toBe(true);
+  });
+
+  it("does not trigger for non-door movement intent", () => {
+    const result = resolveDoorIntentTrigger(
+      { x: 552, y: 292 },
+      { x: 553, y: 292 },
+      [door],
+      { suppressUntilClear: false },
+      8
+    );
+
+    expect(result.door).toBeUndefined();
+    expect(result.suppressUntilClear).toBe(false);
+  });
+
+  it("does not retrigger while the player remains on a suppressed door cell", () => {
+    const result = resolveDoorIntentTrigger(
+      { x: 540, y: 292 },
+      { x: 541, y: 292 },
+      [door],
+      { suppressUntilClear: true },
+      8
+    );
+
+    expect(result.door).toBeUndefined();
+    expect(result.suppressUntilClear).toBe(true);
+  });
+
+  it("allows a new active entry after the player has cleared a just-warped guard", () => {
+    const result = resolveDoorIntentTrigger(
+      { x: 540, y: 296 },
+      { x: 540, y: 295.5 },
+      [door],
+      { suppressUntilClear: true },
+      8
+    );
+
+    expect(result.door).toBe(door);
+    expect(result.suppressUntilClear).toBe(true);
   });
 });
