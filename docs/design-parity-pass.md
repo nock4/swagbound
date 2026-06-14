@@ -38,33 +38,33 @@ Parity splits cleanly into two layers:
 1. ~~**Bitmap font.**~~ DONE — real EB bitmap font everywhere.
 2. ~~**Window frame art.**~~ DONE — real EB 9-slice frames (flavor 0). Flavor switching +
    non-default flavor interior colors remain future work.
-3. **Selection cursor.** Text `>` instead of EB's hand/arrow cursor sprite. (open)
-4. **Battle background animation.** The extracted background renders but is static; EB
-   warps/cycles it. (open)
-5. **Enemy sprite animation / damage flash.** Enemies render a single static frame. (open)
-6. **Transitions.** Geometric circle/flash on battle-enter and hard-cut warps, vs. EB's
-   swirl/ripple/fade. (open)
-7. **Dialogue advance prompt.** Static "Space/Enter: next" text vs. EB's animated ▼. The
-   ▼ arrow art is already extracted (window.json `moreArrow`); wiring it is a small task. (open)
+3. **Selection cursor.** Still text `>` — no clean EB hand-cursor art was identifiable;
+   not invented. (open, low priority) [6528f59 skipped]
+4. ~~**Battle background animation.**~~ DONE — scroll + bounded scanline warp from the
+   bg distortion/scroll tables. [e6fd0ee]
+5. ~~**Enemy damage flash.**~~ DONE — white-tint flash on hit + subtle idle wobble.
+   [9480b87] (true per-enemy frame animation still out of scope.)
+6. ~~**Transitions.**~~ DONE — procedural battle-enter swirl + overworld door fades. [13a3b35]
+7. ~~**Dialogue advance prompt.**~~ DONE — animated ▼ arrow. [5f926ef]
 8. **Text reveal SFX.** Absent — deferred by design to the own-music/audio phase.
+
+Also closed: **window flavor switching** + 7 distinct per-flavor interior colors [6528f59].
 
 ## Concrete bugs / data gaps found
 
-- ~~**Control-code leak:**~~ FIXED — the leading `@` text sentinel is dropped at the
-  tokenizer; dialogue renders clean. [27cc0ad]
-- **Placeholder party stats:** battle party HP/PP show identical default-looking values
-  across members rather than real EB starting vitals — stat-mapping approximation.
-- **Battles not in the default boot:** battle data is a separate opt-in build
-  (`EB_BATTLE`); a default `pnpm dev` world has no encounters wired.
-- **Menu order drift:** Status is reordered and ATM replaces Phone vs. vanilla.
+- ~~**Control-code leak:**~~ FIXED — leading `@` sentinel dropped at the tokenizer. [27cc0ad]
+- ~~**Placeholder party stats:**~~ FIXED — real per-character starting vitals from
+  `initial_stats.yml`. [5f926ef]
+- ~~**Menu order drift:**~~ FIXED — vanilla order Talk/Goods/PSI/Equip/Check/Status. [5f926ef]
+- **Battles not in the default boot:** battle data is still a separate opt-in build; a
+  default `pnpm dev` world has no roaming/contact encounters wired. (open — Batch 3)
 - **Dev chrome on-screen:** the top instruction bar and `F1: debug` badge overlay the
-  game (acceptable for dev; not part of EB).
+  game (acceptable for dev; not part of EB). (open, low priority)
 
-## Highest-leverage next step
+## Status: design/chrome parity essentially complete
 
-Two assets close most of the perceived gap: the **EB bitmap font** and the **window
-9-slice frame art** (both extractable from ROM, consistent with the RE direction).
-Swapping the global font + window renderer to those would lift menu/dialogue/battle
-presentation from ~C to ~A in one focused pass — far higher yield per effort than the
-open-ended cinematic-intro RE. The `@` control-code leak is a small, separate
-correctness fix.
+The two dominant tells (font, window frames) plus all the 2nd-order battle/world effects
+are done and verified. Remaining open items are (a) low-priority polish (hand cursor, dev
+chrome, true enemy-frame animation, BG palette cycling), (b) the deferred audio phase, and
+(c) two large/structural items tracked separately: **overworld battle encounters** and the
+**intro cutscene** (uncertain RE).
