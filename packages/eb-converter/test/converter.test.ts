@@ -16,6 +16,7 @@ import {
   TutorialStatusSchema,
   type ScriptCollection
 } from "@eb/schemas";
+import { buildBattleData } from "../src/battle";
 import { convertProject, parseCcsFile, readNpcReferences, tokenizeCcsString } from "../src/index";
 import { validateGeneratedOutput } from "../src/validate";
 import { classifyProofTarget, findForbiddenProofArtifactText, findNpc744Placements, isNeutralizedMapDoorPointer, proofRecommendation } from "../../../scripts/proof-check";
@@ -282,6 +283,28 @@ describe("generated validation", () => {
       expect(result.battleEnemies).toBe(5);
       expect(result.battleGroups).toBe(4);
       expect(result.battleAssetsChecked).toBe(10);
+
+      const referencedOut = path.join(temp, "generated-referenced");
+      const referenced = await buildBattleData({
+        projectAbs: project,
+        outAbs: referencedOut,
+        displayPath: "synthetic",
+        referencedBattleGroupIds: [22, 999, 21]
+      });
+
+      expect(referenced.selection).toMatchObject({
+        method: "encounter-referenced-full-world",
+        battleGroupIds: [21, 22],
+        fallbackUsed: false
+      });
+      expect(referenced.enemies.map((enemy) => enemy.id)).toEqual([11, 12]);
+      expect(referenced.groups.map((group) => group.id)).toEqual([21, 22]);
+      expect(referenced.warnings).toEqual(expect.arrayContaining([
+        expect.objectContaining({ code: "battle_missing_referenced_groups" })
+      ]));
+      expect(existsSync(path.join(referencedOut, "assets/battle/sprites/010.png"))).toBe(false);
+      expect(existsSync(path.join(referencedOut, "assets/battle/sprites/011.png"))).toBe(true);
+      expect(existsSync(path.join(referencedOut, "assets/battle/sprites/012.png"))).toBe(true);
     } finally {
       await rm(temp, { recursive: true, force: true });
     }

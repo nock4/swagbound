@@ -4,6 +4,7 @@ import path from "node:path";
 import {
   BattleDataSchema,
   CharacterCollectionSchema,
+  EncountersSchema,
   FontCollectionSchema,
   ItemCollectionSchema,
   ManifestSchema,
@@ -26,6 +27,7 @@ const DEFAULT_ITEMS_FILE = "items.json";
 const DEFAULT_PSI_FILE = "psi.json";
 const DEFAULT_SHOPS_FILE = "shops.json";
 const DEFAULT_WINDOW_FILE = "window.json";
+const DEFAULT_ENCOUNTERS_FILE = "encounters.json";
 
 function parseOut(argv: string[]): string {
   const outIndex = argv.indexOf("--out");
@@ -67,6 +69,8 @@ export type GeneratedValidationResult = {
   shops?: number;
   shopItemEntries?: number;
   teleportDestinations?: number;
+  encounterSectors?: number;
+  encounterEnemyGroups?: number;
 };
 
 export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<GeneratedValidationResult> {
@@ -104,6 +108,11 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
   const teleportDestinations = teleportDestinationsRaw
     ? TeleportDestinationsSchema.parse(teleportDestinationsRaw)
     : undefined;
+  const encountersFile = manifest.files.encounters ?? DEFAULT_ENCOUNTERS_FILE;
+  const encountersPath = path.join(out, encountersFile);
+  const shouldReadEncounters = Boolean(manifest.files.encounters) || existsSync(encountersPath);
+  const encountersRaw = shouldReadEncounters ? await readJson(encountersPath) : undefined;
+  const encounters = encountersRaw ? EncountersSchema.parse(encountersRaw) : undefined;
   const battleFile = manifest.files.battle ?? "battle.json";
   const battlePath = path.join(out, battleFile);
   const battleRaw = existsSync(battlePath) ? await readJson(battlePath) : undefined;
@@ -149,6 +158,7 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
     [manifest.files.world]: worldRaw,
     [manifest.files.sprites]: spritesRaw,
     ...(teleportDestinationsRaw ? { [teleportDestinationsFile]: teleportDestinationsRaw } : {}),
+    ...(encountersRaw ? { [encountersFile]: encountersRaw } : {}),
     ...(battleRaw ? { [battleFile]: battleRaw } : {}),
     ...(fontRaw ? { [fontFile]: fontRaw } : {}),
     ...(windowRaw ? { [windowFile]: windowRaw } : {}),
@@ -176,6 +186,7 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
       manifest.files.world,
       manifest.files.sprites,
       ...(teleportDestinations ? [teleportDestinationsFile] : []),
+      ...(encounters ? [encountersFile] : []),
       ...(battle ? [battleFile] : []),
       ...(font ? [fontFile] : []),
       ...(window ? [windowFile] : []),
@@ -196,6 +207,10 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
     worldAssetsChecked,
     ...(teleportDestinations ? {
       teleportDestinations: teleportDestinations.counts.destinations
+    } : {}),
+    ...(encounters ? {
+      encounterSectors: encounters.counts.sectors,
+      encounterEnemyGroups: encounters.counts.enemyGroups
     } : {}),
     ...(battle ? {
       battleEnemies: battle.counts.enemies,

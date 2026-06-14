@@ -2,6 +2,7 @@ import {
   buildDialoguePages,
   BattleDataSchema,
   CharacterCollectionSchema,
+  EncountersSchema,
   FontCollectionSchema,
   ItemCollectionSchema,
   ManifestSchema,
@@ -21,6 +22,7 @@ import {
   type DialoguePage,
   type BattleData,
   type CharacterCollection,
+  type Encounters,
   type FontCollection,
   type ItemCollection,
   type Manifest,
@@ -50,6 +52,7 @@ export type GameData = {
   world?: WorldArtifact;
   sprites?: SpriteSheetCollection;
   teleportDestinations?: TeleportDestinations;
+  encounters?: Encounters;
   battle?: BattleData;
   font?: FontCollection;
   window?: WindowCollection;
@@ -79,6 +82,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     world,
     sprites,
     teleportDestinations,
+    encounters,
     battle,
     font,
     window,
@@ -96,6 +100,9 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${manifest.files.sprites}`, SpriteSheetCollectionSchema),
     manifest.files.teleportDestinations
       ? loadJson(`/generated/${manifest.files.teleportDestinations}`, TeleportDestinationsSchema)
+      : Promise.resolve(undefined),
+    manifest.files.encounters
+      ? loadJson(`/generated/${manifest.files.encounters}`, EncountersSchema)
       : Promise.resolve(undefined),
     manifest.files.battle
       ? loadJson(`/generated/${manifest.files.battle}`, BattleDataSchema)
@@ -129,6 +136,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     world,
     sprites,
     teleportDestinations,
+    encounters,
     battle,
     font,
     window,

@@ -19,6 +19,7 @@ import {
   type SpriteSheetCollection,
   type TutorialStatus,
   type BattleData,
+  type Encounters,
   type FontCollection,
   type WindowCollection,
   type CharacterCollection,
@@ -31,6 +32,7 @@ import {
   type WorldArtifact
 } from "@eb/schemas";
 import { BATTLE_FILE, buildBattleData } from "./battle";
+import { ENCOUNTERS_FILE, buildEncounterData } from "./encounters";
 import { FONT_FILE, buildFontData } from "./font";
 import { WINDOW_FILE, buildWindowData } from "./window";
 import { CHARACTERS_FILE, buildCharacterData } from "./characters";
@@ -87,6 +89,7 @@ type ConvertResult = {
   world: WorldArtifact;
   sprites: SpriteSheetCollection;
   teleportDestinations?: TeleportDestinations;
+  encounters?: Encounters;
   battle?: BattleData;
   font?: FontCollection;
   window?: WindowCollection;
@@ -987,11 +990,21 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   }
 
   const tutorialStatus = await readTutorialStatus(projectAbs, project, projectExists, scripts, npcs, spriteGroups, world);
+  const encounterBuild = battleEnabled && worldMode === "full" && "mode" in world && world.mode === "full"
+    ? await buildEncounterData({
+      projectAbs,
+      displayPath: makeDisplayPath(project),
+      mapWidthTiles: world.mapWidthTiles,
+      mapHeightTiles: world.mapHeightTiles
+    })
+    : undefined;
+  const encounters = encounterBuild?.encounters;
   const battle = battleEnabled
     ? await buildBattleData({
       projectAbs,
       outAbs,
-      displayPath: makeDisplayPath(project)
+      displayPath: makeDisplayPath(project),
+      referencedBattleGroupIds: encounters ? encounterBuild.referencedBattleGroupIds : undefined
     })
     : undefined;
   const font = fontEnabled
@@ -1030,6 +1043,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   const manifestFiles = {
     ...GENERATED_FILES,
     ...(teleportDestinations ? { teleportDestinations: TELEPORT_DESTINATIONS_FILE } : {}),
+    ...(encounters ? { encounters: ENCOUNTERS_FILE } : {}),
     ...(battle ? { battle: BATTLE_FILE } : {}),
     ...(font ? { font: FONT_FILE } : {}),
     ...(window ? { window: WINDOW_FILE } : {}),
@@ -1044,6 +1058,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     ...spriteGroups.warnings,
     ...tutorialStatus.warnings,
     ...world.warnings,
+    ...(encounterBuild?.warnings ?? []),
     ...(battle?.warnings ?? []),
     ...(characters?.warnings ?? []),
     ...(items?.warnings ?? []),
@@ -1060,6 +1075,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     GENERATED_FILES.world,
     GENERATED_FILES.sprites,
     ...(teleportDestinations ? [TELEPORT_DESTINATIONS_FILE] : []),
+    ...(encounters ? [ENCOUNTERS_FILE] : []),
     ...(battle ? [BATTLE_FILE] : []),
     ...(font ? [FONT_FILE] : []),
     ...(window ? [WINDOW_FILE] : []),
@@ -1084,6 +1100,10 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
       worldNpcs: world.counts.npcs,
       spriteSheets: sprites.counts.sheets,
       ...(teleportDestinations ? { teleportDestinations: teleportDestinations.counts.destinations } : {}),
+      ...(encounters ? {
+        encounterSectors: encounters.counts.sectors,
+        encounterEnemyGroups: encounters.counts.enemyGroups
+      } : {}),
       ...(battle ? {
         battleEnemies: battle.counts.enemies,
         battleGroups: battle.counts.groups
@@ -1139,6 +1159,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   if (teleportDestinations) {
     await writeJson(path.join(outAbs, TELEPORT_DESTINATIONS_FILE), teleportDestinations);
   }
+  if (encounters) {
+    await writeJson(path.join(outAbs, ENCOUNTERS_FILE), encounters);
+  }
   if (battle) {
     await writeJson(path.join(outAbs, BATTLE_FILE), battle);
   }
@@ -1169,6 +1192,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     world,
     sprites,
     ...(teleportDestinations ? { teleportDestinations } : {}),
+    ...(encounters ? { encounters } : {}),
     ...(battle ? { battle } : {}),
     ...(font ? { font } : {}),
     ...(window ? { window } : {}),
@@ -1948,6 +1972,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           GENERATED_FILES.world,
           GENERATED_FILES.sprites,
           ...(result.teleportDestinations ? [TELEPORT_DESTINATIONS_FILE] : []),
+          ...(result.encounters ? [ENCOUNTERS_FILE] : []),
           ...(result.battle ? [BATTLE_FILE] : []),
           ...(result.font ? [FONT_FILE] : []),
           ...(result.window ? [WINDOW_FILE] : []),
@@ -1962,6 +1987,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           spriteSheets: result.sprites.counts.sheets,
           ...(result.teleportDestinations ? {
             teleportDestinations: result.teleportDestinations.counts.destinations
+          } : {}),
+          ...(result.encounters ? {
+            encounterSectors: result.encounters.counts.sectors,
+            encounterEnemyGroups: result.encounters.counts.enemyGroups
           } : {}),
           ...("mode" in result.world && result.world.mode === "full" ? {
             chunks: result.world.counts.chunks,

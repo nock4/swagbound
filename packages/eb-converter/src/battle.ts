@@ -43,6 +43,7 @@ type BattleBuildOptions = {
   projectAbs: string;
   outAbs: string;
   displayPath: string;
+  referencedBattleGroupIds?: Iterable<number>;
 };
 
 type EnemyGroupEntry = {
@@ -135,13 +136,22 @@ export async function buildBattleData(options: BattleBuildOptions): Promise<Batt
   };
 
   const warnings: ValidationIssue[] = [];
-  const baseSelected = selectOnettBattleGroups(tables) ?? selectFallbackBattleGroups(tables, warnings);
-  const bossSelection = selectLowLevelBosses(tables, warnings);
-  const selected = mergeBattleSelections(baseSelected, bossSelection);
+  const referencedBattleGroupIds = uniqueSorted([...(options.referencedBattleGroupIds ?? [])]);
+  let extraEnemyIds: number[] = [];
+  const selected = referencedBattleGroupIds.length > 0
+    ? selectReferencedBattleGroups(tables, referencedBattleGroupIds, options.projectAbs, warnings)
+    : (() => {
+      const bossSelection = selectLowLevelBosses(tables, warnings);
+      extraEnemyIds = bossSelection.enemyIds;
+      return mergeBattleSelections(
+        selectOnettBattleGroups(tables) ?? selectFallbackBattleGroups(tables, warnings),
+        bossSelection
+      );
+    })();
   const battleGroupRecords = selected.battleGroupIds.map((id) => requireMapEntry(tables.enemyGroups, id, "enemy_groups.yml"));
   const enemyIds = uniqueSorted([
     ...battleGroupRecords.flatMap((group) => positiveEnemyIds(group)),
-    ...bossSelection.enemyIds
+    ...extraEnemyIds
   ]);
 
   const enemies = enemyIds.map((id) =>
@@ -210,6 +220,109 @@ export async function buildBattleData(options: BattleBuildOptions): Promise<Batt
     },
     warnings
   });
+}
+
+function selectReferencedBattleGroups(
+  tables: BattleSourceTables,
+  referencedBattleGroupIds: number[],
+  projectAbs: string,
+  warnings: ValidationIssue[]
+): Candidate {
+  const missingGroupIds: number[] = [];
+  const emptyGroupIds: number[] = [];
+  const missingEnemyIds = new Set<number>();
+  const missingSpriteEnemyIds = new Set<number>();
+  const missingBackgroundIds = new Set<number>();
+  const selected: number[] = [];
+
+  for (const groupId of referencedBattleGroupIds) {
+    const group = tables.enemyGroups.get(groupId);
+    if (!group) {
+      missingGroupIds.push(groupId);
+      continue;
+    }
+    const enemyIds = uniqueSorted(positiveEnemyIds(group));
+    if (enemyIds.length === 0) {
+      emptyGroupIds.push(groupId);
+      continue;
+    }
+    const missingEnemies = enemyIds.filter((enemyId) => !tables.enemyConfig.has(enemyId));
+    if (missingEnemies.length > 0) {
+      missingEnemies.forEach((enemyId) => missingEnemyIds.add(enemyId));
+      continue;
+    }
+    const missingSprites = enemyIds.filter((enemyId) =>
+      !existsSync(path.join(projectAbs, "BattleSprites", `${pad3(enemyId)}.png`))
+    );
+    if (missingSprites.length > 0) {
+      missingSprites.forEach((enemyId) => missingSpriteEnemyIds.add(enemyId));
+      continue;
+    }
+    const missingBackgrounds = [group.background1, group.background2].filter((backgroundId) =>
+      !existsSync(path.join(projectAbs, "BattleBGs", `${pad3(backgroundId)}.png`))
+    );
+    if (missingBackgrounds.length > 0) {
+      missingBackgrounds.forEach((backgroundId) => missingBackgroundIds.add(backgroundId));
+      continue;
+    }
+    selected.push(groupId);
+  }
+
+  if (missingGroupIds.length > 0) {
+    warnings.push(issue(
+      "warning",
+      "battle_missing_referenced_groups",
+      `Skipped ${missingGroupIds.length} encounter-referenced enemy group(s) missing from enemy_groups.yml.`,
+      "enemy_groups.yml"
+    ));
+  }
+  if (emptyGroupIds.length > 0) {
+    warnings.push(issue(
+      "warning",
+      "battle_empty_referenced_groups",
+      `Skipped ${emptyGroupIds.length} encounter-referenced enemy group(s) with no positive enemy entries.`,
+      "enemy_groups.yml"
+    ));
+  }
+  if (missingEnemyIds.size > 0) {
+    warnings.push(issue(
+      "warning",
+      "battle_missing_referenced_enemy_config",
+      `Skipped encounter groups referencing ${missingEnemyIds.size} enemy id(s) missing from enemy_configuration_table.yml.`,
+      "enemy_configuration_table.yml"
+    ));
+  }
+  if (missingSpriteEnemyIds.size > 0) {
+    warnings.push(issue(
+      "warning",
+      "battle_missing_referenced_sprites",
+      `Skipped encounter groups referencing ${missingSpriteEnemyIds.size} enemy sprite asset(s) missing from BattleSprites.`,
+      "BattleSprites"
+    ));
+  }
+  if (missingBackgroundIds.size > 0) {
+    warnings.push(issue(
+      "warning",
+      "battle_missing_referenced_backgrounds",
+      `Skipped encounter groups referencing ${missingBackgroundIds.size} background asset(s) missing from BattleBGs.`,
+      "BattleBGs"
+    ));
+  }
+  if (selected.length === 0) {
+    warnings.push(issue(
+      "warning",
+      "battle_no_referenced_groups_resolved",
+      "No encounter-referenced battle groups could be resolved; battle.json was emitted empty.",
+      "enemy_groups.yml"
+    ));
+  }
+
+  return {
+    method: "encounter-referenced-full-world",
+    fallbackUsed: false,
+    mapEnemyGroupIds: [],
+    battleGroupIds: uniqueSorted(selected)
+  };
 }
 
 function assertBattleInputs(projectAbs: string): void {

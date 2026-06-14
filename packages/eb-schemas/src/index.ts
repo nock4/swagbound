@@ -481,6 +481,47 @@ export const SpriteSheetCollectionSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+export const EncounterCandidateSchema = z.object({
+  enemyGroup: z.number().int().nonnegative(),
+  probability: z.number().int().positive()
+});
+
+export const EncounterSubGroupSchema = z.object({
+  rate: z.number().int().positive(),
+  candidates: z.array(EncounterCandidateSchema).min(1)
+});
+
+export const EncounterMapGroupSchema = z.object({
+  mapGroup: z.number().int().nonnegative(),
+  eventFlag: z.number().int().nonnegative(),
+  subGroups: z.array(EncounterSubGroupSchema).min(1)
+});
+
+export const EncounterSectorMapGroupSchema = EncounterMapGroupSchema.extend({
+  cellCount: z.number().int().positive().optional()
+});
+
+export const EncounterSectorSchema = EncounterMapGroupSchema.extend({
+  mapGroups: z.array(EncounterSectorMapGroupSchema).min(2).optional()
+});
+
+export const EncountersSchema = z.object({
+  schemaVersion: z.string(),
+  sourceProjectPath: z.string(),
+  sectorWidthTiles: z.number().int().positive(),
+  sectorHeightTiles: z.number().int().positive(),
+  sectorsPerRow: z.number().int().positive(),
+  sectors: z.record(EncounterSectorSchema),
+  counts: z.object({
+    sectors: z.number().int().nonnegative(),
+    mapGroups: z.number().int().nonnegative(),
+    enemyGroups: z.number().int().nonnegative(),
+    sourcePlacementCells: z.number().int().nonnegative(),
+    mixedSectors: z.number().int().nonnegative()
+  }),
+  warnings: z.array(ValidationIssueSchema)
+});
+
 export const BattleActionSchema = z.object({
   id: z.number().int().nonnegative(),
   arg: z.number().int().nonnegative(),
@@ -804,6 +845,7 @@ export const ManifestSchema = z.object({
     world: z.string(),
     sprites: z.string(),
     teleportDestinations: z.string().optional(),
+    encounters: z.string().optional(),
     battle: z.string().optional(),
     font: z.string().optional(),
     window: z.string().optional(),
@@ -823,6 +865,8 @@ export const ManifestSchema = z.object({
     worldNpcs: z.number().int().nonnegative(),
     spriteSheets: z.number().int().nonnegative(),
     teleportDestinations: z.number().int().nonnegative().optional(),
+    encounterSectors: z.number().int().nonnegative().optional(),
+    encounterEnemyGroups: z.number().int().nonnegative().optional(),
     battleEnemies: z.number().int().nonnegative().optional(),
     battleGroups: z.number().int().nonnegative().optional(),
     fontSheets: z.number().int().nonnegative().optional(),
@@ -868,6 +912,11 @@ export type SpriteSheet = z.infer<typeof SpriteSheetSchema>;
 export type SpriteFacing = z.infer<typeof SpriteFacingSchema>;
 export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;
 export type SpriteSheetCollection = z.infer<typeof SpriteSheetCollectionSchema>;
+export type EncounterCandidate = z.infer<typeof EncounterCandidateSchema>;
+export type EncounterSubGroup = z.infer<typeof EncounterSubGroupSchema>;
+export type EncounterMapGroup = z.infer<typeof EncounterMapGroupSchema>;
+export type EncounterSector = z.infer<typeof EncounterSectorSchema>;
+export type Encounters = z.infer<typeof EncountersSchema>;
 export type BattleData = z.infer<typeof BattleDataSchema>;
 export type BattleEnemy = z.infer<typeof BattleEnemySchema>;
 export type BattleGroup = z.infer<typeof BattleGroupSchema>;
