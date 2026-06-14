@@ -1,7 +1,12 @@
 import { expect, type Page } from "@playwright/test";
 
 export type FirstSceneDebug = {
-  mode: "world" | "fallback" | "error" | "battle";
+  mode: "world" | "fallback" | "error" | "battle" | "intro";
+  introActive?: boolean;
+  introBeatIndex?: number;
+  introBeatKind?: string;
+  introSkippable?: boolean;
+  introComplete?: boolean;
   phase?:
     | "enter-transition"
     | "menu"
@@ -220,7 +225,7 @@ export type RuntimeIssues = {
 };
 
 export async function gotoFirstScene(page: Page): Promise<void> {
-  await page.goto("/?noEncounters=1");
+  await page.goto("/?noEncounters=1&nointro=1");
   await expect(page.locator("canvas")).toBeVisible();
   await waitForDebug(page, (state) => state.targetReference === "robot.hello_world" || Boolean(state.error));
 }

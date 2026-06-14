@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { loadGameData, parseManifest, type GameData } from "./loader";
 import { publishDebug } from "./state";
 import { ChunkedWorldScene } from "./chunkedWorldScene";
+import { IntroScene, isIntroDisabled, shouldStartIntro } from "./introScene";
 import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
 import { FallbackScene } from "./fallbackScene";
@@ -59,14 +60,30 @@ class BootScene extends Phaser.Scene {
       });
       return;
     }
-    const saveState = deserializeSaveState(loadFromSlot(DEFAULT_SAVE_SLOT));
+    const saveBlob = loadFromSlot(DEFAULT_SAVE_SLOT);
+    const saveState = deserializeSaveState(saveBlob);
     if (data.world?.available && "mode" in data.world && data.world.mode === "full") {
-      this.scene.start("chunked-world", {
+      const chunkedWorldData = {
         gameData: data,
         saveState,
         saveSlot: DEFAULT_SAVE_SLOT,
         saveSlots: SAVE_SLOTS
+      };
+      const introDecision = shouldStartIntro({
+        hasSave: saveBlob !== null,
+        disabled: isIntroDisabled({
+          search: globalThis.location?.search,
+          registryFlag: this.registry.get("nointro")
+        })
       });
+      if (introDecision.startIntro) {
+        this.scene.start("intro", {
+          nextSceneKey: "chunked-world",
+          nextSceneData: chunkedWorldData
+        });
+      } else {
+        this.scene.start("chunked-world", chunkedWorldData);
+      }
       return;
     }
     if (data.world?.available && !("mode" in data.world) && data.world.images) {
@@ -199,7 +216,7 @@ new Phaser.Game({
   height: 448,
   backgroundColor: "#000000",
   pixelArt: true,
-  scene: [BootScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene],
+  scene: [BootScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH

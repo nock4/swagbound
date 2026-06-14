@@ -15,7 +15,7 @@ test("forced field encounter round-trips from overworld to battle and back", asy
   const issues = attachRuntimeIssueCapture(page);
   const spawn = await firstEncounterSpawn(page);
 
-  await page.goto(`/?encounterSeed=12345&spawn=${spawn.x},${spawn.y}`);
+  await page.goto(`/?encounterSeed=12345&spawn=${spawn.x},${spawn.y}&nointro=1`);
   await expect(page.locator("canvas")).toBeVisible();
   const initial = await waitForDebug(page, (state) =>
     state.mode === "world" &&

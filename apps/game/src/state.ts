@@ -10,7 +10,7 @@ import {
   type RevealState
 } from "./dialogueRenderer";
 
-export type SceneMode = "world" | "fallback" | "error" | "battle";
+export type SceneMode = "world" | "fallback" | "error" | "battle" | "intro";
 export type BattlePhase =
   | "enter-transition"
   | "menu"
@@ -165,8 +165,17 @@ export type NewGameStartupRunDebug = {
   finalPlayerControllable: boolean;
 };
 
+export type IntroDebug = {
+  mode: "intro";
+  introActive: boolean;
+  introBeatIndex: number;
+  introBeatKind?: string;
+  introSkippable: boolean;
+  introComplete: boolean;
+};
+
 export type OverworldDebug = {
-  mode: Exclude<SceneMode, "battle">;
+  mode: "world" | "fallback" | "error";
   dialogueOpen: boolean;
   dialogueText: string;
   dialoguePageIndex: number;
@@ -270,7 +279,7 @@ export type OverworldDebug = {
   error?: { title: string; message: string };
 };
 
-export type FirstSceneDebug = OverworldDebug | BattleDebug;
+export type FirstSceneDebug = OverworldDebug | BattleDebug | IntroDebug;
 
 export function shouldRunNewGameStartup(options: {
   hasSave: boolean;

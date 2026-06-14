@@ -74,7 +74,7 @@ test("door trigger teleports from Onett exterior into the destination map area",
 });
 
 async function gotoFullWorld(page: Page, spawn?: { x: number; y: number }): Promise<FirstSceneDebug> {
-  const params = new URLSearchParams({ noEncounters: "1" });
+  const params = new URLSearchParams({ noEncounters: "1", nointro: "1" });
   if (spawn) {
     params.set("spawn", `${spawn.x},${spawn.y}`);
   }
