@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import type { FontCollection } from "@eb/schemas";
+import type { FontCollection, WindowCollection } from "@eb/schemas";
 import type { WorldScene } from "./worldScene";
 import type { MenuRenderScreen } from "./menuModel";
 import {
@@ -9,6 +9,12 @@ import {
   type BitmapTextOptions,
   type PreparedBitmapFont
 } from "./bitmapFont";
+import {
+  drawWindowFrame,
+  prepareWindowFrames,
+  queueWindowFrameAssets,
+  type PreparedWindowFrames
+} from "./windowFrame";
 
 const MONO = "Menlo, Consolas, monospace";
 const UI_TEXT_SCALE = 2;
@@ -24,8 +30,11 @@ type GameText = Phaser.GameObjects.Text | BitmapFontText;
 export class UiScene extends Phaser.Scene {
   private worldSceneKey = "world";
   private font?: FontCollection;
+  private window?: WindowCollection;
   private bitmapFont?: PreparedBitmapFont;
+  private windowFrames?: PreparedWindowFrames;
   private boxGraphics?: Phaser.GameObjects.Graphics;
+  private dialogueWindow?: Phaser.GameObjects.Container;
   private dialogueText?: GameText;
   private footerText?: GameText;
   private promptText?: Phaser.GameObjects.Text;
@@ -33,6 +42,7 @@ export class UiScene extends Phaser.Scene {
   private panelText?: Phaser.GameObjects.Text;
   private badgeText?: Phaser.GameObjects.Text;
   private menuGraphics?: Phaser.GameObjects.Graphics;
+  private menuWindows: Phaser.GameObjects.Container[] = [];
   private menuTexts: GameText[] = [];
   private lastSignature = "";
 
@@ -40,17 +50,23 @@ export class UiScene extends Phaser.Scene {
     super("ui");
   }
 
-  init(data: { worldSceneKey?: string; font?: FontCollection }): void {
+  init(data: { worldSceneKey?: string; font?: FontCollection; window?: WindowCollection }): void {
     this.worldSceneKey = data.worldSceneKey ?? "world";
     this.font = data.font;
+    this.window = data.window;
+    this.bitmapFont = undefined;
+    this.windowFrames = undefined;
+    this.lastSignature = "";
   }
 
   preload(): void {
     queueBitmapFontAssets(this, this.font);
+    queueWindowFrameAssets(this, this.window);
   }
 
   create(): void {
     this.bitmapFont = prepareBitmapFont(this, this.font);
+    this.windowFrames = prepareWindowFrames(this, this.window);
     this.boxGraphics = this.add.graphics().setDepth(10);
     this.dialogueText = this.createGameText(0, 0, "", {
       fontFamily: MONO,
@@ -130,6 +146,8 @@ export class UiScene extends Phaser.Scene {
       return;
     }
     graphics.clear();
+    this.dialogueWindow?.destroy(true);
+    this.dialogueWindow = undefined;
     if (!open) {
       this.dialogueText.setText("");
       this.footerText.setText("");
@@ -142,7 +160,7 @@ export class UiScene extends Phaser.Scene {
     const x = 24;
     const y = height - boxHeight - 18;
 
-    this.drawWindow(graphics, x, y, boxWidth, boxHeight, 6);
+    this.dialogueWindow = this.drawWindowFrameOrFallback(graphics, x, y, boxWidth, boxHeight, 6, 10);
 
     this.dialogueText.setPosition(x + DIALOGUE_HORIZONTAL_PADDING, y + 18);
     this.dialogueText.setText(text);
@@ -173,6 +191,10 @@ export class UiScene extends Phaser.Scene {
       return;
     }
     graphics.clear();
+    for (const window of this.menuWindows) {
+      window.destroy(true);
+    }
+    this.menuWindows = [];
     for (const text of this.menuTexts) {
       text.destroy();
     }
@@ -186,6 +208,10 @@ export class UiScene extends Phaser.Scene {
     const top = 46;
     let x = margin;
     screens.forEach((screen, index) => {
+      const textInset = this.windowFrames ? 20 : 14;
+      const titleTop = this.windowFrames ? top + 18 : top + 12;
+      const itemTop = this.windowFrames ? top + 54 : top + 48;
+      const itemBottomInset = this.windowFrames ? 64 : 58;
       const remaining = this.scale.width - x - margin;
       const boxWidth = index === 0 ? Math.min(168, remaining) : Math.max(160, remaining);
       const compact = screen.id === "status";
@@ -195,9 +221,12 @@ export class UiScene extends Phaser.Scene {
         this.scale.height - top - 20,
         48 + Math.max(1, screen.items.length) * lineHeight + 14
       );
-      this.drawWindow(graphics, x, top, boxWidth, boxHeight, 6);
+      const menuWindow = this.drawWindowFrameOrFallback(graphics, x, top, boxWidth, boxHeight, 6, 14);
+      if (menuWindow) {
+        this.menuWindows.push(menuWindow);
+      }
 
-      this.menuTexts.push(this.createGameText(x + 14, top + 12, screen.title, {
+      this.menuTexts.push(this.createGameText(x + textInset, titleTop, screen.title, {
         fontFamily: MONO,
         fontSize: "12px",
         color: "#f8fafc"
@@ -206,22 +235,21 @@ export class UiScene extends Phaser.Scene {
         tint: 0xf8fafc
       }).setDepth(15));
 
-      const itemTop = top + 48;
-      const maxItems = Math.max(0, Math.floor((boxHeight - 58) / lineHeight));
+      const maxItems = Math.max(0, Math.floor((boxHeight - itemBottomInset) / lineHeight));
       const visibleItems = screen.items.slice(0, maxItems);
       visibleItems.forEach((item, itemIndex) => {
         const selected = item.selected && item.enabled;
         const prefix = selected ? ">" : " ";
         const label = `${prefix} ${item.label}`;
-        this.menuTexts.push(this.createGameText(x + 14, itemTop + itemIndex * lineHeight, label, {
+        this.menuTexts.push(this.createGameText(x + textInset, itemTop + itemIndex * lineHeight, label, {
           fontFamily: MONO,
           fontSize,
           color: item.enabled ? "#f8fafc" : "#94a3b8",
-          fixedWidth: boxWidth - 28
+          fixedWidth: boxWidth - textInset * 2
         }, {
           scale: UI_TEXT_SCALE,
           tint: item.enabled ? 0xf8fafc : 0x94a3b8,
-          maxWidth: boxWidth - 28
+          maxWidth: boxWidth - textInset * 2
         }).setDepth(15));
       });
 
@@ -240,6 +268,22 @@ export class UiScene extends Phaser.Scene {
       return new BitmapFontText(this, this.bitmapFont, x, y, text, bitmapOptions);
     }
     return this.add.text(x, y, text, style);
+  }
+
+  private drawWindowFrameOrFallback(
+    graphics: Phaser.GameObjects.Graphics,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    radius: number,
+    depth: number
+  ): Phaser.GameObjects.Container | undefined {
+    if (this.windowFrames) {
+      return drawWindowFrame(this, this.windowFrames, x, y, width, height, { scale: UI_TEXT_SCALE }).setDepth(depth);
+    }
+    this.drawWindow(graphics, x, y, width, height, radius);
+    return undefined;
   }
 
   private drawWindow(

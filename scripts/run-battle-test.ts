@@ -16,7 +16,9 @@ async function main(): Promise<void> {
       out: GENERATED_OUT,
       battle: true,
       characters: true,
-      items: true
+      items: true,
+      font: true,
+      window: true
     });
 
     exitCode = await run(

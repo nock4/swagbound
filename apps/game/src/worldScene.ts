@@ -221,7 +221,7 @@ export class WorldScene extends Phaser.Scene {
       this.debugPanelVisible = !this.debugPanelVisible;
     });
 
-    this.scene.launch("ui", { worldSceneKey: "world", font: this.data_.font });
+    this.scene.launch("ui", { worldSceneKey: "world", font: this.data_.font, window: this.data_.window });
     this.publish();
   }
 
@@ -925,7 +925,8 @@ export class WorldScene extends Phaser.Scene {
       characters: this.data_.characters,
       items: this.data_.items,
       psi: this.data_.psi,
-      font: this.data_.font
+      font: this.data_.font,
+      window: this.data_.window
     });
     return true;
   }

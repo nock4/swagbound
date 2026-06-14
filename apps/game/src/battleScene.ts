@@ -44,6 +44,12 @@ import {
   type BitmapTextOptions,
   type PreparedBitmapFont
 } from "./bitmapFont";
+import {
+  drawWindowFrame,
+  prepareWindowFrames,
+  queueWindowFrameAssets,
+  type PreparedWindowFrames
+} from "./windowFrame";
 
 const MONO = "Menlo, Consolas, monospace";
 const COMMANDS = ["BASH", "PSI", "GOODS", "RUN"] as const;
@@ -81,6 +87,7 @@ export class BattleScene extends Phaser.Scene {
   private font_?: FontCollection;
   private window_?: WindowCollection;
   private bitmapFont?: PreparedBitmapFont;
+  private windowFrames?: PreparedWindowFrames;
   private rng_: Rng = () => 0.5;
   private phase_: BattlePhase = "enter-transition";
   private transitionPhase_: BattleTransitionPhase = "enter";
@@ -101,6 +108,7 @@ export class BattleScene extends Phaser.Scene {
   private lastEnemyAction_: LastEnemyActionDebug | null = null;
   private actionDelayMs_ = 0;
   private statusGraphics?: Phaser.GameObjects.Graphics;
+  private statusWindows: Phaser.GameObjects.Container[] = [];
   private targetCursor?: Phaser.GameObjects.Graphics;
   private commandText?: GameText;
   private partyText?: GameText;
@@ -160,10 +168,12 @@ export class BattleScene extends Phaser.Scene {
       this.load.image(spriteKey(enemy.spriteId), generatedAssetUrl(this.battleData_.assetLayout.spriteDir, enemy.spriteId));
     }
     queueBitmapFontAssets(this, this.font_);
+    queueWindowFrameAssets(this, this.window_);
   }
 
   create(): void {
     this.bitmapFont = prepareBitmapFont(this, this.font_);
+    this.windowFrames = prepareWindowFrames(this, this.window_);
     this.cameras.main.setBackgroundColor("#050505");
     this.drawBackground();
     this.drawEnemySprites();
@@ -678,6 +688,10 @@ export class BattleScene extends Phaser.Scene {
     const windowTop = STATUS_TOP + 8;
     const windowHeight = this.scale.height - STATUS_TOP - 16;
     const textTop = STATUS_TOP + 16;
+    for (const window of this.statusWindows) {
+      window.destroy(true);
+    }
+    this.statusWindows = [];
     this.statusGraphics = this.add.graphics().setDepth(20);
     this.targetCursor = this.add.graphics().setDepth(30);
     this.commandText = this.createGameText(44, textTop, "", {
@@ -714,6 +728,12 @@ export class BattleScene extends Phaser.Scene {
   private drawWindow(x: number, y: number, width: number, height: number): void {
     const graphics = this.statusGraphics;
     if (!graphics) {
+      return;
+    }
+    if (this.windowFrames) {
+      this.statusWindows.push(
+        drawWindowFrame(this, this.windowFrames, x, y, width, height, { scale: BATTLE_TEXT_SCALE }).setDepth(20)
+      );
       return;
     }
     graphics.fillStyle(0x0a0f1e, 1);
