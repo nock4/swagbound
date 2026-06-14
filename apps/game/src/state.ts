@@ -39,6 +39,15 @@ export type BattleCombatantDebug = {
   inventoryCount: number;
 };
 
+export type BattleEnemyCombatantDebug = BattleCombatantDebug & {
+  flashActive: boolean;
+  flashIntensity: number;
+  wobble: {
+    dx: number;
+    dy: number;
+  };
+};
+
 export type BattleVictoryDebug = {
   expGained: number;
   moneyGained: number;
@@ -80,7 +89,7 @@ export type BattleDebug = {
   currentActor: BattleActorDebug | null;
   lastEnemyAction: LastEnemyActionDebug | null;
   party: BattleCombatantDebug[];
-  enemies: BattleCombatantDebug[];
+  enemies: BattleEnemyCombatantDebug[];
   windowLoaded?: boolean;
   defaultFlavorId?: number;
   player: {

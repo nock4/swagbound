@@ -36,6 +36,13 @@ import {
   type BattleVictorySummary,
   type Rng
 } from "./battleLogic";
+import {
+  DEFAULT_DAMAGE_FLASH_MS,
+  DEFAULT_ENEMY_WOBBLE_AMP_PX,
+  DEFAULT_ENEMY_WOBBLE_PERIOD_MS,
+  flashState,
+  wobbleOffset
+} from "./battleEffects";
 import { publishBattleDebug, type BattlePhase, type BattleTransitionPhase } from "./state";
 import {
   BitmapFontText,
@@ -77,6 +84,13 @@ type LastEnemyActionDebug = {
   target: number | null;
 };
 type GameText = Phaser.GameObjects.Text | BitmapFontText;
+type SpritePoint = { x: number; y: number };
+type WobbleDebugOffset = { dx: number; dy: number };
+type EnemyEffectDebug = {
+  flashActive: boolean;
+  flashIntensity: number;
+  wobble: WobbleDebugOffset;
+};
 
 export class BattleScene extends Phaser.Scene {
   private battleData_!: BattleData;
@@ -114,6 +128,8 @@ export class BattleScene extends Phaser.Scene {
   private partyText?: GameText;
   private transitionGraphics?: Phaser.GameObjects.Graphics;
   private enemySprites: Phaser.GameObjects.Image[] = [];
+  private enemySpriteBasePoints: Array<SpritePoint | undefined> = [];
+  private enemyLastHitAt: Array<number | null> = [];
 
   constructor() {
     super("battle");
@@ -139,6 +155,8 @@ export class BattleScene extends Phaser.Scene {
       throw new Error(`Battle group ${this.group_.id} has no matching runtime enemy.`);
     }
     this.battle_ = createBattleState(enemies, { characters: data.characters });
+    this.enemyLastHitAt = enemies.map(() => null);
+    this.enemySpriteBasePoints = [];
     this.rng_ = createSeededRng((this.group_.id + 1) * 65537 + enemies.reduce((sum, enemy) => sum + enemy.id, 0));
     this.phase_ = "enter-transition";
     this.transitionPhase_ = "enter";
@@ -220,7 +238,9 @@ export class BattleScene extends Phaser.Scene {
     }
 
     if (!this.isBattleFlowPaused()) {
+      const previousBattle = this.battle_;
       this.battle_ = tickBattleMeters(this.battle_, delta);
+      this.recordEnemyDamageSignals(previousBattle, this.battle_, this.time.now);
       this.actionDelayMs_ = Math.max(0, this.actionDelayMs_ - delta);
       this.advanceBattleFlow();
     }
@@ -479,7 +499,9 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private applyTurnResult(state: BattleState): void {
+    const previousBattle = this.battle_;
     this.battle_ = state;
+    this.recordEnemyDamageSignals(previousBattle, this.battle_, this.time.now);
     this.submenu_ = "command";
     this.submenuIndex_ = 0;
     this.pendingPsiId_ = null;
@@ -671,6 +693,7 @@ export class BattleScene extends Phaser.Scene {
     const enemies = enemiesForGroup(this.battleData_, this.group_);
     const count = Math.max(1, enemies.length);
     this.enemySprites = [];
+    this.enemySpriteBasePoints = [];
     enemies.forEach((enemy, index) => {
       const key = spriteKey(enemy.spriteId);
       if (!this.textures.exists(key)) {
@@ -680,6 +703,7 @@ export class BattleScene extends Phaser.Scene {
       const widthBudget = Math.max(64, 420 / count);
       const scale = Math.min(2, widthBudget / frame.width, 160 / frame.height);
       const point = enemySpritePoint(this.scale.width, count, index, widthBudget);
+      this.enemySpriteBasePoints[index] = point;
       this.enemySprites[index] = this.add.image(point.x, point.y, key).setOrigin(0.5, 0.5).setScale(scale).setDepth(10);
     });
   }
@@ -772,16 +796,18 @@ export class BattleScene extends Phaser.Scene {
       this.commandText?.setText(menuVisible ? this.menuTextLines().join("\n") : "");
       this.partyText?.setText(this.partyStatusLines().join("\n"));
     }
-    this.enemySprites.forEach((sprite, index) => {
-      sprite?.setAlpha(isCombatantAlive(this.battle_.enemies[index]) ? 1 : 0.25);
-    });
+    this.renderEnemySpriteEffects(this.time.now);
     this.renderTargetCursor(menuVisible);
   }
 
   private publish(): void {
     const currentOutcome: BattleOutcome = outcome(this.battle_);
+    const now = this.time.now;
     const party = this.battle_.party.map(debugCombatant);
-    const enemies = this.battle_.enemies.map(debugCombatant);
+    const enemies = this.battle_.enemies.map((enemy, index) => ({
+      ...debugCombatant(enemy),
+      ...this.enemyEffectFor(index, now)
+    }));
     publishBattleDebug({
       mode: "battle",
       phase: this.phase_,
@@ -815,6 +841,55 @@ export class BattleScene extends Phaser.Scene {
       outcome: currentOutcome,
       victorySummary: this.victorySummary_ ? debugVictorySummary(this.victorySummary_) : null
     });
+  }
+
+  private recordEnemyDamageSignals(previous: BattleState, next: BattleState, now: number): void {
+    next.enemies.forEach((enemy, index) => {
+      const previousEnemy = previous.enemies[index];
+      if (!previousEnemy) {
+        return;
+      }
+      const wasRollingDown = previousEnemy.hp.isRolling && previousEnemy.hp.target < previousEnemy.hp.displayed;
+      const isRollingDown = enemy.hp.isRolling && enemy.hp.target < enemy.hp.displayed;
+      if (enemy.hp.target < previousEnemy.hp.target || (isRollingDown && !wasRollingDown)) {
+        this.enemyLastHitAt[index] = now;
+      }
+    });
+  }
+
+  private renderEnemySpriteEffects(now: number): void {
+    this.enemySprites.forEach((sprite, index) => {
+      const enemy = this.battle_.enemies[index];
+      const alive = Boolean(enemy && isCombatantAlive(enemy));
+      const baseAlpha = alive ? 1 : 0.25;
+      const basePoint = this.enemySpriteBasePoints[index];
+      const effect = this.enemyEffectFor(index, now);
+      if (basePoint) {
+        sprite.setPosition(basePoint.x + effect.wobble.dx, basePoint.y + effect.wobble.dy);
+      }
+      if (!alive || !effect.flashActive || effect.flashIntensity <= 0) {
+        sprite.clearTint();
+        sprite.setAlpha(baseAlpha);
+        return;
+      }
+      sprite.setTint(0xffffff);
+      sprite.setAlpha(Math.max(0.35, 1 - effect.flashIntensity * 0.55));
+    });
+  }
+
+  private enemyEffectFor(index: number, now: number): EnemyEffectDebug {
+    const enemy = this.battle_.enemies[index];
+    const alive = Boolean(enemy && isCombatantAlive(enemy));
+    const flash = alive
+      ? flashState(now, this.enemyLastHitAt[index] ?? null, DEFAULT_DAMAGE_FLASH_MS)
+      : { active: false, intensity: 0 };
+    return {
+      flashActive: flash.active,
+      flashIntensity: roundTo(flash.intensity, 2),
+      wobble: alive
+        ? integerOffset(wobbleOffset(now, index, DEFAULT_ENEMY_WOBBLE_AMP_PX, DEFAULT_ENEMY_WOBBLE_PERIOD_MS))
+        : { dx: 0, dy: 0 }
+    };
   }
 
   private actorIsAlive(actor: BattleActor): boolean {
@@ -1087,6 +1162,18 @@ function enemySpritePoint(stageWidth: number, count: number, index: number, widt
     x: stageWidth / 2 + (index - (count - 1) / 2) * widthBudget,
     y: 164
   };
+}
+
+function integerOffset(offset: { dx: number; dy: number }): { dx: number; dy: number } {
+  return {
+    dx: Math.round(offset.dx),
+    dy: Math.round(offset.dy)
+  };
+}
+
+function roundTo(value: number, places: number): number {
+  const multiplier = 10 ** Math.max(0, places);
+  return Math.round(value * multiplier) / multiplier;
 }
 
 function fitName(name: string, width: number): string {
