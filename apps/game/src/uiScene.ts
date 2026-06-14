@@ -16,6 +16,7 @@ import {
   windowFrameName,
   type PreparedWindowFrames
 } from "./windowFrame";
+import { WINDOW_FLAVOR_CHANGE_EVENT, activeWindowFlavorId } from "./windowSettings";
 
 const MONO = "Menlo, Consolas, monospace";
 const UI_TEXT_SCALE = 2;
@@ -47,6 +48,7 @@ export class UiScene extends Phaser.Scene {
   private menuGraphics?: Phaser.GameObjects.Graphics;
   private menuWindows: Phaser.GameObjects.Container[] = [];
   private menuTexts: GameText[] = [];
+  private windowFlavorListener?: () => void;
   private lastSignature = "";
 
   constructor() {
@@ -69,7 +71,15 @@ export class UiScene extends Phaser.Scene {
 
   create(): void {
     this.bitmapFont = prepareBitmapFont(this, this.font);
-    this.windowFrames = prepareWindowFrames(this, this.window);
+    this.refreshWindowFrames();
+    this.windowFlavorListener = () => this.handleWindowFlavorChanged();
+    globalThis.addEventListener?.(WINDOW_FLAVOR_CHANGE_EVENT, this.windowFlavorListener);
+    this.events.once("shutdown", () => {
+      if (this.windowFlavorListener) {
+        globalThis.removeEventListener?.(WINDOW_FLAVOR_CHANGE_EVENT, this.windowFlavorListener);
+        this.windowFlavorListener = undefined;
+      }
+    });
     this.boxGraphics = this.add.graphics().setDepth(10);
     this.dialogueText = this.createGameText(0, 0, "", {
       fontFamily: MONO,
@@ -113,6 +123,15 @@ export class UiScene extends Phaser.Scene {
       lineSpacing: 3
     }).setDepth(13);
     this.menuGraphics = this.add.graphics().setDepth(14);
+  }
+
+  private handleWindowFlavorChanged(): void {
+    this.refreshWindowFrames();
+    this.lastSignature = "";
+  }
+
+  private refreshWindowFrames(): void {
+    this.windowFrames = prepareWindowFrames(this, this.window, activeWindowFlavorId(this.window));
   }
 
   update(): void {

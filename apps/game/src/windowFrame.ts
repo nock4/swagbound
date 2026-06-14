@@ -93,13 +93,15 @@ export function queueWindowFrameAssets(
   window: WindowCollection | undefined,
   flavorId?: number
 ): void {
-  const flavor = selectWindowFlavor(window, flavorId);
-  if (!flavor) {
+  if (!window) {
     return;
   }
-  const key = rawWindowTextureKey(flavor);
-  if (!scene.textures.exists(key)) {
-    scene.load.image(key, `/generated/${flavor.file}`);
+  const flavors = flavorId === undefined ? window.flavors : [selectWindowFlavor(window, flavorId)].filter(isWindowFlavor);
+  for (const flavor of flavors) {
+    const key = rawWindowTextureKey(flavor);
+    if (!scene.textures.exists(key)) {
+      scene.load.image(key, `/generated/${flavor.file}`);
+    }
   }
 }
 
@@ -301,6 +303,10 @@ function selectWindowFlavor(
   }
   const selectedFlavorId = flavorId ?? window.defaultFlavorId;
   return window.flavors.find((flavor) => flavor.id === selectedFlavorId);
+}
+
+function isWindowFlavor(flavor: WindowFlavor | undefined): flavor is WindowFlavor {
+  return Boolean(flavor);
 }
 
 function createProcessedWindowTexture(

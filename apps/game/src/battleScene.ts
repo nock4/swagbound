@@ -58,6 +58,7 @@ import {
   queueWindowFrameAssets,
   type PreparedWindowFrames
 } from "./windowFrame";
+import { WINDOW_FLAVOR_CHANGE_EVENT, activeWindowFlavorId } from "./windowSettings";
 import {
   createAnimatedBattleBackground,
   staticBattleBackgroundDebug,
@@ -141,6 +142,7 @@ export class BattleScene extends Phaser.Scene {
   private enemyLastHitAt: Array<number | null> = [];
   private backgroundAnimation?: AnimatedBattleBackgroundHandle;
   private backgroundDebug: BattleBackgroundDebug = staticBattleBackgroundDebug();
+  private windowFlavorListener?: () => void;
 
   constructor() {
     super("battle");
@@ -204,10 +206,18 @@ export class BattleScene extends Phaser.Scene {
 
   create(): void {
     this.bitmapFont = prepareBitmapFont(this, this.font_);
-    this.windowFrames = prepareWindowFrames(this, this.window_);
+    this.refreshWindowFrames();
+    this.windowFlavorListener = () => this.handleWindowFlavorChanged();
+    globalThis.addEventListener?.(WINDOW_FLAVOR_CHANGE_EVENT, this.windowFlavorListener);
     this.cameras.main.setBackgroundColor("#050505");
     this.drawBackground();
-    this.events.once("shutdown", () => this.backgroundAnimation?.destroy());
+    this.events.once("shutdown", () => {
+      this.backgroundAnimation?.destroy();
+      if (this.windowFlavorListener) {
+        globalThis.removeEventListener?.(WINDOW_FLAVOR_CHANGE_EVENT, this.windowFlavorListener);
+        this.windowFlavorListener = undefined;
+      }
+    });
     this.drawEnemySprites();
     this.createStatusWindow();
     this.input.keyboard?.on("keydown-UP", () => this.moveMenu(-1));
@@ -223,6 +233,17 @@ export class BattleScene extends Phaser.Scene {
     this.renderTransition();
     this.renderStatus();
     this.publish();
+  }
+
+  private handleWindowFlavorChanged(): void {
+    this.refreshWindowFrames();
+    this.createStatusWindow();
+    this.renderStatus();
+    this.publish();
+  }
+
+  private refreshWindowFrames(): void {
+    this.windowFrames = prepareWindowFrames(this, this.window_, activeWindowFlavorId(this.window_));
   }
 
   update(_: number, delta: number): void {
@@ -830,6 +851,10 @@ export class BattleScene extends Phaser.Scene {
       window.destroy(true);
     }
     this.statusWindows = [];
+    this.statusGraphics?.destroy();
+    this.targetCursor?.destroy();
+    this.commandText?.destroy();
+    this.partyText?.destroy();
     this.statusGraphics = this.add.graphics().setDepth(20);
     this.targetCursor = this.add.graphics().setDepth(30);
     this.commandText = this.createGameText(44, textTop, "", {
@@ -948,7 +973,10 @@ export class BattleScene extends Phaser.Scene {
       enemies,
       background: this.backgroundDebug,
       windowLoaded: Boolean(this.window_),
-      ...(this.window_ ? { defaultFlavorId: this.window_.defaultFlavorId } : {}),
+      ...(this.window_ ? {
+        defaultFlavorId: this.window_.defaultFlavorId,
+        activeFlavorId: activeWindowFlavorId(this.window_)
+      } : {}),
       player: {
         name: this.battle_.party[0]?.name ?? "",
         hpDisplayed: party[0]?.hpDisplayed ?? 0,

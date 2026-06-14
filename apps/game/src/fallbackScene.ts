@@ -10,6 +10,7 @@ import {
 } from "./loader";
 import { DialogueController, publishDebug, type FirstSceneDebug } from "./state";
 import { textSpeedCpsFromSearch } from "./dialogueRenderer";
+import { activeWindowFlavorId } from "./windowSettings";
 
 const MONO = "Menlo, Consolas, monospace";
 const INTERACTION_DISTANCE = 128;
@@ -164,7 +165,10 @@ export class FallbackScene extends Phaser.Scene {
       fontLoaded: Boolean(this.data_.font),
       ...(this.data_.font ? { primaryFontId: this.data_.font.primaryFontId } : {}),
       windowLoaded: Boolean(this.data_.window),
-      ...(this.data_.window ? { defaultFlavorId: this.data_.window.defaultFlavorId } : {}),
+      ...(this.data_.window ? {
+        defaultFlavorId: this.data_.window.defaultFlavorId,
+        activeFlavorId: activeWindowFlavorId(this.data_.window)
+      } : {}),
       tutorial: this.data_.tutorialStatus?.counts,
       resolveStatus: resolveStatus(this.data_),
       world: this.data_.world

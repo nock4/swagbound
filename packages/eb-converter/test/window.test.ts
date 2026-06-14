@@ -22,6 +22,13 @@ import {
 
 const FILL_COLOR: RgbColor = { r: 16, g: 24, b: 32 };
 const EDGE_COLOR: RgbColor = { r: 240, g: 240, b: 240 };
+const SHADOW_COLOR: RgbColor = { r: 8, g: 8, b: 8 };
+const INTERIOR_FILL_RECT = { x: 16, y: 0, w: 8, h: 8 };
+const FLAVOR_FILL_COLORS: RgbColor[] = Array.from({ length: 7 }, (_, id) => ({
+  r: FILL_COLOR.r + id * 20,
+  g: FILL_COLOR.g + id * 14,
+  b: FILL_COLOR.b + id * 9
+}));
 
 describe("window extraction", () => {
   it("emits confirmed corner/edge rect constants from a synthetic keyed sheet", () => {
@@ -56,6 +63,7 @@ describe("window extraction", () => {
       expect(roundTrip.defaultFlavorId).toBe(0);
       expect(roundTrip.transparentKey).toEqual(WINDOW_TRANSPARENT_KEY);
       expect(roundTrip.flavors).toHaveLength(7);
+      expect(new Set(roundTrip.flavors.map((flavor) => colorKey(flavor.interiorColor))).size).toBe(7);
       expect(roundTrip.flavors[0]).toEqual({
         id: 0,
         file: "assets/window/0.png",
@@ -104,6 +112,7 @@ describe("window extraction", () => {
       const validation = await validateGeneratedOutput(out);
 
       expect(generated.window?.flavors).toHaveLength(7);
+      expect(new Set(generated.window?.flavors.map((flavor) => colorKey(flavor.interiorColor))).size).toBe(7);
       expect(generated.manifest.files.window).toBe("window.json");
       expect(generated.manifest.counts.windowFlavors).toBe(7);
       expect(existsSync(path.join(out, "window.json"))).toBe(true);
@@ -119,17 +128,18 @@ describe("window extraction", () => {
 
 async function writeWindowFixture(project: string): Promise<void> {
   await mkdir(path.join(project, "WindowGraphics"), { recursive: true });
-  const png = encodeIndexedPng(syntheticWindowSheet());
   for (let id = 0; id < 7; id += 1) {
+    const png = encodeIndexedPng(syntheticWindowSheet(FLAVOR_FILL_COLORS[id] ?? FILL_COLOR));
     await writeFile(path.join(project, "WindowGraphics", `Windows1_${id}.png`), png);
   }
 }
 
-function syntheticWindowSheet(): IndexedPngImage {
+function syntheticWindowSheet(fillColor: RgbColor = FILL_COLOR): IndexedPngImage {
   const width = 64;
   const height = 16;
   const pixels = new Uint8Array(width * height);
   pixels.fill(2);
+  fillRect(pixels, width, INTERIOR_FILL_RECT, 1);
   fillRect(pixels, width, WINDOW_CORNER_RECT, 1);
   fillRect(pixels, width, WINDOW_H_EDGE_RECT, 2);
   fillRect(pixels, width, WINDOW_V_EDGE_RECT, 2);
@@ -137,12 +147,14 @@ function syntheticWindowSheet(): IndexedPngImage {
   pixels[WINDOW_CORNER_RECT.y * width + WINDOW_CORNER_RECT.x] = 0;
   pixels[WINDOW_CORNER_RECT.y * width + WINDOW_CORNER_RECT.x + 1] = 0;
   pixels[(WINDOW_CORNER_RECT.y + 1) * width + WINDOW_CORNER_RECT.x] = 0;
+  pixels[(WINDOW_CORNER_RECT.y + 2) * width + WINDOW_CORNER_RECT.x + 2] = 3;
+  pixels[(WINDOW_CORNER_RECT.y + 3) * width + WINDOW_CORNER_RECT.x + 1] = 3;
   return {
     width,
     height,
     bitDepth: 8,
     colorType: 3,
-    palette: [WINDOW_TRANSPARENT_KEY, FILL_COLOR, EDGE_COLOR],
+    palette: [WINDOW_TRANSPARENT_KEY, fillColor, EDGE_COLOR, SHADOW_COLOR],
     pixels
   };
 }
@@ -194,4 +206,8 @@ function pngChunk(type: string, data: Buffer): Buffer {
   const crc = Buffer.alloc(4);
   crc.writeUInt32BE(crc32(Buffer.concat([typeBytes, data])), 0);
   return Buffer.concat([length, typeBytes, data, crc]);
+}
+
+function colorKey(color: RgbColor): string {
+  return `${color.r},${color.g},${color.b}`;
 }

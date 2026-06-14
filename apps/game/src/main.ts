@@ -7,6 +7,7 @@ import { UiScene } from "./uiScene";
 import { FallbackScene } from "./fallbackScene";
 import { BattleScene } from "./battleScene";
 import { deserializeSaveState, type SaveSlotPersistence } from "./saveState";
+import { registerWindowFlavorControls } from "./windowSettings";
 import "./style.css";
 
 const MONO = "Menlo, Consolas, monospace";
@@ -44,6 +45,7 @@ class BootScene extends Phaser.Scene {
       return;
     }
     const data: GameData = await loadGameData(manifest);
+    registerWindowFlavorControls(data.window);
     const battleGroupId = battleGroupIdFromSearch(globalThis.location?.search);
     if (battleGroupId !== undefined && data.battle) {
       this.scene.start("battle", {
@@ -97,6 +99,7 @@ class BootScene extends Phaser.Scene {
       metadataLines: [],
       resolveStatus: "missing",
       windowLoaded: false,
+      activeFlavorId: undefined,
       error: { title, message }
     });
     this.cameras.main.setBackgroundColor("#10141b");

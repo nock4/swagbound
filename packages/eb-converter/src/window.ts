@@ -19,6 +19,7 @@ export const WINDOW_CORNER_RECT: WindowRect = { x: 32, y: 0, w: 8, h: 8 };
 export const WINDOW_H_EDGE_RECT: WindowRect = { x: 40, y: 0, w: 8, h: 8 };
 export const WINDOW_V_EDGE_RECT: WindowRect = { x: 48, y: 0, w: 8, h: 8 };
 export const WINDOW_MORE_ARROW_RECT: WindowRect = { x: 32, y: 8, w: 8, h: 8 };
+const WINDOW_INTERIOR_FILL_RECT: WindowRect = { x: 16, y: 0, w: 8, h: 8 };
 
 const PNG_SIGNATURE = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
 
@@ -71,6 +72,7 @@ export async function buildWindowData(options: WindowBuildOptions): Promise<Wind
   if (!flavors.some((flavor) => flavor.id === DEFAULT_WINDOW_FLAVOR_ID)) {
     return undefined;
   }
+  assertDistinctInteriorColors(flavors);
 
   await mkdir(path.join(options.outAbs, WINDOW_ASSET_DIR), { recursive: true });
   await Promise.all(copies.map((copy) => copyFile(copy.source, copy.destination)));
@@ -191,7 +193,7 @@ export function detectWindowFlavor(input: {
   file: string;
   image: IndexedPngImage;
 }): WindowFlavor {
-  for (const rect of [WINDOW_CORNER_RECT, WINDOW_H_EDGE_RECT, WINDOW_V_EDGE_RECT, WINDOW_MORE_ARROW_RECT]) {
+  for (const rect of [WINDOW_INTERIOR_FILL_RECT, WINDOW_CORNER_RECT, WINDOW_H_EDGE_RECT, WINDOW_V_EDGE_RECT, WINDOW_MORE_ARROW_RECT]) {
     assertRectWithin(input.image, rect);
   }
 
@@ -274,21 +276,55 @@ function rectContainsColor(image: IndexedPngImage, rect: WindowRect, expected: R
 }
 
 function sampleInteriorColor(image: IndexedPngImage, exteriorKey: RgbColor): RgbColor {
-  const candidates = new Map<string, RgbColor>();
-  for (let y = WINDOW_CORNER_RECT.y; y < WINDOW_CORNER_RECT.y + WINDOW_CORNER_RECT.h; y += 1) {
-    for (let x = WINDOW_CORNER_RECT.x; x < WINDOW_CORNER_RECT.x + WINDOW_CORNER_RECT.w; x += 1) {
+  const interiorRect = {
+    x: WINDOW_CORNER_RECT.x + Math.max(0, WINDOW_CORNER_RECT.w - 3),
+    y: WINDOW_CORNER_RECT.y + Math.max(0, WINDOW_CORNER_RECT.h - 3),
+    w: Math.min(3, WINDOW_CORNER_RECT.w),
+    h: Math.min(3, WINDOW_CORNER_RECT.h)
+  };
+  return modalNonKeyColor(image, WINDOW_INTERIOR_FILL_RECT, exteriorKey)
+    ?? modalNonKeyColor(image, interiorRect, exteriorKey)
+    ?? modalNonKeyColor(image, WINDOW_CORNER_RECT, exteriorKey)
+    ?? failInteriorColor();
+}
+
+function modalNonKeyColor(
+  image: IndexedPngImage,
+  rect: WindowRect,
+  exteriorKey: RgbColor
+): RgbColor | undefined {
+  const counts = new Map<string, { color: RgbColor; count: number; firstIndex: number }>();
+  let firstIndex = 0;
+  for (let y = rect.y; y < rect.y + rect.h; y += 1) {
+    for (let x = rect.x; x < rect.x + rect.w; x += 1) {
       const color = colorAt(image, x, y);
-      if (!sameColor(color, exteriorKey)) {
-        candidates.set(colorKey(color), color);
+      if (sameColor(color, exteriorKey)) {
+        continue;
       }
+      const key = colorKey(color);
+      const entry = counts.get(key);
+      if (entry) {
+        entry.count += 1;
+      } else {
+        counts.set(key, { color, count: 1, firstIndex });
+      }
+      firstIndex += 1;
     }
   }
 
-  const sorted = [...candidates.values()].sort((a, b) => colorBrightness(a) - colorBrightness(b));
-  if (!sorted[0]) {
-    throw new Error("Window corner tile does not contain a non-key interior color.");
+  return [...counts.values()]
+    .sort((a, b) => b.count - a.count || a.firstIndex - b.firstIndex)[0]?.color;
+}
+
+function failInteriorColor(): never {
+  throw new Error("Window corner tile does not contain a non-key interior color.");
+}
+
+function assertDistinctInteriorColors(flavors: WindowFlavor[]): void {
+  const unique = new Set(flavors.map((flavor) => colorKey(flavor.interiorColor)));
+  if (unique.size !== flavors.length) {
+    throw new Error(`Window interior color extraction expected ${flavors.length} distinct flavor colors; detected ${unique.size}.`);
   }
-  return sorted[0];
 }
 
 function sameColor(left: RgbColor, right: RgbColor): boolean {
@@ -297,10 +333,6 @@ function sameColor(left: RgbColor, right: RgbColor): boolean {
 
 function colorKey(color: RgbColor): string {
   return `${color.r},${color.g},${color.b}`;
-}
-
-function colorBrightness(color: RgbColor): number {
-  return color.r + color.g + color.b;
 }
 
 function assertRectWithin(image: IndexedPngImage, rect: WindowRect): void {

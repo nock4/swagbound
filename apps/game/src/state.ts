@@ -100,6 +100,7 @@ export type BattleDebug = {
   background: BattleBackgroundDebug;
   windowLoaded?: boolean;
   defaultFlavorId?: number;
+  activeFlavorId?: number;
   player: {
     name: string;
     hpDisplayed: number;
@@ -202,6 +203,7 @@ export type OverworldDebug = {
   primaryFontId?: number;
   windowLoaded?: boolean;
   defaultFlavorId?: number;
+  activeFlavorId?: number;
   tutorial?: TutorialStatus["counts"];
   resolveStatus: string;
   dialogueCounters?: { opens: number; advances: number; closes: number };

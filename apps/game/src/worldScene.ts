@@ -67,6 +67,7 @@ import {
   type MenuState
 } from "./menuModel";
 import { buildPartyMember, type PartyMember } from "./characterModel";
+import { activeWindowFlavorId } from "./windowSettings";
 
 export const PLAYER_SPEED = 110; // world pixels per second
 export const INTERACTION_DISTANCE = 28; // world pixels between feet positions
@@ -1046,7 +1047,10 @@ export class WorldScene extends Phaser.Scene {
       fontLoaded: Boolean(this.data_.font),
       ...(this.data_.font ? { primaryFontId: this.data_.font.primaryFontId } : {}),
       windowLoaded: Boolean(this.data_.window),
-      ...(this.data_.window ? { defaultFlavorId: this.data_.window.defaultFlavorId } : {}),
+      ...(this.data_.window ? {
+        defaultFlavorId: this.data_.window.defaultFlavorId,
+        activeFlavorId: activeWindowFlavorId(this.data_.window)
+      } : {}),
       tutorial: this.data_.tutorialStatus?.counts,
       resolveStatus: resolveStatus(this.data_),
       dialogueCounters: { opens: this.dialogue.opens, advances: this.dialogue.advances, closes: this.dialogue.closes },

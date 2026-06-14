@@ -95,6 +95,7 @@ import {
   type MenuState
 } from "./menuModel";
 import { buildPartyMember, type PartyMember } from "./characterModel";
+import { activeWindowFlavorId } from "./windowSettings";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -1704,7 +1705,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       fontLoaded: Boolean(this.data_.font),
       ...(this.data_.font ? { primaryFontId: this.data_.font.primaryFontId } : {}),
       windowLoaded: Boolean(this.data_.window),
-      ...(this.data_.window ? { defaultFlavorId: this.data_.window.defaultFlavorId } : {}),
+      ...(this.data_.window ? {
+        defaultFlavorId: this.data_.window.defaultFlavorId,
+        activeFlavorId: activeWindowFlavorId(this.data_.window)
+      } : {}),
       tutorial: this.data_.tutorialStatus?.counts,
       resolveStatus: resolveStatus(this.data_),
       dialogueCounters: { opens: this.dialogue.opens, advances: this.dialogue.advances, closes: this.dialogue.closes },
