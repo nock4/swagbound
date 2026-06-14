@@ -107,20 +107,60 @@ describe("NPC wander controller", () => {
     expect(maxY).toBeLessThanOrEqual(66);
   });
 
-  it("advances to another deterministic direction after a collision", () => {
+  it("holds a blocked wander facing until the step window elapses", () => {
     const state = createNpcState(50, 50, "up", WANDER, FRAMES);
+    const blockedFacings: Facing[] = [];
 
-    step(state, 500, (_x, y) => y < 50);
+    for (let i = 0; i < 9; i += 1) {
+      step(state, 100, () => true);
+      blockedFacings.push(state.player.facing);
+    }
 
     expect(state.player.x).toBe(50);
     expect(state.player.y).toBe(50);
+    expect(state.wanderStepIndex).toBe(0);
+    expect(new Set(blockedFacings)).toEqual(new Set<Facing>(["up"]));
+
+    step(state, 100, () => true);
+
+    expect(state.player.facing).toBe("right");
     expect(state.wanderStepIndex).toBe(1);
 
-    step(state, 500);
+    for (let i = 0; i < 9; i += 1) {
+      step(state, 100, () => true);
+      expect(state.player.facing).toBe("right");
+    }
 
-    expect(state.player.x).toBeGreaterThan(50);
-    expect(state.player.y).toBe(50);
+    step(state, 100, () => true);
+
+    expect(state.player.facing).toBe("down");
+    expect(state.wanderStepIndex).toBe(2);
+  });
+
+  it("changes unblocked wander direction only on the step timer cadence", () => {
+    const state = createNpcState(50, 50, "down", { ...WANDER, stepMs: 400 }, FRAMES);
+
+    step(state, 399);
+
+    expect(state.player.facing).toBe("up");
+    expect(state.wanderStepIndex).toBe(0);
+
+    step(state, 1);
+
     expect(state.player.facing).toBe("right");
+    expect(state.wanderStepIndex).toBe(1);
+    expect(state.player.x).toBeGreaterThan(50);
+    expect(state.player.y).toBeLessThan(50);
+
+    step(state, 399);
+
+    expect(state.player.facing).toBe("right");
+    expect(state.wanderStepIndex).toBe(1);
+
+    step(state, 1);
+
+    expect(state.player.facing).toBe("down");
+    expect(state.wanderStepIndex).toBe(2);
   });
 
   it("replays the same path for the same seed inputs", () => {
