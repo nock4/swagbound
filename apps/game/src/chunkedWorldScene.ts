@@ -25,6 +25,18 @@ import {
   type ChunkCoord,
   type ChunkGrid
 } from "./chunkStreaming";
+import {
+  cellInRange,
+  pointInRect,
+  solidAtWorldPixel,
+  surfaceAtCell,
+  surfaceAtWorldPixel,
+  SURFACE_WATER_MASK,
+  visibleCollisionCellRange,
+  worldPixelToCollisionCell,
+  type CollisionGrid,
+  type WorldRect
+} from "./collisionOverlay";
 import { interactionEvents, type GameEvent } from "./eventRunner";
 import {
   resolveTeleportDestination,
@@ -139,6 +151,7 @@ type DoorFadePhase = "none" | "fade-out" | "fade-in";
 
 const DOOR_FADE_HALF_MS = 90;
 const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
+const COLLISION_OVERLAY_DEPTH = 150_000;
 const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 
 type TilePoint = { x: number; y: number };
@@ -161,9 +174,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private loadingSheetGroups = new Set<number>();
   private currentChunk?: ChunkCoord;
   private solidRows: string[] = [];
+  private surfaceRows: string[] = [];
   private collisionCellSize = 8;
   private collisionWidth = 0;
   private collisionHeight = 0;
+  private collisionOverlay?: Phaser.GameObjects.Graphics;
+  private collisionOverlayEnabled = false;
+  private solidAtHook?: (x: number, y: number) => boolean;
+  private surfaceAtHook?: (x: number, y: number) => number;
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
   private doorTriggerState: DoorTriggerState = { suppressUntilClear: false };
@@ -266,9 +284,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.indexNpcPlacements();
 
     this.solidRows = world.collision.solidRows;
+    this.surfaceRows = world.collision.surfaceRows;
     this.collisionCellSize = world.collision.cellSize;
     this.collisionWidth = world.collision.width;
     this.collisionHeight = world.collision.height;
+    this.collisionOverlayEnabled = this.initialCollisionOverlayEnabled();
+    this.registerCollisionDebugGlobals();
 
     const restoredPlayer = this.restoreState ? undefined : this.applyInitialSave();
     const returnPlayer = this.applyReturnRestore();
@@ -286,7 +307,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.cameras.main.roundPixels = true;
     this.events.once("shutdown", () => {
       this.destroyDoorFadeOverlay();
+      this.destroyCollisionOverlay();
       this.unregisterForceEncounter();
+      this.unregisterCollisionDebugGlobals();
     });
 
     this.cursors = this.input.keyboard?.createCursorKeys();
@@ -303,6 +326,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.input.keyboard?.on("keydown-F1", () => {
       this.debugPanelVisible = !this.debugPanelVisible;
     });
+    this.input.keyboard?.on("keydown-F2", () => this.setCollisionOverlayEnabled(!this.collisionOverlayEnabled));
 
     this.load.on("filecomplete", (key: string) => {
       this.loadingTextureKeys.delete(key);
@@ -325,6 +349,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
 
     this.refreshStreaming(true);
+    this.updateCollisionOverlay();
     this.updatePrompt();
     this.scene.launch("ui", { worldSceneKey: "chunked-world", font: this.data_.font, window: this.data_.window });
     this.registerForceEncounter();
@@ -345,6 +370,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         lockPlayer(this.playerState, this.playerFrames);
       }
       this.updatePrompt();
+      this.updateCollisionOverlay();
       this.publish();
       return;
     }
@@ -376,6 +402,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.player.setDepth(this.player.y);
     this.refreshStreaming();
+    this.updateCollisionOverlay();
     if (this.handleEncounterStep()) {
       return;
     }
@@ -407,6 +434,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.currentChunk = undefined;
     this.cursors = undefined;
     this.keys = undefined;
+    this.solidRows = [];
+    this.surfaceRows = [];
+    this.collisionCellSize = 8;
+    this.collisionWidth = 0;
+    this.collisionHeight = 0;
+    this.destroyCollisionOverlay();
+    this.collisionOverlayEnabled = false;
+    this.unregisterCollisionDebugGlobals();
     this.doorTriggerState = { suppressUntilClear: false };
     this.lastDoor = undefined;
     this.doorFadePhase = "none";
@@ -553,6 +588,142 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private chunkTextureKey(chunk: WorldChunk, layer: ChunkLayer): string {
     return `chunk-${layer}-${chunk.cx}-${chunk.cy}`;
+  }
+
+  private collisionGrid(): CollisionGrid {
+    return {
+      cellSize: this.collisionCellSize,
+      width: this.collisionWidth,
+      height: this.collisionHeight
+    };
+  }
+
+  private setCollisionOverlayEnabled(enabled: boolean): void {
+    this.collisionOverlayEnabled = enabled;
+    this.registry.set("collisionOverlay", enabled);
+    this.updateCollisionOverlay();
+    this.publish();
+  }
+
+  private updateCollisionOverlay(): void {
+    if (!this.collisionOverlayEnabled) {
+      this.collisionOverlay?.clear();
+      this.collisionOverlay?.setVisible(false);
+      return;
+    }
+    const graphics = this.ensureCollisionOverlay();
+    graphics.clear();
+
+    const rect = this.collisionOverlayCameraRect();
+    const range = visibleCollisionCellRange(rect, this.collisionGrid(), 1);
+    if (!range) {
+      return;
+    }
+
+    const cellSize = this.collisionCellSize;
+    for (let cellY = range.minCellY; cellY <= range.maxCellY; cellY += 1) {
+      for (let cellX = range.minCellX; cellX <= range.maxCellX; cellX += 1) {
+        const x = cellX * cellSize;
+        const y = cellY * cellSize;
+        if (this.solidRows[cellY]?.[cellX] === "1") {
+          graphics.fillStyle(0xff2f2f, 0.35);
+          graphics.fillRect(x, y, cellSize, cellSize);
+        }
+        if ((surfaceAtCell(this.surfaceRows, cellX, cellY) & SURFACE_WATER_MASK) !== 0) {
+          graphics.fillStyle(0x2f80ff, 0.3);
+          graphics.fillRect(x, y, cellSize, cellSize);
+        }
+      }
+    }
+
+    this.drawDoorOverlay(graphics, rect, range);
+  }
+
+  private ensureCollisionOverlay(): Phaser.GameObjects.Graphics {
+    if (!this.collisionOverlay || !this.collisionOverlay.active) {
+      this.collisionOverlay = this.add.graphics();
+    }
+    this.collisionOverlay
+      .setPosition(0, 0)
+      .setScrollFactor(1)
+      .setDepth(COLLISION_OVERLAY_DEPTH)
+      .setVisible(true);
+    return this.collisionOverlay;
+  }
+
+  private destroyCollisionOverlay(): void {
+    this.collisionOverlay?.destroy();
+    this.collisionOverlay = undefined;
+  }
+
+  private collisionOverlayCameraRect(): WorldRect {
+    const camera = this.cameras.main;
+    const view = camera.worldView;
+    const zoom = camera.zoom > 0 ? camera.zoom : 1;
+    return {
+      x: view.x,
+      y: view.y,
+      width: view.width || camera.width / zoom,
+      height: view.height || camera.height / zoom
+    };
+  }
+
+  private drawDoorOverlay(
+    graphics: Phaser.GameObjects.Graphics,
+    rect: WorldRect,
+    range: ReturnType<typeof visibleCollisionCellRange>
+  ): void {
+    if (!range) {
+      return;
+    }
+    const cellSize = this.collisionCellSize;
+    for (const door of this.world_.doors) {
+      const cell = worldPixelToCollisionCell(door.worldPixel, cellSize);
+      if (!cell || !cellInRange(cell, range)) {
+        continue;
+      }
+
+      const x = cell.cellX * cellSize;
+      const y = cell.cellY * cellSize;
+      graphics.fillStyle(0x00ff66, 0.25);
+      graphics.fillRect(x, y, cellSize, cellSize);
+      graphics.lineStyle(1, 0x00ff66, 0.95);
+      graphics.strokeRect(x + 0.5, y + 0.5, Math.max(1, cellSize - 1), Math.max(1, cellSize - 1));
+
+      if (pointInRect(door.destinationWorldPixel, rect)) {
+        graphics.lineStyle(1, 0x00ff66, 0.45);
+        graphics.beginPath();
+        graphics.moveTo(door.worldPixel.x, door.worldPixel.y);
+        graphics.lineTo(door.destinationWorldPixel.x, door.destinationWorldPixel.y);
+        graphics.strokePath();
+      }
+    }
+  }
+
+  private initialCollisionOverlayEnabled(): boolean {
+    const queryEnabled = collisionOverlayEnabledBySearch(globalThis.location?.search);
+    const registryEnabled = normalizeCollisionOverlayFlag(this.registry.get("collisionOverlay"));
+    return registryEnabled ?? queryEnabled;
+  }
+
+  private registerCollisionDebugGlobals(): void {
+    const globals = globalThis as Record<string, unknown>;
+    this.solidAtHook = (x: number, y: number) => solidAtWorldPixel(this.solidRows, { x, y }, this.collisionGrid());
+    this.surfaceAtHook = (x: number, y: number) => surfaceAtWorldPixel(this.surfaceRows, { x, y }, this.collisionGrid());
+    globals.__solidAt = this.solidAtHook;
+    globals.__surfaceAt = this.surfaceAtHook;
+  }
+
+  private unregisterCollisionDebugGlobals(): void {
+    const globals = globalThis as Record<string, unknown>;
+    if (this.solidAtHook && globals.__solidAt === this.solidAtHook) {
+      delete globals.__solidAt;
+    }
+    if (this.surfaceAtHook && globals.__surfaceAt === this.surfaceAtHook) {
+      delete globals.__surfaceAt;
+    }
+    this.solidAtHook = undefined;
+    this.surfaceAtHook = undefined;
   }
 
   private spawnNpcsForActiveChunks(center: ChunkCoord): void {
@@ -1865,6 +2036,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       `anim: ${state.animKey} frame ${state.animFrame}`,
       `feet: ${Math.round(state.x)},${Math.round(state.y)} | chunk: ${this.currentChunk?.cx ?? "?"},${this.currentChunk?.cy ?? "?"} | target: ${this.interactionTarget()?.id ?? "none"}`,
       `chunks loaded: ${this.loadedChunkCount()} | active NPCs: ${this.npcRuntimes.size}`,
+      `collision overlay: ${this.collisionOverlayEnabled ? "on" : "off"}`,
       `door fade: ${this.doorFadePhase}`,
       `encounters: ${this.encounterEnabled ? "on" : "off"} | sector: ${this.currentSectorIndex ?? "?"} | cooldown: ${Math.ceil(this.encounterCooldownMs)}ms`,
       `wallet: ${this.partyState.wallet} | bank: ${this.partyState.bank} | shop: ${this.activeShopStoreId ?? "none"}`,
@@ -1941,6 +2113,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       doorFadePhase: this.doorFadePhase,
       loadedChunkCount: this.loadedChunkCount(),
       activeNpcCount: this.npcRuntimes.size,
+      collisionOverlay: this.collisionOverlayEnabled,
       currentChunk: this.currentChunk,
       currentSectorIndex: this.currentSectorIndex,
       encounterEnabled: this.encounterEnabled,
@@ -2028,6 +2201,34 @@ function emptyPartyStateSnapshot(): PartyStateSnapshot {
 function encountersDisabledBySearch(search: string | undefined): boolean {
   const params = new URLSearchParams(search ?? "");
   return params.get("noEncounters") === "1" || params.get("encounters") === "0";
+}
+
+function collisionOverlayEnabledBySearch(search: string | undefined): boolean {
+  return normalizeCollisionOverlayFlag(new URLSearchParams(search ?? "").get("collisionOverlay")) ?? false;
+}
+
+function normalizeCollisionOverlayFlag(value: unknown): boolean | undefined {
+  if (typeof value === "boolean") {
+    return value;
+  }
+  if (typeof value === "number") {
+    if (value === 1) {
+      return true;
+    }
+    if (value === 0) {
+      return false;
+    }
+  }
+  if (typeof value === "string") {
+    const normalized = value.trim().toLowerCase();
+    if (normalized === "1" || normalized === "true" || normalized === "yes" || normalized === "on") {
+      return true;
+    }
+    if (normalized === "0" || normalized === "false" || normalized === "no" || normalized === "off") {
+      return false;
+    }
+  }
+  return undefined;
 }
 
 function normalizeOptionalGroupId(value: number | undefined): number | undefined {

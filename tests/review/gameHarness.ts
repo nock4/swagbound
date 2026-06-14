@@ -103,6 +103,7 @@ export type FirstSceneDebug = {
   doorFadePhase?: "none" | "fade-out" | "fade-in";
   loadedChunkCount?: number;
   activeNpcCount?: number;
+  collisionOverlay?: boolean;
   currentChunk?: { cx: number; cy: number };
   currentSectorIndex?: number;
   encounterEnabled?: boolean;
