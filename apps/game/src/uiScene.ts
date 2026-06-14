@@ -1,8 +1,21 @@
 import Phaser from "phaser";
+import type { FontCollection } from "@eb/schemas";
 import type { WorldScene } from "./worldScene";
 import type { MenuRenderScreen } from "./menuModel";
+import {
+  BitmapFontText,
+  prepareBitmapFont,
+  queueBitmapFontAssets,
+  type BitmapTextOptions,
+  type PreparedBitmapFont
+} from "./bitmapFont";
 
 const MONO = "Menlo, Consolas, monospace";
+const UI_TEXT_SCALE = 2;
+const UI_LINE_SPACING = 2;
+const DIALOGUE_HORIZONTAL_PADDING = 20;
+const DIALOGUE_BOX_HEIGHT = 200;
+type GameText = Phaser.GameObjects.Text | BitmapFontText;
 
 /**
  * Camera-independent overlay: dialogue window, interaction prompt, and the
@@ -10,38 +23,54 @@ const MONO = "Menlo, Consolas, monospace";
  */
 export class UiScene extends Phaser.Scene {
   private worldSceneKey = "world";
+  private font?: FontCollection;
+  private bitmapFont?: PreparedBitmapFont;
   private boxGraphics?: Phaser.GameObjects.Graphics;
-  private dialogueText?: Phaser.GameObjects.Text;
-  private footerText?: Phaser.GameObjects.Text;
+  private dialogueText?: GameText;
+  private footerText?: GameText;
   private promptText?: Phaser.GameObjects.Text;
   private panelGraphics?: Phaser.GameObjects.Graphics;
   private panelText?: Phaser.GameObjects.Text;
   private badgeText?: Phaser.GameObjects.Text;
   private menuGraphics?: Phaser.GameObjects.Graphics;
-  private menuTexts: Phaser.GameObjects.Text[] = [];
+  private menuTexts: GameText[] = [];
   private lastSignature = "";
 
   constructor() {
     super("ui");
   }
 
-  init(data: { worldSceneKey?: string }): void {
+  init(data: { worldSceneKey?: string; font?: FontCollection }): void {
     this.worldSceneKey = data.worldSceneKey ?? "world";
+    this.font = data.font;
+  }
+
+  preload(): void {
+    queueBitmapFontAssets(this, this.font);
   }
 
   create(): void {
+    this.bitmapFont = prepareBitmapFont(this, this.font);
     this.boxGraphics = this.add.graphics().setDepth(10);
-    this.dialogueText = this.add.text(0, 0, "", {
+    this.dialogueText = this.createGameText(0, 0, "", {
       fontFamily: MONO,
       fontSize: "15px",
       color: "#f8fafc",
       lineSpacing: 6,
       wordWrap: { width: this.scale.width - 96 }
+    }, {
+      scale: UI_TEXT_SCALE,
+      tint: 0xf8fafc,
+      lineSpacing: UI_LINE_SPACING,
+      maxWidth: this.scale.width - 48 - DIALOGUE_HORIZONTAL_PADDING * 2
     }).setDepth(11);
-    this.footerText = this.add.text(0, 0, "", {
+    this.footerText = this.createGameText(0, 0, "", {
       fontFamily: MONO,
       fontSize: "10px",
       color: "#cbd5e1"
+    }, {
+      scale: UI_TEXT_SCALE,
+      tint: 0xcbd5e1
     }).setDepth(11);
     this.promptText = this.add.text(12, 10, "", {
       fontFamily: MONO,
@@ -109,15 +138,15 @@ export class UiScene extends Phaser.Scene {
     const width = this.scale.width;
     const height = this.scale.height;
     const boxWidth = width - 48;
-    const boxHeight = 104;
+    const boxHeight = DIALOGUE_BOX_HEIGHT;
     const x = 24;
     const y = height - boxHeight - 18;
 
     this.drawWindow(graphics, x, y, boxWidth, boxHeight, 6);
 
-    this.dialogueText.setPosition(x + 20, y + 18);
+    this.dialogueText.setPosition(x + DIALOGUE_HORIZONTAL_PADDING, y + 18);
     this.dialogueText.setText(text);
-    this.footerText.setPosition(x + boxWidth - 150, y + boxHeight - 18);
+    this.footerText.setPosition(x + boxWidth - 188, y + boxHeight - 38);
     this.footerText.setText(footer);
   }
 
@@ -158,39 +187,59 @@ export class UiScene extends Phaser.Scene {
     let x = margin;
     screens.forEach((screen, index) => {
       const remaining = this.scale.width - x - margin;
-      const boxWidth = index === 0 ? Math.min(136, remaining) : Math.max(160, remaining);
+      const boxWidth = index === 0 ? Math.min(168, remaining) : Math.max(160, remaining);
       const compact = screen.id === "status";
       const fontSize = compact ? "10px" : "13px";
-      const lineHeight = compact ? 15 : 18;
+      const lineHeight = compact ? 34 : 36;
       const boxHeight = Math.min(
         this.scale.height - top - 20,
-        38 + Math.max(1, screen.items.length) * lineHeight + 12
+        48 + Math.max(1, screen.items.length) * lineHeight + 14
       );
       this.drawWindow(graphics, x, top, boxWidth, boxHeight, 6);
 
-      this.menuTexts.push(this.add.text(x + 14, top + 10, screen.title, {
+      this.menuTexts.push(this.createGameText(x + 14, top + 12, screen.title, {
         fontFamily: MONO,
         fontSize: "12px",
         color: "#f8fafc"
+      }, {
+        scale: UI_TEXT_SCALE,
+        tint: 0xf8fafc
       }).setDepth(15));
 
-      const itemTop = top + 32;
-      const maxItems = Math.max(0, Math.floor((boxHeight - 44) / lineHeight));
+      const itemTop = top + 48;
+      const maxItems = Math.max(0, Math.floor((boxHeight - 58) / lineHeight));
       const visibleItems = screen.items.slice(0, maxItems);
       visibleItems.forEach((item, itemIndex) => {
         const selected = item.selected && item.enabled;
         const prefix = selected ? ">" : " ";
         const label = `${prefix} ${item.label}`;
-        this.menuTexts.push(this.add.text(x + 14, itemTop + itemIndex * lineHeight, label, {
+        this.menuTexts.push(this.createGameText(x + 14, itemTop + itemIndex * lineHeight, label, {
           fontFamily: MONO,
           fontSize,
           color: item.enabled ? "#f8fafc" : "#94a3b8",
           fixedWidth: boxWidth - 28
+        }, {
+          scale: UI_TEXT_SCALE,
+          tint: item.enabled ? 0xf8fafc : 0x94a3b8,
+          maxWidth: boxWidth - 28
         }).setDepth(15));
       });
 
       x += boxWidth + gap;
     });
+  }
+
+  private createGameText(
+    x: number,
+    y: number,
+    text: string,
+    style: Phaser.Types.GameObjects.Text.TextStyle,
+    bitmapOptions: BitmapTextOptions = {}
+  ): GameText {
+    if (this.bitmapFont) {
+      return new BitmapFontText(this, this.bitmapFont, x, y, text, bitmapOptions);
+    }
+    return this.add.text(x, y, text, style);
   }
 
   private drawWindow(

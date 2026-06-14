@@ -46,7 +46,14 @@ class BootScene extends Phaser.Scene {
     const data: GameData = await loadGameData(manifest);
     const battleGroupId = battleGroupIdFromSearch(globalThis.location?.search);
     if (battleGroupId !== undefined && data.battle) {
-      this.scene.start("battle", { battleData: data.battle, groupId: battleGroupId, characters: data.characters });
+      this.scene.start("battle", {
+        battleData: data.battle,
+        groupId: battleGroupId,
+        characters: data.characters,
+        items: data.items,
+        psi: data.psi,
+        font: data.font
+      });
       return;
     }
     const saveState = deserializeSaveState(loadFromSlot(DEFAULT_SAVE_SLOT));

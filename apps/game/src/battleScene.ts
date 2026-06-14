@@ -6,6 +6,7 @@ import {
   type BattleEnemy,
   type BattleGroup,
   type CharacterCollection,
+  type FontCollection,
   type ItemCollection,
   type ItemData,
   type PsiCollection,
@@ -35,10 +36,19 @@ import {
   type Rng
 } from "./battleLogic";
 import { publishBattleDebug, type BattlePhase, type BattleTransitionPhase } from "./state";
+import {
+  BitmapFontText,
+  prepareBitmapFont,
+  queueBitmapFontAssets,
+  type BitmapTextOptions,
+  type PreparedBitmapFont
+} from "./bitmapFont";
 
 const MONO = "Menlo, Consolas, monospace";
 const COMMANDS = ["BASH", "PSI", "GOODS", "RUN"] as const;
-const STATUS_TOP = 326;
+const STATUS_TOP = 288;
+const BATTLE_TEXT_SCALE = 2;
+const BATTLE_LINE_SPACING = 2;
 const PADDED_HP_DIGITS = 3;
 const ACTION_ADVANCE_DELAY_MS = 350;
 const MENU_MAX_ROWS = 4;
@@ -59,6 +69,7 @@ type LastEnemyActionDebug = {
   actionType: number | null;
   target: number | null;
 };
+type GameText = Phaser.GameObjects.Text | BitmapFontText;
 
 export class BattleScene extends Phaser.Scene {
   private battleData_!: BattleData;
@@ -66,6 +77,8 @@ export class BattleScene extends Phaser.Scene {
   private battle_!: BattleState;
   private items_?: ItemCollection;
   private psi_?: PsiCollection;
+  private font_?: FontCollection;
+  private bitmapFont?: PreparedBitmapFont;
   private rng_: Rng = () => 0.5;
   private phase_: BattlePhase = "enter-transition";
   private transitionPhase_: BattleTransitionPhase = "enter";
@@ -87,8 +100,8 @@ export class BattleScene extends Phaser.Scene {
   private actionDelayMs_ = 0;
   private statusGraphics?: Phaser.GameObjects.Graphics;
   private targetCursor?: Phaser.GameObjects.Graphics;
-  private commandText?: Phaser.GameObjects.Text;
-  private partyText?: Phaser.GameObjects.Text;
+  private commandText?: GameText;
+  private partyText?: GameText;
   private transitionGraphics?: Phaser.GameObjects.Graphics;
   private enemySprites: Phaser.GameObjects.Image[] = [];
 
@@ -102,11 +115,13 @@ export class BattleScene extends Phaser.Scene {
     characters?: CharacterCollection;
     items?: ItemCollection;
     psi?: PsiCollection;
+    font?: FontCollection;
   }): void {
     this.battleData_ = data.battleData;
     this.group_ = selectBattleGroup(data.battleData, data.groupId);
     this.items_ = data.items;
     this.psi_ = data.psi;
+    this.font_ = data.font;
     const enemies = enemiesForGroup(data.battleData, this.group_);
     if (enemies.length === 0) {
       throw new Error(`Battle group ${this.group_.id} has no matching runtime enemy.`);
@@ -140,9 +155,11 @@ export class BattleScene extends Phaser.Scene {
     for (const enemy of enemiesForGroup(this.battleData_, this.group_)) {
       this.load.image(spriteKey(enemy.spriteId), generatedAssetUrl(this.battleData_.assetLayout.spriteDir, enemy.spriteId));
     }
+    queueBitmapFontAssets(this, this.font_);
   }
 
   create(): void {
+    this.bitmapFont = prepareBitmapFont(this, this.font_);
     this.cameras.main.setBackgroundColor("#050505");
     this.drawBackground();
     this.drawEnemySprites();
@@ -654,27 +671,40 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private createStatusWindow(): void {
+    const windowTop = STATUS_TOP + 8;
+    const windowHeight = this.scale.height - STATUS_TOP - 16;
+    const textTop = STATUS_TOP + 16;
     this.statusGraphics = this.add.graphics().setDepth(20);
     this.targetCursor = this.add.graphics().setDepth(30);
-    this.commandText = this.add.text(44, STATUS_TOP + 32, "", {
+    this.commandText = this.createGameText(44, textTop, "", {
       fontFamily: MONO,
       fontSize: "15px",
       color: "#f8fafc",
       lineSpacing: 8
+    }, {
+      scale: BATTLE_TEXT_SCALE,
+      tint: 0xf8fafc,
+      lineSpacing: BATTLE_LINE_SPACING,
+      maxWidth: 92
     }).setDepth(21);
-    this.partyText = this.add.text(178, STATUS_TOP + 28, "", {
+    this.partyText = this.createGameText(178, textTop, "", {
       fontFamily: MONO,
       fontSize: "14px",
       color: "#f8fafc",
       lineSpacing: 7
+    }, {
+      scale: BATTLE_TEXT_SCALE,
+      tint: 0xf8fafc,
+      lineSpacing: BATTLE_LINE_SPACING,
+      maxWidth: 292
     }).setDepth(21);
 
     const graphics = this.statusGraphics;
     graphics.clear();
     graphics.fillStyle(0x050914, 0.98);
     graphics.fillRect(0, STATUS_TOP, this.scale.width, this.scale.height - STATUS_TOP);
-    this.drawWindow(24, STATUS_TOP + 16, 120, 102);
-    this.drawWindow(160, STATUS_TOP + 16, 328, 118);
+    this.drawWindow(24, windowTop, 120, windowHeight);
+    this.drawWindow(160, windowTop, 328, windowHeight);
   }
 
   private drawWindow(x: number, y: number, width: number, height: number): void {
@@ -688,6 +718,19 @@ export class BattleScene extends Phaser.Scene {
     graphics.strokeRoundedRect(x + 2, y + 2, width - 4, height - 4, 4);
     graphics.lineStyle(1, 0x6b7280, 1);
     graphics.strokeRoundedRect(x + 7, y + 7, width - 14, height - 14, 3);
+  }
+
+  private createGameText(
+    x: number,
+    y: number,
+    text: string,
+    style: Phaser.Types.GameObjects.Text.TextStyle,
+    bitmapOptions: BitmapTextOptions = {}
+  ): GameText {
+    if (this.bitmapFont) {
+      return new BitmapFontText(this, this.bitmapFont, x, y, text, bitmapOptions);
+    }
+    return this.add.text(x, y, text, style);
   }
 
   private renderStatus(): void {
@@ -794,8 +837,8 @@ export class BattleScene extends Phaser.Scene {
     }
     return buildVictorySummaryViewModel(this.victorySummary_)
       .lines
-      .slice(0, 6)
-      .map((line) => fitLine(line, 36));
+      .slice(0, 4)
+      .map((line) => fitLine(line, 28));
   }
 
   private menuTextLines(): string[] {

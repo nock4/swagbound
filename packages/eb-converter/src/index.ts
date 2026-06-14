@@ -588,7 +588,10 @@ export function tokenizeCcsString(value: string): DialogueSegment[] {
 
   const flushText = (end: number) => {
     if (end > textStart) {
-      segments.push({ kind: "text", value: value.slice(textStart, end) });
+      const text = stripCcsTextSentinel(value.slice(textStart, end));
+      if (text.length > 0) {
+        segments.push({ kind: "text", value: text });
+      }
     }
   };
 
@@ -633,6 +636,10 @@ export function tokenizeCcsString(value: string): DialogueSegment[] {
 
   flushText(value.length);
   return segments;
+}
+
+function stripCcsTextSentinel(value: string): string {
+  return value.startsWith("@") ? value.slice(1) : value;
 }
 
 function branchSegmentForPointerBlock(raw: string): DialogueSegment | undefined {

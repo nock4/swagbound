@@ -277,7 +277,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     this.refreshStreaming(true);
     this.updatePrompt();
-    this.scene.launch("ui", { worldSceneKey: "chunked-world" });
+    this.scene.launch("ui", { worldSceneKey: "chunked-world", font: this.data_.font });
     this.maybeStartNewGameStartup(spawn);
     this.publish();
   }
@@ -1335,7 +1335,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
     this.scene.stop("ui");
-    this.scene.start("battle", { battleData: this.data_.battle, groupId: group });
+    this.scene.start("battle", {
+      battleData: this.data_.battle,
+      groupId: group,
+      characters: this.data_.characters,
+      items: this.data_.items,
+      psi: this.data_.psi,
+      font: this.data_.font
+    });
     return true;
   }
 

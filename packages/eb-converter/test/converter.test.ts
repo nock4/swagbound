@@ -922,6 +922,23 @@ describe("CCScript text segments", () => {
     ]);
   });
 
+  it("drops one leading CCScript text sentinel while preserving the text run", () => {
+    expect(tokenizeCcsString("@Hello there!")).toEqual([
+      { kind: "text", value: "Hello there!" }
+    ]);
+    expect(tokenizeCcsString("Hello @there!")).toEqual([
+      { kind: "text", value: "Hello @there!" }
+    ]);
+    expect(tokenizeCcsString("@@Hello there!")).toEqual([
+      { kind: "text", value: "@Hello there!" }
+    ]);
+    expect(tokenizeCcsString("@First[00]@Second")).toEqual([
+      { kind: "text", value: "First" },
+      { kind: "break", break: "line" },
+      { kind: "text", value: "Second" }
+    ]);
+  });
+
   it("flattens linebreak and newline segments to newlines", () => {
     const parsed = parseCcsFile("ccscript/example.ccs", 'label:\n"Alpha[00]Beta[01]Gamma" end\n');
     const pages = buildDialoguePages(parsed.commands.slice(1));

@@ -221,7 +221,7 @@ export class WorldScene extends Phaser.Scene {
       this.debugPanelVisible = !this.debugPanelVisible;
     });
 
-    this.scene.launch("ui", { worldSceneKey: "world" });
+    this.scene.launch("ui", { worldSceneKey: "world", font: this.data_.font });
     this.publish();
   }
 
@@ -919,7 +919,14 @@ export class WorldScene extends Phaser.Scene {
       return false;
     }
     this.scene.stop("ui");
-    this.scene.start("battle", { battleData: this.data_.battle, groupId: group });
+    this.scene.start("battle", {
+      battleData: this.data_.battle,
+      groupId: group,
+      characters: this.data_.characters,
+      items: this.data_.items,
+      psi: this.data_.psi,
+      font: this.data_.font
+    });
     return true;
   }
 
