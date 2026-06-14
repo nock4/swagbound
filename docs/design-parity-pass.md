@@ -64,7 +64,27 @@ Also closed: **window flavor switching** + 7 distinct per-flavor interior colors
 ## Status: design/chrome parity essentially complete
 
 The two dominant tells (font, window frames) plus all the 2nd-order battle/world effects
-are done and verified. Remaining open items are (a) low-priority polish (hand cursor, dev
-chrome, true enemy-frame animation, BG palette cycling), (b) the deferred audio phase, and
-(c) two large/structural items tracked separately: **overworld battle encounters** and the
-**intro cutscene** (uncertain RE).
+are done and verified.
+
+### Overworld battle encounters — DONE [ee51e3a, 9b6886a]
+Table-driven stepped encounters (EB's real sector spawn model): walking a sector rolls its
+rate-weighted enemy groups -> battle -> returns to the field at the saved position with a
+cooldown; PartyState carries across. Honest scope: this is the underlying table model, not
+visible avoidable roaming enemy *sprites* (those need an enemy->overworld-sprite mapping
+CoilSnake doesn't cleanly expose — flagged follow-on).
+
+### Intro cutscene — investigated, deferred (the genuine RE ceiling)
+The `newgame_startup` event ($C5E70B) is a brief setup (flags + pause + one warp), NOT the
+meteor cutscene. EarthBound's real intro (bedroom -> meteor -> Buzz Buzz -> Starman Jr
+battle) is a large separate multi-actor event sequence requiring a substantial slice of the
+event-VM actor/cinematic system + interior maps + a scripted boss battle — beyond a
+timeboxed attempt. The safe fallback (new game lands controllable at the canonical start)
+is in place. **Lead for a careful follow-up:** scripted teleport-destination coords are
+currently read as world pixels in `resolveTeleportDestination`; dest 150 only resolves near
+the real start when read as 8px units — a likely coordinate-unit bug affecting scripted
+teleports generally (verify the unit before changing — low payoff for the intro itself, but
+relevant to story warps).
+
+### Remaining open (low priority)
+Hand cursor (no clean art), dev chrome overlay, true enemy-frame animation, BG palette
+cycling; and the deferred own-music/audio phase.
