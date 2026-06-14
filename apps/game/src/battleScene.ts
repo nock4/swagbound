@@ -60,6 +60,15 @@ import {
   type PreparedWindowFrames
 } from "./windowFrame";
 import { WINDOW_FLAVOR_CHANGE_EVENT, activeWindowFlavorId } from "./windowSettings";
+import {
+  CANCEL_KEY_NAMES,
+  CONFIRM_KEY_NAMES,
+  MENU_DOWN_KEY_NAMES,
+  MENU_LEFT_KEY_NAMES,
+  MENU_RIGHT_KEY_NAMES,
+  MENU_UP_KEY_NAMES,
+  registerDiscreteKeys
+} from "./inputModel";
 import type { PartyMember } from "./characterModel";
 import type { PartyBattleMemberSnapshot, PartyStateSnapshot } from "./partyState";
 import {
@@ -234,14 +243,12 @@ export class BattleScene extends Phaser.Scene {
     });
     this.drawEnemySprites();
     this.createStatusWindow();
-    this.input.keyboard?.on("keydown-UP", () => this.moveMenu(-1));
-    this.input.keyboard?.on("keydown-DOWN", () => this.moveMenu(1));
-    this.input.keyboard?.on("keydown-LEFT", () => this.moveTarget(-1));
-    this.input.keyboard?.on("keydown-RIGHT", () => this.moveTarget(1));
-    this.input.keyboard?.on("keydown-SPACE", () => this.confirmMenu());
-    this.input.keyboard?.on("keydown-ENTER", () => this.confirmMenu());
-    this.input.keyboard?.on("keydown-ESC", () => this.cancelMenu());
-    this.input.keyboard?.on("keydown-BACKSPACE", () => this.cancelMenu());
+    registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveMenu(-1));
+    registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => this.moveMenu(1));
+    registerDiscreteKeys(this.input.keyboard, MENU_LEFT_KEY_NAMES, () => this.moveTarget(-1));
+    registerDiscreteKeys(this.input.keyboard, MENU_RIGHT_KEY_NAMES, () => this.moveTarget(1));
+    registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.confirmMenu());
+    registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.cancelMenu());
     void this.loadOptionalGeneratedMenuData();
     this.transitionGraphics = this.add.graphics().setDepth(90);
     this.renderTransition();

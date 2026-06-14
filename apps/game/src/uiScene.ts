@@ -145,8 +145,8 @@ export class UiScene extends Phaser.Scene {
     const showAdvanceIndicator = open && world.dialogue.revealComplete;
     const footer = open
       ? (!world.dialogue.revealComplete
-          ? "Space/Enter: finish"
-          : (world.dialogue.isLastPage ? "Space/Enter: close" : "Space/Enter: next"))
+          ? "Z: finish | X: close"
+          : (world.dialogue.isLastPage ? "Z/X: close" : "Z: next | X: close"))
       : "";
     const panelVisible = world.debugPanelVisible;
     const runtimeLines = panelVisible ? world.runtimeLines() : [];

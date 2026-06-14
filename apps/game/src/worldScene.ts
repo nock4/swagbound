@@ -66,6 +66,13 @@ import {
   type MenuScreen,
   type MenuState
 } from "./menuModel";
+import {
+  CANCEL_KEY_NAMES,
+  CONFIRM_KEY_NAMES,
+  MENU_DOWN_KEY_NAMES,
+  MENU_UP_KEY_NAMES,
+  registerDiscreteKeys
+} from "./inputModel";
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import { activeWindowFlavorId } from "./windowSettings";
 
@@ -211,12 +218,10 @@ export class WorldScene extends Phaser.Scene {
     this.keys = this.input.keyboard?.addKeys("W,A,S,D") as Record<string, Phaser.Input.Keyboard.Key>;
     this.refreshMenuScreens();
     this.input.keyboard?.on("keydown-M", () => this.openCommandMenu());
-    this.input.keyboard?.on("keydown-UP", () => this.moveMenuCursor(-1));
-    this.input.keyboard?.on("keydown-DOWN", () => this.moveMenuCursor(1));
-    this.input.keyboard?.on("keydown-SPACE", () => this.handleConfirm());
-    this.input.keyboard?.on("keydown-ENTER", () => this.handleConfirm());
-    this.input.keyboard?.on("keydown-ESC", () => this.handleCancel());
-    this.input.keyboard?.on("keydown-BACKSPACE", () => this.handleCancel());
+    registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveMenuCursor(-1));
+    registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => this.moveMenuCursor(1));
+    registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.handleConfirm());
+    registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.handleCancel());
     this.input.keyboard?.on("keydown-P", () => this.handleSaveKey());
     this.input.keyboard?.on("keydown-F1", () => {
       this.debugPanelVisible = !this.debugPanelVisible;
@@ -463,21 +468,21 @@ export class WorldScene extends Phaser.Scene {
   private updatePrompt(): void {
     const target = this.interactionTarget();
     if (this.menuState.open) {
-      this.prompt = "Arrows: choose | Space/Enter: select | Esc/Backspace: back";
+      this.prompt = "Arrows: choose | Z: select | X: back";
     } else if (this.dialogue.open) {
-      this.prompt = "Space/Enter: advance | Esc/Backspace: close";
+      this.prompt = "Z: advance | X: close";
     } else if (target) {
       this.prompt = this.talkPrompt(target.id);
     } else if (this.inRange()) {
-      this.prompt = "Turn to face them, then Space/Enter";
+      this.prompt = "Turn to face them, then press Z";
     } else {
-      this.prompt = "Move with Arrow keys / WASD. Approach someone to talk.";
+      this.prompt = "Move: Arrows/WASD. Approach someone, then press Z.";
     }
   }
 
   private talkPrompt(npcId: number): string {
     const name = this.npcName(npcId);
-    return name ? `Space/Enter: talk to ${name}` : "Space/Enter: talk";
+    return name ? `Z: talk to ${name}` : "Z: talk";
   }
 
   private npcName(npcId: number): string | undefined {

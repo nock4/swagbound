@@ -69,7 +69,7 @@ test("interaction requires facing the NPC, not just standing near it", async ({ 
   const facingState = await readRequiredDebug(page);
   expect(facingState.canInteract, "after walking up, the NPC should be in front").toBe(true);
   expect(facingState.interactionTargetId).toBe(744);
-  expect(facingState.prompt).toContain("Space/Enter: talk");
+  expect(facingState.prompt).toContain("Z: talk");
 
   // Turn away on the perpendicular axis: the facing changes while the player
   // barely moves. If the tap drifts the player out of the radius (the walker

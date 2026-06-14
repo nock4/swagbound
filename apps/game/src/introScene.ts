@@ -14,6 +14,7 @@ import {
   queueWindowFrameAssets,
   type PreparedWindowFrames
 } from "./windowFrame";
+import { CANCEL_KEY_NAMES, CONFIRM_KEY_NAMES, registerDiscreteKeys } from "./inputModel";
 
 export type IntroBeat =
   | { kind: "fade"; dir: "in" | "out"; ms: number }
@@ -140,9 +141,8 @@ export class IntroScene extends Phaser.Scene {
         .setDepth(INTRO_DEPTH)
         .setAlpha(introOverlayAlpha(this.state));
       this.applyVisualState();
-      this.input.keyboard?.on("keydown-SPACE", () => this.skip());
-      this.input.keyboard?.on("keydown-ENTER", () => this.skip());
-      this.input.keyboard?.on("keydown-ESC", () => this.skip());
+      registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.skip());
+      registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.skip());
       this.publish();
       if (this.state.complete) {
         this.complete();

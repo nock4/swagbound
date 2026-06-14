@@ -11,6 +11,7 @@ import {
 import { DialogueController, publishDebug, type FirstSceneDebug } from "./state";
 import { textSpeedCpsFromSearch } from "./dialogueRenderer";
 import { activeWindowFlavorId } from "./windowSettings";
+import { CANCEL_KEY_NAMES, CONFIRM_KEY_NAMES, registerDiscreteKeys } from "./inputModel";
 
 const MONO = "Menlo, Consolas, monospace";
 const INTERACTION_DISTANCE = 128;
@@ -81,10 +82,8 @@ export class FallbackScene extends Phaser.Scene {
 
     this.cursors = this.input.keyboard?.createCursorKeys();
     this.keys = this.input.keyboard?.addKeys("W,A,S,D") as Record<string, Phaser.Input.Keyboard.Key>;
-    this.input.keyboard?.on("keydown-SPACE", () => this.handleAdvance());
-    this.input.keyboard?.on("keydown-ENTER", () => this.handleAdvance());
-    this.input.keyboard?.on("keydown-ESC", () => this.closeDialogue());
-    this.input.keyboard?.on("keydown-BACKSPACE", () => this.closeDialogue());
+    registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.handleAdvance());
+    registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.closeDialogue());
     this.publish();
   }
 
@@ -141,10 +140,10 @@ export class FallbackScene extends Phaser.Scene {
   private publish(): void {
     const distance = this.distance();
     this.promptText?.setText(this.dialogue.open
-      ? "Space/Enter: advance | Esc/Backspace: close"
+      ? "Z: advance | X: close"
       : this.inRange()
-        ? "Space/Enter: talk"
-        : "Move with Arrow keys / WASD. Approach someone to talk.");
+        ? "Z: talk"
+        : "Move: Arrows/WASD. Approach someone, then press Z.");
     const state: FirstSceneDebug = {
       mode: "fallback",
       dialogueOpen: this.dialogue.open,
