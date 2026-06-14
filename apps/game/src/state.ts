@@ -81,6 +81,8 @@ export type BattleDebug = {
   lastEnemyAction: LastEnemyActionDebug | null;
   party: BattleCombatantDebug[];
   enemies: BattleCombatantDebug[];
+  windowLoaded?: boolean;
+  defaultFlavorId?: number;
   player: {
     name: string;
     hpDisplayed: number;
@@ -179,6 +181,8 @@ export type OverworldDebug = {
   metadataLines: string[];
   fontLoaded?: boolean;
   primaryFontId?: number;
+  windowLoaded?: boolean;
+  defaultFlavorId?: number;
   tutorial?: TutorialStatus["counts"];
   resolveStatus: string;
   dialogueCounters?: { opens: number; advances: number; closes: number };

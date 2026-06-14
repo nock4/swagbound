@@ -16,6 +16,7 @@ import {
   TeleportDestinationsSchema,
   TutorialStatusSchema,
   ValidationReportSchema,
+  WindowCollectionSchema,
   WorldArtifactSchema,
   type DialoguePage,
   type BattleData,
@@ -33,6 +34,7 @@ import {
   type TeleportDestinations,
   type TutorialStatus,
   type ValidationReport,
+  type WindowCollection,
   type WorldArtifact
 } from "@eb/schemas";
 
@@ -50,6 +52,7 @@ export type GameData = {
   teleportDestinations?: TeleportDestinations;
   battle?: BattleData;
   font?: FontCollection;
+  window?: WindowCollection;
   characters?: CharacterCollection;
   items?: ItemCollection;
   psi?: PsiCollection;
@@ -78,6 +81,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     teleportDestinations,
     battle,
     font,
+    window,
     characters,
     items,
     psi,
@@ -98,6 +102,9 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       : Promise.resolve(undefined),
     manifest.files.font
       ? loadJson(`/generated/${manifest.files.font}`, FontCollectionSchema)
+      : Promise.resolve(undefined),
+    manifest.files.window
+      ? loadJson(`/generated/${manifest.files.window}`, WindowCollectionSchema)
       : Promise.resolve(undefined),
     manifest.files.characters
       ? loadJson(`/generated/${manifest.files.characters}`, CharacterCollectionSchema)
@@ -124,6 +131,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     teleportDestinations,
     battle,
     font,
+    window,
     characters,
     items,
     psi,
@@ -215,6 +223,7 @@ export function buildMetadataLines(data: GameData): string[] {
     `SpriteGroups/005.png: ${sprite005 ? "detected" : "not detected"}`,
     `Sheets copied: ${data.sprites?.counts.sheets ?? 0}`,
     `Font data: ${data.font ? `${data.font.fonts.length} sheets` : "not loaded"}`,
+    `Window data: ${data.window ? `${data.window.flavors.length} flavors` : "not loaded"}`,
     `World render: ${data.world?.available && "mode" in data.world && data.world.mode === "full" ? "chunked PNGs" : data.world?.available ? "background + foreground PNG" : "skipped"}`,
     "Asset rendering: local-only, gitignored"
   ];

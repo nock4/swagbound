@@ -52,7 +52,8 @@ class BootScene extends Phaser.Scene {
         characters: data.characters,
         items: data.items,
         psi: data.psi,
-        font: data.font
+        font: data.font,
+        window: data.window
       });
       return;
     }
@@ -95,6 +96,7 @@ class BootScene extends Phaser.Scene {
       statusLines: [title],
       metadataLines: [],
       resolveStatus: "missing",
+      windowLoaded: false,
       error: { title, message }
     });
     this.cameras.main.setBackgroundColor("#10141b");

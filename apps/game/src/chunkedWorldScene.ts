@@ -1583,6 +1583,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       metadataLines: this.metadataLines(),
       fontLoaded: Boolean(this.data_.font),
       ...(this.data_.font ? { primaryFontId: this.data_.font.primaryFontId } : {}),
+      windowLoaded: Boolean(this.data_.window),
+      ...(this.data_.window ? { defaultFlavorId: this.data_.window.defaultFlavorId } : {}),
       tutorial: this.data_.tutorialStatus?.counts,
       resolveStatus: resolveStatus(this.data_),
       dialogueCounters: { opens: this.dialogue.opens, advances: this.dialogue.advances, closes: this.dialogue.closes },

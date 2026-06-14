@@ -16,6 +16,7 @@ import {
   TeleportDestinationsSchema,
   TutorialStatusSchema,
   ValidationReportSchema,
+  WindowCollectionSchema,
   WorldArtifactSchema
 } from "@eb/schemas";
 
@@ -24,6 +25,7 @@ const DEFAULT_CHARACTERS_FILE = "characters.json";
 const DEFAULT_ITEMS_FILE = "items.json";
 const DEFAULT_PSI_FILE = "psi.json";
 const DEFAULT_SHOPS_FILE = "shops.json";
+const DEFAULT_WINDOW_FILE = "window.json";
 
 function parseOut(argv: string[]): string {
   const outIndex = argv.indexOf("--out");
@@ -54,6 +56,8 @@ export type GeneratedValidationResult = {
   fontSheets?: number;
   fontGlyphs?: number;
   fontAssetsChecked?: number;
+  windowFlavors?: number;
+  windowAssetsChecked?: number;
   characters?: number;
   characterStatFieldsPopulated?: number;
   items?: number;
@@ -109,6 +113,11 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
   const shouldReadFont = Boolean(manifest.files.font) || existsSync(fontPath);
   const fontRaw = shouldReadFont ? await readJson(fontPath) : undefined;
   const font = fontRaw ? FontCollectionSchema.parse(fontRaw) : undefined;
+  const windowFile = manifest.files.window ?? DEFAULT_WINDOW_FILE;
+  const windowPath = path.join(out, windowFile);
+  const shouldReadWindow = Boolean(manifest.files.window) || existsSync(windowPath);
+  const windowRaw = shouldReadWindow ? await readJson(windowPath) : undefined;
+  const window = windowRaw ? WindowCollectionSchema.parse(windowRaw) : undefined;
   const characterFile = manifest.files.characters ?? DEFAULT_CHARACTERS_FILE;
   const characterPath = path.join(out, characterFile);
   const shouldReadCharacters = Boolean(manifest.files.characters) || existsSync(characterPath);
@@ -142,6 +151,7 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
     ...(teleportDestinationsRaw ? { [teleportDestinationsFile]: teleportDestinationsRaw } : {}),
     ...(battleRaw ? { [battleFile]: battleRaw } : {}),
     ...(fontRaw ? { [fontFile]: fontRaw } : {}),
+    ...(windowRaw ? { [windowFile]: windowRaw } : {}),
     ...(charactersRaw ? { [characterFile]: charactersRaw } : {}),
     ...(itemsRaw ? { [itemFile]: itemsRaw } : {}),
     ...(psiRaw ? { [psiFile]: psiRaw } : {}),
@@ -151,6 +161,7 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
   const worldAssetsChecked = assertWorldAssetsExist(out, world, sprites);
   const battleAssetsChecked = battle ? assertBattleAssetsExist(out, battle) : 0;
   const fontAssetsChecked = font ? assertFontAssetsExist(out, font) : 0;
+  const windowAssetsChecked = window ? assertWindowAssetsExist(out, window) : 0;
 
   return {
     ok: true,
@@ -167,6 +178,7 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
       ...(teleportDestinations ? [teleportDestinationsFile] : []),
       ...(battle ? [battleFile] : []),
       ...(font ? [fontFile] : []),
+      ...(window ? [windowFile] : []),
       ...(characters ? [characterFile] : []),
       ...(items ? [itemFile] : []),
       ...(psi ? [psiFile] : []),
@@ -194,6 +206,10 @@ export async function validateGeneratedOutput(outInput = DEFAULT_OUT): Promise<G
       fontSheets: font.fonts.length,
       fontGlyphs: font.fonts.reduce((total, sheet) => total + sheet.glyphCount, 0),
       fontAssetsChecked
+    } : {}),
+    ...(window ? {
+      windowFlavors: window.flavors.length,
+      windowAssetsChecked
     } : {}),
     ...(characters ? {
       characters: characters.counts.characters,
@@ -264,6 +280,13 @@ function assertFontAssetsExist(out: string, font: { fonts: Array<{ file: string 
     assertLocalAssetExists(out, sheet.file, "missing_font_asset", "font JSON references a missing local asset");
   }
   return font.fonts.length;
+}
+
+function assertWindowAssetsExist(out: string, window: { flavors: Array<{ file: string }> }): number {
+  for (const flavor of window.flavors) {
+    assertLocalAssetExists(out, flavor.file, "missing_window_asset", "window JSON references a missing local asset");
+  }
+  return window.flavors.length;
 }
 
 function assertLocalAssetExists(out: string, assetPath: string, code: string, message: string): void {

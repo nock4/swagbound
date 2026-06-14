@@ -10,7 +10,8 @@ import {
   type ItemCollection,
   type ItemData,
   type PsiCollection,
-  type PsiData
+  type PsiData,
+  type WindowCollection
 } from "@eb/schemas";
 import {
   applyVictoryRewards,
@@ -78,6 +79,7 @@ export class BattleScene extends Phaser.Scene {
   private items_?: ItemCollection;
   private psi_?: PsiCollection;
   private font_?: FontCollection;
+  private window_?: WindowCollection;
   private bitmapFont?: PreparedBitmapFont;
   private rng_: Rng = () => 0.5;
   private phase_: BattlePhase = "enter-transition";
@@ -116,12 +118,14 @@ export class BattleScene extends Phaser.Scene {
     items?: ItemCollection;
     psi?: PsiCollection;
     font?: FontCollection;
+    window?: WindowCollection;
   }): void {
     this.battleData_ = data.battleData;
     this.group_ = selectBattleGroup(data.battleData, data.groupId);
     this.items_ = data.items;
     this.psi_ = data.psi;
     this.font_ = data.font;
+    this.window_ = data.window;
     const enemies = enemiesForGroup(data.battleData, this.group_);
     if (enemies.length === 0) {
       throw new Error(`Battle group ${this.group_.id} has no matching runtime enemy.`);
@@ -775,6 +779,8 @@ export class BattleScene extends Phaser.Scene {
       lastEnemyAction: this.lastEnemyAction_,
       party,
       enemies,
+      windowLoaded: Boolean(this.window_),
+      ...(this.window_ ? { defaultFlavorId: this.window_.defaultFlavorId } : {}),
       player: {
         name: this.battle_.party[0]?.name ?? "",
         hpDisplayed: party[0]?.hpDisplayed ?? 0,

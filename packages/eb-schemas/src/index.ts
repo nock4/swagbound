@@ -588,6 +588,39 @@ export const FontCollectionSchema = z.object({
   path: ["primaryFontId"]
 });
 
+export const RgbColorSchema = z.object({
+  r: z.number().int().min(0).max(255),
+  g: z.number().int().min(0).max(255),
+  b: z.number().int().min(0).max(255)
+});
+
+export const WindowRectSchema = z.object({
+  x: z.number().int().nonnegative(),
+  y: z.number().int().nonnegative(),
+  w: z.number().int().positive(),
+  h: z.number().int().positive()
+});
+
+export const WindowFlavorSchema = z.object({
+  id: z.number().int().nonnegative(),
+  file: z.string(),
+  corner: WindowRectSchema,
+  hEdge: WindowRectSchema,
+  vEdge: WindowRectSchema,
+  moreArrow: WindowRectSchema,
+  interiorColor: RgbColorSchema,
+  detectionNotes: z.record(z.string()).optional()
+});
+
+export const WindowCollectionSchema = z.object({
+  defaultFlavorId: z.number().int().nonnegative(),
+  transparentKey: RgbColorSchema,
+  flavors: z.array(WindowFlavorSchema)
+}).refine((collection) => collection.flavors.some((flavor) => flavor.id === collection.defaultFlavorId), {
+  message: "defaultFlavorId must reference an emitted window flavor",
+  path: ["defaultFlavorId"]
+});
+
 export const CharacterGrowthSchema = z.object({
   offense: z.number().int().nonnegative(),
   defense: z.number().int().nonnegative(),
@@ -754,6 +787,7 @@ export const ManifestSchema = z.object({
     teleportDestinations: z.string().optional(),
     battle: z.string().optional(),
     font: z.string().optional(),
+    window: z.string().optional(),
     characters: z.string().optional(),
     items: z.string().optional(),
     psi: z.string().optional(),
@@ -774,6 +808,7 @@ export const ManifestSchema = z.object({
     battleGroups: z.number().int().nonnegative().optional(),
     fontSheets: z.number().int().nonnegative().optional(),
     fontGlyphs: z.number().int().nonnegative().optional(),
+    windowFlavors: z.number().int().nonnegative().optional(),
     characters: z.number().int().nonnegative().optional(),
     characterStatFieldsPopulated: z.number().int().nonnegative().optional(),
     items: z.number().int().nonnegative().optional(),
@@ -820,6 +855,10 @@ export type BattleGroup = z.infer<typeof BattleGroupSchema>;
 export type BattleDropRarity = z.infer<typeof BattleDropRaritySchema>;
 export type FontGlyphSheet = z.infer<typeof FontGlyphSheetSchema>;
 export type FontCollection = z.infer<typeof FontCollectionSchema>;
+export type RgbColor = z.infer<typeof RgbColorSchema>;
+export type WindowRect = z.infer<typeof WindowRectSchema>;
+export type WindowFlavor = z.infer<typeof WindowFlavorSchema>;
+export type WindowCollection = z.infer<typeof WindowCollectionSchema>;
 export type CharacterCollection = z.infer<typeof CharacterCollectionSchema>;
 export type CharacterData = z.infer<typeof CharacterDataSchema>;
 export type CharacterGrowth = z.infer<typeof CharacterGrowthSchema>;

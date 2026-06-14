@@ -20,6 +20,7 @@ import {
   type TutorialStatus,
   type BattleData,
   type FontCollection,
+  type WindowCollection,
   type CharacterCollection,
   type ItemCollection,
   type PsiCollection,
@@ -31,6 +32,7 @@ import {
 } from "@eb/schemas";
 import { BATTLE_FILE, buildBattleData } from "./battle";
 import { FONT_FILE, buildFontData } from "./font";
+import { WINDOW_FILE, buildWindowData } from "./window";
 import { CHARACTERS_FILE, buildCharacterData } from "./characters";
 import { ITEMS_FILE, PSI_FILE, buildItemPsiData } from "./itemsPsi";
 import { SHOPS_FILE, buildShopData } from "./shops";
@@ -66,6 +68,7 @@ type CliArgs = {
   worldMode: WorldMode;
   battle: boolean;
   font: boolean;
+  window: boolean;
   characters: boolean;
   items: boolean;
   shops: boolean;
@@ -86,6 +89,7 @@ type ConvertResult = {
   teleportDestinations?: TeleportDestinations;
   battle?: BattleData;
   font?: FontCollection;
+  window?: WindowCollection;
   characters?: CharacterCollection;
   items?: ItemCollection;
   psi?: PsiCollection;
@@ -96,12 +100,14 @@ export function parseArgs(argv: string[]): CliArgs {
   const itemsEnabled = parseItemMode(process.env.EB_ITEMS);
   const worldMode = parseWorldMode(process.env.EB_WORLD_MODE);
   let fontOverridden = false;
+  let windowOverridden = false;
   const args: CliArgs = {
     project: process.env.EB_PROJECT ?? DEFAULT_PROJECT,
     out: DEFAULT_OUT,
     worldMode,
     battle: parseBattleMode(process.env.EB_BATTLE),
     font: parseFontMode(process.env.EB_FONT, worldMode),
+    window: parseWindowMode(process.env.EB_WINDOW, worldMode),
     characters: parseCharacterMode(process.env.EB_CHARS),
     items: itemsEnabled,
     shops: parseShopMode(process.env.EB_SHOPS) || itemsEnabled,
@@ -121,6 +127,9 @@ export function parseArgs(argv: string[]): CliArgs {
       if (!fontOverridden && process.env.EB_FONT === undefined) {
         args.font = parseFontMode(undefined, args.worldMode);
       }
+      if (!windowOverridden && process.env.EB_WINDOW === undefined) {
+        args.window = parseWindowMode(undefined, args.worldMode);
+      }
       index += 1;
     } else if (arg === "--battle") {
       args.battle = true;
@@ -130,6 +139,12 @@ export function parseArgs(argv: string[]): CliArgs {
     } else if (arg === "--no-font") {
       args.font = false;
       fontOverridden = true;
+    } else if (arg === "--window") {
+      args.window = true;
+      windowOverridden = true;
+    } else if (arg === "--no-window") {
+      args.window = false;
+      windowOverridden = true;
     } else if (arg === "--characters" || arg === "--chars") {
       args.characters = true;
     } else if (arg === "--items" || arg === "--item-data") {
@@ -179,6 +194,19 @@ function parseFontMode(value: string | undefined, worldMode: WorldMode): boolean
     return true;
   }
   throw new Error(`Unsupported EB_FONT "${value}". Expected "1" or "0".`);
+}
+
+function parseWindowMode(value: string | undefined, worldMode: WorldMode): boolean {
+  if (!value) {
+    return worldMode === "full";
+  }
+  if (value === "0" || value.toLowerCase() === "false" || value.toLowerCase() === "no") {
+    return false;
+  }
+  if (value === "1" || value.toLowerCase() === "true" || value.toLowerCase() === "yes") {
+    return true;
+  }
+  throw new Error(`Unsupported EB_WINDOW "${value}". Expected "1" or "0".`);
 }
 
 function parseCharacterMode(value: string | undefined): boolean {
@@ -871,6 +899,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   const worldMode = options.worldMode ?? parseWorldMode(process.env.EB_WORLD_MODE);
   const battleEnabled = options.battle ?? parseBattleMode(process.env.EB_BATTLE);
   const fontEnabled = options.font ?? parseFontMode(process.env.EB_FONT, worldMode);
+  const windowEnabled = options.window ?? parseWindowMode(process.env.EB_WINDOW, worldMode);
   const charactersEnabled = options.characters ?? parseCharacterMode(process.env.EB_CHARS);
   const itemsEnabled = options.items ?? parseItemMode(process.env.EB_ITEMS);
   const shopsEnabled = options.shops ?? (parseShopMode(process.env.EB_SHOPS) || itemsEnabled);
@@ -971,6 +1000,12 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
       outAbs
     })
     : undefined;
+  const window = windowEnabled
+    ? await buildWindowData({
+      projectAbs,
+      outAbs
+    })
+    : undefined;
   const characters = charactersEnabled
     ? await buildCharacterData({
       projectAbs,
@@ -997,6 +1032,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     ...(teleportDestinations ? { teleportDestinations: TELEPORT_DESTINATIONS_FILE } : {}),
     ...(battle ? { battle: BATTLE_FILE } : {}),
     ...(font ? { font: FONT_FILE } : {}),
+    ...(window ? { window: WINDOW_FILE } : {}),
     ...(characters ? { characters: CHARACTERS_FILE } : {}),
     ...(items ? { items: ITEMS_FILE, psi: PSI_FILE } : {}),
     ...(shops ? { shops: SHOPS_FILE } : {})
@@ -1026,6 +1062,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     ...(teleportDestinations ? [TELEPORT_DESTINATIONS_FILE] : []),
     ...(battle ? [BATTLE_FILE] : []),
     ...(font ? [FONT_FILE] : []),
+    ...(window ? [WINDOW_FILE] : []),
     ...(characters ? [CHARACTERS_FILE] : []),
     ...(items ? [ITEMS_FILE, PSI_FILE] : []),
     ...(shops ? [SHOPS_FILE] : [])
@@ -1054,6 +1091,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
       ...(font ? {
         fontSheets: font.fonts.length,
         fontGlyphs: sum(font.fonts, (sheet) => sheet.glyphCount)
+      } : {}),
+      ...(window ? {
+        windowFlavors: window.flavors.length
       } : {}),
       ...(characters ? {
         characters: characters.counts.characters,
@@ -1105,6 +1145,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   if (font) {
     await writeJson(path.join(outAbs, FONT_FILE), font);
   }
+  if (window) {
+    await writeJson(path.join(outAbs, WINDOW_FILE), window);
+  }
   if (characters) {
     await writeJson(path.join(outAbs, CHARACTERS_FILE), characters);
   }
@@ -1128,6 +1171,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     ...(teleportDestinations ? { teleportDestinations } : {}),
     ...(battle ? { battle } : {}),
     ...(font ? { font } : {}),
+    ...(window ? { window } : {}),
     ...(characters ? { characters } : {}),
     ...(items ? { items } : {}),
     ...(psi ? { psi } : {}),
@@ -1906,6 +1950,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
           ...(result.teleportDestinations ? [TELEPORT_DESTINATIONS_FILE] : []),
           ...(result.battle ? [BATTLE_FILE] : []),
           ...(result.font ? [FONT_FILE] : []),
+          ...(result.window ? [WINDOW_FILE] : []),
           ...(result.characters ? [CHARACTERS_FILE] : []),
           ...(result.items ? [ITEMS_FILE, PSI_FILE] : []),
           ...(result.shops ? [SHOPS_FILE] : [])
@@ -1944,6 +1989,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
             sheets: result.font.fonts.length,
             glyphs: sum(result.font.fonts, (sheet) => sheet.glyphCount),
             primaryFontId: result.font.primaryFontId
+          }
+        } : {}),
+        ...(result.window ? {
+          window: {
+            flavors: result.window.flavors.length,
+            defaultFlavorId: result.window.defaultFlavorId
           }
         } : {}),
         tutorial: result.tutorialStatus.counts,
