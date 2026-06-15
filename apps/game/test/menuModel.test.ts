@@ -7,6 +7,7 @@ import {
   buildCheckScreen,
   buildCheckViewModel,
   buildEquipActionScreens,
+  buildEquipSlotScreens,
   buildEquipViewModel,
   buildGoodsActionScreens,
   buildGoodsViewModel,
@@ -182,19 +183,20 @@ describe("Status view model", () => {
     const memberScreens = buildStatusMemberScreens(status);
     expect(memberScreens).toHaveLength(2);
     expect(memberScreens[0].items.map((item) => item.label)).toEqual([
-      "Name MEMBER_A  Level 10",
-      "HP 50/50",
-      "PP 12/12",
+      "MEMBER_A Lv 10",
+      "HP 50/50 PP 12/12",
       "EXP 0",
-      "Offense 11  Defense 12",
-      "Speed 13  Guts 14",
-      "Luck 17  Vitality 15",
+      "Offense 11 Defense 12",
+      "Speed 13 Guts 14",
+      "Luck 17 Vitality 15",
       "IQ 16"
     ]);
     expect(memberScreens[0].items.every((item) => !item.enabled)).toBe(true);
-    expect(memberScreens[0].items.map((item) => item.label).join(" ")).not.toContain("Wallet");
-    expect(memberScreens[0].items.map((item) => item.label).join(" ")).not.toContain("Bank");
-    expect(memberScreens[1].items[0].label).toBe("Name MEMBER_B  Level 20");
+    const renderedStatus = memberScreens[0].items.map((item) => item.label).join(" ");
+    expect(renderedStatus).not.toContain("Wallet");
+    expect(renderedStatus).not.toContain("Bank");
+    expect(renderedStatus).not.toMatch(/NameMEMBER_A|Level10|Offense11|Defense12/);
+    expect(memberScreens[1].items[0].label).toBe("MEMBER_B Lv 20");
   });
 
   it("builds status from generated character data and session wallet", () => {
@@ -324,6 +326,17 @@ describe("item and PSI menu view models", () => {
     expect(goods.targets.map((target) => target.id)).toEqual([1]);
     expect(goods.entries.map((entry) => entry.itemId)).toEqual([10, 11, 12]);
     expect(equip.entries.map((entry) => entry.itemId)).toEqual([10, 12]);
+    expect(equip.slots.map((slot) => ({
+      slot: slot.slot,
+      label: slot.label,
+      equippedLabel: slot.equippedLabel,
+      itemIds: slot.entries.map((entry) => entry.itemId)
+    }))).toEqual([
+      { slot: "weapon", label: "Weapon", equippedLabel: "-", itemIds: [10, 12] },
+      { slot: "body", label: "Body", equippedLabel: "-", itemIds: [] },
+      { slot: "arms", label: "Arms", equippedLabel: "-", itemIds: [] },
+      { slot: "other", label: "Other", equippedLabel: "-", itemIds: [] }
+    ]);
     expect(psi.entries.map((entry) => entry.psiId)).toEqual([7]);
     expect(check.entries).toHaveLength(3);
 
@@ -351,6 +364,20 @@ describe("item and PSI menu view models", () => {
       inventorySlot: 0,
       itemId: 10
     });
+    const equipSlotScreens = buildEquipSlotScreens(equip);
+    expect(equipSlotScreens.map((screen) => screen.id)).toEqual([
+      "equip-slot-1-weapon",
+      "equip-slot-1-body",
+      "equip-slot-1-arms",
+      "equip-slot-1-other"
+    ]);
+    expect(equipSlotScreens[0].items.map((item) => item.childScreenId)).toEqual([
+      "equip-item-1-0-10",
+      "equip-item-1-2-12"
+    ]);
+    expect(equipSlotScreens[1].items).toMatchObject([
+      { label: "Nothing to equip.", enabled: false }
+    ]);
 
     const checkScreen = buildCheckScreen(check);
     expect(checkScreen.items.map((item) => item.childScreenId)).toEqual([
@@ -363,27 +390,81 @@ describe("item and PSI menu view models", () => {
     expect(detailScreens[0].items.length).toBeGreaterThan(1);
   });
 
-  it("adds concrete menu screens for the package W stub ids", () => {
-    const status = buildStatusViewModel({ partyMembers: [partyMember(1, "MEMBER_A", 5)] });
+  it("drills Goods, PSI, and Equip through member-select screens", () => {
+    const partyMembers = [partyMember(1, "MEMBER_A", 5), partyMember(2, "MEMBER_B", 5)];
+    const status = buildStatusViewModel({ partyMembers });
     const screens = buildMenuScreens(status, {
-      partyMembers: [partyMember(1, "MEMBER_A", 5)],
+      partyMembers,
       partyState: {
         wallet: 0,
         bank: 0,
-        party: () => [1],
-        inventory: () => [10, 11, 12]
+        party: () => [1, 2],
+        inventory: (char: number) => char === 2 ? [13] : [10, 11, 12],
+        equipped: (char: number) => char === 2 ? { body: 13 } : { weapon: 10 }
       },
       items: syntheticItems(),
       psi: syntheticPsi()
     });
 
     const byId = new Map(screens.map((screen) => [screen.id, screen]));
-    expect(byId.get("goods")?.items[0]?.id).not.toBe("goods-stub");
-    expect(byId.get("goods")?.items[0]?.childScreenId).toBe("goods-item-1-0-10");
-    expect(byId.get("psi")?.items[0]?.id).not.toBe("psi-stub");
-    expect(byId.get("equip")?.items[0]?.id).not.toBe("equip-stub");
-    expect(byId.get("equip")?.items[0]?.childScreenId).toBe("equip-item-1-0-10");
+    expect(byId.get("goods")?.items.map((item) => [item.label, item.childScreenId])).toEqual([
+      ["MEMBER_A", "goods-member-0"],
+      ["MEMBER_B", "goods-member-1"]
+    ]);
+    expect(byId.get("goods-member-0")?.items[0]).toMatchObject({
+      id: "goods-0-10",
+      childScreenId: "goods-item-1-0-10"
+    });
+    expect(byId.get("goods-member-1")?.items[0]).toMatchObject({
+      label: "[item 13 data]",
+      childScreenId: "goods-item-2-0-13"
+    });
+
+    expect(byId.get("psi")?.items.map((item) => [item.label, item.childScreenId])).toEqual([
+      ["MEMBER_A", "psi-member-0"],
+      ["MEMBER_B", "psi-member-1"]
+    ]);
+    expect(byId.get("psi-member-0")?.items.map((item) => item.label)).toEqual(["[psi 7 data] stage-a"]);
+    expect(byId.get("psi-member-1")?.items.map((item) => item.label)).toEqual(["[psi 9 data] stage-c"]);
+
+    expect(byId.get("equip")?.items.map((item) => [item.label, item.childScreenId])).toEqual([
+      ["MEMBER_A", "equip-member-0"],
+      ["MEMBER_B", "equip-member-1"]
+    ]);
+    expect(byId.get("equip-member-0")?.items.map((item) => item.label)).toEqual([
+      "Weapon: [item 10 data]",
+      "Body: -",
+      "Arms: -",
+      "Other: -"
+    ]);
+    expect(byId.get("equip-member-0")?.items.map((item) => item.childScreenId)).toEqual([
+      "equip-slot-1-weapon",
+      "equip-slot-1-body",
+      "equip-slot-1-arms",
+      "equip-slot-1-other"
+    ]);
+    expect(byId.get("equip-member-1")?.items.map((item) => item.label)).toEqual([
+      "Weapon: -",
+      "Body: [item 13 data]",
+      "Arms: -",
+      "Other: -"
+    ]);
+    expect(byId.get("equip-slot-1-weapon")?.items.map((item) => item.childScreenId)).toEqual([
+      "equip-item-1-0-10",
+      "equip-item-1-2-12"
+    ]);
+    expect(byId.get("equip-slot-1-body")?.items).toMatchObject([
+      { label: "Nothing to equip.", enabled: false }
+    ]);
+    expect(parseMenuAction(byId.get("equip-item-2-0-13")?.items[0]?.actionId ?? "")).toEqual({
+      kind: "equip",
+      char: 2,
+      inventorySlot: 0,
+      itemId: 13
+    });
+
     expect(byId.get("check")?.items[0]?.id).not.toBe("check-stub");
+    expect(byId.get("check")?.items[0]?.childScreenId).toBe("check-item-0-10");
     expect(byId.get("atm")?.items[0]?.id).toBe("atm-wallet");
   });
 
@@ -485,18 +566,24 @@ function syntheticItems(): ItemCollection {
     items: [
       itemData(10, true),
       itemData(11, false),
-      itemData(12, true, "Neutral help text for [item 12 data].")
+      itemData(12, true, "Neutral help text for [item 12 data]."),
+      itemData(13, true, undefined, 0x14)
     ],
-    counts: { items: 3, equippable: 2 },
+    counts: { items: 4, equippable: 3 },
     warnings: []
   };
 }
 
-function itemData(id: number, equippable: boolean, helpText?: string): ItemCollection["items"][number] {
+function itemData(
+  id: number,
+  equippable: boolean,
+  helpText?: string,
+  type = equippable ? 0x10 : 0x20
+): ItemCollection["items"][number] {
   return {
     id,
     name: `[item ${id} data]`,
-    type: equippable ? 0x10 : 0x20,
+    type,
     cost: id === 10 ? 20 : id === 11 ? 7 : 9,
     action: 0,
     argument: 0,
@@ -551,7 +638,7 @@ function syntheticPsi(): PsiCollection {
         type: "assist",
         strength: "stage-c",
         usableOutsideBattle: false,
-        learnedBy: [{ charId: 3, level: 1 }]
+        learnedBy: [{ charId: 2, level: 1 }]
       }
     ],
     counts: { psi: 3, learnedBy: 3 },

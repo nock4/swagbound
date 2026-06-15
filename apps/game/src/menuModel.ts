@@ -126,6 +126,15 @@ export type EquipViewModel = {
   title: "Equip";
   member: ActivePartyMemberViewModel;
   entries: InventoryMenuEntry[];
+  slots: EquipSlotViewModel[];
+};
+
+export type EquipSlotViewModel = {
+  slot: EquipmentSlot;
+  label: string;
+  equippedLabel: string;
+  screenId: string;
+  entries: InventoryMenuEntry[];
 };
 
 export type PsiMenuEntry = {
@@ -228,6 +237,9 @@ export const STATUS_MENU_ID = "status";
 export const TALK_MENU_ACTION_ID = "talk";
 export const NO_ONE_TO_TALK_TO_MESSAGE = "There's no one to talk to.";
 export const SAVE_MENU_ACTION_ID = "save";
+const GOODS_MENU_ID = "goods";
+const PSI_MENU_ID = "psi";
+const EQUIP_MENU_ID = "equip";
 const ITEM_USE_ACTION_PREFIX = "item-use";
 const EQUIP_ACTION_PREFIX = "equip";
 const SHOP_BUY_ACTION_PREFIX = "shop-buy";
@@ -236,12 +248,13 @@ const SHOP_CANCEL_ACTION_ID = "shop-cancel";
 const ATM_ACTION_PREFIX = "atm";
 const ATM_MENU_ID = "atm";
 const ATM_DEBUG_AMOUNT = 100;
+const EQUIP_SLOTS: EquipmentSlot[] = ["weapon", "body", "arms", "other"];
 
 const MAIN_COMMANDS: Array<Omit<MenuItem, "enabled">> = [
   { id: TALK_MENU_ACTION_ID, label: "Talk", actionId: TALK_MENU_ACTION_ID },
-  { id: "goods", label: "Goods", childScreenId: "goods" },
-  { id: "psi", label: "PSI", childScreenId: "psi" },
-  { id: "equip", label: "Equip", childScreenId: "equip" },
+  { id: GOODS_MENU_ID, label: "Goods", childScreenId: GOODS_MENU_ID },
+  { id: PSI_MENU_ID, label: "PSI", childScreenId: PSI_MENU_ID },
+  { id: EQUIP_MENU_ID, label: "Equip", childScreenId: EQUIP_MENU_ID },
   { id: "check", label: "Check", childScreenId: "check" },
   { id: STATUS_MENU_ID, label: "Status", childScreenId: STATUS_MENU_ID },
   { id: ATM_MENU_ID, label: "ATM", childScreenId: ATM_MENU_ID },
@@ -364,19 +377,28 @@ export function buildMainMenuScreen(): MenuScreen {
 }
 
 export function buildMenuScreens(status: StatusViewModel, input: PartyMenuViewModelInput = {}): MenuScreen[] {
-  const goods = buildGoodsViewModel(input);
-  const psi = buildPsiViewModel(input);
-  const equip = buildEquipViewModel(input);
+  const members = selectedPartyMembers(input);
+  const goodsByMember = members.map((member) => buildGoodsViewModelForMember(input, member));
+  const psiByMember = members.map((member) => buildPsiViewModelForMember(input, member));
+  const equipByMember = members.map((member) => buildEquipViewModelForMember(input, member));
   const check = buildCheckViewModel(input);
   return [
     buildMainMenuScreen(),
-    buildGoodsScreen(goods),
-    ...buildGoodsActionScreens(goods),
-    buildPsiScreen(psi),
+    buildPartyMemberSelectScreen(GOODS_MENU_ID, "Goods", goodsByMember.map((goods) => goods.member)),
+    ...goodsByMember.flatMap((goods, index) => [
+      buildGoodsScreen(goods, partyMemberScreenId(GOODS_MENU_ID, index)),
+      ...buildGoodsActionScreens(goods)
+    ]),
+    buildPartyMemberSelectScreen(PSI_MENU_ID, "PSI", psiByMember.map((psi) => psi.member)),
+    ...psiByMember.map((psi, index) => buildPsiScreen(psi, partyMemberScreenId(PSI_MENU_ID, index))),
     buildStatusScreen(status),
     ...buildStatusMemberScreens(status),
-    buildEquipScreen(equip),
-    ...buildEquipActionScreens(equip),
+    buildPartyMemberSelectScreen(EQUIP_MENU_ID, "Equip", equipByMember.map((equip) => equip.member)),
+    ...equipByMember.flatMap((equip, index) => [
+      buildEquipScreen(equip, partyMemberScreenId(EQUIP_MENU_ID, index)),
+      ...buildEquipSlotScreens(equip),
+      ...buildEquipActionScreens(equip)
+    ]),
     buildCheckScreen(check),
     ...buildCheckDetailScreens(check),
     buildAtmScreen(input)
@@ -455,7 +477,10 @@ export function buildShopViewModel(input: ShopViewModelInput): ShopViewModel {
 }
 
 export function buildGoodsViewModel(input: PartyMenuViewModelInput = {}): GoodsViewModel {
-  const member = activePartyMember(input);
+  return buildGoodsViewModelForMember(input, activePartyMember(input));
+}
+
+function buildGoodsViewModelForMember(input: PartyMenuViewModelInput, member: PartyMember): GoodsViewModel {
   return {
     title: "Goods",
     member: activeMemberView(member),
@@ -465,16 +490,36 @@ export function buildGoodsViewModel(input: PartyMenuViewModelInput = {}): GoodsV
 }
 
 export function buildEquipViewModel(input: PartyMenuViewModelInput = {}): EquipViewModel {
-  const member = activePartyMember(input);
+  return buildEquipViewModelForMember(input, activePartyMember(input));
+}
+
+function buildEquipViewModelForMember(input: PartyMenuViewModelInput, member: PartyMember): EquipViewModel {
+  const equipped = input.partyState?.equipped?.(member.id) ?? {};
+  const items = itemMap(input.items);
+  const entries = inventoryEntries(input, member).filter((entry) => entry.equippable && entry.equipmentSlot);
   return {
     title: "Equip",
     member: activeMemberView(member),
-    entries: inventoryEntries(input, member).filter((entry) => entry.equippable)
+    entries,
+    slots: EQUIP_SLOTS.map((slot) => {
+      const equippedItemId = equipped[slot];
+      const equippedItem = equippedItemId !== undefined ? items.get(equippedItemId) : undefined;
+      return {
+        slot,
+        label: equipmentSlotLabel(slot),
+        equippedLabel: equippedItemId !== undefined ? resolveItemName(input, equippedItemId, equippedItem) : "-",
+        screenId: equipSlotScreenId(member.id, slot),
+        entries: entries.filter((entry) => entry.equipmentSlot === slot)
+      };
+    })
   };
 }
 
 export function buildPsiViewModel(input: PartyMenuViewModelInput = {}): PsiViewModel {
-  const member = activePartyMember(input);
+  return buildPsiViewModelForMember(input, activePartyMember(input));
+}
+
+function buildPsiViewModelForMember(input: PartyMenuViewModelInput, member: PartyMember): PsiViewModel {
   const entries = (input.psi?.psi ?? [])
     .filter((psi) => isLearnedByMember(psi, member.id, member.level))
     .sort((a, b) => a.type.localeCompare(b.type) || a.id - b.id)
@@ -504,18 +549,34 @@ export function buildCheckViewModel(input: PartyMenuViewModelInput = {}): CheckV
   };
 }
 
-export function buildStatusScreen(status: StatusViewModel): MenuScreen {
+function buildPartyMemberSelectScreen(
+  id: string,
+  title: string,
+  members: Array<{ name: string }>
+): MenuScreen {
   return {
-    id: STATUS_MENU_ID,
-    title: status.title,
-    items: status.members.map((member, index) => ({
-      id: `status-select-${index}`,
+    id,
+    title,
+    items: members.map((member, index) => ({
+      id: `${id}-select-${index}`,
       label: member.name,
       enabled: true,
-      childScreenId: statusMemberScreenId(index)
+      childScreenId: partyMemberScreenId(id, index)
     })),
     wrap: false
   };
+}
+
+function partyMemberScreenId(rootId: string, index: number): string {
+  return `${rootId}-member-${stat(index)}`;
+}
+
+function equipSlotScreenId(memberId: number, slot: EquipmentSlot): string {
+  return `equip-slot-${stat(memberId)}-${slot}`;
+}
+
+export function buildStatusScreen(status: StatusViewModel): MenuScreen {
+  return buildPartyMemberSelectScreen(STATUS_MENU_ID, status.title, status.members);
 }
 
 export function buildStatusMemberScreens(status: StatusViewModel): MenuScreen[] {
@@ -527,9 +588,9 @@ export function buildStatusMemberScreens(status: StatusViewModel): MenuScreen[] 
   }));
 }
 
-export function buildGoodsScreen(goods: GoodsViewModel): MenuScreen {
+export function buildGoodsScreen(goods: GoodsViewModel, id = GOODS_MENU_ID): MenuScreen {
   return {
-    id: "goods",
+    id,
     title: goods.title,
     items: goods.entries.length > 0
       ? goods.entries.map((entry) => ({
@@ -574,24 +635,37 @@ export function buildGoodsActionScreens(goods: GoodsViewModel): MenuScreen[] {
   ]);
 }
 
-export function buildEquipScreen(equip: EquipViewModel): MenuScreen {
+export function buildEquipScreen(equip: EquipViewModel, id = EQUIP_MENU_ID): MenuScreen {
   return {
-    id: "equip",
+    id,
     title: equip.title,
-    items: equip.entries.length > 0
-      ? equip.entries.map((entry) => ({
+    items: equip.slots.map((slot) => ({
+      id: `equip-slot-${equip.member.id}-${slot.slot}`,
+      label: fitMenuLabel(`${slot.label}: ${slot.equippedLabel}`),
+      enabled: true,
+      childScreenId: slot.screenId
+    })),
+    wrap: false
+  };
+}
+
+export function buildEquipSlotScreens(equip: EquipViewModel): MenuScreen[] {
+  return equip.slots.map((slot) => ({
+    id: slot.screenId,
+    title: slot.label,
+    items: slot.entries.length > 0
+      ? slot.entries.map((entry) => ({
           id: `equip-${entry.slot}-${entry.itemId}`,
           label: fitMenuLabel([
             entry.equipped ? "Eq" : "",
-            entry.label,
-            equipmentSlotLabel(entry.equipmentSlot)
+            entry.label
           ].filter(Boolean).join(" ")),
           enabled: true,
           childScreenId: entry.equipActionScreenId
         }))
-      : [{ id: "equip-empty", label: "No equippable goods.", enabled: false }],
+      : [{ id: `equip-empty-${equip.member.id}-${slot.slot}`, label: "Nothing to equip.", enabled: false }],
     wrap: false
-  };
+  }));
 }
 
 export function buildEquipActionScreens(equip: EquipViewModel): MenuScreen[] {
@@ -610,7 +684,7 @@ export function buildEquipActionScreens(equip: EquipViewModel): MenuScreen[] {
   }));
 }
 
-export function buildPsiScreen(psi: PsiViewModel): MenuScreen {
+export function buildPsiScreen(psi: PsiViewModel, id = PSI_MENU_ID): MenuScreen {
   const items: MenuItem[] = [];
   let previousType: string | undefined;
   const showGroups = new Set(psi.entries.map((entry) => entry.type).filter(Boolean)).size > 1;
@@ -626,7 +700,7 @@ export function buildPsiScreen(psi: PsiViewModel): MenuScreen {
     });
   }
   return {
-    id: "psi",
+    id,
     title: psi.title,
     items: items.length > 0 ? items : [{ id: "psi-empty", label: "No learned PSI.", enabled: false }],
     wrap: false
@@ -666,18 +740,17 @@ export function buildCheckDetailScreens(check: CheckViewModel): MenuScreen[] {
 }
 
 function statusMemberScreenId(index: number): string {
-  return `${STATUS_MENU_ID}-member-${stat(index)}`;
+  return partyMemberScreenId(STATUS_MENU_ID, index);
 }
 
 function statusMemberItems(member: StatusMemberViewModel): MenuItem[] {
   return [
-    { id: "name-level", label: `Name ${member.name}  Level ${member.level}`, enabled: false },
-    { id: "hp", label: `HP ${member.hp}/${member.maxHp}`, enabled: false },
-    { id: "pp", label: `PP ${member.pp}/${member.maxPp}`, enabled: false },
+    { id: "name-level", label: fitMenuLabel(`${member.name} Lv ${member.level}`), enabled: false },
+    { id: "hp-pp", label: `HP ${member.hp}/${member.maxHp} PP ${member.pp}/${member.maxPp}`, enabled: false },
     { id: "exp", label: `EXP ${member.experience}`, enabled: false },
-    { id: "offense-defense", label: `Offense ${member.stats.offense}  Defense ${member.stats.defense}`, enabled: false },
-    { id: "speed-guts", label: `Speed ${member.stats.speed}  Guts ${member.stats.guts}`, enabled: false },
-    { id: "luck-vitality", label: `Luck ${member.stats.luck}  Vitality ${member.stats.vitality}`, enabled: false },
+    { id: "offense-defense", label: `Offense ${member.stats.offense} Defense ${member.stats.defense}`, enabled: false },
+    { id: "speed-guts", label: `Speed ${member.stats.speed} Guts ${member.stats.guts}`, enabled: false },
+    { id: "luck-vitality", label: `Luck ${member.stats.luck} Vitality ${member.stats.vitality}`, enabled: false },
     { id: "iq", label: `IQ ${member.stats.iq}`, enabled: false }
   ];
 }
