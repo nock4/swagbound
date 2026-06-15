@@ -64,6 +64,7 @@ export type StatusMemberViewModel = {
   id: number;
   name: string;
   level: number;
+  experience: number;
   hp: number;
   maxHp: number;
   pp: number;
@@ -206,6 +207,11 @@ export type MenuAction =
       itemId: number;
     };
 
+export type TalkMenuDecision =
+  | { kind: "openDialogue" }
+  | { kind: "message"; message: string }
+  | { kind: "close" };
+
 export type PartyMenuViewModelInput = StatusViewModelInput & {
   items?: ItemCollection;
   psi?: PsiCollection;
@@ -219,6 +225,8 @@ export type ShopViewModelInput = PartyMenuViewModelInput & {
 
 export const MAIN_MENU_ID = "main";
 export const STATUS_MENU_ID = "status";
+export const TALK_MENU_ACTION_ID = "talk";
+export const NO_ONE_TO_TALK_TO_MESSAGE = "There's no one to talk to.";
 export const SAVE_MENU_ACTION_ID = "save";
 const ITEM_USE_ACTION_PREFIX = "item-use";
 const EQUIP_ACTION_PREFIX = "equip";
@@ -230,7 +238,7 @@ const ATM_MENU_ID = "atm";
 const ATM_DEBUG_AMOUNT = 100;
 
 const MAIN_COMMANDS: Array<Omit<MenuItem, "enabled">> = [
-  { id: "talk", label: "Talk", childScreenId: "talk" },
+  { id: TALK_MENU_ACTION_ID, label: "Talk", actionId: TALK_MENU_ACTION_ID },
   { id: "goods", label: "Goods", childScreenId: "goods" },
   { id: "psi", label: "PSI", childScreenId: "psi" },
   { id: "equip", label: "Equip", childScreenId: "equip" },
@@ -362,11 +370,11 @@ export function buildMenuScreens(status: StatusViewModel, input: PartyMenuViewMo
   const check = buildCheckViewModel(input);
   return [
     buildMainMenuScreen(),
-    buildPlaceholderScreen("talk", "Talk"),
     buildGoodsScreen(goods),
     ...buildGoodsActionScreens(goods),
     buildPsiScreen(psi),
     buildStatusScreen(status),
+    ...buildStatusMemberScreens(status),
     buildEquipScreen(equip),
     ...buildEquipActionScreens(equip),
     buildCheckScreen(check),
@@ -387,6 +395,7 @@ export function buildStatusViewModel(input: StatusViewModelInput = {}): StatusVi
         id: member.id,
         name: member.name.trim() || "PLAYER",
         level: stat(member.level),
+        experience: stat(member.experience),
         hp: stat(vitals?.hp.displayed ?? member.hp),
         maxHp: stat(vitals?.maxHp ?? member.maxHp),
         pp: stat(vitals?.pp ?? member.pp),
@@ -499,9 +508,23 @@ export function buildStatusScreen(status: StatusViewModel): MenuScreen {
   return {
     id: STATUS_MENU_ID,
     title: status.title,
-    items: statusItems(status),
+    items: status.members.map((member, index) => ({
+      id: `status-select-${index}`,
+      label: member.name,
+      enabled: true,
+      childScreenId: statusMemberScreenId(index)
+    })),
     wrap: false
   };
+}
+
+export function buildStatusMemberScreens(status: StatusViewModel): MenuScreen[] {
+  return status.members.map((member, index) => ({
+    id: statusMemberScreenId(index),
+    title: status.title,
+    items: statusMemberItems(member),
+    wrap: false
+  }));
 }
 
 export function buildGoodsScreen(goods: GoodsViewModel): MenuScreen {
@@ -642,41 +665,31 @@ export function buildCheckDetailScreens(check: CheckViewModel): MenuScreen[] {
   }));
 }
 
-function buildPlaceholderScreen(id: string, title: string): MenuScreen {
-  return {
-    id,
-    title,
-    items: [{ id: `${id}-stub`, label: "Not implemented yet.", enabled: false }],
-    wrap: false
-  };
+function statusMemberScreenId(index: number): string {
+  return `${STATUS_MENU_ID}-member-${stat(index)}`;
 }
 
-function statusItems(status: StatusViewModel): MenuItem[] {
-  const items: MenuItem[] = [
-    { id: "wallet", label: `Wallet ${status.wallet}`, enabled: false },
-    { id: "bank", label: `Bank ${status.bank}`, enabled: false }
+function statusMemberItems(member: StatusMemberViewModel): MenuItem[] {
+  return [
+    { id: "name-level", label: `Name ${member.name}  Level ${member.level}`, enabled: false },
+    { id: "hp", label: `HP ${member.hp}/${member.maxHp}`, enabled: false },
+    { id: "pp", label: `PP ${member.pp}/${member.maxPp}`, enabled: false },
+    { id: "exp", label: `EXP ${member.experience}`, enabled: false },
+    { id: "offense-defense", label: `Offense ${member.stats.offense}  Defense ${member.stats.defense}`, enabled: false },
+    { id: "speed-guts", label: `Speed ${member.stats.speed}  Guts ${member.stats.guts}`, enabled: false },
+    { id: "luck-vitality", label: `Luck ${member.stats.luck}  Vitality ${member.stats.vitality}`, enabled: false },
+    { id: "iq", label: `IQ ${member.stats.iq}`, enabled: false }
   ];
-  status.members.forEach((member, index) => {
-    items.push({
-      id: `member-${index}-vitals`,
-      label: `${member.name} Lv ${member.level} HP ${member.hp}/${member.maxHp} PP ${member.pp}/${member.maxPp}`,
-      enabled: false
-    });
-    items.push({
-      id: `member-${index}-stats`,
-      label: [
-        `Off ${member.stats.offense}`,
-        `Def ${member.stats.defense}`,
-        `Spd ${member.stats.speed}`,
-        `Guts ${member.stats.guts}`,
-        `Vit ${member.stats.vitality}`,
-        `IQ ${member.stats.iq}`,
-        `Luck ${member.stats.luck}`
-      ].join(" "),
-      enabled: false
-    });
-  });
-  return items;
+}
+
+export function resolveTalkMenuAction(input: { hasInteractionTarget: boolean; dialogueCanOpen: boolean }): TalkMenuDecision {
+  if (!input.hasInteractionTarget) {
+    return { kind: "message", message: NO_ONE_TO_TALK_TO_MESSAGE };
+  }
+  if (!input.dialogueCanOpen) {
+    return { kind: "close" };
+  }
+  return { kind: "openDialogue" };
 }
 
 export function buildShopMenuScreens(shop: ShopViewModel): MenuScreen[] {

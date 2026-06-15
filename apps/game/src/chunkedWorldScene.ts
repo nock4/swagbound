@@ -109,7 +109,9 @@ import {
   moveMenu,
   openMenu,
   parseMenuAction,
+  resolveTalkMenuAction,
   MAIN_MENU_ID,
+  TALK_MENU_ACTION_ID,
   shopRootScreenId,
   type MenuAction,
   type MenuDebugState,
@@ -1370,6 +1372,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private handleMenuAction(actionId: string): void {
+    if (actionId === TALK_MENU_ACTION_ID) {
+      this.handleTalkAction();
+      return;
+    }
     const action = parseMenuAction(actionId);
     if (!action) {
       this.showMenuResult("Nothing happened.");
@@ -1400,6 +1406,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.handleEquipAction(action);
+  }
+
+  private handleTalkAction(): void {
+    const decision = resolveTalkMenuAction({
+      hasInteractionTarget: Boolean(this.interactionTarget()),
+      dialogueCanOpen: this.dialogue.canOpen()
+    });
+    if (decision.kind === "message") {
+      this.showMenuResult(decision.message);
+      return;
+    }
+    this.menuState = closedMenu();
+    this.activeShopStoreId = undefined;
+    this.refreshMenuScreens();
+    if (decision.kind === "openDialogue") {
+      this.openDialogue();
+      return;
+    }
+    this.closeMenu();
   }
 
   private handleAtmAction(action: Extract<MenuAction, { kind: "atm" }>): void {

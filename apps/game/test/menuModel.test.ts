@@ -15,6 +15,7 @@ import {
   buildPsiViewModel,
   buildShopMenuScreens,
   buildShopViewModel,
+  buildStatusMemberScreens,
   buildStatusScreen,
   buildStatusViewModel,
   cancelMenu,
@@ -24,6 +25,9 @@ import {
   moveMenu,
   openMenu,
   parseMenuAction,
+  resolveTalkMenuAction,
+  NO_ONE_TO_TALK_TO_MESSAGE,
+  TALK_MENU_ACTION_ID,
   type MenuScreen
 } from "../src/menuModel";
 
@@ -115,6 +119,11 @@ describe("menuModel navigation", () => {
   it("exposes save as a concrete main-menu action", () => {
     const screen = buildMainMenuScreen();
 
+    expect(screen.items.find((item) => item.id === "talk")).toMatchObject({
+      label: "Talk",
+      enabled: true,
+      actionId: TALK_MENU_ACTION_ID
+    });
     expect(screen.items.find((item) => item.id === "save")).toMatchObject({
       label: "Save",
       enabled: true,
@@ -156,6 +165,7 @@ describe("Status view model", () => {
       id: 1,
       name: "MEMBER_A",
       level: 10,
+      experience: 0,
       hp: 50,
       maxHp: 50,
       pp: 12,
@@ -163,13 +173,28 @@ describe("Status view model", () => {
       stats: { offense: 11, defense: 12, speed: 13, guts: 14, vitality: 15, iq: 16, luck: 17 }
     });
     expect(screen.items.map((item) => item.id)).toEqual([
-      "wallet",
-      "bank",
-      "member-0-vitals",
-      "member-0-stats",
-      "member-1-vitals",
-      "member-1-stats"
+      "status-select-0",
+      "status-select-1"
     ]);
+    expect(screen.items.map((item) => item.label)).toEqual(["MEMBER_A", "MEMBER_B"]);
+    expect(screen.items.map((item) => item.childScreenId)).toEqual(["status-member-0", "status-member-1"]);
+
+    const memberScreens = buildStatusMemberScreens(status);
+    expect(memberScreens).toHaveLength(2);
+    expect(memberScreens[0].items.map((item) => item.label)).toEqual([
+      "Name MEMBER_A  Level 10",
+      "HP 50/50",
+      "PP 12/12",
+      "EXP 0",
+      "Offense 11  Defense 12",
+      "Speed 13  Guts 14",
+      "Luck 17  Vitality 15",
+      "IQ 16"
+    ]);
+    expect(memberScreens[0].items.every((item) => !item.enabled)).toBe(true);
+    expect(memberScreens[0].items.map((item) => item.label).join(" ")).not.toContain("Wallet");
+    expect(memberScreens[0].items.map((item) => item.label).join(" ")).not.toContain("Bank");
+    expect(memberScreens[1].items[0].label).toBe("Name MEMBER_B  Level 20");
   });
 
   it("builds status from generated character data and session wallet", () => {
@@ -237,6 +262,7 @@ describe("Status view model", () => {
       id: 2,
       name: "MEMBER_B",
       level: 6,
+      experience: 0,
       hp: 66,
       maxHp: 66,
       stats: { offense: 13, defense: 12, speed: 11, guts: 10, vitality: 9, iq: 8, luck: 7 }
@@ -251,8 +277,22 @@ describe("Status view model", () => {
       id: 0,
       name: "PLAYER",
       level: 1,
+      experience: 0,
       hp: 40,
       maxHp: 40
+    });
+  });
+
+  it("decides whether the Talk command should reuse dialogue or show the no-one message", () => {
+    expect(resolveTalkMenuAction({ hasInteractionTarget: true, dialogueCanOpen: true })).toEqual({
+      kind: "openDialogue"
+    });
+    expect(resolveTalkMenuAction({ hasInteractionTarget: false, dialogueCanOpen: true })).toEqual({
+      kind: "message",
+      message: NO_ONE_TO_TALK_TO_MESSAGE
+    });
+    expect(resolveTalkMenuAction({ hasInteractionTarget: true, dialogueCanOpen: false })).toEqual({
+      kind: "close"
     });
   });
 });
