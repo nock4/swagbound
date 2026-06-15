@@ -119,13 +119,15 @@ Diagnosed as **not a bug** (correct EB collision): "can't go north to Ness's hou
 is a solid block directly NW of the start; the road goes *around* it, and you *enter* via the door.
 
 ### Open follow-ons surfaced by this pass
-- **CU-DEST — door destination data (RE):** door TRIGGERS work, but ~26 % of door *destinations*
-  in the EB data resolve to non-walkable void (e.g. Ness's-house door → (900,49), the top sky
-  border). Walkable destinations DO load real navigable sub-areas, so interiors are present —
-  this is per-door destination correctness, needing EB ground-truth (which interior each door
-  leads to). Possibly related to the scripted-teleport coordinate-unit lead noted above. See
-  memory `door-destination-data-issue`.
-- **Battle command completeness:** EB's command menu includes Auto Fight + Defend (+ Spy/etc.);
-  ours is BASH/PSI/GOODS/RUN. Adding them is *gameplay* (new behaviors), scoped separately.
+- ~~**CU-DEST — door destination data:**~~ DONE — door destinations are 8px warp-grid units
+  (×8), not raw pixels (the converter applied ×8 to the teleport table but not to doors).
+  Hybrid scaling (×8 in range, raw for the ~8% over-range outliers) takes door-destination
+  walkability 37% → 100%; the Onett house door now opens into the real house interior.
+  [CU-DEST 0cd7f2a]. Residual: a handful of over-range outliers could still need per-door
+  ground-truth if a bad warp shows up in play. See memory `door-destination-data-issue`.
+- **Battle command completeness:** ~~Auto Fight + Defend~~ DONE [CU-CMD cc54ffe] — menu is now
+  BASH/GOODS/AUTO/PSI/DEFEND/RUN; DEFEND halves a round of incoming damage, AUTO auto-attacks
+  the party per round. Remaining: character-specific commands (Spy, Pray/Paula, Shoot+Bottle
+  Rocket/Jeff, Mirror/Poo) — per-character command sets, a separate gameplay task.
 - ~~**Build cleanup (CU7):**~~ DONE — `build:eb-fullworld` is the single complete build used by
   `pnpm dev`, `pnpm build`, and pretest hooks. `build:eb-full` and `dev:full` remain aliases.
