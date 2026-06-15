@@ -87,7 +87,14 @@ import {
   type NewGameStartupRunDebug
 } from "./state";
 import { createDialogueResolver, textSpeedCpsFromSearch } from "./dialogueRenderer";
-import type { NewGameOpeningStart } from "./newGameOpening";
+import {
+  INTRO_METEOR_BEAT_FIRED_FLAG,
+  decideIntroMeteorBattleTransition,
+  decideIntroMeteorBeatFire,
+  resolveIntroMeteorBeatStart,
+  type IntroMeteorBeatStart,
+  type NewGameOpeningStart
+} from "./newGameOpening";
 import { PartyState, type PartyStateSnapshot } from "./partyState";
 import {
   applySaveState,
@@ -244,6 +251,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private startupInitialSpawn?: { x: number; y: number };
   private startupFallbackReason?: string;
   private newGameOpening?: NewGameOpeningStart;
+  private introMeteorBeat?: IntroMeteorBeatStart;
+  private warnedIntroMeteorSkips = new Set<string>();
   targetReference = TARGET_REFERENCE;
   prompt = "";
   assetsLoaded = false;
@@ -319,6 +328,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.collisionHeight = world.collision.height;
     this.collisionOverlayEnabled = this.initialCollisionOverlayEnabled();
     this.registerCollisionDebugGlobals();
+    this.resolveIntroMeteorBeatForStart();
 
     const restoredPlayer = this.restoreState ? undefined : this.applyInitialSave();
     const returnPlayer = this.applyReturnRestore();
@@ -432,6 +442,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.syncPlayerObject();
     this.refreshStreaming();
     this.updateCollisionOverlay();
+    if (this.maybeStartIntroMeteorBeat()) {
+      return;
+    }
     if (this.handleEncounterStep()) {
       return;
     }
@@ -488,6 +501,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.startupInitialSpawn = undefined;
     this.startupFallbackReason = undefined;
     this.newGameOpening = undefined;
+    this.introMeteorBeat = undefined;
+    this.warnedIntroMeteorSkips.clear();
     this.prompt = "";
     this.assetsLoaded = false;
   }
@@ -1905,6 +1920,94 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
     return this.startEventBattle(group);
+  }
+
+  private resolveIntroMeteorBeatForStart(): void {
+    this.introMeteorBeat = undefined;
+    if (!this.newGameOpening) {
+      return;
+    }
+    const resolution = resolveIntroMeteorBeatStart(this.world_, this.data_.scripts, this.data_.battle);
+    if (resolution.resolved) {
+      this.introMeteorBeat = resolution.start;
+      return;
+    }
+    this.warnIntroMeteorSkip(resolution.reason);
+  }
+
+  private maybeStartIntroMeteorBeat(): boolean {
+    const beat = this.introMeteorBeat;
+    if (!beat || this.menuState.open || this.dialogue.open || this.eventSequence?.running || this.isDoorFadeActive()) {
+      return false;
+    }
+    if (this.playerState.inputLocked) {
+      return false;
+    }
+    const decision = decideIntroMeteorBeatFire({
+      introActive: Boolean(this.newGameOpening),
+      openingComplete: this.startupRunFinalized && !this.startupRunActive,
+      playerInTriggerRegion: pointInRect(this.playerState, beat.trigger),
+      alreadyFired: this.gameFlags.has(INTRO_METEOR_BEAT_FIRED_FLAG)
+    });
+    if (!decision.fire) {
+      return false;
+    }
+
+    this.gameFlags.set(INTRO_METEOR_BEAT_FIRED_FLAG);
+    lockPlayer(this.playerState, this.playerFrames);
+    const started = this.eventSequence?.start(beat.dialogueRef, {
+      onComplete: () => this.completeIntroMeteorDialogue(beat)
+    }) ?? false;
+    if (!started) {
+      this.warnIntroMeteorSkip("dialogue_unavailable");
+      this.finishIntroMeteorBeatWithoutBattle();
+      return true;
+    }
+    this.updatePrompt();
+    this.publish();
+    return true;
+  }
+
+  private completeIntroMeteorDialogue(beat: IntroMeteorBeatStart): void {
+    this.newGameOpening = undefined;
+    this.ensureIntroSoloParty();
+    const battleStarted = this.startEventBattle(beat.battleGroupId);
+    const transition = decideIntroMeteorBattleTransition({
+      battleGroupResolved: true,
+      battleStarted
+    });
+    if (transition.action === "battle") {
+      return;
+    }
+    this.warnIntroMeteorSkip(transition.reason);
+    this.finishIntroMeteorBeatWithoutBattle();
+  }
+
+  private ensureIntroSoloParty(): void {
+    const firstCharacter = this.data_.characters?.characters[0];
+    if (!firstCharacter) {
+      return;
+    }
+    const snapshot = this.partyState.snapshot();
+    this.partyState.restore({
+      ...snapshot,
+      partyIds: [firstCharacter.id]
+    });
+  }
+
+  private finishIntroMeteorBeatWithoutBattle(): void {
+    this.newGameOpening = undefined;
+    this.afterDialogueClosed();
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private warnIntroMeteorSkip(reason: string): void {
+    if (this.warnedIntroMeteorSkips.has(reason)) {
+      return;
+    }
+    this.warnedIntroMeteorSkips.add(reason);
+    console.warn("Skipping new-game meteor intro beat.", reason);
   }
 
   private openShopForCurrentMode(storeId: number): boolean | void {

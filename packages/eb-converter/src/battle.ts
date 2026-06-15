@@ -21,6 +21,7 @@ const LOW_LEVEL_MAX = 10;
 const LOW_LEVEL_BOSS_MAX = 12;
 const MAX_LOW_LEVEL_BOSS_ENEMIES = 5;
 const MAX_BOSS_GROUPS_PER_ENEMY = 1;
+const STORY_BOSS_ENEMY_IDS = [214] as const;
 const TOWN_MAP = "onett";
 const MAP_ENEMY_PLACEMENT_WIDTH = 128;
 const ENCOUNTER_CELLS_PER_SECTOR_X = 4;
@@ -148,7 +149,8 @@ export async function buildBattleData(options: BattleBuildOptions): Promise<Batt
         bossSelection
       );
     })();
-  const battleGroupRecords = selected.battleGroupIds.map((id) => requireMapEntry(tables.enemyGroups, id, "enemy_groups.yml"));
+  const selectedWithStoryGroups = mergeStoryBattleGroups(selected, selectStoryBossBattleGroups(tables));
+  const battleGroupRecords = selectedWithStoryGroups.battleGroupIds.map((id) => requireMapEntry(tables.enemyGroups, id, "enemy_groups.yml"));
   const enemyIds = uniqueSorted([
     ...battleGroupRecords.flatMap((group) => positiveEnemyIds(group)),
     ...extraEnemyIds
@@ -177,12 +179,12 @@ export async function buildBattleData(options: BattleBuildOptions): Promise<Batt
     schemaVersion: SCHEMA_VERSION,
     sourceProjectPath: options.displayPath,
     selection: {
-      method: selected.method,
-      townMap: selected.fallbackUsed ? undefined : TOWN_MAP,
-      mapEnemyGroupIds: selected.mapEnemyGroupIds,
-      battleGroupIds: selected.battleGroupIds,
+      method: selectedWithStoryGroups.method,
+      townMap: selectedWithStoryGroups.fallbackUsed ? undefined : TOWN_MAP,
+      mapEnemyGroupIds: selectedWithStoryGroups.mapEnemyGroupIds,
+      battleGroupIds: selectedWithStoryGroups.battleGroupIds,
       placementCellMapping: "map_enemy_placement key is a 128-wide 2x2-tile encounter grid; sector = floor(cellX/4), floor(cellY/2).",
-      fallbackUsed: selected.fallbackUsed
+      fallbackUsed: selectedWithStoryGroups.fallbackUsed
     },
     statMapping: {
       level: "enemy_configuration_table.yml Level",
@@ -517,6 +519,26 @@ function mergeBattleSelections(base: Candidate, bosses: BossSelection): Candidat
     ...base,
     method: bosses.enemyIds.length > 0 ? `${base.method}+low-level-boss-flag-groups` : base.method,
     battleGroupIds: uniqueInOrder([...base.battleGroupIds, ...bosses.groupIds])
+  };
+}
+
+function selectStoryBossBattleGroups(tables: BattleSourceTables): number[] {
+  return uniqueInOrder(STORY_BOSS_ENEMY_IDS.flatMap((enemyId) => {
+    if (!tables.enemyConfig.has(enemyId)) {
+      return [];
+    }
+    return groupsReferencingEnemy(tables.enemyGroups, enemyId).slice(0, 1).map((group) => group.id);
+  }));
+}
+
+function mergeStoryBattleGroups(base: Candidate, groupIds: number[]): Candidate {
+  if (groupIds.length === 0) {
+    return base;
+  }
+  return {
+    ...base,
+    method: `${base.method}+story-boss-groups`,
+    battleGroupIds: uniqueInOrder([...base.battleGroupIds, ...groupIds])
   };
 }
 
