@@ -11,8 +11,11 @@ const DEFAULT_FULL_SPAWN = { x: 2296, y: 3040 };
 const CANONICAL_FULL_SPAWN = { x: 2112, y: 1768 };
 const DOOR_APPROACH_SPAWN = { x: 5484, y: 6900 };
 const DOOR_TRIGGER = { x: 5480, y: 6872 };
-const RAW_DOOR_DESTINATION = { x: 643, y: 68 };
-const SNAPPED_DOOR_DESTINATION = { x: 651, y: 100 };
+// CU-DEST: door destinations are 8px warp-grid units (x8). This solid-celled door
+// now resolves to a walkable interior destination; the runtime footprint-centres it
+// onto the nearest clear cell for the actual landing.
+const DOOR_DESTINATION = { x: 5144, y: 544 };
+const DOOR_LANDING = { x: 5152, y: 552 };
 
 test("fresh full-world boot stays at the canonical control start", async ({ page }) => {
   const issues = attachRuntimeIssueCapture(page);
@@ -81,16 +84,17 @@ test("solid-cell door trigger teleports from Onett exterior onto walkable ground
   expect(initial.lastDoor).toBeUndefined();
 
   const teleported = await holdKeyUntil(page, "ArrowUp", (state) =>
-    state.lastDoor?.to.x === SNAPPED_DOOR_DESTINATION.x &&
-    state.lastDoor.to.y === SNAPPED_DOOR_DESTINATION.y,
+    state.lastDoor?.to.x === DOOR_LANDING.x &&
+    state.lastDoor.to.y === DOOR_LANDING.y,
     "walking up should trigger the known solid-celled Onett door"
   );
 
   expect(teleported.lastDoor).toBeDefined();
   const lastDoor = teleported.lastDoor!;
   await expectSolidAt(page, DOOR_TRIGGER, true);
-  await expectSolidAt(page, RAW_DOOR_DESTINATION, true);
-  expect(lastDoor.to).toEqual(SNAPPED_DOOR_DESTINATION);
+  // CU-DEST: the x8-scaled destination is itself walkable (the fix), and the landing is too
+  await expectSolidAt(page, DOOR_DESTINATION, false);
+  expect(lastDoor.to).toEqual(DOOR_LANDING);
   await expectSolidAt(page, lastDoor.to, false);
   expect(teleported.player).toEqual(lastDoor.to);
   expect(requireChunk(teleported)).not.toEqual(initialChunk);

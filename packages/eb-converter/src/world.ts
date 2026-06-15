@@ -17,6 +17,7 @@ import {
 } from "@eb/schemas";
 import { parseFts, drawArrangement, isBlankArrangement, isSolidSurface, type FtsTileset, type FtsPalette } from "./fts";
 import {
+  DOOR_WARP_UNIT_PX,
   doorTriggerToWorldPixel,
   parseIntKeyedYaml,
   parseMapDoors,
@@ -417,22 +418,43 @@ function countDoorTypes(entries: MapDoorEntry[]): Record<string, number> {
   return Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)));
 }
 
-function emitWorldDoors(entries: MapDoorEntry[]): WorldDoor[] {
+function doorDestinationToWorldPixel(
+  entry: MapDoorEntry,
+  mapWidthTiles: number,
+  mapHeightTiles: number
+): { x: number; y: number } | undefined {
+  const { destinationX, destinationY } = entry;
+  if (
+    destinationX === undefined ||
+    destinationY === undefined ||
+    !Number.isFinite(destinationX) ||
+    !Number.isFinite(destinationY)
+  ) {
+    return undefined;
+  }
+
+  const maxWarpX = mapWidthTiles * TILE_SIZE / DOOR_WARP_UNIT_PX;
+  const maxWarpY = mapHeightTiles * TILE_SIZE / DOOR_WARP_UNIT_PX;
+  // Door destinations normally share the teleport table's 8px warp grid; the
+  // over-range map_doors.yml outliers are already pixels, so keep those raw.
+  if (destinationX <= maxWarpX && destinationY <= maxWarpY) {
+    return { x: destinationX * DOOR_WARP_UNIT_PX, y: destinationY * DOOR_WARP_UNIT_PX };
+  }
+  return { x: destinationX, y: destinationY };
+}
+
+function emitWorldDoors(entries: MapDoorEntry[], mapWidthTiles: number, mapHeightTiles: number): WorldDoor[] {
   return entries
     .filter((entry) => WORLD_DOOR_TYPES.has(entry.type))
     .map((entry) => {
       const worldPixel = doorTriggerToWorldPixel(entry);
-      const hasDestination =
-        entry.destinationX !== undefined &&
-        entry.destinationY !== undefined &&
-        Number.isFinite(entry.destinationX) &&
-        Number.isFinite(entry.destinationY);
+      const destinationWorldPixel = doorDestinationToWorldPixel(entry, mapWidthTiles, mapHeightTiles);
       // CoilSnake stairway/escalator rows do not carry Destination X/Y fields.
       // Keep a uniform runtime shape by making those trigger-only entries self-targeting.
       return {
         type: entry.type as WorldDoor["type"],
         worldPixel,
-        destinationWorldPixel: hasDestination ? { x: entry.destinationX as number, y: entry.destinationY as number } : worldPixel,
+        destinationWorldPixel: destinationWorldPixel ?? worldPixel,
         ...(entry.direction ? { direction: entry.direction } : {}),
         ...(entry.style !== undefined && !Number.isNaN(entry.style) ? { style: entry.style } : {}),
         ...(entry.eventFlag ? { eventFlag: entry.eventFlag } : {}),
@@ -964,7 +986,7 @@ async function buildFullWorldArtifacts(options: {
   const sheetByGroup = attachSheetsToNpcs(npcs, spriteBuild.sheets);
   const mapDoors = mapDoorsSource ? parseMapDoors(mapDoorsSource) : [];
   const doorTypes = countDoorTypes(mapDoors);
-  const doors = emitWorldDoors(mapDoors);
+  const doors = emitWorldDoors(mapDoors, mapWidthTiles, mapHeightTiles);
 
   const world = WorldChunkedSchema.parse({
     schemaVersion: SCHEMA_VERSION,

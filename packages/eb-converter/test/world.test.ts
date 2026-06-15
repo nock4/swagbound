@@ -717,6 +717,56 @@ describe("world artifact build (synthetic project)", () => {
     }
   }, 30_000);
 
+  it("scales map-door destinations from warp-grid units with raw over-range fallback", async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), "eb-world-doors-"));
+    try {
+      const project = path.join(temp, "project");
+      const out = path.join(temp, "generated");
+      await writeSyntheticChunkProject(project);
+      await writeFile(path.join(project, "map_doors.yml"), [
+        "0:",
+        "  0:",
+        "  - Destination X: 100",
+        "    Destination Y: 50",
+        "    Text Pointer: synthetic.in_range",
+        "    Type: door",
+        "    X: 1",
+        "    Y: 2",
+        "  - Destination X: 129",
+        "    Destination Y: 130",
+        "    Text Pointer: synthetic.over_range",
+        "    Type: door",
+        "    X: 3",
+        "    Y: 4",
+        "  - Destination X: 128",
+        "    Destination Y: 128",
+        "    Text Pointer: synthetic.boundary",
+        "    Type: door",
+        "    X: 5",
+        "    Y: 6",
+        "  - Text Pointer: synthetic.no_destination",
+        "    Type: door",
+        "    X: 7",
+        "    Y: 8",
+        ""
+      ].join("\n"), "utf8");
+
+      const result = await convertProject({ project, out, worldMode: "full" });
+      if (!("mode" in result.world)) {
+        throw new Error("expected chunked world");
+      }
+
+      const doors = new Map(result.world.doors.map((door) => [door.textPointer, door]));
+      expect(doors.get("synthetic.in_range")?.destinationWorldPixel).toEqual({ x: 800, y: 400 });
+      expect(doors.get("synthetic.over_range")?.destinationWorldPixel).toEqual({ x: 129, y: 130 });
+      expect(doors.get("synthetic.boundary")?.destinationWorldPixel).toEqual({ x: 1024, y: 1024 });
+      expect(doors.get("synthetic.no_destination")?.destinationWorldPixel).toEqual({ x: 56, y: 64 });
+      expect(doors.get("synthetic.no_destination")?.worldPixel).toEqual({ x: 56, y: 64 });
+    } finally {
+      await rm(temp, { recursive: true, force: true });
+    }
+  }, 30_000);
+
   it("uses a ROM-derived full-world spawn when present and falls back when absent", async () => {
     const temp = await mkdtemp(path.join(os.tmpdir(), "eb-world-rom-start-"));
     try {

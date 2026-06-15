@@ -72,7 +72,9 @@ export type MapDoorEntry = {
   x: number;
   /** 8px collision-cell Y within the 256x256 door area. */
   y: number;
+  /** 8px warp-grid X destination; over-range outliers may already be world pixels. */
   destinationX?: number;
+  /** 8px warp-grid Y destination; over-range outliers may already be world pixels. */
   destinationY?: number;
   direction?: string;
   style?: number;
@@ -83,9 +85,9 @@ export type MapDoorEntry = {
 
 export type TeleportDestinationEntry = {
   id: number;
-  /** World-pixel X coordinate, matching map_doors.yml Destination X units. */
+  /** World-pixel X coordinate, scaled from 8px warp-grid table units. */
   x: number;
-  /** World-pixel Y coordinate, matching map_doors.yml Destination Y units. */
+  /** World-pixel Y coordinate, scaled from 8px warp-grid table units. */
   y: number;
   /** CCScript/stdarg direction id: 1 north, 3 east, 5 south, 7 west; 0 is a no-facing sentinel. */
   direction: number;
@@ -200,8 +202,8 @@ export const DOOR_TRIGGER_CELL_SIZE = 8;
  * Parses CoilSnake map_doors.yml. Layout:
  *   <areaY>:
  *     <areaX>:
- *     - Destination X: <world px>
- *       Destination Y: <world px>
+ *     - Destination X: <8px warp-grid unit; over-range values may already be world px>
+ *       Destination Y: <8px warp-grid unit; over-range values may already be world px>
  *       Direction: <direction>
  *       Event Flag: <raw>
  *       Style: <int>
@@ -315,13 +317,14 @@ export function doorTriggerToWorldPixel(door: Pick<MapDoorEntry, "areaX" | "area
  * (e.g. dest 150 *8 = (2000,1424) lands in north Onett next to the canonical
  * new-game start; unscaled it resolves to the NW edge.) */
 const TELEPORT_WARP_UNIT_PX = 8;
+export const DOOR_WARP_UNIT_PX = TELEPORT_WARP_UNIT_PX;
 
 /**
  * Parses CoilSnake teleport_destination_table.yml into WORLD-PIXEL coordinates.
  *
- * NOTE: this is a SEPARATE table from map_doors.yml. Door Destination X/Y are
- * already world pixels (consumed directly by emitWorldDoors); the scripted
- * teleport table is in 8px warp-grid units, so scale X/Y by TELEPORT_WARP_UNIT_PX.
+ * NOTE: this is a SEPARATE table from map_doors.yml, but both use 8px
+ * warp-grid units. Door conversion applies the same scaling, except for
+ * over-range map_doors.yml outliers that are already world pixels.
  */
 export function parseTeleportDestinationTable(source: string): TeleportDestinationEntry[] {
   const entries = parseIntKeyedYaml(source);
