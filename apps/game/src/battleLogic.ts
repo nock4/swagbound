@@ -31,6 +31,8 @@ export type BattleActor = {
   index: number;
 };
 export type BattleOutcome = "ongoing" | "win" | "lose";
+export const BATTLE_COMMANDS = ["BASH", "GOODS", "AUTO", "PSI", "DEFEND", "RUN"] as const;
+export type BattleCommand = typeof BATTLE_COMMANDS[number];
 
 export type Combatant = {
   charId: number;
@@ -52,6 +54,7 @@ export type Combatant = {
   itemDropped: number | null;
   itemRarity: BattleEnemy["itemRarity"];
   isEnemy: boolean;
+  defending?: boolean;
   actions?: BattleEnemy["actions"];
   nextActionIndex?: number;
 };
@@ -315,6 +318,10 @@ export function createBattleState(enemies: BattleEnemy | BattleEnemy[], options:
 }
 
 export function damage(attacker: Combatant, defender: Combatant, rng: Rng): number {
+  return applyDefendingDamageReduction(baseDamage(attacker, defender, rng), defender);
+}
+
+function baseDamage(attacker: Combatant, defender: Combatant, rng: Rng): number {
   const base = Math.max(1, attacker.offense - Math.floor(defender.defense / 2));
   const roll = normalizedRoll(rng());
   const spread = 0.9 + roll * 0.2;
@@ -377,6 +384,69 @@ export function resolveTurn(
     outcome: outcome(nextState),
     skipped: false
   };
+}
+
+export function resolveDefaultBashTurn(
+  state: BattleState,
+  actorInput: BattleActor | "player" | "enemy",
+  rng: Rng
+): TurnResolution {
+  const actor = normalizeActor(actorInput);
+  const targetIndex = defaultTargetIndexForActor(state, actor);
+  return resolveTurn(state, actor, rng, targetIndex >= 0 ? { targetIndex } : {});
+}
+
+export function resolveDefendTurn(
+  state: BattleState,
+  actorInput: BattleActor | "player"
+): BattleActionResolution {
+  const actor = normalizeActor(actorInput);
+  const currentOutcome = outcome(state);
+  if (currentOutcome !== "ongoing" || actor.side !== "party") {
+    return blockedAction(state, actor, currentOutcome, "invalidActor");
+  }
+
+  const defender = combatantFor(state, actor);
+  if (!defender || !isCombatantAlive(defender)) {
+    return blockedAction(state, actor, currentOutcome, "invalidActor");
+  }
+
+  const nextState = withCombatant(state, actor, {
+    ...defender,
+    defending: true
+  });
+  return {
+    state: nextState,
+    actor,
+    target: actor,
+    amount: 0,
+    outcome: outcome(nextState),
+    skipped: false
+  };
+}
+
+export function beginCombatantTurn(state: BattleState, actorInput: BattleActor | "player" | "enemy"): BattleState {
+  const actor = normalizeActor(actorInput);
+  const combatant = combatantFor(state, actor);
+  if (!combatant?.defending) {
+    return state;
+  }
+  return withCombatant(state, actor, {
+    ...combatant,
+    defending: false
+  });
+}
+
+export function defaultTargetIndexForActor(
+  state: BattleState,
+  actorInput: BattleActor | "player" | "enemy"
+): number {
+  const actor = normalizeActor(actorInput);
+  return actor.side === "party" ? firstLivingIndex(state.enemies) : firstLivingIndex(state.party);
+}
+
+export function shouldResetAutoFightRound(roundCursor: number, roundOrderLength: number): boolean {
+  return roundCursor >= Math.max(0, roundOrderLength);
 }
 
 /**
@@ -846,17 +916,22 @@ function enemyActionDamageAmount(
   defender: Combatant,
   rng: Rng
 ): number {
-  const base = damage(attacker, defender, rng);
+  const base = baseDamage(attacker, defender, rng);
   if (effectKind === "psi") {
-    return Math.max(1, Math.floor(base * 0.85));
+    return applyDefendingDamageReduction(Math.max(1, Math.floor(base * 0.85)), defender);
   }
   if (effectKind === "statusStub") {
     // Code Address owns exact status/magnitude. Until that ROM routine is
     // decoded, status-like actions are represented as small offense damage
     // plus an intendedStatus marker in the pure result.
-    return Math.max(1, Math.floor(base * 0.35));
+    return applyDefendingDamageReduction(Math.max(1, Math.floor(base * 0.35)), defender);
   }
-  return base;
+  return applyDefendingDamageReduction(base, defender);
+}
+
+function applyDefendingDamageReduction(amount: number, defender: Combatant): number {
+  const finalAmount = Math.max(1, Math.floor(amount));
+  return defender.defending ? Math.max(1, Math.floor(finalAmount / 2)) : finalAmount;
 }
 
 function livingTarget(combatants: Combatant[], side: BattleSide, requestedIndex?: number): BattleActor | null {

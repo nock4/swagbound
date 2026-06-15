@@ -15,7 +15,9 @@ import {
   type WindowCollection
 } from "@eb/schemas";
 import {
+  BATTLE_COMMANDS,
   applyVictoryRewards,
+  beginCombatantTurn,
   buildVictorySummaryViewModel,
   combatantAt,
   createBattleState,
@@ -25,13 +27,17 @@ import {
   outcome,
   psiBattleKind,
   psiPpCost,
+  resolveDefaultBashTurn,
+  resolveDefendTurn,
   resolveEnemyActionTurn,
   resolveItemTurn,
   resolvePsiTurn,
   resolveTurn,
+  shouldResetAutoFightRound,
   tickBattleMeters,
   turnOrder,
   type BattleActor,
+  type BattleCommand,
   type BattleOutcome,
   type BattleState,
   type BattleVictorySummary,
@@ -95,7 +101,7 @@ import { swirlMask, type SwirlMask } from "./transitions";
 
 const MONO = "Menlo, Consolas, monospace";
 const TAU = Math.PI * 2;
-const COMMANDS = ["BASH", "PSI", "GOODS", "RUN"] as const;
+export const COMMANDS = BATTLE_COMMANDS;
 const STATUS_TOP = 288;
 const BATTLE_LINE_SPACING = 2;
 const BATTLE_BOTTOM_MARGIN = 8;
@@ -112,7 +118,6 @@ const MENU_MAX_ROWS = 4;
 const ENTER_TRANSITION_MS = 650;
 const EXIT_TRANSITION_MS = 450;
 
-type BattleCommand = typeof COMMANDS[number];
 type BattleSubmenu = "command" | "psi" | "goods" | "target";
 type BattleTargetMode = "bash" | "psi-offense" | "psi-recovery" | "goods";
 type PendingItemUse = {
@@ -166,6 +171,7 @@ export class BattleScene extends Phaser.Scene {
   private roundOrder_: BattleActor[] = [];
   private roundCursor_ = 0;
   private currentActor_: BattleActor | null = null;
+  private autoFightRound_ = false;
   private lastEnemyAction_: LastEnemyActionDebug | null = null;
   private actionDelayMs_ = 0;
   private statusGraphics?: Phaser.GameObjects.Graphics;
@@ -238,6 +244,7 @@ export class BattleScene extends Phaser.Scene {
     this.roundOrder_ = [];
     this.roundCursor_ = 0;
     this.currentActor_ = null;
+    this.autoFightRound_ = false;
     this.lastEnemyAction_ = null;
     this.actionDelayMs_ = 0;
     this.statusLayoutSignature = "";
@@ -413,6 +420,27 @@ export class BattleScene extends Phaser.Scene {
       this.phase_ = "flee";
       this.renderStatus();
       this.publish();
+      return;
+    }
+    if (command === "AUTO") {
+      this.autoFightRound_ = true;
+      if (!this.autoBashCurrentActor()) {
+        this.autoFightRound_ = false;
+        this.menuMessage_ = "No enemy.";
+        this.renderStatus();
+        this.publish();
+      }
+      return;
+    }
+    if (command === "DEFEND") {
+      const result = resolveDefendTurn(this.battle_, this.currentActor_);
+      if (result.skipped) {
+        this.menuMessage_ = messageForBlockedAction(result.blockedReason);
+        this.renderStatus();
+        this.publish();
+        return;
+      }
+      this.applyTurnResult(result.state);
       return;
     }
     if (command === "PSI") {
@@ -647,9 +675,10 @@ export class BattleScene extends Phaser.Scene {
         return;
       }
 
-      if (this.roundCursor_ >= this.roundOrder_.length) {
+      if (shouldResetAutoFightRound(this.roundCursor_, this.roundOrder_.length)) {
         this.roundOrder_ = turnOrder(this.battle_);
         this.roundCursor_ = 0;
+        this.autoFightRound_ = false;
       }
 
       const actor = this.roundOrder_[this.roundCursor_];
@@ -658,12 +687,22 @@ export class BattleScene extends Phaser.Scene {
         continue;
       }
 
+      this.battle_ = beginCombatantTurn(this.battle_, actor);
       this.currentActor_ = actor;
       if (actor.side === "party") {
         this.phase_ = "menu";
         this.resetMenuForActor();
         this.normalizeTargetIndex();
         this.normalizePartyTargetIndex();
+        if (this.autoFightRound_) {
+          if (this.autoBashCurrentActor()) {
+            return;
+          }
+          if (outcome(this.battle_) !== "ongoing") {
+            continue;
+          }
+          this.autoFightRound_ = false;
+        }
         return;
       }
 
@@ -682,6 +721,22 @@ export class BattleScene extends Phaser.Scene {
       this.actionDelayMs_ = ACTION_ADVANCE_DELAY_MS;
       return;
     }
+  }
+
+  private autoBashCurrentActor(): boolean {
+    if (!this.currentActor_ || this.currentActor_.side !== "party") {
+      return false;
+    }
+    this.normalizeTargetIndex();
+    const result = resolveDefaultBashTurn(this.battle_, this.currentActor_, this.rng_);
+    if (result.defender?.side === "enemy") {
+      this.targetIndex_ = result.defender.index;
+    }
+    if (result.skipped) {
+      return false;
+    }
+    this.applyTurnResult(result.state);
+    return true;
   }
 
   private beginVictorySummary(): void {

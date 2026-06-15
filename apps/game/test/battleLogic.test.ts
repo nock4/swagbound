@@ -1,19 +1,25 @@
 import { describe, expect, it } from "vitest";
 import type { BattleEnemy, CharacterCollection, CharacterData, ItemData, PsiData } from "@eb/schemas";
 import {
+  BATTLE_COMMANDS,
+  beginCombatantTurn,
   buildEnemyCombatant,
   buildPlayerCombatant,
   createBattleState,
   damage,
+  defaultTargetIndexForActor,
   learnedPsiForCombatant,
   outcome,
   PLAYER_DEFAULTS,
   psiPpCost,
+  resolveDefaultBashTurn,
+  resolveDefendTurn,
   resolveEnemyActionTurn,
   resolveItemTurn,
   resolvePsiTurn,
   resolveTurn,
   selectEnemyAction,
+  shouldResetAutoFightRound,
   tickBattleMeters,
   turnOrder,
   withCombatant,
@@ -28,6 +34,12 @@ const opponentC: BattleEnemy = enemy(3, "OPPONENT_C", { hp: 18, defense: 2, offe
 
 const partyCharacterA: CharacterData = character(0, "PARTY_A", { speed: 7, maxHp: 72, maxPp: 18, offense: 21, defense: 8 });
 const partyCharacterB: CharacterData = character(1, "PARTY_B", { speed: 4, maxHp: 48, maxPp: 10, offense: 16, defense: 6 });
+
+describe("battle command menu", () => {
+  it("uses the EarthBound battle command order", () => {
+    expect([...BATTLE_COMMANDS]).toEqual(["BASH", "GOODS", "AUTO", "PSI", "DEFEND", "RUN"]);
+  });
+});
 
 describe("battle damage", () => {
   it("is deterministic when RNG is injected", () => {
@@ -150,6 +162,88 @@ describe("battle turn resolution", () => {
 
     expect(result.defender).toEqual(actor("party", 1));
     expect(result.state.party[1].hp.target).toBeLessThan(result.state.party[1].hp.displayed);
+  });
+
+  it("sets DEFEND and halves incoming physical damage until that combatant's next turn", () => {
+    const battle = createBattleState(enemy(15, "OPPONENT_DEFEND", { offense: 20 }), {
+      characters: characters([partyCharacterA])
+    });
+
+    const defend = resolveDefendTurn(battle, actor("party", 0));
+    const normalHit = resolveTurn(battle, actor("enemy", 0), () => 0.5);
+    const defendedHit = resolveTurn(defend.state, actor("enemy", 0), () => 0.5);
+    const nextTurn = beginCombatantTurn(defend.state, actor("party", 0));
+
+    expect(defend.skipped).toBe(false);
+    expect(defend.target).toEqual(actor("party", 0));
+    expect(defend.state.party[0].defending).toBe(true);
+    expect(normalHit.damage).toBe(16);
+    expect(defendedHit.damage).toBe(8);
+    expect(defendedHit.state.party[0].hp.target).toBe(64);
+    expect(nextTurn.party[0].defending).toBe(false);
+  });
+
+  it("reduces physical and PSI enemy action damage against a defending party member", () => {
+    const physicalBattle = createBattleState(enemy(16, "OPPONENT_PHYSICAL", {
+      offense: 20,
+      actions: actionSet(enemyAction(160, 1, 1))
+    }), {
+      characters: characters([partyCharacterA])
+    });
+    const psiBattle = createBattleState(enemy(17, "OPPONENT_PSI", {
+      offense: 20,
+      actions: actionSet(enemyAction(170, 3, 1))
+    }), {
+      characters: characters([partyCharacterA])
+    });
+
+    const physicalNormal = resolveEnemyActionTurn(physicalBattle, actor("enemy", 0), () => 0.5);
+    const physicalDefending = resolveEnemyActionTurn(
+      resolveDefendTurn(physicalBattle, actor("party", 0)).state,
+      actor("enemy", 0),
+      () => 0.5
+    );
+    const psiNormal = resolveEnemyActionTurn(psiBattle, actor("enemy", 0), () => 0.5);
+    const psiDefending = resolveEnemyActionTurn(
+      resolveDefendTurn(psiBattle, actor("party", 0)).state,
+      actor("enemy", 0),
+      () => 0.5
+    );
+
+    expect(physicalNormal.amount).toBe(16);
+    expect(physicalDefending.effectKind).toBe("physical");
+    expect(physicalDefending.amount).toBe(8);
+    expect(physicalDefending.state.party[0].hp.target).toBe(64);
+    expect(psiNormal.amount).toBe(13);
+    expect(psiDefending.effectKind).toBe("psi");
+    expect(psiDefending.amount).toBe(6);
+    expect(psiDefending.state.party[0].hp.target).toBe(66);
+  });
+
+  it("AUTO bashes the default living enemy without manual target input", () => {
+    let battle = createBattleState([opponentA, opponentB], {
+      offense: 20,
+      defense: 6
+    });
+    battle = withCombatant(battle, actor("enemy", 0), {
+      ...battle.enemies[0],
+      hp: { ...battle.enemies[0].hp, displayed: 0, target: 0, isRolling: false }
+    });
+
+    const result = resolveDefaultBashTurn(battle, actor("party", 0), () => 0.5);
+
+    expect(defaultTargetIndexForActor(battle, actor("party", 0))).toBe(1);
+    expect(result.skipped).toBe(false);
+    expect(result.defender).toEqual(actor("enemy", 1));
+    expect(result.damage).toBe(18);
+    expect(result.state.enemies[1].hp.target).toBe(12);
+  });
+
+  it("detects the round boundary where AUTO should reset", () => {
+    expect(shouldResetAutoFightRound(0, 4)).toBe(false);
+    expect(shouldResetAutoFightRound(3, 4)).toBe(false);
+    expect(shouldResetAutoFightRound(4, 4)).toBe(true);
+    expect(shouldResetAutoFightRound(0, 0)).toBe(true);
   });
 
   it("selects enemy actions by deterministic source-order round robin", () => {

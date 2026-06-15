@@ -62,7 +62,7 @@ test("forced field encounter round-trips from overworld to battle and back", asy
 
 async function chooseRunAndFlee(page: Page): Promise<FirstSceneDebug> {
   await waitForDebug(page, (state) => state.mode === "battle" && state.phase === "menu" && state.currentActor?.side === "party");
-  for (let attempt = 0; attempt < 5; attempt += 1) {
+  for (let attempt = 0; attempt < 7; attempt += 1) {
     const state = await readRequiredDebug(page);
     if (state.command === "RUN") {
       await page.keyboard.press("Space");

@@ -86,7 +86,7 @@ export type BattleDebug = {
   transitionPhase: BattleTransitionPhase;
   menuIndex: number;
   commandIndex: number;
-  command: "BASH" | "PSI" | "GOODS" | "RUN";
+  command: "BASH" | "GOODS" | "AUTO" | "PSI" | "DEFEND" | "RUN";
   submenu: "command" | "psi" | "goods" | "target";
   submenuIndex: number;
   selection: string;
