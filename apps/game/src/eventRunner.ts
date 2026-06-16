@@ -1,8 +1,9 @@
-import type { CustomDialogue, SwagboundDialogueLibrary } from "@eb/schemas";
 import { talkedFlag } from "./gameFlags";
-
-export type CustomDialogueLookup = Pick<CustomDialogue, "byNpcId" | "byTextPointer">;
-export type DialogueLibraryLookup = Pick<SwagboundDialogueLibrary, "entries">;
+import {
+  resolveCustomDialoguePages,
+  type CustomDialogueLookup,
+  type DialogueLibraryLookup
+} from "./scriptedDialogueResolver";
 
 export type ReferenceDialogueEvent = { kind: "dialogue"; reference: string; pages?: never };
 export type InlineDialogueEvent = { kind: "dialogue"; pages: string[]; reference?: never };
@@ -20,24 +21,6 @@ export type FlagReader = {
 
 function ccsReference(pointer: string | undefined): string | undefined {
   return pointer && CCSCRIPT_REFERENCE_PATTERN.test(pointer) ? pointer : undefined;
-}
-
-export function resolveCustomDialoguePages(
-  entry: CustomDialogueLookup["byNpcId"][string] | undefined,
-  dialogueLibrary?: DialogueLibraryLookup
-): string[] | undefined {
-  if (!entry) {
-    return undefined;
-  }
-  if ("pages" in entry) {
-    return entry.pages.length > 0 ? [...entry.pages] : undefined;
-  }
-  const libraryPages = dialogueLibrary?.entries[entry.ref]?.pages;
-  if (libraryPages && libraryPages.length > 0) {
-    return [...libraryPages];
-  }
-  console.warn(`Custom dialogue ref "${entry.ref}" was not found; using EB fallback.`);
-  return undefined;
 }
 
 export function interactionEvents(

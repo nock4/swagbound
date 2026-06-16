@@ -22,5 +22,15 @@
     "35": { "ref": "target:bosch-main-room-v0:proof-token-bowl" },
     "21": { "ref": "interior:bosch-bedroom-v0" }
   },
-  "byTextPointer": {}
+  "byTextPointer": {
+    "data_15.l_0xc5eb0b": { "ref": "dialogue:archive-console-link" },
+    "data_20.l_0xc65efc": {
+      "pages": [
+        "The Public Version Clique doesn't crowd you. It arranges itself around you, smiling, like a search result that already knows your name.",
+        "\"Relax, Bosch. We did the hard part. There's a cleaner you, signed and ready. Just nod and let this one count.\"",
+        "\"Refuse and you stop being a person and start being a dispute. ...Oh, you're going to dispute it. Adorable. Cataloged.\"",
+        "They step into the route like they own the receipt. Whatever you do next, they'll file as the fight starting."
+      ]
+    }
+  }
 }

@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { isNpcVisibleForEventFlags, type EventEffect, type ItemData, type SpriteSheet, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { isNpcVisibleForEventFlags, type DialoguePage, type EventEffect, type ItemData, type SpriteSheet, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
 import { rollEncounter, sectorIndexForTile } from "./encounterLogic";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
 import type { BattleReturnContext, BattleReturnSource, ChunkedWorldRestore } from "./battleReturn";
@@ -13,7 +13,6 @@ import {
   type DoorTriggerState
 } from "./doorTriggers";
 import {
-  buildDialogueForReference,
   buildInlineDialoguePages,
   buildMetadataLines,
   buildStatusLines,
@@ -47,6 +46,10 @@ import {
   type WorldRect
 } from "./collisionOverlay";
 import { interactionEvents, type GameEvent } from "./eventRunner";
+import {
+  resolveScriptedDialoguePages,
+  startScriptedBeatDialogue
+} from "./scriptedDialogueResolver";
 import {
   resolveTeleportDestination,
   RuntimeEventHost,
@@ -295,6 +298,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedIntroMeteorSkips = new Set<string>();
   private warnedIntroFirstBossSkips = new Set<string>();
   private warnedIntroActorVmStubs = new Set<string>();
+  private pendingScriptedDialogueComplete?: () => void;
   targetReference = TARGET_REFERENCE;
   prompt = "";
   assetsLoaded = false;
@@ -1623,7 +1627,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (this.eventSequence?.running) {
         this.eventSequence.confirm();
       } else {
-        this.afterDialogueClosed();
+        this.completeClosedDialogue();
       }
     }
     this.publish();
@@ -2004,7 +2008,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
           if (event.pages) {
             this.dialogue.start(buildInlineDialoguePages(event.pages));
           } else if (!this.startEventSequence(event.reference)) {
-            this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference, this.gameFlags));
+            this.dialogue.start(resolveScriptedDialoguePages(
+              this.data_.customDialogue,
+              this.data_.dialogueLibrary,
+              this.data_.scripts,
+              event.reference,
+              this.gameFlags
+            ));
           }
           break;
         case "setFlag":
@@ -2252,10 +2262,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     this.gameFlags.set(INTRO_METEOR_BEAT_FIRED_FLAG);
     lockPlayer(this.playerState, this.playerFrames);
-    const started = this.eventSequence?.start(beat.dialogueRef, {
-      onComplete: () => this.completeIntroMeteorDialogue(beat)
-    }) ?? false;
-    if (!started) {
+    const startResult = startScriptedBeatDialogue({
+      reference: beat.dialogueRef,
+      customDialogue: this.data_.customDialogue,
+      dialogueLibrary: this.data_.dialogueLibrary,
+      onComplete: () => this.completeIntroMeteorDialogue(beat),
+      startOverrideDialogue: (pages, onComplete) => this.startOverriddenScriptedDialogue(pages, onComplete),
+      startEventSequence: (reference, onComplete) => this.eventSequence?.start(reference, { onComplete }) ?? false
+    });
+    if (startResult === "unavailable") {
       this.warnIntroMeteorSkip("dialogue_unavailable");
       this.finishIntroMeteorBeatWithoutBattle();
       return true;
@@ -2284,10 +2299,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     lockPlayer(this.playerState, this.playerFrames);
-    const started = this.eventSequence?.start(beat.dialogueRef, {
-      onComplete: () => this.completeIntroFirstBossDialogue(beat)
-    }) ?? false;
-    if (!started) {
+    const startResult = startScriptedBeatDialogue({
+      reference: beat.dialogueRef,
+      customDialogue: this.data_.customDialogue,
+      dialogueLibrary: this.data_.dialogueLibrary,
+      onComplete: () => this.completeIntroFirstBossDialogue(beat),
+      startOverrideDialogue: (pages, onComplete) => this.startOverriddenScriptedDialogue(pages, onComplete),
+      startEventSequence: (reference, onComplete) => this.eventSequence?.start(reference, { onComplete }) ?? false
+    });
+    if (startResult === "unavailable") {
       this.warnIntroFirstBossSkip("dialogue_unavailable");
       this.finishIntroFirstBossBeatWithoutBattle();
       return true;
@@ -2295,6 +2315,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updatePrompt();
     this.publish();
     return true;
+  }
+
+  private startOverriddenScriptedDialogue(pages: DialoguePage[], onComplete: () => void): void {
+    this.pendingScriptedDialogueComplete = onComplete;
+    this.dialogue.start(pages);
   }
 
   private completeIntroMeteorDialogue(beat: IntroMeteorBeatStart): void {
@@ -2592,6 +2617,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updatePrompt();
   }
 
+  private completeClosedDialogue(): void {
+    const onComplete = this.pendingScriptedDialogueComplete;
+    this.pendingScriptedDialogueComplete = undefined;
+    if (onComplete) {
+      onComplete();
+      return;
+    }
+    this.afterDialogueClosed();
+  }
+
   private startupRecord(options: {
     attempted: boolean;
     started: boolean;
@@ -2708,6 +2743,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.dialogue.open && !this.eventSequence?.running) {
       return;
     }
+    this.pendingScriptedDialogueComplete = undefined;
     if (this.dialogue.open) {
       this.dialogue.close();
     }
