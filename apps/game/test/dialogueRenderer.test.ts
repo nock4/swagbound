@@ -14,6 +14,7 @@ import {
   revealState,
   type DialogueResolver
 } from "../src/dialogueRenderer";
+import { buildInlineDialoguePages } from "../src/loader";
 import { DialogueController } from "../src/state";
 
 const fakeResolver: DialogueResolver = {
@@ -293,5 +294,28 @@ describe("DialogueController reveal-aware confirm behavior", () => {
     expect(dialogue.advance()).toBe(true);
     expect(dialogue.pageIndex).toBe(1);
     expect(dialogue.advances).toBe(1);
+  });
+
+  it("advances and closes custom inline pages through the shared pager", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(0);
+    const dialogue = new DialogueController({ textSpeedCps: INSTANT_TEXT_SPEED_CPS });
+
+    dialogue.start(buildInlineDialoguePages(["Inline page one.", "Inline page two."]));
+
+    expect(dialogue.open).toBe(true);
+    expect(dialogue.pageIndex).toBe(0);
+    expect(dialogue.currentText).toBe("Inline page one.");
+
+    vi.advanceTimersByTime(DialogueController.ADVANCE_COOLDOWN_MS);
+    expect(dialogue.advance()).toBe(true);
+    expect(dialogue.open).toBe(true);
+    expect(dialogue.pageIndex).toBe(1);
+    expect(dialogue.currentText).toBe("Inline page two.");
+
+    vi.advanceTimersByTime(DialogueController.ADVANCE_COOLDOWN_MS);
+    expect(dialogue.advance()).toBe(false);
+    expect(dialogue.open).toBe(false);
+    expect(dialogue.closes).toBe(1);
   });
 });

@@ -126,4 +126,61 @@ describe("interactionEvents", () => {
 
     expect(events.map((event) => event.kind)).toEqual(["dialogue", "setFlag"]);
   });
+
+  it("uses custom dialogue pages by npcId before text-pointer overrides", () => {
+    const flags = new GameFlags();
+
+    expect(interactionEvents({
+      npcId: 745,
+      textPointer: "robot.greeter"
+    }, FALLBACK_REFERENCE, flags, {
+      byNpcId: {
+        "745": { pages: ["NPC page one.", "NPC page two."] }
+      },
+      byTextPointer: {
+        "robot.greeter": { pages: ["Pointer page."] }
+      }
+    })).toEqual([
+      { kind: "dialogue", pages: ["NPC page one.", "NPC page two."] },
+      { kind: "setFlag", flag: "npc:745:talked" }
+    ]);
+  });
+
+  it("uses custom dialogue pages by the ccscript pointer it would have selected", () => {
+    const flags = new GameFlags();
+    flags.set(talkedFlag(745));
+
+    expect(interactionEvents({
+      npcId: 745,
+      textPointer: "robot.greeter",
+      textPointer2: "robot.greeter_again"
+    }, FALLBACK_REFERENCE, flags, {
+      byNpcId: {},
+      byTextPointer: {
+        "robot.greeter_again": { pages: ["Repeat pointer page."] }
+      }
+    })).toEqual([
+      { kind: "dialogue", pages: ["Repeat pointer page."] },
+      { kind: "setFlag", flag: "npc:745:talked" }
+    ]);
+  });
+
+  it("keeps the ccscript reference when no custom dialogue override matches", () => {
+    const flags = new GameFlags();
+
+    expect(interactionEvents({
+      npcId: 745,
+      textPointer: "robot.greeter"
+    }, FALLBACK_REFERENCE, flags, {
+      byNpcId: {
+        "999": { pages: ["Other NPC page."] }
+      },
+      byTextPointer: {
+        "robot.other": { pages: ["Other pointer page."] }
+      }
+    })).toEqual([
+      { kind: "dialogue", reference: "robot.greeter" },
+      { kind: "setFlag", flag: "npc:745:talked" }
+    ]);
+  });
 });

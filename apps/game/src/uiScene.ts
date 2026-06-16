@@ -13,6 +13,7 @@ import {
 } from "./bitmapFont";
 import {
   drawWindowFrame,
+  moreArrowPlacement,
   prepareWindowFrames,
   queueWindowFrameAssets,
   windowFrameName,
@@ -42,6 +43,8 @@ const DIALOGUE_VERTICAL_PADDING = 9 * EB_UI_SCALE;
 const DIALOGUE_VISIBLE_LINES = 4;
 const DIALOGUE_BOTTOM_MARGIN = 8 * EB_UI_SCALE;
 const DIALOGUE_SIDE_MARGIN = 8 * EB_UI_SCALE;
+const DIALOGUE_MORE_ARROW_INNER_PADDING = 2 * EB_UI_SCALE;
+const DIALOGUE_MORE_ARROW_BOB_PX = 2;
 const MENU_LEFT = 8 * EB_UI_SCALE;
 const MENU_TOP = 8 * EB_UI_SCALE;
 const MENU_RIGHT_MARGIN = 8 * EB_UI_SCALE;
@@ -252,18 +255,33 @@ export class UiScene extends Phaser.Scene {
     if (!this.textures.get(this.windowFrames.textureKey).has(frameName)) {
       return false;
     }
-    const arrowWidth = this.windowFrames.flavor.moreArrow.w * EB_UI_SCALE;
-    const arrowHeight = this.windowFrames.flavor.moreArrow.h * EB_UI_SCALE;
-    const arrowX = Math.round(x + boxWidth - DIALOGUE_HORIZONTAL_PADDING - arrowWidth);
-    const arrowY = Math.round(y + boxHeight - DIALOGUE_VERTICAL_PADDING - arrowHeight);
-    const arrow = this.add.image(arrowX, arrowY, this.windowFrames.textureKey, frameName)
+    const arrow = this.add.image(0, 0, this.windowFrames.textureKey, frameName)
       .setOrigin(0, 0)
       .setScale(EB_UI_SCALE)
       .setDepth(12);
+    // Phaser's registered frame can render wider than the metadata rect, so
+    // clamp with the post-scale display size instead of flavor.moreArrow.w/h.
+    const arrowPlacement = moreArrowPlacement({
+      x,
+      y,
+      width: boxWidth,
+      height: boxHeight,
+      arrowWidth: arrow.displayWidth,
+      arrowHeight: arrow.displayHeight,
+      horizontalPadding: DIALOGUE_HORIZONTAL_PADDING,
+      verticalPadding: DIALOGUE_VERTICAL_PADDING,
+      rightFrameThickness: this.windowFrames.flavor.corner.w * EB_UI_SCALE,
+      bottomFrameThickness: this.windowFrames.flavor.corner.h * EB_UI_SCALE,
+      innerPadding: DIALOGUE_MORE_ARROW_INNER_PADDING,
+      bottomInnerPadding: DIALOGUE_MORE_ARROW_INNER_PADDING + DIALOGUE_MORE_ARROW_BOB_PX
+    });
+    const arrowX = arrowPlacement.x;
+    const arrowY = arrowPlacement.y;
+    arrow.setPosition(arrowX, arrowY);
     this.moreArrow = arrow;
     this.moreArrowTween = this.tweens.add({
       targets: arrow,
-      y: arrowY + 2,
+      y: arrowY + DIALOGUE_MORE_ARROW_BOB_PX,
       duration: 360,
       yoyo: true,
       repeat: -1,

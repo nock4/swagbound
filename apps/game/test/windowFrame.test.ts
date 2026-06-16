@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { WindowCollection } from "@eb/schemas";
 import {
   buildWindowFrameLayout,
+  moreArrowPlacement,
   type WindowFrameLayout,
   type WindowFramePlacement,
   processWindowImageData
@@ -83,6 +84,93 @@ describe("window frame layout", () => {
     expect(layout.corners.topLeft).toMatchObject({ x: 0, y: 0, displayWidth: 10, displayHeight: 12 });
     expect(layout.corners.bottomRight).toMatchObject({ x: 0, y: 0, displayWidth: 10, displayHeight: 12 });
     expect(allPlacements(layout).every((tile) => staysWithin(tile, 10, 12))).toBe(true);
+  });
+
+  it("keeps the native dialogue bottom-right frame and more arrow inside their right edges", () => {
+    const box = { x: 16, y: 300, width: 480, height: 132 };
+    const scale = 2;
+    const frameThickness = flavor.corner.w * scale;
+    const arrowWidth = flavor.moreArrow.w * scale;
+    const arrowHeight = flavor.moreArrow.h * scale;
+    const layout = buildWindowFrameLayout(box.width, box.height, flavor, scale);
+    const bottomRight = layout.corners.bottomRight;
+    const frameRightEdge = box.x + bottomRight.x + bottomRight.displayWidth;
+    const boxRightEdge = box.x + box.width;
+    const arrow = moreArrowPlacement({
+      ...box,
+      arrowWidth,
+      arrowHeight,
+      horizontalPadding: 24,
+      verticalPadding: 18,
+      rightFrameThickness: frameThickness,
+      bottomFrameThickness: frameThickness,
+      innerPadding: 4
+    });
+
+    expect(frameRightEdge).toBe(boxRightEdge);
+    expect(frameRightEdge).toBe(496);
+    expect(arrow.rightInnerEdge).toBe(476);
+    expect(arrow.right).toBe(472);
+    expect(arrow.right).toBeLessThanOrEqual(arrow.rightInnerEdge);
+    expect(arrow.right).toBeLessThanOrEqual(boxRightEdge);
+  });
+
+  it("clamps the more arrow to the frame inner edge when padding would place it over the border", () => {
+    const scale = 2;
+    const frameThickness = flavor.corner.w * scale;
+    const arrowWidth = flavor.moreArrow.w * scale;
+    const arrowHeight = flavor.moreArrow.h * scale;
+
+    for (const width of [48, 64, 132, 480]) {
+      const box = { x: 16, y: 300, width, height: 72 };
+      const arrow = moreArrowPlacement({
+        ...box,
+        arrowWidth,
+        arrowHeight,
+        horizontalPadding: 4,
+        verticalPadding: 18,
+        rightFrameThickness: frameThickness,
+        bottomFrameThickness: frameThickness,
+        innerPadding: 4
+      });
+
+      expect(arrow.right).toBeLessThanOrEqual(arrow.rightInnerEdge);
+      expect(arrow.right).toBeLessThanOrEqual(box.x + box.width);
+      expect(arrow.bottom).toBeLessThanOrEqual(arrow.bottomInnerEdge);
+    }
+  });
+
+  it("uses actual rendered arrow dimensions when they exceed the metadata rect", () => {
+    const box = { x: 16, y: 300, width: 480, height: 132 };
+    const scale = 2;
+    const frameThickness = flavor.corner.w * scale;
+    const assumedArrowWidth = flavor.moreArrow.w * scale;
+    const actualArrowWidth = assumedArrowWidth + 35;
+    const arrowHeight = flavor.moreArrow.h * scale;
+    const assumedPlacement = moreArrowPlacement({
+      ...box,
+      arrowWidth: assumedArrowWidth,
+      arrowHeight,
+      horizontalPadding: 4,
+      verticalPadding: 18,
+      rightFrameThickness: frameThickness,
+      bottomFrameThickness: frameThickness,
+      innerPadding: 4
+    });
+    const actualPlacement = moreArrowPlacement({
+      ...box,
+      arrowWidth: actualArrowWidth,
+      arrowHeight,
+      horizontalPadding: 4,
+      verticalPadding: 18,
+      rightFrameThickness: frameThickness,
+      bottomFrameThickness: frameThickness,
+      innerPadding: 4
+    });
+
+    expect(assumedPlacement.x + actualArrowWidth).toBeGreaterThan(assumedPlacement.rightInnerEdge);
+    expect(actualPlacement.right).toBe(actualPlacement.rightInnerEdge);
+    expect(actualPlacement.right).toBeLessThanOrEqual(box.x + box.width);
   });
 });
 

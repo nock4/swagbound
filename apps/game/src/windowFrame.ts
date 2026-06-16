@@ -68,6 +68,30 @@ export type WindowFrameOptions = {
   scale?: number;
 };
 
+export type MoreArrowPlacementOptions = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  arrowWidth: number;
+  arrowHeight: number;
+  horizontalPadding: number;
+  verticalPadding: number;
+  rightFrameThickness: number;
+  bottomFrameThickness: number;
+  innerPadding?: number;
+  bottomInnerPadding?: number;
+};
+
+export type MoreArrowPlacement = {
+  x: number;
+  y: number;
+  right: number;
+  bottom: number;
+  rightInnerEdge: number;
+  bottomInnerEdge: number;
+};
+
 const DEFAULT_WINDOW_SCALE = 2;
 const WINDOW_FRAME_NAMES: Record<WindowFramePart | "moreArrow", string> = {
   corner: "corner",
@@ -86,6 +110,36 @@ export function processedWindowTextureKey(flavor: Pick<WindowFlavor, "id">): str
 
 export function windowFrameName(part: WindowFramePart | "moreArrow"): string {
   return WINDOW_FRAME_NAMES[part];
+}
+
+export function moreArrowPlacement(options: MoreArrowPlacementOptions): MoreArrowPlacement {
+  const arrowWidth = Math.max(0, options.arrowWidth);
+  const arrowHeight = Math.max(0, options.arrowHeight);
+  const innerPadding = Math.max(0, options.innerPadding ?? 0);
+  const bottomInnerPadding = Math.max(0, options.bottomInnerPadding ?? innerPadding);
+  const rightInnerEdge = Math.max(
+    options.x,
+    options.x + Math.max(0, options.width) - Math.max(0, options.rightFrameThickness) - innerPadding
+  );
+  const bottomInnerEdge = Math.max(
+    options.y,
+    options.y + Math.max(0, options.height) - Math.max(0, options.bottomFrameThickness) - bottomInnerPadding
+  );
+  const preferredX = options.x + Math.max(0, options.width) - Math.max(0, options.horizontalPadding) - arrowWidth;
+  const maxX = rightInnerEdge - arrowWidth;
+  const arrowX = Math.round(Math.min(preferredX, maxX));
+  const preferredY = options.y + Math.max(0, options.height) - Math.max(0, options.verticalPadding) - arrowHeight;
+  const maxY = bottomInnerEdge - arrowHeight;
+  const arrowY = Math.round(Math.min(preferredY, maxY));
+
+  return {
+    x: arrowX,
+    y: arrowY,
+    right: arrowX + arrowWidth,
+    bottom: arrowY + arrowHeight,
+    rightInnerEdge,
+    bottomInnerEdge
+  };
 }
 
 export function queueWindowFrameAssets(

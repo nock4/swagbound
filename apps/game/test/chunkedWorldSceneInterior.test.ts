@@ -23,4 +23,11 @@ describe("chunked world interior rendering contract", () => {
     expect(sceneSource).toContain("this.world_.sectors");
     expect(sceneSource).toContain("this.activeRoomSectorKey === sectorKey");
   });
+
+  it("stabilizes the rendered geometry mask edge without changing room bounds", () => {
+    expect(sceneSource).toContain("ROOM_MASK_EDGE_INSET_SCREEN_PX");
+    expect(sceneSource).toContain("roomMaskEdgeInsetWorldPixels");
+    expect(sceneSource).toContain("range.maxCellX === maskBounds.maxCellX");
+    expect(sceneSource).toContain("range.cellY === maskBounds.maxCellY");
+  });
 });

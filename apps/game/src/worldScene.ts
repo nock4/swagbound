@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { isNpcVisibleForEventFlags, type ItemData, type SpriteSheet, type WorldNpc, type WorldRegion } from "@eb/schemas";
 import {
   buildDialogueForReference,
+  buildInlineDialoguePages,
   buildMetadataLines,
   buildStatusLines,
   chooseReference,
@@ -851,7 +852,9 @@ export class WorldScene extends Phaser.Scene {
     for (const event of events) {
       switch (event.kind) {
         case "dialogue":
-          if (!this.startEventSequence(event.reference)) {
+          if (event.pages) {
+            this.dialogue.start(buildInlineDialoguePages(event.pages));
+          } else if (!this.startEventSequence(event.reference)) {
             this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference, this.gameFlags));
           }
           break;

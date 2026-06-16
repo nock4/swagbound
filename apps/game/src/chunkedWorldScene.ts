@@ -14,6 +14,7 @@ import {
 } from "./doorTriggers";
 import {
   buildDialogueForReference,
+  buildInlineDialoguePages,
   buildMetadataLines,
   buildStatusLines,
   chooseReference,
@@ -150,6 +151,20 @@ import {
   sectorCoordForWorldPixel,
   type ConnectedRoomBounds
 } from "./roomBounds";
+import {
+  advanceMapTransition,
+  beginMapTransition,
+  idleMapTransition,
+  isMapTransitionActive,
+  transitionKindForDoorType,
+  transitionOverlayAlpha,
+  transitionSfxCueForEvent,
+  type MapTransitionEvent,
+  type MapTransitionState,
+  type TransitionKind,
+  type TransitionSfxCue
+} from "./mapTransition";
+import { createTransitionSfx, type TransitionSfx } from "./audio/transitionSfx";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -188,15 +203,16 @@ type BlockedOptions = {
 
 type DoorWarpOptions = {
   instant?: boolean;
+  kind?: TransitionKind;
   triggerWorldPixel?: { x: number; y: number };
 };
 
 type DoorFadePhase = "none" | "fade-out" | "fade-in";
 
-const DOOR_FADE_HALF_MS = 90;
 const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
 const COLLISION_OVERLAY_DEPTH = 150_000;
 const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
+const ROOM_MASK_EDGE_INSET_SCREEN_PX = 0.5;
 
 type TilePoint = { x: number; y: number };
 type ForceEncounterResult =
@@ -237,10 +253,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedInvalidDoorWarps = new Set<string>();
   private doorFadePhase: DoorFadePhase = "none";
   private doorFadeOverlay?: Phaser.GameObjects.Rectangle;
-  private doorFadeTween?: Phaser.Tweens.Tween;
+  private doorTransitionState: MapTransitionState = idleMapTransition();
+  private activeDoorWarp?: {
+    destination: EventWarpDestination;
+    landing: DoorWarpLanding;
+    options: DoorWarpOptions;
+  };
   readonly dialogue = new DialogueController();
   private readonly gameFlags = new GameFlags();
   private readonly partyState = new PartyState();
+  private readonly transitionSfx: TransitionSfx = createTransitionSfx();
   private menuState: MenuState = closedMenu();
   private menuScreens = new Map<string, MenuScreen>();
   private activeShopStoreId?: number;
@@ -303,6 +325,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.lastSavedAt = this.bootSaveState?.savedAt;
     this.restoredFromSave = false;
     this.doorFadePhase = "none";
+    this.doorTransitionState = idleMapTransition();
+    this.activeDoorWarp = undefined;
     this.lastPlayerTile = undefined;
     this.currentSectorIndex = undefined;
     const disabledByQuery = encountersDisabledBySearch(globalThis.location?.search);
@@ -378,6 +402,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     this.cursors = this.input.keyboard?.createCursorKeys();
     this.keys = this.input.keyboard?.addKeys("W,A,S,D") as Record<string, Phaser.Input.Keyboard.Key>;
+    this.registerTransitionSfxResume();
     this.refreshMenuScreens();
     this.input.keyboard?.on("keydown-M", () => this.openCommandMenu());
     registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveMenuCursor(-1));
@@ -439,6 +464,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.stepNpcs(delta);
     this.eventSequence?.update(delta);
+    this.updateDoorTransition(delta);
 
     const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.isDoorFadeActive();
     if (inputOwned && !this.playerState.inputLocked) {
@@ -518,6 +544,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.doorTriggerState = { suppressUntilClear: false };
     this.lastDoor = undefined;
     this.doorFadePhase = "none";
+    this.doorTransitionState = idleMapTransition();
+    this.activeDoorWarp = undefined;
     this.dialogue.close();
     this.gameFlags.clear();
     this.partyState.restore(emptyPartyStateSnapshot());
@@ -736,17 +764,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
     graphics.clear();
     graphics.fillStyle(0xffffff, 1);
     const cellSize = this.collisionCellSize;
+    const maskBounds = room.maskCellBounds;
+    const edgeInset = this.roomMaskEdgeInsetWorldPixels();
     for (const range of room.maskCellRanges) {
-      graphics.fillRect(
-        range.minCellX * cellSize,
-        range.cellY * cellSize,
-        (range.maxCellX - range.minCellX + 1) * cellSize,
-        cellSize
-      );
+      const x = Math.round(range.minCellX * cellSize);
+      const y = Math.round(range.cellY * cellSize);
+      const insetRight = maskBounds && range.maxCellX === maskBounds.maxCellX ? edgeInset : 0;
+      const insetBottom = maskBounds && range.cellY === maskBounds.maxCellY ? edgeInset : 0;
+      const width = Math.max(1, Math.round((range.maxCellX - range.minCellX + 1) * cellSize) - insetRight);
+      const height = Math.max(1, Math.round(cellSize) - insetBottom);
+      graphics.fillRect(x, y, width, height);
     }
     this.roomMask = this.roomMask ?? graphics.createGeometryMask();
     this.roomMask.setShape(graphics);
     return this.roomMask;
+  }
+
+  private roomMaskEdgeInsetWorldPixels(): number {
+    const zoom = this.cameras.main.zoom > 0 ? this.cameras.main.zoom : 1;
+    return ROOM_MASK_EDGE_INSET_SCREEN_PX / zoom;
   }
 
   private applyRoomMaskToImage(
@@ -1116,6 +1152,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
     };
   }
 
+  private registerTransitionSfxResume(): void {
+    const resume = () => this.transitionSfx.resume();
+    this.input.once("pointerdown", resume);
+    this.input.keyboard?.once("keydown", resume);
+    this.events.once("shutdown", () => {
+      this.input.off("pointerdown", resume);
+      this.input.keyboard?.off("keydown", resume);
+    });
+  }
+
   private movementBounds(): { minX: number; maxX: number; minY: number; maxY: number } {
     const width = this.world_.mapWidthTiles * this.world_.tileSize;
     const height = this.world_.mapHeightTiles * this.world_.tileSize;
@@ -1197,6 +1243,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       worldPixel: result.door.destinationWorldPixel,
       direction: result.door.direction
     }, {
+      kind: transitionKindForDoorType(result.door.type),
       triggerWorldPixel: result.door.worldPixel
     });
     return true;
@@ -1315,19 +1362,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
     try {
-      const overlay = this.ensureDoorFadeOverlay();
-      this.doorFadePhase = "fade-out";
+      const transition = beginMapTransition(options.kind ?? "door");
+      this.doorTransitionState = transition.state;
+      this.activeDoorWarp = { destination, landing, options };
+      this.doorFadePhase = this.doorFadePhaseForTransition(this.doorTransitionState);
       lockPlayer(this.playerState, this.playerFrames);
-      overlay.setAlpha(0);
-      overlay.setVisible(true);
+      this.syncDoorFadeOverlay();
+      this.playTransitionSfxForEvents(transition.events);
       this.publish();
-      this.doorFadeTween = this.tweens.add({
-        targets: overlay,
-        alpha: 1,
-        duration: DOOR_FADE_HALF_MS,
-        ease: "Linear",
-        onComplete: () => this.finishDoorFadeOut(destination, landing, options)
-      });
       return true;
     } catch {
       this.finishDoorFade();
@@ -1335,36 +1377,88 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
-  private finishDoorFadeOut(
-    destination: EventWarpDestination,
-    landing: DoorWarpLanding,
-    options: DoorWarpOptions = {}
-  ): void {
-    try {
-      if (!this.applyDoorWarpInstant(destination, landing, options)) {
-        this.finishDoorFade();
+  private updateDoorTransition(deltaMs: number): void {
+    if (!isMapTransitionActive(this.doorTransitionState)) {
+      return;
+    }
+    const result = advanceMapTransition(this.doorTransitionState, deltaMs);
+    this.doorTransitionState = result.state;
+    this.doorFadePhase = this.doorFadePhaseForTransition(this.doorTransitionState);
+    for (const event of result.events) {
+      if (!this.handleDoorTransitionEvent(event)) {
         return;
       }
-      this.doorFadePhase = "fade-in";
-      this.publish();
-      const overlay = this.ensureDoorFadeOverlay();
-      overlay.setVisible(true);
-      overlay.setAlpha(1);
-      this.doorFadeTween = this.tweens.add({
-        targets: overlay,
-        alpha: 0,
-        duration: DOOR_FADE_HALF_MS,
-        ease: "Linear",
-        onComplete: () => this.finishDoorFade()
-      });
+    }
+    this.syncDoorFadeOverlay();
+    this.publish();
+  }
+
+  private handleDoorTransitionEvent(event: MapTransitionEvent): boolean {
+    try {
+      if (event.type === "swap") {
+        const warp = this.activeDoorWarp;
+        if (!warp || !this.applyDoorWarpInstant(warp.destination, warp.landing, warp.options)) {
+          this.finishDoorFade();
+          return false;
+        }
+        return true;
+      }
+      this.playTransitionSfxForEvent(event);
+      if (event.type === "complete") {
+        this.finishDoorFade();
+        return false;
+      }
+      return true;
     } catch {
       this.finishDoorFade();
+      return false;
+    }
+  }
+
+  private syncDoorFadeOverlay(): void {
+    const overlay = this.ensureDoorFadeOverlay();
+    const active = isMapTransitionActive(this.doorTransitionState);
+    overlay.setSize(this.scale.width, this.scale.height);
+    overlay.setVisible(active);
+    overlay.setAlpha(transitionOverlayAlpha(this.doorTransitionState));
+  }
+
+  private playTransitionSfxForEvents(events: readonly MapTransitionEvent[]): void {
+    for (const event of events) {
+      this.playTransitionSfxForEvent(event);
+    }
+  }
+
+  private playTransitionSfxForEvent(event: MapTransitionEvent): void {
+    const cue = transitionSfxCueForEvent(event);
+    if (cue) {
+      this.playTransitionSfxCue(cue);
+    }
+  }
+
+  private playTransitionSfxCue(cue: TransitionSfxCue): void {
+    switch (cue) {
+      case "doorOpen":
+        this.transitionSfx.doorOpen();
+        break;
+      case "doorClose":
+        this.transitionSfx.doorClose();
+        break;
+      case "footsteps":
+        this.transitionSfx.footsteps();
+        break;
+      case "escalatorHum":
+        this.transitionSfx.escalatorHum();
+        break;
+      case "whoosh":
+        this.transitionSfx.whoosh();
+        break;
     }
   }
 
   private finishDoorFade(): void {
-    this.doorFadeTween?.stop();
-    this.doorFadeTween = undefined;
+    this.doorTransitionState = idleMapTransition();
+    this.activeDoorWarp = undefined;
     this.doorFadeOverlay?.setAlpha(0);
     this.doorFadeOverlay?.setVisible(false);
     this.doorFadePhase = "none";
@@ -1389,15 +1483,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private destroyDoorFadeOverlay(): void {
-    this.doorFadeTween?.stop();
-    this.doorFadeTween = undefined;
+    this.doorTransitionState = idleMapTransition();
+    this.activeDoorWarp = undefined;
     this.doorFadeOverlay?.destroy();
     this.doorFadeOverlay = undefined;
     this.doorFadePhase = "none";
   }
 
   private isDoorFadeActive(): boolean {
-    return this.doorFadePhase !== "none";
+    return isMapTransitionActive(this.doorTransitionState);
+  }
+
+  private doorFadePhaseForTransition(state: MapTransitionState): DoorFadePhase {
+    if (!isMapTransitionActive(state)) {
+      return "none";
+    }
+    return state.phase === "fadeIn" ? "fade-in" : "fade-out";
   }
 
   private canReleaseDoorFadeLock(): boolean {
@@ -1885,7 +1986,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.pauseNpcForDialogue(npc);
     lockPlayer(this.playerState, this.playerFrames);
-    this.runEvents(interactionEvents(npc.data, this.targetReference, this.gameFlags));
+    this.runEvents(interactionEvents(npc.data, this.targetReference, this.gameFlags, this.data_.customDialogue));
     this.updatePrompt();
     this.publish();
   }
@@ -1894,7 +1995,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const event of events) {
       switch (event.kind) {
         case "dialogue":
-          if (!this.startEventSequence(event.reference)) {
+          if (event.pages) {
+            this.dialogue.start(buildInlineDialoguePages(event.pages));
+          } else if (!this.startEventSequence(event.reference)) {
             this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference, this.gameFlags));
           }
           break;
@@ -1917,7 +2020,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
       dialogue: this.dialogue,
       flags: this.gameFlags,
       partyState: this.partyState,
-      scene: this,
       resolveWarpDestination: (dest, style) => this.resolveEventWarpDestination(dest, style),
       applyWarpDestination: (destination) => this.applyEventWarpDestination(destination),
       startBattle: (group) => this.startEventBattleForCurrentMode(group),
@@ -2049,7 +2151,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.startupRunActive && this.startupMode === "startup") {
       return this.applyStartupWarpDestination(destination);
     }
-    this.applyDoorWarp(destination);
+    this.applyDoorWarp(destination, { kind: "teleport" });
   }
 
   private applyStartupWarpDestination(destination: EventWarpDestination): boolean {

@@ -2,6 +2,7 @@ import {
   buildDialoguePages,
   BattleDataSchema,
   CharacterCollectionSchema,
+  CustomDialogueSchema,
   EncountersSchema,
   FontCollectionSchema,
   ItemCollectionSchema,
@@ -22,6 +23,7 @@ import {
   type DialoguePage,
   type BattleData,
   type CharacterCollection,
+  type CustomDialogue,
   type Encounters,
   type FontCollection,
   type ItemCollection,
@@ -41,11 +43,13 @@ import {
 } from "@eb/schemas";
 
 export const TARGET_REFERENCE = "robot.hello_world";
+const CUSTOM_DIALOGUE_FILE = "custom-dialogue.json";
 
 export type GameData = {
   manifest: Manifest;
   scripts?: ScriptCollection;
   npcs?: NpcReferenceCollection;
+  customDialogue: CustomDialogue;
   spriteGroups?: SpriteGroupCollection;
   tutorialStatus?: TutorialStatus;
   validationReport?: ValidationReport;
@@ -71,6 +75,14 @@ async function loadJson<T>(url: string, schema: { parse: (value: unknown) => T }
   }
 }
 
+function emptyCustomDialogue(): CustomDialogue {
+  return {
+    schema: "swagbound.custom-dialogue.v1",
+    byNpcId: {},
+    byTextPointer: {}
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -89,7 +101,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     characters,
     items,
     psi,
-    shops
+    shops,
+    customDialogue
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -124,12 +137,14 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       : Promise.resolve(undefined),
     manifest.files.shops
       ? loadJson(`/generated/${manifest.files.shops}`, ShopDataSchema)
-      : Promise.resolve(undefined)
+      : Promise.resolve(undefined),
+    loadJson(`/generated/${CUSTOM_DIALOGUE_FILE}`, CustomDialogueSchema)
   ]);
   return {
     manifest,
     scripts,
     npcs,
+    customDialogue: customDialogue ?? emptyCustomDialogue(),
     spriteGroups,
     tutorialStatus,
     validationReport,
@@ -175,6 +190,15 @@ export function buildDialogueForReference(
     return [{ text: "No imported script text was found.", ended: true, unknownCommands: [] }];
   }
   return buildDialoguePages(resolved.commands);
+}
+
+export function buildInlineDialoguePages(pages: readonly string[]): DialoguePage[] {
+  return pages.map((text, index) => ({
+    text,
+    ended: index + 1 >= pages.length,
+    unknownCommands: [],
+    segments: [{ kind: "text" as const, value: text }]
+  }));
 }
 
 export function hasNpcReference(npcs: NpcReferenceCollection | undefined, reference: string): boolean {

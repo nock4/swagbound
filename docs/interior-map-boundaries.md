@@ -60,3 +60,7 @@ Underworld; the overworld (Onett street, snowy cave mouth) renders unchanged
 
 Known cosmetic (pre-existing, NOT from this change): a few dark floor tiles in
 some rooms render as small black patches — present before this work too.
+
+Follow-up (resolved): a thin mask-edge trailing line off the bottom-right was
+fixed in the map-transitions change (rounded mask rects + 0.5/zoom edge inset).
+See docs/map-transitions.md.

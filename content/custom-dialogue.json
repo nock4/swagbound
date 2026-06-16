@@ -1,0 +1,19 @@
+{
+  "schema": "swagbound.custom-dialogue.v1",
+  "comment": "First-slice placeholder mappings (npcId 1 + 78) to be re-authored. 78 is next to the bedroom spawn for proof.",
+  "byNpcId": {
+    "1": {
+      "pages": [
+        "Bosch! Wake up. Your phone minted something at 4am, and it is signed with your name.",
+        "The payload just says 'Swag is eternal.' You didn't write that. Somebody beat you to being you."
+      ]
+    },
+    "78": {
+      "pages": [
+        "Bosch! Wake up. Your phone minted something at 4am, and it is signed with your name.",
+        "The payload just says 'Swag is eternal.' You didn't write that. Somebody beat you to being you."
+      ]
+    }
+  },
+  "byTextPointer": {}
+}

@@ -1,6 +1,13 @@
 import { talkedFlag } from "./gameFlags";
 
-export type DialogueEvent = { kind: "dialogue"; reference: string };
+export type CustomDialogueLookup = {
+  byNpcId: Record<string, { pages: string[] }>;
+  byTextPointer: Record<string, { pages: string[] }>;
+};
+
+export type ReferenceDialogueEvent = { kind: "dialogue"; reference: string; pages?: never };
+export type InlineDialogueEvent = { kind: "dialogue"; pages: string[]; reference?: never };
+export type DialogueEvent = ReferenceDialogueEvent | InlineDialogueEvent;
 export type SetFlagEvent = { kind: "setFlag"; flag: string };
 
 export type GameEvent = DialogueEvent | SetFlagEvent;
@@ -19,7 +26,8 @@ function ccsReference(pointer: string | undefined): string | undefined {
 export function interactionEvents(
   npc: { npcId: number; eventFlag?: number; textPointer?: string; textPointer2?: string },
   fallbackReference: string,
-  flags: FlagReader
+  flags: FlagReader,
+  customDialogue?: CustomDialogueLookup
 ): GameEvent[] {
   const flag = talkedFlag(npc.npcId);
   const hasEventFlag = npc.eventFlag !== undefined && npc.eventFlag > 0;
@@ -29,8 +37,12 @@ export function interactionEvents(
   const reference = (useTextPointer2 ? ccsReference(npc.textPointer2) : undefined)
     ?? ccsReference(npc.textPointer)
     ?? fallbackReference;
+  const pages = customDialogue?.byNpcId[String(npc.npcId)]?.pages
+    ?? customDialogue?.byTextPointer[reference]?.pages;
   return [
-    { kind: "dialogue", reference },
+    pages && pages.length > 0
+      ? { kind: "dialogue", pages: [...pages] }
+      : { kind: "dialogue", reference },
     { kind: "setFlag", flag }
   ];
 }
