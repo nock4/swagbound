@@ -71,3 +71,41 @@ stretch milestone.
   visual gate ([[ui-verify-native-viewport]], [[subagent-goal-prompts]]).
 - One Codex thread at a time; commit per landed+verified change; ROM read-only,
   extracted text/values stay gitignored and referenced by pointer.
+
+## Pass results (executed 2026-06-16)
+
+Final state: 392 unit tests, tsc 0 errors, e2e review/eb/battle/content all green.
+
+- **0a interior camera/mask** [0c62670] — DONE + native-verified. Player stays
+  centered, map scrolls, only the current room renders (no neighbor bleed).
+- **0b font-aware text engine** [d778711] — DONE. Renders any of the 5 EB fonts;
+  honors the real font-select codes ([1F 30]→0, [1F 31]→Mr. Saturn font 1);
+  default font 0 unchanged.
+- **1 maps** [audit] — CLEAN, no fixes needed. Collision verified (only ~5
+  negligible 1-cell pockets across Onett), rendering faithful (downtown + corridor
+  spot-checked); the real map defect was the interior bleed, fixed in 0a.
+- **2 transitions** [7264e27] — DONE + native-verified. Door destinations healthy
+  (2/1164 unrecoverable, CU5-guarded inert); 96% have return doors; teleport
+  destinations are world-pixels; Ness's-house enter+EXIT round-trip confirmed
+  in-browser; door probe widened to footprint range for set-back exit doors.
+- **3 battles** [c86fddc] — DONE + native-verified. Extended the bounded extraction
+  to include the Act-1 bosses: Frank (group 448), Frankystein Mark 2 (449), Titanic
+  Ant (450), Starman Jr (474); added `speed` stat; Onett roster spot-audited
+  faithful. All bosses fight in-browser on the animated background, 0 errors.
+- **4 story spine** [f32b954] — PLAYABLE SPINE (honest reconstruction). New Game →
+  bedroom opening → Onett → meteor/Buzz Buzz → Starman Jr → flag-gated Frank
+  first-boss trigger (real dialogue by pointer + group 448). Faithful: pointer
+  dialogue + real battles. Reconstructed: Frank reached via an arcade-region
+  trigger. Stubbed + logged (the actor-VM ceiling): Pokey/Picky escort + party_add,
+  roadblock NPC movement, Buzz Buzz death/Sound Stone. Full new-game→Frank walk is
+  playtest-pending (long multi-step navigation, not auto-scriptable).
+
+### The honest remaining ceiling (next slice, multi-session)
+- **Actor/event-VM**: scripted NPC movement (Pokey walking/leading), party_add
+  cutscenes, moving roadblock NPCs — needed for the *faithful* (vs reconstructed)
+  story beats.
+- **Buzz Buzz death + Sound Stone** hand-off, the morning-after gating, and the
+  Giant Step approach → **Titanic Ant** as the Sanctuary-boss milestone.
+- **Pray/Mirror** full EB tables (currently bounded approximations).
+- A couple over-range door destinations + ~4% of doors without a detected return
+  (one-way/scripted warps) — per-door ground-truth if a bad warp shows in play.
