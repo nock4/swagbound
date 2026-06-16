@@ -14,11 +14,14 @@ import {
 } from "./doorTriggers";
 import {
   buildInlineDialoguePages,
+  buildAddedWorldNpcs,
   buildMetadataLines,
   buildStatusLines,
   chooseReference,
+  isAddedWorldChunkedNpc,
   resolveStatus,
   TARGET_REFERENCE,
+  type AddedWorldChunkedNpc,
   type GameData
 } from "./loader";
 import {
@@ -45,7 +48,13 @@ import {
   type CollisionGrid,
   type WorldRect
 } from "./collisionOverlay";
-import { interactionEvents, type GameEvent } from "./eventRunner";
+import {
+  addedNpcInteractionEvents,
+  dispatchInteractionEvents,
+  interactionEvents,
+  type DialogueEvent,
+  type GameEvent
+} from "./eventRunner";
 import {
   resolveScriptedDialoguePages,
   startScriptedBeatDialogue
@@ -178,15 +187,17 @@ type StreamedChunk = {
   foreground?: Phaser.GameObjects.Image;
 };
 
+type RuntimeNpcData = WorldChunkedNpc | AddedWorldChunkedNpc;
+
 type NpcPlacement = {
   key: string;
-  data: WorldChunkedNpc;
+  data: RuntimeNpcData;
   chunk: ChunkCoord;
 };
 
 type NpcRuntime = {
   key: string;
-  data: WorldChunkedNpc;
+  data: RuntimeNpcData;
   state: NpcRuntimeState;
   frames: DirectionFrames;
   sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
@@ -299,6 +310,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedIntroFirstBossSkips = new Set<string>();
   private warnedIntroActorVmStubs = new Set<string>();
   private pendingScriptedDialogueComplete?: () => void;
+  private pendingInteractionShopStoreId?: number;
   targetReference = TARGET_REFERENCE;
   prompt = "";
   assetsLoaded = false;
@@ -571,6 +583,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.warnedIntroActorVmStubs.clear();
     this.prompt = "";
     this.assetsLoaded = false;
+    this.pendingInteractionShopStoreId = undefined;
   }
 
   private indexChunks(): void {
@@ -582,15 +595,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private indexNpcPlacements(): void {
     this.npcPlacementsByChunk.clear();
-    this.world_.npcs.forEach((npc, index) => {
+    const addedNpcs = buildAddedWorldNpcs(this.data_.addedNpcs, this.world_.npcs);
+    if (addedNpcs.length < this.data_.addedNpcs.npcs.length) {
+      console.warn("Skipped added NPC overlay entries with colliding synthetic ids.");
+    }
+    const indexPlacement = (npc: RuntimeNpcData, keyPrefix: string, index: number): void => {
       const placement: NpcPlacement = {
-        key: `${npc.npcId}:${index}:${npc.worldPixel.x}:${npc.worldPixel.y}`,
+        key: `${keyPrefix}:${npc.npcId}:${index}:${npc.worldPixel.x}:${npc.worldPixel.y}`,
         data: npc,
         chunk: chunkForWorldPixel(npc.worldPixel, this.grid())
       };
       const key = chunkKey(placement.chunk);
       this.npcPlacementsByChunk.set(key, [...(this.npcPlacementsByChunk.get(key) ?? []), placement]);
-    });
+    };
+    this.world_.npcs.forEach((npc, index) => indexPlacement(npc, "eb", index));
+    addedNpcs.forEach((npc, index) => indexPlacement(npc, "added", index));
   }
 
   private refreshStreaming(force = false): void {
@@ -1990,37 +2009,50 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.pauseNpcForDialogue(npc);
     lockPlayer(this.playerState, this.playerFrames);
-    this.runEvents(interactionEvents(
-      npc.data,
-      this.targetReference,
-      this.gameFlags,
-      this.data_.customDialogue,
-      this.data_.dialogueLibrary
-    ));
+    this.runEvents(this.interactionEventsForNpc(npc.data));
     this.updatePrompt();
     this.publish();
   }
 
+  private interactionEventsForNpc(npc: RuntimeNpcData): GameEvent[] {
+    if (isAddedWorldChunkedNpc(npc)) {
+      return addedNpcInteractionEvents(
+        { npcId: npc.npcId, interaction: npc.addedInteraction },
+        this.data_.dialogueLibrary
+      );
+    }
+    return interactionEvents(
+      npc,
+      this.targetReference,
+      this.gameFlags,
+      this.data_.customDialogue,
+      this.data_.dialogueLibrary
+    );
+  }
+
   private runEvents(events: GameEvent[]): void {
-    for (const event of events) {
-      switch (event.kind) {
-        case "dialogue":
-          if (event.pages) {
-            this.dialogue.start(buildInlineDialoguePages(event.pages));
-          } else if (!this.startEventSequence(event.reference)) {
-            this.dialogue.start(resolveScriptedDialoguePages(
-              this.data_.customDialogue,
-              this.data_.dialogueLibrary,
-              this.data_.scripts,
-              event.reference,
-              this.gameFlags
-            ));
-          }
-          break;
-        case "setFlag":
-          this.gameFlags.set(event.flag);
-          break;
-      }
+    dispatchInteractionEvents(events, {
+      startDialogue: (event) => this.startInteractionDialogue(event),
+      setFlag: (flag) => this.gameFlags.set(flag),
+      openShop: (storeId) => this.openShopMenu(storeId),
+      deferShop: (storeId) => {
+        this.pendingInteractionShopStoreId = storeId;
+      },
+      isDialogueActive: () => this.dialogue.open || Boolean(this.eventSequence?.running)
+    });
+  }
+
+  private startInteractionDialogue(event: DialogueEvent): void {
+    if (event.pages) {
+      this.dialogue.start(buildInlineDialoguePages(event.pages));
+    } else if (!this.startEventSequence(event.reference)) {
+      this.dialogue.start(resolveScriptedDialoguePages(
+        this.data_.customDialogue,
+        this.data_.dialogueLibrary,
+        this.data_.scripts,
+        event.reference,
+        this.gameFlags
+      ));
     }
   }
 
@@ -2614,6 +2646,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.restoreActiveNpc();
     this.refreshStreaming(true);
+    if (this.pendingInteractionShopStoreId !== undefined) {
+      const storeId = this.pendingInteractionShopStoreId;
+      this.pendingInteractionShopStoreId = undefined;
+      this.openShopMenu(storeId);
+      return;
+    }
     this.updatePrompt();
   }
 

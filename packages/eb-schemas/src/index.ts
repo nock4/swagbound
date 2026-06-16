@@ -264,18 +264,31 @@ export const NpcReferenceCollectionSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
-const CustomDialoguePagesEntrySchema = z.object({
-  pages: z.array(z.string()).min(1)
-}).strict();
+export const ADDED_NPC_MIN_ID = 100000;
 
-const CustomDialogueRefEntrySchema = z.object({
-  ref: z.string().min(1)
-}).strict();
+export const NpcInteractionSchema = z
+  .object({
+    pages: z.array(z.string()).min(1).optional(),
+    ref: z.string().min(1).optional(),
+    shop: z.number().int().nonnegative().optional()
+  })
+  .strict()
+  .superRefine((value, context) => {
+    if (!value.pages && !value.ref && value.shop === undefined) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "interaction entry must include pages, ref, or shop"
+      });
+    }
+    if (value.pages && value.ref) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "interaction entry may include pages or ref, not both"
+      });
+    }
+  });
 
-const CustomDialogueEntrySchema = z.union([
-  CustomDialoguePagesEntrySchema,
-  CustomDialogueRefEntrySchema
-]);
+const CustomDialogueEntrySchema = NpcInteractionSchema;
 
 export const CustomDialogueSchema = z.object({
   schema: z.literal("swagbound.custom-dialogue.v1"),
@@ -519,6 +532,37 @@ export const WorldChunkedSchema = z.object({
 export const WorldArtifactSchema = z.union([WorldChunkedSchema, WorldRegionSchema]);
 
 export const SpriteFacingSchema = z.enum(["up", "right", "down", "left"]);
+
+export const AddedNpcSchema = z
+  .object({
+    id: z.number().int().min(ADDED_NPC_MIN_ID),
+    worldPixel: PixelSchema,
+    spriteGroup: z.number().int().nonnegative(),
+    facing: SpriteFacingSchema,
+    interaction: NpcInteractionSchema
+  })
+  .strict();
+
+export const AddedNpcsSchema = z
+  .object({
+    schema: z.literal("swagbound.added-npcs.v1"),
+    comment: z.string().optional(),
+    npcs: z.array(AddedNpcSchema)
+  })
+  .strict()
+  .superRefine((value, context) => {
+    const seen = new Set<number>();
+    value.npcs.forEach((npc, index) => {
+      if (seen.has(npc.id)) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `duplicate added NPC id ${npc.id}`,
+          path: ["npcs", index, "id"]
+        });
+      }
+      seen.add(npc.id);
+    });
+  });
 
 /** Two walk frames (sheet frame indices) per cardinal facing. */
 export const SpriteAnimationsSchema = z.record(
@@ -985,6 +1029,9 @@ export type WorldArtifact = z.infer<typeof WorldArtifactSchema>;
 export type WorldNpc = z.infer<typeof WorldNpcSchema>;
 export type WorldChunkedNpc = z.infer<typeof WorldChunkedNpcSchema>;
 export type WorldDoor = z.infer<typeof WorldDoorSchema>;
+export type NpcInteraction = z.infer<typeof NpcInteractionSchema>;
+export type AddedNpc = z.infer<typeof AddedNpcSchema>;
+export type AddedNpcs = z.infer<typeof AddedNpcsSchema>;
 export type TeleportDestination = z.infer<typeof TeleportDestinationSchema>;
 export type TeleportDestinations = z.infer<typeof TeleportDestinationsSchema>;
 export type SpriteSheet = z.infer<typeof SpriteSheetSchema>;

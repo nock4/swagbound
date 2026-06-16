@@ -19,8 +19,11 @@ export function resolveCustomDialoguePages(
   if (!entry) {
     return undefined;
   }
-  if ("pages" in entry) {
+  if (entry.pages) {
     return entry.pages.length > 0 ? [...entry.pages] : undefined;
+  }
+  if (!entry.ref) {
+    return undefined;
   }
   const libraryPages = dialogueLibrary?.entries[entry.ref]?.pages;
   if (libraryPages && libraryPages.length > 0) {

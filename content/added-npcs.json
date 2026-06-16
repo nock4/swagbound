@@ -1,0 +1,25 @@
+{
+  "schema": "swagbound.added-npcs.v1",
+  "comment": "First-slice placeholder NPCs proving the overlay + shop interaction. Positions/sprites are first-pass and get dialed in (behind counters) during the sprite pass. See docs/swagbound-eb-act1-arc-mapping.md.",
+  "npcs": [
+    {
+      "id": 100001,
+      "worldPixel": { "x": 296, "y": 568 },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A clerk waits behind the counter, scanning your face like a receipt that hasn't printed yet. \"Buying, or just being seen?\""
+        ],
+        "shop": 1
+      }
+    },
+    {
+      "id": 100002,
+      "worldPixel": { "x": 3848, "y": 2096 },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": { "ref": "interior:burger-shop-v0" }
+    }
+  ]
+}

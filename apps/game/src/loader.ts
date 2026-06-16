@@ -1,5 +1,7 @@
 import {
   buildDialoguePages,
+  ADDED_NPC_MIN_ID,
+  AddedNpcsSchema,
   BattleDataSchema,
   CharacterCollectionSchema,
   CustomDialogueSchema,
@@ -22,6 +24,8 @@ import {
   WindowCollectionSchema,
   WorldArtifactSchema,
   type DialoguePage,
+  type AddedNpc,
+  type AddedNpcs,
   type BattleData,
   type CharacterCollection,
   type CustomDialogue,
@@ -41,10 +45,12 @@ import {
   type TutorialStatus,
   type ValidationReport,
   type WindowCollection,
-  type WorldArtifact
+  type WorldArtifact,
+  type WorldChunkedNpc
 } from "@eb/schemas";
 
 export const TARGET_REFERENCE = "robot.hello_world";
+const ADDED_NPCS_FILE = "added-npcs.json";
 const CUSTOM_DIALOGUE_FILE = "custom-dialogue.json";
 const SWAGBOUND_DIALOGUE_LIBRARY_FILE = "swagbound-dialogue-library.json";
 
@@ -52,6 +58,7 @@ export type GameData = {
   manifest: Manifest;
   scripts?: ScriptCollection;
   npcs?: NpcReferenceCollection;
+  addedNpcs: AddedNpcs;
   customDialogue: CustomDialogue;
   dialogueLibrary: SwagboundDialogueLibrary;
   spriteGroups?: SpriteGroupCollection;
@@ -70,6 +77,11 @@ export type GameData = {
   shops?: ShopData;
 };
 
+export type AddedWorldChunkedNpc = WorldChunkedNpc & {
+  addedNpc: true;
+  addedInteraction: AddedNpc["interaction"];
+};
+
 async function loadJson<T>(url: string, schema: { parse: (value: unknown) => T }): Promise<T | undefined> {
   try {
     const response = await fetch(url);
@@ -84,6 +96,13 @@ function emptyCustomDialogue(): CustomDialogue {
     schema: "swagbound.custom-dialogue.v1",
     byNpcId: {},
     byTextPointer: {}
+  };
+}
+
+function emptyAddedNpcs(): AddedNpcs {
+  return {
+    schema: "swagbound.added-npcs.v1",
+    npcs: []
   };
 }
 
@@ -114,6 +133,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     items,
     psi,
     shops,
+    addedNpcs,
     customDialogue,
     dialogueLibrary
   ] = await Promise.all([
@@ -151,6 +171,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     manifest.files.shops
       ? loadJson(`/generated/${manifest.files.shops}`, ShopDataSchema)
       : Promise.resolve(undefined),
+    loadJson(`/generated/${ADDED_NPCS_FILE}`, AddedNpcsSchema),
     loadJson(`/generated/${CUSTOM_DIALOGUE_FILE}`, CustomDialogueSchema),
     loadJson(`/generated/${SWAGBOUND_DIALOGUE_LIBRARY_FILE}`, SwagboundDialogueLibrarySchema)
   ]);
@@ -158,6 +179,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     manifest,
     scripts,
     npcs,
+    addedNpcs: addedNpcs ?? emptyAddedNpcs(),
     customDialogue: customDialogue ?? emptyCustomDialogue(),
     dialogueLibrary: dialogueLibrary ?? emptyDialogueLibrary(),
     spriteGroups,
@@ -175,6 +197,45 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     psi,
     shops
   };
+}
+
+export function addedNpcSpawnEligible(
+  addedNpc: Pick<AddedNpc, "id">,
+  existingNpcs: readonly Pick<WorldChunkedNpc, "npcId">[]
+): boolean {
+  return addedNpc.id >= ADDED_NPC_MIN_ID && !existingNpcs.some((npc) => npc.npcId === addedNpc.id);
+}
+
+export function isAddedWorldChunkedNpc(npc: WorldChunkedNpc | AddedWorldChunkedNpc): npc is AddedWorldChunkedNpc {
+  return (npc as Partial<AddedWorldChunkedNpc>).addedNpc === true;
+}
+
+export function buildAddedWorldNpcs(
+  addedNpcs: AddedNpcs | undefined,
+  existingNpcs: readonly Pick<WorldChunkedNpc, "npcId">[]
+): AddedWorldChunkedNpc[] {
+  const seenIds = new Set(existingNpcs.map((npc) => npc.npcId));
+  const result: AddedWorldChunkedNpc[] = [];
+  for (const npc of addedNpcs?.npcs ?? []) {
+    if (npc.id < ADDED_NPC_MIN_ID || seenIds.has(npc.id)) {
+      continue;
+    }
+    seenIds.add(npc.id);
+    result.push({
+      npcId: npc.id,
+      spriteGroup: npc.spriteGroup,
+      direction: npc.facing,
+      type: "added-npc",
+      movement: 0,
+      showSprite: "always",
+      interactable: true,
+      visible: true,
+      worldPixel: { ...npc.worldPixel },
+      addedNpc: true,
+      addedInteraction: { ...npc.interaction }
+    });
+  }
+  return result;
 }
 
 export function parseManifest(raw: unknown): Manifest | undefined {
