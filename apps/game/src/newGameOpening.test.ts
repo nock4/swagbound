@@ -210,6 +210,7 @@ function syntheticBattle(): BattleData {
       hp: "synthetic",
       defense: "synthetic",
       offense: "synthetic",
+      speed: "synthetic",
       experience: "synthetic",
       money: "synthetic",
       bossFlag: "synthetic",

@@ -675,7 +675,7 @@ function actor(side: "party" | "enemy", index: number): BattleActor {
 function enemy(
   id: number,
   name: string,
-  stats: Partial<Pick<BattleEnemy, "hp" | "defense" | "offense" | "level" | "bossFlag" | "actions">> = {}
+  stats: Partial<Pick<BattleEnemy, "hp" | "defense" | "offense" | "speed" | "level" | "bossFlag" | "actions">> = {}
 ): BattleEnemy {
   return {
     id,
@@ -685,6 +685,7 @@ function enemy(
     hp: stats.hp ?? 24,
     defense: stats.defense ?? 4,
     offense: stats.offense ?? 8,
+    speed: stats.speed ?? stats.level ?? 3,
     experience: 0,
     money: 0,
     bossFlag: stats.bossFlag ?? false,

@@ -253,6 +253,7 @@ describe("generated validation", () => {
         hp: 12,
         defense: 2,
         offense: 4,
+        speed: 2,
         experience: 7,
         money: 13,
         bossFlag: false,
@@ -270,6 +271,7 @@ describe("generated validation", () => {
         spriteId: 30,
         level: 6,
         hp: 80,
+        speed: 6,
         bossFlag: true,
         actions: [
           { id: 1, arg: 0, actionId: 1, actionType: 1, target: 1 },
@@ -325,6 +327,53 @@ describe("generated validation", () => {
       expect(existsSync(path.join(referencedOut, "assets/battle/sprites/010.png"))).toBe(false);
       expect(existsSync(path.join(referencedOut, "assets/battle/sprites/011.png"))).toBe(true);
       expect(existsSync(path.join(referencedOut, "assets/battle/sprites/012.png"))).toBe(true);
+    } finally {
+      await rm(temp, { recursive: true, force: true });
+    }
+  });
+
+  it("adds story boss groups to referenced battle extraction without unbounding it", async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), "eb-story-battle-"));
+    try {
+      const project = path.join(temp, "project");
+      const out = path.join(temp, "generated");
+      await writeStoryBossBattleFixture(project);
+
+      const battle = await buildBattleData({
+        projectAbs: project,
+        outAbs: out,
+        displayPath: "synthetic",
+        referencedBattleGroupIds: [22]
+      });
+
+      expect(battle.selection).toMatchObject({
+        method: "encounter-referenced-full-world+story-boss-groups",
+        battleGroupIds: [22, 448, 449, 450, 474],
+        fallbackUsed: false
+      });
+      expect(battle.enemies.map((enemy) => enemy.id)).toEqual([12, 37, 130, 131, 209, 214]);
+      expect(battle.groups).toEqual([
+        { id: 22, background1: 3, background2: 0, enemyIds: [12] },
+        { id: 448, background1: 8, background2: 7, enemyIds: [131] },
+        { id: 449, background1: 10, background2: 9, enemyIds: [130] },
+        { id: 450, background1: 12, background2: 11, enemyIds: [37, 209] },
+        { id: 474, background1: 14, background2: 13, enemyIds: [214] }
+      ]);
+      expect([37, 130, 131, 214].every((id) =>
+        battle.enemies.find((enemy) => enemy.id === id)?.bossFlag === true
+      )).toBe(true);
+      expect(Object.fromEntries(battle.enemies.map((enemy) => [enemy.id, enemy.speed]))).toMatchObject({
+        12: 3,
+        37: 8,
+        130: 7,
+        131: 6,
+        209: 5,
+        214: 6
+      });
+      expect(battle.enemies.find((enemy) => enemy.id === 999)).toBeUndefined();
+      expect(battle.groups.find((group) => group.id === 900)).toBeUndefined();
+      expect(battle.counts).toMatchObject({ enemies: 6, groups: 5 });
+      expect(existsSync(path.join(out, "assets/battle/sprites/999.png"))).toBe(false);
     } finally {
       await rm(temp, { recursive: true, force: true });
     }
@@ -544,6 +593,7 @@ async function writeBattleFixture(project: string): Promise<void> {
     "  HP: 0x0c",
     "  Defense: 2",
     "  Offense: 0x04",
+    "  Speed: 2",
     "  Experience points: 7",
     "  Money: 13",
     "  Level: 3",
@@ -563,6 +613,7 @@ async function writeBattleFixture(project: string): Promise<void> {
     "  HP: 14",
     "  Defense: 3",
     "  Offense: 5",
+    "  Speed: 3",
     "  Experience points: 8",
     "  Money: 17",
     "  Level: 4",
@@ -582,6 +633,7 @@ async function writeBattleFixture(project: string): Promise<void> {
     "  HP: 99",
     "  Defense: 9",
     "  Offense: 9",
+    "  Speed: 9",
     "  Experience points: 9",
     "  Money: 19",
     "  Level: 9",
@@ -601,6 +653,7 @@ async function writeBattleFixture(project: string): Promise<void> {
     "  HP: 80",
     "  Defense: 7",
     "  Offense: 12",
+    "  Speed: 6",
     "  Experience points: 20",
     "  Money: 3",
     "  Level: 6",
@@ -620,6 +673,7 @@ async function writeBattleFixture(project: string): Promise<void> {
     "  HP: 120",
     "  Defense: 8",
     "  Offense: 14",
+    "  Speed: 7",
     "  Experience points: 25",
     "  Money: 4",
     "  Level: 12",
@@ -639,6 +693,7 @@ async function writeBattleFixture(project: string): Promise<void> {
     "  HP: 240",
     "  Defense: 20",
     "  Offense: 20",
+    "  Speed: 13",
     "  Experience points: 50",
     "  Money: 5",
     "  Level: 13",
@@ -658,6 +713,7 @@ async function writeBattleFixture(project: string): Promise<void> {
     "  HP: 90",
     "  Defense: 7",
     "  Offense: 12",
+    "  Speed: 6",
     "  Experience points: 21",
     "  Money: 3",
     "  Level: 7",
@@ -867,6 +923,106 @@ async function writeBattleFixture(project: string): Promise<void> {
   await writeFile(path.join(project, "BattleBGs", "005.png"), TINY_PNG);
   await writeFile(path.join(project, "BattleBGs", "006.png"), TINY_PNG);
   await writeFile(path.join(project, "BattleBGs", "007.png"), TINY_PNG);
+}
+
+async function writeStoryBossBattleFixture(project: string): Promise<void> {
+  await mkdir(path.join(project, "BattleSprites"), { recursive: true });
+  await mkdir(path.join(project, "BattleBGs"), { recursive: true });
+  await writeFile(path.join(project, "Project.snake"), "CoilSnakeVersion: 4\n", "utf8");
+  await writeFile(path.join(project, "enemy_configuration_table.yml"), [
+    syntheticBattleEnemyYaml(12, "Neutral Referenced", false, 3),
+    syntheticBattleEnemyYaml(37, "Neutral Story C", true, 8),
+    syntheticBattleEnemyYaml(130, "Neutral Story B", true, 7),
+    syntheticBattleEnemyYaml(131, "Neutral Story A", true, 6),
+    syntheticBattleEnemyYaml(209, "Neutral Support", false, 5),
+    syntheticBattleEnemyYaml(214, "Neutral Story D", true, 6),
+    syntheticBattleEnemyYaml(999, "Neutral Unused", true, 60),
+    ""
+  ].join("\n"), "utf8");
+  await writeFile(path.join(project, "battle_action_table.yml"), [
+    "1:",
+    "  Action type: physical (affected by shields and defending)",
+    "  Target: one",
+    "2:",
+    "  Action type: physical (unaffected by shields and defending)",
+    "  Target: all",
+    "3:",
+    "  Action type: PSI",
+    "  Target: random",
+    "4:",
+    "  Action type: other",
+    "  Target: none",
+    ""
+  ].join("\n"), "utf8");
+  await writeFile(path.join(project, "enemy_groups.yml"), [
+    "22:",
+    "  Background 1: 3",
+    "  Background 2: 0",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 12}",
+    "448:",
+    "  Background 1: 8",
+    "  Background 2: 7",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 131}",
+    "449:",
+    "  Background 1: 10",
+    "  Background 2: 9",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 130}",
+    "450:",
+    "  Background 1: 12",
+    "  Background 2: 11",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 37}",
+    "  - {Amount: 2, Enemy: 209}",
+    "474:",
+    "  Background 1: 14",
+    "  Background 2: 13",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 214}",
+    "900:",
+    "  Background 1: 16",
+    "  Background 2: 15",
+    "  Enemies:",
+    "  - {Amount: 1, Enemy: 999}",
+    ""
+  ].join("\n"), "utf8");
+  await writeFile(path.join(project, "map_enemy_groups.yml"), "", "utf8");
+  await writeFile(path.join(project, "map_enemy_placement.yml"), "", "utf8");
+  await writeFile(path.join(project, "map_sectors.yml"), "", "utf8");
+
+  for (const enemyId of [12, 37, 130, 131, 209, 214]) {
+    await writeFile(path.join(project, "BattleSprites", `${String(enemyId).padStart(3, "0")}.png`), TINY_PNG);
+  }
+  for (const backgroundId of [0, 3, 7, 8, 9, 10, 11, 12, 13, 14]) {
+    await writeFile(path.join(project, "BattleBGs", `${String(backgroundId).padStart(3, "0")}.png`), TINY_PNG);
+  }
+}
+
+function syntheticBattleEnemyYaml(id: number, name: string, bossFlag: boolean, level: number): string {
+  return [
+    `${id}:`,
+    `  Name: ${name}`,
+    `  HP: ${20 + level}`,
+    `  Defense: ${3 + level}`,
+    `  Offense: ${5 + level}`,
+    `  Speed: ${level}`,
+    `  Experience points: ${10 + level}`,
+    `  Money: ${2 + level}`,
+    `  Level: ${level}`,
+    `  Boss Flag: ${bossFlag ? "True" : "False"}`,
+    "  Action 1: 1",
+    "  Action 1 Argument: 0",
+    "  Action 2: 2",
+    "  Action 2 Argument: 1",
+    "  Action 3: 3",
+    "  Action 3 Argument: 2",
+    "  Action 4: 4",
+    "  Action 4 Argument: 3",
+    "  Item Dropped: 0",
+    "  Item Rarity: 1/128"
+  ].join("\n");
 }
 
 async function writeCharacterFixture(project: string): Promise<void> {

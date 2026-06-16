@@ -21,7 +21,7 @@ const LOW_LEVEL_MAX = 10;
 const LOW_LEVEL_BOSS_MAX = 12;
 const MAX_LOW_LEVEL_BOSS_ENEMIES = 5;
 const MAX_BOSS_GROUPS_PER_ENEMY = 1;
-const STORY_BOSS_ENEMY_IDS = [214] as const;
+const STORY_BOSS_ENEMY_IDS = [131, 130, 37, 214] as const;
 const TOWN_MAP = "onett";
 const MAP_ENEMY_PLACEMENT_WIDTH = 128;
 const ENCOUNTER_CELLS_PER_SECTOR_X = 4;
@@ -191,6 +191,7 @@ export async function buildBattleData(options: BattleBuildOptions): Promise<Batt
       hp: "enemy_configuration_table.yml HP",
       defense: "enemy_configuration_table.yml Defense",
       offense: "enemy_configuration_table.yml Offense",
+      speed: "enemy_configuration_table.yml Speed",
       experience: "enemy_configuration_table.yml Experience points",
       money: "enemy_configuration_table.yml Money",
       bossFlag: "enemy_configuration_table.yml Boss Flag",
@@ -562,6 +563,7 @@ function enemyToBattleEnemy(id: number, entry: Record<string, string>, battleAct
     hp: numericField(entry, "HP"),
     defense: numericField(entry, "Defense"),
     offense: numericField(entry, "Offense"),
+    speed: numericField(entry, "Speed"),
     experience: numericField(entry, "Experience points"),
     money: numericField(entry, "Money"),
     bossFlag: booleanField(entry, "Boss Flag"),
