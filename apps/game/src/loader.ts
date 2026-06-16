@@ -13,6 +13,7 @@ import {
   resolveScriptReferenceFlow,
   ScriptCollectionSchema,
   ShopDataSchema,
+  SwagboundDialogueLibrarySchema,
   SpriteGroupCollectionSchema,
   SpriteSheetCollectionSchema,
   TeleportDestinationsSchema,
@@ -33,6 +34,7 @@ import {
   type PsiCollection,
   type ScriptCollection,
   type ShopData,
+  type SwagboundDialogueLibrary,
   type SpriteGroupCollection,
   type SpriteSheetCollection,
   type TeleportDestinations,
@@ -44,12 +46,14 @@ import {
 
 export const TARGET_REFERENCE = "robot.hello_world";
 const CUSTOM_DIALOGUE_FILE = "custom-dialogue.json";
+const SWAGBOUND_DIALOGUE_LIBRARY_FILE = "swagbound-dialogue-library.json";
 
 export type GameData = {
   manifest: Manifest;
   scripts?: ScriptCollection;
   npcs?: NpcReferenceCollection;
   customDialogue: CustomDialogue;
+  dialogueLibrary: SwagboundDialogueLibrary;
   spriteGroups?: SpriteGroupCollection;
   tutorialStatus?: TutorialStatus;
   validationReport?: ValidationReport;
@@ -83,6 +87,14 @@ function emptyCustomDialogue(): CustomDialogue {
   };
 }
 
+function emptyDialogueLibrary(): SwagboundDialogueLibrary {
+  return {
+    schema: "swagbound.dialogue-library.v1",
+    generatedFrom: "empty generated dialogue library fallback",
+    entries: {}
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -102,7 +114,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     items,
     psi,
     shops,
-    customDialogue
+    customDialogue,
+    dialogueLibrary
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -138,13 +151,15 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     manifest.files.shops
       ? loadJson(`/generated/${manifest.files.shops}`, ShopDataSchema)
       : Promise.resolve(undefined),
-    loadJson(`/generated/${CUSTOM_DIALOGUE_FILE}`, CustomDialogueSchema)
+    loadJson(`/generated/${CUSTOM_DIALOGUE_FILE}`, CustomDialogueSchema),
+    loadJson(`/generated/${SWAGBOUND_DIALOGUE_LIBRARY_FILE}`, SwagboundDialogueLibrarySchema)
   ]);
   return {
     manifest,
     scripts,
     npcs,
     customDialogue: customDialogue ?? emptyCustomDialogue(),
+    dialogueLibrary: dialogueLibrary ?? emptyDialogueLibrary(),
     spriteGroups,
     tutorialStatus,
     validationReport,

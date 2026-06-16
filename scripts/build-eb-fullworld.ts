@@ -9,6 +9,8 @@ export const EB_FULL_WORLD_MODE = "full";
 export const EB_FULL_WORLD_OUT = DEFAULT_GENERATED_OUT;
 export const CUSTOM_DIALOGUE_SOURCE = "content/custom-dialogue.json";
 export const CUSTOM_DIALOGUE_OUTPUT = "custom-dialogue.json";
+export const SWAGBOUND_DIALOGUE_LIBRARY_SOURCE = "content/swagbound-dialogue-library.json";
+export const SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT = "swagbound-dialogue-library.json";
 
 /**
  * Canonical EB generated-data build: full world plus battle, party, item, font,
@@ -26,14 +28,21 @@ export async function buildEbFullWorldDefault() {
     font: true,
     window: true
   });
-  await copyCustomDialogueToGenerated(EB_FULL_WORLD_OUT);
+  await copyDialogueDataToGenerated(EB_FULL_WORLD_OUT);
   return result;
 }
 
-async function copyCustomDialogueToGenerated(out: string): Promise<void> {
-  const target = resolve(out, CUSTOM_DIALOGUE_OUTPUT);
+async function copyJsonToGenerated(source: string, out: string, outputName: string): Promise<void> {
+  const target = resolve(out, outputName);
   await mkdir(dirname(target), { recursive: true });
-  await copyFile(resolve(CUSTOM_DIALOGUE_SOURCE), target);
+  await copyFile(resolve(source), target);
+}
+
+async function copyDialogueDataToGenerated(out: string): Promise<void> {
+  await Promise.all([
+    copyJsonToGenerated(CUSTOM_DIALOGUE_SOURCE, out, CUSTOM_DIALOGUE_OUTPUT),
+    copyJsonToGenerated(SWAGBOUND_DIALOGUE_LIBRARY_SOURCE, out, SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT)
+  ]);
 }
 
 async function main(): Promise<void> {

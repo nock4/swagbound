@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { interactionEvents } from "../src/eventRunner";
 import { GameFlags, talkedFlag } from "../src/gameFlags";
 
@@ -144,6 +144,57 @@ describe("interactionEvents", () => {
       { kind: "dialogue", pages: ["NPC page one.", "NPC page two."] },
       { kind: "setFlag", flag: "npc:745:talked" }
     ]);
+  });
+
+  it("resolves custom dialogue refs through the library", () => {
+    const flags = new GameFlags();
+
+    expect(interactionEvents({
+      npcId: 745,
+      textPointer: "robot.greeter"
+    }, FALLBACK_REFERENCE, flags, {
+      byNpcId: {
+        "745": { ref: "interior:greeting" }
+      },
+      byTextPointer: {}
+    }, {
+      entries: {
+        "interior:greeting": {
+          speaker: "Biscuit",
+          pages: ["Library page one.", "Library page two."]
+        }
+      }
+    })).toEqual([
+      { kind: "dialogue", pages: ["Library page one.", "Library page two."] },
+      { kind: "setFlag", flag: "npc:745:talked" }
+    ]);
+  });
+
+  it("falls back to the EB pointer and warns when a custom dialogue ref is unknown", () => {
+    const flags = new GameFlags();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+
+    try {
+      expect(interactionEvents({
+        npcId: 745,
+        textPointer: "robot.greeter"
+      }, FALLBACK_REFERENCE, flags, {
+        byNpcId: {
+          "745": { ref: "interior:missing" }
+        },
+        byTextPointer: {}
+      }, {
+        entries: {}
+      })).toEqual([
+        { kind: "dialogue", reference: "robot.greeter" },
+        { kind: "setFlag", flag: "npc:745:talked" }
+      ]);
+      expect(warn).toHaveBeenCalledWith(
+        'Custom dialogue ref "interior:missing" was not found; using EB fallback.'
+      );
+    } finally {
+      warn.mockRestore();
+    }
   });
 
   it("uses custom dialogue pages by the ccscript pointer it would have selected", () => {

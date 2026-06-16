@@ -9,10 +9,7 @@
       ]
     },
     "78": {
-      "pages": [
-        "Bosch! Wake up. Your phone minted something at 4am, and it is signed with your name.",
-        "The payload just says 'Swag is eternal.' You didn't write that. Somebody beat you to being you."
-      ]
+      "ref": "interior:bosch-bedroom-v0"
     }
   },
   "byTextPointer": {}

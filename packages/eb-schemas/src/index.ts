@@ -264,15 +264,33 @@ export const NpcReferenceCollectionSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
-const CustomDialogueEntrySchema = z.object({
+const CustomDialoguePagesEntrySchema = z.object({
   pages: z.array(z.string()).min(1)
-});
+}).strict();
+
+const CustomDialogueRefEntrySchema = z.object({
+  ref: z.string().min(1)
+}).strict();
+
+const CustomDialogueEntrySchema = z.union([
+  CustomDialoguePagesEntrySchema,
+  CustomDialogueRefEntrySchema
+]);
 
 export const CustomDialogueSchema = z.object({
   schema: z.literal("swagbound.custom-dialogue.v1"),
   comment: z.string().optional(),
   byNpcId: z.record(CustomDialogueEntrySchema),
   byTextPointer: z.record(CustomDialogueEntrySchema)
+});
+
+export const SwagboundDialogueLibrarySchema = z.object({
+  schema: z.literal("swagbound.dialogue-library.v1"),
+  generatedFrom: z.string().min(1),
+  entries: z.record(z.object({
+    speaker: z.string(),
+    pages: z.array(z.string()).min(1)
+  }))
 });
 
 export const TutorialStepStatusSchema = z.enum(["pass", "fail", "blocked", "unknown"]);
@@ -1008,6 +1026,7 @@ export type ScriptCollection = z.infer<typeof ScriptCollectionSchema>;
 export type ScriptCommand = z.infer<typeof ScriptCommandSchema>;
 export type NpcReferenceCollection = z.infer<typeof NpcReferenceCollectionSchema>;
 export type CustomDialogue = z.infer<typeof CustomDialogueSchema>;
+export type SwagboundDialogueLibrary = z.infer<typeof SwagboundDialogueLibrarySchema>;
 export type SpriteGroupCollection = z.infer<typeof SpriteGroupCollectionSchema>;
 export type TutorialStatus = z.infer<typeof TutorialStatusSchema>;
 export type TutorialStep = z.infer<typeof TutorialStepSchema>;
