@@ -10,6 +10,7 @@ export type GlyphSourceRect = {
 
 export type GlyphLayout = GlyphSourceRect & {
   char: string;
+  fontId: number;
   glyphIndex: number;
   draw: boolean;
   dx: number;
@@ -32,14 +33,24 @@ export type ProcessedFontImage = {
   verified: boolean;
 };
 
-export type PreparedBitmapFont = {
-  collection: FontCollection;
+export type PreparedBitmapFontSheet = {
   sheet: FontGlyphSheet;
   rawTextureKey: string;
   textureKey: string;
 };
 
+export type PreparedBitmapFont = PreparedBitmapFontSheet & {
+  collection: FontCollection;
+  sheets: Map<number, PreparedBitmapFontSheet>;
+};
+
+export type BitmapTextRun = {
+  text: string;
+  fontId?: number;
+};
+
 export type BitmapTextOptions = {
+  fontId?: number;
   scale?: number;
   tint?: number;
   lineSpacing?: number;
@@ -51,6 +62,14 @@ const DEFAULT_TINT = 0xf8fafc;
 
 export function primaryFontSheet(font: FontCollection | undefined): FontGlyphSheet | undefined {
   return font?.fonts.find((sheet) => sheet.id === font.primaryFontId);
+}
+
+export function fontSheetForId(font: FontCollection, fontId: number | undefined): FontGlyphSheet {
+  return font.fonts.find((sheet) => sheet.id === fontId) ?? primaryFontSheet(font) ?? font.fonts[0];
+}
+
+export function preparedFontSheetForId(font: PreparedBitmapFont, fontId: number | undefined): PreparedBitmapFontSheet {
+  return font.sheets.get(fontId ?? font.collection.primaryFontId) ?? font.sheets.get(font.collection.primaryFontId) ?? font;
 }
 
 export function rawBitmapFontTextureKey(sheet: Pick<FontGlyphSheet, "id">): string {
@@ -66,13 +85,14 @@ export function bitmapFontFrameName(glyphIndex: number): string {
 }
 
 export function queueBitmapFontAssets(scene: Phaser.Scene, font: FontCollection | undefined): void {
-  const sheet = primaryFontSheet(font);
-  if (!sheet) {
+  if (!font) {
     return;
   }
-  const key = rawBitmapFontTextureKey(sheet);
-  if (!scene.textures.exists(key)) {
-    scene.load.image(key, `/generated/${sheet.file}`);
+  for (const sheet of font.fonts) {
+    const key = rawBitmapFontTextureKey(sheet);
+    if (!scene.textures.exists(key)) {
+      scene.load.image(key, `/generated/${sheet.file}`);
+    }
   }
 }
 
@@ -115,6 +135,25 @@ export function measureBitmapText(
   return { width: layout.width, height: layout.height, lineCount: layout.lineCount };
 }
 
+export function measureBitmapTextForFontId(
+  font: FontCollection,
+  fontId: number,
+  text: string,
+  options: BitmapTextOptions = {}
+): { width: number; height: number; lineCount: number } {
+  const sheet = fontSheetForId(font, fontId);
+  return measureBitmapText(font, sheet, text, options);
+}
+
+export function measureBitmapTextRuns(
+  font: FontCollection,
+  runs: readonly BitmapTextRun[],
+  options: BitmapTextOptions = {}
+): { width: number; height: number; lineCount: number } {
+  const layout = layoutBitmapTextRuns(font, runs, options);
+  return { width: layout.width, height: layout.height, lineCount: layout.lineCount };
+}
+
 export function layoutBitmapText(
   font: FontCollection,
   sheet: FontGlyphSheet,
@@ -138,6 +177,7 @@ export function layoutBitmapText(
       glyphs.push({
         ...rect,
         char,
+        fontId: sheet.id,
         glyphIndex,
         draw: glyphIndex !== 0,
         dx: penX,
@@ -152,6 +192,59 @@ export function layoutBitmapText(
     glyphs,
     width: maxWidth,
     height: lines.length > 0 ? (lines.length - 1) * lineHeight + sheet.cellHeight * scale : 0,
+    lineCount: lines.length
+  };
+}
+
+export function layoutBitmapTextRuns(
+  font: FontCollection,
+  runs: readonly BitmapTextRun[],
+  options: BitmapTextOptions = {}
+): BitmapTextLayout {
+  const normalizedRuns = normalizeRuns(font, runs, options.fontId);
+  if (normalizedRuns.length === 0) {
+    return { glyphs: [], width: 0, height: 0, lineCount: 0 };
+  }
+  if (normalizedRuns.length === 1) {
+    return layoutBitmapText(font, normalizedRuns[0].sheet, normalizedRuns[0].text, {
+      ...options,
+      fontId: normalizedRuns[0].fontId
+    });
+  }
+
+  const scale = integerScale(options.scale);
+  const lineSpacing = Math.max(0, options.lineSpacing ?? 0);
+  const maxCellHeight = normalizedRuns.reduce((height, run) => Math.max(height, run.sheet.cellHeight), 0);
+  const lineHeight = normalizeLineHeight(options.lineHeight, maxCellHeight * scale + lineSpacing);
+  const lines = wrapBitmapTextRunChars(font, runChars(normalizedRuns), options.maxWidth, scale);
+  const glyphs: GlyphLayout[] = [];
+  let maxWidth = 0;
+
+  lines.forEach((line, lineIndex) => {
+    let penX = 0;
+    for (const item of line) {
+      const codepoint = item.char.codePointAt(0);
+      const glyphIndex = codepoint === undefined ? 0 : glyphIndexForCodepoint(codepoint, font, item.sheet);
+      const rect = glyphSourceRect(glyphIndex, item.sheet);
+      const advance = glyphAdvance(glyphIndex, item.sheet, scale);
+      glyphs.push({
+        ...rect,
+        char: item.char,
+        fontId: item.fontId,
+        glyphIndex,
+        draw: glyphIndex !== 0,
+        dx: penX,
+        dy: lineIndex * lineHeight
+      });
+      penX += advance;
+    }
+    maxWidth = Math.max(maxWidth, penX);
+  });
+
+  return {
+    glyphs,
+    width: maxWidth,
+    height: lines.length > 0 ? (lines.length - 1) * lineHeight + maxCellHeight * scale : 0,
     lineCount: lines.length
   };
 }
@@ -217,26 +310,23 @@ export function prepareBitmapFont(scene: Phaser.Scene, font: FontCollection | un
   if (!font || !sheet) {
     return undefined;
   }
-  const rawTextureKey = rawBitmapFontTextureKey(sheet);
-  if (!scene.textures.exists(rawTextureKey)) {
-    return undefined;
-  }
-
-  const textureKey = processedBitmapFontTextureKey(sheet);
-  if (!scene.textures.exists(textureKey) && !createProcessedTexture(scene, rawTextureKey, textureKey, sheet)) {
-    return undefined;
-  }
-
-  const texture = scene.textures.get(textureKey);
-  for (let glyphIndex = 0; glyphIndex < sheet.glyphCount; glyphIndex += 1) {
-    const frameName = bitmapFontFrameName(glyphIndex);
-    if (!texture.has(frameName)) {
-      const rect = glyphSourceRect(glyphIndex, sheet);
-      texture.add(frameName, 0, rect.x, rect.y, rect.width, rect.height);
+  const sheets = new Map<number, PreparedBitmapFontSheet>();
+  for (const candidate of font.fonts) {
+    const prepared = prepareBitmapFontSheet(scene, candidate);
+    if (prepared) {
+      sheets.set(candidate.id, prepared);
     }
   }
+  const primary = sheets.get(sheet.id);
+  if (!primary) {
+    return undefined;
+  }
 
-  return { collection: font, sheet, rawTextureKey, textureKey };
+  return {
+    collection: font,
+    sheets,
+    ...primary
+  };
 }
 
 export function drawText(
@@ -254,8 +344,9 @@ export function drawText(
 export class BitmapFontText {
   readonly container: Phaser.GameObjects.Container;
   private text = "";
+  private runs: BitmapTextRun[] = [];
   private options: Required<Pick<BitmapTextOptions, "scale" | "tint" | "lineSpacing">> &
-    Pick<BitmapTextOptions, "lineHeight" | "maxWidth">;
+    Pick<BitmapTextOptions, "fontId" | "lineHeight" | "maxWidth">;
 
   constructor(
     private readonly scene: Phaser.Scene,
@@ -271,21 +362,29 @@ export class BitmapFontText {
   }
 
   setText(text: string): this {
-    if (text === this.text && this.container.length > 0) {
+    return this.setRuns([{ text, fontId: this.options.fontId }]);
+  }
+
+  setRuns(runs: readonly BitmapTextRun[]): this {
+    const normalizedRuns = normalizeTextRunsForCache(runs, this.options.fontId);
+    const text = normalizedRuns.map((run) => run.text).join("");
+    if (text === this.text && runsEqual(normalizedRuns, this.runs) && this.container.length > 0) {
       return this;
     }
     this.text = text;
+    this.runs = normalizedRuns;
     this.container.removeAll(true);
-    const layout = layoutBitmapText(this.font.collection, this.font.sheet, text, this.options);
+    const layout = layoutBitmapTextRuns(this.font.collection, normalizedRuns, this.options);
     const scale = this.options.scale;
     for (const glyph of layout.glyphs) {
       if (!glyph.draw) {
         continue;
       }
+      const sheet = preparedFontSheetForId(this.font, glyph.fontId);
       const image = this.scene.add.image(
         glyph.dx,
         glyph.dy,
-        this.font.textureKey,
+        sheet.textureKey,
         bitmapFontFrameName(glyph.glyphIndex)
       ).setOrigin(0, 0).setScale(scale).setTint(this.options.tint);
       this.container.add(image);
@@ -383,6 +482,105 @@ function textWidth(font: FontCollection, sheet: FontGlyphSheet, text: string, sc
   return width;
 }
 
+type NormalizedRun = {
+  text: string;
+  fontId: number;
+  sheet: FontGlyphSheet;
+};
+
+type RunChar = {
+  char: string;
+  fontId: number;
+  sheet: FontGlyphSheet;
+};
+
+function normalizeRuns(font: FontCollection, runs: readonly BitmapTextRun[], defaultFontId: number | undefined): NormalizedRun[] {
+  const defaultSheet = fontSheetForId(font, defaultFontId ?? font.primaryFontId);
+  const sourceRuns = runs.length > 0 ? runs : [{ text: "", fontId: defaultSheet.id }];
+  const normalized: NormalizedRun[] = [];
+  for (const run of sourceRuns) {
+    if (run.text.length === 0) {
+      continue;
+    }
+    const sheet = fontSheetForId(font, run.fontId ?? defaultSheet.id);
+    const previous = normalized[normalized.length - 1];
+    if (previous && previous.fontId === sheet.id) {
+      previous.text += run.text;
+    } else {
+      normalized.push({ text: run.text, fontId: sheet.id, sheet });
+    }
+  }
+  return normalized;
+}
+
+function runChars(runs: readonly NormalizedRun[]): RunChar[] {
+  return runs.flatMap((run) =>
+    Array.from(run.text).map((char) => ({
+      char,
+      fontId: run.fontId,
+      sheet: run.sheet
+    }))
+  );
+}
+
+function wrapBitmapTextRunChars(
+  font: FontCollection,
+  chars: RunChar[],
+  maxWidth: number | undefined,
+  scale: number
+): RunChar[][] {
+  const lines: RunChar[][] = [];
+  let line: RunChar[] = [];
+  let width = 0;
+  const widthLimit = Number.isFinite(maxWidth) && (maxWidth ?? 0) > 0 ? maxWidth as number : undefined;
+
+  const pushLine = () => {
+    lines.push(line);
+    line = [];
+    width = 0;
+  };
+
+  for (const item of chars) {
+    if (item.char === "\n") {
+      pushLine();
+      continue;
+    }
+    const codepoint = item.char.codePointAt(0);
+    const glyphIndex = codepoint === undefined ? 0 : glyphIndexForCodepoint(codepoint, font, item.sheet);
+    const advance = glyphAdvance(glyphIndex, item.sheet, scale);
+    if (widthLimit !== undefined && line.length > 0 && width + advance > widthLimit) {
+      pushLine();
+    }
+    line.push(item);
+    width += advance;
+  }
+  lines.push(line);
+  return lines;
+}
+
+function prepareBitmapFontSheet(scene: Phaser.Scene, sheet: FontGlyphSheet): PreparedBitmapFontSheet | undefined {
+  const rawTextureKey = rawBitmapFontTextureKey(sheet);
+  if (!scene.textures.exists(rawTextureKey)) {
+    return undefined;
+  }
+
+  const textureKey = processedBitmapFontTextureKey(sheet);
+  if (!scene.textures.exists(textureKey) && !createProcessedTexture(scene, rawTextureKey, textureKey, sheet)) {
+    return undefined;
+  }
+
+  const texture = scene.textures.get(textureKey);
+  for (let glyphIndex = 0; glyphIndex < sheet.glyphCount; glyphIndex += 1) {
+    const frameName = bitmapFontFrameName(glyphIndex);
+    if (!texture.has(frameName)) {
+      const rect = glyphSourceRect(glyphIndex, sheet);
+      texture.add(frameName, 0, rect.x, rect.y, rect.width, rect.height);
+    }
+  }
+
+  return { sheet, rawTextureKey, textureKey };
+}
+
 function createProcessedTexture(
   scene: Phaser.Scene,
   rawTextureKey: string,
@@ -416,14 +614,28 @@ function createProcessedTexture(
 function normalizeTextOptions(
   options: BitmapTextOptions
 ): Required<Pick<BitmapTextOptions, "scale" | "tint" | "lineSpacing">> &
-  Pick<BitmapTextOptions, "lineHeight" | "maxWidth"> {
+  Pick<BitmapTextOptions, "fontId" | "lineHeight" | "maxWidth"> {
   return {
     scale: integerScale(options.scale),
     tint: options.tint ?? DEFAULT_TINT,
     lineSpacing: Math.max(0, options.lineSpacing ?? 0),
+    ...(options.fontId !== undefined ? { fontId: Math.max(0, Math.trunc(options.fontId)) } : {}),
     ...(options.lineHeight !== undefined ? { lineHeight: normalizeLineHeight(options.lineHeight, 1) } : {}),
     ...(options.maxWidth !== undefined ? { maxWidth: options.maxWidth } : {})
   };
+}
+
+function normalizeTextRunsForCache(runs: readonly BitmapTextRun[], defaultFontId: number | undefined): BitmapTextRun[] {
+  return runs
+    .filter((run) => run.text.length > 0)
+    .map((run) => ({
+      text: run.text,
+      fontId: run.fontId ?? defaultFontId
+    }));
+}
+
+function runsEqual(a: readonly BitmapTextRun[], b: readonly BitmapTextRun[]): boolean {
+  return a.length === b.length && a.every((run, index) => run.text === b[index]?.text && run.fontId === b[index]?.fontId);
 }
 
 function integerScale(scale = 1): number {

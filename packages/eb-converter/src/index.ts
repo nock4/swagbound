@@ -415,6 +415,16 @@ const styleSegment = (
   ...(args.length > 0 ? { args } : {})
 });
 
+export const EB_TEXT_FONT_IDS = {
+  normal: 0,
+  saturn: 1
+} as const;
+
+const fontSegment = (
+  fontId: typeof EB_TEXT_FONT_IDS[keyof typeof EB_TEXT_FONT_IDS],
+  value: keyof typeof EB_TEXT_FONT_IDS
+): DialogueSegment => styleSegment("font", [fontId], value);
+
 const windowSegment = (
   op: Extract<DialogueSegment, { kind: "window" }>["op"],
   args: number[] = []
@@ -591,8 +601,8 @@ export const CCS_TEXT_CODE_REGISTRY: CcsTextCodeRegistryEntry[] = [
   prefixCode("1F 20", 4, [0x1F, 0x20], (bytes, raw) => teleportSegment(bytes[2], bytes[3], raw)),
   prefixCode("1F 21", 3, [0x1F, 0x21], (bytes, raw) => warpSegment(bytes[2], raw)),
   prefixCode("1F 23", 4, [0x1F, 0x23], (bytes, raw) => battleSegment(readLittleEndian(bytes.slice(2)), raw)),
-  fixedCode("1F 30", [0x1F, 0x30], () => styleSegment("font", [], "normal")),
-  fixedCode("1F 31", [0x1F, 0x31], () => styleSegment("font", [], "saturn")),
+  fixedCode("1F 30", [0x1F, 0x30], () => fontSegment(EB_TEXT_FONT_IDS.normal, "normal")),
+  fixedCode("1F 31", [0x1F, 0x31], () => fontSegment(EB_TEXT_FONT_IDS.saturn, "saturn")),
   prefixCode("1F 41", 3, [0x1F, 0x41], (bytes, raw) => eventSegment(bytes[2], raw)),
   fixedCode("1F 69", [0x1F, 0x69], (_bytes, raw) => anchorWarpSegment(raw)),
   prefixCode("1F 71", 4, [0x1F, 0x71], (bytes, raw) => learnPsiSegment(bytes[2], bytes[3], raw)),
@@ -756,9 +766,9 @@ function segmentForMacro(raw: string): DialogueSegment | undefined {
     case "text_blips":
       return args ? styleSegment("blips", [args[0] ?? 0]) : controlSegment(name, raw);
     case "font_normal":
-      return styleSegment("font", [], "normal");
+      return fontSegment(EB_TEXT_FONT_IDS.normal, "normal");
     case "font_saturn":
-      return styleSegment("font", [], "saturn");
+      return fontSegment(EB_TEXT_FONT_IDS.saturn, "saturn");
     case "stat":
       return args ? substitutionSegment("stat", [args[0] ?? 0]) : controlSegment(name, raw);
     case "name":

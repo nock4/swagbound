@@ -83,6 +83,26 @@ describe("NPC reference scanner", () => {
 });
 
 describe("script resolver and dialogue playback", () => {
+  it("tokenizes EB font-select bytes into numeric font-id style segments", () => {
+    expect(tokenizeCcsString("A[1F 31]B[1F 30]C")).toEqual([
+      { kind: "text", value: "A" },
+      { kind: "style", style: "font", value: "saturn", args: [1] },
+      { kind: "text", value: "B" },
+      { kind: "style", style: "font", value: "normal", args: [0] },
+      { kind: "text", value: "C" }
+    ]);
+  });
+
+  it("tokenizes EB font-select macros into the same font ids", () => {
+    expect(tokenizeCcsString("A{font_saturn}B{font_normal}C")).toEqual([
+      { kind: "text", value: "A" },
+      { kind: "style", style: "font", value: "saturn", args: [1] },
+      { kind: "text", value: "B" },
+      { kind: "style", style: "font", value: "normal", args: [0] },
+      { kind: "text", value: "C" }
+    ]);
+  });
+
   it("resolves robot.hello_world from generated script commands", async () => {
     const temp = await mkdtemp(path.join(os.tmpdir(), "eb-resolver-"));
     try {

@@ -6,7 +6,10 @@ import {
   INSTANT_TEXT_SPEED_CPS,
   confirmActionForReveal,
   renderPageToText,
+  renderPageToTextRuns,
+  revealTextRuns,
   revealState,
+  type DialogueTextRun,
   type DialogueResolver,
   type RevealState
 } from "./dialogueRenderer";
@@ -408,8 +411,16 @@ export class DialogueController {
     return renderPageToText(this.pages[this.pageIndex], this.resolver);
   }
 
+  get currentTextRuns(): DialogueTextRun[] {
+    return renderPageToTextRuns(this.pages[this.pageIndex], this.resolver);
+  }
+
   get revealedText(): string {
     return this.currentRevealState.revealedText;
+  }
+
+  get revealedTextRuns(): DialogueTextRun[] {
+    return revealTextRuns(this.currentTextRuns, this.currentRevealState.revealedChars);
   }
 
   get revealComplete(): boolean {

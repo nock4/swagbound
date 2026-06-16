@@ -7,7 +7,10 @@ import {
   confirmActionForReveal,
   perPagePauseMs,
   renderPageToText,
+  renderPageToTextRuns,
   renderSegmentsToText,
+  renderSegmentsToTextRuns,
+  revealTextRuns,
   revealState,
   type DialogueResolver
 } from "../src/dialogueRenderer";
@@ -131,6 +134,41 @@ describe("renderSegmentsToText", () => {
       { kind: "control", code: "raw", raw: "[00]" },
       { kind: "text", value: "B" }
     ])).toBe("AB");
+  });
+
+  it("emits font-tagged runs while keeping font 0 as the default", () => {
+    expect(renderSegmentsToTextRuns([
+      { kind: "text", value: "A" },
+      { kind: "style", style: "font", value: "saturn", args: [1] },
+      { kind: "text", value: "B" },
+      { kind: "style", style: "font", value: "normal", args: [0] },
+      { kind: "text", value: "C" }
+    ])).toEqual([
+      { text: "A", fontId: 0 },
+      { text: "B", fontId: 1 },
+      { text: "C", fontId: 0 }
+    ]);
+  });
+
+  it("preserves page.text for plain all-text pages in the run model", () => {
+    const dialoguePage = page("First text command.\nSecond text command.", [
+      { kind: "text", value: "First text command." },
+      { kind: "text", value: "Second text command." }
+    ]);
+
+    expect(renderPageToTextRuns(dialoguePage)).toEqual([
+      { text: dialoguePage.text, fontId: 0 }
+    ]);
+  });
+
+  it("reveals text runs without losing their font ids", () => {
+    expect(revealTextRuns([
+      { text: "AB", fontId: 0 },
+      { text: "CD", fontId: 1 }
+    ], 3)).toEqual([
+      { text: "AB", fontId: 0 },
+      { text: "C", fontId: 1 }
+    ]);
   });
 
   it("keeps a single plain-text segment identical to page.text", () => {

@@ -5,6 +5,8 @@ import {
   glyphSourceRect,
   layoutBitmapText,
   measureBitmapText,
+  measureBitmapTextForFontId,
+  measureBitmapTextRuns,
   processFontImageData
 } from "../src/bitmapFont";
 
@@ -23,6 +25,16 @@ const sheet: FontGlyphSheet = {
   cellWidth: 16,
   cellHeight: 16,
   widths
+};
+
+const saturnWidths = Array.from({ length: 128 }, () => 1);
+saturnWidths[33] = 10;
+
+const saturnSheet: FontGlyphSheet = {
+  ...sheet,
+  id: 1,
+  file: "assets/font/1.png",
+  widths: saturnWidths
 };
 
 const font: FontCollection = {
@@ -56,6 +68,27 @@ describe("bitmap font mapping", () => {
       lineCount: 1
     });
     expect(measureBitmapText(font, sheet, "\u0001", { scale: 2 }).width).toBe(4);
+  });
+
+  it("measures a requested font id with that sheet's widths", () => {
+    const multiFont: FontCollection = {
+      ...font,
+      fonts: [sheet, saturnSheet]
+    };
+
+    expect(measureBitmapTextForFontId(multiFont, 1, "A", { scale: 2 }).width).toBe(20);
+  });
+
+  it("measures multi-run text using each run's font sheet", () => {
+    const multiFont: FontCollection = {
+      ...font,
+      fonts: [sheet, saturnSheet]
+    };
+
+    expect(measureBitmapTextRuns(multiFont, [
+      { text: "A", fontId: 1 },
+      { text: "B", fontId: 0 }
+    ], { scale: 2 }).width).toBe(30);
   });
 
   it("lays out newline-separated glyphs without treating line breaks as glyphs", () => {

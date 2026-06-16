@@ -1,6 +1,12 @@
 import type { CharacterCollection, DialoguePage, DialogueSegment, ItemCollection, PsiCollection } from "@eb/schemas";
 
 export const INSTANT_TEXT_SPEED_CPS = Number.POSITIVE_INFINITY;
+export const DEFAULT_DIALOGUE_FONT_ID = 0;
+
+export type DialogueTextRun = {
+  text: string;
+  fontId: number;
+};
 
 export interface DialogueResolver {
   playerName(): string;
@@ -112,6 +118,52 @@ export function renderSegmentsToText(
   return output;
 }
 
+export function renderSegmentsToTextRuns(
+  segments: readonly DialogueSegment[] | undefined,
+  resolver: DialogueResolver = DefaultResolver,
+  defaultFontId = DEFAULT_DIALOGUE_FONT_ID
+): DialogueTextRun[] {
+  let activeFontId = defaultFontId;
+  const runs: DialogueTextRun[] = [];
+
+  const append = (text: string) => {
+    if (text.length === 0) {
+      return;
+    }
+    const previous = runs[runs.length - 1];
+    if (previous && previous.fontId === activeFontId) {
+      previous.text += text;
+    } else {
+      runs.push({ text, fontId: activeFontId });
+    }
+  };
+
+  for (const segment of segments ?? []) {
+    switch (segment.kind) {
+      case "text":
+        append(segment.value);
+        break;
+      case "break":
+        append("\n");
+        break;
+      case "substitution":
+        append(renderSubstitution(segment, resolver));
+        break;
+      case "style":
+        if (segment.style === "font") {
+          activeFontId = fontIdFromStyleSegment(segment, defaultFontId);
+        }
+        break;
+      case "pause":
+      case "prompt":
+      case "window":
+      case "control":
+        break;
+    }
+  }
+  return runs;
+}
+
 export function renderPageToText(
   page: Pick<DialoguePage, "text" | "segments"> | undefined,
   resolver: DialogueResolver = DefaultResolver
@@ -124,6 +176,36 @@ export function renderPageToText(
   }
   const rendered = renderSegmentsToText(page.segments, resolver);
   return page.segments.every((segment) => segment.kind === "text") ? page.text : rendered;
+}
+
+export function renderPageToTextRuns(
+  page: Pick<DialoguePage, "text" | "segments"> | undefined,
+  resolver: DialogueResolver = DefaultResolver,
+  defaultFontId = DEFAULT_DIALOGUE_FONT_ID
+): DialogueTextRun[] {
+  if (!page) {
+    return [];
+  }
+  if (!page.segments || page.segments.length === 0 || page.segments.every((segment) => segment.kind === "text")) {
+    return page.text.length > 0 ? [{ text: page.text, fontId: defaultFontId }] : [];
+  }
+  return renderSegmentsToTextRuns(page.segments, resolver, defaultFontId);
+}
+
+export function revealTextRuns(runs: readonly DialogueTextRun[], revealedChars: number): DialogueTextRun[] {
+  const revealed: DialogueTextRun[] = [];
+  let remaining = Math.max(0, Math.trunc(revealedChars));
+  for (const run of runs) {
+    if (remaining <= 0) {
+      break;
+    }
+    const text = run.text.slice(0, remaining);
+    if (text.length > 0) {
+      revealed.push({ text, fontId: run.fontId });
+    }
+    remaining -= run.text.length;
+  }
+  return revealed;
 }
 
 export type RevealState = {
@@ -176,4 +258,22 @@ export function textSpeedCpsFromSearch(search: string | undefined | null): numbe
   }
   const parsed = Number(raw);
   return Number.isFinite(parsed) ? parsed : INSTANT_TEXT_SPEED_CPS;
+}
+
+function fontIdFromStyleSegment(
+  segment: Extract<DialogueSegment, { kind: "style" }>,
+  defaultFontId: number
+): number {
+  const explicit = segment.args?.[0];
+  if (typeof explicit === "number" && Number.isInteger(explicit) && explicit >= 0) {
+    return explicit;
+  }
+  switch (segment.value?.toLowerCase()) {
+    case "normal":
+      return 0;
+    case "saturn":
+      return 1;
+    default:
+      return defaultFontId;
+  }
 }

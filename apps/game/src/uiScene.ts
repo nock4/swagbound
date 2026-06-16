@@ -7,6 +7,7 @@ import {
   measureBitmapText,
   prepareBitmapFont,
   queueBitmapFontAssets,
+  type BitmapTextRun,
   type BitmapTextOptions,
   type PreparedBitmapFont
 } from "./bitmapFont";
@@ -179,6 +180,7 @@ export class UiScene extends Phaser.Scene {
 
     const open = world.dialogue.open;
     const text = open ? world.dialogue.revealedText : "";
+    const textRuns = open ? world.dialogue.revealedTextRuns : [];
     const showAdvanceIndicator = open && world.dialogue.revealComplete;
     const footer = open
       ? (!world.dialogue.revealComplete
@@ -188,7 +190,7 @@ export class UiScene extends Phaser.Scene {
     const panelVisible = world.debugPanelVisible;
     const runtimeLines = panelVisible ? world.runtimeLines() : [];
     const menuScreens = world.menuRenderStack();
-    const signature = `${open}|${text}|${footer}|${showAdvanceIndicator}|${world.prompt}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}`;
+    const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${world.prompt}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}`;
     if (signature === this.lastSignature) {
       this.renderMenuCursors();
       return;
@@ -196,13 +198,19 @@ export class UiScene extends Phaser.Scene {
     this.lastSignature = signature;
 
     this.promptText?.setText(world.prompt);
-    this.drawDialogue(open, text, footer, showAdvanceIndicator);
+    this.drawDialogue(open, text, textRuns, footer, showAdvanceIndicator);
     this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);
     this.drawMenu(menuScreens);
     this.renderMenuCursors();
   }
 
-  private drawDialogue(open: boolean, text: string, footer: string, showAdvanceIndicator: boolean): void {
+  private drawDialogue(
+    open: boolean,
+    text: string,
+    textRuns: readonly BitmapTextRun[],
+    footer: string,
+    showAdvanceIndicator: boolean
+  ): void {
     const graphics = this.boxGraphics;
     if (!graphics || !this.dialogueText || !this.footerText) {
       return;
@@ -212,7 +220,7 @@ export class UiScene extends Phaser.Scene {
     this.dialogueWindow = undefined;
     this.clearMoreArrow();
     if (!open) {
-      this.dialogueText.setText("");
+      this.setGameText(this.dialogueText, "");
       this.footerText.setText("");
       return;
     }
@@ -222,7 +230,7 @@ export class UiScene extends Phaser.Scene {
     this.dialogueWindow = this.drawWindowFrameOrFallback(graphics, x, y, boxWidth, boxHeight, 6, 10);
 
     this.dialogueText.setPosition(x + DIALOGUE_HORIZONTAL_PADDING, y + DIALOGUE_VERTICAL_PADDING);
-    this.dialogueText.setText(text);
+    this.setGameText(this.dialogueText, text, textRuns);
     const arrowShown = showAdvanceIndicator && this.drawMoreArrow(x, y, boxWidth, boxHeight);
     if (arrowShown) {
       this.footerText.setText("");
@@ -425,6 +433,14 @@ export class UiScene extends Phaser.Scene {
 
   private menuLineHeight(): number {
     return ebTextLineHeight({ lineSpacing: UI_LINE_SPACING });
+  }
+
+  private setGameText(target: GameText, text: string, runs?: readonly BitmapTextRun[]): void {
+    if (target instanceof BitmapFontText && runs) {
+      target.setRuns(runs);
+      return;
+    }
+    target.setText(text);
   }
 
   private renderMenuCursors(): void {
