@@ -15,6 +15,7 @@ import {
   resolveScriptReferenceFlow,
   ScriptCollectionSchema,
   ShopDataSchema,
+  SpriteOverridesSchema,
   SwagboundDialogueLibrarySchema,
   SpriteGroupCollectionSchema,
   SpriteSheetCollectionSchema,
@@ -38,6 +39,7 @@ import {
   type PsiCollection,
   type ScriptCollection,
   type ShopData,
+  type SpriteOverrides,
   type SwagboundDialogueLibrary,
   type SpriteGroupCollection,
   type SpriteSheetCollection,
@@ -53,6 +55,7 @@ export const TARGET_REFERENCE = "robot.hello_world";
 const ADDED_NPCS_FILE = "added-npcs.json";
 const CUSTOM_DIALOGUE_FILE = "custom-dialogue.json";
 const SWAGBOUND_DIALOGUE_LIBRARY_FILE = "swagbound-dialogue-library.json";
+const SPRITE_OVERRIDES_FILE = "sprite-overrides.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -66,6 +69,7 @@ export type GameData = {
   validationReport?: ValidationReport;
   world?: WorldArtifact;
   sprites?: SpriteSheetCollection;
+  spriteOverrides?: SpriteOverrides;
   teleportDestinations?: TeleportDestinations;
   encounters?: Encounters;
   battle?: BattleData;
@@ -124,6 +128,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     validationReport,
     world,
     sprites,
+    spriteOverrides,
     teleportDestinations,
     encounters,
     battle,
@@ -144,6 +149,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${manifest.files.validationReport}`, ValidationReportSchema),
     loadJson(`/generated/${manifest.files.world}`, WorldArtifactSchema),
     loadJson(`/generated/${manifest.files.sprites}`, SpriteSheetCollectionSchema),
+    loadJson(`/generated/${SPRITE_OVERRIDES_FILE}`, SpriteOverridesSchema),
     manifest.files.teleportDestinations
       ? loadJson(`/generated/${manifest.files.teleportDestinations}`, TeleportDestinationsSchema)
       : Promise.resolve(undefined),
@@ -187,6 +193,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     validationReport,
     world,
     sprites,
+    spriteOverrides,
     teleportDestinations,
     encounters,
     battle,

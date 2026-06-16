@@ -21,6 +21,7 @@
 export type Facing = "up" | "down" | "left" | "right";
 
 export type DirectionFrames = Record<Facing, [number, number]>;
+export type DirectionFrameSequence = Record<Facing, readonly [number, ...number[]]>;
 
 export const CANONICAL_DIRECTION_FRAMES: DirectionFrames = {
   up: [0, 1],
@@ -65,7 +66,7 @@ export type StepOptions = {
   bounds: { minX: number; maxX: number; minY: number; maxY: number };
   /** Feet-position collision test in world pixels. */
   blocked: (x: number, y: number) => boolean;
-  frames?: DirectionFrames;
+  frames?: DirectionFrameSequence;
   walkFrameMs?: number;
 };
 
@@ -73,7 +74,7 @@ export function createPlayerState(
   x: number,
   y: number,
   facing: Facing = "down",
-  frames: DirectionFrames = CANONICAL_DIRECTION_FRAMES
+  frames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES
 ): PlayerState {
   return {
     x,
@@ -183,14 +184,14 @@ export function stepPlayer(state: PlayerState, input: MoveInput, options: StepOp
   }
 
   state.walkClockMs += options.deltaMs;
-  const pair = frames[state.facing];
+  const sequence = frames[state.facing];
   state.animKey = `walk-${state.facing}`;
-  state.animFrame = pair[Math.floor(state.walkClockMs / walkFrameMs) % 2];
+  state.animFrame = sequence[Math.floor(state.walkClockMs / walkFrameMs) % sequence.length];
   return state;
 }
 
 /** Locks input (dialogue/cutscene) and freezes the actor on its idle frame. */
-export function lockPlayer(state: PlayerState, frames: DirectionFrames = CANONICAL_DIRECTION_FRAMES): PlayerState {
+export function lockPlayer(state: PlayerState, frames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES): PlayerState {
   state.inputLocked = true;
   state.moving = false;
   state.velocityX = 0;

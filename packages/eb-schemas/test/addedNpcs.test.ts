@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   ADDED_NPC_MIN_ID,
   AddedNpcsSchema,
-  CustomDialogueSchema
+  CustomDialogueSchema,
+  SpriteOverridesSchema
 } from "../src/index";
 
 describe("AddedNpcsSchema", () => {
@@ -88,6 +89,77 @@ describe("CustomDialogueSchema shop entries", () => {
       schema: "swagbound.custom-dialogue.v1",
       byNpcId: { "1": { pages: ["Inline."], ref: "library:entry" } },
       byTextPointer: {}
+    }).success).toBe(false);
+  });
+});
+
+describe("SpriteOverridesSchema", () => {
+  it("parses a player override and future NPC/enemy override maps", () => {
+    const parsed = SpriteOverridesSchema.parse({
+      schema: "swagbound.sprite-overrides.v1",
+      player: {
+        image: "assets/swagbound/hero/lsw-2821-walk.png",
+        frameWidth: 192,
+        frameHeight: 192,
+        animations: {
+          down: [0, 1, 2, 3],
+          left: [4, 5, 6, 7],
+          right: [8, 9, 10, 11],
+          up: [12, 13, 14, 15]
+        },
+        displayHeight: 24,
+        originX: 0.5,
+        originY: 1
+      },
+      byNpcId: {
+        "744": {
+          image: "assets/swagbound/hero/lsw-2821-walk.png",
+          frameWidth: 192,
+          frameHeight: 192,
+          animations: {
+            down: [0],
+            left: [4],
+            right: [8],
+            up: [12]
+          }
+        }
+      },
+      byEnemyId: {}
+    });
+
+    expect(parsed.player?.animations.down).toEqual([0, 1, 2, 3]);
+    expect(parsed.byNpcId?.["744"].animations.left).toEqual([4]);
+  });
+
+  it("rejects missing facing sequences and paths outside public assets", () => {
+    expect(SpriteOverridesSchema.safeParse({
+      schema: "swagbound.sprite-overrides.v1",
+      player: {
+        image: "../private/hero.png",
+        frameWidth: 192,
+        frameHeight: 192,
+        animations: {
+          down: [0],
+          left: [4],
+          right: [8],
+          up: [12]
+        }
+      }
+    }).success).toBe(false);
+
+    expect(SpriteOverridesSchema.safeParse({
+      schema: "swagbound.sprite-overrides.v1",
+      player: {
+        image: "assets/swagbound/hero/lsw-2821-walk.png",
+        frameWidth: 192,
+        frameHeight: 192,
+        animations: {
+          down: [],
+          left: [4],
+          right: [8],
+          up: [12]
+        }
+      }
     }).success).toBe(false);
   });
 });

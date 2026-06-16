@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { isNpcVisibleForEventFlags, type DialoguePage, type EventEffect, type ItemData, type SpriteSheet, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { isNpcVisibleForEventFlags, type DialoguePage, type EventEffect, type ItemData, type SpriteOverride, type SpriteSheet, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
 import { rollEncounter, sectorIndexForTile } from "./encounterLogic";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
 import type { BattleReturnContext, BattleReturnSource, ChunkedWorldRestore } from "./battleReturn";
@@ -83,6 +83,7 @@ import {
   stepPlayer,
   toFacing,
   unlockPlayer,
+  type DirectionFrameSequence,
   type DirectionFrames,
   type Facing,
   type InteractionCandidate,
@@ -157,6 +158,12 @@ import { buildPartyMember, type PartyMember } from "./characterModel";
 import { activeWindowFlavorId } from "./windowSettings";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import {
+  spriteOverrideAssetUrl,
+  spriteOverrideDirectionFrames,
+  spriteOverrideFrame,
+  spriteOverrideScale
+} from "./spriteOverrides";
+import {
   resolveConnectedRoomBounds,
   resolveSectorAreaBounds,
   roomMaskContainsWorldPoint,
@@ -227,6 +234,7 @@ const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
 const COLLISION_OVERLAY_DEPTH = 150_000;
 const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 const ROOM_MASK_EDGE_INSET_SCREEN_PX = 0.5;
+const PLAYER_OVERRIDE_SHEET_KEY = "sprite-override-player";
 
 type TilePoint = { x: number; y: number };
 type ForceEncounterResult =
@@ -238,7 +246,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private world_!: WorldChunked;
   private player?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
   private playerState!: PlayerState;
-  private playerFrames: DirectionFrames = CANONICAL_DIRECTION_FRAMES;
+  private playerFrames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES;
   private npcPlacementsByChunk = new Map<string, NpcPlacement[]>();
   private npcRuntimes = new Map<string, NpcRuntime>();
   private activeNpcDialogue?: ActiveNpcDialogue;
@@ -356,6 +364,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   preload(): void {
+    const playerOverride = this.playerSpriteOverride();
+    if (playerOverride) {
+      this.load.spritesheet(PLAYER_OVERRIDE_SHEET_KEY, spriteOverrideAssetUrl(playerOverride.image), {
+        frameWidth: playerOverride.frameWidth,
+        frameHeight: playerOverride.frameHeight
+      });
+    }
     const playerSheet = this.sheetForGroup(this.world_.player.spriteGroup);
     if (playerSheet) {
       this.load.spritesheet(`sheet-${playerSheet.groupId}`, `/generated/${playerSheet.file}`, {
@@ -397,9 +412,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       returnPlayer ?? restoredPlayer ?? this.parseSpawnOverride() ?? this.newGameOpening?.spawn ?? world.player.spawnWorldPixel
     );
     const playerFacing = returnPlayer?.facing ?? restoredPlayer?.facing ?? "down";
-    this.playerFrames = this.framesForGroup(world.player.spriteGroup);
+    this.playerFrames = this.framesForPlayer(world.player.spriteGroup);
     this.playerState = createPlayerState(spawn.x, spawn.y, playerFacing, this.playerFrames);
-    this.player = this.spawnActor(spawn.x, spawn.y, world.player.spriteGroup, playerFacing);
+    this.player = this.spawnPlayerActor(spawn.x, spawn.y, world.player.spriteGroup, playerFacing);
     this.syncEncounterTileState();
 
     const bounds = this.movementBounds();
@@ -1142,6 +1157,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return CANONICAL_DIRECTION_FRAMES;
   }
 
+  private playerSpriteOverride(): SpriteOverride | undefined {
+    return this.data_.spriteOverrides?.player;
+  }
+
+  private framesForPlayer(spriteGroup: number | undefined): DirectionFrameSequence {
+    const override = this.playerSpriteOverride();
+    return override ? spriteOverrideDirectionFrames(override) : this.framesForGroup(spriteGroup);
+  }
+
   private isNpcVisible(npc: Pick<WorldChunkedNpc, "showSprite" | "eventFlag">): boolean {
     return isNpcVisibleForEventFlags(npc.showSprite, npc.eventFlag, this.gameFlags);
   }
@@ -1164,6 +1188,24 @@ export class ChunkedWorldScene extends Phaser.Scene {
     placeholder.setOrigin(0.5, 1);
     placeholder.setDepth(y);
     return placeholder;
+  }
+
+  private spawnPlayerActor(
+    x: number,
+    y: number,
+    spriteGroup: number | undefined,
+    direction: string | undefined
+  ): Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle {
+    const override = this.playerSpriteOverride();
+    if (override && this.textures.exists(PLAYER_OVERRIDE_SHEET_KEY)) {
+      const facing = toFacing(direction);
+      const sprite = this.add.sprite(x, y, PLAYER_OVERRIDE_SHEET_KEY, spriteOverrideFrame(facing, 0, override));
+      sprite.setOrigin(override.originX ?? 0.5, override.originY ?? 1);
+      sprite.setScale(spriteOverrideScale(override.displayHeight, override.frameHeight));
+      sprite.setDepth(y);
+      return sprite;
+    }
+    return this.spawnActor(x, y, spriteGroup, direction);
   }
 
   private readInput(): MoveInput {

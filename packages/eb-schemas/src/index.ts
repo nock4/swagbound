@@ -240,6 +240,37 @@ export const SpriteGroupCollectionSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+const PublicAssetPathSchema = z.string().min(1).refine((value) => {
+  if (value.startsWith("/") || value.includes("\\") || value.split("/").includes("..")) {
+    return false;
+  }
+  return !/^[a-z][a-z0-9+.-]*:/i.test(value);
+}, "path must be relative to apps/game/public");
+
+const SpriteOverrideFrameSequenceSchema = z.array(z.number().int().nonnegative()).min(1);
+
+export const SpriteOverrideSchema = z.object({
+  image: PublicAssetPathSchema,
+  frameWidth: z.number().int().positive(),
+  frameHeight: z.number().int().positive(),
+  animations: z.object({
+    down: SpriteOverrideFrameSequenceSchema,
+    left: SpriteOverrideFrameSequenceSchema,
+    right: SpriteOverrideFrameSequenceSchema,
+    up: SpriteOverrideFrameSequenceSchema
+  }).strict(),
+  displayHeight: z.number().positive().optional(),
+  originX: z.number().optional(),
+  originY: z.number().optional()
+}).strict();
+
+export const SpriteOverridesSchema = z.object({
+  schema: z.literal("swagbound.sprite-overrides.v1"),
+  player: SpriteOverrideSchema.optional(),
+  byNpcId: z.record(SpriteOverrideSchema).optional(),
+  byEnemyId: z.record(SpriteOverrideSchema).optional()
+}).strict();
+
 export const NpcMetadataSchema = z.object({
   indexedFiles: z.array(z.string()),
   referencesRobotHelloWorld: z.boolean()
@@ -1038,6 +1069,8 @@ export type SpriteSheet = z.infer<typeof SpriteSheetSchema>;
 export type SpriteFacing = z.infer<typeof SpriteFacingSchema>;
 export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;
 export type SpriteSheetCollection = z.infer<typeof SpriteSheetCollectionSchema>;
+export type SpriteOverride = z.infer<typeof SpriteOverrideSchema>;
+export type SpriteOverrides = z.infer<typeof SpriteOverridesSchema>;
 export type EncounterCandidate = z.infer<typeof EncounterCandidateSchema>;
 export type EncounterSubGroup = z.infer<typeof EncounterSubGroupSchema>;
 export type EncounterMapGroup = z.infer<typeof EncounterMapGroupSchema>;

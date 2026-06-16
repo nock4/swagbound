@@ -79,6 +79,27 @@ describe("walking facing + animation (moonwalk regression)", () => {
     }
     expect([...seen].sort()).toEqual([2, 3]);
   });
+
+  it("supports four-frame override walk loops", () => {
+    const frames = {
+      down: [0, 1, 2, 3],
+      left: [4, 5, 6, 7],
+      right: [8, 9, 10, 11],
+      up: [12, 13, 14, 15]
+    } as const;
+    const state = createPlayerState(500, 500, "down", frames);
+
+    stepPlayer(state, input({ down: true }), options({ deltaMs: 1, frames }));
+    expect(state.animFrame).toBe(0);
+    stepPlayer(state, input({ down: true }), options({ deltaMs: WALK_FRAME_MS - 1, frames }));
+    expect(state.animFrame).toBe(1);
+    stepPlayer(state, input({ down: true }), options({ deltaMs: WALK_FRAME_MS, frames }));
+    expect(state.animFrame).toBe(2);
+    stepPlayer(state, input({ down: true }), options({ deltaMs: WALK_FRAME_MS, frames }));
+    expect(state.animFrame).toBe(3);
+    stepPlayer(state, input({ down: true }), options({ deltaMs: WALK_FRAME_MS, frames }));
+    expect(state.animFrame).toBe(0);
+  });
 });
 
 describe("idle behavior", () => {
