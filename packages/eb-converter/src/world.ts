@@ -46,6 +46,8 @@ const WORLD_ASSET_DIR = "assets/world";
 const WORLD_CHUNK_ASSET_DIR = `${WORLD_ASSET_DIR}/chunks`;
 const SPRITE_ASSET_DIR = "assets/sprites";
 const WORLD_DOOR_TYPES = new Set(["door", "stairway", "escalator"]);
+const INDOOR_SECTOR_SETTING = "indoors";
+const UNBOUNDED_SECTOR_SETTING = "none";
 
 type Issue = ValidationIssue;
 
@@ -98,7 +100,28 @@ export type ComposedRegion = {
   warnings: Issue[];
 };
 
-export type SectorInfo = { tileset: number; palette: number };
+export type SectorInfo = {
+  tileset: number;
+  palette: number;
+  music: string;
+  setting: string;
+  townMap: string;
+  item: string;
+  areaId: number;
+  indoor: boolean;
+  bounded: boolean;
+};
+
+export type WorldSectorAreas = {
+  cols: number;
+  rows: number;
+  sectorWidthTiles: number;
+  sectorHeightTiles: number;
+  tileSize: number;
+  areaIds: number[];
+  indoor: Array<0 | 1>;
+  bounded: Array<0 | 1>;
+};
 
 /**
  * Composes the region background/foreground RGBA buffers and the surface grid
@@ -368,6 +391,35 @@ function parseOptionalEventFlag(value: string | undefined): number | undefined {
   return Number.isNaN(parsed) ? undefined : parsed;
 }
 
+function sectorSignatureField(value: string | undefined, numeric = false): string {
+  const trimmed = value?.trim() ?? "";
+  if (!numeric || trimmed.length === 0) {
+    return trimmed;
+  }
+  const parsed = parseYamlInteger(trimmed);
+  return Number.isNaN(parsed) ? trimmed : String(parsed);
+}
+
+export function stableSectorAreaId(signature: string): number {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < signature.length; index += 1) {
+    hash ^= signature.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return hash >>> 0;
+}
+
+function sectorSignatureFromEntry(entry: Record<string, string> | undefined): string {
+  return [
+    sectorSignatureField(entry?.Tileset, true),
+    sectorSignatureField(entry?.Palette, true),
+    sectorSignatureField(entry?.Music, true),
+    sectorSignatureField(entry?.Setting),
+    sectorSignatureField(entry?.["Town Map"]),
+    sectorSignatureField(entry?.Item, true)
+  ].join("|");
+}
+
 function sectorInfoFromEntry(entry: Record<string, string> | undefined): SectorInfo | undefined {
   if (!entry) {
     return undefined;
@@ -377,7 +429,49 @@ function sectorInfoFromEntry(entry: Record<string, string> | undefined): SectorI
   if (Number.isNaN(tileset) || Number.isNaN(palette)) {
     return undefined;
   }
-  return { tileset, palette };
+  const setting = sectorSignatureField(entry.Setting);
+  const signature = sectorSignatureFromEntry(entry);
+  return {
+    tileset,
+    palette,
+    music: sectorSignatureField(entry.Music, true),
+    setting,
+    townMap: sectorSignatureField(entry["Town Map"]),
+    item: sectorSignatureField(entry.Item, true),
+    areaId: stableSectorAreaId(signature),
+    indoor: setting === INDOOR_SECTOR_SETTING,
+    bounded: setting !== UNBOUNDED_SECTOR_SETTING
+  };
+}
+
+export function buildWorldSectorAreas(options: {
+  sectorEntries: Map<number, Record<string, string>>;
+  cols: number;
+  rows: number;
+}): WorldSectorAreas {
+  const { sectorEntries, cols, rows } = options;
+  const areaIds: number[] = [];
+  const indoor: Array<0 | 1> = [];
+  const bounded: Array<0 | 1> = [];
+  for (let sectorRow = 0; sectorRow < rows; sectorRow += 1) {
+    for (let sectorCol = 0; sectorCol < cols; sectorCol += 1) {
+      const entry = sectorEntries.get(sectorRow * cols + sectorCol);
+      const info = sectorInfoFromEntry(entry);
+      areaIds.push(info?.areaId ?? stableSectorAreaId(sectorSignatureFromEntry(entry)));
+      indoor.push(info?.indoor ? 1 : 0);
+      bounded.push(info?.bounded ? 1 : 0);
+    }
+  }
+  return {
+    cols,
+    rows,
+    sectorWidthTiles: SECTOR_WIDTH_TILES,
+    sectorHeightTiles: SECTOR_HEIGHT_TILES,
+    tileSize: TILE_SIZE,
+    areaIds,
+    indoor,
+    bounded
+  };
 }
 
 function isLayerTransparent(rgba: Uint8Array): boolean {
@@ -622,8 +716,14 @@ export async function buildWorldArtifacts(options: {
   const mapRows = parseMapTiles(mapTilesSource as string);
   const mapHeightTiles = mapRows.length || DEFAULT_MAP_HEIGHT_TILES;
   const mapWidthTiles = mapRows[0]?.length || DEFAULT_MAP_WIDTH_TILES;
-  const sectorsPerRow = Math.max(1, Math.floor(mapWidthTiles / SECTOR_WIDTH_TILES));
+  const sectorsPerRow = Math.max(1, Math.ceil(mapWidthTiles / SECTOR_WIDTH_TILES));
+  const sectorRows = Math.max(1, Math.ceil(mapHeightTiles / SECTOR_HEIGHT_TILES));
   const sectorEntries = parseIntKeyedYaml(mapSectorsSource as string);
+  const sectorAreas = buildWorldSectorAreas({
+    sectorEntries,
+    cols: sectorsPerRow,
+    rows: sectorRows
+  });
   const anchorPlacement = tutorialPlacements[0];
   const anchorWorld = anchorPlacement
     ? placementToWorldPixel(anchorPlacement)
@@ -680,6 +780,7 @@ export async function buildWorldArtifacts(options: {
       sources,
       warnings,
       sectorLookup,
+      sectorAreas,
       tilesetForMapTileset,
       spawnWorldPixel,
       spawnWorldPixelDerivation,
@@ -838,6 +939,7 @@ async function buildFullWorldArtifacts(options: {
   };
   warnings: Issue[];
   sectorLookup: (sectorCol: number, sectorRow: number) => SectorInfo | undefined;
+  sectorAreas: WorldSectorAreas;
   tilesetForMapTileset: (mapTileset: number) => { tileset: FtsTileset; palettes: Map<number, FtsPalette> } | undefined;
   spawnWorldPixel: { x: number; y: number } | undefined;
   spawnWorldPixelDerivation: string | undefined;
@@ -859,6 +961,7 @@ async function buildFullWorldArtifacts(options: {
     sources,
     warnings,
     sectorLookup,
+    sectorAreas,
     tilesetForMapTileset,
     spawnWorldPixel,
     spawnWorldPixelDerivation,
@@ -997,6 +1100,7 @@ async function buildFullWorldArtifacts(options: {
     mapWidthTiles,
     mapHeightTiles,
     chunkSizeTiles,
+    sectors: sectorAreas,
     chunks,
     collision: {
       cellSize: COLLISION_CELL_SIZE,

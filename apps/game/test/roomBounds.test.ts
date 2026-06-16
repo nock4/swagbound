@@ -3,7 +3,10 @@ import {
   DEFAULT_MAX_INTERIOR_BOUNDS_AREA_CELLS,
   DEFAULT_MAX_INTERIOR_WALKABLE_CELLS,
   resolveConnectedRoomBounds,
-  roomMaskContainsCell
+  resolveSectorAreaBounds,
+  roomMaskContainsCell,
+  roomMaskContainsWorldPoint,
+  type SectorAreaMetadata
 } from "../src/roomBounds";
 import type { CollisionGrid } from "../src/collisionOverlay";
 
@@ -127,5 +130,113 @@ describe("connected room bounds", () => {
     expect(bounds && roomMaskContainsCell(bounds, 1, 3)).toBe(true);
     expect(bounds && roomMaskContainsCell(bounds, 9, 3)).toBe(false);
     expect(bounds && roomMaskContainsCell(bounds, 8, 3)).toBe(false);
+  });
+});
+
+describe("sector area room bounds", () => {
+  function sectors(overrides: Partial<SectorAreaMetadata> = {}): SectorAreaMetadata {
+    return {
+      cols: 3,
+      rows: 1,
+      sectorWidthTiles: 1,
+      sectorHeightTiles: 1,
+      tileSize: 16,
+      areaIds: [10, 10, 20],
+      indoor: [1, 1, 1],
+      bounded: [1, 1, 1],
+      ...overrides
+    };
+  }
+
+  it("joins adjacent sectors with the same areaId and excludes a different-area neighbor", () => {
+    const grid: CollisionGrid = { cellSize: 8, width: 6, height: 2 };
+    const solidRows = rows(grid.width, grid.height, [
+      ...rectCells(0, 0, 4, 2)
+    ]);
+
+    const bounds = resolveSectorAreaBounds(sectors(), solidRows, grid, { x: 4, y: 4 });
+
+    expect(bounds?.isInterior).toBe(true);
+    expect(bounds?.maskCellBounds).toMatchObject({
+      minCellX: 0,
+      maxCellX: 3,
+      minCellY: 0,
+      maxCellY: 1
+    });
+    expect(bounds && roomMaskContainsCell(bounds, 3, 1)).toBe(true);
+    expect(bounds && roomMaskContainsCell(bounds, 4, 1)).toBe(false);
+  });
+
+  it("unions a second signature sector touched by the player's bounded walkable component", () => {
+    const grid: CollisionGrid = { cellSize: 8, width: 4, height: 2 };
+    const solidRows = rows(grid.width, grid.height, rectCells(0, 0, 4, 2));
+
+    const bounds = resolveSectorAreaBounds(
+      sectors({ cols: 2, rows: 1, areaIds: [10, 20], indoor: [1, 1], bounded: [1, 1] }),
+      solidRows,
+      grid,
+      { x: 4, y: 4 }
+    );
+
+    expect(bounds?.isInterior).toBe(true);
+    expect(bounds?.walkableCells).toBe(8);
+    expect(bounds?.maskCellBounds).toMatchObject({
+      minCellX: 0,
+      maxCellX: 3,
+      minCellY: 0,
+      maxCellY: 1
+    });
+    expect(bounds && roomMaskContainsCell(bounds, 3, 1)).toBe(true);
+  });
+
+  it("gates clipping from the player's current sector bounded flag", () => {
+    const grid: CollisionGrid = { cellSize: 8, width: 2, height: 2 };
+    const solidRows = rows(grid.width, grid.height, rectCells(0, 0, 2, 2));
+
+    const bounded = resolveSectorAreaBounds(
+      sectors({ cols: 1, rows: 1, areaIds: [10], indoor: [1], bounded: [1] }),
+      solidRows,
+      grid,
+      { x: 4, y: 4 }
+    );
+    const unbounded = resolveSectorAreaBounds(
+      sectors({ cols: 1, rows: 1, areaIds: [10], indoor: [0], bounded: [0] }),
+      solidRows,
+      grid,
+      { x: 4, y: 4 }
+    );
+
+    expect(bounded?.isInterior).toBe(true);
+    expect(unbounded?.isInterior).toBe(false);
+  });
+
+  it("clips a bounded non-indoor sector such as a cave-style area", () => {
+    const grid: CollisionGrid = { cellSize: 8, width: 2, height: 2 };
+    const solidRows = rows(grid.width, grid.height, rectCells(0, 0, 2, 2));
+
+    const bounds = resolveSectorAreaBounds(
+      sectors({ cols: 1, rows: 1, areaIds: [10], indoor: [0], bounded: [1] }),
+      solidRows,
+      grid,
+      { x: 4, y: 4 }
+    );
+
+    expect(bounds?.isInterior).toBe(true);
+    expect(bounds?.maskCellRanges.length).toBeGreaterThan(0);
+  });
+
+  it("keeps mask containment predicates aligned with sector ranges", () => {
+    const grid: CollisionGrid = { cellSize: 8, width: 6, height: 2 };
+    const solidRows = rows(grid.width, grid.height, [
+      ...rectCells(0, 0, 2, 2),
+      ...rectCells(4, 0, 2, 2)
+    ]);
+
+    const bounds = resolveSectorAreaBounds(sectors(), solidRows, grid, { x: 4, y: 4 });
+
+    expect(bounds && roomMaskContainsCell(bounds, 1, 1)).toBe(true);
+    expect(bounds && roomMaskContainsWorldPoint(bounds, { x: 15, y: 15 }, grid)).toBe(true);
+    expect(bounds && roomMaskContainsCell(bounds, 4, 1)).toBe(false);
+    expect(bounds && roomMaskContainsWorldPoint(bounds, { x: 33, y: 15 }, grid)).toBe(false);
   });
 });

@@ -418,7 +418,15 @@ describe("world artifact build (synthetic project)", () => {
 
     const sectors: string[] = [];
     for (let i = 0; i < 32; i += 1) {
-      sectors.push(`${i}:`, "  Palette: 0", "  Tileset: 0");
+      sectors.push(
+        `${i}:`,
+        "  Palette: 0",
+        "  Tileset: 0",
+        `  Music: ${i === 2 ? 2 : 1}`,
+        `  Setting: ${i === 3 ? "none" : i === 2 ? "cave-style" : "indoors"}`,
+        `  Town Map: ${i === 2 ? "beta" : "alpha"}`,
+        `  Item: ${i === 2 ? 3 : 0}`
+      );
     }
     await writeFile(path.join(project, "map_sectors.yml"), `${sectors.join("\n")}\n`, "utf8");
     await writeFile(path.join(project, "Tilesets", "00.fts"), syntheticFts(), "utf8");
@@ -614,6 +622,30 @@ describe("world artifact build (synthetic project)", () => {
         mapHeightTiles: 32,
         chunkSizeTiles: 16
       });
+      expect(world.sectors).toMatchObject({
+        cols: 4,
+        rows: 8,
+        sectorWidthTiles: 8,
+        sectorHeightTiles: 4,
+        tileSize: 32
+      });
+      expect(world.sectors?.areaIds).toHaveLength(32);
+      expect(world.sectors?.indoor).toHaveLength(32);
+      expect(world.sectors?.bounded).toHaveLength(32);
+      expect(world.sectors?.areaIds[0]).toBe(world.sectors?.areaIds[1]);
+      expect(world.sectors?.areaIds[0]).not.toBe(world.sectors?.areaIds[2]);
+      expect(world.sectors?.indoor[0]).toBe(1);
+      expect(world.sectors?.indoor[2]).toBe(0);
+      expect(world.sectors?.indoor[3]).toBe(0);
+      expect(world.sectors?.bounded[0]).toBe(1);
+      expect(world.sectors?.bounded[2]).toBe(1);
+      expect(world.sectors?.bounded[3]).toBe(0);
+      const sectorJson = JSON.stringify(world.sectors);
+      expect(sectorJson).not.toContain("indoors");
+      expect(sectorJson).not.toContain("none");
+      expect(sectorJson).not.toContain("cave-style");
+      expect(sectorJson).not.toContain("alpha");
+      expect(sectorJson).not.toContain("beta");
       expect(world.chunks).toHaveLength(4);
       const byChunk = new Map(world.chunks.map((chunk) => [`${chunk.cx},${chunk.cy}`, chunk]));
       expect(byChunk.get("0,0")).toMatchObject({ background: "assets/world/chunks/background-0-0.png", foreground: null, void: false });

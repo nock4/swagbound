@@ -47,9 +47,113 @@ export type ConnectedRoomBounds = {
   isInterior: boolean;
 };
 
+export type SectorAreaMetadata = {
+  cols: number;
+  rows: number;
+  sectorWidthTiles: number;
+  sectorHeightTiles: number;
+  tileSize: number;
+  areaIds: readonly number[];
+  indoor: readonly number[];
+  bounded: readonly number[];
+};
+
+export type SectorAreaBoundsOptions = {
+  walkableUnionCellCap?: number;
+};
+
 export const DEFAULT_MAX_INTERIOR_WALKABLE_CELLS = 4096;
 export const DEFAULT_MAX_INTERIOR_BOUNDS_AREA_CELLS = 8192;
 export const DEFAULT_ROOM_WALL_MASK_THICKNESS_CELLS = 24;
+export const DEFAULT_SECTOR_WALKABLE_UNION_CELL_CAP = 6000;
+
+export function resolveSectorAreaBounds(
+  sectors: SectorAreaMetadata | undefined,
+  solidRows: readonly string[],
+  grid: CollisionGrid,
+  startWorldPixel: { x: number; y: number },
+  options: SectorAreaBoundsOptions = {}
+): ConnectedRoomBounds | undefined {
+  if (!validSectorMetadata(sectors)) {
+    return undefined;
+  }
+  const startCell = worldPixelToCollisionCell(startWorldPixel, grid.cellSize);
+  if (
+    !startCell ||
+    !isCellInGrid(startCell.cellX, startCell.cellY, grid) ||
+    isSolidCell(solidRows, startCell.cellX, startCell.cellY)
+  ) {
+    return undefined;
+  }
+  const startSector = sectorCoordForWorldPixel(startWorldPixel, sectors);
+  if (!startSector) {
+    return undefined;
+  }
+
+  const areaId = sectors.areaIds[startSector.index];
+  if (!Number.isInteger(areaId)) {
+    return undefined;
+  }
+  const areaSectorIndexes = floodSectorArea(sectors, startSector, areaId);
+  const walkableFlood = floodWalkableComponent(
+    solidRows,
+    grid,
+    startCell,
+    Math.max(0, Math.floor(options.walkableUnionCellCap ?? DEFAULT_SECTOR_WALKABLE_UNION_CELL_CAP))
+  );
+
+  if (!walkableFlood.exceededCap) {
+    for (const cell of walkableFlood.cells) {
+      const sector = sectorCoordForCollisionCell(cell.cellX, cell.cellY, sectors, grid);
+      if (sector) {
+        areaSectorIndexes.add(sector.index);
+      }
+    }
+  }
+
+  const maskCellRanges = buildSectorMaskCellRanges(areaSectorIndexes, sectors, grid);
+  const maskCellBounds = cellBoundsForRanges(maskCellRanges);
+  const rectCellBounds = maskCellBounds ?? walkableFlood.walkableCellBounds;
+
+  return {
+    startCell,
+    walkableCells: walkableFlood.walkableCells,
+    walkableCellBounds: walkableFlood.walkableCellBounds,
+    ...(maskCellBounds ? { maskCellBounds } : {}),
+    maskCellRanges,
+    rect: {
+      x: rectCellBounds.minCellX * grid.cellSize,
+      y: rectCellBounds.minCellY * grid.cellSize,
+      width: rectCellBounds.widthCells * grid.cellSize,
+      height: rectCellBounds.heightCells * grid.cellSize
+    },
+    isInterior: sectors.bounded[startSector.index] === 1
+  };
+}
+
+export function sectorCoordForWorldPixel(
+  point: { x: number; y: number },
+  sectors: SectorAreaMetadata
+): { sectorCol: number; sectorRow: number; index: number } | undefined {
+  const sectorWidthPixels = sectors.sectorWidthTiles * sectors.tileSize;
+  const sectorHeightPixels = sectors.sectorHeightTiles * sectors.tileSize;
+  if (
+    sectorWidthPixels <= 0 ||
+    sectorHeightPixels <= 0 ||
+    !Number.isFinite(point.x) ||
+    !Number.isFinite(point.y) ||
+    point.x < 0 ||
+    point.y < 0
+  ) {
+    return undefined;
+  }
+  const sectorCol = Math.floor(point.x / sectorWidthPixels);
+  const sectorRow = Math.floor(point.y / sectorHeightPixels);
+  if (sectorCol < 0 || sectorRow < 0 || sectorCol >= sectors.cols || sectorRow >= sectors.rows) {
+    return undefined;
+  }
+  return { sectorCol, sectorRow, index: sectorRow * sectors.cols + sectorCol };
+}
 
 export function resolveConnectedRoomBounds(
   solidRows: readonly string[],
@@ -189,6 +293,228 @@ export function roomMaskContainsWorldPoint(
 ): boolean {
   const cell = worldPixelToCollisionCell(point, grid.cellSize);
   return Boolean(cell && roomMaskContainsCell(room, cell.cellX, cell.cellY));
+}
+
+function validSectorMetadata(sectors: SectorAreaMetadata | undefined): sectors is SectorAreaMetadata {
+  if (!sectors) {
+    return false;
+  }
+  if (
+    !Number.isInteger(sectors.cols) ||
+    !Number.isInteger(sectors.rows) ||
+    !Number.isInteger(sectors.sectorWidthTiles) ||
+    !Number.isInteger(sectors.sectorHeightTiles) ||
+    !Number.isInteger(sectors.tileSize) ||
+    sectors.cols <= 0 ||
+    sectors.rows <= 0 ||
+    sectors.sectorWidthTiles <= 0 ||
+    sectors.sectorHeightTiles <= 0 ||
+    sectors.tileSize <= 0
+  ) {
+    return false;
+  }
+  const expected = sectors.cols * sectors.rows;
+  return (
+    sectors.areaIds.length >= expected &&
+    sectors.indoor.length >= expected &&
+    sectors.bounded.length >= expected
+  );
+}
+
+function floodSectorArea(
+  sectors: SectorAreaMetadata,
+  start: { sectorCol: number; sectorRow: number; index: number },
+  areaId: number
+): Set<number> {
+  const seen = new Uint8Array(sectors.cols * sectors.rows);
+  const queue = [start];
+  const indexes = new Set<number>([start.index]);
+  seen[start.index] = 1;
+  let cursor = 0;
+  while (cursor < queue.length) {
+    const sector = queue[cursor];
+    cursor += 1;
+    enqueueSector(sector.sectorCol + 1, sector.sectorRow);
+    enqueueSector(sector.sectorCol - 1, sector.sectorRow);
+    enqueueSector(sector.sectorCol, sector.sectorRow + 1);
+    enqueueSector(sector.sectorCol, sector.sectorRow - 1);
+  }
+  return indexes;
+
+  function enqueueSector(sectorCol: number, sectorRow: number): void {
+    if (sectorCol < 0 || sectorRow < 0 || sectorCol >= sectors.cols || sectorRow >= sectors.rows) {
+      return;
+    }
+    const index = sectorRow * sectors.cols + sectorCol;
+    if (seen[index] || sectors.areaIds[index] !== areaId) {
+      return;
+    }
+    seen[index] = 1;
+    indexes.add(index);
+    queue.push({ sectorCol, sectorRow, index });
+  }
+}
+
+function floodWalkableComponent(
+  solidRows: readonly string[],
+  grid: CollisionGrid,
+  startCell: { cellX: number; cellY: number },
+  cellCap: number
+): {
+  cells: Array<{ cellX: number; cellY: number }>;
+  exceededCap: boolean;
+  walkableCells: number;
+  walkableCellBounds: ConnectedRoomBounds["walkableCellBounds"];
+} {
+  const seen = new Uint8Array(grid.width * grid.height);
+  const queue: Array<{ cellX: number; cellY: number }> = [startCell];
+  seen[startCell.cellY * grid.width + startCell.cellX] = 1;
+  let cursor = 0;
+  let walkableCells = 0;
+  let minCellX = startCell.cellX;
+  let maxCellX = startCell.cellX;
+  let minCellY = startCell.cellY;
+  let maxCellY = startCell.cellY;
+
+  while (cursor < queue.length) {
+    const cell = queue[cursor];
+    cursor += 1;
+    walkableCells += 1;
+    minCellX = Math.min(minCellX, cell.cellX);
+    maxCellX = Math.max(maxCellX, cell.cellX);
+    minCellY = Math.min(minCellY, cell.cellY);
+    maxCellY = Math.max(maxCellY, cell.cellY);
+    if (walkableCells > cellCap) {
+      return finalize(true);
+    }
+
+    enqueueWalkableNeighbor(cell.cellX + 1, cell.cellY);
+    enqueueWalkableNeighbor(cell.cellX - 1, cell.cellY);
+    enqueueWalkableNeighbor(cell.cellX, cell.cellY + 1);
+    enqueueWalkableNeighbor(cell.cellX, cell.cellY - 1);
+  }
+
+  return finalize(false);
+
+  function enqueueWalkableNeighbor(cellX: number, cellY: number): void {
+    if (!isCellInGrid(cellX, cellY, grid) || isSolidCell(solidRows, cellX, cellY)) {
+      return;
+    }
+    const index = cellY * grid.width + cellX;
+    if (seen[index]) {
+      return;
+    }
+    seen[index] = 1;
+    queue.push({ cellX, cellY });
+  }
+
+  function finalize(exceededCap: boolean): ReturnType<typeof floodWalkableComponent> {
+    const widthCells = maxCellX - minCellX + 1;
+    const heightCells = maxCellY - minCellY + 1;
+    return {
+      cells: exceededCap ? [] : queue,
+      exceededCap,
+      walkableCells,
+      walkableCellBounds: {
+        minCellX,
+        maxCellX,
+        minCellY,
+        maxCellY,
+        widthCells,
+        heightCells,
+        areaCells: widthCells * heightCells
+      }
+    };
+  }
+}
+
+function sectorCoordForCollisionCell(
+  cellX: number,
+  cellY: number,
+  sectors: SectorAreaMetadata,
+  grid: CollisionGrid
+): { sectorCol: number; sectorRow: number; index: number } | undefined {
+  return sectorCoordForWorldPixel({ x: cellX * grid.cellSize, y: cellY * grid.cellSize }, sectors);
+}
+
+function buildSectorMaskCellRanges(
+  sectorIndexes: Set<number>,
+  sectors: SectorAreaMetadata,
+  grid: CollisionGrid
+): RoomMaskCellRange[] {
+  const rangesByRow = new Map<number, Array<{ minCellX: number; maxCellX: number }>>();
+  for (const index of sectorIndexes) {
+    const sectorCol = index % sectors.cols;
+    const sectorRow = Math.floor(index / sectors.cols);
+    const bounds = sectorCellBounds(sectorCol, sectorRow, sectors, grid);
+    if (!bounds) {
+      continue;
+    }
+    for (let cellY = bounds.minCellY; cellY <= bounds.maxCellY; cellY += 1) {
+      rangesByRow.set(cellY, [
+        ...(rangesByRow.get(cellY) ?? []),
+        { minCellX: bounds.minCellX, maxCellX: bounds.maxCellX }
+      ]);
+    }
+  }
+
+  const rows = [...rangesByRow.keys()].sort((a, b) => a - b);
+  const mergedRanges: RoomMaskCellRange[] = [];
+  for (const cellY of rows) {
+    const rowRanges = (rangesByRow.get(cellY) ?? []).sort((a, b) => a.minCellX - b.minCellX || a.maxCellX - b.maxCellX);
+    let current: { minCellX: number; maxCellX: number } | undefined;
+    for (const range of rowRanges) {
+      if (!current) {
+        current = { ...range };
+        continue;
+      }
+      if (range.minCellX <= current.maxCellX + 1) {
+        current.maxCellX = Math.max(current.maxCellX, range.maxCellX);
+        continue;
+      }
+      mergedRanges.push({ cellY, ...current });
+      current = { ...range };
+    }
+    if (current) {
+      mergedRanges.push({ cellY, ...current });
+    }
+  }
+  return mergedRanges;
+}
+
+function sectorCellBounds(
+  sectorCol: number,
+  sectorRow: number,
+  sectors: SectorAreaMetadata,
+  grid: CollisionGrid
+): ConnectedRoomBounds["walkableCellBounds"] | undefined {
+  const sectorWidthPixels = sectors.sectorWidthTiles * sectors.tileSize;
+  const sectorHeightPixels = sectors.sectorHeightTiles * sectors.tileSize;
+  const minPixelX = sectorCol * sectorWidthPixels;
+  const minPixelY = sectorRow * sectorHeightPixels;
+  const maxPixelXExclusive = Math.min((sectorCol + 1) * sectorWidthPixels, grid.width * grid.cellSize);
+  const maxPixelYExclusive = Math.min((sectorRow + 1) * sectorHeightPixels, grid.height * grid.cellSize);
+  if (maxPixelXExclusive <= minPixelX || maxPixelYExclusive <= minPixelY) {
+    return undefined;
+  }
+  const minCellX = clampCell(Math.floor(minPixelX / grid.cellSize), 0, grid.width - 1);
+  const minCellY = clampCell(Math.floor(minPixelY / grid.cellSize), 0, grid.height - 1);
+  const maxCellX = clampCell(Math.ceil(maxPixelXExclusive / grid.cellSize) - 1, 0, grid.width - 1);
+  const maxCellY = clampCell(Math.ceil(maxPixelYExclusive / grid.cellSize) - 1, 0, grid.height - 1);
+  if (maxCellX < minCellX || maxCellY < minCellY) {
+    return undefined;
+  }
+  const widthCells = maxCellX - minCellX + 1;
+  const heightCells = maxCellY - minCellY + 1;
+  return {
+    minCellX,
+    maxCellX,
+    minCellY,
+    maxCellY,
+    widthCells,
+    heightCells,
+    areaCells: widthCells * heightCells
+  };
 }
 
 function buildRoomMaskCellRanges(options: {

@@ -321,6 +321,42 @@ export const WorldCollisionSchema = z.object({
   surfaceRows: z.array(z.string())
 });
 
+export const WorldSectorAreasSchema = z
+  .object({
+    cols: z.number().int().positive(),
+    rows: z.number().int().positive(),
+    sectorWidthTiles: z.number().int().positive(),
+    sectorHeightTiles: z.number().int().positive(),
+    tileSize: z.number().int().positive(),
+    areaIds: z.array(z.number().int().nonnegative()),
+    indoor: z.array(z.union([z.literal(0), z.literal(1)])),
+    bounded: z.array(z.union([z.literal(0), z.literal(1)]))
+  })
+  .superRefine((value, context) => {
+    const expected = value.cols * value.rows;
+    if (value.areaIds.length !== expected) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `areaIds length ${value.areaIds.length} does not match cols*rows ${expected}`,
+        path: ["areaIds"]
+      });
+    }
+    if (value.indoor.length !== expected) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `indoor length ${value.indoor.length} does not match cols*rows ${expected}`,
+        path: ["indoor"]
+      });
+    }
+    if (value.bounded.length !== expected) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `bounded length ${value.bounded.length} does not match cols*rows ${expected}`,
+        path: ["bounded"]
+      });
+    }
+  });
+
 export const WorldSourcesSchema = z.object({
   mapTiles: z.boolean(),
   mapSectors: z.boolean(),
@@ -359,6 +395,7 @@ export const WorldRegionSchema = z.object({
     })
     .optional(),
   collision: WorldCollisionSchema.optional(),
+  sectors: WorldSectorAreasSchema.optional(),
   npcs: z.array(WorldNpcSchema),
   player: z
     .object({
@@ -425,6 +462,7 @@ export const WorldChunkedSchema = z.object({
   mapWidthTiles: z.number().int().positive(),
   mapHeightTiles: z.number().int().positive(),
   chunkSizeTiles: z.number().int().positive(),
+  sectors: WorldSectorAreasSchema.optional(),
   chunks: z.array(WorldChunkSchema),
   collision: WorldCollisionSchema,
   npcs: z.array(WorldChunkedNpcSchema),

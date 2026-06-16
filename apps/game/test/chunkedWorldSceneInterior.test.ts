@@ -17,4 +17,10 @@ describe("chunked world interior rendering contract", () => {
     expect(sceneSource).toContain("setMask(mask)");
     expect(sceneSource).not.toContain("setCrop(");
   });
+
+  it("resolves interior masks from sector metadata when available", () => {
+    expect(sceneSource).toContain("resolveSectorAreaBounds");
+    expect(sceneSource).toContain("this.world_.sectors");
+    expect(sceneSource).toContain("this.activeRoomSectorKey === sectorKey");
+  });
 });

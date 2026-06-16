@@ -145,7 +145,9 @@ import { activeWindowFlavorId } from "./windowSettings";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import {
   resolveConnectedRoomBounds,
+  resolveSectorAreaBounds,
   roomMaskContainsWorldPoint,
+  sectorCoordForWorldPixel,
   type ConnectedRoomBounds
 } from "./roomBounds";
 
@@ -216,6 +218,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private loadingSheetGroups = new Set<number>();
   private currentChunk?: ChunkCoord;
   private activeRoomBounds?: ConnectedRoomBounds;
+  private activeRoomSectorKey?: string;
   private roomMaskGraphics?: Phaser.GameObjects.Graphics;
   private roomMask?: Phaser.Display.Masks.GeometryMask;
   private solidRows: string[] = [];
@@ -500,6 +503,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.loadingSheetGroups.clear();
     this.currentChunk = undefined;
     this.activeRoomBounds = undefined;
+    this.activeRoomSectorKey = undefined;
     this.destroyRoomMask();
     this.cursors = undefined;
     this.keys = undefined;
@@ -665,9 +669,27 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private refreshRoomBounds(force = false): void {
+    if (this.world_.sectors) {
+      const sector = sectorCoordForWorldPixel(this.playerState, this.world_.sectors);
+      const sectorKey = sector ? `${sector.sectorCol},${sector.sectorRow}` : undefined;
+      if (!force && sectorKey && this.activeRoomSectorKey === sectorKey) {
+        return;
+      }
+      this.activeRoomSectorKey = sectorKey;
+      this.activeRoomBounds = resolveSectorAreaBounds(
+        this.world_.sectors,
+        this.solidRows,
+        this.collisionGrid(),
+        this.playerState
+      );
+      this.applyInteriorRoomMask();
+      this.applyNpcRoomVisibility();
+      return;
+    }
     if (!force && this.playerInsideCachedRoomBounds()) {
       return;
     }
+    this.activeRoomSectorKey = undefined;
     this.activeRoomBounds = resolveConnectedRoomBounds(this.solidRows, this.collisionGrid(), this.playerState, {
       surfaceRows: this.surfaceRows
     });
