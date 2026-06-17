@@ -5,6 +5,7 @@ import {
   EB_TEXT_LINE_SPACING,
   EB_UI_SCALE,
   battleMenuCascadeLayout,
+  battleStatusDigitBoxRects,
   battleStatusCardRects,
   battleWindowRect,
   canvasRectForWindowId,
@@ -228,7 +229,8 @@ describe("EB window layouts", () => {
     expect(fourRows.command).toMatchObject({ x: 16, y: 8, visibleStart: 0, visibleCount: 4 });
     expect(sevenRows.command).toMatchObject({ x: 16, y: 8, visibleStart: 0, visibleCount: 7 });
     expect(sevenRows.command!.height).toBeGreaterThan(fourRows.command!.height);
-    expect(sevenRows.description!.y).toBeGreaterThanOrEqual(sevenRows.command!.y + sevenRows.command!.height);
+    expect(sevenRows.description!.y).toBeLessThan(sevenRows.command!.y + sevenRows.command!.height);
+    expect(sevenRows.description!.y + sevenRows.description!.height).toBeGreaterThan(sevenRows.command!.y + sevenRows.command!.height);
     for (const rect of [sevenRows.command!, sevenRows.description!]) {
       expect((rect.x + rect.width) / EB_UI_SCALE).toBeLessThanOrEqual(256);
       expect((rect.y + rect.height) / EB_UI_SCALE).toBeLessThanOrEqual(224);
@@ -271,8 +273,89 @@ describe("EB window layouts", () => {
     expect(layout.submenu!.hasMoreAfter).toBe(false);
     expect(layout.submenu!.x).toBeGreaterThan(layout.command!.x);
     expect(layout.submenu!.x).toBeLessThan(layout.command!.x + layout.command!.width);
+    expect(layout.submenu!.width).toBeGreaterThan(layout.command!.width);
     expect((layout.submenu!.x + layout.submenu!.width) / EB_UI_SCALE).toBeLessThanOrEqual(256);
     expect((layout.submenu!.y + layout.submenu!.height) / EB_UI_SCALE).toBeLessThanOrEqual(224);
+  });
+
+  it("adds a command-menu height guard without scrolling away command rows", () => {
+    const screen = { width: 512, height: 448 };
+    const lineHeight = ebTextLineHeight({ lineSpacing: 4 });
+    const baseOptions = {
+      screen,
+      commandLabels: ["BASH", "GOODS", "AUTO", "PSI", "MIRROR", "DEFEND", "RUN"],
+      measureText: (text: string) => text.length * 8,
+      lineHeight,
+      paddingX: 26,
+      paddingY: 10,
+      leftMargin: 16,
+      topMargin: 8,
+      rightMargin: 16,
+      bottomMargin: 104,
+      cascadeOverlap: 8,
+      submenuOffsetY: 12,
+      descriptionGap: 0,
+      minCommandWidth: 92,
+      minSubmenuWidth: 260,
+      minDescriptionWidth: 128,
+      maxMenuWidth: 360,
+      maxDescriptionWidth: 260
+    };
+    const compact = battleMenuCascadeLayout(baseOptions);
+    const guarded = battleMenuCascadeLayout({
+      ...baseOptions,
+      commandExtraHeight: 8
+    });
+
+    expect(guarded.command).toMatchObject({ visibleStart: 0, visibleCount: 7 });
+    expect(guarded.command!.height).toBe(compact.command!.height + 8);
+    expect(guarded.command!.height).toBeGreaterThanOrEqual(
+      baseOptions.commandLabels.length * lineHeight + baseOptions.paddingY * 2 + 8
+    );
+    expect((guarded.command!.y + guarded.command!.height) / EB_UI_SCALE).toBeLessThanOrEqual(224);
+  });
+
+  it("right-aligns fixed-count status odometer digit boxes inside a card", () => {
+    const card = { x: 100, y: 300, width: 112, height: 84 };
+    const boxes = battleStatusDigitBoxRects({
+      card,
+      value: 7,
+      digitCount: 3,
+      digitWidth: 14,
+      digitHeight: 18,
+      gap: 2,
+      rightPadding: 10,
+      y: 330
+    });
+
+    expect(boxes.map((box) => box.digit)).toEqual(["0", "0", "7"]);
+    expect(boxes).toHaveLength(3);
+    expect(boxes[0]).toMatchObject({ x: 156, y: 330, width: 14, height: 18 });
+    expect(boxes[1].x).toBe(172);
+    expect(boxes[2].x + boxes[2].width).toBe(card.x + card.width - 10);
+    for (const box of boxes) {
+      expect(box.x).toBeGreaterThanOrEqual(card.x);
+      expect(box.y).toBeGreaterThanOrEqual(card.y);
+      expect(box.x + box.width).toBeLessThanOrEqual(card.x + card.width);
+      expect(box.y + box.height).toBeLessThanOrEqual(card.y + card.height);
+    }
+  });
+
+  it("clips status odometer values to the fixed digit count", () => {
+    const boxes = battleStatusDigitBoxRects({
+      card: { x: 0, y: 0, width: 48, height: 24 },
+      value: 1234,
+      digitCount: 3,
+      digitWidth: 14,
+      digitHeight: 18,
+      gap: 2,
+      rightPadding: 0,
+      y: 4
+    });
+
+    expect(boxes.map((box) => box.digit).join("")).toBe("999");
+    expect(boxes[0].x).toBeGreaterThanOrEqual(0);
+    expect(boxes[2].x + boxes[2].width).toBeLessThanOrEqual(48);
   });
 
   it("centers battle party status cards at the bottom for one through four members", () => {
