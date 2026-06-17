@@ -174,11 +174,14 @@ describe("sprite override helpers", () => {
     expect(new Set(Object.values(byNpcId).map((override) => override.image))).toEqual(new Set(allowedImages));
   });
 
-  it("authors the first enemy battle override slice as single-image mappings", async () => {
+  it("authors the full enemy battle roster as single-image mappings", async () => {
     const overrides = SpriteOverridesSchema.parse(JSON.parse(
       await readFile(resolve("content/sprite-overrides.json"), "utf8")
     ));
-    const expected = {
+    const byEnemyId = overrides.byEnemyId ?? {};
+
+    // Anchor mappings that must remain stable.
+    const anchors = {
       "37": "assets/swagbound/enemy/pfp-malady-battle-v1.png",
       "159": "assets/swagbound/enemy/ai-slop-battle-v0.png",
       "55": "assets/swagbound/enemy/lsw-signal-stutter-battle-v0.png",
@@ -187,21 +190,27 @@ describe("sprite override helpers", () => {
       "134": "assets/swagbound/enemy/lsw-question-marketeer-battle-v0.png",
       "81": "assets/swagbound/enemy/lsw-ushanka-shade-battle-v0.png"
     } as const;
+    for (const [enemyId, image] of Object.entries(anchors)) {
+      expect(byEnemyId[enemyId]).toMatchObject({ image });
+    }
 
-    expect(Object.keys(overrides.byEnemyId ?? {}).sort((a, b) => Number(a) - Number(b))).toEqual(
-      Object.keys(expected).sort((a, b) => Number(a) - Number(b))
-    );
-    for (const [enemyId, image] of Object.entries(expected)) {
-      const override = overrides.byEnemyId?.[enemyId];
-      expect(override).toMatchObject({
-        image,
-        displayHeight: 160,
-        originX: 0.5,
-        originY: 0.5
-      });
-      expect(override?.frameWidth).toBeUndefined();
-      expect(override?.frameHeight).toBeUndefined();
-      expect(override?.animations).toBeUndefined();
+    // Full roster: at least 36 enemy ids skinned.
+    expect(Object.keys(byEnemyId).length).toBeGreaterThanOrEqual(36);
+
+    // Same-named EB enemy variants share one coherent skin.
+    for (const [a, b] of [["5", "209"], ["121", "211"], ["8", "210"]] as const) {
+      expect(byEnemyId[a]?.image).toBe(byEnemyId[b]?.image);
+    }
+
+    // Every enemy override is a single-image sprite anchored to the battle box.
+    for (const override of Object.values(byEnemyId)) {
+      expect(override.image.startsWith("assets/swagbound/enemy/")).toBe(true);
+      expect(override.displayHeight).toBe(160);
+      expect(override.originX).toBe(0.5);
+      expect(override.originY).toBe(0.5);
+      expect(override.frameWidth).toBeUndefined();
+      expect(override.frameHeight).toBeUndefined();
+      expect(override.animations).toBeUndefined();
     }
   });
 });
