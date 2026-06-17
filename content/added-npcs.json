@@ -10,8 +10,9 @@
       "spriteGroup": 59,
       "facing": "down",
       "interaction": {
-        "ref": "interior:burger-shop-v0",
-        "shop": 4
+        "pages": [
+          "The drug store clerk swears the kiosk reads minds. The kiosk swears it only reads receipts."
+        ]
       }
     },
     {
@@ -23,8 +24,9 @@
       "spriteGroup": 54,
       "facing": "down",
       "interaction": {
-        "ref": "interior:corner-shop-v0",
-        "shop": 1
+        "pages": [
+          "Two of everyone lately. Real you, route you. I stopped keeping count at the corner."
+        ]
       }
     },
     {
