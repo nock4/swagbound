@@ -1,7 +1,16 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { beforeAll, describe, expect, it } from "vitest";
-import { BattleDataSchema, type BattleData, type BattleEnemy } from "@eb/schemas";
+import {
+  BattleDataSchema,
+  CharacterCollectionSchema,
+  ItemCollectionSchema,
+  type BattleData,
+  type BattleEnemy,
+  type CharacterCollection,
+  type ItemCollection,
+  type ItemData
+} from "@eb/schemas";
 import {
   applyVictoryRewards,
   buildEnemyCombatant,
@@ -10,6 +19,7 @@ import {
   damage,
   outcome,
   resolveEnemyActionTurn,
+  resolveItemTurn,
   resolveTurn,
   selectEnemyAction,
   tickBattleMeters,
@@ -18,6 +28,7 @@ import {
   type BattleActor,
   type BattleState
 } from "../src/battleLogic";
+import { decodeItemUseEffect, isConsumableItem, PartyState, type ItemUseEffect } from "../src/partyState";
 import { setTarget } from "../src/rollingMeter";
 
 // QA: battle-combat domain. Exercises battleLogic.ts pure functions against the
@@ -28,13 +39,35 @@ import { setTarget } from "../src/rollingMeter";
 const GIANT_STEP_BOSS_ID = 37; // group 450 primary boss
 const GIANT_STEP_GROUP_ID = 450;
 const ACT1_BOSS_IDS = [37, 130, 131, 214]; // Giant Step boss, two robots, Starman Jr equivalent
+const REQUIRED_ITEM_EFFECTS = new Map<number, ItemUseEffect["kind"]>([
+  [106, "healHp"],
+  [232, "healHp"],
+  [89, "healHp"],
+  [90, "healHp"],
+  [91, "healHp"],
+  [103, "healHp"],
+  [110, "recoverPp"]
+]);
+const FOOD_DRINK_ACTION_ID = 249;
+const FOOD_DRINK_TYPES = new Set([32, 36]);
+const NON_CONSUMABLE_WEAPON_ID = 17;
 
 let battleData: BattleData;
+let itemData: ItemCollection;
+let characterData: CharacterCollection;
 
 function enemyById(id: number): BattleEnemy {
   const found = battleData.enemies.find((enemy) => enemy.id === id);
   if (!found) {
     throw new Error(`enemy id ${id} missing from generated battle data`);
+  }
+  return found;
+}
+
+function itemById(id: number): ItemData {
+  const found = itemData.items.find((item) => item.id === id);
+  if (!found) {
+    throw new Error(`item id ${id} missing from generated item data`);
   }
   return found;
 }
@@ -55,6 +88,74 @@ beforeAll(async () => {
   battleData = BattleDataSchema.parse(
     JSON.parse(await readFile(resolve("apps/game/public/generated/battle.json"), "utf8"))
   );
+  itemData = ItemCollectionSchema.parse(
+    JSON.parse(await readFile(resolve("apps/game/public/generated/items.json"), "utf8"))
+  );
+  characterData = CharacterCollectionSchema.parse(
+    JSON.parse(await readFile(resolve("apps/game/public/generated/characters.json"), "utf8"))
+  );
+});
+
+describe("qa generated item-use effects", () => {
+  it("decodes grocery and starting food/drink consumables without treating equipment as healing", () => {
+    const startingFoodDrinkIds = new Set(characterData.characters
+      .flatMap((character) => character.startingItems)
+      .filter((id) => {
+        const item = itemById(id);
+        return isConsumableItem(item) &&
+          item.action === FOOD_DRINK_ACTION_ID &&
+          FOOD_DRINK_TYPES.has(item.type);
+      }));
+
+    for (const id of [91, 103, 110]) {
+      expect(startingFoodDrinkIds.has(id), `starting food/drink item ${id} should be covered`).toBe(true);
+    }
+
+    const requiredIds = new Set([...REQUIRED_ITEM_EFFECTS.keys(), ...startingFoodDrinkIds]);
+    for (const id of requiredIds) {
+      const item = itemById(id);
+      const effect = decodeItemUseEffect(item);
+      expect(effect?.kind, `item ${id} effect kind`).toBe(REQUIRED_ITEM_EFFECTS.get(id));
+      expect(itemEffectMagnitude(effect), `item ${id} effect magnitude`).toBeGreaterThan(0);
+    }
+
+    expect(decodeItemUseEffect(itemById(NON_CONSUMABLE_WEAPON_ID))).toBeUndefined();
+  });
+
+  it("applies a generated healing item through the field party state", () => {
+    const item = itemById(106);
+    const state = new PartyState();
+    state.give(0, item.id);
+
+    const result = state.useItem({
+      ownerChar: 0,
+      targetChar: 0,
+      item,
+      targetVitals: { hp: 10, maxHp: 40, pp: 0, maxPp: 0 }
+    });
+
+    expect(result).toMatchObject({ ok: true, itemId: item.id, previousValue: 10, nextValue: 16 });
+    expect(state.inventory(0)).toEqual([]);
+    expect(state.vitals(0)?.hp.target).toBe(16);
+  });
+
+  it("applies a generated healing item through battle Goods", () => {
+    const item = itemById(90);
+    let battle = createBattleState([enemyById(GIANT_STEP_BOSS_ID)], { maxHp: 120 });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      inventory: [item.id],
+      hp: { ...battle.party[0].hp, displayed: 20, target: 20, isRolling: false }
+    });
+
+    const result = resolveItemTurn(battle, actor("party", 0), item, { inventorySlot: 0, targetIndex: 0 });
+
+    expect(result.skipped).toBe(false);
+    expect(result.itemConsumed).toBe(true);
+    expect(result.amount).toBeGreaterThan(0);
+    expect(result.state.party[0].inventory).toEqual([]);
+    expect(result.state.party[0].hp.target).toBeGreaterThan(20);
+  });
 });
 
 describe("qa battle data integrity", () => {
@@ -212,3 +313,10 @@ describe("qa enemy AI action selection on real boss tables", () => {
     expect(dealtDamage).toBe(true);
   });
 });
+
+function itemEffectMagnitude(effect: ItemUseEffect | undefined): number {
+  if (!effect) {
+    return 0;
+  }
+  return "amount" in effect ? effect.amount : effect.percent;
+}

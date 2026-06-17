@@ -929,6 +929,12 @@ export const ItemDataSchema = z.object({
   argument: z.number().int().nonnegative(),
   equippable: z.boolean(),
   miscFlags: z.array(z.string()),
+  effect: z.union([
+    z.object({ kind: z.literal("healHp"), amount: z.number().int().positive() }),
+    z.object({ kind: z.literal("healHpPercent"), percent: z.number().int().positive() }),
+    z.object({ kind: z.literal("recoverPp"), amount: z.number().int().positive() }),
+    z.object({ kind: z.literal("recoverPpPercent"), percent: z.number().int().positive() })
+  ]).optional(),
   helpText: z.string().optional()
 });
 

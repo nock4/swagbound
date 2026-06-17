@@ -6,6 +6,7 @@ import {
   PsiCollectionSchema,
   SCHEMA_VERSION,
   type ItemCollection,
+  type ItemData,
   type PsiCollection,
   type ValidationIssue
 } from "@eb/schemas";
@@ -19,8 +20,19 @@ const REQUIRED_INPUTS = [
   "psi_ability_table.yml",
   "psi_name_table.yml"
 ] as const;
+const BATTLE_ACTIONS_FILE = "battle_action_table.yml";
+const CONDIMENTS_FILE = "condiment_table.yml";
 
 const PSI_LEARN_CHARACTER_SLOTS = [0, 1, 3] as const;
+const FOOD_AND_DRINK_ROUTINE_ADDRESS = 0xc2b27d;
+const HP_FOOD_RECOVERY_MULTIPLIER = 3;
+const PP_FOOD_RECOVERY_DIVISOR = 2;
+
+const DRINK_EFFECTS_BY_HELP_POINTER = new Map<number, ItemUseEffectData>([
+  [0xc545a1, { kind: "healHp", amount: 6 }],
+  [0xc54733, { kind: "recoverPp", amount: 10 }],
+  [0xc561ff, { kind: "healHp", amount: 12 }]
+]);
 
 type ItemPsiBuildOptions = {
   projectAbs: string;
@@ -33,6 +45,8 @@ type ItemConfigEntry = {
   miscFlags: string[];
 };
 
+type ItemUseEffectData = NonNullable<ItemData["effect"]>;
+
 export async function buildItemPsiData(options: ItemPsiBuildOptions): Promise<{
   items: ItemCollection;
   psi: PsiCollection;
@@ -42,6 +56,8 @@ export async function buildItemPsiData(options: ItemPsiBuildOptions): Promise<{
   const itemRows = parseItemConfiguration(
     await readFile(path.join(options.projectAbs, "item_configuration_table.yml"), "utf8")
   );
+  const battleActions = await readOptionalIntKeyedYaml(options.projectAbs, BATTLE_ACTIONS_FILE);
+  const condimentEffects = await readCondimentEffects(options.projectAbs);
   const psiRows = parseIntKeyedYaml(await readFile(path.join(options.projectAbs, "psi_ability_table.yml"), "utf8"));
   const psiNames = parseIntKeyedYaml(await readFile(path.join(options.projectAbs, "psi_name_table.yml"), "utf8"));
   const warnings: ValidationIssue[] = [];
@@ -50,15 +66,18 @@ export async function buildItemPsiData(options: ItemPsiBuildOptions): Promise<{
     .sort((a, b) => a.id - b.id)
     .map((entry) => {
       const type = requiredInteger(entry.fields.Type, `item_configuration_table.yml Type for item ${entry.id}`);
+      const action = requiredInteger(entry.fields.Action, `item_configuration_table.yml Action for item ${entry.id}`);
+      const effect = itemUseEffectForEntry(entry, action, battleActions, condimentEffects);
       return {
         id: entry.id,
         name: entry.fields.Name ?? neutralName("item", entry.id),
         type,
         cost: requiredInteger(entry.fields.Cost, `item_configuration_table.yml Cost for item ${entry.id}`),
-        action: requiredInteger(entry.fields.Action, `item_configuration_table.yml Action for item ${entry.id}`),
+        action,
         argument: optionalInteger(entry.fields.Argument),
         equippable: isEquippableType(type),
-        miscFlags: entry.miscFlags
+        miscFlags: entry.miscFlags,
+        ...(effect ? { effect } : {})
       };
     });
 
@@ -137,6 +156,69 @@ function assertInputs(projectAbs: string): void {
       throw new Error(`Item/PSI extraction requires ${relativePath}.`);
     }
   }
+}
+
+async function readOptionalIntKeyedYaml(projectAbs: string, relativePath: string) {
+  const fullPath = path.join(projectAbs, relativePath);
+  return existsSync(fullPath) ? parseIntKeyedYaml(await readFile(fullPath, "utf8")) : undefined;
+}
+
+async function readCondimentEffects(projectAbs: string): Promise<Map<number, ItemUseEffectData>> {
+  const rows = await readOptionalIntKeyedYaml(projectAbs, CONDIMENTS_FILE);
+  const effects = new Map<number, ItemUseEffectData>();
+  for (const entry of rows?.values() ?? []) {
+    const food = parseYamlInteger(entry.food);
+    const goodRecover = parseYamlInteger(entry["good recover"]);
+    if (!Number.isFinite(food) || food <= 0 || !Number.isFinite(goodRecover) || goodRecover <= 0) {
+      continue;
+    }
+
+    const effect = entry.effect?.trim().toLowerCase();
+    if (effect === "restore hp") {
+      effects.set(food, { kind: "healHp", amount: goodRecover * HP_FOOD_RECOVERY_MULTIPLIER });
+    } else if (effect === "restore pp") {
+      effects.set(food, { kind: "recoverPp", amount: Math.max(1, Math.floor(goodRecover / PP_FOOD_RECOVERY_DIVISOR)) });
+    }
+  }
+  return effects;
+}
+
+function itemUseEffectForEntry(
+  entry: ItemConfigEntry,
+  action: number,
+  battleActions: ReturnType<typeof parseIntKeyedYaml> | undefined,
+  condimentEffects: Map<number, ItemUseEffectData>
+): ItemUseEffectData | undefined {
+  if (!usesFoodAndDrinkRoutine(action, battleActions)) {
+    return undefined;
+  }
+  const condimentEffect = condimentEffects.get(entry.id);
+  if (condimentEffect) {
+    return condimentEffect;
+  }
+  const helpPointer = parsePointerInteger(entry.fields["Help Text Pointer"]);
+  return Number.isFinite(helpPointer) ? DRINK_EFFECTS_BY_HELP_POINTER.get(helpPointer) : undefined;
+}
+
+function usesFoodAndDrinkRoutine(action: number, battleActions: ReturnType<typeof parseIntKeyedYaml> | undefined): boolean {
+  const row = battleActions?.get(action);
+  if (!row) {
+    return false;
+  }
+  const actionType = row["Action type"]?.trim().toLowerCase();
+  const direction = row.Direction?.trim().toLowerCase();
+  return actionType === "item" &&
+    direction === "party" &&
+    parseYamlInteger(row["Code Address"]) === FOOD_AND_DRINK_ROUTINE_ADDRESS;
+}
+
+function parsePointerInteger(value: string | undefined): number {
+  const direct = parseYamlInteger(value);
+  if (Number.isFinite(direct)) {
+    return direct;
+  }
+  const labelMatch = /(?:^|[._])l_0x([0-9a-f]+)$/i.exec(value?.trim() ?? "");
+  return labelMatch ? Number.parseInt(labelMatch[1], 16) : Number.NaN;
 }
 
 function parseItemConfiguration(source: string): Map<number, ItemConfigEntry> {

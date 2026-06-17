@@ -230,7 +230,7 @@ export class PartyState {
   useItem(options: {
     ownerChar: number;
     targetChar: number;
-    item: Pick<ItemData, "id" | "action" | "argument" | "miscFlags">;
+    item: Pick<ItemData, "id" | "action" | "argument" | "miscFlags" | "effect">;
     targetVitals: PartyVitalsInput;
   }): ItemUseResult {
     const ownerChar = normalizeId(options.ownerChar);
@@ -628,10 +628,14 @@ export class PartyState {
 }
 
 export function decodeItemUseEffect(
-  item: Pick<ItemData, "action" | "argument" | "miscFlags">
+  item: Pick<ItemData, "action" | "argument" | "miscFlags" | "effect">
 ): ItemUseEffect | undefined {
   if (!isConsumableItem(item)) {
     return undefined;
+  }
+  const generatedEffect = normalizeGeneratedItemEffect(item.effect);
+  if (generatedEffect) {
+    return generatedEffect;
   }
   const action = stat(item.action);
   const argument = stat(item.argument);
@@ -651,6 +655,22 @@ export function decodeItemUseEffect(
     return { kind: "recoverPpPercent", percent: argument };
   }
   return undefined;
+}
+
+function normalizeGeneratedItemEffect(effect: ItemData["effect"]): ItemUseEffect | undefined {
+  if (!effect) {
+    return undefined;
+  }
+  switch (effect.kind) {
+    case "healHp":
+      return effect.amount > 0 ? { kind: "healHp", amount: stat(effect.amount) } : undefined;
+    case "healHpPercent":
+      return effect.percent > 0 ? { kind: "healHpPercent", percent: stat(effect.percent) } : undefined;
+    case "recoverPp":
+      return effect.amount > 0 ? { kind: "recoverPp", amount: stat(effect.amount) } : undefined;
+    case "recoverPpPercent":
+      return effect.percent > 0 ? { kind: "recoverPpPercent", percent: stat(effect.percent) } : undefined;
+  }
 }
 
 export function isConsumableItem(item: Pick<ItemData, "miscFlags">): boolean {

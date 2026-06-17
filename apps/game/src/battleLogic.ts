@@ -760,7 +760,7 @@ export function resolvePsiTurn(
 export function resolveItemTurn(
   state: BattleState,
   actorInput: BattleActor | "player",
-  item: Pick<ItemData, "id" | "action" | "argument" | "miscFlags">,
+  item: Pick<ItemData, "id" | "action" | "argument" | "miscFlags" | "effect">,
   options: { inventorySlot?: number; targetIndex?: number } = {}
 ): BattleActionResolution {
   const actor = normalizeActor(actorInput);
