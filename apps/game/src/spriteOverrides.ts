@@ -1,7 +1,10 @@
-import type { SpriteOverride } from "@eb/schemas";
+import type { SpriteOverride, SpriteOverrides } from "@eb/schemas";
 import type { DirectionFrameSequence, Facing } from "./playerController";
 
 type SpriteOverrideFrameSource = Pick<SpriteOverride, "animations">;
+
+export const PLAYER_SPRITE_OVERRIDE_SHEET_KEY = "sprite-override-player";
+const NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX = "sprite-override-npc-";
 
 export function spriteOverrideFrame(
   facing: Facing,
@@ -31,6 +34,35 @@ export function spriteOverrideDirectionFrames(override: SpriteOverrideFrameSourc
 
 export function spriteOverrideAssetUrl(image: string): string {
   return `/${image.replace(/^\/+/, "")}`;
+}
+
+export function spriteOverrideForNpcId(
+  overrides: Pick<SpriteOverrides, "byNpcId"> | undefined,
+  npcId: number
+): SpriteOverride | undefined {
+  return overrides?.byNpcId?.[String(npcId)];
+}
+
+export function spriteOverrideNpcEntries(
+  overrides: Pick<SpriteOverrides, "byNpcId"> | undefined
+): Array<[number, SpriteOverride]> {
+  return Object.entries(overrides?.byNpcId ?? {}).flatMap(([rawNpcId, override]) => {
+    const npcId = Number.parseInt(rawNpcId, 10);
+    return Number.isSafeInteger(npcId) && String(npcId) === rawNpcId ? [[npcId, override] as [number, SpriteOverride]] : [];
+  });
+}
+
+export function spriteOverrideNpcSheetKey(npcId: number): string {
+  return `${NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX}${npcId}`;
+}
+
+export function spriteOverrideNpcIdFromSheetKey(key: string): number | undefined {
+  if (!key.startsWith(NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX)) {
+    return undefined;
+  }
+  const rawNpcId = key.slice(NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX.length);
+  const npcId = Number.parseInt(rawNpcId, 10);
+  return Number.isSafeInteger(npcId) && String(npcId) === rawNpcId ? npcId : undefined;
 }
 
 function nonEmptyFrames(frames: readonly number[]): readonly [number, ...number[]] {

@@ -151,6 +151,35 @@ describe("SpriteOverridesSchema", () => {
     expect(parsed.byNpcId?.["744"].animations.left).toEqual([4]);
   });
 
+  it("accepts a single-frame static NPC sprite override", () => {
+    const parsed = SpriteOverridesSchema.parse({
+      schema: "swagbound.sprite-overrides.v1",
+      byNpcId: {
+        "100100": {
+          image: "assets/swagbound/npc/npc-neighbor.png",
+          frameWidth: 80,
+          frameHeight: 80,
+          animations: {
+            down: [0],
+            left: [0],
+            right: [0],
+            up: [0]
+          },
+          displayHeight: 24,
+          originX: 0.5,
+          originY: 1
+        }
+      }
+    });
+
+    expect(parsed.byNpcId?.["100100"].animations).toEqual({
+      down: [0],
+      left: [0],
+      right: [0],
+      up: [0]
+    });
+  });
+
   it("rejects missing facing sequences and paths outside public assets", () => {
     expect(SpriteOverridesSchema.safeParse({
       schema: "swagbound.sprite-overrides.v1",

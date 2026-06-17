@@ -158,9 +158,14 @@ import { buildPartyMember, type PartyMember } from "./characterModel";
 import { activeWindowFlavorId } from "./windowSettings";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import {
+  PLAYER_SPRITE_OVERRIDE_SHEET_KEY,
   spriteOverrideAssetUrl,
   spriteOverrideDirectionFrames,
+  spriteOverrideForNpcId,
   spriteOverrideFrame,
+  spriteOverrideNpcEntries,
+  spriteOverrideNpcIdFromSheetKey,
+  spriteOverrideNpcSheetKey,
   spriteOverrideScale
 } from "./spriteOverrides";
 import {
@@ -206,7 +211,7 @@ type NpcRuntime = {
   key: string;
   data: RuntimeNpcData;
   state: NpcRuntimeState;
-  frames: DirectionFrames;
+  frames: DirectionFrameSequence;
   sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
 };
 
@@ -234,7 +239,6 @@ const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
 const COLLISION_OVERLAY_DEPTH = 150_000;
 const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 const ROOM_MASK_EDGE_INSET_SCREEN_PX = 0.5;
-const PLAYER_OVERRIDE_SHEET_KEY = "sprite-override-player";
 
 type TilePoint = { x: number; y: number };
 type ForceEncounterResult =
@@ -254,6 +258,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private chunkObjects = new Map<string, StreamedChunk>();
   private loadingTextureKeys = new Set<string>();
   private loadingSheetGroups = new Set<number>();
+  private loadingNpcOverrideIds = new Set<number>();
   private currentChunk?: ChunkCoord;
   private activeRoomBounds?: ConnectedRoomBounds;
   private activeRoomSectorKey?: string;
@@ -366,9 +371,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
   preload(): void {
     const playerOverride = this.playerSpriteOverride();
     if (playerOverride) {
-      this.load.spritesheet(PLAYER_OVERRIDE_SHEET_KEY, spriteOverrideAssetUrl(playerOverride.image), {
+      this.load.spritesheet(PLAYER_SPRITE_OVERRIDE_SHEET_KEY, spriteOverrideAssetUrl(playerOverride.image), {
         frameWidth: playerOverride.frameWidth,
         frameHeight: playerOverride.frameHeight
+      });
+    }
+    for (const [npcId, override] of spriteOverrideNpcEntries(this.data_.spriteOverrides)) {
+      this.load.spritesheet(spriteOverrideNpcSheetKey(npcId), spriteOverrideAssetUrl(override.image), {
+        frameWidth: override.frameWidth,
+        frameHeight: override.frameHeight
       });
     }
     const playerSheet = this.sheetForGroup(this.world_.player.spriteGroup);
@@ -449,8 +460,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.load.on("filecomplete", (key: string) => {
       this.loadingTextureKeys.delete(key);
       const sheetGroup = this.groupIdFromSheetKey(key);
+      const overrideNpcId = spriteOverrideNpcIdFromSheetKey(key);
       if (sheetGroup !== undefined) {
         this.loadingSheetGroups.delete(sheetGroup);
+        this.refreshNpcSprites();
+      }
+      if (overrideNpcId !== undefined) {
+        this.loadingNpcOverrideIds.delete(overrideNpcId);
         this.refreshNpcSprites();
       }
       this.materializeRetainedChunks();
@@ -460,8 +476,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (file.key) {
         this.loadingTextureKeys.delete(file.key);
         const sheetGroup = this.groupIdFromSheetKey(file.key);
+        const overrideNpcId = spriteOverrideNpcIdFromSheetKey(file.key);
         if (sheetGroup !== undefined) {
           this.loadingSheetGroups.delete(sheetGroup);
+        }
+        if (overrideNpcId !== undefined) {
+          this.loadingNpcOverrideIds.delete(overrideNpcId);
         }
       }
     });
@@ -558,6 +578,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.chunkObjects.clear();
     this.loadingTextureKeys.clear();
     this.loadingSheetGroups.clear();
+    this.loadingNpcOverrideIds.clear();
     this.currentChunk = undefined;
     this.activeRoomBounds = undefined;
     this.activeRoomSectorKey = undefined;
@@ -1007,7 +1028,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
         ) {
           continue;
         }
-        queued = this.requestNpcSheet(placement.data.spriteGroup) || queued;
+        const override = this.npcSpriteOverride(placement.data.npcId);
+        queued = (override
+          ? this.requestNpcOverrideSheet(placement.data.npcId)
+          : this.requestNpcSheet(placement.data.spriteGroup)) || queued;
         this.npcRuntimes.set(placement.key, this.createNpcRuntime(placement));
       }
     }
@@ -1052,14 +1076,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private createNpcRuntime(placement: NpcPlacement): NpcRuntime {
     const npc = placement.data;
-    const frames = this.framesForGroup(npc.spriteGroup);
+    const frames = this.framesForNpc(npc.npcId, npc.spriteGroup);
     const facing = toFacing(npc.direction);
     return {
       key: placement.key,
       data: npc,
       state: createNpcState(npc.worldPixel.x, npc.worldPixel.y, facing, behaviorForNpc(npc.npcId, npc.movement), frames),
       frames,
-      sprite: this.spawnActor(npc.worldPixel.x, npc.worldPixel.y, npc.spriteGroup, npc.direction)
+      sprite: this.spawnNpcActor(npc.npcId, npc.worldPixel.x, npc.worldPixel.y, npc.spriteGroup, npc.direction)
     };
   }
 
@@ -1106,15 +1130,24 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private refreshNpcSprites(): void {
     for (const npc of this.npcRuntimes.values()) {
-      if (!npc.sprite || npc.sprite instanceof Phaser.GameObjects.Sprite || npc.data.spriteGroup === undefined) {
+      if (!npc.sprite || npc.sprite instanceof Phaser.GameObjects.Sprite) {
         continue;
       }
-      const key = `sheet-${npc.data.spriteGroup}`;
-      if (!this.textures.exists(key)) {
+      const override = this.npcSpriteOverride(npc.data.npcId);
+      const key = override
+        ? spriteOverrideNpcSheetKey(npc.data.npcId)
+        : npc.data.spriteGroup !== undefined ? `sheet-${npc.data.spriteGroup}` : undefined;
+      if (!key || !this.textures.exists(key)) {
         continue;
       }
       npc.sprite.destroy();
-      npc.sprite = this.spawnActor(npc.state.player.x, npc.state.player.y, npc.data.spriteGroup, npc.state.player.facing);
+      npc.sprite = this.spawnNpcActor(
+        npc.data.npcId,
+        npc.state.player.x,
+        npc.state.player.y,
+        npc.data.spriteGroup,
+        npc.state.player.facing
+      );
       this.syncNpc(npc);
     }
   }
@@ -1131,6 +1164,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.load.spritesheet(`sheet-${spriteGroup}`, `/generated/${sheet.file}`, {
       frameWidth: sheet.frameWidth,
       frameHeight: sheet.frameHeight
+    });
+    return true;
+  }
+
+  private requestNpcOverrideSheet(npcId: number): boolean {
+    const override = this.npcSpriteOverride(npcId);
+    const key = spriteOverrideNpcSheetKey(npcId);
+    if (!override || this.textures.exists(key) || this.loadingNpcOverrideIds.has(npcId)) {
+      return false;
+    }
+    this.loadingNpcOverrideIds.add(npcId);
+    this.load.spritesheet(key, spriteOverrideAssetUrl(override.image), {
+      frameWidth: override.frameWidth,
+      frameHeight: override.frameHeight
     });
     return true;
   }
@@ -1161,8 +1208,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.data_.spriteOverrides?.player;
   }
 
+  private npcSpriteOverride(npcId: number): SpriteOverride | undefined {
+    return spriteOverrideForNpcId(this.data_.spriteOverrides, npcId);
+  }
+
   private framesForPlayer(spriteGroup: number | undefined): DirectionFrameSequence {
     const override = this.playerSpriteOverride();
+    return override ? spriteOverrideDirectionFrames(override) : this.framesForGroup(spriteGroup);
+  }
+
+  private framesForNpc(npcId: number, spriteGroup: number | undefined): DirectionFrameSequence {
+    const override = this.npcSpriteOverride(npcId);
     return override ? spriteOverrideDirectionFrames(override) : this.framesForGroup(spriteGroup);
   }
 
@@ -1184,10 +1240,46 @@ export class ChunkedWorldScene extends Phaser.Scene {
       sprite.setDepth(y);
       return sprite;
     }
+    return this.spawnPlaceholderActor(x, y);
+  }
+
+  private spawnPlaceholderActor(x: number, y: number): Phaser.GameObjects.Rectangle {
     const placeholder = this.add.rectangle(x, y, 16, 24, 0x9aa7b8).setStrokeStyle(1, 0xe2e8f0);
     placeholder.setOrigin(0.5, 1);
     placeholder.setDepth(y);
     return placeholder;
+  }
+
+  private spawnOverrideActor(
+    x: number,
+    y: number,
+    direction: string | undefined,
+    textureKey: string,
+    override: SpriteOverride
+  ): Phaser.GameObjects.Sprite {
+    const facing = toFacing(direction);
+    const sprite = this.add.sprite(x, y, textureKey, spriteOverrideFrame(facing, 0, override));
+    sprite.setOrigin(override.originX ?? 0.5, override.originY ?? 1);
+    sprite.setScale(spriteOverrideScale(override.displayHeight, override.frameHeight));
+    sprite.setDepth(y);
+    return sprite;
+  }
+
+  private spawnNpcActor(
+    npcId: number,
+    x: number,
+    y: number,
+    spriteGroup: number | undefined,
+    direction: string | undefined
+  ): Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle {
+    const override = this.npcSpriteOverride(npcId);
+    if (override) {
+      const key = spriteOverrideNpcSheetKey(npcId);
+      return this.textures.exists(key)
+        ? this.spawnOverrideActor(x, y, direction, key, override)
+        : this.spawnPlaceholderActor(x, y);
+    }
+    return this.spawnActor(x, y, spriteGroup, direction);
   }
 
   private spawnPlayerActor(
@@ -1197,13 +1289,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     direction: string | undefined
   ): Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle {
     const override = this.playerSpriteOverride();
-    if (override && this.textures.exists(PLAYER_OVERRIDE_SHEET_KEY)) {
-      const facing = toFacing(direction);
-      const sprite = this.add.sprite(x, y, PLAYER_OVERRIDE_SHEET_KEY, spriteOverrideFrame(facing, 0, override));
-      sprite.setOrigin(override.originX ?? 0.5, override.originY ?? 1);
-      sprite.setScale(spriteOverrideScale(override.displayHeight, override.frameHeight));
-      sprite.setDepth(y);
-      return sprite;
+    if (override && this.textures.exists(PLAYER_SPRITE_OVERRIDE_SHEET_KEY)) {
+      return this.spawnOverrideActor(x, y, direction, PLAYER_SPRITE_OVERRIDE_SHEET_KEY, override);
     }
     return this.spawnActor(x, y, spriteGroup, direction);
   }

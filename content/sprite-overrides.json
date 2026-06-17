@@ -5,15 +5,1818 @@
     "frameWidth": 192,
     "frameHeight": 192,
     "animations": {
-      "down": [0, 1, 2, 3],
-      "left": [4, 5, 6, 7],
-      "right": [8, 9, 10, 11],
-      "up": [12, 13, 14, 15]
+      "down": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "left": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "right": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "up": [
+        12,
+        13,
+        14,
+        15
+      ]
     },
     "displayHeight": 24,
     "originX": 0.5,
     "originY": 1
   },
-  "byNpcId": {},
+  "byNpcId": {
+    "100100": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100101": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100102": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100103": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100104": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100105": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100106": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100107": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100108": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100109": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100110": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100111": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100112": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100113": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100114": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100115": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100116": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100117": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100118": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100119": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100120": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100121": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100122": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100123": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100124": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100125": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100126": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100127": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100128": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100129": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100130": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100131": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100132": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100133": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100134": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100135": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100136": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100137": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100138": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100139": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100140": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100141": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100142": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100143": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100144": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100145": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100146": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100147": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100148": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100149": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100150": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100151": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100152": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100153": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100154": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100155": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100156": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100157": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100158": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100159": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100160": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100161": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100162": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100163": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100164": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100165": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100166": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100167": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100168": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100169": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100170": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100171": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100172": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100173": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100174": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100175": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100176": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100177": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100178": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100179": {
+      "image": "assets/swagbound/npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "100180": {
+      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    }
+  },
   "byEnemyId": {}
 }

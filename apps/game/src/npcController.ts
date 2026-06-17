@@ -3,7 +3,7 @@ import {
   IDLE_INPUT,
   createPlayerState,
   stepPlayer,
-  type DirectionFrames,
+  type DirectionFrameSequence,
   type Facing,
   type MoveInput,
   type PlayerState
@@ -30,7 +30,7 @@ export type NpcStepOptions = {
   deltaMs: number;
   blocked: (x: number, y: number) => boolean;
   bounds: { minX: number; maxX: number; minY: number; maxY: number };
-  frames?: DirectionFrames;
+  frames?: DirectionFrameSequence;
 };
 
 const EPSILON = 0.000001;
@@ -48,7 +48,7 @@ export function createNpcState(
   y: number,
   facing: Facing,
   behavior: NpcBehavior,
-  frames: DirectionFrames = CANONICAL_DIRECTION_FRAMES
+  frames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES
 ): NpcRuntimeState {
   return {
     player: createPlayerState(x, y, facing, frames),
@@ -151,7 +151,7 @@ function stepWander(
   state: NpcRuntimeState,
   behavior: Extract<NpcBehavior, { kind: "wander" }>,
   options: NpcStepOptions,
-  frames: DirectionFrames
+  frames: DirectionFrameSequence
 ): void {
   const stepMs = behavior.stepMs ?? DEFAULT_WANDER_STEP_MS;
   state.wanderElapsedMs += options.deltaMs;
