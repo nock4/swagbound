@@ -36,7 +36,7 @@
   },
   "byNpcId": {
     "100100": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "image": "assets/swagbound/npc/npc-morrow.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {
@@ -58,7 +58,7 @@
       "originY": 1
     },
     "100101": {
-      "image": "assets/swagbound/npc/npc-kid.png",
+      "image": "assets/swagbound/npc/npc-sal.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {
@@ -80,7 +80,7 @@
       "originY": 1
     },
     "100102": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
+      "image": "assets/swagbound/npc/npc-bonkle.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {

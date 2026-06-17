@@ -151,13 +151,19 @@ describe("sprite override helpers", () => {
       "assets/swagbound/npc/npc-neighbor.png",
       "assets/swagbound/npc/npc-kid.png"
     ];
+    // Three placeholders are promoted to the named story trio with their own sprites.
+    const named: Record<string, string> = {
+      "100100": "assets/swagbound/npc/npc-morrow.png",
+      "100101": "assets/swagbound/npc/npc-sal.png",
+      "100102": "assets/swagbound/npc/npc-bonkle.png"
+    };
 
     expect(overrides.player?.image).toBe("assets/swagbound/hero/lsw-2821-walk.png");
     expect(Object.keys(byNpcId).sort((a, b) => Number(a) - Number(b))).toEqual(ids);
     ids.forEach((id, index) => {
       const override = byNpcId[id];
       expect(override).toMatchObject({
-        image: allowedImages[index % allowedImages.length],
+        image: named[id] ?? allowedImages[index % allowedImages.length],
         frameWidth: 80,
         frameHeight: 80,
         displayHeight: 24,
@@ -171,7 +177,9 @@ describe("sprite override helpers", () => {
         up: [0]
       });
     });
-    expect(new Set(Object.values(byNpcId).map((override) => override.image))).toEqual(new Set(allowedImages));
+    expect(new Set(Object.values(byNpcId).map((override) => override.image))).toEqual(
+      new Set([...allowedImages, ...Object.values(named)])
+    );
   });
 
   it("authors the full enemy battle roster as single-image mappings", async () => {
@@ -211,6 +219,31 @@ describe("sprite override helpers", () => {
       expect(override.frameWidth).toBeUndefined();
       expect(override.frameHeight).toBeUndefined();
       expect(override.animations).toBeUndefined();
+    }
+  });
+});
+
+describe("named NPC trio (Bonkle / Sal / Morrow)", () => {
+  it("wires each named NPC's sprite + interaction (dialogue ref + shop where applicable)", async () => {
+    const overrides = SpriteOverridesSchema.parse(JSON.parse(
+      await readFile(resolve("content/sprite-overrides.json"), "utf8")
+    ));
+    const added = AddedNpcsSchema.parse(JSON.parse(
+      await readFile(resolve("content/added-npcs.json"), "utf8")
+    ));
+    const npcById = new Map(added.npcs.map((n) => [n.id, n]));
+    const trio = [
+      { id: 100100, sprite: "assets/swagbound/npc/npc-morrow.png", ref: "interior:burger-shop-v0", shop: 4 },
+      { id: 100101, sprite: "assets/swagbound/npc/npc-sal.png", ref: "interior:corner-shop-v0", shop: 1 },
+      { id: 100102, sprite: "assets/swagbound/npc/npc-bonkle.png", ref: "interior:neighbor-house-v0", shop: undefined }
+    ];
+    for (const t of trio) {
+      const sprite = overrides.byNpcId?.[String(t.id)];
+      expect(sprite?.image).toBe(t.sprite);
+      expect(sprite?.displayHeight).toBe(24);
+      const npc = npcById.get(t.id);
+      expect(npc?.interaction?.ref).toBe(t.ref);
+      expect(npc?.interaction?.shop).toBe(t.shop);
     }
   });
 });

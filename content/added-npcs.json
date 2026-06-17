@@ -8,16 +8,24 @@
         "y": 104
       },
       "spriteGroup": 59,
-      "facing": "left"
+      "facing": "down",
+      "interaction": {
+        "ref": "interior:burger-shop-v0",
+        "shop": 4
+      }
     },
     {
       "id": 100101,
       "worldPixel": {
-        "x": 5144,
-        "y": 552
+        "x": 7560,
+        "y": 1232
       },
       "spriteGroup": 54,
-      "facing": "up"
+      "facing": "down",
+      "interaction": {
+        "ref": "interior:corner-shop-v0",
+        "shop": 1
+      }
     },
     {
       "id": 100102,
@@ -26,7 +34,10 @@
         "y": 2024
       },
       "spriteGroup": 119,
-      "facing": "left"
+      "facing": "down",
+      "interaction": {
+        "ref": "interior:neighbor-house-v0"
+      }
     },
     {
       "id": 100103,
