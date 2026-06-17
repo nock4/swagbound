@@ -1,4 +1,10 @@
-import type { EquipmentSlot, EquippedSlots, PartyBattleMemberSnapshot, PartyStateSnapshot } from "./partyState";
+import type {
+  EquipmentSlot,
+  EquippedSlots,
+  PartyBattleMemberSnapshot,
+  PartyStateSnapshot,
+  PartyVitalsSnapshot
+} from "./partyState";
 import type { Facing } from "./playerController";
 
 export const SAVE_STATE_SCHEMA_VERSION = 1;
@@ -177,6 +183,9 @@ function clonePartyStateSnapshot(snapshot: PartyStateSnapshot): PartyStateSnapsh
       charId: entry.charId,
       slots: { ...entry.slots }
     })),
+    ...(snapshot.vitals ? {
+      vitals: snapshot.vitals.map(clonePartyVitalsSnapshot)
+    } : {}),
     ...(snapshot.battleMembers ? {
       battleMembers: snapshot.battleMembers.map(cloneBattleMemberSnapshot)
     } : {})
@@ -201,6 +210,7 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
   const partyIds = validateIdArray(value.partyIds, { unique: true });
   const inventory = validateInventory(value.inventory);
   const equipped = validateEquipment(value.equipped);
+  const vitals = value.vitals === undefined ? undefined : validateVitals(value.vitals);
   const battleMembers = value.battleMembers === undefined ? undefined : validateBattleMembers(value.battleMembers);
   if (
     wallet === undefined ||
@@ -208,6 +218,7 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
     !partyIds ||
     !inventory ||
     !equipped ||
+    (value.vitals !== undefined && !vitals) ||
     (value.battleMembers !== undefined && !battleMembers)
   ) {
     return null;
@@ -218,6 +229,7 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
     partyIds,
     inventory,
     equipped,
+    ...(vitals ? { vitals } : {}),
     ...(battleMembers ? { battleMembers } : {})
   };
 }
@@ -357,6 +369,43 @@ function validateBattleMembers(value: unknown): PartyBattleMemberSnapshot[] | nu
   return members;
 }
 
+function validateVitals(value: unknown): PartyVitalsSnapshot[] | null {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+  const vitals: PartyVitalsSnapshot[] = [];
+  for (const entry of value) {
+    if (!isRecord(entry)) {
+      return null;
+    }
+    const charId = validateId(entry.charId);
+    const hp = validateHpSnapshot(entry.hp);
+    const maxHp = validateId(entry.maxHp);
+    const pp = validateId(entry.pp);
+    const maxPp = validateId(entry.maxPp);
+    if (
+      charId === undefined ||
+      !hp ||
+      maxHp === undefined ||
+      pp === undefined ||
+      maxPp === undefined
+    ) {
+      return null;
+    }
+    vitals.push({ charId, hp, maxHp, pp, maxPp });
+  }
+  return vitals;
+}
+
+function validateHpSnapshot(value: unknown): PartyVitalsSnapshot["hp"] | null {
+  if (!isRecord(value)) {
+    return null;
+  }
+  const current = validateId(value.current);
+  const target = validateId(value.target);
+  return current === undefined || target === undefined ? null : { current, target };
+}
+
 function validatePartyMemberStats(value: unknown): PartyBattleMemberSnapshot["stats"] | null {
   if (!isRecord(value)) {
     return null;
@@ -411,6 +460,16 @@ function cloneBattleMemberSnapshot(member: PartyBattleMemberSnapshot): PartyBatt
     maxPp: member.maxPp,
     inventory: [...member.inventory],
     stats: { ...member.stats }
+  };
+}
+
+function clonePartyVitalsSnapshot(vitals: PartyVitalsSnapshot): PartyVitalsSnapshot {
+  return {
+    charId: vitals.charId,
+    hp: { ...vitals.hp },
+    maxHp: vitals.maxHp,
+    pp: vitals.pp,
+    maxPp: vitals.maxPp
   };
 }
 

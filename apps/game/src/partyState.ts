@@ -42,12 +42,24 @@ export type PartyBattleMemberSnapshot = {
   stats: PartyMemberStats;
 };
 
+export type PartyVitalsSnapshot = {
+  charId: number;
+  hp: {
+    current: number;
+    target: number;
+  };
+  maxHp: number;
+  pp: number;
+  maxPp: number;
+};
+
 export type PartyStateSnapshot = {
   wallet: number;
   bank?: number;
   partyIds: number[];
   inventory: PartyInventorySnapshot[];
   equipped: PartyEquipmentSnapshot[];
+  vitals?: PartyVitalsSnapshot[];
   battleMembers?: PartyBattleMemberSnapshot[];
 };
 
@@ -461,6 +473,9 @@ export class PartyState {
       equipped: [...this.equippedByChar.entries()]
         .sort(([a], [b]) => a - b)
         .map(([charId, slots]) => ({ charId, slots: cloneEquippedSlots(slots) })),
+      vitals: [...this.vitalsByChar.entries()]
+        .sort(([a], [b]) => a - b)
+        .map(([charId, vitals]) => vitalsSnapshotFromVitals(charId, vitals)),
       battleMembers: [...this.battleMembersByChar.values()]
         .sort((a, b) => a.charId - b.charId)
         .map((member) => ({
@@ -508,6 +523,10 @@ export class PartyState {
         pp: member.pp,
         maxPp: member.maxPp
       });
+    }
+    for (const entry of snapshot.vitals ?? []) {
+      const vitals = vitalsFromSnapshot(entry);
+      this.commitVitals(normalizeId(entry.charId), vitals);
     }
   }
 
@@ -750,6 +769,34 @@ function cloneVitals(vitals: PartyVitals): PartyVitals {
   return {
     ...vitals,
     hp: { ...vitals.hp }
+  };
+}
+
+function vitalsSnapshotFromVitals(charId: number, vitals: PartyVitals): PartyVitalsSnapshot {
+  const maxHp = positiveStat(vitals.maxHp);
+  const maxPp = stat(vitals.maxPp);
+  return {
+    charId: normalizeId(charId),
+    hp: {
+      current: Math.min(maxHp, stat(vitals.hp.displayed)),
+      target: Math.min(maxHp, stat(vitals.hp.target))
+    },
+    maxHp,
+    pp: Math.min(maxPp, stat(vitals.pp)),
+    maxPp
+  };
+}
+
+function vitalsFromSnapshot(snapshot: PartyVitalsSnapshot): PartyVitals {
+  const maxHp = positiveStat(snapshot.maxHp);
+  const maxPp = stat(snapshot.maxPp);
+  const current = Math.min(maxHp, stat(snapshot.hp.current));
+  const target = Math.min(maxHp, stat(snapshot.hp.target));
+  return {
+    hp: setTarget(createRollingMeter(current, HP_RATE_PER_SEC), target),
+    maxHp,
+    pp: Math.min(maxPp, stat(snapshot.pp)),
+    maxPp
   };
 }
 

@@ -122,6 +122,55 @@ describe("save-rest: serialize -> deserialize round-trip", () => {
     expect(second).toBe(first);
   });
 
+  it("persists field-only HP/PP changes before any battle member exists", () => {
+    const sourceParty = new PartyState();
+    sourceParty.partyOp("add", 1);
+    const hpItem = { id: 0x31, action: 0x1e02, argument: 20, miscFlags: ["item disappears when used"] };
+    const ppItem = { id: 0x32, action: 0x1e06, argument: 5, miscFlags: ["item disappears when used"] };
+    sourceParty.give(1, hpItem.id);
+    sourceParty.give(1, ppItem.id);
+
+    expect(sourceParty.useItem({
+      ownerChar: 1,
+      targetChar: 1,
+      item: hpItem,
+      targetVitals: { hp: 12, maxHp: 40, pp: 2, maxPp: 10 }
+    })).toMatchObject({ ok: true, previousValue: 12, nextValue: 32 });
+    expect(sourceParty.useItem({
+      ownerChar: 1,
+      targetChar: 1,
+      item: ppItem,
+      targetVitals: { hp: 32, maxHp: 40, pp: 2, maxPp: 10 }
+    })).toMatchObject({ ok: true, previousValue: 2, nextValue: 7 });
+    expect(sourceParty.battleMember(1)).toBeUndefined();
+
+    const save = captureSaveState({
+      flags: new GameFlags(),
+      partyState: sourceParty,
+      player: { mode: "chunked", mapId: "field-heal", x: 9, y: 10, facing: "left" }
+    });
+    expect(save.party.vitals).toEqual([{
+      charId: 1,
+      hp: { current: 12, target: 32 },
+      maxHp: 40,
+      pp: 7,
+      maxPp: 10
+    }]);
+
+    const reloadedParty = new PartyState();
+    applySaveState(deserializeSaveState(serializeSaveState(save)), {
+      flags: new GameFlags(),
+      partyState: reloadedParty
+    });
+
+    const vitals = reloadedParty.vitals(1);
+    expect(reloadedParty.battleMember(1)).toBeUndefined();
+    expect(vitals?.hp).toMatchObject({ displayed: 12, target: 32, isRolling: true });
+    expect(vitals?.maxHp).toBe(40);
+    expect(vitals?.pp).toBe(7);
+    expect(vitals?.maxPp).toBe(10);
+  });
+
   it("rejects empty, corrupt, missing-section, wrong-version, and out-of-range blobs", () => {
     expect(deserializeSaveState(null)).toBeNull();
     expect(deserializeSaveState(undefined)).toBeNull();
@@ -150,6 +199,45 @@ describe("save-rest: serialize -> deserialize round-trip", () => {
     expect(deserializeSaveState(JSON.stringify({ ...base, player: { ...base.player, mode: "freefly" } }))).toBeNull();
     // Sanity: the well-formed base IS accepted.
     expect(deserializeSaveState(JSON.stringify(base))).not.toBeNull();
+  });
+
+  it("still loads older saves that do not have a party vitals section", () => {
+    const legacySave = {
+      schemaVersion: SAVE_STATE_SCHEMA_VERSION,
+      flags: { strings: [], numeric: [] },
+      party: {
+        wallet: 0,
+        bank: 0,
+        partyIds: [1],
+        inventory: [],
+        equipped: [],
+        battleMembers: [
+          {
+            charId: 1,
+            level: 3,
+            experience: 120,
+            hp: 22,
+            maxHp: 80,
+            pp: 5,
+            maxPp: 25,
+            inventory: [],
+            stats: { offense: 10, defense: 9, speed: 8, guts: 7, vitality: 6, iq: 5, luck: 4 }
+          }
+        ]
+      },
+      player: { mode: "chunked", mapId: "legacy", x: 0, y: 0, facing: "down" }
+    };
+
+    const parsed = deserializeSaveState(JSON.stringify(legacySave));
+    expect(parsed).not.toBeNull();
+    expect(parsed?.party.vitals).toBeUndefined();
+
+    const reloadedParty = new PartyState();
+    applySaveState(parsed, { flags: new GameFlags(), partyState: reloadedParty });
+
+    expect(reloadedParty.vitals(1)?.hp.target).toBe(22);
+    expect(reloadedParty.vitals(1)?.pp).toBe(5);
+    expect(reloadedParty.battleMember(1)).toMatchObject({ hp: 22, pp: 5 });
   });
 });
 
@@ -257,5 +345,42 @@ describe("save-rest: restore() rehydrates vitals to the saved values", () => {
     expect(v?.hp.target).toBe(v?.maxHp);
     expect(v?.pp).toBe(40);
     expect(v?.pp).toBe(v?.maxPp);
+  });
+
+  it("prefers saved field vitals when battle member and vitals sections disagree", () => {
+    const party = new PartyState();
+    party.restore({
+      wallet: 0,
+      bank: 0,
+      partyIds: [1],
+      inventory: [],
+      equipped: [],
+      vitals: [
+        {
+          charId: 1,
+          hp: { current: 10, target: 35 },
+          maxHp: 40,
+          pp: 8,
+          maxPp: 12
+        }
+      ],
+      battleMembers: [
+        {
+          charId: 1,
+          level: 5,
+          experience: 300,
+          hp: 1,
+          maxHp: 40,
+          pp: 0,
+          maxPp: 12,
+          inventory: [],
+          stats: { offense: 12, defense: 11, speed: 10, guts: 9, vitality: 8, iq: 7, luck: 6 }
+        }
+      ]
+    });
+
+    expect(party.vitals(1)?.hp).toMatchObject({ displayed: 10, target: 35 });
+    expect(party.vitals(1)?.pp).toBe(8);
+    expect(party.battleMember(1)).toMatchObject({ hp: 35, pp: 8, maxHp: 40, maxPp: 12 });
   });
 });
