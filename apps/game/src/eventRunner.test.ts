@@ -8,6 +8,12 @@ import {
 import { talkedFlag } from "./gameFlags";
 
 describe("addedNpcInteractionEvents", () => {
+  it("returns no events for a marker without interaction data", () => {
+    expect(addedNpcInteractionEvents({
+      npcId: 100099
+    })).toEqual([]);
+  });
+
   it("yields an immediate shop-open event for a shop-only entry", () => {
     const events = addedNpcInteractionEvents({
       npcId: 100000,

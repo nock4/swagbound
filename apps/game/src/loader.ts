@@ -79,7 +79,7 @@ export type GameData = {
 
 export type AddedWorldChunkedNpc = WorldChunkedNpc & {
   addedNpc: true;
-  addedInteraction: AddedNpc["interaction"];
+  addedInteraction?: AddedNpc["interaction"];
 };
 
 async function loadJson<T>(url: string, schema: { parse: (value: unknown) => T }): Promise<T | undefined> {
@@ -228,11 +228,11 @@ export function buildAddedWorldNpcs(
       type: "added-npc",
       movement: 0,
       showSprite: "always",
-      interactable: true,
+      interactable: npc.interaction !== undefined,
       visible: true,
       worldPixel: { ...npc.worldPixel },
       addedNpc: true,
-      addedInteraction: { ...npc.interaction }
+      ...(npc.interaction ? { addedInteraction: { ...npc.interaction } } : {})
     });
   }
   return result;

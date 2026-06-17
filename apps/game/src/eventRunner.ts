@@ -59,11 +59,15 @@ export function interactionEntryEvents(
 }
 
 export function addedNpcInteractionEvents(
-  npc: { npcId: number; interaction: NpcInteraction },
+  npc: { npcId: number; interaction?: NpcInteraction },
   dialogueLibrary?: DialogueLibraryLookup
 ): GameEvent[] {
+  const events = interactionEntryEvents(npc.interaction, { dialogueLibrary });
+  if (events.length === 0) {
+    return [];
+  }
   return [
-    ...interactionEntryEvents(npc.interaction, { dialogueLibrary }),
+    ...events,
     { kind: "setFlag", flag: talkedFlag(npc.npcId) }
   ];
 }

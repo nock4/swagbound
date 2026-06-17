@@ -24,6 +24,26 @@ describe("AddedNpcsSchema", () => {
     });
   });
 
+  it("accepts positioning placeholders without interactions", () => {
+    const parsed = AddedNpcsSchema.parse({
+      schema: "swagbound.added-npcs.v1",
+      npcs: [{
+        id: ADDED_NPC_MIN_ID,
+        worldPixel: { x: 128, y: 256 },
+        spriteGroup: 59,
+        facing: "down"
+      }]
+    });
+
+    expect(parsed.npcs[0]).toMatchObject({
+      id: ADDED_NPC_MIN_ID,
+      worldPixel: { x: 128, y: 256 },
+      spriteGroup: 59,
+      facing: "down"
+    });
+    expect(parsed.npcs[0].interaction).toBeUndefined();
+  });
+
   it("rejects ids in the EarthBound NPC id range and duplicate synthetic ids", () => {
     expect(AddedNpcsSchema.safeParse({
       schema: "swagbound.added-npcs.v1",

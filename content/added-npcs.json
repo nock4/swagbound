@@ -1,25 +1,734 @@
 {
   "schema": "swagbound.added-npcs.v1",
-  "comment": "First-slice placeholder NPCs proving the overlay + shop interaction. Positions/sprites are first-pass and get dialed in (behind counters) during the sprite pass. See docs/swagbound-eb-act1-arc-mapping.md.",
   "npcs": [
     {
-      "id": 100001,
-      "worldPixel": { "x": 296, "y": 568 },
+      "id": 100100,
+      "worldPixel": {
+        "x": 6184,
+        "y": 104
+      },
       "spriteGroup": 59,
-      "facing": "down",
-      "interaction": {
-        "pages": [
-          "A clerk waits behind the counter, scanning your face like a receipt that hasn't printed yet. \"Buying, or just being seen?\""
-        ],
-        "shop": 1
-      }
+      "facing": "left"
     },
     {
-      "id": 100002,
-      "worldPixel": { "x": 3848, "y": 2096 },
+      "id": 100101,
+      "worldPixel": {
+        "x": 5144,
+        "y": 552
+      },
+      "spriteGroup": 54,
+      "facing": "up"
+    },
+    {
+      "id": 100102,
+      "worldPixel": {
+        "x": 4248,
+        "y": 2024
+      },
+      "spriteGroup": 119,
+      "facing": "left"
+    },
+    {
+      "id": 100103,
+      "worldPixel": {
+        "x": 7544,
+        "y": 848
+      },
+      "spriteGroup": 68,
+      "facing": "right"
+    },
+    {
+      "id": 100104,
+      "worldPixel": {
+        "x": 7640,
+        "y": 1000
+      },
+      "spriteGroup": 66,
+      "facing": "right"
+    },
+    {
+      "id": 100105,
+      "worldPixel": {
+        "x": 7520,
+        "y": 1216
+      },
       "spriteGroup": 59,
-      "facing": "down",
-      "interaction": { "ref": "interior:burger-shop-v0" }
+      "facing": "down"
+    },
+    {
+      "id": 100106,
+      "worldPixel": {
+        "x": 7864,
+        "y": 1368
+      },
+      "spriteGroup": 54,
+      "facing": "down"
+    },
+    {
+      "id": 100107,
+      "worldPixel": {
+        "x": 6976,
+        "y": 1472
+      },
+      "spriteGroup": 119,
+      "facing": "left"
+    },
+    {
+      "id": 100108,
+      "worldPixel": {
+        "x": 7456,
+        "y": 1632
+      },
+      "spriteGroup": 68,
+      "facing": "left"
+    },
+    {
+      "id": 100109,
+      "worldPixel": {
+        "x": 8152,
+        "y": 1624
+      },
+      "spriteGroup": 66,
+      "facing": "down"
+    },
+    {
+      "id": 100110,
+      "worldPixel": {
+        "x": 7760,
+        "y": 1720
+      },
+      "spriteGroup": 59,
+      "facing": "right"
+    },
+    {
+      "id": 100111,
+      "worldPixel": {
+        "x": 7760,
+        "y": 1976
+      },
+      "spriteGroup": 54,
+      "facing": "right"
+    },
+    {
+      "id": 100112,
+      "worldPixel": {
+        "x": 3136,
+        "y": 2120
+      },
+      "spriteGroup": 119,
+      "facing": "right"
+    },
+    {
+      "id": 100113,
+      "worldPixel": {
+        "x": 6688,
+        "y": 2496
+      },
+      "spriteGroup": 68,
+      "facing": "down"
+    },
+    {
+      "id": 100114,
+      "worldPixel": {
+        "x": 4904,
+        "y": 2504
+      },
+      "spriteGroup": 66,
+      "facing": "left"
+    },
+    {
+      "id": 100115,
+      "worldPixel": {
+        "x": 5408,
+        "y": 2520
+      },
+      "spriteGroup": 59,
+      "facing": "left"
+    },
+    {
+      "id": 100116,
+      "worldPixel": {
+        "x": 5952,
+        "y": 2496
+      },
+      "spriteGroup": 54,
+      "facing": "left"
+    },
+    {
+      "id": 100117,
+      "worldPixel": {
+        "x": 7744,
+        "y": 2552
+      },
+      "spriteGroup": 119,
+      "facing": "down"
+    },
+    {
+      "id": 100118,
+      "worldPixel": {
+        "x": 7648,
+        "y": 3272
+      },
+      "spriteGroup": 68,
+      "facing": "right"
+    },
+    {
+      "id": 100119,
+      "worldPixel": {
+        "x": 3880,
+        "y": 3400
+      },
+      "spriteGroup": 66,
+      "facing": "left"
+    },
+    {
+      "id": 100120,
+      "worldPixel": {
+        "x": 5672,
+        "y": 3432
+      },
+      "spriteGroup": 59,
+      "facing": "left"
+    },
+    {
+      "id": 100121,
+      "worldPixel": {
+        "x": 5400,
+        "y": 3496
+      },
+      "spriteGroup": 54,
+      "facing": "left"
+    },
+    {
+      "id": 100122,
+      "worldPixel": {
+        "x": 6696,
+        "y": 3528
+      },
+      "spriteGroup": 119,
+      "facing": "left"
+    },
+    {
+      "id": 100123,
+      "worldPixel": {
+        "x": 7008,
+        "y": 3632
+      },
+      "spriteGroup": 68,
+      "facing": "up"
+    },
+    {
+      "id": 100124,
+      "worldPixel": {
+        "x": 5408,
+        "y": 4160
+      },
+      "spriteGroup": 66,
+      "facing": "left"
+    },
+    {
+      "id": 100125,
+      "worldPixel": {
+        "x": 4272,
+        "y": 4688
+      },
+      "spriteGroup": 59,
+      "facing": "down"
+    },
+    {
+      "id": 100126,
+      "worldPixel": {
+        "x": 7312,
+        "y": 4840
+      },
+      "spriteGroup": 54,
+      "facing": "up"
+    },
+    {
+      "id": 100127,
+      "worldPixel": {
+        "x": 5152,
+        "y": 4952
+      },
+      "spriteGroup": 119,
+      "facing": "down"
+    },
+    {
+      "id": 100128,
+      "worldPixel": {
+        "x": 5720,
+        "y": 4960
+      },
+      "spriteGroup": 68,
+      "facing": "right"
+    },
+    {
+      "id": 100129,
+      "worldPixel": {
+        "x": 8152,
+        "y": 4904
+      },
+      "spriteGroup": 66,
+      "facing": "right"
+    },
+    {
+      "id": 100130,
+      "worldPixel": {
+        "x": 6104,
+        "y": 5080
+      },
+      "spriteGroup": 59,
+      "facing": "down"
+    },
+    {
+      "id": 100131,
+      "worldPixel": {
+        "x": 7616,
+        "y": 5064
+      },
+      "spriteGroup": 54,
+      "facing": "right"
+    },
+    {
+      "id": 100132,
+      "worldPixel": {
+        "x": 4208,
+        "y": 5168
+      },
+      "spriteGroup": 119,
+      "facing": "right"
+    },
+    {
+      "id": 100133,
+      "worldPixel": {
+        "x": 5248,
+        "y": 5208
+      },
+      "spriteGroup": 68,
+      "facing": "up"
+    },
+    {
+      "id": 100134,
+      "worldPixel": {
+        "x": 5920,
+        "y": 5336
+      },
+      "spriteGroup": 66,
+      "facing": "down"
+    },
+    {
+      "id": 100135,
+      "worldPixel": {
+        "x": 4056,
+        "y": 5416
+      },
+      "spriteGroup": 59,
+      "facing": "right"
+    },
+    {
+      "id": 100136,
+      "worldPixel": {
+        "x": 4128,
+        "y": 5440
+      },
+      "spriteGroup": 54,
+      "facing": "down"
+    },
+    {
+      "id": 100137,
+      "worldPixel": {
+        "x": 3776,
+        "y": 5576
+      },
+      "spriteGroup": 119,
+      "facing": "right"
+    },
+    {
+      "id": 100138,
+      "worldPixel": {
+        "x": 5160,
+        "y": 5584
+      },
+      "spriteGroup": 68,
+      "facing": "up"
+    },
+    {
+      "id": 100139,
+      "worldPixel": {
+        "x": 3616,
+        "y": 5696
+      },
+      "spriteGroup": 66,
+      "facing": "down"
+    },
+    {
+      "id": 100140,
+      "worldPixel": {
+        "x": 5152,
+        "y": 5720
+      },
+      "spriteGroup": 59,
+      "facing": "down"
+    },
+    {
+      "id": 100141,
+      "worldPixel": {
+        "x": 3672,
+        "y": 5952
+      },
+      "spriteGroup": 54,
+      "facing": "down"
+    },
+    {
+      "id": 100142,
+      "worldPixel": {
+        "x": 3664,
+        "y": 6200
+      },
+      "spriteGroup": 119,
+      "facing": "left"
+    },
+    {
+      "id": 100143,
+      "worldPixel": {
+        "x": 3992,
+        "y": 6080
+      },
+      "spriteGroup": 68,
+      "facing": "right"
+    },
+    {
+      "id": 100144,
+      "worldPixel": {
+        "x": 6072,
+        "y": 6240
+      },
+      "spriteGroup": 66,
+      "facing": "right"
+    },
+    {
+      "id": 100145,
+      "worldPixel": {
+        "x": 5408,
+        "y": 6496
+      },
+      "spriteGroup": 59,
+      "facing": "left"
+    },
+    {
+      "id": 100146,
+      "worldPixel": {
+        "x": 6552,
+        "y": 6488
+      },
+      "spriteGroup": 54,
+      "facing": "down"
+    },
+    {
+      "id": 100147,
+      "worldPixel": {
+        "x": 5816,
+        "y": 6616
+      },
+      "spriteGroup": 119,
+      "facing": "down"
+    },
+    {
+      "id": 100148,
+      "worldPixel": {
+        "x": 3904,
+        "y": 7360
+      },
+      "spriteGroup": 68,
+      "facing": "left"
+    },
+    {
+      "id": 100149,
+      "worldPixel": {
+        "x": 5848,
+        "y": 6744
+      },
+      "spriteGroup": 66,
+      "facing": "down"
+    },
+    {
+      "id": 100150,
+      "worldPixel": {
+        "x": 5616,
+        "y": 6904
+      },
+      "spriteGroup": 59,
+      "facing": "up"
+    },
+    {
+      "id": 100151,
+      "worldPixel": {
+        "x": 5816,
+        "y": 6872
+      },
+      "spriteGroup": 54,
+      "facing": "down"
+    },
+    {
+      "id": 100152,
+      "worldPixel": {
+        "x": 4000,
+        "y": 6928
+      },
+      "spriteGroup": 119,
+      "facing": "up"
+    },
+    {
+      "id": 100153,
+      "worldPixel": {
+        "x": 8128,
+        "y": 7112
+      },
+      "spriteGroup": 68,
+      "facing": "right"
+    },
+    {
+      "id": 100154,
+      "worldPixel": {
+        "x": 896,
+        "y": 7376
+      },
+      "spriteGroup": 66,
+      "facing": "up"
+    },
+    {
+      "id": 100155,
+      "worldPixel": {
+        "x": 7384,
+        "y": 7768
+      },
+      "spriteGroup": 59,
+      "facing": "down"
+    },
+    {
+      "id": 100156,
+      "worldPixel": {
+        "x": 3072,
+        "y": 8112
+      },
+      "spriteGroup": 54,
+      "facing": "right"
+    },
+    {
+      "id": 100157,
+      "worldPixel": {
+        "x": 6688,
+        "y": 8032
+      },
+      "spriteGroup": 119,
+      "facing": "left"
+    },
+    {
+      "id": 100158,
+      "worldPixel": {
+        "x": 8120,
+        "y": 8024
+      },
+      "spriteGroup": 68,
+      "facing": "down"
+    },
+    {
+      "id": 100159,
+      "worldPixel": {
+        "x": 6712,
+        "y": 8136
+      },
+      "spriteGroup": 66,
+      "facing": "left"
+    },
+    {
+      "id": 100160,
+      "worldPixel": {
+        "x": 7200,
+        "y": 8152
+      },
+      "spriteGroup": 59,
+      "facing": "down"
+    },
+    {
+      "id": 100161,
+      "worldPixel": {
+        "x": 7816,
+        "y": 8168
+      },
+      "spriteGroup": 54,
+      "facing": "right"
+    },
+    {
+      "id": 100162,
+      "worldPixel": {
+        "x": 392,
+        "y": 8352
+      },
+      "spriteGroup": 119,
+      "facing": "up"
+    },
+    {
+      "id": 100163,
+      "worldPixel": {
+        "x": 4576,
+        "y": 8208
+      },
+      "spriteGroup": 68,
+      "facing": "up"
+    },
+    {
+      "id": 100164,
+      "worldPixel": {
+        "x": 2880,
+        "y": 8608
+      },
+      "spriteGroup": 66,
+      "facing": "left"
+    },
+    {
+      "id": 100165,
+      "worldPixel": {
+        "x": 7720,
+        "y": 8680
+      },
+      "spriteGroup": 59,
+      "facing": "left"
+    },
+    {
+      "id": 100166,
+      "worldPixel": {
+        "x": 6808,
+        "y": 9048
+      },
+      "spriteGroup": 54,
+      "facing": "down"
+    },
+    {
+      "id": 100167,
+      "worldPixel": {
+        "x": 7832,
+        "y": 9048
+      },
+      "spriteGroup": 119,
+      "facing": "down"
+    },
+    {
+      "id": 100168,
+      "worldPixel": {
+        "x": 8080,
+        "y": 9080
+      },
+      "spriteGroup": 68,
+      "facing": "right"
+    },
+    {
+      "id": 100169,
+      "worldPixel": {
+        "x": 7096,
+        "y": 9304
+      },
+      "spriteGroup": 66,
+      "facing": "down"
+    },
+    {
+      "id": 100170,
+      "worldPixel": {
+        "x": 7960,
+        "y": 9312
+      },
+      "spriteGroup": 59,
+      "facing": "right"
+    },
+    {
+      "id": 100171,
+      "worldPixel": {
+        "x": 7640,
+        "y": 9432
+      },
+      "spriteGroup": 54,
+      "facing": "down"
+    },
+    {
+      "id": 100172,
+      "worldPixel": {
+        "x": 7896,
+        "y": 9432
+      },
+      "spriteGroup": 119,
+      "facing": "down"
+    },
+    {
+      "id": 100173,
+      "worldPixel": {
+        "x": 6256,
+        "y": 9672
+      },
+      "spriteGroup": 68,
+      "facing": "right"
+    },
+    {
+      "id": 100174,
+      "worldPixel": {
+        "x": 6624,
+        "y": 9616
+      },
+      "spriteGroup": 66,
+      "facing": "up"
+    },
+    {
+      "id": 100175,
+      "worldPixel": {
+        "x": 7712,
+        "y": 9696
+      },
+      "spriteGroup": 59,
+      "facing": "left"
+    },
+    {
+      "id": 100176,
+      "worldPixel": {
+        "x": 6808,
+        "y": 9816
+      },
+      "spriteGroup": 54,
+      "facing": "down"
+    },
+    {
+      "id": 100177,
+      "worldPixel": {
+        "x": 7584,
+        "y": 9928
+      },
+      "spriteGroup": 119,
+      "facing": "right"
+    },
+    {
+      "id": 100178,
+      "worldPixel": {
+        "x": 7712,
+        "y": 9952
+      },
+      "spriteGroup": 68,
+      "facing": "left"
+    },
+    {
+      "id": 100179,
+      "worldPixel": {
+        "x": 6952,
+        "y": 10056
+      },
+      "spriteGroup": 66,
+      "facing": "left"
+    },
+    {
+      "id": 100180,
+      "worldPixel": {
+        "x": 7456,
+        "y": 10072
+      },
+      "spriteGroup": 59,
+      "facing": "left"
     }
   ]
 }

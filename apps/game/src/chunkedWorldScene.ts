@@ -2007,9 +2007,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!npc) {
       return;
     }
+    const events = this.interactionEventsForNpc(npc.data);
+    if (events.length === 0) {
+      return;
+    }
     this.pauseNpcForDialogue(npc);
     lockPlayer(this.playerState, this.playerFrames);
-    this.runEvents(this.interactionEventsForNpc(npc.data));
+    this.runEvents(events);
     this.updatePrompt();
     this.publish();
   }

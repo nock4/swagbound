@@ -64,4 +64,28 @@ describe("added NPC overlay normalization", () => {
     expect(addedNpcSpawnEligible({ id: 100001 }, existing)).toBe(true);
     expect(buildAddedWorldNpcs(addedNpcs, existing).map((npc) => npc.npcId)).toEqual([100001]);
   });
+
+  it("spawns interaction-less added NPCs as non-interactable markers", () => {
+    const addedNpcs: AddedNpcs = {
+      schema: "swagbound.added-npcs.v1",
+      npcs: [{
+        id: 100002,
+        worldPixel: { x: 192, y: 224 },
+        spriteGroup: 59,
+        facing: "down"
+      }]
+    };
+
+    const normalized = buildAddedWorldNpcs(addedNpcs, []);
+
+    expect(normalized).toHaveLength(1);
+    expect(normalized[0]).toMatchObject({
+      npcId: 100002,
+      interactable: false,
+      visible: true,
+      worldPixel: { x: 192, y: 224 },
+      addedNpc: true
+    });
+    expect(normalized[0].addedInteraction).toBeUndefined();
+  });
 });

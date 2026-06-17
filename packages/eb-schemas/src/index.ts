@@ -539,7 +539,7 @@ export const AddedNpcSchema = z
     worldPixel: PixelSchema,
     spriteGroup: z.number().int().nonnegative(),
     facing: SpriteFacingSchema,
-    interaction: NpcInteractionSchema
+    interaction: NpcInteractionSchema.optional()
   })
   .strict();
 
