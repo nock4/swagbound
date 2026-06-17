@@ -1819,8 +1819,80 @@
     }
   },
   "byEnemyId": {
+    "1": {
+      "image": "assets/swagbound/enemy/faithful-servants-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "5": {
+      "image": "assets/swagbound/enemy/pfp-edible-demon-battle-v1-gpt2-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "6": {
+      "image": "assets/swagbound/enemy/demonfella-ii-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "7": {
+      "image": "assets/swagbound/enemy/happy-camper-battle-v1-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "8": {
+      "image": "assets/swagbound/enemy/knitkitmori-battle-v1-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "9": {
+      "image": "assets/swagbound/enemy/solfis-battle-v1-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "22": {
+      "image": "assets/swagbound/enemy/cryptic-kids-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "24": {
+      "image": "assets/swagbound/enemy/milardio-battle-v1-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "25": {
+      "image": "assets/swagbound/enemy/pifella-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "32": {
+      "image": "assets/swagbound/enemy/paingelz-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
     "37": {
       "image": "assets/swagbound/enemy/pfp-malady-battle-v1.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "51": {
+      "image": "assets/swagbound/enemy/wifeystation-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "54": {
+      "image": "assets/swagbound/enemy/lsw-returnless-king-battle-v0.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -1831,13 +1903,61 @@
       "originX": 0.5,
       "originY": 0.5
     },
+    "57": {
+      "image": "assets/swagbound/enemy/ethereal-sols-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
     "64": {
       "image": "assets/swagbound/enemy/lsw-cinder-cap-battle-v0.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
+    "65": {
+      "image": "assets/swagbound/enemy/mifella-2-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
     "81": {
+      "image": "assets/swagbound/enemy/lsw-ushanka-shade-battle-v0.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "88": {
+      "image": "assets/swagbound/enemy/tojiba-disc-battle-v1-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "98": {
+      "image": "assets/swagbound/enemy/heavy-liquid-graphic-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "111": {
+      "image": "assets/swagbound/enemy/lsw-bat-poncho-battle-v0.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "113": {
+      "image": "assets/swagbound/enemy/plastic-fool-battle-v1-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "117": {
+      "image": "assets/swagbound/enemy/collection-2-for-solana-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "118": {
       "image": "assets/swagbound/enemy/lsw-ushanka-shade-battle-v0.png",
       "displayHeight": 160,
       "originX": 0.5,
@@ -1849,14 +1969,86 @@
       "originX": 0.5,
       "originY": 0.5
     },
+    "122": {
+      "image": "assets/swagbound/enemy/runway-show-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "129": {
+      "image": "assets/swagbound/enemy/pfp-hexp-hood-battle-v0.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "132": {
+      "image": "assets/swagbound/enemy/lsw-returnless-king-battle-v0.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
     "134": {
       "image": "assets/swagbound/enemy/lsw-question-marketeer-battle-v0.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
+    "139": {
+      "image": "assets/swagbound/enemy/swag-raccoon-battle-v1-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "144": {
+      "image": "assets/swagbound/enemy/cryptic-kids-2-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "145": {
+      "image": "assets/swagbound/enemy/tape-code-battle-v1-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "150": {
+      "image": "assets/swagbound/enemy/unicornio-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "157": {
+      "image": "assets/swagbound/enemy/gay-mouse-crisis-center-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "158": {
+      "image": "assets/swagbound/enemy/goobdle-s-battle-v1-alpha-extracted-source-size.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
     "159": {
       "image": "assets/swagbound/enemy/ai-slop-battle-v0.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "209": {
+      "image": "assets/swagbound/enemy/pfp-edible-demon-battle-v1-gpt2-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "210": {
+      "image": "assets/swagbound/enemy/knitkitmori-battle-v1-extracted-crop.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "211": {
+      "image": "assets/swagbound/enemy/lsw-sawtooth-bun-battle-v0.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
