@@ -13,6 +13,7 @@ import {
   ManifestSchema,
   NpcReferenceCollectionSchema,
   PsiCollectionSchema,
+  PsiOverridesSchema,
   resolveScriptReference,
   resolveScriptReferenceFlow,
   ScriptCollectionSchema,
@@ -41,6 +42,7 @@ import {
   type NumericFlagState,
   type NpcReferenceCollection,
   type PsiCollection,
+  type PsiOverrides,
   type ScriptCollection,
   type ShopData,
   type SpriteOverrides,
@@ -62,6 +64,7 @@ const SWAGBOUND_DIALOGUE_LIBRARY_FILE = "swagbound-dialogue-library.json";
 const SPRITE_OVERRIDES_FILE = "sprite-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
+const PSI_OVERRIDES_FILE = "psi-overrides.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -145,6 +148,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     items,
     itemOverrides,
     psi,
+    psiOverrides,
     shops,
     addedNpcs,
     customDialogue,
@@ -184,6 +188,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     manifest.files.psi
       ? loadJson(`/generated/${manifest.files.psi}`, PsiCollectionSchema)
       : Promise.resolve(undefined),
+    loadJson(`/generated/${PSI_OVERRIDES_FILE}`, PsiOverridesSchema),
     manifest.files.shops
       ? loadJson(`/generated/${manifest.files.shops}`, ShopDataSchema)
       : Promise.resolve(undefined),
@@ -193,6 +198,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
+  const resolvedPsi = applyPsiOverrides(psi, psiOverrides);
 
   return {
     manifest,
@@ -214,7 +220,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     window,
     characters: resolvedCharacters,
     items: resolvedItems,
-    psi,
+    psi: resolvedPsi,
     shops
   };
 }
@@ -246,6 +252,19 @@ function applyCharacterOverrides(
     }
   }
   return characters;
+}
+
+function applyPsiOverrides(psi: PsiCollection | undefined, overrides: PsiOverrides | undefined): PsiCollection | undefined {
+  if (!psi || !overrides) {
+    return psi;
+  }
+  for (const entry of psi.psi) {
+    const override = overrides.byPsiId[String(entry.id)];
+    if (override) {
+      entry.name = override.name;
+    }
+  }
+  return psi;
 }
 
 export function addedNpcSpawnEligible(

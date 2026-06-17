@@ -815,7 +815,8 @@ export class BattleScene extends Phaser.Scene {
     }
     const result = applyVictoryRewards(this.battle_, {
       rng: this.rng_,
-      items: this.items_?.items
+      items: this.items_?.items,
+      psi: this.psi_?.psi
     });
     this.battle_ = result.state;
     this.victorySummary_ = result.summary;
@@ -1573,7 +1574,6 @@ export class BattleScene extends Phaser.Scene {
     }
     return buildVictorySummaryViewModel(this.victorySummary_)
       .lines
-      .slice(0, 4)
       .map((line) => fitLine(line, 28));
   }
 

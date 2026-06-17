@@ -1,0 +1,17 @@
+{
+  "schema": "swagbound.psi-overrides.v1",
+  "byPsiId": {
+    "1": { "name": "Static" },
+    "9": { "name": "Cold Memo" },
+    "10": { "name": "Cold Memo" },
+    "13": { "name": "Shock Notice" },
+    "14": { "name": "Shock Notice" },
+    "23": { "name": "Wake Up" },
+    "24": { "name": "Wake Up" },
+    "27": { "name": "Decompile" },
+    "28": { "name": "Decompile" },
+    "31": { "name": "Firewall" },
+    "32": { "name": "Firewall" },
+    "43": { "name": "Lull" }
+  }
+}

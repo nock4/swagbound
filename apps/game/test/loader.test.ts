@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { CharacterCollection, ItemCollection, Manifest, ScriptCollection, ScriptCommand } from "@eb/schemas";
+import type { CharacterCollection, ItemCollection, Manifest, PsiCollection, ScriptCollection, ScriptCommand } from "@eb/schemas";
 import { buildDialogueForReference, loadGameData } from "../src/loader";
 
 const file = "ccscript/alpha.ccs";
@@ -177,6 +177,64 @@ describe("loadGameData", () => {
     const data = await loadGameData(manifest);
 
     expect(data.characters?.characters.map((entry) => entry.name)).toEqual(["Bosch", "SOURCE_OTHER"]);
+  });
+
+  it("applies psi override names after loading the psi collection", async () => {
+    const psi: PsiCollection = {
+      schemaVersion: "test",
+      sourceProjectPath: "synthetic",
+      derivation: {
+        source: "synthetic",
+        names: "synthetic",
+        learnedBy: "synthetic",
+        usableOutsideBattle: "synthetic"
+      },
+      psi: [
+        {
+          id: 23,
+          name: "Source Skill A",
+          type: "recovery",
+          strength: "alpha",
+          usableOutsideBattle: true,
+          learnedBy: [{ charId: 0, level: 2 }]
+        },
+        {
+          id: 43,
+          name: "Source Skill B",
+          type: "assist",
+          strength: "alpha",
+          usableOutsideBattle: false,
+          learnedBy: [{ charId: 0, level: 4 }]
+        }
+      ],
+      counts: {
+        psi: 2,
+        learnedBy: 2
+      },
+      warnings: []
+    };
+
+    vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
+      const path = String(url);
+      if (path.endsWith("/psi.json")) {
+        return jsonResponse(psi);
+      }
+      if (path.endsWith("/psi-overrides.json")) {
+        return jsonResponse({
+          schema: "swagbound.psi-overrides.v1",
+          byPsiId: {
+            "23": { name: "Wake Up" }
+          }
+        });
+      }
+      throw new Error(`No fixture for ${path}`);
+    }));
+
+    const manifest = syntheticManifest();
+    manifest.files.psi = "psi.json";
+    const data = await loadGameData(manifest);
+
+    expect(data.psi?.psi.map((entry) => entry.name)).toEqual(["Wake Up", "Source Skill B"]);
   });
 });
 

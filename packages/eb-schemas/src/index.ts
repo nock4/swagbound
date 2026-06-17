@@ -316,6 +316,22 @@ export const CharacterOverridesSchema = z.object({
   byCharId: z.record(z.string().regex(/^\d+$/), CharacterOverrideEntrySchema)
 }).strict();
 
+const PsiOverrideNameSchema = z.string()
+  .trim()
+  .min(1)
+  .max(18)
+  .refine((value) => !value.includes("@"), "psi override names must not include control markers")
+  .refine((value) => !/[\u0000-\u001f\u007f]/.test(value), "psi override names must not include control codes");
+
+const PsiOverrideEntrySchema = z.object({
+  name: PsiOverrideNameSchema
+}).strict();
+
+export const PsiOverridesSchema = z.object({
+  schema: z.literal("swagbound.psi-overrides.v1"),
+  byPsiId: z.record(z.string().regex(/^\d+$/), PsiOverrideEntrySchema)
+}).strict();
+
 export const NpcMetadataSchema = z.object({
   indexedFiles: z.array(z.string()),
   referencesRobotHelloWorld: z.boolean()
@@ -1153,6 +1169,7 @@ export type ItemCollection = z.infer<typeof ItemCollectionSchema>;
 export type ItemData = z.infer<typeof ItemDataSchema>;
 export type PsiCollection = z.infer<typeof PsiCollectionSchema>;
 export type PsiData = z.infer<typeof PsiDataSchema>;
+export type PsiOverrides = z.infer<typeof PsiOverridesSchema>;
 export type ShopData = z.infer<typeof ShopDataSchema>;
 export type ShopEntry = z.infer<typeof ShopEntrySchema>;
 export type DialogueSegment = z.infer<typeof DialogueSegmentSchema>;

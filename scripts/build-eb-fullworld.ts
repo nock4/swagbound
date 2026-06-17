@@ -1,7 +1,7 @@
 import { access, copyFile, mkdir, readFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { SpriteOverridesSchema, type SpriteOverride, type SpriteOverrides } from "../packages/eb-schemas/src/index";
+import { PsiOverridesSchema, SpriteOverridesSchema, type SpriteOverride, type SpriteOverrides } from "../packages/eb-schemas/src/index";
 import { DEFAULT_GENERATED_OUT } from "../packages/content-builder/src/build";
 import { convertProject } from "../packages/eb-converter/src/index";
 
@@ -20,6 +20,8 @@ export const ITEM_OVERRIDES_SOURCE = "content/item-overrides.json";
 export const ITEM_OVERRIDES_OUTPUT = "item-overrides.json";
 export const CHARACTER_OVERRIDES_SOURCE = "content/character-overrides.json";
 export const CHARACTER_OVERRIDES_OUTPUT = "character-overrides.json";
+export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
+export const PSI_OVERRIDES_OUTPUT = "psi-overrides.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
 
 /**
@@ -50,14 +52,20 @@ async function copyJsonToGenerated(source: string, out: string, outputName: stri
 
 async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateSpriteOverrideImages(SPRITE_OVERRIDES_SOURCE);
+  await validatePsiOverrides(PSI_OVERRIDES_SOURCE);
   await Promise.all([
     copyJsonToGenerated(ADDED_NPCS_SOURCE, out, ADDED_NPCS_OUTPUT),
     copyJsonToGenerated(CUSTOM_DIALOGUE_SOURCE, out, CUSTOM_DIALOGUE_OUTPUT),
     copyJsonToGenerated(SWAGBOUND_DIALOGUE_LIBRARY_SOURCE, out, SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT),
     copyJsonToGenerated(SPRITE_OVERRIDES_SOURCE, out, SPRITE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
-    copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT)
+    copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT)
   ]);
+}
+
+async function validatePsiOverrides(source: string): Promise<void> {
+  PsiOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateSpriteOverrideImages(source: string): Promise<void> {
