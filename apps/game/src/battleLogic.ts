@@ -1346,7 +1346,12 @@ function applyExperienceToCombatant(combatant: Combatant, expGained: number): {
     };
   }
 
-  const calculated = calculateStatsAtLevel(combatant.growth, nextLevel);
+  const calculated = calculateStatsAtLevel(combatant.growth, nextLevel, {
+    level: currentLevel,
+    maxHp: combatant.maxHp,
+    maxPp: combatant.maxPp,
+    stats: combatant.stats
+  });
   const nextStats = maxStats(combatant.stats, calculated.stats);
   const nextMaxHp = Math.max(combatant.maxHp, calculated.maxHp);
   const nextMaxPp = Math.max(combatant.maxPp, calculated.maxPp);

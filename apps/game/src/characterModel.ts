@@ -15,6 +15,14 @@ export type PartyMemberStats = {
 export type PartyMemberStatBonuses = Partial<PartyMemberStats>;
 export type PartyMemberGrowth = CharacterGrowth;
 export type PartyMemberExpThreshold = CharacterExpThreshold;
+export type PartyMemberStatSnapshot = {
+  maxHp: number;
+  maxPp: number;
+  stats: PartyMemberStats;
+};
+export type PartyMemberStatBase = PartyMemberStatSnapshot & {
+  level?: number;
+};
 
 export type PartyMember = {
   id: number;
@@ -118,26 +126,43 @@ export function effectivePartyMemberStats(
   };
 }
 
-export function calculateStatsAtLevel(growth: PartyMemberGrowth, level: number): {
-  maxHp: number;
-  maxPp: number;
-  stats: PartyMemberStats;
-} {
-  const calculated = {
-    maxHp: 30,
-    maxPp: 10,
+export function calculateStatsAtLevel(
+  growth: PartyMemberGrowth,
+  level: number,
+  base?: PartyMemberStatBase
+): PartyMemberStatSnapshot {
+  const targetLevel = normalizedLevel(level);
+  if (!base) {
+    return calculateNeutralStatsAtLevel(growth, targetLevel);
+  }
+
+  const normalizedBase = normalizeStatSnapshot(base);
+  const baseLevel = normalizedLevel(base.level ?? 1);
+  if (targetLevel <= baseLevel) {
+    return normalizedBase;
+  }
+
+  const neutralBase = calculateNeutralStatsAtLevel(growth, baseLevel);
+  const neutralTarget = calculateNeutralStatsAtLevel(growth, targetLevel);
+  return {
+    maxHp: normalizedBase.maxHp + Math.max(0, neutralTarget.maxHp - neutralBase.maxHp),
+    maxPp: normalizedBase.maxPp + Math.max(0, neutralTarget.maxPp - neutralBase.maxPp),
     stats: {
-      offense: 2,
-      defense: 2,
-      speed: 2,
-      guts: 2,
-      vitality: 2,
-      iq: 2,
-      luck: 2
+      offense: projectStat("offense", normalizedBase, neutralBase, neutralTarget),
+      defense: projectStat("defense", normalizedBase, neutralBase, neutralTarget),
+      speed: projectStat("speed", normalizedBase, neutralBase, neutralTarget),
+      guts: projectStat("guts", normalizedBase, neutralBase, neutralTarget),
+      vitality: projectStat("vitality", normalizedBase, neutralBase, neutralTarget),
+      iq: projectStat("iq", normalizedBase, neutralBase, neutralTarget),
+      luck: projectStat("luck", normalizedBase, neutralBase, neutralTarget)
     }
   };
+}
 
-  for (let nextLevel = 2; nextLevel <= Math.max(1, Math.floor(level)); nextLevel += 1) {
+function calculateNeutralStatsAtLevel(growth: PartyMemberGrowth, level: number): PartyMemberStatSnapshot {
+  const calculated = neutralLevelOneStats();
+
+  for (let nextLevel = 2; nextLevel <= normalizedLevel(level); nextLevel += 1) {
     calculated.stats.offense = calcNewStat("offense", growth, nextLevel, calculated.stats.offense);
     calculated.stats.defense = calcNewStat("defense", growth, nextLevel, calculated.stats.defense);
     calculated.stats.speed = calcNewStat("speed", growth, nextLevel, calculated.stats.speed);
@@ -201,7 +226,7 @@ function calcNewStat(
 ): number {
   const r = midpointRoll(statName, newLevel);
   const targetGap = (growth[statName] * (newLevel - 1)) - ((oldStatValue - 2) * 10);
-  return oldStatValue + Math.trunc(targetGap * (r / 50));
+  return Math.max(oldStatValue, oldStatValue + Math.trunc(targetGap * (r / 50)));
 }
 
 function midpointRoll(statName: keyof PartyMemberGrowth, newLevel: number): number {
@@ -219,4 +244,49 @@ function stat(value: number): number {
     return 0;
   }
   return Math.max(0, Math.floor(value));
+}
+
+function normalizedLevel(level: number): number {
+  return Math.max(1, stat(level));
+}
+
+function neutralLevelOneStats(): PartyMemberStatSnapshot {
+  return {
+    maxHp: 30,
+    maxPp: 10,
+    stats: {
+      offense: 2,
+      defense: 2,
+      speed: 2,
+      guts: 2,
+      vitality: 2,
+      iq: 2,
+      luck: 2
+    }
+  };
+}
+
+function normalizeStatSnapshot(snapshot: PartyMemberStatSnapshot): PartyMemberStatSnapshot {
+  return {
+    maxHp: stat(snapshot.maxHp),
+    maxPp: stat(snapshot.maxPp),
+    stats: {
+      offense: stat(snapshot.stats.offense),
+      defense: stat(snapshot.stats.defense),
+      speed: stat(snapshot.stats.speed),
+      guts: stat(snapshot.stats.guts),
+      vitality: stat(snapshot.stats.vitality),
+      iq: stat(snapshot.stats.iq),
+      luck: stat(snapshot.stats.luck)
+    }
+  };
+}
+
+function projectStat(
+  field: keyof PartyMemberStats,
+  base: PartyMemberStatSnapshot,
+  neutralBase: PartyMemberStatSnapshot,
+  neutralTarget: PartyMemberStatSnapshot
+): number {
+  return base.stats[field] + Math.max(0, neutralTarget.stats[field] - neutralBase.stats[field]);
 }

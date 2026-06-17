@@ -1,8 +1,10 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import type { BattleEnemy, CharacterData, PsiData } from "@eb/schemas";
+import type { BattleEnemy, CharacterCollection, CharacterData, PsiData } from "@eb/schemas";
 import {
   buildPartyMember,
   calculateStatsAtLevel,
+  type PartyMemberStatSnapshot,
   levelForExperience
 } from "../src/characterModel";
 import {
@@ -14,7 +16,7 @@ import {
 
 // QA domain: leveling & skill growth.
 // All fixtures are synthetic (numeric ids + neutral names only) so the suite
-// carries no EarthBound IP. The growth/expTable shapes mirror the generated
+// carries no source-game names. The growth/expTable shapes mirror the generated
 // characters.json contract: deterministic midpoint stat growth + cumulative
 // EXP thresholds, and psi.json learnedBy { charId, level } gating.
 
@@ -38,6 +40,11 @@ const EXP_TABLE = [
   { level: 6, experience: 236 },
   { level: 7, experience: 449 }
 ];
+
+const STAT_FIELDS = ["offense", "defense", "speed", "guts", "vitality", "iq", "luck"] as const;
+const GENERATED_CHARACTERS = JSON.parse(
+  readFileSync(new URL("../public/generated/characters.json", import.meta.url), "utf8")
+) as CharacterCollection;
 
 // A neutral-base character: starting stats equal the level-1 baseline so that
 // calculateStatsAtLevel growth is realized as positive per-level gains.
@@ -106,16 +113,84 @@ describe("leveling & skill growth", () => {
   });
 
   it("computes stats that are monotonic non-decreasing across levels", () => {
-    const fields = ["offense", "defense", "speed", "guts", "vitality", "iq", "luck"] as const;
     let previous = calculateStatsAtLevel(GROWTH, 1);
     for (let level = 2; level <= 30; level += 1) {
       const current = calculateStatsAtLevel(GROWTH, level);
-      for (const field of fields) {
+      for (const field of STAT_FIELDS) {
         expect(current.stats[field]).toBeGreaterThanOrEqual(previous.stats[field]);
       }
       expect(current.maxHp).toBeGreaterThanOrEqual(previous.maxHp);
       expect(current.maxPp).toBeGreaterThanOrEqual(previous.maxPp);
       previous = current;
+    }
+  });
+
+  it("projects generated base stats from level 1 without an early dead zone", () => {
+    const character = generatedCharacter(0);
+    const growth = requireGrowth(character);
+    const base = statSnapshotFromCharacter(character);
+    const baseProjection = calculateStatsAtLevel(growth, character.level, {
+      level: character.level,
+      ...base
+    });
+
+    expect(baseProjection).toEqual(base);
+
+    let previous = baseProjection;
+    for (let level = 2; level <= 12; level += 1) {
+      const current = calculateStatsAtLevel(growth, level, {
+        level: character.level,
+        ...base
+      });
+      for (const field of STAT_FIELDS) {
+        expect(current.stats[field]).toBeGreaterThanOrEqual(previous.stats[field]);
+      }
+      expect(current.maxHp).toBeGreaterThanOrEqual(previous.maxHp);
+      expect(current.maxPp).toBeGreaterThanOrEqual(previous.maxPp);
+      if (level <= 7) {
+        expect(totalStats(current)).toBeGreaterThan(totalStats(previous));
+      }
+      previous = current;
+    }
+
+    const earlySliceProjection = calculateStatsAtLevel(growth, 7, {
+      level: character.level,
+      ...base
+    });
+    expect(earlySliceProjection.maxHp).toBeGreaterThan(base.maxHp);
+    expect(earlySliceProjection.stats.offense).toBeGreaterThan(base.stats.offense);
+  });
+
+  it("a generated-base multi-level EXP grant raises HP and offense", () => {
+    const member = buildPartyMember(generatedCharacter(0));
+    let state = createBattleState([fallenEnemy(449, 0)], { partyMembers: [member] });
+    state.enemies[0].hp.displayed = 0;
+    state.enemies[0].hp.target = 0;
+    state.enemies[0].hp.isRolling = false;
+
+    const before = state.party[0];
+    const { state: after, summary } = applyVictoryRewards(state, { rng: () => 1 });
+    const leveled = after.party[0];
+
+    expect(leveled.level).toBe(7);
+    expect(leveled.experience).toBe(449);
+    expect(leveled.maxHp).toBeGreaterThan(before.maxHp);
+    expect(leveled.offense).toBeGreaterThan(before.offense);
+    expect(leveled.maxPp).toBeGreaterThanOrEqual(before.maxPp);
+    for (const field of STAT_FIELDS) {
+      expect(leveled.stats[field]).toBeGreaterThanOrEqual(before.stats[field]);
+    }
+
+    expect(summary.levelUps).toHaveLength(1);
+    expect(summary.levelUps[0]).toMatchObject({
+      charId: 0,
+      fromLevel: 1,
+      toLevel: 7
+    });
+    expect(summary.levelUps[0].statGains.maxHp).toBeGreaterThan(0);
+    expect(summary.levelUps[0].statGains.offense).toBeGreaterThan(0);
+    for (const gain of Object.values(summary.levelUps[0].statGains)) {
+      expect(gain).toBeGreaterThanOrEqual(0);
     }
   });
 
@@ -201,3 +276,40 @@ describe("leveling & skill growth", () => {
     expect(viewModel.lines.some((line) => /Lv 6$/.test(line))).toBe(true);
   });
 });
+
+function generatedCharacter(id: number): CharacterData {
+  const character = GENERATED_CHARACTERS.characters.find((entry) => entry.id === id);
+  if (!character) {
+    throw new Error(`Missing generated character id ${id}`);
+  }
+  return character;
+}
+
+function requireGrowth(character: CharacterData): NonNullable<CharacterData["growth"]> {
+  if (!character.growth) {
+    throw new Error(`Missing growth for character id ${character.id}`);
+  }
+  return character.growth;
+}
+
+function statSnapshotFromCharacter(character: CharacterData): PartyMemberStatSnapshot {
+  return {
+    maxHp: character.maxHp,
+    maxPp: character.maxPp,
+    stats: {
+      offense: character.offense,
+      defense: character.defense,
+      speed: character.speed,
+      guts: character.guts,
+      vitality: character.vitality,
+      iq: character.iq,
+      luck: character.luck
+    }
+  };
+}
+
+function totalStats(snapshot: PartyMemberStatSnapshot): number {
+  return snapshot.maxHp
+    + snapshot.maxPp
+    + STAT_FIELDS.reduce((sum, field) => sum + snapshot.stats[field], 0);
+}
