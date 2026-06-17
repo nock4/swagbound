@@ -771,7 +771,7 @@ export function buildShopMenuScreens(shop: ShopViewModel): MenuScreen[] {
       id: shopRootScreenId(shop.storeId),
       title: "Shop",
       items: [
-        { id: `shop-wallet-${shop.storeId}`, label: `Wallet ${shop.wallet}`, enabled: false },
+        { id: `shop-wallet-${shop.storeId}`, label: `$swag ${shop.wallet}`, enabled: false },
         { id: `shop-buy-${shop.storeId}`, label: "Buy", enabled: shop.available, childScreenId: shopBuyScreenId(shop.storeId) },
         { id: `shop-sell-${shop.storeId}`, label: "Sell", enabled: true, childScreenId: shopSellScreenId(shop.storeId) },
         { id: `shop-cancel-${shop.storeId}`, label: "Cancel", enabled: true, actionId: SHOP_CANCEL_ACTION_ID }
@@ -819,7 +819,7 @@ export function buildAtmScreen(input: StatusViewModelInput = {}): MenuScreen {
     id: ATM_MENU_ID,
     title: "ATM",
     items: [
-      { id: "atm-wallet", label: `Wallet ${wallet}`, enabled: false },
+      { id: "atm-wallet", label: `$swag ${wallet}`, enabled: false },
       { id: "atm-bank", label: `Bank ${bank}`, enabled: false },
       { id: "atm-deposit-100", label: `Deposit ${ATM_DEBUG_AMOUNT}`, enabled: wallet > 0, actionId: buildAtmActionId("deposit", ATM_DEBUG_AMOUNT) },
       { id: "atm-withdraw-100", label: `Withdraw ${ATM_DEBUG_AMOUNT}`, enabled: bank > 0, actionId: buildAtmActionId("withdraw", ATM_DEBUG_AMOUNT) },

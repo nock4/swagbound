@@ -929,7 +929,7 @@ export function buildVictorySummaryViewModel(summary: BattleVictorySummary): Bat
   const itemsFound = summary.drops.map((drop) => drop.itemName);
   const lines = [
     `EXP ${summary.expGained}`,
-    `Money ${summary.moneyGained}`,
+    `$swag ${summary.moneyGained}`,
     itemsFound.length > 0 ? `Found ${itemsFound.join(", ")}` : "Found no items",
     ...summary.levelUps.map((levelUp) => `${levelUp.name} Lv ${levelUp.toLevel}`)
   ];
