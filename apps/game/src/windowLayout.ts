@@ -111,6 +111,7 @@ export type BattleMenuCascadeLayoutOptions = {
   minCommandWidth: number;
   minSubmenuWidth: number;
   minDescriptionWidth: number;
+  commandExtraHeight?: number;
   maxMenuWidth?: number;
   maxDescriptionWidth?: number;
   descriptionPaddingX?: number;
@@ -128,6 +129,11 @@ export type BattleStatusCardRect = CanvasRect & {
   active: boolean;
 };
 
+export type BattleStatusDigitBoxRect = CanvasRect & {
+  digitIndex: number;
+  digit: string;
+};
+
 export type BattleStatusCardRectsOptions = {
   screen: ScreenSize;
   memberCount: number;
@@ -139,6 +145,18 @@ export type BattleStatusCardRectsOptions = {
   minCardWidth: number;
   maxCardWidth: number;
   activeLift: number;
+};
+
+export type BattleStatusDigitBoxRectsOptions = {
+  card: CanvasRect;
+  value: number;
+  digitCount: number;
+  digitWidth: number;
+  digitHeight: number;
+  gap: number;
+  rightPadding: number;
+  y: number;
+  leftPadding?: number;
 };
 
 export function windowLayoutToCanvasRect(
@@ -328,6 +346,7 @@ export function battleMenuCascadeLayout(options: BattleMenuCascadeLayoutOptions)
       lineHeight: options.lineHeight,
       paddingX: options.paddingX,
       paddingY: options.paddingY,
+      extraHeight: options.commandExtraHeight,
       minWidth: options.minCommandWidth,
       maxWidth: maxMenuWidth,
       leftMargin,
@@ -364,7 +383,7 @@ export function battleMenuCascadeLayout(options: BattleMenuCascadeLayoutOptions)
       screen: options.screen,
       x: command.x,
       y: Math.min(
-        command.y + command.height + Math.max(0, options.descriptionGap),
+        command.y + command.height - Math.max(0, options.cascadeOverlap) + Math.max(0, options.descriptionGap),
         Math.max(topMargin, bottomLimit - options.lineHeight - (options.descriptionPaddingY ?? options.paddingY) * 2)
       ),
       labels: descriptionLines,
@@ -420,6 +439,39 @@ export function battleStatusCardRects(options: BattleStatusCardRectsOptions): Ba
   });
 }
 
+export function battleStatusDigitBoxRects(options: BattleStatusDigitBoxRectsOptions): BattleStatusDigitBoxRect[] {
+  const digitCount = Math.max(1, Math.floor(options.digitCount));
+  const leftPadding = Math.max(0, Math.ceil(options.leftPadding ?? 0));
+  const rightPadding = Math.max(0, Math.ceil(options.rightPadding));
+  const availableWidth = Math.max(
+    digitCount,
+    Math.floor(options.card.width - leftPadding - rightPadding)
+  );
+  const requestedGap = Math.max(0, Math.ceil(options.gap));
+  const maxGap = digitCount > 1
+    ? Math.max(0, Math.floor((availableWidth - digitCount) / (digitCount - 1)))
+    : 0;
+  const gap = Math.min(requestedGap, maxGap);
+  const requestedDigitWidth = Math.max(1, Math.ceil(options.digitWidth));
+  const maxDigitWidth = Math.max(1, Math.floor((availableWidth - gap * (digitCount - 1)) / digitCount));
+  const digitWidth = Math.min(requestedDigitWidth, maxDigitWidth);
+  const digitHeight = Math.max(1, Math.ceil(Math.min(options.digitHeight, options.card.height)));
+  const totalWidth = digitWidth * digitCount + gap * (digitCount - 1);
+  const startX = Math.round(options.card.x + options.card.width - rightPadding - totalWidth);
+  const maxY = Math.round(options.card.y + options.card.height - digitHeight);
+  const y = clampNumber(Math.round(options.y), Math.round(options.card.y), maxY);
+  const digits = odometerDigits(options.value, digitCount);
+
+  return digits.map((digit, index) => ({
+    digitIndex: index,
+    digit,
+    x: startX + index * (digitWidth + gap),
+    y,
+    width: digitWidth,
+    height: digitHeight
+  }));
+}
+
 function battleScrollableMenuListRect(options: {
   screen: ScreenSize;
   x: number;
@@ -430,6 +482,7 @@ function battleScrollableMenuListRect(options: {
   lineHeight: number;
   paddingX: number;
   paddingY: number;
+  extraHeight?: number;
   minWidth: number;
   maxWidth: number;
   leftMargin: number;
@@ -464,6 +517,7 @@ function battleMenuListRect(options: {
   lineHeight: number;
   paddingX: number;
   paddingY: number;
+  extraHeight?: number;
   minWidth: number;
   maxWidth: number;
   leftMargin: number;
@@ -480,6 +534,7 @@ function battleMenuListRect(options: {
     measureText: options.measureText,
     lineHeight: options.lineHeight,
     lineCount: visibleCount,
+    extraHeight: options.extraHeight,
     paddingX: options.paddingX,
     paddingY: options.paddingY,
     minWidth: options.minWidth,
@@ -576,4 +631,12 @@ function clampRectToScreen(
 
 function clampNumber(value: number, minValue: number, maxValue: number): number {
   return Math.max(minValue, Math.min(maxValue, value));
+}
+
+function odometerDigits(value: number, digitCount: number): string[] {
+  const maxValue = 10 ** digitCount - 1;
+  const normalized = Number.isFinite(value)
+    ? Math.max(0, Math.min(maxValue, Math.floor(value)))
+    : 0;
+  return String(normalized).padStart(digitCount, "0").split("");
 }

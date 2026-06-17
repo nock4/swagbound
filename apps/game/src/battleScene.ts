@@ -73,12 +73,13 @@ import {
 import { WINDOW_FLAVOR_CHANGE_EVENT, activeWindowFlavorId } from "./windowSettings";
 import {
   EB_BITMAP_TEXT_SCALE,
-  EB_TEXT_LINE_SPACING,
   EB_UI_SCALE,
   type CanvasRect,
   battleMenuCascadeLayout,
+  battleStatusDigitBoxRects,
   battleStatusCardRects,
   type BattleMenuListRect,
+  type BattleStatusDigitBoxRect,
   ebTextLineHeight
 } from "./windowLayout";
 import {
@@ -111,36 +112,56 @@ import {
   spriteOverrideEnemyImageKey,
   spriteOverrideForEnemyId
 } from "./spriteOverrides";
+import {
+  createRollingMeter,
+  setTarget,
+  tick as tickRollingMeter,
+  type RollingMeterState
+} from "./rollingMeter";
 
 const MONO = "Menlo, Consolas, monospace";
 const TAU = Math.PI * 2;
 export const COMMANDS = commandsForCharId(0);
 const STATUS_TOP = 288;
-const BATTLE_LINE_SPACING = EB_TEXT_LINE_SPACING;
+const BATTLE_LINE_SPACING = 4;
 const BATTLE_LEFT_MARGIN = 16;
 const BATTLE_LINE_HEIGHT = ebTextLineHeight({ lineSpacing: BATTLE_LINE_SPACING });
-const BATTLE_COMMAND_TEXT_PADDING_X = 16;
-const BATTLE_COMMAND_TEXT_PADDING_Y = 14;
+const BATTLE_COMMAND_TEXT_PADDING_X = 14;
+const BATTLE_COMMAND_TEXT_PADDING_Y = 10;
 const BATTLE_MENU_TOP_MARGIN = 8;
 const BATTLE_MENU_RIGHT_MARGIN = 16;
 const BATTLE_MENU_BOTTOM_CLEARANCE = 104;
 const BATTLE_CASCADE_OVERLAP = 8;
 const BATTLE_SUBMENU_OFFSET_Y = 12;
-const BATTLE_DESCRIPTION_GAP = 4;
-const BATTLE_MENU_MAX_WIDTH = 220;
+const BATTLE_DESCRIPTION_GAP = 0;
+const BATTLE_COMMAND_MIN_WIDTH = 92;
+const BATTLE_SUBMENU_MIN_WIDTH = 260;
+const BATTLE_DESCRIPTION_MIN_WIDTH = 128;
+const BATTLE_COMMAND_EXTRA_HEIGHT = 8;
+const BATTLE_MENU_MAX_WIDTH = 360;
 const BATTLE_DESCRIPTION_MAX_WIDTH = 260;
 const BATTLE_DESCRIPTION_TEXT_PADDING_X = 16;
-const BATTLE_DESCRIPTION_TEXT_PADDING_Y = 10;
+const BATTLE_DESCRIPTION_TEXT_PADDING_Y = 8;
+const BATTLE_STATUS_WINDOW_FLAVOR_ID = 0;
 const BATTLE_STATUS_CARD_SIDE_MARGIN = 16;
 const BATTLE_STATUS_CARD_BOTTOM_MARGIN = 8;
 const BATTLE_STATUS_CARD_GAP = 6;
-const BATTLE_STATUS_CARD_HEIGHT = 88;
+const BATTLE_STATUS_CARD_HEIGHT = 86;
 const BATTLE_STATUS_CARD_MIN_WIDTH = 96;
 const BATTLE_STATUS_CARD_MAX_WIDTH = 128;
 const BATTLE_STATUS_CARD_ACTIVE_LIFT = 6;
 const BATTLE_STATUS_CARD_TEXT_PADDING_X = 10;
-const BATTLE_STATUS_CARD_TEXT_PADDING_Y = 10;
-const PADDED_HP_DIGITS = 3;
+const BATTLE_STATUS_CARD_NAME_Y = 8;
+const BATTLE_STATUS_HP_ROW_Y = 31;
+const BATTLE_STATUS_PP_ROW_Y = 54;
+const BATTLE_STATUS_DIGIT_COUNT = 3;
+const BATTLE_STATUS_DIGIT_WIDTH = 14;
+const BATTLE_STATUS_DIGIT_HEIGHT = 18;
+const BATTLE_STATUS_DIGIT_GAP = 2;
+const BATTLE_STATUS_DIGIT_RIGHT_PADDING = 10;
+const BATTLE_STATUS_DIGIT_TEXT_Y_OFFSET = 1;
+const BATTLE_STATUS_FIELD_INSET = 16;
+const BATTLE_PP_RATE_PER_SEC = 36;
 const ACTION_ADVANCE_DELAY_MS = 350;
 const ENTER_TRANSITION_MS = 650;
 const EXIT_TRANSITION_MS = 450;
@@ -194,6 +215,13 @@ type BattleStatusCardLayout = CanvasRect & {
   active: boolean;
   target: boolean;
 };
+type BattleStatusCardTextSet = {
+  name: GameText;
+  hpLabel: GameText;
+  ppLabel: GameText;
+  hpDigits: GameText[];
+  ppDigits: GameText[];
+};
 type BattleUiView = {
   commandLines: string[];
   submenuLines: string[];
@@ -214,6 +242,7 @@ export class BattleScene extends Phaser.Scene {
   private spriteOverrides_?: SpriteOverrides;
   private bitmapFont?: PreparedBitmapFont;
   private windowFrames?: PreparedWindowFrames;
+  private statusWindowFrames?: PreparedWindowFrames;
   private rng_: Rng = () => 0.5;
   private phase_: BattlePhase = "enter-transition";
   private transitionPhase_: BattleTransitionPhase = "enter";
@@ -235,13 +264,15 @@ export class BattleScene extends Phaser.Scene {
   private lastEnemyAction_: LastEnemyActionDebug | null = null;
   private actionDelayMs_ = 0;
   private statusGraphics?: Phaser.GameObjects.Graphics;
+  private statusFieldGraphics?: Phaser.GameObjects.Graphics;
   private statusAccentGraphics?: Phaser.GameObjects.Graphics;
   private statusWindows: Phaser.GameObjects.Container[] = [];
   private statusLayoutSignature = "";
   private targetCursor?: Phaser.GameObjects.Graphics;
   private menuCursorGraphics?: Phaser.GameObjects.Graphics;
   private menuTexts: Partial<Record<BattleMenuTextRole, GameText>> = {};
-  private statusCardTexts: GameText[] = [];
+  private statusCardTexts: BattleStatusCardTextSet[] = [];
+  private ppMeters = new Map<number, RollingMeterState>();
   private transitionGraphics?: Phaser.GameObjects.Graphics;
   private enemySprites: Phaser.GameObjects.Image[] = [];
   private enemySpriteBasePoints: Array<SpritePoint | undefined> = [];
@@ -317,6 +348,7 @@ export class BattleScene extends Phaser.Scene {
     this.lastEnemyAction_ = null;
     this.actionDelayMs_ = 0;
     this.statusLayoutSignature = "";
+    this.ppMeters.clear();
     this.backgroundAnimation = undefined;
     this.backgroundDebug = staticBattleBackgroundDebug();
     this.exitOutcome_ = null;
@@ -374,10 +406,12 @@ export class BattleScene extends Phaser.Scene {
 
   private refreshWindowFrames(): void {
     this.windowFrames = prepareWindowFrames(this, this.window_, activeWindowFlavorId(this.window_));
+    this.statusWindowFrames = prepareWindowFrames(this, this.window_, BATTLE_STATUS_WINDOW_FLAVOR_ID) ?? this.windowFrames;
   }
 
   update(_: number, delta: number): void {
     this.updateBackground();
+    this.tickStatusPpMeters(delta);
 
     if (this.phase_ === "enter-transition") {
       this.transitionMs_ = Math.max(0, this.transitionMs_ - delta);
@@ -1179,11 +1213,13 @@ export class BattleScene extends Phaser.Scene {
     }
     this.statusWindows = [];
     this.statusGraphics?.destroy();
+    this.statusFieldGraphics?.destroy();
     this.statusAccentGraphics?.destroy();
     this.targetCursor?.destroy();
     this.menuCursorGraphics?.destroy();
     this.destroyBattleUiText();
     this.statusGraphics = this.add.graphics().setDepth(20);
+    this.statusFieldGraphics = this.add.graphics().setDepth(20.5);
     this.statusAccentGraphics = this.add.graphics().setDepth(26);
     this.targetCursor = this.add.graphics().setDepth(30);
     this.menuCursorGraphics = this.add.graphics().setDepth(31);
@@ -1195,8 +1231,16 @@ export class BattleScene extends Phaser.Scene {
       text?.destroy();
     }
     this.menuTexts = {};
-    for (const text of this.statusCardTexts) {
-      text.destroy();
+    for (const textSet of this.statusCardTexts) {
+      textSet.name.destroy();
+      textSet.hpLabel.destroy();
+      textSet.ppLabel.destroy();
+      for (const text of textSet.hpDigits) {
+        text.destroy();
+      }
+      for (const text of textSet.ppDigits) {
+        text.destroy();
+      }
     }
     this.statusCardTexts = [];
   }
@@ -1219,19 +1263,21 @@ export class BattleScene extends Phaser.Scene {
       cascadeOverlap: BATTLE_CASCADE_OVERLAP,
       submenuOffsetY: BATTLE_SUBMENU_OFFSET_Y,
       descriptionGap: BATTLE_DESCRIPTION_GAP,
-      minCommandWidth: 80,
-      minSubmenuWidth: 96,
-      minDescriptionWidth: 120,
+      minCommandWidth: BATTLE_COMMAND_MIN_WIDTH,
+      minSubmenuWidth: BATTLE_SUBMENU_MIN_WIDTH,
+      minDescriptionWidth: BATTLE_DESCRIPTION_MIN_WIDTH,
+      commandExtraHeight: BATTLE_COMMAND_EXTRA_HEIGHT,
       maxMenuWidth: BATTLE_MENU_MAX_WIDTH,
       maxDescriptionWidth: BATTLE_DESCRIPTION_MAX_WIDTH,
       descriptionPaddingX: BATTLE_DESCRIPTION_TEXT_PADDING_X,
       descriptionPaddingY: BATTLE_DESCRIPTION_TEXT_PADDING_Y
     });
     const activeCardIndex = view.statusCards.findIndex((card) => card.active);
+    const statusCardCount = Math.min(4, view.statusCards.length);
     const statusCards = battleStatusCardRects({
       screen: { width: this.scale.width, height: this.scale.height },
-      memberCount: view.statusCards.length,
-      activeIndex: activeCardIndex >= 0 ? activeCardIndex : null,
+      memberCount: statusCardCount,
+      activeIndex: activeCardIndex >= 0 && activeCardIndex < statusCardCount ? activeCardIndex : null,
       sideMargin: BATTLE_STATUS_CARD_SIDE_MARGIN,
       bottomMargin: BATTLE_STATUS_CARD_BOTTOM_MARGIN,
       gap: BATTLE_STATUS_CARD_GAP,
@@ -1255,7 +1301,7 @@ export class BattleScene extends Phaser.Scene {
       (view.commandLines.length === 0 || Boolean(this.menuTexts.command)) &&
       (view.submenuLines.length === 0 || Boolean(this.menuTexts.submenu)) &&
       (view.descriptionLines.length === 0 || Boolean(this.menuTexts.description)) &&
-      this.statusCardTexts.length === view.statusCards.length;
+      this.statusCardTexts.length === statusCards.length;
     if (signature === this.statusLayoutSignature && textReady) {
       return layout;
     }
@@ -1272,6 +1318,7 @@ export class BattleScene extends Phaser.Scene {
       return layout;
     }
     graphics.clear();
+    this.statusFieldGraphics?.clear();
     this.statusAccentGraphics?.clear();
 
     if (layout.command) {
@@ -1341,39 +1388,30 @@ export class BattleScene extends Phaser.Scene {
     }
 
     layout.statusCards.forEach((card) => {
-      this.drawWindow(card.x, card.y, card.width, card.height, 20);
+      this.drawWindow(card.x, card.y, card.width, card.height, 20, this.statusWindowFrames);
+      this.drawStatusCardField(card);
       this.drawStatusCardAccent(card);
-      this.statusCardTexts.push(this.createGameText(
-        card.x + BATTLE_STATUS_CARD_TEXT_PADDING_X,
-        card.y + BATTLE_STATUS_CARD_TEXT_PADDING_Y,
-        "",
-        {
-          fontFamily: MONO,
-          fontSize: "13px",
-          color: "#f8fafc",
-          lineSpacing: BATTLE_LINE_SPACING
-        },
-        {
-          scale: EB_BITMAP_TEXT_SCALE,
-          tint: 0xf8fafc,
-          lineSpacing: BATTLE_LINE_SPACING,
-          lineHeight: BATTLE_LINE_HEIGHT,
-          maxWidth: this.statusCardTextWidth(card)
-        }
-      ).setDepth(21));
+      this.statusCardTexts.push(this.createStatusCardTexts(card));
     });
 
     return layout;
   }
 
-  private drawWindow(x: number, y: number, width: number, height: number, depth = 20): void {
+  private drawWindow(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    depth = 20,
+    frames: PreparedWindowFrames | undefined = this.windowFrames
+  ): void {
     const graphics = this.statusGraphics;
     if (!graphics) {
       return;
     }
-    if (this.windowFrames) {
+    if (frames) {
       this.statusWindows.push(
-        drawWindowFrame(this, this.windowFrames, x, y, width, height, { scale: EB_UI_SCALE }).setDepth(depth)
+        drawWindowFrame(this, frames, x, y, width, height, { scale: EB_UI_SCALE }).setDepth(depth)
       );
       return;
     }
@@ -1425,9 +1463,9 @@ export class BattleScene extends Phaser.Scene {
     );
     layout.statusCards.forEach((card, index) => {
       const viewCard = view.statusCards[index];
-      const text = this.statusCardTexts[index];
-      if (viewCard && text) {
-        text.setText(this.statusCardText(viewCard, card));
+      const textSet = this.statusCardTexts[index];
+      if (viewCard && textSet) {
+        this.updateStatusCardTexts(viewCard, card, textSet);
       }
     });
     this.renderEnemySpriteEffects(this.time.now);
@@ -1511,21 +1549,114 @@ export class BattleScene extends Phaser.Scene {
     return visible.map((line) => this.fitMeasuredText(line, textWidth)).join("\n");
   }
 
-  private statusCardText(card: BattleStatusCardView, rect: CanvasRect): string {
-    const textWidth = this.statusCardTextWidth(rect);
-    return [
-      this.fitMeasuredText(card.name, textWidth),
-      this.fitMeasuredText(`HP ${odometer(card.hp)}`, textWidth),
-      this.fitMeasuredText(`PP ${odometer(card.pp)}`, textWidth)
-    ].join("\n");
-  }
-
   private menuTextWidth(rect: Pick<CanvasRect, "width">, paddingX: number, gutter = MENU_CURSOR_GUTTER_PX): number {
     return Math.max(1, rect.width - paddingX * 2 - gutter);
   }
 
-  private statusCardTextWidth(rect: Pick<CanvasRect, "width">): number {
+  private statusCardNameWidth(rect: Pick<CanvasRect, "width">): number {
     return Math.max(1, rect.width - BATTLE_STATUS_CARD_TEXT_PADDING_X * 2);
+  }
+
+  private createStatusCardTexts(card: BattleStatusCardLayout): BattleStatusCardTextSet {
+    const hpBoxes = this.statusDigitBoxes(card, 0, "hp");
+    const ppBoxes = this.statusDigitBoxes(card, 0, "pp");
+    return {
+      name: this.createStatusText(
+        card.x + BATTLE_STATUS_CARD_TEXT_PADDING_X,
+        card.y + BATTLE_STATUS_CARD_NAME_Y,
+        "",
+        this.statusCardNameWidth(card)
+      ).setDepth(22),
+      hpLabel: this.createStatusText(
+        card.x + BATTLE_STATUS_CARD_TEXT_PADDING_X,
+        card.y + BATTLE_STATUS_HP_ROW_Y + BATTLE_STATUS_DIGIT_TEXT_Y_OFFSET,
+        "HP",
+        28
+      ).setDepth(22),
+      ppLabel: this.createStatusText(
+        card.x + BATTLE_STATUS_CARD_TEXT_PADDING_X,
+        card.y + BATTLE_STATUS_PP_ROW_Y + BATTLE_STATUS_DIGIT_TEXT_Y_OFFSET,
+        "PP",
+        28
+      ).setDepth(22),
+      hpDigits: hpBoxes.map((box) => this.createDigitText(box).setDepth(22)),
+      ppDigits: ppBoxes.map((box) => this.createDigitText(box).setDepth(22))
+    };
+  }
+
+  private updateStatusCardTexts(
+    card: BattleStatusCardView,
+    rect: BattleStatusCardLayout,
+    textSet: BattleStatusCardTextSet
+  ): void {
+    textSet.name.setText(this.fitMeasuredText(card.name, this.statusCardNameWidth(rect)));
+    textSet.hpLabel.setText("HP");
+    textSet.ppLabel.setText("PP");
+    this.updateDigitTexts(textSet.hpDigits, this.statusDigitBoxes(rect, card.hp, "hp"));
+    this.updateDigitTexts(textSet.ppDigits, this.statusDigitBoxes(rect, card.pp, "pp"));
+  }
+
+  private createStatusText(x: number, y: number, text: string, maxWidth: number): GameText {
+    return this.createGameText(
+      x,
+      y,
+      text,
+      {
+        fontFamily: MONO,
+        fontSize: "13px",
+        color: "#f8fafc",
+        lineSpacing: BATTLE_LINE_SPACING
+      },
+      {
+        scale: EB_BITMAP_TEXT_SCALE,
+        tint: 0xf8fafc,
+        lineSpacing: BATTLE_LINE_SPACING,
+        lineHeight: BATTLE_LINE_HEIGHT,
+        maxWidth
+      }
+    );
+  }
+
+  private createDigitText(box: BattleStatusDigitBoxRect): GameText {
+    const text = this.createStatusText(0, 0, box.digit, box.width);
+    return this.positionDigitText(text, box);
+  }
+
+  private updateDigitTexts(texts: GameText[], boxes: BattleStatusDigitBoxRect[]): void {
+    boxes.forEach((box, index) => {
+      const text = texts[index];
+      if (!text) {
+        return;
+      }
+      text.setText(box.digit);
+      this.positionDigitText(text, box);
+    });
+  }
+
+  private positionDigitText(text: GameText, box: BattleStatusDigitBoxRect): GameText {
+    const width = this.measureTextWidth(box.digit);
+    return text.setPosition(
+      Math.round(box.x + (box.width - width) / 2),
+      box.y + BATTLE_STATUS_DIGIT_TEXT_Y_OFFSET
+    );
+  }
+
+  private statusDigitBoxes(
+    card: CanvasRect,
+    value: number,
+    row: "hp" | "pp"
+  ): BattleStatusDigitBoxRect[] {
+    return battleStatusDigitBoxRects({
+      card,
+      value,
+      digitCount: BATTLE_STATUS_DIGIT_COUNT,
+      digitWidth: BATTLE_STATUS_DIGIT_WIDTH,
+      digitHeight: BATTLE_STATUS_DIGIT_HEIGHT,
+      gap: BATTLE_STATUS_DIGIT_GAP,
+      rightPadding: BATTLE_STATUS_DIGIT_RIGHT_PADDING,
+      y: card.y + (row === "hp" ? BATTLE_STATUS_HP_ROW_Y : BATTLE_STATUS_PP_ROW_Y),
+      leftPadding: BATTLE_STATUS_CARD_TEXT_PADDING_X + 30
+    });
   }
 
   private fitMeasuredText(text: string, maxWidth: number): string {
@@ -1543,18 +1674,42 @@ export class BattleScene extends Phaser.Scene {
   private statusCardViews(): BattleStatusCardView[] {
     const activeMemberIndex = this.currentActor_?.side === "party" ? this.currentActor_.index : -1;
     const targetMemberIndex = this.activeTargetSide() === "party" ? this.partyTargetIndex_ : -1;
-    return this.battle_.party.flatMap((member, memberIndex) => (
-      isCombatantAlive(member)
-        ? [{
-          memberIndex,
-          name: member.name,
-          hp: member.hp.displayed,
-          pp: member.pp,
-          active: memberIndex === activeMemberIndex,
-          target: memberIndex === targetMemberIndex
-        }]
-        : []
-    ));
+    const partyMembers = new Set<number>();
+    const cards = this.battle_.party.map((member, memberIndex) => {
+      partyMembers.add(memberIndex);
+      return {
+        memberIndex,
+        name: member.name,
+        hp: member.hp.displayed,
+        pp: this.displayedPpForMember(memberIndex, member.pp),
+        active: memberIndex === activeMemberIndex,
+        target: memberIndex === targetMemberIndex
+      };
+    });
+    for (const memberIndex of this.ppMeters.keys()) {
+      if (!partyMembers.has(memberIndex)) {
+        this.ppMeters.delete(memberIndex);
+      }
+    }
+    return cards;
+  }
+
+  private displayedPpForMember(memberIndex: number, pp: number): number {
+    const target = Math.max(0, Math.floor(pp));
+    const existing = this.ppMeters.get(memberIndex);
+    const meter = existing ?? createRollingMeter(target, BATTLE_PP_RATE_PER_SEC);
+    const next = meter.target === target ? meter : setTarget(meter, target);
+    this.ppMeters.set(memberIndex, next);
+    return next.displayed;
+  }
+
+  private tickStatusPpMeters(delta: number): void {
+    if (delta <= 0 || this.ppMeters.size === 0) {
+      return;
+    }
+    for (const [memberIndex, meter] of this.ppMeters) {
+      this.ppMeters.set(memberIndex, tickRollingMeter(meter, delta));
+    }
   }
 
   private submenuTextLines(): string[] {
@@ -1585,6 +1740,9 @@ export class BattleScene extends Phaser.Scene {
     if (this.menuMessage_) {
       return [this.menuMessage_];
     }
+    if (this.submenu_ === "command") {
+      return [];
+    }
     if (this.submenu_ === "psi") {
       const psi = this.learnedPsiForCurrentActor()[this.submenuIndex_];
       if (!psi) {
@@ -1609,28 +1767,7 @@ export class BattleScene extends Phaser.Scene {
       return [this.activeTargetSide() === "party" ? "Choose friend" : "Choose enemy"];
     }
 
-    switch (this.currentCommand()) {
-      case "BASH":
-        return ["To one enemy"];
-      case "PSI":
-        return ["Choose PSI", "PP Cost varies"];
-      case "GOODS":
-        return ["Choose goods"];
-      case "AUTO":
-        return ["Auto battle"];
-      case "SPY":
-        return ["To one enemy", "Check target"];
-      case "PRAY":
-        return ["Party effect"];
-      case "MIRROR":
-        return ["To one enemy"];
-      case "DEFEND":
-        return ["Guard this turn"];
-      case "RUN":
-        return ["Try to escape"];
-      default:
-        return [];
-    }
+    return [];
   }
 
   private drawStatusCardAccent(card: BattleStatusCardLayout): void {
@@ -1646,6 +1783,53 @@ export class BattleScene extends Phaser.Scene {
       graphics.lineStyle(2, 0x7dd3fc, 0.95);
       graphics.strokeRoundedRect(card.x + 8, card.y + 8, card.width - 16, card.height - 16, 2);
     }
+  }
+
+  private drawStatusCardField(card: BattleStatusCardLayout): void {
+    const graphics = this.statusFieldGraphics;
+    if (!graphics) {
+      return;
+    }
+    const inset = BATTLE_STATUS_FIELD_INSET;
+    const x = Math.round(card.x + inset);
+    const y = Math.round(card.y + inset);
+    const width = Math.max(1, Math.round(card.width - inset * 2));
+    const height = Math.max(1, Math.round(card.height - inset * 2));
+    const interior = this.statusWindowFrames?.flavor.interiorColor ?? this.windowFrames?.flavor.interiorColor;
+    const baseColor = interior ? rgbToNumber(interior) : 0x101010;
+    const checkColor = interior ? rgbToNumber(lightenRgb(interior, 22)) : 0x242424;
+
+    graphics.fillStyle(baseColor, 0.96);
+    graphics.fillRect(x, y, width, height);
+    const cell = 4;
+    for (let yy = y; yy < y + height; yy += cell) {
+      for (let xx = x; xx < x + width; xx += cell) {
+        if ((((xx - x) / cell) + ((yy - y) / cell) + card.index) % 2 !== 0) {
+          continue;
+        }
+        graphics.fillStyle(checkColor, 0.2);
+        graphics.fillRect(xx, yy, Math.min(cell, x + width - xx), Math.min(cell, y + height - yy));
+      }
+    }
+
+    for (const box of [
+      ...this.statusDigitBoxes(card, 0, "hp"),
+      ...this.statusDigitBoxes(card, 0, "pp")
+    ]) {
+      this.drawStatusDigitBox(graphics, box);
+    }
+  }
+
+  private drawStatusDigitBox(
+    graphics: Phaser.GameObjects.Graphics,
+    box: BattleStatusDigitBoxRect
+  ): void {
+    graphics.fillStyle(0x050505, 0.96);
+    graphics.fillRoundedRect(box.x, box.y, box.width, box.height, 2);
+    graphics.fillStyle(0xf8fafc, 0.14);
+    graphics.fillRect(box.x + 1, box.y + 1, Math.max(1, box.width - 2), 2);
+    graphics.lineStyle(1, 0xf8fafc, 0.86);
+    graphics.strokeRoundedRect(box.x + 0.5, box.y + 0.5, box.width - 1, box.height - 1, 2);
   }
 
   private publish(): void {
@@ -1763,6 +1947,9 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     graphics.clear();
+    if (layout.submenu) {
+      this.drawListScrollMarkers(graphics, layout.submenu);
+    }
     if (!menuCursorVisible(this.time.now)) {
       return;
     }
@@ -1838,6 +2025,27 @@ export class BattleScene extends Phaser.Scene {
     graphics.fillTriangle(triangle.x1, triangle.y1, triangle.x2, triangle.y2, triangle.x3, triangle.y3);
     graphics.lineStyle(1, 0x111827, 1);
     graphics.strokeTriangle(triangle.x1, triangle.y1, triangle.x2, triangle.y2, triangle.x3, triangle.y3);
+  }
+
+  private drawListScrollMarkers(
+    graphics: Phaser.GameObjects.Graphics,
+    rect: BattleMenuListRect
+  ): void {
+    const x = Math.round(rect.x + rect.width - BATTLE_COMMAND_TEXT_PADDING_X + 2);
+    if (rect.hasMoreBefore) {
+      const y = Math.round(rect.y + 8);
+      graphics.fillStyle(0xf8fafc, 0.9);
+      graphics.fillTriangle(x, y, x - 5, y + 6, x + 5, y + 6);
+      graphics.lineStyle(1, 0x111827, 0.9);
+      graphics.strokeTriangle(x, y, x - 5, y + 6, x + 5, y + 6);
+    }
+    if (rect.hasMoreAfter) {
+      const y = Math.round(rect.y + rect.height - 8);
+      graphics.fillStyle(0xf8fafc, 0.9);
+      graphics.fillTriangle(x, y, x - 5, y - 6, x + 5, y - 6);
+      graphics.lineStyle(1, 0x111827, 0.9);
+      graphics.strokeTriangle(x, y, x - 5, y - 6, x + 5, y - 6);
+    }
   }
 
   private drawStatusCardTargetMarker(
@@ -2016,9 +2224,11 @@ export class BattleScene extends Phaser.Scene {
     const x = target.x;
     const y = target.y - target.displayHeight / 2 - 16;
     cursor.fillStyle(0xf8fafc, 1);
-    cursor.fillTriangle(x, y + 14, x - 9, y, x + 9, y);
+    cursor.fillTriangle(x, y + 14, x - 8, y + 2, x + 8, y + 2);
+    cursor.fillRect(x - 3, y - 5, 6, 9);
     cursor.lineStyle(1, 0x111827, 1);
-    cursor.strokeTriangle(x, y + 14, x - 9, y, x + 9, y);
+    cursor.strokeTriangle(x, y + 14, x - 8, y + 2, x + 8, y + 2);
+    cursor.strokeRect(x - 3, y - 5, 6, 9);
   }
 }
 
@@ -2195,6 +2405,18 @@ function roundTo(value: number, places: number): number {
   return Math.round(value * multiplier) / multiplier;
 }
 
+function rgbToNumber(color: { r: number; g: number; b: number }): number {
+  return ((color.r & 0xff) << 16) | ((color.g & 0xff) << 8) | (color.b & 0xff);
+}
+
+function lightenRgb(color: { r: number; g: number; b: number }, amount: number): { r: number; g: number; b: number } {
+  return {
+    r: Math.min(255, color.r + amount),
+    g: Math.min(255, color.g + amount),
+    b: Math.min(255, color.b + amount)
+  };
+}
+
 function fitLine(line: string, width: number): string {
   return line.length > width ? line.slice(0, Math.max(0, width - 3)) + "..." : line;
 }
@@ -2274,10 +2496,6 @@ async function fetchParsed<T>(url: string, schema: { safeParse: (value: unknown)
   const raw = await fetchJson<unknown>(url);
   const parsed = schema.safeParse(raw);
   return parsed.success ? parsed.data : undefined;
-}
-
-function odometer(value: number): string {
-  return String(Math.max(0, Math.floor(value))).padStart(PADDED_HP_DIGITS, "0");
 }
 
 function unique(values: number[]): number[] {
