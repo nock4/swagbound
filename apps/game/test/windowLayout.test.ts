@@ -4,6 +4,8 @@ import {
   EB_BITMAP_TEXT_SCALE,
   EB_TEXT_LINE_SPACING,
   EB_UI_SCALE,
+  battleMenuCascadeLayout,
+  battleStatusCardRects,
   battleWindowRect,
   canvasRectForWindowId,
   contentFitWindowRect,
@@ -188,6 +190,122 @@ describe("EB window layouts", () => {
     expect(commandRect.y + commandRect.height).toBeLessThanOrEqual(448);
     expect(statusRect.x + statusRect.width).toBeLessThanOrEqual(512);
     expect(statusRect.y + statusRect.height).toBeLessThanOrEqual(448);
+  });
+
+  it("lays out battle command menus at the top and grows them with command count", () => {
+    const screen = { width: 512, height: 448 };
+    const measureText = (text: string) => text.length * 8;
+    const baseOptions = {
+      screen,
+      measureText,
+      lineHeight: ebTextLineHeight(),
+      paddingX: 30,
+      paddingY: 14,
+      leftMargin: 16,
+      topMargin: 8,
+      rightMargin: 16,
+      bottomMargin: 104,
+      cascadeOverlap: 8,
+      submenuOffsetY: 12,
+      descriptionGap: 4,
+      minCommandWidth: 80,
+      minSubmenuWidth: 96,
+      minDescriptionWidth: 120,
+      maxMenuWidth: 220,
+      maxDescriptionWidth: 240
+    };
+
+    const fourRows = battleMenuCascadeLayout({
+      ...baseOptions,
+      commandLabels: ["BASH", "GOODS", "AUTO", "PSI"]
+    });
+    const sevenRows = battleMenuCascadeLayout({
+      ...baseOptions,
+      commandLabels: ["BASH", "GOODS", "AUTO", "PSI", "MIRROR", "DEFEND", "RUN"],
+      descriptionLines: ["To one enemy", "PP Cost: 0"]
+    });
+
+    expect(fourRows.command).toMatchObject({ x: 16, y: 8, visibleStart: 0, visibleCount: 4 });
+    expect(sevenRows.command).toMatchObject({ x: 16, y: 8, visibleStart: 0, visibleCount: 7 });
+    expect(sevenRows.command!.height).toBeGreaterThan(fourRows.command!.height);
+    expect(sevenRows.description!.y).toBeGreaterThanOrEqual(sevenRows.command!.y + sevenRows.command!.height);
+    for (const rect of [sevenRows.command!, sevenRows.description!]) {
+      expect((rect.x + rect.width) / EB_UI_SCALE).toBeLessThanOrEqual(256);
+      expect((rect.y + rect.height) / EB_UI_SCALE).toBeLessThanOrEqual(224);
+    }
+  });
+
+  it("scrolls long battle submenus inside the top region with the selected row visible", () => {
+    const screen = { width: 512, height: 448 };
+    const submenuLabels = Array.from({ length: 18 }, (_, index) => `PSI Option ${index + 1}`);
+    const layout = battleMenuCascadeLayout({
+      screen,
+      commandLabels: ["BASH", "GOODS", "AUTO", "PSI", "DEFEND", "RUN"],
+      submenuLabels,
+      selectedSubmenuIndex: 17,
+      descriptionLines: ["To all enemies", "PP Cost: 10"],
+      measureText: (text) => text.length * 8,
+      lineHeight: ebTextLineHeight(),
+      paddingX: 30,
+      paddingY: 14,
+      leftMargin: 16,
+      topMargin: 8,
+      rightMargin: 16,
+      bottomMargin: 104,
+      cascadeOverlap: 8,
+      submenuOffsetY: 12,
+      descriptionGap: 4,
+      minCommandWidth: 80,
+      minSubmenuWidth: 96,
+      minDescriptionWidth: 120,
+      maxMenuWidth: 220,
+      maxDescriptionWidth: 240
+    });
+
+    expect(layout.submenu).toBeDefined();
+    expect(layout.submenu!.visibleCount).toBeLessThan(submenuLabels.length);
+    expect(layout.submenu!.visibleStart).toBeGreaterThan(0);
+    expect(17).toBeGreaterThanOrEqual(layout.submenu!.visibleStart);
+    expect(17).toBeLessThan(layout.submenu!.visibleStart + layout.submenu!.visibleCount);
+    expect(layout.submenu!.hasMoreBefore).toBe(true);
+    expect(layout.submenu!.hasMoreAfter).toBe(false);
+    expect(layout.submenu!.x).toBeGreaterThan(layout.command!.x);
+    expect(layout.submenu!.x).toBeLessThan(layout.command!.x + layout.command!.width);
+    expect((layout.submenu!.x + layout.submenu!.width) / EB_UI_SCALE).toBeLessThanOrEqual(256);
+    expect((layout.submenu!.y + layout.submenu!.height) / EB_UI_SCALE).toBeLessThanOrEqual(224);
+  });
+
+  it("centers battle party status cards at the bottom for one through four members", () => {
+    const screen = { width: 512, height: 448 };
+    for (const memberCount of [1, 2, 3, 4]) {
+      const cards = battleStatusCardRects({
+        screen,
+        memberCount,
+        activeIndex: memberCount - 1,
+        sideMargin: 16,
+        bottomMargin: 8,
+        gap: 6,
+        cardHeight: 88,
+        minCardWidth: 96,
+        maxCardWidth: 128,
+        activeLift: 6
+      });
+      const first = cards[0];
+      const last = cards[cards.length - 1];
+      const totalWidth = last.x + last.width - first.x;
+      const rowCenter = first.x + totalWidth / 2;
+
+      expect(cards).toHaveLength(memberCount);
+      expect(rowCenter).toBe(256);
+      expect(first.x).toBeGreaterThanOrEqual(16);
+      expect(last.x + last.width).toBeLessThanOrEqual(512 - 16);
+      expect(last.active).toBe(true);
+      expect(last.y).toBe(448 - 8 - 88 - 6);
+      for (const card of cards) {
+        expect((card.x + card.width) / EB_UI_SCALE).toBeLessThanOrEqual(256);
+        expect((card.y + card.height) / EB_UI_SCALE).toBeLessThanOrEqual(224);
+      }
+    }
   });
 
   it("sizes a window snugly from labels and font metrics", () => {

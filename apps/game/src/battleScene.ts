@@ -76,7 +76,9 @@ import {
   EB_TEXT_LINE_SPACING,
   EB_UI_SCALE,
   type CanvasRect,
-  battleWindowRect,
+  battleMenuCascadeLayout,
+  battleStatusCardRects,
+  type BattleMenuListRect,
   ebTextLineHeight
 } from "./windowLayout";
 import {
@@ -100,7 +102,6 @@ import {
   MENU_CURSOR_GUTTER_PX,
   enemyDefeatVisualState,
   menuCursorVisible,
-  menuRowTexts,
   selectionArrowTriangle
 } from "./battleVisuals";
 import { swirlMask, type SwirlMask } from "./transitions";
@@ -116,17 +117,31 @@ const TAU = Math.PI * 2;
 export const COMMANDS = commandsForCharId(0);
 const STATUS_TOP = 288;
 const BATTLE_LINE_SPACING = EB_TEXT_LINE_SPACING;
-const BATTLE_BOTTOM_MARGIN = 8;
 const BATTLE_LEFT_MARGIN = 16;
-const BATTLE_GAP = 8;
 const BATTLE_LINE_HEIGHT = ebTextLineHeight({ lineSpacing: BATTLE_LINE_SPACING });
 const BATTLE_COMMAND_TEXT_PADDING_X = 16;
 const BATTLE_COMMAND_TEXT_PADDING_Y = 14;
-const BATTLE_STATUS_TEXT_PADDING_X = 20;
-const BATTLE_STATUS_TEXT_PADDING_Y = 14;
+const BATTLE_MENU_TOP_MARGIN = 8;
+const BATTLE_MENU_RIGHT_MARGIN = 16;
+const BATTLE_MENU_BOTTOM_CLEARANCE = 104;
+const BATTLE_CASCADE_OVERLAP = 8;
+const BATTLE_SUBMENU_OFFSET_Y = 12;
+const BATTLE_DESCRIPTION_GAP = 4;
+const BATTLE_MENU_MAX_WIDTH = 220;
+const BATTLE_DESCRIPTION_MAX_WIDTH = 260;
+const BATTLE_DESCRIPTION_TEXT_PADDING_X = 16;
+const BATTLE_DESCRIPTION_TEXT_PADDING_Y = 10;
+const BATTLE_STATUS_CARD_SIDE_MARGIN = 16;
+const BATTLE_STATUS_CARD_BOTTOM_MARGIN = 8;
+const BATTLE_STATUS_CARD_GAP = 6;
+const BATTLE_STATUS_CARD_HEIGHT = 88;
+const BATTLE_STATUS_CARD_MIN_WIDTH = 96;
+const BATTLE_STATUS_CARD_MAX_WIDTH = 128;
+const BATTLE_STATUS_CARD_ACTIVE_LIFT = 6;
+const BATTLE_STATUS_CARD_TEXT_PADDING_X = 10;
+const BATTLE_STATUS_CARD_TEXT_PADDING_Y = 10;
 const PADDED_HP_DIGITS = 3;
 const ACTION_ADVANCE_DELAY_MS = 350;
-const MENU_MAX_ROWS = 4;
 const ENTER_TRANSITION_MS = 650;
 const EXIT_TRANSITION_MS = 450;
 const ENEMY_SPRITE_MAX_HEIGHT = 160;
@@ -160,9 +175,33 @@ type EnemySpriteTexturePlan = {
   override: ReturnType<typeof spriteOverrideForEnemyId>;
 };
 type BattleStatusLayout = {
-  commandRect?: CanvasRect;
-  statusRect: CanvasRect;
+  command?: BattleMenuListRect;
+  submenu?: BattleMenuListRect;
+  description?: CanvasRect;
+  statusCards: BattleStatusCardLayout[];
 };
+type BattleStatusCardView = {
+  memberIndex: number;
+  name: string;
+  hp: number;
+  pp: number;
+  active: boolean;
+  target: boolean;
+};
+type BattleStatusCardLayout = CanvasRect & {
+  index: number;
+  memberIndex: number;
+  active: boolean;
+  target: boolean;
+};
+type BattleUiView = {
+  commandLines: string[];
+  submenuLines: string[];
+  descriptionLines: string[];
+  selectedSubmenuIndex: number;
+  statusCards: BattleStatusCardView[];
+};
+type BattleMenuTextRole = "command" | "submenu" | "description";
 
 export class BattleScene extends Phaser.Scene {
   private battleData_!: BattleData;
@@ -196,12 +235,13 @@ export class BattleScene extends Phaser.Scene {
   private lastEnemyAction_: LastEnemyActionDebug | null = null;
   private actionDelayMs_ = 0;
   private statusGraphics?: Phaser.GameObjects.Graphics;
+  private statusAccentGraphics?: Phaser.GameObjects.Graphics;
   private statusWindows: Phaser.GameObjects.Container[] = [];
   private statusLayoutSignature = "";
   private targetCursor?: Phaser.GameObjects.Graphics;
   private menuCursorGraphics?: Phaser.GameObjects.Graphics;
-  private commandText?: GameText;
-  private partyText?: GameText;
+  private menuTexts: Partial<Record<BattleMenuTextRole, GameText>> = {};
+  private statusCardTexts: GameText[] = [];
   private transitionGraphics?: Phaser.GameObjects.Graphics;
   private enemySprites: Phaser.GameObjects.Image[] = [];
   private enemySpriteBasePoints: Array<SpritePoint | undefined> = [];
@@ -1139,22 +1179,84 @@ export class BattleScene extends Phaser.Scene {
     }
     this.statusWindows = [];
     this.statusGraphics?.destroy();
+    this.statusAccentGraphics?.destroy();
     this.targetCursor?.destroy();
     this.menuCursorGraphics?.destroy();
-    this.commandText?.destroy();
-    this.partyText?.destroy();
+    this.destroyBattleUiText();
     this.statusGraphics = this.add.graphics().setDepth(20);
+    this.statusAccentGraphics = this.add.graphics().setDepth(26);
     this.targetCursor = this.add.graphics().setDepth(30);
     this.menuCursorGraphics = this.add.graphics().setDepth(31);
     this.statusLayoutSignature = "";
   }
 
-  private layoutStatusWindows(commandLines: string[], partyLines: string[]): BattleStatusLayout {
-    const commandRect = commandLines.length > 0 ? this.battleCommandRect(commandLines) : undefined;
-    const statusRect = this.battleStatusRect(partyLines, commandRect);
-    const layout = { commandRect, statusRect };
-    const signature = JSON.stringify({ commandRect, statusRect });
-    if (signature === this.statusLayoutSignature && this.partyText && (commandLines.length === 0 || this.commandText)) {
+  private destroyBattleUiText(): void {
+    for (const text of Object.values(this.menuTexts)) {
+      text?.destroy();
+    }
+    this.menuTexts = {};
+    for (const text of this.statusCardTexts) {
+      text.destroy();
+    }
+    this.statusCardTexts = [];
+  }
+
+  private layoutStatusWindows(view: BattleUiView): BattleStatusLayout {
+    const menuLayout = battleMenuCascadeLayout({
+      screen: { width: this.scale.width, height: this.scale.height },
+      commandLabels: view.commandLines,
+      submenuLabels: view.submenuLines,
+      descriptionLines: view.descriptionLines,
+      selectedSubmenuIndex: view.selectedSubmenuIndex,
+      measureText: (label) => this.measureTextWidth(label),
+      lineHeight: BATTLE_LINE_HEIGHT,
+      paddingX: BATTLE_COMMAND_TEXT_PADDING_X + MENU_CURSOR_GUTTER_PX,
+      paddingY: BATTLE_COMMAND_TEXT_PADDING_Y,
+      leftMargin: BATTLE_LEFT_MARGIN,
+      topMargin: BATTLE_MENU_TOP_MARGIN,
+      rightMargin: BATTLE_MENU_RIGHT_MARGIN,
+      bottomMargin: BATTLE_MENU_BOTTOM_CLEARANCE,
+      cascadeOverlap: BATTLE_CASCADE_OVERLAP,
+      submenuOffsetY: BATTLE_SUBMENU_OFFSET_Y,
+      descriptionGap: BATTLE_DESCRIPTION_GAP,
+      minCommandWidth: 80,
+      minSubmenuWidth: 96,
+      minDescriptionWidth: 120,
+      maxMenuWidth: BATTLE_MENU_MAX_WIDTH,
+      maxDescriptionWidth: BATTLE_DESCRIPTION_MAX_WIDTH,
+      descriptionPaddingX: BATTLE_DESCRIPTION_TEXT_PADDING_X,
+      descriptionPaddingY: BATTLE_DESCRIPTION_TEXT_PADDING_Y
+    });
+    const activeCardIndex = view.statusCards.findIndex((card) => card.active);
+    const statusCards = battleStatusCardRects({
+      screen: { width: this.scale.width, height: this.scale.height },
+      memberCount: view.statusCards.length,
+      activeIndex: activeCardIndex >= 0 ? activeCardIndex : null,
+      sideMargin: BATTLE_STATUS_CARD_SIDE_MARGIN,
+      bottomMargin: BATTLE_STATUS_CARD_BOTTOM_MARGIN,
+      gap: BATTLE_STATUS_CARD_GAP,
+      cardHeight: BATTLE_STATUS_CARD_HEIGHT,
+      minCardWidth: BATTLE_STATUS_CARD_MIN_WIDTH,
+      maxCardWidth: BATTLE_STATUS_CARD_MAX_WIDTH,
+      activeLift: BATTLE_STATUS_CARD_ACTIVE_LIFT
+    }).map((rect, index) => ({
+      ...rect,
+      memberIndex: view.statusCards[index]?.memberIndex ?? index,
+      target: Boolean(view.statusCards[index]?.target)
+    }));
+    const layout: BattleStatusLayout = {
+      command: menuLayout.command,
+      submenu: menuLayout.submenu,
+      description: menuLayout.description,
+      statusCards
+    };
+    const signature = JSON.stringify(layout);
+    const textReady =
+      (view.commandLines.length === 0 || Boolean(this.menuTexts.command)) &&
+      (view.submenuLines.length === 0 || Boolean(this.menuTexts.submenu)) &&
+      (view.descriptionLines.length === 0 || Boolean(this.menuTexts.description)) &&
+      this.statusCardTexts.length === view.statusCards.length;
+    if (signature === this.statusLayoutSignature && textReady) {
       return layout;
     }
     this.statusLayoutSignature = signature;
@@ -1163,21 +1265,20 @@ export class BattleScene extends Phaser.Scene {
       window.destroy(true);
     }
     this.statusWindows = [];
-    this.commandText?.destroy();
-    this.commandText = undefined;
-    this.partyText?.destroy();
-    this.partyText = undefined;
+    this.destroyBattleUiText();
 
     const graphics = this.statusGraphics;
     if (!graphics) {
       return layout;
     }
     graphics.clear();
-    if (commandRect) {
-      this.drawWindow(commandRect.x, commandRect.y, commandRect.width, commandRect.height);
-      this.commandText = this.createGameText(
-        commandRect.x + BATTLE_COMMAND_TEXT_PADDING_X + MENU_CURSOR_GUTTER_PX,
-        commandRect.y + BATTLE_COMMAND_TEXT_PADDING_Y,
+    this.statusAccentGraphics?.clear();
+
+    if (layout.command) {
+      this.drawWindow(layout.command.x, layout.command.y, layout.command.width, layout.command.height, 20);
+      this.menuTexts.command = this.createGameText(
+        layout.command.x + BATTLE_COMMAND_TEXT_PADDING_X + MENU_CURSOR_GUTTER_PX,
+        layout.command.y + BATTLE_COMMAND_TEXT_PADDING_Y,
         "",
         {
           fontFamily: MONO,
@@ -1190,77 +1291,89 @@ export class BattleScene extends Phaser.Scene {
           tint: 0xf8fafc,
           lineSpacing: BATTLE_LINE_SPACING,
           lineHeight: BATTLE_LINE_HEIGHT,
-          maxWidth: Math.max(1, commandRect.width - BATTLE_COMMAND_TEXT_PADDING_X * 2 - MENU_CURSOR_GUTTER_PX)
+          maxWidth: this.menuTextWidth(layout.command, BATTLE_COMMAND_TEXT_PADDING_X)
         }
       ).setDepth(21);
     }
-    this.drawWindow(statusRect.x, statusRect.y, statusRect.width, statusRect.height);
-    this.partyText = this.createGameText(
-      statusRect.x + BATTLE_STATUS_TEXT_PADDING_X + MENU_CURSOR_GUTTER_PX,
-      statusRect.y + BATTLE_STATUS_TEXT_PADDING_Y,
-      "",
-      {
-        fontFamily: MONO,
-        fontSize: "14px",
-        color: "#f8fafc",
-        lineSpacing: BATTLE_LINE_SPACING
-      },
-      {
-        scale: EB_BITMAP_TEXT_SCALE,
-        tint: 0xf8fafc,
-        lineSpacing: BATTLE_LINE_SPACING,
-        lineHeight: BATTLE_LINE_HEIGHT,
-        maxWidth: Math.max(1, statusRect.width - BATTLE_STATUS_TEXT_PADDING_X * 2 - MENU_CURSOR_GUTTER_PX)
-      }
-    ).setDepth(21);
+
+    if (layout.description) {
+      this.drawWindow(layout.description.x, layout.description.y, layout.description.width, layout.description.height, 22);
+      this.menuTexts.description = this.createGameText(
+        layout.description.x + BATTLE_DESCRIPTION_TEXT_PADDING_X,
+        layout.description.y + BATTLE_DESCRIPTION_TEXT_PADDING_Y,
+        "",
+        {
+          fontFamily: MONO,
+          fontSize: "14px",
+          color: "#f8fafc",
+          lineSpacing: BATTLE_LINE_SPACING
+        },
+        {
+          scale: EB_BITMAP_TEXT_SCALE,
+          tint: 0xf8fafc,
+          lineSpacing: BATTLE_LINE_SPACING,
+          lineHeight: BATTLE_LINE_HEIGHT,
+          maxWidth: this.menuTextWidth(layout.description, BATTLE_DESCRIPTION_TEXT_PADDING_X, 0)
+        }
+      ).setDepth(23);
+    }
+
+    if (layout.submenu) {
+      this.drawWindow(layout.submenu.x, layout.submenu.y, layout.submenu.width, layout.submenu.height, 24);
+      this.menuTexts.submenu = this.createGameText(
+        layout.submenu.x + BATTLE_COMMAND_TEXT_PADDING_X + MENU_CURSOR_GUTTER_PX,
+        layout.submenu.y + BATTLE_COMMAND_TEXT_PADDING_Y,
+        "",
+        {
+          fontFamily: MONO,
+          fontSize: "15px",
+          color: "#f8fafc",
+          lineSpacing: BATTLE_LINE_SPACING
+        },
+        {
+          scale: EB_BITMAP_TEXT_SCALE,
+          tint: 0xf8fafc,
+          lineSpacing: BATTLE_LINE_SPACING,
+          lineHeight: BATTLE_LINE_HEIGHT,
+          maxWidth: this.menuTextWidth(layout.submenu, BATTLE_COMMAND_TEXT_PADDING_X)
+        }
+      ).setDepth(25);
+    }
+
+    layout.statusCards.forEach((card) => {
+      this.drawWindow(card.x, card.y, card.width, card.height, 20);
+      this.drawStatusCardAccent(card);
+      this.statusCardTexts.push(this.createGameText(
+        card.x + BATTLE_STATUS_CARD_TEXT_PADDING_X,
+        card.y + BATTLE_STATUS_CARD_TEXT_PADDING_Y,
+        "",
+        {
+          fontFamily: MONO,
+          fontSize: "13px",
+          color: "#f8fafc",
+          lineSpacing: BATTLE_LINE_SPACING
+        },
+        {
+          scale: EB_BITMAP_TEXT_SCALE,
+          tint: 0xf8fafc,
+          lineSpacing: BATTLE_LINE_SPACING,
+          lineHeight: BATTLE_LINE_HEIGHT,
+          maxWidth: this.statusCardTextWidth(card)
+        }
+      ).setDepth(21));
+    });
+
     return layout;
   }
 
-  private battleCommandRect(lines: string[]): CanvasRect {
-    return battleWindowRect({
-      screen: { width: this.scale.width, height: this.scale.height },
-      x: BATTLE_LEFT_MARGIN,
-      labels: lines,
-      measureText: (label) => this.measureTextWidth(label),
-      lineHeight: BATTLE_LINE_HEIGHT,
-      paddingX: BATTLE_COMMAND_TEXT_PADDING_X + MENU_CURSOR_GUTTER_PX,
-      paddingY: BATTLE_COMMAND_TEXT_PADDING_Y,
-      bottomMargin: BATTLE_BOTTOM_MARGIN,
-      leftMargin: BATTLE_LEFT_MARGIN,
-      rightMargin: BATTLE_LEFT_MARGIN,
-      minWidth: 80,
-      maxWidth: 180,
-      maxHeight: this.scale.height - STATUS_TOP - BATTLE_BOTTOM_MARGIN * 2
-    });
-  }
-
-  private battleStatusRect(lines: string[], commandRect: CanvasRect | undefined): CanvasRect {
-    const x = commandRect ? commandRect.x + commandRect.width + BATTLE_GAP : BATTLE_LEFT_MARGIN;
-    return battleWindowRect({
-      screen: { width: this.scale.width, height: this.scale.height },
-      x,
-      labels: lines,
-      measureText: (label) => this.measureTextWidth(label),
-      lineHeight: BATTLE_LINE_HEIGHT,
-      paddingX: BATTLE_STATUS_TEXT_PADDING_X + MENU_CURSOR_GUTTER_PX,
-      paddingY: BATTLE_STATUS_TEXT_PADDING_Y,
-      bottomMargin: BATTLE_BOTTOM_MARGIN,
-      leftMargin: BATTLE_LEFT_MARGIN,
-      rightMargin: BATTLE_LEFT_MARGIN,
-      minWidth: 160,
-      maxWidth: Math.max(80, this.scale.width - x - BATTLE_LEFT_MARGIN),
-      maxHeight: this.scale.height - STATUS_TOP - BATTLE_BOTTOM_MARGIN * 2
-    });
-  }
-
-  private drawWindow(x: number, y: number, width: number, height: number): void {
+  private drawWindow(x: number, y: number, width: number, height: number, depth = 20): void {
     const graphics = this.statusGraphics;
     if (!graphics) {
       return;
     }
     if (this.windowFrames) {
       this.statusWindows.push(
-        drawWindowFrame(this, this.windowFrames, x, y, width, height, { scale: EB_UI_SCALE }).setDepth(20)
+        drawWindowFrame(this, this.windowFrames, x, y, width, height, { scale: EB_UI_SCALE }).setDepth(depth)
       );
       return;
     }
@@ -1303,27 +1416,236 @@ export class BattleScene extends Phaser.Scene {
 
   private renderStatus(): void {
     const menuVisible = this.phase_ === "menu" && this.currentActor_?.side === "party";
-    let commandLines: string[] = [];
-    let partyLines: string[] = [];
-    if (this.phase_ === "victory-summary") {
-      commandLines = ["OK"];
-      partyLines = this.victorySummaryLines();
-    } else if (this.phase_ === "lose") {
-      commandLines = ["OK"];
-      partyLines = ["The party fell."];
-    } else if (this.phase_ === "flee") {
-      commandLines = ["OK"];
-      partyLines = ["Got away."];
-    } else {
-      commandLines = menuVisible ? this.menuTextLines() : this.menuMessage_ ? [this.menuMessage_] : [];
-      partyLines = this.partyStatusLines();
-    }
-    const layout = this.layoutStatusWindows(commandLines, partyLines);
-    this.commandText?.setText(commandLines.join("\n"));
-    this.partyText?.setText(partyLines.join("\n"));
+    const view = this.battleUiView(menuVisible);
+    const layout = this.layoutStatusWindows(view);
+    this.menuTexts.command?.setText(this.listWindowText(view.commandLines, layout.command, BATTLE_COMMAND_TEXT_PADDING_X));
+    this.menuTexts.submenu?.setText(this.listWindowText(view.submenuLines, layout.submenu, BATTLE_COMMAND_TEXT_PADDING_X));
+    this.menuTexts.description?.setText(
+      this.descriptionWindowText(view.descriptionLines, layout.description)
+    );
+    layout.statusCards.forEach((card, index) => {
+      const viewCard = view.statusCards[index];
+      const text = this.statusCardTexts[index];
+      if (viewCard && text) {
+        text.setText(this.statusCardText(viewCard, card));
+      }
+    });
     this.renderEnemySpriteEffects(this.time.now);
-    this.renderMenuCursors(menuVisible, commandLines, layout);
+    this.renderMenuCursors(menuVisible, layout);
     this.renderTargetCursor(menuVisible);
+  }
+
+  private battleUiView(menuVisible: boolean): BattleUiView {
+    const terminalCommandLines = this.phase_ === "victory-summary" || this.phase_ === "lose" || this.phase_ === "flee"
+      ? ["OK"]
+      : [];
+    if (this.phase_ === "victory-summary") {
+      return {
+        commandLines: terminalCommandLines,
+        submenuLines: [],
+        descriptionLines: this.victorySummaryLines(),
+        selectedSubmenuIndex: 0,
+        statusCards: this.statusCardViews()
+      };
+    }
+    if (this.phase_ === "lose") {
+      return {
+        commandLines: terminalCommandLines,
+        submenuLines: [],
+        descriptionLines: ["The party fell."],
+        selectedSubmenuIndex: 0,
+        statusCards: this.statusCardViews()
+      };
+    }
+    if (this.phase_ === "flee") {
+      return {
+        commandLines: terminalCommandLines,
+        submenuLines: [],
+        descriptionLines: ["Got away."],
+        selectedSubmenuIndex: 0,
+        statusCards: this.statusCardViews()
+      };
+    }
+    if (!menuVisible) {
+      return {
+        commandLines: this.menuMessage_ ? [this.menuMessage_] : [],
+        submenuLines: [],
+        descriptionLines: [],
+        selectedSubmenuIndex: 0,
+        statusCards: this.statusCardViews()
+      };
+    }
+    return {
+      commandLines: this.commandsForCurrentActor(),
+      submenuLines: this.submenuTextLines(),
+      descriptionLines: this.menuDescriptionLines(),
+      selectedSubmenuIndex: this.submenuIndex_,
+      statusCards: this.statusCardViews()
+    };
+  }
+
+  private listWindowText(lines: string[], rect: BattleMenuListRect | undefined, paddingX: number): string {
+    if (!rect) {
+      return "";
+    }
+    const textWidth = this.menuTextWidth(rect, paddingX);
+    return lines
+      .slice(rect.visibleStart, rect.visibleStart + rect.visibleCount)
+      .map((line) => this.fitMeasuredText(line, textWidth))
+      .join("\n");
+  }
+
+  private descriptionWindowText(lines: string[], rect: CanvasRect | undefined): string {
+    if (!rect) {
+      return "";
+    }
+    const maxRows = Math.max(
+      1,
+      Math.floor((rect.height - BATTLE_DESCRIPTION_TEXT_PADDING_Y * 2) / BATTLE_LINE_HEIGHT)
+    );
+    const visible = lines.slice(0, maxRows);
+    if (lines.length > maxRows && visible.length > 0) {
+      visible[visible.length - 1] = "...";
+    }
+    const textWidth = this.menuTextWidth(rect, BATTLE_DESCRIPTION_TEXT_PADDING_X, 0);
+    return visible.map((line) => this.fitMeasuredText(line, textWidth)).join("\n");
+  }
+
+  private statusCardText(card: BattleStatusCardView, rect: CanvasRect): string {
+    const textWidth = this.statusCardTextWidth(rect);
+    return [
+      this.fitMeasuredText(card.name, textWidth),
+      this.fitMeasuredText(`HP ${odometer(card.hp)}`, textWidth),
+      this.fitMeasuredText(`PP ${odometer(card.pp)}`, textWidth)
+    ].join("\n");
+  }
+
+  private menuTextWidth(rect: Pick<CanvasRect, "width">, paddingX: number, gutter = MENU_CURSOR_GUTTER_PX): number {
+    return Math.max(1, rect.width - paddingX * 2 - gutter);
+  }
+
+  private statusCardTextWidth(rect: Pick<CanvasRect, "width">): number {
+    return Math.max(1, rect.width - BATTLE_STATUS_CARD_TEXT_PADDING_X * 2);
+  }
+
+  private fitMeasuredText(text: string, maxWidth: number): string {
+    if (this.measureTextWidth(text) <= maxWidth) {
+      return text;
+    }
+    const suffix = "...";
+    let fitted = text;
+    while (fitted.length > 0 && this.measureTextWidth(fitted + suffix) > maxWidth) {
+      fitted = fitted.slice(0, -1);
+    }
+    return fitted.length > 0 ? fitted + suffix : "";
+  }
+
+  private statusCardViews(): BattleStatusCardView[] {
+    const activeMemberIndex = this.currentActor_?.side === "party" ? this.currentActor_.index : -1;
+    const targetMemberIndex = this.activeTargetSide() === "party" ? this.partyTargetIndex_ : -1;
+    return this.battle_.party.flatMap((member, memberIndex) => (
+      isCombatantAlive(member)
+        ? [{
+          memberIndex,
+          name: member.name,
+          hp: member.hp.displayed,
+          pp: member.pp,
+          active: memberIndex === activeMemberIndex,
+          target: memberIndex === targetMemberIndex
+        }]
+        : []
+    ));
+  }
+
+  private submenuTextLines(): string[] {
+    if (this.submenu_ === "psi") {
+      const entries = this.learnedPsiForCurrentActor();
+      if (entries.length === 0) {
+        return [this.menuMessage_ || "No learned PSI."];
+      }
+      return entries.map((psi) => {
+        const cost = psiPpCost(psi);
+        return `${psi.name || `[psi ${psi.id}]`} ${cost}`;
+      });
+    }
+    if (this.submenu_ === "goods") {
+      const entries = this.goodsForCurrentActor();
+      if (entries.length === 0) {
+        return [this.menuMessage_ || "No goods."];
+      }
+      return entries.map((entry) => {
+        const item = this.itemById(entry.itemId);
+        return item?.name || `[item ${entry.itemId}]`;
+      });
+    }
+    return [];
+  }
+
+  private menuDescriptionLines(): string[] {
+    if (this.menuMessage_) {
+      return [this.menuMessage_];
+    }
+    if (this.submenu_ === "psi") {
+      const psi = this.learnedPsiForCurrentActor()[this.submenuIndex_];
+      if (!psi) {
+        return ["No PSI available."];
+      }
+      return [targetScopeForPsi(psi), `PP Cost: ${psiPpCost(psi)}`];
+    }
+    if (this.submenu_ === "goods") {
+      const entry = this.goodsForCurrentActor()[this.submenuIndex_];
+      const item = entry ? this.itemById(entry.itemId) : undefined;
+      return item ? ["To one friend", "Use item"] : ["No goods available."];
+    }
+    if (this.submenu_ === "target") {
+      if (this.pendingPsiId_ !== null) {
+        const psi = this.psiById(this.pendingPsiId_);
+        return psi ? [targetScopeForPsi(psi), `PP Cost: ${psiPpCost(psi)}`] : ["Choose target"];
+      }
+      if (this.pendingItem_) {
+        const item = this.itemById(this.pendingItem_.itemId);
+        return item ? ["To one friend", "Use item"] : ["Choose target"];
+      }
+      return [this.activeTargetSide() === "party" ? "Choose friend" : "Choose enemy"];
+    }
+
+    switch (this.currentCommand()) {
+      case "BASH":
+        return ["To one enemy"];
+      case "PSI":
+        return ["Choose PSI", "PP Cost varies"];
+      case "GOODS":
+        return ["Choose goods"];
+      case "AUTO":
+        return ["Auto battle"];
+      case "SPY":
+        return ["To one enemy", "Check target"];
+      case "PRAY":
+        return ["Party effect"];
+      case "MIRROR":
+        return ["To one enemy"];
+      case "DEFEND":
+        return ["Guard this turn"];
+      case "RUN":
+        return ["Try to escape"];
+      default:
+        return [];
+    }
+  }
+
+  private drawStatusCardAccent(card: BattleStatusCardLayout): void {
+    const graphics = this.statusAccentGraphics;
+    if (!graphics) {
+      return;
+    }
+    if (card.active) {
+      graphics.lineStyle(2, 0xf8fafc, 0.92);
+      graphics.strokeRoundedRect(card.x + 5, card.y + 5, card.width - 10, card.height - 10, 3);
+    }
+    if (card.target) {
+      graphics.lineStyle(2, 0x7dd3fc, 0.95);
+      graphics.strokeRoundedRect(card.x + 8, card.y + 8, card.width - 16, card.height - 16, 2);
+    }
   }
 
   private publish(): void {
@@ -1435,7 +1757,7 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
-  private renderMenuCursors(menuVisible: boolean, commandLines: string[], layout: BattleStatusLayout): void {
+  private renderMenuCursors(menuVisible: boolean, layout: BattleStatusLayout): void {
     const graphics = this.menuCursorGraphics;
     if (!graphics) {
       return;
@@ -1445,12 +1767,12 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
 
-    const commandRow = this.selectedCommandRow(commandLines);
-    if (layout.commandRect && commandRow !== null) {
+    const commandRow = this.selectedCommandRow();
+    if (layout.command && commandRow !== null) {
       this.drawMenuCursorArrow(
         graphics,
-        layout.commandRect.x + BATTLE_COMMAND_TEXT_PADDING_X + 1,
-        layout.commandRect.y + BATTLE_COMMAND_TEXT_PADDING_Y + commandRow * BATTLE_LINE_HEIGHT,
+        layout.command.x + BATTLE_COMMAND_TEXT_PADDING_X + 1,
+        layout.command.y + BATTLE_COMMAND_TEXT_PADDING_Y + commandRow * BATTLE_LINE_HEIGHT,
         BATTLE_LINE_HEIGHT
       );
     }
@@ -1458,20 +1780,24 @@ export class BattleScene extends Phaser.Scene {
     if (!menuVisible) {
       return;
     }
-    for (const row of this.selectedPartyRows()) {
+    const submenuRow = this.selectedSubmenuRow(layout.submenu);
+    if (layout.submenu && submenuRow !== null) {
       this.drawMenuCursorArrow(
         graphics,
-        layout.statusRect.x + BATTLE_STATUS_TEXT_PADDING_X + 1,
-        layout.statusRect.y + BATTLE_STATUS_TEXT_PADDING_Y + row * BATTLE_LINE_HEIGHT,
+        layout.submenu.x + BATTLE_COMMAND_TEXT_PADDING_X + 1,
+        layout.submenu.y + BATTLE_COMMAND_TEXT_PADDING_Y + submenuRow * BATTLE_LINE_HEIGHT,
         BATTLE_LINE_HEIGHT
       );
     }
+
+    if (this.activeTargetSide() === "party") {
+      for (const card of layout.statusCards.filter((statusCard) => statusCard.target)) {
+        this.drawStatusCardTargetMarker(graphics, card);
+      }
+    }
   }
 
-  private selectedCommandRow(commandLines: string[]): number | null {
-    if (commandLines.length === 0) {
-      return null;
-    }
+  private selectedCommandRow(): number | null {
     if (this.phase_ === "victory-summary" || this.phase_ === "lose" || this.phase_ === "flee") {
       return 0;
     }
@@ -1481,27 +1807,24 @@ export class BattleScene extends Phaser.Scene {
     if (this.submenu_ === "command") {
       return this.commandIndex_;
     }
-    if (this.submenu_ === "psi") {
-      return visibleMenuRowIndex(this.learnedPsiForCurrentActor().length, this.submenuIndex_, this.menuMessage_);
-    }
-    if (this.submenu_ === "goods") {
-      return visibleMenuRowIndex(this.goodsForCurrentActor().length, this.submenuIndex_, this.menuMessage_);
-    }
     return null;
   }
 
-  private selectedPartyRows(): number[] {
-    if (!this.currentActor_ || this.currentActor_.side !== "party") {
-      return [];
+  private selectedSubmenuRow(submenu: BattleMenuListRect | undefined): number | null {
+    if (!submenu || this.phase_ !== "menu" || this.currentActor_?.side !== "party") {
+      return null;
     }
-    const rows = new Set<number>();
-    if (this.battle_.party[this.currentActor_.index]) {
-      rows.add(this.currentActor_.index);
+    if (this.submenu_ !== "psi" && this.submenu_ !== "goods") {
+      return null;
     }
-    if (this.activeTargetSide() === "party" && this.battle_.party[this.partyTargetIndex_]) {
-      rows.add(this.partyTargetIndex_);
+    const rowCount = this.submenu_ === "psi"
+      ? this.learnedPsiForCurrentActor().length
+      : this.goodsForCurrentActor().length;
+    if (rowCount <= 0) {
+      return null;
     }
-    return [...rows].sort((a, b) => a - b);
+    const row = this.submenuIndex_ - submenu.visibleStart;
+    return row >= 0 && row < submenu.visibleCount ? row : null;
   }
 
   private drawMenuCursorArrow(
@@ -1515,6 +1838,18 @@ export class BattleScene extends Phaser.Scene {
     graphics.fillTriangle(triangle.x1, triangle.y1, triangle.x2, triangle.y2, triangle.x3, triangle.y3);
     graphics.lineStyle(1, 0x111827, 1);
     graphics.strokeTriangle(triangle.x1, triangle.y1, triangle.x2, triangle.y2, triangle.x3, triangle.y3);
+  }
+
+  private drawStatusCardTargetMarker(
+    graphics: Phaser.GameObjects.Graphics,
+    card: Pick<CanvasRect, "x" | "y" | "width">
+  ): void {
+    const x = Math.round(card.x + card.width / 2);
+    const y = Math.max(2, card.y - 8);
+    graphics.fillStyle(0xf8fafc, 1);
+    graphics.fillTriangle(x, y + 8, x - 7, y, x + 7, y);
+    graphics.lineStyle(1, 0x111827, 1);
+    graphics.strokeTriangle(x, y + 8, x - 7, y, x + 7, y);
   }
 
   private enemyEffectFor(index: number, now: number): EnemyEffectDebug {
@@ -1561,13 +1896,6 @@ export class BattleScene extends Phaser.Scene {
     this.partyTargetIndex_ = firstLiving >= 0 ? firstLiving : 0;
   }
 
-  private partyStatusLines(): string[] {
-    return this.battle_.party.map((member) => {
-      const marker = isCombatantAlive(member) ? " " : "X";
-      return `${marker} ${fitName(member.name, 9)} HP ${odometer(member.hp.displayed)} PP ${odometer(member.pp)}`;
-    });
-  }
-
   private victorySummaryLines(): string[] {
     if (!this.victorySummary_) {
       return [];
@@ -1575,44 +1903,6 @@ export class BattleScene extends Phaser.Scene {
     return buildVictorySummaryViewModel(this.victorySummary_)
       .lines
       .map((line) => fitLine(line, 28));
-  }
-
-  private menuTextLines(): string[] {
-    if (this.submenu_ === "command") {
-      return menuRowTexts(this.commandsForCurrentActor().map((command, index) => ({
-        label: command,
-        selected: index === this.commandIndex_
-      })));
-    }
-    if (this.submenu_ === "psi") {
-      const entries = this.learnedPsiForCurrentActor();
-      if (entries.length === 0) {
-        return [this.menuMessage_ || "No learned PSI."];
-      }
-      return fitMenuRows(menuRowTexts(entries.map((psi, index) => {
-        const cost = psiPpCost(psi);
-        return {
-          label: `${fitName(psi.name || `[psi ${psi.id}]`, 8)} ${cost}`,
-          selected: index === this.submenuIndex_
-        };
-      })), this.submenuIndex_, this.menuMessage_);
-    }
-    if (this.submenu_ === "goods") {
-      const entries = this.goodsForCurrentActor();
-      if (entries.length === 0) {
-        return [this.menuMessage_ || "No goods."];
-      }
-      return fitMenuRows(menuRowTexts(entries.map((entry, index) => {
-        const item = this.itemById(entry.itemId);
-        return {
-          label: fitName(item?.name || `[item ${entry.itemId}]`, 10),
-          selected: index === this.submenuIndex_
-        };
-      })), this.submenuIndex_, this.menuMessage_);
-    }
-
-    const prompt = this.activeTargetSide() === "party" ? "To whom?" : "To enemy?";
-    return [prompt, this.menuMessage_].filter(Boolean);
   }
 
   private currentCommand(): BattleCommand {
@@ -1905,10 +2195,6 @@ function roundTo(value: number, places: number): number {
   return Math.round(value * multiplier) / multiplier;
 }
 
-function fitName(name: string, width: number): string {
-  return name.length > width ? name.slice(0, width) : name.padEnd(width, " ");
-}
-
 function fitLine(line: string, width: number): string {
   return line.length > width ? line.slice(0, Math.max(0, width - 3)) + "..." : line;
 }
@@ -1928,34 +2214,6 @@ function clampIndex(index: number, length: number): number {
   return (index + length) % length;
 }
 
-function fitMenuRows(rows: string[], selectedIndex: number, message: string): string[] {
-  const availableRows = message ? MENU_MAX_ROWS - 1 : MENU_MAX_ROWS;
-  const start = visibleMenuRowStart(rows.length, selectedIndex, message);
-  const visible = rows.slice(start, start + availableRows);
-  if (!message) {
-    return visible;
-  }
-  return [...visible, message];
-}
-
-function visibleMenuRowIndex(rowCount: number, selectedIndex: number, message: string): number | null {
-  if (rowCount <= 0) {
-    return null;
-  }
-  const start = visibleMenuRowStart(rowCount, selectedIndex, message);
-  const availableRows = message ? MENU_MAX_ROWS - 1 : MENU_MAX_ROWS;
-  const visibleIndex = selectedIndex - start;
-  return visibleIndex >= 0 && visibleIndex < availableRows ? visibleIndex : null;
-}
-
-function visibleMenuRowStart(rowCount: number, selectedIndex: number, message: string): number {
-  const availableRows = message ? MENU_MAX_ROWS - 1 : MENU_MAX_ROWS;
-  return Math.min(
-    Math.max(0, selectedIndex - availableRows + 1),
-    Math.max(0, rowCount - availableRows)
-  );
-}
-
 function targetModeForCommand(command: BattleCommand): BattleTargetMode | null {
   switch (command) {
     case "BASH":
@@ -1966,6 +2224,19 @@ function targetModeForCommand(command: BattleCommand): BattleTargetMode | null {
       return "mirror";
     default:
       return null;
+  }
+}
+
+function targetScopeForPsi(psi: PsiData): string {
+  switch (psiBattleKind(psi)) {
+    case "offense":
+      return "To enemies";
+    case "recovery":
+      return "To one friend";
+    case "assist":
+      return "Battle effect";
+    default:
+      return "No battle target";
   }
 }
 

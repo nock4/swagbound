@@ -84,6 +84,63 @@ export type BattleWindowRectOptions = {
   maxHeight?: number;
 };
 
+export type BattleMenuListRect = CanvasRect & {
+  visibleStart: number;
+  visibleCount: number;
+  hasMoreBefore: boolean;
+  hasMoreAfter: boolean;
+};
+
+export type BattleMenuCascadeLayoutOptions = {
+  screen: ScreenSize;
+  commandLabels: string[];
+  submenuLabels?: string[];
+  descriptionLines?: string[];
+  selectedSubmenuIndex?: number;
+  measureText: (text: string) => number;
+  lineHeight: number;
+  paddingX: number;
+  paddingY: number;
+  leftMargin: number;
+  topMargin: number;
+  rightMargin: number;
+  bottomMargin: number;
+  cascadeOverlap: number;
+  submenuOffsetY: number;
+  descriptionGap: number;
+  minCommandWidth: number;
+  minSubmenuWidth: number;
+  minDescriptionWidth: number;
+  maxMenuWidth?: number;
+  maxDescriptionWidth?: number;
+  descriptionPaddingX?: number;
+  descriptionPaddingY?: number;
+};
+
+export type BattleMenuCascadeLayout = {
+  command?: BattleMenuListRect;
+  submenu?: BattleMenuListRect;
+  description?: CanvasRect;
+};
+
+export type BattleStatusCardRect = CanvasRect & {
+  index: number;
+  active: boolean;
+};
+
+export type BattleStatusCardRectsOptions = {
+  screen: ScreenSize;
+  memberCount: number;
+  activeIndex?: number | null;
+  sideMargin: number;
+  bottomMargin: number;
+  gap: number;
+  cardHeight: number;
+  minCardWidth: number;
+  maxCardWidth: number;
+  activeLift: number;
+};
+
 export function windowLayoutToCanvasRect(
   layout: Pick<WindowLayout, "width" | "height" | "xOffset" | "yOffset">,
   scale = EB_UI_SCALE
@@ -244,6 +301,254 @@ export function battleWindowRect(options: BattleWindowRectOptions): CanvasRect {
     top: 0,
     bottom: options.bottomMargin
   });
+}
+
+export function battleMenuCascadeLayout(options: BattleMenuCascadeLayoutOptions): BattleMenuCascadeLayout {
+  const leftMargin = Math.max(0, Math.ceil(options.leftMargin));
+  const topMargin = Math.max(0, Math.ceil(options.topMargin));
+  const rightMargin = Math.max(0, Math.ceil(options.rightMargin));
+  const bottomMargin = Math.max(0, Math.ceil(options.bottomMargin));
+  const bottomLimit = Math.max(topMargin + 1, Math.floor(options.screen.height - bottomMargin));
+  const maxMenuWidth = Math.max(
+    1,
+    Math.min(
+      Math.floor(options.maxMenuWidth ?? options.screen.width),
+      Math.floor(options.screen.width - leftMargin - rightMargin)
+    )
+  );
+  const command = options.commandLabels.length > 0
+    ? battleMenuListRect({
+      screen: options.screen,
+      x: leftMargin,
+      y: topMargin,
+      labels: options.commandLabels,
+      selectedIndex: 0,
+      visibleCount: options.commandLabels.length,
+      measureText: options.measureText,
+      lineHeight: options.lineHeight,
+      paddingX: options.paddingX,
+      paddingY: options.paddingY,
+      minWidth: options.minCommandWidth,
+      maxWidth: maxMenuWidth,
+      leftMargin,
+      topMargin,
+      rightMargin,
+      bottomMargin
+    })
+    : undefined;
+
+  const submenuLabels = options.submenuLabels ?? [];
+  const submenu = command && submenuLabels.length > 0
+    ? battleScrollableMenuListRect({
+      screen: options.screen,
+      x: command.x + Math.max(0, command.width - Math.max(0, options.cascadeOverlap)),
+      y: command.y + Math.max(0, options.submenuOffsetY),
+      labels: submenuLabels,
+      selectedIndex: options.selectedSubmenuIndex ?? 0,
+      measureText: options.measureText,
+      lineHeight: options.lineHeight,
+      paddingX: options.paddingX,
+      paddingY: options.paddingY,
+      minWidth: options.minSubmenuWidth,
+      maxWidth: maxMenuWidth,
+      leftMargin,
+      topMargin,
+      rightMargin,
+      bottomMargin
+    })
+    : undefined;
+
+  const descriptionLines = options.descriptionLines ?? [];
+  const description = command && descriptionLines.length > 0
+    ? battleDescriptionRect({
+      screen: options.screen,
+      x: command.x,
+      y: Math.min(
+        command.y + command.height + Math.max(0, options.descriptionGap),
+        Math.max(topMargin, bottomLimit - options.lineHeight - (options.descriptionPaddingY ?? options.paddingY) * 2)
+      ),
+      labels: descriptionLines,
+      measureText: options.measureText,
+      lineHeight: options.lineHeight,
+      paddingX: options.descriptionPaddingX ?? options.paddingX,
+      paddingY: options.descriptionPaddingY ?? options.paddingY,
+      minWidth: Math.max(options.minDescriptionWidth, command.width),
+      maxWidth: Math.min(
+        Math.max(1, options.maxDescriptionWidth ?? maxMenuWidth),
+        Math.floor(options.screen.width - leftMargin - rightMargin)
+      ),
+      leftMargin,
+      topMargin,
+      rightMargin,
+      bottomMargin
+    })
+    : undefined;
+
+  return { command, submenu, description };
+}
+
+export function battleStatusCardRects(options: BattleStatusCardRectsOptions): BattleStatusCardRect[] {
+  const memberCount = Math.min(4, Math.max(0, Math.floor(options.memberCount)));
+  if (memberCount <= 0) {
+    return [];
+  }
+  const sideMargin = Math.max(0, Math.ceil(options.sideMargin));
+  const gap = Math.max(0, Math.ceil(options.gap));
+  const availableWidth = Math.max(1, Math.floor(options.screen.width - sideMargin * 2 - gap * (memberCount - 1)));
+  const maxFitWidth = Math.max(1, Math.floor(availableWidth / memberCount));
+  const minCardWidth = Math.min(Math.max(1, Math.ceil(options.minCardWidth)), maxFitWidth);
+  const preferredCardWidth = Math.min(Math.max(1, Math.ceil(options.maxCardWidth)), maxFitWidth);
+  const cardWidth = Math.max(minCardWidth, preferredCardWidth);
+  const totalWidth = cardWidth * memberCount + gap * (memberCount - 1);
+  const xStart = clampNumber(Math.round((options.screen.width - totalWidth) / 2), sideMargin, Math.max(sideMargin, options.screen.width - sideMargin - totalWidth));
+  const cardHeight = Math.max(1, Math.ceil(options.cardHeight));
+  const bottomMargin = Math.max(0, Math.ceil(options.bottomMargin));
+  const activeLift = Math.max(0, Math.ceil(options.activeLift));
+  const activeIndex = options.activeIndex ?? -1;
+  const baseY = Math.max(0, Math.floor(options.screen.height - bottomMargin - cardHeight));
+
+  return Array.from({ length: memberCount }, (_, index) => {
+    const active = index === activeIndex;
+    return {
+      index,
+      active,
+      x: xStart + index * (cardWidth + gap),
+      y: Math.max(0, baseY - (active ? activeLift : 0)),
+      width: cardWidth,
+      height: cardHeight
+    };
+  });
+}
+
+function battleScrollableMenuListRect(options: {
+  screen: ScreenSize;
+  x: number;
+  y: number;
+  labels: string[];
+  selectedIndex: number;
+  measureText: (text: string) => number;
+  lineHeight: number;
+  paddingX: number;
+  paddingY: number;
+  minWidth: number;
+  maxWidth: number;
+  leftMargin: number;
+  topMargin: number;
+  rightMargin: number;
+  bottomMargin: number;
+}): BattleMenuListRect {
+  const maxRows = Math.max(
+    1,
+    Math.floor((options.screen.height - options.bottomMargin - options.y - options.paddingY * 2) / options.lineHeight)
+  );
+  const visibleCount = Math.max(1, Math.min(options.labels.length, maxRows));
+  const selectedIndex = clampNumber(Math.floor(options.selectedIndex), 0, Math.max(0, options.labels.length - 1));
+  const visibleStart = scrollStart(options.labels.length, selectedIndex, visibleCount);
+  return battleMenuListRect({
+    ...options,
+    selectedIndex,
+    visibleCount,
+    visibleStart
+  });
+}
+
+function battleMenuListRect(options: {
+  screen: ScreenSize;
+  x: number;
+  y: number;
+  labels: string[];
+  selectedIndex: number;
+  visibleCount: number;
+  visibleStart?: number;
+  measureText: (text: string) => number;
+  lineHeight: number;
+  paddingX: number;
+  paddingY: number;
+  minWidth: number;
+  maxWidth: number;
+  leftMargin: number;
+  topMargin: number;
+  rightMargin: number;
+  bottomMargin: number;
+}): BattleMenuListRect {
+  const visibleCount = Math.max(1, Math.min(options.labels.length, Math.ceil(options.visibleCount)));
+  const visibleStart = clampNumber(Math.floor(options.visibleStart ?? 0), 0, Math.max(0, options.labels.length - visibleCount));
+  const rect = contentFitWindowRect({
+    x: options.x,
+    y: options.y,
+    labels: options.labels,
+    measureText: options.measureText,
+    lineHeight: options.lineHeight,
+    lineCount: visibleCount,
+    paddingX: options.paddingX,
+    paddingY: options.paddingY,
+    minWidth: options.minWidth,
+    maxWidth: options.maxWidth,
+    maxHeight: Math.max(
+      options.lineHeight + options.paddingY * 2,
+      Math.floor(options.screen.height - options.bottomMargin - options.y)
+    )
+  });
+  const clamped = clampRectToScreen(rect, options.screen, {
+    left: options.leftMargin,
+    right: options.rightMargin,
+    top: options.topMargin,
+    bottom: options.bottomMargin
+  });
+  return {
+    ...clamped,
+    visibleStart,
+    visibleCount,
+    hasMoreBefore: visibleStart > 0,
+    hasMoreAfter: visibleStart + visibleCount < options.labels.length
+  };
+}
+
+function battleDescriptionRect(options: {
+  screen: ScreenSize;
+  x: number;
+  y: number;
+  labels: string[];
+  measureText: (text: string) => number;
+  lineHeight: number;
+  paddingX: number;
+  paddingY: number;
+  minWidth: number;
+  maxWidth: number;
+  leftMargin: number;
+  topMargin: number;
+  rightMargin: number;
+  bottomMargin: number;
+}): CanvasRect {
+  const rect = contentFitWindowRect({
+    x: options.x,
+    y: options.y,
+    labels: options.labels,
+    measureText: options.measureText,
+    lineHeight: options.lineHeight,
+    lineCount: Math.max(1, options.labels.length),
+    paddingX: options.paddingX,
+    paddingY: options.paddingY,
+    minWidth: options.minWidth,
+    maxWidth: options.maxWidth,
+    maxHeight: Math.max(
+      options.lineHeight + options.paddingY * 2,
+      Math.floor(options.screen.height - options.bottomMargin - options.y)
+    )
+  });
+  return clampRectToScreen(rect, options.screen, {
+    left: options.leftMargin,
+    right: options.rightMargin,
+    top: options.topMargin,
+    bottom: options.bottomMargin
+  });
+}
+
+function scrollStart(rowCount: number, selectedIndex: number, visibleCount: number): number {
+  return Math.min(
+    Math.max(0, selectedIndex - visibleCount + 1),
+    Math.max(0, rowCount - visibleCount)
+  );
 }
 
 function clampDimension(value: number, minValue = 0, maxValue = Number.POSITIVE_INFINITY): number {
