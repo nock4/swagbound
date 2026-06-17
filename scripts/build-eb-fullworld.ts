@@ -16,6 +16,8 @@ export const SWAGBOUND_DIALOGUE_LIBRARY_SOURCE = "content/swagbound-dialogue-lib
 export const SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT = "swagbound-dialogue-library.json";
 export const SPRITE_OVERRIDES_SOURCE = "content/sprite-overrides.json";
 export const SPRITE_OVERRIDES_OUTPUT = "sprite-overrides.json";
+export const ITEM_OVERRIDES_SOURCE = "content/item-overrides.json";
+export const ITEM_OVERRIDES_OUTPUT = "item-overrides.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
 
 /**
@@ -50,7 +52,8 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(ADDED_NPCS_SOURCE, out, ADDED_NPCS_OUTPUT),
     copyJsonToGenerated(CUSTOM_DIALOGUE_SOURCE, out, CUSTOM_DIALOGUE_OUTPUT),
     copyJsonToGenerated(SWAGBOUND_DIALOGUE_LIBRARY_SOURCE, out, SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT),
-    copyJsonToGenerated(SPRITE_OVERRIDES_SOURCE, out, SPRITE_OVERRIDES_OUTPUT)
+    copyJsonToGenerated(SPRITE_OVERRIDES_SOURCE, out, SPRITE_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT)
   ]);
 }
 

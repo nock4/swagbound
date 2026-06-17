@@ -8,6 +8,7 @@ import {
   EncountersSchema,
   FontCollectionSchema,
   ItemCollectionSchema,
+  ItemOverridesSchema,
   ManifestSchema,
   NpcReferenceCollectionSchema,
   PsiCollectionSchema,
@@ -33,6 +34,7 @@ import {
   type Encounters,
   type FontCollection,
   type ItemCollection,
+  type ItemOverrides,
   type Manifest,
   type NumericFlagState,
   type NpcReferenceCollection,
@@ -56,6 +58,7 @@ const ADDED_NPCS_FILE = "added-npcs.json";
 const CUSTOM_DIALOGUE_FILE = "custom-dialogue.json";
 const SWAGBOUND_DIALOGUE_LIBRARY_FILE = "swagbound-dialogue-library.json";
 const SPRITE_OVERRIDES_FILE = "sprite-overrides.json";
+const ITEM_OVERRIDES_FILE = "item-overrides.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -136,6 +139,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     window,
     characters,
     items,
+    itemOverrides,
     psi,
     shops,
     addedNpcs,
@@ -171,6 +175,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     manifest.files.items
       ? loadJson(`/generated/${manifest.files.items}`, ItemCollectionSchema)
       : Promise.resolve(undefined),
+    loadJson(`/generated/${ITEM_OVERRIDES_FILE}`, ItemOverridesSchema),
     manifest.files.psi
       ? loadJson(`/generated/${manifest.files.psi}`, PsiCollectionSchema)
       : Promise.resolve(undefined),
@@ -181,6 +186,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${CUSTOM_DIALOGUE_FILE}`, CustomDialogueSchema),
     loadJson(`/generated/${SWAGBOUND_DIALOGUE_LIBRARY_FILE}`, SwagboundDialogueLibrarySchema)
   ]);
+  const resolvedItems = applyItemOverrides(items, itemOverrides);
+
   return {
     manifest,
     scripts,
@@ -200,10 +207,23 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     font,
     window,
     characters,
-    items,
+    items: resolvedItems,
     psi,
     shops
   };
+}
+
+function applyItemOverrides(items: ItemCollection | undefined, overrides: ItemOverrides | undefined): ItemCollection | undefined {
+  if (!items || !overrides) {
+    return items;
+  }
+  for (const item of items.items) {
+    const override = overrides.byItemId[String(item.id)];
+    if (override) {
+      item.name = override.name;
+    }
+  }
+  return items;
 }
 
 export function addedNpcSpawnEligible(
