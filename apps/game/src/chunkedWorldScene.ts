@@ -426,6 +426,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     const restoredPlayer = this.restoreState ? undefined : this.applyInitialSave();
     const returnPlayer = this.applyReturnRestore();
+    // Act 1 is solo: if nothing (save/intro) populated the party, default to the
+    // first hero (Bosch) so menus + battle status never fall back to the full roster.
+    if (this.partyState.party().length === 0) {
+      this.ensureIntroSoloParty();
+    }
     const spawn = this.clampSpawn(
       returnPlayer ?? restoredPlayer ?? this.parseSpawnOverride() ?? this.newGameOpening?.spawn ?? world.player.spawnWorldPixel
     );
@@ -2711,7 +2716,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.data_.characters) {
       return undefined;
     }
-    return this.partyState.applyToPartyMembers(this.data_.characters.characters.map(buildPartyMember));
+    const all = this.partyState.applyToPartyMembers(this.data_.characters.characters.map(buildPartyMember));
+    // Battle only the active party (Act 1 = solo Bosch); never the full roster.
+    const activeIds = new Set(this.partyState.party());
+    return activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
   }
 
   private battleGroupExists(group: number): boolean {

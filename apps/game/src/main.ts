@@ -8,6 +8,7 @@ import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
 import { FallbackScene } from "./fallbackScene";
 import { BattleScene } from "./battleScene";
+import { buildPartyMember } from "./characterModel";
 import { deserializeSaveState, type SaveSlotPersistence } from "./saveState";
 import { registerWindowFlavorControls } from "./windowSettings";
 import "./style.css";
@@ -50,10 +51,14 @@ class BootScene extends Phaser.Scene {
     registerWindowFlavorControls(data.window);
     const battleGroupId = battleGroupIdFromSearch(globalThis.location?.search);
     if (battleGroupId !== undefined && data.battle) {
+      const debugSoloMember = data.characters?.characters[0]
+        ? [buildPartyMember(data.characters.characters[0])]
+        : undefined;
       this.scene.start("battle", {
         battleData: data.battle,
         groupId: battleGroupId,
         characters: data.characters,
+        partyMembers: debugSoloMember,
         items: data.items,
         psi: data.psi,
         font: data.font,
