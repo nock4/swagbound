@@ -46,8 +46,6 @@ const SINGLE_FRAME_NPC_OVERRIDE: SpriteOverride = {
   originY: 1
 };
 
-const TOWNSFOLK_NPC_IDS = Array.from({ length: 78 }, (_, index) => 100103 + index);
-
 const SINGLE_IMAGE_ENEMY_OVERRIDE: SpriteOverride = {
   image: "assets/swagbound/enemy/ai-slop-battle-v0.png",
   displayHeight: 160,
@@ -153,19 +151,27 @@ describe("sprite override helpers", () => {
       "assets/swagbound/npc/npc-neighbor.png",
       "assets/swagbound/npc/npc-kid.png"
     ];
-    // Three placeholders are promoted to the named story trio with their own sprites.
-    const named: Record<string, string> = {
-      "100100": "assets/swagbound/npc/npc-morrow.png",
-      "100101": "assets/swagbound/npc/npc-sal.png",
+    // Bonkle stays an overlay NPC; Sal/Morrow now skin the real EB shop clerks (404/749).
+    const namedAdded: Record<string, string> = {
       "100102": "assets/swagbound/npc/npc-bonkle.png"
+    };
+    const clerkOverrides: Record<string, string> = {
+      "404": "assets/swagbound/npc/npc-sal.png",
+      "749": "assets/swagbound/npc/npc-morrow.png"
     };
 
     expect(overrides.player?.image).toBe("assets/swagbound/hero/lsw-2821-walk.png");
-    expect(Object.keys(byNpcId).sort((a, b) => Number(a) - Number(b))).toEqual(ids);
+    // every overlay placeholder has a sprite, plus the two EB clerk overrides
+    for (const id of ids) expect(byNpcId[id]).toBeDefined();
+    const extraKeys = Object.keys(byNpcId).filter((k) => !ids.includes(k)).sort();
+    expect(extraKeys).toEqual(["404", "749"]);
+    for (const [id, image] of Object.entries(clerkOverrides)) {
+      expect(byNpcId[id]).toMatchObject({ image, frameWidth: 80, frameHeight: 80, displayHeight: 24, originX: 0.5, originY: 1 });
+    }
     ids.forEach((id, index) => {
       const override = byNpcId[id];
       expect(override).toMatchObject({
-        image: named[id] ?? allowedImages[index % allowedImages.length],
+        image: namedAdded[id] ?? allowedImages[index % allowedImages.length],
         frameWidth: 80,
         frameHeight: 80,
         displayHeight: 24,
@@ -179,8 +185,8 @@ describe("sprite override helpers", () => {
         up: [0]
       });
     });
-    expect(new Set(Object.values(byNpcId).map((override) => override.image))).toEqual(
-      new Set([...allowedImages, ...Object.values(named)])
+    expect(new Set(ids.map((id) => byNpcId[id].image))).toEqual(
+      new Set([...allowedImages, ...Object.values(namedAdded)])
     );
   });
 
@@ -226,57 +232,55 @@ describe("sprite override helpers", () => {
 });
 
 describe("named NPC trio (Bonkle / Sal / Morrow)", () => {
-  it("wires each named NPC's sprite + interaction (dialogue ref + shop where applicable)", async () => {
+  it("skins the real EB shop clerks as Sal/Morrow and keeps Bonkle as an overlay NPC", async () => {
     const overrides = SpriteOverridesSchema.parse(JSON.parse(
       await readFile(resolve("content/sprite-overrides.json"), "utf8")
     ));
     const added = AddedNpcsSchema.parse(JSON.parse(
       await readFile(resolve("content/added-npcs.json"), "utf8")
     ));
-    const npcById = new Map(added.npcs.map((n) => [n.id, n]));
-    const trio = [
-      { id: 100100, sprite: "assets/swagbound/npc/npc-morrow.png", ref: "interior:burger-shop-v0", shop: 4 },
-      { id: 100101, sprite: "assets/swagbound/npc/npc-sal.png", ref: "interior:corner-shop-v0", shop: 1 },
-      { id: 100102, sprite: "assets/swagbound/npc/npc-bonkle.png", ref: "interior:neighbor-house-v0", shop: undefined }
+    const customDialogue = JSON.parse(await readFile(resolve("content/custom-dialogue.json"), "utf8"));
+
+    // Sal -> EB drug-store clerk (npc 404), Morrow -> EB market clerk (npc 749).
+    const clerks = [
+      { npcId: 404, sprite: "assets/swagbound/npc/npc-sal.png", ref: "interior:corner-shop-v0", shop: 1 },
+      { npcId: 749, sprite: "assets/swagbound/npc/npc-morrow.png", ref: "interior:burger-shop-v0", shop: 4 }
     ];
-    for (const t of trio) {
-      const sprite = overrides.byNpcId?.[String(t.id)];
-      expect(sprite?.image).toBe(t.sprite);
-      expect(sprite?.displayHeight).toBe(24);
-      const npc = npcById.get(t.id);
-      expect(npc?.interaction?.ref).toBe(t.ref);
-      expect(npc?.interaction?.shop).toBe(t.shop);
+    for (const c of clerks) {
+      expect(overrides.byNpcId?.[String(c.npcId)]?.image).toBe(c.sprite);
+      expect(overrides.byNpcId?.[String(c.npcId)]?.displayHeight).toBe(24);
+      const entry = customDialogue.byNpcId[String(c.npcId)];
+      expect(entry?.ref).toBe(c.ref);
+      expect(entry?.shop).toBe(c.shop);
     }
+
+    // Bonkle stays an overlay NPC (added npc 100102) with a dialogue ref, no shop.
+    expect(overrides.byNpcId?.["100102"]?.image).toBe("assets/swagbound/npc/npc-bonkle.png");
+    const bonkle = added.npcs.find((n) => n.id === 100102)?.interaction;
+    expect(bonkle?.ref).toBe("interior:neighbor-house-v0");
+    expect(bonkle?.shop).toBeUndefined();
   });
 });
 
 describe("added NPC interaction coverage", () => {
-  it("keeps the named NPC refs and gives every townsfolk placeholder short inline dialogue", async () => {
+  it("keeps Bonkle's ref and gives every other placeholder short inline dialogue", async () => {
     const added = AddedNpcsSchema.parse(JSON.parse(
       await readFile(resolve("content/added-npcs.json"), "utf8")
     ));
-    const npcById = new Map(added.npcs.map((n) => [n.id, n]));
 
+    // Every building placeholder is interactable.
     expect(added.npcs.filter((npc) => npc.interaction === undefined).map((npc) => npc.id)).toEqual([]);
 
-    const named = [
-      { id: 100100, ref: "interior:burger-shop-v0", shop: 4 },
-      { id: 100101, ref: "interior:corner-shop-v0", shop: 1 },
-      { id: 100102, ref: "interior:neighbor-house-v0", shop: undefined }
-    ];
-    for (const t of named) {
-      const interaction = npcById.get(t.id)?.interaction;
-      expect(interaction?.ref).toBe(t.ref);
-      expect(interaction?.shop).toBe(t.shop);
-      expect(interaction?.pages).toBeUndefined();
-    }
-
-    expect(TOWNSFOLK_NPC_IDS).toHaveLength(78);
-    expect(TOWNSFOLK_NPC_IDS.filter((id) => !npcById.has(id))).toEqual([]);
-
     const sourceQuestionNpcIds = new Set<number>();
-    for (const id of TOWNSFOLK_NPC_IDS) {
-      const interaction = npcById.get(id)?.interaction;
+    for (const npc of added.npcs) {
+      const interaction = npc.interaction;
+      if (npc.id === 100102) {
+        // Bonkle uses a dialogue-library ref.
+        expect(interaction?.ref).toBe("interior:neighbor-house-v0");
+        expect(interaction?.pages).toBeUndefined();
+        continue;
+      }
+      // All other placeholders are townsfolk with short inline pages.
       const pages = interaction?.pages ?? [];
       expect(interaction?.ref).toBeUndefined();
       expect(pages.length).toBeGreaterThan(0);
@@ -289,7 +293,7 @@ describe("added NPC interaction coverage", () => {
         expect(page).not.toContain("/Users/");
       }
       if (pages.some((page) => page.includes("SOURCE?"))) {
-        sourceQuestionNpcIds.add(id);
+        sourceQuestionNpcIds.add(npc.id);
       }
     }
     expect(sourceQuestionNpcIds.size).toBeLessThanOrEqual(8);
