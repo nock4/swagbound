@@ -168,12 +168,18 @@ export type BattleDropSummary = {
   rarity: NonNullable<BattleEnemy["itemRarity"]>;
 };
 
+export type BattleLearnedSkillSummary = {
+  psiId: number;
+  name: string;
+};
+
 export type BattleLevelUpSummary = {
   charId: number;
   name: string;
   fromLevel: number;
   toLevel: number;
   statGains: PartyMemberStats & { maxHp: number; maxPp: number };
+  learnedSkills: BattleLearnedSkillSummary[];
 };
 
 export type BattleVictorySummary = {
@@ -855,6 +861,7 @@ export function applyVictoryRewards(
   options: {
     rng?: Rng;
     items?: Array<Pick<ItemData, "id" | "name">>;
+    psi?: PsiData[];
   } = {}
 ): { state: BattleState; summary: BattleVictorySummary } {
   const rng = options.rng ?? (() => 1);
@@ -906,7 +913,7 @@ export function applyVictoryRewards(
       if (!isCombatantAlive(member)) {
         return member;
       }
-      const applied = applyExperienceToCombatant(member, expGained);
+      const applied = applyExperienceToCombatant(member, expGained, options.psi ?? []);
       if (applied.levelUp) {
         levelUps.push(applied.levelUp);
       }
@@ -931,7 +938,10 @@ export function buildVictorySummaryViewModel(summary: BattleVictorySummary): Bat
     `EXP ${summary.expGained}`,
     `$swag ${summary.moneyGained}`,
     itemsFound.length > 0 ? `Found ${itemsFound.join(", ")}` : "Found no items",
-    ...summary.levelUps.map((levelUp) => `${levelUp.name} Lv ${levelUp.toLevel}`)
+    ...summary.levelUps.flatMap((levelUp) => [
+      `${levelUp.name} Lv ${levelUp.toLevel}`,
+      ...levelUp.learnedSkills.map((skill) => `Learned ${skill.name}`)
+    ])
   ];
   return {
     lines,
@@ -1321,7 +1331,7 @@ function applyItemEffectToCombatant(combatant: Combatant, effect: ItemUseEffect)
   };
 }
 
-function applyExperienceToCombatant(combatant: Combatant, expGained: number): {
+function applyExperienceToCombatant(combatant: Combatant, expGained: number, psiList: PsiData[]): {
   combatant: Combatant;
   levelUp?: BattleLevelUpSummary;
 } {
@@ -1387,6 +1397,7 @@ function applyExperienceToCombatant(combatant: Combatant, expGained: number): {
     speed: nextStats.speed,
     stats: nextStats
   };
+  const learnedSkills = newlyLearnedSkillsForCombatant(psiList, combatant, nextCombatant);
 
   return {
     combatant: nextCombatant,
@@ -1395,9 +1406,32 @@ function applyExperienceToCombatant(combatant: Combatant, expGained: number): {
       name: combatant.name,
       fromLevel: currentLevel,
       toLevel: nextLevel,
-      statGains
+      statGains,
+      learnedSkills
     }
   };
+}
+
+function newlyLearnedSkillsForCombatant(
+  psiList: PsiData[],
+  before: Pick<Combatant, "charId" | "level">,
+  after: Pick<Combatant, "charId" | "level">
+): BattleLearnedSkillSummary[] {
+  if (psiList.length === 0) {
+    return [];
+  }
+  const beforeIds = new Set(learnedPsiForCombatant(psiList, before).map((psi) => stat(psi.id)));
+  return learnedPsiForCombatant(psiList, after)
+    .filter((psi) => !beforeIds.has(stat(psi.id)))
+    .map((psi) => ({
+      psiId: stat(psi.id),
+      name: learnedSkillName(psi)
+    }));
+}
+
+function learnedSkillName(psi: Pick<PsiData, "id" | "name">): string {
+  const trimmed = psi.name.trim();
+  return trimmed.length > 0 ? trimmed : `[psi ${stat(psi.id)}]`;
 }
 
 function maxStats(left: PartyMemberStats, right: PartyMemberStats): PartyMemberStats {

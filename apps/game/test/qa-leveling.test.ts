@@ -89,10 +89,10 @@ function fallenEnemy(experience: number, money: number): BattleEnemy {
   };
 }
 
-function syntheticPsi(id: number, charId: number, level: number, type = "offense"): PsiData {
+function syntheticPsi(id: number, charId: number, level: number, type = "offense", name = `SKILL_${id}`): PsiData {
   return {
     id,
-    name: `SKILL_${id}`,
+    name,
     type,
     strength: "alpha",
     usableOutsideBattle: type === "recovery",
@@ -197,7 +197,7 @@ describe("leveling & skill growth", () => {
   it("a multi-level EXP grant raises level, grants stat increases, and learns a skill", () => {
     const member = buildPartyMember(growthCharacter(7));
     const psiList = [
-      syntheticPsi(500, 7, 3, "offense"), // learned at level 3 -> reachable
+      syntheticPsi(500, 7, 3, "offense", "Wake Up"), // learned at level 3 -> reachable
       syntheticPsi(501, 7, 99, "recovery") // far out of reach
     ];
 
@@ -211,7 +211,7 @@ describe("leveling & skill growth", () => {
     expect(before.level).toBe(1);
     expect(learnedPsiForCombatant(psiList, before)).toHaveLength(0);
 
-    const { state: after, summary } = applyVictoryRewards(state, { rng: () => 1 });
+    const { state: after, summary } = applyVictoryRewards(state, { rng: () => 1, psi: psiList });
     const leveled = after.party[0];
 
     // Level crossed multiple thresholds (1 -> 6 for 250 cumulative EXP).
@@ -232,6 +232,7 @@ describe("leveling & skill growth", () => {
     expect(levelUp.charId).toBe(7);
     expect(levelUp.fromLevel).toBe(1);
     expect(levelUp.toLevel).toBe(6);
+    expect(levelUp.learnedSkills).toEqual([{ psiId: 500, name: "Wake Up" }]);
     const aggregateGain = Object.values(levelUp.statGains).reduce((sum, value) => sum + value, 0);
     expect(aggregateGain).toBeGreaterThan(0);
     // No stat gain is ever negative.
@@ -260,12 +261,15 @@ describe("leveling & skill growth", () => {
 
   it("victory view model surfaces EXP, $swag, and level-up lines", () => {
     const member = buildPartyMember(growthCharacter(7));
+    const psiList = [
+      syntheticPsi(500, 7, 3, "offense", "Wake Up")
+    ];
     let state = createBattleState([fallenEnemy(250, 40)], { partyMembers: [member] });
     state.enemies[0].hp.displayed = 0;
     state.enemies[0].hp.target = 0;
     state.enemies[0].hp.isRolling = false;
 
-    const { summary } = applyVictoryRewards(state, { rng: () => 1 });
+    const { summary } = applyVictoryRewards(state, { rng: () => 1, psi: psiList });
     const viewModel = buildVictorySummaryViewModel(summary);
 
     expect(viewModel.expGained).toBe(250);
@@ -274,6 +278,7 @@ describe("leveling & skill growth", () => {
     expect(viewModel.lines).toContain("EXP 250");
     expect(viewModel.lines).toContain("$swag 40");
     expect(viewModel.lines.some((line) => /Lv 6$/.test(line))).toBe(true);
+    expect(viewModel.lines).toContain("Learned Wake Up");
   });
 });
 
