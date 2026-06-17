@@ -1898,7 +1898,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     const item = this.itemById(action.itemId) ?? fallbackShopItem(action.itemId);
     const result = this.partyState.buyItem(action.char, item);
-    this.showMenuResult(result.ok ? "Bought." : "Not enough money.");
+    this.showMenuResult(result.ok ? "Bought." : "Not enough $swag.");
   }
 
   private handleShopSellAction(action: Extract<MenuAction, { kind: "shopSell" }>): void {

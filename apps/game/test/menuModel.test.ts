@@ -496,7 +496,7 @@ describe("item and PSI menu view models", () => {
     expect(screens[0]).toMatchObject({
       id: "shop-2",
       items: [
-        { id: "shop-wallet-2", enabled: false },
+        { id: "shop-wallet-2", label: expect.stringMatching(/^\$swag /), enabled: false },
         { label: "Buy", childScreenId: "shop-2-buy" },
         { label: "Sell", childScreenId: "shop-2-sell" },
         { label: "Cancel", actionId: "shop-cancel" }
@@ -517,6 +517,7 @@ describe("item and PSI menu view models", () => {
     });
 
     const atm = buildAtmScreen(input);
+    expect(atm.items[0]?.label).toMatch(/^\$swag /);
     expect(parseMenuAction(atm.items[2].actionId ?? "")).toEqual({
       kind: "atm",
       op: "deposit",
