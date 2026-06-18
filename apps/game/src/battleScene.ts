@@ -56,6 +56,7 @@ import {
   flashOverlayState,
   flashState,
   hitSparkState,
+  psiElementFlashColor,
   screenShakeOffset,
   type EffectDirection,
   wobbleOffset
@@ -112,6 +113,7 @@ import {
   ENEMY_SHADOW_ALPHA,
   enemyDefeatVisualState,
   enemyShadowEllipse,
+  enemyTargetCursorAnchorY,
   menuCursorVisible
 } from "./battleVisuals";
 import { swirlMask, type SwirlMask } from "./transitions";
@@ -213,7 +215,6 @@ const BATTLE_FX_ATTACK_FLASH_ALPHA = 0.13;
 const BATTLE_FX_PSI_FLASH_ALPHA = 0.26;
 const BATTLE_FX_VICTORY_FLASH_ALPHA = 0.22;
 const BATTLE_FX_ATTACK_FLASH_COLOR = 0xffffff;
-const BATTLE_FX_PSI_FLASH_COLOR = 0x9ee7ff;
 const BATTLE_FX_VICTORY_FLASH_COLOR = 0xfff0a6;
 const BATTLE_FX_SPARK_COLOR = 0xfff2a8;
 
@@ -795,7 +796,7 @@ export class BattleScene extends Phaser.Scene {
 
     if (details.kind === "psi" && details.damage !== undefined) {
       this.startFlashOverlay(
-        BATTLE_FX_PSI_FLASH_COLOR,
+        psiElementFlashColor(details.psiId ?? 0),
         BATTLE_FX_PSI_FLASH_ALPHA,
         BATTLE_FX_PSI_FLASH_MS
       );
@@ -2773,7 +2774,7 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     const x = target.x;
-    const y = target.y - target.displayHeight / 2 - 16;
+    const y = enemyTargetCursorAnchorY(target.y, target.displayHeight);
     cursor.fillStyle(0xf8fafc, 1);
     cursor.fillTriangle(x, y + 14, x - 8, y + 2, x + 8, y + 2);
     cursor.fillRect(x - 3, y - 5, 6, 9);

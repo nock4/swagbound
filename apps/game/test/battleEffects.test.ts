@@ -4,6 +4,7 @@ import {
   flashOverlayState,
   flashState,
   hitSparkState,
+  psiElementFlashColor,
   screenShakeOffset,
   wobbleOffset
 } from "../src/battleEffects";
@@ -110,6 +111,27 @@ describe("battleEffects", () => {
     it("is inactive outside the flash window", () => {
       expect(flashOverlayState(99, 100, 180, 0.32)).toEqual({ active: false, alpha: 0 });
       expect(flashOverlayState(280, 100, 180, 0.32)).toEqual({ active: false, alpha: 0 });
+    });
+  });
+
+  describe("psiElementFlashColor", () => {
+    it("maps EarthBound PSI id ranges to element flash colors", () => {
+      expect(psiElementFlashColor(5)).toBe(0xff7a2a);
+      expect(psiElementFlashColor(8)).toBe(0xff7a2a);
+      expect(psiElementFlashColor(9)).toBe(0x5fe0ff);
+      expect(psiElementFlashColor(12)).toBe(0x5fe0ff);
+      expect(psiElementFlashColor(13)).toBe(0xffe14d);
+      expect(psiElementFlashColor(16)).toBe(0xffe14d);
+      expect(psiElementFlashColor(17)).toBe(0xf2f2ff);
+      expect(psiElementFlashColor(20)).toBe(0xf2f2ff);
+      expect(psiElementFlashColor(21)).toBe(0xb46bff);
+      expect(psiElementFlashColor(24)).toBe(0xb46bff);
+    });
+
+    it("uses a neutral tint outside known offense PSI ranges", () => {
+      expect(psiElementFlashColor(4)).toBe(0x8fe0d8);
+      expect(psiElementFlashColor(25)).toBe(0x8fe0d8);
+      expect(psiElementFlashColor(Number.NaN)).toBe(0x8fe0d8);
     });
   });
 

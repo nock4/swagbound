@@ -28,6 +28,12 @@ export type EffectDirection = {
 export const DEFAULT_DAMAGE_FLASH_MS = 190;
 export const DEFAULT_ENEMY_WOBBLE_AMP_PX = 1.5;
 export const DEFAULT_ENEMY_WOBBLE_PERIOD_MS = 1600;
+const PSI_FLASH_COLOR_FIRE = 0xff7a2a;
+const PSI_FLASH_COLOR_FREEZE = 0x5fe0ff;
+const PSI_FLASH_COLOR_THUNDER = 0xffe14d;
+const PSI_FLASH_COLOR_FLASH = 0xf2f2ff;
+const PSI_FLASH_COLOR_STARSTORM = 0xb46bff;
+const PSI_FLASH_COLOR_NEUTRAL = 0x8fe0d8;
 
 const TAU = Math.PI * 2;
 
@@ -140,6 +146,26 @@ export function flashOverlayState(
     active: true,
     alpha
   };
+}
+
+export function psiElementFlashColor(psiId: number): number {
+  const normalizedId = Number.isFinite(psiId) ? Math.floor(psiId) : 0;
+  if (normalizedId >= 5 && normalizedId <= 8) {
+    return PSI_FLASH_COLOR_FIRE;
+  }
+  if (normalizedId >= 9 && normalizedId <= 12) {
+    return PSI_FLASH_COLOR_FREEZE;
+  }
+  if (normalizedId >= 13 && normalizedId <= 16) {
+    return PSI_FLASH_COLOR_THUNDER;
+  }
+  if (normalizedId >= 17 && normalizedId <= 20) {
+    return PSI_FLASH_COLOR_FLASH;
+  }
+  if (normalizedId >= 21 && normalizedId <= 24) {
+    return PSI_FLASH_COLOR_STARSTORM;
+  }
+  return PSI_FLASH_COLOR_NEUTRAL;
 }
 
 export function attackerLungeOffset(

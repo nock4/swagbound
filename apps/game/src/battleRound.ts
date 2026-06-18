@@ -77,6 +77,7 @@ export type BattleRoundStepNarrationDetails = {
   attackerName: string;
   targetName?: string;
   moveName?: string;
+  psiId?: number;
   itemName?: string;
   message?: string;
   damage?: number;
@@ -207,6 +208,7 @@ export function resolveRoundStep(
       return fromResolution(turnState, resolvePsiTurn(turnState, actor, psi, rng, targetOptions(queued)), {
         command: queued.command,
         moveName: psi.name,
+        psiId: psi.id,
         psiKind: psiBattleKind(psi)
       });
     }
@@ -566,6 +568,7 @@ function fromResolution(
   context: {
     command: BattleCommand;
     moveName?: string;
+    psiId?: number;
     psiKind?: ReturnType<typeof psiBattleKind>;
     item?: BattleRoundItemData;
   }
@@ -590,6 +593,7 @@ function narrationDetailsForResolution(
   context: {
     command: BattleCommand;
     moveName?: string;
+    psiId?: number;
     psiKind?: ReturnType<typeof psiBattleKind>;
     item?: BattleRoundItemData;
   }
@@ -684,6 +688,7 @@ function narrationDetailsForResolution(
       attackerName,
       targetName,
       moveName: context.moveName,
+      psiId: context.psiId,
       message,
       damage: context.psiKind === "offense" ? amount : undefined,
       healed: context.psiKind === "recovery" ? amount : undefined,

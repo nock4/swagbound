@@ -160,6 +160,7 @@ describe("resolveRoundStep", () => {
       attackerName: "PARTY_A",
       targetName: "OPPONENT_A",
       moveName: "PSI_100",
+      psiId: 100,
       damage: 42,
       missed: false
     });

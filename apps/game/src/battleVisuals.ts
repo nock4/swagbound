@@ -10,6 +10,8 @@ export const ENEMY_SHADOW_ALPHA = 0.38;
 export const ENEMY_SHADOW_WIDTH_FRACTION = 0.58;
 export const ENEMY_SHADOW_FLATNESS = 0.3;
 export const ENEMY_SHADOW_BASE_FRACTION = 0.46;
+export const ENEMY_TARGET_CURSOR_TOP_FRACTION = 0.3;
+export const ENEMY_TARGET_CURSOR_GAP_PX = 8;
 
 export type EnemyShadowEllipse = {
   x: number;
@@ -43,6 +45,18 @@ export function enemyShadowEllipse(
     radiusX,
     radiusY
   };
+}
+
+export function enemyTargetCursorAnchorY(
+  centerY: number,
+  displayHeight: number,
+  topFraction = ENEMY_TARGET_CURSOR_TOP_FRACTION,
+  gapPx = ENEMY_TARGET_CURSOR_GAP_PX
+): number {
+  const height = Math.max(1, Math.abs(finiteOrZero(displayHeight)));
+  const fraction = Math.max(0, finiteOrZero(topFraction));
+  const gap = Math.max(0, finiteOrZero(gapPx));
+  return finiteOrZero(centerY) - height * fraction - gap;
 }
 
 function finiteOrZero(value: number): number {

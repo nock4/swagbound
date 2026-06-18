@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   ENEMY_DEFEAT_FADE_MS,
+  ENEMY_TARGET_CURSOR_GAP_PX,
+  ENEMY_TARGET_CURSOR_TOP_FRACTION,
   MENU_CURSOR_BLINK_PERIOD_MS,
   enemyDefeatVisualState,
   enemyShadowEllipse,
+  enemyTargetCursorAnchorY,
   menuCursorVisible,
   menuRowTexts,
   selectionArrowTriangle
@@ -31,6 +34,22 @@ describe("battleVisuals", () => {
       expect(shadow.radiusY).toBeGreaterThanOrEqual(1);
     });
   });
+
+  describe("enemyTargetCursorAnchorY", () => {
+    it("anchors near the visible sprite top instead of the padded bounding-box top", () => {
+      const centerY = 100;
+      const displayHeight = 160;
+      const anchored = enemyTargetCursorAnchorY(centerY, displayHeight);
+
+      expect(anchored).toBe(centerY - displayHeight * ENEMY_TARGET_CURSOR_TOP_FRACTION - ENEMY_TARGET_CURSOR_GAP_PX);
+      expect(anchored).toBeGreaterThan(centerY - displayHeight / 2 - 16);
+    });
+
+    it("tolerates degenerate sprite heights", () => {
+      expect(enemyTargetCursorAnchorY(Number.NaN, 0)).toBe(-ENEMY_TARGET_CURSOR_TOP_FRACTION - ENEMY_TARGET_CURSOR_GAP_PX);
+    });
+  });
+
   describe("menuCursorVisible", () => {
     it("toggles visibility at the EB-style cursor blink cadence", () => {
       expect(menuCursorVisible(0)).toBe(true);
