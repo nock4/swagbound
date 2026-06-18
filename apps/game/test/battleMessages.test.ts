@@ -25,6 +25,32 @@ describe("composeBattleStepLines", () => {
     ]);
   });
 
+  it("composes SMAAAASH and Guts survival attack beats", () => {
+    expect(composeBattleStepLines({
+      kind: "attack",
+      attackerName: "Bosch",
+      targetName: "Spiteful Crow",
+      damage: 80,
+      smash: true
+    })).toEqual([
+      "Bosch's attack!",
+      "SMAAAASH!!",
+      "80 HP of damage to Spiteful Crow!"
+    ]);
+
+    expect(composeBattleStepLines({
+      kind: "attack",
+      attackerName: "Shark",
+      targetName: "Bosch",
+      damage: 9,
+      gutsSurvived: true
+    })).toEqual([
+      "Shark's attack!",
+      "9 HP of damage to Bosch!",
+      "Bosch endured the blow!"
+    ]);
+  });
+
   it("composes PSI offense and recovery lines", () => {
     expect(composeBattleStepLines({
       kind: "psi",

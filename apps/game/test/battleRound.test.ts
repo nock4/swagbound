@@ -120,6 +120,59 @@ describe("resolveRoundStep", () => {
     expect(result.state.enemies[1].hp.target).toBe(4);
   });
 
+  it("threads physical SMAAAASH and Guts survival flags into narration details", () => {
+    let smashBattle = createBattleState(enemy(31, "SMASH_TARGET", { hp: 100, defense: 10, speed: 1 }), {
+      characters: characters([partyA])
+    });
+    smashBattle = withCombatant(smashBattle, actor("party", 0), {
+      ...smashBattle.party[0],
+      offense: 30,
+      speed: 20,
+      stats: { ...smashBattle.party[0].stats, guts: 500 }
+    });
+
+    const smashResult = resolveRoundStep(
+      smashBattle,
+      actor("party", 0),
+      { partySlot: 0, command: "BASH", target: { side: "enemy", index: 0 } },
+      sequenceRng([1, 0.5])
+    );
+
+    expect(smashResult.resolution).toMatchObject({ damage: 80, smash: true });
+    expect(smashResult.details).toMatchObject({
+      kind: "attack",
+      damage: 80,
+      missed: false,
+      smash: true,
+      gutsSurvived: false
+    });
+
+    let gutsBattle = createBattleState(enemy(32, "LETHAL_ENEMY", {
+      offense: 50,
+      actions: actionSet(enemyAction(320, 1, 1))
+    }), {
+      characters: characters([partyA])
+    });
+    gutsBattle = withCombatant(gutsBattle, actor("party", 0), {
+      ...gutsBattle.party[0],
+      defense: 0,
+      hp: setTarget({ ...gutsBattle.party[0].hp, displayed: 10, target: 10, isRolling: false }, 10),
+      stats: { ...gutsBattle.party[0].stats, guts: 500 }
+    });
+
+    const gutsResult = resolveRoundStep(gutsBattle, actor("enemy", 0), undefined, sequenceRng([1, 1, 0.5, 0]));
+
+    expect(gutsResult.resolution).toMatchObject({ amount: 9, gutsSurvived: true });
+    expect(gutsResult.details).toMatchObject({
+      kind: "attack",
+      damage: 9,
+      missed: false,
+      smash: false,
+      gutsSurvived: true
+    });
+    expect(gutsResult.state.party[0].hp.target).toBe(1);
+  });
+
   it("dispatches SPY without mutating HP and returns the resolver message", () => {
     const battle = createBattleState(opponentA, {
       characters: characters([character(2, "JEFF_TEST")])

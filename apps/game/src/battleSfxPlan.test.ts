@@ -14,6 +14,7 @@ function details(overrides: Partial<BattleRoundStepNarrationDetails>): BattleRou
 describe("battleStepSfx", () => {
   it("sequences attack wind-up into hit, smash, or miss", () => {
     expect(battleStepSfx(details({ kind: "attack", damage: 12 }))).toEqual(["swing", "hit"]);
+    expect(battleStepSfx(details({ kind: "attack", damage: 12, smash: true }))).toEqual(["swing", "smash"]);
     expect(battleStepSfx(details({ kind: "attack", damage: BIG_DAMAGE_SFX_THRESHOLD }))).toEqual(["swing", "smash"]);
     expect(battleStepSfx(details({ kind: "attack", missed: true, damage: 0 }))).toEqual(["swing", "miss"]);
   });

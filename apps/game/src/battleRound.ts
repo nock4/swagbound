@@ -84,6 +84,8 @@ export type BattleRoundStepNarrationDetails = {
   healed?: number;
   ppRestored?: number;
   missed?: boolean;
+  smash?: boolean;
+  gutsSurvived?: boolean;
   fled?: boolean;
   defended?: boolean;
   targetDied?: boolean;
@@ -715,7 +717,9 @@ function narrationDetailsForResolution(
       targetName,
       message,
       damage: resolution.damage,
-      missed: !targetName || resolution.damage <= 0,
+      missed: resolution.missed ?? (!targetName || resolution.damage <= 0),
+      smash: resolution.smash,
+      gutsSurvived: resolution.gutsSurvived,
       targetDied: enemyTargetsDied(previousState, resolution.state, [resolution.defender])
     };
   }
@@ -730,7 +734,9 @@ function narrationDetailsForResolution(
       moveName: kind === "psi" ? "PSI" : undefined,
       message,
       damage: resolution.amount,
-      missed: !targetName || resolution.amount <= 0,
+      missed: resolution.missed ?? (!targetName || resolution.amount <= 0),
+      smash: resolution.smash,
+      gutsSurvived: resolution.gutsSurvived,
       targetDied: enemyTargetsDied(previousState, resolution.state, resolution.targets)
     };
   }

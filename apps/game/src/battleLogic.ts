@@ -98,6 +98,9 @@ export type TurnResolution = {
   damage: number;
   outcome: BattleOutcome;
   skipped: boolean;
+  missed?: boolean;
+  smash?: boolean;
+  gutsSurvived?: boolean;
 };
 
 export type EnemyActionEffectKind = "physical" | "psi" | "statusStub" | "assist" | "none" | "unknown";
@@ -120,6 +123,16 @@ export type EnemyActionResolution = {
   action: EnemyActionSelection | null;
   effectKind: EnemyActionEffectKind;
   intendedStatus?: "generic-ailment";
+  missed?: boolean;
+  smash?: boolean;
+  gutsSurvived?: boolean;
+};
+
+export type PhysicalAttackPipelineResult = {
+  damage: number;
+  missed: boolean;
+  smash: boolean;
+  gutsSurvived: boolean;
 };
 
 export type BattleActionBlockReason =
@@ -367,6 +380,55 @@ export function damage(attacker: Combatant, defender: Combatant, rng: Rng): numb
   return applyDefendingDamageReduction(baseDamage(attacker, defender, rng), defender);
 }
 
+export function resolvePhysicalAttackDamage(
+  attacker: Combatant,
+  defender: Combatant,
+  rng: Rng
+): PhysicalAttackPipelineResult {
+  const missChance = clamp(
+    (2 * stat(defender.speed) - stat(attacker.speed)) / 500,
+    0,
+    0.99
+  );
+  if (normalizedRoll(rng()) < missChance) {
+    return {
+      damage: 0,
+      missed: true,
+      smash: false,
+      gutsSurvived: false
+    };
+  }
+
+  const smashChance = Math.max(stat(attacker.stats.guts) / 500, 1 / 20);
+  const smash = normalizedRoll(rng()) < smashChance;
+  const rawDamage = smash
+    ? Math.max(1, 4 * (stat(attacker.offense) - stat(defender.defense)))
+    : baseDamage(attacker, defender, rng);
+  let damageAmount = applyDefendingDamageReduction(rawDamage, defender);
+
+  const defenderGuts = stat(defender.stats.guts);
+  const lethal = defender.hp.target - damageAmount <= 0;
+  if (lethal && defender.hp.target > 1 && defenderGuts > 0) {
+    const surviveChance = Math.max(defenderGuts / 500, 1 / 20);
+    if (normalizedRoll(rng()) < surviveChance) {
+      damageAmount = defender.hp.target - 1;
+      return {
+        damage: damageAmount,
+        missed: false,
+        smash,
+        gutsSurvived: true
+      };
+    }
+  }
+
+  return {
+    damage: damageAmount,
+    missed: false,
+    smash,
+    gutsSurvived: false
+  };
+}
+
 function baseDamage(attacker: Combatant, defender: Combatant, rng: Rng): number {
   const base = Math.max(1, attacker.offense - Math.floor(defender.defense / 2));
   const roll = normalizedRoll(rng());
@@ -419,16 +481,20 @@ export function resolveTurn(
     return { state, actor, defender: null, damage: 0, outcome: currentOutcome, skipped: true };
   }
 
-  const amount = damage(attackerCombatant, defenderCombatant, rng);
-  const nextDefender = applyDamage(defenderCombatant, amount);
-  const nextState = withCombatant(state, defender, nextDefender);
+  const attack = resolvePhysicalAttackDamage(attackerCombatant, defenderCombatant, rng);
+  const nextState = attack.missed
+    ? state
+    : withCombatant(state, defender, applyDamage(defenderCombatant, attack.damage));
   return {
     state: nextState,
     actor,
     defender,
-    damage: amount,
+    damage: attack.damage,
     outcome: outcome(nextState),
-    skipped: false
+    skipped: false,
+    missed: attack.missed,
+    smash: attack.smash,
+    gutsSurvived: attack.gutsSurvived
   };
 }
 
@@ -691,11 +757,28 @@ export function resolveEnemyActionTurn(
   }
 
   let totalAmount = 0;
+  let physicalAttempts = 0;
+  let physicalMisses = 0;
+  let anySmash = false;
+  let anyGutsSurvived = false;
   for (const target of targets) {
     const targetCombatant = combatantFor(nextState, target);
     if (!targetCombatant || !isCombatantAlive(targetCombatant)) {
       continue;
     }
+    if (effectKind === "physical") {
+      const attack = resolvePhysicalAttackDamage(attacker, targetCombatant, rng);
+      physicalAttempts += 1;
+      physicalMisses += attack.missed ? 1 : 0;
+      anySmash = anySmash || attack.smash;
+      anyGutsSurvived = anyGutsSurvived || attack.gutsSurvived;
+      totalAmount += attack.damage;
+      if (!attack.missed) {
+        nextState = withCombatant(nextState, target, applyDamage(targetCombatant, attack.damage));
+      }
+      continue;
+    }
+
     const amount = enemyActionDamageAmount(effectKind, attacker, targetCombatant, rng);
     totalAmount += amount;
     nextState = withCombatant(nextState, target, applyDamage(targetCombatant, amount));
@@ -710,7 +793,12 @@ export function resolveEnemyActionTurn(
     skipped: false,
     action: selection,
     effectKind,
-    ...(effectKind === "statusStub" ? { intendedStatus: "generic-ailment" as const } : {})
+    ...(effectKind === "statusStub" ? { intendedStatus: "generic-ailment" as const } : {}),
+    ...(effectKind === "physical" ? {
+      missed: physicalAttempts > 0 && physicalMisses === physicalAttempts,
+      smash: anySmash,
+      gutsSurvived: anyGutsSurvived
+    } : {})
   };
 }
 
@@ -1528,6 +1616,13 @@ function normalizedRoll(value: number): number {
     return 0.5;
   }
   return Math.min(1, Math.max(0, value));
+}
+
+function clamp(value: number, minValue: number, maxValue: number): number {
+  if (!Number.isFinite(value)) {
+    return minValue;
+  }
+  return Math.min(maxValue, Math.max(minValue, value));
 }
 
 function modulo(value: number, length: number): number {
