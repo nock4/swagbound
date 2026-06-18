@@ -18,7 +18,6 @@ import {
 } from "@eb/schemas";
 import {
   applyVictoryRewards,
-  beginCombatantTurn,
   buildVictorySummaryViewModel,
   combatantAt,
   commandsForCharId,
@@ -29,18 +28,7 @@ import {
   outcome,
   psiBattleKind,
   psiPpCost,
-  resolveDefaultBashTurn,
-  resolveDefendTurn,
-  resolveEnemyActionTurn,
-  resolveItemTurn,
-  resolveMirrorTurn,
-  resolvePsiTurn,
-  resolvePrayTurn,
-  resolveSpyTurn,
-  resolveTurn,
-  shouldResetAutoFightRound,
   tickBattleMeters,
-  turnOrder,
   type BattleActor,
   type BattleCommand,
   type BattleOutcome,
@@ -48,6 +36,14 @@ import {
   type BattleVictorySummary,
   type Rng
 } from "./battleLogic";
+import {
+  jitteredTurnOrder,
+  nextInputState,
+  partyInputOrder,
+  resolveRoundStep,
+  type BattleRoundInputState,
+  type QueuedCommand
+} from "./battleRound";
 import type { BattleReturnContext, BattleReturnOutcome } from "./battleReturn";
 import {
   DEFAULT_DAMAGE_FLASH_MS,
@@ -86,10 +82,7 @@ import {
   contentFitWindowRect,
   type BattleMenuListRect
 } from "./windowLayout";
-import {
-  commandTargetSelectionPlan,
-  enemyTargetModeForCommand
-} from "./battleMenuFlow";
+import { enemyTargetModeForCommand } from "./battleMenuFlow";
 import {
   CANCEL_KEY_NAMES,
   CONFIRM_KEY_NAMES,
@@ -277,9 +270,11 @@ export class BattleScene extends Phaser.Scene {
   private pendingItem_: PendingItemUse | null = null;
   private menuMessage_ = "";
   private roundOrder_: BattleActor[] = [];
-  private roundCursor_ = 0;
   private currentActor_: BattleActor | null = null;
-  private autoFightRound_ = false;
+  private inputState_: BattleRoundInputState = initialBattleRoundInputState();
+  private queuedCommands_: QueuedCommand[] = [];
+  private executionOrder_: BattleActor[] = [];
+  private executionStepIndex_ = 0;
   private lastEnemyAction_: LastEnemyActionDebug | null = null;
   private actionDelayMs_ = 0;
   private statusGraphics?: Phaser.GameObjects.Graphics;
@@ -363,9 +358,11 @@ export class BattleScene extends Phaser.Scene {
     this.pendingItem_ = null;
     this.menuMessage_ = "";
     this.roundOrder_ = [];
-    this.roundCursor_ = 0;
     this.currentActor_ = null;
-    this.autoFightRound_ = false;
+    this.inputState_ = initialBattleRoundInputState();
+    this.queuedCommands_ = [];
+    this.executionOrder_ = [];
+    this.executionStepIndex_ = 0;
     this.lastEnemyAction_ = null;
     this.actionDelayMs_ = 0;
     this.statusLayoutSignature = "";
@@ -424,7 +421,7 @@ export class BattleScene extends Phaser.Scene {
       if (this.transitionMs_ <= 0) {
         this.transitionGraphics?.clear();
         this.transitionPhase_ = "none";
-        this.advanceToNextActor();
+        this.beginCommandInputRound();
       } else {
         this.renderTransition();
       }
@@ -456,59 +453,15 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private moveMenu(direction: BattleCommandGridDirection): void {
-    if (this.phase_ !== "menu") {
+    if (!this.isCommandInputActive()) {
       return;
     }
     this.menuMessage_ = "";
-    if (this.submenu_ === "command") {
-      const commands = this.commandsForCurrentActor();
-      this.commandIndex_ = moveBattleCommandGridIndex(this.commandIndex_, commands.length, direction, CLEAN_UI_GRID_COLUMNS);
-      this.targetMode_ = targetModeForCommand(this.currentCommand()) ?? this.targetMode_;
-    } else if (this.submenu_ === "psi") {
-      if (direction === "left" || direction === "right") {
-        return;
-      }
-      const count = this.learnedPsiForCurrentActor().length;
-      if (count > 0) {
-        this.submenuIndex_ = clampIndex(this.submenuIndex_ + menuDirectionDelta(direction), count);
-      }
-    } else if (this.submenu_ === "goods") {
-      if (direction === "left" || direction === "right") {
-        return;
-      }
-      const count = this.goodsForCurrentActor().length;
-      if (count > 0) {
-        this.submenuIndex_ = clampIndex(this.submenuIndex_ + menuDirectionDelta(direction), count);
-      }
-    } else if (this.submenu_ === "target") {
-      this.moveTarget(direction === "left" || direction === "up" ? -1 : 1);
+    const delta = this.inputMoveDelta(direction);
+    if (delta === null) {
       return;
     }
-    this.renderStatus();
-    this.publish();
-  }
-
-  private moveTarget(direction: -1 | 1): void {
-    if (this.phase_ !== "menu") {
-      return;
-    }
-    const side = this.activeTargetSide();
-    if (!side) {
-      return;
-    }
-    const living = side === "enemy" ? livingEnemyIndices(this.battle_) : livingPartyIndices(this.battle_);
-    if (living.length === 0) {
-      return;
-    }
-    const currentIndex = side === "enemy" ? this.targetIndex_ : this.partyTargetIndex_;
-    const current = living.includes(currentIndex) ? living.indexOf(currentIndex) : 0;
-    const next = living[(current + direction + living.length) % living.length];
-    if (side === "enemy") {
-      this.targetIndex_ = next;
-    } else {
-      this.partyTargetIndex_ = next;
-    }
-    this.menuMessage_ = "";
+    this.applyInputTransition(nextInputState(this.inputState_, { kind: "move", delta }, this.inputContext()));
     this.renderStatus();
     this.publish();
   }
@@ -518,349 +471,108 @@ export class BattleScene extends Phaser.Scene {
       this.beginExitTransition();
       return;
     }
-    if (this.phase_ !== "menu" || this.currentActor_?.side !== "party") {
-      return;
-    }
-    const command = this.currentCommand();
-    this.menuMessage_ = "";
-    if (this.submenu_ === "psi") {
-      this.confirmPsi();
-      return;
-    }
-    if (this.submenu_ === "goods") {
-      this.confirmGoods();
-      return;
-    }
-    if (this.submenu_ === "target") {
-      this.confirmTarget();
-      return;
-    }
-    if (command === "RUN") {
-      this.phase_ = "flee";
+    if (this.phase_ === "execution") {
+      this.actionDelayMs_ = 0;
+      this.advanceExecutionStep();
       this.renderStatus();
       this.publish();
       return;
     }
-    if (command === "AUTO") {
-      this.autoFightRound_ = true;
-      if (!this.autoBashCurrentActor()) {
-        this.autoFightRound_ = false;
-        this.menuMessage_ = "No enemy.";
-        this.renderStatus();
-        this.publish();
-      }
+    if (!this.isCommandInputActive()) {
       return;
     }
-    if (command === "DEFEND") {
-      const result = resolveDefendTurn(this.battle_, this.currentActor_);
-      if (result.skipped) {
-        this.menuMessage_ = messageForBlockedAction(result.blockedReason);
-        this.renderStatus();
-        this.publish();
-        return;
-      }
-      this.applyTurnResult(result.state);
-      return;
-    }
-    const targetPlan = commandTargetSelectionPlan(command, livingEnemyIndices(this.battle_).length);
-    if (targetPlan.submenu === "target") {
-      this.openCommandTargetSelection(targetPlan.targetMode);
-      return;
-    }
-    if (command === "SPY") {
-      this.confirmSpyTarget();
-      return;
-    }
-    if (command === "PRAY") {
-      const result = resolvePrayTurn(this.battle_, this.currentActor_, this.rng_);
-      if (result.skipped) {
-        this.menuMessage_ = result.message || messageForBlockedAction(result.blockedReason);
-        this.renderStatus();
-        this.publish();
-        return;
-      }
-      this.applyTurnResult(result.state, result.message);
-      return;
-    }
-    if (command === "MIRROR") {
-      this.confirmMirrorTarget();
-      return;
-    }
-    if (command === "PSI") {
-      this.openSubmenu("psi");
-      return;
-    }
-    if (command === "GOODS") {
-      this.openSubmenu("goods");
-      return;
-    }
-
-    this.normalizeTargetIndex();
-    const result = resolveTurn(this.battle_, this.currentActor_, this.rng_, { targetIndex: this.targetIndex_ });
-    this.applyTurnResult(result.state);
+    const transition = nextInputState(this.inputState_, { kind: "confirm" }, this.inputContext());
+    this.menuMessage_ = transition.input === this.inputState_ ? this.blockedInputMessage() : "";
+    this.applyInputTransition(transition);
+    this.renderStatus();
+    this.publish();
   }
 
   private cancelMenu(): void {
-    if (this.phase_ !== "menu") {
+    if (!this.isCommandInputActive()) {
       return;
     }
     this.menuMessage_ = "";
-    if (this.submenu_ === "target") {
-      if (this.pendingPsiId_ !== null) {
-        this.submenu_ = "psi";
-      } else if (this.pendingItem_) {
-        this.submenu_ = "goods";
-      } else {
-        this.submenu_ = "command";
-        this.targetMode_ = targetModeForCommand(this.currentCommand()) ?? "bash";
+    this.applyInputTransition(nextInputState(this.inputState_, { kind: "cancel" }, this.inputContext()));
+    this.renderStatus();
+    this.publish();
+  }
+
+  private inputMoveDelta(direction: BattleCommandGridDirection): number | null {
+    if (this.inputState_.submenu === "command") {
+      const commands = this.commandsForCurrentActor();
+      if (commands.length <= 0) {
+        return null;
       }
-      this.pendingPsiId_ = null;
-      this.pendingItem_ = null;
-    } else if (this.submenu_ === "psi" || this.submenu_ === "goods") {
-      this.submenu_ = "command";
-      this.submenuIndex_ = 0;
-      this.pendingPsiId_ = null;
-      this.pendingItem_ = null;
-      this.targetMode_ = "bash";
+      const current = clampSelectionIndex(this.inputState_.selectionIndex, commands.length);
+      const next = moveBattleCommandGridIndex(current, commands.length, direction, CLEAN_UI_GRID_COLUMNS);
+      return next - current;
     }
-    this.renderStatus();
-    this.publish();
-  }
-
-  private openCommandTargetSelection(targetMode: BattleTargetMode): void {
-    this.pendingPsiId_ = null;
-    this.pendingItem_ = null;
-    this.targetMode_ = targetMode;
-    this.submenu_ = "target";
-    this.normalizeTargetIndex();
-    this.renderStatus();
-    this.publish();
-  }
-
-  private openSubmenu(submenu: "psi" | "goods"): void {
-    this.submenu_ = submenu;
-    this.submenuIndex_ = 0;
-    this.pendingPsiId_ = null;
-    this.pendingItem_ = null;
-    this.targetMode_ = "bash";
-    if (submenu === "psi" && this.learnedPsiForCurrentActor().length === 0) {
-      this.menuMessage_ = "No learned PSI.";
-    } else if (submenu === "goods" && this.goodsForCurrentActor().length === 0) {
-      this.menuMessage_ = "No goods.";
-    }
-    this.renderStatus();
-    this.publish();
-  }
-
-  private confirmPsi(): void {
-    const psi = this.learnedPsiForCurrentActor()[this.submenuIndex_];
-    const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
-    if (!psi || !actor) {
-      this.menuMessage_ = "No learned PSI.";
-      this.renderStatus();
-      this.publish();
-      return;
-    }
-
-    const kind = psiBattleKind(psi);
-    if (kind !== "offense" && kind !== "recovery") {
-      this.menuMessage_ = "Cannot use that PSI here.";
-      this.renderStatus();
-      this.publish();
-      return;
-    }
-
-    const ppCost = psiPpCost(psi);
-    if (actor.pp < ppCost) {
-      this.menuMessage_ = "Not enough PP.";
-      this.renderStatus();
-      this.publish();
-      return;
-    }
-
-    this.pendingPsiId_ = psi.id;
-    this.pendingItem_ = null;
-    this.targetMode_ = kind === "offense" ? "psi-offense" : "psi-recovery";
-    this.submenu_ = "target";
-    if (kind === "offense") {
-      this.normalizeTargetIndex();
-    } else {
-      this.normalizePartyTargetIndex();
-    }
-    this.renderStatus();
-    this.publish();
-  }
-
-  private confirmGoods(): void {
-    const entry = this.goodsForCurrentActor()[this.submenuIndex_];
-    if (!entry) {
-      this.menuMessage_ = "No goods.";
-      this.renderStatus();
-      this.publish();
-      return;
-    }
-
-    const item = this.itemById(entry.itemId);
-    if (!item) {
-      this.menuMessage_ = "Cannot use that item.";
-      this.renderStatus();
-      this.publish();
-      return;
-    }
-
-    this.pendingItem_ = {
-      itemId: entry.itemId,
-      inventorySlot: entry.inventorySlot
-    };
-    this.pendingPsiId_ = null;
-    this.targetMode_ = "goods";
-    this.submenu_ = "target";
-    this.normalizePartyTargetIndex();
-    this.renderStatus();
-    this.publish();
-  }
-
-  private confirmTarget(): void {
-    if (!this.currentActor_) {
-      return;
-    }
-
-    if (this.pendingPsiId_ !== null) {
-      const psi = this.psiById(this.pendingPsiId_);
-      if (!psi) {
-        this.menuMessage_ = "Cannot use that PSI here.";
-        this.submenu_ = "psi";
-        this.renderStatus();
-        this.publish();
-        return;
+    if (this.inputState_.submenu === "psi" || this.inputState_.submenu === "goods") {
+      if (direction === "left" || direction === "right") {
+        return null;
       }
-      const targetIndex = this.targetMode_ === "psi-recovery" ? this.partyTargetIndex_ : this.targetIndex_;
-      const result = resolvePsiTurn(this.battle_, this.currentActor_, psi, this.rng_, { targetIndex });
-      if (result.skipped) {
-        this.menuMessage_ = messageForBlockedAction(result.blockedReason);
-        this.submenu_ = "psi";
-        this.pendingPsiId_ = null;
-        this.renderStatus();
-        this.publish();
-        return;
-      }
-      this.applyTurnResult(result.state);
-      return;
+      return menuDirectionDelta(direction);
     }
-
-    if (this.pendingItem_) {
-      const item = this.itemById(this.pendingItem_.itemId);
-      if (!item) {
-        this.menuMessage_ = "Cannot use that item.";
-        this.submenu_ = "goods";
-        this.pendingItem_ = null;
-        this.renderStatus();
-        this.publish();
-        return;
-      }
-      const result = resolveItemTurn(this.battle_, this.currentActor_, item, {
-        inventorySlot: this.pendingItem_.inventorySlot,
-        targetIndex: this.partyTargetIndex_
-      });
-      if (result.skipped) {
-        this.menuMessage_ = messageForBlockedAction(result.blockedReason);
-        this.submenu_ = "goods";
-        this.pendingItem_ = null;
-        this.renderStatus();
-        this.publish();
-        return;
-      }
-      this.applyTurnResult(result.state);
-      return;
-    }
-
-    if (targetModeForCommand(this.currentCommand())) {
-      this.confirmTargetedCommand();
-    }
+    return direction === "left" || direction === "up" ? -1 : 1;
   }
 
-  private confirmTargetedCommand(): void {
-    if (!this.currentActor_) {
+  private applyInputTransition(transition: ReturnType<typeof nextInputState>): void {
+    this.inputState_ = transition.input;
+    this.queuedCommands_ = [...transition.input.queue];
+    if (transition.complete) {
+      this.beginExecutionPhase();
       return;
     }
-    const command = this.currentCommand();
-    if (command === "SPY") {
-      this.confirmSpyTarget();
-      return;
-    }
-    if (command === "MIRROR") {
-      this.confirmMirrorTarget();
-      return;
-    }
-    this.normalizeTargetIndex();
-    const result = resolveTurn(this.battle_, this.currentActor_, this.rng_, { targetIndex: this.targetIndex_ });
-    this.applyTurnResult(result.state);
+    this.syncMenuFromInputState();
   }
 
-  private confirmSpyTarget(): void {
-    if (!this.currentActor_) {
+  private beginCommandInputRound(): void {
+    if (this.handleBattleOutcome()) {
       return;
     }
-    this.normalizeTargetIndex();
-    const result = resolveSpyTurn(this.battle_, this.currentActor_, { targetIndex: this.targetIndex_ });
-    if (result.skipped) {
-      this.menuMessage_ = result.message || messageForBlockedAction(result.blockedReason);
-      this.renderStatus();
-      this.publish();
+    const order = partyInputOrder(this.battle_);
+    if (order.length === 0) {
+      this.phase_ = "lose";
+      this.transitionPhase_ = "none";
+      this.currentActor_ = null;
       return;
     }
-    this.applyTurnResult(result.state, result.message);
+    this.phase_ = "command-input";
+    this.transitionPhase_ = "none";
+    this.inputState_ = initialBattleRoundInputState();
+    this.queuedCommands_ = [];
+    this.executionOrder_ = [];
+    this.executionStepIndex_ = 0;
+    this.roundOrder_ = order;
+    this.actionDelayMs_ = 0;
+    this.syncMenuFromInputState();
   }
 
-  private confirmMirrorTarget(): void {
-    if (!this.currentActor_) {
+  private beginExecutionPhase(): void {
+    this.queuedCommands_ = [...this.inputState_.queue];
+    this.executionOrder_ = jitteredTurnOrder(this.battle_, this.queuedCommands_, this.rng_);
+    this.roundOrder_ = this.executionOrder_;
+    this.executionStepIndex_ = 0;
+    this.phase_ = "execution";
+    this.transitionPhase_ = "none";
+    this.currentActor_ = null;
+    this.resetMenuForActor();
+    this.actionDelayMs_ = 0;
+    if (this.executionOrder_.length === 0) {
+      this.finishExecutionRound();
       return;
     }
-    this.normalizeTargetIndex();
-    const result = resolveMirrorTurn(this.battle_, this.currentActor_, this.rng_, { targetIndex: this.targetIndex_ });
-    if (result.skipped) {
-      this.menuMessage_ = result.message || messageForBlockedAction(result.blockedReason);
-      this.renderStatus();
-      this.publish();
-      return;
-    }
-    this.applyTurnResult(result.state, result.message);
-  }
-
-  private applyTurnResult(state: BattleState, message = ""): void {
-    const previousBattle = this.battle_;
-    this.battle_ = state;
-    this.recordEnemyDamageSignals(previousBattle, this.battle_, this.time.now);
-    this.submenu_ = "command";
-    this.submenuIndex_ = 0;
-    this.pendingPsiId_ = null;
-    this.pendingItem_ = null;
-    this.targetMode_ = "bash";
-    this.menuMessage_ = message;
-    this.phase_ = "enemy-rolling";
-    this.actionDelayMs_ = ACTION_ADVANCE_DELAY_MS;
-    this.renderStatus();
-    this.publish();
+    this.advanceExecutionStep();
   }
 
   private advanceBattleFlow(): void {
-    const currentOutcome = outcome(this.battle_);
-    if (currentOutcome !== "ongoing") {
-      this.currentActor_ = null;
-      if (currentOutcome === "win") {
-        this.beginVictorySummary();
-      } else {
-        this.phase_ = "lose";
-        this.transitionPhase_ = "none";
-      }
+    if (this.handleBattleOutcome()) {
       return;
     }
 
-    if (this.phase_ === "menu") {
-      if (!this.currentActor_ || this.currentActor_.side !== "party" || !this.actorIsAlive(this.currentActor_)) {
-        this.advanceToNextActor();
-        return;
-      }
+    if (this.phase_ === "command-input") {
+      this.syncMenuFromInputState();
       if (this.activeTargetSide() === "party") {
         this.normalizePartyTargetIndex();
       } else {
@@ -869,87 +581,233 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
 
-    if ((this.phase_ === "enemy-rolling" || this.phase_ === "player-rolling") && this.actionDelayMs_ <= 0) {
-      this.advanceToNextActor();
+    if (this.phase_ === "execution" && this.actionDelayMs_ <= 0) {
+      this.advanceExecutionStep();
     }
   }
 
-  private advanceToNextActor(): void {
+  private advanceExecutionStep(): void {
+    if (this.phase_ !== "execution") {
+      return;
+    }
+    if (this.handleBattleOutcome()) {
+      return;
+    }
+
     for (let guard = 0; guard < 100; guard += 1) {
-      const currentOutcome = outcome(this.battle_);
-      if (currentOutcome !== "ongoing") {
-        this.currentActor_ = null;
-        if (currentOutcome === "win") {
-          this.beginVictorySummary();
-        } else {
-          this.phase_ = "lose";
-          this.transitionPhase_ = "none";
-        }
+      const actor = this.executionOrder_[this.executionStepIndex_];
+      if (!actor) {
+        this.finishExecutionRound();
         return;
       }
+      this.executionStepIndex_ += 1;
+      this.currentActor_ = actor;
 
-      if (shouldResetAutoFightRound(this.roundCursor_, this.roundOrder_.length)) {
-        this.roundOrder_ = turnOrder(this.battle_);
-        this.roundCursor_ = 0;
-        this.autoFightRound_ = false;
-      }
-
-      const actor = this.roundOrder_[this.roundCursor_];
-      this.roundCursor_ += 1;
-      if (!actor || !this.actorIsAlive(actor)) {
+      if (!this.actorIsAlive(actor)) {
         continue;
       }
 
-      this.battle_ = beginCombatantTurn(this.battle_, actor);
-      this.currentActor_ = actor;
-      if (actor.side === "party") {
-        this.phase_ = "menu";
-        this.resetMenuForActor();
-        this.normalizeTargetIndex();
-        this.normalizePartyTargetIndex();
-        if (this.autoFightRound_) {
-          if (this.autoBashCurrentActor()) {
-            return;
-          }
-          if (outcome(this.battle_) !== "ongoing") {
-            continue;
-          }
-          this.autoFightRound_ = false;
-        }
-        return;
-      }
-
-      const result = resolveEnemyActionTurn(this.battle_, actor, this.rng_);
+      const queued = actor.side === "party"
+        ? this.queuedCommands_.find((command) => command.partySlot === actor.index)
+        : undefined;
+      const previousBattle = this.battle_;
+      const result = resolveRoundStep(this.battle_, actor, queued, this.rng_, {
+        psi: this.psi_?.psi,
+        items: this.items_?.items
+      });
       this.battle_ = result.state;
-      this.lastEnemyAction_ = result.action
+      this.recordEnemyDamageSignals(previousBattle, this.battle_, this.time.now);
+      this.updateStepDebugTargets(result, queued);
+      this.menuMessage_ = result.message || (result.skipped ? "Cannot act." : "");
+      this.actionDelayMs_ = ACTION_ADVANCE_DELAY_MS;
+
+      if (result.fled) {
+        this.phase_ = "flee";
+        this.transitionPhase_ = "none";
+        this.currentActor_ = null;
+      }
+      return;
+    }
+
+    this.finishExecutionRound();
+  }
+
+  private finishExecutionRound(): void {
+    if (this.handleBattleOutcome()) {
+      return;
+    }
+    this.beginCommandInputRound();
+  }
+
+  private updateStepDebugTargets(
+    result: ReturnType<typeof resolveRoundStep>,
+    queued: QueuedCommand | undefined
+  ): void {
+    if (queued?.target?.side === "enemy") {
+      this.targetIndex_ = queued.target.index;
+    } else if (queued?.target?.side === "party") {
+      this.partyTargetIndex_ = queued.target.index;
+    }
+
+    const resolution = result.resolution;
+    if (!resolution) {
+      return;
+    }
+    if ("defender" in resolution && resolution.defender) {
+      this.setDebugTarget(resolution.defender);
+    }
+    if ("target" in resolution && resolution.target) {
+      this.setDebugTarget(resolution.target);
+    }
+    if ("targets" in resolution) {
+      const target = resolution.targets[0];
+      if (target) {
+        this.setDebugTarget(target);
+      }
+    }
+    if (result.actor.side === "enemy" && "action" in resolution) {
+      this.lastEnemyAction_ = resolution.action
         ? {
-          enemyIndex: actor.index,
-          actionIndex: result.action.actionIndex,
-          actionId: result.action.actionId,
-          actionType: result.action.actionType ?? null,
-          target: result.action.target ?? null
+          enemyIndex: result.actor.index,
+          actionIndex: resolution.action.actionIndex,
+          actionId: resolution.action.actionId,
+          actionType: resolution.action.actionType ?? null,
+          target: resolution.action.target ?? null
         }
         : null;
-      this.phase_ = "player-rolling";
-      this.actionDelayMs_ = ACTION_ADVANCE_DELAY_MS;
-      return;
     }
   }
 
-  private autoBashCurrentActor(): boolean {
-    if (!this.currentActor_ || this.currentActor_.side !== "party") {
+  private setDebugTarget(actor: BattleActor): void {
+    if (actor.side === "enemy") {
+      this.targetIndex_ = actor.index;
+    } else {
+      this.partyTargetIndex_ = actor.index;
+    }
+  }
+
+  private syncMenuFromInputState(): void {
+    const order = partyInputOrder(this.battle_);
+    this.roundOrder_ = this.phase_ === "execution" ? this.executionOrder_ : order;
+    this.currentActor_ = order[this.inputState_.memberCursor] ?? null;
+    this.queuedCommands_ = [...this.inputState_.queue];
+    this.submenu_ = battleSubmenuFromInput(this.inputState_.submenu);
+    this.submenuIndex_ = this.inputState_.submenu === "psi" || this.inputState_.submenu === "goods"
+      ? this.inputState_.selectionIndex
+      : 0;
+    this.pendingPsiId_ = this.inputState_.pending?.psiId ?? null;
+    this.pendingItem_ = this.pendingItemFromInput();
+    this.commandIndex_ = this.commandIndexFromInput();
+    this.targetMode_ = this.targetModeFromInput();
+
+    if (this.inputState_.submenu === "target-enemy") {
+      this.targetIndex_ = this.inputState_.selectionIndex;
+    } else if (this.inputState_.submenu === "target-ally") {
+      this.partyTargetIndex_ = this.inputState_.selectionIndex;
+    }
+
+    if (this.activeTargetSide() === "party") {
+      this.normalizePartyTargetIndex();
+    } else {
+      this.normalizeTargetIndex();
+    }
+  }
+
+  private commandIndexFromInput(): number {
+    const charId = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_)?.charId ?? 0 : 0;
+    if (this.inputState_.submenu === "command") {
+      return clampSelectionIndex(this.inputState_.selectionIndex, this.commandsForCurrentActor().length);
+    }
+    if (this.inputState_.submenu === "psi") {
+      return commandIndexForChar("PSI", charId);
+    }
+    if (this.inputState_.submenu === "goods") {
+      return commandIndexForChar("GOODS", charId);
+    }
+    return commandIndexForChar(this.inputState_.pending?.command, charId);
+  }
+
+  private targetModeFromInput(): BattleTargetMode {
+    if (this.inputState_.submenu === "target-ally") {
+      return this.inputState_.pending?.command === "PSI" ? "psi-recovery" : "goods";
+    }
+    if (this.inputState_.submenu === "target-enemy") {
+      return this.inputState_.pending?.command === "PSI"
+        ? "psi-offense"
+        : targetModeForCommand(this.inputState_.pending?.command ?? "BASH") ?? "bash";
+    }
+    if (this.inputState_.submenu === "command") {
+      return targetModeForCommand(this.currentCommand()) ?? "bash";
+    }
+    return "bash";
+  }
+
+  private pendingItemFromInput(): PendingItemUse | null {
+    const itemId = this.inputState_.pending?.itemId;
+    if (this.inputState_.pending?.command !== "GOODS" || itemId === undefined) {
+      return null;
+    }
+    const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
+    const inventorySlot = actor?.inventory.indexOf(itemId) ?? -1;
+    return {
+      itemId,
+      inventorySlot: inventorySlot >= 0 ? inventorySlot : 0
+    };
+  }
+
+  private blockedInputMessage(): string {
+    if (this.inputState_.submenu === "psi") {
+      const psi = this.learnedPsiForCurrentActor()[this.inputState_.selectionIndex];
+      const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
+      if (!psi) {
+        return "No learned PSI.";
+      }
+      const kind = psiBattleKind(psi);
+      if (kind !== "offense" && kind !== "recovery") {
+        return "Cannot use that PSI here.";
+      }
+      if (actor && actor.pp < psiPpCost(psi)) {
+        return "Not enough PP.";
+      }
+    }
+    if (this.inputState_.submenu === "goods" && !this.goodsForCurrentActor()[this.inputState_.selectionIndex]) {
+      return "No goods.";
+    }
+    return "Cannot act.";
+  }
+
+  private inputContext(): { state: BattleState; psi?: PsiData[]; items?: ItemData[] } {
+    return {
+      state: this.battle_,
+      psi: this.psi_?.psi,
+      items: this.items_?.items
+    };
+  }
+
+  private isCommandInputActive(): boolean {
+    return this.phase_ === "command-input" && this.currentActor_?.side === "party";
+  }
+
+  private handleBattleOutcome(currentOutcome: BattleOutcome = outcome(this.battle_)): boolean {
+    if (currentOutcome === "ongoing") {
       return false;
     }
-    this.normalizeTargetIndex();
-    const result = resolveDefaultBashTurn(this.battle_, this.currentActor_, this.rng_);
-    if (result.defender?.side === "enemy") {
-      this.targetIndex_ = result.defender.index;
+    this.currentActor_ = null;
+    if (currentOutcome === "win") {
+      this.beginVictorySummary();
+    } else {
+      this.phase_ = "lose";
+      this.transitionPhase_ = "none";
+      this.resetMenuForActor();
     }
-    if (result.skipped) {
-      return false;
-    }
-    this.applyTurnResult(result.state);
     return true;
+  }
+
+  private executionStepDebugIndex(): number {
+    if (this.phase_ !== "execution" || this.executionOrder_.length === 0) {
+      return -1;
+    }
+    return clampNumber(this.executionStepIndex_ - 1, 0, Math.max(0, this.executionOrder_.length - 1));
   }
 
   private beginVictorySummary(): void {
@@ -1588,7 +1446,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private renderStatus(): void {
-    const menuVisible = this.phase_ === "menu" && this.currentActor_?.side === "party";
+    const menuVisible = this.phase_ === "command-input" && this.currentActor_?.side === "party";
     const view = this.battleUiView(menuVisible);
     const layout = this.layoutStatusWindows(view);
     this.updateCommandGridTexts(view, layout);
@@ -1971,6 +1829,10 @@ export class BattleScene extends Phaser.Scene {
       partyTargetIndex: this.partyTargetIndex_,
       turnOrder: this.roundOrder_.map(debugActor),
       currentActor: this.currentActor_ ? debugActor(this.currentActor_) : null,
+      inputMemberIndex: this.phase_ === "command-input" ? this.inputState_.memberCursor : null,
+      queuedCount: this.queuedCommands_.length,
+      executionStepIndex: this.executionStepDebugIndex(),
+      executionStepCount: this.executionOrder_.length,
       lastEnemyAction: this.lastEnemyAction_,
       party,
       enemies,
@@ -2128,7 +1990,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.phase_ === "victory-summary" || this.phase_ === "lose" || this.phase_ === "flee") {
       return 0;
     }
-    if (this.phase_ !== "menu" || this.currentActor_?.side !== "party") {
+    if (this.phase_ !== "command-input" || this.currentActor_?.side !== "party") {
       return null;
     }
     if (this.submenu_ === "command") {
@@ -2138,7 +2000,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private selectedSubmenuRow(submenu: BattleMenuListRect | undefined): number | null {
-    if (!submenu || this.phase_ !== "menu" || this.currentActor_?.side !== "party") {
+    if (!submenu || this.phase_ !== "command-input" || this.currentActor_?.side !== "party") {
       return null;
     }
     if (this.submenu_ !== "psi" && this.submenu_ !== "goods") {
@@ -2358,6 +2220,35 @@ export class BattleScene extends Phaser.Scene {
 
 function selectBattleGroup(data: BattleData, groupId: number | undefined): BattleGroup {
   return data.groups.find((group) => group.id === groupId) ?? data.groups[0];
+}
+
+function initialBattleRoundInputState(): BattleRoundInputState {
+  return {
+    memberCursor: 0,
+    submenu: "command",
+    selectionIndex: 0,
+    queue: []
+  };
+}
+
+function battleSubmenuFromInput(submenu: BattleRoundInputState["submenu"]): BattleSubmenu {
+  return submenu === "target-enemy" || submenu === "target-ally" ? "target" : submenu;
+}
+
+function commandIndexForChar(command: BattleCommand | undefined, charId = 0): number {
+  if (!command) {
+    return 0;
+  }
+  const commands = commandsForCharId(charId);
+  const index = commands.indexOf(command);
+  return index >= 0 ? index : 0;
+}
+
+function clampSelectionIndex(index: number, length: number): number {
+  if (length <= 0) {
+    return 0;
+  }
+  return Math.min(length - 1, Math.max(0, Math.floor(index)));
 }
 
 function buildPostBattlePartySnapshot(base: PartyStateSnapshot, battle: BattleState): PartyStateSnapshot {

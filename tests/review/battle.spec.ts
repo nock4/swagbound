@@ -9,6 +9,8 @@ type BattleDebug = {
   phase:
     | "enter-transition"
     | "menu"
+    | "command-input"
+    | "execution"
     | "enemy-rolling"
     | "player-rolling"
     | "victory-summary"
@@ -19,8 +21,13 @@ type BattleDebug = {
   transitionPhase: "none" | "enter" | "summary" | "exit";
   menuIndex: number;
   targetIndex: number;
+  submenu: "command" | "psi" | "goods" | "target";
   turnOrder: Array<{ side: "party" | "enemy"; index: number }>;
   currentActor: { side: "party" | "enemy"; index: number } | null;
+  inputMemberIndex: number | null;
+  queuedCount: number;
+  executionStepIndex: number;
+  executionStepCount: number;
   lastEnemyAction: {
     enemyIndex: number;
     actionIndex: number;
@@ -178,8 +185,10 @@ async function runBattleToWin(page: Page): Promise<BattleRun> {
     expect(state.outcome, "battle should not end in a loss or flee while driving BASH").not.toBe("lose");
     expect(state.phase, "battle should not flee while driving BASH").not.toBe("flee");
 
-    if (state.phase === "menu") {
-      expect(state.menuIndex, "BASH should stay selected for each confirm").toBe(0);
+    if (state.phase === "command-input") {
+      if (state.submenu === "command") {
+        expect(state.menuIndex, "BASH should stay selected for each command confirm").toBe(0);
+      }
       state = await selectViableEnemyTarget(page, state);
       expect(state.enemies[state.targetIndex]?.alive, "BASH target should be a living enemy").toBe(true);
       targetedEnemyIndexes.add(state.targetIndex);
@@ -297,6 +306,10 @@ async function dismissVictorySummary(page: Page): Promise<BattleDebug> {
 function expectBattleNumbers(state: BattleDebug): void {
   expect(Number.isFinite(state.menuIndex)).toBe(true);
   expect(Number.isFinite(state.targetIndex)).toBe(true);
+  expect(state.inputMemberIndex === null || Number.isInteger(state.inputMemberIndex)).toBe(true);
+  expect(Number.isInteger(state.queuedCount)).toBe(true);
+  expect(Number.isInteger(state.executionStepIndex)).toBe(true);
+  expect(Number.isInteger(state.executionStepCount)).toBe(true);
   expect(["none", "enter", "summary", "exit"]).toContain(state.transitionPhase);
   expect(Array.isArray(state.turnOrder)).toBe(true);
   expect(state.party.length).toBeGreaterThan(0);
