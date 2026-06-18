@@ -20,6 +20,7 @@ export type FirstSceneDebug = {
     | "lose"
     | "flee";
   transitionPhase?: "none" | "enter" | "summary" | "exit";
+  autoMode?: boolean;
   menuIndex?: number;
   commandIndex?: number;
   command?: "BASH" | "GOODS" | "AUTO" | "PSI" | "SPY" | "PRAY" | "MIRROR" | "DEFEND" | "RUN";

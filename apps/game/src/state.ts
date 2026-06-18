@@ -99,6 +99,7 @@ export type BattleDebug = {
   mode: "battle";
   phase: BattlePhase;
   transitionPhase: BattleTransitionPhase;
+  autoMode: boolean;
   menuIndex: number;
   roundNumber: number;
   commandIndex: number;

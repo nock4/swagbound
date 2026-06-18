@@ -36,6 +36,7 @@ type BattleDebug = {
     | "lose"
     | "flee";
   transitionPhase: "none" | "enter" | "summary" | "exit";
+  autoMode: boolean;
   menuIndex: number;
   roundNumber: number;
   commandIndex: number;
@@ -198,6 +199,61 @@ test("solo command input queues BASH before execution", async ({ page }) => {
   expect(result.sawExecution, "round should enter execution").toBe(true);
   expect(result.executionStepIndexes.some((index) => index >= 0)).toBe(true);
   expectRoundResolved(result.final);
+  assertNoRuntimeIssues(issues);
+});
+
+test("AUTO persists across rounds and B cancels back to manual command input", async ({ page }) => {
+  const issues = attachRuntimeIssueCapture(page);
+  const groupId = await readAutoPersistenceBattleGroupId(page);
+  let state = await gotoBattleCommandInput(page, 1, groupId);
+  const initialRound = state.roundNumber;
+
+  state = await tapBattleKeyUntil(page, "ArrowRight", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 0 &&
+    debug.submenu === "command" &&
+    debug.command === "GOODS" &&
+    debug.autoMode === false
+  );
+  state = await tapBattleKeyUntil(page, "ArrowRight", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 0 &&
+    debug.submenu === "command" &&
+    debug.command === "AUTO" &&
+    debug.autoMode === false &&
+    debug.sfxCount > state.sfxCount
+  );
+
+  const firstAutoExecution = await tapBattleKeyUntil(page, "Space", (debug) =>
+    debug.autoMode === true &&
+    debug.phase === "execution" &&
+    debug.inputMemberIndex === null &&
+    debug.queuedCount === 1 &&
+    debug.executionStepCount > 0
+  );
+  expect(firstAutoExecution.roundNumber).toBe(initialRound);
+
+  const nextAutoRound = await waitForBattleDebug(page, (debug) =>
+    debug.autoMode === true &&
+    debug.outcome === "ongoing" &&
+    debug.roundNumber > initialRound &&
+    debug.queuedCount === 1 &&
+    (debug.phase === "command-input" || debug.phase === "execution")
+  );
+  expect(nextAutoRound.autoMode).toBe(true);
+  expect(nextAutoRound.roundNumber).toBeGreaterThan(initialRound);
+
+  await page.keyboard.press("Escape");
+  const manual = await waitForBattleDebug(page, (debug) =>
+    debug.autoMode === false &&
+    debug.outcome === "ongoing" &&
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 0 &&
+    debug.queuedCount === 0 &&
+    debug.submenu === "command"
+  );
+
+  expect(manual.command).toBe("BASH");
   assertNoRuntimeIssues(issues);
 });
 
@@ -465,10 +521,10 @@ async function runBattleToWin(page: Page): Promise<BattleRun> {
   };
 }
 
-async function gotoGeneratedBattle(page: Page, partySize = 1): Promise<BattleDebug> {
-  const groupId = await readFirstBattleGroupId(page);
+async function gotoGeneratedBattle(page: Page, partySize = 1, groupId?: number): Promise<BattleDebug> {
+  const battleGroupId = groupId ?? await readFirstBattleGroupId(page);
   const partyParam = partySize === 1 ? "" : `&party=${partySize}`;
-  await page.goto(`/?battle=${groupId}${partyParam}`);
+  await page.goto(`/?battle=${battleGroupId}${partyParam}`);
   await expect(page.locator("canvas")).toBeVisible();
   await expect.poll(async () => {
     const state = await readBattleDebug(page);
@@ -494,8 +550,8 @@ async function gotoGeneratedBattle(page: Page, partySize = 1): Promise<BattleDeb
   return state;
 }
 
-async function gotoBattleCommandInput(page: Page, partySize = 1): Promise<BattleDebug> {
-  await gotoGeneratedBattle(page, partySize);
+async function gotoBattleCommandInput(page: Page, partySize = 1, groupId?: number): Promise<BattleDebug> {
+  await gotoGeneratedBattle(page, partySize, groupId);
   return waitForBattleDebug(page, (state) =>
     state.phase === "command-input" &&
     state.inputMemberIndex === 0 &&
@@ -591,6 +647,45 @@ async function readFirstBattleGroupId(page: Page): Promise<number> {
   return id as number;
 }
 
+async function readAutoPersistenceBattleGroupId(page: Page): Promise<number> {
+  const response = await page.request.get("/generated/battle.json");
+  expect(response.ok(), "generated battle data should be available").toBe(true);
+  const data = await response.json() as {
+    enemies?: Array<{ id?: unknown; hp?: unknown; offense?: unknown }>;
+    groups?: Array<{ id?: unknown; enemyIds?: unknown }>;
+  };
+  const enemiesById = new Map(
+    (data.enemies ?? [])
+      .filter((enemy): enemy is { id: number; hp: number; offense: number } =>
+        typeof enemy.id === "number" &&
+        typeof enemy.hp === "number" &&
+        typeof enemy.offense === "number"
+      )
+      .map((enemy) => [enemy.id, enemy])
+  );
+  const candidates = (data.groups ?? [])
+    .flatMap((group) => {
+      if (typeof group.id !== "number" || !Array.isArray(group.enemyIds)) {
+        return [];
+      }
+      const enemies = group.enemyIds
+        .filter((id): id is number => typeof id === "number")
+        .map((id) => enemiesById.get(id))
+        .filter((enemy): enemy is { id: number; hp: number; offense: number } => Boolean(enemy));
+      if (enemies.length === 0) {
+        return [];
+      }
+      const totalHp = enemies.reduce((sum, enemy) => sum + enemy.hp, 0);
+      const maxOffense = Math.max(...enemies.map((enemy) => enemy.offense));
+      return [{ id: group.id, totalHp, maxOffense }];
+    })
+    .filter((group) => group.totalHp >= 120 && group.maxOffense <= 20)
+    .sort((left, right) => left.totalHp - right.totalHp);
+  const id = candidates[0]?.id ?? await readFirstBattleGroupId(page);
+  expect(Number.isInteger(id)).toBe(true);
+  return id;
+}
+
 async function readRequiredBattleDebug(page: Page): Promise<BattleDebug> {
   const state = await readBattleDebug(page);
   expect(state, "battle debug state should exist").toBeDefined();
@@ -629,6 +724,7 @@ function expectBattleNumbers(state: BattleDebug): void {
   expect(Number.isInteger(state.executionStepIndex)).toBe(true);
   expect(Number.isInteger(state.executionStepCount)).toBe(true);
   expect(typeof state.executionMessage).toBe("string");
+  expect(typeof state.autoMode).toBe("boolean");
   expect(state.lastSfx === null || typeof state.lastSfx === "string").toBe(true);
   expect(Number.isInteger(state.sfxCount)).toBe(true);
   expect(state.sfxCount).toBeGreaterThanOrEqual(0);

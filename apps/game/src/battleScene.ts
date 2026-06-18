@@ -199,6 +199,7 @@ const BATTLE_STATUS_BAR_X = 28;
 const BATTLE_STATUS_BAR_VALUE_GAP = 4;
 const BATTLE_PP_RATE_PER_SEC = 36;
 const ACTION_ADVANCE_DELAY_MS = 1200;
+const AUTO_COMMAND_INPUT_DELAY_MS = 220;
 const ENTER_TRANSITION_MS = 650;
 const EXIT_TRANSITION_MS = 450;
 const ENEMY_SPRITE_MAX_HEIGHT = 160;
@@ -344,6 +345,8 @@ export class BattleScene extends Phaser.Scene {
   private roundOrder_: BattleActor[] = [];
   private currentActor_: BattleActor | null = null;
   private inputState_: BattleRoundInputState = initialBattleRoundInputState();
+  private autoMode_ = false;
+  private autoCommandDelayMs_ = 0;
   private queuedCommands_: QueuedCommand[] = [];
   private executionOrder_: BattleActor[] = [];
   private priorityStep_: BattleRoundStepResult | null = null;
@@ -454,6 +457,8 @@ export class BattleScene extends Phaser.Scene {
     this.roundOrder_ = [];
     this.currentActor_ = null;
     this.inputState_ = initialBattleRoundInputState();
+    this.autoMode_ = false;
+    this.autoCommandDelayMs_ = 0;
     this.queuedCommands_ = [];
     this.executionOrder_ = [];
     this.priorityStep_ = null;
@@ -559,6 +564,9 @@ export class BattleScene extends Phaser.Scene {
       this.recordEnemyDamageSignals(previousBattle, this.battle_, this.time.now);
       this.playRollingMeterSfx();
       this.actionDelayMs_ = Math.max(0, this.actionDelayMs_ - delta);
+      this.autoCommandDelayMs_ = this.phase_ === "command-input" && this.autoMode_
+        ? Math.max(0, this.autoCommandDelayMs_ - delta)
+        : 0;
       this.advanceBattleFlow();
     }
     this.renderStatus();
@@ -567,6 +575,9 @@ export class BattleScene extends Phaser.Scene {
 
   private moveMenu(direction: BattleCommandGridDirection): void {
     if (!this.isCommandInputActive()) {
+      return;
+    }
+    if (this.autoMode_) {
       return;
     }
     this.menuMessage_ = "";
@@ -595,7 +606,19 @@ export class BattleScene extends Phaser.Scene {
     if (!this.isCommandInputActive()) {
       return;
     }
+    if (this.autoMode_) {
+      return;
+    }
     this.playBattleSfxCue("menuConfirm");
+    if (this.inputState_.submenu === "command" && this.currentCommand() === "AUTO") {
+      this.autoMode_ = true;
+      this.autoCommandDelayMs_ = 0;
+      this.menuMessage_ = "";
+      this.resolveAutoCommandInputRound();
+      this.renderStatus();
+      this.publish();
+      return;
+    }
     const transition = nextInputState(this.inputState_, { kind: "confirm" }, this.inputContext());
     this.menuMessage_ = transition.input === this.inputState_ ? this.blockedInputMessage() : "";
     this.applyInputTransition(transition);
@@ -604,6 +627,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private cancelMenu(): void {
+    if (this.autoMode_) {
+      this.cancelAutoMode();
+      return;
+    }
     if (!this.isCommandInputActive()) {
       return;
     }
@@ -643,6 +670,29 @@ export class BattleScene extends Phaser.Scene {
     this.syncMenuFromInputState();
   }
 
+  private resolveAutoCommandInputRound(): void {
+    this.applyInputTransition(nextInputState(this.inputState_, { kind: "auto" }, this.inputContext()));
+  }
+
+  private cancelAutoMode(): void {
+    this.autoMode_ = false;
+    this.autoCommandDelayMs_ = 0;
+    if (this.phase_ === "command-input" && this.currentActor_?.side === "party") {
+      this.menuMessage_ = "";
+      this.playBattleSfxCue("menuCancel");
+      this.inputState_ = {
+        ...this.inputState_,
+        submenu: "command",
+        selectionIndex: 0,
+        pending: undefined
+      };
+      this.queuedCommands_ = [...this.inputState_.queue];
+      this.syncMenuFromInputState();
+    }
+    this.renderStatus();
+    this.publish();
+  }
+
   private beginCommandInputRound(): void {
     if (this.handleBattleOutcome()) {
       return;
@@ -665,11 +715,13 @@ export class BattleScene extends Phaser.Scene {
     this.pendingFlee_ = false;
     this.roundOrder_ = order;
     this.actionDelayMs_ = 0;
+    this.autoCommandDelayMs_ = this.autoMode_ ? AUTO_COMMAND_INPUT_DELAY_MS : 0;
     this.nextHpTickSfxAtMs_ = 0;
     this.syncMenuFromInputState();
   }
 
   private beginExecutionPhase(): void {
+    this.autoCommandDelayMs_ = 0;
     this.queuedCommands_ = [...this.inputState_.queue];
     const priority = resolveRoundStartPriority(this.battle_, this.queuedCommands_, this.rng_, {
       groupId: this.group_.id,
@@ -714,6 +766,9 @@ export class BattleScene extends Phaser.Scene {
       } else {
         this.normalizeTargetIndex();
       }
+      if (this.autoMode_ && this.autoCommandDelayMs_ <= 0) {
+        this.resolveAutoCommandInputRound();
+      }
       return;
     }
 
@@ -728,6 +783,8 @@ export class BattleScene extends Phaser.Scene {
     }
     if (this.pendingFlee_) {
       this.pendingFlee_ = false;
+      this.autoMode_ = false;
+      this.autoCommandDelayMs_ = 0;
       this.executionMessageLines_ = [];
       this.actionDelayMs_ = 0;
       this.phase_ = "flee";
@@ -1216,6 +1273,8 @@ export class BattleScene extends Phaser.Scene {
     if (currentOutcome === "ongoing") {
       return false;
     }
+    this.autoMode_ = false;
+    this.autoCommandDelayMs_ = 0;
     this.currentActor_ = null;
     if (currentOutcome === "win") {
       this.beginVictorySummary();
@@ -1261,6 +1320,8 @@ export class BattleScene extends Phaser.Scene {
     this.menuMessage_ = "";
     this.executionMessageLines_ = [];
     this.pendingFlee_ = false;
+    this.autoMode_ = false;
+    this.autoCommandDelayMs_ = 0;
   }
 
   private beginExitTransition(): void {
@@ -2405,6 +2466,7 @@ export class BattleScene extends Phaser.Scene {
       mode: "battle",
       phase: this.phase_,
       transitionPhase: this.transitionPhase_,
+      autoMode: this.autoMode_,
       menuIndex: this.commandIndex_,
       roundNumber: this.battle_.roundNumber,
       commandIndex: this.commandIndex_,

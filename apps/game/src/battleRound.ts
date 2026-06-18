@@ -5,7 +5,6 @@ import {
   combatantAt,
   commandsForCharId,
   defaultTargetIndexForActor,
-  firstLivingIndex,
   isCombatantAlive,
   learnedPsiForCombatant,
   psiBattleKind,
@@ -31,6 +30,7 @@ import {
   type SpyResolution,
   type TurnResolution
 } from "./battleLogic";
+import { autoCommandForMember } from "./battleAutoPolicy";
 import { commandTargetSelectionPlan } from "./battleMenuFlow";
 
 export type QueuedCommandTarget = {
@@ -571,13 +571,8 @@ function autoQueueRemaining(
   context: BattleRoundInputContext
 ): BattleRoundInputTransition {
   const order = partyInputOrder(context.state);
-  const targetIndex = firstLivingIndex(context.state.enemies);
   const queue = order.slice(input.memberCursor).reduce((nextQueue, actor) =>
-    upsertQueuedCommand(nextQueue, {
-      partySlot: actor.index,
-      command: "BASH",
-      ...(targetIndex >= 0 ? { target: { side: "enemy" as const, index: targetIndex } } : {})
-    }), input.queue);
+    upsertQueuedCommand(nextQueue, autoCommandForMember(context.state, actor.index, context.psi)), input.queue);
 
   return {
     input: {
