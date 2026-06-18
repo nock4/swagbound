@@ -82,6 +82,7 @@ export function buildCombatantFromPartyMember(
   const maxHp = Math.max(1, stat(member.maxHp));
   const effectiveStats = effectivePartyMemberStats(member, options.statBonuses);
   return {
+    combatantId: "party:0",
     charId: member.id,
     name: member.name,
     level: Math.max(1, stat(member.level)),

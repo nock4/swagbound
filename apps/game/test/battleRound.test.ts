@@ -166,6 +166,154 @@ describe("resolveRoundStep", () => {
     expect(result.state.enemies[1].hp.target).toBe(4);
   });
 
+  it("retargets a queued single-target attack when a teammate already defeated the chosen enemy", () => {
+    const fragileA = enemy(43, "FRAGILE_A", { hp: 5, defense: 0, offense: 4 });
+    const sturdyB = enemy(44, "STURDY_B", { hp: 50, defense: 0, offense: 4 });
+    const battle = createBattleState([fragileA, sturdyB], {
+      characters: characters([
+        character(0, "FAST_A", { offense: 30 }),
+        character(1, "SLOW_B", { offense: 18 })
+      ])
+    });
+    const originalTarget = queuedTarget(battle, "enemy", 0);
+
+    const first = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "BASH", target: originalTarget },
+      () => 0.5
+    );
+    const second = resolveRoundStep(
+      first.state,
+      actor("party", 1),
+      { partySlot: 1, command: "BASH", target: originalTarget },
+      () => 0.5
+    );
+
+    expect(first.details).toMatchObject({ targetName: "FRAGILE_A", targetDied: true });
+    expect(second.skipped).toBe(false);
+    expect(second.resolution).toMatchObject({ defender: actor("enemy", 1) });
+    expect(second.details).toMatchObject({
+      kind: "attack",
+      attackerName: "SLOW_B",
+      targetName: "STURDY_B",
+      damage: 18
+    });
+    expect(second.state.enemies[1].hp.target).toBe(32);
+  });
+
+  it("fizzles a queued offensive step when no living enemy target remains", () => {
+    let battle = createBattleState([opponentA, opponentB], {
+      characters: characters([partyA, partyB])
+    });
+    const originalTarget = queuedTarget(battle, "enemy", 0);
+    battle = killActor(killActor(battle, actor("enemy", 0)), actor("enemy", 1));
+
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 1),
+      { partySlot: 1, command: "BASH", target: originalTarget },
+      () => 0.5
+    );
+
+    expect(result.skipped).toBe(true);
+    expect(result.message).toBe("There was no target.");
+    expect(result.details).toMatchObject({
+      kind: "skip",
+      attackerName: "PARTY_B",
+      message: "There was no target.",
+      noTarget: true
+    });
+    expect(result.resolution).toBeUndefined();
+    expect(result.state).toBe(battle);
+    expect(result.state.enemies.map((combatant) => combatant.hp.target)).toEqual([0, 0]);
+  });
+
+  it("prefers queued combatantId over a stale target index", () => {
+    let battle = createBattleState([opponentA, opponentB], {
+      characters: characters([partyA])
+    });
+    battle = killActor(battle, actor("enemy", 0));
+    const compactedBattle = {
+      ...battle,
+      enemies: [battle.enemies[1], battle.enemies[0]]
+    };
+    const staleTarget = {
+      side: "enemy" as const,
+      index: 1,
+      combatantId: battle.enemies[1].combatantId
+    };
+
+    const result = resolveRoundStep(
+      compactedBattle,
+      actor("party", 0),
+      { partySlot: 0, command: "BASH", target: staleTarget },
+      () => 0.5
+    );
+
+    expect(result.skipped).toBe(false);
+    expect(result.resolution).toMatchObject({ defender: actor("enemy", 0) });
+    expect(result.details).toMatchObject({ targetName: "OPPONENT_B" });
+    expect(result.state.enemies[0].hp.target).toBeLessThan(opponentB.hp);
+    expect(result.state.enemies[1].hp.target).toBe(0);
+  });
+
+  it("retargets recovery actions away from a dead ally", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([partyA, partyB])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      inventory: [200],
+      hp: { ...battle.party[0].hp, displayed: 20, target: 20, isRolling: false }
+    });
+    const originalTarget = queuedTarget(battle, "party", 1);
+    battle = killActor(battle, actor("party", 1));
+
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 200, target: originalTarget },
+      () => 0.5,
+      { items: [syntheticItem(200, 0x02, 30)] }
+    );
+
+    expect(result.skipped).toBe(false);
+    expect(result.resolution).toMatchObject({ target: actor("party", 0), amount: 30 });
+    expect(result.details).toMatchObject({
+      kind: "item",
+      targetName: "PARTY_A",
+      healed: 30
+    });
+    expect(result.state.party[0].hp.target).toBe(50);
+    expect(result.state.party[1].hp.target).toBe(0);
+  });
+
+  it("keeps solo BASH resolution identical with or without combatantId", () => {
+    const battle = createBattleState(opponentA, {
+      characters: characters([partyA])
+    });
+
+    const legacy = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "BASH", target: { side: "enemy", index: 0 } },
+      () => 0.5
+    );
+    const identified = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "BASH", target: queuedTarget(battle, "enemy", 0) },
+      () => 0.5
+    );
+
+    expect(identified.skipped).toBe(legacy.skipped);
+    expect(identified.resolution).toMatchObject({ defender: actor("enemy", 0), damage: 19 });
+    expect(legacy.resolution).toMatchObject({ defender: actor("enemy", 0), damage: 19 });
+    expect(identified.details).toEqual(legacy.details);
+    expect(identified.state.enemies[0].hp.target).toBe(legacy.state.enemies[0].hp.target);
+  });
+
   it("threads physical SMAAAASH and Guts survival flags into narration details", () => {
     let smashBattle = createBattleState(enemy(31, "SMASH_TARGET", { hp: 100, defense: 10, speed: 1 }), {
       characters: characters([partyA])
@@ -587,7 +735,7 @@ describe("nextInputState", () => {
     const confirmed = nextInputState(moved.input, { kind: "confirm" }, { state: battle });
     expect(confirmed.complete).toBe(true);
     expect(confirmed.input.queue).toEqual([
-      { partySlot: 0, command: "BASH", target: { side: "enemy", index: 1 } }
+      { partySlot: 0, command: "BASH", target: queuedTarget(battle, "enemy", 1) }
     ]);
 
     const cancelled = nextInputState(opened.input, { kind: "cancel" }, { state: battle });
@@ -634,8 +782,8 @@ describe("nextInputState", () => {
     expect(transition.complete).toBe(true);
     expect(transition.input.queue).toEqual([
       { partySlot: 0, command: "DEFEND" },
-      { partySlot: 1, command: "BASH", target: { side: "enemy", index: 0 } },
-      { partySlot: 2, command: "BASH", target: { side: "enemy", index: 0 } }
+      { partySlot: 1, command: "BASH", target: queuedTarget(battle, "enemy", 0) },
+      { partySlot: 2, command: "BASH", target: queuedTarget(battle, "enemy", 0) }
     ]);
   });
 });
@@ -665,6 +813,15 @@ function killActor(battle: BattleState, target: BattleActor): BattleState {
 
 function actor(side: "party" | "enemy", index: number): BattleActor {
   return { side, index };
+}
+
+function queuedTarget(battle: BattleState, side: "party" | "enemy", index: number): NonNullable<QueuedCommand["target"]> {
+  const combatant = side === "party" ? battle.party[index] : battle.enemies[index];
+  return {
+    side,
+    index,
+    combatantId: combatant.combatantId
+  };
 }
 
 function enemy(

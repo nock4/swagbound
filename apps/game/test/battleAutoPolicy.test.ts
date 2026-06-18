@@ -27,7 +27,7 @@ describe("autoCommandForMember", () => {
       partySlot: 0,
       command: "PSI",
       psiId: 100,
-      target: { side: "party", index: 1 }
+      target: queuedTarget(battle, "party", 1)
     });
   });
 
@@ -41,7 +41,7 @@ describe("autoCommandForMember", () => {
     ])).toEqual({
       partySlot: 0,
       command: "BASH",
-      target: { side: "enemy", index: 0 }
+      target: queuedTarget(battle, "enemy", 0)
     });
   });
 
@@ -79,7 +79,7 @@ describe("autoCommandForMember", () => {
       partySlot: 0,
       command: "PSI",
       psiId: 100,
-      target: { side: "party", index: 2 }
+      target: queuedTarget(battle, "party", 2)
     });
   });
 
@@ -98,7 +98,7 @@ describe("autoCommandForMember", () => {
     ])).toEqual({
       partySlot: 0,
       command: "BASH",
-      target: { side: "enemy", index: 0 }
+      target: queuedTarget(battle, "enemy", 0)
     });
   });
 });
@@ -119,6 +119,15 @@ function setDisplayedHp(battle: BattleState, target: BattleActor, displayed: num
 
 function actor(side: "party" | "enemy", index: number): BattleActor {
   return { side, index };
+}
+
+function queuedTarget(battle: BattleState, side: "party" | "enemy", index: number) {
+  const combatant = side === "party" ? battle.party[index] : battle.enemies[index];
+  return {
+    side,
+    index,
+    combatantId: combatant.combatantId
+  };
 }
 
 function enemy(

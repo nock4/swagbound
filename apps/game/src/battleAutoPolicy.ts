@@ -1,6 +1,7 @@
 import type { PsiData } from "@eb/schemas";
 import {
   combatantAt,
+  combatantIdForActor,
   defaultTargetIndexForActor,
   isCombatantAlive,
   learnedPsiForCombatant,
@@ -47,7 +48,7 @@ export function autoCommandForMember(
       partySlot: slot,
       command: "PSI",
       psiId: recoveryPsi.psi.id,
-      target: { side: "party", index: endangeredAlly.index }
+      target: queuedTarget(state, "party", endangeredAlly.index)
     };
   }
 
@@ -124,7 +125,16 @@ function bashCommandForMember(state: BattleState, partySlot: number): QueuedComm
   return {
     partySlot,
     command: "BASH",
-    ...(targetIndex >= 0 ? { target: { side: "enemy" as const, index: targetIndex } } : {})
+    ...(targetIndex >= 0 ? { target: queuedTarget(state, "enemy", targetIndex) } : {})
+  };
+}
+
+function queuedTarget(state: BattleState, side: "party" | "enemy", index: number): QueuedCommand["target"] {
+  const combatantId = combatantIdForActor(state, { side, index });
+  return {
+    side,
+    index,
+    ...(combatantId ? { combatantId } : {})
   };
 }
 

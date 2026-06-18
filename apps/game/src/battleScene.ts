@@ -395,6 +395,7 @@ export class BattleScene extends Phaser.Scene {
   private battleSfx_: BattleSfx = createBattleSfx();
   private lastSfx_: BattleSfxCue | null = null;
   private sfxCount_ = 0;
+  private firedSfx_ = new Set<BattleSfxCue>();
   private nextHpTickSfxAtMs_ = 0;
   private returnTo_?: BattleReturnContext;
   private exitOutcome_: BattleReturnOutcome | null = null;
@@ -487,6 +488,7 @@ export class BattleScene extends Phaser.Scene {
     this.battleSfx_ = data.battleSfx ?? createBattleSfx();
     this.lastSfx_ = null;
     this.sfxCount_ = 0;
+    this.firedSfx_.clear();
     this.nextHpTickSfxAtMs_ = 0;
     this.exitOutcome_ = null;
     if (this.encounterAdvantage_ === "instantWin") {
@@ -1145,6 +1147,7 @@ export class BattleScene extends Phaser.Scene {
   private playBattleSfxCue(cue: BattleSfxCue): void {
     this.lastSfx_ = cue;
     this.sfxCount_ += 1;
+    this.firedSfx_.add(cue);
     switch (cue) {
       case "menuMove":
         this.battleSfx_.menuMove();
@@ -2578,6 +2581,7 @@ export class BattleScene extends Phaser.Scene {
       executionMessage: this.executionMessageLines_.join("\n"),
       lastSfx: this.lastSfx_,
       sfxCount: this.sfxCount_,
+      firedSfx: [...this.firedSfx_],
       fx: { ...this.fxCounters_ },
       lastEnemyAction: this.lastEnemyAction_,
       party,

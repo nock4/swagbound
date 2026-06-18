@@ -119,6 +119,7 @@ export type BattleDebug = {
   executionMessage: string;
   lastSfx: BattleSfxCue | null;
   sfxCount: number;
+  firedSfx: BattleSfxCue[];
   fx: BattleFxDebug;
   lastEnemyAction: LastEnemyActionDebug | null;
   party: BattleCombatantDebug[];

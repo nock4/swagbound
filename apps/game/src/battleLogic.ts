@@ -40,6 +40,7 @@ const JEFF_BATTLE_COMMANDS = ["BASH", "GOODS", "AUTO", "SPY", "DEFEND", "RUN"] a
 const POO_BATTLE_COMMANDS = ["BASH", "GOODS", "AUTO", "PSI", "MIRROR", "DEFEND", "RUN"] as const satisfies readonly BattleCommand[];
 
 export type Combatant = {
+  combatantId: string;
   charId: number;
   name: string;
   level: number;
@@ -90,6 +91,11 @@ export type BattleStateOptions = PlayerCombatantOptions & {
   enemyOptions?: EnemyCombatantOptions[];
   wallet?: number;
   roundNumber?: number;
+};
+
+export type BattleTargetOptions = {
+  targetIndex?: number;
+  targetCombatantId?: string;
 };
 
 export type TurnResolution = {
@@ -291,6 +297,7 @@ export function buildPlayerCombatant(options: PlayerCombatantOptions = {}): Comb
   const defense = stat(options.defense ?? PLAYER_DEFAULTS.defense) + stat(options.statBonuses?.defense ?? 0);
   const speed = stat(options.speed ?? PLAYER_DEFAULTS.speed) + stat(options.statBonuses?.speed ?? 0);
   return {
+    combatantId: stableCombatantId("party", 0),
     charId: PLAYER_DEFAULTS.charId,
     name: options.name ?? PLAYER_DEFAULTS.name,
     level: stat(options.level ?? PLAYER_DEFAULTS.level),
@@ -322,6 +329,7 @@ export function buildPlayerCombatant(options: PlayerCombatantOptions = {}): Comb
 export function buildEnemyCombatant(enemy: BattleEnemy, options: EnemyCombatantOptions = {}): Combatant {
   const maxHp = stat(enemy.hp);
   return {
+    combatantId: stableCombatantId("enemy", 0),
     charId: enemy.id,
     name: enemy.name,
     level: stat(enemy.level),
@@ -355,23 +363,29 @@ export function buildEnemyCombatant(enemy: BattleEnemy, options: EnemyCombatantO
 export function buildPartyCombatants(options: BattleStateOptions = {}): Combatant[] {
   const members = options.partyMembers?.slice(0, 4) ?? [];
   if (members.length > 0) {
-    return members.map((partyMember, index) => buildPlayerCombatant(playerOptionsAt(options, index, { partyMember })));
+    return assignCombatantIds(
+      members.map((partyMember, index) => buildPlayerCombatant(playerOptionsAt(options, index, { partyMember }))),
+      "party"
+    );
   }
 
   const characters = options.characters?.characters.slice(0, 4) ?? [];
   if (characters.length > 0) {
-    return characters.map((character, index) => buildPlayerCombatant(playerOptionsAt(options, index, { character })));
+    return assignCombatantIds(
+      characters.map((character, index) => buildPlayerCombatant(playerOptionsAt(options, index, { character }))),
+      "party"
+    );
   }
 
   if (options.partyMember) {
-    return [buildPlayerCombatant(playerOptionsAt(options, 0, { partyMember: options.partyMember }))];
+    return assignCombatantIds([buildPlayerCombatant(playerOptionsAt(options, 0, { partyMember: options.partyMember }))], "party");
   }
 
   if (options.character) {
-    return [buildPlayerCombatant(playerOptionsAt(options, 0, { character: options.character }))];
+    return assignCombatantIds([buildPlayerCombatant(playerOptionsAt(options, 0, { character: options.character }))], "party");
   }
 
-  return [buildPlayerCombatant(playerOptionsAt(options, 0))];
+  return assignCombatantIds([buildPlayerCombatant(playerOptionsAt(options, 0))], "party");
 }
 
 export function createBattleState(enemies: BattleEnemy | BattleEnemy[], options: BattleStateOptions = {}): BattleState {
@@ -379,7 +393,10 @@ export function createBattleState(enemies: BattleEnemy | BattleEnemy[], options:
   const party = buildPartyCombatants(options);
   return {
     party,
-    enemies: enemyList.map((enemy, index) => buildEnemyCombatant(enemy, options.enemyOptions?.[index])),
+    enemies: assignCombatantIds(
+      enemyList.map((enemy, index) => buildEnemyCombatant(enemy, options.enemyOptions?.[index])),
+      "enemy"
+    ),
     wallet: stat(options.wallet ?? party.reduce((sum, member) => sum + member.money, 0)),
     roundNumber: Math.max(1, stat(options.roundNumber ?? 1))
   };
@@ -426,8 +443,8 @@ export function resolveInstantWinRewards(
   options: InstantWinRewardOptions = {}
 ): { state: BattleState; summary: BattleVictorySummary } {
   const instantWinState: BattleState = {
-    party: party.map(cloneCombatant),
-    enemies: enemies.map((enemy) => defeatedCombatant(buildEnemyCombatant(enemy))),
+    party: assignCombatantIds(party.map(cloneCombatant), "party"),
+    enemies: assignCombatantIds(enemies.map((enemy) => defeatedCombatant(buildEnemyCombatant(enemy))), "enemy"),
     wallet: stat(options.wallet ?? party.reduce((sum, member) => sum + member.money, 0)),
     roundNumber: Math.max(1, stat(options.roundNumber ?? 1))
   };
@@ -540,7 +557,7 @@ export function resolveTurn(
   state: BattleState,
   actorInput: BattleActor | "player" | "enemy",
   rng: Rng,
-  options: { targetIndex?: number } = {}
+  options: BattleTargetOptions = {}
 ): TurnResolution {
   const actor = normalizeActor(actorInput);
   const currentOutcome = outcome(state);
@@ -553,7 +570,7 @@ export function resolveTurn(
     return { state, actor, defender: null, damage: 0, outcome: currentOutcome, skipped: true };
   }
 
-  const defender = targetForActor(state, actor, options.targetIndex);
+  const defender = targetForActor(state, actor, options);
   if (!defender) {
     return { state, actor, defender: null, damage: 0, outcome: currentOutcome, skipped: true };
   }
@@ -622,7 +639,7 @@ export function resolveDefendTurn(
 export function resolveSpyTurn(
   state: BattleState,
   actorInput: BattleActor | "player",
-  options: { targetIndex?: number } = {}
+  options: BattleTargetOptions = {}
 ): SpyResolution {
   const actor = normalizeActor(actorInput);
   const currentOutcome = outcome(state);
@@ -635,7 +652,7 @@ export function resolveSpyTurn(
     return blockedSpecialAction(state, actor, currentOutcome, "invalidActor", "");
   }
 
-  const target = livingTarget(state.enemies, "enemy", options.targetIndex);
+  const target = resolveTargetActor(state, "enemy", options);
   if (!target) {
     return blockedSpecialAction(state, actor, currentOutcome, "noTarget", "No target.");
   }
@@ -701,7 +718,7 @@ export function resolveMirrorTurn(
   state: BattleState,
   actorInput: BattleActor | "player",
   rng: Rng,
-  options: { targetIndex?: number } = {}
+  options: BattleTargetOptions = {}
 ): MirrorResolution {
   const actor = normalizeActor(actorInput);
   const currentOutcome = outcome(state);
@@ -714,7 +731,7 @@ export function resolveMirrorTurn(
     return blockedSpecialAction(state, actor, currentOutcome, "invalidActor", "");
   }
 
-  const target = livingTarget(state.enemies, "enemy", options.targetIndex);
+  const target = resolveTargetActor(state, "enemy", options);
   if (!target) {
     return blockedSpecialAction(state, actor, currentOutcome, "noTarget", "No target.");
   }
@@ -889,7 +906,7 @@ export function resolvePsiTurn(
   actorInput: BattleActor | "player",
   psi: PsiData,
   rng: Rng,
-  options: { targetIndex?: number } = {}
+  options: BattleTargetOptions = {}
 ): BattleActionResolution {
   const actor = normalizeActor(actorInput);
   const currentOutcome = outcome(state);
@@ -919,8 +936,8 @@ export function resolvePsiTurn(
   }
 
   const target = kind === "offense"
-    ? livingTarget(state.enemies, "enemy", options.targetIndex)
-    : livingTarget(state.party, "party", options.targetIndex);
+    ? resolveTargetActor(state, "enemy", options)
+    : resolveTargetActor(state, "party", options);
   if (!target) {
     return {
       ...blockedAction(state, actor, currentOutcome, "noTarget"),
@@ -957,7 +974,7 @@ export function resolveItemTurn(
   state: BattleState,
   actorInput: BattleActor | "player",
   item: Pick<ItemData, "id" | "action" | "argument" | "miscFlags" | "effect">,
-  options: { inventorySlot?: number; targetIndex?: number } = {}
+  options: { inventorySlot?: number } & BattleTargetOptions = {}
 ): BattleActionResolution {
   const actor = normalizeActor(actorInput);
   const currentOutcome = outcome(state);
@@ -985,7 +1002,7 @@ export function resolveItemTurn(
     return blockedAction(state, actor, currentOutcome, maybeConsumable ? "unknownEffect" : "notConsumable");
   }
 
-  const target = livingTarget(state.party, "party", options.targetIndex);
+  const target = resolveTargetActor(state, "party", options);
   if (!target) {
     return blockedAction(state, actor, currentOutcome, "noTarget");
   }
@@ -1178,6 +1195,19 @@ export function combatantAt(state: BattleState, actorInput: BattleActor | "playe
   return combatantFor(state, normalizeActor(actorInput));
 }
 
+export function combatantIdForActor(state: BattleState, actorInput: BattleActor | "player" | "enemy"): string | undefined {
+  return combatantAt(state, actorInput)?.combatantId;
+}
+
+export function resolveTargetActor(
+  state: BattleState,
+  side: BattleSide,
+  options: BattleTargetOptions = {}
+): BattleActor | null {
+  const combatants = side === "party" ? state.party : state.enemies;
+  return livingTarget(combatants, side, options.targetIndex, options.targetCombatantId);
+}
+
 export function isCombatantAlive(combatant: Pick<Combatant, "hp">): boolean {
   return !isDepleted(combatant.hp);
 }
@@ -1235,14 +1265,14 @@ function combatantFor(state: BattleState, actor: BattleActor): Combatant | undef
   return actor.side === "party" ? state.party[actor.index] : state.enemies[actor.index];
 }
 
-function targetForActor(state: BattleState, actor: BattleActor, targetIndex: number | undefined): BattleActor | null {
+function targetForActor(state: BattleState, actor: BattleActor, options: BattleTargetOptions): BattleActor | null {
   if (actor.side === "party") {
-    return livingTarget(state.enemies, "enemy", targetIndex);
+    return resolveTargetActor(state, "enemy", options);
   }
 
   // Legacy fallback for direct resolveTurn callers; BattleScene uses
   // resolveEnemyActionTurn for table-driven enemy AI.
-  return livingTarget(state.party, "party");
+  return resolveTargetActor(state, "party", options);
 }
 
 function nextEnemyActionIndex(actions: BattleEnemy["actions"] | undefined, currentActionIndex: number): number {
@@ -1315,7 +1345,21 @@ function applyDefendingDamageReduction(amount: number, defender: Combatant): num
   return defender.defending ? Math.max(1, Math.floor(finalAmount / 2)) : finalAmount;
 }
 
-function livingTarget(combatants: Combatant[], side: BattleSide, requestedIndex?: number): BattleActor | null {
+function livingTarget(
+  combatants: Combatant[],
+  side: BattleSide,
+  requestedIndex?: number,
+  requestedCombatantId?: string
+): BattleActor | null {
+  if (requestedCombatantId) {
+    const idIndex = combatants.findIndex((combatant) => combatant.combatantId === requestedCombatantId);
+    if (idIndex >= 0 && isCombatantAlive(combatants[idIndex])) {
+      return { side, index: idIndex };
+    }
+    const index = firstLivingIndex(combatants);
+    return index >= 0 ? { side, index } : null;
+  }
+
   if (
     requestedIndex !== undefined &&
     requestedIndex >= 0 &&
@@ -1327,6 +1371,17 @@ function livingTarget(combatants: Combatant[], side: BattleSide, requestedIndex?
 
   const index = firstLivingIndex(combatants);
   return index >= 0 ? { side, index } : null;
+}
+
+function stableCombatantId(side: BattleSide, index: number): string {
+  return `${side}:${stat(index)}`;
+}
+
+function assignCombatantIds(combatants: Combatant[], side: BattleSide): Combatant[] {
+  return combatants.map((combatant, index) => ({
+    ...combatant,
+    combatantId: stableCombatantId(side, index)
+  }));
 }
 
 function livingActors(combatants: Combatant[], side: BattleSide): BattleActor[] {

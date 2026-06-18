@@ -3,7 +3,7 @@ import type { BattleRoundStepNarrationDetails } from "./battleRound";
 export function composeBattleStepLines(details: BattleRoundStepNarrationDetails): string[] {
   switch (details.kind) {
     case "skip":
-      return [];
+      return details.noTarget ? preferredMessageLines(details) ?? ["There was no target."] : [];
     case "attack":
       return composeAttackLines(details);
     case "psi":

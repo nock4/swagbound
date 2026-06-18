@@ -3,12 +3,14 @@ import { decodeItemUseEffect } from "./partyState";
 import {
   beginCombatantTurn,
   combatantAt,
+  combatantIdForActor,
   commandsForCharId,
   defaultTargetIndexForActor,
   isCombatantAlive,
   learnedPsiForCombatant,
   psiBattleKind,
   psiPpCost,
+  resolveTargetActor,
   resolveDefaultBashTurn,
   resolveEnemyActionTurn,
   resolveItemTurn,
@@ -24,6 +26,7 @@ import {
   type EncounterAdvantage,
   type BattleSide,
   type BattleState,
+  type BattleTargetOptions,
   type EnemyActionResolution,
   type MirrorResolution,
   type PrayResolution,
@@ -37,6 +40,7 @@ import { commandTargetSelectionPlan } from "./battleMenuFlow";
 export type QueuedCommandTarget = {
   side: BattleSide;
   index: number;
+  combatantId?: string;
 };
 
 export type QueuedCommand = {
@@ -90,6 +94,7 @@ export type BattleRoundStepNarrationDetails = {
   fled?: boolean;
   defended?: boolean;
   targetDied?: boolean;
+  noTarget?: boolean;
 };
 
 export type BattleRoundStepResult = {
@@ -161,6 +166,7 @@ export type BattleRoundInputTransition = {
 };
 
 export const MIN_RUN_SUCCESS_CHANCE = 0.05;
+const NO_TARGET_MESSAGE = "There was no target.";
 
 export function partyInputOrder(state: BattleState): BattleActor[] {
   return state.party.flatMap((combatant, index) =>
@@ -339,28 +345,44 @@ export function resolveRoundStep(
   }
 
   switch (queued.command) {
-    case "BASH":
-      return fromResolution(turnState, resolveTurn(turnState, actor, rng, enemyTargetOptions(queued)), {
+    case "BASH": {
+      const target = resolvedTargetOptions(turnState, queued, "enemy");
+      if (!target) {
+        return noTargetRoundStep(turnState, actor);
+      }
+      return fromResolution(turnState, resolveTurn(turnState, actor, rng, target), {
         command: queued.command
       });
+    }
     case "AUTO":
       return fromResolution(turnState, resolveDefaultBashTurn(turnState, actor, rng), {
         command: queued.command
       });
-    case "SPY":
-      return fromResolution(turnState, resolveSpyTurn(turnState, actor, enemyTargetOptions(queued)), {
+    case "SPY": {
+      const target = resolvedTargetOptions(turnState, queued, "enemy");
+      if (!target) {
+        return noTargetRoundStep(turnState, actor);
+      }
+      return fromResolution(turnState, resolveSpyTurn(turnState, actor, target), {
         command: queued.command
       });
+    }
     case "PSI": {
       const psi = findById(resources.psi, queued.psiId);
       if (!psi) {
         return skippedRoundStep(turnState, actor, "Cannot use that PSI here.");
       }
-      return fromResolution(turnState, resolvePsiTurn(turnState, actor, psi, rng, targetOptions(queued)), {
+      const psiKind = psiBattleKind(psi);
+      const targetSide = psiKind === "offense" ? "enemy" : psiKind === "recovery" ? "party" : null;
+      const target = targetSide ? resolvedTargetOptions(turnState, queued, targetSide) : targetOptions(queued);
+      if (!target) {
+        return noTargetRoundStep(turnState, actor);
+      }
+      return fromResolution(turnState, resolvePsiTurn(turnState, actor, psi, rng, target), {
         command: queued.command,
         moveName: psi.name,
         psiId: psi.id,
-        psiKind: psiBattleKind(psi)
+        psiKind
       });
     }
     case "GOODS": {
@@ -368,7 +390,11 @@ export function resolveRoundStep(
       if (!item) {
         return skippedRoundStep(turnState, actor, "Cannot use that item.");
       }
-      return fromResolution(turnState, resolveItemTurn(turnState, actor, item, targetOptions(queued)), {
+      const target = resolvedTargetOptions(turnState, queued, "party");
+      if (!target) {
+        return noTargetRoundStep(turnState, actor);
+      }
+      return fromResolution(turnState, resolveItemTurn(turnState, actor, item, target), {
         command: queued.command,
         item
       });
@@ -379,10 +405,15 @@ export function resolveRoundStep(
       return fromResolution(turnState, resolvePrayTurn(turnState, actor, rng), {
         command: queued.command
       });
-    case "MIRROR":
-      return fromResolution(turnState, resolveMirrorTurn(turnState, actor, rng, enemyTargetOptions(queued)), {
+    case "MIRROR": {
+      const target = resolvedTargetOptions(turnState, queued, "enemy");
+      if (!target) {
+        return noTargetRoundStep(turnState, actor);
+      }
+      return fromResolution(turnState, resolveMirrorTurn(turnState, actor, rng, target), {
         command: queued.command
       });
+    }
     case "RUN":
       return skippedRoundStep(turnState, actor, "Run is resolved at round start.");
   }
@@ -471,7 +502,7 @@ function confirmCommand(
   return queueAndAdvance(input, context, {
     partySlot: actor.index,
     command,
-    ...(targetIndex >= 0 ? { target: { side: "enemy", index: targetIndex } } : {})
+    ...(targetIndex >= 0 ? { target: queuedTarget(context.state, "enemy", targetIndex) } : {})
   });
 }
 
@@ -546,7 +577,7 @@ function confirmTarget(
     : livingIndices(context.state, side)[0] ?? 0;
   return queueAndAdvance(input, context, {
     ...input.pending,
-    target: { side, index: targetIndex }
+    target: queuedTarget(context.state, side, targetIndex)
   });
 }
 
@@ -733,7 +764,13 @@ function narrationDetailsForResolution(
   const attackerName = combatantName(previousState, resolution.actor);
   const message = resolutionMessage(resolution);
   if (resolution.skipped) {
-    return { kind: "skip", attackerName, message };
+    const noTarget = "blockedReason" in resolution && resolution.blockedReason === "noTarget";
+    return {
+      kind: "skip",
+      attackerName,
+      message: noTarget ? noTargetMessage(message) : message,
+      noTarget
+    };
   }
 
   if ("defender" in resolution) {
@@ -871,6 +908,24 @@ function skippedRoundStep(
   };
 }
 
+function noTargetRoundStep(
+  state: BattleState,
+  actor: BattleActor
+): BattleRoundStepResult {
+  return {
+    state,
+    message: NO_TARGET_MESSAGE,
+    actor,
+    skipped: true,
+    details: {
+      kind: "skip",
+      attackerName: combatantName(state, actor),
+      message: NO_TARGET_MESSAGE,
+      noTarget: true
+    }
+  };
+}
+
 function defendAnnouncementRoundStep(
   state: BattleState,
   actor: BattleActor,
@@ -928,12 +983,43 @@ function enemyTargetsDied(
   });
 }
 
-function enemyTargetOptions(queued: QueuedCommand): { targetIndex?: number } {
-  return queued.target?.side === "enemy" ? { targetIndex: queued.target.index } : {};
+function resolvedTargetOptions(
+  state: BattleState,
+  queued: QueuedCommand,
+  side: BattleSide
+): BattleTargetOptions | null {
+  const target = resolveTargetActor(state, side, targetOptions(queued, side));
+  if (!target) {
+    return null;
+  }
+  const combatantId = combatantIdForActor(state, target);
+  return {
+    targetIndex: target.index,
+    ...(combatantId ? { targetCombatantId: combatantId } : {})
+  };
 }
 
-function targetOptions(queued: QueuedCommand): { targetIndex?: number } {
-  return queued.target ? { targetIndex: queued.target.index } : {};
+function targetOptions(queued: QueuedCommand, expectedSide?: BattleSide): BattleTargetOptions {
+  return queued.target && (!expectedSide || queued.target.side === expectedSide)
+    ? {
+      targetIndex: queued.target.index,
+      ...(queued.target.combatantId ? { targetCombatantId: queued.target.combatantId } : {})
+    }
+    : {};
+}
+
+function queuedTarget(state: BattleState, side: BattleSide, index: number): QueuedCommandTarget {
+  const actor = { side, index };
+  const combatantId = combatantIdForActor(state, actor);
+  return {
+    side,
+    index,
+    ...(combatantId ? { combatantId } : {})
+  };
+}
+
+function noTargetMessage(message: string): string {
+  return message.trim() && message.trim() !== "No target." ? message.trim() : NO_TARGET_MESSAGE;
 }
 
 function findById<T extends { id: number }>(

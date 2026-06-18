@@ -130,5 +130,12 @@ describe("composeBattleStepLines", () => {
       kind: "skip",
       attackerName: "Bosch"
     })).toEqual([]);
+
+    expect(composeBattleStepLines({
+      kind: "skip",
+      attackerName: "Bosch",
+      message: "There was no target.",
+      noTarget: true
+    })).toEqual(["There was no target."]);
   });
 });

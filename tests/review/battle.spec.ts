@@ -55,6 +55,7 @@ type BattleDebug = {
   executionMessage: string;
   lastSfx: BattleSfxCueDebug | null;
   sfxCount: number;
+  firedSfx?: BattleSfxCueDebug[];
   fx: {
     shakeCount: number;
     sparkCount: number;
@@ -430,6 +431,8 @@ async function runBattleToWin(page: Page): Promise<BattleRun> {
     if (state.outcome === "win" && state.enemies.every((enemy) => enemy.hpDisplayed === 0) && state.phase === "victory-summary") {
       final = await dismissVictorySummary(page);
       sawExitTransition ||= final.phase === "exit-transition";
+      sawVictorySfx ||= final.lastSfx === "victory" || Boolean(final.firedSfx?.includes("victory"));
+      sawHpTickSfx ||= final.lastSfx === "hpTick" || Boolean(final.firedSfx?.includes("hpTick"));
       return {
         initial,
         final,
@@ -485,8 +488,8 @@ async function runBattleToWin(page: Page): Promise<BattleRun> {
   );
   sawEnemyRolling ||= final.enemies.some((enemy) => enemy.isRolling);
   sawPartyHpDecrease ||= totalDisplayed(final.party) < initialPartyDisplayed;
-  sawHpTickSfx ||= final.lastSfx === "hpTick";
-  sawVictorySfx ||= final.lastSfx === "victory";
+  sawHpTickSfx ||= final.lastSfx === "hpTick" || Boolean(final.firedSfx?.includes("hpTick"));
+  sawVictorySfx ||= final.lastSfx === "victory" || Boolean(final.firedSfx?.includes("victory"));
   sawVictorySummary ||= final.phase === "victory-summary" && Boolean(final.victorySummary);
   sawShakeFx ||= final.fx.shakeCount > initial.fx.shakeCount;
   sawSparkFx ||= final.fx.sparkCount > initial.fx.sparkCount;
