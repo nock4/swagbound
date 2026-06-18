@@ -17,8 +17,10 @@ import {
   ebTextLineHeight,
   findWindowLayout,
   menuWindowRect,
+  windowInnerContentRect,
   windowLayoutToCanvasRect
 } from "../src/windowLayout";
+import { MENU_CURSOR_GUTTER_PX } from "../src/battleVisuals";
 
 describe("EB window layouts", () => {
   it("keeps bitmap text at the same 2x scale as EB UI windows", () => {
@@ -396,6 +398,76 @@ describe("EB window layouts", () => {
     expect(hpBoxes[0].x).toBeGreaterThanOrEqual(inner.x + labelWidth + labelGap);
     expect(hpBoxes[2].x + hpBoxes[2].width).toBe(inner.x + inner.width);
     expect(ppBoxes[2].x + ppBoxes[2].width).toBe(inner.x + inner.width);
+  });
+
+  it("fits terminal victory summary lines inside padded inner window rects", () => {
+    const frameThickness = EB_WINDOW_TILE_PX * EB_UI_SCALE;
+    const terminalPaddingX = 6;
+    const terminalPaddingY = 6;
+    const lineHeight = ebTextLineHeight({ lineSpacing: 4 });
+    const measureText = (text: string) => text.length * 8;
+    const summaryLines = [
+      "EXP 1",
+      "$swag 13",
+      "Found no items",
+      "Bosch leveled up!",
+      "Offense went up by 1",
+      "Learned PSI Rockin"
+    ];
+    const layout = battleMenuCascadeLayout({
+      screen: { width: 512, height: 448 },
+      commandLabels: ["OK"],
+      descriptionLines: summaryLines,
+      measureText,
+      lineHeight,
+      paddingX: frameThickness + terminalPaddingX + MENU_CURSOR_GUTTER_PX,
+      paddingY: frameThickness + terminalPaddingY,
+      leftMargin: 16,
+      topMargin: 8,
+      rightMargin: 16,
+      bottomMargin: 104,
+      cascadeOverlap: 8,
+      submenuOffsetY: 12,
+      descriptionGap: 0,
+      minCommandWidth: 92,
+      minSubmenuWidth: 260,
+      minDescriptionWidth: 128,
+      maxMenuWidth: 360,
+      maxDescriptionWidth: 260,
+      descriptionPaddingX: frameThickness + terminalPaddingX,
+      descriptionPaddingY: frameThickness + terminalPaddingY
+    });
+
+    expect(layout.command).toBeDefined();
+    expect(layout.description).toBeDefined();
+
+    const commandInner = windowInnerContentRect({
+      rect: layout.command!,
+      frameThickness,
+      paddingX: terminalPaddingX,
+      paddingTop: terminalPaddingY,
+      paddingBottom: terminalPaddingY
+    });
+    const descriptionInner = windowInnerContentRect({
+      rect: layout.description!,
+      frameThickness,
+      paddingX: terminalPaddingX,
+      paddingTop: terminalPaddingY,
+      paddingBottom: terminalPaddingY
+    });
+
+    expect(commandInner.x + MENU_CURSOR_GUTTER_PX + measureText("OK")).toBeLessThanOrEqual(
+      commandInner.x + commandInner.width
+    );
+    expect(commandInner.y + lineHeight).toBeLessThanOrEqual(commandInner.y + commandInner.height);
+    summaryLines.forEach((line, index) => {
+      expect(descriptionInner.x + measureText(line)).toBeLessThanOrEqual(
+        descriptionInner.x + descriptionInner.width
+      );
+      expect(descriptionInner.y + (index + 1) * lineHeight).toBeLessThanOrEqual(
+        descriptionInner.y + descriptionInner.height
+      );
+    });
   });
 
   it("clips status odometer values to the fixed digit count", () => {
