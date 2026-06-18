@@ -8,7 +8,7 @@ import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
 import { FallbackScene } from "./fallbackScene";
 import { BattleScene } from "./battleScene";
-import { buildPartyMember } from "./characterModel";
+import { buildPartyMember, type PartyMember } from "./characterModel";
 import { deserializeSaveState, type SaveSlotPersistence } from "./saveState";
 import { registerWindowFlavorControls } from "./windowSettings";
 import "./style.css";
@@ -51,14 +51,12 @@ class BootScene extends Phaser.Scene {
     registerWindowFlavorControls(data.window);
     const battleGroupId = battleGroupIdFromSearch(globalThis.location?.search);
     if (battleGroupId !== undefined && data.battle) {
-      const debugSoloMember = data.characters?.characters[0]
-        ? [buildPartyMember(data.characters.characters[0])]
-        : undefined;
+      const debugPartyMembers = debugBattlePartyMembersFromSearch(globalThis.location?.search, data.characters);
       this.scene.start("battle", {
         battleData: data.battle,
         groupId: battleGroupId,
         characters: data.characters,
-        partyMembers: debugSoloMember,
+        partyMembers: debugPartyMembers,
         items: data.items,
         psi: data.psi,
         font: data.font,
@@ -228,6 +226,29 @@ function battleGroupIdFromSearch(search: string | undefined): number | undefined
   }
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
+}
+
+function debugBattlePartyMembersFromSearch(
+  search: string | undefined,
+  characters: GameData["characters"]
+): PartyMember[] | undefined {
+  const source = characters?.characters ?? [];
+  if (source.length === 0) {
+    return undefined;
+  }
+  return source.slice(0, debugPartyCountFromSearch(search)).map(buildPartyMember);
+}
+
+function debugPartyCountFromSearch(search: string | undefined): number {
+  const value = new URLSearchParams(search ?? "").get("party");
+  if (value === null || value.trim() === "") {
+    return 1;
+  }
+  const parsed = Number.parseInt(value, 10);
+  if (!Number.isFinite(parsed)) {
+    return 1;
+  }
+  return Math.min(4, Math.max(1, parsed));
 }
 
 new Phaser.Game({

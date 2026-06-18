@@ -1,7 +1,9 @@
 import { expect, test, type Page } from "@playwright/test";
 import {
   assertNoRuntimeIssues,
-  attachRuntimeIssueCapture
+  attachRuntimeIssueCapture,
+  tapKeyUntil,
+  waitForDebug
 } from "./gameHarness";
 
 type BattleDebug = {
@@ -20,8 +22,13 @@ type BattleDebug = {
     | "flee";
   transitionPhase: "none" | "enter" | "summary" | "exit";
   menuIndex: number;
+  commandIndex: number;
+  command: "BASH" | "GOODS" | "AUTO" | "PSI" | "SPY" | "PRAY" | "MIRROR" | "DEFEND" | "RUN";
   targetIndex: number;
+  partyTargetIndex: number;
   submenu: "command" | "psi" | "goods" | "target";
+  submenuIndex: number;
+  selection: string;
   turnOrder: Array<{ side: "party" | "enemy"; index: number }>;
   currentActor: { side: "party" | "enemy"; index: number } | null;
   inputMemberIndex: number | null;
@@ -64,6 +71,9 @@ type BattleCombatantDebug = {
   hpTarget: number;
   isRolling: boolean;
   alive: boolean;
+  pp: number;
+  maxPp: number;
+  inventoryCount: number;
 };
 
 type BattleRun = {
@@ -119,6 +129,136 @@ test("player takes counter-damage during the fight", async ({ page }) => {
 test("no console/page errors during a battle", async ({ page }) => {
   const issues = attachRuntimeIssueCapture(page);
   await runBattleToWin(page);
+  assertNoRuntimeIssues(issues);
+});
+
+test("solo command input queues BASH before execution", async ({ page }) => {
+  const issues = attachRuntimeIssueCapture(page);
+  const initial = await gotoBattleCommandInput(page);
+
+  expect(initial.party).toHaveLength(1);
+  expect(initial.inputMemberIndex).toBe(0);
+  expect(initial.queuedCount).toBe(0);
+  expect(initial.submenu).toBe("command");
+  expect(initial.command).toBe("BASH");
+  expect(initial.executionStepIndex).toBe(-1);
+
+  const execution = await tapBattleKeyUntil(page, "Space", (state) =>
+    state.phase === "execution" &&
+    state.inputMemberIndex === null &&
+    state.queuedCount === 1 &&
+    state.executionStepIndex >= 0 &&
+    state.executionStepCount > 0
+  );
+
+  expect(execution.party).toHaveLength(1);
+  expect(execution.targetIndex).toBe(0);
+  expect(execution.enemies[execution.targetIndex]?.alive ?? false).toBe(true);
+
+  const result = await watchExecutionWithoutCommandMenu(page);
+  expect(result.sawExecution, "round should enter execution").toBe(true);
+  expect(result.executionStepIndexes.some((index) => index >= 0)).toBe(true);
+  expectRoundResolved(result.final);
+  assertNoRuntimeIssues(issues);
+});
+
+test("multi-member command input supports backtracking and ally recovery targeting before execution", async ({ page }) => {
+  const issues = attachRuntimeIssueCapture(page);
+  const initial = await gotoBattleCommandInput(page, 3);
+
+  expect(initial.party).toHaveLength(3);
+  expect(initial.inputMemberIndex).toBe(0);
+  expect(initial.queuedCount).toBe(0);
+  expect(initial.command).toBe("BASH");
+  expect(initial.enemies[initial.targetIndex]?.alive ?? false).toBe(true);
+
+  let state = await tapBattleKeyUntil(page, "Space", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 1 &&
+    debug.queuedCount === 1 &&
+    debug.submenu === "command"
+  );
+  expect(state.currentActor).toEqual({ side: "party", index: 1 });
+  expect(state.command).toBe("BASH");
+
+  state = await tapBattleKeyUntil(page, "Space", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 2 &&
+    debug.queuedCount === 2 &&
+    debug.submenu === "command"
+  );
+  expect(state.currentActor).toEqual({ side: "party", index: 2 });
+
+  state = await tapBattleKeyUntil(page, "Escape", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 1 &&
+    debug.queuedCount === 1 &&
+    debug.submenu === "command"
+  );
+  expect(state.currentActor).toEqual({ side: "party", index: 1 });
+  expect(state.command).toBe("BASH");
+
+  state = await tapBattleKeyUntil(page, "ArrowRight", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 1 &&
+    debug.queuedCount === 1 &&
+    debug.submenu === "command" &&
+    debug.command === "GOODS"
+  );
+  expect(state.menuIndex).toBe(1);
+
+  state = await tapBattleKeyUntil(page, "Space", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 1 &&
+    debug.queuedCount === 1 &&
+    debug.submenu === "goods" &&
+    debug.selection === "item:0:103"
+  );
+  expect(state.party[1]?.inventoryCount).toBeGreaterThanOrEqual(1);
+
+  state = await tapBattleKeyUntil(page, "Space", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 1 &&
+    debug.queuedCount === 1 &&
+    debug.submenu === "target" &&
+    debug.selection === "target:item:0:103" &&
+    debug.partyTargetIndex === 0
+  );
+  expect(state.party[state.partyTargetIndex]?.alive ?? false).toBe(true);
+
+  state = await tapBattleKeyUntil(page, "ArrowRight", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 1 &&
+    debug.queuedCount === 1 &&
+    debug.submenu === "target" &&
+    debug.selection === "target:item:0:103" &&
+    debug.partyTargetIndex === 1
+  );
+  expect(state.targetIndex).toBe(0);
+  expect(state.party[state.partyTargetIndex]?.alive ?? false).toBe(true);
+
+  state = await tapBattleKeyUntil(page, "Space", (debug) =>
+    debug.phase === "command-input" &&
+    debug.inputMemberIndex === 2 &&
+    debug.queuedCount === 2 &&
+    debug.submenu === "command"
+  );
+  expect(state.currentActor).toEqual({ side: "party", index: 2 });
+
+  const execution = await tapBattleKeyUntil(page, "Space", (debug) =>
+    debug.phase === "execution" &&
+    debug.inputMemberIndex === null &&
+    debug.queuedCount === 3 &&
+    debug.executionStepIndex >= 0 &&
+    debug.executionStepCount >= 3
+  );
+  expect(execution.party).toHaveLength(3);
+  expect(execution.executionStepCount).toBeGreaterThanOrEqual(3);
+
+  const result = await watchExecutionWithoutCommandMenu(page, 3);
+  expect(result.sawExecution, "round should execute after all party commands are queued").toBe(true);
+  expect(result.executionStepIndexes.some((index) => index >= 0)).toBe(true);
+  expectRoundResolved(result.final);
   assertNoRuntimeIssues(issues);
 });
 
@@ -236,9 +376,10 @@ async function runBattleToWin(page: Page): Promise<BattleRun> {
   };
 }
 
-async function gotoGeneratedBattle(page: Page): Promise<BattleDebug> {
+async function gotoGeneratedBattle(page: Page, partySize = 1): Promise<BattleDebug> {
   const groupId = await readFirstBattleGroupId(page);
-  await page.goto(`/?battle=${groupId}`);
+  const partyParam = partySize === 1 ? "" : `&party=${partySize}`;
+  await page.goto(`/?battle=${groupId}${partyParam}`);
   await expect(page.locator("canvas")).toBeVisible();
   await expect.poll(async () => {
     const state = await readBattleDebug(page);
@@ -247,7 +388,7 @@ async function gotoGeneratedBattle(page: Page): Promise<BattleDebug> {
       state.mode === "battle" &&
       state.outcome === "ongoing" &&
       state.menuIndex === 0 &&
-      state.party.length > 0 &&
+      state.party.length === partySize &&
       state.enemies.length > 0 &&
       state.enemies.some((enemy) => enemy.hpDisplayed > 0) &&
       state.party.every((member) => Number.isFinite(member.hpDisplayed)) &&
@@ -264,12 +405,97 @@ async function gotoGeneratedBattle(page: Page): Promise<BattleDebug> {
   return state;
 }
 
+async function gotoBattleCommandInput(page: Page, partySize = 1): Promise<BattleDebug> {
+  await gotoGeneratedBattle(page, partySize);
+  return waitForBattleDebug(page, (state) =>
+    state.phase === "command-input" &&
+    state.inputMemberIndex === 0 &&
+    state.queuedCount === 0 &&
+    state.party.length === partySize &&
+    state.submenu === "command"
+  );
+}
+
+async function waitForBattleDebug(
+  page: Page,
+  predicate: (state: BattleDebug) => boolean
+): Promise<BattleDebug> {
+  const state = (await waitForDebug(page, (debug) =>
+    debug.mode === "battle" && predicate(debug as unknown as BattleDebug)
+  )) as unknown as BattleDebug;
+  expectBattleNumbers(state);
+  return state;
+}
+
+async function tapBattleKeyUntil(
+  page: Page,
+  key: string,
+  predicate: (state: BattleDebug) => boolean,
+  attempts = 10
+): Promise<BattleDebug> {
+  const state = (await tapKeyUntil(page, key, (debug) =>
+    debug.mode === "battle" && predicate(debug as unknown as BattleDebug),
+  attempts)) as unknown as BattleDebug;
+  expect(state.mode).toBe("battle");
+  expectBattleNumbers(state);
+  expect(predicate(state), `${key} should drive battle debug to the expected state`).toBe(true);
+  return state;
+}
+
+async function watchExecutionWithoutCommandMenu(
+  page: Page,
+  expectedQueuedCount?: number
+): Promise<{ final: BattleDebug; sawExecution: boolean; executionStepIndexes: number[] }> {
+  const executionStepIndexes: number[] = [];
+  let sawExecution = false;
+  let final = await readRequiredBattleDebug(page);
+  const deadline = Date.now() + 10_000;
+
+  while (Date.now() < deadline) {
+    const state = await readRequiredBattleDebug(page);
+    final = state;
+    if (state.phase === "execution") {
+      sawExecution = true;
+      executionStepIndexes.push(state.executionStepIndex);
+      expect(state.inputMemberIndex, "command input should be closed throughout execution").toBeNull();
+      if (expectedQueuedCount !== undefined) {
+        expect(state.queuedCount).toBe(expectedQueuedCount);
+      }
+      await page.waitForTimeout(60);
+      continue;
+    }
+    if (sawExecution) {
+      return { final, sawExecution, executionStepIndexes };
+    }
+    await page.waitForTimeout(60);
+  }
+
+  expect(sawExecution, "battle should spend time in execution").toBe(true);
+  return { final, sawExecution, executionStepIndexes };
+}
+
+function expectRoundResolved(state: BattleDebug): void {
+  if (state.outcome === "ongoing") {
+    expect(state.phase).toBe("command-input");
+    expect(state.inputMemberIndex).toBe(0);
+    expect(state.queuedCount).toBe(0);
+    return;
+  }
+  expect(state.outcome).toBe("win");
+  expect(["victory-summary", "exit-transition", "win"]).toContain(state.phase);
+}
+
 async function readFirstBattleGroupId(page: Page): Promise<number> {
   const response = await page.request.get("/generated/battle.json");
   expect(response.ok(), "generated battle data should be available").toBe(true);
-  const data = await response.json() as { groups?: Array<{ id?: unknown }> };
-  const id = data.groups?.[0]?.id;
-  expect(typeof id, "generated battle data should include a numeric group id").toBe("number");
+  const data = await response.json() as { groups?: Array<{ id?: unknown; enemyIds?: unknown }> };
+  const group = data.groups?.find((entry) =>
+    typeof entry.id === "number" &&
+    Array.isArray(entry.enemyIds) &&
+    entry.enemyIds.length > 0
+  );
+  const id = group?.id;
+  expect(typeof id, "generated battle data should include a numeric group id with enemies").toBe("number");
   expect(Number.isInteger(id)).toBe(true);
   expect(id).toBeGreaterThanOrEqual(0);
   return id as number;
