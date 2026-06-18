@@ -34,6 +34,7 @@ export type FirstSceneDebug = {
   queuedCount?: number;
   executionStepIndex?: number;
   executionStepCount?: number;
+  executionMessage?: string;
   lastEnemyAction?: {
     enemyIndex: number;
     actionIndex: number;

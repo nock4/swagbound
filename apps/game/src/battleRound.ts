@@ -1,4 +1,5 @@
 import type { ItemData, PsiData } from "@eb/schemas";
+import { decodeItemUseEffect } from "./partyState";
 import {
   beginCombatantTurn,
   combatantAt,
@@ -50,7 +51,7 @@ export type BattleRoundResources = {
   items?: readonly BattleRoundItemData[];
 };
 
-export type BattleRoundItemData = Pick<ItemData, "id" | "action" | "argument" | "miscFlags" | "effect">;
+export type BattleRoundItemData = Pick<ItemData, "id" | "name" | "action" | "argument" | "miscFlags" | "effect">;
 
 export type BattleRoundStepResolution =
   | TurnResolution
@@ -60,6 +61,32 @@ export type BattleRoundStepResolution =
   | PrayResolution
   | MirrorResolution;
 
+export type BattleRoundStepNarrationKind =
+  | "attack"
+  | "psi"
+  | "item"
+  | "defend"
+  | "pray"
+  | "spy"
+  | "mirror"
+  | "run"
+  | "skip";
+
+export type BattleRoundStepNarrationDetails = {
+  kind: BattleRoundStepNarrationKind;
+  attackerName: string;
+  targetName?: string;
+  moveName?: string;
+  itemName?: string;
+  message?: string;
+  damage?: number;
+  healed?: number;
+  ppRestored?: number;
+  missed?: boolean;
+  fled?: boolean;
+  defended?: boolean;
+};
+
 export type BattleRoundStepResult = {
   state: BattleState;
   message: string;
@@ -67,6 +94,7 @@ export type BattleRoundStepResult = {
   skipped: boolean;
   fled?: boolean;
   resolution?: BattleRoundStepResolution;
+  details: BattleRoundStepNarrationDetails;
 };
 
 export type BattleRoundInputSubmenu = "command" | "psi" | "goods" | "target-enemy" | "target-ally";
@@ -148,7 +176,9 @@ export function resolveRoundStep(
 
   const turnState = beginCombatantTurn(state, actor);
   if (actor.side === "enemy") {
-    return fromResolution(resolveEnemyActionTurn(turnState, actor, rng));
+    return fromResolution(turnState, resolveEnemyActionTurn(turnState, actor, rng), {
+      command: "BASH"
+    });
   }
 
   if (!queued) {
@@ -157,38 +187,63 @@ export function resolveRoundStep(
 
   switch (queued.command) {
     case "BASH":
-      return fromResolution(resolveTurn(turnState, actor, rng, enemyTargetOptions(queued)));
+      return fromResolution(turnState, resolveTurn(turnState, actor, rng, enemyTargetOptions(queued)), {
+        command: queued.command
+      });
     case "AUTO":
-      return fromResolution(resolveDefaultBashTurn(turnState, actor, rng));
+      return fromResolution(turnState, resolveDefaultBashTurn(turnState, actor, rng), {
+        command: queued.command
+      });
     case "SPY":
-      return fromResolution(resolveSpyTurn(turnState, actor, enemyTargetOptions(queued)));
+      return fromResolution(turnState, resolveSpyTurn(turnState, actor, enemyTargetOptions(queued)), {
+        command: queued.command
+      });
     case "PSI": {
       const psi = findById(resources.psi, queued.psiId);
       if (!psi) {
         return skippedRoundStep(turnState, actor, "Cannot use that PSI here.");
       }
-      return fromResolution(resolvePsiTurn(turnState, actor, psi, rng, targetOptions(queued)));
+      return fromResolution(turnState, resolvePsiTurn(turnState, actor, psi, rng, targetOptions(queued)), {
+        command: queued.command,
+        moveName: psi.name,
+        psiKind: psiBattleKind(psi)
+      });
     }
     case "GOODS": {
       const item = findById(resources.items, queued.itemId);
       if (!item) {
         return skippedRoundStep(turnState, actor, "Cannot use that item.");
       }
-      return fromResolution(resolveItemTurn(turnState, actor, item, targetOptions(queued)));
+      return fromResolution(turnState, resolveItemTurn(turnState, actor, item, targetOptions(queued)), {
+        command: queued.command,
+        item
+      });
     }
     case "DEFEND":
-      return fromResolution(resolveDefendTurn(turnState, actor));
+      return fromResolution(turnState, resolveDefendTurn(turnState, actor), {
+        command: queued.command
+      });
     case "PRAY":
-      return fromResolution(resolvePrayTurn(turnState, actor, rng));
+      return fromResolution(turnState, resolvePrayTurn(turnState, actor, rng), {
+        command: queued.command
+      });
     case "MIRROR":
-      return fromResolution(resolveMirrorTurn(turnState, actor, rng, enemyTargetOptions(queued)));
+      return fromResolution(turnState, resolveMirrorTurn(turnState, actor, rng, enemyTargetOptions(queued)), {
+        command: queued.command
+      });
     case "RUN":
       return {
         state: turnState,
         message: `${combatant.name} ran away.`,
         actor,
         skipped: false,
-        fled: true
+        fled: true,
+        details: {
+          kind: "run",
+          attackerName: combatant.name,
+          message: `${combatant.name} ran away.`,
+          fled: true
+        }
       };
   }
 }
@@ -504,18 +559,150 @@ function upsertQueuedCommand(queue: QueuedCommand[], queued: QueuedCommand): Que
     .sort((left, right) => left.partySlot - right.partySlot);
 }
 
-function fromResolution(resolution: BattleRoundStepResolution): BattleRoundStepResult {
+function fromResolution(
+  previousState: BattleState,
+  resolution: BattleRoundStepResolution,
+  context: {
+    command: BattleCommand;
+    moveName?: string;
+    psiKind?: ReturnType<typeof psiBattleKind>;
+    item?: BattleRoundItemData;
+  }
+): BattleRoundStepResult {
   return {
     state: resolution.state,
     message: resolutionMessage(resolution),
     actor: resolution.actor,
     skipped: resolution.skipped,
-    resolution
+    resolution,
+    details: narrationDetailsForResolution(previousState, resolution, context)
   };
 }
 
 function resolutionMessage(resolution: BattleRoundStepResolution): string {
   return "message" in resolution ? resolution.message : "";
+}
+
+function narrationDetailsForResolution(
+  previousState: BattleState,
+  resolution: BattleRoundStepResolution,
+  context: {
+    command: BattleCommand;
+    moveName?: string;
+    psiKind?: ReturnType<typeof psiBattleKind>;
+    item?: BattleRoundItemData;
+  }
+): BattleRoundStepNarrationDetails {
+  const attackerName = combatantName(previousState, resolution.actor);
+  const message = resolutionMessage(resolution);
+  if (resolution.skipped) {
+    return { kind: "skip", attackerName, message };
+  }
+
+  if ("defender" in resolution) {
+    const targetName = resolution.defender ? combatantName(previousState, resolution.defender) : undefined;
+    return {
+      kind: "attack",
+      attackerName,
+      targetName,
+      message,
+      damage: resolution.damage,
+      missed: !targetName || resolution.damage <= 0
+    };
+  }
+
+  if ("effectKind" in resolution) {
+    const targetName = multiTargetName(previousState, resolution.targets);
+    const kind = resolution.effectKind === "psi" ? "psi" : "attack";
+    return {
+      kind,
+      attackerName,
+      targetName,
+      moveName: kind === "psi" ? "PSI" : undefined,
+      message,
+      damage: resolution.amount,
+      missed: !targetName || resolution.amount <= 0
+    };
+  }
+
+  if (context.command === "DEFEND") {
+    return {
+      kind: "defend",
+      attackerName,
+      targetName: combatantName(previousState, resolution.actor),
+      message,
+      defended: true
+    };
+  }
+
+  if (context.command === "SPY") {
+    const target = "target" in resolution ? resolution.target : null;
+    return {
+      kind: "spy",
+      attackerName,
+      targetName: target ? combatantName(previousState, target) : undefined,
+      message
+    };
+  }
+
+  if (context.command === "PRAY" && "effect" in resolution) {
+    return {
+      kind: "pray",
+      attackerName,
+      targetName: multiTargetName(previousState, resolution.targets),
+      message,
+      damage: resolution.effect === "damageEnemies" ? resolution.amount : undefined,
+      healed: resolution.effect === "healParty" ? resolution.amount : undefined,
+      ppRestored: resolution.effect === "restorePp" ? resolution.amount : undefined,
+      missed: resolution.effect === "nothing"
+    };
+  }
+
+  if (context.command === "MIRROR") {
+    const target = "target" in resolution ? resolution.target : null;
+    return {
+      kind: "mirror",
+      attackerName,
+      targetName: target ? combatantName(previousState, target) : undefined,
+      message,
+      damage: "amount" in resolution ? resolution.amount : undefined,
+      missed: !("amount" in resolution) || resolution.amount <= 0
+    };
+  }
+
+  if (context.command === "PSI") {
+    const target = "target" in resolution ? resolution.target : null;
+    const amount = "amount" in resolution ? resolution.amount : 0;
+    const targetName = target ? combatantName(previousState, target) : undefined;
+    return {
+      kind: "psi",
+      attackerName,
+      targetName,
+      moveName: context.moveName,
+      message,
+      damage: context.psiKind === "offense" ? amount : undefined,
+      healed: context.psiKind === "recovery" ? amount : undefined,
+      missed: !targetName || amount <= 0
+    };
+  }
+
+  if (context.command === "GOODS") {
+    const target = "target" in resolution ? resolution.target : null;
+    const effect = context.item ? decodeItemUseEffect(context.item) : undefined;
+    const amount = "amount" in resolution ? resolution.amount : 0;
+    return {
+      kind: "item",
+      attackerName,
+      targetName: target ? combatantName(previousState, target) : undefined,
+      itemName: context.item?.name,
+      message,
+      healed: effect?.kind === "healHp" || effect?.kind === "healHpPercent" ? amount : undefined,
+      ppRestored: effect?.kind === "recoverPp" || effect?.kind === "recoverPpPercent" ? amount : undefined,
+      missed: amount <= 0
+    };
+  }
+
+  return { kind: "skip", attackerName, message };
 }
 
 function skippedRoundStep(
@@ -527,8 +714,34 @@ function skippedRoundStep(
     state,
     message,
     actor,
-    skipped: true
+    skipped: true,
+    details: {
+      kind: "skip",
+      attackerName: combatantName(state, actor),
+      message
+    }
   };
+}
+
+function combatantName(state: BattleState, actor: BattleActor): string {
+  return combatantAt(state, actor)?.name ?? "Someone";
+}
+
+function multiTargetName(state: BattleState, targets: readonly BattleActor[]): string | undefined {
+  if (targets.length === 0) {
+    return undefined;
+  }
+  if (targets.length === 1) {
+    return combatantName(state, targets[0]);
+  }
+  const side = targets[0]?.side;
+  if (side === "party" && targets.every((target) => target.side === "party")) {
+    return "the party";
+  }
+  if (side === "enemy" && targets.every((target) => target.side === "enemy")) {
+    return "the enemies";
+  }
+  return "everyone";
 }
 
 function enemyTargetOptions(queued: QueuedCommand): { targetIndex?: number } {

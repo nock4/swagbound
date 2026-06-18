@@ -44,6 +44,7 @@ import {
   type BattleRoundInputState,
   type QueuedCommand
 } from "./battleRound";
+import { composeBattleStepLines } from "./battleMessages";
 import type { BattleReturnContext, BattleReturnOutcome } from "./battleReturn";
 import {
   DEFAULT_DAMAGE_FLASH_MS,
@@ -155,6 +156,13 @@ const BATTLE_MENU_MAX_WIDTH = 360;
 const BATTLE_DESCRIPTION_MAX_WIDTH = 260;
 const BATTLE_DESCRIPTION_TEXT_PADDING_X = 12;
 const BATTLE_DESCRIPTION_TEXT_PADDING_Y = 9;
+const BATTLE_EXECUTION_MESSAGE_TOP = 14;
+const BATTLE_EXECUTION_MESSAGE_MIN_WIDTH = 260;
+const BATTLE_EXECUTION_MESSAGE_MAX_WIDTH = 480;
+const BATTLE_EXECUTION_MESSAGE_PADDING_X = 14;
+const BATTLE_EXECUTION_MESSAGE_PADDING_Y = 10;
+const BATTLE_EXECUTION_MESSAGE_MAX_LINES = 2;
+const BATTLE_EXECUTION_MESSAGE_FONT_SIZE = 14;
 const BATTLE_STATUS_CARD_SIDE_MARGIN = 10;
 const BATTLE_STATUS_CARD_BOTTOM_MARGIN = 8;
 const BATTLE_STATUS_CARD_GAP = 8;
@@ -172,7 +180,7 @@ const BATTLE_STATUS_BAR_HEIGHT = 5;
 const BATTLE_STATUS_BAR_X = 28;
 const BATTLE_STATUS_BAR_VALUE_GAP = 4;
 const BATTLE_PP_RATE_PER_SEC = 36;
-const ACTION_ADVANCE_DELAY_MS = 350;
+const ACTION_ADVANCE_DELAY_MS = 1200;
 const ENTER_TRANSITION_MS = 650;
 const EXIT_TRANSITION_MS = 450;
 const ENEMY_SPRITE_MAX_HEIGHT = 160;
@@ -211,6 +219,7 @@ type BattleStatusLayout = {
   command?: BattleCommandGridLayout;
   submenu?: BattleMenuListRect;
   description?: CanvasRect;
+  executionMessage?: CanvasRect;
   statusCards: BattleStatusCardLayout[];
 };
 type BattleStatusCardView = {
@@ -240,10 +249,11 @@ type BattleUiView = {
   commandLines: string[];
   submenuLines: string[];
   descriptionLines: string[];
+  executionMessageLines: string[];
   selectedSubmenuIndex: number;
   statusCards: BattleStatusCardView[];
 };
-type BattleMenuTextRole = "command" | "submenu" | "description";
+type BattleMenuTextRole = "command" | "submenu" | "description" | "execution";
 
 export class BattleScene extends Phaser.Scene {
   private battleData_!: BattleData;
@@ -275,6 +285,8 @@ export class BattleScene extends Phaser.Scene {
   private queuedCommands_: QueuedCommand[] = [];
   private executionOrder_: BattleActor[] = [];
   private executionStepIndex_ = 0;
+  private executionMessageLines_: string[] = [];
+  private pendingFlee_ = false;
   private lastEnemyAction_: LastEnemyActionDebug | null = null;
   private actionDelayMs_ = 0;
   private statusGraphics?: Phaser.GameObjects.Graphics;
@@ -363,6 +375,8 @@ export class BattleScene extends Phaser.Scene {
     this.queuedCommands_ = [];
     this.executionOrder_ = [];
     this.executionStepIndex_ = 0;
+    this.executionMessageLines_ = [];
+    this.pendingFlee_ = false;
     this.lastEnemyAction_ = null;
     this.actionDelayMs_ = 0;
     this.statusLayoutSignature = "";
@@ -544,6 +558,8 @@ export class BattleScene extends Phaser.Scene {
     this.queuedCommands_ = [];
     this.executionOrder_ = [];
     this.executionStepIndex_ = 0;
+    this.executionMessageLines_ = [];
+    this.pendingFlee_ = false;
     this.roundOrder_ = order;
     this.actionDelayMs_ = 0;
     this.syncMenuFromInputState();
@@ -554,6 +570,8 @@ export class BattleScene extends Phaser.Scene {
     this.executionOrder_ = jitteredTurnOrder(this.battle_, this.queuedCommands_, this.rng_);
     this.roundOrder_ = this.executionOrder_;
     this.executionStepIndex_ = 0;
+    this.executionMessageLines_ = [];
+    this.pendingFlee_ = false;
     this.phase_ = "execution";
     this.transitionPhase_ = "none";
     this.currentActor_ = null;
@@ -590,6 +608,15 @@ export class BattleScene extends Phaser.Scene {
     if (this.phase_ !== "execution") {
       return;
     }
+    if (this.pendingFlee_) {
+      this.pendingFlee_ = false;
+      this.executionMessageLines_ = [];
+      this.actionDelayMs_ = 0;
+      this.phase_ = "flee";
+      this.transitionPhase_ = "none";
+      this.currentActor_ = null;
+      return;
+    }
     if (this.handleBattleOutcome()) {
       return;
     }
@@ -618,13 +645,16 @@ export class BattleScene extends Phaser.Scene {
       this.battle_ = result.state;
       this.recordEnemyDamageSignals(previousBattle, this.battle_, this.time.now);
       this.updateStepDebugTargets(result, queued);
-      this.menuMessage_ = result.message || (result.skipped ? "Cannot act." : "");
+      this.menuMessage_ = result.message;
+      this.executionMessageLines_ = composeBattleStepLines(result.details);
+      if (this.executionMessageLines_.length === 0) {
+        this.actionDelayMs_ = 0;
+        continue;
+      }
       this.actionDelayMs_ = ACTION_ADVANCE_DELAY_MS;
 
       if (result.fled) {
-        this.phase_ = "flee";
-        this.transitionPhase_ = "none";
-        this.currentActor_ = null;
+        this.pendingFlee_ = true;
       }
       return;
     }
@@ -636,6 +666,8 @@ export class BattleScene extends Phaser.Scene {
     if (this.handleBattleOutcome()) {
       return;
     }
+    this.executionMessageLines_ = [];
+    this.pendingFlee_ = false;
     this.beginCommandInputRound();
   }
 
@@ -829,6 +861,8 @@ export class BattleScene extends Phaser.Scene {
     this.commandIndex_ = 0;
     this.currentActor_ = null;
     this.menuMessage_ = "";
+    this.executionMessageLines_ = [];
+    this.pendingFlee_ = false;
   }
 
   private beginExitTransition(): void {
@@ -1209,6 +1243,9 @@ export class BattleScene extends Phaser.Scene {
     const description = descriptionAnchor && view.descriptionLines.length > 0
       ? this.descriptionLayout(view.descriptionLines, descriptionAnchor)
       : undefined;
+    const executionMessage = view.executionMessageLines.length > 0
+      ? this.executionMessageLayout(view.executionMessageLines)
+      : undefined;
     const activeCardIndex = view.statusCards.findIndex((card) => card.active);
     const statusCardCount = Math.min(4, view.statusCards.length);
     const statusCards = battleStatusCardRects({
@@ -1231,6 +1268,7 @@ export class BattleScene extends Phaser.Scene {
       command,
       submenu,
       description,
+      executionMessage,
       statusCards
     };
     const signature = JSON.stringify(layout);
@@ -1238,6 +1276,7 @@ export class BattleScene extends Phaser.Scene {
       (view.commandLines.length === 0 || this.commandGridTexts.length === view.commandLines.length) &&
       (view.submenuLines.length === 0 || Boolean(this.menuTexts.submenu)) &&
       (view.descriptionLines.length === 0 || Boolean(this.menuTexts.description)) &&
+      (view.executionMessageLines.length === 0 || Boolean(this.menuTexts.execution)) &&
       this.statusCardTexts.length === statusCards.length;
     if (signature === this.statusLayoutSignature && textReady) {
       return layout;
@@ -1286,6 +1325,18 @@ export class BattleScene extends Phaser.Scene {
         lineSpacing: BATTLE_LINE_SPACING,
         fixedWidth: textRect.width
       }).setDepth(25);
+    }
+
+    if (layout.executionMessage) {
+      const textRect = this.executionMessageTextRect(layout.executionMessage);
+      drawCleanPanel(graphics, layout.executionMessage);
+      this.menuTexts.execution = createCleanText(this, textRect.x, textRect.y, "", {
+        fontSize: BATTLE_EXECUTION_MESSAGE_FONT_SIZE,
+        color: CLEAN_UI_PRIMARY,
+        lineSpacing: BATTLE_LINE_SPACING,
+        fixedWidth: textRect.width,
+        fixedHeight: textRect.height
+      }).setDepth(27);
     }
 
     layout.statusCards.forEach((card) => {
@@ -1414,6 +1465,33 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
+  private executionMessageLayout(lines: string[]): CanvasRect {
+    const screenWidth = this.scale.width;
+    const maxWidth = Math.min(
+      BATTLE_EXECUTION_MESSAGE_MAX_WIDTH,
+      Math.floor(screenWidth - BATTLE_LEFT_MARGIN * 2)
+    );
+    const measuredWidth = Math.max(
+      BATTLE_EXECUTION_MESSAGE_MIN_WIDTH,
+      ...lines.map((line) => this.measureTextWidth(line, BATTLE_EXECUTION_MESSAGE_FONT_SIZE, 500))
+    );
+    const width = Math.min(
+      maxWidth,
+      Math.ceil(measuredWidth + BATTLE_EXECUTION_MESSAGE_PADDING_X * 2)
+    );
+    const lineCount = Math.max(1, Math.min(lines.length, BATTLE_EXECUTION_MESSAGE_MAX_LINES));
+    const height = BATTLE_EXECUTION_MESSAGE_PADDING_Y * 2 + lineCount * cleanLineHeight(
+      BATTLE_EXECUTION_MESSAGE_FONT_SIZE,
+      BATTLE_LINE_SPACING
+    );
+    return {
+      x: Math.round((screenWidth - width) / 2),
+      y: BATTLE_EXECUTION_MESSAGE_TOP,
+      width,
+      height
+    };
+  }
+
   private standardMenuListTextRect(rect: BattleMenuListRect): CanvasRect {
     const content = cleanPanelInnerRect(rect, {
       x: BATTLE_COMMAND_TEXT_PADDING_X,
@@ -1431,6 +1509,13 @@ export class BattleScene extends Phaser.Scene {
     return cleanPanelInnerRect(rect, {
       x: BATTLE_DESCRIPTION_TEXT_PADDING_X,
       y: BATTLE_DESCRIPTION_TEXT_PADDING_Y
+    });
+  }
+
+  private executionMessageTextRect(rect: CanvasRect): CanvasRect {
+    return cleanPanelInnerRect(rect, {
+      x: BATTLE_EXECUTION_MESSAGE_PADDING_X,
+      y: BATTLE_EXECUTION_MESSAGE_PADDING_Y
     });
   }
 
@@ -1454,6 +1539,9 @@ export class BattleScene extends Phaser.Scene {
     this.menuTexts.description?.setText(
       this.descriptionWindowText(view.descriptionLines, layout.description)
     );
+    this.menuTexts.execution?.setText(
+      this.executionMessageWindowText(view.executionMessageLines, layout.executionMessage)
+    );
     layout.statusCards.forEach((card, index) => {
       const viewCard = view.statusCards[index];
       const textSet = this.statusCardTexts[index];
@@ -1476,6 +1564,7 @@ export class BattleScene extends Phaser.Scene {
         commandLines: terminalCommandLines,
         submenuLines: [],
         descriptionLines: this.victorySummaryLines(),
+        executionMessageLines: [],
         selectedSubmenuIndex: 0,
         statusCards: this.statusCardViews()
       };
@@ -1485,6 +1574,7 @@ export class BattleScene extends Phaser.Scene {
         commandLines: terminalCommandLines,
         submenuLines: [],
         descriptionLines: ["The party fell."],
+        executionMessageLines: [],
         selectedSubmenuIndex: 0,
         statusCards: this.statusCardViews()
       };
@@ -1494,15 +1584,17 @@ export class BattleScene extends Phaser.Scene {
         commandLines: terminalCommandLines,
         submenuLines: [],
         descriptionLines: ["Got away."],
+        executionMessageLines: [],
         selectedSubmenuIndex: 0,
         statusCards: this.statusCardViews()
       };
     }
     if (!menuVisible) {
       return {
-        commandLines: this.menuMessage_ ? [this.menuMessage_] : [],
+        commandLines: this.phase_ === "execution" ? [] : this.menuMessage_ ? [this.menuMessage_] : [],
         submenuLines: [],
         descriptionLines: [],
+        executionMessageLines: this.phase_ === "execution" ? this.executionMessageLines_ : [],
         selectedSubmenuIndex: 0,
         statusCards: this.statusCardViews()
       };
@@ -1511,6 +1603,7 @@ export class BattleScene extends Phaser.Scene {
       commandLines: this.commandsForCurrentActor().map(formatCommandLabel),
       submenuLines: this.submenuTextLines(),
       descriptionLines: this.menuDescriptionLines(),
+      executionMessageLines: [],
       selectedSubmenuIndex: this.submenuIndex_,
       statusCards: this.statusCardViews()
     };
@@ -1539,6 +1632,22 @@ export class BattleScene extends Phaser.Scene {
       1,
       Math.floor(textRect.height / BATTLE_LINE_HEIGHT)
     );
+    const visible = lines.slice(0, maxRows);
+    if (lines.length > maxRows && visible.length > 0) {
+      visible[visible.length - 1] = "...";
+    }
+    return visible.map((line) => this.fitMeasuredText(line, textRect.width)).join("\n");
+  }
+
+  private executionMessageWindowText(lines: string[], rect: CanvasRect | undefined): string {
+    if (!rect) {
+      return "";
+    }
+    const textRect = this.executionMessageTextRect(rect);
+    const maxRows = Math.max(1, Math.floor(textRect.height / cleanLineHeight(
+      BATTLE_EXECUTION_MESSAGE_FONT_SIZE,
+      BATTLE_LINE_SPACING
+    )));
     const visible = lines.slice(0, maxRows);
     if (lines.length > maxRows && visible.length > 0) {
       visible[visible.length - 1] = "...";
@@ -1833,6 +1942,7 @@ export class BattleScene extends Phaser.Scene {
       queuedCount: this.queuedCommands_.length,
       executionStepIndex: this.executionStepDebugIndex(),
       executionStepCount: this.executionOrder_.length,
+      executionMessage: this.executionMessageLines_.join("\n"),
       lastEnemyAction: this.lastEnemyAction_,
       party,
       enemies,

@@ -105,6 +105,7 @@ export type BattleDebug = {
   queuedCount: number;
   executionStepIndex: number;
   executionStepCount: number;
+  executionMessage: string;
   lastEnemyAction: LastEnemyActionDebug | null;
   party: BattleCombatantDebug[];
   enemies: BattleEnemyCombatantDebug[];

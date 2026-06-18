@@ -35,6 +35,7 @@ type BattleDebug = {
   queuedCount: number;
   executionStepIndex: number;
   executionStepCount: number;
+  executionMessage: string;
   lastEnemyAction: {
     enemyIndex: number;
     actionIndex: number;
@@ -457,6 +458,7 @@ async function watchExecutionWithoutCommandMenu(
     if (state.phase === "execution") {
       sawExecution = true;
       executionStepIndexes.push(state.executionStepIndex);
+      expect(state.executionMessage.trim(), "execution should expose the current narration text").not.toBe("");
       expect(state.inputMemberIndex, "command input should be closed throughout execution").toBeNull();
       if (expectedQueuedCount !== undefined) {
         expect(state.queuedCount).toBe(expectedQueuedCount);
@@ -536,6 +538,7 @@ function expectBattleNumbers(state: BattleDebug): void {
   expect(Number.isInteger(state.queuedCount)).toBe(true);
   expect(Number.isInteger(state.executionStepIndex)).toBe(true);
   expect(Number.isInteger(state.executionStepCount)).toBe(true);
+  expect(typeof state.executionMessage).toBe("string");
   expect(["none", "enter", "summary", "exit"]).toContain(state.transitionPhase);
   expect(Array.isArray(state.turnOrder)).toBe(true);
   expect(state.party.length).toBeGreaterThan(0);

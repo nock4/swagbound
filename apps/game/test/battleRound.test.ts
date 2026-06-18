@@ -106,6 +106,13 @@ describe("resolveRoundStep", () => {
     expect(result.skipped).toBe(false);
     expect(result.state.party[0].defending).toBe(false);
     expect(result.resolution).toMatchObject({ defender: actor("enemy", 1), damage: 20 });
+    expect(result.details).toMatchObject({
+      kind: "attack",
+      attackerName: "PARTY_A",
+      targetName: "OPPONENT_B",
+      damage: 20,
+      missed: false
+    });
     expect(result.state.enemies[1].hp.target).toBe(4);
   });
 
@@ -123,6 +130,12 @@ describe("resolveRoundStep", () => {
 
     expect(result.skipped).toBe(false);
     expect(result.message).toBe("OPPONENT_A HP 30/30 Off 12 Def 4.");
+    expect(result.details).toMatchObject({
+      kind: "spy",
+      attackerName: "JEFF_TEST",
+      targetName: "OPPONENT_A",
+      message: "OPPONENT_A HP 30/30 Off 12 Def 4."
+    });
     expect(result.state).toBe(battle);
   });
 
@@ -142,6 +155,14 @@ describe("resolveRoundStep", () => {
 
     expect(result.skipped).toBe(false);
     expect(result.resolution).toMatchObject({ target: actor("enemy", 0), amount: 42 });
+    expect(result.details).toMatchObject({
+      kind: "psi",
+      attackerName: "PARTY_A",
+      targetName: "OPPONENT_A",
+      moveName: "PSI_100",
+      damage: 42,
+      missed: false
+    });
     expect(result.state.party[0].pp).toBe(10);
     expect(result.state.enemies[0].hp.target).toBe(0);
   });
@@ -169,6 +190,14 @@ describe("resolveRoundStep", () => {
 
     expect(result.skipped).toBe(false);
     expect(result.resolution).toMatchObject({ target: actor("party", 1), amount: 28 });
+    expect(result.details).toMatchObject({
+      kind: "item",
+      attackerName: "PARTY_A",
+      targetName: "PARTY_B",
+      itemName: "ITEM_200",
+      healed: 28,
+      missed: false
+    });
     expect(result.state.party[0].inventory).toEqual([]);
     expect(result.state.party[1].hp.target).toBe(48);
   });
@@ -177,12 +206,19 @@ describe("resolveRoundStep", () => {
     const defendBattle = createBattleState(opponentA, { characters: characters([partyA]) });
     const defend = resolveRoundStep(defendBattle, actor("party", 0), { partySlot: 0, command: "DEFEND" }, () => 0.5);
     expect(defend.skipped).toBe(false);
+    expect(defend.details).toMatchObject({ kind: "defend", attackerName: "PARTY_A", defended: true });
     expect(defend.state.party[0].defending).toBe(true);
 
     const prayBattle = createBattleState(opponentA, { characters: characters([partyA, partyB]) });
     const pray = resolveRoundStep(prayBattle, actor("party", 1), { partySlot: 1, command: "PRAY" }, () => 0.95);
     expect(pray.skipped).toBe(false);
     expect(pray.message).toBe("PARTY_B prayed. Nothing happened.");
+    expect(pray.details).toMatchObject({
+      kind: "pray",
+      attackerName: "PARTY_B",
+      message: "PARTY_B prayed. Nothing happened.",
+      missed: true
+    });
 
     const mirrorBattle = createBattleState(enemy(20, "MIRROR_TARGET", { hp: 30, offense: 20, defense: 4 }), {
       characters: characters([character(3, "POO_TEST", { offense: 5 })])
@@ -195,11 +231,18 @@ describe("resolveRoundStep", () => {
     );
     expect(mirror.skipped).toBe(false);
     expect(mirror.message).toBe("POO_TEST mirrored MIRROR_TARGET for 18 damage.");
+    expect(mirror.details).toMatchObject({
+      kind: "mirror",
+      attackerName: "POO_TEST",
+      targetName: "MIRROR_TARGET",
+      damage: 18
+    });
 
     let runBattle = createBattleState(opponentA, { characters: characters([partyA]) });
     runBattle = withCombatant(runBattle, actor("party", 0), { ...runBattle.party[0], defending: true });
     const run = resolveRoundStep(runBattle, actor("party", 0), { partySlot: 0, command: "RUN" }, () => 0.5);
     expect(run.fled).toBe(true);
+    expect(run.details).toMatchObject({ kind: "run", attackerName: "PARTY_A", fled: true });
     expect(run.state.party[0].defending).toBe(false);
     expect(run.state.enemies[0].hp.target).toBe(30);
 
@@ -212,11 +255,18 @@ describe("resolveRoundStep", () => {
     const enemyResult = resolveRoundStep(enemyBattle, actor("enemy", 0), undefined, () => 0.5);
     expect(enemyResult.skipped).toBe(false);
     expect(enemyResult.resolution).toMatchObject({ targets: [actor("party", 0)], amount: 14 });
+    expect(enemyResult.details).toMatchObject({
+      kind: "attack",
+      attackerName: "ENEMY_STEP",
+      targetName: "PARTY_A",
+      damage: 14
+    });
     expect(enemyResult.state.enemies[0].nextActionIndex).toBe(1);
 
     const deadBattle = killActor(createBattleState(opponentA, { characters: characters([partyA]) }), actor("party", 0));
     const dead = resolveRoundStep(deadBattle, actor("party", 0), { partySlot: 0, command: "BASH" }, () => 0.5);
     expect(dead.skipped).toBe(true);
+    expect(dead.details).toMatchObject({ kind: "skip", attackerName: "PARTY_A" });
     expect(dead.state).toBe(deadBattle);
   });
 });
