@@ -23,6 +23,7 @@ const MAPPED_ENTRY: BackgroundOverrideEntry = {
     frequency: 1.75,
     speed: 0.6
   },
+  distortionType: "vertical-compression",
   scroll: {
     x: 1,
     y: 0
@@ -83,8 +84,25 @@ describe("background override helpers", () => {
   it("converts an override entry into an animated battle background shape", () => {
     expect(toBattleBackground(MAPPED_ENTRY)).toEqual({
       id: 0,
-      distortion: MAPPED_ENTRY.distortion,
+      distortion: {
+        ...MAPPED_ENTRY.distortion,
+        kind: "vertical-compression"
+      },
       scroll: MAPPED_ENTRY.scroll
     });
+  });
+
+  it("keeps an authored distortion kind when no override distortion type is present", () => {
+    const entry: BackgroundOverrideEntry = {
+      image: "assets/swagbound/battle-backgrounds/projections-001.png",
+      distortion: {
+        kind: "horizontal, smooth",
+        amplitude: 8,
+        frequency: 2.75,
+        speed: 0.85
+      }
+    };
+
+    expect(toBattleBackground(entry).distortion?.kind).toBe("horizontal, smooth");
   });
 });

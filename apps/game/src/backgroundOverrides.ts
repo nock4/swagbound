@@ -30,7 +30,7 @@ export function backgroundOverrideAssetUrl(image: string): string {
 export function toBattleBackground(entry: BackgroundOverrideEntry): BattleBackground {
   return {
     id: 0,
-    distortion: entry.distortion,
+    distortion: { ...entry.distortion, kind: entry.distortionType ?? entry.distortion?.kind },
     scroll: entry.scroll
   };
 }

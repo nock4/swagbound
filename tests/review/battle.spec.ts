@@ -32,6 +32,7 @@ type BattleDebug = {
   enemies: BattleCombatantDebug[];
   background: {
     animated: boolean;
+    mode: "horizontal-smooth" | "horizontal-interlaced" | "vertical-compression" | "none";
     scrollX: number;
     scrollY: number;
     warpSample: number;
@@ -301,6 +302,7 @@ function expectBattleNumbers(state: BattleDebug): void {
   expect(state.party.length).toBeGreaterThan(0);
   expect(state.enemies.length).toBeGreaterThan(0);
   expect(typeof state.background.animated).toBe("boolean");
+  expect(["horizontal-smooth", "horizontal-interlaced", "vertical-compression", "none"]).toContain(state.background.mode);
   expect(Number.isFinite(state.background.scrollX)).toBe(true);
   expect(Number.isFinite(state.background.scrollY)).toBe(true);
   expect(Number.isFinite(state.background.warpSample)).toBe(true);

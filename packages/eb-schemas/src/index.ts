@@ -761,6 +761,7 @@ export const BattleBackgroundSchema = z.object({
 export const BackgroundOverrideEntrySchema = z.object({
   image: z.string().min(1),
   distortion: BattleBackgroundDistortionSchema,
+  distortionType: z.enum(["horizontal-smooth", "horizontal-interlaced", "vertical-compression"]).optional(),
   scroll: BattleBackgroundScrollSchema.optional()
 }).strict();
 

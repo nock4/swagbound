@@ -79,6 +79,7 @@ export type LastEnemyActionDebug = {
 
 export type BattleBackgroundDebug = {
   animated: boolean;
+  mode: "horizontal-smooth" | "horizontal-interlaced" | "vertical-compression" | "none";
   scrollX: number;
   scrollY: number;
   warpSample: number;

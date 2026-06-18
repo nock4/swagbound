@@ -9,11 +9,23 @@ export const MAX_BATTLE_BACKGROUND_WARP_PX = 8;
 
 const WARP_SAMPLE_ROW = 96;
 
+export type DistortionMode =
+  | "horizontal-smooth"
+  | "horizontal-interlaced"
+  | "vertical-compression"
+  | "none";
+
 export type BattleBackgroundDebug = {
   animated: boolean;
+  mode: DistortionMode;
   scrollX: number;
   scrollY: number;
   warpSample: number;
+};
+
+export type BattleBackgroundRowSample = {
+  sourceX: number;
+  sourceY: number;
 };
 
 export type AnimatedBattleBackgroundHandle = {
@@ -24,6 +36,7 @@ export type AnimatedBattleBackgroundHandle = {
 
 const STATIC_BACKGROUND_DEBUG: BattleBackgroundDebug = {
   animated: false,
+  mode: "none",
   scrollX: 0,
   scrollY: 0,
   warpSample: 0
@@ -54,15 +67,68 @@ export function rowOffset(y: number, now: number, distortion: BattleBackgroundDi
   return amplitude * Math.sin(frequency * finiteNumber(y) + speed * finiteNumber(now) / 1000);
 }
 
+export function normalizeDistortionMode(kind: string | undefined): DistortionMode {
+  if (!kind) {
+    return "none";
+  }
+  const normalized = kind
+    .trim()
+    .toLowerCase()
+    .replace(/[,_-]+/g, " ")
+    .replace(/\s+/g, " ");
+  if (!normalized || normalized === "none" || normalized.includes("unknown")) {
+    return "none";
+  }
+  const tokens = new Set(normalized.split(" "));
+  if (tokens.has("horizontal")) {
+    return tokens.has("interlaced") ? "horizontal-interlaced" : "horizontal-smooth";
+  }
+  if (tokens.has("vertical")) {
+    return "vertical-compression";
+  }
+  return "none";
+}
+
+export function rowSampleOffsets(
+  mode: DistortionMode,
+  y: number,
+  now: number,
+  distortion: BattleBackgroundDistortion | undefined,
+  scrollX: number,
+  scrollY: number,
+  width: number,
+  height: number
+): BattleBackgroundRowSample {
+  const shift = rowOffset(y, now, distortion);
+  const safeWidth = Math.max(1, Math.floor(finiteNumber(width)));
+  const safeHeight = Math.max(1, Math.floor(finiteNumber(height)));
+  let sourceX = finiteNumber(scrollX);
+  let sourceY = finiteNumber(y) + finiteNumber(scrollY);
+
+  if (mode === "horizontal-smooth") {
+    sourceX += shift;
+  } else if (mode === "horizontal-interlaced") {
+    sourceX += Math.floor(finiteNumber(y)) % 2 === 0 ? shift : -shift;
+  } else if (mode === "vertical-compression") {
+    sourceY += shift;
+  }
+
+  return {
+    sourceX: wrapInteger(sourceX, safeWidth),
+    sourceY: wrapInteger(sourceY, safeHeight)
+  };
+}
+
 export function hasAnimatedBattleBackground(background: BattleBackground | undefined): boolean {
   if (!background) {
     return false;
   }
   const scroll = background.scroll;
   const distortion = background.distortion;
+  const mode = normalizeDistortionMode(distortion?.kind);
   return Boolean(
     (scroll && (!isZero(scroll.x) || !isZero(scroll.y))) ||
-    (distortion && distortion.amplitude > 0 && distortion.frequency > 0 && !isZero(distortion.speed))
+    (distortion && mode !== "none" && distortion.amplitude > 0 && distortion.frequency > 0 && !isZero(distortion.speed))
   );
 }
 
@@ -144,17 +210,18 @@ function drawBattleBackgroundFrame(
   const scroll = scrollOffset(now, background.scroll);
   const scrollX = wrapNumber(scroll.x, width);
   const scrollY = wrapNumber(scroll.y, height);
+  const mode = normalizeDistortionMode(background.distortion?.kind);
 
   context.clearRect(0, 0, width, height);
   context.imageSmoothingEnabled = false;
   for (let y = 0; y < height; y += 1) {
-    const sourceY = wrapInteger(y + scrollY, height);
-    const sourceX = wrapInteger(scrollX + rowOffset(y, now, background.distortion), width);
+    const { sourceX, sourceY } = rowSampleOffsets(mode, y, now, background.distortion, scrollX, scrollY, width, height);
     drawWrappedRow(context, source, sourceX, sourceY, y, width);
   }
 
   return {
     animated: true,
+    mode,
     scrollX: roundDebug(scrollX),
     scrollY: roundDebug(scrollY),
     warpSample: roundDebug(rowOffset(Math.min(height - 1, WARP_SAMPLE_ROW), now, background.distortion))

@@ -4,114 +4,128 @@
   "entries": {
     "buzzword-shotgun-001": {
       "image": "assets/swagbound/battle-backgrounds/buzzword-shotgun-001.png",
+      "distortionType": "horizontal-smooth",
       "distortion": {
-        "amplitude": 6,
-        "frequency": 2.1,
-        "speed": 0.65
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
       }
     },
     "caves-001": {
       "image": "assets/swagbound/battle-backgrounds/caves-001.png",
+      "distortionType": "horizontal-smooth",
       "distortion": {
-        "amplitude": 6,
-        "frequency": 1.75,
-        "speed": 0.6
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
       }
     },
     "cloudcastle-dessert-oasis-001": {
       "image": "assets/swagbound/battle-backgrounds/cloudcastle-dessert-oasis-001.png",
+      "distortionType": "vertical-compression",
       "distortion": {
-        "amplitude": 5,
-        "frequency": 1.5,
-        "speed": 0.5
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
       }
     },
     "dance-system-seen-backwards-001": {
       "image": "assets/swagbound/battle-backgrounds/dance-system-seen-backwards-001.png",
+      "distortionType": "horizontal-interlaced",
       "distortion": {
-        "amplitude": 8,
-        "frequency": 2.8,
-        "speed": 0.95
+        "amplitude": 1,
+        "frequency": 0.05,
+        "speed": 0.85
       }
     },
     "pifella-2-22-you-can-not-redo-001": {
       "image": "assets/swagbound/battle-backgrounds/pifella-2-22-you-can-not-redo-001.png",
+      "distortionType": "vertical-compression",
       "distortion": {
-        "amplitude": 7,
-        "frequency": 1.85,
-        "speed": 0.65
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
       }
     },
     "pifella-2-parasite-chamber-001": {
       "image": "assets/swagbound/battle-backgrounds/pifella-2-parasite-chamber-001.png",
+      "distortionType": "horizontal-smooth",
       "distortion": {
-        "amplitude": 5,
-        "frequency": 1.4,
-        "speed": 0.5
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
       }
     },
     "pray4lowbie-001": {
       "image": "assets/swagbound/battle-backgrounds/pray4lowbie-001.png",
+      "distortionType": "vertical-compression",
       "distortion": {
-        "amplitude": 6,
-        "frequency": 2.05,
-        "speed": 0.7
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
       }
     },
     "projections-001": {
       "image": "assets/swagbound/battle-backgrounds/projections-001.png",
+      "distortionType": "horizontal-smooth",
       "distortion": {
-        "amplitude": 8,
-        "frequency": 2.75,
-        "speed": 0.85
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
       }
     },
     "really-new-god-001": {
       "image": "assets/swagbound/battle-backgrounds/really-new-god-001.png",
+      "distortionType": "vertical-compression",
       "distortion": {
-        "amplitude": 8,
-        "frequency": 2.25,
-        "speed": 0.9
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
       }
     },
     "record-of-hyperwar-001": {
       "image": "assets/swagbound/battle-backgrounds/record-of-hyperwar-001.png",
+      "distortionType": "horizontal-interlaced",
       "distortion": {
-        "amplitude": 8,
-        "frequency": 3.1,
-        "speed": 1.05
+        "amplitude": 1,
+        "frequency": 0.05,
+        "speed": 0.85
       }
     },
     "schizobanners-001": {
       "image": "assets/swagbound/battle-backgrounds/schizobanners-001.png",
+      "distortionType": "horizontal-interlaced",
       "distortion": {
-        "amplitude": 8,
-        "frequency": 2.6,
-        "speed": 0.9
+        "amplitude": 1,
+        "frequency": 0.05,
+        "speed": 0.85
       }
     },
     "summon-something-4-002": {
       "image": "assets/swagbound/battle-backgrounds/summon-something-4-002.png",
+      "distortionType": "vertical-compression",
       "distortion": {
-        "amplitude": 8,
-        "frequency": 2.35,
-        "speed": 0.8
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
       }
     },
     "syntax-ruins-archive-quotes-log-001": {
       "image": "assets/swagbound/battle-backgrounds/syntax-ruins-archive-quotes-log-001.png",
+      "distortionType": "horizontal-interlaced",
       "distortion": {
-        "amplitude": 7,
-        "frequency": 2.1,
-        "speed": 0.65
+        "amplitude": 1,
+        "frequency": 0.05,
+        "speed": 0.85
       }
     },
     "toji-a-001": {
       "image": "assets/swagbound/battle-backgrounds/toji-a-001.png",
+      "distortionType": "horizontal-smooth",
       "distortion": {
-        "amplitude": 6,
-        "frequency": 1.7,
-        "speed": 0.55
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
       }
     }
   },
