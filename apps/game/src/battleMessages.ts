@@ -5,7 +5,7 @@ export function composeBattleStepLines(details: BattleRoundStepNarrationDetails)
     case "skip":
       return [];
     case "attack":
-      return composeAttackLines(details.attackerName, details.targetName, details.damage, details.missed);
+      return composeAttackLines(details);
     case "psi":
       return composePsiLines(details);
     case "item":
@@ -17,27 +17,27 @@ export function composeBattleStepLines(details: BattleRoundStepNarrationDetails)
     case "spy":
     case "mirror":
       return preferredMessageLines(details) || composeAttackLines(
-        details.attackerName,
-        details.targetName,
-        details.damage,
-        details.missed
+        details
       );
     case "run":
       return [details.fled ? `${details.attackerName} ran away!` : `${details.attackerName} couldn't escape!`];
   }
 }
 
-function composeAttackLines(
-  attackerName: string,
-  targetName: string | undefined,
-  damage: number | undefined,
-  missed: boolean | undefined
-): string[] {
-  const opener = `${attackerName}'s attack!`;
-  if (missed || !damage || damage <= 0) {
-    return [opener, targetName ? `${targetName} dodged!` : "It missed!"];
+function composeAttackLines(details: BattleRoundStepNarrationDetails): string[] {
+  const opener = `${details.attackerName}'s attack!`;
+  if (details.missed || !details.damage || details.damage <= 0) {
+    return [opener, details.targetName ? `${details.targetName} dodged!` : "It missed!"];
   }
-  return [opener, `${damage} HP of damage to ${targetName ?? "the target"}!`];
+  const lines = [opener];
+  if (details.smash) {
+    lines.push("SMAAAASH!!");
+  }
+  lines.push(`${details.damage} HP of damage to ${details.targetName ?? "the target"}!`);
+  if (details.gutsSurvived) {
+    lines.push(`${details.targetName ?? "The target"} endured the blow!`);
+  }
+  return lines;
 }
 
 function composePsiLines(details: BattleRoundStepNarrationDetails): string[] {

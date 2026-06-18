@@ -14,6 +14,7 @@ import {
   outcome,
   PLAYER_DEFAULTS,
   psiPpCost,
+  resolvePhysicalAttackDamage,
   resolveDefaultBashTurn,
   resolveDefendTurn,
   resolveEnemyActionTurn,
@@ -63,6 +64,83 @@ describe("battle damage", () => {
     expect(damage(player, enemyCombatant, () => 0)).toBe(16);
     expect(damage(player, enemyCombatant, () => 0.5)).toBe(18);
     expect(damage(player, enemyCombatant, () => 1)).toBe(19);
+  });
+
+  it("misses physical attacks when evasion beats the seeded roll", () => {
+    const attacker = buildPlayerCombatant({ offense: 40, speed: 1 });
+    const defender = buildEnemyCombatant(enemy(90, "FAST_TARGET", { defense: 4, speed: 250 }));
+
+    const result = resolvePhysicalAttackDamage(attacker, defender, () => 0.5);
+
+    expect(result).toEqual({
+      damage: 0,
+      missed: true,
+      smash: false,
+      gutsSurvived: false
+    });
+  });
+
+  it("uses attacker Guts for SMAAAASH damage", () => {
+    const attacker = buildPlayerCombatant({
+      offense: 30,
+      speed: 20,
+      statBonuses: { guts: 500 }
+    });
+    const defender = buildEnemyCombatant(enemy(91, "SMASH_TARGET", { defense: 10, speed: 1 }));
+
+    const result = resolvePhysicalAttackDamage(attacker, defender, sequenceRng([1, 0.5]));
+
+    expect(result).toMatchObject({
+      damage: 80,
+      missed: false,
+      smash: true,
+      gutsSurvived: false
+    });
+  });
+
+  it("halves a SMAAAASH against a defending target", () => {
+    const attacker = buildPlayerCombatant({
+      offense: 30,
+      speed: 20,
+      statBonuses: { guts: 500 }
+    });
+    const defender = {
+      ...buildEnemyCombatant(enemy(92, "DEFENDING_TARGET", { defense: 10, speed: 1 })),
+      defending: true
+    };
+
+    const result = resolvePhysicalAttackDamage(attacker, defender, sequenceRng([1, 0.5]));
+
+    expect(result).toMatchObject({
+      damage: 40,
+      smash: true
+    });
+  });
+
+  it("uses defender Guts to stop lethal enemy physical damage at one HP", () => {
+    let battle = createBattleState(enemy(93, "LETHAL_ENEMY", {
+      offense: 50,
+      actions: actionSet(enemyAction(930, 1, 1))
+    }), {
+      maxHp: 10,
+      defense: 0,
+      statBonuses: { guts: 500 }
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      hp: setTarget({ ...battle.party[0].hp, displayed: 10, target: 10, isRolling: false }, 10)
+    });
+
+    const result = resolveEnemyActionTurn(battle, actor("enemy", 0), sequenceRng([1, 1, 0.5, 0]));
+
+    expect(result).toMatchObject({
+      amount: 9,
+      effectKind: "physical",
+      missed: false,
+      smash: false,
+      gutsSurvived: true
+    });
+    expect(result.state.party[0].hp.target).toBe(1);
   });
 });
 
@@ -427,6 +505,19 @@ describe("battle PSI and goods resolution", () => {
     expect(result.state.enemies[0].hp.isRolling).toBe(false);
   });
 
+  it("keeps offensive PSI from using the physical miss pipeline", () => {
+    const battle = createBattleState(enemy(94, "FAST_PSI_TARGET", { hp: 80, speed: 250 }), {
+      characters: characters([partyCharacterA])
+    });
+    const psi = syntheticPsi(105, "offense", "beta", [{ charId: 0, level: 1 }]);
+
+    const result = resolvePsiTurn(battle, actor("party", 0), psi, () => 0, { targetIndex: 0 });
+
+    expect(result.skipped).toBe(false);
+    expect(result.amount).toBeGreaterThan(0);
+    expect(result.state.enemies[0].hp.target).toBeLessThan(80);
+  });
+
   it("applies recovery PSI to a party member rolling meter and consumes PP", () => {
     let battle = createBattleState(opponentA, {
       characters: characters([partyCharacterA, partyCharacterB])
@@ -681,6 +772,11 @@ function drainDisplayedHp(battle: BattleState, target: BattleActor): BattleState
     }),
     15_000
   );
+}
+
+function sequenceRng(values: number[]): () => number {
+  let index = 0;
+  return () => values[index++] ?? values[values.length - 1] ?? 0.5;
 }
 
 function actor(side: "party" | "enemy", index: number): BattleActor {

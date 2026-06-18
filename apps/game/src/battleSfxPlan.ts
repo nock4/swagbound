@@ -51,9 +51,12 @@ export function battleStepSfx(details: BattleRoundStepNarrationDetails): BattleS
   return cues;
 }
 
-function impactCue(details: Pick<BattleRoundStepNarrationDetails, "damage" | "missed">): BattleSfxCue {
+function impactCue(details: Pick<BattleRoundStepNarrationDetails, "damage" | "missed" | "smash">): BattleSfxCue {
   if (details.missed || (details.damage ?? 0) <= 0) {
     return "miss";
+  }
+  if (details.smash) {
+    return "smash";
   }
   return (details.damage ?? 0) >= BIG_DAMAGE_SFX_THRESHOLD ? "smash" : "hit";
 }
