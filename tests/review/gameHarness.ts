@@ -10,6 +10,8 @@ export type FirstSceneDebug = {
   phase?:
     | "enter-transition"
     | "menu"
+    | "command-input"
+    | "execution"
     | "enemy-rolling"
     | "player-rolling"
     | "victory-summary"
@@ -28,6 +30,10 @@ export type FirstSceneDebug = {
   partyTargetIndex?: number;
   turnOrder?: Array<{ side: "party" | "enemy"; index: number }>;
   currentActor?: { side: "party" | "enemy"; index: number } | null;
+  inputMemberIndex?: number | null;
+  queuedCount?: number;
+  executionStepIndex?: number;
+  executionStepCount?: number;
   lastEnemyAction?: {
     enemyIndex: number;
     actionIndex: number;

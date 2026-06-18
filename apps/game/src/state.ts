@@ -18,6 +18,8 @@ export type SceneMode = "world" | "fallback" | "error" | "battle" | "intro";
 export type BattlePhase =
   | "enter-transition"
   | "menu"
+  | "command-input"
+  | "execution"
   | "enemy-rolling"
   | "player-rolling"
   | "victory-summary"
@@ -99,6 +101,10 @@ export type BattleDebug = {
   partyTargetIndex: number;
   turnOrder: BattleActorDebug[];
   currentActor: BattleActorDebug | null;
+  inputMemberIndex: number | null;
+  queuedCount: number;
+  executionStepIndex: number;
+  executionStepCount: number;
   lastEnemyAction: LastEnemyActionDebug | null;
   party: BattleCombatantDebug[];
   enemies: BattleEnemyCombatantDebug[];
