@@ -1,0 +1,122 @@
+{
+  "schema": "swagbound.enemy-overrides.v1",
+  "byEnemyId": {
+    "1": {
+      "name": "Faithful Servants"
+    },
+    "5": {
+      "name": "Edible Demon"
+    },
+    "6": {
+      "name": "Demonfella II"
+    },
+    "7": {
+      "name": "Happy Camper"
+    },
+    "8": {
+      "name": "Knitkitmori"
+    },
+    "9": {
+      "name": "Solfis"
+    },
+    "22": {
+      "name": "Cryptic Kids"
+    },
+    "24": {
+      "name": "Milardio"
+    },
+    "25": {
+      "name": "Pifella"
+    },
+    "32": {
+      "name": "Paingelz"
+    },
+    "37": {
+      "name": "Malady"
+    },
+    "51": {
+      "name": "Wifeystation"
+    },
+    "54": {
+      "name": "Returnless King"
+    },
+    "55": {
+      "name": "Signal Stutter"
+    },
+    "57": {
+      "name": "Ethereal Sols"
+    },
+    "64": {
+      "name": "Cinder Cap"
+    },
+    "65": {
+      "name": "Mifella 2"
+    },
+    "81": {
+      "name": "Ushanka Shade"
+    },
+    "88": {
+      "name": "Tojiba Disc Buddy"
+    },
+    "98": {
+      "name": "Heavy Liquid Graphic"
+    },
+    "111": {
+      "name": "Bat Poncho"
+    },
+    "113": {
+      "name": "Plastic Fool"
+    },
+    "117": {
+      "name": "Collection 2 for Solana"
+    },
+    "118": {
+      "name": "Ushanka Shade"
+    },
+    "121": {
+      "name": "Sawtooth Bun"
+    },
+    "122": {
+      "name": "Runway Show"
+    },
+    "129": {
+      "name": "Hexp Hood"
+    },
+    "132": {
+      "name": "Returnless King"
+    },
+    "134": {
+      "name": "Question Marketeer"
+    },
+    "139": {
+      "name": "Swag Raccoon"
+    },
+    "144": {
+      "name": "Cryptic Kids 2"
+    },
+    "145": {
+      "name": "Tape Code"
+    },
+    "150": {
+      "name": "Unicornio"
+    },
+    "157": {
+      "name": "Gay Mouse Crisis Center"
+    },
+    "158": {
+      "name": "Goobdle-S"
+    },
+    "159": {
+      "name": "AI Slop"
+    },
+    "209": {
+      "name": "Edible Demon"
+    },
+    "210": {
+      "name": "Knitkitmori"
+    },
+    "211": {
+      "name": "Sawtooth Bun"
+    }
+  }
+}
