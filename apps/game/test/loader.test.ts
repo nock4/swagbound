@@ -296,6 +296,26 @@ describe("loadGameData", () => {
 
     expect(data.psi?.psi.map((entry) => entry.name)).toEqual(["Wake Up", "Source Skill B"]);
   });
+
+  it("loads battle rules from the generated overlay", async () => {
+    vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
+      const path = String(url);
+      if (path.endsWith("/battle-rules.json")) {
+        return jsonResponse({
+          schema: "swagbound.battle-rules.v1",
+          unescapableGroups: [450]
+        });
+      }
+      throw new Error(`No fixture for ${path}`);
+    }));
+
+    const data = await loadGameData(syntheticManifest());
+
+    expect(data.battleRules).toEqual({
+      schema: "swagbound.battle-rules.v1",
+      unescapableGroups: [450]
+    });
+  });
 });
 
 function character(id: number, name: string): CharacterCollection["characters"][number] {

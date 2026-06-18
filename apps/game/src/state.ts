@@ -100,6 +100,7 @@ export type BattleDebug = {
   phase: BattlePhase;
   transitionPhase: BattleTransitionPhase;
   menuIndex: number;
+  roundNumber: number;
   commandIndex: number;
   command: BattleCommand;
   submenu: "command" | "psi" | "goods" | "target";

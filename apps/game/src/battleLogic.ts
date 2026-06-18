@@ -67,6 +67,7 @@ export type BattleState = {
   party: Combatant[];
   enemies: Combatant[];
   wallet: number;
+  roundNumber: number;
 };
 
 export type PlayerCombatantOptions = Partial<Pick<Combatant, "name" | "level" | "maxHp" | "offense" | "defense" | "speed">> & {
@@ -87,6 +88,7 @@ export type BattleStateOptions = PlayerCombatantOptions & {
   partyOptions?: PlayerCombatantOptions[];
   enemyOptions?: EnemyCombatantOptions[];
   wallet?: number;
+  roundNumber?: number;
 };
 
 export type TurnResolution = {
@@ -342,7 +344,8 @@ export function createBattleState(enemies: BattleEnemy | BattleEnemy[], options:
   return {
     party,
     enemies: enemyList.map((enemy, index) => buildEnemyCombatant(enemy, options.enemyOptions?.[index])),
-    wallet: stat(options.wallet ?? party.reduce((sum, member) => sum + member.money, 0))
+    wallet: stat(options.wallet ?? party.reduce((sum, member) => sum + member.money, 0)),
+    roundNumber: Math.max(1, stat(options.roundNumber ?? 1))
   };
 }
 
@@ -599,6 +602,23 @@ export function beginCombatantTurn(state: BattleState, actorInput: BattleActor |
     ...combatant,
     defending: false
   });
+}
+
+export function advanceBattleRound(state: BattleState): BattleState {
+  return {
+    ...clearPartyDefending(state),
+    roundNumber: Math.max(1, stat(state.roundNumber) + 1)
+  };
+}
+
+export function clearPartyDefending(state: BattleState): BattleState {
+  if (!state.party.some((member) => member.defending)) {
+    return state;
+  }
+  return {
+    ...state,
+    party: state.party.map((member) => member.defending ? { ...member, defending: false } : member)
+  };
 }
 
 export function defaultTargetIndexForActor(
@@ -872,7 +892,8 @@ export function applyVictoryRewards(
     ...state,
     party: state.party.map(cloneCombatant),
     enemies: state.enemies.map(cloneCombatant),
-    wallet: stat(state.wallet) + moneyGained
+    wallet: stat(state.wallet) + moneyGained,
+    roundNumber: Math.max(1, stat(state.roundNumber))
   };
 
   const drops: BattleDropSummary[] = [];
@@ -956,7 +977,8 @@ export function tickBattleMeters(state: BattleState, dtMs: number): BattleState 
   return {
     party: state.party.map((combatant) => ({ ...combatant, hp: tick(combatant.hp, dtMs) })),
     enemies: state.enemies.map((combatant) => ({ ...combatant, hp: tick(combatant.hp, dtMs) })),
-    wallet: state.wallet
+    wallet: state.wallet,
+    roundNumber: state.roundNumber
   };
 }
 
@@ -1005,9 +1027,23 @@ export function normalizeActor(actor: BattleActor | "player" | "enemy"): BattleA
 }
 
 function applyDamage(combatant: Combatant, amount: number): Combatant {
+  const target = Math.max(0, combatant.hp.target - Math.max(0, Math.floor(amount)));
+  const hp = setTarget(combatant.hp, target);
+  if (combatant.isEnemy && target <= 0) {
+    return {
+      ...combatant,
+      hp: {
+        ...hp,
+        displayed: 0,
+        target: 0,
+        isRolling: false,
+        stepRemainder: 0
+      }
+    };
+  }
   return {
     ...combatant,
-    hp: setTarget(combatant.hp, Math.max(0, combatant.hp.target - Math.max(0, Math.floor(amount))))
+    hp
   };
 }
 

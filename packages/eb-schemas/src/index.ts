@@ -861,6 +861,11 @@ export const BattleDataSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+export const BattleRulesSchema = z.object({
+  schema: z.literal("swagbound.battle-rules.v1"),
+  unescapableGroups: z.array(z.number().int().nonnegative())
+}).strict();
+
 export const FontGlyphSheetSchema = z.object({
   id: z.number().int().nonnegative(),
   file: z.string(),
@@ -1181,6 +1186,7 @@ export type EncounterMapGroup = z.infer<typeof EncounterMapGroupSchema>;
 export type EncounterSector = z.infer<typeof EncounterSectorSchema>;
 export type Encounters = z.infer<typeof EncountersSchema>;
 export type BattleData = z.infer<typeof BattleDataSchema>;
+export type BattleRules = z.infer<typeof BattleRulesSchema>;
 export type BattleEnemy = z.infer<typeof BattleEnemySchema>;
 export type BattleGroup = z.infer<typeof BattleGroupSchema>;
 export type BattleBackground = z.infer<typeof BattleBackgroundSchema>;

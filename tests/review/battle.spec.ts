@@ -37,6 +37,7 @@ type BattleDebug = {
     | "flee";
   transitionPhase: "none" | "enter" | "summary" | "exit";
   menuIndex: number;
+  roundNumber: number;
   commandIndex: number;
   command: "BASH" | "GOODS" | "AUTO" | "PSI" | "SPY" | "PRAY" | "MIRROR" | "DEFEND" | "RUN";
   targetIndex: number;
@@ -620,6 +621,8 @@ async function dismissVictorySummary(page: Page): Promise<BattleDebug> {
 
 function expectBattleNumbers(state: BattleDebug): void {
   expect(Number.isFinite(state.menuIndex)).toBe(true);
+  expect(Number.isInteger(state.roundNumber)).toBe(true);
+  expect(state.roundNumber).toBeGreaterThanOrEqual(1);
   expect(Number.isFinite(state.targetIndex)).toBe(true);
   expect(state.inputMemberIndex === null || Number.isInteger(state.inputMemberIndex)).toBe(true);
   expect(Number.isInteger(state.queuedCount)).toBe(true);

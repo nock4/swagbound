@@ -7,6 +7,7 @@ import {
   type BattleData,
   type BattleEnemy,
   type BattleGroup,
+  type BattleRules,
   type CharacterCollection,
   type FontCollection,
   type ItemCollection,
@@ -18,6 +19,7 @@ import {
 } from "@eb/schemas";
 import {
   applyVictoryRewards,
+  advanceBattleRound,
   buildVictorySummaryViewModel,
   combatantAt,
   commandsForCharId,
@@ -41,6 +43,7 @@ import {
   nextInputState,
   partyInputOrder,
   resolveRoundStep,
+  resolveRoundStartPriority,
   type BattleRoundStepNarrationDetails,
   type BattleRoundStepResult,
   type BattleRoundInputState,
@@ -315,6 +318,7 @@ type BattleMenuTextRole = "command" | "submenu" | "description" | "execution";
 
 export class BattleScene extends Phaser.Scene {
   private battleData_!: BattleData;
+  private battleRules_?: BattleRules;
   private group_!: BattleGroup;
   private battle_!: BattleState;
   private items_?: ItemCollection;
@@ -342,6 +346,7 @@ export class BattleScene extends Phaser.Scene {
   private inputState_: BattleRoundInputState = initialBattleRoundInputState();
   private queuedCommands_: QueuedCommand[] = [];
   private executionOrder_: BattleActor[] = [];
+  private priorityStep_: BattleRoundStepResult | null = null;
   private executionStepIndex_ = 0;
   private executionMessageLines_: string[] = [];
   private pendingFlee_ = false;
@@ -396,12 +401,14 @@ export class BattleScene extends Phaser.Scene {
     window?: WindowCollection;
     spriteOverrides?: SpriteOverrides;
     backgroundOverrides?: BackgroundOverrides;
+    battleRules?: BattleRules;
     partyMembers?: PartyMember[];
     wallet?: number;
     returnTo?: BattleReturnContext;
     battleSfx?: BattleSfx;
   }): void {
     this.battleData_ = data.battleData;
+    this.battleRules_ = data.battleRules ?? data.returnTo?.gameData.battleRules;
     this.group_ = selectBattleGroup(data.battleData, data.groupId);
     this.items_ = data.items;
     this.psi_ = data.psi;
@@ -449,6 +456,7 @@ export class BattleScene extends Phaser.Scene {
     this.inputState_ = initialBattleRoundInputState();
     this.queuedCommands_ = [];
     this.executionOrder_ = [];
+    this.priorityStep_ = null;
     this.executionStepIndex_ = 0;
     this.executionMessageLines_ = [];
     this.pendingFlee_ = false;
@@ -651,6 +659,7 @@ export class BattleScene extends Phaser.Scene {
     this.inputState_ = initialBattleRoundInputState();
     this.queuedCommands_ = [];
     this.executionOrder_ = [];
+    this.priorityStep_ = null;
     this.executionStepIndex_ = 0;
     this.executionMessageLines_ = [];
     this.pendingFlee_ = false;
@@ -662,8 +671,17 @@ export class BattleScene extends Phaser.Scene {
 
   private beginExecutionPhase(): void {
     this.queuedCommands_ = [...this.inputState_.queue];
+    const priority = resolveRoundStartPriority(this.battle_, this.queuedCommands_, this.rng_, {
+      groupId: this.group_.id,
+      rules: this.battleRules_
+    });
+    this.battle_ = priority.state;
+    this.queuedCommands_ = [...priority.queued];
+    this.priorityStep_ = priority.priorityStep ?? null;
     this.executionOrder_ = jitteredTurnOrder(this.battle_, this.queuedCommands_, this.rng_);
-    this.roundOrder_ = this.executionOrder_;
+    this.roundOrder_ = this.priorityStep_
+      ? [this.priorityStep_.actor, ...this.executionOrder_]
+      : this.executionOrder_;
     this.executionStepIndex_ = 0;
     this.executionMessageLines_ = [];
     this.pendingFlee_ = false;
@@ -674,6 +692,10 @@ export class BattleScene extends Phaser.Scene {
     this.actionDelayMs_ = 0;
     this.nextHpTickSfxAtMs_ = 0;
     if (this.executionOrder_.length === 0) {
+      if (this.priorityStep_) {
+        this.advanceExecutionStep();
+        return;
+      }
       this.finishExecutionRound();
       return;
     }
@@ -714,6 +736,20 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     if (this.handleBattleOutcome()) {
+      return;
+    }
+    if (this.priorityStep_) {
+      const result = this.priorityStep_;
+      this.priorityStep_ = null;
+      this.currentActor_ = result.actor;
+      this.menuMessage_ = result.message;
+      this.executionMessageLines_ = composeBattleStepLines(result.details);
+      this.playBattleStepSfx(result.details);
+      this.triggerBattleStepFx(result);
+      this.actionDelayMs_ = this.executionMessageLines_.length > 0 ? ACTION_ADVANCE_DELAY_MS : 0;
+      if (result.fled) {
+        this.pendingFlee_ = true;
+      }
       return;
     }
 
@@ -764,6 +800,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.handleBattleOutcome()) {
       return;
     }
+    this.battle_ = advanceBattleRound(this.battle_);
     this.executionMessageLines_ = [];
     this.pendingFlee_ = false;
     this.beginCommandInputRound();
@@ -2369,6 +2406,7 @@ export class BattleScene extends Phaser.Scene {
       phase: this.phase_,
       transitionPhase: this.transitionPhase_,
       menuIndex: this.commandIndex_,
+      roundNumber: this.battle_.roundNumber,
       commandIndex: this.commandIndex_,
       command: this.currentCommand(),
       submenu: this.submenu_,

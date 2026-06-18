@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { BattleEnemy, CharacterCollection, CharacterData, ItemData, PsiData } from "@eb/schemas";
 import {
   BATTLE_COMMANDS,
+  advanceBattleRound,
   beginCombatantTurn,
   buildEnemyCombatant,
   buildPlayerCombatant,
@@ -125,6 +126,20 @@ describe("battle player model", () => {
       speed: PLAYER_DEFAULTS.speed,
       isEnemy: false
     });
+    expect(battle.roundNumber).toBe(1);
+  });
+
+  it("advances the battle round and clears party defending at the round boundary", () => {
+    let battle = createBattleState(opponentA);
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      defending: true
+    });
+
+    const next = advanceBattleRound(battle);
+
+    expect(next.roundNumber).toBe(2);
+    expect(next.party[0].defending).toBe(false);
   });
 });
 
@@ -394,7 +409,7 @@ describe("battle turn resolution", () => {
 });
 
 describe("battle PSI and goods resolution", () => {
-  it("applies offensive PSI to an enemy rolling meter and consumes PP", () => {
+  it("applies lethal offensive PSI to an enemy immediately and consumes PP", () => {
     const battle = createBattleState(opponentA, {
       characters: characters([partyCharacterA])
     });
@@ -407,9 +422,9 @@ describe("battle PSI and goods resolution", () => {
     expect(result.amount).toBe(42);
     expect(result.ppCost).toBe(psiPpCost(psi));
     expect(result.state.party[0].pp).toBe(18 - psiPpCost(psi));
-    expect(result.state.enemies[0].hp.displayed).toBe(24);
+    expect(result.state.enemies[0].hp.displayed).toBe(0);
     expect(result.state.enemies[0].hp.target).toBe(0);
-    expect(result.state.enemies[0].hp.isRolling).toBe(true);
+    expect(result.state.enemies[0].hp.isRolling).toBe(false);
   });
 
   it("applies recovery PSI to a party member rolling meter and consumes PP", () => {

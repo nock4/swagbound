@@ -2,6 +2,7 @@ import { access, copyFile, mkdir, readFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
+  BattleRulesSchema,
   BackgroundOverridesSchema,
   EnemyOverridesSchema,
   PsiOverridesSchema,
@@ -34,6 +35,8 @@ export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
 export const PSI_OVERRIDES_OUTPUT = "psi-overrides.json";
 export const ENEMY_OVERRIDES_SOURCE = "content/enemy-overrides.json";
 export const ENEMY_OVERRIDES_OUTPUT = "enemy-overrides.json";
+export const BATTLE_RULES_SOURCE = "content/battle-rules.json";
+export const BATTLE_RULES_OUTPUT = "battle-rules.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
 
 /**
@@ -67,6 +70,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateBackgroundOverrideImages(BACKGROUND_OVERRIDES_SOURCE);
   await validatePsiOverrides(PSI_OVERRIDES_SOURCE);
   await validateEnemyOverrides(ENEMY_OVERRIDES_SOURCE);
+  await validateBattleRules(BATTLE_RULES_SOURCE);
   await Promise.all([
     copyJsonToGenerated(ADDED_NPCS_SOURCE, out, ADDED_NPCS_OUTPUT),
     copyJsonToGenerated(CUSTOM_DIALOGUE_SOURCE, out, CUSTOM_DIALOGUE_OUTPUT),
@@ -76,7 +80,8 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
-    copyJsonToGenerated(ENEMY_OVERRIDES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT)
+    copyJsonToGenerated(ENEMY_OVERRIDES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(BATTLE_RULES_SOURCE, out, BATTLE_RULES_OUTPUT)
   ]);
 }
 
@@ -86,6 +91,10 @@ async function validatePsiOverrides(source: string): Promise<void> {
 
 async function validateEnemyOverrides(source: string): Promise<void> {
   EnemyOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateBattleRules(source: string): Promise<void> {
+  BattleRulesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateSpriteOverrideImages(source: string): Promise<void> {

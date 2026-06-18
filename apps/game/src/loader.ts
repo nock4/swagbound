@@ -3,6 +3,7 @@ import {
   ADDED_NPC_MIN_ID,
   AddedNpcsSchema,
   BattleDataSchema,
+  BattleRulesSchema,
   BackgroundOverridesSchema,
   CharacterCollectionSchema,
   CharacterOverridesSchema,
@@ -34,6 +35,7 @@ import {
   type AddedNpcs,
   type BackgroundOverrides,
   type BattleData,
+  type BattleRules,
   type CharacterCollection,
   type CharacterOverrides,
   type CustomDialogue,
@@ -71,6 +73,7 @@ const ITEM_OVERRIDES_FILE = "item-overrides.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
 const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
+const BATTLE_RULES_FILE = "battle-rules.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -89,6 +92,7 @@ export type GameData = {
   teleportDestinations?: TeleportDestinations;
   encounters?: Encounters;
   battle?: BattleData;
+  battleRules?: BattleRules;
   font?: FontCollection;
   window?: WindowCollection;
   characters?: CharacterCollection;
@@ -149,6 +153,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     teleportDestinations,
     encounters,
     battle,
+    battleRules,
     enemyOverrides,
     font,
     window,
@@ -181,6 +186,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     manifest.files.battle
       ? loadJson(`/generated/${manifest.files.battle}`, BattleDataSchema)
       : Promise.resolve(undefined),
+    loadJson(`/generated/${BATTLE_RULES_FILE}`, BattleRulesSchema),
     loadJson(`/generated/${ENEMY_OVERRIDES_FILE}`, EnemyOverridesSchema),
     manifest.files.font
       ? loadJson(`/generated/${manifest.files.font}`, FontCollectionSchema)
@@ -229,6 +235,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     teleportDestinations,
     encounters,
     battle: resolvedBattle,
+    battleRules,
     font,
     window,
     characters: resolvedCharacters,

@@ -7,10 +7,14 @@ import {
   type BattleState
 } from "../src/battleLogic";
 import {
+  applyRoundStartGuardStance,
   jitteredTurnOrder,
+  MIN_RUN_SUCCESS_CHANCE,
   nextInputState,
   partyInputOrder,
+  resolveRoundStartPriority,
   resolveRoundStep,
+  runSuccessChance,
   type BattleRoundInputState,
   type QueuedCommand
 } from "../src/battleRound";
@@ -166,6 +170,8 @@ describe("resolveRoundStep", () => {
     });
     expect(result.state.party[0].pp).toBe(10);
     expect(result.state.enemies[0].hp.target).toBe(0);
+    expect(result.state.enemies[0].hp.displayed).toBe(0);
+    expect(result.details).toMatchObject({ targetDied: true });
   });
 
   it("dispatches GOODS through resolveItemTurn with a party target", () => {
@@ -205,9 +211,16 @@ describe("resolveRoundStep", () => {
 
   it("dispatches DEFEND, PRAY, MIRROR, RUN, enemy steps, and dead skips", () => {
     const defendBattle = createBattleState(opponentA, { characters: characters([partyA]) });
-    const defend = resolveRoundStep(defendBattle, actor("party", 0), { partySlot: 0, command: "DEFEND" }, () => 0.5);
+    const guarding = applyRoundStartGuardStance(defendBattle, [{ partySlot: 0, command: "DEFEND" }]);
+    const defend = resolveRoundStep(guarding, actor("party", 0), { partySlot: 0, command: "DEFEND" }, () => 0.5);
     expect(defend.skipped).toBe(false);
-    expect(defend.details).toMatchObject({ kind: "defend", attackerName: "PARTY_A", defended: true });
+    expect(defend.message).toBe("PARTY_A took a defensive stance.");
+    expect(defend.details).toMatchObject({
+      kind: "defend",
+      attackerName: "PARTY_A",
+      defended: true,
+      message: "PARTY_A took a defensive stance."
+    });
     expect(defend.state.party[0].defending).toBe(true);
 
     const prayBattle = createBattleState(opponentA, { characters: characters([partyA, partyB]) });
@@ -242,8 +255,9 @@ describe("resolveRoundStep", () => {
     let runBattle = createBattleState(opponentA, { characters: characters([partyA]) });
     runBattle = withCombatant(runBattle, actor("party", 0), { ...runBattle.party[0], defending: true });
     const run = resolveRoundStep(runBattle, actor("party", 0), { partySlot: 0, command: "RUN" }, () => 0.5);
-    expect(run.fled).toBe(true);
-    expect(run.details).toMatchObject({ kind: "run", attackerName: "PARTY_A", fled: true });
+    expect(run.fled).toBeUndefined();
+    expect(run.skipped).toBe(true);
+    expect(run.message).toBe("Run is resolved at round start.");
     expect(run.state.party[0].defending).toBe(false);
     expect(run.state.enemies[0].hp.target).toBe(30);
 
@@ -269,6 +283,160 @@ describe("resolveRoundStep", () => {
     expect(dead.skipped).toBe(true);
     expect(dead.details).toMatchObject({ kind: "skip", attackerName: "PARTY_A" });
     expect(dead.state).toBe(deadBattle);
+  });
+});
+
+describe("round-start priority layer", () => {
+  it("sets Guard before speed order so a slow guarder is protected from a faster enemy", () => {
+    const battle = createBattleState(enemy(40, "FAST_ENEMY", {
+      offense: 20,
+      actions: actionSet(enemyAction(400, 1, 1))
+    }), {
+      characters: characters([character(0, "SLOW_GUARD", { speed: 1, defense: 8 })]),
+      enemyOptions: [{ speed: 30 }]
+    });
+    const queued: QueuedCommand[] = [{ partySlot: 0, command: "DEFEND" }];
+
+    const priority = resolveRoundStartPriority(battle, queued, () => 0.5);
+    const order = jitteredTurnOrder(priority.state, priority.queued, sequenceRng([0.5, 0.5]));
+    const enemyResult = resolveRoundStep(priority.state, actor("enemy", 0), undefined, () => 0.5);
+    const defendResult = resolveRoundStep(enemyResult.state, actor("party", 0), queued[0], () => 0.5);
+
+    expect(priority.state.party[0].defending).toBe(true);
+    expect(order[0]).toEqual(actor("enemy", 0));
+    expect(enemyResult.resolution).toMatchObject({ amount: 8 });
+    expect(enemyResult.state.party[0].hp.target).toBe(32);
+    expect(defendResult.message).toBe("SLOW_GUARD took a defensive stance.");
+    expect(defendResult.state.party[0].defending).toBe(true);
+  });
+
+  it("resolves failed Run once at round start, forfeits party actions, and leaves enemies acting", () => {
+    const battle = createBattleState(enemy(41, "NO_ESCAPE_ENEMY", {
+      offense: 10,
+      speed: 40,
+      actions: actionSet(enemyAction(410, 1, 1))
+    }), {
+      characters: characters([partyA, partyB])
+    });
+    const queued: QueuedCommand[] = [
+      { partySlot: 0, command: "RUN" },
+      { partySlot: 1, command: "BASH", target: { side: "enemy", index: 0 } }
+    ];
+
+    const priority = resolveRoundStartPriority(battle, queued, () => 0.9);
+    const order = jitteredTurnOrder(priority.state, priority.queued, () => 0.5);
+    const enemyResult = resolveRoundStep(priority.state, order[0], undefined, () => 0.5);
+
+    expect(priority.runAttempt).toMatchObject({
+      attempted: true,
+      actor: actor("party", 0),
+      blocked: false,
+      success: false
+    });
+    expect(priority.runAttempt?.chance).toBe(MIN_RUN_SUCCESS_CHANCE);
+    expect(priority.priorityStep?.message).toBe("PARTY_A couldn't escape!");
+    expect(priority.priorityStep?.fled).toBe(false);
+    expect(priority.queued).toEqual([]);
+    expect(order).toEqual([actor("enemy", 0)]);
+    expect(enemyResult.skipped).toBe(false);
+    expect(enemyResult.state.party[0].hp.target).toBeLessThan(battle.party[0].hp.target);
+    expect(enemyResult.resolution && "outcome" in enemyResult.resolution ? enemyResult.resolution.outcome : "ongoing").toBe("ongoing");
+  });
+
+  it("resolves successful Run at round start as a flee priority step", () => {
+    const battle = createBattleState(opponentA, {
+      characters: characters([character(0, "FAST_RUNNER", { speed: 90 })]),
+      roundNumber: 2
+    });
+
+    const priority = resolveRoundStartPriority(
+      battle,
+      [{ partySlot: 0, command: "RUN" }],
+      () => 0.1
+    );
+
+    expect(priority.runAttempt).toMatchObject({
+      attempted: true,
+      actor: actor("party", 0),
+      blocked: false,
+      success: true
+    });
+    expect(priority.priorityStep?.fled).toBe(true);
+    expect(priority.priorityStep?.details).toMatchObject({
+      kind: "run",
+      attackerName: "FAST_RUNNER",
+      fled: true
+    });
+    expect(priority.queued).toEqual([]);
+  });
+
+  it("always blocks Run against unescapable battle group 450", () => {
+    const battle = createBattleState(opponentA, { characters: characters([partyA]), roundNumber: 5 });
+    const priority = resolveRoundStartPriority(
+      battle,
+      [{ partySlot: 0, command: "RUN" }],
+      () => 0,
+      { groupId: 450, rules: { unescapableGroups: [450] } }
+    );
+
+    expect(runSuccessChance(battle)).toBeGreaterThan(0);
+    expect(priority.runAttempt).toMatchObject({
+      attempted: true,
+      actor: actor("party", 0),
+      groupId: 450,
+      blocked: true,
+      chance: 0,
+      roll: null,
+      success: false
+    });
+    expect(priority.priorityStep?.message).toBe("PARTY_A couldn't escape!");
+    expect(priority.queued).toEqual([]);
+  });
+
+  it("latches a mortally hit enemy dead immediately so it cannot act later that round", () => {
+    const battle = createBattleState(enemy(42, "FRAGILE_ENEMY", {
+      hp: 5,
+      speed: 1,
+      actions: actionSet(enemyAction(420, 1, 1))
+    }), {
+      characters: characters([character(0, "FAST_PARTY", { offense: 24, speed: 40 })])
+    });
+    const queued: QueuedCommand[] = [
+      { partySlot: 0, command: "BASH", target: { side: "enemy", index: 0 } }
+    ];
+    const priority = resolveRoundStartPriority(battle, queued, () => 0.5);
+    const order = jitteredTurnOrder(priority.state, priority.queued, sequenceRng([0.5, 0.5]));
+
+    const partyResult = resolveRoundStep(priority.state, order[0], queued[0], () => 0.5);
+    const enemyResult = resolveRoundStep(partyResult.state, actor("enemy", 0), undefined, () => 0.5);
+
+    expect(order).toEqual([actor("party", 0), actor("enemy", 0)]);
+    expect(partyResult.details).toMatchObject({ targetDied: true });
+    expect(partyResult.state.enemies[0].hp).toMatchObject({ displayed: 0, target: 0, isRolling: false });
+    expect(enemyResult.skipped).toBe(true);
+    expect(enemyResult.state).toBe(partyResult.state);
+  });
+
+  it("preserves party mortal-survival: a target-zero member still acts while displayed HP is positive", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([partyA])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      hp: setTarget(battle.party[0].hp, 0)
+    });
+
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "BASH", target: { side: "enemy", index: 0 } },
+      () => 0.5
+    );
+
+    expect(battle.party[0].hp.displayed).toBeGreaterThan(0);
+    expect(battle.party[0].hp.target).toBe(0);
+    expect(result.skipped).toBe(false);
+    expect(result.state.enemies[0].hp.target).toBeLessThan(opponentA.hp);
   });
 });
 

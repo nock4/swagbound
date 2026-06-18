@@ -11,7 +11,6 @@ import {
   psiBattleKind,
   psiPpCost,
   resolveDefaultBashTurn,
-  resolveDefendTurn,
   resolveEnemyActionTurn,
   resolveItemTurn,
   resolveMirrorTurn,
@@ -19,6 +18,7 @@ import {
   resolvePsiTurn,
   resolveSpyTurn,
   resolveTurn,
+  withCombatant,
   type BattleActionResolution,
   type BattleActor,
   type BattleCommand,
@@ -99,6 +99,33 @@ export type BattleRoundStepResult = {
   details: BattleRoundStepNarrationDetails;
 };
 
+export type BattleRoundRules = {
+  unescapableGroups?: readonly number[];
+};
+
+export type BattleRoundStartPriorityOptions = {
+  groupId?: number;
+  rules?: BattleRoundRules;
+  minRunSuccessChance?: number;
+};
+
+export type BattleRoundRunAttempt = {
+  attempted: boolean;
+  actor: BattleActor;
+  groupId?: number;
+  blocked: boolean;
+  chance: number;
+  roll: number | null;
+  success: boolean;
+};
+
+export type BattleRoundStartPriorityResult = {
+  state: BattleState;
+  queued: QueuedCommand[];
+  priorityStep?: BattleRoundStepResult;
+  runAttempt?: BattleRoundRunAttempt;
+};
+
 export type BattleRoundInputSubmenu = "command" | "psi" | "goods" | "target-enemy" | "target-ally";
 
 export type BattleRoundInputState = {
@@ -125,6 +152,8 @@ export type BattleRoundInputTransition = {
   input: BattleRoundInputState;
   complete: boolean;
 };
+
+export const MIN_RUN_SUCCESS_CHANCE = 0.05;
 
 export function partyInputOrder(state: BattleState): BattleActor[] {
   return state.party.flatMap((combatant, index) =>
@@ -164,6 +193,90 @@ export function jitteredTurnOrder(
     .map((entry) => entry.actor);
 }
 
+export function applyRoundStartGuardStance(
+  state: BattleState,
+  queued: readonly QueuedCommand[]
+): BattleState {
+  let nextState = state;
+  for (const entry of queued) {
+    if (entry.command !== "DEFEND") {
+      continue;
+    }
+    const actor = { side: "party" as const, index: entry.partySlot };
+    const combatant = combatantAt(nextState, actor);
+    if (!combatant || !isCombatantAlive(combatant) || combatant.defending) {
+      continue;
+    }
+    nextState = withCombatant(nextState, actor, {
+      ...combatant,
+      defending: true
+    });
+  }
+  return nextState;
+}
+
+export function resolveRoundStartPriority(
+  state: BattleState,
+  queued: readonly QueuedCommand[],
+  rng: Rng,
+  options: BattleRoundStartPriorityOptions = {}
+): BattleRoundStartPriorityResult {
+  const guardedState = applyRoundStartGuardStance(state, queued);
+  const runActor = firstLivingQueuedRunActor(guardedState, queued);
+  if (!runActor) {
+    return { state: guardedState, queued: [...queued] };
+  }
+
+  const runner = combatantAt(guardedState, runActor);
+  const blocked = isUnescapableGroup(options.groupId, options.rules);
+  const chance = blocked
+    ? 0
+    : runSuccessChance(guardedState, guardedState.roundNumber, options.minRunSuccessChance);
+  const roll = blocked ? null : normalizedRoll(rng());
+  const success = !blocked && (roll ?? 1) < chance;
+  const message = success
+    ? `${runner?.name ?? "Someone"} ran away.`
+    : `${runner?.name ?? "Someone"} couldn't escape!`;
+
+  return {
+    state: guardedState,
+    queued: [],
+    priorityStep: {
+      state: guardedState,
+      message,
+      actor: runActor,
+      skipped: false,
+      fled: success,
+      details: {
+        kind: "run",
+        attackerName: runner?.name ?? "Someone",
+        message,
+        fled: success
+      }
+    },
+    runAttempt: {
+      attempted: true,
+      actor: runActor,
+      ...(options.groupId !== undefined ? { groupId: options.groupId } : {}),
+      blocked,
+      chance,
+      roll,
+      success
+    }
+  };
+}
+
+export function runSuccessChance(
+  state: BattleState,
+  roundNumber = state.roundNumber,
+  minSuccessChance = MIN_RUN_SUCCESS_CHANCE
+): number {
+  const partySpeed = highestLivingSpeed(state.party);
+  const enemySpeed = highestLivingSpeed(state.enemies);
+  const rawChance = (partySpeed - enemySpeed + 10 * Math.max(1, stat(roundNumber))) / 100;
+  return Math.max(clamp01(minSuccessChance), clamp01(rawChance));
+}
+
 export function resolveRoundStep(
   state: BattleState,
   actor: BattleActor,
@@ -174,6 +287,10 @@ export function resolveRoundStep(
   const combatant = combatantAt(state, actor);
   if (!combatant || !isCombatantAlive(combatant)) {
     return skippedRoundStep(state, actor);
+  }
+
+  if (actor.side === "party" && queued?.command === "DEFEND") {
+    return defendAnnouncementRoundStep(state, actor, combatant.name);
   }
 
   const turnState = beginCombatantTurn(state, actor);
@@ -223,9 +340,7 @@ export function resolveRoundStep(
       });
     }
     case "DEFEND":
-      return fromResolution(turnState, resolveDefendTurn(turnState, actor), {
-        command: queued.command
-      });
+      return defendAnnouncementRoundStep(turnState, actor, combatant.name);
     case "PRAY":
       return fromResolution(turnState, resolvePrayTurn(turnState, actor, rng), {
         command: queued.command
@@ -235,19 +350,7 @@ export function resolveRoundStep(
         command: queued.command
       });
     case "RUN":
-      return {
-        state: turnState,
-        message: `${combatant.name} ran away.`,
-        actor,
-        skipped: false,
-        fled: true,
-        details: {
-          kind: "run",
-          attackerName: combatant.name,
-          message: `${combatant.name} ran away.`,
-          fled: true
-        }
-      };
+      return skippedRoundStep(turnState, actor, "Run is resolved at round start.");
   }
 }
 
@@ -735,6 +838,27 @@ function skippedRoundStep(
   };
 }
 
+function defendAnnouncementRoundStep(
+  state: BattleState,
+  actor: BattleActor,
+  name: string
+): BattleRoundStepResult {
+  const message = `${name} took a defensive stance.`;
+  return {
+    state,
+    message,
+    actor,
+    skipped: false,
+    details: {
+      kind: "defend",
+      attackerName: name,
+      targetName: name,
+      message,
+      defended: true
+    }
+  };
+}
+
 function combatantName(state: BattleState, actor: BattleActor): string {
   return combatantAt(state, actor)?.name ?? "Someone";
 }
@@ -789,9 +913,42 @@ function findById<T extends { id: number }>(
   return entries?.find((entry) => stat(entry.id) === stat(id));
 }
 
+function firstLivingQueuedRunActor(
+  state: BattleState,
+  queued: readonly QueuedCommand[]
+): BattleActor | null {
+  for (const entry of queued) {
+    if (entry.command !== "RUN") {
+      continue;
+    }
+    const actor = { side: "party" as const, index: entry.partySlot };
+    const combatant = combatantAt(state, actor);
+    if (combatant && isCombatantAlive(combatant)) {
+      return actor;
+    }
+  }
+  return null;
+}
+
+function highestLivingSpeed(combatants: readonly { speed: number; hp: BattleState["party"][number]["hp"] }[]): number {
+  return combatants.reduce((highest, combatant) =>
+    isCombatantAlive(combatant) ? Math.max(highest, stat(combatant.speed)) : highest, 0);
+}
+
+function isUnescapableGroup(groupId: number | undefined, rules: BattleRoundRules | undefined): boolean {
+  return groupId !== undefined && Boolean(rules?.unescapableGroups?.some((entry) => stat(entry) === stat(groupId)));
+}
+
 function normalizedRoll(value: number): number {
   if (!Number.isFinite(value)) {
     return 0.5;
+  }
+  return Math.min(1, Math.max(0, value));
+}
+
+function clamp01(value: number): number {
+  if (!Number.isFinite(value)) {
+    return 0;
   }
   return Math.min(1, Math.max(0, value));
 }
