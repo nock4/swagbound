@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { CharacterCollection, ItemCollection, Manifest, PsiCollection, ScriptCollection, ScriptCommand } from "@eb/schemas";
-import { buildDialogueForReference, loadGameData } from "../src/loader";
+import type { BattleData, CharacterCollection, ItemCollection, Manifest, PsiCollection, ScriptCollection, ScriptCommand } from "@eb/schemas";
+import { applyEnemyOverrides, buildDialogueForReference, loadGameData } from "../src/loader";
 
 const file = "ccscript/alpha.ccs";
 const sourceLocation = { file, line: 1, column: 1 };
@@ -74,7 +74,67 @@ describe("buildDialogueForReference", () => {
   });
 });
 
+describe("applyEnemyOverrides", () => {
+  it("renames matching enemy ids and leaves other enemies untouched", () => {
+    const battle = syntheticBattle();
+
+    const resolved = applyEnemyOverrides(battle, {
+      schema: "swagbound.enemy-overrides.v1",
+      byEnemyId: {
+        "159": { name: "AI Slop" }
+      }
+    });
+
+    expect(resolved).not.toBe(battle);
+    expect(resolved?.enemies.map((enemy) => enemy.name)).toEqual(["AI Slop", "Source B"]);
+    expect(battle.enemies.map((enemy) => enemy.name)).toEqual(["Source A", "Source B"]);
+    expect(resolved?.enemies[1]).toBe(battle.enemies[1]);
+  });
+
+  it("is a no-op without overrides or matching enemy ids", () => {
+    const battle = syntheticBattle();
+
+    expect(applyEnemyOverrides(battle, undefined)).toBe(battle);
+    expect(applyEnemyOverrides(undefined, {
+      schema: "swagbound.enemy-overrides.v1",
+      byEnemyId: {
+        "159": { name: "AI Slop" }
+      }
+    })).toBeUndefined();
+    expect(applyEnemyOverrides(battle, {
+      schema: "swagbound.enemy-overrides.v1",
+      byEnemyId: {
+        "999": { name: "Not Present" }
+      }
+    })).toBe(battle);
+  });
+});
+
 describe("loadGameData", () => {
+  it("applies enemy override names after loading the battle collection", async () => {
+    vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
+      const path = String(url);
+      if (path.endsWith("/battle.json")) {
+        return jsonResponse(syntheticBattle());
+      }
+      if (path.endsWith("/enemy-overrides.json")) {
+        return jsonResponse({
+          schema: "swagbound.enemy-overrides.v1",
+          byEnemyId: {
+            "159": { name: "AI Slop" }
+          }
+        });
+      }
+      throw new Error(`No fixture for ${path}`);
+    }));
+
+    const manifest = syntheticManifest();
+    manifest.files.battle = "battle.json";
+    const data = await loadGameData(manifest);
+
+    expect(data.battle?.enemies.map((enemy) => enemy.name)).toEqual(["AI Slop", "Source B"]);
+  });
+
   it("applies item override names after loading the items collection", async () => {
     const items: ItemCollection = {
       schemaVersion: "test",
@@ -255,6 +315,87 @@ function character(id: number, name: string): CharacterCollection["characters"][
     luck: 2,
     startingItems: [],
     money: 0
+  };
+}
+
+function syntheticBattle(): BattleData {
+  return {
+    schemaVersion: "test",
+    sourceProjectPath: "synthetic",
+    selection: {
+      method: "synthetic",
+      mapEnemyGroupIds: [],
+      battleGroupIds: [1],
+      placementCellMapping: "synthetic",
+      fallbackUsed: false
+    },
+    statMapping: {
+      level: "synthetic",
+      hp: "synthetic",
+      defense: "synthetic",
+      offense: "synthetic",
+      speed: "synthetic",
+      experience: "synthetic",
+      money: "synthetic",
+      bossFlag: "synthetic",
+      actions: "synthetic",
+      itemDropped: "synthetic",
+      itemRarity: "synthetic"
+    },
+    spriteFormat: {
+      source: "synthetic",
+      fileType: "png",
+      indexedPaletteBits: 4,
+      transparentPaletteIndex: 0,
+      allowedSizes: [[32, 32]]
+    },
+    assetLayout: {
+      spriteDir: "BattleSprites",
+      backgroundDir: "BattleBGs",
+      spriteFilePattern: "{id}.png",
+      backgroundFilePattern: "{id}.png"
+    },
+    enemies: [
+      battleEnemy(159, "Source A"),
+      battleEnemy(160, "Source B")
+    ],
+    groups: [{
+      id: 1,
+      background1: 1,
+      background2: 2,
+      enemyIds: [159, 160]
+    }],
+    counts: {
+      enemies: 2,
+      groups: 1,
+      spriteFiles: 0,
+      backgroundFiles: 0
+    },
+    warnings: []
+  };
+}
+
+function battleEnemy(id: number, name: string): BattleData["enemies"][number] {
+  return {
+    id,
+    name,
+    spriteId: id,
+    level: 1,
+    hp: 10,
+    defense: 1,
+    offense: 1,
+    speed: 1,
+    experience: 1,
+    money: 1,
+    bossFlag: false,
+    actions: [
+      { id: 0, arg: 0 },
+      { id: 0, arg: 0 },
+      { id: 0, arg: 0 },
+      { id: 0, arg: 0 }
+    ],
+    itemDropped: null,
+    itemRarity: null
   };
 }
 

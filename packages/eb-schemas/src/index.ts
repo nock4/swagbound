@@ -332,6 +332,22 @@ export const PsiOverridesSchema = z.object({
   byPsiId: z.record(z.string().regex(/^\d+$/), PsiOverrideEntrySchema)
 }).strict();
 
+const EnemyOverrideNameSchema = z.string()
+  .trim()
+  .min(1)
+  .max(24)
+  .refine((value) => !value.includes("@"), "enemy override names must not include control markers")
+  .refine((value) => !/[\u0000-\u001f\u007f]/.test(value), "enemy override names must not include control codes");
+
+const EnemyOverrideEntrySchema = z.object({
+  name: EnemyOverrideNameSchema
+}).strict();
+
+export const EnemyOverridesSchema = z.object({
+  schema: z.literal("swagbound.enemy-overrides.v1"),
+  byEnemyId: z.record(z.string().regex(/^\d+$/), EnemyOverrideEntrySchema)
+}).strict();
+
 export const NpcMetadataSchema = z.object({
   indexedFiles: z.array(z.string()),
   referencesRobotHelloWorld: z.boolean()
@@ -1158,6 +1174,7 @@ export type BackgroundOverrideEntry = z.infer<typeof BackgroundOverrideEntrySche
 export type BackgroundOverrides = z.infer<typeof BackgroundOverridesSchema>;
 export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;
 export type CharacterOverrides = z.infer<typeof CharacterOverridesSchema>;
+export type EnemyOverrides = z.infer<typeof EnemyOverridesSchema>;
 export type EncounterCandidate = z.infer<typeof EncounterCandidateSchema>;
 export type EncounterSubGroup = z.infer<typeof EncounterSubGroupSchema>;
 export type EncounterMapGroup = z.infer<typeof EncounterMapGroupSchema>;

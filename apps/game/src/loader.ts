@@ -7,6 +7,7 @@ import {
   CharacterCollectionSchema,
   CharacterOverridesSchema,
   CustomDialogueSchema,
+  EnemyOverridesSchema,
   EncountersSchema,
   FontCollectionSchema,
   ItemCollectionSchema,
@@ -36,6 +37,7 @@ import {
   type CharacterCollection,
   type CharacterOverrides,
   type CustomDialogue,
+  type EnemyOverrides,
   type Encounters,
   type FontCollection,
   type ItemCollection,
@@ -68,6 +70,7 @@ const BACKGROUND_OVERRIDES_FILE = "background-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
+const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -146,6 +149,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     teleportDestinations,
     encounters,
     battle,
+    enemyOverrides,
     font,
     window,
     characters,
@@ -177,6 +181,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     manifest.files.battle
       ? loadJson(`/generated/${manifest.files.battle}`, BattleDataSchema)
       : Promise.resolve(undefined),
+    loadJson(`/generated/${ENEMY_OVERRIDES_FILE}`, EnemyOverridesSchema),
     manifest.files.font
       ? loadJson(`/generated/${manifest.files.font}`, FontCollectionSchema)
       : Promise.resolve(undefined),
@@ -205,6 +210,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
   const resolvedPsi = applyPsiOverrides(psi, psiOverrides);
+  const resolvedBattle = applyEnemyOverrides(battle, enemyOverrides);
 
   return {
     manifest,
@@ -222,7 +228,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     backgroundOverrides,
     teleportDestinations,
     encounters,
-    battle,
+    battle: resolvedBattle,
     font,
     window,
     characters: resolvedCharacters,
@@ -272,6 +278,28 @@ function applyPsiOverrides(psi: PsiCollection | undefined, overrides: PsiOverrid
     }
   }
   return psi;
+}
+
+export function applyEnemyOverrides(
+  battle: BattleData | undefined,
+  overrides: EnemyOverrides | undefined
+): BattleData | undefined {
+  if (!battle || !overrides) {
+    return battle;
+  }
+  let changed = false;
+  const enemies = battle.enemies.map((enemy) => {
+    const override = overrides.byEnemyId[String(enemy.id)];
+    if (!override || override.name === enemy.name) {
+      return enemy;
+    }
+    changed = true;
+    return {
+      ...enemy,
+      name: override.name
+    };
+  });
+  return changed ? { ...battle, enemies } : battle;
 }
 
 export function addedNpcSpawnEligible(
