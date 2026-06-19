@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Swagbound — Playtest Launcher</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; padding: 28px 22px 48px;
+    font: 15px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #0c0e14; color: #eef1f6;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 2px; }
+  .sub { color: #9aa3b2; margin: 0 0 22px; font-size: 13px; }
+  h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: #9aa3b2; margin: 26px 0 10px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+  a.card {
+    display: block; text-decoration: none; color: #eef1f6;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.12);
+    border-radius: 8px; padding: 11px 13px; transition: background .12s, border-color .12s;
+  }
+  a.card:hover { background: rgba(255,255,255,.10); border-color: rgba(255,255,255,.30); }
+  a.card .t { font-weight: 500; }
+  a.card .d { color: #9aa3b2; font-size: 12px; margin-top: 2px; }
+  .boss { border-color: rgba(255,120,90,.5); }
+  table.keys { border-collapse: collapse; margin: 8px 0 0; font-size: 13px; }
+  table.keys td { padding: 3px 16px 3px 0; color: #cdd3de; }
+  table.keys td.k { color: #eef1f6; font-weight: 500; white-space: nowrap; }
+  code { background: rgba(255,255,255,.08); padding: 1px 5px; border-radius: 4px; font-size: 12px; }
+  .note { color: #9aa3b2; font-size: 12px; margin-top: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Swagbound — Playtest Launcher</h1>
+  <p class="sub">Local dev menu. Click a card to open that scenario in this tab. Press a key once to enable audio.</p>
+
+  <h2>Controls</h2>
+  <table class="keys">
+    <tr><td class="k">Arrows / WASD</td><td>Move</td><td class="k">M</td><td>Menu</td></tr>
+    <tr><td class="k">Z / Space / Enter</td><td>Confirm / advance</td><td class="k">P</td><td>Save</td></tr>
+    <tr><td class="k">X / Esc</td><td>Cancel / back</td><td class="k">F1 / F2</td><td>Debug / collision</td></tr>
+  </table>
+
+  <h2>Free roam</h2>
+  <div class="grid">
+    <a class="card" href="/"><div class="t">New game (with intro)</div><div class="d">Full opening → Onett</div></a>
+    <a class="card" href="/?nointro=1"><div class="t">Onett, skip intro</div><div class="d">Walk; random battles on</div></a>
+    <a class="card" href="/?nointro=1&noEncounters=1"><div class="t">Onett, no random battles</div><div class="d">Explore / test menus, shops, doors</div></a>
+  </div>
+
+  <h2>Battles — solo Bosch</h2>
+  <div class="grid">
+    <a class="card" href="/?battle=1&nointro=1"><div class="t">AI Slop</div><div class="d">g1 · buzzword backdrop</div></a>
+    <a class="card" href="/?battle=3&nointro=1"><div class="t">Signal Stutter</div><div class="d">g3 · toji backdrop</div></a>
+    <a class="card" href="/?battle=38&nointro=1"><div class="t">Cryptic Kids</div><div class="d">g38 · 2 enemies</div></a>
+    <a class="card" href="/?battle=55&nointro=1"><div class="t">Faithful Servants</div><div class="d">g55 · hits hard (SMAAAASH)</div></a>
+    <a class="card boss" href="/?battle=450&nointro=1"><div class="t">Malady (boss)</div><div class="d">g450 · dramatic backdrop · Run blocked</div></a>
+  </div>
+
+  <h2>Battles — multi-hero (debug party)</h2>
+  <div class="grid">
+    <a class="card" href="/?battle=38&party=3&nointro=1"><div class="t">3 heroes vs Cryptic Kids</div><div class="d">input all → watch · back-nav · ally heal</div></a>
+    <a class="card" href="/?battle=1&party=2&nointro=1"><div class="t">2 heroes vs AI Slop</div><div class="d">command phase per member</div></a>
+    <a class="card boss" href="/?battle=450&party=4&nointro=1"><div class="t">4 heroes vs Malady</div><div class="d">full party boss fight</div></a>
+  </div>
+
+  <h2>Encounter advantage</h2>
+  <div class="grid">
+    <a class="card" href="/?battle=38&advantage=party&nointro=1"><div class="t">Party first-strike</div><div class="d">free party round 1</div></a>
+    <a class="card" href="/?battle=38&advantage=enemy&nointro=1"><div class="t">Enemy ambush</div><div class="d">enemies act first</div></a>
+    <a class="card" href="/?battle=38&advantage=instant&nointro=1"><div class="t">Instant win</div><div class="d">straight to victory</div></a>
+  </div>
+
+  <p class="note">In battle: pick all commands, then watch the round resolve. Try Run (blocked on the boss), Auto then B to cancel, Defend, PSI. <code>party</code>=1–4, <code>battle</code>=group id, <code>spawn=X,Y</code> drops you at a tile.</p>
+</div>
+</body>
+</html>

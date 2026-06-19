@@ -2025,6 +2025,12 @@
       "originX": 0.5,
       "originY": 0.5
     },
+    "131": {
+      "image": "assets/swagbound/enemy/pfp-malady-battle-v1.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
     "132": {
       "image": "assets/swagbound/enemy/lsw-returnless-king-battle-v0.png",
       "displayHeight": 160,

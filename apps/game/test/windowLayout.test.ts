@@ -96,6 +96,23 @@ describe("EB window layouts", () => {
     expect(dialogueTextWidth(rect, 24)).toBe(432);
   });
 
+  it("anchors the dialogue window to the top when topAnchored is set", () => {
+    const rect = dialogueWindowRect({
+      screen: { width: 512, height: 448 },
+      sideMargin: 16,
+      bottomMargin: 16,
+      paddingX: 24,
+      paddingY: 18,
+      visibleLines: 4,
+      lineHeight: ebTextLineHeight(),
+      topAnchored: true
+    });
+
+    expect(rect.x).toBe(16);
+    expect(rect.y).toBe(16);
+    expect(rect.y + rect.height).toBeLessThanOrEqual(448);
+  });
+
   it("sizes overworld menus to scaled text and clamps cascading windows inside the screen", () => {
     const measureText = (text: string) => text.length * 8;
     const mainRect = menuWindowRect({
