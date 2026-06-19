@@ -349,6 +349,41 @@ export const EnemyOverridesSchema = z.object({
   byEnemyId: z.record(z.string().regex(/^\d+$/), EnemyOverrideEntrySchema)
 }).strict();
 
+/**
+ * Canonical source for enemy naming: a family name maps to every EB enemy id that
+ * shares that Swagbound name. `enemy-overrides.json` (the per-id name map the
+ * runtime loads) is GENERATED from this by {@link expandEnemyNameFamilies}, so the
+ * id->name map can never drift from the family roster.
+ */
+export const EnemyNameFamiliesSchema = z.object({
+  schema: z.literal("swagbound.enemy-name-families.v1"),
+  families: z.record(z.string().min(1), z.array(z.number().int().nonnegative()).min(1))
+}).strict();
+
+export type EnemyNameFamilies = z.infer<typeof EnemyNameFamiliesSchema>;
+
+/**
+ * Expand a family roster into the per-id enemy-overrides map. Throws if an enemy id
+ * is claimed by more than one family. Family names are validated through
+ * {@link EnemyOverridesSchema} (length/control-code rules) as part of the result.
+ */
+export function expandEnemyNameFamilies(families: EnemyNameFamilies): EnemyOverrides {
+  const byEnemyId: Record<string, { name: string }> = {};
+  for (const [name, ids] of Object.entries(families.families)) {
+    for (const id of ids) {
+      const key = String(id);
+      const existing = byEnemyId[key];
+      if (existing) {
+        throw new Error(
+          `enemy id ${id} is assigned to multiple name families: "${existing.name}" and "${name}"`
+        );
+      }
+      byEnemyId[key] = { name };
+    }
+  }
+  return EnemyOverridesSchema.parse({ schema: "swagbound.enemy-overrides.v1", byEnemyId });
+}
+
 export const NpcMetadataSchema = z.object({
   indexedFiles: z.array(z.string()),
   referencesRobotHelloWorld: z.boolean()

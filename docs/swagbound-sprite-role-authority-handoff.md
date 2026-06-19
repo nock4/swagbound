@@ -140,6 +140,8 @@ Current unique enemy-name families and EB numeric IDs:
 
 Treat these as battle enemies when referenced by enemy ID/group in generated EB battle data or Swagbound triggers.
 
+> **Canonical source:** this table mirrors [`content/enemy-name-families.json`](../content/enemy-name-families.json), which is the single committed source of enemy naming. The build expands it into the per-id `enemy-overrides.json` the runtime loads (`expandEnemyNameFamilies`), so the id→name map is never hand-maintained and cannot drift. Edit the JSON, then update this table to match.
+
 ## Current boss / story battle placement
 
 Bossness is not encoded only by sprite filename. For the current repo, use story trigger usage and battle rules.

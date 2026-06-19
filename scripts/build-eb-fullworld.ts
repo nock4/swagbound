@@ -1,10 +1,11 @@
-import { access, copyFile, mkdir, readFile } from "node:fs/promises";
+import { access, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
   BattleRulesSchema,
   BackgroundOverridesSchema,
-  EnemyOverridesSchema,
+  EnemyNameFamiliesSchema,
+  expandEnemyNameFamilies,
   PsiOverridesSchema,
   SpriteOverridesSchema,
   StoryTriggersSchema,
@@ -34,7 +35,7 @@ export const CHARACTER_OVERRIDES_SOURCE = "content/character-overrides.json";
 export const CHARACTER_OVERRIDES_OUTPUT = "character-overrides.json";
 export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
 export const PSI_OVERRIDES_OUTPUT = "psi-overrides.json";
-export const ENEMY_OVERRIDES_SOURCE = "content/enemy-overrides.json";
+export const ENEMY_NAME_FAMILIES_SOURCE = "content/enemy-name-families.json";
 export const ENEMY_OVERRIDES_OUTPUT = "enemy-overrides.json";
 export const BATTLE_RULES_SOURCE = "content/battle-rules.json";
 export const BATTLE_RULES_OUTPUT = "battle-rules.json";
@@ -72,7 +73,6 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateSpriteOverrideImages(SPRITE_OVERRIDES_SOURCE);
   await validateBackgroundOverrideImages(BACKGROUND_OVERRIDES_SOURCE);
   await validatePsiOverrides(PSI_OVERRIDES_SOURCE);
-  await validateEnemyOverrides(ENEMY_OVERRIDES_SOURCE);
   await validateBattleRules(BATTLE_RULES_SOURCE);
   await validateStoryTriggers(STORY_TRIGGERS_SOURCE);
   await Promise.all([
@@ -85,17 +85,26 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
-    copyJsonToGenerated(ENEMY_OVERRIDES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
+    generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
     copyJsonToGenerated(BATTLE_RULES_SOURCE, out, BATTLE_RULES_OUTPUT)
   ]);
 }
 
-async function validatePsiOverrides(source: string): Promise<void> {
-  PsiOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+/**
+ * Generate the per-id enemy-overrides map from the canonical family roster and write
+ * it to the generated output. The family file is the single committed source of
+ * enemy naming; the id->name map is never hand-maintained, so it cannot drift.
+ */
+async function generateEnemyOverridesFromFamilies(source: string, out: string, outputName: string): Promise<void> {
+  const families = EnemyNameFamiliesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  const overrides = expandEnemyNameFamilies(families);
+  const target = resolve(out, outputName);
+  await mkdir(dirname(target), { recursive: true });
+  await writeFile(target, `${JSON.stringify(overrides, null, 2)}\n`, "utf8");
 }
 
-async function validateEnemyOverrides(source: string): Promise<void> {
-  EnemyOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+async function validatePsiOverrides(source: string): Promise<void> {
+  PsiOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateBattleRules(source: string): Promise<void> {
