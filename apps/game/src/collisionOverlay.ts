@@ -20,6 +20,14 @@ export type CollisionCellRange = {
   maxCellY: number;
 };
 
+export type CollisionOverlayCell = {
+  cellX: number;
+  cellY: number;
+  x: number;
+  y: number;
+  size: number;
+};
+
 export function visibleCollisionCellRange(
   rect: WorldRect,
   grid: CollisionGrid,
@@ -117,6 +125,24 @@ export function solidAtWorldPixel(
     return false;
   }
   return solidAtCell(solidRows, cell.cellX, cell.cellY);
+}
+
+export function collisionOverlaySolidCells(
+  solidRows: readonly string[],
+  grid: CollisionGrid,
+  range: CollisionCellRange
+): CollisionOverlayCell[] {
+  const cells: CollisionOverlayCell[] = [];
+  for (let cellY = range.minCellY; cellY <= range.maxCellY; cellY += 1) {
+    for (let cellX = range.minCellX; cellX <= range.maxCellX; cellX += 1) {
+      const x = cellX * grid.cellSize;
+      const y = cellY * grid.cellSize;
+      if (solidAtWorldPixel(solidRows, { x, y }, grid)) {
+        cells.push({ cellX, cellY, x, y, size: grid.cellSize });
+      }
+    }
+  }
+  return cells;
 }
 
 export function surfaceAtCell(

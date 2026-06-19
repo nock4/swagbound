@@ -1,5 +1,10 @@
 import { describe, expect, it } from "vitest";
-import { visibleCollisionCellRange, type CollisionGrid } from "../src/collisionOverlay";
+import {
+  collisionOverlaySolidCells,
+  solidAtWorldPixel,
+  visibleCollisionCellRange,
+  type CollisionGrid
+} from "../src/collisionOverlay";
 
 const GRID: CollisionGrid = {
   cellSize: 8,
@@ -43,5 +48,37 @@ describe("collision overlay visible cell selection", () => {
   it("returns undefined when the camera rect does not overlap the grid", () => {
     expect(visibleCollisionCellRange({ x: 80, y: 0, width: 8, height: 8 }, GRID, 0)).toBeUndefined();
     expect(visibleCollisionCellRange({ x: 0, y: 48, width: 8, height: 8 }, GRID, 0)).toBeUndefined();
+  });
+
+  it("fills exactly the cells that solidAtWorldPixel reports as solid", () => {
+    const solidRows = [
+      "0100000000",
+      "0010100000",
+      "0000000000",
+      "0001110000",
+      "0000000010",
+      "1000000000"
+    ];
+    const rect = { x: 12, y: 7, width: 38, height: 28 };
+    const range = visibleCollisionCellRange(rect, GRID, 1);
+    expect(range).toBeDefined();
+    if (!range) {
+      throw new Error("expected visible range");
+    }
+
+    const actual = collisionOverlaySolidCells(solidRows, GRID, range).map((cell) => `${cell.cellX},${cell.cellY}`);
+    const expected: string[] = [];
+    for (let cellY = range.minCellY; cellY <= range.maxCellY; cellY += 1) {
+      for (let cellX = range.minCellX; cellX <= range.maxCellX; cellX += 1) {
+        const x = cellX * GRID.cellSize;
+        const y = cellY * GRID.cellSize;
+        if (solidAtWorldPixel(solidRows, { x, y }, GRID)) {
+          expected.push(`${cellX},${cellY}`);
+        }
+      }
+    }
+
+    expect(actual).toEqual(expected);
+    expect(actual).toEqual(["1,0", "2,1", "4,1", "3,3", "4,3", "5,3", "0,5"]);
   });
 });

@@ -47,6 +47,7 @@ import {
 } from "./chunkStreaming";
 import {
   cellInRange,
+  collisionOverlaySolidCells,
   pointInRect,
   solidAtWorldPixel,
   surfaceAtCell,
@@ -932,15 +933,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
+    for (const cell of collisionOverlaySolidCells(this.solidRows, this.collisionGrid(), range)) {
+      graphics.fillStyle(0xff2f2f, 0.35);
+      graphics.fillRect(cell.x, cell.y, cell.size, cell.size);
+    }
+
     const cellSize = this.collisionCellSize;
     for (let cellY = range.minCellY; cellY <= range.maxCellY; cellY += 1) {
       for (let cellX = range.minCellX; cellX <= range.maxCellX; cellX += 1) {
         const x = cellX * cellSize;
         const y = cellY * cellSize;
-        if (this.solidRows[cellY]?.[cellX] === "1") {
-          graphics.fillStyle(0xff2f2f, 0.35);
-          graphics.fillRect(x, y, cellSize, cellSize);
-        }
         if ((surfaceAtCell(this.surfaceRows, cellX, cellY) & SURFACE_WATER_MASK) !== 0) {
           graphics.fillStyle(0x2f80ff, 0.3);
           graphics.fillRect(x, y, cellSize, cellSize);
@@ -970,13 +972,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private collisionOverlayCameraRect(): WorldRect {
     const camera = this.cameras.main;
-    const view = camera.worldView;
     const zoom = camera.zoom > 0 ? camera.zoom : 1;
     return {
-      x: view.x,
-      y: view.y,
-      width: view.width || camera.width / zoom,
-      height: view.height || camera.height / zoom
+      x: camera.scrollX,
+      y: camera.scrollY,
+      width: camera.width / zoom,
+      height: camera.height / zoom
     };
   }
 
