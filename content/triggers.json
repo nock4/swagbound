@@ -8,7 +8,7 @@
       "once": true,
       "dialogue": [
         "The arcade light flattens Bosch into a better-lit rumor. A clean copy of his face grins from a card nobody remembers printing.",
-        "MALADY: \"You're late to your own read. The clique already traded the portable you.\"",
+        "MIFELLA 2: \"You're late to your own read. The clique already traded the portable you.\"",
         "These cards don't start here. They point up the line, toward the yard that prints them."
       ],
       "setFlags": ["signal:clique_cleared"],
