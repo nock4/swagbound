@@ -1,34 +1,58 @@
 {
   "schema": "swagbound.story-triggers.v1",
-  "comment": "EXAMPLE Act-1 story gates demonstrating the trigger + barrier layers. World pixels near the Onett control spawn (2112,1768). Replace text/coords/flags with real Swagbound story. Flow: a SOLID guard barrier blocks the road north until Malady (boss group 448) is cleared at the west gate. Boss-cleared flag is set when the fight starts (bosses block RUN). The warning trigger just south of the barrier delivers the flavor line.",
+  "comment": "Act-1 Onett gate chain (Swagbound). Bosses are milady-derivatives resolved via enemy-overrides. Structure mirrors EB Onett: arcade boss -> police chief opens the road -> first Sanctuary boss. Coordinates are world pixels near the control spawn (2112,1768) and are tunable to the real arcade/police/Giant-Step spots. Boss-cleared flags are set when each fight starts (bosses block RUN). Dev: ?flags=onett:road_open to skip ahead. Dialogue text is placeholder Swagbound voice — refine freely.",
   "triggers": [
     {
-      "id": "onett-malady-gate",
+      "id": "onett-arcade-malady",
       "area": { "x": 2016, "y": 1748, "w": 40, "h": 40 },
       "once": true,
       "dialogue": [
         "Something oily peels itself off the air. It is wearing your launch announcement as a face.",
         "MALADY: \"You minted hesitation. I mint certainty. Let's settle which one the town remembers.\""
       ],
-      "setFlags": ["story:malady_cleared"],
+      "setFlags": ["onett:frank_cleared"],
       "battleGroup": 448
+    },
+    {
+      "id": "onett-police-returnless-king",
+      "area": { "x": 2152, "y": 1760, "w": 40, "h": 24 },
+      "once": true,
+      "requireFlags": ["onett:frank_cleared"],
+      "dialogue": [
+        "The precinct's pride steps out, badge polished to a mirror, opinion already filed.",
+        "RETURNLESS KING: \"No refunds, no exits, no road north. Unless you out-certainty me. Try.\""
+      ],
+      "setFlags": ["onett:road_open"],
+      "battleGroup": 36
     },
     {
       "id": "onett-road-north-warning",
       "area": { "x": 2064, "y": 1740, "w": 96, "h": 16 },
       "once": false,
-      "blockFlags": ["story:malady_cleared"],
+      "blockFlags": ["onett:road_open"],
       "dialogue": [
-        "Malady's faithful servants are planted across the road north. They will not budge for vibes alone.",
-        "Deal with Malady first. The road only remembers winners."
+        "Faithful servants are planted across the road north, humming the same three notes.",
+        "The precinct won't lift the line until the Returnless King says so."
       ]
+    },
+    {
+      "id": "onett-giant-step-malady",
+      "area": { "x": 2072, "y": 1664, "w": 88, "h": 40 },
+      "once": true,
+      "requireFlags": ["onett:road_open"],
+      "dialogue": [
+        "At the first sanctuary the ground remembers a melody it never agreed to.",
+        "MALADY: \"You made it past the gate. Cute. The Step is mine to overwrite.\""
+      ],
+      "setFlags": ["onett:giant_step_cleared"],
+      "battleGroup": 450
     }
   ],
   "barriers": [
     {
       "id": "onett-road-north-barrier",
       "area": { "x": 2064, "y": 1716, "w": 96, "h": 24 },
-      "blockFlags": ["story:malady_cleared"],
+      "blockFlags": ["onett:road_open"],
       "image": "assets/swagbound/overworld-npc/faithful-servants.png"
     }
   ]

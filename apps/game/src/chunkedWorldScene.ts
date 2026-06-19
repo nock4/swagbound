@@ -562,7 +562,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.restoreState) {
       this.maybeStartNewGameStartup(spawn);
     }
+    this.applyDebugFlags();
     this.publish();
+  }
+
+  /** Dev affordance: ?flags=a,b,c pre-sets story flags so gated content is reachable. */
+  private applyDebugFlags(): void {
+    const raw = new URLSearchParams(globalThis.location?.search ?? "").get("flags");
+    if (!raw) {
+      return;
+    }
+    for (const flag of raw.split(",").map((part) => part.trim()).filter(Boolean)) {
+      this.gameFlags.set(flag);
+    }
   }
 
   update(_: number, delta: number): void {
