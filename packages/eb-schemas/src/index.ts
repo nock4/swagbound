@@ -449,10 +449,26 @@ export const StoryTriggerSchema = z.object({
   warp: z.object({ x: z.number(), y: z.number() }).optional()
 });
 
+/**
+ * A flag-gated SOLID barricade: while active (requireFlags all set AND blockFlags
+ * none set) it blocks the player over `area` and renders `image` as a guard sprite.
+ * When the gating flag is set (e.g. the boss-cleared flag in blockFlags) it
+ * deactivates — no collision, sprite hidden — opening the path.
+ */
+export const StoryBarrierSchema = z.object({
+  id: z.string().min(1),
+  area: StoryTriggerAreaSchema,
+  requireFlags: z.array(z.string()).optional(),
+  blockFlags: z.array(z.string()).optional(),
+  /** Guard sprite drawn centered on the area while active (public asset path). */
+  image: z.string().optional()
+});
+
 export const StoryTriggersSchema = z.object({
   schema: z.literal("swagbound.story-triggers.v1"),
   comment: z.string().optional(),
-  triggers: z.array(StoryTriggerSchema)
+  triggers: z.array(StoryTriggerSchema),
+  barriers: z.array(StoryBarrierSchema).optional()
 });
 
 export const TutorialStepStatusSchema = z.enum(["pass", "fail", "blocked", "unknown"]);
@@ -1273,6 +1289,7 @@ export type SwagboundDialogueLibrary = z.infer<typeof SwagboundDialogueLibrarySc
 export type StoryTriggers = z.infer<typeof StoryTriggersSchema>;
 export type StoryTrigger = z.infer<typeof StoryTriggerSchema>;
 export type StoryTriggerArea = z.infer<typeof StoryTriggerAreaSchema>;
+export type StoryBarrier = z.infer<typeof StoryBarrierSchema>;
 export type SpriteGroupCollection = z.infer<typeof SpriteGroupCollectionSchema>;
 export type TutorialStatus = z.infer<typeof TutorialStatusSchema>;
 export type TutorialStep = z.infer<typeof TutorialStepSchema>;

@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.story-triggers.v1",
-  "comment": "EXAMPLE Act-1 story gates demonstrating the trigger layer. Coordinates are world pixels near the Onett control spawn (2112,1768). Replace text/coords/flags with real Swagbound story. Flow: walking the road north is blocked until Malady (boss group 448) is cleared at the west gate. Boss-cleared flag is set when the fight starts (bosses block RUN); refine to victory-gated if desired.",
+  "comment": "EXAMPLE Act-1 story gates demonstrating the trigger + barrier layers. World pixels near the Onett control spawn (2112,1768). Replace text/coords/flags with real Swagbound story. Flow: a SOLID guard barrier blocks the road north until Malady (boss group 448) is cleared at the west gate. Boss-cleared flag is set when the fight starts (bosses block RUN). The warning trigger just south of the barrier delivers the flavor line.",
   "triggers": [
     {
       "id": "onett-malady-gate",
@@ -14,15 +14,22 @@
       "battleGroup": 448
     },
     {
-      "id": "onett-road-north-barricade",
-      "area": { "x": 2072, "y": 1716, "w": 80, "h": 24 },
+      "id": "onett-road-north-warning",
+      "area": { "x": 2064, "y": 1740, "w": 96, "h": 16 },
       "once": false,
       "blockFlags": ["story:malady_cleared"],
       "dialogue": [
-        "A slick of pure hype has congealed across the road north. It does not part for vibes alone.",
+        "Malady's faithful servants are planted across the road north. They will not budge for vibes alone.",
         "Deal with Malady first. The road only remembers winners."
-      ],
-      "warp": { "x": 2112, "y": 1784 }
+      ]
+    }
+  ],
+  "barriers": [
+    {
+      "id": "onett-road-north-barrier",
+      "area": { "x": 2064, "y": 1716, "w": 96, "h": 24 },
+      "blockFlags": ["story:malady_cleared"],
+      "image": "assets/swagbound/overworld-npc/faithful-servants.png"
     }
   ]
 }

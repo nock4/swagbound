@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import { isNpcVisibleForEventFlags, type BattleEnemy, type DialoguePage, type EventEffect, type ItemData, type SpriteOverride, type SpriteSheet, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
-import { isOnce, resolveSuppression, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
+import { isNpcVisibleForEventFlags, type BattleEnemy, type DialoguePage, type EventEffect, type ItemData, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { barrierBlocksPoint, isBarrierActive, isOnce, resolveSuppression, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { rollEncounter, sectorIndexForTile } from "./encounterLogic";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
 import type { BattleReturnContext, BattleReturnSource, ChunkedWorldRestore } from "./battleReturn";
@@ -182,6 +182,7 @@ import {
   spriteOverrideNpcIdFromSheetKey,
   spriteOverrideNpcSheetKey,
   spriteOverrideScale,
+  stableAssetPathHash,
   spriteOverrideSheet,
   spriteOverrideSpriteGroupFromSheetKey,
   type SpriteOverrideSheet
@@ -354,6 +355,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedStoryTriggerSkips = new Set<string>();
   private suppressedTriggerId?: string;
   private lastStoryTriggerId?: string;
+  private barrierSprites = new Map<string, Phaser.GameObjects.Image>();
+  private loadingBarrierKeys = new Set<string>();
   private pendingScriptedDialogueComplete?: () => void;
   private pendingInteractionShopStoreId?: number;
   targetReference = TARGET_REFERENCE;
@@ -608,6 +611,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.refreshRoomBounds();
     this.refreshStreaming();
     this.updateCollisionOverlay();
+    this.refreshBarrierSprites();
     if (this.maybeStartIntroMeteorBeat()) {
       return;
     }
@@ -688,6 +692,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.warnedStoryTriggerSkips.clear();
     this.suppressedTriggerId = undefined;
     this.lastStoryTriggerId = undefined;
+    for (const sprite of this.barrierSprites.values()) {
+      sprite.destroy();
+    }
+    this.barrierSprites.clear();
+    this.loadingBarrierKeys.clear();
     this.prompt = "";
     this.assetsLoaded = false;
     this.pendingInteractionShopStoreId = undefined;
@@ -1425,6 +1434,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.surfaceBlocked(x, y)) {
       return true;
     }
+    if (this.barrierBlocks(x, y)) {
+      return true;
+    }
     if (options.includePlayer && this.player && this.actorBodyBlocked(x, y, this.playerState.x, this.playerState.y)) {
       return true;
     }
@@ -1446,6 +1458,55 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private surfaceBlocked(x: number, y: number): boolean {
     return !this.walkableFootprint({ x, y });
+  }
+
+  /** Active story barriers block the player like solid terrain (string-flag gated). */
+  private barrierBlocks(x: number, y: number): boolean {
+    const barriers = this.data_.storyTriggers?.barriers;
+    if (!barriers || barriers.length === 0) {
+      return false;
+    }
+    return barrierBlocksPoint(barriers, { x, y }, (flag) => this.gameFlags.has(flag));
+  }
+
+  /** Creates barrier guard sprites on demand and toggles them with their active state. */
+  private refreshBarrierSprites(): void {
+    const barriers = this.data_.storyTriggers?.barriers;
+    if (!barriers) {
+      return;
+    }
+    for (const barrier of barriers) {
+      const active = isBarrierActive(barrier, (flag) => this.gameFlags.has(flag));
+      let sprite = this.barrierSprites.get(barrier.id);
+      if (!sprite && barrier.image && active) {
+        sprite = this.ensureBarrierSprite(barrier);
+      }
+      sprite?.setVisible(active);
+    }
+  }
+
+  private ensureBarrierSprite(barrier: StoryBarrier): Phaser.GameObjects.Image | undefined {
+    if (!barrier.image) {
+      return undefined;
+    }
+    const key = `barrier-${stableAssetPathHash(barrier.image)}`;
+    if (!this.textures.exists(key)) {
+      if (!this.loadingBarrierKeys.has(key)) {
+        this.loadingBarrierKeys.add(key);
+        this.load.image(key, `/${barrier.image.replace(/^\/+/, "")}`);
+        this.load.once(`filecomplete-image-${key}`, () => this.loadingBarrierKeys.delete(key));
+        if (!this.load.isLoading()) {
+          this.load.start();
+        }
+      }
+      return undefined; // built on a later refresh, once the texture finishes loading
+    }
+    const image = this.add
+      .image(barrier.area.x + barrier.area.w / 2, barrier.area.y + barrier.area.h, key)
+      .setOrigin(0.5, 1);
+    image.setDepth(spriteSortDepth(spriteBottomY({ y: image.y, originY: image.originY, displayHeight: image.displayHeight })));
+    this.barrierSprites.set(barrier.id, image);
+    return image;
   }
 
   private walkableFootprint(point: { x: number; y: number }): boolean {

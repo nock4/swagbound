@@ -1,11 +1,13 @@
 import { describe, expect, it } from "vitest";
-import type { StoryTrigger } from "@eb/schemas";
+import type { StoryBarrier, StoryTrigger } from "@eb/schemas";
 import {
   pointInArea,
   triggerFiredFlag,
   triggerConditionsMet,
   selectStoryTrigger,
-  resolveSuppression
+  resolveSuppression,
+  isBarrierActive,
+  barrierBlocksPoint
 } from "../src/storyTriggers";
 
 const bossGate: StoryTrigger = {
@@ -74,5 +76,31 @@ describe("story trigger selection + suppression", () => {
   it("clears suppression only after the player leaves the suppressed area", () => {
     expect(resolveSuppression("north-barricade", triggers, { x: 205, y: 105 })).toBe("north-barricade");
     expect(resolveSuppression("north-barricade", triggers, { x: 400, y: 400 })).toBeUndefined();
+  });
+});
+
+describe("story barriers (solid gates)", () => {
+  const barrier: StoryBarrier = {
+    id: "road-guard",
+    area: { x: 100, y: 50, w: 64, h: 16 },
+    blockFlags: ["story:boss_cleared"]
+  };
+  const has = (set: string[]) => (flag: string) => set.includes(flag);
+
+  it("is active until the block flag is set", () => {
+    expect(isBarrierActive(barrier, has([]))).toBe(true);
+    expect(isBarrierActive(barrier, has(["story:boss_cleared"]))).toBe(false);
+  });
+
+  it("respects requireFlags", () => {
+    const gated: StoryBarrier = { ...barrier, requireFlags: ["story:arrived"], blockFlags: [] };
+    expect(isBarrierActive(gated, has([]))).toBe(false);
+    expect(isBarrierActive(gated, has(["story:arrived"]))).toBe(true);
+  });
+
+  it("blocks points inside an active barrier only", () => {
+    expect(barrierBlocksPoint([barrier], { x: 110, y: 55 }, has([]))).toBe(true);
+    expect(barrierBlocksPoint([barrier], { x: 300, y: 55 }, has([]))).toBe(false); // outside area
+    expect(barrierBlocksPoint([barrier], { x: 110, y: 55 }, has(["story:boss_cleared"]))).toBe(false); // inactive
   });
 });

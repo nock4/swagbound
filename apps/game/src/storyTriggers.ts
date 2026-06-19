@@ -1,4 +1,4 @@
-import type { StoryTrigger, StoryTriggerArea } from "@eb/schemas";
+import type { StoryBarrier, StoryTrigger, StoryTriggerArea } from "@eb/schemas";
 
 /** True when a point (the player's feet) is inside a trigger area (world pixels). */
 export function pointInArea(point: { x: number; y: number }, area: StoryTriggerArea): boolean {
@@ -58,6 +58,30 @@ export function selectStoryTrigger(
   suppressedId?: string
 ): StoryTrigger | undefined {
   return triggers.find((trigger) => triggerConditionsMet(trigger, feet, hasFlag, suppressedId));
+}
+
+/**
+ * A barrier is active (solid + visible) when all of its requireFlags are set and
+ * none of its blockFlags are set. The boss-cleared flag goes in blockFlags so the
+ * barrier opens once the boss is beaten.
+ */
+export function isBarrierActive(barrier: StoryBarrier, hasFlag: (flag: string) => boolean): boolean {
+  if (barrier.requireFlags && !barrier.requireFlags.every((flag) => hasFlag(flag))) {
+    return false;
+  }
+  if (barrier.blockFlags && barrier.blockFlags.some((flag) => hasFlag(flag))) {
+    return false;
+  }
+  return true;
+}
+
+/** True when an active barrier covers the point (used for solid collision). */
+export function barrierBlocksPoint(
+  barriers: readonly StoryBarrier[],
+  point: { x: number; y: number },
+  hasFlag: (flag: string) => boolean
+): boolean {
+  return barriers.some((barrier) => isBarrierActive(barrier, hasFlag) && pointInArea(point, barrier.area));
 }
 
 /**

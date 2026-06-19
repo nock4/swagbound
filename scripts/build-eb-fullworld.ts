@@ -103,7 +103,12 @@ async function validateBattleRules(source: string): Promise<void> {
 }
 
 async function validateStoryTriggers(source: string): Promise<void> {
-  StoryTriggersSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  const triggers = StoryTriggersSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  await Promise.all(
+    (triggers.barriers ?? [])
+      .filter((barrier): barrier is typeof barrier & { image: string } => Boolean(barrier.image))
+      .map((barrier) => validatePublicAssetImage(barrier.image, "Story barrier image"))
+  );
 }
 
 async function validateSpriteOverrideImages(source: string): Promise<void> {
