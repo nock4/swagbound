@@ -154,11 +154,28 @@ describe("SpriteOverridesSchema", () => {
           }
         }
       },
+      bySpriteGroup: {
+        "12": {
+          image: "assets/swagbound/overworld-npc/ai-slop.png",
+          frameWidth: 48,
+          frameHeight: 48,
+          animations: {
+            down: [0],
+            left: [0],
+            right: [0],
+            up: [0]
+          },
+          displayHeight: 24,
+          originX: 0.5,
+          originY: 1
+        }
+      },
       byEnemyId: {}
     });
 
     expect(parsed.player?.animations?.down).toEqual([0, 1, 2, 3]);
     expect(parsed.byNpcId?.["744"].animations?.left).toEqual([4]);
+    expect(parsed.bySpriteGroup?.["12"].animations?.down).toEqual([0]);
   });
 
   it("accepts single-image enemy overrides without sheet frame fields", () => {
@@ -250,6 +267,23 @@ describe("SpriteOverridesSchema", () => {
         "37": {
           image: "assets/swagbound/enemy/malady-battle-v1-alpha-extracted-source-size.png",
           frameWidth: 260
+        }
+      }
+    }).success).toBe(false);
+
+    expect(SpriteOverridesSchema.safeParse({
+      schema: "swagbound.sprite-overrides.v1",
+      bySpriteGroup: {
+        person: {
+          image: "assets/swagbound/overworld-npc/ai-slop.png",
+          frameWidth: 48,
+          frameHeight: 48,
+          animations: {
+            down: [0],
+            left: [0],
+            right: [0],
+            up: [0]
+          }
         }
       }
     }).success).toBe(false);

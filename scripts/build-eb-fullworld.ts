@@ -109,6 +109,7 @@ function spriteOverrideEntries(overrides: SpriteOverrides): SpriteOverride[] {
   return [
     overrides.player,
     ...Object.values(overrides.byNpcId ?? {}),
+    ...Object.values(overrides.bySpriteGroup ?? {}),
     ...Object.values(overrides.byEnemyId ?? {})
   ].filter((override): override is SpriteOverride => Boolean(override));
 }

@@ -281,6 +281,7 @@ export const SpriteOverridesSchema = z.object({
   schema: z.literal("swagbound.sprite-overrides.v1"),
   player: SpriteOverrideSchema.optional(),
   byNpcId: z.record(SpriteOverrideSchema).optional(),
+  bySpriteGroup: z.record(z.string().regex(/^\d+$/), SpriteOverrideSchema).optional(),
   byEnemyId: z.record(SpriteOverrideSchema).optional()
 }).strict();
 

@@ -26,6 +26,7 @@ export type ResolvedSpriteOverrideImage = {
 
 export const PLAYER_SPRITE_OVERRIDE_SHEET_KEY = "sprite-override-player";
 const NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX = "sprite-override-npc-";
+const GROUP_SPRITE_OVERRIDE_SHEET_KEY_PREFIX = "sprite-override-group-";
 const ENEMY_SPRITE_OVERRIDE_IMAGE_KEY_PREFIX = "sprite-override-enemy-";
 
 export function spriteOverrideFrame(
@@ -71,6 +72,21 @@ export function spriteOverrideForNpcId(
   return overrides?.byNpcId?.[String(npcId)];
 }
 
+export function spriteOverrideForSpriteGroup(
+  overrides: Pick<SpriteOverrides, "bySpriteGroup"> | undefined,
+  spriteGroup: number | undefined
+): SpriteOverride | undefined {
+  return spriteGroup === undefined ? undefined : overrides?.bySpriteGroup?.[String(spriteGroup)];
+}
+
+export function spriteOverrideForNpc(
+  overrides: Pick<SpriteOverrides, "byNpcId" | "bySpriteGroup"> | undefined,
+  npcId: number,
+  spriteGroup: number | undefined
+): SpriteOverride | undefined {
+  return spriteOverrideForNpcId(overrides, npcId) ?? spriteOverrideForSpriteGroup(overrides, spriteGroup);
+}
+
 export function spriteOverrideNpcEntries(
   overrides: Pick<SpriteOverrides, "byNpcId"> | undefined
 ): Array<[number, SpriteOverride]> {
@@ -91,6 +107,33 @@ export function spriteOverrideNpcIdFromSheetKey(key: string): number | undefined
   const rawNpcId = key.slice(NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX.length);
   const npcId = Number.parseInt(rawNpcId, 10);
   return Number.isSafeInteger(npcId) && String(npcId) === rawNpcId ? npcId : undefined;
+}
+
+export function spriteOverrideGroupEntries(
+  overrides: Pick<SpriteOverrides, "bySpriteGroup"> | undefined
+): Array<[number, SpriteOverride]> {
+  return Object.entries(overrides?.bySpriteGroup ?? {}).flatMap(([rawSpriteGroup, override]) => {
+    const spriteGroup = Number.parseInt(rawSpriteGroup, 10);
+    return Number.isSafeInteger(spriteGroup) && String(spriteGroup) === rawSpriteGroup
+      ? [[spriteGroup, override] as [number, SpriteOverride]]
+      : [];
+  });
+}
+
+export function spriteOverrideGroupSheetKey(spriteGroup: number, image: string): string {
+  return `${GROUP_SPRITE_OVERRIDE_SHEET_KEY_PREFIX}${spriteGroup}-${stableAssetPathHash(image)}`;
+}
+
+export function spriteOverrideSpriteGroupFromSheetKey(key: string): number | undefined {
+  if (!key.startsWith(GROUP_SPRITE_OVERRIDE_SHEET_KEY_PREFIX)) {
+    return undefined;
+  }
+  const [, rawSpriteGroup] = /^sprite-override-group-(\d+)-[0-9a-z]+$/.exec(key) ?? [];
+  if (!rawSpriteGroup) {
+    return undefined;
+  }
+  const spriteGroup = Number.parseInt(rawSpriteGroup, 10);
+  return Number.isSafeInteger(spriteGroup) && String(spriteGroup) === rawSpriteGroup ? spriteGroup : undefined;
 }
 
 export function spriteOverrideForEnemyId(

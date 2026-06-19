@@ -7,12 +7,17 @@ import {
   spriteOverrideEnemyEntries,
   spriteOverrideEnemyImageKey,
   spriteOverrideForEnemyId,
+  spriteOverrideForNpc,
   spriteOverrideForNpcId,
+  spriteOverrideForSpriteGroup,
   spriteOverrideDirectionFrames,
   spriteOverrideFrame,
+  spriteOverrideGroupEntries,
+  spriteOverrideGroupSheetKey,
   spriteOverrideNpcEntries,
   spriteOverrideNpcIdFromSheetKey,
   spriteOverrideNpcSheetKey,
+  spriteOverrideSpriteGroupFromSheetKey,
   spriteOverrideScale
 } from "../src/spriteOverrides";
 
@@ -35,6 +40,21 @@ const SINGLE_FRAME_NPC_OVERRIDE: SpriteOverride = {
   image: "assets/swagbound/npc/npc-neighbor.png",
   frameWidth: 80,
   frameHeight: 80,
+  animations: {
+    down: [0],
+    left: [0],
+    right: [0],
+    up: [0]
+  },
+  displayHeight: 24,
+  originX: 0.5,
+  originY: 1
+};
+
+const GROUP_FRAME_NPC_OVERRIDE: SpriteOverride = {
+  image: "assets/swagbound/overworld-npc/ai-slop.png",
+  frameWidth: 48,
+  frameHeight: 48,
   animations: {
     down: [0],
     left: [0],
@@ -119,6 +139,31 @@ describe("sprite override helpers", () => {
     expect(spriteOverrideNpcSheetKey(100100)).toBe("sprite-override-npc-100100");
     expect(spriteOverrideNpcIdFromSheetKey("sprite-override-npc-100100")).toBe(100100);
     expect(spriteOverrideNpcIdFromSheetKey("sheet-100100")).toBeUndefined();
+  });
+
+  it("resolves NPC sprite overrides by NPC id before sprite group and uses hashed group sheet keys", () => {
+    const overrides: SpriteOverrides = {
+      schema: "swagbound.sprite-overrides.v1",
+      byNpcId: {
+        "100100": SINGLE_FRAME_NPC_OVERRIDE
+      },
+      bySpriteGroup: {
+        "12": GROUP_FRAME_NPC_OVERRIDE
+      }
+    };
+    const key = spriteOverrideGroupSheetKey(12, GROUP_FRAME_NPC_OVERRIDE.image);
+
+    expect(spriteOverrideForNpc(overrides, 100100, 12)).toBe(SINGLE_FRAME_NPC_OVERRIDE);
+    expect(spriteOverrideForNpc(overrides, 100101, 12)).toBe(GROUP_FRAME_NPC_OVERRIDE);
+    expect(spriteOverrideForNpc(overrides, 100101, 13)).toBeUndefined();
+    expect(spriteOverrideForSpriteGroup(overrides, 12)).toBe(GROUP_FRAME_NPC_OVERRIDE);
+    expect(spriteOverrideForSpriteGroup(overrides, undefined)).toBeUndefined();
+    expect(spriteOverrideGroupEntries(overrides)).toEqual([[12, GROUP_FRAME_NPC_OVERRIDE]]);
+    expect(key).toBe(spriteOverrideGroupSheetKey(12, GROUP_FRAME_NPC_OVERRIDE.image));
+    expect(key).toMatch(/^sprite-override-group-12-[0-9a-z]+$/);
+    expect(key).not.toBe(spriteOverrideGroupSheetKey(12, "assets/swagbound/overworld-npc/bat-poncho.png"));
+    expect(spriteOverrideSpriteGroupFromSheetKey(key)).toBe(12);
+    expect(spriteOverrideSpriteGroupFromSheetKey("sprite-override-npc-12")).toBeUndefined();
   });
 
   it("selects enemy overrides by numeric enemy id and exposes stable image keys", () => {
