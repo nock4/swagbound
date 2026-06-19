@@ -79,14 +79,6 @@ export function spriteOverrideForSpriteGroup(
   return spriteGroup === undefined ? undefined : overrides?.bySpriteGroup?.[String(spriteGroup)];
 }
 
-export function spriteOverrideForNpc(
-  overrides: Pick<SpriteOverrides, "byNpcId" | "bySpriteGroup"> | undefined,
-  npcId: number,
-  spriteGroup: number | undefined
-): SpriteOverride | undefined {
-  return spriteOverrideForNpcId(overrides, npcId) ?? spriteOverrideForSpriteGroup(overrides, spriteGroup);
-}
-
 export function spriteOverrideNpcEntries(
   overrides: Pick<SpriteOverrides, "byNpcId"> | undefined
 ): Array<[number, SpriteOverride]> {

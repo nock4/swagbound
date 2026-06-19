@@ -23,7 +23,6 @@ export type DoorIntentDirection = {
 
 export type DoorIntentProbeOptions = {
   footBox?: FootBox;
-  maxProbeCells?: number;
 };
 
 export type DoorWarpLanding = {
@@ -48,22 +47,6 @@ export function doorAtFeet(
   cellSize: number
 ): WorldDoor | undefined {
   return doors.find((door) => feetInDoorCell(feet, door, cellSize));
-}
-
-export function resolveDoorTrigger(
-  feet: { x: number; y: number },
-  doors: readonly WorldDoor[],
-  state: DoorTriggerState,
-  cellSize: number
-): DoorTriggerResult {
-  const currentDoor = doorAtFeet(feet, doors, cellSize);
-  if (state.suppressUntilClear) {
-    return doorResult(Boolean(currentDoor), undefined, state.suppressedDoorCell);
-  }
-  if (!currentDoor) {
-    return { suppressUntilClear: false };
-  }
-  return { door: currentDoor, suppressUntilClear: true };
 }
 
 export function resolveAdjacentDoorIntentTrigger(
@@ -160,7 +143,9 @@ function adjacentProbeCells(
   }
 
   const bounds = footprintCellBounds(feet, cellSize, options.footBox);
-  const probeCells = resolveProbeCellRange(cellSize, options);
+  // One cell past the foot box's leading edge (probes start at distance 0, see the
+  // probe loops). Intentionally tight so the warp fires at the door, not ~3 cells early.
+  const probeCells = 1;
   if (movement.dx !== 0 && movement.dy === 0) {
     return uniqueCells(xProbeCells(bounds, movement.dx, probeCells));
   }
@@ -207,19 +192,6 @@ function footprintCellBounds(
     minY: Math.floor((feet.y + footBox.top) / cellSize),
     maxY: Math.floor((feet.y + footBox.bottom) / cellSize)
   };
-}
-
-function resolveProbeCellRange(_cellSize: number, options: DoorIntentProbeOptions): number {
-  // Probe distances start at the foot box's leading edge (distance 0, see the
-  // probe loops), so the foot box's own reach is already covered by the cell
-  // bounds — we only extend ONE extra cell past it. This makes the warp fire
-  // when the player is right at / one cell from the door, instead of up to ~3
-  // cells early (the previous footprint-derived range double-counted the foot
-  // box and triggered transitions well before the door).
-  if (options.maxProbeCells !== undefined) {
-    return Math.max(1, Math.floor(options.maxProbeCells));
-  }
-  return 1;
 }
 
 // Probes start at distance 0 — the foot box's leading edge cell. A door mounted

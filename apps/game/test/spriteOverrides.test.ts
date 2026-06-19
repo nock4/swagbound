@@ -7,7 +7,6 @@ import {
   spriteOverrideEnemyEntries,
   spriteOverrideEnemyImageKey,
   spriteOverrideForEnemyId,
-  spriteOverrideForNpc,
   spriteOverrideForNpcId,
   spriteOverrideForSpriteGroup,
   spriteOverrideDirectionFrames,
@@ -153,9 +152,6 @@ describe("sprite override helpers", () => {
     };
     const key = spriteOverrideGroupSheetKey(12, GROUP_FRAME_NPC_OVERRIDE.image);
 
-    expect(spriteOverrideForNpc(overrides, 100100, 12)).toBe(SINGLE_FRAME_NPC_OVERRIDE);
-    expect(spriteOverrideForNpc(overrides, 100101, 12)).toBe(GROUP_FRAME_NPC_OVERRIDE);
-    expect(spriteOverrideForNpc(overrides, 100101, 13)).toBeUndefined();
     expect(spriteOverrideForSpriteGroup(overrides, 12)).toBe(GROUP_FRAME_NPC_OVERRIDE);
     expect(spriteOverrideForSpriteGroup(overrides, undefined)).toBeUndefined();
     expect(spriteOverrideGroupEntries(overrides)).toEqual([[12, GROUP_FRAME_NPC_OVERRIDE]]);

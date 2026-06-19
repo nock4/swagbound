@@ -354,7 +354,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedIntroActorVmStubs = new Set<string>();
   private warnedStoryTriggerSkips = new Set<string>();
   private suppressedTriggerId?: string;
-  private lastStoryTriggerId?: string;
   private barrierSprites = new Map<string, Phaser.GameObjects.Image>();
   private loadingBarrierKeys = new Set<string>();
   private pendingScriptedDialogueComplete?: () => void;
@@ -703,7 +702,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.warnedIntroActorVmStubs.clear();
     this.warnedStoryTriggerSkips.clear();
     this.suppressedTriggerId = undefined;
-    this.lastStoryTriggerId = undefined;
     for (const sprite of this.barrierSprites.values()) {
       sprite.destroy();
     }
@@ -2706,7 +2704,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     this.suppressedTriggerId = trigger.id;
-    this.lastStoryTriggerId = trigger.id;
     if (isOnce(trigger)) {
       this.gameFlags.set(triggerFiredFlag(trigger.id));
     }
