@@ -309,7 +309,8 @@ export class UiScene extends Phaser.Scene {
       paddingX: DIALOGUE_HORIZONTAL_PADDING,
       paddingY: DIALOGUE_VERTICAL_PADDING,
       lineHeight: this.dialogueLineHeight(),
-      visibleLines: DIALOGUE_VISIBLE_LINES
+      visibleLines: DIALOGUE_VISIBLE_LINES,
+      topAnchored: true
     });
   }
 

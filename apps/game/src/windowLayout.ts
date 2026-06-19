@@ -48,6 +48,8 @@ export type DialogueWindowRectOptions = {
   paddingY: number;
   visibleLines: number;
   lineHeight: number;
+  /** Anchor the box to the top of the screen instead of the bottom. */
+  topAnchored?: boolean;
 };
 
 export type MenuWindowRectOptions = {
@@ -251,9 +253,12 @@ export function dialogueWindowRect(options: DialogueWindowRectOptions): CanvasRe
     1,
     maxHeight
   );
+  const y = options.topAnchored
+    ? bottomMargin
+    : Math.max(0, Math.round(options.screen.height - height - bottomMargin));
   return {
     x: Math.min(sideMargin, Math.max(0, Math.floor(options.screen.width - width))),
-    y: Math.max(0, Math.round(options.screen.height - height - bottomMargin)),
+    y,
     width,
     height
   };
