@@ -1,9 +1,9 @@
 import Phaser from "phaser";
 import { isNpcVisibleForEventFlags, type BattleEnemy, type DialoguePage, type EventEffect, type ItemData, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
-import { barrierBlocksPoint, isBarrierActive, isOnce, resolveSuppression, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
+import { barrierBlocksPoint, isBarrierActive, isOnce, resolveStoryGateReturn, resolveSuppression, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { rollEncounter, sectorIndexForTile } from "./encounterLogic";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
-import type { BattleReturnContext, BattleReturnSource, ChunkedWorldRestore } from "./battleReturn";
+import type { BattleReturnContext, BattleReturnSource, ChunkedWorldRestore, PendingStoryGate } from "./battleReturn";
 import {
   battleRngSeedForGroup,
   computeEncounterAdvantage,
@@ -2246,6 +2246,30 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return player;
   }
 
+  /**
+   * Resolve a deferred story-gate boss (content/triggers.json battleGroup) on battle
+   * return. Its flags — and the once-fired marker — advance ONLY on a win. On a
+   * loss/flee the player lands back at the gate with control: suppress the trigger so
+   * they aren't thrown straight back into the fight; it re-arms once they leave the
+   * area and can re-engage deliberately.
+   */
+  private applyStoryGateReturn(restore: ChunkedWorldRestore): void {
+    const gate = restore.pendingStoryGate;
+    if (!gate) {
+      return;
+    }
+    const resolution = resolveStoryGateReturn(gate, restore.outcome);
+    if (resolution.kind === "advance") {
+      if (resolution.firedFlag) {
+        this.gameFlags.set(resolution.firedFlag);
+      }
+      resolution.setFlags.forEach((flag) => this.gameFlags.set(flag));
+      resolution.clearFlags.forEach((flag) => this.gameFlags.unset(flag));
+      return;
+    }
+    this.suppressedTriggerId = resolution.triggerId;
+  }
+
   private applyReturnRestore(): (SavePlayerSnapshot & { mode: "chunked" }) | undefined {
     const restore = this.restoreState;
     if (!restore) {
@@ -2259,6 +2283,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const flag of restore.flags.numeric) {
       this.gameFlags.setNum(flag);
     }
+    this.applyStoryGateReturn(restore);
     this.partyState.restore(restore.party);
     this.encounterCooldownMs = Math.max(this.encounterCooldownMs, restore.encounter.cooldownMs);
     this.encounterRng.setState(restore.encounter.rngSeed);
@@ -2704,9 +2729,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     this.suppressedTriggerId = trigger.id;
-    if (isOnce(trigger)) {
-      this.gameFlags.set(triggerFiredFlag(trigger.id));
-    }
+    // The once-fired marker is NOT set here: a story-gate boss must be WON before it
+    // counts as fired (see applyStoryTriggerEffects / applyReturnRestore). Non-battle
+    // triggers set it immediately in applyStoryTriggerEffects.
 
     if (trigger.dialogue && trigger.dialogue.length > 0) {
       lockPlayer(this.playerState, this.playerFrames);
@@ -2724,6 +2749,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private applyStoryTriggerEffects(trigger: StoryTrigger): void {
+    // Story-gate boss: launch the battle now and defer ALL flag effects (including
+    // the once-fired marker) until the player WINS it. A lost or fled boss never
+    // advances the story; see applyReturnRestore for the win/loss handling. Warp
+    // triggers keep priority over a battleGroup (matches prior behavior).
+    if (trigger.battleGroup !== undefined && trigger.warp === undefined) {
+      if (this.startEventBattle(trigger.battleGroup, {
+        triggerId: trigger.id,
+        once: isOnce(trigger),
+        setFlags: trigger.setFlags,
+        clearFlags: trigger.clearFlags
+      })) {
+        return;
+      }
+      this.warnStoryTriggerSkip(`battle_unavailable:${trigger.id}`);
+    }
+
+    // Non-battle trigger (or battle-unavailable fallback): apply effects immediately.
+    if (isOnce(trigger)) {
+      this.gameFlags.set(triggerFiredFlag(trigger.id));
+    }
     trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
     trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
 
@@ -2733,13 +2778,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
         { kind: "teleport" }
       );
       return;
-    }
-
-    if (trigger.battleGroup !== undefined) {
-      if (this.startEventBattle(trigger.battleGroup)) {
-        return;
-      }
-      this.warnStoryTriggerSkip(`battle_unavailable:${trigger.id}`);
     }
 
     this.afterDialogueClosed();
@@ -2912,7 +2950,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private startBattleWithReturn(
     group: number,
     source: BattleReturnSource,
-    encounterAdvantage: EncounterAdvantage = "normal"
+    encounterAdvantage: EncounterAdvantage = "normal",
+    pendingStoryGate?: PendingStoryGate
   ): boolean {
     if (!this.data_.battle || !this.battleGroupExists(group) || !this.player) {
       return false;
@@ -2933,7 +2972,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       backgroundOverrides: this.data_.backgroundOverrides,
       battleRules: this.data_.battleRules,
       encounterAdvantage,
-      returnTo: this.battleReturnContext(group, source)
+      returnTo: this.battleReturnContext(group, source, pendingStoryGate)
     });
     return true;
   }
@@ -2974,13 +3013,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return true;
   }
 
-  private battleReturnContext(group: number, source: BattleReturnSource): BattleReturnContext {
+  private battleReturnContext(
+    group: number,
+    source: BattleReturnSource,
+    pendingStoryGate?: PendingStoryGate
+  ): BattleReturnContext {
     return {
       sceneKey: "chunked-world",
       gameData: this.data_,
       saveSlot: this.saveSlot,
       saveSlots: this.saveSlots,
       restore: {
+        ...(pendingStoryGate ? { pendingStoryGate } : {}),
         player: {
           x: this.playerState.x,
           y: this.playerState.y,
@@ -3087,8 +3131,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return resolveTeleportDestination(this.data_.teleportDestinations, dest, style);
   }
 
-  private startEventBattle(group: number): boolean {
-    return this.startBattleWithReturn(group, "event");
+  private startEventBattle(group: number, pendingStoryGate?: PendingStoryGate): boolean {
+    return this.startBattleWithReturn(group, "event", "normal", pendingStoryGate);
   }
 
   private restoreActiveNpc(): void {

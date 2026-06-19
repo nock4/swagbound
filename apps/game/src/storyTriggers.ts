@@ -102,3 +102,36 @@ export function resolveSuppression(
   }
   return suppressedId;
 }
+
+/** A story-gate boss whose effects were deferred to a battle outcome. */
+export type DeferredStoryGate = {
+  triggerId: string;
+  once: boolean;
+  setFlags?: readonly string[];
+  clearFlags?: readonly string[];
+};
+
+/**
+ * How a deferred story-gate boss resolves when the player returns from its battle.
+ * `advance` applies the gate's flags (and once-marker) on a win; `suppress` holds
+ * the trigger off after a loss/flee so the player — who lands back at the gate —
+ * regains control and can re-engage once they step out of its area.
+ */
+export type StoryGateResolution =
+  | { kind: "advance"; setFlags: readonly string[]; clearFlags: readonly string[]; firedFlag?: string }
+  | { kind: "suppress"; triggerId: string };
+
+export function resolveStoryGateReturn(
+  gate: DeferredStoryGate,
+  outcome: "win" | "lose" | "flee" | undefined
+): StoryGateResolution {
+  if (outcome === "win") {
+    return {
+      kind: "advance",
+      setFlags: gate.setFlags ?? [],
+      clearFlags: gate.clearFlags ?? [],
+      firedFlag: gate.once ? triggerFiredFlag(gate.triggerId) : undefined
+    };
+  }
+  return { kind: "suppress", triggerId: gate.triggerId };
+}

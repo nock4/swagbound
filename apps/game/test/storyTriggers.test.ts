@@ -6,6 +6,7 @@ import {
   triggerConditionsMet,
   selectStoryTrigger,
   resolveSuppression,
+  resolveStoryGateReturn,
   isBarrierActive,
   barrierBlocksPoint
 } from "../src/storyTriggers";
@@ -102,5 +103,35 @@ describe("story barriers (solid gates)", () => {
     expect(barrierBlocksPoint([barrier], { x: 110, y: 55 }, has([]))).toBe(true);
     expect(barrierBlocksPoint([barrier], { x: 300, y: 55 }, has([]))).toBe(false); // outside area
     expect(barrierBlocksPoint([barrier], { x: 110, y: 55 }, has(["story:boss_cleared"]))).toBe(false); // inactive
+  });
+});
+
+describe("story-gate boss return (victory-gated flags)", () => {
+  const gate = {
+    triggerId: "boss-gate",
+    once: true,
+    setFlags: ["signal:route_open"],
+    clearFlags: ["signal:road_closed"]
+  };
+
+  it("advances flags + the once-marker only on a win", () => {
+    const resolution = resolveStoryGateReturn(gate, "win");
+    expect(resolution).toEqual({
+      kind: "advance",
+      setFlags: ["signal:route_open"],
+      clearFlags: ["signal:road_closed"],
+      firedFlag: triggerFiredFlag("boss-gate")
+    });
+  });
+
+  it("omits the once-marker for re-armable gates", () => {
+    const resolution = resolveStoryGateReturn({ ...gate, once: false }, "win");
+    expect(resolution).toMatchObject({ kind: "advance", firedFlag: undefined });
+  });
+
+  it("suppresses (never advances) on loss, flee, or unknown outcome", () => {
+    for (const outcome of ["lose", "flee", undefined] as const) {
+      expect(resolveStoryGateReturn(gate, outcome)).toEqual({ kind: "suppress", triggerId: "boss-gate" });
+    }
   });
 });
