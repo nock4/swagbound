@@ -807,17 +807,29 @@ export const BattleBackgroundDistortionSchema = z.object({
   speed: z.number()
 });
 
+/**
+ * Light palette-cycle approximation: oscillates the whole frame's hue by up to
+ * `degrees` at `speed` (radians/sec) for EarthBound-style background shimmer,
+ * without true indexed-palette rotation.
+ */
+export const BattleBackgroundColorCycleSchema = z.object({
+  degrees: z.number(),
+  speed: z.number()
+});
+
 export const BattleBackgroundSchema = z.object({
   id: z.number().int().nonnegative(),
   scroll: BattleBackgroundScrollSchema.optional(),
-  distortion: BattleBackgroundDistortionSchema.optional()
+  distortion: BattleBackgroundDistortionSchema.optional(),
+  colorCycle: BattleBackgroundColorCycleSchema.optional()
 });
 
 export const BackgroundOverrideEntrySchema = z.object({
   image: z.string().min(1),
   distortion: BattleBackgroundDistortionSchema,
   distortionType: z.enum(["horizontal-smooth", "horizontal-interlaced", "vertical-compression"]).optional(),
-  scroll: BattleBackgroundScrollSchema.optional()
+  scroll: BattleBackgroundScrollSchema.optional(),
+  colorCycle: BattleBackgroundColorCycleSchema.optional()
 }).strict();
 
 export const BackgroundOverridesSchema = z.object({
@@ -1231,6 +1243,7 @@ export type BattleGroup = z.infer<typeof BattleGroupSchema>;
 export type BattleBackground = z.infer<typeof BattleBackgroundSchema>;
 export type BattleBackgroundScroll = z.infer<typeof BattleBackgroundScrollSchema>;
 export type BattleBackgroundDistortion = z.infer<typeof BattleBackgroundDistortionSchema>;
+export type BattleBackgroundColorCycle = z.infer<typeof BattleBackgroundColorCycleSchema>;
 export type BattleDropRarity = z.infer<typeof BattleDropRaritySchema>;
 export type FontGlyphSheet = z.infer<typeof FontGlyphSheetSchema>;
 export type FontCollection = z.infer<typeof FontCollectionSchema>;

@@ -9,6 +9,14 @@
         "amplitude": 3,
         "frequency": 0.045,
         "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
       }
     },
     "caves-001": {
@@ -18,6 +26,14 @@
         "amplitude": 3,
         "frequency": 0.045,
         "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
       }
     },
     "cloudcastle-dessert-oasis-001": {
@@ -27,6 +43,14 @@
         "amplitude": 4,
         "frequency": 0.03,
         "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
       }
     },
     "dance-system-seen-backwards-001": {
@@ -36,6 +60,14 @@
         "amplitude": 1,
         "frequency": 0.05,
         "speed": 0.85
+      },
+      "scroll": {
+        "x": 5,
+        "y": 3
+      },
+      "colorCycle": {
+        "degrees": 8,
+        "speed": 0.6
       }
     },
     "pifella-2-22-you-can-not-redo-001": {
@@ -45,6 +77,14 @@
         "amplitude": 4,
         "frequency": 0.03,
         "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
       }
     },
     "pifella-2-parasite-chamber-001": {
@@ -54,6 +94,14 @@
         "amplitude": 3,
         "frequency": 0.045,
         "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
       }
     },
     "pray4lowbie-001": {
@@ -63,6 +111,14 @@
         "amplitude": 4,
         "frequency": 0.03,
         "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
       }
     },
     "projections-001": {
@@ -72,6 +128,14 @@
         "amplitude": 3,
         "frequency": 0.045,
         "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
       }
     },
     "really-new-god-001": {
@@ -81,6 +145,14 @@
         "amplitude": 4,
         "frequency": 0.03,
         "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
       }
     },
     "record-of-hyperwar-001": {
@@ -90,6 +162,14 @@
         "amplitude": 1,
         "frequency": 0.05,
         "speed": 0.85
+      },
+      "scroll": {
+        "x": 5,
+        "y": 3
+      },
+      "colorCycle": {
+        "degrees": 8,
+        "speed": 0.6
       }
     },
     "schizobanners-001": {
@@ -99,6 +179,14 @@
         "amplitude": 1,
         "frequency": 0.05,
         "speed": 0.85
+      },
+      "scroll": {
+        "x": 5,
+        "y": 3
+      },
+      "colorCycle": {
+        "degrees": 8,
+        "speed": 0.6
       }
     },
     "summon-something-4-002": {
@@ -108,6 +196,14 @@
         "amplitude": 4,
         "frequency": 0.03,
         "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
       }
     },
     "syntax-ruins-archive-quotes-log-001": {
@@ -117,6 +213,14 @@
         "amplitude": 1,
         "frequency": 0.05,
         "speed": 0.85
+      },
+      "scroll": {
+        "x": 5,
+        "y": 3
+      },
+      "colorCycle": {
+        "degrees": 8,
+        "speed": 0.6
       }
     },
     "toji-a-001": {
@@ -126,6 +230,14 @@
         "amplitude": 3,
         "frequency": 0.045,
         "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
       }
     }
   },
