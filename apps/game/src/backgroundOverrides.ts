@@ -31,6 +31,7 @@ export function toBattleBackground(entry: BackgroundOverrideEntry): BattleBackgr
   return {
     id: 0,
     distortion: { ...entry.distortion, kind: entry.distortionType ?? entry.distortion?.kind },
-    scroll: entry.scroll
+    scroll: entry.scroll,
+    colorCycle: entry.colorCycle
   };
 }

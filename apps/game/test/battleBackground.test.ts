@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   MAX_BATTLE_BACKGROUND_WARP_PX,
   hasAnimatedBattleBackground,
+  hueRotation,
   normalizeDistortionMode,
   rowOffset,
   rowSampleOffsets,
@@ -35,6 +36,23 @@ describe("battleBackground", () => {
         id: 1,
         distortion: { kind: "horizontal, synthetic", amplitude: 2, frequency: 0.25, speed: 1 }
       })).toBe(true);
+    });
+
+    it("enables animation for a color cycle alone", () => {
+      expect(hasAnimatedBattleBackground({ id: 1, colorCycle: { degrees: 10, speed: 0.5 } })).toBe(true);
+      expect(hasAnimatedBattleBackground({ id: 1, colorCycle: { degrees: 0, speed: 0.5 } })).toBe(false);
+      expect(hasAnimatedBattleBackground({ id: 1, colorCycle: { degrees: 10, speed: 0 } })).toBe(false);
+    });
+  });
+
+  describe("hueRotation", () => {
+    it("oscillates between +/- degrees and is zero when disabled", () => {
+      expect(hueRotation(0, { degrees: 12, speed: 1 })).toBeCloseTo(0, 6);
+      expect(hueRotation((Math.PI / 2) * 1000, { degrees: 12, speed: 1 })).toBeCloseTo(12, 5);
+      expect(hueRotation((Math.PI * 1.5) * 1000, { degrees: 12, speed: 1 })).toBeCloseTo(-12, 5);
+      expect(hueRotation(500, undefined)).toBe(0);
+      expect(hueRotation(500, { degrees: 0, speed: 1 })).toBe(0);
+      expect(hueRotation(500, { degrees: 12, speed: 0 })).toBe(0);
     });
   });
 

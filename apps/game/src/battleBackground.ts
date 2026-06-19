@@ -1,6 +1,7 @@
 import type Phaser from "phaser";
 import type {
   BattleBackground,
+  BattleBackgroundColorCycle,
   BattleBackgroundDistortion,
   BattleBackgroundScroll
 } from "@eb/schemas";
@@ -21,6 +22,7 @@ export type BattleBackgroundDebug = {
   scrollX: number;
   scrollY: number;
   warpSample: number;
+  hueDeg: number;
 };
 
 export type BattleBackgroundRowSample = {
@@ -39,8 +41,22 @@ const STATIC_BACKGROUND_DEBUG: BattleBackgroundDebug = {
   mode: "none",
   scrollX: 0,
   scrollY: 0,
-  warpSample: 0
+  warpSample: 0,
+  hueDeg: 0
 };
+
+/** Oscillating hue rotation (degrees) for the light palette-cycle shimmer. */
+export function hueRotation(now: number, colorCycle: BattleBackgroundColorCycle | undefined): number {
+  if (!colorCycle) {
+    return 0;
+  }
+  const degrees = finiteNumber(colorCycle.degrees);
+  const speed = finiteNumber(colorCycle.speed);
+  if (degrees === 0 || speed === 0) {
+    return 0;
+  }
+  return degrees * Math.sin(speed * finiteNumber(now) / 1000);
+}
 
 export function staticBattleBackgroundDebug(): BattleBackgroundDebug {
   return { ...STATIC_BACKGROUND_DEBUG };
@@ -125,10 +141,12 @@ export function hasAnimatedBattleBackground(background: BattleBackground | undef
   }
   const scroll = background.scroll;
   const distortion = background.distortion;
+  const colorCycle = background.colorCycle;
   const mode = normalizeDistortionMode(distortion?.kind);
   return Boolean(
     (scroll && (!isZero(scroll.x) || !isZero(scroll.y))) ||
-    (distortion && mode !== "none" && distortion.amplitude > 0 && distortion.frequency > 0 && !isZero(distortion.speed))
+    (distortion && mode !== "none" && distortion.amplitude > 0 && distortion.frequency > 0 && !isZero(distortion.speed)) ||
+    (colorCycle && !isZero(colorCycle.degrees) && !isZero(colorCycle.speed))
   );
 }
 
@@ -211,20 +229,26 @@ function drawBattleBackgroundFrame(
   const scrollX = wrapNumber(scroll.x, width);
   const scrollY = wrapNumber(scroll.y, height);
   const mode = normalizeDistortionMode(background.distortion?.kind);
+  const hueDeg = hueRotation(now, background.colorCycle);
 
   context.clearRect(0, 0, width, height);
   context.imageSmoothingEnabled = false;
+  // Hue-rotate the whole frame for the light palette-cycle shimmer. Applies to
+  // each per-row drawImage below; reset afterward so it never leaks.
+  context.filter = hueDeg !== 0 ? `hue-rotate(${hueDeg}deg)` : "none";
   for (let y = 0; y < height; y += 1) {
     const { sourceX, sourceY } = rowSampleOffsets(mode, y, now, background.distortion, scrollX, scrollY, width, height);
     drawWrappedRow(context, source, sourceX, sourceY, y, width);
   }
+  context.filter = "none";
 
   return {
     animated: true,
     mode,
     scrollX: roundDebug(scrollX),
     scrollY: roundDebug(scrollY),
-    warpSample: roundDebug(rowOffset(Math.min(height - 1, WARP_SAMPLE_ROW), now, background.distortion))
+    warpSample: roundDebug(rowOffset(Math.min(height - 1, WARP_SAMPLE_ROW), now, background.distortion)),
+    hueDeg: roundDebug(hueDeg)
   };
 }
 
