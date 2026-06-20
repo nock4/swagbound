@@ -67,7 +67,21 @@
   },
   "byTextPointer": {
     "data_15.l_0xc5eb0b": {
-      "ref": "dialogue:archive-console-link"
+      "pages": [
+        "The Bosch Terminal boots from a timestamp Bosch has not reached yet.",
+        "\"Bosch, the route is not neutral. A public version is already moving through town ahead of your body.\"",
+        "\"That version is the Malady: symptom, mask, and civic convenience with your smile stapled on.\"",
+        "\"Milady is the engine underneath it. Rumor, paperwork, feed pressure, all one cheap machine.\"",
+        "\"Walk the route anyway. Make the public version prove provenance in daylight.\""
+      ]
+    },
+    "data_20.l_0xc66b97": {
+      "pages": [
+        "MiFella hits the door like the algorithm owes him rent.",
+        "\"Bosch. Up. You're trending before breakfast, which is legally the worst kind of trending.\"",
+        "\"Some public version of you is already outside, polite and wrong. Town's eating it up.\"",
+        "\"Bring shoes. Bring a face you can prove is yours. The trouble is making good time.\""
+      ]
     },
     "data_20.l_0xc65efc": {
       "pages": [

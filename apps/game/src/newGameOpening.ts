@@ -5,14 +5,10 @@ export const EARTHBOUND_OPENING_KNOCK_REF = "data_20.l_0xc66b97";
 export const EARTHBOUND_INTRO_METEOR_MARKER_REF = "data_38.l_0xc86279";
 export const EARTHBOUND_BUZZ_BUZZ_METEOR_REF = "data_15.l_0xc5eb0b";
 export const EARTHBOUND_STARMAN_JUNIOR_ENEMY_ID = 214;
-export const EARTHBOUND_FIRST_BOSS_DIALOGUE_REF = "data_20.l_0xc65efc";
-export const EARTHBOUND_FIRST_BOSS_GROUP_ID = 448;
 export const INTRO_BEDROOM_OPENING_DONE_FLAG = "intro:bedroom-opening-done";
 export const INTRO_METEOR_BEAT_FIRED_FLAG = "intro:meteor-beat-fired";
-export const INTRO_FIRST_BOSS_DONE_FLAG = "intro:first-boss-done";
 
 const INTRO_METEOR_TRIGGER_RADIUS_TILES = 3;
-const FIRST_BOSS_TRIGGER_RADIUS_TILES = 3;
 
 export const INTRO_ACTOR_VM_STUBS = [
   {
@@ -59,15 +55,6 @@ export type IntroMeteorBeatStart = {
   derivation: string;
 };
 
-export type IntroFirstBossBeatStart = {
-  dialogueRef: string;
-  battleGroupId: number;
-  trigger: WorldRect;
-  marker: WorldPoint;
-  triggerCenter: WorldPoint;
-  derivation: string;
-};
-
 export type ResolvedIntroMeteorBeat =
   | { resolved: true; start: IntroMeteorBeatStart }
   | {
@@ -89,30 +76,9 @@ export type IntroMeteorBeatFireDecision =
       reason: "not_intro_active" | "opening_not_complete" | "outside_trigger" | "already_fired";
     };
 
-export type IntroFirstBossBeatFireDecision =
-  | { fire: true; nextAlreadyDone: true }
-  | {
-      fire: false;
-      nextAlreadyDone: boolean;
-      reason: "opening_not_complete" | "meteor_not_complete" | "outside_trigger" | "already_done";
-    };
-
 export type IntroSpineProgression =
-  | { monotonic: true; next: "bedroom" | "meteor" | "first_boss" | "complete" }
-  | { monotonic: false; violation: "meteor_without_bedroom" | "first_boss_without_meteor" };
-
-export type ResolvedIntroFirstBossBeat =
-  | { resolved: true; start: IntroFirstBossBeatStart }
-  | {
-      resolved: false;
-      reason:
-        | "missing_world"
-        | "missing_script"
-        | "missing_arcade_marker"
-        | "unwalkable_first_boss_trigger"
-        | "missing_battle"
-        | "missing_battle_group";
-    };
+  | { monotonic: true; next: "bedroom" | "meteor" | "complete" }
+  | { monotonic: false; violation: "meteor_without_bedroom" };
 
 export type IntroMeteorBattleTransitionDecision =
   | { action: "battle"; clearIntroActive: true; returnControl: false }
@@ -161,46 +127,18 @@ export function decideIntroMeteorBeatFire(options: {
   return { fire: true, nextAlreadyFired: true };
 }
 
-export function decideIntroFirstBossBeatFire(options: {
-  bedroomOpeningComplete: boolean;
-  meteorBeatComplete: boolean;
-  playerInTriggerRegion: boolean;
-  alreadyDone: boolean;
-}): IntroFirstBossBeatFireDecision {
-  if (options.alreadyDone) {
-    return { fire: false, nextAlreadyDone: true, reason: "already_done" };
-  }
-  if (!options.bedroomOpeningComplete) {
-    return { fire: false, nextAlreadyDone: false, reason: "opening_not_complete" };
-  }
-  if (!options.meteorBeatComplete) {
-    return { fire: false, nextAlreadyDone: false, reason: "meteor_not_complete" };
-  }
-  if (!options.playerInTriggerRegion) {
-    return { fire: false, nextAlreadyDone: false, reason: "outside_trigger" };
-  }
-  return { fire: true, nextAlreadyDone: true };
-}
-
 export function introSpineProgression(flags: {
   bedroomDone: boolean;
   meteorDone: boolean;
-  firstBossDone: boolean;
 }): IntroSpineProgression {
   if (flags.meteorDone && !flags.bedroomDone) {
     return { monotonic: false, violation: "meteor_without_bedroom" };
-  }
-  if (flags.firstBossDone && !flags.meteorDone) {
-    return { monotonic: false, violation: "first_boss_without_meteor" };
   }
   if (!flags.bedroomDone) {
     return { monotonic: true, next: "bedroom" };
   }
   if (!flags.meteorDone) {
     return { monotonic: true, next: "meteor" };
-  }
-  if (!flags.firstBossDone) {
-    return { monotonic: true, next: "first_boss" };
   }
   return { monotonic: true, next: "complete" };
 }
@@ -348,74 +286,6 @@ export function resolveIntroMeteorBeatStart(
       marker: { ...marker.worldPixel },
       triggerCenter: { ...landing.point },
       derivation: "meteor object text pointer, nearest walkable collision landing, generated battle group containing Starman Junior"
-    }
-  };
-}
-
-export function resolveIntroFirstBossBeatStart(
-  world: WorldChunked | undefined,
-  scripts: ScriptCollection | undefined,
-  battle: BattleData | undefined,
-  options: {
-    dialogueRef?: string;
-    battleGroupId?: number;
-  } = {}
-): ResolvedIntroFirstBossBeat {
-  const dialogueRef = options.dialogueRef ?? EARTHBOUND_FIRST_BOSS_DIALOGUE_REF;
-  const battleGroupId = options.battleGroupId ?? EARTHBOUND_FIRST_BOSS_GROUP_ID;
-
-  if (!world) {
-    return { resolved: false, reason: "missing_world" };
-  }
-  if (!scripts || !resolveScriptReference(scripts, dialogueRef)) {
-    return { resolved: false, reason: "missing_script" };
-  }
-
-  const marker = world.npcs.find((npc) => npc.textPointer === dialogueRef || npc.textPointer2 === dialogueRef);
-  if (!marker) {
-    return { resolved: false, reason: "missing_arcade_marker" };
-  }
-
-  const landing = resolveDoorWarpLanding(
-    marker.worldPixel,
-    world.collision.solidRows,
-    {
-      cellSize: world.collision.cellSize,
-      width: world.collision.width,
-      height: world.collision.height
-    },
-    { maxRingCells: Math.max(1, Math.ceil(world.tileSize / world.collision.cellSize)) }
-  );
-  if (!landing.walkable) {
-    return { resolved: false, reason: "unwalkable_first_boss_trigger" };
-  }
-
-  if (!battle) {
-    return { resolved: false, reason: "missing_battle" };
-  }
-  const battleGroup = battle.groups.find((group) => group.id === battleGroupId);
-  if (!battleGroup) {
-    return { resolved: false, reason: "missing_battle_group" };
-  }
-
-  const radiusPixels = Math.max(world.tileSize, world.tileSize * FIRST_BOSS_TRIGGER_RADIUS_TILES);
-  const trigger = clampedRectAround(landing.point, radiusPixels, {
-    width: world.mapWidthTiles * world.tileSize,
-    height: world.mapHeightTiles * world.tileSize
-  });
-  if (trigger.width <= 0 || trigger.height <= 0) {
-    return { resolved: false, reason: "unwalkable_first_boss_trigger" };
-  }
-
-  return {
-    resolved: true,
-    start: {
-      dialogueRef,
-      battleGroupId: battleGroup.id,
-      trigger,
-      marker: { ...marker.worldPixel },
-      triggerCenter: { ...landing.point },
-      derivation: "Sharks-area NPC text pointer, nearest walkable collision landing, generated Frank battle group"
     }
   };
 }

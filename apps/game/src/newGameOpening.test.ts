@@ -1,11 +1,9 @@
 import { describe, expect, it } from "vitest";
 import type { BattleData, ScriptCollection, ScriptCommand, WorldChunked } from "@eb/schemas";
 import {
-  decideIntroFirstBossBeatFire,
   decideIntroMeteorBattleTransition,
   decideIntroMeteorBeatFire,
   introSpineProgression,
-  resolveIntroFirstBossBeatStart,
   resolveIntroMeteorBeatStart
 } from "./newGameOpening";
 
@@ -105,99 +103,27 @@ describe("intro meteor beat helpers", () => {
   });
 });
 
-describe("intro first-boss beat helpers", () => {
-  it("fires once only after bedroom opening and meteor beats are complete", () => {
-    expect(decideIntroFirstBossBeatFire({
-      bedroomOpeningComplete: false,
-      meteorBeatComplete: true,
-      playerInTriggerRegion: true,
-      alreadyDone: false
-    })).toMatchObject({ fire: false, reason: "opening_not_complete" });
-
-    expect(decideIntroFirstBossBeatFire({
-      bedroomOpeningComplete: true,
-      meteorBeatComplete: false,
-      playerInTriggerRegion: true,
-      alreadyDone: false
-    })).toMatchObject({ fire: false, reason: "meteor_not_complete" });
-
-    const first = decideIntroFirstBossBeatFire({
-      bedroomOpeningComplete: true,
-      meteorBeatComplete: true,
-      playerInTriggerRegion: true,
-      alreadyDone: false
-    });
-    expect(first).toEqual({ fire: true, nextAlreadyDone: true });
-
-    expect(decideIntroFirstBossBeatFire({
-      bedroomOpeningComplete: true,
-      meteorBeatComplete: true,
-      playerInTriggerRegion: true,
-      alreadyDone: first.nextAlreadyDone
-    })).toEqual({
-      fire: false,
-      nextAlreadyDone: true,
-      reason: "already_done"
-    });
-  });
-
+describe("intro spine helpers", () => {
   it("models monotonic story-spine flag progression", () => {
     expect(introSpineProgression({
       bedroomDone: false,
-      meteorDone: false,
-      firstBossDone: false
+      meteorDone: false
     })).toEqual({ monotonic: true, next: "bedroom" });
 
     expect(introSpineProgression({
       bedroomDone: true,
-      meteorDone: false,
-      firstBossDone: false
+      meteorDone: false
     })).toEqual({ monotonic: true, next: "meteor" });
 
     expect(introSpineProgression({
       bedroomDone: true,
-      meteorDone: true,
-      firstBossDone: false
-    })).toEqual({ monotonic: true, next: "first_boss" });
-
-    expect(introSpineProgression({
-      bedroomDone: true,
-      meteorDone: true,
-      firstBossDone: true
+      meteorDone: true
     })).toEqual({ monotonic: true, next: "complete" });
 
     expect(introSpineProgression({
       bedroomDone: false,
-      meteorDone: true,
-      firstBossDone: false
+      meteorDone: true
     })).toEqual({ monotonic: false, violation: "meteor_without_bedroom" });
-
-    expect(introSpineProgression({
-      bedroomDone: true,
-      meteorDone: false,
-      firstBossDone: true
-    })).toEqual({ monotonic: false, violation: "first_boss_without_meteor" });
-  });
-
-  it("resolves the first-boss trigger from a synthetic Sharks-area pointer and battle group", () => {
-    const world = syntheticWorld();
-    const scripts = syntheticScripts("synthetic.frank");
-    const battle = syntheticBattle();
-
-    const resolved = resolveIntroFirstBossBeatStart(world, scripts, battle, {
-      dialogueRef: "synthetic.frank",
-      battleGroupId: 11
-    });
-
-    expect(resolved).toMatchObject({
-      resolved: true,
-      start: {
-        dialogueRef: "synthetic.frank",
-        battleGroupId: 11,
-        derivation: expect.stringContaining("Sharks-area NPC text pointer")
-      }
-    });
-    expect(resolved.resolved ? resolved.start.trigger.width : 0).toBeGreaterThan(0);
   });
 });
 
@@ -234,20 +160,6 @@ function syntheticWorld(): WorldChunked {
         interactable: true,
         visible: true,
         worldPixel: { x: 48, y: 48 }
-      },
-      {
-        npcId: 2,
-        spriteGroup: 1,
-        eventFlag: 0,
-        direction: "up",
-        type: "person",
-        movement: 0,
-        showSprite: "always",
-        textPointer: "synthetic.frank",
-        textPointer2: "$0",
-        interactable: true,
-        visible: true,
-        worldPixel: { x: 80, y: 72 }
       }
     ],
     doors: [],
@@ -268,8 +180,8 @@ function syntheticWorld(): WorldChunked {
       chunksWritten: 0,
       voidChunks: 0,
       chunkFiles: 0,
-      npcs: 2,
-      visibleNpcs: 2,
+      npcs: 1,
+      visibleNpcs: 1,
       solidCells: 0,
       mapTilesetsUsed: 0,
       palettesUsed: 0,

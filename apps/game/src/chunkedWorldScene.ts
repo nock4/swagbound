@@ -117,14 +117,10 @@ import { createDialogueResolver, textSpeedCpsFromSearch } from "./dialogueRender
 import {
   INTRO_ACTOR_VM_STUBS,
   INTRO_BEDROOM_OPENING_DONE_FLAG,
-  INTRO_FIRST_BOSS_DONE_FLAG,
   INTRO_METEOR_BEAT_FIRED_FLAG,
-  decideIntroFirstBossBeatFire,
   decideIntroMeteorBattleTransition,
   decideIntroMeteorBeatFire,
-  resolveIntroFirstBossBeatStart,
   resolveIntroMeteorBeatStart,
-  type IntroFirstBossBeatStart,
   type IntroMeteorBeatStart,
   type NewGameOpeningStart
 } from "./newGameOpening";
@@ -405,9 +401,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private startupFallbackReason?: string;
   private newGameOpening?: NewGameOpeningStart;
   private introMeteorBeat?: IntroMeteorBeatStart;
-  private introFirstBossBeat?: IntroFirstBossBeatStart;
   private warnedIntroMeteorSkips = new Set<string>();
-  private warnedIntroFirstBossSkips = new Set<string>();
   private warnedIntroActorVmStubs = new Set<string>();
   private warnedStoryTriggerSkips = new Set<string>();
   private suppressedTriggerId?: string;
@@ -524,7 +518,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.collisionOverlayEnabled = this.initialCollisionOverlayEnabled();
     this.registerCollisionDebugGlobals();
     this.resolveIntroMeteorBeatForStart();
-    this.resolveIntroFirstBossBeatForStart();
 
     const restoredPlayer = this.restoreState ? undefined : this.applyInitialSave();
     const returnPlayer = this.applyReturnRestore();
@@ -683,9 +676,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.maybeStartIntroMeteorBeat()) {
       return;
     }
-    if (this.maybeStartIntroFirstBossBeat()) {
-      return;
-    }
     if (this.maybeFireStoryTrigger()) {
       return;
     }
@@ -757,9 +747,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.startupFallbackReason = undefined;
     this.newGameOpening = undefined;
     this.introMeteorBeat = undefined;
-    this.introFirstBossBeat = undefined;
     this.warnedIntroMeteorSkips.clear();
-    this.warnedIntroFirstBossSkips.clear();
     this.warnedIntroActorVmStubs.clear();
     this.warnedStoryTriggerSkips.clear();
     this.suppressedTriggerId = undefined;
@@ -2667,16 +2655,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.warnIntroMeteorSkip(resolution.reason);
   }
 
-  private resolveIntroFirstBossBeatForStart(): void {
-    this.introFirstBossBeat = undefined;
-    const resolution = resolveIntroFirstBossBeatStart(this.world_, this.data_.scripts, this.data_.battle);
-    if (resolution.resolved) {
-      this.introFirstBossBeat = resolution.start;
-      return;
-    }
-    this.warnIntroFirstBossSkip(resolution.reason);
-  }
-
   private maybeStartIntroMeteorBeat(): boolean {
     const beat = this.introMeteorBeat;
     if (!beat || this.menuState.open || this.dialogue.open || this.eventSequence?.running || this.isDoorFadeActive()) {
@@ -2708,43 +2686,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (startResult === "unavailable") {
       this.warnIntroMeteorSkip("dialogue_unavailable");
       this.finishIntroMeteorBeatWithoutBattle();
-      return true;
-    }
-    this.updatePrompt();
-    this.publish();
-    return true;
-  }
-
-  private maybeStartIntroFirstBossBeat(): boolean {
-    const beat = this.introFirstBossBeat;
-    if (!beat || this.menuState.open || this.dialogue.open || this.eventSequence?.running || this.isDoorFadeActive()) {
-      return false;
-    }
-    if (this.playerState.inputLocked) {
-      return false;
-    }
-    const decision = decideIntroFirstBossBeatFire({
-      bedroomOpeningComplete: this.gameFlags.has(INTRO_BEDROOM_OPENING_DONE_FLAG),
-      meteorBeatComplete: this.gameFlags.has(INTRO_METEOR_BEAT_FIRED_FLAG) && !this.newGameOpening,
-      playerInTriggerRegion: pointInRect(this.playerState, beat.trigger),
-      alreadyDone: this.gameFlags.has(INTRO_FIRST_BOSS_DONE_FLAG)
-    });
-    if (!decision.fire) {
-      return false;
-    }
-
-    lockPlayer(this.playerState, this.playerFrames);
-    const startResult = startScriptedBeatDialogue({
-      reference: beat.dialogueRef,
-      customDialogue: this.data_.customDialogue,
-      dialogueLibrary: this.data_.dialogueLibrary,
-      onComplete: () => this.completeIntroFirstBossDialogue(beat),
-      startOverrideDialogue: (pages, onComplete) => this.startOverriddenScriptedDialogue(pages, onComplete),
-      startEventSequence: (reference, onComplete) => this.eventSequence?.start(reference, { onComplete }) ?? false
-    });
-    if (startResult === "unavailable") {
-      this.warnIntroFirstBossSkip("dialogue_unavailable");
-      this.finishIntroFirstBossBeatWithoutBattle();
       return true;
     }
     this.updatePrompt();
@@ -2870,22 +2811,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.finishIntroMeteorBeatWithoutBattle();
   }
 
-  private completeIntroFirstBossDialogue(beat: IntroFirstBossBeatStart): void {
-    if (!this.data_.battle || !this.battleGroupExists(beat.battleGroupId) || !this.player) {
-      this.warnIntroFirstBossSkip("battle_unavailable");
-      this.finishIntroFirstBossBeatWithoutBattle();
-      return;
-    }
-
-    this.gameFlags.set(INTRO_FIRST_BOSS_DONE_FLAG);
-    const battleStarted = this.startEventBattle(beat.battleGroupId);
-    if (battleStarted) {
-      return;
-    }
-    this.warnIntroFirstBossSkip("battle_start_failed");
-    this.finishIntroFirstBossBeatWithoutBattle();
-  }
-
   private ensureIntroSoloParty(): void {
     const firstCharacter = this.data_.characters?.characters[0];
     if (!firstCharacter) {
@@ -2905,26 +2830,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
-  private finishIntroFirstBossBeatWithoutBattle(): void {
-    this.afterDialogueClosed();
-    this.updatePrompt();
-    this.publish();
-  }
-
   private warnIntroMeteorSkip(reason: string): void {
     if (this.warnedIntroMeteorSkips.has(reason)) {
       return;
     }
     this.warnedIntroMeteorSkips.add(reason);
     console.warn("Skipping new-game meteor intro beat.", reason);
-  }
-
-  private warnIntroFirstBossSkip(reason: string): void {
-    if (this.warnedIntroFirstBossSkips.has(reason)) {
-      return;
-    }
-    this.warnedIntroFirstBossSkips.add(reason);
-    console.warn("Skipping reconstructed first-boss story beat.", reason);
   }
 
   private warnIntroActorVmStubs(): void {
