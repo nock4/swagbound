@@ -6,6 +6,7 @@ import {
   type EventExecutorAdvanceInput,
   type EventExecutorAdvanceResult,
   type EventExecutorHost,
+  type EventRecoveryEffect,
   type EventWait,
   type ScriptCollection,
   type SpriteFacing,
@@ -396,6 +397,13 @@ export class RuntimeEventHost implements EventExecutorHost {
       return;
     }
     this.recordAudio("musicEffect");
+  }
+
+  recover(effect: EventRecoveryEffect): void {
+    if (this.skipUnsupported(effect)) {
+      return;
+    }
+    this.options.partyState.applyRecovery(effect, effect.char);
   }
 
   partyStat(op: Extract<EventEffect, { kind: "partyStat" }>["op"], char: number, amount: number): void {
