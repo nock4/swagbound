@@ -174,6 +174,8 @@ import {
   PLAYER_SPRITE_OVERRIDE_SHEET_KEY,
   spriteOverrideAssetUrl,
   spriteOverrideDirectionFrames,
+  spriteOverrideEnemyOverworldSheetKey,
+  spriteOverrideForEnemyOverworld,
   spriteOverrideForNpcId,
   spriteOverrideForSpriteGroup,
   spriteOverrideFrame,
@@ -244,6 +246,10 @@ type OverworldEnemyRuntime = {
   state: NpcRuntimeState;
   frames: DirectionFrameSequence;
   sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+  /** Texture key to render once loaded (Swagbound skin key or `sheet-<group>`). */
+  textureKey?: string;
+  /** Present when skinned with Swagbound overworld art (else falls back to EB sprite group). */
+  skin?: SpriteOverrideSheet;
 };
 
 type NpcSpriteOverrideResolution = {
@@ -363,6 +369,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
   private overworldEnemySeq = 0;
   private overworldEnemySpawnCooldownMs = 0;
+  private loadingEnemySkinKeys = new Set<string>();
   private forceEncounterHook?: (groupId?: number, advantage?: unknown) => ForceEncounterResult;
   private newGameStartupRecord?: NewGameStartupRunDebug;
   private startupRunActive = false;
@@ -3005,16 +3012,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
-  /** Swap a placeholder for the real sprite once its overworld sheet finishes loading. */
+  /** Swap a placeholder for the real sprite once its sheet (skin or EB group) finishes loading. */
   private upgradeOverworldEnemySprite(enemy: OverworldEnemyRuntime): void {
-    if (enemy.sprite instanceof Phaser.GameObjects.Sprite || enemy.spriteGroup === undefined) {
+    if (enemy.sprite instanceof Phaser.GameObjects.Sprite || !enemy.textureKey) {
       return;
     }
-    if (!this.textures.exists(`sheet-${enemy.spriteGroup}`)) {
+    if (!this.textures.exists(enemy.textureKey)) {
       return;
     }
     enemy.sprite?.destroy();
-    enemy.sprite = this.spawnActor(enemy.state.player.x, enemy.state.player.y, enemy.spriteGroup, enemy.state.player.facing);
+    enemy.sprite = this.spawnOverworldEnemyActor(
+      enemy.state.player.x,
+      enemy.state.player.y,
+      enemy.state.player.facing,
+      enemy.textureKey,
+      enemy.skin,
+      enemy.spriteGroup
+    );
   }
 
   private syncOverworldEnemy(enemy: OverworldEnemyRuntime): void {
@@ -3060,16 +3074,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.overworldEnemySpawnCooldownMs = OVERWORLD_ENEMY_SPAWN_INTERVAL_MS;
     const spriteGroup = lead.overworldSprite;
-    if (spriteGroup !== undefined && this.requestNpcSheet(spriteGroup)) {
-      this.load.start();
+    // Prefer the Swagbound roaming-enemy skin (by enemy id); fall back to the EB
+    // overworld sprite group when the family has no skin art.
+    const skin = spriteOverrideSheet(spriteOverrideForEnemyOverworld(this.data_.spriteOverrides, lead.id));
+    let textureKey: string | undefined;
+    let frames: DirectionFrameSequence;
+    if (skin) {
+      textureKey = spriteOverrideEnemyOverworldSheetKey(lead.id, skin.image);
+      this.requestEnemySkinSheet(textureKey, skin);
+      frames = spriteOverrideDirectionFrames(skin);
+    } else {
+      textureKey = spriteGroup !== undefined ? `sheet-${spriteGroup}` : undefined;
+      if (spriteGroup !== undefined && this.requestNpcSheet(spriteGroup)) {
+        this.load.start();
+      }
+      frames = this.framesForGroup(spriteGroup);
     }
-    const frames = this.framesForGroup(spriteGroup);
     this.overworldEnemySeq += 1;
     const key = `enemy-${this.overworldEnemySeq}`;
-    const sprite = this.spawnActor(spot.x, spot.y, spriteGroup, undefined);
-    // Hide the placeholder rectangle while the real overworld sheet streams in;
+    const sprite = this.spawnOverworldEnemyActor(spot.x, spot.y, undefined, textureKey, skin, spriteGroup);
+    // Hide the placeholder rectangle while the real sheet streams in;
     // upgradeOverworldEnemySprite() swaps in the sprite (visible) once it loads.
-    if (spriteGroup !== undefined && !(sprite instanceof Phaser.GameObjects.Sprite)) {
+    if (textureKey && !(sprite instanceof Phaser.GameObjects.Sprite)) {
       sprite.setVisible(false);
     }
     this.overworldEnemies.set(key, {
@@ -3077,6 +3103,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       enemyGroup,
       spriteGroup,
       frames,
+      textureKey,
+      skin,
       state: createNpcState(spot.x, spot.y, toFacing(undefined), {
         kind: "wander",
         radiusPx: OVERWORLD_ENEMY_WANDER_RADIUS_PX,
@@ -3085,6 +3113,36 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }, frames),
       sprite
     });
+  }
+
+  private requestEnemySkinSheet(textureKey: string, skin: SpriteOverrideSheet): void {
+    if (this.textures.exists(textureKey) || this.loadingEnemySkinKeys.has(textureKey)) {
+      return;
+    }
+    this.loadingEnemySkinKeys.add(textureKey);
+    this.load.spritesheet(textureKey, spriteOverrideAssetUrl(skin.image), {
+      frameWidth: skin.frameWidth,
+      frameHeight: skin.frameHeight
+    });
+    this.load.start();
+  }
+
+  private spawnOverworldEnemyActor(
+    x: number,
+    y: number,
+    direction: string | undefined,
+    textureKey: string | undefined,
+    skin: SpriteOverrideSheet | undefined,
+    spriteGroup: number | undefined
+  ): Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle {
+    if (skin && textureKey && this.textures.exists(textureKey)) {
+      return this.spawnOverrideActor(x, y, direction, textureKey, skin);
+    }
+    if (skin) {
+      // Skin sheet not ready yet: hidden placeholder until upgrade (avoids an EB-art flash).
+      return this.spawnPlaceholderActor(x, y);
+    }
+    return this.spawnActor(x, y, spriteGroup, direction);
   }
 
   private findOverworldEnemySpawnPoint(): { x: number; y: number } | undefined {
@@ -3137,6 +3195,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.overworldEnemies.clear();
     this.overworldEnemySpawnCooldownMs = 0;
+    this.loadingEnemySkinKeys.clear();
   }
 
   private startEncounterBattle(group: number, forcedAdvantage?: EncounterAdvantage): boolean {

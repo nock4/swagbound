@@ -282,8 +282,56 @@ export const SpriteOverridesSchema = z.object({
   player: SpriteOverrideSchema.optional(),
   byNpcId: z.record(SpriteOverrideSchema).optional(),
   bySpriteGroup: z.record(z.string().regex(/^\d+$/), SpriteOverrideSchema).optional(),
-  byEnemyId: z.record(SpriteOverrideSchema).optional()
+  byEnemyId: z.record(SpriteOverrideSchema).optional(),
+  // Skin for the VISIBLE roaming overworld enemy (touch-to-battle), keyed by EB
+  // enemy id. Generated at build from content/overworld-enemy-skins.json (by
+  // family) + the enemy family roster; distinct from byEnemyId (the battle sprite).
+  overworldByEnemyId: z.record(z.string().regex(/^\d+$/), SpriteOverrideSchema).optional()
 }).strict();
+
+/** Source mapping of overworld roaming-enemy skins by family (build expands to overworldByEnemyId). */
+export const OverworldEnemySkinsSchema = z.object({
+  schema: z.literal("swagbound.overworld-enemy-skins.v1"),
+  comment: z.string().optional(),
+  frame: z.object({
+    frameWidth: z.number().int().positive(),
+    frameHeight: z.number().int().positive(),
+    displayHeight: z.number().positive()
+  }),
+  byFamily: z.record(z.string().min(1), z.string().min(1))
+}).strict();
+
+export type OverworldEnemySkins = z.infer<typeof OverworldEnemySkinsSchema>;
+
+/**
+ * Expand the per-family overworld-enemy skin map into a per-enemy-id sprite-override
+ * map, using the enemy family roster. Families without art are simply omitted (they
+ * fall back to the EB overworld sprite group at runtime).
+ */
+export function expandOverworldEnemySkins(
+  skins: OverworldEnemySkins,
+  families: EnemyNameFamilies
+): Record<string, z.infer<typeof SpriteOverrideSchema>> {
+  const byEnemyId: Record<string, z.infer<typeof SpriteOverrideSchema>> = {};
+  for (const [family, ids] of Object.entries(families.families)) {
+    const image = skins.byFamily[family];
+    if (!image) {
+      continue;
+    }
+    for (const id of ids) {
+      byEnemyId[String(id)] = {
+        image,
+        frameWidth: skins.frame.frameWidth,
+        frameHeight: skins.frame.frameHeight,
+        displayHeight: skins.frame.displayHeight,
+        animations: { up: [0], right: [0], down: [0], left: [0] },
+        originX: 0.5,
+        originY: 1
+      };
+    }
+  }
+  return byEnemyId;
+}
 
 const ItemOverrideNameSchema = z.string()
   .trim()

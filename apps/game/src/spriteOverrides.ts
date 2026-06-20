@@ -135,6 +135,20 @@ export function spriteOverrideForEnemyId(
   return overrides?.byEnemyId?.[String(enemyId)];
 }
 
+const ENEMY_OVERWORLD_SPRITE_OVERRIDE_SHEET_KEY_PREFIX = "sprite-override-enemy-ow-";
+
+/** Swagbound skin for a VISIBLE roaming overworld enemy, keyed by EB enemy id. */
+export function spriteOverrideForEnemyOverworld(
+  overrides: Pick<SpriteOverrides, "overworldByEnemyId"> | undefined,
+  enemyId: number
+): SpriteOverride | undefined {
+  return overrides?.overworldByEnemyId?.[String(enemyId)];
+}
+
+export function spriteOverrideEnemyOverworldSheetKey(enemyId: number, image: string): string {
+  return `${ENEMY_OVERWORLD_SPRITE_OVERRIDE_SHEET_KEY_PREFIX}${enemyId}-${stableAssetPathHash(image)}`;
+}
+
 export function spriteOverrideEnemyEntries(
   overrides: Pick<SpriteOverrides, "byEnemyId"> | undefined
 ): Array<[number, SpriteOverride]> {

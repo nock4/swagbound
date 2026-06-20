@@ -6,6 +6,8 @@ import {
   BackgroundOverridesSchema,
   EnemyNameFamiliesSchema,
   expandEnemyNameFamilies,
+  expandOverworldEnemySkins,
+  OverworldEnemySkinsSchema,
   PsiOverridesSchema,
   SpriteOverridesSchema,
   StoryTriggersSchema,
@@ -27,6 +29,7 @@ export const SWAGBOUND_DIALOGUE_LIBRARY_SOURCE = "content/swagbound-dialogue-lib
 export const SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT = "swagbound-dialogue-library.json";
 export const SPRITE_OVERRIDES_SOURCE = "content/sprite-overrides.json";
 export const SPRITE_OVERRIDES_OUTPUT = "sprite-overrides.json";
+export const OVERWORLD_ENEMY_SKINS_SOURCE = "content/overworld-enemy-skins.json";
 export const BACKGROUND_OVERRIDES_SOURCE = "content/background-overrides.json";
 export const BACKGROUND_OVERRIDES_OUTPUT = "background-overrides.json";
 export const ITEM_OVERRIDES_SOURCE = "content/item-overrides.json";
@@ -70,7 +73,6 @@ async function copyJsonToGenerated(source: string, out: string, outputName: stri
 }
 
 async function copyContentOverlaysToGenerated(out: string): Promise<void> {
-  await validateSpriteOverrideImages(SPRITE_OVERRIDES_SOURCE);
   await validateBackgroundOverrideImages(BACKGROUND_OVERRIDES_SOURCE);
   await validatePsiOverrides(PSI_OVERRIDES_SOURCE);
   await validateBattleRules(BATTLE_RULES_SOURCE);
@@ -80,7 +82,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(ADDED_NPCS_SOURCE, out, ADDED_NPCS_OUTPUT),
     copyJsonToGenerated(CUSTOM_DIALOGUE_SOURCE, out, CUSTOM_DIALOGUE_OUTPUT),
     copyJsonToGenerated(SWAGBOUND_DIALOGUE_LIBRARY_SOURCE, out, SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT),
-    copyJsonToGenerated(SPRITE_OVERRIDES_SOURCE, out, SPRITE_OVERRIDES_OUTPUT),
+    generateSpriteOverridesWithOverworldSkins(out, SPRITE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(BACKGROUND_OVERRIDES_SOURCE, out, BACKGROUND_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
@@ -88,6 +90,28 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
     copyJsonToGenerated(BATTLE_RULES_SOURCE, out, BATTLE_RULES_OUTPUT)
   ]);
+}
+
+/**
+ * Write generated sprite-overrides: the committed content plus a generated
+ * `overworldByEnemyId` map (Swagbound roaming-enemy skins) expanded from
+ * content/overworld-enemy-skins.json (by family) + the enemy family roster.
+ * Validates every referenced image exists in public assets.
+ */
+async function generateSpriteOverridesWithOverworldSkins(out: string, outputName: string): Promise<void> {
+  const base = SpriteOverridesSchema.parse(JSON.parse(await readFile(resolve(SPRITE_OVERRIDES_SOURCE), "utf8")));
+  const skins = OverworldEnemySkinsSchema.parse(JSON.parse(await readFile(resolve(OVERWORLD_ENEMY_SKINS_SOURCE), "utf8")));
+  const families = EnemyNameFamiliesSchema.parse(JSON.parse(await readFile(resolve(ENEMY_NAME_FAMILIES_SOURCE), "utf8")));
+  const merged = SpriteOverridesSchema.parse({
+    ...base,
+    overworldByEnemyId: expandOverworldEnemySkins(skins, families)
+  });
+  await Promise.all(
+    spriteOverrideEntries(merged).map((override) => validatePublicAssetImage(override.image, "Sprite override image"))
+  );
+  const target = resolve(out, outputName);
+  await mkdir(dirname(target), { recursive: true });
+  await writeFile(target, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
 }
 
 /**
@@ -120,20 +144,13 @@ async function validateStoryTriggers(source: string): Promise<void> {
   );
 }
 
-async function validateSpriteOverrideImages(source: string): Promise<void> {
-  const raw = JSON.parse(await readFile(resolve(source), "utf8"));
-  const overrides = SpriteOverridesSchema.parse(raw);
-  await Promise.all(spriteOverrideEntries(overrides).map(async (override) => {
-    await validatePublicAssetImage(override.image, "Sprite override image");
-  }));
-}
-
 function spriteOverrideEntries(overrides: SpriteOverrides): SpriteOverride[] {
   return [
     overrides.player,
     ...Object.values(overrides.byNpcId ?? {}),
     ...Object.values(overrides.bySpriteGroup ?? {}),
-    ...Object.values(overrides.byEnemyId ?? {})
+    ...Object.values(overrides.byEnemyId ?? {}),
+    ...Object.values(overrides.overworldByEnemyId ?? {})
   ].filter((override): override is SpriteOverride => Boolean(override));
 }
 
