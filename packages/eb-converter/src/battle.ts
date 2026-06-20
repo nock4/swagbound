@@ -559,6 +559,8 @@ function enemyToBattleEnemy(id: number, entry: Record<string, string>, battleAct
     // CoilSnake hides the internal deduplicated Battle Sprite column in project
     // YAML and exports render-ready BattleSprites/<enemy id>.png files instead.
     spriteId: id,
+    // Sprite group of the visible roaming overworld enemy (touch-to-battle).
+    overworldSprite: optionalNumericField(entry, "Overworld Sprite"),
     level: numericField(entry, "Level"),
     hp: numericField(entry, "HP"),
     defense: numericField(entry, "Defense"),
