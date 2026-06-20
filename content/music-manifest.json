@@ -1,0 +1,20 @@
+{
+  "schema": "swagbound.music-manifest.v1",
+  "cues": {
+    "overworld": {
+      "file": "audio/music/overworld.mp3",
+      "loop": true,
+      "gain": 0.6
+    },
+    "battle": {
+      "file": "audio/music/battle.mp3",
+      "loop": true,
+      "gain": 0.6
+    },
+    "intro": {
+      "file": "audio/music/intro.mp3",
+      "loop": true,
+      "gain": 0.6
+    }
+  }
+}

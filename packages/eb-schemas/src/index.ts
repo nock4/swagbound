@@ -247,6 +247,15 @@ const PublicAssetPathSchema = z.string().min(1).refine((value) => {
   return !/^[a-z][a-z0-9+.-]*:/i.test(value);
 }, "path must be relative to apps/game/public");
 
+export const MusicManifestSchema = z.object({
+  schema: z.literal("swagbound.music-manifest.v1"),
+  cues: z.record(z.string().min(1), z.object({
+    file: PublicAssetPathSchema,
+    loop: z.boolean().default(true),
+    gain: z.number().min(0).max(1).default(0.7)
+  }).strict())
+}).strict();
+
 const SpriteOverrideFrameSequenceSchema = z.array(z.number().int().nonnegative()).min(1);
 
 export const SpriteOverrideSchema = z.object({
@@ -1355,6 +1364,7 @@ export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;
 export type SpriteSheetCollection = z.infer<typeof SpriteSheetCollectionSchema>;
 export type SpriteOverride = z.infer<typeof SpriteOverrideSchema>;
 export type SpriteOverrides = z.infer<typeof SpriteOverridesSchema>;
+export type MusicManifest = z.infer<typeof MusicManifestSchema>;
 export type BackgroundOverrideEntry = z.infer<typeof BackgroundOverrideEntrySchema>;
 export type BackgroundOverrides = z.infer<typeof BackgroundOverridesSchema>;
 export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;

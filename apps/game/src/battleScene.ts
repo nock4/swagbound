@@ -12,6 +12,7 @@ import {
   type FontCollection,
   type ItemCollection,
   type ItemData,
+  type MusicManifest,
   type PsiCollection,
   type PsiData,
   type SpriteOverrides,
@@ -155,6 +156,7 @@ import {
   type BattleSfx,
   type BattleSfxCue
 } from "./audio/battleSfx";
+import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
 import { battleStepSfx } from "./battleSfxPlan";
 
 const TAU = Math.PI * 2;
@@ -404,6 +406,7 @@ export class BattleScene extends Phaser.Scene {
   private backgroundAnimation?: AnimatedBattleBackgroundHandle;
   private backgroundDebug: BattleBackgroundDebug = staticBattleBackgroundDebug();
   private battleSfx_: BattleSfx = createBattleSfx();
+  private music_: Music = createMusic();
   private lastSfx_: BattleSfxCue | null = null;
   private sfxCount_ = 0;
   private firedSfx_ = new Set<BattleSfxCue>();
@@ -430,6 +433,8 @@ export class BattleScene extends Phaser.Scene {
     wallet?: number;
     returnTo?: BattleReturnContext;
     battleSfx?: BattleSfx;
+    music?: Music;
+    musicManifest?: MusicManifest;
     encounterAdvantage?: EncounterAdvantage;
   }): void {
     this.battleData_ = data.battleData;
@@ -497,6 +502,9 @@ export class BattleScene extends Phaser.Scene {
     this.backgroundAnimation = undefined;
     this.backgroundDebug = staticBattleBackgroundDebug();
     this.battleSfx_ = data.battleSfx ?? createBattleSfx();
+    this.music_ = data.music ?? createMusic(data.musicManifest ?? data.returnTo?.gameData.musicManifest, {
+      muted: musicDisabledBySearch(globalThis.location?.search)
+    });
     this.lastSfx_ = null;
     this.sfxCount_ = 0;
     this.firedSfx_.clear();
@@ -530,8 +538,10 @@ export class BattleScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor("#050505");
     this.drawBackground();
     this.events.once("shutdown", () => {
+      this.music_.stop();
       this.backgroundAnimation?.destroy();
     });
+    void this.music_.play("battle");
     this.drawEnemySprites();
     this.createStatusWindow();
     this.registerBattleSfxResume();
@@ -549,7 +559,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private registerBattleSfxResume(): void {
-    const resume = () => this.battleSfx_.resume();
+    const resume = () => {
+      this.battleSfx_.resume();
+      this.music_.resume();
+    };
     this.input.once("pointerdown", resume);
     this.input.keyboard?.once("keydown", resume);
     this.events.once("shutdown", () => {

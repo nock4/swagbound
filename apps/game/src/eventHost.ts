@@ -36,6 +36,12 @@ type FadeScene = {
   time?: { delayedCall(delay: number, callback: () => void): unknown };
 };
 
+export type EventMusicSink = {
+  play(cue: string): unknown;
+  stop(): unknown;
+  resume(): unknown;
+};
+
 export type EventWarpDestination = {
   x: number;
   y: number;
@@ -86,6 +92,8 @@ export type RuntimeEventHostOptions = {
   applyWarpDestination?: (destination: EventWarpDestination) => boolean | void;
   startBattle?: (group: number) => boolean;
   openShop?: (storeId: number) => boolean | void;
+  music?: EventMusicSink;
+  resolveMusicCueForTrack?: (track: number) => string | undefined;
   isEffectSupported?: (effect: EventEffect) => boolean;
   onUnsupportedEffect?: (effect: EventEffect) => void;
   customDialogue?: CustomDialogueLookup;
@@ -363,8 +371,16 @@ export class RuntimeEventHost implements EventExecutorHost {
     if (this.skipUnsupported(effect)) {
       return;
     }
-    // Audio playback is Phase 7; this slice records calls for debug only.
-    void effect;
+    if (effect.op === "stop") {
+      this.options.music?.stop();
+    } else if (effect.op === "resume") {
+      this.options.music?.resume();
+    } else if ("track" in effect) {
+      const cue = this.options.resolveMusicCueForTrack?.(effect.track);
+      if (cue) {
+        void this.options.music?.play(cue);
+      }
+    }
     this.recordAudio("music");
   }
 

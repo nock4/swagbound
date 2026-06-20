@@ -27,3 +27,11 @@ The content-builder compiles a slice into the same generated files consumed by
 `apps/game`: `manifest.json`, `world.json`, `scripts.json`, `npcs.json`,
 `sprite-groups.json`, `sprites.json`, `tutorial-status.json`, and
 `validation-report.json`, plus generated PNG assets.
+
+## Music Manifest
+
+`music-manifest.json` maps small, named music cues to user-owned track files.
+Act 1 currently defines `overworld`, `battle`, and `intro`. Put real tracks at
+`apps/game/public/audio/music/<cue>.<ext>` and update the manifest file names if
+the extension differs. No tracks are committed by default; missing files keep
+the runtime silent.

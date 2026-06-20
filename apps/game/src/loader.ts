@@ -14,6 +14,7 @@ import {
   ItemCollectionSchema,
   ItemOverridesSchema,
   ManifestSchema,
+  MusicManifestSchema,
   NpcReferenceCollectionSchema,
   PsiCollectionSchema,
   PsiOverridesSchema,
@@ -46,6 +47,7 @@ import {
   type ItemCollection,
   type ItemOverrides,
   type Manifest,
+  type MusicManifest,
   type NumericFlagState,
   type NpcReferenceCollection,
   type PsiCollection,
@@ -77,6 +79,7 @@ const PSI_OVERRIDES_FILE = "psi-overrides.json";
 const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
 const BATTLE_RULES_FILE = "battle-rules.json";
 const STORY_TRIGGERS_FILE = "triggers.json";
+const MUSIC_MANIFEST_FILE = "music-manifest.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -97,6 +100,7 @@ export type GameData = {
   encounters?: Encounters;
   battle?: BattleData;
   battleRules?: BattleRules;
+  musicManifest?: MusicManifest;
   font?: FontCollection;
   window?: WindowCollection;
   characters?: CharacterCollection;
@@ -171,7 +175,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     addedNpcs,
     customDialogue,
     dialogueLibrary,
-    storyTriggers
+    storyTriggers,
+    musicManifest
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -217,7 +222,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${ADDED_NPCS_FILE}`, AddedNpcsSchema),
     loadJson(`/generated/${CUSTOM_DIALOGUE_FILE}`, CustomDialogueSchema),
     loadJson(`/generated/${SWAGBOUND_DIALOGUE_LIBRARY_FILE}`, SwagboundDialogueLibrarySchema),
-    loadJson(`/generated/${STORY_TRIGGERS_FILE}`, StoryTriggersSchema)
+    loadJson(`/generated/${STORY_TRIGGERS_FILE}`, StoryTriggersSchema),
+    loadJson(`/generated/${MUSIC_MANIFEST_FILE}`, MusicManifestSchema)
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
@@ -243,6 +249,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     encounters,
     battle: resolvedBattle,
     battleRules,
+    musicManifest,
     font,
     window,
     characters: resolvedCharacters,

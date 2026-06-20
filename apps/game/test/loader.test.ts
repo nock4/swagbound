@@ -316,6 +316,34 @@ describe("loadGameData", () => {
       unescapableGroups: [450]
     });
   });
+
+  it("loads the generated music manifest overlay", async () => {
+    vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
+      const path = String(url);
+      if (path.endsWith("/music-manifest.json")) {
+        return jsonResponse({
+          schema: "swagbound.music-manifest.v1",
+          cues: {
+            overworld: { file: "audio/music/overworld.mp3", gain: 0.6 }
+          }
+        });
+      }
+      throw new Error(`No fixture for ${path}`);
+    }));
+
+    const data = await loadGameData(syntheticManifest());
+
+    expect(data.musicManifest).toEqual({
+      schema: "swagbound.music-manifest.v1",
+      cues: {
+        overworld: {
+          file: "audio/music/overworld.mp3",
+          loop: true,
+          gain: 0.6
+        }
+      }
+    });
+  });
 });
 
 function character(id: number, name: string): CharacterCollection["characters"][number] {
