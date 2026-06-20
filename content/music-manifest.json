@@ -12,9 +12,9 @@
       "gain": 0.6
     },
     "intro": {
-      "file": "audio/music/intro.mp3",
+      "file": "audio/music/overworld.mp3",
       "loop": true,
-      "gain": 0.6
+      "gain": 0.5
     }
   }
 }
