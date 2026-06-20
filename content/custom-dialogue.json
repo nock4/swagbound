@@ -12,7 +12,12 @@
       "ref": "target:bosch-main-room-v0:cousin"
     },
     "35": {
-      "ref": "target:bosch-main-room-v0:proof-token-bowl"
+      "ref": "target:bosch-main-room-v0:proof-token-bowl",
+      "give": {
+        "char": 1,
+        "item": 54,
+        "once": true
+      }
     },
     "37": {
       "ref": "interior:bosch-main-room-v0"

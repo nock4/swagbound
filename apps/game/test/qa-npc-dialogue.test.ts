@@ -145,6 +145,24 @@ describe("qa npc-dialogue: authored content resolution", () => {
     expect(homeEvents.find((event) => event.kind === "heal")).toEqual({ kind: "heal", scope: "full" });
   });
 
+  it("wires the opening-house proof-token bowl to dialogue and a one-time charm handoff", () => {
+    const bowl = world.npcs.find((npc) => npc.npcId === 35 && npc.interactable);
+    expect(bowl, "EB npc 35 (proof-token bowl) missing/non-interactable").toBeDefined();
+
+    const firstEvents = interactionEvents(bowl!, FALLBACK_REFERENCE, unsetFlags, customLookup, libLookup);
+    expect(describeDialogue(firstEvents).hasRenderableDialogue).toBe(true);
+    expect(firstEvents.map((event) => event.kind)).toEqual(["dialogue", "give", "setFlag"]);
+    expect(firstEvents.find((event) => event.kind === "give")).toEqual({
+      kind: "give",
+      char: 1,
+      item: 54
+    });
+
+    const repeatFlags: FlagReader = { has: (flag) => flag === "npc:35:talked", isSet: () => false };
+    const repeatEvents = interactionEvents(bowl!, FALLBACK_REFERENCE, repeatFlags, customLookup, libLookup);
+    expect(repeatEvents.map((event) => event.kind)).toEqual(["dialogue", "setFlag"]);
+  });
+
   it("wires the named neighbor (added NPC 100102 / Bonkle) through a library ref", () => {
     const bonkle = addedNpcs.npcs.find((npc) => npc.id === 100102);
     expect(bonkle?.interaction?.ref).toBe("interior:neighbor-house-v0");

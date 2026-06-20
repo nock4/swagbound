@@ -2407,7 +2407,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (isAddedWorldChunkedNpc(npc)) {
       return addedNpcInteractionEvents(
         { npcId: npc.npcId, interaction: npc.addedInteraction },
-        this.data_.dialogueLibrary
+        this.data_.dialogueLibrary,
+        this.gameFlags
       );
     }
     return interactionEvents(
@@ -2429,8 +2430,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       },
       heal: (scope) => this.healParty(scope),
       save: () => this.saveGame(false),
+      give: (char, item) => this.giveItem(char, item),
       isDialogueActive: () => this.dialogue.open || Boolean(this.eventSequence?.running)
     });
+  }
+
+  private giveItem(char: number, item: number): void {
+    this.partyState.give(char, item);
+    this.refreshMenuScreens();
+    this.updatePrompt();
+    this.publish();
   }
 
   private healParty(scope: HealEvent["scope"]): void {

@@ -13,8 +13,9 @@ export type SetFlagEvent = { kind: "setFlag"; flag: string };
 export type ShopEvent = { kind: "shop"; storeId: number };
 export type HealEvent = { kind: "heal"; scope: "full" };
 export type SaveEvent = { kind: "save" };
+export type GiveEvent = { kind: "give"; char: number; item: number };
 
-export type GameEvent = DialogueEvent | SetFlagEvent | ShopEvent | HealEvent | SaveEvent;
+export type GameEvent = DialogueEvent | SetFlagEvent | ShopEvent | HealEvent | SaveEvent | GiveEvent;
 
 export type InteractionEventDispatcher = {
   startDialogue(event: DialogueEvent): void;
@@ -23,6 +24,7 @@ export type InteractionEventDispatcher = {
   deferShop(storeId: number): void;
   heal(scope: HealEvent["scope"]): void;
   save(): void;
+  give(char: number, item: number): void;
   isDialogueActive(): boolean;
 };
 
@@ -42,6 +44,7 @@ export function interactionEntryEvents(
   options: {
     fallbackReference?: string;
     dialogueLibrary?: DialogueLibraryLookup;
+    suppressOneTimeEffects?: boolean;
   } = {}
 ): GameEvent[] {
   if (!entry) {
@@ -55,6 +58,9 @@ export function interactionEntryEvents(
     events.push({ kind: "dialogue", pages });
   } else if ((entry.pages || entry.ref) && options.fallbackReference) {
     events.push({ kind: "dialogue", reference: options.fallbackReference });
+  }
+  if (entry.give !== undefined && !(entry.give.once && options.suppressOneTimeEffects)) {
+    events.push({ kind: "give", char: entry.give.char, item: entry.give.item });
   }
   if (entry.shop !== undefined) {
     events.push({ kind: "shop", storeId: entry.shop });
@@ -70,15 +76,20 @@ export function interactionEntryEvents(
 
 export function addedNpcInteractionEvents(
   npc: { npcId: number; interaction?: NpcInteraction },
-  dialogueLibrary?: DialogueLibraryLookup
+  dialogueLibrary?: DialogueLibraryLookup,
+  flags?: FlagReader
 ): GameEvent[] {
-  const events = interactionEntryEvents(npc.interaction, { dialogueLibrary });
+  const flag = talkedFlag(npc.npcId);
+  const events = interactionEntryEvents(npc.interaction, {
+    dialogueLibrary,
+    suppressOneTimeEffects: flags?.has(flag) ?? false
+  });
   if (events.length === 0) {
     return [];
   }
   return [
     ...events,
-    { kind: "setFlag", flag: talkedFlag(npc.npcId) }
+    { kind: "setFlag", flag }
   ];
 }
 
@@ -104,6 +115,9 @@ export function dispatchInteractionEvents(events: readonly GameEvent[], dispatch
       case "save":
         dispatcher.save();
         break;
+      case "give":
+        dispatcher.give(event.char, event.item);
+        break;
     }
   }
 }
@@ -128,7 +142,8 @@ export function interactionEvents(
   return [
     ...interactionEntryEvents(customEntry, {
       fallbackReference: customEntry ? reference : undefined,
-      dialogueLibrary
+      dialogueLibrary,
+      suppressOneTimeEffects: flags.has(flag)
     }),
     ...(customEntry ? [] : [{ kind: "dialogue" as const, reference }]),
     { kind: "setFlag", flag }

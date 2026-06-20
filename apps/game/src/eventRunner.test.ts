@@ -73,6 +73,36 @@ describe("addedNpcInteractionEvents", () => {
       "save"
     ]);
   });
+
+  it("emits one-time give events only before the talked flag is set", () => {
+    const interaction = {
+      pages: ["Take this."],
+      give: { char: 1, item: 54, once: true as const }
+    };
+    const firstEvents = addedNpcInteractionEvents({
+      npcId: 100002,
+      interaction
+    }, undefined, { has: () => false });
+    const repeatEvents = addedNpcInteractionEvents({
+      npcId: 100002,
+      interaction
+    }, undefined, { has: () => true });
+
+    expect(firstEvents).toEqual([
+      { kind: "dialogue", pages: ["Take this."] },
+      { kind: "give", char: 1, item: 54 },
+      { kind: "setFlag", flag: talkedFlag(100002) }
+    ]);
+    expect(dispatchWithMock(firstEvents)).toEqual([
+      "dialogue:Take this.",
+      "give:1:54",
+      `flag:${talkedFlag(100002)}`
+    ]);
+    expect(repeatEvents).toEqual([
+      { kind: "dialogue", pages: ["Take this."] },
+      { kind: "setFlag", flag: talkedFlag(100002) }
+    ]);
+  });
 });
 
 describe("interactionEvents custom-dialogue shops", () => {
@@ -131,6 +161,7 @@ function dispatchWithMock(events: readonly GameEvent[]): string[] {
     },
     heal: (scope) => log.push(`heal:${scope}`),
     save: () => log.push("save"),
+    give: (char, item) => log.push(`give:${char}:${item}`),
     isDialogueActive: () => dialogueActive
   };
 

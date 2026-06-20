@@ -89,7 +89,8 @@ describe("CustomDialogueSchema shop entries", () => {
         "3": { shop: 12 },
         "4": { pages: ["Shopkeeper."], shop: 12 },
         "5": { heal: "full" },
-        "6": { pages: ["Rest."], heal: true, save: true }
+        "6": { pages: ["Rest."], heal: true, save: true },
+        "7": { ref: "library:item", give: { char: 1, item: 54, once: true } }
       },
       byTextPointer: {
         "data_00.l_0x1": { shop: 7 }
@@ -100,6 +101,7 @@ describe("CustomDialogueSchema shop entries", () => {
     expect(parsed.byNpcId["4"]).toMatchObject({ pages: ["Shopkeeper."], shop: 12 });
     expect(parsed.byNpcId["5"].heal).toBe("full");
     expect(parsed.byNpcId["6"]).toMatchObject({ pages: ["Rest."], heal: true, save: true });
+    expect(parsed.byNpcId["7"].give).toEqual({ char: 1, item: 54, once: true });
   });
 
   it("rejects empty entries, entries with both pages and ref, and false service triggers", () => {

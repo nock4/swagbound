@@ -170,6 +170,46 @@ describe("interactionEvents", () => {
     ]);
   });
 
+  it("emits one-time custom-dialogue give events only before the NPC talked flag is set", () => {
+    const flags = new GameFlags();
+    const customDialogue = {
+      byNpcId: {
+        "35": {
+          ref: "target:bosch-main-room-v0:proof-token-bowl",
+          give: { char: 1, item: 54, once: true as const }
+        }
+      },
+      byTextPointer: {}
+    };
+    const dialogueLibrary = {
+      entries: {
+        "target:bosch-main-room-v0:proof-token-bowl": {
+          speaker: "Entry Bowl",
+          pages: ["Bosch takes the Proof-Token Charm."]
+        }
+      }
+    };
+
+    expect(interactionEvents({
+      npcId: 35,
+      textPointer: "data_00.l_0x1"
+    }, FALLBACK_REFERENCE, flags, customDialogue, dialogueLibrary)).toEqual([
+      { kind: "dialogue", pages: ["Bosch takes the Proof-Token Charm."] },
+      { kind: "give", char: 1, item: 54 },
+      { kind: "setFlag", flag: "npc:35:talked" }
+    ]);
+
+    flags.set(talkedFlag(35));
+
+    expect(interactionEvents({
+      npcId: 35,
+      textPointer: "data_00.l_0x1"
+    }, FALLBACK_REFERENCE, flags, customDialogue, dialogueLibrary)).toEqual([
+      { kind: "dialogue", pages: ["Bosch takes the Proof-Token Charm."] },
+      { kind: "setFlag", flag: "npc:35:talked" }
+    ]);
+  });
+
   it("falls back to the EB pointer and warns when a custom dialogue ref is unknown", () => {
     const flags = new GameFlags();
     const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
