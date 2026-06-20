@@ -2,6 +2,30 @@
   "schema": "swagbound.custom-dialogue.v1",
   "comment": "Hand-authored Act-1 dialogue (takes precedence over the generated Drifella barks in content/drifella-barks.json). Two passes: (1) the opening-house cast (npcId->character is a first pass to refine during sprite work, e.g. Biscuit on the dog sprite); (2) a Signal Town MILADY-LORE pass on reachable path NPCs (166/167/191/1410/163/136/202/138/146/1411/135/137) seeding the antagonist's lore through townsfolk rumor: Little Swag World is the organic source, Milady/Remilia corrupts it into hostile classification infrastructure (provenance gates, the public version, the Malady as visible symptom). See docs/swagbound-eb-act1-arc-mapping.md.",
   "byNpcId": {
+    "144": { "pages": [
+      "Milady? Yeah, she's like, the brand. It's on everything down here. I stopped reading it.",
+      "Probably fine. It's usually fine. Why, did you read it?"
+    ] },
+    "145": { "pages": [
+      "My feed says Milady loves us. My feed also says I won a boat.",
+      "I did not win a boat. But I keep checking, you know? Just in case the boat's real and the love isn't."
+    ] },
+    "134": { "pages": [
+      "Everyone north of here works for Milady. Nobody north of here will say so.",
+      "That's the benefit package. You stop being able to say it, and in exchange you stop having to."
+    ] },
+    "132": { "pages": [
+      "I walked up the line once to ask Milady a question.",
+      "The line asked me three back, kept the answers, and mailed me a cleaner version of the question. Never went again."
+    ] },
+    "1408": { "pages": [
+      "The Malady's already up there past the gate, wearing a face.",
+      "Could be anyone's. Could be the better-lit version of yours. That's the part nobody likes to test."
+    ] },
+    "131": { "pages": [
+      "Past the gate the air starts itemizing you. Little ticks, like a register that can see.",
+      "That's the threshold. That's where Milady stops being a rumor and becomes a form you have to sign."
+    ] },
     "166": { "pages": [
       "Milady doesn't run Signal Town. The town runs ON her, like a charge nobody itemized.",
       "You'll meet her paperwork long before you meet her. Most people stop at the paperwork."
