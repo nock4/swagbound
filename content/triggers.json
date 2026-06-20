@@ -1,10 +1,10 @@
 {
   "schema": "swagbound.story-triggers.v1",
-  "comment": "Act-1 Swagbound story gate-chain (Signal Town). Maps to the Narrative Flow Map (swagbound-narrative-flowchart-map.md): the public version of Bosch is already moving through town; gates don't ask who Bosch is, they ask which Bosch is processable. Chain: card clique (B7/B8/D8, sets signal:clique_cleared) -> civic proof gate forces the route open (D1/D2/D3, req clique_cleared, sets signal:route_open) -> solid route barrier opens on route_open -> first threshold boss reveals Malady as a symptom and records the first private memory (D4/C6, req route_open). Bosses are milady-derivatives resolved via enemy-overrides (group 448 -> Mifella 2, group 36 -> Returnless King, group 450 -> Malady). All three boss groups (36/448/450) are unescapable (content/battle-rules.json) and their setFlags + once-marker advance ONLY on a win -- a lost boss returns the player to the gate (suppressed until they step away) so the route never opens without beating it. Coordinates are world pixels near the control spawn (2112,1768) and remain tunable to the real clique/gate/threshold spots. Dev: ?flags=signal:route_open to skip ahead.",
+  "comment": "Act-1 Swagbound story gate-chain (Signal Town = Onett). Battle gates are VISIBLE fixed overworld boss sprites: collide with the boss to play dialogue and start the battle; no battle starts from an invisible area trigger. Bosses are placed at their vanilla EarthBound districts: card clique = Frank (group 448) at the GAME arcade, downtown west of spawn; relay gate Returnless King = Cop+Runaway Dog (group 36, req clique_cleared, sets signal:route_open) on the road by the Police Station (in EB the cops guard the way up to Giant Step); first threshold Malady = Titanic Ant (group 450, req route_open, sets signal:threshold_cleared and source:first_witness) on the north road toward the Giant Step approach. NOTE: Cop+Runaway Dog is a roaming encounter in vanilla EB (no single canonical tile) and Titanic Ant is the far Giant Step summit boss, so those two are anchored to the matching Onett DISTRICT rather than an exact vanilla coordinate. The warning + solid barrier stay area/flag based as the police roadblock north of the Cop, opening on route_open. All three boss groups are unescapable (content/battle-rules.json); their setFlags + once-marker advance ONLY on a win. Dev: ?flags=signal:route_open to skip ahead.",
   "triggers": [
     {
       "id": "signal-town-card-clique",
-      "area": { "x": 2016, "y": 1748, "w": 40, "h": 40 },
+      "boss": { "x": 1512, "y": 1744, "facing": "right" },
       "once": true,
       "dialogue": [
         "The arcade light flattens Bosch into a better-lit rumor. A clean copy of his face grins from a card nobody remembers printing.",
@@ -16,7 +16,7 @@
     },
     {
       "id": "relay-gate-returnless-king",
-      "area": { "x": 2152, "y": 1760, "w": 40, "h": 24 },
+      "boss": { "x": 1928, "y": 1560, "facing": "down" },
       "once": true,
       "requireFlags": ["signal:clique_cleared"],
       "dialogue": [
@@ -29,7 +29,7 @@
     },
     {
       "id": "north-route-gate-warning",
-      "area": { "x": 2064, "y": 1740, "w": 96, "h": 16 },
+      "area": { "x": 1880, "y": 1520, "w": 96, "h": 16 },
       "once": false,
       "blockFlags": ["signal:route_open"],
       "dialogue": [
@@ -40,7 +40,7 @@
     },
     {
       "id": "first-threshold-malady",
-      "area": { "x": 2072, "y": 1664, "w": 88, "h": 40 },
+      "boss": { "x": 1928, "y": 1400, "facing": "down" },
       "once": true,
       "requireFlags": ["signal:route_open"],
       "dialogue": [
@@ -55,7 +55,7 @@
   "barriers": [
     {
       "id": "north-route-barrier",
-      "area": { "x": 2064, "y": 1716, "w": 96, "h": 24 },
+      "area": { "x": 1880, "y": 1496, "w": 96, "h": 16 },
       "blockFlags": ["signal:route_open"],
       "image": "assets/swagbound/overworld-npc/faithful-servants.png"
     }

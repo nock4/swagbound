@@ -20,6 +20,33 @@ export function isOnce(trigger: Pick<StoryTrigger, "once">): boolean {
   return trigger.once ?? true;
 }
 
+export function isBossGate(trigger: Pick<StoryTrigger, "boss">): boolean {
+  return trigger.boss !== undefined;
+}
+
+export function bossGateActive(trigger: StoryTrigger, hasFlag: (flag: string) => boolean): boolean {
+  if (!isBossGate(trigger)) {
+    return false;
+  }
+  if (isOnce(trigger) && hasFlag(triggerFiredFlag(trigger.id))) {
+    return false;
+  }
+  if (trigger.requireFlags && !trigger.requireFlags.every((flag) => hasFlag(flag))) {
+    return false;
+  }
+  if (trigger.blockFlags && trigger.blockFlags.some((flag) => hasFlag(flag))) {
+    return false;
+  }
+  return true;
+}
+
+export function selectActiveBossGates(
+  triggers: readonly StoryTrigger[],
+  hasFlag: (flag: string) => boolean
+): StoryTrigger[] {
+  return triggers.filter((trigger) => bossGateActive(trigger, hasFlag));
+}
+
 /**
  * Whether a trigger's conditions are met for the current player position + flags.
  * `suppressedId` is the trigger currently held off until the player leaves its
@@ -32,6 +59,9 @@ export function triggerConditionsMet(
   hasFlag: (flag: string) => boolean,
   suppressedId?: string
 ): boolean {
+  if (trigger.boss !== undefined || !trigger.area) {
+    return false;
+  }
   if (!pointInArea(feet, trigger.area)) {
     return false;
   }
@@ -97,7 +127,7 @@ export function resolveSuppression(
     return undefined;
   }
   const suppressed = triggers.find((trigger) => trigger.id === suppressedId);
-  if (!suppressed || !pointInArea(feet, suppressed.area)) {
+  if (!suppressed || !suppressed.area || !pointInArea(feet, suppressed.area)) {
     return undefined;
   }
   return suppressedId;

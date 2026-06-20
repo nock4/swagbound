@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { isNpcVisibleForEventFlags, type BattleEnemy, type DialoguePage, type EventEffect, type ItemData, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
-import { barrierBlocksPoint, isBarrierActive, isOnce, resolveStoryGateReturn, resolveSuppression, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
+import { barrierBlocksPoint, isBarrierActive, isOnce, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -254,6 +254,21 @@ type OverworldEnemyRuntime = {
   contactGraceMs: number;
 };
 
+type BossGateRuntime = {
+  triggerId: string;
+  trigger: StoryTrigger;
+  enemyGroup: number;
+  spriteGroup: number | undefined;
+  frames: DirectionFrameSequence;
+  textureKey?: string;
+  skin?: SpriteOverrideSheet;
+  sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+  x: number;
+  y: number;
+  facing: Facing;
+  armed: boolean;
+};
+
 type NpcSpriteOverrideResolution = {
   source: "npc" | "spriteGroup";
   id: number;
@@ -290,6 +305,8 @@ const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 const OVERWORLD_ENEMY_GLOBAL_CAP = 4;
 const OVERWORLD_ENEMY_SPAWN_INTERVAL_MS = 900;
 const OVERWORLD_ENEMY_CONTACT_PX = 12;
+const BOSS_GATE_CONTACT_PX = 14;
+const BOSS_GATE_ARM_DIST_PX = 32;
 // Spawn band kept fully ON-SCREEN (camera shows ~128x112 world px from the player
 // at zoom 2) so a roamer is always visible before it can reach you — never an
 // off-screen "random" touch. Min keeps it off the player's feet.
@@ -374,6 +391,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private currentSectorIndex?: number;
   private lastPlayerTile?: TilePoint;
   private lastEncounterGroup?: number;
+  private bossGateActors = new Map<string, BossGateRuntime>();
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
   private overworldEnemySeq = 0;
   private overworldEnemySpawnCooldownMs = 0;
@@ -669,6 +687,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     if (this.maybeFireStoryTrigger()) {
+      return;
+    }
+    if (this.manageBossGates(delta)) {
       return;
     }
     if (this.manageOverworldEnemies(delta)) {
@@ -2955,6 +2976,163 @@ export class ChunkedWorldScene extends Phaser.Scene {
     console.warn("Skipping unsupported new-game opening event op.", detail);
   }
 
+  private manageBossGates(_deltaMs: number): boolean {
+    const triggers = this.data_.storyTriggers?.triggers;
+    if (!triggers || !this.data_.battle || !this.player) {
+      this.publishBossGateDebug();
+      return false;
+    }
+
+    const active = selectActiveBossGates(triggers, (flag) => this.gameFlags.has(flag));
+    const activeIds = new Set(active.map((trigger) => trigger.id));
+    for (const [id, actor] of this.bossGateActors) {
+      if (!activeIds.has(id)) {
+        actor.sprite?.destroy();
+        this.bossGateActors.delete(id);
+      }
+    }
+
+    for (const gate of active) {
+      if (!gate.boss || this.bossGateActors.has(gate.id)) {
+        continue;
+      }
+      this.spawnBossGate(gate);
+    }
+
+    for (const actor of this.bossGateActors.values()) {
+      this.upgradeBossGateSprite(actor);
+      this.syncBossGateActor(actor);
+      if (!actor.armed && this.distanceToPlayer(actor) > BOSS_GATE_ARM_DIST_PX) {
+        actor.armed = true;
+      }
+    }
+
+    this.publishBossGateDebug();
+    if (!this.overworldPlayActive() || this.encounterCooldownMs > 0) {
+      return false;
+    }
+    for (const actor of this.bossGateActors.values()) {
+      if (actor.armed && this.distanceToPlayer(actor) <= BOSS_GATE_CONTACT_PX) {
+        return this.triggerBossGate(actor);
+      }
+    }
+    return false;
+  }
+
+  private spawnBossGate(gate: StoryTrigger): void {
+    if (!gate.boss || gate.battleGroup === undefined) {
+      this.warnStoryTriggerSkip(`boss_gate_invalid:${gate.id}`);
+      return;
+    }
+    const lead = this.enemiesForBattleGroup(gate.battleGroup)[0];
+    if (!lead) {
+      this.warnStoryTriggerSkip(`boss_enemy_unavailable:${gate.id}`);
+      return;
+    }
+    const spriteGroup = lead.overworldSprite;
+    const { textureKey, skin, frames } = this.resolveOverworldEnemySkin(lead);
+    const facing = toFacing(gate.boss.facing);
+    const sprite = this.spawnOverworldEnemyActor(gate.boss.x, gate.boss.y, facing, textureKey, skin, spriteGroup);
+    if (textureKey && !(sprite instanceof Phaser.GameObjects.Sprite)) {
+      sprite.setVisible(false);
+    }
+    this.bossGateActors.set(gate.id, {
+      triggerId: gate.id,
+      trigger: gate,
+      enemyGroup: gate.battleGroup,
+      spriteGroup,
+      frames,
+      textureKey,
+      skin,
+      sprite,
+      x: gate.boss.x,
+      y: gate.boss.y,
+      facing,
+      armed: false
+    });
+  }
+
+  private upgradeBossGateSprite(actor: BossGateRuntime): void {
+    if (actor.sprite instanceof Phaser.GameObjects.Sprite || !actor.textureKey) {
+      return;
+    }
+    if (!this.textures.exists(actor.textureKey)) {
+      return;
+    }
+    actor.sprite?.destroy();
+    actor.sprite = this.spawnOverworldEnemyActor(
+      actor.x,
+      actor.y,
+      actor.facing,
+      actor.textureKey,
+      actor.skin,
+      actor.spriteGroup
+    );
+  }
+
+  private syncBossGateActor(actor: BossGateRuntime): void {
+    const sprite = actor.sprite;
+    if (!sprite) {
+      return;
+    }
+    sprite.x = actor.x;
+    sprite.y = actor.y;
+    if (sprite instanceof Phaser.GameObjects.Sprite) {
+      sprite.setFrame(actor.frames[actor.facing][0]);
+    }
+    this.setActorSortDepth(sprite);
+  }
+
+  private triggerBossGate(actor: BossGateRuntime): boolean {
+    actor.armed = false;
+    const trigger = actor.trigger;
+    const gate: PendingStoryGate = {
+      triggerId: trigger.id,
+      once: isOnce(trigger),
+      setFlags: trigger.setFlags,
+      clearFlags: trigger.clearFlags
+    };
+    const startBattle = () => {
+      if (this.startEventBattle(actor.enemyGroup, gate)) {
+        return;
+      }
+      this.warnStoryTriggerSkip(`battle_unavailable:${trigger.id}`);
+      if (isOnce(trigger)) {
+        this.gameFlags.set(triggerFiredFlag(trigger.id));
+      }
+      trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
+      trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+      this.afterDialogueClosed();
+      this.updatePrompt();
+      this.publish();
+    };
+
+    if (trigger.dialogue && trigger.dialogue.length > 0) {
+      lockPlayer(this.playerState, this.playerFrames);
+      this.startOverriddenScriptedDialogue(buildInlineDialoguePages(trigger.dialogue), startBattle);
+    } else {
+      startBattle();
+    }
+    this.syncPlayerObject();
+    this.updatePrompt();
+    this.publish();
+    return true;
+  }
+
+  private publishBossGateDebug(): void {
+    (globalThis as Record<string, unknown>).__bossGates = {
+      count: this.bossGateActors.size,
+      gates: [...this.bossGateActors.values()].map((actor) => ({
+        triggerId: actor.triggerId,
+        enemyGroup: actor.enemyGroup,
+        x: Math.round(actor.x),
+        y: Math.round(actor.y),
+        armed: actor.armed,
+        visible: actor.sprite instanceof Phaser.GameObjects.Sprite
+      }))
+    };
+  }
+
   // --- Visible overworld enemies (EarthBound-style touch-to-battle) -----------
 
   /**
@@ -3083,22 +3261,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.overworldEnemySpawnCooldownMs = OVERWORLD_ENEMY_SPAWN_INTERVAL_MS;
     const spriteGroup = lead.overworldSprite;
-    // Prefer the Swagbound roaming-enemy skin (by enemy id); fall back to the EB
-    // overworld sprite group when the family has no skin art.
-    const skin = spriteOverrideSheet(spriteOverrideForEnemyOverworld(this.data_.spriteOverrides, lead.id));
-    let textureKey: string | undefined;
-    let frames: DirectionFrameSequence;
-    if (skin) {
-      textureKey = spriteOverrideEnemyOverworldSheetKey(lead.id, skin.image);
-      this.requestEnemySkinSheet(textureKey, skin);
-      frames = spriteOverrideDirectionFrames(skin);
-    } else {
-      textureKey = spriteGroup !== undefined ? `sheet-${spriteGroup}` : undefined;
-      if (spriteGroup !== undefined && this.requestNpcSheet(spriteGroup)) {
-        this.load.start();
-      }
-      frames = this.framesForGroup(spriteGroup);
-    }
+    const { textureKey, skin, frames } = this.resolveOverworldEnemySkin(lead);
     this.overworldEnemySeq += 1;
     const key = `enemy-${this.overworldEnemySeq}`;
     const sprite = this.spawnOverworldEnemyActor(spot.x, spot.y, undefined, textureKey, skin, spriteGroup);
@@ -3123,6 +3286,34 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }, frames),
       sprite
     });
+  }
+
+  private resolveOverworldEnemySkin(lead: BattleEnemy): {
+    textureKey?: string;
+    skin?: SpriteOverrideSheet;
+    frames: DirectionFrameSequence;
+  } {
+    const spriteGroup = lead.overworldSprite;
+    // Prefer the Swagbound roaming-enemy skin (by enemy id); fall back to the EB
+    // overworld sprite group when the family has no skin art.
+    const skin = spriteOverrideSheet(spriteOverrideForEnemyOverworld(this.data_.spriteOverrides, lead.id));
+    if (skin) {
+      const textureKey = spriteOverrideEnemyOverworldSheetKey(lead.id, skin.image);
+      this.requestEnemySkinSheet(textureKey, skin);
+      return {
+        textureKey,
+        skin,
+        frames: spriteOverrideDirectionFrames(skin)
+      };
+    }
+    const textureKey = spriteGroup !== undefined ? `sheet-${spriteGroup}` : undefined;
+    if (spriteGroup !== undefined && this.requestNpcSheet(spriteGroup)) {
+      this.load.start();
+    }
+    return {
+      textureKey,
+      frames: this.framesForGroup(spriteGroup)
+    };
   }
 
   private requestEnemySkinSheet(textureKey: string, skin: SpriteOverrideSheet): void {
@@ -3204,6 +3395,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       enemy.sprite?.destroy();
     }
     this.overworldEnemies.clear();
+    for (const actor of this.bossGateActors.values()) {
+      actor.sprite?.destroy();
+    }
+    this.bossGateActors.clear();
     this.overworldEnemySpawnCooldownMs = 0;
     this.loadingEnemySkinKeys.clear();
   }

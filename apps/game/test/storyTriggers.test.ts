@@ -5,15 +5,27 @@ import {
   triggerFiredFlag,
   triggerConditionsMet,
   selectStoryTrigger,
+  bossGateActive,
+  selectActiveBossGates,
   resolveSuppression,
   resolveStoryGateReturn,
   isBarrierActive,
   barrierBlocksPoint
 } from "../src/storyTriggers";
 
-const bossGate: StoryTrigger = {
-  id: "boss-gate",
-  area: { x: 100, y: 100, w: 32, h: 32 },
+const areaBattleGateArea = { x: 100, y: 100, w: 32, h: 32 };
+
+const areaBattleGate: StoryTrigger = {
+  id: "area-battle-gate",
+  area: areaBattleGateArea,
+  dialogue: ["Stop right there."],
+  battleGroup: 448,
+  setFlags: ["story:boss_cleared"]
+};
+
+const visibleBossGate: StoryTrigger = {
+  id: "visible-boss-gate",
+  boss: { x: 120, y: 120 },
   dialogue: ["Stop right there."],
   battleGroup: 448,
   setFlags: ["story:boss_cleared"]
@@ -32,23 +44,23 @@ const has = (set: string[]) => (flag: string) => set.includes(flag);
 
 describe("story trigger geometry + conditions", () => {
   it("treats area as a half-open world-pixel rect", () => {
-    expect(pointInArea({ x: 100, y: 100 }, bossGate.area)).toBe(true);
-    expect(pointInArea({ x: 131, y: 131 }, bossGate.area)).toBe(true);
-    expect(pointInArea({ x: 132, y: 100 }, bossGate.area)).toBe(false); // right edge exclusive
-    expect(pointInArea({ x: 99, y: 100 }, bossGate.area)).toBe(false);
+    expect(pointInArea({ x: 100, y: 100 }, areaBattleGateArea)).toBe(true);
+    expect(pointInArea({ x: 131, y: 131 }, areaBattleGateArea)).toBe(true);
+    expect(pointInArea({ x: 132, y: 100 }, areaBattleGateArea)).toBe(false); // right edge exclusive
+    expect(pointInArea({ x: 99, y: 100 }, areaBattleGateArea)).toBe(false);
   });
 
   it("fires inside the area when conditions hold", () => {
-    expect(triggerConditionsMet(bossGate, { x: 110, y: 110 }, has([]))).toBe(true);
-    expect(triggerConditionsMet(bossGate, { x: 10, y: 10 }, has([]))).toBe(false);
+    expect(triggerConditionsMet(areaBattleGate, { x: 110, y: 110 }, has([]))).toBe(true);
+    expect(triggerConditionsMet(areaBattleGate, { x: 10, y: 10 }, has([]))).toBe(false);
   });
 
   it("does not refire a one-shot trigger once its fired flag is set", () => {
-    expect(triggerConditionsMet(bossGate, { x: 110, y: 110 }, has([triggerFiredFlag("boss-gate")]))).toBe(false);
+    expect(triggerConditionsMet(areaBattleGate, { x: 110, y: 110 }, has([triggerFiredFlag("area-battle-gate")]))).toBe(false);
   });
 
   it("honors requireFlags and blockFlags", () => {
-    const needFlag: StoryTrigger = { ...bossGate, id: "g2", requireFlags: ["story:x"] };
+    const needFlag: StoryTrigger = { ...areaBattleGate, id: "g2", requireFlags: ["story:x"] };
     expect(triggerConditionsMet(needFlag, { x: 110, y: 110 }, has([]))).toBe(false);
     expect(triggerConditionsMet(needFlag, { x: 110, y: 110 }, has(["story:x"]))).toBe(true);
     // barricade blocks itself once the prerequisite flag is set
@@ -61,11 +73,52 @@ describe("story trigger geometry + conditions", () => {
   });
 });
 
+describe("visible boss gates", () => {
+  it("excludes boss gates from the invisible area path", () => {
+    expect(triggerConditionsMet(visibleBossGate, { x: 120, y: 120 }, has([]))).toBe(false);
+    expect(selectStoryTrigger([visibleBossGate], { x: 120, y: 120 }, has([]))).toBeUndefined();
+  });
+
+  it("excludes hybrid area + boss triggers from the invisible area path", () => {
+    const hybrid: StoryTrigger = {
+      ...areaBattleGate,
+      id: "hybrid-boss-gate",
+      boss: { x: 110, y: 110 }
+    };
+    expect(triggerConditionsMet(hybrid, { x: 110, y: 110 }, has([]))).toBe(false);
+    expect(selectStoryTrigger([hybrid], { x: 110, y: 110 }, has([]))).toBeUndefined();
+  });
+
+  it("activates only when once and flag gates allow it", () => {
+    expect(bossGateActive(visibleBossGate, has([]))).toBe(true);
+    expect(bossGateActive(visibleBossGate, has([triggerFiredFlag("visible-boss-gate")]))).toBe(false);
+
+    const requiresFlag: StoryTrigger = { ...visibleBossGate, id: "requires-flag", requireFlags: ["story:ready"] };
+    expect(bossGateActive(requiresFlag, has([]))).toBe(false);
+    expect(bossGateActive(requiresFlag, has(["story:ready"]))).toBe(true);
+
+    const blocked: StoryTrigger = { ...visibleBossGate, id: "blocked", blockFlags: ["story:blocked"] };
+    expect(bossGateActive(blocked, has(["story:blocked"]))).toBe(false);
+  });
+
+  it("selects active boss gates in declaration order", () => {
+    const first: StoryTrigger = { ...visibleBossGate, id: "first" };
+    const cleared: StoryTrigger = { ...visibleBossGate, id: "cleared" };
+    const gated: StoryTrigger = { ...visibleBossGate, id: "gated", requireFlags: ["story:missing"] };
+    const second: StoryTrigger = { ...visibleBossGate, id: "second", requireFlags: ["story:ready"] };
+
+    expect(selectActiveBossGates(
+      [first, cleared, gated, second],
+      has([triggerFiredFlag("cleared"), "story:ready"])
+    ).map((trigger) => trigger.id)).toEqual(["first", "second"]);
+  });
+});
+
 describe("story trigger selection + suppression", () => {
-  const triggers = [bossGate, barricade];
+  const triggers = [areaBattleGate, barricade];
 
   it("selects the first matching trigger in declaration order", () => {
-    expect(selectStoryTrigger(triggers, { x: 110, y: 110 }, has([]))?.id).toBe("boss-gate");
+    expect(selectStoryTrigger(triggers, { x: 110, y: 110 }, has([]))?.id).toBe("area-battle-gate");
     expect(selectStoryTrigger(triggers, { x: 205, y: 105 }, has([]))?.id).toBe("north-barricade");
     expect(selectStoryTrigger(triggers, { x: 0, y: 0 }, has([]))).toBeUndefined();
   });
@@ -108,7 +161,7 @@ describe("story barriers (solid gates)", () => {
 
 describe("story-gate boss return (victory-gated flags)", () => {
   const gate = {
-    triggerId: "boss-gate",
+    triggerId: "area-battle-gate",
     once: true,
     setFlags: ["signal:route_open"],
     clearFlags: ["signal:road_closed"]
@@ -120,7 +173,7 @@ describe("story-gate boss return (victory-gated flags)", () => {
       kind: "advance",
       setFlags: ["signal:route_open"],
       clearFlags: ["signal:road_closed"],
-      firedFlag: triggerFiredFlag("boss-gate")
+      firedFlag: triggerFiredFlag("area-battle-gate")
     });
   });
 
@@ -131,7 +184,7 @@ describe("story-gate boss return (victory-gated flags)", () => {
 
   it("suppresses (never advances) on loss, flee, or unknown outcome", () => {
     for (const outcome of ["lose", "flee", undefined] as const) {
-      expect(resolveStoryGateReturn(gate, outcome)).toEqual({ kind: "suppress", triggerId: "boss-gate" });
+      expect(resolveStoryGateReturn(gate, outcome)).toEqual({ kind: "suppress", triggerId: "area-battle-gate" });
     }
   });
 });

@@ -501,10 +501,11 @@ export const SwagboundDialogueLibrarySchema = z.object({
 });
 
 /**
- * Authored story-progression gate. When the player's feet enter `area` and the
- * flag conditions hold, the trigger fires its effects (dialogue, then flags /
- * warp / battle). Drives prerequisite gating: e.g. a road area that warps the
- * player back until the boss-cleared flag is set. Coordinates are world pixels.
+ * Authored story-progression gate. Area gates fire when the player's feet enter
+ * `area` and the flag conditions hold; visible-boss gates instead render a fixed
+ * overworld boss at `boss` and fire on sprite contact. Drives prerequisite
+ * gating: e.g. a road area that warps the player back until the boss-cleared
+ * flag is set. Coordinates are world pixels.
  */
 export const StoryTriggerAreaSchema = z.object({
   x: z.number(),
@@ -515,7 +516,13 @@ export const StoryTriggerAreaSchema = z.object({
 
 export const StoryTriggerSchema = z.object({
   id: z.string().min(1),
-  area: StoryTriggerAreaSchema,
+  area: StoryTriggerAreaSchema.optional(),
+  /** When set, this battle gate renders as a VISIBLE fixed overworld boss sprite at this world pixel; colliding with it (not entering `area`) fires the gate. Requires battleGroup. */
+  boss: z.object({
+    x: z.number(),
+    y: z.number(),
+    facing: z.enum(["up", "down", "left", "right"]).optional()
+  }).optional(),
   /** All of these flags must be set for the trigger to fire. */
   requireFlags: z.array(z.string()).optional(),
   /** None of these flags may be set for the trigger to fire. */
@@ -530,6 +537,25 @@ export const StoryTriggerSchema = z.object({
   battleGroup: z.number().int().nonnegative().optional(),
   /** Teleport the player here after dialogue (world pixels). */
   warp: z.object({ x: z.number(), y: z.number() }).optional()
+}).superRefine((trigger, ctx) => {
+  if (!trigger.area && !trigger.boss) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Story trigger must define at least one of area or boss."
+    });
+  }
+  if (trigger.boss && trigger.battleGroup === undefined) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Story trigger with boss must define battleGroup."
+    });
+  }
+  if (trigger.boss && trigger.warp !== undefined) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "Story trigger with boss cannot define warp."
+    });
+  }
 });
 
 /**
