@@ -250,6 +250,8 @@ type OverworldEnemyRuntime = {
   textureKey?: string;
   /** Present when skinned with Swagbound overworld art (else falls back to EB sprite group). */
   skin?: SpriteOverrideSheet;
+  /** Time remaining before this roamer can start a battle on contact (post-spawn grace). */
+  contactGraceMs: number;
 };
 
 type NpcSpriteOverrideResolution = {
@@ -288,8 +290,14 @@ const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 const OVERWORLD_ENEMY_GLOBAL_CAP = 4;
 const OVERWORLD_ENEMY_SPAWN_INTERVAL_MS = 900;
 const OVERWORLD_ENEMY_CONTACT_PX = 12;
-const OVERWORLD_ENEMY_MIN_SPAWN_DIST_PX = 64;
-const OVERWORLD_ENEMY_MAX_SPAWN_DIST_PX = 140;
+// Spawn band kept fully ON-SCREEN (camera shows ~128x112 world px from the player
+// at zoom 2) so a roamer is always visible before it can reach you — never an
+// off-screen "random" touch. Min keeps it off the player's feet.
+const OVERWORLD_ENEMY_MIN_SPAWN_DIST_PX = 80;
+const OVERWORLD_ENEMY_MAX_SPAWN_DIST_PX = 104;
+// A freshly spawned roamer cannot start a battle until the player has had a beat to
+// see it appear (prevents a spawn-then-instant-contact that would feel random).
+const OVERWORLD_ENEMY_CONTACT_GRACE_MS = 600;
 const OVERWORLD_ENEMY_DESPAWN_DIST_PX = 320;
 const OVERWORLD_ENEMY_WANDER_RADIUS_PX = 40;
 const OVERWORLD_ENEMY_WANDER_SPEED_PX_PER_SEC = 30;
@@ -2999,6 +3007,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         continue;
       }
       if (active) {
+        enemy.contactGraceMs = Math.max(0, enemy.contactGraceMs - deltaMs);
         stepNpc(enemy.state, {
           deltaMs,
           bounds: this.movementBounds(),
@@ -3105,6 +3114,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       frames,
       textureKey,
       skin,
+      contactGraceMs: OVERWORLD_ENEMY_CONTACT_GRACE_MS,
       state: createNpcState(spot.x, spot.y, toFacing(undefined), {
         kind: "wander",
         radiusPx: OVERWORLD_ENEMY_WANDER_RADIUS_PX,
@@ -3165,7 +3175,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
     for (const [key, enemy] of this.overworldEnemies) {
-      if (this.distanceToPlayer(enemy.state.player) <= OVERWORLD_ENEMY_CONTACT_PX) {
+      if (enemy.contactGraceMs <= 0 && this.distanceToPlayer(enemy.state.player) <= OVERWORLD_ENEMY_CONTACT_PX) {
         this.overworldEnemies.delete(key);
         enemy.sprite?.destroy();
         return this.triggerOverworldEnemyBattle(enemy);
