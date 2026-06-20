@@ -175,6 +175,9 @@ const BATTLE_COMMAND_GRID_GAP_Y = 8;
 const BATTLE_COMMAND_CELL_HEIGHT = 26;
 const BATTLE_MENU_CARET_GUTTER_PX = 12;
 const BATTLE_MENU_TOP_MARGIN = 8;
+// Top-left "whose turn" name plate above the command grid.
+const BATTLE_ACTOR_NAME_HEIGHT = BATTLE_COMMAND_TEXT_PADDING_Y * 2 + BATTLE_LINE_HEIGHT;
+const BATTLE_ACTOR_NAME_GAP = 4;
 const BATTLE_MENU_RIGHT_MARGIN = 16;
 const BATTLE_MENU_BOTTOM_CLEARANCE = 92;
 const BATTLE_SUBMENU_GAP = 8;
@@ -290,6 +293,7 @@ type BattleCommandGridLayout = CanvasRect & {
   cells: CleanGridCell[];
 };
 type BattleStatusLayout = {
+  actorName?: CanvasRect;
   command?: BattleCommandGridLayout;
   submenu?: BattleMenuListRect;
   description?: CanvasRect;
@@ -320,6 +324,7 @@ type BattleStatusCardTextSet = {
   ppValue: Phaser.GameObjects.Text;
 };
 type BattleUiView = {
+  actorName?: string;
   commandLines: string[];
   submenuLines: string[];
   descriptionLines: string[];
@@ -327,7 +332,7 @@ type BattleUiView = {
   selectedSubmenuIndex: number;
   statusCards: BattleStatusCardView[];
 };
-type BattleMenuTextRole = "command" | "submenu" | "description" | "execution";
+type BattleMenuTextRole = "command" | "submenu" | "description" | "execution" | "actorName";
 
 export class BattleScene extends Phaser.Scene {
   private battleData_!: BattleData;
@@ -1793,7 +1798,12 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private layoutStatusWindows(view: BattleUiView): BattleStatusLayout {
-    const command = this.commandGridLayout(view.commandLines);
+    const actorName = view.actorName?.trim() ? view.actorName.trim() : undefined;
+    const actorNameOffset = actorName ? BATTLE_ACTOR_NAME_HEIGHT + BATTLE_ACTOR_NAME_GAP : 0;
+    const command = this.commandGridLayout(view.commandLines, BATTLE_MENU_TOP_MARGIN + actorNameOffset);
+    const actorNameRect = actorName && command
+      ? { x: command.x, y: BATTLE_MENU_TOP_MARGIN, width: command.width, height: BATTLE_ACTOR_NAME_HEIGHT }
+      : undefined;
     const submenu = command && view.submenuLines.length > 0
       ? this.menuListLayout({
         labels: view.submenuLines,
@@ -1830,6 +1840,7 @@ export class BattleScene extends Phaser.Scene {
       target: Boolean(view.statusCards[index]?.target)
     }));
     const layout: BattleStatusLayout = {
+      actorName: actorNameRect,
       command,
       submenu,
       description,
@@ -1838,6 +1849,7 @@ export class BattleScene extends Phaser.Scene {
     };
     const signature = JSON.stringify(layout);
     const textReady =
+      (!actorNameRect || Boolean(this.menuTexts.actorName)) &&
       (view.commandLines.length === 0 || this.commandGridTexts.length === view.commandLines.length) &&
       (view.submenuLines.length === 0 || Boolean(this.menuTexts.submenu)) &&
       (view.descriptionLines.length === 0 || Boolean(this.menuTexts.description)) &&
@@ -1857,6 +1869,20 @@ export class BattleScene extends Phaser.Scene {
     graphics.clear();
     this.statusFieldGraphics?.clear();
     this.statusAccentGraphics?.clear();
+
+    if (layout.actorName) {
+      const textRect = cleanPanelInnerRect(layout.actorName, {
+        x: BATTLE_COMMAND_TEXT_PADDING_X,
+        y: BATTLE_COMMAND_TEXT_PADDING_Y
+      });
+      drawCleanPanel(graphics, layout.actorName);
+      this.menuTexts.actorName = createCleanText(this, textRect.x, textRect.y, "", {
+        fontSize: BATTLE_FONT_SIZE,
+        color: CLEAN_UI_PRIMARY,
+        fixedWidth: textRect.width,
+        weight: 500
+      }).setDepth(23);
+    }
 
     if (layout.command) {
       drawCleanPanel(graphics, layout.command);
@@ -1912,7 +1938,7 @@ export class BattleScene extends Phaser.Scene {
     return layout;
   }
 
-  private commandGridLayout(labels: string[]): BattleCommandGridLayout | undefined {
+  private commandGridLayout(labels: string[], topMargin = BATTLE_MENU_TOP_MARGIN): BattleCommandGridLayout | undefined {
     if (labels.length === 0) {
       return undefined;
     }
@@ -1931,7 +1957,7 @@ export class BattleScene extends Phaser.Scene {
     const rect = clampRectToScreen(
       {
         x: BATTLE_LEFT_MARGIN,
-        y: BATTLE_MENU_TOP_MARGIN,
+        y: topMargin,
         width,
         height
       },
@@ -1939,7 +1965,7 @@ export class BattleScene extends Phaser.Scene {
       {
         left: BATTLE_LEFT_MARGIN,
         right: BATTLE_MENU_RIGHT_MARGIN,
-        top: BATTLE_MENU_TOP_MARGIN,
+        top: topMargin,
         bottom: BATTLE_MENU_BOTTOM_CLEARANCE
       }
     );
@@ -2173,6 +2199,7 @@ export class BattleScene extends Phaser.Scene {
     const menuVisible = this.phase_ === "command-input" && this.currentActor_?.side === "party";
     const view = this.battleUiView(menuVisible);
     const layout = this.layoutStatusWindows(view);
+    this.menuTexts.actorName?.setText(view.actorName ?? "");
     this.updateCommandGridTexts(view, layout);
     this.menuTexts.submenu?.setText(this.listWindowText(view.submenuLines, layout.submenu));
     this.menuTexts.description?.setText(
@@ -2240,6 +2267,7 @@ export class BattleScene extends Phaser.Scene {
       };
     }
     return {
+      actorName: this.activeActorName(),
       commandLines: this.commandsForCurrentActor().map(formatCommandLabel),
       submenuLines: this.submenuTextLines(),
       descriptionLines: this.menuDescriptionLines(),
@@ -2247,6 +2275,12 @@ export class BattleScene extends Phaser.Scene {
       selectedSubmenuIndex: this.submenuIndex_,
       statusCards: this.statusCardViews()
     };
+  }
+
+  /** Display name of the party member currently choosing a command (top-left turn plate). */
+  private activeActorName(): string {
+    const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
+    return actor?.name ?? "";
   }
 
   private listWindowText(
