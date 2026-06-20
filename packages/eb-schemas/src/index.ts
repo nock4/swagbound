@@ -894,6 +894,10 @@ export const BattleEnemySchema = z.object({
   id: z.number().int().nonnegative(),
   name: z.string(),
   spriteId: z.number().int().nonnegative(),
+  // EB enemy_configuration_table "Overworld Sprite": the sprite group of the
+  // visible roaming map enemy (distinct from the battle sprite). Drives the
+  // touch-to-battle overworld actor. Optional for legacy/test fixtures.
+  overworldSprite: z.number().int().nonnegative().optional(),
   level: z.number().int().nonnegative(),
   hp: z.number().int().nonnegative(),
   defense: z.number().int().nonnegative(),
