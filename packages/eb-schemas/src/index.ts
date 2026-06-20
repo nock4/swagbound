@@ -14,6 +14,22 @@ const RawEffectMetadataSchema = z.object({
   raw: z.string().optional()
 });
 
+export const EventActorMoveSelectorSchema = z.union([
+  z.literal("player"),
+  z.object({
+    kind: z.literal("player")
+  }),
+  z.object({
+    npcId: z.number().int().nonnegative()
+  }),
+  z.object({
+    kind: z.literal("npc"),
+    npcId: z.number().int().nonnegative()
+  })
+]);
+
+export type EventActorMoveSelector = z.infer<typeof EventActorMoveSelectorSchema>;
+
 const PartyStatOpSchema = z.enum([
   "heal_percent",
   "hurt_percent",
@@ -142,6 +158,15 @@ const FunctionalEventSegmentSchema = z.union([
   RawEffectMetadataSchema.extend({
     kind: z.literal("event"),
     id: z.number().int().nonnegative()
+  }),
+  RawEffectMetadataSchema.extend({
+    kind: z.literal("actorMove"),
+    actor: EventActorMoveSelectorSchema,
+    to: z.object({
+      x: z.number(),
+      y: z.number()
+    }),
+    run: z.boolean().optional()
   })
 ]);
 
@@ -1503,11 +1528,13 @@ export type ResolvedScriptEvents = Omit<ResolvedScriptFlow, "commands"> & {
 
 export type EventWait =
   | { kind: "confirm"; effect: Extract<EventEffect, { kind: "text" | "prompt" }> }
-  | { kind: "pause"; frames: number; remainingFrames: number; effect: Extract<EventEffect, { kind: "pause" }> };
+  | { kind: "pause"; frames: number; remainingFrames: number; effect: Extract<EventEffect, { kind: "pause" }> }
+  | { kind: "actorMove"; effect: Extract<EventEffect, { kind: "actorMove" }> };
 
 export type EventExecutorAdvanceInput = {
   confirm?: boolean;
   frames?: number;
+  actorMoveComplete?: boolean;
 };
 
 export type EventExecutorAdvanceResult =
@@ -1545,6 +1572,7 @@ export type EventExecutorHost = {
   learnPsi?(char: number, psi: number): void;
   event?(id: number): void;
   startBattle?(group: number): void;
+  actorMove?(effect: Extract<EventEffect, { kind: "actorMove" }>): void;
   control?(effect: Extract<EventEffect, { kind: "control" }>): void;
   terminator?(code: "end" | "eob"): void;
 };
@@ -2132,6 +2160,18 @@ export class EventExecutor {
       return true;
     }
 
+    if (this.waiting.kind === "actorMove") {
+      if (!input.actorMoveComplete) {
+        return false;
+      }
+      this.waiting = undefined;
+      return true;
+    }
+
+    if (this.waiting.kind !== "pause") {
+      return false;
+    }
+
     const elapsedFrames = Math.max(0, input.frames ?? 0);
     if (elapsedFrames <= 0) {
       return false;
@@ -2228,6 +2268,9 @@ export class EventExecutor {
       case "battle":
         this.host.startBattle?.(effect.group);
         break;
+      case "actorMove":
+        this.host.actorMove?.(effect);
+        break;
       case "control":
         this.host.control?.(effect);
         break;
@@ -2267,6 +2310,9 @@ function waitForEventEffect(effect: EventEffect): EventWait | undefined {
       remainingFrames: effect.frames,
       effect
     };
+  }
+  if (effect.kind === "actorMove") {
+    return { kind: "actorMove", effect };
   }
   return undefined;
 }
@@ -2409,6 +2455,7 @@ function eventEffectFromSegment(segment: DialogueSegment): EventEffect | undefin
     case "inflict":
     case "learnPsi":
     case "event":
+    case "actorMove":
       return segment;
     case "control":
       if (segment.code === "end" || segment.code === "eob") {

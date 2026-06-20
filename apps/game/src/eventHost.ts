@@ -1,5 +1,6 @@
 import {
   EventExecutor,
+  type EventActorMoveSelector,
   type DialoguePage,
   type DialogueSegment,
   type EventEffect,
@@ -43,6 +44,10 @@ export type EventMusicSink = {
   resume(): unknown;
 };
 
+export type NormalizedActorMoveSelector =
+  | { kind: "player" }
+  | { kind: "npc"; npcId: number };
+
 export type EventWarpDestination = {
   x: number;
   y: number;
@@ -73,6 +78,8 @@ export type EventHostDebug = {
     battleNoops: number;
     shops: number;
     audio: number;
+    actorMoves: number;
+    actorMoveNoops: number;
     unsupported: number;
     unsupportedByKind: Partial<Record<EventEffectKind, number>>;
     lastWarpDest?: number;
@@ -80,6 +87,7 @@ export type EventHostDebug = {
     lastBattleGroup?: number;
     lastShopStoreId?: number;
     lastAudioKind?: "music" | "sound" | "musicEffect";
+    lastActorMoveActor?: string;
     lastUnsupportedKind?: EventEffectKind;
   };
 };
@@ -93,6 +101,7 @@ export type RuntimeEventHostOptions = {
   applyWarpDestination?: (destination: EventWarpDestination) => boolean | void;
   startBattle?: (group: number) => boolean;
   openShop?: (storeId: number) => boolean | void;
+  actorMove?: (effect: Extract<EventEffect, { kind: "actorMove" }>) => boolean | void;
   music?: EventMusicSink;
   resolveMusicCueForTrack?: (track: number) => string | undefined;
   isEffectSupported?: (effect: EventEffect) => boolean;
@@ -171,6 +180,7 @@ export class RuntimeEventHost implements EventExecutorHost {
   private debugState: EventHostDebug = emptyDebug();
   private transitionRequested = false;
   private abortRequested = false;
+  private actorMoveNoopRequested = false;
   private runContext?: RuntimeEventRunContext;
   private dialogueOverrideConsumed = false;
 
@@ -195,6 +205,7 @@ export class RuntimeEventHost implements EventExecutorHost {
     this.reportedUnsupportedEffectKeys.clear();
     this.transitionRequested = false;
     this.abortRequested = false;
+    this.actorMoveNoopRequested = false;
     this.dialogueOverrideConsumed = false;
     this.debugState = { ...emptyDebug(), running: true };
   }
@@ -208,6 +219,7 @@ export class RuntimeEventHost implements EventExecutorHost {
     };
     this.transitionRequested = false;
     this.abortRequested = false;
+    this.actorMoveNoopRequested = false;
     this.executor = undefined;
     this.runContext = undefined;
     this.coveredConfirmIndexes.clear();
@@ -254,6 +266,12 @@ export class RuntimeEventHost implements EventExecutorHost {
   consumeAbortRequested(): boolean {
     const requested = this.abortRequested;
     this.abortRequested = false;
+    return requested;
+  }
+
+  consumeActorMoveNoopRequested(): boolean {
+    const requested = this.actorMoveNoopRequested;
+    this.actorMoveNoopRequested = false;
     return requested;
   }
 
@@ -353,6 +371,24 @@ export class RuntimeEventHost implements EventExecutorHost {
       lastBattleGroup: group
     };
     this.transitionRequested = started;
+  }
+
+  actorMove(effect: Extract<EventEffect, { kind: "actorMove" }>): void {
+    if (this.skipUnsupported(effect)) {
+      this.recordActorMove(effect, false);
+      this.actorMoveNoopRequested = true;
+      return;
+    }
+    if (!this.options.actorMove) {
+      this.recordActorMove(effect, false);
+      this.actorMoveNoopRequested = true;
+      return;
+    }
+    const accepted = this.options.actorMove(effect) !== false;
+    this.recordActorMove(effect, accepted);
+    if (!accepted) {
+      this.actorMoveNoopRequested = true;
+    }
   }
 
   openShop(storeId: number): void {
@@ -553,6 +589,15 @@ export class RuntimeEventHost implements EventExecutorHost {
     };
   }
 
+  private recordActorMove(effect: Extract<EventEffect, { kind: "actorMove" }>, accepted: boolean): void {
+    this.debugState.records = {
+      ...this.debugState.records,
+      actorMoves: this.debugState.records.actorMoves + 1,
+      actorMoveNoops: this.debugState.records.actorMoveNoops + (accepted ? 0 : 1),
+      lastActorMoveActor: actorMoveSelectorLabel(effect.actor)
+    };
+  }
+
   private skipUnsupported(effect: EventEffect): boolean {
     if (this.options.isEffectSupported?.(effect) !== false) {
       return false;
@@ -613,6 +658,13 @@ export class RuntimeEventSequence {
       return;
     }
     this.pump({ confirm: true });
+  }
+
+  notifyActorArrived(): void {
+    if (!this.running) {
+      return;
+    }
+    this.pump({ actorMoveComplete: true });
   }
 
   update(deltaMs: number): void {
@@ -678,6 +730,8 @@ export class RuntimeEventSequence {
     }
     if (result.wait.kind === "confirm" && this.host.shouldAutoConfirmCurrentWait()) {
       this.pump({ confirm: true });
+    } else if (result.wait.kind === "actorMove" && this.host.consumeActorMoveNoopRequested()) {
+      this.pump({ actorMoveComplete: true });
     }
     return false;
   }
@@ -751,10 +805,33 @@ function emptyDebug(): EventHostDebug {
       battleNoops: 0,
       shops: 0,
       audio: 0,
+      actorMoves: 0,
+      actorMoveNoops: 0,
       unsupported: 0,
       unsupportedByKind: {}
     }
   };
+}
+
+export function normalizeActorMoveSelector(actor: EventActorMoveSelector): NormalizedActorMoveSelector | undefined {
+  if (actor === "player") {
+    return { kind: "player" };
+  }
+  if ("kind" in actor && actor.kind === "player") {
+    return { kind: "player" };
+  }
+  if (Number.isInteger(actor.npcId) && actor.npcId >= 0) {
+    return { kind: "npc", npcId: actor.npcId };
+  }
+  return undefined;
+}
+
+function actorMoveSelectorLabel(actor: EventActorMoveSelector): string {
+  const normalized = normalizeActorMoveSelector(actor);
+  if (!normalized) {
+    return "unknown";
+  }
+  return normalized.kind === "player" ? "player" : `npc:${normalized.npcId}`;
 }
 
 function itemUseEffectForPartyStat(

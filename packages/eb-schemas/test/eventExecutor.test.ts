@@ -174,6 +174,43 @@ describe("EventExecutor", () => {
     ]);
   });
 
+  it("waits for actorMove until the scene reports arrival", () => {
+    const file = "ccscript/alpha.ccs";
+    const log: string[] = [];
+    const collection = scripts({
+      [file]: [
+        label(file, "start", 1),
+        effectCommand(file, 2, "actorMove", {
+          kind: "actorMove",
+          actor: { npcId: 744 },
+          to: { x: 120, y: 160 }
+        }),
+        effectCommand(file, 3, "set", { kind: "setFlag", flag: 9, raw: "set(9)" }),
+        runtime(file, "end", 4)
+      ]
+    });
+    const host: EventExecutorHost = {
+      actorMove: (effect) => log.push(`actorMove:${JSON.stringify(effect.actor)}:${effect.to.x},${effect.to.y}`),
+      setFlag: (flag) => log.push(`set:${flag}`)
+    };
+    const executor = new EventExecutor(collection, host);
+    executor.start("alpha.start");
+
+    expect(executor.advance()).toMatchObject({
+      done: false,
+      effect: { kind: "actorMove", actor: { npcId: 744 }, to: { x: 120, y: 160 } },
+      wait: { kind: "actorMove" }
+    });
+    expect(log).toEqual(["actorMove:{\"npcId\":744}:120,160"]);
+    expect(executor.advance()).toMatchObject({ done: false, wait: { kind: "actorMove" } });
+    expect(executor.advance({ frames: 300 })).toMatchObject({ done: false, wait: { kind: "actorMove" } });
+    expect(log).not.toContain("set:9");
+    expect(executor.advance({ actorMoveComplete: true })).toMatchObject({ done: false, effect: { kind: "setFlag", flag: 9 } });
+    expect(executor.advance()).toMatchObject({ done: false, effect: { kind: "terminator" } });
+    expect(executor.advance()).toMatchObject({ done: true, truncated: false });
+    expect(log).toContain("set:9");
+  });
+
   it("changes the effect sequence for conditional paths", () => {
     const file = "ccscript/alpha.ccs";
     const collection = scripts({

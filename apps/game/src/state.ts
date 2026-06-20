@@ -204,6 +204,16 @@ export type IntroDebug = {
   introComplete: boolean;
 };
 
+export type CutsceneMoveDebug = {
+  active: boolean;
+  actor?: string;
+  target?: { x: number; y: number };
+  arrived: boolean;
+  timedOut?: boolean;
+  elapsedMs?: number;
+  position?: { x: number; y: number };
+};
+
 export type OverworldDebug = {
   mode: "world" | "fallback" | "error";
   dialogueOpen: boolean;
@@ -234,6 +244,7 @@ export type OverworldDebug = {
   encounterCooldownMs?: number;
   encounterSeed?: number;
   lastEncounterGroup?: number;
+  cutsceneMove?: CutsceneMoveDebug;
   returnContextActive?: boolean;
   /** Facing-aware: an interactable NPC is in front and in range. */
   canInteract?: boolean;
@@ -278,6 +289,8 @@ export type OverworldDebug = {
       battleNoops: number;
       shops: number;
       audio: number;
+      actorMoves: number;
+      actorMoveNoops: number;
       unsupported: number;
       unsupportedByKind: Partial<Record<string, number>>;
       lastWarpDest?: number;
@@ -285,6 +298,7 @@ export type OverworldDebug = {
       lastBattleGroup?: number;
       lastShopStoreId?: number;
       lastAudioKind?: string;
+      lastActorMoveActor?: string;
       lastUnsupportedKind?: string;
     };
   };

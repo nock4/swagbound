@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { DialogueSegment, ScriptCollection, ScriptCommand } from "@eb/schemas";
-import { RuntimeEventHost, RuntimeEventSequence } from "./eventHost";
+import type { DialogueSegment, EventEffect, ScriptCollection, ScriptCommand } from "@eb/schemas";
+import { RuntimeEventHost, RuntimeEventSequence, normalizeActorMoveSelector } from "./eventHost";
 import { GameFlags } from "./gameFlags";
 import { PartyState, type PartyStateSnapshot } from "./partyState";
 import { DialogueController } from "./state";
@@ -35,6 +35,73 @@ describe("RuntimeEventHost recovery effects", () => {
       healHpPercent: 1,
       recoverPpPercent: 1
     });
+  });
+});
+
+describe("RuntimeEventHost actorMove effects", () => {
+  it("pauses the sequence until actor arrival is reported", () => {
+    const flags = new GameFlags();
+    const moves: Array<Extract<EventEffect, { kind: "actorMove" }>> = [];
+    const host = new RuntimeEventHost({
+      dialogue: new DialogueController(),
+      flags,
+      partyState: new PartyState(),
+      actorMove: (effect) => {
+        moves.push(effect);
+        return true;
+      }
+    });
+    const sequence = new RuntimeEventSequence(recoveryScript([
+      { kind: "actorMove", actor: { npcId: 744 }, to: { x: 120, y: 160 } },
+      { kind: "setFlag", flag: 42, raw: "set(42)" }
+    ]), host);
+
+    expect(sequence.start("test.main")).toBe(true);
+    expect(sequence.running).toBe(true);
+    expect(flags.isSet(42)).toBe(false);
+    expect(moves).toHaveLength(1);
+    expect(sequence.debug().currentEffectKind).toBe("actorMove");
+
+    sequence.update(1000);
+    expect(sequence.running).toBe(true);
+    expect(flags.isSet(42)).toBe(false);
+
+    sequence.notifyActorArrived();
+    expect(sequence.running).toBe(false);
+    expect(flags.isSet(42)).toBe(true);
+    expect(sequence.debug().effectsByKind).toMatchObject({
+      actorMove: 1,
+      setFlag: 1
+    });
+  });
+
+  it("auto-resumes actorMove when no scene sink is registered", () => {
+    const flags = new GameFlags();
+    const host = new RuntimeEventHost({
+      dialogue: new DialogueController(),
+      flags,
+      partyState: new PartyState()
+    });
+    const sequence = new RuntimeEventSequence(recoveryScript([
+      { kind: "actorMove", actor: "player", to: { x: 10, y: 12 } },
+      { kind: "setFlag", flag: 7, raw: "set(7)" }
+    ]), host);
+
+    expect(sequence.start("test.main")).toBe(true);
+    expect(sequence.running).toBe(false);
+    expect(flags.isSet(7)).toBe(true);
+    expect(sequence.debug().records).toMatchObject({
+      actorMoves: 1,
+      actorMoveNoops: 1,
+      lastActorMoveActor: "player"
+    });
+  });
+
+  it("normalizes supported actor move selectors", () => {
+    expect(normalizeActorMoveSelector("player")).toEqual({ kind: "player" });
+    expect(normalizeActorMoveSelector({ kind: "player" })).toEqual({ kind: "player" });
+    expect(normalizeActorMoveSelector({ npcId: 744 })).toEqual({ kind: "npc", npcId: 744 });
+    expect(normalizeActorMoveSelector({ kind: "npc", npcId: 744 })).toEqual({ kind: "npc", npcId: 744 });
   });
 });
 
