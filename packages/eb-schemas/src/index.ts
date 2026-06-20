@@ -110,6 +110,26 @@ const FunctionalEventSegmentSchema = z.union([
     amount: z.number().int().nonnegative()
   }),
   RawEffectMetadataSchema.extend({
+    kind: z.literal("healHp"),
+    amount: z.number().int().positive(),
+    char: z.number().int().nonnegative().optional()
+  }),
+  RawEffectMetadataSchema.extend({
+    kind: z.literal("healHpPercent"),
+    percent: z.number().int().positive(),
+    char: z.number().int().nonnegative().optional()
+  }),
+  RawEffectMetadataSchema.extend({
+    kind: z.literal("recoverPp"),
+    amount: z.number().int().positive(),
+    char: z.number().int().nonnegative().optional()
+  }),
+  RawEffectMetadataSchema.extend({
+    kind: z.literal("recoverPpPercent"),
+    percent: z.number().int().positive(),
+    char: z.number().int().nonnegative().optional()
+  }),
+  RawEffectMetadataSchema.extend({
     kind: z.literal("inflict"),
     char: z.number().int().nonnegative(),
     status: z.number().int().nonnegative()
@@ -1422,6 +1442,10 @@ export type ShopData = z.infer<typeof ShopDataSchema>;
 export type ShopEntry = z.infer<typeof ShopEntrySchema>;
 export type DialogueSegment = z.infer<typeof DialogueSegmentSchema>;
 export type EventEffect = z.infer<typeof EventEffectSchema>;
+export type EventRecoveryEffect = Extract<
+  EventEffect,
+  { kind: "healHp" | "healHpPercent" | "recoverPp" | "recoverPpPercent" }
+>;
 export type ScriptCollection = z.infer<typeof ScriptCollectionSchema>;
 export type ScriptCommand = z.infer<typeof ScriptCommandSchema>;
 export type NpcReferenceCollection = z.infer<typeof NpcReferenceCollectionSchema>;
@@ -1515,6 +1539,7 @@ export type EventExecutorHost = {
   music?(effect: Extract<EventEffect, { kind: "music" }>): void;
   sound?(id: number): void;
   musicEffect?(id: number): void;
+  recover?(effect: EventRecoveryEffect): void;
   partyStat?(op: z.infer<typeof PartyStatOpSchema>, char: number, amount: number): void;
   inflict?(char: number, status: number): void;
   learnPsi?(char: number, psi: number): void;
@@ -2182,6 +2207,12 @@ export class EventExecutor {
       case "musicEffect":
         this.host.musicEffect?.(effect.id);
         break;
+      case "healHp":
+      case "healHpPercent":
+      case "recoverPp":
+      case "recoverPpPercent":
+        this.host.recover?.(effect);
+        break;
       case "partyStat":
         this.host.partyStat?.(effect.op, effect.char, effect.amount);
         break;
@@ -2370,6 +2401,10 @@ function eventEffectFromSegment(segment: DialogueSegment): EventEffect | undefin
     case "music":
     case "sound":
     case "musicEffect":
+    case "healHp":
+    case "healHpPercent":
+    case "recoverPp":
+    case "recoverPpPercent":
     case "partyStat":
     case "inflict":
     case "learnPsi":

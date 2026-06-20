@@ -276,7 +276,11 @@ export class PartyState {
   }
 
   applyPartyStat(char: number, effect: ItemUseEffect): PartyVitalsApplyResult[] {
-    const targetChars = char === 0 ? this.partyVitalTargetIds() : [normalizeId(char)];
+    return this.applyRecovery(effect, char);
+  }
+
+  applyRecovery(effect: ItemUseEffect, char?: number): PartyVitalsApplyResult[] {
+    const targetChars = char === undefined || char === 0 ? this.partyVitalTargetIds() : [normalizeId(char)];
     return targetChars
       .map((charId) => this.applyEffectToChar(charId, effect))
       .filter((result): result is PartyVitalsApplyResult => Boolean(result));
