@@ -2576,18 +2576,32 @@ export class BattleScene extends Phaser.Scene {
       return item ? ["To one friend", "Use item"] : ["No goods available."];
     }
     if (this.submenu_ === "target") {
+      const name = this.targetedCombatantName();
       if (this.pendingPsiId_ !== null) {
         const psi = this.psiById(this.pendingPsiId_);
-        return psi ? [targetScopeForPsi(psi), `PP Cost: ${psiPpCost(psi)}`] : ["Choose target"];
+        return psi ? [name, `PP Cost: ${psiPpCost(psi)}`] : [name];
       }
       if (this.pendingItem_) {
         const item = this.itemById(this.pendingItem_.itemId);
-        return item ? ["To one friend", "Use item"] : ["Choose target"];
+        return item ? [name, "Use item"] : [name];
       }
-      return [this.activeTargetSide() === "party" ? "Choose friend" : "Choose enemy"];
+      return [name];
     }
 
     return [];
+  }
+
+  /** Full name of the combatant under the target cursor, shown while selecting a target. */
+  private targetedCombatantName(): string {
+    const side = this.activeTargetSide();
+    if (side === "party") {
+      return this.battle_.party[this.partyTargetIndex_]?.name ?? "Choose friend";
+    }
+    if (side === "enemy") {
+      this.normalizeTargetIndex();
+      return this.battle_.enemies[this.targetIndex_]?.name ?? "Choose enemy";
+    }
+    return "Choose target";
   }
 
   private publish(): void {

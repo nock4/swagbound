@@ -24,7 +24,10 @@ export function commandTargetSelectionPlan(
   livingEnemyCount: number
 ): CommandTargetSelectionPlan {
   const targetMode = enemyTargetModeForCommand(command);
-  if (targetMode && livingEnemyCount > 1) {
+  // Always require an explicit target pick for single-target enemy actions, even
+  // in a 1-versus-1 fight (mirrors the ally/heal flow, which already does this).
+  // Only skip when there is no living enemy to point at.
+  if (targetMode && livingEnemyCount > 0) {
     return { submenu: "target", targetMode };
   }
   return { submenu: "command", targetMode };
