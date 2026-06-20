@@ -12,6 +12,13 @@ import {
   type TeleportDestinations
 } from "@eb/schemas";
 import { renderSegmentsToText } from "./dialogueRenderer";
+import { buildInlineDialoguePages } from "./loader";
+import {
+  resolveCustomDialoguePages,
+  resolveScriptedDialogueOverridePages,
+  type CustomDialogueLookup,
+  type DialogueLibraryLookup
+} from "./scriptedDialogueResolver";
 import { GameFlags } from "./gameFlags";
 import type { DialogueController } from "./state";
 import { PartyState, type ItemUseEffect, type PartyStateCounts } from "./partyState";
@@ -81,10 +88,18 @@ export type RuntimeEventHostOptions = {
   openShop?: (storeId: number) => boolean | void;
   isEffectSupported?: (effect: EventEffect) => boolean;
   onUnsupportedEffect?: (effect: EventEffect) => void;
+  customDialogue?: CustomDialogueLookup;
+  dialogueLibrary?: DialogueLibraryLookup;
 };
 
 export type EventSequenceOptions = {
   onComplete?: (result: NonNullable<EventHostDebug["result"]>) => void;
+  npcId?: number;
+};
+
+type RuntimeEventRunContext = {
+  reference: string;
+  npcId?: number;
 };
 
 export function dialoguePagesForConfirmEffects(
@@ -147,6 +162,8 @@ export class RuntimeEventHost implements EventExecutorHost {
   private debugState: EventHostDebug = emptyDebug();
   private transitionRequested = false;
   private abortRequested = false;
+  private runContext?: RuntimeEventRunContext;
+  private dialogueOverrideConsumed = false;
 
   constructor(private readonly options: RuntimeEventHostOptions) {}
 
@@ -162,12 +179,14 @@ export class RuntimeEventHost implements EventExecutorHost {
     return this.options.partyState;
   }
 
-  begin(executor: EventExecutor): void {
+  begin(executor: EventExecutor, context: RuntimeEventRunContext): void {
     this.executor = executor;
+    this.runContext = context;
     this.coveredConfirmIndexes.clear();
     this.reportedUnsupportedEffectKeys.clear();
     this.transitionRequested = false;
     this.abortRequested = false;
+    this.dialogueOverrideConsumed = false;
     this.debugState = { ...emptyDebug(), running: true };
   }
 
@@ -181,8 +200,10 @@ export class RuntimeEventHost implements EventExecutorHost {
     this.transitionRequested = false;
     this.abortRequested = false;
     this.executor = undefined;
+    this.runContext = undefined;
     this.coveredConfirmIndexes.clear();
     this.reportedUnsupportedEffectKeys.clear();
+    this.dialogueOverrideConsumed = false;
   }
 
   recordEffect(effect: EventEffect): void {
@@ -400,11 +421,40 @@ export class RuntimeEventHost implements EventExecutorHost {
     if (!isConfirmEffect(effects[index])) {
       return;
     }
-    const pages = dialoguePagesForConfirmEffects(effects, index);
+    const pages = this.resolveDialogueOverridePages()
+      ?? dialoguePagesForConfirmEffects(effects, index);
     for (let next = index; next < effects.length && isConfirmEffect(effects[next]); next += 1) {
       this.coveredConfirmIndexes.add(next);
     }
     this.options.dialogue.start(pages);
+  }
+
+  private resolveDialogueOverridePages(): DialoguePage[] | undefined {
+    if (this.dialogueOverrideConsumed) {
+      return undefined;
+    }
+    const customDialogue = this.options.customDialogue;
+    const context = this.runContext;
+    if (!customDialogue || !context) {
+      return undefined;
+    }
+    this.dialogueOverrideConsumed = true;
+
+    // Granularity: an override is keyed to the sequence entry reference, or to
+    // the active NPC id when supplied, and replaces this run's first contiguous
+    // text/prompt block. Non-dialogue effects and later blocks still execute.
+    const npcEntry = context.npcId !== undefined
+      ? customDialogue.byNpcId[String(context.npcId)]
+      : undefined;
+    const npcPages = resolveCustomDialoguePages(npcEntry, this.options.dialogueLibrary);
+    if (npcPages && npcPages.length > 0) {
+      return buildInlineDialoguePages(npcPages);
+    }
+    return resolveScriptedDialogueOverridePages(
+      customDialogue,
+      this.options.dialogueLibrary,
+      context.reference
+    );
   }
 
   private currentEffectIndex(): number {
@@ -529,7 +579,7 @@ export class RuntimeEventSequence {
     }
     this.executor = executor;
     this.onComplete = options.onComplete;
-    this.host.begin(executor);
+    this.host.begin(executor, { reference, ...(options.npcId !== undefined ? { npcId: options.npcId } : {}) });
     this.pump();
     return true;
   }
