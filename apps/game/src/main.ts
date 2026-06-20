@@ -66,6 +66,7 @@ class BootScene extends Phaser.Scene {
         spriteOverrides: data.spriteOverrides,
         backgroundOverrides: data.backgroundOverrides,
         battleRules: data.battleRules,
+        musicManifest: data.musicManifest,
         encounterAdvantage
       });
       return;

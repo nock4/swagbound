@@ -7,6 +7,7 @@ import {
   EnemyNameFamiliesSchema,
   expandEnemyNameFamilies,
   expandOverworldEnemySkins,
+  MusicManifestSchema,
   OverworldEnemySkinsSchema,
   PsiOverridesSchema,
   SpriteOverridesSchema,
@@ -44,6 +45,8 @@ export const BATTLE_RULES_SOURCE = "content/battle-rules.json";
 export const BATTLE_RULES_OUTPUT = "battle-rules.json";
 export const STORY_TRIGGERS_SOURCE = "content/triggers.json";
 export const STORY_TRIGGERS_OUTPUT = "triggers.json";
+export const MUSIC_MANIFEST_SOURCE = "content/music-manifest.json";
+export const MUSIC_MANIFEST_OUTPUT = "music-manifest.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
 
 /**
@@ -77,6 +80,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validatePsiOverrides(PSI_OVERRIDES_SOURCE);
   await validateBattleRules(BATTLE_RULES_SOURCE);
   await validateStoryTriggers(STORY_TRIGGERS_SOURCE);
+  await validateMusicManifest(MUSIC_MANIFEST_SOURCE);
   await Promise.all([
     copyJsonToGenerated(STORY_TRIGGERS_SOURCE, out, STORY_TRIGGERS_OUTPUT),
     copyJsonToGenerated(ADDED_NPCS_SOURCE, out, ADDED_NPCS_OUTPUT),
@@ -88,7 +92,8 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
-    copyJsonToGenerated(BATTLE_RULES_SOURCE, out, BATTLE_RULES_OUTPUT)
+    copyJsonToGenerated(BATTLE_RULES_SOURCE, out, BATTLE_RULES_OUTPUT),
+    copyJsonToGenerated(MUSIC_MANIFEST_SOURCE, out, MUSIC_MANIFEST_OUTPUT)
   ]);
 }
 
@@ -142,6 +147,10 @@ async function validateStoryTriggers(source: string): Promise<void> {
       .filter((barrier): barrier is typeof barrier & { image: string } => Boolean(barrier.image))
       .map((barrier) => validatePublicAssetImage(barrier.image, "Story barrier image"))
   );
+}
+
+async function validateMusicManifest(source: string): Promise<void> {
+  MusicManifestSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 function spriteOverrideEntries(overrides: SpriteOverrides): SpriteOverride[] {

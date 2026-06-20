@@ -208,6 +208,7 @@ import {
   type TransitionSfxCue
 } from "./mapTransition";
 import { createTransitionSfx, type TransitionSfx } from "./audio/transitionSfx";
+import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -368,6 +369,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private readonly gameFlags = new GameFlags();
   private readonly partyState = new PartyState();
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
+  private music: Music = createMusic();
   private menuState: MenuState = closedMenu();
   private menuScreens = new Map<string, MenuScreen>();
   private activeShopStoreId?: number;
@@ -428,6 +430,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }): void {
     this.data_ = data.gameData;
     this.world_ = data.gameData.world as WorldChunked;
+    this.music = createMusic(data.gameData.musicManifest, {
+      muted: musicDisabledBySearch(globalThis.location?.search)
+    });
     this.resetRuntimeStateForStart();
     this.bootSaveState = data.saveState ?? undefined;
     this.saveSlot = Number.isInteger(data.saveSlot) && (data.saveSlot as number) >= 0 ? data.saveSlot as number : 0;
@@ -542,6 +547,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.cameras.main.roundPixels = true;
     this.refreshRoomBounds(true);
     this.events.once("shutdown", () => {
+      this.music.stop();
       this.destroyDoorFadeOverlay();
       this.destroyCollisionOverlay();
       this.destroyRoomMask();
@@ -607,6 +613,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updateCollisionOverlay();
     this.updatePrompt();
     this.scene.launch("ui", { worldSceneKey: "chunked-world", font: this.data_.font, window: this.data_.window });
+    void this.music.play(this.newGameOpening ? "intro" : "overworld");
     this.registerForceEncounter();
     if (!this.restoreState) {
       this.maybeStartNewGameStartup(spawn);
@@ -1474,7 +1481,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private registerTransitionSfxResume(): void {
-    const resume = () => this.transitionSfx.resume();
+    const resume = () => {
+      this.transitionSfx.resume();
+      this.music.resume();
+    };
     this.input.once("pointerdown", resume);
     this.input.keyboard?.once("keydown", resume);
     this.events.once("shutdown", () => {
@@ -2463,6 +2473,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       applyWarpDestination: (destination) => this.applyEventWarpDestination(destination),
       startBattle: (group) => this.startEventBattleForCurrentMode(group),
       openShop: (storeId) => this.openShopForCurrentMode(storeId),
+      music: this.music,
       isEffectSupported: (effect) => this.isEventEffectSupportedForCurrentMode(effect),
       onUnsupportedEffect: (effect) => this.warnUnsupportedEventEffect(effect),
       customDialogue: this.data_.customDialogue,
@@ -2496,6 +2507,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         finalPlayerControllable: this.isPlayerControllable()
       });
       publishNewGameStartupRecord(this.newGameStartupRecord);
+      void this.music.play("overworld");
       return;
     }
 
@@ -2535,6 +2547,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         finalPlayerControllable: this.isPlayerControllable()
       });
       publishNewGameStartupRecord(this.newGameStartupRecord);
+      void this.music.play("overworld");
       return;
     }
 
@@ -2563,6 +2576,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.startupMode = "startup";
     if (completedOpening) {
       this.gameFlags.set(INTRO_BEDROOM_OPENING_DONE_FLAG);
+      void this.music.play("overworld");
     }
     if (this.dialogue.open && result.status === "aborted") {
       this.dialogue.close();
@@ -2615,6 +2629,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.startupMode = "startup";
     if (completedOpening) {
       this.gameFlags.set(INTRO_BEDROOM_OPENING_DONE_FLAG);
+      void this.music.play("overworld");
     }
     if (this.dialogue.open) {
       this.dialogue.close();

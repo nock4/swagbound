@@ -343,6 +343,40 @@ describe("RuntimeEventHost", () => {
     });
   });
 
+  it("routes music effects to the optional music sink", () => {
+    const file = "ccscript/audio.ccs";
+    const collection = scripts({
+      [file]: [
+        label(file, "start", 1),
+        effect(file, 2, { kind: "music", op: "stop", raw: "music stop" }),
+        effect(file, 3, { kind: "music", op: "resume", raw: "music resume" }),
+        effect(file, 4, { kind: "music", op: "play", track: 7, raw: "music play" }),
+        runtime(file, "end", 5)
+      ]
+    });
+    const calls: string[] = [];
+    const host = new RuntimeEventHost({
+      dialogue: new DialogueController(),
+      flags: new GameFlags(),
+      partyState: new PartyState(),
+      music: {
+        play: (cue) => calls.push(`play:${cue}`),
+        stop: () => calls.push("stop"),
+        resume: () => calls.push("resume")
+      },
+      resolveMusicCueForTrack: (track) => track === 7 ? "battle" : undefined
+    });
+    const sequence = new RuntimeEventSequence(collection, host);
+
+    expect(sequence.start("audio.start")).toBe(true);
+
+    expect(calls).toEqual(["stop", "resume", "play:battle"]);
+    expect(host.debug().records).toMatchObject({
+      audio: 3,
+      lastAudioKind: "music"
+    });
+  });
+
   it("applies partyStat HP/PP recovery to one member or the whole active party", () => {
     const partyState = new PartyState();
     partyState.restore({
