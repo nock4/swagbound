@@ -2464,14 +2464,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
       startBattle: (group) => this.startEventBattleForCurrentMode(group),
       openShop: (storeId) => this.openShopForCurrentMode(storeId),
       isEffectSupported: (effect) => this.isEventEffectSupportedForCurrentMode(effect),
-      onUnsupportedEffect: (effect) => this.warnUnsupportedEventEffect(effect)
+      onUnsupportedEffect: (effect) => this.warnUnsupportedEventEffect(effect),
+      customDialogue: this.data_.customDialogue,
+      dialogueLibrary: this.data_.dialogueLibrary
     });
     this.eventSequence = new RuntimeEventSequence(this.data_.scripts, host);
   }
 
   private startEventSequence(reference: string): boolean {
     return this.eventSequence?.start(reference, {
-      onComplete: () => this.afterDialogueClosed()
+      onComplete: () => this.afterDialogueClosed(),
+      ...(this.activeNpcDialogue?.id !== undefined ? { npcId: this.activeNpcDialogue.id } : {})
     }) ?? false;
   }
 

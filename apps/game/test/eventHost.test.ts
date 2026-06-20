@@ -193,6 +193,86 @@ describe("RuntimeEventHost", () => {
     vi.useRealTimers();
   });
 
+  it("uses entry-reference custom dialogue overrides without skipping event effects", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-01-01T00:00:00Z"));
+
+    const file = "ccscript/events.ccs";
+    const collection = scripts({
+      [file]: [
+        label(file, "override", 1),
+        effect(file, 2, { kind: "setFlag", flag: 7, raw: "set" }),
+        text(file, "Someone's knocking at the door.", 3),
+        runtime(file, "next", 4),
+        text(file, "Raw second page.", 5),
+        effect(file, 6, { kind: "setFlag", flag: 8, raw: "set" }),
+        runtime(file, "end", 7),
+        label(file, "plain", 8),
+        text(file, "Plain EB script page.", 9),
+        runtime(file, "end", 10)
+      ]
+    });
+    const flags = new GameFlags();
+    const dialogue = new DialogueController();
+    const host = new RuntimeEventHost({
+      dialogue,
+      flags,
+      partyState: new PartyState(),
+      customDialogue: {
+        byNpcId: {},
+        byTextPointer: {
+          "events.override": {
+            pages: [
+              "MiFella hits the door like the algorithm owes him rent.",
+              "Override second page."
+            ]
+          }
+        }
+      }
+    });
+    const sequence = new RuntimeEventSequence(collection, host);
+    let completed = false;
+
+    expect(sequence.start("events.override", { onComplete: () => { completed = true; } })).toBe(true);
+
+    expect(flags.isSet(7)).toBe(true);
+    expect(flags.isSet(8)).toBe(false);
+    expect(dialogue.open).toBe(true);
+    expect(dialogue.pages.map((page) => page.text)).toEqual([
+      "MiFella hits the door like the algorithm owes him rent.",
+      "Override second page."
+    ]);
+
+    vi.advanceTimersByTime(200);
+    expect(dialogue.advance()).toBe(true);
+    vi.advanceTimersByTime(200);
+    expect(dialogue.advance()).toBe(false);
+    sequence.confirm();
+
+    expect(flags.isSet(8)).toBe(true);
+    expect(completed).toBe(true);
+    expect(sequence.running).toBe(false);
+
+    const plainDialogue = new DialogueController();
+    const plainHost = new RuntimeEventHost({
+      dialogue: plainDialogue,
+      flags: new GameFlags(),
+      partyState: new PartyState(),
+      customDialogue: {
+        byNpcId: {},
+        byTextPointer: {
+          "events.override": { pages: ["Override page."] }
+        }
+      }
+    });
+    const plainSequence = new RuntimeEventSequence(collection, plainHost);
+
+    expect(plainSequence.start("events.plain")).toBe(true);
+    expect(plainDialogue.pages.map((page) => page.text)).toEqual(["Plain EB script page."]);
+
+    vi.useRealTimers();
+  });
+
   it("applies host side effects and records stubbed calls", () => {
     const file = "ccscript/beta.ccs";
     const collection = scripts({
