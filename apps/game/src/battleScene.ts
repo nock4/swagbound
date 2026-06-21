@@ -172,20 +172,31 @@ const BATTLE_LEFT_MARGIN = 16;
 const BATTLE_LINE_HEIGHT = cleanLineHeight(BATTLE_FONT_SIZE, BATTLE_LINE_SPACING);
 const BATTLE_COMMAND_TEXT_PADDING_X = 12;
 const BATTLE_COMMAND_TEXT_PADDING_Y = 10;
-const BATTLE_COMMAND_GRID_GAP_X = 8;
-const BATTLE_COMMAND_GRID_GAP_Y = 8;
-const BATTLE_COMMAND_CELL_HEIGHT = 26;
+const BATTLE_COMMAND_GRID_PADDING_X = 10;
+const BATTLE_COMMAND_GRID_PADDING_Y = 8;
+const BATTLE_COMMAND_GRID_GAP_X = 6;
+const BATTLE_COMMAND_GRID_GAP_Y = 4;
+const BATTLE_COMMAND_CELL_HEIGHT = 24;
 const BATTLE_MENU_CARET_GUTTER_PX = 12;
 const BATTLE_MENU_TOP_MARGIN = 8;
 // Top-left "whose turn" name plate above the command grid.
-const BATTLE_ACTOR_NAME_HEIGHT = BATTLE_COMMAND_TEXT_PADDING_Y * 2 + BATTLE_LINE_HEIGHT;
+const BATTLE_ACTOR_NAME_PADDING_Y = 8;
+const BATTLE_ACTOR_NAME_HEIGHT = BATTLE_ACTOR_NAME_PADDING_Y * 2 + BATTLE_LINE_HEIGHT;
 const BATTLE_ACTOR_NAME_GAP = 4;
 const BATTLE_MENU_RIGHT_MARGIN = 16;
 const BATTLE_MENU_BOTTOM_CLEARANCE = 92;
 const BATTLE_SUBMENU_GAP = 8;
+const BATTLE_STACKED_MENU_BOTTOM_CLEARANCE = BATTLE_MENU_BOTTOM_CLEARANCE + 4;
+const BATTLE_SUBMENU_STACK_OVERLAP_X = 56;
+const BATTLE_SUBMENU_STACK_OFFSET_Y = -22;
+const BATTLE_TARGET_WINDOW_STACK_OFFSET_X = 28;
+const BATTLE_TARGET_WINDOW_STACK_OFFSET_Y = 22;
 const BATTLE_DESCRIPTION_GAP = 8;
-const BATTLE_COMMAND_MIN_WIDTH = 252;
-const BATTLE_SUBMENU_MIN_WIDTH = 260;
+const BATTLE_COMMAND_SINGLE_MIN_WIDTH = 74;
+const BATTLE_COMMAND_COMPACT_MIN_WIDTH = 188;
+const BATTLE_COMMAND_COMPACT_MAX_WIDTH = 224;
+const BATTLE_SUBMENU_MIN_WIDTH = 220;
+const BATTLE_TARGET_WINDOW_MIN_WIDTH = 156;
 const BATTLE_DESCRIPTION_MIN_WIDTH = 128;
 const BATTLE_MENU_MAX_WIDTH = 360;
 const BATTLE_DESCRIPTION_MAX_WIDTH = 260;
@@ -1813,23 +1824,41 @@ export class BattleScene extends Phaser.Scene {
   private layoutStatusWindows(view: BattleUiView): BattleStatusLayout {
     const actorName = view.actorName?.trim() ? view.actorName.trim() : undefined;
     const actorNameOffset = actorName ? BATTLE_ACTOR_NAME_HEIGHT + BATTLE_ACTOR_NAME_GAP : 0;
-    const command = this.commandGridLayout(view.commandLines, BATTLE_MENU_TOP_MARGIN + actorNameOffset);
+    const stackedMenu = this.isStackedMenuInputActive();
+    const command = this.commandGridLayout(view.commandLines, {
+      anchor: stackedMenu ? "stacked" : "top",
+      topMargin: BATTLE_MENU_TOP_MARGIN + (stackedMenu ? 0 : actorNameOffset),
+      reservedTop: stackedMenu ? actorNameOffset : 0
+    });
     const actorNameRect = actorName && command
-      ? { x: command.x, y: BATTLE_MENU_TOP_MARGIN, width: command.width, height: BATTLE_ACTOR_NAME_HEIGHT }
+      ? {
+        x: command.x,
+        y: stackedMenu
+          ? Math.max(BATTLE_MENU_TOP_MARGIN, command.y - BATTLE_ACTOR_NAME_GAP - BATTLE_ACTOR_NAME_HEIGHT)
+          : BATTLE_MENU_TOP_MARGIN,
+        width: command.width,
+        height: BATTLE_ACTOR_NAME_HEIGHT
+      }
       : undefined;
     const submenu = command && view.submenuLines.length > 0
       ? this.menuListLayout({
         labels: view.submenuLines,
         selectedIndex: view.selectedSubmenuIndex,
-        x: command.x + command.width + BATTLE_SUBMENU_GAP,
-        y: command.y,
+        x: stackedMenu
+          ? command.x + Math.max(0, command.width - BATTLE_SUBMENU_STACK_OVERLAP_X)
+          : command.x + command.width + BATTLE_SUBMENU_GAP,
+        y: stackedMenu ? command.y + BATTLE_SUBMENU_STACK_OFFSET_Y : command.y,
         minWidth: BATTLE_SUBMENU_MIN_WIDTH,
-        maxWidth: BATTLE_MENU_MAX_WIDTH
+        maxWidth: BATTLE_MENU_MAX_WIDTH,
+        bottomClearance: stackedMenu ? BATTLE_STACKED_MENU_BOTTOM_CLEARANCE : BATTLE_MENU_BOTTOM_CLEARANCE
       })
       : undefined;
     const descriptionAnchor = submenu ?? command;
     const description = descriptionAnchor && view.descriptionLines.length > 0
-      ? this.descriptionLayout(view.descriptionLines, descriptionAnchor)
+      ? this.descriptionLayout(view.descriptionLines, descriptionAnchor, {
+        mode: stackedMenu && this.submenu_ === "target" ? "stacked-target" : "below",
+        bottomClearance: stackedMenu ? BATTLE_STACKED_MENU_BOTTOM_CLEARANCE : BATTLE_MENU_BOTTOM_CLEARANCE
+      })
       : undefined;
     const executionMessage = view.executionMessageLines.length > 0
       ? this.executionMessageLayout(view.executionMessageLines)
@@ -1886,7 +1915,7 @@ export class BattleScene extends Phaser.Scene {
     if (layout.actorName) {
       const textRect = cleanPanelInnerRect(layout.actorName, {
         x: BATTLE_COMMAND_TEXT_PADDING_X,
-        y: BATTLE_COMMAND_TEXT_PADDING_Y
+        y: BATTLE_ACTOR_NAME_PADDING_Y
       });
       drawCleanPanel(graphics, layout.actorName);
       this.menuTexts.actorName = createCleanText(this, textRect.x, textRect.y, "", {
@@ -1908,18 +1937,6 @@ export class BattleScene extends Phaser.Scene {
       }).setDepth(21));
     }
 
-    if (layout.description) {
-      const textRect = this.descriptionWindowTextRect(layout.description);
-      drawCleanPanel(graphics, layout.description);
-      this.menuTexts.description = createCleanText(this, textRect.x, textRect.y, "", {
-        fontSize: BATTLE_DESCRIPTION_FONT_SIZE,
-        color: CLEAN_UI_PRIMARY,
-        lineSpacing: BATTLE_LINE_SPACING,
-        fixedWidth: textRect.width,
-        wordWrapWidth: textRect.width
-      }).setDepth(23);
-    }
-
     if (layout.submenu) {
       const textRect = this.standardMenuListTextRect(layout.submenu);
       drawCleanPanel(graphics, layout.submenu);
@@ -1929,6 +1946,18 @@ export class BattleScene extends Phaser.Scene {
         lineSpacing: BATTLE_LINE_SPACING,
         fixedWidth: textRect.width
       }).setDepth(25);
+    }
+
+    if (layout.description) {
+      const textRect = this.descriptionWindowTextRect(layout.description);
+      drawCleanPanel(graphics, layout.description);
+      this.menuTexts.description = createCleanText(this, textRect.x, textRect.y, "", {
+        fontSize: BATTLE_DESCRIPTION_FONT_SIZE,
+        color: CLEAN_UI_PRIMARY,
+        lineSpacing: BATTLE_LINE_SPACING,
+        fixedWidth: textRect.width,
+        wordWrapWidth: textRect.width
+      }).setDepth(26);
     }
 
     if (layout.executionMessage) {
@@ -1951,26 +1980,47 @@ export class BattleScene extends Phaser.Scene {
     return layout;
   }
 
-  private commandGridLayout(labels: string[], topMargin = BATTLE_MENU_TOP_MARGIN): BattleCommandGridLayout | undefined {
+  private commandGridLayout(
+    labels: string[],
+    options: {
+      anchor?: "top" | "stacked";
+      topMargin?: number;
+      reservedTop?: number;
+    } = {}
+  ): BattleCommandGridLayout | undefined {
     if (labels.length === 0) {
       return undefined;
     }
+    const anchor = options.anchor ?? "top";
+    const topMargin = Math.max(BATTLE_MENU_TOP_MARGIN, Math.round(options.topMargin ?? BATTLE_MENU_TOP_MARGIN));
+    const reservedTop = Math.max(0, Math.round(options.reservedTop ?? 0));
+    const minTop = topMargin + reservedTop;
+    const screenMaxWidth = Math.max(1, Math.floor(this.scale.width - BATTLE_LEFT_MARGIN - BATTLE_MENU_RIGHT_MARGIN));
+    const compactMaxWidth = Math.min(BATTLE_COMMAND_COMPACT_MAX_WIDTH, screenMaxWidth);
+    const maxWidth = anchor === "stacked" ? compactMaxWidth : screenMaxWidth;
+    const minWidth = Math.min(
+      labels.length <= 1 ? BATTLE_COMMAND_SINGLE_MIN_WIDTH : BATTLE_COMMAND_COMPACT_MIN_WIDTH,
+      maxWidth
+    );
     const rows = Math.max(1, Math.ceil(labels.length / CLEAN_UI_GRID_COLUMNS));
-    const minWidth = labels.length <= 1 ? 74 : BATTLE_COMMAND_MIN_WIDTH;
     const labelWidth = Math.max(0, ...labels.map((label) => this.measureTextWidth(label, BATTLE_FONT_SIZE, 500)));
     const requestedWidth = Math.max(
       minWidth,
-      Math.ceil(labelWidth * CLEAN_UI_GRID_COLUMNS + BATTLE_COMMAND_TEXT_PADDING_X * 2 + BATTLE_MENU_CARET_GUTTER_PX * CLEAN_UI_GRID_COLUMNS + BATTLE_COMMAND_GRID_GAP_X * (CLEAN_UI_GRID_COLUMNS - 1))
+      Math.ceil(labelWidth * CLEAN_UI_GRID_COLUMNS + BATTLE_COMMAND_GRID_PADDING_X * 2 + BATTLE_MENU_CARET_GUTTER_PX * CLEAN_UI_GRID_COLUMNS + BATTLE_COMMAND_GRID_GAP_X * (CLEAN_UI_GRID_COLUMNS - 1))
     );
     const width = Math.min(
       Math.max(minWidth, requestedWidth),
-      Math.floor(this.scale.width - BATTLE_LEFT_MARGIN - BATTLE_MENU_RIGHT_MARGIN)
+      maxWidth
     );
-    const height = BATTLE_COMMAND_TEXT_PADDING_Y * 2 + rows * BATTLE_COMMAND_CELL_HEIGHT + (rows - 1) * BATTLE_COMMAND_GRID_GAP_Y;
+    const height = BATTLE_COMMAND_GRID_PADDING_Y * 2 + rows * BATTLE_COMMAND_CELL_HEIGHT + (rows - 1) * BATTLE_COMMAND_GRID_GAP_Y;
+    const bottomClearance = anchor === "stacked" ? BATTLE_STACKED_MENU_BOTTOM_CLEARANCE : BATTLE_MENU_BOTTOM_CLEARANCE;
+    const y = anchor === "stacked"
+      ? Math.floor(this.scale.height - bottomClearance - height)
+      : topMargin;
     const rect = clampRectToScreen(
       {
         x: BATTLE_LEFT_MARGIN,
-        y: topMargin,
+        y,
         width,
         height
       },
@@ -1978,13 +2028,13 @@ export class BattleScene extends Phaser.Scene {
       {
         left: BATTLE_LEFT_MARGIN,
         right: BATTLE_MENU_RIGHT_MARGIN,
-        top: topMargin,
-        bottom: BATTLE_MENU_BOTTOM_CLEARANCE
+        top: minTop,
+        bottom: bottomClearance
       }
     );
     const content = cleanPanelInnerRect(rect, {
-      x: BATTLE_COMMAND_TEXT_PADDING_X,
-      y: BATTLE_COMMAND_TEXT_PADDING_Y
+      x: BATTLE_COMMAND_GRID_PADDING_X,
+      y: BATTLE_COMMAND_GRID_PADDING_Y
     });
     return {
       ...rect,
@@ -1999,11 +2049,13 @@ export class BattleScene extends Phaser.Scene {
     y: number;
     minWidth: number;
     maxWidth: number;
+    bottomClearance?: number;
   }): BattleMenuListRect {
     const screen = { width: this.scale.width, height: this.scale.height };
+    const bottomClearance = Math.max(0, Math.round(options.bottomClearance ?? BATTLE_MENU_BOTTOM_CLEARANCE));
     const maxHeight = Math.max(
       BATTLE_LINE_HEIGHT + BATTLE_COMMAND_TEXT_PADDING_Y * 2,
-      Math.floor(screen.height - BATTLE_MENU_BOTTOM_CLEARANCE - options.y)
+      Math.floor(screen.height - bottomClearance - options.y)
     );
     const maxRows = Math.max(1, Math.floor((maxHeight - BATTLE_COMMAND_TEXT_PADDING_Y * 2) / BATTLE_LINE_HEIGHT));
     const visibleCount = Math.max(1, Math.min(options.labels.length, maxRows));
@@ -2026,7 +2078,7 @@ export class BattleScene extends Phaser.Scene {
       left: BATTLE_LEFT_MARGIN,
       right: BATTLE_MENU_RIGHT_MARGIN,
       top: BATTLE_MENU_TOP_MARGIN,
-      bottom: BATTLE_MENU_BOTTOM_CLEARANCE
+      bottom: bottomClearance
     });
     return {
       ...clamped,
@@ -2037,8 +2089,23 @@ export class BattleScene extends Phaser.Scene {
     };
   }
 
-  private descriptionLayout(lines: string[], anchor: CanvasRect): CanvasRect {
-    const y = anchor.y + anchor.height + BATTLE_DESCRIPTION_GAP;
+  private descriptionLayout(
+    lines: string[],
+    anchor: CanvasRect,
+    options: {
+      mode?: "below" | "stacked-target";
+      bottomClearance?: number;
+    } = {}
+  ): CanvasRect {
+    const mode = options.mode ?? "below";
+    const bottomClearance = Math.max(0, Math.round(options.bottomClearance ?? BATTLE_MENU_BOTTOM_CLEARANCE));
+    const stackedTarget = mode === "stacked-target";
+    const x = stackedTarget
+      ? anchor.x + Math.min(BATTLE_TARGET_WINDOW_STACK_OFFSET_X, Math.max(0, anchor.width - BATTLE_TARGET_WINDOW_MIN_WIDTH))
+      : anchor.x;
+    const y = stackedTarget
+      ? anchor.y + BATTLE_TARGET_WINDOW_STACK_OFFSET_Y
+      : anchor.y + anchor.height + BATTLE_DESCRIPTION_GAP;
     const maxWidth = Math.min(
       Math.max(BATTLE_DESCRIPTION_MIN_WIDTH, anchor.width),
       BATTLE_DESCRIPTION_MAX_WIDTH,
@@ -2046,10 +2113,10 @@ export class BattleScene extends Phaser.Scene {
     );
     const maxHeight = Math.max(
       BATTLE_LINE_HEIGHT + BATTLE_DESCRIPTION_TEXT_PADDING_Y * 2,
-      Math.floor(this.scale.height - BATTLE_MENU_BOTTOM_CLEARANCE - y)
+      Math.floor(this.scale.height - bottomClearance - y)
     );
     const rect = contentFitWindowRect({
-      x: anchor.x,
+      x,
       y,
       labels: lines,
       measureText: (label) => this.measureTextWidth(label, BATTLE_DESCRIPTION_FONT_SIZE),
@@ -2057,7 +2124,9 @@ export class BattleScene extends Phaser.Scene {
       lineCount: Math.max(1, lines.length),
       paddingX: BATTLE_DESCRIPTION_TEXT_PADDING_X,
       paddingY: BATTLE_DESCRIPTION_TEXT_PADDING_Y,
-      minWidth: Math.max(BATTLE_DESCRIPTION_MIN_WIDTH, Math.min(anchor.width, maxWidth)),
+      minWidth: stackedTarget
+        ? Math.max(BATTLE_TARGET_WINDOW_MIN_WIDTH, Math.min(anchor.width, maxWidth))
+        : Math.max(BATTLE_DESCRIPTION_MIN_WIDTH, Math.min(anchor.width, maxWidth)),
       maxWidth,
       maxHeight
     });
@@ -2065,7 +2134,7 @@ export class BattleScene extends Phaser.Scene {
       left: BATTLE_LEFT_MARGIN,
       right: BATTLE_MENU_RIGHT_MARGIN,
       top: BATTLE_MENU_TOP_MARGIN,
-      bottom: BATTLE_MENU_BOTTOM_CLEARANCE
+      bottom: bottomClearance
     });
   }
 
@@ -2282,12 +2351,16 @@ export class BattleScene extends Phaser.Scene {
     return {
       actorName: this.activeActorName(),
       commandLines: this.commandsForCurrentActor().map(formatCommandLabel),
-      submenuLines: this.submenuTextLines(),
+      submenuLines: this.visibleSubmenuTextLines(),
       descriptionLines: this.menuDescriptionLines(),
       executionMessageLines: [],
-      selectedSubmenuIndex: this.submenuIndex_,
+      selectedSubmenuIndex: this.visibleSubmenuIndex(),
       statusCards: this.statusCardViews()
     };
+  }
+
+  private isStackedMenuInputActive(): boolean {
+    return this.phase_ === "command-input" && this.currentActor_?.side === "party";
   }
 
   /** Display name of the party member currently choosing a command (top-left turn plate). */
@@ -2547,26 +2620,64 @@ export class BattleScene extends Phaser.Scene {
 
   private submenuTextLines(): string[] {
     if (this.submenu_ === "psi") {
-      const entries = this.learnedPsiForCurrentActor();
-      if (entries.length === 0) {
-        return [this.menuMessage_ || "No learned PSI."];
-      }
-      return entries.map((psi) => {
-        const cost = psiPpCost(psi);
-        return `${psi.name || `[psi ${psi.id}]`} ${cost}`;
-      });
+      return this.psiSubmenuTextLines();
     }
     if (this.submenu_ === "goods") {
-      const entries = this.goodsForCurrentActor();
-      if (entries.length === 0) {
-        return [this.menuMessage_ || "No goods."];
-      }
-      return entries.map((entry) => {
-        const item = this.itemById(entry.itemId);
-        return item?.name || `[item ${entry.itemId}]`;
-      });
+      return this.goodsSubmenuTextLines();
     }
     return [];
+  }
+
+  private visibleSubmenuTextLines(): string[] {
+    if (this.submenu_ !== "target") {
+      return this.submenuTextLines();
+    }
+    if (this.pendingPsiId_ !== null) {
+      return this.psiSubmenuTextLines();
+    }
+    if (this.pendingItem_) {
+      return this.goodsSubmenuTextLines();
+    }
+    return [];
+  }
+
+  private visibleSubmenuIndex(): number {
+    if (this.submenu_ !== "target") {
+      return this.submenuIndex_;
+    }
+    if (this.pendingPsiId_ !== null) {
+      const index = this.learnedPsiForCurrentActor().findIndex((psi) => psi.id === this.pendingPsiId_);
+      return index >= 0 ? index : 0;
+    }
+    if (this.pendingItem_) {
+      const index = this.goodsForCurrentActor().findIndex((entry) =>
+        entry.inventorySlot === this.pendingItem_?.inventorySlot && entry.itemId === this.pendingItem_?.itemId
+      );
+      return index >= 0 ? index : 0;
+    }
+    return 0;
+  }
+
+  private psiSubmenuTextLines(): string[] {
+    const entries = this.learnedPsiForCurrentActor();
+    if (entries.length === 0) {
+      return [this.menuMessage_ || "No learned PSI."];
+    }
+    return entries.map((psi) => {
+      const cost = psiPpCost(psi);
+      return `${psi.name || `[psi ${psi.id}]`} ${cost}`;
+    });
+  }
+
+  private goodsSubmenuTextLines(): string[] {
+    const entries = this.goodsForCurrentActor();
+    if (entries.length === 0) {
+      return [this.menuMessage_ || "No goods."];
+    }
+    return entries.map((entry) => {
+      const item = this.itemById(entry.itemId);
+      return item?.name || `[item ${entry.itemId}]`;
+    });
   }
 
   private menuDescriptionLines(): string[] {
