@@ -20,6 +20,7 @@ import {
 } from "@eb/schemas";
 import {
   applyVictoryRewards,
+  advanceVictorySummaryPageIndex,
   advanceBattleRound,
   battleRngSeedForGroup,
   buildVictorySummaryViewModel,
@@ -367,6 +368,7 @@ export class BattleScene extends Phaser.Scene {
   private transitionPhase_: BattleTransitionPhase = "enter";
   private transitionMs_ = ENTER_TRANSITION_MS;
   private victorySummary_: BattleVictorySummary | null = null;
+  private victorySummaryPageIndex_ = 0;
   private commandIndex_ = 0;
   private submenu_: BattleSubmenu = "command";
   private submenuIndex_ = 0;
@@ -488,6 +490,7 @@ export class BattleScene extends Phaser.Scene {
     this.transitionPhase_ = "enter";
     this.transitionMs_ = ENTER_TRANSITION_MS;
     this.victorySummary_ = null;
+    this.victorySummaryPageIndex_ = 0;
     this.commandIndex_ = 0;
     this.submenu_ = "command";
     this.submenuIndex_ = 0;
@@ -650,7 +653,16 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private confirmMenu(): void {
-    if (this.phase_ === "victory-summary" || this.phase_ === "lose" || this.phase_ === "flee" || this.phase_ === "win") {
+    if (this.phase_ === "victory-summary") {
+      if (this.advanceVictorySummaryPage()) {
+        this.renderStatus();
+        this.publish();
+        return;
+      }
+      this.beginExitTransition();
+      return;
+    }
+    if (this.phase_ === "lose" || this.phase_ === "flee" || this.phase_ === "win") {
       this.beginExitTransition();
       return;
     }
@@ -1414,6 +1426,7 @@ export class BattleScene extends Phaser.Scene {
     const result = resolveInstantWinRewards(this.battle_.party, enemies, rewardOptions);
     this.battle_ = result.state;
     this.victorySummary_ = result.summary;
+    this.victorySummaryPageIndex_ = 0;
     this.phase_ = "victory-summary";
     this.transitionPhase_ = "summary";
     this.transitionMs_ = 0;
@@ -1430,6 +1443,7 @@ export class BattleScene extends Phaser.Scene {
   private beginVictorySummary(): void {
     this.playBattleMusicCue("victory");
     if (this.victorySummary_) {
+      this.victorySummaryPageIndex_ = 0;
       this.phase_ = "victory-summary";
       this.transitionPhase_ = "summary";
       return;
@@ -1447,6 +1461,7 @@ export class BattleScene extends Phaser.Scene {
     });
     this.battle_ = result.state;
     this.victorySummary_ = result.summary;
+    this.victorySummaryPageIndex_ = 0;
     this.phase_ = "victory-summary";
     this.transitionPhase_ = "summary";
     this.submenu_ = "command";
@@ -2788,7 +2803,9 @@ export class BattleScene extends Phaser.Scene {
         isRolling: enemies[0]?.isRolling ?? false
       },
       outcome: currentOutcome,
-      victorySummary: this.victorySummary_ ? debugVictorySummary(this.victorySummary_) : null
+      victorySummary: this.victorySummary_ ? debugVictorySummary(this.victorySummary_) : null,
+      victorySummaryPageIndex: this.victorySummaryPageIndex_,
+      victorySummaryPageCount: this.victorySummaryPages().length
     });
   }
 
@@ -3043,12 +3060,30 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private victorySummaryLines(): string[] {
+    const pages = this.victorySummaryPages();
+    if (pages.length === 0) {
+      return [];
+    }
+    const pageIndex = clampNumber(this.victorySummaryPageIndex_, 0, pages.length - 1);
+    return pages[pageIndex] ?? [];
+  }
+
+  private victorySummaryPages(): string[][] {
     if (!this.victorySummary_) {
       return [];
     }
     return buildVictorySummaryViewModel(this.victorySummary_)
-      .lines
-      .map((line) => fitLine(line, 28));
+      .pages
+      .map((page) => page.map((line) => fitLine(line, 28)));
+  }
+
+  private advanceVictorySummaryPage(): boolean {
+    const next = advanceVictorySummaryPageIndex(
+      this.victorySummaryPageIndex_,
+      this.victorySummaryPages().length
+    );
+    this.victorySummaryPageIndex_ = next.pageIndex;
+    return !next.shouldExit;
   }
 
   private currentCommand(): BattleCommand {

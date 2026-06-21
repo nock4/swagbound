@@ -9,6 +9,7 @@ import {
 } from "../src/characterModel";
 import {
   applyVictoryRewards,
+  advanceVictorySummaryPageIndex,
   buildVictorySummaryViewModel,
   createBattleState,
   learnedPsiForCombatant
@@ -279,6 +280,43 @@ describe("leveling & skill growth", () => {
     expect(viewModel.lines).toContain("$swag 40");
     expect(viewModel.lines.some((line) => /Lv 6$/.test(line))).toBe(true);
     expect(viewModel.lines).toContain("Learned Wake Up");
+  });
+
+  it("paginates a multi-beat victory summary and advances before exit", () => {
+    const member = buildPartyMember(growthCharacter(7));
+    const psiList = [
+      syntheticPsi(500, 7, 3, "offense", "Wake Up")
+    ];
+    let state = createBattleState([fallenEnemy(250, 40)], { partyMembers: [member] });
+    state.enemies[0].hp.displayed = 0;
+    state.enemies[0].hp.target = 0;
+    state.enemies[0].hp.isRolling = false;
+
+    const { summary } = applyVictoryRewards(state, { rng: () => 1, psi: psiList });
+    const viewModel = buildVictorySummaryViewModel(summary);
+
+    expect(viewModel.pages).toHaveLength(2);
+    expect(viewModel.pages[0]).toEqual(["EXP 250", "$swag 40", "Found no items"]);
+    expect(viewModel.pages[1]?.[0]).toMatch(/Lv 6$/);
+    expect(viewModel.pages[1]?.[1]).toBe("Learned Wake Up");
+
+    const afterFirstConfirm = advanceVictorySummaryPageIndex(0, viewModel.pages.length);
+    expect(afterFirstConfirm).toEqual({ pageIndex: 1, shouldExit: false });
+    expect(advanceVictorySummaryPageIndex(afterFirstConfirm.pageIndex, viewModel.pages.length))
+      .toEqual({ pageIndex: 1, shouldExit: true });
+  });
+
+  it("keeps a trivial victory summary on one page and exits on first confirm", () => {
+    const viewModel = buildVictorySummaryViewModel({
+      expGained: 4,
+      moneyGained: 1,
+      drops: [],
+      levelUps: []
+    });
+
+    expect(viewModel.pages).toEqual([["EXP 4", "$swag 1", "Found no items"]]);
+    expect(advanceVictorySummaryPageIndex(0, viewModel.pages.length))
+      .toEqual({ pageIndex: 0, shouldExit: true });
   });
 });
 

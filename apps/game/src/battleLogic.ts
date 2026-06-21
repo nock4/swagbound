@@ -213,10 +213,18 @@ export type BattleVictorySummary = {
 
 export type BattleVictoryViewModel = {
   lines: string[];
+  pages: string[][];
   expGained: number;
   moneyGained: number;
   itemsFound: string[];
   levelUps: BattleLevelUpSummary[];
+};
+
+export const VICTORY_SUMMARY_PAGE_LINE_LIMIT = 3;
+
+export type VictorySummaryPageAdvance = {
+  pageIndex: number;
+  shouldExit: boolean;
 };
 
 export type EncounterAdvantagePartyMember = {
@@ -1153,11 +1161,36 @@ export function buildVictorySummaryViewModel(summary: BattleVictorySummary): Bat
   ];
   return {
     lines,
+    pages: paginateVictorySummaryLines(lines),
     expGained: summary.expGained,
     moneyGained: summary.moneyGained,
     itemsFound,
     levelUps: summary.levelUps
   };
+}
+
+export function paginateVictorySummaryLines(
+  lines: string[],
+  linesPerPage = VICTORY_SUMMARY_PAGE_LINE_LIMIT
+): string[][] {
+  const pageSize = Math.max(1, Math.floor(linesPerPage));
+  const pages: string[][] = [];
+  for (let index = 0; index < lines.length; index += pageSize) {
+    pages.push(lines.slice(index, index + pageSize));
+  }
+  return pages;
+}
+
+export function advanceVictorySummaryPageIndex(
+  currentPageIndex: number,
+  pageCount: number
+): VictorySummaryPageAdvance {
+  const count = Math.max(1, Math.floor(pageCount));
+  const current = clamp(Math.floor(currentPageIndex), 0, count - 1);
+  if (current >= count - 1) {
+    return { pageIndex: current, shouldExit: true };
+  }
+  return { pageIndex: current + 1, shouldExit: false };
 }
 
 export function tickBattleMeters(state: BattleState, dtMs: number): BattleState {

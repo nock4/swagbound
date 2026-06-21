@@ -142,6 +142,8 @@ export type BattleDebug = {
   };
   outcome: "ongoing" | "win" | "lose";
   victorySummary: BattleVictoryDebug | null;
+  victorySummaryPageIndex: number;
+  victorySummaryPageCount: number;
 };
 
 export type DebugNpc = {
