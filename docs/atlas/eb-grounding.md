@@ -29,6 +29,11 @@ Authoritative local signals already used by the Atlas:
   shoplist + music-numbers, Fandom, WikiBound, StrategyWiki, web.archive.org. These hold the
   community-maintained music-id→name and shop-per-town lists.
 
+## Browser research (2026-06, via the user's Chrome — reaches the bot-blocked sources)
+Using a live browser bypassed the 403/cert blocks. Findings:
+- **Authoritative shop list obtained** (starmen.net) → `content/atlas/eb-shops.json` (16 areas, the canonical EarthBound shop/vendor vocabulary). This is the reference for shop names + catalog validation. Mapping a multi-shop town's individual buildings still needs the interior sign / shop inventory.
+- **Music-id table is NOT directly applicable.** The community list (ShrineFox) maps SONG ids → area (46=Onett, 51=Desert, 54=Winters, 50=Moonside, 59=Dalaam, 64=Deep Darkness, 48=Saturn Valley, 52=Peaceful Rest Valley; 26=Hotel, 28=Store, 23=Home). BUT our `map_sectors.yml` `Music` field is an **INDEX**, not the song id — verified: Onett's overworld Music = `2`, not `46`. Translating index→song needs `map_music.yml`, which is event-flag-conditional with encoded values (49306, 33284…) — too much RE for the payoff. So area names stay **visual-grounded** (in-game recognition), not music-mapped. (Correction: PR #112's "Moonside" guess used the wrong frame; trust the in-game visual, mark confidence.)
+
 ## EarthBound location set (reference, from search; for AI context)
 6 town-mapped: **Onett, Twoson, Threed, Fourside, Scaraba, Summers**.
 Unmapped areas (no town map; ~22): Peaceful Rest Valley, Happy-Happy Village, Lilliput

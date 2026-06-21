@@ -1,0 +1,23 @@
+{
+  "schema": "swagbound.atlas.eb-shops.v1",
+  "source": "starmen.net EarthBound Walkthrough Full Shop & Vendor List (fetched via browser 2026-06)",
+  "note": "Authoritative EarthBound shops/vendors per area. Use to ground shop names + validate the building catalog. Mapping a multi-shop town's individual buildings still needs the interior sign or shop inventory.",
+  "byArea": {
+    "Onett": ["Onett Drugstore", "Onett Burger Shop", "Onett Bakery"],
+    "Twoson": ["Twoson Dept. Store (Burger Shop, Bakery, Shop)", "Burglin Park Bakery", "Burglin Park Condiments Shop", "Burglin Park Tool Shop", "Burglin Park vendors (Egg, Ruler, Sign, Banana)"],
+    "Happy Happy Village": ["Self-Serve Stand", "Happy Happy Village Drugstore"],
+    "Threed": ["Threed Drugstore", "Threed Arms Dealer", "Threed Bakery", "Grapefruit Falls Salesman"],
+    "Saturn Valley": ["Saturn Valley Shop"],
+    "Dusty Dunes Desert": ["Desert DRUG Store", "Desert Arms Dealer", "Desert Food Cart"],
+    "Fourside": ["Fourside Bakery", "Fourside Junk Shop", "Topolla Theater", "Fourside Dept. Store (Condiments, Burger, Food, Arms, Tool, Item, Sports, Toy + Ticket Counter)"],
+    "Moonside": ["Moonside Hotel Shop"],
+    "Winters": ["Winters Drugstore", "Winters Laboratory Cave Boy"],
+    "Summers": ["Summers Restaurant", "Summers Shop", "Summers Gelato Cart", "Summers Magic Tart Cart", "Toto Shop"],
+    "Scaraba": ["Scaraba Shop", "Scaraba Snake Shop", "Scaraba Condiments Shop", "Scaraba Snake Bag Shop", "Scaraba Food Shop", "Scaraba Tool Shop", "Scaraba Arms Dealer", "Scaraba Water Shop", "Scaraba Southern Shop"],
+    "Dalaam": ["Dalaam Restaurant"],
+    "Deep Darkness": ["Deep Darkness Shop", "Deep Darkness Arms Dealer"],
+    "Tenda Village": ["Tenda Village Trading Post"],
+    "Lost Underworld": ["Lost Underworld Shop"],
+    "Magicant": ["Magicant Shop"]
+  }
+}
