@@ -219,7 +219,7 @@ import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
 import { advanceCutsceneActorTowardTarget } from "./cutsceneActorMovement";
 import {
   isInteriorMusicSector,
-  overworldMusicCueForInteriorState,
+  overworldMusicCueForSector,
   type OverworldMusicCue
 } from "./worldMusic";
 
@@ -1010,7 +1010,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private syncOverworldMusicCue(force = false): void {
     this.playOverworldMusicCue(
-      overworldMusicCueForInteriorState(this.playerInInteriorMusicSector()),
+      overworldMusicCueForSector(this.data_.musicManifest, this.world_.sectors, this.playerState),
       force
     );
   }

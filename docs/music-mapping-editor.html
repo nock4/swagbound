@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Swagbound Music Mapping Editor</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#f5f4ef;
+  --ink:#1d1d1b;
+  --muted:#66645e;
+  --panel:#fffefa;
+  --line:#c8c4b8;
+  --line-strong:#2e2c28;
+  --accent:#176b5b;
+  --accent-2:#b84032;
+  --soft:#e7efe9;
+  --warn:#f9ead7;
+  --bad:#fae0dc;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:14px/1.35 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+button,input,textarea{
+  font:inherit;
+}
+button{
+  border:1px solid var(--line-strong);
+  background:#fff;
+  color:var(--ink);
+  border-radius:4px;
+  min-height:34px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+button.primary{
+  background:var(--accent);
+  border-color:var(--accent);
+  color:#fff;
+}
+button.danger{
+  color:var(--accent-2);
+  border-color:#c69a92;
+}
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+.shell{
+  min-height:100vh;
+  display:grid;
+  grid-template-columns:minmax(320px,360px) minmax(0,1fr);
+}
+.sidebar{
+  border-right:1px solid var(--line);
+  background:#eeece4;
+  padding:16px;
+  overflow:auto;
+}
+.workspace{
+  padding:18px;
+  overflow:auto;
+}
+.brand{
+  margin:0 0 12px;
+  font-size:21px;
+  line-height:1.1;
+}
+.status{
+  min-height:38px;
+  border:1px solid var(--line);
+  background:var(--panel);
+  padding:8px;
+  margin:10px 0 14px;
+  color:var(--muted);
+}
+.status.ok{
+  background:var(--soft);
+  color:#214d42;
+}
+.status.bad{
+  background:var(--bad);
+  color:#7a251b;
+}
+.controlStack{
+  display:grid;
+  gap:8px;
+}
+.buttonRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+}
+.fileButton{
+  display:inline-flex;
+  align-items:center;
+  min-height:34px;
+  border:1px solid var(--line-strong);
+  background:#fff;
+  border-radius:4px;
+  padding:6px 10px;
+  cursor:pointer;
+}
+.fileButton input{
+  display:none;
+}
+label.fieldLabel{
+  display:block;
+  margin:12px 0 5px;
+  font-weight:700;
+}
+textarea{
+  width:100%;
+  min-height:230px;
+  resize:vertical;
+  border:1px solid var(--line);
+  background:#fffefa;
+  color:var(--ink);
+  border-radius:4px;
+  padding:9px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:12px;
+}
+.topline{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+.topline h2{
+  margin:0;
+  font-size:22px;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(160px,1fr));
+  gap:10px;
+}
+.cueBox,.areaBox,.trackBox{
+  border:1px solid var(--line);
+  background:var(--panel);
+  border-radius:6px;
+}
+.cueBox{
+  padding:10px;
+  display:grid;
+  gap:8px;
+  min-width:0;
+}
+.cueName{
+  font-weight:800;
+  text-transform:uppercase;
+  font-size:12px;
+  letter-spacing:.04em;
+}
+.field{
+  display:grid;
+  gap:4px;
+}
+.field span{
+  color:var(--muted);
+  font-size:11px;
+  font-weight:700;
+}
+input[type="text"],input[type="number"]{
+  width:100%;
+  min-width:0;
+  border:1px solid var(--line);
+  background:#fff;
+  color:var(--ink);
+  border-radius:4px;
+  min-height:32px;
+  padding:6px 8px;
+}
+input[type="range"]{
+  width:100%;
+}
+.check{
+  display:flex;
+  gap:7px;
+  align-items:center;
+  min-height:32px;
+}
+.gainLine{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 48px;
+  gap:8px;
+  align-items:center;
+}
+.section{
+  margin-top:20px;
+}
+.areaTools{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:10px;
+}
+.areaList{
+  display:grid;
+  gap:10px;
+}
+.areaBox{
+  padding:10px;
+}
+.areaHead{
+  display:grid;
+  grid-template-columns:minmax(120px,180px) minmax(120px,1fr) auto;
+  gap:8px;
+  align-items:end;
+}
+.areaFields{
+  margin-top:10px;
+  display:grid;
+  grid-template-columns:1.3fr .8fr .8fr .9fr .8fr 90px;
+  gap:8px;
+  align-items:end;
+}
+.empty{
+  border:1px dashed var(--line);
+  background:#fffefa;
+  padding:14px;
+  color:var(--muted);
+}
+.trackBox{
+  padding:10px;
+}
+.trackTable{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+}
+.trackTable th,.trackTable td{
+  text-align:left;
+  border-bottom:1px solid #e6e0d2;
+  padding:6px 5px;
+  vertical-align:top;
+}
+.trackTable th{
+  color:var(--muted);
+  font-size:11px;
+  text-transform:uppercase;
+}
+.pill{
+  display:inline-block;
+  border:1px solid var(--line);
+  background:#f7f5ef;
+  border-radius:999px;
+  padding:1px 6px;
+  margin:0 4px 4px 0;
+}
+.problems{
+  margin:8px 0 0;
+  padding-left:18px;
+  color:#7a251b;
+}
+.exportBox{
+  width:100%;
+  min-height:260px;
+}
+@media (max-width:1100px){
+  .shell{
+    grid-template-columns:1fr;
+  }
+  .sidebar{
+    border-right:0;
+    border-bottom:1px solid var(--line);
+  }
+  .grid{
+    grid-template-columns:repeat(2,minmax(160px,1fr));
+  }
+  .areaHead,.areaFields{
+    grid-template-columns:1fr;
+  }
+}
+@media (max-width:560px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+  .topline,.areaTools{
+    align-items:stretch;
+    flex-direction:column;
+  }
+  .buttonRow{
+    display:grid;
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <h1 class="brand">Swagbound Music Mapping</h1>
+    <div id="status" class="status">Ready.</div>
+    <div class="controlStack">
+      <div class="buttonRow">
+        <button id="fetchButton">Fetch Generated</button>
+        <label class="fileButton">Open JSON<input id="fileInput" type="file" accept="application/json,.json"></label>
+        <button id="loadTextButton">Load Text</button>
+      </div>
+      <label class="fieldLabel" for="manifestInput">Manifest JSON</label>
+      <textarea id="manifestInput" spellcheck="false"></textarea>
+      <div class="buttonRow">
+        <button id="resetButton">Reset Seed</button>
+        <button id="formatButton">Format Text</button>
+      </div>
+    </div>
+  </aside>
+  <main class="workspace">
+    <div class="topline">
+      <div>
+        <h2>Global Cues</h2>
+      </div>
+      <div class="buttonRow">
+        <button id="copyButton">Copy JSON</button>
+        <button id="downloadButton" class="primary">Download JSON</button>
+      </div>
+    </div>
+    <section id="cueGrid" class="grid" aria-label="Global music cues"></section>
+    <section class="section">
+      <div class="areaTools">
+        <h2>Areas</h2>
+        <button id="addAreaButton" class="primary">Add Area</button>
+      </div>
+      <div id="areaList" class="areaList"></div>
+    </section>
+    <section class="section trackBox">
+      <h2>Referenced Tracks</h2>
+      <div id="trackList"></div>
+    </section>
+    <section class="section">
+      <h2>Export</h2>
+      <textarea id="exportOutput" class="exportBox" spellcheck="false" readonly></textarea>
+      <ul id="problemList" class="problems"></ul>
+    </section>
+  </main>
+</div>
+<script>
+const CUE_NAMES = ["overworld", "interior", "battle", "victory", "intro"];
+const DEFAULT_GAIN = 0.45;
+const SEED = {
+  schema: "swagbound.music-manifest.v1",
+  cues: {
+    overworld: { file: "audio/music/overworld.mp3", loop: true, gain: 0.4 },
+    interior: { file: "audio/music/interior.mp3", loop: true, gain: 0.4 },
+    battle: { file: "audio/music/battle.mp3", loop: true, gain: 0.38 },
+    victory: { file: "audio/music/victory.mp3", loop: false, gain: 0.45 },
+    intro: { file: "audio/music/overworld.mp3", loop: true, gain: 0.3 }
+  }
+};
+let manifest = normalizeManifest(SEED);
+
+const els = {
+  status: document.getElementById("status"),
+  manifestInput: document.getElementById("manifestInput"),
+  fileInput: document.getElementById("fileInput"),
+  cueGrid: document.getElementById("cueGrid"),
+  areaList: document.getElementById("areaList"),
+  trackList: document.getElementById("trackList"),
+  exportOutput: document.getElementById("exportOutput"),
+  problemList: document.getElementById("problemList"),
+  fetchButton: document.getElementById("fetchButton"),
+  loadTextButton: document.getElementById("loadTextButton"),
+  resetButton: document.getElementById("resetButton"),
+  formatButton: document.getElementById("formatButton"),
+  copyButton: document.getElementById("copyButton"),
+  downloadButton: document.getElementById("downloadButton"),
+  addAreaButton: document.getElementById("addAreaButton")
+};
+
+els.fetchButton.addEventListener("click", fetchGenerated);
+els.loadTextButton.addEventListener("click", loadFromTextarea);
+els.resetButton.addEventListener("click", () => {
+  manifest = normalizeManifest(SEED);
+  setStatus("Reset to seed manifest.", "ok");
+  render();
+});
+els.formatButton.addEventListener("click", () => {
+  try {
+    els.manifestInput.value = JSON.stringify(JSON.parse(els.manifestInput.value), null, 2);
+    setStatus("Formatted manifest text.", "ok");
+  } catch (error) {
+    setStatus(error.message, "bad");
+  }
+});
+els.fileInput.addEventListener("change", openFile);
+els.addAreaButton.addEventListener("click", addArea);
+els.copyButton.addEventListener("click", copyExport);
+els.downloadButton.addEventListener("click", downloadExport);
+
+function normalizeManifest(input) {
+  const source = input && typeof input === "object" ? input : {};
+  const cues = {};
+  const loadedCues = source.cues && typeof source.cues === "object" ? source.cues : {};
+  for (const [name, entry] of Object.entries(loadedCues)) {
+    cues[name] = normalizeTrack(entry, defaultCue(name));
+  }
+  for (const name of CUE_NAMES) {
+    cues[name] = normalizeTrack(cues[name], defaultCue(name));
+  }
+  const areas = Array.isArray(source.areas)
+    ? source.areas.map((area, index) => normalizeArea(area, index))
+    : [];
+  return {
+    schema: "swagbound.music-manifest.v1",
+    cues,
+    ...(areas.length ? { areas } : {})
+  };
+}
+
+function defaultCue(name) {
+  if (name === "battle") return { file: "audio/music/battle.mp3", loop: true, gain: 0.38 };
+  if (name === "victory") return { file: "audio/music/victory.mp3", loop: false, gain: 0.45 };
+  if (name === "intro") return { file: "audio/music/overworld.mp3", loop: true, gain: 0.3 };
+  return { file: `audio/music/${name}.mp3`, loop: true, gain: 0.4 };
+}
+
+function normalizeTrack(entry, fallback) {
+  const track = entry && typeof entry === "object" ? entry : {};
+  return {
+    file: stringOr(track.file, fallback.file),
+    loop: typeof track.loop === "boolean" ? track.loop : fallback.loop,
+    gain: clampNumber(track.gain, fallback.gain)
+  };
+}
+
+function normalizeArea(entry, index) {
+  const area = entry && typeof entry === "object" ? entry : {};
+  const match = area.match && typeof area.match === "object" ? area.match : {};
+  const normalized = {
+    id: slug(stringOr(area.id, `area-${index + 1}`)),
+    ...(stringOr(area.label, "") ? { label: stringOr(area.label, "") } : {}),
+    match: normalizeMatch(match),
+    file: stringOr(area.file, "audio/music/area.mp3"),
+    loop: typeof area.loop === "boolean" ? area.loop : true,
+    gain: clampNumber(area.gain, DEFAULT_GAIN)
+  };
+  return normalized;
+}
+
+function normalizeMatch(match) {
+  const result = {};
+  const ids = parseSectorIds(Array.isArray(match.sectorIds) ? match.sectorIds.join(",") : stringOr(match.sectorIds, ""));
+  if (ids.length) result.sectorIds = ids;
+  const range = Array.isArray(match.sectorRange) ? match.sectorRange : parseRange(stringOr(match.sectorRange, ""));
+  if (Array.isArray(range) && range.length === 2 && validSectorNumber(range[0]) && validSectorNumber(range[1])) {
+    result.sectorRange = [Number(range[0]), Number(range[1])];
+  }
+  if (stringOr(match.townMap, "").trim()) result.townMap = stringOr(match.townMap, "").trim();
+  return result;
+}
+
+function render() {
+  els.cueGrid.innerHTML = "";
+  for (const name of CUE_NAMES) {
+    els.cueGrid.appendChild(renderCue(name, manifest.cues[name]));
+  }
+  renderAreas();
+  syncTextAndExport();
+}
+
+function renderCue(name, entry) {
+  const box = document.createElement("article");
+  box.className = "cueBox";
+  box.innerHTML = `
+    <div class="cueName">${escapeHtml(name)}</div>
+    <label class="field"><span>File</span><input type="text" data-cue="${escapeAttr(name)}" data-prop="file" value="${escapeAttr(entry.file)}" list="trackNames"></label>
+    <label class="field"><span>Gain</span><div class="gainLine"><input type="range" min="0" max="1" step="0.01" data-cue="${escapeAttr(name)}" data-prop="gain" value="${entry.gain}"><input type="number" min="0" max="1" step="0.01" data-cue="${escapeAttr(name)}" data-prop="gainNumber" value="${entry.gain}"></div></label>
+    <label class="check"><input type="checkbox" data-cue="${escapeAttr(name)}" data-prop="loop" ${entry.loop ? "checked" : ""}> Loop</label>
+  `;
+  box.addEventListener("input", onCueInput);
+  box.addEventListener("change", onCueInput);
+  return box;
+}
+
+function onCueInput(event) {
+  const target = event.target;
+  const cue = target.dataset.cue;
+  const prop = target.dataset.prop;
+  if (!cue || !prop) return;
+  const entry = manifest.cues[cue];
+  if (prop === "file") entry.file = target.value.trim();
+  if (prop === "loop") entry.loop = target.checked;
+  if (prop === "gain" || prop === "gainNumber") {
+    entry.gain = clampNumber(target.value, DEFAULT_GAIN);
+    const box = target.closest(".cueBox");
+    for (const gainInput of box.querySelectorAll('[data-prop="gain"],[data-prop="gainNumber"]')) {
+      if (gainInput !== target) gainInput.value = entry.gain;
+    }
+  }
+  syncTextAndExport();
+}
+
+function renderAreas() {
+  const areas = manifest.areas || [];
+  els.areaList.innerHTML = "";
+  if (!areas.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "No area entries.";
+    els.areaList.appendChild(empty);
+    return;
+  }
+  areas.forEach((area, index) => {
+    els.areaList.appendChild(renderArea(area, index));
+  });
+}
+
+function renderArea(area, index) {
+  const box = document.createElement("article");
+  box.className = "areaBox";
+  const range = Array.isArray(area.match.sectorRange) ? area.match.sectorRange : ["", ""];
+  box.innerHTML = `
+    <div class="areaHead">
+      <label class="field"><span>ID</span><input type="text" data-area="${index}" data-prop="id" value="${escapeAttr(area.id)}"></label>
+      <label class="field"><span>Label</span><input type="text" data-area="${index}" data-prop="label" value="${escapeAttr(area.label || "")}"></label>
+      <button class="danger" data-area="${index}" data-action="remove">Remove</button>
+    </div>
+    <div class="areaFields">
+      <label class="field"><span>File</span><input type="text" data-area="${index}" data-prop="file" value="${escapeAttr(area.file)}" list="trackNames"></label>
+      <label class="field"><span>Sector IDs</span><input type="text" data-area="${index}" data-prop="sectorIds" value="${escapeAttr((area.match.sectorIds || []).join(","))}" placeholder="1,2,3"></label>
+      <label class="field"><span>Range Min</span><input type="number" min="0" step="1" data-area="${index}" data-prop="rangeMin" value="${escapeAttr(range[0])}"></label>
+      <label class="field"><span>Range Max</span><input type="number" min="0" step="1" data-area="${index}" data-prop="rangeMax" value="${escapeAttr(range[1])}"></label>
+      <label class="field"><span>Town Map</span><input type="text" data-area="${index}" data-prop="townMap" value="${escapeAttr(area.match.townMap || "")}"></label>
+      <label class="field"><span>Gain</span><input type="number" min="0" max="1" step="0.01" data-area="${index}" data-prop="gain" value="${area.gain}"></label>
+    </div>
+    <label class="check"><input type="checkbox" data-area="${index}" data-prop="loop" ${area.loop ? "checked" : ""}> Loop</label>
+  `;
+  box.addEventListener("input", onAreaInput);
+  box.addEventListener("change", onAreaInput);
+  box.addEventListener("click", onAreaClick);
+  return box;
+}
+
+function onAreaInput(event) {
+  const target = event.target;
+  const index = Number(target.dataset.area);
+  const prop = target.dataset.prop;
+  const area = manifest.areas && manifest.areas[index];
+  if (!area || !prop) return;
+  if (prop === "id") area.id = slug(target.value);
+  if (prop === "label") setOptional(area, "label", target.value.trim());
+  if (prop === "file") area.file = target.value.trim();
+  if (prop === "loop") area.loop = target.checked;
+  if (prop === "gain") area.gain = clampNumber(target.value, DEFAULT_GAIN);
+  if (prop === "sectorIds") {
+    const ids = parseSectorIds(target.value);
+    if (ids.length) area.match.sectorIds = ids;
+    else delete area.match.sectorIds;
+  }
+  if (prop === "rangeMin" || prop === "rangeMax") {
+    const box = target.closest(".areaBox");
+    const min = box.querySelector('[data-prop="rangeMin"]').value;
+    const max = box.querySelector('[data-prop="rangeMax"]').value;
+    if (min !== "" || max !== "") area.match.sectorRange = [Number(min), Number(max)];
+    else delete area.match.sectorRange;
+  }
+  if (prop === "townMap") setOptional(area.match, "townMap", target.value.trim());
+  syncTextAndExport();
+}
+
+function onAreaClick(event) {
+  const button = event.target.closest("button[data-action='remove']");
+  if (!button) return;
+  const index = Number(button.dataset.area);
+  manifest.areas.splice(index, 1);
+  if (!manifest.areas.length) delete manifest.areas;
+  render();
+}
+
+function addArea() {
+  if (!manifest.areas) manifest.areas = [];
+  manifest.areas.push({
+    id: nextAreaId(),
+    label: "New Area",
+    match: { sectorIds: [0] },
+    file: "audio/music/area.mp3",
+    loop: true,
+    gain: DEFAULT_GAIN
+  });
+  render();
+  setStatus("Added area entry.", "ok");
+}
+
+function nextAreaId() {
+  const used = new Set((manifest.areas || []).map((area) => area.id));
+  let index = used.size + 1;
+  while (used.has(`area-${index}`)) index += 1;
+  return `area-${index}`;
+}
+
+function syncTextAndExport() {
+  const built = buildManifest();
+  const validation = validateManifest(built);
+  const json = JSON.stringify(built, null, 2);
+  els.manifestInput.value = json;
+  els.exportOutput.value = json + "\n";
+  renderTracks(built);
+  renderProblems(validation.problems);
+  els.copyButton.disabled = !validation.valid;
+  els.downloadButton.disabled = !validation.valid;
+  if (validation.valid) setStatus("Manifest is valid.", "ok");
+  else setStatus(`${validation.problems.length} issue(s) need attention.`, "bad");
+}
+
+function buildManifest() {
+  const cues = {};
+  for (const [name, entry] of Object.entries(manifest.cues)) {
+    cues[name] = {
+      file: entry.file.trim(),
+      loop: Boolean(entry.loop),
+      gain: clampNumber(entry.gain, DEFAULT_GAIN)
+    };
+  }
+  const areas = (manifest.areas || []).map((area) => {
+    const built = {
+      id: area.id.trim(),
+      ...(area.label && area.label.trim() ? { label: area.label.trim() } : {}),
+      match: cleanMatch(area.match),
+      file: area.file.trim(),
+      loop: Boolean(area.loop),
+      gain: clampNumber(area.gain, DEFAULT_GAIN)
+    };
+    return built;
+  });
+  return {
+    schema: "swagbound.music-manifest.v1",
+    cues,
+    ...(areas.length ? { areas } : {})
+  };
+}
+
+function cleanMatch(match) {
+  const result = {};
+  if (Array.isArray(match.sectorIds) && match.sectorIds.length) result.sectorIds = match.sectorIds;
+  if (Array.isArray(match.sectorRange) && match.sectorRange.length === 2) {
+    result.sectorRange = [Number(match.sectorRange[0]), Number(match.sectorRange[1])];
+  }
+  if (match.townMap && match.townMap.trim()) result.townMap = match.townMap.trim();
+  return result;
+}
+
+function validateManifest(data) {
+  const problems = [];
+  if (data.schema !== "swagbound.music-manifest.v1") problems.push("schema must be swagbound.music-manifest.v1");
+  if (!data.cues || typeof data.cues !== "object" || Array.isArray(data.cues)) problems.push("cues must be an object");
+  for (const name of CUE_NAMES) {
+    if (!data.cues[name]) problems.push(`missing cue: ${name}`);
+  }
+  for (const [name, entry] of Object.entries(data.cues || {})) {
+    validateTrack(`cue ${name}`, entry, problems);
+  }
+  if (data.areas !== undefined && !Array.isArray(data.areas)) problems.push("areas must be an array");
+  for (const [index, area] of Object.entries(data.areas || [])) {
+    if (!area.id) problems.push(`area ${Number(index) + 1} needs an id`);
+    validateTrack(`area ${area.id || Number(index) + 1}`, area, problems);
+    validateMatch(`area ${area.id || Number(index) + 1}`, area.match || {}, problems);
+  }
+  return { valid: problems.length === 0, problems };
+}
+
+function validateTrack(label, entry, problems) {
+  if (!entry || typeof entry !== "object") {
+    problems.push(`${label} must be an object`);
+    return;
+  }
+  if (!entry.file || typeof entry.file !== "string") problems.push(`${label} needs a file path`);
+  else validatePublicPath(`${label} file`, entry.file, problems);
+  if (typeof entry.loop !== "boolean") problems.push(`${label} loop must be true or false`);
+  if (typeof entry.gain !== "number" || entry.gain < 0 || entry.gain > 1) problems.push(`${label} gain must be 0..1`);
+}
+
+function validateMatch(label, match, problems) {
+  const hasIds = Array.isArray(match.sectorIds) && match.sectorIds.length > 0;
+  const hasRange = Array.isArray(match.sectorRange);
+  const hasTownMap = typeof match.townMap === "string" && match.townMap.trim().length > 0;
+  if (!hasIds && !hasRange && !hasTownMap) problems.push(`${label} match needs sectorIds, sectorRange, or townMap`);
+  if (hasIds && match.sectorIds.some((id) => !validSectorNumber(id))) problems.push(`${label} sectorIds must be nonnegative integers`);
+  if (hasRange) {
+    const [min, max] = match.sectorRange;
+    if (!validSectorNumber(min) || !validSectorNumber(max) || min > max) {
+      problems.push(`${label} sectorRange must be [min,max] with min <= max`);
+    }
+  }
+}
+
+function validatePublicPath(label, value, problems) {
+  if (value.startsWith("/") || value.includes("\\") || value.split("/").includes("..") || /^[a-z][a-z0-9+.-]*:/i.test(value)) {
+    problems.push(`${label} must be relative to apps/game/public`);
+  }
+}
+
+function renderTracks(data) {
+  const rows = [];
+  for (const [name, entry] of Object.entries(data.cues || {})) {
+    rows.push({ file: entry.file, owner: `cue:${name}`, kind: CUE_NAMES.includes(name) ? "cue" : "cue:extra" });
+  }
+  for (const area of data.areas || []) {
+    rows.push({ file: area.file, owner: `area:${area.id}`, kind: "area" });
+  }
+  if (!rows.length) {
+    els.trackList.innerHTML = '<div class="empty">No track files referenced.</div>';
+    return;
+  }
+  const byFile = new Map();
+  for (const row of rows) {
+    if (!byFile.has(row.file)) byFile.set(row.file, []);
+    byFile.get(row.file).push(row);
+  }
+  const body = [...byFile.entries()].sort(([a], [b]) => a.localeCompare(b)).map(([file, refs]) => `
+    <tr>
+      <td>${escapeHtml(file)}</td>
+      <td>${refs.map((ref) => `<span class="pill">${escapeHtml(ref.owner)}</span>`).join("")}</td>
+      <td>${escapeHtml([...new Set(refs.map((ref) => ref.kind))].join(", "))}</td>
+    </tr>
+  `).join("");
+  els.trackList.innerHTML = `
+    <table class="trackTable">
+      <thead><tr><th>File</th><th>References</th><th>Type</th></tr></thead>
+      <tbody>${body}</tbody>
+    </table>
+    <datalist id="trackNames">${[...byFile.keys()].map((file) => `<option value="${escapeAttr(file)}"></option>`).join("")}</datalist>
+  `;
+}
+
+function renderProblems(problems) {
+  els.problemList.innerHTML = problems.map((problem) => `<li>${escapeHtml(problem)}</li>`).join("");
+}
+
+async function fetchGenerated() {
+  try {
+    const response = await fetch("/generated/music-manifest.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    manifest = normalizeManifest(await response.json());
+    setStatus("Loaded /generated/music-manifest.json.", "ok");
+    render();
+  } catch (error) {
+    setStatus(`Fetch failed: ${error.message}`, "bad");
+  }
+}
+
+function loadFromTextarea() {
+  try {
+    manifest = normalizeManifest(JSON.parse(els.manifestInput.value));
+    setStatus("Loaded manifest text.", "ok");
+    render();
+  } catch (error) {
+    setStatus(error.message, "bad");
+  }
+}
+
+function openFile(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      manifest = normalizeManifest(JSON.parse(String(reader.result || "")));
+      setStatus(`Loaded ${file.name}.`, "ok");
+      render();
+    } catch (error) {
+      setStatus(error.message, "bad");
+    }
+  };
+  reader.readAsText(file);
+}
+
+async function copyExport() {
+  try {
+    await navigator.clipboard.writeText(els.exportOutput.value);
+    setStatus("Copied export JSON.", "ok");
+  } catch (error) {
+    els.exportOutput.select();
+    setStatus(`Clipboard unavailable: ${error.message}`, "bad");
+  }
+}
+
+function downloadExport() {
+  const validation = validateManifest(buildManifest());
+  if (!validation.valid) {
+    renderProblems(validation.problems);
+    setStatus("Export blocked by validation.", "bad");
+    return;
+  }
+  const anchor = document.createElement("a");
+  anchor.href = URL.createObjectURL(new Blob([els.exportOutput.value], { type: "application/json" }));
+  anchor.download = "music-manifest.json";
+  anchor.click();
+  URL.revokeObjectURL(anchor.href);
+  setStatus("Downloaded music-manifest.json.", "ok");
+}
+
+function parseSectorIds(value) {
+  return String(value || "")
+    .split(",")
+    .map((part) => part.trim())
+    .filter(Boolean)
+    .map(Number)
+    .filter(validSectorNumber);
+}
+
+function parseRange(value) {
+  const parts = String(value || "").split(",").map((part) => Number(part.trim()));
+  return parts.length === 2 ? parts : undefined;
+}
+
+function validSectorNumber(value) {
+  return Number.isInteger(Number(value)) && Number(value) >= 0;
+}
+
+function clampNumber(value, fallback) {
+  const number = Number(value);
+  if (!Number.isFinite(number)) return fallback;
+  return Math.max(0, Math.min(1, Math.round(number * 100) / 100));
+}
+
+function stringOr(value, fallback) {
+  return typeof value === "string" ? value : fallback;
+}
+
+function slug(value) {
+  return String(value || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9_-]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "area";
+}
+
+function setOptional(object, key, value) {
+  if (value) object[key] = value;
+  else delete object[key];
+}
+
+function setStatus(message, kind) {
+  els.status.className = `status ${kind || ""}`.trim();
+  els.status.textContent = message;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[char]));
+}
+
+function escapeAttr(value) {
+  return escapeHtml(value).replace(/`/g, "&#96;");
+}
+
+render();
+</script>
+</body>
+</html>

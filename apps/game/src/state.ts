@@ -243,7 +243,7 @@ export type OverworldDebug = {
   collisionOverlay?: boolean;
   currentChunk?: { cx: number; cy: number };
   currentSectorIndex?: number;
-  musicCue?: "intro" | "overworld" | "interior" | undefined;
+  musicCue?: string | undefined;
   encounterEnabled?: boolean;
   encounterCooldownMs?: number;
   encounterSeed?: number;

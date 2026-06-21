@@ -316,13 +316,36 @@ const PublicAssetPathSchema = z.string().min(1).refine((value) => {
   return !/^[a-z][a-z0-9+.-]*:/i.test(value);
 }, "path must be relative to apps/game/public");
 
+export const MUSIC_MANIFEST_DEFAULT_GAIN = 0.45;
+
+const MusicManifestTrackSchema = z.object({
+  file: PublicAssetPathSchema,
+  loop: z.boolean().default(true),
+  gain: z.number().min(0).max(1).default(MUSIC_MANIFEST_DEFAULT_GAIN)
+}).strict();
+
+const MusicManifestAreaMatchSchema = z.object({
+  sectorIds: z.array(z.number().int().nonnegative()).min(1).optional(),
+  sectorRange: z.tuple([
+    z.number().int().nonnegative(),
+    z.number().int().nonnegative()
+  ]).refine(([min, max]) => min <= max, "sectorRange min must be <= max").optional(),
+  townMap: z.string().min(1).optional()
+}).strict().refine(
+  (match) => Boolean(match.sectorIds || match.sectorRange || match.townMap),
+  "area match must include sectorIds, sectorRange, or townMap"
+);
+
+const MusicManifestAreaSchema = MusicManifestTrackSchema.extend({
+  id: z.string().min(1),
+  label: z.string().min(1).optional(),
+  match: MusicManifestAreaMatchSchema
+}).strict();
+
 export const MusicManifestSchema = z.object({
   schema: z.literal("swagbound.music-manifest.v1"),
-  cues: z.record(z.string().min(1), z.object({
-    file: PublicAssetPathSchema,
-    loop: z.boolean().default(true),
-    gain: z.number().min(0).max(1).default(0.7)
-  }).strict())
+  cues: z.record(z.string().min(1), MusicManifestTrackSchema),
+  areas: z.array(MusicManifestAreaSchema).optional()
 }).strict();
 
 const SpriteOverrideFrameSequenceSchema = z.array(z.number().int().nonnegative()).min(1);
