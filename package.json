@@ -13,6 +13,7 @@
     "convert": "pnpm --filter @eb/converter convert",
     "validate": "pnpm --filter @eb/converter validate",
     "content:build": "node --import tsx packages/content-builder/src/index.ts",
+    "atlas:tiles": "node --import tsx scripts/atlas/extract-tiles.ts",
     "content:test": "node --import tsx scripts/run-content-slice-test.ts",
     "hack:npcs": "tsx scripts/apply-npc-hack.ts",
     "hack:npcs:revert": "tsx scripts/apply-npc-hack.ts --revert",
