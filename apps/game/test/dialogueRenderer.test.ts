@@ -137,6 +137,16 @@ describe("renderSegmentsToText", () => {
     ])).toBe("AB");
   });
 
+  it("strips raw CCS control artifacts from display text", () => {
+    const text = "In the next election, please give a speech supporting Mayor Pirkle.";
+    const rawControlText = `[06 49 00 {e(l_0xc72fbe)}]@${text}`;
+    expect(renderSegmentsToText([{ kind: "text", value: rawControlText }])).toBe(text);
+    expect(renderSegmentsToText([{ kind: "text", value: `]@${text}` }])).toBe(text);
+    expect(renderSegmentsToTextRuns([{ kind: "text", value: rawControlText }])).toEqual([
+      { text, fontId: 0 }
+    ]);
+  });
+
   it("emits font-tagged runs while keeping font 0 as the default", () => {
     expect(renderSegmentsToTextRuns([
       { kind: "text", value: "A" },

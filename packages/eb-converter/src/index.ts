@@ -657,6 +657,14 @@ export function tokenizeCcsString(value: string): DialogueSegment[] {
           textStart = index;
           continue;
         }
+        const mixedControlSegment = controlSegmentForMixedBracketBlock(raw);
+        if (mixedControlSegment) {
+          flushText(index);
+          segments.push(mixedControlSegment);
+          index = close + 1;
+          textStart = index;
+          continue;
+        }
       }
     } else if (value[index] === "{") {
       const close = value.indexOf("}", index + 1);
@@ -703,6 +711,18 @@ function branchSegmentForPointerBlock(raw: string): DialogueSegment | undefined 
     return undefined;
   }
   return controlSegment(match[1].toUpperCase() === "03" ? "branch_true" : "branch_false", raw, match[2]);
+}
+
+function controlSegmentForMixedBracketBlock(raw: string): DialogueSegment | undefined {
+  const inner = raw.slice(1, -1).trim();
+  if (!inner || !/(?:^|\s)[0-9a-f]{2}(?:\s|$)|\{e\(/iu.test(inner)) {
+    return undefined;
+  }
+  return controlSegment("unknown", raw, pointerTargetFromBracketBlock(inner));
+}
+
+function pointerTargetFromBracketBlock(inner: string): string | undefined {
+  return /\{e\(([A-Za-z_][\w.-]*)\)\}/u.exec(inner)?.[1];
 }
 
 function decodeByteSegments(bytes: number[], raw: string): DialogueSegment[] {

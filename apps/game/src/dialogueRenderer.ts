@@ -63,6 +63,8 @@ function nonEmpty(value: string | undefined): string | undefined {
 
 type SubstitutionSegment = Extract<DialogueSegment, { kind: "substitution" }>;
 
+const RAW_CCS_BRACKET_CONTROL_PATTERN = /\[(?=[^\]]*(?:[0-9a-f]{2}|\{e\())(?:[^\]\r\n]*)\]/giu;
+
 function firstArg(segment: SubstitutionSegment): number {
   return segment.args[0] ?? Number.NaN;
 }
@@ -91,6 +93,14 @@ function renderSubstitution(segment: SubstitutionSegment, resolver: DialogueReso
   return `[${segment.name}]`;
 }
 
+function sanitizeRenderedTextSegment(value: string): string {
+  return value
+    .replace(RAW_CCS_BRACKET_CONTROL_PATTERN, "")
+    .replace(/\]+@+/g, "")
+    .replace(/^\]+/, "")
+    .replace(/^@+/, "");
+}
+
 export function renderSegmentsToText(
   segments: readonly DialogueSegment[] | undefined,
   resolver: DialogueResolver = DefaultResolver
@@ -99,7 +109,7 @@ export function renderSegmentsToText(
   for (const segment of segments ?? []) {
     switch (segment.kind) {
       case "text":
-        output += segment.value;
+        output += sanitizeRenderedTextSegment(segment.value);
         break;
       case "break":
         output += "\n";
@@ -141,7 +151,7 @@ export function renderSegmentsToTextRuns(
   for (const segment of segments ?? []) {
     switch (segment.kind) {
       case "text":
-        append(segment.value);
+        append(sanitizeRenderedTextSegment(segment.value));
         break;
       case "break":
         append("\n");
@@ -172,10 +182,10 @@ export function renderPageToText(
     return "";
   }
   if (!page.segments || page.segments.length === 0) {
-    return page.text;
+    return sanitizeRenderedTextSegment(page.text);
   }
   const rendered = renderSegmentsToText(page.segments, resolver);
-  return page.segments.every((segment) => segment.kind === "text") ? page.text : rendered;
+  return page.segments.every((segment) => segment.kind === "text") ? sanitizeRenderedTextSegment(page.text) : rendered;
 }
 
 export function renderPageToTextRuns(
@@ -187,7 +197,8 @@ export function renderPageToTextRuns(
     return [];
   }
   if (!page.segments || page.segments.length === 0 || page.segments.every((segment) => segment.kind === "text")) {
-    return page.text.length > 0 ? [{ text: page.text, fontId: defaultFontId }] : [];
+    const text = sanitizeRenderedTextSegment(page.text);
+    return text.length > 0 ? [{ text, fontId: defaultFontId }] : [];
   }
   return renderSegmentsToTextRuns(page.segments, resolver, defaultFontId);
 }

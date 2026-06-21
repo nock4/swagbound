@@ -182,7 +182,9 @@ export class RuntimeEventHost implements EventExecutorHost {
   private abortRequested = false;
   private actorMoveNoopRequested = false;
   private runContext?: RuntimeEventRunContext;
+  private dialogueOverrideChecked = false;
   private dialogueOverrideConsumed = false;
+  private dialogueOverridePages?: DialoguePage[];
 
   constructor(private readonly options: RuntimeEventHostOptions) {}
 
@@ -206,7 +208,9 @@ export class RuntimeEventHost implements EventExecutorHost {
     this.transitionRequested = false;
     this.abortRequested = false;
     this.actorMoveNoopRequested = false;
+    this.dialogueOverrideChecked = false;
     this.dialogueOverrideConsumed = false;
+    this.dialogueOverridePages = undefined;
     this.debugState = { ...emptyDebug(), running: true };
   }
 
@@ -224,7 +228,9 @@ export class RuntimeEventHost implements EventExecutorHost {
     this.runContext = undefined;
     this.coveredConfirmIndexes.clear();
     this.reportedUnsupportedEffectKeys.clear();
+    this.dialogueOverrideChecked = false;
     this.dialogueOverrideConsumed = false;
+    this.dialogueOverridePages = undefined;
   }
 
   recordEffect(effect: EventEffect): void {
@@ -481,40 +487,50 @@ export class RuntimeEventHost implements EventExecutorHost {
     if (!isConfirmEffect(effects[index])) {
       return;
     }
-    const pages = this.resolveDialogueOverridePages()
-      ?? dialoguePagesForConfirmEffects(effects, index);
+    const overridePages = this.resolveDialogueOverridePages();
+    const pages = overridePages
+      ? (this.dialogueOverrideConsumed ? undefined : overridePages)
+      : dialoguePagesForConfirmEffects(effects, index);
     for (let next = index; next < effects.length && isConfirmEffect(effects[next]); next += 1) {
       this.coveredConfirmIndexes.add(next);
+    }
+    if (!pages) {
+      return;
+    }
+    if (overridePages) {
+      this.dialogueOverrideConsumed = true;
     }
     this.options.dialogue.start(pages);
   }
 
   private resolveDialogueOverridePages(): DialoguePage[] | undefined {
-    if (this.dialogueOverrideConsumed) {
-      return undefined;
+    if (this.dialogueOverrideChecked) {
+      return this.dialogueOverridePages;
     }
+    this.dialogueOverrideChecked = true;
     const customDialogue = this.options.customDialogue;
     const context = this.runContext;
     if (!customDialogue || !context) {
       return undefined;
     }
-    this.dialogueOverrideConsumed = true;
 
     // Granularity: an override is keyed to the sequence entry reference, or to
-    // the active NPC id when supplied, and replaces this run's first contiguous
-    // text/prompt block. Non-dialogue effects and later blocks still execute.
+    // the active NPC id when supplied, and owns all dialogue blocks for this
+    // event run. Non-dialogue effects still execute.
     const npcEntry = context.npcId !== undefined
       ? customDialogue.byNpcId[String(context.npcId)]
       : undefined;
     const npcPages = resolveCustomDialoguePages(npcEntry, this.options.dialogueLibrary);
     if (npcPages && npcPages.length > 0) {
-      return buildInlineDialoguePages(npcPages);
+      this.dialogueOverridePages = buildInlineDialoguePages(npcPages);
+      return this.dialogueOverridePages;
     }
-    return resolveScriptedDialogueOverridePages(
+    this.dialogueOverridePages = resolveScriptedDialogueOverridePages(
       customDialogue,
       this.options.dialogueLibrary,
       context.reference
     );
+    return this.dialogueOverridePages;
   }
 
   private currentEffectIndex(): number {

@@ -38,6 +38,46 @@ describe("RuntimeEventHost recovery effects", () => {
   });
 });
 
+describe("RuntimeEventHost dialogue overrides", () => {
+  it("uses a byNpcId override once for the whole event while preserving later non-dialogue effects", () => {
+    const dialogue = new DialogueController();
+    const partyState = new PartyState();
+    const host = new RuntimeEventHost({
+      dialogue,
+      flags: new GameFlags(),
+      partyState,
+      customDialogue: {
+        byNpcId: { "744": { pages: ["Override bark."] } },
+        byTextPointer: {}
+      }
+    });
+    const sequence = new RuntimeEventSequence(eventScript([
+      { kind: "text", value: "First EB block." },
+      { kind: "control", code: "unknown", raw: "[06 49 00 {e(l_0xc72fbe)}]" },
+      { kind: "text", value: "Mayor Pirkle leak." },
+      { kind: "give", char: 1, item: 54, raw: "{give(1,54)}" }
+    ]), host);
+
+    expect(sequence.start("test.main", { npcId: 744 })).toBe(true);
+    expect(sequence.running).toBe(true);
+    expect(dialogue.open).toBe(true);
+    expect(dialogue.pages.map((page) => page.text)).toEqual(["Override bark."]);
+    expect(dialogue.currentText).toBe("Override bark.");
+
+    dialogue.close();
+    sequence.confirm();
+
+    expect(dialogue.open).toBe(false);
+    expect(partyState.inventory(1)).toEqual([54]);
+    expect(sequence.running).toBe(false);
+    expect(sequence.debug().effectsByKind).toMatchObject({
+      text: 2,
+      control: 1,
+      give: 1
+    });
+  });
+});
+
 describe("RuntimeEventHost actorMove effects", () => {
   it("pauses the sequence until actor arrival is reported", () => {
     const flags = new GameFlags();
@@ -148,6 +188,42 @@ function recoveryScript(effects: DialogueSegment[]): ScriptCollection {
       commands: commands.length,
       labels: 1,
       textCommands: 1,
+      unknownCommands: 0
+    },
+    warnings: []
+  };
+}
+
+function eventScript(effects: DialogueSegment[]): ScriptCollection {
+  const commands: ScriptCommand[] = [
+    command({ cmd: "label", raw: "label main", name: "main" }, 1),
+    ...effects.map((effect, index) =>
+      command({ cmd: "text", raw: `effect ${index}`, segments: [effect] }, index + 2)
+    ),
+    command({ cmd: "end", raw: "end" }, effects.length + 2)
+  ];
+  return {
+    schemaVersion: "test",
+    sourceProjectPath: "synthetic",
+    files: [
+      {
+        path: "test.ccs",
+        commands,
+        labels: ["main"],
+        counts: {
+          commands: commands.length,
+          labels: 1,
+          textCommands: effects.length,
+          unknownCommands: 0
+        },
+        warnings: []
+      }
+    ],
+    counts: {
+      files: 1,
+      commands: commands.length,
+      labels: 1,
+      textCommands: effects.length,
       unknownCommands: 0
     },
     warnings: []

@@ -1307,6 +1307,18 @@ describe("CCScript text segments", () => {
     ]);
   });
 
+  it("consumes mixed conditional control blocks before text sentinels", () => {
+    const text = "In the next election, please give a speech supporting Mayor Pirkle.";
+    const rawControl = "[06 49 00 {e(l_0xc72fbe)}]";
+    expect(tokenizeCcsString(`${rawControl}@${text}`)).toEqual([
+      { kind: "control", code: "unknown", raw: rawControl, target: "l_0xc72fbe" },
+      { kind: "text", value: text }
+    ]);
+
+    const parsed = parseCcsFile("ccscript/example.ccs", `label:\n"${rawControl}@${text}" end\n`);
+    expect(buildDialoguePages(parsed.commands.slice(1))[0].text).toBe(text);
+  });
+
   it("unwraps CoilSnake compressed-text <...> annotations to plain text", () => {
     expect(tokenizeCcsString("@Or... <Mushroomized,> where you have a mushroom on your head.")).toEqual([
       { kind: "text", value: "Or... " },
