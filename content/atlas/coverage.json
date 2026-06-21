@@ -1,0 +1,13 @@
+{
+  "schema": "swagbound.atlas.coverage.v1",
+  "byClass": {
+    "characters": { "skinned": 253, "total": 342, "pct": 0.74, "source": "sprites.json" },
+    "battleBackgrounds": { "skinned": 183, "totalUsed": 200, "pct": 0.92, "source": "backgrounds.json" },
+    "mapTiles": { "skinned": 0, "total": 21707, "pct": 0, "note": "no tile-override system exists", "source": "tiles.json" },
+    "motifsBuildingsRooms": { "skinned": 0, "pct": 0, "note": "composed from raw EB tiles", "source": "motifs.json" },
+    "uiFonts": { "pct": 0, "note": "largely raw EB", "source": "ui.json" },
+    "townMaps": { "pct": 0, "note": "raw EB", "source": "townmaps.json" }
+  },
+  "finding": "Characters + battle backdrops have a Swagbound design language; the MAP (tiles -> motifs -> buildings) + UI/fonts are raw EarthBound. Custom maps in the design language need a tile/motif override layer.",
+  "nextStep": "content/tile-overrides.json (+ motif-overrides) mirroring sprite-overrides.json, consumed by the converter; prioritize tiles by usageCount; the /atlas browser is the worklist."
+}
