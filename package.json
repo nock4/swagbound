@@ -51,7 +51,8 @@
     "pretest:replay": "pnpm build:eb-fullworld && pnpm validate",
     "test:replay": "PLAYWRIGHT_ENABLE_REPLAY=1 playwright test --project replay-chromium",
     "show:review": "playwright show-report playwright-report",
-    "verify": "pnpm install --frozen-lockfile && pnpm build:eb-fullworld && pnpm validate && pnpm test && pnpm exec tsc --noEmit && pnpm test:review && pnpm test:eb && pnpm test:battle && pnpm content:test && pnpm build:eb-fullworld && pnpm validate"
+    "verify": "pnpm install --frozen-lockfile && pnpm build:eb-fullworld && pnpm validate && pnpm test && pnpm exec tsc --noEmit && pnpm test:review && pnpm test:eb && pnpm test:battle && pnpm content:test && pnpm build:eb-fullworld && pnpm validate",
+    "atlas:worklist": "node --import tsx scripts/atlas/tile-worklist.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.60.0",

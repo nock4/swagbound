@@ -614,7 +614,7 @@
         <div class="masthead">
           <div>
             <h1>Swagbound Atlas Browser</h1>
-            <p class="subhead">A searchable visual library for the tiles, characters, motifs, buildings, named places, rooms, and interactables available to custom map authors.</p>
+            <p class="subhead">A searchable visual library for the tiles, characters, backgrounds, UI assets, town maps, motifs, buildings, named places, rooms, and interactables available to custom map authors.</p>
           </div>
           <div class="open-note">Run <code>pnpm dev</code>, then open <code>/atlas/</code>. JSON and images load from this folder with relative URLs.</div>
         </div>
@@ -626,6 +626,9 @@
             <option value="overview">Overview</option>
             <option value="tiles">Tiles</option>
             <option value="characters">Characters</option>
+            <option value="backgrounds">Backgrounds</option>
+            <option value="ui">UI</option>
+            <option value="townmaps">Town Maps</option>
             <option value="motifs">Motifs</option>
             <option value="buildings">Buildings</option>
             <option value="places">Places</option>
@@ -639,6 +642,9 @@
           <button class="tab" type="button" data-tab="overview" aria-selected="true">Overview</button>
           <button class="tab" type="button" data-tab="tiles" aria-selected="false">Tiles</button>
           <button class="tab" type="button" data-tab="characters" aria-selected="false">Characters</button>
+          <button class="tab" type="button" data-tab="backgrounds" aria-selected="false">Backgrounds</button>
+          <button class="tab" type="button" data-tab="ui" aria-selected="false">UI</button>
+          <button class="tab" type="button" data-tab="townmaps" aria-selected="false">Town Maps</button>
           <button class="tab" type="button" data-tab="motifs" aria-selected="false">Motifs</button>
           <button class="tab" type="button" data-tab="buildings" aria-selected="false">Buildings</button>
           <button class="tab" type="button" data-tab="places" aria-selected="false">Places</button>
@@ -700,6 +706,66 @@
           </div>
         </div>
         <div id="charactersGrid" class="grid"></div>
+      </section>
+
+      <section id="backgrounds" class="pane" data-section="backgrounds" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Backgrounds</h2>
+            <p id="backgroundsSubtitle">Battle background images with enemy-group usage and override status.</p>
+          </div>
+          <div class="section-actions">
+            <select id="backgroundFilter" class="section-control" aria-label="Background filter">
+              <option value="all">all backgrounds</option>
+              <option value="used">used</option>
+              <option value="unused">unused</option>
+              <option value="overridden">overridden</option>
+              <option value="stock">stock</option>
+            </select>
+            <select id="backgroundSort" class="section-control" aria-label="Background sort">
+              <option value="id">sort by id</option>
+              <option value="usageDesc">sort usage high</option>
+              <option value="usedFirst">sort used first</option>
+            </select>
+          </div>
+        </div>
+        <div id="backgroundsGrid" class="grid"></div>
+      </section>
+
+      <section id="ui" class="pane" data-section="ui" hidden>
+        <div class="section-head">
+          <div>
+            <h2>UI</h2>
+            <p id="uiSubtitle">Window frames, fonts with glyph counts, and generated icon records.</p>
+          </div>
+          <div class="section-actions">
+            <select id="uiFilter" class="section-control" aria-label="UI asset filter">
+              <option value="all">all UI</option>
+              <option value="windows">windows</option>
+              <option value="fonts">fonts</option>
+              <option value="icons">icons</option>
+            </select>
+            <select id="uiIconKindFilter" class="section-control" aria-label="UI icon kind filter">
+              <option value="all">all icon kinds</option>
+            </select>
+          </div>
+        </div>
+        <div id="uiGrid" class="grid"></div>
+      </section>
+
+      <section id="townmaps" class="pane" data-section="townmaps" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Town Maps</h2>
+            <p id="townmapsSubtitle">Region map images with per-region town-map icon counts.</p>
+          </div>
+          <div class="section-actions">
+            <select id="townMapRegionFilter" class="section-control" aria-label="Town map region filter">
+              <option value="all">all regions</option>
+            </select>
+          </div>
+        </div>
+        <div id="townmapsGrid" class="grid"></div>
       </section>
 
       <section id="motifs" class="pane" data-section="motifs" hidden>
@@ -806,8 +872,8 @@
           rendered: new Set()
         };
 
-        const sectionIds = ["overview", "tiles", "characters", "motifs", "buildings", "places", "rooms", "interactables"];
-        const catalogSections = ["tiles", "characters", "motifs", "buildings", "places", "rooms", "interactables"];
+        const sectionIds = ["overview", "tiles", "characters", "backgrounds", "ui", "townmaps", "motifs", "buildings", "places", "rooms", "interactables"];
+        const catalogSections = ["tiles", "characters", "backgrounds", "ui", "townmaps", "motifs", "buildings", "places", "rooms", "interactables"];
         const $ = (id) => document.getElementById(id);
         const els = {
           app: $("app"),
@@ -827,6 +893,17 @@
           roleFilter: $("roleFilter"),
           charactersGrid: $("charactersGrid"),
           charactersSubtitle: $("charactersSubtitle"),
+          backgroundFilter: $("backgroundFilter"),
+          backgroundSort: $("backgroundSort"),
+          backgroundsGrid: $("backgroundsGrid"),
+          backgroundsSubtitle: $("backgroundsSubtitle"),
+          uiFilter: $("uiFilter"),
+          uiIconKindFilter: $("uiIconKindFilter"),
+          uiGrid: $("uiGrid"),
+          uiSubtitle: $("uiSubtitle"),
+          townMapRegionFilter: $("townMapRegionFilter"),
+          townmapsGrid: $("townmapsGrid"),
+          townmapsSubtitle: $("townmapsSubtitle"),
           motifFilter: $("motifFilter"),
           motifsGrid: $("motifsGrid"),
           motifsSubtitle: $("motifsSubtitle"),
@@ -1065,6 +1142,70 @@
           return `${number(count)} ${count === 1 ? singular : plural}`;
         }
 
+        function previewList(values, limit = 8) {
+          const list = Array.isArray(values) ? values : [];
+          const shown = list.slice(0, limit).map((value) => String(value));
+          const rest = list.length - shown.length;
+          return `${shown.join(", ")}${rest > 0 ? ` +${number(rest)} more` : ""}`;
+        }
+
+        function backgroundDisplayId(item) {
+          const numeric = Number(item?.bgId);
+          return Number.isFinite(numeric) ? String(numeric).padStart(3, "0") : String(item?.bgId ?? "");
+        }
+
+        function backgroundEnemyGroups(item) {
+          return Array.isArray(item?.usedByEnemyGroups) ? item.usedByEnemyGroups : [];
+        }
+
+        function backgroundHasOverride(item) {
+          return Boolean(item?.override || item?.overridden);
+        }
+
+        function backgroundMatchesFilter(item, filter) {
+          if (filter === "used") return item?.used === true;
+          if (filter === "unused") return item?.used !== true;
+          if (filter === "overridden") return backgroundHasOverride(item);
+          if (filter === "stock") return !backgroundHasOverride(item);
+          return true;
+        }
+
+        function backgroundHaystack(item, label) {
+          const groups = backgroundEnemyGroups(item);
+          return [
+            item?.bgId,
+            backgroundDisplayId(item),
+            item?.image,
+            item?.used ? "used" : "unused",
+            backgroundHasOverride(item) ? "overridden" : "stock",
+            item?.override,
+            item?.animated ? "animated" : "static",
+            item?.scroll ? `scroll ${item.scroll.x} ${item.scroll.y}` : "",
+            item?.distortion?.kind,
+            ...groups.flatMap((group) => [group, `enemy ${group}`, `enemy group ${group}`]),
+            labelSearch(label)
+          ].join(" ");
+        }
+
+        function dimensionsText(geometry) {
+          if (!geometry || geometry.width == null || geometry.height == null) return "";
+          return `${geometry.width}x${geometry.height}`;
+        }
+
+        function iconDataText(icon) {
+          const data = icon?.data && typeof icon.data === "object" ? icon.data : {};
+          return Object.values(data).filter((value) => value != null).join(" ");
+        }
+
+        function uiIconTitle(icon) {
+          const data = icon?.data && typeof icon.data === "object" ? icon.data : {};
+          return data.name || data.label || icon?.id || "UI icon";
+        }
+
+        function townMapIconsForRegion(townmaps, region) {
+          return (townmaps?.icons ?? []).filter((icon) => icon?.position?.region === region);
+        }
+
         function placeHaystack(item) {
           const occupants = Array.isArray(item.occupants) ? item.occupants : [];
           return [
@@ -1117,6 +1258,12 @@
           const roles = [...new Set(state.data.sprites.groups.map((group) => group.roleGuess).filter(Boolean))].sort();
           els.roleFilter.innerHTML = `<option value="all">all roles</option>${roles.map((role) => `<option value="${escapeHtml(role)}">${escapeHtml(role)}</option>`).join("")}`;
 
+          const iconKinds = [...new Set((state.data.ui?.icons ?? []).map((icon) => icon.kind).filter(Boolean))].sort();
+          els.uiIconKindFilter.innerHTML = `<option value="all">all icon kinds</option>${iconKinds.map((kind) => `<option value="${escapeHtml(kind)}">${escapeHtml(kind)}</option>`).join("")}`;
+
+          const townMapRegions = [...new Set((state.data.townmaps?.maps ?? []).map((map) => map.region).filter(Boolean))].sort();
+          els.townMapRegionFilter.innerHTML = `<option value="all">all regions</option>${townMapRegions.map((region) => `<option value="${escapeHtml(region)}">${escapeHtml(region)}</option>`).join("")}`;
+
           const motifCategories = [...new Set(state.data.motifs.motifs.map((item) => item.categoryGuessAdvisory).filter(Boolean))].sort();
           els.motifFilter.innerHTML = `<option value="all">all motif categories</option>${motifCategories.map((category) => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join("")}`;
 
@@ -1135,7 +1282,7 @@
         }
 
         function renderOverview() {
-          const { tiles, sprites, motifs, buildingNames } = state.data;
+          const { tiles, sprites, motifs, buildingNames, backgrounds, ui, townmaps } = state.data;
           const places = buildingNames?.buildings ?? [];
           const namedPlaces = places.filter((item) => item.name).length;
           const stats = [
@@ -1143,6 +1290,9 @@
             ["Tilesets", number(tiles.counts?.tilesets ?? tiles.tilesets.length), "32px cells"],
             ["Sprites", number(sprites.counts?.groups ?? sprites.groups.length), `${number(sprites.counts?.overriddenGroups ?? 0)} skinned`],
             ["Un-skinned", number(sprites.counts?.unskinnedGroups ?? 0), "raw EB groups"],
+            ...(backgrounds ? [["Backgrounds", number(backgrounds.counts?.total ?? backgrounds.backgrounds?.length ?? 0), `${number(backgrounds.counts?.used ?? 0)} used · ${number(backgrounds.counts?.overridden ?? 0)} overridden`]] : []),
+            ...(ui ? [["UI Assets", number((ui.windows?.length ?? 0) + (ui.fonts?.length ?? 0) + (ui.icons?.length ?? 0)), `${number(ui.counts?.glyphs ?? 0)} glyphs · ${number(ui.counts?.icons ?? ui.icons?.length ?? 0)} icons`]] : []),
+            ...(townmaps ? [["Town Maps", number(townmaps.counts?.maps ?? townmaps.maps?.length ?? 0), `${number(townmaps.counts?.icons ?? townmaps.icons?.length ?? 0)} icons`]] : []),
             ["Motifs", number((motifs.motifs ?? []).length), `${number(motifs.counts?.motifInstances ?? 0)} instances`],
             ["Interactables", number((motifs.interactables ?? []).length), "text/object anchors"],
             ["Places", number(places.length), `${number(namedPlaces)} named`],
@@ -1334,9 +1484,10 @@
         }
 
         function cardMarkup({ image, alt, title, fallback, tags, meta, note, haystack }) {
+          const media = image ? `<div class="card-media">${imageHtml(image, alt || title || fallback)}</div>` : "";
           return `
             <article class="card" data-search="${escapeHtml(haystack)}">
-              <div class="card-media">${imageHtml(image, alt)}</div>
+              ${media}
               <div class="card-body">
                 <h3 class="card-title"><span class="${title ? "label-name" : "fallback-name"}">${escapeHtml(title || fallback)}</span></h3>
                 <div class="tag-row">${tags.filter(Boolean).join("")}</div>
@@ -1345,6 +1496,264 @@
               </div>
             </article>
           `;
+        }
+
+        function renderBackgrounds() {
+          const data = state.data.backgrounds;
+          if (!data) {
+            els.backgroundsSubtitle.textContent = "backgrounds.json is not present in this atlas copy.";
+            els.backgroundsGrid.innerHTML = `<div class="empty">No Backgrounds data is available. Re-run <code>pnpm atlas:browser</code> after adding <code>content/atlas/backgrounds.json</code>.</div>`;
+            state.rendered.add("backgrounds");
+            return;
+          }
+
+          const filter = els.backgroundFilter.value;
+          const sort = els.backgroundSort.value;
+          const backgrounds = [...(data.backgrounds ?? [])].sort((a, b) => {
+            if (sort === "usageDesc") return backgroundEnemyGroups(b).length - backgroundEnemyGroups(a).length;
+            if (sort === "usedFirst") return Number(b.used === true) - Number(a.used === true) || Number(a.bgId) - Number(b.bgId);
+            return Number(a.bgId) - Number(b.bgId);
+          });
+
+          const cards = [];
+          for (const item of backgrounds) {
+            if (!backgroundMatchesFilter(item, filter)) continue;
+            const bgId = backgroundDisplayId(item);
+            const label = labelFor("background", item.bgId, [
+              `bg:${item.bgId}`,
+              `background:${bgId}`
+            ]);
+            const groups = backgroundEnemyGroups(item);
+            const haystack = backgroundHaystack(item, label);
+            if (!matchesQuery(haystack)) continue;
+            const override = item.override || item.overridden;
+            const groupPreview = previewList(groups, 12);
+            const groupNote = groups.length ? `<div class="note">Used by enemy groups: <code>${escapeHtml(groupPreview)}</code></div>` : `<div class="note">No enemy-group usage captured.</div>`;
+            cards.push(cardMarkup({
+              image: item.image,
+              alt: `background ${bgId}`,
+              title: label?.name,
+              fallback: `Background ${bgId}`,
+              tags: [
+                `<span class="tag">id ${escapeHtml(bgId)}</span>`,
+                `<span class="tag ${item.used ? "good" : ""}">${item.used ? "used" : "unused"}</span>`,
+                `<span class="tag ${override ? "warn" : ""}">${override ? "overridden" : "stock"}</span>`,
+                item.animated ? `<span class="tag">animated</span>` : "",
+                ...labelMarkup(label).split(/(?=<span)/).filter(Boolean)
+              ],
+              meta: [
+                `image <code>${escapeHtml(item.image || "unknown")}</code>`,
+                `${number(groups.length)} enemy groups`,
+                override ? `override <code>${escapeHtml(override)}</code>` : "",
+                item.distortion?.kind ? `distortion <code>${escapeHtml(item.distortion.kind)}</code>` : ""
+              ],
+              note: `${labelNote(label)}${groupNote}`,
+              haystack
+            }));
+          }
+
+          const total = data.backgrounds?.length ?? 0;
+          els.backgroundsSubtitle.textContent = `${number(cards.length)} visible battle backgrounds from ${number(total)} total.`;
+          els.backgroundsGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No backgrounds match the current filters.</div>`;
+          registerLazyImages(els.backgroundsGrid);
+          state.rendered.add("backgrounds");
+        }
+
+        function renderUi() {
+          const data = state.data.ui;
+          if (!data) {
+            els.uiSubtitle.textContent = "ui.json is not present in this atlas copy.";
+            els.uiGrid.innerHTML = `<div class="empty">No UI data is available. Re-run <code>pnpm atlas:browser</code> after adding <code>content/atlas/ui.json</code>.</div>`;
+            state.rendered.add("ui");
+            return;
+          }
+
+          const filter = els.uiFilter.value;
+          const iconKindFilter = els.uiIconKindFilter.value;
+          const cards = [];
+          let visibleCount = 0;
+
+          if (filter === "all" || filter === "windows") {
+            const windowCards = [];
+            for (const item of data.windows ?? []) {
+              const dims = dimensionsText(item.geometry);
+              const title = item.configName || item.id;
+              const haystack = [
+                item.id,
+                item.configName,
+                item.image,
+                item.geometry?.sourceFile,
+                item.geometry?.generatedFile,
+                item.geometry?.sourceKind,
+                dims
+              ].join(" ");
+              if (!matchesQuery(haystack)) continue;
+              windowCards.push(cardMarkup({
+                image: item.image,
+                alt: `UI window ${item.id}`,
+                title,
+                fallback: item.id,
+                tags: [
+                  `<span class="tag">window</span>`,
+                  item.geometry?.sourceKind ? `<span class="tag good">${escapeHtml(item.geometry.sourceKind)}</span>` : ""
+                ],
+                meta: [
+                  `id <code>${escapeHtml(item.id)}</code>`,
+                  dims ? `${escapeHtml(dims)} px` : "",
+                  item.geometry?.sourceFile ? `source <code>${escapeHtml(item.geometry.sourceFile)}</code>` : "",
+                  item.geometry?.interiorColor ? `interior rgb(${escapeHtml(item.geometry.interiorColor.r)}, ${escapeHtml(item.geometry.interiorColor.g)}, ${escapeHtml(item.geometry.interiorColor.b)})` : ""
+                ],
+                note: "",
+                haystack
+              }));
+            }
+            if (windowCards.length) {
+              visibleCount += windowCards.length;
+              cards.push(`<div class="town-header" role="heading" aria-level="3"><h3 class="town-header-title">Windows</h3><span class="town-header-meta">${escapeHtml(countLabel(windowCards.length, "window"))}</span></div>`);
+              cards.push(...windowCards);
+            }
+          }
+
+          if (filter === "all" || filter === "fonts") {
+            const fontCards = [];
+            for (const item of data.fonts ?? []) {
+              const dims = dimensionsText(item.geometry);
+              const haystack = [
+                item.fontId,
+                `font ${item.fontId}`,
+                item.image,
+                item.glyphCount,
+                item.geometry?.sourceFile,
+                item.geometry?.generatedFile,
+                dims
+              ].join(" ");
+              if (!matchesQuery(haystack)) continue;
+              fontCards.push(cardMarkup({
+                image: item.image,
+                alt: `UI font ${item.fontId}`,
+                title: `Font ${item.fontId}`,
+                fallback: `Font ${item.fontId}`,
+                tags: [
+                  `<span class="tag">font</span>`,
+                  `<span class="tag good">${number(item.glyphCount ?? 0)} glyphs</span>`
+                ],
+                meta: [
+                  `font id <code>${escapeHtml(item.fontId)}</code>`,
+                  dims ? `${escapeHtml(dims)} px` : "",
+                  item.geometry?.columns ? `${number(item.geometry.columns)} columns` : "",
+                  item.geometry?.cellWidth && item.geometry?.cellHeight ? `${escapeHtml(item.geometry.cellWidth)}x${escapeHtml(item.geometry.cellHeight)} cells` : ""
+                ],
+                note: Array.isArray(item.sampleGlyphWidths) && item.sampleGlyphWidths.length ? `<div class="note">Sample glyph widths: <code>${escapeHtml(previewList(item.sampleGlyphWidths, 16))}</code></div>` : "",
+                haystack
+              }));
+            }
+            if (fontCards.length) {
+              visibleCount += fontCards.length;
+              cards.push(`<div class="town-header" role="heading" aria-level="3"><h3 class="town-header-title">Fonts</h3><span class="town-header-meta">${escapeHtml(countLabel(fontCards.length, "font"))}</span></div>`);
+              cards.push(...fontCards);
+            }
+          }
+
+          if (filter === "all" || filter === "icons") {
+            const iconCards = [];
+            for (const item of data.icons ?? []) {
+              if (iconKindFilter !== "all" && item.kind !== iconKindFilter) continue;
+              const title = uiIconTitle(item);
+              const haystack = [
+                item.id,
+                item.kind,
+                item.source,
+                item.note,
+                title,
+                iconDataText(item)
+              ].join(" ");
+              if (!matchesQuery(haystack)) continue;
+              iconCards.push(cardMarkup({
+                image: item.image,
+                alt: `UI icon ${item.id}`,
+                title,
+                fallback: item.id,
+                tags: [
+                  `<span class="tag">icon</span>`,
+                  item.kind ? `<span class="tag good">${escapeHtml(item.kind)}</span>` : "",
+                  item.image ? `<span class="tag">image</span>` : `<span class="tag">metadata-only</span>`
+                ],
+                meta: [
+                  `id <code>${escapeHtml(item.id)}</code>`,
+                  item.source ? `source <code>${escapeHtml(item.source)}</code>` : "",
+                  item.data?.type != null ? `type <code>${escapeHtml(item.data.type)}</code>` : "",
+                  item.data?.effect != null ? `effect <code>${escapeHtml(item.data.effect)}</code>` : ""
+                ],
+                note: item.note ? `<div class="note">${escapeHtml(item.note)}</div>` : "",
+                haystack
+              }));
+            }
+            if (iconCards.length) {
+              visibleCount += iconCards.length;
+              cards.push(`<div class="town-header" role="heading" aria-level="3"><h3 class="town-header-title">Icons</h3><span class="town-header-meta">${escapeHtml(countLabel(iconCards.length, "entry", "entries"))}</span></div>`);
+              cards.push(...iconCards);
+            }
+          }
+
+          const total = (data.windows?.length ?? 0) + (data.fonts?.length ?? 0) + (data.icons?.length ?? 0);
+          els.uiSubtitle.textContent = `${number(visibleCount)} visible UI records from ${number(total)} total.`;
+          els.uiGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No UI records match the current filters.</div>`;
+          registerLazyImages(els.uiGrid);
+          state.rendered.add("ui");
+        }
+
+        function renderTownMaps() {
+          const data = state.data.townmaps;
+          if (!data) {
+            els.townmapsSubtitle.textContent = "townmaps.json is not present in this atlas copy.";
+            els.townmapsGrid.innerHTML = `<div class="empty">No Town Maps data is available. Re-run <code>pnpm atlas:browser</code> after adding <code>content/atlas/townmaps.json</code>.</div>`;
+            state.rendered.add("townmaps");
+            return;
+          }
+
+          const regionFilter = els.townMapRegionFilter.value;
+          const cards = [];
+          for (const item of data.maps ?? []) {
+            if (regionFilter !== "all" && item.region !== regionFilter) continue;
+            const icons = townMapIconsForRegion(data, item.region);
+            const iconTypes = [...new Set(icons.map((icon) => icon?.position?.icon).filter(Boolean))].sort();
+            const dims = dimensionsText(item.geometry);
+            const haystack = [
+              item.region,
+              item.image,
+              dims,
+              ...icons.flatMap((icon) => [
+                icon.id,
+                icon.position?.icon,
+                icon.position?.eventFlag,
+                `${icon.position?.x},${icon.position?.y}`
+              ])
+            ].join(" ");
+            if (!matchesQuery(haystack)) continue;
+            cards.push(cardMarkup({
+              image: item.image,
+              alt: `${item.region} town map`,
+              title: item.region,
+              fallback: item.region,
+              tags: [
+                `<span class="tag">town map</span>`,
+                `<span class="tag good">${number(icons.length)} icons</span>`
+              ],
+              meta: [
+                dims ? `${escapeHtml(dims)} px` : "",
+                `image <code>${escapeHtml(item.image || "unknown")}</code>`,
+                iconTypes.length ? `types <code>${escapeHtml(previewList(iconTypes, 6))}</code>` : ""
+              ],
+              note: icons.length ? `<div class="note">Icon entries: <code>${escapeHtml(previewList(icons.map((icon) => icon.id), 8))}</code></div>` : `<div class="note">No town-map icons captured for this region.</div>`,
+              haystack
+            }));
+          }
+
+          const total = data.maps?.length ?? 0;
+          els.townmapsSubtitle.textContent = `${number(cards.length)} visible region maps from ${number(total)} total.`;
+          els.townmapsGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No town maps match the current filters.</div>`;
+          registerLazyImages(els.townmapsGrid);
+          state.rendered.add("townmaps");
         }
 
         function renderMotifs() {
@@ -1598,6 +2007,9 @@
           if (section === "overview") renderOverview();
           if (section === "tiles") renderTiles();
           if (section === "characters") renderCharacters();
+          if (section === "backgrounds") renderBackgrounds();
+          if (section === "ui") renderUi();
+          if (section === "townmaps") renderTownMaps();
           if (section === "motifs") renderMotifs();
           if (section === "buildings") renderBuildings();
           if (section === "places") renderPlaces();
@@ -1634,7 +2046,10 @@
           const labelText = labelsLoaded ? `${number(labelsLoaded)} labels loaded` : "labels.json not present";
           const overrideText = state.overrides ? "sprite override names loaded" : "sprite override names unavailable";
           const placeText = state.data?.buildingNames ? `${number(state.data.buildingNames.buildings?.length ?? 0)} places loaded` : "building-names.json not present";
-          els.statusLine.textContent = `${labelText}; ${overrideText}; ${placeText}.`;
+          const backgroundText = state.data?.backgrounds ? `${number(state.data.backgrounds.backgrounds?.length ?? 0)} backgrounds loaded` : "backgrounds.json not present";
+          const uiText = state.data?.ui ? `${number((state.data.ui.windows?.length ?? 0) + (state.data.ui.fonts?.length ?? 0) + (state.data.ui.icons?.length ?? 0))} UI records loaded` : "ui.json not present";
+          const townMapText = state.data?.townmaps ? `${number(state.data.townmaps.maps?.length ?? 0)} town maps loaded` : "townmaps.json not present";
+          els.statusLine.textContent = `${labelText}; ${overrideText}; ${placeText}; ${backgroundText}; ${uiText}; ${townMapText}.`;
         }
 
         function debounce(fn, delay = 140) {
@@ -1673,6 +2088,15 @@
             control.addEventListener("change", () => renderCharacters());
           });
 
+          [els.backgroundFilter, els.backgroundSort].forEach((control) => {
+            control.addEventListener("change", () => renderBackgrounds());
+          });
+
+          [els.uiFilter, els.uiIconKindFilter].forEach((control) => {
+            control.addEventListener("change", () => renderUi());
+          });
+
+          els.townMapRegionFilter.addEventListener("change", () => renderTownMaps());
           els.motifFilter.addEventListener("change", () => renderMotifs());
           els.buildingFilter.addEventListener("change", () => renderBuildings());
           els.placeFilter.addEventListener("change", () => renderPlaces());
@@ -1697,15 +2121,18 @@
         async function init() {
           bindEvents();
           try {
-            const [tiles, sprites, motifs, labels, overrides, buildingNames] = await Promise.all([
+            const [tiles, sprites, motifs, labels, overrides, buildingNames, backgrounds, ui, townmaps] = await Promise.all([
               fetchJson("./tiles.json"),
               fetchJson("./sprites.json"),
               fetchJson("./motifs.json"),
               fetchJson("./labels.json", true),
               fetchJson("./sprite-overrides.json", true),
-              fetchJson("./building-names.json", true)
+              fetchJson("./building-names.json", true),
+              fetchJson("./backgrounds.json", true),
+              fetchJson("./ui.json", true),
+              fetchJson("./townmaps.json", true)
             ]);
-            state.data = { tiles, sprites, motifs, buildingNames };
+            state.data = { tiles, sprites, motifs, buildingNames, backgrounds, ui, townmaps };
             state.labels = labels ?? { byId: {} };
             state.overrides = overrides;
             state.spritePortraits = new Map(sprites.groups.map((group) => [spriteGroupKey(group.groupId), group.portraitImage]));
