@@ -29,6 +29,8 @@ export type AudioContextConstructor = new () => AudioContext;
 
 export const DEFAULT_MUSIC_CUE_GAIN = 0.45;
 export const DEFAULT_MUSIC_MASTER_GAIN = 0.82;
+export const MUSIC_AREA_CUE_PREFIX = "area:";
+export type MusicAreaCueId = `${typeof MUSIC_AREA_CUE_PREFIX}${string}`;
 const DEFAULT_FADE_MS = 650;
 const MIN_GAIN = 0.0001;
 
@@ -282,7 +284,32 @@ export function createMusic(manifest?: MusicManifest, options: MusicOptions = {}
 }
 
 export function resolveMusicCue(manifest: MusicManifest | undefined, cue: string): ResolvedMusicCue | undefined {
+  const areaCue = resolveAreaMusicCue(manifest, cue);
+  if (areaCue) {
+    return areaCue;
+  }
   const entry = manifest?.cues[cue];
+  if (!entry) {
+    return undefined;
+  }
+  return {
+    cue,
+    file: entry.file,
+    loop: entry.loop ?? true,
+    gain: clamp(entry.gain ?? DEFAULT_MUSIC_CUE_GAIN, 0, 1)
+  };
+}
+
+export function musicAreaCueId(id: string): MusicAreaCueId {
+  return `${MUSIC_AREA_CUE_PREFIX}${id}` as MusicAreaCueId;
+}
+
+function resolveAreaMusicCue(manifest: MusicManifest | undefined, cue: string): ResolvedMusicCue | undefined {
+  if (!cue.startsWith(MUSIC_AREA_CUE_PREFIX)) {
+    return undefined;
+  }
+  const id = cue.slice(MUSIC_AREA_CUE_PREFIX.length);
+  const entry = manifest?.areas?.find((area) => area.id === id);
   if (!entry) {
     return undefined;
   }
