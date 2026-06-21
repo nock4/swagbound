@@ -1,7 +1,7 @@
 {
   "schema": "swagbound.atlas.building-names.v2",
   "scope": "map-wide-overworld-entrances",
-  "method": "234 real building entrances (outdoor source sector, deduped by interior) across all towns. Each of the 59 shopkeeper/clerk/save NPCs assigned to its nearest building -> service flag + function label (Shop/Inn/Service desk). Onett 6 verified by interior sign. Residences carry occupants only. TODO: EB town labels per region, and precise per-shop names (drugstore vs bakery) via interior-sign reads. TOWN LABELS from EB map_sectors.yml \"Town Map Image\" (authoritative): Onett/Twoson/Threed/Fourside/Summers/Scaraba; 153 buildings are in unmapped areas (Winters/Magicant/etc., no in-game minimap).",
+  "method": "234 real building entrances (outdoor source sector, deduped by interior) across all towns. Each of the 59 shopkeeper/clerk/save NPCs assigned to its nearest building -> service flag + function label (Shop/Inn/Service desk). Onett 6 verified by interior sign. Residences carry occupants only. TODO: EB town labels per region, and precise per-shop names (drugstore vs bakery) via interior-sign reads. TOWN LABELS from EB map_sectors.yml \"Town Map Image\" (authoritative): Onett/Twoson/Threed/Fourside/Summers/Scaraba; 153 buildings are in unmapped areas (Winters/Magicant/etc., no in-game minimap). UNMAPPED areas sub-grouped by sector Music id; 3 recognized in-game (Winters=music7, Moonside=music59, Dusty Dunes Desert=music45). Other unmapped clusters are visually ambiguous caves/wilderness, left Unmapped (honest). See docs/atlas/eb-grounding.md.",
   "counts": {
     "buildings": 234,
     "services": 29,
@@ -9,13 +9,16 @@
     "residences": 205,
     "regions": 57,
     "byTown": {
-      "Unmapped area": 153,
       "Onett": 25,
+      "Twoson": 17,
+      "Threed": 16,
+      "Fourside": 3,
       "Summers": 14,
       "Scaraba": 6,
-      "Fourside": 3,
-      "Twoson": 17,
-      "Threed": 16
+      "Unmapped area": 133,
+      "Dusty Dunes Desert": 7,
+      "Winters": 9,
+      "Moonside": 4
     }
   },
   "byRegion": {
@@ -3604,7 +3607,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 6
     },
     {
       "id": "b-6872-96",
@@ -3639,7 +3643,8 @@
       "name": "Shop",
       "type": "shop/service",
       "confidence": "inferred-by-role",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 10
     },
     {
       "id": "b-6048-136",
@@ -3680,7 +3685,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 18
     },
     {
       "id": "b-6368-264",
@@ -3709,7 +3715,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 9
     },
     {
       "id": "b-6760-680",
@@ -3731,7 +3738,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 40
     },
     {
       "id": "b-6120-688",
@@ -3753,7 +3761,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Dusty Dunes Desert",
+      "musicArea": 45,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-6120-720",
@@ -3775,7 +3785,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Dusty Dunes Desert",
+      "musicArea": 45,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-7520-1232",
@@ -3828,7 +3840,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 49
     },
     {
       "id": "b-7136-1640",
@@ -3899,7 +3912,8 @@
       "name": "Service desk",
       "type": "shop/service",
       "confidence": "inferred-by-role",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 4
     },
     {
       "id": "b-7256-1728",
@@ -3964,7 +3978,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Winters",
+      "musicArea": 7,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-7768-1728",
@@ -4005,7 +4021,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Winters",
+      "musicArea": 7,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-7136-1768",
@@ -4076,7 +4094,8 @@
       "name": "Shop",
       "type": "shop/service",
       "confidence": "inferred-by-role",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 4
     },
     {
       "id": "b-7648-1768",
@@ -4111,7 +4130,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 4
     },
     {
       "id": "b-8096-1896",
@@ -4146,7 +4166,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 10
     },
     {
       "id": "b-7256-1984",
@@ -4199,7 +4220,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Winters",
+      "musicArea": 7,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-7768-1984",
@@ -4270,7 +4293,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Winters",
+      "musicArea": 7,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-8064-2056",
@@ -4299,7 +4324,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 4
     },
     {
       "id": "b-7000-2144",
@@ -4328,7 +4354,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 29
     },
     {
       "id": "b-7648-2152",
@@ -4399,7 +4426,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 4
     },
     {
       "id": "b-7872-2152",
@@ -4452,7 +4480,8 @@
       "name": "Shop",
       "type": "shop/service",
       "confidence": "inferred-by-role",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 10
     },
     {
       "id": "b-7336-2296",
@@ -4481,7 +4510,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 29
     },
     {
       "id": "b-8072-2320",
@@ -4552,7 +4582,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 4
     },
     {
       "id": "b-6320-2344",
@@ -4581,7 +4612,8 @@
       "name": "Service desk",
       "type": "shop/service",
       "confidence": "inferred-by-role",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 54
     },
     {
       "id": "b-6056-2504",
@@ -4603,7 +4635,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 41
     },
     {
       "id": "b-6680-2512",
@@ -4625,7 +4658,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 48
     },
     {
       "id": "b-6808-2512",
@@ -4647,7 +4681,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 48
     },
     {
       "id": "b-6944-2512",
@@ -4669,7 +4704,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 48
     },
     {
       "id": "b-7616-2536",
@@ -4728,7 +4764,9 @@
       "name": "Service desk",
       "type": "shop/service",
       "confidence": "inferred-by-role",
-      "town": "Unmapped area"
+      "town": "Winters",
+      "musicArea": 7,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-8000-2568",
@@ -4750,7 +4788,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Winters",
+      "musicArea": 7,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-8128-2888",
@@ -4803,7 +4843,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Winters",
+      "musicArea": 7,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-6680-3272",
@@ -4850,7 +4892,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 40
     },
     {
       "id": "b-7656-3272",
@@ -4872,7 +4915,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 40
     },
     {
       "id": "b-8160-3272",
@@ -4894,7 +4938,8 @@
       "name": "Inn / save point",
       "type": "shop/service",
       "confidence": "inferred-by-role",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 40
     },
     {
       "id": "b-7448-3288",
@@ -4916,7 +4961,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 9
     },
     {
       "id": "b-6784-3400",
@@ -4963,7 +5009,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 8
     },
     {
       "id": "b-7400-3424",
@@ -4985,7 +5032,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Dusty Dunes Desert",
+      "musicArea": 45,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-6928-3504",
@@ -5007,7 +5056,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Dusty Dunes Desert",
+      "musicArea": 45,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-8168-3504",
@@ -5029,7 +5080,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Dusty Dunes Desert",
+      "musicArea": 45,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-6680-3528",
@@ -5070,7 +5123,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 40
     },
     {
       "id": "b-6880-3528",
@@ -5092,7 +5146,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 8
     },
     {
       "id": "b-6928-3536",
@@ -5121,7 +5176,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Dusty Dunes Desert",
+      "musicArea": 45,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-8168-3536",
@@ -5143,7 +5200,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Dusty Dunes Desert",
+      "musicArea": 45,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-7008-3624",
@@ -5172,7 +5231,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Winters",
+      "musicArea": 7,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-6240-3672",
@@ -5201,7 +5262,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-7104-3744",
@@ -5223,7 +5285,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-6368-4232",
@@ -5258,7 +5321,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Moonside",
+      "musicArea": 59,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-6880-4296",
@@ -5287,7 +5352,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 52
     },
     {
       "id": "b-7208-4432",
@@ -5309,7 +5375,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 52
     },
     {
       "id": "b-6424-4552",
@@ -5338,7 +5405,8 @@
       "name": "Inn / save point",
       "type": "shop/service",
       "confidence": "inferred-by-role",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 52
     },
     {
       "id": "b-6120-4704",
@@ -5379,7 +5447,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 158
     },
     {
       "id": "b-7960-4744",
@@ -5420,7 +5489,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 52
     },
     {
       "id": "b-7312-4792",
@@ -5455,7 +5525,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 47
     },
     {
       "id": "b-8160-4904",
@@ -5477,7 +5548,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-6456-4936",
@@ -5530,7 +5602,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Moonside",
+      "musicArea": 59,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-6200-4960",
@@ -5559,7 +5633,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 43
     },
     {
       "id": "b-6880-4960",
@@ -5581,7 +5656,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Winters",
+      "musicArea": 7,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-7616-4968",
@@ -5610,7 +5687,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Moonside",
+      "musicArea": 59,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-7192-5064",
@@ -5645,7 +5724,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 8
     },
     {
       "id": "b-7624-5064",
@@ -5667,7 +5747,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 29
     },
     {
       "id": "b-7696-5096",
@@ -5689,7 +5770,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-7984-5096",
@@ -5711,7 +5793,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-7272-5144",
@@ -5733,7 +5816,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-6440-5184",
@@ -5780,7 +5864,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6472-5184",
@@ -5827,7 +5912,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6496-5192",
@@ -5874,7 +5960,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6672-5256",
@@ -5896,7 +5983,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-7616-5256",
@@ -5918,7 +6006,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 10
     },
     {
       "id": "b-6184-5272",
@@ -5953,7 +6042,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-6600-5272",
@@ -5988,7 +6078,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-7192-5320",
@@ -6023,7 +6114,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-8104-5400",
@@ -6045,7 +6137,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-7648-5416",
@@ -6074,7 +6167,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-7904-5416",
@@ -6103,7 +6197,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-6184-5440",
@@ -6150,7 +6245,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6248-5440",
@@ -6197,7 +6293,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-7080-5440",
@@ -6219,7 +6316,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-6272-5448",
@@ -6266,7 +6364,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6160-5544",
@@ -6313,7 +6412,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-8160-5608",
@@ -6335,7 +6435,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-6568-5656",
@@ -6370,7 +6471,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-6184-5696",
@@ -6417,7 +6519,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6248-5696",
@@ -6464,7 +6567,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6696-5696",
@@ -6517,7 +6621,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6824-5696",
@@ -6576,7 +6681,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-7976-5696",
@@ -6611,7 +6717,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 57
     },
     {
       "id": "b-6272-5704",
@@ -6658,7 +6765,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6848-5704",
@@ -6717,7 +6825,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-8096-5704",
@@ -6752,7 +6861,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-7848-5712",
@@ -6781,7 +6891,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-6168-5832",
@@ -6828,7 +6939,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6368-5832",
@@ -6869,7 +6981,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6624-5864",
@@ -6940,7 +7053,9 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Moonside",
+      "musicArea": 59,
+      "townSource": "in-game visual recognition"
     },
     {
       "id": "b-6680-5864",
@@ -7005,7 +7120,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 52
     },
     {
       "id": "b-6848-5864",
@@ -7046,7 +7162,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 53
     },
     {
       "id": "b-6416-5928",
@@ -7087,7 +7204,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-7720-5952",
@@ -7158,7 +7276,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-7784-5952",
@@ -7229,7 +7348,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6240-5960",
@@ -7276,7 +7396,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6752-5960",
@@ -7323,7 +7444,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-7808-5960",
@@ -7394,7 +7516,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-7592-5968",
@@ -7423,7 +7546,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-8040-5984",
@@ -7452,7 +7576,8 @@
       "name": "Service desk",
       "type": "shop/service",
       "confidence": "inferred-by-role",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-6168-6088",
@@ -7523,7 +7648,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6368-6088",
@@ -7558,7 +7684,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6680-6088",
@@ -7605,7 +7732,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6880-6088",
@@ -7627,7 +7755,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-7704-6120",
@@ -7698,7 +7827,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 53
     },
     {
       "id": "b-7904-6120",
@@ -7769,7 +7899,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 52
     },
     {
       "id": "b-7112-6176",
@@ -7791,7 +7922,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 58
     },
     {
       "id": "b-6184-6208",
@@ -7844,7 +7976,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6216-6208",
@@ -7897,7 +8030,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6368-6216",
@@ -7932,7 +8066,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-7776-6216",
@@ -8003,7 +8138,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6368-6344",
@@ -8038,7 +8174,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6680-6344",
@@ -8073,7 +8210,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-7136-6344",
@@ -8095,7 +8233,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6168-6360",
@@ -8136,7 +8275,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6416-6376",
@@ -8165,7 +8305,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-6208-6440",
@@ -8206,7 +8347,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6880-6472",
@@ -8241,7 +8383,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6168-6600",
@@ -8276,7 +8419,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6368-6600",
@@ -8311,7 +8455,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6272-6728",
@@ -8346,7 +8491,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6720-6728",
@@ -8368,7 +8514,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 51
     },
     {
       "id": "b-6080-6736",
@@ -8427,7 +8574,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 61
     },
     {
       "id": "b-7584-6792",
@@ -8474,7 +8622,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6168-6856",
@@ -8503,7 +8652,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-6368-6856",
@@ -8532,7 +8682,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 56
     },
     {
       "id": "b-8128-6864",
@@ -8561,7 +8712,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 10
     },
     {
       "id": "b-7392-6888",
@@ -8602,7 +8754,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 52
     },
     {
       "id": "b-7448-7112",
@@ -8624,7 +8777,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 55
     },
     {
       "id": "b-8136-7112",
@@ -8653,7 +8807,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 8
     },
     {
       "id": "b-7040-7752",
@@ -8694,7 +8849,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 15
     },
     {
       "id": "b-7624-7760",
@@ -8729,7 +8885,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 20
     },
     {
       "id": "b-7552-7880",
@@ -8770,7 +8927,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 15
     },
     {
       "id": "b-8136-7888",
@@ -8817,7 +8975,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 20
     },
     {
       "id": "b-6488-8008",
@@ -8864,7 +9023,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 8
     },
     {
       "id": "b-7040-8008",
@@ -8905,7 +9065,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 15
     },
     {
       "id": "b-7256-8008",
@@ -8940,7 +9101,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 8
     },
     {
       "id": "b-7768-8008",
@@ -9011,7 +9173,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 8
     },
     {
       "id": "b-7624-8016",
@@ -9082,7 +9245,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 20
     },
     {
       "id": "b-7584-8136",
@@ -9135,7 +9299,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 15
     },
     {
       "id": "b-8104-8144",
@@ -9188,7 +9353,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 20
     },
     {
       "id": "b-8128-8328",
@@ -9217,7 +9383,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 15
     },
     {
       "id": "b-7712-8672",
@@ -9246,7 +9413,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 10
     },
     {
       "id": "b-8152-8672",
@@ -9268,7 +9436,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 11
     },
     {
       "id": "b-6512-9432",
@@ -9290,7 +9459,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 36
     },
     {
       "id": "b-6272-9680",
@@ -9325,7 +9495,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 17
     },
     {
       "id": "b-7072-9832",
@@ -9372,7 +9543,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 5
     },
     {
       "id": "b-6344-9880",
@@ -9394,7 +9566,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 48
     },
     {
       "id": "b-7136-10056",
@@ -9416,7 +9589,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 39
     },
     {
       "id": "b-7904-10056",
@@ -9475,7 +9649,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 5
     },
     {
       "id": "b-7448-10072",
@@ -9510,7 +9685,8 @@
       "name": null,
       "type": "residence",
       "confidence": "unverified",
-      "town": "Unmapped area"
+      "town": "Unmapped area",
+      "musicArea": 39
     }
   ]
 }
