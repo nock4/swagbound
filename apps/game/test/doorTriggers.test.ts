@@ -3,6 +3,8 @@ import type { WorldDoor } from "@eb/schemas";
 import {
   doorAtFeet,
   feetInDoorCell,
+  isMessageDoor,
+  messageDoorDialogueReference,
   resolveAdjacentDoorIntentTrigger,
   resolveDoorWarpLanding,
   resolveDoorIntentTrigger,
@@ -38,6 +40,51 @@ describe("door trigger cells", () => {
     expect(feetInDoorCell({ x: 544, y: 288 }, door, 8)).toBe(false);
     expect(feetInDoorCell({ x: 536, y: 296 }, door, 8)).toBe(false);
     expect(doorAtFeet({ x: 540, y: 292 }, [door], 8)).toBe(door);
+  });
+});
+
+describe("message doors", () => {
+  it("classifies a near-self-warp door with a text pointer and routes it to dialogue", () => {
+    const messageDoor: WorldDoor = {
+      ...door,
+      worldPixel: { x: 1440, y: 1736 },
+      destinationWorldPixel: { x: 1440, y: 1744 },
+      direction: "down",
+      style: 0,
+      eventFlag: "0x8154",
+      textPointer: "data_52.l_0xc9a306"
+    };
+    const trigger = resolveAdjacentDoorIntentTrigger(
+      { x: 1440, y: 1744 },
+      { dx: 0, dy: -1 },
+      [messageDoor],
+      { suppressUntilClear: false },
+      8
+    );
+
+    expect(isMessageDoor(messageDoor)).toBe(true);
+    expect(messageDoorDialogueReference(messageDoor)).toBe("data_52.l_0xc9a306");
+    expect(trigger.door).toBe(messageDoor);
+    expect(routeDoorTrigger(trigger)).toEqual({ kind: "dialogue", reference: "data_52.l_0xc9a306" });
+  });
+
+  it("keeps a normal far-warp door on the warp path", () => {
+    expect(isMessageDoor(door)).toBe(false);
+    expect(messageDoorDialogueReference(door)).toBeUndefined();
+    expect(routeDoorTrigger({ door, suppressUntilClear: true })).toEqual({ kind: "warp" });
+  });
+
+  it("leaves a near-self-warp door without a text pointer on the warp path", () => {
+    const noPointerDoor: WorldDoor = {
+      ...door,
+      worldPixel: { x: 1440, y: 1736 },
+      destinationWorldPixel: { x: 1440, y: 1744 }
+    };
+    delete noPointerDoor.textPointer;
+
+    expect(isMessageDoor(noPointerDoor)).toBe(false);
+    expect(messageDoorDialogueReference(noPointerDoor)).toBeUndefined();
+    expect(routeDoorTrigger({ door: noPointerDoor, suppressUntilClear: true })).toEqual({ kind: "warp" });
   });
 });
 
@@ -433,4 +480,12 @@ function stateFrom(result: DoorTriggerResult): DoorTriggerState {
   return result.suppressedDoorCell
     ? { suppressUntilClear: result.suppressUntilClear, suppressedDoorCell: result.suppressedDoorCell }
     : { suppressUntilClear: result.suppressUntilClear };
+}
+
+function routeDoorTrigger(result: DoorTriggerResult): { kind: "none" } | { kind: "warp" } | { kind: "dialogue"; reference: string } {
+  if (!result.door) {
+    return { kind: "none" };
+  }
+  const reference = messageDoorDialogueReference(result.door);
+  return reference ? { kind: "dialogue", reference } : { kind: "warp" };
 }

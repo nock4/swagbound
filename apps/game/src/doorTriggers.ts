@@ -30,6 +30,26 @@ export type DoorWarpLanding = {
   walkable: boolean;
 };
 
+export const MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX = 24;
+
+export function isMessageDoor(
+  door: Pick<WorldDoor, "type" | "worldPixel" | "destinationWorldPixel" | "textPointer">,
+  maxSelfWarpDistancePx = MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX
+): boolean {
+  if (door.type !== "door" || !door.textPointer?.trim()) {
+    return false;
+  }
+  const dx = door.destinationWorldPixel.x - door.worldPixel.x;
+  const dy = door.destinationWorldPixel.y - door.worldPixel.y;
+  return Math.hypot(dx, dy) < maxSelfWarpDistancePx;
+}
+
+export function messageDoorDialogueReference(
+  door: Pick<WorldDoor, "type" | "worldPixel" | "destinationWorldPixel" | "textPointer">
+): string | undefined {
+  return isMessageDoor(door) ? door.textPointer?.trim() : undefined;
+}
+
 export function feetInDoorCell(
   feet: { x: number; y: number },
   door: Pick<WorldDoor, "worldPixel">,

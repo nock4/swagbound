@@ -15,6 +15,7 @@ import {
   type InstantWinRewardOptions
 } from "./battleLogic";
 import {
+  messageDoorDialogueReference,
   resolveAdjacentDoorIntentTrigger,
   resolveDoorWarpLanding,
   resolveDoorIntentTrigger,
@@ -1729,6 +1730,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!result.door) {
       return false;
     }
+    const messageDoorReference = messageDoorDialogueReference(result.door);
+    if (messageDoorReference) {
+      this.openMessageDoorDialogue(messageDoorReference);
+      return true;
+    }
     this.applyDoorWarp({
       x: result.door.destinationWorldPixel.x,
       y: result.door.destinationWorldPixel.y,
@@ -1739,6 +1745,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       triggerWorldPixel: result.door.worldPixel
     });
     return true;
+  }
+
+  private openMessageDoorDialogue(reference: string): void {
+    lockPlayer(this.playerState, this.playerFrames);
+    this.runEvents([{ kind: "dialogue", reference }]);
+    this.updatePrompt();
+    this.publish();
   }
 
   private setDoorTriggerState(result: DoorTriggerResult): void {
