@@ -1,0 +1,1425 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Swagbound Atlas Browser</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #10110f;
+        --panel: #181a17;
+        --panel-2: #20231f;
+        --line: #3b413a;
+        --line-strong: #596153;
+        --text: #f2f0e8;
+        --muted: #b6b5a9;
+        --soft: #85897c;
+        --amber: #d8aa4f;
+        --cyan: #64bfc3;
+        --green: #8cbf65;
+        --red: #d77967;
+        --shadow: rgba(0, 0, 0, 0.35);
+        --radius: 8px;
+        --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+        --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        min-width: 320px;
+        background: var(--bg);
+      }
+
+      body {
+        margin: 0;
+        color: var(--text);
+        font-family: var(--sans);
+        background:
+          linear-gradient(180deg, rgba(216, 170, 79, 0.06), transparent 300px),
+          var(--bg);
+      }
+
+      button,
+      input,
+      select {
+        font: inherit;
+      }
+
+      button {
+        color: inherit;
+      }
+
+      .shell {
+        width: min(1600px, calc(100vw - 32px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 30;
+        padding: 18px 0 14px;
+        background: rgba(16, 17, 15, 0.94);
+        border-bottom: 1px solid var(--line);
+        backdrop-filter: blur(16px);
+      }
+
+      .masthead {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: start;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(28px, 4vw, 52px);
+        line-height: 0.95;
+        letter-spacing: 0;
+      }
+
+      .subhead {
+        margin: 10px 0 0;
+        color: var(--muted);
+        max-width: 980px;
+        line-height: 1.45;
+      }
+
+      .open-note {
+        border: 1px solid var(--line);
+        background: var(--panel);
+        color: var(--muted);
+        border-radius: var(--radius);
+        padding: 10px 12px;
+        min-width: 280px;
+        box-shadow: 0 12px 30px var(--shadow);
+      }
+
+      .open-note code,
+      .stat-value,
+      .meta code,
+      .tile-detail code {
+        font-family: var(--mono);
+      }
+
+      .controls {
+        display: grid;
+        grid-template-columns: minmax(220px, 1fr) 220px auto;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .control,
+      .section-control {
+        height: 42px;
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #121411;
+        color: var(--text);
+        padding: 0 12px;
+      }
+
+      .control:focus,
+      .section-control:focus,
+      .tab:focus-visible,
+      .clear-button:focus-visible,
+      .tile-cell:focus-visible {
+        outline: 2px solid var(--cyan);
+        outline-offset: 2px;
+      }
+
+      .clear-button,
+      .tab {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        min-height: 42px;
+        padding: 0 14px;
+        cursor: pointer;
+      }
+
+      .clear-button:hover,
+      .tab:hover {
+        border-color: var(--line-strong);
+        background: var(--panel-2);
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .tab {
+        color: var(--muted);
+      }
+
+      .tab[aria-selected="true"] {
+        color: var(--text);
+        border-color: var(--amber);
+        background: rgba(216, 170, 79, 0.14);
+      }
+
+      .status-line {
+        min-height: 24px;
+        margin-top: 10px;
+        color: var(--soft);
+        font-size: 14px;
+      }
+
+      main {
+        padding: 24px 0 48px;
+      }
+
+      .pane {
+        display: block;
+      }
+
+      .pane[hidden] {
+        display: none;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 16px;
+        align-items: end;
+        margin: 0 0 16px;
+        padding-top: 8px;
+      }
+
+      .section-head h2 {
+        margin: 0;
+        font-size: 28px;
+        line-height: 1.1;
+        letter-spacing: 0;
+      }
+
+      .section-head p {
+        margin: 7px 0 0;
+        color: var(--muted);
+      }
+
+      .section-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .check-row {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        min-height: 42px;
+        padding: 0 11px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        color: var(--muted);
+        background: var(--panel);
+      }
+
+      .check-row input {
+        accent-color: var(--amber);
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .stat {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        padding: 14px;
+      }
+
+      .stat-label {
+        color: var(--muted);
+        font-size: 13px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .stat-value {
+        display: block;
+        margin-top: 8px;
+        font-size: 30px;
+        line-height: 1;
+      }
+
+      .legend {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        color: var(--muted);
+        padding: 12px 14px;
+        line-height: 1.5;
+      }
+
+      .load-error {
+        border: 1px solid rgba(215, 121, 103, 0.55);
+        border-radius: var(--radius);
+        background: rgba(215, 121, 103, 0.1);
+        color: #f1b6aa;
+        padding: 14px;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(188px, 1fr));
+        gap: 12px;
+      }
+
+      .card,
+      .tileset-card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        box-shadow: 0 12px 28px var(--shadow);
+        overflow: hidden;
+      }
+
+      .card-media {
+        display: grid;
+        place-items: center;
+        min-height: 140px;
+        background:
+          linear-gradient(45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+          linear-gradient(-45deg, rgba(255, 255, 255, 0.03) 25%, transparent 25%),
+          #121411;
+        background-size: 18px 18px;
+        border-bottom: 1px solid var(--line);
+        padding: 12px;
+      }
+
+      .card img {
+        max-width: 100%;
+        max-height: 192px;
+        object-fit: contain;
+      }
+
+      .pixel {
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+
+      img.lazy {
+        opacity: 0;
+        transition: opacity 140ms ease-out;
+      }
+
+      img.lazy.loaded {
+        opacity: 1;
+      }
+
+      img.missing {
+        opacity: 0.35;
+        outline: 1px dashed var(--red);
+      }
+
+      .card-body {
+        padding: 12px;
+      }
+
+      .card-title {
+        margin: 0;
+        font-size: 16px;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
+      .label-name {
+        color: var(--text);
+      }
+
+      .fallback-name {
+        color: var(--muted);
+      }
+
+      .tag-row,
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+
+      .tag-row {
+        margin-top: 9px;
+      }
+
+      .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 22px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        color: var(--muted);
+        background: #121411;
+        padding: 2px 8px;
+        font-size: 12px;
+        line-height: 1.2;
+      }
+
+      .tag.good {
+        border-color: rgba(140, 191, 101, 0.55);
+        color: #c8e6ad;
+      }
+
+      .tag.warn {
+        border-color: rgba(216, 170, 79, 0.55);
+        color: #ead09b;
+      }
+
+      .meta {
+        margin-top: 10px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
+      .meta span {
+        overflow-wrap: anywhere;
+      }
+
+      .note {
+        margin-top: 10px;
+        color: var(--soft);
+        font-size: 13px;
+        line-height: 1.4;
+      }
+
+      .tileset-list {
+        display: grid;
+        gap: 16px;
+      }
+
+      .tileset-head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 12px;
+        align-items: start;
+        padding: 12px;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .tileset-head h3 {
+        margin: 0;
+        font-size: 18px;
+      }
+
+      .tileset-summary {
+        margin-top: 6px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+
+      .tile-detail {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: var(--panel);
+        min-height: 52px;
+        padding: 10px 12px;
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .tile-detail strong {
+        color: var(--text);
+      }
+
+      .tile-scroll {
+        overflow: auto;
+        max-height: 70vh;
+        background: #0b0c0a;
+      }
+
+      .tile-stage {
+        position: relative;
+        width: var(--stage-width);
+        height: var(--stage-height);
+      }
+
+      .tileset-img {
+        display: block;
+        width: var(--stage-width);
+        height: var(--stage-height);
+      }
+
+      .tile-overlay {
+        position: absolute;
+        inset: 0;
+      }
+
+      .tile-cell {
+        position: absolute;
+        width: var(--tile);
+        height: var(--tile);
+        border: 1px solid transparent;
+        background: transparent;
+        padding: 0;
+        cursor: crosshair;
+      }
+
+      .tile-cell:hover,
+      .tile-cell.is-pinned {
+        z-index: 2;
+        border-color: var(--cyan);
+        background: rgba(100, 191, 195, 0.18);
+      }
+
+      .tile-cell[data-solid="true"] {
+        box-shadow: inset 0 0 0 1px rgba(216, 170, 79, 0.3);
+      }
+
+      .tile-cell[data-used="false"] {
+        opacity: 0.45;
+      }
+
+      .empty {
+        border: 1px dashed var(--line-strong);
+        border-radius: var(--radius);
+        color: var(--muted);
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.02);
+      }
+
+      .all-mode .pane {
+        margin-bottom: 34px;
+      }
+
+      @media (max-width: 760px) {
+        .shell {
+          width: min(100% - 20px, 1600px);
+        }
+
+        .masthead,
+        .controls,
+        .section-head,
+        .tileset-head {
+          grid-template-columns: 1fr;
+        }
+
+        .open-note {
+          min-width: 0;
+        }
+
+        .section-actions {
+          justify-content: stretch;
+        }
+
+        .section-control,
+        .check-row {
+          flex: 1 1 160px;
+        }
+
+        .grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="shell">
+        <div class="masthead">
+          <div>
+            <h1>Swagbound Atlas Browser</h1>
+            <p class="subhead">A searchable visual library for the tiles, characters, motifs, buildings, rooms, and interactables available to custom map authors.</p>
+          </div>
+          <div class="open-note">Run <code>pnpm dev</code>, then open <code>/atlas/</code>. JSON and images load from this folder with relative URLs.</div>
+        </div>
+
+        <div class="controls" role="search">
+          <input id="globalSearch" class="control" type="search" autocomplete="off" placeholder="Search names, ids, roles, text pointers, areas, categories">
+          <select id="categoryFilter" class="control" aria-label="Category filter">
+            <option value="all">All categories</option>
+            <option value="overview">Overview</option>
+            <option value="tiles">Tiles</option>
+            <option value="characters">Characters</option>
+            <option value="motifs">Motifs</option>
+            <option value="buildings">Buildings</option>
+            <option value="rooms">Rooms</option>
+            <option value="interactables">Interactables</option>
+          </select>
+          <button id="clearSearch" class="clear-button" type="button">Clear</button>
+        </div>
+
+        <nav class="tabs" aria-label="Atlas sections">
+          <button class="tab" type="button" data-tab="overview" aria-selected="true">Overview</button>
+          <button class="tab" type="button" data-tab="tiles" aria-selected="false">Tiles</button>
+          <button class="tab" type="button" data-tab="characters" aria-selected="false">Characters</button>
+          <button class="tab" type="button" data-tab="motifs" aria-selected="false">Motifs</button>
+          <button class="tab" type="button" data-tab="buildings" aria-selected="false">Buildings</button>
+          <button class="tab" type="button" data-tab="rooms" aria-selected="false">Rooms</button>
+          <button class="tab" type="button" data-tab="interactables" aria-selected="false">Interactables</button>
+        </nav>
+        <div id="statusLine" class="status-line">Loading atlas data...</div>
+      </div>
+    </header>
+
+    <main class="shell" id="app" aria-live="polite">
+      <section id="overview" class="pane" data-section="overview">
+        <div class="section-head">
+          <div>
+            <h2>Overview</h2>
+            <p>Headlines for the atlas vocabulary currently copied into <code>apps/game/public/atlas</code>.</p>
+          </div>
+        </div>
+        <div id="overviewStats" class="stats"></div>
+        <div class="legend">Tiles are 32px arrangements; Characters are NPC/enemy sprite groups with Swagbound skin names when available; Motifs are flora and prop composites; Buildings, Rooms, and Interactables are extracted world-authoring reference pieces.</div>
+      </section>
+
+      <section id="tiles" class="pane" data-section="tiles" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Tiles</h2>
+            <p id="tilesSubtitle">Per-tileset sheets with 32px cell inspection.</p>
+          </div>
+          <div class="section-actions">
+            <label class="check-row"><input id="tileSolidOnly" type="checkbox"> solid-only</label>
+            <label class="check-row"><input id="tileForegroundOnly" type="checkbox"> foreground-only</label>
+            <label class="check-row"><input id="tileUsedOnly" type="checkbox"> used-only</label>
+            <select id="tileSort" class="section-control" aria-label="Tile sort">
+              <option value="id">sort by tileset</option>
+              <option value="usageDesc">sort usage high</option>
+              <option value="usageAsc">sort usage low</option>
+            </select>
+          </div>
+        </div>
+        <div id="tileDetail" class="tile-detail">Hover or click a 32px cell to inspect arrangement, solidity, foreground, palette, and usage.</div>
+        <div id="tilesGrid" class="tileset-list"></div>
+      </section>
+
+      <section id="characters" class="pane" data-section="characters" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Characters</h2>
+            <p id="charactersSubtitle">Sprite group portraits with skin status, role guesses, and NPC usage.</p>
+          </div>
+          <div class="section-actions">
+            <select id="skinFilter" class="section-control" aria-label="Skin filter">
+              <option value="all">all skins</option>
+              <option value="skinned">skinned</option>
+              <option value="unskinned">un-skinned</option>
+            </select>
+            <select id="roleFilter" class="section-control" aria-label="Role filter">
+              <option value="all">all roles</option>
+            </select>
+          </div>
+        </div>
+        <div id="charactersGrid" class="grid"></div>
+      </section>
+
+      <section id="motifs" class="pane" data-section="motifs" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Motifs</h2>
+            <p id="motifsSubtitle">Flora and prop composites with instance counts, size, and advisory category.</p>
+          </div>
+          <div class="section-actions">
+            <select id="motifFilter" class="section-control" aria-label="Motif category filter">
+              <option value="all">all motif categories</option>
+            </select>
+          </div>
+        </div>
+        <div id="motifsGrid" class="grid"></div>
+      </section>
+
+      <section id="buildings" class="pane" data-section="buildings" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Buildings</h2>
+            <p id="buildingsSubtitle">Building composites with footprints, instance counts, doors, and sample areas.</p>
+          </div>
+          <div class="section-actions">
+            <select id="buildingFilter" class="section-control" aria-label="Building filter">
+              <option value="all">all buildings</option>
+              <option value="doors">has doors</option>
+              <option value="repeated">reused</option>
+              <option value="single">single-use</option>
+            </select>
+          </div>
+        </div>
+        <div id="buildingsGrid" class="grid"></div>
+      </section>
+
+      <section id="rooms" class="pane" data-section="rooms" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Rooms</h2>
+            <p id="roomsSubtitle">Interior room composites with dimensions, sector, area, and door count.</p>
+          </div>
+          <div class="section-actions">
+            <select id="roomFilter" class="section-control" aria-label="Room filter">
+              <option value="all">all rooms</option>
+              <option value="doors">has doors</option>
+              <option value="compact">compact</option>
+              <option value="large">large</option>
+            </select>
+          </div>
+        </div>
+        <div id="roomsGrid" class="grid"></div>
+      </section>
+
+      <section id="interactables" class="pane" data-section="interactables" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Interactables</h2>
+            <p id="interactablesSubtitle">Object, switch, and person anchors with text pointers, world pixels, and areas.</p>
+          </div>
+          <div class="section-actions">
+            <select id="interactableFilter" class="section-control" aria-label="Interactable filter">
+              <option value="all">all anchors</option>
+            </select>
+          </div>
+        </div>
+        <div id="interactablesGrid" class="grid"></div>
+      </section>
+    </main>
+
+    <script>
+      (() => {
+        "use strict";
+
+        const state = {
+          activeSection: "overview",
+          data: null,
+          labels: { byId: {} },
+          overrides: null,
+          pinnedTile: null,
+          rendered: new Set()
+        };
+
+        const sectionIds = ["overview", "tiles", "characters", "motifs", "buildings", "rooms", "interactables"];
+        const catalogSections = ["tiles", "characters", "motifs", "buildings", "rooms", "interactables"];
+        const $ = (id) => document.getElementById(id);
+        const els = {
+          app: $("app"),
+          statusLine: $("statusLine"),
+          search: $("globalSearch"),
+          category: $("categoryFilter"),
+          clear: $("clearSearch"),
+          overviewStats: $("overviewStats"),
+          tileSolidOnly: $("tileSolidOnly"),
+          tileForegroundOnly: $("tileForegroundOnly"),
+          tileUsedOnly: $("tileUsedOnly"),
+          tileSort: $("tileSort"),
+          tileDetail: $("tileDetail"),
+          tilesGrid: $("tilesGrid"),
+          tilesSubtitle: $("tilesSubtitle"),
+          skinFilter: $("skinFilter"),
+          roleFilter: $("roleFilter"),
+          charactersGrid: $("charactersGrid"),
+          charactersSubtitle: $("charactersSubtitle"),
+          motifFilter: $("motifFilter"),
+          motifsGrid: $("motifsGrid"),
+          motifsSubtitle: $("motifsSubtitle"),
+          buildingFilter: $("buildingFilter"),
+          buildingsGrid: $("buildingsGrid"),
+          buildingsSubtitle: $("buildingsSubtitle"),
+          roomFilter: $("roomFilter"),
+          roomsGrid: $("roomsGrid"),
+          roomsSubtitle: $("roomsSubtitle"),
+          interactableFilter: $("interactableFilter"),
+          interactablesGrid: $("interactablesGrid"),
+          interactablesSubtitle: $("interactablesSubtitle")
+        };
+
+        let lazyObserver = null;
+        if ("IntersectionObserver" in window) {
+          lazyObserver = new IntersectionObserver((entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              const img = entry.target;
+              lazyObserver.unobserve(img);
+              loadImage(img);
+            }
+          }, { rootMargin: "320px 0px" });
+        }
+
+        function escapeHtml(value) {
+          return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            "\"": "&quot;",
+            "'": "&#39;"
+          }[char]));
+        }
+
+        function normalize(value) {
+          return String(value ?? "").toLowerCase().trim();
+        }
+
+        function compactId(value) {
+          return String(value ?? "").replace(/^0+(\d)/, "$1");
+        }
+
+        function number(value) {
+          return Number(value ?? 0).toLocaleString("en-US");
+        }
+
+        function basename(filePath) {
+          const clean = String(filePath ?? "").split("?")[0].split("#")[0];
+          const file = clean.slice(clean.lastIndexOf("/") + 1);
+          return file.replace(/\.[^.]+$/, "");
+        }
+
+        function titleizeSlug(value) {
+          return String(value ?? "")
+            .replace(/\.[^.]+$/, "")
+            .replace(/[_-]+/g, " ")
+            .replace(/\s+/g, " ")
+            .trim();
+        }
+
+        function assetUrl(filePath) {
+          const clean = String(filePath ?? "").replace(/^atlas\//, "").replace(/^\.\//, "");
+          return clean ? `./${clean}` : "";
+        }
+
+        function imageHtml(src, alt, className = "") {
+          return `<img class="pixel lazy ${className}" data-src="${escapeHtml(assetUrl(src))}" alt="${escapeHtml(alt)}" loading="lazy" decoding="async">`;
+        }
+
+        function loadImage(img) {
+          if (!img.dataset.src || img.src) return;
+          img.addEventListener("load", () => img.classList.add("loaded"), { once: true });
+          img.addEventListener("error", () => {
+            img.classList.add("loaded", "missing");
+            img.alt = `${img.alt} (missing image)`;
+          }, { once: true });
+          img.src = img.dataset.src;
+        }
+
+        function registerLazyImages(root = document) {
+          const images = root.querySelectorAll("img[data-src]:not([data-lazy-ready])");
+          for (const img of images) {
+            img.dataset.lazyReady = "true";
+            if (lazyObserver) {
+              lazyObserver.observe(img);
+            } else {
+              loadImage(img);
+            }
+          }
+        }
+
+        async function fetchJson(path, optional = false) {
+          const response = await fetch(path, { cache: "no-store" });
+          if (!response.ok) {
+            if (optional) return null;
+            throw new Error(`${path} returned ${response.status}`);
+          }
+          const text = await response.text();
+          try {
+            return JSON.parse(text);
+          } catch (err) {
+            // A missing optional file can come back as the dev-server SPA fallback
+            // (HTTP 200 + HTML) instead of a 404 — treat that as "absent".
+            if (optional) return null;
+            throw err;
+          }
+        }
+
+        function labelFor(kind, id, alternatives = []) {
+          const byId = state.labels?.byId ?? {};
+          const ids = [id, compactId(id)];
+          const keys = [];
+          for (const candidate of ids) {
+            keys.push(`${kind}:${candidate}`);
+          }
+          for (const alt of alternatives) {
+            keys.push(alt);
+          }
+          for (const key of keys) {
+            if (byId[key]) return byId[key];
+          }
+          return null;
+        }
+
+        function labelSearch(label) {
+          if (!label) return "";
+          return [
+            label.name,
+            label.category,
+            ...(Array.isArray(label.tags) ? label.tags : []),
+            label.note
+          ].filter(Boolean).join(" ");
+        }
+
+        function labelMarkup(label) {
+          if (!label) return "";
+          const tags = Array.isArray(label.tags) ? label.tags : [];
+          return [
+            label.category ? `<span class="tag good">${escapeHtml(label.category)}</span>` : "",
+            ...tags.map((tag) => `<span class="tag">${escapeHtml(tag)}</span>`)
+          ].join("");
+        }
+
+        function labelNote(label) {
+          return label?.note ? `<div class="note">${escapeHtml(label.note)}</div>` : "";
+        }
+
+        function matchesQuery(haystack) {
+          const query = normalize(els.search.value);
+          return !query || normalize(haystack).includes(query);
+        }
+
+        function roleClass(value) {
+          return value === "enemy" ? "warn" : "good";
+        }
+
+        function spriteSkinInfo(group) {
+          const overrides = state.overrides ?? {};
+          const byGroup = overrides.bySpriteGroup ?? {};
+          const byNpc = overrides.byNpcId ?? {};
+          const byEnemy = overrides.byEnemyId ?? {};
+          const groupOverride = byGroup[String(group.groupId)];
+          let source = groupOverride;
+          if (!source && Array.isArray(group.sampleNpcIds)) {
+            source = group.sampleNpcIds.map((id) => byNpc[String(id)]).find(Boolean);
+          }
+          if (!source && Array.isArray(group.sampleEnemyIds)) {
+            source = group.sampleEnemyIds.map((id) => byEnemy[String(id)]).find(Boolean);
+          }
+          const slug = source?.image ? basename(source.image) : "";
+          return {
+            slug,
+            name: slug ? titleizeSlug(slug) : "",
+            isSkinned: Boolean(group.overridden)
+          };
+        }
+
+        function derivedInteractableId(item, index) {
+          const fromImage = basename(item.image);
+          return fromImage || `interactable-${String(index + 1).padStart(4, "0")}`;
+        }
+
+        function populateFilters() {
+          const roles = [...new Set(state.data.sprites.groups.map((group) => group.roleGuess).filter(Boolean))].sort();
+          els.roleFilter.innerHTML = `<option value="all">all roles</option>${roles.map((role) => `<option value="${escapeHtml(role)}">${escapeHtml(role)}</option>`).join("")}`;
+
+          const motifCategories = [...new Set(state.data.motifs.motifs.map((item) => item.categoryGuessAdvisory).filter(Boolean))].sort();
+          els.motifFilter.innerHTML = `<option value="all">all motif categories</option>${motifCategories.map((category) => `<option value="${escapeHtml(category)}">${escapeHtml(category)}</option>`).join("")}`;
+
+          const anchors = [...new Set(state.data.motifs.interactables.map((item) => item.anchorType).filter(Boolean))].sort();
+          els.interactableFilter.innerHTML = `<option value="all">all anchors</option>${anchors.map((anchor) => `<option value="${escapeHtml(anchor)}">${escapeHtml(anchor)}</option>`).join("")}`;
+        }
+
+        function renderOverview() {
+          const { tiles, sprites, motifs } = state.data;
+          const stats = [
+            ["Tiles", number(tiles.counts?.totalNonBlankTiles ?? 0), `${number(tiles.counts?.totalUsedTiles ?? 0)} used`],
+            ["Tilesets", number(tiles.counts?.tilesets ?? tiles.tilesets.length), "32px cells"],
+            ["Sprites", number(sprites.counts?.groups ?? sprites.groups.length), `${number(sprites.counts?.overriddenGroups ?? 0)} skinned`],
+            ["Un-skinned", number(sprites.counts?.unskinnedGroups ?? 0), "raw EB groups"],
+            ["Motifs", number(motifs.motifs.length), `${number(motifs.counts?.motifInstances ?? 0)} instances`],
+            ["Interactables", number(motifs.interactables.length), "text/object anchors"],
+            ["Rooms", number(motifs.rooms.length), "interior composites"],
+            ["Buildings", number(motifs.buildings.length), "world composites"]
+          ];
+          els.overviewStats.innerHTML = stats.map(([label, value, detail]) => `
+            <article class="stat">
+              <span class="stat-label">${escapeHtml(label)}</span>
+              <span class="stat-value">${escapeHtml(value)}</span>
+              <span class="meta">${escapeHtml(detail)}</span>
+            </article>
+          `).join("");
+          state.rendered.add("overview");
+        }
+
+        function tileSetUsage(tileset) {
+          return tileset.tiles.reduce((sum, tile) => sum + Number(tile.usageCount ?? 0), 0);
+        }
+
+        function tileMatchesFilters(tile) {
+          if (els.tileSolidOnly.checked && !(Number(tile.solidCells ?? 0) > 0)) return false;
+          if (els.tileForegroundOnly.checked && !tile.isForeground) return false;
+          if (els.tileUsedOnly.checked && !(Number(tile.usageCount ?? 0) > 0)) return false;
+          return true;
+        }
+
+        function tileHaystack(tileset, tile, label) {
+          return [
+            `tileset ${tileset.tileset}`,
+            `tile ${tile.arrangement}`,
+            `arrangement ${tile.arrangement}`,
+            `palette ${tile.paletteId}`,
+            tile.isForeground ? "foreground" : "background",
+            Number(tile.solidCells ?? 0) > 0 ? "solid" : "walk",
+            Number(tile.usageCount ?? 0) > 0 ? "used" : "unused",
+            labelSearch(label)
+          ].join(" ");
+        }
+
+        function renderTiles() {
+          const query = normalize(els.search.value);
+          const tileSize = state.data.tiles.tileSize || 32;
+          const sort = els.tileSort.value;
+          const tilesets = [...state.data.tiles.tilesets].sort((a, b) => {
+            if (sort === "usageDesc") return tileSetUsage(b) - tileSetUsage(a);
+            if (sort === "usageAsc") return tileSetUsage(a) - tileSetUsage(b);
+            return Number(a.tileset) - Number(b.tileset);
+          });
+
+          const cards = [];
+          let visibleTiles = 0;
+
+          for (const tileset of tilesets) {
+            const rows = Math.ceil(tileset.tileCount / tileset.gridCols);
+            const usage = tileSetUsage(tileset);
+            const setLabel = labelFor("tileset", tileset.tileset);
+            const setHaystack = [`tileset ${tileset.tileset}`, tileset.atlasImage, labelSearch(setLabel)].join(" ");
+            const setMatches = matchesQuery(setHaystack);
+            const cells = [];
+
+            for (const tile of tileset.tiles) {
+              const tileLabel = labelFor("tile", `${tileset.tileset}:${tile.arrangement}`, [`tile:${tile.arrangement}`]);
+              if (!tileMatchesFilters(tile)) continue;
+              if (query && !setMatches && !matchesQuery(tileHaystack(tileset, tile, tileLabel))) continue;
+              visibleTiles += 1;
+              const solid = Number(tile.solidCells ?? 0) > 0;
+              const used = Number(tile.usageCount ?? 0) > 0;
+              cells.push(`<button
+                type="button"
+                class="tile-cell"
+                style="left:${Number(tile.gx) * tileSize}px; top:${Number(tile.gy) * tileSize}px"
+                data-tileset="${escapeHtml(tileset.tileset)}"
+                data-arrangement="${escapeHtml(tile.arrangement)}"
+                data-solid-cells="${escapeHtml(tile.solidCells)}"
+                data-solid="${solid ? "true" : "false"}"
+                data-foreground="${tile.isForeground ? "true" : "false"}"
+                data-palette="${escapeHtml(tile.paletteId)}"
+                data-used="${used ? "true" : "false"}"
+                data-usage="${escapeHtml(tile.usageCount)}"
+                data-label="${escapeHtml(tileLabel?.name ?? "")}"
+                aria-label="tileset ${escapeHtml(tileset.tileset)} arrangement ${escapeHtml(tile.arrangement)}"
+                title="tileset ${escapeHtml(tileset.tileset)} arrangement ${escapeHtml(tile.arrangement)}"></button>`);
+            }
+
+            if (query && !setMatches && cells.length === 0) continue;
+            if (!query && cells.length === 0) continue;
+
+            const labelName = setLabel?.name ? `<span class="label-name">${escapeHtml(setLabel.name)}</span>` : `<span class="fallback-name">Tileset ${escapeHtml(tileset.tileset)}</span>`;
+            cards.push(`
+              <article class="tileset-card" data-search="${escapeHtml(setHaystack)}">
+                <div class="tileset-head">
+                  <div>
+                    <h3>${labelName}</h3>
+                    <div class="tileset-summary">tileset <code>${escapeHtml(tileset.tileset)}</code> · ${number(cells.length)} visible of ${number(tileset.tileCount)} tiles · ${number(usage)} total uses</div>
+                    <div class="tag-row">${labelMarkup(setLabel)}</div>
+                    ${labelNote(setLabel)}
+                  </div>
+                  <div class="meta"><span>${number(rows)} rows</span><span>${number(tileset.gridCols)} cols</span></div>
+                </div>
+                <div class="tile-scroll">
+                  <div class="tile-stage" style="--stage-width:${Number(tileset.gridCols) * tileSize}px; --stage-height:${Number(rows) * tileSize}px; --tile:${Number(tileSize)}px">
+                    ${imageHtml(tileset.atlasImage, `tileset ${tileset.tileset}`, "tileset-img")}
+                    <div class="tile-overlay">${cells.join("")}</div>
+                  </div>
+                </div>
+              </article>
+            `);
+          }
+
+          els.tilesSubtitle.textContent = `${number(visibleTiles)} visible tile cells across ${number(cards.length)} tilesets.`;
+          els.tilesGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No tiles match the current filters.</div>`;
+          registerLazyImages(els.tilesGrid);
+          state.rendered.add("tiles");
+        }
+
+        function updateTileDetail(cell, pin = false) {
+          if (!cell) return;
+          if (pin) {
+            document.querySelectorAll(".tile-cell.is-pinned").forEach((old) => old.classList.remove("is-pinned"));
+            cell.classList.add("is-pinned");
+            state.pinnedTile = cell;
+          }
+          const label = cell.dataset.label ? ` · ${escapeHtml(cell.dataset.label)}` : "";
+          els.tileDetail.innerHTML = `<strong>Tileset ${escapeHtml(cell.dataset.tileset)} / arrangement ${escapeHtml(cell.dataset.arrangement)}${label}</strong><br>
+            ${cell.dataset.solid === "true" ? "solid" : "walk"} (${escapeHtml(cell.dataset.solidCells)} solid cells) · ${cell.dataset.foreground === "true" ? "foreground" : "background"} · palette <code>${escapeHtml(cell.dataset.palette)}</code> · usage <code>${escapeHtml(cell.dataset.usage)}</code>`;
+        }
+
+        function renderCharacters() {
+          const skinFilter = els.skinFilter.value;
+          const roleFilter = els.roleFilter.value;
+          const cards = [];
+
+          for (const group of state.data.sprites.groups) {
+            const skin = spriteSkinInfo(group);
+            if (skinFilter === "skinned" && !skin.isSkinned) continue;
+            if (skinFilter === "unskinned" && skin.isSkinned) continue;
+            if (roleFilter !== "all" && group.roleGuess !== roleFilter) continue;
+
+            const label = labelFor("character", group.groupId, [
+              `sprite:${group.groupId}`,
+              `spriteGroup:${group.groupId}`,
+              `group:${group.groupId}`
+            ]);
+            const fallbackName = skin.isSkinned ? (skin.name || "skinned override") : "un-skinned (raw EB)";
+            const title = label?.name || fallbackName;
+            const haystack = [
+              `group ${group.groupId}`,
+              skin.slug,
+              fallbackName,
+              group.roleGuess,
+              group.overrideKind,
+              group.usedByNpcCount,
+              ...(group.sampleNpcIds ?? []),
+              ...(group.sampleEnemyIds ?? []),
+              labelSearch(label)
+            ].join(" ");
+            if (!matchesQuery(haystack)) continue;
+
+            cards.push(`
+              <article class="card" data-search="${escapeHtml(haystack)}">
+                <div class="card-media">${imageHtml(group.portraitImage, `sprite group ${group.groupId}`)}</div>
+                <div class="card-body">
+                  <h3 class="card-title"><span class="${label?.name ? "label-name" : "fallback-name"}">${escapeHtml(title)}</span></h3>
+                  <div class="tag-row">
+                    <span class="tag">group ${escapeHtml(group.groupId)}</span>
+                    <span class="tag ${skin.isSkinned ? "good" : ""}">${skin.isSkinned ? "skinned" : "un-skinned"}</span>
+                    <span class="tag ${roleClass(group.roleGuess)}">${escapeHtml(group.roleGuess)}</span>
+                    <span class="tag">${escapeHtml(group.overrideKind)}</span>
+                    ${labelMarkup(label)}
+                  </div>
+                  <div class="meta">
+                    <span>${number(group.usedByNpcCount)} NPC uses</span>
+                    <span>${number(group.frames)} frames</span>
+                    <span>${escapeHtml(group.frameWidth)}x${escapeHtml(group.frameHeight)}</span>
+                    ${(group.sampleNpcIds ?? []).length ? `<span>NPC ${escapeHtml(group.sampleNpcIds.slice(0, 4).join(", "))}</span>` : ""}
+                    ${(group.sampleEnemyIds ?? []).length ? `<span>Enemy ${escapeHtml(group.sampleEnemyIds.slice(0, 4).join(", "))}</span>` : ""}
+                  </div>
+                  ${labelNote(label)}
+                </div>
+              </article>
+            `);
+          }
+
+          els.charactersSubtitle.textContent = `${number(cards.length)} visible sprite groups.`;
+          els.charactersGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No characters match the current filters.</div>`;
+          registerLazyImages(els.charactersGrid);
+          state.rendered.add("characters");
+        }
+
+        function cardMarkup({ image, alt, title, fallback, tags, meta, note, haystack }) {
+          return `
+            <article class="card" data-search="${escapeHtml(haystack)}">
+              <div class="card-media">${imageHtml(image, alt)}</div>
+              <div class="card-body">
+                <h3 class="card-title"><span class="${title ? "label-name" : "fallback-name"}">${escapeHtml(title || fallback)}</span></h3>
+                <div class="tag-row">${tags.filter(Boolean).join("")}</div>
+                <div class="meta">${meta.filter(Boolean).map((item) => `<span>${item}</span>`).join("")}</div>
+                ${note || ""}
+              </div>
+            </article>
+          `;
+        }
+
+        function renderMotifs() {
+          const filter = els.motifFilter.value;
+          const cards = [];
+          for (const item of state.data.motifs.motifs) {
+            if (filter !== "all" && item.categoryGuessAdvisory !== filter) continue;
+            const label = labelFor("motif", item.motifId);
+            const fallback = item.motifId;
+            const haystack = [
+              item.motifId,
+              item.categoryGuessAdvisory,
+              `${item.widthTiles}x${item.heightTiles}`,
+              item.instanceCount,
+              ...(item.paletteVariants ?? []).map((variant) => `tileset ${variant.tileset} palette ${variant.palette}`),
+              labelSearch(label)
+            ].join(" ");
+            if (!matchesQuery(haystack)) continue;
+            cards.push(cardMarkup({
+              image: item.image,
+              alt: item.motifId,
+              title: label?.name,
+              fallback,
+              tags: [
+                `<span class="tag">motif</span>`,
+                `<span class="tag good">${escapeHtml(item.categoryGuessAdvisory)}</span>`,
+                ...labelMarkup(label).split(/(?=<span)/).filter(Boolean)
+              ],
+              meta: [
+                `${number(item.instanceCount)} instances`,
+                `${escapeHtml(item.widthTiles)}x${escapeHtml(item.heightTiles)} tiles`,
+                `solid ${escapeHtml(item.solidRatio)}`,
+                `foreground ${escapeHtml(item.foregroundRatio)}`
+              ],
+              note: labelNote(label),
+              haystack
+            }));
+          }
+          els.motifsSubtitle.textContent = `${number(cards.length)} visible flora/prop motifs.`;
+          els.motifsGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No motifs match the current filters.</div>`;
+          registerLazyImages(els.motifsGrid);
+          state.rendered.add("motifs");
+        }
+
+        function renderBuildings() {
+          const filter = els.buildingFilter.value;
+          const cards = [];
+          for (const item of state.data.motifs.buildings) {
+            const doorCount = Number(item.doorCount ?? 0);
+            const instanceCount = Number(item.instanceCount ?? 0);
+            if (filter === "doors" && doorCount <= 0) continue;
+            if (filter === "repeated" && instanceCount <= 1) continue;
+            if (filter === "single" && instanceCount !== 1) continue;
+            const label = labelFor("building", item.buildingId);
+            const sampleArea = item.sampleLocations?.[0]?.area;
+            const haystack = [
+              item.buildingId,
+              item.footprintWxH,
+              instanceCount,
+              doorCount,
+              sampleArea,
+              labelSearch(label)
+            ].join(" ");
+            if (!matchesQuery(haystack)) continue;
+            cards.push(cardMarkup({
+              image: item.image,
+              alt: item.buildingId,
+              title: label?.name,
+              fallback: item.buildingId,
+              tags: [
+                `<span class="tag">building</span>`,
+                doorCount > 0 ? `<span class="tag good">${number(doorCount)} doors</span>` : `<span class="tag">no doors</span>`,
+                ...labelMarkup(label).split(/(?=<span)/).filter(Boolean)
+              ],
+              meta: [
+                `${number(instanceCount)} instances`,
+                `${escapeHtml(item.footprintWxH)} footprint`,
+                sampleArea ? `area <code>${escapeHtml(sampleArea)}</code>` : ""
+              ],
+              note: labelNote(label),
+              haystack
+            }));
+          }
+          els.buildingsSubtitle.textContent = `${number(cards.length)} visible building composites.`;
+          els.buildingsGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No buildings match the current filters.</div>`;
+          registerLazyImages(els.buildingsGrid);
+          state.rendered.add("buildings");
+        }
+
+        function renderRooms() {
+          const filter = els.roomFilter.value;
+          const cards = [];
+          for (const item of state.data.motifs.rooms) {
+            const doorCount = Number(item.doorCount ?? 0);
+            const areaTiles = Number(item.widthTiles ?? 0) * Number(item.heightTiles ?? 0);
+            if (filter === "doors" && doorCount <= 0) continue;
+            if (filter === "compact" && areaTiles > 96) continue;
+            if (filter === "large" && areaTiles <= 96) continue;
+            const label = labelFor("room", item.roomId);
+            const haystack = [
+              item.roomId,
+              item.sector,
+              item.area,
+              `${item.widthTiles}x${item.heightTiles}`,
+              doorCount,
+              labelSearch(label)
+            ].join(" ");
+            if (!matchesQuery(haystack)) continue;
+            cards.push(cardMarkup({
+              image: item.image,
+              alt: item.roomId,
+              title: label?.name,
+              fallback: item.roomId,
+              tags: [
+                `<span class="tag">room</span>`,
+                doorCount > 0 ? `<span class="tag good">${number(doorCount)} doors</span>` : `<span class="tag">no doors</span>`,
+                ...labelMarkup(label).split(/(?=<span)/).filter(Boolean)
+              ],
+              meta: [
+                `${escapeHtml(item.widthTiles)}x${escapeHtml(item.heightTiles)} tiles`,
+                `sector <code>${escapeHtml(item.sector)}</code>`,
+                `area <code>${escapeHtml(item.area)}</code>`
+              ],
+              note: labelNote(label),
+              haystack
+            }));
+          }
+          els.roomsSubtitle.textContent = `${number(cards.length)} visible room composites.`;
+          els.roomsGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No rooms match the current filters.</div>`;
+          registerLazyImages(els.roomsGrid);
+          state.rendered.add("rooms");
+        }
+
+        function renderInteractables() {
+          const filter = els.interactableFilter.value;
+          const cards = [];
+          state.data.motifs.interactables.forEach((item, index) => {
+            if (filter !== "all" && item.anchorType !== filter) return;
+            const id = derivedInteractableId(item, index);
+            const label = labelFor("interactable", id);
+            const world = item.worldPixel ? `${item.worldPixel.x},${item.worldPixel.y}` : "";
+            const haystack = [
+              id,
+              item.anchorType,
+              item.area,
+              item.textPointer,
+              item.textPreview,
+              world,
+              labelSearch(label)
+            ].join(" ");
+            if (!matchesQuery(haystack)) return;
+            cards.push(cardMarkup({
+              image: item.image,
+              alt: id,
+              title: label?.name,
+              fallback: id,
+              tags: [
+                `<span class="tag">interactable</span>`,
+                `<span class="tag good">${escapeHtml(item.anchorType)}</span>`,
+                ...labelMarkup(label).split(/(?=<span)/).filter(Boolean)
+              ],
+              meta: [
+                item.textPointer ? `text <code>${escapeHtml(item.textPointer)}</code>` : "no text pointer",
+                item.area ? `area <code>${escapeHtml(item.area)}</code>` : "",
+                world ? `world <code>${escapeHtml(world)}</code>` : ""
+              ],
+              note: label?.note ? labelNote(label) : (item.textPreview ? `<div class="note">${escapeHtml(item.textPreview)}</div>` : ""),
+              haystack
+            }));
+          });
+          els.interactablesSubtitle.textContent = `${number(cards.length)} visible interactables.`;
+          els.interactablesGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No interactables match the current filters.</div>`;
+          registerLazyImages(els.interactablesGrid);
+          state.rendered.add("interactables");
+        }
+
+        function renderSection(section) {
+          if (section === "overview") renderOverview();
+          if (section === "tiles") renderTiles();
+          if (section === "characters") renderCharacters();
+          if (section === "motifs") renderMotifs();
+          if (section === "buildings") renderBuildings();
+          if (section === "rooms") renderRooms();
+          if (section === "interactables") renderInteractables();
+        }
+
+        function renderVisibleSections() {
+          if (!state.data) return;
+          const targets = state.activeSection === "all" ? sectionIds : [state.activeSection];
+          for (const section of targets) {
+            renderSection(section);
+          }
+          registerLazyImages();
+        }
+
+        function setSection(section) {
+          state.activeSection = section;
+          const allMode = section === "all";
+          els.app.classList.toggle("all-mode", allMode);
+          for (const id of sectionIds) {
+            const pane = $(id);
+            pane.hidden = !(allMode || id === section);
+          }
+          document.querySelectorAll(".tab").forEach((tab) => {
+            tab.setAttribute("aria-selected", tab.dataset.tab === section ? "true" : "false");
+          });
+          els.category.value = allMode ? "all" : section;
+          renderVisibleSections();
+        }
+
+        function updateStatus() {
+          const labelsLoaded = Object.keys(state.labels?.byId ?? {}).length;
+          const labelText = labelsLoaded ? `${number(labelsLoaded)} labels loaded` : "labels.json not present";
+          const overrideText = state.overrides ? "sprite override names loaded" : "sprite override names unavailable";
+          els.statusLine.textContent = `${labelText}; ${overrideText}.`;
+        }
+
+        function debounce(fn, delay = 140) {
+          let timeout = 0;
+          return (...args) => {
+            window.clearTimeout(timeout);
+            timeout = window.setTimeout(() => fn(...args), delay);
+          };
+        }
+
+        function bindEvents() {
+          document.querySelectorAll(".tab").forEach((tab) => {
+            tab.addEventListener("click", () => setSection(tab.dataset.tab));
+          });
+
+          els.category.addEventListener("change", () => setSection(els.category.value));
+          els.clear.addEventListener("click", () => {
+            els.search.value = "";
+            renderVisibleSections();
+            els.search.focus();
+          });
+
+          els.search.addEventListener("input", debounce(() => {
+            if (normalize(els.search.value) && state.activeSection === "overview") {
+              setSection("all");
+            } else {
+              renderVisibleSections();
+            }
+          }));
+
+          [els.tileSolidOnly, els.tileForegroundOnly, els.tileUsedOnly, els.tileSort].forEach((control) => {
+            control.addEventListener("change", () => renderTiles());
+          });
+
+          [els.skinFilter, els.roleFilter].forEach((control) => {
+            control.addEventListener("change", () => renderCharacters());
+          });
+
+          els.motifFilter.addEventListener("change", () => renderMotifs());
+          els.buildingFilter.addEventListener("change", () => renderBuildings());
+          els.roomFilter.addEventListener("change", () => renderRooms());
+          els.interactableFilter.addEventListener("change", () => renderInteractables());
+
+          els.tilesGrid.addEventListener("mouseover", (event) => {
+            const cell = event.target.closest(".tile-cell");
+            if (cell) updateTileDetail(cell, false);
+          });
+          els.tilesGrid.addEventListener("focusin", (event) => {
+            const cell = event.target.closest(".tile-cell");
+            if (cell) updateTileDetail(cell, false);
+          });
+          els.tilesGrid.addEventListener("click", (event) => {
+            const cell = event.target.closest(".tile-cell");
+            if (cell) updateTileDetail(cell, true);
+          });
+        }
+
+        async function init() {
+          bindEvents();
+          try {
+            const [tiles, sprites, motifs, labels, overrides] = await Promise.all([
+              fetchJson("./tiles.json"),
+              fetchJson("./sprites.json"),
+              fetchJson("./motifs.json"),
+              fetchJson("./labels.json", true),
+              fetchJson("./sprite-overrides.json", true)
+            ]);
+            state.data = { tiles, sprites, motifs };
+            state.labels = labels ?? { byId: {} };
+            state.overrides = overrides;
+            populateFilters();
+            renderOverview();
+            updateStatus();
+          } catch (error) {
+            els.statusLine.textContent = "Atlas data failed to load.";
+            els.app.innerHTML = `<div class="load-error"><strong>Could not load atlas data.</strong><br>${escapeHtml(error.message)}<br>Run <code>pnpm atlas:browser</code>, then <code>pnpm dev</code>, and open <code>/atlas/</code>.</div>`;
+          }
+        }
+
+        init();
+      })();
+    </script>
+  </body>
+</html>
