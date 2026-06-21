@@ -17,7 +17,7 @@ Source of truth: `content/atlas/*.json`. Images: `apps/game/public/atlas/*` (reg
 |---|-------|--------|----------|
 | 0 | Foundation (schema + harness + tracker) | ✅ | content/atlas/, scripts/atlas/, this file |
 | 1 | Tile vocabulary (atlas sheets + tiles.json) | ✅ | atlas/tiles/*.png + tiles.json |
-| 2 | Character catalog (sprites.json) | ⬜ | content/atlas/sprites.json |
+| 2 | Character catalog (sprites.json) | ✅ | content/atlas/sprites.json |
 | 3 | Motif detection (recurring objects) | ⬜ | content/atlas/motifs.json |
 | 4 | Vision labeling & taxonomy | ⬜ | enriched catalog |
 | 5 | Atlas browser (HTML) | ⬜ | docs/atlas-browser.html |
@@ -28,4 +28,5 @@ Scope: complete atomic coverage (tiles+sprites global); motifs + labeling priori
 
 ## Log
 - 2026-06-20: Plan set, data model grounded, foundation started.
-- 2026-06-20: **Phase 1 done** — `pnpm atlas:tiles` renders 31 tileset sheets + `tiles.json`. **21,707 non-blank tiles, 13,453 used.** Top: ts0/arr0 grass×2060. Per-tile: solidCells, isForeground, paletteId, usageCount. Sheets render correctly (verified tileset-00: forest/grass/pond/cliff/sanctuary terrains). Gates green (tsc, build errors:0, vitest 742).
+- 2026-06-20: **Phase 1 done** — `pnpm atlas:tiles` renders 31 tileset sheets + `tiles.json`. **21,707 non-blank tiles, 13,453 used.** Top: ts0/arr0 grass×2060. Per-tile: solidCells, isForeground, paletteId, usageCount. Sheets render correctly (verified tileset-00: forest/grass/pond/cliff/sanctuary terrains). Gates green (tsc, build errors:0, vitest 742). PRs #96/#97.
+- 2026-06-20: **Phase 2 done** — `pnpm atlas:sprites` + `sprites.json`. **342 sprite groups (342 used), 204 skinned (Swagbound override), 138 un-skinned.** Per group: portrait, sheet, frames/animations, usedByNpcCount, sampleNpcIds/locations, overrideKind, roleGuess. Incl. 78 source-backed groups beyond the 264 public sheets. Top: group 195 used by 123 NPCs. Gates green (vitest 743).
