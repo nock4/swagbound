@@ -83,7 +83,7 @@ import {
   type NormalizedActorMoveSelector
 } from "./eventHost";
 import { GameFlags } from "./gameFlags";
-import { behaviorForNpc } from "./npcBehaviors";
+import { behaviorForNpc, interactionEventsHaveServiceEffect } from "./npcBehaviors";
 import {
   createNpcState,
   facingToward,
@@ -368,6 +368,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private playerFrames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES;
   private npcPlacementsByChunk = new Map<string, NpcPlacement[]>();
   private npcRuntimes = new Map<string, NpcRuntime>();
+  private serviceInteractionCache = new Map<string, boolean>();
   private activeNpcDialogue?: ActiveNpcDialogue;
   private chunkByKey = new Map<string, WorldChunk>();
   private chunkObjects = new Map<string, StreamedChunk>();
@@ -765,6 +766,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.chunkByKey.clear();
     this.npcPlacementsByChunk.clear();
     this.npcRuntimes.clear();
+    this.serviceInteractionCache.clear();
     this.clearOverworldEnemies();
     this.chunkObjects.clear();
     this.loadingTextureKeys.clear();
@@ -1303,10 +1305,32 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return {
       key: placement.key,
       data: npc,
-      state: createNpcState(npc.worldPixel.x, npc.worldPixel.y, facing, behaviorForNpc(npc.npcId, npc.movement), frames),
+      state: createNpcState(npc.worldPixel.x, npc.worldPixel.y, facing, this.behaviorForRuntimeNpc(npc), frames),
       frames,
       sprite: this.spawnNpcActor(npc.npcId, npc.worldPixel.x, npc.worldPixel.y, npc.spriteGroup, npc.direction)
     };
+  }
+
+  private behaviorForRuntimeNpc(npc: RuntimeNpcData) {
+    return behaviorForNpc(npc.npcId, npc.movement, {
+      hasServiceInteraction: this.npcHasServiceInteraction(npc),
+      isInteriorHome: isInteriorMusicSector(this.world_.sectors, npc.worldPixel)
+    });
+  }
+
+  private npcHasServiceInteraction(npc: RuntimeNpcData): boolean {
+    if (!npc.interactable) {
+      return false;
+    }
+    const events = this.interactionEventsForNpc(npc);
+    const cacheKey = `${this.gameFlags.listNums().join(",")}:${JSON.stringify(events)}`;
+    const cached = this.serviceInteractionCache.get(cacheKey);
+    if (cached !== undefined) {
+      return cached;
+    }
+    const hasService = interactionEventsHaveServiceEffect(events, this.data_.scripts, this.gameFlags);
+    this.serviceInteractionCache.set(cacheKey, hasService);
+    return hasService;
   }
 
   private stepNpcs(deltaMs: number): void {
