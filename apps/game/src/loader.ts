@@ -16,6 +16,7 @@ import {
   ItemOverridesSchema,
   ManifestSchema,
   MusicManifestSchema,
+  NpcOverridesSchema,
   NpcReferenceCollectionSchema,
   OpeningCutsceneSchema,
   PsiCollectionSchema,
@@ -51,6 +52,7 @@ import {
   type ItemOverrides,
   type Manifest,
   type MusicManifest,
+  type NpcOverrides,
   type NumericFlagState,
   type NpcReferenceCollection,
   type OpeningCutscene,
@@ -81,6 +83,7 @@ const ADDED_NPCS_FILE = "added-npcs.json";
 const CUSTOM_DIALOGUE_FILE = "custom-dialogue.json";
 const SWAGBOUND_DIALOGUE_LIBRARY_FILE = "swagbound-dialogue-library.json";
 const SPRITE_OVERRIDES_FILE = "sprite-overrides.json";
+const NPC_OVERRIDES_FILE = "npc-overrides.json";
 const BACKGROUND_OVERRIDES_FILE = "background-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
@@ -108,6 +111,7 @@ export type GameData = {
   world?: WorldArtifact;
   sprites?: SpriteSheetCollection;
   spriteOverrides?: SpriteOverrides;
+  npcOverrides: NpcOverrides;
   backgroundOverrides?: BackgroundOverrides;
   teleportDestinations?: TeleportDestinations;
   encounters?: Encounters;
@@ -166,6 +170,13 @@ function emptyDrifellaBarks(): DrifellaBarks {
   };
 }
 
+function emptyNpcOverrides(): NpcOverrides {
+  return {
+    schema: "swagbound.npc-overrides.v1",
+    byNpcId: {}
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -177,6 +188,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     world,
     sprites,
     spriteOverrides,
+    npcOverrides,
     backgroundOverrides,
     teleportDestinations,
     encounters,
@@ -208,6 +220,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${manifest.files.world}`, WorldArtifactSchema),
     loadJson(`/generated/${manifest.files.sprites}`, SpriteSheetCollectionSchema),
     loadJson(`/generated/${SPRITE_OVERRIDES_FILE}`, SpriteOverridesSchema),
+    loadJson(`/generated/${NPC_OVERRIDES_FILE}`, NpcOverridesSchema),
     loadJson(`/generated/${BACKGROUND_OVERRIDES_FILE}`, BackgroundOverridesSchema),
     manifest.files.teleportDestinations
       ? loadJson(`/generated/${manifest.files.teleportDestinations}`, TeleportDestinationsSchema)
@@ -276,6 +289,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     world,
     sprites,
     spriteOverrides,
+    npcOverrides: npcOverrides ?? emptyNpcOverrides(),
     backgroundOverrides,
     teleportDestinations,
     encounters,
@@ -288,6 +302,23 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     items: resolvedItems,
     psi: resolvedPsi,
     shops
+  };
+}
+
+export function applyNpcOverride(npc: WorldChunkedNpc, npcOverrides: NpcOverrides | undefined): WorldChunkedNpc | undefined {
+  const override = npcOverrides?.byNpcId[String(npc.npcId)];
+  if (!override) {
+    return npc;
+  }
+  if (override.hide === true) {
+    return undefined;
+  }
+  if (!override.worldPixel) {
+    return npc;
+  }
+  return {
+    ...npc,
+    worldPixel: { ...override.worldPixel }
   };
 }
 

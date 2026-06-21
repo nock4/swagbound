@@ -4,6 +4,7 @@ import {
   AddedNpcsSchema,
   CustomDialogueSchema,
   DrifellaBarksSchema,
+  NpcOverridesSchema,
   SpriteOverridesSchema
 } from "../src/index";
 
@@ -144,6 +145,37 @@ describe("DrifellaBarksSchema", () => {
     expect(DrifellaBarksSchema.safeParse({
       schema: "swagbound.drifella-barks.v1",
       phrases: []
+    }).success).toBe(false);
+  });
+});
+
+describe("NpcOverridesSchema", () => {
+  it("parses hidden and repositioned map NPC overrides keyed by NPC id", () => {
+    const parsed = NpcOverridesSchema.parse({
+      schema: "swagbound.npc-overrides.v1",
+      byNpcId: {
+        "111": { worldPixel: { x: 7248, y: 1016 } },
+        "112": { hide: true }
+      }
+    });
+
+    expect(parsed.byNpcId["111"].worldPixel).toEqual({ x: 7248, y: 1016 });
+    expect(parsed.byNpcId["112"].hide).toBe(true);
+  });
+
+  it("rejects non-numeric NPC ids and unknown override fields", () => {
+    expect(NpcOverridesSchema.safeParse({
+      schema: "swagbound.npc-overrides.v1",
+      byNpcId: {
+        clerk: { hide: true }
+      }
+    }).success).toBe(false);
+
+    expect(NpcOverridesSchema.safeParse({
+      schema: "swagbound.npc-overrides.v1",
+      byNpcId: {
+        "111": { worldPixel: { x: 7248, y: 1016 }, spriteGroup: 5 }
+      }
     }).success).toBe(false);
   });
 });

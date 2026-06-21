@@ -24,6 +24,7 @@ import {
   type DoorTriggerState
 } from "./doorTriggers";
 import {
+  applyNpcOverride,
   buildInlineDialoguePages,
   buildAddedWorldNpcs,
   buildMetadataLines,
@@ -849,7 +850,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const key = chunkKey(placement.chunk);
       this.npcPlacementsByChunk.set(key, [...(this.npcPlacementsByChunk.get(key) ?? []), placement]);
     };
-    this.world_.npcs.forEach((npc, index) => indexPlacement(npc, "eb", index));
+    this.world_.npcs.forEach((npc, index) => {
+      const overriddenNpc = applyNpcOverride(npc, this.data_.npcOverrides);
+      if (overriddenNpc) {
+        indexPlacement(overriddenNpc, "eb", index);
+      }
+    });
     addedNpcs.forEach((npc, index) => indexPlacement(npc, "added", index));
   }
 

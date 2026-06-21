@@ -748,6 +748,17 @@ export const WorldNpcSchema = z.object({
 
 export const WorldChunkedNpcSchema = WorldNpcSchema.omit({ regionPixel: true });
 
+export const NpcOverrideEntrySchema = z.object({
+  hide: z.boolean().optional(),
+  worldPixel: PixelSchema.optional()
+}).strict();
+
+export const NpcOverridesSchema = z.object({
+  schema: z.literal("swagbound.npc-overrides.v1"),
+  comment: z.string().optional(),
+  byNpcId: z.record(z.string().regex(/^\d+$/), NpcOverrideEntrySchema)
+}).strict();
+
 export const WorldCollisionSchema = z.object({
   cellSize: z.number().int().positive(),
   width: z.number().int().positive(),
@@ -1464,6 +1475,8 @@ export type WorldNpc = z.infer<typeof WorldNpcSchema>;
 export type WorldChunkedNpc = z.infer<typeof WorldChunkedNpcSchema>;
 export type WorldDoor = z.infer<typeof WorldDoorSchema>;
 export type NpcInteraction = z.infer<typeof NpcInteractionSchema>;
+export type NpcOverrideEntry = z.infer<typeof NpcOverrideEntrySchema>;
+export type NpcOverrides = z.infer<typeof NpcOverridesSchema>;
 export type AddedNpc = z.infer<typeof AddedNpcSchema>;
 export type AddedNpcs = z.infer<typeof AddedNpcsSchema>;
 export type TeleportDestination = z.infer<typeof TeleportDestinationSchema>;

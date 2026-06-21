@@ -9,6 +9,7 @@ import {
   expandEnemyNameFamilies,
   expandOverworldEnemySkins,
   MusicManifestSchema,
+  NpcOverridesSchema,
   OpeningCutsceneSchema,
   OverworldEnemySkinsSchema,
   PsiOverridesSchema,
@@ -32,6 +33,8 @@ export const SWAGBOUND_DIALOGUE_LIBRARY_SOURCE = "content/swagbound-dialogue-lib
 export const SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT = "swagbound-dialogue-library.json";
 export const SPRITE_OVERRIDES_SOURCE = "content/sprite-overrides.json";
 export const SPRITE_OVERRIDES_OUTPUT = "sprite-overrides.json";
+export const NPC_OVERRIDES_SOURCE = "content/npc-overrides.json";
+export const NPC_OVERRIDES_OUTPUT = "npc-overrides.json";
 export const OVERWORLD_ENEMY_SKINS_SOURCE = "content/overworld-enemy-skins.json";
 export const BACKGROUND_OVERRIDES_SOURCE = "content/background-overrides.json";
 export const BACKGROUND_OVERRIDES_OUTPUT = "background-overrides.json";
@@ -96,12 +99,14 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateMusicManifest(MUSIC_MANIFEST_SOURCE);
   await validateDrifellaBarks(DRIFELLA_BARKS_SOURCE);
   await validateOpeningCutscene(OPENING_CUTSCENE_SOURCE);
+  await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await Promise.all([
     copyJsonToGenerated(STORY_TRIGGERS_SOURCE, out, STORY_TRIGGERS_OUTPUT),
     copyJsonToGenerated(ADDED_NPCS_SOURCE, out, ADDED_NPCS_OUTPUT),
     copyJsonToGenerated(CUSTOM_DIALOGUE_SOURCE, out, CUSTOM_DIALOGUE_OUTPUT),
     copyJsonToGenerated(SWAGBOUND_DIALOGUE_LIBRARY_SOURCE, out, SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT),
     generateSpriteOverridesWithOverworldSkins(out, SPRITE_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(NPC_OVERRIDES_SOURCE, out, NPC_OVERRIDES_OUTPUT),
     copyJsonToGenerated(BACKGROUND_OVERRIDES_SOURCE, out, BACKGROUND_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
@@ -179,6 +184,10 @@ async function validateOpeningCutscene(source: string): Promise<void> {
     return;
   }
   OpeningCutsceneSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateNpcOverrides(source: string): Promise<void> {
+  NpcOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 function spriteOverrideEntries(overrides: SpriteOverrides): SpriteOverride[] {

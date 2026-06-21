@@ -1,0 +1,12 @@
+{
+  "schema": "swagbound.npc-overrides.v1",
+  "comment": "Per-NPC map placement fixes keyed by generated EarthBound npcId.",
+  "byNpcId": {
+    "111": {
+      "worldPixel": {
+        "x": 7248,
+        "y": 1016
+      }
+    }
+  }
+}

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { BattleData, CharacterCollection, CustomDialogue, DrifellaBarks, ItemCollection, Manifest, PsiCollection, ScriptCollection, ScriptCommand } from "@eb/schemas";
-import { applyEnemyOverrides, buildCustomDialogueWithDrifellaBarks, buildDialogueForReference, loadGameData } from "../src/loader";
+import type { BattleData, CharacterCollection, CustomDialogue, DrifellaBarks, ItemCollection, Manifest, NpcOverrides, PsiCollection, ScriptCollection, ScriptCommand, WorldChunkedNpc } from "@eb/schemas";
+import { applyEnemyOverrides, applyNpcOverride, buildCustomDialogueWithDrifellaBarks, buildDialogueForReference, loadGameData } from "../src/loader";
 import { isGeneratedDrifellaBarkEntry } from "../src/customDialogueLookup";
 import { drifellaBarkForNpcId } from "../src/drifellaBarks";
 
@@ -109,6 +109,45 @@ describe("applyEnemyOverrides", () => {
         "999": { name: "Not Present" }
       }
     })).toBe(battle);
+  });
+});
+
+describe("applyNpcOverride", () => {
+  it("returns undefined for hidden NPCs so they are not spawned", () => {
+    const npc = syntheticWorldNpc({ npcId: 111, worldPixel: { x: 7248, y: 1000 } });
+
+    expect(applyNpcOverride(npc, npcOverrides({
+      "111": { hide: true }
+    }))).toBeUndefined();
+  });
+
+  it("uses override coordinates for repositioned NPCs and preserves all other fields", () => {
+    const npc = syntheticWorldNpc({
+      npcId: 111,
+      spriteGroup: 45,
+      movement: 2,
+      worldPixel: { x: 7248, y: 1000 }
+    });
+
+    const resolved = applyNpcOverride(npc, npcOverrides({
+      "111": { worldPixel: { x: 7248, y: 1016 } }
+    }));
+
+    expect(resolved).toMatchObject({
+      npcId: 111,
+      spriteGroup: 45,
+      movement: 2,
+      worldPixel: { x: 7248, y: 1016 }
+    });
+    expect(resolved).not.toBe(npc);
+  });
+
+  it("leaves NPCs without overrides unchanged", () => {
+    const npc = syntheticWorldNpc({ npcId: 110, worldPixel: { x: 7200, y: 1000 } });
+
+    expect(applyNpcOverride(npc, npcOverrides({
+      "111": { worldPixel: { x: 7248, y: 1016 } }
+    }))).toBe(npc);
   });
 });
 
@@ -413,6 +452,24 @@ describe("loadGameData", () => {
       }
     });
   });
+
+  it("loads the generated NPC override overlay", async () => {
+    vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
+      const path = String(url);
+      if (path.endsWith("/npc-overrides.json")) {
+        return jsonResponse(npcOverrides({
+          "111": { worldPixel: { x: 7248, y: 1016 } },
+          "112": { hide: true }
+        }));
+      }
+      throw new Error(`No fixture for ${path}`);
+    }));
+
+    const data = await loadGameData(syntheticManifest());
+
+    expect(data.npcOverrides.byNpcId["111"].worldPixel).toEqual({ x: 7248, y: 1016 });
+    expect(data.npcOverrides.byNpcId["112"].hide).toBe(true);
+  });
 });
 
 function character(id: number, name: string): CharacterCollection["characters"][number] {
@@ -513,6 +570,24 @@ function battleEnemy(id: number, name: string): BattleData["enemies"][number] {
     ],
     itemDropped: null,
     itemRarity: null
+  };
+}
+
+function syntheticWorldNpc(overrides: Partial<WorldChunkedNpc> = {}): WorldChunkedNpc {
+  return {
+    npcId: 1,
+    interactable: true,
+    visible: true,
+    showSprite: "always",
+    worldPixel: { x: 64, y: 64 },
+    ...overrides
+  };
+}
+
+function npcOverrides(byNpcId: NpcOverrides["byNpcId"]): NpcOverrides {
+  return {
+    schema: "swagbound.npc-overrides.v1",
+    byNpcId
   };
 }
 
