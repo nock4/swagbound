@@ -1,0 +1,419 @@
+{
+  "schema": "swagbound.atlas.building-names.v1",
+  "town": "Onett",
+  "method": "Interior sign read by spawning in (drugstore/bakery/arcade/bank verified visually); overworld storefront signs are readable but their door->interior link is fuzzy, so only spawn-verified names are marked verified. Extend by spawning each interior + reading its sign.",
+  "buildings": [
+    {
+      "id": "onett-0",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 2128,
+        "y": 864
+      },
+      "interior": {
+        "x": 8096,
+        "y": 488
+      },
+      "occupants": []
+    },
+    {
+      "id": "onett-1",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 2312,
+        "y": 1112
+      },
+      "interior": {
+        "x": 7048,
+        "y": 976
+      },
+      "occupants": [
+        {
+          "npcId": 91,
+          "spriteGroup": 59,
+          "swagName": "park-static"
+        }
+      ]
+    },
+    {
+      "id": "onett-2",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 2408,
+        "y": 1112
+      },
+      "interior": {
+        "x": 8128,
+        "y": 1256
+      },
+      "occupants": [
+        {
+          "npcId": 39,
+          "spriteGroup": 136,
+          "swagName": "mirror-glitch"
+        }
+      ]
+    },
+    {
+      "id": "onett-3",
+      "name": "Drug Store",
+      "type": "shop/service",
+      "confidence": "verified",
+      "overworldDoor": {
+        "x": 1600,
+        "y": 1128
+      },
+      "interior": {
+        "x": 7904,
+        "y": 1512
+      },
+      "occupants": [
+        {
+          "npcId": 8,
+          "spriteGroup": 52,
+          "swagName": "hexp-hood"
+        },
+        {
+          "npcId": 9,
+          "spriteGroup": 64,
+          "swagName": "runway-show"
+        },
+        {
+          "npcId": 60,
+          "spriteGroup": 215,
+          "swagName": "tunnel-hiss"
+        }
+      ]
+    },
+    {
+      "id": "onett-4",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 1736,
+        "y": 1128
+      },
+      "interior": {
+        "x": 7648,
+        "y": 488
+      },
+      "occupants": [
+        {
+          "npcId": 33,
+          "spriteGroup": 142,
+          "swagName": "returnless-king"
+        },
+        {
+          "npcId": 37,
+          "spriteGroup": 66,
+          "swagName": "solfis"
+        },
+        {
+          "npcId": 38,
+          "spriteGroup": 153,
+          "swagName": "ushanka-shade"
+        }
+      ]
+    },
+    {
+      "id": "onett-5",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 1232,
+        "y": 1280
+      },
+      "interior": {
+        "x": 8160,
+        "y": 360
+      },
+      "occupants": []
+    },
+    {
+      "id": "onett-6",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 1656,
+        "y": 1328
+      },
+      "interior": {
+        "x": 8032,
+        "y": 616
+      },
+      "occupants": []
+    },
+    {
+      "id": "onett-7",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 1096,
+        "y": 1368
+      },
+      "interior": {
+        "x": 7616,
+        "y": 616
+      },
+      "occupants": [
+        {
+          "npcId": 31,
+          "spriteGroup": 373,
+          "swagName": null
+        },
+        {
+          "npcId": 90,
+          "spriteGroup": 127,
+          "swagName": "goobdle-s"
+        }
+      ]
+    },
+    {
+      "id": "onett-8",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 2568,
+        "y": 1400
+      },
+      "interior": {
+        "x": 7624,
+        "y": 1104
+      },
+      "occupants": []
+    },
+    {
+      "id": "onett-9",
+      "name": "Bank",
+      "type": "shop/service",
+      "confidence": "verified",
+      "overworldDoor": {
+        "x": 2040,
+        "y": 1416
+      },
+      "interior": {
+        "x": 8160,
+        "y": 1512
+      },
+      "occupants": [
+        {
+          "npcId": 59,
+          "spriteGroup": 73,
+          "swagName": "wifeystation"
+        }
+      ]
+    },
+    {
+      "id": "onett-10",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 1064,
+        "y": 1496
+      },
+      "interior": {
+        "x": 7560,
+        "y": 848
+      },
+      "occupants": []
+    },
+    {
+      "id": "onett-11",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 2440,
+        "y": 1592
+      },
+      "interior": {
+        "x": 7104,
+        "y": 1256
+      },
+      "occupants": [
+        {
+          "npcId": 93,
+          "spriteGroup": 121,
+          "swagName": "cryptic-kids"
+        }
+      ]
+    },
+    {
+      "id": "onett-12",
+      "name": "Hospital",
+      "type": "shop/service",
+      "confidence": "likely",
+      "overworldDoor": {
+        "x": 1144,
+        "y": 1680
+      },
+      "interior": {
+        "x": 7392,
+        "y": 1000
+      },
+      "occupants": []
+    },
+    {
+      "id": "onett-13",
+      "name": "Arcade",
+      "type": "shop/service",
+      "confidence": "verified",
+      "overworldDoor": {
+        "x": 1576,
+        "y": 1680
+      },
+      "interior": {
+        "x": 7816,
+        "y": 688
+      },
+      "occupants": [
+        {
+          "npcId": 1,
+          "spriteGroup": 284,
+          "swagName": "ethereal-sols"
+        },
+        {
+          "npcId": 2,
+          "spriteGroup": 284,
+          "swagName": "ethereal-sols"
+        },
+        {
+          "npcId": 3,
+          "spriteGroup": 284,
+          "swagName": "ethereal-sols"
+        },
+        {
+          "npcId": 78,
+          "spriteGroup": 59,
+          "swagName": "park-static"
+        }
+      ]
+    },
+    {
+      "id": "onett-14",
+      "name": "Arcade (south door)",
+      "type": "shop/service",
+      "confidence": "verified",
+      "overworldDoor": {
+        "x": 2016,
+        "y": 1704
+      },
+      "interior": {
+        "x": 7200,
+        "y": 392
+      },
+      "occupants": [
+        {
+          "npcId": 68,
+          "spriteGroup": 141,
+          "swagName": "question-marketeer"
+        },
+        {
+          "npcId": 70,
+          "spriteGroup": 74,
+          "swagName": "npc-neighbor"
+        }
+      ]
+    },
+    {
+      "id": "onett-15",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 1576,
+        "y": 1736
+      },
+      "interior": {
+        "x": 7968,
+        "y": 712
+      },
+      "occupants": [
+        {
+          "npcId": 2,
+          "spriteGroup": 284,
+          "swagName": "ethereal-sols"
+        }
+      ]
+    },
+    {
+      "id": "onett-16",
+      "name": "Bakery",
+      "type": "shop/service",
+      "confidence": "verified",
+      "overworldDoor": {
+        "x": 1856,
+        "y": 1736
+      },
+      "interior": {
+        "x": 7360,
+        "y": 1384
+      },
+      "occupants": [
+        {
+          "npcId": 40,
+          "spriteGroup": 137,
+          "swagName": "paingelz"
+        },
+        {
+          "npcId": 41,
+          "spriteGroup": 58,
+          "swagName": "paingelz"
+        }
+      ]
+    },
+    {
+      "id": "onett-17",
+      "name": null,
+      "type": "residence",
+      "confidence": "unverified",
+      "overworldDoor": {
+        "x": 1576,
+        "y": 2264
+      },
+      "interior": {
+        "x": 7584,
+        "y": 1384
+      },
+      "occupants": [
+        {
+          "npcId": 94,
+          "spriteGroup": 451,
+          "swagName": "goobdle-s"
+        },
+        {
+          "npcId": 95,
+          "spriteGroup": 436,
+          "swagName": "demonfella-ii"
+        },
+        {
+          "npcId": 96,
+          "spriteGroup": 436,
+          "swagName": "demonfella-ii"
+        },
+        {
+          "npcId": 97,
+          "spriteGroup": 115,
+          "swagName": "npc-kid"
+        },
+        {
+          "npcId": 123,
+          "spriteGroup": 381,
+          "swagName": "tunnel-hiss"
+        }
+      ]
+    }
+  ]
+}

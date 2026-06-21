@@ -17,7 +17,8 @@ const optionalCopies = [
   ["content/atlas/labels.json", "labels.json"],
   ["content/atlas/backgrounds.json", "backgrounds.json"],
   ["content/atlas/ui.json", "ui.json"],
-  ["content/atlas/townmaps.json", "townmaps.json"]
+  ["content/atlas/townmaps.json", "townmaps.json"],
+  ["content/atlas/building-names.json", "building-names.json"]
 ];
 
 async function exists(filePath) {

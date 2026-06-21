@@ -398,6 +398,56 @@
         line-height: 1.4;
       }
 
+      .occupants {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .occupants-title {
+        color: var(--muted);
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      .occupant {
+        display: grid;
+        grid-template-columns: 36px minmax(0, 1fr);
+        gap: 8px;
+        align-items: center;
+        min-height: 44px;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: #121411;
+        padding: 5px;
+      }
+
+      .occupant.no-portrait {
+        grid-template-columns: 1fr;
+      }
+
+      .occupant-portrait {
+        width: 32px;
+        height: 32px;
+        object-fit: contain;
+      }
+
+      .occupant-name {
+        color: var(--text);
+        font-size: 13px;
+        line-height: 1.25;
+        overflow-wrap: anywhere;
+      }
+
+      .occupant-meta {
+        margin-top: 2px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+
       .tileset-list {
         display: grid;
         gap: 16px;
@@ -534,7 +584,7 @@
         <div class="masthead">
           <div>
             <h1>Swagbound Atlas Browser</h1>
-            <p class="subhead">A searchable visual library for the tiles, characters, motifs, buildings, rooms, and interactables available to custom map authors.</p>
+            <p class="subhead">A searchable visual library for the tiles, characters, motifs, buildings, named places, rooms, and interactables available to custom map authors.</p>
           </div>
           <div class="open-note">Run <code>pnpm dev</code>, then open <code>/atlas/</code>. JSON and images load from this folder with relative URLs.</div>
         </div>
@@ -548,6 +598,7 @@
             <option value="characters">Characters</option>
             <option value="motifs">Motifs</option>
             <option value="buildings">Buildings</option>
+            <option value="places">Places</option>
             <option value="rooms">Rooms</option>
             <option value="interactables">Interactables</option>
           </select>
@@ -560,6 +611,7 @@
           <button class="tab" type="button" data-tab="characters" aria-selected="false">Characters</button>
           <button class="tab" type="button" data-tab="motifs" aria-selected="false">Motifs</button>
           <button class="tab" type="button" data-tab="buildings" aria-selected="false">Buildings</button>
+          <button class="tab" type="button" data-tab="places" aria-selected="false">Places</button>
           <button class="tab" type="button" data-tab="rooms" aria-selected="false">Rooms</button>
           <button class="tab" type="button" data-tab="interactables" aria-selected="false">Interactables</button>
         </nav>
@@ -576,7 +628,7 @@
           </div>
         </div>
         <div id="overviewStats" class="stats"></div>
-        <div class="legend">Tiles are 32px arrangements; Characters are NPC/enemy sprite groups with Swagbound skin names when available; Motifs are flora and prop composites; Buildings, Rooms, and Interactables are extracted world-authoring reference pieces.</div>
+        <div class="legend">Tiles are 32px arrangements; Characters are NPC/enemy sprite groups with Swagbound skin names when available; Motifs are flora and prop composites; Buildings, Places, Rooms, and Interactables are extracted world-authoring reference pieces.</div>
       </section>
 
       <section id="tiles" class="pane" data-section="tiles" hidden>
@@ -653,6 +705,26 @@
         <div id="buildingsGrid" class="grid"></div>
       </section>
 
+      <section id="places" class="pane" data-section="places" hidden>
+        <div class="section-head">
+          <div>
+            <h2>Places</h2>
+            <p id="placesSubtitle">Named buildings with confidence, door/interior coordinates, and occupants.</p>
+          </div>
+          <div class="section-actions">
+            <select id="placeFilter" class="section-control" aria-label="Place filter">
+              <option value="all">all places</option>
+              <option value="named">named</option>
+              <option value="verified">verified</option>
+              <option value="likely">likely</option>
+              <option value="unverified">unverified</option>
+              <option value="occupied">has occupants</option>
+            </select>
+          </div>
+        </div>
+        <div id="placesGrid" class="grid"></div>
+      </section>
+
       <section id="rooms" class="pane" data-section="rooms" hidden>
         <div class="section-head">
           <div>
@@ -696,12 +768,13 @@
           data: null,
           labels: { byId: {} },
           overrides: null,
+          spritePortraits: new Map(),
           pinnedTile: null,
           rendered: new Set()
         };
 
-        const sectionIds = ["overview", "tiles", "characters", "motifs", "buildings", "rooms", "interactables"];
-        const catalogSections = ["tiles", "characters", "motifs", "buildings", "rooms", "interactables"];
+        const sectionIds = ["overview", "tiles", "characters", "motifs", "buildings", "places", "rooms", "interactables"];
+        const catalogSections = ["tiles", "characters", "motifs", "buildings", "places", "rooms", "interactables"];
         const $ = (id) => document.getElementById(id);
         const els = {
           app: $("app"),
@@ -727,6 +800,9 @@
           buildingFilter: $("buildingFilter"),
           buildingsGrid: $("buildingsGrid"),
           buildingsSubtitle: $("buildingsSubtitle"),
+          placeFilter: $("placeFilter"),
+          placesGrid: $("placesGrid"),
+          placesSubtitle: $("placesSubtitle"),
           roomFilter: $("roomFilter"),
           roomsGrid: $("roomsGrid"),
           roomsSubtitle: $("roomsSubtitle"),
@@ -905,6 +981,97 @@
           return fromImage || `interactable-${String(index + 1).padStart(4, "0")}`;
         }
 
+        function spriteGroupKey(value) {
+          const numeric = Number(value);
+          return Number.isFinite(numeric) ? String(numeric) : String(value ?? "");
+        }
+
+        function spriteGroupLabel(value) {
+          const numeric = Number(value);
+          return Number.isFinite(numeric) ? String(numeric).padStart(3, "0") : String(value ?? "");
+        }
+
+        function spritePortraitForGroup(value) {
+          const key = spriteGroupKey(value);
+          return key ? state.spritePortraits.get(key) || "" : "";
+        }
+
+        function pointText(point) {
+          if (!point || point.x == null || point.y == null) return "";
+          return `${point.x},${point.y}`;
+        }
+
+        function confidenceClass(value) {
+          if (value === "verified") return "good";
+          if (value === "likely") return "warn";
+          return "";
+        }
+
+        function confidenceRank(value) {
+          if (value === "verified") return 0;
+          if (value === "likely") return 1;
+          return 2;
+        }
+
+        function placeTitle(item) {
+          return item.name || `Unnamed ${item.type || "residence"}`;
+        }
+
+        function placeHaystack(item) {
+          const occupants = Array.isArray(item.occupants) ? item.occupants : [];
+          return [
+            item.id,
+            item.name,
+            placeTitle(item),
+            item.type,
+            item.confidence,
+            pointText(item.overworldDoor),
+            pointText(item.interior),
+            ...occupants.flatMap((occupant) => [
+              occupant.npcId,
+              `npc ${occupant.npcId}`,
+              occupant.spriteGroup,
+              spriteGroupLabel(occupant.spriteGroup),
+              occupant.swagName
+            ])
+          ].join(" ");
+        }
+
+        function placeMatchesFilter(item, filter) {
+          const occupants = Array.isArray(item.occupants) ? item.occupants : [];
+          if (filter === "named") return Boolean(item.name);
+          if (filter === "occupied") return occupants.length > 0;
+          if (["verified", "likely", "unverified"].includes(filter)) return item.confidence === filter;
+          return true;
+        }
+
+        function comparePlaces(a, b) {
+          const named = Number(!a.name) - Number(!b.name);
+          if (named !== 0) return named;
+          const confidence = confidenceRank(a.confidence) - confidenceRank(b.confidence);
+          if (confidence !== 0) return confidence;
+          return placeTitle(a).localeCompare(placeTitle(b), undefined, { numeric: true });
+        }
+
+        function occupantMarkup(occupants) {
+          if (!occupants.length) return `<div class="note">No occupants captured.</div>`;
+          const rows = occupants.map((occupant) => {
+            const portrait = spritePortraitForGroup(occupant.spriteGroup);
+            const group = spriteGroupLabel(occupant.spriteGroup);
+            const name = occupant.swagName || `NPC ${occupant.npcId}`;
+            return `
+              <div class="occupant ${portrait ? "" : "no-portrait"}">
+                ${portrait ? imageHtml(portrait, `NPC ${occupant.npcId} sprite group ${group}`, "occupant-portrait") : ""}
+                <div>
+                  <div class="occupant-name">${escapeHtml(name)}</div>
+                  <div class="occupant-meta">NPC <code>${escapeHtml(occupant.npcId)}</code>${group ? ` · group <code>${escapeHtml(group)}</code>` : ""}</div>
+                </div>
+              </div>
+            `;
+          });
+          return `<div class="occupants"><div class="occupants-title">Occupants</div>${rows.join("")}</div>`;
+        }
+
         function populateFilters() {
           const roles = [...new Set(state.data.sprites.groups.map((group) => group.roleGuess).filter(Boolean))].sort();
           els.roleFilter.innerHTML = `<option value="all">all roles</option>${roles.map((role) => `<option value="${escapeHtml(role)}">${escapeHtml(role)}</option>`).join("")}`;
@@ -917,16 +1084,19 @@
         }
 
         function renderOverview() {
-          const { tiles, sprites, motifs } = state.data;
+          const { tiles, sprites, motifs, buildingNames } = state.data;
+          const places = buildingNames?.buildings ?? [];
+          const namedPlaces = places.filter((item) => item.name).length;
           const stats = [
             ["Tiles", number(tiles.counts?.totalNonBlankTiles ?? 0), `${number(tiles.counts?.totalUsedTiles ?? 0)} used`],
             ["Tilesets", number(tiles.counts?.tilesets ?? tiles.tilesets.length), "32px cells"],
             ["Sprites", number(sprites.counts?.groups ?? sprites.groups.length), `${number(sprites.counts?.overriddenGroups ?? 0)} skinned`],
             ["Un-skinned", number(sprites.counts?.unskinnedGroups ?? 0), "raw EB groups"],
-            ["Motifs", number(motifs.motifs.length), `${number(motifs.counts?.motifInstances ?? 0)} instances`],
-            ["Interactables", number(motifs.interactables.length), "text/object anchors"],
-            ["Rooms", number(motifs.rooms.length), "interior composites"],
-            ["Buildings", number(motifs.buildings.length), "world composites"]
+            ["Motifs", number((motifs.motifs ?? []).length), `${number(motifs.counts?.motifInstances ?? 0)} instances`],
+            ["Interactables", number((motifs.interactables ?? []).length), "text/object anchors"],
+            ["Places", number(places.length), `${number(namedPlaces)} named`],
+            ["Rooms", number((motifs.rooms ?? []).length), "interior composites"],
+            ["Buildings", number((motifs.buildings ?? []).length), "world composites"]
           ];
           els.overviewStats.innerHTML = stats.map(([label, value, detail]) => `
             <article class="stat">
@@ -1213,6 +1383,52 @@
           state.rendered.add("buildings");
         }
 
+        function renderPlaces() {
+          const filter = els.placeFilter.value;
+          const source = state.data.buildingNames?.buildings ?? [];
+          const cards = [];
+          for (const item of [...source].sort(comparePlaces)) {
+            if (!placeMatchesFilter(item, filter)) continue;
+            const haystack = placeHaystack(item);
+            if (!matchesQuery(haystack)) continue;
+
+            const occupants = Array.isArray(item.occupants) ? item.occupants : [];
+            const confidence = item.confidence || "unverified";
+            const door = pointText(item.overworldDoor);
+            const interior = pointText(item.interior);
+            cards.push(`
+              <article class="card place-card" data-search="${escapeHtml(haystack)}">
+                <div class="card-body">
+                  <h3 class="card-title"><span class="${item.name ? "label-name" : "fallback-name"}">${escapeHtml(placeTitle(item))}</span></h3>
+                  <div class="tag-row">
+                    <span class="tag">place</span>
+                    <span class="tag">${escapeHtml(item.type || "unknown")}</span>
+                    <span class="tag ${confidenceClass(confidence)}">${escapeHtml(confidence)}</span>
+                  </div>
+                  <div class="meta">
+                    <span>id <code>${escapeHtml(item.id)}</code></span>
+                    <span>door <code>${escapeHtml(door || "unknown")}</code></span>
+                    <span>interior <code>${escapeHtml(interior || "unknown")}</code></span>
+                    <span>${number(occupants.length)} occupants</span>
+                  </div>
+                  ${occupantMarkup(occupants)}
+                </div>
+              </article>
+            `);
+          }
+
+          const total = state.data.buildingNames?.buildings?.length ?? 0;
+          if (!state.data.buildingNames) {
+            els.placesSubtitle.textContent = "building-names.json is not present in this atlas copy.";
+            els.placesGrid.innerHTML = `<div class="empty">No Places data is available. Re-run <code>pnpm atlas:browser</code> after adding <code>content/atlas/building-names.json</code>.</div>`;
+          } else {
+            els.placesSubtitle.textContent = `${number(cards.length)} visible named-building records from ${number(total)} total places.`;
+            els.placesGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No places match the current filters.</div>`;
+          }
+          registerLazyImages(els.placesGrid);
+          state.rendered.add("places");
+        }
+
         function renderRooms() {
           const filter = els.roomFilter.value;
           const cards = [];
@@ -1306,6 +1522,7 @@
           if (section === "characters") renderCharacters();
           if (section === "motifs") renderMotifs();
           if (section === "buildings") renderBuildings();
+          if (section === "places") renderPlaces();
           if (section === "rooms") renderRooms();
           if (section === "interactables") renderInteractables();
         }
@@ -1338,7 +1555,8 @@
           const labelsLoaded = Object.keys(state.labels?.byId ?? {}).length;
           const labelText = labelsLoaded ? `${number(labelsLoaded)} labels loaded` : "labels.json not present";
           const overrideText = state.overrides ? "sprite override names loaded" : "sprite override names unavailable";
-          els.statusLine.textContent = `${labelText}; ${overrideText}.`;
+          const placeText = state.data?.buildingNames ? `${number(state.data.buildingNames.buildings?.length ?? 0)} places loaded` : "building-names.json not present";
+          els.statusLine.textContent = `${labelText}; ${overrideText}; ${placeText}.`;
         }
 
         function debounce(fn, delay = 140) {
@@ -1379,6 +1597,7 @@
 
           els.motifFilter.addEventListener("change", () => renderMotifs());
           els.buildingFilter.addEventListener("change", () => renderBuildings());
+          els.placeFilter.addEventListener("change", () => renderPlaces());
           els.roomFilter.addEventListener("change", () => renderRooms());
           els.interactableFilter.addEventListener("change", () => renderInteractables());
 
@@ -1399,16 +1618,18 @@
         async function init() {
           bindEvents();
           try {
-            const [tiles, sprites, motifs, labels, overrides] = await Promise.all([
+            const [tiles, sprites, motifs, labels, overrides, buildingNames] = await Promise.all([
               fetchJson("./tiles.json"),
               fetchJson("./sprites.json"),
               fetchJson("./motifs.json"),
               fetchJson("./labels.json", true),
-              fetchJson("./sprite-overrides.json", true)
+              fetchJson("./sprite-overrides.json", true),
+              fetchJson("./building-names.json", true)
             ]);
-            state.data = { tiles, sprites, motifs };
+            state.data = { tiles, sprites, motifs, buildingNames };
             state.labels = labels ?? { byId: {} };
             state.overrides = overrides;
+            state.spritePortraits = new Map(sprites.groups.map((group) => [spriteGroupKey(group.groupId), group.portraitImage]));
             populateFilters();
             renderOverview();
             updateStatus();
