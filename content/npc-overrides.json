@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.npc-overrides.v1",
-  "comment": "Per-NPC map placement fixes keyed by generated EarthBound npcId.",
+  "comment": "Per-NPC map placement fixes keyed by generated EarthBound npcId. Shops keep only their Buy/Sell clerk(s); decorative NPCs (dogs, phones-skinned-as-unicorns, flavor talkers) in the same room sector are hidden.",
   "byNpcId": {
     "111": {
       "worldPixel": {
@@ -9,6 +9,18 @@
       }
     },
     "13": {
+      "hide": true
+    },
+    "10": {
+      "hide": true
+    },
+    "11": {
+      "hide": true
+    },
+    "405": {
+      "hide": true
+    },
+    "407": {
       "hide": true
     }
   }
