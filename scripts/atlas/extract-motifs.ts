@@ -57,6 +57,13 @@ const LEGACY_MOTIF_EXCLUSION_RADIUS_X = 14;
 const LEGACY_MOTIF_EXCLUSION_RADIUS_UP = 13;
 const LEGACY_MOTIF_EXCLUSION_RADIUS_DOWN = 6;
 const LEGACY_MOTIF_EXCLUSION_MAX_CELLS = 260;
+const DEFAULT_MOTIF_ATLAS_SHAPE = {
+  motifs: 79,
+  motifInstances: 318,
+  buildings: 262,
+  rooms: 221,
+  interactables: 275
+} as const;
 
 export type Point = { x: number; y: number };
 
@@ -259,6 +266,10 @@ function pct(part: number, total: number): number {
 
 function keyFor(tileset: number, arrangement: number): string {
   return `${tileset}:${arrangement}`;
+}
+
+function resolvePath(rootDir: string, pathLike: string): string {
+  return path.isAbsolute(pathLike) ? pathLike : path.join(rootDir, pathLike);
 }
 
 function cellIndex(x: number, y: number, width: number): number {
@@ -1612,14 +1623,68 @@ function byCategory(motifs: MotifOutput[]): Record<string, number> {
   return Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)));
 }
 
+function shouldValidateDefaultShape(projectRelative: string): boolean {
+  return path.normalize(projectRelative) === path.normalize(DEFAULT_PROJECT_RELATIVE);
+}
+
+function assertDefaultMotifAtlasShape(atlas: MotifAtlas, projectRelative: string): void {
+  if (!shouldValidateDefaultShape(projectRelative)) {
+    return;
+  }
+
+  const failures: string[] = [];
+  const expected = DEFAULT_MOTIF_ATLAS_SHAPE;
+  if (atlas.motifs.length !== expected.motifs) {
+    failures.push(`motifs=${atlas.motifs.length} expected ${expected.motifs}`);
+  }
+  if (atlas.counts.motifTypes !== expected.motifs) {
+    failures.push(`counts.motifTypes=${atlas.counts.motifTypes} expected ${expected.motifs}`);
+  }
+  if (atlas.counts.motifInstances !== expected.motifInstances) {
+    failures.push(`counts.motifInstances=${atlas.counts.motifInstances} expected ${expected.motifInstances}`);
+  }
+  if (atlas.buildings.length !== expected.buildings) {
+    failures.push(`buildings=${atlas.buildings.length} expected ${expected.buildings}`);
+  }
+  if (atlas.counts.buildings !== expected.buildings) {
+    failures.push(`counts.buildings=${atlas.counts.buildings} expected ${expected.buildings}`);
+  }
+  if (!Array.isArray(atlas.rooms)) {
+    failures.push("rooms is not an array");
+  } else if (atlas.rooms.length !== expected.rooms) {
+    failures.push(`rooms=${atlas.rooms.length} expected ${expected.rooms}`);
+  }
+  if (atlas.counts.rooms !== expected.rooms) {
+    failures.push(`counts.rooms=${atlas.counts.rooms} expected ${expected.rooms}`);
+  }
+  if (atlas.interactables.length !== expected.interactables) {
+    failures.push(`interactables=${atlas.interactables.length} expected ${expected.interactables}`);
+  }
+  if (atlas.counts.interactables !== expected.interactables) {
+    failures.push(`counts.interactables=${atlas.counts.interactables} expected ${expected.interactables}`);
+  }
+
+  const oversizedBuilding = atlas.buildings.find((building) => {
+    const [widthTiles, heightTiles] = building.footprintWxH.split("x").map((value) => Number(value));
+    return (widthTiles ?? 0) > MAX_BUILDING_DIMENSION_TILES || (heightTiles ?? 0) > MAX_BUILDING_DIMENSION_TILES;
+  });
+  if (oversizedBuilding) {
+    failures.push(`${oversizedBuilding.buildingId} footprint ${oversizedBuilding.footprintWxH} exceeds ${MAX_BUILDING_DIMENSION_TILES}x${MAX_BUILDING_DIMENSION_TILES}`);
+  }
+
+  if (failures.length > 0) {
+    throw new Error(`atlas: motif extraction shape drifted for ${DEFAULT_PROJECT_RELATIVE}: ${failures.join("; ")}`);
+  }
+}
+
 export async function extractMotifAtlas(options: ExtractMotifAtlasOptions = {}): Promise<MotifAtlas> {
   const rootDir = path.resolve(options.rootDir ?? process.cwd());
   const projectRelative = options.projectRelative ?? DEFAULT_PROJECT_RELATIVE;
   const atlasJsonRelative = options.atlasJsonRelative ?? DEFAULT_ATLAS_JSON_RELATIVE;
   const motifImageDirRelative = options.motifImageDirRelative ?? DEFAULT_MOTIF_IMAGE_DIR_RELATIVE;
-  const projectAbs = path.join(rootDir, projectRelative);
-  const outJsonPath = path.join(rootDir, atlasJsonRelative);
-  const outImageDir = path.join(rootDir, motifImageDirRelative);
+  const projectAbs = resolvePath(rootDir, projectRelative);
+  const outJsonPath = resolvePath(rootDir, atlasJsonRelative);
+  const outImageDir = resolvePath(rootDir, motifImageDirRelative);
   const logs: string[] = [];
 
   const [graphicsByMapTileset, mapRows, sectorEntries, tileAtlasSource, mapDoorsSource] = await Promise.all([
@@ -1706,6 +1771,7 @@ export async function extractMotifAtlas(options: ExtractMotifAtlasOptions = {}):
     logs
   };
 
+  assertDefaultMotifAtlasShape(atlas, projectRelative);
   await writeFile(outJsonPath, `${JSON.stringify(atlas, null, 2)}\n`, "utf8");
   return atlas;
 }

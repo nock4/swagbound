@@ -1,8 +1,12 @@
-import { describe, expect, it } from "vitest";
+import { mkdtemp, readFile, readdir, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
+import { afterEach, describe, expect, it } from "vitest";
 import {
   buildIndoorRoomSectorGroups,
   canonicalMirrorSignature,
   extractObjectComponents,
+  extractMotifAtlas,
   growSolidFootprint,
   isIndoorAnchorTile,
   sectorIndexForTile,
@@ -11,6 +15,18 @@ import {
   type TerrainTileStat
 } from "../../../scripts/atlas/extract-motifs";
 import type { WorldSectorAreas } from "../src/world";
+
+const tempDirs: string[] = [];
+
+async function makeTempDir(): Promise<string> {
+  const dir = await mkdtemp(path.join(tmpdir(), "swagbound-motif-atlas-"));
+  tempDirs.push(dir);
+  return dir;
+}
+
+afterEach(async () => {
+  await Promise.all(tempDirs.splice(0).map((dir) => rm(dir, { recursive: true, force: true })));
+});
 
 describe("motif atlas terrain and signature helpers", () => {
   it("marks a known fill as terrain while preserving a one-tile object", () => {
@@ -122,6 +138,43 @@ describe("motif atlas terrain and signature helpers", () => {
       { sector: 1, sectorIndexes: [1], area: 200 }
     ]);
   });
+});
+
+describe("motif atlas extractor golden output", () => {
+  it("reproduces the committed building refinement atlas shape", async () => {
+    const outDir = await makeTempDir();
+    const atlasJsonPath = path.join(outDir, "motifs.json");
+    const imageDir = path.join(outDir, "motifs");
+    const atlas = await extractMotifAtlas({
+      atlasJsonRelative: atlasJsonPath,
+      motifImageDirRelative: imageDir
+    });
+    const generated = JSON.parse(await readFile(atlasJsonPath, "utf8")) as typeof atlas;
+    const golden = JSON.parse(await readFile(path.join("content", "atlas", "motifs.json"), "utf8")) as typeof atlas;
+    const generatedImages = (await readdir(imageDir)).filter((entry) => /^(motif|building|room|interactable)-\d+\.png$/.test(entry));
+
+    expect(generated).toEqual(golden);
+    expect(atlas).toEqual(golden);
+    expect(Array.isArray(generated.rooms)).toBe(true);
+    expect(generated.motifs).toHaveLength(79);
+    expect(generated.buildings).toHaveLength(262);
+    expect(generated.rooms).toHaveLength(221);
+    expect(generated.interactables).toHaveLength(275);
+    expect(generated.counts).toMatchObject({
+      motifTypes: 79,
+      motifInstances: 318,
+      buildings: 262,
+      rooms: 221,
+      interactables: 275,
+      pctBuildingsOver14Tiles: 0
+    });
+    expect(generated.buildings.every((building) => {
+      const [widthTiles, heightTiles] = building.footprintWxH.split("x").map((value) => Number(value));
+      return (widthTiles ?? 0) <= 14 && (heightTiles ?? 0) <= 14;
+    })).toBe(true);
+    expect(generatedImages).toHaveLength(79 + 262 + 221 + 275);
+    await expect(readFile(path.join(imageDir, "room-0001.png"))).resolves.toBeInstanceOf(Buffer);
+  }, 30000);
 });
 
 function makeCells(
