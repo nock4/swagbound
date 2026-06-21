@@ -448,6 +448,36 @@
         overflow-wrap: anywhere;
       }
 
+      .town-header {
+        grid-column: 1 / -1;
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 8px 14px;
+        margin-top: 10px;
+        padding: 10px 2px 2px;
+        border-top: 1px solid var(--line);
+      }
+
+      .town-header:first-child {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: 0;
+      }
+
+      .town-header-title {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.25;
+      }
+
+      .town-header-meta {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.35;
+      }
+
       .tileset-list {
         display: grid;
         gap: 16px;
@@ -720,6 +750,9 @@
               <option value="unverified">unverified</option>
               <option value="occupied">has occupants</option>
             </select>
+            <select id="townFilter" class="section-control" aria-label="Town filter">
+              <option value="all">all towns</option>
+            </select>
           </div>
         </div>
         <div id="placesGrid" class="grid"></div>
@@ -803,6 +836,7 @@
           placeFilter: $("placeFilter"),
           placesGrid: $("placesGrid"),
           placesSubtitle: $("placesSubtitle"),
+          townFilter: $("townFilter"),
           roomFilter: $("roomFilter"),
           roomsGrid: $("roomsGrid"),
           roomsSubtitle: $("roomsSubtitle"),
@@ -1017,12 +1051,27 @@
           return item.name || `Unnamed ${item.type || "residence"}`;
         }
 
+        function placeTown(item) {
+          const town = String(item?.town ?? "").trim();
+          return town || "Unmapped area";
+        }
+
+        function isServicePlace(item) {
+          return item?.isService === true || Boolean(item?.serviceRole) || item?.type === "shop/service";
+        }
+
+        function countLabel(value, singular, plural = `${singular}s`) {
+          const count = Number(value ?? 0);
+          return `${number(count)} ${count === 1 ? singular : plural}`;
+        }
+
         function placeHaystack(item) {
           const occupants = Array.isArray(item.occupants) ? item.occupants : [];
           return [
             item.id,
             item.name,
             placeTitle(item),
+            placeTown(item),
             item.type,
             item.confidence,
             pointText(item.overworldDoor),
@@ -1043,14 +1092,6 @@
           if (filter === "occupied") return occupants.length > 0;
           if (["verified", "likely", "unverified"].includes(filter)) return item.confidence === filter;
           return true;
-        }
-
-        function comparePlaces(a, b) {
-          const named = Number(!a.name) - Number(!b.name);
-          if (named !== 0) return named;
-          const confidence = confidenceRank(a.confidence) - confidenceRank(b.confidence);
-          if (confidence !== 0) return confidence;
-          return placeTitle(a).localeCompare(placeTitle(b), undefined, { numeric: true });
         }
 
         function occupantMarkup(occupants) {
@@ -1081,6 +1122,16 @@
 
           const anchors = [...new Set(state.data.motifs.interactables.map((item) => item.anchorType).filter(Boolean))].sort();
           els.interactableFilter.innerHTML = `<option value="all">all anchors</option>${anchors.map((anchor) => `<option value="${escapeHtml(anchor)}">${escapeHtml(anchor)}</option>`).join("")}`;
+
+          const towns = [];
+          const seenTowns = new Set();
+          for (const item of state.data.buildingNames?.buildings ?? []) {
+            const town = placeTown(item);
+            if (seenTowns.has(town)) continue;
+            seenTowns.add(town);
+            towns.push(town);
+          }
+          els.townFilter.innerHTML = `<option value="all">all towns</option>${towns.map((town) => `<option value="${escapeHtml(town)}">${escapeHtml(town)}</option>`).join("")}`;
         }
 
         function renderOverview() {
@@ -1385,36 +1436,63 @@
 
         function renderPlaces() {
           const filter = els.placeFilter.value;
+          const townFilter = els.townFilter.value;
           const source = state.data.buildingNames?.buildings ?? [];
-          const cards = [];
-          for (const item of [...source].sort(comparePlaces)) {
+          const groups = [];
+          let currentGroup = null;
+          for (const item of source) {
+            const town = placeTown(item);
+            if (townFilter !== "all" && town !== townFilter) continue;
             if (!placeMatchesFilter(item, filter)) continue;
             const haystack = placeHaystack(item);
             if (!matchesQuery(haystack)) continue;
 
-            const occupants = Array.isArray(item.occupants) ? item.occupants : [];
-            const confidence = item.confidence || "unverified";
-            const door = pointText(item.overworldDoor);
-            const interior = pointText(item.interior);
+            if (!currentGroup || currentGroup.town !== town) {
+              currentGroup = { town, items: [] };
+              groups.push(currentGroup);
+            }
+            currentGroup.items.push({ item, haystack });
+          }
+
+          const cards = [];
+          let visibleCount = 0;
+          for (const group of groups) {
+            const serviceCount = group.items.filter(({ item }) => isServicePlace(item)).length;
+            visibleCount += group.items.length;
             cards.push(`
-              <article class="card place-card" data-search="${escapeHtml(haystack)}">
-                <div class="card-body">
-                  <h3 class="card-title"><span class="${item.name ? "label-name" : "fallback-name"}">${escapeHtml(placeTitle(item))}</span></h3>
-                  <div class="tag-row">
-                    <span class="tag">place</span>
-                    <span class="tag">${escapeHtml(item.type || "unknown")}</span>
-                    <span class="tag ${confidenceClass(confidence)}">${escapeHtml(confidence)}</span>
-                  </div>
-                  <div class="meta">
-                    <span>id <code>${escapeHtml(item.id)}</code></span>
-                    <span>door <code>${escapeHtml(door || "unknown")}</code></span>
-                    <span>interior <code>${escapeHtml(interior || "unknown")}</code></span>
-                    <span>${number(occupants.length)} occupants</span>
-                  </div>
-                  ${occupantMarkup(occupants)}
-                </div>
-              </article>
+              <div class="town-header" role="heading" aria-level="3">
+                <h3 class="town-header-title">${escapeHtml(group.town)}</h3>
+                <span class="town-header-meta">${escapeHtml(countLabel(group.items.length, "building"))} · ${escapeHtml(countLabel(serviceCount, "service"))}</span>
+              </div>
             `);
+
+            for (const { item, haystack } of group.items) {
+              const occupants = Array.isArray(item.occupants) ? item.occupants : [];
+              const confidence = item.confidence || "unverified";
+              const door = pointText(item.overworldDoor);
+              const interior = pointText(item.interior);
+              const town = placeTown(item);
+              cards.push(`
+                <article class="card place-card" data-search="${escapeHtml(haystack)}">
+                  <div class="card-body">
+                    <h3 class="card-title"><span class="${item.name ? "label-name" : "fallback-name"}">${escapeHtml(placeTitle(item))}</span></h3>
+                    <div class="tag-row">
+                      <span class="tag">place</span>
+                      <span class="tag">${escapeHtml(town)}</span>
+                      <span class="tag">${escapeHtml(item.type || "unknown")}</span>
+                      <span class="tag ${confidenceClass(confidence)}">${escapeHtml(confidence)}</span>
+                    </div>
+                    <div class="meta">
+                      <span>id <code>${escapeHtml(item.id)}</code></span>
+                      <span>door <code>${escapeHtml(door || "unknown")}</code></span>
+                      <span>interior <code>${escapeHtml(interior || "unknown")}</code></span>
+                      <span>${number(occupants.length)} occupants</span>
+                    </div>
+                    ${occupantMarkup(occupants)}
+                  </div>
+                </article>
+              `);
+            }
           }
 
           const total = state.data.buildingNames?.buildings?.length ?? 0;
@@ -1422,7 +1500,7 @@
             els.placesSubtitle.textContent = "building-names.json is not present in this atlas copy.";
             els.placesGrid.innerHTML = `<div class="empty">No Places data is available. Re-run <code>pnpm atlas:browser</code> after adding <code>content/atlas/building-names.json</code>.</div>`;
           } else {
-            els.placesSubtitle.textContent = `${number(cards.length)} visible named-building records from ${number(total)} total places.`;
+            els.placesSubtitle.textContent = `${number(visibleCount)} visible named-building records from ${number(total)} total places.`;
             els.placesGrid.innerHTML = cards.length ? cards.join("") : `<div class="empty">No places match the current filters.</div>`;
           }
           registerLazyImages(els.placesGrid);
@@ -1598,6 +1676,7 @@
           els.motifFilter.addEventListener("change", () => renderMotifs());
           els.buildingFilter.addEventListener("change", () => renderBuildings());
           els.placeFilter.addEventListener("change", () => renderPlaces());
+          els.townFilter.addEventListener("change", () => renderPlaces());
           els.roomFilter.addEventListener("change", () => renderRooms());
           els.interactableFilter.addEventListener("change", () => renderInteractables());
 
