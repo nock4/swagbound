@@ -20,7 +20,7 @@ Source of truth: `content/atlas/*.json`. Images: `apps/game/public/atlas/*` (reg
 | 2 | Character catalog (sprites.json) | ✅ (metric fix queued) | content/atlas/sprites.json |
 | 3 | Motif detection — door-anchored | ✅ | motifs.json (flora 79 / interactables 275 / rooms 221 / buildings 262) |
 | 4 | Vision labeling & taxonomy | ⬜ | enriched catalog |
-| 5 | Atlas browser (HTML) | ⬜ | docs/atlas-browser.html |
+| 5 | Atlas browser (HTML) | ✅ | apps/game/public/atlas/index.html (open /atlas/index.html) |
 | 6 | Design-language map & gaps | ⬜ | content/atlas/coverage.json |
 | 7 | Map-authoring primitives | ⬜ | content/atlas/map-kit.json + demo |
 | 8 | SCOPE EXPANSION (post-critique) | ⬜ | backgrounds.json, ui.json (windows+fonts+item/psi icons), interactables.json, townmaps.json, palettes/chrome |
