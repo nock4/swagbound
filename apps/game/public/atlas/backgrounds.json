@@ -1,0 +1,6006 @@
+{
+  "schema": "swagbound.atlas.backgrounds.v1",
+  "backgrounds": [
+    {
+      "bgId": 0,
+      "image": "../generated/assets/battle/backgrounds/000.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        20,
+        25,
+        26,
+        27,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        55,
+        56,
+        57,
+        58,
+        59,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127,
+        128,
+        129,
+        130,
+        131,
+        132,
+        133,
+        136,
+        137,
+        138,
+        139,
+        140,
+        141,
+        142,
+        143,
+        144,
+        145,
+        146,
+        147,
+        148,
+        149,
+        150,
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
+        167,
+        168,
+        169,
+        170,
+        171,
+        172,
+        173,
+        174,
+        175,
+        176,
+        177,
+        178,
+        179,
+        180,
+        181,
+        182,
+        183,
+        184,
+        185,
+        186,
+        187,
+        188,
+        189,
+        190,
+        191,
+        192,
+        193,
+        194,
+        195,
+        196,
+        197,
+        198,
+        199,
+        200,
+        201,
+        202,
+        203,
+        204,
+        205,
+        206,
+        207,
+        208,
+        209,
+        210,
+        211,
+        212,
+        213,
+        214,
+        215,
+        216,
+        217,
+        218,
+        219,
+        220,
+        221,
+        228,
+        229,
+        230,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        258,
+        259,
+        260,
+        261,
+        262,
+        263,
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        280,
+        281,
+        282,
+        283,
+        284,
+        285,
+        286,
+        287,
+        288,
+        289,
+        290,
+        291,
+        292,
+        293,
+        294,
+        295,
+        296,
+        297,
+        298,
+        299,
+        300,
+        303,
+        304,
+        306,
+        307,
+        309,
+        310,
+        312,
+        313,
+        322,
+        323,
+        324,
+        325,
+        326,
+        329,
+        330,
+        331,
+        335,
+        336,
+        337,
+        338,
+        339,
+        340,
+        341,
+        342,
+        343,
+        344,
+        345,
+        346,
+        347,
+        348,
+        349,
+        350,
+        351,
+        352,
+        353,
+        354,
+        355,
+        356,
+        357,
+        358,
+        359,
+        360,
+        361,
+        362,
+        363,
+        364,
+        365,
+        366,
+        367,
+        368,
+        369,
+        370,
+        371,
+        372,
+        373,
+        374,
+        375,
+        376,
+        377,
+        378,
+        379,
+        380,
+        381,
+        382,
+        383,
+        384,
+        385,
+        386,
+        387,
+        388,
+        389,
+        390,
+        391,
+        392,
+        393,
+        394,
+        395,
+        396,
+        397,
+        398,
+        399,
+        400,
+        401,
+        402,
+        403,
+        404,
+        405,
+        406,
+        407,
+        408,
+        409,
+        410,
+        411,
+        412,
+        417,
+        427,
+        428,
+        429,
+        430
+      ],
+      "animated": true
+    },
+    {
+      "bgId": 1,
+      "image": "../generated/assets/battle/backgrounds/001.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        36,
+        56,
+        57
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 2,
+      "image": "atlas/backgrounds/002.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 3,
+      "image": "../generated/assets/battle/backgrounds/003.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        61,
+        62,
+        427
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 4,
+      "image": "atlas/backgrounds/004.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 5,
+      "image": "../generated/assets/battle/backgrounds/005.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        8
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 6,
+      "image": "../generated/assets/battle/backgrounds/006.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        9
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 7,
+      "image": "../generated/assets/battle/backgrounds/007.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        10
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 32,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 8,
+      "image": "../generated/assets/battle/backgrounds/008.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        11
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 9,
+      "image": "../generated/assets/battle/backgrounds/009.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        30,
+        31,
+        34,
+        35,
+        41,
+        42,
+        105,
+        108
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 10,
+      "image": "../generated/assets/battle/backgrounds/010.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        33,
+        184,
+        185,
+        186
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 11,
+      "image": "../generated/assets/battle/backgrounds/011.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        43,
+        44,
+        48
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 12,
+      "image": "../generated/assets/battle/backgrounds/012.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        32
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 13,
+      "image": "atlas/backgrounds/013.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 14,
+      "image": "../generated/assets/battle/backgrounds/014.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        37,
+        38,
+        58,
+        59
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 15,
+      "image": "../generated/assets/battle/backgrounds/015.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        63
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 16,
+      "image": "../generated/assets/battle/backgrounds/016.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        55,
+        417
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 17,
+      "image": "atlas/backgrounds/017.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 18,
+      "image": "atlas/backgrounds/018.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 19,
+      "image": "atlas/backgrounds/019.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 20,
+      "image": "../generated/assets/battle/backgrounds/020.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        50,
+        51,
+        53
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 63.75
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 21,
+      "image": "../generated/assets/battle/backgrounds/021.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        45,
+        46,
+        47,
+        106,
+        107
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 1
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 22,
+      "image": "../generated/assets/battle/backgrounds/022.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        49,
+        52
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 23,
+      "image": "atlas/backgrounds/023.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 24,
+      "image": "atlas/backgrounds/024.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 25,
+      "image": "../generated/assets/battle/backgrounds/025.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        64,
+        65
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 26,
+      "image": "../generated/assets/battle/backgrounds/026.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        67,
+        70,
+        71
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 27,
+      "image": "../generated/assets/battle/backgrounds/027.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        66,
+        69,
+        72,
+        75,
+        77
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 28,
+      "image": "../generated/assets/battle/backgrounds/028.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        68,
+        73,
+        74
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 32,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 29,
+      "image": "../generated/assets/battle/backgrounds/029.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        76
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 30,
+      "image": "../generated/assets/battle/backgrounds/030.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        84,
+        86,
+        99,
+        100
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 31,
+      "image": "../generated/assets/battle/backgrounds/031.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        87,
+        89,
+        90,
+        101,
+        102
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 32,
+      "image": "../generated/assets/battle/backgrounds/032.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        80,
+        81,
+        82,
+        83,
+        91,
+        92,
+        93,
+        96,
+        97
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 33,
+      "image": "../generated/assets/battle/backgrounds/033.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        103
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 63.75,
+        "frequency": 0.125,
+        "speed": 0
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 34,
+      "image": "../generated/assets/battle/backgrounds/034.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        104
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 63.75,
+        "frequency": 0.125,
+        "speed": 0
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 35,
+      "image": "../generated/assets/battle/backgrounds/035.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        109,
+        110,
+        111
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 36,
+      "image": "../generated/assets/battle/backgrounds/036.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        119,
+        120,
+        123
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 37,
+      "image": "atlas/backgrounds/037.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 38,
+      "image": "../generated/assets/battle/backgrounds/038.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        112
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 39,
+      "image": "../generated/assets/battle/backgrounds/039.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        125
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 40,
+      "image": "../generated/assets/battle/backgrounds/040.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        127
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 41,
+      "image": "../generated/assets/battle/backgrounds/041.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        124
+      ],
+      "scroll": {
+        "x": -30,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 42,
+      "image": "../generated/assets/battle/backgrounds/042.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        126
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 43,
+      "image": "../generated/assets/battle/backgrounds/043.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        128
+      ],
+      "scroll": {
+        "x": 30,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 63.75,
+        "frequency": 0.125,
+        "speed": 0
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 44,
+      "image": "../generated/assets/battle/backgrounds/044.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        131
+      ],
+      "scroll": {
+        "x": 30,
+        "y": 30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 45,
+      "image": "../generated/assets/battle/backgrounds/045.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        327,
+        328
+      ],
+      "scroll": {
+        "x": 30,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 46,
+      "image": "../generated/assets/battle/backgrounds/046.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        137
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 47,
+      "image": "atlas/backgrounds/047.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -30,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 48,
+      "image": "../generated/assets/battle/backgrounds/048.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        136
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 49,
+      "image": "../generated/assets/battle/backgrounds/049.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        138,
+        139,
+        429
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 50,
+      "image": "atlas/backgrounds/050.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 51,
+      "image": "../generated/assets/battle/backgrounds/051.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        287,
+        293
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 52,
+      "image": "../generated/assets/battle/backgrounds/052.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        146,
+        147,
+        148
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 7.5
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 53,
+      "image": "../generated/assets/battle/backgrounds/053.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        140,
+        141,
+        150,
+        151
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 60
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 54,
+      "image": "../generated/assets/battle/backgrounds/054.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        143
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 60
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 55,
+      "image": "../generated/assets/battle/backgrounds/055.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        153
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 60
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 56,
+      "image": "../generated/assets/battle/backgrounds/056.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        144,
+        145
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 57,
+      "image": "../generated/assets/battle/backgrounds/057.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        154,
+        159
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 58,
+      "image": "../generated/assets/battle/backgrounds/058.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        157,
+        158
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 59,
+      "image": "../generated/assets/battle/backgrounds/059.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        156,
+        168,
+        169
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 60,
+      "image": "../generated/assets/battle/backgrounds/060.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        160,
+        161,
+        430
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 61,
+      "image": "../generated/assets/battle/backgrounds/061.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        155,
+        167
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 62,
+      "image": "../generated/assets/battle/backgrounds/062.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        162,
+        163,
+        164
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 63,
+      "image": "../generated/assets/battle/backgrounds/063.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        165,
+        166
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 64,
+      "image": "../generated/assets/battle/backgrounds/064.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        170
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 65,
+      "image": "../generated/assets/battle/backgrounds/065.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        171
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 66,
+      "image": "../generated/assets/battle/backgrounds/066.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        172
+      ],
+      "scroll": {
+        "x": 15,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 67,
+      "image": "../generated/assets/battle/backgrounds/067.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        176
+      ],
+      "scroll": {
+        "x": -7.5,
+        "y": 7.5
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 68,
+      "image": "../generated/assets/battle/backgrounds/068.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        180,
+        181
+      ],
+      "scroll": {
+        "x": 15,
+        "y": -7.5
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 69,
+      "image": "atlas/backgrounds/069.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -7.5,
+        "y": 7.5
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 70,
+      "image": "../generated/assets/battle/backgrounds/070.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        175
+      ],
+      "scroll": {
+        "x": 7.5,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 71,
+      "image": "../generated/assets/battle/backgrounds/071.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        173
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 32,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 72,
+      "image": "../generated/assets/battle/backgrounds/072.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        182,
+        183
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 73,
+      "image": "../generated/assets/battle/backgrounds/073.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        189,
+        190,
+        191,
+        192,
+        207,
+        208,
+        209,
+        210
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 63.75
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 74,
+      "image": "../generated/assets/battle/backgrounds/074.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        193,
+        194,
+        195
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 75,
+      "image": "../generated/assets/battle/backgrounds/075.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        187,
+        188
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 76,
+      "image": "../generated/assets/battle/backgrounds/076.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        213,
+        214
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 77,
+      "image": "atlas/backgrounds/077.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 78,
+      "image": "../generated/assets/battle/backgrounds/078.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        196
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 79,
+      "image": "../generated/assets/battle/backgrounds/079.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        201,
+        202,
+        203
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 80,
+      "image": "../generated/assets/battle/backgrounds/080.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        197,
+        204,
+        205
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 81,
+      "image": "../generated/assets/battle/backgrounds/081.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        198,
+        199,
+        200
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 82,
+      "image": "../generated/assets/battle/backgrounds/082.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        206,
+        211,
+        212
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 83,
+      "image": "atlas/backgrounds/083.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 84,
+      "image": "../generated/assets/battle/backgrounds/084.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        270,
+        271
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 85,
+      "image": "../generated/assets/battle/backgrounds/085.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        266,
+        268
+      ],
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 86,
+      "image": "../generated/assets/battle/backgrounds/086.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        267,
+        272
+      ],
+      "scroll": {
+        "x": -30,
+        "y": 30
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 87,
+      "image": "../generated/assets/battle/backgrounds/087.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        269
+      ],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 88,
+      "image": "atlas/backgrounds/088.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "animated": true
+    },
+    {
+      "bgId": 89,
+      "image": "atlas/backgrounds/089.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 90,
+      "image": "atlas/backgrounds/090.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 32,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 91,
+      "image": "atlas/backgrounds/091.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "animated": true
+    },
+    {
+      "bgId": 92,
+      "image": "atlas/backgrounds/092.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 15,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 93,
+      "image": "atlas/backgrounds/093.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 0,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 94,
+      "image": "atlas/backgrounds/094.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 95,
+      "image": "../generated/assets/battle/backgrounds/095.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        306,
+        307,
+        310
+      ],
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 96,
+      "image": "../generated/assets/battle/backgrounds/096.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        304,
+        309
+      ],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 97,
+      "image": "../generated/assets/battle/backgrounds/097.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        312,
+        313
+      ],
+      "scroll": {
+        "x": 7.5,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 98,
+      "image": "../generated/assets/battle/backgrounds/098.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        322
+      ],
+      "scroll": {
+        "x": 45,
+        "y": -45
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 99,
+      "image": "atlas/backgrounds/099.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 100,
+      "image": "../generated/assets/battle/backgrounds/100.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        373,
+        378,
+        382
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 101,
+      "image": "atlas/backgrounds/101.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 7.5,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 102,
+      "image": "../generated/assets/battle/backgrounds/102.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        375,
+        385
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 103,
+      "image": "../generated/assets/battle/backgrounds/103.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        381,
+        388
+      ],
+      "scroll": {
+        "x": 7.5,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 104,
+      "image": "../generated/assets/battle/backgrounds/104.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        391,
+        394
+      ],
+      "scroll": {
+        "x": 30,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 105,
+      "image": "../generated/assets/battle/backgrounds/105.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        398
+      ],
+      "scroll": {
+        "x": 0,
+        "y": -15
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 106,
+      "image": "../generated/assets/battle/backgrounds/106.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        389,
+        396,
+        397,
+        402
+      ],
+      "scroll": {
+        "x": 15,
+        "y": -7.5
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.25,
+        "speed": 0
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 107,
+      "image": "../generated/assets/battle/backgrounds/107.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        408
+      ],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 108,
+      "image": "atlas/backgrounds/108.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 109,
+      "image": "../generated/assets/battle/backgrounds/109.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        412
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 110,
+      "image": "../generated/assets/battle/backgrounds/110.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        409
+      ],
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 111,
+      "image": "../generated/assets/battle/backgrounds/111.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        404
+      ],
+      "scroll": {
+        "x": 15,
+        "y": -7.5
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 112,
+      "image": "atlas/backgrounds/112.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 113,
+      "image": "atlas/backgrounds/113.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 114,
+      "image": "../generated/assets/battle/backgrounds/114.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        4
+      ],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 115,
+      "image": "../generated/assets/battle/backgrounds/115.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        5
+      ],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 116,
+      "image": "../generated/assets/battle/backgrounds/116.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        6
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 337.5
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 117,
+      "image": "../generated/assets/battle/backgrounds/117.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        7
+      ],
+      "scroll": {
+        "x": 7.5,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 118,
+      "image": "atlas/backgrounds/118.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 30,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 119,
+      "image": "atlas/backgrounds/119.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 120,
+      "image": "atlas/backgrounds/120.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -30,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 121,
+      "image": "atlas/backgrounds/121.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 32,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 122,
+      "image": "../generated/assets/battle/backgrounds/122.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        14
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 123,
+      "image": "../generated/assets/battle/backgrounds/123.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        13
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 124,
+      "image": "../generated/assets/battle/backgrounds/124.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        12
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 125,
+      "image": "../generated/assets/battle/backgrounds/125.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        15,
+        17,
+        18
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 126,
+      "image": "atlas/backgrounds/126.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": -7.5
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 127,
+      "image": "../generated/assets/battle/backgrounds/127.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        20
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -7.5
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 128,
+      "image": "atlas/backgrounds/128.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 129,
+      "image": "atlas/backgrounds/129.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 130,
+      "image": "atlas/backgrounds/130.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 131,
+      "image": "../generated/assets/battle/backgrounds/131.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        27,
+        29
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 132,
+      "image": "../generated/assets/battle/backgrounds/132.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        244,
+        248
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 133,
+      "image": "../generated/assets/battle/backgrounds/133.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        240,
+        245,
+        246,
+        247
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 134,
+      "image": "../generated/assets/battle/backgrounds/134.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        236,
+        237,
+        242
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 135,
+      "image": "../generated/assets/battle/backgrounds/135.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        238,
+        239,
+        241,
+        243
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 136,
+      "image": "../generated/assets/battle/backgrounds/136.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        253,
+        256,
+        257,
+        258,
+        263
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 137,
+      "image": "../generated/assets/battle/backgrounds/137.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        254,
+        261
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 138,
+      "image": "../generated/assets/battle/backgrounds/138.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        250,
+        252,
+        259,
+        260,
+        262,
+        264,
+        265
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 139,
+      "image": "../generated/assets/battle/backgrounds/139.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        249,
+        251,
+        255
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 140,
+      "image": "../generated/assets/battle/backgrounds/140.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        283
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 141,
+      "image": "../generated/assets/battle/backgrounds/141.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        275,
+        276,
+        281,
+        282,
+        284
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 142,
+      "image": "../generated/assets/battle/backgrounds/142.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        273,
+        279
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 143,
+      "image": "../generated/assets/battle/backgrounds/143.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        274,
+        277,
+        278,
+        280,
+        285,
+        286
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 144,
+      "image": "../generated/assets/battle/backgrounds/144.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        296,
+        297
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 145,
+      "image": "../generated/assets/battle/backgrounds/145.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        298
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 146,
+      "image": "../generated/assets/battle/backgrounds/146.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        288,
+        290,
+        295,
+        300
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 147,
+      "image": "atlas/backgrounds/147.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 148,
+      "image": "../generated/assets/battle/backgrounds/148.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        358,
+        364
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 149,
+      "image": "atlas/backgrounds/149.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 150,
+      "image": "atlas/backgrounds/150.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 151,
+      "image": "../generated/assets/battle/backgrounds/151.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        342,
+        345,
+        348,
+        349
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 152,
+      "image": "../generated/assets/battle/backgrounds/152.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        218,
+        219,
+        220,
+        221
+      ],
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 153,
+      "image": "../generated/assets/battle/backgrounds/153.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        215,
+        216
+      ],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 154,
+      "image": "../generated/assets/battle/backgrounds/154.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        217
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 155,
+      "image": "../generated/assets/battle/backgrounds/155.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        324,
+        325
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 156,
+      "image": "../generated/assets/battle/backgrounds/156.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        338,
+        339,
+        340
+      ],
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 157,
+      "image": "../generated/assets/battle/backgrounds/157.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        132
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 158,
+      "image": "../generated/assets/battle/backgrounds/158.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        326
+      ],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 159,
+      "image": "../generated/assets/battle/backgrounds/159.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        323
+      ],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 160,
+      "image": "atlas/backgrounds/160.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 15,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 32,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 161,
+      "image": "../generated/assets/battle/backgrounds/161.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        330,
+        331,
+        335,
+        336,
+        337
+      ],
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 162,
+      "image": "../generated/assets/battle/backgrounds/162.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        329
+      ],
+      "scroll": {
+        "x": -30,
+        "y": 30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 163,
+      "image": "atlas/backgrounds/163.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 164,
+      "image": "atlas/backgrounds/164.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 165,
+      "image": "atlas/backgrounds/165.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 166,
+      "image": "atlas/backgrounds/166.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 167,
+      "image": "atlas/backgrounds/167.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 168,
+      "image": "atlas/backgrounds/168.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 169,
+      "image": "../generated/assets/battle/backgrounds/169.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        450
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 170,
+      "image": "../generated/assets/battle/backgrounds/170.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        450
+      ],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 171,
+      "image": "atlas/backgrounds/171.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 172,
+      "image": "atlas/backgrounds/172.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 173,
+      "image": "atlas/backgrounds/173.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 174,
+      "image": "atlas/backgrounds/174.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 175,
+      "image": "atlas/backgrounds/175.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 176,
+      "image": "atlas/backgrounds/176.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 177,
+      "image": "atlas/backgrounds/177.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 178,
+      "image": "atlas/backgrounds/178.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 179,
+      "image": "../generated/assets/battle/backgrounds/179.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        448
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 180,
+      "image": "../generated/assets/battle/backgrounds/180.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        448
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 181,
+      "image": "../generated/assets/battle/backgrounds/181.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        449
+      ],
+      "scroll": {
+        "x": 240,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 182,
+      "image": "../generated/assets/battle/backgrounds/182.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        449
+      ],
+      "scroll": {
+        "x": 240,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 183,
+      "image": "atlas/backgrounds/183.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -30,
+        "y": 30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 184,
+      "image": "atlas/backgrounds/184.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 185,
+      "image": "../generated/assets/battle/backgrounds/185.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        222
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 186,
+      "image": "../generated/assets/battle/backgrounds/186.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        222
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 187,
+      "image": "atlas/backgrounds/187.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -14.062,
+        "y": -14.062
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 188,
+      "image": "atlas/backgrounds/188.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 14.063,
+        "y": -14.062
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 189,
+      "image": "../generated/assets/battle/backgrounds/189.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        129
+      ],
+      "scroll": {
+        "x": 15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 190,
+      "image": "../generated/assets/battle/backgrounds/190.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        424
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 32,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 191,
+      "image": "../generated/assets/battle/backgrounds/191.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        231,
+        232,
+        233
+      ],
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 192,
+      "image": "../generated/assets/battle/backgrounds/192.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        231,
+        232,
+        233
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 193,
+      "image": "atlas/backgrounds/193.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 194,
+      "image": "atlas/backgrounds/194.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 195,
+      "image": "atlas/backgrounds/195.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 112.5,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 196,
+      "image": "atlas/backgrounds/196.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 197,
+      "image": "atlas/backgrounds/197.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 198,
+      "image": "../generated/assets/battle/backgrounds/198.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        341,
+        347,
+        351
+      ],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 199,
+      "image": "atlas/backgrounds/199.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 7.5,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 200,
+      "image": "atlas/backgrounds/200.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 0,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 201,
+      "image": "atlas/backgrounds/201.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 0,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 202,
+      "image": "../generated/assets/battle/backgrounds/202.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        134,
+        135
+      ],
+      "scroll": {
+        "x": 112.5,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 203,
+      "image": "../generated/assets/battle/backgrounds/203.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        134,
+        135
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 204,
+      "image": "atlas/backgrounds/204.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 0,
+        "y": -28.125
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 205,
+      "image": "atlas/backgrounds/205.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -28.125,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 206,
+      "image": "atlas/backgrounds/206.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 56.25,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 207,
+      "image": "atlas/backgrounds/207.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 0,
+        "y": -28.125
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 208,
+      "image": "atlas/backgrounds/208.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 56.25,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 209,
+      "image": "../generated/assets/battle/backgrounds/209.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        405
+      ],
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 210,
+      "image": "atlas/backgrounds/210.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 211,
+      "image": "atlas/backgrounds/211.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 56.25,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 212,
+      "image": "../generated/assets/battle/backgrounds/212.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        413,
+        414,
+        415
+      ],
+      "scroll": {
+        "x": 56.25,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 213,
+      "image": "../generated/assets/battle/backgrounds/213.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        413,
+        414,
+        415
+      ],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 214,
+      "image": "atlas/backgrounds/214.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 2,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 215,
+      "image": "atlas/backgrounds/215.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 216,
+      "image": "atlas/backgrounds/216.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 112.5,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 217,
+      "image": "atlas/backgrounds/217.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 56.25,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 218,
+      "image": "../generated/assets/battle/backgrounds/218.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        474
+      ],
+      "scroll": {
+        "x": 7.5,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 219,
+      "image": "../generated/assets/battle/backgrounds/219.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        474
+      ],
+      "scroll": {
+        "x": 15,
+        "y": -7.5
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 220,
+      "image": "atlas/backgrounds/220.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 1,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 221,
+      "image": "atlas/backgrounds/221.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 32,
+        "frequency": 0.25,
+        "speed": 0
+      },
+      "animated": true
+    },
+    {
+      "bgId": 222,
+      "image": "atlas/backgrounds/222.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 223,
+      "image": "atlas/backgrounds/223.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 62.5,
+        "frequency": 0.125,
+        "speed": 0
+      },
+      "animated": true
+    },
+    {
+      "bgId": 224,
+      "image": "atlas/backgrounds/224.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 39.063,
+        "frequency": 0.125,
+        "speed": 0
+      },
+      "animated": true
+    },
+    {
+      "bgId": 225,
+      "image": "atlas/backgrounds/225.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 21.094,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 226,
+      "image": "atlas/backgrounds/226.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 0,
+        "y": 187.5
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 227,
+      "image": "atlas/backgrounds/227.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 0,
+        "y": 337.5
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 1,
+        "frequency": 0.125,
+        "speed": 0
+      },
+      "animated": true
+    },
+    {
+      "bgId": 228,
+      "image": "atlas/backgrounds/228.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 229,
+      "image": "atlas/backgrounds/229.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 230,
+      "image": "atlas/backgrounds/230.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": false
+    },
+    {
+      "bgId": 231,
+      "image": "atlas/backgrounds/231.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 232,
+      "image": "atlas/backgrounds/232.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 233,
+      "image": "atlas/backgrounds/233.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 234,
+      "image": "atlas/backgrounds/234.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 15,
+        "y": 15
+      },
+      "animated": true
+    },
+    {
+      "bgId": 235,
+      "image": "atlas/backgrounds/235.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 236,
+      "image": "atlas/backgrounds/236.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 237,
+      "image": "atlas/backgrounds/237.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 238,
+      "image": "atlas/backgrounds/238.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 239,
+      "image": "atlas/backgrounds/239.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 240,
+      "image": "atlas/backgrounds/240.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 241,
+      "image": "atlas/backgrounds/241.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 242,
+      "image": "atlas/backgrounds/242.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 243,
+      "image": "../generated/assets/battle/backgrounds/243.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        355,
+        356,
+        361,
+        362,
+        365,
+        366
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 30
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 244,
+      "image": "atlas/backgrounds/244.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 245,
+      "image": "atlas/backgrounds/245.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 246,
+      "image": "atlas/backgrounds/246.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 247,
+      "image": "atlas/backgrounds/247.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 248,
+      "image": "atlas/backgrounds/248.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": false
+    },
+    {
+      "bgId": 249,
+      "image": "atlas/backgrounds/249.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": false
+    },
+    {
+      "bgId": 250,
+      "image": "atlas/backgrounds/250.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": false
+    },
+    {
+      "bgId": 251,
+      "image": "atlas/backgrounds/251.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": false
+    },
+    {
+      "bgId": 252,
+      "image": "atlas/backgrounds/252.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": false
+    },
+    {
+      "bgId": 253,
+      "image": "atlas/backgrounds/253.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 254,
+      "image": "atlas/backgrounds/254.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 255,
+      "image": "atlas/backgrounds/255.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 1
+      },
+      "animated": true
+    },
+    {
+      "bgId": 256,
+      "image": "atlas/backgrounds/256.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 257,
+      "image": "atlas/backgrounds/257.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 258,
+      "image": "../generated/assets/battle/backgrounds/258.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        327,
+        328
+      ],
+      "scroll": {
+        "x": -30,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 259,
+      "image": "../generated/assets/battle/backgrounds/259.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        113,
+        117,
+        118,
+        428
+      ],
+      "scroll": {
+        "x": 7.5,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 16,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 260,
+      "image": "../generated/assets/battle/backgrounds/260.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        2
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 261,
+      "image": "../generated/assets/battle/backgrounds/261.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        3
+      ],
+      "scroll": {
+        "x": 56.25,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 262,
+      "image": "../generated/assets/battle/backgrounds/262.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        1
+      ],
+      "scroll": {
+        "x": 112.5,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 263,
+      "image": "atlas/backgrounds/263.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": false
+    },
+    {
+      "bgId": 264,
+      "image": "atlas/backgrounds/264.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": false
+    },
+    {
+      "bgId": 265,
+      "image": "atlas/backgrounds/265.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": true
+    },
+    {
+      "bgId": 266,
+      "image": "../generated/assets/battle/backgrounds/266.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        423
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 267,
+      "image": "../generated/assets/battle/backgrounds/267.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        423
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 268,
+      "image": "../generated/assets/battle/backgrounds/268.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        178,
+        179
+      ],
+      "scroll": {
+        "x": 30,
+        "y": 30
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 32,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 269,
+      "image": "../generated/assets/battle/backgrounds/269.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        39,
+        40,
+        60
+      ],
+      "scroll": {
+        "x": -14.062,
+        "y": -14.062
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 270,
+      "image": "../generated/assets/battle/backgrounds/270.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        39,
+        40,
+        60
+      ],
+      "scroll": {
+        "x": 14.063,
+        "y": -14.062
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 271,
+      "image": "../generated/assets/battle/backgrounds/271.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        350,
+        354,
+        357,
+        363
+      ],
+      "scroll": {
+        "x": 7.5,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 272,
+      "image": "atlas/backgrounds/272.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 0,
+        "y": 15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 273,
+      "image": "atlas/backgrounds/273.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 30,
+        "y": 60
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 274,
+      "image": "../generated/assets/battle/backgrounds/274.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        223,
+        224,
+        225
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 275,
+      "image": "../generated/assets/battle/backgrounds/275.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        223,
+        224,
+        225
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 276,
+      "image": "../generated/assets/battle/backgrounds/276.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        226,
+        227
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 277,
+      "image": "../generated/assets/battle/backgrounds/277.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        226,
+        227
+      ],
+      "scroll": {
+        "x": -30,
+        "y": 30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 278,
+      "image": "atlas/backgrounds/278.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.055,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 279,
+      "image": "atlas/backgrounds/279.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "animated": false
+    },
+    {
+      "bgId": 280,
+      "image": "../generated/assets/battle/backgrounds/280.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        228,
+        229,
+        230
+      ],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 281,
+      "image": "../generated/assets/battle/backgrounds/281.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        234,
+        235
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 282,
+      "image": "../generated/assets/battle/backgrounds/282.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        234,
+        235
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 283,
+      "image": "../generated/assets/battle/backgrounds/283.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        344,
+        346
+      ],
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 284,
+      "image": "atlas/backgrounds/284.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 285,
+      "image": "atlas/backgrounds/285.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 286,
+      "image": "../generated/assets/battle/backgrounds/286.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        359,
+        360
+      ],
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 287,
+      "image": "../generated/assets/battle/backgrounds/287.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        367,
+        368
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 288,
+      "image": "../generated/assets/battle/backgrounds/288.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        133
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 289,
+      "image": "../generated/assets/battle/backgrounds/289.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        371
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 290,
+      "image": "../generated/assets/battle/backgrounds/290.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        369,
+        376
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 291,
+      "image": "../generated/assets/battle/backgrounds/291.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        370,
+        377
+      ],
+      "scroll": {
+        "x": 45,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 292,
+      "image": "atlas/backgrounds/292.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 112.5,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 293,
+      "image": "atlas/backgrounds/293.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 117.188,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 294,
+      "image": "../generated/assets/battle/backgrounds/294.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        303
+      ],
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 295,
+      "image": "atlas/backgrounds/295.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 62.625,
+        "frequency": 1,
+        "speed": 0
+      },
+      "animated": true
+    },
+    {
+      "bgId": 296,
+      "image": "../generated/assets/battle/backgrounds/296.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        406
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 297,
+      "image": "../generated/assets/battle/backgrounds/297.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        403,
+        407
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 298,
+      "image": "atlas/backgrounds/298.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 299,
+      "image": "../generated/assets/battle/backgrounds/299.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        392,
+        393,
+        395
+      ],
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 300,
+      "image": "../generated/assets/battle/backgrounds/300.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        410
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 301,
+      "image": "../generated/assets/battle/backgrounds/301.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        411
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 302,
+      "image": "atlas/backgrounds/302.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 303,
+      "image": "../generated/assets/battle/backgrounds/303.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        390,
+        400,
+        401
+      ],
+      "scroll": {
+        "x": 112.5,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 304,
+      "image": "../generated/assets/battle/backgrounds/304.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        289,
+        291
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 305,
+      "image": "../generated/assets/battle/backgrounds/305.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        292,
+        294,
+        299
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 306,
+      "image": "../generated/assets/battle/backgrounds/306.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        426
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 4,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 307,
+      "image": "../generated/assets/battle/backgrounds/307.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        426
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 308,
+      "image": "atlas/backgrounds/308.png",
+      "used": false,
+      "usedByEnemyGroups": [],
+      "scroll": {
+        "x": 15,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true
+    },
+    {
+      "bgId": 309,
+      "image": "../generated/assets/battle/backgrounds/309.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        379
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 310,
+      "image": "../generated/assets/battle/backgrounds/310.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        386,
+        387
+      ],
+      "scroll": {
+        "x": 30,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 311,
+      "image": "../generated/assets/battle/backgrounds/311.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        380,
+        383,
+        384
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 312,
+      "image": "../generated/assets/battle/backgrounds/312.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        372,
+        374
+      ],
+      "scroll": {
+        "x": 30,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 2,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "caves-001"
+    },
+    {
+      "bgId": 313,
+      "image": "../generated/assets/battle/backgrounds/313.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        16
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "horizontal, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "cloudcastle-dessert-oasis-001"
+    },
+    {
+      "bgId": 314,
+      "image": "../generated/assets/battle/backgrounds/314.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        26
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 4,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "dance-system-seen-backwards-001"
+    },
+    {
+      "bgId": 315,
+      "image": "../generated/assets/battle/backgrounds/315.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        25
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "unknown type 4",
+        "amplitude": 2,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pifella-2-22-you-can-not-redo-001"
+    },
+    {
+      "bgId": 316,
+      "image": "../generated/assets/battle/backgrounds/316.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        85,
+        88
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "animated": true,
+      "override": "pifella-2-parasite-chamber-001"
+    },
+    {
+      "bgId": 317,
+      "image": "../generated/assets/battle/backgrounds/317.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        78,
+        79,
+        94,
+        95,
+        98
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "pray4lowbie-001"
+    },
+    {
+      "bgId": 318,
+      "image": "../generated/assets/battle/backgrounds/318.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        114,
+        115,
+        116
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 30
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "projections-001"
+    },
+    {
+      "bgId": 319,
+      "image": "../generated/assets/battle/backgrounds/319.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        121,
+        122
+      ],
+      "scroll": {
+        "x": -15,
+        "y": -15
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "really-new-god-001"
+    },
+    {
+      "bgId": 320,
+      "image": "../generated/assets/battle/backgrounds/320.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        130
+      ],
+      "scroll": {
+        "x": 30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 63.75,
+        "frequency": 0.125,
+        "speed": 0
+      },
+      "animated": true,
+      "override": "record-of-hyperwar-001"
+    },
+    {
+      "bgId": 321,
+      "image": "../generated/assets/battle/backgrounds/321.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        142,
+        149,
+        152
+      ],
+      "scroll": {
+        "x": 0,
+        "y": 60
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 8,
+        "frequency": 0.25,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "schizobanners-001"
+    },
+    {
+      "bgId": 322,
+      "image": "../generated/assets/battle/backgrounds/322.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        174
+      ],
+      "scroll": {
+        "x": 15,
+        "y": 0
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 32,
+        "frequency": 0.125,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "summon-something-4-002"
+    },
+    {
+      "bgId": 323,
+      "image": "../generated/assets/battle/backgrounds/323.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        177
+      ],
+      "scroll": {
+        "x": -15,
+        "y": 30
+      },
+      "distortion": {
+        "kind": "horizontal, interlaced",
+        "amplitude": 16,
+        "frequency": 0.063,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "syntax-ruins-archive-quotes-log-001"
+    },
+    {
+      "bgId": 324,
+      "image": "../generated/assets/battle/backgrounds/324.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        343,
+        352,
+        353
+      ],
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 16,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true,
+      "override": "toji-a-001"
+    },
+    {
+      "bgId": 325,
+      "image": "../generated/assets/battle/backgrounds/325.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        399
+      ],
+      "scroll": {
+        "x": 15,
+        "y": -7.5
+      },
+      "animated": true,
+      "override": "buzzword-shotgun-001"
+    },
+    {
+      "bgId": 326,
+      "image": "../generated/assets/battle/backgrounds/326.png",
+      "used": true,
+      "usedByEnemyGroups": [
+        424
+      ],
+      "scroll": {
+        "x": -30,
+        "y": -30
+      },
+      "distortion": {
+        "kind": "vertical, smooth",
+        "amplitude": 8,
+        "frequency": 0.188,
+        "speed": 2
+      },
+      "animated": true
+    }
+  ],
+  "counts": {
+    "total": 327,
+    "used": 200,
+    "overridden": 183
+  }
+}

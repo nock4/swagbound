@@ -13,7 +13,12 @@ const requiredCopies = [
   ["content/sprite-overrides.json", "sprite-overrides.json"]
 ];
 
-const optionalCopies = [["content/atlas/labels.json", "labels.json"]];
+const optionalCopies = [
+  ["content/atlas/labels.json", "labels.json"],
+  ["content/atlas/backgrounds.json", "backgrounds.json"],
+  ["content/atlas/ui.json", "ui.json"],
+  ["content/atlas/townmaps.json", "townmaps.json"]
+];
 
 async function exists(filePath) {
   try {

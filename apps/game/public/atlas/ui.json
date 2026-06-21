@@ -1,0 +1,5507 @@
+{
+  "schema": "swagbound.atlas.ui.v1",
+  "windows": [
+    {
+      "id": "Windows1_0",
+      "image": "../generated/assets/window/0.png",
+      "configName": "Plain flavor",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows1_0.png",
+        "generatedFile": "assets/window/0.png",
+        "sourceKind": "generated-flavor",
+        "width": 128,
+        "height": 208,
+        "corner": {
+          "x": 32,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "hEdge": {
+          "x": 40,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "vEdge": {
+          "x": 48,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "moreArrow": {
+          "x": 32,
+          "y": 8,
+          "w": 8,
+          "h": 8
+        },
+        "interiorColor": {
+          "r": 16,
+          "g": 16,
+          "b": 16
+        }
+      }
+    },
+    {
+      "id": "Windows1_1",
+      "image": "../generated/assets/window/1.png",
+      "configName": "Mint flavor",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows1_1.png",
+        "generatedFile": "assets/window/1.png",
+        "sourceKind": "generated-flavor",
+        "width": 128,
+        "height": 208,
+        "corner": {
+          "x": 32,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "hEdge": {
+          "x": 40,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "vEdge": {
+          "x": 48,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "moreArrow": {
+          "x": 32,
+          "y": 8,
+          "w": 8,
+          "h": 8
+        },
+        "interiorColor": {
+          "r": 40,
+          "g": 8,
+          "b": 40
+        }
+      }
+    },
+    {
+      "id": "Windows1_2",
+      "image": "../generated/assets/window/2.png",
+      "configName": "Strawberry flavor",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows1_2.png",
+        "generatedFile": "assets/window/2.png",
+        "sourceKind": "generated-flavor",
+        "width": 128,
+        "height": 208,
+        "corner": {
+          "x": 32,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "hEdge": {
+          "x": 40,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "vEdge": {
+          "x": 48,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "moreArrow": {
+          "x": 32,
+          "y": 8,
+          "w": 8,
+          "h": 8
+        },
+        "interiorColor": {
+          "r": 40,
+          "g": 8,
+          "b": 40
+        }
+      }
+    },
+    {
+      "id": "Windows1_3",
+      "image": "../generated/assets/window/3.png",
+      "configName": "Banana flavor",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows1_3.png",
+        "generatedFile": "assets/window/3.png",
+        "sourceKind": "generated-flavor",
+        "width": 128,
+        "height": 208,
+        "corner": {
+          "x": 32,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "hEdge": {
+          "x": 40,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "vEdge": {
+          "x": 48,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "moreArrow": {
+          "x": 32,
+          "y": 8,
+          "w": 8,
+          "h": 8
+        },
+        "interiorColor": {
+          "r": 40,
+          "g": 8,
+          "b": 40
+        }
+      }
+    },
+    {
+      "id": "Windows1_4",
+      "image": "../generated/assets/window/4.png",
+      "configName": "Peanut flavor",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows1_4.png",
+        "generatedFile": "assets/window/4.png",
+        "sourceKind": "generated-flavor",
+        "width": 128,
+        "height": 208,
+        "corner": {
+          "x": 32,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "hEdge": {
+          "x": 40,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "vEdge": {
+          "x": 48,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "moreArrow": {
+          "x": 32,
+          "y": 8,
+          "w": 8,
+          "h": 8
+        },
+        "interiorColor": {
+          "r": 40,
+          "g": 8,
+          "b": 40
+        }
+      }
+    },
+    {
+      "id": "Windows1_5",
+      "image": "../generated/assets/window/5.png",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows1_5.png",
+        "generatedFile": "assets/window/5.png",
+        "sourceKind": "generated-flavor",
+        "width": 128,
+        "height": 208,
+        "corner": {
+          "x": 32,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "hEdge": {
+          "x": 40,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "vEdge": {
+          "x": 48,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "moreArrow": {
+          "x": 32,
+          "y": 8,
+          "w": 8,
+          "h": 8
+        },
+        "interiorColor": {
+          "r": 40,
+          "g": 8,
+          "b": 40
+        }
+      }
+    },
+    {
+      "id": "Windows1_6",
+      "image": "../generated/assets/window/6.png",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows1_6.png",
+        "generatedFile": "assets/window/6.png",
+        "sourceKind": "generated-flavor",
+        "width": 128,
+        "height": 208,
+        "corner": {
+          "x": 32,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "hEdge": {
+          "x": 40,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "vEdge": {
+          "x": 48,
+          "y": 0,
+          "w": 8,
+          "h": 8
+        },
+        "moreArrow": {
+          "x": 32,
+          "y": 8,
+          "w": 8,
+          "h": 8
+        },
+        "interiorColor": {
+          "r": 40,
+          "g": 8,
+          "b": 40
+        }
+      }
+    },
+    {
+      "id": "Windows2_0",
+      "image": "atlas/ui/window-Windows2_0.png",
+      "configName": "Plain flavor secondary frame",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows2_0.png",
+        "sourceKind": "raw-window-graphics",
+        "width": 56,
+        "height": 8
+      }
+    },
+    {
+      "id": "Windows2_1",
+      "image": "atlas/ui/window-Windows2_1.png",
+      "configName": "Mint flavor secondary frame",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows2_1.png",
+        "sourceKind": "raw-window-graphics",
+        "width": 56,
+        "height": 8
+      }
+    },
+    {
+      "id": "Windows2_2",
+      "image": "atlas/ui/window-Windows2_2.png",
+      "configName": "Strawberry flavor secondary frame",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows2_2.png",
+        "sourceKind": "raw-window-graphics",
+        "width": 56,
+        "height": 8
+      }
+    },
+    {
+      "id": "Windows2_3",
+      "image": "atlas/ui/window-Windows2_3.png",
+      "configName": "Banana flavor secondary frame",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows2_3.png",
+        "sourceKind": "raw-window-graphics",
+        "width": 56,
+        "height": 8
+      }
+    },
+    {
+      "id": "Windows2_4",
+      "image": "atlas/ui/window-Windows2_4.png",
+      "configName": "Peanut flavor secondary frame",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows2_4.png",
+        "sourceKind": "raw-window-graphics",
+        "width": 56,
+        "height": 8
+      }
+    },
+    {
+      "id": "Windows2_5",
+      "image": "atlas/ui/window-Windows2_5.png",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows2_5.png",
+        "sourceKind": "raw-window-graphics",
+        "width": 56,
+        "height": 8
+      }
+    },
+    {
+      "id": "Windows2_6",
+      "image": "atlas/ui/window-Windows2_6.png",
+      "geometry": {
+        "sourceFile": "WindowGraphics/Windows2_6.png",
+        "sourceKind": "raw-window-graphics",
+        "width": 56,
+        "height": 8
+      }
+    }
+  ],
+  "windowLayouts": [
+    {
+      "id": 0,
+      "configName": "window_configuration_table[0]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 13,
+        "height": 8,
+        "xOffset": 1,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 1,
+      "configName": "window_configuration_table[1]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 19,
+        "height": 8,
+        "xOffset": 12,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 2,
+      "configName": "window_configuration_table[2]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 24,
+        "height": 16,
+        "xOffset": 7,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 3,
+      "configName": "window_configuration_table[3]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 6,
+        "height": 10,
+        "xOffset": 1,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 4,
+      "configName": "window_configuration_table[4]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 11,
+        "height": 6,
+        "xOffset": 1,
+        "yOffset": 3
+      }
+    },
+    {
+      "id": 5,
+      "configName": "window_configuration_table[5]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 11,
+        "height": 16,
+        "xOffset": 20,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 6,
+      "configName": "window_configuration_table[6]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 20,
+        "height": 10,
+        "xOffset": 8,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 7,
+      "configName": "window_configuration_table[7]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 13,
+        "height": 16,
+        "xOffset": 18,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 8,
+      "configName": "window_configuration_table[8]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 30,
+        "height": 18,
+        "xOffset": 1,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 9,
+      "configName": "window_configuration_table[9]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 19,
+        "height": 18,
+        "xOffset": 12,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 10,
+      "configName": "window_configuration_table[10]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 8,
+        "height": 4,
+        "xOffset": 1,
+        "yOffset": 10
+      }
+    },
+    {
+      "id": 11,
+      "configName": "window_configuration_table[11]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 11,
+        "height": 4,
+        "xOffset": 1,
+        "yOffset": 15
+      }
+    },
+    {
+      "id": 12,
+      "configName": "window_configuration_table[12]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 19,
+        "height": 16,
+        "xOffset": 12,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 13,
+      "configName": "window_configuration_table[13]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 24,
+        "height": 16,
+        "xOffset": 7,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 14,
+      "configName": "window_configuration_table[14]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 24,
+        "height": 6,
+        "xOffset": 4,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 15,
+      "configName": "window_configuration_table[15]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 21,
+        "height": 6,
+        "xOffset": 1,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 16,
+      "configName": "window_configuration_table[16]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 8,
+        "height": 8,
+        "xOffset": 4,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 17,
+      "configName": "window_configuration_table[17]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 12,
+        "height": 4,
+        "xOffset": 12,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 18,
+      "configName": "window_configuration_table[18]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 14,
+        "height": 6,
+        "xOffset": 1,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 19,
+      "configName": "window_configuration_table[19]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 30,
+        "height": 8,
+        "xOffset": 1,
+        "yOffset": 2
+      }
+    },
+    {
+      "id": 20,
+      "configName": "window_configuration_table[20]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 22,
+        "height": 4,
+        "xOffset": 5,
+        "yOffset": 9
+      }
+    },
+    {
+      "id": 21,
+      "configName": "window_configuration_table[21]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 12,
+        "height": 8,
+        "xOffset": 10,
+        "yOffset": 16
+      }
+    },
+    {
+      "id": 22,
+      "configName": "window_configuration_table[22]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 12,
+        "height": 6,
+        "xOffset": 10,
+        "yOffset": 16
+      }
+    },
+    {
+      "id": 23,
+      "configName": "window_configuration_table[23]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 21,
+        "height": 10,
+        "xOffset": 6,
+        "yOffset": 17
+      }
+    },
+    {
+      "id": 24,
+      "configName": "window_configuration_table[24]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 16,
+        "height": 10,
+        "xOffset": 3,
+        "yOffset": 14
+      }
+    },
+    {
+      "id": 25,
+      "configName": "window_configuration_table[25]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 18,
+        "height": 8,
+        "xOffset": 8,
+        "yOffset": 15
+      }
+    },
+    {
+      "id": 26,
+      "configName": "window_configuration_table[26]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 8,
+        "height": 4,
+        "xOffset": 5,
+        "yOffset": 4
+      }
+    },
+    {
+      "id": 27,
+      "configName": "window_configuration_table[27]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 17,
+        "height": 4,
+        "xOffset": 13,
+        "yOffset": 4
+      }
+    },
+    {
+      "id": 28,
+      "configName": "window_configuration_table[28]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 30,
+        "height": 16,
+        "xOffset": 1,
+        "yOffset": 9
+      }
+    },
+    {
+      "id": 29,
+      "configName": "window_configuration_table[29]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 7,
+        "height": 4,
+        "xOffset": 7,
+        "yOffset": 3
+      }
+    },
+    {
+      "id": 30,
+      "configName": "window_configuration_table[30]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 7,
+        "height": 4,
+        "xOffset": 7,
+        "yOffset": 7
+      }
+    },
+    {
+      "id": 31,
+      "configName": "window_configuration_table[31]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 7,
+        "height": 4,
+        "xOffset": 7,
+        "yOffset": 11
+      }
+    },
+    {
+      "id": 32,
+      "configName": "window_configuration_table[32]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 7,
+        "height": 4,
+        "xOffset": 7,
+        "yOffset": 15
+      }
+    },
+    {
+      "id": 33,
+      "configName": "window_configuration_table[33]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 8,
+        "height": 4,
+        "xOffset": 20,
+        "yOffset": 3
+      }
+    },
+    {
+      "id": 34,
+      "configName": "window_configuration_table[34]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 13,
+        "height": 6,
+        "xOffset": 15,
+        "yOffset": 7
+      }
+    },
+    {
+      "id": 35,
+      "configName": "window_configuration_table[35]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 13,
+        "height": 6,
+        "xOffset": 15,
+        "yOffset": 13
+      }
+    },
+    {
+      "id": 36,
+      "configName": "window_configuration_table[36]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 24,
+        "height": 4,
+        "xOffset": 4,
+        "yOffset": 21
+      }
+    },
+    {
+      "id": 37,
+      "configName": "window_configuration_table[37]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 13,
+        "height": 8,
+        "xOffset": 18,
+        "yOffset": 6
+      }
+    },
+    {
+      "id": 38,
+      "configName": "window_configuration_table[38]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 12,
+        "height": 4,
+        "xOffset": 12,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 39,
+      "configName": "window_configuration_table[39]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 26,
+        "height": 6,
+        "xOffset": 3,
+        "yOffset": 3
+      }
+    },
+    {
+      "id": 40,
+      "configName": "window_configuration_table[40]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 7,
+        "height": 4,
+        "xOffset": 1,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 41,
+      "configName": "window_configuration_table[41]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 15,
+        "height": 4,
+        "xOffset": 16,
+        "yOffset": 8
+      }
+    },
+    {
+      "id": 42,
+      "configName": "window_configuration_table[42]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 21,
+        "height": 4,
+        "xOffset": 10,
+        "yOffset": 8
+      }
+    },
+    {
+      "id": 43,
+      "configName": "window_configuration_table[43]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 27,
+        "height": 4,
+        "xOffset": 4,
+        "yOffset": 8
+      }
+    },
+    {
+      "id": 44,
+      "configName": "window_configuration_table[44]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 24,
+        "height": 16,
+        "xOffset": 8,
+        "yOffset": 2
+      }
+    },
+    {
+      "id": 45,
+      "configName": "window_configuration_table[45]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 15,
+        "height": 6,
+        "xOffset": 3,
+        "yOffset": 11
+      }
+    },
+    {
+      "id": 46,
+      "configName": "window_configuration_table[46]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 8,
+        "height": 10,
+        "xOffset": 4,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 47,
+      "configName": "window_configuration_table[47]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 30,
+        "height": 10,
+        "xOffset": 1,
+        "yOffset": 9
+      }
+    },
+    {
+      "id": 48,
+      "configName": "window_configuration_table[48]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 28,
+        "height": 6,
+        "xOffset": 1,
+        "yOffset": 1
+      }
+    },
+    {
+      "id": 49,
+      "configName": "window_configuration_table[49]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 20,
+        "height": 4,
+        "xOffset": 10,
+        "yOffset": 4
+      }
+    },
+    {
+      "id": 50,
+      "configName": "window_configuration_table[50]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 15,
+        "height": 16,
+        "xOffset": 14,
+        "yOffset": 11
+      }
+    },
+    {
+      "id": 51,
+      "configName": "window_configuration_table[51]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 9,
+        "height": 4,
+        "xOffset": 22,
+        "yOffset": 8
+      }
+    },
+    {
+      "id": 52,
+      "configName": "window_configuration_table[52]",
+      "geometry": {
+        "sourceKind": "window-configuration",
+        "units": "tiles",
+        "width": 18,
+        "height": 18,
+        "xOffset": 7,
+        "yOffset": 9
+      }
+    }
+  ],
+  "fonts": [
+    {
+      "fontId": 0,
+      "image": "../generated/assets/font/0.png",
+      "glyphCount": 128,
+      "sampleGlyphWidths": [
+        2,
+        2,
+        3,
+        2,
+        5,
+        9,
+        7,
+        2,
+        3,
+        3,
+        3,
+        5,
+        2,
+        2,
+        2,
+        4
+      ],
+      "geometry": {
+        "sourceFile": "Fonts/0.png",
+        "generatedFile": "assets/font/0.png",
+        "width": 256,
+        "height": 128,
+        "columns": 16,
+        "cellWidth": 16,
+        "cellHeight": 16
+      }
+    },
+    {
+      "fontId": 1,
+      "image": "../generated/assets/font/1.png",
+      "glyphCount": 128,
+      "sampleGlyphWidths": [
+        4,
+        6,
+        8,
+        6,
+        9,
+        12,
+        8,
+        4,
+        5,
+        5,
+        6,
+        8,
+        6,
+        7,
+        6,
+        8
+      ],
+      "geometry": {
+        "sourceFile": "Fonts/1.png",
+        "generatedFile": "assets/font/1.png",
+        "width": 256,
+        "height": 128,
+        "columns": 16,
+        "cellWidth": 16,
+        "cellHeight": 16
+      }
+    },
+    {
+      "fontId": 2,
+      "image": "../generated/assets/font/2.png",
+      "glyphCount": 128,
+      "sampleGlyphWidths": [
+        2,
+        2,
+        4,
+        4,
+        5,
+        12,
+        11,
+        2,
+        4,
+        4,
+        6,
+        9,
+        3,
+        3,
+        3,
+        7
+      ],
+      "geometry": {
+        "sourceFile": "Fonts/2.png",
+        "generatedFile": "assets/font/2.png",
+        "width": 256,
+        "height": 128,
+        "columns": 16,
+        "cellWidth": 16,
+        "cellHeight": 16
+      }
+    },
+    {
+      "fontId": 3,
+      "image": "../generated/assets/font/3.png",
+      "glyphCount": 128,
+      "sampleGlyphWidths": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "geometry": {
+        "sourceFile": "Fonts/3.png",
+        "generatedFile": "assets/font/3.png",
+        "width": 128,
+        "height": 128,
+        "columns": 16,
+        "cellWidth": 8,
+        "cellHeight": 16
+      }
+    },
+    {
+      "fontId": 4,
+      "image": "../generated/assets/font/4.png",
+      "glyphCount": 128,
+      "sampleGlyphWidths": [
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      "geometry": {
+        "sourceFile": "Fonts/4.png",
+        "generatedFile": "assets/font/4.png",
+        "width": 128,
+        "height": 64,
+        "columns": 16,
+        "cellWidth": 8,
+        "cellHeight": 8
+      }
+    },
+    {
+      "fontId": "credits",
+      "image": "atlas/ui/font-credits.png",
+      "glyphCount": 0,
+      "geometry": {
+        "sourceFile": "Fonts/credits.png",
+        "width": 128,
+        "height": 96
+      }
+    }
+  ],
+  "icons": [
+    {
+      "id": "item:0",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 0,
+        "name": "Null",
+        "type": 255,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:1",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 1,
+        "name": "Franklin badge",
+        "type": 0,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:2",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 2,
+        "name": "Teddy bear",
+        "type": 4,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:3",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 3,
+        "name": "Super plush bear",
+        "type": 4,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:4",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 4,
+        "name": "Broken machine",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:5",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 5,
+        "name": "Broken gadget",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:6",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 6,
+        "name": "Broken air gun",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:7",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 7,
+        "name": "Broken spray can",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:8",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 8,
+        "name": "Broken laser",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:9",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 9,
+        "name": "Broken iron",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:10",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 10,
+        "name": "Broken pipe",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:11",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 11,
+        "name": "Broken cannon",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:12",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 12,
+        "name": "Broken tube",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:13",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 13,
+        "name": "Broken bazooka",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:14",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 14,
+        "name": "Broken trumpet",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:15",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 15,
+        "name": "Broken harmonica",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:16",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 16,
+        "name": "Broken antenna",
+        "type": 8,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:17",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 17,
+        "name": "Cracked bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:18",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 18,
+        "name": "Tee ball bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:19",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 19,
+        "name": "Sand lot bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:20",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 20,
+        "name": "Minor league bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:21",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 21,
+        "name": "Mr. Baseball bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:22",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 22,
+        "name": "Big league bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:23",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 23,
+        "name": "Hall of fame bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:24",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 24,
+        "name": "Magicant bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:25",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 25,
+        "name": "Legendary bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:26",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 26,
+        "name": "Gutsy bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:27",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 27,
+        "name": "Casey bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:28",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 28,
+        "name": "Fry pan",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:29",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 29,
+        "name": "Thick fry pan",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:30",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 30,
+        "name": "Deluxe fry pan",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:31",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 31,
+        "name": "Chef's fry pan",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:32",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 32,
+        "name": "French fry pan",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:33",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 33,
+        "name": "Magic fry pan",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:34",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 34,
+        "name": "Holy fry pan",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:35",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 35,
+        "name": "Sword of kings",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:36",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 36,
+        "name": "Pop gun",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:37",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 37,
+        "name": "Stun gun",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:38",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 38,
+        "name": "Toy air gun",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:39",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 39,
+        "name": "Magnum air gun",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:40",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 40,
+        "name": "Zip gun",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:41",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 41,
+        "name": "Laser gun",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:42",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 42,
+        "name": "Hyper beam",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:43",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 43,
+        "name": "Crusher beam",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:44",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 44,
+        "name": "Spectrum beam",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:45",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 45,
+        "name": "Death ray",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:46",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 46,
+        "name": "Baddest beam",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:47",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 47,
+        "name": "Moon beam gun",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:48",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 48,
+        "name": "Gaia beam",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:49",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 49,
+        "name": "Yo-yo",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:50",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 50,
+        "name": "Slingshot",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:51",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 51,
+        "name": "Bionic slingshot",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:52",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 52,
+        "name": "Trick yo-yo",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:53",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 53,
+        "name": "Combat yo-yo",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:54",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 54,
+        "name": "Travel charm",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:55",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 55,
+        "name": "Great charm",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:56",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 56,
+        "name": "Crystal charm",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:57",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 57,
+        "name": "Rabbit's foot",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:58",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 58,
+        "name": "Flame pendant",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:59",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 59,
+        "name": "Rain pendant",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:60",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 60,
+        "name": "Night pendant",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:61",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 61,
+        "name": "Sea pendant",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:62",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 62,
+        "name": "Star pendant",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:63",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 63,
+        "name": "Cloak of kings",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:64",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 64,
+        "name": "Cheap bracelet",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:65",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 65,
+        "name": "Copper bracelet",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:66",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 66,
+        "name": "Silver bracelet",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:67",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 67,
+        "name": "Gold bracelet",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:68",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 68,
+        "name": "Platinum band",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:69",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 69,
+        "name": "Diamond band",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:70",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 70,
+        "name": "Pixie's bracelet",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:71",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 71,
+        "name": "Cherub's band",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:72",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 72,
+        "name": "Goddess band",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:73",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 73,
+        "name": "Bracer of kings",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:74",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 74,
+        "name": "Baseball cap",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:75",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 75,
+        "name": "Holmes hat",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:76",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 76,
+        "name": "Mr. Baseball cap",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:77",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 77,
+        "name": "Hard hat",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:78",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 78,
+        "name": "Ribbon",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:79",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 79,
+        "name": "Red ribbon",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:80",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 80,
+        "name": "Goddess ribbon",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:81",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 81,
+        "name": "Coin of slumber",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:82",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 82,
+        "name": "Coin of defense",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:83",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 83,
+        "name": "Lucky coin",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:84",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 84,
+        "name": "Talisman coin",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:85",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 85,
+        "name": "Shiny coin",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:86",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 86,
+        "name": "Souvenir coin",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:87",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 87,
+        "name": "Diadem of kings",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:88",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 88,
+        "name": "Cookie",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 6
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:89",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 89,
+        "name": "Bag of fries",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 24
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:90",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 90,
+        "name": "Hamburger",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 48
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:91",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 91,
+        "name": "Boiled egg",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 42
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:92",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 92,
+        "name": "Fresh Egg",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 84
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:93",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 93,
+        "name": "Picnic lunch",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 84
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:94",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 94,
+        "name": "Pasta di Summers",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 108
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:95",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 95,
+        "name": "Pizza",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 120
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:96",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 96,
+        "name": "Chef's special",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 216
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:97",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 97,
+        "name": "Large pizza",
+        "type": 44,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:98",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 98,
+        "name": "PSI caramel",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "recoverPp",
+          "amount": 20
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:99",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 99,
+        "name": "Magic truffle",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "recoverPp",
+          "amount": 80
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:100",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 100,
+        "name": "Brain food lunch",
+        "type": 32,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:101",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 101,
+        "name": "Rock candy",
+        "type": 32,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:102",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 102,
+        "name": "Croissant",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 60
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:103",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 103,
+        "name": "Bread roll",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 30
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:104",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 104,
+        "name": "Pak of bubble gum",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:105",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 105,
+        "name": "Jar of Fly Honey",
+        "type": 53,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:106",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 106,
+        "name": "Can of fruit juice",
+        "type": 36,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 6
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:107",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 107,
+        "name": "Royal iced tea",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:108",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 108,
+        "name": "Protein drink",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:109",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 109,
+        "name": "Kraken soup",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:110",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 110,
+        "name": "Bottle of water",
+        "type": 36,
+        "equippable": false,
+        "effect": {
+          "kind": "recoverPp",
+          "amount": 10
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:111",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 111,
+        "name": "Cold remedy",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:112",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 112,
+        "name": "Vial of serum",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:113",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 113,
+        "name": "IQ capsule",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:114",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 114,
+        "name": "Guts capsule",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:115",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 115,
+        "name": "Speed capsule",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:116",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 116,
+        "name": "Vital capsule",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:117",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 117,
+        "name": "Luck capsule",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:118",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 118,
+        "name": "Ketchup packet",
+        "type": 40,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:119",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 119,
+        "name": "Sugar packet",
+        "type": 40,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:120",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 120,
+        "name": "Tin of Cocoa",
+        "type": 40,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:121",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 121,
+        "name": "Carton of cream",
+        "type": 40,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:122",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 122,
+        "name": "Sprig of parsley",
+        "type": 40,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:123",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 123,
+        "name": "Jar of hot sauce",
+        "type": 40,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:124",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 124,
+        "name": "Salt packet",
+        "type": 40,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:125",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 125,
+        "name": "Backstage pass",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:126",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 126,
+        "name": "Jar of delisauce",
+        "type": 40,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:127",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 127,
+        "name": "Wet towel",
+        "type": 48,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:128",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 128,
+        "name": "Refreshing herb",
+        "type": 48,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:129",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 129,
+        "name": "Secret herb",
+        "type": 48,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:130",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 130,
+        "name": "Horn of life",
+        "type": 48,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:131",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 131,
+        "name": "Counter-PSI unit",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:132",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 132,
+        "name": "Shield killer",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:133",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 133,
+        "name": "Bazooka",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:134",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 134,
+        "name": "Heavy bazooka",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:135",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 135,
+        "name": "HP-sucker",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:136",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 136,
+        "name": "Hungry HP-sucker",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:137",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 137,
+        "name": "Xterminator spray",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:138",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 138,
+        "name": "Slime generator",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:139",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 139,
+        "name": "Yogurt dispenser",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:140",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 140,
+        "name": "Ruler",
+        "type": 48,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:141",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 141,
+        "name": "Snake bag",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:142",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 142,
+        "name": "Mummy wrap",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:143",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 143,
+        "name": "Protractor",
+        "type": 48,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:144",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 144,
+        "name": "Bottle rocket",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:145",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 145,
+        "name": "Big bottle rocket",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:146",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 146,
+        "name": "Multi`bottle rocket",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:147",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 147,
+        "name": "Bomb",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:148",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 148,
+        "name": "Super bomb",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:149",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 149,
+        "name": "Insecticide spray",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:150",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 150,
+        "name": "Rust promoter",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:151",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 151,
+        "name": "Rust promoter DX",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:152",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 152,
+        "name": "Pair`of dirty socks",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:153",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 153,
+        "name": "Stag beetle",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:154",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 154,
+        "name": "Toothbrush",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:155",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 155,
+        "name": "Handbag strap",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:156",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 156,
+        "name": "Pharaoh's curse",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:157",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 157,
+        "name": "Defense shower",
+        "type": 53,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:158",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 158,
+        "name": "Letter from mom",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:159",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 159,
+        "name": "Sudden guts pill",
+        "type": 53,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:160",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 160,
+        "name": "Bag of Dragonite",
+        "type": 53,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:161",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 161,
+        "name": "Defense spray",
+        "type": 53,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:162",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 162,
+        "name": "Piggy nose",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:163",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 163,
+        "name": "For Sale sign",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:164",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 164,
+        "name": "Shyness book",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:165",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 165,
+        "name": "Picture postcard",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:166",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 166,
+        "name": "King banana",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:167",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 167,
+        "name": "Letter from Tony",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:168",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 168,
+        "name": "Chick",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:169",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 169,
+        "name": "Chicken",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:170",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 170,
+        "name": "Key to the shack",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:171",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 171,
+        "name": "Key to the cabin",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:172",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 172,
+        "name": "Bad key machine",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:173",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 173,
+        "name": "Temporary goods",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:174",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 174,
+        "name": "Zombie paper",
+        "type": 58,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:175",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 175,
+        "name": "Hawk eye",
+        "type": 58,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:176",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 176,
+        "name": "Bicycle",
+        "type": 58,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:177",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 177,
+        "name": "ATM card",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:178",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 178,
+        "name": "Show ticket",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:179",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 179,
+        "name": "Letter from kids",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:180",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 180,
+        "name": "Wad of bills",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:181",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 181,
+        "name": "Receiver phone",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:182",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 182,
+        "name": "Diamond",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:183",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 183,
+        "name": "Signed banana",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:184",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 184,
+        "name": "Pencil eraser",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:185",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 185,
+        "name": "Hieroglyph copy",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:186",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 186,
+        "name": "Meteotite",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:187",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 187,
+        "name": "Contact lens",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:188",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 188,
+        "name": "Hand-Aid",
+        "type": 48,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:189",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 189,
+        "name": "Trout yogurt",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 30
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:190",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 190,
+        "name": "Banana",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 24
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:191",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 191,
+        "name": "Calorie stick",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 60
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:192",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 192,
+        "name": "Key to the tower",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:193",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 193,
+        "name": "Meteorite piece",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:194",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 194,
+        "name": "Earth pendant",
+        "type": 20,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:195",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 195,
+        "name": "Neutralizer",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:196",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 196,
+        "name": "Sound Stone",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:197",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 197,
+        "name": "Exit mouse",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:198",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 198,
+        "name": "Gelato de resort",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 30
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:199",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 199,
+        "name": "Snake",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:200",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 200,
+        "name": "Viper",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:201",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 201,
+        "name": "Brain stone",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:202",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 202,
+        "name": "Town map",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:203",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 203,
+        "name": "Video relaxant",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:204",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 204,
+        "name": "Suporma",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:205",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 205,
+        "name": "Key to the locker",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:206",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 206,
+        "name": "Insignificant item",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:207",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 207,
+        "name": "Magic tart",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "recoverPp",
+          "amount": 20
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:208",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 208,
+        "name": "Tiny ruby",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:209",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 209,
+        "name": "Monkey's love",
+        "type": 52,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:210",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 210,
+        "name": "Eraser eraser",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:211",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 211,
+        "name": "Tendakraut",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:212",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 212,
+        "name": "T-rex's bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:213",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 213,
+        "name": "Big league bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:214",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 214,
+        "name": "Ultimate bat",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:215",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 215,
+        "name": "Double beam",
+        "type": 17,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:216",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 216,
+        "name": "Platinum band",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:217",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 217,
+        "name": "Diamond band",
+        "type": 24,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:218",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 218,
+        "name": "Defense ribbon",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:219",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 219,
+        "name": "Talisman ribbon",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:220",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 220,
+        "name": "Saturn ribbon",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:221",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 221,
+        "name": "Coin of silence",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:222",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 222,
+        "name": "Charm coin",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:223",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 223,
+        "name": "Cup of noodles",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 42
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:224",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 224,
+        "name": "Skip sandwich",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 6
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:225",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 225,
+        "name": "Skip sandwich DX",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 6
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:226",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 226,
+        "name": "Lucky sandwich",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 60
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:227",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 227,
+        "name": "Lucky sandwich",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 240
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:228",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 228,
+        "name": "Lucky sandwich",
+        "type": 32,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:229",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 229,
+        "name": "Lucky sandwich",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "recoverPp",
+          "amount": 5
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:230",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 230,
+        "name": "Lucky sandwich",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "recoverPp",
+          "amount": 20
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:231",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 231,
+        "name": "Lucky sandwich",
+        "type": 32,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:232",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 232,
+        "name": "Cup of coffee",
+        "type": 36,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 12
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:233",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 233,
+        "name": "Double burger",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 96
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:234",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 234,
+        "name": "Peanut cheese`bar",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 108
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:235",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 235,
+        "name": "Piggy jelly",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 300
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:236",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 236,
+        "name": "Bowl of rice gruel",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 216
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:237",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 237,
+        "name": "Bean croquette",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 42
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:238",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 238,
+        "name": "Molokheiya soup",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:239",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 239,
+        "name": "Plain roll",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 84
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:240",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 240,
+        "name": "Kabob",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 126
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:241",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 241,
+        "name": "Plain yogurt",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 168
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:242",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 242,
+        "name": "Beef jerky",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 150
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:243",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 243,
+        "name": "Mammoth burger",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 204
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:244",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 244,
+        "name": "Spicy jerky",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 252
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:245",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 245,
+        "name": "Luxury jerky",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 300
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:246",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 246,
+        "name": "Bottle of DXwater",
+        "type": 36,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:247",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 247,
+        "name": "Magic pudding",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "recoverPp",
+          "amount": 40
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:248",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 248,
+        "name": "Non-stick frypan",
+        "type": 16,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:249",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 249,
+        "name": "Mr. Saturn coin",
+        "type": 28,
+        "equippable": true
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:250",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 250,
+        "name": "Meteornium",
+        "type": 56,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:251",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 251,
+        "name": "Popsicle",
+        "type": 32,
+        "equippable": false,
+        "effect": {
+          "kind": "healHp",
+          "amount": 18
+        }
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:252",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 252,
+        "name": "Cup of Lifenoodles",
+        "type": 48,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "item:253",
+      "kind": "item",
+      "image": null,
+      "source": "generated/items.json",
+      "data": {
+        "id": 253,
+        "name": "Carrot key",
+        "type": 59,
+        "equippable": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:0",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 0,
+        "name": "[psi 0]",
+        "strength": "none",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:1",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 1,
+        "name": "PSI(????)",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:2",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 2,
+        "name": "PSI(????)",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:3",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 3,
+        "name": "PSI(????)",
+        "strength": "gamma",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:4",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 4,
+        "name": "PSI(????)",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:5",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 5,
+        "name": "PSI Fire ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:6",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 6,
+        "name": "PSI Fire ",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:7",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 7,
+        "name": "PSI Fire ",
+        "strength": "gamma",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:8",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 8,
+        "name": "PSI Fire ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:9",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 9,
+        "name": "PSI Freeze ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:10",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 10,
+        "name": "PSI Freeze ",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:11",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 11,
+        "name": "PSI Freeze ",
+        "strength": "gamma",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:12",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 12,
+        "name": "PSI Freeze ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:13",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 13,
+        "name": "PSI Thunder ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:14",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 14,
+        "name": "PSI Thunder ",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:15",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 15,
+        "name": "PSI Thunder ",
+        "strength": "gamma",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:16",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 16,
+        "name": "PSI Thunder ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:17",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 17,
+        "name": "PSI Flash ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:18",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 18,
+        "name": "PSI Flash ",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:19",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 19,
+        "name": "PSI Flash ",
+        "strength": "gamma",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:20",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 20,
+        "name": "PSI Flash ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:21",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 21,
+        "name": "PSI Starstorm ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:22",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 22,
+        "name": "PSI Starstorm ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:23",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 23,
+        "name": "Lifeup ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:24",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 24,
+        "name": "Lifeup ",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:25",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 25,
+        "name": "Lifeup ",
+        "strength": "gamma",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:26",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 26,
+        "name": "Lifeup ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:27",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 27,
+        "name": "Healing ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:28",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 28,
+        "name": "Healing ",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:29",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 29,
+        "name": "Healing ",
+        "strength": "gamma",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:30",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 30,
+        "name": "Healing ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:31",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 31,
+        "name": "Shield ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:32",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 32,
+        "name": "Shield ",
+        "strength": "sigma",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:33",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 33,
+        "name": "Shield ",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:34",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 34,
+        "name": "Shield ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:35",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 35,
+        "name": "PSI Shield ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:36",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 36,
+        "name": "PSI Shield ",
+        "strength": "sigma",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:37",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 37,
+        "name": "PSI Shield ",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:38",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 38,
+        "name": "PSI Shield ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:39",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 39,
+        "name": "Offense up ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:40",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 40,
+        "name": "Offense up ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:41",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 41,
+        "name": "Defense down ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:42",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 42,
+        "name": "Defense down ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:43",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 43,
+        "name": "Hypnosis ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:44",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 44,
+        "name": "Hypnosis ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:45",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 45,
+        "name": "PSI Magnet ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:46",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 46,
+        "name": "PSI Magnet ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:47",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 47,
+        "name": "Paralysis ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:48",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 48,
+        "name": "Paralysis ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:49",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 49,
+        "name": "Brainshock ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:50",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 50,
+        "name": "Brainshock ",
+        "strength": "omega",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:51",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 51,
+        "name": "Teleport ",
+        "strength": "alpha",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:52",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 52,
+        "name": "Teleport ",
+        "strength": "beta",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "psi:53",
+      "kind": "psi",
+      "image": null,
+      "source": "generated/psi.json",
+      "data": {
+        "id": 53,
+        "name": "[psi 53]",
+        "strength": "none",
+        "usableOutsideBattle": false
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:8",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 8
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:257",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 257
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:258",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 258
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:262",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 262
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:513",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 513
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:514",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 514
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:518",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 518
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:520",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 520
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:769",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 769
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:770",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 770
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:1025",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 1025
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:1281",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 1281
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:1537",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 1537
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:1793",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 1793
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    },
+    {
+      "id": "status:2049",
+      "kind": "status",
+      "image": null,
+      "source": "generated/scripts.json",
+      "data": {
+        "status": 2049
+      },
+      "note": "No explicit icon image field is emitted; visual glyphs remain embedded in font/window graphics."
+    }
+  ],
+  "counts": {
+    "windows": 14,
+    "windowLayouts": 53,
+    "fonts": 6,
+    "glyphs": 640,
+    "icons": 323,
+    "unresolvedIcons": 323
+  }
+}

@@ -1,0 +1,565 @@
+{
+  "schema": "swagbound.atlas.townmaps.v1",
+  "maps": [
+    {
+      "region": "Onett",
+      "image": "atlas/townmaps/Onett.png",
+      "geometry": {
+        "width": 256,
+        "height": 224
+      }
+    },
+    {
+      "region": "Twoson",
+      "image": "atlas/townmaps/Twoson.png",
+      "geometry": {
+        "width": 256,
+        "height": 224
+      }
+    },
+    {
+      "region": "Threed",
+      "image": "atlas/townmaps/Threed.png",
+      "geometry": {
+        "width": 256,
+        "height": 224
+      }
+    },
+    {
+      "region": "Fourside",
+      "image": "atlas/townmaps/Fourside.png",
+      "geometry": {
+        "width": 256,
+        "height": 224
+      }
+    },
+    {
+      "region": "Summers",
+      "image": "atlas/townmaps/Summers.png",
+      "geometry": {
+        "width": 256,
+        "height": 224
+      }
+    },
+    {
+      "region": "Scaraba",
+      "image": "atlas/townmaps/Scaraba.png",
+      "geometry": {
+        "width": 256,
+        "height": 224
+      }
+    }
+  ],
+  "iconSheetImage": "atlas/townmaps/icons.png",
+  "icons": [
+    {
+      "id": "Onett:shop:0x22e",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Onett",
+        "mapIndex": 0,
+        "x": 85,
+        "y": 91,
+        "eventFlag": "0x22e",
+        "icon": "shop"
+      }
+    },
+    {
+      "id": "Onett:hamburger-shop:0x22f",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Onett",
+        "mapIndex": 0,
+        "x": 106,
+        "y": 94,
+        "eventFlag": "0x22f",
+        "icon": "hamburger shop"
+      }
+    },
+    {
+      "id": "Onett:hint:0x82a9",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Onett",
+        "mapIndex": 0,
+        "x": 187,
+        "y": 94,
+        "eventFlag": "0x82a9",
+        "icon": "hint"
+      }
+    },
+    {
+      "id": "Onett:hotel:0x230",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Onett",
+        "mapIndex": 0,
+        "x": 140,
+        "y": 123,
+        "eventFlag": "0x230",
+        "icon": "hotel"
+      }
+    },
+    {
+      "id": "Onett:hospital:0x231",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Onett",
+        "mapIndex": 0,
+        "x": 29,
+        "y": 158,
+        "eventFlag": "0x231",
+        "icon": "hospital"
+      }
+    },
+    {
+      "id": "Onett:bakery:0x232",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Onett",
+        "mapIndex": 0,
+        "x": 117,
+        "y": 166,
+        "eventFlag": "0x232",
+        "icon": "bakery"
+      }
+    },
+    {
+      "id": "Onett:south-to-twoson:0x233",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Onett",
+        "mapIndex": 0,
+        "x": 96,
+        "y": 190,
+        "eventFlag": "0x233",
+        "icon": "south to twoson"
+      }
+    },
+    {
+      "id": "Twoson:hospital:0x238",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Twoson",
+        "mapIndex": 1,
+        "x": 184,
+        "y": 9,
+        "eventFlag": "0x238",
+        "icon": "hospital"
+      }
+    },
+    {
+      "id": "Twoson:hotel:0x234",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Twoson",
+        "mapIndex": 1,
+        "x": 72,
+        "y": 42,
+        "eventFlag": "0x234",
+        "icon": "hotel"
+      }
+    },
+    {
+      "id": "Twoson:dept-store:0x235",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Twoson",
+        "mapIndex": 1,
+        "x": 112,
+        "y": 46,
+        "eventFlag": "0x235",
+        "icon": "dept store"
+      }
+    },
+    {
+      "id": "Twoson:north-to-onett:0x236",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Twoson",
+        "mapIndex": 1,
+        "x": 32,
+        "y": 48,
+        "eventFlag": "0x236",
+        "icon": "north to onett"
+      }
+    },
+    {
+      "id": "Twoson:hint:0x82aa",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Twoson",
+        "mapIndex": 1,
+        "x": 208,
+        "y": 61,
+        "eventFlag": "0x82aa",
+        "icon": "hint"
+      }
+    },
+    {
+      "id": "Twoson:bakery:0x2a1",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Twoson",
+        "mapIndex": 1,
+        "x": 96,
+        "y": 112,
+        "eventFlag": "0x2a1",
+        "icon": "bakery"
+      }
+    },
+    {
+      "id": "Twoson:bus-stop:0x237",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Twoson",
+        "mapIndex": 1,
+        "x": 208,
+        "y": 154,
+        "eventFlag": "0x237",
+        "icon": "bus stop"
+      }
+    },
+    {
+      "id": "Twoson:south-to-threed:0x239",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Twoson",
+        "mapIndex": 1,
+        "x": 120,
+        "y": 184,
+        "eventFlag": "0x239",
+        "icon": "south to threed"
+      }
+    },
+    {
+      "id": "Threed:hint:0x82ab",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Threed",
+        "mapIndex": 2,
+        "x": 215,
+        "y": 10,
+        "eventFlag": "0x82ab",
+        "icon": "hint"
+      }
+    },
+    {
+      "id": "Threed:hotel:0x23b",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Threed",
+        "mapIndex": 2,
+        "x": 112,
+        "y": 59,
+        "eventFlag": "0x23b",
+        "icon": "hotel"
+      }
+    },
+    {
+      "id": "Threed:bus-stop:0x2a4",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Threed",
+        "mapIndex": 2,
+        "x": 108,
+        "y": 93,
+        "eventFlag": "0x2a4",
+        "icon": "bus stop"
+      }
+    },
+    {
+      "id": "Threed:bus-stop:0x2a5",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Threed",
+        "mapIndex": 2,
+        "x": 115,
+        "y": 97,
+        "eventFlag": "0x2a5",
+        "icon": "bus stop"
+      }
+    },
+    {
+      "id": "Threed:bakery:0x23d",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Threed",
+        "mapIndex": 2,
+        "x": 140,
+        "y": 103,
+        "eventFlag": "0x23d",
+        "icon": "bakery"
+      }
+    },
+    {
+      "id": "Threed:shop:0x23a",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Threed",
+        "mapIndex": 2,
+        "x": 72,
+        "y": 107,
+        "eventFlag": "0x23a",
+        "icon": "shop"
+      }
+    },
+    {
+      "id": "Threed:hospital:0x23e",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Threed",
+        "mapIndex": 2,
+        "x": 126,
+        "y": 107,
+        "eventFlag": "0x23e",
+        "icon": "hospital"
+      }
+    },
+    {
+      "id": "Threed:west-to-twoson:0x282",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Threed",
+        "mapIndex": 2,
+        "x": 24,
+        "y": 142,
+        "eventFlag": "0x282",
+        "icon": "west to twoson"
+      }
+    },
+    {
+      "id": "Threed:east-to-desert:0x281",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Threed",
+        "mapIndex": 2,
+        "x": 176,
+        "y": 142,
+        "eventFlag": "0x281",
+        "icon": "east to desert"
+      }
+    },
+    {
+      "id": "Fourside:hospital:0x23f",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Fourside",
+        "mapIndex": 3,
+        "x": 116,
+        "y": 10,
+        "eventFlag": "0x23f",
+        "icon": "hospital"
+      }
+    },
+    {
+      "id": "Fourside:dept-store:0x240",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Fourside",
+        "mapIndex": 3,
+        "x": 194,
+        "y": 40,
+        "eventFlag": "0x240",
+        "icon": "dept store"
+      }
+    },
+    {
+      "id": "Fourside:hint:0x82ac",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Fourside",
+        "mapIndex": 3,
+        "x": 88,
+        "y": 119,
+        "eventFlag": "0x82ac",
+        "icon": "hint"
+      }
+    },
+    {
+      "id": "Fourside:hotel:0x242",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Fourside",
+        "mapIndex": 3,
+        "x": 64,
+        "y": 123,
+        "eventFlag": "0x242",
+        "icon": "hotel"
+      }
+    },
+    {
+      "id": "Fourside:bakery:0x241",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Fourside",
+        "mapIndex": 3,
+        "x": 172,
+        "y": 132,
+        "eventFlag": "0x241",
+        "icon": "bakery"
+      }
+    },
+    {
+      "id": "Fourside:west-to-desert:0x280",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Fourside",
+        "mapIndex": 3,
+        "x": 16,
+        "y": 192,
+        "eventFlag": "0x280",
+        "icon": "west to desert"
+      }
+    },
+    {
+      "id": "Fourside:bus-stop:0x2a6",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Fourside",
+        "mapIndex": 3,
+        "x": 62,
+        "y": 200,
+        "eventFlag": "0x2a6",
+        "icon": "bus stop"
+      }
+    },
+    {
+      "id": "Summers:hospital:0x244",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Summers",
+        "mapIndex": 4,
+        "x": 136,
+        "y": 9,
+        "eventFlag": "0x244",
+        "icon": "hospital"
+      }
+    },
+    {
+      "id": "Summers:shop:0x245",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Summers",
+        "mapIndex": 4,
+        "x": 176,
+        "y": 18,
+        "eventFlag": "0x245",
+        "icon": "shop"
+      }
+    },
+    {
+      "id": "Summers:hotel:0x243",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Summers",
+        "mapIndex": 4,
+        "x": 128,
+        "y": 27,
+        "eventFlag": "0x243",
+        "icon": "hotel"
+      }
+    },
+    {
+      "id": "Summers:bakery:0x2a2",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Summers",
+        "mapIndex": 4,
+        "x": 172,
+        "y": 46,
+        "eventFlag": "0x2a2",
+        "icon": "bakery"
+      }
+    },
+    {
+      "id": "Summers:hint:0x82ae",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Summers",
+        "mapIndex": 4,
+        "x": 141,
+        "y": 94,
+        "eventFlag": "0x82ae",
+        "icon": "hint"
+      }
+    },
+    {
+      "id": "Scaraba:hotel:0x246",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Scaraba",
+        "mapIndex": 5,
+        "x": 64,
+        "y": 4,
+        "eventFlag": "0x246",
+        "icon": "hotel"
+      }
+    },
+    {
+      "id": "Scaraba:restaurant:0x247",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Scaraba",
+        "mapIndex": 5,
+        "x": 113,
+        "y": 4,
+        "eventFlag": "0x247",
+        "icon": "restaurant"
+      }
+    },
+    {
+      "id": "Scaraba:shop:0x248",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Scaraba",
+        "mapIndex": 5,
+        "x": 165,
+        "y": 4,
+        "eventFlag": "0x248",
+        "icon": "shop"
+      }
+    },
+    {
+      "id": "Scaraba:hint:0x82ad",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Scaraba",
+        "mapIndex": 5,
+        "x": 72,
+        "y": 108,
+        "eventFlag": "0x82ad",
+        "icon": "hint"
+      }
+    },
+    {
+      "id": "Scaraba:hospital:0x249",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Scaraba",
+        "mapIndex": 5,
+        "x": 97,
+        "y": 108,
+        "eventFlag": "0x249",
+        "icon": "hospital"
+      }
+    },
+    {
+      "id": "Scaraba:shop:0x24a",
+      "image": "atlas/townmaps/icons.png",
+      "position": {
+        "region": "Scaraba",
+        "mapIndex": 5,
+        "x": 160,
+        "y": 114,
+        "eventFlag": "0x24a",
+        "icon": "shop"
+      }
+    }
+  ],
+  "counts": {
+    "maps": 6,
+    "icons": 42,
+    "iconTypes": 15
+  }
+}

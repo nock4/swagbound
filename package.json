@@ -16,6 +16,7 @@
     "atlas:tiles": "node --import tsx scripts/atlas/extract-tiles.ts",
     "atlas:sprites": "node --import tsx scripts/atlas/extract-sprites.ts",
     "atlas:motifs": "node --import tsx scripts/atlas/extract-motifs.ts",
+    "atlas:extras": "node --import tsx scripts/atlas/extract-extras.ts",
     "atlas:browser": "node scripts/atlas/copy-browser-data.mjs",
     "content:test": "node --import tsx scripts/run-content-slice-test.ts",
     "hack:npcs": "tsx scripts/apply-npc-hack.ts",

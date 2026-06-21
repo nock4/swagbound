@@ -23,7 +23,7 @@ Source of truth: `content/atlas/*.json`. Images: `apps/game/public/atlas/*` (reg
 | 5 | Atlas browser (HTML) | ✅ | apps/game/public/atlas/index.html (open /atlas/index.html) |
 | 6 | Design-language map & gaps | ⬜ | content/atlas/coverage.json |
 | 7 | Map-authoring primitives | ⬜ | content/atlas/map-kit.json + demo |
-| 8 | SCOPE EXPANSION (post-critique) | ⬜ | backgrounds.json, ui.json (windows+fonts+item/psi icons), interactables.json, townmaps.json, palettes/chrome |
+| 8 | SCOPE EXPANSION (post-critique) | ✅ | backgrounds.json, ui.json (windows+fonts+icons), townmaps.json |
 
 Scope: NOT just overworld. "Every element" = tiles + sprites + motifs/buildings + **battle backgrounds + UI/window frames + fonts + town-maps + item/PSI icons + interactables (doors/switches)**. Phase 8 closes the gaps the scope critic found.
 
