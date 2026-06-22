@@ -39,6 +39,32 @@ export function spriteOverrideFrame(
   return frames[index] ?? 0;
 }
 
+/** Procedural walk-bob tunables. */
+export const SPRITE_WALK_BOB_AMPLITUDE_PX = 2.5;
+export const SPRITE_WALK_BOB_FREQUENCY = 0.0095; // radians per ms; |sin| period ~= 3 hops/sec
+export const SPRITE_WALK_BOB_PHASE_STEP = 1.3; // per-seed phase offset so sprites don't bob in lockstep
+
+/**
+ * Vertical walk-bob offset (px, >= 0) for an overworld sprite. Single-frame
+ * Swagbound skins have no walk-cycle frames, so while they move they hop in place.
+ * Returns 0 for idle sprites and for multi-frame sprites (raw EarthBound / player
+ * walk cycles) that already animate via frame cycling. Purely visual: callers
+ * apply it to display-y AFTER depth sort, so it never affects sort order or logic.
+ */
+export function spriteWalkBobOffset(params: {
+  clockMs: number;
+  seed: number;
+  moving: boolean;
+  frameCount: number;
+}): number {
+  if (!params.moving || params.frameCount > 1) {
+    return 0;
+  }
+  const phase =
+    params.clockMs * SPRITE_WALK_BOB_FREQUENCY + params.seed * SPRITE_WALK_BOB_PHASE_STEP;
+  return Math.abs(Math.sin(phase)) * SPRITE_WALK_BOB_AMPLITUDE_PX;
+}
+
 export function spriteOverrideScale(displayHeight: number | undefined, frameHeight: number): number {
   if (displayHeight === undefined) {
     return 1;

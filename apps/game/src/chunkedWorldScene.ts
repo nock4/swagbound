@@ -187,6 +187,7 @@ import {
   spriteOverrideGroupEntries,
   spriteOverrideGroupSheetKey,
   spriteOverrideNpcEntries,
+  spriteWalkBobOffset,
   spriteOverrideNpcIdFromSheetKey,
   spriteOverrideNpcSheetKey,
   spriteOverrideScale,
@@ -368,6 +369,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private player?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
   private playerState!: PlayerState;
   private playerFrames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES;
+  private spriteWalkBobClockMs = 0;
   private npcPlacementsByChunk = new Map<string, NpcPlacement[]>();
   private npcRuntimes = new Map<string, NpcRuntime>();
   private serviceInteractionCache = new Map<string, boolean>();
@@ -693,6 +695,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.player) {
       return;
     }
+    this.spriteWalkBobClockMs += delta;
     this.partyState.tickMeters(delta);
     this.encounterCooldownMs = Math.max(0, this.encounterCooldownMs - delta);
     if (this.menuState.open) {
@@ -1374,6 +1377,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       actor.setFrame(npc.state.player.animFrame);
     }
     this.setActorSortDepth(actor);
+    actor.y = npc.state.player.y - this.spriteWalkBob(
+      npc.state.player.moving,
+      npc.frames,
+      npc.state.player.facing,
+      npc.data.npcId
+    );
     actor.setVisible(this.npcInsideActiveRoom(npc));
   }
 
@@ -3542,6 +3551,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       actor.setFrame(enemy.state.player.animFrame);
     }
     this.setActorSortDepth(actor);
+    actor.y = enemy.state.player.y - this.spriteWalkBob(
+      enemy.state.player.moving,
+      enemy.frames,
+      enemy.state.player.facing,
+      enemy.enemyGroup
+    );
   }
 
   private canSpawnOverworldEnemy(): boolean {
@@ -4177,6 +4192,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.player.setFrame(this.playerState.animFrame);
     }
     this.setActorSortDepth(this.player);
+    this.player.y = this.playerState.y - this.spriteWalkBob(
+      this.playerState.moving,
+      this.playerFrames,
+      this.playerState.facing,
+      0
+    );
   }
 
   private setActorSortDepth(actor: SortableActor): void {
@@ -4185,6 +4206,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
       originY: actor.originY,
       displayHeight: actor.displayHeight
     })));
+  }
+
+  /**
+   * Vertical walk-bob offset (px, >= 0) for a moving sprite. Returns 0 for idle
+   * sprites and for multi-frame sprites (raw EB / player walk cycles) that already
+   * animate. Visual only: callers apply it to display-y AFTER depth sort, so it
+   * never affects sort order, collision, or logical position.
+   */
+  private spriteWalkBob(
+    moving: boolean,
+    frames: DirectionFrameSequence,
+    facing: Facing,
+    seed: number
+  ): number {
+    return spriteWalkBobOffset({
+      clockMs: this.spriteWalkBobClockMs,
+      seed,
+      moving,
+      frameCount: frames[facing].length
+    });
   }
 
   private loadedChunkCount(): number {
