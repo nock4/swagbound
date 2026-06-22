@@ -1,0 +1,1416 @@
+{
+  "schema": "swagbound.drifella2-roster.v1",
+  "comment": "95 Drifella2 (LSW) creatures from the 2026-06-21 asset-lab overnight run. REVIEW-ONLY (approvedForOverworld=false, runtimePromotion off) — NOT yet wired to game entities. Each creature keeps its battle sprite paired with its overworld sprite (ow-001-nearest canonical; overworldAlt=ow-002). Paths are relative to the swagbound-new repo. To ship: assign each creature an `entity` (enemyId for battle via byEnemyId, and/or spriteGroup/npcId for overworld via bySpriteGroup/byNpcId), copy the files into coilsnake assets, and add the override entries.",
+  "sourceRepo": "/Users/nickgeorge-studio/Projects/swagbound-new",
+  "sourceRun": "asset-lab/overnight/drifella2-100-2026-06-21",
+  "count": 95,
+  "creatures": {
+    "168": {
+      "id": "drifella2-168",
+      "token": "168",
+      "sourceAssetId": "GXW531Uf9vEJM8zLy7KNTZPaBYAgZg4z9a5GbcH5Qx52",
+      "battle": "asset-lab/curation/drifella2-168-overnight-wave-007/accepted/drifella2-168-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-168-overnight-wave-007/accepted/drifella2-168-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-168-overnight-wave-007/accepted/drifella2-168-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-168-overnight-wave-007/accepted/drifella2-168-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 214,
+        "groupUsedByNpcCount": 26
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-168.png"
+    },
+    "473": {
+      "id": "drifella2-473",
+      "token": "473",
+      "sourceAssetId": "H7GLdKA25Ei1ENGf9vfwBQ2mJCEkNCTbVPYTFBUoiHWa",
+      "battle": "asset-lab/curation/drifella2-473-overnight-wave-012/accepted/drifella2-473-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-473-overnight-wave-012/accepted/drifella2-473-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-473-overnight-wave-012/accepted/drifella2-473-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-473-overnight-wave-012/accepted/drifella2-473-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 213,
+        "groupUsedByNpcCount": 21
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-473.png"
+    },
+    "527": {
+      "id": "drifella2-527",
+      "token": "527",
+      "sourceAssetId": "GWR1s2w5L8ERL8SNdfJUNvP6GBXQGXvMK8HXzm6yfds4",
+      "battle": "asset-lab/curation/drifella2-527-overnight-wave-008/accepted/drifella2-527-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-527-overnight-wave-008/accepted/drifella2-527-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-527-overnight-wave-008/accepted/drifella2-527-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-527-overnight-wave-008/accepted/drifella2-527-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 233,
+        "groupUsedByNpcCount": 21
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-527.png"
+    },
+    "587": {
+      "id": "drifella2-587",
+      "token": "587",
+      "sourceAssetId": "GWe46Jy2Cx7uyhqVz9B7gEYjdrKBSaJxEW68NJ6SVFvr",
+      "battle": "asset-lab/curation/drifella2-587-overnight-wave-032/accepted/drifella2-587-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-587-overnight-wave-032/accepted/drifella2-587-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-587-overnight-wave-032/accepted/drifella2-587-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-587-overnight-wave-032/accepted/drifella2-587-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 259,
+        "groupUsedByNpcCount": 20
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-587.png"
+    },
+    "602": {
+      "id": "drifella2-602",
+      "token": "602",
+      "sourceAssetId": "HCoPjtmczaN6dEEU51Fs6edR8DTwcfQ7dNZjPTNNY5m6",
+      "battle": "asset-lab/curation/drifella2-602-overnight-wave-023/accepted/drifella2-602-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-602-overnight-wave-023/accepted/drifella2-602-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-602-overnight-wave-023/accepted/drifella2-602-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-602-overnight-wave-023/accepted/drifella2-602-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 204,
+        "groupUsedByNpcCount": 18
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-602.png"
+    },
+    "684": {
+      "id": "drifella2-684",
+      "token": "684",
+      "sourceAssetId": "Gv7tBBSimBzykaaNrvP2pzHH6etLWRDk8viKzfNvrzqq",
+      "battle": "asset-lab/curation/drifella2-684-overnight-wave-007/accepted/drifella2-684-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-684-overnight-wave-007/accepted/drifella2-684-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-684-overnight-wave-007/accepted/drifella2-684-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-684-overnight-wave-007/accepted/drifella2-684-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 201,
+        "groupUsedByNpcCount": 15
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-684.png"
+    },
+    "795": {
+      "id": "drifella2-795",
+      "token": "795",
+      "sourceAssetId": "H6ZrxwazDuFCGSsCkZ1QT4Y9jUuQ671KjHaz3R8zMDzT",
+      "battle": "asset-lab/curation/drifella2-795-overnight-wave-020/accepted/drifella2-795-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-795-overnight-wave-020/accepted/drifella2-795-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-795-overnight-wave-020/accepted/drifella2-795-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-795-overnight-wave-020/accepted/drifella2-795-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 227,
+        "groupUsedByNpcCount": 12
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-795.png"
+    },
+    "816": {
+      "id": "drifella2-816",
+      "token": "816",
+      "sourceAssetId": "HEBMu6aA2QH65upbAi29GYNxXWZyRNdCT7S7sabyumZD",
+      "battle": "asset-lab/curation/drifella2-816-overnight-wave-029/accepted/drifella2-816-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-816-overnight-wave-029/accepted/drifella2-816-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-816-overnight-wave-029/accepted/drifella2-816-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-816-overnight-wave-029/accepted/drifella2-816-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 198,
+        "groupUsedByNpcCount": 10
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-816.png"
+    },
+    "1374": {
+      "id": "drifella2-1374",
+      "token": "1374",
+      "sourceAssetId": "Gc3fzj9eG7h8EbNFMkAMkU4dNL8Hgv87y1nQzfwCKj2K",
+      "battle": "asset-lab/curation/drifella2-1374-overnight-wave-015/accepted/drifella2-1374-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1374-overnight-wave-015/accepted/drifella2-1374-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1374-overnight-wave-015/accepted/drifella2-1374-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1374-overnight-wave-015/accepted/drifella2-1374-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 199,
+        "groupUsedByNpcCount": 8
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1374.png"
+    },
+    "1427": {
+      "id": "drifella2-1427",
+      "token": "1427",
+      "sourceAssetId": "GeVNzG55efbebREBxP9xideSuNHfUN3ctVNcPkBeHL4f",
+      "battle": "asset-lab/curation/drifella2-1427-overnight-wave-011/accepted/drifella2-1427-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1427-overnight-wave-011/accepted/drifella2-1427-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1427-overnight-wave-011/accepted/drifella2-1427-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1427-overnight-wave-011/accepted/drifella2-1427-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 222,
+        "groupUsedByNpcCount": 7
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1427.png"
+    },
+    "1442": {
+      "id": "drifella2-1442",
+      "token": "1442",
+      "sourceAssetId": "Gwm3hoQDP82Zyn5UWW33xezse8EjuUVx1bk71sUJrK2G",
+      "battle": "asset-lab/curation/drifella2-1442-overnight-wave-011/accepted/drifella2-1442-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1442-overnight-wave-011/accepted/drifella2-1442-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1442-overnight-wave-011/accepted/drifella2-1442-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1442-overnight-wave-011/accepted/drifella2-1442-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 442,
+        "groupUsedByNpcCount": 7
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1442.png"
+    },
+    "1552": {
+      "id": "drifella2-1552",
+      "token": "1552",
+      "sourceAssetId": "H5B56Pc4MfHZCBNcGrQCrrTDhWTkNKRC4myTV3U7XF8J",
+      "battle": "asset-lab/curation/drifella2-1552-overnight-wave-005/accepted/drifella2-1552-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1552-overnight-wave-005/accepted/drifella2-1552-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1552-overnight-wave-005/accepted/drifella2-1552-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1552-overnight-wave-005/accepted/drifella2-1552-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 202,
+        "groupUsedByNpcCount": 6
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1552.png"
+    },
+    "1679": {
+      "id": "drifella2-1679",
+      "token": "1679",
+      "sourceAssetId": "Gvid7sMu9tHA2d1FWDFWySocCpwwXRe3inJVVikW5wuD",
+      "battle": "asset-lab/curation/drifella2-1679-overnight-wave-003/accepted/drifella2-1679-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1679-overnight-wave-003/accepted/drifella2-1679-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1679-overnight-wave-003/accepted/drifella2-1679-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1679-overnight-wave-003/accepted/drifella2-1679-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 239,
+        "groupUsedByNpcCount": 6
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1679.png"
+    },
+    "1789": {
+      "id": "drifella2-1789",
+      "token": "1789",
+      "sourceAssetId": "GhmSVr2HXVTWJmNYt35nCuUfMZp7VT8mUAVpBQUNFS4q",
+      "battle": "asset-lab/curation/drifella2-1789-overnight-wave-014/accepted/drifella2-1789-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1789-overnight-wave-014/accepted/drifella2-1789-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1789-overnight-wave-014/accepted/drifella2-1789-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1789-overnight-wave-014/accepted/drifella2-1789-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 374,
+        "groupUsedByNpcCount": 6
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1789.png"
+    },
+    "1794": {
+      "id": "drifella2-1794",
+      "token": "1794",
+      "sourceAssetId": "HBPXzpdUZSNanRbstH2y3JtXZDzkFV1trBwzFGFwxsMV",
+      "battle": "asset-lab/curation/drifella2-1794-overnight-wave-007/accepted/drifella2-1794-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1794-overnight-wave-007/accepted/drifella2-1794-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1794-overnight-wave-007/accepted/drifella2-1794-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1794-overnight-wave-007/accepted/drifella2-1794-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 33,
+        "groupUsedByNpcCount": 5
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1794.png"
+    },
+    "1830": {
+      "id": "drifella2-1830",
+      "token": "1830",
+      "sourceAssetId": "GuWzd89Egxq4jTxtUTw1DHFK65RrjgeSnpAmp44a1Yfm",
+      "battle": "asset-lab/curation/drifella2-1830-overnight-wave-010/accepted/drifella2-1830-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1830-overnight-wave-010/accepted/drifella2-1830-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1830-overnight-wave-010/accepted/drifella2-1830-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1830-overnight-wave-010/accepted/drifella2-1830-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 203,
+        "groupUsedByNpcCount": 5
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1830.png"
+    },
+    "1841": {
+      "id": "drifella2-1841",
+      "token": "1841",
+      "sourceAssetId": "GVmzjoHtbF5kz7sty2LD34LcQhacRxo6U3nGz9XmQs6Q",
+      "battle": "asset-lab/curation/drifella2-1841-overnight-wave-030/accepted/drifella2-1841-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1841-overnight-wave-030/accepted/drifella2-1841-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1841-overnight-wave-030/accepted/drifella2-1841-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1841-overnight-wave-030/accepted/drifella2-1841-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 206,
+        "groupUsedByNpcCount": 5
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1841.png"
+    },
+    "1845": {
+      "id": "drifella2-1845",
+      "token": "1845",
+      "sourceAssetId": "GrodWdXKmGMTz4xwMeZ5na7QHaP4VJbRAbP3AaM2kcxG",
+      "battle": "asset-lab/curation/drifella2-1845-overnight-wave-002/accepted/drifella2-1845-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1845-overnight-wave-002/accepted/drifella2-1845-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1845-overnight-wave-002/accepted/drifella2-1845-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1845-overnight-wave-002/accepted/drifella2-1845-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 221,
+        "groupUsedByNpcCount": 5
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1845.png"
+    },
+    "1849": {
+      "id": "drifella2-1849",
+      "token": "1849",
+      "sourceAssetId": "HEgvKBiWruNg6H14hjULR8VijLNKaBgJdd6kKaXJZxDx",
+      "battle": "asset-lab/curation/drifella2-1849-overnight-wave-011/accepted/drifella2-1849-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1849-overnight-wave-011/accepted/drifella2-1849-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1849-overnight-wave-011/accepted/drifella2-1849-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1849-overnight-wave-011/accepted/drifella2-1849-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 266,
+        "groupUsedByNpcCount": 5
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1849.png"
+    },
+    "1879": {
+      "id": "drifella2-1879",
+      "token": "1879",
+      "sourceAssetId": "GaReVMh8MJ8CFzZhoi5BQqaWCMoVznQrDmw6HY5gbWM5",
+      "battle": "asset-lab/curation/drifella2-1879-overnight-wave-032/accepted/drifella2-1879-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1879-overnight-wave-032/accepted/drifella2-1879-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1879-overnight-wave-032/accepted/drifella2-1879-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1879-overnight-wave-032/accepted/drifella2-1879-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 376,
+        "groupUsedByNpcCount": 5
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1879.png"
+    },
+    "1901": {
+      "id": "drifella2-1901",
+      "token": "1901",
+      "sourceAssetId": "H5SQqh9X4EkCQErVQHoEHRSECT5eLpUTNXS4KZ72yb5n",
+      "battle": "asset-lab/curation/drifella2-1901-overnight-wave-029/accepted/drifella2-1901-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-1901-overnight-wave-029/accepted/drifella2-1901-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-1901-overnight-wave-029/accepted/drifella2-1901-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-1901-overnight-wave-029/accepted/drifella2-1901-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 210,
+        "groupUsedByNpcCount": 4
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-1901.png"
+    },
+    "2128": {
+      "id": "drifella2-2128",
+      "token": "2128",
+      "sourceAssetId": "HH2Nmt3hJCHLBwJ3kQJy79uCf5muhSF1neiynHBYgSLM",
+      "battle": "asset-lab/curation/drifella2-2128-overnight-wave-031/accepted/drifella2-2128-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2128-overnight-wave-031/accepted/drifella2-2128-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2128-overnight-wave-031/accepted/drifella2-2128-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2128-overnight-wave-031/accepted/drifella2-2128-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 211,
+        "groupUsedByNpcCount": 4
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2128.png"
+    },
+    "2130": {
+      "id": "drifella2-2130",
+      "token": "2130",
+      "sourceAssetId": "Gy8yHrgRkEQ2xJGRajFfNwtdmiqhLooJuXU7F7sRdvZk",
+      "battle": "asset-lab/curation/drifella2-2130-overnight-wave-028/accepted/drifella2-2130-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2130-overnight-wave-028/accepted/drifella2-2130-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2130-overnight-wave-028/accepted/drifella2-2130-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2130-overnight-wave-028/accepted/drifella2-2130-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 229,
+        "groupUsedByNpcCount": 4
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2130.png"
+    },
+    "2258": {
+      "id": "drifella2-2258",
+      "token": "2258",
+      "sourceAssetId": "HEogRBE2Zbt9TAGAa87Sj9MDmHAEBvy5voBbvZQzQog7",
+      "battle": "asset-lab/curation/drifella2-2258-overnight-wave-023/accepted/drifella2-2258-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2258-overnight-wave-023/accepted/drifella2-2258-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2258-overnight-wave-023/accepted/drifella2-2258-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2258-overnight-wave-023/accepted/drifella2-2258-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 243,
+        "groupUsedByNpcCount": 4
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2258.png"
+    },
+    "2281": {
+      "id": "drifella2-2281",
+      "token": "2281",
+      "sourceAssetId": "GTn87MNdFCveNq2QGHHGvCN4wwqDPUA5Uc8UPvJAgcv4",
+      "battle": "asset-lab/curation/drifella2-2281-overnight-wave-004/accepted/drifella2-2281-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2281-overnight-wave-004/accepted/drifella2-2281-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2281-overnight-wave-004/accepted/drifella2-2281-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2281-overnight-wave-004/accepted/drifella2-2281-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 293,
+        "groupUsedByNpcCount": 4
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2281.png"
+    },
+    "2290": {
+      "id": "drifella2-2290",
+      "token": "2290",
+      "sourceAssetId": "GjVbZ6HNTd3sWxZqAYBobrrm7Bq68uq9EbnYEoNrGbcX",
+      "battle": "asset-lab/curation/drifella2-2290-overnight-wave-012/accepted/drifella2-2290-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2290-overnight-wave-012/accepted/drifella2-2290-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2290-overnight-wave-012/accepted/drifella2-2290-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2290-overnight-wave-012/accepted/drifella2-2290-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 371,
+        "groupUsedByNpcCount": 4
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2290.png"
+    },
+    "2329": {
+      "id": "drifella2-2329",
+      "token": "2329",
+      "sourceAssetId": "H2KdssKM839L39snQ9Pn3hadRfNLvGCYFAYbcag8QZi5",
+      "battle": "asset-lab/curation/drifella2-2329-overnight-wave-022/accepted/drifella2-2329-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2329-overnight-wave-022/accepted/drifella2-2329-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2329-overnight-wave-022/accepted/drifella2-2329-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2329-overnight-wave-022/accepted/drifella2-2329-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 373,
+        "groupUsedByNpcCount": 4
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2329.png"
+    },
+    "2344": {
+      "id": "drifella2-2344",
+      "token": "2344",
+      "sourceAssetId": "H6TaUhVgbgvAMQJnY8b9R1qwzEz3szUsRDojzE2om8H5",
+      "battle": "asset-lab/curation/drifella2-2344-overnight-wave-002/accepted/drifella2-2344-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2344-overnight-wave-002/accepted/drifella2-2344-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2344-overnight-wave-002/accepted/drifella2-2344-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2344-overnight-wave-002/accepted/drifella2-2344-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 423,
+        "groupUsedByNpcCount": 4
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2344.png"
+    },
+    "2427": {
+      "id": "drifella2-2427",
+      "token": "2427",
+      "sourceAssetId": "HFv1cMUBr75EUCu93sNqGrTVSqG5KZqFHTbzGjMDcZFd",
+      "battle": "asset-lab/curation/drifella2-2427-overnight-wave-015/accepted/drifella2-2427-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2427-overnight-wave-015/accepted/drifella2-2427-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2427-overnight-wave-015/accepted/drifella2-2427-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2427-overnight-wave-015/accepted/drifella2-2427-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 26,
+        "groupUsedByNpcCount": 3
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2427.png"
+    },
+    "2477": {
+      "id": "drifella2-2477",
+      "token": "2477",
+      "sourceAssetId": "Gb92sAsk59WYdsLBcT2SUPqhBdn9bXRCS3EoMt8iyeZ1",
+      "battle": "asset-lab/curation/drifella2-2477-overnight-wave-021/accepted/drifella2-2477-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2477-overnight-wave-021/accepted/drifella2-2477-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2477-overnight-wave-021/accepted/drifella2-2477-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2477-overnight-wave-021/accepted/drifella2-2477-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 207,
+        "groupUsedByNpcCount": 3
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2477.png"
+    },
+    "2630": {
+      "id": "drifella2-2630",
+      "token": "2630",
+      "sourceAssetId": "HCSZjvmQ899icabXVzdeWvXz5U6SkisgHQjYr119cU4o",
+      "battle": "asset-lab/curation/drifella2-2630-overnight-wave-014/accepted/drifella2-2630-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2630-overnight-wave-014/accepted/drifella2-2630-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2630-overnight-wave-014/accepted/drifella2-2630-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2630-overnight-wave-014/accepted/drifella2-2630-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 224,
+        "groupUsedByNpcCount": 3
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2630.png"
+    },
+    "2694": {
+      "id": "drifella2-2694",
+      "token": "2694",
+      "sourceAssetId": "H1PYL8J5ibn4xuhedQLu5yqWSPT36L8L9ogfoXCm78Wg",
+      "battle": "asset-lab/curation/drifella2-2694-overnight-wave-002/accepted/drifella2-2694-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2694-overnight-wave-002/accepted/drifella2-2694-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2694-overnight-wave-002/accepted/drifella2-2694-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2694-overnight-wave-002/accepted/drifella2-2694-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 225,
+        "groupUsedByNpcCount": 3
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2694.png"
+    },
+    "2781": {
+      "id": "drifella2-2781",
+      "token": "2781",
+      "sourceAssetId": "HEMj46a51S9Z4eKc343HKS2ZPFLBVbHWrbPiSvNjw8FW",
+      "battle": "asset-lab/curation/drifella2-2781-overnight-wave-023/accepted/drifella2-2781-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2781-overnight-wave-023/accepted/drifella2-2781-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2781-overnight-wave-023/accepted/drifella2-2781-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2781-overnight-wave-023/accepted/drifella2-2781-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 230,
+        "groupUsedByNpcCount": 3
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2781.png"
+    },
+    "2796": {
+      "id": "drifella2-2796",
+      "token": "2796",
+      "sourceAssetId": "Ggvn1Fde4HeNGQ4eGq5AZt8xscS5jTftoeZ2NXNhao1b",
+      "battle": "asset-lab/curation/drifella2-2796-overnight-wave-030/accepted/drifella2-2796-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2796-overnight-wave-030/accepted/drifella2-2796-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2796-overnight-wave-030/accepted/drifella2-2796-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2796-overnight-wave-030/accepted/drifella2-2796-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 254,
+        "groupUsedByNpcCount": 3
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2796.png"
+    },
+    "2801": {
+      "id": "drifella2-2801",
+      "token": "2801",
+      "sourceAssetId": "GsPvRMLrqx5py9MYUPf9knprbUrskEmvfkZ6EMKWD7Kx",
+      "battle": "asset-lab/curation/drifella2-2801-overnight-wave-033/accepted/drifella2-2801-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-2801-overnight-wave-033/accepted/drifella2-2801-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-2801-overnight-wave-033/accepted/drifella2-2801-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-2801-overnight-wave-033/accepted/drifella2-2801-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 265,
+        "groupUsedByNpcCount": 3
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-2801.png"
+    },
+    "3162": {
+      "id": "drifella2-3162",
+      "token": "3162",
+      "sourceAssetId": "Gy6yaFQrNNWPZT31AGqmCB54hXxVX6HmU8oaS9ryqDcr",
+      "battle": "asset-lab/curation/drifella2-3162-overnight-wave-033/accepted/drifella2-3162-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3162-overnight-wave-033/accepted/drifella2-3162-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3162-overnight-wave-033/accepted/drifella2-3162-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3162-overnight-wave-033/accepted/drifella2-3162-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 375,
+        "groupUsedByNpcCount": 3
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3162.png"
+    },
+    "3323": {
+      "id": "drifella2-3323",
+      "token": "3323",
+      "sourceAssetId": "GyDDiPLaY2XmfmkEQv2LGexWXpo6NFPzbo7UGV8g25kC",
+      "battle": "asset-lab/curation/drifella2-3323-overnight-wave-005/accepted/drifella2-3323-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3323-overnight-wave-005/accepted/drifella2-3323-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3323-overnight-wave-005/accepted/drifella2-3323-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3323-overnight-wave-005/accepted/drifella2-3323-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 377,
+        "groupUsedByNpcCount": 3
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3323.png"
+    },
+    "3353": {
+      "id": "drifella2-3353",
+      "token": "3353",
+      "sourceAssetId": "HB4HUBNamY3ErukqLKuWhmoxVMLKjnxW9mnh84hooDyw",
+      "battle": "asset-lab/curation/drifella2-3353-overnight-wave-029/accepted/drifella2-3353-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3353-overnight-wave-029/accepted/drifella2-3353-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3353-overnight-wave-029/accepted/drifella2-3353-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3353-overnight-wave-029/accepted/drifella2-3353-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 200,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3353.png"
+    },
+    "3360": {
+      "id": "drifella2-3360",
+      "token": "3360",
+      "sourceAssetId": "GftNWXG65vnuoajB7ymomwcdsFBKdsr5Y1cjFZVMQy3w",
+      "battle": "asset-lab/curation/drifella2-3360-overnight-wave-025/accepted/drifella2-3360-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3360-overnight-wave-025/accepted/drifella2-3360-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3360-overnight-wave-025/accepted/drifella2-3360-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3360-overnight-wave-025/accepted/drifella2-3360-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 208,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3360.png"
+    },
+    "3427": {
+      "id": "drifella2-3427",
+      "token": "3427",
+      "sourceAssetId": "GgBctDzR8wtFADXDHiCvJmWAym7ApJ5tRNSozPBGvSLa",
+      "battle": "asset-lab/curation/drifella2-3427-overnight-wave-006/accepted/drifella2-3427-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3427-overnight-wave-006/accepted/drifella2-3427-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3427-overnight-wave-006/accepted/drifella2-3427-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3427-overnight-wave-006/accepted/drifella2-3427-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 209,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3427.png"
+    },
+    "3436": {
+      "id": "drifella2-3436",
+      "token": "3436",
+      "sourceAssetId": "GyytVxbhBefF6rQS5PbT8ZqWagT2ahy5WoXorYHBvFP9",
+      "battle": "asset-lab/curation/drifella2-3436-overnight-wave-012/accepted/drifella2-3436-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3436-overnight-wave-012/accepted/drifella2-3436-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3436-overnight-wave-012/accepted/drifella2-3436-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3436-overnight-wave-012/accepted/drifella2-3436-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 228,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3436.png"
+    },
+    "3444": {
+      "id": "drifella2-3444",
+      "token": "3444",
+      "sourceAssetId": "GtzxDiPWtorqzAsN6yoLxUg6AB2fMi97VmHjwUvpzvjU",
+      "battle": "asset-lab/curation/drifella2-3444-overnight-wave-004/accepted/drifella2-3444-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3444-overnight-wave-004/accepted/drifella2-3444-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3444-overnight-wave-004/accepted/drifella2-3444-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3444-overnight-wave-004/accepted/drifella2-3444-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 231,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3444.png"
+    },
+    "3463": {
+      "id": "drifella2-3463",
+      "token": "3463",
+      "sourceAssetId": "GdnS76DYuJSTgREzxk8CZEDxrb7L7uJUMw9TpMdH6JeF",
+      "battle": "asset-lab/curation/drifella2-3463-overnight-wave-022/accepted/drifella2-3463-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3463-overnight-wave-022/accepted/drifella2-3463-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3463-overnight-wave-022/accepted/drifella2-3463-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3463-overnight-wave-022/accepted/drifella2-3463-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 236,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3463.png"
+    },
+    "3555": {
+      "id": "drifella2-3555",
+      "token": "3555",
+      "sourceAssetId": "GeTzveDRUBc5VYZPzonMB6kjhWzKG5fX83iiMsvtCbeP",
+      "battle": "asset-lab/curation/drifella2-3555-overnight-wave-010/accepted/drifella2-3555-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3555-overnight-wave-010/accepted/drifella2-3555-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3555-overnight-wave-010/accepted/drifella2-3555-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3555-overnight-wave-010/accepted/drifella2-3555-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 240,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3555.png"
+    },
+    "3630": {
+      "id": "drifella2-3630",
+      "token": "3630",
+      "sourceAssetId": "GeLVAs8pm7wTFhbUwUHmjWYcNFuaaPpjXXbavbNRUmdU",
+      "battle": "asset-lab/curation/drifella2-3630-overnight-wave-016/accepted/drifella2-3630-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3630-overnight-wave-016/accepted/drifella2-3630-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3630-overnight-wave-016/accepted/drifella2-3630-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3630-overnight-wave-016/accepted/drifella2-3630-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 248,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3630.png"
+    },
+    "3634": {
+      "id": "drifella2-3634",
+      "token": "3634",
+      "sourceAssetId": "GStHELtmM7eVZQNQWTZfJiREcvuFHP7uqPPePcWswadc",
+      "battle": "asset-lab/curation/drifella2-3634-overnight-wave-024/accepted/drifella2-3634-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3634-overnight-wave-024/accepted/drifella2-3634-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3634-overnight-wave-024/accepted/drifella2-3634-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3634-overnight-wave-024/accepted/drifella2-3634-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 262,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3634.png"
+    },
+    "3669": {
+      "id": "drifella2-3669",
+      "token": "3669",
+      "sourceAssetId": "GvCWSjgA9hwJLieoU8cRzcjpWDRmbcdiK5V8f57SDPmP",
+      "battle": "asset-lab/curation/drifella2-3669-overnight-wave-016/accepted/drifella2-3669-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3669-overnight-wave-016/accepted/drifella2-3669-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3669-overnight-wave-016/accepted/drifella2-3669-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3669-overnight-wave-016/accepted/drifella2-3669-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 263,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3669.png"
+    },
+    "3790": {
+      "id": "drifella2-3790",
+      "token": "3790",
+      "sourceAssetId": "Gm7kdpi4v95D5cyhouG74yZe6ZBoR7fiebpEjWRKGCJ4",
+      "battle": "asset-lab/curation/drifella2-3790-overnight-wave-024/accepted/drifella2-3790-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3790-overnight-wave-024/accepted/drifella2-3790-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3790-overnight-wave-024/accepted/drifella2-3790-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3790-overnight-wave-024/accepted/drifella2-3790-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 267,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3790.png"
+    },
+    "3818": {
+      "id": "drifella2-3818",
+      "token": "3818",
+      "sourceAssetId": "GkohwGd5Ys1KiBz7thMA6BiqevKKD5MX7KWPWHkoGvDM",
+      "battle": "asset-lab/curation/drifella2-3818-overnight-wave-026/accepted/drifella2-3818-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-3818-overnight-wave-026/accepted/drifella2-3818-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-3818-overnight-wave-026/accepted/drifella2-3818-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-3818-overnight-wave-026/accepted/drifella2-3818-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 405,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-3818.png"
+    },
+    "4010": {
+      "id": "drifella2-4010",
+      "token": "4010",
+      "sourceAssetId": "GSm3KN8UsEdEo2KkxHUv8o6wyFzpvABXirEmMokni4Lu",
+      "battle": "asset-lab/curation/drifella2-4010-overnight-wave-028/accepted/drifella2-4010-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-4010-overnight-wave-028/accepted/drifella2-4010-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-4010-overnight-wave-028/accepted/drifella2-4010-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-4010-overnight-wave-028/accepted/drifella2-4010-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 414,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-4010.png"
+    },
+    "4166": {
+      "id": "drifella2-4166",
+      "token": "4166",
+      "sourceAssetId": "GZknkobUeFtyJA81DBJt5GojyBrs5BHNtd6QVj3jgF1P",
+      "battle": "asset-lab/curation/drifella2-4166-overnight-wave-019/accepted/drifella2-4166-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-4166-overnight-wave-019/accepted/drifella2-4166-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-4166-overnight-wave-019/accepted/drifella2-4166-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-4166-overnight-wave-019/accepted/drifella2-4166-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 426,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-4166.png"
+    },
+    "4243": {
+      "id": "drifella2-4243",
+      "token": "4243",
+      "sourceAssetId": "H1qPJHFpgQBQu97GPxPWxLBAr5LYxvoNcPNNmDRGgSrk",
+      "battle": "asset-lab/curation/drifella2-4243-overnight-wave-018/accepted/drifella2-4243-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-4243-overnight-wave-018/accepted/drifella2-4243-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-4243-overnight-wave-018/accepted/drifella2-4243-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-4243-overnight-wave-018/accepted/drifella2-4243-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 429,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-4243.png"
+    },
+    "4281": {
+      "id": "drifella2-4281",
+      "token": "4281",
+      "sourceAssetId": "GRCxMtcCQDimnS1RFENkeQMG7fGrQu8Rq7C9demvx3uD",
+      "battle": "asset-lab/curation/drifella2-4281-overnight-wave-009/accepted/drifella2-4281-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-4281-overnight-wave-009/accepted/drifella2-4281-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-4281-overnight-wave-009/accepted/drifella2-4281-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-4281-overnight-wave-009/accepted/drifella2-4281-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 430,
+        "groupUsedByNpcCount": 2
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-4281.png"
+    },
+    "4508": {
+      "id": "drifella2-4508",
+      "token": "4508",
+      "sourceAssetId": "GidjVVvbarsdiht8ShwNHPqSHY8tVDCy7yws3KsJ3BJV",
+      "battle": "asset-lab/curation/drifella2-4508-overnight-wave-028/accepted/drifella2-4508-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-4508-overnight-wave-028/accepted/drifella2-4508-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-4508-overnight-wave-028/accepted/drifella2-4508-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-4508-overnight-wave-028/accepted/drifella2-4508-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 51,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-4508.png"
+    },
+    "4564": {
+      "id": "drifella2-4564",
+      "token": "4564",
+      "sourceAssetId": "GRkzXgMjcy9iJwSoa5NFCAjZyQbR4164uCCT8GmDQJZh",
+      "battle": "asset-lab/curation/drifella2-4564-overnight-wave-015/accepted/drifella2-4564-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-4564-overnight-wave-015/accepted/drifella2-4564-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-4564-overnight-wave-015/accepted/drifella2-4564-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-4564-overnight-wave-015/accepted/drifella2-4564-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 197,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-4564.png"
+    },
+    "4595": {
+      "id": "drifella2-4595",
+      "token": "4595",
+      "sourceAssetId": "Ghyubk4tPCCPBJvJApac37QG3WCdsubczEaBM49ssXGw",
+      "battle": "asset-lab/curation/drifella2-4595-overnight-wave-031/accepted/drifella2-4595-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-4595-overnight-wave-031/accepted/drifella2-4595-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-4595-overnight-wave-031/accepted/drifella2-4595-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-4595-overnight-wave-031/accepted/drifella2-4595-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 205,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-4595.png"
+    },
+    "4748": {
+      "id": "drifella2-4748",
+      "token": "4748",
+      "sourceAssetId": "H2mbvLRpHeFxnBqFLrGgccBPSNWrpzMwMU14Xr2mEZQS",
+      "battle": "asset-lab/curation/drifella2-4748-overnight-wave-004/accepted/drifella2-4748-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-4748-overnight-wave-004/accepted/drifella2-4748-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-4748-overnight-wave-004/accepted/drifella2-4748-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-4748-overnight-wave-004/accepted/drifella2-4748-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 212,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-4748.png"
+    },
+    "4888": {
+      "id": "drifella2-4888",
+      "token": "4888",
+      "sourceAssetId": "Gy4DiStKL2QJkNa1Zus9kVjBYzArZg7ZUViJEHK23uai",
+      "battle": "asset-lab/curation/drifella2-4888-overnight-wave-018/accepted/drifella2-4888-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-4888-overnight-wave-018/accepted/drifella2-4888-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-4888-overnight-wave-018/accepted/drifella2-4888-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-4888-overnight-wave-018/accepted/drifella2-4888-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 226,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-4888.png"
+    },
+    "5036": {
+      "id": "drifella2-5036",
+      "token": "5036",
+      "sourceAssetId": "H2EJhTGCnuqsf92x6D5SU4WvmjvYvVzECx3Kv53DxYZq",
+      "battle": "asset-lab/curation/drifella2-5036-overnight-wave-020/accepted/drifella2-5036-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-5036-overnight-wave-020/accepted/drifella2-5036-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-5036-overnight-wave-020/accepted/drifella2-5036-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-5036-overnight-wave-020/accepted/drifella2-5036-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 234,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-5036.png"
+    },
+    "5170": {
+      "id": "drifella2-5170",
+      "token": "5170",
+      "sourceAssetId": "HKJTjMV8dXEa9gJhFytQtDYdkTLouHhVRMMi85DjmYWd",
+      "battle": "asset-lab/curation/drifella2-5170-overnight-wave-006/accepted/drifella2-5170-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-5170-overnight-wave-006/accepted/drifella2-5170-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-5170-overnight-wave-006/accepted/drifella2-5170-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-5170-overnight-wave-006/accepted/drifella2-5170-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 235,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-5170.png"
+    },
+    "5250": {
+      "id": "drifella2-5250",
+      "token": "5250",
+      "sourceAssetId": "H48pAQ1aKheDUJfJryKtBgdpYvtqscErFGKq8pAGVyQv",
+      "battle": "asset-lab/curation/drifella2-5250-overnight-wave-025/accepted/drifella2-5250-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-5250-overnight-wave-025/accepted/drifella2-5250-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-5250-overnight-wave-025/accepted/drifella2-5250-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-5250-overnight-wave-025/accepted/drifella2-5250-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 244,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-5250.png"
+    },
+    "5419": {
+      "id": "drifella2-5419",
+      "token": "5419",
+      "sourceAssetId": "GXg7SUdLTxB6WjpF5HsnNDS4vBkZse4LjFCfxNPMdRcy",
+      "battle": "asset-lab/curation/drifella2-5419-overnight-wave-014/accepted/drifella2-5419-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-5419-overnight-wave-014/accepted/drifella2-5419-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-5419-overnight-wave-014/accepted/drifella2-5419-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-5419-overnight-wave-014/accepted/drifella2-5419-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 246,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-5419.png"
+    },
+    "5588": {
+      "id": "drifella2-5588",
+      "token": "5588",
+      "sourceAssetId": "Ga3aLdpXZLaVKsai9LqB1ea8MuYN8Xfqetx8DaKCDVx6",
+      "battle": "asset-lab/curation/drifella2-5588-overnight-wave-027/accepted/drifella2-5588-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-5588-overnight-wave-027/accepted/drifella2-5588-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-5588-overnight-wave-027/accepted/drifella2-5588-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-5588-overnight-wave-027/accepted/drifella2-5588-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 257,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-5588.png"
+    },
+    "5826": {
+      "id": "drifella2-5826",
+      "token": "5826",
+      "sourceAssetId": "GuN6ZzQZnKR7NLrYQ7iqBA39mFTnbrQsVHTvMTonC6Zm",
+      "battle": "asset-lab/curation/drifella2-5826-overnight-wave-001/accepted/drifella2-5826-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-5826-overnight-wave-001/accepted/drifella2-5826-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-5826-overnight-wave-001/accepted/drifella2-5826-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-5826-overnight-wave-001/accepted/drifella2-5826-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 269,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-5826.png"
+    },
+    "5845": {
+      "id": "drifella2-5845",
+      "token": "5845",
+      "sourceAssetId": "GmAjDemyjbJs3Ch2zBbxHsoNLU8jG8wQQb4uXHrGNMB3",
+      "battle": "asset-lab/curation/drifella2-5845-overnight-wave-024/accepted/drifella2-5845-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-5845-overnight-wave-024/accepted/drifella2-5845-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-5845-overnight-wave-024/accepted/drifella2-5845-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-5845-overnight-wave-024/accepted/drifella2-5845-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 270,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-5845.png"
+    },
+    "5984": {
+      "id": "drifella2-5984",
+      "token": "5984",
+      "sourceAssetId": "GkYQz9fZ8pmFFooPB4zMCkZYqLR9gW3VXBTtjhcym6Nz",
+      "battle": "asset-lab/curation/drifella2-5984-overnight-wave-017/accepted/drifella2-5984-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-5984-overnight-wave-017/accepted/drifella2-5984-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-5984-overnight-wave-017/accepted/drifella2-5984-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-5984-overnight-wave-017/accepted/drifella2-5984-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 350,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-5984.png"
+    },
+    "6002": {
+      "id": "drifella2-6002",
+      "token": "6002",
+      "sourceAssetId": "GtSL2N3Lox2mBU9Wm1up4Tmw7Zy4Q2CTNEKUwmGZaa83",
+      "battle": "asset-lab/curation/drifella2-6002-overnight-wave-008/accepted/drifella2-6002-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-6002-overnight-wave-008/accepted/drifella2-6002-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-6002-overnight-wave-008/accepted/drifella2-6002-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-6002-overnight-wave-008/accepted/drifella2-6002-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 353,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-6002.png"
+    },
+    "6345": {
+      "id": "drifella2-6345",
+      "token": "6345",
+      "sourceAssetId": "GRtXh2Bf5d3751nLZotLYRXZDg7X1aMPcwZYW8kuzoyH",
+      "battle": "asset-lab/curation/drifella2-6345-overnight-wave-021/accepted/drifella2-6345-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-6345-overnight-wave-021/accepted/drifella2-6345-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-6345-overnight-wave-021/accepted/drifella2-6345-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-6345-overnight-wave-021/accepted/drifella2-6345-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 356,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-6345.png"
+    },
+    "6386": {
+      "id": "drifella2-6386",
+      "token": "6386",
+      "sourceAssetId": "HGupjnMTr2ANHhxuXXNALxYf7kUXBRYdUXsvQknx5qHq",
+      "battle": "asset-lab/curation/drifella2-6386-overnight-wave-016/accepted/drifella2-6386-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-6386-overnight-wave-016/accepted/drifella2-6386-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-6386-overnight-wave-016/accepted/drifella2-6386-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-6386-overnight-wave-016/accepted/drifella2-6386-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 360,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-6386.png"
+    },
+    "6472": {
+      "id": "drifella2-6472",
+      "token": "6472",
+      "sourceAssetId": "Ghr1ufTiHVW1acPXA86t74vRhZvoTGHdsLDDstBNv5ww",
+      "battle": "asset-lab/curation/drifella2-6472-overnight-wave-013/accepted/drifella2-6472-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-6472-overnight-wave-013/accepted/drifella2-6472-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-6472-overnight-wave-013/accepted/drifella2-6472-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-6472-overnight-wave-013/accepted/drifella2-6472-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 368,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-6472.png"
+    },
+    "6735": {
+      "id": "drifella2-6735",
+      "token": "6735",
+      "sourceAssetId": "GtbZdYNs9hYCiu4ERqVm98y9pH8ytD3hdz9iS6CvpDKL",
+      "battle": "asset-lab/curation/drifella2-6735-overnight-wave-006/accepted/drifella2-6735-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-6735-overnight-wave-006/accepted/drifella2-6735-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-6735-overnight-wave-006/accepted/drifella2-6735-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-6735-overnight-wave-006/accepted/drifella2-6735-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 369,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-6735.png"
+    },
+    "6775": {
+      "id": "drifella2-6775",
+      "token": "6775",
+      "sourceAssetId": "Gtqa8C581xLobYcxffYGxniEYJKCyaxM3gngx1WKHrzE",
+      "battle": "asset-lab/curation/drifella2-6775-overnight-wave-013/accepted/drifella2-6775-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-6775-overnight-wave-013/accepted/drifella2-6775-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-6775-overnight-wave-013/accepted/drifella2-6775-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-6775-overnight-wave-013/accepted/drifella2-6775-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 378,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-6775.png"
+    },
+    "6986": {
+      "id": "drifella2-6986",
+      "token": "6986",
+      "sourceAssetId": "Ga3b6KayUNfWiRt94ZYFt3HTDFKdNYQJAWJVDg945wB6",
+      "battle": "asset-lab/curation/drifella2-6986-overnight-wave-017/accepted/drifella2-6986-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-6986-overnight-wave-017/accepted/drifella2-6986-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-6986-overnight-wave-017/accepted/drifella2-6986-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-6986-overnight-wave-017/accepted/drifella2-6986-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 384,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-6986.png"
+    },
+    "7211": {
+      "id": "drifella2-7211",
+      "token": "7211",
+      "sourceAssetId": "H9LURHVHCy1ZKz9H1HUZJumzM2xecQEG937KWXH73Yk9",
+      "battle": "asset-lab/curation/drifella2-7211-overnight-wave-009/accepted/drifella2-7211-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-7211-overnight-wave-009/accepted/drifella2-7211-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-7211-overnight-wave-009/accepted/drifella2-7211-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-7211-overnight-wave-009/accepted/drifella2-7211-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 401,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-7211.png"
+    },
+    "7390": {
+      "id": "drifella2-7390",
+      "token": "7390",
+      "sourceAssetId": "GfFKWQb9Afj3p2e3UGmgX7ppcG7nZJtQTGqHJYFFEwmm",
+      "battle": "asset-lab/curation/drifella2-7390-overnight-wave-013/accepted/drifella2-7390-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-7390-overnight-wave-013/accepted/drifella2-7390-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-7390-overnight-wave-013/accepted/drifella2-7390-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-7390-overnight-wave-013/accepted/drifella2-7390-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 402,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-7390.png"
+    },
+    "7753": {
+      "id": "drifella2-7753",
+      "token": "7753",
+      "sourceAssetId": "H6kgWK5CTLikPauS5XKVXfKBj51pVM6Wt4FMdAAuCQoW",
+      "battle": "asset-lab/curation/drifella2-7753-overnight-wave-025/accepted/drifella2-7753-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-7753-overnight-wave-025/accepted/drifella2-7753-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-7753-overnight-wave-025/accepted/drifella2-7753-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-7753-overnight-wave-025/accepted/drifella2-7753-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 403,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-7753.png"
+    },
+    "7997": {
+      "id": "drifella2-7997",
+      "token": "7997",
+      "sourceAssetId": "GteWrML8gq1tb7q4bBZrSBkTA8inENXBtRwmeV3HaqTx",
+      "battle": "asset-lab/curation/drifella2-7997-overnight-wave-027/accepted/drifella2-7997-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-7997-overnight-wave-027/accepted/drifella2-7997-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-7997-overnight-wave-027/accepted/drifella2-7997-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-7997-overnight-wave-027/accepted/drifella2-7997-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 404,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-7997.png"
+    },
+    "8106": {
+      "id": "drifella2-8106",
+      "token": "8106",
+      "sourceAssetId": "GQhXqwKes1vjkLurC7QMgNtPXuuspvDTTt3QM8KHdgKK",
+      "battle": "asset-lab/curation/drifella2-8106-overnight-wave-003/accepted/drifella2-8106-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-8106-overnight-wave-003/accepted/drifella2-8106-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-8106-overnight-wave-003/accepted/drifella2-8106-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-8106-overnight-wave-003/accepted/drifella2-8106-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 407,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-8106.png"
+    },
+    "8218": {
+      "id": "drifella2-8218",
+      "token": "8218",
+      "sourceAssetId": "H7m4kqQDHKrjKMxSFWSNtN7mBDuVdHGEUW9pDzbeZ4JH",
+      "battle": "asset-lab/curation/drifella2-8218-overnight-wave-001/accepted/drifella2-8218-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-8218-overnight-wave-001/accepted/drifella2-8218-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-8218-overnight-wave-001/accepted/drifella2-8218-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-8218-overnight-wave-001/accepted/drifella2-8218-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 409,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-8218.png"
+    },
+    "8256": {
+      "id": "drifella2-8256",
+      "token": "8256",
+      "sourceAssetId": "GnCbPV98rEi9kba1uBKRfsBfgUfMmPJLSznt7p8ePvD1",
+      "battle": "asset-lab/curation/drifella2-8256-overnight-wave-003/accepted/drifella2-8256-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-8256-overnight-wave-003/accepted/drifella2-8256-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-8256-overnight-wave-003/accepted/drifella2-8256-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-8256-overnight-wave-003/accepted/drifella2-8256-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 410,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-8256.png"
+    },
+    "8290": {
+      "id": "drifella2-8290",
+      "token": "8290",
+      "sourceAssetId": "GuZocQnHUGhZVeAqUR4DUhvc75yDNFZftfhCM7frnTsE",
+      "battle": "asset-lab/curation/drifella2-8290-overnight-wave-019/accepted/drifella2-8290-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-8290-overnight-wave-019/accepted/drifella2-8290-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-8290-overnight-wave-019/accepted/drifella2-8290-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-8290-overnight-wave-019/accepted/drifella2-8290-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 411,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-8290.png"
+    },
+    "8394": {
+      "id": "drifella2-8394",
+      "token": "8394",
+      "sourceAssetId": "Gs1Yi7zoN3nXku8j2Xymkrt1y2wFXvzHFwLyvRNeU2dw",
+      "battle": "asset-lab/curation/drifella2-8394-overnight-wave-030/accepted/drifella2-8394-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-8394-overnight-wave-030/accepted/drifella2-8394-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-8394-overnight-wave-030/accepted/drifella2-8394-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-8394-overnight-wave-030/accepted/drifella2-8394-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 420,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-8394.png"
+    },
+    "8424": {
+      "id": "drifella2-8424",
+      "token": "8424",
+      "sourceAssetId": "GqLMrodFVxAfTeaDykR9bbFN5xGe2PCeV1d1MLuwTrSZ",
+      "battle": "asset-lab/curation/drifella2-8424-overnight-wave-018/accepted/drifella2-8424-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-8424-overnight-wave-018/accepted/drifella2-8424-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-8424-overnight-wave-018/accepted/drifella2-8424-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-8424-overnight-wave-018/accepted/drifella2-8424-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 422,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-8424.png"
+    },
+    "8669": {
+      "id": "drifella2-8669",
+      "token": "8669",
+      "sourceAssetId": "HC4G2FXKT7Shdp8eaKDCF3kUuaKojiPCNzCoUspFQ3W6",
+      "battle": "asset-lab/curation/drifella2-8669-overnight-wave-010/accepted/drifella2-8669-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-8669-overnight-wave-010/accepted/drifella2-8669-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-8669-overnight-wave-010/accepted/drifella2-8669-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-8669-overnight-wave-010/accepted/drifella2-8669-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 424,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-8669.png"
+    },
+    "8862": {
+      "id": "drifella2-8862",
+      "token": "8862",
+      "sourceAssetId": "Gv76hzy9B6t3N6Ni1zbZK4fYBppzEV1CgV54o6GFG7Qf",
+      "battle": "asset-lab/curation/drifella2-8862-overnight-wave-017/accepted/drifella2-8862-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-8862-overnight-wave-017/accepted/drifella2-8862-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-8862-overnight-wave-017/accepted/drifella2-8862-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-8862-overnight-wave-017/accepted/drifella2-8862-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 433,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-8862.png"
+    },
+    "8878": {
+      "id": "drifella2-8878",
+      "token": "8878",
+      "sourceAssetId": "GwkUajXGqwgVNwuXXdkgkLKG3Vbh7ZHKESK7TSxrdt9w",
+      "battle": "asset-lab/curation/drifella2-8878-overnight-wave-005/accepted/drifella2-8878-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-8878-overnight-wave-005/accepted/drifella2-8878-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-8878-overnight-wave-005/accepted/drifella2-8878-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-8878-overnight-wave-005/accepted/drifella2-8878-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 447,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-8878.png"
+    },
+    "9018": {
+      "id": "drifella2-9018",
+      "token": "9018",
+      "sourceAssetId": "GjY8yWkpTvnByT4WHeAVaKbJD9Szk5jcFS2sq3aAq4zB",
+      "battle": "asset-lab/curation/drifella2-9018-overnight-wave-021/accepted/drifella2-9018-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-9018-overnight-wave-021/accepted/drifella2-9018-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-9018-overnight-wave-021/accepted/drifella2-9018-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-9018-overnight-wave-021/accepted/drifella2-9018-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 457,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-9018.png"
+    },
+    "9135": {
+      "id": "drifella2-9135",
+      "token": "9135",
+      "sourceAssetId": "HB7ePtxyhqTEy3wqCkm8iREaicireghDJvJgdNaFNU3K",
+      "battle": "asset-lab/curation/drifella2-9135-overnight-wave-020/accepted/drifella2-9135-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-9135-overnight-wave-020/accepted/drifella2-9135-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-9135-overnight-wave-020/accepted/drifella2-9135-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-9135-overnight-wave-020/accepted/drifella2-9135-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 459,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-9135.png"
+    },
+    "9232": {
+      "id": "drifella2-9232",
+      "token": "9232",
+      "sourceAssetId": "GYWyRFvwZvvX2eQNDucGmuSdJXrwbHobDEpdCST63smS",
+      "battle": "asset-lab/curation/drifella2-9232-overnight-wave-033/accepted/drifella2-9232-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-9232-overnight-wave-033/accepted/drifella2-9232-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-9232-overnight-wave-033/accepted/drifella2-9232-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-9232-overnight-wave-033/accepted/drifella2-9232-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": {
+        "spriteGroup": 460,
+        "groupUsedByNpcCount": 1
+      },
+      "overworldLocal": "assets/swagbound/overworld-npc/drifella2-9232.png"
+    },
+    "9305": {
+      "id": "drifella2-9305",
+      "token": "9305",
+      "sourceAssetId": "GmLfu5NJvTyvw17xX9daSx8TwreiWX3uMUXus6Tk1y8u",
+      "battle": "asset-lab/curation/drifella2-9305-overnight-wave-001/accepted/drifella2-9305-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-9305-overnight-wave-001/accepted/drifella2-9305-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-9305-overnight-wave-001/accepted/drifella2-9305-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-9305-overnight-wave-001/accepted/drifella2-9305-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": null
+    },
+    "9461": {
+      "id": "drifella2-9461",
+      "token": "9461",
+      "sourceAssetId": "GoHRiXk8mL9guR9qSpbeN82enC8QGHmRKo1tAiD2NCQA",
+      "battle": "asset-lab/curation/drifella2-9461-overnight-wave-009/accepted/drifella2-9461-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-9461-overnight-wave-009/accepted/drifella2-9461-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-9461-overnight-wave-009/accepted/drifella2-9461-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-9461-overnight-wave-009/accepted/drifella2-9461-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": null
+    },
+    "9463": {
+      "id": "drifella2-9463",
+      "token": "9463",
+      "sourceAssetId": "GoLaPSwDWuiyP3VJWm8hN9fWZCTfeEfGif1ipSAwW3Dt",
+      "battle": "asset-lab/curation/drifella2-9463-overnight-wave-019/accepted/drifella2-9463-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-9463-overnight-wave-019/accepted/drifella2-9463-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-9463-overnight-wave-019/accepted/drifella2-9463-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-9463-overnight-wave-019/accepted/drifella2-9463-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": null
+    },
+    "9747": {
+      "id": "drifella2-9747",
+      "token": "9747",
+      "sourceAssetId": "HGpSWT5iPqW3ZEcbxZ5XEWmQsaZDdheZUGxzwtaWsc4x",
+      "battle": "asset-lab/curation/drifella2-9747-overnight-wave-031/accepted/drifella2-9747-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-9747-overnight-wave-031/accepted/drifella2-9747-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-9747-overnight-wave-031/accepted/drifella2-9747-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-9747-overnight-wave-031/accepted/drifella2-9747-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": null
+    },
+    "9780": {
+      "id": "drifella2-9780",
+      "token": "9780",
+      "sourceAssetId": "HFsfsJY9fhsuGL8vXLmiCxNLUujBVq3g2T692BF1oxgP",
+      "battle": "asset-lab/curation/drifella2-9780-overnight-wave-032/accepted/drifella2-9780-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-9780-overnight-wave-032/accepted/drifella2-9780-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-9780-overnight-wave-032/accepted/drifella2-9780-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-9780-overnight-wave-032/accepted/drifella2-9780-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": null
+    },
+    "9849": {
+      "id": "drifella2-9849",
+      "token": "9849",
+      "sourceAssetId": "GmvtFC3UYiMPC8ppuiaNjhUpMRHQveJ8ZJ5nK63Uh7zN",
+      "battle": "asset-lab/curation/drifella2-9849-overnight-wave-034/accepted/drifella2-9849-battle-v1-alpha-extracted-source-size.png",
+      "battleCrop": "asset-lab/curation/drifella2-9849-overnight-wave-034/accepted/drifella2-9849-battle-v1-extracted-crop.png",
+      "overworld": "asset-lab/curation/drifella2-9849-overnight-wave-034/accepted/drifella2-9849-overworld-v1-ow-001-nearest.png",
+      "overworldAlt": "asset-lab/curation/drifella2-9849-overnight-wave-034/accepted/drifella2-9849-overworld-v1-ow-002-nearest.png",
+      "status": "review-only",
+      "entity": null
+    }
+  },
+  "assignment": {
+    "method": "creatures sorted by token asc -> raw ambient/named NPC groups sorted by usedByNpcCount desc; index-paired. Phones 167/215/216 excluded. 0 unskinned enemies so battle sprites stay in roster (source paths).",
+    "assigned": 89,
+    "leftover": 6,
+    "date": "2026-06-22"
+  }
+}
