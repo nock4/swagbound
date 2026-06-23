@@ -2418,7 +2418,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private isStackedMenuInputActive(): boolean {
-    return this.phase_ === "command-input" && this.currentActor_?.side === "party";
+    // The stacked layout dropped the command cluster to mid-screen. Keep the
+    // command menu top-anchored (name plate + command grid near the top); the
+    // submenu sits beside it rather than stacking down the middle.
+    return false;
   }
 
   /** Display name of the party member currently choosing a command (top-left turn plate). */
