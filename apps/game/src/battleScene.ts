@@ -914,7 +914,7 @@ export class BattleScene extends Phaser.Scene {
       this.currentActor_ = result.actor;
       this.menuMessage_ = result.message;
       this.executionMessageLines_ = composeBattleStepLines(result.events);
-      this.playBattleStepSfx(result.events);
+      this.playBattleStepSfx(result);
       this.triggerBattleStepFx(result);
       this.actionDelayMs_ = this.executionMessageLines_.length > 0 ? ACTION_ADVANCE_DELAY_MS : 0;
       if (result.fled) {
@@ -949,7 +949,7 @@ export class BattleScene extends Phaser.Scene {
       this.updateStepDebugTargets(result, queued);
       this.menuMessage_ = result.message;
       this.executionMessageLines_ = composeBattleStepLines(result.events);
-      this.playBattleStepSfx(result.events);
+      this.playBattleStepSfx(result);
       this.triggerBattleStepFx(result);
       if (this.executionMessageLines_.length === 0) {
         this.actionDelayMs_ = 0;
@@ -983,8 +983,12 @@ export class BattleScene extends Phaser.Scene {
     this.beginCommandInputRound();
   }
 
-  private playBattleStepSfx(events: readonly BattleEvent[]): void {
-    this.playBattleSfxSequence(battleStepSfx(events));
+  private playBattleStepSfx(result: BattleRoundStepResult): void {
+    const cues =
+      result.details.kind === "defend"
+        ? battleStepSfx(result.details)
+        : battleStepSfx(result.events);
+    this.playBattleSfxSequence(cues);
   }
 
   private triggerBattleStepFx(result: BattleRoundStepResult): void {
@@ -1218,6 +1222,12 @@ export class BattleScene extends Phaser.Scene {
       case "smash":
         this.battleSfx_.smash();
         break;
+      case "crit":
+        this.battleSfx_.crit();
+        break;
+      case "defend":
+        this.battleSfx_.defend();
+        break;
       case "miss":
         this.battleSfx_.miss();
         break;
@@ -1238,6 +1248,9 @@ export class BattleScene extends Phaser.Scene {
         break;
       case "victory":
         this.battleSfx_.victory();
+        break;
+      case "levelUp":
+        this.battleSfx_.levelUp();
         break;
     }
   }

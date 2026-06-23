@@ -19,7 +19,7 @@ function sfx(overrides: Partial<BattleRoundStepNarrationDetails>) {
 describe("battleStepSfx", () => {
   it("sequences attack wind-up into hit, smash, or miss", () => {
     expect(sfx({ kind: "attack", damage: 12 })).toEqual(["swing", "hit"]);
-    expect(sfx({ kind: "attack", damage: 12, smash: true })).toEqual(["swing", "smash"]);
+    expect(sfx({ kind: "attack", damage: 12, smash: true })).toEqual(["swing", "crit"]);
     expect(sfx({ kind: "attack", damage: BIG_DAMAGE_SFX_THRESHOLD })).toEqual(["swing", "smash"]);
     expect(sfx({ kind: "attack", missed: true, damage: 0 })).toEqual(["swing", "miss"]);
   });
@@ -42,6 +42,7 @@ describe("battleStepSfx", () => {
   it("maps flee and skips non-impact steps", () => {
     expect(sfx({ kind: "run", fled: true })).toEqual(["run"]);
     expect(sfx({ kind: "skip" })).toEqual([]);
-    expect(sfx({ kind: "defend", defended: true })).toEqual([]);
+    // DEFEND has no events; the cue comes from the narration kind.
+    expect(battleStepSfx(details({ kind: "defend", defended: true }))).toEqual(["defend"]);
   });
 });

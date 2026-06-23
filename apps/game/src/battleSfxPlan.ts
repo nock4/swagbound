@@ -16,6 +16,10 @@ export const BIG_DAMAGE_SFX_THRESHOLD = 60;
 export function battleStepSfx(events: readonly BattleEvent[]): BattleSfxCue[];
 export function battleStepSfx(details: BattleRoundStepNarrationDetails): BattleSfxCue[];
 export function battleStepSfx(input: readonly BattleEvent[] | BattleRoundStepNarrationDetails): BattleSfxCue[] {
+  // DEFEND produces no battle events, so it's only detectable from the narration kind.
+  if (!isBattleEventList(input) && input.kind === "defend") {
+    return ["defend"];
+  }
   const events = isBattleEventList(input) ? input : battleStepEvents(input);
   const cues: BattleSfxCue[] = [];
   const runEvent = events.find((event) => event.kind === "runSucceeded" || event.kind === "runFailed");
@@ -74,7 +78,7 @@ function impactCue(events: readonly BattleEvent[]): BattleSfxCue {
     return "miss";
   }
   if (battleEventsHaveSmash(events)) {
-    return "smash";
+    return "crit";
   }
   return damage >= BIG_DAMAGE_SFX_THRESHOLD ? "smash" : "hit";
 }

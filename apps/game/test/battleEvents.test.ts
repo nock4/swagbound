@@ -264,7 +264,7 @@ function legacyImpactCue(details: Pick<BattleRoundStepNarrationDetails, "damage"
     return "miss";
   }
   if (details.smash) {
-    return "smash";
+    return "crit";
   }
   return (details.damage ?? 0) >= BIG_DAMAGE_SFX_THRESHOLD ? "smash" : "hit";
 }

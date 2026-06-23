@@ -6,6 +6,8 @@ export interface BattleSfx {
   swing(): void;
   hit(): void;
   smash(): void;
+  crit(): void;
+  defend(): void;
   miss(): void;
   psi(): void;
   heal(): void;
@@ -13,6 +15,7 @@ export interface BattleSfx {
   enemyDown(): void;
   run(): void;
   victory(): void;
+  levelUp(): void;
 }
 
 export type BattleSfxCue = Exclude<keyof BattleSfx, "resume">;
@@ -34,6 +37,8 @@ export class NoopBattleSfx implements BattleSfx {
   swing(): void {}
   hit(): void {}
   smash(): void {}
+  crit(): void {}
+  defend(): void {}
   miss(): void {}
   psi(): void {}
   heal(): void {}
@@ -41,6 +46,7 @@ export class NoopBattleSfx implements BattleSfx {
   enemyDown(): void {}
   run(): void {}
   victory(): void {}
+  levelUp(): void {}
 }
 
 export class WebAudioBattleSfx implements BattleSfx {
@@ -108,6 +114,25 @@ export class WebAudioBattleSfx implements BattleSfx {
     });
   }
 
+  crit(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.noiseBurst(context, { start, duration: 0.15, frequencyHz: 130, gain: 0.24 });
+      this.tone(context, { type: "sawtooth", start, duration: 0.22, fromHz: 96, toHz: 38, gain: 0.16 });
+      this.noiseBurst(context, { start: start + 0.02, duration: 0.12, frequencyHz: 920, sweepToHz: 2500, gain: 0.12 });
+      this.tone(context, { type: "square", start: start + 0.05, duration: 0.18, fromHz: 320, toHz: 560, gain: 0.07 });
+    });
+  }
+
+  defend(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.noiseBurst(context, { start, duration: 0.06, frequencyHz: 700, gain: 0.085 });
+      this.tone(context, { type: "square", start, duration: 0.1, fromHz: 300, toHz: 430, gain: 0.075 });
+      this.tone(context, { type: "sine", start: start + 0.05, duration: 0.13, fromHz: 200, toHz: 320, gain: 0.045 });
+    });
+  }
+
   miss(): void {
     this.withContext((context) => {
       const start = context.currentTime;
@@ -172,6 +197,23 @@ export class WebAudioBattleSfx implements BattleSfx {
           gain: index === notes.length - 1 ? 0.08 : 0.06
         });
       });
+      this.tone(context, { type: "triangle", start, duration: 0.38, fromHz: 130.81, toHz: 131.5, gain: 0.05 });
+      this.tone(context, { type: "sine", start: start + notes.length * 0.085, duration: 0.3, fromHz: 1046.5, toHz: 1318.5, gain: 0.05 });
+    });
+  }
+
+  levelUp(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      const notes = [392, 523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((note, index) => {
+        const at = start + index * 0.078;
+        this.tone(context, { type: "triangle", start: at, duration: 0.19, fromHz: note, toHz: note * 1.004, gain: 0.07 });
+        this.tone(context, { type: "square", start: at, duration: 0.085, fromHz: note * 2, toHz: note * 2.004, gain: 0.022 });
+      });
+      const finale = start + notes.length * 0.078;
+      this.tone(context, { type: "sine", start: finale, duration: 0.34, fromHz: 1046.5, toHz: 1568, gain: 0.05 });
+      this.tone(context, { type: "triangle", start: finale, duration: 0.34, fromHz: 523.25, toHz: 784, gain: 0.04 });
     });
   }
 
