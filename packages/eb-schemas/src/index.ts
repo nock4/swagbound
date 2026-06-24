@@ -711,6 +711,59 @@ export const StoryTriggersSchema = z.object({
   barriers: z.array(StoryBarrierSchema).optional()
 });
 
+/**
+ * Authored cutscene: a SEQUENCE of steps the engine runs while the player is
+ * locked, re-creating EarthBound scripted scenes (NPC choreography: walk out a
+ * door, line up, appear/vanish) that the converter drops. moveActor reuses the
+ * proven RuntimeEventSequence actor-move primitive; instantaneous steps (face,
+ * show/hide, flag, sound, warp) apply directly. Coordinates are world pixels.
+ */
+const CutsceneFacingSchema = z.enum(["up", "down", "left", "right"]);
+const CutscenePointSchema = z.object({ x: z.number(), y: z.number() }).strict();
+
+export const CutsceneStepSchema = z.discriminatedUnion("op", [
+  z.object({ op: z.literal("moveActor"), actor: EventActorMoveSelectorSchema, to: CutscenePointSchema, run: z.boolean().optional() }).strict(),
+  z.object({ op: z.literal("faceActor"), actor: EventActorMoveSelectorSchema, dir: CutsceneFacingSchema }).strict(),
+  z.object({ op: z.literal("showActor"), actor: EventActorMoveSelectorSchema }).strict(),
+  z.object({ op: z.literal("hideActor"), actor: EventActorMoveSelectorSchema }).strict(),
+  z.object({ op: z.literal("wait"), ms: z.number().int().nonnegative() }).strict(),
+  z.object({ op: z.literal("dialogue"), pages: z.array(z.string()).min(1) }).strict(),
+  z.object({ op: z.literal("setFlag"), flag: z.string().min(1) }).strict(),
+  z.object({ op: z.literal("clearFlag"), flag: z.string().min(1) }).strict(),
+  z.object({ op: z.literal("sound"), id: z.number().int().nonnegative() }).strict(),
+  z.object({ op: z.literal("warp"), to: CutscenePointSchema }).strict()
+]);
+export type CutsceneStep = z.infer<typeof CutsceneStepSchema>;
+
+const CutsceneTriggerSchema = z.discriminatedUnion("kind", [
+  z.object({ kind: z.literal("area"), area: StoryTriggerAreaSchema }).strict(),
+  z.object({ kind: z.literal("interact"), npcId: z.number().int().nonnegative() }).strict(),
+  z.object({ kind: z.literal("flag"), flag: z.string().min(1) }).strict()
+]);
+export type CutsceneTrigger = z.infer<typeof CutsceneTriggerSchema>;
+
+export const CutsceneSchema = z.object({
+  id: z.string().min(1),
+  trigger: CutsceneTriggerSchema,
+  /** All of these flags must be set for the cutscene to fire. */
+  requireFlags: z.array(z.string()).optional(),
+  /** None of these flags may be set for the cutscene to fire. */
+  blockFlags: z.array(z.string()).optional(),
+  /** Fire at most once (records cutscene:<id>). Default true. */
+  once: z.boolean().optional(),
+  /** Lock player input while the sequence runs. Default true. */
+  lockPlayer: z.boolean().optional(),
+  steps: z.array(CutsceneStepSchema).min(1)
+}).strict();
+export type Cutscene = z.infer<typeof CutsceneSchema>;
+
+export const CutscenesSchema = z.object({
+  schema: z.literal("swagbound.cutscenes.v1"),
+  comment: z.string().optional(),
+  cutscenes: z.array(CutsceneSchema)
+}).strict();
+export type Cutscenes = z.infer<typeof CutscenesSchema>;
+
 export const TutorialStepStatusSchema = z.enum(["pass", "fail", "blocked", "unknown"]);
 
 export const TutorialStepSchema = z.object({
