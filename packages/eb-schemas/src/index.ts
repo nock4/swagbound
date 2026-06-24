@@ -730,6 +730,8 @@ export const CutsceneStepSchema = z.discriminatedUnion("op", [
   z.object({ op: z.literal("dialogue"), pages: z.array(z.string()).min(1) }).strict(),
   z.object({ op: z.literal("setFlag"), flag: z.string().min(1) }).strict(),
   z.object({ op: z.literal("clearFlag"), flag: z.string().min(1) }).strict(),
+  /** Set/unset a numeric EarthBound event flag (e.g. to persistently hide NPCs whose showSprite keys on it). */
+  z.object({ op: z.literal("eventFlag"), flag: z.number().int().nonnegative(), set: z.boolean() }).strict(),
   z.object({ op: z.literal("sound"), id: z.number().int().nonnegative() }).strict(),
   z.object({ op: z.literal("warp"), to: CutscenePointSchema }).strict()
 ]);
@@ -744,6 +746,7 @@ export type CutsceneTrigger = z.infer<typeof CutsceneTriggerSchema>;
 
 export const CutsceneSchema = z.object({
   id: z.string().min(1),
+  comment: z.string().optional(),
   trigger: CutsceneTriggerSchema,
   /** All of these flags must be set for the cutscene to fire. */
   requireFlags: z.array(z.string()).optional(),

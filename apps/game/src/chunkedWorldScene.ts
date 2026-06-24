@@ -2928,7 +2928,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       this.cutsceneRunner = undefined;
       this.activeCutsceneId = undefined;
-      this.cutsceneVisibilityOverride.clear();
+      // Keep visibility overrides: hidden actors must stay hidden after the scene.
+      // The EB flag (eventFlag step) blocks re-creation, but already-spawned runtimes
+      // need the override to stay hidden. Overrides reset on scene start.
       if (lockForCutscene && !this.dialogue.open && !this.eventSequence?.running) {
         unlockPlayer(this.playerState);
       }
@@ -2955,6 +2957,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       isDialogueOpen: () => this.dialogue.open,
       setGameFlag: (flag) => this.gameFlags.set(flag),
       clearGameFlag: (flag) => this.gameFlags.unset(flag),
+      setEventFlag: (flag, set) => { if (set) { this.gameFlags.setNum(flag); } else { this.gameFlags.unsetNum(flag); } },
       playSound: () => { /* content SFX cue: no sound sink wired for cutscenes yet */ },
       warp: (to) => this.warpPlayerToWorldPixel(to)
     };

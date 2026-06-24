@@ -42,6 +42,9 @@ class MockHost implements CutsceneHost {
   clearGameFlag(flag: string): void {
     this.log.push(`clearFlag:${flag}`);
   }
+  setEventFlag(flag: number, set: boolean): void {
+    this.log.push(`eventFlag:${flag}:${set ? "set" : "unset"}`);
+  }
   playSound(id: number): void {
     this.log.push(`sound:${id}`);
   }

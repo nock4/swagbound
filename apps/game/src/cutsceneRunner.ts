@@ -17,6 +17,7 @@ export interface CutsceneHost {
   isDialogueOpen(): boolean;
   setGameFlag(flag: string): void;
   clearGameFlag(flag: string): void;
+  setEventFlag(flag: number, set: boolean): void;
   playSound(id: number): void;
   warp(to: { x: number; y: number }): void;
 }
@@ -110,6 +111,9 @@ export class CutsceneRunner {
         return false;
       case "clearFlag":
         this.host.clearGameFlag(step.flag);
+        return false;
+      case "eventFlag":
+        this.host.setEventFlag(step.flag, step.set);
         return false;
       case "sound":
         this.host.playSound(step.id);
