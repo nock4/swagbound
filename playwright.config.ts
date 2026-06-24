@@ -40,7 +40,7 @@ export default defineConfig({
   projects: [
     {
       name: "review-chromium",
-      testMatch: /full-world\.spec\.ts/,
+      testMatch: /(?:full-world|cutscenes)\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         baseURL: "http://127.0.0.1:5173/",
