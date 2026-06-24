@@ -28,6 +28,7 @@ import {
   SpriteOverridesSchema,
   SwagboundDialogueLibrarySchema,
   StoryTriggersSchema,
+  CutscenesSchema,
   SpriteGroupCollectionSchema,
   SpriteSheetCollectionSchema,
   TeleportDestinationsSchema,
@@ -56,6 +57,7 @@ import {
   type NumericFlagState,
   type NpcReferenceCollection,
   type OpeningCutscene,
+  type Cutscenes,
   type PsiCollection,
   type PsiOverrides,
   type ScriptCollection,
@@ -94,6 +96,7 @@ const STORY_TRIGGERS_FILE = "triggers.json";
 const MUSIC_MANIFEST_FILE = "music-manifest.json";
 const DRIFELLA_BARKS_FILE = "drifella-barks.json";
 const OPENING_CUTSCENE_FILE = "opening-cutscene.json";
+const CUTSCENES_FILE = "cutscenes.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -104,6 +107,7 @@ export type GameData = {
   drifellaBarks: DrifellaBarks;
   dialogueLibrary: SwagboundDialogueLibrary;
   openingCutscene?: OpeningCutscene;
+  cutscenes?: Cutscenes;
   storyTriggers?: StoryTriggers;
   spriteGroups?: SpriteGroupCollection;
   tutorialStatus?: TutorialStatus;
@@ -210,7 +214,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     storyTriggers,
     musicManifest,
     drifellaBarks,
-    openingCutscene
+    openingCutscene,
+    cutscenes
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -260,7 +265,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${STORY_TRIGGERS_FILE}`, StoryTriggersSchema),
     loadJson(`/generated/${MUSIC_MANIFEST_FILE}`, MusicManifestSchema),
     loadJson(`/generated/${DRIFELLA_BARKS_FILE}`, DrifellaBarksSchema),
-    loadJson(`/generated/${OPENING_CUTSCENE_FILE}`, OpeningCutsceneSchema)
+    loadJson(`/generated/${OPENING_CUTSCENE_FILE}`, OpeningCutsceneSchema),
+    loadJson(`/generated/${CUTSCENES_FILE}`, CutscenesSchema)
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
@@ -282,6 +288,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     drifellaBarks: resolvedDrifellaBarks,
     dialogueLibrary: dialogueLibrary ?? emptyDialogueLibrary(),
     openingCutscene,
+    cutscenes,
     storyTriggers,
     spriteGroups,
     tutorialStatus,

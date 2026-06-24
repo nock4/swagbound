@@ -15,6 +15,7 @@ import {
   PsiOverridesSchema,
   SpriteOverridesSchema,
   StoryTriggersSchema,
+  CutscenesSchema,
   TileOverridesSchema,
   type BackgroundOverrideEntry,
   type SpriteOverride,
@@ -54,6 +55,8 @@ export const BATTLE_RULES_SOURCE = "content/battle-rules.json";
 export const BATTLE_RULES_OUTPUT = "battle-rules.json";
 export const STORY_TRIGGERS_SOURCE = "content/triggers.json";
 export const STORY_TRIGGERS_OUTPUT = "triggers.json";
+export const CUTSCENES_SOURCE = "content/cutscenes.json";
+export const CUTSCENES_OUTPUT = "cutscenes.json";
 export const MUSIC_MANIFEST_SOURCE = "content/music-manifest.json";
 export const MUSIC_MANIFEST_OUTPUT = "music-manifest.json";
 export const DRIFELLA_BARKS_SOURCE = "content/drifella-barks.json";
@@ -104,12 +107,14 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validatePsiOverrides(PSI_OVERRIDES_SOURCE);
   await validateBattleRules(BATTLE_RULES_SOURCE);
   await validateStoryTriggers(STORY_TRIGGERS_SOURCE);
+  await validateCutscenes(CUTSCENES_SOURCE);
   await validateMusicManifest(MUSIC_MANIFEST_SOURCE);
   await validateDrifellaBarks(DRIFELLA_BARKS_SOURCE);
   await validateOpeningCutscene(OPENING_CUTSCENE_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await Promise.all([
     copyJsonToGenerated(STORY_TRIGGERS_SOURCE, out, STORY_TRIGGERS_OUTPUT),
+    copyJsonToGenerated(CUTSCENES_SOURCE, out, CUTSCENES_OUTPUT),
     copyJsonToGenerated(ADDED_NPCS_SOURCE, out, ADDED_NPCS_OUTPUT),
     copyJsonToGenerated(CUSTOM_DIALOGUE_SOURCE, out, CUSTOM_DIALOGUE_OUTPUT),
     copyJsonToGenerated(SWAGBOUND_DIALOGUE_LIBRARY_SOURCE, out, SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT),
@@ -169,6 +174,10 @@ async function validatePsiOverrides(source: string): Promise<void> {
 
 async function validateBattleRules(source: string): Promise<void> {
   BattleRulesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateCutscenes(source: string): Promise<void> {
+  CutscenesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateStoryTriggers(source: string): Promise<void> {

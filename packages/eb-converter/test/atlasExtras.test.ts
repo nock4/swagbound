@@ -29,7 +29,7 @@ describe("extra atlas extractor", () => {
       bgId: 262,
       image: "../generated/assets/battle/backgrounds/262.png",
       used: true,
-      override: "buzzword-shotgun-001"
+      override: "summon-something-4-002"
     });
     expect(background262?.usedByEnemyGroups).toContain(1);
     expect(background262?.usedByEnemyGroups.length).toBeGreaterThan(0);

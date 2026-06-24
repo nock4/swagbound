@@ -1,6 +1,7 @@
 import Phaser from "phaser";
-import { isNpcVisibleForEventFlags, type BattleEnemy, type DialoguePage, type EventEffect, type ItemData, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
-import { barrierBlocksPoint, isBarrierActive, isOnce, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
+import { isNpcVisibleForEventFlags, type BattleEnemy, type Cutscene, type DialoguePage, type EventActorMoveSelector, type EventEffect, type ItemData, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
+import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -457,6 +458,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private pendingScriptedDialogueComplete?: () => void;
   private pendingInteractionShopStoreId?: number;
   private cutsceneMove?: CutsceneMoveState;
+  private cutsceneRunner?: CutsceneRunner;
+  private activeCutsceneId?: string;
+  private suppressedCutsceneId?: string;
+  private readonly cutsceneVisibilityOverride = new Map<number, boolean>();
   private cutsceneMoveDebug: CutsceneMoveDebug = { active: false, arrived: false };
   private cutsceneMoveDemoHook?: (npcId: number | string, x: number, y: number, run?: boolean) => boolean;
   targetReference = TARGET_REFERENCE;
@@ -712,6 +717,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.stepCutsceneMove(delta);
     this.updateDoorTransition(delta);
 
+    this.cutsceneRunner?.update(delta);
+    if (this.cutsceneRunner?.running) {
+      // A content cutscene owns the scene: keep the player locked, sync the actor
+      // being driven, and skip movement + world-trigger processing this frame.
+      if (!this.playerState.inputLocked) {
+        lockPlayer(this.playerState, this.playerFrames);
+      }
+      this.syncPlayerObject();
+      this.updateCollisionOverlay();
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
+
     const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.isDoorFadeActive();
     if (inputOwned && !this.playerState.inputLocked) {
       lockPlayer(this.playerState, this.playerFrames);
@@ -742,6 +761,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updateCollisionOverlay();
     this.refreshBarrierSprites();
     if (this.maybeStartIntroMeteorBeat()) {
+      return;
+    }
+    if (this.maybeStartCutscene()) {
       return;
     }
     if (this.maybeFireStoryTrigger()) {
@@ -833,6 +855,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.pendingInteractionShopStoreId = undefined;
     this.cutsceneMove = undefined;
     this.cutsceneMoveDebug = { active: false, arrived: false };
+    this.cutsceneRunner = undefined;
+    this.activeCutsceneId = undefined;
+    this.suppressedCutsceneId = undefined;
+    this.cutsceneVisibilityOverride.clear();
     this.unregisterCutsceneMoveDemoGlobal();
   }
 
@@ -1383,7 +1409,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       npc.state.player.facing,
       npc.data.npcId
     );
-    actor.setVisible(this.npcInsideActiveRoom(npc));
+    actor.setVisible(this.npcInsideActiveRoom(npc) && this.cutsceneActorVisible(npc.data.npcId));
   }
 
   private applyNpcRoomVisibility(): void {
@@ -2129,7 +2155,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   handleAdvance(): void {
     if (!this.dialogue.open) {
-      if (this.eventSequence?.running) {
+      if (this.eventSequence?.running || this.cutsceneRunner?.running) {
         return;
       }
       if (this.interactionTarget() && this.dialogue.canOpen()) {
@@ -2149,7 +2175,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private openCommandMenu(): void {
-    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running) {
+    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running || this.cutsceneRunner?.running) {
       return;
     }
     this.refreshMenuScreens();
@@ -2830,6 +2856,162 @@ export class ChunkedWorldScene extends Phaser.Scene {
     runtime.state.animKey = `idle-${runtime.state.facing}`;
     runtime.state.animFrame = runtime.frames[runtime.state.facing][0];
     runtime.sync();
+  }
+
+  // --- Authored content cutscenes (content/cutscenes.json) ----------------------
+
+  /** Each frame (when idle), fire the first eligible content cutscene. */
+  private maybeStartCutscene(): boolean {
+    if (this.cutsceneRunner?.running || this.dialogue.open || this.eventSequence?.running || this.isDoorFadeActive()) {
+      return false;
+    }
+    const cutscenes = this.data_.cutscenes?.cutscenes;
+    if (!cutscenes || cutscenes.length === 0) {
+      return false;
+    }
+    const feet = { x: this.playerState.x, y: this.playerState.y };
+    let stillSuppressed = false;
+    for (const cutscene of cutscenes) {
+      if (this.suppressedCutsceneId === cutscene.id && this.cutsceneTriggerInArea(cutscene, feet)) {
+        stillSuppressed = true; // don't re-fire while standing in the same trigger area
+        continue;
+      }
+      if (!this.cutsceneConditionsMet(cutscene, feet)) {
+        continue;
+      }
+      this.startCutscene(cutscene);
+      return true;
+    }
+    if (!stillSuppressed) {
+      this.suppressedCutsceneId = undefined;
+    }
+    return false;
+  }
+
+  private cutsceneTriggerInArea(cutscene: Cutscene, feet: { x: number; y: number }): boolean {
+    return cutscene.trigger.kind === "area" && pointInArea(feet, cutscene.trigger.area);
+  }
+
+  private cutsceneConditionsMet(cutscene: Cutscene, feet: { x: number; y: number }): boolean {
+    const once = cutscene.once !== false;
+    if (once && this.gameFlags.has(`cutscene:${cutscene.id}`)) {
+      return false;
+    }
+    if (cutscene.requireFlags?.some((flag) => !this.gameFlags.has(flag))) {
+      return false;
+    }
+    if (cutscene.blockFlags?.some((flag) => this.gameFlags.has(flag))) {
+      return false;
+    }
+    switch (cutscene.trigger.kind) {
+      case "area":
+        return pointInArea(feet, cutscene.trigger.area);
+      case "flag":
+        return this.gameFlags.has(cutscene.trigger.flag);
+      case "interact":
+        return false; // interaction-triggered cutscenes fire from the talk path, not the area scan
+      default:
+        return false;
+    }
+  }
+
+  private startCutscene(cutscene: Cutscene): void {
+    const lockForCutscene = cutscene.lockPlayer !== false;
+    this.activeCutsceneId = cutscene.id;
+    this.suppressedCutsceneId = cutscene.id;
+    if (lockForCutscene) {
+      lockPlayer(this.playerState, this.playerFrames);
+    }
+    const finish = (): void => {
+      if (cutscene.once !== false) {
+        this.gameFlags.set(`cutscene:${cutscene.id}`);
+      }
+      this.cutsceneRunner = undefined;
+      this.activeCutsceneId = undefined;
+      // Keep visibility overrides: hidden actors must stay hidden after the scene.
+      // The EB flag (eventFlag step) blocks re-creation, but already-spawned runtimes
+      // need the override to stay hidden. Overrides reset on scene start.
+      if (lockForCutscene && !this.dialogue.open && !this.eventSequence?.running) {
+        unlockPlayer(this.playerState);
+      }
+      this.updatePrompt();
+      this.publish();
+    };
+    // onComplete fires inside the constructor for all-instant cutscenes; assign
+    // only if still running so a completed runner doesn't linger.
+    const runner = new CutsceneRunner(cutscene.steps, this.createCutsceneHost(), finish);
+    if (runner.running) {
+      this.cutsceneRunner = runner;
+    }
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private createCutsceneHost(): CutsceneHost {
+    return {
+      startActorMove: (actor, to, run) => this.requestCutsceneActorMove({ kind: "actorMove", actor, to, run }),
+      isActorMoveActive: () => this.cutsceneMove !== undefined,
+      faceActor: (actor, dir) => this.setCutsceneActorFacing(actor, dir),
+      setActorVisible: (actor, visible) => this.setCutsceneActorVisible(actor, visible),
+      startDialogue: (pages) => this.dialogue.start(buildInlineDialoguePages([...pages])),
+      isDialogueOpen: () => this.dialogue.open,
+      setGameFlag: (flag) => this.gameFlags.set(flag),
+      clearGameFlag: (flag) => this.gameFlags.unset(flag),
+      setEventFlag: (flag, set) => { if (set) { this.gameFlags.setNum(flag); } else { this.gameFlags.unsetNum(flag); } },
+      playSound: () => { /* content SFX cue: no sound sink wired for cutscenes yet */ },
+      warp: (to) => this.warpPlayerToWorldPixel(to)
+    };
+  }
+
+  private cutsceneActorVisible(npcId: number): boolean {
+    const override = this.cutsceneVisibilityOverride.get(npcId);
+    return override === undefined ? true : override;
+  }
+
+  private setCutsceneActorVisible(actor: EventActorMoveSelector, visible: boolean): void {
+    const normalized = normalizeActorMoveSelector(actor);
+    if (!normalized || normalized.kind !== "npc") {
+      return; // the player actor is always visible
+    }
+    this.cutsceneVisibilityOverride.set(normalized.npcId, visible);
+    const npc = this.npcRuntimeForActor(normalized);
+    if (npc) {
+      this.syncNpc(npc);
+    }
+  }
+
+  private setCutsceneActorFacing(actor: EventActorMoveSelector, dir: CutsceneFacing): void {
+    const normalized = normalizeActorMoveSelector(actor);
+    if (!normalized) {
+      return;
+    }
+    if (normalized.kind === "player") {
+      this.playerState.facing = dir;
+      this.playerState.animKey = `idle-${dir}`;
+      this.playerState.animFrame = this.playerFrames[dir][0];
+      this.syncPlayerObject();
+      return;
+    }
+    const npc = this.npcRuntimeForActor(normalized);
+    if (!npc) {
+      return;
+    }
+    npc.state.player.facing = dir;
+    npc.state.player.animKey = `idle-${dir}`;
+    npc.state.player.animFrame = npc.frames[dir][0];
+    this.syncNpc(npc);
+  }
+
+  private warpPlayerToWorldPixel(to: { x: number; y: number }): void {
+    const point = this.clampSpawn(to);
+    this.playerState.x = point.x;
+    this.playerState.y = point.y;
+    this.playerState.velocityX = 0;
+    this.playerState.velocityY = 0;
+    this.playerState.moving = false;
+    this.syncPlayerObject();
+    this.refreshRoomBounds();
+    this.refreshStreaming();
   }
 
   private maybeStartNewGameStartup(spawn: { x: number; y: number }): void {
