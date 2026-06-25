@@ -64,8 +64,8 @@ async function dump(label) {
           submenu: b.submenu,
           selection: b.selection,
           message: b.executionMessage || undefined,
-          party: (b.party ?? []).map((c) => ({ hp: c.hpTarget, pp: c.pp, alive: c.alive })),
-          enemies: (b.enemies ?? []).map((c) => ({ hp: c.hpTarget, pp: c.pp, alive: c.alive }))
+          party: (b.party ?? []).map((c) => ({ hp: c.hpTarget, pp: c.pp, alive: c.alive, st: c.statuses ?? [] })),
+          enemies: (b.enemies ?? []).map((c) => ({ hp: c.hpTarget, pp: c.pp, alive: c.alive, st: c.statuses ?? [] }))
         }
         : null
     };

@@ -121,6 +121,14 @@ describe("battleStepEvents", () => {
       expect(battleStepSfx(events), `${details.kind} sfx`).toEqual(legacyBattleStepSfx(details));
     }
   });
+
+  it("narrates a non-damaging assist PSI by its effect message, not as a dodge", () => {
+    const lines = composeBattleStepLines(
+      step({ kind: "psi", moveName: "Lull", psiId: 43, targetName: "Foe", message: "Foe is now asleep!", missed: false })
+    );
+    expect(lines).toEqual(["Foe is now asleep!"]);
+    expect(lines.join(" ")).not.toContain("dodged");
+  });
 });
 
 function legacyBattleStepLines(details: BattleRoundStepNarrationDetails): string[] {

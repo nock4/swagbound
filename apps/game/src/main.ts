@@ -60,7 +60,7 @@ class BootScene extends Phaser.Scene {
         characters: data.characters,
         partyMembers: debugPartyMembers,
         items: data.items,
-        psi: data.psi,
+        psi: grantDebugPsi(data.psi, globalThis.location?.search),
         font: data.font,
         window: data.window,
         spriteOverrides: data.spriteOverrides,
@@ -292,6 +292,25 @@ function debugEncounterAdvantageFromSearch(search: string | undefined): Encounte
     default:
       return "normal";
   }
+}
+
+// Dev affordance: ?psi=31,39 (or ?psi=all) grants the lead member (charId 0) those PSI in a debug
+// battle — regardless of who learns them in EB — so assist-PSI effects can be verified in-browser.
+function grantDebugPsi(psi: GameData["psi"], search: string | undefined): GameData["psi"] {
+  const value = new URLSearchParams(search ?? "").get("psi");
+  if (!value || !psi) {
+    return psi;
+  }
+  const grantAll = value.trim().toLowerCase() === "all";
+  const ids = new Set(
+    value.split(",").map((token) => Number.parseInt(token.trim(), 10)).filter((n) => Number.isInteger(n) && n >= 0)
+  );
+  const granted = psi.psi.map((entry) =>
+    grantAll || ids.has(entry.id)
+      ? { ...entry, learnedBy: [...entry.learnedBy, { charId: 0, level: 1 }] }
+      : entry
+  );
+  return { ...psi, psi: granted };
 }
 
 new Phaser.Game({

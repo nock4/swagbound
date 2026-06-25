@@ -80,6 +80,14 @@ function psiEvents(details: BattleRoundStepNarrationDetails): BattleEvent[] {
   if (isRecovery(details)) {
     return recoveryEvents(details, details.attackerName, preferredMessageEvent(details));
   }
+  // A non-damaging assist effect that didn't miss (status inflict / stat buff / PP drain) narrates
+  // via its authored message — NOT the attack-impact path, which reads "no damage" as a dodge.
+  const message = preferredMessageEvent(details);
+  if (message && !details.missed && (details.damage ?? 0) <= 0) {
+    const events: BattleEvent[] = [actionStarted("psi", details), message];
+    appendEnemyDefeatedEvent(events, details);
+    return events;
+  }
   return actionImpactEvents(details, actionStarted("psi", details));
 }
 

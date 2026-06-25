@@ -3417,6 +3417,7 @@ function debugCombatant(combatant: BattleState["party"][number]): {
   pp: number;
   maxPp: number;
   inventoryCount: number;
+  statuses: string[];
 } {
   return {
     hpDisplayed: combatant.hp.displayed,
@@ -3425,7 +3426,8 @@ function debugCombatant(combatant: BattleState["party"][number]): {
     alive: isCombatantAlive(combatant),
     pp: combatant.pp,
     maxPp: combatant.maxPp,
-    inventoryCount: combatant.inventory.length
+    inventoryCount: combatant.inventory.length,
+    statuses: (combatant.statuses ?? []).map((entry) => entry.ailment)
   };
 }
 
