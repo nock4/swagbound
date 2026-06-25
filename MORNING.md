@@ -1,22 +1,20 @@
-# Morning hand-off — autonomous Act-1 autorun
+# Morning hand-off — autonomous Act-1 autorun (COMPLETE)
 
-Overnight goal was "push for full Act 1": an unattended harness that discovers the Act-1
-objectives and plays through them in a real browser. **It now drives the whole chain and beats
-2 of the 3 bosses cleanly; the 3rd (the climax) is a genuine difficulty wall, not a harness bug.**
-Every *progression link* in Act 1 is verified end-to-end.
+Goal was "push for full Act 1": an unattended harness that discovers the Act-1 objectives and plays
+through them in a real browser. **`node scripts/act1.mjs` now beats all three bosses and reaches
+`act1:complete`, fully unattended.** The climax wall was solved by giving Bosch a party member
+(Paula) — your "give Bosch help" call.
 
 ## TL;DR
-- `node scripts/act1.mjs` drives a fresh game through the authored Act-1 boss chain:
-  **card-clique → returnless-king → malady → leave**, reading the live story flags to pick the
-  next objective, A*-routing to each boss, and fighting with an HP-aware AI.
-- **card-clique → VICTORY** (sets `signal:clique_cleared`), **returnless-king → VICTORY**
-  (sets `signal:route_open`, opens the north barrier). Both legit, no assists.
-- **malady → DEFEAT.** It's a **235-HP boss + a 34-HP minion**; solo Bosch at the level you reach
-  by beating bosses 1–2 (max HP ~105, ~14 dmg/turn) can't out-DPS it. With the new focus-fire it
-  got malady down to **152** before falling — closer, but the math doesn't close without leveling.
-- **The final leg is verified**: `node scripts/verify-leg.mjs` injects the boss flags and walks
-  into the leave area → **`act1:complete` fires.** So malady's win is the *only* unproven step, and
-  it's a balance problem, not a machinery one.
+- `node scripts/act1.mjs` drives a fresh game through the authored chain
+  **card-clique → returnless-king → malady → leave** → **`act1:complete`**: flag-driven, A*-routing
+  to each boss, fighting with a PSI-aware duo AI. All three wins are legit (no debug assists in the
+  fights; `__debugHeal` only stands in for the hotel *between* fights).
+- **The climax was a balance reality, not a bug:** malady = the **Titanic Ant** (235 HP, **defense
+  23**) + a Black Antoid. Physical BASH does ~3/hit against that defense, so solo Bosch couldn't win.
+- **The fix (you chose "party member"):** Act 1 is now a **Bosch + Paula duo**. Paula casts **PSI
+  Freeze** (bypasses defense, ~29/cast) to melt the Ant; Bosch **Lifeups** himself when the Ant
+  focuses him. Both survive; the Ant dies in ~8 casts.
 - Quality gates: **803 tests green, tsc clean, `build:eb-fullworld` errors:0.**
 
 ## The Act-1 objective graph (from `content/triggers.json`)
@@ -38,23 +36,25 @@ which the autorun handles automatically by following the flag order.
   stretch, nudge free and **re-plan from where it actually is**. The naive "sparse waypoints + walk
   straight between them" version corner-cut into walls and never reached boss 2; the re-planning
   version reaches all three.
-- **Combat AI** (`fight`): BASH; DEFEND when low unless the enemy is finishable; **focus-fire** —
-  cycles the BASH target to the weakest living enemy so minions die first (decoded the
-  `target:BASH:N` selection UI to do this).
-- **Healing**: `__debugHeal` (new debug global, see below) full-heals between fights — a stand-in
-  for the not-yet-wired hotel/inn. In-battle, PRAY is random so it's not relied on.
+- **Combat AI** (`fight`): drives both members via `b.inputMemberIndex`. **Paula** casts PSI Freeze
+  on the toughest enemy (bypasses high defense); **Bosch** Lifeups himself when low (safe BASH
+  fallback if he hasn't learned it yet), else BASH/focus-fire. Decoded the PSI-cast + `target:BASH:N`
+  selection UIs to do this.
+- **Healing**: `__debugHeal` full-heals + restores PP *between* fights (hotel stand-in); the
+  in-battle sustain is Bosch's real Lifeup, not a debug assist.
 
-## The malady wall — what it'd take (your call)
-malady is the Act-1 climax and is tuned like one. To beat it legitimately Bosch needs roughly 2×
-the staying power, i.e. several levels. The autorun has a **grind phase** (`grind()` — fight roaming
-`__overworldEnemies` until max HP hits a target) but it found **no roaming enemies near the boss**:
-spawns are **sector-gated** (`sectorSpawnBudget`/`selectSectorEnemyGroup` return 0/null for the
-north-route sectors), and even at the south spawn they appear sparsely. So grinding isn't a
-readily-reachable path in the current build. Options, all design decisions for you:
-1. **Tune malady down** (HP and/or the minion) so it's a fair fight at the level you arrive with.
-2. **Make leveling reachable** — denser/sector-correct overworld encounters near the route, and/or
-   wire the **hotel** so healing is real instead of `__debugHeal`.
-3. **Give Bosch help** — a party member or stronger starting kit for the climax.
+## The climax — solved with a party member (your call)
+malady = the **Titanic Ant** (235 HP, **defense 23**) + a Black Antoid — literally EarthBound's Giant
+Step boss, tuned for a higher-level Ness+Paula. Its high defense makes physical BASH near-useless
+(~3/hit), which is why solo Bosch lost (he got it to 152 at best). The fix you chose — **a party
+member** — works cleanly: Paula's **PSI Freeze** bypasses defense (~29/cast) and Bosch's **Lifeup**
+keeps him alive while the Ant focuses him. The Ant dies in ~8 casts and both survive. Act 1 is now a
+**Bosch + Paula duo** (`ensureIntroParty` seeds both).
+
+Still open, but a creative call (not blocking): **Paula's Swagbound identity.** She uses the
+canonical name "Paula" + EB sprite for now — give me a Swagbound name and I'll skin her battle sprite
+via `content/sprite-overrides.json`. She also joins from the start of Act 1; if you want a proper
+join scene, that's a `content/cutscenes.json` + flag-gate follow-up.
 
 ## Debug hook added this run
 - **`window.__debugHeal()`** (apps/game/src/chunkedWorldScene.ts, `registerCollisionDebugGlobals`):
@@ -69,13 +69,13 @@ readily-reachable path in the current build. Options, all design decisions for y
 - Debug params: `?nointro=1`, `?spawn=x,y`, `?flags=a,b,c`, `?battle=<group>&items=&psi=&party=`.
 
 ## What needs you
-1. **Merge PR [#134](https://github.com/nock4/coilsnake-tutorial-experiment/pull/134)** — the battle
-   status/effects + browser-driving workstream (still open from the prior run; 803 tests green).
-   This Act-1 autorun work is committed on the same branch on top of it.
-2. **Decide the malady balance** (the three options above). Once leveling or tuning lands, `act1.mjs`
-   should run start-to-`act1:complete` unattended — the rest of the chain already does.
+1. **Review/merge the duo branch** `feat/act1-duo-paula` — Act 1 is now a Bosch+Paula duo that
+   completes autonomously (3/3 bosses → `act1:complete`). 803 tests green, tsc clean. (The prior
+   battle-effects + browser-driving workstream already merged as #134.)
+2. **Paula's identity** — a quick creative call (Swagbound name), then I skin her sprite. See above.
 
 ## Screenshots (`.codex/screenshots/`)
-- `act1-1-signal-town-card-clique-victory.png`, `act1-2-relay-gate-returnless-king-victory.png` — the two clean wins.
-- `act1-3-first-threshold-malady-defeat.png` — the climax wall ("The party fell," Bosch 0/105).
-- `act1-leg.png` — the verified leave→`act1:complete` leg.
+- `act1-1-signal-town-card-clique-victory.png`, `act1-2-relay-gate-returnless-king-victory.png` — bosses 1–2.
+- `act1-3-first-threshold-malady-victory.png` — the climax win (Bosch 95/122 + Paula 47/47 both standing).
+- `act1-leave.png` — the `act1:complete` moment.
+- `duo-malady.png` — the focused duo-vs-Titanic-Ant verifier.
