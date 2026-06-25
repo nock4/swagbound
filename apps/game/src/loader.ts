@@ -367,6 +367,9 @@ function applyItemOverrides(items: ItemCollection | undefined, overrides: ItemOv
     const override = overrides.byItemId[String(item.id)];
     if (override) {
       item.name = override.name;
+      if (override.effect) {
+        item.effect = override.effect;
+      }
     }
   }
   return items;
@@ -383,6 +386,9 @@ function applyCharacterOverrides(
     const override = overrides.byCharId[String(character.id)];
     if (override) {
       character.name = override.name;
+      if (override.startingItems) {
+        character.startingItems = [...override.startingItems];
+      }
     }
   }
   return characters;

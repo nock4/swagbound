@@ -453,8 +453,18 @@ const ItemOverrideNameSchema = z.string()
   .refine((value) => !value.includes("@"), "item override names must not include control markers")
   .refine((value) => !/[\u0000-\u001f\u007f]/.test(value), "item override names must not include control codes");
 
+/** A usable item's battle/field effect. Shared by extracted ItemData and authored overrides. */
+export const ItemUseEffectSchema = z.union([
+  z.object({ kind: z.literal("healHp"), amount: z.number().int().positive() }),
+  z.object({ kind: z.literal("healHpPercent"), percent: z.number().int().positive() }),
+  z.object({ kind: z.literal("recoverPp"), amount: z.number().int().positive() }),
+  z.object({ kind: z.literal("recoverPpPercent"), percent: z.number().int().positive() })
+]);
+
 const ItemOverrideEntrySchema = z.object({
-  name: ItemOverrideNameSchema
+  name: ItemOverrideNameSchema,
+  /** Optional authored effect, applied over the extracted item.effect at load. */
+  effect: ItemUseEffectSchema.optional()
 }).strict();
 
 export const ItemOverridesSchema = z.object({
@@ -470,7 +480,9 @@ const CharacterOverrideNameSchema = z.string()
   .refine((value) => !/[\u0000-\u001f\u007f]/.test(value), "character override names must not include control codes");
 
 const CharacterOverrideEntrySchema = z.object({
-  name: CharacterOverrideNameSchema
+  name: CharacterOverrideNameSchema,
+  /** Optional: replace the character's starting inventory (item ids) at load. */
+  startingItems: z.array(z.number().int().nonnegative()).optional()
 }).strict();
 
 export const CharacterOverridesSchema = z.object({
@@ -1374,12 +1386,7 @@ export const ItemDataSchema = z.object({
   argument: z.number().int().nonnegative(),
   equippable: z.boolean(),
   miscFlags: z.array(z.string()),
-  effect: z.union([
-    z.object({ kind: z.literal("healHp"), amount: z.number().int().positive() }),
-    z.object({ kind: z.literal("healHpPercent"), percent: z.number().int().positive() }),
-    z.object({ kind: z.literal("recoverPp"), amount: z.number().int().positive() }),
-    z.object({ kind: z.literal("recoverPpPercent"), percent: z.number().int().positive() })
-  ]).optional(),
+  effect: ItemUseEffectSchema.optional(),
   helpText: z.string().optional()
 });
 

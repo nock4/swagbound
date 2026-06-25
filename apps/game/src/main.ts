@@ -241,7 +241,25 @@ function debugBattlePartyMembersFromSearch(
   if (source.length === 0) {
     return undefined;
   }
-  return source.slice(0, debugPartyCountFromSearch(search)).map(buildPartyMember);
+  const members = source.slice(0, debugPartyCountFromSearch(search)).map(buildPartyMember);
+  // Dev affordance: ?items=103,110 appends item ids to the lead member's battle
+  // inventory so Goods can be exercised in a debug battle (e.g. ?battle=448&items=103).
+  const debugItems = debugBattleItemsFromSearch(search);
+  if (debugItems.length > 0 && members[0]) {
+    members[0] = { ...members[0], inventory: [...members[0].inventory, ...debugItems] };
+  }
+  return members;
+}
+
+function debugBattleItemsFromSearch(search: string | undefined): number[] {
+  const value = new URLSearchParams(search ?? "").get("items");
+  if (!value) {
+    return [];
+  }
+  return value
+    .split(",")
+    .map((token) => Number.parseInt(token.trim(), 10))
+    .filter((id) => Number.isInteger(id) && id >= 0);
 }
 
 function debugPartyCountFromSearch(search: string | undefined): number {
