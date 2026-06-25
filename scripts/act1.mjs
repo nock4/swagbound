@@ -129,22 +129,51 @@ async function selectWeakestTarget(living) {
     await tap(cur < want ? "ArrowRight" : "ArrowLeft");
   }
 }
+const bsel = async () => (await peek()).b?.selection ?? "";
+// Open the active caster's PSI list and land on psi:<id>. Returns true (now in the target submenu)
+// if found; false (still in the list) if the caster hasn't learned it — caller cancels + BASHes.
+async function openPsi(id) {
+  await navCommand("PSI"); await tap("z");
+  for (let k = 0; k < 12 && !(await bsel()).includes(`psi:${id}`); k++) await tap("ArrowDown");
+  if (!(await bsel()).includes(`psi:${id}`)) return false;
+  await tap("z"); // select PSI -> target submenu
+  return true;
+}
+async function pickTargetIdx(want) {
+  for (let k = 0; k < 6; k++) {
+    const m = (await bsel()).match(/:(\d+)$/);
+    if (!m || +m[1] === want) return;
+    await tap(+m[1] < want ? "ArrowRight" : "ArrowLeft");
+  }
+}
+async function bashWeakest(living) { await navCommand("BASH"); await tap("z"); await selectWeakestTarget(living); await tap("z"); }
+
+// Duo AI: Paula PSI-Freezes the toughest enemy (bypasses high defense — the Titanic Ant check);
+// Bosch Lifeups himself when low (he's the focused tank), else BASHes. Both fall back to BASH if a
+// PSI isn't learned/affordable. Members are driven in turn via b.inputMemberIndex.
 async function fight(label) {
   let lastPhase = "", captured = false;
-  for (let step = 0; step < 220; step++) {
-    const s = await peek(), b = s.b;
+  for (let step = 0; step < 280; step++) {
+    const b = (await peek()).b;
     if (!b) { await page.waitForTimeout(150); continue; }
     if (b.phase === "victory-summary") return "victory";
     if (b.phase === "defeat" || (b.party ?? []).every((p) => !p.alive)) return "defeat";
     if (b.phase === "command-input") {
-      const me = b.party[0];
-      if (!captured) { G.lastMaxHp = me.hpTarget; captured = true; } // post-heal start HP ~= max HP
+      const idx = b.inputMemberIndex ?? 0;
+      const me = b.party[idx] ?? b.party[0];
+      if (!captured && idx === 0) { G.lastMaxHp = b.party[0].hpTarget; captured = true; } // post-heal start HP ~= max HP
       const living = b.enemies.map((e, i) => ({ e, i })).filter((x) => x.e.alive);
-      const canFinish = living.some((x) => x.e.hpTarget <= 12);
-      const cmd = (me.hpTarget <= 24 && !canFinish) ? "DEFEND" : "BASH";
-      log(`    [${label}] Bosch ${me.hpTarget}hp / enemy ${b.enemies.map((e) => e.hpTarget)}hp -> ${cmd}`);
-      await navCommand(cmd); await tap("z");
-      if (cmd === "BASH") { await selectWeakestTarget(living); await tap("z"); }
+      const boss = living.reduce((a, x) => (x.e.hpTarget > a.e.hpTarget ? x : a), living[0]);
+      let act = "BASH";
+      if (idx === 1 && me.pp >= 4 && (await openPsi(9))) {
+        await pickTargetIdx(boss.i); await tap("z"); act = "Freeze"; // Paula -> toughest enemy
+      } else if (idx === 0 && me.hpTarget <= G.lastMaxHp * 0.55 && me.pp >= 4 && (await openPsi(23))) {
+        await tap("z"); act = "Lifeup"; // Bosch heals himself (default party target)
+      } else {
+        if ((await peek()).b?.submenu === "psi") await tap("x"); // back out of a half-opened PSI list
+        await bashWeakest(living);
+      }
+      log(`    [${label}] r${b.roundNumber} ${idx ? "Paula" : "Bosch"} ${me.hpTarget}hp/${me.pp}pp e=[${b.enemies.map((e) => e.hpTarget)}] -> ${act}`);
     } else if (b.phase === "execution") {
       await tap("z"); // advance narration
     } else {
@@ -192,9 +221,7 @@ for (let obj = 0; obj < 12; obj++) {
   else { log(`\nNo next objective (flags: [${flags.join(",")}]). Stuck.`); break; }
 
   log(`\nObjective ${obj + 1}: ${kind} "${id}" at (${Math.round(target.x)},${Math.round(target.y)}). flags:[${flags.join(",")}]`);
-  // The malady climax (235-HP boss + minion) needs a higher-level Bosch — grind first if under-leveled.
-  if (kind === "boss" && id === "first-threshold-malady" && G.lastMaxHp < 175) await grind(175, 12);
-  await heal(); // full-heal before engaging (hotel stand-in)
+  await heal(); // full-heal both party members before engaging (hotel stand-in; also restores Paula's PP)
   const reached = await routeTo(target);
 
   if (kind === "leave") {
