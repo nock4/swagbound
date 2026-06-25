@@ -582,7 +582,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // Act 1 is solo: if nothing (save/intro) populated the party, default to the
     // first hero (Bosch) so menus + battle status never fall back to the full roster.
     if (this.partyState.party().length === 0) {
-      this.ensureIntroSoloParty();
+      this.ensureIntroParty();
     }
     const spawn = this.clampSpawn(
       returnPlayer ?? restoredPlayer ?? this.parseSpawnOverride() ?? this.newGameOpening?.spawn ?? world.player.spawnWorldPixel
@@ -3394,7 +3394,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private completeIntroMeteorDialogue(beat: IntroMeteorBeatStart): void {
     this.newGameOpening = undefined;
     this.warnIntroActorVmStubs();
-    this.ensureIntroSoloParty();
+    this.ensureIntroParty();
     const battleStarted = this.startEventBattle(beat.battleGroupId);
     const transition = decideIntroMeteorBattleTransition({
       battleGroupResolved: true,
@@ -3407,15 +3407,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.finishIntroMeteorBeatWithoutBattle();
   }
 
-  private ensureIntroSoloParty(): void {
-    const firstCharacter = this.data_.characters?.characters[0];
-    if (!firstCharacter) {
+  private ensureIntroParty(): void {
+    const characters = this.data_.characters?.characters;
+    if (!characters?.length) {
       return;
     }
+    // Act 1 is a duo: Bosch (Ness) leads and Paula joins as the PSI support — she handles the
+    // high-defense climax (Titanic Ant) with PSI Freeze while Bosch heals with Lifeup.
+    const partyIds = [characters[0].id, ...(characters[1] ? [characters[1].id] : [])];
     const snapshot = this.partyState.snapshot();
     this.partyState.restore({
       ...snapshot,
-      partyIds: [firstCharacter.id]
+      partyIds
     });
   }
 
@@ -4029,7 +4032,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return undefined;
     }
     const all = this.partyState.applyToPartyMembers(this.data_.characters.characters.map(buildPartyMember));
-    // Battle only the active party (Act 1 = solo Bosch); never the full roster.
+    // Battle only the active party (Act 1 = Bosch + Paula); never the full roster.
     const activeIds = new Set(this.partyState.party());
     return activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
   }
