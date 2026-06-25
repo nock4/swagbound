@@ -1,5 +1,6 @@
 import type { ItemData } from "@eb/schemas";
 import type { Combatant } from "./battleLogic";
+import type { StatusAilment } from "./statusEffects";
 import type { PartyMember, PartyMemberStats } from "./characterModel";
 import {
   createRollingMeter,
@@ -82,7 +83,33 @@ export type ItemUseEffect =
   | { kind: "healHp"; amount: number }
   | { kind: "healHpPercent"; percent: number }
   | { kind: "recoverPp"; amount: number }
-  | { kind: "recoverPpPercent"; percent: number };
+  | { kind: "recoverPpPercent"; percent: number }
+  | { kind: "damage"; amount: number }
+  | { kind: "drainPp"; amount: number }
+  | { kind: "buffStat"; stat: "offense" | "defense" | "speed" | "guts"; amount: number }
+  | { kind: "revive"; amount: number }
+  | { kind: "cureStatus"; ailment: StatusAilment | "all" }
+  | { kind: "inflictStatus"; ailment: StatusAilment; remaining?: number; magnitude?: number };
+
+/**
+ * Which side of the battlefield an item's effect acts on. Offensive effects (damage, and
+ * inflicting an ailment other than the defensive "shielded" buff) target the enemy; heals,
+ * cures, restores, and self-buffs target the party. Shared by the round resolver, the
+ * command menu, and resolveItemTurn so all three agree on the side.
+ */
+export function itemEffectTargetSide(effect: ItemUseEffect | undefined): "party" | "enemy" {
+  if (effect?.kind === "damage" || effect?.kind === "drainPp") {
+    return "enemy";
+  }
+  if (effect?.kind === "inflictStatus") {
+    return effect.ailment === "shielded" ? "party" : "enemy";
+  }
+  if (effect?.kind === "buffStat") {
+    // A negative buff is a debuff aimed at the enemy (e.g. Defense down).
+    return effect.amount < 0 ? "enemy" : "party";
+  }
+  return "party";
+}
 
 export type ItemUseResult =
   | {
@@ -693,6 +720,23 @@ function normalizeGeneratedItemEffect(effect: ItemData["effect"]): ItemUseEffect
       return effect.amount > 0 ? { kind: "recoverPp", amount: stat(effect.amount) } : undefined;
     case "recoverPpPercent":
       return effect.percent > 0 ? { kind: "recoverPpPercent", percent: stat(effect.percent) } : undefined;
+    case "damage":
+      return effect.amount > 0 ? { kind: "damage", amount: stat(effect.amount) } : undefined;
+    case "drainPp":
+      return effect.amount > 0 ? { kind: "drainPp", amount: stat(effect.amount) } : undefined;
+    case "buffStat":
+      return effect.amount !== 0 ? { kind: "buffStat", stat: effect.stat, amount: Math.trunc(effect.amount) } : undefined;
+    case "revive":
+      return effect.amount > 0 ? { kind: "revive", amount: stat(effect.amount) } : undefined;
+    case "cureStatus":
+      return { kind: "cureStatus", ailment: effect.ailment };
+    case "inflictStatus":
+      return {
+        kind: "inflictStatus",
+        ailment: effect.ailment,
+        ...(effect.remaining !== undefined ? { remaining: stat(effect.remaining) } : {}),
+        ...(effect.magnitude !== undefined ? { magnitude: stat(effect.magnitude) } : {})
+      };
   }
 }
 
@@ -766,6 +810,14 @@ export function applyUseEffectToVitals(vitals: PartyVitals, effect: ItemUseEffec
         nextValue
       };
     }
+    case "damage":
+    case "drainPp":
+    case "buffStat":
+    case "revive":
+    case "cureStatus":
+    case "inflictStatus":
+      // Battle-only effects; no overworld vitals change.
+      return { vitals, previousValue: 0, nextValue: 0 };
   }
 }
 

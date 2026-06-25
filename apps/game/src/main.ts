@@ -60,7 +60,7 @@ class BootScene extends Phaser.Scene {
         characters: data.characters,
         partyMembers: debugPartyMembers,
         items: data.items,
-        psi: data.psi,
+        psi: grantDebugPsi(data.psi, globalThis.location?.search),
         font: data.font,
         window: data.window,
         spriteOverrides: data.spriteOverrides,
@@ -241,7 +241,25 @@ function debugBattlePartyMembersFromSearch(
   if (source.length === 0) {
     return undefined;
   }
-  return source.slice(0, debugPartyCountFromSearch(search)).map(buildPartyMember);
+  const members = source.slice(0, debugPartyCountFromSearch(search)).map(buildPartyMember);
+  // Dev affordance: ?items=103,110 appends item ids to the lead member's battle
+  // inventory so Goods can be exercised in a debug battle (e.g. ?battle=448&items=103).
+  const debugItems = debugBattleItemsFromSearch(search);
+  if (debugItems.length > 0 && members[0]) {
+    members[0] = { ...members[0], inventory: [...members[0].inventory, ...debugItems] };
+  }
+  return members;
+}
+
+function debugBattleItemsFromSearch(search: string | undefined): number[] {
+  const value = new URLSearchParams(search ?? "").get("items");
+  if (!value) {
+    return [];
+  }
+  return value
+    .split(",")
+    .map((token) => Number.parseInt(token.trim(), 10))
+    .filter((id) => Number.isInteger(id) && id >= 0);
 }
 
 function debugPartyCountFromSearch(search: string | undefined): number {
@@ -274,6 +292,25 @@ function debugEncounterAdvantageFromSearch(search: string | undefined): Encounte
     default:
       return "normal";
   }
+}
+
+// Dev affordance: ?psi=31,39 (or ?psi=all) grants the lead member (charId 0) those PSI in a debug
+// battle — regardless of who learns them in EB — so assist-PSI effects can be verified in-browser.
+function grantDebugPsi(psi: GameData["psi"], search: string | undefined): GameData["psi"] {
+  const value = new URLSearchParams(search ?? "").get("psi");
+  if (!value || !psi) {
+    return psi;
+  }
+  const grantAll = value.trim().toLowerCase() === "all";
+  const ids = new Set(
+    value.split(",").map((token) => Number.parseInt(token.trim(), 10)).filter((n) => Number.isInteger(n) && n >= 0)
+  );
+  const granted = psi.psi.map((entry) =>
+    grantAll || ids.has(entry.id)
+      ? { ...entry, learnedBy: [...entry.learnedBy, { charId: 0, level: 1 }] }
+      : entry
+  );
+  return { ...psi, psi: granted };
 }
 
 new Phaser.Game({

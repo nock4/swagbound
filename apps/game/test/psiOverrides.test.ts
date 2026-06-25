@@ -37,6 +37,9 @@ describe("psi override content", () => {
       const generated = psiById.get(id);
       expect(generated, `override psi ${id} must resolve`).toBeDefined();
       expect(override).toBeDefined();
+      if (override?.name === undefined) {
+        continue;
+      }
       expect(override.name.trim()).toBe(override.name);
       expect(override.name.length).toBeGreaterThan(0);
       expect(override.name.length).toBeLessThanOrEqual(18);

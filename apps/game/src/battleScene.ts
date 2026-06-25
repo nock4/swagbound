@@ -120,6 +120,7 @@ import {
 } from "./inputModel";
 import type { PartyMember } from "./characterModel";
 import type { PartyBattleMemberSnapshot, PartyStateSnapshot } from "./partyState";
+import { decodeItemUseEffect } from "./partyState";
 import {
   createAnimatedBattleBackground,
   staticBattleBackgroundDebug,
@@ -188,6 +189,11 @@ const BATTLE_ACTOR_NAME_GAP = 4;
 const BATTLE_MENU_RIGHT_MARGIN = 16;
 const BATTLE_MENU_BOTTOM_CLEARANCE = 92;
 const BATTLE_SUBMENU_GAP = 8;
+// EarthBound-style cascade: the submenu (target / PSI / Goods list) opens offset
+// down-and-right from the command window and overlaps it, instead of sitting beside
+// it. The command window stays top-anchored and visible behind the cascade.
+const BATTLE_SUBMENU_CASCADE_OFFSET_X = 28;
+const BATTLE_SUBMENU_CASCADE_OVERLAP_Y = 16;
 const BATTLE_STACKED_MENU_BOTTOM_CLEARANCE = BATTLE_MENU_BOTTOM_CLEARANCE + 4;
 const BATTLE_SUBMENU_STACK_OVERLAP_X = 56;
 const BATTLE_SUBMENU_STACK_OFFSET_Y = -22;
@@ -201,6 +207,12 @@ const BATTLE_SUBMENU_MIN_WIDTH = 220;
 const BATTLE_TARGET_WINDOW_MIN_WIDTH = 156;
 const BATTLE_DESCRIPTION_MIN_WIDTH = 128;
 const BATTLE_MENU_MAX_WIDTH = 360;
+// Stylized framed border for battle panels (thicker + more opaque than the faint
+// global default) so menus read as deliberate windows over the battle backdrop.
+const BATTLE_PANEL_BORDER: { borderWidth: number; borderAlpha: number } = {
+  borderWidth: 2,
+  borderAlpha: 0.5
+};
 const BATTLE_DESCRIPTION_MAX_WIDTH = 260;
 const BATTLE_DESCRIPTION_TEXT_PADDING_X = 12;
 const BATTLE_DESCRIPTION_TEXT_PADDING_Y = 9;
@@ -1904,8 +1916,10 @@ export class BattleScene extends Phaser.Scene {
         selectedIndex: view.selectedSubmenuIndex,
         x: stackedMenu
           ? command.x + Math.max(0, command.width - BATTLE_SUBMENU_STACK_OVERLAP_X)
-          : command.x + command.width + BATTLE_SUBMENU_GAP,
-        y: stackedMenu ? command.y + BATTLE_SUBMENU_STACK_OFFSET_Y : command.y,
+          : command.x + BATTLE_SUBMENU_CASCADE_OFFSET_X,
+        y: stackedMenu
+          ? command.y + BATTLE_SUBMENU_STACK_OFFSET_Y
+          : command.y + Math.max(0, command.height - BATTLE_SUBMENU_CASCADE_OVERLAP_Y),
         minWidth: BATTLE_SUBMENU_MIN_WIDTH,
         maxWidth: BATTLE_MENU_MAX_WIDTH,
         bottomClearance: stackedMenu ? BATTLE_STACKED_MENU_BOTTOM_CLEARANCE : BATTLE_MENU_BOTTOM_CLEARANCE
@@ -1975,7 +1989,7 @@ export class BattleScene extends Phaser.Scene {
         x: BATTLE_COMMAND_TEXT_PADDING_X,
         y: BATTLE_ACTOR_NAME_PADDING_Y
       });
-      drawCleanPanel(graphics, layout.actorName);
+      drawCleanPanel(graphics, layout.actorName, BATTLE_PANEL_BORDER);
       this.menuTexts.actorName = createCleanText(this, textRect.x, textRect.y, "", {
         fontSize: BATTLE_FONT_SIZE,
         color: CLEAN_UI_PRIMARY,
@@ -1985,7 +1999,7 @@ export class BattleScene extends Phaser.Scene {
     }
 
     if (layout.command) {
-      drawCleanPanel(graphics, layout.command);
+      drawCleanPanel(graphics, layout.command, BATTLE_PANEL_BORDER);
       this.commandGridTexts = layout.command.cells.map((cell) => createCleanText(this, cell.x + BATTLE_MENU_CARET_GUTTER_PX, cell.y + 4, "", {
         fontSize: BATTLE_FONT_SIZE,
         color: CLEAN_UI_PRIMARY,
@@ -1997,7 +2011,7 @@ export class BattleScene extends Phaser.Scene {
 
     if (layout.submenu) {
       const textRect = this.standardMenuListTextRect(layout.submenu);
-      drawCleanPanel(graphics, layout.submenu);
+      drawCleanPanel(graphics, layout.submenu, BATTLE_PANEL_BORDER);
       this.menuTexts.submenu = createCleanText(this, textRect.x, textRect.y, "", {
         fontSize: BATTLE_FONT_SIZE,
         color: CLEAN_UI_PRIMARY,
@@ -2008,7 +2022,7 @@ export class BattleScene extends Phaser.Scene {
 
     if (layout.description) {
       const textRect = this.descriptionWindowTextRect(layout.description);
-      drawCleanPanel(graphics, layout.description);
+      drawCleanPanel(graphics, layout.description, BATTLE_PANEL_BORDER);
       this.menuTexts.description = createCleanText(this, textRect.x, textRect.y, "", {
         fontSize: BATTLE_DESCRIPTION_FONT_SIZE,
         color: CLEAN_UI_PRIMARY,
@@ -2020,7 +2034,7 @@ export class BattleScene extends Phaser.Scene {
 
     if (layout.executionMessage) {
       const textRect = this.executionMessageTextRect(layout.executionMessage);
-      drawCleanPanel(graphics, layout.executionMessage);
+      drawCleanPanel(graphics, layout.executionMessage, BATTLE_PANEL_BORDER);
       this.menuTexts.execution = createCleanText(this, textRect.x, textRect.y, "", {
         fontSize: BATTLE_EXECUTION_MESSAGE_FONT_SIZE,
         color: CLEAN_UI_PRIMARY,
@@ -2031,7 +2045,7 @@ export class BattleScene extends Phaser.Scene {
     }
 
     layout.statusCards.forEach((card) => {
-      drawCleanPanel(graphics, card);
+      drawCleanPanel(graphics, card, BATTLE_PANEL_BORDER);
       this.statusCardTexts.push(this.createStatusCardTexts(card));
     });
 
@@ -3201,7 +3215,17 @@ export class BattleScene extends Phaser.Scene {
     if (!actor || actor.isEnemy) {
       return [];
     }
-    return actor.inventory.map((itemId, inventorySlot) => ({ itemId, inventorySlot }));
+    // Only offer items that actually resolve to a battle effect. Equipment / key
+    // items and consumables whose effect isn't implemented yet decode to
+    // undefined; listing them would let the player "use" something that silently
+    // does nothing. inventorySlot stays the index into the full inventory so the
+    // resolver removes the right slot. Empty result -> the menu shows "No goods."
+    return actor.inventory
+      .map((itemId, inventorySlot) => ({ itemId, inventorySlot }))
+      .filter(({ itemId }) => {
+        const item = this.itemById(itemId);
+        return item ? Boolean(decodeItemUseEffect(item)) : false;
+      });
   }
 
   private psiById(psiId: number): PsiData | undefined {
@@ -3393,6 +3417,7 @@ function debugCombatant(combatant: BattleState["party"][number]): {
   pp: number;
   maxPp: number;
   inventoryCount: number;
+  statuses: string[];
 } {
   return {
     hpDisplayed: combatant.hp.displayed,
@@ -3401,7 +3426,8 @@ function debugCombatant(combatant: BattleState["party"][number]): {
     alive: isCombatantAlive(combatant),
     pp: combatant.pp,
     maxPp: combatant.maxPp,
-    inventoryCount: combatant.inventory.length
+    inventoryCount: combatant.inventory.length,
+    statuses: (combatant.statuses ?? []).map((entry) => entry.ailment)
   };
 }
 
@@ -3478,7 +3504,9 @@ function isBattleImpactCue(cue: BattleSfxCue): boolean {
 function enemySpritePoint(stageWidth: number, count: number, index: number, widthBudget: number): { x: number; y: number } {
   return {
     x: stageWidth / 2 + (index - (count - 1) / 2) * widthBudget,
-    y: 164
+    // Lowered from 164 so the top-left command window + target cursor clear the
+    // enemy art (the 512x448 stage keeps the bottom status cards well below this).
+    y: 200
   };
 }
 

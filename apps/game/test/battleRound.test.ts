@@ -718,6 +718,31 @@ describe("nextInputState", () => {
     });
   });
 
+  it("routes a damage GOODS item to enemy targeting and a healing one to ally targeting", () => {
+    let battle = createBattleState([opponentA, opponentB], { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [212, 220] });
+    const bomb: ItemData = { ...syntheticItem(212, 0, 0), effect: { kind: "damage", amount: 12 } };
+    const heal: ItemData = syntheticItem(220, 0x02, 30);
+    const context = { state: battle, items: [bomb, heal] };
+
+    const offensive = nextInputState(inputState({ submenu: "goods", selectionIndex: 0 }), { kind: "confirm" }, context);
+    expect(offensive.input).toMatchObject({ submenu: "target-enemy", pending: { command: "GOODS", itemId: 212 } });
+
+    const healing = nextInputState(inputState({ submenu: "goods", selectionIndex: 1 }), { kind: "confirm" }, context);
+    expect(healing.input).toMatchObject({ submenu: "target-ally", pending: { command: "GOODS", itemId: 220 } });
+  });
+
+  it("routes an effect PSI to the target submenu the effect dictates", () => {
+    const battle = createBattleState([opponentA, opponentB], { characters: characters([partyA]) });
+    const inflictPsi: PsiData = { ...syntheticPsi(100, "assist", "alpha", [{ charId: 0, level: 1 }]), effect: { kind: "inflictStatus", ailment: "paralyzed" } };
+    const shieldPsi: PsiData = { ...syntheticPsi(101, "assist", "alpha", [{ charId: 0, level: 1 }]), effect: { kind: "inflictStatus", ailment: "shielded", magnitude: 50 } };
+    const context = { state: battle, psi: [inflictPsi, shieldPsi] };
+    const inflict = nextInputState(inputState({ submenu: "psi", selectionIndex: 0 }), { kind: "confirm" }, context);
+    expect(inflict.input).toMatchObject({ submenu: "target-enemy", pending: { command: "PSI", psiId: 100 } });
+    const shield = nextInputState(inputState({ submenu: "psi", selectionIndex: 1 }), { kind: "confirm" }, context);
+    expect(shield.input).toMatchObject({ submenu: "target-ally", pending: { command: "PSI", psiId: 101 } });
+  });
+
   it("uses enemy target gating for BASH, confirms selected targets, and cancels back to command", () => {
     const battle = createBattleState([opponentA, opponentB], {
       characters: characters([partyA])
@@ -797,6 +822,252 @@ function inputState(overrides: Partial<BattleRoundInputState> = {}): BattleRound
     ...overrides
   };
 }
+
+describe("resolveRoundStep status effects", () => {
+  function withStatus(
+    battle: BattleState,
+    slot: number,
+    status: { ailment: "poisoned" | "paralyzed" | "asleep" | "confused" | "shielded"; remaining?: number; magnitude?: number }
+  ): BattleState {
+    return withCombatant(battle, actor("party", slot), { ...battle.party[slot], statuses: [status] });
+  }
+  const bash = (): QueuedCommand => ({ partySlot: 0, command: "BASH", target: { side: "enemy", index: 0 } });
+
+  it("skips a paralyzed combatant's turn and leaves the enemy unharmed", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withStatus(battle, 0, { ailment: "paralyzed" });
+    const enemyHp = battle.enemies[0].hp.target;
+    const result = resolveRoundStep(battle, actor("party", 0), bash(), () => 0.5);
+    expect(result.skipped).toBe(true);
+    expect(result.message).toContain("can't move");
+    expect(result.state.enemies[0].hp.target).toBe(enemyHp);
+  });
+
+  it("skips an asleep combatant's turn (wakes or stays asleep, either way no action)", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withStatus(battle, 0, { ailment: "asleep" });
+    const result = resolveRoundStep(battle, actor("party", 0), bash(), sequenceRng([0.9]));
+    expect(result.skipped).toBe(true);
+  });
+
+  it("ticks poison HP loss at the end of the acting combatant's turn", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withStatus(battle, 0, { ailment: "poisoned" });
+    const before = battle.party[0].hp.target;
+    const result = resolveRoundStep(battle, actor("party", 0), bash(), () => 0.5);
+    expect(result.state.party[0].hp.target).toBe(before - Math.floor(battle.party[0].maxHp / 16));
+    expect(result.message).toContain("poison");
+  });
+
+  it("cures a status with a cureStatus GOODS item", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withStatus(battle, 0, { ailment: "poisoned" });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [210] });
+    const cureItem: ItemData = { ...syntheticItem(210, 0, 0), effect: { kind: "cureStatus", ailment: "poisoned" } };
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 210, target: { side: "party", index: 0 } },
+      () => 0.5,
+      { items: [cureItem] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.state.party[0].statuses ?? []).toEqual([]);
+    expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("no longer poisoned") });
+  });
+
+  it("inflicts shielded with an inflictStatus GOODS item", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [211] });
+    const shieldItem: ItemData = { ...syntheticItem(211, 0, 0), effect: { kind: "inflictStatus", ailment: "shielded", magnitude: 50 } };
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 211, target: { side: "party", index: 0 } },
+      () => 0.5,
+      { items: [shieldItem] }
+    );
+    expect(result.state.party[0].statuses).toEqual([{ ailment: "shielded", magnitude: 50 }]);
+    expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("shielded") });
+  });
+
+  it("reduces incoming attack damage for a shielded combatant (same roll, half the HP loss)", () => {
+    const makeBattle = (): BattleState => {
+      let b = createBattleState(
+        enemy(32, "ATTACKER", { offense: 50, actions: actionSet(enemyAction(320, 1, 1)) }),
+        { characters: characters([partyA]) }
+      );
+      b = withCombatant(b, actor("party", 0), {
+        ...b.party[0],
+        defense: 0,
+        hp: setTarget({ ...b.party[0].hp, displayed: 60, target: 60, isRolling: false }, 60)
+      });
+      return b;
+    };
+    const plainBattle = makeBattle();
+    const plain = resolveRoundStep(plainBattle, actor("enemy", 0), undefined, sequenceRng([1, 1, 0.5, 0]));
+    const plainLoss = plainBattle.party[0].hp.target - plain.state.party[0].hp.target;
+
+    const shieldedBattle = withStatus(makeBattle(), 0, { ailment: "shielded", magnitude: 50 });
+    const guarded = resolveRoundStep(shieldedBattle, actor("enemy", 0), undefined, sequenceRng([1, 1, 0.5, 0]));
+    const guardedLoss = shieldedBattle.party[0].hp.target - guarded.state.party[0].hp.target;
+
+    expect(plainLoss).toBeGreaterThan(0);
+    expect(guardedLoss).toBe(Math.floor(plainLoss / 2));
+    // The narrated number matches the post-shield HP actually lost (not the pre-shield roll).
+    expect(guarded.details).toMatchObject({ damage: guardedLoss });
+    expect(plain.details).toMatchObject({ damage: plainLoss });
+  });
+
+  it("routes a damage GOODS item to the enemy and deals its damage", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [212] });
+    const bombItem: ItemData = { ...syntheticItem(212, 0, 0), effect: { kind: "damage", amount: 12 } };
+    const enemyHp = battle.enemies[0].hp.target;
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 212 },
+      () => 0.5,
+      { items: [bombItem] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.resolution).toMatchObject({ target: actor("enemy", 0), amount: 12 });
+    expect(result.state.enemies[0].hp.target).toBe(enemyHp - 12);
+    expect(result.details).toMatchObject({ kind: "item", damage: 12 });
+  });
+
+  it("routes an offensive inflictStatus GOODS item to the enemy and afflicts it", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [213] });
+    const poisonItem: ItemData = { ...syntheticItem(213, 0, 0), effect: { kind: "inflictStatus", ailment: "poisoned" } };
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 213 },
+      () => 0.5,
+      { items: [poisonItem] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.resolution).toMatchObject({ target: actor("enemy", 0) });
+    expect(result.state.enemies[0].statuses).toEqual([{ ailment: "poisoned" }]);
+    expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("now poisoned") });
+  });
+
+  it("a confused attacker's BASH strikes a random side (self or enemy)", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withStatus(battle, 0, { ailment: "confused" });
+    // First roll picks the confused target (low -> party/self, high -> enemy), then the
+    // physical-attack rolls follow.
+    const hitSelf = resolveRoundStep(battle, actor("party", 0), bash(), sequenceRng([0, 1, 1, 0.5, 0]));
+    expect(hitSelf.resolution).toMatchObject({ defender: actor("party", 0) });
+    const hitEnemy = resolveRoundStep(battle, actor("party", 0), bash(), sequenceRng([0.99, 1, 1, 0.5, 0]));
+    expect(hitEnemy.resolution).toMatchObject({ defender: actor("enemy", 0) });
+  });
+
+  it("a confused enemy strikes a random side (its own kind is possible)", () => {
+    let battle = createBattleState(
+      enemy(32, "ATTACKER", { offense: 50, actions: actionSet(enemyAction(320, 1, 1)) }),
+      { characters: characters([partyA]) }
+    );
+    battle = withCombatant(battle, actor("enemy", 0), { ...battle.enemies[0], statuses: [{ ailment: "confused" }] });
+    const selfHit = resolveRoundStep(battle, actor("enemy", 0), undefined, sequenceRng([0.99, 1, 1, 0.5, 0]));
+    expect(selfHit.resolution).toMatchObject({ targets: [actor("enemy", 0)] });
+    const partyHit = resolveRoundStep(battle, actor("enemy", 0), undefined, sequenceRng([0, 1, 1, 0.5, 0]));
+    expect(partyHit.resolution).toMatchObject({ targets: [actor("party", 0)] });
+  });
+
+  it("raises a battle stat with a buffStat GOODS item", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [214] });
+    const sprayItem: ItemData = { ...syntheticItem(214, 0, 0), effect: { kind: "buffStat", stat: "defense", amount: 10 } };
+    const beforeDef = battle.party[0].defense;
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 214, target: { side: "party", index: 0 } },
+      () => 0.5,
+      { items: [sprayItem] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.state.party[0].defense).toBe(beforeDef + 10);
+    expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("defense went up") });
+  });
+
+  it("revives a fainted ally with a revive GOODS item", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA, partyB]) });
+    battle = withCombatant(battle, actor("party", 1), {
+      ...battle.party[1],
+      hp: setTarget({ ...battle.party[1].hp, displayed: 0, target: 0, isRolling: false }, 0)
+    });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [215] });
+    const reviveItem: ItemData = { ...syntheticItem(215, 0, 0), effect: { kind: "revive", amount: 30 } };
+    expect(battle.party[1].hp.target).toBe(0);
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 215, target: { side: "party", index: 1 } },
+      () => 0.5,
+      { items: [reviveItem] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.state.party[1].hp.target).toBe(30);
+    expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("came back to life") });
+  });
+});
+
+describe("resolveRoundStep PSI effects", () => {
+  const psiWith = (id: number, effect: PsiData["effect"]): PsiData => ({
+    ...syntheticPsi(id, "assist", "alpha", [{ charId: 0, level: 1 }]),
+    effect
+  });
+  const ready = (battle: BattleState): BattleState =>
+    withCombatant(battle, actor("party", 0), { ...battle.party[0], pp: 90, maxPp: 90 });
+
+  it("inflicts a status on the enemy via an assist PSI", () => {
+    const battle = ready(createBattleState(opponentA, { characters: characters([partyA]) }));
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "PSI", psiId: 100, target: { side: "enemy", index: 0 } },
+      () => 0.5,
+      { psi: [psiWith(100, { kind: "inflictStatus", ailment: "paralyzed", remaining: 3 })] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.state.enemies[0].statuses).toEqual([{ ailment: "paralyzed", remaining: 3 }]);
+    expect(result.details).toMatchObject({ kind: "psi", message: expect.stringContaining("paralyzed") });
+  });
+
+  it("shields the caster via an assist PSI (party side)", () => {
+    const battle = ready(createBattleState(opponentA, { characters: characters([partyA]) }));
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "PSI", psiId: 101, target: { side: "party", index: 0 } },
+      () => 0.5,
+      { psi: [psiWith(101, { kind: "inflictStatus", ailment: "shielded", magnitude: 50, remaining: 3 })] }
+    );
+    // Applied to the caster, then decremented by the caster's own end-of-turn tick (3 -> 2).
+    expect(result.state.party[0].statuses).toEqual([{ ailment: "shielded", magnitude: 50, remaining: 2 }]);
+    expect(result.details).toMatchObject({ kind: "psi", message: expect.stringContaining("shielded") });
+  });
+
+  it("drains enemy PP via a drainPp PSI", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], pp: 30, maxPp: 90 });
+    battle = withCombatant(battle, actor("enemy", 0), { ...battle.enemies[0], pp: 20 });
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "PSI", psiId: 102, target: { side: "enemy", index: 0 } },
+      () => 0.5,
+      { psi: [psiWith(102, { kind: "drainPp", amount: 5 })] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.state.enemies[0].pp).toBe(15);
+    expect(result.details).toMatchObject({ kind: "psi", message: expect.stringContaining("PP") });
+  });
+});
 
 function sequenceRng(values: number[]): () => number {
   let index = 0;

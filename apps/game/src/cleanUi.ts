@@ -8,6 +8,7 @@ export const CLEAN_UI_PANEL_FILL = 0x080a10;
 export const CLEAN_UI_PANEL_ALPHA = 0.9;
 export const CLEAN_UI_PANEL_BORDER = 0xffffff;
 export const CLEAN_UI_PANEL_BORDER_ALPHA = 0.3;
+export const CLEAN_UI_PANEL_BORDER_WIDTH = 1;
 export const CLEAN_UI_SELECTION_ALPHA = 0.14;
 export const CLEAN_UI_HP = 0x5dca7a;
 export const CLEAN_UI_PP = 0x4d9bdc;
@@ -42,6 +43,7 @@ export type CleanPanelOptions = {
   fillAlpha?: number;
   borderColor?: number;
   borderAlpha?: number;
+  borderWidth?: number;
 };
 
 export type BattleCommandGridPosition = {
@@ -112,10 +114,13 @@ export function drawCleanPanel(
   options: CleanPanelOptions = {}
 ): void {
   const radius = Math.max(0, Math.round(options.radius ?? CLEAN_UI_PANEL_RADIUS));
+  const borderWidth = Math.max(1, Math.round(options.borderWidth ?? CLEAN_UI_PANEL_BORDER_WIDTH));
   graphics.fillStyle(options.fillColor ?? CLEAN_UI_PANEL_FILL, options.fillAlpha ?? CLEAN_UI_PANEL_ALPHA);
   graphics.fillRoundedRect(rect.x, rect.y, rect.width, rect.height, radius);
-  graphics.lineStyle(1, options.borderColor ?? CLEAN_UI_PANEL_BORDER, options.borderAlpha ?? CLEAN_UI_PANEL_BORDER_ALPHA);
-  graphics.strokeRoundedRect(rect.x + 0.5, rect.y + 0.5, Math.max(1, rect.width - 1), Math.max(1, rect.height - 1), radius);
+  // Stroke inset by half the line width so a thicker border stays inside the panel box.
+  const inset = borderWidth / 2;
+  graphics.lineStyle(borderWidth, options.borderColor ?? CLEAN_UI_PANEL_BORDER, options.borderAlpha ?? CLEAN_UI_PANEL_BORDER_ALPHA);
+  graphics.strokeRoundedRect(rect.x + inset, rect.y + inset, Math.max(1, rect.width - borderWidth), Math.max(1, rect.height - borderWidth), radius);
 }
 
 export function drawCleanSelection(graphics: Phaser.GameObjects.Graphics, rect: CanvasRect): void {

@@ -1267,6 +1267,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.surfaceAtHook = (x: number, y: number) => surfaceAtWorldPixel(this.surfaceRows, { x, y }, this.collisionGrid());
     globals.__solidAt = this.solidAtHook;
     globals.__surfaceAt = this.surfaceAtHook;
+    // Debug-only: full-heal the party (stands in for a hotel/inn while one isn't wired up) so the
+    // autonomous-play harness can sustain a multi-boss run. Nothing in normal play calls it.
+    globals.__debugHeal = () => this.healParty("full");
   }
 
   private unregisterCollisionDebugGlobals(): void {
@@ -1277,6 +1280,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.surfaceAtHook && globals.__surfaceAt === this.surfaceAtHook) {
       delete globals.__surfaceAt;
     }
+    delete globals.__debugHeal;
     this.solidAtHook = undefined;
     this.surfaceAtHook = undefined;
   }

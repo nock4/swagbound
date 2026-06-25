@@ -58,7 +58,7 @@ function applyItemOverrides(items: ItemCollection, overrides: ItemOverrides): It
   const resolved: ItemCollection = JSON.parse(JSON.stringify(items));
   for (const item of resolved.items) {
     const override = overrides.byItemId[String(item.id)];
-    if (override) {
+    if (override?.name) {
       item.name = override.name;
     }
   }
@@ -259,6 +259,9 @@ describe("qa-menus: labels fit the native 512x448 menu window", () => {
     // Goods rows show the bare item name; the widest override must still fit the frame.
     let widest = { name: "", px: 0 };
     for (const [id, entry] of Object.entries(itemOverrides.byItemId)) {
+      if (entry.name === undefined) {
+        continue; // effect-only override (no rename)
+      }
       const px = measureLabelPx(entry.name);
       expect(entry.name.length).toBeLessThanOrEqual(24); // schema cap
       if (px > widest.px) {

@@ -28,6 +28,9 @@ describe("item override content", () => {
       const override = overrides.byItemId[String(id)];
       expect(itemById.has(id), `override item ${id} must resolve`).toBe(true);
       expect(override).toBeDefined();
+      if (override?.name === undefined) {
+        continue;
+      }
       expect(override.name.trim()).toBe(override.name);
       expect(override.name.length).toBeGreaterThan(0);
       expect(override.name.length).toBeLessThanOrEqual(24);
@@ -36,8 +39,8 @@ describe("item override content", () => {
       expect(override.name).not.toBe(itemById.get(id)?.name);
     }
 
-    expect(overrides.byItemId["177"].name.length).toBeLessThanOrEqual(18);
-    expect(overrides.byItemId["208"].name.length).toBeLessThanOrEqual(18);
+    expect((overrides.byItemId["177"]?.name ?? "").length).toBeLessThanOrEqual(18);
+    expect((overrides.byItemId["208"]?.name ?? "").length).toBeLessThanOrEqual(18);
   });
 
   it("keeps corpus anchor names on expected item categories", async () => {

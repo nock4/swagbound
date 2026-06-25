@@ -1,17 +1,179 @@
 {
   "schema": "swagbound.psi-overrides.v1",
   "byPsiId": {
-    "1": { "name": "Static" },
-    "9": { "name": "Cold Memo" },
-    "10": { "name": "Cold Memo" },
-    "13": { "name": "Shock Notice" },
-    "14": { "name": "Shock Notice" },
-    "23": { "name": "Wake Up" },
-    "24": { "name": "Wake Up" },
-    "27": { "name": "Decompile" },
-    "28": { "name": "Decompile" },
-    "31": { "name": "Firewall" },
-    "32": { "name": "Firewall" },
-    "43": { "name": "Lull" }
+    "1": {
+      "name": "Static"
+    },
+    "9": {
+      "name": "Cold Memo"
+    },
+    "10": {
+      "name": "Cold Memo"
+    },
+    "13": {
+      "name": "Shock Notice"
+    },
+    "14": {
+      "name": "Shock Notice"
+    },
+    "23": {
+      "name": "Wake Up"
+    },
+    "24": {
+      "name": "Wake Up"
+    },
+    "27": {
+      "name": "Decompile"
+    },
+    "28": {
+      "name": "Decompile"
+    },
+    "31": {
+      "name": "Firewall",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "magnitude": 50,
+        "remaining": 3
+      }
+    },
+    "32": {
+      "name": "Firewall",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "magnitude": 50,
+        "remaining": 3
+      }
+    },
+    "33": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "magnitude": 50,
+        "remaining": 3
+      }
+    },
+    "34": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "magnitude": 50,
+        "remaining": 3
+      }
+    },
+    "35": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "magnitude": 50,
+        "remaining": 3
+      }
+    },
+    "36": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "magnitude": 50,
+        "remaining": 3
+      }
+    },
+    "37": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "magnitude": 50,
+        "remaining": 3
+      }
+    },
+    "38": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "magnitude": 50,
+        "remaining": 3
+      }
+    },
+    "39": {
+      "effect": {
+        "kind": "buffStat",
+        "stat": "offense",
+        "amount": 8
+      }
+    },
+    "40": {
+      "effect": {
+        "kind": "buffStat",
+        "stat": "offense",
+        "amount": 8
+      }
+    },
+    "41": {
+      "effect": {
+        "kind": "buffStat",
+        "stat": "defense",
+        "amount": -8
+      }
+    },
+    "42": {
+      "effect": {
+        "kind": "buffStat",
+        "stat": "defense",
+        "amount": -8
+      }
+    },
+    "43": {
+      "name": "Lull",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "asleep"
+      }
+    },
+    "44": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "asleep"
+      }
+    },
+    "45": {
+      "effect": {
+        "kind": "drainPp",
+        "amount": 5
+      }
+    },
+    "46": {
+      "effect": {
+        "kind": "drainPp",
+        "amount": 5
+      }
+    },
+    "47": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed",
+        "remaining": 3
+      }
+    },
+    "48": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed",
+        "remaining": 3
+      }
+    },
+    "49": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "confused",
+        "remaining": 3
+      }
+    },
+    "50": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "confused",
+        "remaining": 3
+      }
+    }
   }
 }

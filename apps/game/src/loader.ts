@@ -366,7 +366,12 @@ function applyItemOverrides(items: ItemCollection | undefined, overrides: ItemOv
   for (const item of items.items) {
     const override = overrides.byItemId[String(item.id)];
     if (override) {
-      item.name = override.name;
+      if (override.name) {
+        item.name = override.name;
+      }
+      if (override.effect) {
+        item.effect = override.effect;
+      }
     }
   }
   return items;
@@ -383,6 +388,9 @@ function applyCharacterOverrides(
     const override = overrides.byCharId[String(character.id)];
     if (override) {
       character.name = override.name;
+      if (override.startingItems) {
+        character.startingItems = [...override.startingItems];
+      }
     }
   }
   return characters;
@@ -395,7 +403,12 @@ function applyPsiOverrides(psi: PsiCollection | undefined, overrides: PsiOverrid
   for (const entry of psi.psi) {
     const override = overrides.byPsiId[String(entry.id)];
     if (override) {
-      entry.name = override.name;
+      if (override.name) {
+        entry.name = override.name;
+      }
+      if (override.effect) {
+        entry.effect = override.effect;
+      }
     }
   }
   return psi;

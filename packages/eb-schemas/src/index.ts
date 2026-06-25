@@ -453,9 +453,33 @@ const ItemOverrideNameSchema = z.string()
   .refine((value) => !value.includes("@"), "item override names must not include control markers")
   .refine((value) => !/[\u0000-\u001f\u007f]/.test(value), "item override names must not include control codes");
 
+/** A usable item's battle/field effect. Shared by extracted ItemData and authored overrides. */
+export const ItemUseEffectSchema = z.union([
+  z.object({ kind: z.literal("healHp"), amount: z.number().int().positive() }),
+  z.object({ kind: z.literal("healHpPercent"), percent: z.number().int().positive() }),
+  z.object({ kind: z.literal("recoverPp"), amount: z.number().int().positive() }),
+  z.object({ kind: z.literal("recoverPpPercent"), percent: z.number().int().positive() }),
+  z.object({ kind: z.literal("damage"), amount: z.number().int().positive() }),
+  z.object({ kind: z.literal("drainPp"), amount: z.number().int().positive() }),
+  z.object({ kind: z.literal("buffStat"), stat: z.enum(["offense", "defense", "speed", "guts"]), amount: z.number().int() }),
+  z.object({ kind: z.literal("revive"), amount: z.number().int().positive() }),
+  z.object({ kind: z.literal("cureStatus"), ailment: z.enum(["poisoned", "paralyzed", "asleep", "confused", "shielded", "all"]) }),
+  z.object({
+    kind: z.literal("inflictStatus"),
+    ailment: z.enum(["poisoned", "paralyzed", "asleep", "confused", "shielded"]),
+    remaining: z.number().int().positive().optional(),
+    magnitude: z.number().int().positive().optional()
+  })
+]);
+
 const ItemOverrideEntrySchema = z.object({
-  name: ItemOverrideNameSchema
-}).strict();
+  /** Optional Swagbound rename; when absent the item keeps its extracted name. */
+  name: ItemOverrideNameSchema.optional(),
+  /** Optional authored effect, applied over the extracted item.effect at load. */
+  effect: ItemUseEffectSchema.optional()
+}).strict().refine((e) => e.name !== undefined || e.effect !== undefined, {
+  message: "item override entry must set a name and/or an effect"
+});
 
 export const ItemOverridesSchema = z.object({
   schema: z.literal("swagbound.item-overrides.v1"),
@@ -470,7 +494,9 @@ const CharacterOverrideNameSchema = z.string()
   .refine((value) => !/[\u0000-\u001f\u007f]/.test(value), "character override names must not include control codes");
 
 const CharacterOverrideEntrySchema = z.object({
-  name: CharacterOverrideNameSchema
+  name: CharacterOverrideNameSchema,
+  /** Optional: replace the character's starting inventory (item ids) at load. */
+  startingItems: z.array(z.number().int().nonnegative()).optional()
 }).strict();
 
 export const CharacterOverridesSchema = z.object({
@@ -486,8 +512,12 @@ const PsiOverrideNameSchema = z.string()
   .refine((value) => !/[\u0000-\u001f\u007f]/.test(value), "psi override names must not include control codes");
 
 const PsiOverrideEntrySchema = z.object({
-  name: PsiOverrideNameSchema
-}).strict();
+  name: PsiOverrideNameSchema.optional(),
+  /** Optional authored battle effect, applied over the PSI's kind-based behavior at load. */
+  effect: ItemUseEffectSchema.optional()
+}).strict().refine((e) => e.name !== undefined || e.effect !== undefined, {
+  message: "psi override entry must set a name and/or an effect"
+});
 
 export const PsiOverridesSchema = z.object({
   schema: z.literal("swagbound.psi-overrides.v1"),
@@ -1374,12 +1404,7 @@ export const ItemDataSchema = z.object({
   argument: z.number().int().nonnegative(),
   equippable: z.boolean(),
   miscFlags: z.array(z.string()),
-  effect: z.union([
-    z.object({ kind: z.literal("healHp"), amount: z.number().int().positive() }),
-    z.object({ kind: z.literal("healHpPercent"), percent: z.number().int().positive() }),
-    z.object({ kind: z.literal("recoverPp"), amount: z.number().int().positive() }),
-    z.object({ kind: z.literal("recoverPpPercent"), percent: z.number().int().positive() })
-  ]).optional(),
+  effect: ItemUseEffectSchema.optional(),
   helpText: z.string().optional()
 });
 
@@ -1410,7 +1435,9 @@ export const PsiDataSchema = z.object({
   type: z.string(),
   strength: z.string(),
   usableOutsideBattle: z.boolean(),
-  learnedBy: z.array(PsiLearnedBySchema)
+  learnedBy: z.array(PsiLearnedBySchema),
+  /** Optional authored battle effect (assist PSI: shield/buff/inflict), applied at load. */
+  effect: ItemUseEffectSchema.optional()
 });
 
 export const PsiCollectionSchema = z.object({

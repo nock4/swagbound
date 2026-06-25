@@ -24,10 +24,12 @@ export function parseYamlInteger(value: string | undefined): number {
 export function parseIntKeyedYaml(source: string): IntKeyedEntries {
   const entries: IntKeyedEntries = new Map();
   let current: Record<string, string> | undefined;
+  let lastKey: string | undefined;
   for (const line of source.split(/\r?\n/)) {
     const blockMatch = new RegExp(`^(${INTEGER_TOKEN}):\\s*$`).exec(line);
     if (blockMatch) {
       current = {};
+      lastKey = undefined;
       entries.set(parseYamlInteger(blockMatch[1]), current);
       continue;
     }
@@ -36,7 +38,19 @@ export function parseIntKeyedYaml(source: string): IntKeyedEntries {
     }
     const fieldMatch = /^ {2}([^:]+):\s*(.*)$/.exec(line);
     if (fieldMatch && !line.startsWith("   ")) {
-      current[fieldMatch[1].trim()] = stripQuotes(fieldMatch[2].trim());
+      lastKey = fieldMatch[1].trim();
+      current[lastKey] = stripQuotes(fieldMatch[2].trim());
+      continue;
+    }
+    // A two-space block-list item ("  - value") belongs to the preceding field.
+    // CoilSnake emits list-valued fields this way (e.g. PSI `Type:` -> `- offense`).
+    // The single-line parse used to drop these, blanking the field; fold them back
+    // in (comma-joined) so e.g. PSI offense/recovery class survives.
+    const listMatch = /^ {2}- (.*)$/.exec(line);
+    if (listMatch && lastKey) {
+      const value = stripQuotes(listMatch[1].trim());
+      const existing = current[lastKey];
+      current[lastKey] = existing ? `${existing},${value}` : value;
     }
   }
   return entries;

@@ -26,7 +26,7 @@ const IN_SLICE_STORE_IDS = [1, 4] as const;
 async function loadShopData(): Promise<{
   shops: ShopData;
   items: ItemCollection;
-  overrides: Record<string, { name: string }>;
+  overrides: Record<string, { name?: string }>;
 }> {
   const shops = ShopDataSchema.parse(
     JSON.parse(await readFile(resolve(GEN, "shops.json"), "utf8"))
@@ -44,13 +44,13 @@ async function loadShopData(): Promise<{
 // same data path the runtime uses to feed the menu/dialogue resolver.
 function applyOverrides(
   items: ItemCollection,
-  byItemId: Record<string, { name: string }>
+  byItemId: Record<string, { name?: string }>
 ): ItemCollection {
   return {
     ...items,
     items: items.items.map((item) => {
       const override = byItemId[String(item.id)];
-      return override ? { ...item, name: override.name } : item;
+      return override?.name ? { ...item, name: override.name } : item;
     })
   };
 }
@@ -77,7 +77,7 @@ describe("shops & services QA (generated slice data)", () => {
         expect(Number.isInteger(item!.cost)).toBe(true);
         // Every stocked item must carry a Swagbound rename.
         expect(overrides[String(itemId)], `item ${itemId} needs an override`).toBeDefined();
-        expect(overrides[String(itemId)].name.length).toBeGreaterThan(0);
+        expect((overrides[String(itemId)]?.name ?? "").length, `item ${itemId} needs a Swagbound rename`).toBeGreaterThan(0);
       }
     }
   });
@@ -113,7 +113,10 @@ describe("shops & services QA (generated slice data)", () => {
 
   it("Swagbound shop names are unique (no two goods collapse to the same label)", async () => {
     const { overrides } = await loadShopData();
-    const names = Object.values(overrides).map((o) => o.name);
+    // Only renamed entries carry a label; effect-only overrides have no name.
+    const names = Object.values(overrides)
+      .map((o) => o.name)
+      .filter((n): n is string => n !== undefined);
     expect(new Set(names).size).toBe(names.length);
   });
 
@@ -163,8 +166,8 @@ describe("shops & services QA (generated slice data)", () => {
       expect(entry.cost).toBe(item.cost);
       // sell price is floor(cost/2).
       expect(entry.price).toBe(Math.floor(item.cost / 2));
-      // label leads with the Swagbound override name, then the cost.
-      const expectedName = overrides[String(entry.itemId)].name;
+      // label leads with the Swagbound override name (or the base name), then the cost.
+      const expectedName = overrides[String(entry.itemId)]?.name ?? item.name;
       expect(entry.label.startsWith(expectedName)).toBe(true);
       expect(entry.label.endsWith(String(item.cost))).toBe(true);
     }
