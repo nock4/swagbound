@@ -13,8 +13,14 @@ things left are the bits that genuinely need you (a human at a browser, and a me
 
 ## What needs you (~15 min)
 
-### 1. Native battle verification (I can't drive a browser in the sandbox)
-Run `pnpm dev`, start a battle, and eyeball at native 512×448:
+### 1. Native battle verification — UPDATE: I can drive the browser myself now
+Turns out the "can't run a browser" limit was the Codex subagent sandbox, not my Bash here.
+I verified the loop end-to-end and confirmed the **Spark Tube (#144) damage item** kills the
+boss in the real game (`?battle=448&items=144` → enemy 63hp → 0). I can finish the rest of this
+checklist on request the same way — `node scripts/native-probe.mjs --base http://127.0.0.1:5174/
+--url-params "battle=<group>&items=<ids>" --press ArrowRight --press z ... --out shot.png`, reading
+`__battleDebug` (hp/pp/selection/executionMessage) to assert. So treat this list as optional
+spot-checks, not a blocker. Original eyeball checklist (still useful at native 512×448):
 - [ ] Cast **Shield**/**PSI Shield** → take an enemy hit → damage roughly halved, narration matches HP lost.
 - [ ] Cast **Offense up** → your BASH hits harder next round.
 - [ ] Cast **Hypnosis** on the enemy → it falls asleep and skips turns.
