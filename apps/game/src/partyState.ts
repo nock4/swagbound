@@ -84,8 +84,25 @@ export type ItemUseEffect =
   | { kind: "healHpPercent"; percent: number }
   | { kind: "recoverPp"; amount: number }
   | { kind: "recoverPpPercent"; percent: number }
+  | { kind: "damage"; amount: number }
   | { kind: "cureStatus"; ailment: StatusAilment | "all" }
   | { kind: "inflictStatus"; ailment: StatusAilment; remaining?: number; magnitude?: number };
+
+/**
+ * Which side of the battlefield an item's effect acts on. Offensive effects (damage, and
+ * inflicting an ailment other than the defensive "shielded" buff) target the enemy; heals,
+ * cures, restores, and self-buffs target the party. Shared by the round resolver, the
+ * command menu, and resolveItemTurn so all three agree on the side.
+ */
+export function itemEffectTargetSide(effect: ItemUseEffect | undefined): "party" | "enemy" {
+  if (effect?.kind === "damage") {
+    return "enemy";
+  }
+  if (effect?.kind === "inflictStatus") {
+    return effect.ailment === "shielded" ? "party" : "enemy";
+  }
+  return "party";
+}
 
 export type ItemUseResult =
   | {
@@ -696,6 +713,8 @@ function normalizeGeneratedItemEffect(effect: ItemData["effect"]): ItemUseEffect
       return effect.amount > 0 ? { kind: "recoverPp", amount: stat(effect.amount) } : undefined;
     case "recoverPpPercent":
       return effect.percent > 0 ? { kind: "recoverPpPercent", percent: stat(effect.percent) } : undefined;
+    case "damage":
+      return effect.amount > 0 ? { kind: "damage", amount: stat(effect.amount) } : undefined;
     case "cureStatus":
       return { kind: "cureStatus", ailment: effect.ailment };
     case "inflictStatus":
@@ -778,9 +797,10 @@ export function applyUseEffectToVitals(vitals: PartyVitals, effect: ItemUseEffec
         nextValue
       };
     }
+    case "damage":
     case "cureStatus":
     case "inflictStatus":
-      // Battle-only status effects; no overworld vitals change.
+      // Battle-only effects; no overworld vitals change.
       return { vitals, previousValue: 0, nextValue: 0 };
   }
 }

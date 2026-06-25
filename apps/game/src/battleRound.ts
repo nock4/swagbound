@@ -1,5 +1,5 @@
 import type { ItemData, PsiData } from "@eb/schemas";
-import { decodeItemUseEffect, type ItemUseEffect } from "./partyState";
+import { decodeItemUseEffect, itemEffectTargetSide, type ItemUseEffect } from "./partyState";
 import {
   beginCombatantTurn,
   combatantAt,
@@ -411,7 +411,7 @@ function resolveActorAction(
       if (!item) {
         return skippedRoundStep(turnState, actor, "Cannot use that item.");
       }
-      const target = resolvedTargetOptions(turnState, queued, "party");
+      const target = resolvedTargetOptions(turnState, queued, itemEffectTargetSide(decodeItemUseEffect(item)));
       if (!target) {
         return noTargetRoundStep(turnState, actor);
       }
@@ -603,11 +603,13 @@ function confirmGoods(
   if (itemId === undefined) {
     return { input, complete: false };
   }
+  const item = findById(context.items, itemId);
+  const targetSide = itemEffectTargetSide(item ? decodeItemUseEffect(item) : undefined);
   return {
     input: {
       ...input,
-      submenu: "target-ally",
-      selectionIndex: livingIndices(context.state, "party")[0] ?? 0,
+      submenu: targetSide === "enemy" ? "target-enemy" : "target-ally",
+      selectionIndex: livingIndices(context.state, targetSide)[0] ?? 0,
       pending: { partySlot: actor.index, command: "GOODS", itemId }
     },
     complete: false
@@ -942,6 +944,7 @@ function narrationDetailsForResolution(
       targetName,
       itemName: context.item?.name,
       message,
+      damage: effect?.kind === "damage" ? amount : undefined,
       healed: effect?.kind === "healHp" || effect?.kind === "healHpPercent" ? amount : undefined,
       ppRestored: effect?.kind === "recoverPp" || effect?.kind === "recoverPpPercent" ? amount : undefined,
       missed: amount <= 0,

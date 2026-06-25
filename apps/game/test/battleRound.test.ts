@@ -718,6 +718,20 @@ describe("nextInputState", () => {
     });
   });
 
+  it("routes a damage GOODS item to enemy targeting and a healing one to ally targeting", () => {
+    let battle = createBattleState([opponentA, opponentB], { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [212, 220] });
+    const bomb: ItemData = { ...syntheticItem(212, 0, 0), effect: { kind: "damage", amount: 12 } };
+    const heal: ItemData = syntheticItem(220, 0x02, 30);
+    const context = { state: battle, items: [bomb, heal] };
+
+    const offensive = nextInputState(inputState({ submenu: "goods", selectionIndex: 0 }), { kind: "confirm" }, context);
+    expect(offensive.input).toMatchObject({ submenu: "target-enemy", pending: { command: "GOODS", itemId: 212 } });
+
+    const healing = nextInputState(inputState({ submenu: "goods", selectionIndex: 1 }), { kind: "confirm" }, context);
+    expect(healing.input).toMatchObject({ submenu: "target-ally", pending: { command: "GOODS", itemId: 220 } });
+  });
+
   it("uses enemy target gating for BASH, confirms selected targets, and cancels back to command", () => {
     const battle = createBattleState([opponentA, opponentB], {
       characters: characters([partyA])
@@ -889,6 +903,41 @@ describe("resolveRoundStep status effects", () => {
 
     expect(plainLoss).toBeGreaterThan(0);
     expect(guardedLoss).toBe(Math.floor(plainLoss / 2));
+  });
+
+  it("routes a damage GOODS item to the enemy and deals its damage", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [212] });
+    const bombItem: ItemData = { ...syntheticItem(212, 0, 0), effect: { kind: "damage", amount: 12 } };
+    const enemyHp = battle.enemies[0].hp.target;
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 212 },
+      () => 0.5,
+      { items: [bombItem] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.resolution).toMatchObject({ target: actor("enemy", 0), amount: 12 });
+    expect(result.state.enemies[0].hp.target).toBe(enemyHp - 12);
+    expect(result.details).toMatchObject({ kind: "item", damage: 12 });
+  });
+
+  it("routes an offensive inflictStatus GOODS item to the enemy and afflicts it", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [213] });
+    const poisonItem: ItemData = { ...syntheticItem(213, 0, 0), effect: { kind: "inflictStatus", ailment: "poisoned" } };
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 213 },
+      () => 0.5,
+      { items: [poisonItem] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.resolution).toMatchObject({ target: actor("enemy", 0) });
+    expect(result.state.enemies[0].statuses).toEqual([{ ailment: "poisoned" }]);
+    expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("now poisoned") });
   });
 });
 

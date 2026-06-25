@@ -20,6 +20,7 @@ import {
 import {
   applyUseEffectToVitals,
   decodeItemUseEffect,
+  itemEffectTargetSide,
   type ItemUseEffect,
   type PartyVitals
 } from "./partyState";
@@ -1021,7 +1022,7 @@ export function resolveItemTurn(
     return blockedAction(state, actor, currentOutcome, maybeConsumable ? "unknownEffect" : "notConsumable");
   }
 
-  const target = resolveTargetActor(state, "party", options);
+  const target = resolveTargetActor(state, itemEffectTargetSide(effect), options);
   if (!target) {
     return blockedAction(state, actor, currentOutcome, "noTarget");
   }
@@ -1037,7 +1038,7 @@ export function resolveItemTurn(
     state: nextState,
     actor,
     target,
-    amount: Math.max(0, applied.nextValue - applied.previousValue),
+    amount: applied.amount,
     outcome: outcome(nextState),
     skipped: false,
     itemConsumed: true
@@ -1669,11 +1670,10 @@ function removeInventoryItem(state: BattleState, actor: BattleActor, slot: numbe
 
 function applyItemEffectToCombatant(combatant: Combatant, effect: ItemUseEffect): {
   combatant: Combatant;
-  previousValue: number;
-  nextValue: number;
+  amount: number;
 } {
   if (effect.kind === "cureStatus") {
-    return { combatant: withStatuses(combatant, cureStatus(combatant.statuses, effect.ailment)), previousValue: 0, nextValue: 0 };
+    return { combatant: withStatuses(combatant, cureStatus(combatant.statuses, effect.ailment)), amount: 0 };
   }
   if (effect.kind === "inflictStatus") {
     return {
@@ -1681,9 +1681,13 @@ function applyItemEffectToCombatant(combatant: Combatant, effect: ItemUseEffect)
         ...(effect.remaining !== undefined ? { remaining: effect.remaining } : {}),
         ...(effect.magnitude !== undefined ? { magnitude: effect.magnitude } : {})
       })),
-      previousValue: 0,
-      nextValue: 0
+      amount: 0
     };
+  }
+  if (effect.kind === "damage") {
+    const before = combatant.hp.target;
+    const damaged = applyDamage(combatant, effect.amount);
+    return { combatant: damaged, amount: before - damaged.hp.target };
   }
   const applied = applyUseEffectToVitals(combatantVitals(combatant), effect);
   return {
@@ -1692,8 +1696,7 @@ function applyItemEffectToCombatant(combatant: Combatant, effect: ItemUseEffect)
       hp: applied.vitals.hp,
       pp: applied.vitals.pp
     },
-    previousValue: applied.previousValue,
-    nextValue: applied.nextValue
+    amount: Math.max(0, applied.nextValue - applied.previousValue)
   };
 }
 
