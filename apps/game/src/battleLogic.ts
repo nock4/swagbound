@@ -24,7 +24,10 @@ import {
   type PartyVitals
 } from "./partyState";
 import {
+  cureStatus,
   hasStatus,
+  incomingDamageScale,
+  inflictStatus,
   resolveTurnGate,
   tickStatuses,
   type StatusState
@@ -1267,8 +1270,9 @@ export function normalizeActor(actor: BattleActor | "player" | "enemy"): BattleA
   return actor;
 }
 
-function applyDamage(combatant: Combatant, amount: number): Combatant {
-  const target = Math.max(0, combatant.hp.target - Math.max(0, Math.floor(amount)));
+function applyDamage(combatant: Combatant, amount: number, options: { ignoreShield?: boolean } = {}): Combatant {
+  const scale = options.ignoreShield ? 1 : incomingDamageScale(combatant.statuses);
+  const target = Math.max(0, combatant.hp.target - Math.max(0, Math.floor(amount * scale)));
   const hp = setTarget(combatant.hp, target);
   if (combatant.isEnemy && target <= 0) {
     return {
@@ -1339,7 +1343,8 @@ export function applyEndOfTurnStatusTick(
   const result = tickStatuses(combatant.statuses, combatant.maxHp);
   let next = withStatuses(combatant, result.statuses);
   if (result.hpLoss > 0) {
-    next = applyDamage(next, result.hpLoss);
+    // Poison is internal damage; the shield only mitigates incoming attacks.
+    next = applyDamage(next, result.hpLoss, { ignoreShield: true });
   }
   return { state: withCombatant(state, actor, next), hpLoss: result.hpLoss, name: combatant.name };
 }
@@ -1667,6 +1672,19 @@ function applyItemEffectToCombatant(combatant: Combatant, effect: ItemUseEffect)
   previousValue: number;
   nextValue: number;
 } {
+  if (effect.kind === "cureStatus") {
+    return { combatant: withStatuses(combatant, cureStatus(combatant.statuses, effect.ailment)), previousValue: 0, nextValue: 0 };
+  }
+  if (effect.kind === "inflictStatus") {
+    return {
+      combatant: withStatuses(combatant, inflictStatus(combatant.statuses, effect.ailment, {
+        ...(effect.remaining !== undefined ? { remaining: effect.remaining } : {}),
+        ...(effect.magnitude !== undefined ? { magnitude: effect.magnitude } : {})
+      })),
+      previousValue: 0,
+      nextValue: 0
+    };
+  }
   const applied = applyUseEffectToVitals(combatantVitals(combatant), effect);
   return {
     combatant: {

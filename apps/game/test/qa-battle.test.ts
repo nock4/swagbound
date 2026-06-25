@@ -318,5 +318,11 @@ function itemEffectMagnitude(effect: ItemUseEffect | undefined): number {
   if (!effect) {
     return 0;
   }
-  return "amount" in effect ? effect.amount : effect.percent;
+  if ("amount" in effect) {
+    return effect.amount;
+  }
+  if ("percent" in effect) {
+    return effect.percent;
+  }
+  return 0;
 }

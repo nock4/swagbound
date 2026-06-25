@@ -1,5 +1,5 @@
 import type { ItemData, PsiData } from "@eb/schemas";
-import { decodeItemUseEffect } from "./partyState";
+import { decodeItemUseEffect, type ItemUseEffect } from "./partyState";
 import {
   beginCombatantTurn,
   combatantAt,
@@ -922,12 +922,24 @@ function narrationDetailsForResolution(
 
   if (context.command === "GOODS") {
     const target = "target" in resolution ? resolution.target : null;
+    const targetName = target ? combatantName(previousState, target) : undefined;
     const effect = context.item ? decodeItemUseEffect(context.item) : undefined;
     const amount = "amount" in resolution ? resolution.amount : 0;
+    if (effect && (effect.kind === "cureStatus" || effect.kind === "inflictStatus")) {
+      return {
+        kind: "item",
+        attackerName,
+        targetName,
+        itemName: context.item?.name,
+        message: statusItemMessage(targetName ?? attackerName, effect),
+        missed: false,
+        targetDied: false
+      };
+    }
     return {
       kind: "item",
       attackerName,
-      targetName: target ? combatantName(previousState, target) : undefined,
+      targetName,
       itemName: context.item?.name,
       message,
       healed: effect?.kind === "healHp" || effect?.kind === "healHpPercent" ? amount : undefined,
@@ -938,6 +950,20 @@ function narrationDetailsForResolution(
   }
 
   return { kind: "skip", attackerName, message };
+}
+
+function statusItemMessage(
+  name: string,
+  effect: Extract<ItemUseEffect, { kind: "cureStatus" | "inflictStatus" }>
+): string {
+  if (effect.kind === "cureStatus") {
+    return effect.ailment === "all"
+      ? `${name} is cured of all ailments!`
+      : `${name} is no longer ${effect.ailment}!`;
+  }
+  return effect.ailment === "shielded"
+    ? `${name} is shielded!`
+    : `${name} is now ${effect.ailment}!`;
 }
 
 function skippedRoundStep(

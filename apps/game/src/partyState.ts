@@ -1,5 +1,6 @@
 import type { ItemData } from "@eb/schemas";
 import type { Combatant } from "./battleLogic";
+import type { StatusAilment } from "./statusEffects";
 import type { PartyMember, PartyMemberStats } from "./characterModel";
 import {
   createRollingMeter,
@@ -82,7 +83,9 @@ export type ItemUseEffect =
   | { kind: "healHp"; amount: number }
   | { kind: "healHpPercent"; percent: number }
   | { kind: "recoverPp"; amount: number }
-  | { kind: "recoverPpPercent"; percent: number };
+  | { kind: "recoverPpPercent"; percent: number }
+  | { kind: "cureStatus"; ailment: StatusAilment | "all" }
+  | { kind: "inflictStatus"; ailment: StatusAilment; remaining?: number; magnitude?: number };
 
 export type ItemUseResult =
   | {
@@ -693,6 +696,15 @@ function normalizeGeneratedItemEffect(effect: ItemData["effect"]): ItemUseEffect
       return effect.amount > 0 ? { kind: "recoverPp", amount: stat(effect.amount) } : undefined;
     case "recoverPpPercent":
       return effect.percent > 0 ? { kind: "recoverPpPercent", percent: stat(effect.percent) } : undefined;
+    case "cureStatus":
+      return { kind: "cureStatus", ailment: effect.ailment };
+    case "inflictStatus":
+      return {
+        kind: "inflictStatus",
+        ailment: effect.ailment,
+        ...(effect.remaining !== undefined ? { remaining: stat(effect.remaining) } : {}),
+        ...(effect.magnitude !== undefined ? { magnitude: stat(effect.magnitude) } : {})
+      };
   }
 }
 
@@ -766,6 +778,10 @@ export function applyUseEffectToVitals(vitals: PartyVitals, effect: ItemUseEffec
         nextValue
       };
     }
+    case "cureStatus":
+    case "inflictStatus":
+      // Battle-only status effects; no overworld vitals change.
+      return { vitals, previousValue: 0, nextValue: 0 };
   }
 }
 

@@ -833,6 +833,63 @@ describe("resolveRoundStep status effects", () => {
     expect(result.state.party[0].hp.target).toBe(before - Math.floor(battle.party[0].maxHp / 16));
     expect(result.message).toContain("poison");
   });
+
+  it("cures a status with a cureStatus GOODS item", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withStatus(battle, 0, { ailment: "poisoned" });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [210] });
+    const cureItem: ItemData = { ...syntheticItem(210, 0, 0), effect: { kind: "cureStatus", ailment: "poisoned" } };
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 210, target: { side: "party", index: 0 } },
+      () => 0.5,
+      { items: [cureItem] }
+    );
+    expect(result.skipped).toBe(false);
+    expect(result.state.party[0].statuses ?? []).toEqual([]);
+    expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("no longer poisoned") });
+  });
+
+  it("inflicts shielded with an inflictStatus GOODS item", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [211] });
+    const shieldItem: ItemData = { ...syntheticItem(211, 0, 0), effect: { kind: "inflictStatus", ailment: "shielded", magnitude: 50 } };
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 211, target: { side: "party", index: 0 } },
+      () => 0.5,
+      { items: [shieldItem] }
+    );
+    expect(result.state.party[0].statuses).toEqual([{ ailment: "shielded", magnitude: 50 }]);
+    expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("shielded") });
+  });
+
+  it("reduces incoming attack damage for a shielded combatant (same roll, half the HP loss)", () => {
+    const makeBattle = (): BattleState => {
+      let b = createBattleState(
+        enemy(32, "ATTACKER", { offense: 50, actions: actionSet(enemyAction(320, 1, 1)) }),
+        { characters: characters([partyA]) }
+      );
+      b = withCombatant(b, actor("party", 0), {
+        ...b.party[0],
+        defense: 0,
+        hp: setTarget({ ...b.party[0].hp, displayed: 60, target: 60, isRolling: false }, 60)
+      });
+      return b;
+    };
+    const plainBattle = makeBattle();
+    const plain = resolveRoundStep(plainBattle, actor("enemy", 0), undefined, sequenceRng([1, 1, 0.5, 0]));
+    const plainLoss = plainBattle.party[0].hp.target - plain.state.party[0].hp.target;
+
+    const shieldedBattle = withStatus(makeBattle(), 0, { ailment: "shielded", magnitude: 50 });
+    const guarded = resolveRoundStep(shieldedBattle, actor("enemy", 0), undefined, sequenceRng([1, 1, 0.5, 0]));
+    const guardedLoss = shieldedBattle.party[0].hp.target - guarded.state.party[0].hp.target;
+
+    expect(plainLoss).toBeGreaterThan(0);
+    expect(guardedLoss).toBe(Math.floor(plainLoss / 2));
+  });
 });
 
 function sequenceRng(values: number[]): () => number {

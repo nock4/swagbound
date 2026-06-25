@@ -458,7 +458,14 @@ export const ItemUseEffectSchema = z.union([
   z.object({ kind: z.literal("healHp"), amount: z.number().int().positive() }),
   z.object({ kind: z.literal("healHpPercent"), percent: z.number().int().positive() }),
   z.object({ kind: z.literal("recoverPp"), amount: z.number().int().positive() }),
-  z.object({ kind: z.literal("recoverPpPercent"), percent: z.number().int().positive() })
+  z.object({ kind: z.literal("recoverPpPercent"), percent: z.number().int().positive() }),
+  z.object({ kind: z.literal("cureStatus"), ailment: z.enum(["poisoned", "paralyzed", "asleep", "confused", "shielded", "all"]) }),
+  z.object({
+    kind: z.literal("inflictStatus"),
+    ailment: z.enum(["poisoned", "paralyzed", "asleep", "confused", "shielded"]),
+    remaining: z.number().int().positive().optional(),
+    magnitude: z.number().int().positive().optional()
+  })
 ]);
 
 const ItemOverrideEntrySchema = z.object({
