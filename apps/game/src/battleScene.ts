@@ -86,6 +86,8 @@ import {
   CLEAN_UI_PP,
   CLEAN_UI_PRIMARY,
   CLEAN_UI_SECONDARY,
+  CLEAN_UI_SELECTION_CARET,
+  CLEAN_UI_SELECTION_TEXT,
   CLEAN_UI_TRACK,
   CLEAN_UI_TRACK_ALPHA,
   cleanGridCells,
@@ -2555,12 +2557,16 @@ export class BattleScene extends Phaser.Scene {
       }
       const selected = this.selectedCommandIndex() === index;
       text.setText(this.fitMeasuredText(view.commandLines[index] ?? "", Math.max(1, cell.width - BATTLE_MENU_CARET_GUTTER_PX)));
-      text.setColor(CLEAN_UI_PRIMARY);
       if (selected) {
-        // The active command breathes so the menu reads as live, not a static list.
+        // Inverted active row: dark text raised above the opaque white selection fill (depth 31);
+        // it breathes so the menu reads as live, not a static list.
+        text.setColor(CLEAN_UI_SELECTION_TEXT);
+        text.setDepth(32);
         text.setFontStyle("600");
         text.setAlpha(0.9 + Math.sin(this.time.now / 150) * 0.1);
       } else {
+        text.setColor(CLEAN_UI_PRIMARY);
+        text.setDepth(21);
         text.setFontStyle("400");
         text.setAlpha(1);
       }
@@ -2977,9 +2983,9 @@ export class BattleScene extends Phaser.Scene {
     if (layout.command && commandIndex !== null) {
       const cell = layout.command.cells[commandIndex];
       if (cell) {
-        drawCleanSelection(graphics, cell);
+        drawCleanSelection(graphics, cell, true);
         if (showCaret) {
-          drawCleanCaret(graphics, cell.x + 3, cell.y, cell.height);
+          drawCleanCaret(graphics, cell.x + 3, cell.y, cell.height, CLEAN_UI_SELECTION_CARET);
         }
       }
     }

@@ -29,6 +29,24 @@ const SAVE_SLOTS: SaveSlotPersistence = {
  * playable world scene (real imported map/NPC data) or the fallback scene
  * (placeholder field) when world data is unavailable.
  */
+// Preload the menu/dialogue typeface (Pixelify Sans, linked in index.html) before the scenes
+// render any text, so Phaser caches glyphs in the real face rather than the system fallback.
+// Times out / fails open: if the font CDN is unreachable, the UI falls back gracefully.
+async function loadMenuFont(): Promise<void> {
+  try {
+    const fonts = document.fonts;
+    if (!fonts?.load) {
+      return;
+    }
+    await Promise.race([
+      Promise.all([fonts.load("16px 'Pixelify Sans'"), fonts.load("500 16px 'Pixelify Sans'")]),
+      new Promise<void>((resolve) => setTimeout(resolve, 2500))
+    ]);
+  } catch {
+    // Font unavailable — createCleanText's fallback stack keeps the UI readable.
+  }
+}
+
 class BootScene extends Phaser.Scene {
   constructor() {
     super("boot");
@@ -48,7 +66,7 @@ class BootScene extends Phaser.Scene {
       this.renderError("Generated manifest is missing or invalid.", "Run pnpm convert, then pnpm validate.");
       return;
     }
-    const data: GameData = await loadGameData(manifest);
+    const [data] = await Promise.all([loadGameData(manifest), loadMenuFont()]);
     registerWindowFlavorControls(data.window);
     const battleGroupId = battleGroupIdFromSearch(globalThis.location?.search);
     if (battleGroupId !== undefined && data.battle) {

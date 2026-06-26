@@ -1,21 +1,25 @@
 import type Phaser from "phaser";
 import type { CanvasRect } from "./windowLayout";
 
-export const CLEAN_UI_FONT_FAMILY = "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+export const CLEAN_UI_FONT_FAMILY = "'Pixelify Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 export const CLEAN_UI_PRIMARY = "#EEF1F6";
 export const CLEAN_UI_SECONDARY = "#9AA3B2";
+// Text color for the inverted (selected) row: dark, to read on the opaque white selection fill.
+export const CLEAN_UI_SELECTION_TEXT = "#0a0a0a";
+// Numeric companion (graphics fillStyle takes a hex number) for the caret drawn on that row.
+export const CLEAN_UI_SELECTION_CARET = 0x0a0a0a;
 export const CLEAN_UI_PANEL_FILL = 0x080a10;
 export const CLEAN_UI_PANEL_ALPHA = 0.9;
 export const CLEAN_UI_PANEL_BORDER = 0xffffff;
-export const CLEAN_UI_PANEL_BORDER_ALPHA = 0.3;
-export const CLEAN_UI_PANEL_BORDER_WIDTH = 1;
+export const CLEAN_UI_PANEL_BORDER_ALPHA = 0.85;
+export const CLEAN_UI_PANEL_BORDER_WIDTH = 2;
 export const CLEAN_UI_SELECTION_ALPHA = 0.14;
 export const CLEAN_UI_HP = 0x5dca7a;
 export const CLEAN_UI_PP = 0x4d9bdc;
 export const CLEAN_UI_TRACK = 0xffffff;
 export const CLEAN_UI_TRACK_ALPHA = 0.12;
-export const CLEAN_UI_PANEL_RADIUS = 6;
-export const CLEAN_UI_SELECTION_RADIUS = 4;
+export const CLEAN_UI_PANEL_RADIUS = 9;
+export const CLEAN_UI_SELECTION_RADIUS = 5;
 export const CLEAN_UI_GRID_COLUMNS = 3;
 
 export type CleanTextWeight = 400 | 500;
@@ -123,8 +127,10 @@ export function drawCleanPanel(
   graphics.strokeRoundedRect(rect.x + inset, rect.y + inset, Math.max(1, rect.width - borderWidth), Math.max(1, rect.height - borderWidth), radius);
 }
 
-export function drawCleanSelection(graphics: Phaser.GameObjects.Graphics, rect: CanvasRect): void {
-  graphics.fillStyle(CLEAN_UI_PANEL_BORDER, CLEAN_UI_SELECTION_ALPHA);
+export function drawCleanSelection(graphics: Phaser.GameObjects.Graphics, rect: CanvasRect, opaque = false): void {
+  // opaque = the inverted row fill (solid white, dark text drawn on top); default = a soft highlight
+  // for single-block lists (e.g. the battle submenu) and status accents, where text stays light.
+  graphics.fillStyle(CLEAN_UI_PANEL_BORDER, opaque ? 1 : CLEAN_UI_SELECTION_ALPHA);
   graphics.fillRoundedRect(rect.x, rect.y, rect.width, rect.height, CLEAN_UI_SELECTION_RADIUS);
 }
 

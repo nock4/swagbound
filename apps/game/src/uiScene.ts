@@ -5,6 +5,8 @@ import type { MenuRenderScreen } from "./menuModel";
 import {
   CLEAN_UI_PRIMARY,
   CLEAN_UI_SECONDARY,
+  CLEAN_UI_SELECTION_TEXT,
+  CLEAN_UI_SELECTION_CARET,
   cleanLineHeight,
   cleanPanelInnerRect,
   createCleanText,
@@ -386,10 +388,10 @@ export class UiScene extends Phaser.Scene {
         const textWidth = Math.max(1, boxWidth - textInset * 2 - MENU_CARET_GUTTER_PX);
         this.menuTexts.push(createCleanText(this, x + textInset + MENU_CARET_GUTTER_PX, rowTop, label, {
           fontSize,
-          color: item.enabled ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY,
+          color: selected ? CLEAN_UI_SELECTION_TEXT : (item.enabled ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY),
           weight: selected ? 500 : 400,
           fixedWidth: textWidth
-        }).setDepth(15));
+        }).setDepth(selected ? 17 : 15));
       });
       nextX = Math.min(this.scale.width - MENU_RIGHT_MARGIN - 64, x + boxWidth + MENU_GAP);
     });
@@ -461,9 +463,9 @@ export class UiScene extends Phaser.Scene {
         y: slot.rowTop,
         width: slot.width,
         height: slot.rowHeight
-      });
+      }, true);
       if (menuCursorVisible(this.time.now)) {
-        drawCleanCaret(graphics, slot.x + 3, slot.rowTop, slot.rowHeight);
+        drawCleanCaret(graphics, slot.x + 3, slot.rowTop, slot.rowHeight, CLEAN_UI_SELECTION_CARET);
       }
     }
   }
