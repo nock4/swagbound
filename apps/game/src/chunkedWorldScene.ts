@@ -177,6 +177,7 @@ import { buildPartyMember, type PartyMember } from "./characterModel";
 import { activeWindowFlavorId } from "./windowSettings";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import {
+  FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY,
   PLAYER_SPRITE_OVERRIDE_SHEET_KEY,
   spriteOverrideAssetUrl,
   spriteOverrideDirectionFrames,
@@ -370,6 +371,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private player?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
   private playerState!: PlayerState;
   private playerFrames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES;
+  // 2nd party member (Cloak) trailing the player. Driven by a delayed trail of the player's path.
+  private follower?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+  private followerFrames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES;
+  private followerTrail: Array<{ x: number; y: number; facing: PlayerState["facing"] }> = [];
+  private followerPos?: { x: number; y: number };
+  private followerWalkPhase = 0;
   private spriteWalkBobClockMs = 0;
   private npcPlacementsByChunk = new Map<string, NpcPlacement[]>();
   private npcRuntimes = new Map<string, NpcRuntime>();
@@ -519,6 +526,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
         frameHeight: playerOverride.frameHeight
       });
     }
+    const followerOverride = spriteOverrideSheet(this.followerSpriteOverride());
+    if (followerOverride) {
+      this.load.spritesheet(FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY, spriteOverrideAssetUrl(followerOverride.image), {
+        frameWidth: followerOverride.frameWidth,
+        frameHeight: followerOverride.frameHeight
+      });
+    }
     for (const [npcId, override] of spriteOverrideNpcEntries(this.data_.spriteOverrides)) {
       const sheetOverride = spriteOverrideSheet(override);
       if (!sheetOverride) {
@@ -591,6 +605,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.playerFrames = this.framesForPlayer(world.player.spriteGroup);
     this.playerState = createPlayerState(spawn.x, spawn.y, playerFacing, this.playerFrames);
     this.player = this.spawnPlayerActor(spawn.x, spawn.y, world.player.spriteGroup, playerFacing);
+    this.spawnFollower(spawn, playerFacing);
     this.syncEncounterTileState();
 
     const bounds = this.movementBounds();
@@ -793,6 +808,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.unregisterForceEncounter();
     this.player = undefined;
     this.playerFrames = CANONICAL_DIRECTION_FRAMES;
+    this.follower = undefined;
+    this.followerFrames = CANONICAL_DIRECTION_FRAMES;
+    this.followerTrail = [];
+    this.followerPos = undefined;
+    this.followerWalkPhase = 0;
     this.activeNpcDialogue = undefined;
     this.chunkByKey.clear();
     this.npcPlacementsByChunk.clear();
@@ -4387,6 +4407,83 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.playerState.facing,
       0
     );
+    this.updateFollower();
+  }
+
+  private followerSpriteOverride(): SpriteOverride | undefined {
+    return this.data_.spriteOverrides?.follower;
+  }
+
+  private spawnFollower(spawn: { x: number; y: number }, facing: string): void {
+    this.follower = undefined;
+    this.followerFrames = CANONICAL_DIRECTION_FRAMES;
+    this.followerTrail = [];
+    this.followerPos = undefined;
+    this.followerWalkPhase = 0;
+    if (this.partyState.party().length < 2) {
+      return; // solo party — no follower to draw
+    }
+    const sheet = spriteOverrideSheet(this.followerSpriteOverride());
+    if (sheet && this.textures.exists(FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY)) {
+      this.followerFrames = spriteOverrideDirectionFrames(sheet);
+      this.follower = this.spawnOverrideActor(spawn.x, spawn.y, facing, FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY, sheet);
+      this.followerPos = { x: spawn.x, y: spawn.y };
+    }
+  }
+
+  // Trail the player at a fixed path-distance behind (EarthBound-style party follower).
+  private updateFollower(): void {
+    if (!this.follower) {
+      return;
+    }
+    const px = this.playerState.x;
+    const py = this.playerState.y;
+    const trail = this.followerTrail;
+    const last = trail[trail.length - 1];
+    if (last && Math.hypot(px - last.x, py - last.y) > 48) {
+      // Door/warp jump — snap over rather than streaking the follower across the map.
+      trail.length = 0;
+      this.followerPos = { x: px, y: py };
+      this.follower.setPosition(px, py);
+    }
+    const tail = trail[trail.length - 1];
+    if (!tail || Math.hypot(px - tail.x, py - tail.y) > 0.5) {
+      trail.push({ x: px, y: py, facing: this.playerState.facing });
+      if (trail.length > 96) {
+        trail.shift();
+      }
+    }
+    const FOLLOW_DISTANCE = 26;
+    let accumulated = 0;
+    let target = trail[0] ?? { x: px, y: py, facing: this.playerState.facing };
+    for (let i = trail.length - 1; i > 0; i -= 1) {
+      const a = trail[i];
+      const b = trail[i - 1];
+      const segment = Math.hypot(a.x - b.x, a.y - b.y);
+      if (accumulated + segment >= FOLLOW_DISTANCE) {
+        const t = (FOLLOW_DISTANCE - accumulated) / segment;
+        target = { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, facing: a.facing };
+        break;
+      }
+      accumulated += segment;
+      target = b;
+    }
+    const prev = this.followerPos ?? { x: target.x, y: target.y };
+    const moved = Math.hypot(target.x - prev.x, target.y - prev.y);
+    this.followerPos = { x: target.x, y: target.y };
+    const walking = moved > 0.2;
+    this.follower.x = target.x;
+    if (this.follower instanceof Phaser.GameObjects.Sprite) {
+      const frames = this.followerFrames[target.facing];
+      if (walking) {
+        this.followerWalkPhase += moved;
+        this.follower.setFrame(frames[Math.floor(this.followerWalkPhase / 8) % frames.length] ?? frames[0]);
+      } else {
+        this.follower.setFrame(frames[0]);
+      }
+    }
+    this.follower.y = target.y - this.spriteWalkBob(walking, this.followerFrames, target.facing, 0);
+    this.setActorSortDepth(this.follower);
   }
 
   private setActorSortDepth(actor: SortableActor): void {

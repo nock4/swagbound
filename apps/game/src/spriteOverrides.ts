@@ -25,6 +25,7 @@ export type ResolvedSpriteOverrideImage = {
 };
 
 export const PLAYER_SPRITE_OVERRIDE_SHEET_KEY = "sprite-override-player";
+export const FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY = "sprite-override-follower";
 const NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX = "sprite-override-npc-";
 const GROUP_SPRITE_OVERRIDE_SHEET_KEY_PREFIX = "sprite-override-group-";
 const ENEMY_SPRITE_OVERRIDE_IMAGE_KEY_PREFIX = "sprite-override-enemy-";

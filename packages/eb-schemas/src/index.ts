@@ -381,6 +381,8 @@ export const SpriteOverrideSchema = z.object({
 export const SpriteOverridesSchema = z.object({
   schema: z.literal("swagbound.sprite-overrides.v1"),
   player: SpriteOverrideSchema.optional(),
+  // Overworld sprite for the 2nd party member (Cloak), shown as a trailing follower.
+  follower: SpriteOverrideSchema.optional(),
   byNpcId: z.record(SpriteOverrideSchema).optional(),
   bySpriteGroup: z.record(z.string().regex(/^\d+$/), SpriteOverrideSchema).optional(),
   byEnemyId: z.record(SpriteOverrideSchema).optional(),
