@@ -51,11 +51,13 @@ member** — works cleanly: Paula's **PSI Freeze** bypasses defense (~29/cast) a
 keeps him alive while the Ant focuses him. The Ant dies in ~8 casts and both survive. Act 1 is now a
 **Bosch + Paula duo** (`ensureIntroParty` seeds both).
 
-Paula is now named **Cloak** (`content/character-overrides.json` charId 1, same mechanism as
-Ness→Bosch) — the battle status card reads "Cloak". The battle is EB-style (party = status cards,
-only the lead sprite in the scene), so there's no second-member *sprite* to skin yet; rendering Cloak
-beside Bosch would be a battle-scene feature if you want her visible. She also joins from the start of
-Act 1; a proper join scene is a `content/cutscenes.json` + flag-gate follow-up.
+Paula is now **Cloak** (`content/character-overrides.json` charId 1) and **trails Bosch in the
+overworld** like an EarthBound party member — a delayed trail of the player's path drives her sprite
+26px behind, with walk animation + door-jump snapping (`updateFollower` in chunkedWorldScene). Her
+look is the `follower` section of `content/sprite-overrides.json` (the `lsw-855` hero walk sheet) —
+swap that image to reskin her. (FYI Bosch is the green frog `lsw-2821`; Cloak is the red-cap kid.)
+Battles stay EB first-person (party = status cards, which read "Bosch" / "Cloak"). She joins from the
+start of Act 1; a proper join scene is a `content/cutscenes.json` follow-up.
 
 ## Debug hook added this run
 - **`window.__debugHeal()`** (apps/game/src/chunkedWorldScene.ts, `registerCollisionDebugGlobals`):
