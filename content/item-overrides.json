@@ -301,6 +301,41 @@
         "ailment": "poisoned"
       }
     },
+    "113": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "iq",
+        "amount": 1
+      }
+    },
+    "114": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "guts",
+        "amount": 1
+      }
+    },
+    "115": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "speed",
+        "amount": 1
+      }
+    },
+    "116": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "vitality",
+        "amount": 1
+      }
+    },
+    "117": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "luck",
+        "amount": 1
+      }
+    },
     "118": {
       "name": "Permit Packet",
       "effect": {
@@ -438,13 +473,25 @@
       }
     },
     "149": {
-      "name": "Bug Notice"
+      "name": "Bug Notice",
+      "effect": {
+        "kind": "damage",
+        "amount": 100
+      }
     },
     "150": {
-      "name": "Rust Notice"
+      "name": "Rust Notice",
+      "effect": {
+        "kind": "damage",
+        "amount": 200
+      }
     },
     "151": {
-      "name": "Rust Warrant"
+      "name": "Rust Warrant",
+      "effect": {
+        "kind": "damage",
+        "amount": 400
+      }
     },
     "152": {
       "effect": {
@@ -460,11 +507,28 @@
     "154": {
       "name": "Clean Brush"
     },
+    "155": {
+      "effect": {
+        "kind": "damage",
+        "amount": 250
+      }
+    },
+    "156": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed",
+        "remaining": 3
+      }
+    },
     "159": {
       "name": "Focus Fizz"
     },
     "160": {
-      "name": "Rally Dust"
+      "name": "Rally Dust",
+      "effect": {
+        "kind": "damage",
+        "amount": 800
+      }
     },
     "161": {
       "name": "Signal Patch",
@@ -522,10 +586,19 @@
       }
     },
     "199": {
-      "name": "Pocket Decoy"
+      "name": "Pocket Decoy",
+      "effect": {
+        "kind": "damage",
+        "amount": 250
+      }
     },
     "200": {
-      "name": "Sharp Decoy"
+      "name": "Sharp Decoy",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "poisoned",
+        "remaining": 3
+      }
     },
     "207": {
       "name": "Signal Tart",

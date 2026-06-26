@@ -77,6 +77,15 @@
     "3": {
       "ref": "target:bosch-main-room-v0:signal-pet-gate"
     },
+    "58": {
+      "pages": [
+        "\"Hotel Onett. One night re-syncs the whole party — HP, PP, anyone who fainted. Runs you $100.\"",
+        "...you crash hard. Somewhere a save chime plays.",
+        "\"Morning, champ. Everybody's topped off. Door's that way.\""
+      ],
+      "cost": 100,
+      "heal": "full"
+    },
     "21": {
       "ref": "interior:bosch-bedroom-v0"
     },

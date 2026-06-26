@@ -162,6 +162,7 @@ function dispatchWithMock(events: readonly GameEvent[]): string[] {
     heal: (scope) => log.push(`heal:${scope}`),
     save: () => log.push("save"),
     give: (char, item) => log.push(`give:${char}:${item}`),
+    money: (op, amount) => log.push(`money:${op}:${amount}`),
     isDialogueActive: () => dialogueActive
   };
 

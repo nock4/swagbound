@@ -143,17 +143,20 @@ export class UiScene extends Phaser.Scene {
       fontSize: 11,
       color: CLEAN_UI_PRIMARY
     }).setDepth(11);
-    this.badgeText = createCleanText(this, this.scale.width - 12, 10, "` or F1: debug", {
-      fontSize: 11,
-      color: CLEAN_UI_SECONDARY
-    }).setOrigin(1, 0).setDepth(11);
     this.panelGraphics = this.add.graphics().setDepth(12);
     this.panelText = createCleanText(this, 0, 0, "", {
       fontSize: DEBUG_FONT_SIZE,
       color: CLEAN_UI_PRIMARY,
       lineSpacing: 3
     }).setDepth(13);
-    this.createCopyButton();
+    // The "F1: debug" badge + Copy chip are dev tooling — hidden in production builds.
+    if (import.meta.env.DEV) {
+      this.badgeText = createCleanText(this, this.scale.width - 12, 10, "` or F1: debug", {
+        fontSize: 11,
+        color: CLEAN_UI_SECONDARY
+      }).setOrigin(1, 0).setDepth(11);
+      this.createCopyButton();
+    }
     this.menuGraphics = this.add.graphics().setDepth(14);
     this.menuCursorGraphics = this.add.graphics().setDepth(16);
   }

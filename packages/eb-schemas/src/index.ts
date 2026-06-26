@@ -381,6 +381,8 @@ export const SpriteOverrideSchema = z.object({
 export const SpriteOverridesSchema = z.object({
   schema: z.literal("swagbound.sprite-overrides.v1"),
   player: SpriteOverrideSchema.optional(),
+  // Overworld sprite for the 2nd party member (Cloak), shown as a trailing follower.
+  follower: SpriteOverrideSchema.optional(),
   byNpcId: z.record(SpriteOverrideSchema).optional(),
   bySpriteGroup: z.record(z.string().regex(/^\d+$/), SpriteOverrideSchema).optional(),
   byEnemyId: z.record(SpriteOverrideSchema).optional(),
@@ -462,6 +464,9 @@ export const ItemUseEffectSchema = z.union([
   z.object({ kind: z.literal("damage"), amount: z.number().int().positive() }),
   z.object({ kind: z.literal("drainPp"), amount: z.number().int().positive() }),
   z.object({ kind: z.literal("buffStat"), stat: z.enum(["offense", "defense", "speed", "guts"]), amount: z.number().int() }),
+  // Permanent stat growth (EB capsules): boosts a combatant stat that persists past the fight via
+  // the post-battle stat writeback. Covers all seven stats (capsules raise iq/guts/speed/vitality/luck).
+  z.object({ kind: z.literal("permStat"), stat: z.enum(["offense", "defense", "speed", "guts", "vitality", "iq", "luck"]), amount: z.number().int() }),
   z.object({ kind: z.literal("revive"), amount: z.number().int().positive() }),
   z.object({ kind: z.literal("cureStatus"), ailment: z.enum(["poisoned", "paralyzed", "asleep", "confused", "shielded", "all"]) }),
   z.object({
@@ -612,7 +617,9 @@ export const NpcInteractionSchema = z
     }).strict().optional(),
     shop: z.number().int().nonnegative().optional(),
     heal: z.union([z.literal("full"), z.literal(true)]).optional(),
-    save: z.literal(true).optional()
+    save: z.literal(true).optional(),
+    // Money charged before the interaction's heal (e.g. an inn's nightly fee).
+    cost: z.number().int().nonnegative().optional()
   })
   .strict()
   .superRefine((value, context) => {
@@ -1403,6 +1410,12 @@ export const ItemDataSchema = z.object({
   action: z.number().int().nonnegative(),
   argument: z.number().int().nonnegative(),
   equippable: z.boolean(),
+  // Stat bonuses applied while equipped (weapons → offense, armor → defense). From the EB item
+  // Argument[0]; secondary EB equip bonuses (iq/luck) are ROM-encoded and deferred.
+  equipBonuses: z.object({
+    offense: z.number().int().optional(),
+    defense: z.number().int().optional()
+  }).optional(),
   miscFlags: z.array(z.string()),
   effect: ItemUseEffectSchema.optional(),
   helpText: z.string().optional()

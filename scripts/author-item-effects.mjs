@@ -32,7 +32,16 @@ const PP = { 98: 120, 99: 480, 110: 6, 207: 120, 246: 6, 247: 240 };
 const CURE = { 111: "poisoned", 112: "poisoned", 127: "poisoned", 128: "poisoned", 129: "all", 188: "poisoned" };
 // Offensive fixed damage (ROM-RE: rockets = hits*$0078=120 each, single-target; bombs are
 // immediate operands). 146 "Multi bottle rocket" is single-target despite its name.
-const DAMAGE = { 144: 120, 145: 600, 146: 2400, 147: 90, 148: 270 };
+// Throwables (ROM-RE: LDA #imm at each item action's Code Address in EarthBound (USA).sfc):
+// 149 Insecticide $c2aa0c=100, 150 Rust promoter $c2aa6d=200, 151 Rust DX $c2aa76=400,
+// 155 Handbag strap $c2a5ec=250, 160 Bag of Dragonite $c2a99c=800, 199 Snake $c2a89d=250.
+// EB's all-target reach + enemy-type (insect/metal) effectiveness aren't modeled; goods damage
+// is single-target here (as accepted for 146). Stag beetle/Pharaoh's curse/Viper deferred
+// (status / type-gated routines not cleanly decodable to a flat damage).
+const DAMAGE = {
+  144: 120, 145: 600, 146: 2400, 147: 90, 148: 270,
+  149: 100, 150: 200, 151: 400, 155: 250, 160: 800, 199: 250
+};
 // Revive: Horn of life / Cup of Lifenoodles restore a fainted ally to FULL HP (EB writes Max HP).
 // 9999 is a sentinel — applyHeal caps it at the combatant's maxHp, i.e. a full revive.
 const REVIVE = { 130: 9999, 252: 9999 };
@@ -40,10 +49,32 @@ const REVIVE = { 130: 9999, 252: 9999 };
 // flat approximation. (Sudden guts pill #159 is Guts*2 — neither guts nor multipliers exist in
 // the buffStat kind yet, so it is intentionally left unmapped.)
 const BUFF = { 161: { stat: "defense", amount: 5 } };
+// Permanent stat-growth capsules (ROM-RE: action 249 dispatch $C2B27D selectors 4-8 each JMP to a
+// per-stat path calling the shared increment $C26A2D; item Argument = [statSelector, 1, 1, 0], with
+// arg[1]=1 = +1 permanent point). The capsule name fixes the stat. The boost persists past the fight
+// via the post-battle stat writeback. Rock candy (101, selector 3 = random stat, unresolved) deferred.
+const PERMSTAT = {
+  113: { stat: "iq", amount: 1 },
+  114: { stat: "guts", amount: 1 },
+  115: { stat: "speed", amount: 1 },
+  116: { stat: "vitality", amount: 1 },
+  117: { stat: "luck", amount: 1 }
+};
 // Immobilize items (EB status group $1f=4, "can't act this turn") -> mapped to paralyzed.
 // remaining is an estimated duration (the exact EB wear-off wasn't decoded). 142 also deals
 // damage in EB; only the signature immobilize is modeled.
-const INFLICT = { 142: { ailment: "paralyzed", remaining: 3 }, 152: { ailment: "paralyzed", remaining: 3 } };
+// 156 Pharaoh's curse / 200 Viper: SWAGBOUND-AUTHORED (not ROM-faithful). Their EB effect is a
+// battle-action-VM script (item routine -> $C1DC1C -> $C186B1 -> 24-bit VM scripts $C4550E/$D59589
+// via per-item descriptor sub-scripts $6B18/$766E); decoding the exact ailment needs RE'ing the whole
+// battle-action VM, disproportionate for these obscure non-Act-1 items. Flavor-derived: Viper "is
+// biting" (venom) -> poisoned; Pharaoh's curse "something unknown burst from the box" (a curse) ->
+// paralyzed. (Stag beetle 153 + Toothbrush 154 left unmapped: effect KIND itself is ambiguous / gag.)
+const INFLICT = {
+  142: { ailment: "paralyzed", remaining: 3 },
+  152: { ailment: "paralyzed", remaining: 3 },
+  156: { ailment: "paralyzed", remaining: 3 },
+  200: { ailment: "poisoned", remaining: 3 }
+};
 // Swagbound names for the consumables that had no existing override (civic / signal-tech theme,
 // matching the established rename scheme). Red Tape = the bureaucratic immobilizer.
 const NAMES = {
@@ -62,12 +93,13 @@ for (const [id, ailment] of Object.entries(CURE)) entry(id).effect = { kind: "cu
 for (const [id, amount] of Object.entries(DAMAGE)) entry(id).effect = { kind: "damage", amount };
 for (const [id, amount] of Object.entries(REVIVE)) entry(id).effect = { kind: "revive", amount };
 for (const [id, b] of Object.entries(BUFF)) entry(id).effect = { kind: "buffStat", stat: b.stat, amount: b.amount };
+for (const [id, b] of Object.entries(PERMSTAT)) entry(id).effect = { kind: "permStat", stat: b.stat, amount: b.amount };
 for (const [id, inf] of Object.entries(INFLICT)) {
   entry(id).effect = { kind: "inflictStatus", ailment: inf.ailment, ...(inf.remaining ? { remaining: inf.remaining } : {}) };
 }
 for (const [id, name] of Object.entries(NAMES)) entry(id).name = name;
 
 writeFileSync(PATH, `${JSON.stringify(data, null, 2)}\n`);
-const counts = [HEAL, PP, CURE, DAMAGE, REVIVE, BUFF, INFLICT].map((m) => Object.keys(m).length);
-console.log(`Authored: ${counts[0]} heal, ${counts[1]} pp, ${counts[2]} cure, ${counts[3]} damage, ${counts[4]} revive, ${counts[5]} buff, ${counts[6]} inflict`);
+const counts = [HEAL, PP, CURE, DAMAGE, REVIVE, BUFF, PERMSTAT, INFLICT].map((m) => Object.keys(m).length);
+console.log(`Authored: ${counts[0]} heal, ${counts[1]} pp, ${counts[2]} cure, ${counts[3]} damage, ${counts[4]} revive, ${counts[5]} buff, ${counts[6]} permStat, ${counts[7]} inflict`);
 console.log(`Total items with effects: ${Object.values(data.byItemId).filter((e) => e.effect).length}`);

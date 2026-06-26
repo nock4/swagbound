@@ -87,6 +87,7 @@ export type ItemUseEffect =
   | { kind: "damage"; amount: number }
   | { kind: "drainPp"; amount: number }
   | { kind: "buffStat"; stat: "offense" | "defense" | "speed" | "guts"; amount: number }
+  | { kind: "permStat"; stat: "offense" | "defense" | "speed" | "guts" | "vitality" | "iq" | "luck"; amount: number }
   | { kind: "revive"; amount: number }
   | { kind: "cureStatus"; ailment: StatusAilment | "all" }
   | { kind: "inflictStatus"; ailment: StatusAilment; remaining?: number; magnitude?: number };
@@ -726,6 +727,8 @@ function normalizeGeneratedItemEffect(effect: ItemData["effect"]): ItemUseEffect
       return effect.amount > 0 ? { kind: "drainPp", amount: stat(effect.amount) } : undefined;
     case "buffStat":
       return effect.amount !== 0 ? { kind: "buffStat", stat: effect.stat, amount: Math.trunc(effect.amount) } : undefined;
+    case "permStat":
+      return effect.amount !== 0 ? { kind: "permStat", stat: effect.stat, amount: Math.trunc(effect.amount) } : undefined;
     case "revive":
       return effect.amount > 0 ? { kind: "revive", amount: stat(effect.amount) } : undefined;
     case "cureStatus":
@@ -813,6 +816,7 @@ export function applyUseEffectToVitals(vitals: PartyVitals, effect: ItemUseEffec
     case "damage":
     case "drainPp":
     case "buffStat":
+    case "permStat":
     case "revive":
     case "cureStatus":
     case "inflictStatus":

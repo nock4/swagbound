@@ -15,8 +15,9 @@ export type ShopEvent = { kind: "shop"; storeId: number };
 export type HealEvent = { kind: "heal"; scope: "full" };
 export type SaveEvent = { kind: "save" };
 export type GiveEvent = { kind: "give"; char: number; item: number };
+export type MoneyEvent = { kind: "money"; op: "give" | "take"; amount: number };
 
-export type GameEvent = DialogueEvent | SetFlagEvent | ShopEvent | HealEvent | SaveEvent | GiveEvent;
+export type GameEvent = DialogueEvent | SetFlagEvent | ShopEvent | HealEvent | SaveEvent | GiveEvent | MoneyEvent;
 
 export type InteractionEventDispatcher = {
   startDialogue(event: DialogueEvent): void;
@@ -26,6 +27,7 @@ export type InteractionEventDispatcher = {
   heal(scope: HealEvent["scope"]): void;
   save(): void;
   give(char: number, item: number): void;
+  money(op: "give" | "take", amount: number): void;
   isDialogueActive(): boolean;
 };
 
@@ -65,6 +67,9 @@ export function interactionEntryEvents(
   }
   if (entry.shop !== undefined) {
     events.push({ kind: "shop", storeId: entry.shop });
+  }
+  if (entry.cost !== undefined && entry.cost > 0) {
+    events.push({ kind: "money", op: "take", amount: entry.cost });
   }
   if (entry.heal === true || entry.heal === "full") {
     events.push({ kind: "heal", scope: "full" });
@@ -118,6 +123,9 @@ export function dispatchInteractionEvents(events: readonly GameEvent[], dispatch
         break;
       case "give":
         dispatcher.give(event.char, event.item);
+        break;
+      case "money":
+        dispatcher.money(event.op, event.amount);
         break;
     }
   }

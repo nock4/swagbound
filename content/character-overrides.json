@@ -1,6 +1,7 @@
 {
   "schema": "swagbound.character-overrides.v1",
   "byCharId": {
-    "0": { "name": "Bosch", "startingItems": [177, 103, 110] }
+    "0": { "name": "Bosch", "startingItems": [177, 103, 110] },
+    "1": { "name": "Cloak" }
   }
 }
