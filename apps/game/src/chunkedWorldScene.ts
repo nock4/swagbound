@@ -634,14 +634,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
     registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.handleConfirm());
     registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.handleCancel());
     this.input.keyboard?.on("keydown-P", () => this.handleSaveKey());
+    // Debug toggles (panel + collision overlay) are dev-only — not wired in production builds.
     // F1 toggles the debug panel; backtick (`) is a Mac-friendly alias since the
     // top-row F-keys default to hardware controls (brightness) on macOS.
-    const toggleDebugPanel = () => {
-      this.debugPanelVisible = !this.debugPanelVisible;
-    };
-    this.input.keyboard?.on("keydown-F1", toggleDebugPanel);
-    this.input.keyboard?.on("keydown-BACKTICK", toggleDebugPanel);
-    this.input.keyboard?.on("keydown-F2", () => this.setCollisionOverlayEnabled(!this.collisionOverlayEnabled));
+    if (import.meta.env.DEV) {
+      const toggleDebugPanel = () => {
+        this.debugPanelVisible = !this.debugPanelVisible;
+      };
+      this.input.keyboard?.on("keydown-F1", toggleDebugPanel);
+      this.input.keyboard?.on("keydown-BACKTICK", toggleDebugPanel);
+      this.input.keyboard?.on("keydown-F2", () => this.setCollisionOverlayEnabled(!this.collisionOverlayEnabled));
+    }
 
     this.load.on("filecomplete", (key: string) => {
       this.loadingTextureKeys.delete(key);
