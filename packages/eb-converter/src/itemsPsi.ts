@@ -43,6 +43,7 @@ type ItemConfigEntry = {
   id: number;
   fields: Record<string, string>;
   miscFlags: string[];
+  argument: number[];
 };
 
 type ItemUseEffectData = NonNullable<ItemData["effect"]>;
@@ -68,6 +69,7 @@ export async function buildItemPsiData(options: ItemPsiBuildOptions): Promise<{
       const type = requiredInteger(entry.fields.Type, `item_configuration_table.yml Type for item ${entry.id}`);
       const action = requiredInteger(entry.fields.Action, `item_configuration_table.yml Action for item ${entry.id}`);
       const effect = itemUseEffectForEntry(entry, action, battleActions, condimentEffects);
+      const equipBonuses = equipBonusesForType(type, entry.argument);
       return {
         id: entry.id,
         name: entry.fields.Name ?? neutralName("item", entry.id),
@@ -76,6 +78,7 @@ export async function buildItemPsiData(options: ItemPsiBuildOptions): Promise<{
         action,
         argument: optionalInteger(entry.fields.Argument),
         equippable: isEquippableType(type),
+        ...(equipBonuses ? { equipBonuses } : {}),
         miscFlags: entry.miscFlags,
         ...(effect ? { effect } : {})
       };
@@ -221,10 +224,11 @@ function parsePointerInteger(value: string | undefined): number {
   return labelMatch ? Number.parseInt(labelMatch[1], 16) : Number.NaN;
 }
 
-function parseItemConfiguration(source: string): Map<number, ItemConfigEntry> {
+export function parseItemConfiguration(source: string): Map<number, ItemConfigEntry> {
   const entries = new Map<number, ItemConfigEntry>();
   let current: ItemConfigEntry | undefined;
   let collectingMiscFlags = false;
+  let collectingArgument = false;
 
   for (const line of source.split(/\r?\n/)) {
     const blockMatch = /^(0x[0-9a-fA-F]+|\$[0-9a-fA-F]+|\d+):\s*$/.exec(line);
@@ -232,10 +236,12 @@ function parseItemConfiguration(source: string): Map<number, ItemConfigEntry> {
       current = {
         id: parseYamlInteger(blockMatch[1]),
         fields: {},
-        miscFlags: []
+        miscFlags: [],
+        argument: []
       };
       entries.set(current.id, current);
       collectingMiscFlags = false;
+      collectingArgument = false;
       continue;
     }
     if (!current) {
@@ -247,12 +253,17 @@ function parseItemConfiguration(source: string): Map<number, ItemConfigEntry> {
       const key = fieldMatch[1].trim();
       current.fields[key] = stripQuotes(fieldMatch[2].trim());
       collectingMiscFlags = key === "Misc Flags";
+      collectingArgument = key === "Argument";
       continue;
     }
 
     const listMatch = /^ {2}-\s*(.*)$/.exec(line);
-    if (collectingMiscFlags && listMatch) {
-      current.miscFlags.push(stripQuotes(listMatch[1].trim()));
+    if (listMatch) {
+      if (collectingArgument) {
+        current.argument.push(parseYamlInteger(listMatch[1].trim()));
+      } else if (collectingMiscFlags) {
+        current.miscFlags.push(stripQuotes(listMatch[1].trim()));
+      }
     }
   }
 
@@ -273,6 +284,20 @@ function discoverLearnColumns(rows: ReturnType<typeof parseIntKeyedYaml>): strin
 
 function isEquippableType(type: number): boolean {
   return type >= 0x10 && type <= 0x1f;
+}
+
+// EB equip stat bonus from the item Argument: weapons (Type 0x10-0x13) put offense in Argument[0]
+// (Cracked bat = 4, Legendary bat = 110); armor (0x14-0x1f) puts defense in Argument[0] (Coin of
+// defense = 40). Secondary EB bonuses (iq/luck in later Argument bytes) are ROM-encoded — deferred.
+export function equipBonusesForType(type: number, argument: unknown): { offense?: number; defense?: number } | undefined {
+  if (!isEquippableType(type) || !Array.isArray(argument)) {
+    return undefined;
+  }
+  const primary = Number(argument[0]);
+  if (!Number.isInteger(primary) || primary <= 0) {
+    return undefined;
+  }
+  return type <= 0x13 ? { offense: primary } : { defense: primary };
 }
 
 function usableOutsideBattle(value: string | undefined): boolean {

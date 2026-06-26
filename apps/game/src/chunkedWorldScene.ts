@@ -1290,9 +1290,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.surfaceAtHook = (x: number, y: number) => surfaceAtWorldPixel(this.surfaceRows, { x, y }, this.collisionGrid());
     globals.__solidAt = this.solidAtHook;
     globals.__surfaceAt = this.surfaceAtHook;
-    // Debug-only: full-heal the party (stands in for a hotel/inn while one isn't wired up) so the
-    // autonomous-play harness can sustain a multi-boss run. Nothing in normal play calls it.
+    // Debug-only: full-heal the party — a between-fight convenience for the autonomous-play harness
+    // (the player-facing rest is the in-world hotel at NPC 58). Nothing in normal play calls it.
     globals.__debugHeal = () => this.healParty("full");
+    // Debug-only: equip an item on a party member and read battle-resolved stats, for verifying
+    // equipped-gear bonuses (weapons → offense, armor → defense). Nothing in normal play calls these.
+    globals.__equip = (charId: number, itemId: number) => {
+      const item = this.itemById(itemId);
+      return item ? this.partyState.equip(charId, item) : { ok: false };
+    };
+    globals.__battleStats = (charId: number) => {
+      const member = this.battlePartyMembers()?.find((entry) => entry.id === charId);
+      return member ? { offense: member.stats.offense, defense: member.stats.defense } : undefined;
+    };
   }
 
   private unregisterCollisionDebugGlobals(): void {
@@ -1304,6 +1314,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       delete globals.__surfaceAt;
     }
     delete globals.__debugHeal;
+    delete globals.__equip;
+    delete globals.__battleStats;
     this.solidAtHook = undefined;
     this.surfaceAtHook = undefined;
   }
@@ -4058,7 +4070,27 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const all = this.partyState.applyToPartyMembers(this.data_.characters.characters.map(buildPartyMember));
     // Battle only the active party (Act 1 = Bosch + Paula); never the full roster.
     const activeIds = new Set(this.partyState.party());
-    return activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
+    const selected = activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
+    // Fold equipped-gear bonuses into battle stats (weapons → offense, armor → defense).
+    return selected.map((member) => {
+      const bonus = this.equipStatBonuses(member.id);
+      return bonus.offense || bonus.defense
+        ? { ...member, stats: { ...member.stats, offense: member.stats.offense + bonus.offense, defense: member.stats.defense + bonus.defense } }
+        : member;
+    });
+  }
+
+  private equipStatBonuses(charId: number): { offense: number; defense: number } {
+    let offense = 0;
+    let defense = 0;
+    for (const itemId of Object.values(this.partyState.equipped(charId))) {
+      const bonuses = this.itemById(itemId)?.equipBonuses;
+      if (bonuses) {
+        offense += bonuses.offense ?? 0;
+        defense += bonuses.defense ?? 0;
+      }
+    }
+    return { offense, defense };
   }
 
   private battleGroupExists(group: number): boolean {

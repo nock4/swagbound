@@ -1407,6 +1407,12 @@ export const ItemDataSchema = z.object({
   action: z.number().int().nonnegative(),
   argument: z.number().int().nonnegative(),
   equippable: z.boolean(),
+  // Stat bonuses applied while equipped (weapons → offense, armor → defense). From the EB item
+  // Argument[0]; secondary EB equip bonuses (iq/luck) are ROM-encoded and deferred.
+  equipBonuses: z.object({
+    offense: z.number().int().optional(),
+    defense: z.number().int().optional()
+  }).optional(),
   miscFlags: z.array(z.string()),
   effect: ItemUseEffectSchema.optional(),
   helpText: z.string().optional()
