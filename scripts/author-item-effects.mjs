@@ -32,7 +32,16 @@ const PP = { 98: 120, 99: 480, 110: 6, 207: 120, 246: 6, 247: 240 };
 const CURE = { 111: "poisoned", 112: "poisoned", 127: "poisoned", 128: "poisoned", 129: "all", 188: "poisoned" };
 // Offensive fixed damage (ROM-RE: rockets = hits*$0078=120 each, single-target; bombs are
 // immediate operands). 146 "Multi bottle rocket" is single-target despite its name.
-const DAMAGE = { 144: 120, 145: 600, 146: 2400, 147: 90, 148: 270 };
+// Throwables (ROM-RE: LDA #imm at each item action's Code Address in EarthBound (USA).sfc):
+// 149 Insecticide $c2aa0c=100, 150 Rust promoter $c2aa6d=200, 151 Rust DX $c2aa76=400,
+// 155 Handbag strap $c2a5ec=250, 160 Bag of Dragonite $c2a99c=800, 199 Snake $c2a89d=250.
+// EB's all-target reach + enemy-type (insect/metal) effectiveness aren't modeled; goods damage
+// is single-target here (as accepted for 146). Stag beetle/Pharaoh's curse/Viper deferred
+// (status / type-gated routines not cleanly decodable to a flat damage).
+const DAMAGE = {
+  144: 120, 145: 600, 146: 2400, 147: 90, 148: 270,
+  149: 100, 150: 200, 151: 400, 155: 250, 160: 800, 199: 250
+};
 // Revive: Horn of life / Cup of Lifenoodles restore a fainted ally to FULL HP (EB writes Max HP).
 // 9999 is a sentinel — applyHeal caps it at the combatant's maxHp, i.e. a full revive.
 const REVIVE = { 130: 9999, 252: 9999 };
