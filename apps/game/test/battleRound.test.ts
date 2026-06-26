@@ -456,6 +456,35 @@ describe("resolveRoundStep", () => {
     expect(result.state.party[1].hp.target).toBe(48);
   });
 
+  it("a permStat capsule raises the combatant's BASE stat (so the post-battle writeback persists it)", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([partyA, partyB])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      inventory: [113]
+    });
+    const beforeGuts = battle.party[0].stats.guts;
+    const capsule: ItemData = {
+      ...syntheticItem(113, 249, 1),
+      effect: { kind: "permStat", stat: "guts", amount: 1 }
+    };
+
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      { partySlot: 0, command: "GOODS", itemId: 113, target: { side: "party", index: 0 } },
+      () => 0.5,
+      { items: [capsule] }
+    );
+
+    expect(result.skipped).toBe(false);
+    // Written to combatant.stats (the base) — battleMemberFromCombatant captures stats, so it persists.
+    expect(result.state.party[0].stats.guts).toBe(beforeGuts + 1);
+    expect(result.state.party[0].inventory).toEqual([]);
+    expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("guts") });
+  });
+
   it("dispatches DEFEND, PRAY, MIRROR, RUN, enemy steps, and dead skips", () => {
     const defendBattle = createBattleState(opponentA, { characters: characters([partyA]) });
     const guarding = applyRoundStartGuardStance(defendBattle, [{ partySlot: 0, command: "DEFEND" }]);

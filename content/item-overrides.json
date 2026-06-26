@@ -301,6 +301,41 @@
         "ailment": "poisoned"
       }
     },
+    "113": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "iq",
+        "amount": 1
+      }
+    },
+    "114": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "guts",
+        "amount": 1
+      }
+    },
+    "115": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "speed",
+        "amount": 1
+      }
+    },
+    "116": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "vitality",
+        "amount": 1
+      }
+    },
+    "117": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "luck",
+        "amount": 1
+      }
+    },
     "118": {
       "name": "Permit Packet",
       "effect": {

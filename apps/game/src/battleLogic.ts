@@ -1809,6 +1809,12 @@ function applyItemEffectToCombatant(combatant: Combatant, effect: ItemUseEffect)
     const next = Math.max(0, combatant[effect.stat] + effect.amount);
     return { combatant: { ...combatant, [effect.stat]: next }, amount: effect.amount };
   }
+  if (effect.kind === "permStat") {
+    // Permanent growth (capsules): raise the BASE stat so applyBattleResult's writeback persists it
+    // past the fight (and it re-derives into the effective combatant stats next battle).
+    const next = Math.max(0, combatant.stats[effect.stat] + effect.amount);
+    return { combatant: { ...combatant, stats: { ...combatant.stats, [effect.stat]: next } }, amount: effect.amount };
+  }
   if (effect.kind === "revive") {
     if (isCombatantAlive(combatant)) {
       return { combatant, amount: 0 };

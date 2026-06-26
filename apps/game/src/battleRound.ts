@@ -916,7 +916,7 @@ function narrationDetailsForResolution(
     const amount = "amount" in resolution ? resolution.amount : 0;
     const targetName = target ? combatantName(previousState, target) : undefined;
     const effect = context.psiEffect;
-    if (effect && (effect.kind === "cureStatus" || effect.kind === "inflictStatus" || effect.kind === "buffStat" || effect.kind === "revive" || effect.kind === "drainPp")) {
+    if (effect && (effect.kind === "cureStatus" || effect.kind === "inflictStatus" || effect.kind === "buffStat" || effect.kind === "permStat" || effect.kind === "revive" || effect.kind === "drainPp")) {
       return {
         kind: "psi",
         attackerName,
@@ -947,7 +947,7 @@ function narrationDetailsForResolution(
     const targetName = target ? combatantName(previousState, target) : undefined;
     const effect = context.item ? decodeItemUseEffect(context.item) : undefined;
     const amount = "amount" in resolution ? resolution.amount : 0;
-    if (effect && (effect.kind === "cureStatus" || effect.kind === "inflictStatus" || effect.kind === "buffStat" || effect.kind === "revive" || effect.kind === "drainPp")) {
+    if (effect && (effect.kind === "cureStatus" || effect.kind === "inflictStatus" || effect.kind === "buffStat" || effect.kind === "permStat" || effect.kind === "revive" || effect.kind === "drainPp")) {
       return {
         kind: "item",
         attackerName,
@@ -977,7 +977,7 @@ function narrationDetailsForResolution(
 
 function itemEffectMessage(
   name: string,
-  effect: Extract<ItemUseEffect, { kind: "cureStatus" | "inflictStatus" | "buffStat" | "revive" | "drainPp" }>
+  effect: Extract<ItemUseEffect, { kind: "cureStatus" | "inflictStatus" | "buffStat" | "permStat" | "revive" | "drainPp" }>
 ): string {
   if (effect.kind === "drainPp") {
     return `${name} lost some PP!`;
@@ -987,6 +987,9 @@ function itemEffectMessage(
   }
   if (effect.kind === "buffStat") {
     return `${name}'s ${effect.stat} went ${effect.amount < 0 ? "down" : "up"}!`;
+  }
+  if (effect.kind === "permStat") {
+    return `${name}'s ${effect.stat} rose for good!`;
   }
   if (effect.kind === "cureStatus") {
     return effect.ailment === "all"
