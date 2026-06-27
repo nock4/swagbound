@@ -417,6 +417,7 @@ export class BattleScene extends Phaser.Scene {
   private menuCursorGraphics?: Phaser.GameObjects.Graphics;
   private menuTexts: Partial<Record<Exclude<BattleMenuTextRole, "command">, Phaser.GameObjects.Text>> = {};
   private commandGridTexts: Phaser.GameObjects.Text[] = [];
+  private submenuRowTexts: Phaser.GameObjects.Text[] = [];
   private statusCardTexts: BattleStatusCardTextSet[] = [];
   private ppMeters = new Map<number, RollingMeterState>();
   private transitionGraphics?: Phaser.GameObjects.Graphics;
@@ -1883,6 +1884,10 @@ export class BattleScene extends Phaser.Scene {
       text.destroy();
     }
     this.commandGridTexts = [];
+    for (const text of this.submenuRowTexts) {
+      text.destroy();
+    }
+    this.submenuRowTexts = [];
     for (const textSet of this.statusCardTexts) {
       textSet.name.destroy();
       textSet.hpLabel.destroy();
@@ -1967,7 +1972,7 @@ export class BattleScene extends Phaser.Scene {
     const textReady =
       (!actorNameRect || Boolean(this.menuTexts.actorName)) &&
       (view.commandLines.length === 0 || this.commandGridTexts.length === view.commandLines.length) &&
-      (view.submenuLines.length === 0 || Boolean(this.menuTexts.submenu)) &&
+      (view.submenuLines.length === 0 || this.submenuRowTexts.length === layout.submenu?.visibleCount) &&
       (view.descriptionLines.length === 0 || Boolean(this.menuTexts.description)) &&
       (view.executionMessageLines.length === 0 || Boolean(this.menuTexts.execution)) &&
       this.statusCardTexts.length === statusCards.length;
@@ -2014,12 +2019,14 @@ export class BattleScene extends Phaser.Scene {
     if (layout.submenu) {
       const textRect = this.standardMenuListTextRect(layout.submenu);
       drawCleanPanel(graphics, layout.submenu, BATTLE_PANEL_BORDER);
-      this.menuTexts.submenu = createCleanText(this, textRect.x, textRect.y, "", {
-        fontSize: BATTLE_FONT_SIZE,
-        color: CLEAN_UI_PRIMARY,
-        lineSpacing: BATTLE_LINE_SPACING,
-        fixedWidth: textRect.width
-      }).setDepth(25);
+      this.submenuRowTexts = Array.from({ length: layout.submenu.visibleCount }, (_, row) =>
+        createCleanText(this, textRect.x, textRect.y + row * BATTLE_LINE_HEIGHT, "", {
+          fontSize: BATTLE_FONT_SIZE,
+          color: CLEAN_UI_PRIMARY,
+          fixedWidth: textRect.width,
+          fixedHeight: BATTLE_LINE_HEIGHT
+        }).setDepth(25)
+      );
     }
 
     if (layout.description) {
@@ -2357,7 +2364,7 @@ export class BattleScene extends Phaser.Scene {
     const layout = this.layoutStatusWindows(view);
     this.menuTexts.actorName?.setText(view.actorName ?? "");
     this.updateCommandGridTexts(view, layout);
-    this.menuTexts.submenu?.setText(this.listWindowText(view.submenuLines, layout.submenu));
+    this.updateSubmenuRowTexts(view, layout);
     this.menuTexts.description?.setText(
       this.descriptionWindowText(view.descriptionLines, layout.description)
     );
@@ -2446,18 +2453,38 @@ export class BattleScene extends Phaser.Scene {
     return actor?.name ?? "";
   }
 
-  private listWindowText(
+  private listWindowRows(
     lines: string[],
     rect: BattleMenuListRect | undefined
-  ): string {
+  ): string[] {
     if (!rect) {
-      return "";
+      return [];
     }
     const textWidth = this.standardMenuListTextRect(rect).width;
     return lines
       .slice(rect.visibleStart, rect.visibleStart + rect.visibleCount)
-      .map((line) => this.fitMeasuredText(line, textWidth))
-      .join("\n");
+      .map((line) => this.fitMeasuredText(line, textWidth));
+  }
+
+  private updateSubmenuRowTexts(view: BattleUiView, layout: BattleStatusLayout): void {
+    if (!layout.submenu) {
+      for (const text of this.submenuRowTexts) {
+        text.setVisible(false);
+      }
+      return;
+    }
+    const rows = this.listWindowRows(view.submenuLines, layout.submenu);
+    const selectedRow = this.selectedSubmenuRow(layout.submenu);
+    this.submenuRowTexts.forEach((text, index) => {
+      const row = rows[index];
+      const selected = selectedRow === index;
+      text.setVisible(row !== undefined);
+      text.setText(row ?? "");
+      text.setColor(selected ? CLEAN_UI_SELECTION_TEXT : CLEAN_UI_PRIMARY);
+      text.setDepth(selected ? 32 : 25);
+      text.setFontStyle(selected ? "500" : "400");
+      text.setAlpha(1);
+    });
   }
 
   private descriptionWindowText(lines: string[], rect: CanvasRect | undefined): string {
@@ -3002,9 +3029,9 @@ export class BattleScene extends Phaser.Scene {
         width: Math.max(1, layout.submenu.width - BATTLE_COMMAND_TEXT_PADDING_X * 2),
         height: BATTLE_LINE_HEIGHT
       };
-      drawCleanSelection(graphics, selectionRect);
+      drawCleanSelection(graphics, selectionRect, true);
       if (showCaret) {
-        drawCleanCaret(graphics, selectionRect.x + 3, selectionRect.y, selectionRect.height);
+        drawCleanCaret(graphics, selectionRect.x + 3, selectionRect.y, selectionRect.height, CLEAN_UI_SELECTION_CARET);
       }
     }
 
