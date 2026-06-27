@@ -5,9 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CoilSnake First Scene</title>
     <link rel="icon" href="data:," />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" />
+    <!-- Self-hosted menu/dialogue typeface (Pixelify Sans variable font, weights 400-700).
+         Bundled at /fonts/pixelify-sans.woff2 so the UI font works fully offline; the
+         cleanUi.ts fallback stack still covers the rare case the file fails to load. -->
+    <link
+      rel="preload"
+      href="/fonts/pixelify-sans.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <style>
+      @font-face {
+        font-family: "Pixelify Sans";
+        font-style: normal;
+        font-weight: 400 700;
+        font-display: swap;
+        src: url("/fonts/pixelify-sans.woff2") format("woff2");
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
