@@ -143,56 +143,290 @@
       "heal": "full",
       "save": true
     },
-    "8": { "shop": 2 },
-    "9": { "shop": 1 },
-    "40": { "shop": 5 },
-    "291": { "shop": 6 },
-    "292": { "shop": 7 },
-    "295": { "shop": 9 },
-    "296": { "shop": 8 },
-    "311": { "shop": 11 },
-    "316": { "shop": 14 },
-    "318": { "shop": 15 },
-    "338": { "shop": 63 },
-    "403": { "shop": 16 },
+    "8": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 2
+    },
+    "9": {
+      "pages": [
+        "Hi, come in, come in!",
+        "What can I do for you today?"
+      ],
+      "shop": 1
+    },
+    "40": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 5
+    },
+    "291": {
+      "pages": [
+        "Hello, may I take your order?\n(smile, smile)"
+      ],
+      "shop": 6
+    },
+    "292": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 7
+    },
+    "295": {
+      "pages": [
+        "Hi!",
+        "Can I help you?"
+      ],
+      "shop": 9
+    },
+    "296": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 8
+    },
+    "311": {
+      "pages": [
+        "Hey mon! You got to expand your mind an' use this stuff creatively.",
+        "C'mon, buy some of my junk!"
+      ],
+      "shop": 11
+    },
+    "316": {
+      "pages": [
+        "I like to sell my goodies on the street.",
+        "Sure, flies land on them, but in my opinion, it makes them taste even better!"
+      ],
+      "shop": 14
+    },
+    "318": {
+      "pages": [
+        "Would you like some bananas?"
+      ],
+      "shop": 15
+    },
+    "338": {
+      "pages": [
+        "Hello! Would you like some seasonings to add to your foods at meal time?",
+        "They are really quite miraculous!"
+      ],
+      "shop": 63
+    },
+    "403": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 16
+    },
     "404": {
       "ref": "interior:corner-shop-v0",
       "shop": 1
     },
-    "504": { "shop": 17 },
-    "505": { "shop": 18 },
-    "509": { "shop": 20 },
-    "536": { "shop": 19 },
-    "606": { "shop": 22 },
-    "708": { "shop": 56 },
-    "713": { "shop": 23 },
-    "715": { "shop": 57 },
-    "747": { "shop": 24 },
+    "504": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 17
+    },
+    "505": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 18
+    },
+    "509": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 20
+    },
+    "536": {
+      "pages": [
+        "Sssshhh!\nDon't talk too loud!",
+        "What do you want?"
+      ],
+      "shop": 19
+    },
+    "606": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 22
+    },
+    "708": {
+      "pages": [
+        "You must have a long, tough road ahead of you, do you not?",
+        "No, there is no need to explain. I already know... you must be hungry."
+      ],
+      "shop": 56
+    },
+    "713": {
+      "pages": [
+        "Hi Hi Hi.\nYou come\nbuying?",
+        "You can sell,\ntoo."
+      ],
+      "shop": 23
+    },
+    "715": {
+      "pages": [
+        "Hi Hi Hi.\nYou come\nbuying?",
+        "You can sell,\ntoo."
+      ],
+      "shop": 57
+    },
+    "747": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 24
+    },
     "749": {
       "ref": "interior:burger-shop-v0",
       "shop": 4
     },
-    "769": { "shop": 25 },
-    "853": { "shop": 26 },
-    "922": { "shop": 27 },
-    "923": { "shop": 28 },
-    "926": { "shop": 30 },
-    "932": { "shop": 29 },
-    "936": { "shop": 34 },
-    "959": { "shop": 35 },
-    "1008": { "shop": 39 },
-    "1011": { "shop": 38 },
-    "1025": { "shop": 40 },
-    "1098": { "shop": 61 },
-    "1123": { "shop": 41 },
-    "1125": { "shop": 45 },
-    "1139": { "shop": 43 },
-    "1140": { "shop": 44 },
-    "1146": { "shop": 21 },
-    "1156": { "shop": 63 },
-    "1157": { "shop": 62 },
-    "1312": { "shop": 36 },
-    "1374": { "shop": 60 }
+    "769": {
+      "pages": [
+        "Sssshhh!\nDon't talk too loud!",
+        "What do you want?"
+      ],
+      "shop": 25
+    },
+    "853": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 26
+    },
+    "922": {
+      "pages": [
+        "Hi!",
+        "Can I help you?"
+      ],
+      "shop": 27
+    },
+    "923": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 28
+    },
+    "926": {
+      "pages": [
+        "Hello there!",
+        "How would you like to buy some seasonings"
+      ],
+      "shop": 30
+    },
+    "932": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 29
+    },
+    "936": {
+      "pages": [
+        "Sssshhh!\nDon't talk too loud!",
+        "What do you want?"
+      ],
+      "shop": 34
+    },
+    "959": {
+      "pages": [
+        "C'mon in!\nWe've got the goods, G!"
+      ],
+      "shop": 35
+    },
+    "1008": {
+      "pages": [
+        "If ye be headin' to Scaraba, ye ought to shop here.",
+        "Things're expensive down there..."
+      ],
+      "shop": 39
+    },
+    "1011": {
+      "pages": [
+        "Hi! Welcome to my store.",
+        "What do you need?"
+      ],
+      "shop": 38
+    },
+    "1025": {
+      "pages": [
+        "So, where's your mom and dad?",
+        "You mean you kids came in here all by yourselves...?"
+      ],
+      "shop": 40
+    },
+    "1098": {
+      "pages": [
+        "We serve water, rice gruel and those sorts of things."
+      ],
+      "shop": 61
+    },
+    "1123": {
+      "pages": [
+        "Welcome, welcome! Ach, the heat! Is your body okay?",
+        "Can I interest you in some of my merchandise?"
+      ],
+      "shop": 41
+    },
+    "1125": {
+      "pages": [
+        "Sssshhh!\nDon't talk too loud!",
+        "What do you want?"
+      ],
+      "shop": 45
+    },
+    "1139": {
+      "pages": [
+        "Hissss, I'm Red Snake... come on in!",
+        "Kissss of Fire! Armpit hair fertilizer!\nYesssssss!"
+      ],
+      "shop": 43
+    },
+    "1140": {
+      "pages": [
+        "If you've already got what you need, great!",
+        "But if you don't, well, that would be a real shame."
+      ],
+      "shop": 44
+    },
+    "1146": {
+      "pages": [
+        "I sell water to those who are thirsty."
+      ],
+      "shop": 21
+    },
+    "1156": {
+      "pages": [
+        "Hello! Would you like some seasonings to add to your foods at meal time?",
+        "They are really quite miraculous!"
+      ],
+      "shop": 63
+    },
+    "1157": {
+      "pages": [
+        "Hello there! Welcome to my humble shop!",
+        "How about some of our famous Scaraba delicacies?"
+      ],
+      "shop": 62
+    },
+    "1312": {
+      "pages": [
+        "Hi! This shop specializes in puddings and pendants!",
+        "You'd like to buy some, wouldn't you?"
+      ],
+      "shop": 36
+    },
+    "1374": {
+      "pages": [
+        "Hi, how are you doing? From the look of things,",
+        "I would say, not so good."
+      ],
+      "shop": 60
+    }
   },
   "byTextPointer": {
     "data_15.l_0xc5eb0b": {

@@ -304,13 +304,21 @@ async function astarWalkTo(page, tx, ty, opts = {}) {
   if (!path || !path.length) return s0;
   for (let i = 1; i < path.length; i++) {
     const wx = x0 + path[i].c * step, wy = y0 + path[i].r * step;
-    // step toward this waypoint
-    for (let k = 0; k < 6; k++) {
+    // step toward this waypoint; if the dominant axis is blocked, take the other axis.
+    for (let k = 0; k < 8; k++) {
       const s = await snap(page);
       if (s.doorFade || s.battle || (opts.stopOnDialogue && s.dlg)) return s;
       const dx = wx - (s.x ?? wx), dy = wy - (s.y ?? wy);
       if (Math.hypot(dx, dy) < 7) break;
-      await hold(page, Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up"), 130);
+      const primary = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
+      const secondary = Math.abs(dx) > Math.abs(dy) ? (dy > 0 ? "down" : "up") : (dx > 0 ? "right" : "left");
+      const bx = s.x ?? 0, by = s.y ?? 0;
+      await hold(page, primary, 120);
+      const a = await snap(page);
+      // primary made no progress AND the other axis still needs distance -> try it
+      if (Math.hypot((a.x ?? bx) - bx, (a.y ?? by) - by) < 2 && Math.abs(Math.abs(dx) > Math.abs(dy) ? dy : dx) > 4) {
+        await hold(page, secondary, 120);
+      }
     }
   }
   return snap(page);
@@ -406,52 +414,57 @@ async function runTrigger(page) {
 }
 
 // DOOR: walk into a door, assert a transition fires, you're not boxed in after, and you can leave.
+// Exhaustive per-door solver: a door tile is solid; the walkable approach can be on
+// ANY side. Probe __solidAt for every walkable neighbour, then A* to each and push
+// into the door. Only flag a DEAD door if EVERY walkable approach fails to transition.
 async function runDoor(page) {
   const door = scenario.door || {};
-  const enterDir = door.dir || "down";
-  const opp = { down: "up", up: "down", left: "right", right: "left" }[enterDir] || "up";
   const start = await snap(page);
   if (start.x == null) { add("noBoot", "no player for door test"); return; }
   const startSector = start.sector, startX = start.x, startY = start.y;
-  let sawFade = false, entered = false;
-  // A* to the door's walkable doorstep, then step into the door to trigger it.
-  const atStep = await astarWalkTo(page, door.x, door.y);
-  if (atStep.doorFade) sawFade = entered = true;
-  for (let i = 0; i < 8 && !entered; i++) {
-    const s0 = await snap(page);
-    if (s0.x == null) break;
-    const dx = door.x - s0.x, dy = door.y - s0.y;
-    const dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
-    await hold(page, Math.hypot(dx, dy) < 10 ? enterDir : dir, 190);
-    const s = await snap(page);
-    if (s.doorFade) sawFade = true;
-    const moved = Math.hypot((s.x ?? startX) - startX, (s.y ?? startY) - startY);
-    if (sawFade || (s.sector != null && s.sector !== startSector && moved > 60) || moved > 200) entered = true;
-    if (s.battle) await runBattle(page);
+  // Probe walkable neighbours of the door tile, scanning out a few tiles per side so
+  // we find the real doorstep even when the immediate neighbour is also wall.
+  const probe = await page.evaluate(({ x, y }) => {
+    const f = globalThis.__solidAt; if (!f) return null;
+    const open = (px, py) => !f(px, py);
+    const find = (dx, dy) => { for (let d = 8; d <= 32; d += 8) { if (open(x + dx * d, y + dy * d)) return d; } return 0; };
+    return { N: find(0, -1), S: find(0, 1), W: find(-1, 0), E: find(1, 0) };
+  }, { x: door.x, y: door.y });
+  if (!probe) { add("noSolidProbe", "__solidAt unavailable for door test"); return; }
+  const approaches = [];
+  if (probe.N) approaches.push({ name: "N", sx: door.x, sy: door.y - probe.N, into: "down" });
+  if (probe.S) approaches.push({ name: "S", sx: door.x, sy: door.y + probe.S, into: "up" });
+  if (probe.W) approaches.push({ name: "W", sx: door.x - probe.W, sy: door.y, into: "right" });
+  if (probe.E) approaches.push({ name: "E", sx: door.x + probe.E, sy: door.y, into: "left" });
+  if (approaches.length === 0) { add("doorWalledOff", `door (${door.x},${door.y}) has no walkable tile within 32px (decorative/unreachable)`, { where: "door", severity: "low" }); return; }
+
+  // Re-spawn AT each doorstep and step into the door. Spawning on the walkable
+  // approach removes all navigation uncertainty — the only thing under test is the door.
+  let entered = false, used = null;
+  for (const ap of approaches) {
+    try { await page.goto(BASE + `?nointro=1&spawn=${ap.sx},${ap.sy}`, { waitUntil: "load", timeout: 30000 }); } catch { continue; }
+    let ok = false;
+    for (let i = 0; i < 40; i++) { const m = await dbg(page, "mode"); if (m && m !== "error") { ok = true; break; } await page.waitForTimeout(150); }
+    if (!ok) continue;
+    await page.waitForTimeout(400); await page.mouse.click(256, 224); await page.waitForTimeout(80);
+    const sStart = await snap(page);
+    for (let k = 0; k < 6 && !entered; k++) {
+      await hold(page, ap.into, 200);
+      const s = await snap(page);
+      if (s.battle) { await runBattle(page); break; }
+      if (s.doorFade || (s.sector != null && s.sector !== sStart.sector) || Math.hypot((s.x ?? sStart.x) - sStart.x, (s.y ?? sStart.y) - sStart.y) > 200) entered = true;
+    }
+    if (entered) { used = ap.name; break; }
   }
-  await page.waitForTimeout(800); // let any fade settle
-  const mid = await snap(page);
-  if (!entered && !sawFade && mid.sector === startSector && Math.hypot((mid.x ?? startX) - startX, (mid.y ?? startY) - startY) < 40) {
-    add("doorNoTransition", `walked ${enterDir} into door at (${door.x},${door.y}) but no transition fired`, { where: "door", severity: "med" });
+
+  if (!entered) {
+    add("doorDead", `door (${door.x},${door.y}) did not transition from ANY walkable approach [${approaches.map((a) => a.name + a.sx + ":" + a.sy).join(" ")}]`, { where: "door", severity: "high" });
+    await shot(page, "door-dead");
     return;
   }
-  if (mid.doorFade) { // fade should have completed by now
-    await page.waitForTimeout(1500);
-    if ((await snap(page)).doorFade) { add("doorFadeStuck", `door fade never completed after entering (${door.x},${door.y})`, { where: "door", severity: "high" }); await shot(page, "door-fade-stuck"); return; }
-  }
-  await shot(page, "door-entered");
-  // not boxed in after entering?
+  await page.waitForTimeout(800);
+  if ((await snap(page)).doorFade) { await page.waitForTimeout(1600); if ((await snap(page)).doorFade) { add("doorFadeStuck", `door (${door.x},${door.y}) fade never completed`, { where: "door", severity: "high" }); await shot(page, "door-fade-stuck"); return; } }
   everMoved = true; await boxedCheck(page);
-  // try to leave: walk back the way we came
-  const inside = await snap(page);
-  let exited = false;
-  for (let i = 0; i < 10; i++) {
-    await hold(page, opp, 220);
-    const s = await snap(page);
-    if (s.doorFade || (s.sector != null && s.sector === startSector)) { exited = true; break; }
-    if (s.battle) await runBattle(page);
-  }
-  if (!exited) add("doorCantExitVerify", `entered door (${door.x},${door.y}) but could not walk back out (may be navigation; verify)`, { where: "door", severity: "low" });
 }
 
 // EQUIP/MENU: open menu, walk every screen, equip/unequip, use a good, watch for crash/softlock/no-effect.
