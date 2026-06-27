@@ -41,3 +41,6 @@ playwright-report/
 
 # External Swagbound source filepath bundle (local-only, references external project)
 swagbound-dialogue-lore-story-filepaths.txt
+
+# Licensed audition tracks (approved jammers) — large, not for the repo
+apps/game/public/audio/jammers/

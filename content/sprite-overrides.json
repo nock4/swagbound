@@ -39,16 +39,212 @@
     "frameWidth": 192,
     "frameHeight": 192,
     "animations": {
-      "down": [0, 1, 2, 3],
-      "left": [4, 5, 6, 7],
-      "right": [8, 9, 10, 11],
-      "up": [12, 13, 14, 15]
+      "down": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "left": [
+        4,
+        5,
+        6,
+        7
+      ],
+      "right": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "up": [
+        12,
+        13,
+        14,
+        15
+      ]
     },
     "displayHeight": 24,
     "originX": 0.5,
     "originY": 1
   },
   "byNpcId": {
+    "74": {
+      "image": "assets/swagbound/overworld-npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "75": {
+      "image": "assets/swagbound/overworld-npc/cryptic-kids.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "76": {
+      "image": "assets/swagbound/overworld-npc/cryptic-kids-2.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "77": {
+      "image": "assets/swagbound/overworld-npc/happy-camper.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "158": {
+      "image": "assets/swagbound/overworld-npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "159": {
+      "image": "assets/swagbound/overworld-npc/cryptic-kids.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "384": {
+      "image": "assets/swagbound/overworld-npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "387": {
+      "image": "assets/swagbound/overworld-npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
     "404": {
       "image": "assets/swagbound/npc/npc-sal.png",
       "frameWidth": 80,
@@ -73,6 +269,336 @@
     },
     "749": {
       "image": "assets/swagbound/npc/npc-morrow.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "766": {
+      "image": "assets/swagbound/overworld-npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "767": {
+      "image": "assets/swagbound/overworld-npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1283": {
+      "image": "assets/swagbound/overworld-npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1284": {
+      "image": "assets/swagbound/overworld-npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1285": {
+      "image": "assets/swagbound/overworld-npc/cryptic-kids.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1286": {
+      "image": "assets/swagbound/overworld-npc/cryptic-kids-2.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1288": {
+      "image": "assets/swagbound/overworld-npc/happy-camper.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1289": {
+      "image": "assets/swagbound/overworld-npc/ushanka-shade.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1291": {
+      "image": "assets/swagbound/overworld-npc/knitkitmori.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1298": {
+      "image": "assets/swagbound/overworld-npc/swag-raccoon.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1315": {
+      "image": "assets/swagbound/overworld-npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1316": {
+      "image": "assets/swagbound/overworld-npc/npc-kid.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1317": {
+      "image": "assets/swagbound/overworld-npc/cryptic-kids.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1338": {
+      "image": "assets/swagbound/overworld-npc/npc-neighbor.png",
+      "frameWidth": 80,
+      "frameHeight": 80,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "1339": {
+      "image": "assets/swagbound/overworld-npc/npc-kid.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {

@@ -205,7 +205,17 @@ describe("sprite override helpers", () => {
     // every overlay placeholder has a sprite, plus the two EB clerk overrides
     for (const id of ids) expect(byNpcId[id]).toBeDefined();
     const extraKeys = Object.keys(byNpcId).filter((k) => !ids.includes(k)).sort();
-    expect(extraKeys).toEqual(["404", "749"]);
+    // Clerks (404/749) plus crowd-variety skins authored by scripts/vary-crowd-skins.mjs,
+    // which de-duplicates tight same-group NPC clusters by rotating distinct overworld-npc
+    // skins. Those extras must be well-formed single-frame overworld-npc overrides.
+    expect(extraKeys).toEqual(expect.arrayContaining(["404", "749"]));
+    const crowdVarietyKeys = extraKeys.filter((k) => !["404", "749"].includes(k));
+    for (const id of crowdVarietyKeys) {
+      const override = byNpcId[id];
+      expect(override?.image).toMatch(/^assets\/swagbound\/overworld-npc\/.+\.png$/);
+      expect(override).toMatchObject({ displayHeight: 24, originX: 0.5, originY: 1 });
+      expect(override?.animations).toEqual({ down: [0], left: [0], right: [0], up: [0] });
+    }
     for (const [id, image] of Object.entries(clerkOverrides)) {
       expect(byNpcId[id]).toMatchObject({ image, frameWidth: 80, frameHeight: 80, displayHeight: 24, originX: 0.5, originY: 1 });
     }

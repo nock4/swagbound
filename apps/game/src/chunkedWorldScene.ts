@@ -227,6 +227,7 @@ import {
   overworldMusicCueForSector,
   type OverworldMusicCue
 } from "./worldMusic";
+import { publishAuditionTarget, type AuditionLocation } from "./musicAuditioner";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -323,6 +324,10 @@ type BlockedOptions = {
   ignoreNpcId?: number;
   includePlayer?: boolean;
   includeNpcs?: boolean;
+  // When set, NPCs whose body already overlaps this point are ignored, so an
+  // actor that ends up co-located with an NPC (door-warp spawn, scripted move)
+  // can always walk free instead of being trapped in every direction.
+  escapeOverlapAt?: { x: number; y: number };
 };
 
 type DoorWarpOptions = {
@@ -492,6 +497,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.world_ = data.gameData.world as WorldChunked;
     this.music = createMusic(data.gameData.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
+    });
+    // Dev music-auditioner bridge: lets the Track Lab panel mute this scene's
+    // music while a candidate track auditions, and read where the player is.
+    publishAuditionTarget({
+      setGameMusicEnabled: (enabled) => this.music.setEnabled(enabled),
+      getLocation: () => this.auditionLocation()
     });
     this.resetRuntimeStateForStart();
     this.bootSaveState = data.saveState ?? undefined;
@@ -769,7 +780,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       deltaMs: delta,
       speed: PLAYER_SPEED,
       bounds: this.movementBounds(),
-      blocked: (x, y) => this.blocked(x, y, { includeNpcs: true }),
+      blocked: (x, y) =>
+        this.blocked(x, y, {
+          includeNpcs: true,
+          escapeOverlapAt: { x: this.playerState.x, y: this.playerState.y }
+        }),
       frames: this.playerFrames
     });
     this.syncPlayerObject();
@@ -1088,6 +1103,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private playerInInteriorMusicSector(): boolean {
     return isInteriorMusicSector(this.world_.sectors, this.playerState);
+  }
+
+  /** Snapshot of where the player is, for the dev music-auditioner panel. */
+  private auditionLocation(): AuditionLocation {
+    const sectors = this.world_.sectors;
+    const sector = sectors ? sectorCoordForWorldPixel(this.playerState, sectors) : undefined;
+    const sectorIndex = sector?.index ?? null;
+    const areaId =
+      sectorIndex !== null && sectors?.areaIds ? sectors.areaIds[sectorIndex] ?? null : null;
+    return {
+      cue: this.currentOverworldMusicCue ?? "—",
+      sectorIndex,
+      areaId,
+      x: Math.round(this.playerState.x),
+      y: Math.round(this.playerState.y)
+    };
   }
 
   private applyInteriorRoomMask(): void {
@@ -1703,6 +1734,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
           continue;
         }
         if (!this.npcInsideActiveRoom(npc)) {
+          continue;
+        }
+        // If this NPC is already overlapping the mover's current spot, don't let
+        // it block — otherwise a co-located NPC walls off every direction at once.
+        if (
+          options.escapeOverlapAt &&
+          this.actorBodyBlocked(options.escapeOverlapAt.x, options.escapeOverlapAt.y, npc.state.player.x, npc.state.player.y)
+        ) {
           continue;
         }
         if (this.actorBodyBlocked(x, y, npc.state.player.x, npc.state.player.y)) {
@@ -4523,11 +4562,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private setActorSortDepth(actor: SortableActor): void {
-    actor.setDepth(spriteSortDepth(spriteBottomY({
+    const bottomY = spriteBottomY({
       y: actor.y,
       originY: actor.originY,
       displayHeight: actor.displayHeight
-    })));
+    });
+    // Tiebreak by x so actors sharing a row (e.g. a crowd of NPCs at the same y)
+    // layer deterministically left-behind-right instead of stacking at one depth.
+    // The fraction stays < 1 so the y-row ordering always dominates.
+    const tiebreak = Number.isFinite(actor.x) ? ((actor.x % 4096) + 4096) % 4096 / 4096 * 0.5 : 0;
+    actor.setDepth(spriteSortDepth(bottomY) + tiebreak);
   }
 
   /**

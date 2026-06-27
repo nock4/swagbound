@@ -12,6 +12,7 @@ import { buildPartyMember, type PartyMember } from "./characterModel";
 import type { EncounterAdvantage } from "./battleLogic";
 import { deserializeSaveState, type SaveSlotPersistence } from "./saveState";
 import { registerWindowFlavorControls } from "./windowSettings";
+import { mountMusicAuditioner } from "./musicAuditioner";
 import "./style.css";
 
 const MONO = "Menlo, Consolas, monospace";
@@ -344,3 +345,9 @@ new Phaser.Game({
     autoCenter: Phaser.Scale.CENTER_BOTH
   }
 });
+
+// Dev-only "Track Lab" panel for auditioning music against live locations.
+// Gated to the dev server so it never ships in a production build.
+if (import.meta.env.DEV) {
+  mountMusicAuditioner();
+}
