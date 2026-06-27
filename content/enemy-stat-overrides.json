@@ -1,0 +1,17 @@
+{
+  "schema": "swagbound.enemy-stat-overrides.v1",
+  "byEnemyId": {
+    "37": {
+      "offense": 27,
+      "hp": 260
+    },
+    "54": {
+      "offense": 22,
+      "hp": 95
+    },
+    "131": {
+      "offense": 15,
+      "hp": 74
+    }
+  }
+}

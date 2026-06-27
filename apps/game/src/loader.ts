@@ -10,6 +10,7 @@ import {
   CustomDialogueSchema,
   DrifellaBarksSchema,
   EnemyOverridesSchema,
+  EnemyStatOverridesSchema,
   EncountersSchema,
   FontCollectionSchema,
   ItemCollectionSchema,
@@ -47,6 +48,7 @@ import {
   type CustomDialogue,
   type DrifellaBarks,
   type EnemyOverrides,
+  type EnemyStatOverrides,
   type Encounters,
   type FontCollection,
   type ItemCollection,
@@ -91,6 +93,7 @@ const ITEM_OVERRIDES_FILE = "item-overrides.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
 const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
+const ENEMY_STAT_OVERRIDES_FILE = "enemy-stat-overrides.json";
 const BATTLE_RULES_FILE = "battle-rules.json";
 const STORY_TRIGGERS_FILE = "triggers.json";
 const MUSIC_MANIFEST_FILE = "music-manifest.json";
@@ -199,6 +202,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     battle,
     battleRules,
     enemyOverrides,
+    enemyStatOverrides,
     font,
     window,
     characters,
@@ -238,6 +242,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       : Promise.resolve(undefined),
     loadJson(`/generated/${BATTLE_RULES_FILE}`, BattleRulesSchema),
     loadJson(`/generated/${ENEMY_OVERRIDES_FILE}`, EnemyOverridesSchema),
+    loadJson(`/generated/${ENEMY_STAT_OVERRIDES_FILE}`, EnemyStatOverridesSchema),
     manifest.files.font
       ? loadJson(`/generated/${manifest.files.font}`, FontCollectionSchema)
       : Promise.resolve(undefined),
@@ -271,7 +276,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
   const resolvedPsi = applyPsiOverrides(psi, psiOverrides);
-  const resolvedBattle = applyEnemyOverrides(battle, enemyOverrides);
+  const resolvedBattle = applyEnemyStatOverrides(applyEnemyOverrides(battle, enemyOverrides), enemyStatOverrides);
   const resolvedDrifellaBarks = drifellaBarks ?? emptyDrifellaBarks();
   const resolvedCustomDialogue = buildCustomDialogueWithDrifellaBarks(
     customDialogue ?? emptyCustomDialogue(),
@@ -432,6 +437,37 @@ export function applyEnemyOverrides(
       ...enemy,
       name: override.name
     };
+  });
+  return changed ? { ...battle, enemies } : battle;
+}
+
+const ENEMY_STAT_OVERRIDE_KEYS = ["hp", "offense", "defense", "speed"] as const;
+
+export function applyEnemyStatOverrides(
+  battle: BattleData | undefined,
+  overrides: EnemyStatOverrides | undefined
+): BattleData | undefined {
+  if (!battle || !overrides) {
+    return battle;
+  }
+  let changed = false;
+  const enemies = battle.enemies.map((enemy) => {
+    const override = overrides.byEnemyId[String(enemy.id)];
+    if (!override) {
+      return enemy;
+    }
+    let next = enemy;
+    for (const key of ENEMY_STAT_OVERRIDE_KEYS) {
+      const value = override[key];
+      if (value !== undefined && value !== next[key]) {
+        if (next === enemy) {
+          next = { ...enemy };
+        }
+        next[key] = value;
+        changed = true;
+      }
+    }
+    return next;
   });
   return changed ? { ...battle, enemies } : battle;
 }

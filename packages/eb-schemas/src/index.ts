@@ -550,6 +550,20 @@ export const EnemyOverridesSchema = z.object({
   byEnemyId: z.record(z.string().regex(/^\d+$/), EnemyOverrideEntrySchema)
 }).strict();
 
+const EnemyStatOverrideEntrySchema = z.object({
+  hp: z.number().int().nonnegative().optional(),
+  offense: z.number().int().nonnegative().optional(),
+  defense: z.number().int().nonnegative().optional(),
+  speed: z.number().int().nonnegative().optional()
+}).strict().refine((entry) => Object.keys(entry).length > 0, {
+  message: "enemy stat override entry must set at least one stat"
+});
+
+export const EnemyStatOverridesSchema = z.object({
+  schema: z.literal("swagbound.enemy-stat-overrides.v1"),
+  byEnemyId: z.record(z.string().regex(/^\d+$/), EnemyStatOverrideEntrySchema)
+}).strict();
+
 /**
  * Canonical source for enemy naming: a family name maps to every EB enemy id that
  * shares that Swagbound name. `enemy-overrides.json` (the per-id name map the
@@ -1608,6 +1622,7 @@ export type BackgroundOverrides = z.infer<typeof BackgroundOverridesSchema>;
 export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;
 export type CharacterOverrides = z.infer<typeof CharacterOverridesSchema>;
 export type EnemyOverrides = z.infer<typeof EnemyOverridesSchema>;
+export type EnemyStatOverrides = z.infer<typeof EnemyStatOverridesSchema>;
 export type EncounterCandidate = z.infer<typeof EncounterCandidateSchema>;
 export type EncounterSubGroup = z.infer<typeof EncounterSubGroupSchema>;
 export type EncounterMapGroup = z.infer<typeof EncounterMapGroupSchema>;

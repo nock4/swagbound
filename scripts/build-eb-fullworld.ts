@@ -6,6 +6,7 @@ import {
   BackgroundOverridesSchema,
   DrifellaBarksSchema,
   EnemyNameFamiliesSchema,
+  EnemyStatOverridesSchema,
   expandEnemyNameFamilies,
   expandOverworldEnemySkins,
   MusicManifestSchema,
@@ -51,6 +52,8 @@ export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
 export const PSI_OVERRIDES_OUTPUT = "psi-overrides.json";
 export const ENEMY_NAME_FAMILIES_SOURCE = "content/enemy-name-families.json";
 export const ENEMY_OVERRIDES_OUTPUT = "enemy-overrides.json";
+export const ENEMY_STAT_OVERRIDES_SOURCE = "content/enemy-stat-overrides.json";
+export const ENEMY_STAT_OVERRIDES_OUTPUT = "enemy-stat-overrides.json";
 export const BATTLE_RULES_SOURCE = "content/battle-rules.json";
 export const BATTLE_RULES_OUTPUT = "battle-rules.json";
 export const STORY_TRIGGERS_SOURCE = "content/triggers.json";
@@ -112,6 +115,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateDrifellaBarks(DRIFELLA_BARKS_SOURCE);
   await validateOpeningCutscene(OPENING_CUTSCENE_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
+  await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
   await Promise.all([
     copyJsonToGenerated(STORY_TRIGGERS_SOURCE, out, STORY_TRIGGERS_OUTPUT),
     copyJsonToGenerated(CUTSCENES_SOURCE, out, CUTSCENES_OUTPUT),
@@ -126,6 +130,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(ENEMY_STAT_OVERRIDES_SOURCE, out, ENEMY_STAT_OVERRIDES_OUTPUT),
     copyJsonToGenerated(BATTLE_RULES_SOURCE, out, BATTLE_RULES_OUTPUT),
     copyJsonToGenerated(MUSIC_MANIFEST_SOURCE, out, MUSIC_MANIFEST_OUTPUT),
     copyJsonToGenerated(DRIFELLA_BARKS_SOURCE, out, DRIFELLA_BARKS_OUTPUT),
@@ -206,6 +211,10 @@ async function validateOpeningCutscene(source: string): Promise<void> {
 
 async function validateNpcOverrides(source: string): Promise<void> {
   NpcOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateEnemyStatOverrides(source: string): Promise<void> {
+  EnemyStatOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function readTileOverrides(source: string): Promise<TileOverrides> {

@@ -1,10 +1,115 @@
 import { describe, expect, it } from "vitest";
-import type { AddedNpcs, WorldChunkedNpc } from "@eb/schemas";
+import type { AddedNpcs, BattleData, EnemyStatOverrides, WorldChunkedNpc } from "@eb/schemas";
 import {
   addedNpcSpawnEligible,
+  applyEnemyStatOverrides,
   buildAddedWorldNpcs,
   isAddedWorldChunkedNpc
 } from "./loader";
+
+function enemy(id: number, stats: Pick<BattleData["enemies"][number], "hp" | "offense" | "defense" | "speed">): BattleData["enemies"][number] {
+  return {
+    id,
+    name: `Enemy ${id}`,
+    spriteId: id,
+    level: 1,
+    hp: stats.hp,
+    offense: stats.offense,
+    defense: stats.defense,
+    speed: stats.speed,
+    experience: 0,
+    money: 0,
+    bossFlag: false,
+    actions: [
+      { id: 0, arg: 0 },
+      { id: 0, arg: 0 },
+      { id: 0, arg: 0 },
+      { id: 0, arg: 0 }
+    ],
+    itemDropped: null,
+    itemRarity: null
+  };
+}
+
+function battleData(enemies: BattleData["enemies"]): BattleData {
+  return {
+    schemaVersion: "test",
+    sourceProjectPath: "test",
+    selection: {
+      method: "test",
+      mapEnemyGroupIds: [],
+      battleGroupIds: [],
+      placementCellMapping: "test",
+      fallbackUsed: false
+    },
+    statMapping: {
+      level: "test",
+      hp: "test",
+      defense: "test",
+      offense: "test",
+      speed: "test",
+      experience: "test",
+      money: "test",
+      bossFlag: "test",
+      actions: "test",
+      itemDropped: "test",
+      itemRarity: "test"
+    },
+    spriteFormat: {
+      source: "test",
+      fileType: "png",
+      indexedPaletteBits: 4,
+      transparentPaletteIndex: 0,
+      allowedSizes: [[64, 64]]
+    },
+    assetLayout: {
+      spriteDir: "test",
+      backgroundDir: "test",
+      spriteFilePattern: "test",
+      backgroundFilePattern: "test"
+    },
+    enemies,
+    groups: [],
+    counts: {
+      enemies: enemies.length,
+      groups: 0,
+      spriteFiles: 0,
+      backgroundFiles: 0
+    },
+    warnings: []
+  };
+}
+
+describe("enemy stat overrides", () => {
+  it("overwrites only listed numeric stats by enemy id", () => {
+    const battle = battleData([
+      enemy(131, { hp: 63, offense: 12, defense: 17, speed: 7 }),
+      enemy(54, { hp: 75, offense: 15, defense: 18, speed: 5 })
+    ]);
+    const overrides: EnemyStatOverrides = {
+      schema: "swagbound.enemy-stat-overrides.v1",
+      byEnemyId: {
+        "131": { hp: 80, offense: 18 },
+        "999": { hp: 1, offense: 1, defense: 1, speed: 1 }
+      }
+    };
+
+    const resolved = applyEnemyStatOverrides(battle, overrides);
+
+    expect(resolved?.enemies.find((entry) => entry.id === 131)).toMatchObject({
+      hp: 80,
+      offense: 18,
+      defense: 17,
+      speed: 7
+    });
+    expect(resolved?.enemies.find((entry) => entry.id === 54)).toMatchObject({
+      hp: 75,
+      offense: 15,
+      defense: 18,
+      speed: 5
+    });
+  });
+});
 
 describe("added NPC overlay normalization", () => {
   it("normalizes eligible added NPCs into chunked NPC runtime data", () => {
