@@ -1,0 +1,229 @@
+# Drifella 2 Game Text Candidates
+
+Generated from metadata + RapidOCR. Treat as raw source flavor, not final dialogue. Keep provenance by token number.
+
+## Clean-ish high-signal snippets
+
+- `TAKE ALL YOUR MONEY OUT OF THE BANK` — #6684, metadata/background, tags: npc-bark, surreal-prop, metadata-trait
+- `TAKE ALL YOUR MONEY OUT OF THE BANK` — #7041, metadata/background, tags: npc-bark, surreal-prop, metadata-trait
+- `TAKE ALL YOUR MONEY OUT OF THE BANK` — #8333, metadata/background, tags: npc-bark, surreal-prop, metadata-trait
+- `TAKE ALL YOUR MONEY OUT OF THE BANK` — #5778, metadata/background, tags: npc-bark, surreal-prop, metadata-trait
+- `TAKE ALL YOUR MONEY OUT OF THE BANK` — #3517, metadata/background, tags: npc-bark, surreal-prop, metadata-trait
+- `earl chart painting in my living room` — #792, metadata/background, tags: metadata-trait
+- `earl chart painting in my living room` — #6274, metadata/background, tags: metadata-trait
+- `earl chart painting in my living room` — #8603, metadata/background, tags: metadata-trait
+- `his ass is not a software engineer` — #1253, metadata/overlay, tags: npc-bark, metadata-trait
+- `his ass is not a software engineer` — #1868, metadata/overlay, tags: npc-bark, metadata-trait
+- `his ass is not a software engineer` — #1327, metadata/overlay, tags: npc-bark, metadata-trait
+- `his ass is not a software engineer` — #1710, metadata/overlay, tags: npc-bark, metadata-trait
+- `house party nearby im bringing weird guys` — #2575, metadata/background, tags: metadata-trait
+- `how to catch a milk thief` — #1728, metadata/overlay, tags: npc-bark, metadata-trait
+- `how to catch a milk thief` — #8961, metadata/overlay, tags: npc-bark, metadata-trait
+- `how to catch a milk thief` — #1795, metadata/overlay, tags: npc-bark, metadata-trait
+- `how to catch a milk thief` — #4531, metadata/overlay, tags: npc-bark, metadata-trait
+- `how to catch a milk thief` — #3859, metadata/overlay, tags: npc-bark, metadata-trait
+- `i wake up i engage in tomfoolery` — #4684, metadata/overlay, tags: npc-bark, metadata-trait
+- `i wake up i engage in tomfoolery` — #6627, metadata/overlay, tags: npc-bark, metadata-trait
+- `i wake up i engage in tomfoolery` — #1531, metadata/overlay, tags: npc-bark, metadata-trait
+- `i wake up i engage in tomfoolery` — #417, metadata/overlay, tags: npc-bark, metadata-trait
+- `it takes a little treat to tame a beast` — #2888, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `it takes a little treat to tame a beast` — #6078, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `life would be much easier` — #622, metadata/overlay, tags: metadata-trait
+- `life would be much easier` — #8450, metadata/overlay, tags: metadata-trait
+- `life would be much easier` — #2733, metadata/overlay, tags: metadata-trait
+- `life would be much easier` — #2967, metadata/overlay, tags: metadata-trait
+- `life would be much easier` — #2195, metadata/overlay, tags: metadata-trait
+- `life would be much easier` — #4383, metadata/overlay, tags: metadata-trait
+- `life would be much easier` — #1090, metadata/overlay, tags: metadata-trait
+- `life would be much easier` — #1690, metadata/overlay, tags: metadata-trait
+- `my girant isopod phone case` — #9906, metadata/left_hand, tags: metadata-trait
+- `my girant isopod phone case` — #5401, metadata/left_hand, tags: metadata-trait
+- `my girant isopod phone case` — #8943, metadata/left_hand, tags: metadata-trait
+- `my girant isopod phone case` — #4828, metadata/left_hand, tags: metadata-trait
+- `my girant isopod phone case` — #4726, metadata/left_hand, tags: metadata-trait
+- `praying to your flight god` — #1271, metadata/background, tags: surreal-prop, metadata-trait
+- `praying to your flight god` — #6625, metadata/background, tags: surreal-prop, metadata-trait
+- `praying to your flight god` — #2391, metadata/background, tags: surreal-prop, metadata-trait
+- `praying to your flight god` — #1531, metadata/background, tags: surreal-prop, metadata-trait
+- `praying to your flight god` — #1133, metadata/background, tags: surreal-prop, metadata-trait
+- `remember who you are fighting for` — #1239, metadata/background, tags: metadata-trait
+- `remember who you are fighting for` — #9394, metadata/background, tags: metadata-trait
+- `remember who you are fighting for` — #3206, metadata/background, tags: metadata-trait
+- `she want me cuz im normal` — #7401, metadata/overlay, tags: npc-bark, metadata-trait
+- `she want me cuz im normal` — #7319, metadata/overlay, tags: npc-bark, metadata-trait
+- `she want me cuz im normal` — #6546, metadata/overlay, tags: npc-bark, metadata-trait
+- `she want me cuz im normal` — #8524, metadata/overlay, tags: npc-bark, metadata-trait
+- `she want me cuz im normal` — #6926, metadata/overlay, tags: npc-bark, metadata-trait
+- `touching grass isnt enough` — #9176, metadata/overlay, tags: npc-bark, metadata-trait
+- `touching grass isnt enough` — #824, metadata/overlay, tags: npc-bark, metadata-trait
+- `touching grass isnt enough` — #9598, metadata/overlay, tags: npc-bark, metadata-trait
+- `touching grass isnt enough` — #687, metadata/overlay, tags: npc-bark, metadata-trait
+- `vivienne westwood gem jacket` — #9176, metadata/cloth, tags: metadata-trait
+- `vivienne westwood gem jacket` — #7010, metadata/cloth, tags: metadata-trait
+- `vivienne westwood gem jacket` — #213, metadata/cloth, tags: metadata-trait
+- `vivienne westwood gem jacket` — #1390, metadata/cloth, tags: metadata-trait
+- `vivienne westwood gem jacket` — #5962, metadata/cloth, tags: metadata-trait
+- `vivienne westwood gem jacket` — #2581, metadata/cloth, tags: metadata-trait
+- `vivienne westwood gem jacket` — #5968, metadata/cloth, tags: metadata-trait
+- `wake up we gotta turn the power on` — #194, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `wake up we gotta turn the power on` — #3779, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `wake up we gotta turn the power on` — #9031, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `wake up we gotta turn the power on` — #2160, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `wake up we gotta turn the power on` — #6403, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `wake up we gotta turn the power on` — #4118, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `wake up we gotta turn the power on` — #2000, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `wake up we gotta turn the power on` — #6875, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `who needs brain cells when you have swag` — #7483, metadata/overlay, tags: npc-bark, metadata-trait
+- `who needs brain cells when you have swag` — #2704, metadata/overlay, tags: npc-bark, metadata-trait
+- `wow it is literally me meme` — #3830, metadata/background, tags: metadata-trait
+- `you cant beat a man that battles with himself every day` — #2708, metadata/overlay, tags: metadata-trait
+- `you cant beat a man that battles with himself every day` — #9390, metadata/overlay, tags: metadata-trait
+- `youre a fag and your shits all retarded` — #4172, metadata/overlay, tags: metadata-trait
+- `youre a fag and your shits all retarded` — #6761, metadata/overlay, tags: metadata-trait
+- `youre a fag and your shits all retarded` — #3570, metadata/overlay, tags: metadata-trait
+- `american flag` — #632, metadata/background, tags: metadata-trait
+- `american flag` — #4032, metadata/background, tags: metadata-trait
+- `american flag` — #4365, metadata/background, tags: metadata-trait
+- `american flag` — #417, metadata/background, tags: metadata-trait
+- `american flag` — #9783, metadata/background, tags: metadata-trait
+- `anime eye rock` — #3896, metadata/left_hand, tags: metadata-trait
+- `anime eye rock` — #5118, metadata/left_hand, tags: metadata-trait
+- `anime eye rock` — #8166, metadata/left_hand, tags: metadata-trait
+- `Are you real` — #9240, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `Are you real` — #632, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `Are you real` — #3517, metadata/overlay, tags: npc-bark, surreal-prop, metadata-trait
+- `asspizza bedroom` — #4489, metadata/background, tags: metadata-trait
+- `asspizza bedroom` — #9789, metadata/background, tags: metadata-trait
+- `asspizza bedroom` — #1145, metadata/background, tags: metadata-trait
+- `asspizza gobln shirt` — #5524, metadata/cloth, tags: metadata-trait
+- `asspizza gobln shirt` — #9321, metadata/cloth, tags: metadata-trait
+- `asspizza gobln shirt` — #8541, metadata/cloth, tags: metadata-trait
+- `asspizza gobln shirt` — #1312, metadata/cloth, tags: metadata-trait
+- `asspizza gobln shirt` — #1754, metadata/cloth, tags: metadata-trait
+- `black ops on my tv` — #5451, metadata/background, tags: metadata-trait
+- `black ops on my tv` — #4563, metadata/background, tags: metadata-trait
+- `blue pokemon swag` — #4130, metadata/background, tags: npc-bark, metadata-trait
+- `blue pokemon swag` — #5763, metadata/background, tags: npc-bark, metadata-trait
+- `blue pokemon swag` — #3800, metadata/background, tags: npc-bark, metadata-trait
+- `blue pokemon swag` — #9681, metadata/background, tags: npc-bark, metadata-trait
+- `blue pokemon swag` — #8015, metadata/background, tags: npc-bark, metadata-trait
+- `brain transplant` — #7704, metadata/overlay, tags: metadata-trait
+- `brain transplant` — #2667, metadata/overlay, tags: metadata-trait
+- `chrome hearts mousetrap` — #1019, metadata/left_hand, tags: metadata-trait
+- `dark brotherhood` — #4856, metadata/background, tags: metadata-trait
+- `dark brotherhood` — #7297, metadata/background, tags: metadata-trait
+- `dark brotherhood` — #6926, metadata/background, tags: metadata-trait
+- `days never finished` — #2410, metadata/overlay, tags: metadata-trait
+- `days never finished` — #9939, metadata/overlay, tags: metadata-trait
+- `days never finished` — #9410, metadata/overlay, tags: metadata-trait
+- `destroyed gameboy` — #6099, metadata/right_hand, tags: metadata-trait
+- `destroyed gameboy` — #4828, metadata/right_hand, tags: metadata-trait
+- `destroyed gameboy` — #2575, metadata/right_hand, tags: metadata-trait
+- `destroyed gameboy` — #2704, metadata/right_hand, tags: metadata-trait
+- `ditto sweets` — #8308, metadata/background, tags: metadata-trait
+- `ditto sweets` — #6341, metadata/background, tags: metadata-trait
+- `ditto sweets` — #6553, metadata/background, tags: metadata-trait
+- `dont give me orders` — #6186, metadata/right_hand, tags: npc-bark, metadata-trait
+
+## Mature / review before use
+
+- `bringing freedom and democracy to an oil rich country near you` — #649, metadata/overlay, tags: surreal-prop, metadata-trait, mature-review
+- `i like getting my boot hole licked by nft monkeys` — #8497, metadata/overlay, tags: metadata-trait, mature-review
+- `i like getting my boot hole licked by nft monkeys` — #8224, metadata/overlay, tags: metadata-trait, mature-review
+- `im in love with my gf dont talk to me she has a nuclear bomb` — #3986, metadata/overlay, tags: metadata-trait, mature-review
+- `person who keeps gambling` — #1625, metadata/overlay, tags: metadata-trait, mature-review
+- `person who keeps gambling` — #3748, metadata/overlay, tags: metadata-trait, mature-review
+- `person who keeps gambling` — #1659, metadata/overlay, tags: metadata-trait, mature-review
+- `person who keeps gambling` — #7241, metadata/overlay, tags: metadata-trait, mature-review
+- `someone with autism stole my wallet heart` — #8892, metadata/right_hand, tags: metadata-trait, mature-review
+- `someone with autism stole my wallet heart` — #5866, metadata/right_hand, tags: metadata-trait, mature-review
+- `someone with autism stole my wallet heart` — #8309, metadata/right_hand, tags: metadata-trait, mature-review
+- `someone with autism stole my wallet heart` — #9620, metadata/right_hand, tags: metadata-trait, mature-review
+- `someone with autism stole my wallet heart` — #5962, metadata/right_hand, tags: metadata-trait, mature-review
+- `someone with autism stole my wallet heart` — #6926, metadata/right_hand, tags: metadata-trait, mature-review
+- `thank you lord for this here perc 30` — #2430, metadata/overlay, tags: metadata-trait, mature-review
+- `thank you lord for this here perc 30` — #3725, metadata/overlay, tags: metadata-trait, mature-review
+- `thank you lord for this here perc 30` — #4138, metadata/overlay, tags: metadata-trait, mature-review
+- `youre in her dms im letting greed corrupt me` — #2357, metadata/overlay, tags: metadata-trait, mature-review
+- `youre in her dms im letting greed corrupt me` — #958, metadata/overlay, tags: metadata-trait, mature-review
+- `youre in her dms im letting greed corrupt me` — #6625, metadata/overlay, tags: metadata-trait, mature-review
+- `youre in her dms im letting greed corrupt me` — #5623, metadata/overlay, tags: metadata-trait, mature-review
+- `youre in her dms im letting greed corrupt me` — #4563, metadata/overlay, tags: metadata-trait, mature-review
+- `anime with blood` — #4036, metadata/mouth, tags: metadata-trait, mature-review
+- `anime with blood` — #6274, metadata/mouth, tags: metadata-trait, mature-review
+- `assault rifle` — #9567, metadata/right_hand, tags: metadata-trait, mature-review
+- `btc fear greed index` — #4530, metadata/left_hand, tags: metadata-trait, mature-review
+- `btc fear greed index` — #5183, metadata/left_hand, tags: metadata-trait, mature-review
+- `btc fear greed index` — #9783, metadata/left_hand, tags: metadata-trait, mature-review
+- `imagine fentanyl here` — #4393, metadata/overlay, tags: metadata-trait, mature-review
+- `imagine fentanyl here` — #7010, metadata/overlay, tags: metadata-trait, mature-review
+- `imagine fentanyl here` — #792, metadata/overlay, tags: metadata-trait, mature-review
+- `imagine fentanyl here` — #5383, metadata/overlay, tags: metadata-trait, mature-review
+- `imagine fentanyl here` — #9315, metadata/overlay, tags: metadata-trait, mature-review
+- `kill you red puffer` — #7068, metadata/cloth, tags: metadata-trait, mature-review
+- `kill you red puffer` — #1891, metadata/cloth, tags: metadata-trait, mature-review
+- `kill you red puffer` — #7399, metadata/cloth, tags: metadata-trait, mature-review
+- `kill you red puffer` — #5352, metadata/cloth, tags: metadata-trait, mature-review
+- `kill you red puffer` — #344, metadata/cloth, tags: metadata-trait, mature-review
+- `kill you red puffer` — #6886, metadata/cloth, tags: metadata-trait, mature-review
+- `kill you red puffer` — #433, metadata/cloth, tags: metadata-trait, mature-review
+- `left anime gun` — #6085, metadata/left_hand, tags: metadata-trait, mature-review
+- `left anime gun` — #3811, metadata/left_hand, tags: metadata-trait, mature-review
+- `left anime gun` — #5653, metadata/left_hand, tags: metadata-trait, mature-review
+- `left anime gun` — #6926, metadata/left_hand, tags: metadata-trait, mature-review
+- `pot of greed` — #9176, metadata/left_hand, tags: metadata-trait, mature-review
+- `pot of greed` — #3502, metadata/left_hand, tags: metadata-trait, mature-review
+- `pot of greed` — #6783, metadata/left_hand, tags: metadata-trait, mature-review
+- `pot of greed` — #6018, metadata/left_hand, tags: metadata-trait, mature-review
+- `pot of greed` — #8828, metadata/left_hand, tags: metadata-trait, mature-review
+- `pot of greed` — #2575, metadata/left_hand, tags: metadata-trait, mature-review
+- `pot of greed` — #8928, metadata/left_hand, tags: metadata-trait, mature-review
+- `BORED APE NAZI CLUB` — #3951, metadata/overlay, tags: metadata-trait, mature-review
+- `BORED APE NAZI CLUB` — #326, metadata/overlay, tags: metadata-trait, mature-review
+- `BORED APE NAZI CLUB` — #8639, metadata/overlay, tags: metadata-trait, mature-review
+- `BORED APE NAZI CLUB` — #6341, metadata/overlay, tags: metadata-trait, mature-review
+- `white house mcdonalds order` — #326, metadata/background, tags: metadata-trait, mature-review
+- `white house mcdonalds order` — #9772, metadata/background, tags: metadata-trait, mature-review
+- `white house mcdonalds order` — #9035, metadata/background, tags: metadata-trait, mature-review
+- `white house mcdonalds order` — #494, metadata/background, tags: metadata-trait, mature-review
+- `white house mcdonalds order` — #5308, metadata/background, tags: metadata-trait, mature-review
+- `white house mcdonalds order` — #9191, metadata/background, tags: metadata-trait, mature-review
+- `"'THING'WITH THE BURGERS AGAIN` — #2546, rapidocr/visible_text, tags: npc-bark, visual-ocr, mature-review
+- `"'THING*WITHTHE BURGERS AGAIN` — #6479, rapidocr/visible_text, tags: npc-bark, visual-ocr, mature-review
+- `'M LETTING GREED CORRUPT ME` — #6625, rapidocr/visible_text, tags: visual-ocr, mature-review
+- `'M LETTING GREED CORRUPT ME` — #5623, rapidocr/visible_text, tags: visual-ocr, mature-review
+- `blood splatter` — #6565, metadata/overlay, tags: metadata-trait, mature-review
+- `blood splatter` — #2606, metadata/overlay, tags: metadata-trait, mature-review
+- `blood splatter` — #6916, metadata/overlay, tags: metadata-trait, mature-review
+- `blood splatter` — #4950, metadata/overlay, tags: metadata-trait, mature-review
+- `drifella kill scene` — #8111, metadata/background, tags: surreal-prop, metadata-trait, mature-review
+- `drifella kill scene` — #5401, metadata/background, tags: surreal-prop, metadata-trait, mature-review
+- `drifella kill scene` — #4824, metadata/background, tags: surreal-prop, metadata-trait, mature-review
+- `drifella kill scene` — #8224, metadata/background, tags: surreal-prop, metadata-trait, mature-review
+- `fired from mcdonalds` — #7980, metadata/overlay, tags: metadata-trait, mature-review
+- `fired from mcdonalds` — #2546, metadata/overlay, tags: metadata-trait, mature-review
+- `fired from mcdonalds` — #6479, metadata/overlay, tags: metadata-trait, mature-review
+- `FLETTING GREED CORRUPTME` — #2357, rapidocr/visible_text, tags: visual-ocr, mature-review
+- `fortnite nerf gun` — #7677, metadata/right_hand, tags: metadata-trait, mature-review
+- `fortnite nerf gun` — #622, metadata/right_hand, tags: metadata-trait, mature-review
+- `fortnite nerf gun` — #9176, metadata/right_hand, tags: metadata-trait, mature-review
+- `frazetta with gun` — #3166, metadata/background, tags: metadata-trait, mature-review
+- `FREAKING FIRED FROM MILADY'S` — #2546, rapidocr/visible_text, tags: surreal-prop, visual-ocr, mature-review
+- `general with gun` — #8198, metadata/cloth, tags: metadata-trait, mature-review
+- `general with gun` — #9878, metadata/cloth, tags: metadata-trait, mature-review
+- `general with gun` — #1851, metadata/cloth, tags: metadata-trait, mature-review
+- `general with gun` — #8354, metadata/cloth, tags: metadata-trait, mature-review
+- `general with gun` — #6455, metadata/cloth, tags: metadata-trait, mature-review
+- `general with gun` — #7333, metadata/cloth, tags: metadata-trait, mature-review
+- `I'MLETTING GREED CORRUPT ME` — #4563, rapidocr/visible_text, tags: visual-ocr, mature-review
+- `IM LETTING GREED CORRUPT ME` — #958, rapidocr/visible_text, tags: visual-ocr, mature-review
+- `kill all solana nfts` — #2430, metadata/right_hand, tags: metadata-trait, mature-review
+- `kill all solana nfts` — #5729, metadata/right_hand, tags: metadata-trait, mature-review
+- `kill all solana nfts` — #4032, metadata/right_hand, tags: metadata-trait, mature-review
+- `kill all solana nfts` — #1664, metadata/right_hand, tags: metadata-trait, mature-review
+- `kill all solana nfts` — #6582, metadata/right_hand, tags: metadata-trait, mature-review
+- `kill all solana nfts` — #3548, metadata/right_hand, tags: metadata-trait, mature-review
+- `kill all solana nfts` — #7852, metadata/right_hand, tags: metadata-trait, mature-review
+- `lego nazi zombies` — #7135, metadata/right_hand, tags: metadata-trait, mature-review
+- `lego nazi zombies` — #2322, metadata/right_hand, tags: metadata-trait, mature-review
+- `lego nazi zombies` — #8234, metadata/right_hand, tags: metadata-trait, mature-review

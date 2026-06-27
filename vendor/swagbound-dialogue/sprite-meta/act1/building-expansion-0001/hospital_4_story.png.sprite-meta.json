@@ -1,0 +1,22 @@
+{
+  "sprite": "hospital_4_story.png",
+  "runtimeAsset": "public/assets/act1/building-expansion-0001/hospital_4_story.png",
+  "sprite_dimensions": {
+    "w": 171,
+    "h": 210
+  },
+  "placement_offset_px": {
+    "x": 0,
+    "y": 55
+  },
+  "ysort_anchor_local": {
+    "x": 86,
+    "y": 210
+  },
+  "collision_rect_local": {
+    "x": 26,
+    "y": 168,
+    "w": 120,
+    "h": 24
+  }
+}

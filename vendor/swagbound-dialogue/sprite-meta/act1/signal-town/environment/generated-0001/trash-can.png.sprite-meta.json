@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "trash-can.png",
+  "sprite_dimensions": {
+    "w": 40,
+    "h": 48
+  },
+  "ysort_anchor_local": {
+    "x": 20,
+    "y": 48
+  },
+  "collision_rect_local": {
+    "x": 8,
+    "y": 35,
+    "w": 24,
+    "h": 10
+  },
+  "door_anchor_local": {
+    "x": 20,
+    "y": 48
+  },
+  "door_facing": "south",
+  "source": {
+    "sliceId": "signal-town-environment-generated-0001",
+    "sourceManifest": "asset-lab/manifests/onett-environment-sprites-0001.json",
+    "sourceCandidate": "trash-can",
+    "processedSource": "asset-lab/generated/processed/onett-environment-sprites-0001/urban-props/trash-can.png",
+    "runtimeAsset": "public/assets/act1/signal-town/environment/generated-0001/trash-can.png"
+  },
+  "notes": "First reviewable Signal Town generated-environment population slice. This metadata is conservative and should be visually reviewed before promotion beyond the proof map."
+}

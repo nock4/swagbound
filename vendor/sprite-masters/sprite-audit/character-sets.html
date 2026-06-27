@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Canonical Character Set Review</title>
+  <style>
+    :root { color-scheme: light; --bg:#f4f4ef; --panel:#fff; --ink:#202124; --muted:#666b70; --line:#d4d6d0; --accent:#176b87; --bad:#9b3030; --warn:#8a6416; --ok:#2f6f4e; --chip:#ece8de; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:14px/1.45 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color:var(--ink); background:var(--bg); }
+    header { position:sticky; top:0; z-index:10; display:flex; justify-content:space-between; gap:16px; align-items:center; padding:14px 18px; border-bottom:1px solid var(--line); background:rgba(244,244,239,.97); backdrop-filter:blur(10px); }
+    h1 { margin:0; font-size:20px; line-height:1.2; letter-spacing:0; }
+    h2 { margin:0; font-size:15px; letter-spacing:0; }
+    h3 { margin:10px 0 4px; font-size:12px; letter-spacing:0; }
+    p { margin:4px 0 0; color:var(--muted); font-size:12px; }
+    nav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+    .copy-status { min-width:120px; color:var(--ok); font-size:12px; text-align:right; }
+    .seed-status { color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 8px; background:#fff; font-size:11px; }
+    a, button { border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:6px; padding:8px 10px; text-decoration:none; min-height:36px; }
+    button { cursor:pointer; font:inherit; }
+    .primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; padding:12px 18px; border-bottom:1px solid var(--line); background:#fbfbf8; }
+    .stats div { border:1px solid var(--line); border-radius:8px; background:#fff; padding:9px; display:grid; gap:2px; }
+    .stats strong { font-size:19px; line-height:1; }
+    .stats span { color:var(--muted); font-size:10px; text-transform:uppercase; overflow-wrap:anywhere; }
+    .toolbar { display:grid; grid-template-columns:minmax(220px, 1fr) 170px 210px 170px 140px 150px auto; gap:8px; align-items:center; padding:12px 18px; border-bottom:1px solid var(--line); background:#fafaf7; }
+    input, select, textarea { width:100%; border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--ink); padding:8px; font:inherit; }
+    textarea { min-height:54px; resize:vertical; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(520px, 1fr)); gap:12px; padding:14px 18px 40px; }
+    .card { display:grid; grid-template-columns:220px minmax(0, 1fr); border:1px solid var(--line); border-radius:8px; background:var(--panel); overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.08); }
+    .card.kind-enemy { border-left:5px solid var(--accent); }
+    .card.kind-friendly-npc-or-hero { border-left:5px solid var(--ok); }
+    .card.kind-enemy-candidate { border-left:5px solid var(--warn); }
+    .card.decision-reject-set { border-color:#d2a39c; background:#fff8f6; }
+    .card.decision-accept-canonical, .card.decision-ow-only-friendly { border-color:#9ab8ad; background:#f8fbf9; }
+    .visuals { display:grid; grid-template-rows:repeat(3, minmax(130px, auto)); gap:0; background:
+      linear-gradient(45deg, #e7e7e7 25%, transparent 25%) 0 0/14px 14px,
+      linear-gradient(45deg, transparent 75%, #e7e7e7 75%) 0 0/14px 14px,
+      linear-gradient(45deg, transparent 75%, #e7e7e7 75%) 7px 7px/14px 14px,
+      linear-gradient(45deg, #e7e7e7 25%, #f9f9f9 25%) 7px 7px/14px 14px; border-right:1px solid var(--line); }
+    .slot { min-height:130px; margin:0; display:grid; grid-template-rows:auto 1fr auto; gap:4px; place-items:center; padding:8px; border-bottom:1px solid rgba(0,0,0,.08); background:rgba(255,255,255,.56); }
+    .slot:last-child { border-bottom:0; }
+    .slot img { max-width:100%; max-height:88px; image-rendering:pixelated; }
+    .slot figcaption { justify-self:start; border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.92); padding:1px 6px; font-size:10px; color:#333; }
+    .slot small { width:100%; color:var(--muted); font-size:9px; overflow-wrap:anywhere; text-align:center; }
+    .slot-replacement { outline:2px solid rgba(23,107,135,.38); outline-offset:-3px; background:rgba(226,244,248,.7); }
+    .empty { display:grid; place-items:center; min-height:60px; color:var(--muted); font-size:12px; }
+    .body { padding:10px; display:grid; gap:8px; min-width:0; }
+    .card-head { display:flex; justify-content:space-between; gap:8px; align-items:start; }
+    .card-head > span { flex:0 0 auto; background:var(--chip); border:1px solid #ddd8ca; border-radius:999px; padding:2px 8px; font-size:10px; color:#3f4245; }
+    .tags { display:flex; flex-wrap:wrap; gap:4px; }
+    .tags span { background:var(--chip); border:1px solid #ddd8ca; border-radius:999px; padding:1px 6px; font-size:10px; color:#3f4245; max-width:100%; overflow-wrap:anywhere; }
+    .notes { border-left:3px solid var(--line); padding-left:8px; }
+    .assignment-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; align-items:end; }
+    .check { display:flex; gap:6px; align-items:center; min-height:36px; padding:8px; border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--ink); line-height:1.2; overflow-wrap:anywhere; }
+    .check input { width:auto; margin:0; }
+    .select-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; }
+    .replacement-box { display:grid; grid-template-columns:minmax(160px, .7fr) minmax(220px, 1.3fr); gap:6px; padding:8px; border:1px solid var(--line); border-radius:6px; background:#fbfbf8; }
+    label { display:grid; gap:3px; color:var(--muted); font-size:11px; min-width:0; }
+    .button-row { display:flex; gap:6px; flex-wrap:wrap; }
+    .button-row button { min-height:32px; padding:6px 8px; font-size:12px; }
+    .candidate-review { border-color:#d6cdc0; background:#fffaf0; }
+    .candidate-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(116px, 1fr)); gap:8px; margin-top:8px; }
+    .candidate-tile { position:relative; display:grid; grid-template-rows:18px 74px auto; gap:4px; align-items:center; justify-items:center; min-height:132px; padding:6px; border:1px solid var(--line); border-radius:6px; background:#fff; text-align:center; color:var(--ink); }
+    .candidate-tile.active { border-color:var(--accent); box-shadow:0 0 0 2px rgba(23,107,135,.18); background:#eef8fa; }
+    .candidate-tile.runtime-ref::after { content:"runtime"; position:absolute; top:5px; right:5px; border:1px solid rgba(23,107,135,.35); border-radius:999px; padding:1px 5px; background:#eef8fa; color:var(--accent); font-size:9px; }
+    .candidate-tile span { justify-self:start; color:var(--muted); font-size:10px; }
+    .candidate-tile img { max-width:100%; max-height:72px; image-rendering:pixelated; }
+    .candidate-tile small { width:100%; color:var(--muted); font-size:9px; overflow-wrap:anywhere; }
+    details { border:1px solid var(--line); border-radius:6px; padding:8px; background:#fbfbf8; }
+    summary { cursor:pointer; color:#444; }
+    .path-list { display:grid; gap:2px; max-height:190px; overflow:auto; border:1px solid var(--line); border-radius:6px; background:#fff; }
+    .path-list div { display:grid; grid-template-columns:90px 1fr; gap:6px; padding:5px 6px; border-bottom:1px solid var(--line); color:var(--muted); font-size:10px; overflow-wrap:anywhere; }
+    .path-list div:last-child { border-bottom:0; }
+    dialog { width:min(980px, calc(100vw - 28px)); border:1px solid var(--line); border-radius:8px; padding:0; }
+    .dialog-head, .dialog-actions { padding:12px 14px; display:flex; justify-content:space-between; border-bottom:1px solid var(--line); }
+    .dialog-actions { border-top:1px solid var(--line); border-bottom:0; justify-content:flex-end; }
+    #jsonPreview { min-height:420px; border:0; border-radius:0; font:12px/1.35 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; white-space:pre; }
+    @media (max-width: 860px) { header { position:static; display:grid; } nav { justify-content:start; } .toolbar { grid-template-columns:1fr; } .grid { grid-template-columns:1fr; } .card { grid-template-columns:1fr; } .visuals { grid-template-columns:repeat(3, minmax(0, 1fr)); grid-template-rows:auto; border-right:0; border-bottom:1px solid var(--line); } .select-grid, .assignment-grid, .replacement-box { grid-template-columns:1fr; } .check { justify-content:start; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Canonical Character Set Review</h1>
+      <p>One decision card per character set. Enemies need one battle + one overworld. Friendly NPCs need one overworld or walk asset.</p>
+    </div>
+    <nav>
+      <a href="index.html">Index</a>
+      <a href="battle-backgrounds.html">Battle Backgrounds</a>
+      <a href="enemies.html">Old Enemy Audit</a>
+      <a href="duplicates.html">Duplicates</a>
+      <button id="copyJson" class="primary" type="button">Copy Decisions</button>
+      <button id="copyCleanup" type="button">Copy Cleanup Proposal</button>
+      <button id="showJson" type="button">Preview JSON</button>
+      <span class="seed-status">420 seeded / 0 visible</span>
+      <span id="copyStatus" class="copy-status" role="status" aria-live="polite"></span>
+    </nav>
+  </header>
+  <section class="stats">
+    <div><strong>0</strong><span>remaining character sets</span></div>
+    <div><strong>420</strong><span>total character sets</span></div>
+    <div><strong>0</strong><span>runtime Enemy Sets</span></div><div><strong>0</strong><span>friendly Npc Or Hero Sets</span></div><div><strong>0</strong><span>enemy Candidate Sets</span></div><div><strong>0</strong><span>manifest Selected Review Only Sets</span></div><div><strong>0</strong><span>staged Needs Human Selection Sets</span></div><div><strong>0</strong><span>incomplete Enemy Candidate Sets</span></div><div><strong>0</strong><span>missing Enemy Pair Count</span></div><div><strong>0</strong><span>non Selected Variant Paths</span></div><div><strong>0</strong><span>blocked Runtime Cleanup Paths</span></div>
+  </section>
+  <section class="toolbar">
+    <input id="search" type="search" placeholder="Search ids, names, paths, manifests">
+    <select id="kindFilter">
+      <option value="all">All kinds</option>
+      <option value="enemy">Runtime enemies</option>
+      <option value="enemy-candidate">Enemy candidates</option>
+      <option value="friendly-npc-or-hero">Friendly / hero</option>
+    </select>
+    <select id="statusFilter">
+      <option value="all">All authority statuses</option>
+
+    </select>
+    <select id="decisionFilter">
+      <option value="all">All decisions</option>
+      <option value="undecided">Undecided</option>
+      <option value="accept-canonical">Accept canonical</option>
+      <option value="ow-only-friendly">OW only friendly</option>
+      <option value="needs-selection">Needs selection</option>
+      <option value="reject-set">Reject set</option>
+      <option value="preserve-evidence-only">Evidence only</option>
+    </select>
+    <select id="actFilter">
+      <option value="all">All acts</option>
+      <option value="unassigned">Unassigned</option><option value="act-1">Act 1</option><option value="act-2">Act 2</option><option value="act-3">Act 3</option><option value="future-act">Future act</option>
+    </select>
+    <select id="flagFilter">
+      <option value="all">All flags</option>
+      <option value="boss">Boss</option>
+      <option value="friendly">Friendly OW NPC</option>
+      <option value="replace-overworld">Replace OW</option>
+      <option value="regenerate-overworld">Regenerate OW</option>
+    </select>
+    <span id="count"></span>
+  </section>
+  <main id="grid" class="grid"></main>
+  <dialog id="jsonDialog">
+    <div class="dialog-head"><strong>Export JSON</strong><button id="closeJson" type="button">Close</button></div>
+    <textarea id="jsonPreview" spellcheck="false"></textarea>
+    <div class="dialog-actions"><button id="copyJsonFromDialog" class="primary" type="button">Copy</button></div>
+  </dialog>
+  <script>
+    const AUTHORITY = {
+  "schema": "swagbound.characterSetAuthorityReview.v1",
+  "generatedAt": "2026-05-26T00:50:19.672Z",
+  "reviewOnly": true,
+  "runtimePromotionAllowed": false,
+  "sourceAuditPath": "asset-lab/sprites/sprite-audit/sprite-audit.json",
+  "sourceRuntimeRosterPath": "swagbound-phaser/public/data/enemy-roster.json",
+  "sourceBattleContentPath": "swagbound-phaser/public/data/content-battle.json",
+  "policy": {
+    "assignmentUnit": "character-set",
+    "enemyRequirement": "one battle sprite and one overworld sprite",
+    "friendlyNpcRequirement": "one overworld or walk sprite only",
+    "actAssignmentOptions": [
+      "unassigned",
+      "act-1",
+      "act-2",
+      "act-3",
+      "future-act"
+    ],
+    "bossFlagIsReviewMetadataOnly": true,
+    "friendlyNpcFlagMeansNoBattleRequired": true,
+    "overworldReplacementMustUseSameCharacterSetCandidate": true,
+    "runtimeRosterIsCurrentAuthority": true,
+    "cleanupIsProposalOnly": true,
+    "destructiveActionAllowed": false,
+    "runtimeReferencesBlockAutomaticDeletion": true
+  },
+  "counts": {
+    "characterSets": 0,
+    "runtimeEnemySets": 0,
+    "friendlyNpcOrHeroSets": 0,
+    "enemyCandidateSets": 0,
+    "manifestSelectedReviewOnlySets": 0,
+    "stagedNeedsHumanSelectionSets": 0,
+    "incompleteEnemyCandidateSets": 0,
+    "missingEnemyPairCount": 0,
+    "nonSelectedVariantPaths": 0,
+    "blockedRuntimeCleanupPaths": 0
+  },
+  "records": [],
+  "fullCounts": {
+    "characterSets": 420,
+    "runtimeEnemySets": 36,
+    "friendlyNpcOrHeroSets": 11,
+    "enemyCandidateSets": 373,
+    "manifestSelectedReviewOnlySets": 11,
+    "stagedNeedsHumanSelectionSets": 278,
+    "incompleteEnemyCandidateSets": 84,
+    "missingEnemyPairCount": 88,
+    "nonSelectedVariantPaths": 1434,
+    "blockedRuntimeCleanupPaths": 37
+  }
+};
+    const SEEDED_STATE = {};
+    const STORAGE_KEY = "swagbound.characterSetAuthorityReview.v1";
+    const decisions = [
+      ["undecided", "Undecided"],
+      ["accept-canonical", "Accept canonical"],
+      ["ow-only-friendly", "OW only friendly"],
+      ["needs-selection", "Needs selection"],
+      ["reject-set", "Reject set"],
+      ["preserve-evidence-only", "Evidence only"]
+    ];
+    const actOptions = [
+  [
+    "unassigned",
+    "Unassigned"
+  ],
+  [
+    "act-1",
+    "Act 1"
+  ],
+  [
+    "act-2",
+    "Act 2"
+  ],
+  [
+    "act-3",
+    "Act 3"
+  ],
+  [
+    "future-act",
+    "Future act"
+  ]
+];
+    const overworldSpriteDecisions = [
+  [
+    "keep-selected",
+    "Keep selected overworld"
+  ],
+  [
+    "replace-from-same-source-duplicate",
+    "Replace from same-source duplicates"
+  ],
+  [
+    "regenerate-overworld",
+    "Regenerate overworld"
+  ],
+  [
+    "not-applicable",
+    "Not applicable"
+  ]
+];
+    let state = { ...SEEDED_STATE, ...loadState() };
+    const els = {
+      search: document.getElementById("search"),
+      kindFilter: document.getElementById("kindFilter"),
+      statusFilter: document.getElementById("statusFilter"),
+      decisionFilter: document.getElementById("decisionFilter"),
+      actFilter: document.getElementById("actFilter"),
+      flagFilter: document.getElementById("flagFilter"),
+      count: document.getElementById("count"),
+      grid: document.getElementById("grid"),
+      copyJson: document.getElementById("copyJson"),
+      copyCleanup: document.getElementById("copyCleanup"),
+      showJson: document.getElementById("showJson"),
+      jsonDialog: document.getElementById("jsonDialog"),
+      jsonPreview: document.getElementById("jsonPreview"),
+      closeJson: document.getElementById("closeJson"),
+      copyJsonFromDialog: document.getElementById("copyJsonFromDialog"),
+      copyStatus: document.getElementById("copyStatus")
+    };
+    render();
+    bind();
+
+    function loadState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") || {}; }
+      catch { return {}; }
+    }
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+    function recordState(id) {
+      if (!state[id]) {
+        const record = AUTHORITY.records.find((item) => item.id === id);
+        state[id] = defaultRecordState(record);
+      } else {
+        state[id] = { ...defaultRecordState(AUTHORITY.records.find((item) => item.id === id)), ...state[id] };
+      }
+      return state[id];
+    }
+    function readRecordState(id) {
+      const record = AUTHORITY.records.find((item) => item.id === id);
+      return { ...defaultRecordState(record), ...(state[id] || {}) };
+    }
+    function canonicalizeFlaggedState(local) {
+      if (local.isBoss || local.isOverworldFriendlyNpc) {
+        return { ...local, decisionStatus: "accept-canonical" };
+      }
+      return local;
+    }
+    function defaultRecordState(record) {
+      return {
+        decisionStatus: "undecided",
+        actAssignment: "unassigned",
+        isBoss: false,
+        isOverworldFriendlyNpc: false,
+        overworldSpriteDecision: "keep-selected",
+        replacementOverworldPath: "",
+        notes: ""
+      };
+    }
+    function bind() {
+      els.search.addEventListener("input", render);
+      els.kindFilter.addEventListener("change", render);
+      els.statusFilter.addEventListener("change", render);
+      els.decisionFilter.addEventListener("change", render);
+      els.actFilter.addEventListener("change", render);
+      els.flagFilter.addEventListener("change", render);
+      els.copyJson.addEventListener("click", copyDecisionExport);
+      els.copyCleanup.addEventListener("click", copyCleanupExport);
+      els.copyJsonFromDialog.addEventListener("click", copyDecisionExport);
+      els.showJson.addEventListener("click", showJson);
+      els.closeJson.addEventListener("click", () => els.jsonDialog.close());
+      els.grid.addEventListener("input", (event) => {
+        const id = event.target.dataset.id;
+        if (!id) return;
+        const current = recordState(id);
+        current[event.target.dataset.field] = event.target.type === "checkbox" ? event.target.checked : event.target.value;
+        if ((event.target.dataset.field === "isBoss" || event.target.dataset.field === "isOverworldFriendlyNpc") && event.target.checked) {
+          current.decisionStatus = "accept-canonical";
+        }
+        saveState();
+        if (event.target.tagName === "SELECT" || event.target.type === "checkbox") render();
+        else renderCount();
+      });
+      els.grid.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const record = AUTHORITY.records.find((item) => item.id === button.dataset.id);
+        if (!record) return;
+        const current = recordState(record.id);
+        if (button.dataset.action === "useSuggestions") {
+          current.decisionStatus = record.kind === "friendly-npc-or-hero" ? "ow-only-friendly" : "accept-canonical";
+          current.selectedBattlePath = record.selectedBattlePath || record.suggestedBattlePath || "";
+          current.selectedOverworldPath = record.selectedOverworldPath || record.suggestedOverworldPath || "";
+          current.selectedWalkPath = record.selectedWalkPath || record.suggestedWalkPath || "";
+          current.isOverworldFriendlyNpc = record.kind === "friendly-npc-or-hero";
+          current.overworldSpriteDecision = "keep-selected";
+          current.replacementOverworldPath = "";
+        }
+        if (button.dataset.action === "pickOverworldCandidate") {
+          const selectedPath = button.dataset.path || "";
+          const currentOverworld = current.selectedOverworldPath || record.selectedOverworldPath || record.suggestedOverworldPath || "";
+          if (!currentOverworld || selectedPath === currentOverworld) {
+            current.selectedOverworldPath = selectedPath;
+            current.overworldSpriteDecision = "keep-selected";
+            current.replacementOverworldPath = "";
+          } else {
+            current.overworldSpriteDecision = "replace-from-same-source-duplicate";
+            current.replacementOverworldPath = selectedPath;
+          }
+        }
+        if (button.dataset.action === "needsSelection") current.decisionStatus = "needs-selection";
+        if (button.dataset.action === "rejectSet") current.decisionStatus = "reject-set";
+        saveState();
+        render();
+      });
+    }
+    function currentRecords() {
+      const needle = els.search.value.trim().toLowerCase();
+      const kind = els.kindFilter.value;
+      const status = els.statusFilter.value;
+      const decision = els.decisionFilter.value;
+      const act = els.actFilter.value;
+      const flag = els.flagFilter.value;
+      return AUTHORITY.records.filter((record) => {
+        const local = readRecordState(record.id);
+        const flagMatch = flag === "all"
+          || (flag === "boss" && local.isBoss)
+          || (flag === "friendly" && local.isOverworldFriendlyNpc)
+          || (flag === "replace-overworld" && local.overworldSpriteDecision === "replace-from-same-source-duplicate")
+          || (flag === "regenerate-overworld" && local.overworldSpriteDecision === "regenerate-overworld");
+        const hay = [
+          record.id, record.displayName, record.kind, record.status, record.selectionAuthority,
+          local.actAssignment, local.overworldSpriteDecision, local.isBoss ? "boss" : "", local.isOverworldFriendlyNpc ? "friendly overworld npc" : "",
+          record.notes?.join(" "), record.manifestRefs?.map((ref) => ref.repoPath).join(" "),
+          record.assets?.map((asset) => asset.repoPath).join(" ")
+        ].join(" ").toLowerCase();
+        return (kind === "all" || record.kind === kind)
+          && (status === "all" || record.status === status)
+          && (decision === "all" || local.decisionStatus === decision)
+          && (act === "all" || local.actAssignment === act)
+          && flagMatch
+          && (!needle || hay.includes(needle));
+      });
+    }
+    function render() {
+      const records = currentRecords();
+      els.grid.innerHTML = records.map(renderCard).join("");
+      renderCount(records.length);
+    }
+    function renderCount(count = null) {
+      const decided = Object.values(state).filter((item) => item.decisionStatus && item.decisionStatus !== "undecided").length;
+      const total = AUTHORITY.fullCounts?.characterSets || AUTHORITY.records.length;
+      els.count.textContent = (count ?? currentRecords().length) + " shown / " + AUTHORITY.records.length + " remaining sets / " + total + " total / " + decided + " visible decided";
+    }
+    function renderCard(record) {
+      const local = readRecordState(record.id);
+      const battleChoice = local.selectedBattlePath || record.selectedBattlePath || record.suggestedBattlePath || "";
+      const overworldChoice = local.selectedOverworldPath || record.selectedOverworldPath || record.suggestedOverworldPath || "";
+      const effectiveOverworldChoice = proposedOverworldPath(local, { overworld: overworldChoice });
+      const isReplacingOverworld = effectiveOverworldChoice && effectiveOverworldChoice !== overworldChoice;
+      const walkChoice = local.selectedWalkPath || record.selectedWalkPath || record.suggestedWalkPath || "";
+      return '<article class="card kind-' + escapeAttr(record.kind) + ' decision-' + escapeAttr(local.decisionStatus) + (isReplacingOverworld ? ' replacing-overworld' : '') + '">' +
+        '<div class="visuals">' +
+          renderSlot("Battle", battleChoice, record) +
+          renderSlot(isReplacingOverworld ? "Proposed Overworld" : "Overworld", effectiveOverworldChoice, record, isReplacingOverworld ? "replacement" : "") +
+          renderSlot("Walk", walkChoice, record) +
+        '</div>' +
+        '<div class="body">' +
+          '<div class="card-head"><div><h2>' + escapeHtml(record.displayName) + '</h2><p>' + escapeHtml(record.id) + '</p></div><span>' + escapeHtml(labelFromId(record.kind)) + '</span></div>' +
+          '<div class="tags">' +
+            tag(record.status) + tag(record.selectionAuthority) + tag(record.requiredSprites.join(" + ")) +
+            (local.actAssignment && local.actAssignment !== "unassigned" ? tag(labelFromId(local.actAssignment)) : "") +
+            (local.isBoss ? tag("boss") : "") +
+            (local.isOverworldFriendlyNpc ? tag("friendly OW NPC") : "") +
+            (isReplacingOverworld ? tag("OW replacement proposed") : "") +
+            (record.sharedRuntimeSpriteWith.length ? tag("shared with " + record.sharedRuntimeSpriteWith.join(", ")) : "") +
+          '</div>' +
+          '<div class="notes">' + (record.notes || []).map((note) => '<p>' + escapeHtml(note) + '</p>').join("") + '</div>' +
+          renderClassificationControls(record, local) +
+          renderSelects(record, battleChoice, overworldChoice, walkChoice) +
+          renderOverworldReplacementControls(record, local, overworldChoice) +
+          renderOverworldCandidateGallery(record, local, overworldChoice) +
+          '<label>Decision <select data-id="' + escapeAttr(record.id) + '" data-field="decisionStatus">' + decisions.map(([value, label]) => '<option value="' + escapeAttr(value) + '"' + (local.decisionStatus === value ? " selected" : "") + '>' + escapeHtml(label) + '</option>').join("") + '</select></label>' +
+          '<label>Notes <textarea data-id="' + escapeAttr(record.id) + '" data-field="notes" placeholder="Why this set is accepted, rejected, or needs source review">' + escapeHtml(local.notes || "") + '</textarea></label>' +
+          '<div class="button-row"><button type="button" data-action="useSuggestions" data-id="' + escapeAttr(record.id) + '">Use Suggested</button><button type="button" data-action="needsSelection" data-id="' + escapeAttr(record.id) + '">Needs Selection</button><button type="button" data-action="rejectSet" data-id="' + escapeAttr(record.id) + '">Reject Set</button></div>' +
+          renderDetails(record) +
+        '</div>' +
+      '</article>';
+    }
+    function renderClassificationControls(record, local) {
+      return '<div class="assignment-grid">' +
+        '<label>Act <select data-id="' + escapeAttr(record.id) + '" data-field="actAssignment">' + actOptions.map(([value, label]) => '<option value="' + escapeAttr(value) + '"' + (local.actAssignment === value ? " selected" : "") + '>' + escapeHtml(label) + '</option>').join("") + '</select></label>' +
+        '<label class="check"><input type="checkbox" data-id="' + escapeAttr(record.id) + '" data-field="isBoss"' + (local.isBoss ? " checked" : "") + '> Boss</label>' +
+        '<label class="check"><input type="checkbox" data-id="' + escapeAttr(record.id) + '" data-field="isOverworldFriendlyNpc"' + (local.isOverworldFriendlyNpc ? " checked" : "") + '> Friendly overworld NPC</label>' +
+      '</div>';
+    }
+    function renderSlot(label, repoPath, record, badge = "") {
+      const asset = record.assets.find((candidate) => candidate.repoPath === repoPath);
+      const image = asset?.imageSrc || "";
+      return '<figure class="slot' + (badge ? ' slot-' + escapeAttr(badge) : '') + '"><figcaption>' + escapeHtml(label) + '</figcaption>' +
+        (image ? '<img loading="lazy" src="' + escapeAttr(image) + '" alt="">' : '<div class="empty">None</div>') +
+        '<small>' + escapeHtml(repoPath ? repoPath.replace("swagbound-phaser/public/assets/", "/assets/") : "unselected") + '</small></figure>';
+    }
+    function renderSelects(record, battleChoice, overworldChoice, walkChoice) {
+      const battle = record.assetBuckets.battle || [];
+      const ow = record.assetBuckets.overworld || [];
+      const walk = record.assetBuckets.walk || [];
+      return '<div class="select-grid">' +
+        selectField(record.id, "selectedBattlePath", "Battle", battle, battleChoice) +
+        selectField(record.id, "selectedOverworldPath", "Overworld", ow, overworldChoice) +
+        selectField(record.id, "selectedWalkPath", "Walk", walk, walkChoice) +
+      '</div>';
+    }
+    function renderOverworldReplacementControls(record, local, overworldChoice) {
+      const ow = record.assetBuckets.overworld || [];
+      const replacement = local.replacementOverworldPath || overworldChoice || "";
+      return '<div class="replacement-box">' +
+        '<label>Overworld sprite decision <select data-id="' + escapeAttr(record.id) + '" data-field="overworldSpriteDecision">' + overworldSpriteDecisions.map(([value, label]) => '<option value="' + escapeAttr(value) + '"' + (local.overworldSpriteDecision === value ? " selected" : "") + '>' + escapeHtml(label) + '</option>').join("") + '</select></label>' +
+        (ow.length
+          ? '<label>Replacement overworld from same set <select data-id="' + escapeAttr(record.id) + '" data-field="replacementOverworldPath"><option value="">Use selected overworld</option>' + ow.map((asset, index) => '<option value="' + escapeAttr(asset.repoPath) + '"' + (replacement === asset.repoPath && local.replacementOverworldPath ? " selected" : "") + '>' + escapeHtml((index + 1) + ". " + asset.width + "x" + asset.height + " / " + asset.repoPath) + '</option>').join("") + '</select></label>'
+          : '<label>Replacement overworld from same set<select disabled><option>No overworld candidates available</option></select></label>') +
+      '</div>';
+    }
+    function renderOverworldCandidateGallery(record, local, overworldChoice) {
+      const ow = record.assetBuckets.overworld || [];
+      if (!ow.length) return "";
+      const proposed = proposedOverworldPath(local, { overworld: overworldChoice });
+      return '<details class="candidate-review" open><summary>Overworld candidate images (' + ow.length + ')</summary><div class="candidate-grid">' +
+        ow.map((asset, index) => {
+          const active = asset.repoPath === proposed;
+          const runtime = asset.runtimeReferenced ? " runtime-ref" : "";
+          return '<button class="candidate-tile' + (active ? ' active' : '') + runtime + '" type="button" data-action="pickOverworldCandidate" data-id="' + escapeAttr(record.id) + '" data-path="' + escapeAttr(asset.repoPath) + '">' +
+            '<span>' + escapeHtml(String(index + 1)) + '</span>' +
+            '<img loading="lazy" src="' + escapeAttr(asset.imageSrc) + '" alt="">' +
+            '<small>' + escapeHtml(asset.width + 'x' + asset.height + ' / ' + asset.repoPath) + '</small>' +
+          '</button>';
+        }).join("") +
+      '</div></details>';
+    }
+    function selectField(id, field, label, assets, selected) {
+      if (!assets.length) return '<label>' + escapeHtml(label) + '<select disabled><option>None available</option></select></label>';
+      return '<label>' + escapeHtml(label) + '<select data-id="' + escapeAttr(id) + '" data-field="' + escapeAttr(field) + '">' +
+        '<option value="">Unselected</option>' +
+        assets.map((asset, index) => '<option value="' + escapeAttr(asset.repoPath) + '"' + (selected === asset.repoPath ? " selected" : "") + '>' + escapeHtml((index + 1) + ". " + asset.width + "x" + asset.height + " / " + asset.repoPath) + '</option>').join("") +
+      '</select></label>';
+    }
+    function renderDetails(record) {
+      const cleanupCount = record.nonSelectedVariantPaths.length;
+      const evidenceCount = record.preserveEvidencePaths.length;
+      const blockedCount = record.blockedRuntimeCleanupPaths.length;
+      return '<details><summary>Assets, manifests, cleanup candidates</summary>' +
+        '<h3>Assets</h3><div class="path-list">' + record.assets.map((asset) => '<div><strong>' + escapeHtml(asset.role) + '</strong><span>' + escapeHtml(asset.repoPath) + '</span></div>').join("") + '</div>' +
+        '<h3>Manifests</h3><div class="path-list">' + (record.manifestRefs.length ? record.manifestRefs.map((ref) => '<div><strong>' + escapeHtml(ref.status || "manifest") + '</strong><span>' + escapeHtml(ref.repoPath) + '</span></div>').join("") : '<p>No manifest match found.</p>') + '</div>' +
+        '<h3>Cleanup Preview</h3><p>' + cleanupCount + ' non-selected variants, ' + evidenceCount + ' evidence paths, ' + blockedCount + ' runtime-blocked paths.</p>' +
+      '</details>';
+    }
+    function tag(value) {
+      return value ? '<span>' + escapeHtml(value) + '</span>' : "";
+    }
+    function chosen(record) {
+      const local = readRecordState(record.id);
+      return {
+        battle: local.selectedBattlePath || record.selectedBattlePath || record.suggestedBattlePath || null,
+        overworld: local.selectedOverworldPath || record.selectedOverworldPath || record.suggestedOverworldPath || null,
+        walk: local.selectedWalkPath || record.selectedWalkPath || record.suggestedWalkPath || null,
+      };
+    }
+    function proposedOverworldPath(local, selection) {
+      return local.overworldSpriteDecision === "replace-from-same-source-duplicate" && local.replacementOverworldPath
+        ? local.replacementOverworldPath
+        : selection.overworld;
+    }
+    function cleanupForDecision(record, selection, local) {
+      const keepPaths = new Set([selection.battle, proposedOverworldPath(local, selection), selection.walk].filter(Boolean));
+      const nonSelectedVariantPaths = [];
+      const preserveEvidencePaths = [];
+      const blockedRuntimeCleanupPaths = [];
+      for (const asset of record.assets) {
+        if (keepPaths.has(asset.repoPath)) continue;
+        if (asset.role === "source-anchor" || /source-size|source-retained|identity|mask|raw-alpha/.test(asset.repoPath.toLowerCase())) {
+          preserveEvidencePaths.push(asset.repoPath);
+        } else if (asset.runtimeReferenced) {
+          blockedRuntimeCleanupPaths.push(asset.repoPath);
+        } else {
+          nonSelectedVariantPaths.push(asset.repoPath);
+        }
+      }
+      return { nonSelectedVariantPaths, preserveEvidencePaths, blockedRuntimeCleanupPaths };
+    }
+    function buildDecisionExport() {
+      return {
+        schema: "swagbound.characterSetAuthorityDecisions.v1",
+        sourceSchema: AUTHORITY.schema,
+        exportedAt: new Date().toISOString(),
+        reviewOnly: true,
+        runtimePromotionAllowed: false,
+        sourceReviewPage: "asset-lab/sprites/sprite-audit/character-sets.html",
+        policy: AUTHORITY.policy,
+        decisions: AUTHORITY.records.map((record) => {
+          const local = canonicalizeFlaggedState(readRecordState(record.id));
+          const selection = chosen(record);
+          const replacementOverworldPath = local.replacementOverworldPath || null;
+          const replaceOverworldSprite = local.overworldSpriteDecision === "replace-from-same-source-duplicate";
+          const cleanup = cleanupForDecision(record, selection, local);
+          return {
+            id: record.id,
+            displayName: record.displayName,
+            kind: record.kind,
+            authorityStatus: record.status,
+            decisionStatus: local.decisionStatus || "undecided",
+            actAssignment: local.actAssignment || "unassigned",
+            isBoss: Boolean(local.isBoss),
+            isOverworldFriendlyNpc: Boolean(local.isOverworldFriendlyNpc),
+            notes: local.notes || "",
+            selectedBattlePath: selection.battle,
+            selectedOverworldPath: selection.overworld,
+            selectedWalkPath: selection.walk,
+            overworldSpriteDecision: local.overworldSpriteDecision || "keep-selected",
+            replaceOverworldSprite,
+            replacementOverworldPath,
+            proposedOverworldPath: proposedOverworldPath(local, selection),
+            sameSourceOverworldCandidatePaths: (record.assetBuckets.overworld || []).map((asset) => asset.repoPath),
+            nonSelectedVariantPaths: cleanup.nonSelectedVariantPaths,
+            preserveEvidencePaths: cleanup.preserveEvidencePaths,
+            blockedRuntimeCleanupPaths: cleanup.blockedRuntimeCleanupPaths,
+          };
+        }).filter((decision) => decision.decisionStatus !== "undecided"
+          || decision.notes
+          || decision.actAssignment !== "unassigned"
+          || decision.isBoss
+          || decision.isOverworldFriendlyNpc
+          || decision.overworldSpriteDecision !== "keep-selected"
+          || decision.replacementOverworldPath)
+      };
+    }
+    function buildCleanupExport() {
+      const candidates = [];
+      for (const record of AUTHORITY.records) {
+        const local = readRecordState(record.id);
+        if (!["accept-canonical", "ow-only-friendly", "reject-set", "preserve-evidence-only"].includes(local.decisionStatus)) continue;
+        const selection = chosen(record);
+        const cleanup = cleanupForDecision(record, selection, local);
+        let paths = cleanup.nonSelectedVariantPaths;
+        if (local.decisionStatus === "reject-set") {
+          const selected = new Set([selection.battle, proposedOverworldPath(local, selection), selection.walk].filter(Boolean));
+          paths = record.assets.filter((asset) => !selected.has(asset.repoPath) && !asset.runtimeReferenced).map((asset) => asset.repoPath);
+        }
+        candidates.push({
+          id: record.id,
+          displayName: record.displayName,
+          kind: record.kind,
+          reviewDecision: local.decisionStatus,
+          actAssignment: local.actAssignment || "unassigned",
+          isBoss: Boolean(local.isBoss),
+          isOverworldFriendlyNpc: Boolean(local.isOverworldFriendlyNpc),
+          notes: local.notes || "",
+          selectedBattlePath: selection.battle,
+          selectedOverworldPath: selection.overworld,
+          selectedWalkPath: selection.walk,
+          overworldSpriteDecision: local.overworldSpriteDecision || "keep-selected",
+          replacementOverworldPath: local.replacementOverworldPath || null,
+          proposedAction: local.decisionStatus === "preserve-evidence-only" ? "preserve-evidence-only" : "delete-or-archive-nonselected-variants",
+          humanApprovalRequired: true,
+          destructiveActionAllowed: false,
+          blockedRuntimeCleanupPaths: cleanup.blockedRuntimeCleanupPaths,
+          assetPaths: paths,
+        });
+      }
+      return {
+        schema: "swagbound.characterSetCleanupProposal.v1",
+        sourceDecisionSchema: "swagbound.characterSetAuthorityDecisions.v1",
+        exportedAt: new Date().toISOString(),
+        reviewOnly: true,
+        destructiveActionAllowed: false,
+        runtimePromotionAllowed: false,
+        policy: AUTHORITY.policy,
+        candidates,
+      };
+    }
+    function showJson() {
+      els.jsonPreview.value = JSON.stringify(buildDecisionExport(), null, 2);
+      els.jsonDialog.showModal();
+      els.jsonPreview.focus();
+      els.jsonPreview.select();
+    }
+    async function copyDecisionExport() {
+      const text = JSON.stringify(buildDecisionExport(), null, 2);
+      els.jsonPreview.value = text;
+      try { await navigator.clipboard.writeText(text); }
+      catch {
+        if (!els.jsonDialog.open) els.jsonDialog.showModal();
+        els.jsonPreview.focus();
+        els.jsonPreview.select();
+        document.execCommand("copy");
+      }
+      setCopyStatus("Copied decisions JSON");
+    }
+    async function copyCleanupExport() {
+      const text = JSON.stringify(buildCleanupExport(), null, 2);
+      els.jsonPreview.value = text;
+      try { await navigator.clipboard.writeText(text); }
+      catch {
+        if (!els.jsonDialog.open) els.jsonDialog.showModal();
+        els.jsonPreview.focus();
+        els.jsonPreview.select();
+        document.execCommand("copy");
+      }
+      setCopyStatus("Copied cleanup proposal");
+    }
+    function setCopyStatus(message) {
+      els.copyStatus.textContent = message;
+      window.clearTimeout(setCopyStatus.timer);
+      setCopyStatus.timer = window.setTimeout(() => { els.copyStatus.textContent = ""; }, 2400);
+    }
+    function labelFromId(value) {
+      return String(value || "").replace(/[_-]+/g, " ").replace(/([a-z])([A-Z])/g, "$1 $2").trim();
+    }
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+    function escapeAttr(value) { return escapeHtml(value); }
+  </script>
+</body>
+</html>

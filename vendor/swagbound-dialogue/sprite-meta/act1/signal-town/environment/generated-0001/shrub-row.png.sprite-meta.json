@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "shrub-row.png",
+  "sprite_dimensions": {
+    "w": 80,
+    "h": 40
+  },
+  "ysort_anchor_local": {
+    "x": 40,
+    "y": 40
+  },
+  "collision_rect_local": {
+    "x": 5,
+    "y": 26,
+    "w": 70,
+    "h": 10
+  },
+  "door_anchor_local": {
+    "x": 40,
+    "y": 40
+  },
+  "door_facing": "south",
+  "source": {
+    "sliceId": "signal-town-environment-generated-0001",
+    "sourceManifest": "asset-lab/manifests/onett-environment-sprites-0001.json",
+    "sourceCandidate": "shrub-row",
+    "processedSource": "asset-lab/generated/processed/onett-environment-sprites-0001/nature/shrub-row.png",
+    "runtimeAsset": "public/assets/act1/signal-town/environment/generated-0001/shrub-row.png"
+  },
+  "notes": "First reviewable Signal Town generated-environment population slice. This metadata is conservative and should be visually reviewed before promotion beyond the proof map."
+}

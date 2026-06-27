@@ -1,0 +1,78 @@
+{
+  "schema": "swagbound.nativeChatgptCropManifest.v1",
+  "source": "native-chatgpt-image-tool",
+  "sourceImage": "bosch-house-act1-native-sheet.png",
+  "notes": "Single native ChatGPT image output containing seven isolated Bosch House Act 1 sprite candidates. Crops preserve raw native sheet as source evidence.",
+  "crops": [
+    {
+      "id": "bosch_default_candidate",
+      "source": "bosch-house-act1-native-sheet.png",
+      "crop": {
+        "x": 80,
+        "y": 120,
+        "w": 240,
+        "h": 390
+      }
+    },
+    {
+      "id": "guardian_placeholder",
+      "source": "bosch-house-act1-native-sheet.png",
+      "crop": {
+        "x": 410,
+        "y": 100,
+        "w": 240,
+        "h": 410
+      }
+    },
+    {
+      "id": "cousin_placeholder",
+      "source": "bosch-house-act1-native-sheet.png",
+      "crop": {
+        "x": 760,
+        "y": 130,
+        "w": 260,
+        "h": 380
+      }
+    },
+    {
+      "id": "signal_pet_modem",
+      "source": "bosch-house-act1-native-sheet.png",
+      "crop": {
+        "x": 1100,
+        "y": 215,
+        "w": 260,
+        "h": 290
+      }
+    },
+    {
+      "id": "proof_token_charm",
+      "source": "bosch-house-act1-native-sheet.png",
+      "crop": {
+        "x": 80,
+        "y": 590,
+        "w": 230,
+        "h": 340
+      }
+    },
+    {
+      "id": "proof_token_bowl",
+      "source": "bosch-house-act1-native-sheet.png",
+      "crop": {
+        "x": 370,
+        "y": 660,
+        "w": 310,
+        "h": 280
+      }
+    },
+    {
+      "id": "receipt_router",
+      "source": "bosch-house-act1-native-sheet.png",
+      "crop": {
+        "x": 760,
+        "y": 620,
+        "w": 260,
+        "h": 330
+      }
+    }
+  ]
+}

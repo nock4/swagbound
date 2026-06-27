@@ -1,0 +1,163 @@
+{
+  "schema": "swagbound.battle-backdrop-registry.v1",
+  "default": "projections-001",
+  "zones": {
+    "north-park": "buzzword-shotgun-001",
+    "south-park": "caves-001"
+  },
+  "entries": {
+    "buzzword-shotgun-001": {
+      "image1": "battle-backgrounds/buzzword-shotgun-001.png",
+      "image2": "battle-backgrounds/buzzword-shotgun-002.png",
+      "paletteMode": "acid",
+      "distortionType": "sine-horizontal",
+      "amplitude": 6,
+      "frequency": 2.1,
+      "speed": 0.65,
+      "rowHeight": 14,
+      "letterboxSize": 0
+    },
+    "really-new-god-001": {
+      "image1": "battle-backgrounds/really-new-god-001.png",
+      "image2": "battle-backgrounds/postcards2-001.png",
+      "paletteMode": "pulse",
+      "distortionType": "counter-scroll",
+      "amplitude": 8,
+      "frequency": 2.25,
+      "speed": 0.9,
+      "rowHeight": 10,
+      "letterboxSize": 0
+    },
+    "caves-001": {
+      "image1": "battle-backgrounds/caves-001.png",
+      "image2": "battle-backgrounds/caves-002.png",
+      "paletteMode": "slow-cycle",
+      "distortionType": "sine-horizontal",
+      "amplitude": 6,
+      "frequency": 1.75,
+      "speed": 0.6,
+      "rowHeight": 12,
+      "letterboxSize": 0
+    },
+    "projections-001": {
+      "image1": "battle-backgrounds/projections-001.png",
+      "image2": "battle-backgrounds/datacenters-001.png",
+      "paletteMode": "slow-cycle",
+      "distortionType": "counter-scroll",
+      "amplitude": 9,
+      "frequency": 2.75,
+      "speed": 0.85,
+      "rowHeight": 8,
+      "letterboxSize": 0
+    },
+    "cloudcastle-dessert-oasis-001": {
+      "image1": "battle-backgrounds/cloudcastle-dessert-oasis-001.png",
+      "image2": "battle-backgrounds/internet-iii-001.png",
+      "paletteMode": "pulse",
+      "distortionType": "sine-horizontal",
+      "amplitude": 5,
+      "frequency": 1.5,
+      "speed": 0.5,
+      "rowHeight": 14,
+      "letterboxSize": 1
+    },
+    "dance-system-seen-backwards-001": {
+      "image1": "battle-backgrounds/dance-system-seen-backwards-001.png",
+      "image2": "battle-backgrounds/dance-system-seen-backwards-002.png",
+      "paletteMode": "acid",
+      "distortionType": "counter-scroll",
+      "amplitude": 10,
+      "frequency": 2.8,
+      "speed": 0.95,
+      "rowHeight": 8,
+      "letterboxSize": 0
+    },
+    "pifella-2-22-you-can-not-redo-001": {
+      "image1": "battle-backgrounds/pifella-2-22-you-can-not-redo-001.png",
+      "image2": "battle-backgrounds/pifella-2-22-you-can-not-redo-002.png",
+      "paletteMode": "pulse",
+      "distortionType": "sine-horizontal",
+      "amplitude": 7,
+      "frequency": 1.85,
+      "speed": 0.65,
+      "rowHeight": 10,
+      "letterboxSize": 0
+    },
+    "pifella-2-parasite-chamber-001": {
+      "image1": "battle-backgrounds/pifella-2-parasite-chamber-001.png",
+      "paletteMode": "slow-cycle",
+      "distortionType": "sine-horizontal",
+      "amplitude": 5,
+      "frequency": 1.4,
+      "speed": 0.5,
+      "rowHeight": 12,
+      "letterboxSize": 1
+    },
+    "pray4lowbie-001": {
+      "image1": "battle-backgrounds/pray4lowbie-001.png",
+      "image2": "battle-backgrounds/pray4lowbie-002.png",
+      "paletteMode": "pulse",
+      "distortionType": "sine-horizontal",
+      "amplitude": 6,
+      "frequency": 2.05,
+      "speed": 0.7,
+      "rowHeight": 10,
+      "letterboxSize": 0
+    },
+    "record-of-hyperwar-001": {
+      "image1": "battle-backgrounds/record-of-hyperwar-001.png",
+      "image2": "battle-backgrounds/record-of-hyperwar-002.png",
+      "paletteMode": "acid",
+      "distortionType": "counter-scroll",
+      "amplitude": 11,
+      "frequency": 3.1,
+      "speed": 1.05,
+      "rowHeight": 8,
+      "letterboxSize": 0
+    },
+    "schizobanners-001": {
+      "image1": "battle-backgrounds/schizobanners-001.png",
+      "image2": "battle-backgrounds/schizobanners-002.png",
+      "paletteMode": "acid",
+      "distortionType": "counter-scroll",
+      "amplitude": 9,
+      "frequency": 2.6,
+      "speed": 0.9,
+      "rowHeight": 8,
+      "letterboxSize": 0
+    },
+    "summon-something-4-002": {
+      "image1": "battle-backgrounds/summon-something-4-002.png",
+      "image2": "battle-backgrounds/summon-something-4-003.png",
+      "paletteMode": "slow-cycle",
+      "distortionType": "sine-horizontal",
+      "amplitude": 8,
+      "frequency": 2.35,
+      "speed": 0.8,
+      "rowHeight": 10,
+      "letterboxSize": 0
+    },
+    "syntax-ruins-archive-quotes-log-001": {
+      "image1": "battle-backgrounds/syntax-ruins-archive-quotes-log-001.png",
+      "image2": "battle-backgrounds/syntax-ruins-archive-quotes-log-002.png",
+      "paletteMode": "slow-cycle",
+      "distortionType": "counter-scroll",
+      "amplitude": 7,
+      "frequency": 2.1,
+      "speed": 0.65,
+      "rowHeight": 10,
+      "letterboxSize": 1
+    },
+    "toji-a-001": {
+      "image1": "battle-backgrounds/toji-a-001.png",
+      "image2": "battle-backgrounds/toji-a-002.png",
+      "paletteMode": "pulse",
+      "distortionType": "sine-horizontal",
+      "amplitude": 6,
+      "frequency": 1.7,
+      "speed": 0.55,
+      "rowHeight": 12,
+      "letterboxSize": 0
+    }
+  }
+}

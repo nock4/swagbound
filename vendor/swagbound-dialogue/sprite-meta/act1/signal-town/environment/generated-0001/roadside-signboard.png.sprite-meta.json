@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "roadside-signboard.png",
+  "sprite_dimensions": {
+    "w": 48,
+    "h": 56
+  },
+  "ysort_anchor_local": {
+    "x": 24,
+    "y": 56
+  },
+  "collision_rect_local": {
+    "x": 15,
+    "y": 42,
+    "w": 18,
+    "h": 12
+  },
+  "door_anchor_local": {
+    "x": 24,
+    "y": 56
+  },
+  "door_facing": "south",
+  "source": {
+    "sliceId": "signal-town-environment-generated-0001",
+    "sourceManifest": "asset-lab/manifests/onett-environment-sprites-0001.json",
+    "sourceCandidate": "roadside-signboard",
+    "processedSource": "asset-lab/generated/processed/onett-environment-sprites-0001/signs/roadside-signboard.png",
+    "runtimeAsset": "public/assets/act1/signal-town/environment/generated-0001/roadside-signboard.png"
+  },
+  "notes": "First reviewable Signal Town generated-environment population slice. This metadata is conservative and should be visually reviewed before promotion beyond the proof map."
+}

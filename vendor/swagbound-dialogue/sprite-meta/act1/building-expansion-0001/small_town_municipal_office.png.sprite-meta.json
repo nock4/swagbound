@@ -1,0 +1,22 @@
+{
+  "sprite": "small_town_municipal_office.png",
+  "runtimeAsset": "public/assets/act1/building-expansion-0001/small_town_municipal_office.png",
+  "sprite_dimensions": {
+    "w": 141,
+    "h": 126
+  },
+  "placement_offset_px": {
+    "x": 0,
+    "y": 55
+  },
+  "ysort_anchor_local": {
+    "x": 71,
+    "y": 126
+  },
+  "collision_rect_local": {
+    "x": 21,
+    "y": 96,
+    "w": 100,
+    "h": 20
+  }
+}

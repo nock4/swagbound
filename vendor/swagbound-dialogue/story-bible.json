@@ -1,0 +1,1141 @@
+{
+  "schema": "swagbound.story-bible.v1",
+  "updatedAt": "2026-05-21T00:00:00.000Z",
+  "meta": {
+    "title": "Swagbound Story Bible",
+    "status": "adopted-concept",
+    "runtimeLane": "phaser-reentry-evaluation",
+    "sourcePolicy": "engine-neutral-design-data",
+    "notes": "Dashboard-managed design data. Promotion to runtime content requires an explicit compiler/review step."
+  },
+  "arcs": [
+    {
+      "id": "act-1-social-capture",
+      "title": "Act 1: Social Capture",
+      "status": "adopted-concept",
+      "summary": "Bosch learns that hostile systems do not merely attack people. They invite people to classify themselves, then turn that participation into evidence.",
+      "order": 1,
+      "questIds": [
+        "intro-first-ten-minutes",
+        "gm-factory",
+        "relay-yard"
+      ],
+      "themeIds": [
+        "forced-participation",
+        "social-capture",
+        "provenance",
+        "administrative-evil",
+        "public-version",
+        "private-space-violation"
+      ],
+      "motifIds": [
+        "gm",
+        "smoke",
+        "manager-id",
+        "proof-request",
+        "name-record",
+        "route-brief",
+        "public-version-card",
+        "malady-as-symptom"
+      ],
+      "phaserHooks": {
+        "mapIds": [
+          "signal-town-suburb-proof"
+        ],
+        "journalCategoryId": "route",
+        "flagPrefix": "act1"
+      }
+    },
+    {
+      "id": "act-2-solana-beach",
+      "title": "Act 2: Solana Beach",
+      "status": "adopted-concept",
+      "summary": "Bosch enters a resort town where leisure has become an algorithm: every errand, line, meal, reservation, and beach ritual makes people perform themselves as Solana Beach residents instead of becoming present subjects.",
+      "order": 2,
+      "questIds": [
+        "solana-beach-algorithmic-leisure"
+      ],
+      "themeIds": [
+        "algorithmic-leisure",
+        "self-conscious-presence",
+        "social-capture",
+        "public-version"
+      ],
+      "motifIds": [
+        "seventeen-dollar-ice-cream",
+        "saved-reel-reservations",
+        "line-of-doubles"
+      ],
+      "phaserHooks": {
+        "mapIds": [
+          "act2-coastal-proof"
+        ],
+        "journalCategoryId": "solana-beach",
+        "flagPrefix": "act2"
+      }
+    }
+  ],
+  "quests": [
+    {
+      "id": "intro-first-ten-minutes",
+      "title": "Intro: First Ten Minutes",
+      "status": "writing",
+      "summary": "Bosch wakes into an already-running public record: cold signal, disputed naming, violated bedroom, home threshold, friendly street misrecognition, and the first soft proof gate.",
+      "actId": "act-1-social-capture",
+      "order": 1,
+      "hook": "The title and naming flow imply Bosch has been seen by a system before the player has acted.",
+      "objective": "Leave the bedroom, open the route brief, step onto the first street, and pass one proof gate while realizing the route is recording compliance.",
+      "falseBelief": "If Bosch explains the source truth clearly enough, the town will correct the record and treat him as private and real.",
+      "pressure": "Bosch is not just misrecognized; a hostile public version of him has witness depth, claimant-smell traps, and canon drag before he consents.",
+      "twist": "The first gate is not a lock. It is a friendly request to perform presence in a way the route can record.",
+      "payoff": "The route opens toward Signal Park, but the journal notes that something recorded how.",
+      "beats": [
+        "Cold signal fragments show PUBLIC VERSION FOUND before title or immediately after New Game.",
+        "Naming confirms Bosch while flickering through wrong public variants.",
+        "Bedroom objects reveal events Bosch does not remember and a route brief opened from outside the house.",
+        "Home hall turns ordinary family warmth into copied or future-facing text.",
+        "First street NPCs are charming but weirdly confident about partial rumors.",
+        "A soft proof gate opens after Bosch checks one object and talks to one witness.",
+        "Journal update: the route opened, but something recorded how."
+      ],
+      "themeIds": [
+        "social-capture",
+        "provenance",
+        "private-space-violation",
+        "public-version",
+        "administrative-evil"
+      ],
+      "npcIds": [],
+      "motifIds": [
+        "name-record",
+        "route-brief",
+        "proof-request",
+        "public-version-card",
+        "malady-as-symptom"
+      ],
+      "systemIds": [
+        "intro-record-machine",
+        "relay-yard"
+      ],
+      "enemyMechanicIds": [
+        "proof-request",
+        "soft-gate"
+      ],
+      "sourceIds": [
+        "obsidian-act-1-provenance-war-refinement",
+        "obsidian-jpegs-cool-canon-to-scene-memo",
+        "obsidian-milady-remilia-cosmic-antagonist-reframe",
+        "obsidian-act-1-anti-milady-content-spec",
+        "obsidian-earthbound-reception-build-reference",
+        "obsidian-act-1-public-version-card-object-ladder",
+        "obsidian-act-1-runtime-dialogue-pass",
+        "intake-miladybonkle-mifella-egregore",
+        "intake-salgotrader-patrician-dialogue-bank",
+        "intake-miladybonkle-bookshelf-check-exit-enclave",
+        "intake-fishing3morrow-wish-miladys-real",
+        "intake-kitvolta-bedtimepilled-sleepmaxxing"
+      ],
+      "phaserHooks": {
+        "suggestedMapIds": [
+          "intro-signal-cold-open",
+          "name-record",
+          "bosch-bedroom-v0",
+          "home-hall-v0",
+          "signal-town-suburb-proof"
+        ],
+        "journalEntryIds": [
+          "intro-name-record",
+          "route-brief",
+          "first-proof-recorded"
+        ],
+        "flagPrefix": "intro",
+        "dialogueIds": [
+          "intro-cold-signal",
+          "intro-name-record",
+          "bedroom-terminal-route-brief",
+          "first-proof-gate"
+        ],
+        "loreVariables": [
+          "rumorHeat",
+          "fitCoherence",
+          "phrasePickup",
+          "factionRead",
+          "witnessDepth",
+          "claimantSmell",
+          "canonDrag",
+          "scandalResilience"
+        ],
+        "sourceNotes": "Intro content should preserve the Obsidian lore-mining constraints: no lore dump, cozy systems becoming metaphysical, Milady/Remilia as hostile classification machinery."
+      }
+    },
+    {
+      "id": "gm-factory",
+      "title": "The Good Morning Factory",
+      "status": "adopted-concept",
+      "summary": "A side quest where GM streaks, proof-of-work, Smoke, and role gates become enemy rituals.",
+      "actId": "act-1-social-capture",
+      "order": 10,
+      "hook": "NPCs compulsively say GM even when it is not morning. The Factory misses Bosch before he has ever clocked in.",
+      "objective": "Enter the Factory, learn how participation is being converted into evidence, and help workers clock out.",
+      "falseBelief": "The tasks are harmless community rituals.",
+      "pressure": "Every greeting, reaction, proof, and role makes Bosch easier to classify.",
+      "twist": "The Factory is not making products. It is producing roles.",
+      "payoff": "Bosch learns that refusal and clocking out can be stronger than explanation.",
+      "beats": [
+        "GM Bosch. Don't forget to clock in. The Factory misses you.",
+        "Say GM, react to ten posts, submit proof of presence, burn Smoke for access.",
+        "The Former Manager explains that participation becomes evidence.",
+        "A Friendly Mod / Chief Morning Officer tries to convert Bosch into an admissible public version.",
+        "Bosch clocks out and teaches workers that nonparticipation can break the loop."
+      ],
+      "themeIds": [
+        "forced-participation",
+        "social-capture",
+        "provenance",
+        "role-assignment",
+        "administrative-evil",
+        "clocking-out"
+      ],
+      "npcIds": [
+        "former-manager"
+      ],
+      "motifIds": [
+        "gm",
+        "smoke",
+        "manager-id",
+        "break-room",
+        "clock-in-terminal",
+        "proof-request"
+      ],
+      "systemIds": [
+        "good-morning-factory",
+        "morning-managers",
+        "relay-yard"
+      ],
+      "enemyMechanicIds": [
+        "forced-gm",
+        "streak-anxiety",
+        "role-assignment",
+        "proof-request",
+        "soft-gate",
+        "community-reminder"
+      ],
+      "sourceIds": [
+        "tojiba-brand-manager-interview"
+      ],
+      "phaserHooks": {
+        "suggestedMapId": "gm-factory-floor",
+        "journalEntryId": "gm-factory-brief",
+        "flagPrefix": "act1.gmFactory",
+        "encounterIds": [
+          "morning-manager"
+        ],
+        "dialogueIds": [
+          "former-manager-intro",
+          "gm-factory-terminal"
+        ]
+      }
+    },
+    {
+      "id": "relay-yard",
+      "title": "Relay Yard",
+      "status": "adopted-concept",
+      "summary": "The machine that sorts performed roles into official public truth.",
+      "actId": "act-1-social-capture",
+      "order": 20,
+      "hook": "Signals arrive before bodies and public versions of Bosch harden on the route.",
+      "objective": "Reach the yard before hostile classification finishes.",
+      "falseBelief": "Relay Yard is just infrastructure.",
+      "pressure": "Every prior action arrives as sortable metadata.",
+      "twist": "The yard canonicalizes whatever the Factory and other systems made Bosch perform.",
+      "payoff": "Bosch sees the pipeline from greeting ritual to classification machine.",
+      "beats": [
+        "Rumor spreads in the park.",
+        "Pressure concentrates under the route.",
+        "Relay Yard makes public versions official."
+      ],
+      "themeIds": [
+        "social-capture",
+        "provenance",
+        "administrative-evil"
+      ],
+      "npcIds": [],
+      "motifIds": [
+        "proof-request"
+      ],
+      "systemIds": [
+        "relay-yard"
+      ],
+      "enemyMechanicIds": [
+        "proof-request",
+        "role-assignment"
+      ],
+      "sourceIds": [],
+      "phaserHooks": {
+        "suggestedMapId": "signal-town-suburb-proof",
+        "journalEntryId": "route-brief",
+        "flagPrefix": "act1.relayYard"
+      }
+    },
+    {
+      "id": "solana-beach-algorithmic-leisure",
+      "title": "Solana Beach Algorithmic Leisure",
+      "status": "adopted-concept",
+      "summary": "The Act 2 town looks like a beach escape, but its shops, sidewalks, queues, and saved recommendation lists turn ordinary fun into public self-performance.",
+      "actId": "act-2-solana-beach",
+      "order": 30,
+      "hook": "Bosch tries to do something harmless in Solana Beach and realizes every harmless thing arrives pre-captioned, recommended, queued, and socially audited.",
+      "objective": "Move through the beachfront loop, follow one recommendation chain, and find the first place where Bosch can act without being sorted into the town's leisure script.",
+      "falseBelief": "Solana Beach is a break from Act 1's record machinery because it feels sunny, casual, and pleasure-driven.",
+      "pressure": "Nobody can just eat, shop, swim, or meet a friend; every action becomes a performed chapter in the town's feed of itself.",
+      "twist": "The town is not hiding a machine behind leisure. Leisure is the machine.",
+      "payoff": "Bosch learns that Act 2's antagonist pressure is not proof of work, but proof of vibe: a queue-shaped civic ritual that erodes subjecthood by making every person into a lifestyle concept.",
+      "beats": [
+        "A beach sign welcomes Bosch to Solana Beach and immediately suggests the correct way to arrive.",
+        "Friends going for ice cream are treated as a publishable Solana Beach scene before they reach the counter.",
+        "The cone costs too much, but the receipt matters less than the feeling that Bosch has completed a recommended moment.",
+        "A saved-reel reservation list points Bosch to dinner, then to another line of people dressed and posed like variations of the same person.",
+        "NPCs describe losing the person they were before the town taught them how to be seen here.",
+        "The first Act 2 gate opens only when Bosch breaks a leisure script instead of optimizing it."
+      ],
+      "themeIds": [
+        "algorithmic-leisure",
+        "self-conscious-presence",
+        "social-capture",
+        "public-version"
+      ],
+      "npcIds": [],
+      "motifIds": [
+        "seventeen-dollar-ice-cream",
+        "saved-reel-reservations",
+        "line-of-doubles"
+      ],
+      "systemIds": [
+        "solana-beach-leisure-engine"
+      ],
+      "enemyMechanicIds": [
+        "presence-check",
+        "reservation-loop"
+      ],
+      "sourceIds": [
+        "intake-ben-horne-solana-beach-algorithm"
+      ],
+      "phaserHooks": {
+        "suggestedMapIds": [
+          "act2-coastal-proof"
+        ],
+        "journalEntryIds": [
+          "solana-beach-welcome",
+          "ice-cream-line",
+          "reservation-loop"
+        ],
+        "flagPrefix": "act2.solanaBeach",
+        "dialogueIds": [
+          "solana-beach-town-sign",
+          "ice-cream-line-npc",
+          "saved-reel-reservation-list"
+        ],
+        "loreVariables": [
+          "presenceLoss",
+          "recommendationPressure",
+          "queueDepth",
+          "vibeCoherence",
+          "subjectErosion"
+        ],
+        "sourceNotes": "Adapt the source as Solana Beach lore. Keep the mundane comedy of errands and food lines, but make the horror come from algorithmic leisure and self-conscious civic performance."
+      }
+    }
+  ],
+  "npcs": [
+    {
+      "id": "former-manager",
+      "name": "The Former Manager",
+      "status": "adopted-concept",
+      "summary": "An ex-Factory insider who understands the task culture machinery and helps Bosch clock out without becoming a new manager.",
+      "role": "ally / quest interpreter",
+      "want": "To stop relapsing into helpful little managerial corrections.",
+      "fear": "That the only way to be real is to keep holding a role.",
+      "battleSupport": [
+        "Clock Out",
+        "Smoke Break",
+        "Old Badge",
+        "Unionize",
+        "Do Not Engage"
+      ],
+      "dialogueTexture": "Half workplace onboarding, half ashamed punk witness. Knows the ritual is stupid and still feels its pull.",
+      "questIds": [
+        "gm-factory"
+      ],
+      "themeIds": [
+        "clocking-out",
+        "role-assignment",
+        "social-capture"
+      ],
+      "motifIds": [
+        "manager-id",
+        "smoke",
+        "break-room"
+      ],
+      "systemIds": [
+        "good-morning-factory"
+      ],
+      "phaserHooks": {
+        "npcPrototypeId": "former-manager",
+        "dialogueId": "former-manager-intro",
+        "supportMoveIds": [
+          "clock-out",
+          "smoke-break",
+          "old-badge",
+          "unionize",
+          "do-not-engage"
+        ]
+      }
+    }
+  ],
+  "themes": [
+    {
+      "id": "forced-participation",
+      "title": "Forced Participation",
+      "status": "adopted-concept",
+      "summary": "The enemy makes refusal feel socially impossible before it makes obedience mandatory."
+    },
+    {
+      "id": "social-capture",
+      "title": "Social Capture",
+      "status": "adopted-concept",
+      "summary": "Community rituals become data capture, sorting, and leverage."
+    },
+    {
+      "id": "provenance",
+      "title": "Provenance",
+      "status": "adopted-concept",
+      "summary": "Actions become evidence of identity, ownership, and legitimacy."
+    },
+    {
+      "id": "role-assignment",
+      "title": "Role Assignment",
+      "status": "adopted-concept",
+      "summary": "Systems label people, then demand they perform the label."
+    },
+    {
+      "id": "administrative-evil",
+      "title": "Administrative Evil",
+      "status": "adopted-concept",
+      "summary": "The horror arrives as paperwork, reminders, forms, gates, and friendly procedure."
+    },
+    {
+      "id": "clocking-out",
+      "title": "Clocking Out",
+      "status": "adopted-concept",
+      "summary": "A spiritual/mechanical refusal to keep feeding the system with proof of presence."
+    },
+    {
+      "id": "private-space-violation",
+      "title": "Private Space Violation",
+      "status": "writing",
+      "summary": "The safest rooms are already porous; intimate objects reveal that hostile records entered before Bosch woke up."
+    },
+    {
+      "id": "public-version",
+      "title": "Public Version",
+      "status": "writing",
+      "summary": "The threat is not only impersonation. It is a socially accepted Bosch variant arriving before Bosch can correct it."
+    },
+    {
+      "id": "algorithmic-leisure",
+      "title": "Algorithmic Leisure",
+      "status": "adopted-concept",
+      "summary": "Pleasure, restaurants, beach rituals, and errands become recommendation machinery that tells people how to enjoy themselves before they arrive."
+    },
+    {
+      "id": "self-conscious-presence",
+      "title": "Self-Conscious Presence",
+      "status": "adopted-concept",
+      "summary": "The town prevents full presence by making every ordinary action feel like a scene being authored for public legibility."
+    }
+  ],
+  "motifs": [
+    {
+      "id": "gm",
+      "title": "GM",
+      "status": "adopted-concept",
+      "summary": "A greeting turned ritual command.",
+      "firstAppearance": "Factory exterior signage and NPC greetings.",
+      "escalation": "Repeated GM becomes tracked evidence.",
+      "inversion": "Saying nothing becomes an action.",
+      "payoff": "Clocking out breaks the greeting loop."
+    },
+    {
+      "id": "smoke",
+      "title": "Smoke",
+      "status": "adopted-concept",
+      "summary": "Reward points / cigarette break currency / proof that work happened.",
+      "firstAppearance": "Factory task rewards.",
+      "escalation": "Smoke buys access to the Break Room.",
+      "inversion": "Smoke Break becomes ally protection instead of reward treadmill.",
+      "payoff": "Workers spend Smoke to leave, not to advance."
+    },
+    {
+      "id": "manager-id",
+      "title": "Manager ID",
+      "status": "adopted-concept",
+      "summary": "A badge that proves role ownership while trapping the wearer inside the role.",
+      "firstAppearance": "Former Manager's old badge.",
+      "escalation": "Enemies scan IDs before attacks.",
+      "inversion": "Old Badge spoofs authority to open exits.",
+      "payoff": "The badge is discarded or defaced."
+    },
+    {
+      "id": "break-room",
+      "title": "Break Room",
+      "status": "adopted-concept",
+      "summary": "A promised rest space that is also another gate.",
+      "firstAppearance": "Factory signage.",
+      "escalation": "Access requires more proof.",
+      "inversion": "The real break is leaving the building.",
+      "payoff": "Break Room becomes an exit route."
+    },
+    {
+      "id": "clock-in-terminal",
+      "title": "Clock-In Terminal",
+      "status": "adopted-concept",
+      "summary": "Terminal that converts presence into work records.",
+      "firstAppearance": "Factory entrance.",
+      "escalation": "Terminal begins greeting Bosch personally.",
+      "inversion": "Clock Out command rewrites the terminal state.",
+      "payoff": "Terminal prints an invalid / liberating receipt."
+    },
+    {
+      "id": "proof-request",
+      "title": "Proof Request",
+      "status": "adopted-concept",
+      "summary": "The question that makes people perform their identity for the machine.",
+      "firstAppearance": "Manager prompts and Relay Yard classification.",
+      "escalation": "Proof becomes mandatory for movement.",
+      "inversion": "Bosch refuses to furnish proof.",
+      "payoff": "The system cannot classify what it cannot make perform."
+    },
+    {
+      "id": "name-record",
+      "title": "Name Record",
+      "status": "writing",
+      "summary": "A name as route metadata rather than a private label.",
+      "firstAppearance": "Naming flow flickers through wrong or over-official Bosch variants.",
+      "escalation": "NPCs and systems reference public Bosch variants before Bosch understands them.",
+      "inversion": "Bosch refuses to keep correcting the record on the enemy terms.",
+      "payoff": "The final route must break the public-version machine instead of winning a naming dispute."
+    },
+    {
+      "id": "route-brief",
+      "title": "Route Brief",
+      "status": "writing",
+      "summary": "An objective note opened from outside Bosch home, proving the route already knows him.",
+      "firstAppearance": "Bedroom terminal or desk note.",
+      "escalation": "Journal entries become useful but suspect records of compliance.",
+      "inversion": "Bosch uses the brief to navigate without accepting its classification.",
+      "payoff": "The route brief becomes evidence that can be rejected or corrupted at Relay Yard."
+    },
+    {
+      "id": "public-version-card",
+      "title": "Public Version Card",
+      "status": "writing",
+      "summary": "A cheap laminated proof object that converts Bosch's private self into a portable civic record. The Act 1 Mani-Mani equivalent: funny and mundane at first, then increasingly hostile classification infrastructure.",
+      "firstAppearance": "Bedroom: a crumpled printout with Bosch's face almost right and a quote he never said.",
+      "escalation": "Cards multiply across the route: hall, fence post, shop, park notice board, underpass turnstile slot, Relay Yard desk.",
+      "inversion": "Bosch keeps a damaged card instead of a clean one; refusal of correct enemy recognition becomes the better artifact.",
+      "payoff": "The card returns as a voice in the Milady dream-pocket and must be rejected, not corrected.",
+      "objectLadder": [
+        "bedroom-printout",
+        "hall-claimant-edit",
+        "shop-blank",
+        "shop-sleeved",
+        "park-contested",
+        "underpass-inserted",
+        "underpass-refused",
+        "yard-stamped",
+        "yard-damaged",
+        "destroyed"
+      ],
+      "loreVariables": [
+        "public_version_seen",
+        "public_version_category",
+        "public_version_state",
+        "enemy_recognition_compliance",
+        "witness_depth",
+        "claimant_smell",
+        "canon_drag",
+        "scandal_resilience"
+      ]
+    },
+    {
+      "id": "malady-as-symptom",
+      "title": "Malady as Symptom",
+      "status": "writing",
+      "summary": "The Malady is the visible fever, not the cause. It is one of many public versions the Milady signal manufactures. Bosch can beat a Malady; he cannot beat the engine that makes Maladies until he sees the engine.",
+      "firstAppearance": "Neighbor warning: 'Don't bring that smell to the yard.'",
+      "escalation": "Encounter NPCs and route prompts treat Malady as a known carrier word.",
+      "inversion": "Defeating the Malady reveals the Milady rabbit-hole instead of closing Act 1 cleanly.",
+      "payoff": "Act 2 hands off to Bosch knowing the signal has to be fought at the source."
+    },
+    {
+      "id": "seventeen-dollar-ice-cream",
+      "title": "Seventeen-Dollar Ice Cream",
+      "status": "adopted-concept",
+      "summary": "A simple treat inflated into a proof of having performed Solana Beach correctly.",
+      "firstAppearance": "Beachfront ice cream line.",
+      "escalation": "Receipts, stickers, and NPC chatter treat the cone as an identity badge.",
+      "inversion": "Bosch can buy nothing, share one, or throw the receipt away without losing the route.",
+      "payoff": "The town's pleasure economy is exposed as another proof request."
+    },
+    {
+      "id": "saved-reel-reservations",
+      "title": "Saved-Reel Reservations",
+      "status": "adopted-concept",
+      "summary": "Recommendation lists that replace appetite, curiosity, and presence with queued social proof.",
+      "firstAppearance": "Phone/list object near the beachfront cafe strip.",
+      "escalation": "Every recommendation forwards Bosch to a more legible version of the same experience.",
+      "inversion": "The useful clue is found by ignoring the recommended next stop.",
+      "payoff": "Act 2 teaches that optimization can be a leash."
+    },
+    {
+      "id": "line-of-doubles",
+      "title": "Line of Doubles",
+      "status": "adopted-concept",
+      "summary": "Queues where people slowly converge into the same pose, outfit, appetite, and civic self-image.",
+      "firstAppearance": "Dinner line after the ice cream beat.",
+      "escalation": "Longer lines produce stronger duplicate behavior and weaker private memory.",
+      "inversion": "Bosch exits the line and becomes less readable.",
+      "payoff": "The queue becomes the visible shape of Solana Beach's subject-eroding machine."
+    }
+  ],
+  "systems": [
+    {
+      "id": "good-morning-factory",
+      "title": "Good Morning Factory",
+      "status": "adopted-concept",
+      "summary": "A social ritual factory that turns greetings and small tasks into usable identity records.",
+      "consumes": [
+        "greetings",
+        "reactions",
+        "proof of presence",
+        "micro-work",
+        "vibe verification"
+      ],
+      "produces": [
+        "roles",
+        "streaks",
+        "Smoke",
+        "admissible evidence"
+      ],
+      "weaponizes": [
+        "belonging",
+        "helpfulness",
+        "access",
+        "routine"
+      ],
+      "questIds": [
+        "gm-factory"
+      ],
+      "themeIds": [
+        "forced-participation",
+        "social-capture",
+        "provenance",
+        "administrative-evil"
+      ],
+      "motifIds": [
+        "gm",
+        "smoke",
+        "clock-in-terminal",
+        "break-room"
+      ]
+    },
+    {
+      "id": "morning-managers",
+      "title": "Morning Managers",
+      "status": "adopted-concept",
+      "summary": "Enemy family enforcing the Factory's check-in rituals and status gates.",
+      "consumes": [
+        "worker attention",
+        "streak anxiety"
+      ],
+      "produces": [
+        "role compliance",
+        "verification pressure"
+      ],
+      "weaponizes": [
+        "friendly reminders",
+        "soft gates",
+        "holder-only damage"
+      ],
+      "questIds": [
+        "gm-factory"
+      ],
+      "themeIds": [
+        "role-assignment",
+        "forced-participation"
+      ],
+      "motifIds": [
+        "manager-id",
+        "proof-request"
+      ]
+    },
+    {
+      "id": "relay-yard",
+      "title": "Relay Yard",
+      "status": "adopted-concept",
+      "summary": "Sorting infrastructure that converts performed signals into official public versions.",
+      "consumes": [
+        "performed identity",
+        "greeting records",
+        "route behavior"
+      ],
+      "produces": [
+        "classification",
+        "canonized labels",
+        "public Bosch variants"
+      ],
+      "weaponizes": [
+        "metadata",
+        "arrival order",
+        "official truth"
+      ],
+      "questIds": [
+        "relay-yard"
+      ],
+      "themeIds": [
+        "social-capture",
+        "provenance",
+        "administrative-evil"
+      ],
+      "motifIds": [
+        "proof-request"
+      ]
+    },
+    {
+      "id": "intro-record-machine",
+      "title": "Intro Record Machine",
+      "status": "writing",
+      "summary": "The first-ten-minute machinery that turns name confirmation, room inspection, witness contact, and a soft gate into route evidence.",
+      "consumes": [
+        "name confirmation",
+        "private-room interaction",
+        "first witness contact",
+        "proof-gate compliance"
+      ],
+      "produces": [
+        "intro route brief",
+        "public Bosch hints",
+        "first proof record"
+      ],
+      "weaponizes": [
+        "helpful onboarding",
+        "private familiarity",
+        "friendly neighborhood confidence"
+      ],
+      "questIds": [
+        "intro-first-ten-minutes"
+      ],
+      "themeIds": [
+        "private-space-violation",
+        "public-version",
+        "social-capture",
+        "provenance"
+      ],
+      "motifIds": [
+        "name-record",
+        "route-brief",
+        "proof-request"
+      ]
+    },
+    {
+      "id": "solana-beach-leisure-engine",
+      "title": "Solana Beach Leisure Engine",
+      "status": "adopted-concept",
+      "summary": "A resort-town civic machine that converts recommended fun, visible queues, expensive treats, and reservation rituals into public identity.",
+      "consumes": [
+        "appetite",
+        "friendship",
+        "beach time",
+        "restaurant desire",
+        "saved recommendation lists"
+      ],
+      "produces": [
+        "vibe compliance",
+        "queue pressure",
+        "lifestyle doubles",
+        "subject erosion"
+      ],
+      "weaponizes": [
+        "fun",
+        "taste",
+        "scarcity",
+        "recommendation culture",
+        "fear of missing the correct moment"
+      ],
+      "questIds": [
+        "solana-beach-algorithmic-leisure"
+      ],
+      "themeIds": [
+        "algorithmic-leisure",
+        "self-conscious-presence",
+        "social-capture",
+        "public-version"
+      ],
+      "motifIds": [
+        "seventeen-dollar-ice-cream",
+        "saved-reel-reservations",
+        "line-of-doubles"
+      ]
+    }
+  ],
+  "aesthetics": [
+    {
+      "id": "gm-factory-office-rot",
+      "title": "Factory Office Rot",
+      "status": "adopted-concept",
+      "summary": "Cheap fluorescent workplace ritual space rotting into internet ceremony.",
+      "zoneIds": [
+        "good-morning-factory"
+      ],
+      "palette": [
+        "nicotine beige",
+        "terminal green",
+        "badge blue",
+        "burnt orange Smoke",
+        "fluorescent white"
+      ],
+      "lighting": "Flat overhead fluorescents with terminal glow and sour dawn leaking through high windows.",
+      "props": [
+        "clock-in terminals",
+        "laminated onboarding posters",
+        "badge scanners",
+        "ash trays",
+        "break-room vending machines",
+        "motivational banners"
+      ],
+      "architecture": "Warehouse-office hybrid: cubicle lanes, factory belts carrying forms, badge gates, fake lounge corners.",
+      "uiTexture": "Workplace kiosk prompts, stamped receipts, HR warning boxes.",
+      "forbiddenAesthetics": [
+        "sleek tech startup",
+        "clean sci-fi lab",
+        "generic cyberpunk neon"
+      ]
+    },
+    {
+      "id": "violated-bedroom-cozy-static",
+      "title": "Violated Bedroom Cozy Static",
+      "status": "writing",
+      "summary": "A beautiful, cramped, EarthBound-cozy bedroom whose most intimate objects have been quietly authored over.",
+      "zoneIds": [
+        "intro-record-machine"
+      ],
+      "palette": [
+        "warm lamp amber",
+        "faded poster red",
+        "bedroom blue shadow",
+        "terminal green",
+        "off-white paper"
+      ],
+      "lighting": "Warm private room light interrupted by tiny cold terminal and window glows.",
+      "props": [
+        "festival poster with Bosch drawn in",
+        "desk terminal",
+        "unfinished blanket dream",
+        "window over quiet Signal Town",
+        "small Little Swag World source object"
+      ],
+      "architecture": "Small readable bedroom and home hall with clear exits, no feature clutter, and one inspectable per emotional idea.",
+      "uiTexture": "Route-brief fragments, wrong-name flicker, journal update receipts.",
+      "forbiddenAesthetics": [
+        "horror-game bedroom",
+        "generic tutorial room",
+        "lore-library dump"
+      ]
+    },
+    {
+      "id": "solana-beach-algorithmic-resort",
+      "title": "Solana Beach Algorithmic Resort",
+      "status": "adopted-concept",
+      "summary": "A sunny coastal town whose pleasant surfaces are too composed: beachfront pastel, expensive snack counters, reservation chalkboards, phone-glow patios, and lines that look like lifestyle mirrors.",
+      "zoneIds": [
+        "solana-beach-leisure-engine"
+      ],
+      "palette": [
+        "sun-bleached peach",
+        "pool turquoise",
+        "receipt white",
+        "phone-screen blue",
+        "sunset coral"
+      ],
+      "lighting": "Golden beach light with unnaturally crisp queue shadows and small cold phone glows after each recommendation beat.",
+      "props": [
+        "ice cream counter menu",
+        "overpriced receipt",
+        "reservation chalkboards",
+        "saved-reel phone list",
+        "beachfront line ropes",
+        "identical tote bags"
+      ],
+      "architecture": "Low coastal storefronts, boutique hotel fronts, cafe patios, boardwalk corners, and beach access paths arranged as scenic loops that keep returning Bosch to queues.",
+      "uiTexture": "Recommendation cards, reservation waitlist slips, receipt stamps, and journal updates that feel like leisure itinerary fragments.",
+      "forbiddenAesthetics": [
+        "generic tropical resort",
+        "vacation postcard only",
+        "dark cyberpunk city",
+        "literal social media app parody"
+      ]
+    }
+  ],
+  "enemyMechanics": [
+    {
+      "id": "forced-gm",
+      "title": "Forced GM",
+      "status": "adopted-concept",
+      "summary": "Compulsion/status attack that spends a player turn on a meaningless greeting.",
+      "battleIntent": "control",
+      "statusEffect": "streakbound",
+      "phaserHooks": {
+        "moveId": "forced-gm",
+        "statusId": "streakbound"
+      }
+    },
+    {
+      "id": "streak-anxiety",
+      "title": "Streak Anxiety",
+      "status": "adopted-concept",
+      "summary": "Pressure ramps each round unless Bosch clocks out or breaks the loop.",
+      "battleIntent": "setup",
+      "statusEffect": "streakbound",
+      "phaserHooks": {
+        "moveId": "streak-anxiety",
+        "statusId": "streakbound"
+      }
+    },
+    {
+      "id": "role-assignment",
+      "title": "Role Assignment",
+      "status": "adopted-concept",
+      "summary": "Assigns a label that changes available choices or damage rules.",
+      "battleIntent": "debuff",
+      "statusEffect": "verified",
+      "phaserHooks": {
+        "moveId": "role-assignment",
+        "statusId": "verified"
+      }
+    },
+    {
+      "id": "proof-request",
+      "title": "Proof Request",
+      "status": "adopted-concept",
+      "summary": "Demands proof and punishes response loops.",
+      "battleIntent": "pressure",
+      "statusEffect": "unverified",
+      "phaserHooks": {
+        "moveId": "proof-request",
+        "statusId": "unverified"
+      }
+    },
+    {
+      "id": "soft-gate",
+      "title": "Soft Gate",
+      "status": "adopted-concept",
+      "summary": "Locks access behind fake friendliness and holder-only logic.",
+      "battleIntent": "defense",
+      "statusEffect": "over-branded",
+      "phaserHooks": {
+        "moveId": "soft-gate",
+        "statusId": "over-branded"
+      }
+    },
+    {
+      "id": "community-reminder",
+      "title": "Community Reminder",
+      "status": "adopted-concept",
+      "summary": "A friendly message that adds pressure because everyone can see it.",
+      "battleIntent": "weird",
+      "statusEffect": "streakbound",
+      "phaserHooks": {
+        "moveId": "community-reminder",
+        "statusId": "streakbound"
+      }
+    },
+    {
+      "id": "presence-check",
+      "title": "Presence Check",
+      "status": "adopted-concept",
+      "summary": "Tests whether Bosch is acting from attention or merely performing the town's expected scene.",
+      "battleIntent": "control",
+      "statusEffect": "pre-captioned",
+      "phaserHooks": {
+        "moveId": "presence-check",
+        "statusId": "pre-captioned"
+      }
+    },
+    {
+      "id": "reservation-loop",
+      "title": "Reservation Loop",
+      "status": "adopted-concept",
+      "summary": "Forces a target through repeated waitlist logic, delaying action while increasing queue pressure.",
+      "battleIntent": "delay",
+      "statusEffect": "waitlisted",
+      "phaserHooks": {
+        "moveId": "reservation-loop",
+        "statusId": "waitlisted"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "tojiba-brand-manager-interview",
+      "title": "Roman Graffiti interview with Tojiba Brand Manager",
+      "status": "adopted-concept",
+      "summary": "Source inspiration for task culture, fictionalized brand roles, Discord /work ritual, social capture, and self-mythologizing internet community systems.",
+      "url": "https://www.romangraffiti.blog/post/an-interview-with-tojiba-brand-manager",
+      "fetchedAt": "2026-05-09"
+    },
+    {
+      "id": "obsidian-act-1-provenance-war-refinement",
+      "title": "Obsidian: Act 1 provenance-war refinement",
+      "status": "adopted-concept",
+      "summary": "Bosch is trapped in a provenance war: source truth is weaker than witness depth, spread legitimacy, claimant smell, and canonization pressure.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/act-1-provenance-war-refinement.md",
+      "fetchedAt": "2026-05-09"
+    },
+    {
+      "id": "obsidian-jpegs-cool-canon-to-scene-memo",
+      "title": "Obsidian: jpegs.cool canon to scene memo",
+      "status": "adopted-concept",
+      "summary": "Milady logic should be scene logic: Bosch is a spread event before a stable self, witnesses matter more than explanations, and fit is epistemic.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/jpegs-cool-canon-to-scene-memo.md",
+      "fetchedAt": "2026-05-09"
+    },
+    {
+      "id": "obsidian-milady-remilia-cosmic-antagonist-reframe",
+      "title": "Obsidian: Milady / Remilia cosmic antagonist reframe",
+      "status": "adopted-concept",
+      "summary": "Milady and Remilia should read as the ambient evil system: seductive, funny, socially confident, and morally hostile classification machinery.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/milady-remilia-cosmic-antagonist-reframe.md",
+      "fetchedAt": "2026-05-09"
+    },
+    {
+      "id": "obsidian-act-1-anti-milady-content-spec",
+      "title": "Obsidian: Act 1 anti-Milady content spec",
+      "status": "adopted-concept",
+      "summary": "Content-facing Act 1 rewrite: bedroom violation, hostile first-contact street reads, Relay Yard as enemy processing, and Bosch moving toward resistance.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/act-1-anti-milady-content-spec.md",
+      "fetchedAt": "2026-05-09"
+    },
+    {
+      "id": "obsidian-earthbound-reception-build-reference",
+      "title": "Obsidian: EarthBound reception build reference",
+      "status": "adopted-concept",
+      "summary": "EarthBound reference pressure: cozy mundane systems become metaphysical; object text, shops, phones, route briefs, and witness marks should carry story.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/earthbound-reception-build-reference.md",
+      "fetchedAt": "2026-05-09"
+    },
+    {
+      "id": "obsidian-lore-source-intake-log",
+      "title": "Obsidian: lore source intake log",
+      "status": "writing",
+      "summary": "Compact registry of every lore source intake with story thesis, dialogue candidates, battle/status ideas, and promotion notes. Read first when promoting transformed lines into runtime content.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/lore-source-intake-log.md",
+      "fetchedAt": "2026-05-12"
+    },
+    {
+      "id": "obsidian-act-1-public-version-card-object-ladder",
+      "title": "Obsidian: Act 1 Public Version Card object ladder",
+      "status": "writing",
+      "summary": "The Public Version Card is Act 1's Mani-Mani equivalent: a cheap laminated proof object that escalates from neighborhood joke to Relay Yard classification artifact and finally to a thing Bosch must refuse to be saved by.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/act-1-public-version-card-object-ladder.md",
+      "fetchedAt": "2026-05-12"
+    },
+    {
+      "id": "obsidian-act-1-runtime-dialogue-pass",
+      "title": "Obsidian: Act 1 runtime dialogue pass",
+      "status": "adopted-concept",
+      "summary": "The runtime text layer should frame Bosch's route as crossing hostile ground before the Milady/Remilia machine hardens a false public version. Park = rumor, underpass = pressure, yard = official truth.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/act-1-runtime-dialogue-pass.md",
+      "fetchedAt": "2026-05-12"
+    },
+    {
+      "id": "obsidian-ai-slop-enemy-design-spec",
+      "title": "Obsidian: AI Slop enemy design spec",
+      "status": "adopted-concept",
+      "summary": "AI Slop is a hostile-classification enemy that attacks Bosch's specificity by producing fast plausible wrong public versions of him. Cute-horrible floating cherub of generated filler, not a robot.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/ai-slop-enemy-design-spec.md",
+      "fetchedAt": "2026-05-12"
+    },
+    {
+      "id": "intake-miladybonkle-mifella-egregore",
+      "title": "Intake: MiladyBonkle / Mifella egregore",
+      "status": "writing",
+      "summary": "Milady-world produces scenes where the viewer, critic, collector, and magazine become unwilling content. The interpretive trap converts spectators into proof that the image worked. Source for Reaction Harvested status family.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/raw/swagbound/lore-intake/2026-05-10-miladybonkle-mifella-egregore.md",
+      "fetchedAt": "2026-05-10"
+    },
+    {
+      "id": "intake-salgotrader-patrician-dialogue-bank",
+      "title": "Intake: SAlgotrader / patrician dialogue bank",
+      "status": "writing",
+      "summary": "Scene-native NFT/PFP occult comedy: gates, cozy beds, mint rituals, fake finance certainty, vibe checks, trait-like social posture, public-image anxiety. Scene jokes become infrastructure.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/lore-intake/salgotrader-profile-mine-patrician-dialogue-bank.md",
+      "fetchedAt": "2026-05-10"
+    },
+    {
+      "id": "intake-miladybonkle-bookshelf-check-exit-enclave",
+      "title": "Intake: MiladyBonkle / bookshelf-check + exit-enclave",
+      "status": "writing",
+      "summary": "Dense hostile-intellectual voice bank: bookshelf checks, Timeline Operations, Exit Enclaves, criticism-as-combat, false exits. Taste becomes a hidden stat; every social surface checks whether Bosch is legible.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/lore-intake/miladybonkle-profile-mine-bookshelf-check-exit-enclave.md",
+      "fetchedAt": "2026-05-10"
+    },
+    {
+      "id": "intake-nokcha75-logout-society-network-dissidence",
+      "title": "Intake: nokcha75 / logout society + network dissidence",
+      "status": "writing",
+      "summary": "False-exit and network-capture source. The alternative to society becomes another administrative network. Logout kiosks, dissident badges with barcodes, support-the-thing rituals.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/lore-intake/nokcha75-profile-mine-logout-society-network-dissidence.md",
+      "fetchedAt": "2026-05-10"
+    },
+    {
+      "id": "intake-rubbtoe-timeline-fracture-posting-doctrine",
+      "title": "Intake: rubbtoe / timeline fracture posting doctrine",
+      "status": "writing",
+      "summary": "Remilio as posting catechism: fracture timelines, convert irony into doctrine, feed contradictions to the network, accelerate hallucination, treat retreat as another signal. Status seeds: Timeline Fractured, Doctrine Converted, Contradiction Fed.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/rubbtoe-timeline-fracture-posting-doctrine.md",
+      "fetchedAt": "2026-05-12"
+    },
+    {
+      "id": "intake-fishing3morrow-wish-miladys-real",
+      "title": "Intake: fishing3morrow / wish miladys were real",
+      "status": "writing",
+      "summary": "Retail ontological bleed: cute image, school-uniform pose, album cover, shop receipt all become proof surfaces. Status seeds: Glossy Proof, Merch-Real, Pose Verified. Longing turns into inventory.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/lore-intake/fishing3morrow-wish-miladys-real.md",
+      "fetchedAt": "2026-05-12"
+    },
+    {
+      "id": "intake-kitvolta-bedtimepilled-sleepmaxxing",
+      "title": "Intake: kitvolta / bedtimepilled sleepmaxxing",
+      "status": "writing",
+      "summary": "Cozy self-care language turns bedtime into a stat, route choice, or soft compliance ritual. Status seeds: Sleepmaxxed, Rested But Readable. Useful early Swagbound texture: bedroom as soft checkpoint.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/lore-intake/kitvolta-bedtimepilled-sleepmaxxing.md",
+      "fetchedAt": "2026-05-12"
+    },
+    {
+      "id": "intake-milady-zine02-ethereum-cypherpunk-crusade",
+      "title": "Intake: Milady Zine 02 / Ethereum cypherpunk crusade",
+      "status": "writing",
+      "summary": "The zine turns Ethereum/cypherpunk language into protocol theology: mandates, pledges, privacy, exit, anti-compromise, thousand-year-machine rhetoric. Hostile liberation machinery for Relay Yard kiosks and pledge terminals.",
+      "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/milady-zine02-ethereum-cypherpunk-crusade.md",
+      "fetchedAt": "2026-05-10"
+    },
+    {
+      "id": "intake-ben-horne-solana-beach-algorithm",
+      "title": "Intake: Ben Horne / Solana Beach as algorithmic town",
+      "status": "adopted-concept",
+      "summary": "Source for Act 2 Solana Beach: the town is not merely a place, but an algorithmic simulation of leisure where ordinary outings become self-conscious scenes, queues erode subjecthood, and recommendations turn desire into public performance.",
+      "url": "https://x.com/benjamin_horne/status/2057190871708455336",
+      "fetchedAt": "2026-05-21"
+    }
+  ]
+}

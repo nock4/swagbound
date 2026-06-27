@@ -1,0 +1,571 @@
+{
+  "schema": "swagbound.act1-route-dialogue.v1",
+  "messages": {
+    "dialogue.act1.home.signal_pet_gate_blocked": {
+      "id": "dialogue.act1.home.signal_pet_gate_blocked",
+      "ownerId": "gate.act1.home.signal_pet_gate",
+      "routeBeatId": "beat.act1.signal_pet_gate",
+      "speaker": "Signal-Pet",
+      "text": "The signal-pet plants itself in the hall and noses Bosch back toward the proof-token bowl. It will not let the route leave home until the charm is actually carried.",
+      "flagsRequired": [],
+      "flagsSet": [],
+      "windowPresetId": "window.dialogue.standard",
+      "script": {
+        "id": "script.act1.home.signal_pet_gate_blocked",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Signal-Pet",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.home.signal_pet_gate_cleared": {
+      "id": "dialogue.act1.home.signal_pet_gate_cleared",
+      "ownerId": "gate.act1.home.signal_pet_gate",
+      "routeBeatId": "beat.act1.signal_pet_gate",
+      "speaker": "Signal-Pet",
+      "text": "The signal-pet has moved aside, but keeps one paw near the hall. It remembers the charm's warmth and lets the real Bosch pass.",
+      "flagsRequired": [
+        "intro.signal_pet_gate_cleared"
+      ],
+      "flagsSet": [],
+      "windowPresetId": "window.dialogue.standard",
+      "script": {
+        "id": "script.act1.home.signal_pet_gate_cleared",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Signal-Pet",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.neighbor.first_witness": {
+      "id": "dialogue.act1.neighbor.first_witness",
+      "ownerId": "npci.act1.neighbor.first_witness",
+      "routeBeatId": "beat.act1.neighbor_witness",
+      "speaker": "Sidewalk Kid",
+      "text": "The Sidewalk Kid points at Bosch, then at the curb where the other Bosch apparently stood. \"He had your face and a cleaner story. Said 'Swag is eternal' like a slogan he found in somebody else's pocket. Everybody repeated it before anyone asked if you were here. Sal's kiosk can make proof before gossip grows paperwork.\"",
+      "flagsSet": [
+        "intro.first_witness_spoken",
+        "intro.first_proof_recorded"
+      ],
+      "windowPresetId": "window.dialogue.standard",
+      "variants": [
+        {
+          "id": "dialogue.act1.neighbor.first_witness.variant.after_gate",
+          "priority": 20,
+          "text": "The Sidewalk Kid watches the gate receipt flutter in Bosch's hand. \"Okay, that's more Bosch than the other Bosch had.\"",
+          "flagsRequired": [
+            "intro.first_witness_spoken",
+            "act1.boss_gate_unlocked"
+          ],
+          "flagsAbsent": [],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.first_witness"
+        },
+        {
+          "id": "dialogue.act1.neighbor.first_witness.variant.after_witness",
+          "priority": 10,
+          "text": "The Sidewalk Kid whispers, \"I already told them I saw the easy Bosch. Go make it readable before the town makes it official.\"",
+          "flagsRequired": [
+            "intro.first_witness_spoken"
+          ],
+          "flagsAbsent": [
+            "act1.boss_gate_unlocked"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.first_witness"
+        }
+      ],
+      "script": {
+        "id": "script.act1.neighbor.first_witness",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Sidewalk Kid",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          },
+          {
+            "action": "setFlags",
+            "flags": [
+              "intro.first_witness_spoken",
+              "intro.first_proof_recorded"
+            ]
+          },
+          {
+            "action": "completeObjective",
+            "objectiveId": "collect_first_witness"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.civic.town_gate_blocked": {
+      "id": "dialogue.act1.civic.town_gate_blocked",
+      "ownerId": "hotspot.act1.civic_gate.town_gate_brief",
+      "routeBeatId": "beat.act1.town_gate_brief",
+      "speaker": "Route Clerk",
+      "text": "The Route Clerk blocks the civic line with a receipt tray. \"Bring Sal's proof token first. The gate reads paper before it listens to gossip.\"",
+      "flagsRequired": [],
+      "flagsSet": [],
+      "windowPresetId": "window.dialogue.standard",
+      "script": {
+        "id": "script.act1.civic.town_gate_blocked",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Route Clerk",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.civic.town_gate_brief": {
+      "id": "dialogue.act1.civic.town_gate_brief",
+      "ownerId": "hotspot.act1.civic_gate.town_gate_brief",
+      "routeBeatId": "beat.act1.town_gate_brief",
+      "speaker": "Route Clerk",
+      "text": "The Route Clerk folds Sal's receipt into thirds and lines it beside the witness note. \"Gate brief: keep the messy order. Witness, proof service, public refusal, park rumors, then classifier. If the easy Bosch tries to skip ahead, make the machine wait for the body standing here.\"",
+      "flagsSet": [
+        "act1.received_town_gate_brief"
+      ],
+      "windowPresetId": "window.dialogue.standard",
+      "script": {
+        "id": "script.act1.civic.town_gate_brief",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Route Clerk",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          },
+          {
+            "action": "setFlags",
+            "flags": [
+              "act1.received_town_gate_brief"
+            ]
+          },
+          {
+            "action": "completeObjective",
+            "objectiveId": "receive_town_gate_brief"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.civic.town_gate_brief_repeat": {
+      "id": "dialogue.act1.civic.town_gate_brief_repeat",
+      "ownerId": "hotspot.act1.civic_gate.town_gate_brief",
+      "routeBeatId": "beat.act1.town_gate_brief",
+      "speaker": "Route Clerk",
+      "text": "The Route Clerk taps the folded brief. \"Same order, Bosch: witness, proof, public refusal, parks, then the classifier. The easy version only wins if you let it skip a line.\"",
+      "flagsRequired": [
+        "act1.received_town_gate_brief"
+      ],
+      "flagsSet": [],
+      "windowPresetId": "window.dialogue.standard",
+      "variants": [
+        {
+          "id": "dialogue.act1.civic.town_gate_brief_repeat.variant.before_refusal",
+          "priority": 20,
+          "text": "The clerk points past the sign toward the humming pole. \"Your Public Version Card is loud now. Refuse it there, not in private. Signal Town believes whatever enough bored people watch.\"",
+          "flagsRequired": [
+            "act1.received_town_gate_brief"
+          ],
+          "flagsAbsent": [
+            "act1.resolved_social_obstruction"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.town_authority"
+        },
+        {
+          "id": "dialogue.act1.civic.town_gate_brief_repeat.variant.before_parks",
+          "priority": 10,
+          "text": "The clerk sorts two park slips into a tray marked REAL ENOUGH. \"The card is contested. Now quiet the rumor field before the gate reads it.\"",
+          "flagsRequired": [
+            "act1.received_town_gate_brief",
+            "act1.resolved_social_obstruction"
+          ],
+          "flagsAbsent": [
+            "act1.rumor_field_quieted"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.town_authority"
+        }
+      ],
+      "script": {
+        "id": "script.act1.civic.town_gate_brief_repeat",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Route Clerk",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.civic.social_obstruction": {
+      "id": "dialogue.act1.civic.social_obstruction",
+      "ownerId": "gate.act1.pressure_pocket.public_version_clique",
+      "routeBeatId": "beat.act1.social_obstruction",
+      "speaker": "Public Version Clique",
+      "text": "Three kids and one humming pole offer Bosch a clean version of himself: no witness, no smudge, no argument, already signed. \"Let this one count,\" they say. Bosch holds up Sal's ugly receipt and refuses the shortcut in public. The pole flickers, then prints one unsure word: PRESENT.",
+      "flagsSet": [
+        "act1.resolved_social_obstruction",
+        "intro.first_proof_object_checked"
+      ],
+      "windowPresetId": "window.dialogue.standard",
+      "script": {
+        "id": "script.act1.civic.social_obstruction",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Public Version Clique",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          },
+          {
+            "action": "setFlags",
+            "flags": [
+              "act1.resolved_social_obstruction",
+              "intro.first_proof_object_checked"
+            ]
+          },
+          {
+            "action": "completeObjective",
+            "objectiveId": "resolve_social_obstruction"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.civic.social_obstruction_resolved": {
+      "id": "dialogue.act1.civic.social_obstruction_resolved",
+      "ownerId": "gate.act1.pressure_pocket.public_version_clique",
+      "routeBeatId": "beat.act1.social_obstruction",
+      "speaker": "Public Version Clique",
+      "text": "The clique leaves a careful gap around Bosch now. Their clean form is still there, but Sal's receipt is stapled across the part that tried to count for him.",
+      "flagsRequired": [
+        "act1.resolved_social_obstruction"
+      ],
+      "flagsSet": [],
+      "windowPresetId": "window.dialogue.standard",
+      "variants": [
+        {
+          "id": "dialogue.act1.civic.social_obstruction_resolved.variant.before_parks",
+          "priority": 10,
+          "text": "One kid has written SOURCE? on the card, then crossed out the question mark. \"The parks heard both versions. Better make the noise choose a witness.\"",
+          "flagsRequired": [
+            "act1.resolved_social_obstruction"
+          ],
+          "flagsAbsent": [
+            "act1.rumor_field_quieted"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.social_obstruction"
+        }
+      ],
+      "script": {
+        "id": "script.act1.civic.social_obstruction_resolved",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Public Version Clique",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.civic.social_obstruction_blocked": {
+      "id": "dialogue.act1.civic.social_obstruction_blocked",
+      "ownerId": "gate.act1.pressure_pocket.public_version_clique",
+      "routeBeatId": "beat.act1.social_obstruction",
+      "speaker": "Public Version Clique",
+      "text": "The clique has Bosch boxed in, but the refusal has no weight yet. They want Sal's prepared proof before anyone can argue with the easy public version.",
+      "flagsRequired": [],
+      "flagsSet": [],
+      "windowPresetId": "window.dialogue.standard",
+      "variants": [
+        {
+          "id": "dialogue.act1.civic.social_obstruction_blocked.variant.missing_proof",
+          "priority": 20,
+          "text": "The clique holds up a spotless public-version form. Bosch can object, but without Sal's prepared proof it sounds like one rumor trying to outshout another.",
+          "flagsRequired": [],
+          "flagsAbsent": [
+            "act1.proof_object_prepared"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.social_obstruction"
+        },
+        {
+          "id": "dialogue.act1.civic.social_obstruction_blocked.variant.missing_brief",
+          "priority": 10,
+          "text": "The clique squints at Sal's proof, then shrugs. Without the town-gate brief, nobody agrees where the refusal should land.",
+          "flagsRequired": [
+            "act1.proof_object_prepared"
+          ],
+          "flagsAbsent": [
+            "act1.received_town_gate_brief"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.social_obstruction"
+        }
+      ],
+      "script": {
+        "id": "script.act1.civic.social_obstruction_blocked",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Public Version Clique",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.station.classifier_receipt": {
+      "id": "dialogue.act1.station.classifier_receipt",
+      "ownerId": "gate.act1.station.classifier",
+      "routeBeatId": "beat.act1.station_classifier",
+      "speaker": "Gate",
+      "text": "The station gate chews through Sal's smudged receipt, the public refusal, and both park reports. It prints a Gate Classifier Receipt with two lines: SOURCE CLAIMANT PRESENT. PUBLIC VERSION CONTESTED BY BODY ON ROUTE.",
+      "flagsSet": [
+        "act1.boss_gate_unlocked",
+        "act1.route_compliance_processed"
+      ],
+      "windowPresetId": "window.dialogue.standard",
+      "variants": [
+        {
+          "id": "dialogue.act1.station.classifier_receipt.variant.ready_to_print",
+          "priority": 10,
+          "text": "The gate accepts the damaged trail over the clean card. It prints SOURCE CLAIMANT PRESENT, then adds a smaller line: PUBLIC VERSION CONTESTED.",
+          "flagsRequired": [
+            "act1.proof_object_prepared",
+            "act1.received_town_gate_brief",
+            "act1.resolved_social_obstruction",
+            "act1.rumor_field_quieted"
+          ],
+          "flagsAbsent": [
+            "act1.boss_gate_unlocked"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.station_gate_unlock"
+        }
+      ],
+      "script": {
+        "id": "script.act1.station.classifier_receipt",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Gate",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          },
+          {
+            "action": "setFlags",
+            "flags": [
+              "act1.boss_gate_unlocked",
+              "act1.route_compliance_processed"
+            ]
+          },
+          {
+            "action": "completeObjective",
+            "objectiveId": "unlock_station_gate"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.station.classifier_blocked": {
+      "id": "dialogue.act1.station.classifier_blocked",
+      "ownerId": "gate.act1.station.classifier",
+      "routeBeatId": "beat.act1.station_classifier",
+      "speaker": "Gate",
+      "text": "The classifier keeps the gate shut. It wants the town brief, the clique refusal, and both park reports before it will print Bosch a receipt.",
+      "flagsRequired": [],
+      "flagsSet": [],
+      "windowPresetId": "window.dialogue.standard",
+      "variants": [
+        {
+          "id": "dialogue.act1.station.classifier_blocked.variant.missing_proof",
+          "priority": 40,
+          "text": "The classifier window stays dark. It wants Sal's prepared proof before it will read the rest of Bosch's route.",
+          "flagsRequired": [],
+          "flagsAbsent": [
+            "act1.proof_object_prepared"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.station_gate_unlock"
+        },
+        {
+          "id": "dialogue.act1.station.classifier_blocked.variant.missing_brief",
+          "priority": 30,
+          "text": "The gate scans the proof, then asks for the civic brief. Proof without the town's route order is just a warm receipt.",
+          "flagsRequired": [
+            "act1.proof_object_prepared"
+          ],
+          "flagsAbsent": [
+            "act1.received_town_gate_brief"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.station_gate_unlock"
+        },
+        {
+          "id": "dialogue.act1.station.classifier_blocked.variant.clique_unresolved",
+          "priority": 20,
+          "text": "The gate prints PUBLIC VERSION UNCONTESTED. Refuse the clique's easy Bosch where the town can see it.",
+          "flagsRequired": [
+            "act1.proof_object_prepared",
+            "act1.received_town_gate_brief"
+          ],
+          "flagsAbsent": [
+            "act1.resolved_social_obstruction"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.station_gate_unlock"
+        },
+        {
+          "id": "dialogue.act1.station.classifier_blocked.variant.parks_uncleared",
+          "priority": 10,
+          "text": "The gate reads the proof and refusal, then points at both park reports. The rumor field still has to quiet down.",
+          "flagsRequired": [
+            "act1.proof_object_prepared",
+            "act1.received_town_gate_brief",
+            "act1.resolved_social_obstruction"
+          ],
+          "flagsAbsent": [
+            "act1.rumor_field_quieted"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.station_gate_unlock"
+        }
+      ],
+      "script": {
+        "id": "script.act1.station.classifier_blocked",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Gate",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.station.malady_reveal": {
+      "id": "dialogue.act1.station.malady_reveal",
+      "ownerId": "battleMarker.act1.station_gate.malady",
+      "routeBeatId": "beat.act1.malady_boss",
+      "speaker": "Ledger",
+      "text": "TX 0x4f1a reverted. Signer: Malady. The mask peels back to Bosch's face wearing someone else's receipt. CONTRACT OWNER: Milady. The wallet was not the boss; the town's willingness to process the easier Bosch was.",
+      "flagsRequired": [
+        "act1.boss_defeated"
+      ],
+      "flagsSet": [],
+      "windowPresetId": "window.dialogue.standard",
+      "script": {
+        "id": "script.act1.station.malady_reveal",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Ledger",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.station.refuse_processing": {
+      "id": "dialogue.act1.station.refuse_processing",
+      "ownerId": "hotspot.act1.station_gate.refuse_processing",
+      "routeBeatId": "beat.act1.refuse_processing",
+      "speaker": "Compliance",
+      "text": "Compliance slides a clean Public Version Card across the audit window. It would file faster, travel lighter, and never argue. Bosch keeps the damaged card instead and refuses the processing stamp. The route past the gate stops pretending it was closed for safety.",
+      "flagsSet": [
+        "act1.refused_processing",
+        "act1.complete"
+      ],
+      "windowPresetId": "window.dialogue.standard",
+      "variants": [
+        {
+          "id": "dialogue.act1.station.refuse_processing.variant.first_refusal",
+          "priority": 10,
+          "text": "Compliance offers the clean card one last time. Bosch keeps the damaged version, refuses the stamp, and makes the file carry the person who showed up.",
+          "flagsRequired": [
+            "act1.boss_defeated"
+          ],
+          "flagsAbsent": [
+            "act1.complete"
+          ],
+          "windowPresetId": "window.dialogue.standard",
+          "routeSpatialRuleId": "routeSpatial.act1.civic_audit"
+        }
+      ],
+      "script": {
+        "id": "script.act1.station.refuse_processing",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Compliance",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          },
+          {
+            "action": "setFlags",
+            "flags": [
+              "act1.refused_processing",
+              "act1.complete"
+            ]
+          },
+          {
+            "action": "completeObjective",
+            "objectiveId": "refuse_processing"
+          }
+        ]
+      }
+    },
+    "dialogue.act1.station.refuse_processing_repeat": {
+      "id": "dialogue.act1.station.refuse_processing_repeat",
+      "ownerId": "hotspot.act1.station_gate.refuse_processing",
+      "routeBeatId": "beat.act1.refuse_processing",
+      "speaker": "Compliance",
+      "text": "The processing stamp is already refused. The classifier keeps the damaged card on file because the route finally prefers a scuffed witness to a clean shortcut.",
+      "flagsRequired": [
+        "act1.complete"
+      ],
+      "flagsSet": [],
+      "windowPresetId": "window.dialogue.standard",
+      "script": {
+        "id": "script.act1.station.refuse_processing_repeat",
+        "end": "returnToOverworld",
+        "steps": [
+          {
+            "action": "showDialogue",
+            "speaker": "Compliance",
+            "textRef": "text",
+            "windowPresetId": "window.dialogue.standard"
+          }
+        ]
+      }
+    }
+  }
+}

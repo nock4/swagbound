@@ -1,0 +1,2210 @@
+{
+  "schema": "swagbound.drifella2.bark-pool.v1",
+  "source": "asset-lab/text-extraction/drifella2-text-corpus-0003",
+  "minBarkScore": 5,
+  "count": 130,
+  "barks": [
+    {
+      "phrase": "girls heart my swag",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 117
+        },
+        {
+          "field": "overlay",
+          "count": 40
+        }
+      ],
+      "total_count": 157,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "nft",
+        "swag"
+      ],
+      "bark_score": 10
+    },
+    {
+      "phrase": "honor thy father bloody shirt",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 100
+        }
+      ],
+      "total_count": 100,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [
+        "religion",
+        "swag"
+      ],
+      "bark_score": 10
+    },
+    {
+      "phrase": "i feel like dying hat",
+      "fields": [
+        {
+          "field": "head",
+          "count": 61
+        }
+      ],
+      "total_count": 61,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "swag",
+        "doomer"
+      ],
+      "bark_score": 10
+    },
+    {
+      "phrase": "shoot up the party",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 48
+        }
+      ],
+      "total_count": 48,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [
+        "vidya",
+        "gun"
+      ],
+      "bark_score": 10
+    },
+    {
+      "phrase": "kill you red puffer",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 122
+        }
+      ],
+      "total_count": 122,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "me and her joint",
+      "fields": [
+        {
+          "field": "mouth",
+          "count": 100
+        }
+      ],
+      "total_count": 100,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "pharma"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "someone with autism stole my wallet heart",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 89
+        }
+      ],
+      "total_count": 89,
+      "word_count": 7,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "nft"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "kill all solana nfts",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 84
+        }
+      ],
+      "total_count": 84,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [
+        "nft"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "my call of duty",
+      "fields": [
+        {
+          "field": "head",
+          "count": 69
+        }
+      ],
+      "total_count": 69,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "vidya"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "who needs brain cells when you have swag",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 67
+        }
+      ],
+      "total_count": 67,
+      "word_count": 8,
+      "length_bucket": "medium",
+      "voice": "interrogative",
+      "cursed": false,
+      "vibes": [
+        "nft",
+        "swag"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "i wake up i engage in tomfoolery",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 56
+        }
+      ],
+      "total_count": 56,
+      "word_count": 7,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "ironic"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "i like getting my boot hole licked by nft monkeys",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 48
+        }
+      ],
+      "total_count": 48,
+      "word_count": 10,
+      "length_bucket": "long",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "nft"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "black ops on my tv",
+      "fields": [
+        {
+          "field": "background",
+          "count": 47
+        }
+      ],
+      "total_count": 47,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "vidya"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "I SPEND MONEY LIKE ITS COD ZOMBIES",
+      "fields": [
+        {
+          "field": "background",
+          "count": 45
+        }
+      ],
+      "total_count": 45,
+      "word_count": 7,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "vidya"
+      ],
+      "bark_score": 9
+    },
+    {
+      "phrase": "leather demon bat hat",
+      "fields": [
+        {
+          "field": "head",
+          "count": 67
+        }
+      ],
+      "total_count": 67,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "religion",
+        "swag"
+      ],
+      "bark_score": 8
+    },
+    {
+      "phrase": "dont give me orders",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 66
+        }
+      ],
+      "total_count": 66,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "youre in her dms im letting greed corrupt me",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 66
+        }
+      ],
+      "total_count": 66,
+      "word_count": 9,
+      "length_bucket": "long",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "remember who you are fighting for",
+      "fields": [
+        {
+          "field": "background",
+          "count": 62
+        }
+      ],
+      "total_count": 62,
+      "word_count": 6,
+      "length_bucket": "medium",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "my girant isopod phone case",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 60
+        }
+      ],
+      "total_count": 60,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "thank you lord for this here perc 30",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 60
+        }
+      ],
+      "total_count": 60,
+      "word_count": 8,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "pharma",
+        "religion"
+      ],
+      "bark_score": 8
+    },
+    {
+      "phrase": "wake up we gotta turn the power on",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 60
+        }
+      ],
+      "total_count": 60,
+      "word_count": 8,
+      "length_bucket": "medium",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "wow it is literally me meme",
+      "fields": [
+        {
+          "field": "background",
+          "count": 57
+        }
+      ],
+      "total_count": 57,
+      "word_count": 6,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "be ready to fight the horde",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 56
+        }
+      ],
+      "total_count": 56,
+      "word_count": 6,
+      "length_bucket": "medium",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "i can sleep anywhere",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 56
+        }
+      ],
+      "total_count": 56,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "i have two sides",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 54
+        }
+      ],
+      "total_count": 54,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "anime tax fraud hat",
+      "fields": [
+        {
+          "field": "head",
+          "count": 53
+        }
+      ],
+      "total_count": 53,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "swag",
+        "anime"
+      ],
+      "bark_score": 8
+    },
+    {
+      "phrase": "earl chart painting in my living room",
+      "fields": [
+        {
+          "field": "background",
+          "count": 52
+        }
+      ],
+      "total_count": 52,
+      "word_count": 7,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "house party  nearby im bringing weird guys",
+      "fields": [
+        {
+          "field": "background",
+          "count": 51
+        }
+      ],
+      "total_count": 51,
+      "word_count": 7,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "i am rooting for you",
+      "fields": [
+        {
+          "field": "background",
+          "count": 51
+        }
+      ],
+      "total_count": 51,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "how to catch a milk thief",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 49
+        }
+      ],
+      "total_count": 49,
+      "word_count": 6,
+      "length_bucket": "medium",
+      "voice": "interrogative",
+      "cursed": false,
+      "vibes": [
+        "food"
+      ],
+      "bark_score": 8
+    },
+    {
+      "phrase": "she want me cuz im normal",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 48
+        }
+      ],
+      "total_count": 48,
+      "word_count": 6,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "yall dont fuck with music like i do",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 47
+        }
+      ],
+      "total_count": 47,
+      "word_count": 8,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "me gay chair v5",
+      "fields": [
+        {
+          "field": "background",
+          "count": 46
+        }
+      ],
+      "total_count": 46,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "this shit laced im tweakkinn ahhhhhh",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 43
+        }
+      ],
+      "total_count": 43,
+      "word_count": 6,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "TAKE ALL YOUR MONEY OUT OF THE BANK",
+      "fields": [
+        {
+          "field": "background",
+          "count": 42
+        }
+      ],
+      "total_count": 42,
+      "word_count": 8,
+      "length_bucket": "medium",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "this picture broke my heart",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 40
+        }
+      ],
+      "total_count": 40,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 8
+    },
+    {
+      "phrase": "piss stained goblin shirt",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 127
+        }
+      ],
+      "total_count": 127,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "backwards pill cyber jac",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 112
+        }
+      ],
+      "total_count": 112,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "pharma"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "bape mape zip up",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 111
+        }
+      ],
+      "total_count": 111,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "bullet bill spike teeth",
+      "fields": [
+        {
+          "field": "mouth",
+          "count": 110
+        }
+      ],
+      "total_count": 110,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "gun"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "cdg camo heart tee",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 109
+        }
+      ],
+      "total_count": 109,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "evil prof oak shirt",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 108
+        }
+      ],
+      "total_count": 108,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "yugi and joey shirt",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 106
+        }
+      ],
+      "total_count": 106,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "buying a t shirt",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 99
+        }
+      ],
+      "total_count": 99,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "vivienne westwood gem jacket",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 99
+        }
+      ],
+      "total_count": 99,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "akira black and gray",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 97
+        }
+      ],
+      "total_count": 97,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "anime"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "golden spiky demon grill",
+      "fields": [
+        {
+          "field": "mouth",
+          "count": 94
+        }
+      ],
+      "total_count": 94,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "religion"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "community rpg shoutsout community",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 87
+        }
+      ],
+      "total_count": 87,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "vidya"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "shoot",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 75
+        }
+      ],
+      "total_count": 75,
+      "word_count": 1,
+      "length_bucket": "short",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [
+        "vidya",
+        "gun"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "shoot myself",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 75
+        }
+      ],
+      "total_count": 75,
+      "word_count": 2,
+      "length_bucket": "short",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [
+        "vidya",
+        "gun"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "white gloves with gun",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 72
+        }
+      ],
+      "total_count": 72,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "gun"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "jesus vhs 911 edition",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 62
+        }
+      ],
+      "total_count": 62,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "religion"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "black ops 2 speech bubble",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 60
+        }
+      ],
+      "total_count": 60,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "vidya"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "ceramic chambered mifella heart",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 59
+        }
+      ],
+      "total_count": 59,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "milady"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "ghost and anime girl",
+      "fields": [
+        {
+          "field": "background",
+          "count": 59
+        }
+      ],
+      "total_count": 59,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "anime"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "mewtwo in red circle",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 59
+        }
+      ],
+      "total_count": 59,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "vidya"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "rip avant nft wave",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 59
+        }
+      ],
+      "total_count": 59,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "nft"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "born to drain mud is a fuck",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 58
+        }
+      ],
+      "total_count": 58,
+      "word_count": 7,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "nft"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "sony hat princess diana",
+      "fields": [
+        {
+          "field": "head",
+          "count": 57
+        }
+      ],
+      "total_count": 57,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "gengar pinball sprite sheet",
+      "fields": [
+        {
+          "field": "background",
+          "count": 53
+        }
+      ],
+      "total_count": 53,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "vidya"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "the life of drifella",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 51
+        }
+      ],
+      "total_count": 51,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "lore"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "btc fear greed index",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 49
+        }
+      ],
+      "total_count": 49,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "nft"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "no love deep web",
+      "fields": [
+        {
+          "field": "background",
+          "count": 47
+        }
+      ],
+      "total_count": 47,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "doomer"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "spiky yung lean bladee",
+      "fields": [
+        {
+          "field": "background",
+          "count": 47
+        }
+      ],
+      "total_count": 47,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "pharma"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "praying to your flight god",
+      "fields": [
+        {
+          "field": "background",
+          "count": 45
+        }
+      ],
+      "total_count": 45,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "religion"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "shadow wizard in hotel",
+      "fields": [
+        {
+          "field": "background",
+          "count": 45
+        }
+      ],
+      "total_count": 45,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "vidya"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "dratini line sprite sheets",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 42
+        }
+      ],
+      "total_count": 42,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "vidya"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "white house mcdonalds order",
+      "fields": [
+        {
+          "field": "background",
+          "count": 41
+        }
+      ],
+      "total_count": 41,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "milady"
+      ],
+      "bark_score": 7
+    },
+    {
+      "phrase": "mangekyo sharingan left bleed",
+      "fields": [
+        {
+          "field": "eyes",
+          "count": 203
+        }
+      ],
+      "total_count": 203,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "mangekyo sharingan right bleed",
+      "fields": [
+        {
+          "field": "eyes",
+          "count": 186
+        }
+      ],
+      "total_count": 186,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "evil pepe with cigar",
+      "fields": [
+        {
+          "field": "mouth",
+          "count": 124
+        }
+      ],
+      "total_count": 124,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "be different hoodie",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 111
+        }
+      ],
+      "total_count": 111,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 6
+    },
+    {
+      "phrase": "chris chan rugby longsleeve",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 108
+        }
+      ],
+      "total_count": 108,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "dont care shirt",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 104
+        }
+      ],
+      "total_count": 104,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 6
+    },
+    {
+      "phrase": "devil world raf simmons",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 101
+        }
+      ],
+      "total_count": 101,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "raf simmons virginia creeper",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 100
+        }
+      ],
+      "total_count": 100,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "mouth with cig yo",
+      "fields": [
+        {
+          "field": "mouth",
+          "count": 95
+        }
+      ],
+      "total_count": 95,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "silent hill 2 zip",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 95
+        }
+      ],
+      "total_count": 95,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "thrashed vtg nature sweater",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 95
+        }
+      ],
+      "total_count": 95,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "pissed cartman no respect",
+      "fields": [
+        {
+          "field": "mouth",
+          "count": 93
+        }
+      ],
+      "total_count": 93,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "im gay tee",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 92
+        }
+      ],
+      "total_count": 92,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [
+        "swag"
+      ],
+      "bark_score": 6
+    },
+    {
+      "phrase": "baby gray blood sketch",
+      "fields": [
+        {
+          "field": "body",
+          "count": 79
+        }
+      ],
+      "total_count": 79,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "red pinnk white sketch",
+      "fields": [
+        {
+          "field": "body",
+          "count": 69
+        }
+      ],
+      "total_count": 69,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "abstract night cat sketch",
+      "fields": [
+        {
+          "field": "body",
+          "count": 67
+        }
+      ],
+      "total_count": 67,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "dark magician aura sword",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 67
+        }
+      ],
+      "total_count": 67,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "life would be much easier",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 66
+        }
+      ],
+      "total_count": 66,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "marker pixel bastard 2",
+      "fields": [
+        {
+          "field": "body",
+          "count": 65
+        }
+      ],
+      "total_count": 65,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "officer peaked another soviet comrade",
+      "fields": [
+        {
+          "field": "head",
+          "count": 65
+        }
+      ],
+      "total_count": 65,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "thick goth lola bunny",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 65
+        }
+      ],
+      "total_count": 65,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "the fool rock negative",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 64
+        }
+      ],
+      "total_count": 64,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "toon blue eyes white dragon",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 64
+        }
+      ],
+      "total_count": 64,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "marker pixel pink yellow",
+      "fields": [
+        {
+          "field": "body",
+          "count": 62
+        }
+      ],
+      "total_count": 62,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "you cant beat a man that battles with himself every day",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 60
+        }
+      ],
+      "total_count": 60,
+      "word_count": 11,
+      "length_bucket": "long",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "im in love with my gf dont talk to me she has a nuclear bomb",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 59
+        }
+      ],
+      "total_count": 59,
+      "word_count": 15,
+      "length_bucket": "long",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "this doesnt bode well",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 59
+        }
+      ],
+      "total_count": 59,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "touching grass isnt enough",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 59
+        }
+      ],
+      "total_count": 59,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "cannot use this item offline",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 58
+        }
+      ],
+      "total_count": 58,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "dark magician spiky headphones",
+      "fields": [
+        {
+          "field": "head",
+          "count": 58
+        }
+      ],
+      "total_count": 58,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "its over were back",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 58
+        }
+      ],
+      "total_count": 58,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "in case of fire",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 57
+        }
+      ],
+      "total_count": 57,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "his ass is not a software engineer",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 56
+        }
+      ],
+      "total_count": 56,
+      "word_count": 7,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "it takes a little treat to tame a beast",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 55
+        }
+      ],
+      "total_count": 55,
+      "word_count": 9,
+      "length_bucket": "long",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "knit cat ear balaclava",
+      "fields": [
+        {
+          "field": "head",
+          "count": 55
+        }
+      ],
+      "total_count": 55,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "person who keeps gambling",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 55
+        }
+      ],
+      "total_count": 55,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "something about us moon",
+      "fields": [
+        {
+          "field": "background",
+          "count": 54
+        }
+      ],
+      "total_count": 54,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "missing no and jellyfish uap",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 53
+        }
+      ],
+      "total_count": 53,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "mc ride playing club penguin",
+      "fields": [
+        {
+          "field": "background",
+          "count": 52
+        }
+      ],
+      "total_count": 52,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "skull of mary magdeline shrine",
+      "fields": [
+        {
+          "field": "background",
+          "count": 52
+        }
+      ],
+      "total_count": 52,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "aura crown of thorns",
+      "fields": [
+        {
+          "field": "head",
+          "count": 51
+        }
+      ],
+      "total_count": 51,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "michael and jason mask",
+      "fields": [
+        {
+          "field": "head",
+          "count": 51
+        }
+      ],
+      "total_count": 51,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "silent hill 2 crtv",
+      "fields": [
+        {
+          "field": "background",
+          "count": 51
+        }
+      ],
+      "total_count": 51,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "edward and bella playing chess",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 49
+        }
+      ],
+      "total_count": 49,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "jpeg in front of tarp",
+      "fields": [
+        {
+          "field": "background",
+          "count": 47
+        }
+      ],
+      "total_count": 47,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "ye net and yahoo",
+      "fields": [
+        {
+          "field": "background",
+          "count": 46
+        }
+      ],
+      "total_count": 46,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "blue eyes toon painting",
+      "fields": [
+        {
+          "field": "background",
+          "count": 45
+        }
+      ],
+      "total_count": 45,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "bringing freedom and democracy to an oil rich country near you",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 45
+        }
+      ],
+      "total_count": 45,
+      "word_count": 11,
+      "length_bucket": "long",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "girls love a man in armor",
+      "fields": [
+        {
+          "field": "background",
+          "count": 45
+        }
+      ],
+      "total_count": 45,
+      "word_count": 6,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "ren and stimpy bg2",
+      "fields": [
+        {
+          "field": "background",
+          "count": 45
+        }
+      ],
+      "total_count": 45,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "the silence of the lambs",
+      "fields": [
+        {
+          "field": "background",
+          "count": 44
+        }
+      ],
+      "total_count": 44,
+      "word_count": 5,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "rolling into the function",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 42
+        }
+      ],
+      "total_count": 42,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "ren and stimpy bg1",
+      "fields": [
+        {
+          "field": "background",
+          "count": 39
+        }
+      ],
+      "total_count": 39,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 6
+    },
+    {
+      "phrase": "death note manha cover",
+      "fields": [
+        {
+          "field": "background",
+          "count": 26
+        }
+      ],
+      "total_count": 26,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [
+        "doomer"
+      ],
+      "bark_score": 6
+    },
+    {
+      "phrase": "go go ackman",
+      "fields": [
+        {
+          "field": "mouth",
+          "count": 122
+        }
+      ],
+      "total_count": 122,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 5
+    },
+    {
+      "phrase": "i heart bladee",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 113
+        }
+      ],
+      "total_count": 113,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 5
+    },
+    {
+      "phrase": "eat",
+      "fields": [
+        {
+          "field": "mouth",
+          "count": 106
+        }
+      ],
+      "total_count": 106,
+      "word_count": 1,
+      "length_bucket": "short",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 5
+    },
+    {
+      "phrase": "my clash base",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 74
+        }
+      ],
+      "total_count": 74,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 5
+    },
+    {
+      "phrase": "my favorite cards",
+      "fields": [
+        {
+          "field": "left_hand",
+          "count": 74
+        }
+      ],
+      "total_count": 74,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "first_person",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 5
+    },
+    {
+      "phrase": "kill",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 54
+        }
+      ],
+      "total_count": 54,
+      "word_count": 1,
+      "length_bucket": "short",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 5
+    },
+    {
+      "phrase": "revive me nurse",
+      "fields": [
+        {
+          "field": "background",
+          "count": 45
+        }
+      ],
+      "total_count": 45,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "imperative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 5
+    },
+    {
+      "phrase": "heath ledger joker concept",
+      "fields": [
+        {
+          "field": "body",
+          "count": 2
+        }
+      ],
+      "total_count": 2,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": false,
+      "vibes": [],
+      "bark_score": 5
+    }
+  ]
+}

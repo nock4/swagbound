@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Battle Background Review</title>
+  <style>
+    :root { color-scheme: light; --bg:#f4f4ef; --panel:#fff; --ink:#202124; --muted:#666b70; --line:#d4d6d0; --accent:#176b87; --bad:#9b3030; --warn:#8a6416; --ok:#2f6f4e; --chip:#ece8de; }
+    * { box-sizing:border-box; }
+    body { margin:0; font:14px/1.45 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color:var(--ink); background:var(--bg); }
+    header { position:sticky; top:0; z-index:10; display:flex; justify-content:space-between; gap:16px; align-items:center; padding:14px 18px; border-bottom:1px solid var(--line); background:rgba(244,244,239,.97); backdrop-filter:blur(10px); }
+    h1 { margin:0; font-size:20px; line-height:1.2; letter-spacing:0; }
+    h2 { margin:0; font-size:15px; letter-spacing:0; }
+    h3 { margin:10px 0 4px; font-size:12px; letter-spacing:0; }
+    p { margin:4px 0 0; color:var(--muted); font-size:12px; }
+    nav { display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+    .copy-status { min-width:120px; color:var(--ok); font-size:12px; text-align:right; }
+    .seed-status { color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 8px; background:#fff; font-size:11px; }
+    a, button { border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:6px; padding:8px 10px; text-decoration:none; min-height:36px; }
+    button { cursor:pointer; font:inherit; }
+    .primary { background:var(--accent); border-color:var(--accent); color:#fff; }
+    .stats { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; padding:12px 18px; border-bottom:1px solid var(--line); background:#fbfbf8; }
+    .stats div { border:1px solid var(--line); border-radius:8px; background:#fff; padding:9px; display:grid; gap:2px; }
+    .stats strong { font-size:19px; line-height:1; }
+    .stats span { color:var(--muted); font-size:10px; text-transform:uppercase; overflow-wrap:anywhere; }
+    .toolbar { display:grid; grid-template-columns:minmax(220px, 1fr) 170px 210px 170px 140px 150px auto; gap:8px; align-items:center; padding:12px 18px; border-bottom:1px solid var(--line); background:#fafaf7; }
+    input, select, textarea { width:100%; border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--ink); padding:8px; font:inherit; }
+    textarea { min-height:54px; resize:vertical; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(520px, 1fr)); gap:12px; padding:14px 18px 40px; }
+    .card { display:grid; grid-template-columns:220px minmax(0, 1fr); border:1px solid var(--line); border-radius:8px; background:var(--panel); overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.08); }
+    .card.kind-enemy { border-left:5px solid var(--accent); }
+    .card.kind-friendly-npc-or-hero { border-left:5px solid var(--ok); }
+    .card.kind-enemy-candidate { border-left:5px solid var(--warn); }
+    .card.decision-reject-set { border-color:#d2a39c; background:#fff8f6; }
+    .card.decision-accept-canonical, .card.decision-ow-only-friendly { border-color:#9ab8ad; background:#f8fbf9; }
+    .visuals { display:grid; grid-template-rows:repeat(3, minmax(130px, auto)); gap:0; background:
+      linear-gradient(45deg, #e7e7e7 25%, transparent 25%) 0 0/14px 14px,
+      linear-gradient(45deg, transparent 75%, #e7e7e7 75%) 0 0/14px 14px,
+      linear-gradient(45deg, transparent 75%, #e7e7e7 75%) 7px 7px/14px 14px,
+      linear-gradient(45deg, #e7e7e7 25%, #f9f9f9 25%) 7px 7px/14px 14px; border-right:1px solid var(--line); }
+    .slot { min-height:130px; margin:0; display:grid; grid-template-rows:auto 1fr auto; gap:4px; place-items:center; padding:8px; border-bottom:1px solid rgba(0,0,0,.08); background:rgba(255,255,255,.56); }
+    .slot:last-child { border-bottom:0; }
+    .slot img { max-width:100%; max-height:88px; image-rendering:pixelated; }
+    .slot figcaption { justify-self:start; border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.92); padding:1px 6px; font-size:10px; color:#333; }
+    .slot small { width:100%; color:var(--muted); font-size:9px; overflow-wrap:anywhere; text-align:center; }
+    .slot-replacement { outline:2px solid rgba(23,107,135,.38); outline-offset:-3px; background:rgba(226,244,248,.7); }
+    .empty { display:grid; place-items:center; min-height:60px; color:var(--muted); font-size:12px; }
+    .body { padding:10px; display:grid; gap:8px; min-width:0; }
+    .card-head { display:flex; justify-content:space-between; gap:8px; align-items:start; }
+    .card-head > span { flex:0 0 auto; background:var(--chip); border:1px solid #ddd8ca; border-radius:999px; padding:2px 8px; font-size:10px; color:#3f4245; }
+    .tags { display:flex; flex-wrap:wrap; gap:4px; }
+    .tags span { background:var(--chip); border:1px solid #ddd8ca; border-radius:999px; padding:1px 6px; font-size:10px; color:#3f4245; max-width:100%; overflow-wrap:anywhere; }
+    .notes { border-left:3px solid var(--line); padding-left:8px; }
+    .assignment-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr)); gap:8px; align-items:end; }
+    .check { display:flex; gap:6px; align-items:center; min-height:36px; padding:8px; border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--ink); line-height:1.2; overflow-wrap:anywhere; }
+    .check input { width:auto; margin:0; }
+    .select-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; }
+    .replacement-box { display:grid; grid-template-columns:minmax(160px, .7fr) minmax(220px, 1.3fr); gap:6px; padding:8px; border:1px solid var(--line); border-radius:6px; background:#fbfbf8; }
+    label { display:grid; gap:3px; color:var(--muted); font-size:11px; min-width:0; }
+    .button-row { display:flex; gap:6px; flex-wrap:wrap; }
+    .button-row button { min-height:32px; padding:6px 8px; font-size:12px; }
+    .candidate-review { border-color:#d6cdc0; background:#fffaf0; }
+    .candidate-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(116px, 1fr)); gap:8px; margin-top:8px; }
+    .candidate-tile { position:relative; display:grid; grid-template-rows:18px 74px auto; gap:4px; align-items:center; justify-items:center; min-height:132px; padding:6px; border:1px solid var(--line); border-radius:6px; background:#fff; text-align:center; color:var(--ink); }
+    .candidate-tile.active { border-color:var(--accent); box-shadow:0 0 0 2px rgba(23,107,135,.18); background:#eef8fa; }
+    .candidate-tile.runtime-ref::after { content:"runtime"; position:absolute; top:5px; right:5px; border:1px solid rgba(23,107,135,.35); border-radius:999px; padding:1px 5px; background:#eef8fa; color:var(--accent); font-size:9px; }
+    .candidate-tile span { justify-self:start; color:var(--muted); font-size:10px; }
+    .candidate-tile img { max-width:100%; max-height:72px; image-rendering:pixelated; }
+    .candidate-tile small { width:100%; color:var(--muted); font-size:9px; overflow-wrap:anywhere; }
+    details { border:1px solid var(--line); border-radius:6px; padding:8px; background:#fbfbf8; }
+    summary { cursor:pointer; color:#444; }
+    .path-list { display:grid; gap:2px; max-height:190px; overflow:auto; border:1px solid var(--line); border-radius:6px; background:#fff; }
+    .path-list div { display:grid; grid-template-columns:90px 1fr; gap:6px; padding:5px 6px; border-bottom:1px solid var(--line); color:var(--muted); font-size:10px; overflow-wrap:anywhere; }
+    .path-list div:last-child { border-bottom:0; }
+    dialog { width:min(980px, calc(100vw - 28px)); border:1px solid var(--line); border-radius:8px; padding:0; }
+    .dialog-head, .dialog-actions { padding:12px 14px; display:flex; justify-content:space-between; border-bottom:1px solid var(--line); }
+    .dialog-actions { border-top:1px solid var(--line); border-bottom:0; justify-content:flex-end; }
+    #jsonPreview { min-height:420px; border:0; border-radius:0; font:12px/1.35 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; white-space:pre; }
+    @media (max-width: 860px) { header { position:static; display:grid; } nav { justify-content:start; } .toolbar { grid-template-columns:1fr; } .grid { grid-template-columns:1fr; } .card { grid-template-columns:1fr; } .visuals { grid-template-columns:repeat(3, minmax(0, 1fr)); grid-template-rows:auto; border-right:0; border-bottom:1px solid var(--line); } .select-grid, .assignment-grid, .replacement-box { grid-template-columns:1fr; } .check { justify-content:start; } }
+  .background-toolbar { grid-template-columns:minmax(220px, 1fr) 180px 160px 150px auto; }
+    .background-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(620px, 1fr)); gap:12px; padding:14px 18px 40px; }
+    .background-card { display:grid; grid-template-columns:330px minmax(0, 1fr); border:1px solid var(--line); border-left:5px solid var(--accent); border-radius:8px; background:var(--panel); overflow:hidden; box-shadow:0 1px 2px rgba(0,0,0,.08); }
+    .background-card.decision-reject { border-color:#d2a39c; background:#fff8f6; }
+    .background-card.decision-keep { border-color:#9ab8ad; background:#f8fbf9; }
+    .background-visuals { display:grid; grid-template-rows:repeat(2, minmax(160px, auto)); border-right:1px solid var(--line); background:#111; }
+    .background-slot { min-height:160px; margin:0; display:grid; grid-template-rows:auto 1fr auto; gap:6px; place-items:center; padding:8px; border-bottom:1px solid rgba(255,255,255,.14); background:#171717; }
+    .background-slot:last-child { border-bottom:0; }
+    .background-slot img { width:100%; max-height:128px; object-fit:contain; image-rendering:auto; }
+    .background-slot figcaption { justify-self:start; border:1px solid rgba(255,255,255,.24); border-radius:999px; background:rgba(0,0,0,.54); padding:1px 7px; font-size:10px; color:#fff; }
+    .background-slot small { width:100%; color:#c8c8c8; font-size:9px; overflow-wrap:anywhere; text-align:center; }
+    @media (max-width: 860px) { .background-toolbar, .background-grid { grid-template-columns:1fr; } .background-card { grid-template-columns:1fr; } .background-visuals { grid-template-columns:repeat(2, minmax(0, 1fr)); grid-template-rows:auto; border-right:0; border-bottom:1px solid var(--line); } }
+  </style>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Battle Background Review</h1>
+      <p>Assign battle backgrounds to Act 1, Act 2, or Act 3. This is review-only and does not promote runtime assets.</p>
+    </div>
+    <nav>
+      <a href="index.html">Index</a>
+      <a href="character-sets.html">Character Sets</a>
+      <button id="copyJson" class="primary" type="button">Copy Decisions</button>
+      <button id="showJson" type="button">Preview JSON</button>
+      <span class="seed-status">18 seeded / 0 visible</span>
+      <span id="copyStatus" class="copy-status" role="status" aria-live="polite"></span>
+    </nav>
+  </header>
+  <section class="stats">
+    <div><strong>0</strong><span>remaining background sets</span></div>
+    <div><strong>18</strong><span>total background sets</span></div>
+    <div><strong>0</strong><span>runtime Registry Sets</span></div><div><strong>0</strong><span>runtime Referenced Background Sets</span></div><div><strong>0</strong><span>staged Candidate Sets</span></div><div><strong>0</strong><span>non Selected Variant Paths</span></div><div><strong>0</strong><span>blocked Runtime Cleanup Paths</span></div>
+  </section>
+  <section class="toolbar background-toolbar">
+    <input id="search" type="search" placeholder="Search background ids, paths, zones">
+    <select id="statusFilter">
+      <option value="all">All statuses</option>
+
+    </select>
+    <select id="decisionFilter">
+      <option value="all">All decisions</option>
+      <option value="undecided">Undecided</option><option value="keep">Keep</option><option value="needs-selection">Needs selection</option><option value="reject">Reject</option><option value="evidence-only">Evidence only</option>
+    </select>
+    <select id="actFilter">
+      <option value="all">All acts</option>
+      <option value="unassigned">Unassigned</option><option value="act-1">Act 1</option><option value="act-2">Act 2</option><option value="act-3">Act 3</option>
+    </select>
+    <span id="count"></span>
+  </section>
+  <main id="grid" class="background-grid"></main>
+  <dialog id="jsonDialog">
+    <div class="dialog-head"><strong>Export JSON</strong><button id="closeJson" type="button">Close</button></div>
+    <textarea id="jsonPreview" spellcheck="false"></textarea>
+    <div class="dialog-actions"><button id="copyJsonFromDialog" class="primary" type="button">Copy</button></div>
+  </dialog>
+  <script>
+    const AUTHORITY = {
+  "schema": "swagbound.battleBackgroundAuthorityReview.v1",
+  "generatedAt": "2026-05-26T00:50:19.672Z",
+  "reviewOnly": true,
+  "runtimePromotionAllowed": false,
+  "sourceBackdropRegistryPath": "swagbound-phaser/public/data/backdrop-registry.json",
+  "sourceBattleContentPath": "swagbound-phaser/public/data/content-battle.json",
+  "policy": {
+    "assignmentUnit": "battle-background-set",
+    "actAssignmentOptions": [
+      "unassigned",
+      "act-1",
+      "act-2",
+      "act-3"
+    ],
+    "cleanupIsProposalOnly": true,
+    "destructiveActionAllowed": false,
+    "runtimeReferencesBlockAutomaticDeletion": true,
+    "runtimePromotionRequiresSeparateApproval": true
+  },
+  "counts": {
+    "backgroundSets": 0,
+    "runtimeRegistrySets": 0,
+    "runtimeReferencedBackgroundSets": 0,
+    "stagedCandidateSets": 0,
+    "nonSelectedVariantPaths": 0,
+    "blockedRuntimeCleanupPaths": 0
+  },
+  "records": [],
+  "fullCounts": {
+    "backgroundSets": 18,
+    "runtimeRegistrySets": 14,
+    "runtimeReferencedBackgroundSets": 3,
+    "stagedCandidateSets": 1,
+    "nonSelectedVariantPaths": 86,
+    "blockedRuntimeCleanupPaths": 3
+  }
+};
+    const SEEDED_STATE = {};
+    const STORAGE_KEY = "swagbound.battleBackgroundAuthorityReview.v1";
+    const decisions = [
+  [
+    "undecided",
+    "Undecided"
+  ],
+  [
+    "keep",
+    "Keep"
+  ],
+  [
+    "needs-selection",
+    "Needs selection"
+  ],
+  [
+    "reject",
+    "Reject"
+  ],
+  [
+    "evidence-only",
+    "Evidence only"
+  ]
+];
+    const actOptions = [
+  [
+    "unassigned",
+    "Unassigned"
+  ],
+  [
+    "act-1",
+    "Act 1"
+  ],
+  [
+    "act-2",
+    "Act 2"
+  ],
+  [
+    "act-3",
+    "Act 3"
+  ]
+];
+    let state = { ...SEEDED_STATE, ...loadState() };
+    const els = {
+      search: document.getElementById("search"),
+      statusFilter: document.getElementById("statusFilter"),
+      decisionFilter: document.getElementById("decisionFilter"),
+      actFilter: document.getElementById("actFilter"),
+      count: document.getElementById("count"),
+      grid: document.getElementById("grid"),
+      copyJson: document.getElementById("copyJson"),
+      showJson: document.getElementById("showJson"),
+      jsonDialog: document.getElementById("jsonDialog"),
+      jsonPreview: document.getElementById("jsonPreview"),
+      closeJson: document.getElementById("closeJson"),
+      copyJsonFromDialog: document.getElementById("copyJsonFromDialog"),
+      copyStatus: document.getElementById("copyStatus")
+    };
+    render();
+    bind();
+
+    function loadState() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") || {}; }
+      catch { return {}; }
+    }
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+    function defaultRecordState() {
+      return {
+        decisionStatus: "undecided",
+        actAssignment: "unassigned",
+        isBossBackground: false,
+        selectedPrimaryPath: "",
+        selectedSecondaryPath: "",
+        notes: ""
+      };
+    }
+    function recordState(id) {
+      const record = AUTHORITY.records.find((item) => item.id === id);
+      if (!state[id]) state[id] = defaultRecordState();
+      else state[id] = sanitizeRecordState({ ...defaultRecordState(), ...state[id] }, record);
+      return state[id];
+    }
+    function readRecordState(id) {
+      const record = AUTHORITY.records.find((item) => item.id === id);
+      return sanitizeRecordState({ ...defaultRecordState(), ...(state[id] || {}) }, record);
+    }
+    function sanitizeRecordState(local, record) {
+      if (!record) return local;
+      const paths = new Set((record.assets || []).map((asset) => asset.repoPath));
+      if (local.selectedPrimaryPath && !paths.has(local.selectedPrimaryPath)) local.selectedPrimaryPath = "";
+      if (local.selectedSecondaryPath && !paths.has(local.selectedSecondaryPath)) local.selectedSecondaryPath = "";
+      return local;
+    }
+    function bind() {
+      els.search.addEventListener("input", render);
+      els.statusFilter.addEventListener("change", render);
+      els.decisionFilter.addEventListener("change", render);
+      els.actFilter.addEventListener("change", render);
+      els.copyJson.addEventListener("click", copyDecisionExport);
+      els.copyJsonFromDialog.addEventListener("click", copyDecisionExport);
+      els.showJson.addEventListener("click", showJson);
+      els.closeJson.addEventListener("click", () => els.jsonDialog.close());
+      els.grid.addEventListener("input", (event) => {
+        const id = event.target.dataset.id;
+        if (!id) return;
+        const current = recordState(id);
+        current[event.target.dataset.field] = event.target.type === "checkbox" ? event.target.checked : event.target.value;
+        saveState();
+        if (event.target.tagName === "SELECT" || event.target.type === "checkbox") render();
+        else renderCount();
+      });
+      els.grid.addEventListener("click", (event) => {
+        const button = event.target.closest("button[data-action]");
+        if (!button) return;
+        const record = AUTHORITY.records.find((item) => item.id === button.dataset.id);
+        if (!record) return;
+        const current = recordState(record.id);
+        if (button.dataset.action === "useSuggestions") {
+          current.decisionStatus = "keep";
+          current.selectedPrimaryPath = record.selectedPrimaryPath || record.suggestedPrimaryPath || "";
+          current.selectedSecondaryPath = record.selectedSecondaryPath || record.suggestedSecondaryPath || "";
+        }
+        if (button.dataset.action === "needsSelection") current.decisionStatus = "needs-selection";
+        if (button.dataset.action === "reject") current.decisionStatus = "reject";
+        saveState();
+        render();
+      });
+    }
+    function currentRecords() {
+      const needle = els.search.value.trim().toLowerCase();
+      const status = els.statusFilter.value;
+      const decision = els.decisionFilter.value;
+      const act = els.actFilter.value;
+      return AUTHORITY.records.filter((record) => {
+        const local = readRecordState(record.id);
+        const hay = [
+          record.id, record.displayName, record.status, record.selectionAuthority,
+          record.zones?.join(" "), record.notes?.join(" "),
+          record.assets?.map((asset) => asset.repoPath).join(" ")
+        ].join(" ").toLowerCase();
+        return (status === "all" || record.status === status)
+          && (decision === "all" || local.decisionStatus === decision)
+          && (act === "all" || local.actAssignment === act)
+          && (!needle || hay.includes(needle));
+      });
+    }
+    function render() {
+      const records = currentRecords();
+      els.grid.innerHTML = records.map(renderCard).join("");
+      renderCount(records.length);
+    }
+    function renderCount(count = null) {
+      const decided = Object.values(state).filter((item) => item.decisionStatus && item.decisionStatus !== "undecided").length;
+      const total = AUTHORITY.fullCounts?.backgroundSets || AUTHORITY.records.length;
+      els.count.textContent = (count ?? currentRecords().length) + " shown / " + AUTHORITY.records.length + " remaining backgrounds / " + total + " total / " + decided + " visible decided";
+    }
+    function renderCard(record) {
+      const local = readRecordState(record.id);
+      const primaryChoice = local.selectedPrimaryPath || record.selectedPrimaryPath || record.suggestedPrimaryPath || "";
+      const secondaryChoice = local.selectedSecondaryPath || record.selectedSecondaryPath || record.suggestedSecondaryPath || "";
+      return '<article class="background-card decision-' + escapeAttr(local.decisionStatus) + '">' +
+        '<div class="background-visuals">' +
+          renderBackgroundSlot("Primary", primaryChoice, record) +
+          renderBackgroundSlot("Secondary", secondaryChoice, record) +
+        '</div>' +
+        '<div class="body">' +
+          '<div class="card-head"><div><h2>' + escapeHtml(record.displayName) + '</h2><p>' + escapeHtml(record.id) + '</p></div><span>' + escapeHtml(labelFromId(record.status)) + '</span></div>' +
+          '<div class="tags">' + tag(record.selectionAuthority) + (record.zones.length ? tag("zones: " + record.zones.join(", ")) : "") + '</div>' +
+          '<div class="notes">' + (record.notes || []).map((note) => '<p>' + escapeHtml(note) + '</p>').join("") + '</div>' +
+          '<div class="assignment-grid">' +
+            '<label>Act <select data-id="' + escapeAttr(record.id) + '" data-field="actAssignment">' + actOptions.map(([value, label]) => '<option value="' + escapeAttr(value) + '"' + (local.actAssignment === value ? " selected" : "") + '>' + escapeHtml(label) + '</option>').join("") + '</select></label>' +
+            '<label class="check"><input type="checkbox" data-id="' + escapeAttr(record.id) + '" data-field="isBossBackground"' + (local.isBossBackground ? " checked" : "") + '> Boss background</label>' +
+          '</div>' +
+          '<div class="select-grid">' +
+            selectField(record.id, "selectedPrimaryPath", "Primary background", record.assets, primaryChoice) +
+            selectField(record.id, "selectedSecondaryPath", "Secondary background", record.assets, secondaryChoice) +
+          '</div>' +
+          '<label>Decision <select data-id="' + escapeAttr(record.id) + '" data-field="decisionStatus">' + decisions.map(([value, label]) => '<option value="' + escapeAttr(value) + '"' + (local.decisionStatus === value ? " selected" : "") + '>' + escapeHtml(label) + '</option>').join("") + '</select></label>' +
+          '<label>Notes <textarea data-id="' + escapeAttr(record.id) + '" data-field="notes" placeholder="Act fit, boss use, why this background should stay or be rejected">' + escapeHtml(local.notes || "") + '</textarea></label>' +
+          '<div class="button-row"><button type="button" data-action="useSuggestions" data-id="' + escapeAttr(record.id) + '">Use Suggested</button><button type="button" data-action="needsSelection" data-id="' + escapeAttr(record.id) + '">Needs Selection</button><button type="button" data-action="reject" data-id="' + escapeAttr(record.id) + '">Reject</button></div>' +
+          renderDetails(record) +
+        '</div>' +
+      '</article>';
+    }
+    function renderBackgroundSlot(label, repoPath, record) {
+      const asset = record.assets.find((candidate) => candidate.repoPath === repoPath);
+      const image = asset?.imageSrc || "";
+      return '<figure class="background-slot"><figcaption>' + escapeHtml(label) + '</figcaption>' +
+        (image ? '<img loading="lazy" src="' + escapeAttr(image) + '" alt="">' : '<div class="empty">None</div>') +
+        '<small>' + escapeHtml(repoPath || "unselected") + '</small></figure>';
+    }
+    function selectField(id, field, label, assets, selected) {
+      if (!assets.length) return '<label>' + escapeHtml(label) + '<select disabled><option>None available</option></select></label>';
+      return '<label>' + escapeHtml(label) + '<select data-id="' + escapeAttr(id) + '" data-field="' + escapeAttr(field) + '">' +
+        '<option value="">Unselected</option>' +
+        assets.map((asset, index) => '<option value="' + escapeAttr(asset.repoPath) + '"' + (selected === asset.repoPath ? " selected" : "") + '>' + escapeHtml((index + 1) + ". " + asset.width + "x" + asset.height + " / " + asset.repoPath) + '</option>').join("") +
+      '</select></label>';
+    }
+    function renderDetails(record) {
+      return '<details><summary>All variants and runtime refs</summary>' +
+        '<h3>Assets</h3><div class="path-list">' + record.assets.map((asset) => '<div><strong>' + escapeHtml(asset.groupId) + '</strong><span>' + escapeHtml(asset.repoPath) + '</span></div>').join("") + '</div>' +
+        '<h3>Runtime References</h3><div class="path-list">' + (record.runtimeReferences.length ? record.runtimeReferences.map((ref) => '<div><strong>' + escapeHtml(ref.source) + '</strong><span>' + escapeHtml(ref.ownerId + " / " + ref.role) + '</span></div>').join("") : '<p>No runtime reference found.</p>') + '</div>' +
+        '<h3>Cleanup Preview</h3><p>' + record.nonSelectedVariantPaths.length + ' non-selected variants, ' + record.blockedRuntimeCleanupPaths.length + ' runtime-blocked paths.</p>' +
+      '</details>';
+    }
+    function chosen(record) {
+      const local = readRecordState(record.id);
+      return {
+        primary: local.selectedPrimaryPath || record.selectedPrimaryPath || record.suggestedPrimaryPath || null,
+        secondary: local.selectedSecondaryPath || record.selectedSecondaryPath || record.suggestedSecondaryPath || null,
+      };
+    }
+    function buildDecisionExport() {
+      return {
+        schema: "swagbound.battleBackgroundAuditDecisions.v1",
+        sourceSchema: AUTHORITY.schema,
+        exportedAt: new Date().toISOString(),
+        reviewOnly: true,
+        runtimePromotionAllowed: false,
+        sourceReviewPage: "asset-lab/sprites/sprite-audit/battle-backgrounds.html",
+        policy: AUTHORITY.policy,
+        decisions: AUTHORITY.records.map((record) => {
+          const local = readRecordState(record.id);
+          const selection = chosen(record);
+          return {
+            id: record.id,
+            displayName: record.displayName,
+            authorityStatus: record.status,
+            decisionStatus: local.decisionStatus || "undecided",
+            actAssignment: local.actAssignment || "unassigned",
+            isBossBackground: Boolean(local.isBossBackground),
+            notes: local.notes || "",
+            selectedPrimaryPath: selection.primary,
+            selectedSecondaryPath: selection.secondary,
+            nonSelectedVariantPaths: record.nonSelectedVariantPaths,
+            blockedRuntimeCleanupPaths: record.blockedRuntimeCleanupPaths,
+            assetPaths: record.assets.map((asset) => asset.repoPath),
+          };
+        }).filter((decision) => decision.decisionStatus !== "undecided"
+          || decision.notes
+          || decision.actAssignment !== "unassigned"
+          || decision.isBossBackground)
+      };
+    }
+    function showJson() {
+      els.jsonPreview.value = JSON.stringify(buildDecisionExport(), null, 2);
+      els.jsonDialog.showModal();
+      els.jsonPreview.focus();
+      els.jsonPreview.select();
+    }
+    async function copyDecisionExport() {
+      const text = JSON.stringify(buildDecisionExport(), null, 2);
+      els.jsonPreview.value = text;
+      try { await navigator.clipboard.writeText(text); }
+      catch {
+        if (!els.jsonDialog.open) els.jsonDialog.showModal();
+        els.jsonPreview.focus();
+        els.jsonPreview.select();
+        document.execCommand("copy");
+      }
+      setCopyStatus("Copied background decisions");
+    }
+    function setCopyStatus(message) {
+      els.copyStatus.textContent = message;
+      window.clearTimeout(setCopyStatus.timer);
+      setCopyStatus.timer = window.setTimeout(() => { els.copyStatus.textContent = ""; }, 2400);
+    }
+    function tag(value) {
+      return value ? '<span>' + escapeHtml(value) + '</span>' : "";
+    }
+    function labelFromId(value) {
+      return String(value || "").replace(/[_-]+/g, " ").replace(/([a-z])([A-Z])/g, "$1 $2").trim();
+    }
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+    function escapeAttr(value) { return escapeHtml(value); }
+  </script>
+</body>
+</html>

@@ -1,0 +1,418 @@
+# Drifella 2 RapidOCR Pass 0001
+
+Automated OCR over local `image.png` files. This is noisy but catches text not present in metadata.
+
+Items scanned: 500
+Images with OCR hits: 409
+
+## OCR lines by token
+
+- drifella 2 #7677: `FORTNITE`
+- drifella 2 #194: `UPIT'S21` | `COTTATURN ON THE POWER`
+- drifella 2 #2372: `G FORE HE` | `EReE` | `MASON` | `MOHAw.` | `EAST` | `MLF`
+- drifella 2 #2430: `THANK YOU LORD FOR` | `FOR THIS HERE PERC 30`
+- drifella 2 #117: `you've been liquidated`
+- drifella 2 #9261: `PePs` | `ay` | `87` | `Mik`
+- drifella 2 #7683: `SUOF` | `Def` | `> SPEED` | `Be different.` | `-- BRAINS`
+- drifella 2 #7135: `Plotnum` | `RHIN` | `5000` | `Fast Acting Long lasing` | `TIME` | `SIZE` | `STAMINA` | `-Nazi zombies-`
+- drifella 2 #3896: `The essence of the Dratini` | `line is a more Godlead-pilled` | `take on the base-cocoon-maturity` | `structure in that the final result is` | `a violent and unwanted change,` | `greatly ugly in presentation but vast` | `ill power and consequence`
+- drifella 2 #6503: `ROTHKO MAKER` | `MAF& PTVI.` | `ONHLCL PD bne` | `LST ARL TL 0PURN`
+- drifella 2 #9111: `Dorrt`
+- drifella 2 #5097: `my demons dont know i` | `got da opium dog in me` | `Go Forward.`
+- drifella 2 #2708: `You cant` | `beat a man,` | `2` | `that battles with` | `imself` | `eMerv`
+- drifella 2 #2409: `Buying all blue hides : doddg5441223'*` | `200ki` | `Selhsg d' bones 2 5k ey0o kl ts00k` | `Bugg skairs!@` | `50k` | `00k` | `500k` | `500k`
+- drifella 2 #1728: `HOW TO CATCH A MILK THIEF`
+- drifella 2 #4993: `cont` | `of` | `solana` | `Wa` | `At the apo` | `xir of`
+- drifella 2 #6717: `solana`
+- drifella 2 #4977: `FEMCEL` | `.` | `MD)0D9`
+- drifella 2 #6186: `yuh` | `-|---` | `...` | `00` | `Deli` | `Don't give me orders!`
+- drifella 2 #8007: `G FORE HEA` | `GESSOO` | `1.1` | `EReE` | `MASON` | `MOHA..` | `EAST` | `LF`
+- drifella 2 #9502: `thinking about the tact that eoward can on` | `ChAOTC` | `play chess with bella because he can't read.` | `her mind`
+- drifella 2 #4684: `wake up` | `iengage in` | `tomfoolery`
+- drifella 2 #7980: `over` | `We're back` | `YOU JUST GOT` | `FREAKINGFIRED FROM MILADY'S` | `MCDONALDS RESTAURANT` | `FOR DOINGTHAT` | `THING WITHTHE BURGERSAGAIN`
+- drifella 2 #5729: `I STRUGGLE` | `astSia` | `Y0N` | `marZale`
+- drifella 2 #4489: `"this doesn't bode well'`
+- drifella 2 #2060: `n`
+- drifella 2 #9240: `Are you real???` | `No bitch take your schizo` | `meds!!!`
+- drifella 2 #4700: `G` | `aogaime` | `RLR.` | `Lean 4'5`
+- drifella 2 #3318: `drifella.` | `L3` | `03..` | `73`
+- drifella 2 #622: `FORTNITE` | `life would be much easier` | `if i was an evil wizard i` | `think`
+- drifella 2 #5390: `THE LIFE OF` | `DrIfelLA` | `HE LIFE OF` | `DRIfeLLA` | `LIFE OF` | `DRIFELL` | `LINe OF` | `DRIFELL`
+- drifella 2 #5761: `m` | `roo` | `Tor` | `rou` | `lay` | `ew` | `R12` | `a fteu tw`
+- drifella 2 #2303: `AuME VSL` | `神#` | `生` | `七心` | `DG` | `dor no` | `RE`
+- drifella 2 #1239: `REMEMBERWHOY9US` | `TINCFOR` | `E S U S` | `9-11` | `Eedition` | `emhrance` | `TtT` | `DTW`
+- drifella 2 #9176: `TOUCHING GRASS` | `ISNT ENOUGH` | `FORTNITE` | `I NEED BAD THINGS TO HAPPEN` | `TO EVIL PEOPLE IN POWER`
+- drifella 2 #8719: `Oobcooo.` | `68`
+- drifella 2 #8892: `am` | `or you` | `Play` | `Plaver` | `ew` | `afte!` | `upon` | `undo`
+- drifella 2 #8421: `00` | `200`
+- drifella 2 #3155: `G FORE HEI` | `0` | `EReE` | `MASON` | `MOHAW.` | `EAST` | `MLF` | `WEST`
+- drifella 2 #8117: `ouorofen fablets. 200` | `(Provided as lbuprofen Sodium 256 mg)` | `Pain Reliever/ Fever Reducer (NSAID)`
+- drifella 2 #8961: `HOW TO CATCH A MILK THIEF.` | `1/ 1 0/ 6 Bms`
+- drifella 2 #1019: `snion` | `Dratin` | `40.HP`
+- drifella 2 #7783: `8`
+- drifella 2 #9715: `over` | `We're back` | `U?` | `??`
+- drifella 2 #8308: `CHOOSE` | `ME` | `BFF` | `SOu.`
+- drifella 2 #775: `Gster`
+- drifella 2 #3464: `SHUUTUP`
+- drifella 2 #7664: `1 32 LINE` | `MY` | `SWAG` | `weeky op doralors:` | `cnunucd S42677 JlfeyHen?` | `ntu 50m 180 51504`
+- drifella 2 #632: `Are)you real???` | `No bitch take your schizo` | `meds!!!`
+- drifella 2 #8198: `PII`
+- drifella 2 #1599: `FREE`
+- drifella 2 #8068: `Be different.` | `CHEEEHERK DKD`
+- drifella 2 #1443: `WHAT VIBE DOI GIVE OFf ?` | `Wdeb` | `"psugiuros mnks D` | `YER` | `MA` | `Supreme` | `Supreme` | `Supreme`
+- drifella 2 #2888: `it takes a little treat` | `to` | `tame-a` | `beast`
+- drifella 2 #8490: `俺味神放了` | `*育VSL!!` | `夕力写` | `大` | `老` | `DJ` | `d or no GoD.` | `CARE NOT.`
+- drifella 2 #7401: `ISI` | `NEY` | `CO` | `SHE WANT ME CUZ` | `T'M NORMAL`
+- drifella 2 #9789: `llobbiy`
+- drifella 2 #1253: `his ass is not a software` | `engineer`
+- drifella 2 #2774: `HI` | `次`
+- drifella 2 #4032: `Curd` | `caille De Sa` | `WL I Poids Net 12` | `猪紅佬` | `Ingredcnts Blood Sait Water` | `Ingrecents Sarg. Sel Eau.` | `Nz thanget Tesu srowde` | `Carder Relngera`
+- drifella 2 #8450: `TION FAIRYI` | `WY` | `life would be much easier` | `if i was an evil wizard i` | `think`
+- drifella 2 #3166: `yuh` | `福`
+- drifella 2 #649: `Bringingreedom` | `And Democracy` | `SONY` | `To An Oil-Rich` | `Country` | `Near You`
+- drifella 2 #8455: `have two sides`
+- drifella 2 #3779: `WAKEUP!!T'S 201U!` | `IN CASE OF` | `FIRE` | `E GOTTATURN ONTHE POWERA`
+- drifella 2 #824: `TOUCHING GRASS` | `ISNT ENOUGH` | `I NEED BAD THINGS TO HAPPEN` | `TO eVIl PeOPLe In POWEr`
+- drifella 2 #9483: `EYES WIDE SHUT` | `工` | `BLADEE`
+- drifella 2 #6290: `MEAN` | `PILLS` | `.02`
+- drifella 2 #3951: `BORED APE` | `NAZI CLUB`
+- drifella 2 #9906: `evirWor`
+- drifella 2 #326: `BORED APE` | `NAZICLUB`
+- drifella 2 #1255: `SIPMeN` | `c....` | `IN CASE OF` | `FIRE` | `BAEAK GLASS`
+- drifella 2 #6684: `TAKE` | `OuN` | `EVE` | `BAN` | `MONEY` | `DSE` | `INEV'IF` | `IDRAW`
+- drifella 2 #5547: `BORN TO DRAIN` | `MUD IS AFUCK` | `Burn Em All 2022` | `I am arsonist` | `Corhn.` | `'es` | `410 757,864.530. SLUDGE BURNED`
+- drifella 2 #8353: `the Tlence of the lambs` | `@`
+- drifella 2 #1161: `MEAN` | `DILLS` | `Yo! Brother!`
+- drifella 2 #1145: `u/10/6Bus`
+- drifella 2 #2577: `Diesel` | `PEPSL` | `2/$2` | `11` | `ay` | `URHLEADED`
+- drifella 2 #5774: `n` | `?` | `?`
+- drifella 2 #9693: `次` | `DRDPou'`
+- drifella 2 #2473: `SHOP` | `5`
+- drifella 2 #5866: `m` | `Someone With` | `AUTISM` | `Stole my wallet`
+- drifella 2 #8309: `FELLTP` | `So meone With` | `Avamt` | `NFT` | `AUTISM` | `Tnare` | `Stole my wallet`
+- drifella 2 #2410: `Days never finished,` | `Master got me workin`
+- drifella 2 #5919: `aps Iy am it9 y irs kdy`
+- drifella 2 #9390: `You cant` | `beat a man` | `that battles with`
+- drifella 2 #5545: `RifelLA` | `TEdLA` | `E11` | `RiEELL` | `HE LUFE` | `FE!` | `WHIC!` | `WHICH`
+- drifella 2 #7041: `TAKE` | `OUT.` | `EVE` | `BAN` | `SE` | `AW` | `2` | `LESU S`
+- drifella 2 #1795: `IOW TO CATCH` | `IILK THIEF` | `Blood Curd` | `Lait caille De Sang` | `Not WL / Poids Net 12 1b` | `猪紅佬` | `Dts Blood Sal Water` | `Iccents Sang. Sel Eau.`
+- drifella 2 #8111: `0.`
+- drifella 2 #7319: `8` | `68P` | `ShE WANT ME CUZ` | `IM NORMAL` | `IN CASE OF` | `FIRE` | `BnEaK GLAsS`
+- drifella 2 #4531: `HOW TO CATCH A MILK THIEF` | `ESUS` | `9-11` | `Edllon` | `TtT`
+- drifella 2 #4530: `Sporlsln.` | `imnG` | `ARDS` | `Now?` | `Extreme Fea` | `21`
+- drifella 2 #4821: `Be ready to figit the horde`
+- drifella 2 #2733: `life would be much easier` | `if i was an evil wizard i` | `think`
+- drifella 2 #6892: `Nintendo`
+- drifella 2 #6464: `New York` | `Rome` | `Milan` | `London`
+- drifella 2 #2546: `YOU JUST GOT *` | `FREAKING FIRED FROM MILADY'S` | `MCDONALDS RESTAURANT` | `FOR DOING THAT` | `"'THING'WITH THE BURGERS AGAIN`
+- drifella 2 #5524: `TRMIO'C TE KEOVER GF THMUS` | `Xylazi` | `Chinese m` | `aces ship` | `illicit xylaz` | `ealers in` | `Can be bought on` | `m`
+- drifella 2 #9138: `0` | `0 00  00  00` | `工` | `BLADEE`
+- drifella 2 #1271: `over` | `We're back` | `FEMCEL`
+- drifella 2 #8588: `名` | `名心` | `6` | `名` | `名名香` | `名` | `4` | `名`
+- drifella 2 #7965: `ss drip`
+- drifella 2 #2276: `BANNE`
+- drifella 2 #6546: `SHE WANT ME CUZ` | `I'M NORMAL` | `SWAG`
+- drifella 2 #4856: `27.`
+- drifella 2 #8411: `"this doesn'tbode well"` | `Be diff`
+- drifella 2 #9321: `8` | `odo` | `66`
+- drifella 2 #2163: `88`
+- drifella 2 #5401: `9`
+- drifella 2 #8292: `BORN TO DRAIN` | `MUDLSA FUCK` | `Burn` | `112022` | `I am arsonist` | `410,7 57 864 530 SLUDGE BURNEC`
+- drifella 2 #9031: `WAKEUP!IT'S2010!` | `Do wex` | `or go` | `WEGOTTA TURN ON THE POWER!`
+- drifella 2 #3502: `SLUMO` | `100` | `BULL.`
+- drifella 2 #7184: `Nintendo`
+- drifella 2 #4319: `at` | `conter` | `kir of` | `Wake` | `Ase` | `At the apothecary` | `Which` | `Wakeful`
+- drifella 2 #7919: `over` | `We're back` | `Based Retard Bang` | `BOMB`
+- drifella 2 #2160: `MAKEUPII'S201!` | `FEULPA` | `0`
+- drifella 2 #1590: `Nintendo`
+- drifella 2 #2357: `YOU'RE IN HER DMS` | `ROTHKOMAKER` | `FLETTING GREED CORRUPTME`
+- drifella 2 #4418: `Yo! Brother!`
+- drifella 2 #8872: `62`
+- drifella 2 #8649: `SLUMP` | `Blood Curd` | `ait caille De Sang` | `Net WL / Poids Net 12 1b` | `猪紅佬` | `Ingredionts Blood Sat Waler` | `Ingrecients Sarg. Sel Eau` | `aso chanqe cold wates.`
+- drifella 2 #1625: `erson whg` | `keeps on` | `gambling` | `erson who....` | `stopped--` | `gambling`
+- drifella 2 #8243: `trad er` | `retard`
+- drifella 2 #1595: `tmar`
+- drifella 2 #1241: `SONY` | `AAAAAAAAAA`
+- drifella 2 #6403: `WAKEUP!IT'S 2010!` | `WE GOTTA TURNON HE POWER!`
+- drifella 2 #1891: `KILZ` | `YOUF`
+- drifella 2 #5706: `thinking about the fact that edward can only` | `play chess with bella because he can'tread` | `her mind`
+- drifella 2 #7781: `tr ade` | `retar`
+- drifella 2 #4501: `EYES WIDE SHUT`
+- drifella 2 #8333: `E` | `AN` | `ON`
+- drifella 2 #4393: `Jmagjinc` | `tangi`
+- drifella 2 #6649: `pussycater`
+- drifella 2 #1015: `Rolling into the function over encumbered in` | `my 13th century ghillie suit. Bitches fainting` | `can't handle my dark soul` | `T-SHIRT` | `Size L  Good condition`
+- drifella 2 #5296: `C` | `100` | `GX`
+- drifella 2 #2580: `E STRUG` | `Wh`
+- drifella 2 #5748: `G` | `Devir World`
+- drifella 2 #5216: `JSTAHO` | `Chyuer` | `u/10/6Bus`
+- drifella 2 #8981: `M` | `YOU DIED`
+- drifella 2 #9202: `GIRLS` | `MY` | `SWAG` | `CHEEEHERK DKD`
+- drifella 2 #8: `THIN` | `FAST` | `824945`
+- drifella 2 #9768: `62.` | `pussyeater`
+- drifella 2 #9567: `KHI`
+- drifella 2 #7704: `over` | `We're back` | `Brain` | `Transplant` | `$39.99.`
+- drifella 2 #9902: `touches his` | `circumcision scar` | `99` | `sorryi wasn't` | `there to protect you.`
+- drifella 2 #3127: `11`
+- drifella 2 #6627: `wake/up` | `DIEING` | `engage in` | `tomfoolery`
+- drifella 2 #6085: `my demons c nt know i` | `got da opium dog in me` | `BOMB`
+- drifella 2 #9772: `PRaDa`
+- drifella 2 #958: `YOU'RE IN HER DMS` | `IM LETTING GREED CORRUPT ME`
+- drifella 2 #9032: `Veilig` | `011` | `0OR` | `100k` | `S0Ok` | `5001` | `120` | `Sellnerone tts g xooxl!`
+- drifella 2 #3916: `y'alldon` | `I't fuck with music` | `like ido` | `Do w` | `or ao`
+- drifella 2 #6625: `YOU'RE IN HER DMS` | `1201` | `IE SrRUG` | `66.18` | `me` | `'M LETTING GREED CORRUPT ME`
+- drifella 2 #2576: `GIRLS` | `MY` | `SWAG`
+- drifella 2 #7399: `KILL` | `YOUF`
+- drifella 2 #2805: `Df?`
+- drifella 2 #7010: `Jmagine Fentany`
+- drifella 2 #5144: `DIEING` | `honor thy` | `father`
+- drifella 2 #792: `Biseuit` | `Fentanyl` | `magine` | `Hero` | `Dm`
+- drifella 2 #1682: `CON  IOUSNLSS ENLRGY` | `Donrt`
+- drifella 2 #6274: `001,` | `ECON` | `NESTLES` | `CRUNCH` | `Milk ChOcolate`
+- drifella 2 #5623: `YOU'RE IN HER DMS` | `'M LETTING GREED CORRUPT ME`
+- drifella 2 #5183: `Now:` | `Extreme` | `eal` | `21`
+- drifella 2 #4743: `本` | `at` | `conte` | `xir of` | `Wak` | `ase` | `At` | `of`
+- drifella 2 #7329: `Over 9000!`
+- drifella 2 #5742: `a1` | `conter` | `cir of` | `Wake` | `ise` | `the apotheca` | `Which elixir of` | `166`
+- drifella 2 #5929: `Based Retard Bang` | `BOMB`
+- drifella 2 #1045: `田田` | `BULLS`
+- drifella 2 #8541: `thinking abput thefact that edward can oni` | `play chess:with bella because he can't reae` | `her mimd-`
+- drifella 2 #3382: `cani get a copy` | `of Black Ops 2` | `for the` | `Playstation 3`
+- drifella 2 #6909: `Yesterday 5 12 PM` | `TOUR GUIDE FROM THE UNDERWORLD` | `1` | `00` | `Tod=* 1:02 Ai` | `my demons dont know i` | `got da opium dog in me` | `DR0Pou2.`
+- drifella 2 #2391: `u106Bms`
+- drifella 2 #1629: `.` | `D099`
+- drifella 2 #3725: `THANK YOU LORD FOR` | `LUMO` | `FOR THIS.HERE PERC 30`
+- drifella 2 #5802: `HIK KMORI`
+- drifella 2 #8284: `1.3`
+- drifella 2 #9620: `Fuller Ave` | `BOMB` | `omeone With` | `AUTISM` | `Stole my war`
+- drifella 2 #9984: `sdrip` | `9`
+- drifella 2 #4365: `m` | `can i get a copy` | `of Black Ops 2` | `for the` | `Playstation 3`
+- drifella 2 #4130: `MALO` | `Hash Brown` | `脆薯饼` | `11`
+- drifella 2 #9019: `Pau` | `1.77`
+- drifella 2 #5383: `Jmagib` | `htanyl` | `Ho` | `DRoPouT`
+- drifella 2 #3875: `2` | `:SHIRT` | `ze L Good condition`
+- drifella 2 #3219: `ra!` | `2040`
+- drifella 2 #5778: `B` | `SE` | `Avant` | `NFT` | `mave` | `FREE`
+- drifella 2 #3934: `付中忙通`
+- drifella 2 #1531: `up` | `Wal` | `m` | `11` | `TTE` | `.5 eensye` | `ELFBAR` | `BC5000`
+- drifella 2 #8919: `88`
+- drifella 2 #1621: `Cafo Milano.` | `xpionar Hop Signin anonymous` | `IN CASE OF` | `FIRE` | `77.77` | `BREAK GLAES`
+- drifella 2 #7552: `MONEY` | `K` | `?` | `?` | `?` | `P` | `an`
+- drifella 2 #4895: `F B`
+- drifella 2 #3772: `jem offline` | `dse this`
+- drifella 2 #6784: `2` | `2` | `2` | `2` | `BULLS` | `2`
+- drifella 2 #4848: `DIEING`
+- drifella 2 #3228: `9` | `当`
+- drifella 2 #2967: `life would be much easier` | `if i was an evil wizard i` | `er` | `think`
+- drifella 2 #1039: `7.c`
+- drifella 2 #9348: `元王` | `付中通老5`
+- drifella 2 #213: `7`
+- drifella 2 #611: `NETE` | `601.` | `ECONOMY SIZE` | `NNED` | `Milk chacolate.` | `U3ADUS` | `SOMETIMES. IT JUST HAPPENS:`
+- drifella 2 #1664: `Based Retard Bang` | `BOMB`
+- drifella 2 #5680: `GEEKED UP` | `D`
+- drifella 2 #2634: `s drip`
+- drifella 2 #5404: `8` | `kir of` | `contei` | `Wak` | `se` | `At the apol.` | `i of` | `ECONOMY SIZE`
+- drifella 2 #6511: `"CONSCIOUSNESS ENERGY GRID`
+- drifella 2 #7563: `30000`
+- drifella 2 #4118: `1T's2010!` | `SHOPLI` | `Chocclale` | `-DRIUK` | `VE GOTToato` | `18`
+- drifella 2 #1126: `DIEING` | `VE` | `Munk`
+- drifella 2 #9912: `"this doesn't bode well"`
+- drifella 2 #2195: `40.HP` | `life would be much easier` | `if i was an evil wizard i` | `think`
+- drifella 2 #8639: `BOREDAPE` | `NAZI CLUB`
+- drifella 2 #6712: `WAGTOSI`
+- drifella 2 #249: `smon` | `Drati` | `40.HP` | `Dram` | `10`
+- drifella 2 #7462: `FREE`
+- drifella 2 #4670: `SIPMOY`
+- drifella 2 #7947: `JK"R` | `AVAIAVAAV`
+- drifella 2 #7133: `818` | `"this doesn't bode well"` | `工` | `BLADEE`
+- drifella 2 #6996: `Bussyeater`
+- drifella 2 #6582: `Icpoo!` | `oobcooo` | `68`
+- drifella 2 #1453: `glockette`
+- drifella 2 #3301: `TOUR GUIDE FROM THE UNDERWORLD` | `SONY`
+- drifella 2 #9315: `Jmagine` | `Fentanyl` | `Here` | `Chyuer`
+- drifella 2 #8603: `23.98`
+- drifella 2 #1754: `FVERLAST`
+- drifella 2 #9175: `(HELL` | `glockette`
+- drifella 2 #8062: `W.` | `Supreme` | `Supreme` | `Supremg`
+- drifella 2 #5851: `Diesel`
+- drifella 2 #7071: `SWAGTOSSII`
+- drifella 2 #3548: `YeaDn。 IP0D`
+- drifella 2 #7410: `over` | `We're back`
+- drifella 2 #8524: `ISIEND MONEY` | `SHE WANT ME CUZ` | `I'M NORMAL` | `231967`
+- drifella 2 #8500: `RS` | `?`
+- drifella 2 #1718: `society`
+- drifella 2 #7539: `Biscuit` | `my demons dont know i` | `got da opium dog in me` | `FREE`
+- drifella 2 #674: `2` | `1-SHIRT` | `Size L Good condition`
+- drifella 2 #9544: `honor thy` | `(IENTER` | `father`
+- drifella 2 #4379: `mBGay` | `LIFE OF` | `RIFE` | `Althe` | `LIFE OF` | `TeEL` | `THE` | `LIFE`
+- drifella 2 #6263: `名` | `名` | `名` | `名` | `名名` | `44` | `23` | `名`
+- drifella 2 #6849: `100`
+- drifella 2 #8980: `GRILL` | `USDA` | `CHOICE`
+- drifella 2 #8441: `SHUUT UP` | `THEPARTY`
+- drifella 2 #8354: `terrified of` | `being known`
+- drifella 2 #1367: `Its over` | `We're back` | `at` | `78` | `aptecary` | `contemplating wrich elixir of` | `Wakefulness to bu  yase` | `At the apothec`
+- drifella 2 #3800: `BLUE` | `ADV` | `EXPLI`
+- drifella 2 #1291: `Over 9000!` | `ROTHKO MAKER` | `F&RTVI.` | `ONHLCL PD bne` | `TST ERL TEL 02UFN`
+- drifella 2 #976: `BANNE` | `NFOINO` | `VARSW`
+- drifella 2 #7922: `touches his` | `circumcision scar` | `Do we` | `or go` | `iro` | `'i'm sorry 1` | `wasn't` | `there to protect you`
+- drifella 2 #5118: `Blood Curd` | `Lhit caille De Sang` | `Net WL / Poids Net: 12 1b` | `猪紅佬` | `Ingredicnts Blood Salt Waier.` | `Ingredents. Sarg. Sel Eau.` | `aso change cold wae.` | `dIGarder Relngere`
+- drifella 2 #1676: `my demons dont know i`
+- drifella 2 #1049: `the lence of the lambs`
+- drifella 2 #9598: `TOUCHING GRASS` | `ISNT ENOUGH` | `INEED BAD THINGS TO HAPPEN` | `TO EVIL PEOPLE IN POWER`
+- drifella 2 #4172: `YOURE A FAG` | `AND YOUR` | `SHITS ALL RETARDED`
+- drifella 2 #7580: `73H`
+- drifella 2 #5343: `glockette`
+- drifella 2 #5747: `TOUR GUIDE FROM THE UNDERWORLD`
+- drifella 2 #2095: `2` | `2` | `2` | `2` | `2`
+- drifella 2 #9104: `WHAT VIBE DO I GIVE OFF ?` | `Hoe by mo` | `nol gmuser lol psigfunost mns D` | `can sleep anywhere` | `A` | `YERBA` | `HATE` | `09108`
+- drifella 2 #5012: `OWNED2` | `SOMLTIMES IT JUST HAPPENS.`
+- drifella 2 #5892: `*育VSL!!` | `电法神` | `夕一力了` | `大管3P!` | `Or no god.` | `Re NOt.` | `烟健` | `工`
+- drifella 2 #9681: `KeMOE` | `BLUE` | `NAP` | `trade` | `e tar`
+- drifella 2 #30: `8.`
+- drifella 2 #767: `Romo.` | `Par` | `Milan` | `London!`
+- drifella 2 #687: `TOUCHING.GRASS` | `zard` | `120 HP` | `ISNT ENOUGH` | `lam.` | `Poke` | `nes` | `apComas`
+- drifella 2 #494: `00` | `l.!! MyG!! W.`
+- drifella 2 #9444: `Chocolale` | `DRIUK` | `B` | `131`
+- drifella 2 #1868: `his asshis` | `not a software` | `engineer`
+- drifella 2 #5352: `W` | `1111`
+- drifella 2 #6078: `it takesa.little,treat` | `MEAND HER` | `totame a beast`
+- drifella 2 #6783: `Hash Brown` | `脆薯饼`
+- drifella 2 #4485: `0`
+- drifella 2 #7362: `32 AUIE` | `JSAHO` | `Cuvuer` | `Blate kaled`
+- drifella 2 #8416: `Long ime ntro` | `RLP.` | `Leon 4.` | `(oadais`
+- drifella 2 #7963: `THIL` | `FAST` | `824.945`
+- drifella 2 #8023: `031-1` | `Rolling into the function over encumbered in` | `my 13th century ghillie suit. Bitches fainting` | `can't handle my dark soul`
+- drifella 2 #5308: `Its over` | `We're back`
+- drifella 2 #2322: `Nazi zombies`
+- drifella 2 #7020: `SLAY` | `A` | `FLOP`
+- drifella 2 #4514: `Y` | `22` | `glockette` | `0` | `0品`
+- drifella 2 #2466: `over` | `We're back` | `frmar`
+- drifella 2 #4383: `life would be much easier` | `ifiwas an evil wizard i` | `NAKn` | `think`
+- drifella 2 #8460: `MD)099` | `Kill` | `04`
+- drifella 2 #7297: `次` | `YOU DIED`
+- drifella 2 #2157: `50` | `pussyeater` | `04`
+- drifella 2 #6455: `次`
+- drifella 2 #7252: `ELFBAR` | `BC5000` | `Faygo` | `Lv3` | `-SHIRT` | `03.` | `73`
+- drifella 2 #344: `988` | `HNOX`
+- drifella 2 #3748: `Person who` | `keeps on` | `gambling` | `Person who.` | `stopped` | `gambling`
+- drifella 2 #6600: `koodon`
+- drifella 2 #3517: `Are you real???` | `TAKE` | `OU` | `EVE` | `BAN` | `DRLW` | `No bitch take your schizo` | `meds!l!`
+- drifella 2 #6341: `BORED APE` | `CHOOSE` | `ME` | `BFF`
+- drifella 2 #5653: `nave` | `e two sides` | `glockette`
+- drifella 2 #4047: `700kl` | `Bu gy skarsie` | `50` | `00k` | `LUMO` | `s0ok.` | `500k` | `500.`
+- drifella 2 #8166: `MEANN UER` | `3`
+- drifella 2 #8497: `I like getting my booty hole licked by NFT monkeys.`
+- drifella 2 #3357: `女` | `tranauil` | `本` | `次`
+- drifella 2 #4369: `ss drip` | `I STRUG` | `arZane`
+- drifella 2 #1390: `GIRLS` | `MY` | `SWAG`
+- drifella 2 #1138: `twilight` | `BOMB`
+- drifella 2 #4871: `ELFBAR` | `BC5000` | `Tavoo` | `US.DA` | `CHOICE`
+- drifella 2 #335: `9.` | `111`
+- drifella 2 #6151: `PRADA`
+- drifella 2 #4138: `THANK YOU LORD FOR` | `FOR THIS HERE PERC 30`
+- drifella 2 #1659: `Person who` | `keeps on` | `gambling` | `STANLI` | `Person who` | `stopped` | `DD。 DP°0D` | `GAY`
+- drifella 2 #8943: `L3` | `03.13`
+- drifella 2 #2667: `Brain` | `$39.99.`
+- drifella 2 #8015: `9. 1Lo1` | `obbiy` | `36.02.`
+- drifella 2 #9156: `SHUUTUP` | `THE PAR`
+- drifella 2 #2490: `over` | `We're back` | `Supreme` | `Supreme` | `Supremg`
+- drifella 2 #5270: `SALE!le`
+- drifella 2 #9506: `Ibuprofen Tablets, 200 mg.` | `Provided as Jht` | `000.2 0` | `Pain Reliever`
+- drifella 2 #6176: `Rome` | `Hilan` | `London`
+- drifella 2 #6706: `T-SHIRT` | `Size L  Good condition`
+- drifella 2 #275: `cani get a copy` | `of Black Ops 2` | `for the` | `Playstation 3` | `CHWEEHHRK bKO` | `ize L Good condition`
+- drifella 2 #4523: `Be different.`
+- drifella 2 #8474: `Be ready to fighit tlie horde`
+- drifella 2 #908: `69` | `OFF` | `L STRUGG` | `mie` | `中书`
+- drifella 2 #1479: `D` | `40.HP` | `10`
+- drifella 2 #6812: `7T》` | `FINALYFANTASY`
+- drifella 2 #9191: `'this doesn't bode well'` | `SWAGTOSII`
+- drifella 2 #8367: `Yo! Brother!`
+- drifella 2 #8234: `- Nazi zombies.`
+- drifella 2 #6553: `CHC` | `SOuc`
+- drifella 2 #9676: `Vata`
+- drifella 2 #3986: `im in love with my gf` | `dont talk to me she has` | `a nuclear bomb` | `honor tl` | `fathc` | `U.S.DA`
+- drifella 2 #5901: `FEMCEL` | `LENTER`
+- drifella 2 #499: `X`
+- drifella 2 #6765: `111` | `FREE`
+- drifella 2 #7241: `Person who` | `keeps on` | `gambling` | `9111` | `Person who` | `Cstopped` | `aniblng`
+- drifella 2 #9526: `Yo! Brother!`
+- drifella 2 #836: `CHEEDHEKK EKD`
+- drifella 2 #7483: `WHO NEEDS BRAIN CELLS` | `WHEN YOU HAVE SWAG?`
+- drifella 2 #7634: `337 Comntents 255 Shares` | `B Like` | `Comment` | `6>  Share`
+- drifella 2 #1382: `twilight` | `8`
+- drifella 2 #2187: `all don't fuck wth music` | `likeido`
+- drifella 2 #1090: `4世` | `4+24` | `life would be much easier` | `if i was an evil wizard i` | `thinkwa`
+- drifella 2 #9096: `ANn HER` | `S` | `P` | `tmar`
+- drifella 2 #8448: `VAAAIAWVAIA`
+- drifella 2 #3830: `Wo... t` | `LITERAI`
+- drifella 2 #2000: `WAN30P!IT'S 2010` | `WE GOTTA TURN ON TNE POWER!`
+- drifella 2 #2479: `ng for you` | `am roc` | `Playerg` | `5 to New Pl, er` | `aftertv` | `Greed` | `Game` | `and.`
+- drifella 2 #5962: `Dussy rater.` | `Someone With` | `AUTISM` | `Stole my walle`
+- drifella 2 #3495: `2040` | `04`
+- drifella 2 #9936: `GL`
+- drifella 2 #1821: `FELLR`
+- drifella 2 #6018: `Kill`
+- drifella 2 #6761: `YOURE AFAG` | `AND YOUR` | `SHITS ALL RETARDED`
+- drifella 2 #3278: `BOMB`
+- drifella 2 #3859: `HOW TO CATCH A MILK THIEF` | `honor thy` | `father`
+- drifella 2 #6853: `SALE!!`
+- drifella 2 #8828: `Over 9000!` | `88`
+- drifella 2 #3570: `YOURE A FAG` | `AND YOUR` | `SHITS ALL RETARDED`
+- drifella 2 #361: `908` | `GIRL`
+- drifella 2 #2338: `7.`
+- drifella 2 #259: `1611` | `158` | `can i get a copy` | `of Black Ops 2` | `for the` | `Playstation 3` | `003.` | `ECONOMY SIZE`
+- drifella 2 #4828: `Be different.`
+- drifella 2 #4563: `YOU'RE INHER DMS` | `I'MLETTING GREED CORRUPT ME`
+- drifella 2 #7333: `FINAL FANTASYIN`
+- drifella 2 #417: `ake` | `U` | `engage` | `Etomfoolery`
+- drifella 2 #9338: `CALL` | `WORLI` | `WAR` | `USDAT` | `1124272`
+- drifella 2 #1366: `Kill`
+- drifella 2 #7543: `100`
+- drifella 2 #9667: `Drati?` | `Drams` | `BOMB` | `8`
+- drifella 2 #7852: `y'all dont fuck with music` | `likeide`
+- drifella 2 #2575: `house` | `priy` | `nearby` | `im brin` | `gu'` | `电`
+- drifella 2 #6886: `C才又又又，停的栏` | `么付中忙准子为` | `OUF`
+- drifella 2 #6875: `WAKEUP!IT'S2010!` | `WE CIA TURN ON THE PO ER`
+- drifella 2 #3018: `wvoaers!`
+- drifella 2 #8476: `SHUUT UP`
+- drifella 2 #6493: `t` | `20N'` | `WarZane`
+- drifella 2 #7660: `"this d esn't bode Well` | `Daaa`
+- drifella 2 #6926: `SHE WANT ME CUZ` | `I'M NORMAL` | `SomeoneWitn` | `AUTISM` | `Stole my wallet`
+- drifella 2 #9216: `M` | `Donrt`
+- drifella 2 #1690: `Arant` | `NFT life would be mucheasier` | `Thrare.` | `if i was an evil wizard i` | `think`
+- drifella 2 #678: `O`
+- drifella 2 #6283: `Cafo Mlano, GmbH Expiorr Hep Signin anonymous` | `DIEING`
+- drifella 2 #9469: `Do we` | `or go r.` | `fro`
+- drifella 2 #9783: `Based Retard Bang` | `BOME` | `Now:` | `reme Feai` | `21`
+- drifella 2 #7345: `安` | `anguility` | `M)099`
+- drifella 2 #8883: `TRANQ'S TAKEOVER OF THOUS` | `Chinese m` | `laces ship` | `illicit xyla?` | `ealers in` | `ught on` | `m` | `Puerto Ri`
+- drifella 2 #9394: `REMEMBFDYMHOYOUAREEIGHTING XOR` | `0010` | `HHBKEKO`
+- drifella 2 #2581: `631.`
+- drifella 2 #8928: `Fuller Ave`
+- drifella 2 #5080: `MONEY` | `SW` | `T` | `NA!` | `80`
+- drifella 2 #6805: `8` | `Blood Curd` | `Lait caille De Sang` | `Net WL / Poids Net: 121b` | `猪紅佬` | `Ingredcnts Blood Sait Water.` | `Ingredents Sarg. Sal Eau.` | `Nz thanger Ieeu srowde.`
+- drifella 2 #6364: `MONEY`
+- drifella 2 #9410: `Days never finished,` | `Master got me workin`
+- drifella 2 #1133: `71.` | `75 eeney` | `RSTER` | `CHARIZARD` | `[PYRO]` | `0`
+- drifella 2 #889: `ChaOT` | `08`
+- drifella 2 #5111: `8` | `名` | `5` | `..1` | `3.9` | `2.` | `1.2` | `0-4`
+- drifella 2 #8224: `I like getting my booty hole licked by NFT monkeys.` | `YoaDn。 DPoD` | `OAY` | `G-Good`
+- drifella 2 #4009: `Supreme` | `Supreme` | `Supremg`
+- drifella 2 #1327: `his ass is not a software` | `engineer` | `SONY`
+- drifella 2 #4726: `Be ready to figlit the liorde`
+- drifella 2 #6622: `EReE` | `MASON` | `MOHAW.` | `EAST` | `LLE`
+- drifella 2 #5848: `100`
+- drifella 2 #6479: `YOU JUST GOT` | `FREAKINGFIRED FROM MILADY'S` | `MCDONALDS RESTAURANT` | `FOR DOING THAT` | `"'THING*WITHTHE BURGERS AGAIN` | `tra` | `e t.`
+- drifella 2 #433: `KILR` | `YOUF`
+- drifella 2 #4321: `WHAL VBE DO I GIVE OFF ?` | `A` | `YERBA` | `HATE` | `2` | `1` | `ORN TO DRAIN` | `TUD IS A FUCK`
+- drifella 2 #9678: `NUMBER 46: DRAGLU0N`
+- drifella 2 #286: `00k` | `500k` | `500k` | `500k` | `1.0` | `Sellingerunu pl8 g 5ooul!` | `Solltng 1l laus 300k` | `Soling dhallee`
+- drifella 2 #6113: `honor thy` | `father`
+- drifella 2 #2704: `WHO NEEDS BRAIN CELIS` | `WHEN YOU HAVE SWAG?`
+- drifella 2 #3206: `REMEMBERVHOYOUAREEIGHTINGFOR` | `my demons dont know 1` | `got da opium dog in me` | `YOUDIED`
+- drifella 2 #1710: `isnota software` | `his ass` | `lo be bur` | `M.engineer` | `now` | `Star` | `taltired` | `rune'sate`
+- drifella 2 #5644: `the sllence of the lambs`
+- drifella 2 #1463: `FVERLAST`
+- drifella 2 #5968: `ng for you` | `am roc` | `Playerg` | `to New Pl` | `er` | `aftertw` | `Greed` | `Game`
+- drifella 2 #1815: `OUSNESS ENLRGY GRID` | `MAY`

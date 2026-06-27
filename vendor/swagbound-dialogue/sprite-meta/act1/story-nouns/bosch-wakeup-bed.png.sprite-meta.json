@@ -1,0 +1,19 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "bosch-wakeup-bed.png",
+  "sprite_dimensions": {
+    "w": 128,
+    "h": 96
+  },
+  "collision_rect_local": {
+    "x": 22,
+    "y": 73,
+    "w": 84,
+    "h": 10
+  },
+  "ysort_anchor_local": {
+    "x": 64,
+    "y": 88
+  },
+  "notes": "Act 1 story noun sprite pack; compact hand-authored pixel prop/NPC art."
+}

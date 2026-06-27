@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "flower-bed.png",
+  "sprite_dimensions": {
+    "w": 80,
+    "h": 40
+  },
+  "ysort_anchor_local": {
+    "x": 40,
+    "y": 40
+  },
+  "collision_rect_local": {
+    "x": 8,
+    "y": 28,
+    "w": 64,
+    "h": 8
+  },
+  "door_anchor_local": {
+    "x": 40,
+    "y": 40
+  },
+  "door_facing": "south",
+  "source": {
+    "sliceId": "signal-town-environment-generated-0001",
+    "sourceManifest": "asset-lab/manifests/onett-environment-sprites-0001.json",
+    "sourceCandidate": "flower-bed",
+    "processedSource": "asset-lab/generated/processed/onett-environment-sprites-0001/nature/flower-bed.png",
+    "runtimeAsset": "public/assets/act1/signal-town/environment/generated-0001/flower-bed.png"
+  },
+  "notes": "First reviewable Signal Town generated-environment population slice. This metadata is conservative and should be visually reviewed before promotion beyond the proof map."
+}

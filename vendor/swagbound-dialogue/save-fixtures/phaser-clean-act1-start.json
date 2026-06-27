@@ -1,0 +1,35 @@
+{
+  "schema": "swagbound.save.v1",
+  "saved_at": "2026-05-06T00:00:00Z",
+  "scene": "swagbound://scene/interiors/green-home",
+  "player": {
+    "position": [1700, 1940],
+    "hp": 30,
+    "max_hp": 30
+  },
+  "reward_totals": { "swag": 0, "xp": 0 },
+  "event_flags": { "act1.started": true },
+  "act1": {
+    "schema": "swagbound.act1-state.v1",
+    "actId": "act1",
+    "started": true,
+    "complete": false,
+    "gateUnlocked": false,
+    "currentObjectiveId": "wake_up",
+    "currentObjectiveText": "Wake up in Bosch's room and read the Route Brief.",
+    "completedObjectiveIds": [],
+    "flags": { "act1.started": true },
+    "phaseIndex": 1
+  },
+  "inventory": [],
+  "encounter_cooldown": 0,
+  "last_interior_visit": {
+    "doorTarget": "bosch-bedroom",
+    "doorId": "DoorTrigger002",
+    "preDoorPosition": [1700, 1940],
+    "destinationScene": "swagbound://scene/interiors/green-home",
+    "entrySpawn": [320, 288],
+    "returnSpawn": [1840, 960]
+  },
+  "party": ["lsw-2821"]
+}

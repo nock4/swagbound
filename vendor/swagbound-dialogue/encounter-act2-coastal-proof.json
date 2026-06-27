@@ -1,0 +1,80 @@
+{
+  "schema": "swagbound.encounter-table.v1",
+  "id": "act2-coastal-proof",
+  "base_chance": 0.04,
+  "cooldown_steps": 36,
+  "source": {
+    "roster": "swagbound-phaser/public/data/enemy-roster.json",
+    "policy": "Act 2 scaffold table using existing Phaser-owned enemy roster until Act 2-specific enemy promotion lands."
+  },
+  "zones": {
+    "default": {
+      "encounters": [
+        {
+          "encounter_id": "question-marketeer",
+          "weight": 3
+        },
+        {
+          "encounter_id": "cinder-cap",
+          "weight": 2
+        },
+        {
+          "encounter_id": "mirror-glitch",
+          "weight": 2
+        },
+        {
+          "encounter_id": "sawtooth-bun",
+          "weight": 1
+        }
+      ]
+    },
+    "strip": {
+      "encounters": [
+        {
+          "encounter_id": "question-marketeer",
+          "weight": 3
+        },
+        {
+          "encounter_id": "mirror-glitch",
+          "weight": 2
+        },
+        {
+          "encounter_id": "sawtooth-bun",
+          "weight": 1
+        }
+      ]
+    },
+    "service-seam": {
+      "encounters": [
+        {
+          "encounter_id": "cinder-cap",
+          "weight": 3
+        },
+        {
+          "encounter_id": "tunnel-hiss",
+          "weight": 2
+        },
+        {
+          "encounter_id": "mirror-glitch",
+          "weight": 2
+        }
+      ]
+    },
+    "promenade-edge": {
+      "encounters": [
+        {
+          "encounter_id": "mirror-glitch",
+          "weight": 3
+        },
+        {
+          "encounter_id": "question-marketeer",
+          "weight": 2
+        },
+        {
+          "encounter_id": "sawtooth-bun",
+          "weight": 1
+        }
+      ]
+    }
+  }
+}

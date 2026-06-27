@@ -1,0 +1,126 @@
+{
+  "schema": "swagbound.door-targets.v1",
+  "default_target": "corner-shop",
+  "targets": {
+    "bosch-bedroom": {
+      "scene": "swagbound://scene/interiors/green-home",
+      "entry_spawn": [
+        320,
+        288
+      ],
+      "anchor": "family-bedroom-exterior-south"
+    },
+    "burger-shop": {
+      "scene": "swagbound://scene/interiors/burger-shop",
+      "entry_spawn": [
+        320,
+        360
+      ],
+      "anchor": "burger-shop-exterior-south"
+    },
+    "cream-home": {
+      "scene": "swagbound://scene/interiors/cream-home",
+      "entry_spawn": [
+        256,
+        288
+      ],
+      "anchor": "cream-home-exterior-south"
+    },
+    "downtown-bodega": {
+      "scene": "swagbound://scene/interiors/corner-shop",
+      "entry_spawn": [
+        320,
+        360
+      ],
+      "anchor": "corner-shop-bodega-exterior-south"
+    },
+    "downtown-pharmacy": {
+      "scene": "swagbound://scene/interiors/corner-shop",
+      "entry_spawn": [
+        320,
+        360
+      ],
+      "anchor": "corner-shop-pharmacy-exterior-south"
+    },
+    "downtown-room": {
+      "scene": "swagbound://scene/interiors/cream-home",
+      "entry_spawn": [
+        256,
+        288
+      ],
+      "anchor": "cream-home-room-exterior-south"
+    },
+    "green-home": {
+      "scene": "swagbound://scene/interiors/green-home",
+      "entry_spawn": [
+        320,
+        288
+      ],
+      "anchor": "green-home-exterior-south"
+    },
+    "home-hall": {
+      "scene": "swagbound://scene/interiors/cream-home",
+      "entry_spawn": [
+        256,
+        288
+      ],
+      "anchor": "cream-home-hall-exterior-south"
+    },
+    "neighbor-house": {
+      "scene": "swagbound://scene/interiors/green-home",
+      "entry_spawn": [
+        320,
+        288
+      ],
+      "anchor": "green-home-neighbor-exterior-south"
+    },
+    "relay-control-room": {
+      "scene": "swagbound://scene/interiors/corner-shop",
+      "entry_spawn": [
+        320,
+        360
+      ],
+      "anchor": "community-office-exterior-south"
+    },
+    "relay-lab-pocket": {
+      "scene": "swagbound://scene/interiors/corner-shop",
+      "entry_spawn": [
+        320,
+        360
+      ],
+      "anchor": "community-office-lab-exterior-south"
+    },
+    "vendor-backroom": {
+      "scene": "swagbound://scene/interiors/corner-shop",
+      "entry_spawn": [
+        320,
+        360
+      ],
+      "anchor": "community-office-backroom-exterior-south"
+    },
+    "corner-shop": {
+      "scene": "swagbound://scene/interiors/corner-shop",
+      "entry_spawn": [
+        320,
+        360
+      ],
+      "anchor": "corner-shop-exterior-south"
+    },
+    "placeholder-interior": {
+      "scene": "swagbound://scene/interiors/corner-shop",
+      "entry_spawn": [
+        320,
+        360
+      ],
+      "anchor": "legacy-placeholder-exterior-south"
+    },
+    "town-hall": {
+      "scene": "swagbound://scene/interiors/corner-shop",
+      "entry_spawn": [
+        320,
+        360
+      ],
+      "anchor": "town-hall-exterior-south"
+    }
+  }
+}

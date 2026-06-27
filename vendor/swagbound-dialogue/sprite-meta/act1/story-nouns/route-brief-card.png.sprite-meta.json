@@ -1,0 +1,19 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "route-brief-card.png",
+  "sprite_dimensions": {
+    "w": 80,
+    "h": 80
+  },
+  "collision_rect_local": {
+    "x": 25,
+    "y": 49,
+    "w": 30,
+    "h": 8
+  },
+  "ysort_anchor_local": {
+    "x": 40,
+    "y": 62
+  },
+  "notes": "Act 1 story noun sprite pack; compact hand-authored pixel prop/NPC art."
+}

@@ -7,7 +7,9 @@ import {
   type SwagboundDialogueLibrary
 } from "../packages/eb-schemas/src/index";
 
-export const DEFAULT_CORPUS_DIR = "/Users/nickgeorge-studio/Projects/swagbound-new/swagbound-phaser/public/data";
+// Vendored in-repo (see vendor/README.md). Override with arg 1 or $SWAGBOUND_DIALOGUE_DIR to
+// re-import from the upstream swagbound-phaser checkout instead.
+export const DEFAULT_CORPUS_DIR = "vendor/swagbound-dialogue";
 export const DEFAULT_LIBRARY_OUTPUT = "content/swagbound-dialogue-library.json";
 export const GENERATED_FROM = "swagbound-phaser structured dialogue";
 export const CONTENT_DIALOGUE_FILE = "content-dialogue.json";
@@ -264,7 +266,7 @@ export async function importSwagboundDialogue(
 }
 
 async function main(): Promise<void> {
-  const summary = await importSwagboundDialogue(process.argv[2] ?? DEFAULT_CORPUS_DIR);
+  const summary = await importSwagboundDialogue(process.argv[2] ?? process.env.SWAGBOUND_DIALOGUE_DIR ?? DEFAULT_CORPUS_DIR);
   console.log(JSON.stringify({
     ok: true,
     generatedFrom: GENERATED_FROM,

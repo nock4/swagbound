@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "red-picket-fence-straight.png",
+  "sprite_dimensions": {
+    "w": 80,
+    "h": 48
+  },
+  "ysort_anchor_local": {
+    "x": 40,
+    "y": 48
+  },
+  "collision_rect_local": {
+    "x": 5,
+    "y": 31,
+    "w": 70,
+    "h": 11
+  },
+  "door_anchor_local": {
+    "x": 40,
+    "y": 48
+  },
+  "door_facing": "south",
+  "source": {
+    "sliceId": "signal-town-environment-generated-0001",
+    "sourceManifest": "asset-lab/manifests/onett-environment-sprites-0001.json",
+    "sourceCandidate": "red-picket-fence-straight",
+    "processedSource": "asset-lab/generated/processed/onett-environment-sprites-0001/barriers/red-picket-fence-straight.png",
+    "runtimeAsset": "public/assets/act1/signal-town/environment/generated-0001/red-picket-fence-straight.png"
+  },
+  "notes": "First reviewable Signal Town generated-environment population slice. This metadata is conservative and should be visually reviewed before promotion beyond the proof map."
+}

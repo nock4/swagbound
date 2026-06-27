@@ -1,0 +1,1377 @@
+{
+  "schema": "swagbound.interior-collision.v1",
+  "coordinateSpace": "normalized-room",
+  "interiors": {
+    "bosch-bedroom-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.36,
+          "y": 0.86,
+          "w": 0.28,
+          "h": 0.14,
+          "target": "bosch-upstairs-hall"
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "bed-nightstand",
+          "x": 0.06,
+          "y": 0.32,
+          "w": 0.28,
+          "h": 0.32
+        },
+        {
+          "id": "desk-chair",
+          "x": 0.57,
+          "y": 0.22,
+          "w": 0.3,
+          "h": 0.21
+        },
+        {
+          "id": "right-dresser",
+          "x": 0.78,
+          "y": 0.13,
+          "w": 0.16,
+          "h": 0.17
+        },
+        {
+          "id": "bookshelf-tv-stack",
+          "x": 0.71,
+          "y": 0.59,
+          "w": 0.18,
+          "h": 0.21
+        },
+        {
+          "id": "round-chair",
+          "x": 0.76,
+          "y": 0.42,
+          "w": 0.16,
+          "h": 0.13
+        },
+        {
+          "id": "north-door-blocker",
+          "x": 0.33,
+          "y": 0.05,
+          "w": 0.13,
+          "h": 0.21
+        }
+      ]
+    },
+    "bosch-upstairs-hall-v0": {
+      "spawn": { "x": 0.5, "y": 0.78 },
+      "walkBounds": { "id": "walkable-floor", "x": 0.08, "y": 0.25, "w": 0.84, "h": 0.68 },
+      "exitZones": [
+        { "id": "to-bedroom", "x": 0.04, "y": 0.46, "w": 0.12, "h": 0.26, "target": "bosch-bedroom" },
+        { "id": "to-side-room", "x": 0.84, "y": 0.46, "w": 0.12, "h": 0.26, "target": "bosch-side-room" },
+        { "id": "stairs-down", "x": 0.38, "y": 0.83, "w": 0.24, "h": 0.15, "target": "bosch-main-room" }
+      ],
+      "solidRects": [
+        { "id": "north-wall", "x": 0, "y": 0, "w": 1, "h": 0.22 },
+        { "id": "west-wall-top", "x": 0, "y": 0.22, "w": 0.06, "h": 0.26 },
+        { "id": "west-wall-bottom", "x": 0, "y": 0.7, "w": 0.06, "h": 0.3 },
+        { "id": "east-wall-top", "x": 0.94, "y": 0.22, "w": 0.06, "h": 0.26 },
+        { "id": "east-wall-bottom", "x": 0.94, "y": 0.7, "w": 0.06, "h": 0.3 },
+        { "id": "landing-rail-left", "x": 0.18, "y": 0.3, "w": 0.18, "h": 0.08 },
+        { "id": "landing-rail-right", "x": 0.64, "y": 0.3, "w": 0.18, "h": 0.08 }
+      ]
+    },
+    "bosch-side-room-v0": {
+      "spawn": { "x": 0.2, "y": 0.62 },
+      "walkBounds": { "id": "walkable-floor", "x": 0.08, "y": 0.26, "w": 0.84, "h": 0.66 },
+      "exitZones": [{ "id": "side-room-door", "x": 0.03, "y": 0.45, "w": 0.13, "h": 0.28, "target": "bosch-upstairs-hall" }],
+      "solidRects": [
+        { "id": "north-wall", "x": 0, "y": 0, "w": 1, "h": 0.22 },
+        { "id": "west-wall-top", "x": 0, "y": 0.22, "w": 0.06, "h": 0.26 },
+        { "id": "west-wall-bottom", "x": 0, "y": 0.7, "w": 0.06, "h": 0.3 },
+        { "id": "east-wall", "x": 0.94, "y": 0.22, "w": 0.06, "h": 0.78 },
+        { "id": "starter-cache", "x": 0.46, "y": 0.42, "w": 0.2, "h": 0.12 }
+      ]
+    },
+    "bosch-main-room-v0": {
+      "spawn": { "x": 0.5, "y": 0.46 },
+      "walkBounds": { "id": "walkable-floor", "x": 0.08, "y": 0.25, "w": 0.84, "h": 0.68 },
+      "exitZones": [
+        { "id": "stairs-up", "x": 0.4, "y": 0.22, "w": 0.2, "h": 0.13, "target": "bosch-upstairs-hall" },
+        { "id": "front-door", "x": 0.38, "y": 0.84, "w": 0.24, "h": 0.14, "target": "overworld" }
+      ],
+      "solidRects": [
+        { "id": "north-wall-left", "x": 0, "y": 0, "w": 0.42, "h": 0.22 },
+        { "id": "north-wall-right", "x": 0.58, "y": 0, "w": 0.42, "h": 0.22 },
+        { "id": "west-wall", "x": 0, "y": 0.22, "w": 0.06, "h": 0.78 },
+        { "id": "east-wall", "x": 0.94, "y": 0.22, "w": 0.06, "h": 0.78 },
+        { "id": "kitchen-table", "x": 0.18, "y": 0.38, "w": 0.22, "h": 0.14 },
+        { "id": "sofa", "x": 0.62, "y": 0.38, "w": 0.2, "h": 0.13 }
+      ],
+      "interactionZones": [
+        { "id": "guardian", "x": 0.2, "y": 0.54, "w": 0.16, "h": 0.12, "target": "guardian" },
+        { "id": "cousin", "x": 0.66, "y": 0.54, "w": 0.16, "h": 0.12, "target": "cousin" },
+        { "id": "proof-token-bowl", "x": 0.44, "y": 0.58, "w": 0.12, "h": 0.1, "target": "proof-token-bowl" },
+        { "id": "receipt-router", "x": 0.7, "y": 0.44, "w": 0.14, "h": 0.12, "target": "receipt-router" },
+        { "id": "signal-pet-gate", "x": 0.42, "y": 0.72, "w": 0.16, "h": 0.1, "target": "signal-pet-gate" }
+      ]
+    },
+    "burger-shop-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.23
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.23,
+          "w": 0.07,
+          "h": 0.65
+        },
+        {
+          "id": "east-wall",
+          "x": 0.93,
+          "y": 0.23,
+          "w": 0.07,
+          "h": 0.65
+        },
+        {
+          "id": "service-counter-grill",
+          "x": 0.18,
+          "y": 0.27,
+          "w": 0.61,
+          "h": 0.12
+        },
+        {
+          "id": "left-booth-upper",
+          "x": 0.22,
+          "y": 0.4,
+          "w": 0.14,
+          "h": 0.11
+        },
+        {
+          "id": "right-booth-upper",
+          "x": 0.64,
+          "y": 0.4,
+          "w": 0.14,
+          "h": 0.11
+        },
+        {
+          "id": "left-booth-lower",
+          "x": 0.15,
+          "y": 0.57,
+          "w": 0.2,
+          "h": 0.1
+        },
+        {
+          "id": "right-booth-lower",
+          "x": 0.65,
+          "y": 0.57,
+          "w": 0.2,
+          "h": 0.1
+        },
+        {
+          "id": "center-table",
+          "x": 0.4,
+          "y": 0.46,
+          "w": 0.2,
+          "h": 0.14
+        },
+        {
+          "id": "side-partition-left",
+          "x": 0.11,
+          "y": 0.25,
+          "w": 0.05,
+          "h": 0.44
+        },
+        {
+          "id": "side-partition-right",
+          "x": 0.84,
+          "y": 0.25,
+          "w": 0.05,
+          "h": 0.44
+        }
+      ]
+    },
+    "corner-shop-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.36,
+          "y": 0.86,
+          "w": 0.28,
+          "h": 0.14
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "service-counter",
+          "x": 0.09,
+          "y": 0.29,
+          "w": 0.32,
+          "h": 0.17
+        },
+        {
+          "id": "front-display-left",
+          "x": 0.1,
+          "y": 0.63,
+          "w": 0.28,
+          "h": 0.13
+        },
+        {
+          "id": "center-display",
+          "x": 0.44,
+          "y": 0.44,
+          "w": 0.11,
+          "h": 0.33
+        },
+        {
+          "id": "right-display",
+          "x": 0.64,
+          "y": 0.43,
+          "w": 0.12,
+          "h": 0.35
+        },
+        {
+          "id": "east-cooler",
+          "x": 0.85,
+          "y": 0.41,
+          "w": 0.09,
+          "h": 0.45
+        },
+        {
+          "id": "back-wall-shelves",
+          "x": 0.13,
+          "y": 0.22,
+          "w": 0.29,
+          "h": 0.08
+        }
+      ]
+    },
+    "downtown-bodega-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "checkout-counter",
+          "x": 0.1,
+          "y": 0.32,
+          "w": 0.82,
+          "h": 0.15
+        },
+        {
+          "id": "left-shelf-island",
+          "x": 0.14,
+          "y": 0.58,
+          "w": 0.28,
+          "h": 0.15
+        },
+        {
+          "id": "center-shelf-island",
+          "x": 0.43,
+          "y": 0.43,
+          "w": 0.16,
+          "h": 0.33
+        },
+        {
+          "id": "right-shelf-island",
+          "x": 0.64,
+          "y": 0.43,
+          "w": 0.16,
+          "h": 0.35
+        }
+      ]
+    },
+    "downtown-pharmacy-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "pharmacy-counter",
+          "x": 0.11,
+          "y": 0.32,
+          "w": 0.78,
+          "h": 0.15
+        },
+        {
+          "id": "left-display-rack",
+          "x": 0.14,
+          "y": 0.58,
+          "w": 0.25,
+          "h": 0.15
+        },
+        {
+          "id": "center-display-rack",
+          "x": 0.43,
+          "y": 0.43,
+          "w": 0.16,
+          "h": 0.32
+        },
+        {
+          "id": "right-display-rack",
+          "x": 0.64,
+          "y": 0.43,
+          "w": 0.16,
+          "h": 0.34
+        }
+      ]
+    },
+    "downtown-room-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "sofa",
+          "x": 0.12,
+          "y": 0.35,
+          "w": 0.32,
+          "h": 0.16
+        },
+        {
+          "id": "table",
+          "x": 0.58,
+          "y": 0.52,
+          "w": 0.2,
+          "h": 0.12
+        }
+      ]
+    },
+    "dream-city-pocket-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-boundary",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-boundary",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-boundary",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "signal-plinth-left",
+          "x": 0.12,
+          "y": 0.3,
+          "w": 0.22,
+          "h": 0.16
+        },
+        {
+          "id": "signal-plinth-right",
+          "x": 0.66,
+          "y": 0.3,
+          "w": 0.22,
+          "h": 0.16
+        }
+      ]
+    },
+    "home-hall-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "living-room-seating",
+          "x": 0.38,
+          "y": 0.17,
+          "w": 0.38,
+          "h": 0.3
+        },
+        {
+          "id": "kitchen-counter",
+          "x": 0.63,
+          "y": 0.54,
+          "w": 0.29,
+          "h": 0.27
+        },
+        {
+          "id": "left-entry-fixtures",
+          "x": 0.12,
+          "y": 0.54,
+          "w": 0.14,
+          "h": 0.26
+        },
+        {
+          "id": "hall-post",
+          "x": 0.29,
+          "y": 0.33,
+          "w": 0.06,
+          "h": 0.24
+        },
+        {
+          "id": "north-cabinet",
+          "x": 0.19,
+          "y": 0.08,
+          "w": 0.2,
+          "h": 0.19
+        }
+      ]
+    },
+    "milady-dream-pocket-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-boundary",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-boundary",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-boundary",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "dream-fixture-left",
+          "x": 0.12,
+          "y": 0.34,
+          "w": 0.22,
+          "h": 0.16
+        },
+        {
+          "id": "dream-fixture-right",
+          "x": 0.66,
+          "y": 0.34,
+          "w": 0.22,
+          "h": 0.16
+        }
+      ]
+    },
+    "neighbor-house-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "sofa-table-cluster",
+          "x": 0.06,
+          "y": 0.4,
+          "w": 0.34,
+          "h": 0.28
+        },
+        {
+          "id": "tv-cabinet",
+          "x": 0.36,
+          "y": 0.16,
+          "w": 0.26,
+          "h": 0.14
+        },
+        {
+          "id": "right-bookcase",
+          "x": 0.75,
+          "y": 0.13,
+          "w": 0.19,
+          "h": 0.16
+        },
+        {
+          "id": "left-plant-table",
+          "x": 0.14,
+          "y": 0.18,
+          "w": 0.15,
+          "h": 0.16
+        },
+        {
+          "id": "right-floor-plant",
+          "x": 0.86,
+          "y": 0.48,
+          "w": 0.1,
+          "h": 0.14
+        }
+      ]
+    },
+    "payphone-node-room-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "phone-bank",
+          "x": 0.16,
+          "y": 0.3,
+          "w": 0.68,
+          "h": 0.16
+        },
+        {
+          "id": "floor-terminal",
+          "x": 0.44,
+          "y": 0.55,
+          "w": 0.12,
+          "h": 0.12
+        }
+      ]
+    },
+    "relay-control-room-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "control-bank",
+          "x": 0.1,
+          "y": 0.31,
+          "w": 0.8,
+          "h": 0.16
+        },
+        {
+          "id": "console-island",
+          "x": 0.38,
+          "y": 0.55,
+          "w": 0.24,
+          "h": 0.13
+        }
+      ]
+    },
+    "relay-lab-pocket-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "lab-counter",
+          "x": 0.11,
+          "y": 0.31,
+          "w": 0.78,
+          "h": 0.15
+        },
+        {
+          "id": "relay-equipment",
+          "x": 0.16,
+          "y": 0.54,
+          "w": 0.22,
+          "h": 0.14
+        }
+      ]
+    },
+    "relay-underpass-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-boundary",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-boundary",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-boundary",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "left-pillar",
+          "x": 0.16,
+          "y": 0.36,
+          "w": 0.16,
+          "h": 0.22
+        },
+        {
+          "id": "right-pillar",
+          "x": 0.68,
+          "y": 0.36,
+          "w": 0.16,
+          "h": 0.22
+        }
+      ]
+    },
+    "signal-closet-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "rack-left",
+          "x": 0.1,
+          "y": 0.31,
+          "w": 0.26,
+          "h": 0.22
+        },
+        {
+          "id": "rack-right",
+          "x": 0.64,
+          "y": 0.31,
+          "w": 0.26,
+          "h": 0.22
+        }
+      ]
+    },
+    "signal-shack-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "radio-table",
+          "x": 0.12,
+          "y": 0.34,
+          "w": 0.32,
+          "h": 0.17
+        },
+        {
+          "id": "supply-shelf",
+          "x": 0.68,
+          "y": 0.31,
+          "w": 0.22,
+          "h": 0.22
+        }
+      ]
+    },
+    "static-lab-pocket-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "static-console",
+          "x": 0.12,
+          "y": 0.31,
+          "w": 0.76,
+          "h": 0.16
+        },
+        {
+          "id": "lab-crate",
+          "x": 0.18,
+          "y": 0.55,
+          "w": 0.18,
+          "h": 0.14
+        }
+      ]
+    },
+    "vendor-backroom-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "stock-shelves",
+          "x": 0.1,
+          "y": 0.31,
+          "w": 0.8,
+          "h": 0.16
+        },
+        {
+          "id": "crate-stack",
+          "x": 0.62,
+          "y": 0.55,
+          "w": 0.24,
+          "h": 0.16
+        }
+      ]
+    },
+    "town-hall-v0": {
+      "spawn": {
+        "x": 0.5,
+        "y": 0.82
+      },
+      "walkBounds": {
+        "id": "walkable-floor",
+        "x": 0.07,
+        "y": 0.24,
+        "w": 0.86,
+        "h": 0.74
+      },
+      "exitZones": [
+        {
+          "id": "exit-south",
+          "x": 0.39,
+          "y": 0.9,
+          "w": 0.22,
+          "h": 0.1
+        }
+      ],
+      "solidRects": [
+        {
+          "id": "north-wall",
+          "x": 0,
+          "y": 0,
+          "w": 1,
+          "h": 0.22
+        },
+        {
+          "id": "west-wall",
+          "x": 0,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "east-wall",
+          "x": 0.94,
+          "y": 0.22,
+          "w": 0.06,
+          "h": 0.78
+        },
+        {
+          "id": "clerk-counter",
+          "x": 0.14,
+          "y": 0.26,
+          "w": 0.72,
+          "h": 0.14
+        },
+        {
+          "id": "bulletin-board",
+          "x": 0.08,
+          "y": 0.46,
+          "w": 0.26,
+          "h": 0.14
+        },
+        {
+          "id": "bench-upper",
+          "x": 0.4,
+          "y": 0.57,
+          "w": 0.2,
+          "h": 0.08
+        },
+        {
+          "id": "bench-lower",
+          "x": 0.4,
+          "y": 0.71,
+          "w": 0.2,
+          "h": 0.08
+        },
+        {
+          "id": "voting-desk",
+          "x": 0.7,
+          "y": 0.5,
+          "w": 0.18,
+          "h": 0.17
+        },
+        {
+          "id": "pamphlet-table",
+          "x": 0.12,
+          "y": 0.68,
+          "w": 0.12,
+          "h": 0.12
+        }
+      ]
+    }
+  }
+}

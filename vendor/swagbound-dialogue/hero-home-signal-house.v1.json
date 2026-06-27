@@ -1,0 +1,148 @@
+{
+  "schema": "swagbound.hero-home-signal-house.v1",
+  "id": "hero-home-interior-0001",
+  "canonHeroName": "Bosch",
+  "profile": {
+    "heroNameToken": "{heroName}",
+    "defaultSpriteVariantId": "lsw-2821",
+    "persistedFields": ["heroName", "spriteVariantId"]
+  },
+  "worldPlacement": {
+    "description": "Bosch's House sits west of Signal Town on the western residential road that leads east into downtown.",
+    "flow": ["hero_home", "bosch_house_exterior", "west_residential_road", "downtown"]
+  },
+  "maps": {
+    "hero_home": {
+      "type": "interior",
+      "dimensionsPx": { "w": 640, "h": 384 },
+      "rooms": [
+        { "id": "bedroom_nw", "label": "Bedroom", "rect": { "x": 48, "y": 48, "w": 208, "h": 132 } },
+        { "id": "kitchen_dining_ne", "label": "Kitchen / Dining", "rect": { "x": 384, "y": 48, "w": 208, "h": 132 } },
+        { "id": "common_room_south_center", "label": "Common Room", "rect": { "x": 96, "y": 184, "w": 448, "h": 144 } }
+      ],
+      "spawns": {
+        "bed_spawn": { "x": 156, "y": 144, "facing": "down" },
+        "fromExterior": { "x": 320, "y": 324, "facing": "up" }
+      },
+      "transitionRects": [
+        {
+          "id": "south_exit",
+          "rect": { "x": 280, "y": 336, "w": 80, "h": 32 },
+          "toMap": "bosch_house_exterior",
+          "toSpawn": "front_door_spawn",
+          "requiresFlag": "act1.hasProofTokenCharm",
+          "blockedBy": "signal-pet-gate"
+        }
+      ],
+      "collisionRects": [
+        { "id": "north_wall", "x": 0, "y": 0, "w": 640, "h": 40 },
+        { "id": "west_wall", "x": 0, "y": 0, "w": 32, "h": 384 },
+        { "id": "east_wall", "x": 608, "y": 0, "w": 32, "h": 384 },
+        { "id": "kitchen_counter", "x": 408, "y": 72, "w": 152, "h": 40 },
+        { "id": "bed", "x": 76, "y": 76, "w": 104, "h": 56 },
+        { "id": "sofa", "x": 410, "y": 218, "w": 108, "h": 42 }
+      ],
+      "path": [
+        { "id": "bed_spawn", "x": 156, "y": 144 },
+        { "id": "bedroom_doorway", "x": 256, "y": 176 },
+        { "id": "common_room_center", "x": 320, "y": 248 },
+        { "id": "proof_token_bowl", "x": 268, "y": 250 },
+        { "id": "receipt_router", "x": 374, "y": 250 },
+        { "id": "south_exit", "x": 320, "y": 340 }
+      ]
+    },
+    "bosch_house_exterior": {
+      "type": "exterior",
+      "dimensionsPx": { "w": 960, "h": 640 },
+      "spawns": {
+        "front_door_spawn": { "x": 480, "y": 420, "facing": "down" }
+      },
+      "transitionRects": [
+        {
+          "id": "front_door",
+          "rect": { "x": 448, "y": 344, "w": 64, "h": 40 },
+          "toMap": "hero_home",
+          "toSpawn": "fromExterior"
+        },
+        {
+          "id": "east_path",
+          "rect": { "x": 880, "y": 360, "w": 64, "h": 96 },
+          "toMap": "west_residential_road",
+          "toSpawn": "west_entry"
+        }
+      ],
+      "labels": ["Bosch's House", "front yard", "western residential road"]
+    },
+    "west_residential_road": {
+      "type": "exterior",
+      "dimensionsPx": { "w": 1280, "h": 640 },
+      "spawns": {
+        "west_entry": { "x": 96, "y": 392, "facing": "right" },
+        "east_exit": { "x": 1184, "y": 392, "facing": "right" }
+      },
+      "transitionRects": [
+        {
+          "id": "east_exit",
+          "rect": { "x": 1216, "y": 344, "w": 48, "h": 96 },
+          "toMap": "downtown",
+          "toSpawn": "west_entry"
+        }
+      ],
+      "labels": ["west residential road", "downtown west entry"]
+    },
+    "downtown": {
+      "type": "exterior",
+      "dimensionsPx": { "w": 1600, "h": 960 },
+      "spawns": {
+        "west_entry": { "x": 96, "y": 480, "facing": "right" }
+      },
+      "transitionRects": [
+        {
+          "id": "west_entry",
+          "rect": { "x": 0, "y": 432, "w": 48, "h": 96 },
+          "toMap": "west_residential_road",
+          "toSpawn": "east_exit"
+        }
+      ],
+      "labels": ["downtown west entry", "route to Corner Shop"]
+    }
+  },
+  "interactions": [
+    {
+      "id": "proof-token-bowl",
+      "mapId": "hero_home",
+      "kind": "key_item",
+      "setsFlags": ["act1.hasProofTokenCharm", "intro.proof_token_charm_bound"],
+      "grantsItem": "proof-token-charm",
+      "bindsProfileFields": ["heroName", "spriteVariantId"],
+      "interactionZone": { "x": 232, "y": 220, "w": 72, "h": 56 }
+    },
+    {
+      "id": "receipt-router",
+      "mapId": "hero_home",
+      "kind": "save_point",
+      "requiresFlag": "act1.hasProofTokenCharm",
+      "menu": ["Sync", "Status", "Never mind"],
+      "savePointId": "hero_home.receipt_router",
+      "checkpointId": "hero_home.south_exit",
+      "writesSchema": "swagbound.save.v1",
+      "interactionZone": { "x": 344, "y": 220, "w": 72, "h": 56 }
+    },
+    {
+      "id": "signal-pet-gate",
+      "mapId": "hero_home",
+      "kind": "gate_npc",
+      "blocksTransition": "hero_home/south_exit",
+      "clearedByFlag": "act1.hasProofTokenCharm",
+      "startPosition": { "x": 320, "y": 326 },
+      "clearedPosition": { "x": 236, "y": 296 },
+      "speechPolicy": "movement_or_reaction_only"
+    }
+  ],
+  "requiredTransitions": [
+    "hero_home/south_exit -> bosch_house_exterior/front_door_spawn",
+    "bosch_house_exterior/front_door -> hero_home/fromExterior",
+    "west_residential_road/east_exit -> downtown/west_entry",
+    "downtown/west_entry -> west_residential_road/east_exit"
+  ]
+}

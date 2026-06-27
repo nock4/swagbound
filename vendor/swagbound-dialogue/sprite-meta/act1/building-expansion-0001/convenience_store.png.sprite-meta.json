@@ -1,0 +1,22 @@
+{
+  "sprite": "convenience_store.png",
+  "runtimeAsset": "public/assets/act1/building-expansion-0001/convenience_store.png",
+  "sprite_dimensions": {
+    "w": 136,
+    "h": 108
+  },
+  "placement_offset_px": {
+    "x": 0,
+    "y": 55
+  },
+  "ysort_anchor_local": {
+    "x": 68,
+    "y": 108
+  },
+  "collision_rect_local": {
+    "x": 20,
+    "y": 82,
+    "w": 96,
+    "h": 18
+  }
+}

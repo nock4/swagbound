@@ -1,0 +1,12 @@
+{
+  "schema": "swagbound.retired-backdrops.v1",
+  "keys": [
+    "signal-storm-promenade-001"
+  ],
+  "prefixes": [
+    "signal-storm-promenade"
+  ],
+  "reasons": {
+    "signal-storm-promenade": "Retired by Nick on 2026-05-10; do not use this battle background again."
+  }
+}

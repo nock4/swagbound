@@ -1,0 +1,799 @@
+{
+  "schema": "swagbound.spriteAuditDeletionExecution.v1",
+  "page": "enemies",
+  "executedAt": "2026-05-25T20:05:31.275Z",
+  "reviewOnlySourceSchema": "swagbound.spriteAuditDecisions.v1",
+  "deletionApprovedByUserInChat": true,
+  "keepPolicy": "keep every non-delete status from the submitted enemies review pass",
+  "runtimeReferenceHandling": {
+    "placeholderBackdropFallbackRemoved": true,
+    "pondStaticEncounterReferencesRemoved": true,
+    "deletedRuntimeReferencedAssets": [
+      "swagbound-phaser/public/assets/battle-backgrounds/_placeholder.png",
+      "swagbound-phaser/public/assets/generated/enemies/lsw-pond-static-battle-v1.png",
+      "swagbound-phaser/public/assets/generated/enemies/lsw-pond-static-overworld-v1.png"
+    ]
+  },
+  "counts": {
+    "deleteGroups": 47,
+    "assetPathsRequested": 195,
+    "deletedFiles": 195,
+    "missingBeforeDelete": 0
+  },
+  "groups": [
+    {
+      "id": "_placeholder",
+      "label": "placeholder",
+      "assetCount": 1,
+      "assetPaths": [
+        "swagbound-phaser/public/assets/battle-backgrounds/_placeholder.png"
+      ],
+      "runtimeReferencedAtReview": [
+        "swagbound-phaser/public/assets/battle-backgrounds/_placeholder.png"
+      ]
+    },
+    {
+      "id": "drifella-iii-approach-01-eb-silhouette",
+      "label": "drifella iii approach 01 eb silhouette",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-01-eb-silhouette-alpha-extracted-source-size.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella-iii-approach-02-hippie-human",
+      "label": "drifella iii approach 02 hippie human",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-02-hippie-human-alpha-extracted-source-size.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella-iii-approach-03-object-totem",
+      "label": "drifella iii approach 03 object totem",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-03-object-totem-alpha-extracted-source-size.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella-iii-approach-04-dragon-mask",
+      "label": "drifella iii approach 04 dragon mask",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-04-dragon-mask-alpha-extracted-source-size.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella-iii-approach-05-source-direct",
+      "label": "drifella iii approach 05 source direct",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-05-source-direct-alpha-extracted-source-size.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella-iii-overworld-research-01",
+      "label": "drifella iii overworld research 01",
+      "assetCount": 2,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-01-lanczos.png",
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-01-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella-iii-overworld-research-02",
+      "label": "drifella iii overworld research 02",
+      "assetCount": 2,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-02-lanczos.png",
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-02-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella-iii-overworld-research-03",
+      "label": "drifella iii overworld research 03",
+      "assetCount": 2,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-03-lanczos.png",
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-03-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella-iii-overworld-research-04",
+      "label": "drifella iii overworld research 04",
+      "assetCount": 2,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-04-lanczos.png",
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-04-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella-iii-overworld-research-05",
+      "label": "drifella iii overworld research 05",
+      "assetCount": 2,
+      "assetPaths": [
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-05-lanczos.png",
+        "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-05-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-1348-battle-source-retained",
+      "label": "drifella2 1348 battle source retained",
+      "assetCount": 6,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-clean-v1-pixel-reduced.png",
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-clean-v1.png",
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-full-v1-pixel-reduced.png",
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-full-v1.png",
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-v1-pixel-reduced.png",
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-v1.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-1348-overworld-source-retained-clean-v1",
+      "label": "drifella2 1348 overworld source retained clean v1",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-overworld-source-retained-clean-v1.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-1348-overworld-source-retained-face-v1",
+      "label": "drifella2 1348 overworld source retained face v1",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-overworld-source-retained-face-v1.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-1348-overworld-source-retained-full-v1",
+      "label": "drifella2 1348 overworld source retained full v1",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-overworld-source-retained-full-v1.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-1348-source-retained-clean-mask",
+      "label": "drifella2 1348 source retained clean mask",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-source-retained-clean-mask.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-1348-source-retained-full-mask",
+      "label": "drifella2 1348 source retained full mask",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-source-retained-full-mask.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-1932",
+      "label": "drifella2 1932",
+      "assetCount": 5,
+      "assetPaths": [
+        "asset-lab/curation/pfp-enemy-source-batch-0059/accepted/drifella2-1932-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0059/accepted/drifella2-1932-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/drifella2-1932-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0059/accepted/drifella2-1932-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/drifella2-1932-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-3313",
+      "label": "drifella2 3313",
+      "assetCount": 16,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-battle-v1-extracted-crop.png",
+        "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-battle-v1-extracted-crop.png",
+        "asset-lab/curation/drifella2-magiceden-3313-overworld-native48-retry-0001/accepted/drifella2-3313-overworld-native48-retry-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella2-magiceden-3313-overworld-native48-retry-0001/accepted/drifella2-3313-overworld-native48-retry-ow-001-lanczos.png",
+        "asset-lab/curation/drifella2-magiceden-3313-overworld-native48-retry-0001/accepted/drifella2-3313-overworld-native48-retry-ow-001-nearest.png",
+        "asset-lab/curation/drifella2-magiceden-3313-overworld-native48-retry-0001/accepted/drifella2-3313-overworld-native48-retry-ow-001-raw-alpha.png",
+        "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-overworld-v1-ow-001-lanczos.png",
+        "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-overworld-v1-ow-002-lanczos.png",
+        "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-overworld-v1-ow-002-nearest.png",
+        "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-overworld-v1-ow-001-lanczos.png",
+        "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-overworld-v1-ow-002-lanczos.png",
+        "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-overworld-v1-ow-002-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-5408-safeproxy-local-repair",
+      "label": "drifella2 5408 safeproxy local repair",
+      "assetCount": 5,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-battle-v1-extracted-crop.png",
+        "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-overworld-v1-ow-001-lanczos.png",
+        "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-overworld-v1-ow-001-raw-alpha-contained.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-8397-gpt-ow-retry-v2",
+      "label": "drifella2 8397 gpt ow retry v2",
+      "assetCount": 5,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-ow-001-lanczos-crisp-bold.png",
+        "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-ow-001-lanczos-crisp.png",
+        "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-ow-001-lanczos.png",
+        "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella2-8397-local",
+      "label": "drifella2 8397 local",
+      "assetCount": 2,
+      "assetPaths": [
+        "asset-lab/curation/drifella2-magiceden-8397-local-ow-companion-0001/accepted/drifella2-8397-local-overworld-v1-ow-001-lanczos.png",
+        "asset-lab/curation/drifella2-magiceden-8397-local-ow-companion-0001/accepted/drifella2-8397-local-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella3-1092",
+      "label": "drifella3 1092",
+      "assetCount": 6,
+      "assetPaths": [
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-battle-v1-extracted-crop.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-overworld-v1-ow-001-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-overworld-v1-ow-002-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-overworld-v1-ow-002-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella3-1092-left-mouth-shadow",
+      "label": "drifella3 1092 left mouth shadow",
+      "assetCount": 2,
+      "assetPaths": [
+        "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-1092-left-mouth-shadow-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-1092-left-mouth-shadow-battle-v1-extracted-crop.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella3-1238",
+      "label": "drifella3 1238",
+      "assetCount": 6,
+      "assetPaths": [
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-battle-v1-extracted-crop.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-overworld-v1-ow-001-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-overworld-v1-ow-002-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-overworld-v1-ow-002-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella3-1238-left-red-head",
+      "label": "drifella3 1238 left red head",
+      "assetCount": 2,
+      "assetPaths": [
+        "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-1238-left-red-head-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-1238-left-red-head-battle-v1-extracted-crop.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella3-1327",
+      "label": "drifella3 1327",
+      "assetCount": 6,
+      "assetPaths": [
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-battle-v1-extracted-crop.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-overworld-v1-ow-001-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-overworld-v1-ow-002-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-overworld-v1-ow-002-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella3-909",
+      "label": "drifella3 909",
+      "assetCount": 6,
+      "assetPaths": [
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-battle-v1-extracted-crop.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-overworld-v1-ow-001-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-overworld-v1-ow-002-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-overworld-v1-ow-002-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella3-909-left-ink-creature",
+      "label": "drifella3 909 left ink creature",
+      "assetCount": 2,
+      "assetPaths": [
+        "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-909-left-ink-creature-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-909-left-ink-creature-battle-v1-extracted-crop.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "drifella3-966",
+      "label": "drifella3 966",
+      "assetCount": 6,
+      "assetPaths": [
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-battle-v1-extracted-crop.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-overworld-v1-ow-001-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-overworld-v1-ow-002-lanczos.png",
+        "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-overworld-v1-ow-002-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "lsw-3115",
+      "label": "lsw 3115",
+      "assetCount": 22,
+      "assetPaths": [
+        "asset-lab/curation/lsw-enemy-source-batch-0002/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0002/accepted/lsw-3115-battle-v1-extracted-crop.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0012/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0012/accepted/lsw-3115-battle-v1-extracted-crop.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0013/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0013/accepted/lsw-3115-battle-v1-extracted-crop.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0015/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0015/accepted/lsw-3115-battle-v1-extracted-crop.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0016/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0016/accepted/lsw-3115-battle-v1-extracted-crop.png",
+        "asset-lab/curation/lsw-enemy-source-direct-batch-0016/accepted/lsw-3115-source-direct-battle-v0.png",
+        "swagbound-phaser/public/assets/generated/enemies/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+        "swagbound-phaser/public/assets/generated/enemies/lsw-3115-source-direct-battle-v0.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0002/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0012/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0013/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0015/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/lsw-enemy-source-batch-0016/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/lsw-enemy-source-direct-batch-0016/accepted/lsw-3115-source-direct-overworld-v0.png",
+        "swagbound-phaser/public/assets/generated/enemies/lsw-3115-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/lsw-3115-source-direct-overworld-v0.png",
+        "asset-lab/curation/lsw-enemy-source-direct-batch-0016/accepted/lsw-3115-source-direct-keyed.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "lsw-enemy-promotion-0003-review",
+      "label": "lsw enemy promotion 0003 review",
+      "assetCount": 2,
+      "assetPaths": [
+        "swagbound-phaser/public/assets/generated/asset-lab/other/lsw-enemy-promotion-0003-review.png",
+        "asset-lab/curation/enemy-source-batch-0001/accepted/lsw-enemy-promotion-0003-review.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "lsw-pond-static",
+      "label": "lsw pond static",
+      "assetCount": 2,
+      "assetPaths": [
+        "swagbound-phaser/public/assets/generated/enemies/lsw-pond-static-battle-v1.png",
+        "swagbound-phaser/public/assets/generated/enemies/lsw-pond-static-overworld-v1.png"
+      ],
+      "runtimeReferencedAtReview": [
+        "swagbound-phaser/public/assets/generated/enemies/lsw-pond-static-battle-v1.png",
+        "swagbound-phaser/public/assets/generated/enemies/lsw-pond-static-overworld-v1.png"
+      ]
+    },
+    {
+      "id": "metal-misfit",
+      "label": "metal misfit",
+      "assetCount": 5,
+      "assetPaths": [
+        "asset-lab/curation/pfp-enemy-source-batch-0030/accepted/metal-misfit-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0030/accepted/metal-misfit-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/metal-misfit-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0030/accepted/metal-misfit-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/metal-misfit-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "my-little-fella",
+      "label": "my little fella",
+      "assetCount": 5,
+      "assetPaths": [
+        "asset-lab/curation/pfp-enemy-source-batch-0013/accepted/my-little-fella-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0013/accepted/my-little-fella-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/my-little-fella-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0013/accepted/my-little-fella-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/my-little-fella-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-003",
+      "label": "tojiba disc buddy 003",
+      "assetCount": 8,
+      "assetPaths": [
+        "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-003-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-003-battle-v1-extracted-crop.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-003-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-003-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-003-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-003-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-003-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-003-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-003-crop",
+      "label": "tojiba disc buddy 003 crop",
+      "assetCount": 8,
+      "assetPaths": [
+        "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-003-crop-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-003-crop-battle-v1-extracted-crop.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-003-crop-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-003-crop-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-003-crop-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-003-crop-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-003-crop-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-003-crop-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-004",
+      "label": "tojiba disc buddy 004",
+      "assetCount": 8,
+      "assetPaths": [
+        "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-004-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-004-battle-v1-extracted-crop.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-004-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-004-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-004-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-004-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-004-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-004-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-005",
+      "label": "tojiba disc buddy 005",
+      "assetCount": 8,
+      "assetPaths": [
+        "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-005-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-005-battle-v1-extracted-crop.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-005-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-005-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-005-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-005-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-005-battle-alpha-source-size",
+      "label": "tojiba disc buddy 005 battle alpha source size",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/tojiba-single-source-preserve-0001/accepted/tojiba-disc-buddy-005-battle-alpha-source-size.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-005-battle-crop-260",
+      "label": "tojiba disc buddy 005 battle crop 260",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/tojiba-single-source-preserve-0001/accepted/tojiba-disc-buddy-005-battle-crop-260.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-005-crop",
+      "label": "tojiba disc buddy 005 crop",
+      "assetCount": 8,
+      "assetPaths": [
+        "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-005-crop-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-005-crop-battle-v1-extracted-crop.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-005-crop-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-005-crop-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-crop-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-005-crop-overworld-v1-ow-001-nearest.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-005-crop-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-crop-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-005-generic",
+      "label": "tojiba disc buddy 005 generic",
+      "assetCount": 5,
+      "assetPaths": [
+        "asset-lab/curation/tojiba-single-source-generic-prompt-0004/accepted/tojiba-disc-buddy-005-generic-battle-v1b-alpha-extracted-source-size.png",
+        "asset-lab/curation/tojiba-single-source-generic-prompt-0004/accepted/tojiba-disc-buddy-005-generic-battle-v1b-extracted-crop.png",
+        "asset-lab/curation/tojiba-single-source-generic-prompt-0004/accepted/tojiba-disc-buddy-005-generic-battle-v1c-alpha-extracted-source-size.png",
+        "asset-lab/curation/tojiba-single-source-generic-prompt-0004/accepted/tojiba-disc-buddy-005-generic-battle-v1c-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-generic-battle-v1b-alpha-extracted-source-size.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-005-orientation-lock",
+      "label": "tojiba disc buddy 005 orientation lock",
+      "assetCount": 5,
+      "assetPaths": [
+        "asset-lab/curation/tojiba-single-source-orientation-lock-0002/accepted/tojiba-disc-buddy-005-orientation-lock-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/tojiba-single-source-orientation-lock-0002/accepted/tojiba-disc-buddy-005-orientation-lock-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-orientation-lock-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/tojiba-single-source-orientation-lock-0002/accepted/tojiba-disc-buddy-005-orientation-lock-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-orientation-lock-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-005-overworld-48",
+      "label": "tojiba disc buddy 005 overworld 48",
+      "assetCount": 1,
+      "assetPaths": [
+        "asset-lab/curation/tojiba-single-source-preserve-0001/accepted/tojiba-disc-buddy-005-overworld-48.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "tojiba-disc-buddy-005-source-trace",
+      "label": "tojiba disc buddy 005 source trace",
+      "assetCount": 5,
+      "assetPaths": [
+        "asset-lab/curation/tojiba-single-source-source-trace-0003/accepted/tojiba-disc-buddy-005-source-trace-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/tojiba-single-source-source-trace-0003/accepted/tojiba-disc-buddy-005-source-trace-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-source-trace-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/tojiba-single-source-source-trace-0003/accepted/tojiba-disc-buddy-005-source-trace-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-source-trace-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    },
+    {
+      "id": "ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83",
+      "label": "ud835 udc54 ud835 udcbd ud835 udcc8 ud835 udcc9 ud835 udccc ud835 udcbd ud835 udcce ud835 udcb6 ud835 udcc2 ud83",
+      "assetCount": 5,
+      "assetPaths": [
+        "asset-lab/curation/pfp-enemy-source-batch-0032/accepted/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0032/accepted/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-battle-v1-extracted-crop.png",
+        "swagbound-phaser/public/assets/generated/enemies/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-battle-v1-alpha-extracted-source-size.png",
+        "asset-lab/curation/pfp-enemy-source-batch-0032/accepted/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-overworld-v1-ow-001-nearest.png",
+        "swagbound-phaser/public/assets/generated/enemies/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-overworld-v1-ow-001-nearest.png"
+      ],
+      "runtimeReferencedAtReview": []
+    }
+  ],
+  "deletedFiles": [
+    "swagbound-phaser/public/assets/battle-backgrounds/_placeholder.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-01-eb-silhouette-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-02-hippie-human-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-03-object-totem-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-04-dragon-mask-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-approach-05-source-direct-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-01-lanczos.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-01-nearest.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-02-lanczos.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-02-nearest.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-03-lanczos.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-03-nearest.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-04-lanczos.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-04-nearest.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-05-lanczos.png",
+    "asset-lab/curation/drifella-iii-overworld-research-pass-0001/accepted/drifella-iii-overworld-research-05-nearest.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-clean-v1-pixel-reduced.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-clean-v1.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-full-v1-pixel-reduced.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-full-v1.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-v1-pixel-reduced.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-battle-source-retained-v1.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-overworld-source-retained-clean-v1.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-overworld-source-retained-face-v1.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-overworld-source-retained-full-v1.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-source-retained-clean-mask.png",
+    "asset-lab/curation/drifella2-magiceden-1348-source-retained-0001/accepted/drifella2-1348-source-retained-full-mask.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0059/accepted/drifella2-1932-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0059/accepted/drifella2-1932-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/drifella2-1932-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0059/accepted/drifella2-1932-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/drifella2-1932-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella2-magiceden-3313-overworld-native48-retry-0001/accepted/drifella2-3313-overworld-native48-retry-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella2-magiceden-3313-overworld-native48-retry-0001/accepted/drifella2-3313-overworld-native48-retry-ow-001-lanczos.png",
+    "asset-lab/curation/drifella2-magiceden-3313-overworld-native48-retry-0001/accepted/drifella2-3313-overworld-native48-retry-ow-001-nearest.png",
+    "asset-lab/curation/drifella2-magiceden-3313-overworld-native48-retry-0001/accepted/drifella2-3313-overworld-native48-retry-ow-001-raw-alpha.png",
+    "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-overworld-v1-ow-001-lanczos.png",
+    "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-overworld-v1-ow-002-lanczos.png",
+    "asset-lab/curation/drifella2-magiceden-3313-source-derived-canon-0001/accepted/drifella2-3313-overworld-v1-ow-002-nearest.png",
+    "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-overworld-v1-ow-001-lanczos.png",
+    "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-overworld-v1-ow-002-lanczos.png",
+    "asset-lab/curation/drifella2-magiceden-3313-sprite-review-0001/accepted/drifella2-3313-overworld-v1-ow-002-nearest.png",
+    "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-overworld-v1-ow-001-lanczos.png",
+    "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella2-magiceden-5408-safeproxy-local-repair-0001/accepted/drifella2-5408-safeproxy-local-repair-overworld-v1-ow-001-raw-alpha-contained.png",
+    "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-ow-001-lanczos-crisp-bold.png",
+    "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-ow-001-lanczos-crisp.png",
+    "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-ow-001-lanczos.png",
+    "asset-lab/curation/drifella2-magiceden-8397-gpt-ow-retry-0002/accepted/drifella2-8397-gpt-ow-retry-v2-ow-001-nearest.png",
+    "asset-lab/curation/drifella2-magiceden-8397-local-ow-companion-0001/accepted/drifella2-8397-local-overworld-v1-ow-001-lanczos.png",
+    "asset-lab/curation/drifella2-magiceden-8397-local-ow-companion-0001/accepted/drifella2-8397-local-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-overworld-v1-ow-001-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-overworld-v1-ow-002-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1092-overworld-v1-ow-002-nearest.png",
+    "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-1092-left-mouth-shadow-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-1092-left-mouth-shadow-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-overworld-v1-ow-001-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-overworld-v1-ow-002-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1238-overworld-v1-ow-002-nearest.png",
+    "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-1238-left-red-head-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-1238-left-red-head-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-overworld-v1-ow-001-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-overworld-v1-ow-002-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-1327-overworld-v1-ow-002-nearest.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-overworld-v1-ow-001-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-overworld-v1-ow-002-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-909-overworld-v1-ow-002-nearest.png",
+    "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-909-left-ink-creature-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella3-source-crop-sprite-batch-0002/accepted/drifella3-909-left-ink-creature-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-battle-v1-extracted-crop.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-overworld-v1-ow-001-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-overworld-v1-ow-002-lanczos.png",
+    "asset-lab/curation/drifella3-magiceden-sprite-batch-0001/accepted/drifella3-966-overworld-v1-ow-002-nearest.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0002/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0002/accepted/lsw-3115-battle-v1-extracted-crop.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0012/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0012/accepted/lsw-3115-battle-v1-extracted-crop.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0013/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0013/accepted/lsw-3115-battle-v1-extracted-crop.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0015/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0015/accepted/lsw-3115-battle-v1-extracted-crop.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0016/accepted/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0016/accepted/lsw-3115-battle-v1-extracted-crop.png",
+    "asset-lab/curation/lsw-enemy-source-direct-batch-0016/accepted/lsw-3115-source-direct-battle-v0.png",
+    "swagbound-phaser/public/assets/generated/enemies/lsw-3115-battle-v1-alpha-extracted-source-size.png",
+    "swagbound-phaser/public/assets/generated/enemies/lsw-3115-source-direct-battle-v0.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0002/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0012/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0013/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0015/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/lsw-enemy-source-batch-0016/accepted/lsw-3115-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/lsw-enemy-source-direct-batch-0016/accepted/lsw-3115-source-direct-overworld-v0.png",
+    "swagbound-phaser/public/assets/generated/enemies/lsw-3115-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/lsw-3115-source-direct-overworld-v0.png",
+    "asset-lab/curation/lsw-enemy-source-direct-batch-0016/accepted/lsw-3115-source-direct-keyed.png",
+    "swagbound-phaser/public/assets/generated/asset-lab/other/lsw-enemy-promotion-0003-review.png",
+    "asset-lab/curation/enemy-source-batch-0001/accepted/lsw-enemy-promotion-0003-review.png",
+    "swagbound-phaser/public/assets/generated/enemies/lsw-pond-static-battle-v1.png",
+    "swagbound-phaser/public/assets/generated/enemies/lsw-pond-static-overworld-v1.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0030/accepted/metal-misfit-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0030/accepted/metal-misfit-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/metal-misfit-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0030/accepted/metal-misfit-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/metal-misfit-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0013/accepted/my-little-fella-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0013/accepted/my-little-fella-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/my-little-fella-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0013/accepted/my-little-fella-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/my-little-fella-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-003-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-003-battle-v1-extracted-crop.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-003-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-003-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-003-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-003-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-003-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-003-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-003-crop-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-003-crop-battle-v1-extracted-crop.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-003-crop-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-003-crop-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-003-crop-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-003-crop-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-003-crop-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-003-crop-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-004-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-004-battle-v1-extracted-crop.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-004-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-004-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-004-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-004-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-004-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-004-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-005-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-005-battle-v1-extracted-crop.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-005-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-005-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0041/accepted/tojiba-disc-buddy-005-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0042/accepted/tojiba-disc-buddy-005-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/tojiba-single-source-preserve-0001/accepted/tojiba-disc-buddy-005-battle-alpha-source-size.png",
+    "asset-lab/curation/tojiba-single-source-preserve-0001/accepted/tojiba-disc-buddy-005-battle-crop-260.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-005-crop-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-005-crop-battle-v1-extracted-crop.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-005-crop-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-005-crop-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-crop-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0043/accepted/tojiba-disc-buddy-005-crop-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0044/accepted/tojiba-disc-buddy-005-crop-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-crop-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/tojiba-single-source-generic-prompt-0004/accepted/tojiba-disc-buddy-005-generic-battle-v1b-alpha-extracted-source-size.png",
+    "asset-lab/curation/tojiba-single-source-generic-prompt-0004/accepted/tojiba-disc-buddy-005-generic-battle-v1b-extracted-crop.png",
+    "asset-lab/curation/tojiba-single-source-generic-prompt-0004/accepted/tojiba-disc-buddy-005-generic-battle-v1c-alpha-extracted-source-size.png",
+    "asset-lab/curation/tojiba-single-source-generic-prompt-0004/accepted/tojiba-disc-buddy-005-generic-battle-v1c-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-generic-battle-v1b-alpha-extracted-source-size.png",
+    "asset-lab/curation/tojiba-single-source-orientation-lock-0002/accepted/tojiba-disc-buddy-005-orientation-lock-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/tojiba-single-source-orientation-lock-0002/accepted/tojiba-disc-buddy-005-orientation-lock-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-orientation-lock-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/tojiba-single-source-orientation-lock-0002/accepted/tojiba-disc-buddy-005-orientation-lock-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-orientation-lock-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/tojiba-single-source-preserve-0001/accepted/tojiba-disc-buddy-005-overworld-48.png",
+    "asset-lab/curation/tojiba-single-source-source-trace-0003/accepted/tojiba-disc-buddy-005-source-trace-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/tojiba-single-source-source-trace-0003/accepted/tojiba-disc-buddy-005-source-trace-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-source-trace-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/tojiba-single-source-source-trace-0003/accepted/tojiba-disc-buddy-005-source-trace-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/tojiba-disc-buddy-005-source-trace-overworld-v1-ow-001-nearest.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0032/accepted/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0032/accepted/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-battle-v1-extracted-crop.png",
+    "swagbound-phaser/public/assets/generated/enemies/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-battle-v1-alpha-extracted-source-size.png",
+    "asset-lab/curation/pfp-enemy-source-batch-0032/accepted/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-overworld-v1-ow-001-nearest.png",
+    "swagbound-phaser/public/assets/generated/enemies/ud835-udc54-ud835-udcbd-ud835-udcc8-ud835-udcc9-ud835-udccc-ud835-udcbd-ud835-udcce-ud835-udcb6-ud835-udcc2-ud83-overworld-v1-ow-001-nearest.png"
+  ],
+  "missingBeforeDelete": []
+}

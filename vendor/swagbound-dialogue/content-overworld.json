@@ -1,0 +1,850 @@
+{
+  "schema": "swagbound.overworld.v1",
+  "maps": {
+    "signal-town-suburb-proof": {
+      "player": {
+        "earthbound_speed": 1365,
+        "animation_delay_frames": 8,
+        "supports_eight_directions": true,
+        "sprite_meta": "swagbound-phaser/public/data/sprite-meta/heroes/lsw-2821.png.sprite-meta.json"
+      },
+      "tile_overrides": [
+        {
+          "tile": [
+            1,
+            0
+          ],
+          "terrain": "sidewalk",
+          "flags": [
+            "talk_through"
+          ]
+        },
+        {
+          "tile": [
+            2,
+            0
+          ],
+          "terrain": "sidewalk",
+          "flags": [
+            "foreground_lower"
+          ]
+        },
+        {
+          "tile": [
+            3,
+            0
+          ],
+          "terrain": "sidewalk",
+          "flags": [
+            "water",
+            "sunstroke"
+          ]
+        },
+        {
+          "tile": [
+            4,
+            0
+          ],
+          "terrain": "sidewalk",
+          "flags": [
+            "very_solid",
+            "map_object"
+          ]
+        }
+      ],
+      "npc_definitions": {
+        "kid-idle-south": {
+          "npc_type": "person",
+          "appears": "always",
+          "interaction_mode": "talk",
+          "earthbound_speed": 1024,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "script": [
+            {
+              "op": "set_loop_point",
+              "index": 0
+            },
+            {
+              "op": "face",
+              "dir": 4
+            },
+            {
+              "op": "pause",
+              "frames": 20
+            },
+            {
+              "op": "face",
+              "dir": 4
+            },
+            {
+              "op": "pause",
+              "frames": 20
+            },
+            {
+              "op": "loop",
+              "to": 0
+            }
+          ]
+        },
+        "neighbor-idle-south": {
+          "npc_type": "person",
+          "appears": "always",
+          "interaction_mode": "talk",
+          "earthbound_speed": 1024,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "script": [
+            {
+              "op": "set_loop_point",
+              "index": 0
+            },
+            {
+              "op": "face",
+              "dir": 4
+            },
+            {
+              "op": "pause",
+              "frames": 20
+            },
+            {
+              "op": "face",
+              "dir": 4
+            },
+            {
+              "op": "pause",
+              "frames": 20
+            },
+            {
+              "op": "loop",
+              "to": 0
+            }
+          ]
+        },
+        "kid-route": {
+          "npc_type": "person",
+          "appears": "always",
+          "interaction_mode": "talk",
+          "earthbound_speed": 1024,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "behavior": "route",
+          "route_pause_frames": [
+            18,
+            28
+          ]
+        },
+        "neighbor-wander": {
+          "npc_type": "person",
+          "appears": "always",
+          "interaction_mode": "talk",
+          "earthbound_speed": 1024,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "behavior": "wander",
+          "wander_pause_frames": [
+            18,
+            36
+          ],
+          "wander_step_frames": [
+            18,
+            36
+          ]
+        },
+        "object-check": {
+          "npc_type": "object",
+          "appears": "always",
+          "interaction_mode": "check",
+          "earthbound_speed": 0,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "script": [
+            {
+              "op": "halt"
+            }
+          ]
+        },
+        "item-cache": {
+          "npc_type": "item",
+          "appears": "always",
+          "interaction_mode": "check",
+          "earthbound_speed": 0,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "hide_when_claimed": true,
+          "script": [
+            {
+              "op": "halt"
+            }
+          ]
+        }
+      },
+      "npc_instances": [
+        {
+          "id": "north-sidewalk-kid",
+          "definition": "kid-route",
+          "source_id": "north-sidewalk-kid",
+          "route_tiles": [
+            [
+              11,
+              11
+            ],
+            [
+              12,
+              11
+            ],
+            [
+              13,
+              11
+            ],
+            [
+              12,
+              11
+            ]
+          ],
+          "interaction": {
+            "id": "north-sidewalk-kid-talk",
+            "speaker": "Sidewalk Kid",
+            "duration_seconds": 2.8,
+            "complete_objective": "collect_first_witness",
+            "lines": [
+              "The Sidewalk Kid points at Bosch, then at the curb where the other Bosch apparently stood.",
+              "\"He had your face and a cleaner story. Said 'Swag is eternal' like a slogan he found in somebody else's pocket.\"",
+              "Everybody repeated it before anyone asked if you were here.",
+              "Sal's kiosk can make proof before gossip grows paperwork."
+            ]
+          }
+        },
+        {
+          "id": "north-neighbor-home",
+          "definition": "neighbor-wander",
+          "source_id": "north-neighbor-home",
+          "wander_box_tiles": [
+            29,
+            11,
+            30,
+            12
+          ],
+          "interaction": {
+            "id": "north-neighbor-home-talk",
+            "speaker": "North Neighbor",
+            "duration_seconds": 1.9,
+            "lines": [
+              "Your terminal phrase got here before you did.",
+              "The other Bosch walked like he was following arrows only he could see."
+            ]
+          }
+        },
+        {
+          "id": "north-office-kid",
+          "definition": "kid-idle-south",
+          "source_id": "north-office-kid",
+          "interaction": {
+            "id": "north-office-kid-talk",
+            "speaker": "Compliance Kid",
+            "duration_seconds": 1.8,
+            "lines": [
+              "The public Bosch is easier to process because he never interrupts the form.",
+              "The Public Version Clique says that is basically citizenship."
+            ]
+          }
+        },
+        {
+          "id": "north-shop-neighbor",
+          "definition": "neighbor-idle-south",
+          "source_id": "north-shop-neighbor",
+          "interaction": {
+            "id": "north-shop-neighbor-talk",
+            "speaker": "Route Clerk",
+            "duration_seconds": 1.8,
+            "complete_objective": "collect_first_witness",
+            "lines": [
+              "Gate brief: proof first, witness second, park rumors last.",
+              "Refuse the clique before the classifier reads the easy Bosch."
+            ]
+          }
+        },
+        {
+          "id": "shop-front-neighbor",
+          "definition": "neighbor-idle-south",
+          "source_id": "shop-front-neighbor",
+          "interaction": {
+            "id": "shop-front-neighbor-talk",
+            "speaker": "Shop Front Neighbor",
+            "duration_seconds": 1.8,
+            "lines": [
+              "Two flashes hit Signal Park.",
+              "North spread the rumor; south made people act like it was already settled."
+            ]
+          }
+        },
+        {
+          "id": "burger-line-kid",
+          "definition": "kid-route",
+          "source_id": "burger-line-kid",
+          "route_tiles": [
+            [
+              21,
+              25
+            ],
+            [
+              22,
+              25
+            ],
+            [
+              21,
+              25
+            ],
+            [
+              20,
+              25
+            ]
+          ],
+          "interaction": {
+            "id": "burger-line-kid-talk",
+            "speaker": "Burger Line Kid",
+            "duration_seconds": 1.9,
+            "lines": [
+              "The line only moves when everybody faces the counter.",
+              "The other Bosch knew where to stand."
+            ]
+          }
+        },
+        {
+          "id": "townhall-neighbor",
+          "definition": "neighbor-idle-south",
+          "source_id": "townhall-neighbor",
+          "interaction": {
+            "id": "townhall-neighbor-talk",
+            "speaker": "Town Hall Neighbor",
+            "duration_seconds": 1.8,
+            "lines": [
+              "Witness, proof, public refusal, parks, classifier.",
+              "Keep the messy order where the gate can read it."
+            ]
+          }
+        },
+        {
+          "id": "east-shop-kid",
+          "definition": "kid-idle-south",
+          "source_id": "east-shop-kid",
+          "interaction": {
+            "id": "east-shop-kid-talk",
+            "speaker": "East Shop Kid",
+            "duration_seconds": 1.8,
+            "lines": [
+              "The sign by town hall changed overnight.",
+              "It points at the station like your name is already on the schedule."
+            ]
+          }
+        },
+        {
+          "id": "southwest-kid",
+          "definition": "kid-idle-south",
+          "source_id": "southwest-kid",
+          "interaction": {
+            "id": "southwest-kid-talk",
+            "speaker": "Southwest Kid",
+            "duration_seconds": 1.8,
+            "lines": [
+              "South park is shorter and meaner.",
+              "It asks you to react before you can think, then calls that consent."
+            ]
+          }
+        },
+        {
+          "id": "south-home-neighbor",
+          "definition": "neighbor-idle-south",
+          "source_id": "south-home-neighbor",
+          "interaction": {
+            "id": "south-home-neighbor-talk",
+            "speaker": "South Home Neighbor",
+            "duration_seconds": 1.8,
+            "lines": [
+              "Everyone is pretending the public Bosch is just a joke.",
+              "It stopped being funny when the flyers knew your room."
+            ]
+          }
+        },
+        {
+          "id": "south-office-kid",
+          "definition": "kid-idle-south",
+          "source_id": "south-office-kid",
+          "interaction": {
+            "id": "south-office-kid-talk",
+            "speaker": "South Office Kid",
+            "duration_seconds": 1.8,
+            "lines": [
+              "If your HP dips, regroup before the next fight.",
+              "The route records courage and panic the same way, but your body knows the difference."
+            ]
+          }
+        },
+        {
+          "id": "southeast-neighbor",
+          "definition": "neighbor-idle-south",
+          "source_id": "southeast-neighbor",
+          "interaction": {
+            "id": "southeast-neighbor-talk",
+            "speaker": "Neighbor",
+            "duration_seconds": 1.8,
+            "lines": [
+              "Oh, hey. Do you ever think about doors?",
+              "Anyway, I am late for the post office."
+            ]
+          }
+        },
+        {
+          "id": "woods-neighbor",
+          "definition": "neighbor-wander",
+          "source_id": "woods-neighbor",
+          "wander_box_tiles": [
+            33,
+            45,
+            35,
+            46
+          ],
+          "interaction": {
+            "id": "woods-neighbor-talk",
+            "speaker": "Woods Neighbor",
+            "duration_seconds": 1.9,
+            "lines": [
+              "Out here the signal gets lazy.",
+              "It still knows which version of Bosch the town prefers."
+            ]
+          }
+        },
+        {
+          "id": "trail-kid",
+          "definition": "kid-route",
+          "source_id": "trail-kid",
+          "route_tiles": [
+            [
+              14,
+              46
+            ],
+            [
+              15,
+              46
+            ],
+            [
+              16,
+              47
+            ],
+            [
+              15,
+              46
+            ]
+          ],
+          "interaction": {
+            "id": "trail-kid-talk",
+            "speaker": "Trail Kid",
+            "duration_seconds": 1.9,
+            "lines": [
+              "Dirt paths keep better secrets than sidewalks.",
+              "The route still notices where you step."
+            ]
+          }
+        },
+        {
+          "id": "civic-town-sign",
+          "definition": "object-check",
+          "source_id": "civic-town-sign",
+          "interaction": {
+            "id": "civic-town-sign-check",
+            "speaker": "Town Sign",
+            "duration_seconds": 1.6,
+            "lines": [
+              "SIGNAL TOWN CIVIC ROUTE",
+              "Confirmed residents proceed. Source claimants pending witness review."
+            ]
+          }
+        },
+        {
+          "id": "north-civic-mailbox",
+          "definition": "object-check",
+          "source_id": "north-civic-mailbox",
+          "interaction": {
+            "id": "north-civic-mailbox-check",
+            "speaker": "Mailbox",
+            "duration_seconds": 1.5,
+            "lines": [
+              "A folded notice lists BOSCH? as seen near north park.",
+              "Witness line: pending. The envelope is warm like it remembers the trial."
+            ]
+          }
+        },
+        {
+          "id": "south-office-mailbox",
+          "definition": "item-cache",
+          "source_id": "south-office-mailbox",
+          "event_flag": "act1.cache.south_office_mailbox_claimed",
+          "interaction": {
+            "id": "south-office-mailbox-check",
+            "speaker": "Mailbox",
+            "claim_flag": "act1.cache.south_office_mailbox_claimed",
+            "give_swag": 2,
+            "duration_seconds": 1.5,
+            "lines": [
+              "A receipt is stamped SOUTH PARK COMPLIANCE.",
+              "There are 2 Swag tucked behind it and a checkbox labeled REACTED PROPERLY."
+            ]
+          }
+        },
+        {
+          "id": "market-utility-pole",
+          "definition": "object-check",
+          "source_id": "market-utility-pole",
+          "interaction": {
+            "id": "market-utility-pole-check",
+            "speaker": "Utility Pole",
+            "duration_seconds": 1.5,
+            "lines": [
+              "The pole hums: PUBLIC VERSION FOUND.",
+              "SOURCE: PRESENT, BUT CONTESTING."
+            ]
+          }
+        },
+        {
+          "id": "east-shop-mailbox-cache",
+          "definition": "item-cache",
+          "source_id": "east-shop-mailbox",
+          "event_flag": "act1.cache.east_shop_mailbox_claimed",
+          "interaction": {
+            "id": "east-shop-mailbox-cache-check",
+            "speaker": "Mailbox",
+            "claim_flag": "act1.cache.east_shop_mailbox_claimed",
+            "give_items": [
+              {
+                "id": "focus-fizz",
+                "quantity": 1
+              }
+            ],
+            "duration_seconds": 1.6,
+            "lines": [
+              "A sealed Focus Fizz coupon says proof of presence required at checkout.",
+              "The coupon is expired, but the requirement is doing great."
+            ]
+          }
+        }
+      ]
+    },
+    "act2-coastal-proof": {
+      "player": {
+        "earthbound_speed": 1365,
+        "animation_delay_frames": 8,
+        "supports_eight_directions": true,
+        "sprite_meta": "swagbound-phaser/public/data/sprite-meta/heroes/lsw-2821.png.sprite-meta.json"
+      },
+      "tile_overrides": [
+        {
+          "tile": [
+            6,
+            11
+          ],
+          "terrain": "sidewalk",
+          "flags": [
+            "talk_through"
+          ]
+        },
+        {
+          "tile": [
+            7,
+            11
+          ],
+          "terrain": "sidewalk",
+          "flags": [
+            "foreground_lower"
+          ]
+        },
+        {
+          "tile": [
+            8,
+            11
+          ],
+          "terrain": "sidewalk",
+          "flags": [
+            "water",
+            "sunstroke"
+          ]
+        },
+        {
+          "tile": [
+            9,
+            11
+          ],
+          "terrain": "sidewalk",
+          "flags": [
+            "very_solid",
+            "map_object"
+          ]
+        }
+      ],
+      "npc_definitions": {
+        "kid-idle-south": {
+          "npc_type": "person",
+          "appears": "always",
+          "interaction_mode": "talk",
+          "earthbound_speed": 1024,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "script": [
+            {
+              "op": "set_loop_point",
+              "index": 0
+            },
+            {
+              "op": "face",
+              "dir": 4
+            },
+            {
+              "op": "pause",
+              "frames": 20
+            },
+            {
+              "op": "face",
+              "dir": 4
+            },
+            {
+              "op": "pause",
+              "frames": 20
+            },
+            {
+              "op": "loop",
+              "to": 0
+            }
+          ]
+        },
+        "neighbor-idle-south": {
+          "npc_type": "person",
+          "appears": "always",
+          "interaction_mode": "talk",
+          "earthbound_speed": 1024,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "script": [
+            {
+              "op": "set_loop_point",
+              "index": 0
+            },
+            {
+              "op": "face",
+              "dir": 4
+            },
+            {
+              "op": "pause",
+              "frames": 20
+            },
+            {
+              "op": "face",
+              "dir": 4
+            },
+            {
+              "op": "pause",
+              "frames": 20
+            },
+            {
+              "op": "loop",
+              "to": 0
+            }
+          ]
+        },
+        "kid-route": {
+          "npc_type": "person",
+          "appears": "always",
+          "interaction_mode": "talk",
+          "earthbound_speed": 1024,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "behavior": "route",
+          "route_pause_frames": [
+            18,
+            28
+          ]
+        },
+        "neighbor-wander": {
+          "npc_type": "person",
+          "appears": "always",
+          "interaction_mode": "talk",
+          "earthbound_speed": 1024,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "behavior": "wander",
+          "wander_pause_frames": [
+            18,
+            36
+          ],
+          "wander_step_frames": [
+            18,
+            36
+          ]
+        },
+        "object-check": {
+          "npc_type": "object",
+          "appears": "always",
+          "interaction_mode": "check",
+          "earthbound_speed": 0,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "script": [
+            {
+              "op": "halt"
+            }
+          ]
+        },
+        "item-cache": {
+          "npc_type": "item",
+          "appears": "always",
+          "interaction_mode": "check",
+          "earthbound_speed": 0,
+          "animation_delay_frames": 20,
+          "supports_eight_directions": false,
+          "default_direction": 4,
+          "runtime_scale": 1,
+          "destroy_if_far": true,
+          "active_radius_px": 1440,
+          "hide_when_claimed": true,
+          "script": [
+            {
+              "op": "halt"
+            }
+          ]
+        }
+      },
+      "npc_instances": [
+        {
+          "id": "sunline-bellhop",
+          "definition": "neighbor-idle-south",
+          "source_id": "north-office-kid",
+          "interaction": {
+            "id": "sunline-bellhop-talk",
+            "speaker": "Sunline Bellhop",
+            "duration_seconds": 1.8,
+            "lines": [
+              "Everybody smiles at the exact same tempo out here.",
+              "If the promenade stays this calm, the calm is the problem."
+            ]
+          }
+        },
+        {
+          "id": "coral-patio-host",
+          "definition": "neighbor-idle-south",
+          "source_id": "north-shop-neighbor",
+          "interaction": {
+            "id": "coral-patio-host-talk",
+            "speaker": "Patio Host",
+            "duration_seconds": 1.8,
+            "lines": [
+              "The umbrellas make the strip feel social even when nobody is really talking.",
+              "Stay where the light says you belong."
+            ]
+          }
+        },
+        {
+          "id": "service-runner",
+          "definition": "kid-route",
+          "source_id": "north-sidewalk-kid",
+          "route_tiles": [
+            [
+              11,
+              11
+            ],
+            [
+              12,
+              11
+            ],
+            [
+              13,
+              11
+            ],
+            [
+              12,
+              11
+            ]
+          ],
+          "interaction": {
+            "id": "service-runner-talk",
+            "speaker": "Service Runner",
+            "duration_seconds": 1.9,
+            "lines": [
+              "Behind the facades, every cart knows where it is supposed to wait.",
+              "The lane remembers you faster than the strip does."
+            ]
+          }
+        },
+        {
+          "id": "promenade-viewer",
+          "definition": "kid-idle-south",
+          "source_id": "shop-front-neighbor",
+          "interaction": {
+            "id": "promenade-viewer-talk",
+            "speaker": "Promenade Viewer",
+            "duration_seconds": 1.8,
+            "lines": [
+              "The water is bright enough to look fake from here.",
+              "I keep checking whether the horizon moved first or me."
+            ]
+          }
+        },
+        {
+          "id": "linen-clerk",
+          "definition": "object-check",
+          "source_id": "mailbox-check",
+          "interaction": {
+            "id": "linen-clerk-check",
+            "speaker": "Marked Crate",
+            "duration_seconds": 1.6,
+            "lines": [
+              "Fresh towels. Fresh uniforms. Fresh public versions of everybody.",
+              "The label peels off before Bosch can read who the delivery was for."
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

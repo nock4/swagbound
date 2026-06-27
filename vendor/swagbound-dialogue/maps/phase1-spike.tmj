@@ -1,0 +1,816 @@
+{
+  "type": "map",
+  "tiledversion": "1.11.0",
+  "version": "1.10",
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "width": 4,
+  "height": 4,
+  "tilewidth": 32,
+  "tileheight": 32,
+  "layers": [
+    {
+      "id": 1,
+      "name": "ground",
+      "type": "tilelayer",
+      "width": 4,
+      "height": 4,
+      "data": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        1,
+        2,
+        3,
+        4,
+        5,
+        1,
+        2,
+        3,
+        4,
+        5,
+        1
+      ]
+    },
+    {
+      "id": 2,
+      "name": "decor",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 201,
+          "name": "ROUTE_SIGN",
+          "x": 64,
+          "y": 96,
+          "width": 24,
+          "height": 24,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "route-sign"
+            },
+            {
+              "name": "terrain",
+              "value": "sidewalk"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "interactables",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 301,
+          "name": "MILK_PHONE",
+          "x": 112,
+          "y": 96,
+          "width": 24,
+          "height": 32,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "milk-phone"
+            },
+            {
+              "name": "dialogueId",
+              "value": "milk_phone_001"
+            },
+            {
+              "name": "collision",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "interactionRadius",
+              "type": "float",
+              "value": 96
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "doors",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 401,
+          "name": "noise-mart-door",
+          "x": 160,
+          "y": 96,
+          "width": 28,
+          "height": 18,
+          "properties": [
+            {
+              "name": "target",
+              "value": "noise-mart"
+            },
+            {
+              "name": "destinationScene",
+              "value": "swagbound://scene/interiors/corner-shop"
+            },
+            {
+              "name": "entrySpawn",
+              "value": "320,360"
+            },
+            {
+              "name": "returnSpawn",
+              "value": "160,128"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "npcs",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 501,
+          "name": "relay-tv-clerk",
+          "x": 96,
+          "y": 160,
+          "width": 24,
+          "height": 32,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "npc-kid"
+            },
+            {
+              "name": "dialogueId",
+              "value": "relay_tv_clerk_001"
+            },
+            {
+              "name": "movement",
+              "value": "pace-left-right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "encounters",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 601,
+          "name": "north-park-static-zone",
+          "x": 192,
+          "y": 160,
+          "width": 64,
+          "height": 48,
+          "properties": [
+            {
+              "name": "encounterId",
+              "value": "signal-storm-swarm"
+            },
+            {
+              "name": "zone",
+              "value": "north-park"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "colliders",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 701,
+          "name": "signal-cone",
+          "x": 32,
+          "y": 160,
+          "width": 24,
+          "height": 24
+        }
+      ]
+    }
+  ],
+  "tilesets": [
+    {
+      "firstgid": 1,
+      "name": "collision-spike",
+      "tilewidth": 32,
+      "tileheight": 32,
+      "tilecount": 40,
+      "columns": 8,
+      "tiles": [
+        {
+          "id": 0,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "80 80 80 80 / 80 80 80 80 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 84
+            }
+          ]
+        },
+        {
+          "id": 1,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 00 90 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 58
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "82 82 82 82 / 82 82 82 82 / 82 82 82 82 / 82 82 82 82"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 72
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "0C 0C 0C 0C / 0C 0C 0C 0C / 0C 0C 0C 0C / 0C 0C 0C 0C"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 68
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "02 02 02 02 / 02 02 02 02 / 01 01 01 01 / 01 01 01 01"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 74
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 00 00 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 41
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "80 00 00 00 / 80 00 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 45
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 80 80 00 / 00 80 80 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 49
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 00 00 00 00 / 80 80 00 00 / 80 80 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 51
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 10 10 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 44
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "08 08 08 08 / 08 08 08 08 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 43
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "04 04 04 04 / 04 04 04 04 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 43
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "40 40 40 40 / 40 40 40 40 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 56
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "02 02 00 00 / 02 02 00 00 / 00 00 01 01 / 00 00 01 01"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 61
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "90 90 00 00 / 90 90 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 57
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "0C 00 0C 00 / 00 0C 00 0C / 0C 00 0C 00 / 00 0C 00 0C"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 62
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "80 80 80 80 / 00 00 00 00 / 00 00 00 00 / 80 80 80 80"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 52
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 80 80 80 80 / 80 80 80 80 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 52
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "82 00 82 00 / 00 82 00 82 / 82 00 82 00 / 00 82 00 82"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 59
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 00 00 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 39
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 00 00 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 39
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "80 00 80 00 / 80 00 80 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 47
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 80 00 80 / 00 80 00 80 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 47
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "10 00 00 00 / 00 10 00 00 / 00 00 10 00 / 00 00 00 10"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 49
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "01 01 01 01 / 00 00 00 00 / 00 00 00 00 / 02 02 02 02"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 54
+            }
+          ]
+        },
+        {
+          "id": 25,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "0C 0C 00 00 / 0C 0C 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 48
+            }
+          ]
+        },
+        {
+          "id": 26,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "40 40 00 00 / 40 40 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 48
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "80 80 82 82 / 80 80 82 82 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 67
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 90 90 / 00 00 90 90 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 58
+            }
+          ]
+        },
+        {
+          "id": 29,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "02 00 02 00 / 00 02 00 02 / 01 00 01 00 / 00 01 00 01"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 60
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 00 00 00 00 / 80 00 00 80 / 80 00 00 80"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 45
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 00 00 00 00 / 00 80 80 00 / 00 80 80 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 45
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "08 04 08 04 / 04 08 04 08 / 08 04 08 04 / 04 08 04 08"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 63
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "90 00 00 90 / 00 90 90 00 / 00 90 90 00 / 90 00 00 90"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 64
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "80 40 80 40 / 40 80 40 80 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 57
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 00 00 00 00 / 40 80 40 80 / 80 40 80 40"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 57
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "02 02 02 02 / 00 00 00 00 / 00 00 00 00 / 01 01 01 01"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 55
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 0C 0C 0C 0C / 0C 0C 0C 0C / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 51
+            }
+          ]
+        },
+        {
+          "id": 38,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "10 10 10 10 / 10 10 10 10 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 46
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "properties": [
+            {
+              "name": "swagboundCollision16",
+              "type": "string",
+              "value": "00 00 00 00 / 00 00 00 00 / 00 00 00 00 / 00 00 00 00"
+            },
+            {
+              "name": "authorSeconds",
+              "type": "float",
+              "value": 38
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

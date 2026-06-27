@@ -1,0 +1,117 @@
+{
+  "schema": "swagbound.dialogue-content.v1",
+  "generatedAt": "2026-04-30T21:24:23.956Z",
+  "journalCategories": [
+    {
+      "id": "route",
+      "label": "Route"
+    },
+    {
+      "id": "intel",
+      "label": "Threat Intel"
+    }
+  ],
+  "startingJournalEntries": [
+    {
+      "id": "route-brief",
+      "label": "Keep The Source",
+      "categoryId": "route",
+      "categoryLabel": "Route",
+      "description": "Wake up, prove the public Bosch arrived before the real one, and refuse the civic route that wants the easier version.",
+      "detail": "Home establishes the anomaly, town witnesses make it social, Sal makes it portable, the Public Version Clique makes it hostile, the parks make it contested, and the Station Gate turns it into processing.",
+      "status": "active",
+      "badge": "Active",
+      "updatedAt": "Opened before Bosch woke up"
+    },
+    {
+      "id": "act2-coastal-brief",
+      "label": "Daytime Deco District",
+      "categoryId": "route",
+      "categoryLabel": "Route",
+      "description": "Reach the strip, then test whether the service seam tells the truth faster than the promenade does.",
+      "detail": "Hotel glamour, public ritual, and maintenance pressure should all be legible before combat takes over.",
+      "status": "staged",
+      "badge": "Act 2",
+      "updatedAt": "Act 2 scaffold created"
+    }
+  ],
+  "dialogues": [
+    {
+      "id": "archive-console-link",
+      "title": "Bosch Terminal Link",
+      "speaker": "Bosch Terminal",
+      "startNodeId": "handshake",
+      "nodes": [
+        {
+          "id": "handshake",
+          "lines": [
+            "Bosch, the route is not neutral. A public version of you is already moving through town ahead of your body, and town services are starting to treat him as convenient."
+          ],
+          "nextNodeId": "prompt"
+        },
+        {
+          "id": "prompt",
+          "lines": [
+            "Ask where the pressure starts or why the town needs a Bosch it can process."
+          ],
+          "choices": [
+            {
+              "id": "ask-route",
+              "label": "Ask where the pressure starts",
+              "detail": "Trace the hostile path from home through witness, shop, park, and gate.",
+              "nextNodeId": "route"
+            },
+            {
+              "id": "ask-key",
+              "label": "Ask what the gate wants",
+              "detail": "Confirm what the civic route is trying to classify and lock in.",
+              "nextNodeId": "key"
+            }
+          ]
+        },
+        {
+          "id": "route",
+          "lines": [
+            "The witness makes rumor social, the shop makes proof portable, the clique makes it hostile, the parks make it contested, and the gate tries to make it official. Leave home with something real."
+          ],
+          "nextNodeId": "briefing"
+        },
+        {
+          "id": "key",
+          "lines": [
+            "The Station Gate does not test who you are. It sorts which Bosch is easiest to count. Make it read the whole trail before it reads you."
+          ],
+          "nextNodeId": "briefing"
+        },
+        {
+          "id": "briefing",
+          "lines": [
+            "Route note transmitted. Journal updated. Move before the public version learns your morning routine."
+          ],
+          "outcomeId": "route-briefed"
+        }
+      ]
+    },
+    {
+      "id": "act2-coastal-kiosk",
+      "title": "Promenade Kiosk",
+      "speaker": "Map Kiosk",
+      "startNodeId": "welcome",
+      "nodes": [
+        {
+          "id": "welcome",
+          "lines": [
+            "WELCOME TO THE BRIGHT SIDE. THE SERVICE SEAM IS NOT LISTED ON THIS MAP."
+          ],
+          "nextNodeId": "hint"
+        },
+        {
+          "id": "hint",
+          "lines": [
+            "Bosch can feel the missing lane more clearly than the route the kiosk is trying to sell him."
+          ]
+        }
+      ]
+    }
+  ]
+}

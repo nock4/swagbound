@@ -1,0 +1,56 @@
+{
+  "schema": "swagbound.phaser-content-manifest.v1",
+  "generated_at": "2026-05-07T22:53:37.865Z",
+  "source_runtime": "swagbound-phaser",
+  "assets": {
+    "battle_backdrops": {
+      "source_promoted_pngs": 27,
+      "curated_png_files": 27,
+      "curated_keys": [
+        "buzzword-shotgun-001",
+        "buzzword-shotgun-002",
+        "caves-001",
+        "caves-002",
+        "cloudcastle-dessert-oasis-001",
+        "dance-system-seen-backwards-001",
+        "dance-system-seen-backwards-002",
+        "datacenters-001",
+        "internet-iii-001",
+        "pifella-2-22-you-can-not-redo-001",
+        "pifella-2-22-you-can-not-redo-002",
+        "pifella-2-parasite-chamber-001",
+        "postcards2-001",
+        "pray4lowbie-001",
+        "pray4lowbie-002",
+        "projections-001",
+        "really-new-god-001",
+        "record-of-hyperwar-001",
+        "record-of-hyperwar-002",
+        "schizobanners-001",
+        "schizobanners-002",
+        "summon-something-4-002",
+        "summon-something-4-003",
+        "syntax-ruins-archive-quotes-log-001",
+        "syntax-ruins-archive-quotes-log-002",
+        "toji-a-001",
+        "toji-a-002"
+      ],
+      "placeholder": true,
+      "import_sidecars_excluded": 0,
+      "conversion": "png-curated-no-transcode",
+      "proof_map_objects": 360,
+      "proof_map_doors": 19
+    },
+    "battle_enemy_sprites": {
+      "source_encounters": [
+        "signal-storm-swarm"
+      ],
+      "curated_png_files": 3,
+      "curated_paths": [
+        "generated/enemies/lsw-cinder-cap-battle-v0.png",
+        "generated/enemies/lsw-sawtooth-bun-battle-v0.png",
+        "generated/enemies/lsw-signal-stutter-battle-v0.png"
+      ]
+    }
+  }
+}

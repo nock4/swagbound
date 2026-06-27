@@ -1,0 +1,109 @@
+{
+  "schema": "swagbound.drifella2.bark-pool.cursed.v1",
+  "warning": "Do not ship to public build without explicit per-line review.",
+  "count": 6,
+  "barks": [
+    {
+      "phrase": "trader retard",
+      "fields": [
+        {
+          "field": "cloth",
+          "count": 116
+        }
+      ],
+      "total_count": 116,
+      "word_count": 2,
+      "length_bucket": "short",
+      "voice": "descriptive",
+      "cursed": true,
+      "vibes": [
+        "nft"
+      ],
+      "bark_score": 0
+    },
+    {
+      "phrase": "lego nazi zombies",
+      "fields": [
+        {
+          "field": "right_hand",
+          "count": 92
+        }
+      ],
+      "total_count": 92,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "descriptive",
+      "cursed": true,
+      "vibes": [],
+      "bark_score": 0
+    },
+    {
+      "phrase": "based retard gang",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 73
+        }
+      ],
+      "total_count": 73,
+      "word_count": 3,
+      "length_bucket": "short",
+      "voice": "descriptive",
+      "cursed": true,
+      "vibes": [
+        "ironic"
+      ],
+      "bark_score": 0
+    },
+    {
+      "phrase": "BORED APE NAZI CLUB",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 54
+        }
+      ],
+      "total_count": 54,
+      "word_count": 4,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": true,
+      "vibes": [
+        "nft"
+      ],
+      "bark_score": 0
+    },
+    {
+      "phrase": "retard absorber",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 54
+        }
+      ],
+      "total_count": 54,
+      "word_count": 2,
+      "length_bucket": "short",
+      "voice": "descriptive",
+      "cursed": true,
+      "vibes": [],
+      "bark_score": 0
+    },
+    {
+      "phrase": "youre a fag and your shits all retarded",
+      "fields": [
+        {
+          "field": "overlay",
+          "count": 48
+        }
+      ],
+      "total_count": 48,
+      "word_count": 8,
+      "length_bucket": "medium",
+      "voice": "declarative",
+      "cursed": true,
+      "vibes": [],
+      "bark_score": 0
+    }
+  ]
+}

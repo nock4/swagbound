@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "medium-leafy-tree.png",
+  "sprite_dimensions": {
+    "w": 80,
+    "h": 96
+  },
+  "ysort_anchor_local": {
+    "x": 40,
+    "y": 96
+  },
+  "collision_rect_local": {
+    "x": 30,
+    "y": 74,
+    "w": 20,
+    "h": 18
+  },
+  "door_anchor_local": {
+    "x": 40,
+    "y": 96
+  },
+  "door_facing": "south",
+  "source": {
+    "sliceId": "signal-town-environment-generated-0001",
+    "sourceManifest": "asset-lab/manifests/onett-environment-sprites-0001.json",
+    "sourceCandidate": "medium-leafy-tree",
+    "processedSource": "asset-lab/generated/processed/onett-environment-sprites-0001/nature/medium-leafy-tree.png",
+    "runtimeAsset": "public/assets/act1/signal-town/environment/generated-0001/medium-leafy-tree.png"
+  },
+  "notes": "First reviewable Signal Town generated-environment population slice. This metadata is conservative and should be visually reviewed before promotion beyond the proof map."
+}

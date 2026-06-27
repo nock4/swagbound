@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "utility-pole.png",
+  "sprite_dimensions": {
+    "w": 32,
+    "h": 96
+  },
+  "ysort_anchor_local": {
+    "x": 16,
+    "y": 96
+  },
+  "collision_rect_local": {
+    "x": 10,
+    "y": 74,
+    "w": 12,
+    "h": 18
+  },
+  "door_anchor_local": {
+    "x": 16,
+    "y": 96
+  },
+  "door_facing": "south",
+  "source": {
+    "sliceId": "signal-town-environment-generated-0001",
+    "sourceManifest": "asset-lab/manifests/onett-environment-sprites-0001.json",
+    "sourceCandidate": "utility-pole",
+    "processedSource": "asset-lab/generated/processed/onett-environment-sprites-0001/urban-props/utility-pole.png",
+    "runtimeAsset": "public/assets/act1/signal-town/environment/generated-0001/utility-pole.png"
+  },
+  "notes": "First reviewable Signal Town generated-environment population slice. This metadata is conservative and should be visually reviewed before promotion beyond the proof map."
+}

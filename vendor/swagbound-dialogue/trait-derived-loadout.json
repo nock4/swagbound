@@ -1,0 +1,110 @@
+{
+  "schema": "swagbound.trait-derived-loadout.v1",
+  "generatedAt": "2026-05-09T20:40:00.000Z",
+  "source": {
+    "corpus": "little-swag-world-drifella2",
+    "designNote": "docs/design/trait-derived-items-and-swag.md",
+    "loreMiningNote": "asset-lab/text-extraction/drifella2-trait-lore-mining.md"
+  },
+  "items": [
+    {
+      "id": "memento-photo",
+      "label": "Memento Photo",
+      "category": "proof",
+      "quantity": 2,
+      "consumable": true,
+      "sourceTrait": { "slot": "92left", "value": "Memento Photo" },
+      "description": "A pocket proof that reminds the target they were seen before the registry touched them.",
+      "useEffect": { "type": "heal", "amount": 10 }
+    },
+    {
+      "id": "field-recording",
+      "label": "Field Recording",
+      "category": "proof",
+      "quantity": 1,
+      "consumable": true,
+      "sourceTrait": { "slot": "92left", "value": "Field Recording" },
+      "description": "A scraped room tone from the source world. Helps Bosch line up the next hit.",
+      "useEffect": { "type": "focus", "amount": 1 }
+    },
+    {
+      "id": "joker-card",
+      "label": "Joker Card",
+      "category": "proof",
+      "quantity": 1,
+      "consumable": true,
+      "sourceTrait": { "slot": "93right", "value": "Joker Card" },
+      "description": "A bad credential that still passes one hostile check.",
+      "useEffect": { "type": "shield", "amount": 4, "hits": 1 }
+    }
+  ],
+  "equipment": [
+    {
+      "id": "wet-fit",
+      "label": "Wet Fit",
+      "slot": "cloth",
+      "sourceTrait": { "slot": "5cloth", "value": "Wet Fit" },
+      "description": "Worn classification that makes stale labels slide off."
+    },
+    {
+      "id": "duck-camo",
+      "label": "Duck Camo",
+      "slot": "cloth",
+      "sourceTrait": { "slot": "5cloth", "value": "Duck Camo" },
+      "description": "Pattern logic for crossing an observer's blind spot."
+    },
+    {
+      "id": "drifella-angel-hat",
+      "label": "Drifella Angel Hat",
+      "slot": "head",
+      "sourceTrait": { "slot": "91head", "value": "Drifella Angel Hat" },
+      "description": "A halo-shaped metadata exception."
+    }
+  ],
+  "swagMoves": [
+    {
+      "id": "swag-wake-up-rumor",
+      "label": "Wake Up / rumor",
+      "tier": "rumor",
+      "spCost": 3,
+      "target": "ally",
+      "sourceTrait": { "slot": "94overlay", "value": "Wake Up" },
+      "description": "Peels one bad overlay off an ally and restores HP.",
+      "message": "Bosch calls a rumor back into the room.",
+      "effect": { "type": "heal", "amount": 6 }
+    },
+    {
+      "id": "swag-ghost-sprite-witness",
+      "label": "Ghost Sprite / witness",
+      "tier": "witness",
+      "spCost": 4,
+      "target": "enemy",
+      "sourceTrait": { "slot": "94overlay", "value": "Ghost Sprites" },
+      "description": "Summons witness-static around the target and makes their label flicker.",
+      "message": "Ghost sprites testify in the static.",
+      "effect": { "type": "damage", "amount": 8 }
+    },
+    {
+      "id": "swag-wrong-background-record",
+      "label": "Wrong Background / record",
+      "tier": "record",
+      "spCost": 5,
+      "target": "enemy",
+      "sourceTrait": { "slot": "1background", "value": "Wrong Background" },
+      "description": "Forces the enemy record to render on the wrong layer.",
+      "message": "The background refuses the enemy's paperwork.",
+      "effect": { "type": "damage", "amount": 11 }
+    },
+    {
+      "id": "swag-work-fit-source",
+      "label": "Work Fit / source",
+      "tier": "source",
+      "spCost": 6,
+      "target": "ally",
+      "sourceTrait": { "slot": "5cloth", "value": "Work Fit" },
+      "description": "Turns worn classification into a direct action buff.",
+      "message": "The fit becomes proof of work.",
+      "effect": { "type": "focus", "amount": 2 }
+    }
+  ]
+}

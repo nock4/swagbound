@@ -1,0 +1,113 @@
+{
+  "schema": "swagbound.encounter-table.v1",
+  "id": "proof-map",
+  "base_chance": 0.05,
+  "cooldown_steps": 30,
+  "source": {
+    "roster": "swagbound-phaser/public/data/enemy-roster.json",
+    "policy": "superseded by Phaser-owned enemy roster"
+  },
+  "overworld_enemies": [
+    {
+      "id": "north-park-static",
+      "label": "Ushanka Shade",
+      "encounter_id": "signal-storm-swarm",
+      "encounter_area": "ParkStaticEncounter",
+      "zone": "north-park",
+      "x": 1700,
+      "y": 920,
+      "radius": 40,
+      "facing": "down",
+      "sprite_path": "generated/enemies/lsw-ushanka-shade-overworld-v0.png",
+      "clear_flag": "act1.cleared_north_park"
+    },
+    {
+      "id": "south-park-cinder",
+      "label": "Cinder Cap",
+      "encounter_id": "cinder-cap",
+      "encounter_area": "CinderCapEncounter",
+      "zone": "south-park",
+      "x": 3200,
+      "y": 2840,
+      "radius": 40,
+      "facing": "left",
+      "sprite_path": "generated/enemies/lsw-cinder-cap-overworld-v0.png",
+      "clear_flag": "act1.cleared_south_park"
+    },
+    {
+      "id": "boss-gate",
+      "label": "Signal Jam",
+      "encounter_id": "malady",
+      "encounter_area": "Act1BossEncounter",
+      "zone": "station-gate-edge",
+      "x": 4400,
+      "y": 3520,
+      "radius": 44,
+      "facing": "down",
+      "sprite_path": "generated/enemies/pfp-malady-overworld-v1.png",
+      "clear_flag": "act1.boss_defeated"
+    }
+  ],
+  "zones": {
+    "default": {
+      "encounters": [
+        {
+          "encounter_id": "question-marketeer",
+          "weight": 4
+        },
+        {
+          "encounter_id": "cinder-cap",
+          "weight": 3
+        },
+        {
+          "encounter_id": "sawtooth-bun",
+          "weight": 2
+        },
+        {
+          "encounter_id": "mirror-glitch",
+          "weight": 1
+        }
+      ]
+    },
+    "north-park": {
+      "encounters": [
+        {
+          "encounter_id": "signal-storm-swarm",
+          "weight": 3
+        },
+        {
+          "encounter_id": "question-marketeer",
+          "weight": 3
+        },
+        {
+          "encounter_id": "mirror-glitch",
+          "weight": 2
+        },
+        {
+          "encounter_id": "sawtooth-bun",
+          "weight": 2
+        }
+      ]
+    },
+    "south-park": {
+      "encounters": [
+        {
+          "encounter_id": "cinder-cap",
+          "weight": 3
+        },
+        {
+          "encounter_id": "tunnel-hiss",
+          "weight": 2
+        },
+        {
+          "encounter_id": "sawtooth-bun",
+          "weight": 2
+        },
+        {
+          "encounter_id": "question-marketeer",
+          "weight": 2
+        }
+      ]
+    }
+  }
+}

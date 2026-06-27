@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "storefront-planter.png",
+  "sprite_dimensions": {
+    "w": 64,
+    "h": 40
+  },
+  "ysort_anchor_local": {
+    "x": 32,
+    "y": 40
+  },
+  "collision_rect_local": {
+    "x": 5,
+    "y": 29,
+    "w": 54,
+    "h": 9
+  },
+  "door_anchor_local": {
+    "x": 32,
+    "y": 40
+  },
+  "door_facing": "south",
+  "source": {
+    "sliceId": "signal-town-environment-generated-0001",
+    "sourceManifest": "asset-lab/manifests/onett-environment-sprites-0001.json",
+    "sourceCandidate": "storefront-planter",
+    "processedSource": "asset-lab/generated/processed/onett-environment-sprites-0001/urban-props/storefront-planter.png",
+    "runtimeAsset": "public/assets/act1/signal-town/environment/generated-0001/storefront-planter.png"
+  },
+  "notes": "First reviewable Signal Town generated-environment population slice. This metadata is conservative and should be visually reviewed before promotion beyond the proof map."
+}

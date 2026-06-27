@@ -1,0 +1,1215 @@
+{
+  "schema": "swagbound.prop-footprints.v1",
+  "coordinateSpace": "sprite-local",
+  "source": {
+    "sceneFile": "src/game/editor/props/PropFootprintsScene.scene",
+    "exportedAt": "2026-05-17T23:04:39.612Z",
+    "method": "phaser-editor-calibrated-solids"
+  },
+  "props": {
+    "blue-public-box.png": {
+      "id": "blue-public-box",
+      "sprite": "blue-public-box.png",
+      "textureKey": "blue-public-box",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/blue-public-box.png",
+      "role": "urban-prop",
+      "dimensions": {
+        "w": 48,
+        "h": 56
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 24,
+        "y": 56
+      },
+      "collisionRect": {
+        "x": 8,
+        "y": 42,
+        "w": 32,
+        "h": 12
+      },
+      "placementCount": 4
+    },
+    "broken-fence-segment.png": {
+      "id": "broken-fence-segment",
+      "sprite": "broken-fence-segment.png",
+      "textureKey": "broken-fence-segment",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/broken-fence-segment.png",
+      "role": "barrier",
+      "dimensions": {
+        "w": 80,
+        "h": 48
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 48
+      },
+      "collisionRect": {
+        "x": 8,
+        "y": 31,
+        "w": 64,
+        "h": 11
+      },
+      "placementCount": 2
+    },
+    "burger-shop.png": {
+      "id": "burger-shop",
+      "sprite": "burger-shop.png",
+      "textureKey": "burger-shop",
+      "assetPath": "/assets/map-props/onett-v17/burger-shop.png",
+      "role": "building",
+      "dimensions": {
+        "w": 422,
+        "h": 387
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 210,
+        "y": 363
+      },
+      "collisionRect": {
+        "x": 15,
+        "y": 205,
+        "w": 390,
+        "h": 158
+      },
+      "placementCount": 2
+    },
+    "community-office.png": {
+      "id": "community-office",
+      "sprite": "community-office.png",
+      "textureKey": "community-office",
+      "assetPath": "/assets/map-props/onett-v17/community-office.png",
+      "role": "building",
+      "dimensions": {
+        "w": 492,
+        "h": 395
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 244,
+        "y": 370
+      },
+      "collisionRect": {
+        "x": 17,
+        "y": 209,
+        "w": 455,
+        "h": 161
+      },
+      "placementCount": 3
+    },
+    "convenience_store.png": {
+      "id": "convenience-store",
+      "sprite": "convenience_store.png",
+      "textureKey": "act1-building-convenience-store",
+      "assetPath": "/assets/act1/building-expansion-0001/convenience_store.png",
+      "role": "building",
+      "dimensions": {
+        "w": 136,
+        "h": 108
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 68,
+        "y": 108
+      },
+      "collisionRect": {
+        "x": 20,
+        "y": 82,
+        "w": 96,
+        "h": 18
+      },
+      "placementCount": 1
+    },
+    "corner-shop.png": {
+      "id": "corner-shop",
+      "sprite": "corner-shop.png",
+      "textureKey": "corner-shop",
+      "assetPath": "/assets/map-props/onett-v17/corner-shop.png",
+      "role": "building",
+      "dimensions": {
+        "w": 460,
+        "h": 386
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 201,
+        "y": 362
+      },
+      "collisionRect": {
+        "x": 16,
+        "y": 204,
+        "w": 425,
+        "h": 158
+      },
+      "placementCount": 3
+    },
+    "cream-home.png": {
+      "id": "cream-home",
+      "sprite": "cream-home.png",
+      "textureKey": "cream-home",
+      "assetPath": "/assets/map-props/onett-v17/cream-home.png",
+      "role": "building",
+      "dimensions": {
+        "w": 465,
+        "h": 395
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 231,
+        "y": 370
+      },
+      "collisionRect": {
+        "x": 16,
+        "y": 209,
+        "w": 430,
+        "h": 161
+      },
+      "placementCount": 3
+    },
+    "deciduous-tree.png": {
+      "id": "deciduous-tree",
+      "sprite": "deciduous-tree.png",
+      "textureKey": "deciduous-tree",
+      "assetPath": "/assets/map-props/lsw-overworld-decoration/deciduous-tree.png",
+      "role": "tree",
+      "dimensions": {
+        "w": 160,
+        "h": 240
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 80,
+        "y": 235
+      },
+      "collisionRect": {
+        "x": 60,
+        "y": 187,
+        "w": 39,
+        "h": 30
+      },
+      "placementCount": 12
+    },
+    "dense-forest-edge.png": {
+      "id": "dense-forest-edge",
+      "sprite": "dense-forest-edge.png",
+      "textureKey": "dense-forest-edge",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/dense-forest-edge.png",
+      "role": "tree",
+      "dimensions": {
+        "w": 128,
+        "h": 96
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 64,
+        "y": 96
+      },
+      "collisionRect": {
+        "x": 6,
+        "y": 58,
+        "w": 116,
+        "h": 30
+      },
+      "placementCount": 1
+    },
+    "evergreen-pine.png": {
+      "id": "evergreen-pine",
+      "sprite": "evergreen-pine.png",
+      "textureKey": "evergreen-pine",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/evergreen-pine.png",
+      "role": "tree",
+      "dimensions": {
+        "w": 72,
+        "h": 96
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 36,
+        "y": 96
+      },
+      "collisionRect": {
+        "x": 24,
+        "y": 74,
+        "w": 24,
+        "h": 18
+      },
+      "placementCount": 1
+    },
+    "flower-bed.png": {
+      "id": "flower-bed",
+      "sprite": "flower-bed.png",
+      "textureKey": "flower-bed",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/flower-bed.png",
+      "role": "decor",
+      "dimensions": {
+        "w": 80,
+        "h": 40
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 40
+      },
+      "collisionRect": {
+        "x": 8,
+        "y": 28,
+        "w": 64,
+        "h": 8
+      },
+      "placementCount": 5
+    },
+    "flower-cluster.png": {
+      "id": "flower-cluster",
+      "sprite": "flower-cluster.png",
+      "textureKey": "flower-cluster",
+      "assetPath": "/assets/map-props/lsw-overworld-decoration/flower-cluster.png",
+      "role": "flower",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 29,
+        "y": 61,
+        "w": 21,
+        "h": 9
+      },
+      "placementCount": 32
+    },
+    "gate-classifier-reader.png": {
+      "id": "gate-classifier-reader",
+      "sprite": "gate-classifier-reader.png",
+      "textureKey": "act1-story-gate-classifier-reader",
+      "assetPath": "/assets/story-nouns/act1/gate-classifier-reader.png",
+      "role": "terminal",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 73
+      },
+      "collisionRect": {
+        "x": 25,
+        "y": 56,
+        "w": 30,
+        "h": 13
+      },
+      "placementCount": 1
+    },
+    "green-home.png": {
+      "id": "green-home",
+      "sprite": "green-home.png",
+      "textureKey": "green-home",
+      "assetPath": "/assets/map-props/onett-v17/green-home.png",
+      "role": "building",
+      "dimensions": {
+        "w": 464,
+        "h": 396
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 230,
+        "y": 371
+      },
+      "collisionRect": {
+        "x": 16,
+        "y": 209,
+        "w": 429,
+        "h": 162
+      },
+      "placementCount": 3
+    },
+    "hedge-segment.png": {
+      "id": "hedge-segment",
+      "sprite": "hedge-segment.png",
+      "textureKey": "hedge-segment",
+      "assetPath": "/assets/map-props/lsw-overworld-decoration/hedge-segment.png",
+      "role": "hedge",
+      "dimensions": {
+        "w": 160,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 80,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 6,
+        "y": 65,
+        "w": 147,
+        "h": 6
+      },
+      "placementCount": 8
+    },
+    "hospital_4_story.png": {
+      "id": "hospital-4-story",
+      "sprite": "hospital_4_story.png",
+      "textureKey": "act1-building-hospital-4-story",
+      "assetPath": "/assets/act1/building-expansion-0001/hospital_4_story.png",
+      "role": "building",
+      "dimensions": {
+        "w": 171,
+        "h": 210
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 86,
+        "y": 210
+      },
+      "collisionRect": {
+        "x": 26,
+        "y": 168,
+        "w": 120,
+        "h": 24
+      },
+      "placementCount": 1
+    },
+    "hospital_clinic.png": {
+      "id": "hospital-clinic",
+      "sprite": "hospital_clinic.png",
+      "textureKey": "act1-building-hospital-clinic",
+      "assetPath": "/assets/act1/building-expansion-0001/hospital_clinic.png",
+      "role": "building",
+      "dimensions": {
+        "w": 148,
+        "h": 124
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 74,
+        "y": 124
+      },
+      "collisionRect": {
+        "x": 22,
+        "y": 94,
+        "w": 104,
+        "h": 20
+      },
+      "placementCount": 1
+    },
+    "hot-wallet-proof-token.png": {
+      "id": "hot-wallet-proof-token",
+      "sprite": "hot-wallet-proof-token.png",
+      "textureKey": "act1-story-hot-wallet-proof-token",
+      "assetPath": "/assets/story-nouns/act1/hot-wallet-proof-token.png",
+      "role": "item",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 62
+      },
+      "collisionRect": {
+        "x": 26,
+        "y": 48,
+        "w": 28,
+        "h": 8
+      },
+      "placementCount": 1
+    },
+    "hotel_3_story.png": {
+      "id": "hotel-3-story",
+      "sprite": "hotel_3_story.png",
+      "textureKey": "act1-building-hotel-3-story",
+      "assetPath": "/assets/act1/building-expansion-0001/hotel_3_story.png",
+      "role": "building",
+      "dimensions": {
+        "w": 220,
+        "h": 197
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 110,
+        "y": 197
+      },
+      "collisionRect": {
+        "x": 33,
+        "y": 158,
+        "w": 154,
+        "h": 24
+      },
+      "placementCount": 1
+    },
+    "large-round-tree.png": {
+      "id": "large-round-tree",
+      "sprite": "large-round-tree.png",
+      "textureKey": "large-round-tree",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/large-round-tree.png",
+      "role": "tree",
+      "dimensions": {
+        "w": 96,
+        "h": 112
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 48,
+        "y": 112
+      },
+      "collisionRect": {
+        "x": 36,
+        "y": 88,
+        "w": 24,
+        "h": 20
+      },
+      "placementCount": 1
+    },
+    "mailbox.png": {
+      "id": "mailbox",
+      "sprite": "mailbox.png",
+      "textureKey": "mailbox",
+      "assetPath": "/assets/map-props/lsw-overworld-decoration/mailbox.png",
+      "role": "mailbox",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 36,
+        "y": 47,
+        "w": 11,
+        "h": 13
+      },
+      "placementCount": 10
+    },
+    "medium-leafy-tree.png": {
+      "id": "medium-leafy-tree",
+      "sprite": "medium-leafy-tree.png",
+      "textureKey": "medium-leafy-tree",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/medium-leafy-tree.png",
+      "role": "tree",
+      "dimensions": {
+        "w": 80,
+        "h": 96
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 96
+      },
+      "collisionRect": {
+        "x": 30,
+        "y": 74,
+        "w": 20,
+        "h": 18
+      },
+      "placementCount": 1
+    },
+    "npc-bonkle.png": {
+      "id": "npc-bonkle",
+      "sprite": "npc-bonkle.png",
+      "textureKey": "act1-story-npc-bonkle",
+      "assetPath": "/assets/story-nouns/act1/npc-bonkle.png",
+      "role": "npc",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 29,
+        "y": 54,
+        "w": 22,
+        "h": 17
+      },
+      "placementCount": 1
+    },
+    "npc-kid.png": {
+      "id": "npc-kid",
+      "sprite": "npc-kid.png",
+      "textureKey": "npc-kid",
+      "assetPath": "/assets/map-props/lsw-overworld-decoration/npc-kid.png",
+      "role": "npc",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 29,
+        "y": 56,
+        "w": 22,
+        "h": 17
+      },
+      "placementCount": 9
+    },
+    "npc-morrow.png": {
+      "id": "npc-morrow",
+      "sprite": "npc-morrow.png",
+      "textureKey": "act1-story-npc-morrow",
+      "assetPath": "/assets/story-nouns/act1/npc-morrow.png",
+      "role": "npc",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 29,
+        "y": 54,
+        "w": 22,
+        "h": 17
+      },
+      "placementCount": 1
+    },
+    "npc-neighbor.png": {
+      "id": "npc-neighbor",
+      "sprite": "npc-neighbor.png",
+      "textureKey": "npc-neighbor",
+      "assetPath": "/assets/map-props/lsw-overworld-decoration/npc-neighbor.png",
+      "role": "npc",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 32,
+        "y": 54,
+        "w": 16,
+        "h": 18
+      },
+      "placementCount": 10
+    },
+    "npc-sal.png": {
+      "id": "npc-sal",
+      "sprite": "npc-sal.png",
+      "textureKey": "act1-story-npc-sal",
+      "assetPath": "/assets/story-nouns/act1/npc-sal.png",
+      "role": "npc",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 29,
+        "y": 54,
+        "w": 22,
+        "h": 17
+      },
+      "placementCount": 1
+    },
+    "park-rumor-static-marker.png": {
+      "id": "park-rumor-static-marker",
+      "sprite": "park-rumor-static-marker.png",
+      "textureKey": "act1-story-park-rumor-static-marker",
+      "assetPath": "/assets/story-nouns/act1/park-rumor-static-marker.png",
+      "role": "marker",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 73
+      },
+      "collisionRect": {
+        "x": 25,
+        "y": 51,
+        "w": 30,
+        "h": 12
+      },
+      "placementCount": 1
+    },
+    "picket-fence.png": {
+      "id": "picket-fence",
+      "sprite": "picket-fence.png",
+      "textureKey": "picket-fence",
+      "assetPath": "/assets/map-props/lsw-overworld-decoration/picket-fence.png",
+      "role": "fence",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 3,
+        "y": 34,
+        "w": 74,
+        "h": 9
+      },
+      "placementCount": 128
+    },
+    "pine-tree.png": {
+      "id": "pine-tree",
+      "sprite": "pine-tree.png",
+      "textureKey": "pine-tree",
+      "assetPath": "/assets/map-props/lsw-overworld-decoration/pine-tree.png",
+      "role": "tree",
+      "dimensions": {
+        "w": 160,
+        "h": 240
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 80,
+        "y": 235
+      },
+      "collisionRect": {
+        "x": 62,
+        "y": 192,
+        "w": 35,
+        "h": 31
+      },
+      "placementCount": 12
+    },
+    "public-version-bosch.png": {
+      "id": "public-version-bosch",
+      "sprite": "public-version-bosch.png",
+      "textureKey": "act1-story-public-version-bosch",
+      "assetPath": "/assets/story-nouns/act1/public-version-bosch.png",
+      "role": "npc",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 29,
+        "y": 54,
+        "w": 23,
+        "h": 17
+      },
+      "placementCount": 1
+    },
+    "red-picket-fence-straight.png": {
+      "id": "red-picket-fence-straight",
+      "sprite": "red-picket-fence-straight.png",
+      "textureKey": "red-picket-fence-straight",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/red-picket-fence-straight.png",
+      "role": "barrier",
+      "dimensions": {
+        "w": 80,
+        "h": 48
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 48
+      },
+      "collisionRect": {
+        "x": 5,
+        "y": 31,
+        "w": 70,
+        "h": 11
+      },
+      "placementCount": 4
+    },
+    "roadside-boundary-marker.png": {
+      "id": "roadside-boundary-marker",
+      "sprite": "roadside-boundary-marker.png",
+      "textureKey": "roadside-boundary-marker",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/roadside-boundary-marker.png",
+      "role": "barrier",
+      "dimensions": {
+        "w": 32,
+        "h": 40
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 16,
+        "y": 40
+      },
+      "collisionRect": {
+        "x": 6,
+        "y": 28,
+        "w": 20,
+        "h": 10
+      },
+      "placementCount": 3
+    },
+    "roadside-signboard.png": {
+      "id": "roadside-signboard",
+      "sprite": "roadside-signboard.png",
+      "textureKey": "roadside-signboard",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/roadside-signboard.png",
+      "role": "sign",
+      "dimensions": {
+        "w": 48,
+        "h": 56
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 24,
+        "y": 56
+      },
+      "collisionRect": {
+        "x": 15,
+        "y": 42,
+        "w": 18,
+        "h": 12
+      },
+      "placementCount": 3
+    },
+    "route-direction-sign.png": {
+      "id": "route-direction-sign",
+      "sprite": "route-direction-sign.png",
+      "textureKey": "route-direction-sign",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/route-direction-sign.png",
+      "role": "sign",
+      "dimensions": {
+        "w": 48,
+        "h": 64
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 24,
+        "y": 64
+      },
+      "collisionRect": {
+        "x": 16,
+        "y": 46,
+        "w": 16,
+        "h": 16
+      },
+      "placementCount": 3
+    },
+    "shrub-row.png": {
+      "id": "shrub-row",
+      "sprite": "shrub-row.png",
+      "textureKey": "shrub-row",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/shrub-row.png",
+      "role": "decor",
+      "dimensions": {
+        "w": 80,
+        "h": 40
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 40
+      },
+      "collisionRect": {
+        "x": 5,
+        "y": 26,
+        "w": 70,
+        "h": 10
+      },
+      "placementCount": 4
+    },
+    "signal-town-env-utility-pole.png": {
+      "id": "signal-town-env-utility-pole",
+      "sprite": "signal-town-env-utility-pole.png",
+      "textureKey": "signal-town-env-utility-pole",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/signal-town-env-utility-pole.png",
+      "role": "urban-prop",
+      "dimensions": {
+        "w": 32,
+        "h": 96
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 16,
+        "y": 96
+      },
+      "collisionRect": {
+        "x": 10,
+        "y": 74,
+        "w": 12,
+        "h": 18
+      },
+      "placementCount": 1
+    },
+    "small_town_municipal_office.png": {
+      "id": "small-town-municipal-office",
+      "sprite": "small_town_municipal_office.png",
+      "textureKey": "act1-building-small-town-municipal-office",
+      "assetPath": "/assets/act1/building-expansion-0001/small_town_municipal_office.png",
+      "role": "building",
+      "dimensions": {
+        "w": 141,
+        "h": 126
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 71,
+        "y": 126
+      },
+      "collisionRect": {
+        "x": 21,
+        "y": 96,
+        "w": 100,
+        "h": 20
+      },
+      "placementCount": 1
+    },
+    "small-bush.png": {
+      "id": "small-bush",
+      "sprite": "small-bush.png",
+      "textureKey": "small-bush",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/small-bush.png",
+      "role": "decor",
+      "dimensions": {
+        "w": 48,
+        "h": 40
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 24,
+        "y": 40
+      },
+      "collisionRect": {
+        "x": 8,
+        "y": 26,
+        "w": 32,
+        "h": 10
+      },
+      "placementCount": 1
+    },
+    "small-shrub.png": {
+      "id": "small-shrub",
+      "sprite": "small-shrub.png",
+      "textureKey": "small-shrub",
+      "assetPath": "/assets/map-props/lsw-overworld-decoration/small-shrub.png",
+      "role": "shrub",
+      "dimensions": {
+        "w": 80,
+        "h": 80
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 40,
+        "y": 75
+      },
+      "collisionRect": {
+        "x": 22,
+        "y": 46,
+        "w": 34,
+        "h": 9
+      },
+      "placementCount": 41
+    },
+    "storefront-planter.png": {
+      "id": "storefront-planter",
+      "sprite": "storefront-planter.png",
+      "textureKey": "storefront-planter",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/storefront-planter.png",
+      "role": "urban-prop",
+      "dimensions": {
+        "w": 64,
+        "h": 40
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 32,
+        "y": 40
+      },
+      "collisionRect": {
+        "x": 5,
+        "y": 29,
+        "w": 54,
+        "h": 9
+      },
+      "placementCount": 12
+    },
+    "streetlight.png": {
+      "id": "streetlight",
+      "sprite": "streetlight.png",
+      "textureKey": "streetlight",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/streetlight.png",
+      "role": "urban-prop",
+      "dimensions": {
+        "w": 40,
+        "h": 96
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 20,
+        "y": 96
+      },
+      "collisionRect": {
+        "x": 14,
+        "y": 78,
+        "w": 12,
+        "h": 16
+      },
+      "placementCount": 11
+    },
+    "stump-trunk.png": {
+      "id": "stump-trunk",
+      "sprite": "stump-trunk.png",
+      "textureKey": "stump-trunk",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/stump-trunk.png",
+      "role": "decor",
+      "dimensions": {
+        "w": 32,
+        "h": 32
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 16,
+        "y": 32
+      },
+      "collisionRect": {
+        "x": 6,
+        "y": 22,
+        "w": 20,
+        "h": 8
+      },
+      "placementCount": 1
+    },
+    "town-sign.png": {
+      "id": "town-sign",
+      "sprite": "town-sign.png",
+      "textureKey": "town-sign",
+      "assetPath": "/assets/map-props/onett-v17/town-sign.png",
+      "role": "sign",
+      "dimensions": {
+        "w": 117,
+        "h": 135
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 58,
+        "y": 135
+      },
+      "collisionRect": {
+        "x": 39,
+        "y": 88,
+        "w": 37,
+        "h": 38
+      },
+      "placementCount": 1
+    },
+    "trash-can.png": {
+      "id": "trash-can",
+      "sprite": "trash-can.png",
+      "textureKey": "trash-can",
+      "assetPath": "/assets/act1/signal-town/environment/generated-0001/trash-can.png",
+      "role": "urban-prop",
+      "dimensions": {
+        "w": 40,
+        "h": 48
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 0
+      },
+      "ysortAnchor": {
+        "x": 20,
+        "y": 48
+      },
+      "collisionRect": {
+        "x": 8,
+        "y": 35,
+        "w": 24,
+        "h": 10
+      },
+      "placementCount": 7
+    },
+    "utility-pole.png": {
+      "id": "utility-pole",
+      "sprite": "utility-pole.png",
+      "textureKey": "utility-pole",
+      "assetPath": "/assets/map-props/onett-v17/utility-pole.png",
+      "role": "pole",
+      "dimensions": {
+        "w": 77,
+        "h": 159
+      },
+      "placementOffset": {
+        "x": 0,
+        "y": 55
+      },
+      "ysortAnchor": {
+        "x": 38,
+        "y": 159
+      },
+      "collisionRect": {
+        "x": 26,
+        "y": 103,
+        "w": 25,
+        "h": 45
+      },
+      "placementCount": 6
+    }
+  },
+  "qa": {
+    "expectedSprites": 46,
+    "coveredSprites": 46,
+    "missingSprites": [],
+    "extraSprites": [],
+    "proofMapPlacements": 360,
+    "drift": []
+  }
+}

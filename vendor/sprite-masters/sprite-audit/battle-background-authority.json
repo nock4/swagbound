@@ -1,0 +1,2695 @@
+{
+  "schema": "swagbound.battleBackgroundAuthorityReview.v1",
+  "generatedAt": "2026-05-26T00:50:19.672Z",
+  "reviewOnly": true,
+  "runtimePromotionAllowed": false,
+  "sourceBackdropRegistryPath": "swagbound-phaser/public/data/backdrop-registry.json",
+  "sourceBattleContentPath": "swagbound-phaser/public/data/content-battle.json",
+  "policy": {
+    "assignmentUnit": "battle-background-set",
+    "actAssignmentOptions": [
+      "unassigned",
+      "act-1",
+      "act-2",
+      "act-3"
+    ],
+    "cleanupIsProposalOnly": true,
+    "destructiveActionAllowed": false,
+    "runtimeReferencesBlockAutomaticDeletion": true,
+    "runtimePromotionRequiresSeparateApproval": true
+  },
+  "counts": {
+    "backgroundSets": 18,
+    "runtimeRegistrySets": 14,
+    "runtimeReferencedBackgroundSets": 3,
+    "stagedCandidateSets": 1,
+    "nonSelectedVariantPaths": 86,
+    "blockedRuntimeCleanupPaths": 3
+  },
+  "records": [
+    {
+      "id": "buzzword-shotgun-001",
+      "displayName": "buzzword shotgun 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/buzzword-shotgun-001.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/buzzword-shotgun-002.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/buzzword-shotgun-001.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/buzzword-shotgun-002.png",
+      "zones": [
+        "north-park"
+      ],
+      "registryEntry": {
+        "image1": "battle-backgrounds/buzzword-shotgun-001.png",
+        "image2": "battle-backgrounds/buzzword-shotgun-002.png",
+        "paletteMode": "acid",
+        "distortionType": "sine-horizontal",
+        "amplitude": 6,
+        "frequency": 2.1,
+        "speed": 0.65,
+        "rowHeight": 14,
+        "letterboxSize": 0
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-buzzword-shotgun-001",
+          "label": "buzzword shotgun 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/buzzword-shotgun-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/buzzword-shotgun-001.png",
+          "runtimePath": "/assets/battle-backgrounds/buzzword-shotgun-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "buzzword-shotgun",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2631452,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "buzzword-shotgun-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            },
+            {
+              "source": "content-battle",
+              "ownerId": "battle.encounters.signal-storm-swarm.visual.battleBackground.path",
+              "role": "battleBackground",
+              "dataPath": "swagbound-phaser/public/data/content-battle.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-buzzword-shotgun-002",
+          "label": "buzzword shotgun 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/buzzword-shotgun-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/buzzword-shotgun-002.png",
+          "runtimePath": "/assets/battle-backgrounds/buzzword-shotgun-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "buzzword-shotgun",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2423553,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "buzzword-shotgun-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-buzzword-shotgun-buzzword-shotgun-001",
+          "label": "buzzword shotgun 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "buzzword-shotgun",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2631452,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-buzzword-shotgun-buzzword-shotgun-002",
+          "label": "buzzword shotgun 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "buzzword-shotgun",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2423553,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-buzzword-shotgun-buzzword-shotgun-003",
+          "label": "buzzword shotgun 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "buzzword-shotgun",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2163148,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-buzzword-shotgun-buzzword-shotgun-004",
+          "label": "buzzword shotgun 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "buzzword-shotgun",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2255684,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-buzzword-shotgun-buzzword-shotgun-005",
+          "label": "buzzword shotgun 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "buzzword-shotgun",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2728446,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "buzzword-shotgun-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "content-battle",
+          "ownerId": "battle.encounters.signal-storm-swarm.visual.battleBackground.path",
+          "role": "battleBackground",
+          "dataPath": "swagbound-phaser/public/data/content-battle.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "buzzword-shotgun-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/buzzword-shotgun/buzzword-shotgun-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "caves-001",
+      "displayName": "caves 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/caves-001.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/caves-002.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/caves-001.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/caves-002.png",
+      "zones": [
+        "south-park"
+      ],
+      "registryEntry": {
+        "image1": "battle-backgrounds/caves-001.png",
+        "image2": "battle-backgrounds/caves-002.png",
+        "paletteMode": "slow-cycle",
+        "distortionType": "sine-horizontal",
+        "amplitude": 6,
+        "frequency": 1.75,
+        "speed": 0.6,
+        "rowHeight": 12,
+        "letterboxSize": 0
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-caves-001",
+          "label": "caves 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/caves-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/caves-001.png",
+          "runtimePath": "/assets/battle-backgrounds/caves-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "caves",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1981243,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "caves-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-caves-002",
+          "label": "caves 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/caves-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/caves-002.png",
+          "runtimePath": "/assets/battle-backgrounds/caves-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "caves",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2366613,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "caves-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-caves-caves-001",
+          "label": "caves 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/caves/caves-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "caves",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1981243,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-caves-caves-002",
+          "label": "caves 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/caves/caves-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "caves",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2366613,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-caves-caves-003",
+          "label": "caves 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/caves/caves-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "caves",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2154182,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-caves-caves-004",
+          "label": "caves 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/caves/caves-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "caves",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2503040,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-caves-caves-005",
+          "label": "caves 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/caves/caves-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "caves",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2411513,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "caves-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "caves-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/caves/caves-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "cloudcastle-dessert-oasis-001",
+      "displayName": "cloudcastle dessert oasis 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/cloudcastle-dessert-oasis-001.png",
+      "selectedSecondaryPath": null,
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/cloudcastle-dessert-oasis-001.png",
+      "suggestedSecondaryPath": null,
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/cloudcastle-dessert-oasis-001.png",
+        "image2": "battle-backgrounds/internet-iii-001.png",
+        "paletteMode": "pulse",
+        "distortionType": "sine-horizontal",
+        "amplitude": 5,
+        "frequency": 1.5,
+        "speed": 0.5,
+        "rowHeight": 14,
+        "letterboxSize": 1
+      },
+      "assetCount": 6,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-cloudcastle-dessert-oasis-001",
+          "label": "cloudcastle dessert oasis 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/cloudcastle-dessert-oasis-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/cloudcastle-dessert-oasis-001.png",
+          "runtimePath": "/assets/battle-backgrounds/cloudcastle-dessert-oasis-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "cloudcastle-dessert-oasis",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2680895,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "cloudcastle-dessert-oasis-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-cloudcastle-dessert-oasis-cloudcastle-dessert-oasis-001",
+          "label": "cloudcastle dessert oasis 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "cloudcastle-dessert-oasis",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2680895,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-cloudcastle-dessert-oasis-cloudcastle-dessert-oasis-002",
+          "label": "cloudcastle dessert oasis 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "cloudcastle-dessert-oasis",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2572776,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-cloudcastle-dessert-oasis-cloudcastle-dessert-oasis-003",
+          "label": "cloudcastle dessert oasis 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "cloudcastle-dessert-oasis",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2411554,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-cloudcastle-dessert-oasis-cloudcastle-dessert-oasis-004",
+          "label": "cloudcastle dessert oasis 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "cloudcastle-dessert-oasis",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2942911,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-cloudcastle-dessert-oasis-cloudcastle-dessert-oasis-005",
+          "label": "cloudcastle dessert oasis 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "cloudcastle-dessert-oasis",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2761462,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "cloudcastle-dessert-oasis-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/cloudcastle-dessert-oasis/cloudcastle-dessert-oasis-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses one animated layer.",
+        "Registry secondary layer belongs to a different filename family (internet-iii); it is split into its own review row."
+      ]
+    },
+    {
+      "id": "dance-system-seen-backwards-001",
+      "displayName": "dance system seen backwards 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/dance-system-seen-backwards-001.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/dance-system-seen-backwards-002.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/dance-system-seen-backwards-001.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/dance-system-seen-backwards-002.png",
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/dance-system-seen-backwards-001.png",
+        "image2": "battle-backgrounds/dance-system-seen-backwards-002.png",
+        "paletteMode": "acid",
+        "distortionType": "counter-scroll",
+        "amplitude": 10,
+        "frequency": 2.8,
+        "speed": 0.95,
+        "rowHeight": 8,
+        "letterboxSize": 0
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-dance-system-seen-backwards-001",
+          "label": "dance system seen backwards 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/dance-system-seen-backwards-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/dance-system-seen-backwards-001.png",
+          "runtimePath": "/assets/battle-backgrounds/dance-system-seen-backwards-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "dance-system-seen-backwards",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2236206,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "dance-system-seen-backwards-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-dance-system-seen-backwards-002",
+          "label": "dance system seen backwards 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/dance-system-seen-backwards-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/dance-system-seen-backwards-002.png",
+          "runtimePath": "/assets/battle-backgrounds/dance-system-seen-backwards-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "dance-system-seen-backwards",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 3204348,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "dance-system-seen-backwards-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-dance-system-seen-backwards-dance-system-seen-backwards-001",
+          "label": "dance system seen backwards 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "dance-system-seen-backwards",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2236206,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-dance-system-seen-backwards-dance-system-seen-backwards-002",
+          "label": "dance system seen backwards 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "dance-system-seen-backwards",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 3204348,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-dance-system-seen-backwards-dance-system-seen-backwards-003",
+          "label": "dance system seen backwards 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "dance-system-seen-backwards",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2795277,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-dance-system-seen-backwards-dance-system-seen-backwards-004",
+          "label": "dance system seen backwards 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "dance-system-seen-backwards",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2203721,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-dance-system-seen-backwards-dance-system-seen-backwards-005",
+          "label": "dance system seen backwards 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "dance-system-seen-backwards",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2244767,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "dance-system-seen-backwards-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "dance-system-seen-backwards-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/dance-system-seen-backwards/dance-system-seen-backwards-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "pifella-2-22-you-can-not-redo-001",
+      "displayName": "pifella 2 22 you can not redo 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-001.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-002.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-001.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-002.png",
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/pifella-2-22-you-can-not-redo-001.png",
+        "image2": "battle-backgrounds/pifella-2-22-you-can-not-redo-002.png",
+        "paletteMode": "pulse",
+        "distortionType": "sine-horizontal",
+        "amplitude": 7,
+        "frequency": 1.85,
+        "speed": 0.65,
+        "rowHeight": 10,
+        "letterboxSize": 0
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-pifella-2-22-you-can-not-redo-001",
+          "label": "pifella 2 22 you can not redo 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-001.png",
+          "runtimePath": "/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "pifella-2-22-you-can-not-redo",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 829546,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "pifella-2-22-you-can-not-redo-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-pifella-2-22-you-can-not-redo-002",
+          "label": "pifella 2 22 you can not redo 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-002.png",
+          "runtimePath": "/assets/battle-backgrounds/pifella-2-22-you-can-not-redo-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "pifella-2-22-you-can-not-redo",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2113535,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "pifella-2-22-you-can-not-redo-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pifella-2-22-you-can-not-redo-pifella-2-22-you-can-not-redo-001",
+          "label": "pifella 2 22 you can not redo 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pifella-2-22-you-can-not-redo",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 829546,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pifella-2-22-you-can-not-redo-pifella-2-22-you-can-not-redo-002",
+          "label": "pifella 2 22 you can not redo 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pifella-2-22-you-can-not-redo",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2113535,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pifella-2-22-you-can-not-redo-pifella-2-22-you-can-not-redo-003",
+          "label": "pifella 2 22 you can not redo 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pifella-2-22-you-can-not-redo",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1426920,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pifella-2-22-you-can-not-redo-pifella-2-22-you-can-not-redo-004",
+          "label": "pifella 2 22 you can not redo 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pifella-2-22-you-can-not-redo",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1456244,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pifella-2-22-you-can-not-redo-pifella-2-22-you-can-not-redo-005",
+          "label": "pifella 2 22 you can not redo 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pifella-2-22-you-can-not-redo",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2156797,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "pifella-2-22-you-can-not-redo-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "pifella-2-22-you-can-not-redo-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-22-you-can-not-redo/pifella-2-22-you-can-not-redo-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "pifella-2-parasite-chamber-001",
+      "displayName": "pifella 2 parasite chamber 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pifella-2-parasite-chamber-001.png",
+      "selectedSecondaryPath": null,
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pifella-2-parasite-chamber-001.png",
+      "suggestedSecondaryPath": null,
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/pifella-2-parasite-chamber-001.png",
+        "paletteMode": "slow-cycle",
+        "distortionType": "sine-horizontal",
+        "amplitude": 5,
+        "frequency": 1.4,
+        "speed": 0.5,
+        "rowHeight": 12,
+        "letterboxSize": 1
+      },
+      "assetCount": 2,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-pifella-2-parasite-chamber-001",
+          "label": "pifella 2 parasite chamber 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/pifella-2-parasite-chamber-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/pifella-2-parasite-chamber-001.png",
+          "runtimePath": "/assets/battle-backgrounds/pifella-2-parasite-chamber-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "pifella-2-parasite-chamber",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2210339,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "pifella-2-parasite-chamber-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pifella-2-parasite-chamber-pifella-2-parasite-chamber-001",
+          "label": "pifella 2 parasite chamber 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-parasite-chamber/pifella-2-parasite-chamber-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pifella-2-parasite-chamber/pifella-2-parasite-chamber-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pifella-2-parasite-chamber",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2210339,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "pifella-2-parasite-chamber-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/pifella-2-parasite-chamber/pifella-2-parasite-chamber-001.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses one animated layer."
+      ]
+    },
+    {
+      "id": "pray4lowbie-001",
+      "displayName": "pray4lowbie 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pray4lowbie-001.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pray4lowbie-002.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pray4lowbie-001.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/pray4lowbie-002.png",
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/pray4lowbie-001.png",
+        "image2": "battle-backgrounds/pray4lowbie-002.png",
+        "paletteMode": "pulse",
+        "distortionType": "sine-horizontal",
+        "amplitude": 6,
+        "frequency": 2.05,
+        "speed": 0.7,
+        "rowHeight": 10,
+        "letterboxSize": 0
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-pray4lowbie-001",
+          "label": "pray4lowbie 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/pray4lowbie-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/pray4lowbie-001.png",
+          "runtimePath": "/assets/battle-backgrounds/pray4lowbie-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "pray4lowbie",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 969126,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "pray4lowbie-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-pray4lowbie-002",
+          "label": "pray4lowbie 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/pray4lowbie-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/pray4lowbie-002.png",
+          "runtimePath": "/assets/battle-backgrounds/pray4lowbie-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "pray4lowbie",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 952230,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "pray4lowbie-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pray4lowbie-pray4lowbie-001",
+          "label": "pray4lowbie 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pray4lowbie",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 969126,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pray4lowbie-pray4lowbie-002",
+          "label": "pray4lowbie 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pray4lowbie",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 952230,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pray4lowbie-pray4lowbie-003",
+          "label": "pray4lowbie 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pray4lowbie",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1245785,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pray4lowbie-pray4lowbie-004",
+          "label": "pray4lowbie 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pray4lowbie",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1327346,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-pray4lowbie-pray4lowbie-005",
+          "label": "pray4lowbie 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "pray4lowbie",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1409936,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "pray4lowbie-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "pray4lowbie-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/pray4lowbie/pray4lowbie-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "projections-001",
+      "displayName": "projections 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/projections-001.png",
+      "selectedSecondaryPath": null,
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/projections-001.png",
+      "suggestedSecondaryPath": null,
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/projections-001.png",
+        "image2": "battle-backgrounds/datacenters-001.png",
+        "paletteMode": "slow-cycle",
+        "distortionType": "counter-scroll",
+        "amplitude": 9,
+        "frequency": 2.75,
+        "speed": 0.85,
+        "rowHeight": 8,
+        "letterboxSize": 0
+      },
+      "assetCount": 6,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-projections-001",
+          "label": "projections 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/projections-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/projections-001.png",
+          "runtimePath": "/assets/battle-backgrounds/projections-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "projections",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1145198,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "projections-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-projections-projections-001",
+          "label": "projections 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/projections/projections-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "projections",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1145198,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-projections-projections-002",
+          "label": "projections 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/projections/projections-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "projections",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1167152,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-projections-projections-003",
+          "label": "projections 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/projections/projections-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "projections",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1345807,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-projections-projections-004",
+          "label": "projections 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/projections/projections-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "projections",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1005209,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-projections-projections-005",
+          "label": "projections 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/projections/projections-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "projections",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1213370,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "projections-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/projections/projections-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses one animated layer.",
+        "Registry secondary layer belongs to a different filename family (datacenters); it is split into its own review row."
+      ]
+    },
+    {
+      "id": "really-new-god-001",
+      "displayName": "really new god 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/really-new-god-001.png",
+      "selectedSecondaryPath": null,
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/really-new-god-001.png",
+      "suggestedSecondaryPath": null,
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/really-new-god-001.png",
+        "image2": "battle-backgrounds/postcards2-001.png",
+        "paletteMode": "pulse",
+        "distortionType": "counter-scroll",
+        "amplitude": 8,
+        "frequency": 2.25,
+        "speed": 0.9,
+        "rowHeight": 10,
+        "letterboxSize": 0
+      },
+      "assetCount": 6,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-really-new-god-001",
+          "label": "really new god 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/really-new-god-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/really-new-god-001.png",
+          "runtimePath": "/assets/battle-backgrounds/really-new-god-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "really-new-god",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1101729,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "really-new-god-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-really-new-god-really-new-god-001",
+          "label": "really new god 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/really-new-god/really-new-god-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "really-new-god",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1101729,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-really-new-god-really-new-god-002",
+          "label": "really new god 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/really-new-god/really-new-god-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "really-new-god",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1429652,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-really-new-god-really-new-god-003",
+          "label": "really new god 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/really-new-god/really-new-god-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "really-new-god",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1246642,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-really-new-god-really-new-god-004",
+          "label": "really new god 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/really-new-god/really-new-god-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "really-new-god",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1159597,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-really-new-god-really-new-god-005",
+          "label": "really new god 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/really-new-god/really-new-god-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "really-new-god",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1374766,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "really-new-god-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/really-new-god/really-new-god-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses one animated layer.",
+        "Registry secondary layer belongs to a different filename family (postcards2); it is split into its own review row."
+      ]
+    },
+    {
+      "id": "record-of-hyperwar-001",
+      "displayName": "record of hyperwar 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/record-of-hyperwar-001.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/record-of-hyperwar-002.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/record-of-hyperwar-001.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/record-of-hyperwar-002.png",
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/record-of-hyperwar-001.png",
+        "image2": "battle-backgrounds/record-of-hyperwar-002.png",
+        "paletteMode": "acid",
+        "distortionType": "counter-scroll",
+        "amplitude": 11,
+        "frequency": 3.1,
+        "speed": 1.05,
+        "rowHeight": 8,
+        "letterboxSize": 0
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-record-of-hyperwar-001",
+          "label": "record of hyperwar 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/record-of-hyperwar-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/record-of-hyperwar-001.png",
+          "runtimePath": "/assets/battle-backgrounds/record-of-hyperwar-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "record-of-hyperwar",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2629850,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "record-of-hyperwar-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-record-of-hyperwar-002",
+          "label": "record of hyperwar 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/record-of-hyperwar-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/record-of-hyperwar-002.png",
+          "runtimePath": "/assets/battle-backgrounds/record-of-hyperwar-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "record-of-hyperwar",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2653959,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "record-of-hyperwar-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-record-of-hyperwar-record-of-hyperwar-001",
+          "label": "record of hyperwar 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "record-of-hyperwar",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2629850,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-record-of-hyperwar-record-of-hyperwar-002",
+          "label": "record of hyperwar 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "record-of-hyperwar",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2653959,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-record-of-hyperwar-record-of-hyperwar-003",
+          "label": "record of hyperwar 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "record-of-hyperwar",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2673350,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-record-of-hyperwar-record-of-hyperwar-004",
+          "label": "record of hyperwar 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "record-of-hyperwar",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2625994,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-record-of-hyperwar-record-of-hyperwar-005",
+          "label": "record of hyperwar 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "record-of-hyperwar",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2602255,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "record-of-hyperwar-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "record-of-hyperwar-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/record-of-hyperwar/record-of-hyperwar-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "schizobanners-001",
+      "displayName": "schizobanners 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/schizobanners-001.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/schizobanners-002.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/schizobanners-001.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/schizobanners-002.png",
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/schizobanners-001.png",
+        "image2": "battle-backgrounds/schizobanners-002.png",
+        "paletteMode": "acid",
+        "distortionType": "counter-scroll",
+        "amplitude": 9,
+        "frequency": 2.6,
+        "speed": 0.9,
+        "rowHeight": 8,
+        "letterboxSize": 0
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-schizobanners-001",
+          "label": "schizobanners 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/schizobanners-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/schizobanners-001.png",
+          "runtimePath": "/assets/battle-backgrounds/schizobanners-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "schizobanners",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2132333,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "schizobanners-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-schizobanners-002",
+          "label": "schizobanners 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/schizobanners-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/schizobanners-002.png",
+          "runtimePath": "/assets/battle-backgrounds/schizobanners-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "schizobanners",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1756697,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "schizobanners-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-schizobanners-schizobanners-001",
+          "label": "schizobanners 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/schizobanners/schizobanners-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "schizobanners",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2132333,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-schizobanners-schizobanners-002",
+          "label": "schizobanners 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/schizobanners/schizobanners-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "schizobanners",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1756697,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-schizobanners-schizobanners-003",
+          "label": "schizobanners 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/schizobanners/schizobanners-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "schizobanners",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2771952,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-schizobanners-schizobanners-004",
+          "label": "schizobanners 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/schizobanners/schizobanners-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "schizobanners",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2155510,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-schizobanners-schizobanners-005",
+          "label": "schizobanners 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/schizobanners/schizobanners-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "schizobanners",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2560460,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "schizobanners-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "schizobanners-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/schizobanners/schizobanners-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "summon-something-4-002",
+      "displayName": "summon something 4 002",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/summon-something-4-002.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/summon-something-4-003.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/summon-something-4-002.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/summon-something-4-003.png",
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/summon-something-4-002.png",
+        "image2": "battle-backgrounds/summon-something-4-003.png",
+        "paletteMode": "slow-cycle",
+        "distortionType": "sine-horizontal",
+        "amplitude": 8,
+        "frequency": 2.35,
+        "speed": 0.8,
+        "rowHeight": 10,
+        "letterboxSize": 0
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-summon-something-4-002",
+          "label": "summon something 4 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/summon-something-4-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/summon-something-4-002.png",
+          "runtimePath": "/assets/battle-backgrounds/summon-something-4-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "summon-something-4",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1365699,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "summon-something-4-002",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-summon-something-4-003",
+          "label": "summon something 4 003",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/summon-something-4-003.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/summon-something-4-003.png",
+          "runtimePath": "/assets/battle-backgrounds/summon-something-4-003.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "summon-something-4",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1390312,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "summon-something-4-002",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-summon-something-4-summon-something-4-001",
+          "label": "summon something 4 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "summon-something-4",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2107880,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-summon-something-4-summon-something-4-002",
+          "label": "summon something 4 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "summon-something-4",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1365699,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-summon-something-4-summon-something-4-003",
+          "label": "summon something 4 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "summon-something-4",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1390312,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-summon-something-4-summon-something-4-004",
+          "label": "summon something 4 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "summon-something-4",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2127643,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-summon-something-4-summon-something-4-005",
+          "label": "summon something 4 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "summon-something-4",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2108900,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "summon-something-4-002",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "summon-something-4-002",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/summon-something-4/summon-something-4-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "syntax-ruins-archive-quotes-log-001",
+      "displayName": "syntax ruins archive quotes log 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-001.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-002.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-001.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-002.png",
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/syntax-ruins-archive-quotes-log-001.png",
+        "image2": "battle-backgrounds/syntax-ruins-archive-quotes-log-002.png",
+        "paletteMode": "slow-cycle",
+        "distortionType": "counter-scroll",
+        "amplitude": 7,
+        "frequency": 2.1,
+        "speed": 0.65,
+        "rowHeight": 10,
+        "letterboxSize": 1
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-syntax-ruins-archive-quotes-log-001",
+          "label": "syntax ruins archive quotes log 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-001.png",
+          "runtimePath": "/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "syntax-ruins-archive-quotes-log",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2838745,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "syntax-ruins-archive-quotes-log-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-syntax-ruins-archive-quotes-log-002",
+          "label": "syntax ruins archive quotes log 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-002.png",
+          "runtimePath": "/assets/battle-backgrounds/syntax-ruins-archive-quotes-log-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "syntax-ruins-archive-quotes-log",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2933343,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "syntax-ruins-archive-quotes-log-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-syntax-ruins-archive-quotes-log-syntax-ruins-archive-quotes-log-001",
+          "label": "syntax ruins archive quotes log 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "syntax-ruins-archive-quotes-log",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2838745,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-syntax-ruins-archive-quotes-log-syntax-ruins-archive-quotes-log-002",
+          "label": "syntax ruins archive quotes log 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "syntax-ruins-archive-quotes-log",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2933343,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-syntax-ruins-archive-quotes-log-syntax-ruins-archive-quotes-log-003",
+          "label": "syntax ruins archive quotes log 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "syntax-ruins-archive-quotes-log",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2546558,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-syntax-ruins-archive-quotes-log-syntax-ruins-archive-quotes-log-004",
+          "label": "syntax ruins archive quotes log 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "syntax-ruins-archive-quotes-log",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2566393,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-syntax-ruins-archive-quotes-log-syntax-ruins-archive-quotes-log-005",
+          "label": "syntax ruins archive quotes log 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "syntax-ruins-archive-quotes-log",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2580706,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "syntax-ruins-archive-quotes-log-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "syntax-ruins-archive-quotes-log-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/syntax-ruins-archive-quotes-log/syntax-ruins-archive-quotes-log-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "toji-a-001",
+      "displayName": "toji a 001",
+      "kind": "battle-background",
+      "status": "runtime-registry",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/toji-a-001.png",
+      "selectedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/toji-a-002.png",
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/toji-a-001.png",
+      "suggestedSecondaryPath": "swagbound-phaser/public/assets/battle-backgrounds/toji-a-002.png",
+      "zones": [],
+      "registryEntry": {
+        "image1": "battle-backgrounds/toji-a-001.png",
+        "image2": "battle-backgrounds/toji-a-002.png",
+        "paletteMode": "pulse",
+        "distortionType": "sine-horizontal",
+        "amplitude": 6,
+        "frequency": 1.7,
+        "speed": 0.55,
+        "rowHeight": 12,
+        "letterboxSize": 0
+      },
+      "assetCount": 7,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-toji-a-001",
+          "label": "toji a 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/toji-a-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/toji-a-001.png",
+          "runtimePath": "/assets/battle-backgrounds/toji-a-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "toji-a",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1667640,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "toji-a-001",
+              "role": "image1",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-toji-a-002",
+          "label": "toji a 002",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/toji-a-002.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/toji-a-002.png",
+          "runtimePath": "/assets/battle-backgrounds/toji-a-002.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "toji-a",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2189780,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "toji-a-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-toji-a-toji-a-001",
+          "label": "toji a 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/toji-a/toji-a-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "toji-a",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1667640,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-toji-a-toji-a-002",
+          "label": "toji a 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/toji-a/toji-a-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "toji-a",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2189780,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-toji-a-toji-a-003",
+          "label": "toji a 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/toji-a/toji-a-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "toji-a",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1168468,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-toji-a-toji-a-004",
+          "label": "toji a 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/toji-a/toji-a-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "toji-a",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 765457,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-toji-a-toji-a-005",
+          "label": "toji a 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/toji-a/toji-a-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "toji-a",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1037497,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "toji-a-001",
+          "role": "image1",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        },
+        {
+          "source": "backdrop-registry",
+          "ownerId": "toji-a-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/toji-a/toji-a-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Runtime backdrop registry pair is current authority unless Nick overrides it.",
+        "This background uses two animated layers."
+      ]
+    },
+    {
+      "id": "datacenters",
+      "displayName": "datacenters",
+      "kind": "battle-background",
+      "status": "runtime-referenced-background",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": null,
+      "selectedSecondaryPath": null,
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/datacenters-001.png",
+      "suggestedSecondaryPath": null,
+      "zones": [],
+      "registryEntry": null,
+      "assetCount": 6,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-datacenters-001",
+          "label": "datacenters 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/datacenters-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/datacenters-001.png",
+          "runtimePath": "/assets/battle-backgrounds/datacenters-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "datacenters",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2264617,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "projections-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-datacenters-datacenters-001",
+          "label": "datacenters 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/datacenters/datacenters-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "datacenters",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2264617,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-datacenters-datacenters-002",
+          "label": "datacenters 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/datacenters/datacenters-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "datacenters",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2255739,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-datacenters-datacenters-003",
+          "label": "datacenters 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/datacenters/datacenters-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "datacenters",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2676858,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-datacenters-datacenters-004",
+          "label": "datacenters 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/datacenters/datacenters-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "datacenters",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 3016198,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-datacenters-datacenters-005",
+          "label": "datacenters 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/datacenters/datacenters-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "datacenters",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2640485,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "projections-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/datacenters/datacenters-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [
+        "swagbound-phaser/public/assets/battle-backgrounds/datacenters-001.png"
+      ],
+      "notes": [
+        "Runtime references this filename family as a secondary layer, but it is not the same collection as its paired primary; review it as a separate battle-background set."
+      ]
+    },
+    {
+      "id": "internet-iii",
+      "displayName": "internet iii",
+      "kind": "battle-background",
+      "status": "runtime-referenced-background",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": null,
+      "selectedSecondaryPath": null,
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/internet-iii-001.png",
+      "suggestedSecondaryPath": null,
+      "zones": [],
+      "registryEntry": null,
+      "assetCount": 6,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-internet-iii-001",
+          "label": "internet iii 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/internet-iii-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/internet-iii-001.png",
+          "runtimePath": "/assets/battle-backgrounds/internet-iii-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "internet-iii",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 3696909,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "cloudcastle-dessert-oasis-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-internet-iii-internet-iii-001",
+          "label": "internet iii 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/internet-iii/internet-iii-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "internet-iii",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 3696909,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-internet-iii-internet-iii-002",
+          "label": "internet iii 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/internet-iii/internet-iii-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "internet-iii",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 3563026,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-internet-iii-internet-iii-003",
+          "label": "internet iii 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/internet-iii/internet-iii-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "internet-iii",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 3607728,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-internet-iii-internet-iii-004",
+          "label": "internet iii 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/internet-iii/internet-iii-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "internet-iii",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 3624280,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-internet-iii-internet-iii-005",
+          "label": "internet iii 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/internet-iii/internet-iii-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "internet-iii",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 3471859,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "cloudcastle-dessert-oasis-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/internet-iii/internet-iii-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [
+        "swagbound-phaser/public/assets/battle-backgrounds/internet-iii-001.png"
+      ],
+      "notes": [
+        "Runtime references this filename family as a secondary layer, but it is not the same collection as its paired primary; review it as a separate battle-background set."
+      ]
+    },
+    {
+      "id": "postcards2",
+      "displayName": "postcards2",
+      "kind": "battle-background",
+      "status": "runtime-referenced-background",
+      "selectionAuthority": "swagbound-phaser/public/data/backdrop-registry.json",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": null,
+      "selectedSecondaryPath": null,
+      "suggestedPrimaryPath": "swagbound-phaser/public/assets/battle-backgrounds/postcards2-001.png",
+      "suggestedSecondaryPath": null,
+      "zones": [],
+      "registryEntry": null,
+      "assetCount": 6,
+      "assets": [
+        {
+          "id": "swagbound-phaser-public-assets-battle-backgrounds-postcards2-001",
+          "label": "postcards2 001",
+          "repoPath": "swagbound-phaser/public/assets/battle-backgrounds/postcards2-001.png",
+          "imageSrc": "../../../swagbound-phaser/public/assets/battle-backgrounds/postcards2-001.png",
+          "runtimePath": "/assets/battle-backgrounds/postcards2-001.png",
+          "sourceArea": "runtime-battle-backgrounds",
+          "groupId": "postcards2",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1677287,
+          "runtimeReferenced": true,
+          "runtimeReferences": [
+            {
+              "source": "backdrop-registry",
+              "ownerId": "really-new-god-001",
+              "role": "image2",
+              "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+            }
+          ]
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-postcards2-postcards2-001",
+          "label": "postcards2 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/postcards2/postcards2-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "postcards2",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1677287,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-postcards2-postcards2-002",
+          "label": "postcards2 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/postcards2/postcards2-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "postcards2",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1903137,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-postcards2-postcards2-003",
+          "label": "postcards2 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/postcards2/postcards2-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "postcards2",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1949718,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-postcards2-postcards2-004",
+          "label": "postcards2 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/postcards2/postcards2-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "postcards2",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 1825891,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-postcards2-postcards2-005",
+          "label": "postcards2 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/postcards2/postcards2-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "postcards2",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 708815,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [
+        {
+          "source": "backdrop-registry",
+          "ownerId": "really-new-god-001",
+          "role": "image2",
+          "dataPath": "swagbound-phaser/public/data/backdrop-registry.json"
+        }
+      ],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/postcards2/postcards2-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [
+        "swagbound-phaser/public/assets/battle-backgrounds/postcards2-001.png"
+      ],
+      "notes": [
+        "Runtime references this filename family as a secondary layer, but it is not the same collection as its paired primary; review it as a separate battle-background set."
+      ]
+    },
+    {
+      "id": "42069ers",
+      "displayName": "42069ers",
+      "kind": "battle-background",
+      "status": "staged-background-candidate",
+      "selectionAuthority": "asset-lab/generated/processed/battle-backdrops",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "selectedPrimaryPath": null,
+      "selectedSecondaryPath": null,
+      "suggestedPrimaryPath": "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-001.png",
+      "suggestedSecondaryPath": null,
+      "zones": [],
+      "registryEntry": null,
+      "assetCount": 5,
+      "assets": [
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-42069ers-42069ers-001",
+          "label": "42069ers 001",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-001.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/42069ers/42069ers-001.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "42069ers",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2406378,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-42069ers-42069ers-002",
+          "label": "42069ers 002",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-002.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/42069ers/42069ers-002.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "42069ers",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2485563,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-42069ers-42069ers-003",
+          "label": "42069ers 003",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-003.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/42069ers/42069ers-003.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "42069ers",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2592714,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-42069ers-42069ers-004",
+          "label": "42069ers 004",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-004.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/42069ers/42069ers-004.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "42069ers",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2789056,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        },
+        {
+          "id": "asset-lab-generated-processed-battle-backdrops-0001-42069ers-42069ers-005",
+          "label": "42069ers 005",
+          "repoPath": "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-005.png",
+          "imageSrc": "../../generated/processed/battle-backdrops-0001/42069ers/42069ers-005.png",
+          "runtimePath": null,
+          "sourceArea": "asset-lab-processed-battle-backdrops",
+          "groupId": "42069ers",
+          "width": 1280,
+          "height": 1120,
+          "bytes": 2246069,
+          "runtimeReferenced": false,
+          "runtimeReferences": []
+        }
+      ],
+      "runtimeReferences": [],
+      "nonSelectedVariantPaths": [
+        "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-001.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-002.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-003.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-004.png",
+        "asset-lab/generated/processed/battle-backdrops-0001/42069ers/42069ers-005.png"
+      ],
+      "blockedRuntimeCleanupPaths": [],
+      "notes": [
+        "Processed battle-backdrop candidate pile; select act only if this should survive for later promotion review."
+      ]
+    }
+  ]
+}

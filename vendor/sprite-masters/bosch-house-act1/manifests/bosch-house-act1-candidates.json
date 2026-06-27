@@ -1,0 +1,628 @@
+{
+  "schema": "swagbound.nativeChatgptSpriteImportBatch.v1",
+  "id": "bosch-house-act1",
+  "createdAt": "2026-05-25T02:04:30+00:00",
+  "updatedAt": "2026-05-25T15:07:18+00:00",
+  "status": "rejected-canon-mismatch",
+  "provider": "native-chatgpt-image-tool",
+  "model": null,
+  "sourceMode": "native-generated-external-import",
+  "reviewOnly": true,
+  "runtimePromotionAllowed": false,
+  "runtimePromotion": false,
+  "activeProcedure": "docs/ops/swagbound-native-chatgpt-sprite-import.md",
+  "incomingPath": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt",
+  "promptCardsIndex": "asset-lab/sprites/bosch-house-act1/prompt-cards/prompt-cards.md",
+  "backgroundColor": "#FF00FF",
+  "apiExecution": {
+    "enabled": false,
+    "reason": "API generation is intentionally disabled for this pass; native ChatGPT image generation plus repo import is the canonical lane.",
+    "manualExperimentalOnly": true,
+    "notNextUnblock": true
+  },
+  "candidateCount": 7,
+  "candidates": [
+    {
+      "id": "bosch_default_candidate",
+      "label": "Bosch default candidate",
+      "role": "hero",
+      "provider": "native-chatgpt-image-tool",
+      "model": null,
+      "sourceMode": "native-generated-external-import",
+      "status": "rejected-canon-mismatch",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "runtimePromotion": false,
+      "rawIncomingPath": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt",
+      "acceptedIncomingFilenames": [
+        "bosch_default_candidate.png",
+        "bosch_default_candidate_0001.png",
+        "bosch_default_candidate-0001.png"
+      ],
+      "promptCard": "asset-lab/sprites/bosch-house-act1/prompt-cards/bosch_default_candidate.md",
+      "promptHashSha256": "d8b63a594f8e276fce844fea5c37eeb4fb4bfff3e17a3abdc560f03666355457",
+      "rawOutput": null,
+      "processedOutput": null,
+      "backgroundColor": "#FF00FF",
+      "targetReviewPx": [
+        96,
+        128
+      ],
+      "nativeIntent": "32x48 hero overworld sprite after later approval",
+      "interactionRuntimeRole": "the playable hero at the beginning of the home route",
+      "alphaExtraction": {
+        "method": "chroma-key",
+        "backgroundColor": "#FF00FF",
+        "tolerance": 0,
+        "edgeHaloCheck": "not-run",
+        "blankCheck": "not-run",
+        "backgroundBleedCheck": "not-run",
+        "ok": false,
+        "reason": "not worth remediating / blocked by canon rejection",
+        "processedOutput": null
+      },
+      "copyRisk": {
+        "earthboundDerived": false,
+        "copiedLayoutOrSprite": false,
+        "checklist": [
+          "not Mother/EarthBound silhouette",
+          "not copied phone/present save prop",
+          "no readable text/logos",
+          "original Swagbound canon only",
+          "no literal Wi-Fi icon as main design language",
+          "not generic chibi/JRPG style without Swagbound lore"
+        ]
+      },
+      "approval": {
+        "approvedBy": null,
+        "approvedAt": null,
+        "notes": null
+      },
+      "artApproval": "rejected",
+      "alphaQa": "not worth remediating / blocked by canon rejection",
+      "rejectedEvidence": {
+        "rawSheet": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/bosch-house-act1-native-sheet.png",
+        "cropManifest": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/crop-manifest.json",
+        "crop": {
+          "x": 80,
+          "y": 120,
+          "w": 240,
+          "h": 390
+        },
+        "preservation": "raw native sheet is rejected evidence only; prior crop/process files are not current candidates and are not referenced for review or promotion",
+        "rawImportedAt": "2026-05-25T02:17:08+00:00"
+      },
+      "artReview": {
+        "status": "rejected",
+        "reason": "Bosch reads as a generic protagonist, not Signal Town/Bosch default.",
+        "reviewedAt": "2026-05-25T02:33:05+00:00",
+        "reviewedBy": "Nick owner review"
+      }
+    },
+    {
+      "id": "guardian_placeholder",
+      "label": "Household guardian placeholder",
+      "role": "npc",
+      "provider": "native-chatgpt-image-tool",
+      "model": null,
+      "sourceMode": "native-generated-external-import",
+      "status": "rejected-canon-mismatch",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "runtimePromotion": false,
+      "rawIncomingPath": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt",
+      "acceptedIncomingFilenames": [
+        "guardian_placeholder.png",
+        "guardian_placeholder_0001.png",
+        "guardian_placeholder-0001.png"
+      ],
+      "promptCard": "asset-lab/sprites/bosch-house-act1/prompt-cards/guardian_placeholder.md",
+      "promptHashSha256": "bb235d88088fd4c894412a193bce634d57dbe3c4d025b3bb3743d5c44f813501",
+      "rawOutput": null,
+      "processedOutput": null,
+      "backgroundColor": "#FF00FF",
+      "targetReviewPx": [
+        96,
+        128
+      ],
+      "nativeIntent": "32x48 NPC overworld sprite after later approval",
+      "interactionRuntimeRole": "a warm practical household guardian NPC in Bosch's house",
+      "alphaExtraction": {
+        "method": "chroma-key",
+        "backgroundColor": "#FF00FF",
+        "tolerance": 0,
+        "edgeHaloCheck": "not-run",
+        "blankCheck": "not-run",
+        "backgroundBleedCheck": "not-run",
+        "ok": false,
+        "reason": "not worth remediating / blocked by canon rejection",
+        "processedOutput": null
+      },
+      "copyRisk": {
+        "earthboundDerived": false,
+        "copiedLayoutOrSprite": false,
+        "checklist": [
+          "not Mother/EarthBound silhouette",
+          "not copied phone/present save prop",
+          "no readable text/logos",
+          "original Swagbound canon only",
+          "no literal Wi-Fi icon as main design language",
+          "not generic chibi/JRPG style without Swagbound lore"
+        ]
+      },
+      "approval": {
+        "approvedBy": null,
+        "approvedAt": null,
+        "notes": null
+      },
+      "artApproval": "rejected",
+      "alphaQa": "not worth remediating / blocked by canon rejection",
+      "rejectedEvidence": {
+        "rawSheet": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/bosch-house-act1-native-sheet.png",
+        "cropManifest": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/crop-manifest.json",
+        "crop": {
+          "x": 410,
+          "y": 100,
+          "w": 240,
+          "h": 410
+        },
+        "preservation": "raw native sheet is rejected evidence only; prior crop/process files are not current candidates and are not referenced for review or promotion",
+        "rawImportedAt": "2026-05-25T02:17:08+00:00"
+      },
+      "artReview": {
+        "status": "rejected",
+        "reason": "Guardian reads as a generic mother/maid, not a practical guardian/community logistics role.",
+        "reviewedAt": "2026-05-25T02:33:05+00:00",
+        "reviewedBy": "Nick owner review"
+      }
+    },
+    {
+      "id": "cousin_placeholder",
+      "label": "Cousin placeholder",
+      "role": "npc",
+      "provider": "native-chatgpt-image-tool",
+      "model": null,
+      "sourceMode": "native-generated-external-import",
+      "status": "rejected-canon-mismatch",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "runtimePromotion": false,
+      "rawIncomingPath": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt",
+      "acceptedIncomingFilenames": [
+        "cousin_placeholder.png",
+        "cousin_placeholder_0001.png",
+        "cousin_placeholder-0001.png"
+      ],
+      "promptCard": "asset-lab/sprites/bosch-house-act1/prompt-cards/cousin_placeholder.md",
+      "promptHashSha256": "d364eddbcd85b5f3f50994c4ac94d2336b98e8a320b452cad715ab9436683508",
+      "rawOutput": null,
+      "processedOutput": null,
+      "backgroundColor": "#FF00FF",
+      "targetReviewPx": [
+        96,
+        128
+      ],
+      "nativeIntent": "32x48 NPC overworld sprite after later approval",
+      "interactionRuntimeRole": "a younger cousin NPC with restless social-feed energy",
+      "alphaExtraction": {
+        "method": "chroma-key",
+        "backgroundColor": "#FF00FF",
+        "tolerance": 0,
+        "edgeHaloCheck": "not-run",
+        "blankCheck": "not-run",
+        "backgroundBleedCheck": "not-run",
+        "ok": false,
+        "reason": "not worth remediating / blocked by canon rejection",
+        "processedOutput": null
+      },
+      "copyRisk": {
+        "earthboundDerived": false,
+        "copiedLayoutOrSprite": false,
+        "checklist": [
+          "not Mother/EarthBound silhouette",
+          "not copied phone/present save prop",
+          "no readable text/logos",
+          "original Swagbound canon only",
+          "no literal Wi-Fi icon as main design language",
+          "not generic chibi/JRPG style without Swagbound lore"
+        ]
+      },
+      "approval": {
+        "approvedBy": null,
+        "approvedAt": null,
+        "notes": null
+      },
+      "artApproval": "rejected",
+      "alphaQa": "not worth remediating / blocked by canon rejection",
+      "rejectedEvidence": {
+        "rawSheet": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/bosch-house-act1-native-sheet.png",
+        "cropManifest": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/crop-manifest.json",
+        "crop": {
+          "x": 760,
+          "y": 130,
+          "w": 260,
+          "h": 380
+        },
+        "preservation": "raw native sheet is rejected evidence only; prior crop/process files are not current candidates and are not referenced for review or promotion",
+        "rawImportedAt": "2026-05-25T02:17:08+00:00"
+      },
+      "artReview": {
+        "status": "rejected",
+        "reason": "Cousin reads as a generic hoodie kid, not a rumor/signal/sticker lens.",
+        "reviewedAt": "2026-05-25T02:33:05+00:00",
+        "reviewedBy": "Nick owner review"
+      }
+    },
+    {
+      "id": "signal_pet_modem",
+      "label": "Signal pet modem",
+      "role": "gate_npc",
+      "provider": "native-chatgpt-image-tool",
+      "model": null,
+      "sourceMode": "native-generated-external-import",
+      "status": "rejected-canon-mismatch",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "runtimePromotion": false,
+      "rawIncomingPath": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt",
+      "acceptedIncomingFilenames": [
+        "signal_pet_modem.png",
+        "signal_pet_modem_0001.png",
+        "signal_pet_modem-0001.png"
+      ],
+      "promptCard": "asset-lab/sprites/bosch-house-act1/prompt-cards/signal_pet_modem.md",
+      "promptHashSha256": "8bd80d5144619a7969b4bfbf293bb35eab3c49d841850db53a5afce8fbee9588",
+      "rawOutput": null,
+      "processedOutput": null,
+      "backgroundColor": "#FF00FF",
+      "targetReviewPx": [
+        64,
+        64
+      ],
+      "nativeIntent": "24x32 to 32x32 gate token after later approval",
+      "interactionRuntimeRole": "a small modem-like household signal companion that blocks the exit until Bosch has the proof token charm",
+      "alphaExtraction": {
+        "method": "chroma-key",
+        "backgroundColor": "#FF00FF",
+        "tolerance": 0,
+        "edgeHaloCheck": "not-run",
+        "blankCheck": "not-run",
+        "backgroundBleedCheck": "not-run",
+        "ok": false,
+        "reason": "not worth remediating / blocked by canon rejection",
+        "processedOutput": null
+      },
+      "copyRisk": {
+        "earthboundDerived": false,
+        "copiedLayoutOrSprite": false,
+        "checklist": [
+          "not Mother/EarthBound silhouette",
+          "not copied phone/present save prop",
+          "no readable text/logos",
+          "original Swagbound canon only",
+          "no literal Wi-Fi icon as main design language",
+          "not generic chibi/JRPG style without Swagbound lore"
+        ]
+      },
+      "approval": {
+        "approvedBy": null,
+        "approvedAt": null,
+        "notes": null
+      },
+      "artApproval": "rejected",
+      "alphaQa": "not worth remediating / blocked by canon rejection",
+      "rejectedEvidence": {
+        "rawSheet": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/bosch-house-act1-native-sheet.png",
+        "cropManifest": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/crop-manifest.json",
+        "crop": {
+          "x": 1100,
+          "y": 215,
+          "w": 260,
+          "h": 290
+        },
+        "preservation": "raw native sheet is rejected evidence only; prior crop/process files are not current candidates and are not referenced for review or promotion",
+        "rawImportedAt": "2026-05-25T02:17:08+00:00"
+      },
+      "artReview": {
+        "status": "rejected",
+        "reason": "Signal-pet reads as a robot mascot, not a domestic signal-sensitive pet.",
+        "reviewedAt": "2026-05-25T02:33:05+00:00",
+        "reviewedBy": "Nick owner review"
+      }
+    },
+    {
+      "id": "proof_token_charm",
+      "label": "Proof token charm",
+      "role": "key_item",
+      "provider": "native-chatgpt-image-tool",
+      "model": null,
+      "sourceMode": "native-generated-external-import",
+      "status": "rejected-canon-mismatch",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "runtimePromotion": false,
+      "rawIncomingPath": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt",
+      "acceptedIncomingFilenames": [
+        "proof_token_charm.png",
+        "proof_token_charm_0001.png",
+        "proof_token_charm-0001.png"
+      ],
+      "promptCard": "asset-lab/sprites/bosch-house-act1/prompt-cards/proof_token_charm.md",
+      "promptHashSha256": "3fcb707081cdaa168263cae21c8512049a9130efa7d2317bb5159aa1b980394f",
+      "rawOutput": null,
+      "processedOutput": null,
+      "backgroundColor": "#FF00FF",
+      "targetReviewPx": [
+        48,
+        48
+      ],
+      "nativeIntent": "16x16 to 24x24 item pickup after later approval",
+      "interactionRuntimeRole": "a tiny early key item representing social proof made physical",
+      "alphaExtraction": {
+        "method": "chroma-key",
+        "backgroundColor": "#FF00FF",
+        "tolerance": 0,
+        "edgeHaloCheck": "not-run",
+        "blankCheck": "not-run",
+        "backgroundBleedCheck": "not-run",
+        "ok": false,
+        "reason": "not worth remediating / blocked by canon rejection",
+        "processedOutput": null
+      },
+      "copyRisk": {
+        "earthboundDerived": false,
+        "copiedLayoutOrSprite": false,
+        "checklist": [
+          "not Mother/EarthBound silhouette",
+          "not copied phone/present save prop",
+          "no readable text/logos",
+          "original Swagbound canon only",
+          "no literal Wi-Fi icon as main design language",
+          "not generic chibi/JRPG style without Swagbound lore"
+        ]
+      },
+      "approval": {
+        "approvedBy": null,
+        "approvedAt": null,
+        "notes": null
+      },
+      "artApproval": "rejected",
+      "alphaQa": "not worth remediating / blocked by canon rejection",
+      "rejectedEvidence": {
+        "rawSheet": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/bosch-house-act1-native-sheet.png",
+        "cropManifest": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/crop-manifest.json",
+        "crop": {
+          "x": 80,
+          "y": 590,
+          "w": 230,
+          "h": 340
+        },
+        "preservation": "raw native sheet is rejected evidence only; prior crop/process files are not current candidates and are not referenced for review or promotion",
+        "rawImportedAt": "2026-05-25T02:17:08+00:00"
+      },
+      "artReview": {
+        "status": "rejected",
+        "reason": "Literal Wi-Fi iconography replaces proof/receipt/signal language.",
+        "reviewedAt": "2026-05-25T02:33:05+00:00",
+        "reviewedBy": "Nick owner review"
+      }
+    },
+    {
+      "id": "proof_token_bowl",
+      "label": "Proof token bowl",
+      "role": "prop",
+      "provider": "native-chatgpt-image-tool",
+      "model": null,
+      "sourceMode": "native-generated-external-import",
+      "status": "rejected-canon-mismatch",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "runtimePromotion": false,
+      "rawIncomingPath": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt",
+      "acceptedIncomingFilenames": [
+        "proof_token_bowl.png",
+        "proof_token_bowl_0001.png",
+        "proof_token_bowl-0001.png"
+      ],
+      "promptCard": "asset-lab/sprites/bosch-house-act1/prompt-cards/proof_token_bowl.md",
+      "promptHashSha256": "05f34f2faf15b72b8db6cab05ca04af3d7b53838c3e2b305bad4398e8e715e2a",
+      "rawOutput": null,
+      "processedOutput": null,
+      "backgroundColor": "#FF00FF",
+      "targetReviewPx": [
+        64,
+        64
+      ],
+      "nativeIntent": "24x24 to 32x32 prop after later approval",
+      "interactionRuntimeRole": "a small entry-table bowl holding the proof token charm",
+      "alphaExtraction": {
+        "method": "chroma-key",
+        "backgroundColor": "#FF00FF",
+        "tolerance": 0,
+        "edgeHaloCheck": "not-run",
+        "blankCheck": "not-run",
+        "backgroundBleedCheck": "not-run",
+        "ok": false,
+        "reason": "not worth remediating / blocked by canon rejection",
+        "processedOutput": null
+      },
+      "copyRisk": {
+        "earthboundDerived": false,
+        "copiedLayoutOrSprite": false,
+        "checklist": [
+          "not Mother/EarthBound silhouette",
+          "not copied phone/present save prop",
+          "no readable text/logos",
+          "original Swagbound canon only",
+          "no literal Wi-Fi icon as main design language",
+          "not generic chibi/JRPG style without Swagbound lore"
+        ]
+      },
+      "approval": {
+        "approvedBy": null,
+        "approvedAt": null,
+        "notes": null
+      },
+      "artApproval": "rejected",
+      "alphaQa": "not worth remediating / blocked by canon rejection",
+      "rejectedEvidence": {
+        "rawSheet": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/bosch-house-act1-native-sheet.png",
+        "cropManifest": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/crop-manifest.json",
+        "crop": {
+          "x": 370,
+          "y": 660,
+          "w": 310,
+          "h": 280
+        },
+        "preservation": "raw native sheet is rejected evidence only; prior crop/process files are not current candidates and are not referenced for review or promotion",
+        "rawImportedAt": "2026-05-25T02:17:09+00:00"
+      },
+      "artReview": {
+        "status": "rejected",
+        "reason": "Literal Wi-Fi iconography replaces household proof-token/catchall language.",
+        "reviewedAt": "2026-05-25T02:33:05+00:00",
+        "reviewedBy": "Nick owner review"
+      }
+    },
+    {
+      "id": "receipt_router",
+      "label": "Receipt router",
+      "role": "save_point",
+      "provider": "native-chatgpt-image-tool",
+      "model": null,
+      "sourceMode": "native-generated-external-import",
+      "status": "rejected-canon-mismatch",
+      "reviewOnly": true,
+      "runtimePromotionAllowed": false,
+      "runtimePromotion": false,
+      "rawIncomingPath": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt",
+      "acceptedIncomingFilenames": [
+        "receipt_router.png",
+        "receipt_router_0001.png",
+        "receipt_router-0001.png"
+      ],
+      "promptCard": "asset-lab/sprites/bosch-house-act1/prompt-cards/receipt_router.md",
+      "promptHashSha256": "1d5576ce8cf2ee32fa6dfd84a09f05850b81238fcfd09467b59ca7d4890b2d99",
+      "rawOutput": null,
+      "processedOutput": null,
+      "backgroundColor": "#FF00FF",
+      "targetReviewPx": [
+        64,
+        64
+      ],
+      "nativeIntent": "24x32 to 32x32 save-point prop after later approval",
+      "interactionRuntimeRole": "a small receipt-printer/router hybrid that reads as a save point",
+      "alphaExtraction": {
+        "method": "chroma-key",
+        "backgroundColor": "#FF00FF",
+        "tolerance": 0,
+        "edgeHaloCheck": "not-run",
+        "blankCheck": "not-run",
+        "backgroundBleedCheck": "not-run",
+        "ok": false,
+        "reason": "not worth remediating / blocked by canon rejection",
+        "processedOutput": null
+      },
+      "copyRisk": {
+        "earthboundDerived": false,
+        "copiedLayoutOrSprite": false,
+        "checklist": [
+          "not Mother/EarthBound silhouette",
+          "not copied phone/present save prop",
+          "no readable text/logos",
+          "original Swagbound canon only",
+          "no literal Wi-Fi icon as main design language",
+          "not generic chibi/JRPG style without Swagbound lore"
+        ]
+      },
+      "approval": {
+        "approvedBy": null,
+        "approvedAt": null,
+        "notes": null
+      },
+      "artApproval": "rejected",
+      "alphaQa": "not worth remediating / blocked by canon rejection",
+      "rejectedEvidence": {
+        "rawSheet": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/bosch-house-act1-native-sheet.png",
+        "cropManifest": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/crop-manifest.json",
+        "crop": {
+          "x": 760,
+          "y": 620,
+          "w": 260,
+          "h": 330
+        },
+        "preservation": "raw native sheet is rejected evidence only; prior crop/process files are not current candidates and are not referenced for review or promotion",
+        "rawImportedAt": "2026-05-25T02:17:09+00:00"
+      },
+      "artReview": {
+        "status": "rejected",
+        "reason": "Receipt Router reads as a generic Wi-Fi printer, not a patched household save/checkpoint/status object.",
+        "reviewedAt": "2026-05-25T02:33:05+00:00",
+        "reviewedBy": "Nick owner review"
+      }
+    }
+  ],
+  "importSummary": {
+    "importedAt": "2026-05-25T02:17:09+00:00",
+    "incomingPath": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt",
+    "imported": 7,
+    "ambiguous": 0,
+    "awaiting": 0,
+    "cropManifestSupplied": true
+  },
+  "alphaSummary": {
+    "status": "not worth remediating / blocked by canon rejection",
+    "processedAt": null,
+    "pass": 0,
+    "fail": 0,
+    "reason": "visual Swagbound canon rejection supersedes magenta edge-halo cleanup"
+  },
+  "reviewArtifacts": {
+    "reviewPage": "asset-lab/sprites/bosch-house-act1/review.html",
+    "contactSheet": "asset-lab/sprites/bosch-house-act1/contact-sheets/bosch-house-act1-contact-sheet.png",
+    "verification": "asset-lab/sprites/bosch-house-act1/verification.md",
+    "adversarialReview": "asset-lab/sprites/bosch-house-act1/adversarial-review.md"
+  },
+  "artApproval": "rejected",
+  "alphaQa": "not worth remediating / blocked by canon rejection",
+  "visualCanonReview": {
+    "status": "rejected",
+    "reason": "These sprites do not follow Swagbound canon visually.",
+    "reviewedAt": "2026-05-25T15:06:26+00:00",
+    "reviewedBy": "Nick owner review",
+    "primaryBlocker": true
+  },
+  "currentStatus": "awaiting native ChatGPT regeneration; one target per PNG",
+  "nextUnblock": "Generate replacement native ChatGPT PNGs from the canon-first prompt cards, then run adversarial art review before alpha cleanup.",
+  "rejectedEvidence": {
+    "rawSheet": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/bosch-house-act1-native-sheet.png",
+    "cropManifest": "asset-lab/sprites/bosch-house-act1/_incoming/native-chatgpt/crop-manifest.json",
+    "preservation": "rejected evidence only; not a candidate; not alpha-cleanup-ready; not runtime-promotable"
+  },
+  "rejectionReasons": [
+    "These sprites do not follow Swagbound canon visually.",
+    "Generic chibi/JRPG style, not Swagbound canon.",
+    "Literal Wi-Fi iconography replaces proof/receipt/signal language.",
+    "Bosch reads as generic protagonist, not Signal Town/Bosch default.",
+    "Guardian reads as generic mother/maid, not practical guardian/community logistics role.",
+    "Cousin reads as generic hoodie kid, not rumor/signal/sticker lens.",
+    "Signal-pet reads as robot mascot, not domestic signal-sensitive pet.",
+    "Receipt Router reads as generic Wi-Fi printer, not patched household save/checkpoint/status object.",
+    "The sheet does not mine or express Swagbound lore."
+  ],
+  "rejectionDecision": {
+    "decidedAt": "2026-05-25T02:33:05+00:00",
+    "decidedBy": "Nick owner review",
+    "decision": "reject current Bosch House native sprite sheet because the sprites do not follow Swagbound canon visually",
+    "requiredCorrection": [
+      "Rewrite prompt cards from canon first, not generic sprite style.",
+      "Generate one target per native ChatGPT image, not a combined sheet.",
+      "Use exact flat #FF00FF background.",
+      "Avoid literal Wi-Fi symbols except tiny abstract signal hints.",
+      "Use original unreadable proof marks/glyphs, receipt slips, patched objects, stickers, charms, thrifted hardware.",
+      "Keep provider native-chatgpt-image-tool, model null, API disabled.",
+      "Import only after new PNGs are generated.",
+      "Run adversarial review before alpha cleanup."
+    ]
+  }
+}

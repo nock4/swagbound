@@ -1,0 +1,22 @@
+{
+  "sprite": "hotel_3_story.png",
+  "runtimeAsset": "public/assets/act1/building-expansion-0001/hotel_3_story.png",
+  "sprite_dimensions": {
+    "w": 220,
+    "h": 197
+  },
+  "placement_offset_px": {
+    "x": 0,
+    "y": 55
+  },
+  "ysort_anchor_local": {
+    "x": 110,
+    "y": 197
+  },
+  "collision_rect_local": {
+    "x": 33,
+    "y": 158,
+    "w": 154,
+    "h": 24
+  }
+}

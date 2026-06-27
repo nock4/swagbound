@@ -1,0 +1,5486 @@
+{
+  "type": "map",
+  "tiledversion": "1.11.0",
+  "version": "1.10",
+  "orientation": "orthogonal",
+  "renderorder": "right-down",
+  "width": 96,
+  "height": 12,
+  "tilewidth": 64,
+  "tileheight": 64,
+  "layers": [
+    {
+      "id": 1,
+      "name": "ground",
+      "type": "tilelayer",
+      "width": 96,
+      "height": 12,
+      "data": []
+    },
+    {
+      "type": "objectgroup",
+      "name": "buildings",
+      "objects": [
+        {
+          "id": 1,
+          "name": "VICTOR_RIBBON_HOTEL",
+          "type": "building",
+          "x": 20,
+          "y": 350,
+          "width": 146,
+          "height": 126,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-victor-ribbon-hotel"
+            },
+            {
+              "name": "role",
+              "value": "boutique-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 2,
+          "name": "SUNLINE_GRAND_HOTEL_TOWER",
+          "type": "building",
+          "x": 135,
+          "y": 350,
+          "width": 96,
+          "height": 182,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-sunline-grand-hotel-tower"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "name": "CORAL_CORNER_CAFE",
+          "type": "building",
+          "x": 243,
+          "y": 350,
+          "width": 132,
+          "height": 108,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-coral-corner-cafe"
+            },
+            {
+              "name": "role",
+              "value": "cafe"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "name": "PALE_TURQUOISE_GALLERY_ARCADE",
+          "type": "building",
+          "x": 373,
+          "y": 350,
+          "width": 140,
+          "height": 138,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-pale-turquoise-gallery-arcade"
+            },
+            {
+              "name": "role",
+              "value": "gallery-arcade"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "name": "S0_CANYON_05_BREAKWATER_SPIRE",
+          "type": "building",
+          "x": 490,
+          "y": 350,
+          "width": 106,
+          "height": 184,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-breakwater-crown-hotel"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 6,
+          "name": "SEAFOAM_BATHHOUSE_LOUNGE",
+          "type": "building",
+          "x": 619,
+          "y": 350,
+          "width": 164,
+          "height": 116,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-seafoam-bathhouse-lounge"
+            },
+            {
+              "name": "role",
+              "value": "bathhouse-lounge"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 7,
+          "name": "SUNLINE_TERRACE_HOTEL",
+          "type": "building",
+          "x": 783,
+          "y": 350,
+          "width": 176,
+          "height": 130,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-sunline-terrace-hotel"
+            },
+            {
+              "name": "role",
+              "value": "hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 8,
+          "name": "S0_CANYON_08_RIBBON_STACK",
+          "type": "building",
+          "x": 929,
+          "y": 350,
+          "width": 128,
+          "height": 136,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-victor-ribbon-hotel"
+            },
+            {
+              "name": "role",
+              "value": "boutique-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "name": "S0_CANYON_09_GRAND_NEEDLE",
+          "type": "building",
+          "x": 1033,
+          "y": 350,
+          "width": 92,
+          "height": 178,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-sunline-grand-hotel-tower"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 10,
+          "name": "S0_CANYON_10_CORAL_STOREFRONT",
+          "type": "building",
+          "x": 1137,
+          "y": 350,
+          "width": 128,
+          "height": 106,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-coral-corner-cafe"
+            },
+            {
+              "name": "role",
+              "value": "cafe"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "name": "S0_CANYON_11_ARCADE_FLATIRON",
+          "type": "building",
+          "x": 1261,
+          "y": 350,
+          "width": 132,
+          "height": 142,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-pale-turquoise-gallery-arcade"
+            },
+            {
+              "name": "role",
+              "value": "gallery-arcade"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "name": "S0_CANYON_12_CROWN_BOOKEND",
+          "type": "building",
+          "x": 1374,
+          "y": 350,
+          "width": 106,
+          "height": 188,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-breakwater-crown-hotel"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 13,
+          "name": "S0_CANYON_13_SEAFOAM_EDGE",
+          "type": "building",
+          "x": 1494,
+          "y": 350,
+          "width": 146,
+          "height": 112,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-seafoam-bathhouse-lounge"
+            },
+            {
+              "name": "role",
+              "value": "bathhouse-lounge"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "tower-bookended-canyon"
+            }
+          ]
+        },
+        {
+          "id": 14,
+          "name": "S1_RIBBON_01_SEAFOAM_CANOPY",
+          "type": "building",
+          "x": 1540,
+          "y": 350,
+          "width": 164,
+          "height": 108,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-seafoam-bathhouse-lounge"
+            },
+            {
+              "name": "role",
+              "value": "bathhouse-lounge"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 15,
+          "name": "S1_RIBBON_02_CORAL_CAFE",
+          "type": "building",
+          "x": 1673,
+          "y": 350,
+          "width": 130,
+          "height": 102,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-coral-corner-cafe"
+            },
+            {
+              "name": "role",
+              "value": "cafe"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 16,
+          "name": "S1_RIBBON_03_GALLERY_MARQUEE",
+          "type": "building",
+          "x": 1797,
+          "y": 350,
+          "width": 146,
+          "height": 122,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-pale-turquoise-gallery-arcade"
+            },
+            {
+              "name": "role",
+              "value": "gallery-arcade"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 17,
+          "name": "S1_RIBBON_04_TERRACE_LOWRISE",
+          "type": "building",
+          "x": 1939,
+          "y": 350,
+          "width": 166,
+          "height": 116,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-sunline-terrace-hotel"
+            },
+            {
+              "name": "role",
+              "value": "hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 18,
+          "name": "S1_RIBBON_05_RIBBON_BOUTIQUE",
+          "type": "building",
+          "x": 2075,
+          "y": 350,
+          "width": 134,
+          "height": 120,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-victor-ribbon-hotel"
+            },
+            {
+              "name": "role",
+              "value": "boutique-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 19,
+          "name": "S1_RIBBON_06_CORAL_SNACK_BAR",
+          "type": "building",
+          "x": 2190,
+          "y": 350,
+          "width": 124,
+          "height": 100,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-coral-corner-cafe"
+            },
+            {
+              "name": "role",
+              "value": "cafe"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 20,
+          "name": "S1_RIBBON_07_SEAFOAM_ARCADE",
+          "type": "building",
+          "x": 2316,
+          "y": 350,
+          "width": 156,
+          "height": 112,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-seafoam-bathhouse-lounge"
+            },
+            {
+              "name": "role",
+              "value": "bathhouse-lounge"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 21,
+          "name": "S1_RIBBON_08_GALLERY_SHORT",
+          "type": "building",
+          "x": 2451,
+          "y": 350,
+          "width": 142,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-pale-turquoise-gallery-arcade"
+            },
+            {
+              "name": "role",
+              "value": "gallery-arcade"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 22,
+          "name": "S1_RIBBON_09_TERRACE_CANOPY",
+          "type": "building",
+          "x": 2590,
+          "y": 350,
+          "width": 164,
+          "height": 118,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-sunline-terrace-hotel"
+            },
+            {
+              "name": "role",
+              "value": "hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 23,
+          "name": "S1_RIBBON_10_GRAND_LONE_TOWER",
+          "type": "building",
+          "x": 2704,
+          "y": 350,
+          "width": 92,
+          "height": 178,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-sunline-grand-hotel-tower"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 24,
+          "name": "S1_RIBBON_11_CROWN_BACKLOT",
+          "type": "building",
+          "x": 2790,
+          "y": 350,
+          "width": 108,
+          "height": 170,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-breakwater-crown-hotel"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 25,
+          "name": "S1_RIBBON_12_CORAL_NEON",
+          "type": "building",
+          "x": 2893,
+          "y": 350,
+          "width": 126,
+          "height": 102,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-coral-corner-cafe"
+            },
+            {
+              "name": "role",
+              "value": "cafe"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 26,
+          "name": "S1_RIBBON_13_VICTOR_SIDEWALL",
+          "type": "building",
+          "x": 3010,
+          "y": 350,
+          "width": 136,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-victor-ribbon-hotel"
+            },
+            {
+              "name": "role",
+              "value": "boutique-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "low-arcade-cafe-ribbon"
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "name": "S2_STEP_01_TERRACE_WIDE",
+          "type": "building",
+          "x": 3080,
+          "y": 350,
+          "width": 176,
+          "height": 132,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-sunline-terrace-hotel"
+            },
+            {
+              "name": "role",
+              "value": "hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "name": "S2_STEP_02_RIBBON_NARROW",
+          "type": "building",
+          "x": 3223,
+          "y": 350,
+          "width": 122,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-victor-ribbon-hotel"
+            },
+            {
+              "name": "role",
+              "value": "boutique-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 29,
+          "name": "S2_STEP_03_CROWN_TALL",
+          "type": "building",
+          "x": 3334,
+          "y": 350,
+          "width": 112,
+          "height": 188,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-breakwater-crown-hotel"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "name": "S2_STEP_04_CORAL_LOW",
+          "type": "building",
+          "x": 3448,
+          "y": 350,
+          "width": 128,
+          "height": 104,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-coral-corner-cafe"
+            },
+            {
+              "name": "role",
+              "value": "cafe"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "name": "S2_STEP_05_GRAND_TOWER",
+          "type": "building",
+          "x": 3554,
+          "y": 350,
+          "width": 96,
+          "height": 178,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-sunline-grand-hotel-tower"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "name": "S2_STEP_06_SEAFOAM_MID",
+          "type": "building",
+          "x": 3672,
+          "y": 350,
+          "width": 152,
+          "height": 120,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-seafoam-bathhouse-lounge"
+            },
+            {
+              "name": "role",
+              "value": "bathhouse-lounge"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "name": "S2_STEP_07_GALLERY_TALL",
+          "type": "building",
+          "x": 3811,
+          "y": 350,
+          "width": 138,
+          "height": 140,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-pale-turquoise-gallery-arcade"
+            },
+            {
+              "name": "role",
+              "value": "gallery-arcade"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "name": "S2_STEP_08_TERRACE_SHELF",
+          "type": "building",
+          "x": 3961,
+          "y": 350,
+          "width": 174,
+          "height": 136,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-sunline-terrace-hotel"
+            },
+            {
+              "name": "role",
+              "value": "hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "name": "S2_STEP_09_CROWN_SPIRE",
+          "type": "building",
+          "x": 4096,
+          "y": 350,
+          "width": 108,
+          "height": 184,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-breakwater-crown-hotel"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "name": "S2_STEP_10_CORAL_KIOSK",
+          "type": "building",
+          "x": 4205,
+          "y": 350,
+          "width": 122,
+          "height": 106,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-coral-corner-cafe"
+            },
+            {
+              "name": "role",
+              "value": "cafe"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 37,
+          "name": "S2_STEP_11_RIBBON_TALL",
+          "type": "building",
+          "x": 4323,
+          "y": 350,
+          "width": 126,
+          "height": 136,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-victor-ribbon-hotel"
+            },
+            {
+              "name": "role",
+              "value": "boutique-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 38,
+          "name": "S2_STEP_12_GALLERY_LOW",
+          "type": "building",
+          "x": 4449,
+          "y": 350,
+          "width": 138,
+          "height": 126,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-pale-turquoise-gallery-arcade"
+            },
+            {
+              "name": "role",
+              "value": "gallery-arcade"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "name": "S2_STEP_13_GRAND_EDGE",
+          "type": "building",
+          "x": 4559,
+          "y": 350,
+          "width": 94,
+          "height": 176,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-sunline-grand-hotel-tower"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "stepped-hotel-wall"
+            }
+          ]
+        },
+        {
+          "id": 40,
+          "name": "S3_CLUSTER_01_SEAFOAM_GATE",
+          "type": "building",
+          "x": 4614,
+          "y": 350,
+          "width": 160,
+          "height": 112,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-seafoam-bathhouse-lounge"
+            },
+            {
+              "name": "role",
+              "value": "bathhouse-lounge"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 41,
+          "name": "S3_CLUSTER_02_GRAND_TOWER",
+          "type": "building",
+          "x": 4750,
+          "y": 350,
+          "width": 96,
+          "height": 170,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-sunline-grand-hotel-tower"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 42,
+          "name": "S3_BREAKWATER_CROWN_HOTEL",
+          "type": "building",
+          "x": 4864,
+          "y": 350,
+          "width": 116,
+          "height": 186,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-breakwater-crown-hotel"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 43,
+          "name": "S3_CLUSTER_04_GALLERY_PIER",
+          "type": "building",
+          "x": 4975,
+          "y": 350,
+          "width": 142,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-pale-turquoise-gallery-arcade"
+            },
+            {
+              "name": "role",
+              "value": "gallery-arcade"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 44,
+          "name": "S3_CLUSTER_05_TERRACE_BLOCK",
+          "type": "building",
+          "x": 5116,
+          "y": 350,
+          "width": 176,
+          "height": 132,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-sunline-terrace-hotel"
+            },
+            {
+              "name": "role",
+              "value": "hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 45,
+          "name": "S3_CLUSTER_06_VICTOR_SIGN",
+          "type": "building",
+          "x": 5251,
+          "y": 350,
+          "width": 130,
+          "height": 126,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-victor-ribbon-hotel"
+            },
+            {
+              "name": "role",
+              "value": "boutique-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 46,
+          "name": "S3_CLUSTER_07_CORAL_STALL",
+          "type": "building",
+          "x": 5360,
+          "y": 350,
+          "width": 124,
+          "height": 106,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-coral-corner-cafe"
+            },
+            {
+              "name": "role",
+              "value": "cafe"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 47,
+          "name": "S3_CLUSTER_08_SEAFOAM_WIDE",
+          "type": "building",
+          "x": 5484,
+          "y": 350,
+          "width": 160,
+          "height": 116,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-seafoam-bathhouse-lounge"
+            },
+            {
+              "name": "role",
+              "value": "bathhouse-lounge"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 48,
+          "name": "S3_CLUSTER_09_GRAND_NEON",
+          "type": "building",
+          "x": 5593,
+          "y": 350,
+          "width": 94,
+          "height": 166,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-sunline-grand-hotel-tower"
+            },
+            {
+              "name": "role",
+              "value": "tower-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 49,
+          "name": "S3_CLUSTER_10_GALLERY_ARCADE",
+          "type": "building",
+          "x": 5692,
+          "y": 350,
+          "width": 140,
+          "height": 126,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-pale-turquoise-gallery-arcade"
+            },
+            {
+              "name": "role",
+              "value": "gallery-arcade"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 50,
+          "name": "S3_CLUSTER_11_TERRACE_LAST",
+          "type": "building",
+          "x": 5828,
+          "y": 350,
+          "width": 168,
+          "height": 128,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-sunline-terrace-hotel"
+            },
+            {
+              "name": "role",
+              "value": "hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 51,
+          "name": "S3_CLUSTER_12_CORAL_CROPPED_EDGE",
+          "type": "building",
+          "x": 5956,
+          "y": 350,
+          "width": 124,
+          "height": 106,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-coral-corner-cafe"
+            },
+            {
+              "name": "role",
+              "value": "cafe"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        },
+        {
+          "id": 52,
+          "name": "S3_CLUSTER_13_VICTOR_FINAL_SIGN",
+          "type": "building",
+          "x": 6065,
+          "y": 350,
+          "width": 130,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-victor-ribbon-hotel"
+            },
+            {
+              "name": "role",
+              "value": "boutique-hotel"
+            },
+            {
+              "name": "depthMode",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "value": 342,
+              "type": "int"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.96,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.08,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "float"
+            },
+            {
+              "name": "shadowKind",
+              "type": "string",
+              "value": "act2Building"
+            },
+            {
+              "name": "composition",
+              "type": "string",
+              "value": "compressed-crown-terminal-cluster"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "objectgroup",
+      "name": "trees",
+      "objects": [
+        {
+          "id": 29,
+          "name": "PROMENADE_PALM_CLUSTER_WEST",
+          "type": "tree",
+          "x": 420,
+          "y": 430,
+          "width": 82,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "role",
+              "value": "shade"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.24,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "name": "PROMENADE_PALM_CLUSTER_EAST",
+          "type": "tree",
+          "x": 1320,
+          "y": 445,
+          "width": 82,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "role",
+              "value": "windbreak"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.24,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "name": "S1_PROMENADE_PALM_CLUSTER_WEST",
+          "type": "tree",
+          "x": 1846,
+          "y": 448,
+          "width": 82,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-promenade-palm"
+            },
+            {
+              "name": "role",
+              "value": "shade"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.24,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "name": "S1_PROMENADE_PALM_CLUSTER_EAST",
+          "type": "tree",
+          "x": 2746,
+          "y": 462,
+          "width": 82,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-promenade-palm"
+            },
+            {
+              "name": "role",
+              "value": "windbreak"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.24,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 39,
+          "name": "S2_PROMENADE_PALM_CLUSTER_WEST",
+          "type": "tree",
+          "x": 3262,
+          "y": 450,
+          "width": 82,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-promenade-palm"
+            },
+            {
+              "name": "role",
+              "value": "shade"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.24,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 40,
+          "name": "S2_PROMENADE_PALM_CLUSTER_EAST",
+          "type": "tree",
+          "x": 4082,
+          "y": 455,
+          "width": 82,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-promenade-palm"
+            },
+            {
+              "name": "role",
+              "value": "windbreak"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.24,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 44,
+          "name": "S3_PROMENADE_PALM_CLUSTER_WEST",
+          "type": "tree",
+          "x": 5368,
+          "y": 452,
+          "width": 82,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-promenade-palm"
+            },
+            {
+              "name": "role",
+              "value": "shade"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.24,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 45,
+          "name": "S3_PROMENADE_PALM_CLUSTER_EAST",
+          "type": "tree",
+          "x": 5988,
+          "y": 458,
+          "width": 82,
+          "height": 124,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-promenade-palm"
+            },
+            {
+              "name": "role",
+              "value": "windbreak"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.24,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 2,
+              "type": "int"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "objectgroup",
+      "name": "props",
+      "objects": [
+        {
+          "id": 50,
+          "name": "PROMENADE_PAYPHONE_PROP",
+          "type": "prop",
+          "x": 1040,
+          "y": 484,
+          "width": 34,
+          "height": 58,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-miami-payphone"
+            },
+            {
+              "name": "role",
+              "value": "phone-prop"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.26,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 1,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 51,
+          "name": "HARBOR_STATIC_POSTER_PROP",
+          "type": "prop",
+          "x": 1250,
+          "y": 500,
+          "width": 56,
+          "height": 64,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-harbor-static-poster"
+            },
+            {
+              "name": "role",
+              "value": "poster"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": false,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.26,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 1,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 58,
+          "name": "S1_PROMENADE_PAYPHONE_PROP",
+          "type": "prop",
+          "x": 2256,
+          "y": 500,
+          "width": 34,
+          "height": 58,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-miami-payphone"
+            },
+            {
+              "name": "role",
+              "value": "phone-prop"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.26,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 1,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 59,
+          "name": "S1_HARBOR_STATIC_POSTER_PROP",
+          "type": "prop",
+          "x": 2656,
+          "y": 510,
+          "width": 56,
+          "height": 64,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-harbor-static-poster"
+            },
+            {
+              "name": "role",
+              "value": "poster"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": false,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.26,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 1,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 66,
+          "name": "S2_PROMENADE_PAYPHONE_PROP",
+          "type": "prop",
+          "x": 3672,
+          "y": 500,
+          "width": 34,
+          "height": 58,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-miami-payphone"
+            },
+            {
+              "name": "role",
+              "value": "phone-prop"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.26,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 1,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 67,
+          "name": "S2_HARBOR_STATIC_POSTER_PROP",
+          "type": "prop",
+          "x": 4422,
+          "y": 508,
+          "width": 56,
+          "height": 64,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-harbor-static-poster"
+            },
+            {
+              "name": "role",
+              "value": "poster"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": false,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.26,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 1,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 74,
+          "name": "S3_PROMENADE_PAYPHONE_PROP",
+          "type": "prop",
+          "x": 5538,
+          "y": 500,
+          "width": 34,
+          "height": 58,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-miami-payphone"
+            },
+            {
+              "name": "role",
+              "value": "phone-prop"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.26,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 1,
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "id": 75,
+          "name": "S3_HARBOR_STATIC_POSTER_PROP",
+          "type": "prop",
+          "x": 5768,
+          "y": 510,
+          "width": 56,
+          "height": 64,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-harbor-static-poster"
+            },
+            {
+              "name": "role",
+              "value": "poster"
+            },
+            {
+              "name": "depthMode",
+              "value": "y"
+            },
+            {
+              "name": "collision",
+              "value": false,
+              "type": "bool"
+            },
+            {
+              "name": "shadow",
+              "value": true,
+              "type": "bool"
+            },
+            {
+              "name": "shadowScaleX",
+              "value": 0.82,
+              "type": "float"
+            },
+            {
+              "name": "shadowScaleY",
+              "value": 0.26,
+              "type": "float"
+            },
+            {
+              "name": "shadowOffsetY",
+              "value": 1,
+              "type": "int"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "objectgroup",
+      "name": "signs",
+      "objects": []
+    },
+    {
+      "id": 2,
+      "name": "decor",
+      "type": "objectgroup",
+      "objects": []
+    },
+    {
+      "id": 3,
+      "name": "interactables",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 97,
+          "name": "MIAMI_PAYPHONE",
+          "x": 780,
+          "y": 500,
+          "width": 34,
+          "height": 58,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-miami-payphone"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_coastal_payphone"
+            },
+            {
+              "name": "collision",
+              "value": true
+            },
+            {
+              "name": "interactionRadius",
+              "value": 112
+            }
+          ]
+        },
+        {
+          "id": 98,
+          "name": "HARBOR_STATIC_POSTER",
+          "x": 1240,
+          "y": 455,
+          "width": 48,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-harbor-static-poster"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_harbor_static_poster"
+            },
+            {
+              "name": "collision",
+              "value": false
+            }
+          ]
+        },
+        {
+          "id": 99,
+          "name": "S1_MIAMI_PAYPHONE",
+          "x": 2328,
+          "y": 500,
+          "width": 34,
+          "height": 58,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-miami-payphone"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_coastal_payphone"
+            },
+            {
+              "name": "collision",
+              "value": true
+            },
+            {
+              "name": "interactionRadius",
+              "value": 112
+            }
+          ]
+        },
+        {
+          "id": 100,
+          "name": "S1_HARBOR_STATIC_POSTER",
+          "x": 2788,
+          "y": 455,
+          "width": 48,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s1-harbor-static-poster"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_harbor_static_poster"
+            },
+            {
+              "name": "collision",
+              "value": false
+            }
+          ]
+        },
+        {
+          "id": 101,
+          "name": "S2_MIAMI_PAYPHONE",
+          "x": 3842,
+          "y": 500,
+          "width": 34,
+          "height": 58,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-miami-payphone"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_coastal_payphone"
+            },
+            {
+              "name": "collision",
+              "value": true
+            },
+            {
+              "name": "interactionRadius",
+              "value": 112
+            }
+          ]
+        },
+        {
+          "id": 102,
+          "name": "S2_HARBOR_STATIC_POSTER",
+          "x": 4302,
+          "y": 455,
+          "width": 48,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s2-harbor-static-poster"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_harbor_static_poster"
+            },
+            {
+              "name": "collision",
+              "value": false
+            }
+          ]
+        },
+        {
+          "id": 103,
+          "name": "S3_MIAMI_PAYPHONE",
+          "x": 5400,
+          "y": 500,
+          "width": 34,
+          "height": 58,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-miami-payphone"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_coastal_payphone"
+            },
+            {
+              "name": "collision",
+              "value": true
+            },
+            {
+              "name": "interactionRadius",
+              "value": 112
+            }
+          ]
+        },
+        {
+          "id": 104,
+          "name": "S3_HARBOR_STATIC_POSTER",
+          "x": 5860,
+          "y": 455,
+          "width": 48,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "act2-s3-harbor-static-poster"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_harbor_static_poster"
+            },
+            {
+              "name": "collision",
+              "value": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "doors",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 105,
+          "name": "deco-hotel-door",
+          "x": 940,
+          "y": 420,
+          "width": 32,
+          "height": 22,
+          "properties": [
+            {
+              "name": "target",
+              "value": "deco-hotel-lobby"
+            },
+            {
+              "name": "destinationScene",
+              "value": "swagbound://scene/interiors/deco-hotel-lobby"
+            },
+            {
+              "name": "locked",
+              "value": false
+            },
+            {
+              "name": "returnSpawn",
+              "value": "940,464"
+            },
+            {
+              "name": "facing",
+              "value": "up"
+            }
+          ]
+        },
+        {
+          "id": 106,
+          "name": "harbor-service-door",
+          "x": 1360,
+          "y": 500,
+          "width": 30,
+          "height": 20,
+          "properties": [
+            {
+              "name": "target",
+              "value": "harbor-service-kiosk"
+            },
+            {
+              "name": "destinationScene",
+              "value": "swagbound://scene/interiors/harbor-service-kiosk"
+            },
+            {
+              "name": "locked",
+              "value": true
+            },
+            {
+              "name": "message",
+              "value": "A laminated sign says the harbor kiosk reopens after the tide calms down."
+            },
+            {
+              "name": "returnSpawn",
+              "value": "1360,540"
+            },
+            {
+              "name": "facing",
+              "value": "up"
+            }
+          ]
+        },
+        {
+          "id": 107,
+          "name": "S1_deco-hotel-door",
+          "x": 2476,
+          "y": 420,
+          "width": 32,
+          "height": 22,
+          "properties": [
+            {
+              "name": "target",
+              "value": "s1-deco-hotel-lobby"
+            },
+            {
+              "name": "destinationScene",
+              "value": "swagbound://scene/interiors/deco-hotel-lobby"
+            },
+            {
+              "name": "locked",
+              "value": false
+            },
+            {
+              "name": "returnSpawn",
+              "value": "940,464"
+            },
+            {
+              "name": "facing",
+              "value": "up"
+            }
+          ]
+        },
+        {
+          "id": 108,
+          "name": "S1_harbor-service-door",
+          "x": 2896,
+          "y": 500,
+          "width": 30,
+          "height": 20,
+          "properties": [
+            {
+              "name": "target",
+              "value": "s1-harbor-service-kiosk"
+            },
+            {
+              "name": "destinationScene",
+              "value": "swagbound://scene/interiors/harbor-service-kiosk"
+            },
+            {
+              "name": "locked",
+              "value": true
+            },
+            {
+              "name": "message",
+              "value": "A laminated sign says the harbor kiosk reopens after the tide calms down."
+            },
+            {
+              "name": "returnSpawn",
+              "value": "1360,540"
+            },
+            {
+              "name": "facing",
+              "value": "up"
+            }
+          ]
+        },
+        {
+          "id": 109,
+          "name": "S2_deco-hotel-door",
+          "x": 4012,
+          "y": 420,
+          "width": 32,
+          "height": 22,
+          "properties": [
+            {
+              "name": "target",
+              "value": "s2-deco-hotel-lobby"
+            },
+            {
+              "name": "destinationScene",
+              "value": "swagbound://scene/interiors/deco-hotel-lobby"
+            },
+            {
+              "name": "locked",
+              "value": false
+            },
+            {
+              "name": "returnSpawn",
+              "value": "940,464"
+            },
+            {
+              "name": "facing",
+              "value": "up"
+            }
+          ]
+        },
+        {
+          "id": 110,
+          "name": "S2_harbor-service-door",
+          "x": 4432,
+          "y": 500,
+          "width": 30,
+          "height": 20,
+          "properties": [
+            {
+              "name": "target",
+              "value": "s2-harbor-service-kiosk"
+            },
+            {
+              "name": "destinationScene",
+              "value": "swagbound://scene/interiors/harbor-service-kiosk"
+            },
+            {
+              "name": "locked",
+              "value": true
+            },
+            {
+              "name": "message",
+              "value": "A laminated sign says the harbor kiosk reopens after the tide calms down."
+            },
+            {
+              "name": "returnSpawn",
+              "value": "1360,540"
+            },
+            {
+              "name": "facing",
+              "value": "up"
+            }
+          ]
+        },
+        {
+          "id": 111,
+          "name": "S3_deco-hotel-door",
+          "x": 5548,
+          "y": 420,
+          "width": 32,
+          "height": 22,
+          "properties": [
+            {
+              "name": "target",
+              "value": "s3-deco-hotel-lobby"
+            },
+            {
+              "name": "destinationScene",
+              "value": "swagbound://scene/interiors/deco-hotel-lobby"
+            },
+            {
+              "name": "locked",
+              "value": false
+            },
+            {
+              "name": "returnSpawn",
+              "value": "940,464"
+            },
+            {
+              "name": "facing",
+              "value": "up"
+            }
+          ]
+        },
+        {
+          "id": 112,
+          "name": "S3_harbor-service-door",
+          "x": 5968,
+          "y": 500,
+          "width": 30,
+          "height": 20,
+          "properties": [
+            {
+              "name": "target",
+              "value": "s3-harbor-service-kiosk"
+            },
+            {
+              "name": "destinationScene",
+              "value": "swagbound://scene/interiors/harbor-service-kiosk"
+            },
+            {
+              "name": "locked",
+              "value": true
+            },
+            {
+              "name": "message",
+              "value": "A laminated sign says the harbor kiosk reopens after the tide calms down."
+            },
+            {
+              "name": "returnSpawn",
+              "value": "1360,540"
+            },
+            {
+              "name": "facing",
+              "value": "up"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "npcs",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 113,
+          "name": "promenade-zine-vendor",
+          "x": 700,
+          "y": 470,
+          "width": 32,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "npc-neighbor"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_coastal_kiosk"
+            },
+            {
+              "name": "movement",
+              "value": "idle-south"
+            }
+          ]
+        },
+        {
+          "id": 114,
+          "name": "harbor-static-runner",
+          "x": 1180,
+          "y": 560,
+          "width": 32,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "npc-kid"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_harbor_static_runner"
+            },
+            {
+              "name": "movement",
+              "value": "pace-left-right"
+            }
+          ]
+        },
+        {
+          "id": 115,
+          "name": "S1_promenade-zine-vendor",
+          "x": 2248,
+          "y": 470,
+          "width": 32,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "npc-neighbor"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_coastal_kiosk"
+            },
+            {
+              "name": "movement",
+              "value": "idle-south"
+            }
+          ]
+        },
+        {
+          "id": 116,
+          "name": "S1_harbor-static-runner",
+          "x": 2728,
+          "y": 560,
+          "width": 32,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "npc-kid"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_harbor_static_runner"
+            },
+            {
+              "name": "movement",
+              "value": "pace-left-right"
+            }
+          ]
+        },
+        {
+          "id": 117,
+          "name": "S2_promenade-zine-vendor",
+          "x": 3762,
+          "y": 470,
+          "width": 32,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "npc-neighbor"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_coastal_kiosk"
+            },
+            {
+              "name": "movement",
+              "value": "idle-south"
+            }
+          ]
+        },
+        {
+          "id": 118,
+          "name": "S2_harbor-static-runner",
+          "x": 4242,
+          "y": 560,
+          "width": 32,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "npc-kid"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_harbor_static_runner"
+            },
+            {
+              "name": "movement",
+              "value": "pace-left-right"
+            }
+          ]
+        },
+        {
+          "id": 119,
+          "name": "S3_promenade-zine-vendor",
+          "x": 5320,
+          "y": 470,
+          "width": 32,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "npc-neighbor"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_coastal_kiosk"
+            },
+            {
+              "name": "movement",
+              "value": "idle-south"
+            }
+          ]
+        },
+        {
+          "id": 120,
+          "name": "S3_harbor-static-runner",
+          "x": 5800,
+          "y": 560,
+          "width": 32,
+          "height": 48,
+          "properties": [
+            {
+              "name": "sprite",
+              "value": "npc-kid"
+            },
+            {
+              "name": "dialogue",
+              "value": "act2_harbor_static_runner"
+            },
+            {
+              "name": "movement",
+              "value": "pace-left-right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "encounters",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 121,
+          "name": "beach-static-zone",
+          "x": 520,
+          "y": 650,
+          "width": 320,
+          "height": 180,
+          "properties": [
+            {
+              "name": "encounterId",
+              "value": "mirror-glitch"
+            },
+            {
+              "name": "zone",
+              "value": "promenade-edge"
+            }
+          ]
+        },
+        {
+          "id": 122,
+          "name": "harbor-service-seam-zone",
+          "x": 1080,
+          "y": 560,
+          "width": 300,
+          "height": 190,
+          "properties": [
+            {
+              "name": "encounterId",
+              "value": "tunnel-hiss"
+            },
+            {
+              "name": "zone",
+              "value": "service-seam"
+            }
+          ]
+        },
+        {
+          "id": 123,
+          "name": "S1_beach-static-zone",
+          "x": 2056,
+          "y": 650,
+          "width": 320,
+          "height": 180,
+          "properties": [
+            {
+              "name": "encounterId",
+              "value": "mirror-glitch"
+            },
+            {
+              "name": "zone",
+              "value": "promenade-edge"
+            }
+          ]
+        },
+        {
+          "id": 124,
+          "name": "S1_harbor-service-seam-zone",
+          "x": 2616,
+          "y": 560,
+          "width": 300,
+          "height": 190,
+          "properties": [
+            {
+              "name": "encounterId",
+              "value": "tunnel-hiss"
+            },
+            {
+              "name": "zone",
+              "value": "service-seam"
+            }
+          ]
+        },
+        {
+          "id": 125,
+          "name": "S2_beach-static-zone",
+          "x": 3592,
+          "y": 650,
+          "width": 320,
+          "height": 180,
+          "properties": [
+            {
+              "name": "encounterId",
+              "value": "mirror-glitch"
+            },
+            {
+              "name": "zone",
+              "value": "promenade-edge"
+            }
+          ]
+        },
+        {
+          "id": 126,
+          "name": "S2_harbor-service-seam-zone",
+          "x": 4152,
+          "y": 560,
+          "width": 300,
+          "height": 190,
+          "properties": [
+            {
+              "name": "encounterId",
+              "value": "tunnel-hiss"
+            },
+            {
+              "name": "zone",
+              "value": "service-seam"
+            }
+          ]
+        },
+        {
+          "id": 127,
+          "name": "S3_beach-static-zone",
+          "x": 5128,
+          "y": 650,
+          "width": 320,
+          "height": 180,
+          "properties": [
+            {
+              "name": "encounterId",
+              "value": "mirror-glitch"
+            },
+            {
+              "name": "zone",
+              "value": "promenade-edge"
+            }
+          ]
+        },
+        {
+          "id": 128,
+          "name": "S3_harbor-service-seam-zone",
+          "x": 5688,
+          "y": 560,
+          "width": 300,
+          "height": 190,
+          "properties": [
+            {
+              "name": "encounterId",
+              "value": "tunnel-hiss"
+            },
+            {
+              "name": "zone",
+              "value": "service-seam"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "colliders",
+      "type": "objectgroup",
+      "objects": [
+        {
+          "id": 129,
+          "name": "seawall-west-base",
+          "x": 240,
+          "y": 584,
+          "width": 320,
+          "height": 28
+        },
+        {
+          "id": 130,
+          "name": "deco-hotel-patio-rail",
+          "x": 880,
+          "y": 448,
+          "width": 180,
+          "height": 24
+        },
+        {
+          "id": 131,
+          "name": "harbor-crate-stack",
+          "x": 1280,
+          "y": 585,
+          "width": 96,
+          "height": 62
+        },
+        {
+          "id": 132,
+          "name": "S1_seawall-west-base",
+          "x": 1776,
+          "y": 584,
+          "width": 320,
+          "height": 28
+        },
+        {
+          "id": 133,
+          "name": "S1_deco-hotel-patio-rail",
+          "x": 2416,
+          "y": 448,
+          "width": 180,
+          "height": 24
+        },
+        {
+          "id": 134,
+          "name": "S1_harbor-crate-stack",
+          "x": 2816,
+          "y": 585,
+          "width": 96,
+          "height": 62
+        },
+        {
+          "id": 135,
+          "name": "S2_seawall-west-base",
+          "x": 3312,
+          "y": 584,
+          "width": 320,
+          "height": 28
+        },
+        {
+          "id": 136,
+          "name": "S2_deco-hotel-patio-rail",
+          "x": 3952,
+          "y": 448,
+          "width": 180,
+          "height": 24
+        },
+        {
+          "id": 137,
+          "name": "S2_harbor-crate-stack",
+          "x": 4352,
+          "y": 585,
+          "width": 96,
+          "height": 62
+        },
+        {
+          "id": 138,
+          "name": "S3_seawall-west-base",
+          "x": 4848,
+          "y": 584,
+          "width": 320,
+          "height": 28
+        },
+        {
+          "id": 139,
+          "name": "S3_deco-hotel-patio-rail",
+          "x": 5488,
+          "y": 448,
+          "width": 180,
+          "height": 24
+        },
+        {
+          "id": 140,
+          "name": "S3_harbor-crate-stack",
+          "x": 5888,
+          "y": 585,
+          "width": 96,
+          "height": 62
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "ambient-animations",
+      "type": "objectgroup",
+      "visible": true,
+      "opacity": 1,
+      "x": 0,
+      "y": 0,
+      "objects": [
+        {
+          "id": 141,
+          "name": "ocean-shimmer-band",
+          "type": "ambient",
+          "x": 0,
+          "y": 160,
+          "width": 6144,
+          "height": 120,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "tileSprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "act2-ocean-shimmer"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-ocean-shimmer"
+            },
+            {
+              "name": "speedX",
+              "type": "float",
+              "value": 0.025
+            },
+            {
+              "name": "speedY",
+              "type": "float",
+              "value": 0
+            },
+            {
+              "name": "alpha",
+              "type": "float",
+              "value": 0.12
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 170
+            },
+            {
+              "name": "sectionCount",
+              "type": "int",
+              "value": 4
+            }
+          ]
+        },
+        {
+          "id": 142,
+          "name": "shore-foam-main",
+          "type": "ambient",
+          "x": 0,
+          "y": 340,
+          "width": 6144,
+          "height": 38,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "tileSprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "act2-shore-foam"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-shore-foam"
+            },
+            {
+              "name": "speedX",
+              "type": "float",
+              "value": 0.12
+            },
+            {
+              "name": "speedY",
+              "type": "float",
+              "value": 0
+            },
+            {
+              "name": "alpha",
+              "type": "float",
+              "value": 0.34
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "fixed"
+            },
+            {
+              "name": "depth",
+              "type": "int",
+              "value": 346
+            },
+            {
+              "name": "sectionCount",
+              "type": "int",
+              "value": 4
+            }
+          ]
+        },
+        {
+          "id": 143,
+          "name": "palm-court-wind-01",
+          "type": "ambient",
+          "x": 610,
+          "y": 440,
+          "width": 64,
+          "height": 96,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "sprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "palm-light-wind"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "amplitude",
+              "type": "float",
+              "value": 1.5
+            },
+            {
+              "name": "durationMs",
+              "type": "int",
+              "value": 2600
+            },
+            {
+              "name": "phase",
+              "type": "float",
+              "value": 0.2
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "y"
+            }
+          ]
+        },
+        {
+          "id": 144,
+          "name": "palm-court-wind-02",
+          "type": "ambient",
+          "x": 1180,
+          "y": 452,
+          "width": 64,
+          "height": 96,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "sprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "palm-light-wind"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "amplitude",
+              "type": "float",
+              "value": 1.25
+            },
+            {
+              "name": "durationMs",
+              "type": "int",
+              "value": 3100
+            },
+            {
+              "name": "phase",
+              "type": "float",
+              "value": 0.65
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "y"
+            }
+          ]
+        },
+        {
+          "id": 145,
+          "name": "S1_palm-court-wind-01",
+          "type": "ambient",
+          "x": 2146,
+          "y": 440,
+          "width": 64,
+          "height": 96,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "sprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "palm-light-wind"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "amplitude",
+              "type": "float",
+              "value": 1.5
+            },
+            {
+              "name": "durationMs",
+              "type": "int",
+              "value": 2600
+            },
+            {
+              "name": "phase",
+              "type": "float",
+              "value": 0.2
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "y"
+            }
+          ]
+        },
+        {
+          "id": 146,
+          "name": "S1_palm-court-wind-02",
+          "type": "ambient",
+          "x": 2716,
+          "y": 452,
+          "width": 64,
+          "height": 96,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "sprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "palm-light-wind"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "amplitude",
+              "type": "float",
+              "value": 1.25
+            },
+            {
+              "name": "durationMs",
+              "type": "int",
+              "value": 3100
+            },
+            {
+              "name": "phase",
+              "type": "float",
+              "value": 0.65
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "y"
+            }
+          ]
+        },
+        {
+          "id": 147,
+          "name": "S2_palm-court-wind-01",
+          "type": "ambient",
+          "x": 3682,
+          "y": 440,
+          "width": 64,
+          "height": 96,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "sprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "palm-light-wind"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "amplitude",
+              "type": "float",
+              "value": 1.5
+            },
+            {
+              "name": "durationMs",
+              "type": "int",
+              "value": 2600
+            },
+            {
+              "name": "phase",
+              "type": "float",
+              "value": 0.2
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "y"
+            }
+          ]
+        },
+        {
+          "id": 148,
+          "name": "S2_palm-court-wind-02",
+          "type": "ambient",
+          "x": 4252,
+          "y": 452,
+          "width": 64,
+          "height": 96,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "sprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "palm-light-wind"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "amplitude",
+              "type": "float",
+              "value": 1.25
+            },
+            {
+              "name": "durationMs",
+              "type": "int",
+              "value": 3100
+            },
+            {
+              "name": "phase",
+              "type": "float",
+              "value": 0.65
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "y"
+            }
+          ]
+        },
+        {
+          "id": 149,
+          "name": "S3_palm-court-wind-01",
+          "type": "ambient",
+          "x": 5218,
+          "y": 440,
+          "width": 64,
+          "height": 96,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "sprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "palm-light-wind"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "amplitude",
+              "type": "float",
+              "value": 1.5
+            },
+            {
+              "name": "durationMs",
+              "type": "int",
+              "value": 2600
+            },
+            {
+              "name": "phase",
+              "type": "float",
+              "value": 0.2
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "y"
+            }
+          ]
+        },
+        {
+          "id": 150,
+          "name": "S3_palm-court-wind-02",
+          "type": "ambient",
+          "x": 5788,
+          "y": 452,
+          "width": 64,
+          "height": 96,
+          "properties": [
+            {
+              "name": "kind",
+              "type": "string",
+              "value": "sprite"
+            },
+            {
+              "name": "animationId",
+              "type": "string",
+              "value": "palm-light-wind"
+            },
+            {
+              "name": "asset",
+              "type": "string",
+              "value": "act2-promenade-palm"
+            },
+            {
+              "name": "amplitude",
+              "type": "float",
+              "value": 1.25
+            },
+            {
+              "name": "durationMs",
+              "type": "int",
+              "value": 3100
+            },
+            {
+              "name": "phase",
+              "type": "float",
+              "value": 0.65
+            },
+            {
+              "name": "depthMode",
+              "type": "string",
+              "value": "y"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "tilesets": [],
+  "nextobjectid": 152
+}

@@ -1,0 +1,2043 @@
+{
+  "schema": "swagbound.enemy-roster.v1",
+  "defaultEncounterIds": [
+    "question-marketeer",
+    "mirror-glitch",
+    "sawtooth-bun",
+    "cinder-cap",
+    "park-static",
+    "tunnel-hiss",
+    "malady",
+    "tape-code",
+    "tojiba-disc"
+  ],
+  "reserveEncounterIds": [
+    "ushanka-shade",
+    "returnless-king",
+    "bat-poncho",
+    "hexp-hood",
+    "edible-demon",
+    "plastic-fool",
+    "swag-raccoon",
+    "knitkitmori",
+    "happy-camper",
+    "milardio",
+    "solfis",
+    "unicornio",
+    "ethereal-sols",
+    "pifella",
+    "paingelz",
+    "cryptic-kids",
+    "gay-mouse-crisis-center",
+    "cryptic-kids-2",
+    "demonfella-ii",
+    "wifeystation",
+    "heavy-liquid-graphic",
+    "collection-2-for-solana",
+    "mifella-2",
+    "faithful-servants",
+    "goobdle-s",
+    "runway-show",
+    "ai-slop"
+  ],
+  "enemies": {
+    "mirror-glitch": {
+      "id": "mirror-glitch",
+      "name": "Signal Stutter",
+      "maxHp": 18,
+      "attack": 5,
+      "reward": {
+        "xp": 9,
+        "swag": 2
+      },
+      "intro": "A Signal Stutter jitters in the bridge afterimage.",
+      "attackText": "Bosch snaps the rhythm back into place.",
+      "enemyText": "The Signal Stutter throws a bent note.",
+      "moves": [
+        {
+          "id": "bent-note",
+          "label": "Bent Note",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Signal Stutter throws a bent note."
+        },
+        {
+          "id": "phase-skip",
+          "label": "Phase Skip",
+          "intentType": "weird",
+          "power": 4,
+          "message": "The Signal Stutter skips half a beat ahead."
+        }
+      ],
+      "victoryText": "The relay pocket quiets down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/lsw-signal-stutter-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "Little Swag World source-derived Signal Stutter enemy"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/lsw-signal-stutter-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "Little Swag World source-derived Signal Stutter overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "source-derived-runtime-v0",
+        "sourceEntryId": "lsw-enemy-0020",
+        "promotionManifest": "asset-lab/manifests/lsw-enemy-promotion-0001.json"
+      }
+    },
+    "cinder-cap": {
+      "id": "cinder-cap",
+      "name": "Cinder Cap",
+      "maxHp": 24,
+      "attack": 6,
+      "reward": {
+        "xp": 10,
+        "swag": 3
+      },
+      "intro": "A Cinder Cap rolls heat across the pavement.",
+      "attackText": "Bosch knocks sparks out of the brim.",
+      "enemyText": "The Cinder Cap coughs up hot feedback.",
+      "moves": [
+        {
+          "id": "hot-feedback",
+          "label": "Hot Feedback",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Cinder Cap coughs up hot feedback.",
+          "actionTags": [
+            "psi-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "ember-burst",
+          "label": "Ember Burst",
+          "intentType": "heavy",
+          "power": 7,
+          "message": "The Cinder Cap shakes loose a sharp ember burst.",
+          "actionTags": [
+            "psi-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "ash-cover",
+          "label": "Ash Cover",
+          "intentType": "setup",
+          "power": 5,
+          "message": "The Cinder Cap smears ash across the signal.",
+          "actionTags": [
+            "psi-like",
+            "no-shield-decrement"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        }
+      ],
+      "victoryText": "The air cools back into shape.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/lsw-cinder-cap-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "Little Swag World source-derived Cinder Cap enemy"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/lsw-cinder-cap-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "Little Swag World source-derived Cinder Cap overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "source-derived-runtime-v0",
+        "sourceEntryId": "lsw-enemy-0005",
+        "promotionManifest": "asset-lab/manifests/lsw-enemy-promotion-0002.json"
+      },
+      "speed": 10,
+      "guts": 14,
+      "vulnerabilities": {
+        "freeze": 1.25,
+        "fire": 0.75
+      },
+      "actionOrder": "weighted",
+      "initialStatus": []
+    },
+    "sawtooth-bun": {
+      "id": "sawtooth-bun",
+      "name": "Sawtooth Bun",
+      "maxHp": 20,
+      "attack": 5,
+      "reward": {
+        "xp": 9,
+        "swag": 2
+      },
+      "intro": "A Sawtooth Bun saws through the quiet.",
+      "attackText": "Bosch clips the blade rhythm.",
+      "enemyText": "The Sawtooth Bun revs at ankle height.",
+      "moves": [
+        {
+          "id": "ankle-rev",
+          "label": "Ankle Rev",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Sawtooth Bun revs at ankle height."
+        },
+        {
+          "id": "saw-hop",
+          "label": "Saw Hop",
+          "intentType": "heavy",
+          "power": 5,
+          "message": "The Sawtooth Bun hop-saws across the road stripe."
+        }
+      ],
+      "victoryText": "The teeth stop clicking.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/lsw-sawtooth-bun-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "Little Swag World source-derived Sawtooth Bun enemy"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/lsw-sawtooth-bun-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "Little Swag World source-derived Sawtooth Bun overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "source-derived-runtime-v0",
+        "sourceEntryId": "lsw-enemy-0008",
+        "promotionManifest": "asset-lab/manifests/lsw-enemy-promotion-0002.json"
+      }
+    },
+    "question-marketeer": {
+      "id": "question-marketeer",
+      "name": "Question Marketeer",
+      "maxHp": 26,
+      "attack": 4,
+      "reward": {
+        "xp": 11,
+        "swag": 2
+      },
+      "intro": "A Question Marketeer asks the wrong thing loudly.",
+      "attackText": "Bosch answers with a clean bash.",
+      "enemyText": "The Question Marketeer charges interest.",
+      "moves": [
+        {
+          "id": "interest-charge",
+          "label": "Interest Charge",
+          "intentType": "pressure",
+          "power": 4,
+          "message": "The Question Marketeer charges interest.",
+          "actionTags": [
+            "bash-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "question-stack",
+          "label": "Question Stack",
+          "intentType": "setup",
+          "power": 4,
+          "message": "The Question Marketeer stacks three louder questions.",
+          "actionTags": [
+            "psi-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "late-fee",
+          "label": "Late Fee",
+          "intentType": "heavy",
+          "power": 5,
+          "message": "The Question Marketeer adds a late fee to the noise.",
+          "actionTags": [
+            "bash-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        }
+      ],
+      "victoryText": "The question folds into punctuation.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/lsw-question-marketeer-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "Little Swag World source-derived Question Marketeer enemy"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/lsw-question-marketeer-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "Little Swag World source-derived Question Marketeer overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "source-derived-runtime-v0",
+        "sourceEntryId": "lsw-enemy-0014",
+        "promotionManifest": "asset-lab/manifests/lsw-enemy-promotion-0002.json"
+      },
+      "speed": 7,
+      "guts": 8,
+      "actionOrder": "weighted",
+      "initialStatus": []
+    },
+    "ushanka-shade": {
+      "id": "ushanka-shade",
+      "name": "Ushanka Shade",
+      "maxHp": 25,
+      "attack": 5,
+      "reward": {
+        "xp": 10,
+        "swag": 3
+      },
+      "intro": "An Ushanka Shade waits under a bad winter signal.",
+      "attackText": "Bosch breaks the hush with one hard hit.",
+      "enemyText": "The Ushanka Shade peers out from under the brim.",
+      "moves": [
+        {
+          "id": "frost-hush",
+          "label": "Frost Hush",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Ushanka Shade exhales a frost hush."
+        },
+        {
+          "id": "bone-glare",
+          "label": "Bone Glare",
+          "intentType": "weird",
+          "power": 4,
+          "message": "The Ushanka Shade flashes a rib-bright glare."
+        },
+        {
+          "id": "star-flap",
+          "label": "Star Flap",
+          "intentType": "setup",
+          "power": 4,
+          "message": "The Ushanka Shade snaps its earflaps like warning flags."
+        }
+      ],
+      "victoryText": "The winter hush cracks and blows away.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/lsw-ushanka-shade-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "Little Swag World source-derived Ushanka Shade enemy"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/lsw-ushanka-shade-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "Little Swag World source-derived Ushanka Shade overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "source-derived-runtime-v0",
+        "sourceEntryId": "lsw-enemy-0009",
+        "promotionManifest": "asset-lab/manifests/lsw-enemy-promotion-0003.json"
+      }
+    },
+    "returnless-king": {
+      "id": "returnless-king",
+      "name": "Returnless King",
+      "maxHp": 28,
+      "attack": 5,
+      "reward": {
+        "xp": 12,
+        "swag": 3
+      },
+      "intro": "A Returnless King rolls out a decree nobody asked for.",
+      "attackText": "Bosch shoves the little throne off center.",
+      "enemyText": "The Returnless King rattles its prophecy board.",
+      "moves": [
+        {
+          "id": "nothing-ever",
+          "label": "Nothing Ever",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Returnless King announces nothing ever again."
+        },
+        {
+          "id": "crown-rattle",
+          "label": "Crown Rattle",
+          "intentType": "heavy",
+          "power": 6,
+          "message": "The Returnless King rattles its crown and lunges forward."
+        },
+        {
+          "id": "wheel-prophecy",
+          "label": "Wheel Prophecy",
+          "intentType": "weird",
+          "power": 4,
+          "message": "The Returnless King rolls through a prophecy nobody can parse."
+        }
+      ],
+      "victoryText": "The decree folds back into silence.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/lsw-returnless-king-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "Little Swag World source-derived Returnless King enemy"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/lsw-returnless-king-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "Little Swag World source-derived Returnless King overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "source-derived-runtime-v0",
+        "sourceEntryId": "lsw-enemy-0011",
+        "promotionManifest": "asset-lab/manifests/lsw-enemy-promotion-0003.json"
+      }
+    },
+    "bat-poncho": {
+      "id": "bat-poncho",
+      "name": "Bat Poncho",
+      "maxHp": 23,
+      "attack": 6,
+      "reward": {
+        "xp": 10,
+        "swag": 2
+      },
+      "intro": "A Bat Poncho drifts in on a pocket of night air.",
+      "attackText": "Bosch smacks the brim before the swarm settles.",
+      "enemyText": "The Bat Poncho shakes loose a little black storm.",
+      "moves": [
+        {
+          "id": "bat-swarm",
+          "label": "Bat Swarm",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Bat Poncho shakes loose a little black storm."
+        },
+        {
+          "id": "brim-hex",
+          "label": "Brim Hex",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Bat Poncho tilts its brim and bends the room light."
+        },
+        {
+          "id": "cloak-jab",
+          "label": "Cloak Jab",
+          "intentType": "heavy",
+          "power": 6,
+          "message": "The Bat Poncho jabs forward from inside the cloak."
+        }
+      ],
+      "victoryText": "The poncho drops back into harmless cloth.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/lsw-bat-poncho-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "Little Swag World source-derived Bat Poncho enemy"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/lsw-bat-poncho-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "Little Swag World source-derived Bat Poncho overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "source-derived-runtime-v0",
+        "sourceEntryId": "lsw-enemy-0019",
+        "promotionManifest": "asset-lab/manifests/lsw-enemy-promotion-0003.json"
+      }
+    },
+    "hexp-hood": {
+      "id": "hexp-hood",
+      "name": "Hexp Hood",
+      "maxHp": 23,
+      "attack": 6,
+      "reward": {
+        "xp": 10,
+        "swag": 3
+      },
+      "intro": "A Hexp Hood steps out of the collectible static.",
+      "attackText": "Bosch catches the hood on the downbeat.",
+      "enemyText": "The Hexp Hood clicks its zipper teeth in rhythm.",
+      "moves": [
+        {
+          "id": "zipper-click",
+          "label": "Zipper Click",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Hexp Hood clicks its zipper teeth in rhythm."
+        },
+        {
+          "id": "hexp-pounce",
+          "label": "HEXP Pounce",
+          "intentType": "heavy",
+          "power": 7,
+          "message": "The Hexp Hood pounces through a pocket of bad luck."
+        },
+        {
+          "id": "hood-static",
+          "label": "Hood Static",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Hexp Hood pulls the room noise over its face."
+        }
+      ],
+      "victoryText": "The hood slumps back into harmless fabric.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/pfp-hexp-hood-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Hexp Hood battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/pfp-hexp-hood-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Hexp Hood overworld proxy v2 repixel"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-hexp-003",
+        "promotionManifest": "asset-lab/manifests/pfp-enemy-promotion-0001.json"
+      }
+    },
+    "edible-demon": {
+      "id": "edible-demon",
+      "name": "Edible Demon",
+      "maxHp": 21,
+      "attack": 6,
+      "reward": {
+        "xp": 10,
+        "swag": 3
+      },
+      "intro": "An Edible Demon flutters out of the snack-static.",
+      "attackText": "Bosch knocks the sugar buzz off beat.",
+      "enemyText": "The Edible Demon flashes teal eyes and flaps in place.",
+      "moves": [
+        {
+          "id": "horn-glint",
+          "label": "Horn Glint",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Edible Demon catches a sour glint on its horns."
+        },
+        {
+          "id": "teal-eye-pop",
+          "label": "Teal Eye Pop",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Edible Demon pops its teal eyes like candy LEDs."
+        },
+        {
+          "id": "wing-snack",
+          "label": "Wing Snack",
+          "intentType": "heavy",
+          "power": 7,
+          "message": "The Edible Demon wing-claps a sticky little curse."
+        }
+      ],
+      "victoryText": "The demon wrapper crinkles into quiet.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/pfp-edible-demon-battle-v1-gpt2-extracted-crop.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Edible Demon battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/pfp-edible-demon-overworld-v1-native48-provisional-lanczos.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Edible Demon overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-edible-demon-001",
+        "promotionManifest": "asset-lab/manifests/pfp-edible-demon-gpt-image-2-v1.json"
+      }
+    },
+    "plastic-fool": {
+      "id": "plastic-fool",
+      "name": "Plastic Fool",
+      "maxHp": 19,
+      "attack": 5,
+      "reward": {
+        "xp": 9,
+        "swag": 3
+      },
+      "intro": "A Plastic Fool luck-walks out of the pocket static.",
+      "attackText": "Bosch knocks the charm loop off balance.",
+      "enemyText": "The Plastic Fool flashes clover luck and curls its shoes.",
+      "moves": [
+        {
+          "id": "clover-flick",
+          "label": "Clover Flick",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Plastic Fool flicks a lucky clover into the noise."
+        },
+        {
+          "id": "shoe-curl",
+          "label": "Shoe Curl",
+          "intentType": "weird",
+          "power": 4,
+          "message": "The Plastic Fool curls its shoes through a slippery beat."
+        },
+        {
+          "id": "plastic-grin",
+          "label": "Plastic Grin",
+          "intentType": "setup",
+          "power": 4,
+          "message": "The Plastic Fool smiles like a prize-machine reflection."
+        }
+      ],
+      "victoryText": "The clovers stop orbiting.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/plastic-fool-battle-v1-extracted-crop.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Plastic Fool battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/plastic-fool-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Plastic Fool overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-plastic-fool-001",
+        "promotionManifest": "asset-lab/manifests/pfp-plastic-fool-gpt-image-2-v1.json"
+      }
+    },
+    "swag-raccoon": {
+      "id": "swag-raccoon",
+      "name": "Swag Raccoon",
+      "maxHp": 22,
+      "attack": 6,
+      "reward": {
+        "xp": 10,
+        "swag": 3
+      },
+      "intro": "A Swag Raccoon peeks out from under a stolen signal hood.",
+      "attackText": "Bosch clips the raccoon rhythm clean.",
+      "enemyText": "The Swag Raccoon narrows its eyes and palms the beat.",
+      "moves": [
+        {
+          "id": "hood-feint",
+          "label": "Hood Feint",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Swag Raccoon feints from behind the hood."
+        },
+        {
+          "id": "trash-glimmer",
+          "label": "Trash Glimmer",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Swag Raccoon flashes a tiny garbage-moon glimmer."
+        },
+        {
+          "id": "side-flare",
+          "label": "Side Flare",
+          "intentType": "heavy",
+          "power": 7,
+          "message": "The Swag Raccoon flares both yellow side tufts at once."
+        }
+      ],
+      "victoryText": "The hood quits pretending to be alive.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/swag-raccoon-battle-v1-extracted-crop.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Swag Raccoon battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/swag-raccoon-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Swag Raccoon overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-swag-raccoon-003",
+        "promotionManifest": "asset-lab/manifests/pfp-swag-raccoon-gpt-image-2-v1.json"
+      }
+    },
+    "tape-code": {
+      "id": "tape-code",
+      "name": "Tape Code",
+      "maxHp": 20,
+      "attack": 5,
+      "reward": {
+        "xp": 9,
+        "swag": 3
+      },
+      "intro": "Tape Code clicks awake and plays Bosch's correction back wrong.",
+      "attackText": "Bosch cracks the loop before it can copy him again.",
+      "enemyText": "Tape Code drags the phrase around until it sounds official.",
+      "moves": [
+        {
+          "id": "reel-chew",
+          "label": "Reel Chew",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "Tape Code chews up Bosch's last correction and spits it back on beat."
+        },
+        {
+          "id": "melon-hiss",
+          "label": "Signal Hiss",
+          "intentType": "weird",
+          "power": 4,
+          "message": "Tape Code hisses with a copied signal still warm from someone else's mouth."
+        },
+        {
+          "id": "label-loop",
+          "label": "Label Loop",
+          "intentType": "setup",
+          "power": 4,
+          "message": "Tape Code loops the label until the correction becomes evidence."
+        }
+      ],
+      "victoryText": "The loop snaps before it can harden into canon.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/tape-code-battle-v1-extracted-crop.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Tape Code battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/tape-code-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Tape Code overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-tape-code-004",
+        "promotionManifest": "asset-lab/manifests/pfp-tape-code-gpt-image-2-v1.json"
+      }
+    },
+    "tojiba-disc": {
+      "id": "tojiba-disc",
+      "name": "Tojiba Disc Buddy",
+      "maxHp": 24,
+      "attack": 6,
+      "reward": {
+        "xp": 11,
+        "swag": 3
+      },
+      "intro": "A Tojiba Disc Buddy boots up with Bosch's name half-written in its registry.",
+      "attackText": "Bosch knocks the scan head off the record.",
+      "enemyText": "The Tojiba Disc Buddy files a witness mark before Bosch can object.",
+      "moves": [
+        {
+          "id": "drive-eye",
+          "label": "Drive Eye",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Tojiba Disc Buddy scans Bosch like proof media."
+        },
+        {
+          "id": "green-goo-step",
+          "label": "Green Goo Step",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Tojiba Disc Buddy tracks wet witness marks across the floor."
+        },
+        {
+          "id": "red-box-jolt",
+          "label": "Red Box Jolt",
+          "intentType": "heavy",
+          "power": 7,
+          "message": "The Tojiba Disc Buddy jolts the half-written record toward processed status."
+        }
+      ],
+      "victoryText": "The registry ejects the page before it can finish Bosch.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/tojiba-disc-battle-v1-extracted-crop.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Tojiba Disc Buddy battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/tojiba-disc-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Tojiba Disc Buddy overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-tojiba-disc-002",
+        "promotionManifest": "asset-lab/manifests/pfp-tojiba-disc-gpt-image-2-v1.json"
+      }
+    },
+    "knitkitmori": {
+      "id": "knitkitmori",
+      "name": "Knitkitmori",
+      "maxHp": 27,
+      "attack": 7,
+      "reward": {
+        "xp": 12,
+        "swag": 4
+      },
+      "intro": "Knitkitmori steps in with lime hair and a loaded stare.",
+      "attackText": "Bosch clips the neon thread clean.",
+      "enemyText": "Knitkitmori threads a bright line through the noise.",
+      "moves": [
+        {
+          "id": "lime-sight",
+          "label": "Lime Sight",
+          "intentType": "pressure",
+          "power": 7,
+          "message": "Knitkitmori narrows a lime-green sight line."
+        },
+        {
+          "id": "thread-burst",
+          "label": "Thread Burst",
+          "intentType": "heavy",
+          "power": 8,
+          "message": "Knitkitmori bursts neon thread across the lane."
+        },
+        {
+          "id": "bead-rattle",
+          "label": "Bead Rattle",
+          "intentType": "weird",
+          "power": 5,
+          "message": "Knitkitmori rattles bead charms out of sync."
+        }
+      ],
+      "victoryText": "The yarn of static unravels into silence.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/knitkitmori-battle-v1-extracted-crop.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Knitkitmori battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/knitkitmori-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Knitkitmori overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-knitkitmori-005",
+        "promotionManifest": "asset-lab/manifests/pfp-knitkitmori-gpt-image-2-v1.json"
+      }
+    },
+    "happy-camper": {
+      "id": "happy-camper",
+      "name": "Happy Camper",
+      "maxHp": 23,
+      "attack": 6,
+      "reward": {
+        "xp": 10,
+        "swag": 3
+      },
+      "intro": "A Happy Camper steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Happy Camper throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "happy-camper-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Happy Camper jabs through the static."
+        },
+        {
+          "id": "happy-camper-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 6,
+          "message": "The Happy Camper flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/happy-camper-battle-v1-extracted-crop.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Happy Camper battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/happy-camper-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Happy Camper overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-happy-campers-002",
+        "promotionManifest": "asset-lab/manifests/pfp-happy-camper-gpt-image-2-v1.json"
+      }
+    },
+    "milardio": {
+      "id": "milardio",
+      "name": "Milardio",
+      "maxHp": 24,
+      "attack": 5,
+      "reward": {
+        "xp": 11,
+        "swag": 2
+      },
+      "intro": "A Milardio steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Milardio throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "milardio-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Milardio jabs through the static."
+        },
+        {
+          "id": "milardio-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Milardio flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/milardio-battle-v1-extracted-crop.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Milardio battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/milardio-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Milardio overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-milardio-002",
+        "promotionManifest": "asset-lab/manifests/pfp-milardio-gpt-image-2-v1.json"
+      }
+    },
+    "solfis": {
+      "id": "solfis",
+      "name": "Solfis",
+      "maxHp": 25,
+      "attack": 6,
+      "reward": {
+        "xp": 12,
+        "swag": 3
+      },
+      "intro": "A Solfis steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Solfis throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "solfis-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Solfis jabs through the static."
+        },
+        {
+          "id": "solfis-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 6,
+          "message": "The Solfis flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/solfis-battle-v1-extracted-crop.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Solfis battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/solfis-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Solfis overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-solfis-002",
+        "promotionManifest": "asset-lab/manifests/pfp-solfis-gpt-image-2-v1.json",
+        "overworldApproval": "provisional-selected-ow-001-nearest-but-review-json-approveOverworld-false"
+      }
+    },
+    "unicornio": {
+      "id": "unicornio",
+      "name": "Unicornio",
+      "maxHp": 24,
+      "attack": 6,
+      "reward": {
+        "xp": 11,
+        "swag": 3
+      },
+      "intro": "A Unicornio steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Unicornio throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "unicornio-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Unicornio jabs through the static."
+        },
+        {
+          "id": "unicornio-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Unicornio flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/unicornio-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Unicornio battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/unicornio-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Unicornio overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-unicornio-003",
+        "promotionManifest": "asset-lab/manifests/pfp-unicornio-gpt-image-2-v1.json",
+        "approval": "batch-0005-all-approved-by-nick"
+      }
+    },
+    "ethereal-sols": {
+      "id": "ethereal-sols",
+      "name": "Ethereal Sols",
+      "maxHp": 25,
+      "attack": 6,
+      "reward": {
+        "xp": 12,
+        "swag": 3
+      },
+      "intro": "A Ethereal Sols steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Ethereal Sols throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "ethereal-sols-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Ethereal Sols jabs through the static."
+        },
+        {
+          "id": "ethereal-sols-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Ethereal Sols flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/ethereal-sols-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Ethereal Sols battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/ethereal-sols-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Ethereal Sols overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-ethereal-sols-001",
+        "promotionManifest": "asset-lab/manifests/pfp-ethereal-sols-gpt-image-2-v1.json",
+        "approval": "batch-0005-all-approved-by-nick"
+      }
+    },
+    "pifella": {
+      "id": "pifella",
+      "name": "Pifella",
+      "maxHp": 23,
+      "attack": 7,
+      "reward": {
+        "xp": 11,
+        "swag": 2
+      },
+      "intro": "A Pifella steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Pifella throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "pifella-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 7,
+          "message": "The Pifella jabs through the static."
+        },
+        {
+          "id": "pifella-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 6,
+          "message": "The Pifella flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/pifella-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Pifella battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/pifella-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Pifella overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-pifella-001",
+        "promotionManifest": "asset-lab/manifests/pfp-pifella-gpt-image-2-v1.json",
+        "approval": "batch-0005-all-approved-by-nick"
+      }
+    },
+    "paingelz": {
+      "id": "paingelz",
+      "name": "Paingelz",
+      "maxHp": 25,
+      "attack": 6,
+      "reward": {
+        "xp": 12,
+        "swag": 3
+      },
+      "intro": "A Paingelz steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Paingelz throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "paingelz-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Paingelz jabs through the static."
+        },
+        {
+          "id": "paingelz-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Paingelz flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/paingelz-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Paingelz battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/paingelz-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Paingelz overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-paingelz-004",
+        "promotionManifest": "asset-lab/manifests/pfp-paingelz-gpt-image-2-v1.json",
+        "approval": "batch-0006-approved-by-nick"
+      }
+    },
+    "cryptic-kids": {
+      "id": "cryptic-kids",
+      "name": "Cryptic Kids",
+      "maxHp": 26,
+      "attack": 6,
+      "reward": {
+        "xp": 13,
+        "swag": 3
+      },
+      "intro": "A Cryptic Kids steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Cryptic Kids throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "cryptic-kids-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Cryptic Kids jabs through the static."
+        },
+        {
+          "id": "cryptic-kids-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Cryptic Kids flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/cryptic-kids-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Cryptic Kids battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/cryptic-kids-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Cryptic Kids overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-cryptic-kids-002",
+        "promotionManifest": "asset-lab/manifests/pfp-cryptic-kids-gpt-image-2-v1.json",
+        "approval": "batch-0006-approved-by-nick"
+      }
+    },
+    "malady": {
+      "id": "malady",
+      "name": "Malady",
+      "maxHp": 23,
+      "attack": 5,
+      "reward": {
+        "xp": 10,
+        "swag": 2
+      },
+      "intro": "A Malady walks out wearing the public version of Bosch like a fever.",
+      "attackText": "Bosch tears at the label before it can settle.",
+      "enemyText": "The Malady sorts Bosch into a diagnosis he did not choose.",
+      "moves": [
+        {
+          "id": "malady-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Malady pricks Bosch with a hostile little name tag.",
+          "actionTags": [
+            "bash-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "malady-flare",
+          "label": "Public Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Malady flares with a public version that sounds almost like Bosch.",
+          "actionTags": [
+            "psi-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        }
+      ],
+      "victoryText": "The false profile coughs once and loses its grip.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/malady-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Malady battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/malady-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Malady overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-malady-004",
+        "promotionManifest": "asset-lab/manifests/pfp-malady-gpt-image-2-v1.json",
+        "approval": "batch-0006-approved-by-nick"
+      },
+      "speed": 12,
+      "guts": 16,
+      "actionOrder": "random",
+      "initialStatus": []
+    },
+    "gay-mouse-crisis-center": {
+      "id": "gay-mouse-crisis-center",
+      "name": "Gay Mouse Crisis Center",
+      "maxHp": 24,
+      "attack": 6,
+      "reward": {
+        "xp": 12,
+        "swag": 3
+      },
+      "intro": "A Gay Mouse Crisis Center steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Gay Mouse Crisis Center throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "gay-mouse-crisis-center-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Gay Mouse Crisis Center jabs through the static."
+        },
+        {
+          "id": "gay-mouse-crisis-center-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Gay Mouse Crisis Center flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/gay-mouse-crisis-center-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Gay Mouse Crisis Center battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/gay-mouse-crisis-center-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Gay Mouse Crisis Center overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-gay-mouse-crisis-center-002",
+        "promotionManifest": "asset-lab/manifests/pfp-gay-mouse-crisis-center-gpt-image-2-v1.json",
+        "approval": "batch-0007-approved-by-nick"
+      }
+    },
+    "cryptic-kids-2": {
+      "id": "cryptic-kids-2",
+      "name": "Cryptic Kids 2",
+      "maxHp": 26,
+      "attack": 6,
+      "reward": {
+        "xp": 13,
+        "swag": 3
+      },
+      "intro": "A Cryptic Kids 2 steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Cryptic Kids 2 throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "cryptic-kids-2-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Cryptic Kids 2 jabs through the static."
+        },
+        {
+          "id": "cryptic-kids-2-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Cryptic Kids 2 flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/cryptic-kids-2-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Cryptic Kids 2 battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/cryptic-kids-2-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Cryptic Kids 2 overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-cryptic-kids-2-001",
+        "promotionManifest": "asset-lab/manifests/pfp-cryptic-kids-2-gpt-image-2-v1.json",
+        "approval": "batch-0007-approved-by-nick"
+      }
+    },
+    "demonfella-ii": {
+      "id": "demonfella-ii",
+      "name": "Demonfella II",
+      "maxHp": 25,
+      "attack": 7,
+      "reward": {
+        "xp": 12,
+        "swag": 3
+      },
+      "intro": "A Demonfella II steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Demonfella II throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "demonfella-ii-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 7,
+          "message": "The Demonfella II jabs through the static."
+        },
+        {
+          "id": "demonfella-ii-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 6,
+          "message": "The Demonfella II flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/demonfella-ii-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Demonfella II battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/demonfella-ii-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Demonfella II overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-demonfella-ii-005",
+        "promotionManifest": "asset-lab/manifests/pfp-demonfella-ii-gpt-image-2-v1.json",
+        "approval": "batch-0007-approved-by-nick"
+      }
+    },
+    "wifeystation": {
+      "id": "wifeystation",
+      "name": "Wifeystation",
+      "maxHp": 22,
+      "attack": 5,
+      "reward": {
+        "xp": 10,
+        "swag": 2
+      },
+      "intro": "A Wifeystation steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Wifeystation throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "wifeystation-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Wifeystation jabs through the static."
+        },
+        {
+          "id": "wifeystation-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 4,
+          "message": "The Wifeystation flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/wifeystation-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Wifeystation battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/wifeystation-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Wifeystation overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-wifeystation-001",
+        "promotionManifest": "asset-lab/manifests/pfp-wifeystation-gpt-image-2-v1.json",
+        "approval": "batch-0008-approved-by-nick-proceed"
+      }
+    },
+    "heavy-liquid-graphic": {
+      "id": "heavy-liquid-graphic",
+      "name": "Heavy Liquid Graphic",
+      "maxHp": 28,
+      "attack": 6,
+      "reward": {
+        "xp": 11,
+        "swag": 3
+      },
+      "intro": "A Heavy Liquid Graphic steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Heavy Liquid Graphic throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "heavy-liquid-graphic-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Heavy Liquid Graphic jabs through the static."
+        },
+        {
+          "id": "heavy-liquid-graphic-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Heavy Liquid Graphic flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/heavy-liquid-graphic-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Heavy Liquid Graphic battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/heavy-liquid-graphic-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Heavy Liquid Graphic overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-heavy-liquid-graphic-001",
+        "promotionManifest": "asset-lab/manifests/pfp-heavy-liquid-graphic-gpt-image-2-v1.json",
+        "approval": "batch-0008-approved-by-nick-proceed"
+      }
+    },
+    "collection-2-for-solana": {
+      "id": "collection-2-for-solana",
+      "name": "Collection 2 for Solana",
+      "maxHp": 24,
+      "attack": 6,
+      "reward": {
+        "xp": 10,
+        "swag": 3
+      },
+      "intro": "A Collection 2 for Solana steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Collection 2 for Solana throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "collection-2-for-solana-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Collection 2 for Solana jabs through the static."
+        },
+        {
+          "id": "collection-2-for-solana-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Collection 2 for Solana flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/collection-2-for-solana-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Collection 2 for Solana battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/collection-2-for-solana-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Collection 2 for Solana overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-collection-2-for-solana-001",
+        "promotionManifest": "asset-lab/manifests/pfp-collection-2-for-solana-gpt-image-2-v1.json",
+        "approval": "batch-0008-approved-by-nick-proceed"
+      }
+    },
+    "mifella-2": {
+      "id": "mifella-2",
+      "name": "Mifella 2",
+      "maxHp": 23,
+      "attack": 6,
+      "reward": {
+        "xp": 11,
+        "swag": 2
+      },
+      "intro": "A Mifella 2 steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Mifella 2 throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "mifella-2-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Mifella 2 jabs through the static."
+        },
+        {
+          "id": "mifella-2-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Mifella 2 flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/mifella-2-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Mifella 2 battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/mifella-2-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Mifella 2 overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-mifella-2-001",
+        "promotionManifest": "asset-lab/manifests/pfp-mifella-2-gpt-image-2-v1.json",
+        "approval": "batch-0009-approved-by-nick-proceed"
+      }
+    },
+    "faithful-servants": {
+      "id": "faithful-servants",
+      "name": "Faithful Servants",
+      "maxHp": 30,
+      "attack": 5,
+      "reward": {
+        "xp": 12,
+        "swag": 3
+      },
+      "intro": "A Faithful Servants steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Faithful Servants throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "faithful-servants-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Faithful Servants jabs through the static."
+        },
+        {
+          "id": "faithful-servants-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 4,
+          "message": "The Faithful Servants flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/faithful-servants-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Faithful Servants battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/faithful-servants-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Faithful Servants overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-faithful-servants-001",
+        "promotionManifest": "asset-lab/manifests/pfp-faithful-servants-gpt-image-2-v1.json",
+        "approval": "batch-0009-approved-by-nick-proceed"
+      }
+    },
+    "goobdle-s": {
+      "id": "goobdle-s",
+      "name": "Goobdle-S",
+      "maxHp": 21,
+      "attack": 7,
+      "reward": {
+        "xp": 11,
+        "swag": 2
+      },
+      "intro": "A Goobdle-S steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Goobdle-S throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "goobdle-s-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 7,
+          "message": "The Goobdle-S jabs through the static."
+        },
+        {
+          "id": "goobdle-s-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 6,
+          "message": "The Goobdle-S flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/goobdle-s-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Goobdle-S battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/goobdle-s-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Goobdle-S overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-goobdle-s-001",
+        "promotionManifest": "asset-lab/manifests/pfp-goobdle-s-gpt-image-2-v1.json",
+        "approval": "batch-0009-approved-by-nick-proceed"
+      }
+    },
+    "runway-show": {
+      "id": "runway-show",
+      "name": "Runway Show",
+      "maxHp": 26,
+      "attack": 6,
+      "reward": {
+        "xp": 11,
+        "swag": 3
+      },
+      "intro": "A Runway Show steps out of the PFP static.",
+      "attackText": "Bosch knocks the signal back into shape.",
+      "enemyText": "The Runway Show throws a crooked little burst.",
+      "moves": [
+        {
+          "id": "runway-show-jab",
+          "label": "Static Jab",
+          "intentType": "pressure",
+          "power": 6,
+          "message": "The Runway Show jabs through the static."
+        },
+        {
+          "id": "runway-show-flare",
+          "label": "PFP Flare",
+          "intentType": "weird",
+          "power": 5,
+          "message": "The Runway Show flares into a bad profile picture omen."
+        }
+      ],
+      "victoryText": "The profile flicker settles down.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/runway-show-battle-v1-alpha-extracted-source-size.png",
+          "width": 260,
+          "height": 260,
+          "label": "PFP collection source-derived Runway Show battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/runway-show-overworld-v1-ow-001-nearest.png",
+          "width": 48,
+          "height": 48,
+          "label": "PFP collection source-derived Runway Show overworld proxy OW 001 nearest"
+        }
+      },
+      "source": {
+        "policy": "pfp-collection-source-derived-runtime-v1",
+        "sourceEntryId": "pfp-runway-show-002",
+        "promotionManifest": "asset-lab/manifests/pfp-runway-show-gpt-image-2-v1.json",
+        "approval": "batch-0012-json-approved-by-nick"
+      }
+    },
+    "park-static": {
+      "id": "park-static",
+      "name": "Ushanka Shade",
+      "maxHp": 18,
+      "attack": 5,
+      "reward": {
+        "xp": 8,
+        "swag": 4
+      },
+      "intro": "An Ushanka Shade waits under a bad winter signal.",
+      "attackText": "Bosch breaks the hush with one hard hit.",
+      "enemyText": "The Ushanka Shade peers out from under the brim.",
+      "moves": [
+        {
+          "id": "frost-hush",
+          "label": "Frost Hush",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Ushanka Shade exhales a frost hush.",
+          "actionTags": [
+            "psi-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "bone-glare",
+          "label": "Bone Glare",
+          "intentType": "weird",
+          "power": 4,
+          "message": "The Ushanka Shade flashes a rib-bright glare.",
+          "actionTags": [
+            "psi-like",
+            "unmissable"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "star-flap",
+          "label": "Star Flap",
+          "intentType": "setup",
+          "power": 4,
+          "message": "The Ushanka Shade snaps its earflaps like warning flags.",
+          "actionTags": [
+            "bash-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        }
+      ],
+      "victoryText": "The winter hush cracks and blows away.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/lsw-ushanka-shade-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "Little Swag World source-derived Ushanka Shade enemy"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/lsw-ushanka-shade-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "Little Swag World source-derived Ushanka Shade overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "source-derived-runtime-v0",
+        "sourceEntryId": "lsw-enemy-0009",
+        "promotionManifest": "asset-lab/manifests/lsw-enemy-promotion-0003.json"
+      },
+      "speed": 9,
+      "guts": 12,
+      "actionOrder": "cyclic",
+      "initialStatus": []
+    },
+    "tunnel-hiss": {
+      "id": "tunnel-hiss",
+      "name": "Returnless King",
+      "maxHp": 21,
+      "attack": 6,
+      "reward": {
+        "xp": 10,
+        "swag": 3
+      },
+      "intro": "A Returnless King rolls out a decree nobody asked for.",
+      "attackText": "Bosch shoves the little throne off center.",
+      "enemyText": "The Returnless King rattles its prophecy board.",
+      "moves": [
+        {
+          "id": "nothing-ever",
+          "label": "Nothing Ever",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "The Returnless King announces nothing ever again."
+        },
+        {
+          "id": "crown-rattle",
+          "label": "Crown Rattle",
+          "intentType": "heavy",
+          "power": 6,
+          "message": "The Returnless King rattles its crown and lunges forward."
+        },
+        {
+          "id": "wheel-prophecy",
+          "label": "Wheel Prophecy",
+          "intentType": "weird",
+          "power": 4,
+          "message": "The Returnless King rolls through a prophecy nobody can parse."
+        }
+      ],
+      "victoryText": "The decree folds back into silence.",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/lsw-returnless-king-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "Little Swag World source-derived Returnless King enemy"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/lsw-returnless-king-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "Little Swag World source-derived Returnless King overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "source-derived-runtime-v0",
+        "sourceEntryId": "lsw-enemy-0011",
+        "promotionManifest": "asset-lab/manifests/lsw-enemy-promotion-0003.json"
+      }
+    },
+    "ai-slop": {
+      "id": "ai-slop",
+      "name": "AI Slop",
+      "maxHp": 28,
+      "attack": 6,
+      "reward": {
+        "xp": 12,
+        "swag": 3
+      },
+      "intro": "AI Slop entered your feed.",
+      "attackText": "Bosch hit the output where it looked most certain.",
+      "enemyText": "AI Slop dropped an em dash where a thought should be.",
+      "moves": [
+        {
+          "id": "em-dash",
+          "label": "Em Dash",
+          "intentType": "pressure",
+          "power": 5,
+          "message": "AI Slop connected two unrelated clauses with confidence.",
+          "actionTags": [
+            "psi-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "hallucinate",
+          "label": "Hallucinate",
+          "intentType": "weird",
+          "power": 4,
+          "message": "AI Slop remembered something that never happened.",
+          "actionTags": [
+            "no-shield-decrement"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "youre-absolutely-right",
+          "label": "YOU'RE ABSOLUTELY RIGHT",
+          "intentType": "heavy",
+          "power": 7,
+          "message": "AI Slop said YOU'RE ABSOLUTELY RIGHT and made everything worse.",
+          "actionTags": [
+            "psi-like"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        },
+        {
+          "id": "b2b-saas",
+          "label": "B2B SAAS",
+          "intentType": "setup",
+          "power": 5,
+          "message": "AI Slop pivoted into B2B SAAS.",
+          "actionTags": [
+            "no-shield-decrement"
+          ],
+          "targetDirection": "party",
+          "targetShape": "one"
+        }
+      ],
+      "victoryText": "It's not just a victory, it's a triumph!",
+      "visual": {
+        "sprite": {
+          "path": "generated/enemies/ai-slop-battle-v0.png",
+          "width": 260,
+          "height": 260,
+          "label": "AI Slop battle sprite"
+        },
+        "overworldSprite": {
+          "path": "generated/enemies/ai-slop-overworld-v0.png",
+          "width": 48,
+          "height": 48,
+          "label": "AI Slop overworld proxy"
+        }
+      },
+      "source": {
+        "policy": "original-swagbound-enemy-design-v0",
+        "designSpec": "Wiki/projects/swagbound/ai-slop-enemy-design-spec.md",
+        "promotionManifest": "asset-lab/manifests/ai-slop-original-promotion-v0.json"
+      },
+      "speed": 8,
+      "guts": 6,
+      "vulnerabilities": {
+        "freeze": 1.1,
+        "fire": 0.9
+      },
+      "actionOrder": "weighted",
+      "initialStatus": []
+    }
+  }
+}

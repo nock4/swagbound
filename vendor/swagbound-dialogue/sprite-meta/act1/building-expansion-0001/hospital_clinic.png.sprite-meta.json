@@ -1,0 +1,22 @@
+{
+  "sprite": "hospital_clinic.png",
+  "runtimeAsset": "public/assets/act1/building-expansion-0001/hospital_clinic.png",
+  "sprite_dimensions": {
+    "w": 148,
+    "h": 124
+  },
+  "placement_offset_px": {
+    "x": 0,
+    "y": 55
+  },
+  "ysort_anchor_local": {
+    "x": 74,
+    "y": 124
+  },
+  "collision_rect_local": {
+    "x": 22,
+    "y": 94,
+    "w": 104,
+    "h": 20
+  }
+}

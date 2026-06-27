@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.sprite-meta.v1",
+  "sprite": "dense-forest-edge.png",
+  "sprite_dimensions": {
+    "w": 128,
+    "h": 96
+  },
+  "ysort_anchor_local": {
+    "x": 64,
+    "y": 96
+  },
+  "collision_rect_local": {
+    "x": 6,
+    "y": 58,
+    "w": 116,
+    "h": 30
+  },
+  "door_anchor_local": {
+    "x": 64,
+    "y": 96
+  },
+  "door_facing": "south",
+  "source": {
+    "sliceId": "signal-town-environment-generated-0001",
+    "sourceManifest": "asset-lab/manifests/onett-environment-sprites-0001.json",
+    "sourceCandidate": "dense-forest-edge",
+    "processedSource": "asset-lab/generated/processed/onett-environment-sprites-0001/nature/dense-forest-edge.png",
+    "runtimeAsset": "public/assets/act1/signal-town/environment/generated-0001/dense-forest-edge.png"
+  },
+  "notes": "First reviewable Signal Town generated-environment population slice. This metadata is conservative and should be visually reviewed before promotion beyond the proof map."
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "swagbound.retiredApiAttempt.v1",
+  "id": "proof_token_charm",
+  "status": "retired-not-canonical",
+  "reason": "Bosch House Act 1 sprite generation now uses native ChatGPT image generation plus repo import. This file is not referenced by the active manifest.",
+  "activeProcedure": "docs/ops/swagbound-native-chatgpt-sprite-import.md",
+  "secretRecorded": false
+}

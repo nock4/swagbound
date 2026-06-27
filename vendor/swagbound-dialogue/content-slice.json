@@ -1,0 +1,450 @@
+{
+  "schema": "swagbound.content-slice.v1",
+  "generatedAt": "2026-04-30T21:24:23.956Z",
+  "source": {
+    "slice": "swagbound-phaser/public/data/content/slice.json",
+    "dialogue": "swagbound-phaser/public/data/content/dialogue.json",
+    "battle": "swagbound-phaser/public/data/content/battle.json",
+    "enemies": "swagbound-phaser/public/data/enemies/roster.json"
+  },
+  "startMapId": "route",
+  "pacing": {
+    "schema": "swagbound.slice-pacing.v1",
+    "targetMinutes": 60,
+    "routeGoal": "Bosch leaves home, crosses hostile ground, reaches Relay Yard, and realizes the Milady machine has to be fought rather than joined.",
+    "segments": [
+      {
+        "id": "intro-naming",
+        "label": "Name The Signal",
+        "environment": "intro",
+        "targetMinutes": 5,
+        "sceneIds": [
+          "intro"
+        ],
+        "proof": "Intro naming hands off to the browser overworld."
+      },
+      {
+        "id": "home-wakeup",
+        "label": "Bedroom To Block",
+        "environment": "home",
+        "targetMinutes": 8,
+        "mapIds": [
+          "bosch-bedroom",
+          "home-hall",
+          "neighborhood-block",
+          "swagway-downtown"
+        ],
+        "proof": "Bedroom poster, home exit, and neighborhood kid establish the route."
+      },
+      {
+        "id": "corner-shop-prep",
+        "label": "Corner Shop Prep",
+        "environment": "shop",
+        "targetMinutes": 8,
+        "mapIds": [
+          "corner-shop"
+        ],
+        "proof": "Pocket Snack, Signal Patch, and route economy are shop-proven."
+      },
+      {
+        "id": "signal-park-checkpoint",
+        "label": "Signal Park Checkpoint",
+        "environment": "park",
+        "targetMinutes": 13,
+        "mapIds": [
+          "signal-park"
+        ],
+        "encounterIds": [
+          "park-static"
+        ],
+        "proof": "Checkpoint, Ushanka Shade, shield, status, and reward pacing are smoke-proven."
+      },
+      {
+        "id": "relay-underpass-cache",
+        "label": "Underpass Cache",
+        "environment": "underpass",
+        "targetMinutes": 13,
+        "mapIds": [
+          "relay-underpass"
+        ],
+        "encounterIds": [
+          "tunnel-hiss"
+        ],
+        "proof": "Underpass cache, wall collision, Focus Fizz, Big Snack, and Returnless King are smoke-proven."
+      },
+      {
+        "id": "milady-relay-yard",
+        "label": "Milady Relay Yard",
+        "environment": "finale",
+        "targetMinutes": 13,
+        "mapIds": [
+          "milady-relay-yard"
+        ],
+        "proof": "Final relay interaction closes the current playable route."
+      }
+    ]
+  },
+  "player": {
+    "size": 24,
+    "speed": 150,
+    "stats": {
+      "maxHp": 30
+    },
+    "spawn": {
+      "x": 560,
+      "y": 630,
+      "facingX": 0,
+      "facingY": 1
+    },
+    "visual": {
+      "bodyColor": [
+        0.16,
+        0.25,
+        0.62,
+        1
+      ],
+      "headColor": [
+        0.95,
+        0.78,
+        0.58,
+        1
+      ],
+      "glyph": "B",
+      "sprite": {
+        "path": "generated/sprites/bosch-hood-reference-walk-v3.png",
+        "width": 20,
+        "height": 28,
+        "sheet": {
+          "frameWidth": 96,
+          "frameHeight": 96,
+          "columns": 4,
+          "rows": 4,
+          "rowOrder": [
+            "down",
+            "left",
+            "right",
+            "up"
+          ],
+          "frameDuration": 0.16
+        }
+      }
+    }
+  },
+  "controls": {
+    "interactKeys": [
+      "e",
+      "enter"
+    ],
+    "advanceKeys": [
+      "e",
+      "enter",
+      "space"
+    ],
+    "moveLeft": [
+      "a",
+      "arrowleft"
+    ],
+    "moveRight": [
+      "d",
+      "arrowright"
+    ],
+    "moveUp": [
+      "w",
+      "arrowup"
+    ],
+    "moveDown": [
+      "s",
+      "arrowdown"
+    ],
+    "inventoryKeys": [
+      "i",
+      "tab"
+    ],
+    "menuCloseKeys": [
+      "escape",
+      "i",
+      "tab"
+    ],
+    "menuUpKeys": [
+      "w",
+      "arrowup"
+    ],
+    "menuDownKeys": [
+      "s",
+      "arrowdown"
+    ]
+  },
+  "inventoryUi": {
+    "title": "Stuff",
+    "emptyText": "No stuff yet.",
+    "detailTitle": "Check",
+    "closeHint": "E: Use   I / Tab / Esc",
+    "noUseText": "This is important, but Bosch cannot use it from Stuff yet."
+  },
+  "keyItems": [
+    {
+      "id": "route-brief",
+      "name": "Route Brief",
+      "label": "Route Brief",
+      "kind": "story",
+      "consumable": false,
+      "objectiveId": "wake_up",
+      "description": "Bosch's opening route note. It is already open when he wakes, turning a bedroom morning into a town-scale anomaly."
+    },
+    {
+      "id": "proof-token-charm",
+      "name": "Proof-Token Charm",
+      "label": "Proof-Token Charm",
+      "kind": "proof",
+      "consumable": false,
+      "objectiveId": "leave_house",
+      "description": "A warm home-token from the entry bowl. It binds the chosen name and sprite variant before Bosch leaves the house, unlocks Receipt Routers, and makes the signal-pet stand down."
+    },
+    {
+      "id": "practice-bat",
+      "name": "Practice Bat",
+      "label": "Practice Bat",
+      "kind": "gear",
+      "consumable": false,
+      "objectiveId": "collect_starter_item",
+      "description": "A starter bat from the side room: not proof, not status, just something solid Bosch chose himself before stepping into rumor."
+    },
+    {
+      "id": "public-version-card",
+      "name": "Public Version Card",
+      "label": "Public Version Card",
+      "kind": "proof",
+      "consumable": false,
+      "objectiveId": "collect_starter_item",
+      "description": "A cheap laminated card showing the version of Bosch the town is already repeating. It works like a bad local ID."
+    },
+    {
+      "id": "hot-wallet-proof-token",
+      "name": "Hot Wallet proof token",
+      "label": "Hot Wallet proof token",
+      "kind": "proof",
+      "consumable": false,
+      "objectiveId": "prepare_proof",
+      "description": "A portable token from Sal's kiosk. It turns the witness trail into something a civic machine will at least pretend to read."
+    },
+    {
+      "id": "gate-classifier-receipt",
+      "name": "Gate Classifier Receipt",
+      "label": "Gate Classifier Receipt",
+      "kind": "receipt",
+      "consumable": false,
+      "objectiveId": "unlock_station_gate",
+      "description": "The Station Gate's printed classification of Bosch's public version. Like a key, but more embarrassing."
+    },
+    {
+      "id": "damaged-public-version-card",
+      "name": "Damaged Public Version Card",
+      "label": "Damaged Public Version Card",
+      "kind": "proof",
+      "consumable": false,
+      "objectiveId": "defeat_malady",
+      "description": "The public-version card after Malady cracks it into evidence. The damage makes the fake harder to file and easier to remember."
+    }
+  ],
+  "shop": {
+    "id": "corner-shop",
+    "title": "Corner Shop",
+    "clerkPromptId": "shop-clerk",
+    "subtitle": "Counter snacks",
+    "closeHint": "E / Enter: buy   Esc: leave",
+    "leaveLabel": "Leave",
+    "currencyLabel": "Swag",
+    "startingBalance": 0,
+    "alreadyOwnedText": "Bosch cannot carry more of those yet.",
+    "insufficientText": "Bosch does not have enough Swag for that yet.",
+    "purchaseText": "It slides into Stuff for the route.",
+    "items": [
+      {
+        "id": "pocket-snack",
+        "name": "Pocket Snack",
+        "label": "Pocket Snack",
+        "kind": "snack",
+        "badge": "Snack",
+        "price": 2,
+        "priceText": "2 Swag",
+        "stackable": true,
+        "maxQuantity": 3,
+        "consumable": true,
+        "useLabel": "Eat",
+        "useText": "Bosch eats the Pocket Snack. The route noise gets quieter.",
+        "fullText": "Bosch feels steady already. Save the snack for later.",
+        "useEffect": {
+          "type": "heal",
+          "amount": 8
+        },
+        "description": "A shelf-stable route snack in a signal-blue wrapper. Restores 8 HP from Stuff."
+      },
+      {
+        "id": "signal-patch",
+        "name": "Signal Patch",
+        "label": "Signal Patch",
+        "kind": "patch",
+        "badge": "Guard",
+        "price": 3,
+        "priceText": "3 Swag",
+        "stackable": true,
+        "maxQuantity": 2,
+        "consumable": true,
+        "useLabel": "Patch",
+        "useText": "Bosch slaps on a Signal Patch. The next hit gets softened.",
+        "fullText": "The patch is for battle pressure, not walking around.",
+        "useEffect": {
+          "type": "shield",
+          "amount": 4,
+          "hits": 1
+        },
+        "description": "A disposable signal patch. In battle it reduces the next enemy hit by 4."
+      },
+      {
+        "id": "focus-fizz",
+        "name": "Focus Fizz",
+        "label": "Focus Fizz",
+        "kind": "drink",
+        "badge": "Focus",
+        "price": 3,
+        "priceText": "3 Swag",
+        "stackable": true,
+        "maxQuantity": 2,
+        "consumable": true,
+        "useLabel": "Sip",
+        "useText": "Bosch drinks the Focus Fizz and catches the beat.",
+        "fullText": "Bosch is already holding enough signal charge.",
+        "useEffect": {
+          "type": "focus",
+          "amount": 1
+        },
+        "description": "A bright shop drink. In battle it grants one focus charge."
+      }
+    ]
+  },
+  "shops": [
+    {
+      "id": "downtown-cart",
+      "title": "Downtown Cart",
+      "clerkPromptId": "downtown-sidewalk-vendor",
+      "dialogueId": "downtownVendor",
+      "speaker": "Downtown Cart",
+      "subtitle": "Sidewalk supplies",
+      "closeHint": "E / Enter: buy   Esc: leave",
+      "leaveLabel": "Leave",
+      "currencyLabel": "Swag",
+      "alreadyOwnedText": "Bosch cannot carry more from this cart yet.",
+      "insufficientText": "The cart waves off the empty-wallet routine.",
+      "purchaseText": "The bag crinkles into Stuff.",
+      "items": [
+        {
+          "id": "pocket-snack",
+          "name": "Pocket Snack",
+          "label": "Pocket Snack",
+          "kind": "snack",
+          "badge": "Snack",
+          "price": 2,
+          "priceText": "2 Swag",
+          "stackable": true,
+          "maxQuantity": 3,
+          "consumable": true,
+          "useLabel": "Eat",
+          "useText": "Bosch eats the Pocket Snack. The route noise gets quieter.",
+          "fullText": "Bosch feels steady already. Save the snack for later.",
+          "useEffect": {
+            "type": "heal",
+            "amount": 8
+          },
+          "description": "A shelf-stable route snack in a signal-blue wrapper. Restores 8 HP from Stuff."
+        },
+        {
+          "id": "focus-fizz",
+          "name": "Focus Fizz",
+          "label": "Focus Fizz",
+          "kind": "drink",
+          "badge": "Focus",
+          "price": 2,
+          "priceText": "2 Swag",
+          "stackable": true,
+          "maxQuantity": 2,
+          "consumable": true,
+          "useLabel": "Sip",
+          "useText": "Bosch drinks the Focus Fizz and catches the beat.",
+          "fullText": "Bosch is already holding enough signal charge.",
+          "useEffect": {
+            "type": "focus",
+            "amount": 1
+          },
+          "description": "A bright shop drink. In battle it grants one focus charge."
+        }
+      ]
+    },
+    {
+      "id": "underpass-cache",
+      "title": "Underpass Cache",
+      "clerkPromptId": "underpass-marker",
+      "dialogueId": "underpassMarker",
+      "speaker": "Underpass Cache",
+      "subtitle": "Relay supplies",
+      "closeHint": "E / Enter: buy   Esc: leave",
+      "leaveLabel": "Leave",
+      "currencyLabel": "Swag",
+      "alreadyOwnedText": "Bosch cannot carry more from this cache yet.",
+      "insufficientText": "The cache wants more Swag than Bosch has.",
+      "purchaseText": "The cache clicks shut after handing it over.",
+      "items": [
+        {
+          "id": "big-snack",
+          "name": "Big Snack",
+          "label": "Big Snack",
+          "kind": "snack",
+          "badge": "Snack+",
+          "price": 4,
+          "priceText": "4 Swag",
+          "stackable": true,
+          "maxQuantity": 2,
+          "consumable": true,
+          "useLabel": "Eat",
+          "useText": "Bosch eats the Big Snack. The route noise drops hard.",
+          "fullText": "Bosch should save the Big Snack for a real hit.",
+          "useEffect": {
+            "type": "heal",
+            "amount": 12
+          },
+          "description": "A heavier route snack from the underpass cache. Restores 12 HP in battle or from Stuff."
+        },
+        {
+          "id": "focus-fizz",
+          "name": "Focus Fizz",
+          "label": "Focus Fizz",
+          "kind": "drink",
+          "badge": "Focus",
+          "price": 2,
+          "priceText": "2 Swag",
+          "stackable": true,
+          "maxQuantity": 2,
+          "consumable": true,
+          "useLabel": "Sip",
+          "useText": "Bosch drinks the Focus Fizz and catches the beat.",
+          "fullText": "Bosch is already holding enough signal charge.",
+          "useEffect": {
+            "type": "focus",
+            "amount": 1
+          },
+          "description": "A bright shop drink. In battle it grants one focus charge."
+        }
+      ]
+    }
+  ],
+  "audio": {
+    "tracks": {
+      "p0Loop": {
+        "path": "audio/route-loop-portofino1.mp3",
+        "loop": true,
+        "volume": 0.15,
+        "bus": "music",
+        "label": "Route loop"
+      }
+    }
+  }
+}

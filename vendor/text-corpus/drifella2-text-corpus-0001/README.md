@@ -1,0 +1,257 @@
+# Drifella 2 Text Corpus 0001
+
+Source: `swagbound-og-assets/lsw-corpus/output/drifella2`
+Items parsed: 500
+Missing images: 1
+
+## What this captures
+
+- Metadata titles / token numbers
+- Trait text likely to appear as collage language: `94overlay`, `1background`, `2background+`, plus character/object phrase traits
+- This is metadata extraction, not full visual OCR yet. Use it as the first reliable text corpus, then run OCR/vision on the high-value images if needed.
+
+## Best phrase candidates
+
+- `TAKE ALL YOUR MONEY OUT OF THE BANK` — drifella 2 #6684, field `background`, score 9
+- `Are you real` — drifella 2 #9240, field `overlay`, score 8
+- `american flag` — drifella 2 #632, field `background`, score 8
+- `anime eye rock` — drifella 2 #3896, field `left_hand`, score 8
+- `anime with blood` — drifella 2 #4036, field `mouth`, score 8
+- `assault rifle` — drifella 2 #9567, field `right_hand`, score 8
+- `asspizza bedroom` — drifella 2 #4489, field `background`, score 8
+- `asspizza gobln shirt` — drifella 2 #5524, field `cloth`, score 8
+- `black ops on my tv` — drifella 2 #5451, field `background`, score 8
+- `blue pokemon swag` — drifella 2 #4130, field `background`, score 8
+- `brain transplant` — drifella 2 #7704, field `overlay`, score 8
+- `bringing freedom and democracy to an oil rich country near you` — drifella 2 #649, field `overlay`, score 8
+- `btc fear greed index` — drifella 2 #4530, field `left_hand`, score 8
+- `chrome hearts mousetrap` — drifella 2 #1019, field `left_hand`, score 8
+- `dark brotherhood` — drifella 2 #4856, field `background`, score 8
+- `days never finished` — drifella 2 #2410, field `overlay`, score 8
+- `destroyed gameboy` — drifella 2 #6099, field `right_hand`, score 8
+- `ditto sweets` — drifella 2 #8308, field `background`, score 8
+- `dont give me orders` — drifella 2 #6186, field `right_hand`, score 8
+- `doomer beanie` — drifella 2 #9104, field `head`, score 8
+- `earl chart painting in my living room` — drifella 2 #792, field `background`, score 8
+- `fang reaper meme` — drifella 2 #4093, field `background`, score 8
+- `ghost and anime girl` — drifella 2 #4977, field `background`, score 8
+- `girls heart my swag` — drifella 2 #7664, field `cloth`, score 8
+- `griffith helmet` — drifella 2 #9878, field `head`, score 8
+- `hieronymus bosch meme` — drifella 2 #1718, field `background`, score 8
+- `his ass is not a software engineer` — drifella 2 #1253, field `overlay`, score 8
+- `house party  nearby im bringing weird guys` — drifella 2 #2575, field `background`, score 8
+- `how to catch a milk thief` — drifella 2 #1728, field `overlay`, score 8
+- `i am rooting for you` — drifella 2 #5761, field `background`, score 8
+- `i like getting my boot hole licked by nft monkeys` — drifella 2 #8497, field `overlay`, score 8
+- `i wake up i engage in tomfoolery` — drifella 2 #4684, field `overlay`, score 8
+- `im in love with my gf dont talk to me she has a nuclear bomb` — drifella 2 #3986, field `overlay`, score 8
+- `imagine fentanyl here` — drifella 2 #4393, field `overlay`, score 8
+- `it takes a little treat to tame a beast` — drifella 2 #2888, field `overlay`, score 8
+- `its over were back` — drifella 2 #1367, field `overlay`, score 8
+- `kill you red puffer` — drifella 2 #7068, field `cloth`, score 8
+- `left anime gun` — drifella 2 #6085, field `left_hand`, score 8
+- `life is pain` — drifella 2 #9019, field `overlay`, score 8
+- `life would be much easier` — drifella 2 #622, field `overlay`, score 8
+- `margiela jewel mask` — drifella 2 #4036, field `head`, score 8
+- `me and her joint` — drifella 2 #6960, field `mouth`, score 8
+- `me gay chair v5` — drifella 2 #4379, field `background`, score 8
+- `memento photo` — drifella 2 #6263, field `right_hand`, score 8
+- `metal fabrics` — drifella 2 #622, field `background`, score 8
+- `metal skelly` — drifella 2 #632, field `cloth`, score 8
+- `mewtwo in red circle` — drifella 2 #4036, field `overlay`, score 8
+- `meyomme dratini drawing` — drifella 2 #1865, field `left_hand`, score 8
+- `my call of duty` — drifella 2 #5863, field `head`, score 8
+- `my clash base` — drifella 2 #4104, field `right_hand`, score 8
+- `my favorite cards` — drifella 2 #1133, field `left_hand`, score 8
+- `my girant isopod phone case` — drifella 2 #9906, field `left_hand`, score 8
+- `no love deep web` — drifella 2 #1625, field `background`, score 8
+- `person who keeps gambling` — drifella 2 #1625, field `overlay`, score 8
+- `playing game` — drifella 2 #1019, field `right_hand`, score 8
+- `pot of greed` — drifella 2 #9176, field `left_hand`, score 8
+- `power ranger huddle` — drifella 2 #4207, field `background`, score 8
+- `praying to your flight god` — drifella 2 #1271, field `background`, score 8
+- `remember who you are fighting for` — drifella 2 #1239, field `background`, score 8
+- `revive me nurse` — drifella 2 #427, field `background`, score 8
+- `scout power reader` — drifella 2 #8719, field `head`, score 8
+- `shattered glass` — drifella 2 #361, field `overlay`, score 8
+- `she want me cuz im normal` — drifella 2 #7401, field `overlay`, score 8
+- `shiny and chrome` — drifella 2 #4821, field `mouth`, score 8
+- `shoot myself` — drifella 2 #6565, field `right_hand`, score 8
+- `someone with autism stole my wallet heart` — drifella 2 #8892, field `right_hand`, score 8
+- `something about us moon` — drifella 2 #6085, field `background`, score 8
+- `swag coin fistbump` — drifella 2 #8961, field `left_hand`, score 8
+- `swag weed girl` — drifella 2 #1865, field `background`, score 8
+- `swagtoshi nakamoto` — drifella 2 #5742, field `cloth`, score 8
+- `sweeper manga` — drifella 2 #8455, field `mouth`, score 8
+- `thank you lord for this here perc 30` — drifella 2 #2430, field `overlay`, score 8
+- `the life of drifella` — drifella 2 #5390, field `overlay`, score 8
+- `this doesnt bode well` — drifella 2 #4489, field `overlay`, score 8
+- `touching grass isnt enough` — drifella 2 #9176, field `overlay`, score 8
+- `tweety birds` — drifella 2 #3155, field `overlay`, score 8
+- `vetements kanye hoodie` — drifella 2 #2888, field `cloth`, score 8
+- `vivienne westwood gem jacket` — drifella 2 #9176, field `cloth`, score 8
+- `wake up we gotta turn the power on` — drifella 2 #194, field `overlay`, score 8
+- `who needs brain cells when you have swag` — drifella 2 #7483, field `overlay`, score 8
+- `wizard software` — drifella 2 #1595, field `overlay`, score 8
+- `wolf knight helmet` — drifella 2 #1253, field `head`, score 8
+- `wow it is literally me meme` — drifella 2 #3830, field `background`, score 8
+- `you cant beat a man that battles with himself every day` — drifella 2 #2708, field `overlay`, score 8
+- `you want muffin` — drifella 2 #8639, field `left_hand`, score 8
+- `you've been liquidated` — drifella 2 #117, field `overlay`, score 8
+- `youre a fag and your shits all retarded` — drifella 2 #4172, field `overlay`, score 8
+- `youre in her dms im letting greed corrupt me` — drifella 2 #2357, field `overlay`, score 8
+- `BORED APE NAZI CLUB` — drifella 2 #3951, field `overlay`, score 6
+- `I SPEND MONEY LIKE ITS COD ZOMBIES` — drifella 2 #7401, field `background`, score 6
+- `anime mist` — drifella 2 #1833, field `background`, score 6
+- `chrome dice` — drifella 2 #7683, field `left_hand`, score 6
+- `game shark` — drifella 2 #8068, field `left_hand`, score 6
+- `mean pills` — drifella 2 #6290, field `left_hand`, score 6
+- `meat heart` — drifella 2 #8980, field `right_hand`, score 6
+- `my lean` — drifella 2 #9240, field `right_hand`, score 6
+- `my wife` — drifella 2 #6625, field `right_hand`, score 6
+- `toji class` — drifella 2 #9031, field `background`, score 6
+- `yo brother` — drifella 2 #8892, field `overlay`, score 6
+- `you died` — drifella 2 #8981, field `overlay`, score 6
+- `100 emoji hat` — drifella 2 #3044, field `head`, score 5
+- `1930s bw cartoon` — drifella 2 #9175, field `background`, score 5
+- `Stańczyk painting` — drifella 2 #8411, field `background`, score 5
+- `aborted drifella` — drifella 2 #3570, field `left_hand`, score 5
+- `airbrush hat` — drifella 2 #4039, field `head`, score 5
+- `akira black and gray` — drifella 2 #8309, field `cloth`, score 5
+- `apocolyptic hazmat head` — drifella 2 #495, field `head`, score 5
+- `ashley wood sketch` — drifella 2 #8421, field `background`, score 5
+- `aura crown of thorns` — drifella 2 #5966, field `head`, score 5
+- `aura ear muffs` — drifella 2 #4821, field `head`, score 5
+- `backwards pill cyber jac` — drifella 2 #6186, field `cloth`, score 5
+- `bacon doorway` — drifella 2 #9096, field `background`, score 5
+- `bacon figures` — drifella 2 #5929, field `background`, score 5
+- `bacon fist fight` — drifella 2 #7319, field `background`, score 5
+- `bacon ghost 2` — drifella 2 #33, field `background`, score 5
+- `bacon priest` — drifella 2 #5863, field `background`, score 5
+- `bacon sketch` — drifella 2 #7677, field `background`, score 5
+- `ballistic hockey mask` — drifella 2 #8421, field `head`, score 5
+- `bandage wrapped head` — drifella 2 #6085, field `head`, score 5
+- `bape mape zip up` — drifella 2 #5866, field `cloth`, score 5
+- `barbed wire bat` — drifella 2 #9321, field `left_hand`, score 5
+- `barbed wire heart` — drifella 2 #427, field `overlay`, score 5
+- `base cacoon maturity` — drifella 2 #3896, field `overlay`, score 5
+- `based retard gang` — drifella 2 #7919, field `overlay`, score 5
+- `basquiat head` — drifella 2 #6717, field `background_plus`, score 5
+- `bat turtle painting` — drifella 2 #7184, field `background`, score 5
+- `batman clench` — drifella 2 #2708, field `mouth`, score 5
+- `be different hoodie` — drifella 2 #7683, field `cloth`, score 5
+- `be ready to fight the horde` — drifella 2 #4821, field `overlay`, score 5
+- `benny boys place` — drifella 2 #1621, field `background`, score 5
+- `birthday cake` — drifella 2 #7068, field `left_hand`, score 5
+- `black dead hands` — drifella 2 #2276, field `left_hand`, score 5
+- `black ops 2 speech bubble` — drifella 2 #3382, field `overlay`, score 5
+- `bladee reaper` — drifella 2 #4489, field `background_plus`, score 5
+- `blood splatter` — drifella 2 #6565, field `overlay`, score 5
+- `bloody smile` — drifella 2 #1019, field `mouth`, score 5
+- `blown up car` — drifella 2 #649, field `background`, score 5
+- `blue eyes toon painting` — drifella 2 #1590, field `background`, score 5
+- `bombed building` — drifella 2 #9768, field `background`, score 5
+- `born to drain mud is a fuck` — drifella 2 #5547, field `overlay`, score 5
+- `boxing gloves` — drifella 2 #1754, field `left_hand`, score 5
+- `btc laser eyes` — drifella 2 #8243, field `overlay`, score 5
+- `bullet bill spike teeth` — drifella 2 #9939, field `mouth`, score 5
+- `bullet holes` — drifella 2 #9878, field `overlay`, score 5
+- `bunny delivery` — drifella 2 #8068, field `right_hand`, score 5
+- `burning monk` — drifella 2 #3324, field `background`, score 5
+- `buying a t shirt` — drifella 2 #1015, field `cloth`, score 5
+- `camo gengar plush` — drifella 2 #5742, field `left_hand`, score 5
+- `candy bape hoodie` — drifella 2 #4700, field `cloth`, score 5
+- `cannot use this item offline` — drifella 2 #5524, field `overlay`, score 5
+- `castle w moat` — drifella 2 #4501, field `background`, score 5
+- `cat hashbrown` — drifella 2 #632, field `right_hand`, score 5
+- `cdg camo heart tee` — drifella 2 #2410, field `cloth`, score 5
+- `ceramic chambered mifella heart` — drifella 2 #3166, field `left_hand`, score 5
+- `chained deck` — drifella 2 #9111, field `left_hand`, score 5
+- `chaos zombie` — drifella 2 #1161, field `background`, score 5
+- `chicken wing` — drifella 2 #8537, field `right_hand`, score 5
+- `chris chan rugby longsleeve` — drifella 2 #4684, field `cloth`, score 5
+- `chugging cola` — drifella 2 #3916, field `left_hand`, score 5
+- `church graveyards` — drifella 2 #4684, field `background`, score 5
+
+## Most common overlays
+
+- `wake up we gotta turn the power on`: 8
+- `life would be much easier`: 8
+- `vingette shadow`: 7
+- `blood drip`: 7
+- `cat`: 6
+- `this doesnt bode well`: 6
+- `nails`: 6
+- `milk`: 6
+- `garbage`: 6
+- `how to catch a milk thief`: 5
+- `yo brother`: 5
+- `contraption`: 5
+- `free`: 5
+- `she want me cuz im normal`: 5
+- `trash`: 5
+- `AAAAAAAAAAAAAAA`: 5
+- `youre in her dms im letting greed corrupt me`: 5
+- `imagine fentanyl here`: 5
+- `pussy eater`: 5
+- `bomb`: 5
+- `bullet holes`: 5
+- `red arrows`: 5
+- `comic shroud`: 4
+- `just tired`: 4
+- `rainbow runescape selling`: 4
+- `i wake up i engage in tomfoolery`: 4
+- `touching grass isnt enough`: 4
+- `tweety birds`: 4
+- `shoot up the party`: 4
+- `his ass is not a software engineer`: 4
+- `door bolts`: 4
+- `guns`: 4
+- `BORED APE NAZI CLUB`: 4
+- `strangled red`: 4
+- `blood splatter`: 4
+- `based retard gang`: 4
+- `person who keeps gambling`: 4
+- `btc laser eyes`: 4
+- `divine ratio`: 4
+- `kill`: 4
+- `black ops 2 speech bubble`: 4
+- `thank you lord for this here perc 30`: 3
+- `femcel`: 3
+- `edward and bella playing chess`: 3
+- `fired from mcdonalds`: 3
+- `Are you real`: 3
+- `health bar`: 3
+- `the life of drifella`: 3
+- `HELL`: 3
+- `question marks`: 3
+- `moth`: 3
+- `slipmon`: 3
+- `born to drain mud is a fuck`: 3
+- `days never finished`: 3
+- `be ready to fight the horde`: 3
+- `mewtwo in red circle`: 3
+- `baby yoshis`: 3
+- `100 emoji`: 3
+- `wizard software`: 3
+- `you died`: 3
+- `girls heart my swag`: 3
+- `flesh star`: 3
+- `yall dont fuck with music like i do`: 3
+- `lock and key`: 3
+- `conciousness energy grid`: 3
+- `over 9000`: 3
+- `dark stars`: 3
+- `tour guide`: 3
+- `stars`: 3
+- `s drip`: 3
+- `youre a fag and your shits all retarded`: 3
+- `you cant beat a man that battles with himself every day`: 2
+- `solana`: 2
+- `yuh`: 2
+- `ibuprofen`: 2
+- `glitter holo`: 2
+- `cyber cygil overlay`: 2
+- `it takes a little treat to tame a beast`: 2
+- `i have two sides`: 2
+- `eyes wide shut`: 2

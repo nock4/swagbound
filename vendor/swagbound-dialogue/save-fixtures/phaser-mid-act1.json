@@ -1,0 +1,61 @@
+{
+  "schema": "swagbound.save.v1",
+  "saved_at": "2026-05-06T00:10:00Z",
+  "scene": "swagbound://scene/interiors/corner-shop",
+  "player": {
+    "position": [320, 360],
+    "hp": 22,
+    "max_hp": 30
+  },
+  "reward_totals": { "swag": 5, "xp": 21 },
+  "event_flags": {
+    "act1.started": true,
+    "act1.woke_up": true,
+    "act1.left_bedroom": true,
+    "act1.collected_starter_item": true,
+    "act1.left_house": true,
+    "act1.met_neighbors": true,
+    "act1.visited_corner_shop": true,
+    "act1.proof_object_prepared": true
+  },
+  "act1": {
+    "schema": "swagbound.act1-state.v1",
+    "actId": "act1",
+    "started": true,
+    "complete": false,
+    "gateUnlocked": false,
+    "currentObjectiveId": "receive_town_gate_brief",
+    "currentObjectiveText": "Receive the town gate brief from the civic authority.",
+    "completedObjectiveIds": ["wake_up", "leave_bedroom", "collect_starter_item", "leave_house", "collect_first_witness", "prepare_proof"],
+    "flags": {
+      "act1.started": true,
+      "act1.woke_up": true,
+      "act1.left_bedroom": true,
+      "act1.collected_starter_item": true,
+      "act1.left_house": true,
+      "act1.met_neighbors": true,
+      "intro.first_witness_spoken": true,
+      "intro.first_proof_recorded": true,
+      "act1.visited_corner_shop": true,
+      "act1.proof_object_prepared": true
+    },
+    "phaseIndex": 3
+  },
+  "inventory": [
+    { "id": "pocket-snack", "label": "Pocket Snack", "quantity": 1, "consumable": true },
+    { "id": "route-brief", "label": "Route Brief", "quantity": 1, "consumable": false },
+    { "id": "practice-bat", "label": "Practice Bat", "quantity": 1, "consumable": false },
+    { "id": "public-version-card", "label": "Public Version Card", "quantity": 1, "consumable": false },
+    { "id": "hot-wallet-proof-token", "label": "Hot Wallet proof token", "quantity": 1, "consumable": false }
+  ],
+  "encounter_cooldown": 7,
+  "last_interior_visit": {
+    "doorTarget": "corner-shop",
+    "doorId": "DoorTrigger005",
+    "preDoorPosition": [4000, 880],
+    "destinationScene": "swagbound://scene/interiors/corner-shop",
+    "entrySpawn": [320, 360],
+    "returnSpawn": [4000, 960]
+  },
+  "party": ["lsw-2821"]
+}
