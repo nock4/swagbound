@@ -44,3 +44,6 @@ swagbound-dialogue-lore-story-filepaths.txt
 
 # Licensed audition tracks (approved jammers) — large, not for the repo
 apps/game/public/audio/jammers/
+
+# Mined shop-clerk targets (playtest fixture)
+scripts/.shop-clerks.json
