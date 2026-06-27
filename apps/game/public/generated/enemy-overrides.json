@@ -1,0 +1,434 @@
+{
+  "schema": "swagbound.enemy-overrides.v1",
+  "byEnemyId": {
+    "1": {
+      "name": "Faithful Servants"
+    },
+    "3": {
+      "name": "Faithful Servants"
+    },
+    "4": {
+      "name": "Edible Demon"
+    },
+    "5": {
+      "name": "Edible Demon"
+    },
+    "6": {
+      "name": "Demonfella II"
+    },
+    "7": {
+      "name": "Happy Camper"
+    },
+    "8": {
+      "name": "Knitkitmori"
+    },
+    "9": {
+      "name": "Solfis"
+    },
+    "10": {
+      "name": "Demonfella II"
+    },
+    "11": {
+      "name": "Happy Camper"
+    },
+    "12": {
+      "name": "Knitkitmori"
+    },
+    "13": {
+      "name": "Solfis"
+    },
+    "14": {
+      "name": "Cryptic Kids"
+    },
+    "15": {
+      "name": "Milardio"
+    },
+    "16": {
+      "name": "Pifella"
+    },
+    "17": {
+      "name": "Paingelz"
+    },
+    "18": {
+      "name": "Malady"
+    },
+    "19": {
+      "name": "Wifeystation"
+    },
+    "20": {
+      "name": "Returnless King"
+    },
+    "22": {
+      "name": "Cryptic Kids"
+    },
+    "23": {
+      "name": "Signal Stutter"
+    },
+    "24": {
+      "name": "Milardio"
+    },
+    "25": {
+      "name": "Pifella"
+    },
+    "28": {
+      "name": "Ethereal Sols"
+    },
+    "29": {
+      "name": "Cinder Cap"
+    },
+    "30": {
+      "name": "Mifella 2"
+    },
+    "31": {
+      "name": "Ushanka Shade"
+    },
+    "32": {
+      "name": "Paingelz"
+    },
+    "33": {
+      "name": "Tojiba Disc Buddy"
+    },
+    "35": {
+      "name": "Heavy Liquid Graphic"
+    },
+    "36": {
+      "name": "Bat Poncho"
+    },
+    "37": {
+      "name": "Malady"
+    },
+    "38": {
+      "name": "Plastic Fool"
+    },
+    "43": {
+      "name": "Collection 2 for Solana"
+    },
+    "44": {
+      "name": "Sawtooth Bun"
+    },
+    "45": {
+      "name": "Runway Show"
+    },
+    "46": {
+      "name": "Hexp Hood"
+    },
+    "47": {
+      "name": "Question Marketeer"
+    },
+    "48": {
+      "name": "Swag Raccoon"
+    },
+    "50": {
+      "name": "Cryptic Kids 2"
+    },
+    "51": {
+      "name": "Wifeystation"
+    },
+    "52": {
+      "name": "Tape Code"
+    },
+    "53": {
+      "name": "Unicornio"
+    },
+    "54": {
+      "name": "Returnless King"
+    },
+    "55": {
+      "name": "Signal Stutter"
+    },
+    "56": {
+      "name": "Gay Mouse Crisis Center"
+    },
+    "57": {
+      "name": "Ethereal Sols"
+    },
+    "58": {
+      "name": "Goobdle-S"
+    },
+    "59": {
+      "name": "AI Slop"
+    },
+    "60": {
+      "name": "Faithful Servants"
+    },
+    "61": {
+      "name": "Edible Demon"
+    },
+    "62": {
+      "name": "Demonfella II"
+    },
+    "63": {
+      "name": "Happy Camper"
+    },
+    "64": {
+      "name": "Cinder Cap"
+    },
+    "65": {
+      "name": "Mifella 2"
+    },
+    "66": {
+      "name": "Knitkitmori"
+    },
+    "67": {
+      "name": "Solfis"
+    },
+    "68": {
+      "name": "Cryptic Kids"
+    },
+    "69": {
+      "name": "Milardio"
+    },
+    "70": {
+      "name": "Pifella"
+    },
+    "71": {
+      "name": "Paingelz"
+    },
+    "72": {
+      "name": "Malady"
+    },
+    "75": {
+      "name": "Wifeystation"
+    },
+    "76": {
+      "name": "Returnless King"
+    },
+    "77": {
+      "name": "Signal Stutter"
+    },
+    "78": {
+      "name": "Ethereal Sols"
+    },
+    "80": {
+      "name": "Cinder Cap"
+    },
+    "81": {
+      "name": "Ushanka Shade"
+    },
+    "82": {
+      "name": "Mifella 2"
+    },
+    "84": {
+      "name": "Ushanka Shade"
+    },
+    "85": {
+      "name": "Tojiba Disc Buddy"
+    },
+    "86": {
+      "name": "Heavy Liquid Graphic"
+    },
+    "87": {
+      "name": "Bat Poncho"
+    },
+    "88": {
+      "name": "Tojiba Disc Buddy"
+    },
+    "89": {
+      "name": "Plastic Fool"
+    },
+    "91": {
+      "name": "Collection 2 for Solana"
+    },
+    "92": {
+      "name": "Sawtooth Bun"
+    },
+    "94": {
+      "name": "Runway Show"
+    },
+    "96": {
+      "name": "Hexp Hood"
+    },
+    "97": {
+      "name": "Question Marketeer"
+    },
+    "98": {
+      "name": "Heavy Liquid Graphic"
+    },
+    "99": {
+      "name": "Swag Raccoon"
+    },
+    "100": {
+      "name": "Cryptic Kids 2"
+    },
+    "101": {
+      "name": "Tape Code"
+    },
+    "103": {
+      "name": "Unicornio"
+    },
+    "104": {
+      "name": "Gay Mouse Crisis Center"
+    },
+    "105": {
+      "name": "Goobdle-S"
+    },
+    "106": {
+      "name": "AI Slop"
+    },
+    "107": {
+      "name": "Faithful Servants"
+    },
+    "108": {
+      "name": "Edible Demon"
+    },
+    "109": {
+      "name": "Demonfella II"
+    },
+    "111": {
+      "name": "Bat Poncho"
+    },
+    "112": {
+      "name": "Happy Camper"
+    },
+    "113": {
+      "name": "Plastic Fool"
+    },
+    "114": {
+      "name": "Knitkitmori"
+    },
+    "115": {
+      "name": "Solfis"
+    },
+    "117": {
+      "name": "Collection 2 for Solana"
+    },
+    "118": {
+      "name": "Ushanka Shade"
+    },
+    "119": {
+      "name": "Cryptic Kids"
+    },
+    "120": {
+      "name": "Milardio"
+    },
+    "121": {
+      "name": "Sawtooth Bun"
+    },
+    "122": {
+      "name": "Runway Show"
+    },
+    "123": {
+      "name": "Pifella"
+    },
+    "124": {
+      "name": "Paingelz"
+    },
+    "126": {
+      "name": "Malady"
+    },
+    "127": {
+      "name": "Wifeystation"
+    },
+    "129": {
+      "name": "Hexp Hood"
+    },
+    "130": {
+      "name": "Demonfella II"
+    },
+    "131": {
+      "name": "Mifella 2"
+    },
+    "132": {
+      "name": "Returnless King"
+    },
+    "133": {
+      "name": "Signal Stutter"
+    },
+    "134": {
+      "name": "Question Marketeer"
+    },
+    "135": {
+      "name": "Ethereal Sols"
+    },
+    "136": {
+      "name": "Cinder Cap"
+    },
+    "138": {
+      "name": "Mifella 2"
+    },
+    "139": {
+      "name": "Swag Raccoon"
+    },
+    "142": {
+      "name": "Ushanka Shade"
+    },
+    "143": {
+      "name": "Tojiba Disc Buddy"
+    },
+    "144": {
+      "name": "Cryptic Kids 2"
+    },
+    "145": {
+      "name": "Tape Code"
+    },
+    "147": {
+      "name": "Heavy Liquid Graphic"
+    },
+    "148": {
+      "name": "Bat Poncho"
+    },
+    "149": {
+      "name": "Plastic Fool"
+    },
+    "150": {
+      "name": "Unicornio"
+    },
+    "151": {
+      "name": "Collection 2 for Solana"
+    },
+    "152": {
+      "name": "Sawtooth Bun"
+    },
+    "153": {
+      "name": "Runway Show"
+    },
+    "154": {
+      "name": "Hexp Hood"
+    },
+    "155": {
+      "name": "Question Marketeer"
+    },
+    "156": {
+      "name": "Swag Raccoon"
+    },
+    "157": {
+      "name": "Gay Mouse Crisis Center"
+    },
+    "158": {
+      "name": "Goobdle-S"
+    },
+    "159": {
+      "name": "AI Slop"
+    },
+    "195": {
+      "name": "Cryptic Kids 2"
+    },
+    "209": {
+      "name": "Edible Demon"
+    },
+    "210": {
+      "name": "Knitkitmori"
+    },
+    "211": {
+      "name": "Sawtooth Bun"
+    },
+    "212": {
+      "name": "Tape Code"
+    },
+    "214": {
+      "name": "Unicornio"
+    },
+    "222": {
+      "name": "Gay Mouse Crisis Center"
+    },
+    "223": {
+      "name": "Goobdle-S"
+    },
+    "224": {
+      "name": "AI Slop"
+    },
+    "227": {
+      "name": "Faithful Servants"
+    }
+  }
+}

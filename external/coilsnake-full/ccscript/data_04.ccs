@@ -1,0 +1,618 @@
+/*
+ * EarthBound Text Dump
+ * Time: 20:26:52 - 12/06/2026
+ * Generated using CCScriptWriter.
+ */
+
+command e(label) "{long label}"
+
+// Text Data
+l_0xc54b67:
+    newline
+    " <{itemname(135)}>" next
+    call(data_05.l_0xc56db7) "@Sucks up some HP from the target creature." next
+    "@The more HP an enemy has, the more you get." next
+    call(data_05.l_0xc56d9b) end
+
+l_0xc54bb0:
+    newline
+    " <{itemname(136)}>" next
+    call(data_05.l_0xc56db7) "@Sucks up some HP from all the enemies." next
+    "@The more HP the enemies have, the more you get." next
+    call(data_05.l_0xc56d9b) end
+
+l_0xc54bfa:
+    newline
+    " <{itemname(137)}>" next
+    "@Deals 200 points of damage to any bug when used during combat." next
+    call(data_05.l_0xc56d9b) end
+
+l_0xc54c32:
+    newline
+    " <{itemname(138)}>" next
+    call(data_05.l_0xc56db7) "@Sprays a sticky substance that stops the enemy from moving." next
+    call(data_05.l_0xc56d9b) end
+
+l_0xc54c6d:
+    newline
+    " <{itemname(139)}>" next
+    call(data_05.l_0xc56db7) "@Invented by Apple Kid." next
+    "@If used during combat, some damage will be dealt to the enemy," next
+    "@though it's not understood why this happens... it's just yogurt after all..." next
+    call(data_05.l_0xc56d9b) end
+
+l_0xc54ceb:
+    newline
+    " <{itemname(140)}>" next
+    "@You can even use this during battle!" next
+    call(data_05.l_0xc56d9b) end
+
+l_0xc54d10:
+    newline
+    " <{itemname(141)}>" next
+    "@During battle, a snake pops out of the bag and bites the enemy." next
+    "@There are thousands of small snakes living in the bag," next
+    "@so you should be able to use it over and over again." next
+    "@It can possibly poison the enemy, too." end
+
+l_0xc54d99:
+    newline
+    " <{itemname(142)}>" next
+    "@If used as a whip during battle, the enemy will take some damage" next
+    "@and stop moving for a while." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc54ddc:
+    newline
+    " <{itemname(143)}>" next
+    "@You can even use this during battle!" next
+    call(data_05.l_0xc56d9b) end
+
+l_0xc54e01:
+    newline
+    " <{itemname(144)}>" next
+    call(data_05.l_0xc56db7) call(data_05.l_0xc56dc5) next
+    call(data_05.l_0xc56dab) end
+
+l_0xc54e1d:
+    "akm" goto(l_0xc54e20)
+
+l_0xc54e20:
+    newline
+    " <{itemname(145)}>" next
+    call(data_05.l_0xc56db7) "@Fires a fast, powerful bottle rocket." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc54e54:
+    newline
+    " <{itemname(146)}>" next
+    call(data_05.l_0xc56db7) "@Possibly the strongest weapon around," next
+    "@it does a lot of damage due to its massive warhead." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc54ea7:
+    newline
+    " <{itemname(147)}>" next
+    call(data_05.l_0xc56dc5) next
+    "@Because of its explosive power," next
+    "@it may effect others besides the target creature. " next
+    call(data_05.l_0xc56dab) end
+
+l_0xc54ef7:
+    newline
+    " <{itemname(148)}>" next
+    "@Able to dish out some heavy-duty destruction in combat.  " next
+    "@Because of its explosive power," next
+    "@it may effect others besides the target creature." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc54f6a:
+    newline
+    " <{itemname(149)}>" next
+    "@Deals 100 points of damage to any bug when used during combat." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc54fa2:
+    newline
+    " <{itemname(150)}>" next
+    "@Quickly rusts metallic enemies when used during battle." next
+    "@The enemy will take about 200 points of damage." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc54ff0:
+    newline
+    " <{itemname(151)}>" next
+    "@Causes almost instantaneous rusting" next
+    "@when used on metallic enemies during battle." next
+    "@The enemy takes about 400 points of damage." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc55057:
+    newline
+    " <{itemname(152)}>" next
+    "@When used during battle, the enemy gets so nauseous from the ripe odor," next
+    "@they cannot fight." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc5509e:
+    newline
+    " <{itemname(153)}>" next
+    "@By throwing this at the enemy during battle," next
+    "@the enemy is shocked and stops moving." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc550e3:
+    newline
+    " <{itemname(154)}>" next
+    "@Can be used during battle." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc55105:
+    newline
+    " <{itemname(155)}>" next
+    "@When used as a whip during battle," next
+    "@the enemy takes enough damage to stop moving for a short time." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc5514f:
+    newline
+    " <{itemname(156)}>" next
+    "@An ectoplasmic ooze is disgorged out of the dreadful box," next
+    "@and the enemy may be poisoned." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc5519f:
+    newline
+    " <{itemname(157)}>" next
+    "@Increases the Defense of all the friends." next
+    call(data_05.l_0xc56b0d) next
+    call(data_05.l_0xc56d9b) end
+
+l_0xc551cd:
+    newline
+    " <{itemname(158)}>" next
+    "@A letter from Mom to {name(1)}." end
+
+l_0xc551ea:
+    newline
+    " <{itemname(159)}>" next
+    "@Doubles your guts during battle." next
+    "@However, after a battle, your guts return to normal. " next
+    call(data_05.l_0xc56dab) end
+
+l_0xc55230:
+    newline
+    " <{itemname(160)}>" next
+    "@If you sprinkle the powder on one of your friends during battle, " next
+    "@that friend turns into a dragon and attacks all enemies." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc5528d:
+    newline
+    " <{itemname(161)}>" next
+    "@Increase one of the friends Defense during battle." next
+    call(data_05.l_0xc56b0d) next
+    call(data_05.l_0xc56dab) end
+
+l_0xc552c4:
+    newline
+    " <{itemname(162)}>" next
+    "@If you wear this on your nose, you can find and root out magic truffles." next
+    call(data_05.l_0xc56d9b) next
+    "@...let me explain a bit about Magic Truffles." next
+    "@They are a kind of mushroom that grow in damp places, like at the base of big trees." next
+    "@They are almost always buried, " next
+    "@so they cannot be seen." next
+    "@If you find one and eat it, it is said to greatly recover a person's PP!" next
+    "@You can see more info about the wondrous Magic Truffle after you have obtained one." end
+
+l_0xc553d7:
+    newline
+    " <{itemname(163)}>" next
+    "@It invites people to come and buy your unnecessary goods." next
+    call(data_05.l_0xc56d9b) end
+
+l_0xc55409:
+    newline
+    " <{itemname(164)}>" next
+    "@As the title says, it helps one overcome shyness." end
+
+l_0xc55433:
+    newline
+    " <{itemname(165)}>" next
+    "@Not really horrible, but the scene on the front doesn't make you want to go there.  " end
+
+l_0xc5546c:
+    newline
+    " <{itemname(166)}>" next
+    "@A king-sized banana." linebreak
+    "  Not edible." end
+
+l_0xc55496:
+    newline
+    " <{itemname(167)}>" next
+    "@A letter from Tony to {name(3)}." end
+
+l_0xc554b3:
+    newline
+    " <{itemname(168)}>" next
+    "@A chick that just hatched." end
+
+l_0xc554cf:
+    newline
+    " <{itemname(169)}>" next
+    "@A real, live chicken." next
+    "@Don't eat it, please." end
+
+l_0xc554f6:
+    newline
+    " <{itemname(170)}>" next
+    "@A key to the traveling entertainer's shack." end
+
+l_0xc5551d:
+    newline
+    " <{itemname(171)}>" next
+    "@A key to a holding cell made specially for {name(2)}." end
+
+l_0xc55546:
+    newline
+    " <{itemname(172)}>" next
+    "@The <Machine that Opens Doors," next
+    "@especially when you have a slightly bad key> machine." end
+
+l_0xc5558a:
+    newline
+    " <{itemname(173)}>" next
+    "@A key given to you by a maid who works at the Monotoli building." end
+
+l_0xc555b8:
+    newline
+    " <{itemname(174)}>" next
+    "@Apple Kid's invention." next
+    "@Lay this out in the tent, and the next day, a lot of zombies may be stuck to it." end
+
+l_0xc55602:
+    newline
+    " <{itemname(175)}>" next
+    "@What a miracle! Now you can see in the dark!" end
+
+l_0xc55627:
+    newline
+    " <{itemname(176)}>" next
+    "@Riding this makes you feel like whistling!" next
+    "@You can even ring the bell by pressing the R button." end
+
+l_0xc5566b:
+    newline
+    " <{itemname(177)}>" next
+    "@You know, you shouldn't leave home without..." next
+    "@It even works overseas!" end
+
+l_0xc5569c:
+    newline
+    " <{itemname(178)}>" next
+    "@It says, <Section B, seat 3D.>" end
+
+l_0xc556c1:
+    newline
+    " <{itemname(179)}>" next
+    "@A letter from the preschool kids to {name(2)}." end
+
+l_0xc556e3:
+    newline
+    " <{itemname(180)}>" next
+    "@A bundle of brand new, crisp bills." end
+
+l_0xc5570b:
+    newline
+    " <{itemname(181)}>" next
+    "@Apple Kid's invention." next
+    "@Now, you can receive important calls." end
+
+l_0xc55740:
+    newline
+    " <{itemname(182)}>" next
+    "@A big, beautiful, and expensive-looking gem." end
+
+l_0xc5576a:
+    newline
+    " <{itemname(183)}>" next
+    "@A banana skin with Venus's autograph." end
+
+l_0xc55794:
+    newline
+    " <{itemname(184)}>" next
+    "@Apple Kid's invention." next
+    "@It makes something blocking your way" next
+    "@that looks like a pencil disappear in just a second." end
+
+l_0xc557e7:
+    newline
+    " <{itemname(185)}>" next
+    "@A copy of a hieroglyph." next
+    "@Something important is recorded in the ancient characters." end
+
+l_0xc55831:
+    newline
+    " <{itemname(186)}>" next
+    "@It can be sold for a very high price." next
+    "@Nothing happens if you use it." next
+    "@A good explanation is kind of tough..." end
+
+l_0xc5587e:
+    newline
+    " <{itemname(187)}>" next
+    "@It must belong to someone." end
+
+l_0xc55897:
+    newline
+    " <{itemname(188)}>" next
+    "@A hand-made Band Aid." next
+    "@It heals your wounded body." next
+    call(data_05.l_0xc56dab) end
+
+l_0xc558ca:
+    newline
+    " <{itemname(189)}>" next
+    "@A fashionable treat for snobby, haute cuisine people in some big cities." next
+    call(data_05.l_0xc56cb5) "30" call(data_05.l_0xc56cd6) end
+
+l_0xc55915:
+    newline
+    " <{itemname(190)}>" next
+    call(data_05.l_0xc56cb5) "25" call(data_05.l_0xc56cd6) end
+
+l_0xc5592c:
+    newline
+    " <{itemname(191)}>" next
+    call(data_05.l_0xc56cb5) "60" call(data_05.l_0xc56cd6) end
+
+l_0xc55943:
+    newline
+    " <{itemname(192)}>" next
+    "@An old key." end
+
+l_0xc55957:
+    newline
+    " <{itemname(193)}>" next
+    "@It looks like a plain old rock," next
+    "@but for someone who knows about it, it is actually a very precious, unusual element." end
+
+l_0xc559a8:
+    newline
+    " <{itemname(194)}>" next
+    call(data_05.l_0xc56bdf) "@It protects you from fire, freeze, and flash attacks." end
+
+l_0xc559d9:
+    newline
+    " <{itemname(195)}>" next
+    call(data_05.l_0xc56db7) "@When used during battle," next
+    "@this item resets the abilities of all creatures (friend or enemy)" next
+    "@to their normal levels." next
+    "@Any changes that had taken place due to PSI and such is neutralized." next
+    "@It also neutralizes all shields (friend or enemy) that were in effect." next
+    "@(Remember, the abilities" next
+    "@that I am talking about are Offense, Defense, Guts, etc.)" end
+
+l_0xc55ad5:
+    newline
+    " <{itemname(196)}>" next
+    "@If you touch this to your forehead and concentrate on your thoughts," next
+    "@Your Sanctuary melodies can be heard." end
+
+l_0xc55b21:
+    newline
+    " <{itemname(197)}>" next
+    "@If you use this in a dungeon or some such place," next
+    "@the mouse brings you back to the place where you entered." next
+    "@It's a very smart mouse." end
+
+l_0xc55b79:
+    newline
+    " <{itemname(198)}>" next
+    "@Ice cream that is all the rage among fashionable, young women." next
+    call(data_05.l_0xc56cb5) "30" call(data_05.l_0xc56cd6) end
+
+l_0xc55bc1:
+    newline
+    " <{itemname(199)}>" next
+    "@When used during battle, it bites the enemy and disappears." next
+    "@It may also poison the enemy." end
+
+l_0xc55c03:
+    newline
+    " <{itemname(200)}>" next
+    "@When used during battle, it bites the enemy and disappears." next
+    "@It always poisons the enemy." end
+
+l_0xc55c46:
+    newline
+    " <{itemname(201)}>" next
+    "@A miraculous stone that enables you to <concentrate>" next
+    "@without using your own brain." next
+    "@This is accomplished just by your keeping this item." next
+    "@This is great because if you can't concentrate, you can't use PSI." end
+
+l_0xc55cce:
+    newline
+    " <{itemname(202)}>" next
+    "@A handy town map. It can be used in Onett, as well as other towns." next
+    "@You can view the map quickly, simply by pressing the X button." end
+
+l_0xc55d2e:
+    newline
+    " <{itemname(203)}>" next
+    "@What the hey is this?" end
+
+l_0xc55d46:
+    newline
+    " <{itemname(204)}>" next
+    "@Orange Kid's invention." next
+    "@The full name is the <Super Orange Machine.>" end
+
+l_0xc55d82:
+    newline
+    " <{itemname(205)}>" next
+    "@A key to a regular locker." end
+
+l_0xc55da1:
+    newline
+    " <{itemname(206)}>" next
+    "@It doesn't look like it would do much of anything, but..." end
+
+l_0xc55dc8:
+    newline
+    " <{itemname(207)}>" next
+    "@Recovers about 20 PP." end
+
+l_0xc55de0:
+    newline
+    " <{itemname(208)}>" next
+    "@An old treasure from Dalaam." end
+
+l_0xc55dfe:
+    newline
+    " <{itemname(209)}>" next
+    "@A gift from a monkey." next
+    "@It can be used during battle." end
+
+l_0xc55e28:
+    newline
+    " <{itemname(210)}>" next
+    "@Apple Kid's invention." next
+    "@It erases something that looks like an eraser" next
+    "@that also might be blocking your way." end
+
+l_0xc55e77:
+    newline
+    " <{itemname(211)}>" next
+    "@A very strong-smelling dish." next
+    "@Those who like it go nuts for it..." end
+
+l_0xc55eab:
+    newline
+    " <{itemname(212)}>" next
+    call(data_05.l_0xc56b8e) end
+
+l_0xc55ebb:
+    newline
+    " <{itemname(213)}>" next
+    call(data_05.l_0xc56b8e) next
+    "@Wow! Look at the pine tar! It's almost all the way to the end!" end
+
+l_0xc55ef6:
+    newline
+    " <{itemname(214)}>" next
+    call(data_05.l_0xc56b8e) end
+
+l_0xc55f06:
+    newline
+    " <{itemname(215)}>" next
+    call(data_05.l_0xc56ba0) end
+
+l_0xc55f16:
+    newline
+    " <{itemname(216)}>" next
+    call(data_05.l_0xc56bf4) end
+
+l_0xc55f26:
+    newline
+    " <{itemname(217)}>" next
+    call(data_05.l_0xc56bf4) end
+
+l_0xc55f36:
+    newline
+    " <{itemname(218)}>" next
+    call(data_05.l_0xc56c6d) next
+    "@When equipped, Luck is increased." end
+
+l_0xc55f5d:
+    newline
+    " <{itemname(219)}>" next
+    call(data_05.l_0xc56c6d) next
+    "@When equipped, Luck is increased." end
+
+l_0xc55f84:
+    newline
+    " <{itemname(220)}>" next
+    call(data_05.l_0xc56c6d) next
+    "@When equipped, Luck is increased." next
+    "@Same as the one that Mr. Saturn wears on his head.{wait}" linebreak
+    eob
+
+l_0xc55fcc:
+    newline
+    " <{itemname(221)}>" next
+    call(data_05.l_0xc56c54) end
+
+l_0xc55fdc:
+    newline
+    " <{itemname(222)}>" next
+    call(data_05.l_0xc56c54) end
+
+l_0xc55fec:
+    newline
+    " <{itemname(223)}>" next
+    "@You know what this is..." next
+    call(data_05.l_0xc56cb5) "40" call(data_05.l_0xc56cd6) end
+
+l_0xc56011:
+    newline
+    " <{itemname(224)}>" next
+    "@Gives you a spring in your step for about 10 seconds." next
+    "@It also helps you recover your power a bit." end
+
+l_0xc56054:
+    newline
+    " <{itemname(225)}>" next
+    "@Gives you a spring in your step for about 20 seconds." next
+    "@It also helps you recover your power a bit." end
+
+l_0xc56097:
+    newline
+    " <{itemname(226)}>" next
+    "@It helps you recover your power..." next
+    "@How much and what you exactly recover depends on your luck!" end
+
+l_0xc560d3:
+    newline
+    " <{itemname(227)}>" next
+    "@It helps you recover your power..." next
+    "@How much and what you exactly recover depends on your luck!" end
+
+l_0xc5610f:
+    newline
+    " <{itemname(228)}>" next
+    "@It helps you recover your power..." next
+    "@How much and what you exactly recover depends on your luck!" end
+
+l_0xc5614b:
+    newline
+    " <{itemname(229)}>" next
+    "@It helps you recover your power..." next
+    "@How much and what you exactly recover depends on your luck!" end
+
+l_0xc56187:
+    newline
+    " <{itemname(230)}>" next
+    "@It helps you recover your power..." next
+    "@How much and what you exactly recover depends on your luck!" end
+
+l_0xc561c3:
+    newline
+    " <{itemname(231)}>" next
+    "@It helps you recover your power..." next
+    "@How much and what you exactly recover depends on your luck!" end
+
+l_0xc561ff:
+    newline
+    " <{itemname(232)}>" next
+    call(data_05.l_0xc56cc5) "12" call(data_05.l_0xc56cd6) next
+    "@I guess it tastes good to adults." end
+
+l_0xc56230:
+    newline
+    " <{itemname(233)}>" next
+    call(data_05.l_0xc56cb5) "90" call(data_05.l_0xc56cd6) next
+    "@100% beef." end
+

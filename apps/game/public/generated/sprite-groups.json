@@ -1,0 +1,3258 @@
+{
+  "schemaVersion": "0.2.0",
+  "sourceProjectPath": "external/coilsnake-full",
+  "images": [
+    {
+      "path": "SpriteGroups/000.png",
+      "id": 0,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/001.png",
+      "id": 1,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/002.png",
+      "id": 2,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/003.png",
+      "id": 3,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/004.png",
+      "id": 4,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/005.png",
+      "id": 5,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/006.png",
+      "id": 6,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/007.png",
+      "id": 7,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/008.png",
+      "id": 8,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/009.png",
+      "id": 9,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/010.png",
+      "id": 10,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/011.png",
+      "id": 11,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/012.png",
+      "id": 12,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/013.png",
+      "id": 13,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/014.png",
+      "id": 14,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/015.png",
+      "id": 15,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/016.png",
+      "id": 16,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/017.png",
+      "id": 17,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/018.png",
+      "id": 18,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/019.png",
+      "id": 19,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/020.png",
+      "id": 20,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/021.png",
+      "id": 21,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/022.png",
+      "id": 22,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/023.png",
+      "id": 23,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/024.png",
+      "id": 24,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/025.png",
+      "id": 25,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/026.png",
+      "id": 26,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/027.png",
+      "id": 27,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/028.png",
+      "id": 28,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/029.png",
+      "id": 29,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/030.png",
+      "id": 30,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/031.png",
+      "id": 31,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/032.png",
+      "id": 32,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/033.png",
+      "id": 33,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/034.png",
+      "id": 34,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/035.png",
+      "id": 35,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/036.png",
+      "id": 36,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/037.png",
+      "id": 37,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/038.png",
+      "id": 38,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/039.png",
+      "id": 39,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/040.png",
+      "id": 40,
+      "extension": ".png",
+      "width": 96,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/041.png",
+      "id": 41,
+      "extension": ".png",
+      "width": 256,
+      "height": 320
+    },
+    {
+      "path": "SpriteGroups/042.png",
+      "id": 42,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/043.png",
+      "id": 43,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/044.png",
+      "id": 44,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/045.png",
+      "id": 45,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/046.png",
+      "id": 46,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/047.png",
+      "id": 47,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/048.png",
+      "id": 48,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/049.png",
+      "id": 49,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/050.png",
+      "id": 50,
+      "extension": ".png",
+      "width": 96,
+      "height": 160
+    },
+    {
+      "path": "SpriteGroups/051.png",
+      "id": 51,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/052.png",
+      "id": 52,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/053.png",
+      "id": 53,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/054.png",
+      "id": 54,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/055.png",
+      "id": 55,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/056.png",
+      "id": 56,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/057.png",
+      "id": 57,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/058.png",
+      "id": 58,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/059.png",
+      "id": 59,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/060.png",
+      "id": 60,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/061.png",
+      "id": 61,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/062.png",
+      "id": 62,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/063.png",
+      "id": 63,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/064.png",
+      "id": 64,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/065.png",
+      "id": 65,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/066.png",
+      "id": 66,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/067.png",
+      "id": 67,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/068.png",
+      "id": 68,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/069.png",
+      "id": 69,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/070.png",
+      "id": 70,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/071.png",
+      "id": 71,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/072.png",
+      "id": 72,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/073.png",
+      "id": 73,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/074.png",
+      "id": 74,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/075.png",
+      "id": 75,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/076.png",
+      "id": 76,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/077.png",
+      "id": 77,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/078.png",
+      "id": 78,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/079.png",
+      "id": 79,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/080.png",
+      "id": 80,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/081.png",
+      "id": 81,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/082.png",
+      "id": 82,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/083.png",
+      "id": 83,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/084.png",
+      "id": 84,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/085.png",
+      "id": 85,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/086.png",
+      "id": 86,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/087.png",
+      "id": 87,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/088.png",
+      "id": 88,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/089.png",
+      "id": 89,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/090.png",
+      "id": 90,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/091.png",
+      "id": 91,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/092.png",
+      "id": 92,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/093.png",
+      "id": 93,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/094.png",
+      "id": 94,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/095.png",
+      "id": 95,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/096.png",
+      "id": 96,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/097.png",
+      "id": 97,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/098.png",
+      "id": 98,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/099.png",
+      "id": 99,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/100.png",
+      "id": 100,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/101.png",
+      "id": 101,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/102.png",
+      "id": 102,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/103.png",
+      "id": 103,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/104.png",
+      "id": 104,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/105.png",
+      "id": 105,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/106.png",
+      "id": 106,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/107.png",
+      "id": 107,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/108.png",
+      "id": 108,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/109.png",
+      "id": 109,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/110.png",
+      "id": 110,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/111.png",
+      "id": 111,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/112.png",
+      "id": 112,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/113.png",
+      "id": 113,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/114.png",
+      "id": 114,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/115.png",
+      "id": 115,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/116.png",
+      "id": 116,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/117.png",
+      "id": 117,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/118.png",
+      "id": 118,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/119.png",
+      "id": 119,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/120.png",
+      "id": 120,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/121.png",
+      "id": 121,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/122.png",
+      "id": 122,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/123.png",
+      "id": 123,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/124.png",
+      "id": 124,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/125.png",
+      "id": 125,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/126.png",
+      "id": 126,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/127.png",
+      "id": 127,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/128.png",
+      "id": 128,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/129.png",
+      "id": 129,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/130.png",
+      "id": 130,
+      "extension": ".png",
+      "width": 96,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/131.png",
+      "id": 131,
+      "extension": ".png",
+      "width": 96,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/132.png",
+      "id": 132,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/133.png",
+      "id": 133,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/134.png",
+      "id": 134,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/135.png",
+      "id": 135,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/136.png",
+      "id": 136,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/137.png",
+      "id": 137,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/138.png",
+      "id": 138,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/139.png",
+      "id": 139,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/140.png",
+      "id": 140,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/141.png",
+      "id": 141,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/142.png",
+      "id": 142,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/143.png",
+      "id": 143,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/144.png",
+      "id": 144,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/145.png",
+      "id": 145,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/146.png",
+      "id": 146,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/147.png",
+      "id": 147,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/148.png",
+      "id": 148,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/149.png",
+      "id": 149,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/150.png",
+      "id": 150,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/151.png",
+      "id": 151,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/152.png",
+      "id": 152,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/153.png",
+      "id": 153,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/154.png",
+      "id": 154,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/155.png",
+      "id": 155,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/156.png",
+      "id": 156,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/157.png",
+      "id": 157,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/158.png",
+      "id": 158,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/159.png",
+      "id": 159,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/160.png",
+      "id": 160,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/161.png",
+      "id": 161,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/162.png",
+      "id": 162,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/163.png",
+      "id": 163,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/164.png",
+      "id": 164,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/165.png",
+      "id": 165,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/166.png",
+      "id": 166,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/167.png",
+      "id": 167,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/168.png",
+      "id": 168,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/169.png",
+      "id": 169,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/170.png",
+      "id": 170,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/171.png",
+      "id": 171,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/172.png",
+      "id": 172,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/173.png",
+      "id": 173,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/174.png",
+      "id": 174,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/175.png",
+      "id": 175,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/176.png",
+      "id": 176,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/177.png",
+      "id": 177,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/178.png",
+      "id": 178,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/179.png",
+      "id": 179,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/180.png",
+      "id": 180,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/181.png",
+      "id": 181,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/182.png",
+      "id": 182,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/183.png",
+      "id": 183,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/184.png",
+      "id": 184,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/185.png",
+      "id": 185,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/186.png",
+      "id": 186,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/187.png",
+      "id": 187,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/188.png",
+      "id": 188,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/189.png",
+      "id": 189,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/190.png",
+      "id": 190,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/191.png",
+      "id": 191,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/192.png",
+      "id": 192,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/193.png",
+      "id": 193,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/194.png",
+      "id": 194,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/195.png",
+      "id": 195,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/196.png",
+      "id": 196,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/197.png",
+      "id": 197,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/198.png",
+      "id": 198,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/199.png",
+      "id": 199,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/200.png",
+      "id": 200,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/201.png",
+      "id": 201,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/202.png",
+      "id": 202,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/203.png",
+      "id": 203,
+      "extension": ".png",
+      "width": 192,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/204.png",
+      "id": 204,
+      "extension": ".png",
+      "width": 64,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/205.png",
+      "id": 205,
+      "extension": ".png",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/206.png",
+      "id": 206,
+      "extension": ".png",
+      "width": 192,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/207.png",
+      "id": 207,
+      "extension": ".png",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/208.png",
+      "id": 208,
+      "extension": ".png",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/209.png",
+      "id": 209,
+      "extension": ".png",
+      "width": 192,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/210.png",
+      "id": 210,
+      "extension": ".png",
+      "width": 192,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/211.png",
+      "id": 211,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/212.png",
+      "id": 212,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/213.png",
+      "id": 213,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/214.png",
+      "id": 214,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/215.png",
+      "id": 215,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/216.png",
+      "id": 216,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/217.png",
+      "id": 217,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/218.png",
+      "id": 218,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/219.png",
+      "id": 219,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/220.png",
+      "id": 220,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/221.png",
+      "id": 221,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/222.png",
+      "id": 222,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/223.png",
+      "id": 223,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/224.png",
+      "id": 224,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/225.png",
+      "id": 225,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/226.png",
+      "id": 226,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/227.png",
+      "id": 227,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/228.png",
+      "id": 228,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/229.png",
+      "id": 229,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/230.png",
+      "id": 230,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/231.png",
+      "id": 231,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/232.png",
+      "id": 232,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/233.png",
+      "id": 233,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/234.png",
+      "id": 234,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/235.png",
+      "id": 235,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/236.png",
+      "id": 236,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/237.png",
+      "id": 237,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/238.png",
+      "id": 238,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/239.png",
+      "id": 239,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/240.png",
+      "id": 240,
+      "extension": ".png",
+      "width": 192,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/241.png",
+      "id": 241,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/242.png",
+      "id": 242,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/243.png",
+      "id": 243,
+      "extension": ".png",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/244.png",
+      "id": 244,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/245.png",
+      "id": 245,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/246.png",
+      "id": 246,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/247.png",
+      "id": 247,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/248.png",
+      "id": 248,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/249.png",
+      "id": 249,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/250.png",
+      "id": 250,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/251.png",
+      "id": 251,
+      "extension": ".png",
+      "width": 192,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/252.png",
+      "id": 252,
+      "extension": ".png",
+      "width": 256,
+      "height": 256
+    },
+    {
+      "path": "SpriteGroups/253.png",
+      "id": 253,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/254.png",
+      "id": 254,
+      "extension": ".png",
+      "width": 192,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/255.png",
+      "id": 255,
+      "extension": ".png",
+      "width": 192,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/256.png",
+      "id": 256,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/257.png",
+      "id": 257,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/258.png",
+      "id": 258,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/259.png",
+      "id": 259,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/260.png",
+      "id": 260,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/261.png",
+      "id": 261,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/262.png",
+      "id": 262,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/263.png",
+      "id": 263,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/264.png",
+      "id": 264,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/265.png",
+      "id": 265,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/266.png",
+      "id": 266,
+      "extension": ".png",
+      "width": 64,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/267.png",
+      "id": 267,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/268.png",
+      "id": 268,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/269.png",
+      "id": 269,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/270.png",
+      "id": 270,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/271.png",
+      "id": 271,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/272.png",
+      "id": 272,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/273.png",
+      "id": 273,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/274.png",
+      "id": 274,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/275.png",
+      "id": 275,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/276.png",
+      "id": 276,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/277.png",
+      "id": 277,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/278.png",
+      "id": 278,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/279.png",
+      "id": 279,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/280.png",
+      "id": 280,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/281.png",
+      "id": 281,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/282.png",
+      "id": 282,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/283.png",
+      "id": 283,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/284.png",
+      "id": 284,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/285.png",
+      "id": 285,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/286.png",
+      "id": 286,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/287.png",
+      "id": 287,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/288.png",
+      "id": 288,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/289.png",
+      "id": 289,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/290.png",
+      "id": 290,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/291.png",
+      "id": 291,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/292.png",
+      "id": 292,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/293.png",
+      "id": 293,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/294.png",
+      "id": 294,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/295.png",
+      "id": 295,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/296.png",
+      "id": 296,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/297.png",
+      "id": 297,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/298.png",
+      "id": 298,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/299.png",
+      "id": 299,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/300.png",
+      "id": 300,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/301.png",
+      "id": 301,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/302.png",
+      "id": 302,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/303.png",
+      "id": 303,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/304.png",
+      "id": 304,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/305.png",
+      "id": 305,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/306.png",
+      "id": 306,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/307.png",
+      "id": 307,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/308.png",
+      "id": 308,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/309.png",
+      "id": 309,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/310.png",
+      "id": 310,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/311.png",
+      "id": 311,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/312.png",
+      "id": 312,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/313.png",
+      "id": 313,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/314.png",
+      "id": 314,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/315.png",
+      "id": 315,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/316.png",
+      "id": 316,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/317.png",
+      "id": 317,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/318.png",
+      "id": 318,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/319.png",
+      "id": 319,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/320.png",
+      "id": 320,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/321.png",
+      "id": 321,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/322.png",
+      "id": 322,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/323.png",
+      "id": 323,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/324.png",
+      "id": 324,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/325.png",
+      "id": 325,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/326.png",
+      "id": 326,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/327.png",
+      "id": 327,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/328.png",
+      "id": 328,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/329.png",
+      "id": 329,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/330.png",
+      "id": 330,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/331.png",
+      "id": 331,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/332.png",
+      "id": 332,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/333.png",
+      "id": 333,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/334.png",
+      "id": 334,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/335.png",
+      "id": 335,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/336.png",
+      "id": 336,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/337.png",
+      "id": 337,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/338.png",
+      "id": 338,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/339.png",
+      "id": 339,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/340.png",
+      "id": 340,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/341.png",
+      "id": 341,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/342.png",
+      "id": 342,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/343.png",
+      "id": 343,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/344.png",
+      "id": 344,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/345.png",
+      "id": 345,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/346.png",
+      "id": 346,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/347.png",
+      "id": 347,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/348.png",
+      "id": 348,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/349.png",
+      "id": 349,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/350.png",
+      "id": 350,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/351.png",
+      "id": 351,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/352.png",
+      "id": 352,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/353.png",
+      "id": 353,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/354.png",
+      "id": 354,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/355.png",
+      "id": 355,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/356.png",
+      "id": 356,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/357.png",
+      "id": 357,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/358.png",
+      "id": 358,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/359.png",
+      "id": 359,
+      "extension": ".png",
+      "width": 96,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/360.png",
+      "id": 360,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/361.png",
+      "id": 361,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/362.png",
+      "id": 362,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/363.png",
+      "id": 363,
+      "extension": ".png",
+      "width": 96,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/364.png",
+      "id": 364,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/365.png",
+      "id": 365,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/366.png",
+      "id": 366,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/367.png",
+      "id": 367,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/368.png",
+      "id": 368,
+      "extension": ".png",
+      "width": 192,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/369.png",
+      "id": 369,
+      "extension": ".png",
+      "width": 192,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/370.png",
+      "id": 370,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/371.png",
+      "id": 371,
+      "extension": ".png",
+      "width": 192,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/372.png",
+      "id": 372,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/373.png",
+      "id": 373,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/374.png",
+      "id": 374,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/375.png",
+      "id": 375,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/376.png",
+      "id": 376,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/377.png",
+      "id": 377,
+      "extension": ".png",
+      "width": 192,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/378.png",
+      "id": 378,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/379.png",
+      "id": 379,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/380.png",
+      "id": 380,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/381.png",
+      "id": 381,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/382.png",
+      "id": 382,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/383.png",
+      "id": 383,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/384.png",
+      "id": 384,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/385.png",
+      "id": 385,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/386.png",
+      "id": 386,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/387.png",
+      "id": 387,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/388.png",
+      "id": 388,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/389.png",
+      "id": 389,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/390.png",
+      "id": 390,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/391.png",
+      "id": 391,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/392.png",
+      "id": 392,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/393.png",
+      "id": 393,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/394.png",
+      "id": 394,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/395.png",
+      "id": 395,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/396.png",
+      "id": 396,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/397.png",
+      "id": 397,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/398.png",
+      "id": 398,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/399.png",
+      "id": 399,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/400.png",
+      "id": 400,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/401.png",
+      "id": 401,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/402.png",
+      "id": 402,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/403.png",
+      "id": 403,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/404.png",
+      "id": 404,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/405.png",
+      "id": 405,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/406.png",
+      "id": 406,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/407.png",
+      "id": 407,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/408.png",
+      "id": 408,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/409.png",
+      "id": 409,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/410.png",
+      "id": 410,
+      "extension": ".png",
+      "width": 192,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/411.png",
+      "id": 411,
+      "extension": ".png",
+      "width": 192,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/412.png",
+      "id": 412,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/413.png",
+      "id": 413,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/414.png",
+      "id": 414,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/415.png",
+      "id": 415,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/416.png",
+      "id": 416,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/417.png",
+      "id": 417,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/418.png",
+      "id": 418,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/419.png",
+      "id": 419,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/420.png",
+      "id": 420,
+      "extension": ".png",
+      "width": 128,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/421.png",
+      "id": 421,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/422.png",
+      "id": 422,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/423.png",
+      "id": 423,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/424.png",
+      "id": 424,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/425.png",
+      "id": 425,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/426.png",
+      "id": 426,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/427.png",
+      "id": 427,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/428.png",
+      "id": 428,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/429.png",
+      "id": 429,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/430.png",
+      "id": 430,
+      "extension": ".png",
+      "width": 64,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/431.png",
+      "id": 431,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/432.png",
+      "id": 432,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/433.png",
+      "id": 433,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/434.png",
+      "id": 434,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/435.png",
+      "id": 435,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/436.png",
+      "id": 436,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/437.png",
+      "id": 437,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/438.png",
+      "id": 438,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/439.png",
+      "id": 439,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/440.png",
+      "id": 440,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/441.png",
+      "id": 441,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/442.png",
+      "id": 442,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/443.png",
+      "id": 443,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/444.png",
+      "id": 444,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/445.png",
+      "id": 445,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/446.png",
+      "id": 446,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/447.png",
+      "id": 447,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/448.png",
+      "id": 448,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/449.png",
+      "id": 449,
+      "extension": ".png",
+      "width": 64,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/450.png",
+      "id": 450,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/451.png",
+      "id": 451,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/452.png",
+      "id": 452,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/453.png",
+      "id": 453,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/454.png",
+      "id": 454,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/455.png",
+      "id": 455,
+      "extension": ".png",
+      "width": 128,
+      "height": 128
+    },
+    {
+      "path": "SpriteGroups/456.png",
+      "id": 456,
+      "extension": ".png",
+      "width": 64,
+      "height": 96
+    },
+    {
+      "path": "SpriteGroups/457.png",
+      "id": 457,
+      "extension": ".png",
+      "width": 96,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/458.png",
+      "id": 458,
+      "extension": ".png",
+      "width": 128,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/459.png",
+      "id": 459,
+      "extension": ".png",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/460.png",
+      "id": 460,
+      "extension": ".png",
+      "width": 256,
+      "height": 192
+    },
+    {
+      "path": "SpriteGroups/461.png",
+      "id": 461,
+      "extension": ".png",
+      "width": 64,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/462.png",
+      "id": 462,
+      "extension": ".png",
+      "width": 192,
+      "height": 64
+    },
+    {
+      "path": "SpriteGroups/463.png",
+      "id": 463,
+      "extension": ".png",
+      "width": 192,
+      "height": 64
+    }
+  ],
+  "counts": {
+    "images": 464
+  },
+  "warnings": []
+}

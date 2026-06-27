@@ -1,0 +1,429 @@
+{
+  "schema": "swagbound.background-overrides.v1",
+  "default": "projections-001",
+  "entries": {
+    "buzzword-shotgun-001": {
+      "image": "assets/swagbound/battle-backgrounds/buzzword-shotgun-001.png",
+      "distortionType": "horizontal-smooth",
+      "distortion": {
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
+      }
+    },
+    "caves-001": {
+      "image": "assets/swagbound/battle-backgrounds/caves-001.png",
+      "distortionType": "horizontal-smooth",
+      "distortion": {
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
+      }
+    },
+    "cloudcastle-dessert-oasis-001": {
+      "image": "assets/swagbound/battle-backgrounds/cloudcastle-dessert-oasis-001.png",
+      "distortionType": "vertical-compression",
+      "distortion": {
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
+      }
+    },
+    "dance-system-seen-backwards-001": {
+      "image": "assets/swagbound/battle-backgrounds/dance-system-seen-backwards-001.png",
+      "distortionType": "horizontal-interlaced",
+      "distortion": {
+        "amplitude": 1,
+        "frequency": 0.05,
+        "speed": 0.85
+      },
+      "scroll": {
+        "x": 5,
+        "y": 3
+      },
+      "colorCycle": {
+        "degrees": 8,
+        "speed": 0.6
+      }
+    },
+    "pifella-2-22-you-can-not-redo-001": {
+      "image": "assets/swagbound/battle-backgrounds/pifella-2-22-you-can-not-redo-001.png",
+      "distortionType": "vertical-compression",
+      "distortion": {
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
+      }
+    },
+    "pifella-2-parasite-chamber-001": {
+      "image": "assets/swagbound/battle-backgrounds/pifella-2-parasite-chamber-001.png",
+      "distortionType": "horizontal-smooth",
+      "distortion": {
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
+      }
+    },
+    "pray4lowbie-001": {
+      "image": "assets/swagbound/battle-backgrounds/pray4lowbie-001.png",
+      "distortionType": "vertical-compression",
+      "distortion": {
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
+      }
+    },
+    "projections-001": {
+      "image": "assets/swagbound/battle-backgrounds/projections-001.png",
+      "distortionType": "horizontal-smooth",
+      "distortion": {
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
+      }
+    },
+    "really-new-god-001": {
+      "image": "assets/swagbound/battle-backgrounds/really-new-god-001.png",
+      "distortionType": "vertical-compression",
+      "distortion": {
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
+      }
+    },
+    "record-of-hyperwar-001": {
+      "image": "assets/swagbound/battle-backgrounds/record-of-hyperwar-001.png",
+      "distortionType": "horizontal-interlaced",
+      "distortion": {
+        "amplitude": 1,
+        "frequency": 0.05,
+        "speed": 0.85
+      },
+      "scroll": {
+        "x": 5,
+        "y": 3
+      },
+      "colorCycle": {
+        "degrees": 8,
+        "speed": 0.6
+      }
+    },
+    "schizobanners-001": {
+      "image": "assets/swagbound/battle-backgrounds/schizobanners-001.png",
+      "distortionType": "horizontal-interlaced",
+      "distortion": {
+        "amplitude": 1,
+        "frequency": 0.05,
+        "speed": 0.85
+      },
+      "scroll": {
+        "x": 5,
+        "y": 3
+      },
+      "colorCycle": {
+        "degrees": 8,
+        "speed": 0.6
+      }
+    },
+    "summon-something-4-002": {
+      "image": "assets/swagbound/battle-backgrounds/summon-something-4-002.png",
+      "distortionType": "vertical-compression",
+      "distortion": {
+        "amplitude": 4,
+        "frequency": 0.03,
+        "speed": 0.6
+      },
+      "scroll": {
+        "x": 2,
+        "y": 6
+      },
+      "colorCycle": {
+        "degrees": 12,
+        "speed": 0.4
+      }
+    },
+    "syntax-ruins-archive-quotes-log-001": {
+      "image": "assets/swagbound/battle-backgrounds/syntax-ruins-archive-quotes-log-001.png",
+      "distortionType": "horizontal-interlaced",
+      "distortion": {
+        "amplitude": 1,
+        "frequency": 0.05,
+        "speed": 0.85
+      },
+      "scroll": {
+        "x": 5,
+        "y": 3
+      },
+      "colorCycle": {
+        "degrees": 8,
+        "speed": 0.6
+      }
+    },
+    "toji-a-001": {
+      "image": "assets/swagbound/battle-backgrounds/toji-a-001.png",
+      "distortionType": "horizontal-smooth",
+      "distortion": {
+        "amplitude": 3,
+        "frequency": 0.045,
+        "speed": 0.7
+      },
+      "scroll": {
+        "x": 7,
+        "y": -2
+      },
+      "colorCycle": {
+        "degrees": 10,
+        "speed": 0.5
+      }
+    }
+  },
+  "byBackgroundId": {
+    "1": "record-of-hyperwar-001",
+    "3": "caves-001",
+    "5": "cloudcastle-dessert-oasis-001",
+    "6": "really-new-god-001",
+    "7": "cloudcastle-dessert-oasis-001",
+    "8": "pifella-2-parasite-chamber-001",
+    "9": "summon-something-4-002",
+    "10": "projections-001",
+    "11": "really-new-god-001",
+    "12": "record-of-hyperwar-001",
+    "14": "schizobanners-001",
+    "15": "summon-something-4-002",
+    "16": "syntax-ruins-archive-quotes-log-001",
+    "20": "toji-a-001",
+    "21": "buzzword-shotgun-001",
+    "22": "caves-001",
+    "25": "cloudcastle-dessert-oasis-001",
+    "26": "dance-system-seen-backwards-001",
+    "27": "pifella-2-22-you-can-not-redo-001",
+    "28": "pifella-2-parasite-chamber-001",
+    "29": "pray4lowbie-001",
+    "30": "projections-001",
+    "31": "really-new-god-001",
+    "32": "record-of-hyperwar-001",
+    "33": "schizobanners-001",
+    "34": "summon-something-4-002",
+    "35": "syntax-ruins-archive-quotes-log-001",
+    "36": "toji-a-001",
+    "38": "buzzword-shotgun-001",
+    "39": "caves-001",
+    "40": "cloudcastle-dessert-oasis-001",
+    "41": "dance-system-seen-backwards-001",
+    "42": "pifella-2-22-you-can-not-redo-001",
+    "43": "pifella-2-parasite-chamber-001",
+    "44": "pray4lowbie-001",
+    "45": "projections-001",
+    "46": "really-new-god-001",
+    "48": "record-of-hyperwar-001",
+    "49": "schizobanners-001",
+    "51": "summon-something-4-002",
+    "52": "syntax-ruins-archive-quotes-log-001",
+    "53": "toji-a-001",
+    "54": "buzzword-shotgun-001",
+    "55": "caves-001",
+    "56": "cloudcastle-dessert-oasis-001",
+    "57": "dance-system-seen-backwards-001",
+    "58": "pifella-2-22-you-can-not-redo-001",
+    "59": "pifella-2-parasite-chamber-001",
+    "60": "pray4lowbie-001",
+    "61": "projections-001",
+    "62": "really-new-god-001",
+    "63": "record-of-hyperwar-001",
+    "64": "schizobanners-001",
+    "65": "summon-something-4-002",
+    "66": "syntax-ruins-archive-quotes-log-001",
+    "67": "toji-a-001",
+    "68": "buzzword-shotgun-001",
+    "70": "caves-001",
+    "71": "cloudcastle-dessert-oasis-001",
+    "72": "dance-system-seen-backwards-001",
+    "73": "pifella-2-22-you-can-not-redo-001",
+    "74": "pifella-2-parasite-chamber-001",
+    "75": "pray4lowbie-001",
+    "76": "projections-001",
+    "78": "really-new-god-001",
+    "79": "record-of-hyperwar-001",
+    "80": "schizobanners-001",
+    "81": "summon-something-4-002",
+    "82": "syntax-ruins-archive-quotes-log-001",
+    "84": "toji-a-001",
+    "85": "buzzword-shotgun-001",
+    "86": "caves-001",
+    "87": "cloudcastle-dessert-oasis-001",
+    "95": "dance-system-seen-backwards-001",
+    "96": "pifella-2-22-you-can-not-redo-001",
+    "97": "pifella-2-parasite-chamber-001",
+    "98": "pray4lowbie-001",
+    "100": "projections-001",
+    "102": "really-new-god-001",
+    "103": "record-of-hyperwar-001",
+    "104": "schizobanners-001",
+    "105": "summon-something-4-002",
+    "106": "syntax-ruins-archive-quotes-log-001",
+    "107": "toji-a-001",
+    "109": "buzzword-shotgun-001",
+    "110": "caves-001",
+    "111": "cloudcastle-dessert-oasis-001",
+    "114": "cloudcastle-dessert-oasis-001",
+    "115": "toji-a-001",
+    "116": "pifella-2-parasite-chamber-001",
+    "117": "toji-a-001",
+    "122": "projections-001",
+    "123": "really-new-god-001",
+    "124": "record-of-hyperwar-001",
+    "125": "schizobanners-001",
+    "127": "summon-something-4-002",
+    "131": "syntax-ruins-archive-quotes-log-001",
+    "132": "toji-a-001",
+    "133": "buzzword-shotgun-001",
+    "134": "caves-001",
+    "135": "cloudcastle-dessert-oasis-001",
+    "136": "dance-system-seen-backwards-001",
+    "137": "pifella-2-22-you-can-not-redo-001",
+    "138": "pifella-2-parasite-chamber-001",
+    "139": "pray4lowbie-001",
+    "140": "projections-001",
+    "141": "really-new-god-001",
+    "142": "record-of-hyperwar-001",
+    "143": "schizobanners-001",
+    "144": "summon-something-4-002",
+    "145": "syntax-ruins-archive-quotes-log-001",
+    "146": "toji-a-001",
+    "148": "buzzword-shotgun-001",
+    "151": "caves-001",
+    "152": "cloudcastle-dessert-oasis-001",
+    "153": "dance-system-seen-backwards-001",
+    "154": "pifella-2-22-you-can-not-redo-001",
+    "155": "pifella-2-parasite-chamber-001",
+    "156": "pray4lowbie-001",
+    "157": "projections-001",
+    "158": "really-new-god-001",
+    "159": "record-of-hyperwar-001",
+    "161": "schizobanners-001",
+    "162": "summon-something-4-002",
+    "170": "pifella-2-parasite-chamber-001",
+    "180": "summon-something-4-002",
+    "182": "buzzword-shotgun-001",
+    "186": "caves-001",
+    "189": "cloudcastle-dessert-oasis-001",
+    "190": "dance-system-seen-backwards-001",
+    "192": "pifella-2-22-you-can-not-redo-001",
+    "198": "pifella-2-parasite-chamber-001",
+    "203": "pray4lowbie-001",
+    "209": "projections-001",
+    "212": "really-new-god-001",
+    "219": "really-new-god-001",
+    "243": "schizobanners-001",
+    "259": "summon-something-4-002",
+    "260": "really-new-god-001",
+    "261": "toji-a-001",
+    "262": "summon-something-4-002",
+    "266": "caves-001",
+    "268": "cloudcastle-dessert-oasis-001",
+    "269": "dance-system-seen-backwards-001",
+    "271": "pifella-2-22-you-can-not-redo-001",
+    "274": "pifella-2-parasite-chamber-001",
+    "276": "pray4lowbie-001",
+    "280": "projections-001",
+    "281": "really-new-god-001",
+    "283": "record-of-hyperwar-001",
+    "286": "schizobanners-001",
+    "287": "summon-something-4-002",
+    "288": "syntax-ruins-archive-quotes-log-001",
+    "289": "toji-a-001",
+    "290": "buzzword-shotgun-001",
+    "291": "caves-001",
+    "294": "cloudcastle-dessert-oasis-001",
+    "296": "dance-system-seen-backwards-001",
+    "297": "pifella-2-22-you-can-not-redo-001",
+    "299": "pifella-2-parasite-chamber-001",
+    "300": "pray4lowbie-001",
+    "301": "projections-001",
+    "303": "really-new-god-001",
+    "304": "record-of-hyperwar-001",
+    "305": "schizobanners-001",
+    "306": "summon-something-4-002",
+    "309": "syntax-ruins-archive-quotes-log-001",
+    "310": "toji-a-001",
+    "311": "buzzword-shotgun-001",
+    "312": "caves-001",
+    "313": "cloudcastle-dessert-oasis-001",
+    "314": "dance-system-seen-backwards-001",
+    "315": "pifella-2-22-you-can-not-redo-001",
+    "316": "pifella-2-parasite-chamber-001",
+    "317": "pray4lowbie-001",
+    "318": "projections-001",
+    "319": "really-new-god-001",
+    "320": "record-of-hyperwar-001",
+    "321": "schizobanners-001",
+    "322": "summon-something-4-002",
+    "323": "syntax-ruins-archive-quotes-log-001",
+    "324": "toji-a-001",
+    "325": "buzzword-shotgun-001"
+  }
+}

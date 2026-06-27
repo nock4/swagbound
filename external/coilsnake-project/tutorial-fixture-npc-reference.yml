@@ -1,0 +1,5 @@
+# Synthetic local-only scanner proof for the Phaser rebuild prototype.
+# This is not extracted ROM data. It exists so the text/YML scanner can
+# verify script-label references without mutating real fixture files.
+context: tutorial_scanner_proof
+script: robot.hello_world

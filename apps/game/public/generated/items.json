@@ -1,0 +1,4168 @@
+{
+  "schemaVersion": "0.2.0",
+  "sourceProjectPath": "external/coilsnake-full",
+  "derivation": {
+    "source": "item_configuration_table.yml provides item names and numeric metadata; nested Misc Flags list entries are preserved as strings.",
+    "equippable": "Item Type values in the 0x10-0x1f equipment range are marked equippable; equip effects and slot state are deferred.",
+    "helpText": "The current CoilSnake table exposes help-text pointers, not decoded help text; runtime Check screens use generated helpText when present and neutral placeholders otherwise."
+  },
+  "items": [
+    {
+      "id": 0,
+      "name": "Null",
+      "type": 255,
+      "cost": 2,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": []
+    },
+    {
+      "id": 1,
+      "name": "Franklin badge",
+      "type": 0,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Teddy bear",
+      "type": 4,
+      "cost": 178,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Super plush bear",
+      "type": 4,
+      "cost": 1198,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Broken machine",
+      "type": 8,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 5,
+      "name": "Broken gadget",
+      "type": 8,
+      "cost": 109,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 6,
+      "name": "Broken air gun",
+      "type": 8,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 7,
+      "name": "Broken spray can",
+      "type": 8,
+      "cost": 189,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Broken laser",
+      "type": 8,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 9,
+      "name": "Broken iron",
+      "type": 8,
+      "cost": 149,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Broken pipe",
+      "type": 8,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Broken cannon",
+      "type": 8,
+      "cost": 218,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Broken tube",
+      "type": 8,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 13,
+      "name": "Broken bazooka",
+      "type": 8,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 14,
+      "name": "Broken trumpet",
+      "type": 8,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Broken harmonica",
+      "type": 8,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Broken antenna",
+      "type": 8,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Cracked bat",
+      "type": 16,
+      "cost": 18,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 4
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Tee ball bat",
+      "type": 16,
+      "cost": 48,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 8
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Sand lot bat",
+      "type": 16,
+      "cost": 98,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 15
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 20,
+      "name": "Minor league bat",
+      "type": 16,
+      "cost": 399,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 26
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Mr. Baseball bat",
+      "type": 16,
+      "cost": 498,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 38
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Big league bat",
+      "type": 16,
+      "cost": 3080,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 54
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Hall of fame bat",
+      "type": 16,
+      "cost": 1880,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 62
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Magicant bat",
+      "type": 16,
+      "cost": 0,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 80
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Legendary bat",
+      "type": 16,
+      "cost": 0,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 110
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Gutsy bat",
+      "type": 16,
+      "cost": 2980,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 100
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Casey bat",
+      "type": 16,
+      "cost": 38,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 125
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Fry pan",
+      "type": 16,
+      "cost": 56,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 10
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Thick fry pan",
+      "type": 16,
+      "cost": 198,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 20
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Deluxe fry pan",
+      "type": 16,
+      "cost": 598,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 30
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Chef's fry pan",
+      "type": 16,
+      "cost": 1198,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 40
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 32,
+      "name": "French fry pan",
+      "type": 16,
+      "cost": 1790,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 60
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 33,
+      "name": "Magic fry pan",
+      "type": 16,
+      "cost": 4790,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 50
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Holy fry pan",
+      "type": 16,
+      "cost": 3480,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 80
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 35,
+      "name": "Sword of kings",
+      "type": 16,
+      "cost": 0,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 10
+      },
+      "miscFlags": [
+        "poo can use"
+      ]
+    },
+    {
+      "id": 36,
+      "name": "Pop gun",
+      "type": 17,
+      "cost": 110,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 16
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 37,
+      "name": "Stun gun",
+      "type": 17,
+      "cost": 150,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 24
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 38,
+      "name": "Toy air gun",
+      "type": 17,
+      "cost": 215,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 32
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Magnum air gun",
+      "type": 17,
+      "cost": 0,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 36
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Zip gun",
+      "type": 17,
+      "cost": 425,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 40
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 41,
+      "name": "Laser gun",
+      "type": 17,
+      "cost": 0,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 48
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Hyper beam",
+      "type": 17,
+      "cost": 850,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 58
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Crusher beam",
+      "type": 17,
+      "cost": 1150,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 72
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 44,
+      "name": "Spectrum beam",
+      "type": 17,
+      "cost": 1650,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 78
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 45,
+      "name": "Death ray",
+      "type": 17,
+      "cost": 2300,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 90
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 46,
+      "name": "Baddest beam",
+      "type": 17,
+      "cost": 0,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 98
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 47,
+      "name": "Moon beam gun",
+      "type": 17,
+      "cost": 4450,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 110
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Gaia beam",
+      "type": 17,
+      "cost": 0,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 125
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 49,
+      "name": "Yo-yo",
+      "type": 17,
+      "cost": 29,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 6
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Slingshot",
+      "type": 17,
+      "cost": 89,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 12
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Bionic slingshot",
+      "type": 17,
+      "cost": 449,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 32
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 52,
+      "name": "Trick yo-yo",
+      "type": 17,
+      "cost": 998,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 46
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 53,
+      "name": "Combat yo-yo",
+      "type": 17,
+      "cost": 1148,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 54
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 54,
+      "name": "Travel charm",
+      "type": 20,
+      "cost": 60,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 55,
+      "name": "Great charm",
+      "type": 20,
+      "cost": 400,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 1
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 56,
+      "name": "Crystal charm",
+      "type": 20,
+      "cost": 600,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 2
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 57,
+      "name": "Rabbit's foot",
+      "type": 20,
+      "cost": 1800,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 3
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 58,
+      "name": "Flame pendant",
+      "type": 20,
+      "cost": 3000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 15
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 59,
+      "name": "Rain pendant",
+      "type": 20,
+      "cost": 3000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 15
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 60,
+      "name": "Night pendant",
+      "type": 20,
+      "cost": 3000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 15
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 61,
+      "name": "Sea pendant",
+      "type": 20,
+      "cost": 5000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 20
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 62,
+      "name": "Star pendant",
+      "type": 20,
+      "cost": 7000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 30
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 63,
+      "name": "Cloak of kings",
+      "type": 20,
+      "cost": 0,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 176
+      },
+      "miscFlags": [
+        "poo can use"
+      ]
+    },
+    {
+      "id": 64,
+      "name": "Cheap bracelet",
+      "type": 24,
+      "cost": 98,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 5
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 65,
+      "name": "Copper bracelet",
+      "type": 24,
+      "cost": 349,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 10
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 66,
+      "name": "Silver bracelet",
+      "type": 24,
+      "cost": 599,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 15
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 67,
+      "name": "Gold bracelet",
+      "type": 24,
+      "cost": 2799,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 30
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 68,
+      "name": "Platinum band",
+      "type": 24,
+      "cost": 6899,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 40
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 69,
+      "name": "Diamond band",
+      "type": 24,
+      "cost": 9998,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 50
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 70,
+      "name": "Pixie's bracelet",
+      "type": 24,
+      "cost": 1590,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 60
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 71,
+      "name": "Cherub's band",
+      "type": 24,
+      "cost": 1790,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 70
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 72,
+      "name": "Goddess band",
+      "type": 24,
+      "cost": 1980,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 80
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 73,
+      "name": "Bracer of kings",
+      "type": 24,
+      "cost": 0,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 216
+      },
+      "miscFlags": [
+        "poo can use"
+      ]
+    },
+    {
+      "id": 74,
+      "name": "Baseball cap",
+      "type": 28,
+      "cost": 19,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 5
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 75,
+      "name": "Holmes hat",
+      "type": 28,
+      "cost": 59,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 10
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 76,
+      "name": "Mr. Baseball cap",
+      "type": 28,
+      "cost": 199,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 6
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 77,
+      "name": "Hard hat",
+      "type": 28,
+      "cost": 298,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 15
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 78,
+      "name": "Ribbon",
+      "type": 28,
+      "cost": 89,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 20
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 79,
+      "name": "Red ribbon",
+      "type": 28,
+      "cost": 179,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 25
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 80,
+      "name": "Goddess ribbon",
+      "type": 28,
+      "cost": 6980,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 110
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 81,
+      "name": "Coin of slumber",
+      "type": 28,
+      "cost": 1500,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 30
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 82,
+      "name": "Coin of defense",
+      "type": 28,
+      "cost": 2000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 40
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 83,
+      "name": "Lucky coin",
+      "type": 28,
+      "cost": 6000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 50
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 84,
+      "name": "Talisman coin",
+      "type": 28,
+      "cost": 3500,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 60
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 85,
+      "name": "Shiny coin",
+      "type": 28,
+      "cost": 4000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 70
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 86,
+      "name": "Souvenir coin",
+      "type": 28,
+      "cost": 6000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 80
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 87,
+      "name": "Diadem of kings",
+      "type": 28,
+      "cost": 0,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 216
+      },
+      "miscFlags": [
+        "poo can use"
+      ]
+    },
+    {
+      "id": 88,
+      "name": "Cookie",
+      "type": 32,
+      "cost": 7,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    {
+      "id": 89,
+      "name": "Bag of fries",
+      "type": 32,
+      "cost": 8,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 24
+      }
+    },
+    {
+      "id": 90,
+      "name": "Hamburger",
+      "type": 32,
+      "cost": 14,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 48
+      }
+    },
+    {
+      "id": 91,
+      "name": "Boiled egg",
+      "type": 32,
+      "cost": 9,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 42
+      }
+    },
+    {
+      "id": 92,
+      "name": "Fresh Egg",
+      "type": 32,
+      "cost": 12,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item can change",
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 84
+      }
+    },
+    {
+      "id": 93,
+      "name": "Picnic lunch",
+      "type": 32,
+      "cost": 24,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 84
+      }
+    },
+    {
+      "id": 94,
+      "name": "Pasta di Summers",
+      "type": 32,
+      "cost": 128,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 108
+      }
+    },
+    {
+      "id": 95,
+      "name": "Pizza",
+      "type": 32,
+      "cost": 48,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 120
+      }
+    },
+    {
+      "id": 96,
+      "name": "Chef's special",
+      "type": 32,
+      "cost": 298,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 216
+      }
+    },
+    {
+      "id": 97,
+      "name": "Large pizza",
+      "type": 44,
+      "cost": 238,
+      "action": 250,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 98,
+      "name": "PSI caramel",
+      "type": 32,
+      "cost": 100,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 20
+      }
+    },
+    {
+      "id": 99,
+      "name": "Magic truffle",
+      "type": 32,
+      "cost": 298,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 80
+      }
+    },
+    {
+      "id": 100,
+      "name": "Brain food lunch",
+      "type": 32,
+      "cost": 800,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 101,
+      "name": "Rock candy",
+      "type": 32,
+      "cost": 38,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 102,
+      "name": "Croissant",
+      "type": 32,
+      "cost": 18,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 60
+      }
+    },
+    {
+      "id": 103,
+      "name": "Bread roll",
+      "type": 32,
+      "cost": 12,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 30
+      }
+    },
+    {
+      "id": 104,
+      "name": "Pak of bubble gum",
+      "type": 56,
+      "cost": 0,
+      "action": 188,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 105,
+      "name": "Jar of Fly Honey",
+      "type": 53,
+      "cost": 0,
+      "action": 189,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 106,
+      "name": "Can of fruit juice",
+      "type": 36,
+      "cost": 4,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    {
+      "id": 107,
+      "name": "Royal iced tea",
+      "type": 36,
+      "cost": 78,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 108,
+      "name": "Protein drink",
+      "type": 36,
+      "cost": 38,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 109,
+      "name": "Kraken soup",
+      "type": 36,
+      "cost": 648,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 110,
+      "name": "Bottle of water",
+      "type": 36,
+      "cost": 4,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 10
+      }
+    },
+    {
+      "id": 111,
+      "name": "Cold remedy",
+      "type": 36,
+      "cost": 22,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 112,
+      "name": "Vial of serum",
+      "type": 36,
+      "cost": 58,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 113,
+      "name": "IQ capsule",
+      "type": 36,
+      "cost": 38,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 114,
+      "name": "Guts capsule",
+      "type": 36,
+      "cost": 38,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 115,
+      "name": "Speed capsule",
+      "type": 36,
+      "cost": 38,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 116,
+      "name": "Vital capsule",
+      "type": 36,
+      "cost": 38,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 117,
+      "name": "Luck capsule",
+      "type": 36,
+      "cost": 38,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 118,
+      "name": "Ketchup packet",
+      "type": 40,
+      "cost": 2,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 119,
+      "name": "Sugar packet",
+      "type": 40,
+      "cost": 3,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 120,
+      "name": "Tin of Cocoa",
+      "type": 40,
+      "cost": 4,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 121,
+      "name": "Carton of cream",
+      "type": 40,
+      "cost": 4,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 122,
+      "name": "Sprig of parsley",
+      "type": 40,
+      "cost": 2,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 123,
+      "name": "Jar of hot sauce",
+      "type": 40,
+      "cost": 3,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 124,
+      "name": "Salt packet",
+      "type": 40,
+      "cost": 2,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 125,
+      "name": "Backstage pass",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 126,
+      "name": "Jar of delisauce",
+      "type": 40,
+      "cost": 300,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 127,
+      "name": "Wet towel",
+      "type": 48,
+      "cost": 24,
+      "action": 149,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 128,
+      "name": "Refreshing herb",
+      "type": 48,
+      "cost": 80,
+      "action": 150,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 129,
+      "name": "Secret herb",
+      "type": 48,
+      "cost": 380,
+      "action": 151,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 130,
+      "name": "Horn of life",
+      "type": 48,
+      "cost": 1780,
+      "action": 152,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 131,
+      "name": "Counter-PSI unit",
+      "type": 52,
+      "cost": 0,
+      "action": 159,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 132,
+      "name": "Shield killer",
+      "type": 52,
+      "cost": 0,
+      "action": 160,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 133,
+      "name": "Bazooka",
+      "type": 52,
+      "cost": 950,
+      "action": 310,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 134,
+      "name": "Heavy bazooka",
+      "type": 52,
+      "cost": 0,
+      "action": 311,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 135,
+      "name": "HP-sucker",
+      "type": 52,
+      "cost": 800,
+      "action": 161,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 136,
+      "name": "Hungry HP-sucker",
+      "type": 52,
+      "cost": 0,
+      "action": 176,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 137,
+      "name": "Xterminator spray",
+      "type": 52,
+      "cost": 630,
+      "action": 179,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 138,
+      "name": "Slime generator",
+      "type": 52,
+      "cost": 420,
+      "action": 169,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 139,
+      "name": "Yogurt dispenser",
+      "type": 52,
+      "cost": 0,
+      "action": 170,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 140,
+      "name": "Ruler",
+      "type": 48,
+      "cost": 2,
+      "action": 186,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 141,
+      "name": "Snake bag",
+      "type": 52,
+      "cost": 98,
+      "action": 171,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 142,
+      "name": "Mummy wrap",
+      "type": 52,
+      "cost": 128,
+      "action": 162,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 143,
+      "name": "Protractor",
+      "type": 48,
+      "cost": 2,
+      "action": 187,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 144,
+      "name": "Bottle rocket",
+      "type": 52,
+      "cost": 29,
+      "action": 163,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 145,
+      "name": "Big bottle rocket",
+      "type": 52,
+      "cost": 139,
+      "action": 164,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 146,
+      "name": "Multi`bottle rocket",
+      "type": 52,
+      "cost": 2139,
+      "action": 165,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 147,
+      "name": "Bomb",
+      "type": 52,
+      "cost": 149,
+      "action": 167,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 148,
+      "name": "Super bomb",
+      "type": 52,
+      "cost": 399,
+      "action": 168,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 149,
+      "name": "Insecticide spray",
+      "type": 52,
+      "cost": 19,
+      "action": 178,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 150,
+      "name": "Rust promoter",
+      "type": 52,
+      "cost": 89,
+      "action": 180,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 151,
+      "name": "Rust promoter DX",
+      "type": 52,
+      "cost": 289,
+      "action": 181,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 152,
+      "name": "Pair`of dirty socks",
+      "type": 52,
+      "cost": 2,
+      "action": 172,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 153,
+      "name": "Stag beetle",
+      "type": 52,
+      "cost": 8,
+      "action": 173,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 154,
+      "name": "Toothbrush",
+      "type": 52,
+      "cost": 3,
+      "action": 174,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 155,
+      "name": "Handbag strap",
+      "type": 52,
+      "cost": 39,
+      "action": 166,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 156,
+      "name": "Pharaoh's curse",
+      "type": 52,
+      "cost": 290,
+      "action": 175,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 157,
+      "name": "Defense shower",
+      "type": 53,
+      "cost": 0,
+      "action": 184,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 158,
+      "name": "Letter from mom",
+      "type": 59,
+      "cost": 0,
+      "action": 287,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 159,
+      "name": "Sudden guts pill",
+      "type": 53,
+      "cost": 500,
+      "action": 182,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 160,
+      "name": "Bag of Dragonite",
+      "type": 53,
+      "cost": 1000,
+      "action": 177,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 161,
+      "name": "Defense spray",
+      "type": 53,
+      "cost": 500,
+      "action": 183,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 162,
+      "name": "Piggy nose",
+      "type": 56,
+      "cost": 300,
+      "action": 190,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 163,
+      "name": "For Sale sign",
+      "type": 56,
+      "cost": 0,
+      "action": 191,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 164,
+      "name": "Shyness book",
+      "type": 59,
+      "cost": 0,
+      "action": 192,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 165,
+      "name": "Picture postcard",
+      "type": 56,
+      "cost": 2,
+      "action": 193,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 166,
+      "name": "King banana",
+      "type": 56,
+      "cost": 0,
+      "action": 285,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 167,
+      "name": "Letter from Tony",
+      "type": 59,
+      "cost": 0,
+      "action": 288,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 168,
+      "name": "Chick",
+      "type": 56,
+      "cost": 25,
+      "action": 195,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item can change",
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 169,
+      "name": "Chicken",
+      "type": 56,
+      "cost": 220,
+      "action": 196,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item can change",
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 170,
+      "name": "Key to the shack",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 171,
+      "name": "Key to the cabin",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 172,
+      "name": "Bad key machine",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 173,
+      "name": "Temporary goods",
+      "type": 56,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 174,
+      "name": "Zombie paper",
+      "type": 58,
+      "cost": 0,
+      "action": 198,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 175,
+      "name": "Hawk eye",
+      "type": 58,
+      "cost": 0,
+      "action": 199,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 176,
+      "name": "Bicycle",
+      "type": 58,
+      "cost": 0,
+      "action": 200,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 177,
+      "name": "ATM card",
+      "type": 59,
+      "cost": 0,
+      "action": 197,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "cannot be given away",
+        "cannot be stored with escargo express",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 178,
+      "name": "Show ticket",
+      "type": 59,
+      "cost": 12,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 179,
+      "name": "Letter from kids",
+      "type": 59,
+      "cost": 0,
+      "action": 289,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 180,
+      "name": "Wad of bills",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 181,
+      "name": "Receiver phone",
+      "type": 59,
+      "cost": 0,
+      "action": 286,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "cannot be given away",
+        "cannot be stored with escargo express",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 182,
+      "name": "Diamond",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 183,
+      "name": "Signed banana",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 184,
+      "name": "Pencil eraser",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 185,
+      "name": "Hieroglyph copy",
+      "type": 59,
+      "cost": 0,
+      "action": 270,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 186,
+      "name": "Meteotite",
+      "type": 56,
+      "cost": 4000,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 187,
+      "name": "Contact lens",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 188,
+      "name": "Hand-Aid",
+      "type": 48,
+      "cost": 19,
+      "action": 140,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 189,
+      "name": "Trout yogurt",
+      "type": 32,
+      "cost": 48,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 30
+      }
+    },
+    {
+      "id": 190,
+      "name": "Banana",
+      "type": 32,
+      "cost": 5,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 24
+      }
+    },
+    {
+      "id": 191,
+      "name": "Calorie stick",
+      "type": 32,
+      "cost": 18,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 60
+      }
+    },
+    {
+      "id": 192,
+      "name": "Key to the tower",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 193,
+      "name": "Meteorite piece",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 194,
+      "name": "Earth pendant",
+      "type": 20,
+      "cost": 4000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 16
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 195,
+      "name": "Neutralizer",
+      "type": 52,
+      "cost": 0,
+      "action": 247,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 196,
+      "name": "Sound Stone",
+      "type": 56,
+      "cost": 0,
+      "action": 258,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "cannot be given away",
+        "cannot be stored with escargo express",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 197,
+      "name": "Exit mouse",
+      "type": 56,
+      "cost": 0,
+      "action": 259,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 198,
+      "name": "Gelato de resort",
+      "type": 32,
+      "cost": 49,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 30
+      }
+    },
+    {
+      "id": 199,
+      "name": "Snake",
+      "type": 52,
+      "cost": 220,
+      "action": 268,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 200,
+      "name": "Viper",
+      "type": 52,
+      "cost": 550,
+      "action": 269,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 201,
+      "name": "Brain stone",
+      "type": 56,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 202,
+      "name": "Town map",
+      "type": 56,
+      "cost": 0,
+      "action": 271,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 203,
+      "name": "Video relaxant",
+      "type": 56,
+      "cost": 0,
+      "action": 272,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 204,
+      "name": "Suporma",
+      "type": 56,
+      "cost": 50,
+      "action": 281,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 205,
+      "name": "Key to the locker",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 206,
+      "name": "Insignificant item",
+      "type": 59,
+      "cost": 2,
+      "action": 282,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 207,
+      "name": "Magic tart",
+      "type": 32,
+      "cost": 480,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 20
+      }
+    },
+    {
+      "id": 208,
+      "name": "Tiny ruby",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "cannot be given away",
+        "cannot be stored with escargo express",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 209,
+      "name": "Monkey's love",
+      "type": 52,
+      "cost": 0,
+      "action": 283,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 210,
+      "name": "Eraser eraser",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 211,
+      "name": "Tendakraut",
+      "type": 59,
+      "cost": 0,
+      "action": 284,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "cannot be stored with escargo express",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 212,
+      "name": "T-rex's bat",
+      "type": 16,
+      "cost": 698,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 48
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 213,
+      "name": "Big league bat",
+      "type": 16,
+      "cost": 1380,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 54
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 214,
+      "name": "Ultimate bat",
+      "type": 16,
+      "cost": 2298,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 68
+      },
+      "miscFlags": [
+        "ness can use"
+      ]
+    },
+    {
+      "id": 215,
+      "name": "Double beam",
+      "type": 17,
+      "cost": 1000,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 66
+      },
+      "miscFlags": [
+        "jeff can use"
+      ]
+    },
+    {
+      "id": 216,
+      "name": "Platinum band",
+      "type": 24,
+      "cost": 3899,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 40
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 217,
+      "name": "Diamond band",
+      "type": 24,
+      "cost": 5198,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 50
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 218,
+      "name": "Defense ribbon",
+      "type": 28,
+      "cost": 389,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 40
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 219,
+      "name": "Talisman ribbon",
+      "type": 28,
+      "cost": 3500,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 60
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 220,
+      "name": "Saturn ribbon",
+      "type": 28,
+      "cost": 3980,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 90
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 221,
+      "name": "Coin of silence",
+      "type": 28,
+      "cost": 2500,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 45
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 222,
+      "name": "Charm coin",
+      "type": 28,
+      "cost": 3000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 50
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 223,
+      "name": "Cup of noodles",
+      "type": 32,
+      "cost": 98,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 42
+      }
+    },
+    {
+      "id": 224,
+      "name": "Skip sandwich",
+      "type": 32,
+      "cost": 38,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    {
+      "id": 225,
+      "name": "Skip sandwich DX",
+      "type": 32,
+      "cost": 98,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    {
+      "id": 226,
+      "name": "Lucky sandwich",
+      "type": 32,
+      "cost": 128,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 60
+      }
+    },
+    {
+      "id": 227,
+      "name": "Lucky sandwich",
+      "type": 32,
+      "cost": 128,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 240
+      }
+    },
+    {
+      "id": 228,
+      "name": "Lucky sandwich",
+      "type": 32,
+      "cost": 128,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 229,
+      "name": "Lucky sandwich",
+      "type": 32,
+      "cost": 128,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 5
+      }
+    },
+    {
+      "id": 230,
+      "name": "Lucky sandwich",
+      "type": 32,
+      "cost": 128,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 20
+      }
+    },
+    {
+      "id": 231,
+      "name": "Lucky sandwich",
+      "type": 32,
+      "cost": 128,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 232,
+      "name": "Cup of coffee",
+      "type": 36,
+      "cost": 6,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 12
+      }
+    },
+    {
+      "id": 233,
+      "name": "Double burger",
+      "type": 32,
+      "cost": 24,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 96
+      }
+    },
+    {
+      "id": 234,
+      "name": "Peanut cheese`bar",
+      "type": 32,
+      "cost": 22,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 108
+      }
+    },
+    {
+      "id": 235,
+      "name": "Piggy jelly",
+      "type": 32,
+      "cost": 222,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 300
+      }
+    },
+    {
+      "id": 236,
+      "name": "Bowl of rice gruel",
+      "type": 32,
+      "cost": 88,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 216
+      }
+    },
+    {
+      "id": 237,
+      "name": "Bean croquette",
+      "type": 32,
+      "cost": 12,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 42
+      }
+    },
+    {
+      "id": 238,
+      "name": "Molokheiya soup",
+      "type": 36,
+      "cost": 20,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 239,
+      "name": "Plain roll",
+      "type": 32,
+      "cost": 38,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 84
+      }
+    },
+    {
+      "id": 240,
+      "name": "Kabob",
+      "type": 32,
+      "cost": 54,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 126
+      }
+    },
+    {
+      "id": 241,
+      "name": "Plain yogurt",
+      "type": 32,
+      "cost": 78,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 168
+      }
+    },
+    {
+      "id": 242,
+      "name": "Beef jerky",
+      "type": 32,
+      "cost": 70,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 150
+      }
+    },
+    {
+      "id": 243,
+      "name": "Mammoth burger",
+      "type": 32,
+      "cost": 98,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 204
+      }
+    },
+    {
+      "id": 244,
+      "name": "Spicy jerky",
+      "type": 32,
+      "cost": 140,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 252
+      }
+    },
+    {
+      "id": 245,
+      "name": "Luxury jerky",
+      "type": 32,
+      "cost": 210,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 300
+      }
+    },
+    {
+      "id": 246,
+      "name": "Bottle of DXwater",
+      "type": 36,
+      "cost": 198,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 247,
+      "name": "Magic pudding",
+      "type": 32,
+      "cost": 680,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 40
+      }
+    },
+    {
+      "id": 248,
+      "name": "Non-stick frypan",
+      "type": 16,
+      "cost": 1490,
+      "action": 239,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "offense": 50
+      },
+      "miscFlags": [
+        "paula can use"
+      ]
+    },
+    {
+      "id": 249,
+      "name": "Mr. Saturn coin",
+      "type": 28,
+      "cost": 1000,
+      "action": 240,
+      "argument": 0,
+      "equippable": true,
+      "equipBonuses": {
+        "defense": 47
+      },
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 250,
+      "name": "Meteornium",
+      "type": 56,
+      "cost": 2000,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 251,
+      "name": "Popsicle",
+      "type": 32,
+      "cost": 7,
+      "action": 249,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ],
+      "effect": {
+        "kind": "healHp",
+        "amount": 18
+      }
+    },
+    {
+      "id": 252,
+      "name": "Cup of Lifenoodles",
+      "type": 48,
+      "cost": 178,
+      "action": 152,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "item disappears when used",
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    },
+    {
+      "id": 253,
+      "name": "Carrot key",
+      "type": 59,
+      "cost": 0,
+      "action": 1,
+      "argument": 0,
+      "equippable": false,
+      "miscFlags": [
+        "jeff can use",
+        "ness can use",
+        "paula can use",
+        "poo can use"
+      ]
+    }
+  ],
+  "counts": {
+    "items": 254,
+    "equippable": 85
+  },
+  "warnings": []
+}

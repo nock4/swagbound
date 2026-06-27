@@ -1,0 +1,763 @@
+{
+  "schemaVersion": "0.2.0",
+  "sourceProjectPath": "external/coilsnake-full",
+  "derivation": {
+    "source": "psi_ability_table.yml provides PSI rows; psi_name_table.yml resolves PSI name ids.",
+    "names": "Rows with non-numeric PSI Name values use neutral runtime placeholders.",
+    "learnedBy": "Learn-level columns are mapped by table order to character slots 0, 1, and 3; copyrighted column labels are not used as ids.",
+    "usableOutsideBattle": "Usability text is normalized to true only for values that explicitly mention outside/field/both/all usage or boolean true."
+  },
+  "psi": [
+    {
+      "id": 0,
+      "name": "[psi 0]",
+      "type": "[]",
+      "strength": "none",
+      "usableOutsideBattle": false,
+      "learnedBy": []
+    },
+    {
+      "id": 1,
+      "name": "PSI(????)",
+      "type": "offense",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 8
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "PSI(????)",
+      "type": "offense",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 22
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "PSI(????)",
+      "type": "offense",
+      "strength": "gamma",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 49
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "PSI(????)",
+      "type": "offense",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 75
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "PSI Fire ",
+      "type": "offense",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 3
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "PSI Fire ",
+      "type": "offense",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 19
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "PSI Fire ",
+      "type": "offense",
+      "strength": "gamma",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 37
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "PSI Fire ",
+      "type": "offense",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 64
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "PSI Freeze ",
+      "type": "offense",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 1
+        },
+        {
+          "charId": 3,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "PSI Freeze ",
+      "type": "offense",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 11
+        },
+        {
+          "charId": 3,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "PSI Freeze ",
+      "type": "offense",
+      "strength": "gamma",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 31
+        },
+        {
+          "charId": 3,
+          "level": 33
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "PSI Freeze ",
+      "type": "offense",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 46
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "PSI Thunder ",
+      "type": "offense",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 8
+        },
+        {
+          "charId": 3,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "PSI Thunder ",
+      "type": "offense",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 25
+        },
+        {
+          "charId": 3,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "PSI Thunder ",
+      "type": "offense",
+      "strength": "gamma",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 57
+        },
+        {
+          "charId": 3,
+          "level": 41
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "PSI Thunder ",
+      "type": "offense",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 3,
+          "level": 55
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "PSI Flash ",
+      "type": "offense",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 18
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "PSI Flash ",
+      "type": "offense",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 38
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "PSI Flash ",
+      "type": "offense",
+      "strength": "gamma",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 61
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "PSI Flash ",
+      "type": "offense",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 67
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "PSI Starstorm ",
+      "type": "offense",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": []
+    },
+    {
+      "id": 22,
+      "name": "PSI Starstorm ",
+      "type": "offense",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": []
+    },
+    {
+      "id": 23,
+      "name": "Lifeup ",
+      "type": "recovery",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 2
+        },
+        {
+          "charId": 3,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Lifeup ",
+      "type": "recovery",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 20
+        },
+        {
+          "charId": 3,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "Lifeup ",
+      "type": "recovery",
+      "strength": "gamma",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 39
+        },
+        {
+          "charId": 3,
+          "level": 46
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "Lifeup ",
+      "type": "recovery",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 70
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "Healing ",
+      "type": "recovery",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 10
+        },
+        {
+          "charId": 3,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "Healing ",
+      "type": "recovery",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 24
+        },
+        {
+          "charId": 3,
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "Healing ",
+      "type": "recovery",
+      "strength": "gamma",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 53
+        },
+        {
+          "charId": 3,
+          "level": 36
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "name": "Healing ",
+      "type": "recovery",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 3,
+          "level": 52
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "name": "Shield ",
+      "type": "assist",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 12
+        },
+        {
+          "charId": 3,
+          "level": 14
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "name": "Shield ",
+      "type": "assist",
+      "strength": "sigma",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 3,
+          "level": 15
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "name": "Shield ",
+      "type": "assist",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 34
+        },
+        {
+          "charId": 3,
+          "level": 16
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "name": "Shield ",
+      "type": "assist",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 3,
+          "level": 51
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "name": "PSI Shield ",
+      "type": "assist",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 6
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "name": "PSI Shield ",
+      "type": "assist",
+      "strength": "sigma",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 27
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "name": "PSI Shield ",
+      "type": "assist",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 51
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "name": "PSI Shield ",
+      "type": "assist",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 60
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "name": "Offense up ",
+      "type": "assist",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 21
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "name": "Offense up ",
+      "type": "assist",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 40
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "name": "Defense down ",
+      "type": "assist",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 29
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "name": "Defense down ",
+      "type": "assist",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 54
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "name": "Hypnosis ",
+      "type": "assist",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 4
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "name": "Hypnosis ",
+      "type": "assist",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 27
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "name": "PSI Magnet ",
+      "type": "recovery",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 15
+        },
+        {
+          "charId": 3,
+          "level": 21
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "name": "PSI Magnet ",
+      "type": "recovery",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 24
+        },
+        {
+          "charId": 3,
+          "level": 27
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "name": "Paralysis ",
+      "type": "assist",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 14
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "name": "Paralysis ",
+      "type": "assist",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 29
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "name": "Brainshock ",
+      "type": "assist",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 3,
+          "level": 24
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "name": "Brainshock ",
+      "type": "assist",
+      "strength": "omega",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 3,
+          "level": 44
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Teleport ",
+      "type": "other",
+      "strength": "alpha",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 3,
+          "level": 17
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "name": "Teleport ",
+      "type": "other",
+      "strength": "beta",
+      "usableOutsideBattle": false,
+      "learnedBy": [
+        {
+          "charId": 3,
+          "level": 18
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "name": "[psi 53]",
+      "type": "[]",
+      "strength": "none",
+      "usableOutsideBattle": false,
+      "learnedBy": []
+    }
+  ],
+  "counts": {
+    "psi": 54,
+    "learnedBy": 66
+  },
+  "warnings": []
+}

@@ -1,0 +1,7402 @@
+{
+  "schemaVersion": "0.2.0",
+  "sourceProjectPath": "external/coilsnake-full",
+  "sheets": [
+    {
+      "groupId": 1,
+      "file": "assets/sprites/001.png",
+      "sourcePath": "SpriteGroups/001.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 2,
+      "file": "assets/sprites/002.png",
+      "sourcePath": "SpriteGroups/002.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 15,
+      "file": "assets/sprites/015.png",
+      "sourcePath": "SpriteGroups/015.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 33,
+      "file": "assets/sprites/033.png",
+      "sourcePath": "SpriteGroups/033.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 39,
+      "file": "assets/sprites/039.png",
+      "sourcePath": "SpriteGroups/039.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 40,
+      "file": "assets/sprites/040.png",
+      "sourcePath": "SpriteGroups/040.png",
+      "frameWidth": 24,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 41,
+      "file": "assets/sprites/041.png",
+      "sourcePath": "SpriteGroups/041.png",
+      "frameWidth": 64,
+      "frameHeight": 80,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 44,
+      "file": "assets/sprites/044.png",
+      "sourcePath": "SpriteGroups/044.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 45,
+      "file": "assets/sprites/045.png",
+      "sourcePath": "SpriteGroups/045.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 46,
+      "file": "assets/sprites/046.png",
+      "sourcePath": "SpriteGroups/046.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 48,
+      "file": "assets/sprites/048.png",
+      "sourcePath": "SpriteGroups/048.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 51,
+      "file": "assets/sprites/051.png",
+      "sourcePath": "SpriteGroups/051.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 52,
+      "file": "assets/sprites/052.png",
+      "sourcePath": "SpriteGroups/052.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 53,
+      "file": "assets/sprites/053.png",
+      "sourcePath": "SpriteGroups/053.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 54,
+      "file": "assets/sprites/054.png",
+      "sourcePath": "SpriteGroups/054.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 55,
+      "file": "assets/sprites/055.png",
+      "sourcePath": "SpriteGroups/055.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 56,
+      "file": "assets/sprites/056.png",
+      "sourcePath": "SpriteGroups/056.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 57,
+      "file": "assets/sprites/057.png",
+      "sourcePath": "SpriteGroups/057.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 58,
+      "file": "assets/sprites/058.png",
+      "sourcePath": "SpriteGroups/058.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 59,
+      "file": "assets/sprites/059.png",
+      "sourcePath": "SpriteGroups/059.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 60,
+      "file": "assets/sprites/060.png",
+      "sourcePath": "SpriteGroups/060.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 61,
+      "file": "assets/sprites/061.png",
+      "sourcePath": "SpriteGroups/061.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 62,
+      "file": "assets/sprites/062.png",
+      "sourcePath": "SpriteGroups/062.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 63,
+      "file": "assets/sprites/063.png",
+      "sourcePath": "SpriteGroups/063.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 64,
+      "file": "assets/sprites/064.png",
+      "sourcePath": "SpriteGroups/064.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 65,
+      "file": "assets/sprites/065.png",
+      "sourcePath": "SpriteGroups/065.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 66,
+      "file": "assets/sprites/066.png",
+      "sourcePath": "SpriteGroups/066.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 67,
+      "file": "assets/sprites/067.png",
+      "sourcePath": "SpriteGroups/067.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 68,
+      "file": "assets/sprites/068.png",
+      "sourcePath": "SpriteGroups/068.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 69,
+      "file": "assets/sprites/069.png",
+      "sourcePath": "SpriteGroups/069.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 70,
+      "file": "assets/sprites/070.png",
+      "sourcePath": "SpriteGroups/070.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 71,
+      "file": "assets/sprites/071.png",
+      "sourcePath": "SpriteGroups/071.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 72,
+      "file": "assets/sprites/072.png",
+      "sourcePath": "SpriteGroups/072.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 73,
+      "file": "assets/sprites/073.png",
+      "sourcePath": "SpriteGroups/073.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 74,
+      "file": "assets/sprites/074.png",
+      "sourcePath": "SpriteGroups/074.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 75,
+      "file": "assets/sprites/075.png",
+      "sourcePath": "SpriteGroups/075.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 76,
+      "file": "assets/sprites/076.png",
+      "sourcePath": "SpriteGroups/076.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 77,
+      "file": "assets/sprites/077.png",
+      "sourcePath": "SpriteGroups/077.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 78,
+      "file": "assets/sprites/078.png",
+      "sourcePath": "SpriteGroups/078.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 79,
+      "file": "assets/sprites/079.png",
+      "sourcePath": "SpriteGroups/079.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 80,
+      "file": "assets/sprites/080.png",
+      "sourcePath": "SpriteGroups/080.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 81,
+      "file": "assets/sprites/081.png",
+      "sourcePath": "SpriteGroups/081.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 83,
+      "file": "assets/sprites/083.png",
+      "sourcePath": "SpriteGroups/083.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 84,
+      "file": "assets/sprites/084.png",
+      "sourcePath": "SpriteGroups/084.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 85,
+      "file": "assets/sprites/085.png",
+      "sourcePath": "SpriteGroups/085.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 86,
+      "file": "assets/sprites/086.png",
+      "sourcePath": "SpriteGroups/086.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 87,
+      "file": "assets/sprites/087.png",
+      "sourcePath": "SpriteGroups/087.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 88,
+      "file": "assets/sprites/088.png",
+      "sourcePath": "SpriteGroups/088.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 89,
+      "file": "assets/sprites/089.png",
+      "sourcePath": "SpriteGroups/089.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 90,
+      "file": "assets/sprites/090.png",
+      "sourcePath": "SpriteGroups/090.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 91,
+      "file": "assets/sprites/091.png",
+      "sourcePath": "SpriteGroups/091.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 92,
+      "file": "assets/sprites/092.png",
+      "sourcePath": "SpriteGroups/092.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 93,
+      "file": "assets/sprites/093.png",
+      "sourcePath": "SpriteGroups/093.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 94,
+      "file": "assets/sprites/094.png",
+      "sourcePath": "SpriteGroups/094.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 95,
+      "file": "assets/sprites/095.png",
+      "sourcePath": "SpriteGroups/095.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 96,
+      "file": "assets/sprites/096.png",
+      "sourcePath": "SpriteGroups/096.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 97,
+      "file": "assets/sprites/097.png",
+      "sourcePath": "SpriteGroups/097.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 3,
+      "frames": 9,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 98,
+      "file": "assets/sprites/098.png",
+      "sourcePath": "SpriteGroups/098.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 99,
+      "file": "assets/sprites/099.png",
+      "sourcePath": "SpriteGroups/099.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 100,
+      "file": "assets/sprites/100.png",
+      "sourcePath": "SpriteGroups/100.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 101,
+      "file": "assets/sprites/101.png",
+      "sourcePath": "SpriteGroups/101.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 102,
+      "file": "assets/sprites/102.png",
+      "sourcePath": "SpriteGroups/102.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 103,
+      "file": "assets/sprites/103.png",
+      "sourcePath": "SpriteGroups/103.png",
+      "frameWidth": 24,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 104,
+      "file": "assets/sprites/104.png",
+      "sourcePath": "SpriteGroups/104.png",
+      "frameWidth": 24,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 105,
+      "file": "assets/sprites/105.png",
+      "sourcePath": "SpriteGroups/105.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 107,
+      "file": "assets/sprites/107.png",
+      "sourcePath": "SpriteGroups/107.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 108,
+      "file": "assets/sprites/108.png",
+      "sourcePath": "SpriteGroups/108.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 109,
+      "file": "assets/sprites/109.png",
+      "sourcePath": "SpriteGroups/109.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 110,
+      "file": "assets/sprites/110.png",
+      "sourcePath": "SpriteGroups/110.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 111,
+      "file": "assets/sprites/111.png",
+      "sourcePath": "SpriteGroups/111.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 112,
+      "file": "assets/sprites/112.png",
+      "sourcePath": "SpriteGroups/112.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 113,
+      "file": "assets/sprites/113.png",
+      "sourcePath": "SpriteGroups/113.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 114,
+      "file": "assets/sprites/114.png",
+      "sourcePath": "SpriteGroups/114.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 115,
+      "file": "assets/sprites/115.png",
+      "sourcePath": "SpriteGroups/115.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 116,
+      "file": "assets/sprites/116.png",
+      "sourcePath": "SpriteGroups/116.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 117,
+      "file": "assets/sprites/117.png",
+      "sourcePath": "SpriteGroups/117.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 118,
+      "file": "assets/sprites/118.png",
+      "sourcePath": "SpriteGroups/118.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 119,
+      "file": "assets/sprites/119.png",
+      "sourcePath": "SpriteGroups/119.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 120,
+      "file": "assets/sprites/120.png",
+      "sourcePath": "SpriteGroups/120.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 121,
+      "file": "assets/sprites/121.png",
+      "sourcePath": "SpriteGroups/121.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 122,
+      "file": "assets/sprites/122.png",
+      "sourcePath": "SpriteGroups/122.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 123,
+      "file": "assets/sprites/123.png",
+      "sourcePath": "SpriteGroups/123.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 124,
+      "file": "assets/sprites/124.png",
+      "sourcePath": "SpriteGroups/124.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 125,
+      "file": "assets/sprites/125.png",
+      "sourcePath": "SpriteGroups/125.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 126,
+      "file": "assets/sprites/126.png",
+      "sourcePath": "SpriteGroups/126.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 127,
+      "file": "assets/sprites/127.png",
+      "sourcePath": "SpriteGroups/127.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 128,
+      "file": "assets/sprites/128.png",
+      "sourcePath": "SpriteGroups/128.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 129,
+      "file": "assets/sprites/129.png",
+      "sourcePath": "SpriteGroups/129.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 130,
+      "file": "assets/sprites/130.png",
+      "sourcePath": "SpriteGroups/130.png",
+      "frameWidth": 24,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 131,
+      "file": "assets/sprites/131.png",
+      "sourcePath": "SpriteGroups/131.png",
+      "frameWidth": 24,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 132,
+      "file": "assets/sprites/132.png",
+      "sourcePath": "SpriteGroups/132.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 133,
+      "file": "assets/sprites/133.png",
+      "sourcePath": "SpriteGroups/133.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 134,
+      "file": "assets/sprites/134.png",
+      "sourcePath": "SpriteGroups/134.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 136,
+      "file": "assets/sprites/136.png",
+      "sourcePath": "SpriteGroups/136.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 137,
+      "file": "assets/sprites/137.png",
+      "sourcePath": "SpriteGroups/137.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 138,
+      "file": "assets/sprites/138.png",
+      "sourcePath": "SpriteGroups/138.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 139,
+      "file": "assets/sprites/139.png",
+      "sourcePath": "SpriteGroups/139.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 140,
+      "file": "assets/sprites/140.png",
+      "sourcePath": "SpriteGroups/140.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 141,
+      "file": "assets/sprites/141.png",
+      "sourcePath": "SpriteGroups/141.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 142,
+      "file": "assets/sprites/142.png",
+      "sourcePath": "SpriteGroups/142.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 144,
+      "file": "assets/sprites/144.png",
+      "sourcePath": "SpriteGroups/144.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 145,
+      "file": "assets/sprites/145.png",
+      "sourcePath": "SpriteGroups/145.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 146,
+      "file": "assets/sprites/146.png",
+      "sourcePath": "SpriteGroups/146.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 147,
+      "file": "assets/sprites/147.png",
+      "sourcePath": "SpriteGroups/147.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 149,
+      "file": "assets/sprites/149.png",
+      "sourcePath": "SpriteGroups/149.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 150,
+      "file": "assets/sprites/150.png",
+      "sourcePath": "SpriteGroups/150.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 152,
+      "file": "assets/sprites/152.png",
+      "sourcePath": "SpriteGroups/152.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 153,
+      "file": "assets/sprites/153.png",
+      "sourcePath": "SpriteGroups/153.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 154,
+      "file": "assets/sprites/154.png",
+      "sourcePath": "SpriteGroups/154.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 155,
+      "file": "assets/sprites/155.png",
+      "sourcePath": "SpriteGroups/155.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 156,
+      "file": "assets/sprites/156.png",
+      "sourcePath": "SpriteGroups/156.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 157,
+      "file": "assets/sprites/157.png",
+      "sourcePath": "SpriteGroups/157.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 158,
+      "file": "assets/sprites/158.png",
+      "sourcePath": "SpriteGroups/158.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 159,
+      "file": "assets/sprites/159.png",
+      "sourcePath": "SpriteGroups/159.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 160,
+      "file": "assets/sprites/160.png",
+      "sourcePath": "SpriteGroups/160.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 162,
+      "file": "assets/sprites/162.png",
+      "sourcePath": "SpriteGroups/162.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 163,
+      "file": "assets/sprites/163.png",
+      "sourcePath": "SpriteGroups/163.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 164,
+      "file": "assets/sprites/164.png",
+      "sourcePath": "SpriteGroups/164.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 166,
+      "file": "assets/sprites/166.png",
+      "sourcePath": "SpriteGroups/166.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 167,
+      "file": "assets/sprites/167.png",
+      "sourcePath": "SpriteGroups/167.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 168,
+      "file": "assets/sprites/168.png",
+      "sourcePath": "SpriteGroups/168.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 170,
+      "file": "assets/sprites/170.png",
+      "sourcePath": "SpriteGroups/170.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 171,
+      "file": "assets/sprites/171.png",
+      "sourcePath": "SpriteGroups/171.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 172,
+      "file": "assets/sprites/172.png",
+      "sourcePath": "SpriteGroups/172.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 173,
+      "file": "assets/sprites/173.png",
+      "sourcePath": "SpriteGroups/173.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 174,
+      "file": "assets/sprites/174.png",
+      "sourcePath": "SpriteGroups/174.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 175,
+      "file": "assets/sprites/175.png",
+      "sourcePath": "SpriteGroups/175.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 176,
+      "file": "assets/sprites/176.png",
+      "sourcePath": "SpriteGroups/176.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 177,
+      "file": "assets/sprites/177.png",
+      "sourcePath": "SpriteGroups/177.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 178,
+      "file": "assets/sprites/178.png",
+      "sourcePath": "SpriteGroups/178.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 179,
+      "file": "assets/sprites/179.png",
+      "sourcePath": "SpriteGroups/179.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 181,
+      "file": "assets/sprites/181.png",
+      "sourcePath": "SpriteGroups/181.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 182,
+      "file": "assets/sprites/182.png",
+      "sourcePath": "SpriteGroups/182.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 183,
+      "file": "assets/sprites/183.png",
+      "sourcePath": "SpriteGroups/183.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 185,
+      "file": "assets/sprites/185.png",
+      "sourcePath": "SpriteGroups/185.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 186,
+      "file": "assets/sprites/186.png",
+      "sourcePath": "SpriteGroups/186.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 187,
+      "file": "assets/sprites/187.png",
+      "sourcePath": "SpriteGroups/187.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 188,
+      "file": "assets/sprites/188.png",
+      "sourcePath": "SpriteGroups/188.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 189,
+      "file": "assets/sprites/189.png",
+      "sourcePath": "SpriteGroups/189.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 195,
+      "file": "assets/sprites/195.png",
+      "sourcePath": "SpriteGroups/195.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 197,
+      "file": "assets/sprites/197.png",
+      "sourcePath": "SpriteGroups/197.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 198,
+      "file": "assets/sprites/198.png",
+      "sourcePath": "SpriteGroups/198.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 199,
+      "file": "assets/sprites/199.png",
+      "sourcePath": "SpriteGroups/199.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 200,
+      "file": "assets/sprites/200.png",
+      "sourcePath": "SpriteGroups/200.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 201,
+      "file": "assets/sprites/201.png",
+      "sourcePath": "SpriteGroups/201.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 202,
+      "file": "assets/sprites/202.png",
+      "sourcePath": "SpriteGroups/202.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 204,
+      "file": "assets/sprites/204.png",
+      "sourcePath": "SpriteGroups/204.png",
+      "frameWidth": 16,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 206,
+      "file": "assets/sprites/206.png",
+      "sourcePath": "SpriteGroups/206.png",
+      "frameWidth": 48,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 207,
+      "file": "assets/sprites/207.png",
+      "sourcePath": "SpriteGroups/207.png",
+      "frameWidth": 64,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 208,
+      "file": "assets/sprites/208.png",
+      "sourcePath": "SpriteGroups/208.png",
+      "frameWidth": 64,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 209,
+      "file": "assets/sprites/209.png",
+      "sourcePath": "SpriteGroups/209.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 211,
+      "file": "assets/sprites/211.png",
+      "sourcePath": "SpriteGroups/211.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 212,
+      "file": "assets/sprites/212.png",
+      "sourcePath": "SpriteGroups/212.png",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 213,
+      "file": "assets/sprites/213.png",
+      "sourcePath": "SpriteGroups/213.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 214,
+      "file": "assets/sprites/214.png",
+      "sourcePath": "SpriteGroups/214.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 215,
+      "file": "assets/sprites/215.png",
+      "sourcePath": "SpriteGroups/215.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 216,
+      "file": "assets/sprites/216.png",
+      "sourcePath": "SpriteGroups/216.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 221,
+      "file": "assets/sprites/221.png",
+      "sourcePath": "SpriteGroups/221.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 222,
+      "file": "assets/sprites/222.png",
+      "sourcePath": "SpriteGroups/222.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 224,
+      "file": "assets/sprites/224.png",
+      "sourcePath": "SpriteGroups/224.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 225,
+      "file": "assets/sprites/225.png",
+      "sourcePath": "SpriteGroups/225.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 226,
+      "file": "assets/sprites/226.png",
+      "sourcePath": "SpriteGroups/226.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 227,
+      "file": "assets/sprites/227.png",
+      "sourcePath": "SpriteGroups/227.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 228,
+      "file": "assets/sprites/228.png",
+      "sourcePath": "SpriteGroups/228.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 229,
+      "file": "assets/sprites/229.png",
+      "sourcePath": "SpriteGroups/229.png",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 230,
+      "file": "assets/sprites/230.png",
+      "sourcePath": "SpriteGroups/230.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 231,
+      "file": "assets/sprites/231.png",
+      "sourcePath": "SpriteGroups/231.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 233,
+      "file": "assets/sprites/233.png",
+      "sourcePath": "SpriteGroups/233.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 234,
+      "file": "assets/sprites/234.png",
+      "sourcePath": "SpriteGroups/234.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 235,
+      "file": "assets/sprites/235.png",
+      "sourcePath": "SpriteGroups/235.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 236,
+      "file": "assets/sprites/236.png",
+      "sourcePath": "SpriteGroups/236.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 237,
+      "file": "assets/sprites/237.png",
+      "sourcePath": "SpriteGroups/237.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 238,
+      "file": "assets/sprites/238.png",
+      "sourcePath": "SpriteGroups/238.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 239,
+      "file": "assets/sprites/239.png",
+      "sourcePath": "SpriteGroups/239.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 243,
+      "file": "assets/sprites/243.png",
+      "sourcePath": "SpriteGroups/243.png",
+      "frameWidth": 64,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 4,
+      "frames": 16,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 244,
+      "file": "assets/sprites/244.png",
+      "sourcePath": "SpriteGroups/244.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 246,
+      "file": "assets/sprites/246.png",
+      "sourcePath": "SpriteGroups/246.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 248,
+      "file": "assets/sprites/248.png",
+      "sourcePath": "SpriteGroups/248.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 249,
+      "file": "assets/sprites/249.png",
+      "sourcePath": "SpriteGroups/249.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 254,
+      "file": "assets/sprites/254.png",
+      "sourcePath": "SpriteGroups/254.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 255,
+      "file": "assets/sprites/255.png",
+      "sourcePath": "SpriteGroups/255.png",
+      "frameWidth": 48,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 256,
+      "file": "assets/sprites/256.png",
+      "sourcePath": "SpriteGroups/256.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 257,
+      "file": "assets/sprites/257.png",
+      "sourcePath": "SpriteGroups/257.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 259,
+      "file": "assets/sprites/259.png",
+      "sourcePath": "SpriteGroups/259.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 260,
+      "file": "assets/sprites/260.png",
+      "sourcePath": "SpriteGroups/260.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 262,
+      "file": "assets/sprites/262.png",
+      "sourcePath": "SpriteGroups/262.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 263,
+      "file": "assets/sprites/263.png",
+      "sourcePath": "SpriteGroups/263.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 265,
+      "file": "assets/sprites/265.png",
+      "sourcePath": "SpriteGroups/265.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 266,
+      "file": "assets/sprites/266.png",
+      "sourcePath": "SpriteGroups/266.png",
+      "frameWidth": 16,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 267,
+      "file": "assets/sprites/267.png",
+      "sourcePath": "SpriteGroups/267.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 268,
+      "file": "assets/sprites/268.png",
+      "sourcePath": "SpriteGroups/268.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 269,
+      "file": "assets/sprites/269.png",
+      "sourcePath": "SpriteGroups/269.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 270,
+      "file": "assets/sprites/270.png",
+      "sourcePath": "SpriteGroups/270.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 279,
+      "file": "assets/sprites/279.png",
+      "sourcePath": "SpriteGroups/279.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 281,
+      "file": "assets/sprites/281.png",
+      "sourcePath": "SpriteGroups/281.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 284,
+      "file": "assets/sprites/284.png",
+      "sourcePath": "SpriteGroups/284.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 287,
+      "file": "assets/sprites/287.png",
+      "sourcePath": "SpriteGroups/287.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 288,
+      "file": "assets/sprites/288.png",
+      "sourcePath": "SpriteGroups/288.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 293,
+      "file": "assets/sprites/293.png",
+      "sourcePath": "SpriteGroups/293.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 294,
+      "file": "assets/sprites/294.png",
+      "sourcePath": "SpriteGroups/294.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 295,
+      "file": "assets/sprites/295.png",
+      "sourcePath": "SpriteGroups/295.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 299,
+      "file": "assets/sprites/299.png",
+      "sourcePath": "SpriteGroups/299.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 300,
+      "file": "assets/sprites/300.png",
+      "sourcePath": "SpriteGroups/300.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 303,
+      "file": "assets/sprites/303.png",
+      "sourcePath": "SpriteGroups/303.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 305,
+      "file": "assets/sprites/305.png",
+      "sourcePath": "SpriteGroups/305.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 308,
+      "file": "assets/sprites/308.png",
+      "sourcePath": "SpriteGroups/308.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 310,
+      "file": "assets/sprites/310.png",
+      "sourcePath": "SpriteGroups/310.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 315,
+      "file": "assets/sprites/315.png",
+      "sourcePath": "SpriteGroups/315.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 320,
+      "file": "assets/sprites/320.png",
+      "sourcePath": "SpriteGroups/320.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 3,
+      "frames": 9,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 322,
+      "file": "assets/sprites/322.png",
+      "sourcePath": "SpriteGroups/322.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 3,
+      "frames": 9,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 325,
+      "file": "assets/sprites/325.png",
+      "sourcePath": "SpriteGroups/325.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 3,
+      "frames": 9,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 328,
+      "file": "assets/sprites/328.png",
+      "sourcePath": "SpriteGroups/328.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 331,
+      "file": "assets/sprites/331.png",
+      "sourcePath": "SpriteGroups/331.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 333,
+      "file": "assets/sprites/333.png",
+      "sourcePath": "SpriteGroups/333.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 3,
+      "frames": 9,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 353,
+      "file": "assets/sprites/353.png",
+      "sourcePath": "SpriteGroups/353.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 356,
+      "file": "assets/sprites/356.png",
+      "sourcePath": "SpriteGroups/356.png",
+      "frameWidth": 24,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 359,
+      "file": "assets/sprites/359.png",
+      "sourcePath": "SpriteGroups/359.png",
+      "frameWidth": 24,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 360,
+      "file": "assets/sprites/360.png",
+      "sourcePath": "SpriteGroups/360.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 361,
+      "file": "assets/sprites/361.png",
+      "sourcePath": "SpriteGroups/361.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 363,
+      "file": "assets/sprites/363.png",
+      "sourcePath": "SpriteGroups/363.png",
+      "frameWidth": 24,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 373,
+      "file": "assets/sprites/373.png",
+      "sourcePath": "SpriteGroups/373.png",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 374,
+      "file": "assets/sprites/374.png",
+      "sourcePath": "SpriteGroups/374.png",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 375,
+      "file": "assets/sprites/375.png",
+      "sourcePath": "SpriteGroups/375.png",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 376,
+      "file": "assets/sprites/376.png",
+      "sourcePath": "SpriteGroups/376.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 377,
+      "file": "assets/sprites/377.png",
+      "sourcePath": "SpriteGroups/377.png",
+      "frameWidth": 48,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 381,
+      "file": "assets/sprites/381.png",
+      "sourcePath": "SpriteGroups/381.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 396,
+      "file": "assets/sprites/396.png",
+      "sourcePath": "SpriteGroups/396.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 398,
+      "file": "assets/sprites/398.png",
+      "sourcePath": "SpriteGroups/398.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 399,
+      "file": "assets/sprites/399.png",
+      "sourcePath": "SpriteGroups/399.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 401,
+      "file": "assets/sprites/401.png",
+      "sourcePath": "SpriteGroups/401.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 402,
+      "file": "assets/sprites/402.png",
+      "sourcePath": "SpriteGroups/402.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 403,
+      "file": "assets/sprites/403.png",
+      "sourcePath": "SpriteGroups/403.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 404,
+      "file": "assets/sprites/404.png",
+      "sourcePath": "SpriteGroups/404.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 405,
+      "file": "assets/sprites/405.png",
+      "sourcePath": "SpriteGroups/405.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 406,
+      "file": "assets/sprites/406.png",
+      "sourcePath": "SpriteGroups/406.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 407,
+      "file": "assets/sprites/407.png",
+      "sourcePath": "SpriteGroups/407.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 409,
+      "file": "assets/sprites/409.png",
+      "sourcePath": "SpriteGroups/409.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 410,
+      "file": "assets/sprites/410.png",
+      "sourcePath": "SpriteGroups/410.png",
+      "frameWidth": 48,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 411,
+      "file": "assets/sprites/411.png",
+      "sourcePath": "SpriteGroups/411.png",
+      "frameWidth": 48,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 412,
+      "file": "assets/sprites/412.png",
+      "sourcePath": "SpriteGroups/412.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 414,
+      "file": "assets/sprites/414.png",
+      "sourcePath": "SpriteGroups/414.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 416,
+      "file": "assets/sprites/416.png",
+      "sourcePath": "SpriteGroups/416.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 418,
+      "file": "assets/sprites/418.png",
+      "sourcePath": "SpriteGroups/418.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 419,
+      "file": "assets/sprites/419.png",
+      "sourcePath": "SpriteGroups/419.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 420,
+      "file": "assets/sprites/420.png",
+      "sourcePath": "SpriteGroups/420.png",
+      "frameWidth": 32,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 422,
+      "file": "assets/sprites/422.png",
+      "sourcePath": "SpriteGroups/422.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 423,
+      "file": "assets/sprites/423.png",
+      "sourcePath": "SpriteGroups/423.png",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 424,
+      "file": "assets/sprites/424.png",
+      "sourcePath": "SpriteGroups/424.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 426,
+      "file": "assets/sprites/426.png",
+      "sourcePath": "SpriteGroups/426.png",
+      "frameWidth": 16,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 427,
+      "file": "assets/sprites/427.png",
+      "sourcePath": "SpriteGroups/427.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 428,
+      "file": "assets/sprites/428.png",
+      "sourcePath": "SpriteGroups/428.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 429,
+      "file": "assets/sprites/429.png",
+      "sourcePath": "SpriteGroups/429.png",
+      "frameWidth": 32,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 430,
+      "file": "assets/sprites/430.png",
+      "sourcePath": "SpriteGroups/430.png",
+      "frameWidth": 16,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 433,
+      "file": "assets/sprites/433.png",
+      "sourcePath": "SpriteGroups/433.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 436,
+      "file": "assets/sprites/436.png",
+      "sourcePath": "SpriteGroups/436.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 442,
+      "file": "assets/sprites/442.png",
+      "sourcePath": "SpriteGroups/442.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 443,
+      "file": "assets/sprites/443.png",
+      "sourcePath": "SpriteGroups/443.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 446,
+      "file": "assets/sprites/446.png",
+      "sourcePath": "SpriteGroups/446.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 447,
+      "file": "assets/sprites/447.png",
+      "sourcePath": "SpriteGroups/447.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 450,
+      "file": "assets/sprites/450.png",
+      "sourcePath": "SpriteGroups/450.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 451,
+      "file": "assets/sprites/451.png",
+      "sourcePath": "SpriteGroups/451.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 456,
+      "file": "assets/sprites/456.png",
+      "sourcePath": "SpriteGroups/456.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 459,
+      "file": "assets/sprites/459.png",
+      "sourcePath": "SpriteGroups/459.png",
+      "frameWidth": 64,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    },
+    {
+      "groupId": 460,
+      "file": "assets/sprites/460.png",
+      "sourcePath": "SpriteGroups/460.png",
+      "frameWidth": 64,
+      "frameHeight": 48,
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "animations": {
+        "up": [
+          0,
+          1
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ]
+      }
+    }
+  ],
+  "counts": {
+    "sheets": 264
+  },
+  "warnings": []
+}

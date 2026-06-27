@@ -1,0 +1,9 @@
+hello_world:
+    "@Hello World!" end
+greeter:
+    "@Beep boop. I greet, therefore I am." next
+    "@New parts arrive tomorrow. Come back then." end
+patroller:
+    "@Patrolling this canyon. Step aside, hero." end
+greeter_again:
+    "@Told you already. Parts. Tomorrow." end

@@ -1,0 +1,6 @@
+{
+  "compileSucceeded": true,
+  "bootVerified": true,
+  "emulator": "Snes9x",
+  "reviewUrl": "local Playwright video/trace; run pnpm test:review"
+}

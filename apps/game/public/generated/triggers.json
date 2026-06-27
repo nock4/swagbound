@@ -1,0 +1,98 @@
+{
+  "schema": "swagbound.story-triggers.v1",
+  "comment": "Act-1 Swagbound story gate-chain (Signal Town = Onett). Battle gates are VISIBLE fixed overworld boss sprites: collide with the boss to play dialogue and start the battle; no battle starts from an invisible area trigger. Bosses are placed at their vanilla EarthBound districts: card clique = Frank (group 448) at the GAME arcade; relay gate Returnless King = Cop+Runaway Dog (group 36, req clique_cleared, sets signal:route_open) by the Police Station; first threshold Malady = Titanic Ant (group 450, req route_open, sets signal:threshold_cleared) on the north road toward Giant Step. After each boss is WON its setFlag is set, which fires a co-located area REVEAL trigger (the post-win narrative beat: Frankystein-Mk2 framing after Frank, the mask-peel after the Malady). The leave-signal-town trigger (req threshold_cleared) is the Act-1 ending (Refuse Processing) and sets act1:complete. The warning + solid barrier stay area/flag based as the police roadblock north of the Cop, opening on route_open. NOTE: Cop+Dog is a roaming encounter in vanilla EB and Titanic Ant is the far Giant Step summit boss, so those two are anchored to the matching Onett DISTRICT, not an exact tile. All three boss groups are unescapable (content/battle-rules.json); their setFlags + once-marker advance ONLY on a win. Dev: ?flags=signal:route_open or ?flags=signal:threshold_cleared to skip ahead.",
+  "triggers": [
+    {
+      "id": "signal-town-card-clique",
+      "boss": { "x": 1512, "y": 1744, "facing": "right" },
+      "once": true,
+      "dialogue": [
+        "The arcade light flattens Bosch into a better-lit rumor. A clean copy of his face grins from a card nobody remembers printing.",
+        "MIFELLA 2: \"You're late to your own read. The clique already traded the portable you.\"",
+        "These cards don't start here. They point up the line, toward the yard that prints them."
+      ],
+      "setFlags": ["signal:clique_cleared"],
+      "battleGroup": 448
+    },
+    {
+      "id": "signal-town-card-clique-reveal",
+      "area": { "x": 1472, "y": 1720, "w": 88, "h": 56 },
+      "once": true,
+      "requireFlags": ["signal:clique_cleared"],
+      "dialogue": [
+        "The clique doesn't lose. It re-prints. Where Mifella 2 folded, a cleaner Bosch stands up -- pre-signed, better-lit, already filed under his name.",
+        "MIFELLA 2 (Mk2): \"Beat the copy, meet the upgrade. The yard shipped your replacement before you finished swinging.\"",
+        "Bosch keeps the smudged version. The clean one points up the line, toward the gate that decides which Bosch leaves."
+      ]
+    },
+    {
+      "id": "relay-gate-returnless-king",
+      "boss": { "x": 1928, "y": 1560, "facing": "down" },
+      "once": true,
+      "requireFlags": ["signal:clique_cleared"],
+      "dialogue": [
+        "The gate files Bosch before it ever looks at him.",
+        "RETURNLESS KING: \"Source. Vessel. Claimant. Derivative. Pick the lie that travels.\"",
+        "Bosch refuses the stamp. The route unlocks anyway -- not because it agreed, because he forced it."
+      ],
+      "setFlags": ["signal:route_open"],
+      "battleGroup": 36
+    },
+    {
+      "id": "north-route-gate-warning",
+      "area": { "x": 1880, "y": 1520, "w": 96, "h": 16 },
+      "once": false,
+      "blockFlags": ["signal:route_open"],
+      "dialogue": [
+        "The road north is open enough to see and closed enough to mean something.",
+        "A smiling line of route aides keeps checking the same card, never once looking at Bosch.",
+        "\"The road opens once the gate decides which Bosch is leaving. Please hold.\""
+      ]
+    },
+    {
+      "id": "first-threshold-malady",
+      "boss": { "x": 1904, "y": 1408, "facing": "down" },
+      "once": true,
+      "requireFlags": ["signal:route_open"],
+      "dialogue": [
+        "The first threshold hums with a memory too small to sell.",
+        "MALADY: \"A private thing is just a public thing with poor distribution. I'm only the symptom you can see.\"",
+        "The card warms, then fails to describe him. Bosch keeps the damaged version -- and the threshold records it."
+      ],
+      "setFlags": ["signal:threshold_cleared", "source:first_witness"],
+      "battleGroup": 450
+    },
+    {
+      "id": "first-threshold-malady-reveal",
+      "area": { "x": 1880, "y": 1384, "w": 96, "h": 48 },
+      "once": true,
+      "requireFlags": ["signal:threshold_cleared"],
+      "dialogue": [
+        "The Malady stops describing Bosch and starts describing itself. The mask warms, slips, and underneath is his own face -- better-lit, pre-approved, smiling without him.",
+        "Stamped small and certain across the peeled mask: CONTRACT OWNER -- MILADY.",
+        "Bosch keeps the damaged card. The threshold records a face the route was never going to be able to sell."
+      ]
+    },
+    {
+      "id": "leave-signal-town",
+      "area": { "x": 1888, "y": 1280, "w": 80, "h": 40 },
+      "once": true,
+      "requireFlags": ["signal:threshold_cleared"],
+      "dialogue": [
+        "The north gate offers a clean exit stamp: one signature and the public version walks out wearing his name, on time, on brand.",
+        "Bosch hands back the pen. He keeps the damaged Public Version Card -- unfiled, unflattering, his.",
+        "Signal Town logs him as \"left unprocessed.\" The road north opens on a Bosch the route never got to finish.",
+        "[ ACT 1 -- END ]"
+      ],
+      "setFlags": ["act1:complete"]
+    }
+  ],
+  "barriers": [
+    {
+      "id": "north-route-barrier",
+      "area": { "x": 1880, "y": 1496, "w": 96, "h": 16 },
+      "blockFlags": ["signal:route_open"],
+      "image": "assets/swagbound/overworld-npc/faithful-servants.png"
+    }
+  ]
+}

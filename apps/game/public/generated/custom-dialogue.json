@@ -1,0 +1,1130 @@
+{
+  "schema": "swagbound.custom-dialogue.v1",
+  "comment": "Hand-authored Act-1 dialogue (takes precedence over the generated Drifella barks in content/drifella-barks.json). Two passes: (1) the opening-house cast (npcId->character is a first pass to refine during sprite work, e.g. Biscuit on the dog sprite); (2) a Signal Town MILADY-LORE pass on reachable path NPCs (166/167/191/1410/163/136/202/138/146/1411/135/137) seeding the antagonist's lore through townsfolk rumor: Little Swag World is the organic source, Milady/Remilia corrupts it into hostile classification infrastructure (provenance gates, the public version, the Malady as visible symptom). See docs/swagbound-eb-act1-arc-mapping.md.",
+  "byNpcId": {
+    "1": {
+      "pages": [
+        "A kid with a laminated smile steps into Bosch's lane before Bosch has finished choosing it.",
+        "\"Hey. You want in? Membership's free — the read is what costs you. We already have a version of you that joined. You're just here to sign for it.\""
+      ]
+    },
+    "3": {
+      "ref": "target:bosch-main-room-v0:signal-pet-gate"
+    },
+    "5": {
+      "pages": [
+        "\"To tell you the truth — and the truth's been getting expensive — I don't remember saying half of what the town has me saying.\"",
+        "\"My public version's a better neighbor than I am. Pays his dues, waves first. I just live here.\""
+      ]
+    },
+    "8": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 2
+    },
+    "9": {
+      "pages": [
+        "Hi, come in, come in!",
+        "What can I do for you today?"
+      ],
+      "shop": 1
+    },
+    "21": {
+      "ref": "interior:bosch-bedroom-v0"
+    },
+    "33": {
+      "ref": "target:bosch-main-room-v0:cousin",
+      "shop": 4
+    },
+    "35": {
+      "ref": "target:bosch-main-room-v0:proof-token-bowl",
+      "give": {
+        "char": 1,
+        "item": 54,
+        "once": true
+      }
+    },
+    "37": {
+      "ref": "interior:bosch-main-room-v0"
+    },
+    "40": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 5
+    },
+    "58": {
+      "pages": [
+        "\"Hotel Onett. One night re-syncs the whole party — HP, PP, anyone who fainted. Runs you $100.\"",
+        "...you crash hard. Somewhere a save chime plays.",
+        "\"Morning, champ. Everybody's topped off. Door's that way.\""
+      ],
+      "cost": 100,
+      "heal": "full"
+    },
+    "78": {
+      "pages": [
+        "MiFella lets himself in like he owns the version of you that counts.",
+        "\"Bosch! Wake up. You're trending before breakfast. Congrats, I think?\"",
+        "\"There's already a you outside. Cleaner haircut, smoother story.\"",
+        "\"He signed a 4am mint: 'Swag is eternal.' The town's already calling him convenient.\"",
+        "\"Relax, it's free press. Come let it count. ...You're gonna make a face, aren't you. They love the face.\""
+      ]
+    },
+    "85": {
+      "ref": "interior:bosch-side-room-v0"
+    },
+    "90": {
+      "ref": "interior:bosch-upstairs-hall-v0"
+    },
+    "98": {
+      "ref": "interior:home-hall-v0"
+    },
+    "99": {
+      "ref": "target:bosch-main-room-v0:guardian"
+    },
+    "100": {
+      "ref": "dialogue:archive-console-link"
+    },
+    "106": {
+      "pages": [
+        "The man doesn't talk. He's watching the Bosch that arrived before Bosch did, and finds this one wanting.",
+        "\".....\""
+      ]
+    },
+    "115": {
+      "pages": [
+        "The intake printer blinks: ROUTE FATIGUE ACCEPTED.",
+        "\"Clean breath, Bosch. I can reset your meters, not your story.\""
+      ],
+      "heal": "full"
+    },
+    "131": {
+      "pages": [
+        "Past the gate the air starts itemizing you. Little ticks, like a register that can see.",
+        "That's the threshold. That's where Milady stops being a rumor and becomes a form you have to sign."
+      ]
+    },
+    "132": {
+      "pages": [
+        "I walked up the line once to ask Milady a question.",
+        "The line asked me three back, kept the answers, and mailed me a cleaner version of the question. Never went again."
+      ]
+    },
+    "134": {
+      "pages": [
+        "Everyone north of here works for Milady. Nobody north of here will say so.",
+        "That's the benefit package. You stop being able to say it, and in exchange you stop having to."
+      ]
+    },
+    "135": {
+      "pages": [
+        "Everything here points up the line. Up the line is the yard, and the yard is Milady's.",
+        "And Milady's is everywhere, which is exactly how you know it's nowhere good."
+      ]
+    },
+    "136": {
+      "pages": [
+        "Seen your public version yet? Smiles better than you. Answers before you do.",
+        "Milady prefers it, honestly. Less upkeep, no opinions of its own."
+      ]
+    },
+    "137": {
+      "pages": [
+        "I'm not scared of Milady.",
+        "I'm scared of how reasonable she makes the paperwork sound. You sign before you notice you agreed."
+      ]
+    },
+    "138": {
+      "pages": [
+        "They say Milady was born down in the source somewhere. They say she's already pregnant with the next one.",
+        "They say a lot. The saying sticks better than the truth. That stickiness IS the machine."
+      ]
+    },
+    "144": {
+      "pages": [
+        "Milady? Yeah, she's like, the brand. It's on everything down here. I stopped reading it.",
+        "Probably fine. It's usually fine. Why, did you read it?"
+      ]
+    },
+    "145": {
+      "pages": [
+        "My feed says Milady loves us. My feed also says I won a boat.",
+        "I did not win a boat. But I keep checking, you know? Just in case the boat's real and the love isn't."
+      ]
+    },
+    "146": {
+      "pages": [
+        "That Malady up the route? That's only the part you're allowed to see.",
+        "Milady's the part already inside your distribution. You can't out-run your own reach."
+      ]
+    },
+    "148": {
+      "pages": [
+        "Guardian checks the door latch, then Bosch's pulse.",
+        "\"Rest here. The house will hold your place while the route tries to edit it.\""
+      ],
+      "heal": "full",
+      "save": true
+    },
+    "163": {
+      "pages": [
+        "Remilia's the one holding the stamp.",
+        "Milady's the one who decided there'd BE a stamp. Different job. Same smirk."
+      ]
+    },
+    "166": {
+      "pages": [
+        "Milady doesn't run Signal Town. The town runs ON her, like a charge nobody itemized.",
+        "You'll meet her paperwork long before you meet her. Most people stop at the paperwork."
+      ]
+    },
+    "167": {
+      "pages": [
+        "I got FREAKING FIRED FROM MILADY'S for asking what the job actually was.",
+        "Turned out the job was being me, at scale, badly. They had a cleaner me by lunch."
+      ]
+    },
+    "191": {
+      "pages": [
+        "Used to be Little Swag World was just where we were from. No stamp, no fee.",
+        "Then Milady filed it as a 'source' and started charging us rent on ourselves. She calls that provenance."
+      ]
+    },
+    "202": {
+      "pages": [
+        "Don't stare at the cards too long. The cards read you back.",
+        "Whatever they find, they file straight up the line. Everything up the line is Milady's."
+      ]
+    },
+    "291": {
+      "pages": [
+        "Hello, may I take your order?\n(smile, smile)"
+      ],
+      "shop": 6
+    },
+    "292": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 7
+    },
+    "295": {
+      "pages": [
+        "Hi!",
+        "Can I help you?"
+      ],
+      "shop": 9
+    },
+    "296": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 8
+    },
+    "311": {
+      "pages": [
+        "Hey mon! You got to expand your mind an' use this stuff creatively.",
+        "C'mon, buy some of my junk!"
+      ],
+      "shop": 11
+    },
+    "316": {
+      "pages": [
+        "I like to sell my goodies on the street.",
+        "Sure, flies land on them, but in my opinion, it makes them taste even better!"
+      ],
+      "shop": 14
+    },
+    "318": {
+      "pages": [
+        "Would you like some bananas?"
+      ],
+      "shop": 15
+    },
+    "338": {
+      "pages": [
+        "Hello! Would you like some seasonings to add to your foods at meal time?",
+        "They are really quite miraculous!"
+      ],
+      "shop": 63
+    },
+    "400": {
+      "pages": [
+        "Two travelers stand very close, the way people do when they've been filed under the same number.",
+        "\"Our kid's downtown, waiting on his record to clear. We wanted to bring him something real — before the souvenir stand prints a version that's easier to love.\""
+      ]
+    },
+    "403": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 16
+    },
+    "404": {
+      "ref": "interior:corner-shop-v0",
+      "shop": 1
+    },
+    "504": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 17
+    },
+    "505": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 18
+    },
+    "509": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 20
+    },
+    "536": {
+      "pages": [
+        "Sssshhh!\nDon't talk too loud!",
+        "What do you want?"
+      ],
+      "shop": 19
+    },
+    "606": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 22
+    },
+    "708": {
+      "pages": [
+        "You must have a long, tough road ahead of you, do you not?",
+        "No, there is no need to explain. I already know... you must be hungry."
+      ],
+      "shop": 56
+    },
+    "713": {
+      "pages": [
+        "Hi Hi Hi.\nYou come\nbuying?",
+        "You can sell,\ntoo."
+      ],
+      "shop": 23
+    },
+    "715": {
+      "pages": [
+        "Hi Hi Hi.\nYou come\nbuying?",
+        "You can sell,\ntoo."
+      ],
+      "shop": 57
+    },
+    "747": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 24
+    },
+    "749": {
+      "ref": "interior:burger-shop-v0",
+      "shop": 4
+    },
+    "769": {
+      "pages": [
+        "Sssshhh!\nDon't talk too loud!",
+        "What do you want?"
+      ],
+      "shop": 25
+    },
+    "853": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 26
+    },
+    "922": {
+      "pages": [
+        "Hi!",
+        "Can I help you?"
+      ],
+      "shop": 27
+    },
+    "923": {
+      "pages": [
+        "Hello there!\nHow may I help you?"
+      ],
+      "shop": 28
+    },
+    "926": {
+      "pages": [
+        "Hello there!",
+        "How would you like to buy some seasonings"
+      ],
+      "shop": 30
+    },
+    "932": {
+      "pages": [
+        "Hello. May I help you?"
+      ],
+      "shop": 29
+    },
+    "936": {
+      "pages": [
+        "Sssshhh!\nDon't talk too loud!",
+        "What do you want?"
+      ],
+      "shop": 34
+    },
+    "959": {
+      "pages": [
+        "C'mon in!\nWe've got the goods, G!"
+      ],
+      "shop": 35
+    },
+    "1008": {
+      "pages": [
+        "If ye be headin' to Scaraba, ye ought to shop here.",
+        "Things're expensive down there..."
+      ],
+      "shop": 39
+    },
+    "1011": {
+      "pages": [
+        "Hi! Welcome to my store.",
+        "What do you need?"
+      ],
+      "shop": 38
+    },
+    "1025": {
+      "pages": [
+        "So, where's your mom and dad?",
+        "You mean you kids came in here all by yourselves...?"
+      ],
+      "shop": 40
+    },
+    "1098": {
+      "pages": [
+        "We serve water, rice gruel and those sorts of things."
+      ],
+      "shop": 61
+    },
+    "1123": {
+      "pages": [
+        "Welcome, welcome! Ach, the heat! Is your body okay?",
+        "Can I interest you in some of my merchandise?"
+      ],
+      "shop": 41
+    },
+    "1125": {
+      "pages": [
+        "Sssshhh!\nDon't talk too loud!",
+        "What do you want?"
+      ],
+      "shop": 45
+    },
+    "1139": {
+      "pages": [
+        "Hissss, I'm Red Snake... come on in!",
+        "Kissss of Fire! Armpit hair fertilizer!\nYesssssss!"
+      ],
+      "shop": 43
+    },
+    "1140": {
+      "pages": [
+        "If you've already got what you need, great!",
+        "But if you don't, well, that would be a real shame."
+      ],
+      "shop": 44
+    },
+    "1146": {
+      "pages": [
+        "I sell water to those who are thirsty."
+      ],
+      "shop": 21
+    },
+    "1156": {
+      "pages": [
+        "Hello! Would you like some seasonings to add to your foods at meal time?",
+        "They are really quite miraculous!"
+      ],
+      "shop": 63
+    },
+    "1157": {
+      "pages": [
+        "Hello there! Welcome to my humble shop!",
+        "How about some of our famous Scaraba delicacies?"
+      ],
+      "shop": 62
+    },
+    "1312": {
+      "pages": [
+        "Hi! This shop specializes in puddings and pendants!",
+        "You'd like to buy some, wouldn't you?"
+      ],
+      "shop": 36
+    },
+    "1374": {
+      "pages": [
+        "Hi, how are you doing? From the look of things,",
+        "I would say, not so good."
+      ],
+      "shop": 60
+    },
+    "1408": {
+      "pages": [
+        "The Malady's already up there past the gate, wearing a face.",
+        "Could be anyone's. Could be the better-lit version of yours. That's the part nobody likes to test."
+      ]
+    },
+    "1410": {
+      "pages": [
+        "The gate isn't cruel. It just needs you to prove normal, show left, match background.",
+        "Milady wrote the form. Nobody has ever passed it clean. That part isn't a bug."
+      ]
+    },
+    "1411": {
+      "pages": [
+        "My cousin tried to opt out of provenance.",
+        "Now there's a cleaner cousin downtown, doing my cousin better than he ever did. We don't speak. He files reports."
+      ]
+    },
+    "2": {
+      "pages": [
+        "The kid points at Bosch like an old injury has learned to identify suspects.",
+        "\"It was you. The record says you beat my buddy, and the record got here before you did. Beat it before I have to become evidence.\""
+      ]
+    },
+    "4": {
+      "pages": [
+        "He works the gum in his mouth like a clerk processing something wet and official.",
+        "\"Spit, spit. You want some? Get your own, claimant. My mouth's the only file in town I still control.\""
+      ]
+    },
+    "6": {
+      "pages": [
+        "\"Frank's got a weapon with a reputation bigger than his hand.\"",
+        "\"If you take it from him, maybe the town has to admit the source can still beat the brochure.\""
+      ]
+    },
+    "7": {
+      "pages": [
+        "\"You buy something meant to protect you, you equip it. Otherwise it's just another receipt saying a better Bosch knew what to do.\"",
+        "\"There. I gave my own enemy a hint. That's confidence, or bad filing. Let's see which one survives.\""
+      ]
+    },
+    "10": {
+      "pages": [
+        "\"Cash matters. I get it. But call your mother.\"",
+        "\"Worry is expensive when the town keeps printing versions of you and none of them pick up the phone.\""
+      ]
+    },
+    "11": {
+      "pages": [
+        "The dog barks, then briefly speaks with the exhausted patience of a manual nobody admits reading.",
+        "\"Watch the HP and PP window in shops. Flash means better, black means no fit. Even a dog can tell when the system is ranking bodies.\""
+      ]
+    },
+    "13": {
+      "pages": [
+        "The receiver is warm, as if someone just finished rehearsing Bosch's side of the call.",
+        "\"Line's open. Say something before the record does.\""
+      ]
+    },
+    "15": {
+      "pages": [
+        "\"That noise woke the house and now you're acting like fear is optional.\"",
+        "\"You'll sneak out anyway. At least change clothes before the street writes down what you were wearing.\""
+      ]
+    },
+    "16": {
+      "pages": [
+        "The dog opens one eye from the civic sleep all decent animals keep.",
+        "\"Humans, dogs, rumors. We all sleep at night. Why is your route awake?\""
+      ]
+    },
+    "30": {
+      "pages": [
+        "\"Hey, bro. The sound woke you too?\"",
+        "\"I was scared until I remembered the town usually scares itself first, then asks us to confirm it.\""
+      ]
+    },
+    "34": {
+      "pages": [
+        "\"It seems like I'm always here.\"",
+        "\"That isn't loyalty. It's what happens when a place keeps a person in the same frame because the frame tests well.\""
+      ]
+    },
+    "39": {
+      "pages": [
+        "\"Wait a minute, youngster. I sell hints because uncertainty got monetized before either of us arrived.\"",
+        "\"Come back when confidence costs more than cash. I'm here all the time. That's part of the business model.\""
+      ]
+    },
+    "41": {
+      "pages": [
+        "\"I could tell you about the creature from the vegetable soup, but unrelated talk trains people to ignore warnings.\"",
+        "\"Speak to everyone anyway. The town changes its story depending on when it thinks you're listening.\""
+      ]
+    },
+    "42": {
+      "pages": [
+        "\"Cottage cheese on bread. Latest craze, apparently.\"",
+        "\"A food becomes a movement the moment enough mouths pretend they discovered it first.\""
+      ]
+    },
+    "43": {
+      "pages": [
+        "\"Lucky sandwiches are everywhere now. Like fortune cookies, except the prophecy has mayonnaise.\"",
+        "\"Some even recover PP. I don't know what PP is, but I know when a product starts sounding like a prayer.\""
+      ]
+    },
+    "47": {
+      "pages": [
+        "\"Pokey ran after a police car and told me to watch the house. So I am watching the house.\"",
+        "\"Mom and Dad are at an elegant restaurant. The kind where absence comes with a receipt.\""
+      ]
+    },
+    "59": {
+      "pages": [
+        "\"The nightly rate isn't cheap. Clean sheets, secure rooms, a phone that lets the town confirm you survived.\"",
+        "\"People pay more when confusion is outside counting heads.\""
+      ]
+    },
+    "60": {
+      "pages": [
+        "The receiver answers with the small click of an institution recognizing a hand.",
+        "\"Another line. Another place where Bosch can become a voice before he becomes a body.\""
+      ]
+    },
+    "67": {
+      "pages": [
+        "\"The townspeople are confused. When that happens, crowds start auditioning for disaster.\"",
+        "\"So we police are cautious. Caution is what we call surveillance when it wears a badge.\""
+      ]
+    },
+    "68": {
+      "pages": [
+        "\"I'd rather be writing parking tickets. A meter doesn't argue about who it is.\"",
+        "\"Lately every pedestrian arrives with a public version and a complaint from the future.\""
+      ]
+    },
+    "69": {
+      "pages": [
+        "The officer looks too steamed to be useful and too official to leave alone.",
+        "\"Don't talk to me. I'm busy being angry in a way the department can file.\""
+      ]
+    },
+    "73": {
+      "pages": [
+        "\"Small fry. You're shaking, right? The form says suspects shake.\"",
+        "\"Average police are stronger than superheroes because superheroes still need an origin. We just need a report.\""
+      ]
+    },
+    "74": {
+      "pages": [
+        "\"Your average policeman is stronger than any superhero.\"",
+        "\"A superhero has to prove himself in public. We get issued public proof and call it training.\""
+      ]
+    },
+    "75": {
+      "pages": [
+        "\"Don't let the Mayor's compliments give you a big head.\"",
+        "\"Civic praise is just a leash with nicer language. Bring it on before the ribbon tightens.\""
+      ]
+    },
+    "76": {
+      "pages": [
+        "\"Right here, right now. That's what the script says before it admits the kid might win.\"",
+        "\"If I lose, I'll call the boss. Authority always has another office behind it.\""
+      ]
+    },
+    "77": {
+      "pages": [
+        "\"Let's go, go og. No, go. See? Even command language slips when the record gets nervous.\"",
+        "\"Excuse me. I meant to sound ready.\""
+      ]
+    },
+    "83": {
+      "pages": [
+        "\"I'm in a foul mood because the Mayor doesn't like me.\"",
+        "\"This paper may take hours to sign. Delaying a record is the closest thing City Hall gives me to power.\""
+      ]
+    },
+    "84": {
+      "pages": [
+        "\"Aren't you Bosch? School holiday? Homework done? Teeth brushed? Bed dry?\"",
+        "\"Forgive me. Adults become checklists when they can't protect the child from the route.\""
+      ]
+    },
+    "86": {
+      "pages": [
+        "\"Mayor Pirkle, pleased to meet you. You beat the bullies, which lets peace take credit after the danger is over.\"",
+        "\"A key to the shack? Fine. Take it. But if the record turns violent, remember: responsibility never entered this office.\""
+      ]
+    },
+    "87": {
+      "pages": [
+        "\"Next election, support Mayor Pirkle.\"",
+        "\"A speech sounds more sincere when someone else writes the need before you write the words.\""
+      ]
+    },
+    "88": {
+      "pages": [
+        "\"Thank you for your help.\"",
+        "\"That's the official sentence. The unofficial one is shorter: thank you for making the file less embarrassing.\""
+      ]
+    },
+    "89": {
+      "pages": [
+        "\"City Hall is east. Where the sun rises, where the paper warms up first.\"",
+        "\"Follow the light if you trust light to tell you what it has already touched.\""
+      ]
+    },
+    "91": {
+      "pages": [
+        "\"Trouble creates a market for hints.\"",
+        "\"I can sell you a direction, Bosch. I cannot sell you the part where the direction stops selling you back.\""
+      ]
+    },
+    "92": {
+      "pages": [
+        "\"Lier X. Agerate finally found something interesting.\"",
+        "\"He says he'll only show it to you, which means the treasure already knows what name to ask for.\""
+      ]
+    },
+    "93": {
+      "pages": [
+        "\"I wonder if EarthBound has been released yet.\"",
+        "\"Sometimes a town waits for its own source material to arrive and explain why everyone sounds borrowed.\""
+      ]
+    },
+    "94": {
+      "pages": [
+        "A mother mouse presents her son like a small, living exit clause.",
+        "\"Take him if you get lost. He knows the way out because mazes underestimate anything they cannot file as a person.\""
+      ]
+    },
+    "95": {
+      "pages": [
+        "The mouse stands at the edge of the dark road and asks for faith without paperwork.",
+        "\"Trust me there. Some routes only become visible after the record gives up watching.\""
+      ]
+    },
+    "96": {
+      "pages": [
+        "\"O o o o. Do I come too?\"",
+        "\"I can be small, quiet, and very hard for a system to explain.\""
+      ]
+    },
+    "97": {
+      "pages": [
+        "\"I live rent-free with the Exit mice. They are kind, fast, and not impressed by property language.\"",
+        "\"When a maze claims you, they treat the claim like a clerical error.\""
+      ]
+    },
+    "102": {
+      "pages": [
+        "\"I read Our Society is Convenient. Hotels and drugstores have phones; green costs a dollar, black is free.\"",
+        "\"Convenience is just surveillance with instructions printed clearly enough to feel generous.\""
+      ]
+    },
+    "103": {
+      "pages": [
+        "\"Lately I sense UFOs overhead. Maybe I'm dreaming.\"",
+        "\"Dreams are cheaper to dismiss than witnesses, so the town files most witnesses under dreams.\""
+      ]
+    },
+    "104": {
+      "pages": [
+        "\"Our Convenient Society says modern life demands an ATM in every hotel and drugstore.\"",
+        "\"Imagine needing a book to notice the machines that already know when you're broke.\""
+      ]
+    },
+    "105": {
+      "pages": [
+        "The person says nothing, which in Signal Town counts as a difficult kind of testimony.",
+        "\".....\""
+      ]
+    },
+    "107": {
+      "pages": [
+        "\"I'm cramming for tomorrow's big test: hotels refill HP and PP; life recovery restores HP, not PP.\"",
+        "\"A test about games is still a test about obedience. Memorize the rules before the rules memorize you.\""
+      ]
+    },
+    "108": {
+      "pages": [
+        "\"I'm researching Giant Step, north and west of Signal Town. They say it has special power.\"",
+        "\"Places get powerful when enough people point at them but not enough people ask who benefits.\""
+      ]
+    },
+    "109": {
+      "pages": [
+        "\"I saw a Magic butterfly outside the window. Not in the encyclopedia. There, in the air.\"",
+        "\"Get close and your cares fly away. For a moment, the record can't keep up with anything that light.\""
+      ]
+    },
+    "110": {
+      "pages": [
+        "\"Who are you here to see? The patient was just brought in, still unconscious.\"",
+        "\"Pay the doctor's fee and we'll keep the body on file until the person returns to it.\""
+      ]
+    },
+    "111": {
+      "pages": [
+        "\"You may not believe it, but I'm a healer.\"",
+        "\"The hospital handles ordinary damage. I handle the conditions too embarrassing for official medicine to name cleanly.\""
+      ]
+    },
+    "112": {
+      "pages": [
+        "\"Diamondized. Mushroomized. Conditions the hospital can pronounce but not forgive.\"",
+        "\"We wait in lobbies because shame always arrives before the patient does.\""
+      ]
+    },
+    "113": {
+      "pages": [
+        "\"I can examine each of you for a fee.\"",
+        "\"The body becomes a line item; the line item becomes proof that somebody is still inside.\""
+      ]
+    },
+    "114": {
+      "pages": [
+        "\"Around here, our doctor is number one.\"",
+        "\"That's what the lobby says, and lobbies are built to make waiting sound like confidence.\""
+      ]
+    },
+    "116": {
+      "pages": [
+        "\"I was SMAAAAASHED by a mouse.\"",
+        "\"Small things hit hardest when the record has already decided they don't count.\""
+      ]
+    },
+    "117": {
+      "pages": [
+        "\"Here to visit my daughter? So you're the one who calls at night and talks for hours.\"",
+        "\"No? Then why did your version come through the line before you came through the door?\""
+      ]
+    },
+    "118": {
+      "pages": [
+        "\"I came to visit a friend, slipped in the hallway, and became a patient too.\"",
+        "\"That's the tragic version. The civic version calls it efficient intake.\""
+      ]
+    },
+    "120": {
+      "pages": [
+        "\"You've grown since I last saw you. You're beginning to look like a man.\"",
+        "\"Or like the town's idea of one. I like the harder version better, the one still deciding.\""
+      ]
+    },
+    "121": {
+      "pages": [
+        "\"I dreamed you were traveling with a cute girl.\"",
+        "\"If the dream becomes record, say hi for me. Single people learn to flirt with possible futures.\""
+      ]
+    },
+    "122": {
+      "pages": [
+        "\"I'll give you my cap. I know you've wanted it for a long time.\"",
+        "\"Wear something with a history. The route hates when an object remembers who touched it.\""
+      ]
+    },
+    "376": {
+      "pages": [
+        "\"I've been waiting for you. Help make the world blue, happy, peaceful, simple enough to process.\"",
+        "\"Be my right hand. A right hand signs faster when the head stops asking who wrote the form.\""
+      ]
+    },
+    "377": {
+      "pages": [
+        "\"Aai i i i e e e e e e!\"",
+        "\"I screamed because nobody had issued me a better response yet.\""
+      ]
+    },
+    "378": {
+      "pages": [
+        "\"Blue, blue. Want to be one of us? Stop what you're doing and meet Mr. Carpainter.\"",
+        "\"He loves a claimant who arrives pre-flattened.\""
+      ]
+    },
+    "379": {
+      "pages": [
+        "\"Blue, blue. Am I blocking you?\"",
+        "\"I'll move. Even devotion has to make room when the route has a stronger appointment.\""
+      ]
+    },
+    "380": {
+      "pages": [
+        "\"Blue, blue. Don't bother us. We're in the middle of prayer.\"",
+        "\"Fine, I'll move. The line to heaven is still a line.\""
+      ]
+    },
+    "381": {
+      "pages": [
+        "\"Blue, blue. You think I can only walk in place?\"",
+        "\"Watch closely. Even a loop can perform dissent if someone files the footage wrong.\""
+      ]
+    },
+    "382": {
+      "pages": [
+        "\"Green, green. No, that's not it.\"",
+        "\"I'm new. My mouth hasn't fully accepted the color policy.\""
+      ]
+    },
+    "383": {
+      "pages": [
+        "\"Blue, blue. I'll stand somewhere else.\"",
+        "\"Belief is portable when the room needs rearranging.\""
+      ]
+    },
+    "384": {
+      "pages": [
+        "\"Blew, blew. I'm learning to whistle because whistling makes one smile.\"",
+        "\"If happiness can be trained into the mouth, maybe nobody checks the eyes.\""
+      ]
+    },
+    "385": {
+      "pages": [
+        "\"Blue, blue. Arm the torpedoes, full speed ahead, or something official like that.\"",
+        "\"Now I'll crush you. Violence sounds calmer when it borrows procedure.\""
+      ]
+    },
+    "386": {
+      "pages": [
+        "\"Blue, blue. Don't disrupt our meeting.\"",
+        "\"A meeting is a crowd with minutes. A crowd with minutes can call stomping consensus.\""
+      ]
+    },
+    "387": {
+      "pages": [
+        "\"Blue, blue. Strange, unmasked fellow.\"",
+        "\"Don't go to heaven. Heaven has an intake standard, and your face is still arguing with itself.\""
+      ]
+    },
+    "388": {
+      "pages": [
+        "\"Blue, blue. Anti-blue boy.\"",
+        "\"You're getting on my nerves because you keep arriving in colors the doctrine can't compress.\""
+      ]
+    },
+    "389": {
+      "pages": [
+        "\"Blue, blue. Those who aren't believers must not be good.\"",
+        "\"Eternity is where bad categories go when the village runs out of patience.\""
+      ]
+    },
+    "390": {
+      "pages": [
+        "\"Blue, blue. This should wake you up.\"",
+        "\"The funny thing about forced awakening is how much it resembles being knocked unconscious.\""
+      ]
+    },
+    "391": {
+      "pages": [
+        "\"Blue, blue. Your outfit is wicked.\"",
+        "\"Fabric confesses before people do. That's what the doctrine says when it gets lazy.\""
+      ]
+    },
+    "392": {
+      "pages": [
+        "\"Blue, blue. Why would a person who's not blue be here?\"",
+        "\"The question is a fence. You can hear how proud it is of being short.\""
+      ]
+    },
+    "393": {
+      "pages": [
+        "\"Blue, blue. You can't be happy unless you know Happy-Happyism.\"",
+        "\"Happiness gets easier to manage after it becomes a membership requirement.\""
+      ]
+    },
+    "397": {
+      "pages": [
+        "\"When the world is changed to blue, a peaceful country can be established. Do you understand now?\"",
+        "\"Agreement is nicer when it arrives as comprehension. Disagreement can be filed as confusion.\""
+      ]
+    },
+    "398": {
+      "pages": [
+        "\"You might misunderstand me, but Carpainter's voice affects minds like a hypnotist.\"",
+        "\"A warning becomes dangerous when it still has to speak inside the room it warns you about.\""
+      ]
+    },
+    "399": {
+      "pages": [
+        "\"We wanted to join the Happy-Happy group. Married couple from Twoson.\"",
+        "\"Two people can become one file if they stand close enough and answer blue at the same time.\""
+      ]
+    },
+    "401": {
+      "pages": [
+        "\"This is the Happy-Happyism counseling office. Once you obtain happiness, visit headquarters.\"",
+        "\"Counseling prepares the person. Headquarters prepares the version that will be easier to keep.\""
+      ]
+    },
+    "402": {
+      "pages": [
+        "\"I not know you. My kind are in valley over there.\"",
+        "\"Bye bye. Outsiders always bring papers first and questions second.\""
+      ]
+    },
+    "405": {
+      "pages": [
+        "\"The refreshing herb says it helps colds, poison, depression, and the illnesses that won't heal cleanly.\"",
+        "\"An herb with copy on the back is still a plant trying to survive marketing.\""
+      ]
+    },
+    "407": {
+      "pages": [
+        "The receiver is lifted into a silence already shaped like Bosch.",
+        "\"Someone has been waiting to hear whether your voice matches the one on file.\""
+      ]
+    },
+    "408": {
+      "pages": [
+        "\"We're one big happy family here. Officially, only family may stay.\"",
+        "\"Study Happy-Happyism and we might rent you a bed. Refuse, and kinship becomes enforcement.\""
+      ]
+    },
+    "409": {
+      "pages": [
+        "\"Blue... blue. I can examine each of you for a fee.\"",
+        "\"Even the body must tint itself before the village agrees to call it treatable.\""
+      ]
+    },
+    "410": {
+      "pages": [
+        "\"Blue... blue. Who are you here to see? The patient is unconscious.\"",
+        "\"Pay the doctor and we'll keep the file breathing until the person catches up.\""
+      ]
+    },
+    "591": {
+      "pages": [
+        "\"I dreamt you and I were taking a walk.\"",
+        "\"Then you arrived looking troubled, as if the dream sent its record ahead and kept the warmth.\""
+      ]
+    },
+    "594": {
+      "pages": [
+        "\"Late snack? No. I'm stuck on my project and wishing Dr. Andonuts were here.\"",
+        "\"Take this bent key if you're going to the locker room. Useful things rarely stay straight after passing through school.\""
+      ]
+    },
+    "604": {
+      "pages": [
+        "\"If you're going outside, say hi to Maxwell. He watches out for younger students.\"",
+        "\"Dangerous animals are wandering around, and the campus still calls that extracurricular.\""
+      ]
+    },
+    "605": {
+      "pages": [
+        "\"I'm so sleepy. Tony's birthday is tomorrow.\"",
+        "\"I decorated every cookie by hand, so each one has proof it was loved before the party made love public.\""
+      ]
+    },
+    "607": {
+      "pages": [
+        "\"There's a monkey at the entrance. Buy bubble gum and you can have him for free; otherwise he's a dollar.\"",
+        "\"Commerce has strange ideas about companionship, but the monkey seems to understand the terms.\""
+      ]
+    },
+    "608": {
+      "pages": [
+        "\"The bubble gum here is incredible.\"",
+        "\"You should see the bubbles. For a second, even a mouth can make a world the record cannot enter.\""
+      ]
+    },
+    "609": {
+      "pages": [
+        "The monkey gives one sharp answer and refuses the paperwork around it.",
+        "\"Kyee kyee. Yeah.\""
+      ]
+    },
+    "610": {
+      "pages": [
+        "The phone gives three small beeps, no greeting, no person.",
+        "\"Beep-beep-beep. Some systems prefer refusal when recognition would cost too much.\""
+      ]
+    },
+    "612": {
+      "pages": [
+        "\"I'm the cook for the Tessie-Watching club. Stew?\"",
+        "\"Waiting for a monster is easier with a bowl in your hands. It gives the newspaper something domestic to crop out.\""
+      ]
+    },
+    "613": {
+      "pages": [
+        "\"If I find Tessie, do I get in the newspaper?\"",
+        "\"Fifteen minutes of fame is just a public version with a shorter lease.\""
+      ]
+    },
+    "614": {
+      "pages": [
+        "The second phone repeats the same blank little alarm.",
+        "\"Beep-beep-beep. A line can be dead and still sound busy.\""
+      ]
+    },
+    "705": {
+      "pages": [
+        "\"You finally got here. This is the third Sanctuary location, but it's mine now.\"",
+        "\"Take it if you dare. Sacred places are only sacred until someone files possession first.\""
+      ]
+    },
+    "748": {
+      "pages": [
+        "\"We also run an inn. It's a night if you want to stay.\"",
+        "\"No? Probably wise. The beds are old and dusty, and dust remembers every traveler better than we do.\""
+      ]
+    },
+    "751": {
+      "pages": [
+        "The receiver clicks like a room pretending not to listen.",
+        "\"Your voice enters first. The rest of you is always late to telecommunications.\""
+      ]
+    },
+    "752": {
+      "pages": [
+        "\"Small house, but stay the night.\"",
+        "\"While you sleep, I can fix what's broken. Repair is the quiet art of returning an object to itself before morning files it as trash.\""
+      ]
+    },
+    "753": {
+      "pages": [
+        "The receiver is already awake.",
+        "\"Every call asks the same question: are you the source, or just the voice that arrived fastest?\""
+      ]
+    },
+    "1071": {
+      "pages": [
+        "\"Wait a minute, youngster. I can give you a hint for a price.\"",
+        "\"If you decline, the system calls it confidence. If you pay, it calls the route proprietary.\""
+      ]
+    }
+  },
+  "byTextPointer": {
+    "data_15.l_0xc5eb0b": {
+      "pages": [
+        "The Bosch Terminal boots from a timestamp Bosch has not reached yet.",
+        "\"Bosch, the route is not neutral. A public version is already moving through town ahead of your body.\"",
+        "\"That version is the Malady: symptom, mask, and civic convenience with your smile stapled on.\"",
+        "\"Milady is the engine underneath it. Rumor, paperwork, feed pressure, all one cheap machine.\"",
+        "\"Walk the route anyway. Make the public version prove provenance in daylight.\""
+      ]
+    },
+    "data_20.l_0xc66b97": {
+      "pages": [
+        "MiFella hits the door like the algorithm owes him rent.",
+        "\"Bosch. Up. You're trending before breakfast, which is legally the worst kind of trending.\"",
+        "\"Some public version of you is already outside, polite and wrong. Town's eating it up.\"",
+        "\"Bring shoes. Bring a face you can prove is yours. The trouble is making good time.\""
+      ]
+    },
+    "data_20.l_0xc65efc": {
+      "pages": [
+        "The Public Version Clique doesn't crowd you. It arranges itself around you, smiling, like a search result that already knows your name.",
+        "\"Relax, Bosch. We did the hard part. There's a cleaner you, signed and ready. Just nod and let this one count.\"",
+        "\"Refuse and you stop being a person and start being a dispute. ...Oh, you're going to dispute it. Adorable. Cataloged.\"",
+        "They step into the route like they own the receipt. Whatever you do next, they'll file as the fight starting."
+      ]
+    }
+  }
+}

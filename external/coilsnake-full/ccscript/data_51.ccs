@@ -1,0 +1,341 @@
+/*
+ * EarthBound Text Dump
+ * Time: 20:26:52 - 12/06/2026
+ * Generated using CCScriptWriter.
+ */
+
+command e(label) "{long label}"
+
+// Text Data
+l_0xc996aa:
+    "@I heard many footprints exist deep down in the east cave." next
+    "@People call that place Lilliput Steps, and it makes them feel uneasy." end
+
+l_0xc99703:
+    "@It looks like almost everyone woke up and left..." end
+
+l_0xc99720:
+    "@There are only three people remaining..." next
+    "@I don't want to stay.{pause(20)}  I'll get out of here..." end
+
+l_0xc99757:
+    "@Sorry about everything!{pause(15)}  Let's be buddies." end
+
+l_0xc99776:
+    "@We wanted to join the Happy-Happy religious group." next
+    "@We're a married couple from Twoson." end
+
+l_0xc997ae:
+    "@Our child is waiting for us in Twoson." next
+    "@As a souvenir we'd like to bring him some happiness." end
+
+l_0xc997ee:
+    "@This is the famous Happy-Happyism counseling office." next
+    "@When you obtain happiness" next
+    "@you should visit the Happy-Happyism headquarters." next
+    "@It's located at the center of the village." end
+
+l_0xc9985a:
+    "@Hey {stat(8)}, it's been a long time." next
+    "@Since we last met, the whole town has woken up." next
+    "@The best happiness comes from being free... you kids made me realize that." end
+
+l_0xc998c1:
+    "[06 44 00 {e(l_0xc998fd)}]@(All of our products are blessed.{pause(20)}" linebreak
+    "             --Blue-Blue Drugstore)" end
+
+l_0xc998fd:
+    "@(Not all of our products are blessed." linebreak
+    "     --Nothing Blue Drugstore)" end
+
+l_0xc9992f:
+    eob
+
+l_0xc99930:
+    "[06 D1 00 {e(l_0xc9992f)}][06 05 02 {e(l_0xc9992f)}][1F 63 {e(l_0xc99945)}]" eob
+
+l_0xc99945:
+    "{pause(30)}{set(flag 517)}[1F E1 10 03 1E][06 D5 01 {e(l_0xc9992f)}]{set(flag 476)}{set(flag 11)}" eob
+
+l_0xc9995d:
+    "{set(flag 513)}{isset(flag 469)}[1B 02 {e(l_0xc9992f)}][06 1E 00 {e(l_0xc99991)}]{isset(flag 97)}[1B 02 {e(l_0xc9992f)}][06 25 03 {e(l_0xc99981)}]" eob
+
+l_0xc99981:
+    "{isset(flag 94)}[1B 02 {e(l_0xc9992f)}]{set(flag 310)}{unset(flag 301)}" eob
+
+l_0xc99991:
+    "{isset(flag 95)}[1B 02 {e(l_0xc9992f)}][1F 63 {e(data_14.l_0xc5e819)}]" eob
+
+l_0xc999a1:
+    "[06 78 02 {e(data_53.l_0xc9b20e)}]{isset(flag 469)}[1B 02 {e(l_0xc9992f)}][06 68 00 {e(l_0xc9992f)}][06 12 00 {e(l_0xc9992f)}]{window_open(1)}[06 02 00 {e(l_0xc99a3c)}]@Hey {stat(8)}!" linebreak
+    "[19 22 01 01 05 00]{char_direction(1, 0)}  Like I said, my dad isn't home yet!" next
+    "@You've got to bring Picky back before he comes home!" next
+    "@I'll try to help you a little.[19 22 01 01 05 00]{char_direction(1, 0)}{wait}{window_closeall}{set(flag 2)}" eob
+
+l_0xc99a3c:
+    "@{stat(8)}!" next
+    "[19 22 01 01 05 00]{char_direction(1, 0)}@You haven't got a clue about what to do.{wait}{window_closeall}{unset(flag 2)}" eob
+
+l_0xc99a6b:
+    "{isset(flag 107)}[1B 02 {e(l_0xc9992f)}][1F 63 {e(l_0xc99a7b)}]" eob
+
+l_0xc99a7b:
+    "{music(122)}{pause(155)}[1F E1 01 00 FF]{set(flag 422)}{unset(flag 107)}{music_resume}" eob
+
+l_0xc99a8f:
+    "{unset(flag 103)}" eob
+
+l_0xc99a93:
+    "[06 78 02 {e(data_53.l_0xc9b20e)}][06 69 00 {e(l_0xc9992f)}]{unset(flag 38)}{set(flag 289)}{set(flag 290)}{set(flag 291)}{set(flag 292)}{set(flag 293)}[06 B6 00 {e(l_0xc99abb)}]" eob
+
+l_0xc99abb:
+    "{set(flag 39)}{unset(flag 36)}[06 69 00 {e(l_0xc9992f)}]{set(flag 449)}" eob
+
+l_0xc99acc:
+    "[06 D3 00 {e(l_0xc99ae3)}]{set(flag 43)}{isset(flag 309)}[1B 02 {e(l_0xc9992f)}]{hotspot_off(1)}" eob
+
+l_0xc99ae3:
+    "{window_open(1)}@(We will be closed for a short period." next
+    "@Thank you for your many years of support." next
+    "@Mr. Poochyfud, Manager, Chaos Theater.){wait}{window_closeall}" eob
+
+l_0xc99b3f:
+    "{set(flag 416)}{set(flag 417)}{set(flag 418)}{set(flag 419)}{set(flag 420)}{set(flag 421)}[06 0E 00 {e(l_0xc9992f)}]{set(flag 50)}" eob
+
+l_0xc99b5c:
+    "{unset(flag 51)}" eob
+
+l_0xc99b60:
+    call(data_52.l_0xc9b10b) eob
+
+l_0xc99b66:
+    "{set(flag 106)}" eob
+
+l_0xc99b6a:
+    "[06 78 02 {e(data_53.l_0xc9b20e)}]{set(flag 110)}" eob
+
+l_0xc99b75:
+    "{set(flag 750)}{unset(flag 383)}{isset(flag 533)}" call(l_0xc99bb2) "{isset(flag 469)}[1B 02 {e(l_0xc9992f)}][06 62 00 {e(l_0xc99c15)}][06 5F 00 {e(l_0xc99bb6)}]{isset(flag 30)}[1B 02 {e(l_0xc9992f)}][1F F1 15 00 29 00]{set(flag 95)}{set(flag 753)}{pause(120)}" eob
+
+l_0xc99bb2:
+    "{unset(flag 533)}" eob
+
+l_0xc99bb6:
+    "{window_open(1)}@The phone is ringing!{pause(15)}  Answer it!" next
+    "@At my house, my dad gets bent if I don't get the phone..." next
+    "@within the first three rings!{wait}{window_closeall}" eob
+
+l_0xc99c15:
+    "{set(flag 209)}{set(flag 200)}" call(l_0xc99c24) "{unset(flag 514)}" eob
+
+l_0xc99c24:
+    "{isset(flag 688)}[1B 02 {e(l_0xc9992f)}]{set(flag 201)}" eob
+
+l_0xc99c31:
+    "{set(flag 210)}[06 34 01 {e(l_0xc9992f)}]{set(flag 31)}{unset(flag 32)}{unset(flag 33)}{unset(flag 306)}{unset(flag 307)}" eob
+
+l_0xc99c4b:
+    "{unset(flag 315)}" eob
+
+l_0xc99c4f:
+    "{set(flag 213)}" eob
+
+l_0xc99c53:
+    "{set(flag 214)}{unset(flag 590)}[06 60 02 {e(l_0xc99c61)}]" eob
+
+l_0xc99c61:
+    "{unset(flag 608)}{set(flag 174)}" eob
+
+l_0xc99c68:
+    "{isset(flag 214)}[1B 02 {e(l_0xc9992f)}]" goto(l_0xc99c53)
+
+l_0xc99c76:
+    call(data_52.l_0xc9b10b) "[06 60 02 {e(l_0xc99c61)}]" eob
+
+l_0xc99c83:
+    "{set(flag 219)}" call(data_52.l_0xc9b10b) "{isset(flag 126)}[1B 02 {e(l_0xc9992f)}]{set(flag 538)}" eob
+
+l_0xc99c98:
+    "{unset(flag 383)}[06 7B 01 {e(l_0xc9992f)}][1F 63 {e(l_0xc99ca9)}]" eob
+
+l_0xc99ca9:
+    call(data_31.l_0xc7ae41) "{pause(15)}" call(data_31.l_0xc7acb8) "{set(flag 379)}{set(flag 52)}" eob
+
+l_0xc99cbc:
+    "[06 89 02 {e(l_0xc99cc9)}]" call(data_47.l_0xc937a3) eob
+
+l_0xc99cc9:
+    "{unset(flag 383)}" eob
+
+l_0xc99ccd:
+    "{hide_char(255)}[1F 63 {e(l_0xc99cd8)}]" eob
+
+l_0xc99cd8:
+    "{music(15)}{pause(240)}{pause(100)}" call(data_22.l_0xc69082) "{set(flag 220)}{set(flag 55)}{unset(flag 52)}{warp(59)}{show_party(1)}" eob
+
+l_0xc99cf6:
+    "[06 24 00 {e(l_0xc99cfe)}]" eob
+
+l_0xc99cfe:
+    "[1F 63 {e(data_15.l_0xc5f83b)}]" eob
+
+l_0xc99d05:
+    "[06 55 01 {e(l_0xc9992f)}]{isset(flag 82)}[1B 02 {e(l_0xc9992f)}][1F 63 {e(l_0xc99d1c)}]" eob
+
+l_0xc99d1c:
+    "[06 6F 00 {e(data_30.l_0xc7916c)}]" eob
+
+l_0xc99d24:
+    call(l_0xc99d92) "{isset(flag 309)}[1B 02 {e(l_0xc9992f)}]" eob
+
+l_0xc99d33:
+    "[1F 66 01 03 12 9B C7 00]" eob
+
+l_0xc99d3c:
+    eob
+
+l_0xc99d3d:
+    "[06 92 00 {e(l_0xc99d45)}]" eob
+
+l_0xc99d45:
+    "[06 93 00 {e(l_0xc99d59)}][1F 63 {e(data_40.l_0xc89238)}]{set(flag 147)}{set(flag 759)}" eob
+
+l_0xc99d59:
+    "[06 A7 02 {e(l_0xc9992f)}][1F 63 {e(data_40.l_0xc88991)}]{set(flag 679)}" eob
+
+l_0xc99d6a:
+    "[06 92 00 {e(l_0xc99d78)}][1F 63 {e(data_40.l_0xc88d91)}]" eob
+
+l_0xc99d78:
+    "{isset(flag 680)}[1B 02 {e(l_0xc9992f)}][1F 63 {e(data_40.l_0xc88991)}]{unset(flag 680)}" eob
+
+l_0xc99d8b:
+    "{unset(flag 374)}{unset(flag 536)}" eob
+
+l_0xc99d92:
+    "{isset(flag 322)}[1B 02 {e(l_0xc9992f)}][06 0D 00 {e(l_0xc9992f)}]{set(flag 118)}" eob
+
+l_0xc99da6:
+    "{music_effect(8)}{unset(flag 383)}" call(l_0xc99d92) "[06 76 00 {e(l_0xc99db9)}]" eob
+
+l_0xc99db9:
+    "[06 E3 02 {e(l_0xc9992f)}][06 0D 00 {e(l_0xc9992f)}][1F 63 {e(data_53.l_0xc9c65b)}]" eob
+
+l_0xc99dce:
+    "{unset(flag 383)}{isset(flag 611)}[1B 02 {e(l_0xc9992f)}][1F 63 {e(l_0xc99de1)}]" eob
+
+l_0xc99de1:
+    "[1F 1A 43 01 03]{pause(10)}[19 22 FF 02 43 01]{char_direction(255, 0)}{pause(50)}[1F 1B 43 01][1F F1 43 01 80 02][1F 61]{window_open(1)}@Hello?  {stat(8)}?" next
+    "{counter(1)}" call(data_33.l_0xc7dc7f) "[1B 03 {e(l_0xc99e48)}]" goto(l_0xc99e1b)
+
+l_0xc99e1b:
+    "@Everdred is looking for you." next
+    "@He's got something for you.{wait}{window_closeall}[1F F1 43 01 82 02]{pause(60)}{unset(flag 611)}{event(6)}" eob
+
+l_0xc99e48:
+    "{pause(20)}@What's that?  You're not?!" next
+    "@Then, if you see {stat(8)}, repeat this message to him word for word..." next
+    goto(l_0xc99e1b)
+
+l_0xc99e8b:
+    "[06 4F 01 {e(l_0xc9992f)}][1F 66 01 05 BA A1 C7 00]" eob
+
+l_0xc99e9b:
+    "{unset(flag 383)}{set(flag 370)}[06 88 00 {e(l_0xc9992f)}][1F 66 01 06 B1 9E C9 00]" eob
+
+l_0xc99eb1:
+    "{set(flag 136)}{hotspot_off(1)}" eob
+
+l_0xc99eb8:
+    eob
+
+l_0xc99eb9:
+    call(data_52.l_0xc9b10b) "[06 47 00 {e(l_0xc9992f)}]{set(flag 312)}" eob
+
+l_0xc99ec9:
+    call(data_52.l_0xc9b10b) "[06 47 00 {e(l_0xc9992f)}]{set(flag 315)}" eob
+
+l_0xc99ed9:
+    "{unset(flag 312)}" eob
+
+l_0xc99edd:
+    "[06 78 02 {e(data_53.l_0xc9b20e)}][06 6C 00 {e(l_0xc9992f)}]{window_open(1)}{hasitem(255, 170)}[1B 02 {e(l_0xc99f2d)}]{take(255, 170)}@(" call(data_34.l_0xc7e6d7) " used the key to the traveling entertainer's shack.)[03]{sound(119)}{set(flag 108)}{window_closeall}" eob
+
+l_0xc99f2d:
+    "@(The door is locked.){wait}{window_closeall}" eob
+
+l_0xc99f40:
+    eob
+
+l_0xc99f41:
+    "{window_open(1)}@(" call(data_34.l_0xc7e6d7) " used <Machine that opens doors," next
+    "@especially when you have a slightly bad key>" next
+    "@...to open the door.)[03]{window_closeall}" eob
+
+l_0xc99f91:
+    "[06 77 00 {e(l_0xc9992f)}]{sound(111)}{pause(40)}{window_open(1)}[06 73 00 {e(l_0xc99fc7)}]@I'm changing my clothes now.  Don't come in!{wait}{window_closeall}" eob
+
+l_0xc99fc7:
+    "@Come in quick!  Don't be shy.{wait}{window_closeall}" eob
+
+l_0xc99fe0:
+    "[06 3F 01 {e(l_0xc9992f)}]{set(flag 319)}{set(flag 751)}[1F 63 {e(l_0xc99ff4)}]" eob
+
+l_0xc99ff4:
+    goto(data_30.l_0xc79223)
+
+l_0xc99ff9:
+    eob
+
+l_0xc99ffa:
+    "{isset(flag 146)}[1B 02 {e(l_0xc9a062)}][06 8B 00 {e(l_0xc9992f)}][06 39 00 {e(l_0xc9992f)}][1F 66 01 0B 5A 95 C8 00]" eob
+
+l_0xc9a01a:
+    "{event(6)}{unset(flag 556)}{isset(flag 690)}[1B 02 {e(l_0xc9992f)}][1F 63 {e(data_22.l_0xc692f7)}]" eob
+
+l_0xc9a030:
+    "{isset(flag 139)}[1B 02 {e(l_0xc9992f)}]{isset(flag 555)}[1B 02 {e(l_0xc9992f)}][1F 63 {e(l_0xc9a049)}]" eob
+
+l_0xc9a049:
+    "[1F E1 14 01 00]{pause(20)}[1F E1 1F 00 00]{pause(20)}[1F E1 14 01 1E]{pause(1)}{unset(flag 555)}" eob
+
+l_0xc9a062:
+    "{window_open(1)}@(Temporarily closed." linebreak
+    "  ...Gwaargh!){wait}{sound(114)}{window_closeall}" eob
+
+l_0xc9a08b:
+    "{warp(155)}" call(data_31.l_0xc7a7dd) "{set(flag 376)}{set(flag 591)}[19 26 05]" eob
+
+l_0xc9a09d:
+    "{isset(flag 591)}[1B 02 {e(l_0xc9992f)}][1F 63 {e(l_0xc9a0ad)}]" eob
+
+l_0xc9a0ad:
+    "{event(6)}" call(data_31.l_0xc7b550) eob
+
+l_0xc9a0b6:
+    eob
+
+l_0xc9a0b7:
+    "[06 D5 00 {e(l_0xc9992f)}][06 44 00 {e(l_0xc9a10c)}]{sound(111)}{pause(40)}{window_open(1)}{font_saturn}@I not sure.{pause(20)}" linebreak
+    "  Boing!" next
+    "@Friends " next
+    "@in valley" linebreak
+    "  behind Threed." next
+    "@Ding! Ding!{wait}{window_closeall}{font_normal}" eob
+
+l_0xc9a10c:
+    "{sound(111)}{pause(40)}{window_open(1)}{font_saturn}@Oh, Hi ho.{wait}{window_closeall}{font_normal}" eob
+
+l_0xc9a123:
+    "{unset(flag 660)}{isset(flag 44)}[1B 02 {e(l_0xc9992f)}]{event(5)}[1F 63 {e(data_50.l_0xc98cd3)}]" eob
+
+l_0xc9a139:
+    "{isset(flag 211)}[1B 02 {e(l_0xc9a193)}]" goto(l_0xc9a142)
+
+l_0xc9a142:
+    "{isset(flag 68)}[1B 02 {e(l_0xc9992f)}]{window_open(1)}@(The Happy Happy Religious Group has broken up." next
+    "@This building is temporarily closed.){wait}{window_closeall}" eob
+
+l_0xc9a193:
+    "[06 44 00 {e(l_0xc9992f)}]{set(flag 660)}" goto(l_0xc9a142)
+

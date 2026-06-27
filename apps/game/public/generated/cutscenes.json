@@ -1,0 +1,31 @@
+{
+  "schema": "swagbound.cutscenes.v1",
+  "comment": "Authored cutscenes that re-create EarthBound scripted scenes the converter drops (NPC choreography: walk out a door, line up, appear/vanish). Run scripts/scan-broken-scenes.mjs for the inventory; use --scene <ccsRef> for a scene's NPC ids + door coords.",
+  "cutscenes": [
+    {
+      "id": "onett-police-disperse",
+      "comment": "Police station (data_15 cop row, npcs 73-77 sprite group 74 @ y=192). EB had them walk off via raw [1F F1] codes + {set(flag 289)}. They turn, lose interest, file out the right door (7640,208) one by one, and stay gone (EB flag 289).",
+      "trigger": { "kind": "area", "area": { "x": 7430, "y": 204, "w": 220, "h": 128 } },
+      "once": true,
+      "lockPlayer": true,
+      "steps": [
+        { "op": "faceActor", "actor": { "npcId": 74 }, "dir": "down" },
+        { "op": "faceActor", "actor": { "npcId": 75 }, "dir": "down" },
+        { "op": "faceActor", "actor": { "npcId": 76 }, "dir": "down" },
+        { "op": "dialogue", "pages": ["The officers size you up, then lose interest all at once.", "\"Shift's over. Whatever this is, it's the next guy's problem.\""] },
+        { "op": "moveActor", "actor": { "npcId": 77 }, "to": { "x": 7640, "y": 208 } },
+        { "op": "hideActor", "actor": { "npcId": 77 } },
+        { "op": "moveActor", "actor": { "npcId": 76 }, "to": { "x": 7640, "y": 208 } },
+        { "op": "hideActor", "actor": { "npcId": 76 } },
+        { "op": "moveActor", "actor": { "npcId": 75 }, "to": { "x": 7640, "y": 208 } },
+        { "op": "hideActor", "actor": { "npcId": 75 } },
+        { "op": "moveActor", "actor": { "npcId": 74 }, "to": { "x": 7640, "y": 208 } },
+        { "op": "hideActor", "actor": { "npcId": 74 } },
+        { "op": "moveActor", "actor": { "npcId": 73 }, "to": { "x": 7640, "y": 208 } },
+        { "op": "hideActor", "actor": { "npcId": 73 } },
+        { "op": "eventFlag", "flag": 289, "set": true },
+        { "op": "setFlag", "flag": "signal:police-dispersed" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,459 @@
+/*
+ * EarthBound Text Dump
+ * Time: 20:26:52 - 12/06/2026
+ * Generated using CCScriptWriter.
+ */
+
+command e(label) "{long label}"
+
+// Text Data
+l_0xc89b4f:
+    "{event(5)}[1F 1A C0 03 01]{pause(60)}[1F 1B C0 03][1F F1 C0 03 BB 00][1F 61][1F E6 C0 03][19 22 01 02 C0 03]{char_direction(1, 0)}[19 22 02 02 C0 03]{char_direction(2, 0)}[19 22 03 02 C0 03]{char_direction(3, 0)}{window_open(1)}@Heh heh heh..." linebreak
+    "  There's no need to wait...[03]{window_closeall}[1F 15 6A 00 BD 00 01][1F EF 6A 00][1F E8 FF][1F E9 C0 03][1F 61]{pause(60)}[1F 1F 6A 00 06][1F ED][1F 15 B9 01 09 03 01][1F 15 6A 00 BF 00 01][1F EF 6A 00][1F E8 FF][1F 61]{hide_char(255)}{unset(flag 536)}{set(flag 535)}{music_resume}{lock_movement(255)}{unset(flag 317)}[1F F1 C0 03 C0 00][1F 61]{window_open(1)}@All right... on to Threed!" next
+    "{window_closeall}[1F F1 E2 03 C1 00]{pause(60)}[1F EE E2 03][1F E8 FF]{hotspot_off(1)}" eob
+
+l_0xc89c1d:
+    "[1F ED][1F 15 F3 00 C2 00 FF]{warp(75)}[1F EF F3 00]" eob
+
+l_0xc89c2e:
+    "[1F ED][1F 15 F3 00 C3 00 FF]{warp(210)}[1F EF F3 00]" eob
+
+l_0xc89c3f:
+    "[1F ED][1F 15 F3 00 C4 00 FF]{warp(211)}[1F EF F3 00]" eob
+
+l_0xc89c50:
+    "[1F ED][1F 15 F3 00 C5 00 FF]{warp(73)}[1F EF F3 00]" eob
+
+l_0xc89c61:
+    "[1F ED][1F 15 F3 00 C6 00 FF]{warp(71)}[1F EF F3 00]" eob
+
+l_0xc89c72:
+    "[1F ED][1F 15 F3 00 C7 00 FF]{warp(212)}[1F EF F3 00]" eob
+
+l_0xc89c83:
+    "[1F ED][1F 15 F3 00 C8 00 FF]{warp(213)}[1F EF F3 00]" eob
+
+l_0xc89c94:
+    "[1F ED][1F 15 F3 00 C9 00 FF]{warp(69)}[1F EF F3 00]" eob
+
+l_0xc89ca5:
+    "{music_effect(3)}{pause(60)}{unset(flag 535)}{music_resume}[1F 15 6A 00 4A 00 01]{pause(1)}[1F EF 6A 00]{show_party(1)}[1F E8 FF][1F 61]{char_direction(1, 1)}{char_direction(2, 1)}{char_direction(3, 1)}[1F ED]{lock_movement(255)}[1F 15 95 00 4B 00 01][1F 61]{pause(30)}[1F E7 95 00]" call(l_0xc89d0a) "{pause(20)}[1F F2 95 00 4C 00][1F 61]{pause(30)}[1F EA F3 00][1F 61]{unset(flag 11)}{event(6)}[1F 15 B9 01 0A 03 01]" eob
+
+l_0xc89d0a:
+    call(data_33.l_0xc7de60) "{window_open(1)}@All right!{pause(20)}  We made it!" next
+    "@I'm sorry we couldn't do more for you." next
+    "@Remember,{pause(15)} though... we're on your side." next
+    "@When you're having a tough time," next
+    "@just think of our songs and imagine the Runaway Five singing somewhere far," next
+    "@far away..." next
+    "@By the way,{pause(15)} why did you need to come back here?" next
+    "@You must have forgotten some very important item or gadget here..." next
+    "@How's that for a guess?{pause(20)}  Am I close?" next
+    "@Well,{pause(15)} you don't have to tell me..." next
+    "@See you later and good luck![03]{window_closeall}" eob
+
+l_0xc89e1b:
+    "@Didactically speaking,{pause(15)} seminal evidence seems to explicate the fact that" next
+    "@your repudiation of entropy supports my theory of space-time synthesis." next
+    "@Of this,{pause(15)} I am irrefutably confident." end
+
+l_0xc89ea8:
+    "@Mmmmm." next
+    "@I think it's a very complicated issue." next
+    "{pause(60)}" linebreak
+    "@.{pause(15)}.{pause(15)}.{pause(15)}.{pause(15)}.{pause(15)} Oh, sorry!" next
+    "@I was sleeping..." end
+
+l_0xc89ef8:
+    "@You guys can't envision the final collapse of capitalism?" next
+    "@Incredible!" end
+
+l_0xc89f2d:
+    "[06 69 02 {e(l_0xc8a023)}]@You know, I really want to eat some Magic cake." next
+    "@It's a mysterious work of art...{pause(15)}  I can't get that cake off my mind." next
+    "@There's only one woman who can make Magic cake..." next
+    "@She's hanging out in this club." next
+    "@Yeah, she's over there at the entrance..." next
+    "@Anyway, the absolute irony and study of self-identification is..." next
+    "@Blah, blah, blah..." next
+    "@I don't know what to do!{wait}[06 10 00 {e(data_51.l_0xc9992f)}]{set(flag 61)}" eob
+
+l_0xc8a023:
+    "@The woman who sells magic cake" next
+    "@seems to have been removed from the members list." end
+
+l_0xc8a056:
+    "@You don't understand what the hey everyone is talking about, do you?" next
+    "@I don't either, but I try to be patient with the customers." next
+    "@They pay high prices just for a glass of water" next
+    "@and the chance to have serious, intellectual discussions." next
+    "@Actually, it's an easy business." next
+    "@You want a drink?" next
+    "@We only serve water, though..." end
+
+l_0xc8a11c:
+    "@The show?{pause(20)}  It's already started." next
+    "@Everyone stares at the stone on stage and philosophizes." next
+    "@...Doesn't it sound stupid?[06 10 00 {e(l_0xc8a174)}]" end
+
+l_0xc8a174:
+    next
+    "@If you just want water, go to the drug store.{pause(20)}  It's a lot cheaper there." end
+
+l_0xc8a1a0:
+    "@Across the sea, there's a town called Scaraba." next
+    "@It's a mysterious town.{pause(15)}" linebreak
+    "  It's my dream town." end
+
+l_0xc8a1e1:
+    "@I'm a grave robber." next
+    "@I was scared of the pyramid in Scaraba..." next
+    "@so, I didn't go in..." next
+    "@but I tell people that I saw mummy-type monsters with my very own eyes!" end
+
+l_0xc8a24c:
+    "[06 69 02 {e(l_0xc8a2d5)}]@Do you know the Stoic Club, in Summers?" next
+    "@You need to call a secret number for a reservation if you want to get in." next
+    "@What?" next
+    "@Yeah, I'll give you the secret number." next
+    "@I warn you though, it's a strange place...{wait}{sound(116)}{set(flag 203)}{event(5)}" eob
+
+l_0xc8a2d5:
+    "@I think this is a nice town.{pause(20)}  Come back when you grow up!" end
+
+l_0xc8a2f9:
+    "@If you come closer,{pause(15)} I'll play the trumpet!" next
+    "@....." next
+    "@Uhhh, I don't know how to play yet." end
+
+l_0xc8a333:
+    "@Bow..." next
+    "@...now brown cow?" end
+
+l_0xc8a34b:
+    call(data_12.l_0xc5d47f) eob
+
+l_0xc8a351:
+    call(data_12.l_0xc5d461) eob
+
+l_0xc8a357:
+    "@There's a big monster living in the sea between here and Scaraba." next
+    "@I've seen a picture of it." end
+
+l_0xc8a394:
+    "[06 10 00 {e(l_0xc8a3dd)}]" goto(l_0xc8a39b)
+
+l_0xc8a39b:
+    "@How annoying!{pause(20)}  Why are you are wandering around?" next
+    "@Summers is a posh resort, made for adults." end
+
+l_0xc8a3dd:
+    "[06 49 00 {e(l_0xc8a39b)}]{counter(4)}" call(data_33.l_0xc7dc7f) "[1B 03 {e(l_0xc8a39b)}]@That Kung Fu-like hairstyle!{pause(20)}  You look so cool!" next
+    "@I may fall in love with you.{pause(20)}  Do you think I'm too forward?" end
+
+l_0xc8a43d:
+    "@Don't get too excited about this town.{pause(20)}  It's a tourist trap." next
+    "@Everyone seems to be nice,{pause(15)} but they're just doing it for the money." next
+    "@I know from experience." end
+
+l_0xc8a49e:
+    "@Excuse me." end
+
+l_0xc8a4a9:
+    "[06 57 01 {e(l_0xc8a4f0)}]@I heard the security guard in the Scaraba Cultural Museum isn't very nice." next
+    "@But he can be helpful." end
+
+l_0xc8a4f0:
+    "@Forget about the adventure,{pause(15)} come back again!" end
+
+l_0xc8a50c:
+    eob
+
+l_0xc8a50d:
+    "@I can't believe you pronounce Hotel as <Hotel.>" next
+    "@In this country, Hotel is pronounced <otel.>" next
+    "@...What?" next
+    "@So then in your country, is otter pronounced as <Hotter>?" next
+    "@'Ow should I know these things?" end
+
+l_0xc8a58f:
+    call(data_21.l_0xc680e2) eob
+
+l_0xc8a595:
+    "[19 10 01]{rtoarg}@Thank you again, Poke..." next
+    "@Uhhh, " call(l_0xc8a5bc) " {name(0)}." end
+
+l_0xc8a5bc:
+    "{result_is(2)}[1B 03 {e(l_0xc8a5c8)}]Mr." eob
+
+l_0xc8a5c8:
+    "Miss." eob
+
+l_0xc8a5ce:
+    call(data_12.l_0xc5d46d) eob
+
+l_0xc8a5d4:
+    "@{stat(4)}?" next
+    "@Please... we do not have such trash on our menu." end
+
+l_0xc8a5fc:
+    "@Hey, talking to people at another table in a restaurant is like..." next
+    "@breaking into their room and checking their drawers for valuables." next
+    "@Yeah, other people on important adventures do such things," next
+    "@but you have to admit that it's bizarre!" end
+
+l_0xc8a691:
+    "@I like the atmosphere in this restaurant.{pause(20)}  They have good food, too." end
+
+l_0xc8a6bf:
+    "@I'll have the Braised Boa Over Minced Baby Leeks..." next
+    "@Oh, you're not the waiter." end
+
+l_0xc8a6f9:
+    "@I have fake teeth, so I like soft foods." next
+    "@Not like rocks or stones.{pause(20)}  They're too hard." end
+
+l_0xc8a737:
+    "[06 00 03 {e(l_0xc8a88c)}]@Right now, part of the Scaraba Cultural Museum is being remodeled." next
+    "@Do you still want to enter?" linebreak
+    "[19 02]Yes[02][19 02]No[02][1C 07 02][11]{clearline}[09 02 {e(l_0xc8a7c5)} {e(l_0xc8a792)}]" goto(l_0xc8a792)
+
+l_0xc8a792:
+    "@Since the Hieroglyph display is closed,{pause(15)} people haven't wanted to visit." end
+
+l_0xc8a7c5:
+    "@Three dollars per person." next
+    "@Study hard." linebreak
+    "{open_wallet}[19 02]Yes[02][19 02]No[02][1C 07 02][11]{clearline}[09 02 {e(l_0xc8a805)} {e(l_0xc8a792)}]" goto(l_0xc8a792)
+
+l_0xc8a805:
+    "[1D 15 03 00]{swap}[1D 14 00 00 00 00][1B 03 {e(l_0xc8a82e)}]{sound(118)}[1D 09 00 00]{open_wallet}{set(flag 768)}[06 49 00 {e(data_51.l_0xc9992f)}]{hotspot_off(1)}" eob
+
+l_0xc8a82e:
+    "@You don't have any money, right?" next
+    "@Okay, since you kids look like you would study hard, you may enter," next
+    "@free of charge!" next
+    "@Oh wait... I can't do that!  Good bye." end
+
+l_0xc8a88c:
+    "@Since the Hieroglyph display is closed,{pause(15)} people haven't wanted to visit." end
+
+l_0xc8a8bf:
+    "@This room is being remodeled, so I can't show it to you..." next
+    "[06 10 00 {e(l_0xc8a997)}]" goto(l_0xc8a8e7)
+
+l_0xc8a8e7:
+    "@I can't... well, I usually don't...{pause(20)} show this room..." next
+    "@Once you hit adulthood, you'll understand." next
+    "@I do,{pause(15)} however,{pause(15)} like jewelry." next
+    "@Perhaps a little, shall we say, <under the table deal> would be in order..." end
+
+l_0xc8a976:
+    "[19 19 00 00]{swap}{result_is(208)}[1B 02 {e(data_32.l_0xc7c6b6)}]{counter(4)}" call(data_33.l_0xc7dc7f) "[1B 03 {e(data_32.l_0xc7c6b6)}]" goto(l_0xc8a997)
+
+l_0xc8a996:
+    eob
+
+l_0xc8a997:
+    "{counter(4)}" call(data_33.l_0xc7dc7f) "[1B 03 {e(l_0xc8a8e7)}]@Oh, the samurai kid is here." next
+    "@Will " call(l_0xc8aabe) " be giving me that gem?" next
+    "[19 02]Yes[02][19 02]No[02][1C 07 02][11]{clearline}[09 02 {e(l_0xc8aa7f)} {e(l_0xc8a9ec)}]" goto(l_0xc8a9ec)
+
+l_0xc8a9ec:
+    "{sound(118)}@Excuse me?" next
+    "@So, what " call(l_0xc8aabe) " just handed me is not a gem." next
+    "@Hah ha ha." next
+    "@I'm going to really enjoy the <cookie> that I just got." next
+    "@Let's pretend this conversation never took place..." next
+    "@While I'm pretending, you go on in...[03]" goto(l_0xc8aacf)
+
+l_0xc8aa7e:
+    eob
+
+l_0xc8aa7f:
+    "{sound(118)}@You're such a good student." next
+    "@I'm impressed by your passion for learning.{pause(20)}  Come in.[03]" goto(l_0xc8aacf)
+
+l_0xc8aabd:
+    eob
+
+l_0xc8aabe:
+    "[19 10 01]{result_is(4)}[1B 03 {e(l_0xc8aacc)}]he" eob
+
+l_0xc8aacc:
+    "you" eob
+
+l_0xc8aacf:
+    "[1F 16 0D 04 01]{pause(30)}{sound(8)}[1F 1E 0D 04 06]{take(255, 208)}{set(flag 346)}" eob
+
+l_0xc8aae6:
+    "[06 0A 00 {e(l_0xc8abb0)}]@Excellent!" next
+    "@Do you feel like you're really experiencing this great historical period?" next
+    "@The experience is more valuable than a small gem...  Ha ha ha!" next
+    "@The other day, a rich kid came to Summers by helicopter..." next
+    "@He also took a picture of the Hieroglyphs." next
+    "@I got lots of money from him.  Heh heh heh." end
+
+l_0xc8abb0:
+    "@Here's a picture of the hieroglyphs, just for you." next
+    "@It's a reward for studying so hard." next
+    "[1D 03 FF][1B 02 {e(l_0xc8ac30)}][1D 0E 00 B9]" call(data_33.l_0xc7dccf) next
+    "@Use it in your Human Civilization class.  Ha ha ha!{wait}{set(flag 343)}{unset(flag 10)}[06 8C 00 {e(data_51.l_0xc9992f)}]{set(flag 687)}" eob
+
+l_0xc8ac30:
+    "{sound(5)}@Oh, you can't carry it 'cause you have too much stuff." next
+    "@It's a pity.{pause(20)}  You're such a hard worker." next
+    "@Ha ha ha!{wait}{set(flag 10)}" eob
+
+l_0xc8ac6f:
+    "[1F 16 0E 04 07][1F 1A 0E 04 03]{pause(60)}[1F 1B 0E 04][1F F1 0E 04 02 03][1F 61][1F E6 0E 04]{window_open(1)}@Wait one second." next
+    "@Here's a picture of the hieroglyphs just for you." next
+    "@It's a reward for studying so hard." next
+    "[1D 03 FF][1B 02 {e(l_0xc8ad22)}][1D 0E 00 B9]" call(data_33.l_0xc7dccf) next
+    "@Use it in your Human Civilization class." next
+    "@Ha ha ha!{wait}{window_closeall}[1F E9 0E 04][1F 61]{set(flag 343)}[06 8C 00 {e(data_51.l_0xc9992f)}]{set(flag 687)}" eob
+
+l_0xc8ad22:
+    "{sound(5)}@Oh, you can't carry it 'cause you have too much stuff." next
+    "@It's a pity.{pause(20)}  You're such a hard worker." next
+    "@Ha ha ha!{wait}{window_closeall}[1F E9 0E 04][1F 61]{set(flag 10)}" eob
+
+l_0xc8ad69:
+    "[06 49 00 {e(l_0xc8ae72)}][06 3A 00 {e(l_0xc8ae3b)}]@...mumble, mumble..." next
+    "@Why would Mr. Spoon from the Fourside museum try to call me?" next
+    "@I bet he just wants to brag about something..." next
+    "@Well,{pause(15)} let him try...{pause(20)}  I wonder what he wants to tell me?" next
+    "@Bah!{pause(20)}  I dare him to try and upstage me..." next
+    "@Oh!{pause(20)}  Pardon me...{pause(20)}  I was just talking to myself... *cough*{wait}{sound(114)}" end
+
+l_0xc8ae3b:
+    "@It must be something teeny weeny that Mr. Spoon has found." next
+    "@I don't need to know the specifics." end
+
+l_0xc8ae72:
+    "@You have a good reputation." next
+    "@Wouldn't you like to focus your hard working energy" next
+    "@in the exciting field of archaeology?" end
+
+l_0xc8aec1:
+    "[06 49 00 {e(l_0xc8af0f)}]@I saw a chubby kid about your age here." next
+    "@He looked like he was awfully wealthy.  He was being extravagant!" end
+
+l_0xc8af0f:
+    "@It's nice seeing you in such good shape." next
+    "@I wonder what porky Pokey's doing." next
+    "@Yeah, that's the boy I met before." end
+
+l_0xc8af57:
+    call(data_44.l_0xc900d5) eob
+
+l_0xc8af5d:
+    call(data_43.l_0xc9006f) eob
+
+l_0xc8af63:
+    "@My cousin is a nurse in Twoson." next
+    "@She's not good at administering shots." next
+    "@The one she gave me was painful." end
+
+l_0xc8afad:
+    "@Wake up in the morning, fall in love." next
+    "@Eat lunch, fall in love..." next
+    "@And at night,{pause(15)} fall in love again..." next
+    "@That's my dream life." end
+
+l_0xc8b008:
+    "@The guy next to me is really bugging me.{pause(20)}  He keeps following me around." end
+
+l_0xc8b038:
+    "@I wonder why such serious looking kids as you would come to this resort town..." next
+    "@You guys are spoiling the atmosphere..." end
+
+l_0xc8b07f:
+    "@I'm actually a surfer.{pause(20)}  But you can't surf at this beach." next
+    "@Should I become a porter so that I can get tips from all the old folks?" end
+
+l_0xc8b0d4:
+    "@Are you from Eagleland?" next
+    "@If you like adventure,{pause(15)} this isn't your kind of place." next
+    "@You should travel across the sea to Scaraba from Toto, the port town." end
+
+l_0xc8b130:
+    "[06 10 00 {e(l_0xc8b158)}]" goto(l_0xc8b137)
+
+l_0xc8b137:
+    "@Don't talk to me." next
+    "@My mind is a complete blank." end
+
+l_0xc8b158:
+    "[06 49 00 {e(l_0xc8b137)}]{counter(4)}" call(data_33.l_0xc7dc7f) "[1B 03 {e(l_0xc8b137)}]@Asian boy, you're so cool..." next
+    "@Don't look at me like that..." end
+
+l_0xc8b191:
+    "[06 49 00 {e(l_0xc8b22f)}][06 10 00 {e(data_19.l_0xc65015)}]{event(5)}@I don't know who told you." next
+    "@You came from far off just to eat my Magic cake?..." next
+    "@I thought making cakes would be the best career for me." next
+    "@Dig in!" next
+    "@I used all leftover materials.{pause(20)}  This is a very special Magic cake![03]{window_closeall}{unset(flag 61)}" goto(data_46.l_0xc920a2)
+
+l_0xc8b22e:
+    eob
+
+l_0xc8b22f:
+    "@I can't make anymore Magic cakes." next
+    "@If you want to try something tastier..." next
+    "@I have a <{itemname(207)}.>" next
+    "@Try it." next
+    "{wait}[1D 03 FF][1B 02 {e(l_0xc8b292)}][1D 0E FF CF]{sound(116)}@...I could make one extra good today." end
+
+l_0xc8b292:
+    "@You seem to have too much stuff to carry." next
+    "@Come back after you get rid of something." end
+
+l_0xc8b2bc:
+    "@You look so serious..." next
+    "@You're in Summers, a dream paradise." next
+    "@Relax, and have some fun." end
+
+l_0xc8b2f8:
+    "@The sky's blue and the sun is high." next
+    "@The prices here are so high, it'll make your face turn blue!" next
+    "@That's Summers!" end
+
+l_0xc8b342:
+    "@If you're bored, go check out the <Scaraba Cultural Museum.>" next
+    "@It may be helpful to you." next
+    "@They have a hieroglyph from a pyramid." end
+
+l_0xc8b39d:
+    "@Another nice day." next
+    "@Summers always has sunny days." end
+
+l_0xc8b3c0:
+    call(data_19.l_0xc65009) eob
+
+l_0xc8b3c6:
+    "@(It's a Myna bird!)" next
+    "[1D 21 05][09 05 {e(l_0xc8b008)} {e(l_0xc8b130)} {e(l_0xc8b0d4)} {e(l_0xc8b342)} {e(l_0xc8b3f8)}]" goto(l_0xc8afad)
+
+l_0xc8b3f7:
+    eob
+
+l_0xc8b3f8:
+    "[06 D9 00 {e(l_0xc8b460)}]@To go to Scaraba,{pause(15)} you need to cross the sea." next
+    "@However a monster named Kraken lives in the open sea." next
+    "@He attacks ships that pass through." next
+    "@Are you scared?" end
+
+l_0xc8b460:
+    "@I'm a mighty sailor man" next
+    "@A mountain man I'm not" next
+    "@The open sea is home for me" next
+    "@And mountains aren't worth snot" next
+    "@...I'm writing a song for sailors." end
+
+l_0xc8b4c9:
+    "@Dinosaurs existed!{pause(20)}  I saw one!" next
+    "@It had been out of the underground when it dried out." next
+    "@Of course, it was dead!" next
+    "@Believe what I'm saying!" end
+

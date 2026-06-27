@@ -1,12 +1,9 @@
 # Local source checkouts
-external/coilsnake-project/
-external/coilsnake-full/
+# NOTE: external/coilsnake-* (the EB decompile, no raw ROM) and the generated
+# game data are now TRACKED so the repo is fully self-contained — clone +
+# `pnpm install && pnpm dev` builds and runs with no external deps or ROM.
 CoilSnake-master/
 phaser-4.1.0/
-
-# Generated game assets
-apps/game/public/generated/*
-!apps/game/public/generated/.gitkeep
 
 # Node workspace output
 node_modules/

@@ -1,0 +1,11 @@
+{
+  "schema": "swagbound.opening-cutscene.v1",
+  "steps": [
+    {
+      "actorMove": {
+        "actor": { "npcId": 78 },
+        "to": { "x": 7820, "y": 588 }
+      }
+    }
+  ]
+}

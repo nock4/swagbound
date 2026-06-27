@@ -1,0 +1,800 @@
+{
+  "schema": "swagbound.item-overrides.v1",
+  "byItemId": {
+    "2": {
+      "name": "Proxy Plush"
+    },
+    "3": {
+      "name": "Heavy Proxy Plush"
+    },
+    "5": {
+      "name": "Scrap Gadget"
+    },
+    "7": {
+      "name": "Static Can"
+    },
+    "9": {
+      "name": "Heavy Wrench"
+    },
+    "11": {
+      "name": "Civic Cannon"
+    },
+    "17": {
+      "name": "Practice Bat"
+    },
+    "18": {
+      "name": "Curb Bat"
+    },
+    "19": {
+      "name": "Sand Lot Slugger"
+    },
+    "20": {
+      "name": "Union Slugger"
+    },
+    "21": {
+      "name": "Registry Bat"
+    },
+    "22": {
+      "name": "Charter Slugger"
+    },
+    "23": {
+      "name": "Archive Slugger"
+    },
+    "28": {
+      "name": "Kitchen Pan"
+    },
+    "29": {
+      "name": "Work Pan"
+    },
+    "30": {
+      "name": "Permit Pan"
+    },
+    "31": {
+      "name": "Crew Skillet"
+    },
+    "32": {
+      "name": "Embassy Skillet"
+    },
+    "34": {
+      "name": "Witness Skillet"
+    },
+    "38": {
+      "name": "Signal Popper"
+    },
+    "40": {
+      "name": "Route Popper"
+    },
+    "42": {
+      "name": "Relay Beam"
+    },
+    "43": {
+      "name": "Breach Beam"
+    },
+    "49": {
+      "name": "Jammer Yo-Yo"
+    },
+    "50": {
+      "name": "Signal Slingshot"
+    },
+    "51": {
+      "name": "Circuit Slingshot"
+    },
+    "52": {
+      "name": "Jury Yo-Yo"
+    },
+    "53": {
+      "name": "Riot Yo-Yo"
+    },
+    "54": {
+      "name": "Proof-Token Charm"
+    },
+    "55": {
+      "name": "Registry Pendant"
+    },
+    "56": {
+      "name": "Witness Pendant"
+    },
+    "58": {
+      "name": "Wet Fit"
+    },
+    "59": {
+      "name": "Duck Camo"
+    },
+    "60": {
+      "name": "Work Fit"
+    },
+    "64": {
+      "name": "Paper Cuff"
+    },
+    "65": {
+      "name": "Permit Cuff"
+    },
+    "66": {
+      "name": "Audit Cuff"
+    },
+    "67": {
+      "name": "Union Cuff"
+    },
+    "68": {
+      "name": "Archive Band"
+    },
+    "69": {
+      "name": "Witness Band"
+    },
+    "74": {
+      "name": "Drifella Angel Hat"
+    },
+    "75": {
+      "name": "Casework Hat"
+    },
+    "77": {
+      "name": "Worksite Hat"
+    },
+    "78": {
+      "name": "Witness Ribbon"
+    },
+    "79": {
+      "name": "Registry Ribbon"
+    },
+    "81": {
+      "name": "Night Docket"
+    },
+    "82": {
+      "name": "Guard Docket"
+    },
+    "83": {
+      "name": "Chance Docket"
+    },
+    "84": {
+      "name": "Seal Docket"
+    },
+    "85": {
+      "name": "Bright Docket"
+    },
+    "88": {
+      "name": "Pocket Snack",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "89": {
+      "name": "Route Snack",
+      "effect": {
+        "kind": "healHp",
+        "amount": 24
+      }
+    },
+    "90": {
+      "name": "Big Snack",
+      "effect": {
+        "kind": "healHp",
+        "amount": 48
+      }
+    },
+    "91": {
+      "name": "Desk Protein",
+      "effect": {
+        "kind": "healHp",
+        "amount": 42
+      }
+    },
+    "92": {
+      "name": "Live Protein",
+      "effect": {
+        "kind": "healHp",
+        "amount": 84
+      }
+    },
+    "93": {
+      "name": "Union Lunch",
+      "effect": {
+        "kind": "healHp",
+        "amount": 84
+      }
+    },
+    "94": {
+      "name": "Resort Noodles",
+      "effect": {
+        "kind": "healHp",
+        "amount": 108
+      }
+    },
+    "95": {
+      "effect": {
+        "kind": "healHp",
+        "amount": 120
+      },
+      "name": "Ward Pie"
+    },
+    "96": {
+      "name": "Crew Special",
+      "effect": {
+        "kind": "healHp",
+        "amount": 216
+      }
+    },
+    "97": {
+      "effect": {
+        "kind": "healHp",
+        "amount": 240
+      },
+      "name": "District Pie"
+    },
+    "98": {
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 120
+      },
+      "name": "Static Caramel"
+    },
+    "99": {
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 480
+      },
+      "name": "Relay Truffle"
+    },
+    "100": {
+      "name": "Focus Lunch",
+      "effect": {
+        "kind": "healHp",
+        "amount": 300
+      }
+    },
+    "102": {
+      "name": "Echo Bread",
+      "effect": {
+        "kind": "healHp",
+        "amount": 60
+      }
+    },
+    "103": {
+      "name": "Route Roll",
+      "effect": {
+        "kind": "healHp",
+        "amount": 30
+      }
+    },
+    "106": {
+      "name": "Cache Juice",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "107": {
+      "name": "Council Tea",
+      "effect": {
+        "kind": "healHp",
+        "amount": 60
+      }
+    },
+    "108": {
+      "name": "Workshop Shake",
+      "effect": {
+        "kind": "healHp",
+        "amount": 84
+      }
+    },
+    "109": {
+      "name": "Harbor Soup",
+      "effect": {
+        "kind": "healHp",
+        "amount": 216
+      }
+    },
+    "110": {
+      "name": "Field Water",
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 6
+      }
+    },
+    "111": {
+      "name": "Relief Tonic",
+      "effect": {
+        "kind": "cureStatus",
+        "ailment": "poisoned"
+      }
+    },
+    "112": {
+      "name": "Relief Serum",
+      "effect": {
+        "kind": "cureStatus",
+        "ailment": "poisoned"
+      }
+    },
+    "113": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "iq",
+        "amount": 1
+      }
+    },
+    "114": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "guts",
+        "amount": 1
+      }
+    },
+    "115": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "speed",
+        "amount": 1
+      }
+    },
+    "116": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "vitality",
+        "amount": 1
+      }
+    },
+    "117": {
+      "effect": {
+        "kind": "permStat",
+        "stat": "luck",
+        "amount": 1
+      }
+    },
+    "118": {
+      "name": "Permit Packet",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "119": {
+      "name": "Sweet Packet",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "120": {
+      "name": "Desk Cocoa",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "121": {
+      "name": "White Carton",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "122": {
+      "name": "Green Sprig",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "123": {
+      "name": "Spice Jar",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "124": {
+      "name": "White Packet",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "126": {
+      "name": "Charter Sauce",
+      "effect": {
+        "kind": "healHp",
+        "amount": 6
+      }
+    },
+    "127": {
+      "name": "Clean Towel",
+      "effect": {
+        "kind": "cureStatus",
+        "ailment": "poisoned"
+      }
+    },
+    "128": {
+      "name": "Relief Herb",
+      "effect": {
+        "kind": "cureStatus",
+        "ailment": "poisoned"
+      }
+    },
+    "129": {
+      "name": "Archive Herb",
+      "effect": {
+        "kind": "cureStatus",
+        "ailment": "all"
+      }
+    },
+    "130": {
+      "name": "Life Signal Horn",
+      "effect": {
+        "kind": "revive",
+        "amount": 9999
+      }
+    },
+    "133": {
+      "name": "Civic Launcher"
+    },
+    "140": {
+      "name": "Joker Card"
+    },
+    "142": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed",
+        "remaining": 3
+      },
+      "name": "Red Tape"
+    },
+    "143": {
+      "name": "Angle Slip"
+    },
+    "144": {
+      "name": "Spark Tube",
+      "effect": {
+        "kind": "damage",
+        "amount": 120
+      }
+    },
+    "145": {
+      "name": "Big Spark Tube",
+      "effect": {
+        "kind": "damage",
+        "amount": 600
+      }
+    },
+    "146": {
+      "name": "Crowd Spark Tube",
+      "effect": {
+        "kind": "damage",
+        "amount": 2400
+      }
+    },
+    "147": {
+      "name": "Audit Charge",
+      "effect": {
+        "kind": "damage",
+        "amount": 90
+      }
+    },
+    "148": {
+      "name": "Union Charge",
+      "effect": {
+        "kind": "damage",
+        "amount": 270
+      }
+    },
+    "149": {
+      "name": "Bug Notice",
+      "effect": {
+        "kind": "damage",
+        "amount": 100
+      }
+    },
+    "150": {
+      "name": "Rust Notice",
+      "effect": {
+        "kind": "damage",
+        "amount": 200
+      }
+    },
+    "151": {
+      "name": "Rust Warrant",
+      "effect": {
+        "kind": "damage",
+        "amount": 400
+      }
+    },
+    "152": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed",
+        "remaining": 3
+      },
+      "name": "Foul Socks"
+    },
+    "153": {
+      "name": "Pocket Beetle",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "confused",
+        "remaining": 3
+      }
+    },
+    "154": {
+      "name": "Clean Brush",
+      "effect": {
+        "kind": "cureStatus",
+        "ailment": "all"
+      }
+    },
+    "155": {
+      "effect": {
+        "kind": "damage",
+        "amount": 250
+      }
+    },
+    "156": {
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed",
+        "remaining": 3
+      }
+    },
+    "159": {
+      "name": "Focus Fizz",
+      "effect": {
+        "kind": "buffStat",
+        "stat": "guts",
+        "multiplier": 2
+      }
+    },
+    "160": {
+      "name": "Rally Dust",
+      "effect": {
+        "kind": "damage",
+        "amount": 800
+      }
+    },
+    "161": {
+      "name": "Signal Patch",
+      "effect": {
+        "kind": "buffStat",
+        "stat": "defense",
+        "amount": 5
+      }
+    },
+    "162": {
+      "name": "Field Recording"
+    },
+    "165": {
+      "name": "Memento Photo"
+    },
+    "177": {
+      "name": "Proof Card"
+    },
+    "188": {
+      "effect": {
+        "kind": "cureStatus",
+        "ailment": "poisoned"
+      },
+      "name": "Relief Patch"
+    },
+    "189": {
+      "effect": {
+        "kind": "healHp",
+        "amount": 30
+      },
+      "name": "Ledger Yogurt"
+    },
+    "190": {
+      "name": "Pocket Fruit",
+      "effect": {
+        "kind": "healHp",
+        "amount": 24
+      }
+    },
+    "191": {
+      "name": "Work Stick",
+      "effect": {
+        "kind": "healHp",
+        "amount": 60
+      }
+    },
+    "194": {
+      "name": "Groundwire Fit"
+    },
+    "198": {
+      "name": "Cold Resort Cup",
+      "effect": {
+        "kind": "healHp",
+        "amount": 30
+      }
+    },
+    "199": {
+      "name": "Pocket Decoy",
+      "effect": {
+        "kind": "damage",
+        "amount": 250
+      }
+    },
+    "200": {
+      "name": "Sharp Decoy",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "poisoned",
+        "remaining": 3
+      }
+    },
+    "207": {
+      "name": "Signal Tart",
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 120
+      }
+    },
+    "208": {
+      "name": "Civic Gem"
+    },
+    "212": {
+      "name": "Fossil Bat"
+    },
+    "213": {
+      "name": "Major Ledger Bat"
+    },
+    "214": {
+      "name": "Final Ledger Bat"
+    },
+    "216": {
+      "name": "Registry Band"
+    },
+    "217": {
+      "name": "Charter Band"
+    },
+    "218": {
+      "name": "Guard Ribbon"
+    },
+    "221": {
+      "name": "Quiet Docket"
+    },
+    "222": {
+      "name": "Memento Docket"
+    },
+    "223": {
+      "name": "Route Noodles",
+      "effect": {
+        "kind": "healHp",
+        "amount": 42
+      }
+    },
+    "224": {
+      "name": "Transit Sandwich"
+    },
+    "225": {
+      "name": "Express Sandwich"
+    },
+    "226": {
+      "name": "Chance Sandwich"
+    },
+    "232": {
+      "name": "Cache Coffee",
+      "effect": {
+        "kind": "healHp",
+        "amount": 12
+      }
+    },
+    "233": {
+      "name": "Stacked Burger",
+      "effect": {
+        "kind": "healHp",
+        "amount": 96
+      }
+    },
+    "234": {
+      "name": "Union Snack Bar",
+      "effect": {
+        "kind": "healHp",
+        "amount": 108
+      }
+    },
+    "235": {
+      "name": "Witness Jelly",
+      "effect": {
+        "kind": "healHp",
+        "amount": 300
+      }
+    },
+    "236": {
+      "name": "Registry Gruel",
+      "effect": {
+        "kind": "healHp",
+        "amount": 216
+      }
+    },
+    "237": {
+      "name": "Bean Ledger Cake",
+      "effect": {
+        "kind": "healHp",
+        "amount": 42
+      }
+    },
+    "238": {
+      "name": "Civic Broth",
+      "effect": {
+        "kind": "healHp",
+        "amount": 84
+      }
+    },
+    "239": {
+      "name": "Quiet Roll",
+      "effect": {
+        "kind": "healHp",
+        "amount": 84
+      }
+    },
+    "240": {
+      "name": "Route Skewer",
+      "effect": {
+        "kind": "healHp",
+        "amount": 126
+      }
+    },
+    "241": {
+      "name": "Calm Yogurt",
+      "effect": {
+        "kind": "healHp",
+        "amount": 168
+      }
+    },
+    "242": {
+      "name": "Work Jerky",
+      "effect": {
+        "kind": "healHp",
+        "amount": 150
+      }
+    },
+    "243": {
+      "name": "Civic Burger",
+      "effect": {
+        "kind": "healHp",
+        "amount": 204
+      }
+    },
+    "244": {
+      "name": "Signal Jerky",
+      "effect": {
+        "kind": "healHp",
+        "amount": 252
+      }
+    },
+    "245": {
+      "name": "Charter Jerky",
+      "effect": {
+        "kind": "healHp",
+        "amount": 300
+      }
+    },
+    "246": {
+      "name": "Deep Cache Water",
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 6
+      }
+    },
+    "247": {
+      "name": "Signal Pudding",
+      "effect": {
+        "kind": "recoverPp",
+        "amount": 240
+      }
+    },
+    "248": {
+      "name": "Slip Skillet"
+    },
+    "251": {
+      "name": "Pocket Pop",
+      "effect": {
+        "kind": "healHp",
+        "amount": 18
+      }
+    },
+    "252": {
+      "effect": {
+        "kind": "revive",
+        "amount": 9999
+      }
+    }
+  }
+}

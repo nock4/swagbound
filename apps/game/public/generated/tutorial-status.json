@@ -1,0 +1,228 @@
+{
+  "schemaVersion": "0.2.0",
+  "sourceProjectPath": "external/coilsnake-full",
+  "sourceTutorialUrl": "https://github.com/pk-hack/CoilSnake/wiki/Tutorial%3A-Your-First-Hack",
+  "steps": [
+    {
+      "id": "project_snake",
+      "label": "CoilSnake project metadata exists",
+      "status": "pass",
+      "evidence": "Project.snake was checked in the local fixture.",
+      "path": "Project.snake"
+    },
+    {
+      "id": "robot_ccs",
+      "label": "robot.ccs exists",
+      "status": "fail",
+      "evidence": "ccscript/robot.ccs was not found.",
+      "path": "ccscript/robot.ccs"
+    },
+    {
+      "id": "hello_world_label",
+      "label": "hello_world label exists",
+      "status": "fail",
+      "evidence": "hello_world label was not parsed.",
+      "path": "ccscript/robot.ccs"
+    },
+    {
+      "id": "hello_world_text",
+      "label": "Hello World dialogue text exists",
+      "status": "fail",
+      "evidence": "Expected imported text command value @Hello World! after robot.hello_world.",
+      "path": "ccscript/robot.ccs",
+      "expected": "@Hello World!",
+      "actual": "missing"
+    },
+    {
+      "id": "hello_world_end",
+      "label": "Dialogue terminates with end or eob",
+      "status": "fail",
+      "evidence": "Expected robot.hello_world to terminate with end/eob.",
+      "path": "ccscript/robot.ccs",
+      "expected": "end or eob",
+      "actual": "missing"
+    },
+    {
+      "id": "sprite_group_005",
+      "label": "Robot tutorial sprite metadata exists",
+      "status": "pass",
+      "evidence": "SpriteGroups/005.png was indexed as metadata only.",
+      "path": "SpriteGroups/005.png"
+    },
+    {
+      "id": "scanner_reference",
+      "label": "Text/YML scanner finds robot.hello_world",
+      "status": "fail",
+      "evidence": "Scanner should find a local text/YML reference to robot.hello_world.",
+      "path": "npcs.json",
+      "expected": "robot.hello_world",
+      "actual": "data_28.l_0xc74c07, data_28.l_0xc74c8a, data_28.l_0xc74cf7, data_28.l_0xc74d5e, data_28.l_0xc74d9f, data_28.l_0xc74e14, data_23.l_0xc6a666, data_28.l_0xc74e89, data_28.l_0xc74e83, data_28.l_0xc74e8f, data_22.l_0xc69928, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc6803d, data_28.l_0xc74f56, data_20.l_0xc66d3e, data_28.l_0xc75717, data_28.l_0xc75c33, data_28.l_0xc75717, data_28.l_0xc75c33, data_28.l_0xc76112, data_28.l_0xc75909, data_20.l_0xc66b97, data_20.l_0xc66aa4, data_28.l_0xc763a3, data_28.l_0xc763e9, data_28.l_0xc7640b, data_20.l_0xc6653b, data_22.l_0xc6971e, data_25.l_0xc70144, data_28.l_0xc76443, data_29.l_0xc76449, data_29.l_0xc7661b, data_22.l_0xc69651, data_15.l_0xc5ef3e, data_29.l_0xc76663, data_15.l_0xc5f1fb, data_20.l_0xc673f9, data_29.l_0xc7678a, data_29.l_0xc76804, data_29.l_0xc7683a, data_44.l_0xc90339, data_29.l_0xc7689e, data_20.l_0xc68017, data_21.l_0xc680a6, data_21.l_0xc680c2, data_29.l_0xc768f4, data_29.l_0xc76924, data_37.l_0xc842f9, data_29.l_0xc7695f, data_29.l_0xc76980, data_29.l_0xc7699e, data_29.l_0xc76b87, data_29.l_0xc76c29, data_29.l_0xc76ca1, data_29.l_0xc7699e, data_29.l_0xc76e92, data_15.l_0xc5f914, data_15.l_0xc5f984, data_15.l_0xc5f9dd, data_15.l_0xc5fa72, data_29.l_0xc76ec5, data_26.l_0xc72709, data_26.l_0xc72765, data_26.l_0xc727a8, data_26.l_0xc727cf, data_26.l_0xc72822, data_26.l_0xc72910, data_27.l_0xc7298c, data_27.l_0xc729ff, data_27.l_0xc72af8, data_27.l_0xc72f7b, data_15.l_0xc5f828, data_27.l_0xc72ff8, data_27.l_0xc73024, data_27.l_0xc730f6, data_27.l_0xc7316f, data_27.l_0xc731f0, data_20.l_0xc676d4, data_20.l_0xc67820, data_20.l_0xc67836, data_22.l_0xc6a4f2, data_27.l_0xc73236, data_27.l_0xc7343f, data_27.l_0xc734de, data_27.l_0xc73550, data_22.l_0xc69d8e, data_27.l_0xc7370e, data_22.l_0xc69cb5, data_27.l_0xc73698, data_27.l_0xc736c0, data_27.l_0xc73796, data_27.l_0xc737b0, data_22.l_0xc69c03, data_27.l_0xc737fc, data_22.l_0xc69e74, data_27.l_0xc73882, data_45.l_0xc916a3, data_22.l_0xc6a286, data_27.l_0xc73888, data_27.l_0xc7388e, data_20.l_0xc67a1c, data_20.l_0xc67aa0, data_20.l_0xc67add, data_27.l_0xc738b6, data_27.l_0xc73940, data_27.l_0xc73c28, data_27.l_0xc73db0, data_27.l_0xc73f0f, data_14.l_0xc5e8a0, data_27.l_0xc74180, data_27.l_0xc743b0, data_27.l_0xc74475, data_28.l_0xc74690, data_28.l_0xc74646, data_28.l_0xc747ed, data_22.l_0xc69fa9, data_28.l_0xc749c7, data_28.l_0xc74a3d, data_19.l_0xc659c9, data_19.l_0xc65a18, data_19.l_0xc65a4c, data_19.l_0xc65ae9, data_19.l_0xc65c01, data_19.l_0xc65c89, data_19.l_0xc65cec, data_19.l_0xc65e08, data_19.l_0xc65e46, data_20.l_0xc65ea3, data_20.l_0xc65efc, data_20.l_0xc66002, data_20.l_0xc65f5c, data_20.l_0xc660a6, data_61.l_0xefa2c9, data_61.l_0xefa2d6, data_20.l_0xc66e40, data_20.l_0xc67026, data_20.l_0xc66f90, data_20.l_0xc66fe2, data_20.l_0xc66f4a, data_20.l_0xc66f20, data_20.l_0xc67089, data_20.l_0xc670e6, data_20.l_0xc67194, data_20.l_0xc671ad, data_20.l_0xc67229, data_20.l_0xc67237, data_20.l_0xc672eb, data_20.l_0xc67349, data_27.l_0xc745b9, data_28.l_0xc74646, data_28.l_0xc74ba9, data_20.l_0xc67bb9, data_20.l_0xc67c0c, data_20.l_0xc67bad, data_23.l_0xc6a755, data_20.l_0xc67b67, data_38.l_0xc86279, data_20.l_0xc67b91, data_20.l_0xc66762, data_20.l_0xc66a83, data_20.l_0xc66670, data_35.l_0xc80000, data_35.l_0xc804d1, data_35.l_0xc809ba, data_35.l_0xc80a7e, data_35.l_0xc80b7f, data_35.l_0xc80c31, data_48.l_0xc968ae, data_48.l_0xc950b2, data_35.l_0xc81122, data_35.l_0xc81676, data_35.l_0xc81934, data_36.l_0xc81a88, data_36.l_0xc81b0c, data_36.l_0xc81be2, data_36.l_0xc81bb8, data_36.l_0xc81cd6, data_47.l_0xc94a63, data_36.l_0xc81cd6, data_36.l_0xc81df1, data_36.l_0xc81e0f, data_36.l_0xc81eee, data_36.l_0xc81f2a, data_30.l_0xc793be, data_31.l_0xc793f3, data_31.l_0xc7944e, data_48.l_0xc950e8, data_48.l_0xc9514f, data_48.l_0xc951b7, data_48.l_0xc9522b, data_48.l_0xc9527c, data_48.l_0xc952b2, data_48.l_0xc95306, data_48.l_0xc95324, data_48.l_0xc953bf, data_48.l_0xc953f7, data_48.l_0xc954e1, data_48.l_0xc95532, data_48.l_0xc956d6, data_48.l_0xc9571e, data_48.l_0xc95786, data_48.l_0xc9594d, data_48.l_0xc959a5, data_48.l_0xc957cb, data_48.l_0xc958d7, data_48.l_0xc959db, data_48.l_0xc95a8d, data_48.l_0xc95c0e, data_48.l_0xc96124, data_44.l_0xc90393, data_48.l_0xc962c8, data_20.l_0xc68017, data_21.l_0xc680a6, data_21.l_0xc680c2, data_38.l_0xc849ed, data_22.l_0xc69121, data_48.l_0xc96304, data_48.l_0xc963ea, data_45.l_0xc916af, data_48.l_0xc963f0, data_48.l_0xc963f6, data_47.l_0xc94d7a, data_47.l_0xc94e44, data_47.l_0xc94ed9, data_47.l_0xc94f42, data_48.l_0xc9649a, data_48.l_0xc9650f, data_48.l_0xc96552, data_48.l_0xc965a4, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc6803d, data_48.l_0xc96675, data_25.l_0xc7014f, data_48.l_0xc9675a, data_48.l_0xc9675a, data_48.l_0xc967e7, data_48.l_0xc967fb, data_48.l_0xc9684f, data_48.l_0xc968ae, data_22.l_0xc6a5e0, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc6803d, data_48.l_0xc968b6, data_48.l_0xc968bc, data_48.l_0xc969e5, data_48.l_0xc96a72, data_48.l_0xc96a78, data_48.l_0xc96a7e, data_49.l_0xc96b37, data_49.l_0xc96bb5, data_49.l_0xc96baf, data_49.l_0xc96bbb, data_49.l_0xc96bf2, data_22.l_0xc695d8, data_22.l_0xc698ca, data_22.l_0xc6a551, data_21.l_0xc680a6, data_21.l_0xc680c2, data_47.l_0xc93853, data_47.l_0xc93a00, data_47.l_0xc93a2e, data_47.l_0xc93aed, data_47.l_0xc93b60, data_47.l_0xc93ca7, data_47.l_0xc93d31, data_47.l_0xc93da9, data_47.l_0xc93e16, data_47.l_0xc93e1c, data_47.l_0xc93fa0, data_47.l_0xc940e3, data_47.l_0xc942c7, data_47.l_0xc94479, data_47.l_0xc9447f, data_47.l_0xc94503, data_47.l_0xc94509, data_47.l_0xc94abc, data_35.l_0xc80c31, data_47.l_0xc94730, data_47.l_0xc945a9, data_47.l_0xc9461f, data_47.l_0xc946b1, data_47.l_0xc946e6, data_47.l_0xc9477d, data_47.l_0xc94883, data_48.l_0xc95019, data_47.l_0xc94b57, data_47.l_0xc94bc9, data_47.l_0xc94c6d, data_36.l_0xc81c91, data_36.l_0xc81f56, data_19.l_0xc6502d, data_48.l_0xc96425, data_36.l_0xc81c56, data_35.l_0xc80939, data_22.l_0xc6a458, data_28.l_0xc748d8, data_47.l_0xc94560, data_47.l_0xc94560, data_47.l_0xc94560, data_47.l_0xc94560, data_47.l_0xc94560, data_47.l_0xc94560, data_15.l_0xc5fd72, data_47.l_0xc94594, data_48.l_0xc95393, data_39.l_0xc866c4, data_39.l_0xc866ab, data_23.l_0xc6a77b, data_48.l_0xc95365, data_47.l_0xc94769, data_47.l_0xc94769, data_50.l_0xc98000, data_50.l_0xc98024, data_50.l_0xc982f2, data_50.l_0xc98374, data_50.l_0xc98424, data_50.l_0xc9847f, data_50.l_0xc98517, data_50.l_0xc98598, data_50.l_0xc98602, data_50.l_0xc9864b, data_50.l_0xc986cc, data_50.l_0xc9873b, data_50.l_0xc98785, data_50.l_0xc987cf, data_50.l_0xc9881e, data_50.l_0xc9886f, data_50.l_0xc988cb, data_50.l_0xc988f1, data_50.l_0xc98913, data_51.l_0xc99703, data_51.l_0xc99720, data_51.l_0xc99757, data_50.l_0xc98f37, data_50.l_0xc990b3, data_51.l_0xc99776, data_51.l_0xc997ae, data_51.l_0xc997ee, data_50.l_0xc98b24, data_50.l_0xc98b68, data_19.l_0xc6501b, data_22.l_0xc697ba, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc6803d, data_50.l_0xc994f5, data_43.l_0xc90010, data_44.l_0xc9009d, data_50.l_0xc98cd3, data_50.l_0xc98d78, data_50.l_0xc98ede, data_50.l_0xc99018, data_50.l_0xc99120, data_50.l_0xc991c7, data_50.l_0xc99282, data_50.l_0xc992fa, data_50.l_0xc993a5, data_22.l_0xc69007, data_50.l_0xc9894e, data_50.l_0xc99582, data_51.l_0xc996aa, data_50.l_0xc98b6e, data_50.l_0xc98bef, data_45.l_0xc916af, data_51.l_0xc9985a, data_22.l_0xc6a1bc, data_50.l_0xc994cb, data_50.l_0xc98e8d, data_51.l_0xc998c1, data_60.l_0xef952e, data_31.l_0xc795c1, data_60.l_0xef952e, data_31.l_0xc794b1, data_61.l_0xef9822, data_61.l_0xef981c, data_50.l_0xc994fb, data_61.l_0xef9857, data_61.l_0xef9785, data_30.l_0xc79088, data_30.l_0xc790c4, data_61.l_0xef97a2, data_42.l_0xc8d9ed, data_42.l_0xc8db32, data_42.l_0xc8dc4f, data_42.l_0xc8dd35, data_43.l_0xc8f69d, data_43.l_0xc8f6b5, data_43.l_0xc8f6ca, data_23.l_0xc6bef9, data_43.l_0xc8f66a, data_43.l_0xc8f69d, data_43.l_0xc8f6b5, data_23.l_0xc6bef9, data_23.l_0xc6bef9, data_43.l_0xc8f6ca, data_43.l_0xc8f6e2, data_43.l_0xc8f701, data_43.l_0xc8f715, data_23.l_0xc6bef9, data_43.l_0xc8f725, data_43.l_0xc8efb9, data_43.l_0xc8f11b, data_42.l_0xc8df51, data_42.l_0xc8df8a, data_25.l_0xc6fae5, data_25.l_0xc6fb02, data_46.l_0xc91c3a, data_43.l_0xc8f75e, data_46.l_0xc91c3a, data_44.l_0xc9067d, data_43.l_0xc8f450, data_43.l_0xc8f48a, data_20.l_0xc68017, data_21.l_0xc680a6, data_21.l_0xc680c2, data_38.l_0xc84fd8, data_43.l_0xc8f240, data_42.l_0xc8dfc1, data_42.l_0xc8e044, data_42.l_0xc8e04a, data_45.l_0xc916bb, data_42.l_0xc8e0ad, data_42.l_0xc8e132, data_42.l_0xc8e138, data_42.l_0xc8e13e, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc6803d, data_48.l_0xc96124, data_42.l_0xc8e144, data_25.l_0xc7015a, data_42.l_0xc8e62c, data_43.l_0xc8eee5, data_43.l_0xc8ed1e, data_43.l_0xc8ee02, data_42.l_0xc8e14a, data_42.l_0xc8e1bd, data_42.l_0xc8e275, data_42.l_0xc8e2ea, data_42.l_0xc8e388, data_42.l_0xc8e467, data_42.l_0xc8e515, data_42.l_0xc8e5b1, data_42.l_0xc8e6a9, data_42.l_0xc8e6e3, data_42.l_0xc8e6ed, data_42.l_0xc8e734, data_42.l_0xc8e804, data_42.l_0xc8ea8b, data_42.l_0xc8eace, data_42.l_0xc8eb2c, data_43.l_0xc8ebe4, data_43.l_0xc8ec90, data_43.l_0xc8ecb4, data_43.l_0xc8ecba, data_42.l_0xc8de4a, data_42.l_0xc8dbf8, data_42.l_0xc8dcd6, data_42.l_0xc8daa0, data_43.l_0xc8f6e2, data_43.l_0xc8f701, data_43.l_0xc8f725, data_43.l_0xc8ef99, data_43.l_0xc8f2b7, data_43.l_0xc8f2ef, data_43.l_0xc8f324, data_43.l_0xc8f344, data_43.l_0xc8f392, data_43.l_0xc8f3eb, data_43.l_0xc8f41f, data_43.l_0xc8f42a, data_43.l_0xc8f43f, data_43.l_0xc8f448, data_43.l_0xc8f535, data_43.l_0xc8f5d0, data_52.l_0xc9a930, data_43.l_0xc8efb9, data_43.l_0xc8f11b, data_20.l_0xc67bad, data_15.l_0xc5fdea, data_15.l_0xc5fe4b, data_33.l_0xc7dacb, data_23.l_0xc6a7a5, data_47.l_0xc94560, data_47.l_0xc94560, data_47.l_0xc94560, data_47.l_0xc94560, data_47.l_0xc94560, data_60.l_0xef9502, data_23.l_0xc6a9f9, data_23.l_0xc6aa2f, data_25.l_0xc6f8d9, data_25.l_0xc6f8e6, data_25.l_0xc6f8d9, data_25.l_0xc6f940, data_25.l_0xc6f8d9, data_25.l_0xc6f96d, data_25.l_0xc6f8d9, data_25.l_0xc6f99a, data_25.l_0xc6f8d9, data_25.l_0xc6f913, data_24.l_0xc6c42c, data_24.l_0xc6c479, data_24.l_0xc6c4d5, data_24.l_0xc6c52e, data_24.l_0xc6c565, data_24.l_0xc6cd2a, data_23.l_0xc6ad68, data_23.l_0xc6ad6e, data_23.l_0xc6af23, data_23.l_0xc6af6c, data_20.l_0xc68091, data_21.l_0xc680a6, data_21.l_0xc680c2, data_23.l_0xc6afe1, data_23.l_0xc6b0fa, data_20.l_0xc68091, data_23.l_0xc6b18d, data_24.l_0xc6c7d9, data_24.l_0xc6cb97, data_24.l_0xc6cc31, data_19.l_0xc6504b, data_20.l_0xc68091, data_24.l_0xc6cdcd, data_24.l_0xc6c606, data_24.l_0xc6c68f, data_23.l_0xc6b7d0, data_23.l_0xc6b8eb, data_23.l_0xc6ba5f, data_23.l_0xc6bb60, data_23.l_0xc6bbf9, data_23.l_0xc6bc80, data_23.l_0xc6bdd3, data_31.l_0xc7a22a, data_23.l_0xc6c2db, data_23.l_0xc6c3a9, data_24.l_0xc6c970, data_24.l_0xc6cebc, data_24.l_0xc6cf2d, data_30.l_0xc79088, data_30.l_0xc79101, data_22.l_0xc68de4, data_24.l_0xc6d0b1, data_23.l_0xc6bf0c, data_24.l_0xc6d0f0, data_23.l_0xc6c035, data_24.l_0xc6d133, data_23.l_0xc6c099, data_23.l_0xc6c1c3, data_23.l_0xc6c236, data_23.l_0xc6c287, data_24.l_0xc6ce34, data_24.l_0xc6d0db, data_24.l_0xc6d082, data_55.l_0xc9fc9e, data_55.l_0xc9fcd5, data_60.l_0xef941f, data_20.l_0xc67938, data_20.l_0xc67820, data_20.l_0xc67836, data_23.l_0xc6be74, data_60.l_0xef9365, data_60.l_0xef9384, data_60.l_0xef93a3, data_60.l_0xef93c2, data_60.l_0xef93e1, data_60.l_0xef9400, data_20.l_0xc68091, data_40.l_0xc87a9a, data_40.l_0xc87aba, data_40.l_0xc87aeb, data_56.l_0xef617b, data_56.l_0xef6276, data_56.l_0xef62b1, data_56.l_0xef62f5, data_56.l_0xef63b5, data_56.l_0xef6400, data_56.l_0xef6419, data_56.l_0xef6446, data_56.l_0xef679a, data_23.l_0xc6a8d4, data_35.l_0xc7fe02, data_56.l_0xef6814, data_34.l_0xc7e797, data_20.l_0xc68017, data_34.l_0xc7e80d, data_34.l_0xc7e813, data_12.l_0xc5d389, data_19.l_0xc65021, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc68017, data_34.l_0xc7e819, data_34.l_0xc7e8ae, data_34.l_0xc7e96c, data_34.l_0xc7ebf9, data_34.l_0xc7ec6c, data_34.l_0xc7edf1, data_34.l_0xc7ee7b, data_34.l_0xc7eede, data_34.l_0xc7ef0d, data_34.l_0xc7ef3b, data_34.l_0xc7f165, data_34.l_0xc7f29e, data_34.l_0xc7f710, data_34.l_0xc7f8c7, data_34.l_0xc7f921, data_35.l_0xc7fe61, data_24.l_0xc6c942, data_34.l_0xc7fb3e, data_22.l_0xc69038, data_34.l_0xc7ea00, data_34.l_0xc7eb4c, data_34.l_0xc7ece9, data_22.l_0xc69861, data_34.l_0xc7f8ab, data_23.l_0xc6a90c, data_33.l_0xc7db3f, data_33.l_0xc7db8d, data_33.l_0xc7dbdb, data_15.l_0xc60000, data_44.l_0xc906f1, data_19.l_0xc65027, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc68017, data_15.l_0xc6002c, data_20.l_0xc68017, data_15.l_0xc600d5, data_15.l_0xc60100, data_15.l_0xc60140, data_15.l_0xc60180, data_15.l_0xc601c0, data_15.l_0xc60239, data_15.l_0xc60349, data_15.l_0xc605db, data_15.l_0xc60633, data_15.l_0xc60678, data_15.l_0xc60696, data_16.l_0xc60b8a, data_16.l_0xc60b9b, data_16.l_0xc60bae, data_16.l_0xc60dc4, data_16.l_0xc60e2a, data_40.l_0xc8905c, data_17.l_0xc62b87, data_17.l_0xc6283d, data_17.l_0xc62886, data_45.l_0xc916c7, data_19.l_0xc6503f, data_15.l_0xc6026c, data_15.l_0xc606d8, data_16.l_0xc60bbf, data_16.l_0xc60be3, data_16.l_0xc60c1b, data_16.l_0xc60cd8, data_22.l_0xc690ff, data_19.l_0xc65057, data_30.l_0xc78628, data_30.l_0xc78748, data_17.l_0xc62cf9, data_16.l_0xc60d6c, data_17.l_0xc62cf5, data_17.l_0xc62c50, data_16.l_0xc61715, data_16.l_0xc61616, data_16.l_0xc61715, data_16.l_0xc61616, data_16.l_0xc61966, data_16.l_0xc61817, data_16.l_0xc61966, data_16.l_0xc61817, data_16.l_0xc61ddb, data_16.l_0xc61cac, data_16.l_0xc61ddb, data_16.l_0xc61cac, data_16.l_0xc623bf, data_16.l_0xc623bf, data_16.l_0xc61b85, data_16.l_0xc61a88, data_16.l_0xc61b85, data_16.l_0xc61a88, data_16.l_0xc62257, data_16.l_0xc620f7, data_16.l_0xc62257, data_16.l_0xc620f7, data_16.l_0xc62578, data_16.l_0xc62026, data_16.l_0xc61f07, data_16.l_0xc62026, data_16.l_0xc61f07, data_17.l_0xc6271a, data_30.l_0xc79088, data_30.l_0xc790e4, data_17.l_0xc6279f, data_16.l_0xc60e30, data_16.l_0xc61228, data_16.l_0xc612d2, data_16.l_0xc612ff, data_16.l_0xc6132c, data_20.l_0xc67859, data_20.l_0xc67820, data_20.l_0xc67836, data_16.l_0xc61359, data_16.l_0xc61386, data_24.l_0xc6d19c, data_24.l_0xc6d37e, data_24.l_0xc6d50a, data_24.l_0xc6d695, data_24.l_0xc6d6a1, data_24.l_0xc6d86d, data_24.l_0xc6d93f, data_24.l_0xc6d97a, data_24.l_0xc6d993, data_24.l_0xc6d9ca, data_24.l_0xc6da0b, data_24.l_0xc6daf5, data_24.l_0xc6dbce, data_24.l_0xc6dc62, data_37.l_0xc84111, data_37.l_0xc84168, data_24.l_0xc6dc8d, data_24.l_0xc6dc93, data_24.l_0xc6dce7, data_24.l_0xc6dd0a, data_24.l_0xc6de7b, data_24.l_0xc6df83, data_24.l_0xc6dfe7, data_24.l_0xc6e088, data_37.l_0xc83fcf, data_20.l_0xc6803d, data_24.l_0xc6e0e3, data_25.l_0xc6e192, data_25.l_0xc6e220, data_25.l_0xc6e2a4, data_25.l_0xc6e7f6, data_25.l_0xc6e806, data_25.l_0xc6e557, data_25.l_0xc6e69c, data_25.l_0xc6e81a, data_25.l_0xc6e982, data_25.l_0xc6ea34, data_25.l_0xc6eeb4, data_25.l_0xc6ea34, data_25.l_0xc6f881, data_25.l_0xc6ee94, data_22.l_0xc68e0c, data_25.l_0xc6ef24, data_25.l_0xc6ef47, data_25.l_0xc6ef6a, data_25.l_0xc6ef8d, data_25.l_0xc6efd3, data_40.l_0xc8989f, data_40.l_0xc898bc, data_40.l_0xc89922, data_40.l_0xc898d4, data_40.l_0xc89902, data_25.l_0xc6efb0, data_44.l_0xc9083a, data_25.l_0xc6f0b5, data_20.l_0xc68017, data_21.l_0xc680a6, data_21.l_0xc680c2, data_25.l_0xc6f112, data_38.l_0xc8567b, data_25.l_0xc6f175, data_25.l_0xc6f225, data_25.l_0xc6f27c, data_25.l_0xc6f374, data_25.l_0xc6f659, data_25.l_0xc6f757, data_37.l_0xc84079, data_25.l_0xc6f8bf, data_37.l_0xc83f5f, data_49.l_0xc97990, data_36.l_0xc82105, data_36.l_0xc822d2, data_36.l_0xc8258c, data_36.l_0xc826bc, data_36.l_0xc82730, data_36.l_0xc82785, data_36.l_0xc827af, data_36.l_0xc827cf, data_45.l_0xc916d3, data_36.l_0xc827d5, data_36.l_0xc827db, data_23.l_0xc6a950, data_23.l_0xc6a937, data_36.l_0xc82874, data_36.l_0xc8287a, data_36.l_0xc829f8, data_36.l_0xc829fe, data_36.l_0xc82a04, data_12.l_0xc5d425, data_36.l_0xc82a69, data_36.l_0xc82a6f, data_36.l_0xc82b06, data_36.l_0xc82b59, data_36.l_0xc82c11, data_40.l_0xc8972a, data_36.l_0xc82a63, data_12.l_0xc5d40d, data_12.l_0xc5d419, data_37.l_0xc83d18, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc6803d, data_21.l_0xc680a6, data_21.l_0xc680c2, data_36.l_0xc82c6b, data_36.l_0xc82d6c, data_36.l_0xc82e26, data_36.l_0xc82ef8, data_36.l_0xc82fa9, data_36.l_0xc83002, data_36.l_0xc83082, data_36.l_0xc83158, data_36.l_0xc832bf, data_37.l_0xc833b1, data_37.l_0xc834e1, data_37.l_0xc8361c, data_37.l_0xc839f7, data_37.l_0xc83a45, data_37.l_0xc83a89, data_37.l_0xc83aee, data_37.l_0xc83c94, data_37.l_0xc83cdd, data_37.l_0xc83d1e, data_40.l_0xc89b32, data_37.l_0xc83d9e, data_37.l_0xc83e7f, data_37.l_0xc83e97, data_37.l_0xc83ecd, data_37.l_0xc83efd, data_37.l_0xc83f3c, data_31.l_0xc7b550, data_31.l_0xc7b576, data_37.l_0xc841b3, data_25.l_0xc70165, data_30.l_0xc78a9e, data_23.l_0xc6a800, data_37.l_0xc83d24, data_41.l_0xc89e1b, data_41.l_0xc89ea8, data_41.l_0xc89ef8, data_41.l_0xc89f2d, data_41.l_0xc8a056, data_41.l_0xc8a11c, data_42.l_0xc8b8d5, data_41.l_0xc8a1a0, data_41.l_0xc8a1e1, data_41.l_0xc8a24c, data_41.l_0xc8a2f9, data_41.l_0xc8a333, data_41.l_0xc8a34b, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc6803d, data_41.l_0xc8a351, data_41.l_0xc8a357, data_41.l_0xc8a394, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc6803d, data_41.l_0xc8a43d, data_41.l_0xc8a49e, data_41.l_0xc8a4a9, data_38.l_0xc85bd4, data_44.l_0xc908bc, data_41.l_0xc8a595, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc6803d, data_41.l_0xc8a50d, data_41.l_0xc8a5ce, data_41.l_0xc8a5d4, data_41.l_0xc8a5fc, data_41.l_0xc8a691, data_41.l_0xc8a6bf, data_41.l_0xc8a6f9, data_42.l_0xc8bae0, data_41.l_0xc8a737, data_20.l_0xc68008, data_41.l_0xc8ad69, data_41.l_0xc8aec1, data_41.l_0xc8a8bf, data_41.l_0xc8a976, data_41.l_0xc8aae6, data_60.l_0xef94c4, data_60.l_0xef94e3, data_41.l_0xc8af57, data_45.l_0xc916df, data_41.l_0xc8af5d, data_41.l_0xc8af63, data_41.l_0xc8afad, data_41.l_0xc8b008, data_41.l_0xc8b038, data_41.l_0xc8b07f, data_41.l_0xc8b0d4, data_41.l_0xc8b130, data_41.l_0xc8b2bc, data_41.l_0xc8b2f8, data_41.l_0xc8b342, data_41.l_0xc8b39d, data_12.l_0xc5d48b, data_41.l_0xc8b3c6, data_41.l_0xc8b3f8, data_41.l_0xc8b4c9, data_42.l_0xc8b52a, data_42.l_0xc8ba82, data_42.l_0xc8b8c0, data_42.l_0xc8b8cd, data_41.l_0xc8b191, data_42.l_0xc8bab9, data_25.l_0xc70176, data_42.l_0xc8bb5b, data_19.l_0xc65057, data_22.l_0xc690c5, data_19.l_0xc65057, data_23.l_0xc6a7d2, data_53.l_0xc9c991, data_53.l_0xc9cc13, data_53.l_0xc9ccf5, data_54.l_0xc9d5c4, data_53.l_0xc9cd4f, data_53.l_0xc9ce2c, data_53.l_0xc9ce9b, data_53.l_0xc9cef7, data_19.l_0xc65045, data_22.l_0xc6a3de, data_53.l_0xc9d011, data_53.l_0xc9d02d, data_53.l_0xc9d125, data_46.l_0xc929ae, data_53.l_0xc9d334, data_53.l_0xc9d3e0, data_53.l_0xc9d4d3, data_54.l_0xc9d621, data_54.l_0xc9d656, data_54.l_0xc9d621, data_54.l_0xc9d656, data_54.l_0xc9d621, data_54.l_0xc9d656, data_53.l_0xc9d1b7, data_54.l_0xc9d6ce, data_53.l_0xc9d2ba, data_05.l_0xc56df3, data_44.l_0xc90a9b, data_05.l_0xc56df9, data_38.l_0xc85f76, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc68017, data_05.l_0xc56dff, data_05.l_0xc56e2c, data_05.l_0xc56e5b, data_05.l_0xc56e61, data_45.l_0xc916eb, data_05.l_0xc56e67, data_05.l_0xc56eca, data_05.l_0xc56efd, data_05.l_0xc56f32, data_05.l_0xc56f80, data_05.l_0xc5711a, data_05.l_0xc57120, data_05.l_0xc57126, data_05.l_0xc571b9, data_46.l_0xc9310d, data_05.l_0xc5730d, data_05.l_0xc57361, data_19.l_0xc6500f, data_12.l_0xc5d539, data_05.l_0xc574f6, data_06.l_0xc5762c, data_06.l_0xc57730, data_06.l_0xc57760, data_06.l_0xc577d8, data_46.l_0xc9344f, data_25.l_0xc70187, data_46.l_0xc9310d, data_06.l_0xc57c96, data_19.l_0xc65033, data_19.l_0xc65039, data_06.l_0xc57cd4, data_06.l_0xc57cd4, data_23.l_0xc6a895, data_06.l_0xc57dc6, data_60.l_0xef907f, data_60.l_0xef909e, data_60.l_0xef924e, data_60.l_0xef926d, data_60.l_0xef90bd, data_60.l_0xef90dc, data_60.l_0xef90f9, data_60.l_0xef928c, data_60.l_0xef9118, data_60.l_0xef92ab, data_60.l_0xef9137, data_60.l_0xef92ca, data_60.l_0xef9448, data_60.l_0xef9156, data_60.l_0xef9175, data_60.l_0xef9194, data_60.l_0xef92e9, data_60.l_0xef91b3, data_60.l_0xef91d2, data_60.l_0xef9308, data_60.l_0xef91f1, data_60.l_0xef9210, data_60.l_0xef922f, data_60.l_0xef9327, data_60.l_0xef9346, data_46.l_0xc9323b, data_06.l_0xc57947, data_06.l_0xc57c2c, data_06.l_0xc57b5c, data_20.l_0xc6803d, data_20.l_0xc6803d, data_06.l_0xc57b7c, data_21.l_0xc680a6, data_21.l_0xc680c2, data_24.l_0xc6cdcd, data_40.l_0xc87eee, data_06.l_0xc57b9c, data_06.l_0xc57bbc, data_06.l_0xc57b04, data_06.l_0xc57b04, data_06.l_0xc57dea, data_45.l_0xc916eb, data_05.l_0xc56e61, data_05.l_0xc56e5b, data_54.l_0xc9e37e, data_54.l_0xc9e578, data_54.l_0xc9e613, data_54.l_0xc9e619, data_54.l_0xc9e763, data_12.l_0xc5d55d, data_54.l_0xc9e87d, data_54.l_0xc9e865, data_54.l_0xc9ed29, data_54.l_0xc9ec74, data_54.l_0xc9ed3c, data_54.l_0xc9ed95, data_54.l_0xc9e79f, data_54.l_0xc9e7b8, data_54.l_0xc9e7d1, data_54.l_0xc9e7ea, data_54.l_0xc9e803, data_54.l_0xc9ec7a, data_54.l_0xc9e27b, data_54.l_0xc9ddc6, data_54.l_0xc9ddd1, data_54.l_0xc9ddf8, data_54.l_0xc9d72e, data_54.l_0xc9d6f8, data_54.l_0xc9d779, data_54.l_0xc9d6f8, data_54.l_0xc9d77f, data_54.l_0xc9d940, data_54.l_0xc9db12, data_54.l_0xc9d6f8, data_54.l_0xc9db2c, data_54.l_0xc9d6f8, data_54.l_0xc9db3e, data_54.l_0xc9d6f8, data_54.l_0xc9dbaf, data_54.l_0xc9d6f8, data_54.l_0xc9dbd6, data_54.l_0xc9d6f8, data_47.l_0xc936e6, data_54.l_0xc9d6f8, data_54.l_0xc9ddb4, data_54.l_0xc9d6f8, data_54.l_0xc9e2f5, data_54.l_0xc9dc2c, data_54.l_0xc9d6f8, data_20.l_0xc68017, data_40.l_0xc87b40, data_56.l_0xef5864, data_53.l_0xc9bd35, data_53.l_0xc9bd69, data_53.l_0xc9c262, data_53.l_0xc9c27e, data_56.l_0xef58c7, data_17.l_0xc63043, data_56.l_0xef57eb, data_12.l_0xc5d56f, data_56.l_0xef5a3e, data_56.l_0xef5aed, data_56.l_0xef5be6, data_56.l_0xef5c98, data_56.l_0xef5d16, data_56.l_0xef5e94, data_56.l_0xef5f7d, data_56.l_0xef5fdf, data_56.l_0xef6049, data_54.l_0xc9de0e, data_56.l_0xef604f, data_56.l_0xef6084, data_56.l_0xef60f2, data_56.l_0xef60f2, data_56.l_0xef60f2, data_44.l_0xc90e4a, data_56.l_0xef610c, data_56.l_0xef610d, data_56.l_0xef6157, data_56.l_0xef6157, data_17.l_0xc63043, data_29.l_0xc76f20, data_29.l_0xc76f26, data_29.l_0xc76f42, data_29.l_0xc76f5e, data_29.l_0xc76f7a, data_29.l_0xc76f96, data_29.l_0xc7719e, data_29.l_0xc7739f, data_21.l_0xc680a6, data_21.l_0xc680c2, data_20.l_0xc68017, data_29.l_0xc773f4, data_29.l_0xc7743d, data_29.l_0xc7749d, data_29.l_0xc774c6, data_29.l_0xc774ec, data_29.l_0xc77511, data_29.l_0xc77529, data_29.l_0xc77544, data_29.l_0xc77572, data_29.l_0xc7758a, data_29.l_0xc77592, data_29.l_0xc7759c, data_29.l_0xc775bf, data_29.l_0xc775fd, data_29.l_0xc7768f, data_29.l_0xc776c8, data_29.l_0xc776c8, data_29.l_0xc776c8, data_29.l_0xc777f2, data_29.l_0xc7786e, data_29.l_0xc77251, data_29.l_0xc772ff, data_29.l_0xc7735d, data_29.l_0xc77cdf, data_29.l_0xc77d3a, data_29.l_0xc776ee, data_29.l_0xc77713, data_29.l_0xc7774b, data_29.l_0xc7777e, data_29.l_0xc77790, data_29.l_0xc7779e, data_29.l_0xc77d9f, data_60.l_0xef9467, data_60.l_0xef9486, data_60.l_0xef94a5, data_29.l_0xc77da5, data_29.l_0xc7794c, data_22.l_0xc68f74, data_49.l_0xc96d4f, data_49.l_0xc96d6a, data_49.l_0xc96d8a, data_49.l_0xc96db2, data_60.l_0xef8fe4, data_49.l_0xc97b06, data_49.l_0xc97b0c, data_60.l_0xef9022, data_45.l_0xc916f7, data_49.l_0xc96f5d, data_49.l_0xc979e5, data_49.l_0xc97a51, data_60.l_0xef9003, data_44.l_0xc90c38, data_38.l_0xc861dd, data_19.l_0xc65051, data_17.l_0xc62d30, data_21.l_0xc680c2, data_20.l_0xc68017, data_49.l_0xc974f4, data_49.l_0xc975cc, data_49.l_0xc96d10, data_49.l_0xc96dec, data_49.l_0xc96eb4, data_49.l_0xc96f0a, data_49.l_0xc96fe2, data_49.l_0xc9707c, data_49.l_0xc970c8, data_49.l_0xc97187, data_49.l_0xc972e7, data_49.l_0xc9734a, data_49.l_0xc973b1, data_49.l_0xc973e4, data_49.l_0xc9740a, data_49.l_0xc9743d, data_49.l_0xc9749e, data_49.l_0xc9712e, data_49.l_0xc97b12, data_49.l_0xc97823, data_49.l_0xc96e07, data_49.l_0xc96e22, data_49.l_0xc96e22, data_49.l_0xc96e22, data_49.l_0xc96e3d, data_49.l_0xc96e58, data_49.l_0xc96e7e, data_49.l_0xc96e99, data_23.l_0xc6a861, data_49.l_0xc9794b, data_22.l_0xc68f74, data_32.l_0xc7d84f, data_32.l_0xc7d85b, data_32.l_0xc7d84f, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d85b, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d873, data_32.l_0xc7d873, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d867, data_32.l_0xc7d85b, data_32.l_0xc7d867, data_32.l_0xc7d85b, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d867, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d85b, data_32.l_0xc7d873, data_32.l_0xc7d873, data_32.l_0xc7d873, data_32.l_0xc7d873, data_32.l_0xc7d873, data_32.l_0xc7d873, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d867, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d85b, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f, data_32.l_0xc7d84f"
+    },
+    {
+      "id": "npc_744_exists",
+      "label": "NPC 744 config entry exists",
+      "status": "pass",
+      "evidence": "npc_config_table.yml contains entry 744.",
+      "path": "npc_config_table.yml"
+    },
+    {
+      "id": "npc_744_sprite",
+      "label": "NPC 744 sprite id",
+      "status": "fail",
+      "evidence": "Expected NPC 744 Sprite to match the tutorial value.",
+      "path": "npc_config_table.yml",
+      "expected": "5",
+      "actual": "195"
+    },
+    {
+      "id": "npc_744_movement",
+      "label": "NPC 744 movement id",
+      "status": "fail",
+      "evidence": "Expected NPC 744 Movement to match the tutorial value.",
+      "path": "npc_config_table.yml",
+      "expected": "605",
+      "actual": "708"
+    },
+    {
+      "id": "npc_744_event_flag",
+      "label": "NPC 744 event flag",
+      "status": "fail",
+      "evidence": "Expected NPC 744 Event Flag to match the tutorial value.",
+      "path": "npc_config_table.yml",
+      "expected": "0x0",
+      "actual": "0x274"
+    },
+    {
+      "id": "npc_744_appears",
+      "label": "NPC 744 appears always",
+      "status": "fail",
+      "evidence": "Expected NPC 744 Show Sprite to match the tutorial value.",
+      "path": "npc_config_table.yml",
+      "expected": "always",
+      "actual": "when event flag set"
+    },
+    {
+      "id": "npc_744_dialogue",
+      "label": "NPC 744 dialogue pointer",
+      "status": "fail",
+      "evidence": "Expected NPC 744 Text Pointer 1 to match the tutorial value.",
+      "path": "npc_config_table.yml",
+      "expected": "robot.hello_world",
+      "actual": "data_33.l_0xc7db3f"
+    },
+    {
+      "id": "npc_744_type",
+      "label": "NPC 744 interaction type",
+      "status": "fail",
+      "evidence": "Expected NPC 744 Type to match the tutorial value.",
+      "path": "npc_config_table.yml",
+      "expected": "person",
+      "actual": "object"
+    },
+    {
+      "id": "map_sprites_npc_744",
+      "label": "Map sprites include NPC 744",
+      "status": "pass",
+      "evidence": "map_sprites.yml references NPC 744 at line 2094. Bedroom placement is not inferred.",
+      "path": "map_sprites.yml",
+      "actual": "- {NPC ID: 744, X: 136, Y: 128}"
+    },
+    {
+      "id": "world_region_rendered",
+      "label": "Map region around NPC 744 renders from imported data",
+      "status": "pass",
+      "evidence": "world.json includes a rendered region and the tutorial NPC placement.",
+      "path": "world.json",
+      "actual": "world pixel 392,7552"
+    },
+    {
+      "id": "rom_compile_run",
+      "label": "Compile and run patched ROM",
+      "status": "blocked",
+      "evidence": "ROM compilation and emulator testing require explicit permission and local-only proof.",
+      "path": "tutorial-run-proof.json",
+      "actual": "local proof only"
+    }
+  ],
+  "counts": {
+    "steps": 17,
+    "passed": 5,
+    "failed": 11,
+    "blocked": 1,
+    "unknown": 0
+  },
+  "warnings": [
+    {
+      "severity": "info",
+      "code": "tutorial_robot_ccs",
+      "message": "ccscript/robot.ccs was not found.",
+      "path": "ccscript/robot.ccs"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_hello_world_label",
+      "message": "hello_world label was not parsed.",
+      "path": "ccscript/robot.ccs"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_hello_world_text",
+      "message": "Expected imported text command value @Hello World! after robot.hello_world.",
+      "path": "ccscript/robot.ccs"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_hello_world_end",
+      "message": "Expected robot.hello_world to terminate with end/eob.",
+      "path": "ccscript/robot.ccs"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_scanner_reference",
+      "message": "Scanner should find a local text/YML reference to robot.hello_world.",
+      "path": "npcs.json"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_npc_744_sprite",
+      "message": "Expected NPC 744 Sprite to match the tutorial value.",
+      "path": "npc_config_table.yml"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_npc_744_movement",
+      "message": "Expected NPC 744 Movement to match the tutorial value.",
+      "path": "npc_config_table.yml"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_npc_744_event_flag",
+      "message": "Expected NPC 744 Event Flag to match the tutorial value.",
+      "path": "npc_config_table.yml"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_npc_744_appears",
+      "message": "Expected NPC 744 Show Sprite to match the tutorial value.",
+      "path": "npc_config_table.yml"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_npc_744_dialogue",
+      "message": "Expected NPC 744 Text Pointer 1 to match the tutorial value.",
+      "path": "npc_config_table.yml"
+    },
+    {
+      "severity": "info",
+      "code": "tutorial_npc_744_type",
+      "message": "Expected NPC 744 Type to match the tutorial value.",
+      "path": "npc_config_table.yml"
+    },
+    {
+      "severity": "warning",
+      "code": "tutorial_rom_compile_run",
+      "message": "ROM compilation and emulator testing require explicit permission and local-only proof.",
+      "path": "tutorial-run-proof.json"
+    }
+  ]
+}

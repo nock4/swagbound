@@ -1,0 +1,126 @@
+{
+  "schema": "swagbound.dialogue-library.v1",
+  "generatedFrom": "swagbound-phaser structured dialogue",
+  "entries": {
+    "dialogue:act2-coastal-kiosk": {
+      "speaker": "Map Kiosk",
+      "pages": [
+        "WELCOME TO THE BRIGHT SIDE. THE SERVICE SEAM IS NOT LISTED ON THIS MAP.",
+        "Bosch can feel the missing lane more clearly than the route the kiosk is trying to sell him."
+      ]
+    },
+    "dialogue:archive-console-link": {
+      "speaker": "Bosch Terminal",
+      "pages": [
+        "Bosch, the route is not neutral. A public version of you is already moving through town ahead of your body, and town services are starting to treat him as convenient.",
+        "Ask where the pressure starts or why the town needs a Bosch it can process."
+      ]
+    },
+    "interior:bosch-bedroom-v0": {
+      "speaker": "Biscuit",
+      "pages": [
+        "Biscuit holds up their phone like it is too hot to keep.",
+        "\" The Route Brief on the desk is already open, and the timestamp says it opened from outside the house while Bosch was",
+        "asleep. The checklist is rude but clear: witness, proof service, parks, Station Gate.",
+        "It feels less like homework and more like a town trying to file a version of Bosch before Bosch can object."
+      ]
+    },
+    "interior:bosch-main-room-v0": {
+      "speaker": "Biscuit",
+      "pages": [
+        "Downstairs, the house keeps pretending to be a house.",
+        "The TV is muted on a civic route alert, the table mail has Bosch's name spelled with a question mark, and every phone is",
+        "trying not to buzz. Biscuit says the sidewalk kid saw the other Bosch first.",
+        "The entry bowl gives off a small warm click, like it heard that and wants Bosch to leave with something the street can",
+        "recognize."
+      ]
+    },
+    "interior:bosch-side-room-v0": {
+      "speaker": "Bosch",
+      "pages": [
+        "Behind the storage boxes: the Route Brief backup, a Practice Bat, and a Public Version Card with Bosch's smile printed a",
+        "little wrong. The bat is something solid. The card is something social.",
+        "The backup brief has three margin notes in handwriting Bosch does not recognize: keep your proof warm, keep your route",
+        "local, do not let a crowd finish your sentence. Together they feel like a starter kit for arguing with a town."
+      ]
+    },
+    "interior:bosch-upstairs-hall-v0": {
+      "speaker": "Biscuit",
+      "pages": [
+        "Biscuit blocks the upstairs landing just long enough to point at the side room.",
+        "Downstairs, three phones buzz and stop at the exact same time.",
+        "\"If your public version is already outside, bring something real from inside. Weird guide rule. \""
+      ]
+    },
+    "interior:burger-shop-v0": {
+      "speaker": "Morrow",
+      "pages": [
+        "Morrow at the counter is reading from a flyer aloud: \"Swag is eternal. SOURCE?",
+        "\" The kid does not notice Bosch is in the room until the fryer timer beeps in the rhythm of his name.",
+        "The grill line keeps humming because local businesses survive by not making eye contact with omens."
+      ]
+    },
+    "interior:corner-shop-v0": {
+      "speaker": "Sal",
+      "pages": [
+        "Sal slides Bosch's Public Version Card under the Tojiba kiosk scanner, then stops the machine before it finishes the",
+        "sentence. \"Hot Wallet mint, witness packet, park route.",
+        "\" The kiosk spits out a proof token, a warm charm echo, and a gum coupon stamped NOT ID."
+      ]
+    },
+    "interior:home-hall-v0": {
+      "speaker": "Biscuit",
+      "pages": [
+        "\" A flyer has slid through the mail slot: Bosch's face cropped wrong, the quote printed below.",
+        "The back is stamped VESSEL, like the house accepted delivery for a version of Bosch nobody ordered."
+      ]
+    },
+    "interior:neighbor-house-v0": {
+      "speaker": "Bonkle",
+      "pages": [
+        "Bonkle keeps one hand on the chain and one eye on the sidewalk. \"Other-you had your face and a cleaner story.",
+        "Said 'Swag is eternal' like he found it folded in somebody else's pocket.",
+        "I repeated it once and heard City Hall start making room for a stamp. \""
+      ]
+    },
+    "target:bosch-main-room-v0:cousin": {
+      "speaker": "Cousin",
+      "pages": [
+        "Cousin peels a half-stuck sticker off their sleeve: SOURCE? in marker, then a tiny arrow pointing at Bosch.",
+        "\"The road is doing that fake-helpful thing. \""
+      ]
+    },
+    "target:bosch-main-room-v0:guardian": {
+      "speaker": "Guardian",
+      "pages": [
+        "Guardian has three receipt slips clipped to a fridge magnet and none of them agree.",
+        "\"Bosch, take the Proof-Token Charm before you let the sidewalk count you. I packed snacks, not destiny. \""
+      ]
+    },
+    "target:bosch-main-room-v0:proof-token-bowl": {
+      "speaker": "Entry Bowl",
+      "pages": [
+        "Bosch takes the Proof-Token Charm. It is not money, not a weapon, and not permission.",
+        "It is a small warm proof that the name and sprite leaving the house belong to the same person.",
+        "For one second it reflects the room wrong: a bowl, a doorway, a sidewalk witness, and a version of Bosch that never",
+        "learned how to wait."
+      ]
+    },
+    "target:bosch-main-room-v0:receipt-router": {
+      "speaker": "Receipt Router",
+      "pages": [
+        "The Receipt Router coughs, prints a crooked strip, and offers three household options: Sync the morning, check Status,",
+        "or pretend this is normal. A taped note says: LOCAL PROOF ONLY. NOT A PORTAL. NOT A PARENT."
+      ]
+    },
+    "target:bosch-main-room-v0:signal-pet-gate": {
+      "speaker": "Signal-Pet",
+      "pages": [
+        "The signal-pet presses one paw against the south path.",
+        "It does not bark; it listens to the room like a radio under a blanket.",
+        "When the Proof-Token Charm warms in Bosch's hand, it sniffs once, accepts the match, and shuffles aside.",
+        "The house has approved the person leaving. The town still has to be convinced."
+      ]
+    }
+  }
+}

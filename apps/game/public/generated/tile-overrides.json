@@ -1,0 +1,5 @@
+{
+  "schema": "swagbound.tile-overrides.v1",
+  "comment": "Empty by default so EB map chunks render unchanged. To reskin map tiles, add byTile entries keyed as <tileset>:<arrangement> with 32x32 Swagbound art paths relative to apps/game/public, rebuild with pnpm build:eb-fullworld, and prioritize candidates by content/atlas/tiles.json usageCount.",
+  "byTile": {}
+}

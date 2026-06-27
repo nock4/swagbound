@@ -1,0 +1,39 @@
+{
+  "schema": "swagbound.music-manifest.v1",
+  "cues": {
+    "overworld": {
+      "file": "audio/music/overworld.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "interior": {
+      "file": "audio/music/overworld.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "battle": {
+      "file": "audio/music/battle.mp3",
+      "loop": true,
+      "gain": 0.38
+    },
+    "victory": {
+      "file": "audio/music/overworld.mp3",
+      "loop": false,
+      "gain": 0.45
+    },
+    "intro": {
+      "file": "audio/music/overworld.mp3",
+      "loop": true,
+      "gain": 0.3
+    }
+  },
+  "areas": [
+    {
+      "id": "signal-north-threshold",
+      "file": "audio/music/overworld.mp3",
+      "loop": true,
+      "gain": 0.4,
+      "match": { "sectorIds": [327, 359] }
+    }
+  ]
+}

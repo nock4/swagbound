@@ -1,0 +1,427 @@
+/*
+ * EarthBound Text Dump
+ * Time: 20:26:52 - 12/06/2026
+ * Generated using CCScriptWriter.
+ */
+
+command e(label) "{long label}"
+
+// Text Data
+l_0xc833b1:
+    "[06 49 00 {e(l_0xc834a8)}][06 8F 00 {e(l_0xc83457)}]@You boys are sneaking around, looking for Mr. Monotoli, aren't you?" next
+    "@If I catch you boys doing anything,{pause(15)} I'll arrest you--no questions asked!" next
+    "@Be prepared!" next
+    "[19 10 01]{rtoarg}@Got it, {name(0)}..." next
+    "@Ha ha ha." next
+    "@I've already checked out your name..." end
+
+l_0xc83457:
+    "@Oh, that rude comment was a slip of the tongue." next
+    "@Now I feel like Monotoli should eat my shorts." next
+    "[19 10 01]{rtoarg}@{name(0)}, {swap}" call(data_34.l_0xc7e6b3) "." end
+
+l_0xc834a8:
+    "@I misjudged you guys." next
+    "@I thought you were little snot-nosed punks." next
+    "@...I know better now." end
+
+l_0xc834e1:
+    "@I kept asking around for Trout-flavored yogurt, but...{wait}{hasitem(255, 139)}[1B 03 {e(l_0xc83515)}]" eob
+
+l_0xc83515:
+    next
+    "@What?{pause(20)}  You have a <{itemname(139)}>?" next
+    "@May I have it?" next
+    "{sound(118)}{pause(10)}@(Before you could answer, she took the <{itemname(139)}.>`)" next
+    "@Now I can make Trout-flavored yogurt for my guests." next
+    "@...You are so kind, I'll make some for you." next
+    "@My room's on the 48th floor.{pause(20)}  Don't forget to drop by!{wait}{window_closeall}{take(255, 139)}{set(flag 142)}[1F F1 B7 03 A8 02][1F 61][1F E6 B7 03][19 23 B7 03 01 FF 00][1F 16 B7 03 00]{pause(20)}{window_open(1)}@My room's on the 48th floor.{pause(20)}  Don't forget to drop by!{wait}{window_closeall}[1F E9 B7 03]{unset(flag 59)}" eob
+
+l_0xc8361b:
+    eob
+
+l_0xc8361c:
+    "@....." next
+    "@*Wheeze, wheeze*..." next
+    "@....." next
+    "@Aren't you {name(1)}...?" next
+    "@...I can't see too well..." next
+    "@Everything's blurry...{pause(20)}  You are {name(1)}, aren't you?" next
+    "@It's me, we met in Twoson...{pause(20)}  Everdred from Burglin Park." next
+    "@You must remember.{pause(20)}  I'm the best thief around." next
+    "@That... Carpainter in Happy Happy Village was hiding something..." next
+    "@*wheeze, wheeze*... strange." next
+    "@I stole it, and thought about selling it in the big city..." next
+    "@An old, city-wise man called it Mani Mani." next
+    "@It's a strange-colored, doll-looking thing." next
+    "@...Ohh... *wheeze*,{pause(20)}" linebreak
+    "  I'm in pain." next
+    "@...and" next
+    "@....." next
+    "@Monotoli tricked me and stole it...{pause(30)} from me!" next
+    "@He tricked a thief!" next
+    "@He wanted me out of the way because I know his secret..." next
+    "@He gets his evil power from that statue!" next
+    "@...Listen!" next
+    "@I'll tell you only once." next
+    "@At the cafe,{pause(15)} check...{pause(15)} behind...{pause(15)} the counter..." next
+    "@...*Gasp*..." next
+    "[06 09 00 {e(l_0xc838b9)}]{set(flag 9)}@I said I'd tell you only once..." next
+    "@But if you insist, I'll tell you once more..." next
+    "@...*gasp, gasp*" next
+    "@Do{pause(5)} do{pause(5)} do you wanna hear it again?" linebreak
+    "[19 02]Yes[02][19 02]No[02][1C 07 02][11]{clearline}[09 02 {e(l_0xc8361c)} {e(l_0xc83957)}]" goto(l_0xc83957)
+
+l_0xc838b9:
+    "@I've told you twice already..." next
+    "@But if you wanna hear one more time..." next
+    "@I'll tell you once more..." next
+    "@D...{pause(15)} D...{pause(15)} do... you wanna hear it again?" linebreak
+    "[19 02]Yes[02][19 02]No[02][1C 07 02][11]{clearline}[09 02 {e(l_0xc8392f)} {e(l_0xc83957)}]" goto(l_0xc83957)
+
+l_0xc8392f:
+    "@I'm not that nice of a guy.{pause(20)}  Besides." next
+    "@I'm slipping away..." next
+    goto(l_0xc83957)
+
+l_0xc83957:
+    "@...Before I go, here's my last haiku poem:" next
+    "@When on your way out" next
+    "@Be sure that you say goodbye" next
+    "@then lock the door tight." next
+    "@This is my final request...{pause(20)}" linebreak
+    "  Don't follow me." next
+    "@I must be on my way..." next
+    "@Whoa..." next
+    "@So...{pause(15)} long!{wait}{set(flag 145)}{unset(flag 60)}" call(data_40.l_0xc8983b) eob
+
+l_0xc839f7:
+    "[06 91 00 {e(l_0xc83a24)}]@There's a person lying on the ground." next
+    "@I wonder if he's... he's..." end
+
+l_0xc83a24:
+    "@He's not dead..." next
+    "@I thought he may have passed on." end
+
+l_0xc83a45:
+    "[06 91 00 {e(l_0xc83a6a)}]@Oooo... I don't like seeing a corpse around here." end
+
+l_0xc83a6a:
+    "@He should really go to the hospital like other sick people do." end
+
+l_0xc83a89:
+    "[06 91 00 {e(l_0xc83ab3)}]@He's breathing..." next
+    "@Has he just been playing too hard?" end
+
+l_0xc83ab3:
+    "@Do you know him?" next
+    "@You must be a dangerous kid!" next
+    "@I'll bet you're on your way to Jackie's Cafe right now!" end
+
+l_0xc83aee:
+    "[06 91 00 {e(l_0xc83c5d)}][06 02 00 {e(l_0xc83c1e)}]@Don't cut in front of me!" next
+    "@If you give me somethin', I'll let you have my spot." next
+    "@Will you give me somethin'?" linebreak
+    "[19 02]Yes[02][19 02]No[02][1C 07 02][11]{clearline}[09 02 {e(l_0xc83b7b)} {e(l_0xc83b5a)}]" goto(l_0xc83b5a)
+
+l_0xc83b5a:
+    newline
+    "@Then stay right there where you're too short to see a thing!" end
+
+l_0xc83b7b:
+    "@So, what do I get?" call(data_14.l_0xc5e456) "{pause(60)}" newline
+    "[1B 02 {e(l_0xc83b5a)}]{store_registers}[19 19 00 00][1D 0B 00][1B 02 {e(l_0xc83c2d)}]@Are you sure?" linebreak
+    "[19 02]Yes[02][19 02]No[02][1C 07 02][11]{clearline}[09 02 {e(l_0xc83bfc)} {e(l_0xc83bc3)}]" goto(l_0xc83bc3)
+
+l_0xc83bc3:
+    "@If you don't want to give me somethin'," next
+    "@don't say you're gonna give me somethin'..." next
+    goto(l_0xc83b7b)
+
+l_0xc83bfc:
+    "{load_registers}[1D 0F 00 00]{sound(118)}{pause(1)}@All right, take my place.{wait}{set(flag 2)}" call(data_40.l_0xc8982a) eob
+
+l_0xc83c1e:
+    "@All right, take my place." end
+
+l_0xc83c2d:
+    "@Give me somethin' that makes me really happy!" next
+    "@And do it in a nice way!" end
+
+l_0xc83c5d:
+    "@Don't you feel better since you had the chance to talk with your friend?" next
+    "@I helped you find him." end
+
+l_0xc83c94:
+    "[06 91 00 {e(l_0xc83cc8)}]@Oh, no no no.{pause(20)}  I don't want to go like that." next
+    "@I'm glad it wasn't me." end
+
+l_0xc83cc8:
+    "@Is that man going to... to...?" end
+
+l_0xc83cdd:
+    "[06 91 00 {e(l_0xc83cf9)}]@He doesn't look like a nice man." end
+
+l_0xc83cf9:
+    "@He stared right at me..." next
+    "@Ooo... it was scary!" end
+
+l_0xc83d18:
+    call(data_12.l_0xc5d43d) eob
+
+l_0xc83d1e:
+    call(data_12.l_0xc5d44f) eob
+
+l_0xc83d24:
+    "[06 C2 00 {e(data_32.l_0xc7c588)}]{counter(1)}" call(data_33.l_0xc7dc7f) "[1B 03 {e(data_22.l_0xc690a6)}]{music(155)}@You finally got here." next
+    "@This is the fifth <Your Sanctuary> location.{pause(20)}  But it's mine now." next
+    "@Take it from me,{pause(30)} if you dare...[03]" call(data_21.l_0xc68425) "[1B 03 {e(data_21.l_0xc683de)}][1F 1E E3 03 08]{pause(120)}{set(flag 194)}" eob
+
+l_0xc83d9e:
+    "[06 5A 00 {e(l_0xc83e3c)}]@What happened to those guys digging for the buried gold?" next
+    "@If they found the gold, it would be worth a huge amount of money." next
+    "@They'd be able to pay off a million dollar debt very easily." next
+    "@If I were them, I'd go to Japan and live it up!" end
+
+l_0xc83e3c:
+    "@I heard they couldn't find the buried gold." next
+    "@Those guys worked really hard,{pause(15)} but all they got was a diamond!" end
+
+l_0xc83e7f:
+    "@I wonder why the department store's closed." end
+
+l_0xc83e97:
+    "@When Monotoli became the owner," next
+    "@this department store began having strange happenings." end
+
+l_0xc83ecd:
+    "@I heard the department store finally re-opened." next
+    "@Hope they have a boffo sale." end
+
+l_0xc83efd:
+    "@Behind this wall, things seem very strange." next
+    "@I feel like this isn't my place..." next
+    "@Maybe it's your place." end
+
+l_0xc83f3c:
+    "@The boy stuck to the wall... may be a Peeping Tom." end
+
+l_0xc83f5f:
+    "[06 8F 00 {e(l_0xc83faf)}]@(You were wandering around the warehouse with a vacant, far away look in your eyes." next
+    "@Were you daydreaming?)" end
+
+l_0xc83faf:
+    "@I'm lucky I'm a rat.{pause(20)}  We have such easy lives..." end
+
+l_0xc83fcf:
+    "@Oh, {stat(8)}," next
+    "[06 7E 02 {e(l_0xc83fe6)}]@{stat(30)}..." next
+    goto(l_0xc83fe6)
+
+l_0xc83fe6:
+    "@I'm Geldegarde Monotoli." next
+    "@Don't you remember me?" next
+    "@I returned this building to Mr. Enrich Flavor." next
+    "@Now I'm working as an elevator man." next
+    "@I'm very happy, and it's good to be alive." next
+    "@I heard of your many successes.{pause(20)}  Wonderful." end
+
+l_0xc84079:
+    "@Wheeee!{pause(20)}  Hic!" next
+    "@{name(1)}." next
+    "@Pokey left me, his own dad, and just disappeared." next
+    "@If you see him, tell him that he should take better care of his father." next
+    "@Don't tell my wife in Onett that I've been spending my time here." next
+    "@Hic!{pause(15)}  Wheeeee!" end
+
+l_0xc84111:
+    "@I heard Venus made an appearance at the Runaway Five show." next
+    "@I missed her 'cause I went to the bathroom." next
+    "@I'll hate bathrooms for the rest of my life." end
+
+l_0xc84168:
+    "@Oh, I can't see the Runaway Five here anymore...?" next
+    "@I should dump this sorry excuse of a man and become a Runaway Five groupie." end
+
+l_0xc841b3:
+    "@I'm very punctual about time and careful with money." next
+    "@I don't look like it, though." end
+
+l_0xc841de:
+    "[06 49 00 {e(l_0xc842f6)}][06 80 01 {e(l_0xc842f3)}][06 99 00 {e(l_0xc842f0)}][06 DA 00 {e(l_0xc842ed)}][06 5C 01 {e(l_0xc842ea)}][06 56 01 {e(l_0xc842e7)}][06 D9 00 {e(l_0xc842e4)}][06 10 00 {e(l_0xc842e1)}][06 8F 00 {e(l_0xc842de)}][06 4B 00 {e(l_0xc842db)}][06 8B 00 {e(l_0xc842d8)}][06 39 00 {e(l_0xc842d5)}][06 D6 00 {e(l_0xc842d2)}][06 47 00 {e(l_0xc842cf)}][06 45 00 {e(l_0xc842cc)}][06 80 00 {e(l_0xc842c9)}][06 2E 00 {e(l_0xc842c6)}][06 D3 00 {e(l_0xc842c3)}][06 55 00 {e(l_0xc842c0)}][06 0D 00 {e(l_0xc842bd)}][06 44 00 {e(l_0xc842ba)}][06 56 00 {e(l_0xc842b7)}][06 76 00 {e(l_0xc842b4)}][06 69 00 {e(l_0xc842b1)}][06 B6 00 {e(l_0xc842ae)}][06 50 00 {e(l_0xc842ab)}][06 40 00 {e(l_0xc842a8)}][06 28 00 {e(l_0xc842a5)}]{counter(1)}" eob
+
+l_0xc842a5:
+    "{counter(2)}" eob
+
+l_0xc842a8:
+    "{counter(3)}" eob
+
+l_0xc842ab:
+    "{counter(4)}" eob
+
+l_0xc842ae:
+    "{counter(5)}" eob
+
+l_0xc842b1:
+    "{counter(6)}" eob
+
+l_0xc842b4:
+    "{counter(7)}" eob
+
+l_0xc842b7:
+    "{counter(8)}" eob
+
+l_0xc842ba:
+    "{counter(9)}" eob
+
+l_0xc842bd:
+    "{counter(10)}" eob
+
+l_0xc842c0:
+    "{counter(11)}" eob
+
+l_0xc842c3:
+    "{counter(12)}" eob
+
+l_0xc842c6:
+    "{counter(13)}" eob
+
+l_0xc842c9:
+    "{counter(14)}" eob
+
+l_0xc842cc:
+    "{counter(15)}" eob
+
+l_0xc842cf:
+    "{counter(16)}" eob
+
+l_0xc842d2:
+    "{counter(17)}" eob
+
+l_0xc842d5:
+    "{counter(18)}" eob
+
+l_0xc842d8:
+    "{counter(19)}" eob
+
+l_0xc842db:
+    "{counter(20)}" eob
+
+l_0xc842de:
+    "{counter(21)}" eob
+
+l_0xc842e1:
+    "{counter(22)}" eob
+
+l_0xc842e4:
+    "{counter(23)}" eob
+
+l_0xc842e7:
+    "{counter(24)}" eob
+
+l_0xc842ea:
+    "{counter(25)}" eob
+
+l_0xc842ed:
+    "{counter(26)}" eob
+
+l_0xc842f0:
+    "{counter(27)}" eob
+
+l_0xc842f3:
+    "{counter(28)}" eob
+
+l_0xc842f6:
+    "{counter(29)}" eob
+
+l_0xc842f9:
+    call(l_0xc841de) "{ctoarg}{swap}[1F C0 1D {e(l_0xc843f6)} {e(l_0xc8442c)} {e(l_0xc8444c)} {e(l_0xc84485)} {e(l_0xc844bd)} {e(l_0xc844ea)} {e(l_0xc84525)} {e(l_0xc8455f)} {e(l_0xc84608)} {e(l_0xc84657)} {e(l_0xc84693)} {e(l_0xc84693)} {e(l_0xc84693)} {e(l_0xc84693)} {e(l_0xc84693)} {e(l_0xc846b6)} {e(l_0xc846b6)} {e(l_0xc846fc)} {e(l_0xc84728)} {e(l_0xc8474d)} {e(l_0xc8477f)} {e(l_0xc847e6)} {e(l_0xc8481a)} {e(l_0xc8484c)} {e(l_0xc848a4)} {e(l_0xc848db)} {e(data_38.l_0xc84930)} {e(data_38.l_0xc84973)} {e(data_38.l_0xc849aa)}]" eob
+
+l_0xc8437a:
+    "@Good morning!" linebreak
+    "  Here's your free copy of the morning newspaper!" next
+    eob
+
+l_0xc843a7:
+    "@Here's today's headlines in the Onett Times..." next
+    eob
+
+l_0xc843c8:
+    "@There's an advertisement in today's Onett Times that looks interesting." next
+    eob
+
+l_0xc843f6:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Mysterious meteorite north of Onett still burning brightly>" end
+
+l_0xc8442c:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Road to Twoson still closed>" end
+
+l_0xc8444c:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Complaints about Sharks gang suddenly melt into thin air>" end
+
+l_0xc84485:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Mayor of Onett teaches Sharks a lesson, brings peace to Onett>" end
+
+l_0xc844bd:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Tamer of the Sharks actually a boy in a red cap!>" end
+
+l_0xc844ea:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Many citizens of Onett suffer due to crooked real estate agents>" end
+
+l_0xc84525:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Girl named {stat(30)} listed as missing in neighboring town of Twoson>" end
+
+l_0xc8455f:
+    call(l_0xc8437a) "@Yes... the Onett Times... Uhhh..." next
+    "@Well, {pause(10)} I made a mistake and brought you a newspaper called OnettStar on accident." next
+    "@Let me read you the headline anyway..." next
+    "@<So called Mr. Leader Guy running for mayor of Onett>" next
+    "@Well,{pause(10)} that's OnettStar for you." end
+
+l_0xc84608:
+    call(l_0xc8437a) call(l_0xc843c8) "@<Isn't it about time for a fantastic vacation to the dream resort of Summers?" next
+    "@Someday, we'll see you there...>" end
+
+l_0xc84657:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Twoson kidnap victim {stat(30)} rescued by local Onett hero {name(1)}>" end
+
+l_0xc84693:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Situation in the town of Threed is dire>" end
+
+l_0xc846b6:
+    call(l_0xc8437a) call(l_0xc843c8) "@<Even our clerks get lost in the store!" next
+    "@The world's largest department store, the Fourside Grand>" end
+
+l_0xc846fc:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Meteorite north of Onett still burning hot>" end
+
+l_0xc84728:
+    call(l_0xc8437a) "@...{pause(10)}Oh,{pause(10)} there's no issue today... sorry." end
+
+l_0xc8474d:
+    call(l_0xc8437a) call(l_0xc843a7) "@<{stat(4)} found to be major source of nutrition and energy>" end
+
+l_0xc8477f:
+    call(l_0xc8437a) call(l_0xc843c8) "@<Exotic atmosphere!" linebreak
+    "  Historical sites!" next
+    "@Come to the glorious jewel named Scaraba!" next
+    "@Scaraba Tourist Association>" end
+
+l_0xc847e6:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Onett Police chief still not through playing EarthBound!>" end
+
+l_0xc8481a:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Prince {name(4)} of Dalaam traveling incognito to Onett?>" end
+
+l_0xc8484c:
+    call(l_0xc8437a) call(l_0xc843c8) "@<Even a seasoned world traveler enjoys staying here." next
+    "@Hotel Onett in lovely downtown Onett.>" next
+    "@...Hey, this is our ad!" end
+
+l_0xc848a4:
+    call(l_0xc8437a) call(l_0xc843a7) "@<International news:  Pyramid in Scaraba vandalized>" end
+
+l_0xc848db:
+    call(l_0xc8437a) call(l_0xc843a7) "@<Onett Library facing crisis" next
+    "@Many book borrowers giving library books away or never returning them>" end
+
