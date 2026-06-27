@@ -165,10 +165,16 @@ async function fight(label) {
       const living = b.enemies.map((e, i) => ({ e, i })).filter((x) => x.e.alive);
       const boss = living.reduce((a, x) => (x.e.hpTarget > a.e.hpTarget ? x : a), living[0]);
       let act = "BASH";
+      // Paula (the Freeze engine) is glass and now gets occasionally targeted, so Bosch
+      // protects her: if she's critically low, he Lifeups HER (ally-target) before himself.
+      const paula = b.party[1];
+      const paulaCrit = idx === 0 && paula && paula.alive && paula.hpTarget <= 14;
       if (idx === 1 && me.pp >= 4 && (await openPsi(9))) {
         await pickTargetIdx(boss.i); await tap("z"); act = "Freeze"; // Paula -> toughest enemy
+      } else if (paulaCrit && me.pp >= 4 && (await openPsi(23))) {
+        await pickTargetIdx(1); await tap("z"); act = "Lifeup->Paula"; // Bosch saves Paula
       } else if (idx === 0 && me.hpTarget <= G.lastMaxHp * 0.55 && me.pp >= 4 && (await openPsi(23))) {
-        await tap("z"); act = "Lifeup"; // Bosch heals himself (default party target)
+        await pickTargetIdx(0); await tap("z"); act = "Lifeup"; // Bosch heals himself
       } else {
         if ((await peek()).b?.submenu === "psi") await tap("x"); // back out of a half-opened PSI list
         await bashWeakest(living);

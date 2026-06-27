@@ -277,6 +277,10 @@ export const PLAYER_DEFAULTS = {
 } as const;
 
 const ENEMY_HP_RATE_PER_SEC = 42;
+// Chance a single-target enemy attack swings at a non-lead party member instead of
+// the lead. Low so the lead still soaks most hits, but enough that a glass back-row
+// member is a real liability you have to protect.
+const ENEMY_OFF_LEAD_TARGET_CHANCE = 0.18;
 const STRENGTH_RANK: Record<string, number> = {
   none: 0,
   alpha: 1,
@@ -1493,8 +1497,17 @@ function targetActorsForEnemyAction(state: BattleState, target: number | undefin
   }
 
   switch (target) {
-    case 1:
+    case 1: {
+      // Single-target enemy attacks nominally hit the lead, but occasionally swing
+      // at someone else so a fragile back-row member (e.g. Paula, hp30) isn't
+      // perfectly safe behind the tank. Lead stays the heavy favourite.
+      if (living.length > 1 && normalizedRoll(rng()) < ENEMY_OFF_LEAD_TARGET_CHANCE) {
+        const offLead = living.slice(1);
+        const index = Math.min(offLead.length - 1, Math.floor(normalizedRoll(rng()) * offLead.length));
+        return [offLead[index]];
+      }
       return [living[0]];
+    }
     case 2: {
       const index = Math.min(living.length - 1, Math.floor(normalizedRoll(rng()) * living.length));
       return [living[index]];
