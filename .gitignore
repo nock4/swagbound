@@ -47,3 +47,5 @@ apps/game/public/audio/jammers/
 
 # Mined shop-clerk targets (playtest fixture)
 scripts/.shop-clerks.json
+
+scripts/.onett-dialogue-targets.json
