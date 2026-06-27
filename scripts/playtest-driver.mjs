@@ -19,6 +19,7 @@
  */
 import { chromium } from "@playwright/test";
 import { mkdirSync } from "node:fs";
+import { findPath, nearestOpen } from "./route.mjs";
 
 const args = parseArgs(process.argv.slice(2));
 const scenario = JSON.parse(args.scenario ?? "{}");
@@ -93,6 +94,9 @@ const main = async () => {
     else if (scenario.mode === "saveload") await runSaveLoad(page);
     else if (scenario.mode === "shop") await runShop(page);
     else if (scenario.mode === "trigger") await runTrigger(page);
+    else if (scenario.mode === "door") await runDoor(page);
+    else if (scenario.mode === "equip") await runEquip(page);
+    else if (scenario.mode === "cutscene") await runCutscene(page);
     else await runExplore(page);
   } catch (e) {
     add("driverError", String(e).slice(0, 200));
@@ -137,7 +141,8 @@ async function snap(page) {
       inRange: d.inInteractionRange, cue: d.musicCue, sector: d.currentSectorIndex,
       bounds: d.movementBounds, battle: b ? { phase: b.phase, command: b.command } : null,
       flags: Array.isArray(d.flags) ? [...d.flags].sort() : [],
-      wallet: ps.wallet, bank: ps.bank, invItems: ps.inventoryItems, partyCount: ps.partyCount
+      wallet: ps.wallet, bank: ps.bank, invItems: ps.inventoryItems, partyCount: ps.partyCount,
+      doorFade: d.doorFadeActive, lastDoor: d.lastDoor
     };
   });
 }
@@ -277,6 +282,40 @@ async function runScript(page) {
   }
 }
 
+// A* walk to (tx,ty) using the game's own collision (__solidAt), like act1.mjs.
+// Returns the final snapshot. Bails early on transition (fade)/battle/dialogue.
+async function astarWalkTo(page, tx, ty, opts = {}) {
+  const step = 8, M = 96;
+  const s0 = await snap(page);
+  if (s0.x == null) return s0;
+  const x0 = Math.min(s0.x, tx) - M, y0 = Math.min(s0.y, ty) - M, x1 = Math.max(s0.x, tx) + M, y1 = Math.max(s0.y, ty) + M;
+  const grid = await page.evaluate(({ x0, y0, x1, y1, step }) => {
+    const fn = globalThis.__solidAt; if (!fn) return null;
+    const cols = Math.floor((x1 - x0) / step) + 1, rows = Math.floor((y1 - y0) / step) + 1;
+    const g = []; for (let r = 0; r < rows; r++) { const row = []; for (let c = 0; c < cols; c++) row.push(fn(x0 + c * step, y0 + r * step) ? 1 : 0); g.push(row); }
+    return { cols, rows, g };
+  }, { x0, y0, x1, y1, step });
+  if (!grid) return s0;
+  const blocked = grid.g.map((row) => row.map((v) => v === 1));
+  const w2c = (x, y) => [Math.round((x - x0) / step), Math.round((y - y0) / step)];
+  const start = nearestOpen(blocked, grid.cols, grid.rows, ...w2c(s0.x, s0.y));
+  const goal = nearestOpen(blocked, grid.cols, grid.rows, ...w2c(tx, ty));
+  const path = start && goal && findPath(blocked, grid.cols, grid.rows, start, goal);
+  if (!path || !path.length) return s0;
+  for (let i = 1; i < path.length; i++) {
+    const wx = x0 + path[i].c * step, wy = y0 + path[i].r * step;
+    // step toward this waypoint
+    for (let k = 0; k < 6; k++) {
+      const s = await snap(page);
+      if (s.doorFade || s.battle || (opts.stopOnDialogue && s.dlg)) return s;
+      const dx = wx - (s.x ?? wx), dy = wy - (s.y ?? wy);
+      if (Math.hypot(dx, dy) < 7) break;
+      await hold(page, Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up"), 130);
+    }
+  }
+  return snap(page);
+}
+
 async function walkToward(page, tx, ty, maxIters = 14) {
   for (let i = 0; i < maxIters; i++) {
     const s = await snap(page);
@@ -364,6 +403,107 @@ async function runTrigger(page) {
   if (expect === true && !fired) add("triggerDidNotFire", `expected trigger '${t.id}' to fire (conditions met) but nothing happened at (${t.x},${t.y})`, { where: "trigger", severity: "high" });
   if (expect === false && fired) add("triggerFiredWhenGated", `trigger '${t.id}' fired but should be gated (requireFlags unmet / blocked)`, { where: "trigger", severity: "high" });
   if (s.battle) await runBattle(page);
+}
+
+// DOOR: walk into a door, assert a transition fires, you're not boxed in after, and you can leave.
+async function runDoor(page) {
+  const door = scenario.door || {};
+  const enterDir = door.dir || "down";
+  const opp = { down: "up", up: "down", left: "right", right: "left" }[enterDir] || "up";
+  const start = await snap(page);
+  if (start.x == null) { add("noBoot", "no player for door test"); return; }
+  const startSector = start.sector, startX = start.x, startY = start.y;
+  let sawFade = false, entered = false;
+  // A* to the door's walkable doorstep, then step into the door to trigger it.
+  const atStep = await astarWalkTo(page, door.x, door.y);
+  if (atStep.doorFade) sawFade = entered = true;
+  for (let i = 0; i < 8 && !entered; i++) {
+    const s0 = await snap(page);
+    if (s0.x == null) break;
+    const dx = door.x - s0.x, dy = door.y - s0.y;
+    const dir = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? "right" : "left") : (dy > 0 ? "down" : "up");
+    await hold(page, Math.hypot(dx, dy) < 10 ? enterDir : dir, 190);
+    const s = await snap(page);
+    if (s.doorFade) sawFade = true;
+    const moved = Math.hypot((s.x ?? startX) - startX, (s.y ?? startY) - startY);
+    if (sawFade || (s.sector != null && s.sector !== startSector && moved > 60) || moved > 200) entered = true;
+    if (s.battle) await runBattle(page);
+  }
+  await page.waitForTimeout(800); // let any fade settle
+  const mid = await snap(page);
+  if (!entered && !sawFade && mid.sector === startSector && Math.hypot((mid.x ?? startX) - startX, (mid.y ?? startY) - startY) < 40) {
+    add("doorNoTransition", `walked ${enterDir} into door at (${door.x},${door.y}) but no transition fired`, { where: "door", severity: "med" });
+    return;
+  }
+  if (mid.doorFade) { // fade should have completed by now
+    await page.waitForTimeout(1500);
+    if ((await snap(page)).doorFade) { add("doorFadeStuck", `door fade never completed after entering (${door.x},${door.y})`, { where: "door", severity: "high" }); await shot(page, "door-fade-stuck"); return; }
+  }
+  await shot(page, "door-entered");
+  // not boxed in after entering?
+  everMoved = true; await boxedCheck(page);
+  // try to leave: walk back the way we came
+  const inside = await snap(page);
+  let exited = false;
+  for (let i = 0; i < 10; i++) {
+    await hold(page, opp, 220);
+    const s = await snap(page);
+    if (s.doorFade || (s.sector != null && s.sector === startSector)) { exited = true; break; }
+    if (s.battle) await runBattle(page);
+  }
+  if (!exited) add("doorCantExitVerify", `entered door (${door.x},${door.y}) but could not walk back out (may be navigation; verify)`, { where: "door", severity: "low" });
+}
+
+// EQUIP/MENU: open menu, walk every screen, equip/unequip, use a good, watch for crash/softlock/no-effect.
+async function runEquip(page) {
+  await tap(page, "m", 320);
+  if (!(await snap(page)).menu) { add("menuWontOpen", "menu did not open on M", { where: "equip", severity: "med" }); return; }
+  await shot(page, "menu");
+  // Equip is the 4th top-level row (Talk,Goods,PSI,Equip,Check,Status) -> down x3
+  const before = await snap(page);
+  for (let r = 0; r < 6; r++) {
+    // navigate to row r, enter, poke first few items, back out
+    await tap(page, "x", 120); await tap(page, "Escape", 120); // ensure top level
+    for (let k = 0; k < r; k++) await tap(page, "ArrowDown", 110);
+    await tap(page, "z", 220); // enter screen
+    let s = await snap(page);
+    if (s.mode === "error") { add("crash", `menu screen row ${r} crashed`, { where: "equip", severity: "high" }); return; }
+    // poke a couple of items/rows with confirm (equip/use/select a character)
+    for (let k = 0; k < 4; k++) { await tap(page, "z", 180); s = await snap(page); if (s.mode === "error") { add("crash", `menu action row ${r} crashed`, { where: "equip", severity: "high" }); return; } if (s.wallet != null && s.wallet < 0) add("menuMoneyNegative", `wallet negative after menu actions`, { where: "equip", severity: "high" }); }
+    // back out to top
+    for (let k = 0; k < 4; k++) await tap(page, "x", 110);
+  }
+  // close menu
+  for (let i = 0; i < 5; i++) { await tap(page, "x", 110); await tap(page, "Escape", 110); if (!(await snap(page)).menu) break; }
+  const after = await snap(page);
+  if (after.menu) add("menuStuck", "menu would not close after equip/use stress", { where: "equip", severity: "high" });
+  else if (after.locked && !after.dlg) add("menuLeftLocked", "input locked after closing menu", { where: "equip", severity: "high" });
+}
+
+// CUTSCENE: walk into the trigger area; assert the scene fires (player locks / NPCs move)
+// and COMPLETES (player unlocks) without softlocking.
+async function runCutscene(page) {
+  const cs = scenario.cutscene || {};
+  await astarWalkTo(page, cs.x, cs.y);
+  // nudge into the area
+  let fired = false;
+  for (let i = 0; i < 8; i++) {
+    await hold(page, cs.approach || "up", 180);
+    const s = await snap(page);
+    if (s.locked || s.dlg) { fired = true; break; }
+  }
+  if (!fired) { add("cutsceneNoFire", `entered area for '${cs.id}' but it never started (player never locked) — may be once:true already-fired or area miss`, { where: "cutscene", severity: "low" }); return; }
+  await shot(page, "cutscene-mid");
+  // wait for completion (unlock); advance any dialogue
+  let done = false;
+  for (let i = 0; i < 40; i++) {
+    const s = await snap(page);
+    if (!s.locked && !s.dlg) { done = true; break; }
+    if (s.dlg) await tap(page, "z", 200); else await page.waitForTimeout(300);
+  }
+  if (!done) { add("cutsceneSoftlock", `cutscene '${cs.id}' did not release the player within ~12s (possible softlock)`, { where: "cutscene", severity: "high" }); await shot(page, "cutscene-stuck"); return; }
+  // after completion the player must be able to move
+  everMoved = true; await boxedCheck(page);
 }
 
 async function finish(browser, page) {
