@@ -2,22 +2,54 @@
   "schema": "swagbound.item-overrides.v1",
   "byItemId": {
     "2": {
-      "name": "Proxy Plush"
+      "name": "Teddy bear",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "targetSide": "party",
+        "remaining": 3
+      }
     },
     "3": {
-      "name": "Heavy Proxy Plush"
+      "name": "Super plush bear",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded",
+        "targetSide": "party",
+        "remaining": 5
+      }
     },
     "5": {
-      "name": "Scrap Gadget"
+      "name": "Broken gadget",
+      "effect": {
+        "kind": "damage",
+        "amount": 215,
+        "targetSide": "enemies"
+      }
     },
     "7": {
-      "name": "Static Can"
+      "name": "Broken spray can",
+      "effect": {
+        "kind": "damage",
+        "amount": 161,
+        "targetSide": "enemies"
+      }
     },
     "9": {
-      "name": "Heavy Wrench"
+      "name": "Broken iron",
+      "effect": {
+        "kind": "buffStat",
+        "stat": "defense",
+        "amount": 10
+      }
     },
     "11": {
-      "name": "Civic Cannon"
+      "name": "Broken cannon",
+      "effect": {
+        "kind": "buffStat",
+        "stat": "offense",
+        "amount": 10
+      }
     },
     "17": {
       "name": "Practice Bat"
@@ -484,10 +516,19 @@
       }
     },
     "133": {
-      "name": "Civic Launcher"
+      "name": "Bazooka",
+      "effect": {
+        "kind": "damage",
+        "amount": 400
+      }
     },
     "140": {
-      "name": "Joker Card"
+      "name": "Ruler",
+      "effect": {
+        "kind": "buffStat",
+        "stat": "speed",
+        "amount": 1
+      }
     },
     "142": {
       "effect": {
