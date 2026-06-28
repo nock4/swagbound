@@ -10,7 +10,7 @@
 //         "image": "assets/buildings/the-plug.png" }   // x,y,w,h = where/size on the chunk (512x512), top-left origin
 //   ] }
 import { execSync } from "node:child_process";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, existsSync, rmSync } from "node:fs";
 import { join } from "node:path";
 
 const ROOT = process.cwd();
@@ -33,6 +33,18 @@ for (const b of cfg.buildings ?? []) {
   // Drop the sprite straight over the EB building (no ground fill). Placement
   // is anchored by the BOTTOM edge (b.y + b.h = the EB building's base).
   execSync(`magick "${chunk}" \\( "${img}" -filter point -resize ${b.w}x${b.h}! \\) -geometry +${b.x}+${b.y} -compose over -composite "${chunk}"`, { stdio: "ignore" });
+  // Tall buildings are promoted to a FOREGROUND chunk layer (you walk behind
+  // them), and the sign can live there too — so the un-patched foreground would
+  // render the old sign over our background patch. Stamp the patch onto the
+  // foreground as well, but CLIP it to the foreground's existing silhouette so
+  // we never add stray opaque pixels (which would occlude the player).
+  const fg = join(CHUNKS, `foreground-${cx}-${cy}.png`);
+  if (existsSync(fg)) {
+    const tmp = join(CHUNKS, `.fgtmp-${cx}-${cy}.png`);
+    execSync(`magick "${fg}" \\( "${img}" -filter point -resize ${b.w}x${b.h}! \\) -geometry +${b.x}+${b.y} -compose over -composite "${tmp}"`, { stdio: "ignore" });
+    execSync(`magick "${tmp}" \\( "${fg}" -alpha extract \\) -compose CopyOpacity -composite "${fg}"`, { stdio: "ignore" });
+    rmSync(tmp, { force: true });
+  }
   console.log(`  stamped ${b.id} -> chunk ${b.chunk} @ ${b.x},${b.y} (${b.w}x${b.h}, base ${b.y + b.h})`);
   stamped++;
 }
