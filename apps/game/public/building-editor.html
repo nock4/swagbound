@@ -30,7 +30,7 @@
 <script>
 let DATA = { buildings: [] }, scale = 2.5, chunk = null, sel = null;
 const stage = document.getElementById("stage"), chunkSel = document.getElementById("chunk"), info = document.getElementById("info");
-const CH = "/generated/assets/world/chunks";
+const CH = "/editor-chunks"; // clean (un-stamped) EB chunks so the draggable sprite is the only Swagbound building
 
 async function load() {
   DATA = await (await fetch("/__building-overrides")).json();

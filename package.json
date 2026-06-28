@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "pnpm build:eb-fullworld",
-    "build:eb-fullworld": "node --import tsx scripts/build-eb-fullworld.ts && node scripts/stamp-signs.mjs && node scripts/stamp-buildings.mjs",
+    "build:eb-fullworld": "node --import tsx scripts/build-eb-fullworld.ts && node scripts/snapshot-clean-chunks.mjs && node scripts/stamp-signs.mjs && node scripts/stamp-buildings.mjs",
     "predev": "pnpm build:eb-fullworld",
     "dev": "pnpm --filter @eb/game dev",
     "dev:serve": "pnpm --filter @eb/game dev",
