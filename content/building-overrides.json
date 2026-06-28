@@ -1,0 +1,87 @@
+{
+  "schema": "swagbound.building-overrides.v1",
+  "comment": "Drop-in building sprites composited onto the map. x,y,w,h = position+size on the 512x512 chunk.",
+  "buildings": [
+    {
+      "id": "the-plug",
+      "chunk": "3,2",
+      "x": 18,
+      "y": 3,
+      "w": 96,
+      "h": 114,
+      "image": "assets/buildings/the-plug.png"
+    },
+    {
+      "id": "grease",
+      "chunk": "3,2",
+      "x": 120,
+      "y": 18,
+      "w": 154,
+      "h": 108,
+      "image": "assets/buildings/grease.png"
+    },
+    {
+      "id": "the-dao",
+      "chunk": "3,2",
+      "x": 10,
+      "y": 208,
+      "w": 234,
+      "h": 142,
+      "image": "assets/buildings/the-dao.png"
+    },
+    {
+      "id": "mons-link",
+      "chunk": "3,3",
+      "x": 0,
+      "y": 100,
+      "w": 100,
+      "h": 118,
+      "image": "assets/buildings/mons-link.png"
+    },
+    {
+      "id": "cafe",
+      "chunk": "3,3",
+      "x": 255,
+      "y": 80,
+      "w": 132,
+      "h": 142,
+      "image": "assets/buildings/cafe.png"
+    },
+    {
+      "id": "the-precinct",
+      "chunk": "3,3",
+      "x": 434,
+      "y": 52,
+      "w": 78,
+      "h": 162,
+      "image": "assets/buildings/the-precinct.png"
+    },
+    {
+      "id": "dr-office",
+      "chunk": "2,3",
+      "x": 38,
+      "y": 4,
+      "w": 226,
+      "h": 168,
+      "image": "assets/buildings/dr-office.png"
+    },
+    {
+      "id": "slice",
+      "chunk": "2,3",
+      "x": 370,
+      "y": 74,
+      "w": 104,
+      "h": 150,
+      "image": "assets/buildings/slice.png"
+    },
+    {
+      "id": "the-archive",
+      "chunk": "4,1",
+      "x": 0,
+      "y": 252,
+      "w": 190,
+      "h": 118,
+      "image": "assets/buildings/the-archive.png"
+    }
+  ]
+}
