@@ -5,26 +5,357 @@
     {
       "id": "onett-police-disperse",
       "comment": "Police station (data_15 cop row, npcs 73-77 sprite group 74 @ y=192). EB had them walk off via raw [1F F1] codes + {set(flag 289)}. They turn, lose interest, file out the right door (7640,208) one by one, and stay gone (EB flag 289).",
-      "trigger": { "kind": "area", "area": { "x": 7430, "y": 204, "w": 220, "h": 128 } },
+      "trigger": {
+        "kind": "area",
+        "area": {
+          "x": 7430,
+          "y": 204,
+          "w": 220,
+          "h": 128
+        }
+      },
       "once": true,
       "lockPlayer": true,
       "steps": [
-        { "op": "faceActor", "actor": { "npcId": 74 }, "dir": "down" },
-        { "op": "faceActor", "actor": { "npcId": 75 }, "dir": "down" },
-        { "op": "faceActor", "actor": { "npcId": 76 }, "dir": "down" },
-        { "op": "dialogue", "pages": ["The officers size you up, then lose interest all at once.", "\"Shift's over. Whatever this is, it's the next guy's problem.\""] },
-        { "op": "moveActor", "actor": { "npcId": 77 }, "to": { "x": 7640, "y": 208 } },
-        { "op": "hideActor", "actor": { "npcId": 77 } },
-        { "op": "moveActor", "actor": { "npcId": 76 }, "to": { "x": 7640, "y": 208 } },
-        { "op": "hideActor", "actor": { "npcId": 76 } },
-        { "op": "moveActor", "actor": { "npcId": 75 }, "to": { "x": 7640, "y": 208 } },
-        { "op": "hideActor", "actor": { "npcId": 75 } },
-        { "op": "moveActor", "actor": { "npcId": 74 }, "to": { "x": 7640, "y": 208 } },
-        { "op": "hideActor", "actor": { "npcId": 74 } },
-        { "op": "moveActor", "actor": { "npcId": 73 }, "to": { "x": 7640, "y": 208 } },
-        { "op": "hideActor", "actor": { "npcId": 73 } },
-        { "op": "eventFlag", "flag": 289, "set": true },
-        { "op": "setFlag", "flag": "signal:police-dispersed" }
+        {
+          "op": "faceActor",
+          "actor": {
+            "npcId": 74
+          },
+          "dir": "down"
+        },
+        {
+          "op": "faceActor",
+          "actor": {
+            "npcId": 75
+          },
+          "dir": "down"
+        },
+        {
+          "op": "faceActor",
+          "actor": {
+            "npcId": 76
+          },
+          "dir": "down"
+        },
+        {
+          "op": "dialogue",
+          "pages": [
+            "The officers size you up, then lose interest all at once.",
+            "\"Shift's over. Whatever this is, it's the next guy's problem.\""
+          ]
+        },
+        {
+          "op": "moveActor",
+          "actor": {
+            "npcId": 77
+          },
+          "to": {
+            "x": 7640,
+            "y": 208
+          }
+        },
+        {
+          "op": "hideActor",
+          "actor": {
+            "npcId": 77
+          }
+        },
+        {
+          "op": "moveActor",
+          "actor": {
+            "npcId": 76
+          },
+          "to": {
+            "x": 7640,
+            "y": 208
+          }
+        },
+        {
+          "op": "hideActor",
+          "actor": {
+            "npcId": 76
+          }
+        },
+        {
+          "op": "moveActor",
+          "actor": {
+            "npcId": 75
+          },
+          "to": {
+            "x": 7640,
+            "y": 208
+          }
+        },
+        {
+          "op": "hideActor",
+          "actor": {
+            "npcId": 75
+          }
+        },
+        {
+          "op": "moveActor",
+          "actor": {
+            "npcId": 74
+          },
+          "to": {
+            "x": 7640,
+            "y": 208
+          }
+        },
+        {
+          "op": "hideActor",
+          "actor": {
+            "npcId": 74
+          }
+        },
+        {
+          "op": "moveActor",
+          "actor": {
+            "npcId": 73
+          },
+          "to": {
+            "x": 7640,
+            "y": 208
+          }
+        },
+        {
+          "op": "hideActor",
+          "actor": {
+            "npcId": 73
+          }
+        },
+        {
+          "op": "eventFlag",
+          "flag": 289,
+          "set": true
+        },
+        {
+          "op": "setFlag",
+          "flag": "signal:police-dispersed"
+        }
+      ]
+    },
+    {
+      "id": "onett-keep-on-task",
+      "comment": "data_14.l_0xc5e840, near world pixel 2728,608 (cluster of NPCs 150/189/190/199 at ~2752,544, just outside the Giant Step cave doors). EB choreography: pause(60), hide_char_float(5), window_open(1), dialogue, char_direction(1,0) = the lead companion (NPC 150, sprite group 74) turns to face the player (down) and nags them about wandering instead of getting the kid home. The trailing companion 'floats off' (hide_char_float) and is hidden afterward. Voiced Swagbound noir; player watches then is released.",
+      "trigger": {
+        "kind": "area",
+        "area": {
+          "x": 2680,
+          "y": 560,
+          "w": 144,
+          "h": 96
+        }
+      },
+      "once": true,
+      "lockPlayer": true,
+      "steps": [
+        {
+          "op": "wait",
+          "ms": 700
+        },
+        {
+          "op": "faceActor",
+          "actor": {
+            "npcId": 150
+          },
+          "dir": "down"
+        },
+        {
+          "op": "dialogue",
+          "pages": [
+            "A hand lands on your shoulder before you reach the dark.",
+            "\"Hey. So that's the plan? Just drift wherever the wind takes you?\"",
+            "\"There's a kid counting on us to get him home. The wandering can wait.\""
+          ]
+        },
+        {
+          "op": "moveActor",
+          "actor": {
+            "npcId": 199
+          },
+          "to": {
+            "x": 2776,
+            "y": 600
+          }
+        },
+        {
+          "op": "hideActor",
+          "actor": {
+            "npcId": 199
+          }
+        },
+        {
+          "op": "setFlag",
+          "flag": "signal:keep-on-task"
+        }
+      ]
+    },
+    {
+      "id": "onett-brother-fallsin",
+      "comment": "data_14 / placement @ worldPixel 2008,112, eventFlag 466, NPC 124 (sprite group 382). EB choreography markers: hide_char, show_char, party_add. EB beat (data_14.ccs:313-324) is the big-brother 'are you just gonna wander around wherever you please?' lecture that ends in {unset(flag 466)} and a party/flag transition. Re-creates it as: the companion (NPC 124) materializes (show_char), faces the player, says his dry piece, then falls in and vanishes from the field (party_add -> hide_char). Gated on EB flag 466; clears it on completion so it never re-fires. Bystanders 165/193/198 are left alone.",
+      "trigger": {
+        "kind": "area",
+        "area": {
+          "x": 1944,
+          "y": 48,
+          "w": 144,
+          "h": 128
+        }
+      },
+      "once": true,
+      "lockPlayer": true,
+      "steps": [
+        {
+          "op": "showActor",
+          "actor": {
+            "npcId": 124
+          }
+        },
+        {
+          "op": "faceActor",
+          "actor": {
+            "npcId": 124
+          },
+          "dir": "down"
+        },
+        {
+          "op": "dialogue",
+          "pages": [
+            "He steps out of the dark like he's been waiting for you to notice.",
+            "\"So. You're just gonna wander wherever you please. No plan, no backup, no clue.\"",
+            "\"...Sometimes I wonder which one of us is supposed to be the responsible one.\"",
+            "He sighs the sigh of a man who already knows the answer. \"Fine. I'm coming. Somebody's gotta watch your back.\""
+          ]
+        },
+        {
+          "op": "moveActor",
+          "actor": {
+            "npcId": 124
+          },
+          "to": {
+            "x": 2008,
+            "y": 132
+          }
+        },
+        {
+          "op": "wait",
+          "ms": 200
+        },
+        {
+          "op": "hideActor",
+          "actor": {
+            "npcId": 124
+          }
+        },
+        {
+          "op": "eventFlag",
+          "flag": 466,
+          "set": false
+        },
+        {
+          "op": "setFlag",
+          "flag": "signal:onett-brother-joined"
+        }
+      ]
+    },
+    {
+      "id": "onett-welcome-home-lights-out",
+      "comment": "data_20.l_0xc66e40 -> l_0xc66eca (the 'Welcome home / go to bed' beat). Actor is the house occupant npcId 148 (sprite group 145) at world pixel 2656,344; co-located npcId 183 (group 227) stays put. EB: mom greets the player, player picks Yes, music_effect(3) + a wall of flag sets (295/469/530/473/468/749, unset 474/11/517), hide_char(255), two warps into the bedroom, lock_movement(255), then show_party(1) for the morning. Re-staged as: occupant faces player, two-page goodnight dialogue, hide the occupant (lights out), then setFlag the lights-out signal. lockPlayer true so the player watches; steps always resolve so the player is released.",
+      "trigger": {
+        "kind": "area",
+        "area": {
+          "x": 2592,
+          "y": 296,
+          "w": 128,
+          "h": 96
+        }
+      },
+      "once": true,
+      "lockPlayer": true,
+      "steps": [
+        {
+          "op": "faceActor",
+          "actor": {
+            "npcId": 148
+          },
+          "dir": "down"
+        },
+        {
+          "op": "dialogue",
+          "pages": [
+            "Welcome home, kid. Door was unlocked. It's always unlocked. That's the kind of town this still is, for now.",
+            "Whatever's out there past the streetlights can wait til morning. It's not going anywhere. Neither are you.",
+            "Lights out. Scoot. We don't talk about the noise tonight."
+          ]
+        },
+        {
+          "op": "wait",
+          "ms": 400
+        },
+        {
+          "op": "hideActor",
+          "actor": {
+            "npcId": 148
+          }
+        },
+        {
+          "op": "wait",
+          "ms": 300
+        },
+        {
+          "op": "setFlag",
+          "flag": "signal:welcome-home-lights-out"
+        }
+      ]
+    },
+    {
+      "id": "onett-minch-brother-nag",
+      "comment": "data_51.l_0xc999a1 (Act 1, Minch house door @ worldPixel 2392,344, eventFlag 0x1d4). Sole actor is npcId 182 / sprite group 227 standing @ 2352,368 (movement 8). EB choreography = char_direction(1,0): he turns to face the player (down) while reminding them to bring Picky back before dad gets home, then offers a little help via {set(flag 2)}. Reauthored as a one-shot area cutscene bracketing 2392,344; lockPlayer so the player watches the turn + line, steps always complete so the player is released.",
+      "trigger": {
+        "kind": "area",
+        "area": {
+          "x": 2312,
+          "y": 280,
+          "w": 160,
+          "h": 128
+        }
+      },
+      "once": true,
+      "lockPlayer": true,
+      "steps": [
+        {
+          "op": "faceActor",
+          "actor": {
+            "npcId": 182
+          },
+          "dir": "down"
+        },
+        {
+          "op": "wait",
+          "ms": 200
+        },
+        {
+          "op": "dialogue",
+          "pages": [
+            "The kid by the door clocks you and doesn't bother getting up.",
+            "\"Like I said. Dad's not home yet. Small mercy.\"",
+            "\"You drag Picky back here before he walks through that door, or it's both our hides.\"",
+            "\"...Fine. I'll throw you a bone. Don't make me regret it.\""
+          ]
+        },
+        {
+          "op": "faceActor",
+          "actor": {
+            "npcId": 182
+          },
+          "dir": "down"
+        },
+        {
+          "op": "setFlag",
+          "flag": "flag:2"
+        }
       ]
     }
   ]

@@ -1,0 +1,30 @@
+{
+  "id": "onett-card-clique-shakedown",
+  "comment": "Re-creates EB scene data_20.l_0xc65ea3 near world pixel 1512,1744 (card-clique punks guarding the road to Frank). A punk (npcId 142) steps up to hassle Bosch, his buddy (npcId 143) closes ranks, then they fold and slink off. Original [1F F1 ...] movement = punk shuffling toward the player as a follower; set(flag 363) preserved as eventFlag 363.",
+  "trigger": { "kind": "area", "area": { "x": 1472, "y": 1696, "w": 112, "h": 112 } },
+  "once": true,
+  "lockPlayer": true,
+  "steps": [
+    { "op": "faceActor", "actor": { "npcId": 142 }, "dir": "down" },
+    { "op": "moveActor", "actor": { "npcId": 142 }, "to": { "x": 1512, "y": 1728 } },
+    { "op": "faceActor", "actor": { "npcId": 143 }, "dir": "up" },
+    { "op": "moveActor", "actor": { "npcId": 143 }, "to": { "x": 1536, "y": 1760 } },
+    { "op": "dialogue", "pages": [
+      "A kid in a backwards cap plants himself in your lane. His deck of cards fans like he practiced it in a mirror.",
+      "\"You wanna start somethin', or what?\"",
+      "His buddy drifts in behind you. The math is two-on-one and they want you to do it."
+    ] },
+    { "op": "wait", "ms": 400 },
+    { "op": "faceActor", "actor": { "npcId": 142 }, "dir": "down" },
+    { "op": "dialogue", "pages": [
+      "You don't blink. You've got nowhere soft to be.",
+      "The cap kid reads it on your face and the bravado leaks out of him like air from a slow tire.",
+      "\"...Forget it. You're not worth the cards. Go see Frank if you're so tough.\""
+    ] },
+    { "op": "moveActor", "actor": { "npcId": 142 }, "to": { "x": 1480, "y": 1712 } },
+    { "op": "faceActor", "actor": { "npcId": 143 }, "dir": "down" },
+    { "op": "moveActor", "actor": { "npcId": 143 }, "to": { "x": 1568, "y": 1792 } },
+    { "op": "eventFlag", "flag": 363, "set": true },
+    { "op": "setFlag", "flag": "signal:card-clique-shakedown" }
+  ]
+}

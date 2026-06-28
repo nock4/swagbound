@@ -1,0 +1,108 @@
+<!doctype html>
+<meta charset="utf8">
+<title>Swagbound Building Placement Editor</title>
+<style>
+  body { margin: 0; background: #16161c; color: #e8e8ef; font: 13px/1.5 system-ui, sans-serif; }
+  #bar { position: sticky; top: 0; background: #1f1f29; padding: 8px 12px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid #333; }
+  select, button { font: inherit; background: #2a2a36; color: #e8e8ef; border: 1px solid #444; border-radius: 6px; padding: 5px 10px; cursor: pointer; }
+  button.save { background: #2e6; color: #04210f; border-color: #2e6; font-weight: 600; }
+  #hint { color: #8a8; }
+  #info { color: #9cf; font-variant-numeric: tabular-nums; }
+  #stageWrap { padding: 16px; overflow: auto; }
+  #stage { position: relative; image-rendering: pixelated; outline: 1px solid #333; }
+  #stage img.bld { position: absolute; image-rendering: pixelated; cursor: grab; outline: 1px dashed rgba(255,255,255,0.25); }
+  #stage img.bld.sel { outline: 2px solid #2ef; z-index: 10; cursor: grabbing; }
+  #stage .handle { position: absolute; width: 12px; height: 12px; background: #2ef; border: 1px solid #034; border-radius: 2px; z-index: 20; }
+  #stage .handle.nw { cursor: nwse-resize; } #stage .handle.se { cursor: nwse-resize; }
+  #stage .handle.ne { cursor: nesw-resize; } #stage .handle.sw { cursor: nesw-resize; }
+  .grid { position:absolute; inset:0; pointer-events:none; background-size: var(--g) var(--g); background-image: linear-gradient(rgba(0,255,255,.12) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,255,.12) 1px,transparent 1px); }
+</style>
+<div id="bar">
+  <b>Building Placement</b>
+  <label>Chunk <select id="chunk"></select></label>
+  <label>Zoom <select id="zoom"><option>1.5</option><option>2</option><option selected>2.5</option><option>3</option></select></label>
+  <label><input type="checkbox" id="gridOn"> grid</label>
+  <button class="save" id="save">Save</button>
+  <span id="info">—</span>
+  <span id="hint">click to select · drag body to move · drag corner handles to resize · arrows = nudge 1px (shift = ±5) · [ ] = width · - = height · S = save</span>
+</div>
+<div id="stageWrap"><div id="stage"></div></div>
+<script>
+let DATA = { buildings: [] }, scale = 2.5, chunk = null, sel = null;
+const stage = document.getElementById("stage"), chunkSel = document.getElementById("chunk"), info = document.getElementById("info");
+const CH = "/editor-chunks"; // clean (un-stamped) EB chunks so the draggable sprite is the only Swagbound building
+
+async function load() {
+  DATA = await (await fetch("/__building-overrides")).json();
+  const chunks = [...new Set(DATA.buildings.map(b => b.chunk))].sort();
+  chunkSel.innerHTML = chunks.map(c => `<option>${c}</option>`).join("");
+  chunk = chunks[0]; render();
+}
+function render() {
+  scale = parseFloat(document.getElementById("zoom").value);
+  const [cx, cy] = chunk.split(",");
+  stage.style.width = stage.style.height = (512 * scale) + "px";
+  stage.style.background = `#0a0 url(${CH}/background-${cx}-${cy}.png) center/contain no-repeat`;
+  stage.innerHTML = "";
+  if (document.getElementById("gridOn").checked) { const g = document.createElement("div"); g.className = "grid"; g.style.setProperty("--g", (8 * scale) + "px"); stage.appendChild(g); }
+  for (const b of DATA.buildings.filter(b => b.chunk === chunk)) {
+    const img = document.createElement("img");
+    img.className = "bld" + (b === sel ? " sel" : ""); img.src = "/" + b.image; img.dataset.id = b.id;
+    Object.assign(img.style, { left: b.x * scale + "px", top: b.y * scale + "px", width: b.w * scale + "px", height: b.h * scale + "px" });
+    img.onmousedown = e => startDrag(e, b); stage.appendChild(img);
+  }
+  if (sel && sel.chunk === chunk) {
+    for (const c of ["nw", "ne", "sw", "se"]) {
+      const h = document.createElement("div"); h.className = "handle " + c;
+      const hx = (c.includes("w") ? sel.x : sel.x + sel.w) * scale;
+      const hy = (c.includes("n") ? sel.y : sel.y + sel.h) * scale;
+      h.style.left = (hx - 6) + "px"; h.style.top = (hy - 6) + "px";
+      h.onmousedown = e => startResize(e, c); stage.appendChild(h);
+    }
+  }
+  showInfo();
+}
+function startResize(e, corner) {
+  e.preventDefault(); e.stopPropagation();
+  const sx = e.clientX, sy = e.clientY, b = sel, bx = b.x, by = b.y, bw = b.w, bh = b.h;
+  const mv = ev => {
+    const dx = Math.round((ev.clientX - sx) / scale), dy = Math.round((ev.clientY - sy) / scale);
+    if (corner.includes("e")) b.w = Math.max(8, bw + dx);
+    if (corner.includes("s")) b.h = Math.max(8, bh + dy);
+    if (corner.includes("w")) { b.w = Math.max(8, bw - dx); b.x = bx + (bw - b.w); }
+    if (corner.includes("n")) { b.h = Math.max(8, bh - dy); b.y = by + (bh - b.h); }
+    render();
+  };
+  const up = () => { window.removeEventListener("mousemove", mv); window.removeEventListener("mouseup", up); };
+  window.addEventListener("mousemove", mv); window.addEventListener("mouseup", up);
+}
+function showInfo() { info.textContent = sel ? `${sel.id}:  x=${sel.x} y=${sel.y} w=${sel.w} h=${sel.h}  (bottom ${sel.y + sel.h})` : "—"; }
+function startDrag(e, b) {
+  e.preventDefault(); sel = b; render();
+  const ox = e.clientX, oy = e.clientY, bx = b.x, by = b.y;
+  const mv = ev => { b.x = Math.round(bx + (ev.clientX - ox) / scale); b.y = Math.round(by + (ev.clientY - oy) / scale); render(); };
+  const up = () => { window.removeEventListener("mousemove", mv); window.removeEventListener("mouseup", up); };
+  window.addEventListener("mousemove", mv); window.addEventListener("mouseup", up);
+}
+window.addEventListener("keydown", e => {
+  if (e.target.tagName === "SELECT") return;
+  if (e.key.toLowerCase() === "s") { save(); return; }
+  if (!sel) return;
+  const d = e.shiftKey ? 5 : 1; let used = true;
+  if (e.key === "ArrowLeft") sel.x -= d; else if (e.key === "ArrowRight") sel.x += d;
+  else if (e.key === "ArrowUp") sel.y -= d; else if (e.key === "ArrowDown") sel.y += d;
+  else if (e.key === "[") sel.w -= d; else if (e.key === "]") sel.w += d;
+  else if (e.key === "-") sel.h -= d; else if (e.key === "=") sel.h += d;
+  else used = false;
+  if (used) { e.preventDefault(); render(); }
+});
+async function save() {
+  const r = await fetch("/__building-overrides", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(DATA, null, 2) });
+  info.textContent = r.ok ? "✓ saved to content/building-overrides.json — rebuild to bake into the game" : "save failed";
+}
+document.getElementById("save").onclick = save;
+chunkSel.onchange = () => { chunk = chunkSel.value; sel = null; render(); };
+document.getElementById("zoom").onchange = render;
+document.getElementById("gridOn").onchange = render;
+load();
+</script>

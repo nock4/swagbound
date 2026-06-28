@@ -1,0 +1,375 @@
+{
+  "schema": "swagbound.building-overrides.v1",
+  "comment": "Re-signed EB building crops pasted back at their exact source box (seamless; only the sign changed). x,y,w,h = the crop/paste box on the chunk.",
+  "buildings": [
+    {
+      "id": "the-plug",
+      "chunk": "3,2",
+      "x": 14,
+      "y": 0,
+      "w": 120,
+      "h": 170,
+      "image": "assets/buildings/the-plug.png"
+    },
+    {
+      "id": "grease",
+      "chunk": "3,2",
+      "x": 118,
+      "y": 12,
+      "w": 162,
+      "h": 116,
+      "image": "assets/buildings/grease.png"
+    },
+    {
+      "id": "the-dao",
+      "chunk": "3,2",
+      "x": 8,
+      "y": 200,
+      "w": 236,
+      "h": 150,
+      "image": "assets/buildings/the-dao.png"
+    },
+    {
+      "id": "mons-link",
+      "chunk": "3,3",
+      "x": 0,
+      "y": 92,
+      "w": 110,
+      "h": 128,
+      "image": "assets/buildings/mons-link.png"
+    },
+    {
+      "id": "cafe",
+      "chunk": "3,3",
+      "x": 250,
+      "y": 78,
+      "w": 140,
+      "h": 145,
+      "image": "assets/buildings/cafe.png"
+    },
+    {
+      "id": "the-precinct",
+      "chunk": "3,3",
+      "x": 430,
+      "y": 50,
+      "w": 82,
+      "h": 165,
+      "image": "assets/buildings/the-precinct.png"
+    },
+    {
+      "id": "dr-office",
+      "chunk": "2,3",
+      "x": 34,
+      "y": 0,
+      "w": 232,
+      "h": 175,
+      "image": "assets/buildings/dr-office.png"
+    },
+    {
+      "id": "slice",
+      "chunk": "2,3",
+      "x": 366,
+      "y": 70,
+      "w": 108,
+      "h": 155,
+      "image": "assets/buildings/slice.png"
+    },
+    {
+      "id": "the-archive",
+      "chunk": "4,1",
+      "x": 0,
+      "y": 248,
+      "w": 192,
+      "h": 122,
+      "image": "assets/buildings/the-archive.png"
+    },
+    {
+      "id": "swag-hotel-2-12-338",
+      "chunk": "2,12",
+      "x": 313,
+      "y": 239,
+      "w": 88,
+      "h": 130,
+      "image": "assets/buildings/swag-hotel-2-12-338.png"
+    },
+    {
+      "id": "wheels-2-12-473",
+      "chunk": "2,12",
+      "x": 448,
+      "y": 239,
+      "w": 64,
+      "h": 136,
+      "image": "assets/buildings/wheels-2-12-473.png"
+    },
+    {
+      "id": "swag-mart-3-12-101",
+      "chunk": "3,12",
+      "x": 76,
+      "y": 240,
+      "w": 138,
+      "h": 139,
+      "image": "assets/buildings/swag-mart-3-12-101.png"
+    },
+    {
+      "id": "dr-office-4-12-167",
+      "chunk": "4,12",
+      "x": 142,
+      "y": 0,
+      "w": 132,
+      "h": 136,
+      "image": "assets/buildings/dr-office-4-12-167.png"
+    },
+    {
+      "id": "the-venue-4-12-98",
+      "chunk": "4,12",
+      "x": 73,
+      "y": 287,
+      "w": 157,
+      "h": 132,
+      "image": "assets/buildings/the-venue-4-12-98.png"
+    },
+    {
+      "id": "daycare-4-13-1",
+      "chunk": "4,13",
+      "x": 0,
+      "y": 277,
+      "w": 98,
+      "h": 131,
+      "image": "assets/buildings/daycare-4-13-1.png"
+    },
+    {
+      "id": "slice-4-13-242",
+      "chunk": "4,13",
+      "x": 217,
+      "y": 310,
+      "w": 87,
+      "h": 130,
+      "image": "assets/buildings/slice-4-13-242.png"
+    },
+    {
+      "id": "swag-hotel-10-17-401",
+      "chunk": "10,17",
+      "x": 376,
+      "y": 157,
+      "w": 90,
+      "h": 131,
+      "image": "assets/buildings/swag-hotel-10-17-401.png"
+    },
+    {
+      "id": "the-big-top-10-17-255",
+      "chunk": "10,17",
+      "x": 230,
+      "y": 292,
+      "w": 146,
+      "h": 142,
+      "image": "assets/buildings/the-big-top-10-17-255.png"
+    },
+    {
+      "id": "the-big-top-10-17-457",
+      "chunk": "10,17",
+      "x": 432,
+      "y": 324,
+      "w": 80,
+      "h": 132,
+      "image": "assets/buildings/the-big-top-10-17-457.png"
+    },
+    {
+      "id": "the-plug-10-18-72",
+      "chunk": "10,18",
+      "x": 47,
+      "y": 0,
+      "w": 124,
+      "h": 132,
+      "image": "assets/buildings/the-plug-10-18-72.png"
+    },
+    {
+      "id": "cafe-11-18-119",
+      "chunk": "11,18",
+      "x": 94,
+      "y": 0,
+      "w": 104,
+      "h": 132,
+      "image": "assets/buildings/cafe-11-18-119.png"
+    },
+    {
+      "id": "fossils-6-8-56",
+      "chunk": "6,8",
+      "x": 31,
+      "y": 226,
+      "w": 128,
+      "h": 148,
+      "image": "assets/buildings/fossils-6-8-56.png"
+    },
+    {
+      "id": "swag-hotel-8-5-419",
+      "chunk": "8,5",
+      "x": 394,
+      "y": 71,
+      "w": 96,
+      "h": 132,
+      "image": "assets/buildings/swag-hotel-8-5-419.png"
+    },
+    {
+      "id": "swag-hotel-8-5-200",
+      "chunk": "8,5",
+      "x": 175,
+      "y": 247,
+      "w": 106,
+      "h": 132,
+      "image": "assets/buildings/swag-hotel-8-5-200.png"
+    },
+    {
+      "id": "the-table-9-5-278",
+      "chunk": "9,5",
+      "x": 253,
+      "y": 52,
+      "w": 138,
+      "h": 132,
+      "image": "assets/buildings/the-table-9-5-278.png"
+    },
+    {
+      "id": "swag-hotel-9-5-462",
+      "chunk": "9,5",
+      "x": 437,
+      "y": 218,
+      "w": 75,
+      "h": 134,
+      "image": "assets/buildings/swag-hotel-9-5-462.png"
+    },
+    {
+      "id": "mons-shop-10-5-170",
+      "chunk": "10,5",
+      "x": 145,
+      "y": 52,
+      "w": 86,
+      "h": 133,
+      "image": "assets/buildings/mons-shop-10-5-170.png"
+    },
+    {
+      "id": "the-exhibit-11-5-308",
+      "chunk": "11,5",
+      "x": 283,
+      "y": 0,
+      "w": 182,
+      "h": 132,
+      "image": "assets/buildings/the-exhibit-11-5-308.png"
+    },
+    {
+      "id": "mons-shop-11-5-2",
+      "chunk": "11,5",
+      "x": 0,
+      "y": 64,
+      "w": 96,
+      "h": 132,
+      "image": "assets/buildings/mons-shop-11-5-2.png"
+    },
+    {
+      "id": "swag-hotel-11-5-70",
+      "chunk": "11,5",
+      "x": 45,
+      "y": 230,
+      "w": 100,
+      "h": 136,
+      "image": "assets/buildings/swag-hotel-11-5-70.png"
+    },
+    {
+      "id": "dr-office-12-5-332",
+      "chunk": "12,5",
+      "x": 307,
+      "y": 55,
+      "w": 116,
+      "h": 132,
+      "image": "assets/buildings/dr-office-12-5-332.png"
+    },
+    {
+      "id": "swag-hotel-13-5-100",
+      "chunk": "13,5",
+      "x": 75,
+      "y": 97,
+      "w": 100,
+      "h": 134,
+      "image": "assets/buildings/swag-hotel-13-5-100.png"
+    },
+    {
+      "id": "mons-shop-13-5-322",
+      "chunk": "13,5",
+      "x": 297,
+      "y": 108,
+      "w": 92,
+      "h": 131,
+      "image": "assets/buildings/mons-shop-13-5-322.png"
+    },
+    {
+      "id": "mons-shop-1-4-131",
+      "chunk": "1,4",
+      "x": 106,
+      "y": 182,
+      "w": 92,
+      "h": 131,
+      "image": "assets/buildings/mons-shop-1-4-131.png"
+    },
+    {
+      "id": "r-d-0-9-315",
+      "chunk": "0,9",
+      "x": 290,
+      "y": 171,
+      "w": 78,
+      "h": 133,
+      "image": "assets/buildings/r-d-0-9-315.png"
+    },
+    {
+      "id": "fossils-15-8-121",
+      "chunk": "15,8",
+      "x": 96,
+      "y": 94,
+      "w": 126,
+      "h": 153,
+      "image": "assets/buildings/fossils-15-8-121.png"
+    },
+    {
+      "id": "slice-10-18-192",
+      "chunk": "10,18",
+      "x": 160,
+      "y": 0,
+      "w": 150,
+      "h": 135,
+      "image": "assets/buildings/slice-10-18-192.png"
+    },
+    {
+      "id": "swag-hotel-onett-L",
+      "chunk": "3,2",
+      "x": 432,
+      "y": 290,
+      "w": 80,
+      "h": 160,
+      "image": "assets/buildings/swag-hotel-onett-L.png"
+    },
+    {
+      "id": "swag-hotel-onett-R",
+      "chunk": "4,2",
+      "x": 0,
+      "y": 290,
+      "w": 112,
+      "h": 160,
+      "image": "assets/buildings/swag-hotel-onett-R.png"
+    },
+    {
+      "id": "dr-office-threed-L",
+      "chunk": "10,18",
+      "x": 430,
+      "y": 0,
+      "w": 82,
+      "h": 150,
+      "image": "assets/buildings/dr-office-threed-L.png"
+    },
+    {
+      "id": "dr-office-threed-R",
+      "chunk": "11,18",
+      "x": 0,
+      "y": 0,
+      "w": 110,
+      "h": 150,
+      "image": "assets/buildings/dr-office-threed-R.png"
+    }
+  ]
+}

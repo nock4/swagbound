@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, relative } from "node:path";
 import { defineConfig, type Plugin } from "vite";
@@ -49,8 +49,34 @@ function extname(name: string): string {
   return dot < 0 ? "" : name.slice(dot).toLowerCase();
 }
 
+/**
+ * Dev-only load/save endpoint for building-editor.html — reads and writes
+ * content/building-overrides.json so building placements can be tuned visually.
+ */
+function buildingOverridesPlugin(): Plugin {
+  const file = join(ROOT, "..", "..", "content", "building-overrides.json");
+  return {
+    name: "swag-building-overrides",
+    configureServer(server) {
+      server.middlewares.use("/__building-overrides", (req, res) => {
+        if (req.method === "POST") {
+          let body = "";
+          req.on("data", (c) => (body += c));
+          req.on("end", () => {
+            try { JSON.parse(body); writeFileSync(file, body.endsWith("\n") ? body : body + "\n"); res.statusCode = 200; res.end("ok"); }
+            catch (e) { res.statusCode = 400; res.end(String(e)); }
+          });
+          return;
+        }
+        res.setHeader("Content-Type", "application/json");
+        res.end(readFileSync(file, "utf8"));
+      });
+    }
+  };
+}
+
 export default defineConfig({
-  plugins: [audioListPlugin()],
+  plugins: [audioListPlugin(), buildingOverridesPlugin()],
   server: {
     host: "127.0.0.1",
     port: 5173

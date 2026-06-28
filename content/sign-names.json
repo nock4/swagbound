@@ -1,0 +1,32 @@
+{
+  "schema": "swagbound.sign-names.v1",
+  "comment": "EarthBound building sign text -> Swagbound equivalent. Town-name billboards (TWOSON/THREED/...) intentionally omitted = left unchanged until Swagbound town names are set. Used by scripts/stamp-signs.mjs.",
+  "byText": {
+    "DRUGSTORE": "THE PLUG",
+    "HOSPITAL": "DR OFFICE",
+    "TWOSON HOSPITAL": "DR OFFICE",
+    "BAKERY": "CAFE",
+    "GAME": "MONS LINK",
+    "HOTEL": "SWAG HOTEL",
+    "SHOP": "MONS SHOP",
+    "CLUB STORE": "MONS SHOP",
+    "BUS STATION": "BUS STATION",
+    "BURGER SHOP": "GREASE",
+    "TOWN HALL": "THE DAO",
+    "LIBRARY": "THE ARCHIVE",
+    "PIZZA": "SLICE",
+    "POLICE": "THE PRECINCT",
+    "RESTAURANT": "THE TABLE",
+    "CYCLE SHOP": "WHEELS",
+    "TWOSON DEPT STORE": "SWAG MART",
+    "MUSEUM": "THE EXHIBIT",
+    "DINOSAUR MUSEUM": "FOSSILS",
+    "LAB": "R&D",
+    "CHAOS THEATER": "THE VENUE",
+    "CIRCUS": "THE BIG TOP",
+    "WELCOME TO THE CIRCUS": "THE BIG TOP",
+    "RUNAWAY FIVE": "RUNAWAY FIVE",
+    "LESTAR": "DAYCARE",
+    "ENTER FREE": "FREE ENTRY"
+  }
+}

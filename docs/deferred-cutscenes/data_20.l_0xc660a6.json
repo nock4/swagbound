@@ -1,0 +1,72 @@
+{
+  "id": "onett-frank-defeated",
+  "comment": "data_20.l_0xc660a6 @ world 1616,1616. EB's post-battle Frank scene: Frank (npcId 146, sprite group 153) introduces himself as Fail-proof Frank, loses for the first time, then drops the Giant Step exposition before walking off (raw [1F F1 CA 00 7B 02] departure choreography). EB sets flags 515/64/697/363/364/2 + unset 365; here flag 132 (the placement eventFlag) marks the scene consumed and signal:frank-defeated gates downstream story. Co-located NPCs 163 (grp117) and 202 (grp401) are bystanders, left in place. Door @1592,1680 is the nearest exit Frank shuffles toward.",
+  "trigger": {
+    "kind": "area",
+    "area": {
+      "x": 1560,
+      "y": 1560,
+      "w": 128,
+      "h": 112
+    }
+  },
+  "once": true,
+  "lockPlayer": true,
+  "steps": [
+    {
+      "op": "faceActor",
+      "actor": { "npcId": 146 },
+      "dir": "down"
+    },
+    {
+      "op": "dialogue",
+      "pages": [
+        "...So you actually showed up.",
+        "Name's Frank. Fail-proof Frank, they call me around here. You?",
+        "C'mon. A guy beats your face in, the least he gets is a name."
+      ]
+    },
+    {
+      "op": "dialogue",
+      "pages": [
+        "Puff... puff... puff.",
+        "And THIS is the Frankystein Mark II. Built it myself. Never lost with it.",
+        "...Huh. First time for everything, I guess."
+      ]
+    },
+    {
+      "op": "setFlag",
+      "flag": "signal:frankystein-broken"
+    },
+    {
+      "op": "dialogue",
+      "pages": [
+        "Fail-proof Frank. Now just... failure Frank. Has a ring to it.",
+        "You've been asking around about Giant Step. Fine. I'll talk.",
+        "It's a power spot. Real power, the kind that lets certain people pull off miracles.",
+        "Problem is some monster crawled in and drank the whole place dry.",
+        "Getting there's no picnic either. The path runs behind the entertainers' shack.",
+        "Pirkle, the mayor, keeps the key. Go charm it out of him.",
+        "You came in stronger than me, kid. And you're only getting started. Now beat it."
+      ]
+    },
+    {
+      "op": "moveActor",
+      "actor": { "npcId": 146 },
+      "to": { "x": 1592, "y": 1680 }
+    },
+    {
+      "op": "hideActor",
+      "actor": { "npcId": 146 }
+    },
+    {
+      "op": "eventFlag",
+      "flag": 132,
+      "set": true
+    },
+    {
+      "op": "setFlag",
+      "flag": "signal:frank-defeated"
+    }
+  ]
+}

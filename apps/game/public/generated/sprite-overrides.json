@@ -5197,6 +5197,28 @@
       "originX": 0.5,
       "originY": 1
     },
+    "167": {
+      "image": "assets/swagbound/overworld-npc/wifeystation.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
     "168": {
       "image": "assets/swagbound/overworld-npc/goobdle-s.png",
       "frameWidth": 48,
@@ -6035,6 +6057,50 @@
     },
     "214": {
       "image": "assets/swagbound/overworld-npc/drifella2-168.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "215": {
+      "image": "assets/swagbound/overworld-npc/tape-code.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "216": {
+      "image": "assets/swagbound/overworld-npc/tojiba-disc.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {

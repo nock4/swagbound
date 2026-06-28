@@ -1,17 +1,41 @@
 {
   "schema": "swagbound.enemy-stat-overrides.v1",
   "byEnemyId": {
+    "1": {
+      "offense": 24,
+      "defense": 28,
+      "hp": 115,
+      "speed": 11
+    },
     "37": {
       "offense": 27,
       "hp": 260
+    },
+    "45": {
+      "offense": 50,
+      "defense": 66,
+      "hp": 260,
+      "speed": 18
     },
     "54": {
       "offense": 22,
       "hp": 95
     },
+    "130": {
+      "offense": 19,
+      "defense": 22,
+      "hp": 110,
+      "speed": 6
+    },
     "131": {
       "offense": 15,
       "hp": 74
+    },
+    "214": {
+      "offense": 22,
+      "defense": 24,
+      "hp": 320,
+      "speed": 14
     }
   }
 }

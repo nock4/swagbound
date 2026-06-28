@@ -1,0 +1,22 @@
+{
+  "id": "onett-frank-taunt",
+  "comment": "data_20.l_0xc65efc (Onett, near world pixel 1568,1792). Sharks punks npc 142 + 143 (sprite group 284, movements 606/609) loiter at the road; bystander npc 1411 (group 214) hangs back. EB has them taunt the player toward Frank then set flag 364 via raw [1F F1 8F 00 7B 02] party/movement code. Recreated: the punks turn, size you up, drop the Frank threat, and the dispatch flag is set so the goons stop re-prompting.",
+  "trigger": { "kind": "area", "area": { "x": 1480, "y": 1704, "w": 144, "h": 128 } },
+  "once": true,
+  "lockPlayer": true,
+  "steps": [
+    { "op": "faceActor", "actor": { "npcId": 142 }, "dir": "down" },
+    { "op": "faceActor", "actor": { "npcId": 143 }, "dir": "down" },
+    { "op": "dialogue", "pages": [
+      "Two of them peel off the chain-link and step into your light. One's chewing something he stopped chewing a while ago.",
+      "\"You lost, or just stupid? Same difference out here.\"",
+      "\"You want to meet Frank. Everybody wants to meet Frank. Right up until Frank meets them.\"",
+      "He flicks his collar straight, like that settles it.",
+      "\"Go on then. We'll be here for the part where you come back limping.\""
+    ] },
+    { "op": "faceActor", "actor": { "npcId": 142 }, "dir": "left" },
+    { "op": "faceActor", "actor": { "npcId": 143 }, "dir": "right" },
+    { "op": "eventFlag", "flag": 364, "set": true },
+    { "op": "setFlag", "flag": "signal:frank-taunt-delivered" }
+  ]
+}
