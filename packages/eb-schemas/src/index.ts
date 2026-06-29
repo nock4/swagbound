@@ -454,10 +454,21 @@ export const SpriteOverlaySheetSchema = z.object({
   offset: z.object({ x: z.number(), y: z.number() }).strict().optional()
 }).strict();
 
+/** The 4-member party roster (EarthBound slots). Defines each hero's identity + overworld sprite. */
+export const PartySlotSchema = z.enum(["Ness", "Paula", "Jeff", "Poo"]);
+export const PartyHeroSchema = z.object({
+  slot: PartySlotSchema,
+  name: z.string().min(1),
+  joinOrder: z.number().int().positive(),
+  sprite: SpriteOverrideSchema
+}).strict();
+
 export const SpriteOverridesSchema = z.object({
   schema: z.literal("swagbound.sprite-overrides.v1"),
   /** Shared overlay assets, referenced by the visual-state resolver (sweat/mushroom/possession). */
   overlays: z.record(SpriteOverlayNameSchema, SpriteOverlaySheetSchema).optional(),
+  /** Full 4-hero party roster (slot -> identity + sprite). The lead's sprite also drives `player`. */
+  party: z.array(PartyHeroSchema).optional(),
   player: SpriteOverrideSchema.optional(),
   // Overworld sprite for the 2nd party member (Cloak), shown as a trailing follower.
   follower: SpriteOverrideSchema.optional(),
@@ -1692,6 +1703,8 @@ export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;
 export type SpriteSheetCollection = z.infer<typeof SpriteSheetCollectionSchema>;
 export type SpriteOverride = z.infer<typeof SpriteOverrideSchema>;
 export type SpriteOverrides = z.infer<typeof SpriteOverridesSchema>;
+export type PartyHero = z.infer<typeof PartyHeroSchema>;
+export type PartySlot = z.infer<typeof PartySlotSchema>;
 export type SpriteStateName = z.infer<typeof SpriteStateNameSchema>;
 export type SpriteStateSheet = z.infer<typeof SpriteStateSheetSchema>;
 export type SpriteAnchors = z.infer<typeof SpriteAnchorsSchema>;
