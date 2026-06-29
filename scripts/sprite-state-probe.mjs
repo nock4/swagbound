@@ -30,7 +30,7 @@ await page.waitForTimeout(300);
 const cases = [
   { name: "default (cleared)",      forced: {},                                  expect: { baseState: "default", alpha: 1, tint: null, scaleRatio: 1 } },
   { name: "tiny",                   forced: { status: { tiny: true } },          expect: { baseState: "tiny", scaleRatio: 0.55 } },
-  { name: "dead",                   forced: { event: "dead" },                   expect: { baseState: "dead", alpha: 0.5 } },
+  { name: "dead (faithful sheet)",  forced: { event: "dead" },                   expect: { baseState: "dead", sheetSwapped: true } },
   { name: "tiny+ko -> tinyDead",    forced: { ko: true, status: { tiny: true } },expect: { baseState: "tinyDead", alpha: 0.5, scaleRatio: 0.55 } },
   { name: "diamondized (tint)",     forced: { status: { diamondized: true } },   expect: { baseState: "diamondized", tintSet: true } },
   { name: "invert palette",         forced: { invertPalette: true },             expect: { baseState: "default", invert: true } },
@@ -53,6 +53,7 @@ for (const c of cases) {
   if (e.scaleRatio !== undefined) checks.push(["scaleRatio", Math.abs((v?.applied?.scale ?? 0) / baseScale - e.scaleRatio) < 0.05, ((v?.applied?.scale ?? 0) / baseScale).toFixed(2)]);
   if (e.tint === null) checks.push(["noTint", v?.applied?.tint === null, v?.applied?.tint]);
   if (e.tintSet) checks.push(["tintSet", typeof v?.applied?.tint === "number", v?.applied?.tint]);
+  if (e.sheetSwapped) checks.push(["sheetSwapped", v?.sheetSwapped === true, v?.sheetSwapped]);
   if (e.invert) checks.push(["invert", v?.transforms?.invertPalette === true, v?.transforms?.invertPalette]);
   if (e.teleport) checks.push(["teleport", v?.transforms?.teleportSpin === true, v?.transforms?.teleportSpin]);
   if (e.lock) checks.push(["lock", v?.lockAnimation === true, v?.lockAnimation]);
