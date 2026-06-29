@@ -594,10 +594,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     // Faithful per-state hero sheets + shared overlay assets (forward-compatible: no-op until a skin
     // supplies them). The visual-state render path swaps to these when present, else approximates.
-    const playerStates = this.playerSpriteOverride()?.states as Record<string, { image: string; frameWidth: number; frameHeight: number }> | undefined;
+    type StateSheets = Record<string, { image: string; frameWidth: number; frameHeight: number }> | undefined;
+    const playerStates = this.playerSpriteOverride()?.states as StateSheets;
     for (const [name, sheet] of Object.entries(playerStates ?? {})) {
       if (sheet) {
         this.load.spritesheet(this.playerStateSheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+      }
+    }
+    const followerStates = this.followerSpriteOverride()?.states as StateSheets;
+    for (const [name, sheet] of Object.entries(followerStates ?? {})) {
+      if (sheet) {
+        this.load.spritesheet(this.followerStateSheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
       }
     }
     const overlays = this.data_.spriteOverrides?.overlays as Record<string, { image: string; frameWidth: number; frameHeight: number }> | undefined;
@@ -4825,6 +4832,67 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.follower.y = target.y - this.spriteWalkBob(walking, this.followerFrames, target.facing, 0);
     this.setActorSortDepth(this.follower);
+    this.applyFollowerVisualState(target.facing);
+  }
+
+  private followerStateSheetKey(state: string): string {
+    return `sprite-override-follower-state-${state}`;
+  }
+
+  private loadedFollowerStateSheetKey(baseState: ResolvedVisualState["baseState"]): string | undefined {
+    if (baseState === "default") {
+      return undefined;
+    }
+    const states = this.followerSpriteOverride()?.states as Record<string, unknown> | undefined;
+    if (!states?.[baseState]) {
+      return undefined;
+    }
+    const key = this.followerStateSheetKey(baseState);
+    return this.textures.exists(key) ? key : undefined;
+  }
+
+  /**
+   * Apply the party's shared visual state (computed for the lead each frame in applyPlayerVisualState)
+   * to the FOLLOWER sprite, using the follower's OWN state sheets + anchors. So every hero gets the
+   * same states (water/dead/bike/ladder/...) rendered in their own art. Overlays + teleport spin stay
+   * lead-only for now (the lead casts/wears them). The follower mirrors the lead's base state -- in EB
+   * the party climbs/rides/wades together.
+   */
+  private applyFollowerVisualState(facing: "up" | "down" | "left" | "right"): void {
+    if (!(this.follower instanceof Phaser.GameObjects.Sprite)) {
+      return;
+    }
+    const resolved = this.lastResolvedVisualState;
+    if (!resolved) {
+      return;
+    }
+    const sprite = this.follower;
+    const ov = spriteOverrideSheet(this.followerSpriteOverride());
+    const stateKey = this.loadedFollowerStateSheetKey(resolved.baseState);
+    const swapped = stateKey !== undefined;
+    if (stateKey && sprite.texture.key !== stateKey) {
+      sprite.setTexture(stateKey);
+    }
+    const approx = swapped ? {} : resolved.approximation;
+    const baseScale = ov ? spriteOverrideScale(ov.displayHeight, ov.frameHeight) : 1;
+    const scale = baseScale * (approx.scale ?? 1);
+    sprite.setScale(scale);
+    sprite.setAlpha(approx.alpha ?? 1);
+    if (approx.desaturate) {
+      sprite.setTint(0x9a9a9a); // invert is a camera-wide filter, so only the desaturate approx is per-sprite
+    } else {
+      sprite.clearTint();
+    }
+    if (resolved.lockAnimation && !swapped) {
+      sprite.setFrame(this.followerFrames[facing][0]);
+    }
+    if (resolved.transforms.waterClip && ov?.frameHeight && ov?.frameWidth) {
+      const waterline = ov.anchors?.waterline ?? Math.round(ov.frameHeight * 0.6);
+      sprite.setCrop(0, 0, ov.frameWidth, waterline);
+      sprite.y -= (ov.frameHeight - waterline) * scale;
+    } else if (sprite.isCropped) {
+      sprite.setCrop();
+    }
   }
 
   private setActorSortDepth(actor: SortableActor): void {

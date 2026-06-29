@@ -3,6 +3,15 @@
 How every EarthBound hero appearance-change maps onto our custom-sprite system, what's built, and
 the generation briefs for the faithful state sheets.
 
+## Coverage: ALL hero characters
+The visual-state system applies to **every playable hero**, not just the lead. Each hero's override
+(`player`, `follower`, and any future party member) carries its OWN `states` sheets + `anchors`; the
+party shares the resolved state (water/dead/bike/ladder/… computed once for the lead) and each sprite
+renders it in its own art. So state sheets must be generated for EACH hero (Bosch `lsw-2821`, the
+follower `lsw-855`, future members). Overlays + the teleport spin are currently lead-only (the lead
+casts/wears them) — a documented refinement. Follower in-engine testing awaits a party context (Act 1
+is solo Bosch); the follower render path mirrors the verified player path.
+
 ## Engine (built — `feat/hero-sprite-states`)
 - Resolver: `apps/game/src/playerVisualState.ts` (pure; inputs → base state + transforms + overlays + fallback).
 - Render: `chunkedWorldScene.applyPlayerVisualState()` — swaps to a faithful `states.<name>` sheet when
