@@ -18,7 +18,9 @@ is solo Bosch); the follower render path mirrors the verified player path.
   present, else applies a generic approximation. Overlays pinned to `anchors.head`. Water clip at `anchors.waterline`.
 - Schema: `SpriteOverride.states` (per-state alternate sheets) + `overlays` registry + `anchors` (`packages/eb-schemas`).
 - Debug: `__setPlayerVisualState({...})` / `__playerVisualState()` / `__overlayInfo()`; readout on `__firstSceneDebug.visualState`.
-- Tests: `apps/game/src/playerVisualState.test.ts` (unit) + `scripts/sprite-state-probe.mjs` (in-engine).
+- Tests (all green): `playerVisualState.test.ts` (unit A) · `sprite-state-probe.mjs` (in-engine readout +
+  geometry, 11/11) · `sprite-state-goldens.mjs` (golden snapshots H, AE diff 0) · `sprite-state-matrix.mjs`
+  + `sprite-state-matrix-fleet.workflow.js` (multi-agent fleet I: 28/28 cells = 7 states × 4 facings).
 - HARNESS NOTE: the headless renderer does not composite WebGL color ops (tint/ColorMatrix). Color
   effects (invert/diamondized) verify via readout; geometry/alpha/overlay/water via pixel-diff. Confirm
   color visuals in a real (headed) browser.
@@ -29,9 +31,9 @@ is solo Bosch); the follower render path mirrors the verified player path.
 | default walk | base sheet | have | ✅ |
 | **dead / ghost** | `states.dead` sheet swap | derived from walk art | ✅ done (ImageMagick recolor) |
 | **tiny / tinyDead** | scale (approx) — or `states.tiny` sheet | optional faithful | ✅ approx; sheet optional |
-| **ladder** | `states.ladder` sheet swap | NEW POSE | ⏳ gen |
-| **rope** | `states.rope` sheet swap | NEW POSE | ⏳ gen |
-| **bike** | `states.bike` sheet swap | NEW POSE | ⏳ gen (pilot) |
+| **ladder** | `states.ladder` sheet swap | Codex img-gen (both heroes) | ✅ done |
+| **rope** | `states.rope` sheet swap | Codex img-gen (both heroes) | ✅ done |
+| **bike** | `states.bike` sheet swap | Codex img-gen (both heroes) | ✅ done |
 | **sleeping / sitting / falling / pajamas / robot / meditating / teleportBurnt / diamondized** | `states.<name>` sheet | NEW POSE / shared | ⏳ later-act |
 | color inversion (Moonside) | camera ColorMatrix.negative + tint fallback | none | ✅ (verify headed) |
 | teleport spin | frame-cycle transform | none (reuses walk) | ✅ |
