@@ -9,7 +9,8 @@
       "dialogue": [
         "The arcade light flattens Bosch into a better-lit rumor. A clean copy of his face grins from a card nobody remembers printing.",
         "MIFELLA 2: \"You're late to your own read. The clique already traded the portable you.\"",
-        "These cards don't start here. They point up the line, toward the yard that prints them."
+        "These cards don't start here. They point up the line, toward the yard that prints them.",
+        "Bosch reads the copy for a weak seam. (First scrap: press Z to lock in a move -- BASH to swing, DEFEND when you're hurting, PSI when swinging won't cut it.)"
       ],
       "setFlags": ["signal:clique_cleared"],
       "battleGroup": 448
@@ -22,7 +23,7 @@
       "dialogue": [
         "The clique doesn't lose. It re-prints. Where Mifella 2 folded, a cleaner Bosch stands up -- pre-signed, better-lit, already filed under his name.",
         "MIFELLA 2 (Mk2): \"Beat the copy, meet the upgrade. The yard shipped your replacement before you finished swinging.\"",
-        "Bosch keeps the smudged version. The clean one points up the line, toward the gate that decides which Bosch leaves."
+        "Bosch keeps the smudged version. The clean one points up the line -- north, to the gate by the station, where the route decides which Bosch leaves."
       ]
     },
     {
@@ -69,8 +70,8 @@
       "requireFlags": ["signal:threshold_cleared"],
       "dialogue": [
         "The Malady stops describing Bosch and starts describing itself. The mask warms, slips, and underneath is his own face -- better-lit, pre-approved, smiling without him.",
-        "Stamped small and certain across the peeled mask: CONTRACT OWNER -- MILADY.",
-        "Bosch keeps the damaged card. The threshold records a face the route was never going to be able to sell."
+        "The threshold logs the receipt without being asked: SIGNER -- MALADY. CONTRACT OWNER -- MILADY. Beating the symptom didn't kill the machine. It named it.",
+        "Bosch keeps the damaged card. North, the last gate waits for a clean Bosch to walk out wearing his name."
       ]
     },
     {

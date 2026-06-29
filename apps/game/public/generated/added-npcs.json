@@ -1132,6 +1132,94 @@
           "Go carefully. The town is kind, but kind things can still file you."
         ]
       }
+    },
+    {
+      "id": 100200,
+      "worldPixel": { "x": 2064, "y": 1744 },
+      "spriteGroup": 119,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A kid leans off a stoop like he's been waiting to be first to tell you.",
+          "\"You're up. Took your time. Your card's been up for hours.\"",
+          "\"Talk to folks with Z -- everybody's got a read on you, couple of 'em even true. Wanna check your pockets or your stats? That's X.\"",
+          "\"Now go find who's printing your face. Follow the laminate. West, the arcade crowd. They trade you like they invented you.\""
+        ]
+      }
+    },
+    {
+      "id": 100201,
+      "worldPixel": { "x": 1660, "y": 1712 },
+      "spriteGroup": 54,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "WITNESS KID: \"I saw the first card. Yours is a reprint.\"",
+          "\"Don't take it personal. Reprints travel better. That's sort of the whole problem.\""
+        ]
+      }
+    },
+    {
+      "id": 100202,
+      "worldPixel": { "x": 1740, "y": 1712 },
+      "spriteGroup": 66,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "VESSEL READER: \"Stop acting like the card is about you. You're what it's using to travel.\"",
+          "\"Source, vessel, claimant -- three hats, no head. Pick wrong and the town writes you in pen.\""
+        ]
+      }
+    },
+    {
+      "id": 100203,
+      "worldPixel": { "x": 1800, "y": 1712 },
+      "spriteGroup": 68,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "COUNTERFEIT SNIFFER: \"Real source doesn't carry proof this clean.\"",
+          "\"You smell handmade. Round here that's a compliment. At the gate up north it's a death sentence.\""
+        ]
+      }
+    },
+    {
+      "id": 100204,
+      "worldPixel": { "x": 1512, "y": 1672 },
+      "spriteGroup": 59,
+      "facing": "up",
+      "interaction": {
+        "pages": [
+          "A notice board, layered three-deep in Public Version Cards. Some carry your face. Some carry your phrase. One has neither -- and the crowd treats that one as the realest of all.",
+          "Stapled across the rest, a route slip: GATE NORTH, BY THE STATION. UNPROCESSED VERSIONS REPORT FOR SORTING.",
+          "A route aide keeps straightening the cards. \"Don't touch the board. The board touches you.\""
+        ]
+      }
+    },
+    {
+      "id": 100205,
+      "worldPixel": { "x": 1904, "y": 1584 },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A turnstile that doesn't ask for money. A slot blinks: INSERT PUBLIC VERSION.",
+          "The attendant doesn't look up. \"Insert the card, you cross clean. Refuse, you cross marked. Either way you cross as a version.\"",
+          "Bosch leaves the card in his pocket. The turnstile gives up with a civic little click. North by the station, the real mouth waits."
+        ]
+      }
+    },
+    {
+      "id": 100206,
+      "worldPixel": { "x": 1976, "y": 1576 },
+      "spriteGroup": 68,
+      "facing": "up",
+      "interaction": {
+        "pages": [
+          "A route aide with a clipboard and a smile that was issued, not earned.",
+          "\"Cards sorted? The road north opens once the gate decides which Bosch is leaving. Station's right there. Try not to look unprocessed.\""
+        ]
+      }
     }
   ]
 }
