@@ -35,7 +35,9 @@ const cases = [
   { name: "diamondized (tint)",     forced: { status: { diamondized: true } },   expect: { baseState: "diamondized", tintSet: true } },
   { name: "invert palette",         forced: { invertPalette: true },             expect: { baseState: "default", invert: true } },
   { name: "teleport spin",          forced: { teleporting: true },               expect: { baseState: "default", teleport: true } },
-  { name: "ladder (locked)",        forced: { onLadder: true },                  expect: { baseState: "ladder", lock: true } },
+  { name: "ladder (faithful sheet)", forced: { onLadder: true },                 expect: { baseState: "ladder", sheetSwapped: true, lock: true } },
+  { name: "rope (faithful sheet)",  forced: { onRope: true },                    expect: { baseState: "rope", sheetSwapped: true, lock: true } },
+  { name: "bike (faithful sheet)",  forced: { riding: "bike" },                  expect: { baseState: "bike", sheetSwapped: true } },
   { name: "mushroom overlay",       forced: { status: { mushroomized: true } },  expect: { baseState: "default", overlay: "mushroom" } }
 ];
 
