@@ -81,8 +81,13 @@ const overlayAppears = Buffer.isBuffer(noOverlay) && !noOverlay.equals(withMushr
 console.log(`geometry pixel-diff -- tiny shrinks: ${tinyChanged ? "YES" : "NO"}  teleport spin cycles: ${teleportCycling ? "YES" : "NO"}  mushroom overlay appears: ${overlayAppears ? "YES" : "NO"}`);
 await force({ status: { mushroomized: true } }); await page.waitForTimeout(150);
 await page.screenshot({ path: "/private/tmp/livewalk/state-mushroom.png" }).catch(() => {});
+// water wading: forcing deep water clips + raises the sprite (geometry)
+await force({}); await page.waitForTimeout(150); const dryBuf = await shot();
+await force({ deepWater: true }); await page.waitForTimeout(180); const wetBuf = await shot();
+const waterClips = Buffer.isBuffer(dryBuf) && !dryBuf.equals(wetBuf);
+console.log(`water wading clips sprite: ${waterClips ? "YES" : "NO"}`);
 await force({ status: { tiny: true } }); await page.waitForTimeout(150);
 await page.screenshot({ path: "/private/tmp/livewalk/state-tiny.png" }).catch(() => {});
-const geomOk = tinyChanged && teleportCycling && overlayAppears;
+const geomOk = tinyChanged && teleportCycling && overlayAppears && waterClips;
 console.log(`\n=== ${pass}/${pass + fail} readout checks; geometry pixel-diff ok=${geomOk}; pageerrors: ${errs.length ? errs.slice(0, 3) : "none"} ===`);
 await browser.close();

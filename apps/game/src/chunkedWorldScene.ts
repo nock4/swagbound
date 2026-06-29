@@ -4568,15 +4568,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return override ? spriteOverrideScale(override.displayHeight, override.frameHeight) : 1;
   }
 
-  /** Live visual-state inputs: real signals (extended in later phases) merged under forced overrides. */
+  /** Live visual-state inputs: real signals merged under forced overrides (forced wins, for tests/cutscenes). */
   private currentVisualStateInputs(): VisualStateInputs {
     const base = defaultVisualStateInputs();
     const forced = this.forcedVisualState;
     return {
       ...base,
+      deepWater: this.isPlayerInWater(), // real terrain signal (3a)
+      // ladder/rope/bike real triggers await tile-class data + a mount mechanic; forced-path for now.
       ...forced,
       status: { ...base.status, ...(forced.status ?? {}) }
     };
+  }
+
+  private isPlayerInWater(): boolean {
+    try {
+      const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
+      return (surface & SURFACE_WATER_MASK) !== 0;
+    } catch {
+      return false;
+    }
   }
 
   /**
@@ -4631,7 +4642,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     this.lastVisualSheetSwapped = sheetSwapped;
     this.lastVisualApplied = { scale, alpha, tint };
-    this.updatePlayerOverlays(resolved);
+    this.updatePlayerOverlays(resolved); // positioned from the un-shifted feet, before the water raise below
+
+    // Water wading: clip the submerged lower body at the waterline and raise the sprite so the visible
+    // top stays put. Resolver gates waterClip to upright base states (default/tiny). Crop is cleared
+    // otherwise. Done last so overlays already anchored to the normal head position.
+    const ov = this.playerSpriteOverride();
+    if (resolved.transforms.waterClip && ov?.frameHeight && ov?.frameWidth) {
+      const waterline = ov.anchors?.waterline ?? Math.round(ov.frameHeight * 0.6);
+      sprite.setCrop(0, 0, ov.frameWidth, waterline);
+      sprite.y -= (ov.frameHeight - waterline) * scale;
+    } else if (sprite.isCropped) {
+      sprite.setCrop();
+    }
   }
 
   /**
