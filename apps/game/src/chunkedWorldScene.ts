@@ -174,6 +174,12 @@ import {
   registerDiscreteKeys
 } from "./inputModel";
 import { buildPartyMember, type PartyMember } from "./characterModel";
+import {
+  defaultVisualStateInputs,
+  resolvePlayerVisualState,
+  type ResolvedVisualState,
+  type VisualStateInputs
+} from "./playerVisualState";
 import { activeWindowFlavorId } from "./windowSettings";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import {
@@ -407,6 +413,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private collisionOverlayEnabled = false;
   private solidAtHook?: (x: number, y: number) => boolean;
   private surfaceAtHook?: (x: number, y: number) => number;
+  /** Debug/cutscene-forced overrides merged over the live visual-state inputs (see playerVisualState). */
+  private forcedVisualState: Partial<VisualStateInputs> = {};
+  private lastResolvedVisualState?: ResolvedVisualState;
+  private lastVisualApplied: { scale: number; alpha: number; tint: number | null } = { scale: 1, alpha: 1, tint: null };
+  private lastVisualSheetSwapped = false;
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
   private doorTriggerState: DoorTriggerState = { suppressUntilClear: false };
@@ -574,6 +585,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
         frameWidth: playerSheet.frameWidth,
         frameHeight: playerSheet.frameHeight
       });
+    }
+    // Faithful per-state hero sheets + shared overlay assets (forward-compatible: no-op until a skin
+    // supplies them). The visual-state render path swaps to these when present, else approximates.
+    const playerStates = this.playerSpriteOverride()?.states as Record<string, { image: string; frameWidth: number; frameHeight: number }> | undefined;
+    for (const [name, sheet] of Object.entries(playerStates ?? {})) {
+      if (sheet) {
+        this.load.spritesheet(this.playerStateSheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+      }
+    }
+    const overlays = this.data_.spriteOverrides?.overlays as Record<string, { image: string; frameWidth: number; frameHeight: number }> | undefined;
+    for (const [name, sheet] of Object.entries(overlays ?? {})) {
+      if (sheet) {
+        this.load.spritesheet(this.overlaySheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+      }
     }
   }
 
@@ -1341,6 +1366,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const member = this.battlePartyMembers()?.find((entry) => entry.id === charId);
       return member ? { offense: member.stats.offense, defense: member.stats.defense } : undefined;
     };
+    // Debug-only: force hero visual-state inputs (KO, ride, status, cutscene event, palette) so the
+    // sprite-state render path can be exercised in-engine without reaching each in-game trigger.
+    // e.g. __setPlayerVisualState({ event: "dead" }) or ({ status: { tiny: true } }); call with {} to clear.
+    globals.__setPlayerVisualState = (forced?: Partial<VisualStateInputs>) => {
+      this.forcedVisualState = forced ?? {};
+      this.applyPlayerVisualState();
+      return this.lastResolvedVisualState;
+    };
+    globals.__playerVisualState = () => this.lastResolvedVisualState;
   }
 
   private unregisterCollisionDebugGlobals(): void {
@@ -1354,6 +1388,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__debugHeal;
     delete globals.__equip;
     delete globals.__battleStats;
+    delete globals.__setPlayerVisualState;
+    delete globals.__playerVisualState;
     this.solidAtHook = undefined;
     this.surfaceAtHook = undefined;
   }
@@ -4489,7 +4525,90 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.playerState.facing,
       0
     );
+    this.applyPlayerVisualState();
     this.updateFollower();
+  }
+
+  private playerStateSheetKey(state: string): string {
+    return `sprite-override-player-state-${state}`;
+  }
+
+  private overlaySheetKey(name: string): string {
+    return `sprite-override-overlay-${name}`;
+  }
+
+  /** Texture key for a faithful state sheet IF the skin defines it AND it loaded; else undefined. */
+  private loadedStateSheetKey(baseState: ResolvedVisualState["baseState"]): string | undefined {
+    if (baseState === "default") {
+      return undefined;
+    }
+    const states = this.playerSpriteOverride()?.states as Record<string, unknown> | undefined;
+    if (!states?.[baseState]) {
+      return undefined;
+    }
+    const key = this.playerStateSheetKey(baseState);
+    return this.textures.exists(key) ? key : undefined;
+  }
+
+  private playerBaseScale(): number {
+    const override = spriteOverrideSheet(this.playerSpriteOverride());
+    return override ? spriteOverrideScale(override.displayHeight, override.frameHeight) : 1;
+  }
+
+  /** Live visual-state inputs: real signals (extended in later phases) merged under forced overrides. */
+  private currentVisualStateInputs(): VisualStateInputs {
+    const base = defaultVisualStateInputs();
+    const forced = this.forcedVisualState;
+    return {
+      ...base,
+      ...forced,
+      status: { ...base.status, ...(forced.status ?? {}) }
+    };
+  }
+
+  /**
+   * Resolve the hero visual state and apply it to the player sprite. Swaps to a faithful state sheet
+   * when one exists; otherwise applies the generic approximation (scale/alpha/tint) so any skin still
+   * "does the same". Runs each frame from syncPlayerObject (cheap; idempotent).
+   */
+  private applyPlayerVisualState(): void {
+    if (!(this.player instanceof Phaser.GameObjects.Sprite)) {
+      return;
+    }
+    const resolved = resolvePlayerVisualState(this.currentVisualStateInputs());
+    this.lastResolvedVisualState = resolved;
+    const sprite = this.player;
+
+    const stateSheetKey = this.loadedStateSheetKey(resolved.baseState);
+    const sheetSwapped = stateSheetKey !== undefined;
+    if (stateSheetKey && sprite.texture.key !== stateSheetKey) {
+      sprite.setTexture(stateSheetKey);
+    }
+
+    // With a faithful sheet, no approximation; without one, fall back to the generic look-alike.
+    const approx = sheetSwapped ? {} : resolved.approximation;
+    const scale = this.playerBaseScale() * (approx.scale ?? 1);
+    sprite.setScale(scale);
+    const alpha = approx.alpha ?? 1;
+    sprite.setAlpha(alpha);
+    let tint: number | null = null;
+    if (approx.desaturate) {
+      tint = 0x9a9a9a;
+    } else if (resolved.transforms.invertPalette) {
+      tint = 0x6a6aff; // placeholder approximation; Phase 1 replaces with a true WebGL invert pipeline
+    }
+    if (tint === null) {
+      sprite.clearTint();
+    } else {
+      sprite.setTint(tint);
+    }
+
+    if (resolved.lockAnimation && !sheetSwapped) {
+      sprite.setFrame(this.playerFrames[this.playerState.facing][0]);
+    }
+
+    this.lastVisualSheetSwapped = sheetSwapped;
+    this.lastVisualApplied = { scale, alpha, tint };
   }
 
   private followerSpriteOverride(): SpriteOverride | undefined {
@@ -4645,6 +4764,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       animKey: this.playerState.animKey,
       animFrame: this.playerState.animFrame,
       inputLocked: this.playerState.inputLocked,
+      visualState: this.lastResolvedVisualState
+        ? {
+            baseState: this.lastResolvedVisualState.baseState,
+            transforms: this.lastResolvedVisualState.transforms,
+            overlays: this.lastResolvedVisualState.overlays,
+            lockAnimation: this.lastResolvedVisualState.lockAnimation,
+            sheetSwapped: this.lastVisualSheetSwapped,
+            applied: this.lastVisualApplied
+          }
+        : undefined,
       lastDoor: this.lastDoor,
       doorFadeActive: this.isDoorFadeActive(),
       doorFadePhase: this.doorFadePhase,

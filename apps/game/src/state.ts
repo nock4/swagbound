@@ -235,6 +235,15 @@ export type OverworldDebug = {
   animKey?: string;
   animFrame?: number;
   inputLocked?: boolean;
+  /** Resolved hero visual state (base sheet + transforms + overlays + applied approximation). */
+  visualState?: {
+    baseState: string;
+    transforms: { invertPalette: boolean; waterClip: boolean };
+    overlays: readonly string[];
+    lockAnimation: boolean;
+    sheetSwapped: boolean;
+    applied: { scale: number; alpha: number; tint: number | null };
+  };
   lastDoor?: { from: { x: number; y: number }; to: { x: number; y: number } };
   doorFadeActive?: boolean;
   doorFadePhase?: "none" | "fade-out" | "fade-in";
