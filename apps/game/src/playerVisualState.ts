@@ -33,13 +33,15 @@ export interface VisualStateInputs {
   event?: SpriteStateName | null;
   /** Moonside-style negative-palette area. */
   invertPalette: boolean;
+  /** Mid PSI-Teleport (the spin/dash animation). */
+  teleporting: boolean;
 }
 
 export interface ResolvedVisualState {
   baseState: SpriteStateName | "default";
   /** Applied by the render layer ONLY when the skin lacks a sheet for `baseState`. */
   approximation: { scale?: number; alpha?: number; desaturate?: boolean };
-  transforms: { invertPalette: boolean; waterClip: boolean };
+  transforms: { invertPalette: boolean; waterClip: boolean; teleportSpin: boolean };
   overlays: SpriteOverlayName[];
   /** ladder/rope/sitting/sleeping hold a static pose instead of cycling the walk animation. */
   lockAnimation: boolean;
@@ -84,7 +86,8 @@ export function resolvePlayerVisualState(inputs: VisualStateInputs): ResolvedVis
     approximation: { ...(APPROXIMATION[baseState as SpriteStateName] ?? {}) },
     transforms: {
       invertPalette: inputs.invertPalette,
-      waterClip: inputs.deepWater && WADEABLE.has(baseState)
+      waterClip: inputs.deepWater && WADEABLE.has(baseState),
+      teleportSpin: inputs.teleporting && !inputs.ko
     },
     overlays,
     lockAnimation: LOCKED_STATES.has(baseState as SpriteStateName)
@@ -93,5 +96,5 @@ export function resolvePlayerVisualState(inputs: VisualStateInputs): ResolvedVis
 
 /** Default inputs (plain walking, nothing applied) -- a convenience for callers/tests. */
 export function defaultVisualStateInputs(): VisualStateInputs {
-  return { ko: false, deepWater: false, onLadder: false, onRope: false, riding: null, status: {}, event: null, invertPalette: false };
+  return { ko: false, deepWater: false, onLadder: false, onRope: false, riding: null, status: {}, event: null, invertPalette: false, teleporting: false };
 }

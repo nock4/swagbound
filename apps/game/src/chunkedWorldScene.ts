@@ -418,6 +418,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private lastResolvedVisualState?: ResolvedVisualState;
   private lastVisualApplied: { scale: number; alpha: number; tint: number | null } = { scale: 1, alpha: 1, tint: null };
   private lastVisualSheetSwapped = false;
+  private playerInvertActive = false;
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
   private doorTriggerState: DoorTriggerState = { suppressUntilClear: false };
@@ -4591,11 +4592,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     sprite.setScale(scale);
     const alpha = approx.alpha ?? 1;
     sprite.setAlpha(alpha);
+
+    // Color inversion: a real per-pixel ColorMatrix negative filter; tint fallback if filters are
+    // unavailable. Diamondized's approximation desaturates via tint.
+    const invertViaFilter = this.setPlayerInvert(sprite, resolved.transforms.invertPalette);
     let tint: number | null = null;
     if (approx.desaturate) {
       tint = 0x9a9a9a;
-    } else if (resolved.transforms.invertPalette) {
-      tint = 0x6a6aff; // placeholder approximation; Phase 1 replaces with a true WebGL invert pipeline
+    } else if (resolved.transforms.invertPalette && !invertViaFilter) {
+      tint = 0x6a6aff;
     }
     if (tint === null) {
       sprite.clearTint();
@@ -4603,12 +4608,53 @@ export class ChunkedWorldScene extends Phaser.Scene {
       sprite.setTint(tint);
     }
 
-    if (resolved.lockAnimation && !sheetSwapped) {
+    // Frame: teleport spin cycles facings rapidly (reuses walk frames); else locked poses hold frame 0.
+    if (resolved.transforms.teleportSpin && !sheetSwapped) {
+      const order: Array<"down" | "left" | "up" | "right"> = ["down", "left", "up", "right"];
+      const idx = Math.floor(this.time.now / 70) % order.length;
+      sprite.setFrame(this.playerFrames[order[idx]][0]);
+    } else if (resolved.lockAnimation && !sheetSwapped) {
       sprite.setFrame(this.playerFrames[this.playerState.facing][0]);
     }
 
     this.lastVisualSheetSwapped = sheetSwapped;
     this.lastVisualApplied = { scale, alpha, tint };
+  }
+
+  /**
+   * Toggle a real per-pixel color inversion (Moonside) via a ColorMatrix.negative filter on the MAIN
+   * CAMERA -- Phaser 4's primary filter path, and faithful since Moonside inverts the whole screen.
+   * Returns true when the real filter is active; false when off OR filters are unavailable (the caller
+   * then applies a sprite-tint fallback). Only mutates on change, so it's cheap to call each frame.
+   */
+  private setPlayerInvert(_sprite: Phaser.GameObjects.Sprite, want: boolean): boolean {
+    // Faithful per-pixel inversion via a ColorMatrix.negative filter on the main camera (Phaser 4's
+    // primary filter path; Moonside inverts the whole screen anyway). Returns true when applied; the
+    // caller applies a sprite-tint fallback only when camera filters are unavailable. NOTE: WebGL
+    // color ops (this filter AND setTint) do not composite in the headless screenshot harness, so
+    // color effects are verified by the resolver + readout, not pixel-diff -- confirm visuals in a
+    // real browser. Geometry (scale) and alpha effects DO pixel-diff headless.
+    if (want === this.playerInvertActive) {
+      return want;
+    }
+    type FilterCam = {
+      filters?: { internal: { clear: () => void; addColorMatrix: () => { colorMatrix: { negative: () => unknown } } } } | null;
+    };
+    const cam = this.cameras.main as unknown as FilterCam;
+    try {
+      if (!cam.filters) {
+        throw new Error("camera filters unavailable");
+      }
+      cam.filters.internal.clear();
+      if (want) {
+        cam.filters.internal.addColorMatrix().colorMatrix.negative();
+      }
+      this.playerInvertActive = want;
+      return want;
+    } catch {
+      this.playerInvertActive = false;
+      return false;
+    }
   }
 
   private followerSpriteOverride(): SpriteOverride | undefined {

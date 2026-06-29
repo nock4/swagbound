@@ -238,7 +238,7 @@ export type OverworldDebug = {
   /** Resolved hero visual state (base sheet + transforms + overlays + applied approximation). */
   visualState?: {
     baseState: string;
-    transforms: { invertPalette: boolean; waterClip: boolean };
+    transforms: { invertPalette: boolean; waterClip: boolean; teleportSpin: boolean };
     overlays: readonly string[];
     lockAnimation: boolean;
     sheetSwapped: boolean;

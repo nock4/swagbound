@@ -7,7 +7,7 @@ describe("resolvePlayerVisualState", () => {
   it("plain walking -> default, no transforms/overlays", () => {
     const r = resolvePlayerVisualState(defaultVisualStateInputs());
     expect(r.baseState).toBe("default");
-    expect(r.transforms).toEqual({ invertPalette: false, waterClip: false });
+    expect(r.transforms).toEqual({ invertPalette: false, waterClip: false, teleportSpin: false });
     expect(r.overlays).toEqual([]);
     expect(r.lockAnimation).toBe(false);
   });
@@ -55,6 +55,11 @@ describe("resolvePlayerVisualState", () => {
   it("invert palette is independent of base state", () => {
     expect(resolvePlayerVisualState(inputs({ invertPalette: true })).transforms.invertPalette).toBe(true);
     expect(resolvePlayerVisualState(inputs({ invertPalette: true, riding: "bike" })).transforms.invertPalette).toBe(true);
+  });
+
+  it("teleport spin is active when teleporting and alive, suppressed when KO'd", () => {
+    expect(resolvePlayerVisualState(inputs({ teleporting: true })).transforms.teleportSpin).toBe(true);
+    expect(resolvePlayerVisualState(inputs({ teleporting: true, ko: true })).transforms.teleportSpin).toBe(false);
   });
 
   it("overlays layer on living heroes and stack; suppressed when KO'd", () => {

@@ -22,7 +22,8 @@ const cases = [
   { name: "dead",                   forced: { event: "dead" },                   expect: { baseState: "dead", alpha: 0.5 } },
   { name: "tiny+ko -> tinyDead",    forced: { ko: true, status: { tiny: true } },expect: { baseState: "tinyDead", alpha: 0.5, scaleRatio: 0.55 } },
   { name: "diamondized (tint)",     forced: { status: { diamondized: true } },   expect: { baseState: "diamondized", tintSet: true } },
-  { name: "invert palette (tint)",  forced: { invertPalette: true },             expect: { baseState: "default", invert: true, tintSet: true } },
+  { name: "invert palette",         forced: { invertPalette: true },             expect: { baseState: "default", invert: true } },
+  { name: "teleport spin",          forced: { teleporting: true },               expect: { baseState: "default", teleport: true } },
   { name: "ladder (locked)",        forced: { onLadder: true },                  expect: { baseState: "ladder", lock: true } },
   { name: "mushroom overlay",       forced: { status: { mushroomized: true } },  expect: { baseState: "default", overlay: "mushroom" } }
 ];
@@ -42,16 +43,29 @@ for (const c of cases) {
   if (e.tint === null) checks.push(["noTint", v?.applied?.tint === null, v?.applied?.tint]);
   if (e.tintSet) checks.push(["tintSet", typeof v?.applied?.tint === "number", v?.applied?.tint]);
   if (e.invert) checks.push(["invert", v?.transforms?.invertPalette === true, v?.transforms?.invertPalette]);
+  if (e.teleport) checks.push(["teleport", v?.transforms?.teleportSpin === true, v?.transforms?.teleportSpin]);
   if (e.lock) checks.push(["lock", v?.lockAnimation === true, v?.lockAnimation]);
   if (e.overlay) checks.push(["overlay", (v?.overlays ?? []).includes(e.overlay), v?.overlays]);
   const ok = checks.every((x) => x[1]);
   ok ? pass++ : fail++;
   console.log(`${ok ? "PASS" : "FAIL"}  ${c.name}  ${checks.filter((x) => !x[1]).map((x) => `${x[0]}=${JSON.stringify(x[2])}`).join(" ") || ""}`);
 }
-// visual eyeball
+// PIXEL-DIFF is only meaningful for GEOMETRY/ALPHA here: the headless renderer does not composite
+// WebGL color ops (setTint AND ColorMatrix filters), so invert/diamondized are verified by the readout
+// checks above, not pixels. Confirm color visuals in a real browser. (Proven: setTint no-ops headless.)
+const box = { x: 232, y: 188, width: 48, height: 64 }; // ~viewport center where the camera holds the player
+const shot = () => page.screenshot({ clip: box });
+// geometry: tiny must shrink the sprite vs default
+await force({}); await page.waitForTimeout(150); const offBuf = await shot();
+await force({ status: { tiny: true } }); await page.waitForTimeout(180); const tinyBuf = await shot();
+const tinyChanged = Buffer.isBuffer(offBuf) && !offBuf.equals(tinyBuf);
+// teleport spin: frames must be CYCLING (two captures during the spin differ)
+await force({ teleporting: true }); await page.waitForTimeout(50); const t1 = await shot();
+await page.waitForTimeout(170); const t2 = await shot();
+const teleportCycling = Buffer.isBuffer(t1) && !t1.equals(t2);
+console.log(`geometry pixel-diff -- tiny shrinks: ${tinyChanged ? "YES" : "NO"}  teleport spin cycles: ${teleportCycling ? "YES" : "NO"}`);
 await force({ status: { tiny: true } }); await page.waitForTimeout(150);
 await page.screenshot({ path: "/private/tmp/livewalk/state-tiny.png" }).catch(() => {});
-await force({ event: "dead" }); await page.waitForTimeout(150);
-await page.screenshot({ path: "/private/tmp/livewalk/state-dead.png" }).catch(() => {});
-console.log(`\n=== ${pass}/${pass + fail} state checks passed; pageerrors: ${errs.length ? errs.slice(0, 3) : "none"} ===`);
+const geomOk = tinyChanged && teleportCycling;
+console.log(`\n=== ${pass}/${pass + fail} readout checks; geometry pixel-diff ok=${geomOk}; pageerrors: ${errs.length ? errs.slice(0, 3) : "none"} ===`);
 await browser.close();
