@@ -346,6 +346,9 @@ type DoorFadePhase = "none" | "fade-out" | "fade-in";
 
 const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
 const COLLISION_OVERLAY_DEPTH = 150_000;
+// Head/companion overlays render just above the foreground occluder layer (depth 100_000) so a mushroom
+// cap / sweat / possession ghost shows on the character, but stay below the door-fade + UI overlays.
+const PLAYER_OVERLAY_DEPTH = 110_000;
 const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 // Visible overworld enemies (EarthBound-style touch-to-battle): tuning.
 const OVERWORLD_ENEMY_GLOBAL_CAP = 4;
@@ -419,6 +422,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private lastVisualApplied: { scale: number; alpha: number; tint: number | null } = { scale: 1, alpha: 1, tint: null };
   private lastVisualSheetSwapped = false;
   private playerInvertActive = false;
+  /** Head-mounted/companion overlay sprites (sweat/mushroom/possession), keyed by overlay name. */
+  private overlaySprites = new Map<string, Phaser.GameObjects.Sprite>();
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
   private doorTriggerState: DoorTriggerState = { suppressUntilClear: false };
@@ -850,6 +855,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private resetRuntimeStateForStart(): void {
     this.destroyDoorFadeOverlay();
     this.unregisterForceEncounter();
+    this.destroyPlayerOverlays();
     this.player = undefined;
     this.playerFrames = CANONICAL_DIRECTION_FRAMES;
     this.follower = undefined;
@@ -1376,6 +1382,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return this.lastResolvedVisualState;
     };
     globals.__playerVisualState = () => this.lastResolvedVisualState;
+    globals.__overlayInfo = () => ({
+      texLoaded: ["sweat", "mushroom", "possessionGhost"].map((n) => [n, this.textures.exists(this.overlaySheetKey(n))]),
+      registry: Object.keys((this.data_.spriteOverrides?.overlays ?? {})),
+      sprites: [...this.overlaySprites.entries()].map(([n, s]) => ({ n, visible: s.visible, x: Math.round(s.x), y: Math.round(s.y), tex: s.texture?.key, depth: s.depth }))
+    });
   }
 
   private unregisterCollisionDebugGlobals(): void {
@@ -1391,6 +1402,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__battleStats;
     delete globals.__setPlayerVisualState;
     delete globals.__playerVisualState;
+    delete globals.__overlayInfo;
     this.solidAtHook = undefined;
     this.surfaceAtHook = undefined;
   }
@@ -4619,6 +4631,65 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     this.lastVisualSheetSwapped = sheetSwapped;
     this.lastVisualApplied = { scale, alpha, tint };
+    this.updatePlayerOverlays(resolved);
+  }
+
+  /**
+   * Position head/companion overlay sprites (sweat/mushroom/possession) at the player's head anchor and
+   * show only the active ones. Overlays follow the player, scale with it, and render just above it. The
+   * head point uses anchors.head when the skin supplies it, else the top-center fallback.
+   */
+  private updatePlayerOverlays(resolved: ResolvedVisualState): void {
+    if (!(this.player instanceof Phaser.GameObjects.Sprite)) {
+      for (const sprite of this.overlaySprites.values()) {
+        sprite.setVisible(false);
+      }
+      return;
+    }
+    const active = new Set<string>(resolved.overlays);
+    for (const [name, sprite] of this.overlaySprites) {
+      if (!active.has(name)) {
+        sprite.setVisible(false);
+      }
+    }
+    const registry = this.data_.spriteOverrides?.overlays as
+      | Record<string, { frameWidth: number; frameHeight: number; frames?: number[]; offset?: { x: number; y: number } }>
+      | undefined;
+    if (!registry) {
+      return;
+    }
+    const ov = this.playerSpriteOverride();
+    const scale = this.lastVisualApplied.scale || 1;
+    const frameW = ov?.frameWidth ?? this.player.width;
+    const frameH = ov?.frameHeight ?? this.player.height;
+    const headX = ov?.anchors?.head?.x ?? frameW / 2; // fallback: top-center
+    const headY = ov?.anchors?.head?.y ?? 0;
+    const spriteTopY = this.player.y - frameH * scale; // origin is (0.5, 1) => player.y is the feet
+    for (const name of active) {
+      const data = registry[name];
+      const key = this.overlaySheetKey(name);
+      if (!data || !this.textures.exists(key)) {
+        continue;
+      }
+      let sprite = this.overlaySprites.get(name);
+      if (!sprite || !sprite.scene) {
+        sprite = this.add.sprite(0, 0, key, (data.frames ?? [0])[0]);
+        sprite.setOrigin(0.5, 1);
+        this.overlaySprites.set(name, sprite);
+      }
+      sprite.x = this.player.x + (headX - frameW / 2) * scale + (data.offset?.x ?? 0) * scale;
+      sprite.y = spriteTopY + headY * scale + (data.offset?.y ?? 0) * scale;
+      sprite.setScale(scale);
+      sprite.setDepth(PLAYER_OVERLAY_DEPTH);
+      sprite.setVisible(true);
+    }
+  }
+
+  private destroyPlayerOverlays(): void {
+    for (const sprite of this.overlaySprites.values()) {
+      sprite.destroy();
+    }
+    this.overlaySprites.clear();
   }
 
   /**

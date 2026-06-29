@@ -9709,5 +9709,34 @@
       "originX": 0.5,
       "originY": 1
     }
+  },
+  "overlays": {
+    "sweat": {
+      "image": "assets/swagbound/overlays/sweat.png",
+      "frameWidth": 8,
+      "frameHeight": 10,
+      "offset": {
+        "x": 0,
+        "y": -2
+      }
+    },
+    "mushroom": {
+      "image": "assets/swagbound/overlays/mushroom.png",
+      "frameWidth": 12,
+      "frameHeight": 10,
+      "offset": {
+        "x": 0,
+        "y": -1
+      }
+    },
+    "possessionGhost": {
+      "image": "assets/swagbound/overlays/possession-ghost.png",
+      "frameWidth": 12,
+      "frameHeight": 12,
+      "offset": {
+        "x": 0,
+        "y": -3
+      }
+    }
   }
 }

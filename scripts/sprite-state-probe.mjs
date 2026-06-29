@@ -16,6 +16,17 @@ await page.waitForTimeout(1000);
 const force = (forced) => page.evaluate((f) => globalThis.__setPlayerVisualState(f), forced);
 const read = () => page.evaluate(() => globalThis.__firstSceneDebug?.visualState ?? null);
 
+// Drain the opening cold-signal cutscene: while it runs, update() returns early (no per-frame sprite
+// sync, so teleport-spin can't cycle and overlays can't reposition) AND its dialogue box covers the
+// player's head (masking overlay pixel-diffs). Clear it so the normal loop runs for the checks below.
+for (let i = 0; i < 30; i++) {
+  const busy = await page.evaluate(() => globalThis.__firstSceneDebug?.dialogueOpen || globalThis.__firstSceneDebug?.inputLocked);
+  if (!busy) break;
+  await page.keyboard.press("z");
+  await page.waitForTimeout(150);
+}
+await page.waitForTimeout(300);
+
 const cases = [
   { name: "default (cleared)",      forced: {},                                  expect: { baseState: "default", alpha: 1, tint: null, scaleRatio: 1 } },
   { name: "tiny",                   forced: { status: { tiny: true } },          expect: { baseState: "tiny", scaleRatio: 0.55 } },
@@ -53,7 +64,7 @@ for (const c of cases) {
 // PIXEL-DIFF is only meaningful for GEOMETRY/ALPHA here: the headless renderer does not composite
 // WebGL color ops (setTint AND ColorMatrix filters), so invert/diamondized are verified by the readout
 // checks above, not pixels. Confirm color visuals in a real browser. (Proven: setTint no-ops headless.)
-const box = { x: 232, y: 188, width: 48, height: 64 }; // ~viewport center where the camera holds the player
+const box = { x: 220, y: 150, width: 72, height: 104 }; // covers the player AND the head (overlays sit above the body)
 const shot = () => page.screenshot({ clip: box });
 // geometry: tiny must shrink the sprite vs default
 await force({}); await page.waitForTimeout(150); const offBuf = await shot();
@@ -63,9 +74,15 @@ const tinyChanged = Buffer.isBuffer(offBuf) && !offBuf.equals(tinyBuf);
 await force({ teleporting: true }); await page.waitForTimeout(50); const t1 = await shot();
 await page.waitForTimeout(170); const t2 = await shot();
 const teleportCycling = Buffer.isBuffer(t1) && !t1.equals(t2);
-console.log(`geometry pixel-diff -- tiny shrinks: ${tinyChanged ? "YES" : "NO"}  teleport spin cycles: ${teleportCycling ? "YES" : "NO"}`);
+// overlay PRESENCE is a textured child sprite (not a tint), so it DOES render headless
+await force({}); await page.waitForTimeout(150); const noOverlay = await shot();
+await force({ status: { mushroomized: true } }); await page.waitForTimeout(180); const withMushroom = await shot();
+const overlayAppears = Buffer.isBuffer(noOverlay) && !noOverlay.equals(withMushroom);
+console.log(`geometry pixel-diff -- tiny shrinks: ${tinyChanged ? "YES" : "NO"}  teleport spin cycles: ${teleportCycling ? "YES" : "NO"}  mushroom overlay appears: ${overlayAppears ? "YES" : "NO"}`);
+await force({ status: { mushroomized: true } }); await page.waitForTimeout(150);
+await page.screenshot({ path: "/private/tmp/livewalk/state-mushroom.png" }).catch(() => {});
 await force({ status: { tiny: true } }); await page.waitForTimeout(150);
 await page.screenshot({ path: "/private/tmp/livewalk/state-tiny.png" }).catch(() => {});
-const geomOk = tinyChanged && teleportCycling;
+const geomOk = tinyChanged && teleportCycling && overlayAppears;
 console.log(`\n=== ${pass}/${pass + fail} readout checks; geometry pixel-diff ok=${geomOk}; pageerrors: ${errs.length ? errs.slice(0, 3) : "none"} ===`);
 await browser.close();
