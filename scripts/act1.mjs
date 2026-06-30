@@ -40,11 +40,18 @@ async function buildGrid(x0, y0, x1, y1, step = 8) {
     const cols = Math.floor((x1 - x0) / step) + 1, rows = Math.floor((y1 - y0) / step) + 1;
     const g = []; for (let r = 0; r < rows; r++) { const row = new Array(cols); for (let c = 0; c < cols; c++) row[c] = fn(x0 + c * step, y0 + r * step) ? 1 : 0; g.push(row); } return { cols, rows, g };
   }, { x0, y0, x1, y1, step });
+  // NPC body-boxes are NOT in __solidAt; the planner is otherwise NPC-blind and would
+  // ram standing NPCs (e.g. the authored rumor trio / turnstile / route aides). Treat
+  // visible NPCs as obstacles so the autorun routes around them like a real player would.
+  const npcs = await page.evaluate(() => (globalThis.__firstSceneDebug?.npcs ?? []).filter((n) => n.visible).map((n) => ({ x: n.x, y: n.y })));
   const { cols, rows, g } = solid;
   const blocked = Array.from({ length: rows }, () => new Array(cols).fill(false));
   const mark = (c, r) => { for (let dr = -1; dr <= 1; dr++) for (let dc = -1; dc <= 1; dc++) { const nr = r + dr, nc = c + dc; if (nr >= 0 && nc >= 0 && nr < rows && nc < cols) blocked[nr][nc] = true; } };
+  // Tight mark (NPC cell only, no padding) so a one-tile NPC doesn't seal a passable gap.
+  const markCell = (c, r) => { if (r >= 0 && c >= 0 && r < rows && c < cols) blocked[r][c] = true; };
   for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) if (g[r][c]) mark(c, r);
   for (const d of DOORS) { const c = Math.round((d.x - x0) / step), r = Math.round((d.y - y0) / step); if (c >= -1 && r >= -1 && c <= cols && r <= rows) mark(c, r); }
+  for (const n of npcs) { markCell(Math.round((n.x - x0) / step), Math.round((n.y - y0) / step)); }
   return { cols, rows, blocked, x0, y0, step };
 }
 const w2c = (G, x, y) => ({ c: Math.round((x - G.x0) / G.step), r: Math.round((y - G.y0) / G.step) });
@@ -94,15 +101,21 @@ async function routeTo(target) {
     }
     if (bailed) { await hold(PERP[attempt % 4], 220); } // perpendicular nudge to escape the corner
   }
-  // Final approach into the target sprite (it sits just off the walkable path); nudge in 4 dirs.
-  for (let i = 0; i < 40; i++) {
+  // Final approach into the target sprite. Walk straight at it; only when PHYSICALLY stalled (a wall
+  // or NPC body actually stopped us) do a single perpendicular wiggle, then resume toward the target.
+  // (Wiggling merely because distance isn't shrinking oscillates the player off the approach lane.)
+  let lastX = -1e9, lastY = -1e9;
+  for (let i = 0; i < 70; i++) {
     let s = await peek();
     if (inBattle(s)) return "battle";
     if (!s.o?.player) { await page.waitForTimeout(120); continue; }
     if (s.o.dialogueOpen) { await tap("z"); continue; }
     const p = s.o.player, dx = target.x - p.x, dy = target.y - p.y;
-    if (Math.abs(dx) < 6 && Math.abs(dy) < 6) { await hold(PERP[i % 4], 120); continue; }
-    await hold(dirToward(dx, dy), 120);
+    const moved = Math.hypot(p.x - lastX, p.y - lastY);
+    lastX = p.x; lastY = p.y;
+    if (i > 0 && moved < 2) await hold(PERP[i % 4], 140);            // truly stuck -> wiggle free
+    else if (Math.abs(dx) < 6 && Math.abs(dy) < 6) await hold(PERP[i % 4], 120); // on top of it -> jostle into contact
+    else await hold(dirToward(dx, dy), 120);
   }
   return inBattle(await peek()) ? "battle" : "arrived";
 }
@@ -215,6 +228,16 @@ await page.goto(`${BASE}?nointro=1${SPAWN ? `&spawn=${SPAWN}` : ""}`, { waitUnti
 await page.waitForFunction(() => globalThis.__firstSceneDebug, { timeout: 20000 }).catch(() => {});
 await page.waitForTimeout(1500);
 log(`Act-1 chain: ${BOSSES.map((b) => b.id).join(" -> ")} -> leave.`);
+
+// Drain the cold-signal opening cutscene (lockPlayer + multi-page reveal) before navigating.
+// Press z until its completion flag is set: this also covers the race where the area cutscene
+// hasn't fired yet on the first tick (a bare z is harmless until the dialogue appears).
+for (let i = 0; i < 80; i++) {
+  const o = (await peek()).o;
+  if ((o?.flags ?? []).includes("signal:cold-signal-seen") && !o?.dialogueOpen && !o?.inputLocked) break;
+  await tap("z", 200);
+}
+log(`  opening cutscene drained; flags:[${((await peek()).o?.flags ?? []).join(",")}]`);
 
 let bossesWon = 0;
 for (let obj = 0; obj < 12; obj++) {

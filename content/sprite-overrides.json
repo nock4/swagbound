@@ -1,9 +1,10 @@
 {
   "schema": "swagbound.sprite-overrides.v1",
   "player": {
-    "image": "assets/swagbound/hero/lsw-2821-walk.png",
-    "frameWidth": 192,
-    "frameHeight": 192,
+    "image": "assets/swagbound/hero/bosch-hood-walk.png",
+    "frameWidth": 96,
+    "frameHeight": 96,
+    "displayHeight": 24,
     "animations": {
       "down": [
         0,
@@ -30,43 +31,136 @@
         15
       ]
     },
-    "displayHeight": 24,
-    "originX": 0.5,
-    "originY": 1
-  },
-  "follower": {
-    "image": "assets/swagbound/hero/lsw-855-walk.png",
-    "frameWidth": 192,
-    "frameHeight": 192,
-    "animations": {
-      "down": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "left": [
-        4,
-        5,
-        6,
-        7
-      ],
-      "right": [
-        8,
-        9,
-        10,
-        11
-      ],
-      "up": [
-        12,
-        13,
-        14,
-        15
-      ]
-    },
-    "displayHeight": 24,
-    "originX": 0.5,
-    "originY": 1
+    "states": {
+      "dead": {
+        "image": "assets/swagbound/hero/bosch-hood-dead.png",
+        "frameWidth": 96,
+        "frameHeight": 96,
+        "displayHeight": 24,
+        "animations": {
+          "down": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "left": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "right": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        }
+      },
+      "bike": {
+        "image": "assets/swagbound/hero/bosch-hood-bike.png",
+        "frameWidth": 96,
+        "frameHeight": 96,
+        "displayHeight": 24,
+        "animations": {
+          "down": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "left": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "right": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        }
+      },
+      "ladder": {
+        "image": "assets/swagbound/hero/bosch-hood-ladder.png",
+        "frameWidth": 96,
+        "frameHeight": 96,
+        "displayHeight": 24,
+        "animations": {
+          "down": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "left": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "right": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        }
+      },
+      "rope": {
+        "image": "assets/swagbound/hero/bosch-hood-rope.png",
+        "frameWidth": 96,
+        "frameHeight": 96,
+        "displayHeight": 24,
+        "animations": {
+          "down": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "left": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "right": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        }
+      }
+    }
   },
   "byNpcId": {
     "74": {
@@ -9709,5 +9803,704 @@
       "originX": 0.5,
       "originY": 1
     }
-  }
+  },
+  "overlays": {
+    "sweat": {
+      "image": "assets/swagbound/overlays/sweat.png",
+      "frameWidth": 8,
+      "frameHeight": 10,
+      "offset": {
+        "x": 0,
+        "y": -2
+      }
+    },
+    "mushroom": {
+      "image": "assets/swagbound/overlays/mushroom.png",
+      "frameWidth": 12,
+      "frameHeight": 10,
+      "offset": {
+        "x": 0,
+        "y": -1
+      }
+    },
+    "possessionGhost": {
+      "image": "assets/swagbound/overlays/possession-ghost.png",
+      "frameWidth": 12,
+      "frameHeight": 12,
+      "offset": {
+        "x": 0,
+        "y": -3
+      }
+    }
+  },
+  "party": [
+    {
+      "slot": "Ness",
+      "name": "Bosch",
+      "joinOrder": 1,
+      "sprite": {
+        "image": "assets/swagbound/hero/bosch-hood-walk.png",
+        "frameWidth": 96,
+        "frameHeight": 96,
+        "displayHeight": 24,
+        "animations": {
+          "down": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "left": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "right": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        "states": {
+          "dead": {
+            "image": "assets/swagbound/hero/bosch-hood-dead.png",
+            "frameWidth": 96,
+            "frameHeight": 96,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "bike": {
+            "image": "assets/swagbound/hero/bosch-hood-bike.png",
+            "frameWidth": 96,
+            "frameHeight": 96,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "ladder": {
+            "image": "assets/swagbound/hero/bosch-hood-ladder.png",
+            "frameWidth": 96,
+            "frameHeight": 96,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "rope": {
+            "image": "assets/swagbound/hero/bosch-hood-rope.png",
+            "frameWidth": 96,
+            "frameHeight": 96,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "slot": "Paula",
+      "name": "Cloak",
+      "joinOrder": 2,
+      "sprite": {
+        "image": "assets/swagbound/hero/lsw-224-walk.png",
+        "frameWidth": 192,
+        "frameHeight": 192,
+        "displayHeight": 24,
+        "animations": {
+          "down": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "left": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "right": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        "states": {
+          "dead": {
+            "image": "assets/swagbound/hero/lsw-224-dead.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "bike": {
+            "image": "assets/swagbound/hero/lsw-224-bike.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "ladder": {
+            "image": "assets/swagbound/hero/lsw-224-ladder.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "rope": {
+            "image": "assets/swagbound/hero/lsw-224-rope.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "slot": "Jeff",
+      "name": "Munch",
+      "joinOrder": 3,
+      "sprite": {
+        "image": "assets/swagbound/hero/lsw-855-walk.png",
+        "frameWidth": 192,
+        "frameHeight": 192,
+        "displayHeight": 24,
+        "animations": {
+          "down": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "left": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "right": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        "states": {
+          "dead": {
+            "image": "assets/swagbound/hero/lsw-855-dead.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "bike": {
+            "image": "assets/swagbound/hero/lsw-855-bike.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "ladder": {
+            "image": "assets/swagbound/hero/lsw-855-ladder.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "rope": {
+            "image": "assets/swagbound/hero/lsw-855-rope.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          }
+        }
+      }
+    },
+    {
+      "slot": "Poo",
+      "name": "Knight",
+      "joinOrder": 4,
+      "sprite": {
+        "image": "assets/swagbound/hero/lsw-2821-walk.png",
+        "frameWidth": 192,
+        "frameHeight": 192,
+        "displayHeight": 24,
+        "animations": {
+          "down": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "left": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "right": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        "states": {
+          "dead": {
+            "image": "assets/swagbound/hero/lsw-2821-dead.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "bike": {
+            "image": "assets/swagbound/hero/lsw-2821-bike.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "ladder": {
+            "image": "assets/swagbound/hero/lsw-2821-ladder.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          },
+          "rope": {
+            "image": "assets/swagbound/hero/lsw-2821-rope.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "displayHeight": 24,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            }
+          }
+        }
+      }
+    }
+  ]
 }

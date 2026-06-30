@@ -174,6 +174,12 @@ import {
   registerDiscreteKeys
 } from "./inputModel";
 import { buildPartyMember, type PartyMember } from "./characterModel";
+import {
+  defaultVisualStateInputs,
+  resolvePlayerVisualState,
+  type ResolvedVisualState,
+  type VisualStateInputs
+} from "./playerVisualState";
 import { activeWindowFlavorId } from "./windowSettings";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import {
@@ -340,6 +346,9 @@ type DoorFadePhase = "none" | "fade-out" | "fade-in";
 
 const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
 const COLLISION_OVERLAY_DEPTH = 150_000;
+// Head/companion overlays render just above the foreground occluder layer (depth 100_000) so a mushroom
+// cap / sweat / possession ghost shows on the character, but stay below the door-fade + UI overlays.
+const PLAYER_OVERLAY_DEPTH = 110_000;
 const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 // Visible overworld enemies (EarthBound-style touch-to-battle): tuning.
 const OVERWORLD_ENEMY_GLOBAL_CAP = 4;
@@ -407,6 +416,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private collisionOverlayEnabled = false;
   private solidAtHook?: (x: number, y: number) => boolean;
   private surfaceAtHook?: (x: number, y: number) => number;
+  /** Debug/cutscene-forced overrides merged over the live visual-state inputs (see playerVisualState). */
+  private forcedVisualState: Partial<VisualStateInputs> = {};
+  private lastResolvedVisualState?: ResolvedVisualState;
+  private lastVisualApplied: { scale: number; alpha: number; tint: number | null } = { scale: 1, alpha: 1, tint: null };
+  private lastVisualSheetSwapped = false;
+  private playerInvertActive = false;
+  /** Head-mounted/companion overlay sprites (sweat/mushroom/possession), keyed by overlay name. */
+  private overlaySprites = new Map<string, Phaser.GameObjects.Sprite>();
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
   private doorTriggerState: DoorTriggerState = { suppressUntilClear: false };
@@ -574,6 +591,27 @@ export class ChunkedWorldScene extends Phaser.Scene {
         frameWidth: playerSheet.frameWidth,
         frameHeight: playerSheet.frameHeight
       });
+    }
+    // Faithful per-state hero sheets + shared overlay assets (forward-compatible: no-op until a skin
+    // supplies them). The visual-state render path swaps to these when present, else approximates.
+    type StateSheets = Record<string, { image: string; frameWidth: number; frameHeight: number }> | undefined;
+    const playerStates = this.playerSpriteOverride()?.states as StateSheets;
+    for (const [name, sheet] of Object.entries(playerStates ?? {})) {
+      if (sheet) {
+        this.load.spritesheet(this.playerStateSheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+      }
+    }
+    const followerStates = this.followerSpriteOverride()?.states as StateSheets;
+    for (const [name, sheet] of Object.entries(followerStates ?? {})) {
+      if (sheet) {
+        this.load.spritesheet(this.followerStateSheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+      }
+    }
+    const overlays = this.data_.spriteOverrides?.overlays as Record<string, { image: string; frameWidth: number; frameHeight: number }> | undefined;
+    for (const [name, sheet] of Object.entries(overlays ?? {})) {
+      if (sheet) {
+        this.load.spritesheet(this.overlaySheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+      }
     }
   }
 
@@ -824,6 +862,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private resetRuntimeStateForStart(): void {
     this.destroyDoorFadeOverlay();
     this.unregisterForceEncounter();
+    this.destroyPlayerOverlays();
     this.player = undefined;
     this.playerFrames = CANONICAL_DIRECTION_FRAMES;
     this.follower = undefined;
@@ -1341,6 +1380,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const member = this.battlePartyMembers()?.find((entry) => entry.id === charId);
       return member ? { offense: member.stats.offense, defense: member.stats.defense } : undefined;
     };
+    // Debug-only: force hero visual-state inputs (KO, ride, status, cutscene event, palette) so the
+    // sprite-state render path can be exercised in-engine without reaching each in-game trigger.
+    // e.g. __setPlayerVisualState({ event: "dead" }) or ({ status: { tiny: true } }); call with {} to clear.
+    globals.__setPlayerVisualState = (forced?: Partial<VisualStateInputs>) => {
+      this.forcedVisualState = forced ?? {};
+      this.applyPlayerVisualState();
+      return this.lastResolvedVisualState;
+    };
+    globals.__playerVisualState = () => this.lastResolvedVisualState;
+    globals.__overlayInfo = () => ({
+      texLoaded: ["sweat", "mushroom", "possessionGhost"].map((n) => [n, this.textures.exists(this.overlaySheetKey(n))]),
+      registry: Object.keys((this.data_.spriteOverrides?.overlays ?? {})),
+      sprites: [...this.overlaySprites.entries()].map(([n, s]) => ({ n, visible: s.visible, x: Math.round(s.x), y: Math.round(s.y), tex: s.texture?.key, depth: s.depth }))
+    });
   }
 
   private unregisterCollisionDebugGlobals(): void {
@@ -1354,6 +1407,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__debugHeal;
     delete globals.__equip;
     delete globals.__battleStats;
+    delete globals.__setPlayerVisualState;
+    delete globals.__playerVisualState;
+    delete globals.__overlayInfo;
     this.solidAtHook = undefined;
     this.surfaceAtHook = undefined;
   }
@@ -4489,7 +4545,217 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.playerState.facing,
       0
     );
+    this.applyPlayerVisualState();
     this.updateFollower();
+  }
+
+  private playerStateSheetKey(state: string): string {
+    return `sprite-override-player-state-${state}`;
+  }
+
+  private overlaySheetKey(name: string): string {
+    return `sprite-override-overlay-${name}`;
+  }
+
+  /** Texture key for a faithful state sheet IF the skin defines it AND it loaded; else undefined. */
+  private loadedStateSheetKey(baseState: ResolvedVisualState["baseState"]): string | undefined {
+    if (baseState === "default") {
+      return undefined;
+    }
+    const states = this.playerSpriteOverride()?.states as Record<string, unknown> | undefined;
+    if (!states?.[baseState]) {
+      return undefined;
+    }
+    const key = this.playerStateSheetKey(baseState);
+    return this.textures.exists(key) ? key : undefined;
+  }
+
+  private playerBaseScale(): number {
+    const override = spriteOverrideSheet(this.playerSpriteOverride());
+    return override ? spriteOverrideScale(override.displayHeight, override.frameHeight) : 1;
+  }
+
+  /** Live visual-state inputs: real signals merged under forced overrides (forced wins, for tests/cutscenes). */
+  private currentVisualStateInputs(): VisualStateInputs {
+    const base = defaultVisualStateInputs();
+    const forced = this.forcedVisualState;
+    return {
+      ...base,
+      deepWater: this.isPlayerInWater(), // real terrain signal (3a)
+      // ladder/rope/bike real triggers await tile-class data + a mount mechanic; forced-path for now.
+      ...forced,
+      status: { ...base.status, ...(forced.status ?? {}) }
+    };
+  }
+
+  private isPlayerInWater(): boolean {
+    try {
+      const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
+      return (surface & SURFACE_WATER_MASK) !== 0;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Resolve the hero visual state and apply it to the player sprite. Swaps to a faithful state sheet
+   * when one exists; otherwise applies the generic approximation (scale/alpha/tint) so any skin still
+   * "does the same". Runs each frame from syncPlayerObject (cheap; idempotent).
+   */
+  private applyPlayerVisualState(): void {
+    if (!(this.player instanceof Phaser.GameObjects.Sprite)) {
+      return;
+    }
+    const resolved = resolvePlayerVisualState(this.currentVisualStateInputs());
+    this.lastResolvedVisualState = resolved;
+    const sprite = this.player;
+
+    const stateSheetKey = this.loadedStateSheetKey(resolved.baseState);
+    const sheetSwapped = stateSheetKey !== undefined;
+    if (stateSheetKey && sprite.texture.key !== stateSheetKey) {
+      sprite.setTexture(stateSheetKey);
+    }
+
+    // With a faithful sheet, no approximation; without one, fall back to the generic look-alike.
+    const approx = sheetSwapped ? {} : resolved.approximation;
+    const scale = this.playerBaseScale() * (approx.scale ?? 1);
+    sprite.setScale(scale);
+    const alpha = approx.alpha ?? 1;
+    sprite.setAlpha(alpha);
+
+    // Color inversion: a real per-pixel ColorMatrix negative filter; tint fallback if filters are
+    // unavailable. Diamondized's approximation desaturates via tint.
+    const invertViaFilter = this.setPlayerInvert(sprite, resolved.transforms.invertPalette);
+    let tint: number | null = null;
+    if (approx.desaturate) {
+      tint = 0x9a9a9a;
+    } else if (resolved.transforms.invertPalette && !invertViaFilter) {
+      tint = 0x6a6aff;
+    }
+    if (tint === null) {
+      sprite.clearTint();
+    } else {
+      sprite.setTint(tint);
+    }
+
+    // Frame: teleport spin cycles facings rapidly (reuses walk frames); else locked poses hold frame 0.
+    if (resolved.transforms.teleportSpin && !sheetSwapped) {
+      const order: Array<"down" | "left" | "up" | "right"> = ["down", "left", "up", "right"];
+      const idx = Math.floor(this.time.now / 70) % order.length;
+      sprite.setFrame(this.playerFrames[order[idx]][0]);
+    } else if (resolved.lockAnimation && !sheetSwapped) {
+      sprite.setFrame(this.playerFrames[this.playerState.facing][0]);
+    }
+
+    this.lastVisualSheetSwapped = sheetSwapped;
+    this.lastVisualApplied = { scale, alpha, tint };
+    this.updatePlayerOverlays(resolved); // positioned from the un-shifted feet, before the water raise below
+
+    // Water wading: clip the submerged lower body at the waterline and raise the sprite so the visible
+    // top stays put. Resolver gates waterClip to upright base states (default/tiny). Crop is cleared
+    // otherwise. Done last so overlays already anchored to the normal head position.
+    const ov = this.playerSpriteOverride();
+    if (resolved.transforms.waterClip && ov?.frameHeight && ov?.frameWidth) {
+      const waterline = ov.anchors?.waterline ?? Math.round(ov.frameHeight * 0.6);
+      sprite.setCrop(0, 0, ov.frameWidth, waterline);
+      sprite.y -= (ov.frameHeight - waterline) * scale;
+    } else if (sprite.isCropped) {
+      sprite.setCrop();
+    }
+  }
+
+  /**
+   * Position head/companion overlay sprites (sweat/mushroom/possession) at the player's head anchor and
+   * show only the active ones. Overlays follow the player, scale with it, and render just above it. The
+   * head point uses anchors.head when the skin supplies it, else the top-center fallback.
+   */
+  private updatePlayerOverlays(resolved: ResolvedVisualState): void {
+    if (!(this.player instanceof Phaser.GameObjects.Sprite)) {
+      for (const sprite of this.overlaySprites.values()) {
+        sprite.setVisible(false);
+      }
+      return;
+    }
+    const active = new Set<string>(resolved.overlays);
+    for (const [name, sprite] of this.overlaySprites) {
+      if (!active.has(name)) {
+        sprite.setVisible(false);
+      }
+    }
+    const registry = this.data_.spriteOverrides?.overlays as
+      | Record<string, { frameWidth: number; frameHeight: number; frames?: number[]; offset?: { x: number; y: number } }>
+      | undefined;
+    if (!registry) {
+      return;
+    }
+    const ov = this.playerSpriteOverride();
+    const scale = this.lastVisualApplied.scale || 1;
+    const frameW = ov?.frameWidth ?? this.player.width;
+    const frameH = ov?.frameHeight ?? this.player.height;
+    const headX = ov?.anchors?.head?.x ?? frameW / 2; // fallback: top-center
+    const headY = ov?.anchors?.head?.y ?? 0;
+    const spriteTopY = this.player.y - frameH * scale; // origin is (0.5, 1) => player.y is the feet
+    for (const name of active) {
+      const data = registry[name];
+      const key = this.overlaySheetKey(name);
+      if (!data || !this.textures.exists(key)) {
+        continue;
+      }
+      let sprite = this.overlaySprites.get(name);
+      if (!sprite || !sprite.scene) {
+        sprite = this.add.sprite(0, 0, key, (data.frames ?? [0])[0]);
+        sprite.setOrigin(0.5, 1);
+        this.overlaySprites.set(name, sprite);
+      }
+      sprite.x = this.player.x + (headX - frameW / 2) * scale + (data.offset?.x ?? 0) * scale;
+      sprite.y = spriteTopY + headY * scale + (data.offset?.y ?? 0) * scale;
+      sprite.setScale(scale);
+      sprite.setDepth(PLAYER_OVERLAY_DEPTH);
+      sprite.setVisible(true);
+    }
+  }
+
+  private destroyPlayerOverlays(): void {
+    for (const sprite of this.overlaySprites.values()) {
+      sprite.destroy();
+    }
+    this.overlaySprites.clear();
+  }
+
+  /**
+   * Toggle a real per-pixel color inversion (Moonside) via a ColorMatrix.negative filter on the MAIN
+   * CAMERA -- Phaser 4's primary filter path, and faithful since Moonside inverts the whole screen.
+   * Returns true when the real filter is active; false when off OR filters are unavailable (the caller
+   * then applies a sprite-tint fallback). Only mutates on change, so it's cheap to call each frame.
+   */
+  private setPlayerInvert(_sprite: Phaser.GameObjects.Sprite, want: boolean): boolean {
+    // Faithful per-pixel inversion via a ColorMatrix.negative filter on the main camera (Phaser 4's
+    // primary filter path; Moonside inverts the whole screen anyway). Returns true when applied; the
+    // caller applies a sprite-tint fallback only when camera filters are unavailable. NOTE: WebGL
+    // color ops (this filter AND setTint) do not composite in the headless screenshot harness, so
+    // color effects are verified by the resolver + readout, not pixel-diff -- confirm visuals in a
+    // real browser. Geometry (scale) and alpha effects DO pixel-diff headless.
+    if (want === this.playerInvertActive) {
+      return want;
+    }
+    type FilterCam = {
+      filters?: { internal: { clear: () => void; addColorMatrix: () => { colorMatrix: { negative: () => unknown } } } } | null;
+    };
+    const cam = this.cameras.main as unknown as FilterCam;
+    try {
+      if (!cam.filters) {
+        throw new Error("camera filters unavailable");
+      }
+      cam.filters.internal.clear();
+      if (want) {
+        cam.filters.internal.addColorMatrix().colorMatrix.negative();
+      }
+      this.playerInvertActive = want;
+      return want;
+    } catch {
+      this.playerInvertActive = false;
+      return false;
+    }
   }
 
   private followerSpriteOverride(): SpriteOverride | undefined {
@@ -4566,6 +4832,67 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.follower.y = target.y - this.spriteWalkBob(walking, this.followerFrames, target.facing, 0);
     this.setActorSortDepth(this.follower);
+    this.applyFollowerVisualState(target.facing);
+  }
+
+  private followerStateSheetKey(state: string): string {
+    return `sprite-override-follower-state-${state}`;
+  }
+
+  private loadedFollowerStateSheetKey(baseState: ResolvedVisualState["baseState"]): string | undefined {
+    if (baseState === "default") {
+      return undefined;
+    }
+    const states = this.followerSpriteOverride()?.states as Record<string, unknown> | undefined;
+    if (!states?.[baseState]) {
+      return undefined;
+    }
+    const key = this.followerStateSheetKey(baseState);
+    return this.textures.exists(key) ? key : undefined;
+  }
+
+  /**
+   * Apply the party's shared visual state (computed for the lead each frame in applyPlayerVisualState)
+   * to the FOLLOWER sprite, using the follower's OWN state sheets + anchors. So every hero gets the
+   * same states (water/dead/bike/ladder/...) rendered in their own art. Overlays + teleport spin stay
+   * lead-only for now (the lead casts/wears them). The follower mirrors the lead's base state -- in EB
+   * the party climbs/rides/wades together.
+   */
+  private applyFollowerVisualState(facing: "up" | "down" | "left" | "right"): void {
+    if (!(this.follower instanceof Phaser.GameObjects.Sprite)) {
+      return;
+    }
+    const resolved = this.lastResolvedVisualState;
+    if (!resolved) {
+      return;
+    }
+    const sprite = this.follower;
+    const ov = spriteOverrideSheet(this.followerSpriteOverride());
+    const stateKey = this.loadedFollowerStateSheetKey(resolved.baseState);
+    const swapped = stateKey !== undefined;
+    if (stateKey && sprite.texture.key !== stateKey) {
+      sprite.setTexture(stateKey);
+    }
+    const approx = swapped ? {} : resolved.approximation;
+    const baseScale = ov ? spriteOverrideScale(ov.displayHeight, ov.frameHeight) : 1;
+    const scale = baseScale * (approx.scale ?? 1);
+    sprite.setScale(scale);
+    sprite.setAlpha(approx.alpha ?? 1);
+    if (approx.desaturate) {
+      sprite.setTint(0x9a9a9a); // invert is a camera-wide filter, so only the desaturate approx is per-sprite
+    } else {
+      sprite.clearTint();
+    }
+    if (resolved.lockAnimation && !swapped) {
+      sprite.setFrame(this.followerFrames[facing][0]);
+    }
+    if (resolved.transforms.waterClip && ov?.frameHeight && ov?.frameWidth) {
+      const waterline = ov.anchors?.waterline ?? Math.round(ov.frameHeight * 0.6);
+      sprite.setCrop(0, 0, ov.frameWidth, waterline);
+      sprite.y -= (ov.frameHeight - waterline) * scale;
+    } else if (sprite.isCropped) {
+      sprite.setCrop();
+    }
   }
 
   private setActorSortDepth(actor: SortableActor): void {
@@ -4645,6 +4972,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       animKey: this.playerState.animKey,
       animFrame: this.playerState.animFrame,
       inputLocked: this.playerState.inputLocked,
+      visualState: this.lastResolvedVisualState
+        ? {
+            baseState: this.lastResolvedVisualState.baseState,
+            transforms: this.lastResolvedVisualState.transforms,
+            overlays: this.lastResolvedVisualState.overlays,
+            lockAnimation: this.lastResolvedVisualState.lockAnimation,
+            sheetSwapped: this.lastVisualSheetSwapped,
+            applied: this.lastVisualApplied
+          }
+        : undefined,
       lastDoor: this.lastDoor,
       doorFadeActive: this.isDoorFadeActive(),
       doorFadePhase: this.doorFadePhase,

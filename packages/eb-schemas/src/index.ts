@@ -350,20 +350,84 @@ export const MusicManifestSchema = z.object({
 
 const SpriteOverrideFrameSequenceSchema = z.array(z.number().int().nonnegative()).min(1);
 
+/** Per-direction walk frames, shared by the base override and every state sheet. */
+export const SpriteDirectionalAnimationsSchema = z.object({
+  down: SpriteOverrideFrameSequenceSchema,
+  left: SpriteOverrideFrameSequenceSchema,
+  right: SpriteOverrideFrameSequenceSchema,
+  up: SpriteOverrideFrameSequenceSchema
+}).strict();
+
+/**
+ * Anchor metadata (frame-local pixels, pre-scale). See the long note on SpriteOverrideSchema.anchors.
+ * head = attach point for head overlays; waterline = y below which the sprite hides when wading.
+ */
+export const SpriteAnchorsSchema = z.object({
+  head: z.object({ x: z.number(), y: z.number() }).strict().optional(),
+  waterline: z.number().optional()
+}).strict();
+
+/**
+ * The EarthBound hero visual states whose WHOLE sprite sheet is swapped (per playable_char_gfx_table.yml
+ * + the field sprite galleries). Generic transforms (color-invert, teleport-spin) and overlays (sweat,
+ * mushroom, possession) are NOT here -- they ride the base/overlay sheets. A skin may supply faithful art
+ * for any subset; missing states fall back to a generic approximation at runtime.
+ */
+export const SpriteStateNameSchema = z.enum([
+  "dead",        // KO'd / ghost field sprite
+  "tiny",        // shrunk (Lost Underworld, shrink status)
+  "tinyDead",    // shrunk + KO'd
+  "ladder",      // climbing a ladder
+  "rope",        // climbing a rope
+  "bike",        // riding the bicycle
+  "sleeping",    // lying in bed / knocked out
+  "sitting",     // seated
+  "falling",     // falling down a pit
+  "pajamas",     // opening bedroom + Magicant
+  "robot",       // Phase Distorter endgame bodies
+  "meditating",  // Poo Mu Training
+  "teleportBurnt", // failed PSI Teleport
+  "diamondized"  // Diamondize status statue
+]);
+
+/** A full alternate sprite sheet for one hero visual state. */
+export const SpriteStateSheetSchema = z.object({
+  image: PublicAssetPathSchema,
+  frameWidth: z.number().int().positive(),
+  frameHeight: z.number().int().positive(),
+  animations: SpriteDirectionalAnimationsSchema,
+  displayWidth: z.number().positive().optional(),
+  displayHeight: z.number().positive().optional(),
+  originX: z.number().optional(),
+  originY: z.number().optional(),
+  anchors: SpriteAnchorsSchema.optional()
+}).strict();
+
 export const SpriteOverrideSchema = z.object({
   image: PublicAssetPathSchema,
   frameWidth: z.number().int().positive().optional(),
   frameHeight: z.number().int().positive().optional(),
-  animations: z.object({
-    down: SpriteOverrideFrameSequenceSchema,
-    left: SpriteOverrideFrameSequenceSchema,
-    right: SpriteOverrideFrameSequenceSchema,
-    up: SpriteOverrideFrameSequenceSchema
-  }).strict().optional(),
+  animations: SpriteDirectionalAnimationsSchema.optional(),
   displayWidth: z.number().positive().optional(),
   displayHeight: z.number().positive().optional(),
   originX: z.number().optional(),
-  originY: z.number().optional()
+  originY: z.number().optional(),
+  /**
+   * Optional anchor metadata so future hero "special-state" effects land correctly on a custom
+   * skin regardless of its art. All values are FRAME-LOCAL pixels (origin = frame top-left,
+   * measured PRE-scale; the engine multiplies by the sprite's render scale).
+   * Generic transforms (color invert, shrink/scale, KO alpha/tint, PSI-teleport spin) need NO
+   * anchors -- they apply to the whole texture. These are only for effects that attach to a
+   * body part or clip the silhouette:
+   *  - head: attach point for head overlays (desert sweat-drops, mushroomization cap).
+   *  - waterline: y-row below which the sprite is hidden when wading in DEEP water.
+   * Convention when omitted: head = top-center (x=frameWidth/2, y=0), feet baseline = frameHeight
+   * (bottom), waterline ~= 60% down the frame. Keep skins feet-anchored at bottom-center so these
+   * fallbacks hold. (Bike riding is NOT covered here -- it needs a dedicated ride sprite sheet.)
+   */
+  anchors: SpriteAnchorsSchema.optional(),
+  /** Faithful alternate sheets per hero visual state (EB whole-sheet swaps). Optional + sparse; missing states approximate at runtime. */
+  states: z.record(SpriteStateNameSchema, SpriteStateSheetSchema).optional()
 }).strict().superRefine((override, ctx) => {
   const sheetFields = [
     override.frameWidth !== undefined,
@@ -378,8 +442,33 @@ export const SpriteOverrideSchema = z.object({
   }
 });
 
+/** Shared (not per-character) head-mounted/companion overlays drawn atop the base sprite. */
+export const SpriteOverlayNameSchema = z.enum(["sweat", "mushroom", "possessionGhost"]);
+export const SpriteOverlaySheetSchema = z.object({
+  image: PublicAssetPathSchema,
+  frameWidth: z.number().int().positive(),
+  frameHeight: z.number().int().positive(),
+  /** Animation frame indices (default [0]). */
+  frames: z.array(z.number().int().nonnegative()).min(1).optional(),
+  /** Offset (frame-local px) added to the host sprite's head anchor when positioning the overlay. */
+  offset: z.object({ x: z.number(), y: z.number() }).strict().optional()
+}).strict();
+
+/** The 4-member party roster (EarthBound slots). Defines each hero's identity + overworld sprite. */
+export const PartySlotSchema = z.enum(["Ness", "Paula", "Jeff", "Poo"]);
+export const PartyHeroSchema = z.object({
+  slot: PartySlotSchema,
+  name: z.string().min(1),
+  joinOrder: z.number().int().positive(),
+  sprite: SpriteOverrideSchema
+}).strict();
+
 export const SpriteOverridesSchema = z.object({
   schema: z.literal("swagbound.sprite-overrides.v1"),
+  /** Shared overlay assets, referenced by the visual-state resolver (sweat/mushroom/possession). */
+  overlays: z.record(SpriteOverlayNameSchema, SpriteOverlaySheetSchema).optional(),
+  /** Full 4-hero party roster (slot -> identity + sprite). The lead's sprite also drives `player`. */
+  party: z.array(PartyHeroSchema).optional(),
   player: SpriteOverrideSchema.optional(),
   // Overworld sprite for the 2nd party member (Cloak), shown as a trailing follower.
   follower: SpriteOverrideSchema.optional(),
@@ -1614,6 +1703,13 @@ export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;
 export type SpriteSheetCollection = z.infer<typeof SpriteSheetCollectionSchema>;
 export type SpriteOverride = z.infer<typeof SpriteOverrideSchema>;
 export type SpriteOverrides = z.infer<typeof SpriteOverridesSchema>;
+export type PartyHero = z.infer<typeof PartyHeroSchema>;
+export type PartySlot = z.infer<typeof PartySlotSchema>;
+export type SpriteStateName = z.infer<typeof SpriteStateNameSchema>;
+export type SpriteStateSheet = z.infer<typeof SpriteStateSheetSchema>;
+export type SpriteAnchors = z.infer<typeof SpriteAnchorsSchema>;
+export type SpriteOverlayName = z.infer<typeof SpriteOverlayNameSchema>;
+export type SpriteOverlaySheet = z.infer<typeof SpriteOverlaySheetSchema>;
 export type TileOverrideEntry = z.infer<typeof TileOverrideEntrySchema>;
 export type TileOverrides = z.infer<typeof TileOverridesSchema>;
 export type MusicManifest = z.infer<typeof MusicManifestSchema>;
