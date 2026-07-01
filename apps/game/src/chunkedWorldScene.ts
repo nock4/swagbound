@@ -134,6 +134,8 @@ import {
   type NewGameOpeningStart
 } from "./newGameOpening";
 import { PartyState, type PartyStateSnapshot } from "./partyState";
+import { STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
+import type { OverworldStatusHudView } from "./overworldStatusHud";
 import {
   applySaveState,
   captureSaveState,
@@ -378,6 +380,8 @@ const OVERWORLD_ENEMY_DESPAWN_DIST_PX = 320;
 const OVERWORLD_ENEMY_WANDER_RADIUS_PX = 40;
 const OVERWORLD_ENEMY_WANDER_SPEED_PX_PER_SEC = 30;
 const OVERWORLD_ENEMY_SPAWN_ATTEMPTS = 8;
+const LOW_HP_DANGER_FRACTION = 1 / 8;
+const LOW_HP_DANGER_BEEP_INTERVAL_MS = 820;
 const ROOM_MASK_EDGE_INSET_SCREEN_PX = 0.5;
 const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
 const CUTSCENE_ACTOR_MOVE_TIMEOUT_MS = 8_000;
@@ -479,6 +483,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private currentSectorIndex?: number;
   private lastPlayerTile?: TilePoint;
   private lastEncounterGroup?: number;
+  private dangerHeartbeatElapsedMs = LOW_HP_DANGER_BEEP_INTERVAL_MS;
+  private poisonStepTicks = 0;
+  private poisonHpLost = 0;
   private bossGateActors = new Map<string, BossGateRuntime>();
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
   private overworldEnemySeq = 0;
@@ -553,6 +560,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.activeDoorWarp = undefined;
     this.lastPlayerTile = undefined;
     this.currentSectorIndex = undefined;
+    this.dangerHeartbeatElapsedMs = LOW_HP_DANGER_BEEP_INTERVAL_MS;
+    this.poisonStepTicks = 0;
+    this.poisonHpLost = 0;
     const disabledByQuery = encountersDisabledBySearch(globalThis.location?.search);
     const canEncounter = Boolean(data.gameData.encounters && data.gameData.battle);
     const restoredEncounter = data.restore?.encounter;
@@ -788,6 +798,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.spriteWalkBobClockMs += delta;
     this.partyState.tickMeters(delta);
+    this.updateDangerHeartbeat(delta);
     this.tickDialogueBlip();
     this.encounterCooldownMs = Math.max(0, this.encounterCooldownMs - delta);
     // Encounter swirl owns the frame while it covers the overworld, then switches to battle.
@@ -850,6 +861,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         }),
       frames: this.playerFrames
     });
+    const playerSteppedTile = this.syncEncounterTileState();
+    this.applyFieldPoisonForStep(playerSteppedTile);
     this.syncPlayerObject();
     this.refreshRoomBounds();
     this.syncOverworldMusicCue();
@@ -1499,6 +1512,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const member = this.battlePartyMembers()?.find((entry) => entry.id === charId);
       return member ? { offense: member.stats.offense, defense: member.stats.defense } : undefined;
     };
+    globals.__overworldStatusHud = () => this.overworldStatusHud();
+    globals.__setPartyStatus = (charId: number, ailment: StatusAilment, active = true) => {
+      if (!STATUS_AILMENTS.includes(ailment)) {
+        return { ok: false, reason: "unknown ailment" };
+      }
+      const statuses = active
+        ? this.partyState.inflictStatus(charId, ailment)
+        : this.partyState.cureStatus(charId, ailment);
+      this.refreshMenuScreens();
+      return { ok: true, charId, statuses, hud: this.overworldStatusHud() };
+    };
     // Debug-only: force hero visual-state inputs (KO, ride, status, cutscene event, palette) so the
     // sprite-state render path can be exercised in-engine without reaching each in-game trigger.
     // e.g. __setPlayerVisualState({ event: "dead" }) or ({ status: { tiny: true } }); call with {} to clear.
@@ -1526,6 +1550,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__debugHeal;
     delete globals.__equip;
     delete globals.__battleStats;
+    delete globals.__overworldStatusHud;
+    delete globals.__setPartyStatus;
     delete globals.__setPlayerVisualState;
     delete globals.__playerVisualState;
     delete globals.__overlayInfo;
@@ -2668,6 +2694,74 @@ export class ChunkedWorldScene extends Phaser.Scene {
       })));
     }
     this.menuScreens = new Map(screens.map((screen) => [screen.id, screen]));
+  }
+
+  overworldStatusHud(): OverworldStatusHudView {
+    const members = this.overworldHudPartyMembers().slice(0, 4).map((member) => {
+      const vitals = this.partyState.vitals(member.id);
+      const maxHp = statusHudStat(vitals?.maxHp ?? member.maxHp, 1);
+      const hp = statusHudStat(vitals?.hp.displayed ?? member.hp);
+      const hpTarget = Math.min(maxHp, statusHudStat(vitals?.hp.target ?? member.hp));
+      const maxPp = statusHudStat(vitals?.maxPp ?? member.maxPp);
+      const pp = Math.min(maxPp, statusHudStat(vitals?.pp ?? member.pp));
+      const statuses = this.partyState.statuses(member.id);
+      return {
+        charId: member.id,
+        name: member.name.trim() || "PLAYER",
+        hp: Math.min(maxHp, hp),
+        hpTarget,
+        maxHp,
+        pp,
+        maxPp,
+        statuses,
+        hpRolling: Boolean(vitals?.hp.isRolling),
+        danger: isDangerHp(hpTarget, maxHp)
+      };
+    });
+    return {
+      visible: members.length > 0,
+      dangerActive: members.some((member) => member.danger),
+      poisonTicks: this.poisonStepTicks,
+      poisonHpLost: this.poisonHpLost,
+      members
+    };
+  }
+
+  private updateDangerHeartbeat(deltaMs: number): void {
+    if (!this.overworldStatusHud().dangerActive) {
+      this.dangerHeartbeatElapsedMs = LOW_HP_DANGER_BEEP_INTERVAL_MS;
+      return;
+    }
+    this.dangerHeartbeatElapsedMs += Math.max(0, deltaMs);
+    if (this.dangerHeartbeatElapsedMs < LOW_HP_DANGER_BEEP_INTERVAL_MS) {
+      return;
+    }
+    this.dangerHeartbeatElapsedMs = 0;
+    this.transitionSfx.dangerHeartbeat();
+  }
+
+  private applyFieldPoisonForStep(playerSteppedTile: boolean): void {
+    if (!playerSteppedTile) {
+      return;
+    }
+    const ticks = this.partyState.applyFieldPoisonStep();
+    if (ticks.length === 0) {
+      return;
+    }
+    this.poisonStepTicks += ticks.length;
+    this.poisonHpLost += ticks.reduce((sum, tick) => sum + tick.hpLoss, 0);
+    this.transitionSfx.poisonTick();
+    this.refreshMenuScreens();
+  }
+
+  private overworldHudPartyMembers(): PartyMember[] {
+    const characters = this.data_.characters?.characters;
+    if (!characters?.length) {
+      return [];
+    }
+    const members = this.partyState.applyToPartyMembers(characters.map(buildPartyMember));
+    const activeIds = new Set(this.partyState.party());
+    return activeIds.size > 0 ? members.filter((member) => activeIds.has(member.id)) : members;
   }
 
   private openShopMenu(storeId: number): void {
@@ -5199,6 +5293,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       eventExecutor: this.eventSequence?.debug(),
       newGameStartup: this.newGameStartupRecord,
       partyState: this.partyState.counts(),
+      overworldHud: this.overworldStatusHud(),
       shopOpen: this.menuState.open && this.activeShopStoreId !== undefined,
       ...(this.activeShopStoreId !== undefined ? { activeShopStoreId: this.activeShopStoreId } : {}),
       menu: this.menuDebugState(),
@@ -5318,6 +5413,20 @@ function roundedPoint(point: { x: number; y: number }): { x: number; y: number }
     x: Math.round(point.x),
     y: Math.round(point.y)
   };
+}
+
+function statusHudStat(value: number, fallback = 0): number {
+  const numeric = Number.isFinite(value) ? value : fallback;
+  return Math.max(0, Math.floor(numeric));
+}
+
+function isDangerHp(hp: number, maxHp: number): boolean {
+  const current = statusHudStat(hp);
+  const max = statusHudStat(maxHp, 1);
+  if (current <= 0 || max <= 0) {
+    return false;
+  }
+  return current <= Math.max(1, Math.floor(max * LOW_HP_DANGER_FRACTION));
 }
 
 function emptyPartyStateSnapshot(): PartyStateSnapshot {

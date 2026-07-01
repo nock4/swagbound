@@ -8,6 +8,7 @@ import {
   type EquippedSlots,
   type PartyVitals
 } from "./partyState";
+import { formatStatusAilments, type StatusState } from "./statusEffects";
 
 export type MenuItem = {
   id: string;
@@ -69,6 +70,7 @@ export type StatusMemberViewModel = {
   maxHp: number;
   pp: number;
   maxPp: number;
+  statuses: StatusState;
   stats: PartyMemberStats;
 };
 
@@ -89,6 +91,7 @@ export type StatusViewModelInput = {
     inventory?(char: number): number[];
     equipped?(char: number): EquippedSlots;
     vitals?(char: number): PartyVitals | undefined;
+    statuses?(char: number): StatusState;
   };
   wallet?: number;
 };
@@ -443,6 +446,7 @@ export function buildStatusViewModel(input: StatusViewModelInput = {}): StatusVi
         maxHp: stat(vitals?.maxHp ?? member.maxHp),
         pp: stat(vitals?.pp ?? member.pp),
         maxPp: stat(vitals?.maxPp ?? member.maxPp),
+        statuses: input.partyState?.statuses?.(member.id) ?? member.statuses?.map((entry) => ({ ...entry })) ?? [],
         stats: {
           offense: stat(member.stats.offense),
           defense: stat(member.stats.defense),
@@ -768,6 +772,7 @@ function statusMemberItems(member: StatusMemberViewModel): MenuItem[] {
   return [
     { id: "name-level", label: fitMenuLabel(`${member.name} Lv ${member.level}`), enabled: false },
     { id: "hp-pp", label: `HP ${member.hp}/${member.maxHp} PP ${member.pp}/${member.maxPp}`, enabled: false },
+    { id: "condition", label: fitMenuLabel(`Cond ${formatStatusAilments(member.statuses)}`), enabled: false },
     { id: "exp", label: `EXP ${member.experience}`, enabled: false },
     { id: "offense-defense", label: `Offense ${member.stats.offense} Defense ${member.stats.defense}`, enabled: false },
     { id: "speed-guts", label: `Speed ${member.stats.speed} Guts ${member.stats.guts}`, enabled: false },

@@ -123,6 +123,7 @@ import {
 import type { PartyMember } from "./characterModel";
 import type { PartyBattleMemberSnapshot, PartyStateSnapshot } from "./partyState";
 import { decodeItemUseEffect } from "./partyState";
+import type { StatusState } from "./statusEffects";
 import {
   createAnimatedBattleBackground,
   staticBattleBackgroundDebug,
@@ -3265,10 +3266,18 @@ function buildPostBattlePartySnapshot(base: PartyStateSnapshot, battle: BattleSt
   const battleMembersByChar = new Map<number, PartyBattleMemberSnapshot>(
     (base.battleMembers ?? []).map((member) => [member.charId, cloneBattleMemberSnapshot(member)])
   );
+  const statusesByChar = new Map<number, StatusState>(
+    (base.statuses ?? []).map((entry) => [entry.charId, cloneStatusState(entry.statuses)])
+  );
 
   for (const combatant of partyCombatants) {
     inventoryByChar.set(combatant.charId, combatant.inventory.map((itemId) => stat(itemId)));
     battleMembersByChar.set(combatant.charId, battleMemberSnapshotFromCombatant(combatant));
+    if (combatant.statuses?.length) {
+      statusesByChar.set(combatant.charId, cloneStatusState(combatant.statuses));
+    } else {
+      statusesByChar.delete(combatant.charId);
+    }
   }
 
   const partyIds = unique([
@@ -3286,8 +3295,15 @@ function buildPostBattlePartySnapshot(base: PartyStateSnapshot, battle: BattleSt
     equipped: base.equipped.map((entry) => ({ charId: entry.charId, slots: { ...entry.slots } })),
     battleMembers: [...battleMembersByChar.values()]
       .sort((a, b) => a.charId - b.charId)
-      .map(cloneBattleMemberSnapshot)
+      .map(cloneBattleMemberSnapshot),
+    statuses: [...statusesByChar.entries()]
+      .sort(([a], [b]) => a - b)
+      .map(([charId, statuses]) => ({ charId, statuses: cloneStatusState(statuses) }))
   };
+}
+
+function cloneStatusState(statuses: StatusState | undefined): StatusState {
+  return (statuses ?? []).map((entry) => ({ ...entry }));
 }
 
 function battleMemberSnapshotFromCombatant(combatant: BattleState["party"][number]): PartyBattleMemberSnapshot {

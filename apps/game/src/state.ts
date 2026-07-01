@@ -2,6 +2,7 @@ import type { DialoguePage, TutorialStatus } from "@eb/schemas";
 import type { BattleSfxCue } from "./audio/battleSfx";
 import type { BattleCommand, EncounterAdvantage } from "./battleLogic";
 import type { MenuDebugState } from "./menuModel";
+import type { OverworldStatusHudView } from "./overworldStatusHud";
 import {
   DefaultResolver,
   INSTANT_TEXT_SPEED_CPS,
@@ -323,6 +324,7 @@ export type OverworldDebug = {
     inventoryItems: number;
     partyCount: number;
   };
+  overworldHud?: OverworldStatusHudView;
   shopOpen?: boolean;
   activeShopStoreId?: number;
   menu?: MenuDebugState;

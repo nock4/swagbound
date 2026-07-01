@@ -1,6 +1,7 @@
 import type { CharacterData, CharacterExpThreshold, CharacterGrowth } from "@eb/schemas";
 import type { Combatant } from "./battleLogic";
 import { createRollingMeter } from "./rollingMeter";
+import type { StatusState } from "./statusEffects";
 
 export type PartyMemberStats = {
   offense: number;
@@ -36,6 +37,7 @@ export type PartyMember = {
   stats: PartyMemberStats;
   inventory: number[];
   money: number;
+  statuses?: StatusState;
   growth?: PartyMemberGrowth;
   expTable?: PartyMemberExpThreshold[];
 };
@@ -101,6 +103,7 @@ export function buildCombatantFromPartyMember(
     stats: effectiveStats,
     ...(member.growth ? { growth: { ...member.growth } } : {}),
     ...(member.expTable ? { expTable: member.expTable.map((entry) => ({ ...entry })) } : {}),
+    ...(member.statuses?.length ? { statuses: member.statuses.map((entry) => ({ ...entry })) } : {}),
     money: stat(member.money),
     itemDropped: null,
     itemRarity: null,

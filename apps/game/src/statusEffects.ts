@@ -17,6 +17,14 @@ export type StatusAilment =
   | "confused" // offense may strike a random side
   | "shielded"; // incoming damage reduced (a buff, not an ailment)
 
+export const STATUS_AILMENTS: readonly StatusAilment[] = [
+  "poisoned",
+  "paralyzed",
+  "asleep",
+  "confused",
+  "shielded"
+];
+
 export type StatusInstance = {
   ailment: StatusAilment;
   /** Remaining turns; undefined = until cured / battle end. Decremented by tickStatuses. */
@@ -29,13 +37,69 @@ export type StatusState = StatusInstance[];
 
 /** Default poison loss = maxHp / POISON_HP_DIVISOR per tick (authored). */
 export const POISON_HP_DIVISOR = 16;
+export const FIELD_POISON_MIN_HP = 1;
 /** Default shield damage reduction percent (authored). */
 export const DEFAULT_SHIELD_PERCENT = 50;
 /** Default chance (0..1) an asleep combatant wakes at the start of its turn (authored). */
 export const SLEEP_WAKE_CHANCE = 0.34;
 
+const STATUS_AILMENT_LABELS = {
+  poisoned: "Poison",
+  paralyzed: "Paralysis",
+  asleep: "Sleep",
+  confused: "Confusion",
+  shielded: "Shield"
+} as const satisfies Record<StatusAilment, string>;
+
+const STATUS_AILMENT_BADGES = {
+  poisoned: "PSN",
+  paralyzed: "PAR",
+  asleep: "SLP",
+  confused: "CNF",
+  shielded: "SHD"
+} as const satisfies Record<StatusAilment, string>;
+
 export function hasStatus(state: StatusState | undefined, ailment: StatusAilment): boolean {
   return Boolean(state?.some((entry) => entry.ailment === ailment));
+}
+
+export function statusAilmentLabel(ailment: StatusAilment): string {
+  return STATUS_AILMENT_LABELS[ailment];
+}
+
+export function statusAilmentBadge(ailment: StatusAilment): string {
+  return STATUS_AILMENT_BADGES[ailment];
+}
+
+export function formatStatusAilments(state: StatusState | undefined): string {
+  const labels = (state ?? []).map((entry) => statusAilmentLabel(entry.ailment));
+  return labels.length > 0 ? labels.join(", ") : "OK";
+}
+
+export function poisonDamagePerTick(state: StatusState | undefined, maxHp: number): number {
+  const poison = state?.find((entry) => entry.ailment === "poisoned");
+  if (!poison) {
+    return 0;
+  }
+  const denom = poison.magnitude && poison.magnitude > 0 ? poison.magnitude : POISON_HP_DIVISOR;
+  return Math.max(1, Math.floor(Math.max(0, maxHp) / denom));
+}
+
+export function fieldPoisonTick(
+  state: StatusState | undefined,
+  currentHp: number,
+  maxHp: number
+): { hpLoss: number; nextHp: number } {
+  const current = Math.max(0, Math.floor(Number.isFinite(currentHp) ? currentHp : 0));
+  if (current <= FIELD_POISON_MIN_HP) {
+    return { hpLoss: 0, nextHp: current };
+  }
+  const damage = poisonDamagePerTick(state, maxHp);
+  if (damage <= 0) {
+    return { hpLoss: 0, nextHp: current };
+  }
+  const nextHp = Math.max(FIELD_POISON_MIN_HP, current - damage);
+  return { hpLoss: current - nextHp, nextHp };
 }
 
 /** Add (or refresh) a status. Re-inflicting refreshes remaining/magnitude rather than stacking. */
@@ -108,8 +172,7 @@ export function tickStatuses(
   const next: StatusState = [];
   for (const entry of statuses) {
     if (entry.ailment === "poisoned") {
-      const denom = entry.magnitude && entry.magnitude > 0 ? entry.magnitude : POISON_HP_DIVISOR;
-      hpLoss += Math.max(1, Math.floor(Math.max(0, maxHp) / denom));
+      hpLoss += poisonDamagePerTick([entry], maxHp);
     }
     if (entry.remaining !== undefined) {
       const remaining = entry.remaining - 1;

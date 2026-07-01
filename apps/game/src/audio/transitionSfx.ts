@@ -9,6 +9,10 @@ export interface TransitionSfx {
   encounter(): void;
   /** Soft per-character tick for typewriter dialogue text. */
   textBlip(): void;
+  /** EarthBound low-HP "danger" heartbeat double-thump; called on an interval while a member is critical. */
+  dangerHeartbeat(): void;
+  /** Short muted tick when field poison drains a step of HP. */
+  poisonTick(): void;
 }
 
 export type TransitionSfxOptions = {
@@ -29,6 +33,8 @@ export class NoopTransitionSfx implements TransitionSfx {
   whoosh(): void {}
   encounter(): void {}
   textBlip(): void {}
+  dangerHeartbeat(): void {}
+  poisonTick(): void {}
 }
 
 export class WebAudioTransitionSfx implements TransitionSfx {
@@ -128,6 +134,24 @@ export class WebAudioTransitionSfx implements TransitionSfx {
     this.withContext((context) => {
       const start = context.currentTime;
       this.tone(context, { type: "square", start, duration: 0.022, fromHz: 620, toHz: 660, gain: 0.05 });
+    });
+  }
+
+  dangerHeartbeat(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      // EB low-HP warning: a low "lub-dub" double-thump (two soft descending sine pulses).
+      this.tone(context, { type: "sine", start, duration: 0.09, fromHz: 150, toHz: 90, gain: 0.11 });
+      this.tone(context, { type: "sine", start: start + 0.14, duration: 0.11, fromHz: 130, toHz: 74, gain: 0.09 });
+    });
+  }
+
+  poisonTick(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      // Sickly muted blip: a short bandpassed noise "bloop" with a low falling tone.
+      this.noiseBurst(context, { start, duration: 0.12, frequencyHz: 320, sweepToHz: 180, gain: 0.05 });
+      this.tone(context, { type: "triangle", start, duration: 0.12, fromHz: 240, toHz: 150, gain: 0.05 });
     });
   }
 
