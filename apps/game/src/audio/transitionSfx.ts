@@ -5,6 +5,10 @@ export interface TransitionSfx {
   footsteps(): void;
   escalatorHum(): void;
   whoosh(): void;
+  /** EarthBound-style battle-swirl sting played when an encounter starts. */
+  encounter(): void;
+  /** Soft per-character tick for typewriter dialogue text. */
+  textBlip(): void;
 }
 
 export type TransitionSfxOptions = {
@@ -23,6 +27,8 @@ export class NoopTransitionSfx implements TransitionSfx {
   footsteps(): void {}
   escalatorHum(): void {}
   whoosh(): void {}
+  encounter(): void {}
+  textBlip(): void {}
 }
 
 export class WebAudioTransitionSfx implements TransitionSfx {
@@ -100,6 +106,28 @@ export class WebAudioTransitionSfx implements TransitionSfx {
         sweepToHz: 1900
       });
       this.tone(context, { type: "sine", start: start + 0.04, duration: 0.36, fromHz: 220, toHz: 440, gain: 0.05 });
+    });
+  }
+
+  encounter(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      // Fast warbling tone climbing in pitch (the EB battle-swirl "wa-wa-wa"), over
+      // a rising noise sweep — ~0.6s to match the encounter swirl animation.
+      for (let index = 0; index < 6; index += 1) {
+        const t = start + index * 0.09;
+        const base = 300 + index * 95;
+        this.tone(context, { type: "square", start: t, duration: 0.06, fromHz: base, toHz: base * 1.5, gain: 0.06 });
+        this.tone(context, { type: "sawtooth", start: t + 0.045, duration: 0.05, fromHz: base * 1.5, toHz: base, gain: 0.04 });
+      }
+      this.noiseBurst(context, { start, duration: 0.58, frequencyHz: 500, sweepToHz: 2600, gain: 0.06 });
+    });
+  }
+
+  textBlip(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, { type: "square", start, duration: 0.022, fromHz: 620, toHz: 660, gain: 0.05 });
     });
   }
 

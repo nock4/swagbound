@@ -1,6 +1,8 @@
 import type { CharacterCollection, DialoguePage, DialogueSegment, ItemCollection, PsiCollection } from "@eb/schemas";
 
 export const INSTANT_TEXT_SPEED_CPS = Number.POSITIVE_INFINITY;
+/** EarthBound-style typewriter speed (chars/sec) used unless ?textspeed overrides it. */
+export const DEFAULT_TEXT_SPEED_CPS = 45;
 export const DEFAULT_DIALOGUE_FONT_ID = 0;
 
 export type DialogueTextRun = {
@@ -264,11 +266,14 @@ export function confirmActionForReveal(revealComplete: boolean): DialogueConfirm
 
 export function textSpeedCpsFromSearch(search: string | undefined | null): number {
   const raw = new URLSearchParams(search ?? "").get("textspeed");
-  if (!raw || raw.trim().toLowerCase() === "instant") {
+  if (raw == null || raw.trim() === "") {
+    return DEFAULT_TEXT_SPEED_CPS;
+  }
+  if (raw.trim().toLowerCase() === "instant") {
     return INSTANT_TEXT_SPEED_CPS;
   }
   const parsed = Number(raw);
-  return Number.isFinite(parsed) ? parsed : INSTANT_TEXT_SPEED_CPS;
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : DEFAULT_TEXT_SPEED_CPS;
 }
 
 function fontIdFromStyleSegment(

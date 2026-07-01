@@ -46,10 +46,18 @@ interface Assignment {
 const ASSIGN_STORAGE_KEY = "swag:music-auditioner:assignments";
 
 let target: AuditionTarget | null = null;
+const targetListeners = new Set<(target: AuditionTarget | null) => void>();
 
-/** Called by the active world scene so the panel can mute it + read location. */
-export function publishAuditionTarget(next: AuditionTarget): void {
+/**
+ * Called by the active world scene so the panel can mute it + read location.
+ * Pass null when the scene shuts down (e.g. a battle starts) so the panel can
+ * stop auditioning instead of bleeding its track over the next scene's music.
+ */
+export function publishAuditionTarget(next: AuditionTarget | null): void {
   target = next;
+  for (const listener of targetListeners) {
+    listener(next);
+  }
 }
 
 let mounted = false;
@@ -154,6 +162,15 @@ class MusicAuditionerPanel {
     this.renderAssignments();
     void this.loadTracks();
     window.setInterval(() => this.refreshLocation(), 700);
+    // When the world scene shuts down (e.g. a battle starts) the target is
+    // cleared. Stop auditioning so the track does not play over the next
+    // scene's music, and release the mute so game audio resumes cleanly.
+    targetListeners.add((next) => {
+      if (!next && !this.audio.paused) {
+        this.audio.pause();
+        this.onStopped();
+      }
+    });
   }
 
   private async loadTracks(): Promise<void> {
@@ -163,7 +180,10 @@ class MusicAuditionerPanel {
         throw new Error(`HTTP ${res.status}`);
       }
       const data = (await res.json()) as { tracks?: AudioTrack[] };
-      this.tracks = Array.isArray(data.tracks) ? data.tracks : [];
+      const all = Array.isArray(data.tracks) ? data.tracks : [];
+      // Only the 27 approved tracks (audio/jammers/) belong in the selector — not
+      // jammers-raw, earthbound-jammers, or the old audio/music placeholders.
+      this.tracks = all.filter((track) => track.url.includes("/audio/jammers/"));
     } catch {
       this.tracks = [];
     }

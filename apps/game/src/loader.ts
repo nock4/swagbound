@@ -17,6 +17,8 @@ import {
   ItemOverridesSchema,
   ManifestSchema,
   MusicManifestSchema,
+  SectorMusicSchema,
+  CollisionOverridesSchema,
   NpcOverridesSchema,
   NpcReferenceCollectionSchema,
   OpeningCutsceneSchema,
@@ -55,6 +57,8 @@ import {
   type ItemOverrides,
   type Manifest,
   type MusicManifest,
+  type SectorMusic,
+  type CollisionOverrides,
   type NpcOverrides,
   type NumericFlagState,
   type NpcReferenceCollection,
@@ -97,6 +101,8 @@ const ENEMY_STAT_OVERRIDES_FILE = "enemy-stat-overrides.json";
 const BATTLE_RULES_FILE = "battle-rules.json";
 const STORY_TRIGGERS_FILE = "triggers.json";
 const MUSIC_MANIFEST_FILE = "music-manifest.json";
+const SECTOR_MUSIC_FILE = "sector-music.json";
+const COLLISION_OVERRIDES_FILE = "collision-overrides.json";
 const DRIFELLA_BARKS_FILE = "drifella-barks.json";
 const OPENING_CUTSCENE_FILE = "opening-cutscene.json";
 const CUTSCENES_FILE = "cutscenes.json";
@@ -125,6 +131,8 @@ export type GameData = {
   battle?: BattleData;
   battleRules?: BattleRules;
   musicManifest?: MusicManifest;
+  sectorMusic?: SectorMusic;
+  collisionOverrides?: CollisionOverrides;
   font?: FontCollection;
   window?: WindowCollection;
   characters?: CharacterCollection;
@@ -217,6 +225,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     dialogueLibrary,
     storyTriggers,
     musicManifest,
+    sectorMusic,
+    collisionOverrides,
     drifellaBarks,
     openingCutscene,
     cutscenes
@@ -269,6 +279,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${SWAGBOUND_DIALOGUE_LIBRARY_FILE}`, SwagboundDialogueLibrarySchema),
     loadJson(`/generated/${STORY_TRIGGERS_FILE}`, StoryTriggersSchema),
     loadJson(`/generated/${MUSIC_MANIFEST_FILE}`, MusicManifestSchema),
+    loadJson(`/generated/${SECTOR_MUSIC_FILE}`, SectorMusicSchema),
+    loadJson(`/generated/${COLLISION_OVERRIDES_FILE}`, CollisionOverridesSchema),
     loadJson(`/generated/${DRIFELLA_BARKS_FILE}`, DrifellaBarksSchema),
     loadJson(`/generated/${OPENING_CUTSCENE_FILE}`, OpeningCutsceneSchema),
     loadJson(`/generated/${CUTSCENES_FILE}`, CutscenesSchema)
@@ -308,6 +320,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     battle: resolvedBattle,
     battleRules,
     musicManifest,
+    sectorMusic,
+    collisionOverrides,
     font,
     window,
     characters: resolvedCharacters,

@@ -68,6 +68,17 @@ describe("character model", () => {
     expect(combatant.hp).toMatchObject({ displayed: 88, target: 88, ratePerSec: 3 });
   });
 
+  it("starts the combatant at the member's CURRENT hp, not full (persists damage/death across battles)", () => {
+    const damaged = { ...buildPartyMember(character), hp: 12 };
+    expect(buildCombatantFromPartyMember(damaged).hp).toMatchObject({ displayed: 12, target: 12 });
+
+    const dead = { ...buildPartyMember(character), hp: 0 };
+    expect(buildCombatantFromPartyMember(dead).hp).toMatchObject({ displayed: 0, target: 0 });
+
+    const overflow = { ...buildPartyMember(character), hp: 999 };
+    expect(buildCombatantFromPartyMember(overflow).hp).toMatchObject({ displayed: 88, target: 88 });
+  });
+
   it("computes effective stats with optional equipment bonuses", () => {
     const member = buildPartyMember(character);
 

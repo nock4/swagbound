@@ -120,7 +120,7 @@ export type BattleDebug = {
   lastSfx: BattleSfxCue | null;
   sfxCount: number;
   firedSfx: BattleSfxCue[];
-  musicCue?: "battle" | "victory" | undefined;
+  musicCue?: "battle" | "boss" | "victory" | undefined;
   fx: BattleFxDebug;
   lastEnemyAction: LastEnemyActionDebug | null;
   party: BattleCombatantDebug[];

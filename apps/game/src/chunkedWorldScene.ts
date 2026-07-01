@@ -180,6 +180,7 @@ import {
   type ResolvedVisualState,
   type VisualStateInputs
 } from "./playerVisualState";
+import { drawSwirl } from "./transitions";
 import { activeWindowFlavorId } from "./windowSettings";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import {
@@ -227,6 +228,7 @@ import {
 } from "./mapTransition";
 import { createTransitionSfx, type TransitionSfx } from "./audio/transitionSfx";
 import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
+import { getSharedMusic } from "./sharedMusic";
 import { advanceCutsceneActorTowardTarget } from "./cutsceneActorMovement";
 import {
   isInteriorMusicSector,
@@ -345,6 +347,10 @@ type DoorWarpOptions = {
 type DoorFadePhase = "none" | "fade-out" | "fade-in";
 
 const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
+// The EB battle-encounter swirl: a colored spiral covers the overworld to black, THEN we switch to the
+// battle scene (which reveals from black). Sits above everything, including the door-fade overlay.
+const ENCOUNTER_SWIRL_MS = 620;
+const ENCOUNTER_SWIRL_DEPTH = 1_500_000;
 const COLLISION_OVERLAY_DEPTH = 150_000;
 // Head/companion overlays render just above the foreground occluder layer (depth 100_000) so a mushroom
 // cap / sweat / possession ghost shows on the character, but stay below the door-fade + UI overlays.
@@ -356,6 +362,10 @@ const OVERWORLD_ENEMY_SPAWN_INTERVAL_MS = 900;
 const OVERWORLD_ENEMY_CONTACT_PX = 12;
 const BOSS_GATE_CONTACT_PX = 14;
 const BOSS_GATE_ARM_DIST_PX = 32;
+const OVERWORLD_CAMERA_ZOOM = 2;
+// Cap on the interior zoom-to-fill so short rooms don't blow up; rooms shorter
+// than (viewport / this) keep a small centered letterbox instead of over-zooming.
+const INTERIOR_CAMERA_MAX_ZOOM = 3.5;
 // Spawn band kept fully ON-SCREEN (camera shows ~128x112 world px from the player
 // at zoom 2) so a roamer is always visible before it can reach you — never an
 // off-screen "random" touch. Min keeps it off the player's feet.
@@ -431,6 +441,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedInvalidDoorWarps = new Set<string>();
   private doorFadePhase: DoorFadePhase = "none";
   private doorFadeOverlay?: Phaser.GameObjects.Rectangle;
+  /** Deferred battle start: while set, the overworld plays the colored encounter swirl, then switches. */
+  private pendingBattleStart?: { sceneKey: string; params: Record<string, unknown> };
+  private encounterSwirlMs = 0;
+  private encounterSwirlGfx?: Phaser.GameObjects.Graphics;
+  private lastDialogueRevealedChars = 0;
   private doorTransitionState: MapTransitionState = idleMapTransition();
   private activeDoorWarp?: {
     destination: EventWarpDestination;
@@ -443,6 +458,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
   private music: Music = createMusic();
   private currentOverworldMusicCue?: OverworldMusicCue;
+  /** When set (by a story trigger's `music` field), overrides sector-based overworld music. */
+  private forcedOverworldMusicCue?: OverworldMusicCue;
   private menuState: MenuState = closedMenu();
   private menuScreens = new Map<string, MenuScreen>();
   private activeShopStoreId?: number;
@@ -512,7 +529,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }): void {
     this.data_ = data.gameData;
     this.world_ = data.gameData.world as WorldChunked;
-    this.music = createMusic(data.gameData.musicManifest, {
+    this.music = getSharedMusic(this.registry, data.gameData.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
     // Dev music-auditioner bridge: lets the Track Lab panel mute this scene's
@@ -636,6 +653,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.collisionCellSize = world.collision.cellSize;
     this.collisionWidth = world.collision.width;
     this.collisionHeight = world.collision.height;
+    this.applyCollisionOverrides();
     this.collisionOverlayEnabled = this.initialCollisionOverlayEnabled();
     this.registerCollisionDebugGlobals();
     this.resolveIntroMeteorBeatForStart();
@@ -659,12 +677,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     const bounds = this.movementBounds();
     this.cameras.main.setBounds(0, 0, bounds.maxX + 8, bounds.maxY + 1);
-    this.cameras.main.setZoom(2);
+    this.cameras.main.setZoom(OVERWORLD_CAMERA_ZOOM);
     this.cameras.main.startFollow(this.player, true);
     this.cameras.main.roundPixels = true;
     this.refreshRoomBounds(true);
     this.events.once("shutdown", () => {
       this.music.stop();
+      publishAuditionTarget(null);
       this.destroyDoorFadeOverlay();
       this.destroyCollisionOverlay();
       this.destroyRoomMask();
@@ -769,7 +788,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.spriteWalkBobClockMs += delta;
     this.partyState.tickMeters(delta);
+    this.tickDialogueBlip();
     this.encounterCooldownMs = Math.max(0, this.encounterCooldownMs - delta);
+    // Encounter swirl owns the frame while it covers the overworld, then switches to battle.
+    if (this.tickEncounterSwirl(delta)) {
+      this.publish();
+      return;
+    }
     if (this.menuState.open) {
       if (!this.playerState.inputLocked) {
         lockPlayer(this.playerState, this.playerFrames);
@@ -863,6 +888,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.destroyDoorFadeOverlay();
     this.unregisterForceEncounter();
     this.destroyPlayerOverlays();
+    this.pendingBattleStart = undefined;
+    this.encounterSwirlGfx?.destroy();
+    this.encounterSwirlGfx = undefined;
     this.player = undefined;
     this.playerFrames = CANONICAL_DIRECTION_FRAMES;
     this.follower = undefined;
@@ -907,6 +935,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.menuScreens.clear();
     this.activeShopStoreId = undefined;
     this.currentOverworldMusicCue = undefined;
+    this.forcedOverworldMusicCue = undefined;
     this.eventSequence = undefined;
     this.newGameStartupRecord = undefined;
     this.startupRunActive = false;
@@ -1093,6 +1122,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       );
       this.applyInteriorRoomMask();
       this.applyNpcRoomVisibility();
+      this.updateCameraRoomBounds();
       return;
     }
     if (!force && this.playerInsideCachedRoomBounds()) {
@@ -1104,6 +1134,33 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
     this.applyInteriorRoomMask();
     this.applyNpcRoomVisibility();
+    this.updateCameraRoomBounds();
+  }
+
+  /**
+   * Keep the camera locked inside an interior room so its masked edge never
+   * reveals the black void around it (EB never scrolls past a room). Falls back
+   * to the full map bounds in the overworld.
+   */
+  private updateCameraRoomBounds(): void {
+    const camera = this.cameras.main;
+    const room = this.activeInteriorRoom();
+    if (room) {
+      // Zoom in just enough that the room covers the viewport on its short axis,
+      // so the masked edge never reveals the black void. Capped so small rooms
+      // don't over-zoom; any residual gap is centered (symmetric, intentional).
+      const fillZoom = Math.max(
+        OVERWORLD_CAMERA_ZOOM,
+        camera.width / room.rect.width,
+        camera.height / room.rect.height
+      );
+      camera.setZoom(Math.min(fillZoom, INTERIOR_CAMERA_MAX_ZOOM));
+      camera.setBounds(room.rect.x, room.rect.y, room.rect.width, room.rect.height, true);
+      return;
+    }
+    camera.setZoom(OVERWORLD_CAMERA_ZOOM);
+    const bounds = this.movementBounds();
+    camera.setBounds(0, 0, bounds.maxX + 8, bounds.maxY + 1);
   }
 
   private playerInsideCachedRoomBounds(): boolean {
@@ -1126,8 +1183,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private syncOverworldMusicCue(force = false): void {
+    if (this.forcedOverworldMusicCue) {
+      this.playOverworldMusicCue(this.forcedOverworldMusicCue, force);
+      return;
+    }
     this.playOverworldMusicCue(
-      overworldMusicCueForSector(this.data_.musicManifest, this.world_.sectors, this.playerState),
+      overworldMusicCueForSector(
+        this.data_.musicManifest,
+        this.world_.sectors,
+        this.playerState,
+        false,
+        this.data_.sectorMusic
+      ),
       force
     );
   }
@@ -1138,6 +1205,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.currentOverworldMusicCue = cue;
     void this.music.play(cue);
+  }
+
+  /** Soft per-character tick as typewriter dialogue reveals (skips whitespace, throttled). */
+  private tickDialogueBlip(): void {
+    if (!this.dialogue.open || this.dialogue.revealComplete) {
+      this.lastDialogueRevealedChars = 0;
+      return;
+    }
+    const state = this.dialogue.currentRevealState;
+    const revealed = state.revealedChars;
+    if (revealed < this.lastDialogueRevealedChars) {
+      this.lastDialogueRevealedChars = revealed; // new page reset
+    }
+    if (revealed > this.lastDialogueRevealedChars) {
+      const fresh = state.revealedText.slice(this.lastDialogueRevealedChars, revealed);
+      if (revealed % 2 === 0 && /\S/.test(fresh)) {
+        this.transitionSfx.textBlip();
+      }
+      this.lastDialogueRevealedChars = revealed;
+    }
   }
 
   private playerInInteriorMusicSector(): boolean {
@@ -1353,6 +1440,38 @@ export class ChunkedWorldScene extends Phaser.Scene {
         graphics.strokePath();
       }
     }
+  }
+
+  /**
+   * Force authored world-pixel rects solid. EarthBound's roof/behind-building cells
+   * convert to walkable (surface-00, no priority — indistinguishable from grass), so
+   * the player can walk on roofs. content/collision-overrides.json patches those cells.
+   */
+  private applyCollisionOverrides(): void {
+    const overrides = this.data_.collisionOverrides;
+    if (!overrides || overrides.solids.length === 0) return;
+    const cs = this.collisionCellSize;
+    const height = this.solidRows.length;
+    if (height === 0) return;
+    const width = this.solidRows[0].length;
+    // Convert only the touched rows to mutable char arrays.
+    const patched = new Map<number, string[]>();
+    const rowChars = (row: number): string[] => {
+      let chars = patched.get(row);
+      if (!chars) { chars = this.solidRows[row].split(""); patched.set(row, chars); }
+      return chars;
+    };
+    for (const rect of overrides.solids) {
+      const c0 = Math.max(0, Math.floor(rect.x / cs));
+      const c1 = Math.min(width - 1, Math.floor((rect.x + rect.w - 1) / cs));
+      const r0 = Math.max(0, Math.floor(rect.y / cs));
+      const r1 = Math.min(height - 1, Math.floor((rect.y + rect.h - 1) / cs));
+      for (let r = r0; r <= r1; r += 1) {
+        const chars = rowChars(r);
+        for (let c = c0; c <= c1; c += 1) chars[c] = "1";
+      }
+    }
+    for (const [row, chars] of patched) this.solidRows[row] = chars.join("");
   }
 
   private initialCollisionOverlayEnabled(): boolean {
@@ -3516,6 +3635,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
+    if (trigger.music) {
+      this.forcedOverworldMusicCue = trigger.music as OverworldMusicCue;
+      this.syncOverworldMusicCue(true);
+    }
+
     this.afterDialogueClosed();
     this.updatePrompt();
     this.publish();
@@ -4077,7 +4201,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.lastEncounterGroup = group;
     this.scene.stop("ui");
-    this.scene.start("battle", {
+    // Play the colored EB encounter swirl over the overworld, THEN switch to battle (see tickEncounterSwirl).
+    this.beginEncounterSwirl({
       battleData: this.data_.battle,
       groupId: group,
       characters: this.data_.characters,
@@ -4091,8 +4216,48 @@ export class ChunkedWorldScene extends Phaser.Scene {
       backgroundOverrides: this.data_.backgroundOverrides,
       battleRules: this.data_.battleRules,
       encounterAdvantage,
+      boss: pendingStoryGate !== undefined,
       returnTo: this.battleReturnContext(group, source, pendingStoryGate)
     });
+    return true;
+  }
+
+  private beginEncounterSwirl(params: Record<string, unknown>): void {
+    this.pendingBattleStart = { sceneKey: "battle", params };
+    this.encounterSwirlMs = 0;
+    // Stop the overworld track (it fades out over the ~0.6s swirl, so it's silent
+    // before the battle music hits) and fire the EB battle-swirl sting.
+    this.music.stop();
+    this.currentOverworldMusicCue = undefined;
+    this.transitionSfx.encounter();
+    lockPlayer(this.playerState, this.playerFrames);
+    if (!this.encounterSwirlGfx) {
+      this.encounterSwirlGfx = this.add.graphics().setScrollFactor(0).setDepth(ENCOUNTER_SWIRL_DEPTH);
+    }
+    this.encounterSwirlGfx.setVisible(true);
+  }
+
+  /** Advance + render the overworld encounter swirl; switch to the battle scene when fully covered. */
+  private tickEncounterSwirl(delta: number): boolean {
+    if (!this.pendingBattleStart) {
+      return false;
+    }
+    this.encounterSwirlMs += delta;
+    const p = Math.min(1, this.encounterSwirlMs / ENCOUNTER_SWIRL_MS);
+    const g = this.encounterSwirlGfx;
+    if (g) {
+      g.clear();
+      // progress 1 -> clear (overworld visible), 0 -> covered/black; ramp 1->0 to cover the screen.
+      drawSwirl(g, 1 - p, this.scale.width, this.scale.height, { clockMs: this.time.now });
+    }
+    this.syncPlayerObject();
+    if (p >= 1) {
+      const { sceneKey, params } = this.pendingBattleStart;
+      this.pendingBattleStart = undefined;
+      g?.clear();
+      g?.setVisible(false);
+      this.scene.start(sceneKey, params);
+    }
     return true;
   }
 
@@ -4582,10 +4747,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return {
       ...base,
       deepWater: this.isPlayerInWater(), // real terrain signal (3a)
+      ko: this.leadPartyMemberDowned(), // real KO signal: lead at 0 HP -> dead/ghost overworld sprite
       // ladder/rope/bike real triggers await tile-class data + a mount mechanic; forced-path for now.
       ...forced,
       status: { ...base.status, ...(forced.status ?? {}) }
     };
+  }
+
+  /** The lead (front) party member is downed (0 HP) — shows the dead overworld sprite. */
+  private leadPartyMemberDowned(): boolean {
+    const leadId = this.partyState.party()[0];
+    if (leadId === undefined) {
+      return false;
+    }
+    const vitals = this.partyState.vitals(leadId);
+    return vitals ? vitals.hp.target <= 0 : false;
   }
 
   private isPlayerInWater(): boolean {

@@ -1,11 +1,11 @@
-import type { MusicManifest } from "@eb/schemas";
-import { musicAreaCueId, type MusicAreaCueId } from "./audio/music";
+import type { MusicManifest, SectorMusic } from "@eb/schemas";
+import { musicAreaCueId, musicInteriorCueId, type MusicAreaCueId, type MusicInteriorCueId } from "./audio/music";
 import {
   sectorCoordForWorldPixel,
   type SectorAreaMetadata
 } from "./roomBounds";
 
-export type OverworldMusicCue = "intro" | "overworld" | "interior" | MusicAreaCueId;
+export type OverworldMusicCue = "intro" | "overworld" | "interior" | MusicAreaCueId | MusicInteriorCueId;
 type MusicManifestArea = NonNullable<MusicManifest["areas"]>[number];
 type SectorMusicMetadata = SectorAreaMetadata & {
   townMaps?: readonly string[];
@@ -36,7 +36,8 @@ export function overworldMusicCueForSector(
   manifest: MusicManifest | undefined,
   sectors: SectorAreaMetadata | undefined,
   point: { x: number; y: number },
-  introActive = false
+  introActive = false,
+  sectorMusic?: SectorMusic
 ): OverworldMusicCue {
   if (introActive) {
     return "intro";
@@ -45,7 +46,29 @@ export function overworldMusicCueForSector(
   if (area) {
     return musicAreaCueId(area.id);
   }
-  return overworldMusicCueForInteriorState(isInteriorMusicSector(sectors, point));
+  if (!isInteriorMusicSector(sectors, point)) {
+    return "overworld";
+  }
+  // Inside a building: pick the per-building-type interior track by EB song id,
+  // so the song only changes when you enter a different KIND of building.
+  const songId = interiorSongIdForSector(sectorMusic, sectors, point);
+  return songId !== undefined ? musicInteriorCueId(songId) : "interior";
+}
+
+function interiorSongIdForSector(
+  sectorMusic: SectorMusic | undefined,
+  sectors: SectorAreaMetadata | undefined,
+  point: { x: number; y: number }
+): number | undefined {
+  if (!sectorMusic || !sectors) {
+    return undefined;
+  }
+  const sector = sectorCoordForWorldPixel(point, sectors);
+  if (!sector) {
+    return undefined;
+  }
+  const songId = sectorMusic.song[sector.index];
+  return songId && songId > 0 ? songId : undefined;
 }
 
 export function areaMusicForSector(

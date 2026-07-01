@@ -15,7 +15,12 @@ describe("chunked world interior rendering contract", () => {
   it("uses a room mask rather than rectangular chunk crops for interior isolation", () => {
     expect(sceneSource).toContain("createGeometryMask");
     expect(sceneSource).toContain("setMask(mask)");
-    expect(sceneSource).not.toContain("setCrop(");
+    // Interior isolation must clip the streamed chunk images with the geometry
+    // mask, never a rectangular setCrop. The only allowed setCrop is the water
+    // occluder waterline on a `sprite` (player/NPC) — unrelated to interiors.
+    expect(sceneSource).not.toMatch(/(background|foreground|streamed|chunk\w*|image)\.setCrop\(/i);
+    const cropReceivers = [...sceneSource.matchAll(/(\w+)\.setCrop\(/g)].map((match) => match[1]);
+    expect(cropReceivers.every((receiver) => receiver === "sprite")).toBe(true);
   });
 
   it("resolves interior masks from sector metadata when available", () => {

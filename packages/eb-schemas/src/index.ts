@@ -345,8 +345,41 @@ const MusicManifestAreaSchema = MusicManifestTrackSchema.extend({
 export const MusicManifestSchema = z.object({
   schema: z.literal("swagbound.music-manifest.v1"),
   cues: z.record(z.string().min(1), MusicManifestTrackSchema),
-  areas: z.array(MusicManifestAreaSchema).optional()
+  areas: z.array(MusicManifestAreaSchema).optional(),
+  /**
+   * Interior music keyed by EarthBound song id (the building TYPE: all hospitals
+   * share one id, all houses another, etc.). When the player is inside a building
+   * whose EB song id is listed here, that track plays; otherwise the `interior`
+   * cue is used. Faithful to how EarthBound assigns interior music.
+   */
+  interiors: z.record(z.string().min(1), MusicManifestTrackSchema).optional()
 }).strict();
+
+/**
+ * Authored solid-collision patches in WORLD PIXELS. EarthBound's roof/behind-building
+ * cells convert to walkable (no priority, surface-00, indistinguishable from grass),
+ * so the player can walk on roofs. These rects force those cells solid.
+ */
+export const CollisionOverridesSchema = z.object({
+  schema: z.literal("swagbound.collision-overrides.v1"),
+  solids: z.array(z.object({
+    x: z.number().int().nonnegative(),
+    y: z.number().int().nonnegative(),
+    w: z.number().int().positive(),
+    h: z.number().int().positive(),
+    note: z.string().optional()
+  }))
+});
+export type CollisionOverrides = z.infer<typeof CollisionOverridesSchema>;
+
+export const SectorMusicSchema = z.object({
+  schema: z.literal("swagbound.sector-music.v1"),
+  cols: z.number().int().positive(),
+  rows: z.number().int().positive(),
+  song: z.array(z.number().int().nonnegative()),
+  indoor: z.array(z.union([z.literal(0), z.literal(1)]))
+});
+export type SectorMusic = z.infer<typeof SectorMusicSchema>;
 
 const SpriteOverrideFrameSequenceSchema = z.array(z.number().int().nonnegative()).min(1);
 
@@ -809,6 +842,8 @@ export const StoryTriggerSchema = z.object({
   dialogue: z.array(z.string()).optional(),
   setFlags: z.array(z.string()).optional(),
   clearFlags: z.array(z.string()).optional(),
+  /** When set, fire this music cue (a music-manifest cue id, e.g. "ending") as a forced overworld track when the trigger's effects run. Persists over sector-based music until another trigger or interior change replaces it. */
+  music: z.string().min(1).optional(),
   /** Battle group id to start after dialogue (mutually exclusive with warp). */
   battleGroup: z.number().int().nonnegative().optional(),
   /** Teleport the player here after dialogue (world pixels). */

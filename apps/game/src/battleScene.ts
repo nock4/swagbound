@@ -136,7 +136,7 @@ import {
   enemyTargetCursorAnchorY,
   menuCursorVisible
 } from "./battleVisuals";
-import { swirlMask, type SwirlMask } from "./transitions";
+import { drawSwirl } from "./transitions";
 import {
   resolveSpriteOverrideImageFrame,
   spriteOverrideAssetUrl,
@@ -161,6 +161,7 @@ import {
   type BattleSfxCue
 } from "./audio/battleSfx";
 import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
+import { getSharedMusic } from "./sharedMusic";
 import { battleStepSfx } from "./battleSfxPlan";
 import { battleMusicCueForOutcome, type BattleMusicCue } from "./battleMusic";
 
@@ -242,7 +243,7 @@ const BATTLE_STATUS_BAR_HEIGHT = 5;
 const BATTLE_STATUS_BAR_X = 28;
 const BATTLE_STATUS_BAR_VALUE_GAP = 4;
 const BATTLE_PP_RATE_PER_SEC = 36;
-const ACTION_ADVANCE_DELAY_MS = 1200;
+const ACTION_ADVANCE_DELAY_MS = 1650;
 const AUTO_COMMAND_INPUT_DELAY_MS = 220;
 const ENTER_TRANSITION_MS = 650;
 const EXIT_TRANSITION_MS = 450;
@@ -251,17 +252,17 @@ const ENEMY_SPRITE_REDRAW_RETRY_MS = 50;
 const MAX_ENEMY_SPRITE_REDRAW_ATTEMPTS = 5;
 const BATTLE_FX_SPARK_DEPTH = 13;
 const BATTLE_FX_FLASH_DEPTH = 12;
-const BATTLE_FX_SCREEN_SHAKE_MS = 260;
-const BATTLE_FX_HIT_SPARK_MS = 280;
-const BATTLE_FX_ATTACK_FLASH_MS = 120;
-const BATTLE_FX_PSI_FLASH_MS = 230;
-const BATTLE_FX_VICTORY_FLASH_MS = 360;
-const BATTLE_FX_ENEMY_LUNGE_MS = 260;
-const BATTLE_FX_MIN_SHAKE_PX = 1.6;
-const BATTLE_FX_MAX_SHAKE_PX = 4.8;
-const BATTLE_FX_ATTACK_FLASH_ALPHA = 0.13;
-const BATTLE_FX_PSI_FLASH_ALPHA = 0.26;
-const BATTLE_FX_VICTORY_FLASH_ALPHA = 0.22;
+const BATTLE_FX_SCREEN_SHAKE_MS = 420;
+const BATTLE_FX_HIT_SPARK_MS = 380;
+const BATTLE_FX_ATTACK_FLASH_MS = 190;
+const BATTLE_FX_PSI_FLASH_MS = 340;
+const BATTLE_FX_VICTORY_FLASH_MS = 520;
+const BATTLE_FX_ENEMY_LUNGE_MS = 340;
+const BATTLE_FX_MIN_SHAKE_PX = 2.4;
+const BATTLE_FX_MAX_SHAKE_PX = 8.5;
+const BATTLE_FX_ATTACK_FLASH_ALPHA = 0.22;
+const BATTLE_FX_PSI_FLASH_ALPHA = 0.4;
+const BATTLE_FX_VICTORY_FLASH_ALPHA = 0.34;
 const BATTLE_FX_ATTACK_FLASH_COLOR = 0xffffff;
 const BATTLE_FX_VICTORY_FLASH_COLOR = 0xfff0a6;
 const BATTLE_FX_LEVELUP_FLASH_MS = 440;
@@ -441,6 +442,7 @@ export class BattleScene extends Phaser.Scene {
   private battleSfx_: BattleSfx = createBattleSfx();
   private music_: Music = createMusic();
   private currentBattleMusicCue?: BattleMusicCue;
+  private isBossBattle_ = false;
   private lastSfx_: BattleSfxCue | null = null;
   private sfxCount_ = 0;
   private firedSfx_ = new Set<BattleSfxCue>();
@@ -470,8 +472,10 @@ export class BattleScene extends Phaser.Scene {
     music?: Music;
     musicManifest?: MusicManifest;
     encounterAdvantage?: EncounterAdvantage;
+    boss?: boolean;
   }): void {
     this.battleData_ = data.battleData;
+    this.isBossBattle_ = data.boss ?? false;
     this.battleRules_ = data.battleRules ?? data.returnTo?.gameData.battleRules;
     this.group_ = selectBattleGroup(data.battleData, data.groupId);
     this.encounterAdvantage_ = normalizeEncounterAdvantage(data.encounterAdvantage);
@@ -537,7 +541,7 @@ export class BattleScene extends Phaser.Scene {
     this.backgroundAnimation = undefined;
     this.backgroundDebug = staticBattleBackgroundDebug();
     this.battleSfx_ = data.battleSfx ?? createBattleSfx();
-    this.music_ = data.music ?? createMusic(data.musicManifest ?? data.returnTo?.gameData.musicManifest, {
+    this.music_ = data.music ?? getSharedMusic(this.registry, data.musicManifest ?? data.returnTo?.gameData.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
     this.currentBattleMusicCue = undefined;
@@ -577,7 +581,7 @@ export class BattleScene extends Phaser.Scene {
       this.music_.stop();
       this.backgroundAnimation?.destroy();
     });
-    this.playBattleMusicCue(battleMusicCueForOutcome(outcome(this.battle_)), true);
+    this.playBattleMusicCue(battleMusicCueForOutcome(outcome(this.battle_), this.isBossBattle_), true);
     this.drawEnemySprites();
     this.createStatusWindow();
     this.registerBattleSfxResume();
@@ -1078,7 +1082,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private shakeIntensityForDamage(damage: number, targetDied: boolean): number {
-    const scaled = BATTLE_FX_MIN_SHAKE_PX + Math.sqrt(Math.max(0, damage)) * 0.26 + (targetDied ? 0.9 : 0);
+    const scaled = BATTLE_FX_MIN_SHAKE_PX + Math.sqrt(Math.max(0, damage)) * 0.42 + (targetDied ? 1.8 : 0);
     return clampNumber(scaled, BATTLE_FX_MIN_SHAKE_PX, BATTLE_FX_MAX_SHAKE_PX);
   }
 
@@ -1563,102 +1567,8 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private renderEnterSwirl(graphics: Phaser.GameObjects.Graphics, progress: number): void {
-    const mask = swirlMask(progress);
-    if (mask.clear) {
-      return;
-    }
-
-    const width = this.scale.width;
-    const height = this.scale.height;
-    const cx = width / 2;
-    const cy = STATUS_TOP / 2;
-    const maxRadius = Math.hypot(Math.max(cx, width - cx), Math.max(cy, height - cy));
-
-    graphics.fillStyle(0x050505, mask.baseAlpha);
-    graphics.fillRect(0, 0, width, height);
-    if (mask.fullyCovered) {
-      return;
-    }
-
-    this.drawSwirlBands(graphics, mask, cx, cy, maxRadius);
-    this.drawSwirlHighlights(graphics, mask, cx, cy, maxRadius);
-  }
-
-  private drawSwirlBands(
-    graphics: Phaser.GameObjects.Graphics,
-    mask: SwirlMask,
-    cx: number,
-    cy: number,
-    maxRadius: number
-  ): void {
-    const armSpan = TAU / mask.armCount;
-    const segmentOverscan = 1.1 / mask.bandCount;
-    for (let arm = 0; arm < mask.armCount; arm += 1) {
-      for (let segment = 0; segment < mask.bandCount; segment += 1) {
-        const innerRatio = Math.max(mask.revealRadiusRatio, segment / mask.bandCount);
-        const outerRatio = Math.min(1.32, (segment + 1) / mask.bandCount + segmentOverscan);
-        if (outerRatio <= mask.revealRadiusRatio) {
-          continue;
-        }
-        const centerRatio = (innerRatio + outerRatio) / 2;
-        const angle = mask.rotationRadians + arm * armSpan + centerRatio * mask.spiralPitch * TAU;
-        const span = armSpan * (0.18 + mask.coverage * 0.18);
-        const inner = innerRatio * maxRadius;
-        const outer = outerRatio * maxRadius + 22 * mask.coverage;
-        const points = [
-          polarPoint(cx, cy, inner, angle - span * 0.58),
-          polarPoint(cx, cy, outer, angle - span * 0.38),
-          polarPoint(cx, cy, outer, angle + span * 0.38),
-          polarPoint(cx, cy, inner, angle + span * 0.58)
-        ];
-
-        graphics.fillStyle(segment % 2 === 0 ? 0x050505 : 0x111827, mask.bandAlpha);
-        graphics.beginPath();
-        graphics.moveTo(points[0].x, points[0].y);
-        for (let index = 1; index < points.length; index += 1) {
-          graphics.lineTo(points[index].x, points[index].y);
-        }
-        graphics.closePath();
-        graphics.fillPath();
-      }
-    }
-  }
-
-  private drawSwirlHighlights(
-    graphics: Phaser.GameObjects.Graphics,
-    mask: SwirlMask,
-    cx: number,
-    cy: number,
-    maxRadius: number
-  ): void {
-    const alpha = 0.34 * mask.coverage;
-    if (alpha <= 0) {
-      return;
-    }
-    const armSpan = TAU / mask.armCount;
-    for (let arm = 0; arm < mask.armCount; arm += 1) {
-      graphics.lineStyle(3, arm % 2 === 0 ? 0xf8fafc : 0x7dd3fc, alpha);
-      graphics.beginPath();
-      let started = false;
-      for (let segment = 0; segment <= mask.bandCount; segment += 1) {
-        const ratio = segment / mask.bandCount;
-        if (ratio < mask.revealRadiusRatio) {
-          continue;
-        }
-        const radius = ratio * maxRadius;
-        const angle = mask.rotationRadians + arm * armSpan + ratio * mask.spiralPitch * TAU;
-        const point = polarPoint(cx, cy, radius, angle);
-        if (!started) {
-          graphics.moveTo(point.x, point.y);
-          started = true;
-        } else {
-          graphics.lineTo(point.x, point.y);
-        }
-      }
-      if (started) {
-        graphics.strokePath();
-      }
-    }
+    // Colored EB swirl reveal (from black -> battle). Shared renderer; centered on the battle viewport.
+    drawSwirl(graphics, progress, this.scale.width, this.scale.height, { cy: STATUS_TOP / 2, clockMs: this.time.now });
   }
 
   private exitBattle(): void {
