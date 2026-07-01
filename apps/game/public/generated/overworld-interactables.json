@@ -1,0 +1,61 @@
+{
+  "schema": "swagbound.overworld-interactables.v1",
+  "comment": "Small Act-1 Onett proof set for facing-confirm signs, presents, and examine hotspots. Use ?nointro=1&spawn=x,y and press Z from the north side for the near-spawn entries.",
+  "interactables": [
+    {
+      "id": "signal-spawn-notice",
+      "kind": "sign",
+      "label": "Spawn notice",
+      "worldPixel": { "x": 2112, "y": 1788 },
+      "pages": [
+        "NOTICE: The route only looks official because it owns a clipboard.",
+        "Bosch reads the bottom line twice. The ink refuses to remember him."
+      ]
+    },
+    {
+      "id": "signal-town-dao-sign",
+      "kind": "sign",
+      "label": "THE DAO sign",
+      "worldPixel": { "x": 1666, "y": 1273 },
+      "pages": [
+        "THE DAO",
+        "Public meetings are open to anyone whose name survives the intake form."
+      ]
+    },
+    {
+      "id": "signal-spawn-present",
+      "kind": "present",
+      "label": "Roadside present",
+      "worldPixel": { "x": 2144, "y": 1788 },
+      "item": { "char": 1, "item": 88 },
+      "pages": [
+        "Bosch opened the present.",
+        "Inside was a Pocket Snack!",
+        "You got the Pocket Snack!"
+      ],
+      "openedPages": [
+        "The present is open. Even the ribbon has filed its report."
+      ]
+    },
+    {
+      "id": "signal-spawn-flier",
+      "kind": "examine",
+      "label": "Loose flier",
+      "worldPixel": { "x": 2080, "y": 1788 },
+      "pages": [
+        "A loose flier promises a cleaner version of Bosch by morning.",
+        "Someone crossed out CLEANER and wrote EASIER."
+      ]
+    },
+    {
+      "id": "signal-spawn-mailbox",
+      "kind": "examine",
+      "label": "Mailbox",
+      "worldPixel": { "x": 2160, "y": 1788 },
+      "pages": [
+        "The mailbox contains one receipt addressed to PUBLIC VERSION.",
+        "The stamp is warm."
+      ]
+    }
+  ]
+}

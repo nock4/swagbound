@@ -1,5 +1,6 @@
 import type { DialoguePage, TutorialStatus } from "@eb/schemas";
 import type { BattleSfxCue } from "./audio/battleSfx";
+import type { InteractionSfxCue } from "./audio/transitionSfx";
 import type { BattleCommand, BattleVictoryViewPageKind, EncounterAdvantage } from "./battleLogic";
 import type { MenuDebugState, MenuRenderScreen } from "./menuModel";
 import type { OverworldStatusHudView } from "./overworldStatusHud";
@@ -254,6 +255,25 @@ export type CutsceneMoveDebug = {
   position?: { x: number; y: number };
 };
 
+export type OverworldInteractableDebug = {
+  id: string;
+  kind: "sign" | "present" | "examine";
+  x: number;
+  y: number;
+  label?: string;
+  opened?: boolean;
+};
+
+export type OverworldInteractionTargetDebug = {
+  kind: "npc" | "sign" | "present" | "examine";
+  key: string;
+  id: number | string;
+  x: number;
+  y: number;
+  distance: number;
+  label?: string;
+};
+
 export type OverworldDebug = {
   mode: "world" | "fallback" | "error";
   dialogueOpen: boolean;
@@ -298,10 +318,19 @@ export type OverworldDebug = {
   returnContextActive?: boolean;
   /** Facing-aware: an interactable NPC is in front and in range. */
   canInteract?: boolean;
-  interactionTargetId?: number;
+  interactionTargetId?: number | string;
+  interactionTargetKind?: OverworldInteractionTargetDebug["kind"];
+  interactionTargetKey?: string;
+  nearestInteractable?: OverworldInteractionTargetDebug;
+  interactables?: OverworldInteractableDebug[];
+  interactionSfx?: {
+    last: InteractionSfxCue | null;
+    count: number;
+    calls: InteractionSfxCue[];
+  };
   activeNpcId?: number;
   distanceToNpc?: number;
-  /** Radius-only proximity to the nearest interactable NPC. */
+  /** Radius-only proximity to the nearest interactable. */
   inInteractionRange: boolean;
   movementBounds: { minX: number; maxX: number; minY: number; maxY: number };
   statusLines: string[];

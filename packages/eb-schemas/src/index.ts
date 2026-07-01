@@ -1218,6 +1218,63 @@ export const AddedNpcsSchema = z
     });
   });
 
+const OverworldInteractableBaseSchema = z.object({
+  id: z.string().trim().min(1),
+  label: z.string().trim().min(1).optional(),
+  worldPixel: PixelSchema
+});
+
+export const OverworldSignInteractableSchema = OverworldInteractableBaseSchema.extend({
+  kind: z.literal("sign"),
+  pages: z.array(z.string().trim().min(1)).min(1)
+}).strict();
+
+export const OverworldExamineInteractableSchema = OverworldInteractableBaseSchema.extend({
+  kind: z.literal("examine"),
+  pages: z.array(z.string().trim().min(1)).min(1)
+}).strict();
+
+export const OverworldPresentInteractableSchema = OverworldInteractableBaseSchema.extend({
+  kind: z.literal("present"),
+  item: z.object({
+    char: z.number().int().nonnegative(),
+    item: z.number().int().nonnegative()
+  }).strict(),
+  pages: z.array(z.string().trim().min(1)).min(1).optional(),
+  openedPages: z.array(z.string().trim().min(1)).min(1).optional(),
+  openedFlag: z.string().trim().min(1).optional()
+}).strict();
+
+export const OverworldInteractableSchema = z.discriminatedUnion("kind", [
+  OverworldSignInteractableSchema,
+  OverworldExamineInteractableSchema,
+  OverworldPresentInteractableSchema
+]);
+
+export const OverworldInteractablesSchema = z
+  .object({
+    schema: z.literal("swagbound.overworld-interactables.v1"),
+    comment: z.string().optional(),
+    interactables: z.array(OverworldInteractableSchema)
+  })
+  .strict()
+  .superRefine((value, context) => {
+    const seen = new Set<string>();
+    value.interactables.forEach((entry, index) => {
+      if (seen.has(entry.id)) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `duplicate overworld interactable id ${entry.id}`,
+          path: ["interactables", index, "id"]
+        });
+      }
+      seen.add(entry.id);
+    });
+  });
+
+export type OverworldInteractable = z.infer<typeof OverworldInteractableSchema>;
+export type OverworldInteractables = z.infer<typeof OverworldInteractablesSchema>;
+
 /** Two walk frames (sheet frame indices) per cardinal facing. */
 export const SpriteAnimationsSchema = z.record(
   SpriteFacingSchema,

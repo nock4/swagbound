@@ -13,7 +13,17 @@ export interface TransitionSfx {
   dangerHeartbeat(): void;
   /** Short muted tick when field poison drains a step of HP. */
   poisonTick(): void;
+  /** Short confirm chirp when starting an in-world talk/sign interaction. */
+  talkConfirm(): void;
+  /** Small chime when a present opens. */
+  presentOpen(): void;
+  /** Bright jingle when an item is received. */
+  itemGet(): void;
+  /** Soft read cue for signs and examine hotspots. */
+  readCue(): void;
 }
+
+export type InteractionSfxCue = "talkConfirm" | "presentOpen" | "itemGet" | "readCue";
 
 export type TransitionSfxOptions = {
   muted?: boolean;
@@ -35,6 +45,10 @@ export class NoopTransitionSfx implements TransitionSfx {
   textBlip(): void {}
   dangerHeartbeat(): void {}
   poisonTick(): void {}
+  talkConfirm(): void {}
+  presentOpen(): void {}
+  itemGet(): void {}
+  readCue(): void {}
 }
 
 export class WebAudioTransitionSfx implements TransitionSfx {
@@ -152,6 +166,48 @@ export class WebAudioTransitionSfx implements TransitionSfx {
       // Sickly muted blip: a short bandpassed noise "bloop" with a low falling tone.
       this.noiseBurst(context, { start, duration: 0.12, frequencyHz: 320, sweepToHz: 180, gain: 0.05 });
       this.tone(context, { type: "triangle", start, duration: 0.12, fromHz: 240, toHz: 150, gain: 0.05 });
+    });
+  }
+
+  talkConfirm(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, { type: "square", start, duration: 0.055, fromHz: 520, toHz: 780, gain: 0.055 });
+      this.tone(context, { type: "triangle", start: start + 0.035, duration: 0.04, fromHz: 780, toHz: 620, gain: 0.035 });
+    });
+  }
+
+  presentOpen(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, { type: "triangle", start, duration: 0.09, fromHz: 330, toHz: 660, gain: 0.08 });
+      this.tone(context, { type: "sine", start: start + 0.065, duration: 0.12, fromHz: 660, toHz: 990, gain: 0.055 });
+      this.noiseBurst(context, { start, duration: 0.08, frequencyHz: 1800, gain: 0.025 });
+    });
+  }
+
+  itemGet(): void {
+    this.withContext((context) => {
+      const start = context.currentTime + 0.08;
+      const notes = [523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((hz, index) => {
+        this.tone(context, {
+          type: index === notes.length - 1 ? "triangle" : "square",
+          start: start + index * 0.075,
+          duration: index === notes.length - 1 ? 0.18 : 0.07,
+          fromHz: hz,
+          toHz: hz * 1.01,
+          gain: index === notes.length - 1 ? 0.075 : 0.055
+        });
+      });
+    });
+  }
+
+  readCue(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, { type: "sine", start, duration: 0.06, fromHz: 880, toHz: 740, gain: 0.04 });
+      this.tone(context, { type: "triangle", start: start + 0.055, duration: 0.07, fromHz: 660, toHz: 660, gain: 0.03 });
     });
   }
 

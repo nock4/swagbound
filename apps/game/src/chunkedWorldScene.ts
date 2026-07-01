@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { isNpcVisibleForEventFlags, type BattleEnemy, type Cutscene, type DialoguePage, type EventActorMoveSelector, type EventEffect, type ItemData, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { isNpcVisibleForEventFlags, type BattleEnemy, type Cutscene, type DialoguePage, type EventActorMoveSelector, type EventEffect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
 import { sectorIndexForTile } from "./encounterLogic";
@@ -119,7 +119,9 @@ import {
   type DebugNpc,
   type FirstSceneDebug,
   type CutsceneMoveDebug,
-  type NewGameStartupRunDebug
+  type NewGameStartupRunDebug,
+  type OverworldInteractableDebug,
+  type OverworldInteractionTargetDebug
 } from "./state";
 import { createDialogueResolver, textSpeedCpsFromSearch } from "./dialogueRenderer";
 import {
@@ -239,7 +241,7 @@ import {
   type TransitionKind,
   type TransitionSfxCue
 } from "./mapTransition";
-import { createTransitionSfx, type TransitionSfx } from "./audio/transitionSfx";
+import { createTransitionSfx, type InteractionSfxCue, type TransitionSfx } from "./audio/transitionSfx";
 import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
 import { getSharedMusic } from "./sharedMusic";
 import { advanceCutsceneActorTowardTarget } from "./cutsceneActorMovement";
@@ -249,6 +251,10 @@ import {
   type OverworldMusicCue
 } from "./worldMusic";
 import { publishAuditionTarget, type AuditionLocation } from "./musicAuditioner";
+import {
+  overworldInteractableEvents,
+  overworldInteractableIsOpened
+} from "./overworldInteractables";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -319,6 +325,17 @@ type ActiveNpcDialogue = {
   key: string;
   id: number;
   restoreFacing: Facing;
+};
+
+type WorldInteractionKind = "npc" | OverworldInteractable["kind"];
+
+type WorldInteractionCandidate = InteractionCandidate & {
+  id: number;
+  key: string;
+  targetKind: WorldInteractionKind;
+  label?: string;
+  npcId?: number;
+  interactableId?: string;
 };
 
 type ActorMoveEffect = Extract<EventEffect, { kind: "actorMove" }>;
@@ -441,6 +458,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private npcRuntimes = new Map<string, NpcRuntime>();
   private serviceInteractionCache = new Map<string, boolean>();
   private activeNpcDialogue?: ActiveNpcDialogue;
+  private presentInteractableSprites = new Map<string, Phaser.GameObjects.Rectangle>();
   private chunkByKey = new Map<string, WorldChunk>();
   private chunkObjects = new Map<string, StreamedChunk>();
   private loadingTextureKeys = new Set<string>();
@@ -494,6 +512,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private readonly menuSfx: BattleSfx = createBattleSfx();
   private menuSfxCalls: MenuSfxCue[] = [];
   private menuSfxCount = 0;
+  private interactionSfxCalls: InteractionSfxCue[] = [];
+  private interactionSfxCount = 0;
   private music: Music = createMusic();
   private currentOverworldMusicCue?: OverworldMusicCue;
   /** When set (by a story trigger's `music` field), overrides sector-based overworld music. */
@@ -723,6 +743,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.playerState = createPlayerState(spawn.x, spawn.y, playerFacing, this.playerFrames);
     this.player = this.spawnPlayerActor(spawn.x, spawn.y, world.player.spriteGroup, playerFacing);
     this.spawnFollower(spawn, playerFacing);
+    this.spawnPresentInteractables();
     this.syncEncounterTileState();
 
     const bounds = this.movementBounds();
@@ -818,6 +839,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.maybeStartNewGameStartup(spawn);
     }
     this.applyDebugFlags();
+    this.syncPresentInteractableSprites();
     this.publish();
   }
 
@@ -956,6 +978,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.npcPlacementsByChunk.clear();
     this.npcRuntimes.clear();
     this.serviceInteractionCache.clear();
+    this.destroyPresentInteractableSprites();
     this.clearOverworldEnemies();
     this.chunkObjects.clear();
     this.loadingTextureKeys.clear();
@@ -991,6 +1014,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.lastServiceResult = undefined;
     this.menuSfxCalls = [];
     this.menuSfxCount = 0;
+    this.interactionSfxCalls = [];
+    this.interactionSfxCount = 0;
     this.currentOverworldMusicCue = undefined;
     this.forcedOverworldMusicCue = undefined;
     this.eventSequence = undefined;
@@ -1947,6 +1972,45 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.spawnActor(x, y, spriteGroup, direction);
   }
 
+  private spawnPresentInteractables(): void {
+    this.destroyPresentInteractableSprites();
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "present") {
+        continue;
+      }
+      const sprite = this.add.rectangle(entry.worldPixel.x, entry.worldPixel.y, 14, 12, 0xd64265)
+        .setOrigin(0.5, 1);
+      this.presentInteractableSprites.set(entry.id, sprite);
+      this.setActorSortDepth(sprite);
+    }
+    this.syncPresentInteractableSprites();
+  }
+
+  private syncPresentInteractableSprites(): void {
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "present") {
+        continue;
+      }
+      const sprite = this.presentInteractableSprites.get(entry.id);
+      if (!sprite || !sprite.active) {
+        continue;
+      }
+      const opened = this.overworldInteractableOpened(entry);
+      sprite
+        .setFillStyle(opened ? 0x6b7280 : 0xd64265, 1)
+        .setStrokeStyle(2, opened ? 0xcbd5e1 : 0xfff3a3, 1);
+      sprite.setVisible(true);
+      this.setActorSortDepth(sprite);
+    }
+  }
+
+  private destroyPresentInteractableSprites(): void {
+    for (const sprite of this.presentInteractableSprites.values()) {
+      sprite.destroy();
+    }
+    this.presentInteractableSprites.clear();
+  }
+
   private readInput(): MoveInput {
     return {
       left: Boolean(this.cursors?.left?.isDown || this.keys?.A?.isDown),
@@ -1980,6 +2044,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return true;
     }
     if (this.barrierBlocks(x, y)) {
+      return true;
+    }
+    if ((options.includeNpcs ?? true) && this.presentInteractableBlocks(x, y, options.escapeOverlapAt)) {
       return true;
     }
     if (options.includePlayer && this.player && this.actorBodyBlocked(x, y, this.playerState.x, this.playerState.y)) {
@@ -2020,6 +2087,24 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
     return barrierBlocksPoint(barriers, { x, y }, (flag) => this.gameFlags.has(flag));
+  }
+
+  private presentInteractableBlocks(x: number, y: number, escapeOverlapAt?: { x: number; y: number }): boolean {
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "present") {
+        continue;
+      }
+      if (
+        escapeOverlapAt &&
+        this.actorBodyBlocked(escapeOverlapAt.x, escapeOverlapAt.y, entry.worldPixel.x, entry.worldPixel.y)
+      ) {
+        continue;
+      }
+      if (this.actorBodyBlocked(x, y, entry.worldPixel.x, entry.worldPixel.y)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /** Creates barrier guard sprites on demand and toggles them with their active state. */
@@ -2412,21 +2497,38 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return Math.abs(x - bodyX) < 14 && y > bodyY - 18 && y < bodyY + 10;
   }
 
-  private interactionCandidates(): InteractionCandidate[] {
-    return [...this.npcRuntimes.values()]
+  private interactionCandidates(): WorldInteractionCandidate[] {
+    const npcCandidates: WorldInteractionCandidate[] = [...this.npcRuntimes.values()]
       .filter((npc) => this.npcInsideActiveRoom(npc))
       .map((npc) => ({
         id: npc.data.npcId,
+        key: `npc:${npc.data.npcId}`,
+        targetKind: "npc",
+        npcId: npc.data.npcId,
+        label: this.npcName(npc.data.npcId),
         x: npc.state.player.x,
         y: npc.state.player.y,
         interactable: npc.data.interactable
       }));
+    return [
+      ...npcCandidates,
+      ...this.data_.overworldInteractables.interactables.map((entry, index) => ({
+        id: -1 - index,
+        key: `interactable:${entry.id}`,
+        targetKind: entry.kind,
+        interactableId: entry.id,
+        label: entry.label,
+        x: entry.worldPixel.x,
+        y: entry.worldPixel.y,
+        interactable: true
+      }))
+    ];
   }
 
-  private interactionTarget(): InteractionCandidate | undefined {
+  private interactionTarget(): WorldInteractionCandidate | undefined {
     return findInteractionTarget(this.playerState, this.interactionCandidates(), {
       maxDistance: INTERACTION_DISTANCE
-    })?.candidate;
+    })?.candidate as WorldInteractionCandidate | undefined;
   }
 
   private tutorialNpc(): NpcRuntime | undefined {
@@ -2453,12 +2555,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
     } else if (this.dialogue.open) {
       this.prompt = "Z: advance | X: close";
     } else if (target) {
-      this.prompt = this.talkPrompt(target.id);
+      this.prompt = this.interactionPrompt(target);
     } else if (this.inRange()) {
-      this.prompt = "Turn to face them, then press Z";
+      this.prompt = "Turn to face it, then press Z";
     } else {
       this.prompt = "Move: Arrows/WASD. Approach someone, then press Z.";
     }
+  }
+
+  private interactionPrompt(target: WorldInteractionCandidate): string {
+    if (target.targetKind === "sign") {
+      return target.label ? `Z: read ${target.label}` : "Z: read sign";
+    }
+    if (target.targetKind === "present") {
+      const entry = this.overworldInteractableById(target.interactableId);
+      return entry?.kind === "present" && this.overworldInteractableOpened(entry)
+        ? "Z: check present"
+        : "Z: open present";
+    }
+    if (target.targetKind === "examine") {
+      return target.label ? `Z: check ${target.label}` : "Z: check";
+    }
+    return this.talkPrompt(target.npcId ?? target.id);
   }
 
   private talkPrompt(npcId: number): string {
@@ -3285,7 +3403,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private openDialogue(): void {
     const target = this.interactionTarget();
-    const npc = [...this.npcRuntimes.values()].find((runtime) => runtime.data.npcId === target?.id);
+    if (!target) {
+      return;
+    }
+    if (target.targetKind !== "npc") {
+      this.openOverworldInteractable(target);
+      return;
+    }
+    const npc = [...this.npcRuntimes.values()].find((runtime) => runtime.data.npcId === target.npcId);
     if (!npc) {
       return;
     }
@@ -3294,8 +3419,31 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.pauseNpcForDialogue(npc);
+    this.playInteractionSfx("talkConfirm");
     lockPlayer(this.playerState, this.playerFrames);
     this.runEvents(events);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private openOverworldInteractable(target: WorldInteractionCandidate): void {
+    const entry = this.overworldInteractableById(target.interactableId);
+    if (!entry) {
+      return;
+    }
+    const action = overworldInteractableEvents(entry, this.gameFlags, {
+      itemName: (itemId) => this.itemName(itemId, this.itemById(itemId))
+    });
+    if (action.events.length === 0) {
+      return;
+    }
+    this.restoreActiveNpc();
+    for (const cue of action.sfxBeforeEvents) {
+      this.playInteractionSfx(cue);
+    }
+    lockPlayer(this.playerState, this.playerFrames);
+    this.runEvents(action.events);
+    this.syncPresentInteractableSprites();
     this.updatePrompt();
     this.publish();
   }
@@ -3317,10 +3465,44 @@ export class ChunkedWorldScene extends Phaser.Scene {
     );
   }
 
+  private overworldInteractableById(id: string | undefined): OverworldInteractable | undefined {
+    if (!id) {
+      return undefined;
+    }
+    return this.data_.overworldInteractables.interactables.find((entry) => entry.id === id);
+  }
+
+  private overworldInteractableOpened(entry: OverworldInteractable): boolean {
+    return overworldInteractableIsOpened(entry, this.gameFlags);
+  }
+
+  private playInteractionSfx(cue: InteractionSfxCue): void {
+    this.transitionSfx.resume();
+    this.interactionSfxCalls = [...this.interactionSfxCalls, cue].slice(-24);
+    this.interactionSfxCount += 1;
+    switch (cue) {
+      case "talkConfirm":
+        this.transitionSfx.talkConfirm();
+        break;
+      case "presentOpen":
+        this.transitionSfx.presentOpen();
+        break;
+      case "itemGet":
+        this.transitionSfx.itemGet();
+        break;
+      case "readCue":
+        this.transitionSfx.readCue();
+        break;
+    }
+  }
+
   private runEvents(events: GameEvent[]): void {
     dispatchInteractionEvents(events, {
       startDialogue: (event) => this.startInteractionDialogue(event),
-      setFlag: (flag) => this.gameFlags.set(flag),
+      setFlag: (flag) => {
+        this.gameFlags.set(flag);
+        this.syncPresentInteractableSprites();
+      },
       openShop: (storeId) => this.openShopMenu(storeId),
       deferShop: (storeId) => {
         this.pendingInteractionShopStoreId = storeId;
@@ -3339,6 +3521,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private giveItem(char: number, item: number): void {
     this.partyState.give(char, item);
+    this.playInteractionSfx("itemGet");
     this.refreshMenuScreens();
     this.updatePrompt();
     this.publish();
@@ -5596,11 +5779,54 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return count;
   }
 
+  private debugInteractables(): OverworldInteractableDebug[] {
+    return this.data_.overworldInteractables.interactables.map((entry) => ({
+      id: entry.id,
+      kind: entry.kind,
+      x: entry.worldPixel.x,
+      y: entry.worldPixel.y,
+      ...(entry.label ? { label: entry.label } : {}),
+      ...(entry.kind === "present" ? { opened: this.overworldInteractableOpened(entry) } : {})
+    }));
+  }
+
+  private nearestInteractionTargetDebug(): OverworldInteractionTargetDebug | undefined {
+    const nearest = nearestInteractable(this.playerState, this.interactionCandidates(), INTERACTION_DISTANCE);
+    if (!nearest) {
+      return undefined;
+    }
+    return this.interactionTargetDebug(nearest.candidate as WorldInteractionCandidate, nearest.distance);
+  }
+
+  private interactionTargetDebug(
+    candidate: WorldInteractionCandidate,
+    distance = Phaser.Math.Distance.Between(this.playerState.x, this.playerState.y, candidate.x, candidate.y)
+  ): OverworldInteractionTargetDebug {
+    return {
+      kind: candidate.targetKind,
+      key: candidate.key,
+      id: candidate.targetKind === "npc" ? candidate.npcId ?? candidate.id : candidate.interactableId ?? candidate.id,
+      x: candidate.x,
+      y: candidate.y,
+      distance: Math.round(distance * 10) / 10,
+      ...(candidate.label ? { label: candidate.label } : {})
+    };
+  }
+
+  private interactionSfxDebug(): { last: InteractionSfxCue | null; count: number; calls: InteractionSfxCue[] } {
+    return {
+      last: this.interactionSfxCalls.at(-1) ?? null,
+      count: this.interactionSfxCount,
+      calls: [...this.interactionSfxCalls]
+    };
+  }
+
   private publish(): void {
     const world = this.world_;
     const npc744 = this.tutorialNpc();
     const distance = this.distanceToTutorialNpc();
     const target = this.interactionTarget();
+    const targetDebug = target ? this.interactionTargetDebug(target) : undefined;
     const npcs: DebugNpc[] = [...this.npcRuntimes.values()].map((npc) => ({
       id: npc.data.npcId,
       x: npc.state.player.x,
@@ -5656,7 +5882,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       cutsceneMove: this.cutsceneMoveDebug,
       returnContextActive: this.returnContextActive,
       canInteract: Boolean(target),
-      interactionTargetId: target?.id,
+      interactionTargetId: targetDebug?.id,
+      interactionTargetKind: targetDebug?.kind,
+      interactionTargetKey: targetDebug?.key,
+      nearestInteractable: this.nearestInteractionTargetDebug(),
+      interactables: this.debugInteractables(),
+      interactionSfx: this.interactionSfxDebug(),
       activeNpcId: (this.dialogue.open || this.eventSequence?.running) ? this.activeNpcDialogue?.id : undefined,
       distanceToNpc: distance,
       inInteractionRange: this.inRange(),
