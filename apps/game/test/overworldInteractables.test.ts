@@ -40,14 +40,14 @@ describe("overworldInteractableEvents", () => {
         { kind: "give", char: 1, item: 88 },
         { kind: "setFlag", flag }
       ],
-      sfxBeforeEvents: ["presentOpen"],
+      sfxBeforeEvents: ["talkConfirm", "presentOpen"],
       opened: false
     });
 
     const repeat = overworldInteractableEvents(present, { has: (value) => value === flag });
     expect(repeat).toEqual({
       events: [{ kind: "dialogue", pages: ["The present is empty."] }],
-      sfxBeforeEvents: [],
+      sfxBeforeEvents: ["talkConfirm"],
       opened: true
     });
     expect(overworldInteractableIsOpened(present, { has: (value) => value === flag })).toBe(true);
@@ -63,7 +63,7 @@ describe("overworldInteractableEvents", () => {
 
     expect(overworldInteractableEvents(examine, { has: () => false })).toEqual({
       events: [{ kind: "dialogue", pages: ["A flier."] }],
-      sfxBeforeEvents: ["readCue"],
+      sfxBeforeEvents: ["talkConfirm", "readCue"],
       opened: false
     });
   });

@@ -35,7 +35,7 @@ export function overworldInteractableEvents(
   }
   return {
     events: [{ kind: "dialogue", pages: entry.pages }],
-    sfxBeforeEvents: entry.kind === "sign" ? ["talkConfirm", "readCue"] : ["readCue"],
+    sfxBeforeEvents: ["talkConfirm", "readCue"],
     opened: false
   };
 }
@@ -49,7 +49,7 @@ function presentEvents(
   if (flags.has(openedFlag)) {
     return {
       events: [{ kind: "dialogue", pages: entry.openedPages ?? ["The present is empty."] }],
-      sfxBeforeEvents: [],
+      sfxBeforeEvents: ["talkConfirm"],
       opened: true
     };
   }
@@ -59,7 +59,7 @@ function presentEvents(
       { kind: "give", char: entry.item.char, item: entry.item.item },
       { kind: "setFlag", flag: openedFlag }
     ],
-    sfxBeforeEvents: ["presentOpen"],
+    sfxBeforeEvents: ["talkConfirm", "presentOpen"],
     opened: false
   };
 }
