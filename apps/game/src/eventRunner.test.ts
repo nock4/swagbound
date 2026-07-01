@@ -54,6 +54,27 @@ describe("addedNpcInteractionEvents", () => {
     ]);
   });
 
+  it("orders dialogue before deferred service screens for pages plus service", () => {
+    const events = addedNpcInteractionEvents({
+      npcId: 100003,
+      interaction: { pages: ["Need a room?"], service: "hotel", cost: 100 }
+    });
+
+    expect(events).toEqual([
+      { kind: "dialogue", pages: ["Need a room?"] },
+      { kind: "service", service: "hotel", cost: 100 },
+      { kind: "setFlag", flag: talkedFlag(100003) }
+    ]);
+
+    const log = dispatchWithMock(events);
+    expect(log).toEqual([
+      "dialogue:Need a room?",
+      "defer-service:hotel:100",
+      `flag:${talkedFlag(100003)}`,
+      "service:hotel:100"
+    ]);
+  });
+
   it("emits heal and save events from interaction entries", () => {
     const events = interactionEntryEvents({
       pages: ["Rest here."],
@@ -148,6 +169,7 @@ function dispatchWithMock(events: readonly GameEvent[]): string[] {
   const log: string[] = [];
   let dialogueActive = false;
   let deferredShop: number | undefined;
+  let deferredService: { service: "hospital" | "hotel" | "phone"; cost?: number } | undefined;
   const dispatcher: InteractionEventDispatcher = {
     startDialogue: (event: DialogueEvent) => {
       dialogueActive = true;
@@ -158,6 +180,11 @@ function dispatchWithMock(events: readonly GameEvent[]): string[] {
     deferShop: (storeId) => {
       deferredShop = storeId;
       log.push(`defer-shop:${storeId}`);
+    },
+    openService: (service, cost) => log.push(cost === undefined ? `service:${service}` : `service:${service}:${cost}`),
+    deferService: (service, cost) => {
+      deferredService = { service, ...(cost !== undefined ? { cost } : {}) };
+      log.push(cost === undefined ? `defer-service:${service}` : `defer-service:${service}:${cost}`);
     },
     heal: (scope) => log.push(`heal:${scope}`),
     save: () => log.push("save"),
@@ -170,6 +197,9 @@ function dispatchWithMock(events: readonly GameEvent[]): string[] {
   dialogueActive = false;
   if (deferredShop !== undefined) {
     dispatcher.openShop(deferredShop);
+  }
+  if (deferredService) {
+    dispatcher.openService(deferredService.service, deferredService.cost);
   }
   return log;
 }

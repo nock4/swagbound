@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PartyState, type PartyStateSnapshot } from "./partyState";
+import { hospitalRecoveryCost, PartyState, type PartyStateSnapshot } from "./partyState";
 
 describe("PartyState field statuses", () => {
   it("drains poisoned active party members on field steps without killing them", () => {
@@ -48,6 +48,66 @@ describe("PartyState field statuses", () => {
   });
 });
 
+describe("PartyState menu services", () => {
+  it("moves and drops exact inventory slots while clearing orphaned equipment", () => {
+    const partyState = new PartyState();
+    partyState.restore({
+      wallet: 0,
+      partyIds: [1, 2],
+      inventory: [{ charId: 1, itemIds: [10, 11] }],
+      equipped: [{ charId: 1, slots: { weapon: 10 } }]
+    });
+
+    expect(partyState.transferItem(1, 2, 0, 10)).toMatchObject({
+      ok: true,
+      fromChar: 1,
+      toChar: 2,
+      fromSlot: 0,
+      toSlot: 0
+    });
+    expect(partyState.inventory(1)).toEqual([11]);
+    expect(partyState.inventory(2)).toEqual([10]);
+    expect(partyState.equipped(1)).toEqual({});
+
+    expect(partyState.dropItem(1, 0, 11)).toMatchObject({ ok: true, fromChar: 1, fromSlot: 0 });
+    expect(partyState.inventory(1)).toEqual([]);
+  });
+
+  it("deposits and withdraws storage items through exact slots", () => {
+    const partyState = new PartyState();
+    partyState.restore({
+      wallet: 0,
+      partyIds: [1, 2],
+      inventory: [{ charId: 1, itemIds: [20, 21] }],
+      equipped: []
+    });
+
+    expect(partyState.depositStoredItem(1, 1, 21)).toMatchObject({ ok: true, fromChar: 1, toSlot: 0 });
+    expect(partyState.inventory(1)).toEqual([20]);
+    expect(partyState.storage()).toEqual([21]);
+
+    expect(partyState.withdrawStoredItem(2, 0, 21)).toMatchObject({ ok: true, toChar: 2, toSlot: 0 });
+    expect(partyState.storage()).toEqual([]);
+    expect(partyState.inventory(2)).toEqual([21]);
+  });
+
+  it("computes hospital recovery cost from damage, PP, level, and KO state", () => {
+    expect(hospitalRecoveryCost([
+      memberForRecovery({ level: 5, hp: 45, maxHp: 100, pp: 5, maxPp: 20 }),
+      memberForRecovery({ level: 3, hp: 0, maxHp: 80, pp: 0, maxPp: 10 })
+    ])).toBe(85);
+  });
+
+  it("full recovery restores HP/PP and optionally cures statuses", () => {
+    const partyState = poisonedPartyState(3);
+    partyState.fullRecover({ cureStatuses: true });
+
+    expect(partyState.vitals(1)?.hp.target).toBe(100);
+    expect(partyState.vitals(1)?.pp).toBe(20);
+    expect(partyState.statuses(1)).toEqual([]);
+  });
+});
+
 function poisonedPartyState(hp: number): PartyState {
   const partyState = new PartyState();
   partyState.restore({
@@ -61,4 +121,26 @@ function poisonedPartyState(hp: number): PartyState {
     ]
   } satisfies PartyStateSnapshot);
   return partyState;
+}
+
+function memberForRecovery(input: {
+  level: number;
+  hp: number;
+  maxHp: number;
+  pp: number;
+  maxPp: number;
+}) {
+  return {
+    id: input.level,
+    name: `Member ${input.level}`,
+    level: input.level,
+    experience: 0,
+    hp: input.hp,
+    maxHp: input.maxHp,
+    pp: input.pp,
+    maxPp: input.maxPp,
+    stats: { offense: 1, defense: 1, speed: 1, guts: 1, vitality: 1, iq: 1, luck: 1 },
+    inventory: [],
+    money: 0
+  };
 }

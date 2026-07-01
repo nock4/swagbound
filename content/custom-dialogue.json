@@ -236,25 +236,28 @@
         "\"Some things you see once and spend the rest of your life unseeing.\""
       ]
     },
-    "58": {
-      "pages": [
-        "\"One night here and the whole party gets re-synced. Anyone who fainted, restored.\"",
-        "\"Runs you $100. Sleep's the only clean transaction left.\"",
-        "\"Morning, champ. Everyone's topped off. Door filed you out that way.\""
-      ]
-    },
+	    "58": {
+	      "pages": [
+	        "\"One night here and the whole party gets re-synced. Anyone who fainted, restored.\"",
+	        "\"Runs you $100. Sleep's the only clean transaction left.\"",
+	        "\"Morning, champ. Everyone's topped off. Door filed you out that way.\""
+	      ],
+	      "service": "hotel",
+	      "cost": 100
+	    },
     "59": {
       "pages": [
         "\"Rate's steep. Clean sheets, locked door, a phone that tells the town you survived.\"",
         "\"People pay extra when the confusion's outside, counting heads.\""
       ]
     },
-    "60": {
-      "pages": [
-        "The receiver clicks, the small sound of an institution recognizing a hand.",
-        "\"Bosch gets to be a voice in another place before he's a body there.\""
-      ]
-    },
+	    "60": {
+	      "pages": [
+	        "The receiver clicks, the small sound of an institution recognizing a hand.",
+	        "\"Bosch gets to be a voice in another place before he's a body there.\""
+	      ],
+	      "service": "phone"
+	    },
     "62": {
       "pages": [
         "He clocks Bosch the way an actuary clocks a man on a ladder.",
@@ -535,12 +538,13 @@
         "Pay the fee, we hold the body on file till the person comes back to claim it."
       ]
     },
-    "111": {
-      "pages": [
-        "Don't laugh. I'm a healer. Licensed by nobody, trusted by the desperate.",
-        "Hospital fixes the wounds with names. I take the ones too embarrassing to name."
-      ]
-    },
+	    "111": {
+	      "pages": [
+	        "Don't laugh. I'm a healer. Licensed by nobody, trusted by the desperate.",
+	        "Hospital fixes the wounds with names. I take the ones too embarrassing to name."
+	      ],
+	      "service": "hospital"
+	    },
     "112": {
       "pages": [
         "Turned to stone, turned to mushroom. Conditions they can spell but won't forgive.",
@@ -559,12 +563,13 @@
         "That's what the lobby says. Lobbies make waiting sound like a choice."
       ]
     },
-    "115": {
-      "pages": [
-        "Intake printer blinks: ROUTE FATIGUE ACCEPTED.",
-        "Clean breath. I can reset your meters. Not your story. Nobody resets that."
-      ]
-    },
+	    "115": {
+	      "pages": [
+	        "Intake printer blinks: ROUTE FATIGUE ACCEPTED.",
+	        "Clean breath. I can reset your meters. Not your story. Nobody resets that."
+	      ],
+	      "service": "hospital"
+	    },
     "116": {
       "pages": [
         "\"A mouse put me here. A small mouse.\"",
@@ -1944,11 +1949,12 @@
     },
     "1292": {
       "pages": [
-        "The voice arrives before the body does, patient as a thing that has waited entire civilizations for the appointment.",
-        "\"You finally came. And you finally talk to me. Good. Take notes if you have to. You're the chosen one. Your destiny isn't yours alone — it belongs to the whole universe, and one day every version of you across it will overlap into one.\"",
-        "\"Remember Giant Step in Onett? That was one of Your Sanctuaries. A power spot. A monster guarded it, swollen on the place's own strength, and you put it down. There are eight. Reach all eight, let the Sound Stone record every melody, and the last door opens — Your World, finally visible.\""
-      ]
-    },
+	        "The voice arrives before the body does, patient as a thing that has waited entire civilizations for the appointment.",
+	        "\"You finally came. And you finally talk to me. Good. Take notes if you have to. You're the chosen one. Your destiny isn't yours alone — it belongs to the whole universe, and one day every version of you across it will overlap into one.\"",
+	        "\"Remember Giant Step in Onett? That was one of Your Sanctuaries. A power spot. A monster guarded it, swollen on the place's own strength, and you put it down.\"",
+	        "\"There are eight. Reach all eight, let the Sound Stone record every melody, and the last door opens — Your World, finally visible.\""
+	      ]
+	    },
     "1293": {
       "pages": [
         "The Tenda nods at the bird like a coworker who started speaking in code.",

@@ -757,6 +757,7 @@ export const NpcInteractionSchema = z
       once: z.literal(true).optional()
     }).strict().optional(),
     shop: z.number().int().nonnegative().optional(),
+    service: z.enum(["hospital", "hotel", "phone"]).optional(),
     heal: z.union([z.literal("full"), z.literal(true)]).optional(),
     save: z.literal(true).optional(),
     // Money charged before the interaction's heal (e.g. an inn's nightly fee).
@@ -769,12 +770,13 @@ export const NpcInteractionSchema = z
       && !value.ref
       && value.give === undefined
       && value.shop === undefined
+      && value.service === undefined
       && value.heal === undefined
       && value.save !== true
     ) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "interaction entry must include pages, ref, give, shop, heal, or save"
+        message: "interaction entry must include pages, ref, give, shop, service, heal, or save"
       });
     }
     if (value.pages && value.ref) {

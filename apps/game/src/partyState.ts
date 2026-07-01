@@ -20,6 +20,7 @@ export type PartyStateCounts = {
   bank: number;
   inventoryChars: number;
   inventoryItems: number;
+  storageItems: number;
   partyCount: number;
 };
 
@@ -71,6 +72,7 @@ export type PartyStateSnapshot = {
   partyIds: number[];
   inventory: PartyInventorySnapshot[];
   equipped: PartyEquipmentSnapshot[];
+  storage?: number[];
   statuses?: PartyStatusSnapshot[];
   vitals?: PartyVitalsSnapshot[];
   battleMembers?: PartyBattleMemberSnapshot[];
@@ -172,6 +174,34 @@ export type EquipResult =
       reason: "notEquippable";
     };
 
+export type EquipStatSummary = {
+  offense: number;
+  defense: number;
+};
+
+export type EquipStatPreview = EquipStatSummary & {
+  deltaOffense: number;
+  deltaDefense: number;
+};
+
+export type ItemMoveResult =
+  | {
+      ok: true;
+      itemId: number;
+      fromChar?: number;
+      toChar?: number;
+      fromSlot: number;
+      toSlot?: number;
+    }
+  | {
+      ok: false;
+      itemId: number;
+      fromChar?: number;
+      toChar?: number;
+      fromSlot: number;
+      reason: "missingItem" | "sameTarget";
+    };
+
 export type ShopBuyResult =
   | {
       ok: true;
@@ -225,6 +255,7 @@ export class PartyState {
   private walletValue = 0;
   private bankValue = 0;
   private readonly inventoryByChar = new Map<number, number[]>();
+  private storageItems: number[] = [];
   private readonly partyIds = new Set<number>();
   private readonly equippedByChar = new Map<number, EquippedSlots>();
   private readonly vitalsByChar = new Map<number, PartyVitals>();
@@ -241,6 +272,10 @@ export class PartyState {
 
   inventory(char: number): number[] {
     return [...(this.inventoryByChar.get(normalizeId(char)) ?? [])];
+  }
+
+  storage(): number[] {
+    return [...this.storageItems];
   }
 
   equipped(char: number): EquippedSlots {
@@ -291,6 +326,78 @@ export class PartyState {
     return true;
   }
 
+  takeFromSlot(char: number, inventorySlot: number, item: number): boolean {
+    const normalizedChar = normalizeId(char);
+    const itemId = normalizeId(item);
+    const slot = stat(inventorySlot);
+    const items = this.inventoryByChar.get(normalizedChar) ?? [];
+    if (items[slot] !== itemId) {
+      return false;
+    }
+    items.splice(slot, 1);
+    if (items.length === 0) {
+      this.inventoryByChar.delete(normalizedChar);
+    } else {
+      this.inventoryByChar.set(normalizedChar, items);
+    }
+    if (!items.includes(itemId)) {
+      this.clearEquippedItem(normalizedChar, itemId);
+    }
+    return true;
+  }
+
+  transferItem(ownerChar: number, targetChar: number, inventorySlot: number, item: number): ItemMoveResult {
+    const fromChar = normalizeId(ownerChar);
+    const toChar = normalizeId(targetChar);
+    const itemId = normalizeId(item);
+    const fromSlot = stat(inventorySlot);
+    if (fromChar === toChar) {
+      return { ok: false, itemId, fromChar, toChar, fromSlot, reason: "sameTarget" };
+    }
+    if (!this.takeFromSlot(fromChar, fromSlot, itemId)) {
+      return { ok: false, itemId, fromChar, toChar, fromSlot, reason: "missingItem" };
+    }
+    const targetItems = this.inventoryByChar.get(toChar) ?? [];
+    targetItems.push(itemId);
+    this.inventoryByChar.set(toChar, targetItems);
+    return { ok: true, itemId, fromChar, toChar, fromSlot, toSlot: targetItems.length - 1 };
+  }
+
+  dropItem(char: number, inventorySlot: number, item: number): ItemMoveResult {
+    const fromChar = normalizeId(char);
+    const itemId = normalizeId(item);
+    const fromSlot = stat(inventorySlot);
+    if (!this.takeFromSlot(fromChar, fromSlot, itemId)) {
+      return { ok: false, itemId, fromChar, fromSlot, reason: "missingItem" };
+    }
+    return { ok: true, itemId, fromChar, fromSlot };
+  }
+
+  depositStoredItem(char: number, inventorySlot: number, item: number): ItemMoveResult {
+    const fromChar = normalizeId(char);
+    const itemId = normalizeId(item);
+    const fromSlot = stat(inventorySlot);
+    if (!this.takeFromSlot(fromChar, fromSlot, itemId)) {
+      return { ok: false, itemId, fromChar, fromSlot, reason: "missingItem" };
+    }
+    this.storageItems.push(itemId);
+    return { ok: true, itemId, fromChar, fromSlot, toSlot: this.storageItems.length - 1 };
+  }
+
+  withdrawStoredItem(char: number, storageSlot: number, item: number): ItemMoveResult {
+    const toChar = normalizeId(char);
+    const itemId = normalizeId(item);
+    const fromSlot = stat(storageSlot);
+    if (this.storageItems[fromSlot] !== itemId) {
+      return { ok: false, itemId, toChar, fromSlot, reason: "missingItem" };
+    }
+    this.storageItems.splice(fromSlot, 1);
+    const targetItems = this.inventoryByChar.get(toChar) ?? [];
+    targetItems.push(itemId);
+    this.inventoryByChar.set(toChar, targetItems);
+    return { ok: true, itemId, toChar, fromSlot, toSlot: targetItems.length - 1 };
+  }
+
   useItem(options: {
     ownerChar: number;
     targetChar: number;
@@ -336,6 +443,19 @@ export class PartyState {
     return targetChars
       .map((charId) => this.applyEffectToChar(charId, effect))
       .filter((result): result is PartyVitalsApplyResult => Boolean(result));
+  }
+
+  fullRecover(options: { cureStatuses?: boolean } = {}): void {
+    this.restorePartyVitals();
+    if (options.cureStatuses ?? true) {
+      for (const charId of this.partyVitalTargetIds()) {
+        this.statusesByChar.delete(charId);
+      }
+    }
+  }
+
+  hospitalRecoveryCost(members: readonly PartyMember[]): number {
+    return hospitalRecoveryCost(this.applyToPartyMembers([...members]));
   }
 
   /**
@@ -579,6 +699,7 @@ export class PartyState {
       bank: this.bankValue,
       inventoryChars: this.inventoryByChar.size,
       inventoryItems,
+      storageItems: this.storageItems.length,
       partyCount: this.partyIds.size
     };
   }
@@ -594,6 +715,7 @@ export class PartyState {
       equipped: [...this.equippedByChar.entries()]
         .sort(([a], [b]) => a - b)
         .map(([charId, slots]) => ({ charId, slots: cloneEquippedSlots(slots) })),
+      ...(this.storageItems.length > 0 ? { storage: [...this.storageItems] } : {}),
       statuses: [...this.statusesByChar.entries()]
         .sort(([a], [b]) => a - b)
         .map(([charId, statuses]) => ({ charId, statuses: cloneStatusState(statuses) })),
@@ -620,6 +742,7 @@ export class PartyState {
     this.walletValue = stat(snapshot.wallet);
     this.bankValue = stat(snapshot.bank ?? 0);
     this.inventoryByChar.clear();
+    this.storageItems = [];
     this.partyIds.clear();
     this.equippedByChar.clear();
     this.vitalsByChar.clear();
@@ -639,6 +762,7 @@ export class PartyState {
     for (const entry of snapshot.equipped) {
       this.setEquippedSlots(normalizeId(entry.charId), cloneEquippedSlots(entry.slots));
     }
+    this.storageItems = (snapshot.storage ?? []).map(normalizeId);
     for (const entry of snapshot.statuses ?? []) {
       this.commitStatuses(normalizeId(entry.charId), entry.statuses);
     }
@@ -886,9 +1010,78 @@ export function equipmentSlotForItemType(type: number): EquipmentSlot | undefine
   return undefined;
 }
 
+export function equipmentStatBonuses(
+  equipped: EquippedSlots,
+  itemById: (itemId: number) => Pick<ItemData, "equipBonuses"> | undefined
+): EquipStatSummary {
+  let offense = 0;
+  let defense = 0;
+  for (const itemId of Object.values(equipped)) {
+    const bonuses = itemById(itemId)?.equipBonuses;
+    offense += intStat(bonuses?.offense ?? 0);
+    defense += intStat(bonuses?.defense ?? 0);
+  }
+  return { offense, defense };
+}
+
+export function previewEquipStats(options: {
+  baseStats: Pick<PartyMemberStats, "offense" | "defense">;
+  equipped: EquippedSlots;
+  item: Pick<ItemData, "id" | "type" | "equipBonuses">;
+  itemById: (itemId: number) => Pick<ItemData, "equipBonuses"> | undefined;
+}): EquipStatPreview | undefined {
+  const slot = equipmentSlotForItemType(options.item.type);
+  if (!slot) {
+    return undefined;
+  }
+  const equipped = cloneEquippedSlots(options.equipped);
+  const itemId = normalizeId(options.item.id);
+  const currentBonuses = equipmentStatBonuses(equipped, options.itemById);
+  if (equipped[slot] === itemId) {
+    delete equipped[slot];
+  } else {
+    equipped[slot] = itemId;
+  }
+  const nextBonuses = equipmentStatBonuses(equipped, (id) => id === itemId ? options.item : options.itemById(id));
+  const current = {
+    offense: stat(options.baseStats.offense) + currentBonuses.offense,
+    defense: stat(options.baseStats.defense) + currentBonuses.defense
+  };
+  const next = {
+    offense: stat(options.baseStats.offense) + nextBonuses.offense,
+    defense: stat(options.baseStats.defense) + nextBonuses.defense
+  };
+  return {
+    offense: next.offense,
+    defense: next.defense,
+    deltaOffense: next.offense - current.offense,
+    deltaDefense: next.defense - current.defense
+  };
+}
+
 export function sellPriceForItem(item: Pick<ItemData, "cost">): number {
   // Phase 5 shop rule: selling returns half of item cost, rounded down.
   return Math.floor(stat(item.cost) / 2);
+}
+
+export function hospitalRecoveryCost(members: readonly Pick<PartyMember, "level" | "hp" | "maxHp" | "pp" | "maxPp">[]): number {
+  return members.reduce((sum, member) => {
+    const level = positiveStat(member.level);
+    const maxHp = positiveStat(member.maxHp);
+    const maxPp = stat(member.maxPp);
+    const hp = Math.min(maxHp, stat(member.hp));
+    const pp = Math.min(maxPp, stat(member.pp));
+    const missingHp = Math.max(0, maxHp - hp);
+    const missingPp = Math.max(0, maxPp - pp);
+    if (missingHp === 0 && missingPp === 0) {
+      return sum;
+    }
+    const damageCost = Math.ceil(missingHp / 5);
+    const ppCost = Math.ceil(missingPp / 3);
+    const levelCost = Math.max(2, Math.ceil(level * 1.5));
+    const reviveCost = hp <= 0 ? Math.max(20, level * 12) : 0;
+    return sum + damageCost + ppCost + levelCost + reviveCost;
+  }, 0);
 }
 
 export function applyUseEffectToVitals(vitals: PartyVitals, effect: ItemUseEffect): {
@@ -1097,6 +1290,13 @@ function normalizeId(value: number): number {
 
 function positiveStat(value: number): number {
   return Math.max(1, stat(value));
+}
+
+function intStat(value: number): number {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  return Math.trunc(value);
 }
 
 function stat(value: number): number {

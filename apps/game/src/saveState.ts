@@ -185,6 +185,7 @@ function clonePartyStateSnapshot(snapshot: PartyStateSnapshot): PartyStateSnapsh
       charId: entry.charId,
       slots: { ...entry.slots }
     })),
+    ...(snapshot.storage ? { storage: [...snapshot.storage] } : {}),
     ...(snapshot.vitals ? {
       vitals: snapshot.vitals.map(clonePartyVitalsSnapshot)
     } : {}),
@@ -215,6 +216,7 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
   const partyIds = validateIdArray(value.partyIds, { unique: true });
   const inventory = validateInventory(value.inventory);
   const equipped = validateEquipment(value.equipped);
+  const storage = value.storage === undefined ? undefined : validateIdArray(value.storage);
   const vitals = value.vitals === undefined ? undefined : validateVitals(value.vitals);
   const battleMembers = value.battleMembers === undefined ? undefined : validateBattleMembers(value.battleMembers);
   const statuses = value.statuses === undefined ? undefined : validateStatuses(value.statuses);
@@ -224,6 +226,7 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
     !partyIds ||
     !inventory ||
     !equipped ||
+    (value.storage !== undefined && !storage) ||
     (value.vitals !== undefined && !vitals) ||
     (value.battleMembers !== undefined && !battleMembers) ||
     (value.statuses !== undefined && !statuses)
@@ -236,6 +239,7 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
     partyIds,
     inventory,
     equipped,
+    ...(storage ? { storage } : {}),
     ...(vitals ? { vitals } : {}),
     ...(battleMembers ? { battleMembers } : {}),
     ...(statuses ? { statuses } : {})

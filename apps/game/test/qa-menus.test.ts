@@ -185,10 +185,13 @@ describe("qa-menus: currency label is $swag", () => {
     expect(atm.items.map((item) => item.id)).toEqual([
       "atm-wallet",
       "atm-bank",
+      "atm-deposit-10",
+      "atm-deposit-50",
       "atm-deposit-100",
-      "atm-withdraw-100",
-      "atm-deposit-all",
-      "atm-withdraw-all"
+      "atm-deposit-500",
+      "atm-deposit-1000",
+      "atm-deposit-1234",
+      "atm-withdraw-empty"
     ]);
   });
 });

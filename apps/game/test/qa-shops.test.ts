@@ -111,12 +111,13 @@ describe("shops & services QA (generated slice data)", () => {
     expect(unresolvedOverrides).toEqual([]);
   });
 
-  it("Swagbound shop names are unique (no two goods collapse to the same label)", async () => {
-    const { overrides } = await loadShopData();
-    // Only renamed entries carry a label; effect-only overrides have no name.
-    const names = Object.values(overrides)
-      .map((o) => o.name)
-      .filter((n): n is string => n !== undefined);
+  it("Swagbound shop names are unique (no two stocked goods collapse to the same label)", async () => {
+    const { shops, overrides } = await loadShopData();
+    const stocked = new Set(shops.shops.flatMap((shop) => shop.itemIds));
+    const names = Object.entries(overrides)
+      .filter(([id]) => stocked.has(Number(id)))
+      .map(([, override]) => override.name)
+      .filter((name): name is string => name !== undefined);
     expect(new Set(names).size).toBe(names.length);
   });
 

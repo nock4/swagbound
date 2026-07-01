@@ -1,7 +1,7 @@
 import type { DialoguePage, TutorialStatus } from "@eb/schemas";
 import type { BattleSfxCue } from "./audio/battleSfx";
 import type { BattleCommand, BattleVictoryViewPageKind, EncounterAdvantage } from "./battleLogic";
-import type { MenuDebugState } from "./menuModel";
+import type { MenuDebugState, MenuRenderScreen } from "./menuModel";
 import type { OverworldStatusHudView } from "./overworldStatusHud";
 import {
   DefaultResolver,
@@ -358,12 +358,23 @@ export type OverworldDebug = {
     bank: number;
     inventoryChars: number;
     inventoryItems: number;
+    storageItems: number;
     partyCount: number;
   };
   overworldHud?: OverworldStatusHudView;
   shopOpen?: boolean;
   activeShopStoreId?: number;
   menu?: MenuDebugState;
+  menuRenderStack?: MenuRenderScreen[];
+  menuSfx?: {
+    last: BattleSfxCue | null;
+    count: number;
+    calls: BattleSfxCue[];
+  };
+  service?: {
+    active?: Record<string, unknown>;
+    lastResult?: Record<string, unknown>;
+  };
   world?: {
     available: boolean;
     originTile?: { x: number; y: number };

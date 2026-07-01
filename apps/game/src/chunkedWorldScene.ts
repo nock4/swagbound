@@ -69,7 +69,8 @@ import {
   interactionEvents,
   type DialogueEvent,
   type GameEvent,
-  type HealEvent
+  type HealEvent,
+  type ServiceKind
 } from "./eventRunner";
 import {
   resolveScriptedDialoguePages,
@@ -133,7 +134,8 @@ import {
   type IntroMeteorBeatStart,
   type NewGameOpeningStart
 } from "./newGameOpening";
-import { PartyState, type PartyStateSnapshot } from "./partyState";
+import { equipmentSlotForItemType, PartyState, type PartyStateSnapshot } from "./partyState";
+import { createBattleSfx, type BattleSfx, type BattleSfxCue } from "./audio/battleSfx";
 import { STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
 import type { OverworldStatusHudView } from "./overworldStatusHud";
 import {
@@ -146,9 +148,17 @@ import {
 } from "./saveState";
 import {
   buildMenuScreens,
+  buildHospitalServiceScreen,
+  buildHotelServiceScreen,
+  buildPhoneServiceScreens,
+  buildShopEquipPromptScreen,
+  buildAtmScreen,
   buildShopMenuScreens,
   buildShopViewModel,
   buildStatusViewModel,
+  ATM_MENU_ID,
+  HOSPITAL_SERVICE_MENU_ID,
+  HOTEL_SERVICE_MENU_ID,
   cancelMenu,
   closedMenu,
   confirmMenu,
@@ -160,6 +170,7 @@ import {
   refreshMenuStackScreens,
   resolveTalkMenuAction,
   MAIN_MENU_ID,
+  PHONE_SERVICE_MENU_ID,
   TALK_MENU_ACTION_ID,
   shopRootScreenId,
   type MenuAction,
@@ -387,11 +398,31 @@ const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
 const CUTSCENE_ACTOR_MOVE_TIMEOUT_MS = 8_000;
 const CUTSCENE_ACTOR_RUN_MULTIPLIER = 1.5;
 const CUTSCENE_MOVE_DEMO_REFERENCE = "cutsceneMoveDemo.main";
+const DEFAULT_HOTEL_REST_COST = 100;
 
 type TilePoint = { x: number; y: number };
 type ForceEncounterResult =
   | { started: true; enemyGroup: number; advantage: EncounterAdvantage }
   | { started: false; reason: string; enemyGroup?: number; advantage?: EncounterAdvantage };
+
+type ActiveServiceState =
+  | { kind: ServiceKind; cost?: number }
+  | { kind: "atm" }
+  | { kind: "shop-equip"; storeId: number; char: number; inventorySlot: number; itemId: number; itemName: string };
+
+type ServiceDebugState = {
+  active?: ActiveServiceState;
+  lastResult?: {
+    kind: ActiveServiceState["kind"];
+    message: string;
+    cost?: number;
+    wallet: number;
+    bank: number;
+    storageItems: number;
+  };
+};
+
+type MenuSfxCue = Extract<BattleSfxCue, "menuMove" | "menuConfirm" | "menuCancel">;
 
 export class ChunkedWorldScene extends Phaser.Scene {
   private data_!: GameData;
@@ -460,6 +491,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private readonly gameFlags = new GameFlags();
   private readonly partyState = new PartyState();
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
+  private readonly menuSfx: BattleSfx = createBattleSfx();
+  private menuSfxCalls: MenuSfxCue[] = [];
+  private menuSfxCount = 0;
   private music: Music = createMusic();
   private currentOverworldMusicCue?: OverworldMusicCue;
   /** When set (by a story trigger's `music` field), overrides sector-based overworld music. */
@@ -467,6 +501,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private menuState: MenuState = closedMenu();
   private menuScreens = new Map<string, MenuScreen>();
   private activeShopStoreId?: number;
+  private activeService?: ActiveServiceState;
+  private lastServiceResult?: ServiceDebugState["lastResult"];
   private eventSequence?: RuntimeEventSequence;
   private bootSaveState?: SaveState;
   private saveSlot = 0;
@@ -510,6 +546,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private loadingBarrierKeys = new Set<string>();
   private pendingScriptedDialogueComplete?: () => void;
   private pendingInteractionShopStoreId?: number;
+  private pendingInteractionService?: { service: ServiceKind; cost?: number };
   private cutsceneMove?: CutsceneMoveState;
   private cutsceneRunner?: CutsceneRunner;
   private activeCutsceneId?: string;
@@ -950,6 +987,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.menuState = closedMenu();
     this.menuScreens.clear();
     this.activeShopStoreId = undefined;
+    this.activeService = undefined;
+    this.lastServiceResult = undefined;
+    this.menuSfxCalls = [];
+    this.menuSfxCount = 0;
     this.currentOverworldMusicCue = undefined;
     this.forcedOverworldMusicCue = undefined;
     this.eventSequence = undefined;
@@ -975,6 +1016,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.prompt = "";
     this.assetsLoaded = false;
     this.pendingInteractionShopStoreId = undefined;
+    this.pendingInteractionService = undefined;
     this.cutsceneMove = undefined;
     this.cutsceneMoveDebug = { active: false, arrived: false };
     this.cutsceneRunner = undefined;
@@ -1504,7 +1546,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     globals.__surfaceAt = this.surfaceAtHook;
     // Debug-only: full-heal the party — a between-fight convenience for the autonomous-play harness
     // (the player-facing rest is the in-world hotel at NPC 58). Nothing in normal play calls it.
-    globals.__debugHeal = () => this.healParty("full");
+    globals.__debugHeal = () => {
+      this.partyState.fullRecover({ cureStatuses: true });
+      this.refreshMenuScreens();
+      this.publish();
+    };
     // Debug-only: equip an item on a party member and read battle-resolved stats, for verifying
     // equipped-gear bonuses (weapons → offense, armor → defense). Nothing in normal play calls these.
     globals.__equip = (charId: number, itemId: number) => {
@@ -2473,6 +2519,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.menuState = openMenu(root);
+    this.playMenuSfx("menuConfirm");
     lockPlayer(this.playerState, this.playerFrames);
     this.updatePrompt();
     this.publish();
@@ -2482,7 +2529,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.menuState.open) {
       return;
     }
+    const before = this.menuDebugState();
     this.menuState = moveMenu(this.menuState, delta);
+    const after = this.menuDebugState();
+    if (before.cursorIndex !== after.cursorIndex || before.currentItemId !== after.currentItemId) {
+      this.playMenuSfx("menuMove");
+    }
     this.publish();
   }
 
@@ -2492,7 +2544,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.refreshMenuScreens();
     const result = confirmMenu(this.menuState, (id) => this.menuScreens.get(id));
+    const changed = JSON.stringify(menuDebugState(result.state)) !== JSON.stringify(this.menuDebugState());
     this.menuState = result.state;
+    if (result.actionId || changed) {
+      this.playMenuSfx("menuConfirm");
+    } else {
+      this.playMenuSfx("menuCancel");
+    }
     if (result.actionId) {
       this.handleMenuAction(result.actionId);
       return;
@@ -2535,6 +2593,42 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.handleItemUseAction(action);
       return;
     }
+    if (action.kind === "itemGive") {
+      this.handleItemGiveAction(action);
+      return;
+    }
+    if (action.kind === "itemDrop") {
+      this.handleItemDropAction(action);
+      return;
+    }
+    if (action.kind === "shopEquipNow") {
+      this.handleShopEquipNowAction(action);
+      return;
+    }
+    if (action.kind === "shopEquipLater") {
+      this.handleShopEquipLaterAction(action);
+      return;
+    }
+    if (action.kind === "hospitalService") {
+      this.handleHospitalServiceAction(action);
+      return;
+    }
+    if (action.kind === "hotelService") {
+      this.handleHotelServiceAction(action);
+      return;
+    }
+    if (action.kind === "phoneService") {
+      this.handlePhoneServiceAction(action);
+      return;
+    }
+    if (action.kind === "storageDeposit") {
+      this.handleStorageDepositAction(action);
+      return;
+    }
+    if (action.kind === "storageWithdraw") {
+      this.handleStorageWithdrawAction(action);
+      return;
+    }
     this.handleEquipAction(action);
   }
 
@@ -2562,6 +2656,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       ? (action.op === "deposit" ? this.partyState.wallet : this.partyState.bank)
       : action.amount ?? 0;
     const moved = this.partyState.applyAtm(action.op, amount);
+    this.recordServiceResult("atm", moved > 0 ? "Done." : "No funds moved.");
     this.showMenuResult(moved > 0 ? "Done." : "No funds moved.");
   }
 
@@ -2571,8 +2666,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.showMenuResult("Not for sale.");
       return;
     }
-    const item = this.itemById(action.itemId) ?? fallbackShopItem(action.itemId);
-    this.partyState.buyItem(action.char, item);
+    const item = this.itemById(action.itemId);
+    if (!item) {
+      this.showMenuResult("Not for sale.");
+      return;
+    }
+    const result = this.partyState.buyItem(action.char, item);
+    if (!result.ok) {
+      this.showMenuResult("Not enough money.");
+      return;
+    }
+    const inventorySlot = Math.max(0, this.partyState.inventory(action.char).length - 1);
+    if (item.equippable && equipmentSlotForItemType(item.type)) {
+      this.openShopEquipPrompt({
+        kind: "shop-equip",
+        storeId: action.storeId,
+        char: action.char,
+        inventorySlot,
+        itemId: item.id,
+        itemName: this.itemName(item.id, item)
+      });
+      return;
+    }
     this.refreshOpenMenuAfterAction();
   }
 
@@ -2584,6 +2699,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const item = this.itemById(action.itemId) ?? fallbackShopItem(action.itemId);
     this.partyState.sellItem(action.char, item);
     this.refreshOpenMenuAfterAction();
+  }
+
+  private handleShopEquipNowAction(action: Extract<MenuAction, { kind: "shopEquipNow" }>): void {
+    const item = this.itemById(action.itemId);
+    if (!item || this.partyState.inventory(action.char)[action.inventorySlot] !== action.itemId) {
+      this.recordServiceResult("shop-equip", "You can't equip that.");
+      this.showMenuResult("You can't equip that.");
+      return;
+    }
+    const result = this.partyState.equip(action.char, item);
+    this.recordServiceResult("shop-equip", result.ok ? "Equipped." : "You can't equip that.");
+    this.activeService = undefined;
+    this.openShopRootMenu(action.storeId);
+  }
+
+  private handleShopEquipLaterAction(action: Extract<MenuAction, { kind: "shopEquipLater" }>): void {
+    this.recordServiceResult("shop-equip", "Kept in Goods.");
+    this.activeService = undefined;
+    this.openShopRootMenu(action.storeId);
   }
 
   private handleItemUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "itemUse" }>): void {
@@ -2602,6 +2736,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.showMenuResult(result.ok ? "Used." : "You can't use that.");
   }
 
+  private handleItemGiveAction(action: Extract<MenuAction, { kind: "itemGive" }>): void {
+    const result = this.partyState.transferItem(
+      action.ownerChar,
+      action.targetChar,
+      action.inventorySlot,
+      action.itemId
+    );
+    this.showMenuResult(result.ok ? "Gave." : "You can't give that.");
+  }
+
+  private handleItemDropAction(action: Extract<MenuAction, { kind: "itemDrop" }>): void {
+    const result = this.partyState.dropItem(action.ownerChar, action.inventorySlot, action.itemId);
+    this.showMenuResult(result.ok ? "Dropped." : "You can't drop that.");
+  }
+
   private handleEquipAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "equip" }>): void {
     const item = this.itemById(action.itemId);
     if (!item || this.partyState.inventory(action.char)[action.inventorySlot] !== action.itemId) {
@@ -2612,8 +2761,86 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.showMenuResult(result.ok ? (result.equipped ? "Equipped." : "Unequipped.") : "You can't equip that.");
   }
 
+  private handleHospitalServiceAction(action: Extract<MenuAction, { kind: "hospitalService" }>): void {
+    const cost = action.cost;
+    if (!action.accept) {
+      this.recordServiceResult("hospital", "Maybe later.", cost);
+      this.showMenuResult("Maybe later.");
+      return;
+    }
+    if (this.partyState.wallet < cost) {
+      this.recordServiceResult("hospital", "You don't have enough $swag.", cost);
+      this.showMenuResult("You don't have enough $swag.");
+      return;
+    }
+    this.partyState.applyMoney("take", cost);
+    this.partyState.fullRecover({ cureStatuses: true });
+    this.recordServiceResult("hospital", "All fixed up.", cost);
+    this.showMenuResult("All fixed up.");
+  }
+
+  private handleHotelServiceAction(action: Extract<MenuAction, { kind: "hotelService" }>): void {
+    const cost = action.cost;
+    if (!action.accept) {
+      this.recordServiceResult("hotel", "Maybe next time.", cost);
+      this.showMenuResult("Maybe next time.");
+      return;
+    }
+    if (this.partyState.wallet < cost) {
+      this.recordServiceResult("hotel", "You don't have enough $swag.", cost);
+      this.showMenuResult("You don't have enough $swag.");
+      return;
+    }
+    this.partyState.applyMoney("take", cost);
+    this.partyState.fullRecover({ cureStatuses: false });
+    this.recordServiceResult("hotel", "You rested. Good morning.", cost);
+    this.showMenuResult("You rested. Good morning.");
+  }
+
+  private handlePhoneServiceAction(action: Extract<MenuAction, { kind: "phoneService" }>): void {
+    if (action.option === "dad") {
+      const saved = this.saveGame(false);
+      this.recordServiceResult("phone", saved ? "Dad saved your game." : "Dad couldn't save.");
+      this.showMenuResult(saved ? "Dad saved your game." : "Dad couldn't save.");
+      return;
+    }
+    if (action.option === "mom") {
+      this.recordServiceResult("phone", "Mom says you're doing great.");
+      this.showMenuResult("Mom says you're doing great.");
+      return;
+    }
+    this.recordServiceResult("phone", "Hung up.");
+    this.closeMenu();
+  }
+
+  private handleStorageDepositAction(action: Extract<MenuAction, { kind: "storageDeposit" }>): void {
+    const result = this.partyState.depositStoredItem(action.char, action.inventorySlot, action.itemId);
+    if (!result.ok) {
+      this.recordServiceResult("phone", "Escargo couldn't take that.");
+      this.showMenuResult("Escargo couldn't take that.");
+      return;
+    }
+    this.recordServiceResult("phone", "Stored.");
+    this.refreshOpenMenuAfterAction();
+  }
+
+  private handleStorageWithdrawAction(action: Extract<MenuAction, { kind: "storageWithdraw" }>): void {
+    const result = this.partyState.withdrawStoredItem(action.char, action.storageSlot, action.itemId);
+    if (!result.ok) {
+      this.recordServiceResult("phone", "Escargo couldn't find that.");
+      this.showMenuResult("Escargo couldn't find that.");
+      return;
+    }
+    this.recordServiceResult("phone", "Delivered.");
+    this.refreshOpenMenuAfterAction();
+  }
+
   private itemById(itemId: number): ItemData | undefined {
     return this.data_.items?.items.find((item) => item.id === itemId);
+  }
+
+  private itemName(itemId: number, item?: ItemData): string {
+    return createDialogueResolver(this.data_).itemName(itemId) ?? item?.name.trim() ?? `[item ${itemId}]`;
   }
 
   private partyMemberById(charId: number): PartyMember | undefined {
@@ -2623,6 +2850,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private showMenuResult(message: string): void {
     this.menuState = closedMenu();
     this.activeShopStoreId = undefined;
+    this.activeService = undefined;
     this.refreshMenuScreens();
     this.dialogue.start([{
       text: message,
@@ -2637,6 +2865,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private closeMenu(): void {
     this.menuState = closedMenu();
     this.activeShopStoreId = undefined;
+    this.activeService = undefined;
     this.refreshMenuScreens();
     if (!this.dialogue.open && !this.eventSequence?.running) {
       unlockPlayer(this.playerState);
@@ -2650,6 +2879,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.menuState = refreshMenuStackScreens(this.menuState, (id) => this.menuScreens.get(id));
     if (!this.menuState.open) {
       this.activeShopStoreId = undefined;
+      this.activeService = undefined;
     }
     if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running) {
       unlockPlayer(this.playerState);
@@ -2662,9 +2892,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.menuState.open) {
       return;
     }
+    this.playMenuSfx("menuCancel");
     this.menuState = cancelMenu(this.menuState);
     if (!this.menuState.open) {
       this.activeShopStoreId = undefined;
+      this.activeService = undefined;
     }
     if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running) {
       unlockPlayer(this.playerState);
@@ -2695,6 +2927,31 @@ export class ChunkedWorldScene extends Phaser.Scene {
         resolver,
         storeId: this.activeShopStoreId
       })));
+    }
+    if (this.activeService?.kind === "atm") {
+      screens.push(buildAtmScreen({
+        characters: this.data_.characters,
+        partyState: this.partyState
+      }));
+    } else if (this.activeService?.kind === "hospital") {
+      screens.push(buildHospitalServiceScreen({
+        wallet: this.partyState.wallet,
+        cost: this.activeService.cost ?? this.hospitalServiceCost()
+      }));
+    } else if (this.activeService?.kind === "hotel") {
+      screens.push(buildHotelServiceScreen({
+        wallet: this.partyState.wallet,
+        cost: this.activeService.cost ?? DEFAULT_HOTEL_REST_COST
+      }));
+    } else if (this.activeService?.kind === "phone") {
+      screens.push(...buildPhoneServiceScreens({
+        characters: this.data_.characters,
+        items: this.data_.items,
+        partyState: this.partyState,
+        resolver
+      }));
+    } else if (this.activeService?.kind === "shop-equip") {
+      screens.push(buildShopEquipPromptScreen(this.activeService));
     }
     this.menuScreens = new Map(screens.map((screen) => [screen.id, screen]));
   }
@@ -2769,6 +3026,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private openShopMenu(storeId: number): void {
     this.activeShopStoreId = Math.max(0, Math.floor(storeId));
+    this.activeService = undefined;
     this.refreshMenuScreens();
     const root = this.menuScreens.get(shopRootScreenId(this.activeShopStoreId));
     if (!root) {
@@ -2781,12 +3039,118 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
+  private openShopRootMenu(storeId: number): void {
+    this.activeShopStoreId = Math.max(0, Math.floor(storeId));
+    this.refreshMenuScreens();
+    const root = this.menuScreens.get(shopRootScreenId(this.activeShopStoreId));
+    if (!root) {
+      this.showMenuResult("Shop closed.");
+      return;
+    }
+    this.menuState = openMenu(root);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private openShopEquipPrompt(input: Extract<ActiveServiceState, { kind: "shop-equip" }>): void {
+    this.activeShopStoreId = input.storeId;
+    this.activeService = input;
+    this.refreshMenuScreens();
+    const screen = this.menuScreens.get(buildShopEquipPromptScreen(input).id);
+    if (!screen) {
+      this.refreshOpenMenuAfterAction();
+      return;
+    }
+    this.menuState = openMenu(screen);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private openAtmMenu(): void {
+    this.activeShopStoreId = undefined;
+    this.activeService = { kind: "atm" };
+    this.refreshMenuScreens();
+    const root = this.menuScreens.get(ATM_MENU_ID);
+    if (!root) {
+      this.activeService = undefined;
+      return;
+    }
+    this.menuState = openMenu(root);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private openServiceMenu(service: ServiceKind, cost?: number): void {
+    const resolvedCost = service === "hospital"
+      ? cost ?? this.hospitalServiceCost()
+      : service === "hotel"
+        ? cost ?? DEFAULT_HOTEL_REST_COST
+        : cost;
+    this.activeShopStoreId = undefined;
+    this.activeService = resolvedCost === undefined ? { kind: service } : { kind: service, cost: resolvedCost };
+    this.refreshMenuScreens();
+    const rootId = service === "hospital"
+      ? HOSPITAL_SERVICE_MENU_ID
+      : service === "hotel"
+        ? HOTEL_SERVICE_MENU_ID
+        : PHONE_SERVICE_MENU_ID;
+    const root = this.menuScreens.get(rootId);
+    if (!root) {
+      this.activeService = undefined;
+      return;
+    }
+    this.menuState = openMenu(root);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private hospitalServiceCost(): number {
+    return this.partyState.hospitalRecoveryCost(this.overworldHudPartyMembers());
+  }
+
   menuRenderStack(): MenuRenderScreen[] {
     return menuRenderStack(this.menuState);
   }
 
   menuDebugState(): MenuDebugState {
     return menuDebugState(this.menuState);
+  }
+
+  private playMenuSfx(cue: MenuSfxCue): void {
+    this.menuSfx.resume();
+    this.menuSfx[cue]();
+    this.menuSfxCount += 1;
+    this.menuSfxCalls = [...this.menuSfxCalls, cue].slice(-24);
+  }
+
+  private menuSfxDebug(): { last: MenuSfxCue | null; count: number; calls: MenuSfxCue[] } {
+    return {
+      last: this.menuSfxCalls[this.menuSfxCalls.length - 1] ?? null,
+      count: this.menuSfxCount,
+      calls: [...this.menuSfxCalls]
+    };
+  }
+
+  private serviceDebug(): ServiceDebugState {
+    return {
+      ...(this.activeService ? { active: { ...this.activeService } } : {}),
+      ...(this.lastServiceResult ? { lastResult: { ...this.lastServiceResult } } : {})
+    };
+  }
+
+  private recordServiceResult(kind: ActiveServiceState["kind"], message: string, cost?: number): void {
+    this.lastServiceResult = {
+      kind,
+      message,
+      ...(cost !== undefined ? { cost } : {}),
+      wallet: this.partyState.wallet,
+      bank: this.partyState.bank,
+      storageItems: this.partyState.storage().length
+    };
   }
 
   private handleSaveKey(): void {
@@ -2796,7 +3160,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.saveGame(false);
   }
 
-  private saveGame(showResult: boolean): void {
+  private saveGame(showResult: boolean): boolean {
     const savedAt = new Date().toISOString();
     const save = captureSaveState({
       flags: this.gameFlags,
@@ -2814,10 +3178,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     if (showResult) {
       this.showMenuResult(saved ? "Saved." : "Save unavailable.");
-      return;
+      return saved;
     }
     this.updatePrompt();
     this.publish();
+    return saved;
   }
 
   private applyInitialSave(): SavePlayerSnapshot | undefined {
@@ -2960,8 +3325,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       deferShop: (storeId) => {
         this.pendingInteractionShopStoreId = storeId;
       },
-      heal: (scope) => this.healParty(scope),
-      save: () => this.saveGame(false),
+      openService: (service, cost) => this.openServiceMenu(service, cost),
+      deferService: (service, cost) => {
+        this.pendingInteractionService = { service, ...(cost !== undefined ? { cost } : {}) };
+      },
+      heal: (scope) => this.requestHospitalService(scope),
+      save: () => this.requestPhoneService(),
       give: (char, item) => this.giveItem(char, item),
       money: (op, amount) => this.partyState.applyMoney(op, amount),
       isDialogueActive: () => this.dialogue.open || Boolean(this.eventSequence?.running)
@@ -2975,14 +3344,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
-  private healParty(scope: HealEvent["scope"]): void {
+  private requestHospitalService(scope: HealEvent["scope"]): void {
     if (scope !== "full") {
       return;
     }
-    this.partyState.restore();
-    this.refreshMenuScreens();
-    this.updatePrompt();
-    this.publish();
+    if (this.dialogue.open || this.eventSequence?.running) {
+      this.pendingInteractionService = { service: "hospital" };
+      return;
+    }
+    this.openServiceMenu("hospital");
+  }
+
+  private requestPhoneService(): void {
+    if (this.dialogue.open || this.eventSequence?.running) {
+      this.pendingInteractionService = { service: "phone" };
+      return;
+    }
+    this.openServiceMenu("phone");
   }
 
   private startInteractionDialogue(event: DialogueEvent): void {
@@ -3019,6 +3397,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       applyWarpDestination: (destination) => this.applyEventWarpDestination(destination),
       startBattle: (group) => this.startEventBattleForCurrentMode(group),
       openShop: (storeId) => this.openShopForCurrentMode(storeId),
+      openAtm: () => this.openAtmMenu(),
       actorMove: (effect) => this.requestCutsceneActorMove(effect),
       music: this.music,
       isEffectSupported: (effect) => this.isEventEffectSupportedForCurrentMode(effect),
@@ -4599,6 +4978,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.openShopMenu(storeId);
       return;
     }
+    if (this.pendingInteractionService) {
+      const pending = this.pendingInteractionService;
+      this.pendingInteractionService = undefined;
+      this.openServiceMenu(pending.service, pending.cost);
+      return;
+    }
     this.updatePrompt();
   }
 
@@ -5300,6 +5685,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       shopOpen: this.menuState.open && this.activeShopStoreId !== undefined,
       ...(this.activeShopStoreId !== undefined ? { activeShopStoreId: this.activeShopStoreId } : {}),
       menu: this.menuDebugState(),
+      menuRenderStack: this.menuRenderStack(),
+      menuSfx: this.menuSfxDebug(),
+      service: this.serviceDebug(),
       world: {
         available: world.available,
         widthPixels: world.mapWidthTiles * world.tileSize,

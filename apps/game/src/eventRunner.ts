@@ -12,18 +12,22 @@ export type InlineDialogueEvent = { kind: "dialogue"; pages: string[]; reference
 export type DialogueEvent = ReferenceDialogueEvent | InlineDialogueEvent;
 export type SetFlagEvent = { kind: "setFlag"; flag: string };
 export type ShopEvent = { kind: "shop"; storeId: number };
+export type ServiceKind = "hospital" | "hotel" | "phone";
+export type ServiceEvent = { kind: "service"; service: ServiceKind; cost?: number };
 export type HealEvent = { kind: "heal"; scope: "full" };
 export type SaveEvent = { kind: "save" };
 export type GiveEvent = { kind: "give"; char: number; item: number };
 export type MoneyEvent = { kind: "money"; op: "give" | "take"; amount: number };
 
-export type GameEvent = DialogueEvent | SetFlagEvent | ShopEvent | HealEvent | SaveEvent | GiveEvent | MoneyEvent;
+export type GameEvent = DialogueEvent | SetFlagEvent | ShopEvent | ServiceEvent | HealEvent | SaveEvent | GiveEvent | MoneyEvent;
 
 export type InteractionEventDispatcher = {
   startDialogue(event: DialogueEvent): void;
   setFlag(flag: string): void;
   openShop(storeId: number): void;
   deferShop(storeId: number): void;
+  openService(service: ServiceKind, cost?: number): void;
+  deferService(service: ServiceKind, cost?: number): void;
   heal(scope: HealEvent["scope"]): void;
   save(): void;
   give(char: number, item: number): void;
@@ -68,7 +72,14 @@ export function interactionEntryEvents(
   if (entry.shop !== undefined) {
     events.push({ kind: "shop", storeId: entry.shop });
   }
-  if (entry.cost !== undefined && entry.cost > 0) {
+  if (entry.service !== undefined) {
+    events.push({
+      kind: "service",
+      service: entry.service,
+      ...(entry.cost !== undefined ? { cost: entry.cost } : {})
+    });
+  }
+  if (entry.service === undefined && entry.cost !== undefined && entry.cost > 0) {
     events.push({ kind: "money", op: "take", amount: entry.cost });
   }
   if (entry.heal === true || entry.heal === "full") {
@@ -113,6 +124,13 @@ export function dispatchInteractionEvents(events: readonly GameEvent[], dispatch
           dispatcher.deferShop(event.storeId);
         } else {
           dispatcher.openShop(event.storeId);
+        }
+        break;
+      case "service":
+        if (dispatcher.isDialogueActive()) {
+          dispatcher.deferService(event.service, event.cost);
+        } else {
+          dispatcher.openService(event.service, event.cost);
         }
         break;
       case "heal":

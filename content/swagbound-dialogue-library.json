@@ -2,6 +2,12 @@
   "schema": "swagbound.dialogue-library.v1",
   "generatedFrom": "swagbound-phaser structured dialogue",
   "entries": {
+    "passthrough:empty": {
+      "speaker": "System",
+      "pages": [
+        "..."
+      ]
+    },
     "dialogue:act2-coastal-kiosk": {
       "speaker": "Map Kiosk",
       "pages": [
