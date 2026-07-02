@@ -463,6 +463,38 @@ describe("battle turn resolution", () => {
     expect(result.state.party[1].hp.target).toBe(31);
   });
 
+  it("routes ally-directed enemy Lifeup to the weakest damaged enemy ally", () => {
+    let battle = createBattleState([
+      enemy(37, "Malady", { hp: 235, offense: 19, actions: actionSet(enemyAction(0, 0, 0)) }),
+      enemy(209, "Black Antoid", {
+        hp: 34,
+        offense: 14,
+        actions: actionSet(enemyAction(32, 3, 1, {
+          arg: 23,
+          direction: "party",
+          name: "Lifeup alpha",
+          effect: { kind: "healHp", amount: 20 }
+        }))
+      }),
+      enemy(209, "Black Antoid", { hp: 34, offense: 14, actions: actionSet(enemyAction(0, 0, 0)) })
+    ], {
+      characters: characters([partyCharacterA])
+    });
+    battle = withCombatant(battle, actor("enemy", 0), {
+      ...battle.enemies[0],
+      hp: setTarget({ ...battle.enemies[0].hp, displayed: 235, target: 235, isRolling: false }, 120)
+    });
+
+    const result = resolveEnemyActionTurn(battle, actor("enemy", 1), () => 0.5);
+
+    expect(result.effectKind).toBe("psi");
+    expect(result.action).toMatchObject({ actionId: 32, direction: "party", target: 1 });
+    expect(result.targets).toEqual([actor("enemy", 0)]);
+    expect(result.amount).toBe(20);
+    expect(result.state.enemies[0].hp.target).toBe(140);
+    expect(result.state.party[0].hp.target).toBe(72);
+  });
+
   it("degrades a status-class enemy action to small damage with an intended status stub", () => {
     const battle = createBattleState(enemy(12, "OPPONENT_F", {
       offense: 20,
@@ -496,6 +528,17 @@ describe("battle turn resolution", () => {
     expect(result.targets).toEqual([]);
     expect(result.state.party[0].hp.target).toBe(72);
     expect(result.state.enemies[0].nextActionIndex).toBe(1);
+  });
+
+  it("letters only duplicated enemy display names while combatant ids stay distinct", () => {
+    const battle = createBattleState([
+      enemy(21, "Runaway Dog"),
+      enemy(22, "Runaway Dog"),
+      enemy(23, "Cop")
+    ]);
+
+    expect(battle.enemies.map((combatant) => combatant.name)).toEqual(["Runaway Dog A", "Runaway Dog B", "Cop"]);
+    expect(new Set(battle.enemies.map((combatant) => combatant.combatantId)).size).toBe(3);
   });
 
   it("builds a boss-flagged action enemy and defeats it with existing party turns", () => {
@@ -885,8 +928,13 @@ function enemy(
   };
 }
 
-function enemyAction(id: number, actionType: number, target: number): BattleEnemy["actions"][number] {
-  return { id, arg: 0, actionId: id, actionType, target };
+function enemyAction(
+  id: number,
+  actionType: number,
+  target: number,
+  overrides: Partial<BattleEnemy["actions"][number]> = {}
+): BattleEnemy["actions"][number] {
+  return { id, arg: 0, actionId: id, actionType, target, ...overrides };
 }
 
 function actionSet(...actions: BattleEnemy["actions"][number][]): BattleEnemy["actions"] {

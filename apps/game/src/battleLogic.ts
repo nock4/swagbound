@@ -135,7 +135,10 @@ export type EnemyActionSelection = {
   actionIndex: number;
   actionId: number;
   actionType?: number;
+  direction?: "party" | "enemy";
   target?: number;
+  name?: string;
+  effect?: ItemUseEffect;
 };
 
 export type EnemyActionResolution = {
@@ -147,6 +150,8 @@ export type EnemyActionResolution = {
   skipped: boolean;
   action: EnemyActionSelection | null;
   effectKind: EnemyActionEffectKind;
+  effect?: ItemUseEffect;
+  moveName?: string;
   intendedStatus?: "generic-ailment";
   missed?: boolean;
   smash?: boolean;
@@ -872,7 +877,10 @@ export function selectEnemyAction(
     actionIndex,
     actionId: stat(action.actionId ?? action.id),
     ...(action.actionType !== undefined ? { actionType: stat(action.actionType) } : {}),
-    ...(action.target !== undefined ? { target: stat(action.target) } : {})
+    ...(action.direction !== undefined ? { direction: action.direction } : {}),
+    ...(action.target !== undefined ? { target: stat(action.target) } : {}),
+    ...(action.name !== undefined ? { name: action.name } : {}),
+    ...(action.effect !== undefined ? { effect: action.effect } : {})
   };
 }
 
@@ -903,10 +911,15 @@ export function resolveEnemyActionTurn(
     const confusedPick = randomLivingActor(nextState, rng);
     targets = confusedPick ? [confusedPick] : [];
   } else {
-    targets = targetActorsForEnemyAction(nextState, selection.target, rng);
+    targets = targetActorsForEnemyAction(nextState, selection, rng);
   }
   const effectKind = enemyActionEffectKind(selection.actionType);
-  if (targets.length === 0 || effectKind === "none" || effectKind === "assist" || effectKind === "unknown") {
+  if (
+    targets.length === 0 ||
+    effectKind === "none" ||
+    (effectKind === "assist" && !selection.effect) ||
+    effectKind === "unknown"
+  ) {
     return {
       state: nextState,
       actor,
@@ -915,7 +928,9 @@ export function resolveEnemyActionTurn(
       outcome: outcome(nextState),
       skipped: false,
       action: selection,
-      effectKind
+      effectKind,
+      ...(selection.effect ? { effect: selection.effect } : {}),
+      ...(selection.name ? { moveName: selection.name } : {})
     };
   }
 
@@ -927,6 +942,18 @@ export function resolveEnemyActionTurn(
   for (const target of targets) {
     const targetCombatant = combatantFor(nextState, target);
     if (!targetCombatant || !isCombatantAlive(targetCombatant)) {
+      continue;
+    }
+    if (selection.effect) {
+      const applied = applyItemEffectToCombatant(targetCombatant, selection.effect);
+      totalAmount += applied.amount;
+      nextState = withCombatant(nextState, target, applied.combatant);
+      if (selection.effect.kind === "drainPp") {
+        const attackerNow = combatantFor(nextState, actor);
+        if (attackerNow) {
+          nextState = withCombatant(nextState, actor, applyPpRestore(attackerNow, applied.amount));
+        }
+      }
       continue;
     }
     if (effectKind === "physical") {
@@ -956,6 +983,8 @@ export function resolveEnemyActionTurn(
     skipped: false,
     action: selection,
     effectKind,
+    ...(selection.effect ? { effect: selection.effect } : {}),
+    ...(selection.name ? { moveName: selection.name } : {}),
     ...(effectKind === "statusStub" ? { intendedStatus: "generic-ailment" as const } : {}),
     ...(effectKind === "physical" ? {
       missed: physicalAttempts > 0 && physicalMisses === physicalAttempts,
@@ -1588,20 +1617,22 @@ function nextEnemyActionIndex(actions: BattleEnemy["actions"] | undefined, curre
   return modulo(currentActionIndex + 1, length);
 }
 
-function targetActorsForEnemyAction(state: BattleState, target: number | undefined, rng: Rng): BattleActor[] {
-  const living = state.party.flatMap((combatant, index) =>
-    isCombatantAlive(combatant) ? [{ side: "party" as const, index }] : []
-  );
+function targetActorsForEnemyAction(state: BattleState, selection: EnemyActionSelection, rng: Rng): BattleActor[] {
+  const side = targetSideForEnemyActionDirection(selection.direction);
+  const living = livingActors(side === "party" ? state.party : state.enemies, side);
   if (living.length === 0) {
     return [];
   }
 
-  switch (target) {
+  switch (selection.target) {
     case 1: {
+      if (isRecoveryEffect(selection.effect)) {
+        return [weakestDamagedActor(state, living) ?? living[0]];
+      }
       // Single-target enemy attacks nominally hit the lead, but occasionally swing
       // at someone else so a fragile back-row member (e.g. Paula, hp30) isn't
       // perfectly safe behind the tank. Lead stays the heavy favourite.
-      if (living.length > 1 && normalizedRoll(rng()) < ENEMY_OFF_LEAD_TARGET_CHANCE) {
+      if (side === "party" && living.length > 1 && normalizedRoll(rng()) < ENEMY_OFF_LEAD_TARGET_CHANCE) {
         const offLead = living.slice(1);
         const index = Math.min(offLead.length - 1, Math.floor(normalizedRoll(rng()) * offLead.length));
         return [offLead[index]];
@@ -1618,6 +1649,29 @@ function targetActorsForEnemyAction(state: BattleState, target: number | undefin
     default:
       return [];
   }
+}
+
+function targetSideForEnemyActionDirection(direction: "party" | "enemy" | undefined): BattleSide {
+  return direction === "party" ? "enemy" : "party";
+}
+
+function isRecoveryEffect(effect: ItemUseEffect | undefined): boolean {
+  return effect?.kind === "healHp" ||
+    effect?.kind === "healHpPercent" ||
+    effect?.kind === "recoverPp" ||
+    effect?.kind === "recoverPpPercent";
+}
+
+function weakestDamagedActor(state: BattleState, actors: readonly BattleActor[]): BattleActor | undefined {
+  let best: { actor: BattleActor; missingHp: number } | undefined;
+  for (const actor of actors) {
+    const combatant = combatantFor(state, actor);
+    const missingHp = combatant ? Math.max(0, combatant.maxHp - combatant.hp.target) : 0;
+    if (missingHp > 0 && (!best || missingHp > best.missingHp)) {
+      best = { actor, missingHp };
+    }
+  }
+  return best?.actor;
 }
 
 function enemyActionEffectKind(actionType: number | undefined): EnemyActionEffectKind {
@@ -1695,10 +1749,35 @@ function stableCombatantId(side: BattleSide, index: number): string {
 }
 
 function assignCombatantIds(combatants: Combatant[], side: BattleSide): Combatant[] {
-  return combatants.map((combatant, index) => ({
+  const namedCombatants = side === "enemy" ? letterDuplicateEnemyNames(combatants) : combatants;
+  return namedCombatants.map((combatant, index) => ({
     ...combatant,
     combatantId: stableCombatantId(side, index)
   }));
+}
+
+function letterDuplicateEnemyNames(combatants: Combatant[]): Combatant[] {
+  const counts = new Map<string, number>();
+  for (const combatant of combatants) {
+    counts.set(combatant.name, (counts.get(combatant.name) ?? 0) + 1);
+  }
+  const seen = new Map<string, number>();
+  return combatants.map((combatant) => {
+    if ((counts.get(combatant.name) ?? 0) <= 1) {
+      return combatant;
+    }
+    const index = seen.get(combatant.name) ?? 0;
+    seen.set(combatant.name, index + 1);
+    return {
+      ...combatant,
+      name: `${combatant.name} ${duplicateNameLetter(index)}`
+    };
+  });
+}
+
+function duplicateNameLetter(index: number): string {
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  return alphabet[index] ?? String(index + 1);
 }
 
 function livingActors(combatants: Combatant[], side: BattleSide): BattleActor[] {

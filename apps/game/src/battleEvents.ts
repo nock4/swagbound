@@ -31,7 +31,7 @@ export function battleStepEvents(details: BattleRoundStepNarrationDetails): Batt
     case "skip":
       return details.noTarget ? [noTargetEvent(details)] : [];
     case "attack":
-      return actionImpactEvents(details, actionStarted("attack", details));
+      return attackEvents(details);
     case "psi":
       return psiEvents(details);
     case "item":
@@ -50,6 +50,16 @@ export function battleStepEvents(details: BattleRoundStepNarrationDetails): Batt
         actorName: details.attackerName
       }];
   }
+}
+
+function attackEvents(details: BattleRoundStepNarrationDetails): BattleEvent[] {
+  const message = preferredMessageEvent(details);
+  if (message && !details.missed && (details.damage ?? 0) <= 0) {
+    const events: BattleEvent[] = [actionStarted("attack", details), message];
+    appendEnemyDefeatedEvent(events, details);
+    return events;
+  }
+  return actionImpactEvents(details, actionStarted("attack", details), message);
 }
 
 export function firstBattleAction(events: readonly BattleEvent[]): BattleActionStartedEvent | undefined {

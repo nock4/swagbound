@@ -850,6 +850,26 @@ function narrationDetailsForResolution(
   if ("effectKind" in resolution) {
     const targetName = multiTargetName(previousState, resolution.targets);
     const kind = resolution.effectKind === "psi" ? "psi" : "attack";
+    if (resolution.effect) {
+      return {
+        kind,
+        attackerName,
+        targetName,
+        moveName: resolution.moveName ?? (kind === "psi" ? "PSI" : undefined),
+        message: enemyActionEffectMessage(targetName ?? attackerName, resolution.effect),
+        damage: resolution.effect.kind === "damage" ? resolution.amount : undefined,
+        healed: resolution.effect.kind === "healHp" || resolution.effect.kind === "healHpPercent" || resolution.effect.kind === "revive"
+          ? resolution.amount
+          : undefined,
+        ppRestored: resolution.effect.kind === "recoverPp" || resolution.effect.kind === "recoverPpPercent"
+          ? resolution.amount
+          : undefined,
+        missed: false,
+        targetDied: resolution.effect.kind === "damage"
+          ? enemyTargetsDied(previousState, resolution.state, resolution.targets)
+          : false
+      };
+    }
     return {
       kind,
       attackerName,
@@ -1000,6 +1020,13 @@ function itemEffectMessage(
   return effect.ailment === "shielded"
     ? `${name} is shielded!`
     : `${name} is now ${effect.ailment}!`;
+}
+
+function enemyActionEffectMessage(name: string, effect: ItemUseEffect): string | undefined {
+  if (effect.kind === "cureStatus" || effect.kind === "inflictStatus" || effect.kind === "buffStat" || effect.kind === "permStat" || effect.kind === "revive" || effect.kind === "drainPp") {
+    return itemEffectMessage(name, effect);
+  }
+  return undefined;
 }
 
 function skippedRoundStep(

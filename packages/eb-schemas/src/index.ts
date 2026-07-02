@@ -604,6 +604,11 @@ export const ItemUseEffectSchema = z.union([
   })
 ]);
 
+const EnemyActionEffectEntrySchema = z.object({
+  name: z.string().trim().min(1).optional(),
+  effect: ItemUseEffectSchema
+}).strict();
+
 const ItemOverrideEntrySchema = z.object({
   /** Optional Swagbound rename; when absent the item keeps its extracted name. */
   name: ItemOverrideNameSchema.optional(),
@@ -684,6 +689,11 @@ const EnemyStatOverrideEntrySchema = z.object({
 export const EnemyStatOverridesSchema = z.object({
   schema: z.literal("swagbound.enemy-stat-overrides.v1"),
   byEnemyId: z.record(z.string().regex(/^\d+$/), EnemyStatOverrideEntrySchema)
+}).strict();
+
+export const EnemyActionEffectsSchema = z.object({
+  schema: z.literal("swagbound.enemy-action-effects.v1"),
+  byActionId: z.record(z.string().regex(/^\d+$/), EnemyActionEffectEntrySchema)
 }).strict();
 
 /**
@@ -1349,7 +1359,10 @@ export const BattleActionSchema = z.object({
   arg: z.number().int().nonnegative(),
   actionId: z.number().int().nonnegative().optional(),
   actionType: z.number().int().min(0).max(5).optional(),
-  target: z.number().int().min(0).max(4).optional()
+  target: z.number().int().min(0).max(4).optional(),
+  direction: z.enum(["party", "enemy"]).optional(),
+  name: z.string().trim().min(1).optional(),
+  effect: ItemUseEffectSchema.optional()
 });
 
 export const BattleDropRaritySchema = z.object({
@@ -1426,7 +1439,11 @@ export const BattleGroupSchema = z.object({
   id: z.number().int().nonnegative(),
   background1: z.number().int().nonnegative(),
   background2: z.number().int().nonnegative(),
-  enemyIds: z.array(z.number().int().nonnegative()).min(1)
+  enemyIds: z.array(z.number().int().nonnegative()).min(1),
+  entries: z.array(z.object({
+    id: z.number().int().nonnegative(),
+    amount: z.number().int().positive()
+  }).strict()).min(1).optional()
 });
 
 export const BattleDataSchema = z.object({
@@ -1813,6 +1830,7 @@ export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;
 export type CharacterOverrides = z.infer<typeof CharacterOverridesSchema>;
 export type EnemyOverrides = z.infer<typeof EnemyOverridesSchema>;
 export type EnemyStatOverrides = z.infer<typeof EnemyStatOverridesSchema>;
+export type EnemyActionEffects = z.infer<typeof EnemyActionEffectsSchema>;
 export type EncounterCandidate = z.infer<typeof EncounterCandidateSchema>;
 export type EncounterSubGroup = z.infer<typeof EncounterSubGroupSchema>;
 export type EncounterMapGroup = z.infer<typeof EncounterMapGroupSchema>;

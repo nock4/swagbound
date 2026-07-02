@@ -224,10 +224,10 @@ describe("generated validation", () => {
       });
       expect(battle?.enemies.map((enemy) => enemy.id)).toEqual([10, 11, 30, 31, 33]);
       expect(battle?.groups).toEqual([
-        { id: 20, background1: 3, background2: 0, enemyIds: [10] },
-        { id: 21, background1: 4, background2: 0, enemyIds: [11] },
-        { id: 30, background1: 6, background2: 0, enemyIds: [30] },
-        { id: 31, background1: 7, background2: 0, enemyIds: [31] }
+        { id: 20, background1: 3, background2: 0, enemyIds: [10], entries: [{ id: 10, amount: 1 }] },
+        { id: 21, background1: 4, background2: 0, enemyIds: [11], entries: [{ id: 11, amount: 1 }] },
+        { id: 30, background1: 6, background2: 0, enemyIds: [30], entries: [{ id: 30, amount: 1 }] },
+        { id: 31, background1: 7, background2: 0, enemyIds: [31], entries: [{ id: 31, amount: 1 }] }
       ]);
       expect(battle?.backgrounds?.map((background) => background.id)).toEqual([0, 3, 4, 6, 7]);
       expect(battle?.backgrounds?.find((background) => background.id === 0)).toEqual({ id: 0 });
@@ -260,10 +260,10 @@ describe("generated validation", () => {
         itemRarity: { numerator: 16, denominator: 128 },
         itemDropped: 0,
         actions: [
-          { id: 1, arg: 0, actionId: 1, actionType: 1, target: 1 },
-          { id: 2, arg: 3, actionId: 2, actionType: 2, target: 4 },
-          { id: 3, arg: 0, actionId: 3, actionType: 3, target: 1 },
-          { id: 4, arg: 1, actionId: 4, actionType: 5, target: 0 }
+          { id: 1, arg: 0, actionId: 1, actionType: 1, direction: "enemy", target: 1 },
+          { id: 2, arg: 3, actionId: 2, actionType: 2, direction: "enemy", target: 4 },
+          { id: 3, arg: 0, actionId: 3, actionType: 3, direction: "enemy", target: 1 },
+          { id: 4, arg: 1, actionId: 4, actionType: 5, direction: "party", target: 0 }
         ]
       });
       expect(battle?.enemies.find((enemy) => enemy.id === 30)).toMatchObject({
@@ -274,10 +274,10 @@ describe("generated validation", () => {
         speed: 6,
         bossFlag: true,
         actions: [
-          { id: 1, arg: 0, actionId: 1, actionType: 1, target: 1 },
-          { id: 2, arg: 0, actionId: 2, actionType: 2, target: 4 },
-          { id: 3, arg: 0, actionId: 3, actionType: 3, target: 1 },
-          { id: 4, arg: 0, actionId: 4, actionType: 5, target: 0 }
+          { id: 1, arg: 0, actionId: 1, actionType: 1, direction: "enemy", target: 1 },
+          { id: 2, arg: 0, actionId: 2, actionType: 2, direction: "enemy", target: 4 },
+          { id: 3, arg: 0, actionId: 3, actionType: 3, direction: "enemy", target: 1 },
+          { id: 4, arg: 0, actionId: 4, actionType: 5, direction: "party", target: 0 }
         ]
       });
       expect(battle?.enemies.find((enemy) => enemy.id === 32)).toBeUndefined();
@@ -353,11 +353,11 @@ describe("generated validation", () => {
       });
       expect(battle.enemies.map((enemy) => enemy.id)).toEqual([12, 37, 130, 131, 209, 214]);
       expect(battle.groups).toEqual([
-        { id: 22, background1: 3, background2: 0, enemyIds: [12] },
-        { id: 448, background1: 8, background2: 7, enemyIds: [131] },
-        { id: 449, background1: 10, background2: 9, enemyIds: [130] },
-        { id: 450, background1: 12, background2: 11, enemyIds: [37, 209] },
-        { id: 474, background1: 14, background2: 13, enemyIds: [214] }
+        { id: 22, background1: 3, background2: 0, enemyIds: [12], entries: [{ id: 12, amount: 1 }] },
+        { id: 448, background1: 8, background2: 7, enemyIds: [131], entries: [{ id: 131, amount: 1 }] },
+        { id: 449, background1: 10, background2: 9, enemyIds: [130], entries: [{ id: 130, amount: 1 }] },
+        { id: 450, background1: 12, background2: 11, enemyIds: [37, 209], entries: [{ id: 37, amount: 1 }, { id: 209, amount: 2 }] },
+        { id: 474, background1: 14, background2: 13, enemyIds: [214], entries: [{ id: 214, amount: 1 }] }
       ]);
       expect([37, 130, 131, 214].every((id) =>
         battle.enemies.find((enemy) => enemy.id === id)?.bossFlag === true
@@ -733,30 +733,39 @@ async function writeBattleFixture(project: string): Promise<void> {
   await writeFile(path.join(project, "battle_action_table.yml"), [
     "1:",
     "  Action type: physical (affected by shields and defending)",
+    "  Direction: enemy",
     "  Target: one",
     "2:",
     "  Action type: physical (unaffected by shields and defending)",
+    "  Direction: enemy",
     "  Target: all",
     "3:",
     "  Action type: PSI",
+    "  Direction: enemy",
     "  Target: one",
     "4:",
     "  Action type: other",
+    "  Direction: party",
     "  Target: none",
     "5:",
     "  Action type: item",
+    "  Direction: party",
     "  Target: none",
     "6:",
     "  Action type: nothing",
+    "  Direction: party",
     "  Target: none",
     "7:",
     "  Action type: other",
+    "  Direction: enemy",
     "  Target: one",
     "8:",
     "  Action type: physical (unaffected by shields and defending)",
+    "  Direction: enemy",
     "  Target: random",
     "9:",
     "  Action type: physical (affected by shields and defending)",
+    "  Direction: enemy",
     "  Target: one",
     ""
   ].join("\n"), "utf8");
@@ -942,15 +951,19 @@ async function writeStoryBossBattleFixture(project: string): Promise<void> {
   await writeFile(path.join(project, "battle_action_table.yml"), [
     "1:",
     "  Action type: physical (affected by shields and defending)",
+    "  Direction: enemy",
     "  Target: one",
     "2:",
     "  Action type: physical (unaffected by shields and defending)",
+    "  Direction: enemy",
     "  Target: all",
     "3:",
     "  Action type: PSI",
+    "  Direction: enemy",
     "  Target: random",
     "4:",
     "  Action type: other",
+    "  Direction: party",
     "  Target: none",
     ""
   ].join("\n"), "utf8");

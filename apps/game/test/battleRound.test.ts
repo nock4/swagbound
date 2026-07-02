@@ -1006,6 +1006,29 @@ describe("resolveRoundStep status effects", () => {
     expect(partyHit.resolution).toMatchObject({ targets: [actor("party", 0)] });
   });
 
+  it("lets Coil Snake's mapped poison bite inflict poisoned through resolveRoundStep", () => {
+    const battle = createBattleState(
+      enemy(55, "Coil Snake", {
+        actions: actionSet(enemyAction(242, 5, 1, {
+          direction: "enemy",
+          name: "poison bite",
+          effect: { kind: "inflictStatus", ailment: "poisoned" }
+        }))
+      }),
+      { characters: characters([partyA]) }
+    );
+
+    const result = resolveRoundStep(battle, actor("enemy", 0), undefined, () => 0.5);
+
+    expect(result.skipped).toBe(false);
+    expect(result.resolution).toMatchObject({
+      effectKind: "statusStub",
+      targets: [actor("party", 0)]
+    });
+    expect(result.state.party[0].statuses).toEqual([{ ailment: "poisoned" }]);
+    expect(result.details.message).toContain("poisoned");
+  });
+
   it("raises a battle stat with a buffStat GOODS item", () => {
     let battle = createBattleState(opponentA, { characters: characters([partyA]) });
     battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [214] });
@@ -1147,8 +1170,13 @@ function enemy(
   };
 }
 
-function enemyAction(id: number, actionType: number, target: number): BattleEnemy["actions"][number] {
-  return { id, arg: 0, actionId: id, actionType, target };
+function enemyAction(
+  id: number,
+  actionType: number,
+  target: number,
+  overrides: Partial<BattleEnemy["actions"][number]> = {}
+): BattleEnemy["actions"][number] {
+  return { id, arg: 0, actionId: id, actionType, target, ...overrides };
 }
 
 function actionSet(...actions: BattleEnemy["actions"][number][]): BattleEnemy["actions"] {

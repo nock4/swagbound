@@ -18,6 +18,7 @@ import {
   type SpriteOverrides,
   type WindowCollection
 } from "@eb/schemas";
+import { expandBattleGroupEnemies } from "./battleGroups";
 import {
   applyVictoryRewards,
   advanceVictorySummaryPageIndex,
@@ -3526,9 +3527,7 @@ function cloneBattleMemberSnapshot(member: PartyBattleMemberSnapshot): PartyBatt
 }
 
 function enemiesForGroup(data: BattleData, group: BattleGroup): BattleEnemy[] {
-  return group.enemyIds
-    .map((enemyId) => data.enemies.find((enemy) => enemy.id === enemyId))
-    .filter((enemy): enemy is BattleEnemy => Boolean(enemy));
+  return expandBattleGroupEnemies(data, group);
 }
 
 function selectBattleBackground(data: BattleData, id: number): BattleBackground | undefined {

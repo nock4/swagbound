@@ -62,6 +62,7 @@ type EnemyGroupRecord = {
 type BattleActionRecord = {
   id: number;
   actionType: number;
+  direction: "party" | "enemy";
   target: number;
 };
 
@@ -125,6 +126,11 @@ const BATTLE_ACTION_TYPE_VALUES = new Map([
   ["other", 5]
 ]);
 
+const BATTLE_ACTION_DIRECTION_VALUES = new Map([
+  ["party", "party"],
+  ["enemy", "enemy"]
+] as const);
+
 export async function buildBattleData(options: BattleBuildOptions): Promise<BattleData> {
   assertBattleInputs(options.projectAbs);
   const tables: BattleSourceTables = {
@@ -163,7 +169,8 @@ export async function buildBattleData(options: BattleBuildOptions): Promise<Batt
     id: group.id,
     background1: group.background1,
     background2: group.background2,
-    enemyIds: uniqueSorted(positiveEnemyIds(group).filter((id) => enemyIds.includes(id)))
+    enemyIds: uniqueSorted(positiveEnemyIds(group).filter((id) => enemyIds.includes(id))),
+    entries: positiveEnemyEntries(group).filter((entry) => enemyIds.includes(entry.id))
   }));
   const backgroundIds = uniqueSorted(groups.flatMap((group) => [group.background1, group.background2]));
   const backgrounds = await readBattleBackgroundAnimations(options.projectAbs, backgroundIds);
@@ -195,7 +202,7 @@ export async function buildBattleData(options: BattleBuildOptions): Promise<Batt
       experience: "enemy_configuration_table.yml Experience points",
       money: "enemy_configuration_table.yml Money",
       bossFlag: "enemy_configuration_table.yml Boss Flag",
-      actions: "enemy_configuration_table.yml Action 1-4 plus Action 1-4 Argument; numeric actionType/target decoded from battle_action_table.yml",
+      actions: "enemy_configuration_table.yml Action 1-4 plus Action 1-4 Argument; numeric actionType/direction/target decoded from battle_action_table.yml",
       itemDropped: "enemy_configuration_table.yml Item Dropped",
       itemRarity: "enemy_configuration_table.yml Item Rarity as numerator/denominator odds"
     },
@@ -577,6 +584,7 @@ function enemyToBattleEnemy(id: number, entry: Record<string, string>, battleAct
         arg: numericField(entry, `Action ${index} Argument`),
         actionId,
         actionType: action.actionType,
+        direction: action.direction,
         target: action.target
       };
     }),
@@ -592,6 +600,7 @@ async function readBattleActions(file: string): Promise<Map<number, BattleAction
     actions.set(id, {
       id,
       actionType: enumField(row, "Action type", BATTLE_ACTION_TYPE_VALUES),
+      direction: stringEnumField(row, "Direction", BATTLE_ACTION_DIRECTION_VALUES),
       target: enumField(row, "Target", BATTLE_TARGET_VALUES)
     });
   }
@@ -866,6 +875,12 @@ function positiveEnemyIds(group: EnemyGroupRecord): number[] {
   return group.enemies.filter((entry) => entry.amount > 0).map((entry) => entry.enemy);
 }
 
+function positiveEnemyEntries(group: EnemyGroupRecord): Array<{ id: number; amount: number }> {
+  return group.enemies
+    .filter((entry) => entry.amount > 0)
+    .map((entry) => ({ id: entry.enemy, amount: entry.amount }));
+}
+
 function numericField(entry: Record<string, string>, field: string): number {
   const parsed = parseYamlInteger(entry[field]);
   if (Number.isNaN(parsed)) {
@@ -888,6 +903,15 @@ function enumField(entry: Record<string, string>, field: string, values: Map<str
     }
     return parsed;
   }
+  const value = values.get(raw?.toLowerCase() ?? "");
+  if (value === undefined) {
+    throw new Error(`Invalid or missing battle enum field "${field}".`);
+  }
+  return value;
+}
+
+function stringEnumField<T extends string>(entry: Record<string, string>, field: string, values: Map<string, T>): T {
+  const raw = entry[field]?.trim();
   const value = values.get(raw?.toLowerCase() ?? "");
   if (value === undefined) {
     throw new Error(`Invalid or missing battle enum field "${field}".`);

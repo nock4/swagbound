@@ -9,6 +9,7 @@ import {
   CharacterOverridesSchema,
   CustomDialogueSchema,
   DrifellaBarksSchema,
+  EnemyActionEffectsSchema,
   EnemyOverridesSchema,
   EnemyStatOverridesSchema,
   EncountersSchema,
@@ -50,6 +51,7 @@ import {
   type CharacterOverrides,
   type CustomDialogue,
   type DrifellaBarks,
+  type EnemyActionEffects,
   type EnemyOverrides,
   type EnemyStatOverrides,
   type Encounters,
@@ -100,6 +102,7 @@ const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
 const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
 const ENEMY_STAT_OVERRIDES_FILE = "enemy-stat-overrides.json";
+const ENEMY_ACTION_EFFECTS_FILE = "enemy-action-effects.json";
 const BATTLE_RULES_FILE = "battle-rules.json";
 const STORY_TRIGGERS_FILE = "triggers.json";
 const MUSIC_MANIFEST_FILE = "music-manifest.json";
@@ -134,6 +137,7 @@ export type GameData = {
   encounters?: Encounters;
   battle?: BattleData;
   battleRules?: BattleRules;
+  enemyActionEffects?: EnemyActionEffects;
   musicManifest?: MusicManifest;
   sectorMusic?: SectorMusic;
   collisionOverrides?: CollisionOverrides;
@@ -256,6 +260,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     battleRules,
     enemyOverrides,
     enemyStatOverrides,
+    enemyActionEffects,
     font,
     window,
     characters,
@@ -299,6 +304,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${BATTLE_RULES_FILE}`, BattleRulesSchema),
     loadJson(`/generated/${ENEMY_OVERRIDES_FILE}`, EnemyOverridesSchema),
     loadJson(`/generated/${ENEMY_STAT_OVERRIDES_FILE}`, EnemyStatOverridesSchema),
+    loadJson(`/generated/${ENEMY_ACTION_EFFECTS_FILE}`, EnemyActionEffectsSchema),
     manifest.files.font
       ? loadJson(`/generated/${manifest.files.font}`, FontCollectionSchema)
       : Promise.resolve(undefined),
@@ -335,7 +341,10 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
   const resolvedPsi = applyPsiOverrides(psi, psiOverrides);
-  const resolvedBattle = applyEnemyStatOverrides(applyEnemyOverrides(battle, enemyOverrides), enemyStatOverrides);
+  const resolvedBattle = applyEnemyActionEffects(
+    applyEnemyStatOverrides(applyEnemyOverrides(battle, enemyOverrides), enemyStatOverrides),
+    enemyActionEffects
+  );
   const resolvedDrifellaBarks = drifellaBarks ?? emptyDrifellaBarks();
   const resolvedCustomDialogue = buildCustomDialogueWithDrifellaBarks(
     customDialogue ?? emptyCustomDialogue(),
@@ -367,6 +376,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     encounters,
     battle: resolvedBattle,
     battleRules,
+    enemyActionEffects,
     musicManifest,
     sectorMusic,
     collisionOverrides,
@@ -530,6 +540,33 @@ export function applyEnemyStatOverrides(
       }
     }
     return next;
+  });
+  return changed ? { ...battle, enemies } : battle;
+}
+
+export function applyEnemyActionEffects(
+  battle: BattleData | undefined,
+  effects: EnemyActionEffects | undefined
+): BattleData | undefined {
+  if (!battle || !effects) {
+    return battle;
+  }
+  let changed = false;
+  const enemies = battle.enemies.map((enemy) => {
+    const actions = enemy.actions.map((action) => {
+      const actionId = String(action.actionId ?? action.id);
+      const effect = effects.byActionId[actionId];
+      if (!effect) {
+        return action;
+      }
+      changed = true;
+      return {
+        ...action,
+        ...(effect.name ? { name: effect.name } : {}),
+        effect: { ...effect.effect }
+      };
+    }) as typeof enemy.actions;
+    return actions === enemy.actions ? enemy : { ...enemy, actions };
   });
   return changed ? { ...battle, enemies } : battle;
 }

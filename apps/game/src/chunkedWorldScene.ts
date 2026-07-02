@@ -16,6 +16,7 @@ import {
   type InstantWinRewardOptions,
   type PlayerCombatantOptions
 } from "./battleLogic";
+import { expandBattleGroupEnemies } from "./battleGroups";
 import {
   messageDoorDialogueReference,
   resolveAdjacentDoorIntentTrigger,
@@ -5066,9 +5067,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!battle || !battleGroup) {
       return [];
     }
-    return battleGroup.enemyIds
-      .map((enemyId) => battle.enemies.find((enemy) => enemy.id === enemyId))
-      .filter((enemy): enemy is BattleEnemy => Boolean(enemy));
+    return expandBattleGroupEnemies(battle, battleGroup);
   }
 
   private registerForceEncounter(): void {
