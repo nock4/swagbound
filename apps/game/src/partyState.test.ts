@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { ItemData } from "@eb/schemas";
 import { hospitalRecoveryCost, PartyState, type PartyStateSnapshot } from "./partyState";
 import { buildCombatantFromPartyMember, type PartyMember } from "./characterModel";
 
@@ -30,6 +31,25 @@ describe("PartyState battle round-trips", () => {
       expect(combatant.stats.defense).toBe(16);
       partyState.applyBattleResult([combatant], 0);
     }
+  });
+
+  it("clears battle-scoped statuses after battle while preserving poison and paralysis", () => {
+    const partyState = new PartyState();
+    const base = partyMember(1, "Bosch");
+    const combatant = {
+      ...buildCombatantFromPartyMember(base),
+      statuses: [
+        { ailment: "poisoned" as const },
+        { ailment: "paralyzed" as const },
+        { ailment: "asleep" as const },
+        { ailment: "confused" as const },
+        { ailment: "shielded" as const, magnitude: 50 }
+      ]
+    };
+
+    partyState.applyBattleResult([combatant], 0);
+
+    expect(partyState.statuses(1)).toEqual([{ ailment: "poisoned" }, { ailment: "paralyzed" }]);
   });
 });
 
@@ -138,6 +158,54 @@ describe("PartyState menu services", () => {
     expect(partyState.vitals(1)?.pp).toBe(20);
     expect(partyState.statuses(1)).toEqual([]);
   });
+
+  it("does not consume battle-only damage items from the field", () => {
+    const partyState = itemUsePartyState([200], 40);
+    const bomb: ItemData = { ...syntheticItem(200), effect: { kind: "damage", amount: 30 } };
+
+    const result = partyState.useItem({
+      ownerChar: 1,
+      targetChar: 1,
+      item: bomb,
+      targetVitals: { hp: 40, maxHp: 100, pp: 10, maxPp: 20 }
+    });
+
+    expect(result).toMatchObject({ ok: false, reason: "notFieldUsable" });
+    expect(partyState.inventory(1)).toEqual([200]);
+    expect(partyState.vitals(1)?.hp.target).toBe(40);
+  });
+
+  it("does not let offensive status items self-target from the field", () => {
+    const partyState = itemUsePartyState([201], 40);
+    const poisonNeedle: ItemData = { ...syntheticItem(201), effect: { kind: "inflictStatus", ailment: "poisoned" } };
+
+    const result = partyState.useItem({
+      ownerChar: 1,
+      targetChar: 1,
+      item: poisonNeedle,
+      targetVitals: { hp: 40, maxHp: 100, pp: 10, maxPp: 20 }
+    });
+
+    expect(result).toMatchObject({ ok: false, reason: "notFieldUsable" });
+    expect(partyState.inventory(1)).toEqual([201]);
+    expect(partyState.statuses(1)).toEqual([]);
+  });
+
+  it("still consumes and applies field healing items", () => {
+    const partyState = itemUsePartyState([202], 25);
+    const cookie = syntheticItem(202, { kind: "healHp", amount: 12 });
+
+    const result = partyState.useItem({
+      ownerChar: 1,
+      targetChar: 1,
+      item: cookie,
+      targetVitals: { hp: 25, maxHp: 100, pp: 10, maxPp: 20 }
+    });
+
+    expect(result).toMatchObject({ ok: true, previousValue: 25, nextValue: 37 });
+    expect(partyState.inventory(1)).toEqual([]);
+    expect(partyState.vitals(1)?.hp.target).toBe(37);
+  });
 });
 
 function poisonedPartyState(hp: number): PartyState {
@@ -153,6 +221,51 @@ function poisonedPartyState(hp: number): PartyState {
     ]
   } satisfies PartyStateSnapshot);
   return partyState;
+}
+
+function itemUsePartyState(itemIds: number[], hp: number): PartyState {
+  const partyState = new PartyState();
+  partyState.restore({
+    wallet: 0,
+    partyIds: [1],
+    inventory: [{ charId: 1, itemIds }],
+    equipped: [],
+    statuses: [],
+    vitals: [
+      { charId: 1, hp: { current: hp, target: hp }, maxHp: 100, pp: 10, maxPp: 20 }
+    ]
+  } satisfies PartyStateSnapshot);
+  return partyState;
+}
+
+function partyMember(id: number, name: string): PartyMember {
+  return {
+    id,
+    name,
+    level: 3,
+    experience: 0,
+    hp: 40,
+    maxHp: 40,
+    pp: 10,
+    maxPp: 10,
+    stats: { offense: 20, defense: 12, speed: 5, guts: 3, vitality: 4, iq: 3, luck: 2 },
+    inventory: [],
+    money: 0
+  };
+}
+
+function syntheticItem(id: number, effect?: ItemData["effect"]): ItemData {
+  return {
+    id,
+    name: `ITEM_${id}`,
+    type: 0,
+    cost: 0,
+    action: 0,
+    argument: 0,
+    equippable: false,
+    miscFlags: ["item disappears when used"],
+    ...(effect ? { effect } : {})
+  };
 }
 
 function memberForRecovery(input: {

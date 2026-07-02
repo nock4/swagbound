@@ -28,13 +28,14 @@ describe("swirlMask", () => {
 
 /** Records the graphics calls so we can assert what drawSwirl drew. */
 function recorder() {
-  const calls = { fillRect: 0, fillPath: 0, strokePath: 0, fills: [] as number[] };
+  const calls = { fillRect: 0, fillPath: 0, strokePath: 0, fills: [] as number[], strokes: [] as number[] };
   const g: SwirlGraphics = {
     fillStyle: (c) => { calls.fills.push(c); return g; },
     fillRect: () => { calls.fillRect += 1; return g; },
     beginPath: () => g, moveTo: () => g, lineTo: () => g, closePath: () => g,
     fillPath: () => { calls.fillPath += 1; return g; },
-    lineStyle: () => g, strokePath: () => { calls.strokePath += 1; return g; }
+    lineStyle: (_width, color) => { calls.strokes.push(color); return g; },
+    strokePath: () => { calls.strokePath += 1; return g; }
   };
   return { g, calls };
 }
@@ -61,5 +62,21 @@ describe("drawSwirl", () => {
     // colors vary (not a single flat color) -> it's the multicolor swirl
     const uniqueBandColors = new Set(calls.fills).size;
     expect(uniqueBandColors).toBeGreaterThan(3);
+  });
+
+  it("tints party first-strike bands green", () => {
+    const { g, calls } = recorder();
+    drawSwirl(g, 0.5, 512, 448, { advantageTint: "party" });
+    expect(calls.fills).toContain(0x20d96b);
+    expect(calls.fills).toContain(0x71ff9d);
+    expect(calls.strokes).toContain(0xbaffd0);
+  });
+
+  it("tints enemy ambush bands red", () => {
+    const { g, calls } = recorder();
+    drawSwirl(g, 0.5, 512, 448, { advantageTint: "enemy" });
+    expect(calls.fills).toContain(0xd92c24);
+    expect(calls.fills).toContain(0xff6a54);
+    expect(calls.strokes).toContain(0xffc2ba);
   });
 });

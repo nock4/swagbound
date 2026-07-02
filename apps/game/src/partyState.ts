@@ -4,6 +4,7 @@ import {
   cureStatus as cureStatusEffect,
   fieldPoisonTick,
   inflictStatus as inflictStatusEffect,
+  stripBattleScopedStatuses,
   type StatusAilment,
   type StatusState
 } from "./statusEffects";
@@ -126,6 +127,27 @@ export function itemEffectTargetSide(effect: ItemUseEffect | undefined): "party"
   return "party";
 }
 
+export function isFieldUsableItemEffect(effect: ItemUseEffect | undefined): effect is ItemUseEffect {
+  if (!effect || itemEffectTargetSide(effect) !== "party") {
+    return false;
+  }
+  switch (effect.kind) {
+    case "healHp":
+    case "healHpPercent":
+    case "recoverPp":
+    case "recoverPpPercent":
+    case "cureStatus":
+    case "revive":
+      return true;
+    case "damage":
+    case "drainPp":
+    case "buffStat":
+    case "permStat":
+    case "inflictStatus":
+      return false;
+  }
+}
+
 export type ItemUseResult =
   | {
       ok: true;
@@ -141,7 +163,7 @@ export type ItemUseResult =
       itemId: number;
       ownerChar: number;
       targetChar: number;
-      reason: "missingItem" | "notConsumable" | "unknownEffect";
+      reason: "missingItem" | "notConsumable" | "unknownEffect" | "notFieldUsable";
     };
 
 export type PartyVitalsApplyResult = {
@@ -417,10 +439,16 @@ export class PartyState {
     if (!effect) {
       return { ok: false, itemId, ownerChar, targetChar, reason: "unknownEffect" };
     }
+    if (!isFieldUsableItemEffect(effect)) {
+      return { ok: false, itemId, ownerChar, targetChar, reason: "notFieldUsable" };
+    }
 
     const applied = this.applyEffectToChar(targetChar, effect, options.targetVitals);
     if (!applied) {
       return { ok: false, itemId, ownerChar, targetChar, reason: "unknownEffect" };
+    }
+    if (effect.kind === "revive" && applied.previousValue === applied.nextValue) {
+      return { ok: false, itemId, ownerChar, targetChar, reason: "notFieldUsable" };
     }
     this.take(ownerChar, itemId);
     return {
@@ -655,7 +683,7 @@ export class PartyState {
         pp: Math.min(stat(combatant.maxPp), stat(combatant.pp)),
         maxPp: stat(combatant.maxPp)
       });
-      this.commitStatuses(charId, combatant.statuses ?? []);
+      this.commitStatuses(charId, stripBattleScopedStatuses(combatant.statuses));
       this.battleMembersByChar.set(charId, battleMemberFromCombatant(combatant));
     }
   }
@@ -1132,11 +1160,22 @@ export function applyUseEffectToVitals(vitals: PartyVitals, effect: ItemUseEffec
     case "drainPp":
     case "buffStat":
     case "permStat":
-    case "revive":
     case "cureStatus":
     case "inflictStatus":
       // Battle-only effects; no overworld vitals change.
       return { vitals, previousValue: 0, nextValue: 0 };
+    case "revive": {
+      const previousValue = vitals.hp.target;
+      if (previousValue > 0) {
+        return { vitals, previousValue, nextValue: previousValue };
+      }
+      const nextValue = Math.min(vitals.maxHp, Math.max(1, effect.amount));
+      return {
+        vitals: { ...vitals, hp: setTarget(vitals.hp, nextValue) },
+        previousValue,
+        nextValue
+      };
+    }
   }
 }
 

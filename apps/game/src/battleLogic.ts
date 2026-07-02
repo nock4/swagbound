@@ -178,6 +178,7 @@ export type BattleActionResolution = {
   state: BattleState;
   actor: BattleActor;
   target: BattleActor | null;
+  targets?: BattleActor[];
   amount: number;
   outcome: BattleOutcome;
   skipped: boolean;
@@ -203,6 +204,15 @@ export type MirrorResolution = BattleActionResolution & {
 };
 
 export type PsiBattleKind = "offense" | "recovery" | "assist" | "other";
+export type PsiTargetMode = "one" | "all";
+type PsiAmountFields = Partial<{
+  amount: unknown;
+  damage: unknown;
+  damageAmount: unknown;
+  heal: unknown;
+  healAmount: unknown;
+  power: unknown;
+}>;
 
 export type BattleDropSummary = {
   enemyId: number;
@@ -482,8 +492,17 @@ export function computeEncounterAdvantage(
   return "normal";
 }
 
-export function battleRngSeedForGroup(groupId: number, enemies: readonly Pick<BattleEnemy, "id">[]): number {
-  return (stat(groupId) + 1) * 65537 + enemies.reduce((sum, enemy) => sum + stat(enemy.id), 0);
+export function battleRngSeedForGroup(
+  groupId: number,
+  enemies: readonly Pick<BattleEnemy, "id">[],
+  encounterSeed?: number
+): number {
+  const groupSeed = (stat(groupId) + 1) * 65537 + enemies.reduce((sum, enemy) => sum + stat(enemy.id), 0);
+  if (encounterSeed === undefined) {
+    return groupSeed;
+  }
+  const seed = finiteUint32(encounterSeed);
+  return (groupSeed ^ (seed + 0x9e3779b9 + ((groupSeed << 6) >>> 0) + (groupSeed >>> 2))) >>> 0;
 }
 
 export function createBattleRng(seed: number): Rng {
@@ -1031,31 +1050,37 @@ export function resolvePsiTurn(
   // Authored-effect PSI (assist: shield / stat buff / status inflict) reuse the item-effect
   // machinery, with the target side decided by the effect (itemEffectTargetSide).
   if (psi.effect) {
-    const effectTarget = psi.effect.kind === "revive"
-      ? resolveFaintedPartyTarget(state, options)
-      : resolveTargetActor(state, itemEffectTargetSide(psi.effect), options);
-    if (!effectTarget) {
+    const effectTargets = psi.effect.kind === "revive"
+      ? [resolveFaintedPartyTarget(state, options)].filter((target): target is BattleActor => Boolean(target))
+      : resolvePsiTargetActors(state, psi, itemEffectTargetSide(psi.effect), options);
+    if (effectTargets.length === 0) {
       return { ...blockedAction(state, actor, currentOutcome, "noTarget"), ppCost };
     }
-    const effectCombatant = combatantFor(state, effectTarget);
-    if (!effectCombatant) {
-      return { ...blockedAction(state, actor, currentOutcome, "noTarget"), ppCost };
-    }
-    const applied = applyItemEffectToCombatant(effectCombatant, psi.effect);
-    let withEffect = withCombatant(state, effectTarget, applied.combatant);
-    if (psi.effect.kind === "drainPp") {
-      // Credit the drained PP back to the caster (PSI Magnet).
-      const casterNow = combatantFor(withEffect, actor);
-      if (casterNow) {
-        withEffect = withCombatant(withEffect, actor, applyPpRestore(casterNow, applied.amount));
+    let withEffect = state;
+    let totalAmount = 0;
+    for (const effectTarget of effectTargets) {
+      const effectCombatant = combatantFor(withEffect, effectTarget);
+      if (!effectCombatant) {
+        continue;
+      }
+      const applied = applyItemEffectToCombatant(effectCombatant, psi.effect);
+      totalAmount += applied.amount;
+      withEffect = withCombatant(withEffect, effectTarget, applied.combatant);
+      if (psi.effect.kind === "drainPp") {
+        // Credit the drained PP back to the caster (PSI Magnet).
+        const casterNow = combatantFor(withEffect, actor);
+        if (casterNow) {
+          withEffect = withCombatant(withEffect, actor, applyPpRestore(casterNow, applied.amount));
+        }
       }
     }
     const nextState = spendPp(withEffect, actor, ppCost);
     return {
       state: nextState,
       actor,
-      target: effectTarget,
-      amount: applied.amount,
+      target: effectTargets[0] ?? null,
+      targets: effectTargets,
+      amount: totalAmount,
       outcome: outcome(nextState),
       skipped: false,
       ppCost
@@ -1066,35 +1091,36 @@ export function resolvePsiTurn(
   if (kind !== "offense" && kind !== "recovery") {
     return blockedAction(state, actor, currentOutcome, "unsupportedPsi");
   }
-  const target = kind === "offense"
-    ? resolveTargetActor(state, "enemy", options)
-    : resolveTargetActor(state, "party", options);
-  if (!target) {
+  const targetSide = psiTargetSide(psi) ?? (kind === "offense" ? "enemy" : "party");
+  const targets = resolvePsiTargetActors(state, psi, targetSide, options);
+  if (targets.length === 0) {
     return {
       ...blockedAction(state, actor, currentOutcome, "noTarget"),
       ppCost
     };
   }
 
-  const targetCombatant = combatantFor(state, target);
-  if (!targetCombatant) {
-    return {
-      ...blockedAction(state, actor, currentOutcome, "noTarget"),
-      ppCost
-    };
+  let totalAmount = 0;
+  let withTarget = state;
+  for (const target of targets) {
+    const targetCombatant = combatantFor(withTarget, target);
+    if (!targetCombatant) {
+      continue;
+    }
+    const amount = psiEffectAmount(psi, kind, rng);
+    totalAmount += amount;
+    const nextTarget = kind === "offense"
+      ? applyDamage(targetCombatant, amount)
+      : applyHeal(targetCombatant, amount);
+    withTarget = withCombatant(withTarget, target, nextTarget);
   }
-
-  const amount = psiEffectAmount(psi, kind, rng);
-  const nextTarget = kind === "offense"
-    ? applyDamage(targetCombatant, amount)
-    : applyHeal(targetCombatant, amount);
-  const withTarget = withCombatant(state, target, nextTarget);
   const nextState = spendPp(withTarget, actor, ppCost);
   return {
     state: nextState,
     actor,
-    target,
-    amount,
+    target: targets[0] ?? null,
+    targets,
+    amount: totalAmount,
     outcome: outcome(nextState),
     skipped: false,
     ppCost
@@ -1184,17 +1210,93 @@ export function psiBattleKind(psi: Pick<PsiData, "type">): PsiBattleKind | undef
   return undefined;
 }
 
-export function psiPpCost(psi: Pick<PsiData, "strength">): number {
+export function psiTargetSide(psi: Pick<PsiData, "type" | "direction" | "effect">): BattleSide | null {
+  if (psi.effect) {
+    return itemEffectTargetSide(psi.effect);
+  }
+  if (psi.direction === "party" || psi.direction === "enemy") {
+    return psi.direction;
+  }
+  const kind = psiBattleKind(psi);
+  if (kind === "offense") {
+    return "enemy";
+  }
+  if (kind === "recovery") {
+    return "party";
+  }
+  return null;
+}
+
+export function psiTargetMode(psi: Pick<PsiData, "target">): PsiTargetMode {
+  return psi.target === "all" || psi.target === "row" ? "all" : "one";
+}
+
+export function psiTargetsAll(psi: Pick<PsiData, "target">): boolean {
+  return psiTargetMode(psi) === "all";
+}
+
+export function psiPpCost(psi: Pick<PsiData, "strength" | "ppCost">): number {
+  if (psi.ppCost !== undefined && Number.isFinite(psi.ppCost)) {
+    return stat(psi.ppCost);
+  }
   return STRENGTH_PP_COST[normalizedStrength(psi.strength)] ?? STRENGTH_PP_COST.none;
 }
 
-export function psiEffectAmount(psi: Pick<PsiData, "strength">, kind: "offense" | "recovery", rng: Rng = () => 0.5): number {
+export function psiEffectAmount(
+  psi: Pick<PsiData, "strength"> & PsiAmountFields,
+  kind: "offense" | "recovery",
+  rng: Rng = () => 0.5
+): number {
+  const override = psiAmountOverride(psi, kind, rng);
+  if (override !== undefined) {
+    return override;
+  }
   const rank = STRENGTH_RANK[normalizedStrength(psi.strength)] ?? 0;
   const base = kind === "offense"
     ? 18 + rank * 12
     : 24 + rank * 16;
   const spread = kind === "offense" ? 0.95 + normalizedRoll(rng()) * 0.1 : 1;
   return Math.max(1, Math.floor(base * spread));
+}
+
+function psiAmountOverride(psi: PsiAmountFields, kind: "offense" | "recovery", rng: Rng): number | undefined {
+  const candidates = kind === "offense"
+    ? [psi.damage, psi.damageAmount, psi.power, psi.amount]
+    : [psi.heal, psi.healAmount, psi.amount];
+  for (const candidate of candidates) {
+    const amount = psiAmountFromUnknown(candidate, rng);
+    if (amount !== undefined) {
+      return amount;
+    }
+  }
+  return undefined;
+}
+
+function psiAmountFromUnknown(value: unknown, rng: Rng): number | undefined {
+  if (typeof value === "number" && Number.isFinite(value) && value > 0) {
+    return Math.max(1, Math.floor(value));
+  }
+  if (!value || typeof value !== "object") {
+    return undefined;
+  }
+  const fields = value as Record<string, unknown>;
+  const direct = numericField(fields, "amount") ?? numericField(fields, "value") ?? numericField(fields, "power");
+  if (direct !== undefined && direct > 0) {
+    return Math.max(1, Math.floor(direct));
+  }
+  const min = numericField(fields, "min");
+  const max = numericField(fields, "max");
+  if (min !== undefined && max !== undefined && max > 0) {
+    const low = Math.max(1, Math.floor(Math.min(min, max)));
+    const high = Math.max(low, Math.floor(Math.max(min, max)));
+    return low + Math.floor(normalizedRoll(rng()) * (high - low + 1));
+  }
+  return undefined;
+}
+
+function numericField(fields: Record<string, unknown>, key: string): number | undefined {
+  const value = fields[key];
+  return typeof value === "number" && Number.isFinite(value) ? value : undefined;
 }
 
 export function applyVictoryRewards(
@@ -1249,13 +1351,17 @@ export function applyVictoryRewards(
   }
 
   const levelUps: BattleLevelUpSummary[] = [];
+  const livingPartyCount = nextState.party.filter(isCombatantAlive).length;
+  const expPerLiving = expGained > 0 && livingPartyCount > 0
+    ? Math.max(1, Math.floor(expGained / livingPartyCount))
+    : 0;
   nextState = {
     ...nextState,
     party: nextState.party.map((member) => {
       if (!isCombatantAlive(member)) {
         return member;
       }
-      const applied = applyExperienceToCombatant(member, expGained, options.psi ?? []);
+      const applied = applyExperienceToCombatant(member, expPerLiving, options.psi ?? []);
       if (applied.levelUp) {
         levelUps.push(applied.levelUp);
       }
@@ -1439,6 +1545,19 @@ export function resolveTargetActor(
 ): BattleActor | null {
   const combatants = side === "party" ? state.party : state.enemies;
   return livingTarget(combatants, side, options.targetIndex, options.targetCombatantId);
+}
+
+function resolvePsiTargetActors(
+  state: BattleState,
+  psi: Pick<PsiData, "target">,
+  side: BattleSide,
+  options: BattleTargetOptions
+): BattleActor[] {
+  if (psiTargetsAll(psi)) {
+    return livingActors(side === "party" ? state.party : state.enemies, side);
+  }
+  const target = resolveTargetActor(state, side, options);
+  return target ? [target] : [];
 }
 
 /** Resolve a FAINTED party member (the specified index if fainted, else the first fainted). Used by revive. */
@@ -2326,6 +2445,13 @@ function stat(value: number): number {
     return 0;
   }
   return Math.max(0, Math.floor(value));
+}
+
+function finiteUint32(value: number): number {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  return Math.floor(value) >>> 0;
 }
 
 function enemySpeed(enemy: BattleEnemy): number {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fieldPoisonTick, formatStatusAilments, poisonDamagePerTick } from "./statusEffects";
+import { fieldPoisonTick, formatStatusAilments, poisonDamagePerTick, stripBattleScopedStatuses } from "./statusEffects";
 
 describe("field poison ticks", () => {
   it("does nothing without poison", () => {
@@ -23,5 +23,20 @@ describe("status labels", () => {
   it("formats active ailments for menu display", () => {
     expect(formatStatusAilments(undefined)).toBe("OK");
     expect(formatStatusAilments([{ ailment: "poisoned" }, { ailment: "paralyzed" }])).toBe("Poison, Paralysis");
+  });
+});
+
+describe("battle-scoped status cleanup", () => {
+  it("strips asleep/confused/shielded while preserving EB-persistent poison and paralysis", () => {
+    expect(stripBattleScopedStatuses([
+      { ailment: "poisoned" },
+      { ailment: "paralyzed" },
+      { ailment: "asleep" },
+      { ailment: "confused" },
+      { ailment: "shielded", magnitude: 50 }
+    ])).toEqual([
+      { ailment: "poisoned" },
+      { ailment: "paralyzed" }
+    ]);
   });
 });

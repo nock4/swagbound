@@ -2869,7 +2869,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       item,
       targetVitals: vitalsForPartyMember(target)
     });
-    this.showMenuResult(result.ok ? "Used." : "You can't use that.");
+    this.showMenuResult(result.ok
+      ? "Used."
+      : result.reason === "notFieldUsable" ? "You can't use that here." : "You can't use that.");
   }
 
   private handleItemGiveAction(action: Extract<MenuAction, { kind: "itemGive" }>): void {
@@ -4880,6 +4882,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.scene.stop("ui");
     // Play the colored EB encounter swirl over the overworld, THEN switch to battle (see tickEncounterSwirl).
     const battlePartyMembers = this.battlePartyMembers();
+    const encounterSeed = this.nextBattleEncounterSeed();
     this.beginEncounterSwirl({
       battleData: this.data_.battle,
       groupId: group,
@@ -4895,6 +4898,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       backgroundOverrides: this.data_.backgroundOverrides,
       battleRules: this.data_.battleRules,
       encounterAdvantage,
+      encounterSeed,
       boss: pendingStoryGate !== undefined,
       returnTo: this.battleReturnContext(group, source, pendingStoryGate)
     });
@@ -4927,7 +4931,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (g) {
       g.clear();
       // progress 1 -> clear (overworld visible), 0 -> covered/black; ramp 1->0 to cover the screen.
-      drawSwirl(g, 1 - p, this.scale.width, this.scale.height, { clockMs: this.time.now });
+      drawSwirl(g, 1 - p, this.scale.width, this.scale.height, {
+        clockMs: this.time.now,
+        advantageTint: swirlTintForAdvantage(this.pendingBattleStart.params.encounterAdvantage)
+      });
     }
     this.syncPlayerObject();
     if (p >= 1) {
@@ -4946,6 +4953,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return party && enemies.length > 0 ? computeEncounterAdvantage(party, enemies) : "normal";
   }
 
+  private nextBattleEncounterSeed(): number {
+    this.encounterRng.next();
+    return this.encounterRng.state();
+  }
+
   private resolveInstantWinEncounter(group: number): boolean {
     if (!this.data_.battle || !this.battleGroupExists(group) || !this.player) {
       return false;
@@ -4955,6 +4967,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
     const instantWinPartyMembers = this.battlePartyMembers();
+    const encounterSeed = this.nextBattleEncounterSeed();
     const battle = createBattleState(enemies, {
       characters: this.data_.characters,
       partyMembers: instantWinPartyMembers,
@@ -4964,7 +4977,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const rewards = resolveInstantWinRewards(battle.party, enemies, instantWinRewardOptions({
       wallet: battle.wallet,
       roundNumber: battle.roundNumber,
-      rng: createBattleRng(battleRngSeedForGroup(group, enemies)),
+      rng: createBattleRng(battleRngSeedForGroup(group, enemies, encounterSeed)),
       items: this.data_.items?.items,
       psi: this.data_.psi?.psi
     }));
@@ -6161,6 +6174,16 @@ function normalizeForcedEncounterAdvantage(value: unknown): EncounterAdvantage |
     default:
       return undefined;
   }
+}
+
+function swirlTintForAdvantage(value: unknown): "party" | "enemy" | undefined {
+  if (value === "partyFirstStrike") {
+    return "party";
+  }
+  if (value === "enemyFirstStrike") {
+    return "enemy";
+  }
+  return undefined;
 }
 
 function instantWinRewardOptions(options: {

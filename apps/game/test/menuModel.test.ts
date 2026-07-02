@@ -358,6 +358,10 @@ describe("item and PSI menu view models", () => {
       itemId: 10,
       targetChar: 1
     });
+    expect(goodsActionScreens[4]).toMatchObject({
+      id: "goods-use-target-1-1-11",
+      items: [{ label: "You can't use that here.", enabled: false }]
+    });
     expect(parseMenuAction(goodsActionScreens[0].items[2]?.actionId ?? "")).toEqual({
       kind: "itemDrop",
       ownerChar: 1,
@@ -668,8 +672,9 @@ function itemData(
     action: 0,
     argument: 0,
     equippable,
-    miscFlags: [],
+    miscFlags: id === 10 ? ["item disappears when used"] : [],
     ...(equipBonuses ? { equipBonuses } : {}),
+    ...(id === 10 ? { effect: { kind: "healHp" as const, amount: 12 } } : {}),
     ...(helpText ? { helpText } : {})
   };
 }

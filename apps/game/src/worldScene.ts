@@ -653,7 +653,9 @@ export class WorldScene extends Phaser.Scene {
       item,
       targetVitals: vitalsForPartyMember(target)
     });
-    this.showMenuResult(result.ok ? "Used." : "You can't use that.");
+    this.showMenuResult(result.ok
+      ? "Used."
+      : result.reason === "notFieldUsable" ? "You can't use that here." : "You can't use that.");
   }
 
   private handleEquipAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "equip" }>): void {

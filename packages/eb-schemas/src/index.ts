@@ -1666,6 +1666,10 @@ export const PsiDataSchema = z.object({
   name: z.string(),
   type: z.string(),
   strength: z.string(),
+  action: z.number().int().nonnegative().optional(),
+  ppCost: z.number().int().nonnegative().optional(),
+  target: z.enum(["none", "one", "row", "all"]).optional(),
+  direction: z.enum(["party", "enemy"]).optional(),
   usableOutsideBattle: z.boolean(),
   learnedBy: z.array(PsiLearnedBySchema),
   /** Optional authored battle effect (assist PSI: shield/buff/inflict), applied at load. */
