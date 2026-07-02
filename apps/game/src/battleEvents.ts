@@ -88,7 +88,9 @@ export function battleEventsHaveEnemyDefeated(events: readonly BattleEvent[]): b
 
 function psiEvents(details: BattleRoundStepNarrationDetails): BattleEvent[] {
   if (isRecovery(details)) {
-    return recoveryEvents(details, details.attackerName, preferredMessageEvent(details));
+    // Name the RECIPIENT, not the caster — an enemy Lifeup on an ally must
+    // read "<ally> recovered N HP!", matching the item recovery path.
+    return recoveryEvents(details, details.targetName ?? details.attackerName, preferredMessageEvent(details));
   }
   // A non-damaging assist effect that didn't miss (status inflict / stat buff / PP drain) narrates
   // via its authored message — NOT the attack-impact path, which reads "no damage" as a dodge.
