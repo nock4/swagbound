@@ -700,15 +700,9 @@ export class RuntimeEventSequence {
     if (!this.running) {
       return;
     }
-    this.executor = undefined;
-    this.host.finish({
-      status: "aborted",
-      truncated: false,
-      commandsVisited: 0,
-      jumps: 0,
-      reason
-    });
-    this.onComplete = undefined;
+    // Callers rely on onComplete to finalize state machines (e.g. the new-game
+    // startup run); an external abort must fire it like internal aborts do.
+    this.finishAborted(reason);
   }
 
   debug(): EventHostDebug {

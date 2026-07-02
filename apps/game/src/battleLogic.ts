@@ -10,6 +10,8 @@ import {
   buildCombatantFromPartyMember,
   buildPartyMember,
   calculateStatsAtLevel,
+  combatantBaseStats,
+  effectivePartyMemberStats,
   levelForExperience,
   type PartyMember,
   type PartyMemberExpThreshold,
@@ -64,6 +66,8 @@ export type Combatant = {
   defense: number;
   speed: number;
   stats: PartyMemberStats;
+  /** Equip-derived bonuses already folded into stats; subtract to recover base stats. */
+  statBonuses?: PartyMemberStatBonuses;
   growth?: PartyMemberGrowth;
   expTable?: PartyMemberExpThreshold[];
   money: number;
@@ -344,6 +348,7 @@ export function buildPlayerCombatant(options: PlayerCombatantOptions = {}): Comb
   const defense = stat(options.defense ?? PLAYER_DEFAULTS.defense) + stat(options.statBonuses?.defense ?? 0);
   const speed = stat(options.speed ?? PLAYER_DEFAULTS.speed) + stat(options.statBonuses?.speed ?? 0);
   return {
+    ...(options.statBonuses ? { statBonuses: { ...options.statBonuses } } : {}),
     combatantId: stableCombatantId("party", 0),
     charId: PLAYER_DEFAULTS.charId,
     name: options.name ?? PLAYER_DEFAULTS.name,
@@ -1983,23 +1988,27 @@ function applyExperienceToCombatant(combatant: Combatant, expGained: number, psi
     };
   }
 
+  // Growth runs on BASE stats (equip bonuses subtracted) so gear never distorts
+  // level-up gains; the effective stats get the bonuses re-applied afterwards.
+  const baseStats = combatantBaseStats(combatant);
   const calculated = calculateStatsAtLevel(combatant.growth, nextLevel, {
     level: currentLevel,
     maxHp: combatant.maxHp,
     maxPp: combatant.maxPp,
-    stats: combatant.stats
+    stats: baseStats
   });
-  const nextStats = maxStats(combatant.stats, calculated.stats);
+  const nextBaseStats = maxStats(baseStats, calculated.stats);
+  const nextStats = effectivePartyMemberStats({ stats: nextBaseStats }, combatant.statBonuses);
   const nextMaxHp = Math.max(combatant.maxHp, calculated.maxHp);
   const nextMaxPp = Math.max(combatant.maxPp, calculated.maxPp);
   const statGains = {
-    offense: nextStats.offense - combatant.stats.offense,
-    defense: nextStats.defense - combatant.stats.defense,
-    speed: nextStats.speed - combatant.stats.speed,
-    guts: nextStats.guts - combatant.stats.guts,
-    vitality: nextStats.vitality - combatant.stats.vitality,
-    iq: nextStats.iq - combatant.stats.iq,
-    luck: nextStats.luck - combatant.stats.luck,
+    offense: nextBaseStats.offense - baseStats.offense,
+    defense: nextBaseStats.defense - baseStats.defense,
+    speed: nextBaseStats.speed - baseStats.speed,
+    guts: nextBaseStats.guts - baseStats.guts,
+    vitality: nextBaseStats.vitality - baseStats.vitality,
+    iq: nextBaseStats.iq - baseStats.iq,
+    luck: nextBaseStats.luck - baseStats.luck,
     maxHp: nextMaxHp - combatant.maxHp,
     maxPp: nextMaxPp - combatant.maxPp
   };

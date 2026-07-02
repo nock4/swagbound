@@ -1,5 +1,37 @@
 import { describe, expect, it } from "vitest";
 import { hospitalRecoveryCost, PartyState, type PartyStateSnapshot } from "./partyState";
+import { buildCombatantFromPartyMember, type PartyMember } from "./characterModel";
+
+describe("PartyState battle round-trips", () => {
+  it("does not compound equip stat bonuses across battle round-trips", () => {
+    const partyState = new PartyState();
+    const base: PartyMember = {
+      id: 0,
+      name: "Bosch",
+      level: 3,
+      experience: 0,
+      hp: 40,
+      maxHp: 40,
+      pp: 10,
+      maxPp: 10,
+      stats: { offense: 20, defense: 12, speed: 5, guts: 3, vitality: 4, iq: 3, luck: 2 },
+      inventory: [],
+      money: 0
+    };
+
+    for (let trip = 0; trip < 3; trip += 1) {
+      const [member] = partyState.applyToPartyMembers([{ ...base, stats: { ...base.stats } }]);
+      // Persisted stats stay BASE — a +10 weapon must not raise them per battle.
+      expect(member.stats.offense).toBe(20);
+      expect(member.stats.defense).toBe(12);
+      const combatant = buildCombatantFromPartyMember(member, { statBonuses: { offense: 10, defense: 4 } });
+      // In battle the equip bonus applies once.
+      expect(combatant.stats.offense).toBe(30);
+      expect(combatant.stats.defense).toBe(16);
+      partyState.applyBattleResult([combatant], 0);
+    }
+  });
+});
 
 describe("PartyState field statuses", () => {
   it("drains poisoned active party members on field steps without killing them", () => {

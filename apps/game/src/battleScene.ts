@@ -45,6 +45,7 @@ import {
   type BattleVictorySummary,
   type EncounterAdvantage,
   type InstantWinRewardOptions,
+  type PlayerCombatantOptions,
   type Rng
 } from "./battleLogic";
 import {
@@ -123,7 +124,7 @@ import {
   MENU_UP_KEY_NAMES,
   registerDiscreteKeys
 } from "./inputModel";
-import type { PartyMember } from "./characterModel";
+import { combatantBaseStats, type PartyMember } from "./characterModel";
 import type { PartyBattleMemberSnapshot, PartyStateSnapshot } from "./partyState";
 import { decodeItemUseEffect } from "./partyState";
 import type { StatusState } from "./statusEffects";
@@ -486,6 +487,7 @@ export class BattleScene extends Phaser.Scene {
     backgroundOverrides?: BackgroundOverrides;
     battleRules?: BattleRules;
     partyMembers?: PartyMember[];
+    partyOptions?: PlayerCombatantOptions[];
     wallet?: number;
     returnTo?: BattleReturnContext;
     battleSfx?: BattleSfx;
@@ -515,6 +517,7 @@ export class BattleScene extends Phaser.Scene {
     this.battle_ = createBattleState(enemies, {
       characters: data.characters,
       partyMembers: data.partyMembers,
+      partyOptions: data.partyOptions,
       wallet: data.wallet
     });
     this.enemyLastHitAt = enemies.map(() => null);
@@ -3503,15 +3506,8 @@ function battleMemberSnapshotFromCombatant(combatant: BattleState["party"][numbe
     pp: Math.min(stat(combatant.maxPp), stat(combatant.pp)),
     maxPp: stat(combatant.maxPp),
     inventory: combatant.inventory.map((itemId) => stat(itemId)),
-    stats: {
-      offense: stat(combatant.stats.offense),
-      defense: stat(combatant.stats.defense),
-      speed: stat(combatant.stats.speed),
-      guts: stat(combatant.stats.guts),
-      vitality: stat(combatant.stats.vitality),
-      iq: stat(combatant.stats.iq),
-      luck: stat(combatant.stats.luck)
-    }
+    // BASE stats only — persisting effective stats re-adds equip bonuses next battle.
+    stats: combatantBaseStats(combatant)
   };
 }
 

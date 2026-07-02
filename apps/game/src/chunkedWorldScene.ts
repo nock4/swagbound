@@ -13,7 +13,8 @@ import {
   createBattleState,
   resolveInstantWinRewards,
   type EncounterAdvantage,
-  type InstantWinRewardOptions
+  type InstantWinRewardOptions,
+  type PlayerCombatantOptions
 } from "./battleLogic";
 import {
   messageDoorDialogueReference,
@@ -1583,7 +1584,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return item ? this.partyState.equip(charId, item) : { ok: false };
     };
     globals.__battleStats = (charId: number) => {
-      const member = this.battlePartyMembers()?.find((entry) => entry.id === charId);
+      const member = this.effectiveBattlePartyMembers()?.find((entry) => entry.id === charId);
       return member ? { offense: member.stats.offense, defense: member.stats.defense } : undefined;
     };
     globals.__overworldStatusHud = () => this.overworldStatusHud();
@@ -1600,6 +1601,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // Debug-only: force hero visual-state inputs (KO, ride, status, cutscene event, palette) so the
     // sprite-state render path can be exercised in-engine without reaching each in-game trigger.
     // e.g. __setPlayerVisualState({ event: "dead" }) or ({ status: { tiny: true } }); call with {} to clear.
+    globals.__partyOp = (op: "add" | "remove", charId: number) => {
+      this.partyState.partyOp(op, charId);
+      this.partyState.ensureVitalsFor(this.overworldHudPartyMembers());
+      // Respawn the follower so debug party changes are visible immediately.
+      this.spawnFollower({ x: this.playerState.x, y: this.playerState.y }, this.playerState.facing);
+      return this.partyState.party();
+    };
+    globals.__followerInfo = () => ({
+      spawned: Boolean(this.follower),
+      pos: this.followerPos ? { ...this.followerPos } : null,
+      player: { x: this.playerState.x, y: this.playerState.y },
+      textureLoaded: this.textures.exists(FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY),
+      overrideConfigured: Boolean(this.followerSpriteOverride())
+    });
     globals.__setPlayerVisualState = (forced?: Partial<VisualStateInputs>) => {
       this.forcedVisualState = forced ?? {};
       this.applyPlayerVisualState();
@@ -1626,6 +1641,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__battleStats;
     delete globals.__overworldStatusHud;
     delete globals.__setPartyStatus;
+    delete globals.__partyOp;
+    delete globals.__followerInfo;
     delete globals.__setPlayerVisualState;
     delete globals.__playerVisualState;
     delete globals.__overlayInfo;
@@ -4861,11 +4878,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.lastEncounterGroup = group;
     this.scene.stop("ui");
     // Play the colored EB encounter swirl over the overworld, THEN switch to battle (see tickEncounterSwirl).
+    const battlePartyMembers = this.battlePartyMembers();
     this.beginEncounterSwirl({
       battleData: this.data_.battle,
       groupId: group,
       characters: this.data_.characters,
-      partyMembers: this.battlePartyMembers(),
+      partyMembers: battlePartyMembers,
+      partyOptions: this.battlePartyOptions(battlePartyMembers),
       wallet: this.partyState.wallet,
       items: this.data_.items,
       psi: this.data_.psi,
@@ -4921,7 +4940,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private encounterAdvantageForGroup(group: number): EncounterAdvantage {
-    const party = this.battlePartyMembers();
+    const party = this.effectiveBattlePartyMembers();
     const enemies = this.enemiesForBattleGroup(group);
     return party && enemies.length > 0 ? computeEncounterAdvantage(party, enemies) : "normal";
   }
@@ -4934,9 +4953,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (enemies.length === 0) {
       return false;
     }
+    const instantWinPartyMembers = this.battlePartyMembers();
     const battle = createBattleState(enemies, {
       characters: this.data_.characters,
-      partyMembers: this.battlePartyMembers(),
+      partyMembers: instantWinPartyMembers,
+      partyOptions: this.battlePartyOptions(instantWinPartyMembers),
       wallet: this.partyState.wallet
     });
     const rewards = resolveInstantWinRewards(battle.party, enemies, instantWinRewardOptions({
@@ -4996,9 +5017,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const all = this.partyState.applyToPartyMembers(this.data_.characters.characters.map(buildPartyMember));
     // Battle only the active party (Act 1 = Bosch + Paula); never the full roster.
     const activeIds = new Set(this.partyState.party());
-    const selected = activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
-    // Fold equipped-gear bonuses into battle stats (weapons → offense, armor → defense).
-    return selected.map((member) => {
+    // BASE stats only. Equip bonuses ride separately as combatant statBonuses
+    // (battlePartyOptions) so post-battle snapshots never compound them.
+    return activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
+  }
+
+  /** Per-member combatant options aligned with battlePartyMembers(): equip bonuses as statBonuses. */
+  private battlePartyOptions(members: PartyMember[] | undefined): PlayerCombatantOptions[] | undefined {
+    if (!members?.length) {
+      return undefined;
+    }
+    return members.map((member) => {
+      const bonus = this.equipStatBonuses(member.id);
+      return bonus.offense || bonus.defense ? { statBonuses: bonus } : {};
+    });
+  }
+
+  /** Members with equip bonuses folded in — for advantage math and debug readouts ONLY, never persistence. */
+  private effectiveBattlePartyMembers(): PartyMember[] | undefined {
+    return this.battlePartyMembers()?.map((member) => {
       const bonus = this.equipStatBonuses(member.id);
       return bonus.offense || bonus.defense
         ? { ...member, stats: { ...member.stats, offense: member.stats.offense + bonus.offense, defense: member.stats.defense + bonus.defense } }
@@ -5297,12 +5334,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.dialogue.open && !this.eventSequence?.running) {
       return;
     }
+    // Cancel is "skip to end", not "abandon": one-shot story beats (intro
+    // meteor, story triggers, boss gates) must still fire their completion
+    // effects or their armed flags leave the run permanently stranded.
+    const pendingComplete = this.pendingScriptedDialogueComplete;
     this.pendingScriptedDialogueComplete = undefined;
     if (this.dialogue.open) {
       this.dialogue.close();
     }
     this.eventSequence?.abort();
-    this.afterDialogueClosed();
+    if (pendingComplete) {
+      pendingComplete();
+    } else {
+      this.afterDialogueClosed();
+    }
     this.publish();
   }
 

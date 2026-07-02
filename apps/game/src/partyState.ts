@@ -7,7 +7,7 @@ import {
   type StatusAilment,
   type StatusState
 } from "./statusEffects";
-import type { PartyMember, PartyMemberStats } from "./characterModel";
+import { combatantBaseStats, type PartyMember, type PartyMemberStats } from "./characterModel";
 import {
   createRollingMeter,
   setTarget,
@@ -1228,7 +1228,8 @@ function battleMemberFromCombatant(combatant: Combatant): PartyBattleMemberSnaps
     pp: combatant.pp,
     maxPp: combatant.maxPp,
     inventory: combatant.inventory,
-    stats: combatant.stats
+    // BASE stats only — persisting effective stats re-adds equip bonuses next battle.
+    stats: combatantBaseStats(combatant)
   });
 }
 

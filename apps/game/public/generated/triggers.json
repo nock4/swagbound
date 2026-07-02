@@ -85,7 +85,8 @@
         "Signal Town logs him as \"left unprocessed.\" The road north opens on a Bosch the route never got to finish.",
         "[ ACT 1 -- END ]"
       ],
-      "setFlags": ["act1:complete"]
+      "setFlags": ["act1:complete"],
+      "music": "ending"
     }
   ],
   "barriers": [

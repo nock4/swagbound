@@ -151,12 +151,46 @@ export type AddedWorldChunkedNpc = WorldChunkedNpc & {
 };
 
 async function loadJson<T>(url: string, schema: { parse: (value: unknown) => T }): Promise<T | undefined> {
+  // Absent layers are expected (most generated JSON is optional) — but a layer
+  // that EXISTS and fails to parse/validate must be loud, or authoring mistakes
+  // silently disable story triggers, collision overrides, cutscenes, etc.
+  let response: Response;
   try {
-    const response = await fetch(url);
-    return schema.parse(await response.json());
-  } catch {
+    response = await fetch(url);
+  } catch (error) {
+    console.warn(`[loader] fetch failed for ${url}; layer disabled`, error);
     return undefined;
   }
+  if (!response.ok) {
+    if (response.status !== 404) {
+      console.warn(`[loader] ${url} responded ${response.status}; layer disabled`);
+    }
+    return undefined;
+  }
+  const contentType = response.headers.get("content-type") ?? "";
+  if (!contentType.includes("json")) {
+    console.warn(`[loader] ${url} returned non-JSON (${contentType || "unknown content-type"}); layer disabled`);
+    return undefined;
+  }
+  try {
+    return schema.parse(await response.json());
+  } catch (error) {
+    console.error(`[loader] ${url} exists but is INVALID — layer disabled`, error);
+    return undefined;
+  }
+}
+
+/**
+ * The overworld follower sprite defaults to the 2nd hero's (joinOrder 2) party
+ * sprite so the roster is the single source of truth — an explicit `follower`
+ * override still wins when authored.
+ */
+function withDerivedFollower(overrides: SpriteOverrides | undefined): SpriteOverrides | undefined {
+  if (!overrides || overrides.follower) {
+    return overrides;
+  }
+  const second = overrides.party?.find((hero) => hero.joinOrder === 2);
+  return second ? { ...overrides, follower: second.sprite } : overrides;
 }
 
 function emptyCustomDialogue(): CustomDialogue {
@@ -326,7 +360,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     validationReport,
     world,
     sprites,
-    spriteOverrides,
+    spriteOverrides: withDerivedFollower(spriteOverrides),
     npcOverrides: npcOverrides ?? emptyNpcOverrides(),
     backgroundOverrides,
     teleportDestinations,

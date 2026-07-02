@@ -115,6 +115,28 @@ describe("RuntimeEventHost actorMove effects", () => {
     });
   });
 
+  it("fires onComplete with an aborted result on external abort", () => {
+    const flags = new GameFlags();
+    const host = new RuntimeEventHost({
+      dialogue: new DialogueController(),
+      flags,
+      partyState: new PartyState(),
+      actorMove: () => true
+    });
+    const sequence = new RuntimeEventSequence(recoveryScript([
+      { kind: "actorMove", actor: { npcId: 744 }, to: { x: 120, y: 160 } },
+      { kind: "setFlag", flag: 42, raw: "set(42)" }
+    ]), host);
+    const results: Array<{ status: string; reason?: string }> = [];
+    expect(sequence.start("test.main", { onComplete: (result) => results.push(result) })).toBe(true);
+    expect(sequence.running).toBe(true);
+
+    sequence.abort("player_cancel");
+    expect(sequence.running).toBe(false);
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({ status: "aborted", reason: "player_cancel" });
+  });
+
   it("auto-resumes actorMove when no scene sink is registered", () => {
     const flags = new GameFlags();
     const host = new RuntimeEventHost({
