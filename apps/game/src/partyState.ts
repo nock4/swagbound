@@ -660,8 +660,11 @@ export class PartyState {
     this.partyIds.delete(normalizedChar);
   }
 
-  applyBattleResult(party: Combatant[], wallet: number): void {
+  applyBattleResult(party: Combatant[], wallet: number, bank?: number): void {
     this.walletValue = stat(wallet);
+    if (bank !== undefined) {
+      this.bankValue = stat(bank);
+    }
     for (const combatant of party.filter((member) => !member.isEnemy)) {
       const charId = normalizeId(combatant.charId);
       const inventory = combatant.inventory.map(normalizeId);

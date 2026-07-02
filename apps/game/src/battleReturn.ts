@@ -1,7 +1,7 @@
 import type { GameData } from "./loader";
-import type { PartyStateSnapshot } from "./partyState";
+import type { PartyBattleMemberSnapshot, PartyStateSnapshot, PartyVitalsSnapshot } from "./partyState";
 import type { Facing } from "./playerController";
-import type { SaveFlagsSnapshot, SaveSlotPersistence } from "./saveState";
+import type { SaveFlagsSnapshot, SavePlayerSnapshot, SaveSlotPersistence } from "./saveState";
 
 export type BattleReturnSource = "encounter" | "event";
 export type BattleReturnOutcome = "win" | "lose" | "flee";
@@ -39,6 +39,10 @@ export type ChunkedWorldRestore = {
   outcome?: BattleReturnOutcome;
   /** Deferred effects for a story-gate boss; applied on `outcome === "win"`. */
   pendingStoryGate?: PendingStoryGate;
+  defeat?: {
+    savedPlayer?: SavePlayerSnapshot;
+    newGamePlayer: SavePlayerSnapshot;
+  };
 };
 
 export type BattleReturnContext = {
@@ -48,3 +52,102 @@ export type BattleReturnContext = {
   saveSlots?: SaveSlotPersistence;
   restore: ChunkedWorldRestore;
 };
+
+export type DefeatReturnResult = {
+  party: PartyStateSnapshot;
+  player: SavePlayerSnapshot;
+  respawnSource: "save" | "newGame";
+};
+
+export function applyDefeatReturn(input: {
+  party: PartyStateSnapshot;
+  savedPlayer?: SavePlayerSnapshot;
+  newGamePlayer: SavePlayerSnapshot;
+}): DefeatReturnResult {
+  const respawnSource = input.savedPlayer ? "save" : "newGame";
+  return {
+    party: defeatPartySnapshot(input.party),
+    player: clonePlayerSnapshot(input.savedPlayer ?? input.newGamePlayer),
+    respawnSource
+  };
+}
+
+function defeatPartySnapshot(snapshot: PartyStateSnapshot): PartyStateSnapshot {
+  const leadCharId = snapshot.partyIds[0]
+    ?? snapshot.battleMembers?.[0]?.charId
+    ?? snapshot.vitals?.[0]?.charId;
+  return {
+    wallet: Math.floor(nonNegativeInt(snapshot.wallet) / 2),
+    ...(snapshot.bank !== undefined ? { bank: nonNegativeInt(snapshot.bank) } : {}),
+    partyIds: [...snapshot.partyIds],
+    inventory: snapshot.inventory.map((entry) => ({
+      charId: entry.charId,
+      itemIds: [...entry.itemIds]
+    })),
+    equipped: snapshot.equipped.map((entry) => ({
+      charId: entry.charId,
+      slots: { ...entry.slots }
+    })),
+    ...(snapshot.storage ? { storage: [...snapshot.storage] } : {}),
+    ...(snapshot.statuses ? {
+      statuses: snapshot.statuses.map((entry) => ({
+        charId: entry.charId,
+        statuses: entry.statuses.map((status) => ({ ...status }))
+      }))
+    } : {}),
+    ...(snapshot.vitals ? {
+      vitals: snapshot.vitals.map((entry) => defeatVitals(entry, leadCharId))
+    } : {}),
+    ...(snapshot.battleMembers ? {
+      battleMembers: snapshot.battleMembers.map((entry) => defeatBattleMember(entry, leadCharId))
+    } : {})
+  };
+}
+
+function defeatBattleMember(member: PartyBattleMemberSnapshot, leadCharId: number | undefined): PartyBattleMemberSnapshot {
+  const maxHp = positiveInt(member.maxHp);
+  return {
+    ...member,
+    hp: member.charId === leadCharId ? maxHp : 0,
+    maxHp,
+    pp: nonNegativeInt(member.pp),
+    maxPp: nonNegativeInt(member.maxPp),
+    inventory: [...member.inventory],
+    stats: { ...member.stats }
+  };
+}
+
+function defeatVitals(vitals: PartyVitalsSnapshot, leadCharId: number | undefined): PartyVitalsSnapshot {
+  const maxHp = positiveInt(vitals.maxHp);
+  const hp = vitals.charId === leadCharId ? maxHp : 0;
+  return {
+    ...vitals,
+    hp: { current: hp, target: hp },
+    maxHp,
+    pp: nonNegativeInt(vitals.pp),
+    maxPp: nonNegativeInt(vitals.maxPp)
+  };
+}
+
+function clonePlayerSnapshot(player: SavePlayerSnapshot): SavePlayerSnapshot {
+  return {
+    mode: player.mode,
+    ...(player.mapId !== undefined ? { mapId: player.mapId } : {}),
+    ...(player.region ? { region: {
+      ...(player.region.originTile ? { originTile: { ...player.region.originTile } } : {}),
+      ...(player.region.widthPixels !== undefined ? { widthPixels: player.region.widthPixels } : {}),
+      ...(player.region.heightPixels !== undefined ? { heightPixels: player.region.heightPixels } : {})
+    } } : {}),
+    x: player.x,
+    y: player.y,
+    facing: player.facing
+  };
+}
+
+function nonNegativeInt(value: number): number {
+  return Number.isFinite(value) ? Math.max(0, Math.trunc(value)) : 0;
+}
+
+function positiveInt(value: number): number {
+  return Math.max(1, nonNegativeInt(value));
+}

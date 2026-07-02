@@ -145,6 +145,7 @@ import type { OverworldStatusHudView } from "./overworldStatusHud";
 import {
   applySaveState,
   captureSaveState,
+  deserializeSaveState,
   serializeSaveState,
   type SavePlayerSnapshot,
   type SaveSlotPersistence,
@@ -426,7 +427,6 @@ type ForceEncounterResult =
 
 type ActiveServiceState =
   | { kind: ServiceKind; cost?: number }
-  | { kind: "atm" }
   | { kind: "shop-equip"; storeId: number; char: number; inventorySlot: number; itemId: number; itemName: string };
 
 type ServiceDebugState = {
@@ -3222,6 +3222,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private openServiceMenu(service: ServiceKind, cost?: number): void {
+    if (service === "atm") {
+      this.openAtmMenu();
+      return;
+    }
     const resolvedCost = service === "hospital"
       ? cost ?? this.hospitalServiceCost()
       : service === "hotel"
@@ -3338,6 +3342,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.hasSave = true;
     this.lastSavedAt = this.bootSaveState.savedAt;
     return player;
+  }
+
+  private latestSavedPlayerSnapshot(): SavePlayerSnapshot | undefined {
+    const persisted = deserializeSaveState(this.saveSlots?.loadFromSlot(this.saveSlot));
+    const save = persisted ?? this.bootSaveState;
+    return save && this.isCompatibleSavePlayer(save.player) ? { ...save.player } : undefined;
+  }
+
+  private newGameRespawnPlayerSnapshot(): SavePlayerSnapshot {
+    const spawn = this.newGameOpening?.spawn ?? this.world_.player.spawnWorldPixel;
+    return {
+      mode: "chunked",
+      mapId: this.saveMapId(),
+      x: spawn.x,
+      y: spawn.y,
+      facing: "down"
+    };
   }
 
   /**
@@ -3481,7 +3502,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.targetReference,
       this.gameFlags,
       this.data_.customDialogue,
-      this.data_.dialogueLibrary
+      this.data_.dialogueLibrary,
+      this.data_.scripts
     );
   }
 
@@ -3567,9 +3589,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private startInteractionDialogue(event: DialogueEvent): void {
-    if (event.pages) {
-      this.dialogue.start(buildInlineDialoguePages(event.pages));
-    } else if (!this.startEventSequence(event.reference)) {
+    if (event.reference) {
+      if (this.startEventSequence(event.reference)) {
+        return;
+      }
+      if (event.pages) {
+        this.dialogue.start(buildInlineDialoguePages(event.pages));
+        return;
+      }
       this.dialogue.start(resolveScriptedDialoguePages(
         this.data_.customDialogue,
         this.data_.dialogueLibrary,
@@ -3577,6 +3604,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         event.reference,
         this.gameFlags
       ));
+    } else if (event.pages) {
+      this.dialogue.start(buildInlineDialoguePages(event.pages));
     }
   }
 
@@ -4890,6 +4919,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       partyMembers: battlePartyMembers,
       partyOptions: this.battlePartyOptions(battlePartyMembers),
       wallet: this.partyState.wallet,
+      bank: this.partyState.bank,
       items: this.data_.items,
       psi: this.data_.psi,
       font: this.data_.font,
@@ -4972,16 +5002,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
       characters: this.data_.characters,
       partyMembers: instantWinPartyMembers,
       partyOptions: this.battlePartyOptions(instantWinPartyMembers),
-      wallet: this.partyState.wallet
+      wallet: this.partyState.wallet,
+      bank: this.partyState.bank
     });
     const rewards = resolveInstantWinRewards(battle.party, enemies, instantWinRewardOptions({
       wallet: battle.wallet,
+      bank: battle.bank ?? this.partyState.bank,
       roundNumber: battle.roundNumber,
       rng: createBattleRng(battleRngSeedForGroup(group, enemies, encounterSeed)),
       items: this.data_.items?.items,
       psi: this.data_.psi?.psi
     }));
-    this.partyState.applyBattleResult(rewards.state.party, rewards.state.wallet);
+    this.partyState.applyBattleResult(rewards.state.party, rewards.state.wallet, rewards.state.bank);
     this.lastEncounterGroup = group;
     this.encounterCooldownMs = ENCOUNTER_RETURN_COOLDOWN_MS;
     this.refreshMenuScreens();
@@ -4996,6 +5028,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     source: BattleReturnSource,
     pendingStoryGate?: PendingStoryGate
   ): BattleReturnContext {
+    const savedPlayer = this.latestSavedPlayerSnapshot();
     return {
       sceneKey: "chunked-world",
       gameData: this.data_,
@@ -5013,6 +5046,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
           numeric: this.gameFlags.listNums()
         },
         party: this.partyState.snapshot(),
+        defeat: {
+          ...(savedPlayer ? { savedPlayer } : {}),
+          newGamePlayer: this.newGameRespawnPlayerSnapshot()
+        },
         encounter: {
           enabled: this.encounterEnabled,
           cooldownMs: ENCOUNTER_RETURN_COOLDOWN_MS,
@@ -6188,6 +6225,7 @@ function swirlTintForAdvantage(value: unknown): "party" | "enemy" | undefined {
 
 function instantWinRewardOptions(options: {
   wallet: number;
+  bank?: number;
   roundNumber: number;
   rng: () => number;
   items?: Array<Pick<ItemData, "id" | "name">>;
@@ -6195,6 +6233,7 @@ function instantWinRewardOptions(options: {
 }): InstantWinRewardOptions {
   const result: InstantWinRewardOptions = {
     wallet: options.wallet,
+    ...(options.bank !== undefined ? { bank: options.bank } : {}),
     roundNumber: options.roundNumber,
     rng: options.rng
   };

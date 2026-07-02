@@ -85,6 +85,7 @@ export type BattleState = {
   party: Combatant[];
   enemies: Combatant[];
   wallet: number;
+  bank?: number;
   roundNumber: number;
 };
 
@@ -106,6 +107,7 @@ export type BattleStateOptions = PlayerCombatantOptions & {
   partyOptions?: PlayerCombatantOptions[];
   enemyOptions?: EnemyCombatantOptions[];
   wallet?: number;
+  bank?: number;
   roundNumber?: number;
 };
 
@@ -296,6 +298,7 @@ export type EncounterAdvantageEnemy = {
 
 export type InstantWinRewardOptions = {
   wallet?: number;
+  bank?: number;
   roundNumber?: number;
   rng?: Rng;
   items?: Array<Pick<ItemData, "id" | "name">>;
@@ -465,6 +468,7 @@ export function createBattleState(enemies: BattleEnemy | BattleEnemy[], options:
       "enemy"
     ),
     wallet: stat(options.wallet ?? party.reduce((sum, member) => sum + member.money, 0)),
+    ...(options.bank !== undefined ? { bank: stat(options.bank) } : {}),
     roundNumber: Math.max(1, stat(options.roundNumber ?? 1))
   };
 }
@@ -522,6 +526,7 @@ export function resolveInstantWinRewards(
     party: assignCombatantIds(party.map(cloneCombatant), "party"),
     enemies: assignCombatantIds(enemies.map((enemy) => defeatedCombatant(buildEnemyCombatant(enemy))), "enemy"),
     wallet: stat(options.wallet ?? party.reduce((sum, member) => sum + member.money, 0)),
+    ...(options.bank !== undefined ? { bank: stat(options.bank) } : {}),
     roundNumber: Math.max(1, stat(options.roundNumber ?? 1))
   };
   const rewardOptions: { rng?: Rng; items?: Array<Pick<ItemData, "id" | "name">>; psi?: PsiData[] } = {};
@@ -1315,7 +1320,8 @@ export function applyVictoryRewards(
     ...state,
     party: state.party.map(cloneCombatant),
     enemies: state.enemies.map(cloneCombatant),
-    wallet: stat(state.wallet) + moneyGained,
+    wallet: stat(state.wallet),
+    bank: stat(state.bank ?? 0) + moneyGained,
     roundNumber: Math.max(1, stat(state.roundNumber))
   };
 
@@ -1402,7 +1408,7 @@ function victorySummaryPageDetails(summary: BattleVictorySummary, itemsFound: st
     kind: "tally",
     lines: [
       `${summary.expGained} EXP`,
-      `You got $${summary.moneyGained}`,
+      `The connect wired $${summary.moneyGained} to your account.`,
       itemsFound.length > 0 ? `Found ${itemsFound.join(", ")}` : "Found no items"
     ]
   }];
@@ -1477,6 +1483,7 @@ export function tickBattleMeters(state: BattleState, dtMs: number): BattleState 
     party: state.party.map((combatant) => ({ ...combatant, hp: tick(combatant.hp, dtMs) })),
     enemies: state.enemies.map((combatant) => ({ ...combatant, hp: tick(combatant.hp, dtMs) })),
     wallet: state.wallet,
+    ...(state.bank !== undefined ? { bank: state.bank } : {}),
     roundNumber: state.roundNumber
   };
 }

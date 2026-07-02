@@ -71,7 +71,7 @@ import {
   firstBattleDamage,
   type BattleEvent
 } from "./battleEvents";
-import type { BattleReturnContext, BattleReturnOutcome } from "./battleReturn";
+import { applyDefeatReturn, type BattleReturnContext, type BattleReturnOutcome } from "./battleReturn";
 import {
   DEFAULT_DAMAGE_FLASH_MS,
   DEFAULT_ENEMY_WOBBLE_AMP_PX,
@@ -492,6 +492,7 @@ export class BattleScene extends Phaser.Scene {
     partyMembers?: PartyMember[];
     partyOptions?: PlayerCombatantOptions[];
     wallet?: number;
+    bank?: number;
     returnTo?: BattleReturnContext;
     battleSfx?: BattleSfx;
     music?: Music;
@@ -522,7 +523,8 @@ export class BattleScene extends Phaser.Scene {
       characters: data.characters,
       partyMembers: data.partyMembers,
       partyOptions: data.partyOptions,
-      wallet: data.wallet
+      wallet: data.wallet,
+      bank: data.bank
     });
     this.enemyLastHitAt = enemies.map(() => null);
     this.enemyDefeatedAt = enemies.map(() => null);
@@ -1611,6 +1613,7 @@ export class BattleScene extends Phaser.Scene {
   private resolveInstantWinBattleState(enemies: BattleEnemy[]): void {
     const rewardOptions = instantWinRewardOptions({
       wallet: this.battle_.wallet,
+      bank: this.battle_.bank ?? this.returnTo_?.restore.party.bank ?? 0,
       roundNumber: this.battle_.roundNumber,
       rng: this.rng_,
       items: this.items_?.items,
@@ -1724,10 +1727,32 @@ export class BattleScene extends Phaser.Scene {
     this.transitionPhase_ = "none";
     if (this.returnTo_) {
       const outcome = this.exitOutcome_ ?? this.currentReturnOutcome();
+      const postBattleParty = buildPostBattlePartySnapshot(this.returnTo_.restore.party, this.battle_);
+      const defeatReturn = outcome === "lose"
+        ? applyDefeatReturn({
+          party: postBattleParty,
+          ...(this.returnTo_.restore.defeat?.savedPlayer
+            ? { savedPlayer: this.returnTo_.restore.defeat.savedPlayer }
+            : {}),
+          newGamePlayer: this.returnTo_.restore.defeat?.newGamePlayer ?? {
+            mode: "chunked",
+            x: this.returnTo_.restore.player.x,
+            y: this.returnTo_.restore.player.y,
+            facing: this.returnTo_.restore.player.facing
+          }
+        })
+        : undefined;
       const restore = {
         ...this.returnTo_.restore,
         outcome,
-        party: buildPostBattlePartySnapshot(this.returnTo_.restore.party, this.battle_),
+        ...(defeatReturn ? {
+          player: {
+            x: defeatReturn.player.x,
+            y: defeatReturn.player.y,
+            facing: defeatReturn.player.facing
+          }
+        } : {}),
+        party: defeatReturn?.party ?? postBattleParty,
         encounter: {
           ...this.returnTo_.restore.encounter,
           lastEncounterGroup: this.group_.id
@@ -3492,7 +3517,7 @@ function buildPostBattlePartySnapshot(base: PartyStateSnapshot, battle: BattleSt
 
   return {
     wallet: stat(battle.wallet),
-    ...(base.bank !== undefined ? { bank: stat(base.bank) } : {}),
+    ...(base.bank !== undefined || battle.bank !== undefined ? { bank: stat(battle.bank ?? base.bank ?? 0) } : {}),
     partyIds,
     inventory: [...inventoryByChar.entries()]
       .sort(([a], [b]) => a - b)
@@ -3889,6 +3914,7 @@ function swirlTintForAdvantage(value: EncounterAdvantage): "party" | "enemy" | u
 
 function instantWinRewardOptions(options: {
   wallet: number;
+  bank?: number;
   roundNumber: number;
   rng: Rng;
   items?: ItemData[];
@@ -3896,6 +3922,7 @@ function instantWinRewardOptions(options: {
 }): InstantWinRewardOptions {
   const result: InstantWinRewardOptions = {
     wallet: options.wallet,
+    ...(options.bank !== undefined ? { bank: options.bank } : {}),
     roundNumber: options.roundNumber,
     rng: options.rng
   };

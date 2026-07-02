@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { DialogueSegment, EventEffect, ScriptCollection, ScriptCommand } from "@eb/schemas";
 import { RuntimeEventHost, RuntimeEventSequence, normalizeActorMoveSelector } from "./eventHost";
+import { GENERATED_DRIFELLA_BARK_SOURCE } from "./customDialogueLookup";
 import { GameFlags } from "./gameFlags";
 import { PartyState, type PartyStateSnapshot } from "./partyState";
 import { DialogueController } from "./state";
@@ -75,6 +76,30 @@ describe("RuntimeEventHost dialogue overrides", () => {
       control: 1,
       give: 1
     });
+  });
+
+  it("does not let generated Drifella barks override the reference event text", () => {
+    const dialogue = new DialogueController();
+    const host = new RuntimeEventHost({
+      dialogue,
+      flags: new GameFlags(),
+      partyState: new PartyState(),
+      customDialogue: {
+        byNpcId: {
+          "744": {
+            pages: ["Generated bark."],
+            generated: { source: GENERATED_DRIFELLA_BARK_SOURCE }
+          }
+        },
+        byTextPointer: {}
+      }
+    });
+    const sequence = new RuntimeEventSequence(eventScript([
+      { kind: "text", value: "Original event text." }
+    ]), host);
+
+    expect(sequence.start("test.main", { npcId: 744 })).toBe(true);
+    expect(dialogue.currentText).toBe("Original event text.");
   });
 });
 

@@ -861,7 +861,8 @@ export class WorldScene extends Phaser.Scene {
       this.targetReference,
       this.gameFlags,
       this.data_.customDialogue,
-      this.data_.dialogueLibrary
+      this.data_.dialogueLibrary,
+      this.data_.scripts
     ));
     this.updatePrompt();
     this.publish();
@@ -871,10 +872,15 @@ export class WorldScene extends Phaser.Scene {
     for (const event of events) {
       switch (event.kind) {
         case "dialogue":
-          if (event.pages) {
+          if (event.reference) {
+            if (this.startEventSequence(event.reference)) {
+              break;
+            }
+            this.dialogue.start(event.pages
+              ? buildInlineDialoguePages(event.pages)
+              : buildDialogueForReference(this.data_.scripts, event.reference, this.gameFlags));
+          } else if (event.pages) {
             this.dialogue.start(buildInlineDialoguePages(event.pages));
-          } else if (!this.startEventSequence(event.reference)) {
-            this.dialogue.start(buildDialogueForReference(this.data_.scripts, event.reference, this.gameFlags));
           }
           break;
         case "setFlag":
@@ -900,14 +906,17 @@ export class WorldScene extends Phaser.Scene {
       resolveWarpDestination: (dest, style) => this.resolveEventWarpDestination(dest, style),
       applyWarpDestination: (destination) => this.applyEventWarpDestination(destination),
       startBattle: (group) => this.startEventBattle(group),
-      openShop: (storeId) => this.openShopMenu(storeId)
+      openShop: (storeId) => this.openShopMenu(storeId),
+      customDialogue: this.data_.customDialogue,
+      dialogueLibrary: this.data_.dialogueLibrary
     });
     this.eventSequence = new RuntimeEventSequence(this.data_.scripts, host);
   }
 
   private startEventSequence(reference: string): boolean {
     return this.eventSequence?.start(reference, {
-      onComplete: () => this.afterDialogueClosed()
+      onComplete: () => this.afterDialogueClosed(),
+      ...(this.activeNpcDialogue?.id !== undefined ? { npcId: this.activeNpcDialogue.id } : {})
     }) ?? false;
   }
 

@@ -767,7 +767,7 @@ export const NpcInteractionSchema = z
       once: z.literal(true).optional()
     }).strict().optional(),
     shop: z.number().int().nonnegative().optional(),
-    service: z.enum(["hospital", "hotel", "phone"]).optional(),
+    service: z.enum(["hospital", "hotel", "phone", "atm"]).optional(),
     heal: z.union([z.literal("full"), z.literal(true)]).optional(),
     save: z.literal(true).optional(),
     // Money charged before the interaction's heal (e.g. an inn's nightly fee).

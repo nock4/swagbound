@@ -143,6 +143,21 @@ describe("PartyState menu services", () => {
     expect(partyState.inventory(2)).toEqual([21]);
   });
 
+  it("withdraws banked battle winnings into wallet cash through ATM state", () => {
+    const partyState = new PartyState();
+    partyState.restore({
+      wallet: 0,
+      bank: 120,
+      partyIds: [1],
+      inventory: [],
+      equipped: []
+    });
+
+    expect(partyState.applyAtm("withdraw", 50)).toBe(50);
+    expect(partyState.wallet).toBe(50);
+    expect(partyState.bank).toBe(70);
+  });
+
   it("computes hospital recovery cost from damage, PP, level, and KO state", () => {
     expect(hospitalRecoveryCost([
       memberForRecovery({ level: 5, hp: 45, maxHp: 100, pp: 5, maxPp: 20 }),

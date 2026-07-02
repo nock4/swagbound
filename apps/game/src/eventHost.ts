@@ -21,6 +21,7 @@ import {
   type CustomDialogueLookup,
   type DialogueLibraryLookup
 } from "./scriptedDialogueResolver";
+import { isGeneratedDrifellaBarkEntry } from "./customDialogueLookup";
 import { GameFlags } from "./gameFlags";
 import type { DialogueController } from "./state";
 import { PartyState, type ItemUseEffect, type PartyStateCounts } from "./partyState";
@@ -526,7 +527,9 @@ export class RuntimeEventHost implements EventExecutorHost {
     const npcEntry = context.npcId !== undefined
       ? customDialogue.byNpcId[String(context.npcId)]
       : undefined;
-    const npcPages = resolveCustomDialoguePages(npcEntry, this.options.dialogueLibrary);
+    const npcPages = isGeneratedDrifellaBarkEntry(npcEntry)
+      ? undefined
+      : resolveCustomDialoguePages(npcEntry, this.options.dialogueLibrary);
     if (npcPages && npcPages.length > 0) {
       this.dialogueOverridePages = buildInlineDialoguePages(npcPages);
       return this.dialogueOverridePages;
