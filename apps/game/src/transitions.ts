@@ -52,6 +52,8 @@ export interface SwirlDrawOptions {
   cy?: number;
   /** Animation clock (ms) so the colors + highlights cycle over time. */
   clockMs?: number;
+  /** Optional encounter advantage tint: first strike = green, ambush = red. */
+  advantageTint?: "party" | "enemy";
 }
 
 /**
@@ -103,7 +105,10 @@ export function drawSwirl(
       ];
       // vivid hue cycling by segment + arm + time (the EB multicolor swirl)
       const hue = wrap01(segment / mask.bandCount + arm / mask.armCount + clockMs / 700);
-      graphics.fillStyle(hsvToHex(hue, 0.85, segment % 2 === 0 ? 1 : 0.74), mask.bandAlpha);
+      const color = options.advantageTint
+        ? tintedBandColor(options.advantageTint, segment, arm)
+        : hsvToHex(hue, 0.85, segment % 2 === 0 ? 1 : 0.74);
+      graphics.fillStyle(color, mask.bandAlpha);
       graphics.beginPath();
       graphics.moveTo(points[0].x, points[0].y);
       for (let index = 1; index < points.length; index += 1) {
@@ -120,7 +125,10 @@ export function drawSwirl(
   }
   for (let arm = 0; arm < mask.armCount; arm += 1) {
     const hue = wrap01(arm / mask.armCount + clockMs / 500 + 0.3);
-    graphics.lineStyle(3, hsvToHex(hue, 0.55, 1), highlightAlpha);
+    const color = options.advantageTint
+      ? tintedHighlightColor(options.advantageTint)
+      : hsvToHex(hue, 0.55, 1);
+    graphics.lineStyle(3, color, highlightAlpha);
     graphics.beginPath();
     let started = false;
     for (let segment = 0; segment <= mask.bandCount; segment += 1) {
@@ -142,6 +150,17 @@ export function drawSwirl(
       graphics.strokePath();
     }
   }
+}
+
+function tintedBandColor(tint: NonNullable<SwirlDrawOptions["advantageTint"]>, segment: number, arm: number): number {
+  const party = [0x0a7f35, 0x20d96b, 0x71ff9d, 0x0f5f2a];
+  const enemy = [0x7d1010, 0xd92c24, 0xff6a54, 0x5f0909];
+  const palette = tint === "party" ? party : enemy;
+  return palette[(segment + arm) % palette.length] ?? palette[0];
+}
+
+function tintedHighlightColor(tint: NonNullable<SwirlDrawOptions["advantageTint"]>): number {
+  return tint === "party" ? 0xbaffd0 : 0xffc2ba;
 }
 
 function polarPoint(cx: number, cy: number, radius: number, angle: number): { x: number; y: number } {

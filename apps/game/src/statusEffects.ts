@@ -25,6 +25,8 @@ export const STATUS_AILMENTS: readonly StatusAilment[] = [
   "shielded"
 ];
 
+export const BATTLE_SCOPED_STATUS_AILMENTS = ["asleep", "confused", "shielded"] as const satisfies readonly StatusAilment[];
+
 export type StatusInstance = {
   ailment: StatusAilment;
   /** Remaining turns; undefined = until cured / battle end. Decremented by tickStatuses. */
@@ -61,6 +63,14 @@ const STATUS_AILMENT_BADGES = {
 
 export function hasStatus(state: StatusState | undefined, ailment: StatusAilment): boolean {
   return Boolean(state?.some((entry) => entry.ailment === ailment));
+}
+
+export function isBattleScopedStatus(ailment: StatusAilment): boolean {
+  return (BATTLE_SCOPED_STATUS_AILMENTS as readonly StatusAilment[]).includes(ailment);
+}
+
+export function stripBattleScopedStatuses(state: StatusState | undefined): StatusState {
+  return (state ?? []).filter((entry) => !isBattleScopedStatus(entry.ailment));
 }
 
 export function statusAilmentLabel(ailment: StatusAilment): string {

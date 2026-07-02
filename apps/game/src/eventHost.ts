@@ -21,6 +21,7 @@ import {
   type CustomDialogueLookup,
   type DialogueLibraryLookup
 } from "./scriptedDialogueResolver";
+import { isGeneratedDrifellaBarkEntry } from "./customDialogueLookup";
 import { GameFlags } from "./gameFlags";
 import type { DialogueController } from "./state";
 import { PartyState, type ItemUseEffect, type PartyStateCounts } from "./partyState";
@@ -103,6 +104,7 @@ export type RuntimeEventHostOptions = {
   openShop?: (storeId: number) => boolean | void;
   openAtm?: () => boolean | void;
   actorMove?: (effect: Extract<EventEffect, { kind: "actorMove" }>) => boolean | void;
+  onPartyChange?: (op: "add" | "remove", char: number, partyIds: number[]) => void;
   music?: EventMusicSink;
   resolveMusicCueForTrack?: (track: number) => string | undefined;
   isEffectSupported?: (effect: EventEffect) => boolean;
@@ -314,7 +316,10 @@ export class RuntimeEventHost implements EventExecutorHost {
     if (this.skipUnsupported({ kind: "give", char, item })) {
       return;
     }
-    this.options.partyState.give(char, item);
+    if (!this.options.partyState.give(char, item)) {
+      // Inventory full (EB 14-slot cap) — the give is refused, not queued.
+      console.warn(`[eventHost] give(${char}, ${item}) refused: inventory full`);
+    }
   }
 
   take(char: number, item: number): void {
@@ -347,7 +352,12 @@ export class RuntimeEventHost implements EventExecutorHost {
     if (this.skipUnsupported({ kind: "party", op, char })) {
       return;
     }
+    const before = this.options.partyState.party().join(",");
     this.options.partyState.partyOp(op, char);
+    const partyIds = this.options.partyState.party();
+    if (partyIds.join(",") !== before) {
+      this.options.onPartyChange?.(op, char, partyIds);
+    }
   }
 
   warp(dest: number): void {
@@ -526,7 +536,9 @@ export class RuntimeEventHost implements EventExecutorHost {
     const npcEntry = context.npcId !== undefined
       ? customDialogue.byNpcId[String(context.npcId)]
       : undefined;
-    const npcPages = resolveCustomDialoguePages(npcEntry, this.options.dialogueLibrary);
+    const npcPages = isGeneratedDrifellaBarkEntry(npcEntry)
+      ? undefined
+      : resolveCustomDialoguePages(npcEntry, this.options.dialogueLibrary);
     if (npcPages && npcPages.length > 0) {
       this.dialogueOverridePages = buildInlineDialoguePages(npcPages);
       return this.dialogueOverridePages;
@@ -700,15 +712,9 @@ export class RuntimeEventSequence {
     if (!this.running) {
       return;
     }
-    this.executor = undefined;
-    this.host.finish({
-      status: "aborted",
-      truncated: false,
-      commandsVisited: 0,
-      jumps: 0,
-      reason
-    });
-    this.onComplete = undefined;
+    // Callers rely on onComplete to finalize state machines (e.g. the new-game
+    // startup run); an external abort must fire it like internal aborts do.
+    this.finishAborted(reason);
   }
 
   debug(): EventHostDebug {

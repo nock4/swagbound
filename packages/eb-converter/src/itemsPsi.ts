@@ -101,11 +101,20 @@ export async function buildItemPsiData(options: ItemPsiBuildOptions): Promise<{
       const name = Number.isFinite(nameId)
         ? psiNames.get(nameId)?.Name ?? neutralName("psi", id)
         : neutralName("psi", id);
+      const action = optionalInteger(entry.Action);
+      const battleAction = battleActions?.get(action);
+      const ppCost = optionalInteger(battleAction?.["PP Cost"]);
+      const target = normalizeBattleActionTarget(battleAction?.Target);
+      const direction = normalizeBattleActionDirection(battleAction?.Direction);
       return {
         id,
         name,
         type: entry.Type ?? "",
         strength: entry.Strength ?? "",
+        action,
+        ...(battleAction ? { ppCost } : {}),
+        ...(target ? { target } : {}),
+        ...(direction ? { direction } : {}),
         usableOutsideBattle: usableOutsideBattle(entry["Usability Outside of Battle"]),
         learnedBy: learnColumns.flatMap((column, index) => {
           const charId = PSI_LEARN_CHARACTER_SLOTS[index];
@@ -213,6 +222,24 @@ function usesFoodAndDrinkRoutine(action: number, battleActions: ReturnType<typeo
   return actionType === "item" &&
     direction === "party" &&
     parseYamlInteger(row["Code Address"]) === FOOD_AND_DRINK_ROUTINE_ADDRESS;
+}
+
+function normalizeBattleActionTarget(value: string | undefined): "none" | "one" | "row" | "all" | undefined {
+  const normalized = value?.trim().toLowerCase();
+  switch (normalized) {
+    case "none":
+    case "one":
+    case "row":
+    case "all":
+      return normalized;
+    default:
+      return undefined;
+  }
+}
+
+function normalizeBattleActionDirection(value: string | undefined): "party" | "enemy" | undefined {
+  const normalized = value?.trim().toLowerCase();
+  return normalized === "party" || normalized === "enemy" ? normalized : undefined;
 }
 
 function parsePointerInteger(value: string | undefined): number {

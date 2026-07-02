@@ -18,6 +18,7 @@ import {
   type SpriteOverrides,
   type WindowCollection
 } from "@eb/schemas";
+import { expandBattleGroupEnemies } from "./battleGroups";
 import {
   applyVictoryRewards,
   advanceVictorySummaryPageIndex,
@@ -35,6 +36,8 @@ import {
   outcome,
   psiBattleKind,
   psiPpCost,
+  psiTargetMode,
+  psiTargetSide,
   resolveInstantWinRewards,
   settlePendingPartyMortalWounds,
   tickBattleMeters,
@@ -45,6 +48,7 @@ import {
   type BattleVictorySummary,
   type EncounterAdvantage,
   type InstantWinRewardOptions,
+  type PlayerCombatantOptions,
   type Rng
 } from "./battleLogic";
 import {
@@ -67,19 +71,16 @@ import {
   firstBattleDamage,
   type BattleEvent
 } from "./battleEvents";
-import type { BattleReturnContext, BattleReturnOutcome } from "./battleReturn";
+import { applyDefeatReturn, type BattleReturnContext, type BattleReturnOutcome } from "./battleReturn";
 import {
   DEFAULT_DAMAGE_FLASH_MS,
-  DEFAULT_ENEMY_WOBBLE_AMP_PX,
-  DEFAULT_ENEMY_WOBBLE_PERIOD_MS,
   attackerLungeOffset,
   flashOverlayState,
   flashState,
   hitSparkState,
   psiElementFlashProfile,
   screenShakeOffset,
-  type EffectDirection,
-  wobbleOffset
+  type EffectDirection
 } from "./battleEffects";
 import { publishBattleDebug, type BattlePhase, type BattleTransitionPhase } from "./state";
 import {
@@ -123,10 +124,10 @@ import {
   MENU_UP_KEY_NAMES,
   registerDiscreteKeys
 } from "./inputModel";
-import type { PartyMember } from "./characterModel";
+import { combatantBaseStats, type PartyMember } from "./characterModel";
 import type { PartyBattleMemberSnapshot, PartyStateSnapshot } from "./partyState";
 import { decodeItemUseEffect } from "./partyState";
-import type { StatusState } from "./statusEffects";
+import { stripBattleScopedStatuses, type StatusState } from "./statusEffects";
 import {
   createAnimatedBattleBackground,
   staticBattleBackgroundDebug,
@@ -486,12 +487,15 @@ export class BattleScene extends Phaser.Scene {
     backgroundOverrides?: BackgroundOverrides;
     battleRules?: BattleRules;
     partyMembers?: PartyMember[];
+    partyOptions?: PlayerCombatantOptions[];
     wallet?: number;
+    bank?: number;
     returnTo?: BattleReturnContext;
     battleSfx?: BattleSfx;
     music?: Music;
     musicManifest?: MusicManifest;
     encounterAdvantage?: EncounterAdvantage;
+    encounterSeed?: number;
     boss?: boolean;
   }): void {
     this.battleData_ = data.battleData;
@@ -515,7 +519,9 @@ export class BattleScene extends Phaser.Scene {
     this.battle_ = createBattleState(enemies, {
       characters: data.characters,
       partyMembers: data.partyMembers,
-      wallet: data.wallet
+      partyOptions: data.partyOptions,
+      wallet: data.wallet,
+      bank: data.bank
     });
     this.enemyLastHitAt = enemies.map(() => null);
     this.enemyDefeatedAt = enemies.map(() => null);
@@ -528,7 +534,7 @@ export class BattleScene extends Phaser.Scene {
     this.enemySpriteRedrawScheduled = false;
     this.enemySpriteRedrawAttempts = 0;
     this.enemySpriteRetryQueuedKeys.clear();
-    this.rng_ = createBattleRng(battleRngSeedForGroup(this.group_.id, enemies));
+    this.rng_ = createBattleRng(battleRngSeedForGroup(this.group_.id, enemies, data.encounterSeed));
     this.phase_ = "enter-transition";
     this.transitionPhase_ = "enter";
     this.transitionMs_ = ENTER_TRANSITION_MS;
@@ -919,11 +925,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private advanceBattleFlow(): void {
-    if (this.handleBattleOutcome()) {
-      return;
-    }
-
     if (this.phase_ === "command-input") {
+      if (this.handleBattleOutcome()) {
+        return;
+      }
       this.syncMenuFromInputState();
       if (this.activeTargetSide() === "party") {
         this.normalizePartyTargetIndex();
@@ -936,8 +941,15 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
 
-    if (this.phase_ === "execution" && this.actionDelayMs_ <= 0) {
-      this.advanceExecutionStep();
+    if (this.phase_ === "execution") {
+      if (this.actionDelayMs_ <= 0) {
+        this.advanceExecutionStep();
+      }
+      return;
+    }
+
+    if (this.handleBattleOutcome()) {
+      return;
     }
   }
 
@@ -1121,7 +1133,7 @@ export class BattleScene extends Phaser.Scene {
     if ("defender" in resolution) {
       return resolution.defender ? [resolution.defender] : [];
     }
-    if ("targets" in resolution) {
+    if ("targets" in resolution && resolution.targets) {
       return [...resolution.targets];
     }
     if ("target" in resolution) {
@@ -1442,7 +1454,7 @@ export class BattleScene extends Phaser.Scene {
     if ("target" in resolution && resolution.target) {
       this.setDebugTarget(resolution.target);
     }
-    if ("targets" in resolution) {
+    if ("targets" in resolution && resolution.targets) {
       const target = resolution.targets[0];
       if (target) {
         this.setDebugTarget(target);
@@ -1598,6 +1610,7 @@ export class BattleScene extends Phaser.Scene {
   private resolveInstantWinBattleState(enemies: BattleEnemy[]): void {
     const rewardOptions = instantWinRewardOptions({
       wallet: this.battle_.wallet,
+      bank: this.battle_.bank ?? this.returnTo_?.restore.party.bank ?? 0,
       roundNumber: this.battle_.roundNumber,
       rng: this.rng_,
       items: this.items_?.items,
@@ -1699,7 +1712,11 @@ export class BattleScene extends Phaser.Scene {
 
   private renderEnterSwirl(graphics: Phaser.GameObjects.Graphics, progress: number): void {
     // Colored EB swirl reveal (from black -> battle). Shared renderer; centered on the battle viewport.
-    drawSwirl(graphics, progress, this.scale.width, this.scale.height, { cy: STATUS_TOP / 2, clockMs: this.time.now });
+    drawSwirl(graphics, progress, this.scale.width, this.scale.height, {
+      cy: STATUS_TOP / 2,
+      clockMs: this.time.now,
+      advantageTint: swirlTintForAdvantage(this.encounterAdvantage_)
+    });
   }
 
   private exitBattle(): void {
@@ -1707,10 +1724,32 @@ export class BattleScene extends Phaser.Scene {
     this.transitionPhase_ = "none";
     if (this.returnTo_) {
       const outcome = this.exitOutcome_ ?? this.currentReturnOutcome();
+      const postBattleParty = buildPostBattlePartySnapshot(this.returnTo_.restore.party, this.battle_);
+      const defeatReturn = outcome === "lose"
+        ? applyDefeatReturn({
+          party: postBattleParty,
+          ...(this.returnTo_.restore.defeat?.savedPlayer
+            ? { savedPlayer: this.returnTo_.restore.defeat.savedPlayer }
+            : {}),
+          newGamePlayer: this.returnTo_.restore.defeat?.newGamePlayer ?? {
+            mode: "chunked",
+            x: this.returnTo_.restore.player.x,
+            y: this.returnTo_.restore.player.y,
+            facing: this.returnTo_.restore.player.facing
+          }
+        })
+        : undefined;
       const restore = {
         ...this.returnTo_.restore,
         outcome,
-        party: buildPostBattlePartySnapshot(this.returnTo_.restore.party, this.battle_),
+        ...(defeatReturn ? {
+          player: {
+            x: defeatReturn.player.x,
+            y: defeatReturn.player.y,
+            facing: defeatReturn.player.facing
+          }
+        } : {}),
+        party: defeatReturn?.party ?? postBattleParty,
         encounter: {
           ...this.returnTo_.restore.encounter,
           lastEncounterGroup: this.group_.id
@@ -3156,9 +3195,7 @@ export class BattleScene extends Phaser.Scene {
     return {
       flashActive: flash.active,
       flashIntensity: roundTo(flash.intensity, 2),
-      wobble: alive
-        ? integerOffset(wobbleOffset(now, index, DEFAULT_ENEMY_WOBBLE_AMP_PX, DEFAULT_ENEMY_WOBBLE_PERIOD_MS))
-        : { dx: 0, dy: 0 }
+      wobble: { dx: 0, dy: 0 }
     };
   }
 
@@ -3460,8 +3497,9 @@ function buildPostBattlePartySnapshot(base: PartyStateSnapshot, battle: BattleSt
   for (const combatant of partyCombatants) {
     inventoryByChar.set(combatant.charId, combatant.inventory.map((itemId) => stat(itemId)));
     battleMembersByChar.set(combatant.charId, battleMemberSnapshotFromCombatant(combatant));
-    if (combatant.statuses?.length) {
-      statusesByChar.set(combatant.charId, cloneStatusState(combatant.statuses));
+    const persistentStatuses = stripBattleScopedStatuses(combatant.statuses);
+    if (persistentStatuses.length) {
+      statusesByChar.set(combatant.charId, cloneStatusState(persistentStatuses));
     } else {
       statusesByChar.delete(combatant.charId);
     }
@@ -3474,7 +3512,7 @@ function buildPostBattlePartySnapshot(base: PartyStateSnapshot, battle: BattleSt
 
   return {
     wallet: stat(battle.wallet),
-    ...(base.bank !== undefined ? { bank: stat(base.bank) } : {}),
+    ...(base.bank !== undefined || battle.bank !== undefined ? { bank: stat(battle.bank ?? base.bank ?? 0) } : {}),
     partyIds,
     inventory: [...inventoryByChar.entries()]
       .sort(([a], [b]) => a - b)
@@ -3503,15 +3541,8 @@ function battleMemberSnapshotFromCombatant(combatant: BattleState["party"][numbe
     pp: Math.min(stat(combatant.maxPp), stat(combatant.pp)),
     maxPp: stat(combatant.maxPp),
     inventory: combatant.inventory.map((itemId) => stat(itemId)),
-    stats: {
-      offense: stat(combatant.stats.offense),
-      defense: stat(combatant.stats.defense),
-      speed: stat(combatant.stats.speed),
-      guts: stat(combatant.stats.guts),
-      vitality: stat(combatant.stats.vitality),
-      iq: stat(combatant.stats.iq),
-      luck: stat(combatant.stats.luck)
-    }
+    // BASE stats only — persisting effective stats re-adds equip bonuses next battle.
+    stats: combatantBaseStats(combatant)
   };
 }
 
@@ -3530,9 +3561,7 @@ function cloneBattleMemberSnapshot(member: PartyBattleMemberSnapshot): PartyBatt
 }
 
 function enemiesForGroup(data: BattleData, group: BattleGroup): BattleEnemy[] {
-  return group.enemyIds
-    .map((enemyId) => data.enemies.find((enemy) => enemy.id === enemyId))
-    .filter((enemy): enemy is BattleEnemy => Boolean(enemy));
+  return expandBattleGroupEnemies(data, group);
 }
 
 function selectBattleBackground(data: BattleData, id: number): BattleBackground | undefined {
@@ -3793,11 +3822,15 @@ function targetModeForCommand(command: BattleCommand): BattleTargetMode | null {
 }
 
 function targetScopeForPsi(psi: PsiData): string {
+  const side = psiTargetSide(psi);
+  const mode = psiTargetMode(psi);
+  if (side === "enemy") {
+    return mode === "all" ? "To all enemies" : "To one enemy";
+  }
+  if (side === "party") {
+    return mode === "all" ? "To all friends" : "To one friend";
+  }
   switch (psiBattleKind(psi)) {
-    case "offense":
-      return "To enemies";
-    case "recovery":
-      return "To one friend";
     case "assist":
       return "Battle effect";
     default:
@@ -3864,8 +3897,19 @@ function normalizeEncounterAdvantage(value: EncounterAdvantage | undefined): Enc
   }
 }
 
+function swirlTintForAdvantage(value: EncounterAdvantage): "party" | "enemy" | undefined {
+  if (value === "partyFirstStrike") {
+    return "party";
+  }
+  if (value === "enemyFirstStrike") {
+    return "enemy";
+  }
+  return undefined;
+}
+
 function instantWinRewardOptions(options: {
   wallet: number;
+  bank?: number;
   roundNumber: number;
   rng: Rng;
   items?: ItemData[];
@@ -3873,6 +3917,7 @@ function instantWinRewardOptions(options: {
 }): InstantWinRewardOptions {
   const result: InstantWinRewardOptions = {
     wallet: options.wallet,
+    ...(options.bank !== undefined ? { bank: options.bank } : {}),
     roundNumber: options.roundNumber,
     rng: options.rng
   };

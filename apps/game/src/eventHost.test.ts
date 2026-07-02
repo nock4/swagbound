@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { DialogueSegment, EventEffect, ScriptCollection, ScriptCommand } from "@eb/schemas";
 import { RuntimeEventHost, RuntimeEventSequence, normalizeActorMoveSelector } from "./eventHost";
+import { GENERATED_DRIFELLA_BARK_SOURCE } from "./customDialogueLookup";
 import { GameFlags } from "./gameFlags";
 import { PartyState, type PartyStateSnapshot } from "./partyState";
 import { DialogueController } from "./state";
@@ -76,6 +77,30 @@ describe("RuntimeEventHost dialogue overrides", () => {
       give: 1
     });
   });
+
+  it("does not let generated Drifella barks override the reference event text", () => {
+    const dialogue = new DialogueController();
+    const host = new RuntimeEventHost({
+      dialogue,
+      flags: new GameFlags(),
+      partyState: new PartyState(),
+      customDialogue: {
+        byNpcId: {
+          "744": {
+            pages: ["Generated bark."],
+            generated: { source: GENERATED_DRIFELLA_BARK_SOURCE }
+          }
+        },
+        byTextPointer: {}
+      }
+    });
+    const sequence = new RuntimeEventSequence(eventScript([
+      { kind: "text", value: "Original event text." }
+    ]), host);
+
+    expect(sequence.start("test.main", { npcId: 744 })).toBe(true);
+    expect(dialogue.currentText).toBe("Original event text.");
+  });
 });
 
 describe("RuntimeEventHost actorMove effects", () => {
@@ -115,6 +140,28 @@ describe("RuntimeEventHost actorMove effects", () => {
     });
   });
 
+  it("fires onComplete with an aborted result on external abort", () => {
+    const flags = new GameFlags();
+    const host = new RuntimeEventHost({
+      dialogue: new DialogueController(),
+      flags,
+      partyState: new PartyState(),
+      actorMove: () => true
+    });
+    const sequence = new RuntimeEventSequence(recoveryScript([
+      { kind: "actorMove", actor: { npcId: 744 }, to: { x: 120, y: 160 } },
+      { kind: "setFlag", flag: 42, raw: "set(42)" }
+    ]), host);
+    const results: Array<{ status: string; reason?: string }> = [];
+    expect(sequence.start("test.main", { onComplete: (result) => results.push(result) })).toBe(true);
+    expect(sequence.running).toBe(true);
+
+    sequence.abort("player_cancel");
+    expect(sequence.running).toBe(false);
+    expect(results).toHaveLength(1);
+    expect(results[0]).toMatchObject({ status: "aborted", reason: "player_cancel" });
+  });
+
   it("auto-resumes actorMove when no scene sink is registered", () => {
     const flags = new GameFlags();
     const host = new RuntimeEventHost({
@@ -142,6 +189,28 @@ describe("RuntimeEventHost actorMove effects", () => {
     expect(normalizeActorMoveSelector({ kind: "player" })).toEqual({ kind: "player" });
     expect(normalizeActorMoveSelector({ npcId: 744 })).toEqual({ kind: "npc", npcId: 744 });
     expect(normalizeActorMoveSelector({ kind: "npc", npcId: 744 })).toEqual({ kind: "npc", npcId: 744 });
+  });
+});
+
+describe("RuntimeEventHost party effects", () => {
+  it("notifies when party composition changes", () => {
+    const partyState = new PartyState();
+    const changes: Array<{ op: "add" | "remove"; char: number; partyIds: number[] }> = [];
+    const host = new RuntimeEventHost({
+      dialogue: new DialogueController(),
+      flags: new GameFlags(),
+      partyState,
+      onPartyChange: (op, char, partyIds) => changes.push({ op, char, partyIds })
+    });
+
+    host.party("add", 2);
+    host.party("add", 2);
+    host.party("remove", 2);
+
+    expect(changes).toEqual([
+      { op: "add", char: 2, partyIds: [2] },
+      { op: "remove", char: 2, partyIds: [] }
+    ]);
   });
 });
 

@@ -916,6 +916,14 @@
         "\"You finally got here. First Sanctuary on the list. Used to be yours, the brochure says. It's mine now. Come collect, if the source has the nerve.\""
       ]
     },
+    "256": {
+      "pages": [
+        "\"Twoson keeps beds by the night and records by the decade.\"",
+        "\"Fifty dollars buys the bed. The receipt comes free because it already knows you.\""
+      ],
+      "service": "hotel",
+      "cost": 50
+    },
     "291": {
       "pages": [
         "Welcome. We log the order, we log the face. Mostly the order.",
@@ -1225,6 +1233,14 @@
         "\"Take it back, if your version of the story outlasts mine.\""
       ]
     },
+    "483": {
+      "pages": [
+        "\"Threed Sunset Hotel. Sixty dollars for the night.\"",
+        "\"We keep the curtains closed so the town has to guess which version checked in.\""
+      ],
+      "service": "hotel",
+      "cost": 60
+    },
     "504": {
       "pages": [
         "\"You looking to buy, or just confirming you exist? Both cost the same.\""
@@ -1479,6 +1495,14 @@
         "Welcome. Everything's priced. Even the things that aren't for sale."
       ]
     },
+    "890": {
+      "pages": [
+        "\"Monotoli Grand. Seventy-five dollars to let the room pretend nothing followed you in.\"",
+        "\"Checkout is morning. Accounting is permanent.\""
+      ],
+      "service": "hotel",
+      "cost": 75
+    },
     "922": {
       "pages": [
         "Step in. Browse slow. The shelves remember who lingers."
@@ -1523,6 +1547,14 @@
         "Welcome. Everything's priced, nothing's free.",
         "Tell me what you're short on."
       ]
+    },
+    "1020": {
+      "pages": [
+        "\"Summers can offer a room at one hundred fifty dollars a night.\"",
+        "\"Reservation or no reservation, the ledger will recognize you.\""
+      ],
+      "service": "hotel",
+      "cost": 150
     },
     "1025": {
       "pages": [
@@ -1651,6 +1683,14 @@
         "\"Welcome, welcome! Ach, this heat. Is the body still cooperating?\"",
         "\"Buy something. The merchandise won't sell itself, though it has tried.\""
       ]
+    },
+    "1124": {
+      "pages": [
+        "\"Great Southern International Resort Hotel. Only the deluxe suite is left.\"",
+        "\"One hundred dollars. The cheaper rooms escaped before you did.\""
+      ],
+      "service": "hotel",
+      "cost": 100
     },
     "1125": {
       "pages": [
@@ -1997,6 +2037,13 @@
         "Hi, how's it going? Be honest, the room already filed an answer.",
         "From the look of you, I'd say: under review."
       ]
+    },
+    "1375": {
+      "pages": [
+        "The machine wakes with a click like a small bank recognizing a larger debt.",
+        "Deposit, withdraw. The account remembers what your pockets cannot."
+      ],
+      "service": "atm"
     },
     "1407": {
       "pages": [

@@ -101,6 +101,7 @@ export function buildCombatantFromPartyMember(
     speed: effectiveStats.speed,
     experience: stat(member.experience),
     stats: effectiveStats,
+    ...(options.statBonuses ? { statBonuses: { ...options.statBonuses } } : {}),
     ...(member.growth ? { growth: { ...member.growth } } : {}),
     ...(member.expTable ? { expTable: member.expTable.map((entry) => ({ ...entry })) } : {}),
     ...(member.statuses?.length ? { statuses: member.statuses.map((entry) => ({ ...entry })) } : {}),
@@ -116,6 +117,22 @@ export function buildCombatantFromCharacter(
   options: CharacterCombatantOptions = {}
 ): Combatant {
   return buildCombatantFromPartyMember(buildPartyMember(data), options);
+}
+
+/** Recover a party combatant's BASE stats (equip bonuses subtracted). Persist these, never the effective stats. */
+export function combatantBaseStats(
+  combatant: Pick<Combatant, "stats"> & { statBonuses?: PartyMemberStatBonuses }
+): PartyMemberStats {
+  const bonuses = combatant.statBonuses ?? {};
+  return {
+    offense: Math.max(0, stat(combatant.stats.offense) - stat(bonuses.offense ?? 0)),
+    defense: Math.max(0, stat(combatant.stats.defense) - stat(bonuses.defense ?? 0)),
+    speed: Math.max(0, stat(combatant.stats.speed) - stat(bonuses.speed ?? 0)),
+    guts: Math.max(0, stat(combatant.stats.guts) - stat(bonuses.guts ?? 0)),
+    vitality: Math.max(0, stat(combatant.stats.vitality) - stat(bonuses.vitality ?? 0)),
+    iq: Math.max(0, stat(combatant.stats.iq) - stat(bonuses.iq ?? 0)),
+    luck: Math.max(0, stat(combatant.stats.luck) - stat(bonuses.luck ?? 0))
+  };
 }
 
 export function effectivePartyMemberStats(

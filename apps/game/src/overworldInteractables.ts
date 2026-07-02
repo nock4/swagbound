@@ -28,10 +28,11 @@ export function overworldInteractableEvents(
   flags: OverworldInteractableFlagReader,
   options: {
     itemName?: (itemId: number) => string | undefined;
+    hasRoom?: (char: number) => boolean;
   } = {}
 ): OverworldInteractableAction {
   if (entry.kind === "present") {
-    return presentEvents(entry, flags, options.itemName);
+    return presentEvents(entry, flags, options.itemName, options.hasRoom);
   }
   return {
     events: [{ kind: "dialogue", pages: entry.pages }],
@@ -43,7 +44,8 @@ export function overworldInteractableEvents(
 function presentEvents(
   entry: Extract<OverworldInteractable, { kind: "present" }>,
   flags: OverworldInteractableFlagReader,
-  itemName: ((itemId: number) => string | undefined) | undefined
+  itemName: ((itemId: number) => string | undefined) | undefined,
+  hasRoom: ((char: number) => boolean) | undefined
 ): OverworldInteractableAction {
   const openedFlag = overworldPresentOpenedFlag(entry);
   if (flags.has(openedFlag)) {
@@ -51,6 +53,14 @@ function presentEvents(
       events: [{ kind: "dialogue", pages: entry.openedPages ?? ["The present is empty."] }],
       sfxBeforeEvents: ["talkConfirm"],
       opened: true
+    };
+  }
+  if (hasRoom && !hasRoom(entry.item.char)) {
+    // EB: a present stays unopened when the recipient's bag is full.
+    return {
+      events: [{ kind: "dialogue", pages: ["You can't carry any more."] }],
+      sfxBeforeEvents: ["talkConfirm"],
+      opened: false
     };
   }
   return {

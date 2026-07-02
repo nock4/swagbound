@@ -25,7 +25,7 @@ import {
   parseYamlInteger,
   placementToWorldPixel
 } from "../src/coilsnakeYaml";
-import { chooseRegion, encodeCollisionRows, findSpawn, spriteGroupAnimations, TILE_SIZE } from "../src/world";
+import { chooseRegion, composeRegion, encodeCollisionRows, findSpawn, spriteGroupAnimations, FULL_CHUNK_SIZE_TILES, TILE_SIZE } from "../src/world";
 import { decodePngRgba, encodePngRgba, readPngHeader, type PngRgba } from "../src/png";
 import {
   EB_ROM_SIZE_BYTES,
@@ -306,6 +306,45 @@ describe("region selection and collision encoding", () => {
     const withVoid = encodeCollisionRows(surface, 4, 1, voidSolid);
     expect(withVoid.solidRows).toEqual(["1100"]);
     expect(withVoid.solidCells).toBe(2);
+  });
+
+  it("promotes bottom-row foreground occluders using the south chunk's top row solidity", () => {
+    const tileset = parseFts(syntheticFts());
+    const graphics = { tileset, palettes: new Map([[0, tileset.palettes[0]]]) };
+    const sector = {
+      tileset: 0,
+      palette: 0,
+      music: "0",
+      setting: "none",
+      townMap: "none",
+      item: "0",
+      areaId: 0,
+      indoor: false,
+      bounded: false
+    };
+    const bottomForegroundPixel = (southArrangementIndex: number): number[] => {
+      const mapRows = Array.from({ length: FULL_CHUNK_SIZE_TILES * 2 }, () =>
+        Array.from({ length: FULL_CHUNK_SIZE_TILES }, () => 1)
+      );
+      mapRows[FULL_CHUNK_SIZE_TILES - 1][0] = 2; // solid occluder candidate on chunk bottom row
+      mapRows[FULL_CHUNK_SIZE_TILES][0] = southArrangementIndex;
+      const composed = composeRegion({
+        bounds: {
+          originTileX: 0,
+          originTileY: 0,
+          widthTiles: FULL_CHUNK_SIZE_TILES,
+          heightTiles: FULL_CHUNK_SIZE_TILES
+        },
+        mapRows,
+        sectorLookup: () => sector,
+        tilesetForMapTileset: () => graphics
+      });
+      const offset = (((FULL_CHUNK_SIZE_TILES - 1) * TILE_SIZE) * composed.widthPixels) * 4;
+      return [...composed.foreground.slice(offset, offset + 4)];
+    };
+
+    expect(bottomForegroundPixel(2)).toEqual([255, 0, 0, 255]);
+    expect(bottomForegroundPixel(1)).toEqual([0, 0, 0, 0]);
   });
 
   it("maps CoilSnake sprite-group frames to per-direction walk pairs", () => {
@@ -942,6 +981,60 @@ describe("world artifact build (synthetic project)", () => {
       expect(doors.get("synthetic.boundary")?.destinationWorldPixel).toEqual({ x: 1024, y: 1024 });
       expect(doors.get("synthetic.no_destination")?.destinationWorldPixel).toEqual({ x: 56, y: 64 });
       expect(doors.get("synthetic.no_destination")?.worldPixel).toEqual({ x: 56, y: 64 });
+    } finally {
+      await rm(temp, { recursive: true, force: true });
+    }
+  }, 30_000);
+
+  it("resolves style-33 scripted floor-hole doors through the teleport table", async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), "eb-world-scripted-doors-"));
+    try {
+      const project = path.join(temp, "project");
+      const out = path.join(temp, "generated");
+      await writeSyntheticChunkProject(project);
+      await writeFile(path.join(project, "ccscript", "data_51.ccs"), [
+        "l_0xc99ccd:",
+        '    "{hide_char(255)}[1F 63 {e(l_0xc99cd8)}]" eob',
+        "l_0xc99cd8:",
+        '    "{music(15)}{pause(240)}{warp(59)}{show_party(1)}" eob',
+        ""
+      ].join("\n"), "utf8");
+      await writeFile(path.join(project, "teleport_destination_table.yml"), [
+        "59:",
+        "  Direction: 5",
+        "  Unknown: 127",
+        "  Warp Style: 1",
+        "  X: 358",
+        "  Y: 385",
+        ""
+      ].join("\n"), "utf8");
+      await writeFile(path.join(project, "map_doors.yml"), [
+        "1:",
+        "  2:",
+        "  - Destination X: 399",
+        "    Destination Y: 144",
+        "    Direction: down",
+        "    Event Flag: 0x0",
+        "    Style: 33",
+        "    Text Pointer: data_51.l_0xc99ccd",
+        "    Type: door",
+        "    X: 5",
+        "    Y: 25",
+        ""
+      ].join("\n"), "utf8");
+
+      const result = await convertProject({ project, out, worldMode: "full" });
+      if (!("mode" in result.world)) {
+        throw new Error("expected chunked world");
+      }
+
+      expect(result.world.doors).toHaveLength(1);
+      expect(result.world.doors[0]).toMatchObject({
+        type: "door",
+        style: 33,
+        textPointer: "data_51.l_0xc99ccd",
+        destinationWorldPixel: { x: 2864, y: 3080 }
+      });
     } finally {
       await rm(temp, { recursive: true, force: true });
     }

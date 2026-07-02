@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { DialogueSegment, ScriptCollection, ScriptCommand } from "@eb/schemas";
 import type { DialogueEvent, GameEvent, InteractionEventDispatcher } from "./eventRunner";
 import {
   addedNpcInteractionEvents,
@@ -163,13 +164,55 @@ describe("interactionEvents custom-dialogue shops", () => {
       { kind: "setFlag", flag: talkedFlag(745) }
     ]);
   });
+
+  it("keeps pure custom dialogue reference-backed so CCS behavior still runs", () => {
+    const events = interactionEvents(
+      { npcId: 9, textPointer: "data_28.l_0xc74e83" },
+      "fallback.reference",
+      { has: () => false },
+      {
+        byNpcId: {
+          "9": { pages: ["What can I do for you?"] }
+        },
+        byTextPointer: {}
+      },
+      undefined,
+      selectorScript("data_28", "l_0xc74e83", 226)
+    );
+
+    expect(events).toEqual([
+      { kind: "dialogue", reference: "data_28.l_0xc74e83", pages: ["What can I do for you?"] },
+      { kind: "shop", storeId: 1 },
+      { kind: "setFlag", flag: talkedFlag(9) }
+    ]);
+  });
+
+  it("lets authored service keys win over reference-backed behavior", () => {
+    const events = interactionEvents(
+      { npcId: 1375, textPointer: "data_17.l_0xc62d30" },
+      "fallback.reference",
+      { has: () => false },
+      {
+        byNpcId: {
+          "1375": { pages: ["Bank terminal."], service: "atm" }
+        },
+        byTextPointer: {}
+      }
+    );
+
+    expect(events).toEqual([
+      { kind: "dialogue", pages: ["Bank terminal."] },
+      { kind: "service", service: "atm" },
+      { kind: "setFlag", flag: talkedFlag(1375) }
+    ]);
+  });
 });
 
 function dispatchWithMock(events: readonly GameEvent[]): string[] {
   const log: string[] = [];
   let dialogueActive = false;
   let deferredShop: number | undefined;
-  let deferredService: { service: "hospital" | "hotel" | "phone"; cost?: number } | undefined;
+  let deferredService: { service: "hospital" | "hotel" | "phone" | "atm"; cost?: number } | undefined;
   const dispatcher: InteractionEventDispatcher = {
     startDialogue: (event: DialogueEvent) => {
       dialogueActive = true;
@@ -202,4 +245,52 @@ function dispatchWithMock(events: readonly GameEvent[]): string[] {
     dispatcher.openService(deferredService.service, deferredService.cost);
   }
   return log;
+}
+
+function selectorScript(fileStem: string, labelName: string, flag: number): ScriptCollection {
+  const path = `ccscript/${fileStem}.ccs`;
+  const commands: ScriptCommand[] = [
+    command({ cmd: "label", raw: `${labelName}:`, name: labelName }, path, 1),
+    command({
+      cmd: "text",
+      raw: "selector",
+      segments: [{ kind: "setFlag", flag, raw: `set(${flag})` } satisfies DialogueSegment]
+    }, path, 2),
+    command({ cmd: "end", raw: "end" }, path, 3)
+  ];
+  return {
+    schemaVersion: "test",
+    sourceProjectPath: "synthetic",
+    files: [{
+      path,
+      commands,
+      labels: [labelName],
+      counts: {
+        commands: commands.length,
+        labels: 1,
+        textCommands: 1,
+        unknownCommands: 0
+      },
+      warnings: []
+    }],
+    counts: {
+      files: 1,
+      commands: commands.length,
+      labels: 1,
+      textCommands: 1,
+      unknownCommands: 0
+    },
+    warnings: []
+  };
+}
+
+function command(
+  input: Omit<ScriptCommand, "sourceLocation">,
+  file: string,
+  line: number
+): ScriptCommand {
+  return {
+    ...input,
+    sourceLocation: { file, line, column: 1 }
+  };
 }

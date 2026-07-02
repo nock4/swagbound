@@ -3,7 +3,9 @@ import { buildPartyMember, type PartyMember, type PartyMemberStats } from "./cha
 import type { DialogueResolver } from "./dialogueRenderer";
 import { psiPpCost } from "./battleLogic";
 import {
+  decodeItemUseEffect,
   equipmentSlotForItemType,
+  isFieldUsableItemEffect,
   previewEquipStats,
   sellPriceForItem,
   type EquipmentSlot,
@@ -113,6 +115,7 @@ export type InventoryMenuEntry = {
   ownerChar: number;
   label: string;
   equippable: boolean;
+  fieldUsable: boolean;
   equipmentSlot?: EquipmentSlot;
   equipped: boolean;
   helpText?: string;
@@ -761,7 +764,9 @@ export function buildGoodsActionScreens(goods: GoodsViewModel): MenuScreen[] {
     {
       id: entry.useTargetScreenId,
       title: "Use",
-      items: goods.targets.length > 0
+      items: !entry.fieldUsable
+        ? [{ id: `${entry.id}-not-field-usable`, label: "You can't use that here.", enabled: false }]
+        : goods.targets.length > 0
         ? goods.targets.map((target) => ({
             id: `${entry.id}-target-${target.id}`,
             label: target.name,
@@ -1131,6 +1136,7 @@ function inventoryEntries(input: PartyMenuViewModelInput, member: PartyMember): 
       ownerChar: member.id,
       label: fitMenuLabel(resolveItemName(input, itemId, item)),
       equippable: item?.equippable ?? false,
+      fieldUsable: isFieldUsableItemEffect(item ? decodeItemUseEffect(item) : undefined),
       ...(equipmentSlot ? { equipmentSlot } : {}),
       equipped: equipmentSlot ? equipped[equipmentSlot] === itemId : false,
       helpText: item?.helpText,

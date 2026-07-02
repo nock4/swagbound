@@ -1,4 +1,5 @@
 import type { CutsceneStep, EventActorMoveSelector } from "@eb/schemas";
+import type { CutsceneSoundId } from "./cutsceneSfx";
 
 export type CutsceneFacing = "up" | "down" | "left" | "right";
 
@@ -18,7 +19,7 @@ export interface CutsceneHost {
   setGameFlag(flag: string): void;
   clearGameFlag(flag: string): void;
   setEventFlag(flag: number, set: boolean): void;
-  playSound(id: number): void;
+  playSound(id: CutsceneSoundId): void;
   warp(to: { x: number; y: number }): void;
 }
 

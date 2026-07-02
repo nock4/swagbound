@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { BattleData, CharacterCollection, CustomDialogue, DrifellaBarks, ItemCollection, Manifest, NpcOverrides, PsiCollection, ScriptCollection, ScriptCommand, WorldChunkedNpc } from "@eb/schemas";
-import { applyEnemyOverrides, applyNpcOverride, buildCustomDialogueWithDrifellaBarks, buildDialogueForReference, loadGameData } from "../src/loader";
+import { applyEnemyActionEffects, applyEnemyOverrides, applyNpcOverride, buildCustomDialogueWithDrifellaBarks, buildDialogueForReference, loadGameData } from "../src/loader";
 import { isGeneratedDrifellaBarkEntry } from "../src/customDialogueLookup";
 import { drifellaBarkForNpcId } from "../src/drifellaBarks";
 
@@ -109,6 +109,30 @@ describe("applyEnemyOverrides", () => {
         "999": { name: "Not Present" }
       }
     })).toBe(battle);
+  });
+});
+
+describe("applyEnemyActionEffects", () => {
+  it("attaches authored effects to generated battle actions by action id", () => {
+    const battle = syntheticBattle();
+
+    const resolved = applyEnemyActionEffects(battle, {
+      schema: "swagbound.enemy-action-effects.v1",
+      byActionId: {
+        "32": {
+          name: "Lifeup alpha",
+          effect: { kind: "healHp", amount: 20 }
+        }
+      }
+    });
+
+    expect(resolved).not.toBe(battle);
+    expect(resolved?.enemies[0].actions[0]).toMatchObject({
+      actionId: 32,
+      name: "Lifeup alpha",
+      effect: { kind: "healHp", amount: 20 }
+    });
+    expect(battle.enemies[0].actions[0]).not.toHaveProperty("effect");
   });
 });
 
@@ -563,7 +587,7 @@ function battleEnemy(id: number, name: string): BattleData["enemies"][number] {
     money: 1,
     bossFlag: false,
     actions: [
-      { id: 0, arg: 0 },
+      { id: 32, arg: 23, actionId: 32, actionType: 3, direction: "party", target: 1 },
       { id: 0, arg: 0 },
       { id: 0, arg: 0 },
       { id: 0, arg: 0 }
@@ -593,6 +617,9 @@ function npcOverrides(byNpcId: NpcOverrides["byNpcId"]): NpcOverrides {
 
 function jsonResponse(value: unknown): Response {
   return {
+    ok: true,
+    status: 200,
+    headers: new Headers({ "content-type": "application/json" }),
     json: async () => value
   } as Response;
 }

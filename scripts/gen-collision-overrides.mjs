@@ -19,7 +19,7 @@
 import fs from "node:fs";
 
 const WORLD = "apps/game/public/generated/world.json";
-const OUT = "/private/tmp/claude-501/-Users-nickgeorge-studio-Projects-coilsnake-tutorial-experiment/e24bac65-13de-404c-b27a-b376b6301e04/scratchpad/collision-candidates.json";
+const OUT = process.env.OUT ?? "tmp/collision-candidates.json";
 
 // Onett town box (world px). Generous; town buildings cluster here.
 const [px0, py0, px1, py1] = process.argv.slice(2).map(Number).length === 4
@@ -108,6 +108,25 @@ for (let id = 0; id < wallComps.length; id += 1) {
     if (L && R && U && D) roof.push([x, y]);
   }
   if (roof.length >= 4) comps.push(roof);
+}
+
+// Exclude any roof cell a door lands on or departs from (±1-cell footprint margin).
+// Warp-reachable decks/rooms look identical to sealed roof pockets to the sandwich
+// heuristic — cross-checking world.doors[] is what separates them (audit: 8 corrupted
+// door landings shipped without this).
+const doorCells = new Set();
+for (const door of world.doors ?? []) {
+  for (const point of [door.worldPixel, door.destinationWorldPixel]) {
+    if (!point) continue;
+    const dcx = Math.floor(point.x / cs) - cx0;
+    const dcy = Math.floor(point.y / cs) - cy0;
+    for (let dy = -1; dy <= 1; dy += 1) for (let dx = -1; dx <= 1; dx += 1) {
+      doorCells.add(`${dcx + dx},${dcy + dy}`);
+    }
+  }
+}
+for (let c = 0; c < comps.length; c += 1) {
+  comps[c] = comps[c].filter(([x, y]) => !doorCells.has(`${x},${y}`));
 }
 
 // Merge a component's cells into rectangles: per-row horizontal runs, then merge

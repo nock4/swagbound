@@ -5,6 +5,7 @@ import {
   advanceBattleRound,
   applyVictoryRewards,
   beginCombatantTurn,
+  battleRngSeedForGroup,
   buildEnemyCombatant,
   buildPlayerCombatant,
   commandsForCharId,
@@ -248,6 +249,15 @@ describe("encounter advantage", () => {
     ])).toBe("normal");
   });
 
+  it("keeps group-only battle RNG deterministic unless an encounter seed is supplied", () => {
+    const enemies = [enemy(75, "RNG_A"), enemy(76, "RNG_B")];
+    const deterministic = battleRngSeedForGroup(12, enemies);
+
+    expect(battleRngSeedForGroup(12, enemies)).toBe(deterministic);
+    expect(battleRngSeedForGroup(12, enemies, 100)).not.toBe(deterministic);
+    expect(battleRngSeedForGroup(12, enemies, 101)).not.toBe(battleRngSeedForGroup(12, enemies, 100));
+  });
+
   it("resolves instant-win rewards with parity to a normal victory over the same group", () => {
     const droppedEnemy: BattleEnemy = {
       ...enemy(75, "DROP_FOE", { hp: 12, level: 1 }),
@@ -276,6 +286,36 @@ describe("encounter advantage", () => {
     expect(instantVictory.summary).toEqual(normalVictory.summary);
     expect(instantVictory.state.wallet).toBe(normalVictory.state.wallet);
     expect(instantVictory.state.party[0].inventory).toEqual(normalVictory.state.party[0].inventory);
+  });
+
+  it("divides victory EXP among living party members and gives none to KO'd members", () => {
+    const expEnemy = {
+      ...enemy(77, "EXP_FOE", { hp: 12, level: 1 }),
+      experience: 101
+    };
+    let battle = createBattleState(expEnemy, {
+      characters: characters([
+        partyCharacterA,
+        partyCharacterB,
+        character(2, "PARTY_C", { maxHp: 52, maxPp: 0, offense: 18, defense: 7, speed: 3 })
+      ])
+    });
+    battle = withCombatant(battle, actor("enemy", 0), {
+      ...battle.enemies[0],
+      hp: { ...battle.enemies[0].hp, displayed: 0, target: 0, isRolling: false }
+    });
+    battle = withCombatant(battle, actor("party", 1), {
+      ...battle.party[1],
+      hp: { ...battle.party[1].hp, displayed: 0, target: 0, isRolling: false }
+    });
+
+    const result = applyVictoryRewards(battle);
+
+    expect(result.summary.expGained).toBe(101);
+    // EB rounding: ceil(101/2) = 51 per conscious member; KO'd gets none.
+    expect(result.state.party[0].experience).toBe(51);
+    expect(result.state.party[1].experience).toBe(0);
+    expect(result.state.party[2].experience).toBe(51);
   });
 });
 
@@ -463,6 +503,38 @@ describe("battle turn resolution", () => {
     expect(result.state.party[1].hp.target).toBe(31);
   });
 
+  it("routes ally-directed enemy Lifeup to the weakest damaged enemy ally", () => {
+    let battle = createBattleState([
+      enemy(37, "Malady", { hp: 235, offense: 19, actions: actionSet(enemyAction(0, 0, 0)) }),
+      enemy(209, "Black Antoid", {
+        hp: 34,
+        offense: 14,
+        actions: actionSet(enemyAction(32, 3, 1, {
+          arg: 23,
+          direction: "party",
+          name: "Lifeup alpha",
+          effect: { kind: "healHp", amount: 20 }
+        }))
+      }),
+      enemy(209, "Black Antoid", { hp: 34, offense: 14, actions: actionSet(enemyAction(0, 0, 0)) })
+    ], {
+      characters: characters([partyCharacterA])
+    });
+    battle = withCombatant(battle, actor("enemy", 0), {
+      ...battle.enemies[0],
+      hp: setTarget({ ...battle.enemies[0].hp, displayed: 235, target: 235, isRolling: false }, 120)
+    });
+
+    const result = resolveEnemyActionTurn(battle, actor("enemy", 1), () => 0.5);
+
+    expect(result.effectKind).toBe("psi");
+    expect(result.action).toMatchObject({ actionId: 32, direction: "party", target: 1 });
+    expect(result.targets).toEqual([actor("enemy", 0)]);
+    expect(result.amount).toBe(20);
+    expect(result.state.enemies[0].hp.target).toBe(140);
+    expect(result.state.party[0].hp.target).toBe(72);
+  });
+
   it("degrades a status-class enemy action to small damage with an intended status stub", () => {
     const battle = createBattleState(enemy(12, "OPPONENT_F", {
       offense: 20,
@@ -496,6 +568,17 @@ describe("battle turn resolution", () => {
     expect(result.targets).toEqual([]);
     expect(result.state.party[0].hp.target).toBe(72);
     expect(result.state.enemies[0].nextActionIndex).toBe(1);
+  });
+
+  it("letters only duplicated enemy display names while combatant ids stay distinct", () => {
+    const battle = createBattleState([
+      enemy(21, "Runaway Dog"),
+      enemy(22, "Runaway Dog"),
+      enemy(23, "Cop")
+    ]);
+
+    expect(battle.enemies.map((combatant) => combatant.name)).toEqual(["Runaway Dog A", "Runaway Dog B", "Cop"]);
+    expect(new Set(battle.enemies.map((combatant) => combatant.combatantId)).size).toBe(3);
   });
 
   it("builds a boss-flagged action enemy and defeats it with existing party turns", () => {
@@ -595,6 +678,66 @@ describe("battle PSI and goods resolution", () => {
     expect(result.state.party[1].hp.displayed).toBe(20);
     expect(result.state.party[1].hp.target).toBe(48);
     expect(result.state.party[1].hp.isRolling).toBe(true);
+  });
+
+  it("uses real PSI ppCost metadata when present", () => {
+    const psi: PsiData = { ...syntheticPsi(106, "offense", "alpha", [{ charId: 0, level: 1 }]), ppCost: 11 };
+
+    expect(psiPpCost(psi)).toBe(11);
+  });
+
+  it("applies all-target offensive PSI to every living enemy with per-target damage rolls", () => {
+    const battle = createBattleState([
+      enemy(95, "PSI_TARGET_A", { hp: 80 }),
+      enemy(96, "PSI_TARGET_B", { hp: 80 })
+    ], {
+      characters: characters([partyCharacterA])
+    });
+    const psi: PsiData = {
+      ...syntheticPsi(107, "offense", "alpha", [{ charId: 0, level: 1 }]),
+      ppCost: 7,
+      target: "all",
+      direction: "enemy"
+    };
+
+    const result = resolvePsiTurn(battle, actor("party", 0), psi, sequenceRng([0, 1]));
+
+    expect(result.skipped).toBe(false);
+    expect(result.ppCost).toBe(7);
+    expect(result.target).toEqual(actor("enemy", 0));
+    expect(result.targets).toEqual([actor("enemy", 0), actor("enemy", 1)]);
+    expect(result.amount).toBe(59);
+    expect(result.state.enemies.map((enemy) => enemy.hp.target)).toEqual([52, 49]);
+    expect(result.state.party[0].pp).toBe(11);
+  });
+
+  it("applies all-target recovery PSI to every living party member", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([partyCharacterA, partyCharacterB])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      hp: { ...battle.party[0].hp, displayed: 10, target: 10, isRolling: false }
+    });
+    battle = withCombatant(battle, actor("party", 1), {
+      ...battle.party[1],
+      hp: { ...battle.party[1].hp, displayed: 20, target: 20, isRolling: false }
+    });
+    const psi: PsiData = {
+      ...syntheticPsi(108, "recovery", "alpha", [{ charId: 0, level: 1 }]),
+      ppCost: 5,
+      target: "all",
+      direction: "party"
+    };
+
+    const result = resolvePsiTurn(battle, actor("party", 0), psi, () => 0.5);
+
+    expect(result.skipped).toBe(false);
+    expect(result.targets).toEqual([actor("party", 0), actor("party", 1)]);
+    expect(result.amount).toBe(80);
+    expect(result.state.party[0].hp.target).toBe(50);
+    expect(result.state.party[1].hp.target).toBe(48);
+    expect(result.state.party[0].pp).toBe(13);
   });
 
   it("blocks PSI when the actor does not have enough PP", () => {
@@ -885,8 +1028,13 @@ function enemy(
   };
 }
 
-function enemyAction(id: number, actionType: number, target: number): BattleEnemy["actions"][number] {
-  return { id, arg: 0, actionId: id, actionType, target };
+function enemyAction(
+  id: number,
+  actionType: number,
+  target: number,
+  overrides: Partial<BattleEnemy["actions"][number]> = {}
+): BattleEnemy["actions"][number] {
+  return { id, arg: 0, actionId: id, actionType, target, ...overrides };
 }
 
 function actionSet(...actions: BattleEnemy["actions"][number][]): BattleEnemy["actions"] {

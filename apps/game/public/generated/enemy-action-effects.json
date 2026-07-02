@@ -1,0 +1,247 @@
+{
+  "schema": "swagbound.enemy-action-effects.v1",
+  "byActionId": {
+    "14": {
+      "name": "PSI Fire alpha",
+      "note": "psi arg 5: PSI Fire alpha desc 'about 80 points of damage each'; scaled by existing Lifeup alpha 20/100 ratio -> 16 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 16
+      }
+    },
+    "15": {
+      "name": "PSI Fire beta",
+      "note": "psi arg 6: PSI Fire beta desc 'about 160 points of damage each'; scaled by existing Lifeup alpha 20/100 ratio -> 32 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 32
+      }
+    },
+    "16": {
+      "name": "PSI Fire gamma",
+      "note": "psi arg 7: PSI Fire gamma desc 'about 240 points of damage each'; scaled by existing Lifeup alpha 20/100 ratio -> 48 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 48
+      }
+    },
+    "18": {
+      "name": "PSI Freeze alpha",
+      "note": "psi arg 9: PSI Freeze alpha desc 'about 180 points of damage'; scaled by existing Lifeup alpha 20/100 ratio -> 36 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 36
+      }
+    },
+    "19": {
+      "name": "PSI Freeze beta",
+      "note": "psi arg 10: PSI Freeze beta desc 'about 360 points of damage'; scaled by existing Lifeup alpha 20/100 ratio -> 72 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 72
+      }
+    },
+    "22": {
+      "name": "PSI Thunder alpha",
+      "note": "psi arg 13: PSI Thunder alpha desc 'about 120 points of damage'; scaled by existing Lifeup alpha 20/100 ratio -> 24 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 24
+      }
+    },
+    "23": {
+      "name": "PSI Thunder beta",
+      "note": "psi arg 14: PSI Thunder beta desc '120 points ... two separate times'; scaled by existing Lifeup alpha 20/100 ratio -> 48 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 48
+      }
+    },
+    "24": {
+      "name": "PSI Thunder gamma",
+      "note": "psi arg 15: PSI Thunder gamma desc '200 points ... three separate times'; scaled by existing Lifeup alpha 20/100 ratio -> 120 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 120
+      }
+    },
+    "30": {
+      "name": "PSI Starstorm alpha",
+      "note": "psi arg 21: PSI Starstorm alpha desc 'about 360 points of damage to each enemy'; scaled by existing Lifeup alpha 20/100 ratio -> 72 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 72
+      }
+    },
+    "32": {
+      "name": "Lifeup alpha",
+      "note": "psi arg 23: Lifeup alpha desc 'Restores 100 HP to one person'; existing content scales this to healHp 20.",
+      "effect": {
+        "kind": "healHp",
+        "amount": 20
+      }
+    },
+    "40": {
+      "name": "Shield alpha",
+      "note": "psi arg 31: Shield alpha desc 'reduces the damage caused by an enemy's attack by 50%' -> shielded.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded"
+      }
+    },
+    "41": {
+      "name": "Shield beta",
+      "note": "psi arg 33: Shield beta desc 'Cuts damage in half' -> shielded.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded"
+      }
+    },
+    "44": {
+      "name": "PSI Shield alpha",
+      "note": "psi arg 35: PSI Shield alpha desc 'blocks an enemy's PSI attack' -> shielded.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded"
+      }
+    },
+    "45": {
+      "name": "PSI Shield beta",
+      "note": "psi arg 37: PSI Shield beta desc 'reflects an enemy's PSI attack' -> shielded.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded"
+      }
+    },
+    "47": {
+      "name": "PSI Shield omega",
+      "note": "psi arg 38: PSI Shield omega desc 'Protects everyone with a psychic power shield' -> shielded.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "shielded"
+      }
+    },
+    "50": {
+      "name": "Defense down alpha",
+      "note": "psi arg 41: Defense down alpha desc 'Decreases the Defense of one enemy' -> defense -8.",
+      "effect": {
+        "kind": "buffStat",
+        "stat": "defense",
+        "amount": -8
+      }
+    },
+    "52": {
+      "name": "Hypnosis alpha",
+      "note": "psi arg 43: Hypnosis alpha desc 'Puts one enemy to sleep' -> asleep.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "asleep"
+      }
+    },
+    "54": {
+      "name": "PSI Magnet alpha",
+      "note": "psi arg 45: PSI Magnet alpha desc 'Grabs 2-8 points of PP' -> drainPp 5 midpoint.",
+      "effect": {
+        "kind": "drainPp",
+        "amount": 5
+      }
+    },
+    "56": {
+      "name": "Paralysis alpha",
+      "note": "psi arg 47: Paralysis alpha desc 'numbed condition' -> paralyzed.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed"
+      }
+    },
+    "57": {
+      "name": "Paralysis omega",
+      "note": "psi arg 48: Paralysis omega desc 'numbed condition' for all enemies -> paralyzed.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed"
+      }
+    },
+    "58": {
+      "name": "Brainshock alpha",
+      "note": "psi arg 49: Brainshock alpha desc 'Makes one enemy feels strange' -> confused.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "confused"
+      }
+    },
+    "59": {
+      "name": "Brainshock omega",
+      "note": "psi arg 50: Brainshock omega desc 'Makes all of the enemies feel strange' -> confused.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "confused"
+      }
+    },
+    "72": {
+      "name": "poison stinger",
+      "note": "msg: 'stung with its poison stinger' -> poisoned.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "poisoned"
+      }
+    },
+    "79": {
+      "name": "binding attack",
+      "note": "msg: 'employed a binding attack' -> paralyzed.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed"
+      }
+    },
+    "80": {
+      "name": "sticky mucus",
+      "note": "msg: 'spit out a sticky mucus' -> paralyzed.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed"
+      }
+    },
+    "82": {
+      "name": "spider silk",
+      "note": "msg: 'shot spider silk out of its body' -> paralyzed.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed"
+      }
+    },
+    "85": {
+      "name": "disrupted senses",
+      "note": "msg: 'disrupted your senses' -> confused.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "confused"
+      }
+    },
+    "96": {
+      "name": "lost temper",
+      "note": "Code Address $c29e38 matches PSI Offense up alpha; msg 'lost his temper' -> offense +8.",
+      "effect": {
+        "kind": "buffStat",
+        "stat": "offense",
+        "amount": 8
+      }
+    },
+    "202": {
+      "name": "electrical shock attack",
+      "note": "Code Address $c2987d matches PSI Thunder beta; msg 'electrical shock attack' -> scaled 48 damage.",
+      "effect": {
+        "kind": "damage",
+        "amount": 48
+      }
+    },
+    "242": {
+      "name": "coil bind",
+      "note": "msg: 'coiled around you and attacked' plus Code Address $c28cb8 shared with binding/sticky mucus/spider silk -> paralyzed.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed"
+      }
+    }
+  }
+}

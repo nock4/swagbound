@@ -586,6 +586,74 @@ describe("round-start priority layer", () => {
     expect(defendResult.state.party[0].defending).toBe(true);
   });
 
+  it("does not grant DEFEND stance when paralysis gates the queued defender", () => {
+    let battle = createBattleState(enemy(42, "FAST_ENEMY", {
+      offense: 20,
+      actions: actionSet(enemyAction(420, 1, 1))
+    }), {
+      characters: characters([character(0, "STUCK_GUARD", { speed: 1, defense: 8 })]),
+      enemyOptions: [{ speed: 30 }]
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      statuses: [{ ailment: "paralyzed" }, { ailment: "poisoned" }]
+    });
+    const queued: QueuedCommand[] = [{ partySlot: 0, command: "DEFEND" }];
+
+    const priority = resolveRoundStartPriority(battle, queued, () => 0.5);
+    const beforeHp = priority.state.party[0].hp.target;
+    const result = resolveRoundStep(priority.state, actor("party", 0), queued[0], () => 0.5);
+
+    expect(priority.state.party[0].defending).toBeUndefined();
+    expect(result.skipped).toBe(true);
+    expect(result.message).toContain("can't move");
+    expect(result.message).toContain("poison");
+    expect(result.state.party[0].defending).toBeUndefined();
+    expect(result.state.party[0].hp.target).toBe(beforeHp - Math.floor(priority.state.party[0].maxHp / 16));
+  });
+
+  it("does not grant DEFEND stance when sleep gates the queued defender", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([partyA])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      statuses: [{ ailment: "asleep" }]
+    });
+    const queued: QueuedCommand[] = [{ partySlot: 0, command: "DEFEND" }];
+
+    const priority = resolveRoundStartPriority(battle, queued, () => 0.5);
+    const result = resolveRoundStep(priority.state, actor("party", 0), queued[0], () => 0.9);
+
+    expect(priority.state.party[0].defending).toBeUndefined();
+    expect(result.skipped).toBe(true);
+    expect(result.message).toContain("fast asleep");
+    expect(result.state.party[0].defending).toBeUndefined();
+  });
+
+
+  it("ticks poison for a combatant who successfully DEFENDs", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([partyA])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      statuses: [{ ailment: "poisoned" }]
+    });
+    const queued: QueuedCommand[] = [{ partySlot: 0, command: "DEFEND" }];
+
+    const priority = resolveRoundStartPriority(battle, queued, () => 0.5);
+    const beforeHp = priority.state.party[0].hp.target;
+    const result = resolveRoundStep(priority.state, actor("party", 0), queued[0], () => 0.5);
+
+    expect(priority.state.party[0].defending).toBe(true);
+    expect(result.skipped).toBe(false);
+    expect(result.message).toContain("took a defensive stance");
+    expect(result.message).toContain("poison");
+    expect(result.state.party[0].defending).toBe(true);
+    expect(result.state.party[0].hp.target).toBe(beforeHp - Math.floor(priority.state.party[0].maxHp / 16));
+  });
+
   it("resolves failed Run once at round start, forfeits party actions, and leaves enemies acting", () => {
     const battle = createBattleState(enemy(41, "NO_ESCAPE_ENEMY", {
       offense: 10,
@@ -723,7 +791,12 @@ describe("nextInputState", () => {
     });
     const offense = syntheticPsi(100, "offense", "alpha", [{ charId: 0, level: 1 }]);
     const recovery = syntheticPsi(101, "recovery", "alpha", [{ charId: 0, level: 1 }]);
-    const context = { state: battle, psi: [offense, recovery] };
+    const allOffense: PsiData = {
+      ...syntheticPsi(102, "offense", "alpha", [{ charId: 0, level: 1 }]),
+      target: "all",
+      direction: "enemy"
+    };
+    const context = { state: battle, psi: [offense, recovery, allOffense] };
 
     const command = nextInputState(inputState({ selectionIndex: 3 }), { kind: "confirm" }, context);
     expect(command.input.submenu).toBe("psi");
@@ -745,6 +818,15 @@ describe("nextInputState", () => {
       selectionIndex: 0,
       pending: { command: "PSI", psiId: 101 }
     });
+
+    const allTarget = nextInputState(
+      { ...command.input, selectionIndex: 2 },
+      { kind: "confirm" },
+      context
+    );
+    expect(allTarget.complete).toBe(false);
+    expect(allTarget.input.memberCursor).toBe(1);
+    expect(allTarget.input.queue).toEqual([{ partySlot: 0, command: "PSI", psiId: 102 }]);
   });
 
   it("routes a damage GOODS item to enemy targeting and a healing one to ally targeting", () => {
@@ -1006,6 +1088,29 @@ describe("resolveRoundStep status effects", () => {
     expect(partyHit.resolution).toMatchObject({ targets: [actor("party", 0)] });
   });
 
+  it("lets Coil Snake's mapped poison bite inflict poisoned through resolveRoundStep", () => {
+    const battle = createBattleState(
+      enemy(55, "Coil Snake", {
+        actions: actionSet(enemyAction(242, 5, 1, {
+          direction: "enemy",
+          name: "poison bite",
+          effect: { kind: "inflictStatus", ailment: "poisoned" }
+        }))
+      }),
+      { characters: characters([partyA]) }
+    );
+
+    const result = resolveRoundStep(battle, actor("enemy", 0), undefined, () => 0.5);
+
+    expect(result.skipped).toBe(false);
+    expect(result.resolution).toMatchObject({
+      effectKind: "statusStub",
+      targets: [actor("party", 0)]
+    });
+    expect(result.state.party[0].statuses).toEqual([{ ailment: "poisoned" }]);
+    expect(result.details.message).toContain("poisoned");
+  });
+
   it("raises a battle stat with a buffStat GOODS item", () => {
     let battle = createBattleState(opponentA, { characters: characters([partyA]) });
     battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [214] });
@@ -1147,8 +1252,13 @@ function enemy(
   };
 }
 
-function enemyAction(id: number, actionType: number, target: number): BattleEnemy["actions"][number] {
-  return { id, arg: 0, actionId: id, actionType, target };
+function enemyAction(
+  id: number,
+  actionType: number,
+  target: number,
+  overrides: Partial<BattleEnemy["actions"][number]> = {}
+): BattleEnemy["actions"][number] {
+  return { id, arg: 0, actionId: id, actionType, target, ...overrides };
 }
 
 function actionSet(...actions: BattleEnemy["actions"][number][]): BattleEnemy["actions"] {

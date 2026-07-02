@@ -102,7 +102,8 @@ for (const rawNpc of world.npcs ?? []) {
     TARGET_REFERENCE,
     flagReader,
     runtimeCustomDialogue,
-    dialogueLibrary
+    dialogueLibrary,
+    scripts
   );
   const shopIds = shopIdsFromEvents(events, scripts);
   clerkTargets.push(...clerkEntriesForNpc(npc, shopIds, shopsById));

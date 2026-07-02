@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { isNpcVisibleForEventFlags, type BattleEnemy, type Cutscene, type DialoguePage, type EventActorMoveSelector, type EventEffect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { type BattleEnemy, type Cutscene, type DialoguePage, type EventActorMoveSelector, type EventEffect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
 import { sectorIndexForTile } from "./encounterLogic";
@@ -13,8 +13,10 @@ import {
   createBattleState,
   resolveInstantWinRewards,
   type EncounterAdvantage,
-  type InstantWinRewardOptions
+  type InstantWinRewardOptions,
+  type PlayerCombatantOptions
 } from "./battleLogic";
+import { expandBattleGroupEnemies } from "./battleGroups";
 import {
   messageDoorDialogueReference,
   resolveAdjacentDoorIntentTrigger,
@@ -88,6 +90,7 @@ import {
 } from "./eventHost";
 import { GameFlags } from "./gameFlags";
 import { behaviorForNpc, interactionEventsHaveServiceEffect } from "./npcBehaviors";
+import { cutsceneNpcHiddenFlag, isNpcVisibleForRuntimeFlags } from "./npcVisibility";
 import {
   createNpcState,
   facingToward,
@@ -143,6 +146,7 @@ import type { OverworldStatusHudView } from "./overworldStatusHud";
 import {
   applySaveState,
   captureSaveState,
+  deserializeSaveState,
   serializeSaveState,
   type SavePlayerSnapshot,
   type SaveSlotPersistence,
@@ -245,6 +249,7 @@ import { createTransitionSfx, type InteractionSfxCue, type TransitionSfx } from 
 import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
 import { getSharedMusic } from "./sharedMusic";
 import { advanceCutsceneActorTowardTarget } from "./cutsceneActorMovement";
+import { cutsceneSoundLabel, resolveCutsceneSfxCue, type CutsceneSoundId, type CutsceneSfxCue } from "./cutsceneSfx";
 import {
   isInteriorMusicSector,
   overworldMusicCueForSector,
@@ -320,6 +325,14 @@ type NpcSpriteOverrideResolution = {
 };
 
 type SortableActor = Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+
+type FollowerRuntime = {
+  joinOrder: number;
+  sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+  frames: DirectionFrameSequence;
+  pos: { x: number; y: number };
+  walkPhase: number;
+};
 
 type ActiveNpcDialogue = {
   key: string;
@@ -424,7 +437,6 @@ type ForceEncounterResult =
 
 type ActiveServiceState =
   | { kind: ServiceKind; cost?: number }
-  | { kind: "atm" }
   | { kind: "shop-equip"; storeId: number; char: number; inventorySlot: number; itemId: number; itemName: string };
 
 type ServiceDebugState = {
@@ -448,11 +460,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private playerState!: PlayerState;
   private playerFrames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES;
   // 2nd party member (Cloak) trailing the player. Driven by a delayed trail of the player's path.
-  private follower?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
-  private followerFrames: DirectionFrameSequence = CANONICAL_DIRECTION_FRAMES;
+  private followers: FollowerRuntime[] = [];
   private followerTrail: Array<{ x: number; y: number; facing: PlayerState["facing"] }> = [];
-  private followerPos?: { x: number; y: number };
-  private followerWalkPhase = 0;
   private spriteWalkBobClockMs = 0;
   private npcPlacementsByChunk = new Map<string, NpcPlacement[]>();
   private npcRuntimes = new Map<string, NpcRuntime>();
@@ -638,11 +647,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
         frameHeight: playerOverride.frameHeight
       });
     }
-    const followerOverride = spriteOverrideSheet(this.followerSpriteOverride());
-    if (followerOverride) {
-      this.load.spritesheet(FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY, spriteOverrideAssetUrl(followerOverride.image), {
-        frameWidth: followerOverride.frameWidth,
-        frameHeight: followerOverride.frameHeight
+    for (const follower of this.followerSpriteOverrides()) {
+      this.load.spritesheet(this.followerSpriteSheetKey(follower.joinOrder), spriteOverrideAssetUrl(follower.sheet.image), {
+        frameWidth: follower.sheet.frameWidth,
+        frameHeight: follower.sheet.frameHeight
       });
     }
     for (const [npcId, override] of spriteOverrideNpcEntries(this.data_.spriteOverrides)) {
@@ -685,10 +693,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.load.spritesheet(this.playerStateSheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
       }
     }
-    const followerStates = this.followerSpriteOverride()?.states as StateSheets;
-    for (const [name, sheet] of Object.entries(followerStates ?? {})) {
-      if (sheet) {
-        this.load.spritesheet(this.followerStateSheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+    for (const follower of this.followerSpriteOverrides()) {
+      const followerStates = follower.sheet.states as StateSheets;
+      for (const [name, sheet] of Object.entries(followerStates ?? {})) {
+        if (sheet) {
+          this.load.spritesheet(this.followerStateSheetKey(follower.joinOrder, name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+        }
       }
     }
     const overlays = this.data_.spriteOverrides?.overlays as Record<string, { image: string; frameWidth: number; frameHeight: number }> | undefined;
@@ -968,11 +978,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.encounterSwirlGfx = undefined;
     this.player = undefined;
     this.playerFrames = CANONICAL_DIRECTION_FRAMES;
-    this.follower = undefined;
-    this.followerFrames = CANONICAL_DIRECTION_FRAMES;
+    this.destroyFollowers();
     this.followerTrail = [];
-    this.followerPos = undefined;
-    this.followerWalkPhase = 0;
     this.activeNpcDialogue = undefined;
     this.chunkByKey.clear();
     this.npcPlacementsByChunk.clear();
@@ -1583,7 +1590,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return item ? this.partyState.equip(charId, item) : { ok: false };
     };
     globals.__battleStats = (charId: number) => {
-      const member = this.battlePartyMembers()?.find((entry) => entry.id === charId);
+      const member = this.effectiveBattlePartyMembers()?.find((entry) => entry.id === charId);
       return member ? { offense: member.stats.offense, defense: member.stats.defense } : undefined;
     };
     globals.__overworldStatusHud = () => this.overworldStatusHud();
@@ -1600,6 +1607,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // Debug-only: force hero visual-state inputs (KO, ride, status, cutscene event, palette) so the
     // sprite-state render path can be exercised in-engine without reaching each in-game trigger.
     // e.g. __setPlayerVisualState({ event: "dead" }) or ({ status: { tiny: true } }); call with {} to clear.
+    globals.__partyOp = (op: "add" | "remove", charId: number) => {
+      this.partyState.partyOp(op, charId);
+      this.handlePartyCompositionChanged();
+      return this.partyState.party();
+    };
+    globals.__followerInfo = () => ({
+      spawned: this.followers.length > 0,
+      pos: this.followers[0]?.pos ? { ...this.followers[0].pos } : null,
+      followers: this.followers.map((follower) => ({
+        joinOrder: follower.joinOrder,
+        pos: { ...follower.pos },
+        textureKey: follower.sprite instanceof Phaser.GameObjects.Sprite ? follower.sprite.texture.key : null
+      })),
+      player: { x: this.playerState.x, y: this.playerState.y },
+      textureLoaded: this.textures.exists(FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY),
+      overrideConfigured: this.followerSpriteOverrides().length > 0
+    });
     globals.__setPlayerVisualState = (forced?: Partial<VisualStateInputs>) => {
       this.forcedVisualState = forced ?? {};
       this.applyPlayerVisualState();
@@ -1626,6 +1650,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__battleStats;
     delete globals.__overworldStatusHud;
     delete globals.__setPartyStatus;
+    delete globals.__partyOp;
+    delete globals.__followerInfo;
     delete globals.__setPlayerVisualState;
     delete globals.__playerVisualState;
     delete globals.__overlayInfo;
@@ -1766,7 +1792,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private applyNpcRoomVisibility(): void {
     for (const npc of this.npcRuntimes.values()) {
-      npc.sprite?.setVisible(this.npcInsideActiveRoom(npc));
+      npc.sprite?.setVisible(this.npcInsideActiveRoom(npc) && this.cutsceneActorVisible(npc.data.npcId));
     }
   }
 
@@ -1900,8 +1926,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return resolution ? spriteOverrideDirectionFrames(resolution.override) : this.framesForGroup(spriteGroup);
   }
 
-  private isNpcVisible(npc: Pick<WorldChunkedNpc, "showSprite" | "eventFlag">): boolean {
-    return isNpcVisibleForEventFlags(npc.showSprite, npc.eventFlag, this.gameFlags);
+  private isNpcVisible(npc: Pick<WorldChunkedNpc, "npcId" | "showSprite" | "eventFlag">): boolean {
+    return isNpcVisibleForRuntimeFlags(npc, this.gameFlags);
   }
 
   private spawnActor(
@@ -2791,7 +2817,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     const result = this.partyState.buyItem(action.char, item);
     if (!result.ok) {
-      this.showMenuResult("Not enough money.");
+      this.showMenuResult(result.reason === "inventoryFull" ? "No room to carry it." : "Not enough money.");
       return;
     }
     const inventorySlot = Math.max(0, this.partyState.inventory(action.char).length - 1);
@@ -2851,7 +2877,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       item,
       targetVitals: vitalsForPartyMember(target)
     });
-    this.showMenuResult(result.ok ? "Used." : "You can't use that.");
+    this.showMenuResult(result.ok
+      ? "Used."
+      : result.reason === "notFieldUsable" ? "You can't use that here." : "You can't use that.");
   }
 
   private handleItemGiveAction(action: Extract<MenuAction, { kind: "itemGive" }>): void {
@@ -2861,7 +2889,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       action.inventorySlot,
       action.itemId
     );
-    this.showMenuResult(result.ok ? "Gave." : "You can't give that.");
+    this.showMenuResult(result.ok
+      ? "Gave."
+      : result.reason === "targetFull" ? "They can't carry any more." : "You can't give that.");
   }
 
   private handleItemDropAction(action: Extract<MenuAction, { kind: "itemDrop" }>): void {
@@ -2945,8 +2975,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private handleStorageWithdrawAction(action: Extract<MenuAction, { kind: "storageWithdraw" }>): void {
     const result = this.partyState.withdrawStoredItem(action.char, action.storageSlot, action.itemId);
     if (!result.ok) {
-      this.recordServiceResult("phone", "Escargo couldn't find that.");
-      this.showMenuResult("Escargo couldn't find that.");
+      const message = result.reason === "targetFull" ? "You can't carry any more." : "Escargo couldn't find that.";
+      this.recordServiceResult("phone", message);
+      this.showMenuResult(message);
       return;
     }
     this.recordServiceResult("phone", "Delivered.");
@@ -3202,6 +3233,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private openServiceMenu(service: ServiceKind, cost?: number): void {
+    if (service === "atm") {
+      this.openAtmMenu();
+      return;
+    }
     const resolvedCost = service === "hospital"
       ? cost ?? this.hospitalServiceCost()
       : service === "hotel"
@@ -3320,6 +3355,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return player;
   }
 
+  private latestSavedPlayerSnapshot(): SavePlayerSnapshot | undefined {
+    const persisted = deserializeSaveState(this.saveSlots?.loadFromSlot(this.saveSlot));
+    const save = persisted ?? this.bootSaveState;
+    return save && this.isCompatibleSavePlayer(save.player) ? { ...save.player } : undefined;
+  }
+
+  private newGameRespawnPlayerSnapshot(): SavePlayerSnapshot {
+    const spawn = this.newGameOpening?.spawn ?? this.world_.player.spawnWorldPixel;
+    return {
+      mode: "chunked",
+      mapId: this.saveMapId(),
+      x: spawn.x,
+      y: spawn.y,
+      facing: "down"
+    };
+  }
+
   /**
    * Resolve a deferred story-gate boss (content/triggers.json battleGroup) on battle
    * return. Its flags — and the once-fired marker — advance ONLY on a win. On a
@@ -3432,7 +3484,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     const action = overworldInteractableEvents(entry, this.gameFlags, {
-      itemName: (itemId) => this.itemName(itemId, this.itemById(itemId))
+      itemName: (itemId) => this.itemName(itemId, this.itemById(itemId)),
+      hasRoom: (char) => this.partyState.inventoryRoom(char) > 0
     });
     if (action.events.length === 0) {
       return;
@@ -3461,7 +3514,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.targetReference,
       this.gameFlags,
       this.data_.customDialogue,
-      this.data_.dialogueLibrary
+      this.data_.dialogueLibrary,
+      this.data_.scripts
     );
   }
 
@@ -3547,9 +3601,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private startInteractionDialogue(event: DialogueEvent): void {
-    if (event.pages) {
-      this.dialogue.start(buildInlineDialoguePages(event.pages));
-    } else if (!this.startEventSequence(event.reference)) {
+    if (event.reference) {
+      if (this.startEventSequence(event.reference)) {
+        return;
+      }
+      if (event.pages) {
+        this.dialogue.start(buildInlineDialoguePages(event.pages));
+        return;
+      }
       this.dialogue.start(resolveScriptedDialoguePages(
         this.data_.customDialogue,
         this.data_.dialogueLibrary,
@@ -3557,6 +3616,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         event.reference,
         this.gameFlags
       ));
+    } else if (event.pages) {
+      this.dialogue.start(buildInlineDialoguePages(event.pages));
     }
   }
 
@@ -3582,6 +3643,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       openShop: (storeId) => this.openShopForCurrentMode(storeId),
       openAtm: () => this.openAtmMenu(),
       actorMove: (effect) => this.requestCutsceneActorMove(effect),
+      onPartyChange: () => this.handlePartyCompositionChanged(),
       music: this.music,
       isEffectSupported: (effect) => this.isEventEffectSupportedForCurrentMode(effect),
       onUnsupportedEffect: (effect) => this.warnUnsupportedEventEffect(effect),
@@ -3878,7 +3940,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       setGameFlag: (flag) => this.gameFlags.set(flag),
       clearGameFlag: (flag) => this.gameFlags.unset(flag),
       setEventFlag: (flag, set) => { if (set) { this.gameFlags.setNum(flag); } else { this.gameFlags.unsetNum(flag); } },
-      playSound: () => { /* content SFX cue: no sound sink wired for cutscenes yet */ },
+      playSound: (id) => this.playCutsceneSound(id),
       warp: (to) => this.warpPlayerToWorldPixel(to)
     };
   }
@@ -3894,9 +3956,69 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return; // the player actor is always visible
     }
     this.cutsceneVisibilityOverride.set(normalized.npcId, visible);
+    const hiddenFlag = cutsceneNpcHiddenFlag(normalized.npcId);
+    if (visible) {
+      this.gameFlags.unset(hiddenFlag);
+    } else {
+      this.gameFlags.set(hiddenFlag);
+    }
     const npc = this.npcRuntimeForActor(normalized);
     if (npc) {
       this.syncNpc(npc);
+    }
+  }
+
+  private playCutsceneSound(id: CutsceneSoundId): void {
+    const cue = resolveCutsceneSfxCue(id);
+    if (!cue) {
+      console.warn(`Unknown cutscene sound cue: ${cutsceneSoundLabel(id)}`);
+      return;
+    }
+    this.transitionSfx.resume();
+    this.playCutsceneSfxCue(cue);
+  }
+
+  private playCutsceneSfxCue(cue: CutsceneSfxCue): void {
+    switch (cue) {
+      case "doorOpen":
+        this.transitionSfx.doorOpen();
+        break;
+      case "doorClose":
+        this.transitionSfx.doorClose();
+        break;
+      case "footsteps":
+        this.transitionSfx.footsteps();
+        break;
+      case "escalatorHum":
+        this.transitionSfx.escalatorHum();
+        break;
+      case "whoosh":
+        this.transitionSfx.whoosh();
+        break;
+      case "encounter":
+        this.transitionSfx.encounter();
+        break;
+      case "textBlip":
+        this.transitionSfx.textBlip();
+        break;
+      case "dangerHeartbeat":
+        this.transitionSfx.dangerHeartbeat();
+        break;
+      case "poisonTick":
+        this.transitionSfx.poisonTick();
+        break;
+      case "talkConfirm":
+        this.playInteractionSfx("talkConfirm");
+        break;
+      case "presentOpen":
+        this.playInteractionSfx("presentOpen");
+        break;
+      case "itemGet":
+        this.playInteractionSfx("itemGet");
+        break;
+      case "readCue":
+        this.playInteractionSfx("readCue");
+        break;
     }
   }
 
@@ -4341,6 +4463,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       ...snapshot,
       partyIds
     });
+  }
+
+  private handlePartyCompositionChanged(): void {
+    this.partyState.ensureVitalsFor(this.overworldHudPartyMembers());
+    this.refreshMenuScreens();
+    this.spawnFollower({ x: this.playerState.x, y: this.playerState.y }, this.playerState.facing);
+    this.publish();
   }
 
   private finishIntroMeteorBeatWithoutBattle(): void {
@@ -4861,12 +4990,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.lastEncounterGroup = group;
     this.scene.stop("ui");
     // Play the colored EB encounter swirl over the overworld, THEN switch to battle (see tickEncounterSwirl).
+    const battlePartyMembers = this.battlePartyMembers();
+    const encounterSeed = this.nextBattleEncounterSeed();
     this.beginEncounterSwirl({
       battleData: this.data_.battle,
       groupId: group,
       characters: this.data_.characters,
-      partyMembers: this.battlePartyMembers(),
+      partyMembers: battlePartyMembers,
+      partyOptions: this.battlePartyOptions(battlePartyMembers),
       wallet: this.partyState.wallet,
+      bank: this.partyState.bank,
       items: this.data_.items,
       psi: this.data_.psi,
       font: this.data_.font,
@@ -4875,6 +5008,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       backgroundOverrides: this.data_.backgroundOverrides,
       battleRules: this.data_.battleRules,
       encounterAdvantage,
+      encounterSeed,
       boss: pendingStoryGate !== undefined,
       returnTo: this.battleReturnContext(group, source, pendingStoryGate)
     });
@@ -4907,7 +5041,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (g) {
       g.clear();
       // progress 1 -> clear (overworld visible), 0 -> covered/black; ramp 1->0 to cover the screen.
-      drawSwirl(g, 1 - p, this.scale.width, this.scale.height, { clockMs: this.time.now });
+      drawSwirl(g, 1 - p, this.scale.width, this.scale.height, {
+        clockMs: this.time.now,
+        advantageTint: swirlTintForAdvantage(this.pendingBattleStart.params.encounterAdvantage)
+      });
     }
     this.syncPlayerObject();
     if (p >= 1) {
@@ -4921,9 +5058,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private encounterAdvantageForGroup(group: number): EncounterAdvantage {
-    const party = this.battlePartyMembers();
+    const party = this.effectiveBattlePartyMembers();
     const enemies = this.enemiesForBattleGroup(group);
     return party && enemies.length > 0 ? computeEncounterAdvantage(party, enemies) : "normal";
+  }
+
+  private nextBattleEncounterSeed(): number {
+    this.encounterRng.next();
+    return this.encounterRng.state();
   }
 
   private resolveInstantWinEncounter(group: number): boolean {
@@ -4934,19 +5076,24 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (enemies.length === 0) {
       return false;
     }
+    const instantWinPartyMembers = this.battlePartyMembers();
+    const encounterSeed = this.nextBattleEncounterSeed();
     const battle = createBattleState(enemies, {
       characters: this.data_.characters,
-      partyMembers: this.battlePartyMembers(),
-      wallet: this.partyState.wallet
+      partyMembers: instantWinPartyMembers,
+      partyOptions: this.battlePartyOptions(instantWinPartyMembers),
+      wallet: this.partyState.wallet,
+      bank: this.partyState.bank
     });
     const rewards = resolveInstantWinRewards(battle.party, enemies, instantWinRewardOptions({
       wallet: battle.wallet,
+      bank: battle.bank ?? this.partyState.bank,
       roundNumber: battle.roundNumber,
-      rng: createBattleRng(battleRngSeedForGroup(group, enemies)),
+      rng: createBattleRng(battleRngSeedForGroup(group, enemies, encounterSeed)),
       items: this.data_.items?.items,
       psi: this.data_.psi?.psi
     }));
-    this.partyState.applyBattleResult(rewards.state.party, rewards.state.wallet);
+    this.partyState.applyBattleResult(rewards.state.party, rewards.state.wallet, rewards.state.bank);
     this.lastEncounterGroup = group;
     this.encounterCooldownMs = ENCOUNTER_RETURN_COOLDOWN_MS;
     this.refreshMenuScreens();
@@ -4961,6 +5108,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     source: BattleReturnSource,
     pendingStoryGate?: PendingStoryGate
   ): BattleReturnContext {
+    const savedPlayer = this.latestSavedPlayerSnapshot();
     return {
       sceneKey: "chunked-world",
       gameData: this.data_,
@@ -4978,6 +5126,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
           numeric: this.gameFlags.listNums()
         },
         party: this.partyState.snapshot(),
+        defeat: {
+          ...(savedPlayer ? { savedPlayer } : {}),
+          newGamePlayer: this.newGameRespawnPlayerSnapshot()
+        },
         encounter: {
           enabled: this.encounterEnabled,
           cooldownMs: ENCOUNTER_RETURN_COOLDOWN_MS,
@@ -4996,9 +5148,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const all = this.partyState.applyToPartyMembers(this.data_.characters.characters.map(buildPartyMember));
     // Battle only the active party (Act 1 = Bosch + Paula); never the full roster.
     const activeIds = new Set(this.partyState.party());
-    const selected = activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
-    // Fold equipped-gear bonuses into battle stats (weapons → offense, armor → defense).
-    return selected.map((member) => {
+    // BASE stats only. Equip bonuses ride separately as combatant statBonuses
+    // (battlePartyOptions) so post-battle snapshots never compound them.
+    return activeIds.size > 0 ? all.filter((member) => activeIds.has(member.id)) : all;
+  }
+
+  /** Per-member combatant options aligned with battlePartyMembers(): equip bonuses as statBonuses. */
+  private battlePartyOptions(members: PartyMember[] | undefined): PlayerCombatantOptions[] | undefined {
+    if (!members?.length) {
+      return undefined;
+    }
+    return members.map((member) => {
+      const bonus = this.equipStatBonuses(member.id);
+      return bonus.offense || bonus.defense ? { statBonuses: bonus } : {};
+    });
+  }
+
+  /** Members with equip bonuses folded in — for advantage math and debug readouts ONLY, never persistence. */
+  private effectiveBattlePartyMembers(): PartyMember[] | undefined {
+    return this.battlePartyMembers()?.map((member) => {
       const bonus = this.equipStatBonuses(member.id);
       return bonus.offense || bonus.defense
         ? { ...member, stats: { ...member.stats, offense: member.stats.offense + bonus.offense, defense: member.stats.defense + bonus.defense } }
@@ -5029,9 +5197,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!battle || !battleGroup) {
       return [];
     }
-    return battleGroup.enemyIds
-      .map((enemyId) => battle.enemies.find((enemy) => enemy.id === enemyId))
-      .filter((enemy): enemy is BattleEnemy => Boolean(enemy));
+    return expandBattleGroupEnemies(battle, battleGroup);
   }
 
   private registerForceEncounter(): void {
@@ -5297,12 +5463,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.dialogue.open && !this.eventSequence?.running) {
       return;
     }
+    // Cancel is "skip to end", not "abandon": one-shot story beats (intro
+    // meteor, story triggers, boss gates) must still fire their completion
+    // effects or their armed flags leave the run permanently stranded.
+    const pendingComplete = this.pendingScriptedDialogueComplete;
     this.pendingScriptedDialogueComplete = undefined;
     if (this.dialogue.open) {
       this.dialogue.close();
     }
     this.eventSequence?.abort();
-    this.afterDialogueClosed();
+    if (pendingComplete) {
+      pendingComplete();
+    } else {
+      this.afterDialogueClosed();
+    }
     this.publish();
   }
 
@@ -5599,30 +5773,62 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
-  private followerSpriteOverride(): SpriteOverride | undefined {
-    return this.data_.spriteOverrides?.follower;
+  private followerSpriteOverride(joinOrder: number): SpriteOverride | undefined {
+    if (joinOrder === 2 && this.data_.spriteOverrides?.follower) {
+      return this.data_.spriteOverrides.follower;
+    }
+    return this.data_.spriteOverrides?.party?.find((hero) => hero.joinOrder === joinOrder)?.sprite;
+  }
+
+  private followerSpriteOverrides(): Array<{ joinOrder: number; sheet: SpriteOverrideSheet }> {
+    const result: Array<{ joinOrder: number; sheet: SpriteOverrideSheet }> = [];
+    for (const joinOrder of [2, 3, 4]) {
+      const sheet = spriteOverrideSheet(this.followerSpriteOverride(joinOrder));
+      if (sheet) {
+        result.push({ joinOrder, sheet });
+      }
+    }
+    return result;
+  }
+
+  private followerSpriteSheetKey(joinOrder: number): string {
+    return joinOrder === 2 ? FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY : `sprite-override-follower-${joinOrder}`;
+  }
+
+  private destroyFollowers(): void {
+    for (const follower of this.followers) {
+      follower.sprite.destroy();
+    }
+    this.followers = [];
   }
 
   private spawnFollower(spawn: { x: number; y: number }, facing: string): void {
-    this.follower = undefined;
-    this.followerFrames = CANONICAL_DIRECTION_FRAMES;
+    this.destroyFollowers();
     this.followerTrail = [];
-    this.followerPos = undefined;
-    this.followerWalkPhase = 0;
-    if (this.partyState.party().length < 2) {
+    const followerCount = Math.min(3, Math.max(0, this.partyState.party().length - 1));
+    if (followerCount <= 0) {
       return; // solo party — no follower to draw
     }
-    const sheet = spriteOverrideSheet(this.followerSpriteOverride());
-    if (sheet && this.textures.exists(FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY)) {
-      this.followerFrames = spriteOverrideDirectionFrames(sheet);
-      this.follower = this.spawnOverrideActor(spawn.x, spawn.y, facing, FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY, sheet);
-      this.followerPos = { x: spawn.x, y: spawn.y };
+    for (let index = 0; index < followerCount; index += 1) {
+      const joinOrder = index + 2;
+      const sheet = spriteOverrideSheet(this.followerSpriteOverride(joinOrder));
+      const key = this.followerSpriteSheetKey(joinOrder);
+      if (!sheet || !this.textures.exists(key)) {
+        continue;
+      }
+      this.followers.push({
+        joinOrder,
+        sprite: this.spawnOverrideActor(spawn.x, spawn.y, facing, key, sheet),
+        frames: spriteOverrideDirectionFrames(sheet),
+        pos: { x: spawn.x, y: spawn.y },
+        walkPhase: 0
+      });
     }
   }
 
-  // Trail the player at a fixed path-distance behind (EarthBound-style party follower).
+  // Trail the player at fixed path-distances behind the lead (EarthBound-style party chain).
   private updateFollower(): void {
-    if (!this.follower) {
+    if (this.followers.length === 0) {
       return;
     }
     const px = this.playerState.x;
@@ -5630,86 +5836,112 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const trail = this.followerTrail;
     const last = trail[trail.length - 1];
     if (last && Math.hypot(px - last.x, py - last.y) > 48) {
-      // Door/warp jump — snap over rather than streaking the follower across the map.
+      // Door/warp jump — snap over rather than streaking the followers across the map.
       trail.length = 0;
-      this.followerPos = { x: px, y: py };
-      this.follower.setPosition(px, py);
+      for (const follower of this.followers) {
+        follower.pos = { x: px, y: py };
+        follower.sprite.setPosition(px, py);
+      }
     }
     const tail = trail[trail.length - 1];
     if (!tail || Math.hypot(px - tail.x, py - tail.y) > 0.5) {
       trail.push({ x: px, y: py, facing: this.playerState.facing });
-      if (trail.length > 96) {
+      if (trail.length > 144) {
         trail.shift();
       }
     }
     const FOLLOW_DISTANCE = 26;
+    this.followers.forEach((follower, index) => {
+      const target = this.followerTrailTarget(FOLLOW_DISTANCE * (index + 1), px, py);
+      this.updateFollowerRuntime(follower, target);
+    });
+  }
+
+  private followerTrailTarget(
+    followDistance: number,
+    px: number,
+    py: number
+  ): { x: number; y: number; facing: PlayerState["facing"] } {
+    const trail = this.followerTrail;
     let accumulated = 0;
     let target = trail[0] ?? { x: px, y: py, facing: this.playerState.facing };
     for (let i = trail.length - 1; i > 0; i -= 1) {
       const a = trail[i];
       const b = trail[i - 1];
       const segment = Math.hypot(a.x - b.x, a.y - b.y);
-      if (accumulated + segment >= FOLLOW_DISTANCE) {
-        const t = (FOLLOW_DISTANCE - accumulated) / segment;
-        target = { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, facing: a.facing };
-        break;
+      if (accumulated + segment >= followDistance) {
+        const t = (followDistance - accumulated) / segment;
+        return { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t, facing: a.facing };
       }
       accumulated += segment;
       target = b;
     }
-    const prev = this.followerPos ?? { x: target.x, y: target.y };
-    const moved = Math.hypot(target.x - prev.x, target.y - prev.y);
-    this.followerPos = { x: target.x, y: target.y };
+    return target;
+  }
+
+  private updateFollowerRuntime(
+    follower: FollowerRuntime,
+    target: { x: number; y: number; facing: PlayerState["facing"] }
+  ): void {
+    const moved = Math.hypot(target.x - follower.pos.x, target.y - follower.pos.y);
+    follower.pos = { x: target.x, y: target.y };
     const walking = moved > 0.2;
-    this.follower.x = target.x;
-    if (this.follower instanceof Phaser.GameObjects.Sprite) {
-      const frames = this.followerFrames[target.facing];
+    follower.sprite.x = target.x;
+    if (follower.sprite instanceof Phaser.GameObjects.Sprite) {
+      const frames = follower.frames[target.facing];
       if (walking) {
-        this.followerWalkPhase += moved;
-        this.follower.setFrame(frames[Math.floor(this.followerWalkPhase / 8) % frames.length] ?? frames[0]);
+        follower.walkPhase += moved;
+        follower.sprite.setFrame(frames[Math.floor(follower.walkPhase / 8) % frames.length] ?? frames[0]);
       } else {
-        this.follower.setFrame(frames[0]);
+        follower.sprite.setFrame(frames[0]);
       }
     }
-    this.follower.y = target.y - this.spriteWalkBob(walking, this.followerFrames, target.facing, 0);
-    this.setActorSortDepth(this.follower);
-    this.applyFollowerVisualState(target.facing);
+    follower.sprite.y = target.y - this.spriteWalkBob(walking, follower.frames, target.facing, follower.joinOrder);
+    this.setActorSortDepth(follower.sprite);
+    this.applyFollowerVisualState(follower, target.facing);
   }
 
-  private followerStateSheetKey(state: string): string {
-    return `sprite-override-follower-state-${state}`;
+  private followerStateSheetKey(joinOrder: number, state: string): string {
+    return joinOrder === 2
+      ? `sprite-override-follower-state-${state}`
+      : `sprite-override-follower-${joinOrder}-state-${state}`;
   }
 
-  private loadedFollowerStateSheetKey(baseState: ResolvedVisualState["baseState"]): string | undefined {
+  private loadedFollowerStateSheetKey(
+    follower: FollowerRuntime,
+    baseState: ResolvedVisualState["baseState"]
+  ): string | undefined {
     if (baseState === "default") {
       return undefined;
     }
-    const states = this.followerSpriteOverride()?.states as Record<string, unknown> | undefined;
+    const states = this.followerSpriteOverride(follower.joinOrder)?.states as Record<string, unknown> | undefined;
     if (!states?.[baseState]) {
       return undefined;
     }
-    const key = this.followerStateSheetKey(baseState);
+    const key = this.followerStateSheetKey(follower.joinOrder, baseState);
     return this.textures.exists(key) ? key : undefined;
   }
 
   /**
    * Apply the party's shared visual state (computed for the lead each frame in applyPlayerVisualState)
-   * to the FOLLOWER sprite, using the follower's OWN state sheets + anchors. So every hero gets the
-   * same states (water/dead/bike/ladder/...) rendered in their own art. Overlays + teleport spin stay
-   * lead-only for now (the lead casts/wears them). The follower mirrors the lead's base state -- in EB
-   * the party climbs/rides/wades together.
+   * to every follower sprite, using each follower's own state sheets + anchors. Overlays + teleport
+   * spin stay lead-only for now. The chain mirrors the lead's base state -- in EB the party
+   * climbs/rides/wades together.
    */
-  private applyFollowerVisualState(facing: "up" | "down" | "left" | "right"): void {
-    if (!(this.follower instanceof Phaser.GameObjects.Sprite)) {
+  private applyFollowerVisualState(
+    follower: FollowerRuntime,
+    facing: "up" | "down" | "left" | "right"
+  ): void {
+    if (!(follower.sprite instanceof Phaser.GameObjects.Sprite)) {
       return;
     }
     const resolved = this.lastResolvedVisualState;
     if (!resolved) {
       return;
     }
-    const sprite = this.follower;
-    const ov = spriteOverrideSheet(this.followerSpriteOverride());
-    const stateKey = this.loadedFollowerStateSheetKey(resolved.baseState);
+    const sprite = follower.sprite;
+    const ov = spriteOverrideSheet(this.followerSpriteOverride(follower.joinOrder));
+    const stateKey = this.loadedFollowerStateSheetKey(follower, resolved.baseState);
     const swapped = stateKey !== undefined;
     if (stateKey && sprite.texture.key !== stateKey) {
       sprite.setTexture(stateKey);
@@ -5725,7 +5957,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       sprite.clearTint();
     }
     if (resolved.lockAnimation && !swapped) {
-      sprite.setFrame(this.followerFrames[facing][0]);
+      sprite.setFrame(follower.frames[facing][0]);
     }
     if (resolved.transforms.waterClip && ov?.frameHeight && ov?.frameWidth) {
       const waterline = ov.anchors?.waterline ?? Math.round(ov.frameHeight * 0.6);
@@ -6119,8 +6351,19 @@ function normalizeForcedEncounterAdvantage(value: unknown): EncounterAdvantage |
   }
 }
 
+function swirlTintForAdvantage(value: unknown): "party" | "enemy" | undefined {
+  if (value === "partyFirstStrike") {
+    return "party";
+  }
+  if (value === "enemyFirstStrike") {
+    return "enemy";
+  }
+  return undefined;
+}
+
 function instantWinRewardOptions(options: {
   wallet: number;
+  bank?: number;
   roundNumber: number;
   rng: () => number;
   items?: Array<Pick<ItemData, "id" | "name">>;
@@ -6128,6 +6371,7 @@ function instantWinRewardOptions(options: {
 }): InstantWinRewardOptions {
   const result: InstantWinRewardOptions = {
     wallet: options.wallet,
+    ...(options.bank !== undefined ? { bank: options.bank } : {}),
     roundNumber: options.roundNumber,
     rng: options.rng
   };

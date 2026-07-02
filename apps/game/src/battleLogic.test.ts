@@ -1,7 +1,10 @@
 import type { BattleEnemy, ItemData } from "@eb/schemas";
 import { describe, expect, it } from "vitest";
 import {
+  applyVictoryRewards,
+  buildVictorySummaryViewModel,
   createBattleState,
+  resolveInstantWinRewards,
   resolveItemTurn,
   resolvePhysicalAttackDamage,
   type BattleActor,
@@ -49,6 +52,20 @@ function sequenceRng(values: number[]): Rng {
   return () => values[index++] ?? values[values.length - 1] ?? 0;
 }
 
+function defeatedEnemyBattle(
+  enemyOverrides: Partial<BattleEnemy>,
+  options: { wallet: number; bank: number }
+) {
+  const battle = createBattleState(enemy(enemyOverrides), options);
+  return {
+    ...battle,
+    enemies: battle.enemies.map((combatant) => ({
+      ...combatant,
+      hp: { ...combatant.hp, displayed: 0, target: 0, isRolling: false }
+    }))
+  };
+}
+
 describe("battle item stat buffs", () => {
   it("preserves additive buffStat behavior", () => {
     const battle = createBattleState(enemy(), { defense: 12 });
@@ -90,5 +107,33 @@ describe("battle item stat buffs", () => {
     expect(result.state.party[0].stats.guts).toBe(80);
     expect(before.smash).toBe(false);
     expect(after.smash).toBe(true);
+  });
+});
+
+describe("battle rewards economy", () => {
+  it("deposits victory money into the bank without increasing wallet cash", () => {
+    const battle = defeatedEnemyBattle({ money: 42 }, { wallet: 10, bank: 100 });
+
+    const result = applyVictoryRewards(battle);
+
+    expect(result.state.wallet).toBe(10);
+    expect(result.state.bank).toBe(142);
+    expect(result.summary.moneyGained).toBe(42);
+    expect(buildVictorySummaryViewModel(result.summary).pages[0]).toContain(
+      "The connect wired $42 to your account."
+    );
+  });
+
+  it("deposits instant-win money into the bank too", () => {
+    const setup = createBattleState(enemy({ money: 35 }), { wallet: 7, bank: 12 });
+
+    const result = resolveInstantWinRewards(setup.party, [enemy({ money: 35 })], {
+      wallet: setup.wallet,
+      bank: setup.bank
+    });
+
+    expect(result.state.wallet).toBe(7);
+    expect(result.state.bank).toBe(47);
+    expect(result.summary.moneyGained).toBe(35);
   });
 });

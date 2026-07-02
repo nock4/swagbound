@@ -1,5 +1,6 @@
 import type { ItemData, PsiData } from "@eb/schemas";
 import { decodeItemUseEffect, itemEffectTargetSide, type ItemUseEffect } from "./partyState";
+import { hasStatus } from "./statusEffects";
 import {
   beginCombatantTurn,
   combatantAt,
@@ -11,6 +12,9 @@ import {
   learnedPsiForCombatant,
   psiBattleKind,
   psiPpCost,
+  psiTargetSide,
+  psiTargetsAll,
+  resolveDefendTurn,
   resolveTargetActor,
   resolveDefaultBashTurn,
   resolveEnemyActionTurn,
@@ -249,7 +253,13 @@ export function applyRoundStartGuardStance(
     }
     const actor = { side: "party" as const, index: entry.partySlot };
     const combatant = combatantAt(nextState, actor);
-    if (!combatant || !isCombatantAlive(combatant) || combatant.defending) {
+    if (
+      !combatant ||
+      !isCombatantAlive(combatant) ||
+      combatant.defending ||
+      hasStatus(combatant.statuses, "paralyzed") ||
+      hasStatus(combatant.statuses, "asleep")
+    ) {
       continue;
     }
     nextState = withCombatant(nextState, actor, {
@@ -333,10 +343,6 @@ export function resolveRoundStep(
     return skippedRoundStep(state, actor);
   }
 
-  if (actor.side === "party" && queued?.command === "DEFEND") {
-    return defendAnnouncementRoundStep(state, actor, combatant.name);
-  }
-
   const turnState = beginCombatantTurn(state, actor);
   const gate = resolveCombatantTurnGate(turnState, actor, rng);
   if (!gate.canAct) {
@@ -396,8 +402,10 @@ function resolveActorAction(
         return skippedRoundStep(turnState, actor, "Cannot use that PSI here.");
       }
       const psiKind = psiBattleKind(psi);
-      const targetSide = psiKind === "offense" ? "enemy" : psiKind === "recovery" ? "party" : null;
-      const target = targetSide ? resolvedTargetOptions(turnState, queued, targetSide) : targetOptions(queued);
+      const targetSide = psiTargetSide(psi);
+      const target = targetSide && !psiTargetsAll(psi)
+        ? resolvedTargetOptions(turnState, queued, targetSide)
+        : targetOptions(queued);
       if (!target) {
         return noTargetRoundStep(turnState, actor);
       }
@@ -424,7 +432,7 @@ function resolveActorAction(
       });
     }
     case "DEFEND":
-      return defendAnnouncementRoundStep(turnState, actor, combatantName);
+      return defendAnnouncementRoundStep(resolveDefendTurn(turnState, actor).state, actor, combatantName);
     case "PRAY":
       return fromResolution(turnState, resolvePrayTurn(turnState, actor, rng), {
         command: queued.command
@@ -581,9 +589,13 @@ function confirmPsi(
     return { input, complete: false };
   }
 
-  const targetSide = psi.effect
-    ? itemEffectTargetSide(psi.effect)
-    : kind === "offense" ? "enemy" : "party";
+  const targetSide = psiTargetSide(psi);
+  if (!targetSide) {
+    return { input, complete: false };
+  }
+  if (psiTargetsAll(psi)) {
+    return queueAndAdvance(input, context, { partySlot: actor.index, command: "PSI", psiId: psi.id });
+  }
   return {
     input: {
       ...input,
@@ -850,6 +862,26 @@ function narrationDetailsForResolution(
   if ("effectKind" in resolution) {
     const targetName = multiTargetName(previousState, resolution.targets);
     const kind = resolution.effectKind === "psi" ? "psi" : "attack";
+    if (resolution.effect) {
+      return {
+        kind,
+        attackerName,
+        targetName,
+        moveName: resolution.moveName ?? (kind === "psi" ? "PSI" : undefined),
+        message: enemyActionEffectMessage(targetName ?? attackerName, resolution.effect),
+        damage: resolution.effect.kind === "damage" ? resolution.amount : undefined,
+        healed: resolution.effect.kind === "healHp" || resolution.effect.kind === "healHpPercent" || resolution.effect.kind === "revive"
+          ? resolution.amount
+          : undefined,
+        ppRestored: resolution.effect.kind === "recoverPp" || resolution.effect.kind === "recoverPpPercent"
+          ? resolution.amount
+          : undefined,
+        missed: false,
+        targetDied: resolution.effect.kind === "damage"
+          ? enemyTargetsDied(previousState, resolution.state, resolution.targets)
+          : false
+      };
+    }
     return {
       kind,
       attackerName,
@@ -912,9 +944,12 @@ function narrationDetailsForResolution(
   }
 
   if (context.command === "PSI") {
+    const targets = "targets" in resolution && resolution.targets ? resolution.targets : [];
     const target = "target" in resolution ? resolution.target : null;
     const amount = "amount" in resolution ? resolution.amount : 0;
-    const targetName = target ? combatantName(previousState, target) : undefined;
+    const targetName = targets.length > 0
+      ? multiTargetName(previousState, targets)
+      : target ? combatantName(previousState, target) : undefined;
     const effect = context.psiEffect;
     if (effect && (effect.kind === "cureStatus" || effect.kind === "inflictStatus" || effect.kind === "buffStat" || effect.kind === "permStat" || effect.kind === "revive" || effect.kind === "drainPp")) {
       return {
@@ -925,7 +960,7 @@ function narrationDetailsForResolution(
         psiId: context.psiId,
         message: itemEffectMessage(targetName ?? attackerName, effect),
         missed: false,
-        targetDied: effect.kind === "inflictStatus" ? enemyTargetsDied(previousState, resolution.state, [target]) : false
+        targetDied: effect.kind === "inflictStatus" ? enemyTargetsDied(previousState, resolution.state, targets.length > 0 ? targets : [target]) : false
       };
     }
     return {
@@ -938,7 +973,7 @@ function narrationDetailsForResolution(
       damage: context.psiKind === "offense" ? amount : undefined,
       healed: context.psiKind === "recovery" ? amount : undefined,
       missed: !targetName || amount <= 0,
-      targetDied: enemyTargetsDied(previousState, resolution.state, [target])
+      targetDied: enemyTargetsDied(previousState, resolution.state, targets.length > 0 ? targets : [target])
     };
   }
 
@@ -1000,6 +1035,13 @@ function itemEffectMessage(
   return effect.ailment === "shielded"
     ? `${name} is shielded!`
     : `${name} is now ${effect.ailment}!`;
+}
+
+function enemyActionEffectMessage(name: string, effect: ItemUseEffect): string | undefined {
+  if (effect.kind === "cureStatus" || effect.kind === "inflictStatus" || effect.kind === "buffStat" || effect.kind === "permStat" || effect.kind === "revive" || effect.kind === "drainPp") {
+    return itemEffectMessage(name, effect);
+  }
+  return undefined;
 }
 
 function skippedRoundStep(

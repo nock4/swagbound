@@ -604,6 +604,12 @@ export const ItemUseEffectSchema = z.union([
   })
 ]);
 
+const EnemyActionEffectEntrySchema = z.object({
+  name: z.string().trim().min(1).optional(),
+  note: z.string().trim().min(1).optional(),
+  effect: ItemUseEffectSchema
+}).strict();
+
 const ItemOverrideEntrySchema = z.object({
   /** Optional Swagbound rename; when absent the item keeps its extracted name. */
   name: ItemOverrideNameSchema.optional(),
@@ -686,6 +692,11 @@ export const EnemyStatOverridesSchema = z.object({
   byEnemyId: z.record(z.string().regex(/^\d+$/), EnemyStatOverrideEntrySchema)
 }).strict();
 
+export const EnemyActionEffectsSchema = z.object({
+  schema: z.literal("swagbound.enemy-action-effects.v1"),
+  byActionId: z.record(z.string().regex(/^\d+$/), EnemyActionEffectEntrySchema)
+}).strict();
+
 /**
  * Canonical source for enemy naming: a family name maps to every EB enemy id that
  * shares that Swagbound name. `enemy-overrides.json` (the per-id name map the
@@ -757,7 +768,7 @@ export const NpcInteractionSchema = z
       once: z.literal(true).optional()
     }).strict().optional(),
     shop: z.number().int().nonnegative().optional(),
-    service: z.enum(["hospital", "hotel", "phone"]).optional(),
+    service: z.enum(["hospital", "hotel", "phone", "atm"]).optional(),
     heal: z.union([z.literal("full"), z.literal(true)]).optional(),
     save: z.literal(true).optional(),
     // Money charged before the interaction's heal (e.g. an inn's nightly fee).
@@ -914,7 +925,7 @@ export const CutsceneStepSchema = z.discriminatedUnion("op", [
   z.object({ op: z.literal("clearFlag"), flag: z.string().min(1) }).strict(),
   /** Set/unset a numeric EarthBound event flag (e.g. to persistently hide NPCs whose showSprite keys on it). */
   z.object({ op: z.literal("eventFlag"), flag: z.number().int().nonnegative(), set: z.boolean() }).strict(),
-  z.object({ op: z.literal("sound"), id: z.number().int().nonnegative() }).strict(),
+  z.object({ op: z.literal("sound"), id: z.union([z.number().int().nonnegative(), z.string().min(1)]) }).strict(),
   z.object({ op: z.literal("warp"), to: CutscenePointSchema }).strict()
 ]);
 export type CutsceneStep = z.infer<typeof CutsceneStepSchema>;
@@ -1349,7 +1360,10 @@ export const BattleActionSchema = z.object({
   arg: z.number().int().nonnegative(),
   actionId: z.number().int().nonnegative().optional(),
   actionType: z.number().int().min(0).max(5).optional(),
-  target: z.number().int().min(0).max(4).optional()
+  target: z.number().int().min(0).max(4).optional(),
+  direction: z.enum(["party", "enemy"]).optional(),
+  name: z.string().trim().min(1).optional(),
+  effect: ItemUseEffectSchema.optional()
 });
 
 export const BattleDropRaritySchema = z.object({
@@ -1426,7 +1440,11 @@ export const BattleGroupSchema = z.object({
   id: z.number().int().nonnegative(),
   background1: z.number().int().nonnegative(),
   background2: z.number().int().nonnegative(),
-  enemyIds: z.array(z.number().int().nonnegative()).min(1)
+  enemyIds: z.array(z.number().int().nonnegative()).min(1),
+  entries: z.array(z.object({
+    id: z.number().int().nonnegative(),
+    amount: z.number().int().positive()
+  }).strict()).min(1).optional()
 });
 
 export const BattleDataSchema = z.object({
@@ -1649,6 +1667,10 @@ export const PsiDataSchema = z.object({
   name: z.string(),
   type: z.string(),
   strength: z.string(),
+  action: z.number().int().nonnegative().optional(),
+  ppCost: z.number().int().nonnegative().optional(),
+  target: z.enum(["none", "one", "row", "all"]).optional(),
+  direction: z.enum(["party", "enemy"]).optional(),
   usableOutsideBattle: z.boolean(),
   learnedBy: z.array(PsiLearnedBySchema),
   /** Optional authored battle effect (assist PSI: shield/buff/inflict), applied at load. */
@@ -1813,6 +1835,7 @@ export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;
 export type CharacterOverrides = z.infer<typeof CharacterOverridesSchema>;
 export type EnemyOverrides = z.infer<typeof EnemyOverridesSchema>;
 export type EnemyStatOverrides = z.infer<typeof EnemyStatOverridesSchema>;
+export type EnemyActionEffects = z.infer<typeof EnemyActionEffectsSchema>;
 export type EncounterCandidate = z.infer<typeof EncounterCandidateSchema>;
 export type EncounterSubGroup = z.infer<typeof EncounterSubGroupSchema>;
 export type EncounterMapGroup = z.infer<typeof EncounterMapGroupSchema>;

@@ -7,6 +7,7 @@ import {
   SpriteSheetCollectionSchema,
   WorldChunkedSchema,
   type WorldArtifact,
+  type ScriptCollection,
   WorldRegionSchema,
   type SpriteSheetCollection,
   type ValidationIssue,
@@ -16,7 +17,17 @@ import {
   type WorldRegion,
   type TileOverrides
 } from "@eb/schemas";
-import { parseFts, drawArrangement, decodeArrangementCell, isBlankArrangement, isSolidSurface, isOccluderTile, type FtsTileset, type FtsPalette } from "./fts";
+import {
+  FTS_CELLS_PER_ARRANGEMENT,
+  parseFts,
+  drawArrangement,
+  decodeArrangementCell,
+  isBlankArrangement,
+  isSolidSurface,
+  isOccluderTile,
+  type FtsTileset,
+  type FtsPalette
+} from "./fts";
 import {
   DOOR_WARP_UNIT_PX,
   doorTriggerToWorldPixel,
@@ -27,7 +38,8 @@ import {
   parseYamlInteger,
   placementToWorldPixel,
   type MapDoorEntry,
-  type SpritePlacement
+  type SpritePlacement,
+  type TeleportDestinationEntry
 } from "./coilsnakeYaml";
 import { decodePngRgba, encodePngRgba, readPngHeader, type PngRgba } from "./png";
 
@@ -47,10 +59,16 @@ const WORLD_ASSET_DIR = "assets/world";
 const WORLD_CHUNK_ASSET_DIR = `${WORLD_ASSET_DIR}/chunks`;
 const SPRITE_ASSET_DIR = "assets/sprites";
 const WORLD_DOOR_TYPES = new Set(["door", "stairway", "escalator"]);
+const SCRIPTED_WARP_DOOR_STYLES = new Set([33]);
 const INDOOR_SECTOR_SETTING = "indoors";
 const UNBOUNDED_SECTOR_SETTING = "none";
 
 type Issue = ValidationIssue;
+
+type DoorDestinationContext = {
+  scriptWarpDestinations: Map<string, number>;
+  teleportDestinationsById: Map<number, TeleportDestinationEntry>;
+};
 
 function issue(severity: Issue["severity"], code: string, message: string, issuePath?: string): Issue {
   return { severity, code, message, ...(issuePath ? { path: issuePath } : {}) };
@@ -159,6 +177,17 @@ function drawTileOverrideImage(options: {
   }
 }
 
+function countSolidArrangementCells(tileset: FtsTileset, arrangementIndex: number): number {
+  const cellBase = arrangementIndex * FTS_CELLS_PER_ARRANGEMENT;
+  let count = 0;
+  for (let cell = 0; cell < FTS_CELLS_PER_ARRANGEMENT; cell += 1) {
+    if (isSolidSurface(tileset.collisions[cellBase + cell])) {
+      count += 1;
+    }
+  }
+  return count;
+}
+
 /**
  * Composes the region background/foreground RGBA buffers and the surface grid
  * from parsed map rows, per-sector tileset/palette info, and parsed tilesets.
@@ -189,6 +218,7 @@ export function composeRegion(options: {
   // Solid-cell count (0..16) per map tile, used after the pass below to decide
   // which solid tiles occlude actors (see isOccluderTile).
   const tileSolidCount = new Int16Array(bounds.widthTiles * bounds.heightTiles);
+  const southTileSolidCount = new Int16Array(bounds.widthTiles);
   type ForegroundTile = {
     tx: number;
     ty: number;
@@ -283,14 +313,40 @@ export function composeRegion(options: {
     }
   }
 
+  const solidCountForMapTile = (mapX: number, mapY: number): number => {
+    const arrangementIndex = mapRows[mapY]?.[mapX];
+    if (arrangementIndex === undefined || Number.isNaN(arrangementIndex)) {
+      return 0;
+    }
+    const sectorCol = Math.floor(mapX / SECTOR_WIDTH_TILES);
+    const sectorRow = Math.floor(mapY / SECTOR_HEIGHT_TILES);
+    const sector = sectorLookup(sectorCol, sectorRow);
+    if (!sector) {
+      return 0;
+    }
+    const graphics = tilesetForMapTileset(sector.tileset);
+    if (!graphics) {
+      return 0;
+    }
+    return countSolidArrangementCells(graphics.tileset, arrangementIndex);
+  };
+  const southMapY = bounds.originTileY + bounds.heightTiles;
+  if (mapRows[southMapY]) {
+    for (let tx = 0; tx < bounds.widthTiles; tx += 1) {
+      southTileSolidCount[tx] = solidCountForMapTile(bounds.originTileX + tx, southMapY);
+    }
+  }
+
   // Second pass: draw the above-actor foreground. A solid tile is promoted only
   // when the tile directly below is also solid (isOccluderTile) — the front face
   // the player overlaps stays in the background so the player draws over it.
   // Priority-bit cells always go to the foreground.
   const solidCountAt = (tx: number, ty: number): number =>
-    tx < 0 || ty < 0 || tx >= bounds.widthTiles || ty >= bounds.heightTiles
+    tx < 0 || ty < 0 || tx >= bounds.widthTiles || ty > bounds.heightTiles
       ? 0
-      : tileSolidCount[ty * bounds.widthTiles + tx];
+      : ty === bounds.heightTiles
+        ? southTileSolidCount[tx]
+        : tileSolidCount[ty * bounds.widthTiles + tx];
   for (const tile of foregroundTiles) {
     const occluder = isOccluderTile(solidCountAt(tile.tx, tile.ty), solidCountAt(tile.tx, tile.ty + 1));
     const cellInForeground = (cellX: number, cellY: number): boolean => {
@@ -616,11 +672,97 @@ function countDoorTypes(entries: MapDoorEntry[]): Record<string, number> {
   return Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)));
 }
 
+function firstWarpDestinationForLabel(
+  commands: ScriptCollection["files"][number]["commands"],
+  label: string,
+  seenLabels = new Set<string>()
+): number | undefined {
+  if (seenLabels.has(label)) {
+    return undefined;
+  }
+  seenLabels.add(label);
+
+  const start = commands.findIndex((command) => command.cmd === "label" && command.name === label);
+  if (start < 0) {
+    return undefined;
+  }
+  for (const command of commands.slice(start + 1)) {
+    if (command.cmd === "label") {
+      return undefined;
+    }
+    for (const segment of command.segments ?? []) {
+      if (segment.kind === "warp") {
+        return segment.dest;
+      }
+      if (segment.kind === "control" && segment.target && !segment.target.includes(".")) {
+        const targetDestination = firstWarpDestinationForLabel(commands, segment.target, seenLabels);
+        if (targetDestination !== undefined) {
+          return targetDestination;
+        }
+      }
+    }
+  }
+  return undefined;
+}
+
+function scriptWarpDestinationsFromScripts(scripts: ScriptCollection | undefined): Map<string, number> {
+  const destinations = new Map<string, number>();
+  for (const file of scripts?.files ?? []) {
+    const match = /^ccscript\/(.+)\.ccs$/i.exec(file.path);
+    if (!match) {
+      continue;
+    }
+    const stem = match[1];
+    for (const label of file.labels) {
+      const warpDestination = firstWarpDestinationForLabel(file.commands, label);
+      if (warpDestination !== undefined) {
+        destinations.set(`${stem}.${label}`, warpDestination);
+      }
+    }
+  }
+  return destinations;
+}
+
+function doorDestinationContext(options: {
+  scripts?: ScriptCollection;
+  teleportDestinations?: readonly TeleportDestinationEntry[];
+}): DoorDestinationContext {
+  return {
+    scriptWarpDestinations: scriptWarpDestinationsFromScripts(options.scripts),
+    teleportDestinationsById: new Map((options.teleportDestinations ?? []).map((destination) => [destination.id, destination]))
+  };
+}
+
+function doorUsesScriptedWarpDestination(entry: MapDoorEntry): boolean {
+  return entry.type === "door" && entry.style !== undefined && SCRIPTED_WARP_DOOR_STYLES.has(entry.style);
+}
+
+function scriptedDoorDestinationToWorldPixel(
+  entry: MapDoorEntry,
+  context: DoorDestinationContext
+): { x: number; y: number } | undefined {
+  if (!doorUsesScriptedWarpDestination(entry) || !entry.textPointer) {
+    return undefined;
+  }
+  const warpDestinationId = context.scriptWarpDestinations.get(entry.textPointer);
+  if (warpDestinationId === undefined) {
+    return undefined;
+  }
+  const destination = context.teleportDestinationsById.get(warpDestinationId);
+  return destination ? { x: destination.x, y: destination.y } : undefined;
+}
+
 function doorDestinationToWorldPixel(
   entry: MapDoorEntry,
   mapWidthTiles: number,
-  mapHeightTiles: number
+  mapHeightTiles: number,
+  context: DoorDestinationContext = doorDestinationContext({})
 ): { x: number; y: number } | undefined {
+  const scriptedDestination = scriptedDoorDestinationToWorldPixel(entry, context);
+  if (scriptedDestination) {
+    return scriptedDestination;
+  }
+
   const { destinationX, destinationY } = entry;
   if (
     destinationX === undefined ||
@@ -641,12 +783,17 @@ function doorDestinationToWorldPixel(
   return { x: destinationX, y: destinationY };
 }
 
-function emitWorldDoors(entries: MapDoorEntry[], mapWidthTiles: number, mapHeightTiles: number): WorldDoor[] {
+function emitWorldDoors(
+  entries: MapDoorEntry[],
+  mapWidthTiles: number,
+  mapHeightTiles: number,
+  context: DoorDestinationContext
+): WorldDoor[] {
   return entries
     .filter((entry) => WORLD_DOOR_TYPES.has(entry.type))
     .map((entry) => {
       const worldPixel = doorTriggerToWorldPixel(entry);
-      const destinationWorldPixel = doorDestinationToWorldPixel(entry, mapWidthTiles, mapHeightTiles);
+      const destinationWorldPixel = doorDestinationToWorldPixel(entry, mapWidthTiles, mapHeightTiles, context);
       // CoilSnake stairway/escalator rows do not carry Destination X/Y fields.
       // Keep a uniform runtime shape by making those trigger-only entries self-targeting.
       return {
@@ -659,6 +806,33 @@ function emitWorldDoors(entries: MapDoorEntry[], mapWidthTiles: number, mapHeigh
         ...(entry.textPointer ? { textPointer: entry.textPointer } : {})
       };
     });
+}
+
+export async function buildWorldDoors(options: {
+  projectAbs: string;
+  scripts?: ScriptCollection;
+  teleportDestinations?: readonly TeleportDestinationEntry[];
+}): Promise<WorldDoor[]> {
+  const [mapTilesSource, mapDoorsSource] = await Promise.all([
+    readFile(path.join(options.projectAbs, "map_tiles.map"), "utf8").catch(() => undefined),
+    readFile(path.join(options.projectAbs, "map_doors.yml"), "utf8").catch(() => undefined)
+  ]);
+  if (!mapDoorsSource) {
+    return [];
+  }
+
+  const mapRows = mapTilesSource ? parseMapTiles(mapTilesSource) : [];
+  const mapHeightTiles = mapRows.length || DEFAULT_MAP_HEIGHT_TILES;
+  const mapWidthTiles = mapRows[0]?.length || DEFAULT_MAP_WIDTH_TILES;
+  return emitWorldDoors(
+    parseMapDoors(mapDoorsSource),
+    mapWidthTiles,
+    mapHeightTiles,
+    doorDestinationContext({
+      scripts: options.scripts,
+      teleportDestinations: options.teleportDestinations
+    })
+  );
 }
 
 async function loadTileOverrideImages(options: {
@@ -794,6 +968,8 @@ export async function buildWorldArtifacts(options: {
   newGameStartupDerivation?: string;
   tileOverrides?: TileOverrides;
   tileOverridePublicRoot?: string;
+  scripts?: ScriptCollection;
+  teleportDestinations?: readonly TeleportDestinationEntry[];
 }): Promise<WorldBuildResult> {
   const {
     projectAbs,
@@ -806,7 +982,9 @@ export async function buildWorldArtifacts(options: {
     newGameStartupRef,
     newGameStartupDerivation,
     tileOverrides,
-    tileOverridePublicRoot
+    tileOverridePublicRoot,
+    scripts,
+    teleportDestinations
   } = options;
   const warnings: Issue[] = [];
 
@@ -927,6 +1105,7 @@ export async function buildWorldArtifacts(options: {
     publicRoot: tileOverridePublicRoot,
     warnings
   });
+  const doorDestinations = doorDestinationContext({ scripts, teleportDestinations });
 
   if (worldMode === "full") {
     return buildFullWorldArtifacts({
@@ -950,6 +1129,7 @@ export async function buildWorldArtifacts(options: {
       newGameStartupRef,
       newGameStartupDerivation,
       anchorWorld,
+      doorDestinations,
       tileOverrideImages
     });
   }
@@ -1111,6 +1291,7 @@ async function buildFullWorldArtifacts(options: {
   newGameStartupRef: string | undefined;
   newGameStartupDerivation: string | undefined;
   anchorWorld: { x: number; y: number };
+  doorDestinations: DoorDestinationContext;
   tileOverrideImages?: TileOverrideImages;
 }): Promise<WorldBuildResult> {
   const {
@@ -1134,6 +1315,7 @@ async function buildFullWorldArtifacts(options: {
     newGameStartupRef,
     newGameStartupDerivation,
     anchorWorld,
+    doorDestinations,
     tileOverrideImages
   } = options;
 
@@ -1256,7 +1438,7 @@ async function buildFullWorldArtifacts(options: {
   const sheetByGroup = attachSheetsToNpcs(npcs, spriteBuild.sheets);
   const mapDoors = mapDoorsSource ? parseMapDoors(mapDoorsSource) : [];
   const doorTypes = countDoorTypes(mapDoors);
-  const doors = emitWorldDoors(mapDoors, mapWidthTiles, mapHeightTiles);
+  const doors = emitWorldDoors(mapDoors, mapWidthTiles, mapHeightTiles, doorDestinations);
 
   const world = WorldChunkedSchema.parse({
     schemaVersion: SCHEMA_VERSION,

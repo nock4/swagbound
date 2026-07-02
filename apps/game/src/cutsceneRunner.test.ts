@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { CutsceneStep, EventActorMoveSelector } from "@eb/schemas";
 import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
+import type { CutsceneSoundId } from "./cutsceneSfx";
 
 function sel(actor: EventActorMoveSelector): string {
   if (actor === "player") return "player";
@@ -45,7 +46,7 @@ class MockHost implements CutsceneHost {
   setEventFlag(flag: number, set: boolean): void {
     this.log.push(`eventFlag:${flag}:${set ? "set" : "unset"}`);
   }
-  playSound(id: number): void {
+  playSound(id: CutsceneSoundId): void {
     this.log.push(`sound:${id}`);
   }
   warp(to: { x: number; y: number }): void {
@@ -84,6 +85,18 @@ describe("CutsceneRunner", () => {
     expect(runner.running).toBe(true);
     runner.update(60);
     expect(host.log).toEqual(["setFlag:a", "setFlag:b"]);
+    expect(runner.running).toBe(false);
+  });
+
+  it("runs named sound cue steps", () => {
+    const host = new MockHost();
+    const steps: CutsceneStep[] = [
+      { op: "sound", id: "doorOpen" },
+      { op: "sound", id: 7 }
+    ];
+    const runner = new CutsceneRunner(steps, host);
+
+    expect(host.log).toEqual(["sound:doorOpen", "sound:7"]);
     expect(runner.running).toBe(false);
   });
 

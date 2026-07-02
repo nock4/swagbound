@@ -987,6 +987,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   const newGameStartupRef = scriptReferenceForSnesLabel(scripts, romStartMetadata?.startupTargetSnesAddress);
   const npcs = await readNpcReferences(projectAbs, project, projectExists);
   const spriteGroups = await readSpriteGroups(projectAbs, project, projectExists, warnings);
+  const teleportDestinations = await readTeleportDestinations(projectAbs, projectExists, worldMode);
   const worldBuild = await buildWorldArtifacts({
     projectAbs,
     outAbs,
@@ -998,7 +999,9 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     newGameStartupRef,
     newGameStartupDerivation: newGameStartupRef ? ROM_NEW_GAME_STARTUP_DERIVATION : undefined,
     tileOverrides: options.tileOverrides,
-    tileOverridePublicRoot: options.tileOverridePublicRoot
+    tileOverridePublicRoot: options.tileOverridePublicRoot,
+    scripts,
+    teleportDestinations: teleportDestinations?.destinations
   });
   const world = worldBuild.world;
   const sprites = worldBuild.sprites;
@@ -1088,7 +1091,6 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
       displayPath: makeDisplayPath(project)
     })
     : undefined;
-  const teleportDestinations = await readTeleportDestinations(projectAbs, projectExists, worldMode);
   const manifestFiles = {
     ...GENERATED_FILES,
     ...(teleportDestinations ? { teleportDestinations: TELEPORT_DESTINATIONS_FILE } : {}),

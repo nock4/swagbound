@@ -1,3 +1,5 @@
+import { audioContextAvailable, sharedAudioContext } from "./sharedAudioContext";
+
 export interface BattleSfx {
   resume(): void;
   menuMove(): void;
@@ -24,8 +26,6 @@ export type BattleSfxOptions = {
   muted?: boolean;
   volume?: number;
 };
-
-type AudioContextConstructor = new () => AudioContext;
 
 export const BATTLE_SFX_MASTER_GAIN = 0.68;
 
@@ -239,16 +239,20 @@ export class WebAudioBattleSfx implements BattleSfx {
     if (this.unavailable || this.options.muted) {
       return undefined;
     }
+    if (this.context?.state === "closed") {
+      this.context = undefined;
+      this.masterGain = undefined;
+    }
     if (this.context) {
       return this.context;
     }
-    const Ctor = audioContextConstructor();
-    if (!Ctor) {
+    const context = sharedAudioContext();
+    if (!context) {
       this.unavailable = true;
       return undefined;
     }
     try {
-      this.context = new Ctor();
+      this.context = context;
       this.masterGain = this.context.createGain();
       this.masterGain.gain.value = clamp(this.options.volume ?? BATTLE_SFX_MASTER_GAIN, 0, 1);
       this.masterGain.connect(this.context.destination);
@@ -329,14 +333,7 @@ export class WebAudioBattleSfx implements BattleSfx {
 }
 
 export function createBattleSfx(options: BattleSfxOptions = {}): BattleSfx {
-  return audioContextConstructor() ? new WebAudioBattleSfx(options) : new NoopBattleSfx();
-}
-
-function audioContextConstructor(): AudioContextConstructor | undefined {
-  const audioGlobal = globalThis as typeof globalThis & {
-    webkitAudioContext?: AudioContextConstructor;
-  };
-  return audioGlobal.AudioContext ?? audioGlobal.webkitAudioContext;
+  return audioContextAvailable() ? new WebAudioBattleSfx(options) : new NoopBattleSfx();
 }
 
 function clamp(value: number, min: number, max: number): number {

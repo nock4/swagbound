@@ -1,3 +1,5 @@
+import { audioContextAvailable, sharedAudioContext } from "./sharedAudioContext";
+
 export interface TransitionSfx {
   resume(): void;
   doorOpen(): void;
@@ -29,8 +31,6 @@ export type TransitionSfxOptions = {
   muted?: boolean;
   volume?: number;
 };
-
-type AudioContextConstructor = new () => AudioContext;
 
 export const TRANSITION_SFX_MASTER_GAIN = 0.72;
 
@@ -233,16 +233,20 @@ export class WebAudioTransitionSfx implements TransitionSfx {
     if (this.unavailable || this.options.muted) {
       return undefined;
     }
+    if (this.context?.state === "closed") {
+      this.context = undefined;
+      this.masterGain = undefined;
+    }
     if (this.context) {
       return this.context;
     }
-    const Ctor = audioContextConstructor();
-    if (!Ctor) {
+    const context = sharedAudioContext();
+    if (!context) {
       this.unavailable = true;
       return undefined;
     }
     try {
-      this.context = new Ctor();
+      this.context = context;
       this.masterGain = this.context.createGain();
       this.masterGain.gain.value = clamp(this.options.volume ?? TRANSITION_SFX_MASTER_GAIN, 0, 1);
       this.masterGain.connect(this.context.destination);
@@ -323,14 +327,7 @@ export class WebAudioTransitionSfx implements TransitionSfx {
 }
 
 export function createTransitionSfx(options: TransitionSfxOptions = {}): TransitionSfx {
-  return audioContextConstructor() ? new WebAudioTransitionSfx(options) : new NoopTransitionSfx();
-}
-
-function audioContextConstructor(): AudioContextConstructor | undefined {
-  const audioGlobal = globalThis as typeof globalThis & {
-    webkitAudioContext?: AudioContextConstructor;
-  };
-  return audioGlobal.AudioContext ?? audioGlobal.webkitAudioContext;
+  return audioContextAvailable() ? new WebAudioTransitionSfx(options) : new NoopTransitionSfx();
 }
 
 function clamp(value: number, min: number, max: number): number {
