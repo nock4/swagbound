@@ -1,6 +1,12 @@
 import type { ItemData } from "@eb/schemas";
 import type { Combatant } from "./battleLogic";
-import type { StatusAilment } from "./statusEffects";
+import {
+  cureStatus as cureStatusEffect,
+  fieldPoisonTick,
+  inflictStatus as inflictStatusEffect,
+  type StatusAilment,
+  type StatusState
+} from "./statusEffects";
 import type { PartyMember, PartyMemberStats } from "./characterModel";
 import {
   createRollingMeter,
@@ -14,6 +20,7 @@ export type PartyStateCounts = {
   bank: number;
   inventoryChars: number;
   inventoryItems: number;
+  storageItems: number;
   partyCount: number;
 };
 
@@ -54,12 +61,19 @@ export type PartyVitalsSnapshot = {
   maxPp: number;
 };
 
+export type PartyStatusSnapshot = {
+  charId: number;
+  statuses: StatusState;
+};
+
 export type PartyStateSnapshot = {
   wallet: number;
   bank?: number;
   partyIds: number[];
   inventory: PartyInventorySnapshot[];
   equipped: PartyEquipmentSnapshot[];
+  storage?: number[];
+  statuses?: PartyStatusSnapshot[];
   vitals?: PartyVitalsSnapshot[];
   battleMembers?: PartyBattleMemberSnapshot[];
 };
@@ -137,6 +151,13 @@ export type PartyVitalsApplyResult = {
   nextValue: number;
 };
 
+export type PartyFieldPoisonTickResult = {
+  charId: number;
+  previousHp: number;
+  nextHp: number;
+  hpLoss: number;
+};
+
 export type EquipResult =
   | {
       ok: true;
@@ -151,6 +172,34 @@ export type EquipResult =
       char: number;
       itemId: number;
       reason: "notEquippable";
+    };
+
+export type EquipStatSummary = {
+  offense: number;
+  defense: number;
+};
+
+export type EquipStatPreview = EquipStatSummary & {
+  deltaOffense: number;
+  deltaDefense: number;
+};
+
+export type ItemMoveResult =
+  | {
+      ok: true;
+      itemId: number;
+      fromChar?: number;
+      toChar?: number;
+      fromSlot: number;
+      toSlot?: number;
+    }
+  | {
+      ok: false;
+      itemId: number;
+      fromChar?: number;
+      toChar?: number;
+      fromSlot: number;
+      reason: "missingItem" | "sameTarget";
     };
 
 export type ShopBuyResult =
@@ -206,10 +255,12 @@ export class PartyState {
   private walletValue = 0;
   private bankValue = 0;
   private readonly inventoryByChar = new Map<number, number[]>();
+  private storageItems: number[] = [];
   private readonly partyIds = new Set<number>();
   private readonly equippedByChar = new Map<number, EquippedSlots>();
   private readonly vitalsByChar = new Map<number, PartyVitals>();
   private readonly battleMembersByChar = new Map<number, PartyBattleMemberSnapshot>();
+  private readonly statusesByChar = new Map<number, StatusState>();
 
   get wallet(): number {
     return this.walletValue;
@@ -221,6 +272,10 @@ export class PartyState {
 
   inventory(char: number): number[] {
     return [...(this.inventoryByChar.get(normalizeId(char)) ?? [])];
+  }
+
+  storage(): number[] {
+    return [...this.storageItems];
   }
 
   equipped(char: number): EquippedSlots {
@@ -235,6 +290,10 @@ export class PartyState {
   battleMember(char: number): PartyBattleMemberSnapshot | undefined {
     const member = this.battleMembersByChar.get(normalizeId(char));
     return member ? cloneBattleMember(member) : undefined;
+  }
+
+  statuses(char: number): StatusState {
+    return cloneStatusState(this.statusesByChar.get(normalizeId(char)));
   }
 
   party(): number[] {
@@ -265,6 +324,78 @@ export class PartyState {
       this.clearEquippedItem(normalizedChar, normalizeId(item));
     }
     return true;
+  }
+
+  takeFromSlot(char: number, inventorySlot: number, item: number): boolean {
+    const normalizedChar = normalizeId(char);
+    const itemId = normalizeId(item);
+    const slot = stat(inventorySlot);
+    const items = this.inventoryByChar.get(normalizedChar) ?? [];
+    if (items[slot] !== itemId) {
+      return false;
+    }
+    items.splice(slot, 1);
+    if (items.length === 0) {
+      this.inventoryByChar.delete(normalizedChar);
+    } else {
+      this.inventoryByChar.set(normalizedChar, items);
+    }
+    if (!items.includes(itemId)) {
+      this.clearEquippedItem(normalizedChar, itemId);
+    }
+    return true;
+  }
+
+  transferItem(ownerChar: number, targetChar: number, inventorySlot: number, item: number): ItemMoveResult {
+    const fromChar = normalizeId(ownerChar);
+    const toChar = normalizeId(targetChar);
+    const itemId = normalizeId(item);
+    const fromSlot = stat(inventorySlot);
+    if (fromChar === toChar) {
+      return { ok: false, itemId, fromChar, toChar, fromSlot, reason: "sameTarget" };
+    }
+    if (!this.takeFromSlot(fromChar, fromSlot, itemId)) {
+      return { ok: false, itemId, fromChar, toChar, fromSlot, reason: "missingItem" };
+    }
+    const targetItems = this.inventoryByChar.get(toChar) ?? [];
+    targetItems.push(itemId);
+    this.inventoryByChar.set(toChar, targetItems);
+    return { ok: true, itemId, fromChar, toChar, fromSlot, toSlot: targetItems.length - 1 };
+  }
+
+  dropItem(char: number, inventorySlot: number, item: number): ItemMoveResult {
+    const fromChar = normalizeId(char);
+    const itemId = normalizeId(item);
+    const fromSlot = stat(inventorySlot);
+    if (!this.takeFromSlot(fromChar, fromSlot, itemId)) {
+      return { ok: false, itemId, fromChar, fromSlot, reason: "missingItem" };
+    }
+    return { ok: true, itemId, fromChar, fromSlot };
+  }
+
+  depositStoredItem(char: number, inventorySlot: number, item: number): ItemMoveResult {
+    const fromChar = normalizeId(char);
+    const itemId = normalizeId(item);
+    const fromSlot = stat(inventorySlot);
+    if (!this.takeFromSlot(fromChar, fromSlot, itemId)) {
+      return { ok: false, itemId, fromChar, fromSlot, reason: "missingItem" };
+    }
+    this.storageItems.push(itemId);
+    return { ok: true, itemId, fromChar, fromSlot, toSlot: this.storageItems.length - 1 };
+  }
+
+  withdrawStoredItem(char: number, storageSlot: number, item: number): ItemMoveResult {
+    const toChar = normalizeId(char);
+    const itemId = normalizeId(item);
+    const fromSlot = stat(storageSlot);
+    if (this.storageItems[fromSlot] !== itemId) {
+      return { ok: false, itemId, toChar, fromSlot, reason: "missingItem" };
+    }
+    this.storageItems.splice(fromSlot, 1);
+    const targetItems = this.inventoryByChar.get(toChar) ?? [];
+    targetItems.push(itemId);
+    this.inventoryByChar.set(toChar, targetItems);
+    return { ok: true, itemId, toChar, fromSlot, toSlot: targetItems.length - 1 };
   }
 
   useItem(options: {
@@ -312,6 +443,81 @@ export class PartyState {
     return targetChars
       .map((charId) => this.applyEffectToChar(charId, effect))
       .filter((result): result is PartyVitalsApplyResult => Boolean(result));
+  }
+
+  fullRecover(options: { cureStatuses?: boolean } = {}): void {
+    this.restorePartyVitals();
+    if (options.cureStatuses ?? true) {
+      for (const charId of this.partyVitalTargetIds()) {
+        this.statusesByChar.delete(charId);
+      }
+    }
+  }
+
+  hospitalRecoveryCost(members: readonly PartyMember[]): number {
+    return hospitalRecoveryCost(this.applyToPartyMembers([...members]));
+  }
+
+  /**
+   * Seed baseline vitals for active party members that have none yet. Vitals are
+   * otherwise only recorded once a character takes damage or enters battle, which
+   * left field poison (and the overworld HUD) with no HP/PP target to work from
+   * on a fresh game. Never overwrites an existing (e.g. save-restored) entry.
+   */
+  ensureVitalsFor(members: readonly PartyMember[]): void {
+    for (const member of members) {
+      const charId = normalizeId(member.id);
+      if (this.vitalsByChar.has(charId)) {
+        continue;
+      }
+      this.vitalsByChar.set(charId, {
+        hp: createRollingMeter(member.hp, HP_RATE_PER_SEC),
+        maxHp: member.maxHp,
+        pp: member.pp,
+        maxPp: member.maxPp
+      });
+    }
+  }
+
+  applyFieldPoisonStep(): PartyFieldPoisonTickResult[] {
+    const results: PartyFieldPoisonTickResult[] = [];
+    for (const charId of this.partyVitalTargetIds()) {
+      const statuses = this.statusesByChar.get(charId);
+      const vitals = this.vitalsForKnownChar(charId);
+      if (!vitals || !statuses?.length) {
+        continue;
+      }
+      const previousHp = vitals.hp.target;
+      const tickResult = fieldPoisonTick(statuses, previousHp, vitals.maxHp);
+      if (tickResult.hpLoss <= 0) {
+        continue;
+      }
+      this.commitVitals(charId, {
+        ...vitals,
+        hp: setTarget(vitals.hp, tickResult.nextHp)
+      });
+      results.push({
+        charId,
+        previousHp,
+        nextHp: tickResult.nextHp,
+        hpLoss: tickResult.hpLoss
+      });
+    }
+    return results;
+  }
+
+  inflictStatus(char: number, ailment: StatusAilment, options: { remaining?: number; magnitude?: number } = {}): StatusState {
+    const charId = normalizeId(char);
+    const statuses = inflictStatusEffect(this.statusesByChar.get(charId), ailment, options);
+    this.commitStatuses(charId, statuses);
+    return cloneStatusState(statuses);
+  }
+
+  cureStatus(char: number, ailment: StatusAilment | "all"): StatusState {
+    const charId = normalizeId(char);
+    const statuses = cureStatusEffect(this.statusesByChar.get(charId), ailment);
+    this.commitStatuses(charId, statuses);
+    return cloneStatusState(statuses);
   }
 
   equip(char: number, item: Pick<ItemData, "id" | "type">): EquipResult {
@@ -449,6 +655,7 @@ export class PartyState {
         pp: Math.min(stat(combatant.maxPp), stat(combatant.pp)),
         maxPp: stat(combatant.maxPp)
       });
+      this.commitStatuses(charId, combatant.statuses ?? []);
       this.battleMembersByChar.set(charId, battleMemberFromCombatant(combatant));
     }
   }
@@ -462,6 +669,7 @@ export class PartyState {
       const charId = normalizeId(member.id);
       const battleMember = this.battleMembersByChar.get(charId);
       const vitals = this.vitalsByChar.get(charId);
+      const statuses = this.statusesByChar.get(charId);
       const inventory = this.inventoryByChar.has(charId)
         ? this.inventory(charId)
         : battleMember?.inventory ?? member.inventory.map(normalizeId);
@@ -475,7 +683,8 @@ export class PartyState {
         maxPp: battleMember?.maxPp ?? member.maxPp,
         pp: vitals?.pp ?? battleMember?.pp ?? member.pp,
         stats: { ...stats },
-        inventory: [...inventory]
+        inventory: [...inventory],
+        ...(statuses?.length ? { statuses: cloneStatusState(statuses) } : {})
       };
     });
   }
@@ -490,6 +699,7 @@ export class PartyState {
       bank: this.bankValue,
       inventoryChars: this.inventoryByChar.size,
       inventoryItems,
+      storageItems: this.storageItems.length,
       partyCount: this.partyIds.size
     };
   }
@@ -505,6 +715,10 @@ export class PartyState {
       equipped: [...this.equippedByChar.entries()]
         .sort(([a], [b]) => a - b)
         .map(([charId, slots]) => ({ charId, slots: cloneEquippedSlots(slots) })),
+      ...(this.storageItems.length > 0 ? { storage: [...this.storageItems] } : {}),
+      statuses: [...this.statusesByChar.entries()]
+        .sort(([a], [b]) => a - b)
+        .map(([charId, statuses]) => ({ charId, statuses: cloneStatusState(statuses) })),
       vitals: [...this.vitalsByChar.entries()]
         .sort(([a], [b]) => a - b)
         .map(([charId, vitals]) => vitalsSnapshotFromVitals(charId, vitals)),
@@ -528,10 +742,12 @@ export class PartyState {
     this.walletValue = stat(snapshot.wallet);
     this.bankValue = stat(snapshot.bank ?? 0);
     this.inventoryByChar.clear();
+    this.storageItems = [];
     this.partyIds.clear();
     this.equippedByChar.clear();
     this.vitalsByChar.clear();
     this.battleMembersByChar.clear();
+    this.statusesByChar.clear();
 
     for (const charId of snapshot.partyIds) {
       this.partyIds.add(normalizeId(charId));
@@ -545,6 +761,10 @@ export class PartyState {
     }
     for (const entry of snapshot.equipped) {
       this.setEquippedSlots(normalizeId(entry.charId), cloneEquippedSlots(entry.slots));
+    }
+    this.storageItems = (snapshot.storage ?? []).map(normalizeId);
+    for (const entry of snapshot.statuses ?? []) {
+      this.commitStatuses(normalizeId(entry.charId), entry.statuses);
     }
     for (const entry of snapshot.battleMembers ?? []) {
       const member = normalizeBattleMember(entry);
@@ -592,12 +812,16 @@ export class PartyState {
       return undefined;
     }
     const applied = applyUseEffectToVitals(vitals, effect);
+    const statusApplied = applyUseEffectToStatuses(this.statusesByChar.get(charId), effect);
+    if (statusApplied) {
+      this.commitStatuses(charId, statusApplied.statuses);
+    }
     this.commitVitals(charId, applied.vitals);
     return {
       charId,
       effect,
-      previousValue: applied.previousValue,
-      nextValue: applied.nextValue
+      previousValue: statusApplied?.previousValue ?? applied.previousValue,
+      nextValue: statusApplied?.nextValue ?? applied.nextValue
     };
   }
 
@@ -628,6 +852,15 @@ export class PartyState {
       pp: Math.min(stat(vitals.maxPp), stat(vitals.pp)),
       maxPp: stat(vitals.maxPp)
     });
+  }
+
+  private commitStatuses(charId: number, statuses: StatusState): void {
+    const next = cloneStatusState(statuses);
+    if (next.length === 0) {
+      this.statusesByChar.delete(charId);
+      return;
+    }
+    this.statusesByChar.set(charId, next);
   }
 
   private partyVitalTargetIds(): number[] {
@@ -777,9 +1010,78 @@ export function equipmentSlotForItemType(type: number): EquipmentSlot | undefine
   return undefined;
 }
 
+export function equipmentStatBonuses(
+  equipped: EquippedSlots,
+  itemById: (itemId: number) => Pick<ItemData, "equipBonuses"> | undefined
+): EquipStatSummary {
+  let offense = 0;
+  let defense = 0;
+  for (const itemId of Object.values(equipped)) {
+    const bonuses = itemById(itemId)?.equipBonuses;
+    offense += intStat(bonuses?.offense ?? 0);
+    defense += intStat(bonuses?.defense ?? 0);
+  }
+  return { offense, defense };
+}
+
+export function previewEquipStats(options: {
+  baseStats: Pick<PartyMemberStats, "offense" | "defense">;
+  equipped: EquippedSlots;
+  item: Pick<ItemData, "id" | "type" | "equipBonuses">;
+  itemById: (itemId: number) => Pick<ItemData, "equipBonuses"> | undefined;
+}): EquipStatPreview | undefined {
+  const slot = equipmentSlotForItemType(options.item.type);
+  if (!slot) {
+    return undefined;
+  }
+  const equipped = cloneEquippedSlots(options.equipped);
+  const itemId = normalizeId(options.item.id);
+  const currentBonuses = equipmentStatBonuses(equipped, options.itemById);
+  if (equipped[slot] === itemId) {
+    delete equipped[slot];
+  } else {
+    equipped[slot] = itemId;
+  }
+  const nextBonuses = equipmentStatBonuses(equipped, (id) => id === itemId ? options.item : options.itemById(id));
+  const current = {
+    offense: stat(options.baseStats.offense) + currentBonuses.offense,
+    defense: stat(options.baseStats.defense) + currentBonuses.defense
+  };
+  const next = {
+    offense: stat(options.baseStats.offense) + nextBonuses.offense,
+    defense: stat(options.baseStats.defense) + nextBonuses.defense
+  };
+  return {
+    offense: next.offense,
+    defense: next.defense,
+    deltaOffense: next.offense - current.offense,
+    deltaDefense: next.defense - current.defense
+  };
+}
+
 export function sellPriceForItem(item: Pick<ItemData, "cost">): number {
   // Phase 5 shop rule: selling returns half of item cost, rounded down.
   return Math.floor(stat(item.cost) / 2);
+}
+
+export function hospitalRecoveryCost(members: readonly Pick<PartyMember, "level" | "hp" | "maxHp" | "pp" | "maxPp">[]): number {
+  return members.reduce((sum, member) => {
+    const level = positiveStat(member.level);
+    const maxHp = positiveStat(member.maxHp);
+    const maxPp = stat(member.maxPp);
+    const hp = Math.min(maxHp, stat(member.hp));
+    const pp = Math.min(maxPp, stat(member.pp));
+    const missingHp = Math.max(0, maxHp - hp);
+    const missingPp = Math.max(0, maxPp - pp);
+    if (missingHp === 0 && missingPp === 0) {
+      return sum;
+    }
+    const damageCost = Math.ceil(missingHp / 5);
+    const ppCost = Math.ceil(missingPp / 3);
+    const levelCost = Math.max(2, Math.ceil(level * 1.5));
+    const reviveCost = hp <= 0 ? Math.max(20, level * 12) : 0;
+    return sum + damageCost + ppCost + levelCost + reviveCost;
+  }, 0);
 }
 
 export function applyUseEffectToVitals(vitals: PartyVitals, effect: ItemUseEffect): {
@@ -838,11 +1140,54 @@ export function applyUseEffectToVitals(vitals: PartyVitals, effect: ItemUseEffec
   }
 }
 
+export function applyUseEffectToStatuses(
+  statuses: StatusState | undefined,
+  effect: ItemUseEffect
+): { statuses: StatusState; previousValue: number; nextValue: number } | undefined {
+  switch (effect.kind) {
+    case "cureStatus": {
+      const previousValue = statuses?.length ?? 0;
+      const nextStatuses = cureStatusEffect(statuses, effect.ailment);
+      return {
+        statuses: nextStatuses,
+        previousValue,
+        nextValue: nextStatuses.length
+      };
+    }
+    case "inflictStatus": {
+      const previousValue = statuses?.length ?? 0;
+      const nextStatuses = inflictStatusEffect(statuses, effect.ailment, {
+        remaining: effect.remaining,
+        magnitude: effect.magnitude
+      });
+      return {
+        statuses: nextStatuses,
+        previousValue,
+        nextValue: nextStatuses.length
+      };
+    }
+    case "healHp":
+    case "healHpPercent":
+    case "recoverPp":
+    case "recoverPpPercent":
+    case "damage":
+    case "drainPp":
+    case "buffStat":
+    case "permStat":
+    case "revive":
+      return undefined;
+  }
+}
+
 function cloneVitals(vitals: PartyVitals): PartyVitals {
   return {
     ...vitals,
     hp: { ...vitals.hp }
   };
+}
+
+function cloneStatusState(statuses: StatusState | undefined): StatusState {
+  return (statuses ?? []).map((entry) => ({ ...entry }));
 }
 
 function vitalsSnapshotFromVitals(charId: number, vitals: PartyVitals): PartyVitalsSnapshot {
@@ -945,6 +1290,13 @@ function normalizeId(value: number): number {
 
 function positiveStat(value: number): number {
   return Math.max(1, stat(value));
+}
+
+function intStat(value: number): number {
+  if (!Number.isFinite(value)) {
+    return 0;
+  }
+  return Math.trunc(value);
 }
 
 function stat(value: number): number {

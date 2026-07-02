@@ -31,6 +31,8 @@ export const DEFAULT_MUSIC_CUE_GAIN = 0.45;
 export const DEFAULT_MUSIC_MASTER_GAIN = 0.82;
 export const MUSIC_AREA_CUE_PREFIX = "area:";
 export type MusicAreaCueId = `${typeof MUSIC_AREA_CUE_PREFIX}${string}`;
+export const MUSIC_INTERIOR_CUE_PREFIX = "interior:";
+export type MusicInteriorCueId = `${typeof MUSIC_INTERIOR_CUE_PREFIX}${string}`;
 const DEFAULT_FADE_MS = 650;
 const MIN_GAIN = 0.0001;
 
@@ -288,6 +290,10 @@ export function resolveMusicCue(manifest: MusicManifest | undefined, cue: string
   if (areaCue) {
     return areaCue;
   }
+  const interiorCue = resolveInteriorMusicCue(manifest, cue);
+  if (interiorCue) {
+    return interiorCue;
+  }
   const entry = manifest?.cues[cue];
   if (!entry) {
     return undefined;
@@ -302,6 +308,27 @@ export function resolveMusicCue(manifest: MusicManifest | undefined, cue: string
 
 export function musicAreaCueId(id: string): MusicAreaCueId {
   return `${MUSIC_AREA_CUE_PREFIX}${id}` as MusicAreaCueId;
+}
+
+export function musicInteriorCueId(songId: number): MusicInteriorCueId {
+  return `${MUSIC_INTERIOR_CUE_PREFIX}${songId}` as MusicInteriorCueId;
+}
+
+function resolveInteriorMusicCue(manifest: MusicManifest | undefined, cue: string): ResolvedMusicCue | undefined {
+  if (!cue.startsWith(MUSIC_INTERIOR_CUE_PREFIX)) {
+    return undefined;
+  }
+  const songId = cue.slice(MUSIC_INTERIOR_CUE_PREFIX.length);
+  const entry = manifest?.interiors?.[songId] ?? manifest?.cues.interior;
+  if (!entry) {
+    return undefined;
+  }
+  return {
+    cue,
+    file: entry.file,
+    loop: entry.loop ?? true,
+    gain: clamp(entry.gain ?? DEFAULT_MUSIC_CUE_GAIN, 0, 1)
+  };
 }
 
 function resolveAreaMusicCue(manifest: MusicManifest | undefined, cue: string): ResolvedMusicCue | undefined {

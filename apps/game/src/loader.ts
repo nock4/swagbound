@@ -17,9 +17,12 @@ import {
   ItemOverridesSchema,
   ManifestSchema,
   MusicManifestSchema,
+  SectorMusicSchema,
+  CollisionOverridesSchema,
   NpcOverridesSchema,
   NpcReferenceCollectionSchema,
   OpeningCutsceneSchema,
+  OverworldInteractablesSchema,
   PsiCollectionSchema,
   PsiOverridesSchema,
   resolveScriptReference,
@@ -55,10 +58,13 @@ import {
   type ItemOverrides,
   type Manifest,
   type MusicManifest,
+  type SectorMusic,
+  type CollisionOverrides,
   type NpcOverrides,
   type NumericFlagState,
   type NpcReferenceCollection,
   type OpeningCutscene,
+  type OverworldInteractables,
   type Cutscenes,
   type PsiCollection,
   type PsiOverrides,
@@ -97,9 +103,12 @@ const ENEMY_STAT_OVERRIDES_FILE = "enemy-stat-overrides.json";
 const BATTLE_RULES_FILE = "battle-rules.json";
 const STORY_TRIGGERS_FILE = "triggers.json";
 const MUSIC_MANIFEST_FILE = "music-manifest.json";
+const SECTOR_MUSIC_FILE = "sector-music.json";
+const COLLISION_OVERRIDES_FILE = "collision-overrides.json";
 const DRIFELLA_BARKS_FILE = "drifella-barks.json";
 const OPENING_CUTSCENE_FILE = "opening-cutscene.json";
 const CUTSCENES_FILE = "cutscenes.json";
+const OVERWORLD_INTERACTABLES_FILE = "overworld-interactables.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -109,6 +118,7 @@ export type GameData = {
   customDialogue: RuntimeCustomDialogue;
   drifellaBarks: DrifellaBarks;
   dialogueLibrary: SwagboundDialogueLibrary;
+  overworldInteractables: OverworldInteractables;
   openingCutscene?: OpeningCutscene;
   cutscenes?: Cutscenes;
   storyTriggers?: StoryTriggers;
@@ -125,6 +135,8 @@ export type GameData = {
   battle?: BattleData;
   battleRules?: BattleRules;
   musicManifest?: MusicManifest;
+  sectorMusic?: SectorMusic;
+  collisionOverrides?: CollisionOverrides;
   font?: FontCollection;
   window?: WindowCollection;
   characters?: CharacterCollection;
@@ -184,6 +196,13 @@ function emptyNpcOverrides(): NpcOverrides {
   };
 }
 
+function emptyOverworldInteractables(): OverworldInteractables {
+  return {
+    schema: "swagbound.overworld-interactables.v1",
+    interactables: []
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -217,9 +236,12 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     dialogueLibrary,
     storyTriggers,
     musicManifest,
+    sectorMusic,
+    collisionOverrides,
     drifellaBarks,
     openingCutscene,
-    cutscenes
+    cutscenes,
+    overworldInteractables
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -269,9 +291,12 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${SWAGBOUND_DIALOGUE_LIBRARY_FILE}`, SwagboundDialogueLibrarySchema),
     loadJson(`/generated/${STORY_TRIGGERS_FILE}`, StoryTriggersSchema),
     loadJson(`/generated/${MUSIC_MANIFEST_FILE}`, MusicManifestSchema),
+    loadJson(`/generated/${SECTOR_MUSIC_FILE}`, SectorMusicSchema),
+    loadJson(`/generated/${COLLISION_OVERRIDES_FILE}`, CollisionOverridesSchema),
     loadJson(`/generated/${DRIFELLA_BARKS_FILE}`, DrifellaBarksSchema),
     loadJson(`/generated/${OPENING_CUTSCENE_FILE}`, OpeningCutsceneSchema),
-    loadJson(`/generated/${CUTSCENES_FILE}`, CutscenesSchema)
+    loadJson(`/generated/${CUTSCENES_FILE}`, CutscenesSchema),
+    loadJson(`/generated/${OVERWORLD_INTERACTABLES_FILE}`, OverworldInteractablesSchema)
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
@@ -292,6 +317,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     customDialogue: resolvedCustomDialogue,
     drifellaBarks: resolvedDrifellaBarks,
     dialogueLibrary: dialogueLibrary ?? emptyDialogueLibrary(),
+    overworldInteractables: overworldInteractables ?? emptyOverworldInteractables(),
     openingCutscene,
     cutscenes,
     storyTriggers,
@@ -308,6 +334,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     battle: resolvedBattle,
     battleRules,
     musicManifest,
+    sectorMusic,
+    collisionOverrides,
     font,
     window,
     characters: resolvedCharacters,

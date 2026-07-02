@@ -260,7 +260,7 @@ describe("leveling & skill growth", () => {
     expect(after.wallet).toBe(40);
   });
 
-  it("victory view model surfaces EXP, $swag, and level-up lines", () => {
+  it("victory view model surfaces tally, level-up spotlight, stat deltas, and learned PSI lines", () => {
     const member = buildPartyMember(growthCharacter(7));
     const psiList = [
       syntheticPsi(500, 7, 3, "offense", "Wake Up")
@@ -276,10 +276,12 @@ describe("leveling & skill growth", () => {
     expect(viewModel.expGained).toBe(250);
     expect(viewModel.moneyGained).toBe(40);
     expect(viewModel.levelUps).toHaveLength(1);
-    expect(viewModel.lines).toContain("EXP 250");
-    expect(viewModel.lines).toContain("$swag 40");
-    expect(viewModel.lines.some((line) => /Lv 6$/.test(line))).toBe(true);
-    expect(viewModel.lines).toContain("Learned Wake Up");
+    expect(viewModel.lines).toContain("250 EXP");
+    expect(viewModel.lines).toContain("You got $40");
+    expect(viewModel.lines).toContain("PARTY_7 LEVEL UP!");
+    expect(viewModel.lines).toContain("Lv 1 -> 6 ↑");
+    expect(viewModel.lines.some((line) => /^Offense \d+ -> \d+ ↑$/.test(line))).toBe(true);
+    expect(viewModel.lines).toContain("Learned PSI Wake Up!");
   });
 
   it("paginates a multi-beat victory summary and advances before exit", () => {
@@ -295,15 +297,24 @@ describe("leveling & skill growth", () => {
     const { summary } = applyVictoryRewards(state, { rng: () => 1, psi: psiList });
     const viewModel = buildVictorySummaryViewModel(summary);
 
-    expect(viewModel.pages).toHaveLength(2);
-    expect(viewModel.pages[0]).toEqual(["EXP 250", "$swag 40", "Found no items"]);
-    expect(viewModel.pages[1]?.[0]).toMatch(/Lv 6$/);
-    expect(viewModel.pages[1]?.[1]).toBe("Learned Wake Up");
+    expect(viewModel.pages.length).toBeGreaterThan(3);
+    expect(viewModel.pages[0]).toEqual(["250 EXP", "You got $40", "Found no items"]);
+    expect(viewModel.pageDetails[1]).toMatchObject({
+      kind: "level-up",
+      highlighted: true,
+      lines: ["PARTY_7 LEVEL UP!", "Lv 1 -> 6 ↑"]
+    });
+    expect(viewModel.pageDetails.some((page) => page.kind === "stat-gains" && page.lines[0]?.includes("->"))).toBe(true);
+    expect(viewModel.pageDetails[viewModel.pageDetails.length - 1]).toMatchObject({
+      kind: "learned-psi",
+      highlighted: true,
+      lines: ["Learned PSI Wake Up!"]
+    });
 
     const afterFirstConfirm = advanceVictorySummaryPageIndex(0, viewModel.pages.length);
     expect(afterFirstConfirm).toEqual({ pageIndex: 1, shouldExit: false });
-    expect(advanceVictorySummaryPageIndex(afterFirstConfirm.pageIndex, viewModel.pages.length))
-      .toEqual({ pageIndex: 1, shouldExit: true });
+    expect(advanceVictorySummaryPageIndex(viewModel.pages.length - 1, viewModel.pages.length))
+      .toEqual({ pageIndex: viewModel.pages.length - 1, shouldExit: true });
   });
 
   it("keeps a trivial victory summary on one page and exits on first confirm", () => {
@@ -314,7 +325,7 @@ describe("leveling & skill growth", () => {
       levelUps: []
     });
 
-    expect(viewModel.pages).toEqual([["EXP 4", "$swag 1", "Found no items"]]);
+    expect(viewModel.pages).toEqual([["4 EXP", "You got $1", "Found no items"]]);
     expect(advanceVictorySummaryPageIndex(0, viewModel.pages.length))
       .toEqual({ pageIndex: 0, shouldExit: true });
   });

@@ -5,7 +5,25 @@ export interface TransitionSfx {
   footsteps(): void;
   escalatorHum(): void;
   whoosh(): void;
+  /** EarthBound-style battle-swirl sting played when an encounter starts. */
+  encounter(): void;
+  /** Soft per-character tick for typewriter dialogue text. */
+  textBlip(): void;
+  /** EarthBound low-HP "danger" heartbeat double-thump; called on an interval while a member is critical. */
+  dangerHeartbeat(): void;
+  /** Short muted tick when field poison drains a step of HP. */
+  poisonTick(): void;
+  /** Short confirm chirp when starting an in-world talk/sign interaction. */
+  talkConfirm(): void;
+  /** Small chime when a present opens. */
+  presentOpen(): void;
+  /** Bright jingle when an item is received. */
+  itemGet(): void;
+  /** Soft read cue for signs and examine hotspots. */
+  readCue(): void;
 }
+
+export type InteractionSfxCue = "talkConfirm" | "presentOpen" | "itemGet" | "readCue";
 
 export type TransitionSfxOptions = {
   muted?: boolean;
@@ -23,6 +41,14 @@ export class NoopTransitionSfx implements TransitionSfx {
   footsteps(): void {}
   escalatorHum(): void {}
   whoosh(): void {}
+  encounter(): void {}
+  textBlip(): void {}
+  dangerHeartbeat(): void {}
+  poisonTick(): void {}
+  talkConfirm(): void {}
+  presentOpen(): void {}
+  itemGet(): void {}
+  readCue(): void {}
 }
 
 export class WebAudioTransitionSfx implements TransitionSfx {
@@ -100,6 +126,88 @@ export class WebAudioTransitionSfx implements TransitionSfx {
         sweepToHz: 1900
       });
       this.tone(context, { type: "sine", start: start + 0.04, duration: 0.36, fromHz: 220, toHz: 440, gain: 0.05 });
+    });
+  }
+
+  encounter(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      // Fast warbling tone climbing in pitch (the EB battle-swirl "wa-wa-wa"), over
+      // a rising noise sweep — ~0.6s to match the encounter swirl animation.
+      for (let index = 0; index < 6; index += 1) {
+        const t = start + index * 0.09;
+        const base = 300 + index * 95;
+        this.tone(context, { type: "square", start: t, duration: 0.06, fromHz: base, toHz: base * 1.5, gain: 0.06 });
+        this.tone(context, { type: "sawtooth", start: t + 0.045, duration: 0.05, fromHz: base * 1.5, toHz: base, gain: 0.04 });
+      }
+      this.noiseBurst(context, { start, duration: 0.58, frequencyHz: 500, sweepToHz: 2600, gain: 0.06 });
+    });
+  }
+
+  textBlip(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, { type: "square", start, duration: 0.022, fromHz: 620, toHz: 660, gain: 0.05 });
+    });
+  }
+
+  dangerHeartbeat(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      // EB low-HP warning: a low "lub-dub" double-thump (two soft descending sine pulses).
+      this.tone(context, { type: "sine", start, duration: 0.09, fromHz: 150, toHz: 90, gain: 0.11 });
+      this.tone(context, { type: "sine", start: start + 0.14, duration: 0.11, fromHz: 130, toHz: 74, gain: 0.09 });
+    });
+  }
+
+  poisonTick(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      // Sickly muted blip: a short bandpassed noise "bloop" with a low falling tone.
+      this.noiseBurst(context, { start, duration: 0.12, frequencyHz: 320, sweepToHz: 180, gain: 0.05 });
+      this.tone(context, { type: "triangle", start, duration: 0.12, fromHz: 240, toHz: 150, gain: 0.05 });
+    });
+  }
+
+  talkConfirm(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, { type: "square", start, duration: 0.055, fromHz: 520, toHz: 780, gain: 0.055 });
+      this.tone(context, { type: "triangle", start: start + 0.035, duration: 0.04, fromHz: 780, toHz: 620, gain: 0.035 });
+    });
+  }
+
+  presentOpen(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, { type: "triangle", start, duration: 0.09, fromHz: 330, toHz: 660, gain: 0.08 });
+      this.tone(context, { type: "sine", start: start + 0.065, duration: 0.12, fromHz: 660, toHz: 990, gain: 0.055 });
+      this.noiseBurst(context, { start, duration: 0.08, frequencyHz: 1800, gain: 0.025 });
+    });
+  }
+
+  itemGet(): void {
+    this.withContext((context) => {
+      const start = context.currentTime + 0.08;
+      const notes = [523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((hz, index) => {
+        this.tone(context, {
+          type: index === notes.length - 1 ? "triangle" : "square",
+          start: start + index * 0.075,
+          duration: index === notes.length - 1 ? 0.18 : 0.07,
+          fromHz: hz,
+          toHz: hz * 1.01,
+          gain: index === notes.length - 1 ? 0.075 : 0.055
+        });
+      });
+    });
+  }
+
+  readCue(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.tone(context, { type: "sine", start, duration: 0.06, fromHz: 880, toHz: 740, gain: 0.04 });
+      this.tone(context, { type: "triangle", start: start + 0.055, duration: 0.07, fromHz: 660, toHz: 660, gain: 0.03 });
     });
   }
 

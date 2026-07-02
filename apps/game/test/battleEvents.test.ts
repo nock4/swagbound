@@ -86,7 +86,7 @@ describe("battleStepEvents", () => {
     ]);
   });
 
-  it("keeps narration and SFX equivalent to the pre-event detail mapping", () => {
+  it("keeps SFX equivalent to the pre-event detail mapping", () => {
     const cases: BattleRoundStepNarrationDetails[] = [
       step({ kind: "attack", damage: 12 }),
       step({ kind: "attack", missed: true, damage: 0 }),
@@ -117,7 +117,6 @@ describe("battleStepEvents", () => {
 
     for (const details of cases) {
       const events = battleStepEvents(details);
-      expect(composeBattleStepLines(events), `${details.kind} narration`).toEqual(legacyBattleStepLines(details));
       expect(battleStepSfx(events), `${details.kind} sfx`).toEqual(legacyBattleStepSfx(details));
     }
   });
@@ -130,98 +129,6 @@ describe("battleStepEvents", () => {
     expect(lines.join(" ")).not.toContain("dodged");
   });
 });
-
-function legacyBattleStepLines(details: BattleRoundStepNarrationDetails): string[] {
-  switch (details.kind) {
-    case "skip":
-      return details.noTarget ? preferredMessageLines(details) ?? ["There was no target."] : [];
-    case "attack":
-      return legacyAttackLines(details);
-    case "psi":
-      return legacyPsiLines(details);
-    case "item":
-      return legacyItemLines(details);
-    case "defend":
-      return [`${details.attackerName} took a defensive stance.`];
-    case "pray":
-      return legacyRecoveryOrMessageLines(details, "prayed");
-    case "spy":
-      return preferredMessageLines(details) || [`${details.attackerName} sizes up the foe!`];
-    case "mirror":
-      return preferredMessageLines(details) || legacyMirrorLines(details);
-    case "run":
-      return [details.fled ? `${details.attackerName} ran away!` : `${details.attackerName} couldn't escape!`];
-  }
-}
-
-function legacyAttackLines(details: BattleRoundStepNarrationDetails): string[] {
-  const opener = `${details.attackerName}'s attack!`;
-  if (details.missed || !details.damage || details.damage <= 0) {
-    return [opener, details.targetName ? `${details.targetName} dodged!` : "It missed!"];
-  }
-  const lines = [opener];
-  if (details.smash) {
-    lines.push("SMAAAASH!!");
-  }
-  lines.push(`${details.damage} HP of damage to ${details.targetName ?? "the target"}!`);
-  if (details.gutsSurvived) {
-    lines.push(`${details.targetName ?? "The target"} endured the blow!`);
-  }
-  return lines;
-}
-
-function legacyMirrorLines(details: BattleRoundStepNarrationDetails): string[] {
-  const [, ...rest] = legacyAttackLines(details);
-  return [`${details.attackerName} mirrors the foe!`, ...rest];
-}
-
-function legacyPsiLines(details: BattleRoundStepNarrationDetails): string[] {
-  if ((details.healed ?? 0) > 0 || (details.ppRestored ?? 0) > 0) {
-    return legacyRecoveryOrMessageLines(details, "tried PSI");
-  }
-  const move = details.moveName?.trim() || "PSI";
-  const opener = `${details.attackerName} tried ${move}!`;
-  if (details.missed || !details.damage || details.damage <= 0) {
-    return [opener, details.targetName ? `${details.targetName} dodged!` : "It missed!"];
-  }
-  return [opener, `${details.damage} HP of damage to ${details.targetName ?? "the target"}!`];
-}
-
-function legacyItemLines(details: BattleRoundStepNarrationDetails): string[] {
-  const message = preferredMessageLines(details);
-  if (message) {
-    return message;
-  }
-  const item = details.itemName?.trim() || "an item";
-  const opener = `${details.attackerName} used ${item}!`;
-  if ((details.healed ?? 0) > 0) {
-    return [opener, `${details.targetName ?? details.attackerName} recovered ${details.healed} HP!`];
-  }
-  if ((details.ppRestored ?? 0) > 0) {
-    return [opener, `${details.targetName ?? details.attackerName} recovered ${details.ppRestored} PP!`];
-  }
-  return [opener];
-}
-
-function legacyRecoveryOrMessageLines(
-  details: BattleRoundStepNarrationDetails,
-  fallbackVerb: string
-): string[] {
-  const message = preferredMessageLines(details);
-  if (message) {
-    return message;
-  }
-  if ((details.healed ?? 0) > 0) {
-    return [`${details.attackerName} recovered ${details.healed} HP!`];
-  }
-  if ((details.ppRestored ?? 0) > 0) {
-    return [`${details.attackerName} recovered ${details.ppRestored} PP!`];
-  }
-  if ((details.damage ?? 0) > 0) {
-    return [`${details.attackerName} ${fallbackVerb}.`, `${details.damage} HP of damage to ${details.targetName ?? "the target"}!`];
-  }
-  return [`${details.attackerName} ${fallbackVerb}.`];
-}
 
 function legacyBattleStepSfx(details: BattleRoundStepNarrationDetails): BattleSfxCue[] {
   const cues: BattleSfxCue[] = [];
@@ -279,13 +186,4 @@ function legacyImpactCue(details: Pick<BattleRoundStepNarrationDetails, "damage"
 
 function legacyIsRecovery(details: Pick<BattleRoundStepNarrationDetails, "healed" | "ppRestored">): boolean {
   return (details.healed ?? 0) > 0 || (details.ppRestored ?? 0) > 0;
-}
-
-function preferredMessageLines(details: BattleRoundStepNarrationDetails): string[] | null {
-  const message = details.message?.trim();
-  if (!message) {
-    return null;
-  }
-  const lines = message.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-  return lines.length > 0 ? lines : null;
 }

@@ -3,9 +3,11 @@ import type {
   EquippedSlots,
   PartyBattleMemberSnapshot,
   PartyStateSnapshot,
+  PartyStatusSnapshot,
   PartyVitalsSnapshot
 } from "./partyState";
 import type { Facing } from "./playerController";
+import { STATUS_AILMENTS, type StatusAilment, type StatusState } from "./statusEffects";
 
 export const SAVE_STATE_SCHEMA_VERSION = 1;
 
@@ -183,11 +185,15 @@ function clonePartyStateSnapshot(snapshot: PartyStateSnapshot): PartyStateSnapsh
       charId: entry.charId,
       slots: { ...entry.slots }
     })),
+    ...(snapshot.storage ? { storage: [...snapshot.storage] } : {}),
     ...(snapshot.vitals ? {
       vitals: snapshot.vitals.map(clonePartyVitalsSnapshot)
     } : {}),
     ...(snapshot.battleMembers ? {
       battleMembers: snapshot.battleMembers.map(cloneBattleMemberSnapshot)
+    } : {}),
+    ...(snapshot.statuses ? {
+      statuses: snapshot.statuses.map(clonePartyStatusSnapshot)
     } : {})
   };
 }
@@ -210,16 +216,20 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
   const partyIds = validateIdArray(value.partyIds, { unique: true });
   const inventory = validateInventory(value.inventory);
   const equipped = validateEquipment(value.equipped);
+  const storage = value.storage === undefined ? undefined : validateIdArray(value.storage);
   const vitals = value.vitals === undefined ? undefined : validateVitals(value.vitals);
   const battleMembers = value.battleMembers === undefined ? undefined : validateBattleMembers(value.battleMembers);
+  const statuses = value.statuses === undefined ? undefined : validateStatuses(value.statuses);
   if (
     wallet === undefined ||
     (value.bank !== undefined && bank === undefined) ||
     !partyIds ||
     !inventory ||
     !equipped ||
+    (value.storage !== undefined && !storage) ||
     (value.vitals !== undefined && !vitals) ||
-    (value.battleMembers !== undefined && !battleMembers)
+    (value.battleMembers !== undefined && !battleMembers) ||
+    (value.statuses !== undefined && !statuses)
   ) {
     return null;
   }
@@ -229,8 +239,10 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
     partyIds,
     inventory,
     equipped,
+    ...(storage ? { storage } : {}),
     ...(vitals ? { vitals } : {}),
-    ...(battleMembers ? { battleMembers } : {})
+    ...(battleMembers ? { battleMembers } : {}),
+    ...(statuses ? { statuses } : {})
   };
 }
 
@@ -397,6 +409,54 @@ function validateVitals(value: unknown): PartyVitalsSnapshot[] | null {
   return vitals;
 }
 
+function validateStatuses(value: unknown): PartyStatusSnapshot[] | null {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+  const statusSnapshots: PartyStatusSnapshot[] = [];
+  for (const entry of value) {
+    if (!isRecord(entry)) {
+      return null;
+    }
+    const charId = validateId(entry.charId);
+    const statuses = validateStatusState(entry.statuses);
+    if (charId === undefined || !statuses) {
+      return null;
+    }
+    statusSnapshots.push({ charId, statuses });
+  }
+  return statusSnapshots;
+}
+
+function validateStatusState(value: unknown): StatusState | null {
+  if (!Array.isArray(value)) {
+    return null;
+  }
+  const statuses: StatusState = [];
+  for (const entry of value) {
+    const ailment = isRecord(entry) && typeof entry.ailment === "string" && STATUS_AILMENTS.includes(entry.ailment as StatusAilment)
+      ? entry.ailment as StatusAilment
+      : undefined;
+    if (!isRecord(entry) || !ailment) {
+      return null;
+    }
+    const remaining = entry.remaining === undefined ? undefined : validateId(entry.remaining);
+    const magnitude = entry.magnitude === undefined ? undefined : validateId(entry.magnitude);
+    if (
+      (entry.remaining !== undefined && remaining === undefined) ||
+      (entry.magnitude !== undefined && magnitude === undefined)
+    ) {
+      return null;
+    }
+    statuses.push({
+      ailment,
+      ...(remaining !== undefined ? { remaining } : {}),
+      ...(magnitude !== undefined ? { magnitude } : {})
+    });
+  }
+  return statuses;
+}
+
 function validateHpSnapshot(value: unknown): PartyVitalsSnapshot["hp"] | null {
   if (!isRecord(value)) {
     return null;
@@ -470,6 +530,13 @@ function clonePartyVitalsSnapshot(vitals: PartyVitalsSnapshot): PartyVitalsSnaps
     maxHp: vitals.maxHp,
     pp: vitals.pp,
     maxPp: vitals.maxPp
+  };
+}
+
+function clonePartyStatusSnapshot(snapshot: PartyStatusSnapshot): PartyStatusSnapshot {
+  return {
+    charId: snapshot.charId,
+    statuses: snapshot.statuses.map((entry) => ({ ...entry }))
   };
 }
 

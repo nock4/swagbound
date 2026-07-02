@@ -1,39 +1,83 @@
 {
   "schema": "swagbound.music-manifest.v1",
   "cues": {
+    "intro": {
+      "file": "audio/jammers/087__nate-young__forever-day.mp3",
+      "loop": true,
+      "gain": 0.32
+    },
     "overworld": {
-      "file": "audio/music/overworld.mp3",
+      "file": "audio/jammers/069__emerson-kitamura__track-6639a2f8.mp3",
       "loop": true,
       "gain": 0.4
     },
     "interior": {
-      "file": "audio/music/overworld.mp3",
+      "file": "audio/jammers/148__plone__miniature-magic.mp3",
       "loop": true,
       "gain": 0.4
     },
     "battle": {
-      "file": "audio/music/battle.mp3",
+      "file": "audio/jammers/098__foodman__kazunoko.mp3",
       "loop": true,
-      "gain": 0.38
+      "gain": 0.4
+    },
+    "boss": {
+      "file": "audio/jammers/155__four-tet-container__kool-fm-container-remix.mp3",
+      "loop": true,
+      "gain": 0.42
     },
     "victory": {
-      "file": "audio/music/overworld.mp3",
+      "file": "audio/jammers/059__raymond-scott__lightworks.mp3",
       "loop": false,
-      "gain": 0.45
+      "gain": 0.5
     },
-    "intro": {
-      "file": "audio/music/overworld.mp3",
+    "ending": {
+      "file": "audio/jammers/051__spellling__golden-numbers.mp3",
       "loop": true,
-      "gain": 0.3
+      "gain": 0.4
     }
   },
-  "areas": [
-    {
-      "id": "signal-north-threshold",
-      "file": "audio/music/overworld.mp3",
+  "areas": [],
+  "interiors": {
+    "18": {
+      "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
       "loop": true,
-      "gain": 0.4,
-      "match": { "sectorIds": [327, 359] }
+      "gain": 0.4
+    },
+    "20": {
+      "file": "audio/jammers/037__raymond-scott__baltimore-gas-electric-test.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "22": {
+      "file": "audio/jammers/064__inoyamaland__happy-birthday.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "26": {
+      "file": "audio/jammers/025__raymond-scott__in-the-hall-of-the-mountain-queen.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "28": {
+      "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "17": {
+      "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "19": {
+      "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "152": {
+      "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
+      "loop": true,
+      "gain": 0.4
     }
-  ]
+  }
 }

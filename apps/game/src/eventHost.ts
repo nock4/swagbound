@@ -101,6 +101,7 @@ export type RuntimeEventHostOptions = {
   applyWarpDestination?: (destination: EventWarpDestination) => boolean | void;
   startBattle?: (group: number) => boolean;
   openShop?: (storeId: number) => boolean | void;
+  openAtm?: () => boolean | void;
   actorMove?: (effect: Extract<EventEffect, { kind: "actorMove" }>) => boolean | void;
   music?: EventMusicSink;
   resolveMusicCueForTrack?: (track: number) => string | undefined;
@@ -332,6 +333,11 @@ export class RuntimeEventHost implements EventExecutorHost {
 
   atm(op: "deposit" | "withdraw", amount: number): void {
     if (this.skipUnsupported({ kind: "atm", op, amount })) {
+      return;
+    }
+    if (this.options.openAtm) {
+      const opened = this.options.openAtm() !== false;
+      this.transitionRequested = opened;
       return;
     }
     this.options.partyState.applyAtm(op, amount);

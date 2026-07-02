@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { isNpcVisibleForEventFlags, type BattleEnemy, type Cutscene, type DialoguePage, type EventActorMoveSelector, type EventEffect, type ItemData, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { isNpcVisibleForEventFlags, type BattleEnemy, type Cutscene, type DialoguePage, type EventActorMoveSelector, type EventEffect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
 import { sectorIndexForTile } from "./encounterLogic";
@@ -69,7 +69,8 @@ import {
   interactionEvents,
   type DialogueEvent,
   type GameEvent,
-  type HealEvent
+  type HealEvent,
+  type ServiceKind
 } from "./eventRunner";
 import {
   resolveScriptedDialoguePages,
@@ -118,7 +119,9 @@ import {
   type DebugNpc,
   type FirstSceneDebug,
   type CutsceneMoveDebug,
-  type NewGameStartupRunDebug
+  type NewGameStartupRunDebug,
+  type OverworldInteractableDebug,
+  type OverworldInteractionTargetDebug
 } from "./state";
 import { createDialogueResolver, textSpeedCpsFromSearch } from "./dialogueRenderer";
 import {
@@ -133,7 +136,10 @@ import {
   type IntroMeteorBeatStart,
   type NewGameOpeningStart
 } from "./newGameOpening";
-import { PartyState, type PartyStateSnapshot } from "./partyState";
+import { equipmentSlotForItemType, PartyState, type PartyStateSnapshot } from "./partyState";
+import { createBattleSfx, type BattleSfx, type BattleSfxCue } from "./audio/battleSfx";
+import { STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
+import type { OverworldStatusHudView } from "./overworldStatusHud";
 import {
   applySaveState,
   captureSaveState,
@@ -144,9 +150,17 @@ import {
 } from "./saveState";
 import {
   buildMenuScreens,
+  buildHospitalServiceScreen,
+  buildHotelServiceScreen,
+  buildPhoneServiceScreens,
+  buildShopEquipPromptScreen,
+  buildAtmScreen,
   buildShopMenuScreens,
   buildShopViewModel,
   buildStatusViewModel,
+  ATM_MENU_ID,
+  HOSPITAL_SERVICE_MENU_ID,
+  HOTEL_SERVICE_MENU_ID,
   cancelMenu,
   closedMenu,
   confirmMenu,
@@ -158,6 +172,7 @@ import {
   refreshMenuStackScreens,
   resolveTalkMenuAction,
   MAIN_MENU_ID,
+  PHONE_SERVICE_MENU_ID,
   TALK_MENU_ACTION_ID,
   shopRootScreenId,
   type MenuAction,
@@ -180,6 +195,7 @@ import {
   type ResolvedVisualState,
   type VisualStateInputs
 } from "./playerVisualState";
+import { drawSwirl } from "./transitions";
 import { activeWindowFlavorId } from "./windowSettings";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import {
@@ -225,8 +241,9 @@ import {
   type TransitionKind,
   type TransitionSfxCue
 } from "./mapTransition";
-import { createTransitionSfx, type TransitionSfx } from "./audio/transitionSfx";
+import { createTransitionSfx, type InteractionSfxCue, type TransitionSfx } from "./audio/transitionSfx";
 import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
+import { getSharedMusic } from "./sharedMusic";
 import { advanceCutsceneActorTowardTarget } from "./cutsceneActorMovement";
 import {
   isInteriorMusicSector,
@@ -234,6 +251,10 @@ import {
   type OverworldMusicCue
 } from "./worldMusic";
 import { publishAuditionTarget, type AuditionLocation } from "./musicAuditioner";
+import {
+  overworldInteractableEvents,
+  overworldInteractableIsOpened
+} from "./overworldInteractables";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -306,6 +327,17 @@ type ActiveNpcDialogue = {
   restoreFacing: Facing;
 };
 
+type WorldInteractionKind = "npc" | OverworldInteractable["kind"];
+
+type WorldInteractionCandidate = InteractionCandidate & {
+  id: number;
+  key: string;
+  targetKind: WorldInteractionKind;
+  label?: string;
+  npcId?: number;
+  interactableId?: string;
+};
+
 type ActorMoveEffect = Extract<EventEffect, { kind: "actorMove" }>;
 
 type CutsceneMoveState = {
@@ -345,6 +377,10 @@ type DoorWarpOptions = {
 type DoorFadePhase = "none" | "fade-out" | "fade-in";
 
 const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
+// The EB battle-encounter swirl: a colored spiral covers the overworld to black, THEN we switch to the
+// battle scene (which reveals from black). Sits above everything, including the door-fade overlay.
+const ENCOUNTER_SWIRL_MS = 620;
+const ENCOUNTER_SWIRL_DEPTH = 1_500_000;
 const COLLISION_OVERLAY_DEPTH = 150_000;
 // Head/companion overlays render just above the foreground occluder layer (depth 100_000) so a mushroom
 // cap / sweat / possession ghost shows on the character, but stay below the door-fade + UI overlays.
@@ -356,6 +392,10 @@ const OVERWORLD_ENEMY_SPAWN_INTERVAL_MS = 900;
 const OVERWORLD_ENEMY_CONTACT_PX = 12;
 const BOSS_GATE_CONTACT_PX = 14;
 const BOSS_GATE_ARM_DIST_PX = 32;
+const OVERWORLD_CAMERA_ZOOM = 2;
+// Cap on the interior zoom-to-fill so short rooms don't blow up; rooms shorter
+// than (viewport / this) keep a small centered letterbox instead of over-zooming.
+const INTERIOR_CAMERA_MAX_ZOOM = 3.5;
 // Spawn band kept fully ON-SCREEN (camera shows ~128x112 world px from the player
 // at zoom 2) so a roamer is always visible before it can reach you — never an
 // off-screen "random" touch. Min keeps it off the player's feet.
@@ -368,16 +408,38 @@ const OVERWORLD_ENEMY_DESPAWN_DIST_PX = 320;
 const OVERWORLD_ENEMY_WANDER_RADIUS_PX = 40;
 const OVERWORLD_ENEMY_WANDER_SPEED_PX_PER_SEC = 30;
 const OVERWORLD_ENEMY_SPAWN_ATTEMPTS = 8;
+const LOW_HP_DANGER_FRACTION = 1 / 8;
+const LOW_HP_DANGER_BEEP_INTERVAL_MS = 820;
 const ROOM_MASK_EDGE_INSET_SCREEN_PX = 0.5;
 const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
 const CUTSCENE_ACTOR_MOVE_TIMEOUT_MS = 8_000;
 const CUTSCENE_ACTOR_RUN_MULTIPLIER = 1.5;
 const CUTSCENE_MOVE_DEMO_REFERENCE = "cutsceneMoveDemo.main";
+const DEFAULT_HOTEL_REST_COST = 100;
 
 type TilePoint = { x: number; y: number };
 type ForceEncounterResult =
   | { started: true; enemyGroup: number; advantage: EncounterAdvantage }
   | { started: false; reason: string; enemyGroup?: number; advantage?: EncounterAdvantage };
+
+type ActiveServiceState =
+  | { kind: ServiceKind; cost?: number }
+  | { kind: "atm" }
+  | { kind: "shop-equip"; storeId: number; char: number; inventorySlot: number; itemId: number; itemName: string };
+
+type ServiceDebugState = {
+  active?: ActiveServiceState;
+  lastResult?: {
+    kind: ActiveServiceState["kind"];
+    message: string;
+    cost?: number;
+    wallet: number;
+    bank: number;
+    storageItems: number;
+  };
+};
+
+type MenuSfxCue = Extract<BattleSfxCue, "menuMove" | "menuConfirm" | "menuCancel">;
 
 export class ChunkedWorldScene extends Phaser.Scene {
   private data_!: GameData;
@@ -396,6 +458,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private npcRuntimes = new Map<string, NpcRuntime>();
   private serviceInteractionCache = new Map<string, boolean>();
   private activeNpcDialogue?: ActiveNpcDialogue;
+  private presentInteractableSprites = new Map<string, Phaser.GameObjects.Rectangle>();
   private chunkByKey = new Map<string, WorldChunk>();
   private chunkObjects = new Map<string, StreamedChunk>();
   private loadingTextureKeys = new Set<string>();
@@ -431,6 +494,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedInvalidDoorWarps = new Set<string>();
   private doorFadePhase: DoorFadePhase = "none";
   private doorFadeOverlay?: Phaser.GameObjects.Rectangle;
+  /** Deferred battle start: while set, the overworld plays the colored encounter swirl, then switches. */
+  private pendingBattleStart?: { sceneKey: string; params: Record<string, unknown> };
+  private encounterSwirlMs = 0;
+  private encounterSwirlGfx?: Phaser.GameObjects.Graphics;
+  private lastDialogueRevealedChars = 0;
   private doorTransitionState: MapTransitionState = idleMapTransition();
   private activeDoorWarp?: {
     destination: EventWarpDestination;
@@ -441,11 +509,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private readonly gameFlags = new GameFlags();
   private readonly partyState = new PartyState();
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
+  private readonly menuSfx: BattleSfx = createBattleSfx();
+  private menuSfxCalls: MenuSfxCue[] = [];
+  private menuSfxCount = 0;
+  private interactionSfxCalls: InteractionSfxCue[] = [];
+  private interactionSfxCount = 0;
   private music: Music = createMusic();
   private currentOverworldMusicCue?: OverworldMusicCue;
+  /** When set (by a story trigger's `music` field), overrides sector-based overworld music. */
+  private forcedOverworldMusicCue?: OverworldMusicCue;
   private menuState: MenuState = closedMenu();
   private menuScreens = new Map<string, MenuScreen>();
   private activeShopStoreId?: number;
+  private activeService?: ActiveServiceState;
+  private lastServiceResult?: ServiceDebugState["lastResult"];
   private eventSequence?: RuntimeEventSequence;
   private bootSaveState?: SaveState;
   private saveSlot = 0;
@@ -462,6 +539,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private currentSectorIndex?: number;
   private lastPlayerTile?: TilePoint;
   private lastEncounterGroup?: number;
+  private dangerHeartbeatElapsedMs = LOW_HP_DANGER_BEEP_INTERVAL_MS;
+  private poisonStepTicks = 0;
+  private poisonHpLost = 0;
   private bossGateActors = new Map<string, BossGateRuntime>();
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
   private overworldEnemySeq = 0;
@@ -486,6 +566,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private loadingBarrierKeys = new Set<string>();
   private pendingScriptedDialogueComplete?: () => void;
   private pendingInteractionShopStoreId?: number;
+  private pendingInteractionService?: { service: ServiceKind; cost?: number };
   private cutsceneMove?: CutsceneMoveState;
   private cutsceneRunner?: CutsceneRunner;
   private activeCutsceneId?: string;
@@ -512,7 +593,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }): void {
     this.data_ = data.gameData;
     this.world_ = data.gameData.world as WorldChunked;
-    this.music = createMusic(data.gameData.musicManifest, {
+    this.music = getSharedMusic(this.registry, data.gameData.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
     // Dev music-auditioner bridge: lets the Track Lab panel mute this scene's
@@ -536,6 +617,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.activeDoorWarp = undefined;
     this.lastPlayerTile = undefined;
     this.currentSectorIndex = undefined;
+    this.dangerHeartbeatElapsedMs = LOW_HP_DANGER_BEEP_INTERVAL_MS;
+    this.poisonStepTicks = 0;
+    this.poisonHpLost = 0;
     const disabledByQuery = encountersDisabledBySearch(globalThis.location?.search);
     const canEncounter = Boolean(data.gameData.encounters && data.gameData.battle);
     const restoredEncounter = data.restore?.encounter;
@@ -636,6 +720,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.collisionCellSize = world.collision.cellSize;
     this.collisionWidth = world.collision.width;
     this.collisionHeight = world.collision.height;
+    this.applyCollisionOverrides();
     this.collisionOverlayEnabled = this.initialCollisionOverlayEnabled();
     this.registerCollisionDebugGlobals();
     this.resolveIntroMeteorBeatForStart();
@@ -647,6 +732,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.partyState.party().length === 0) {
       this.ensureIntroParty();
     }
+    // Seed baseline vitals so field poison + the overworld HUD have a HP/PP target
+    // from the start (vitals are otherwise only recorded on damage/battle entry).
+    this.partyState.ensureVitalsFor(this.overworldHudPartyMembers());
     const spawn = this.clampSpawn(
       returnPlayer ?? restoredPlayer ?? this.parseSpawnOverride() ?? this.newGameOpening?.spawn ?? world.player.spawnWorldPixel
     );
@@ -655,16 +743,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.playerState = createPlayerState(spawn.x, spawn.y, playerFacing, this.playerFrames);
     this.player = this.spawnPlayerActor(spawn.x, spawn.y, world.player.spriteGroup, playerFacing);
     this.spawnFollower(spawn, playerFacing);
+    this.spawnPresentInteractables();
     this.syncEncounterTileState();
 
     const bounds = this.movementBounds();
     this.cameras.main.setBounds(0, 0, bounds.maxX + 8, bounds.maxY + 1);
-    this.cameras.main.setZoom(2);
+    this.cameras.main.setZoom(OVERWORLD_CAMERA_ZOOM);
     this.cameras.main.startFollow(this.player, true);
     this.cameras.main.roundPixels = true;
     this.refreshRoomBounds(true);
     this.events.once("shutdown", () => {
       this.music.stop();
+      publishAuditionTarget(null);
       this.destroyDoorFadeOverlay();
       this.destroyCollisionOverlay();
       this.destroyRoomMask();
@@ -749,6 +839,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.maybeStartNewGameStartup(spawn);
     }
     this.applyDebugFlags();
+    this.syncPresentInteractableSprites();
     this.publish();
   }
 
@@ -769,7 +860,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.spriteWalkBobClockMs += delta;
     this.partyState.tickMeters(delta);
+    this.updateDangerHeartbeat(delta);
+    this.tickDialogueBlip();
     this.encounterCooldownMs = Math.max(0, this.encounterCooldownMs - delta);
+    // Encounter swirl owns the frame while it covers the overworld, then switches to battle.
+    if (this.tickEncounterSwirl(delta)) {
+      this.publish();
+      return;
+    }
     if (this.menuState.open) {
       if (!this.playerState.inputLocked) {
         lockPlayer(this.playerState, this.playerFrames);
@@ -825,6 +923,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         }),
       frames: this.playerFrames
     });
+    const playerSteppedTile = this.syncEncounterTileState();
+    this.applyFieldPoisonForStep(playerSteppedTile);
     this.syncPlayerObject();
     this.refreshRoomBounds();
     this.syncOverworldMusicCue();
@@ -863,6 +963,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.destroyDoorFadeOverlay();
     this.unregisterForceEncounter();
     this.destroyPlayerOverlays();
+    this.pendingBattleStart = undefined;
+    this.encounterSwirlGfx?.destroy();
+    this.encounterSwirlGfx = undefined;
     this.player = undefined;
     this.playerFrames = CANONICAL_DIRECTION_FRAMES;
     this.follower = undefined;
@@ -875,6 +978,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.npcPlacementsByChunk.clear();
     this.npcRuntimes.clear();
     this.serviceInteractionCache.clear();
+    this.destroyPresentInteractableSprites();
     this.clearOverworldEnemies();
     this.chunkObjects.clear();
     this.loadingTextureKeys.clear();
@@ -906,7 +1010,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.menuState = closedMenu();
     this.menuScreens.clear();
     this.activeShopStoreId = undefined;
+    this.activeService = undefined;
+    this.lastServiceResult = undefined;
+    this.menuSfxCalls = [];
+    this.menuSfxCount = 0;
+    this.interactionSfxCalls = [];
+    this.interactionSfxCount = 0;
     this.currentOverworldMusicCue = undefined;
+    this.forcedOverworldMusicCue = undefined;
     this.eventSequence = undefined;
     this.newGameStartupRecord = undefined;
     this.startupRunActive = false;
@@ -930,6 +1041,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.prompt = "";
     this.assetsLoaded = false;
     this.pendingInteractionShopStoreId = undefined;
+    this.pendingInteractionService = undefined;
     this.cutsceneMove = undefined;
     this.cutsceneMoveDebug = { active: false, arrived: false };
     this.cutsceneRunner = undefined;
@@ -1093,6 +1205,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       );
       this.applyInteriorRoomMask();
       this.applyNpcRoomVisibility();
+      this.updateCameraRoomBounds();
       return;
     }
     if (!force && this.playerInsideCachedRoomBounds()) {
@@ -1104,6 +1217,33 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
     this.applyInteriorRoomMask();
     this.applyNpcRoomVisibility();
+    this.updateCameraRoomBounds();
+  }
+
+  /**
+   * Keep the camera locked inside an interior room so its masked edge never
+   * reveals the black void around it (EB never scrolls past a room). Falls back
+   * to the full map bounds in the overworld.
+   */
+  private updateCameraRoomBounds(): void {
+    const camera = this.cameras.main;
+    const room = this.activeInteriorRoom();
+    if (room) {
+      // Zoom in just enough that the room covers the viewport on its short axis,
+      // so the masked edge never reveals the black void. Capped so small rooms
+      // don't over-zoom; any residual gap is centered (symmetric, intentional).
+      const fillZoom = Math.max(
+        OVERWORLD_CAMERA_ZOOM,
+        camera.width / room.rect.width,
+        camera.height / room.rect.height
+      );
+      camera.setZoom(Math.min(fillZoom, INTERIOR_CAMERA_MAX_ZOOM));
+      camera.setBounds(room.rect.x, room.rect.y, room.rect.width, room.rect.height, true);
+      return;
+    }
+    camera.setZoom(OVERWORLD_CAMERA_ZOOM);
+    const bounds = this.movementBounds();
+    camera.setBounds(0, 0, bounds.maxX + 8, bounds.maxY + 1);
   }
 
   private playerInsideCachedRoomBounds(): boolean {
@@ -1126,8 +1266,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private syncOverworldMusicCue(force = false): void {
+    if (this.forcedOverworldMusicCue) {
+      this.playOverworldMusicCue(this.forcedOverworldMusicCue, force);
+      return;
+    }
     this.playOverworldMusicCue(
-      overworldMusicCueForSector(this.data_.musicManifest, this.world_.sectors, this.playerState),
+      overworldMusicCueForSector(
+        this.data_.musicManifest,
+        this.world_.sectors,
+        this.playerState,
+        false,
+        this.data_.sectorMusic
+      ),
       force
     );
   }
@@ -1138,6 +1288,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.currentOverworldMusicCue = cue;
     void this.music.play(cue);
+  }
+
+  /** Soft per-character tick as typewriter dialogue reveals (skips whitespace, throttled). */
+  private tickDialogueBlip(): void {
+    if (!this.dialogue.open || this.dialogue.revealComplete) {
+      this.lastDialogueRevealedChars = 0;
+      return;
+    }
+    const state = this.dialogue.currentRevealState;
+    const revealed = state.revealedChars;
+    if (revealed < this.lastDialogueRevealedChars) {
+      this.lastDialogueRevealedChars = revealed; // new page reset
+    }
+    if (revealed > this.lastDialogueRevealedChars) {
+      const fresh = state.revealedText.slice(this.lastDialogueRevealedChars, revealed);
+      if (revealed % 2 === 0 && /\S/.test(fresh)) {
+        this.transitionSfx.textBlip();
+      }
+      this.lastDialogueRevealedChars = revealed;
+    }
   }
 
   private playerInInteriorMusicSector(): boolean {
@@ -1355,6 +1525,38 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
+  /**
+   * Force authored world-pixel rects solid. EarthBound's roof/behind-building cells
+   * convert to walkable (surface-00, no priority — indistinguishable from grass), so
+   * the player can walk on roofs. content/collision-overrides.json patches those cells.
+   */
+  private applyCollisionOverrides(): void {
+    const overrides = this.data_.collisionOverrides;
+    if (!overrides || overrides.solids.length === 0) return;
+    const cs = this.collisionCellSize;
+    const height = this.solidRows.length;
+    if (height === 0) return;
+    const width = this.solidRows[0].length;
+    // Convert only the touched rows to mutable char arrays.
+    const patched = new Map<number, string[]>();
+    const rowChars = (row: number): string[] => {
+      let chars = patched.get(row);
+      if (!chars) { chars = this.solidRows[row].split(""); patched.set(row, chars); }
+      return chars;
+    };
+    for (const rect of overrides.solids) {
+      const c0 = Math.max(0, Math.floor(rect.x / cs));
+      const c1 = Math.min(width - 1, Math.floor((rect.x + rect.w - 1) / cs));
+      const r0 = Math.max(0, Math.floor(rect.y / cs));
+      const r1 = Math.min(height - 1, Math.floor((rect.y + rect.h - 1) / cs));
+      for (let r = r0; r <= r1; r += 1) {
+        const chars = rowChars(r);
+        for (let c = c0; c <= c1; c += 1) chars[c] = "1";
+      }
+    }
+    for (const [row, chars] of patched) this.solidRows[row] = chars.join("");
+  }
+
   private initialCollisionOverlayEnabled(): boolean {
     const queryEnabled = collisionOverlayEnabledBySearch(globalThis.location?.search);
     const registryEnabled = normalizeCollisionOverlayFlag(this.registry.get("collisionOverlay"));
@@ -1369,7 +1571,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     globals.__surfaceAt = this.surfaceAtHook;
     // Debug-only: full-heal the party — a between-fight convenience for the autonomous-play harness
     // (the player-facing rest is the in-world hotel at NPC 58). Nothing in normal play calls it.
-    globals.__debugHeal = () => this.healParty("full");
+    globals.__debugHeal = () => {
+      this.partyState.fullRecover({ cureStatuses: true });
+      this.refreshMenuScreens();
+      this.publish();
+    };
     // Debug-only: equip an item on a party member and read battle-resolved stats, for verifying
     // equipped-gear bonuses (weapons → offense, armor → defense). Nothing in normal play calls these.
     globals.__equip = (charId: number, itemId: number) => {
@@ -1379,6 +1585,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
     globals.__battleStats = (charId: number) => {
       const member = this.battlePartyMembers()?.find((entry) => entry.id === charId);
       return member ? { offense: member.stats.offense, defense: member.stats.defense } : undefined;
+    };
+    globals.__overworldStatusHud = () => this.overworldStatusHud();
+    globals.__setPartyStatus = (charId: number, ailment: StatusAilment, active = true) => {
+      if (!STATUS_AILMENTS.includes(ailment)) {
+        return { ok: false, reason: "unknown ailment" };
+      }
+      const statuses = active
+        ? this.partyState.inflictStatus(charId, ailment)
+        : this.partyState.cureStatus(charId, ailment);
+      this.refreshMenuScreens();
+      return { ok: true, charId, statuses, hud: this.overworldStatusHud() };
     };
     // Debug-only: force hero visual-state inputs (KO, ride, status, cutscene event, palette) so the
     // sprite-state render path can be exercised in-engine without reaching each in-game trigger.
@@ -1407,6 +1624,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__debugHeal;
     delete globals.__equip;
     delete globals.__battleStats;
+    delete globals.__overworldStatusHud;
+    delete globals.__setPartyStatus;
     delete globals.__setPlayerVisualState;
     delete globals.__playerVisualState;
     delete globals.__overlayInfo;
@@ -1753,6 +1972,45 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.spawnActor(x, y, spriteGroup, direction);
   }
 
+  private spawnPresentInteractables(): void {
+    this.destroyPresentInteractableSprites();
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "present") {
+        continue;
+      }
+      const sprite = this.add.rectangle(entry.worldPixel.x, entry.worldPixel.y, 14, 12, 0xd64265)
+        .setOrigin(0.5, 1);
+      this.presentInteractableSprites.set(entry.id, sprite);
+      this.setActorSortDepth(sprite);
+    }
+    this.syncPresentInteractableSprites();
+  }
+
+  private syncPresentInteractableSprites(): void {
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "present") {
+        continue;
+      }
+      const sprite = this.presentInteractableSprites.get(entry.id);
+      if (!sprite || !sprite.active) {
+        continue;
+      }
+      const opened = this.overworldInteractableOpened(entry);
+      sprite
+        .setFillStyle(opened ? 0x6b7280 : 0xd64265, 1)
+        .setStrokeStyle(2, opened ? 0xcbd5e1 : 0xfff3a3, 1);
+      sprite.setVisible(true);
+      this.setActorSortDepth(sprite);
+    }
+  }
+
+  private destroyPresentInteractableSprites(): void {
+    for (const sprite of this.presentInteractableSprites.values()) {
+      sprite.destroy();
+    }
+    this.presentInteractableSprites.clear();
+  }
+
   private readInput(): MoveInput {
     return {
       left: Boolean(this.cursors?.left?.isDown || this.keys?.A?.isDown),
@@ -1786,6 +2044,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return true;
     }
     if (this.barrierBlocks(x, y)) {
+      return true;
+    }
+    if ((options.includeNpcs ?? true) && this.presentInteractableBlocks(x, y, options.escapeOverlapAt)) {
       return true;
     }
     if (options.includePlayer && this.player && this.actorBodyBlocked(x, y, this.playerState.x, this.playerState.y)) {
@@ -1826,6 +2087,24 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
     return barrierBlocksPoint(barriers, { x, y }, (flag) => this.gameFlags.has(flag));
+  }
+
+  private presentInteractableBlocks(x: number, y: number, escapeOverlapAt?: { x: number; y: number }): boolean {
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "present") {
+        continue;
+      }
+      if (
+        escapeOverlapAt &&
+        this.actorBodyBlocked(escapeOverlapAt.x, escapeOverlapAt.y, entry.worldPixel.x, entry.worldPixel.y)
+      ) {
+        continue;
+      }
+      if (this.actorBodyBlocked(x, y, entry.worldPixel.x, entry.worldPixel.y)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /** Creates barrier guard sprites on demand and toggles them with their active state. */
@@ -2218,21 +2497,38 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return Math.abs(x - bodyX) < 14 && y > bodyY - 18 && y < bodyY + 10;
   }
 
-  private interactionCandidates(): InteractionCandidate[] {
-    return [...this.npcRuntimes.values()]
+  private interactionCandidates(): WorldInteractionCandidate[] {
+    const npcCandidates: WorldInteractionCandidate[] = [...this.npcRuntimes.values()]
       .filter((npc) => this.npcInsideActiveRoom(npc))
       .map((npc) => ({
         id: npc.data.npcId,
+        key: `npc:${npc.data.npcId}`,
+        targetKind: "npc",
+        npcId: npc.data.npcId,
+        label: this.npcName(npc.data.npcId),
         x: npc.state.player.x,
         y: npc.state.player.y,
         interactable: npc.data.interactable
       }));
+    return [
+      ...npcCandidates,
+      ...this.data_.overworldInteractables.interactables.map((entry, index) => ({
+        id: -1 - index,
+        key: `interactable:${entry.id}`,
+        targetKind: entry.kind,
+        interactableId: entry.id,
+        label: entry.label,
+        x: entry.worldPixel.x,
+        y: entry.worldPixel.y,
+        interactable: true
+      }))
+    ];
   }
 
-  private interactionTarget(): InteractionCandidate | undefined {
+  private interactionTarget(): WorldInteractionCandidate | undefined {
     return findInteractionTarget(this.playerState, this.interactionCandidates(), {
       maxDistance: INTERACTION_DISTANCE
-    })?.candidate;
+    })?.candidate as WorldInteractionCandidate | undefined;
   }
 
   private tutorialNpc(): NpcRuntime | undefined {
@@ -2259,12 +2555,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
     } else if (this.dialogue.open) {
       this.prompt = "Z: advance | X: close";
     } else if (target) {
-      this.prompt = this.talkPrompt(target.id);
+      this.prompt = this.interactionPrompt(target);
     } else if (this.inRange()) {
-      this.prompt = "Turn to face them, then press Z";
+      this.prompt = "Turn to face it, then press Z";
     } else {
       this.prompt = "Move: Arrows/WASD. Approach someone, then press Z.";
     }
+  }
+
+  private interactionPrompt(target: WorldInteractionCandidate): string {
+    if (target.targetKind === "sign") {
+      return target.label ? `Z: read ${target.label}` : "Z: read sign";
+    }
+    if (target.targetKind === "present") {
+      const entry = this.overworldInteractableById(target.interactableId);
+      return entry?.kind === "present" && this.overworldInteractableOpened(entry)
+        ? "Z: check present"
+        : "Z: open present";
+    }
+    if (target.targetKind === "examine") {
+      return target.label ? `Z: check ${target.label}` : "Z: check";
+    }
+    return this.talkPrompt(target.npcId ?? target.id);
   }
 
   private talkPrompt(npcId: number): string {
@@ -2325,6 +2637,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.menuState = openMenu(root);
+    this.playMenuSfx("menuConfirm");
     lockPlayer(this.playerState, this.playerFrames);
     this.updatePrompt();
     this.publish();
@@ -2334,7 +2647,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.menuState.open) {
       return;
     }
+    const before = this.menuDebugState();
     this.menuState = moveMenu(this.menuState, delta);
+    const after = this.menuDebugState();
+    if (before.cursorIndex !== after.cursorIndex || before.currentItemId !== after.currentItemId) {
+      this.playMenuSfx("menuMove");
+    }
     this.publish();
   }
 
@@ -2344,7 +2662,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.refreshMenuScreens();
     const result = confirmMenu(this.menuState, (id) => this.menuScreens.get(id));
+    const changed = JSON.stringify(menuDebugState(result.state)) !== JSON.stringify(this.menuDebugState());
     this.menuState = result.state;
+    if (result.actionId || changed) {
+      this.playMenuSfx("menuConfirm");
+    } else {
+      this.playMenuSfx("menuCancel");
+    }
     if (result.actionId) {
       this.handleMenuAction(result.actionId);
       return;
@@ -2387,6 +2711,42 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.handleItemUseAction(action);
       return;
     }
+    if (action.kind === "itemGive") {
+      this.handleItemGiveAction(action);
+      return;
+    }
+    if (action.kind === "itemDrop") {
+      this.handleItemDropAction(action);
+      return;
+    }
+    if (action.kind === "shopEquipNow") {
+      this.handleShopEquipNowAction(action);
+      return;
+    }
+    if (action.kind === "shopEquipLater") {
+      this.handleShopEquipLaterAction(action);
+      return;
+    }
+    if (action.kind === "hospitalService") {
+      this.handleHospitalServiceAction(action);
+      return;
+    }
+    if (action.kind === "hotelService") {
+      this.handleHotelServiceAction(action);
+      return;
+    }
+    if (action.kind === "phoneService") {
+      this.handlePhoneServiceAction(action);
+      return;
+    }
+    if (action.kind === "storageDeposit") {
+      this.handleStorageDepositAction(action);
+      return;
+    }
+    if (action.kind === "storageWithdraw") {
+      this.handleStorageWithdrawAction(action);
+      return;
+    }
     this.handleEquipAction(action);
   }
 
@@ -2414,6 +2774,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       ? (action.op === "deposit" ? this.partyState.wallet : this.partyState.bank)
       : action.amount ?? 0;
     const moved = this.partyState.applyAtm(action.op, amount);
+    this.recordServiceResult("atm", moved > 0 ? "Done." : "No funds moved.");
     this.showMenuResult(moved > 0 ? "Done." : "No funds moved.");
   }
 
@@ -2423,8 +2784,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.showMenuResult("Not for sale.");
       return;
     }
-    const item = this.itemById(action.itemId) ?? fallbackShopItem(action.itemId);
-    this.partyState.buyItem(action.char, item);
+    const item = this.itemById(action.itemId);
+    if (!item) {
+      this.showMenuResult("Not for sale.");
+      return;
+    }
+    const result = this.partyState.buyItem(action.char, item);
+    if (!result.ok) {
+      this.showMenuResult("Not enough money.");
+      return;
+    }
+    const inventorySlot = Math.max(0, this.partyState.inventory(action.char).length - 1);
+    if (item.equippable && equipmentSlotForItemType(item.type)) {
+      this.openShopEquipPrompt({
+        kind: "shop-equip",
+        storeId: action.storeId,
+        char: action.char,
+        inventorySlot,
+        itemId: item.id,
+        itemName: this.itemName(item.id, item)
+      });
+      return;
+    }
     this.refreshOpenMenuAfterAction();
   }
 
@@ -2436,6 +2817,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const item = this.itemById(action.itemId) ?? fallbackShopItem(action.itemId);
     this.partyState.sellItem(action.char, item);
     this.refreshOpenMenuAfterAction();
+  }
+
+  private handleShopEquipNowAction(action: Extract<MenuAction, { kind: "shopEquipNow" }>): void {
+    const item = this.itemById(action.itemId);
+    if (!item || this.partyState.inventory(action.char)[action.inventorySlot] !== action.itemId) {
+      this.recordServiceResult("shop-equip", "You can't equip that.");
+      this.showMenuResult("You can't equip that.");
+      return;
+    }
+    const result = this.partyState.equip(action.char, item);
+    this.recordServiceResult("shop-equip", result.ok ? "Equipped." : "You can't equip that.");
+    this.activeService = undefined;
+    this.openShopRootMenu(action.storeId);
+  }
+
+  private handleShopEquipLaterAction(action: Extract<MenuAction, { kind: "shopEquipLater" }>): void {
+    this.recordServiceResult("shop-equip", "Kept in Goods.");
+    this.activeService = undefined;
+    this.openShopRootMenu(action.storeId);
   }
 
   private handleItemUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "itemUse" }>): void {
@@ -2454,6 +2854,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.showMenuResult(result.ok ? "Used." : "You can't use that.");
   }
 
+  private handleItemGiveAction(action: Extract<MenuAction, { kind: "itemGive" }>): void {
+    const result = this.partyState.transferItem(
+      action.ownerChar,
+      action.targetChar,
+      action.inventorySlot,
+      action.itemId
+    );
+    this.showMenuResult(result.ok ? "Gave." : "You can't give that.");
+  }
+
+  private handleItemDropAction(action: Extract<MenuAction, { kind: "itemDrop" }>): void {
+    const result = this.partyState.dropItem(action.ownerChar, action.inventorySlot, action.itemId);
+    this.showMenuResult(result.ok ? "Dropped." : "You can't drop that.");
+  }
+
   private handleEquipAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "equip" }>): void {
     const item = this.itemById(action.itemId);
     if (!item || this.partyState.inventory(action.char)[action.inventorySlot] !== action.itemId) {
@@ -2464,8 +2879,86 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.showMenuResult(result.ok ? (result.equipped ? "Equipped." : "Unequipped.") : "You can't equip that.");
   }
 
+  private handleHospitalServiceAction(action: Extract<MenuAction, { kind: "hospitalService" }>): void {
+    const cost = action.cost;
+    if (!action.accept) {
+      this.recordServiceResult("hospital", "Maybe later.", cost);
+      this.showMenuResult("Maybe later.");
+      return;
+    }
+    if (this.partyState.wallet < cost) {
+      this.recordServiceResult("hospital", "You don't have enough $swag.", cost);
+      this.showMenuResult("You don't have enough $swag.");
+      return;
+    }
+    this.partyState.applyMoney("take", cost);
+    this.partyState.fullRecover({ cureStatuses: true });
+    this.recordServiceResult("hospital", "All fixed up.", cost);
+    this.showMenuResult("All fixed up.");
+  }
+
+  private handleHotelServiceAction(action: Extract<MenuAction, { kind: "hotelService" }>): void {
+    const cost = action.cost;
+    if (!action.accept) {
+      this.recordServiceResult("hotel", "Maybe next time.", cost);
+      this.showMenuResult("Maybe next time.");
+      return;
+    }
+    if (this.partyState.wallet < cost) {
+      this.recordServiceResult("hotel", "You don't have enough $swag.", cost);
+      this.showMenuResult("You don't have enough $swag.");
+      return;
+    }
+    this.partyState.applyMoney("take", cost);
+    this.partyState.fullRecover({ cureStatuses: false });
+    this.recordServiceResult("hotel", "You rested. Good morning.", cost);
+    this.showMenuResult("You rested. Good morning.");
+  }
+
+  private handlePhoneServiceAction(action: Extract<MenuAction, { kind: "phoneService" }>): void {
+    if (action.option === "dad") {
+      const saved = this.saveGame(false);
+      this.recordServiceResult("phone", saved ? "Dad saved your game." : "Dad couldn't save.");
+      this.showMenuResult(saved ? "Dad saved your game." : "Dad couldn't save.");
+      return;
+    }
+    if (action.option === "mom") {
+      this.recordServiceResult("phone", "Mom says you're doing great.");
+      this.showMenuResult("Mom says you're doing great.");
+      return;
+    }
+    this.recordServiceResult("phone", "Hung up.");
+    this.closeMenu();
+  }
+
+  private handleStorageDepositAction(action: Extract<MenuAction, { kind: "storageDeposit" }>): void {
+    const result = this.partyState.depositStoredItem(action.char, action.inventorySlot, action.itemId);
+    if (!result.ok) {
+      this.recordServiceResult("phone", "Escargo couldn't take that.");
+      this.showMenuResult("Escargo couldn't take that.");
+      return;
+    }
+    this.recordServiceResult("phone", "Stored.");
+    this.refreshOpenMenuAfterAction();
+  }
+
+  private handleStorageWithdrawAction(action: Extract<MenuAction, { kind: "storageWithdraw" }>): void {
+    const result = this.partyState.withdrawStoredItem(action.char, action.storageSlot, action.itemId);
+    if (!result.ok) {
+      this.recordServiceResult("phone", "Escargo couldn't find that.");
+      this.showMenuResult("Escargo couldn't find that.");
+      return;
+    }
+    this.recordServiceResult("phone", "Delivered.");
+    this.refreshOpenMenuAfterAction();
+  }
+
   private itemById(itemId: number): ItemData | undefined {
     return this.data_.items?.items.find((item) => item.id === itemId);
+  }
+
+  private itemName(itemId: number, item?: ItemData): string {
+    return createDialogueResolver(this.data_).itemName(itemId) ?? item?.name.trim() ?? `[item ${itemId}]`;
   }
 
   private partyMemberById(charId: number): PartyMember | undefined {
@@ -2475,6 +2968,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private showMenuResult(message: string): void {
     this.menuState = closedMenu();
     this.activeShopStoreId = undefined;
+    this.activeService = undefined;
     this.refreshMenuScreens();
     this.dialogue.start([{
       text: message,
@@ -2489,6 +2983,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private closeMenu(): void {
     this.menuState = closedMenu();
     this.activeShopStoreId = undefined;
+    this.activeService = undefined;
     this.refreshMenuScreens();
     if (!this.dialogue.open && !this.eventSequence?.running) {
       unlockPlayer(this.playerState);
@@ -2502,6 +2997,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.menuState = refreshMenuStackScreens(this.menuState, (id) => this.menuScreens.get(id));
     if (!this.menuState.open) {
       this.activeShopStoreId = undefined;
+      this.activeService = undefined;
     }
     if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running) {
       unlockPlayer(this.playerState);
@@ -2514,9 +3010,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.menuState.open) {
       return;
     }
+    this.playMenuSfx("menuCancel");
     this.menuState = cancelMenu(this.menuState);
     if (!this.menuState.open) {
       this.activeShopStoreId = undefined;
+      this.activeService = undefined;
     }
     if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running) {
       unlockPlayer(this.playerState);
@@ -2548,11 +3046,105 @@ export class ChunkedWorldScene extends Phaser.Scene {
         storeId: this.activeShopStoreId
       })));
     }
+    if (this.activeService?.kind === "atm") {
+      screens.push(buildAtmScreen({
+        characters: this.data_.characters,
+        partyState: this.partyState
+      }));
+    } else if (this.activeService?.kind === "hospital") {
+      screens.push(buildHospitalServiceScreen({
+        wallet: this.partyState.wallet,
+        cost: this.activeService.cost ?? this.hospitalServiceCost()
+      }));
+    } else if (this.activeService?.kind === "hotel") {
+      screens.push(buildHotelServiceScreen({
+        wallet: this.partyState.wallet,
+        cost: this.activeService.cost ?? DEFAULT_HOTEL_REST_COST
+      }));
+    } else if (this.activeService?.kind === "phone") {
+      screens.push(...buildPhoneServiceScreens({
+        characters: this.data_.characters,
+        items: this.data_.items,
+        partyState: this.partyState,
+        resolver
+      }));
+    } else if (this.activeService?.kind === "shop-equip") {
+      screens.push(buildShopEquipPromptScreen(this.activeService));
+    }
     this.menuScreens = new Map(screens.map((screen) => [screen.id, screen]));
+  }
+
+  overworldStatusHud(): OverworldStatusHudView {
+    const members = this.overworldHudPartyMembers().slice(0, 4).map((member) => {
+      const vitals = this.partyState.vitals(member.id);
+      const maxHp = statusHudStat(vitals?.maxHp ?? member.maxHp, 1);
+      const hp = statusHudStat(vitals?.hp.displayed ?? member.hp);
+      const hpTarget = Math.min(maxHp, statusHudStat(vitals?.hp.target ?? member.hp));
+      const maxPp = statusHudStat(vitals?.maxPp ?? member.maxPp);
+      const pp = Math.min(maxPp, statusHudStat(vitals?.pp ?? member.pp));
+      const statuses = this.partyState.statuses(member.id);
+      return {
+        charId: member.id,
+        name: member.name.trim() || "PLAYER",
+        hp: Math.min(maxHp, hp),
+        hpTarget,
+        maxHp,
+        pp,
+        maxPp,
+        statuses,
+        hpRolling: Boolean(vitals?.hp.isRolling),
+        danger: isDangerHp(hpTarget, maxHp)
+      };
+    });
+    return {
+      visible: members.length > 0,
+      dangerActive: members.some((member) => member.danger),
+      poisonTicks: this.poisonStepTicks,
+      poisonHpLost: this.poisonHpLost,
+      members
+    };
+  }
+
+  private updateDangerHeartbeat(deltaMs: number): void {
+    if (!this.overworldStatusHud().dangerActive) {
+      this.dangerHeartbeatElapsedMs = LOW_HP_DANGER_BEEP_INTERVAL_MS;
+      return;
+    }
+    this.dangerHeartbeatElapsedMs += Math.max(0, deltaMs);
+    if (this.dangerHeartbeatElapsedMs < LOW_HP_DANGER_BEEP_INTERVAL_MS) {
+      return;
+    }
+    this.dangerHeartbeatElapsedMs = 0;
+    this.transitionSfx.dangerHeartbeat();
+  }
+
+  private applyFieldPoisonForStep(playerSteppedTile: boolean): void {
+    if (!playerSteppedTile) {
+      return;
+    }
+    const ticks = this.partyState.applyFieldPoisonStep();
+    if (ticks.length === 0) {
+      return;
+    }
+    this.poisonStepTicks += ticks.length;
+    this.poisonHpLost += ticks.reduce((sum, tick) => sum + tick.hpLoss, 0);
+    this.transitionSfx.poisonTick();
+    this.refreshMenuScreens();
+  }
+
+  private overworldHudPartyMembers(): PartyMember[] {
+    const characters = this.data_.characters?.characters;
+    if (!characters?.length) {
+      return [];
+    }
+    const members = this.partyState.applyToPartyMembers(characters.map(buildPartyMember));
+    const activeIds = new Set(this.partyState.party());
+    return activeIds.size > 0 ? members.filter((member) => activeIds.has(member.id)) : members;
   }
 
   private openShopMenu(storeId: number): void {
     this.activeShopStoreId = Math.max(0, Math.floor(storeId));
+    this.activeService = undefined;
     this.refreshMenuScreens();
     const root = this.menuScreens.get(shopRootScreenId(this.activeShopStoreId));
     if (!root) {
@@ -2565,12 +3157,118 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
+  private openShopRootMenu(storeId: number): void {
+    this.activeShopStoreId = Math.max(0, Math.floor(storeId));
+    this.refreshMenuScreens();
+    const root = this.menuScreens.get(shopRootScreenId(this.activeShopStoreId));
+    if (!root) {
+      this.showMenuResult("Shop closed.");
+      return;
+    }
+    this.menuState = openMenu(root);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private openShopEquipPrompt(input: Extract<ActiveServiceState, { kind: "shop-equip" }>): void {
+    this.activeShopStoreId = input.storeId;
+    this.activeService = input;
+    this.refreshMenuScreens();
+    const screen = this.menuScreens.get(buildShopEquipPromptScreen(input).id);
+    if (!screen) {
+      this.refreshOpenMenuAfterAction();
+      return;
+    }
+    this.menuState = openMenu(screen);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private openAtmMenu(): void {
+    this.activeShopStoreId = undefined;
+    this.activeService = { kind: "atm" };
+    this.refreshMenuScreens();
+    const root = this.menuScreens.get(ATM_MENU_ID);
+    if (!root) {
+      this.activeService = undefined;
+      return;
+    }
+    this.menuState = openMenu(root);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private openServiceMenu(service: ServiceKind, cost?: number): void {
+    const resolvedCost = service === "hospital"
+      ? cost ?? this.hospitalServiceCost()
+      : service === "hotel"
+        ? cost ?? DEFAULT_HOTEL_REST_COST
+        : cost;
+    this.activeShopStoreId = undefined;
+    this.activeService = resolvedCost === undefined ? { kind: service } : { kind: service, cost: resolvedCost };
+    this.refreshMenuScreens();
+    const rootId = service === "hospital"
+      ? HOSPITAL_SERVICE_MENU_ID
+      : service === "hotel"
+        ? HOTEL_SERVICE_MENU_ID
+        : PHONE_SERVICE_MENU_ID;
+    const root = this.menuScreens.get(rootId);
+    if (!root) {
+      this.activeService = undefined;
+      return;
+    }
+    this.menuState = openMenu(root);
+    lockPlayer(this.playerState, this.playerFrames);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private hospitalServiceCost(): number {
+    return this.partyState.hospitalRecoveryCost(this.overworldHudPartyMembers());
+  }
+
   menuRenderStack(): MenuRenderScreen[] {
     return menuRenderStack(this.menuState);
   }
 
   menuDebugState(): MenuDebugState {
     return menuDebugState(this.menuState);
+  }
+
+  private playMenuSfx(cue: MenuSfxCue): void {
+    this.menuSfx.resume();
+    this.menuSfx[cue]();
+    this.menuSfxCount += 1;
+    this.menuSfxCalls = [...this.menuSfxCalls, cue].slice(-24);
+  }
+
+  private menuSfxDebug(): { last: MenuSfxCue | null; count: number; calls: MenuSfxCue[] } {
+    return {
+      last: this.menuSfxCalls[this.menuSfxCalls.length - 1] ?? null,
+      count: this.menuSfxCount,
+      calls: [...this.menuSfxCalls]
+    };
+  }
+
+  private serviceDebug(): ServiceDebugState {
+    return {
+      ...(this.activeService ? { active: { ...this.activeService } } : {}),
+      ...(this.lastServiceResult ? { lastResult: { ...this.lastServiceResult } } : {})
+    };
+  }
+
+  private recordServiceResult(kind: ActiveServiceState["kind"], message: string, cost?: number): void {
+    this.lastServiceResult = {
+      kind,
+      message,
+      ...(cost !== undefined ? { cost } : {}),
+      wallet: this.partyState.wallet,
+      bank: this.partyState.bank,
+      storageItems: this.partyState.storage().length
+    };
   }
 
   private handleSaveKey(): void {
@@ -2580,7 +3278,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.saveGame(false);
   }
 
-  private saveGame(showResult: boolean): void {
+  private saveGame(showResult: boolean): boolean {
     const savedAt = new Date().toISOString();
     const save = captureSaveState({
       flags: this.gameFlags,
@@ -2598,10 +3296,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     if (showResult) {
       this.showMenuResult(saved ? "Saved." : "Save unavailable.");
-      return;
+      return saved;
     }
     this.updatePrompt();
     this.publish();
+    return saved;
   }
 
   private applyInitialSave(): SavePlayerSnapshot | undefined {
@@ -2704,7 +3403,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private openDialogue(): void {
     const target = this.interactionTarget();
-    const npc = [...this.npcRuntimes.values()].find((runtime) => runtime.data.npcId === target?.id);
+    if (!target) {
+      return;
+    }
+    if (target.targetKind !== "npc") {
+      this.openOverworldInteractable(target);
+      return;
+    }
+    const npc = [...this.npcRuntimes.values()].find((runtime) => runtime.data.npcId === target.npcId);
     if (!npc) {
       return;
     }
@@ -2713,8 +3419,31 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.pauseNpcForDialogue(npc);
+    this.playInteractionSfx("talkConfirm");
     lockPlayer(this.playerState, this.playerFrames);
     this.runEvents(events);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private openOverworldInteractable(target: WorldInteractionCandidate): void {
+    const entry = this.overworldInteractableById(target.interactableId);
+    if (!entry) {
+      return;
+    }
+    const action = overworldInteractableEvents(entry, this.gameFlags, {
+      itemName: (itemId) => this.itemName(itemId, this.itemById(itemId))
+    });
+    if (action.events.length === 0) {
+      return;
+    }
+    this.restoreActiveNpc();
+    for (const cue of action.sfxBeforeEvents) {
+      this.playInteractionSfx(cue);
+    }
+    lockPlayer(this.playerState, this.playerFrames);
+    this.runEvents(action.events);
+    this.syncPresentInteractableSprites();
     this.updatePrompt();
     this.publish();
   }
@@ -2736,16 +3465,54 @@ export class ChunkedWorldScene extends Phaser.Scene {
     );
   }
 
+  private overworldInteractableById(id: string | undefined): OverworldInteractable | undefined {
+    if (!id) {
+      return undefined;
+    }
+    return this.data_.overworldInteractables.interactables.find((entry) => entry.id === id);
+  }
+
+  private overworldInteractableOpened(entry: OverworldInteractable): boolean {
+    return overworldInteractableIsOpened(entry, this.gameFlags);
+  }
+
+  private playInteractionSfx(cue: InteractionSfxCue): void {
+    this.transitionSfx.resume();
+    this.interactionSfxCalls = [...this.interactionSfxCalls, cue].slice(-24);
+    this.interactionSfxCount += 1;
+    switch (cue) {
+      case "talkConfirm":
+        this.transitionSfx.talkConfirm();
+        break;
+      case "presentOpen":
+        this.transitionSfx.presentOpen();
+        break;
+      case "itemGet":
+        this.transitionSfx.itemGet();
+        break;
+      case "readCue":
+        this.transitionSfx.readCue();
+        break;
+    }
+  }
+
   private runEvents(events: GameEvent[]): void {
     dispatchInteractionEvents(events, {
       startDialogue: (event) => this.startInteractionDialogue(event),
-      setFlag: (flag) => this.gameFlags.set(flag),
+      setFlag: (flag) => {
+        this.gameFlags.set(flag);
+        this.syncPresentInteractableSprites();
+      },
       openShop: (storeId) => this.openShopMenu(storeId),
       deferShop: (storeId) => {
         this.pendingInteractionShopStoreId = storeId;
       },
-      heal: (scope) => this.healParty(scope),
-      save: () => this.saveGame(false),
+      openService: (service, cost) => this.openServiceMenu(service, cost),
+      deferService: (service, cost) => {
+        this.pendingInteractionService = { service, ...(cost !== undefined ? { cost } : {}) };
+      },
+      heal: (scope) => this.requestHospitalService(scope),
+      save: () => this.requestPhoneService(),
       give: (char, item) => this.giveItem(char, item),
       money: (op, amount) => this.partyState.applyMoney(op, amount),
       isDialogueActive: () => this.dialogue.open || Boolean(this.eventSequence?.running)
@@ -2754,19 +3521,29 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private giveItem(char: number, item: number): void {
     this.partyState.give(char, item);
+    this.playInteractionSfx("itemGet");
     this.refreshMenuScreens();
     this.updatePrompt();
     this.publish();
   }
 
-  private healParty(scope: HealEvent["scope"]): void {
+  private requestHospitalService(scope: HealEvent["scope"]): void {
     if (scope !== "full") {
       return;
     }
-    this.partyState.restore();
-    this.refreshMenuScreens();
-    this.updatePrompt();
-    this.publish();
+    if (this.dialogue.open || this.eventSequence?.running) {
+      this.pendingInteractionService = { service: "hospital" };
+      return;
+    }
+    this.openServiceMenu("hospital");
+  }
+
+  private requestPhoneService(): void {
+    if (this.dialogue.open || this.eventSequence?.running) {
+      this.pendingInteractionService = { service: "phone" };
+      return;
+    }
+    this.openServiceMenu("phone");
   }
 
   private startInteractionDialogue(event: DialogueEvent): void {
@@ -2803,6 +3580,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       applyWarpDestination: (destination) => this.applyEventWarpDestination(destination),
       startBattle: (group) => this.startEventBattleForCurrentMode(group),
       openShop: (storeId) => this.openShopForCurrentMode(storeId),
+      openAtm: () => this.openAtmMenu(),
       actorMove: (effect) => this.requestCutsceneActorMove(effect),
       music: this.music,
       isEffectSupported: (effect) => this.isEventEffectSupportedForCurrentMode(effect),
@@ -3516,6 +4294,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
+    if (trigger.music) {
+      this.forcedOverworldMusicCue = trigger.music as OverworldMusicCue;
+      this.syncOverworldMusicCue(true);
+    }
+
     this.afterDialogueClosed();
     this.updatePrompt();
     this.publish();
@@ -4077,7 +4860,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.lastEncounterGroup = group;
     this.scene.stop("ui");
-    this.scene.start("battle", {
+    // Play the colored EB encounter swirl over the overworld, THEN switch to battle (see tickEncounterSwirl).
+    this.beginEncounterSwirl({
       battleData: this.data_.battle,
       groupId: group,
       characters: this.data_.characters,
@@ -4091,8 +4875,48 @@ export class ChunkedWorldScene extends Phaser.Scene {
       backgroundOverrides: this.data_.backgroundOverrides,
       battleRules: this.data_.battleRules,
       encounterAdvantage,
+      boss: pendingStoryGate !== undefined,
       returnTo: this.battleReturnContext(group, source, pendingStoryGate)
     });
+    return true;
+  }
+
+  private beginEncounterSwirl(params: Record<string, unknown>): void {
+    this.pendingBattleStart = { sceneKey: "battle", params };
+    this.encounterSwirlMs = 0;
+    // Stop the overworld track (it fades out over the ~0.6s swirl, so it's silent
+    // before the battle music hits) and fire the EB battle-swirl sting.
+    this.music.stop();
+    this.currentOverworldMusicCue = undefined;
+    this.transitionSfx.encounter();
+    lockPlayer(this.playerState, this.playerFrames);
+    if (!this.encounterSwirlGfx) {
+      this.encounterSwirlGfx = this.add.graphics().setScrollFactor(0).setDepth(ENCOUNTER_SWIRL_DEPTH);
+    }
+    this.encounterSwirlGfx.setVisible(true);
+  }
+
+  /** Advance + render the overworld encounter swirl; switch to the battle scene when fully covered. */
+  private tickEncounterSwirl(delta: number): boolean {
+    if (!this.pendingBattleStart) {
+      return false;
+    }
+    this.encounterSwirlMs += delta;
+    const p = Math.min(1, this.encounterSwirlMs / ENCOUNTER_SWIRL_MS);
+    const g = this.encounterSwirlGfx;
+    if (g) {
+      g.clear();
+      // progress 1 -> clear (overworld visible), 0 -> covered/black; ramp 1->0 to cover the screen.
+      drawSwirl(g, 1 - p, this.scale.width, this.scale.height, { clockMs: this.time.now });
+    }
+    this.syncPlayerObject();
+    if (p >= 1) {
+      const { sceneKey, params } = this.pendingBattleStart;
+      this.pendingBattleStart = undefined;
+      g?.clear();
+      g?.setVisible(false);
+      this.scene.start(sceneKey, params);
+    }
     return true;
   }
 
@@ -4335,6 +5159,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const storeId = this.pendingInteractionShopStoreId;
       this.pendingInteractionShopStoreId = undefined;
       this.openShopMenu(storeId);
+      return;
+    }
+    if (this.pendingInteractionService) {
+      const pending = this.pendingInteractionService;
+      this.pendingInteractionService = undefined;
+      this.openServiceMenu(pending.service, pending.cost);
       return;
     }
     this.updatePrompt();
@@ -4582,10 +5412,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return {
       ...base,
       deepWater: this.isPlayerInWater(), // real terrain signal (3a)
+      ko: this.leadPartyMemberDowned(), // real KO signal: lead at 0 HP -> dead/ghost overworld sprite
       // ladder/rope/bike real triggers await tile-class data + a mount mechanic; forced-path for now.
       ...forced,
       status: { ...base.status, ...(forced.status ?? {}) }
     };
+  }
+
+  /** The lead (front) party member is downed (0 HP) — shows the dead overworld sprite. */
+  private leadPartyMemberDowned(): boolean {
+    const leadId = this.partyState.party()[0];
+    if (leadId === undefined) {
+      return false;
+    }
+    const vitals = this.partyState.vitals(leadId);
+    return vitals ? vitals.hp.target <= 0 : false;
   }
 
   private isPlayerInWater(): boolean {
@@ -4938,11 +5779,54 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return count;
   }
 
+  private debugInteractables(): OverworldInteractableDebug[] {
+    return this.data_.overworldInteractables.interactables.map((entry) => ({
+      id: entry.id,
+      kind: entry.kind,
+      x: entry.worldPixel.x,
+      y: entry.worldPixel.y,
+      ...(entry.label ? { label: entry.label } : {}),
+      ...(entry.kind === "present" ? { opened: this.overworldInteractableOpened(entry) } : {})
+    }));
+  }
+
+  private nearestInteractionTargetDebug(): OverworldInteractionTargetDebug | undefined {
+    const nearest = nearestInteractable(this.playerState, this.interactionCandidates(), INTERACTION_DISTANCE);
+    if (!nearest) {
+      return undefined;
+    }
+    return this.interactionTargetDebug(nearest.candidate as WorldInteractionCandidate, nearest.distance);
+  }
+
+  private interactionTargetDebug(
+    candidate: WorldInteractionCandidate,
+    distance = Phaser.Math.Distance.Between(this.playerState.x, this.playerState.y, candidate.x, candidate.y)
+  ): OverworldInteractionTargetDebug {
+    return {
+      kind: candidate.targetKind,
+      key: candidate.key,
+      id: candidate.targetKind === "npc" ? candidate.npcId ?? candidate.id : candidate.interactableId ?? candidate.id,
+      x: candidate.x,
+      y: candidate.y,
+      distance: Math.round(distance * 10) / 10,
+      ...(candidate.label ? { label: candidate.label } : {})
+    };
+  }
+
+  private interactionSfxDebug(): { last: InteractionSfxCue | null; count: number; calls: InteractionSfxCue[] } {
+    return {
+      last: this.interactionSfxCalls.at(-1) ?? null,
+      count: this.interactionSfxCount,
+      calls: [...this.interactionSfxCalls]
+    };
+  }
+
   private publish(): void {
     const world = this.world_;
     const npc744 = this.tutorialNpc();
     const distance = this.distanceToTutorialNpc();
     const target = this.interactionTarget();
+    const targetDebug = target ? this.interactionTargetDebug(target) : undefined;
     const npcs: DebugNpc[] = [...this.npcRuntimes.values()].map((npc) => ({
       id: npc.data.npcId,
       x: npc.state.player.x,
@@ -4998,7 +5882,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       cutsceneMove: this.cutsceneMoveDebug,
       returnContextActive: this.returnContextActive,
       canInteract: Boolean(target),
-      interactionTargetId: target?.id,
+      interactionTargetId: targetDebug?.id,
+      interactionTargetKind: targetDebug?.kind,
+      interactionTargetKey: targetDebug?.key,
+      nearestInteractable: this.nearestInteractionTargetDebug(),
+      interactables: this.debugInteractables(),
+      interactionSfx: this.interactionSfxDebug(),
       activeNpcId: (this.dialogue.open || this.eventSequence?.running) ? this.activeNpcDialogue?.id : undefined,
       distanceToNpc: distance,
       inInteractionRange: this.inRange(),
@@ -5023,9 +5912,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       eventExecutor: this.eventSequence?.debug(),
       newGameStartup: this.newGameStartupRecord,
       partyState: this.partyState.counts(),
+      overworldHud: this.overworldStatusHud(),
       shopOpen: this.menuState.open && this.activeShopStoreId !== undefined,
       ...(this.activeShopStoreId !== undefined ? { activeShopStoreId: this.activeShopStoreId } : {}),
       menu: this.menuDebugState(),
+      menuRenderStack: this.menuRenderStack(),
+      menuSfx: this.menuSfxDebug(),
+      service: this.serviceDebug(),
       world: {
         available: world.available,
         widthPixels: world.mapWidthTiles * world.tileSize,
@@ -5142,6 +6035,20 @@ function roundedPoint(point: { x: number; y: number }): { x: number; y: number }
     x: Math.round(point.x),
     y: Math.round(point.y)
   };
+}
+
+function statusHudStat(value: number, fallback = 0): number {
+  const numeric = Number.isFinite(value) ? value : fallback;
+  return Math.max(0, Math.floor(numeric));
+}
+
+function isDangerHp(hp: number, maxHp: number): boolean {
+  const current = statusHudStat(hp);
+  const max = statusHudStat(maxHp, 1);
+  if (current <= 0 || max <= 0) {
+    return false;
+  }
+  return current <= Math.max(1, Math.floor(max * LOW_HP_DANGER_FRACTION));
 }
 
 function emptyPartyStateSnapshot(): PartyStateSnapshot {

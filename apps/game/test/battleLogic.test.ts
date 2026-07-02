@@ -28,6 +28,7 @@ import {
   resolveTurn,
   resolveInstantWinRewards,
   selectEnemyAction,
+  settlePendingPartyMortalWounds,
   shouldResetAutoFightRound,
   tickBattleMeters,
   turnOrder,
@@ -795,6 +796,27 @@ describe("battle outcomes", () => {
     expect(battle.party[0].hp.displayed).toBeGreaterThan(0);
     expect(battle.enemies[0].hp.displayed).toBe(0);
     expect(outcome(battle)).toBe("win");
+  });
+
+  it("settles pending party mortal wounds to displayed HP when battle ends safely", () => {
+    let battle = createBattleState([opponentC], {
+      characters: characters([partyCharacterA, partyCharacterB]),
+      hpRatePerSec: 2
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      hp: setTarget({ ...battle.party[0].hp, displayed: 12, target: 12, isRolling: false }, 0)
+    });
+
+    const settled = settlePendingPartyMortalWounds(battle);
+
+    expect(settled.rescuedCount).toBe(1);
+    expect(settled.state.party[0].hp).toMatchObject({
+      displayed: 12,
+      target: 12,
+      isRolling: false
+    });
+    expect(settled.state.party[1].hp.target).toBe(battle.party[1].hp.target);
   });
 
   it("skips displayed-dead combatants in turn order and turn resolution", () => {

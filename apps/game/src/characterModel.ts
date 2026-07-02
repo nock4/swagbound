@@ -1,6 +1,7 @@
 import type { CharacterData, CharacterExpThreshold, CharacterGrowth } from "@eb/schemas";
 import type { Combatant } from "./battleLogic";
 import { createRollingMeter } from "./rollingMeter";
+import type { StatusState } from "./statusEffects";
 
 export type PartyMemberStats = {
   offense: number;
@@ -36,6 +37,7 @@ export type PartyMember = {
   stats: PartyMemberStats;
   inventory: number[];
   money: number;
+  statuses?: StatusState;
   growth?: PartyMemberGrowth;
   expTable?: PartyMemberExpThreshold[];
 };
@@ -80,6 +82,9 @@ export function buildCombatantFromPartyMember(
   options: CharacterCombatantOptions = {}
 ): Combatant {
   const maxHp = Math.max(1, stat(member.maxHp));
+  // Start the battle at the member's CURRENT (persisted) HP, not full — otherwise
+  // damage and death are wiped every encounter. 0 = still KO'd (revive to fight).
+  const currentHp = Math.min(maxHp, Math.max(0, stat(member.hp ?? maxHp)));
   const effectiveStats = effectivePartyMemberStats(member, options.statBonuses);
   return {
     combatantId: "party:0",
@@ -90,7 +95,7 @@ export function buildCombatantFromPartyMember(
     maxPp: stat(member.maxPp),
     pp: stat(member.pp),
     inventory: member.inventory.map(stat),
-    hp: createRollingMeter(maxHp, options.hpRatePerSec ?? DEFAULT_HP_RATE_PER_SEC),
+    hp: createRollingMeter(currentHp, options.hpRatePerSec ?? DEFAULT_HP_RATE_PER_SEC),
     offense: effectiveStats.offense,
     defense: effectiveStats.defense,
     speed: effectiveStats.speed,
@@ -98,6 +103,7 @@ export function buildCombatantFromPartyMember(
     stats: effectiveStats,
     ...(member.growth ? { growth: { ...member.growth } } : {}),
     ...(member.expTable ? { expTable: member.expTable.map((entry) => ({ ...entry })) } : {}),
+    ...(member.statuses?.length ? { statuses: member.statuses.map((entry) => ({ ...entry })) } : {}),
     money: stat(member.money),
     itemDropped: null,
     itemRarity: null,

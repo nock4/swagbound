@@ -601,7 +601,14 @@ export class WorldScene extends Phaser.Scene {
       this.handleItemUseAction(action);
       return;
     }
-    this.handleEquipAction(action);
+    if (action.kind === "equip") {
+      this.handleEquipAction(action);
+      return;
+    }
+    // Extended goods/shop/service actions (give/drop/equip-on-buy/hospital/hotel/
+    // phone/storage) are wired only in the full-world ChunkedWorldScene; the legacy
+    // image-based WorldScene ignores them gracefully.
+    this.showMenuResult("Nothing happened.");
   }
 
   private handleAtmAction(action: Extract<MenuAction, { kind: "atm" }>): void {

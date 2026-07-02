@@ -30,11 +30,13 @@ import {
   createBattleState,
   firstLivingIndex,
   isCombatantAlive,
+  isPendingPartyMortalWound,
   learnedPsiForCombatant,
   outcome,
   psiBattleKind,
   psiPpCost,
   resolveInstantWinRewards,
+  settlePendingPartyMortalWounds,
   tickBattleMeters,
   type BattleActor,
   type BattleCommand,
@@ -60,6 +62,7 @@ import { composeBattleStepLines } from "./battleMessages";
 import {
   battleEventsHaveEnemyDefeated,
   battleEventsHaveMiss,
+  battleEventsHaveSmash,
   firstBattleAction,
   firstBattleDamage,
   type BattleEvent
@@ -123,6 +126,7 @@ import {
 import type { PartyMember } from "./characterModel";
 import type { PartyBattleMemberSnapshot, PartyStateSnapshot } from "./partyState";
 import { decodeItemUseEffect } from "./partyState";
+import type { StatusState } from "./statusEffects";
 import {
   createAnimatedBattleBackground,
   staticBattleBackgroundDebug,
@@ -136,7 +140,7 @@ import {
   enemyTargetCursorAnchorY,
   menuCursorVisible
 } from "./battleVisuals";
-import { swirlMask, type SwirlMask } from "./transitions";
+import { drawSwirl } from "./transitions";
 import {
   resolveSpriteOverrideImageFrame,
   spriteOverrideAssetUrl,
@@ -161,6 +165,7 @@ import {
   type BattleSfxCue
 } from "./audio/battleSfx";
 import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
+import { getSharedMusic } from "./sharedMusic";
 import { battleStepSfx } from "./battleSfxPlan";
 import { battleMusicCueForOutcome, type BattleMusicCue } from "./battleMusic";
 
@@ -223,7 +228,7 @@ const BATTLE_EXECUTION_MESSAGE_MIN_WIDTH = 260;
 const BATTLE_EXECUTION_MESSAGE_MAX_WIDTH = 480;
 const BATTLE_EXECUTION_MESSAGE_PADDING_X = 14;
 const BATTLE_EXECUTION_MESSAGE_PADDING_Y = 10;
-const BATTLE_EXECUTION_MESSAGE_MAX_LINES = 2;
+const BATTLE_EXECUTION_MESSAGE_MAX_LINES = 3;
 const BATTLE_EXECUTION_MESSAGE_FONT_SIZE = 14;
 const BATTLE_STATUS_CARD_SIDE_MARGIN = 10;
 const BATTLE_STATUS_CARD_BOTTOM_MARGIN = 8;
@@ -242,32 +247,39 @@ const BATTLE_STATUS_BAR_HEIGHT = 5;
 const BATTLE_STATUS_BAR_X = 28;
 const BATTLE_STATUS_BAR_VALUE_GAP = 4;
 const BATTLE_PP_RATE_PER_SEC = 36;
-const ACTION_ADVANCE_DELAY_MS = 1200;
+const ACTION_ADVANCE_DELAY_MS = 1650;
+const ACTION_ADVANCE_MIN_DELAY_MS = 1150;
+const ACTION_ADVANCE_MAX_DELAY_MS = 2400;
+const ACTION_ADVANCE_MISS_DELTA_MS = -260;
+const ACTION_ADVANCE_SMASH_DELTA_MS = 520;
+const ACTION_ADVANCE_DEFEAT_DELTA_MS = 160;
+const ACTION_ADVANCE_EXTRA_LINE_MS = 130;
 const AUTO_COMMAND_INPUT_DELAY_MS = 220;
 const ENTER_TRANSITION_MS = 650;
 const EXIT_TRANSITION_MS = 450;
+const VICTORY_TALLY_DURATION_MS = 820;
+const VICTORY_TALLY_TICK_MS = 75;
 const ENEMY_SPRITE_MAX_HEIGHT = 160;
 const ENEMY_SPRITE_REDRAW_RETRY_MS = 50;
 const MAX_ENEMY_SPRITE_REDRAW_ATTEMPTS = 5;
 const BATTLE_FX_SPARK_DEPTH = 13;
 const BATTLE_FX_FLASH_DEPTH = 12;
-const BATTLE_FX_SCREEN_SHAKE_MS = 260;
-const BATTLE_FX_HIT_SPARK_MS = 280;
-const BATTLE_FX_ATTACK_FLASH_MS = 120;
-const BATTLE_FX_PSI_FLASH_MS = 230;
-const BATTLE_FX_VICTORY_FLASH_MS = 360;
-const BATTLE_FX_ENEMY_LUNGE_MS = 260;
-const BATTLE_FX_MIN_SHAKE_PX = 1.6;
-const BATTLE_FX_MAX_SHAKE_PX = 4.8;
-const BATTLE_FX_ATTACK_FLASH_ALPHA = 0.13;
-const BATTLE_FX_PSI_FLASH_ALPHA = 0.26;
-const BATTLE_FX_VICTORY_FLASH_ALPHA = 0.22;
+const BATTLE_FX_SCREEN_SHAKE_MS = 420;
+const BATTLE_FX_HIT_SPARK_MS = 380;
+const BATTLE_FX_ATTACK_FLASH_MS = 190;
+const BATTLE_FX_PSI_FLASH_MS = 340;
+const BATTLE_FX_VICTORY_FLASH_MS = 520;
+const BATTLE_FX_ENEMY_LUNGE_MS = 340;
+const BATTLE_FX_MIN_SHAKE_PX = 2.4;
+const BATTLE_FX_MAX_SHAKE_PX = 8.5;
+const BATTLE_FX_ATTACK_FLASH_ALPHA = 0.22;
+const BATTLE_FX_PSI_FLASH_ALPHA = 0.4;
+const BATTLE_FX_VICTORY_FLASH_ALPHA = 0.34;
 const BATTLE_FX_ATTACK_FLASH_COLOR = 0xffffff;
 const BATTLE_FX_VICTORY_FLASH_COLOR = 0xfff0a6;
 const BATTLE_FX_LEVELUP_FLASH_MS = 440;
 const BATTLE_FX_LEVELUP_FLASH_ALPHA = 0.3;
 const BATTLE_FX_LEVELUP_FLASH_COLOR = 0xfff4c4;
-const BATTLE_FX_LEVELUP_DELAY_MS = 520;
 const BATTLE_FX_SPARK_COLOR = 0xfff2a8;
 
 type BattleSubmenu = "command" | "psi" | "goods" | "target";
@@ -356,6 +368,11 @@ type BattleStatusCardTextSet = {
   hpValue: Phaser.GameObjects.Text;
   ppValue: Phaser.GameObjects.Text;
 };
+type VictoryTallyState = {
+  exp: RollingMeterState;
+  money: RollingMeterState;
+  nextTickSfxAtMs: number;
+};
 type BattleUiView = {
   actorName?: string;
   commandLines: string[];
@@ -387,6 +404,9 @@ export class BattleScene extends Phaser.Scene {
   private transitionMs_ = ENTER_TRANSITION_MS;
   private victorySummary_: BattleVictorySummary | null = null;
   private victorySummaryPageIndex_ = 0;
+  private victoryTally_: VictoryTallyState | null = null;
+  private victoryPageFlourishSignature_ = "";
+  private mortalWoundRescueCount_ = 0;
   private commandIndex_ = 0;
   private submenu_: BattleSubmenu = "command";
   private submenuIndex_ = 0;
@@ -409,6 +429,7 @@ export class BattleScene extends Phaser.Scene {
   private pendingFlee_ = false;
   private lastEnemyAction_: LastEnemyActionDebug | null = null;
   private actionDelayMs_ = 0;
+  private lastActionDwellMs_ = 0;
   private statusGraphics?: Phaser.GameObjects.Graphics;
   private statusFieldGraphics?: Phaser.GameObjects.Graphics;
   private statusAccentGraphics?: Phaser.GameObjects.Graphics;
@@ -441,6 +462,7 @@ export class BattleScene extends Phaser.Scene {
   private battleSfx_: BattleSfx = createBattleSfx();
   private music_: Music = createMusic();
   private currentBattleMusicCue?: BattleMusicCue;
+  private isBossBattle_ = false;
   private lastSfx_: BattleSfxCue | null = null;
   private sfxCount_ = 0;
   private firedSfx_ = new Set<BattleSfxCue>();
@@ -470,8 +492,10 @@ export class BattleScene extends Phaser.Scene {
     music?: Music;
     musicManifest?: MusicManifest;
     encounterAdvantage?: EncounterAdvantage;
+    boss?: boolean;
   }): void {
     this.battleData_ = data.battleData;
+    this.isBossBattle_ = data.boss ?? false;
     this.battleRules_ = data.battleRules ?? data.returnTo?.gameData.battleRules;
     this.group_ = selectBattleGroup(data.battleData, data.groupId);
     this.encounterAdvantage_ = normalizeEncounterAdvantage(data.encounterAdvantage);
@@ -510,6 +534,9 @@ export class BattleScene extends Phaser.Scene {
     this.transitionMs_ = ENTER_TRANSITION_MS;
     this.victorySummary_ = null;
     this.victorySummaryPageIndex_ = 0;
+    this.victoryTally_ = null;
+    this.victoryPageFlourishSignature_ = "";
+    this.mortalWoundRescueCount_ = 0;
     this.commandIndex_ = 0;
     this.submenu_ = "command";
     this.submenuIndex_ = 0;
@@ -532,12 +559,13 @@ export class BattleScene extends Phaser.Scene {
     this.pendingFlee_ = false;
     this.lastEnemyAction_ = null;
     this.actionDelayMs_ = 0;
+    this.lastActionDwellMs_ = 0;
     this.statusLayoutSignature = "";
     this.ppMeters.clear();
     this.backgroundAnimation = undefined;
     this.backgroundDebug = staticBattleBackgroundDebug();
     this.battleSfx_ = data.battleSfx ?? createBattleSfx();
-    this.music_ = data.music ?? createMusic(data.musicManifest ?? data.returnTo?.gameData.musicManifest, {
+    this.music_ = data.music ?? getSharedMusic(this.registry, data.musicManifest ?? data.returnTo?.gameData.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
     this.currentBattleMusicCue = undefined;
@@ -577,7 +605,7 @@ export class BattleScene extends Phaser.Scene {
       this.music_.stop();
       this.backgroundAnimation?.destroy();
     });
-    this.playBattleMusicCue(battleMusicCueForOutcome(outcome(this.battle_)), true);
+    this.playBattleMusicCue(battleMusicCueForOutcome(outcome(this.battle_), this.isBossBattle_), true);
     this.drawEnemySprites();
     this.createStatusWindow();
     this.registerBattleSfxResume();
@@ -610,6 +638,7 @@ export class BattleScene extends Phaser.Scene {
   update(_: number, delta: number): void {
     this.updateBackground();
     this.tickStatusPpMeters(delta);
+    this.tickVictoryPresentation(delta);
 
     if (this.phase_ === "enter-transition") {
       this.transitionMs_ = Math.max(0, this.transitionMs_ - delta);
@@ -811,6 +840,7 @@ export class BattleScene extends Phaser.Scene {
     this.currentActor_ = null;
     this.resetMenuForActor();
     this.actionDelayMs_ = 0;
+    this.lastActionDwellMs_ = 0;
     this.autoCommandDelayMs_ = 0;
     this.nextHpTickSfxAtMs_ = 0;
     if (this.executionOrder_.length === 0) {
@@ -845,6 +875,7 @@ export class BattleScene extends Phaser.Scene {
     this.pendingFlee_ = false;
     this.roundOrder_ = order;
     this.actionDelayMs_ = 0;
+    this.lastActionDwellMs_ = 0;
     this.autoCommandDelayMs_ = this.autoMode_ ? AUTO_COMMAND_INPUT_DELAY_MS : 0;
     this.nextHpTickSfxAtMs_ = 0;
     this.syncMenuFromInputState();
@@ -874,6 +905,7 @@ export class BattleScene extends Phaser.Scene {
     this.currentActor_ = null;
     this.resetMenuForActor();
     this.actionDelayMs_ = 0;
+    this.lastActionDwellMs_ = 0;
     this.nextHpTickSfxAtMs_ = 0;
     if (this.executionOrder_.length === 0) {
       if (this.priorityStep_) {
@@ -919,6 +951,7 @@ export class BattleScene extends Phaser.Scene {
       this.autoCommandDelayMs_ = 0;
       this.executionMessageLines_ = [];
       this.actionDelayMs_ = 0;
+      this.lastActionDwellMs_ = 0;
       this.phase_ = "flee";
       this.transitionPhase_ = "none";
       this.currentActor_ = null;
@@ -935,7 +968,8 @@ export class BattleScene extends Phaser.Scene {
       this.executionMessageLines_ = composeBattleStepLines(result.events);
       this.playBattleStepSfx(result);
       this.triggerBattleStepFx(result);
-      this.actionDelayMs_ = this.executionMessageLines_.length > 0 ? ACTION_ADVANCE_DELAY_MS : 0;
+      this.actionDelayMs_ = this.actionDwellMsForStep(result, this.executionMessageLines_);
+      this.lastActionDwellMs_ = this.actionDelayMs_;
       if (result.fled) {
         this.pendingFlee_ = true;
       }
@@ -972,9 +1006,11 @@ export class BattleScene extends Phaser.Scene {
       this.triggerBattleStepFx(result);
       if (this.executionMessageLines_.length === 0) {
         this.actionDelayMs_ = 0;
+        this.lastActionDwellMs_ = 0;
         continue;
       }
-      this.actionDelayMs_ = ACTION_ADVANCE_DELAY_MS;
+      this.actionDelayMs_ = this.actionDwellMsForStep(result, this.executionMessageLines_);
+      this.lastActionDwellMs_ = this.actionDelayMs_;
 
       if (result.fled) {
         this.pendingFlee_ = true;
@@ -1008,6 +1044,32 @@ export class BattleScene extends Phaser.Scene {
         ? battleStepSfx(result.details)
         : battleStepSfx(result.events);
     this.playBattleSfxSequence(cues);
+  }
+
+  private actionDwellMsForStep(result: BattleRoundStepResult, lines: readonly string[]): number {
+    if (lines.length <= 0) {
+      return 0;
+    }
+    const events = result.events;
+    const damage = Math.max(0, Math.floor(firstBattleDamage(events)?.amount ?? 0));
+    let dwellMs = ACTION_ADVANCE_DELAY_MS;
+    if (battleEventsHaveMiss(events)) {
+      dwellMs += ACTION_ADVANCE_MISS_DELTA_MS;
+    }
+    if (battleEventsHaveSmash(events)) {
+      dwellMs += ACTION_ADVANCE_SMASH_DELTA_MS;
+    } else if (damage >= 100) {
+      dwellMs += 360;
+    } else if (damage >= 50) {
+      dwellMs += 260;
+    } else if (damage >= 20) {
+      dwellMs += 140;
+    }
+    if (battleEventsHaveEnemyDefeated(events)) {
+      dwellMs += ACTION_ADVANCE_DEFEAT_DELTA_MS;
+    }
+    dwellMs += Math.max(0, lines.length - 2) * ACTION_ADVANCE_EXTRA_LINE_MS;
+    return clampNumber(dwellMs, ACTION_ADVANCE_MIN_DELAY_MS, ACTION_ADVANCE_MAX_DELAY_MS);
   }
 
   private triggerBattleStepFx(result: BattleRoundStepResult): void {
@@ -1078,7 +1140,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private shakeIntensityForDamage(damage: number, targetDied: boolean): number {
-    const scaled = BATTLE_FX_MIN_SHAKE_PX + Math.sqrt(Math.max(0, damage)) * 0.26 + (targetDied ? 0.9 : 0);
+    const scaled = BATTLE_FX_MIN_SHAKE_PX + Math.sqrt(Math.max(0, damage)) * 0.42 + (targetDied ? 1.8 : 0);
     return clampNumber(scaled, BATTLE_FX_MIN_SHAKE_PX, BATTLE_FX_MAX_SHAKE_PX);
   }
 
@@ -1113,18 +1175,84 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
-  private playLevelUpFlourishIfAny(): void {
-    if ((this.victorySummary_?.levelUps.length ?? 0) <= 0) {
+  private settlePendingMortalWoundsForBattleEnd(): void {
+    const settled = settlePendingPartyMortalWounds(this.battle_);
+    if (settled.rescuedCount <= 0) {
       return;
     }
-    this.time.delayedCall(BATTLE_FX_LEVELUP_DELAY_MS, () => {
-      this.playBattleSfxCue("levelUp");
-      this.startFlashOverlay(
-        BATTLE_FX_LEVELUP_FLASH_COLOR,
-        BATTLE_FX_LEVELUP_FLASH_ALPHA,
-        BATTLE_FX_LEVELUP_FLASH_MS
-      );
-    });
+    this.battle_ = settled.state;
+    this.mortalWoundRescueCount_ += settled.rescuedCount;
+  }
+
+  private ensureVictoryPresentation(): void {
+    if (!this.victorySummary_ || this.victoryTally_) {
+      return;
+    }
+    this.victoryTally_ = createVictoryTally(this.victorySummary_, this.time.now);
+    this.victoryPageFlourishSignature_ = "";
+    this.playVictoryPageFlourishIfNeeded();
+  }
+
+  private tickVictoryPresentation(delta: number): void {
+    if (this.phase_ !== "victory-summary" || !this.victoryTally_ || delta <= 0) {
+      return;
+    }
+    const previousExp = this.victoryTally_.exp.displayed;
+    const previousMoney = this.victoryTally_.money.displayed;
+    const wasRolling = victoryTallyIsRolling(this.victoryTally_);
+    this.victoryTally_ = {
+      ...this.victoryTally_,
+      exp: tickRollingMeter(this.victoryTally_.exp, delta),
+      money: tickRollingMeter(this.victoryTally_.money, delta)
+    };
+    const changed =
+      previousExp !== this.victoryTally_.exp.displayed ||
+      previousMoney !== this.victoryTally_.money.displayed;
+    if (changed && this.time.now >= this.victoryTally_.nextTickSfxAtMs) {
+      this.playBattleSfxCue("menuMove");
+      this.victoryTally_ = {
+        ...this.victoryTally_,
+        nextTickSfxAtMs: this.time.now + VICTORY_TALLY_TICK_MS
+      };
+    }
+    if (wasRolling && !victoryTallyIsRolling(this.victoryTally_)) {
+      this.playVictoryPageFlourishIfNeeded();
+    }
+  }
+
+  private completeVictoryTallyIfRolling(): boolean {
+    if (!this.victoryTally_ || !victoryTallyIsRolling(this.victoryTally_)) {
+      return false;
+    }
+    this.victoryTally_ = {
+      exp: completedRollingMeter(this.victoryTally_.exp),
+      money: completedRollingMeter(this.victoryTally_.money),
+      nextTickSfxAtMs: this.time.now + VICTORY_TALLY_TICK_MS
+    };
+    this.playBattleSfxCue("menuMove");
+    this.playVictoryPageFlourishIfNeeded();
+    return true;
+  }
+
+  private playVictoryPageFlourishIfNeeded(): void {
+    if (this.phase_ !== "victory-summary" || !this.victorySummary_) {
+      return;
+    }
+    const page = this.currentVictorySummaryPageDetail();
+    if (!page?.highlighted) {
+      return;
+    }
+    const signature = `${this.victorySummaryPageIndex_}:${page.kind}:${page.levelUpIndex ?? -1}:${page.learnedSkillIndex ?? -1}`;
+    if (signature === this.victoryPageFlourishSignature_) {
+      return;
+    }
+    this.victoryPageFlourishSignature_ = signature;
+    this.playBattleSfxCue("levelUp");
+    this.startFlashOverlay(
+      BATTLE_FX_LEVELUP_FLASH_COLOR,
+      BATTLE_FX_LEVELUP_FLASH_ALPHA,
+      BATTLE_FX_LEVELUP_FLASH_MS
+    );
   }
 
   private startEnemyLunge(enemyIndex: number): void {
@@ -1479,6 +1607,7 @@ export class BattleScene extends Phaser.Scene {
     this.battle_ = result.state;
     this.victorySummary_ = result.summary;
     this.victorySummaryPageIndex_ = 0;
+    this.victoryTally_ = null;
     this.phase_ = "victory-summary";
     this.transitionPhase_ = "summary";
     this.transitionMs_ = 0;
@@ -1490,6 +1619,7 @@ export class BattleScene extends Phaser.Scene {
     this.pendingFlee_ = false;
     this.autoMode_ = false;
     this.autoCommandDelayMs_ = 0;
+    this.ensureVictoryPresentation();
   }
 
   private beginVictorySummary(): void {
@@ -1498,7 +1628,7 @@ export class BattleScene extends Phaser.Scene {
       this.victorySummaryPageIndex_ = 0;
       this.phase_ = "victory-summary";
       this.transitionPhase_ = "summary";
-      this.playLevelUpFlourishIfAny();
+      this.ensureVictoryPresentation();
       return;
     }
     this.playBattleSfxCue("victory");
@@ -1507,6 +1637,7 @@ export class BattleScene extends Phaser.Scene {
       BATTLE_FX_VICTORY_FLASH_ALPHA,
       BATTLE_FX_VICTORY_FLASH_MS
     );
+    this.settlePendingMortalWoundsForBattleEnd();
     const result = applyVictoryRewards(this.battle_, {
       rng: this.rng_,
       items: this.items_?.items,
@@ -1515,9 +1646,10 @@ export class BattleScene extends Phaser.Scene {
     this.battle_ = result.state;
     this.victorySummary_ = result.summary;
     this.victorySummaryPageIndex_ = 0;
+    this.victoryTally_ = null;
     this.phase_ = "victory-summary";
     this.transitionPhase_ = "summary";
-    this.playLevelUpFlourishIfAny();
+    this.ensureVictoryPresentation();
     this.submenu_ = "command";
     this.commandIndex_ = 0;
     this.currentActor_ = null;
@@ -1533,6 +1665,9 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     this.exitOutcome_ = this.currentReturnOutcome();
+    if (this.exitOutcome_ !== "lose") {
+      this.settlePendingMortalWoundsForBattleEnd();
+    }
     this.phase_ = "exit-transition";
     this.transitionPhase_ = "exit";
     this.transitionMs_ = EXIT_TRANSITION_MS;
@@ -1563,102 +1698,8 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private renderEnterSwirl(graphics: Phaser.GameObjects.Graphics, progress: number): void {
-    const mask = swirlMask(progress);
-    if (mask.clear) {
-      return;
-    }
-
-    const width = this.scale.width;
-    const height = this.scale.height;
-    const cx = width / 2;
-    const cy = STATUS_TOP / 2;
-    const maxRadius = Math.hypot(Math.max(cx, width - cx), Math.max(cy, height - cy));
-
-    graphics.fillStyle(0x050505, mask.baseAlpha);
-    graphics.fillRect(0, 0, width, height);
-    if (mask.fullyCovered) {
-      return;
-    }
-
-    this.drawSwirlBands(graphics, mask, cx, cy, maxRadius);
-    this.drawSwirlHighlights(graphics, mask, cx, cy, maxRadius);
-  }
-
-  private drawSwirlBands(
-    graphics: Phaser.GameObjects.Graphics,
-    mask: SwirlMask,
-    cx: number,
-    cy: number,
-    maxRadius: number
-  ): void {
-    const armSpan = TAU / mask.armCount;
-    const segmentOverscan = 1.1 / mask.bandCount;
-    for (let arm = 0; arm < mask.armCount; arm += 1) {
-      for (let segment = 0; segment < mask.bandCount; segment += 1) {
-        const innerRatio = Math.max(mask.revealRadiusRatio, segment / mask.bandCount);
-        const outerRatio = Math.min(1.32, (segment + 1) / mask.bandCount + segmentOverscan);
-        if (outerRatio <= mask.revealRadiusRatio) {
-          continue;
-        }
-        const centerRatio = (innerRatio + outerRatio) / 2;
-        const angle = mask.rotationRadians + arm * armSpan + centerRatio * mask.spiralPitch * TAU;
-        const span = armSpan * (0.18 + mask.coverage * 0.18);
-        const inner = innerRatio * maxRadius;
-        const outer = outerRatio * maxRadius + 22 * mask.coverage;
-        const points = [
-          polarPoint(cx, cy, inner, angle - span * 0.58),
-          polarPoint(cx, cy, outer, angle - span * 0.38),
-          polarPoint(cx, cy, outer, angle + span * 0.38),
-          polarPoint(cx, cy, inner, angle + span * 0.58)
-        ];
-
-        graphics.fillStyle(segment % 2 === 0 ? 0x050505 : 0x111827, mask.bandAlpha);
-        graphics.beginPath();
-        graphics.moveTo(points[0].x, points[0].y);
-        for (let index = 1; index < points.length; index += 1) {
-          graphics.lineTo(points[index].x, points[index].y);
-        }
-        graphics.closePath();
-        graphics.fillPath();
-      }
-    }
-  }
-
-  private drawSwirlHighlights(
-    graphics: Phaser.GameObjects.Graphics,
-    mask: SwirlMask,
-    cx: number,
-    cy: number,
-    maxRadius: number
-  ): void {
-    const alpha = 0.34 * mask.coverage;
-    if (alpha <= 0) {
-      return;
-    }
-    const armSpan = TAU / mask.armCount;
-    for (let arm = 0; arm < mask.armCount; arm += 1) {
-      graphics.lineStyle(3, arm % 2 === 0 ? 0xf8fafc : 0x7dd3fc, alpha);
-      graphics.beginPath();
-      let started = false;
-      for (let segment = 0; segment <= mask.bandCount; segment += 1) {
-        const ratio = segment / mask.bandCount;
-        if (ratio < mask.revealRadiusRatio) {
-          continue;
-        }
-        const radius = ratio * maxRadius;
-        const angle = mask.rotationRadians + arm * armSpan + ratio * mask.spiralPitch * TAU;
-        const point = polarPoint(cx, cy, radius, angle);
-        if (!started) {
-          graphics.moveTo(point.x, point.y);
-          started = true;
-        } else {
-          graphics.lineTo(point.x, point.y);
-        }
-      }
-      if (started) {
-        graphics.strokePath();
-      }
-    }
+    // Colored EB swirl reveal (from black -> battle). Shared renderer; centered on the battle viewport.
+    drawSwirl(graphics, progress, this.scale.width, this.scale.height, { cy: STATUS_TOP / 2, clockMs: this.time.now });
   }
 
   private exitBattle(): void {
@@ -2851,6 +2892,7 @@ export class BattleScene extends Phaser.Scene {
       ...debugCombatant(enemy),
       ...this.enemyEffectFor(index, now)
     }));
+    const victoryPage = this.phase_ === "victory-summary" ? this.currentVictorySummaryPageDetail() : undefined;
     publishBattleDebug({
       mode: "battle",
       phase: this.phase_,
@@ -2873,6 +2915,8 @@ export class BattleScene extends Phaser.Scene {
       executionStepIndex: this.executionStepDebugIndex(),
       executionStepCount: this.executionOrder_.length,
       executionMessage: this.executionMessageLines_.join("\n"),
+      actionDelayMs: Math.round(this.actionDelayMs_),
+      lastActionDwellMs: Math.round(this.lastActionDwellMs_),
       lastSfx: this.lastSfx_,
       sfxCount: this.sfxCount_,
       firedSfx: [...this.firedSfx_],
@@ -2900,8 +2944,12 @@ export class BattleScene extends Phaser.Scene {
       },
       outcome: currentOutcome,
       victorySummary: this.victorySummary_ ? debugVictorySummary(this.victorySummary_) : null,
+      victoryTally: debugVictoryTally(this.victoryTally_),
       victorySummaryPageIndex: this.victorySummaryPageIndex_,
-      victorySummaryPageCount: this.victorySummaryPages().length
+      victorySummaryPageCount: this.victorySummaryPages().length,
+      victorySummaryPageKind: victoryPage?.kind ?? null,
+      victorySummaryPageHighlighted: Boolean(victoryPage?.highlighted),
+      mortalWounds: debugMortalWounds(this.battle_, this.mortalWoundRescueCount_)
     });
   }
 
@@ -3168,17 +3216,38 @@ export class BattleScene extends Phaser.Scene {
     if (!this.victorySummary_) {
       return [];
     }
-    return buildVictorySummaryViewModel(this.victorySummary_)
-      .pages
-      .map((page) => page.map((line) => fitLine(line, 28)));
+    const pages = this.victorySummaryPageDetails().map((page) => [...page.lines]);
+    if (this.victoryTally_ && pages[0]) {
+      pages[0][0] = `${this.victoryTally_.exp.displayed} EXP`;
+      pages[0][1] = `You got $${this.victoryTally_.money.displayed}`;
+    }
+    return pages.map((page) => page.map((line) => fitLine(line, 28)));
+  }
+
+  private victorySummaryPageDetails() {
+    return this.victorySummary_ ? buildVictorySummaryViewModel(this.victorySummary_).pageDetails : [];
+  }
+
+  private currentVictorySummaryPageDetail() {
+    const pages = this.victorySummaryPageDetails();
+    if (pages.length === 0) {
+      return undefined;
+    }
+    return pages[clampNumber(this.victorySummaryPageIndex_, 0, pages.length - 1)];
   }
 
   private advanceVictorySummaryPage(): boolean {
+    if (this.completeVictoryTallyIfRolling()) {
+      return true;
+    }
     const next = advanceVictorySummaryPageIndex(
       this.victorySummaryPageIndex_,
       this.victorySummaryPages().length
     );
     this.victorySummaryPageIndex_ = next.pageIndex;
+    if (!next.shouldExit) {
+      this.playVictoryPageFlourishIfNeeded();
+    }
     return !next.shouldExit;
   }
 
@@ -3327,6 +3396,35 @@ function initialBattleRoundInputState(): BattleRoundInputState {
   };
 }
 
+function createVictoryTally(summary: BattleVictorySummary, now: number): VictoryTallyState {
+  return {
+    exp: setTarget(createRollingMeter(0, victoryTallyRate(summary.expGained)), summary.expGained),
+    money: setTarget(createRollingMeter(0, victoryTallyRate(summary.moneyGained)), summary.moneyGained),
+    nextTickSfxAtMs: now
+  };
+}
+
+function victoryTallyRate(total: number): number {
+  const target = Math.max(0, Math.floor(total));
+  if (target <= 0) {
+    return 1;
+  }
+  return Math.max(1, Math.ceil(target / (VICTORY_TALLY_DURATION_MS / 1000)));
+}
+
+function victoryTallyIsRolling(tally: VictoryTallyState): boolean {
+  return tally.exp.isRolling || tally.money.isRolling;
+}
+
+function completedRollingMeter(meter: RollingMeterState): RollingMeterState {
+  return {
+    ...meter,
+    displayed: meter.target,
+    isRolling: false,
+    stepRemainder: 0
+  };
+}
+
 function battleSubmenuFromInput(submenu: BattleRoundInputState["submenu"]): BattleSubmenu {
   return submenu === "target-enemy" || submenu === "target-ally" ? "target" : submenu;
 }
@@ -3355,10 +3453,18 @@ function buildPostBattlePartySnapshot(base: PartyStateSnapshot, battle: BattleSt
   const battleMembersByChar = new Map<number, PartyBattleMemberSnapshot>(
     (base.battleMembers ?? []).map((member) => [member.charId, cloneBattleMemberSnapshot(member)])
   );
+  const statusesByChar = new Map<number, StatusState>(
+    (base.statuses ?? []).map((entry) => [entry.charId, cloneStatusState(entry.statuses)])
+  );
 
   for (const combatant of partyCombatants) {
     inventoryByChar.set(combatant.charId, combatant.inventory.map((itemId) => stat(itemId)));
     battleMembersByChar.set(combatant.charId, battleMemberSnapshotFromCombatant(combatant));
+    if (combatant.statuses?.length) {
+      statusesByChar.set(combatant.charId, cloneStatusState(combatant.statuses));
+    } else {
+      statusesByChar.delete(combatant.charId);
+    }
   }
 
   const partyIds = unique([
@@ -3376,8 +3482,15 @@ function buildPostBattlePartySnapshot(base: PartyStateSnapshot, battle: BattleSt
     equipped: base.equipped.map((entry) => ({ charId: entry.charId, slots: { ...entry.slots } })),
     battleMembers: [...battleMembersByChar.values()]
       .sort((a, b) => a.charId - b.charId)
-      .map(cloneBattleMemberSnapshot)
+      .map(cloneBattleMemberSnapshot),
+    statuses: [...statusesByChar.entries()]
+      .sort(([a], [b]) => a - b)
+      .map(([charId, statuses]) => ({ charId, statuses: cloneStatusState(statuses) }))
   };
+}
+
+function cloneStatusState(statuses: StatusState | undefined): StatusState {
+  return (statuses ?? []).map((entry) => ({ ...entry }));
 }
 
 function battleMemberSnapshotFromCombatant(combatant: BattleState["party"][number]): PartyBattleMemberSnapshot {
@@ -3510,7 +3623,14 @@ function debugVictorySummary(summary: BattleVictorySummary): {
   expGained: number;
   moneyGained: number;
   drops: Array<{ enemyId: number; itemId: number; itemName: string; recipientCharId: number }>;
-  levelUps: Array<{ charId: number; name: string; fromLevel: number; toLevel: number }>;
+  levelUps: Array<{
+    charId: number;
+    name: string;
+    fromLevel: number;
+    toLevel: number;
+    statChanges: Array<{ stat: string; before: number; after: number; gain: number }>;
+    learnedSkills: Array<{ psiId: number; name: string }>;
+  }>;
 } {
   return {
     expGained: summary.expGained,
@@ -3525,8 +3645,54 @@ function debugVictorySummary(summary: BattleVictorySummary): {
       charId: levelUp.charId,
       name: levelUp.name,
       fromLevel: levelUp.fromLevel,
-      toLevel: levelUp.toLevel
+      toLevel: levelUp.toLevel,
+      statChanges: levelUp.statChanges.map((change) => ({ ...change })),
+      learnedSkills: levelUp.learnedSkills.map((skill) => ({ ...skill }))
     }))
+  };
+}
+
+function debugVictoryTally(tally: VictoryTallyState | null): {
+  expDisplayed: number;
+  expTarget: number;
+  moneyDisplayed: number;
+  moneyTarget: number;
+  isRolling: boolean;
+} | null {
+  if (!tally) {
+    return null;
+  }
+  return {
+    expDisplayed: tally.exp.displayed,
+    expTarget: tally.exp.target,
+    moneyDisplayed: tally.money.displayed,
+    moneyTarget: tally.money.target,
+    isRolling: victoryTallyIsRolling(tally)
+  };
+}
+
+function debugMortalWounds(
+  battle: BattleState,
+  rescuedOnBattleEnd: number
+): {
+  pendingCount: number;
+  rescuedOnBattleEnd: number;
+  pending: Array<{ index: number; name: string; hpDisplayed: number; hpTarget: number; isRolling: boolean }>;
+} {
+  const pending = battle.party
+    .map((member, index) => ({ member, index }))
+    .filter(({ member }) => isPendingPartyMortalWound(member))
+    .map(({ member, index }) => ({
+      index,
+      name: member.name,
+      hpDisplayed: member.hp.displayed,
+      hpTarget: member.hp.target,
+      isRolling: member.hp.isRolling
+    }));
+  return {
+    pendingCount: pending.length,
+    rescuedOnBattleEnd,
+    pending
   };
 }
 

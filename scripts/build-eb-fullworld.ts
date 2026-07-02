@@ -12,6 +12,7 @@ import {
   MusicManifestSchema,
   NpcOverridesSchema,
   OpeningCutsceneSchema,
+  OverworldInteractablesSchema,
   OverworldEnemySkinsSchema,
   PsiOverridesSchema,
   SpriteOverridesSchema,
@@ -62,10 +63,17 @@ export const CUTSCENES_SOURCE = "content/cutscenes.json";
 export const CUTSCENES_OUTPUT = "cutscenes.json";
 export const MUSIC_MANIFEST_SOURCE = "content/music-manifest.json";
 export const MUSIC_MANIFEST_OUTPUT = "music-manifest.json";
+// Derived from external/coilsnake map_sectors+map_music via scripts/gen-sector-music.mjs.
+export const SECTOR_MUSIC_SOURCE = "content/sector-music.json";
+export const SECTOR_MUSIC_OUTPUT = "sector-music.json";
+export const COLLISION_OVERRIDES_SOURCE = "content/collision-overrides.json";
+export const COLLISION_OVERRIDES_OUTPUT = "collision-overrides.json";
 export const DRIFELLA_BARKS_SOURCE = "content/drifella-barks.json";
 export const DRIFELLA_BARKS_OUTPUT = "drifella-barks.json";
 export const OPENING_CUTSCENE_SOURCE = "content/opening-cutscene.json";
 export const OPENING_CUTSCENE_OUTPUT = "opening-cutscene.json";
+export const OVERWORLD_INTERACTABLES_SOURCE = "content/overworld-interactables.json";
+export const OVERWORLD_INTERACTABLES_OUTPUT = "overworld-interactables.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
 
 /**
@@ -114,6 +122,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateMusicManifest(MUSIC_MANIFEST_SOURCE);
   await validateDrifellaBarks(DRIFELLA_BARKS_SOURCE);
   await validateOpeningCutscene(OPENING_CUTSCENE_SOURCE);
+  await validateOverworldInteractables(OVERWORLD_INTERACTABLES_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
   await Promise.all([
@@ -133,8 +142,11 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(ENEMY_STAT_OVERRIDES_SOURCE, out, ENEMY_STAT_OVERRIDES_OUTPUT),
     copyJsonToGenerated(BATTLE_RULES_SOURCE, out, BATTLE_RULES_OUTPUT),
     copyJsonToGenerated(MUSIC_MANIFEST_SOURCE, out, MUSIC_MANIFEST_OUTPUT),
+    copyOptionalJsonToGenerated(SECTOR_MUSIC_SOURCE, out, SECTOR_MUSIC_OUTPUT),
+    copyOptionalJsonToGenerated(COLLISION_OVERRIDES_SOURCE, out, COLLISION_OVERRIDES_OUTPUT),
     copyJsonToGenerated(DRIFELLA_BARKS_SOURCE, out, DRIFELLA_BARKS_OUTPUT),
-    copyOptionalJsonToGenerated(OPENING_CUTSCENE_SOURCE, out, OPENING_CUTSCENE_OUTPUT)
+    copyOptionalJsonToGenerated(OPENING_CUTSCENE_SOURCE, out, OPENING_CUTSCENE_OUTPUT),
+    copyOptionalJsonToGenerated(OVERWORLD_INTERACTABLES_SOURCE, out, OVERWORLD_INTERACTABLES_OUTPUT)
   ]);
 }
 
@@ -207,6 +219,13 @@ async function validateOpeningCutscene(source: string): Promise<void> {
     return;
   }
   OpeningCutsceneSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateOverworldInteractables(source: string): Promise<void> {
+  if (!(await fileExists(source))) {
+    return;
+  }
+  OverworldInteractablesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateNpcOverrides(source: string): Promise<void> {

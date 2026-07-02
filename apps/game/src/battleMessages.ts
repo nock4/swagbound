@@ -19,16 +19,16 @@ export function composeBattleStepLines(input: readonly BattleEvent[] | BattleRou
         lines.push(actionStartedLine(event));
         break;
       case "missed":
-        lines.push(event.targetName ? `${event.targetName} dodged!` : "It missed!");
+        lines.push(missedLine(event, activeAction));
         break;
       case "smash":
         if (usesAttackImpactNarration(activeAction)) {
-          lines.push("SMAAAASH!!");
+          lines.push("SMAAAASH!! A solid hit!");
         }
         break;
       case "damage":
         if (activeAction?.action !== "item") {
-          lines.push(`${event.amount} HP of damage to ${event.targetName ?? "the target"}!`);
+          lines.push(damageLine(event));
         }
         break;
       case "heal":
@@ -42,14 +42,14 @@ export function composeBattleStepLines(input: readonly BattleEvent[] | BattleRou
         break;
       case "gutsSurvived":
         if (usesAttackImpactNarration(activeAction)) {
-          lines.push(`${event.targetName ?? "The target"} endured the blow!`);
+          lines.push(`${event.targetName ?? "The target"} just barely held on!`);
         }
         break;
       case "runSucceeded":
         lines.push(`${event.actorName} ran away!`);
         break;
       case "runFailed":
-        lines.push(`${event.actorName} couldn't escape!`);
+        lines.push(`${event.actorName} couldn't get away!`);
         break;
       case "noTarget":
         lines.push(...(event.lines ?? ["There was no target."]));
@@ -60,6 +60,24 @@ export function composeBattleStepLines(input: readonly BattleEvent[] | BattleRou
     }
   }
   return lines;
+}
+
+function missedLine(
+  event: Extract<BattleEvent, { kind: "missed" }>,
+  action: BattleActionStartedEvent | null
+): string {
+  if (action?.action === "psi") {
+    return event.targetName ? `It didn't work on ${event.targetName}!` : "It didn't work!";
+  }
+  if (action?.action === "pray") {
+    return "Nothing happened!";
+  }
+  return event.targetName ? `${event.targetName} dodged swiftly!` : "The attack missed!";
+}
+
+function damageLine(event: Extract<BattleEvent, { kind: "damage" }>): string {
+  const target = event.targetName ?? "the target";
+  return `${target} took ${event.amount} HP of damage!`;
 }
 
 function actionStartedLine(event: BattleActionStartedEvent): string {

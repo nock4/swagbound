@@ -79,8 +79,8 @@ function describeDialogue(events: readonly GameEvent[]): {
 }
 
 describe("qa npc-dialogue: authored content resolution", () => {
-  it("wires interaction for all 81 added NPCs and resolves each to renderable dialogue", () => {
-    expect(addedNpcs.npcs).toHaveLength(81);
+  it("wires interaction for all 88 added NPCs and resolves each to renderable dialogue", () => {
+    expect(addedNpcs.npcs).toHaveLength(88);
     const broken: number[] = [];
     for (const npc of addedNpcs.npcs) {
       expect(npc.interaction, `added npc ${npc.id} has no interaction`).toBeDefined();
@@ -132,22 +132,29 @@ describe("qa npc-dialogue: authored content resolution", () => {
     expect(morrowResolved.shopIds).toEqual([4]);
   });
 
-  it("wires the hospital and home-rest healers to heal/save service events", () => {
+  it("wires hospital, hotel, and phone NPCs to service events", () => {
     const hospital = world.npcs.find((npc) => npc.npcId === 115 && npc.interactable);
-    const home = world.npcs.find((npc) => npc.npcId === 148 && npc.interactable);
+    const hotel = world.npcs.find((npc) => npc.npcId === 58 && npc.interactable);
+    const phone = world.npcs.find((npc) => npc.npcId === 60 && npc.interactable);
     expect(hospital, "EB npc 115 (hospital greeter) missing/non-interactable").toBeDefined();
-    expect(home, "EB npc 148 (home guardian) missing/non-interactable").toBeDefined();
+    expect(hotel, "EB npc 58 (hotel clerk) missing/non-interactable").toBeDefined();
+    expect(phone, "EB npc 60 (phone) missing/non-interactable").toBeDefined();
 
     const hospitalEvents = interactionEvents(hospital!, FALLBACK_REFERENCE, unsetFlags, customLookup, libLookup);
-    const homeEvents = interactionEvents(home!, FALLBACK_REFERENCE, unsetFlags, customLookup, libLookup);
+    const hotelEvents = interactionEvents(hotel!, FALLBACK_REFERENCE, unsetFlags, customLookup, libLookup);
+    const phoneEvents = interactionEvents(phone!, FALLBACK_REFERENCE, unsetFlags, customLookup, libLookup);
 
     expect(describeDialogue(hospitalEvents).hasRenderableDialogue).toBe(true);
-    expect(hospitalEvents.map((event) => event.kind)).toEqual(["dialogue", "heal", "setFlag"]);
-    expect(hospitalEvents.find((event) => event.kind === "heal")).toEqual({ kind: "heal", scope: "full" });
+    expect(hospitalEvents.map((event) => event.kind)).toEqual(["dialogue", "service", "setFlag"]);
+    expect(hospitalEvents.find((event) => event.kind === "service")).toEqual({ kind: "service", service: "hospital" });
 
-    expect(describeDialogue(homeEvents).hasRenderableDialogue).toBe(true);
-    expect(homeEvents.map((event) => event.kind)).toEqual(["dialogue", "heal", "save", "setFlag"]);
-    expect(homeEvents.find((event) => event.kind === "heal")).toEqual({ kind: "heal", scope: "full" });
+    expect(describeDialogue(hotelEvents).hasRenderableDialogue).toBe(true);
+    expect(hotelEvents.map((event) => event.kind)).toEqual(["dialogue", "service", "setFlag"]);
+    expect(hotelEvents.find((event) => event.kind === "service")).toEqual({ kind: "service", service: "hotel", cost: 100 });
+
+    expect(describeDialogue(phoneEvents).hasRenderableDialogue).toBe(true);
+    expect(phoneEvents.map((event) => event.kind)).toEqual(["dialogue", "service", "setFlag"]);
+    expect(phoneEvents.find((event) => event.kind === "service")).toEqual({ kind: "service", service: "phone" });
   });
 
   it("wires the opening-house proof-token bowl to dialogue and a one-time charm handoff", () => {

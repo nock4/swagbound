@@ -16,7 +16,7 @@ describe("composeBattleStepLines", () => {
       damage: 12
     })).toEqual([
       "Bosch's attack!",
-      "12 HP of damage to Spiteful Crow!"
+      "Spiteful Crow took 12 HP of damage!"
     ]);
 
     expect(lines({
@@ -27,7 +27,7 @@ describe("composeBattleStepLines", () => {
       missed: true
     })).toEqual([
       "Bosch's attack!",
-      "Spiteful Crow dodged!"
+      "Spiteful Crow dodged swiftly!"
     ]);
   });
 
@@ -40,8 +40,8 @@ describe("composeBattleStepLines", () => {
       smash: true
     })).toEqual([
       "Bosch's attack!",
-      "SMAAAASH!!",
-      "80 HP of damage to Spiteful Crow!"
+      "SMAAAASH!! A solid hit!",
+      "Spiteful Crow took 80 HP of damage!"
     ]);
 
     expect(lines({
@@ -52,8 +52,8 @@ describe("composeBattleStepLines", () => {
       gutsSurvived: true
     })).toEqual([
       "Shark's attack!",
-      "9 HP of damage to Bosch!",
-      "Bosch endured the blow!"
+      "Bosch took 9 HP of damage!",
+      "Bosch just barely held on!"
     ]);
   });
 
@@ -66,7 +66,7 @@ describe("composeBattleStepLines", () => {
       damage: 42
     })).toEqual([
       "Bosch tried PSI Rockin alpha!",
-      "42 HP of damage to Runaway Dog!"
+      "Runaway Dog took 42 HP of damage!"
     ]);
 
     expect(lines({
@@ -128,7 +128,7 @@ describe("composeBattleStepLines", () => {
       kind: "run",
       attackerName: "Bosch",
       fled: false
-    })).toEqual(["Bosch couldn't escape!"]);
+    })).toEqual(["Bosch couldn't get away!"]);
   });
 
   it("omits skipped steps", () => {

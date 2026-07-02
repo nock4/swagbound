@@ -32,7 +32,7 @@ export const NPC_BEHAVIORS = {
   746: { kind: "patrol", axis: "x", rangePx: 24, speedPxPerSec: 40 }
 } satisfies Record<number, NpcBehavior>;
 
-const SERVICE_GAME_EVENT_KINDS = new Set<GameEvent["kind"]>(["shop", "heal", "save"]);
+const SERVICE_GAME_EVENT_KINDS = new Set<GameEvent["kind"]>(["shop", "service", "heal", "save"]);
 const SERVICE_EVENT_EFFECT_KINDS = new Set<EventEffect["kind"]>([
   "shop",
   "healHp",

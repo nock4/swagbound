@@ -7,17 +7,23 @@ import {
   CLEAN_UI_SECONDARY,
   CLEAN_UI_SELECTION_TEXT,
   CLEAN_UI_SELECTION_CARET,
+  CLEAN_UI_HP,
+  CLEAN_UI_PP,
+  CLEAN_UI_TRACK,
+  CLEAN_UI_TRACK_ALPHA,
   cleanLineHeight,
   cleanPanelInnerRect,
   createCleanText,
   drawCleanCaret,
   drawCleanPanel,
   drawCleanSelection,
-  estimateCleanTextWidth
+  estimateCleanTextWidth,
+  statusBarFillFraction
 } from "./cleanUi";
 import type { DialogueTextRun } from "./dialogueRenderer";
 import {
   type CanvasRect,
+  battleStatusCardRects,
   dialogueTextWidth,
   dialogueWindowRect,
   menuWindowRect
@@ -25,6 +31,8 @@ import {
 import {
   menuCursorVisible
 } from "./battleVisuals";
+import type { OverworldStatusHudMember, OverworldStatusHudView } from "./overworldStatusHud";
+import { statusAilmentBadge } from "./statusEffects";
 
 const UI_LINE_SPACING = 2;
 const DIALOGUE_FONT_SIZE = 15;
@@ -55,8 +63,35 @@ type MenuCursorSlot = {
   rowHeight: number;
 };
 
+type OverworldHudTextSet = {
+  name: Phaser.GameObjects.Text;
+  badges: Phaser.GameObjects.Text;
+  hpLabel: Phaser.GameObjects.Text;
+  ppLabel: Phaser.GameObjects.Text;
+  hpValue: Phaser.GameObjects.Text;
+  ppValue: Phaser.GameObjects.Text;
+};
+
 const DEBUG_COPY_LABEL = "[ Copy ]";
 const DEBUG_COPIED_LABEL = "[ Copied! ]";
+const OVERWORLD_HUD_CARD_SIDE_MARGIN = 10;
+const OVERWORLD_HUD_CARD_BOTTOM_MARGIN = 8;
+const OVERWORLD_HUD_CARD_GAP = 8;
+const OVERWORLD_HUD_CARD_HEIGHT = 78;
+const OVERWORLD_HUD_CARD_MIN_WIDTH = 112;
+const OVERWORLD_HUD_CARD_MAX_WIDTH = 160;
+const OVERWORLD_HUD_CONTENT_PADDING_X = 10;
+const OVERWORLD_HUD_CONTENT_PADDING_Y = 8;
+const OVERWORLD_HUD_NAME_FONT_SIZE = 13;
+const OVERWORLD_HUD_BADGE_FONT_SIZE = 11;
+const OVERWORLD_HUD_LABEL_FONT_SIZE = 11;
+const OVERWORLD_HUD_VALUE_FONT_SIZE = 12;
+const OVERWORLD_HUD_HP_ROW_Y = 23;
+const OVERWORLD_HUD_PP_ROW_Y = 47;
+const OVERWORLD_HUD_LABEL_WIDTH = 20;
+const OVERWORLD_HUD_BAR_HEIGHT = 5;
+const OVERWORLD_HUD_BAR_X = 28;
+const OVERWORLD_HUD_BAR_VALUE_GAP = 4;
 
 /** Copy debug-panel text to the clipboard so it can be pasted into a bug report. */
 function copyTextToClipboard(text: string): void {
@@ -110,6 +145,11 @@ export class UiScene extends Phaser.Scene {
   private panelText?: Phaser.GameObjects.Text;
   private badgeText?: Phaser.GameObjects.Text;
   private menuHintText?: Phaser.GameObjects.Text;
+  private hudGraphics?: Phaser.GameObjects.Graphics;
+  private hudFieldGraphics?: Phaser.GameObjects.Graphics;
+  private hudAccentGraphics?: Phaser.GameObjects.Graphics;
+  private hudTexts: OverworldHudTextSet[] = [];
+  private hudLayoutSignature = "";
   private menuGraphics?: Phaser.GameObjects.Graphics;
   private menuCursorGraphics?: Phaser.GameObjects.Graphics;
   private menuTexts: Phaser.GameObjects.Text[] = [];
@@ -167,6 +207,9 @@ export class UiScene extends Phaser.Scene {
       fontSize: 11,
       color: CLEAN_UI_SECONDARY
     }).setOrigin(1, 1).setDepth(11);
+    this.hudGraphics = this.add.graphics().setDepth(8);
+    this.hudFieldGraphics = this.add.graphics().setDepth(8.5);
+    this.hudAccentGraphics = this.add.graphics().setDepth(9);
     this.menuGraphics = this.add.graphics().setDepth(14);
     this.menuCursorGraphics = this.add.graphics().setDepth(16);
   }
@@ -196,7 +239,9 @@ export class UiScene extends Phaser.Scene {
   }
 
   update(): void {
-    const world = this.scene.get(this.worldSceneKey) as WorldScene | undefined;
+    const world = this.scene.get(this.worldSceneKey) as (WorldScene & {
+      overworldStatusHud?: () => OverworldStatusHudView;
+    }) | undefined;
     if (!world) {
       return;
     }
@@ -214,8 +259,11 @@ export class UiScene extends Phaser.Scene {
     const runtimeLines = panelVisible ? world.runtimeLines() : [];
     const menuScreens = world.menuRenderStack();
     const promptVisible = !open && menuScreens.length === 0;
-    const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${world.prompt}|${promptVisible}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}`;
+    const hudView = world.overworldStatusHud?.();
+    const visibleHudView = promptVisible && hudView?.visible ? hudView : undefined;
+    const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${world.prompt}|${promptVisible}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
     if (signature === this.lastSignature) {
+      this.drawOverworldHud(visibleHudView);
       this.renderMenuCursors();
       return;
     }
@@ -225,8 +273,10 @@ export class UiScene extends Phaser.Scene {
     this.promptText?.setVisible(promptVisible);
     // Menu hint shares the prompt's visibility: only while walking, never over a menu/dialogue.
     this.menuHintText?.setVisible(promptVisible);
+    this.positionMenuHint(Boolean(visibleHudView));
     this.drawDialogue(open, text, textRuns, footer, showAdvanceIndicator);
     this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);
+    this.drawOverworldHud(visibleHudView);
     this.drawMenu(menuScreens);
     this.renderMenuCursors();
   }
@@ -395,6 +445,215 @@ export class UiScene extends Phaser.Scene {
       });
       nextX = Math.min(this.scale.width - MENU_RIGHT_MARGIN - 64, x + boxWidth + MENU_GAP);
     });
+  }
+
+  private positionMenuHint(hudVisible: boolean): void {
+    const y = hudVisible
+      ? this.scale.height - OVERWORLD_HUD_CARD_BOTTOM_MARGIN - OVERWORLD_HUD_CARD_HEIGHT - 6
+      : this.scale.height - 12;
+    this.menuHintText?.setPosition(this.scale.width - 12, Math.max(12, y));
+  }
+
+  private drawOverworldHud(view: OverworldStatusHudView | undefined): void {
+    const graphics = this.hudGraphics;
+    const fieldGraphics = this.hudFieldGraphics;
+    const accentGraphics = this.hudAccentGraphics;
+    if (!graphics || !fieldGraphics || !accentGraphics) {
+      return;
+    }
+    graphics.clear();
+    fieldGraphics.clear();
+    accentGraphics.clear();
+    const members = view?.members.slice(0, 4) ?? [];
+    if (!view?.visible || members.length === 0) {
+      this.setHudTextsVisible(false);
+      return;
+    }
+
+    const cards = battleStatusCardRects({
+      screen: { width: this.scale.width, height: this.scale.height },
+      memberCount: members.length,
+      activeIndex: null,
+      sideMargin: OVERWORLD_HUD_CARD_SIDE_MARGIN,
+      bottomMargin: OVERWORLD_HUD_CARD_BOTTOM_MARGIN,
+      gap: OVERWORLD_HUD_CARD_GAP,
+      cardHeight: OVERWORLD_HUD_CARD_HEIGHT,
+      minCardWidth: OVERWORLD_HUD_CARD_MIN_WIDTH,
+      maxCardWidth: OVERWORLD_HUD_CARD_MAX_WIDTH,
+      activeLift: 0
+    });
+    this.ensureHudTextLayout(cards);
+
+    cards.forEach((card, index) => {
+      const member = members[index];
+      const textSet = this.hudTexts[index];
+      if (!member || !textSet) {
+        return;
+      }
+      drawCleanPanel(graphics, card, { borderWidth: 2, borderAlpha: 0.5 });
+      if (member.danger) {
+        const pulse = 0.22 + Math.sin(this.time.now / 115) * 0.08;
+        accentGraphics.fillStyle(0xffffff, pulse);
+        accentGraphics.fillRoundedRect(card.x + 4, card.y + 4, Math.max(1, card.width - 8), Math.max(1, card.height - 8), 5);
+        accentGraphics.lineStyle(1, 0xffffff, 0.5 + Math.sin(this.time.now / 140) * 0.2);
+        accentGraphics.strokeRoundedRect(card.x + 4.5, card.y + 4.5, Math.max(1, card.width - 9), Math.max(1, card.height - 9), 5);
+      }
+      const content = this.hudCardContentRect(card);
+      this.updateHudTextSet(textSet, member, content);
+      this.drawHudStatusBar(fieldGraphics, this.hudStatusBarMetrics(content, "hp"), member.hp, member.maxHp, CLEAN_UI_HP);
+      this.drawHudStatusBar(fieldGraphics, this.hudStatusBarMetrics(content, "pp"), member.pp, member.maxPp, CLEAN_UI_PP);
+    });
+  }
+
+  private ensureHudTextLayout(cards: CanvasRect[]): void {
+    const signature = JSON.stringify(cards.map((card) => ({
+      x: card.x,
+      y: card.y,
+      width: card.width,
+      height: card.height
+    })));
+    if (signature === this.hudLayoutSignature && this.hudTexts.length === cards.length) {
+      this.setHudTextsVisible(true);
+      return;
+    }
+    this.hudLayoutSignature = signature;
+    for (const textSet of this.hudTexts) {
+      textSet.name.destroy();
+      textSet.badges.destroy();
+      textSet.hpLabel.destroy();
+      textSet.ppLabel.destroy();
+      textSet.hpValue.destroy();
+      textSet.ppValue.destroy();
+    }
+    this.hudTexts = cards.map((card) => this.createHudTextSet(card));
+  }
+
+  private createHudTextSet(card: CanvasRect): OverworldHudTextSet {
+    const content = this.hudCardContentRect(card);
+    const hpMetrics = this.hudStatusBarMetrics(content, "hp");
+    const ppMetrics = this.hudStatusBarMetrics(content, "pp");
+    const badgeWidth = Math.min(48, Math.max(34, Math.floor(content.width * 0.34)));
+    const nameWidth = Math.max(1, content.width - badgeWidth - 4);
+    return {
+      name: this.createHudText(content.x, content.y, "", nameWidth, OVERWORLD_HUD_NAME_FONT_SIZE, 500).setDepth(9.5),
+      badges: this.createHudText(content.x + content.width - badgeWidth, content.y + 1, "", badgeWidth, OVERWORLD_HUD_BADGE_FONT_SIZE, 500, "right").setDepth(9.5),
+      hpLabel: this.createHudText(content.x, hpMetrics.labelY, "HP", OVERWORLD_HUD_LABEL_WIDTH, OVERWORLD_HUD_LABEL_FONT_SIZE, 500).setDepth(9.5),
+      ppLabel: this.createHudText(content.x, ppMetrics.labelY, "PP", OVERWORLD_HUD_LABEL_WIDTH, OVERWORLD_HUD_LABEL_FONT_SIZE, 500).setDepth(9.5),
+      hpValue: this.createHudText(hpMetrics.valueX, hpMetrics.valueY, "", hpMetrics.valueWidth, OVERWORLD_HUD_VALUE_FONT_SIZE, 400, "right").setDepth(9.5),
+      ppValue: this.createHudText(ppMetrics.valueX, ppMetrics.valueY, "", ppMetrics.valueWidth, OVERWORLD_HUD_VALUE_FONT_SIZE, 400, "right").setDepth(9.5)
+    };
+  }
+
+  private createHudText(
+    x: number,
+    y: number,
+    text: string,
+    width: number,
+    fontSize: number,
+    weight: 400 | 500,
+    align: "left" | "right" = "left"
+  ): Phaser.GameObjects.Text {
+    return createCleanText(this, x, y, text, {
+      fontSize,
+      color: weight === 500 ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY,
+      fixedWidth: width,
+      weight,
+      align
+    });
+  }
+
+  private updateHudTextSet(
+    textSet: OverworldHudTextSet,
+    member: OverworldStatusHudMember,
+    content: CanvasRect
+  ): void {
+    const badgeText = member.statuses.map((entry) => statusAilmentBadge(entry.ailment)).join(" ");
+    textSet.name.setText(this.fitCleanText(member.name, textSet.name.width || content.width, OVERWORLD_HUD_NAME_FONT_SIZE));
+    textSet.badges.setText(this.fitCleanText(badgeText, textSet.badges.width || 48, OVERWORLD_HUD_BADGE_FONT_SIZE));
+    textSet.hpLabel.setText("HP");
+    textSet.ppLabel.setText("PP");
+    textSet.hpValue.setText(`${member.hp}/${member.maxHp}`);
+    textSet.ppValue.setText(`${member.pp}/${member.maxPp}`);
+    const hpAlpha = member.danger ? 0.7 + Math.sin(this.time.now / 120) * 0.25 : 1;
+    textSet.hpValue.setAlpha(hpAlpha);
+    textSet.hpLabel.setAlpha(hpAlpha);
+  }
+
+  private setHudTextsVisible(visible: boolean): void {
+    if (!visible) {
+      this.hudLayoutSignature = "";
+    }
+    for (const textSet of this.hudTexts) {
+      textSet.name.setVisible(visible);
+      textSet.badges.setVisible(visible);
+      textSet.hpLabel.setVisible(visible);
+      textSet.ppLabel.setVisible(visible);
+      textSet.hpValue.setVisible(visible);
+      textSet.ppValue.setVisible(visible);
+    }
+  }
+
+  private hudCardContentRect(card: CanvasRect): CanvasRect {
+    return cleanPanelInnerRect(card, {
+      x: OVERWORLD_HUD_CONTENT_PADDING_X,
+      y: OVERWORLD_HUD_CONTENT_PADDING_Y
+    });
+  }
+
+  private hudStatusBarMetrics(content: CanvasRect, row: "hp" | "pp"): {
+    labelY: number;
+    valueX: number;
+    valueY: number;
+    valueWidth: number;
+    barX: number;
+    barY: number;
+    barWidth: number;
+    barHeight: number;
+  } {
+    const rowY = content.y + (row === "hp" ? OVERWORLD_HUD_HP_ROW_Y : OVERWORLD_HUD_PP_ROW_Y);
+    const valueWidth = Math.min(58, Math.max(42, Math.floor(content.width * 0.38)));
+    const barX = content.x + OVERWORLD_HUD_BAR_X;
+    const valueX = content.x + content.width - valueWidth;
+    const barWidth = Math.max(12, valueX - OVERWORLD_HUD_BAR_VALUE_GAP - barX);
+    return {
+      labelY: rowY - 1,
+      valueX,
+      valueY: rowY - 2,
+      valueWidth,
+      barX,
+      barY: rowY + 13,
+      barWidth,
+      barHeight: OVERWORLD_HUD_BAR_HEIGHT
+    };
+  }
+
+  private drawHudStatusBar(
+    graphics: Phaser.GameObjects.Graphics,
+    metrics: ReturnType<UiScene["hudStatusBarMetrics"]>,
+    current: number,
+    max: number,
+    fillColor: number
+  ): void {
+    graphics.fillStyle(CLEAN_UI_TRACK, CLEAN_UI_TRACK_ALPHA);
+    graphics.fillRoundedRect(metrics.barX, metrics.barY, metrics.barWidth, metrics.barHeight, 3);
+    const fillWidth = Math.round(metrics.barWidth * statusBarFillFraction(current, max));
+    if (fillWidth <= 0) {
+      return;
+    }
+    graphics.fillStyle(fillColor, 0.95);
+    graphics.fillRoundedRect(metrics.barX, metrics.barY, fillWidth, metrics.barHeight, 3);
+  }
+
+  private fitCleanText(text: string, maxWidth: number, fontSize: number): string {
+    if (estimateCleanTextWidth(text, fontSize) <= maxWidth) {
+      return text;
+    }
+    const suffix = "...";
+    let fitted = text;
+    while (fitted.length > 0 && estimateCleanTextWidth(fitted + suffix, fontSize) > maxWidth) {
+      fitted = fitted.slice(0, -1);
+    }
+    return fitted.length > 0 ? fitted + suffix : "";
   }
 
   private dialogueRect(): CanvasRect {

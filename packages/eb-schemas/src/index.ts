@@ -345,8 +345,41 @@ const MusicManifestAreaSchema = MusicManifestTrackSchema.extend({
 export const MusicManifestSchema = z.object({
   schema: z.literal("swagbound.music-manifest.v1"),
   cues: z.record(z.string().min(1), MusicManifestTrackSchema),
-  areas: z.array(MusicManifestAreaSchema).optional()
+  areas: z.array(MusicManifestAreaSchema).optional(),
+  /**
+   * Interior music keyed by EarthBound song id (the building TYPE: all hospitals
+   * share one id, all houses another, etc.). When the player is inside a building
+   * whose EB song id is listed here, that track plays; otherwise the `interior`
+   * cue is used. Faithful to how EarthBound assigns interior music.
+   */
+  interiors: z.record(z.string().min(1), MusicManifestTrackSchema).optional()
 }).strict();
+
+/**
+ * Authored solid-collision patches in WORLD PIXELS. EarthBound's roof/behind-building
+ * cells convert to walkable (no priority, surface-00, indistinguishable from grass),
+ * so the player can walk on roofs. These rects force those cells solid.
+ */
+export const CollisionOverridesSchema = z.object({
+  schema: z.literal("swagbound.collision-overrides.v1"),
+  solids: z.array(z.object({
+    x: z.number().int().nonnegative(),
+    y: z.number().int().nonnegative(),
+    w: z.number().int().positive(),
+    h: z.number().int().positive(),
+    note: z.string().optional()
+  }))
+});
+export type CollisionOverrides = z.infer<typeof CollisionOverridesSchema>;
+
+export const SectorMusicSchema = z.object({
+  schema: z.literal("swagbound.sector-music.v1"),
+  cols: z.number().int().positive(),
+  rows: z.number().int().positive(),
+  song: z.array(z.number().int().nonnegative()),
+  indoor: z.array(z.union([z.literal(0), z.literal(1)]))
+});
+export type SectorMusic = z.infer<typeof SectorMusicSchema>;
 
 const SpriteOverrideFrameSequenceSchema = z.array(z.number().int().nonnegative()).min(1);
 
@@ -724,6 +757,7 @@ export const NpcInteractionSchema = z
       once: z.literal(true).optional()
     }).strict().optional(),
     shop: z.number().int().nonnegative().optional(),
+    service: z.enum(["hospital", "hotel", "phone"]).optional(),
     heal: z.union([z.literal("full"), z.literal(true)]).optional(),
     save: z.literal(true).optional(),
     // Money charged before the interaction's heal (e.g. an inn's nightly fee).
@@ -736,12 +770,13 @@ export const NpcInteractionSchema = z
       && !value.ref
       && value.give === undefined
       && value.shop === undefined
+      && value.service === undefined
       && value.heal === undefined
       && value.save !== true
     ) {
       context.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "interaction entry must include pages, ref, give, shop, heal, or save"
+        message: "interaction entry must include pages, ref, give, shop, service, heal, or save"
       });
     }
     if (value.pages && value.ref) {
@@ -809,6 +844,8 @@ export const StoryTriggerSchema = z.object({
   dialogue: z.array(z.string()).optional(),
   setFlags: z.array(z.string()).optional(),
   clearFlags: z.array(z.string()).optional(),
+  /** When set, fire this music cue (a music-manifest cue id, e.g. "ending") as a forced overworld track when the trigger's effects run. Persists over sector-based music until another trigger or interior change replaces it. */
+  music: z.string().min(1).optional(),
   /** Battle group id to start after dialogue (mutually exclusive with warp). */
   battleGroup: z.number().int().nonnegative().optional(),
   /** Teleport the player here after dialogue (world pixels). */
@@ -1180,6 +1217,63 @@ export const AddedNpcsSchema = z
       seen.add(npc.id);
     });
   });
+
+const OverworldInteractableBaseSchema = z.object({
+  id: z.string().trim().min(1),
+  label: z.string().trim().min(1).optional(),
+  worldPixel: PixelSchema
+});
+
+export const OverworldSignInteractableSchema = OverworldInteractableBaseSchema.extend({
+  kind: z.literal("sign"),
+  pages: z.array(z.string().trim().min(1)).min(1)
+}).strict();
+
+export const OverworldExamineInteractableSchema = OverworldInteractableBaseSchema.extend({
+  kind: z.literal("examine"),
+  pages: z.array(z.string().trim().min(1)).min(1)
+}).strict();
+
+export const OverworldPresentInteractableSchema = OverworldInteractableBaseSchema.extend({
+  kind: z.literal("present"),
+  item: z.object({
+    char: z.number().int().nonnegative(),
+    item: z.number().int().nonnegative()
+  }).strict(),
+  pages: z.array(z.string().trim().min(1)).min(1).optional(),
+  openedPages: z.array(z.string().trim().min(1)).min(1).optional(),
+  openedFlag: z.string().trim().min(1).optional()
+}).strict();
+
+export const OverworldInteractableSchema = z.discriminatedUnion("kind", [
+  OverworldSignInteractableSchema,
+  OverworldExamineInteractableSchema,
+  OverworldPresentInteractableSchema
+]);
+
+export const OverworldInteractablesSchema = z
+  .object({
+    schema: z.literal("swagbound.overworld-interactables.v1"),
+    comment: z.string().optional(),
+    interactables: z.array(OverworldInteractableSchema)
+  })
+  .strict()
+  .superRefine((value, context) => {
+    const seen = new Set<string>();
+    value.interactables.forEach((entry, index) => {
+      if (seen.has(entry.id)) {
+        context.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: `duplicate overworld interactable id ${entry.id}`,
+          path: ["interactables", index, "id"]
+        });
+      }
+      seen.add(entry.id);
+    });
+  });
+
+export type OverworldInteractable = z.infer<typeof OverworldInteractableSchema>;
+export type OverworldInteractables = z.infer<typeof OverworldInteractablesSchema>;
 
 /** Two walk frames (sheet frame indices) per cardinal facing. */
 export const SpriteAnimationsSchema = z.record(

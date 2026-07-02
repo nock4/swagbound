@@ -1,13 +1,17 @@
 import type { CharacterCollection, ItemCollection, ItemData, PsiCollection, PsiData, ShopData } from "@eb/schemas";
 import { buildPartyMember, type PartyMember, type PartyMemberStats } from "./characterModel";
 import type { DialogueResolver } from "./dialogueRenderer";
+import { psiPpCost } from "./battleLogic";
 import {
   equipmentSlotForItemType,
+  previewEquipStats,
   sellPriceForItem,
   type EquipmentSlot,
+  type EquipStatPreview,
   type EquippedSlots,
   type PartyVitals
 } from "./partyState";
+import { formatStatusAilments, type StatusState } from "./statusEffects";
 
 export type MenuItem = {
   id: string;
@@ -69,6 +73,7 @@ export type StatusMemberViewModel = {
   maxHp: number;
   pp: number;
   maxPp: number;
+  statuses: StatusState;
   stats: PartyMemberStats;
 };
 
@@ -88,7 +93,9 @@ export type StatusViewModelInput = {
     party(): number[];
     inventory?(char: number): number[];
     equipped?(char: number): EquippedSlots;
+    storage?(): number[];
     vitals?(char: number): PartyVitals | undefined;
+    statuses?(char: number): StatusState;
   };
   wallet?: number;
 };
@@ -109,9 +116,11 @@ export type InventoryMenuEntry = {
   equipmentSlot?: EquipmentSlot;
   equipped: boolean;
   helpText?: string;
+  statPreview?: EquipStatPreview;
   detailScreenId: string;
   actionScreenId: string;
   useTargetScreenId: string;
+  giveTargetScreenId: string;
   equipActionScreenId: string;
 };
 
@@ -119,6 +128,7 @@ export type GoodsViewModel = {
   title: "Goods";
   member: ActivePartyMemberViewModel;
   targets: ActivePartyMemberViewModel[];
+  giveTargets: ActivePartyMemberViewModel[];
   entries: InventoryMenuEntry[];
 };
 
@@ -143,6 +153,8 @@ export type PsiMenuEntry = {
   label: string;
   type: string;
   level: number;
+  ppCost: number;
+  affordable: boolean;
 };
 
 export type PsiViewModel = {
@@ -165,6 +177,11 @@ export type ShopModeEntry = {
   price: number;
   ownerChar: number;
   inventorySlot?: number;
+  available: boolean;
+  affordable: boolean;
+  soldOut: boolean;
+  equippable: boolean;
+  equipmentSlot?: EquipmentSlot;
 };
 
 export type ShopViewModel = {
@@ -200,6 +217,17 @@ export type MenuAction =
       itemId: number;
     }
   | {
+      kind: "shopEquipNow";
+      storeId: number;
+      char: number;
+      inventorySlot: number;
+      itemId: number;
+    }
+  | {
+      kind: "shopEquipLater";
+      storeId: number;
+    }
+  | {
       kind: "shopCancel";
     }
   | {
@@ -210,9 +238,48 @@ export type MenuAction =
       targetChar: number;
     }
   | {
+      kind: "itemGive";
+      ownerChar: number;
+      inventorySlot: number;
+      itemId: number;
+      targetChar: number;
+    }
+  | {
+      kind: "itemDrop";
+      ownerChar: number;
+      inventorySlot: number;
+      itemId: number;
+    }
+  | {
       kind: "equip";
       char: number;
       inventorySlot: number;
+      itemId: number;
+    }
+  | {
+      kind: "hospitalService";
+      accept: boolean;
+      cost: number;
+    }
+  | {
+      kind: "hotelService";
+      accept: boolean;
+      cost: number;
+    }
+  | {
+      kind: "phoneService";
+      option: "dad" | "mom" | "cancel";
+    }
+  | {
+      kind: "storageDeposit";
+      char: number;
+      inventorySlot: number;
+      itemId: number;
+    }
+  | {
+      kind: "storageWithdraw";
+      char: number;
+      storageSlot: number;
       itemId: number;
     };
 
@@ -241,13 +308,27 @@ const GOODS_MENU_ID = "goods";
 const PSI_MENU_ID = "psi";
 const EQUIP_MENU_ID = "equip";
 const ITEM_USE_ACTION_PREFIX = "item-use";
+const ITEM_GIVE_ACTION_PREFIX = "item-give";
+const ITEM_DROP_ACTION_PREFIX = "item-drop";
 const EQUIP_ACTION_PREFIX = "equip";
 const SHOP_BUY_ACTION_PREFIX = "shop-buy";
 const SHOP_SELL_ACTION_PREFIX = "shop-sell";
+const SHOP_EQUIP_NOW_ACTION_PREFIX = "shop-equip-now";
+const SHOP_EQUIP_LATER_ACTION_PREFIX = "shop-equip-later";
 const SHOP_CANCEL_ACTION_ID = "shop-cancel";
 const ATM_ACTION_PREFIX = "atm";
-const ATM_MENU_ID = "atm";
-const ATM_DEBUG_AMOUNT = 100;
+export const ATM_MENU_ID = "atm";
+export const HOSPITAL_SERVICE_MENU_ID = "service-hospital";
+export const HOTEL_SERVICE_MENU_ID = "service-hotel";
+export const PHONE_SERVICE_MENU_ID = "service-phone";
+const PHONE_STORAGE_MENU_ID = "service-phone-storage";
+const PHONE_STORAGE_DEPOSIT_MENU_ID = "service-phone-storage-deposit";
+const PHONE_STORAGE_WITHDRAW_MENU_ID = "service-phone-storage-withdraw";
+const SERVICE_ACTION_PREFIX = "service";
+const PHONE_ACTION_PREFIX = "phone";
+const STORAGE_DEPOSIT_ACTION_PREFIX = "storage-deposit";
+const STORAGE_WITHDRAW_ACTION_PREFIX = "storage-withdraw";
+const ATM_AMOUNT_OPTIONS = [10, 50, 100, 500, 1000];
 const EQUIP_SLOTS: EquipmentSlot[] = ["weapon", "body", "arms", "other"];
 
 const MAIN_COMMANDS: Array<Omit<MenuItem, "enabled">> = [
@@ -443,6 +524,7 @@ export function buildStatusViewModel(input: StatusViewModelInput = {}): StatusVi
         maxHp: stat(vitals?.maxHp ?? member.maxHp),
         pp: stat(vitals?.pp ?? member.pp),
         maxPp: stat(vitals?.maxPp ?? member.maxPp),
+        statuses: input.partyState?.statuses?.(member.id) ?? member.statuses?.map((entry) => ({ ...entry })) ?? [],
         stats: {
           offense: stat(member.stats.offense),
           defense: stat(member.stats.defense),
@@ -462,21 +544,35 @@ export function buildShopViewModel(input: ShopViewModelInput): ShopViewModel {
   const items = itemMap(input.items);
   const shop = input.shops?.shops.find((entry) => entry.id === stat(input.storeId));
   const ownerChar = member.id;
+  const wallet = stat(input.partyState?.wallet ?? input.wallet ?? 0);
   const buyEntries = (shop?.itemIds ?? []).map((itemId, slot) => {
     const item = items.get(itemId);
     const cost = stat(item?.cost ?? 0);
+    const soldOut = itemId <= 0 || !item || cost <= 0;
+    const affordable = !soldOut && wallet >= cost;
+    const equipmentSlot = item ? equipmentSlotForItemType(item.type) : undefined;
     return {
       id: `shop-buy-${slot}-${itemId}`,
       itemId,
-      label: fitMenuLabel(`${resolveItemName(input, itemId, item)} ${cost}`),
+      label: fitMenuLabel([
+        resolveItemName(input, itemId, item),
+        String(cost),
+        soldOut ? "SOLD OUT" : (!affordable ? "NO CASH" : "")
+      ].filter(Boolean).join(" ")),
       cost,
       price: sellPriceForItem(item ?? fallbackItem(itemId)),
-      ownerChar
+      ownerChar,
+      available: !soldOut && affordable,
+      affordable,
+      soldOut,
+      equippable: item?.equippable ?? false,
+      ...(equipmentSlot ? { equipmentSlot } : {})
     };
   });
   const sellEntries = (input.partyState?.inventory?.(ownerChar) ?? member.inventory).map((itemId, slot) => {
     const item = items.get(itemId);
     const price = sellPriceForItem(item ?? fallbackItem(itemId));
+    const equipmentSlot = item ? equipmentSlotForItemType(item.type) : undefined;
     return {
       id: `shop-sell-${slot}-${itemId}`,
       itemId,
@@ -484,13 +580,18 @@ export function buildShopViewModel(input: ShopViewModelInput): ShopViewModel {
       cost: stat(item?.cost ?? 0),
       price,
       ownerChar,
-      inventorySlot: slot
+      inventorySlot: slot,
+      available: true,
+      affordable: true,
+      soldOut: false,
+      equippable: item?.equippable ?? false,
+      ...(equipmentSlot ? { equipmentSlot } : {})
     };
   });
   return {
     storeId: stat(input.storeId),
     member: activeMemberView(member),
-    wallet: stat(input.partyState?.wallet ?? input.wallet ?? 0),
+    wallet,
     buyEntries,
     sellEntries,
     available: Boolean(shop)
@@ -506,6 +607,7 @@ function buildGoodsViewModelForMember(input: PartyMenuViewModelInput, member: Pa
     title: "Goods",
     member: activeMemberView(member),
     targets: selectedPartyMembers(input).map(activeMemberView),
+    giveTargets: selectedPartyMembers(input).filter((target) => target.id !== member.id).map(activeMemberView),
     entries: inventoryEntries(input, member)
   };
 }
@@ -541,17 +643,21 @@ export function buildPsiViewModel(input: PartyMenuViewModelInput = {}): PsiViewM
 }
 
 function buildPsiViewModelForMember(input: PartyMenuViewModelInput, member: PartyMember): PsiViewModel {
+  const pp = stat(input.partyState?.vitals?.(member.id)?.pp ?? member.pp);
   const entries = (input.psi?.psi ?? [])
     .filter((psi) => isLearnedByMember(psi, member.id, member.level))
     .sort((a, b) => a.type.localeCompare(b.type) || a.id - b.id)
     .map((psi) => {
       const learned = psi.learnedBy.find((item) => item.charId === member.id);
+      const ppCost = psiPpCost(psi);
       return {
         id: `psi-${psi.id}`,
         psiId: psi.id,
-        label: fitMenuLabel([resolvePsiName(input, psi), psi.strength].filter(Boolean).join(" ")),
+        label: fitMenuLabel([resolvePsiName(input, psi), psi.strength, `PP ${ppCost}`].filter(Boolean).join(" ")),
         type: psi.type,
-        level: learned?.level ?? 0
+        level: learned?.level ?? 0,
+        ppCost,
+        affordable: pp >= ppCost
       };
     });
   return {
@@ -636,6 +742,18 @@ export function buildGoodsActionScreens(goods: GoodsViewModel): MenuScreen[] {
           label: "Use",
           enabled: true,
           childScreenId: entry.useTargetScreenId
+        },
+        {
+          id: `${entry.id}-give`,
+          label: "Give",
+          enabled: goods.giveTargets.length > 0,
+          childScreenId: entry.giveTargetScreenId
+        },
+        {
+          id: `${entry.id}-drop`,
+          label: "Drop",
+          enabled: true,
+          actionId: buildItemDropActionId(entry.ownerChar, entry.slot, entry.itemId)
         }
       ],
       wrap: false
@@ -651,6 +769,19 @@ export function buildGoodsActionScreens(goods: GoodsViewModel): MenuScreen[] {
             actionId: buildItemUseActionId(entry.ownerChar, entry.slot, entry.itemId, target.id)
           }))
         : [{ id: `${entry.id}-no-target`, label: "No target.", enabled: false }],
+      wrap: false
+    },
+    {
+      id: entry.giveTargetScreenId,
+      title: "Give",
+      items: goods.giveTargets.length > 0
+        ? goods.giveTargets.map((target) => ({
+            id: `${entry.id}-give-target-${target.id}`,
+            label: target.name,
+            enabled: true,
+            actionId: buildItemGiveActionId(entry.ownerChar, entry.slot, entry.itemId, target.id)
+          }))
+        : [{ id: `${entry.id}-no-give-target`, label: "No one to give to.", enabled: false }],
       wrap: false
     }
   ]);
@@ -679,7 +810,8 @@ export function buildEquipSlotScreens(equip: EquipViewModel): MenuScreen[] {
           id: `equip-${entry.slot}-${entry.itemId}`,
           label: fitMenuLabel([
             entry.equipped ? "Eq" : "",
-            entry.label
+            entry.label,
+            equipDeltaLabel(entry.statPreview)
           ].filter(Boolean).join(" ")),
           enabled: true,
           childScreenId: entry.equipActionScreenId
@@ -717,7 +849,7 @@ export function buildPsiScreen(psi: PsiViewModel, id = PSI_MENU_ID): MenuScreen 
     items.push({
       id: entry.id,
       label: entry.label,
-      enabled: true
+      enabled: entry.affordable
     });
   }
   return {
@@ -768,6 +900,7 @@ function statusMemberItems(member: StatusMemberViewModel): MenuItem[] {
   return [
     { id: "name-level", label: fitMenuLabel(`${member.name} Lv ${member.level}`), enabled: false },
     { id: "hp-pp", label: `HP ${member.hp}/${member.maxHp} PP ${member.pp}/${member.maxPp}`, enabled: false },
+    { id: "condition", label: fitMenuLabel(`Cond ${formatStatusAilments(member.statuses)}`), enabled: false },
     { id: "exp", label: `EXP ${member.experience}`, enabled: false },
     { id: "offense-defense", label: `Offense ${member.stats.offense} Defense ${member.stats.defense}`, enabled: false },
     { id: "speed-guts", label: `Speed ${member.stats.speed} Guts ${member.stats.guts}`, enabled: false },
@@ -806,7 +939,7 @@ export function buildShopMenuScreens(shop: ShopViewModel): MenuScreen[] {
         ? shop.buyEntries.map((entry) => ({
             id: entry.id,
             label: entry.label,
-            enabled: true,
+            enabled: entry.available,
             actionId: buildShopBuyActionId(shop.storeId, entry.ownerChar, entry.itemId)
           }))
         : [{ id: `shop-buy-empty-${shop.storeId}`, label: "No goods.", enabled: false }],
@@ -836,16 +969,149 @@ export function buildShopMenuScreens(shop: ShopViewModel): MenuScreen[] {
 export function buildAtmScreen(input: StatusViewModelInput = {}): MenuScreen {
   const wallet = stat(input.partyState?.wallet ?? input.wallet ?? 0);
   const bank = stat(input.partyState?.bank ?? 0);
+  const depositItems = atmAmountOptions(wallet).map((amount) => ({
+    id: `atm-deposit-${amount}`,
+    label: `Deposit ${amount}`,
+    enabled: wallet > 0,
+    actionId: buildAtmActionId("deposit", amount)
+  }));
+  const withdrawItems = atmAmountOptions(bank).map((amount) => ({
+    id: `atm-withdraw-${amount}`,
+    label: `Withdraw ${amount}`,
+    enabled: bank > 0,
+    actionId: buildAtmActionId("withdraw", amount)
+  }));
   return {
     id: ATM_MENU_ID,
     title: "ATM",
     items: [
       { id: "atm-wallet", label: `$swag ${wallet}`, enabled: false },
       { id: "atm-bank", label: `Bank ${bank}`, enabled: false },
-      { id: "atm-deposit-100", label: `Deposit ${ATM_DEBUG_AMOUNT}`, enabled: wallet > 0, actionId: buildAtmActionId("deposit", ATM_DEBUG_AMOUNT) },
-      { id: "atm-withdraw-100", label: `Withdraw ${ATM_DEBUG_AMOUNT}`, enabled: bank > 0, actionId: buildAtmActionId("withdraw", ATM_DEBUG_AMOUNT) },
-      { id: "atm-deposit-all", label: "Deposit All", enabled: wallet > 0, actionId: buildAtmActionId("deposit") },
-      { id: "atm-withdraw-all", label: "Withdraw All", enabled: bank > 0, actionId: buildAtmActionId("withdraw") }
+      ...(depositItems.length > 0 ? depositItems : [{ id: "atm-deposit-empty", label: "No cash to deposit.", enabled: false }]),
+      ...(withdrawItems.length > 0 ? withdrawItems : [{ id: "atm-withdraw-empty", label: "No cash to withdraw.", enabled: false }])
+    ],
+    wrap: false
+  };
+}
+
+export function buildHospitalServiceScreen(input: { wallet: number; cost: number }): MenuScreen {
+  const wallet = stat(input.wallet);
+  const cost = stat(input.cost);
+  return {
+    id: HOSPITAL_SERVICE_MENU_ID,
+    title: "Hospital",
+    items: [
+      { id: "hospital-cost", label: `Treatment ${cost}`, enabled: false },
+      { id: "hospital-wallet", label: `$swag ${wallet}`, enabled: false },
+      { id: "hospital-yes", label: "Yes", enabled: wallet >= cost, actionId: buildHospitalServiceActionId(true, cost) },
+      { id: "hospital-no", label: "No", enabled: true, actionId: buildHospitalServiceActionId(false, cost) }
+    ],
+    wrap: false
+  };
+}
+
+export function buildHotelServiceScreen(input: { wallet: number; cost: number }): MenuScreen {
+  const wallet = stat(input.wallet);
+  const cost = stat(input.cost);
+  return {
+    id: HOTEL_SERVICE_MENU_ID,
+    title: "Hotel",
+    items: [
+      { id: "hotel-cost", label: `Stay ${cost}`, enabled: false },
+      { id: "hotel-wallet", label: `$swag ${wallet}`, enabled: false },
+      { id: "hotel-yes", label: "Yes", enabled: wallet >= cost, actionId: buildHotelServiceActionId(true, cost) },
+      { id: "hotel-no", label: "No", enabled: true, actionId: buildHotelServiceActionId(false, cost) }
+    ],
+    wrap: false
+  };
+}
+
+export function buildPhoneServiceScreens(input: PartyMenuViewModelInput = {}): MenuScreen[] {
+  const member = activePartyMember(input);
+  const storage = input.partyState?.storage?.() ?? [];
+  const entries = inventoryEntries(input, member);
+  return [
+    {
+      id: PHONE_SERVICE_MENU_ID,
+      title: "Phone",
+      items: [
+        { id: "phone-dad", label: "Dad", enabled: true, actionId: buildPhoneActionId("dad") },
+        { id: "phone-storage", label: "Escargo Express", enabled: true, childScreenId: PHONE_STORAGE_MENU_ID },
+        { id: "phone-mom", label: "Mom", enabled: true, actionId: buildPhoneActionId("mom") },
+        { id: "phone-cancel", label: "Hang up", enabled: true, actionId: buildPhoneActionId("cancel") }
+      ],
+      wrap: false
+    },
+    {
+      id: PHONE_STORAGE_MENU_ID,
+      title: "Escargo Express",
+      items: [
+        { id: "phone-storage-deposit", label: "Deposit", enabled: entries.length > 0, childScreenId: PHONE_STORAGE_DEPOSIT_MENU_ID },
+        { id: "phone-storage-withdraw", label: "Withdraw", enabled: storage.length > 0, childScreenId: PHONE_STORAGE_WITHDRAW_MENU_ID }
+      ],
+      wrap: false
+    },
+    {
+      id: PHONE_STORAGE_DEPOSIT_MENU_ID,
+      title: "Deposit",
+      items: entries.length > 0
+        ? entries.map((entry) => ({
+            id: `storage-deposit-${entry.slot}-${entry.itemId}`,
+            label: entry.label,
+            enabled: true,
+            actionId: buildStorageDepositActionId(entry.ownerChar, entry.slot, entry.itemId)
+          }))
+        : [{ id: "storage-deposit-empty", label: "No goods to deposit.", enabled: false }],
+      wrap: false
+    },
+    {
+      id: PHONE_STORAGE_WITHDRAW_MENU_ID,
+      title: "Withdraw",
+      items: storage.length > 0
+        ? storage.map((itemId, slot) => {
+            const item = input.items?.items.find((entry) => entry.id === itemId);
+            return {
+              id: `storage-withdraw-${slot}-${itemId}`,
+              label: fitMenuLabel(resolveItemName(input, itemId, item)),
+              enabled: true,
+              actionId: buildStorageWithdrawActionId(member.id, slot, itemId)
+            };
+          })
+        : [{ id: "storage-withdraw-empty", label: "Storage is empty.", enabled: false }],
+      wrap: false
+    }
+  ];
+}
+
+export function buildShopEquipPromptScreen(input: {
+  storeId: number;
+  char: number;
+  inventorySlot: number;
+  itemId: number;
+  itemName: string;
+}): MenuScreen {
+  const storeId = stat(input.storeId);
+  const char = stat(input.char);
+  const inventorySlot = stat(input.inventorySlot);
+  const itemId = stat(input.itemId);
+  return {
+    id: shopEquipPromptScreenId(storeId),
+    title: "Equip",
+    items: [
+      { id: "shop-equip-item", label: fitMenuLabel(input.itemName), enabled: false },
+      { id: "shop-equip-question", label: "Equip it now?", enabled: false },
+      {
+        id: "shop-equip-yes",
+        label: "Yes",
+        enabled: true,
+        actionId: buildShopEquipNowActionId(storeId, char, inventorySlot, itemId)
+      },
+      {
+        id: "shop-equip-no",
+        label: "No",
+        enabled: true,
+        actionId: buildShopEquipLaterActionId(storeId)
+      }
     ],
     wrap: false
   };
@@ -868,9 +1134,18 @@ function inventoryEntries(input: PartyMenuViewModelInput, member: PartyMember): 
       ...(equipmentSlot ? { equipmentSlot } : {}),
       equipped: equipmentSlot ? equipped[equipmentSlot] === itemId : false,
       helpText: item?.helpText,
+      ...(item && equipmentSlot ? {
+        statPreview: previewEquipStats({
+          baseStats: member.stats,
+          equipped,
+          item,
+          itemById: (id) => items.get(id)
+        })
+      } : {}),
       detailScreenId: `check-item-${slot}-${itemId}`,
       actionScreenId: `goods-item-${member.id}-${slot}-${itemId}`,
       useTargetScreenId: `goods-use-target-${member.id}-${slot}-${itemId}`,
+      giveTargetScreenId: `goods-give-target-${member.id}-${slot}-${itemId}`,
       equipActionScreenId: `equip-item-${member.id}-${slot}-${itemId}`
     };
   });
@@ -891,6 +1166,25 @@ export function buildItemUseActionId(
   ].join(":");
 }
 
+export function buildItemGiveActionId(
+  ownerChar: number,
+  inventorySlot: number,
+  itemId: number,
+  targetChar: number
+): string {
+  return [
+    ITEM_GIVE_ACTION_PREFIX,
+    stat(ownerChar),
+    stat(inventorySlot),
+    stat(itemId),
+    stat(targetChar)
+  ].join(":");
+}
+
+export function buildItemDropActionId(ownerChar: number, inventorySlot: number, itemId: number): string {
+  return [ITEM_DROP_ACTION_PREFIX, stat(ownerChar), stat(inventorySlot), stat(itemId)].join(":");
+}
+
 export function buildEquipActionId(char: number, inventorySlot: number, itemId: number): string {
   return [EQUIP_ACTION_PREFIX, stat(char), stat(inventorySlot), stat(itemId)].join(":");
 }
@@ -903,8 +1197,36 @@ export function buildShopSellActionId(storeId: number, char: number, inventorySl
   return [SHOP_SELL_ACTION_PREFIX, stat(storeId), stat(char), stat(inventorySlot), stat(itemId)].join(":");
 }
 
+export function buildShopEquipNowActionId(storeId: number, char: number, inventorySlot: number, itemId: number): string {
+  return [SHOP_EQUIP_NOW_ACTION_PREFIX, stat(storeId), stat(char), stat(inventorySlot), stat(itemId)].join(":");
+}
+
+export function buildShopEquipLaterActionId(storeId: number): string {
+  return [SHOP_EQUIP_LATER_ACTION_PREFIX, stat(storeId)].join(":");
+}
+
 export function buildAtmActionId(op: "deposit" | "withdraw", amount?: number): string {
   return [ATM_ACTION_PREFIX, op, amount === undefined ? "all" : stat(amount)].join(":");
+}
+
+export function buildHospitalServiceActionId(accept: boolean, cost: number): string {
+  return [SERVICE_ACTION_PREFIX, "hospital", accept ? "yes" : "no", stat(cost)].join(":");
+}
+
+export function buildHotelServiceActionId(accept: boolean, cost: number): string {
+  return [SERVICE_ACTION_PREFIX, "hotel", accept ? "yes" : "no", stat(cost)].join(":");
+}
+
+export function buildPhoneActionId(option: "dad" | "mom" | "cancel"): string {
+  return [PHONE_ACTION_PREFIX, option].join(":");
+}
+
+export function buildStorageDepositActionId(char: number, inventorySlot: number, itemId: number): string {
+  return [STORAGE_DEPOSIT_ACTION_PREFIX, stat(char), stat(inventorySlot), stat(itemId)].join(":");
+}
+
+export function buildStorageWithdrawActionId(char: number, storageSlot: number, itemId: number): string {
+  return [STORAGE_WITHDRAW_ACTION_PREFIX, stat(char), stat(storageSlot), stat(itemId)].join(":");
 }
 
 export function shopRootScreenId(storeId: number): string {
@@ -917,6 +1239,10 @@ function shopBuyScreenId(storeId: number): string {
 
 function shopSellScreenId(storeId: number): string {
   return `shop-${stat(storeId)}-sell`;
+}
+
+export function shopEquipPromptScreenId(storeId: number): string {
+  return `shop-${stat(storeId)}-equip-now`;
 }
 
 export function parseMenuAction(actionId: string): MenuAction | undefined {
@@ -938,6 +1264,27 @@ export function parseMenuAction(actionId: string): MenuAction | undefined {
     const amount = Number(rawParts[1]);
     return Number.isInteger(amount) && amount >= 0 ? { kind: "atm", op, amount, all: false } : undefined;
   }
+  if (prefix === SERVICE_ACTION_PREFIX && rawParts.length === 3) {
+    const [service, answer, rawCost] = rawParts;
+    const cost = Number(rawCost);
+    if (!Number.isInteger(cost) || cost < 0 || (answer !== "yes" && answer !== "no")) {
+      return undefined;
+    }
+    if (service === "hospital") {
+      return { kind: "hospitalService", accept: answer === "yes", cost };
+    }
+    if (service === "hotel") {
+      return { kind: "hotelService", accept: answer === "yes", cost };
+    }
+    return undefined;
+  }
+  if (prefix === PHONE_ACTION_PREFIX && rawParts.length === 1) {
+    const option = rawParts[0];
+    if (option === "dad" || option === "mom" || option === "cancel") {
+      return { kind: "phoneService", option };
+    }
+    return undefined;
+  }
   const parts = rawParts.map((part) => Number(part));
   if (parts.some((part) => !Number.isInteger(part) || part < 0)) {
     return undefined;
@@ -945,6 +1292,14 @@ export function parseMenuAction(actionId: string): MenuAction | undefined {
   if (prefix === ITEM_USE_ACTION_PREFIX && parts.length === 4) {
     const [ownerChar, inventorySlot, itemId, targetChar] = parts;
     return { kind: "itemUse", ownerChar, inventorySlot, itemId, targetChar };
+  }
+  if (prefix === ITEM_GIVE_ACTION_PREFIX && parts.length === 4) {
+    const [ownerChar, inventorySlot, itemId, targetChar] = parts;
+    return { kind: "itemGive", ownerChar, inventorySlot, itemId, targetChar };
+  }
+  if (prefix === ITEM_DROP_ACTION_PREFIX && parts.length === 3) {
+    const [ownerChar, inventorySlot, itemId] = parts;
+    return { kind: "itemDrop", ownerChar, inventorySlot, itemId };
   }
   if (prefix === EQUIP_ACTION_PREFIX && parts.length === 3) {
     const [char, inventorySlot, itemId] = parts;
@@ -957,6 +1312,22 @@ export function parseMenuAction(actionId: string): MenuAction | undefined {
   if (prefix === SHOP_SELL_ACTION_PREFIX && parts.length === 4) {
     const [storeId, char, inventorySlot, itemId] = parts;
     return { kind: "shopSell", storeId, char, inventorySlot, itemId };
+  }
+  if (prefix === SHOP_EQUIP_NOW_ACTION_PREFIX && parts.length === 4) {
+    const [storeId, char, inventorySlot, itemId] = parts;
+    return { kind: "shopEquipNow", storeId, char, inventorySlot, itemId };
+  }
+  if (prefix === SHOP_EQUIP_LATER_ACTION_PREFIX && parts.length === 1) {
+    const [storeId] = parts;
+    return { kind: "shopEquipLater", storeId };
+  }
+  if (prefix === STORAGE_DEPOSIT_ACTION_PREFIX && parts.length === 3) {
+    const [char, inventorySlot, itemId] = parts;
+    return { kind: "storageDeposit", char, inventorySlot, itemId };
+  }
+  if (prefix === STORAGE_WITHDRAW_ACTION_PREFIX && parts.length === 3) {
+    const [char, storageSlot, itemId] = parts;
+    return { kind: "storageWithdraw", char, storageSlot, itemId };
   }
   return undefined;
 }
@@ -1017,6 +1388,27 @@ function equipmentSlotLabel(slot: EquipmentSlot | undefined): string {
     default:
       return "";
   }
+}
+
+function equipDeltaLabel(preview: EquipStatPreview | undefined): string {
+  if (!preview) {
+    return "";
+  }
+  const parts = [
+    statDelta("Off", preview.deltaOffense),
+    statDelta("Def", preview.deltaDefense)
+  ].filter(Boolean);
+  return parts.length > 0 ? parts.join(" ") : "Even";
+}
+
+function statDelta(label: string, delta: number): string {
+  if (delta > 0) {
+    return `${label} ↑${delta}`;
+  }
+  if (delta < 0) {
+    return `${label} ↓${Math.abs(delta)}`;
+  }
+  return "";
 }
 
 function currentFrame(state: MenuState): MenuFrame | undefined {
@@ -1090,6 +1482,18 @@ function fitMenuLabel(label: string, maxLength = 44): string {
     return clean;
   }
   return `${clean.slice(0, Math.max(0, maxLength - 3))}...`;
+}
+
+function atmAmountOptions(balance: number): number[] {
+  const normalized = stat(balance);
+  if (normalized <= 0) {
+    return [];
+  }
+  const amounts = ATM_AMOUNT_OPTIONS.filter((amount) => amount <= normalized);
+  if (!amounts.includes(normalized)) {
+    amounts.push(normalized);
+  }
+  return [...new Set(amounts)].sort((a, b) => a - b);
 }
 
 function wrapMenuText(text: string, maxLength: number): string[] {

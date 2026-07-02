@@ -11,9 +11,13 @@ import {
   buildEquipViewModel,
   buildGoodsActionScreens,
   buildGoodsViewModel,
+  buildHospitalServiceScreen,
+  buildHotelServiceScreen,
   buildMainMenuScreen,
   buildMenuScreens,
+  buildPhoneServiceScreens,
   buildPsiViewModel,
+  buildShopEquipPromptScreen,
   buildShopMenuScreens,
   buildShopViewModel,
   buildStatusMemberScreens,
@@ -182,6 +186,7 @@ describe("Status view model", () => {
     expect(memberScreens[0].items.map((item) => item.label)).toEqual([
       "MEMBER_A Lv 10",
       "HP 50/50 PP 12/12",
+      "Cond OK",
       "EXP 0",
       "Offense 11 Defense 12",
       "Speed 13 Guts 14",
@@ -340,7 +345,11 @@ describe("item and PSI menu view models", () => {
     const goodsActionScreens = buildGoodsActionScreens(goods);
     expect(goodsActionScreens[0]).toMatchObject({
       id: "goods-item-1-0-10",
-      items: [{ label: "Use", childScreenId: "goods-use-target-1-0-10" }]
+      items: [
+        { label: "Use", childScreenId: "goods-use-target-1-0-10" },
+        { label: "Give", enabled: false, childScreenId: "goods-give-target-1-0-10" },
+        { label: "Drop", actionId: "item-drop:1:0:10" }
+      ]
     });
     expect(parseMenuAction(goodsActionScreens[1].items[0]?.actionId ?? "")).toEqual({
       kind: "itemUse",
@@ -348,6 +357,12 @@ describe("item and PSI menu view models", () => {
       inventorySlot: 0,
       itemId: 10,
       targetChar: 1
+    });
+    expect(parseMenuAction(goodsActionScreens[0].items[2]?.actionId ?? "")).toEqual({
+      kind: "itemDrop",
+      ownerChar: 1,
+      inventorySlot: 0,
+      itemId: 10
     });
 
     const equipActionScreens = buildEquipActionScreens(equip);
@@ -421,8 +436,20 @@ describe("item and PSI menu view models", () => {
       ["MEMBER_A", "psi-member-0"],
       ["MEMBER_B", "psi-member-1"]
     ]);
-    expect(byId.get("psi-member-0")?.items.map((item) => item.label)).toEqual(["[psi 7 data] stage-a"]);
-    expect(byId.get("psi-member-1")?.items.map((item) => item.label)).toEqual(["[psi 9 data] stage-c"]);
+    expect(byId.get("psi-member-0")?.items.map((item) => item.label)).toEqual(["[psi 7 data] stage-a PP 0"]);
+    expect(byId.get("psi-member-1")?.items.map((item) => item.label)).toEqual(["[psi 9 data] stage-c PP 0"]);
+    expect(byId.get("goods-item-1-0-10")?.items.map((item) => [item.label, item.enabled])).toEqual([
+      ["Use", true],
+      ["Give", true],
+      ["Drop", true]
+    ]);
+    expect(parseMenuAction(byId.get("goods-give-target-1-0-10")?.items[0]?.actionId ?? "")).toEqual({
+      kind: "itemGive",
+      ownerChar: 1,
+      inventorySlot: 0,
+      itemId: 10,
+      targetChar: 2
+    });
 
     expect(byId.get("equip")?.items.map((item) => [item.label, item.childScreenId])).toEqual([
       ["MEMBER_A", "equip-member-0"],
@@ -521,13 +548,67 @@ describe("item and PSI menu view models", () => {
     expect(parseMenuAction(atm.items[2].actionId ?? "")).toEqual({
       kind: "atm",
       op: "deposit",
-      amount: 100,
+      amount: 10,
       all: false
     });
     expect(parseMenuAction(atm.items[5].actionId ?? "")).toEqual({
       kind: "atm",
       op: "withdraw",
-      all: true
+      amount: 40,
+      all: false
+    });
+  });
+
+  it("shows equip stat deltas and service action screens", () => {
+    const input = {
+      partyMembers: [partyMember(1, "MEMBER_A", 5)],
+      partyState: {
+        wallet: 80,
+        bank: 0,
+        party: () => [1],
+        inventory: () => [10, 12],
+        equipped: () => ({ weapon: 10 })
+      },
+      items: syntheticItems(),
+      resolver: {
+        itemName: (id: number) => `[item ${id} data]`,
+        psiName: (id: number) => `[psi ${id} data]`
+      }
+    };
+    const equip = buildEquipViewModel(input);
+    const weaponScreen = buildEquipSlotScreens(equip)[0];
+    expect(weaponScreen.items.map((item) => item.label)).toEqual([
+      "Eq [item 10 data] Off ↓4",
+      "[item 12 data] Off ↑4"
+    ]);
+
+    const hospital = buildHospitalServiceScreen({ wallet: 80, cost: 70 });
+    expect(parseMenuAction(hospital.items[2]?.actionId ?? "")).toEqual({
+      kind: "hospitalService",
+      accept: true,
+      cost: 70
+    });
+
+    const hotel = buildHotelServiceScreen({ wallet: 80, cost: 100 });
+    expect(hotel.items[2]).toMatchObject({ label: "Yes", enabled: false });
+
+    const phoneScreens = buildPhoneServiceScreens(input);
+    expect(phoneScreens[0].items.map((item) => item.label)).toEqual(["Dad", "Escargo Express", "Mom", "Hang up"]);
+    expect(parseMenuAction(phoneScreens[0].items[0]?.actionId ?? "")).toEqual({ kind: "phoneService", option: "dad" });
+
+    const equipPrompt = buildShopEquipPromptScreen({
+      storeId: 2,
+      char: 1,
+      inventorySlot: 1,
+      itemId: 12,
+      itemName: "[item 12 data]"
+    });
+    expect(parseMenuAction(equipPrompt.items[2]?.actionId ?? "")).toEqual({
+      kind: "shopEquipNow",
+      storeId: 2,
+      char: 1,
+      inventorySlot: 1,
+      itemId: 12
     });
   });
 });
@@ -562,9 +643,9 @@ function syntheticItems(): ItemCollection {
     sourceProjectPath: "synthetic",
     derivation: { source: "synthetic", equippable: "synthetic", helpText: "synthetic" },
     items: [
-      itemData(10, true),
+      itemData(10, true, undefined, undefined, { offense: 4 }),
       itemData(11, false),
-      itemData(12, true, "Neutral help text for [item 12 data]."),
+      itemData(12, true, "Neutral help text for [item 12 data].", undefined, { offense: 8 }),
       itemData(13, true, undefined, 0x14)
     ],
     counts: { items: 4, equippable: 3 },
@@ -576,7 +657,8 @@ function itemData(
   id: number,
   equippable: boolean,
   helpText?: string,
-  type = equippable ? 0x10 : 0x20
+  type = equippable ? 0x10 : 0x20,
+  equipBonuses?: ItemCollection["items"][number]["equipBonuses"]
 ): ItemCollection["items"][number] {
   return {
     id,
@@ -587,6 +669,7 @@ function itemData(
     argument: 0,
     equippable,
     miscFlags: [],
+    ...(equipBonuses ? { equipBonuses } : {}),
     ...(helpText ? { helpText } : {})
   };
 }

@@ -1,7 +1,9 @@
 import type { DialoguePage, TutorialStatus } from "@eb/schemas";
 import type { BattleSfxCue } from "./audio/battleSfx";
-import type { BattleCommand, EncounterAdvantage } from "./battleLogic";
-import type { MenuDebugState } from "./menuModel";
+import type { InteractionSfxCue } from "./audio/transitionSfx";
+import type { BattleCommand, BattleVictoryViewPageKind, EncounterAdvantage } from "./battleLogic";
+import type { MenuDebugState, MenuRenderScreen } from "./menuModel";
+import type { OverworldStatusHudView } from "./overworldStatusHud";
 import {
   DefaultResolver,
   INSTANT_TEXT_SPEED_CPS,
@@ -69,6 +71,36 @@ export type BattleVictoryDebug = {
     name: string;
     fromLevel: number;
     toLevel: number;
+    statChanges: Array<{
+      stat: string;
+      before: number;
+      after: number;
+      gain: number;
+    }>;
+    learnedSkills: Array<{
+      psiId: number;
+      name: string;
+    }>;
+  }>;
+};
+
+export type BattleVictoryTallyDebug = {
+  expDisplayed: number;
+  expTarget: number;
+  moneyDisplayed: number;
+  moneyTarget: number;
+  isRolling: boolean;
+};
+
+export type BattleMortalWoundsDebug = {
+  pendingCount: number;
+  rescuedOnBattleEnd: number;
+  pending: Array<{
+    index: number;
+    name: string;
+    hpDisplayed: number;
+    hpTarget: number;
+    isRolling: boolean;
   }>;
 };
 
@@ -117,10 +149,12 @@ export type BattleDebug = {
   executionStepIndex: number;
   executionStepCount: number;
   executionMessage: string;
+  actionDelayMs: number;
+  lastActionDwellMs: number;
   lastSfx: BattleSfxCue | null;
   sfxCount: number;
   firedSfx: BattleSfxCue[];
-  musicCue?: "battle" | "victory" | undefined;
+  musicCue?: "battle" | "boss" | "victory" | undefined;
   fx: BattleFxDebug;
   lastEnemyAction: LastEnemyActionDebug | null;
   party: BattleCombatantDebug[];
@@ -142,8 +176,12 @@ export type BattleDebug = {
   };
   outcome: "ongoing" | "win" | "lose";
   victorySummary: BattleVictoryDebug | null;
+  victoryTally: BattleVictoryTallyDebug | null;
   victorySummaryPageIndex: number;
   victorySummaryPageCount: number;
+  victorySummaryPageKind: BattleVictoryViewPageKind | null;
+  victorySummaryPageHighlighted: boolean;
+  mortalWounds: BattleMortalWoundsDebug;
 };
 
 export type DebugNpc = {
@@ -217,6 +255,25 @@ export type CutsceneMoveDebug = {
   position?: { x: number; y: number };
 };
 
+export type OverworldInteractableDebug = {
+  id: string;
+  kind: "sign" | "present" | "examine";
+  x: number;
+  y: number;
+  label?: string;
+  opened?: boolean;
+};
+
+export type OverworldInteractionTargetDebug = {
+  kind: "npc" | "sign" | "present" | "examine";
+  key: string;
+  id: number | string;
+  x: number;
+  y: number;
+  distance: number;
+  label?: string;
+};
+
 export type OverworldDebug = {
   mode: "world" | "fallback" | "error";
   dialogueOpen: boolean;
@@ -261,10 +318,19 @@ export type OverworldDebug = {
   returnContextActive?: boolean;
   /** Facing-aware: an interactable NPC is in front and in range. */
   canInteract?: boolean;
-  interactionTargetId?: number;
+  interactionTargetId?: number | string;
+  interactionTargetKind?: OverworldInteractionTargetDebug["kind"];
+  interactionTargetKey?: string;
+  nearestInteractable?: OverworldInteractionTargetDebug;
+  interactables?: OverworldInteractableDebug[];
+  interactionSfx?: {
+    last: InteractionSfxCue | null;
+    count: number;
+    calls: InteractionSfxCue[];
+  };
   activeNpcId?: number;
   distanceToNpc?: number;
-  /** Radius-only proximity to the nearest interactable NPC. */
+  /** Radius-only proximity to the nearest interactable. */
   inInteractionRange: boolean;
   movementBounds: { minX: number; maxX: number; minY: number; maxY: number };
   statusLines: string[];
@@ -321,11 +387,23 @@ export type OverworldDebug = {
     bank: number;
     inventoryChars: number;
     inventoryItems: number;
+    storageItems: number;
     partyCount: number;
   };
+  overworldHud?: OverworldStatusHudView;
   shopOpen?: boolean;
   activeShopStoreId?: number;
   menu?: MenuDebugState;
+  menuRenderStack?: MenuRenderScreen[];
+  menuSfx?: {
+    last: BattleSfxCue | null;
+    count: number;
+    calls: BattleSfxCue[];
+  };
+  service?: {
+    active?: Record<string, unknown>;
+    lastResult?: Record<string, unknown>;
+  };
   world?: {
     available: boolean;
     originTile?: { x: number; y: number };

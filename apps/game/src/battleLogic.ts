@@ -209,12 +209,22 @@ export type BattleLearnedSkillSummary = {
   name: string;
 };
 
+export type BattleLevelUpStatKey = keyof PartyMemberStats | "maxHp" | "maxPp";
+
+export type BattleLevelUpStatChange = {
+  stat: BattleLevelUpStatKey;
+  before: number;
+  after: number;
+  gain: number;
+};
+
 export type BattleLevelUpSummary = {
   charId: number;
   name: string;
   fromLevel: number;
   toLevel: number;
   statGains: PartyMemberStats & { maxHp: number; maxPp: number };
+  statChanges: BattleLevelUpStatChange[];
   learnedSkills: BattleLearnedSkillSummary[];
 };
 
@@ -228,10 +238,21 @@ export type BattleVictorySummary = {
 export type BattleVictoryViewModel = {
   lines: string[];
   pages: string[][];
+  pageDetails: BattleVictoryViewPage[];
   expGained: number;
   moneyGained: number;
   itemsFound: string[];
   levelUps: BattleLevelUpSummary[];
+};
+
+export type BattleVictoryViewPageKind = "tally" | "level-up" | "stat-gains" | "learned-psi";
+
+export type BattleVictoryViewPage = {
+  kind: BattleVictoryViewPageKind;
+  lines: string[];
+  highlighted?: boolean;
+  levelUpIndex?: number;
+  learnedSkillIndex?: number;
 };
 
 export const VICTORY_SUMMARY_PAGE_LINE_LIMIT = 3;
@@ -1221,23 +1242,68 @@ export function applyVictoryRewards(
 
 export function buildVictorySummaryViewModel(summary: BattleVictorySummary): BattleVictoryViewModel {
   const itemsFound = summary.drops.map((drop) => drop.itemName);
-  const lines = [
-    `EXP ${summary.expGained}`,
-    `$swag ${summary.moneyGained}`,
-    itemsFound.length > 0 ? `Found ${itemsFound.join(", ")}` : "Found no items",
-    ...summary.levelUps.flatMap((levelUp) => [
-      `${levelUp.name} Lv ${levelUp.toLevel}`,
-      ...levelUp.learnedSkills.map((skill) => `Learned ${skill.name}`)
-    ])
-  ];
+  const pageDetails = victorySummaryPageDetails(summary, itemsFound);
+  const lines = pageDetails.flatMap((page) => page.lines);
   return {
     lines,
-    pages: paginateVictorySummaryLines(lines),
+    pages: pageDetails.map((page) => [...page.lines]),
+    pageDetails,
     expGained: summary.expGained,
     moneyGained: summary.moneyGained,
     itemsFound,
     levelUps: summary.levelUps
   };
+}
+
+function victorySummaryPageDetails(summary: BattleVictorySummary, itemsFound: string[]): BattleVictoryViewPage[] {
+  const pages: BattleVictoryViewPage[] = [{
+    kind: "tally",
+    lines: [
+      `${summary.expGained} EXP`,
+      `You got $${summary.moneyGained}`,
+      itemsFound.length > 0 ? `Found ${itemsFound.join(", ")}` : "Found no items"
+    ]
+  }];
+
+  summary.levelUps.forEach((levelUp, levelUpIndex) => {
+    pages.push({
+      kind: "level-up",
+      highlighted: true,
+      levelUpIndex,
+      lines: [
+        `${levelUp.name} LEVEL UP!`,
+        `Lv ${levelUp.fromLevel} -> ${levelUp.toLevel} ↑`
+      ]
+    });
+
+    const statLines = levelUp.statChanges.map((change) =>
+      `${levelUpStatLabel(change.stat)} ${change.before} -> ${change.after} ↑`
+    );
+    for (const page of paginateVictorySummaryLines(statLines)) {
+      pages.push({
+        kind: "stat-gains",
+        levelUpIndex,
+        lines: page
+      });
+    }
+
+    levelUp.learnedSkills.forEach((skill, learnedSkillIndex) => {
+      pages.push({
+        kind: "learned-psi",
+        highlighted: true,
+        levelUpIndex,
+        learnedSkillIndex,
+        lines: [learnedPsiLine(skill.name)]
+      });
+    });
+  });
+
+  return pages;
+}
+
+function learnedPsiLine(name: string): string {
+  const trimmed = name.trim();
+  return /^psi\b/i.test(trimmed) ? `Learned ${trimmed}!` : `Learned PSI ${trimmed}!`;
 }
 
 export function paginateVictorySummaryLines(
@@ -1270,6 +1336,35 @@ export function tickBattleMeters(state: BattleState, dtMs: number): BattleState 
     enemies: state.enemies.map((combatant) => ({ ...combatant, hp: tick(combatant.hp, dtMs) })),
     wallet: state.wallet,
     roundNumber: state.roundNumber
+  };
+}
+
+export function isPendingPartyMortalWound(combatant: Pick<Combatant, "hp" | "isEnemy">): boolean {
+  return !combatant.isEnemy && combatant.hp.target <= 0 && combatant.hp.displayed > 0;
+}
+
+export function settlePendingPartyMortalWounds(state: BattleState): { state: BattleState; rescuedCount: number } {
+  let rescuedCount = 0;
+  const party = state.party.map((combatant) => {
+    if (!isPendingPartyMortalWound(combatant)) {
+      return combatant;
+    }
+    rescuedCount += 1;
+    const currentHp = clamp(Math.floor(combatant.hp.displayed), 1, Math.max(1, stat(combatant.maxHp)));
+    return {
+      ...combatant,
+      hp: {
+        ...combatant.hp,
+        displayed: currentHp,
+        target: currentHp,
+        isRolling: false,
+        stepRemainder: 0
+      }
+    };
+  });
+  return {
+    state: rescuedCount > 0 ? { ...state, party } : state,
+    rescuedCount
   };
 }
 
@@ -1939,6 +2034,11 @@ function applyExperienceToCombatant(combatant: Combatant, expGained: number, psi
       fromLevel: currentLevel,
       toLevel: nextLevel,
       statGains,
+      statChanges: levelUpStatChanges(combatant, {
+        stats: nextStats,
+        maxHp: nextMaxHp,
+        maxPp: nextMaxPp
+      }),
       learnedSkills
     }
   };
@@ -2000,6 +2100,75 @@ function maxStats(left: PartyMemberStats, right: PartyMemberStats): PartyMemberS
     iq: Math.max(left.iq, right.iq),
     luck: Math.max(left.luck, right.luck)
   };
+}
+
+const LEVEL_UP_STAT_KEYS = [
+  "offense",
+  "defense",
+  "speed",
+  "guts",
+  "vitality",
+  "iq",
+  "luck",
+  "maxHp",
+  "maxPp"
+] as const satisfies readonly BattleLevelUpStatKey[];
+
+type LevelUpStatSnapshot = {
+  stats: PartyMemberStats;
+  maxHp: number;
+  maxPp: number;
+};
+
+function levelUpStatChanges(
+  before: LevelUpStatSnapshot,
+  after: LevelUpStatSnapshot
+): BattleLevelUpStatChange[] {
+  return LEVEL_UP_STAT_KEYS
+    .map((key) => {
+      const beforeValue = levelUpStatValue(before, key);
+      const afterValue = levelUpStatValue(after, key);
+      return {
+        stat: key,
+        before: beforeValue,
+        after: afterValue,
+        gain: afterValue - beforeValue
+      };
+    })
+    .filter((change) => change.gain > 0);
+}
+
+function levelUpStatValue(snapshot: LevelUpStatSnapshot, key: BattleLevelUpStatKey): number {
+  if (key === "maxHp") {
+    return stat(snapshot.maxHp);
+  }
+  if (key === "maxPp") {
+    return stat(snapshot.maxPp);
+  }
+  return stat(snapshot.stats[key]);
+}
+
+function levelUpStatLabel(key: BattleLevelUpStatKey): string {
+  switch (key) {
+    case "offense":
+      return "Offense";
+    case "defense":
+      return "Defense";
+    case "speed":
+      return "Speed";
+    case "guts":
+      return "Guts";
+    case "vitality":
+      return "Vitality";
+    case "iq":
+      return "IQ";
+    case "luck":
+      return "Luck";
+    case "maxHp":
+      return "Max HP";
+    case "maxPp":
+      return "Max PP";
+  }
 }
 
 function cloneCombatant(combatant: Combatant): Combatant {
