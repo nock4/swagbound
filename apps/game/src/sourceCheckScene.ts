@@ -275,6 +275,15 @@ export class SourceCheckScene extends Phaser.Scene {
   private returnToWorld(outcome: SourceCheckOutcome): void {
     this.phase = "exiting";
     const context = this.returnTo.context;
+    // Normalize the return party through PartyState for EVERY outcome. The
+    // cleared path already did this inside applyReward; declined/failed skip it,
+    // and a raw (un-normalized) party snapshot can be rejected by the world
+    // scene's restore — which would strand the player in this scene.
+    if (!this.rewardApplied) {
+      const party = new PartyState();
+      party.restore(context.restore.party);
+      context.restore.party = party.snapshot();
+    }
     context.restore.player = {
       x: this.returnTo.worldPixel.x,
       y: this.returnTo.worldPixel.y,
@@ -445,7 +454,7 @@ export class SourceCheckScene extends Phaser.Scene {
   private currentReveal(): { revealedText: string; revealedChars: number; revealComplete: boolean } {
     const text = this.phase === "feedback" ? this.feedbackText : this.currentQuestion()?.prompt ?? "";
     return this.revealForced
-      ? revealState(text, 0, 1_000_000)
+      ? revealState(text, Number.MAX_SAFE_INTEGER, TEXT_CPS)
       : revealState(text, this.time.now - this.revealStartedAt, TEXT_CPS);
   }
 
