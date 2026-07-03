@@ -1262,6 +1262,120 @@ export const OverworldInteractableSchema = z.discriminatedUnion("kind", [
   OverworldPresentInteractableSchema
 ]);
 
+export const CardNftSchema = z.object({
+  id: z.string().trim().min(1),
+  name: z.string().trim().min(1),
+  collection: z.literal("card-nft-2"),
+  tokenRef: z.string().trim().min(1),
+  image: z.string().trim().min(1),
+  thumb: z.string().trim().min(1),
+  rarity: z.enum(["common", "holo", "source-grade"]),
+  region: z.string().trim().min(1),
+  sortIndex: z.number().int().positive(),
+  caption: z.string().trim().min(1),
+  silhouetteHint: z.string().trim().min(1)
+}).strict();
+
+export const CardNftsSchema = z.object({
+  schema: z.literal("swagbound.card-nfts.v1"),
+  comment: z.string().optional(),
+  cards: z.array(CardNftSchema).min(1)
+}).strict().superRefine((value, context) => {
+  const seen = new Set<string>();
+  value.cards.forEach((card, index) => {
+    if (seen.has(card.id)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate card id ${card.id}`,
+        path: ["cards", index, "id"]
+      });
+    }
+    seen.add(card.id);
+  });
+});
+
+export const SourceCheckQuestionSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("trueFalse"),
+    prompt: z.string().trim().min(1).max(240),
+    answer: z.boolean(),
+    failLine: z.string().trim().min(1).optional(),
+    spoilerGateFlag: z.string().trim().min(1).optional()
+  }).strict(),
+  z.object({
+    type: z.literal("multipleChoice4"),
+    prompt: z.string().trim().min(1).max(240),
+    options: z.array(z.string().trim().min(1).max(60)).length(4),
+    answerIndex: z.number().int().min(0).max(3),
+    officialIndex: z.number().int().min(0).max(3).optional(),
+    failLine: z.string().trim().min(1).optional(),
+    spoilerGateFlag: z.string().trim().min(1).optional()
+  }).strict()
+]);
+
+export const DrifellaSourceCheckSchema = z.object({
+  id: z.string().trim().min(1),
+  drifellaId: z.string().trim().min(1),
+  npcId: z.number().int().min(100300).max(100399),
+  region: z.string().trim().min(1),
+  tier: z.number().int().min(1).max(4),
+  placement: z.object({
+    kind: z.string().trim().min(1),
+    worldPixel: z.object({ x: z.number().int(), y: z.number().int() }),
+    facing: z.enum(["up", "down", "left", "right"])
+  }).strict(),
+  visibility: z.object({
+    requireFlags: z.array(z.string().trim().min(1)),
+    blockFlags: z.array(z.string().trim().min(1))
+  }).strict(),
+  battleSprite: z.string().trim().min(1),
+  hints: z.array(z.discriminatedUnion("kind", [
+    z.object({ kind: z.literal("rumorNpc"), npcId: z.number().int(), page: z.string().trim().min(1) }).strict(),
+    z.object({ kind: z.literal("binder") }).strict()
+  ])),
+  entryPrompt: z.array(z.string().trim().min(1)).min(1),
+  questions: z.object({
+    drawCount: z.number().int().min(1),
+    pool: z.array(SourceCheckQuestionSchema).min(1)
+  }).strict().refine((value) => value.pool.length >= value.drawCount, {
+    message: "question pool smaller than drawCount"
+  }),
+  rewards: z.object({
+    cardId: z.string().trim().min(1),
+    itemId: z.number().int().positive()
+  }).strict(),
+  retry: z.object({
+    policy: z.literal("leaveArea"),
+    rotatePool: z.boolean(),
+    checkpointAt: z.number().int().positive().nullable()
+  }).strict(),
+  reactions: z.object({
+    correct: z.array(z.string().trim().min(1)).min(1),
+    cleared: z.array(z.string().trim().min(1)).min(1),
+    failed: z.array(z.string().trim().min(1)).min(1),
+    alreadyCleared: z.array(z.string().trim().min(1)).min(1)
+  }).strict()
+}).strict();
+
+export const DrifellaSourceChecksSchema = z.object({
+  schema: z.literal("swagbound.drifella-source-checks.v1"),
+  comment: z.string().optional(),
+  checks: z.array(DrifellaSourceCheckSchema).min(1)
+}).strict().superRefine((value, context) => {
+  const ids = new Set<string>();
+  const npcIds = new Set<number>();
+  value.checks.forEach((check, index) => {
+    if (ids.has(check.id)) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: `duplicate check id ${check.id}`, path: ["checks", index, "id"] });
+    }
+    if (npcIds.has(check.npcId)) {
+      context.addIssue({ code: z.ZodIssueCode.custom, message: `duplicate check npcId ${check.npcId}`, path: ["checks", index, "npcId"] });
+    }
+    ids.add(check.id);
+    npcIds.add(check.npcId);
+  });
+});
+
 export const OverworldInteractablesSchema = z
   .object({
     schema: z.literal("swagbound.overworld-interactables.v1"),
@@ -1285,6 +1399,11 @@ export const OverworldInteractablesSchema = z
 
 export type OverworldInteractable = z.infer<typeof OverworldInteractableSchema>;
 export type OverworldInteractables = z.infer<typeof OverworldInteractablesSchema>;
+export type CardNft = z.infer<typeof CardNftSchema>;
+export type CardNfts = z.infer<typeof CardNftsSchema>;
+export type SourceCheckQuestion = z.infer<typeof SourceCheckQuestionSchema>;
+export type DrifellaSourceCheck = z.infer<typeof DrifellaSourceCheckSchema>;
+export type DrifellaSourceChecks = z.infer<typeof DrifellaSourceChecksSchema>;
 
 /** Two walk frames (sheet frame indices) per cardinal facing. */
 export const SpriteAnimationsSchema = z.record(

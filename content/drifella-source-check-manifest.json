@@ -1,0 +1,1875 @@
+{
+  "schema": "swagbound.drifella-source-check-manifest.v0",
+  "comment": "DRAFT accounting manifest — every Drifella2 roster creature (95/95) allocated to a Source Check. NOT loaded by the game and NOT in the build copy-list; this is the wiring worklist for content/drifella-source-checks.json. Region/exposure allocation is a deterministic token-order starting point — swap freely in the art-direction pass. currentAmbientGroups = sprite groups wearing this creature as an ambient crowd skin today (see the ambient-reassignment decision in the design spec). The 2 unshipped creatures (9780, 9849) are allocated to the secret tier and need sprite intake first. CARD PAIRING (2026-07-03): cardNftRewardId now references the 95 rarest Card NFT 2 pieces by Magic Eden meInstant rank (snapshot in content/card-nfts-top95.json) — rarest cards guard the deepest checks; within each region, rarer cards go to hidden/secret slots.",
+  "quotas": [
+    {
+      "region": "morningside",
+      "tier": 1,
+      "visible": 6,
+      "hidden": 2
+    },
+    {
+      "region": "postwick",
+      "tier": 1,
+      "visible": 6,
+      "hidden": 3
+    },
+    {
+      "region": "bluebell-village",
+      "tier": 2,
+      "visible": 5,
+      "hidden": 4
+    },
+    {
+      "region": "dead-letter",
+      "tier": 2,
+      "visible": 5,
+      "hidden": 5
+    },
+    {
+      "region": "little-swag-world",
+      "tier": 3,
+      "visible": 12,
+      "hidden": 6
+    },
+    {
+      "region": "the-galleria",
+      "tier": 3,
+      "visible": 7,
+      "hidden": 5
+    },
+    {
+      "region": "solana-beach",
+      "tier": 3,
+      "visible": 6,
+      "hidden": 4
+    },
+    {
+      "region": "vacancy-flats",
+      "tier": 4,
+      "visible": 2,
+      "hidden": 5
+    },
+    {
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "visible": 2,
+      "hidden": 4
+    },
+    {
+      "region": "secret",
+      "tier": 4,
+      "visible": 0,
+      "hidden": 6
+    }
+  ],
+  "totals": {
+    "creatures": 95,
+    "allocated": 95,
+    "shipped": 93,
+    "vaultOnly": 2
+  },
+  "checks": [
+    {
+      "checkId": "sourcecheck-morningside-001",
+      "drifellaId": "drifella2-168",
+      "token": "168",
+      "region": "morningside",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        214
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10925",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-morningside-002",
+      "drifellaId": "drifella2-473",
+      "token": "473",
+      "region": "morningside",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        213
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10998",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-morningside-003",
+      "drifellaId": "drifella2-527",
+      "token": "527",
+      "region": "morningside",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        233
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10458",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-morningside-004",
+      "drifellaId": "drifella2-587",
+      "token": "587",
+      "region": "morningside",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        259
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3672",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-morningside-005",
+      "drifellaId": "drifella2-602",
+      "token": "602",
+      "region": "morningside",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        204
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4969",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-morningside-006",
+      "drifellaId": "drifella2-684",
+      "token": "684",
+      "region": "morningside",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        201
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10906",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-morningside-007",
+      "drifellaId": "drifella2-795",
+      "token": "795",
+      "region": "morningside",
+      "tier": 1,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        227
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10464",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-morningside-008",
+      "drifellaId": "drifella2-816",
+      "token": "816",
+      "region": "morningside",
+      "tier": 1,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        198
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10681",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-postwick-001",
+      "drifellaId": "drifella2-1374",
+      "token": "1374",
+      "region": "postwick",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        199
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8869",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-postwick-002",
+      "drifellaId": "drifella2-1427",
+      "token": "1427",
+      "region": "postwick",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        222
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3550",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-postwick-003",
+      "drifellaId": "drifella2-1442",
+      "token": "1442",
+      "region": "postwick",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        442
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8877",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-postwick-004",
+      "drifellaId": "drifella2-1552",
+      "token": "1552",
+      "region": "postwick",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        202
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3476",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-postwick-005",
+      "drifellaId": "drifella2-1679",
+      "token": "1679",
+      "region": "postwick",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        239
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4855",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-postwick-006",
+      "drifellaId": "drifella2-1789",
+      "token": "1789",
+      "region": "postwick",
+      "tier": 1,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        374
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3452",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-postwick-007",
+      "drifellaId": "drifella2-1794",
+      "token": "1794",
+      "region": "postwick",
+      "tier": 1,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        33
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8864",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-postwick-008",
+      "drifellaId": "drifella2-1830",
+      "token": "1830",
+      "region": "postwick",
+      "tier": 1,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        203
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10708",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-postwick-009",
+      "drifellaId": "drifella2-1841",
+      "token": "1841",
+      "region": "postwick",
+      "tier": 1,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        206
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8930",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-bluebell-village-001",
+      "drifellaId": "drifella2-1845",
+      "token": "1845",
+      "region": "bluebell-village",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        221
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-6848",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-bluebell-village-002",
+      "drifellaId": "drifella2-1849",
+      "token": "1849",
+      "region": "bluebell-village",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        266
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10986",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-bluebell-village-003",
+      "drifellaId": "drifella2-1879",
+      "token": "1879",
+      "region": "bluebell-village",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        376
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10806",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-bluebell-village-004",
+      "drifellaId": "drifella2-1901",
+      "token": "1901",
+      "region": "bluebell-village",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        210
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3704",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-bluebell-village-005",
+      "drifellaId": "drifella2-2128",
+      "token": "2128",
+      "region": "bluebell-village",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        211
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10362",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-bluebell-village-006",
+      "drifellaId": "drifella2-2130",
+      "token": "2130",
+      "region": "bluebell-village",
+      "tier": 2,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        229
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8886",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-bluebell-village-007",
+      "drifellaId": "drifella2-2258",
+      "token": "2258",
+      "region": "bluebell-village",
+      "tier": 2,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        243
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10682",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-bluebell-village-008",
+      "drifellaId": "drifella2-2281",
+      "token": "2281",
+      "region": "bluebell-village",
+      "tier": 2,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        293
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10445",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-bluebell-village-009",
+      "drifellaId": "drifella2-2290",
+      "token": "2290",
+      "region": "bluebell-village",
+      "tier": 2,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        371
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-9993",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-001",
+      "drifellaId": "drifella2-2329",
+      "token": "2329",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        373
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4644",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-002",
+      "drifellaId": "drifella2-2344",
+      "token": "2344",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        423
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10857",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-003",
+      "drifellaId": "drifella2-2427",
+      "token": "2427",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        26
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10699",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-004",
+      "drifellaId": "drifella2-2477",
+      "token": "2477",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        207
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3650",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-005",
+      "drifellaId": "drifella2-2630",
+      "token": "2630",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        224
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3676",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-006",
+      "drifellaId": "drifella2-2694",
+      "token": "2694",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        225
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4632",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-007",
+      "drifellaId": "drifella2-2781",
+      "token": "2781",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        230
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3717",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-008",
+      "drifellaId": "drifella2-2796",
+      "token": "2796",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        254
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8926",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-009",
+      "drifellaId": "drifella2-2801",
+      "token": "2801",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        265
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3497",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-dead-letter-010",
+      "drifellaId": "drifella2-3162",
+      "token": "3162",
+      "region": "dead-letter",
+      "tier": 2,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        375
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3513",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-001",
+      "drifellaId": "drifella2-3323",
+      "token": "3323",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        377
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8903",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-002",
+      "drifellaId": "drifella2-3353",
+      "token": "3353",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        200
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10800",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-003",
+      "drifellaId": "drifella2-3360",
+      "token": "3360",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        208
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4799",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-004",
+      "drifellaId": "drifella2-3427",
+      "token": "3427",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        209
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8890",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-005",
+      "drifellaId": "drifella2-3436",
+      "token": "3436",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        228
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10718",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-006",
+      "drifellaId": "drifella2-3444",
+      "token": "3444",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        231
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3633",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-007",
+      "drifellaId": "drifella2-3463",
+      "token": "3463",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        236
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3473",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-008",
+      "drifellaId": "drifella2-3555",
+      "token": "3555",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        240
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3600",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-009",
+      "drifellaId": "drifella2-3630",
+      "token": "3630",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        248
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8923",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-010",
+      "drifellaId": "drifella2-3634",
+      "token": "3634",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        262
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3629",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-011",
+      "drifellaId": "drifella2-3669",
+      "token": "3669",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        263
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4698",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-012",
+      "drifellaId": "drifella2-3790",
+      "token": "3790",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        267
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10787",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-013",
+      "drifellaId": "drifella2-3818",
+      "token": "3818",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        405
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3512",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-014",
+      "drifellaId": "drifella2-4010",
+      "token": "4010",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        414
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3714",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-015",
+      "drifellaId": "drifella2-4166",
+      "token": "4166",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        426
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3677",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-016",
+      "drifellaId": "drifella2-4243",
+      "token": "4243",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        429
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3542",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-017",
+      "drifellaId": "drifella2-4281",
+      "token": "4281",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        430
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8836",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-little-swag-world-018",
+      "drifellaId": "drifella2-4508",
+      "token": "4508",
+      "region": "little-swag-world",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        51
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-5623",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-001",
+      "drifellaId": "drifella2-4564",
+      "token": "4564",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        197
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3475",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-002",
+      "drifellaId": "drifella2-4595",
+      "token": "4595",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        205
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-6660",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-003",
+      "drifellaId": "drifella2-4748",
+      "token": "4748",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        212
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8876",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-004",
+      "drifellaId": "drifella2-4888",
+      "token": "4888",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        226
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8928",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-005",
+      "drifellaId": "drifella2-5036",
+      "token": "5036",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        234
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3682",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-006",
+      "drifellaId": "drifella2-5170",
+      "token": "5170",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        235
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-8935",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-007",
+      "drifellaId": "drifella2-5250",
+      "token": "5250",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        244
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10701",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-008",
+      "drifellaId": "drifella2-5419",
+      "token": "5419",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        246
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3599",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-009",
+      "drifellaId": "drifella2-5588",
+      "token": "5588",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        257
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-9060",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-010",
+      "drifellaId": "drifella2-5826",
+      "token": "5826",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        269
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3549",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-011",
+      "drifellaId": "drifella2-5845",
+      "token": "5845",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        270
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10801",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-galleria-012",
+      "drifellaId": "drifella2-5984",
+      "token": "5984",
+      "region": "the-galleria",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        350
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4679",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-001",
+      "drifellaId": "drifella2-6002",
+      "token": "6002",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        353
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3459",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-002",
+      "drifellaId": "drifella2-6345",
+      "token": "6345",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        356
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10774",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-003",
+      "drifellaId": "drifella2-6386",
+      "token": "6386",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        360
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4932",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-004",
+      "drifellaId": "drifella2-6472",
+      "token": "6472",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        368
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10848",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-005",
+      "drifellaId": "drifella2-6735",
+      "token": "6735",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        369
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3726",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-006",
+      "drifellaId": "drifella2-6775",
+      "token": "6775",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        378
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10712",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-007",
+      "drifellaId": "drifella2-6986",
+      "token": "6986",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        384
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3591",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-008",
+      "drifellaId": "drifella2-7211",
+      "token": "7211",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        401
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3691",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-009",
+      "drifellaId": "drifella2-7390",
+      "token": "7390",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        402
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3553",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-solana-beach-010",
+      "drifellaId": "drifella2-7753",
+      "token": "7753",
+      "region": "solana-beach",
+      "tier": 3,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        403
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4856",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-vacancy-flats-001",
+      "drifellaId": "drifella2-7997",
+      "token": "7997",
+      "region": "vacancy-flats",
+      "tier": 4,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        404
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-6833",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-vacancy-flats-002",
+      "drifellaId": "drifella2-8106",
+      "token": "8106",
+      "region": "vacancy-flats",
+      "tier": 4,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        407
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10790",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-vacancy-flats-003",
+      "drifellaId": "drifella2-8218",
+      "token": "8218",
+      "region": "vacancy-flats",
+      "tier": 4,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        409
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3493",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-vacancy-flats-004",
+      "drifellaId": "drifella2-8256",
+      "token": "8256",
+      "region": "vacancy-flats",
+      "tier": 4,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        410
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10904",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-vacancy-flats-005",
+      "drifellaId": "drifella2-8290",
+      "token": "8290",
+      "region": "vacancy-flats",
+      "tier": 4,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        411
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3448",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-vacancy-flats-006",
+      "drifellaId": "drifella2-8394",
+      "token": "8394",
+      "region": "vacancy-flats",
+      "tier": 4,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        420
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3412",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-vacancy-flats-007",
+      "drifellaId": "drifella2-8424",
+      "token": "8424",
+      "region": "vacancy-flats",
+      "tier": 4,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        422
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3564",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-unlisted-room-001",
+      "drifellaId": "drifella2-8669",
+      "token": "8669",
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        424
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-4963",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-unlisted-room-002",
+      "drifellaId": "drifella2-8862",
+      "token": "8862",
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "exposure": "visible",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        433
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3509",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-unlisted-room-003",
+      "drifellaId": "drifella2-8878",
+      "token": "8878",
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        447
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10909",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-unlisted-room-004",
+      "drifellaId": "drifella2-9018",
+      "token": "9018",
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        457
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3703",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-unlisted-room-005",
+      "drifellaId": "drifella2-9135",
+      "token": "9135",
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        459
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-10955",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-the-unlisted-room-006",
+      "drifellaId": "drifella2-9232",
+      "token": "9232",
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "exposure": "hidden",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        460
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3694",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-secret-001",
+      "drifellaId": "drifella2-9780",
+      "token": "9780",
+      "region": "secret",
+      "tier": 4,
+      "exposure": "secret",
+      "spriteShipped": false,
+      "currentAmbientGroups": [],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-6803",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-secret-002",
+      "drifellaId": "drifella2-9849",
+      "token": "9849",
+      "region": "secret",
+      "tier": 4,
+      "exposure": "secret",
+      "spriteShipped": false,
+      "currentAmbientGroups": [],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3561",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-secret-003",
+      "drifellaId": "drifella2-9305",
+      "token": "9305",
+      "region": "secret",
+      "tier": 4,
+      "exposure": "secret",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        71
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3437",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-secret-004",
+      "drifellaId": "drifella2-9461",
+      "token": "9461",
+      "region": "secret",
+      "tier": 4,
+      "exposure": "secret",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        152
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3519",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-secret-005",
+      "drifellaId": "drifella2-9463",
+      "token": "9463",
+      "region": "secret",
+      "tier": 4,
+      "exposure": "secret",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        111
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3451",
+      "itemRewardId": null,
+      "status": "unplaced"
+    },
+    {
+      "checkId": "sourcecheck-secret-006",
+      "drifellaId": "drifella2-9747",
+      "token": "9747",
+      "region": "secret",
+      "tier": 4,
+      "exposure": "secret",
+      "spriteShipped": true,
+      "currentAmbientGroups": [
+        382
+      ],
+      "placement": {
+        "kind": "TBD",
+        "worldPixel": null
+      },
+      "cardNftRewardId": "card-nft-2-3578",
+      "itemRewardId": null,
+      "status": "unplaced"
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 {
   "id": "slice-01",
-  "title": "Signal Town — Bosch's Block",
-  "description": "Swagbound opening beat: Bosch wakes to find a smoother 'public version' of himself already walked the block. Grab something real and head out to prove the you that just woke up got here first.",
+  "title": "Morningside — Bosch's Block",
+  "description": "Swagbound opening beat: Bosch wakes to find a smoother 'leaked version' of himself already walked the block. Grab something real and head out to prove the you that just woke up got here first.",
   "tileSize": 32,
   "palette": [
     { "symbol": "W", "name": "house wall", "solid": true, "color": "#3b2f4a", "accent": "#54456a" },

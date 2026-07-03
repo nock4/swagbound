@@ -2,12 +2,6 @@
   "schema": "swagbound.dialogue-library.v1",
   "generatedFrom": "swagbound-phaser structured dialogue",
   "entries": {
-    "passthrough:empty": {
-      "speaker": "System",
-      "pages": [
-        "..."
-      ]
-    },
     "dialogue:act2-coastal-kiosk": {
       "speaker": "Map Kiosk",
       "pages": [
@@ -18,7 +12,7 @@
     "dialogue:archive-console-link": {
       "speaker": "Bosch Terminal",
       "pages": [
-        "Bosch, the route is not neutral. A public version of you is already moving through town ahead of your body, and town services are starting to treat him as convenient.",
+        "Bosch, the route is not neutral. A leaked version of you is already moving through town ahead of your body, and town services are starting to treat him as convenient.",
         "Ask where the pressure starts or why the town needs a Bosch it can process."
       ]
     },
@@ -44,8 +38,8 @@
     "interior:bosch-side-room-v0": {
       "speaker": "Bosch",
       "pages": [
-        "Behind the storage boxes: the Route Brief backup, a Practice Bat, and a Public Version Card with Bosch's smile printed a",
-        "little wrong. The bat is something solid. The card is something social.",
+        "Behind the storage boxes: the Route Brief backup, a Practice Bat, and a Dox Sheet with Bosch's smile printed a little",
+        "wrong. The bat is something solid. The card is something social.",
         "The backup brief has three margin notes in handwriting Bosch does not recognize: keep your proof warm, keep your route",
         "local, do not let a crowd finish your sentence. Together they feel like a starter kit for arguing with a town."
       ]
@@ -55,7 +49,7 @@
       "pages": [
         "Biscuit blocks the upstairs landing just long enough to point at the side room.",
         "Downstairs, three phones buzz and stop at the exact same time.",
-        "\"If your public version is already outside, bring something real from inside. Weird guide rule. \""
+        "\"If your leaked version is already outside, bring something real from inside. Weird guide rule. \""
       ]
     },
     "interior:burger-shop-v0": {
@@ -69,8 +63,8 @@
     "interior:corner-shop-v0": {
       "speaker": "Sal",
       "pages": [
-        "Sal slides Bosch's Public Version Card under the Tojiba kiosk scanner, then stops the machine before it finishes the",
-        "sentence. \"Hot Wallet mint, witness packet, park route.",
+        "Sal slides Bosch's Dox Sheet under the Tojiba kiosk scanner, then stops the machine before it finishes the sentence.",
+        "\"Hot Wallet mint, witness packet, park route.",
         "\" The kiosk spits out a proof token, a warm charm echo, and a gum coupon stamped NOT ID."
       ]
     },
