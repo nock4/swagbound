@@ -1135,7 +1135,10 @@
     },
     {
       "id": 100200,
-      "worldPixel": { "x": 2064, "y": 1744 },
+      "worldPixel": {
+        "x": 2064,
+        "y": 1744
+      },
       "spriteGroup": 119,
       "facing": "down",
       "interaction": {
@@ -1149,7 +1152,10 @@
     },
     {
       "id": 100201,
-      "worldPixel": { "x": 1660, "y": 1712 },
+      "worldPixel": {
+        "x": 1660,
+        "y": 1712
+      },
       "spriteGroup": 54,
       "facing": "down",
       "interaction": {
@@ -1161,7 +1167,10 @@
     },
     {
       "id": 100202,
-      "worldPixel": { "x": 1740, "y": 1712 },
+      "worldPixel": {
+        "x": 1740,
+        "y": 1712
+      },
       "spriteGroup": 66,
       "facing": "down",
       "interaction": {
@@ -1173,7 +1182,10 @@
     },
     {
       "id": 100203,
-      "worldPixel": { "x": 1800, "y": 1712 },
+      "worldPixel": {
+        "x": 1800,
+        "y": 1712
+      },
       "spriteGroup": 68,
       "facing": "down",
       "interaction": {
@@ -1185,7 +1197,10 @@
     },
     {
       "id": 100204,
-      "worldPixel": { "x": 1512, "y": 1672 },
+      "worldPixel": {
+        "x": 1512,
+        "y": 1672
+      },
       "spriteGroup": 59,
       "facing": "up",
       "interaction": {
@@ -1198,7 +1213,10 @@
     },
     {
       "id": 100205,
-      "worldPixel": { "x": 1904, "y": 1584 },
+      "worldPixel": {
+        "x": 1904,
+        "y": 1584
+      },
       "spriteGroup": 59,
       "facing": "down",
       "interaction": {
@@ -1211,13 +1229,128 @@
     },
     {
       "id": 100206,
-      "worldPixel": { "x": 1976, "y": 1576 },
+      "worldPixel": {
+        "x": 1976,
+        "y": 1576
+      },
       "spriteGroup": 68,
       "facing": "up",
       "interaction": {
         "pages": [
           "A route aide with a clipboard and a smile that was issued, not earned.",
           "\"Cards sorted? The road north opens once the gate decides which Bosch is leaving. Station's right there. Try not to look unprocessed.\""
+        ]
+      }
+    },
+    {
+      "id": 101000,
+      "worldPixel": {
+        "x": 7496,
+        "y": 1216
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Every block in Morningside has a John. This one's the original, allegedly."
+        ]
+      }
+    },
+    {
+      "id": 101001,
+      "worldPixel": {
+        "x": 7584,
+        "y": 1232
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "The signs keep changing names. My name keeps changing signs."
+        ]
+      }
+    },
+    {
+      "id": 101002,
+      "worldPixel": {
+        "x": 7664,
+        "y": 1000
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Corner shop's got a new machine. It only takes attention."
+        ]
+      }
+    },
+    {
+      "id": 101003,
+      "worldPixel": {
+        "x": 7616,
+        "y": 1000
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Bosch walked past this morning. Or someone shaped like the rumor of him."
+        ]
+      }
+    },
+    {
+      "id": 101004,
+      "worldPixel": {
+        "x": 7568,
+        "y": 848
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "We're all kinfolks here. Nobody remembers whose."
+        ]
+      }
+    },
+    {
+      "id": 101005,
+      "worldPixel": {
+        "x": 7840,
+        "y": 1368
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Town hall says it's fine. Town hall says a lot of things."
+        ]
+      }
+    },
+    {
+      "id": 101006,
+      "worldPixel": {
+        "x": 6952,
+        "y": 1472
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "You feel that? That's the neighborhood starting to read you back."
+        ]
+      }
+    },
+    {
+      "id": 101007,
+      "worldPixel": {
+        "x": 7544,
+        "y": 1180
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Step-cousins reunion. Long story. Stick around, it gets longer."
         ]
       }
     }

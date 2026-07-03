@@ -3193,6 +3193,182 @@
       "displayHeight": 24,
       "originX": 0.5,
       "originY": 1
+    },
+    "101000": {
+      "image": "assets/swagbound/overworld-npc/promo-john-002.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101001": {
+      "image": "assets/swagbound/overworld-npc/promo-john-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101002": {
+      "image": "assets/swagbound/overworld-npc/promo-john-004.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101003": {
+      "image": "assets/swagbound/overworld-npc/promo-juan-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101004": {
+      "image": "assets/swagbound/overworld-npc/promo-kinfolks-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101005": {
+      "image": "assets/swagbound/overworld-npc/promo-kinfolks-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101006": {
+      "image": "assets/swagbound/overworld-npc/promo-kinfolks-004.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101007": {
+      "image": "assets/swagbound/overworld-npc/promo-autismo-step-cousins-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
     }
   },
   "bySpriteGroup": {
