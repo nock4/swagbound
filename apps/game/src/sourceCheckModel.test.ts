@@ -17,6 +17,7 @@ function check(overrides: Partial<DrifellaSourceCheck> = {}): DrifellaSourceChec
   return {
     id: "sourcecheck-test",
     drifellaId: "drifella2-test",
+    drifellaName: "Drifella test",
     npcId: 100300,
     region: "morningside",
     tier: 1,

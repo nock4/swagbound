@@ -2691,7 +2691,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
           targetKind: "sourceCheck" as const,
           sourceCheckId: runtime.check.id,
           npcId: runtime.check.npcId,
-          label: "Drifella",
+          label: runtime.check.drifellaName,
           x: runtime.check.placement.worldPixel.x,
           y: runtime.check.placement.worldPixel.y,
           interactable: true
@@ -6375,7 +6375,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         kind: "sourceCheck" as const,
         x: runtime.check.placement.worldPixel.x,
         y: runtime.check.placement.worldPixel.y,
-        label: runtime.visible ? "Drifella" : "hidden"
+        label: runtime.visible ? runtime.check.drifellaName : "hidden"
       }))
     ];
   }

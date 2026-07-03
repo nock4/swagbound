@@ -13,6 +13,15 @@ describe("source check generated content", () => {
     expect(cards.cards.length).toBe(95);
     expect(checks.checks.length).toBe(8);
     expect(checks.checks.every((check) => cards.cards.some((card) => card.id === check.rewards.cardId))).toBe(true);
+    for (const check of checks.checks) {
+      expect(check.personality).toMatchObject({
+        bit: expect.any(String),
+        tic: expect.any(String)
+      });
+      expect(check.reactions.correct.length).toBeGreaterThanOrEqual(3);
+      expect(check.reactions.cleared.length).toBeGreaterThanOrEqual(2);
+      expect(check.reactions.failed.length).toBeGreaterThanOrEqual(2);
+    }
   });
 });
 

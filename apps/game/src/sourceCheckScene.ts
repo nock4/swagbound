@@ -35,6 +35,12 @@ import {
 import { menuCursorVisible } from "./battleVisuals";
 import { revealState } from "./dialogueRenderer";
 import {
+  createSourceCheckSfx,
+  type SourceCheckCardRarity,
+  type SourceCheckSfx,
+  type SourceCheckSfxCue
+} from "./audio/sourceCheckSfx";
+import {
   cardById,
   drawSourceCheckQuestions,
   resolveSourceCheckRewards,
@@ -98,6 +104,10 @@ export class SourceCheckScene extends Phaser.Scene {
   private texts: Phaser.GameObjects.Text[] = [];
   private drifellaImage?: Phaser.GameObjects.Image;
   private cardImage?: Phaser.GameObjects.Image;
+  private sourceCheckSfx: SourceCheckSfx = createSourceCheckSfx();
+  private lastSfx: SourceCheckSfxCue | null = null;
+  private sfxCount = 0;
+  private usedCorrectReactionLines = new Set<string>();
 
   constructor() {
     super("source-check");
@@ -124,6 +134,9 @@ export class SourceCheckScene extends Phaser.Scene {
     this.rewardApplied = false;
     this.ceremonyItemHeld = false;
     this.cardTextureLoading = false;
+    this.lastSfx = null;
+    this.sfxCount = 0;
+    this.usedCorrectReactionLines.clear();
   }
 
   preload(): void {
@@ -138,6 +151,7 @@ export class SourceCheckScene extends Phaser.Scene {
     this.phaseStartedAt = this.time.now;
     this.revealStartedAt = this.time.now;
     this.createDrifellaImage();
+    this.registerSourceCheckSfxResume();
     registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.confirm());
     registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.cancel());
     registerDiscreteKeys(this.input.keyboard, MENU_LEFT_KEY_NAMES, () => this.moveSelection("left"));
@@ -207,7 +221,11 @@ export class SourceCheckScene extends Phaser.Scene {
       return;
     }
     const columns = this.answerColumns(question);
-    this.selectionIndex = moveBattleCommandGridIndex(this.selectionIndex, question.options.length, direction, columns);
+    const nextIndex = moveBattleCommandGridIndex(this.selectionIndex, question.options.length, direction, columns);
+    if (nextIndex !== this.selectionIndex) {
+      this.selectionIndex = nextIndex;
+      this.playSourceCheckSfx("menuMove");
+    }
   }
 
   private confirmAnswer(): void {
@@ -215,17 +233,22 @@ export class SourceCheckScene extends Phaser.Scene {
     if (!question) {
       return;
     }
+    this.playSourceCheckSfx("answerLock");
     const correct = this.selectionIndex === question.correctOptionIndex;
     this.feedbackCorrect = correct;
     this.lastOutcome = correct ? "correct" : "wrong";
     if (correct) {
       this.correctSoFar += 1;
-      this.feedbackText = this.pickLine(this.check.reactions.correct);
+      this.feedbackText = this.pickLine(this.check.reactions.correct, this.usedCorrectReactionLines);
+      const streakStep = this.correctSoFar - 1;
+      this.time.delayedCall(70, () => this.playSourceCheckSfx("correct", { streakStep }));
     } else {
       this.feedbackText = [
         question.failLine ?? "Not quite.",
         this.pickLine(this.check.reactions.failed)
       ].join("\n");
+      this.time.delayedCall(70, () => this.playSourceCheckSfx("wrong"));
+      this.cameras.main.shake(90, 0.0022);
     }
     this.phase = "feedback";
     this.phaseStartedAt = this.time.now;
@@ -250,6 +273,8 @@ export class SourceCheckScene extends Phaser.Scene {
     this.lastOutcome = "cleared";
     this.applyReward();
     this.ensureCardTexture();
+    this.playSourceCheckSfx("ceremony");
+    this.time.delayedCall(420, () => this.playSourceCheckSfx(`rarity:${this.rewardRarity()}`));
   }
 
   private applyReward(): void {
@@ -357,6 +382,17 @@ export class SourceCheckScene extends Phaser.Scene {
       align: "center",
       weight: 500
     }).setOrigin(0.5, 0);
+    const tic = this.check.personality?.tic;
+    if (tic) {
+      this.addText(86, 274, tic, {
+        fontSize: 14,
+        color: CLEAN_UI_SECONDARY,
+        fixedWidth: 340,
+        align: "center",
+        wordWrapWidth: 340,
+        lineSpacing: 2
+      });
+    }
   }
 
   private drawQuestionPanel(): void {
@@ -453,9 +489,16 @@ export class SourceCheckScene extends Phaser.Scene {
 
   private currentReveal(): { revealedText: string; revealedChars: number; revealComplete: boolean } {
     const text = this.phase === "feedback" ? this.feedbackText : this.currentQuestion()?.prompt ?? "";
+    const cps = this.currentTextCps();
     return this.revealForced
-      ? revealState(text, Number.MAX_SAFE_INTEGER, TEXT_CPS)
-      : revealState(text, this.time.now - this.revealStartedAt, TEXT_CPS);
+      ? revealState(text, Number.MAX_SAFE_INTEGER, cps)
+      : revealState(text, this.time.now - this.revealStartedAt, cps);
+  }
+
+  private currentTextCps(): number {
+    return this.phase === "question" && this.questionIndex === this.draw.drawCount - 1
+      ? TEXT_CPS * 0.85
+      : TEXT_CPS;
   }
 
   private answerColumns(question: DrawnSourceCheckQuestion): number {
@@ -501,16 +544,70 @@ export class SourceCheckScene extends Phaser.Scene {
     this.flags.delete(flag);
   }
 
-  private pickLine(lines: readonly string[]): string {
+  private pickLine(lines: readonly string[], usedLines?: Set<string>): string {
     if (lines.length === 0) {
       return "";
     }
-    const index = Math.abs(Math.floor((this.time.now + this.questionIndex * 17) % lines.length));
-    return lines[index] ?? lines[0] ?? "";
+    const unused = usedLines ? lines.filter((line) => !usedLines.has(line)) : lines;
+    if (usedLines && unused.length === 0) {
+      usedLines.clear();
+    }
+    const candidates = usedLines && unused.length > 0 ? unused : lines;
+    const index = Math.abs(Math.floor((this.time.now + this.questionIndex * 17) % candidates.length));
+    const line = candidates[index] ?? candidates[0] ?? "";
+    usedLines?.add(line);
+    return line;
   }
 
   private itemName(itemId: number): string {
     return this.items?.items.find((item) => item.id === itemId)?.name.trim() || `item ${itemId}`;
+  }
+
+  private rewardRarity(): SourceCheckCardRarity {
+    return cardById(this.cards, this.check.rewards.cardId)?.rarity ?? "common";
+  }
+
+  private registerSourceCheckSfxResume(): void {
+    const resume = () => {
+      this.sourceCheckSfx.resume();
+    };
+    this.input.once("pointerdown", resume);
+    this.input.keyboard?.once("keydown", resume);
+    this.events.once("shutdown", () => {
+      this.input.off("pointerdown", resume);
+      this.input.keyboard?.off("keydown", resume);
+    });
+  }
+
+  private playSourceCheckSfx(cue: SourceCheckSfxCue, options: { streakStep?: number } = {}): void {
+    this.lastSfx = cue;
+    this.sfxCount += 1;
+    switch (cue) {
+      case "menuMove":
+        this.sourceCheckSfx.menuMove();
+        break;
+      case "answerLock":
+        this.sourceCheckSfx.answerLock();
+        break;
+      case "correct":
+        this.sourceCheckSfx.correct(options.streakStep ?? 0);
+        break;
+      case "wrong":
+        this.sourceCheckSfx.wrong();
+        break;
+      case "ceremony":
+        this.sourceCheckSfx.ceremony();
+        break;
+      case "rarity:common":
+        this.sourceCheckSfx.raritySting("common");
+        break;
+      case "rarity:holo":
+        this.sourceCheckSfx.raritySting("holo");
+        break;
+      case "rarity:source-grade":
+        this.sourceCheckSfx.raritySting("source-grade");
+        break;
+    }
   }
 
   private drifellaTextureKey(): string {
@@ -552,6 +649,9 @@ export class SourceCheckScene extends Phaser.Scene {
       selection: this.selectionIndex,
       correctSoFar: this.correctSoFar,
       lastOutcome: this.lastOutcome,
+      lastSfx: this.lastSfx,
+      sfxCount: this.sfxCount,
+      personality: this.check.personality ?? null,
       drawnPrompts: this.draw.questions.map((question) => question.prompt),
       // Rendered option order for the CURRENT question (post-shuffle) — lets
       // headless drivers answer deterministically by matching option text.
@@ -568,6 +668,7 @@ function dummyCheck(): DrifellaSourceCheck {
   return {
     id: "dummy",
     drifellaId: "dummy",
+    drifellaName: "Drifella",
     npcId: 100300,
     region: "dummy",
     tier: 1,

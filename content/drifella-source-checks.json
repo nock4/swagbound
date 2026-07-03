@@ -5,11 +5,26 @@
     {
       "id": "sourcecheck-morningside-001",
       "drifellaId": "drifella2-168",
+      "drifellaName": "Drifella 168",
       "npcId": 100300,
       "region": "morningside",
       "tier": 1,
-      "placement": { "kind": "main-route", "worldPixel": { "x": 2040, "y": 1840 }, "facing": "up" },
-      "visibility": { "requireFlags": [], "blockFlags": [] },
+      "placement": {
+        "kind": "main-route",
+        "worldPixel": {
+          "x": 2040,
+          "y": 1840
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A return-desk librarian who treats every rumor like an overdue book.",
+        "tic": "\"Filed under: witnessed.\""
+      },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-168.png",
       "hints": [],
       "entryPrompt": [
@@ -28,7 +43,12 @@
           {
             "type": "multipleChoice4",
             "prompt": "The category box on the leaked card was checked—",
-            "options": ["VESSEL", "SOURCE", "RESIDENT (VERIFIED)", "FRIEND"],
+            "options": [
+              "VESSEL",
+              "SOURCE",
+              "RESIDENT (VERIFIED)",
+              "FRIEND"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Close. Closeness is not a category.\""
@@ -42,30 +62,71 @@
           {
             "type": "multipleChoice4",
             "prompt": "The card-stock trail out of Bosch's block ran—",
-            "options": ["West, toward the arcade", "North, toward the road", "Into the municipal record", "Uphill, morally"],
+            "options": [
+              "West, toward the arcade",
+              "North, toward the road",
+              "Into the municipal record",
+              "Uphill, morally"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"West. The crowd deals faces west.\""
           }
         ]
       },
-      "rewards": { "cardId": "card-nft-2-10925", "itemId": 88 },
-      "retry": { "policy": "leaveArea", "rotatePool": true, "checkpointAt": null },
+      "rewards": {
+        "cardId": "card-nft-2-10925",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
       "reactions": {
-        "correct": ["\"Yes. YES. You were there.\"", "\"Correct, and warmly so.\""],
-        "cleared": ["\"The card is warm. It was always going to be yours; it just needed a witness.\""],
-        "failed": ["\"No harm done. Walk it off and come back — the questions miss you already.\""],
-        "alreadyCleared": ["\"We've met. The binder remembers even when you don't.\""]
+        "correct": [
+          "\"Filed under: yes. You were there.\"",
+          "\"Correct, and warmly shelved.\"",
+          "\"The record got quiet. Good sign.\"",
+          "\"Due date met. Witness returned.\""
+        ],
+        "cleared": [
+          "\"The card is warm. Filed under: yours, with witnesses.\"",
+          "\"Perfect return. No fine, just the card.\""
+        ],
+        "failed": [
+          "\"No harm done. Filed under: come back with steadier hands.\"",
+          "\"The questions miss you already. Very embarrassing for them.\""
+        ],
+        "alreadyCleared": [
+          "\"We've met. The binder remembers even when you don't.\"",
+          "\"Filed under: already returned.\""
+        ]
       }
     },
     {
       "id": "sourcecheck-morningside-002",
       "drifellaId": "drifella2-473",
+      "drifellaName": "Drifella 473",
       "npcId": 100301,
       "region": "morningside",
       "tier": 1,
-      "placement": { "kind": "plaza", "worldPixel": { "x": 1700, "y": 1680 }, "facing": "down" },
-      "visibility": { "requireFlags": [], "blockFlags": [] },
+      "placement": {
+        "kind": "plaza",
+        "worldPixel": {
+          "x": 1700,
+          "y": 1680
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A ceremonial notary who stamps air, silence, and mild civic dread.",
+        "tic": "*stamp* \"Notarized.\""
+      },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-473.png",
       "hints": [],
       "entryPrompt": [
@@ -78,7 +139,12 @@
           {
             "type": "multipleChoice4",
             "prompt": "The arcade crowd deals in—",
-            "options": ["Faces", "High scores", "Licensed recreation permits", "Loose change"],
+            "options": [
+              "Faces",
+              "High scores",
+              "Licensed recreation permits",
+              "Loose change"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Faces. I cannot notarize 'high scores.'\""
@@ -98,30 +164,71 @@
           {
             "type": "multipleChoice4",
             "prompt": "What did the leaked card say under Bosch's almost-right face?",
-            "options": ["\"I said it first, so I don't have to mean it.\"", "\"Home by dinner.\"", "\"Statement pending legal review.\"", "\"It me.\""],
+            "options": [
+              "\"I said it first, so I don't have to mean it.\"",
+              "\"Home by dinner.\"",
+              "\"Statement pending legal review.\"",
+              "\"It me.\""
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"He never said it. That was the whole problem. Stamped: problem.\""
           }
         ]
       },
-      "rewards": { "cardId": "card-nft-2-10998", "itemId": 106 },
-      "retry": { "policy": "leaveArea", "rotatePool": true, "checkpointAt": null },
+      "rewards": {
+        "cardId": "card-nft-2-10998",
+        "itemId": 106
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
       "reactions": {
-        "correct": ["*stamp* \"Notarized.\"", "*stamp stamp* \"Doubly so.\""],
-        "cleared": ["\"Perfect record. I'm issuing the card and, unofficially, a feeling of pride.\""],
-        "failed": ["\"I cannot notarize that. I can barely look at it. Return when rested.\""],
-        "alreadyCleared": ["\"Your file is closed and beautiful. Do not reopen it.\""]
+        "correct": [
+          "*stamp* \"Notarized.\"",
+          "*stamp stamp* \"Doubly so.\"",
+          "\"Attention verified. Initial here in your mind.\"",
+          "*stamp* \"The witness stands.\""
+        ],
+        "cleared": [
+          "\"Perfect record. Card issued; pride unofficially attached.\"",
+          "*stamp* \"Case closed without incident. Rare.\""
+        ],
+        "failed": [
+          "\"I cannot notarize that. Return when rested.\"",
+          "*stamp?* \"No. Even the stamp hesitated.\""
+        ],
+        "alreadyCleared": [
+          "\"Your file is closed and beautiful. Do not reopen it.\"",
+          "*stamp* \"Previously witnessed.\""
+        ]
       }
     },
     {
       "id": "sourcecheck-morningside-003",
       "drifellaId": "drifella2-527",
+      "drifellaName": "Drifella 527",
       "npcId": 100302,
       "region": "morningside",
       "tier": 1,
-      "placement": { "kind": "roadside", "worldPixel": { "x": 2260, "y": 1620 }, "facing": "left" },
-      "visibility": { "requireFlags": [], "blockFlags": [] },
+      "placement": {
+        "kind": "roadside",
+        "worldPixel": {
+          "x": 2260,
+          "y": 1620
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A roadside clerk who files questions by patience, not date.",
+        "tic": "\"Filed. Correctly.\""
+      },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-527.png",
       "hints": [],
       "entryPrompt": [
@@ -134,7 +241,12 @@
           {
             "type": "multipleChoice4",
             "prompt": "The building the town calls THE PRECINCT is where—",
-            "options": ["The police keep the roadblock's paperwork", "Cards are printed", "Community wellness is administered", "The mayor sleeps"],
+            "options": [
+              "The police keep the roadblock's paperwork",
+              "Cards are printed",
+              "Community wellness is administered",
+              "The mayor sleeps"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Paperwork. It's always paperwork.\""
@@ -154,30 +266,71 @@
           {
             "type": "multipleChoice4",
             "prompt": "Battle winnings in this town travel—",
-            "options": ["Wired to your account, by the connect", "Straight into your pocket", "Into the municipal general fund", "Nowhere; money is a rumor"],
+            "options": [
+              "Wired to your account, by the connect",
+              "Straight into your pocket",
+              "Into the municipal general fund",
+              "Nowhere; money is a rumor"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Wired. The connect handles it. Check the account, not the pocket.\""
           }
         ]
       },
-      "rewards": { "cardId": "card-nft-2-10458", "itemId": 103 },
-      "retry": { "policy": "leaveArea", "rotatePool": true, "checkpointAt": null },
+      "rewards": {
+        "cardId": "card-nft-2-10458",
+        "itemId": 103
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
       "reactions": {
-        "correct": ["\"Filed. Correctly.\"", "\"You watch this town like I do. Unsettling. Good.\""],
-        "cleared": ["\"A perfect file. Take the card before the precinct hears about it.\""],
-        "failed": ["\"Misfiled. Happens to the best cabinets. Come back around.\""],
-        "alreadyCleared": ["\"Your file is the one I show the new questions, as an example.\""]
+        "correct": [
+          "\"Filed. Correctly.\"",
+          "\"Cross-referenced with dread. You pass.\"",
+          "\"The cabinet approves one drawer over.\"",
+          "\"You watch this town like I do. Unsettling. Good.\""
+        ],
+        "cleared": [
+          "\"A perfect file. Take the card before the precinct hears.\"",
+          "\"Closed folder. Clean tab. Suspiciously satisfying.\""
+        ],
+        "failed": [
+          "\"Misfiled. Happens to the best cabinets. Come back around.\"",
+          "\"Wrong drawer. The label forgives you.\""
+        ],
+        "alreadyCleared": [
+          "\"Your file is the one I show new questions as an example.\"",
+          "\"Already filed. The precinct still has not noticed.\""
+        ]
       }
     },
     {
       "id": "sourcecheck-morningside-004",
       "drifellaId": "drifella2-587",
+      "drifellaName": "Drifella 587",
       "npcId": 100303,
       "region": "morningside",
       "tier": 1,
-      "placement": { "kind": "south-road", "worldPixel": { "x": 1850, "y": 2100 }, "facing": "up" },
-      "visibility": { "requireFlags": [], "blockFlags": [] },
+      "placement": {
+        "kind": "south-road",
+        "worldPixel": {
+          "x": 1850,
+          "y": 2100
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A gentle corner-grader giving the town quiet marks in pencil.",
+        "tic": "\"Gentle mark: witnessed.\""
+      },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-587.png",
       "hints": [],
       "entryPrompt": [
@@ -196,7 +349,12 @@
           {
             "type": "multipleChoice4",
             "prompt": "What kind of proof does the Source Pocket keep?",
-            "options": ["Living specificity", "Station approval", "A clean public listing", "A perfect hostile copy"],
+            "options": [
+              "Living specificity",
+              "Station approval",
+              "A clean public listing",
+              "A perfect hostile copy"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Specificity. Alive. You can tell because it wriggles.\""
@@ -210,30 +368,71 @@
           {
             "type": "multipleChoice4",
             "prompt": "The kid on the stoop had been waiting—",
-            "options": ["His whole short life", "Since Tuesday", "Pending an appointment confirmation", "For the bus"],
+            "options": [
+              "His whole short life",
+              "Since Tuesday",
+              "Pending an appointment confirmation",
+              "For the bus"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"His whole short life. He said so. Kids keep excellent records.\""
           }
         ]
       },
-      "rewards": { "cardId": "card-nft-2-3672", "itemId": 89 },
-      "retry": { "policy": "leaveArea", "rotatePool": true, "checkpointAt": null },
+      "rewards": {
+        "cardId": "card-nft-2-3672",
+        "itemId": 89
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
       "reactions": {
-        "correct": ["\"Mm. Witnessed.\"", "\"You stood still long enough. It shows.\""],
-        "cleared": ["\"Full marks. The south road approves, and it approves of nothing.\""],
-        "failed": ["\"The road will still be here. So will the questions. Softer, even.\""],
-        "alreadyCleared": ["\"Go on. Other corners are waiting to be noticed.\""]
+        "correct": [
+          "\"Gentle mark: witnessed.\"",
+          "\"Mm. Correct. The corner relaxes.\"",
+          "\"You stood still long enough. It shows.\"",
+          "\"Full credit for noticing the sad part.\""
+        ],
+        "cleared": [
+          "\"Full marks. The south road approves of almost nothing.\"",
+          "\"The pencil rests. Take the card before it grades me.\""
+        ],
+        "failed": [
+          "\"The road will still be here. So will the questions.\"",
+          "\"Soft correction. No permanent mark.\""
+        ],
+        "alreadyCleared": [
+          "\"Go on. Other corners are waiting to be noticed.\"",
+          "\"Already graded. Surprisingly legible.\""
+        ]
       }
     },
     {
       "id": "sourcecheck-morningside-005",
       "drifellaId": "drifella2-602",
+      "drifellaName": "Drifella 602",
       "npcId": 100304,
       "region": "morningside",
       "tier": 1,
-      "placement": { "kind": "north-road", "worldPixel": { "x": 1980, "y": 1450 }, "facing": "down" },
-      "visibility": { "requireFlags": [], "blockFlags": [] },
+      "placement": {
+        "kind": "north-road",
+        "worldPixel": {
+          "x": 1980,
+          "y": 1450
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A roadside itinerary clerk who treats memory like luggage with a tag.",
+        "tic": "\"Mileage note: remember this.\""
+      },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-602.png",
       "hints": [],
       "entryPrompt": [
@@ -252,7 +451,12 @@
           {
             "type": "multipleChoice4",
             "prompt": "Who deals faces at the west end of town?",
-            "options": ["The arcade crowd", "The precinct", "The Bureau of Likeness", "The hotel"],
+            "options": [
+              "The arcade crowd",
+              "The precinct",
+              "The Bureau of Likeness",
+              "The hotel"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"The arcade crowd. There is no Bureau of Likeness. Yet.\""
@@ -266,30 +470,71 @@
           {
             "type": "multipleChoice4",
             "prompt": "The face on the leaked card was wrong the way—",
-            "options": ["A bad memory is almost right", "A mirror is backwards", "An unlicensed reproduction violates code 7", "Soup is wrong"],
+            "options": [
+              "A bad memory is almost right",
+              "A mirror is backwards",
+              "An unlicensed reproduction violates code 7",
+              "Soup is wrong"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Almost right. That's the dangerous kind of wrong.\""
           }
         ]
       },
-      "rewards": { "cardId": "card-nft-2-4969", "itemId": 91 },
-      "retry": { "policy": "leaveArea", "rotatePool": true, "checkpointAt": null },
+      "rewards": {
+        "cardId": "card-nft-2-4969",
+        "itemId": 91
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
       "reactions": {
-        "correct": ["\"So you DID walk this road.\"", "\"The road remembers you too, now.\""],
-        "cleared": ["\"Take the card. Show it to the horizon when you get there.\""],
-        "failed": ["\"The road forgives. It has forgiven worse itineraries.\""],
-        "alreadyCleared": ["\"Safe travels. Watch for the ones who hide.\""]
+        "correct": [
+          "\"Mileage note: you did walk this road.\"",
+          "\"The road remembers you too, now.\"",
+          "\"Stamped on the horizon. Correct.\"",
+          "\"Good. Your shoes corroborate you.\""
+        ],
+        "cleared": [
+          "\"Take the card. Show it to the horizon when you get there.\"",
+          "\"Route complete. The road signs off in pencil.\""
+        ],
+        "failed": [
+          "\"The road forgives worse itineraries.\"",
+          "\"Wrong turn. Leave town in your head, then come back.\""
+        ],
+        "alreadyCleared": [
+          "\"Safe travels. Watch for the ones who hide.\"",
+          "\"Mileage note: already witnessed.\""
+        ]
       }
     },
     {
       "id": "sourcecheck-morningside-006",
       "drifellaId": "drifella2-684",
+      "drifellaName": "Drifella 684",
       "npcId": 100305,
       "region": "morningside",
       "tier": 1,
-      "placement": { "kind": "west-block", "worldPixel": { "x": 1350, "y": 1900 }, "facing": "right" },
-      "visibility": { "requireFlags": [], "blockFlags": [] },
+      "placement": {
+        "kind": "west-block",
+        "worldPixel": {
+          "x": 1350,
+          "y": 1900
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "An obsessive window-counter who suspects architecture of perjury.",
+        "tic": "\"Forty-one windows. Zero honest.\""
+      },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-684.png",
       "hints": [],
       "entryPrompt": [
@@ -308,7 +553,12 @@
           {
             "type": "multipleChoice4",
             "prompt": "A present box in this world, once opened—",
-            "options": ["Stays opened", "Refills overnight", "Is restocked by municipal services", "Was never really there"],
+            "options": [
+              "Stays opened",
+              "Refills overnight",
+              "Is restocked by municipal services",
+              "Was never really there"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Stays opened. Honesty is rare; boxes have it.\""
@@ -322,34 +572,81 @@
           {
             "type": "multipleChoice4",
             "prompt": "The household voice heard on the first morning had—",
-            "options": ["Panic under the paint", "Breakfast on the tray", "A prepared official statement", "Nothing to say"],
+            "options": [
+              "Panic under the paint",
+              "Breakfast on the tray",
+              "A prepared official statement",
+              "Nothing to say"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Panic. Under the paint. You could hear the brush strokes.\""
           }
         ]
       },
-      "rewards": { "cardId": "card-nft-2-10906", "itemId": 110 },
-      "retry": { "policy": "leaveArea", "rotatePool": true, "checkpointAt": null },
+      "rewards": {
+        "cardId": "card-nft-2-10906",
+        "itemId": 110
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
       "reactions": {
-        "correct": ["\"Forty-two honest things in town now. You're one.\"", "\"Counted and correct.\""],
-        "cleared": ["\"A full count! The card is yours. I saw it arrive before you did, obviously.\""],
-        "failed": ["\"Off by one. Everything in this town is off by one. Come back.\""],
-        "alreadyCleared": ["\"Still counting. Still forty-one windows. Still fond of you.\""]
+        "correct": [
+          "\"Forty-two honest things in town now. You're one.\"",
+          "\"Counted and correct.\"",
+          "\"Window tally amended. Briefly optimistic.\"",
+          "\"One pane stopped lying when you said that.\""
+        ],
+        "cleared": [
+          "\"Full count. The card is yours; I saw it arrive first.\"",
+          "\"Forty-one windows, one clean answer sheet.\""
+        ],
+        "failed": [
+          "\"Off by one. Everything here is off by one. Come back.\"",
+          "\"A window coughed when you said that. Bad sign.\""
+        ],
+        "alreadyCleared": [
+          "\"Still counting. Still forty-one windows. Still fond of you.\"",
+          "\"Already cleared. The windows refuse to improve.\""
+        ]
       }
     },
     {
       "id": "sourcecheck-morningside-007",
       "drifellaId": "drifella2-795",
+      "drifellaName": "Drifella 795",
       "npcId": 100306,
       "region": "morningside",
       "tier": 1,
-      "placement": { "kind": "behind-building", "worldPixel": { "x": 2200, "y": 1560 }, "facing": "down" },
-      "visibility": { "requireFlags": [], "blockFlags": [] },
+      "placement": {
+        "kind": "behind-building",
+        "worldPixel": {
+          "x": 2200,
+          "y": 1560
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A quiet-side precinct lurker who rewards good peripheral suspicion.",
+        "tic": "\"Quiet side says yes.\""
+      },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-795.png",
       "hints": [
-        { "kind": "rumorNpc", "npcId": 100205, "page": "Something patient lives behind the precinct. It grades kindly, my aunt says. My aunt is never wrong twice." },
-        { "kind": "binder" }
+        {
+          "kind": "rumorNpc",
+          "npcId": 100205,
+          "page": "Something patient lives behind the precinct. It grades kindly, my aunt says. My aunt is never wrong twice."
+        },
+        {
+          "kind": "binder"
+        }
       ],
       "entryPrompt": [
         "Tucked behind the precinct, a Drifella nods as if you were expected.",
@@ -361,7 +658,12 @@
           {
             "type": "multipleChoice4",
             "prompt": "The best place to stand, in this town, is—",
-            "options": ["Wherever the record isn't looking", "Center of the plaza", "Within designated viewing areas", "On the roof"],
+            "options": [
+              "Wherever the record isn't looking",
+              "Center of the plaza",
+              "Within designated viewing areas",
+              "On the roof"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Behind things. Beside things. The record has terrible peripheral vision.\""
@@ -381,34 +683,81 @@
           {
             "type": "multipleChoice4",
             "prompt": "What does a hidden Drifella reward?",
-            "options": ["Curiosity", "Speed", "Compliance with posted signage", "Luck"],
+            "options": [
+              "Curiosity",
+              "Speed",
+              "Compliance with posted signage",
+              "Luck"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"Curiosity. You HAD it a minute ago — it's how you got here.\""
           }
         ]
       },
-      "rewards": { "cardId": "card-nft-2-10464", "itemId": 102 },
-      "retry": { "policy": "leaveArea", "rotatePool": true, "checkpointAt": null },
+      "rewards": {
+        "cardId": "card-nft-2-10464",
+        "itemId": 102
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
       "reactions": {
-        "correct": ["\"Quietly excellent.\"", "\"The building approves. Buildings talk to me.\""],
-        "cleared": ["\"A holo card, for someone who looks behind things. Fitting.\""],
-        "failed": ["\"Even the quiet side has off days. Circle the block; I'll wait.\""],
-        "alreadyCleared": ["\"Shh. Others haven't found me yet. Let them earn it.\""]
+        "correct": [
+          "\"Quietly excellent.\"",
+          "\"The building approves. Buildings talk to me.\"",
+          "\"Quiet side says yes.\"",
+          "\"The record looked forward. You looked around.\""
+        ],
+        "cleared": [
+          "\"A holo card, for someone who looks behind things. Fitting.\"",
+          "\"Curiosity logged. Quiet side rewards its own.\""
+        ],
+        "failed": [
+          "\"Even the quiet side has off days. Circle the block.\"",
+          "\"The building winced softly. Try again after shade.\""
+        ],
+        "alreadyCleared": [
+          "\"Shh. Others haven't found me yet. Let them earn it.\"",
+          "\"Already rewarded. Stay peripheral.\""
+        ]
       }
     },
     {
       "id": "sourcecheck-morningside-008",
       "drifellaId": "drifella2-816",
+      "drifellaName": "Drifella 816",
       "npcId": 100307,
       "region": "morningside",
       "tier": 1,
-      "placement": { "kind": "hotel-side", "worldPixel": { "x": 2000, "y": 1350 }, "facing": "down" },
-      "visibility": { "requireFlags": [], "blockFlags": [] },
+      "placement": {
+        "kind": "hotel-side",
+        "worldPixel": {
+          "x": 2000,
+          "y": 1350
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A hotel-side hummer preserving a tune no camera can prove.",
+        "tic": "\"Mm-hm. No public version.\""
+      },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-816.png",
       "hints": [
-        { "kind": "rumorNpc", "npcId": 100206, "page": "The hotel has a side nobody photographs. Something up there hums when the town gets quiet." },
-        { "kind": "binder" }
+        {
+          "kind": "rumorNpc",
+          "npcId": 100206,
+          "page": "The hotel has a side nobody photographs. Something up there hums when the town gets quiet."
+        },
+        {
+          "kind": "binder"
+        }
       ],
       "entryPrompt": [
         "On the hotel's unphotographed side, a Drifella hums a tune with no public version.",
@@ -426,7 +775,12 @@
           {
             "type": "multipleChoice4",
             "prompt": "Bosch pocketed the damaged card because—",
-            "options": ["Unfiled and unflattering, it was HIS", "It was worth money", "Municipal code requires retention of documents", "He collects trash"],
+            "options": [
+              "Unfiled and unflattering, it was HIS",
+              "It was worth money",
+              "Municipal code requires retention of documents",
+              "He collects trash"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"His. Damage and all. ESPECIALLY the damage.\""
@@ -440,20 +794,46 @@
           {
             "type": "multipleChoice4",
             "prompt": "What arrives before you do, if you're not careful?",
-            "options": ["A leaked version", "The weather", "Scheduled municipal notices", "Nothing; time is linear"],
+            "options": [
+              "A leaked version",
+              "The weather",
+              "Scheduled municipal notices",
+              "Nothing; time is linear"
+            ],
             "answerIndex": 0,
             "officialIndex": 2,
             "failLine": "\"The leak. It's faster because it's lighter. It carries none of the truth.\""
           }
         ]
       },
-      "rewards": { "cardId": "card-nft-2-10681", "itemId": 93 },
-      "retry": { "policy": "leaveArea", "rotatePool": true, "checkpointAt": null },
+      "rewards": {
+        "cardId": "card-nft-2-10681",
+        "itemId": 93
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
       "reactions": {
-        "correct": ["\"The hum agrees with you.\"", "\"Mm-hm. Mm-HM.\""],
-        "cleared": ["\"Take the card. It hums a little too, if you hold it right.\""],
-        "failed": ["\"The hum drops a note when that happens. Come restore the chord.\""],
-        "alreadyCleared": ["\"Hum with me a while. No questions. We've done the questions.\""]
+        "correct": [
+          "\"The hum agrees with you.\"",
+          "\"Mm-hm. Mm-HM.\"",
+          "\"No public version, but that note was true.\"",
+          "\"The chord holds. For now.\""
+        ],
+        "cleared": [
+          "\"Take the card. It hums a little if you hold it right.\"",
+          "\"Clean chord. Holo enough for the hotel's bad side.\""
+        ],
+        "failed": [
+          "\"The hum drops a note when that happens. Come restore it.\"",
+          "\"Flat note. Still yours to tune.\""
+        ],
+        "alreadyCleared": [
+          "\"Hum with me a while. No questions. We've done those.\"",
+          "\"Already in tune. The hotel side keeps it quiet.\""
+        ]
       }
     }
   ]

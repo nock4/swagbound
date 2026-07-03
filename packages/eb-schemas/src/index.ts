@@ -1316,6 +1316,8 @@ export const SourceCheckQuestionSchema = z.discriminatedUnion("type", [
 export const DrifellaSourceCheckSchema = z.object({
   id: z.string().trim().min(1),
   drifellaId: z.string().trim().min(1),
+  /** Player-facing name, e.g. "Drifella 168" (keyed to the on-chain token id). */
+  drifellaName: z.string().trim().min(1),
   npcId: z.number().int().min(100300).max(100399),
   region: z.string().trim().min(1),
   tier: z.number().int().min(1).max(4),
@@ -1328,6 +1330,10 @@ export const DrifellaSourceCheckSchema = z.object({
     requireFlags: z.array(z.string().trim().min(1)),
     blockFlags: z.array(z.string().trim().min(1))
   }).strict(),
+  personality: z.object({
+    bit: z.string().min(1),
+    tic: z.string().min(1)
+  }).strict().optional(),
   battleSprite: z.string().trim().min(1),
   hints: z.array(z.discriminatedUnion("kind", [
     z.object({ kind: z.literal("rumorNpc"), npcId: z.number().int(), page: z.string().trim().min(1) }).strict(),
