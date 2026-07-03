@@ -4,7 +4,9 @@ import { pathToFileURL } from "node:url";
 import {
   BattleRulesSchema,
   BackgroundOverridesSchema,
+  CardNftsSchema,
   DrifellaBarksSchema,
+  DrifellaSourceChecksSchema,
   EnemyActionEffectsSchema,
   EnemyNameFamiliesSchema,
   EnemyStatOverridesSchema,
@@ -77,6 +79,10 @@ export const OPENING_CUTSCENE_SOURCE = "content/opening-cutscene.json";
 export const OPENING_CUTSCENE_OUTPUT = "opening-cutscene.json";
 export const OVERWORLD_INTERACTABLES_SOURCE = "content/overworld-interactables.json";
 export const OVERWORLD_INTERACTABLES_OUTPUT = "overworld-interactables.json";
+export const CARD_NFTS_SOURCE = "content/card-nfts.json";
+export const CARD_NFTS_OUTPUT = "card-nfts.json";
+export const DRIFELLA_SOURCE_CHECKS_SOURCE = "content/drifella-source-checks.json";
+export const DRIFELLA_SOURCE_CHECKS_OUTPUT = "drifella-source-checks.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
 
 /**
@@ -126,6 +132,8 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateDrifellaBarks(DRIFELLA_BARKS_SOURCE);
   await validateOpeningCutscene(OPENING_CUTSCENE_SOURCE);
   await validateOverworldInteractables(OVERWORLD_INTERACTABLES_SOURCE);
+  await validateCardNfts(CARD_NFTS_SOURCE);
+  await validateDrifellaSourceChecks(DRIFELLA_SOURCE_CHECKS_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
   await validateEnemyActionEffects(ENEMY_ACTION_EFFECTS_SOURCE);
@@ -151,7 +159,9 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyOptionalJsonToGenerated(COLLISION_OVERRIDES_SOURCE, out, COLLISION_OVERRIDES_OUTPUT),
     copyJsonToGenerated(DRIFELLA_BARKS_SOURCE, out, DRIFELLA_BARKS_OUTPUT),
     copyOptionalJsonToGenerated(OPENING_CUTSCENE_SOURCE, out, OPENING_CUTSCENE_OUTPUT),
-    copyOptionalJsonToGenerated(OVERWORLD_INTERACTABLES_SOURCE, out, OVERWORLD_INTERACTABLES_OUTPUT)
+    copyOptionalJsonToGenerated(OVERWORLD_INTERACTABLES_SOURCE, out, OVERWORLD_INTERACTABLES_OUTPUT),
+    copyOptionalJsonToGenerated(CARD_NFTS_SOURCE, out, CARD_NFTS_OUTPUT),
+    copyOptionalJsonToGenerated(DRIFELLA_SOURCE_CHECKS_SOURCE, out, DRIFELLA_SOURCE_CHECKS_OUTPUT)
   ]);
 }
 
@@ -238,6 +248,20 @@ async function validateOverworldInteractables(source: string): Promise<void> {
     return;
   }
   OverworldInteractablesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateCardNfts(source: string): Promise<void> {
+  if (!(await fileExists(source))) {
+    return;
+  }
+  CardNftsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateDrifellaSourceChecks(source: string): Promise<void> {
+  if (!(await fileExists(source))) {
+    return;
+  }
+  DrifellaSourceChecksSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateNpcOverrides(source: string): Promise<void> {

@@ -4,6 +4,7 @@ import type { WorldScene } from "./worldScene";
 import type { MenuRenderScreen } from "./menuModel";
 import {
   CLEAN_UI_PRIMARY,
+  CLEAN_UI_PANEL_BORDER,
   CLEAN_UI_SECONDARY,
   CLEAN_UI_SELECTION_TEXT,
   CLEAN_UI_SELECTION_CARET,
@@ -70,6 +71,13 @@ type OverworldHudTextSet = {
   ppLabel: Phaser.GameObjects.Text;
   hpValue: Phaser.GameObjects.Text;
   ppValue: Phaser.GameObjects.Text;
+};
+
+type BinderOverlayCard = {
+  id: string;
+  name: string;
+  image: string;
+  caption: string;
 };
 
 const DEBUG_COPY_LABEL = "[ Copy ]";
@@ -158,6 +166,11 @@ export class UiScene extends Phaser.Scene {
   private copyButton?: Phaser.GameObjects.Text;
   private panelDebugText = "";
   private copyResetEvent?: Phaser.Time.TimerEvent;
+  private binderOverlayGraphics?: Phaser.GameObjects.Graphics;
+  private binderOverlayImage?: Phaser.GameObjects.Image;
+  private binderOverlayTexts: Phaser.GameObjects.Text[] = [];
+  private binderOverlayTextureKey?: string;
+  private binderOverlayClose?: () => void;
 
   constructor() {
     super("ui");
@@ -212,6 +225,27 @@ export class UiScene extends Phaser.Scene {
     this.hudAccentGraphics = this.add.graphics().setDepth(9);
     this.menuGraphics = this.add.graphics().setDepth(14);
     this.menuCursorGraphics = this.add.graphics().setDepth(16);
+    this.binderOverlayGraphics = this.add.graphics().setDepth(80);
+  }
+
+  showBinderCardOverlay(card: BinderOverlayCard, onClose: () => void): void {
+    this.closeBinderCardOverlay(false);
+    this.binderOverlayClose = onClose;
+    this.binderOverlayTextureKey = `binder-overlay-${card.id}`;
+    this.drawBinderCardOverlay(card);
+    this.input.keyboard?.once("keydown", () => this.closeBinderCardOverlay(true));
+    if (!this.textures.exists(this.binderOverlayTextureKey)) {
+      const loadingKey = this.binderOverlayTextureKey;
+      this.load.image(loadingKey, card.image.startsWith("/") ? card.image : `/${card.image}`);
+      this.load.once("complete", () => {
+        if (this.binderOverlayTextureKey === loadingKey) {
+          this.drawBinderCardOverlay(card);
+        }
+      });
+      if (!this.load.isLoading()) {
+        this.load.start();
+      }
+    }
   }
 
   /** A clickable [ Copy ] chip (top bar) that copies the live debug panel text. */
@@ -445,6 +479,72 @@ export class UiScene extends Phaser.Scene {
       });
       nextX = Math.min(this.scale.width - MENU_RIGHT_MARGIN - 64, x + boxWidth + MENU_GAP);
     });
+  }
+
+  private drawBinderCardOverlay(card: BinderOverlayCard): void {
+    const graphics = this.binderOverlayGraphics;
+    const key = this.binderOverlayTextureKey;
+    if (!graphics || !key) {
+      return;
+    }
+    graphics.clear();
+    for (const text of this.binderOverlayTexts) {
+      text.destroy();
+    }
+    this.binderOverlayTexts = [];
+    this.binderOverlayImage?.destroy();
+    this.binderOverlayImage = undefined;
+
+    graphics.fillStyle(0x000000, 0.72);
+    graphics.fillRect(0, 0, this.scale.width, this.scale.height);
+    const captionRect = { x: 54, y: 344, width: 404, height: 70 };
+    drawCleanPanel(graphics, captionRect);
+
+    if (this.textures.exists(key)) {
+      const image = this.add.image(this.scale.width / 2, 176, key).setDepth(82);
+      const scale = Math.min(1.3, 256 / Math.max(1, image.height), 220 / Math.max(1, image.width));
+      image.setScale(scale);
+      this.binderOverlayImage = image;
+    } else {
+      graphics.lineStyle(2, CLEAN_UI_PANEL_BORDER, 0.78);
+      graphics.strokeRoundedRect(176, 56, 160, 224, 6);
+    }
+
+    const inner = cleanPanelInnerRect(captionRect, { x: 14, y: 10 });
+    this.binderOverlayTexts.push(createCleanText(this, inner.x, inner.y, card.name, {
+      fontSize: 15,
+      color: CLEAN_UI_PRIMARY,
+      fixedWidth: inner.width,
+      align: "center",
+      weight: 500
+    }).setDepth(83));
+    this.binderOverlayTexts.push(createCleanText(this, inner.x, inner.y + 26, card.caption, {
+      fontSize: 13,
+      color: CLEAN_UI_SECONDARY,
+      fixedWidth: inner.width,
+      wordWrapWidth: inner.width,
+      align: "center"
+    }).setDepth(83));
+  }
+
+  private closeBinderCardOverlay(notify: boolean): void {
+    this.binderOverlayGraphics?.clear();
+    this.binderOverlayImage?.destroy();
+    this.binderOverlayImage = undefined;
+    for (const text of this.binderOverlayTexts) {
+      text.destroy();
+    }
+    this.binderOverlayTexts = [];
+    const key = this.binderOverlayTextureKey;
+    if (key && this.textures.exists(key)) {
+      this.textures.remove(key);
+    }
+    this.binderOverlayTextureKey = undefined;
+    const onClose = this.binderOverlayClose;
+    this.binderOverlayClose = undefined;
+    if (notify) {
+      onClose?.();
+    }
   }
 
   private positionMenuHint(hudVisible: boolean): void {

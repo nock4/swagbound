@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { type BattleEnemy, type Cutscene, type DialoguePage, type EventActorMoveSelector, type EventEffect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
 import { sectorIndexForTile } from "./encounterLogic";
@@ -260,6 +260,17 @@ import {
   overworldInteractableEvents,
   overworldInteractableIsOpened
 } from "./overworldInteractables";
+import type { SourceCheckReturnTo } from "./sourceCheckScene";
+import {
+  SOURCE_CHECK_RETRY_DISTANCE_PX,
+  buildBinderViewModel,
+  cardById,
+  cardOwnedFlag,
+  sourceCheckCanRetry,
+  sourceCheckClearedFlag,
+  sourceCheckItemHeldFlag,
+  sourceCheckVisible
+} from "./sourceCheckModel";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -317,6 +328,12 @@ type BossGateRuntime = {
   armed: boolean;
 };
 
+type SourceCheckActorRuntime = {
+  check: DrifellaSourceCheck;
+  sprite: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle;
+  visible: boolean;
+};
+
 type NpcSpriteOverrideResolution = {
   source: "npc" | "spriteGroup";
   id: number;
@@ -324,7 +341,7 @@ type NpcSpriteOverrideResolution = {
   override: SpriteOverrideSheet;
 };
 
-type SortableActor = Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+type SortableActor = Phaser.GameObjects.Sprite | Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle;
 
 type FollowerRuntime = {
   joinOrder: number;
@@ -340,7 +357,7 @@ type ActiveNpcDialogue = {
   restoreFacing: Facing;
 };
 
-type WorldInteractionKind = "npc" | OverworldInteractable["kind"];
+type WorldInteractionKind = "npc" | OverworldInteractable["kind"] | "sourceCheck";
 
 type WorldInteractionCandidate = InteractionCandidate & {
   id: number;
@@ -349,6 +366,7 @@ type WorldInteractionCandidate = InteractionCandidate & {
   label?: string;
   npcId?: number;
   interactableId?: string;
+  sourceCheckId?: string;
 };
 
 type ActorMoveEffect = Extract<EventEffect, { kind: "actorMove" }>;
@@ -429,6 +447,12 @@ const CUTSCENE_ACTOR_MOVE_TIMEOUT_MS = 8_000;
 const CUTSCENE_ACTOR_RUN_MULTIPLIER = 1.5;
 const CUTSCENE_MOVE_DEMO_REFERENCE = "cutsceneMoveDemo.main";
 const DEFAULT_HOTEL_REST_COST = 100;
+const SOURCE_CHECK_SESSION_REGISTRY_KEY = "source-check-session";
+
+type SourceCheckSessionState = {
+  attempts: Record<string, number>;
+  failedAt: Record<string, { x: number; y: number }>;
+};
 
 type TilePoint = { x: number; y: number };
 type ForceEncounterResult =
@@ -468,6 +492,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private serviceInteractionCache = new Map<string, boolean>();
   private activeNpcDialogue?: ActiveNpcDialogue;
   private presentInteractableSprites = new Map<string, Phaser.GameObjects.Rectangle>();
+  private sourceCheckActors = new Map<string, SourceCheckActorRuntime>();
   private chunkByKey = new Map<string, WorldChunk>();
   private chunkObjects = new Map<string, StreamedChunk>();
   private loadingTextureKeys = new Set<string>();
@@ -532,6 +557,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private activeShopStoreId?: number;
   private activeService?: ActiveServiceState;
   private lastServiceResult?: ServiceDebugState["lastResult"];
+  private binderOverlayOpen = false;
   private eventSequence?: RuntimeEventSequence;
   private bootSaveState?: SaveState;
   private saveSlot = 0;
@@ -576,6 +602,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private pendingScriptedDialogueComplete?: () => void;
   private pendingInteractionShopStoreId?: number;
   private pendingInteractionService?: { service: ServiceKind; cost?: number };
+  private pendingSourceCheckEntryId?: string;
   private cutsceneMove?: CutsceneMoveState;
   private cutsceneRunner?: CutsceneRunner;
   private activeCutsceneId?: string;
@@ -707,6 +734,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.load.spritesheet(this.overlaySheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
       }
     }
+    for (const check of this.data_.sourceChecks.checks) {
+      this.load.image(this.sourceCheckOverworldTextureKey(check), this.sourceCheckOverworldAssetUrl(check));
+    }
   }
 
   create(): void {
@@ -754,6 +784,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.player = this.spawnPlayerActor(spawn.x, spawn.y, world.player.spriteGroup, playerFacing);
     this.spawnFollower(spawn, playerFacing);
     this.spawnPresentInteractables();
+    this.spawnSourceCheckActors();
     this.syncEncounterTileState();
 
     const bounds = this.movementBounds();
@@ -768,6 +799,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.destroyDoorFadeOverlay();
       this.destroyCollisionOverlay();
       this.destroyRoomMask();
+      this.destroySourceCheckActors();
       this.unregisterCutsceneMoveDemoGlobal();
       this.unregisterForceEncounter();
       this.unregisterCollisionDebugGlobals();
@@ -906,7 +938,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
-    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.isDoorFadeActive();
+    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.isDoorFadeActive() || this.binderOverlayOpen;
     if (inputOwned && !this.playerState.inputLocked) {
       lockPlayer(this.playerState, this.playerFrames);
     } else if (!inputOwned && this.playerState.inputLocked) {
@@ -941,6 +973,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.refreshStreaming();
     this.updateCollisionOverlay();
     this.refreshBarrierSprites();
+    this.refreshSourceCheckSessionGates();
+    this.syncSourceCheckActors();
     if (this.maybeStartIntroMeteorBeat()) {
       return;
     }
@@ -986,6 +1020,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.npcRuntimes.clear();
     this.serviceInteractionCache.clear();
     this.destroyPresentInteractableSprites();
+    this.destroySourceCheckActors();
     this.clearOverworldEnemies();
     this.chunkObjects.clear();
     this.loadingTextureKeys.clear();
@@ -1019,6 +1054,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.activeShopStoreId = undefined;
     this.activeService = undefined;
     this.lastServiceResult = undefined;
+    this.binderOverlayOpen = false;
     this.menuSfxCalls = [];
     this.menuSfxCount = 0;
     this.interactionSfxCalls = [];
@@ -1049,6 +1085,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.assetsLoaded = false;
     this.pendingInteractionShopStoreId = undefined;
     this.pendingInteractionService = undefined;
+    this.pendingSourceCheckEntryId = undefined;
     this.cutsceneMove = undefined;
     this.cutsceneMoveDebug = { active: false, arrived: false };
     this.cutsceneRunner = undefined;
@@ -2037,6 +2074,114 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.presentInteractableSprites.clear();
   }
 
+  private spawnSourceCheckActors(): void {
+    this.destroySourceCheckActors();
+    for (const check of this.data_.sourceChecks.checks) {
+      const sprite = this.spawnSourceCheckActor(check);
+      const runtime = {
+        check,
+        sprite,
+        visible: false
+      };
+      this.sourceCheckActors.set(check.id, runtime);
+    }
+    this.syncSourceCheckActors();
+  }
+
+  private spawnSourceCheckActor(check: DrifellaSourceCheck): Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle {
+    const key = this.sourceCheckOverworldTextureKey(check);
+    const { x, y } = check.placement.worldPixel;
+    const sprite = this.textures.exists(key)
+      ? this.add.image(x, y, key).setOrigin(0.5, 1)
+      : this.add.rectangle(x, y, 12, 24, 0x9aa3b2, 0.9).setOrigin(0.5, 1);
+    if ("height" in sprite && sprite.height > 0) {
+      sprite.setScale(24 / sprite.height);
+    }
+    this.setActorSortDepth(sprite);
+    return sprite;
+  }
+
+  private syncSourceCheckActors(): void {
+    for (const runtime of this.sourceCheckActors.values()) {
+      const visible = this.sourceCheckActorVisible(runtime.check);
+      runtime.visible = visible;
+      runtime.sprite.setVisible(visible);
+      if (visible) {
+        this.setActorSortDepth(runtime.sprite);
+      }
+    }
+  }
+
+  private sourceCheckActorVisible(check: DrifellaSourceCheck): boolean {
+    return sourceCheckVisible(check, this.gameFlags);
+  }
+
+  private destroySourceCheckActors(): void {
+    for (const runtime of this.sourceCheckActors.values()) {
+      runtime.sprite.destroy();
+    }
+    this.sourceCheckActors.clear();
+  }
+
+  private sourceCheckOverworldTextureKey(check: DrifellaSourceCheck): string {
+    return `source-check-overworld-${check.id}`;
+  }
+
+  private sourceCheckOverworldAssetUrl(check: DrifellaSourceCheck): string {
+    return `/assets/swagbound/overworld-npc/${check.drifellaId}.png`;
+  }
+
+  private sourceCheckSession(): SourceCheckSessionState {
+    const value = this.registry.get(SOURCE_CHECK_SESSION_REGISTRY_KEY) as Partial<SourceCheckSessionState> | undefined;
+    return {
+      attempts: { ...(value?.attempts ?? {}) },
+      failedAt: { ...(value?.failedAt ?? {}) }
+    };
+  }
+
+  private setSourceCheckSession(session: SourceCheckSessionState): void {
+    this.registry.set(SOURCE_CHECK_SESSION_REGISTRY_KEY, {
+      attempts: { ...session.attempts },
+      failedAt: { ...session.failedAt }
+    });
+  }
+
+  private nextSourceCheckAttempt(checkId: string): number {
+    const session = this.sourceCheckSession();
+    const next = Math.max(0, Math.floor(session.attempts[checkId] ?? 0)) + 1;
+    session.attempts[checkId] = next;
+    this.setSourceCheckSession(session);
+    return next;
+  }
+
+  private sourceCheckRetryGated(check: DrifellaSourceCheck): boolean {
+    return this.sourceCheckRetryDistance(check) !== undefined;
+  }
+
+  private sourceCheckRetryDistance(check: DrifellaSourceCheck): number | undefined {
+    const failedAt = this.sourceCheckSession().failedAt[check.id];
+    if (!failedAt) {
+      return undefined;
+    }
+    const distance = Phaser.Math.Distance.Between(this.playerState.x, this.playerState.y, failedAt.x, failedAt.y);
+    return sourceCheckCanRetry(distance, SOURCE_CHECK_RETRY_DISTANCE_PX) ? undefined : distance;
+  }
+
+  private refreshSourceCheckSessionGates(): void {
+    const session = this.sourceCheckSession();
+    let changed = false;
+    for (const [checkId, failedAt] of Object.entries(session.failedAt)) {
+      const distance = Phaser.Math.Distance.Between(this.playerState.x, this.playerState.y, failedAt.x, failedAt.y);
+      if (sourceCheckCanRetry(distance, SOURCE_CHECK_RETRY_DISTANCE_PX)) {
+        delete session.failedAt[checkId];
+        changed = true;
+      }
+    }
+    if (changed) {
+      this.setSourceCheckSession(session);
+    }
+  }
+
   private readInput(): MoveInput {
     return {
       left: Boolean(this.cursors?.left?.isDown || this.keys?.A?.isDown),
@@ -2538,6 +2683,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }));
     return [
       ...npcCandidates,
+      ...[...this.sourceCheckActors.values()]
+        .filter((runtime) => runtime.visible)
+        .map((runtime) => ({
+          id: runtime.check.npcId,
+          key: `source-check:${runtime.check.id}`,
+          targetKind: "sourceCheck" as const,
+          sourceCheckId: runtime.check.id,
+          npcId: runtime.check.npcId,
+          label: "Drifella",
+          x: runtime.check.placement.worldPixel.x,
+          y: runtime.check.placement.worldPixel.y,
+          interactable: true
+        })),
       ...this.data_.overworldInteractables.interactables.map((entry, index) => ({
         id: -1 - index,
         key: `interactable:${entry.id}`,
@@ -2654,7 +2812,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private openCommandMenu(): void {
-    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running || this.cutsceneRunner?.running) {
+    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running || this.cutsceneRunner?.running || this.binderOverlayOpen) {
       return;
     }
     this.refreshMenuScreens();
@@ -2771,6 +2929,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     if (action.kind === "storageWithdraw") {
       this.handleStorageWithdrawAction(action);
+      return;
+    }
+    if (action.kind === "binderCard") {
+      this.handleBinderCardAction(action.cardId);
       return;
     }
     this.handleEquipAction(action);
@@ -2984,6 +3146,41 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.refreshOpenMenuAfterAction();
   }
 
+  private handleBinderCardAction(cardId: string): void {
+    const card = cardById(this.data_.cardNfts, cardId);
+    if (!card || !this.gameFlags.has(cardOwnedFlag(card.id))) {
+      this.playMenuSfx("menuCancel");
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
+    this.menuState = closedMenu();
+    this.activeShopStoreId = undefined;
+    this.activeService = undefined;
+    this.binderOverlayOpen = true;
+    lockPlayer(this.playerState, this.playerFrames);
+    const ui = this.scene.get("ui") as {
+      showBinderCardOverlay?: (card: { id: string; name: string; image: string; caption: string }, onClose: () => void) => void;
+    } | undefined;
+    if (!ui?.showBinderCardOverlay) {
+      this.binderOverlayOpen = false;
+      unlockPlayer(this.playerState);
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
+    ui.showBinderCardOverlay(card, () => {
+      this.binderOverlayOpen = false;
+      if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running) {
+        unlockPlayer(this.playerState);
+      }
+      this.updatePrompt();
+      this.publish();
+    });
+    this.updatePrompt();
+    this.publish();
+  }
+
   private itemById(itemId: number): ItemData | undefined {
     return this.data_.items?.items.find((item) => item.id === itemId);
   }
@@ -3064,6 +3261,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       items: this.data_.items,
       psi: this.data_.psi,
       shops: this.data_.shops,
+      cardNfts: this.data_.cardNfts,
+      flags: this.gameFlags,
       partyState: this.partyState,
       resolver
     });
@@ -3072,6 +3271,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         characters: this.data_.characters,
         items: this.data_.items,
         shops: this.data_.shops,
+        cardNfts: this.data_.cardNfts,
+        flags: this.gameFlags,
         partyState: this.partyState,
         resolver,
         storeId: this.activeShopStoreId
@@ -3096,6 +3297,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       screens.push(...buildPhoneServiceScreens({
         characters: this.data_.characters,
         items: this.data_.items,
+        cardNfts: this.data_.cardNfts,
+        flags: this.gameFlags,
         partyState: this.partyState,
         resolver
       }));
@@ -3411,6 +3614,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.applyStoryGateReturn(restore);
     this.partyState.restore(restore.party);
+    this.applySourceCheckReturn(restore);
     this.encounterCooldownMs = Math.max(this.encounterCooldownMs, restore.encounter.cooldownMs);
     this.encounterRng.setState(restore.encounter.rngSeed);
     this.encounterSeed = restore.encounter.rngSeed;
@@ -3428,6 +3632,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return undefined;
     }
     return player;
+  }
+
+  private applySourceCheckReturn(restore: ChunkedWorldRestore): void {
+    const result = restore.sourceCheck;
+    if (!result) {
+      return;
+    }
+    if (result.outcome === "failed") {
+      const session = this.sourceCheckSession();
+      session.failedAt[result.id] = { ...result.worldPixel };
+      this.setSourceCheckSession(session);
+    }
   }
 
   private isCompatibleSavePlayer(player: SavePlayerSnapshot): boolean {
@@ -3459,6 +3675,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     if (target.targetKind !== "npc") {
+      if (target.targetKind === "sourceCheck") {
+        this.openSourceCheckInteraction(target);
+        return;
+      }
       this.openOverworldInteractable(target);
       return;
     }
@@ -3499,6 +3719,127 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.syncPresentInteractableSprites();
     this.updatePrompt();
     this.publish();
+  }
+
+  private openSourceCheckInteraction(target: WorldInteractionCandidate): void {
+    const check = this.sourceCheckById(target.sourceCheckId);
+    if (!check) {
+      return;
+    }
+    this.restoreActiveNpc();
+    this.playInteractionSfx("talkConfirm");
+    lockPlayer(this.playerState, this.playerFrames);
+    if (this.sourceCheckRetryGated(check)) {
+      this.dialogue.start(buildInlineDialoguePages([this.randomSourceCheckLine(check.reactions.failed)]));
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
+    if (this.gameFlags.has(sourceCheckClearedFlag(check.id))) {
+      const pages = [this.randomSourceCheckLine(check.reactions.alreadyCleared)];
+      if (this.deliverHeldSourceCheckItem(check)) {
+        pages.push("Held item delivered.");
+      }
+      this.dialogue.start(buildInlineDialoguePages(pages));
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
+    this.pendingSourceCheckEntryId = check.id;
+    this.dialogue.start(buildInlineDialoguePages([...check.entryPrompt]));
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private deliverHeldSourceCheckItem(check: DrifellaSourceCheck): boolean {
+    const heldFlag = sourceCheckItemHeldFlag(check.id);
+    if (!this.gameFlags.has(heldFlag)) {
+      return false;
+    }
+    const leadCharId = this.leadPartyCharId();
+    if (this.partyState.inventoryRoom(leadCharId) <= 0) {
+      return false;
+    }
+    if (!this.partyState.give(leadCharId, check.rewards.itemId)) {
+      return false;
+    }
+    this.gameFlags.unset(heldFlag);
+    this.playInteractionSfx("itemGet");
+    this.refreshMenuScreens();
+    return true;
+  }
+
+  private launchPendingSourceCheck(checkId: string): void {
+    const check = this.sourceCheckById(checkId);
+    if (!check) {
+      this.afterDialogueClosed();
+      return;
+    }
+    const attempt = this.nextSourceCheckAttempt(check.id);
+    this.scene.stop("ui");
+    this.scene.start("source-check", {
+      check,
+      cards: this.data_.cardNfts,
+      items: this.data_.items,
+      spriteOverrides: this.data_.spriteOverrides,
+      attempt,
+      gameFlagsSnapshot: this.gameFlags.list(),
+      returnTo: this.sourceCheckReturnTo()
+    });
+  }
+
+  private sourceCheckReturnTo(): SourceCheckReturnTo {
+    return {
+      worldPixel: {
+        x: this.playerState.x,
+        y: this.playerState.y
+      },
+      facing: this.playerState.facing,
+      context: {
+        sceneKey: "chunked-world",
+        gameData: this.data_,
+        saveSlot: this.saveSlot,
+        saveSlots: this.saveSlots,
+        restore: {
+          player: {
+            x: this.playerState.x,
+            y: this.playerState.y,
+            facing: this.playerState.facing
+          },
+          flags: {
+            strings: this.gameFlags.list(),
+            numeric: this.gameFlags.listNums()
+          },
+          party: this.partyState.snapshot(),
+          encounter: {
+            enabled: this.encounterEnabled,
+            cooldownMs: this.encounterCooldownMs,
+            rngSeed: this.encounterRng.state(),
+            lastEncounterGroup: this.lastEncounterGroup
+          },
+          source: "event"
+        }
+      }
+    };
+  }
+
+  private sourceCheckById(id: string | undefined): DrifellaSourceCheck | undefined {
+    if (!id) {
+      return undefined;
+    }
+    return this.data_.sourceChecks.checks.find((check) => check.id === id);
+  }
+
+  private randomSourceCheckLine(lines: readonly string[]): string {
+    if (lines.length === 0) {
+      return "";
+    }
+    const index = Math.floor(Math.abs(this.time.now) % lines.length);
+    return lines[index] ?? lines[0] ?? "";
+  }
+
+  private leadPartyCharId(): number {
+    return this.partyState.party()[0] ?? this.data_.characters?.characters[0]?.id ?? 0;
   }
 
   private interactionEventsForNpc(npc: RuntimeNpcData): GameEvent[] {
@@ -3556,6 +3897,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       setFlag: (flag) => {
         this.gameFlags.set(flag);
         this.syncPresentInteractableSprites();
+        this.syncSourceCheckActors();
       },
       openShop: (storeId) => this.openShopMenu(storeId),
       deferShop: (storeId) => {
@@ -5343,6 +5685,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       onComplete();
       return;
     }
+    const sourceCheckId = this.pendingSourceCheckEntryId;
+    this.pendingSourceCheckEntryId = undefined;
+    if (sourceCheckId) {
+      this.launchPendingSourceCheck(sourceCheckId);
+      return;
+    }
     this.afterDialogueClosed();
   }
 
@@ -5468,6 +5816,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // effects or their armed flags leave the run permanently stranded.
     const pendingComplete = this.pendingScriptedDialogueComplete;
     this.pendingScriptedDialogueComplete = undefined;
+    this.pendingSourceCheckEntryId = undefined;
     if (this.dialogue.open) {
       this.dialogue.close();
     }
@@ -6012,14 +6361,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private debugInteractables(): OverworldInteractableDebug[] {
-    return this.data_.overworldInteractables.interactables.map((entry) => ({
+    return [
+      ...this.data_.overworldInteractables.interactables.map((entry) => ({
       id: entry.id,
       kind: entry.kind,
       x: entry.worldPixel.x,
       y: entry.worldPixel.y,
       ...(entry.label ? { label: entry.label } : {}),
       ...(entry.kind === "present" ? { opened: this.overworldInteractableOpened(entry) } : {})
-    }));
+      })),
+      ...[...this.sourceCheckActors.values()].map((runtime) => ({
+        id: runtime.check.id,
+        kind: "sourceCheck" as const,
+        x: runtime.check.placement.worldPixel.x,
+        y: runtime.check.placement.worldPixel.y,
+        label: runtime.visible ? "Drifella" : "hidden"
+      }))
+    ];
   }
 
   private nearestInteractionTargetDebug(): OverworldInteractionTargetDebug | undefined {
@@ -6054,6 +6412,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private publish(): void {
+    this.publishBinderDebug();
     const world = this.world_;
     const npc744 = this.tutorialNpc();
     const distance = this.distanceToTutorialNpc();
@@ -6163,6 +6522,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
     };
     publishDebug(state);
+  }
+
+  private publishBinderDebug(): void {
+    (globalThis as Record<string, unknown>).__binderDebug = () => {
+      const binder = buildBinderViewModel(this.data_.cardNfts, this.gameFlags);
+      return {
+        owned: binder.owned,
+        total: binder.total,
+        byRegion: Object.fromEntries(binder.regions.map((region) => [
+          region.id,
+          {
+            owned: region.owned,
+            total: region.total
+          }
+        ]))
+      };
+    };
   }
 }
 

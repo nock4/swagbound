@@ -1,7 +1,8 @@
-import type { CharacterCollection, ItemCollection, ItemData, PsiCollection, PsiData, ShopData } from "@eb/schemas";
+import type { CardNfts, CharacterCollection, ItemCollection, ItemData, PsiCollection, PsiData, ShopData } from "@eb/schemas";
 import { buildPartyMember, type PartyMember, type PartyMemberStats } from "./characterModel";
 import type { DialogueResolver } from "./dialogueRenderer";
 import { psiPpCost } from "./battleLogic";
+import { buildBinderViewModel, type BinderViewModel } from "./sourceCheckModel";
 import {
   decodeItemUseEffect,
   equipmentSlotForItemType,
@@ -284,6 +285,10 @@ export type MenuAction =
       char: number;
       storageSlot: number;
       itemId: number;
+    }
+  | {
+      kind: "binderCard";
+      cardId: string;
     };
 
 export type TalkMenuDecision =
@@ -295,6 +300,10 @@ export type PartyMenuViewModelInput = StatusViewModelInput & {
   items?: ItemCollection;
   psi?: PsiCollection;
   shops?: ShopData;
+  cardNfts?: CardNfts;
+  flags?: {
+    has(flag: string): boolean;
+  };
   resolver?: Pick<DialogueResolver, "itemName" | "psiName">;
 };
 
@@ -310,6 +319,7 @@ export const SAVE_MENU_ACTION_ID = "save";
 const GOODS_MENU_ID = "goods";
 const PSI_MENU_ID = "psi";
 const EQUIP_MENU_ID = "equip";
+export const BINDER_MENU_ID = "binder";
 const ITEM_USE_ACTION_PREFIX = "item-use";
 const ITEM_GIVE_ACTION_PREFIX = "item-give";
 const ITEM_DROP_ACTION_PREFIX = "item-drop";
@@ -331,6 +341,7 @@ const SERVICE_ACTION_PREFIX = "service";
 const PHONE_ACTION_PREFIX = "phone";
 const STORAGE_DEPOSIT_ACTION_PREFIX = "storage-deposit";
 const STORAGE_WITHDRAW_ACTION_PREFIX = "storage-withdraw";
+const BINDER_CARD_ACTION_PREFIX = "binder-card";
 const ATM_AMOUNT_OPTIONS = [10, 50, 100, 500, 1000];
 const EQUIP_SLOTS: EquipmentSlot[] = ["weapon", "body", "arms", "other"];
 
@@ -340,8 +351,9 @@ const MAIN_COMMANDS: Array<Omit<MenuItem, "enabled">> = [
   { id: PSI_MENU_ID, label: "PSI", childScreenId: PSI_MENU_ID },
   { id: EQUIP_MENU_ID, label: "Equip", childScreenId: EQUIP_MENU_ID },
   { id: "check", label: "Check", childScreenId: "check" },
-  { id: STATUS_MENU_ID, label: "Status", childScreenId: STATUS_MENU_ID }
-  // Vanilla EB's pause menu is exactly these 6. ATM is reached at ATM machines and
+  { id: STATUS_MENU_ID, label: "Status", childScreenId: STATUS_MENU_ID },
+  { id: BINDER_MENU_ID, label: "Binder", childScreenId: BINDER_MENU_ID }
+  // ATM is reached at ATM machines and
   // Save via phone (here: the P key, chunkedWorldScene keydown-P) - neither is a menu item.
 ];
 
@@ -487,6 +499,7 @@ export function buildMenuScreens(status: StatusViewModel, input: PartyMenuViewMo
   const psiByMember = members.map((member) => buildPsiViewModelForMember(input, member));
   const equipByMember = members.map((member) => buildEquipViewModelForMember(input, member));
   const check = buildCheckViewModel(input);
+  const binder = input.cardNfts ? buildBinderViewModel(input.cardNfts, input.flags ?? { has: () => false }) : emptyBinderViewModel();
   return [
     buildMainMenuScreen(),
     buildPartyMemberSelectScreen(GOODS_MENU_ID, "Goods", goodsByMember.map((goods) => goods.member)),
@@ -506,6 +519,7 @@ export function buildMenuScreens(status: StatusViewModel, input: PartyMenuViewMo
     ]),
     buildCheckScreen(check),
     ...buildCheckDetailScreens(check),
+    ...buildBinderScreens(binder),
     buildAtmScreen(input)
   ];
 }
@@ -897,6 +911,48 @@ export function buildCheckDetailScreens(check: CheckViewModel): MenuScreen[] {
   }));
 }
 
+export function buildBinderScreens(binder: BinderViewModel): MenuScreen[] {
+  return [
+    {
+      id: BINDER_MENU_ID,
+      title: "Binder",
+      items: binder.regions.length > 0
+        ? binder.regions.map((region) => ({
+            id: `binder-region-${region.id}`,
+            label: region.label,
+            enabled: true,
+            childScreenId: binderRegionScreenId(region.id)
+          }))
+        : [{ id: "binder-empty", label: "No cards.", enabled: false }],
+      wrap: false
+    },
+    ...binder.regions.map((region) => ({
+      id: binderRegionScreenId(region.id),
+      title: region.label,
+      items: (binder.cardsByRegion[region.id] ?? []).map((card) => ({
+        id: card.id,
+        label: fitMenuLabel(card.label),
+        enabled: card.owned,
+        ...(card.owned ? { actionId: buildBinderCardActionId(card.cardId) } : {})
+      })),
+      wrap: false
+    }))
+  ];
+}
+
+function emptyBinderViewModel(): BinderViewModel {
+  return {
+    owned: 0,
+    total: 0,
+    regions: [],
+    cardsByRegion: {}
+  };
+}
+
+function binderRegionScreenId(regionId: string): string {
+  return `binder-region-${regionId}`;
+}
+
 function statusMemberScreenId(index: number): string {
   return partyMemberScreenId(STATUS_MENU_ID, index);
 }
@@ -1235,6 +1291,10 @@ export function buildStorageWithdrawActionId(char: number, storageSlot: number, 
   return [STORAGE_WITHDRAW_ACTION_PREFIX, stat(char), stat(storageSlot), stat(itemId)].join(":");
 }
 
+export function buildBinderCardActionId(cardId: string): string {
+  return [BINDER_CARD_ACTION_PREFIX, encodeURIComponent(cardId)].join(":");
+}
+
 export function shopRootScreenId(storeId: number): string {
   return `shop-${stat(storeId)}`;
 }
@@ -1290,6 +1350,10 @@ export function parseMenuAction(actionId: string): MenuAction | undefined {
       return { kind: "phoneService", option };
     }
     return undefined;
+  }
+  if (prefix === BINDER_CARD_ACTION_PREFIX && rawParts.length === 1) {
+    const cardId = decodeURIComponent(rawParts[0] ?? "").trim();
+    return cardId ? { kind: "binderCard", cardId } : undefined;
   }
   const parts = rawParts.map((part) => Number(part));
   if (parts.some((part) => !Number.isInteger(part) || part < 0)) {

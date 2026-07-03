@@ -19,6 +19,15 @@ export type PendingStoryGate = {
   clearFlags?: string[];
 };
 
+export type SourceCheckReturnState = {
+  id: string;
+  outcome: "declined" | "failed" | "cleared";
+  worldPixel: {
+    x: number;
+    y: number;
+  };
+};
+
 export type BattleReturnEncounterState = {
   enabled: boolean;
   cooldownMs: number;
@@ -39,6 +48,8 @@ export type ChunkedWorldRestore = {
   outcome?: BattleReturnOutcome;
   /** Deferred effects for a story-gate boss; applied on `outcome === "win"`. */
   pendingStoryGate?: PendingStoryGate;
+  /** Session-only source-check result; consumed by the world scene on restart. */
+  sourceCheck?: SourceCheckReturnState;
   defeat?: {
     savedPlayer?: SavePlayerSnapshot;
     newGamePlayer: SavePlayerSnapshot;

@@ -8,9 +8,11 @@ import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
 import { FallbackScene } from "./fallbackScene";
 import { BattleScene } from "./battleScene";
+import { SourceCheckScene } from "./sourceCheckScene";
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import type { EncounterAdvantage } from "./battleLogic";
-import { deserializeSaveState, type SaveSlotPersistence } from "./saveState";
+import { deserializeSaveState, type SaveSlotPersistence, type SaveState } from "./saveState";
+import type { DrifellaSourceCheck } from "@eb/schemas";
 import { registerWindowFlavorControls } from "./windowSettings";
 import { mountMusicAuditioner } from "./musicAuditioner";
 import "./style.css";
@@ -92,6 +94,22 @@ class BootScene extends Phaser.Scene {
     }
     const saveBlob = loadFromSlot(DEFAULT_SAVE_SLOT);
     const saveState = deserializeSaveState(saveBlob);
+    const sourceCheckId = sourceCheckIdFromSearch(globalThis.location?.search);
+    const sourceCheck = sourceCheckId
+      ? data.sourceChecks.checks.find((check) => check.id === sourceCheckId)
+      : undefined;
+    if (sourceCheck) {
+      this.scene.start("source-check", {
+        check: sourceCheck,
+        cards: data.cardNfts,
+        items: data.items,
+        spriteOverrides: data.spriteOverrides,
+        attempt: 1,
+        gameFlagsSnapshot: saveState?.flags.strings ?? [],
+        returnTo: debugSourceCheckReturnTo(data, sourceCheck, saveState)
+      });
+      return;
+    }
     if (data.world?.available && "mode" in data.world && data.world.mode === "full") {
       const introDisabled = isIntroDisabled({
         search: globalThis.location?.search,
@@ -252,6 +270,81 @@ function battleGroupIdFromSearch(search: string | undefined): number | undefined
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
 }
 
+function sourceCheckIdFromSearch(search: string | undefined): string | undefined {
+  const value = new URLSearchParams(search ?? "").get("sourcecheck")?.trim();
+  return value || undefined;
+}
+
+function debugSourceCheckReturnTo(
+  data: GameData,
+  check: DrifellaSourceCheck,
+  saveState: SaveState | null
+): {
+  worldPixel: { x: number; y: number };
+  facing: DrifellaSourceCheck["placement"]["facing"];
+  context: {
+    sceneKey: "chunked-world";
+    gameData: GameData;
+    saveSlot: number;
+    saveSlots: SaveSlotPersistence;
+    restore: {
+      player: { x: number; y: number; facing: DrifellaSourceCheck["placement"]["facing"] };
+      flags: { strings: string[]; numeric: number[] };
+      party: SaveState["party"];
+      encounter: { enabled: boolean; cooldownMs: number; rngSeed: number };
+      source: "event";
+    };
+  };
+} {
+  const worldPixel = { ...check.placement.worldPixel };
+  const facing = check.placement.facing;
+  return {
+    worldPixel,
+    facing,
+    context: {
+      sceneKey: "chunked-world",
+      gameData: data,
+      saveSlot: DEFAULT_SAVE_SLOT,
+      saveSlots: SAVE_SLOTS,
+      restore: {
+        player: { x: worldPixel.x, y: worldPixel.y, facing },
+        flags: {
+          strings: [...(saveState?.flags.strings ?? [])],
+          numeric: [...(saveState?.flags.numeric ?? [])]
+        },
+        party: saveState?.party ?? emptyDebugParty(data),
+        encounter: {
+          enabled: Boolean(data.encounters && data.battle),
+          cooldownMs: 0,
+          rngSeed: seedFromString(check.id)
+        },
+        source: "event"
+      }
+    }
+  };
+}
+
+function emptyDebugParty(data: GameData): SaveState["party"] {
+  const partyIds = data.characters?.characters.slice(0, 2).map((character) => character.id) ?? [];
+  return {
+    wallet: 0,
+    bank: 0,
+    partyIds,
+    inventory: [],
+    equipped: [],
+    battleMembers: []
+  };
+}
+
+function seedFromString(value: string): number {
+  let hash = 2166136261;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return hash >>> 0;
+}
+
 function debugBattlePartyMembersFromSearch(
   search: string | undefined,
   characters: GameData["characters"]
@@ -339,7 +432,7 @@ new Phaser.Game({
   height: 448,
   backgroundColor: "#000000",
   pixelArt: true,
-  scene: [BootScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene],
+  scene: [BootScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH

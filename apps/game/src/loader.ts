@@ -5,10 +5,12 @@ import {
   BattleDataSchema,
   BattleRulesSchema,
   BackgroundOverridesSchema,
+  CardNftsSchema,
   CharacterCollectionSchema,
   CharacterOverridesSchema,
   CustomDialogueSchema,
   DrifellaBarksSchema,
+  DrifellaSourceChecksSchema,
   EnemyActionEffectsSchema,
   EnemyOverridesSchema,
   EnemyStatOverridesSchema,
@@ -47,10 +49,12 @@ import {
   type BackgroundOverrides,
   type BattleData,
   type BattleRules,
+  type CardNfts,
   type CharacterCollection,
   type CharacterOverrides,
   type CustomDialogue,
   type DrifellaBarks,
+  type DrifellaSourceChecks,
   type EnemyActionEffects,
   type EnemyOverrides,
   type EnemyStatOverrides,
@@ -112,6 +116,8 @@ const DRIFELLA_BARKS_FILE = "drifella-barks.json";
 const OPENING_CUTSCENE_FILE = "opening-cutscene.json";
 const CUTSCENES_FILE = "cutscenes.json";
 const OVERWORLD_INTERACTABLES_FILE = "overworld-interactables.json";
+const CARD_NFTS_FILE = "card-nfts.json";
+const DRIFELLA_SOURCE_CHECKS_FILE = "drifella-source-checks.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -122,6 +128,8 @@ export type GameData = {
   drifellaBarks: DrifellaBarks;
   dialogueLibrary: SwagboundDialogueLibrary;
   overworldInteractables: OverworldInteractables;
+  cardNfts: CardNfts;
+  sourceChecks: DrifellaSourceChecks;
   openingCutscene?: OpeningCutscene;
   cutscenes?: Cutscenes;
   storyTriggers?: StoryTriggers;
@@ -241,6 +249,20 @@ function emptyOverworldInteractables(): OverworldInteractables {
   };
 }
 
+function emptyCardNfts(): CardNfts {
+  return {
+    schema: "swagbound.card-nfts.v1",
+    cards: []
+  };
+}
+
+function emptySourceChecks(): DrifellaSourceChecks {
+  return {
+    schema: "swagbound.drifella-source-checks.v1",
+    checks: []
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -280,7 +302,9 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     drifellaBarks,
     openingCutscene,
     cutscenes,
-    overworldInteractables
+    overworldInteractables,
+    cardNfts,
+    sourceChecks
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -336,7 +360,9 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${DRIFELLA_BARKS_FILE}`, DrifellaBarksSchema),
     loadJson(`/generated/${OPENING_CUTSCENE_FILE}`, OpeningCutsceneSchema),
     loadJson(`/generated/${CUTSCENES_FILE}`, CutscenesSchema),
-    loadJson(`/generated/${OVERWORLD_INTERACTABLES_FILE}`, OverworldInteractablesSchema)
+    loadJson(`/generated/${OVERWORLD_INTERACTABLES_FILE}`, OverworldInteractablesSchema),
+    loadJson(`/generated/${CARD_NFTS_FILE}`, CardNftsSchema),
+    loadJson(`/generated/${DRIFELLA_SOURCE_CHECKS_FILE}`, DrifellaSourceChecksSchema)
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
@@ -361,6 +387,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     drifellaBarks: resolvedDrifellaBarks,
     dialogueLibrary: dialogueLibrary ?? emptyDialogueLibrary(),
     overworldInteractables: overworldInteractables ?? emptyOverworldInteractables(),
+    cardNfts: cardNfts ?? emptyCardNfts(),
+    sourceChecks: sourceChecks ?? emptySourceChecks(),
     openingCutscene,
     cutscenes,
     storyTriggers,

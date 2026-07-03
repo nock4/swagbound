@@ -257,7 +257,7 @@ export type CutsceneMoveDebug = {
 
 export type OverworldInteractableDebug = {
   id: string;
-  kind: "sign" | "present" | "examine";
+  kind: "sign" | "present" | "examine" | "sourceCheck";
   x: number;
   y: number;
   label?: string;
@@ -265,7 +265,7 @@ export type OverworldInteractableDebug = {
 };
 
 export type OverworldInteractionTargetDebug = {
-  kind: "npc" | "sign" | "present" | "examine";
+  kind: "npc" | "sign" | "present" | "examine" | "sourceCheck";
   key: string;
   id: number | string;
   x: number;
