@@ -27,6 +27,23 @@ export type SourceCheckDraw = {
   questions: DrawnSourceCheckQuestion[];
 };
 
+/**
+ * Derive the "Drifella <token>" display name from a `drifella2-<token>` sprite id.
+ * The sprite token IS the name (drifella2-168 -> "Drifella 168"); this keeps the
+ * id as the single source of truth so names can never drift from the sprite.
+ * Falls back to the raw id if it isn't a drifella2 id.
+ */
+export function drifellaNameFromId(drifellaId: string): string {
+  const match = /^drifella2-(.+)$/.exec(drifellaId.trim());
+  return match ? `Drifella ${match[1]}` : drifellaId;
+}
+
+/** Resolve a check's display name: explicit override if present, else derived from the id. */
+export function drifellaDisplayName(check: { drifellaId: string; drifellaName?: string }): string {
+  const override = check.drifellaName?.trim();
+  return override && override.length > 0 ? override : drifellaNameFromId(check.drifellaId);
+}
+
 export type SourceCheckRewardResult = {
   flagsToSet: string[];
   flagsToClear: string[];

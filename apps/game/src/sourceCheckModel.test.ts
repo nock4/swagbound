@@ -5,6 +5,8 @@ import {
   buildBinderViewModel,
   cardOwnedFlag,
   drawSourceCheckQuestions,
+  drifellaDisplayName,
+  drifellaNameFromId,
   resolveSourceCheckRewards,
   sourceCheckCanRetry,
   sourceCheckClearedFlag,
@@ -60,6 +62,23 @@ function check(overrides: Partial<DrifellaSourceCheck> = {}): DrifellaSourceChec
     ...overrides
   };
 }
+
+describe("drifella display name", () => {
+  it("derives 'Drifella <token>' from a drifella2 id", () => {
+    expect(drifellaNameFromId("drifella2-168")).toBe("Drifella 168");
+    expect(drifellaNameFromId("drifella2-9849")).toBe("Drifella 9849");
+  });
+
+  it("falls back to the raw id for non-drifella2 ids", () => {
+    expect(drifellaNameFromId("dummy")).toBe("dummy");
+  });
+
+  it("prefers an explicit override, else derives from the id", () => {
+    expect(drifellaDisplayName({ drifellaId: "drifella2-473" })).toBe("Drifella 473");
+    expect(drifellaDisplayName({ drifellaId: "drifella2-473", drifellaName: "" })).toBe("Drifella 473");
+    expect(drifellaDisplayName({ drifellaId: "drifella2-473", drifellaName: "The Archivist" })).toBe("The Archivist");
+  });
+});
 
 describe("drawSourceCheckQuestions", () => {
   it("draws deterministically for the same check and attempt", () => {

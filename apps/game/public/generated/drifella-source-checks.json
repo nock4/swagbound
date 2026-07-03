@@ -1,11 +1,10 @@
 {
   "schema": "swagbound.drifella-source-checks.v1",
-  "comment": "Drifella Source Checks — friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
+  "comment": "Drifella Source Checks \u2014 friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
   "checks": [
     {
       "id": "sourcecheck-morningside-001",
       "drifellaId": "drifella2-168",
-      "drifellaName": "Drifella 168",
       "npcId": 100300,
       "region": "morningside",
       "tier": 1,
@@ -43,7 +42,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the leaked card was checked—",
+            "prompt": "The category box on the leaked card was checked\u2014",
             "options": [
               "VESSEL",
               "SOURCE",
@@ -64,7 +63,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The card-stock trail out of Bosch's block ran—",
+            "prompt": "The card-stock trail out of Bosch's block ran\u2014",
             "options": [
               "West, toward the arcade",
               "North, toward the road",
@@ -78,7 +77,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A 'readymade' in art is—",
+            "prompt": "A 'readymade' in art is\u2014",
             "category": "art",
             "options": [
               "An ordinary object declared to be art",
@@ -132,7 +131,6 @@
     {
       "id": "sourcecheck-morningside-002",
       "drifellaId": "drifella2-473",
-      "drifellaName": "Drifella 473",
       "npcId": 100301,
       "region": "morningside",
       "tier": 1,
@@ -163,7 +161,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The arcade crowd deals in—",
+            "prompt": "The arcade crowd deals in\u2014",
             "options": [
               "Faces",
               "High scores",
@@ -205,7 +203,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Marcel Duchamp turned a urinal into art mostly by—",
+            "prompt": "Marcel Duchamp turned a urinal into art mostly by\u2014",
             "category": "art",
             "options": [
               "Signing it and giving it a title",
@@ -259,7 +257,6 @@
     {
       "id": "sourcecheck-morningside-003",
       "drifellaId": "drifella2-527",
-      "drifellaName": "Drifella 527",
       "npcId": 100302,
       "region": "morningside",
       "tier": 1,
@@ -290,7 +287,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The building the town calls THE PRECINCT is where—",
+            "prompt": "The building the town calls THE PRECINCT is where\u2014",
             "options": [
               "The police keep the roadblock's paperwork",
               "Cards are printed",
@@ -318,7 +315,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Battle winnings in this town travel—",
+            "prompt": "Battle winnings in this town travel\u2014",
             "options": [
               "Wired to your account, by the connect",
               "Straight into your pocket",
@@ -332,7 +329,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A perfect copy of a painting is worth less than the original because we care about—",
+            "prompt": "A perfect copy of a painting is worth less than the original because we care about\u2014",
             "category": "art",
             "options": [
               "Where it came from",
@@ -346,7 +343,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The 'aura' of an original artwork is—",
+            "prompt": "The 'aura' of an original artwork is\u2014",
             "category": "art",
             "options": [
               "A presence the copy can't hold",
@@ -393,7 +390,6 @@
     {
       "id": "sourcecheck-morningside-004",
       "drifellaId": "drifella2-587",
-      "drifellaName": "Drifella 587",
       "npcId": 100303,
       "region": "morningside",
       "tier": 1,
@@ -452,7 +448,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The kid on the stoop had been waiting—",
+            "prompt": "The kid on the stoop had been waiting\u2014",
             "options": [
               "His whole short life",
               "Since Tuesday",
@@ -466,7 +462,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Expressionism cares most about—",
+            "prompt": "Expressionism cares most about\u2014",
             "category": "art",
             "options": [
               "Inner feeling over accurate likeness",
@@ -520,7 +516,6 @@
     {
       "id": "sourcecheck-morningside-005",
       "drifellaId": "drifella2-602",
-      "drifellaName": "Drifella 602",
       "npcId": 100304,
       "region": "morningside",
       "tier": 1,
@@ -579,7 +574,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The face on the leaked card was wrong the way—",
+            "prompt": "The face on the leaked card was wrong the way\u2014",
             "options": [
               "A bad memory is almost right",
               "A mirror is backwards",
@@ -593,7 +588,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The Dada movement was deliberately—",
+            "prompt": "The Dada movement was deliberately\u2014",
             "category": "art",
             "options": [
               "Absurd and anti-establishment",
@@ -607,7 +602,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "'Avant-garde' means art that is—",
+            "prompt": "'Avant-garde' means art that is\u2014",
             "category": "art",
             "options": [
               "Experimental, ahead of its time",
@@ -654,7 +649,6 @@
     {
       "id": "sourcecheck-morningside-006",
       "drifellaId": "drifella2-684",
-      "drifellaName": "Drifella 684",
       "npcId": 100305,
       "region": "morningside",
       "tier": 1,
@@ -678,7 +672,7 @@
       "hints": [],
       "entryPrompt": [
         "A Drifella idles by the west block, counting windows. It waves without looking.",
-        "\"Forty-one windows. Zero of them honest. Anyway — Source Check?\""
+        "\"Forty-one windows. Zero of them honest. Anyway \u2014 Source Check?\""
       ],
       "questions": {
         "drawCount": 2,
@@ -692,7 +686,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A present box in this world, once opened—",
+            "prompt": "A present box in this world, once opened\u2014",
             "options": [
               "Stays opened",
               "Refills overnight",
@@ -713,7 +707,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The household voice heard on the first morning had—",
+            "prompt": "The household voice heard on the first morning had\u2014",
             "options": [
               "Panic under the paint",
               "Breakfast on the tray",
@@ -727,7 +721,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A Mark Rothko painting is mostly—",
+            "prompt": "A Mark Rothko painting is mostly\u2014",
             "category": "art",
             "options": [
               "Large soft blocks of color",
@@ -781,7 +775,6 @@
     {
       "id": "sourcecheck-morningside-007",
       "drifellaId": "drifella2-795",
-      "drifellaName": "Drifella 795",
       "npcId": 100306,
       "region": "morningside",
       "tier": 1,
@@ -821,7 +814,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The best place to stand, in this town, is—",
+            "prompt": "The best place to stand, in this town, is\u2014",
             "options": [
               "Wherever the record isn't looking",
               "Center of the plaza",
@@ -858,12 +851,12 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Curiosity. You HAD it a minute ago — it's how you got here.\"",
+            "failLine": "\"Curiosity. You HAD it a minute ago \u2014 it's how you got here.\"",
             "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Sol LeWitt said the idea itself can be 'a machine that makes the—'",
+            "prompt": "Sol LeWitt said the idea itself can be 'a machine that makes the\u2014'",
             "category": "art",
             "options": [
               "Art",
@@ -917,7 +910,6 @@
     {
       "id": "sourcecheck-morningside-008",
       "drifellaId": "drifella2-816",
-      "drifellaName": "Drifella 816",
       "npcId": 100307,
       "region": "morningside",
       "tier": 1,
@@ -964,7 +956,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Bosch pocketed the damaged card because—",
+            "prompt": "Bosch pocketed the damaged card because\u2014",
             "options": [
               "Unfiled and unflattering, it was HIS",
               "It was worth money",
@@ -999,7 +991,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "John Cage's '4'33\"' has the performer—",
+            "prompt": "John Cage's '4'33\"' has the performer\u2014",
             "category": "art",
             "options": [
               "Sit and play nothing, so you hear the room",
@@ -1013,7 +1005,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A 'field recording' captures—",
+            "prompt": "A 'field recording' captures\u2014",
             "category": "art",
             "options": [
               "The real sounds of an actual place",

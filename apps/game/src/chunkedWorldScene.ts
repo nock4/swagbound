@@ -266,6 +266,7 @@ import {
   buildBinderViewModel,
   cardById,
   cardOwnedFlag,
+  drifellaDisplayName,
   sourceCheckCanRetry,
   sourceCheckClearedFlag,
   sourceCheckItemHeldFlag,
@@ -2691,7 +2692,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
           targetKind: "sourceCheck" as const,
           sourceCheckId: runtime.check.id,
           npcId: runtime.check.npcId,
-          label: runtime.check.drifellaName,
+          label: drifellaDisplayName(runtime.check),
           x: runtime.check.placement.worldPixel.x,
           y: runtime.check.placement.worldPixel.y,
           interactable: true
@@ -6375,7 +6376,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         kind: "sourceCheck" as const,
         x: runtime.check.placement.worldPixel.x,
         y: runtime.check.placement.worldPixel.y,
-        label: runtime.visible ? runtime.check.drifellaName : "hidden"
+        label: runtime.visible ? drifellaDisplayName(runtime.check) : "hidden"
       }))
     ];
   }

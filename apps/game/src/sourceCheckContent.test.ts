@@ -4,6 +4,7 @@ import {
   CardNftsSchema,
   DrifellaSourceChecksSchema
 } from "@eb/schemas";
+import { drifellaDisplayName } from "./sourceCheckModel";
 
 describe("source check generated content", () => {
   it("parses the generated card registry and source checks with the committed schemas", () => {
@@ -21,6 +22,8 @@ describe("source check generated content", () => {
       expect(check.reactions.correct.length).toBeGreaterThanOrEqual(3);
       expect(check.reactions.cleared.length).toBeGreaterThanOrEqual(2);
       expect(check.reactions.failed.length).toBeGreaterThanOrEqual(2);
+      // Name is derived from the sprite id (single source of truth), not stored.
+      expect(drifellaDisplayName(check)).toMatch(/^Drifella \d+$/);
     }
   });
 });

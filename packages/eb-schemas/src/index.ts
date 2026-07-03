@@ -1328,8 +1328,12 @@ export const SourceCheckQuestionSchema = z.discriminatedUnion("type", [
 export const DrifellaSourceCheckSchema = z.object({
   id: z.string().trim().min(1),
   drifellaId: z.string().trim().min(1),
-  /** Player-facing name, e.g. "Drifella 168" (keyed to the on-chain token id). */
-  drifellaName: z.string().trim().min(1),
+  /**
+   * Optional player-facing name override. When omitted, the name is derived from
+   * drifellaId ("drifella2-168" -> "Drifella 168") so the sprite id is the single
+   * source of truth. Only set this to give a Drifella a bespoke, non-numeric name.
+   */
+  drifellaName: z.string().trim().min(1).optional(),
   npcId: z.number().int().min(100300).max(100399),
   region: z.string().trim().min(1),
   tier: z.number().int().min(1).max(4),
