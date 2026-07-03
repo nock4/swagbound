@@ -3512,7 +3512,7 @@
       "originY": 1
     },
     "26": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2427.png",
+      "image": "assets/swagbound/overworld-npc/ai-slop.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -3534,7 +3534,7 @@
       "originY": 1
     },
     "33": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1794.png",
+      "image": "assets/swagbound/overworld-npc/bat-poncho.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -3710,7 +3710,7 @@
       "originY": 1
     },
     "51": {
-      "image": "assets/swagbound/overworld-npc/drifella2-4508.png",
+      "image": "assets/swagbound/overworld-npc/cinder-cap.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -4150,7 +4150,7 @@
       "originY": 1
     },
     "71": {
-      "image": "assets/swagbound/overworld-npc/drifella2-9305.png",
+      "image": "assets/swagbound/overworld-npc/collection-2-for-solana.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -4986,7 +4986,7 @@
       "originY": 1
     },
     "111": {
-      "image": "assets/swagbound/overworld-npc/drifella2-9463.png",
+      "image": "assets/swagbound/overworld-npc/cryptic-kids-2.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -5822,7 +5822,7 @@
       "originY": 1
     },
     "152": {
-      "image": "assets/swagbound/overworld-npc/drifella2-9461.png",
+      "image": "assets/swagbound/overworld-npc/cryptic-kids.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6636,7 +6636,7 @@
       "originY": 1
     },
     "197": {
-      "image": "assets/swagbound/overworld-npc/drifella2-4564.png",
+      "image": "assets/swagbound/overworld-npc/demonfella-ii.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6658,7 +6658,7 @@
       "originY": 1
     },
     "198": {
-      "image": "assets/swagbound/overworld-npc/drifella2-816.png",
+      "image": "assets/swagbound/overworld-npc/edible-demon.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6680,7 +6680,7 @@
       "originY": 1
     },
     "199": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1374.png",
+      "image": "assets/swagbound/overworld-npc/ethereal-sols.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6702,7 +6702,7 @@
       "originY": 1
     },
     "200": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3353.png",
+      "image": "assets/swagbound/overworld-npc/faithful-servants.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6724,7 +6724,7 @@
       "originY": 1
     },
     "201": {
-      "image": "assets/swagbound/overworld-npc/drifella2-684.png",
+      "image": "assets/swagbound/overworld-npc/gay-mouse-crisis-center.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6746,7 +6746,7 @@
       "originY": 1
     },
     "202": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1552.png",
+      "image": "assets/swagbound/overworld-npc/goobdle-s.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6768,7 +6768,7 @@
       "originY": 1
     },
     "203": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1830.png",
+      "image": "assets/swagbound/overworld-npc/happy-camper.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6790,7 +6790,7 @@
       "originY": 1
     },
     "204": {
-      "image": "assets/swagbound/overworld-npc/drifella2-602.png",
+      "image": "assets/swagbound/overworld-npc/heavy-liquid-graphic.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6812,7 +6812,7 @@
       "originY": 1
     },
     "205": {
-      "image": "assets/swagbound/overworld-npc/drifella2-4595.png",
+      "image": "assets/swagbound/overworld-npc/hexp-hood.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6834,7 +6834,7 @@
       "originY": 1
     },
     "206": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1841.png",
+      "image": "assets/swagbound/overworld-npc/knitkitmori.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6856,7 +6856,7 @@
       "originY": 1
     },
     "207": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2477.png",
+      "image": "assets/swagbound/overworld-npc/malady.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6878,7 +6878,7 @@
       "originY": 1
     },
     "208": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3360.png",
+      "image": "assets/swagbound/overworld-npc/mifella-2.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6900,7 +6900,7 @@
       "originY": 1
     },
     "209": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3427.png",
+      "image": "assets/swagbound/overworld-npc/milardio.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6922,7 +6922,7 @@
       "originY": 1
     },
     "210": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1901.png",
+      "image": "assets/swagbound/overworld-npc/mirror-glitch.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6944,7 +6944,7 @@
       "originY": 1
     },
     "211": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2128.png",
+      "image": "assets/swagbound/overworld-npc/paingelz.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6966,7 +6966,7 @@
       "originY": 1
     },
     "212": {
-      "image": "assets/swagbound/overworld-npc/drifella2-4748.png",
+      "image": "assets/swagbound/overworld-npc/park-static.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -6988,7 +6988,7 @@
       "originY": 1
     },
     "213": {
-      "image": "assets/swagbound/overworld-npc/drifella2-473.png",
+      "image": "assets/swagbound/overworld-npc/pifella.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7010,7 +7010,7 @@
       "originY": 1
     },
     "214": {
-      "image": "assets/swagbound/overworld-npc/drifella2-168.png",
+      "image": "assets/swagbound/overworld-npc/plastic-fool.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7076,7 +7076,7 @@
       "originY": 1
     },
     "221": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1845.png",
+      "image": "assets/swagbound/overworld-npc/question-marketeer.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7098,7 +7098,7 @@
       "originY": 1
     },
     "222": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1427.png",
+      "image": "assets/swagbound/overworld-npc/returnless-king.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7120,7 +7120,7 @@
       "originY": 1
     },
     "224": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2630.png",
+      "image": "assets/swagbound/overworld-npc/runway-show.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7142,7 +7142,7 @@
       "originY": 1
     },
     "225": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2694.png",
+      "image": "assets/swagbound/overworld-npc/sawtooth-bun.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7164,7 +7164,7 @@
       "originY": 1
     },
     "226": {
-      "image": "assets/swagbound/overworld-npc/drifella2-4888.png",
+      "image": "assets/swagbound/overworld-npc/solfis.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7186,7 +7186,7 @@
       "originY": 1
     },
     "227": {
-      "image": "assets/swagbound/overworld-npc/drifella2-795.png",
+      "image": "assets/swagbound/overworld-npc/swag-raccoon.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7208,7 +7208,7 @@
       "originY": 1
     },
     "228": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3436.png",
+      "image": "assets/swagbound/overworld-npc/tape-code.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7230,7 +7230,7 @@
       "originY": 1
     },
     "229": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2130.png",
+      "image": "assets/swagbound/overworld-npc/tojiba-disc.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7252,7 +7252,7 @@
       "originY": 1
     },
     "230": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2781.png",
+      "image": "assets/swagbound/overworld-npc/tunnel-hiss.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7274,7 +7274,7 @@
       "originY": 1
     },
     "231": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3444.png",
+      "image": "assets/swagbound/overworld-npc/ushanka-shade.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7296,7 +7296,7 @@
       "originY": 1
     },
     "233": {
-      "image": "assets/swagbound/overworld-npc/drifella2-527.png",
+      "image": "assets/swagbound/overworld-npc/wifeystation.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7318,7 +7318,7 @@
       "originY": 1
     },
     "234": {
-      "image": "assets/swagbound/overworld-npc/drifella2-5036.png",
+      "image": "assets/swagbound/overworld-npc/ai-slop.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7340,7 +7340,7 @@
       "originY": 1
     },
     "235": {
-      "image": "assets/swagbound/overworld-npc/drifella2-5170.png",
+      "image": "assets/swagbound/overworld-npc/bat-poncho.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7362,7 +7362,7 @@
       "originY": 1
     },
     "236": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3463.png",
+      "image": "assets/swagbound/overworld-npc/cinder-cap.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7428,7 +7428,7 @@
       "originY": 1
     },
     "239": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1679.png",
+      "image": "assets/swagbound/overworld-npc/collection-2-for-solana.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7450,7 +7450,7 @@
       "originY": 1
     },
     "240": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3555.png",
+      "image": "assets/swagbound/overworld-npc/cryptic-kids-2.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7472,7 +7472,7 @@
       "originY": 1
     },
     "243": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2258.png",
+      "image": "assets/swagbound/overworld-npc/cryptic-kids.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7494,7 +7494,7 @@
       "originY": 1
     },
     "244": {
-      "image": "assets/swagbound/overworld-npc/drifella2-5250.png",
+      "image": "assets/swagbound/overworld-npc/demonfella-ii.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7516,7 +7516,7 @@
       "originY": 1
     },
     "246": {
-      "image": "assets/swagbound/overworld-npc/drifella2-5419.png",
+      "image": "assets/swagbound/overworld-npc/edible-demon.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7538,7 +7538,7 @@
       "originY": 1
     },
     "248": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3630.png",
+      "image": "assets/swagbound/overworld-npc/ethereal-sols.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7582,7 +7582,7 @@
       "originY": 1
     },
     "254": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2796.png",
+      "image": "assets/swagbound/overworld-npc/faithful-servants.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7648,7 +7648,7 @@
       "originY": 1
     },
     "257": {
-      "image": "assets/swagbound/overworld-npc/drifella2-5588.png",
+      "image": "assets/swagbound/overworld-npc/gay-mouse-crisis-center.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7670,7 +7670,7 @@
       "originY": 1
     },
     "259": {
-      "image": "assets/swagbound/overworld-npc/drifella2-587.png",
+      "image": "assets/swagbound/overworld-npc/goobdle-s.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7714,7 +7714,7 @@
       "originY": 1
     },
     "262": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3634.png",
+      "image": "assets/swagbound/overworld-npc/happy-camper.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7736,7 +7736,7 @@
       "originY": 1
     },
     "263": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3669.png",
+      "image": "assets/swagbound/overworld-npc/heavy-liquid-graphic.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7758,7 +7758,7 @@
       "originY": 1
     },
     "265": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2801.png",
+      "image": "assets/swagbound/overworld-npc/hexp-hood.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7780,7 +7780,7 @@
       "originY": 1
     },
     "266": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1849.png",
+      "image": "assets/swagbound/overworld-npc/knitkitmori.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7802,7 +7802,7 @@
       "originY": 1
     },
     "267": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3790.png",
+      "image": "assets/swagbound/overworld-npc/malady.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7846,7 +7846,7 @@
       "originY": 1
     },
     "269": {
-      "image": "assets/swagbound/overworld-npc/drifella2-5826.png",
+      "image": "assets/swagbound/overworld-npc/mifella-2.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -7868,7 +7868,7 @@
       "originY": 1
     },
     "270": {
-      "image": "assets/swagbound/overworld-npc/drifella2-5845.png",
+      "image": "assets/swagbound/overworld-npc/milardio.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8066,7 +8066,7 @@
       "originY": 1
     },
     "293": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2281.png",
+      "image": "assets/swagbound/overworld-npc/mirror-glitch.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8440,7 +8440,7 @@
       "originY": 1
     },
     "350": {
-      "image": "assets/swagbound/overworld-npc/drifella2-5984.png",
+      "image": "assets/swagbound/overworld-npc/paingelz.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8462,7 +8462,7 @@
       "originY": 1
     },
     "353": {
-      "image": "assets/swagbound/overworld-npc/drifella2-6002.png",
+      "image": "assets/swagbound/overworld-npc/park-static.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8484,7 +8484,7 @@
       "originY": 1
     },
     "356": {
-      "image": "assets/swagbound/overworld-npc/drifella2-6345.png",
+      "image": "assets/swagbound/overworld-npc/pifella.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8550,7 +8550,7 @@
       "originY": 1
     },
     "360": {
-      "image": "assets/swagbound/overworld-npc/drifella2-6386.png",
+      "image": "assets/swagbound/overworld-npc/plastic-fool.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8638,7 +8638,7 @@
       "originY": 1
     },
     "368": {
-      "image": "assets/swagbound/overworld-npc/drifella2-6472.png",
+      "image": "assets/swagbound/overworld-npc/question-marketeer.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8660,7 +8660,7 @@
       "originY": 1
     },
     "369": {
-      "image": "assets/swagbound/overworld-npc/drifella2-6735.png",
+      "image": "assets/swagbound/overworld-npc/returnless-king.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8682,7 +8682,7 @@
       "originY": 1
     },
     "371": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2290.png",
+      "image": "assets/swagbound/overworld-npc/runway-show.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8704,7 +8704,7 @@
       "originY": 1
     },
     "373": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2329.png",
+      "image": "assets/swagbound/overworld-npc/sawtooth-bun.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8726,7 +8726,7 @@
       "originY": 1
     },
     "374": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1789.png",
+      "image": "assets/swagbound/overworld-npc/solfis.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8748,7 +8748,7 @@
       "originY": 1
     },
     "375": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3162.png",
+      "image": "assets/swagbound/overworld-npc/swag-raccoon.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8770,7 +8770,7 @@
       "originY": 1
     },
     "376": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1879.png",
+      "image": "assets/swagbound/overworld-npc/tape-code.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8792,7 +8792,7 @@
       "originY": 1
     },
     "377": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3323.png",
+      "image": "assets/swagbound/overworld-npc/tojiba-disc.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8814,7 +8814,7 @@
       "originY": 1
     },
     "378": {
-      "image": "assets/swagbound/overworld-npc/drifella2-6775.png",
+      "image": "assets/swagbound/overworld-npc/tunnel-hiss.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8858,7 +8858,7 @@
       "originY": 1
     },
     "382": {
-      "image": "assets/swagbound/overworld-npc/drifella2-9747.png",
+      "image": "assets/swagbound/overworld-npc/ushanka-shade.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8880,7 +8880,7 @@
       "originY": 1
     },
     "384": {
-      "image": "assets/swagbound/overworld-npc/drifella2-6986.png",
+      "image": "assets/swagbound/overworld-npc/wifeystation.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8968,7 +8968,7 @@
       "originY": 1
     },
     "401": {
-      "image": "assets/swagbound/overworld-npc/drifella2-7211.png",
+      "image": "assets/swagbound/overworld-npc/ai-slop.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -8990,7 +8990,7 @@
       "originY": 1
     },
     "402": {
-      "image": "assets/swagbound/overworld-npc/drifella2-7390.png",
+      "image": "assets/swagbound/overworld-npc/bat-poncho.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9012,7 +9012,7 @@
       "originY": 1
     },
     "403": {
-      "image": "assets/swagbound/overworld-npc/drifella2-7753.png",
+      "image": "assets/swagbound/overworld-npc/cinder-cap.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9034,7 +9034,7 @@
       "originY": 1
     },
     "404": {
-      "image": "assets/swagbound/overworld-npc/drifella2-7997.png",
+      "image": "assets/swagbound/overworld-npc/collection-2-for-solana.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9056,7 +9056,7 @@
       "originY": 1
     },
     "405": {
-      "image": "assets/swagbound/overworld-npc/drifella2-3818.png",
+      "image": "assets/swagbound/overworld-npc/cryptic-kids-2.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9100,7 +9100,7 @@
       "originY": 1
     },
     "407": {
-      "image": "assets/swagbound/overworld-npc/drifella2-8106.png",
+      "image": "assets/swagbound/overworld-npc/cryptic-kids.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9122,7 +9122,7 @@
       "originY": 1
     },
     "409": {
-      "image": "assets/swagbound/overworld-npc/drifella2-8218.png",
+      "image": "assets/swagbound/overworld-npc/demonfella-ii.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9144,7 +9144,7 @@
       "originY": 1
     },
     "410": {
-      "image": "assets/swagbound/overworld-npc/drifella2-8256.png",
+      "image": "assets/swagbound/overworld-npc/edible-demon.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9166,7 +9166,7 @@
       "originY": 1
     },
     "411": {
-      "image": "assets/swagbound/overworld-npc/drifella2-8290.png",
+      "image": "assets/swagbound/overworld-npc/ethereal-sols.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9210,7 +9210,7 @@
       "originY": 1
     },
     "414": {
-      "image": "assets/swagbound/overworld-npc/drifella2-4010.png",
+      "image": "assets/swagbound/overworld-npc/faithful-servants.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9298,7 +9298,7 @@
       "originY": 1
     },
     "420": {
-      "image": "assets/swagbound/overworld-npc/drifella2-8394.png",
+      "image": "assets/swagbound/overworld-npc/gay-mouse-crisis-center.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9320,7 +9320,7 @@
       "originY": 1
     },
     "422": {
-      "image": "assets/swagbound/overworld-npc/drifella2-8424.png",
+      "image": "assets/swagbound/overworld-npc/goobdle-s.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9342,7 +9342,7 @@
       "originY": 1
     },
     "423": {
-      "image": "assets/swagbound/overworld-npc/drifella2-2344.png",
+      "image": "assets/swagbound/overworld-npc/happy-camper.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9364,7 +9364,7 @@
       "originY": 1
     },
     "424": {
-      "image": "assets/swagbound/overworld-npc/drifella2-8669.png",
+      "image": "assets/swagbound/overworld-npc/heavy-liquid-graphic.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9386,7 +9386,7 @@
       "originY": 1
     },
     "426": {
-      "image": "assets/swagbound/overworld-npc/drifella2-4166.png",
+      "image": "assets/swagbound/overworld-npc/hexp-hood.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9452,7 +9452,7 @@
       "originY": 1
     },
     "429": {
-      "image": "assets/swagbound/overworld-npc/drifella2-4243.png",
+      "image": "assets/swagbound/overworld-npc/knitkitmori.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9474,7 +9474,7 @@
       "originY": 1
     },
     "430": {
-      "image": "assets/swagbound/overworld-npc/drifella2-4281.png",
+      "image": "assets/swagbound/overworld-npc/malady.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9496,7 +9496,7 @@
       "originY": 1
     },
     "433": {
-      "image": "assets/swagbound/overworld-npc/drifella2-8862.png",
+      "image": "assets/swagbound/overworld-npc/mifella-2.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9562,7 +9562,7 @@
       "originY": 1
     },
     "442": {
-      "image": "assets/swagbound/overworld-npc/drifella2-1442.png",
+      "image": "assets/swagbound/overworld-npc/milardio.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9628,7 +9628,7 @@
       "originY": 1
     },
     "447": {
-      "image": "assets/swagbound/overworld-npc/drifella2-8878.png",
+      "image": "assets/swagbound/overworld-npc/mirror-glitch.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9738,7 +9738,7 @@
       "originY": 1
     },
     "457": {
-      "image": "assets/swagbound/overworld-npc/drifella2-9018.png",
+      "image": "assets/swagbound/overworld-npc/paingelz.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9760,7 +9760,7 @@
       "originY": 1
     },
     "459": {
-      "image": "assets/swagbound/overworld-npc/drifella2-9135.png",
+      "image": "assets/swagbound/overworld-npc/park-static.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -9782,7 +9782,7 @@
       "originY": 1
     },
     "460": {
-      "image": "assets/swagbound/overworld-npc/drifella2-9232.png",
+      "image": "assets/swagbound/overworld-npc/pifella.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
