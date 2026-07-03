@@ -655,7 +655,8 @@ export class SourceCheckScene extends Phaser.Scene {
       drawnPrompts: this.draw.questions.map((question) => question.prompt),
       // Rendered option order for the CURRENT question (post-shuffle) — lets
       // headless drivers answer deterministically by matching option text.
-      options: this.draw.questions[this.questionIndex]?.options ?? []
+      options: this.draw.questions[this.questionIndex]?.options ?? [],
+      correctOptionIndex: this.draw.questions[this.questionIndex]?.correctOptionIndex ?? -1
     };
   }
 }

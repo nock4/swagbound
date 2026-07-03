@@ -110,9 +110,13 @@ export function drawSourceCheckQuestions(
     sourceIndex: check.questions.pool.indexOf(question)
   }));
   const normalizedAttempt = Math.max(1, Math.floor(attempt));
+  // Bias the draw by question category against the check's difficulty tier: early
+  // (tier 1) checks surface the approachable art/lore questions first, late (tier 4)
+  // checks surface the game-memory ("witnessed") ones. rotatePool keeps its
+  // rotate-through-unseen semantics on top of this stable, biased base order.
   const ordered = check.retry.rotatePool
-    ? rotate(shuffle(indexed, `${check.id}:questions`), ((normalizedAttempt - 1) * drawCount) % indexed.length)
-    : shuffle(indexed, `${check.id}:questions:${normalizedAttempt}`);
+    ? rotate(weightedQuestionOrder(indexed, check, ""), ((normalizedAttempt - 1) * drawCount) % indexed.length)
+    : weightedQuestionOrder(indexed, check, `:${normalizedAttempt}`);
   return {
     attempt: normalizedAttempt,
     drawCount,
@@ -228,6 +232,57 @@ function prepareDrawnQuestion(
     correctOptionIndex: order.indexOf(question.answerIndex),
     ...(question.failLine ? { failLine: question.failLine } : {})
   };
+}
+
+// Category difficulty, easiest → hardest. "art"/"vibe" lean on real-world or
+// intuitive knowledge (approachable); "lore" is learnable world-rules; "witnessed"
+// requires having seen a specific one-time event in the game (hardest to recall).
+function categoryDifficulty(category: SourceCheckQuestion["category"]): number {
+  switch (category) {
+    case "art":
+    case "vibe":
+      return 0;
+    case "lore":
+      return 1;
+    case "witnessed":
+    default:
+      return 2;
+  }
+}
+
+// The difficulty a tier should skew toward: tier 1 wants easy (0), tier 4 wants
+// hard (2), middle tiers land on learnable lore (1).
+function tierDifficultyTarget(tier: number): number {
+  if (tier <= 1) return 0;
+  if (tier >= 4) return 2;
+  return 1;
+}
+
+// Weight a question by how well its category matches the tier's target difficulty:
+// on-target = 1, one step off = 1/3, two steps off = 1/9. Higher weight = drawn sooner.
+function questionCategoryWeight(category: SourceCheckQuestion["category"], tier: number): number {
+  const distance = Math.abs(categoryDifficulty(category) - tierDifficultyTarget(tier));
+  return 3 ** -distance;
+}
+
+// Seeded weighted permutation (Efraimidis–Spirakis): each item gets key u^(1/weight);
+// sorting by descending key yields a weighted sample-without-replacement order, so
+// higher-weight (on-target-difficulty) questions land first while every question stays
+// reachable. Deterministic per (check, salt). An all-same-weight pool degrades to a
+// plain seeded shuffle, preserving prior behavior for untagged pools.
+function weightedQuestionOrder<T extends { question: SourceCheckQuestion }>(
+  items: readonly T[],
+  check: DrifellaSourceCheck,
+  salt: string
+): T[] {
+  const rng = createStatefulRng(hashSeed(`${check.id}:qweight${salt}`));
+  return items
+    .map((item) => {
+      const weight = questionCategoryWeight(item.question.category, check.tier);
+      return { item, key: Math.pow(rng.next(), 1 / weight) };
+    })
+    .sort((a, b) => b.key - a.key)
+    .map((entry) => entry.item);
 }
 
 function shuffle<T>(items: readonly T[], seed: string): T[] {

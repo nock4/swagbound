@@ -1294,17 +1294,29 @@ export const CardNftsSchema = z.object({
   });
 });
 
+/**
+ * Question category, used to blend + tune difficulty:
+ * - witnessed: recalls a specific in-game event (hardest; rewards attentive play)
+ * - lore: a stable canon fact about the world (learnable/reusable)
+ * - art: real-world art knowledge (abstract/avant-garde/sound/conceptual) — the
+ *   approachable layer; famous-name easy in early regions, deeper in late ones
+ * - vibe: answerable by tone/logic/common sense alone
+ */
+export const SourceCheckCategorySchema = z.enum(["witnessed", "lore", "art", "vibe"]);
+
 export const SourceCheckQuestionSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("trueFalse"),
     prompt: z.string().trim().min(1).max(240),
     answer: z.boolean(),
+    category: SourceCheckCategorySchema.optional(),
     failLine: z.string().trim().min(1).optional(),
     spoilerGateFlag: z.string().trim().min(1).optional()
   }).strict(),
   z.object({
     type: z.literal("multipleChoice4"),
     prompt: z.string().trim().min(1).max(240),
+    category: SourceCheckCategorySchema.optional(),
     options: z.array(z.string().trim().min(1).max(60)).length(4),
     answerIndex: z.number().int().min(0).max(3),
     officialIndex: z.number().int().min(0).max(3).optional(),

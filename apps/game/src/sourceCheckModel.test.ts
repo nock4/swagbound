@@ -78,6 +78,38 @@ describe("drawSourceCheckQuestions", () => {
     expect(new Set([...first.questions, ...second.questions].map((question) => question.sourceIndex)).size).toBe(4);
   });
 
+  it("skews early (tier 1) draws toward easy categories and late (tier 4) toward witnessed", () => {
+    // pool indices 0,1 = art (easy), 2,3 = witnessed (hard)
+    const categorizedPool: DrifellaSourceCheck["questions"]["pool"] = [
+      { type: "trueFalse", prompt: "art0", answer: true, category: "art" },
+      { type: "trueFalse", prompt: "art1", answer: false, category: "art" },
+      { type: "trueFalse", prompt: "wit0", answer: true, category: "witnessed" },
+      { type: "trueFalse", prompt: "wit1", answer: false, category: "witnessed" }
+    ];
+    const artShare = (tier: 1 | 4): number => {
+      let art = 0;
+      let total = 0;
+      for (let seed = 0; seed < 60; seed += 1) {
+        const draw = drawSourceCheckQuestions(
+          check({ id: `sourcecheck-skew-${seed}`, tier, questions: { drawCount: 2, pool: categorizedPool } }),
+          FLAGS_NONE,
+          1
+        );
+        for (const question of draw.questions) {
+          total += 1;
+          if (question.sourceIndex < 2) art += 1; // sourceIndex 0/1 are the art questions
+        }
+      }
+      return art / total;
+    };
+
+    const earlyArt = artShare(1);
+    const lateArt = artShare(4);
+    expect(earlyArt).toBeGreaterThan(0.65); // early checks lead with the approachable art questions
+    expect(lateArt).toBeLessThan(0.35); // late checks lead with game-memory witnessed questions
+    expect(earlyArt).toBeGreaterThan(lateArt);
+  });
+
   it("preserves multiple-choice correctness after option shuffle", () => {
     const draw = drawSourceCheckQuestions(check({
       questions: {

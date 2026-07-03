@@ -38,7 +38,8 @@
             "type": "trueFalse",
             "prompt": "The card that arrived before breakfast asked Bosch's permission first.",
             "answer": false,
-            "failLine": "\"It didn't even knock. Cards never knock.\""
+            "failLine": "\"It didn't even knock. Cards never knock.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -51,13 +52,15 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Close. Closeness is not a category.\""
+            "failLine": "\"Close. Closeness is not a category.\"",
+            "category": "witnessed"
           },
           {
             "type": "trueFalse",
             "prompt": "Bosch kept the damaged original card.",
             "answer": true,
-            "failLine": "\"He did. Damage is a kind of proof.\""
+            "failLine": "\"He did. Damage is a kind of proof.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -70,7 +73,29 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"West. The crowd deals faces west.\""
+            "failLine": "\"West. The crowd deals faces west.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A 'readymade' in art is—",
+            "category": "art",
+            "options": [
+              "An ordinary object declared to be art",
+              "A pre-stretched blank canvas",
+              "A factory-approved design",
+              "A paint-by-numbers kit"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The library reshelves it under: object, reclassified.\""
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A signed urinal has hung in serious art museums.",
+            "category": "art",
+            "answer": true,
+            "failLine": "\"Duchamp's 'Fountain.' Filed under: yes, really.\""
           }
         ]
       },
@@ -147,19 +172,22 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Faces. I cannot notarize 'high scores.'\""
+            "failLine": "\"Faces. I cannot notarize 'high scores.'\"",
+            "category": "witnessed"
           },
           {
             "type": "trueFalse",
             "prompt": "The Doxx Clique crowds you like an angry mob.",
             "answer": false,
-            "failLine": "\"No. It ARRANGES itself. Smiling. That's worse, and it's on the record.\""
+            "failLine": "\"No. It ARRANGES itself. Smiling. That's worse, and it's on the record.\"",
+            "category": "witnessed"
           },
           {
             "type": "trueFalse",
             "prompt": "A stamped exit is the only legal way out of Morningside.",
             "answer": false,
-            "failLine": "\"FALSE, thank goodness. Unprocessed departures remain a civic right.\""
+            "failLine": "\"FALSE, thank goodness. Unprocessed departures remain a civic right.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -172,7 +200,29 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"He never said it. That was the whole problem. Stamped: problem.\""
+            "failLine": "\"He never said it. That was the whole problem. Stamped: problem.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Marcel Duchamp turned a urinal into art mostly by—",
+            "category": "art",
+            "options": [
+              "Signing it and giving it a title",
+              "Scrubbing it spotless",
+              "Having it officially certified",
+              "Smashing it to pieces"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"A signature. My whole trade. *stamp*\""
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "An artist can turn a thing into art just by deciding it is.",
+            "category": "art",
+            "answer": true,
+            "failLine": "*stamp* \"Declared, therefore notarized.\""
           }
         ]
       },
@@ -249,19 +299,22 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Paperwork. It's always paperwork.\""
+            "failLine": "\"Paperwork. It's always paperwork.\"",
+            "category": "witnessed"
           },
           {
             "type": "trueFalse",
             "prompt": "The road north opens the moment you ask politely.",
             "answer": false,
-            "failLine": "\"Politeness is not a route permit. The route opens when the route opens.\""
+            "failLine": "\"Politeness is not a route permit. The route opens when the route opens.\"",
+            "category": "witnessed"
           },
           {
             "type": "trueFalse",
             "prompt": "A voice from the next room worried about a card before breakfast.",
             "answer": true,
-            "failLine": "\"It had panic under the paint. You were there. Listen harder next time.\""
+            "failLine": "\"It had panic under the paint. You were there. Listen harder next time.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -274,7 +327,36 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Wired. The connect handles it. Check the account, not the pocket.\""
+            "failLine": "\"Wired. The connect handles it. Check the account, not the pocket.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A perfect copy of a painting is worth less than the original because we care about—",
+            "category": "art",
+            "options": [
+              "Where it came from",
+              "How new it looks",
+              "Its filing status",
+              "Its exact size"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Provenance. I file everything by where it's been.\""
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The 'aura' of an original artwork is—",
+            "category": "art",
+            "options": [
+              "A presence the copy can't hold",
+              "Its resale price",
+              "Its certificate",
+              "Its coat of varnish"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The part the copy never gets. Sound familiar?\""
           }
         ]
       },
@@ -344,7 +426,8 @@
             "type": "trueFalse",
             "prompt": "A Dox Sheet proves Bosch is privately understood.",
             "answer": false,
-            "failLine": "\"It proves he is publicly ASSEMBLED. Different thing. Sadder thing.\""
+            "failLine": "\"It proves he is publicly ASSEMBLED. Different thing. Sadder thing.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -357,13 +440,15 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Specificity. Alive. You can tell because it wriggles.\""
+            "failLine": "\"Specificity. Alive. You can tell because it wriggles.\"",
+            "category": "lore"
           },
           {
             "type": "trueFalse",
             "prompt": "The mailbox receipt was addressed to Bosch.",
             "answer": false,
-            "failLine": "\"Addressed to DOX SHEET. The mail knows something we don't.\""
+            "failLine": "\"Addressed to DOX SHEET. The mail knows something we don't.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -376,7 +461,29 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"His whole short life. He said so. Kids keep excellent records.\""
+            "failLine": "\"His whole short life. He said so. Kids keep excellent records.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Expressionism cares most about—",
+            "category": "art",
+            "options": [
+              "Inner feeling over accurate likeness",
+              "Photographic accuracy",
+              "An approved color palette",
+              "Perfectly straight edges"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Feeling first. Likeness is a formality.\""
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Van Gogh's swirling night skies aim to copy exactly how a sky looks.",
+            "category": "art",
+            "answer": false,
+            "failLine": "\"They show what it FELT like. Grade: felt.\""
           }
         ]
       },
@@ -446,7 +553,8 @@
             "type": "trueFalse",
             "prompt": "The north road was open from the very first morning.",
             "answer": false,
-            "failLine": "\"Blocked. Politely, officially, thoroughly blocked.\""
+            "failLine": "\"Blocked. Politely, officially, thoroughly blocked.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -459,13 +567,15 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"The arcade crowd. There is no Bureau of Likeness. Yet.\""
+            "failLine": "\"The arcade crowd. There is no Bureau of Likeness. Yet.\"",
+            "category": "witnessed"
           },
           {
             "type": "trueFalse",
             "prompt": "A leaked version of Bosch was reported better behaved and earlier to breakfast.",
             "answer": true,
-            "failLine": "\"Earlier to breakfast! The audacity of the punctual.\""
+            "failLine": "\"Earlier to breakfast! The audacity of the punctual.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -478,7 +588,36 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Almost right. That's the dangerous kind of wrong.\""
+            "failLine": "\"Almost right. That's the dangerous kind of wrong.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The Dada movement was deliberately—",
+            "category": "art",
+            "options": [
+              "Absurd and anti-establishment",
+              "Photorealistic and calm",
+              "State-sponsored",
+              "About tidy landscapes"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Nonsense on purpose. Pack it with the rest.\""
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "'Avant-garde' means art that is—",
+            "category": "art",
+            "options": [
+              "Experimental, ahead of its time",
+              "Officially approved",
+              "Very old and very safe",
+              "Strictly for resale"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Ahead of the route. It always is.\""
           }
         ]
       },
@@ -548,7 +687,8 @@
             "type": "trueFalse",
             "prompt": "Talking to someone in this town requires standing near them first.",
             "answer": true,
-            "failLine": "\"Proximity, then words. The town runs on this and little else.\""
+            "failLine": "\"Proximity, then words. The town runs on this and little else.\"",
+            "category": "lore"
           },
           {
             "type": "multipleChoice4",
@@ -561,13 +701,15 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Stays opened. Honesty is rare; boxes have it.\""
+            "failLine": "\"Stays opened. Honesty is rare; boxes have it.\"",
+            "category": "lore"
           },
           {
             "type": "trueFalse",
             "prompt": "Signs in Morningside can be read by pressing the talk button at them.",
             "answer": true,
-            "failLine": "\"They wait YEARS to be read. Have a heart.\""
+            "failLine": "\"They wait YEARS to be read. Have a heart.\"",
+            "category": "lore"
           },
           {
             "type": "multipleChoice4",
@@ -580,7 +722,29 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Panic. Under the paint. You could hear the brush strokes.\""
+            "failLine": "\"Panic. Under the paint. You could hear the brush strokes.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A Mark Rothko painting is mostly—",
+            "category": "art",
+            "options": [
+              "Large soft blocks of color",
+              "Tiny detailed faces",
+              "A municipal map",
+              "Dense blocks of text"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Color, counted in big honest blocks.\""
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Abstract art is required to look like a real thing.",
+            "category": "art",
+            "answer": false,
+            "failLine": "\"Not required to resemble anything. The windows agree.\""
           }
         ]
       },
@@ -666,19 +830,22 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Behind things. Beside things. The record has terrible peripheral vision.\""
+            "failLine": "\"Behind things. Beside things. The record has terrible peripheral vision.\"",
+            "category": "witnessed"
           },
           {
             "type": "trueFalse",
             "prompt": "Every Drifella in this town stands on the main road.",
             "answer": false,
-            "failLine": "\"Present company behind the building, as evidence.\""
+            "failLine": "\"Present company behind the building, as evidence.\"",
+            "category": "witnessed"
           },
           {
             "type": "trueFalse",
             "prompt": "The Doxx Clique already knew Bosch's name before he introduced himself.",
             "answer": true,
-            "failLine": "\"Like a search result that already knows your name. You shivered. I saw.\""
+            "failLine": "\"Like a search result that already knows your name. You shivered. I saw.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -691,7 +858,29 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Curiosity. You HAD it a minute ago — it's how you got here.\""
+            "failLine": "\"Curiosity. You HAD it a minute ago — it's how you got here.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Sol LeWitt said the idea itself can be 'a machine that makes the—'",
+            "category": "art",
+            "options": [
+              "Art",
+              "Rent",
+              "Paperwork",
+              "Bed"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The idea does the work. You found the idea behind the wall.\""
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "In conceptual art, the idea can matter more than the finished object.",
+            "category": "art",
+            "answer": true,
+            "failLine": "\"The thought is the piece. The rest is quiet-side detail.\""
           }
         ]
       },
@@ -770,7 +959,8 @@
             "type": "trueFalse",
             "prompt": "The hotel will rest your whole party for free.",
             "answer": false,
-            "failLine": "\"Rest is real, and real things cost. The hum is free. Only the hum.\""
+            "failLine": "\"Rest is real, and real things cost. The hum is free. Only the hum.\"",
+            "category": "lore"
           },
           {
             "type": "multipleChoice4",
@@ -783,13 +973,15 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"His. Damage and all. ESPECIALLY the damage.\""
+            "failLine": "\"His. Damage and all. ESPECIALLY the damage.\"",
+            "category": "witnessed"
           },
           {
             "type": "trueFalse",
             "prompt": "A Source Check hurts.",
             "answer": false,
-            "failLine": "\"Has any of this hurt? Be honest. You're doing great.\""
+            "failLine": "\"Has any of this hurt? Be honest. You're doing great.\"",
+            "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
@@ -802,7 +994,43 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"The leak. It's faster because it's lighter. It carries none of the truth.\""
+            "failLine": "\"The leak. It's faster because it's lighter. It carries none of the truth.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "John Cage's '4'33\"' has the performer—",
+            "category": "art",
+            "options": [
+              "Sit and play nothing, so you hear the room",
+              "Play as loud as possible",
+              "Observe a noise ordinance",
+              "Play a long drum solo"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Silence, framed. The room hums. So do I.\""
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A 'field recording' captures—",
+            "category": "art",
+            "options": [
+              "The real sounds of an actual place",
+              "A televised sports game",
+              "A form filled out in a field",
+              "Printed sheet music"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The place, humming to itself. No public version.\""
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Silence itself can be the subject of a piece of music.",
+            "category": "art",
+            "answer": true,
+            "failLine": "\"Ask Cage. Ask the unphotographed side of the hotel.\""
           }
         ]
       },
