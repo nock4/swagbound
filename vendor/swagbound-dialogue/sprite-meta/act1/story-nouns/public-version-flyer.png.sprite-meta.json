@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.sprite-meta.v1",
-  "sprite": "public-version-flyer.png",
+  "sprite": "doxx-flyer.png",
   "sprite_dimensions": {
     "w": 80,
     "h": 80

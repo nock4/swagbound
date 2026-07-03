@@ -787,11 +787,11 @@
       },
       "placementCount": 12
     },
-    "public-version-bosch.png": {
-      "id": "public-version-bosch",
-      "sprite": "public-version-bosch.png",
-      "textureKey": "act1-story-public-version-bosch",
-      "assetPath": "/assets/story-nouns/act1/public-version-bosch.png",
+    "doxx-bosch.png": {
+      "id": "doxx-bosch",
+      "sprite": "doxx-bosch.png",
+      "textureKey": "act1-story-doxx-bosch",
+      "assetPath": "/assets/story-nouns/act1/doxx-bosch.png",
       "role": "npc",
       "dimensions": {
         "w": 80,

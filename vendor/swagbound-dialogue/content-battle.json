@@ -1071,7 +1071,7 @@
           "xp": 10,
           "swag": 2
         },
-        "intro": "Malady walks out wearing the public version of Bosch like a fever with paperwork.",
+        "intro": "Malady walks out wearing the leaked version of Bosch like a fever with paperwork.",
         "attackText": "Bosch tears at the label before it can settle into a record.",
         "enemyText": "Malady sorts Bosch into a diagnosis he did not choose, then smiles like sorting is mercy.",
         "moves": [
@@ -1092,7 +1092,7 @@
             "label": "Public Flare",
             "intentType": "weird",
             "power": 5,
-            "message": "Malady flares with a public version that sounds almost like Bosch when heard through a waiting room wall.",
+            "message": "Malady flares with a leaked version that sounds almost like Bosch when heard through a waiting room wall.",
             "actionTags": [
               "psi-like"
             ],

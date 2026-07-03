@@ -12,13 +12,13 @@ and `~/Documents/nicks-mind-map/Wiki/projects/swagbound/`.
 
 ## Wired in this pass (no engine work)
 - **A (cold-signal premise)** — `cutscenes.json` `signal-town-cold-signal-open`:
-  staged the thesis (public version arrives before Bosch acts; "almost-right face";
+  staged the thesis (leaked version arrives before Bosch acts; "almost-right face";
   "I said it first"; VESSEL box; household "why is your face on a card") + first
   wayfinding cue (go west to the arcade). Fires at the new-game spawn.
 - **C2 (rumor trio + notice board)** — `added-npcs.json` 100201/100202/100203
   (Witness Kid / Vessel Reader / Counterfeit Sniffer, verbatim bible lines) +
   100204 (layered-cards notice board with a "GATE NORTH, BY THE STATION" route slip).
-- **C5 (turnstile)** — `added-npcs.json` 100205: "INSERT PUBLIC VERSION" threshold
+- **C5 (turnstile)** — `added-npcs.json` 100205: "INSERT DOX SHEET" threshold
   beat, refuse-framed to match the runtime (which has no interactive choice yet).
 - **Wayfinding** — `added-npcs.json` 100200 (spawn → west) and 100206 (police gate →
   north), plus directional cues folded into the `triggers.json` post-win reveals.
@@ -39,8 +39,8 @@ Controls reference: Arrows = move, Z/Space/Enter = confirm/talk/advance, X/Esc =
 ## Deferred — need engine code
 
 ### B3 — Corner shop sells the "poison" items
-Bible (`act-1-public-version-card-object-ladder.md`) specifies a Signal Town corner
-shop selling **Blank Public Version Card**, **Clear Sleeve**, **Sticker Pack
+Bible (`act-1-public-version-card-object-ladder.md`) specifies a Morningside corner
+shop selling **Blank Dox Sheet**, **Clear Sleeve**, **Sticker Pack
 (LOCAL/SOURCE/NORMAL)**, each incrementing a hidden `enemy_recognition_compliance`
 when used. Needs: new entries in `content/item-overrides.json`, a shop wired to a
 clerk NPC (`interaction.shop`), and a compliance counter the battle/gate logic reads.
@@ -63,9 +63,9 @@ Replacing the name-entry screen and authoring inspectable bedroom objects are en
 tasks, not content-file authoring.
 
 ## Canon decision pending (not a bug)
-The bible's **latest** Relay Yard language (`act-1-relay-yard-hot-wallet-threshold-
+The bible's **latest** Suppression Center language (`act-1-relay-yard-hot-wallet-threshold-
 canon-alignment.md`, 2026-05-13) reworks the threshold around a **Hot Wallet** object
 (scan → category stamp → Ledger receipt) and explicitly states it was **never
 promoted to runtime** (blocked on the interior dialogue schema). The runtime keeps the
-older-but-approved **Public Version Card** object. This pass folded in only the Ledger
+older-but-approved **Dox Sheet** object. This pass folded in only the Ledger
 *reveal cadence*; a full switch to Hot Wallet is a creative call for Nick.

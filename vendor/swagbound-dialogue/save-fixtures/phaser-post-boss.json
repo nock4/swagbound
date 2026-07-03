@@ -33,7 +33,7 @@
     "complete": true,
     "gateUnlocked": true,
     "currentObjectiveId": "act1_complete",
-    "currentObjectiveText": "Act 1 is complete. Bosch keeps the damaged public-version proof.",
+    "currentObjectiveText": "Act 1 is complete. Bosch keeps the damaged doxx proof.",
     "completedObjectiveIds": [
       "wake_up",
       "leave_bedroom",
@@ -76,10 +76,10 @@
   "inventory": [
     { "id": "route-brief", "label": "Route Brief", "quantity": 1, "consumable": false },
     { "id": "practice-bat", "label": "Practice Bat", "quantity": 1, "consumable": false },
-    { "id": "public-version-card", "label": "Public Version Card", "quantity": 1, "consumable": false },
+    { "id": "public-version-card", "label": "Dox Sheet", "quantity": 1, "consumable": false },
     { "id": "hot-wallet-proof-token", "label": "Hot Wallet proof token", "quantity": 1, "consumable": false },
     { "id": "gate-classifier-receipt", "label": "Gate Classifier Receipt", "quantity": 1, "consumable": false },
-    { "id": "damaged-public-version-card", "label": "Damaged Public Version Card", "quantity": 1, "consumable": false }
+    { "id": "damaged-public-version-card", "label": "Damaged Dox Sheet", "quantity": 1, "consumable": false }
   ],
   "encounter_cooldown": 30,
   "last_interior_visit": {},

@@ -45,7 +45,7 @@
     { "id": "pocket-snack", "label": "Pocket Snack", "quantity": 1, "consumable": true },
     { "id": "route-brief", "label": "Route Brief", "quantity": 1, "consumable": false },
     { "id": "practice-bat", "label": "Practice Bat", "quantity": 1, "consumable": false },
-    { "id": "public-version-card", "label": "Public Version Card", "quantity": 1, "consumable": false },
+    { "id": "public-version-card", "label": "Dox Sheet", "quantity": 1, "consumable": false },
     { "id": "hot-wallet-proof-token", "label": "Hot Wallet proof token", "quantity": 1, "consumable": false }
   ],
   "encounter_cooldown": 7,

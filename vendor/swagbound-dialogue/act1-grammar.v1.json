@@ -256,7 +256,7 @@
       "ambienceCue": "none",
       "musicRuleId": "music.act1.pressure_pocket.proof_region",
       "proofTags": [
-        "public-version",
+        "doxx",
         "pressure"
       ]
     },
@@ -807,7 +807,7 @@
       "id": "npc.act1.biscuit",
       "label": "Biscuit",
       "role": "home-grounding-voice",
-      "canonSummary": "Biscuit grounds the opening in family-house alarm: phones are buzzing, the Route Brief opened while Bosch slept, and the public version problem has already entered the home.",
+      "canonSummary": "Biscuit grounds the opening in family-house alarm: phones are buzzing, the Route Brief opened while Bosch slept, and the leaked version problem has already entered the home.",
       "defaultDialogueId": "dialogue.act1.home.route_brief",
       "spriteRef": {
         "status": "pending-review",
@@ -825,7 +825,7 @@
       "id": "npc.act1.guardian",
       "label": "Guardian",
       "role": "practical-guardian-logistics",
-      "canonSummary": "The Guardian is a practical household logistics voice who treats proof as leaving-the-house preparation: take the charm, sync at the router, and make the public version wait.",
+      "canonSummary": "The Guardian is a practical household logistics voice who treats proof as leaving-the-house preparation: take the charm, sync at the router, and make the leaked version wait.",
       "defaultDialogueId": "dialogue.act1.home.guardian_proof_token",
       "spriteRef": {
         "status": "pending-review",
@@ -843,7 +843,7 @@
       "id": "npc.act1.cousin",
       "label": "Cousin",
       "role": "rumor-sticker-signal-lens",
-      "canonSummary": "The Cousin reads Signal Town through rumors, stickers, signs, and fake-helpful road language, warning Bosch that paperwork and signal pressure are already watching.",
+      "canonSummary": "The Cousin reads Morningside through rumors, stickers, signs, and fake-helpful road language, warning Bosch that paperwork and signal pressure are already watching.",
       "defaultDialogueId": "dialogue.act1.home.cousin_signal_rumor",
       "spriteRef": {
         "status": "pending-review",
@@ -1019,7 +1019,7 @@
         "targetId": "route-brief",
         "routeUse": "Bedroom desk route-brief interaction target."
       },
-      "canonSummary": "The Route Brief is the impossible morning document: already open, externally timestamped, and tied to the Tojiba mint that says Bosch's public version is moving before Bosch is.",
+      "canonSummary": "The Route Brief is the impossible morning document: already open, externally timestamped, and tied to the Tojiba mint that says Bosch's leaked version is moving before Bosch is.",
       "dialogueId": "dialogue.act1.home.route_brief",
       "flagsRequired": [],
       "flagsSet": [
@@ -1040,7 +1040,7 @@
         "targetId": "starter-cache",
         "routeUse": "Side-room starter-cache interaction target."
       },
-      "canonSummary": "The Side-Room Starter Cache makes the first kit concrete: backup Route Brief, Practice Bat, and wrong-smile Public Version Card, pairing something solid with something social.",
+      "canonSummary": "The Side-Room Starter Cache makes the first kit concrete: backup Route Brief, Practice Bat, and wrong-smile Dox Sheet, pairing something solid with something social.",
       "dialogueId": "dialogue.act1.home.side_room_cache",
       "flagsRequired": [],
       "flagsSet": [
@@ -1125,7 +1125,7 @@
         "targetId": "shop-counter",
         "routeUse": "Corner-shop service-counter proof interaction target."
       },
-      "canonSummary": "The Corner-Shop Proof Counter is Signal Town's half-useful proof service: a Tojiba kiosk mints a Hot Wallet and prints an insulting coupon in the same breath.",
+      "canonSummary": "The Corner-Shop Proof Counter is Morningside's half-useful proof service: a Tojiba kiosk mints a Hot Wallet and prints an insulting coupon in the same breath.",
       "dialogueId": "dialogue.act1.corner_shop.proof_counter",
       "flagsRequired": [],
       "flagsSet": [
@@ -1140,7 +1140,7 @@
       "id": "prop.act1.main_street.public_version_bosch",
       "mapId": "proof-map",
       "mapObjectId": "north-sidewalk-kid",
-      "assetId": "public-version-bosch",
+      "assetId": "doxx-bosch",
       "position": {
         "anchorType": "proof-map-object",
         "sourceMapId": "proof-map",
@@ -1153,12 +1153,12 @@
           "x": 1200,
           "y": 1920
         },
-        "routeUse": "pins the public-version Bosch crowd marker to its reviewed proof-map object"
+        "routeUse": "pins the doxx Bosch crowd marker to its reviewed proof-map object"
       },
-      "sprite": "public-version-bosch.png",
-      "assetPath": "/assets/story-nouns/act1/public-version-bosch.png",
+      "sprite": "doxx-bosch.png",
+      "assetPath": "/assets/story-nouns/act1/doxx-bosch.png",
       "districtId": "sector.act1.home_rise",
-      "routeRole": "public-version-crowd",
+      "routeRole": "doxx-crowd",
       "collisionSemantic": "occludesLower",
       "occlusion": "lower",
       "proofTags": [
@@ -1583,7 +1583,7 @@
       ],
       "proofTags": [
         "gate",
-        "public-version"
+        "doxx"
       ]
     },
     {
@@ -1764,7 +1764,7 @@
       "id": "hotspot.act1.pressure_pocket.public_version_clique",
       "districtId": "sector.act1.civic_gate_block",
       "hotspotType": "social-obstruction",
-      "routeRole": "public-version-refusal",
+      "routeRole": "doxx-refusal",
       "boundsPx": {
         "x": 3920,
         "y": 1840,
@@ -1785,10 +1785,10 @@
       ],
       "dialogueId": "dialogue.act1.civic.social_obstruction",
       "proofTags": [
-        "public-version",
+        "doxx",
         "obstruction"
       ],
-      "notes": "Route beat keeps the pressure-pocket public-version name, but current no-debug route proof activates this obstruction at the civic utility-pole/checkpoint cluster."
+      "notes": "Route beat keeps the pressure-pocket doxx name, but current no-debug route proof activates this obstruction at the civic utility-pole/checkpoint cluster."
     },
     {
       "id": "hotspot.act1.station_gate.refuse_processing",
@@ -2397,7 +2397,7 @@
           "damaged-public-version-card"
         ]
       },
-      "routeUse": "Station Gate boss encounter; owns the Malady stat/reward row, boss defeat state, civic-machine reveal flags, and damaged public-version card reward before refusal processing."
+      "routeUse": "Station Gate boss encounter; owns the Malady stat/reward row, boss defeat state, civic-machine reveal flags, and damaged dox sheet reward before refusal processing."
     }
   ],
   "battleActionRules": [
@@ -2534,7 +2534,7 @@
       "messageMaxCharsPerLine": 56,
       "messageMaxLines": 2,
       "message": "Malady pricks Bosch with a hostile little name tag and waits for him to answer to it.",
-      "routeUse": "Malady boss physical-pressure move; keeps bash-like semantics separate from public-version weirdness."
+      "routeUse": "Malady boss physical-pressure move; keeps bash-like semantics separate from doxx weirdness."
     },
     {
       "id": "battleAction.act1.malady.public_flare",
@@ -2552,8 +2552,8 @@
       "messageWindowPresetId": "window.battle.message",
       "messageMaxCharsPerLine": 56,
       "messageMaxLines": 2,
-      "message": "Malady flares with a public version that sounds almost like Bosch when heard through a waiting room wall.",
-      "routeUse": "Malady boss weird move; owns the public-version flare language and message-window fit budget."
+      "message": "Malady flares with a leaked version that sounds almost like Bosch when heard through a waiting room wall.",
+      "routeUse": "Malady boss weird move; owns the doxx flare language and message-window fit budget."
     }
   ],
   "battleStatusPanelRules": [
@@ -3091,7 +3091,7 @@
       "effect": {
         "type": "none"
       },
-      "routeUse": "Public Version Card is inspectable false-proof language, not an active use item."
+      "routeUse": "Dox Sheet is inspectable false-proof language, not an active use item."
     },
     {
       "id": "itemAction.act1.hot_wallet_proof_token.inspect",
@@ -3142,7 +3142,7 @@
       "effect": {
         "type": "none"
       },
-      "routeUse": "Damaged Public Version Card is post-Malady evidence and remains inspectable after Act 1."
+      "routeUse": "Damaged Dox Sheet is post-Malady evidence and remains inspectable after Act 1."
     },
     {
       "id": "itemAction.act1.shop.pocket_snack.consume",
@@ -3617,7 +3617,7 @@
       "supportBeatIds": [],
       "rewardItemIds": [],
       "statusWindowPresetId": "window.field.status",
-      "routeUse": "First-witness objective completes when the neighbor witness gives Bosch a concrete public-version trail."
+      "routeUse": "First-witness objective completes when the neighbor witness gives Bosch a concrete doxx trail."
     },
     {
       "id": "objectiveProgression.act1.prepare_proof",
@@ -3677,7 +3677,7 @@
       "supportBeatIds": [],
       "rewardItemIds": [],
       "statusWindowPresetId": "window.field.status",
-      "routeUse": "Public Version Clique objective completes only after Bosch has both portable proof and the civic brief."
+      "routeUse": "Doxx Clique objective completes only after Bosch has both portable proof and the civic brief."
     },
     {
       "id": "objectiveProgression.act1.clear_park_rumors",
@@ -3743,7 +3743,7 @@
         "damaged-public-version-card"
       ],
       "statusWindowPresetId": "window.field.status",
-      "routeUse": "Malady objective completes through the boss victory path, revealing the machine and awarding the damaged public-version card."
+      "routeUse": "Malady objective completes through the boss victory path, revealing the machine and awarding the damaged dox sheet."
     },
     {
       "id": "objectiveProgression.act1.refuse_processing",
@@ -4072,11 +4072,11 @@
       },
       "noDebugEvidence": {
         "type": "routeLogLabel",
-        "label": "public-version obstruction: confirm check",
+        "label": "doxx obstruction: confirm check",
         "action": "press",
         "key": "KeyZ"
       },
-      "routeUse": "Public Version Clique obstruction resolves through Check, preserving deliberate player refusal instead of passive proximity."
+      "routeUse": "Doxx Clique obstruction resolves through Check, preserving deliberate player refusal instead of passive proximity."
     },
     {
       "id": "routeAction.act1.north_park_trial.battle",
@@ -4222,7 +4222,7 @@
         "north-family-home",
         "north-sidewalk-kid"
       ],
-      "routeUse": "First witness should read as a neighborhood sidewalk stop near the public-version Bosch landmark, not as an abstract objective update."
+      "routeUse": "First witness should read as a neighborhood sidewalk stop near the doxx Bosch landmark, not as an abstract objective update."
     },
     {
       "id": "routeSpatial.act1.corner_shop_entry",
@@ -4419,7 +4419,7 @@
     {
       "id": "objective.act1.collect_starter_item",
       "objectiveId": "collect_starter_item",
-      "text": "Collect the side-room proof tools before the public version reaches downstairs.",
+      "text": "Collect the side-room proof tools before the leaked version reaches downstairs.",
       "flagsRequired": [
         "act1.left_bedroom"
       ],
@@ -4466,7 +4466,7 @@
     {
       "id": "objective.act1.resolve_social_obstruction",
       "objectiveId": "resolve_social_obstruction",
-      "text": "Confront the Public Version Clique and refuse their easy Bosch.",
+      "text": "Confront the Doxx Clique and refuse their easy Bosch.",
       "flagsRequired": [
         "act1.received_town_gate_brief"
       ],
@@ -4493,7 +4493,7 @@
     {
       "id": "objective.act1.defeat_malady",
       "objectiveId": "defeat_malady",
-      "text": "Face Malady, the fever wearing Bosch's public version.",
+      "text": "Face Malady, the fever wearing Bosch's leaked version.",
       "flagsRequired": [
         "act1.boss_gate_unlocked"
       ],
@@ -4511,7 +4511,7 @@
     {
       "id": "objective.act1.complete",
       "objectiveId": "act1_complete",
-      "text": "Act 1 is complete. Bosch keeps the damaged public-version proof.",
+      "text": "Act 1 is complete. Bosch keeps the damaged doxx proof.",
       "flagsRequired": [
         "act1.complete"
       ],
@@ -4897,7 +4897,7 @@
     },
     {
       "id": "beat.act1.social_obstruction",
-      "label": "Public Version Clique",
+      "label": "Doxx Clique",
       "objectiveId": "resolve_social_obstruction",
       "primaryOwnerId": "gate.act1.pressure_pocket.public_version_clique",
       "flagsSet": [
@@ -5501,7 +5501,7 @@
         "dialogue.act1.home.side_room_cache",
         "routeAction.act1.side_room_cache.confirm"
       ],
-      "recommendedNextStep": "Expand starter-cache item language and Public Version Card framing here before optional house flavor.",
+      "recommendedNextStep": "Expand starter-cache item language and Dox Sheet framing here before optional house flavor.",
       "routeUse": "Starter-cache dialogue is safe for route-critical expansion because no-debug route input proves the object and item handoff."
     },
     {

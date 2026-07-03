@@ -1261,7 +1261,7 @@
         "xp": 10,
         "swag": 2
       },
-      "intro": "A Malady walks out wearing the public version of Bosch like a fever.",
+      "intro": "A Malady walks out wearing the leaked version of Bosch like a fever.",
       "attackText": "Bosch tears at the label before it can settle.",
       "enemyText": "The Malady sorts Bosch into a diagnosis he did not choose.",
       "moves": [
@@ -1282,7 +1282,7 @@
           "label": "Public Flare",
           "intentType": "weird",
           "power": 5,
-          "message": "The Malady flares with a public version that sounds almost like Bosch.",
+          "message": "The Malady flares with a leaked version that sounds almost like Bosch.",
           "actionTags": [
             "psi-like"
           ],

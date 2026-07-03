@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.custom-dialogue.v1",
-  "comment": "Hand-authored Act-1 dialogue (takes precedence over the generated Drifella barks in content/drifella-barks.json). Two passes: (1) the opening-house cast (npcId->character is a first pass to refine during sprite work, e.g. Biscuit on the dog sprite); (2) a Signal Town MILADY-LORE pass on reachable path NPCs (166/167/191/1410/163/136/202/138/146/1411/135/137) seeding the antagonist's lore through townsfolk rumor: Little Swag World is the organic source, Milady/Remilia corrupts it into hostile classification infrastructure (provenance gates, the public version, the Malady as visible symptom). See docs/swagbound-eb-act1-arc-mapping.md.",
+  "comment": "Hand-authored Act-1 dialogue (takes precedence over the generated Drifella barks in content/drifella-barks.json). Two passes: (1) the opening-house cast (npcId->character is a first pass to refine during sprite work, e.g. Biscuit on the dog sprite); (2) a Morningside MILADY-LORE pass on reachable path NPCs (166/167/191/1410/163/136/202/138/146/1411/135/137) seeding the antagonist's lore through townsfolk rumor: Little Swag World is the organic source, Milady/Remilia corrupts it into hostile classification infrastructure (provenance gates, the leaked version, the Malady as visible symptom). See docs/swagbound-eb-act1-arc-mapping.md.",
   "byNpcId": {
     "1": {
       "pages": [
@@ -27,7 +27,7 @@
     "5": {
       "pages": [
         "\"To tell you the truth — and the truth's been getting expensive — I don't remember saying half of what the town has me saying.\"",
-        "\"My public version's a better neighbor than I am. Pays his dues, waves first. I just live here.\""
+        "\"My leaked version's a better neighbor than I am. Pays his dues, waves first. I just live here.\""
       ]
     },
     "6": {
@@ -294,7 +294,7 @@
     "68": {
       "pages": [
         "\"I'd rather be writing parking tickets. A meter doesn't argue about who it is.\"",
-        "\"Lately every pedestrian arrives with a public version and a complaint from the future.\""
+        "\"Lately every pedestrian arrives with a leaked version and a complaint from the future.\""
       ]
     },
     "69": {
@@ -504,7 +504,7 @@
     },
     "105": {
       "pages": [
-        "The person says nothing. In Signal Town, silence still gets transcribed.",
+        "The person says nothing. In Morningside, silence still gets transcribed.",
         "....."
       ]
     },
@@ -695,7 +695,7 @@
     },
     "136": {
       "pages": [
-        "Seen your public version yet? Smiles better than you. Answers before you do.",
+        "Seen your leaked version yet? Smiles better than you. Answers before you do.",
         "Milady prefers it, honestly. Less upkeep, no opinions of its own."
       ]
     },
@@ -729,7 +729,7 @@
       "pages": [
         "He cradles the trumpet like the one possession the records haven't claimed yet.",
         "\"Happiest man alive. Scenic spot, good acoustics, nobody to tell me no.\"",
-        "\"I'll send a haunting little melody clean across town. Let the public version of me try to play it back.\""
+        "\"I'll send a haunting little melody clean across town. Let the leaked version of me try to play it back.\""
       ]
     },
     "142": {
@@ -870,7 +870,7 @@
     },
     "166": {
       "pages": [
-        "Milady doesn't run Signal Town. The town runs ON her, like a charge nobody itemized.",
+        "Milady doesn't run Morningside. The town runs ON her, like a charge nobody itemized.",
         "You'll meet her paperwork long before you meet her. Most people stop at the paperwork."
       ]
     },
@@ -1331,7 +1331,7 @@
     "613": {
       "pages": [
         "\"If I find Tessie, do I get in the newspaper?\"",
-        "\"Fifteen minutes of fame is just a public version with a shorter lease.\""
+        "\"Fifteen minutes of fame is just a leaked version with a shorter lease.\""
       ]
     },
     "614": {
@@ -2086,23 +2086,23 @@
     "data_15.l_0xc5eb0b": {
       "pages": [
         "The Bosch Terminal boots from a timestamp Bosch has not reached yet.",
-        "\"Bosch, the route is not neutral. A public version is already moving through town ahead of your body.\"",
+        "\"Bosch, the route is not neutral. A leaked version is already moving through town ahead of your body.\"",
         "\"That version is the Malady: symptom, mask, and civic convenience with your smile stapled on.\"",
         "\"Milady is the engine underneath it. Rumor, paperwork, feed pressure, all one cheap machine.\"",
-        "\"Walk the route anyway. Make the public version prove provenance in daylight.\""
+        "\"Walk the route anyway. Make the leaked version prove provenance in daylight.\""
       ]
     },
     "data_20.l_0xc66b97": {
       "pages": [
         "MiFella hits the door like the algorithm owes him rent.",
         "\"Bosch. Up. You're trending before breakfast, which is legally the worst kind of trending.\"",
-        "\"Some public version of you is already outside, polite and wrong. Town's eating it up.\"",
+        "\"Some leaked version of you is already outside, polite and wrong. Town's eating it up.\"",
         "\"Bring shoes. Bring a face you can prove is yours. The trouble is making good time.\""
       ]
     },
     "data_20.l_0xc65efc": {
       "pages": [
-        "The Public Version Clique doesn't crowd you. It arranges itself around you, smiling, like a search result that already knows your name.",
+        "The Doxx Clique doesn't crowd you. It arranges itself around you, smiling, like a search result that already knows your name.",
         "\"Relax, Bosch. We did the hard part. There's a cleaner you, signed and ready. Just nod and let this one count.\"",
         "\"Refuse and you stop being a person and start being a dispute. ...Oh, you're going to dispute it. Adorable. Cataloged.\"",
         "They step into the route like they own the receipt. Whatever you do next, they'll file as the fight starting."

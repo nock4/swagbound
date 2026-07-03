@@ -223,7 +223,7 @@
       1120,
       1600
     ],
-    "collisionSource": "Stable center layout restored; runtime collision applies prop-footprints.v1 manifest to placed objects. Future Signal Town edits must use the Tiled/object-layer authoring contract."
+    "collisionSource": "Stable center layout restored; runtime collision applies prop-footprints.v1 manifest to placed objects. Future Morningside edits must use the Tiled/object-layer authoring contract."
   },
   "tiles": [
     {
@@ -64071,9 +64071,9 @@
     },
     {
       "id": "north-sidewalk-kid",
-      "sprite": "public-version-bosch.png",
-      "sprite_meta": "swagbound-phaser/public/data/sprite-meta/act1/story-nouns/public-version-bosch.png.sprite-meta.json",
-      "assetPath": "/assets/story-nouns/act1/public-version-bosch.png",
+      "sprite": "doxx-bosch.png",
+      "sprite_meta": "swagbound-phaser/public/data/sprite-meta/act1/story-nouns/doxx-bosch.png.sprite-meta.json",
+      "assetPath": "/assets/story-nouns/act1/doxx-bosch.png",
       "layer": "prop",
       "x": 1200,
       "y": 1920,
@@ -64094,7 +64094,7 @@
       "type": "npc",
       "kind": "kid-route",
       "category": "route-npc",
-      "assetId": "public-version-bosch",
+      "assetId": "doxx-bosch",
       "district": "home_rise",
       "interaction": "north-sidewalk-kid-talk",
       "sprite_dimensions": {

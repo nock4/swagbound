@@ -25,7 +25,7 @@
         "social-capture",
         "provenance",
         "administrative-evil",
-        "public-version",
+        "doxx",
         "private-space-violation"
       ],
       "motifIds": [
@@ -59,7 +59,7 @@
         "algorithmic-leisure",
         "self-conscious-presence",
         "social-capture",
-        "public-version"
+        "doxx"
       ],
       "motifIds": [
         "seventeen-dollar-ice-cream",
@@ -86,11 +86,11 @@
       "hook": "The title and naming flow imply Bosch has been seen by a system before the player has acted.",
       "objective": "Leave the bedroom, open the route brief, step onto the first street, and pass one proof gate while realizing the route is recording compliance.",
       "falseBelief": "If Bosch explains the source truth clearly enough, the town will correct the record and treat him as private and real.",
-      "pressure": "Bosch is not just misrecognized; a hostile public version of him has witness depth, claimant-smell traps, and canon drag before he consents.",
+      "pressure": "Bosch is not just misrecognized; a hostile leaked version of him has witness depth, claimant-smell traps, and canon drag before he consents.",
       "twist": "The first gate is not a lock. It is a friendly request to perform presence in a way the route can record.",
-      "payoff": "The route opens toward Signal Park, but the journal notes that something recorded how.",
+      "payoff": "The route opens toward Morningside Park, but the journal notes that something recorded how.",
       "beats": [
-        "Cold signal fragments show PUBLIC VERSION FOUND before title or immediately after New Game.",
+        "Cold signal fragments show DOX SHEET FOUND before title or immediately after New Game.",
         "Naming confirms Bosch while flickering through wrong public variants.",
         "Bedroom objects reveal events Bosch does not remember and a route brief opened from outside the house.",
         "Home hall turns ordinary family warmth into copied or future-facing text.",
@@ -102,7 +102,7 @@
         "social-capture",
         "provenance",
         "private-space-violation",
-        "public-version",
+        "doxx",
         "administrative-evil"
       ],
       "npcIds": [],
@@ -185,7 +185,7 @@
         "GM Bosch. Don't forget to clock in. The Factory misses you.",
         "Say GM, react to ten posts, submit proof of presence, burn Smoke for access.",
         "The Former Manager explains that participation becomes evidence.",
-        "A Friendly Mod / Chief Morning Officer tries to convert Bosch into an admissible public version.",
+        "A Friendly Mod / Chief Morning Officer tries to convert Bosch into an admissible leaked version.",
         "Bosch clocks out and teaches workers that nonparticipation can break the loop."
       ],
       "themeIds": [
@@ -238,21 +238,21 @@
     },
     {
       "id": "relay-yard",
-      "title": "Relay Yard",
+      "title": "Suppression Center",
       "status": "adopted-concept",
       "summary": "The machine that sorts performed roles into official public truth.",
       "actId": "act-1-social-capture",
       "order": 20,
-      "hook": "Signals arrive before bodies and public versions of Bosch harden on the route.",
+      "hook": "Signals arrive before bodies and leaked versions of Bosch harden on the route.",
       "objective": "Reach the yard before hostile classification finishes.",
-      "falseBelief": "Relay Yard is just infrastructure.",
+      "falseBelief": "Suppression Center is just infrastructure.",
       "pressure": "Every prior action arrives as sortable metadata.",
       "twist": "The yard canonicalizes whatever the Factory and other systems made Bosch perform.",
       "payoff": "Bosch sees the pipeline from greeting ritual to classification machine.",
       "beats": [
         "Rumor spreads in the park.",
         "Pressure concentrates under the route.",
-        "Relay Yard makes public versions official."
+        "Suppression Center makes leaked versions official."
       ],
       "themeIds": [
         "social-capture",
@@ -302,7 +302,7 @@
         "algorithmic-leisure",
         "self-conscious-presence",
         "social-capture",
-        "public-version"
+        "doxx"
       ],
       "npcIds": [],
       "motifIds": [
@@ -436,8 +436,8 @@
       "summary": "The safest rooms are already porous; intimate objects reveal that hostile records entered before Bosch woke up."
     },
     {
-      "id": "public-version",
-      "title": "Public Version",
+      "id": "doxx",
+      "title": "Dox Sheet",
       "status": "writing",
       "summary": "The threat is not only impersonation. It is a socially accepted Bosch variant arriving before Bosch can correct it."
     },
@@ -510,7 +510,7 @@
       "title": "Proof Request",
       "status": "adopted-concept",
       "summary": "The question that makes people perform their identity for the machine.",
-      "firstAppearance": "Manager prompts and Relay Yard classification.",
+      "firstAppearance": "Manager prompts and Suppression Center classification.",
       "escalation": "Proof becomes mandatory for movement.",
       "inversion": "Bosch refuses to furnish proof.",
       "payoff": "The system cannot classify what it cannot make perform."
@@ -521,9 +521,9 @@
       "status": "writing",
       "summary": "A name as route metadata rather than a private label.",
       "firstAppearance": "Naming flow flickers through wrong or over-official Bosch variants.",
-      "escalation": "NPCs and systems reference public Bosch variants before Bosch understands them.",
+      "escalation": "NPCs and systems reference leaked Bosch variants before Bosch understands them.",
       "inversion": "Bosch refuses to keep correcting the record on the enemy terms.",
-      "payoff": "The final route must break the public-version machine instead of winning a naming dispute."
+      "payoff": "The final route must break the doxx machine instead of winning a naming dispute."
     },
     {
       "id": "route-brief",
@@ -533,15 +533,15 @@
       "firstAppearance": "Bedroom terminal or desk note.",
       "escalation": "Journal entries become useful but suspect records of compliance.",
       "inversion": "Bosch uses the brief to navigate without accepting its classification.",
-      "payoff": "The route brief becomes evidence that can be rejected or corrupted at Relay Yard."
+      "payoff": "The route brief becomes evidence that can be rejected or corrupted at Suppression Center."
     },
     {
       "id": "public-version-card",
-      "title": "Public Version Card",
+      "title": "Dox Sheet",
       "status": "writing",
       "summary": "A cheap laminated proof object that converts Bosch's private self into a portable civic record. The Act 1 Mani-Mani equivalent: funny and mundane at first, then increasingly hostile classification infrastructure.",
       "firstAppearance": "Bedroom: a crumpled printout with Bosch's face almost right and a quote he never said.",
-      "escalation": "Cards multiply across the route: hall, fence post, shop, park notice board, underpass turnstile slot, Relay Yard desk.",
+      "escalation": "Cards multiply across the route: hall, fence post, shop, park notice board, underpass turnstile slot, Suppression Center desk.",
       "inversion": "Bosch keeps a damaged card instead of a clean one; refusal of correct enemy recognition becomes the better artifact.",
       "payoff": "The card returns as a voice in the Milady dream-pocket and must be rejected, not corrected.",
       "objectLadder": [
@@ -571,7 +571,7 @@
       "id": "malady-as-symptom",
       "title": "Malady as Symptom",
       "status": "writing",
-      "summary": "The Malady is the visible fever, not the cause. It is one of many public versions the Milady signal manufactures. Bosch can beat a Malady; he cannot beat the engine that makes Maladies until he sees the engine.",
+      "summary": "The Malady is the visible fever, not the cause. It is one of many leaked versions the Milady signal manufactures. Bosch can beat a Malady; he cannot beat the engine that makes Maladies until he sees the engine.",
       "firstAppearance": "Neighbor warning: 'Don't bring that smell to the yard.'",
       "escalation": "Encounter NPCs and route prompts treat Malady as a known carrier word.",
       "inversion": "Defeating the Malady reveals the Milady rabbit-hole instead of closing Act 1 cleanly.",
@@ -681,9 +681,9 @@
     },
     {
       "id": "relay-yard",
-      "title": "Relay Yard",
+      "title": "Suppression Center",
       "status": "adopted-concept",
-      "summary": "Sorting infrastructure that converts performed signals into official public versions.",
+      "summary": "Sorting infrastructure that converts performed signals into official leaked versions.",
       "consumes": [
         "performed identity",
         "greeting records",
@@ -692,7 +692,7 @@
       "produces": [
         "classification",
         "canonized labels",
-        "public Bosch variants"
+        "leaked Bosch variants"
       ],
       "weaponizes": [
         "metadata",
@@ -724,7 +724,7 @@
       ],
       "produces": [
         "intro route brief",
-        "public Bosch hints",
+        "leaked Bosch hints",
         "first proof record"
       ],
       "weaponizes": [
@@ -737,7 +737,7 @@
       ],
       "themeIds": [
         "private-space-violation",
-        "public-version",
+        "doxx",
         "social-capture",
         "provenance"
       ],
@@ -779,7 +779,7 @@
         "algorithmic-leisure",
         "self-conscious-presence",
         "social-capture",
-        "public-version"
+        "doxx"
       ],
       "motifIds": [
         "seventeen-dollar-ice-cream",
@@ -841,7 +841,7 @@
         "festival poster with Bosch drawn in",
         "desk terminal",
         "unfinished blanket dream",
-        "window over quiet Signal Town",
+        "window over quiet Morningside",
         "small Little Swag World source object"
       ],
       "architecture": "Small readable bedroom and home hall with clear exits, no feature clutter, and one inspectable per emotional idea.",
@@ -1021,7 +1021,7 @@
       "id": "obsidian-act-1-anti-milady-content-spec",
       "title": "Obsidian: Act 1 anti-Milady content spec",
       "status": "adopted-concept",
-      "summary": "Content-facing Act 1 rewrite: bedroom violation, hostile first-contact street reads, Relay Yard as enemy processing, and Bosch moving toward resistance.",
+      "summary": "Content-facing Act 1 rewrite: bedroom violation, hostile first-contact street reads, Suppression Center as enemy processing, and Bosch moving toward resistance.",
       "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/act-1-anti-milady-content-spec.md",
       "fetchedAt": "2026-05-09"
     },
@@ -1043,9 +1043,9 @@
     },
     {
       "id": "obsidian-act-1-public-version-card-object-ladder",
-      "title": "Obsidian: Act 1 Public Version Card object ladder",
+      "title": "Obsidian: Act 1 Dox Sheet object ladder",
       "status": "writing",
-      "summary": "The Public Version Card is Act 1's Mani-Mani equivalent: a cheap laminated proof object that escalates from neighborhood joke to Relay Yard classification artifact and finally to a thing Bosch must refuse to be saved by.",
+      "summary": "The Dox Sheet is Act 1's Mani-Mani equivalent: a cheap laminated proof object that escalates from neighborhood joke to Suppression Center classification artifact and finally to a thing Bosch must refuse to be saved by.",
       "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/act-1-public-version-card-object-ladder.md",
       "fetchedAt": "2026-05-12"
     },
@@ -1053,7 +1053,7 @@
       "id": "obsidian-act-1-runtime-dialogue-pass",
       "title": "Obsidian: Act 1 runtime dialogue pass",
       "status": "adopted-concept",
-      "summary": "The runtime text layer should frame Bosch's route as crossing hostile ground before the Milady/Remilia machine hardens a false public version. Park = rumor, underpass = pressure, yard = official truth.",
+      "summary": "The runtime text layer should frame Bosch's route as crossing hostile ground before the Milady/Remilia machine hardens a false leaked version. Park = rumor, underpass = pressure, yard = official truth.",
       "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/act-1-runtime-dialogue-pass.md",
       "fetchedAt": "2026-05-12"
     },
@@ -1061,7 +1061,7 @@
       "id": "obsidian-ai-slop-enemy-design-spec",
       "title": "Obsidian: AI Slop enemy design spec",
       "status": "adopted-concept",
-      "summary": "AI Slop is a hostile-classification enemy that attacks Bosch's specificity by producing fast plausible wrong public versions of him. Cute-horrible floating cherub of generated filler, not a robot.",
+      "summary": "AI Slop is a hostile-classification enemy that attacks Bosch's specificity by producing fast plausible wrong leaked versions of him. Cute-horrible floating cherub of generated filler, not a robot.",
       "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/ai-slop-enemy-design-spec.md",
       "fetchedAt": "2026-05-12"
     },
@@ -1125,7 +1125,7 @@
       "id": "intake-milady-zine02-ethereum-cypherpunk-crusade",
       "title": "Intake: Milady Zine 02 / Ethereum cypherpunk crusade",
       "status": "writing",
-      "summary": "The zine turns Ethereum/cypherpunk language into protocol theology: mandates, pledges, privacy, exit, anti-compromise, thousand-year-machine rhetoric. Hostile liberation machinery for Relay Yard kiosks and pledge terminals.",
+      "summary": "The zine turns Ethereum/cypherpunk language into protocol theology: mandates, pledges, privacy, exit, anti-compromise, thousand-year-machine rhetoric. Hostile liberation machinery for Suppression Center kiosks and pledge terminals.",
       "url": "file:///Users/nickgeorge-studio/Documents/nicks-mind-map/Wiki/projects/swagbound/milady-zine02-ethereum-cypherpunk-crusade.md",
       "fetchedAt": "2026-05-10"
     },

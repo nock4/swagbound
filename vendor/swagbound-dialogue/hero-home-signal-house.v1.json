@@ -8,7 +8,7 @@
     "persistedFields": ["heroName", "spriteVariantId"]
   },
   "worldPlacement": {
-    "description": "Bosch's House sits west of Signal Town on the western residential road that leads east into downtown.",
+    "description": "Bosch's House sits west of Morningside on the western residential road that leads east into downtown.",
     "flow": ["hero_home", "bosch_house_exterior", "west_residential_road", "downtown"]
   },
   "maps": {

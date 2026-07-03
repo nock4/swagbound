@@ -11,7 +11,7 @@
   "pacing": {
     "schema": "swagbound.slice-pacing.v1",
     "targetMinutes": 60,
-    "routeGoal": "Bosch leaves home, crosses hostile ground, reaches Relay Yard, and realizes the Milady machine has to be fought rather than joined.",
+    "routeGoal": "Bosch leaves home, crosses hostile ground, reaches Suppression Center, and realizes the Milady machine has to be fought rather than joined.",
     "segments": [
       {
         "id": "intro-naming",
@@ -48,7 +48,7 @@
       },
       {
         "id": "signal-park-checkpoint",
-        "label": "Signal Park Checkpoint",
+        "label": "Morningside Park Checkpoint",
         "environment": "park",
         "targetMinutes": 13,
         "mapIds": [
@@ -74,7 +74,7 @@
       },
       {
         "id": "milady-relay-yard",
-        "label": "Milady Relay Yard",
+        "label": "Milady Suppression Center",
         "environment": "finale",
         "targetMinutes": 13,
         "mapIds": [
@@ -211,8 +211,8 @@
     },
     {
       "id": "public-version-card",
-      "name": "Public Version Card",
-      "label": "Public Version Card",
+      "name": "Dox Sheet",
+      "label": "Dox Sheet",
       "kind": "proof",
       "consumable": false,
       "objectiveId": "collect_starter_item",
@@ -234,16 +234,16 @@
       "kind": "receipt",
       "consumable": false,
       "objectiveId": "unlock_station_gate",
-      "description": "The Station Gate's printed classification of Bosch's public version. Like a key, but more embarrassing."
+      "description": "The Station Gate's printed classification of Bosch's leaked version. Like a key, but more embarrassing."
     },
     {
       "id": "damaged-public-version-card",
-      "name": "Damaged Public Version Card",
-      "label": "Damaged Public Version Card",
+      "name": "Damaged Dox Sheet",
+      "label": "Damaged Dox Sheet",
       "kind": "proof",
       "consumable": false,
       "objectiveId": "defeat_malady",
-      "description": "The public-version card after Malady cracks it into evidence. The damage makes the fake harder to file and easier to remember."
+      "description": "The dox sheet after Malady cracks it into evidence. The damage makes the fake harder to file and easier to remember."
     }
   ],
   "shop": {

@@ -179,7 +179,7 @@
         {
           "id": "dialogue.act1.civic.town_gate_brief_repeat.variant.before_refusal",
           "priority": 20,
-          "text": "The clerk points past the sign toward the humming pole. \"Your Public Version Card is loud now. Refuse it there, not in private. Signal Town believes whatever enough bored people watch.\"",
+          "text": "The clerk points past the sign toward the humming pole. \"Your Dox Sheet is loud now. Refuse it there, not in private. Morningside believes whatever enough bored people watch.\"",
           "flagsRequired": [
             "act1.received_town_gate_brief"
           ],
@@ -221,7 +221,7 @@
       "id": "dialogue.act1.civic.social_obstruction",
       "ownerId": "gate.act1.pressure_pocket.public_version_clique",
       "routeBeatId": "beat.act1.social_obstruction",
-      "speaker": "Public Version Clique",
+      "speaker": "Doxx Clique",
       "text": "Three kids and one humming pole offer Bosch a clean version of himself: no witness, no smudge, no argument, already signed. \"Let this one count,\" they say. Bosch holds up Sal's ugly receipt and refuses the shortcut in public. The pole flickers, then prints one unsure word: PRESENT.",
       "flagsSet": [
         "act1.resolved_social_obstruction",
@@ -234,7 +234,7 @@
         "steps": [
           {
             "action": "showDialogue",
-            "speaker": "Public Version Clique",
+            "speaker": "Doxx Clique",
             "textRef": "text",
             "windowPresetId": "window.dialogue.standard"
           },
@@ -256,7 +256,7 @@
       "id": "dialogue.act1.civic.social_obstruction_resolved",
       "ownerId": "gate.act1.pressure_pocket.public_version_clique",
       "routeBeatId": "beat.act1.social_obstruction",
-      "speaker": "Public Version Clique",
+      "speaker": "Doxx Clique",
       "text": "The clique leaves a careful gap around Bosch now. Their clean form is still there, but Sal's receipt is stapled across the part that tried to count for him.",
       "flagsRequired": [
         "act1.resolved_social_obstruction"
@@ -284,7 +284,7 @@
         "steps": [
           {
             "action": "showDialogue",
-            "speaker": "Public Version Clique",
+            "speaker": "Doxx Clique",
             "textRef": "text",
             "windowPresetId": "window.dialogue.standard"
           }
@@ -295,8 +295,8 @@
       "id": "dialogue.act1.civic.social_obstruction_blocked",
       "ownerId": "gate.act1.pressure_pocket.public_version_clique",
       "routeBeatId": "beat.act1.social_obstruction",
-      "speaker": "Public Version Clique",
-      "text": "The clique has Bosch boxed in, but the refusal has no weight yet. They want Sal's prepared proof before anyone can argue with the easy public version.",
+      "speaker": "Doxx Clique",
+      "text": "The clique has Bosch boxed in, but the refusal has no weight yet. They want Sal's prepared proof before anyone can argue with the easy leaked version.",
       "flagsRequired": [],
       "flagsSet": [],
       "windowPresetId": "window.dialogue.standard",
@@ -304,7 +304,7 @@
         {
           "id": "dialogue.act1.civic.social_obstruction_blocked.variant.missing_proof",
           "priority": 20,
-          "text": "The clique holds up a spotless public-version form. Bosch can object, but without Sal's prepared proof it sounds like one rumor trying to outshout another.",
+          "text": "The clique holds up a spotless dox sheet. Bosch can object, but without Sal's prepared proof it sounds like one rumor trying to outshout another.",
           "flagsRequired": [],
           "flagsAbsent": [
             "act1.proof_object_prepared"
@@ -332,7 +332,7 @@
         "steps": [
           {
             "action": "showDialogue",
-            "speaker": "Public Version Clique",
+            "speaker": "Doxx Clique",
             "textRef": "text",
             "windowPresetId": "window.dialogue.standard"
           }
@@ -344,7 +344,7 @@
       "ownerId": "gate.act1.station.classifier",
       "routeBeatId": "beat.act1.station_classifier",
       "speaker": "Gate",
-      "text": "The station gate chews through Sal's smudged receipt, the public refusal, and both park reports. It prints a Gate Classifier Receipt with two lines: SOURCE CLAIMANT PRESENT. PUBLIC VERSION CONTESTED BY BODY ON ROUTE.",
+      "text": "The station gate chews through Sal's smudged receipt, the public refusal, and both park reports. It prints a Gate Classifier Receipt with two lines: SOURCE CLAIMANT PRESENT. DOX SHEET CONTESTED BY BODY ON ROUTE.",
       "flagsSet": [
         "act1.boss_gate_unlocked",
         "act1.route_compliance_processed"
@@ -354,7 +354,7 @@
         {
           "id": "dialogue.act1.station.classifier_receipt.variant.ready_to_print",
           "priority": 10,
-          "text": "The gate accepts the damaged trail over the clean card. It prints SOURCE CLAIMANT PRESENT, then adds a smaller line: PUBLIC VERSION CONTESTED.",
+          "text": "The gate accepts the damaged trail over the clean card. It prints SOURCE CLAIMANT PRESENT, then adds a smaller line: DOX SHEET CONTESTED.",
           "flagsRequired": [
             "act1.proof_object_prepared",
             "act1.received_town_gate_brief",
@@ -429,7 +429,7 @@
         {
           "id": "dialogue.act1.station.classifier_blocked.variant.clique_unresolved",
           "priority": 20,
-          "text": "The gate prints PUBLIC VERSION UNCONTESTED. Refuse the clique's easy Bosch where the town can see it.",
+          "text": "The gate prints DOX SHEET UNCONTESTED. Refuse the clique's easy Bosch where the town can see it.",
           "flagsRequired": [
             "act1.proof_object_prepared",
             "act1.received_town_gate_brief"
@@ -498,7 +498,7 @@
       "ownerId": "hotspot.act1.station_gate.refuse_processing",
       "routeBeatId": "beat.act1.refuse_processing",
       "speaker": "Compliance",
-      "text": "Compliance slides a clean Public Version Card across the audit window. It would file faster, travel lighter, and never argue. Bosch keeps the damaged card instead and refuses the processing stamp. The route past the gate stops pretending it was closed for safety.",
+      "text": "Compliance slides a clean Dox Sheet across the audit window. It would file faster, travel lighter, and never argue. Bosch keeps the damaged card instead and refuses the processing stamp. The route past the gate stops pretending it was closed for safety.",
       "flagsSet": [
         "act1.refused_processing",
         "act1.complete"

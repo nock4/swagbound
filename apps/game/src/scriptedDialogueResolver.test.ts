@@ -24,13 +24,13 @@ describe("resolveScriptedDialoguePages", () => {
 
   it("resolves byTextPointer library refs through the dialogue library", () => {
     const pages = resolveScriptedDialoguePages(
-      customDialogue({ "data_20.l_0xc65efc": { ref: "public-version-clique" } }),
-      dialogueLibrary({ "public-version-clique": ["Public Version Clique."] }),
+      customDialogue({ "data_20.l_0xc65efc": { ref: "doxx-clique" } }),
+      dialogueLibrary({ "doxx-clique": ["Doxx Clique."] }),
       syntheticScripts("data_20.l_0xc65efc", "Frank fallback."),
       "data_20.l_0xc65efc"
     );
 
-    expect(pages.map((page) => page.text)).toEqual(["Public Version Clique."]);
+    expect(pages.map((page) => page.text)).toEqual(["Doxx Clique."]);
   });
 
   it("falls back to EB script text when the ref has no byTextPointer override", () => {

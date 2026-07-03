@@ -150,7 +150,7 @@ Current story-trigger battle gates:
 
 | Trigger | Battle group | Story role | Flags set |
 |---|---:|---|---|
-| `signal-town-card-clique` | 448 | public-version clique / local Act-1 confrontation | `signal:clique_cleared` |
+| `signal-town-card-clique` | 448 | doxx clique / local Act-1 confrontation | `signal:clique_cleared` |
 | `relay-gate-returnless-king` | 36 | civic authority / classification gate | `signal:route_open` |
 | `first-threshold-malady` | 450 | first threshold / Malady symptom boss | `signal:threshold_cleared`, `source:first_witness` |
 
@@ -158,7 +158,7 @@ For Act 1, the intended boss/major story enemies are:
 
 - **Malady**: primary Act-1 threshold boss / Milady-world infection symptom
 - **Returnless King**: civic authority / road-opening story boss
-- **Public Version Clique / card-clique encounter**: local public-version gang function, currently battle group 448
+- **Doxx Clique / card-clique encounter**: local doxx gang function, currently battle group 448
 
 Check `content/battle-rules.json` for unescapable groups before deciding whether a battle should behave as boss-like.
 
@@ -203,13 +203,13 @@ Historical Act-1 placement board:
 
 | Encounter | Role | Placement intent |
 |---|---|---|
-| `question-marketeer` | early public demand | Signal Town pressure where Bosch is made to answer the wrong question loudly |
-| `mirror-glitch` | false-signal proof | early false public version and repeated afterimage pressure |
+| `question-marketeer` | early public demand | Morningside pressure where Bosch is made to answer the wrong question loudly |
+| `mirror-glitch` | false-signal proof | early false leaked version and repeated afterimage pressure |
 | `sawtooth-bun` | low-route friction | early ordinary-strange route hazard |
 | `cinder-cap` | hot feedback | signal burn and feedback pressure before Relay logic hardens |
-| `park-static` | witness pressure | Signal Park public gaze |
+| `park-static` | witness pressure | Morningside Park public gaze |
 | `tunnel-hiss` | decree/classification pressure | Underpass/Relay approach pressure |
-| `malady` | Milady-world infection | hostile public-version disease, not generic static |
+| `malady` | Milady-world infection | hostile doxx disease, not generic static |
 | `tape-code` | copied correction loop | Bosch's correction replayed wrong until official |
 | `tojiba-disc` | proof-media registry | witness marks, scanning, filing, half-written records |
 

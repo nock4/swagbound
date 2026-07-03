@@ -17,8 +17,8 @@
       "label": "Keep The Source",
       "categoryId": "route",
       "categoryLabel": "Route",
-      "description": "Wake up, prove the public Bosch arrived before the real one, and refuse the civic route that wants the easier version.",
-      "detail": "Home establishes the anomaly, town witnesses make it social, Sal makes it portable, the Public Version Clique makes it hostile, the parks make it contested, and the Station Gate turns it into processing.",
+      "description": "Wake up, prove the leaked Bosch arrived before the real one, and refuse the civic route that wants the easier version.",
+      "detail": "Home establishes the anomaly, town witnesses make it social, Sal makes it portable, the Doxx Clique makes it hostile, the parks make it contested, and the Station Gate turns it into processing.",
       "status": "active",
       "badge": "Active",
       "updatedAt": "Opened before Bosch woke up"
@@ -45,7 +45,7 @@
         {
           "id": "handshake",
           "lines": [
-            "Bosch, the route is not neutral. A public version of you is already moving through town ahead of your body, and town services are starting to treat him as convenient."
+            "Bosch, the route is not neutral. A leaked version of you is already moving through town ahead of your body, and town services are starting to treat him as convenient."
           ],
           "nextNodeId": "prompt"
         },
@@ -86,7 +86,7 @@
         {
           "id": "briefing",
           "lines": [
-            "Route note transmitted. Journal updated. Move before the public version learns your morning routine."
+            "Route note transmitted. Journal updated. Move before the leaked version learns your morning routine."
           ],
           "outcomeId": "route-briefed"
         }

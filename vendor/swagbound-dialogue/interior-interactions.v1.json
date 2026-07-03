@@ -19,14 +19,14 @@
       "id": "bosch-upstairs-hall-biscuit",
       "default_target": "hall-landing",
       "speaker": "Biscuit",
-      "text": "Biscuit blocks the upstairs landing just long enough to point at the side room. Downstairs, three phones buzz and stop at the exact same time. \"If your public version is already outside, bring something real from inside. Weird guide rule. I do not make the rules.\"",
+      "text": "Biscuit blocks the upstairs landing just long enough to point at the side room. Downstairs, three phones buzz and stop at the exact same time. \"If your leaked version is already outside, bring something real from inside. Weird guide rule. I do not make the rules.\"",
       "flags": ["act1.checked_upstairs_hall", "intro.upstairs_hall_reached"]
     },
     "bosch-side-room-v0": {
       "id": "bosch-side-room-starter-cache",
       "default_target": "starter-cache",
       "speaker": "Bosch",
-      "text": "Behind the storage boxes: the Route Brief backup, a Practice Bat, and a Public Version Card with Bosch's smile printed a little wrong. The bat is something solid. The card is something social. The backup brief has three margin notes in handwriting Bosch does not recognize: keep your proof warm, keep your route local, do not let a crowd finish your sentence. Together they feel like a starter kit for arguing with a town.",
+      "text": "Behind the storage boxes: the Route Brief backup, a Practice Bat, and a Dox Sheet with Bosch's smile printed a little wrong. The bat is something solid. The card is something social. The backup brief has three margin notes in handwriting Bosch does not recognize: keep your proof warm, keep your route local, do not let a crowd finish your sentence. Together they feel like a starter kit for arguing with a town.",
       "flags": ["act1.checked_side_room", "act1.route_brief_acquired", "act1.practice_bat_acquired", "act1.public_version_card_acquired"],
       "completes_objective": "collect_starter_item"
     },
@@ -49,7 +49,7 @@
       "id": "corner-shop-proof-counter",
       "default_target": "shop-counter",
       "speaker": "Sal",
-      "text": "Sal slides Bosch's Public Version Card under the Tojiba kiosk scanner, then stops the machine before it finishes the sentence. \"Hot Wallet mint, witness packet, park route. The town loves a clean shortcut, so we give it a receipt with smudges it cannot ignore.\" The kiosk spits out a proof token, a warm charm echo, and a gum coupon stamped NOT ID.",
+      "text": "Sal slides Bosch's Dox Sheet under the Tojiba kiosk scanner, then stops the machine before it finishes the sentence. \"Hot Wallet mint, witness packet, park route. The town loves a clean shortcut, so we give it a receipt with smudges it cannot ignore.\" The kiosk spits out a proof token, a warm charm echo, and a gum coupon stamped NOT ID.",
       "flags": ["act1.checked_corner_shop_counter", "act1.proof_object_prepared"],
       "completes_objective": "prepare_proof"
     },
@@ -66,7 +66,7 @@
       "id": "guardian-proof-token-brief",
       "default_target": "guardian",
       "speaker": "Guardian",
-      "text": "Guardian has three receipt slips clipped to a fridge magnet and none of them agree. \"{heroName}, take the Proof-Token Charm before you let the sidewalk count you. I packed snacks, not destiny. If the town wants a public version, make it wait behind the person with keys, shoes, and a pulse.\"",
+      "text": "Guardian has three receipt slips clipped to a fridge magnet and none of them agree. \"{heroName}, take the Proof-Token Charm before you let the sidewalk count you. I packed snacks, not destiny. If the town wants a leaked version, make it wait behind the person with keys, shoes, and a pulse.\"",
       "flags": ["intro.guardian_proof_token_briefed"]
     },
     "bosch-main-room-v0:cousin": {

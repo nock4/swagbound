@@ -947,7 +947,7 @@ The UX, map, and parity-sweep auditors ran once the spend limit was raised, agai
 - **files:** `apps/game/src/chunkedWorldScene.ts`
 - **evidence:** handlePhoneServiceAction (lines 2936-2950): 'mom' → static 'Mom says you're doing great.'; 'dad' → save with 'Dad saved your game.' — no exp/level recap, no homesickness cure hook. No homesickness status exists anywhere (statusEffects.ts model: poisoned/paralyzed/asleep/confused/shielded only).
 - **EB parity note:** EB: Ness periodically becomes Homesick (battle turns lost to daydreaming) and calling Mom cures it; Dad recaps exp gained and needed-to-next-level when you call to save. Confidence: high on both mechanics (well-documented). Whether solo Bosch should inherit homesickness is a Swagbound voice/design call.
-- **recommendation:** At minimum give Dad the exp-recap lines (data is available in partyState). Homesickness is a creative call — it is very Ness-specific flavor that could translate well to the Bosch 'public version' arc.
+- **recommendation:** At minimum give Dad the exp-recap lines (data is available in partyState). Homesickness is a creative call — it is very Ness-specific flavor that could translate well to the Bosch 'leaked version' arc.
 
 #### F86 · Minor field/battle presentation trivia (grouped): ATM fixed denominations vs EB digit entry; battle command grid order differs from EB; hotel/hospital lack EB presentation beats; victory money line phrasing
 
