@@ -931,7 +931,10 @@ export function buildBinderScreens(binder: BinderViewModel): MenuScreen[] {
       title: region.label,
       items: (binder.cardsByRegion[region.id] ?? []).map((card) => ({
         id: card.id,
-        label: fitMenuLabel(card.label),
+        // Tight cap so one card panel fits inside 512px alongside its parent
+        // list without overflowing (long silhouette hints used to blow the
+        // panel past the screen edge and collide with the region column).
+        label: fitMenuLabel(card.label, 24),
         enabled: card.owned,
         ...(card.owned ? { actionId: buildBinderCardActionId(card.cardId) } : {})
       })),

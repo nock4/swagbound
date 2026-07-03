@@ -233,7 +233,14 @@ export class UiScene extends Phaser.Scene {
     this.binderOverlayClose = onClose;
     this.binderOverlayTextureKey = `binder-overlay-${card.id}`;
     this.drawBinderCardOverlay(card);
-    this.input.keyboard?.once("keydown", () => this.closeBinderCardOverlay(true));
+    // Register the "any key closes" listener on the NEXT frame — otherwise the
+    // same keydown that opened the overlay (dispatched to this scene too) closes
+    // it instantly, since the confirm fires on the world scene's keyboard.
+    this.time.delayedCall(150, () => {
+      if (this.binderOverlayClose) {
+        this.input.keyboard?.once("keydown", () => this.closeBinderCardOverlay(true));
+      }
+    });
     if (!this.textures.exists(this.binderOverlayTextureKey)) {
       const loadingKey = this.binderOverlayTextureKey;
       this.load.image(loadingKey, card.image.startsWith("/") ? card.image : `/${card.image}`);
@@ -432,8 +439,14 @@ export class UiScene extends Phaser.Scene {
       return;
     }
 
+    // Drop leading panels that would overflow the screen so the deepest (active)
+    // panel always fits without overlapping its parents. Cascading works for the
+    // shallow 2-deep menus; the binder's 3-deep drill-down with wide labels
+    // ("LITTLE SWAG WORLD - 0/18") overflows 512px and used to collide.
+    const visibleScreens = this.fitMenuScreens(screens);
+
     let nextX = MENU_LEFT;
-    screens.forEach((screen) => {
+    visibleScreens.forEach((screen) => {
       const rect = this.menuRect(screen, nextX);
       const { x, y, width: boxWidth, height: boxHeight } = rect;
       const textInset = MENU_HORIZONTAL_PADDING;
@@ -477,8 +490,33 @@ export class UiScene extends Phaser.Scene {
           fixedWidth: textWidth
         }).setDepth(selected ? 17 : 15));
       });
-      nextX = Math.min(this.scale.width - MENU_RIGHT_MARGIN - 64, x + boxWidth + MENU_GAP);
+      nextX = x + boxWidth + MENU_GAP;
     });
+  }
+
+  /** Keep the longest suffix of the screen stack whose cascaded panels fit on screen. */
+  private fitMenuScreens(screens: MenuRenderScreen[]): MenuRenderScreen[] {
+    if (screens.length <= 1) {
+      return screens;
+    }
+    const rightEdge = this.scale.width - MENU_RIGHT_MARGIN;
+    for (let dropped = 0; dropped < screens.length - 1; dropped += 1) {
+      const candidate = screens.slice(dropped);
+      let x = MENU_LEFT;
+      let fits = true;
+      for (const screen of candidate) {
+        const rect = this.menuRect(screen, x);
+        if (rect.x + rect.width > rightEdge) {
+          fits = false;
+          break;
+        }
+        x = rect.x + rect.width + MENU_GAP;
+      }
+      if (fits) {
+        return candidate;
+      }
+    }
+    return screens.slice(screens.length - 1);
   }
 
   private drawBinderCardOverlay(card: BinderOverlayCard): void {

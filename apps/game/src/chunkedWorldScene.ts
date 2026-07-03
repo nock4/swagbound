@@ -6505,6 +6505,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       partyState: this.partyState.counts(),
       overworldHud: this.overworldStatusHud(),
       shopOpen: this.menuState.open && this.activeShopStoreId !== undefined,
+      binderOverlayOpen: this.binderOverlayOpen,
       ...(this.activeShopStoreId !== undefined ? { activeShopStoreId: this.activeShopStoreId } : {}),
       menu: this.menuDebugState(),
       menuRenderStack: this.menuRenderStack(),

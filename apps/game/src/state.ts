@@ -392,6 +392,7 @@ export type OverworldDebug = {
   };
   overworldHud?: OverworldStatusHudView;
   shopOpen?: boolean;
+  binderOverlayOpen?: boolean;
   activeShopStoreId?: number;
   menu?: MenuDebugState;
   menuRenderStack?: MenuRenderScreen[];
