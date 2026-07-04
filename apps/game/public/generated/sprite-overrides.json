@@ -11855,7 +11855,7 @@
       "originY": 0.5
     },
     "23": {
-      "image": "assets/swagbound/enemy/lsw-signal-stutter-battle-v0.png",
+      "image": "assets/swagbound/enemy/promo-enemy-pick-me-ports-003.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -11903,7 +11903,7 @@
       "originY": 0.5
     },
     "33": {
-      "image": "assets/swagbound/enemy/tojiba-disc-battle-v1-extracted-crop.png",
+      "image": "assets/swagbound/enemy/promo-enemy-vintage-warriors-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -12035,7 +12035,7 @@
       "originY": 0.5
     },
     "61": {
-      "image": "assets/swagbound/enemy/pfp-edible-demon-battle-v1-gpt2-extracted-crop.png",
+      "image": "assets/swagbound/enemy/promo-enemy-bando-kids-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -12413,7 +12413,7 @@
       "originY": 0.5
     },
     "136": {
-      "image": "assets/swagbound/enemy/lsw-cinder-cap-battle-v0.png",
+      "image": "assets/swagbound/enemy/promo-enemy-bando-kids-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -13189,7 +13189,7 @@
       "originY": 1
     },
     "33": {
-      "image": "assets/swagbound/overworld-npc/tojiba-disc.png",
+      "image": "assets/swagbound/overworld-npc/promo-enemy-vintage-warriors-004-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -13651,7 +13651,7 @@
       "originY": 1
     },
     "61": {
-      "image": "assets/swagbound/overworld-npc/edible-demon.png",
+      "image": "assets/swagbound/overworld-npc/promo-enemy-bando-kids-001-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -14993,7 +14993,7 @@
       "originY": 1
     },
     "136": {
-      "image": "assets/swagbound/overworld-npc/cinder-cap.png",
+      "image": "assets/swagbound/overworld-npc/promo-enemy-bando-kids-002-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15632,6 +15632,28 @@
     },
     "227": {
       "image": "assets/swagbound/overworld-npc/faithful-servants.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "23": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-pick-me-ports-003-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
