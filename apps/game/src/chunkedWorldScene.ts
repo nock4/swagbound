@@ -3,6 +3,7 @@ import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSource
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
 import { BossPlacementEditor, isBossEditEnabled, type BossEditorEntry, type BossFacing } from "./bossPlacementEditor";
+import { CollisionOverrideEditor, isCollisionEditEnabled } from "./collisionOverrideEditor";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -604,6 +605,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private poisonHpLost = 0;
   private bossGateActors = new Map<string, BossGateRuntime>();
   private bossEditor?: BossPlacementEditor;
+  private collisionEditor?: CollisionOverrideEditor;
+  /** solidRows snapshot (post-authored-overrides) the paint editor repaints from. */
+  private editorBaseSolidRows?: string[];
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
   private overworldEnemySeq = 0;
   private overworldEnemySpawnCooldownMs = 0;
@@ -831,6 +835,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.unregisterCollisionDebugGlobals();
       this.bossEditor?.destroy();
       this.bossEditor = undefined;
+      this.collisionEditor?.destroy();
+      this.collisionEditor = undefined;
+      this.editorBaseSolidRows = undefined;
     });
 
     this.cursors = this.input.keyboard?.createCursorKeys();
@@ -871,6 +878,30 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.input.keyboard?.on("keydown-G", () => this.bossEditor?.placeSelectedAtPlayer());
       this.input.keyboard?.on("keydown-F", () => this.bossEditor?.cycleFacing());
       this.input.keyboard?.on("keydown-E", () => this.bossEditor?.exportPlacements());
+    }
+
+    // Collision paint editor (?collisionedit=1): author solid-override rects on the
+    // live grid. See collisionOverrideEditor.ts for the legend. Forces the collision
+    // overlay on; painted rects take effect immediately (walk against them to test).
+    if (isCollisionEditEnabled(globalThis.location?.search)) {
+      this.editorBaseSolidRows = [...this.solidRows];
+      this.collisionEditor = new CollisionOverrideEditor({
+        getPlayerPosition: () => ({ x: Math.round(this.playerState.x), y: Math.round(this.playerState.y) }),
+        cellSize: () => this.collisionCellSize,
+        gridSize: () => ({ width: this.collisionWidth, height: this.collisionHeight }),
+        authoredRects: () => this.data_.collisionOverrides?.solids ?? [],
+        applySessionRects: (rects) => {
+          const base = this.editorBaseSolidRows;
+          if (!base) return;
+          for (let i = 0; i < base.length; i += 1) this.solidRows[i] = base[i];
+          applySolidOverrideRects(this.solidRows, rects, this.collisionCellSize);
+          this.updateCollisionOverlay();
+        }
+      });
+      // Keys are handled by the editor's own window listener (not Phaser scene
+      // bindings): the scene can restart before shutdown runs, and per-scene
+      // bindings would then stack once per orphaned instance.
+      this.setCollisionOverlayEnabled(true);
     }
 
     this.load.on("filecomplete", (key: string) => {
@@ -1573,6 +1604,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     this.drawDoorOverlay(graphics, rect, range);
+
+    // Paint-editor cursor (white) + pending rect anchor (amber).
+    const cursor = this.collisionEditor?.cursor();
+    if (cursor) {
+      graphics.lineStyle(1, 0xffffff, 1);
+      graphics.strokeRect(cursor.cellX * cellSize + 0.5, cursor.cellY * cellSize + 0.5, cellSize - 1, cellSize - 1);
+    }
+    const anchor = this.collisionEditor?.rectAnchor();
+    if (anchor) {
+      graphics.lineStyle(1, 0xffcc66, 1);
+      graphics.strokeRect(anchor.cellX * cellSize + 0.5, anchor.cellY * cellSize + 0.5, cellSize - 1, cellSize - 1);
+    }
   }
 
   private ensureCollisionOverlay(): Phaser.GameObjects.Graphics {
@@ -5017,6 +5060,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publishBossGateDebug();
     if (editing) {
       this.bossEditor?.refresh();
+      this.collisionEditor?.refresh();
       return false;
     }
     if (!this.overworldPlayActive() || this.encounterCooldownMs > 0) {
