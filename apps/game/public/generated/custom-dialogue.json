@@ -5,7 +5,7 @@
     "1": {
       "pages": [
         "A kid with a laminated smile steps into Bosch's lane before Bosch has finished choosing it.",
-        "\"Hey. You want in? Membership's free — the read is what costs you. We already have a version of you that joined. You're just here to sign for it.\""
+        "\"Hey. You want in? Membership's free \u2014 the read is what costs you. We already have a version of you that joined. You're just here to sign for it.\""
       ]
     },
     "2": {
@@ -26,7 +26,7 @@
     },
     "5": {
       "pages": [
-        "\"To tell you the truth — and the truth's been getting expensive — I don't remember saying half of what the town has me saying.\"",
+        "\"To tell you the truth \u2014 and the truth's been getting expensive \u2014 I don't remember saying half of what the town has me saying.\"",
         "\"My leaked version's a better neighbor than I am. Pays his dues, waves first. I just live here.\""
       ]
     },
@@ -69,7 +69,7 @@
     },
     "12": {
       "pages": [
-        "The machine waits the way machines wait — patient, incurious, certain you'll comply.",
+        "The machine waits the way machines wait \u2014 patient, incurious, certain you'll comply.",
         "\"Insert your card. We'll take it from here. We always do.\""
       ]
     },
@@ -236,28 +236,28 @@
         "\"Some things you see once and spend the rest of your life unseeing.\""
       ]
     },
-	    "58": {
-	      "pages": [
-	        "\"One night here and the whole party gets re-synced. Anyone who fainted, restored.\"",
-	        "\"Runs you $100. Sleep's the only clean transaction left.\"",
-	        "\"Morning, champ. Everyone's topped off. Door filed you out that way.\""
-	      ],
-	      "service": "hotel",
-	      "cost": 100
-	    },
+    "58": {
+      "pages": [
+        "\"One night here and the whole party gets re-synced. Anyone who fainted, restored.\"",
+        "\"Runs you $100. Sleep's the only clean transaction left.\"",
+        "\"Morning, champ. Everyone's topped off. Door filed you out that way.\""
+      ],
+      "service": "hotel",
+      "cost": 100
+    },
     "59": {
       "pages": [
         "\"Rate's steep. Clean sheets, locked door, a phone that tells the town you survived.\"",
         "\"People pay extra when the confusion's outside, counting heads.\""
       ]
     },
-	    "60": {
-	      "pages": [
-	        "The receiver clicks, the small sound of an institution recognizing a hand.",
-	        "\"Bosch gets to be a voice in another place before he's a body there.\""
-	      ],
-	      "service": "phone"
-	    },
+    "60": {
+      "pages": [
+        "The receiver clicks, the small sound of an institution recognizing a hand.",
+        "\"Bosch gets to be a voice in another place before he's a body there.\""
+      ],
+      "service": "phone"
+    },
     "62": {
       "pages": [
         "He clocks Bosch the way an actuary clocks a man on a ladder.",
@@ -538,13 +538,13 @@
         "Pay the fee, we hold the body on file till the person comes back to claim it."
       ]
     },
-	    "111": {
-	      "pages": [
-	        "Don't laugh. I'm a healer. Licensed by nobody, trusted by the desperate.",
-	        "Hospital fixes the wounds with names. I take the ones too embarrassing to name."
-	      ],
-	      "service": "hospital"
-	    },
+    "111": {
+      "pages": [
+        "Don't laugh. I'm a healer. Licensed by nobody, trusted by the desperate.",
+        "Hospital fixes the wounds with names. I take the ones too embarrassing to name."
+      ],
+      "service": "hospital"
+    },
     "112": {
       "pages": [
         "Turned to stone, turned to mushroom. Conditions they can spell but won't forgive.",
@@ -563,13 +563,13 @@
         "That's what the lobby says. Lobbies make waiting sound like a choice."
       ]
     },
-	    "115": {
-	      "pages": [
-	        "Intake printer blinks: ROUTE FATIGUE ACCEPTED.",
-	        "Clean breath. I can reset your meters. Not your story. Nobody resets that."
-	      ],
-	      "service": "hospital"
-	    },
+    "115": {
+      "pages": [
+        "Intake printer blinks: ROUTE FATIGUE ACCEPTED.",
+        "Clean breath. I can reset your meters. Not your story. Nobody resets that."
+      ],
+      "service": "hospital"
+    },
     "116": {
       "pages": [
         "\"A mouse put me here. A small mouse.\"",
@@ -827,7 +827,7 @@
     "157": {
       "pages": [
         "The cop runs the same line on a loop, a stamp pressed until the ink gives out.",
-        "\"Clear out. Get out of my way. Clear out. Get out of my way. Clear out. Of way out get my —\"",
+        "\"Clear out. Get out of my way. Clear out. Get out of my way. Clear out. Of way out get my \u2014\"",
         "\"Whoops. My mistake. I mean: get out of my way.\""
       ]
     },
@@ -1186,8 +1186,8 @@
     "439": {
       "pages": [
         "The kid wears his importance like a borrowed coat two sizes too generous.",
-        "\"You're here to bug me. Call me Master Pokey — Carpainter stamped me important, made it official in Happy-Happyism. You should join. You won't.\"",
-        "\"I'm glad I signed. I won't fight you myself — that's what these guys are filed under. Later, potater.\""
+        "\"You're here to bug me. Call me Master Pokey \u2014 Carpainter stamped me important, made it official in Happy-Happyism. You should join. You won't.\"",
+        "\"I'm glad I signed. I won't fight you myself \u2014 that's what these guys are filed under. Later, potater.\""
       ]
     },
     "443": {
@@ -1892,9 +1892,9 @@
     },
     "1270": {
       "pages": [
-        "\"Giygas attacks from the past. To reach him you warp there — through the Phase Distorter 3. But the machine won't carry the living. Flesh dies in the crossing. That's not cruelty. That's the spec.\"",
+        "\"Giygas attacks from the past. To reach him you warp there \u2014 through the Phase Distorter 3. But the machine won't carry the living. Flesh dies in the crossing. That's not cruelty. That's the spec.\"",
         "\"So we move only the program. Your spirit goes into a robot and the robot goes back. Your body stays here, signed out and waiting, while the better, quieter version of you does the fighting.\"",
-        "\"I can't promise the spirit returns. The four of you are the chosen ones — which is the town's polite word for the ones who don't get to decline. Still go? Yes  No\""
+        "\"I can't promise the spirit returns. The four of you are the chosen ones \u2014 which is the town's polite word for the ones who don't get to decline. Still go? Yes  No\""
       ]
     },
     "1271": {
@@ -1989,12 +1989,12 @@
     },
     "1292": {
       "pages": [
-	        "The voice arrives before the body does, patient as a thing that has waited entire civilizations for the appointment.",
-	        "\"You finally came. And you finally talk to me. Good. Take notes if you have to. You're the chosen one. Your destiny isn't yours alone — it belongs to the whole universe, and one day every version of you across it will overlap into one.\"",
-	        "\"Remember Giant Step in Onett? That was one of Your Sanctuaries. A power spot. A monster guarded it, swollen on the place's own strength, and you put it down.\"",
-	        "\"There are eight. Reach all eight, let the Sound Stone record every melody, and the last door opens — Your World, finally visible.\""
-	      ]
-	    },
+        "The voice arrives before the body does, patient as a thing that has waited entire civilizations for the appointment.",
+        "\"You finally came. And you finally talk to me. Good. Take notes if you have to. You're the chosen one. Your destiny isn't yours alone \u2014 it belongs to the whole universe, and one day every version of you across it will overlap into one.\"",
+        "\"Remember Giant Step in Onett? That was one of Your Sanctuaries. A power spot. A monster guarded it, swollen on the place's own strength, and you put it down.\"",
+        "\"There are eight. Reach all eight, let the Sound Stone record every melody, and the last door opens \u2014 Your World, finally visible.\""
+      ]
+    },
     "1293": {
       "pages": [
         "The Tenda nods at the bird like a coworker who started speaking in code.",
@@ -2079,6 +2079,225 @@
     "1522": {
       "pages": [
         "\"Something's inside.\" Handed over like a receipt for a thing he never bought."
+      ]
+    },
+    "839": {
+      "pages": [
+        "So you're a fan of these five. Sweet. Let me file that.",
+        "Here's the read: this band owes me a million. I hold the paper.",
+        "Their masters, their name, their whole fit? Signed over to me. Provenance says so.",
+        "Cry about it to the record. The record says I'm the claimant."
+      ]
+    },
+    "842": {
+      "pages": [
+        "Oh. You're a little kid with a phone out.",
+        "No signatures. Every signed thing leaks, and then it's the source, not me.",
+        "I'm too busy getting witnessed to be witnessed by you."
+      ]
+    },
+    "843": {
+      "pages": [
+        "Filed under again. The venue owner doxxed the whole set out from under us.",
+        "We're stuck in here on a phony contract. Somebody else holds our provenance now."
+      ]
+    },
+    "844": {
+      "pages": [
+        "We know how to make the sound. We never learned to hold the rights.",
+        "Do-wap, do do wop. That part's still ours. For now."
+      ]
+    },
+    "845": {
+      "pages": [
+        "We owe you so much it's on the record somewhere.",
+        "Sorry. Truly. You're a better claimant than the one we've got."
+      ]
+    },
+    "846": {
+      "pages": [
+        "We're so helpless. Every version of us is somebody else's file.",
+        "Really helpless, and unprovenanced... hyuk hyuk hyuk."
+      ]
+    },
+    "847": {
+      "pages": [
+        "You want the read on Monotoli? You'll need us to get you filed in.",
+        "Don't ask how I know. Call it a hunch that leaked."
+      ]
+    },
+    "848": {
+      "pages": [
+        "Want a ticket to the set? Scanned at the kiosk, witnessed at the door.",
+        "Yes / No"
+      ]
+    },
+    "849": {
+      "pages": [
+        "..."
+      ]
+    },
+    "850": {
+      "pages": [
+        "Thanks. You're on the record now.",
+        "Hurry, claimant. The set starts any second and the unlisted cut waits for no one."
+      ]
+    },
+    "851": {
+      "pages": [
+        "I heard the source herself showed up at the set. In person. Unmistakable.",
+        "I was in the bathroom. Missed the one moment that couldn't be bootlegged.",
+        "I'll hate bathrooms for the rest of my documented life."
+      ]
+    },
+    "852": {
+      "pages": [
+        "Wait, the five don't play here anymore...?",
+        "I should dump this unwitnessed excuse of a man and go chase their leaked cut full-time."
+      ]
+    },
+    "906": {
+      "pages": [
+        "The Museum of Fakes doesn't own a single original. Everything on these walls is a replica.",
+        "Everyone knows that going in. It's on the wall-text, technically.",
+        "If you came looking for the source, you came to the wrong kiosk. The source doesn't scan here."
+      ]
+    },
+    "907": {
+      "pages": [
+        "Real ones don't scan. The replicas do. Make of that what you will."
+      ]
+    },
+    "908": {
+      "pages": [
+        "I'm glad someone got witnessed today. Lately the room stays empty.",
+        "...I'm the curator. Or the claimant to the title, anyway.",
+        "Nobody's disputed my provenance yet, so I keep the plaques honest and the fakes labeled as fakes."
+      ]
+    },
+    "909": {
+      "pages": [
+        "Every piece in here is filed under 'attributed to.' We stopped saying 'by' a long time ago."
+      ]
+    },
+    "910": {
+      "pages": [
+        "I think about how many originals got lost before anyone bothered to record them.",
+        "Would've loved to witness one un-leaked, un-copied, before it went to replica like the rest."
+      ]
+    },
+    "911": {
+      "pages": [
+        "Massive!... Not you. I mean the fake. The replica's honestly bigger than the thing it copies.",
+        "That's the joke of the place: the fit outgrows the source."
+      ]
+    },
+    "912": {
+      "pages": [
+        "This place should sell merch off the exhibits. Slap a fake on a fit and sell the fit.",
+        "At least then the replica would admit what it is."
+      ]
+    },
+    "913": {
+      "pages": [
+        "The plaque hedges every claim. 'Believed to be.' 'Possibly.' Nothing here is on the record for real."
+      ]
+    },
+    "920": {
+      "pages": [
+        "Hardware and tools. Everything on this counter has a serial number, a provenance, a paper trail.",
+        "You want the real one or your leaked version? The real one costs more, and it scans."
+      ]
+    },
+    "921": {
+      "pages": [
+        "Tickets for the Chaos Theater? The set's already been bootlegged, but the room hasn't.",
+        "Buy the ticket and you're witnessed in the room. Skip it and you only ever get somebody's leaked cut.",
+        "So. You want to be on the record, or not?"
+      ]
+    },
+    "924": {
+      "pages": [
+        "Everything in here is priced by your fit, and my fit is not reading well today.",
+        "Maybe I go back to my hometown. Nobody kiosk-scans you there. Nobody files what you can't afford."
+      ]
+    },
+    "927": {
+      "pages": [
+        "Mumble, mumble... I'm slammed. Three claimants, two returns, one dispute.",
+        "Don't get yourself filed as loitering, kid. Move along."
+      ]
+    },
+    "928": {
+      "pages": [
+        "So you ditched too, huh. Neither of us is where the record says we should be right now.",
+        "Relax. Nobody's witnessing us in the tools aisle."
+      ]
+    },
+    "929": {
+      "pages": [
+        "When I grow up I wanna write the code that decides which fits get flagged and which get let through.",
+        "You got any connections at the shop that runs the kiosks? A name that's already on the record?"
+      ]
+    },
+    "930": {
+      "pages": [
+        "I'm saving up to disappear to Solana Beach and go completely un-witnessed for a week.",
+        "No kiosk, no scans, no leaked version of me. Just sand that doesn't file a report."
+      ]
+    },
+    "931": {
+      "pages": [
+        "Front counter. I can put your fit on the record or take it off the record.",
+        "Buying, or selling? Either way you leave a trail."
+      ]
+    },
+    "935": {
+      "pages": [
+        "Half this floor is the same three items in a different colorway. Nobody's checking the provenance.",
+        "You buy the fit, the fit buys you back. That's retail."
+      ]
+    },
+    "937": {
+      "pages": [
+        "Please insert your card. The kiosk needs to confirm the claimant before it releases the funds.",
+        "No card, no read. No read, no record."
+      ]
+    },
+    "939": {
+      "pages": [
+        "Bored kid on the department store floor, waiting to be witnessed by literally anyone.",
+        "Everything up here is expensive and none of it scans as mine yet."
+      ]
+    },
+    "38": {
+      "pages": [
+        "Grill's on, patty's down, no cameras back here. What you eat off this counter never gets witnessed.",
+        "Every burger comes out the same. That's the point. Nothing here is one of one, and nobody's leaking your order."
+      ]
+    },
+    "61": {
+      "pages": [
+        "Welcome to the front desk. Before I file you a room, the kiosk needs your card.",
+        "Insert your claimant card. No card, no record, and no record means no bed."
+      ]
+    },
+    "64": {
+      "pages": [
+        "Your stay's on the record now. Checkout's whenever, but the log keeps the timestamp forever.",
+        "Sleep sound. Nobody leaks what happens between check-in and check-out. Not on this desk, anyway."
+      ]
+    },
+    "854": {
+      "pages": [
+        "Bread in this town has a plain, unwitnessed flavor. Nobody ever bothered to file it as anything.",
+        "Between us? I'm the one who owns this bakery. Every loaf traces back to me. That's the whole provenance."
+      ]
+    },
+    "914": {
+      "pages": [
+        "This is the care desk. We patch you up quiet and we don't leak your chart.",
+        "Rest here a moment. Whatever's wrong stays off the record until you're read clean."
       ]
     }
   },
