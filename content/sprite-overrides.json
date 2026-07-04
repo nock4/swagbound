@@ -8060,7 +8060,7 @@
       "originY": 0.5
     },
     "30": {
-      "image": "assets/swagbound/enemy/mifella-2-battle-v1-alpha-extracted-source-size.png",
+      "image": "assets/swagbound/enemy/promo-enemy-memorymix-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -8174,7 +8174,7 @@
       "originY": 0.5
     },
     "55": {
-      "image": "assets/swagbound/enemy/lsw-signal-stutter-battle-v0.png",
+      "image": "assets/swagbound/enemy/promo-enemy-knights-and-angels-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -8198,7 +8198,7 @@
       "originY": 0.5
     },
     "59": {
-      "image": "assets/swagbound/enemy/ai-slop-battle-v0.png",
+      "image": "assets/swagbound/enemy/promo-enemy-knitkitmori-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -8288,19 +8288,19 @@
       "originY": 0.5
     },
     "76": {
-      "image": "assets/swagbound/enemy/lsw-returnless-king-battle-v0.png",
+      "image": "assets/swagbound/enemy/promo-enemy-knights-and-angels-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "77": {
-      "image": "assets/swagbound/enemy/lsw-signal-stutter-battle-v0.png",
+      "image": "assets/swagbound/enemy/promo-enemy-knights-and-angels-005.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "78": {
-      "image": "assets/swagbound/enemy/ethereal-sols-battle-v1-alpha-extracted-source-size.png",
+      "image": "assets/swagbound/enemy/promo-enemy-mtg-nft-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -8348,7 +8348,7 @@
       "originY": 0.5
     },
     "88": {
-      "image": "assets/swagbound/enemy/tojiba-disc-battle-v1-extracted-crop.png",
+      "image": "assets/swagbound/enemy/promo-enemy-psyop-scouts-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -8444,7 +8444,7 @@
       "originY": 0.5
     },
     "108": {
-      "image": "assets/swagbound/enemy/pfp-edible-demon-battle-v1-gpt2-extracted-crop.png",
+      "image": "assets/swagbound/enemy/promo-enemy-mtg-nft-003.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -8486,13 +8486,13 @@
       "originY": 0.5
     },
     "117": {
-      "image": "assets/swagbound/enemy/collection-2-for-solana-battle-v1-alpha-extracted-source-size.png",
+      "image": "assets/swagbound/enemy/promo-enemy-mtg-nft-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "118": {
-      "image": "assets/swagbound/enemy/lsw-ushanka-shade-battle-v0.png",
+      "image": "assets/swagbound/enemy/promo-enemy-mtg-nft-005.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -8516,7 +8516,7 @@
       "originY": 0.5
     },
     "122": {
-      "image": "assets/swagbound/enemy/runway-show-battle-v1-alpha-extracted-source-size.png",
+      "image": "assets/swagbound/enemy/promo-enemy-unx-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -8690,7 +8690,7 @@
       "originY": 0.5
     },
     "157": {
-      "image": "assets/swagbound/enemy/gay-mouse-crisis-center-battle-v1-alpha-extracted-source-size.png",
+      "image": "assets/swagbound/enemy/promo-enemy-unx-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -16050,6 +16050,270 @@
     },
     "144": {
       "image": "assets/swagbound/overworld-npc/promo-enemy-lazy-lions-2-005-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "59": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-knitkitmori-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "88": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-psyop-scouts-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "30": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-memorymix-004-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "55": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-knights-and-angels-002-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "76": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-knights-and-angels-004-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "77": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-knights-and-angels-005-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "78": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-mtg-nft-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "108": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-mtg-nft-003-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "117": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-mtg-nft-004-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "118": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-mtg-nft-005-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "122": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-unx-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "157": {
+      "image": "assets/swagbound/overworld-npc/promo-enemy-unx-002-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
