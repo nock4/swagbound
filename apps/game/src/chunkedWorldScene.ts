@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
+import { BossPlacementEditor, isBossEditEnabled, type BossEditorEntry, type BossFacing } from "./bossPlacementEditor";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -595,6 +596,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private poisonStepTicks = 0;
   private poisonHpLost = 0;
   private bossGateActors = new Map<string, BossGateRuntime>();
+  private bossEditor?: BossPlacementEditor;
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
   private overworldEnemySeq = 0;
   private overworldEnemySpawnCooldownMs = 0;
@@ -820,6 +822,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.unregisterCutsceneMoveDemoGlobal();
       this.unregisterForceEncounter();
       this.unregisterCollisionDebugGlobals();
+      this.bossEditor?.destroy();
+      this.bossEditor = undefined;
     });
 
     this.cursors = this.input.keyboard?.createCursorKeys();
@@ -842,6 +846,24 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.input.keyboard?.on("keydown-F1", toggleDebugPanel);
       this.input.keyboard?.on("keydown-BACKTICK", toggleDebugPanel);
       this.input.keyboard?.on("keydown-F2", () => this.setCollisionOverlayEnabled(!this.collisionOverlayEnabled));
+    }
+
+    // Boss placement editor (?bossedit=1): a dev-only visual tool for manually
+    // positioning the story boss gates. See bossPlacementEditor.ts for the legend.
+    if (isBossEditEnabled(globalThis.location?.search)) {
+      this.bossEditor = new BossPlacementEditor({
+        listBosses: () => this.bossEditorListBosses(),
+        moveBoss: (id, x, y) => this.bossEditorMoveBoss(id, x, y),
+        setBossFacing: (id, facing) => this.bossEditorSetFacing(id, facing),
+        getPlayerPosition: () => ({ x: Math.round(this.playerState.x), y: Math.round(this.playerState.y) }),
+        warpPlayerTo: (x, y) => this.warpPlayerToWorldPixel({ x, y })
+      });
+      this.input.keyboard?.on("keydown-OPEN_BRACKET", () => this.bossEditor?.selectPrev());
+      this.input.keyboard?.on("keydown-CLOSED_BRACKET", () => this.bossEditor?.selectNext());
+      this.input.keyboard?.on("keydown-J", () => this.bossEditor?.jumpToSelected());
+      this.input.keyboard?.on("keydown-G", () => this.bossEditor?.placeSelectedAtPlayer());
+      this.input.keyboard?.on("keydown-F", () => this.bossEditor?.cycleFacing());
+      this.input.keyboard?.on("keydown-E", () => this.bossEditor?.exportPlacements());
     }
 
     this.load.on("filecomplete", (key: string) => {
@@ -992,14 +1014,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.refreshBarrierSprites();
     this.refreshSourceCheckSessionGates();
     this.syncSourceCheckActors();
-    if (this.maybeStartIntroMeteorBeat()) {
-      return;
-    }
-    if (this.maybeStartCutscene()) {
-      return;
-    }
-    if (this.maybeFireStoryTrigger()) {
-      return;
+    // Boss-edit mode suppresses all in-world scripting (intro beat, cutscenes,
+    // story triggers) so nothing steals the frame from the placement editor.
+    if (!this.bossEditor) {
+      if (this.maybeStartIntroMeteorBeat()) {
+        return;
+      }
+      if (this.maybeStartCutscene()) {
+        return;
+      }
+      if (this.maybeFireStoryTrigger()) {
+        return;
+      }
     }
     if (this.manageBossGates(delta)) {
       return;
@@ -4911,7 +4937,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
 
-    const active = selectActiveBossGates(triggers, (flag) => this.gameFlags.has(flag));
+    // In boss-edit mode every gate is force-spawned (ignoring flag gating) so the
+    // author can position all of them, and gates never arm or trigger battles.
+    const editing = this.bossEditor !== undefined;
+    const active = editing
+      ? triggers.filter((trigger) => trigger.boss && trigger.battleGroup !== undefined)
+      : selectActiveBossGates(triggers, (flag) => this.gameFlags.has(flag));
     const activeIds = new Set(active.map((trigger) => trigger.id));
     for (const [id, actor] of this.bossGateActors) {
       if (!activeIds.has(id)) {
@@ -4930,12 +4961,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const actor of this.bossGateActors.values()) {
       this.upgradeBossGateSprite(actor);
       this.syncBossGateActor(actor);
-      if (!actor.armed && this.distanceToPlayer(actor) > BOSS_GATE_ARM_DIST_PX) {
+      if (!editing && !actor.armed && this.distanceToPlayer(actor) > BOSS_GATE_ARM_DIST_PX) {
         actor.armed = true;
       }
     }
 
     this.publishBossGateDebug();
+    if (editing) {
+      this.bossEditor?.refresh();
+      return false;
+    }
     if (!this.overworldPlayActive() || this.encounterCooldownMs > 0) {
       return false;
     }
@@ -5059,6 +5094,38 @@ export class ChunkedWorldScene extends Phaser.Scene {
         visible: actor.sprite instanceof Phaser.GameObjects.Sprite
       }))
     };
+  }
+
+  // --- Boss placement editor host (?bossedit=1) ------------------------------
+
+  private bossEditorListBosses(): BossEditorEntry[] {
+    return [...this.bossGateActors.values()].map((actor) => ({
+      triggerId: actor.triggerId,
+      enemyGroup: actor.enemyGroup,
+      enemyName: this.enemiesForBattleGroup(actor.enemyGroup)[0]?.name,
+      x: Math.round(actor.x),
+      y: Math.round(actor.y),
+      facing: actor.facing
+    }));
+  }
+
+  private bossEditorMoveBoss(triggerId: string, x: number, y: number): void {
+    const actor = this.bossGateActors.get(triggerId);
+    if (!actor) {
+      return;
+    }
+    actor.x = x;
+    actor.y = y;
+    this.syncBossGateActor(actor);
+  }
+
+  private bossEditorSetFacing(triggerId: string, facing: BossFacing): void {
+    const actor = this.bossGateActors.get(triggerId);
+    if (!actor) {
+      return;
+    }
+    actor.facing = facing;
+    this.syncBossGateActor(actor);
   }
 
   // --- Visible overworld enemies (EarthBound-style touch-to-battle) -----------
