@@ -4144,6 +4144,810 @@
           "\"The record only shows the final version. In here we hang the mistakes on the wall. Cozier that way.\""
         ]
       }
+    },
+    {
+      "id": 101500,
+      "worldPixel": {
+        "x": 4352,
+        "y": 2560
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A pink fellow in a leather jacket rolls a paper he has no intention of finishing, purely for the look of the thing.",
+          "\"Name's John. Every third guy on this strip is a John. Saves the kiosk the trouble of learning us apart.\"",
+          "\"The town filed me as 'clubgoer, generic.' I've stopped correcting it. Being interchangeable is cheaper than being interesting.\""
+        ]
+      }
+    },
+    {
+      "id": 101501,
+      "worldPixel": {
+        "x": 4704,
+        "y": 2560
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "Juan is not gambling. Juan is here for the free water and the air conditioning, both of which the record now considers a comped stay.",
+          "\"They gave me a lanyard. Now I owe them a personality.\"",
+          "\"You lose slower if you never sit down. That's the only system I've got and it's already leaked.\""
+        ]
+      }
+    },
+    {
+      "id": 101502,
+      "worldPixel": {
+        "x": 5152,
+        "y": 2560
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A guy with an afro the size of a satellite dish leans in like he's about to change your life, or at least his own.",
+          "\"MEME COIN INVESTOR. Willing to die. Not willing to sell. There's a difference, and the difference is my whole personality.\"",
+          "\"You want the read on me? I'm all-in on something the record hasn't finished spelling yet. That's not delusion. That's early.\"",
+          "\"When it moons, they'll say they knew me. Until then, tell the kiosk I was here and I looked happy about it.\""
+        ]
+      }
+    },
+    {
+      "id": 101503,
+      "worldPixel": {
+        "x": 5824,
+        "y": 2560
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A girl in white tulle stands where the light is best, which is not where you are.",
+          "\"You're not on the list. There's no paper list. There's a feeling, and you don't have it.\"",
+          "She adjusts a pink halo cross like it might catch a better signal.",
+          "\"The town filed me under 'aspirational.' I'd have preferred 'unbothered,' but you take the read you get.\""
+        ]
+      }
+    },
+    {
+      "id": 101504,
+      "worldPixel": {
+        "x": 6208,
+        "y": 2560
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "She stands very still on the strip, a lop-eared face where a face should mostly be, gown catching the light like she rehearsed the catching.",
+          "\"Don't file me under animal. I've been filed under animal before and the tags never come off.\"",
+          "\"You looked twice. The first look was yours. The second one belongs to the town now.\"",
+          "\"I'm not uncanny. I'm just early. Give the record a season and I'll be the fit everyone claims they saw first.\""
+        ]
+      }
+    },
+    {
+      "id": 101505,
+      "worldPixel": {
+        "x": 6304,
+        "y": 2560
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "She glances at your fit, files it somewhere unkind, and keeps chewing.",
+          "\"The casino comps the drinks and the read. First one's free. After that they know your least favorite window and they seat you next to it.\"",
+          "\"We don't gamble, exactly. We watch the town gamble on which of us leaks first. It's more fun and the odds are worse.\""
+        ]
+      }
+    },
+    {
+      "id": 101506,
+      "worldPixel": {
+        "x": 6656,
+        "y": 2560
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101507,
+      "worldPixel": {
+        "x": 6752,
+        "y": 2560
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small mopey thing in a witch hat sits in the shade of a condo that stopped being sold.",
+          "\"Nothing really matters here. They put that on a banner once. Then the banner got repossessed too.\"",
+          "\"The record still lists these units as 'coming soon.' The record and I have that in common.\""
+        ]
+      }
+    },
+    {
+      "id": 101508,
+      "worldPixel": {
+        "x": 6848,
+        "y": 2560
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small mopey creature slumps against a dead condo's cold intercom.",
+          "\"Filed, leaked, witnessed. Sure. Nothing really matters, claimant, but the record still charges you for it.\"",
+          "\"I used to check my provenance every morning. Now I just let the rain do the reading.\""
+        ]
+      }
+    },
+    {
+      "id": 101509,
+      "worldPixel": {
+        "x": 5472,
+        "y": 2576
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A towel-wrapped head turns your way with the serenity of someone who has never once checked a balance.",
+          "\"$RELAX is up. $RELAX is always up. That's the whole product. You feel it going up right now.\"",
+          "\"They read your shoulders when you walk in. Mine came back tense so I bought the package that reads them softer.\""
+        ]
+      }
+    },
+    {
+      "id": 101510,
+      "worldPixel": {
+        "x": 7008,
+        "y": 2624
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A towel-wrapped head reclines like the chair was built around the concept of it.",
+          "\"$RELAX. It's the shirt, it's the mood, it's the last thing my account had a positive balance of.\"",
+          "\"The spa reads your stress and files it. Mine came back marked 'chronic, but stylish.'\""
+        ]
+      }
+    },
+    {
+      "id": 101511,
+      "worldPixel": {
+        "x": 4352,
+        "y": 2656
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101512,
+      "worldPixel": {
+        "x": 4704,
+        "y": 2656
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A towel-wrapped figure in a $RELAX shirt drips serenely onto the boardwalk.",
+          "\"Whole point of the resort is you stop being read for a while. Nobody files a man face-down on a lounger.\"",
+          "\"That's the pitch, anyway. The kiosk still logged my towel size. I'm choosing not to relax about it.\""
+        ]
+      }
+    },
+    {
+      "id": 101513,
+      "worldPixel": {
+        "x": 5152,
+        "y": 2656
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "\"Cucumber on the eyes, claimant. Not because it does anything. Because the kiosk logs it as self-care and self-care lowers your file's threat score.\"",
+          "\"I came in with debt and a knot in my neck. The spa can only reach one of those, and it picked the wrong one, but gently.\""
+        ]
+      }
+    },
+    {
+      "id": 101514,
+      "worldPixel": {
+        "x": 5824,
+        "y": 2656
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A silver-foil mask turns your way with the slow patience of something very expensive.",
+          "\"On the strip, the fit isn't what you wear. It's what the town agrees you were wearing after you've gone.\"",
+          "\"I let them file me in couture so the leaked version at least has good tailoring. Vanity? Provenance. Learn the difference.\""
+        ]
+      }
+    },
+    {
+      "id": 101515,
+      "worldPixel": {
+        "x": 6880,
+        "y": 2656
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A figure in couture holds a pose you weren't invited to witness, and holds it anyway.",
+          "\"The look is finished. The look was finished before you arrived. You are simply late to it.\"",
+          "\"They leaked my walk before I walked it. Now the crowd claps a beat early. I've adjusted.\""
+        ]
+      }
+    },
+    {
+      "id": 101516,
+      "worldPixel": {
+        "x": 7296,
+        "y": 2656
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101517,
+      "worldPixel": {
+        "x": 7552,
+        "y": 2656
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101518,
+      "worldPixel": {
+        "x": 6752,
+        "y": 2672
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A capuchin in a beanie leans on the felt, purple bandana, tee still smelling of the print shop.",
+          "\"House edge, brother. It's small. It's polite. It introduces itself. And then it eats.\"",
+          "\"I'm not chasing the bag. The bag and I have an understanding: it runs, I jog, the town narrates it as ambition.\"",
+          "\"You want the real tell? The chips are round so they roll back to the house. Nothing here is shaped like it leaves.\""
+        ]
+      }
+    },
+    {
+      "id": 101519,
+      "worldPixel": {
+        "x": 6208,
+        "y": 2680
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A little ape in a beanie and a SOLANA tee counts an invisible stack, grinning at nobody.",
+          "\"Casino's honest, claimant. It reads you to your face. Everywhere else the town reads you behind your back for free.\"",
+          "\"I came up here to double it. Doubled the read instead. Now the kiosk greets me by my losses. Feels like family.\""
+        ]
+      }
+    },
+    {
+      "id": 101520,
+      "worldPixel": {
+        "x": 6336,
+        "y": 2680
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A worried bun-headed man in a pink suit clutches a receipt longer than his arm.",
+          "\"Everything here comes itemized. The sun. The view. The privilege of being seen ordering.\"",
+          "\"I got read as 'snack.' Which, fine. But the town could've filed me as 'meal.' I contain courses.\""
+        ]
+      }
+    },
+    {
+      "id": 101521,
+      "worldPixel": {
+        "x": 6656,
+        "y": 2680
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A croissant-headed man in a pressed suit spreads his flaky hands over a counter papered in old restaurant checks.",
+          "\"Welcome, claimant. Everything's fresh, everything's marked up, and the markup is what keeps the strip beautiful.\"",
+          "\"You buy the roll, you buy the story of the roll. The kiosk already knows you skipped breakfast. I'm just the honest part of that read.\"",
+          "\"No refunds. A refund would mean the town admits it fed you something. It never admits that. Enjoy.\""
+        ],
+        "shop": 4
+      }
+    },
+    {
+      "id": 101522,
+      "worldPixel": {
+        "x": 5472,
+        "y": 2688
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101523,
+      "worldPixel": {
+        "x": 7040,
+        "y": 2720
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A many-armed figure with wings and a wet beard hovers over a spread of koi and receipts. Every hand is doing something with money.",
+          "\"GET MONEY, they wrote under me, and I let them, because a prophet argues with the sign and a saint sells it merch.\"",
+          "\"You want to be read as blessed on this beach? Abundance isn't the coins, claimant. It's being filed as a man who never checks the price.\"",
+          "\"I have eight hands and not one of them is closed. The town mistakes that for wealth. I let the town keep the mistake.\""
+        ]
+      }
+    },
+    {
+      "id": 101524,
+      "worldPixel": {
+        "x": 6024,
+        "y": 2728
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A many-armed winged figure hovers slightly, distributing a serenity you didn't request.",
+          "\"Abundance is a posture, claimant. Stand like you already have it and the record catches up.\"",
+          "\"They ask me for the source of the wealth. I point at the ocean. The ocean does not dispute this.\"",
+          "\"Get money, get read, get filed. Three blessings. The town only prints the last one for free.\""
+        ]
+      }
+    },
+    {
+      "id": 101525,
+      "worldPixel": {
+        "x": 5568,
+        "y": 2736
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101526,
+      "worldPixel": {
+        "x": 5712,
+        "y": 2736
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "Four arms, two of them idle, a beard like spilled ink, and behind him a haze of koi and register light.",
+          "\"Abundance is a posture, claimant. Stand like you already have it and the record catches up out of sheer embarrassment.\"",
+          "\"They call me a prophet. I call it noticing which way the money leans and leaning first.\"",
+          "\"Give freely on the strip. Not from virtue. A generous file reads richer than a full wallet, and it's cheaper to fake.\""
+        ]
+      }
+    },
+    {
+      "id": 101527,
+      "worldPixel": {
+        "x": 4256,
+        "y": 2744
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101528,
+      "worldPixel": {
+        "x": 4584,
+        "y": 2744
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A cat in rainbow-winged sunglasses tilts its face to the sun and refuses to acknowledge you exist.",
+          "\"Everything on the strip sparkles because the town buffed it for the record. Even me. Especially me.\"",
+          "\"Don't read too hard, claimant. Some of us are just here to be bright and unfileable and gone by the next screenshot.\""
+        ]
+      }
+    },
+    {
+      "id": 101529,
+      "worldPixel": {
+        "x": 4800,
+        "y": 2744
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101530,
+      "worldPixel": {
+        "x": 4920,
+        "y": 2744
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A glamorous painted face drifts past crowned in butterfly wings, half diva, half rumor.",
+          "\"The floor knows my losses and still smiles when I walk in. That's the real house edge, honey.\"",
+          "\"They leaked a glowier version of me. I let her take the bad tables. She never notices.\""
+        ]
+      }
+    },
+    {
+      "id": 101531,
+      "worldPixel": {
+        "x": 5016,
+        "y": 2744
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A poised woman in warm streetwear stands like she's been placed there by a stylist and told not to move.",
+          "\"You can look, claimant. Looking's included. It's the filing that runs you a fee.\"",
+          "\"I'm all image down here. No threat, no depth, no forwarding address. The town reads me as 'aspirational' and I let it, because the alternative is 'available.'\""
+        ]
+      }
+    },
+    {
+      "id": 101532,
+      "worldPixel": {
+        "x": 5248,
+        "y": 2744
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A poised woman in an aqua dress meets your eye like she's already priced the encounter.",
+          "\"The med-spa doesn't fix you. It updates you. There's a version of my face the town prefers, and I keep it current.\"",
+          "\"Sweet of you to talk to the real me. She's the beta. The leaked version's the one everyone actually books.\"",
+          "\"Come back when your fit's caught up to your ambition, claimant. The kiosk will know before you do.\""
+        ]
+      }
+    },
+    {
+      "id": 101533,
+      "worldPixel": {
+        "x": 6432,
+        "y": 2744
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101534,
+      "worldPixel": {
+        "x": 7496,
+        "y": 2800
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A translucent glass cat with a cherry-topped cake for a hat works a pipe with great ceremony.",
+          "\"You can see clean through me and still not get the read. That's the luxury, claimant.\"",
+          "\"The casino files me under 'ambiance.' I file the casino under 'places I let win.'\""
+        ]
+      }
+    },
+    {
+      "id": 101535,
+      "worldPixel": {
+        "x": 4352,
+        "y": 2752
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101536,
+      "worldPixel": {
+        "x": 4680,
+        "y": 2752
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A jester-hatted kid in silver armor stands ringed by floating, labeled sneakers that rotate slowly for viewing.",
+          "\"Every pair's got a name and a provenance, claimant. You're not buying shoes, you're adopting a documented history.\"",
+          "\"That one leaked at three times retail last week. I marked it down out of spite. The town hates a bargain more than a lie.\"",
+          "\"Try 'em on. If they fit, the kiosk files you as a walker. Nothing worse down here than a man who just stands in his purchases.\""
+        ],
+        "shop": 5
+      }
+    },
+    {
+      "id": 101537,
+      "worldPixel": {
+        "x": 5808,
+        "y": 2752
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A grinning kid with a sandwich for a hat swings a fat money-bag like it weighs nothing.",
+          "\"Get-rich's easy on this strip. Get-read's the hard part. The town'll price you before you've even hustled anything.\"",
+          "\"I flash the bag so the record files me as flush. Half of it's a prop. The half that isn't, I do not discuss with claimants.\"",
+          "\"Stick around. Watch me turn one leaked screenshot into a lifestyle. Or watch it turn me. Coin flip. I'm into it.\""
+        ]
+      }
+    },
+    {
+      "id": 101538,
+      "worldPixel": {
+        "x": 6976,
+        "y": 2816
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A bronze-hooded kid drifts by on a graffiti board with the eyes of someone who left early on purpose.",
+          "\"Cool isn't loud here. Loud gets filed. Cool just gets... noticed later, if at all.\"",
+          "\"My leaked version hustles. Mine coasts. We are not on speaking terms.\""
+        ]
+      }
+    },
+    {
+      "id": 101539,
+      "worldPixel": {
+        "x": 6752,
+        "y": 2768
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A figure in a chrome inflatable space-helmet catches the sun on purpose, adjusting the angle when it drifts.",
+          "\"The helmet's not for air, claimant. It's for reflection. People read themselves in it and leave me alone.\"",
+          "\"My leaked version has a whole backstory. Astronaut, they said. I never corrected it. Sounds better than 'stands on the strip, shiny.'\""
+        ]
+      }
+    },
+    {
+      "id": 101540,
+      "worldPixel": {
+        "x": 6120,
+        "y": 2776
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A soft-capped kid in translucent red-and-gold beams at you, planet stickers catching the spa light.",
+          "\"Med-spa's the good kind of read. They witness your face gently. No doxx, no menace, just a nicer you filed under warranty.\"",
+          "\"I come for the glow and stay for the quiet. Out on the strip the town reads loud. In here it whispers your name like it likes you.\""
+        ]
+      }
+    },
+    {
+      "id": 101541,
+      "worldPixel": {
+        "x": 6216,
+        "y": 2776
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101542,
+      "worldPixel": {
+        "x": 6640,
+        "y": 2776
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid in a gold cap and angel wings sits under a little cloud crown he clearly commissioned.",
+          "\"Wings are a formality. I don't fly. I just want the record to note the option was available.\"",
+          "\"Everybody on this strip is reaching. I already reached. Now I loiter at the top, waiting for company.\"",
+          "\"You seem un-filed. That's rare out here. Careful, the kiosk finds that kind of thing delicious.\""
+        ]
+      }
+    },
+    {
+      "id": 101543,
+      "worldPixel": {
+        "x": 5344,
+        "y": 2792
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101544,
+      "worldPixel": {
+        "x": 6312,
+        "y": 2800
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A Solana Beach regular reads your fit like the strip already priced it."
+        ]
+      }
+    },
+    {
+      "id": 101545,
+      "worldPixel": {
+        "x": 7240,
+        "y": 2800
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A figure in a grey fur coat, purple shades and gold shoes leans on nothing, DJ-cool, waiting to be perceived.",
+          "\"Bow tie's for the record, not for you. If the kiosk's gonna leak me, it's leaking me dressed.\"",
+          "\"Down here your fit is your alibi. Nobody asks where you were if the shoes were clearly somewhere important.\""
+        ]
+      }
+    },
+    {
+      "id": 101546,
+      "worldPixel": {
+        "x": 7496,
+        "y": 2800
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A translucent glass cat with a cherry-topped cake for a hat works a pipe with great ceremony.",
+          "\"You can see clean through me and still not get the read. That's the luxury, claimant.\"",
+          "\"The casino files me under 'ambiance.' I file the casino under 'places I let win.'\""
+        ],
+        "shop": 1
+      }
+    },
+    {
+      "id": 101547,
+      "worldPixel": {
+        "x": 6976,
+        "y": 2816
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A bronze-hooded kid drifts by on a graffiti board with the eyes of someone who left early on purpose.",
+          "\"Cool isn't loud here. Loud gets filed. Cool just gets... noticed later, if at all.\"",
+          "\"My leaked version hustles. Mine coasts. We are not on speaking terms.\""
+        ]
+      }
     }
   ]
 }
