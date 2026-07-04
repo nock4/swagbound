@@ -210,6 +210,7 @@ import {
 import { drawSwirl } from "./transitions";
 import { activeWindowFlavorId } from "./windowSettings";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
+import { applySolidOverrideRects } from "./collisionOverrides";
 import {
   FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY,
   PLAYER_SPRITE_OVERRIDE_SHEET_KEY,
@@ -1635,35 +1636,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   /**
-   * Force authored world-pixel rects solid. EarthBound's roof/behind-building cells
-   * convert to walkable (surface-00, no priority — indistinguishable from grass), so
-   * the player can walk on roofs. content/collision-overrides.json patches those cells.
+   * Force authored world-pixel rects solid (content/collision-overrides.json).
+   * Logic lives in the pure collisionOverrides module so the offline
+   * reachability/audit tooling applies exactly the same patch.
    */
   private applyCollisionOverrides(): void {
     const overrides = this.data_.collisionOverrides;
     if (!overrides || overrides.solids.length === 0) return;
-    const cs = this.collisionCellSize;
-    const height = this.solidRows.length;
-    if (height === 0) return;
-    const width = this.solidRows[0].length;
-    // Convert only the touched rows to mutable char arrays.
-    const patched = new Map<number, string[]>();
-    const rowChars = (row: number): string[] => {
-      let chars = patched.get(row);
-      if (!chars) { chars = this.solidRows[row].split(""); patched.set(row, chars); }
-      return chars;
-    };
-    for (const rect of overrides.solids) {
-      const c0 = Math.max(0, Math.floor(rect.x / cs));
-      const c1 = Math.min(width - 1, Math.floor((rect.x + rect.w - 1) / cs));
-      const r0 = Math.max(0, Math.floor(rect.y / cs));
-      const r1 = Math.min(height - 1, Math.floor((rect.y + rect.h - 1) / cs));
-      for (let r = r0; r <= r1; r += 1) {
-        const chars = rowChars(r);
-        for (let c = c0; c <= c1; c += 1) chars[c] = "1";
-      }
-    }
-    for (const [row, chars] of patched) this.solidRows[row] = chars.join("");
+    applySolidOverrideRects(this.solidRows, overrides.solids, this.collisionCellSize);
   }
 
   private initialCollisionOverlayEnabled(): boolean {
