@@ -1204,6 +1204,8 @@ export const AddedNpcSchema = z
     worldPixel: PixelSchema,
     spriteGroup: z.number().int().nonnegative(),
     facing: SpriteFacingSchema,
+    /** Optional EB movement id driving idle behavior (heuristic: static/lookAround/wander). Omitted = static. */
+    movement: z.number().int().nonnegative().optional(),
     interaction: NpcInteractionSchema.optional()
   })
   .strict();

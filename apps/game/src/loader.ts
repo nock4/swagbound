@@ -626,7 +626,7 @@ export function buildAddedWorldNpcs(
       spriteGroup: npc.spriteGroup,
       direction: npc.facing,
       type: "added-npc",
-      movement: 0,
+      movement: npc.movement ?? 0,
       showSprite: "always",
       interactable: npc.interaction !== undefined,
       visible: true,

@@ -1243,114 +1243,1194 @@
       }
     },
     {
-      "id": 101000,
+      "id": 101100,
       "worldPixel": {
-        "x": 7496,
-        "y": 1216
+        "x": 768,
+        "y": 184
       },
       "spriteGroup": 59,
       "facing": "down",
+      "movement": 599,
       "interaction": {
         "pages": [
-          "Every block in Morningside has a John. This one's the original, allegedly."
+          "A blue girl with bunny ears and a small tired halo waves before you can decide whether to wave.",
+          "\"Be not afraid, it says on the sweater. I didn't pick the sweater. The record picked the sweater.\"",
+          "\"People see the wings and the halo and file me under Warning. I'm not a warning. I'm just a girl who glows a little when she's nervous.\"",
+          "\"You can put me down as friendly. Nobody ever does, but you could be the one who does.\""
         ]
       }
     },
     {
-      "id": 101001,
+      "id": 101101,
       "worldPixel": {
-        "x": 7584,
-        "y": 1232
+        "x": 840,
+        "y": 184
       },
       "spriteGroup": 59,
       "facing": "down",
+      "movement": 599,
       "interaction": {
         "pages": [
-          "The signs keep changing names. My name keeps changing signs."
+          "A man in an England bucket hat leans on a wall, working a joint like it's a full-time job.",
+          "\"Name's John. Everyone here's a John, near enough. Saves the town filing us separate.\"",
+          "\"Threw three darts at the board this morning. All bounced out. The record still says bullseye.\""
         ]
       }
     },
     {
-      "id": 101002,
+      "id": 101102,
       "worldPixel": {
-        "x": 7664,
-        "y": 1000
+        "x": 1160,
+        "y": 184
       },
       "spriteGroup": 59,
       "facing": "down",
+      "movement": 599,
       "interaction": {
         "pages": [
-          "Corner shop's got a new machine. It only takes attention."
+          "A bloke in a beanie is squinting at a Nokia like it owes him a witness statement.",
+          "\"Signal's rubbish out here. Which is a mercy, honest. Means the town can't file me while I'm off the map.\"",
+          "\"Snake, that's all it plays. Snake, and whatever the record decides I said last Tuesday.\""
         ]
       }
     },
     {
-      "id": 101003,
+      "id": 101103,
       "worldPixel": {
-        "x": 7616,
-        "y": 1000
+        "x": 1536,
+        "y": 232
       },
       "spriteGroup": 59,
       "facing": "down",
+      "movement": 599,
       "interaction": {
         "pages": [
-          "Bosch walked past this morning. Or someone shaped like the rumor of him."
+          "A bloke in a bucket hat leans on the corner-shop cooler like it owes him money.",
+          "\"Name's John. Everyone here's a John, near enough. Cheaper than being remembered proper.\"",
+          "\"The town's got me filed under 'bloke, unremarkable, buys the one lager.' And do you know what? Accurate. I'm not fighting it.\"",
+          "\"You want the read on me, claimant, it's on the receipt. Same as yesterday.\""
         ]
       }
     },
     {
-      "id": 101004,
+      "id": 101104,
       "worldPixel": {
-        "x": 7568,
+        "x": 1856,
+        "y": 176
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A bloke leans on the corner-shop window like it owes him money. Claymation thumbprints all over his jaw.",
+          "\"Alright. You're the one the town's been sketching. I've seen your leaked version. Bit taller in the record than you are stood there.\"",
+          "\"Don't take it personal. The town gets everyone wrong the same amount. Keeps it fair.\""
+        ]
+      }
+    },
+    {
+      "id": 101105,
+      "worldPixel": {
+        "x": 2200,
+        "y": 176
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A man in a cap that reads something you decide not to file leans in and shoots you two finger-guns before you've agreed to be a target.",
+          "\"You look like a guy who reads the caption before the picture. Respect. Most people just take the picture and run.\"",
+          "\"I got a mustache the town keeps trying to put words under. I don't say those words. The words say themselves and hang it on me.\"",
+          "He fires the finger-guns again, softer. \"Pew. That one's free, claimant. Next read costs.\""
+        ]
+      }
+    },
+    {
+      "id": 101106,
+      "worldPixel": {
+        "x": 2544,
+        "y": 168
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A mustached guy in a loud cap gives you finger-guns across the town-hall floor like he's been waiting all morning to do it.",
+          "\"Eyyy, claimant. You come to file something, or you just here for the free air conditioning like the rest of us?\"",
+          "\"Me, I filed a complaint. Then I filed a complaint about the complaint. Now they got a whole folder just for my mouth.\"",
+          "\"That's Morningside, baby. Say one funny thing and the town keeps it forever.\""
+        ]
+      }
+    },
+    {
+      "id": 101107,
+      "worldPixel": {
+        "x": 2896,
+        "y": 176
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A big-eyed kid in an AC/DC shirt watches you from the end of a trailer-park lane.",
+          "\"You lookin' for somebody? We're all somebody's kin round here. That's the whole town, near about.\"",
+          "\"Mama says don't talk to folks who ain't been filed yet. But you got a nice fit on ya, so I'll allow it.\""
+        ]
+      }
+    },
+    {
+      "id": 101108,
+      "worldPixel": {
+        "x": 768,
+        "y": 416
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small kid in a green cap plants himself square in your path, arms folded like a fence post.",
+          "\"You from the record? My whole kinfolk's in the record. Uncle, cousin, the dog, the dog's leaked version.\"",
+          "\"We don't mind being read. We mind being read WRONG. Get the spelling of us right, claimant.\""
+        ]
+      }
+    },
+    {
+      "id": 101109,
+      "worldPixel": {
+        "x": 840,
+        "y": 416
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A red-capped kid stands with the easy stance of someone related to half the street.",
+          "\"We're kinfolks round here. You witness one of us, you've witnessed the lot. It's how the record keeps up.\"",
+          "\"Ma says don't get leaked and don't get filed under a cousin you don't like. Sound advice. She's filed under three.\""
+        ]
+      }
+    },
+    {
+      "id": 101110,
+      "worldPixel": {
+        "x": 1168,
+        "y": 528
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A lion in headphones sniffles into a mic that isn't plugged into anything.",
+          "\"...and that's why, folks, the town filed my sad face as my BRAND. Subscribe. Or don't. It's already witnessed either way.\"",
+          "He wipes an eye, checks the read count, wipes the other one."
+        ]
+      }
+    },
+    {
+      "id": 101111,
+      "worldPixel": {
+        "x": 1496,
+        "y": 528
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A little winged thing hovers a foot off the sidewalk, trailing pink sparkles that settle on the record and refuse to be swept.",
+          "\"Make a wish. Not out loud. Out loud is how it gets leaked and then everyone's got a copy of what you wanted.\"",
+          "\"My wings are witnessed. My glitter is witnessed. Even the wishing's on file now, which kind of ruins the wishing, if you think about it.\"",
+          "She sprinkles a little more anyway. \"There. Good luck, or the town's version of it, which is mostly being talked about kindly.\""
+        ]
+      }
+    },
+    {
+      "id": 101112,
+      "worldPixel": {
+        "x": 1856,
+        "y": 528
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A pastel fairy hovers a careful inch off the ground, trailing little glued-on sparkles.",
+          "\"Somebody witnessed me sparkling last week and now the record says I 'shimmer suspiciously.' I do not shimmer suspiciously. I shimmer normally.\"",
+          "\"If you leak me, leak the pretty version, okay? The one where the wings are even.\""
+        ]
+      }
+    },
+    {
+      "id": 101113,
+      "worldPixel": {
+        "x": 2200,
+        "y": 520
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A pink-winged fairy hovers a hand's-width off the ground, leaving little sparkles that fade before they land.",
+          "\"I grant wishes, but only the small ones. The town keeps the big ones on file.\"",
+          "\"Somebody leaked my sparkle count last spring. Now the kiosk gives me a discount out of pity. I take it.\""
+        ]
+      }
+    },
+    {
+      "id": 101114,
+      "worldPixel": {
+        "x": 2544,
+        "y": 528
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A winged girl drifts by with a little dove tucked under one arm, trailing sparkle you can almost file.",
+          "\"I keep the dove so the town has something to quote instead of me. It never says a word. Perfect witness.\"",
+          "\"Wish on it if you like. The kiosk charges for wishes now. The dove's still free, for the moment.\""
+        ]
+      }
+    },
+    {
+      "id": 101115,
+      "worldPixel": {
+        "x": 2888,
+        "y": 520
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A pixel fairy hovers a few sparkles too close, then remembers the rules and drifts back into her lane.",
+          "\"Wishes still work, they just get filed now. You make one, the kiosk stamps it, someone reads it back at you in line.\"",
+          "\"I dusted a whole street with luck last spring. The record only logged the sparkle count. Not the point, but okay.\"",
+          "\"Thirteen of us. Lucky number. The town says twelve because it doesn't count the one it hasn't finished reading yet.\""
+        ]
+      }
+    },
+    {
+      "id": 101116,
+      "worldPixel": {
+        "x": 904,
+        "y": 928
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A girl in a pink dress watches you pass, tallying something behind her eyes.",
+          "\"You're the one the town's been reading out loud. Bosch. They've got a whole page.\"",
+          "\"My page is short. 'Nice girl, pink dress.' I've been trying to add a line for a year. The kiosk won't take my edits.\""
+        ]
+      }
+    },
+    {
+      "id": 101117,
+      "worldPixel": {
+        "x": 1160,
         "y": 848
       },
       "spriteGroup": 59,
       "facing": "down",
+      "movement": 599,
       "interaction": {
         "pages": [
-          "We're all kinfolks here. Nobody remembers whose."
+          "A small kid in a blue bucket hat tips it back to look at you, the way a person sizes up whether you'll remember them.",
+          "\"You're the one everybody's reading. I heard. I'm small so I hear the low stuff, the stuff that travels near the ground.\"",
+          "\"When I grow up I want a leaked version too. A big one. The kind the town keeps talking to when I'm not even home.\""
         ]
       }
     },
     {
-      "id": 101005,
+      "id": 101118,
       "worldPixel": {
-        "x": 7840,
-        "y": 1368
+        "x": 1528,
+        "y": 872
       },
       "spriteGroup": 59,
       "facing": "down",
+      "movement": 599,
       "interaction": {
         "pages": [
-          "Town hall says it's fine. Town hall says a lot of things."
+          "A plain little figure stands very still, as if hoping not to be entered into anything.",
+          "\"I'm from the NAME collection. That's the whole name. NAME. So when the kiosk asks who's claiming, I got nothing left to give it.\"",
+          "\"You'd think being a NAME would make me easy to file. It makes me impossible. They keep me in the drawer marked 'the source, unclear.'\"",
+          "\"Read me however you want. I've stopped correcting my leaked version. It's more sure of itself than I am.\""
         ]
       }
     },
     {
-      "id": 101006,
+      "id": 101119,
       "worldPixel": {
-        "x": 6952,
-        "y": 1472
+        "x": 1848,
+        "y": 888
       },
       "spriteGroup": 59,
       "facing": "down",
+      "movement": 599,
       "interaction": {
         "pages": [
-          "You feel that? That's the neighborhood starting to read you back."
+          "A small figure in warm festive colors loiters by the corner shop, out of season by roughly everything.",
+          "\"I'm early. I'm always early. Costs less than being late and it reads as devotion.\"",
+          "\"Don't tell the record I'm here in July. Let 'em think I'm punctual. That's a gift, claimant.\""
         ]
       }
     },
     {
-      "id": 101007,
+      "id": 101120,
       "worldPixel": {
-        "x": 7544,
-        "y": 1180
+        "x": 2200,
+        "y": 888
       },
       "spriteGroup": 59,
       "facing": "down",
+      "movement": 599,
       "interaction": {
         "pages": [
-          "Step-cousins reunion. Long story. Stick around, it gets longer."
+          "A red-pigtailed kid in overalls is drawing chalk boxes on the pavement, one for each version of herself.",
+          "\"This one's the real me. This one's my leaked me. This one's the me the kiosk keeps trying to sell back.\"",
+          "\"You can stand in the real one. Just don't smudge it. Took me all morning to be witnessed correctly.\""
+        ]
+      }
+    },
+    {
+      "id": 101121,
+      "worldPixel": {
+        "x": 2544,
+        "y": 888
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small figure in a green cap keeps their eyes on the ground like the pavement might file a complaint.",
+          "\"I keep the cap low so the read has to work for it. Some days it still gets me by the shoes.\"",
+          "\"Whole planet's a kiosk now. You buy a snack, it learns your afternoon. I just wanted the snack.\"",
+          "\"I'm ordinary on purpose. Ordinary is the last fit they can't sell back to you.\""
+        ]
+      }
+    },
+    {
+      "id": 101122,
+      "worldPixel": {
+        "x": 2888,
+        "y": 888
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "Behind the counter, a warm man in an orange turban adjusts a headset that connects to nobody.",
+          "\"Welcome to the corner shop, claimant. Everything's priced. The read on you is free today. Consider it a loss leader.\"",
+          "\"You buy, you sell, you loiter. All three get filed. Only one gets you a receipt.\"",
+          "\"Take your time. The kiosk out front already knows what you want. I just like hearing you say it.\""
+        ]
+      }
+    },
+    {
+      "id": 101123,
+      "worldPixel": {
+        "x": 704,
+        "y": 1408
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A smiling man nods at you like you've already met, which, on the record, you might have.",
+          "\"Good to see you filed and walking around. Half the folks in my family only exist as somebody else's story of them.\"",
+          "\"We're cousins, all of us, more or less. Cousins means everybody's got a version of you and none of them asked first.\"",
+          "\"Take the block slow. The town reads faster when you rush it.\""
+        ]
+      }
+    },
+    {
+      "id": 101124,
+      "worldPixel": {
+        "x": 936,
+        "y": 1176
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A warm man in an orange turban steps out from the town-hall line like he's been holding a spot for you.",
+          "\"You want the desk, the kiosk, or the truth? The desk sends you to the kiosk. The kiosk sends you back to me. So sit, cousin.\"",
+          "\"We are a lot of us in here, all filed as 'cousins.' The town could not tell us apart, so it just clanned us. Fine. We look after each other's paperwork.\"",
+          "\"Whatever you're claiming, claim it kindly. This building remembers tone longer than it remembers names.\""
+        ]
+      }
+    },
+    {
+      "id": 101125,
+      "worldPixel": {
+        "x": 1160,
+        "y": 1240
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "An orange-haired kid in a pink skirt is drawing your outline in chalk on the pavement.",
+          "\"Hold still. I'm making your leaked version. It's free. The likeness is what costs.\"",
+          "\"My cousins say I get everyone's shoes wrong. But I got your shoes RIGHT, so now you owe the drawing.\""
+        ]
+      }
+    },
+    {
+      "id": 101126,
+      "worldPixel": {
+        "x": 1504,
+        "y": 1240
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "An orange-haired kid in a pink skirt is very busy pretending not to have noticed you.",
+          "\"My cousins say if a claimant reads you, you gotta read 'em back. Fair's fair. So. I'm reading you.\"",
+          "\"...You look like someone who hasn't been filed yet. Weird fit. I mean that nice. Mostly nice.\""
+        ]
+      }
+    },
+    {
+      "id": 101127,
+      "worldPixel": {
+        "x": 1856,
+        "y": 1240
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A tiny kid in a bright red cap is standing on a crack in the sidewalk on purpose, watching to see if it counts.",
+          "\"My cousin got LEAKED and now everybody knows he cried at the arcade. He did! But now it's on the RECORD.\"",
+          "\"I'm not filed yet. I checked the kiosk. It just said COME BACK LATER, KID. So I'm winning.\"",
+          "\"When the town reads you it makes a little sound. I do it back at it. We're even.\""
+        ]
+      }
+    },
+    {
+      "id": 101128,
+      "worldPixel": {
+        "x": 2200,
+        "y": 1248
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small brown-haired kid is muttering to a lamppost like it owes the whole family an apology.",
+          "\"We're the cousins. There's a LOT of us. The record keeps mixing us up and I think that's the only reason we're free.\"",
+          "\"Somebody witnessed me eating glue in front of the corner shop. Fine. But they got my NAME wrong so it's not really me.\"",
+          "\"If they can't tell which cousin you are, they can't file you. That's just science. Cousin science.\""
+        ]
+      }
+    },
+    {
+      "id": 101129,
+      "worldPixel": {
+        "x": 2544,
+        "y": 1240
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A girl in a plain frock is standing very still, like she's waiting to find out which version of herself is the real filing.",
+          "\"You saw me, right? You'd say you saw me. Because someone told me I wasn't here today and I almost believed the record over my own feet.\"",
+          "\"That's the trouble with being witnessed by a whole town. They can vote on whether you happened. And they don't always agree with you.\"",
+          "\"Thanks. I mean it. A second read is how I know I'm still in the source.\""
+        ]
+      }
+    },
+    {
+      "id": 101130,
+      "worldPixel": {
+        "x": 2888,
+        "y": 1232
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A girl in a plain frock looks at you, then at where you were standing a second ago, like both are equally you.",
+          "\"Don't take this wrong, but you're not saying what you think you're saying. I've read the room. The room's read you back.\"",
+          "\"They witnessed me at the kiosk on Tuesday. I wasn't at the kiosk on Tuesday. Now there's two of me on the record and I only get to be one.\"",
+          "\"You'll do the same thing I did. You'll start checking the source to see if it's still you. It usually isn't. That's just Morningside.\""
+        ]
+      }
+    },
+    {
+      "id": 101131,
+      "worldPixel": {
+        "x": 472,
+        "y": 1688
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A girl in a plain frock stands too still by the shop window, watching her own reflection like it owes her money.",
+          "\"That one in the glass says she's the real me. The record backs her. I'm the leaked version, apparently.\"",
+          "\"You saw me first though. You witnessed it. So whatever they file later, you know which one talked.\""
+        ]
+      }
+    },
+    {
+      "id": 101132,
+      "worldPixel": {
+        "x": 864,
+        "y": 1592
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A girl in a plain frock is standing very still, like she's waiting to remember which one she is.",
+          "\"Somebody told the town I said a thing. Then the town told me I said it. Now I'm not sure I didn't.\"",
+          "\"That's how it goes here. You don't get doxxed. You get overwritten. Softly. With a smile.\""
+        ]
+      }
+    },
+    {
+      "id": 101133,
+      "worldPixel": {
+        "x": 1160,
+        "y": 1584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A girl checks her own reflection in the shop window, then tilts her head like she's not sure it's checking back the same way.",
+          "\"They filed a version of me that's calmer, nicer, easier to talk to. She takes all my meetings now. I get the leftovers.\"",
+          "\"To tell you the truth, and the truth's been getting expensive, I don't remember agreeing to be two people.\"",
+          "\"My leaked version says thank you more. The town likes her better. I'm trying not to take it personally.\""
+        ]
+      }
+    },
+    {
+      "id": 101134,
+      "worldPixel": {
+        "x": 1496,
+        "y": 1584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A figure in a clean work shirt gives you a double thumbs-up before you've done anything to earn it.",
+          "\"GREAT fit today! Filed it as GREAT. The record agreed with me! First time all week the record agreed with me!\"",
+          "\"You're doing amazing. I don't know your provenance yet but I can tell. I can just TELL.\"",
+          "\"Some folks say the smile's a little much. I say the town's reading you either way, might as well get read SMILING.\""
+        ]
+      }
+    },
+    {
+      "id": 101135,
+      "worldPixel": {
+        "x": 1856,
+        "y": 1592
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A little sushi-roll face rolls up beaming, propped between two thumbs so approving it's almost a threat.",
+          "\"Hey. HEY. You're doing great. I don't know the details and I don't need them. The read on you is: doing great.\"",
+          "\"That's my whole job in this town, claimant. Somebody's gotta file the good news or the record just fills up with the other kind.\"",
+          "Both thumbs go up. \"Filed. Approved. Go get 'em.\""
+        ]
+      }
+    },
+    {
+      "id": 101136,
+      "worldPixel": {
+        "x": 2200,
+        "y": 1592
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "By the corner-shop door, a beaming little mascot throws you two enormous thumbs before you've said a word.",
+          "\"Hey! Everything's fine! I say that to everybody who comes in, and so far the record shows a ninety-percent fine rate, which is GREAT.\"",
+          "\"Membership at this shop is free. The thumbs are free. The read is what costs, but you look like you can afford a small read.\"",
+          "\"Go on in, claimant. Buy something. I'll be out here believing in you at full volume.\""
+        ]
+      }
+    },
+    {
+      "id": 101137,
+      "worldPixel": {
+        "x": 2544,
+        "y": 1592
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A pastel-pink unicorn girl waves with the whole arm, sparkles trailing like she left a filter on.",
+          "\"Hi hi! You're new to the record, huh. Don't be scared, the town only bites the people it's already decided about.\"",
+          "\"I got read early and it was the BEST thing. Now everybody knows my fit before I walk in. Saves so much time.\"",
+          "\"Stick by me a sec. Being seen next to something cute rounds your provenance up.\""
+        ]
+      }
+    },
+    {
+      "id": 101138,
+      "worldPixel": {
+        "x": 2840,
+        "y": 1544
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A pastel unicorn loiters by the corner shop, all hearts and sparkles and a faintly weary glitter.",
+          "\"Cute sells, so I'm always on the record. Every angle. My least favorite window has its own fan page.\"",
+          "\"Being adorable is just being witnessed forever with no off switch. Anyway. Buy something, you're blocking my light.\""
+        ]
+      }
+    },
+    {
+      "id": 101139,
+      "worldPixel": {
+        "x": 496,
+        "y": 1888
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small kawaii unicorn is parked near town hall, radiating enough sweetness to make the whole square feel surveilled.",
+          "\"I'm too cute to file, that's what everyone THINKS, and that's exactly how they got the other three.\"",
+          "\"The kiosk knows my order, my shoe size, and my least favorite window. I never told it about the window.\"",
+          "\"Sparkle is a disguise. You'd be amazed what the town lets you overhear when it's decided you're harmless.\""
+        ]
+      }
+    },
+    {
+      "id": 101140,
+      "worldPixel": {
+        "x": 832,
+        "y": 1944
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid with a peaked cap and enormous teary eyes clutches a bent trading card.",
+          "\"Press F. Doesn't matter for what. The town's always got somebody to pay respects to this week.\"",
+          "\"They filed my whole feeling under one word. 'Sad.' A word. For all of it. You believe that.\"",
+          "\"If you get leaked, get leaked crying. At least then the read's honest.\""
+        ]
+      }
+    },
+    {
+      "id": 101141,
+      "worldPixel": {
+        "x": 1160,
+        "y": 1896
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid with enormous teary eyes and a peaked cap is sitting on the curb, holding a card like it's a permit for grief.",
+          "\"Press F. You don't gotta know for what. Everyone in the record's mourning something. Most of us just don't caption it.\"",
+          "\"I heard the town's reading you back now. Must be nice. Nobody reads me. I'm more of a footnote. F.\""
+        ]
+      }
+    },
+    {
+      "id": 101142,
+      "worldPixel": {
+        "x": 1504,
+        "y": 1928
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid with huge wet eyes leans on the shop wall, cradling a bent trading card like it's a headstone.",
+          "\"Press F. You don't gotta ask for what. Just press it. Somebody's always gone around here.\"",
+          "\"I heard a thing about you. I'm not gonna say the thing. I'm just gonna hold it, real quiet, where you can see me holding it.\"",
+          "\"That's the trade in this town, mister. Everybody's carrying somebody's leaked version. I'm just honest about the weight.\""
+        ]
+      }
+    },
+    {
+      "id": 101143,
+      "worldPixel": {
+        "x": 1856,
+        "y": 1952
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid with a peaked cap and enormous teary eyes stares at nothing, clutching a bent trading card.",
+          "\"Press F. Nobody presses F anymore. The town retired the grief and kept the merch.\"",
+          "\"My leaked version cries in higher resolution than me. People like his tears better. Figures.\""
+        ]
+      }
+    },
+    {
+      "id": 101144,
+      "worldPixel": {
+        "x": 2200,
+        "y": 1896
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid in a yellow shirt is loudly counting the town-hall tiles and starting over every time you look.",
+          "\"Forty-one. No. ONE. You made me lose it. Now the count's got a witness so I have to file it different.\"",
+          "\"Step-cousins are coming later. When they file, the whole hall gets LOUD. You'll want your own tile by then.\""
+        ]
+      }
+    },
+    {
+      "id": 101145,
+      "worldPixel": {
+        "x": 2496,
+        "y": 1944
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A figure in a straw hat keeps the brim between their face and the street, patient as a fence post.",
+          "\"Hat's not for the sun. It's for the read. Costs the town an extra second to place me, and a second's a second.\"",
+          "\"I don't say much. Said too much once, it got filed, then it got LEAKED, then a stranger quoted me back wrong.\"",
+          "\"Provenance is just knowing where a thing came from. Around here that's the most dangerous thing anybody can know about you.\""
+        ]
+      }
+    },
+    {
+      "id": 101146,
+      "worldPixel": {
+        "x": 2816,
+        "y": 1976
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid in a red scarf loiters near the corner shop, scarf pulled up like weather they invented themselves.",
+          "\"Scarf's up because the town does your face first. Take the face and the rest of the read comes cheap. Not selling cheap.\"",
+          "\"They witnessed me buying candy and wrote it down like it MEANT something. It was candy. It meant candy.\"",
+          "\"You can be filed or you can be a rumor. Rumors move faster and nobody's got the receipt. I'm gonna be a rumor.\""
+        ]
+      }
+    },
+    {
+      "id": 101147,
+      "worldPixel": {
+        "x": 536,
+        "y": 2040
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "An owl in a beanie and shades leans on the corner-shop counter, working the register with the calm of a clerk who's seen your whole fit and priced it.",
+          "\"Welcome to the shop, claimant. Membership's free. The read is what costs, and I read fast.\"",
+          "\"Everything on these shelves is witnessed, provenance clean, no leaks. Can't say the same for the guy who sold it to me, but that's the trade.\"",
+          "He flashes an OK-hand. \"You buying, or you just here to get filed? Either way the kiosk's already logged your shoe size.\""
+        ]
+      }
+    },
+    {
+      "id": 101148,
+      "worldPixel": {
+        "x": 992,
+        "y": 2008
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A brown owl in a beanie and shades leans in a doorway working an unbothered OK-hand.",
+          "\"Whooo's asking. Relax, that's a joke, that's the whole bit. I do the honk, you do the read, we all go about our day.\"",
+          "\"I used to sell out of this block. Now I just perch on it. Turns out the town'll file you as 'vendor' forever even after you quit vending.\"",
+          "\"Anyway. Fit's clean, energy's clean. Go get whatever the source is charging you for today, claimant.\""
+        ]
+      }
+    },
+    {
+      "id": 101149,
+      "worldPixel": {
+        "x": 1376,
+        "y": 2392
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small kid draws power buttons for eyes, and both of them are leaking.",
+          "\"An error dialog opened in me this morning and nobody clicked OK. It's just... sitting there. Blinking. Being read.\"",
+          "\"The town saved a copy of the crying so I wouldn't have to keep it. That was supposed to help.\""
+        ]
+      }
+    },
+    {
+      "id": 101150,
+      "worldPixel": {
+        "x": 1504,
+        "y": 2304
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A little glitch-eyed kid sits on the curb, a soft error blinking somewhere behind his face.",
+          "\"Everything I loved got a dialog box. Are you sure? Yes. No. Cancel. I always hit the wrong one.\"",
+          "\"The town keeps a copy of me from before I started crying. It's nicer than I am. It gets more visitors.\""
+        ]
+      }
+    },
+    {
+      "id": 101151,
+      "worldPixel": {
+        "x": 1856,
+        "y": 2304
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small kid sits on the curb with the specific stillness of someone grieving a file they can't get deleted.",
+          "\"There's a version of me from before the town started reading. It was quieter. I miss it. It won't answer anymore.\"",
+          "\"Everything gets saved now. Even the parts you'd trade a whole summer to unsave. Especially those.\"",
+          "\"I'm not sad about being witnessed. I'm sad it's forever. Witnessed I could live with. Forever's the part that gets you.\""
+        ]
+      }
+    },
+    {
+      "id": 101152,
+      "worldPixel": {
+        "x": 2016,
+        "y": 2264
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid loiters just inside the corner shop's light, watching the door like it's about to confess something.",
+          "\"I know a thing about the kiosk. No, I won't say it here. Here is exactly where the record does its best listening.\"",
+          "\"You look almost unfiled. That's rare. Enjoy it. It doesn't survive contact with the town for long.\"",
+          "\"Everybody thinks the leak is the scary part. The leak's nothing. The scary part is how QUIETLY you get read first.\""
+        ]
+      }
+    },
+    {
+      "id": 101153,
+      "worldPixel": {
+        "x": 2592,
+        "y": 1976
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small crayon-blue kid stands under a flickering streetlight, an error dialog blinking soft behind its eyes like it never got dismissed.",
+          "\"Something didn't save. I don't know what. I keep waiting for it to load and it keeps offering to send a report to the town.\"",
+          "\"You want my advice, claimant? Don't get too witnessed. Once you're on the record you can't quit out. There's no button for it.\""
+        ]
+      }
+    },
+    {
+      "id": 101154,
+      "worldPixel": {
+        "x": 1056,
+        "y": 2904
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small kid with fuzzy brown hair squints at you like you're a dialog box that won't close.",
+          "\"You're new to the record. Everything about you still loads. Give it a week, you'll cache like the rest of us.\"",
+          "\"I asked the kiosk to forget one thing about me. It filed the request. Under my name. So now that's on the page too.\""
+        ]
+      }
+    },
+    {
+      "id": 101155,
+      "worldPixel": {
+        "x": 1344,
+        "y": 2584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A person with a whole sandwich for a head loiters near the fence, unbothered.",
+          "\"Careful how you look at me, claimant. Last week somebody read me as 'a snack' and the town filed it and now that's just my legal fit.\"",
+          "\"I'd offer you a bite but that's how provenance disputes start.\""
+        ]
+      }
+    },
+    {
+      "id": 101156,
+      "worldPixel": {
+        "x": 1504,
+        "y": 2656
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A hooded figure in wonky crayon-sunglasses waves at you with a hand drawn slightly too big.",
+          "\"I made myself at home. Colored me in and everything. Town says I'm off-model. Town can catch these hands.\"",
+          "\"No provenance, no problem. I'm not leaked, I'm ORIGINAL. Rough around the lines, but original.\""
+        ]
+      }
+    },
+    {
+      "id": 101157,
+      "worldPixel": {
+        "x": 1696,
+        "y": 2648
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid holds up a crayon drawing of a green-brained figure surrounded by cats, presenting it like a legal document.",
+          "\"HALLOW BE THY NAME. I wrote that. It means don't put my real one on the record. The cats agree. The cats always agree.\"",
+          "\"I drew myself before the town could. Now there's two of me and MINE has better cats. Mine wins.\"",
+          "\"They said my provenance is 'unclear.' GOOD. Unclear is safe. Unclear is where the cats and me live.\""
+        ]
+      }
+    },
+    {
+      "id": 101158,
+      "worldPixel": {
+        "x": 1952,
+        "y": 2520
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small crayon-colored kid is coloring outside every line on purpose, tongue out, deeply committed.",
+          "\"If you draw yourself messy enough the kiosk can't read the fit. I checked. It just made a confused little beep.\"",
+          "\"Grown-ups file. Kids DRAW. Drawing is like filing but you get to lie and it's called being CREATIVE.\"",
+          "\"My leaked version is very neat and very sad. I'd never leak like that. I'd leak WRONG. I'd leak with EXTRA arms.\""
+        ]
+      }
+    },
+    {
+      "id": 101159,
+      "worldPixel": {
+        "x": 1088,
+        "y": 3032
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A chibi girl in a pink cap that says FBI on it greets you from behind the corner-shop shelves, her eyes cheerful little X's that do not seem to affect her mood.",
+          "\"Hi! I greet people. That's my thing. I greet, I remember, I file. Mostly in that order but the last two blur.\"",
+          "\"Don't mind the eyes. They X'd out on their own. The town said it was a leak, I said it was a look, we agreed to disagree on the record.\"",
+          "\"Anyway. You're read, you're logged, you're welcome here. Grab what you need, claimant.\""
+        ]
+      }
+    },
+    {
+      "id": 101160,
+      "worldPixel": {
+        "x": 1168,
+        "y": 3016
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A soft chibi kid glows faintly, rainbow-star eyes catching more light than the street can account for.",
+          "\"Oh! You've got a heavy record on you. Somebody's been reading you all morning and not putting you back.\"",
+          "\"Here. Stand in the glow a sec. It won't fix your leaked version, but it makes the witnessing feel less like being caught.\"",
+          "\"Go easy on the town. It only got mean because it got read first.\""
+        ]
+      }
+    },
+    {
+      "id": 101161,
+      "worldPixel": {
+        "x": 1504,
+        "y": 3016
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A gentle glowing chibi drifts near the town-hall steps, a soft halo-light following a beat behind her.",
+          "\"Welcome to the hall, claimant. I greet people. It's not a job, the town just assigned me the glow and I leaned in.\"",
+          "\"They keep trying to file what I'm made of. Light, mostly. Rumor, a little. I let them guess. Guessing keeps them warm.\"",
+          "\"Go on in. Whatever they say about you in there, remember a glowing thing said hello first. That's on the record too.\""
+        ]
+      }
+    },
+    {
+      "id": 101162,
+      "worldPixel": {
+        "x": 1768,
+        "y": 3000
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A gentle chibi kid glows a soft rainbow, close enough that you can feel the warmth of being noticed.",
+          "\"Oh, hello. You're new to the record. It's warmer than they warn you. Don't fight it, just breathe.\"",
+          "\"I glow so the town always knows exactly where I am. Saves them the trouble of guessing wrong about me.\"",
+          "\"If it ever gets loud in there, come find the light. I'll vouch for whatever fit you show up in.\""
+        ]
+      }
+    },
+    {
+      "id": 101163,
+      "worldPixel": {
+        "x": 2440,
+        "y": 0
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A green-hooded little gremlin with red goggles and small angel wings flashes you a thumbs-up and a peace sign at once.",
+          "\"Camper! Sort of. The wings are new, the town added those when it re-read me. I'm not arguing, they're nice.\"",
+          "\"Everything's fine here. That's not me being read wrong, that's me actually saying it. Rare in Morningside. Savor it.\""
+        ]
+      }
+    },
+    {
+      "id": 101164,
+      "worldPixel": {
+        "x": 2504,
+        "y": 0
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A little winged camper bustles up with a lanyard of badges, already reaching for a form you didn't request.",
+          "\"Welcome, welcome! Every newcomer gets WITNESSED and BADGED. It's not mandatory, it's just heavily encouraged and also mandatory.\"",
+          "\"I've got a form for your fit, a form for your source, and a lovely little form for the forms. All filed same-day!\"",
+          "\"Some campers find the cheer unsettling. I find the town reads you gentler when you're SMILING and ORGANIZED. Badge?\""
+        ]
+      }
+    },
+    {
+      "id": 101165,
+      "worldPixel": {
+        "x": 2568,
+        "y": 0
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A little winged gremlin in red goggles drifts past, throwing a peace sign at nobody and a thumbs-up at the sky.",
+          "\"Great day to be witnessed! Wings up, worries down. I don't read the fine print and the fine print's never come for me yet.\"",
+          "\"You look like you carry the whole record on your back. Set it down a sec. The town'll still be reading you when you pick it back up.\""
+        ]
+      }
+    },
+    {
+      "id": 101166,
+      "worldPixel": {
+        "x": 2656,
+        "y": 0
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small red-capped camper gives you a two-handed thumbs-up outside the town hall, beaming like it's their whole job.",
+          "\"Everything's fine! I checked! I filed a form that SAYS everything's fine and they stamped it and now it's official.\"",
+          "\"You look like somebody who read the fine print. Don't. The fine print files back.\""
+        ]
+      }
+    },
+    {
+      "id": 101167,
+      "worldPixel": {
+        "x": 2720,
+        "y": 0
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A green-hooded gremlin with feathered wings and red goggles leans by the corner shop, throwing you a lazy peace sign.",
+          "\"Everything's fine. That's my whole read. The town files me under 'fine' and I have never once corrected it.\"",
+          "\"Wings, thumbs, goggles. Nobody's ever asked which one's load-bearing. Keep 'em guessing, claimant. The read's expensive.\""
         ]
       }
     }
