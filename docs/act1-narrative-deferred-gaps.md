@@ -3,7 +3,17 @@
 Status after the 2026-06-28 narrative pass. The Act-1 story spine plays
 start → Malady → `act1:complete` in-engine (verified via `scripts/act1.mjs` +
 `scripts/act1-gate-probe.mjs`), and the design's A–D beats are now wired except
-for the items below. These were **explicitly deferred** because they need engine
+for the items below.
+
+> **Re-verified 2026-07-04:** `scripts/act1.mjs` again played the full chain to
+> `act1:complete` (card-clique → returnless-king → malady → leave, 3/3 bosses,
+> all reveal/flag triggers fired; malady beaten by the Bosch+Paula duo as
+> designed). The design bible's Act-1 pages are unchanged since this doc, so the
+> alignment below is current. **Blocker update:** the "interior dialogue schema"
+> that blocked the Hot Wallet threshold rework (canon note below) is resolved —
+> `custom-dialogue.json` `byNpcId` now voices native interior NPCs in-engine
+> (36 wired + verified this pass). The Hot Wallet switch is now unblocked
+> content-wise; it remains a creative call for Nick. These were **explicitly deferred** because they need engine
 code, not content-file authoring (`triggers.json` / `cutscenes.json` /
 `added-npcs.json`).
 
