@@ -58,5 +58,10 @@ for (const candidate of selected) {
 }
 authored.solids = existing;
 fs.writeFileSync(AUTHORED, `${JSON.stringify(authored, null, 2)}\n`);
+// The runtime loads the GENERATED copy (loader.ts), which the full build refreshes
+// from content/. Sync it here too so promotions take effect without a rebuild.
+const generatedCopy = path.join(ROOT, "apps/game/public/generated/collision-overrides.json");
+fs.copyFileSync(AUTHORED, generatedCopy);
 console.log(`promoted ${selected.length} candidate(s): +${added} rects, ${skipped} already covered`);
+console.log(`synced ${generatedCopy}`);
 console.log(`review with: git diff content/collision-overrides.json`);

@@ -248,11 +248,50 @@ for (let id = 0; id < wallComps.length; id += 1) {
 }
 pocketAnomalies.sort((a, b) => b.cells - a.cells);
 
-// ---- anomaly C: reachable walkable cells under stamped building art ----
+// ---- anomaly C: reachable walkable cells whose art the building stamps CHANGED ----
+// The stamps are mostly seamless re-signed crops (same silhouette as EB), so a
+// walkable cell only matters when its pixels actually differ from the pre-stamp
+// background (snapshot in apps/game/public/editor-chunks/). Unchanged-art cells
+// keep EB's own art, for which EB's collision is already correct.
 const buildingsFile = path.join(ROOT, "content/building-overrides.json");
 const stampedAnomalies = [];
 if (fs.existsSync(buildingsFile)) {
   const CHUNK_PX = world.chunkSizeTiles * world.tileSize;
+  const chunkPair = new Map(); // "cx,cy" -> {post, pre} | null
+  const loadChunkPair = (chunkX, chunkY) => {
+    const key = `${chunkX},${chunkY}`;
+    if (chunkPair.has(key)) return chunkPair.get(key);
+    const postFile = path.join(GENERATED, `assets/world/chunks/background-${chunkX}-${chunkY}.png`);
+    const preFile = path.join(ROOT, `apps/game/public/editor-chunks/background-${chunkX}-${chunkY}.png`);
+    const pair =
+      fs.existsSync(postFile) && fs.existsSync(preFile)
+        ? { post: decodePngRgba(fs.readFileSync(postFile), postFile), pre: decodePngRgba(fs.readFileSync(preFile), preFile) }
+        : null;
+    chunkPair.set(key, pair);
+    return pair;
+  };
+  const cellArtChanged = (cx, cy) => {
+    const chunkX = Math.floor((cx * CS) / CHUNK_PX);
+    const chunkY = Math.floor((cy * CS) / CHUNK_PX);
+    const pair = loadChunkPair(chunkX, chunkY);
+    if (!pair) return true; // no snapshot -> keep the cell (conservative)
+    const lx = cx * CS - chunkX * CHUNK_PX;
+    const ly = cy * CS - chunkY * CHUNK_PX;
+    let changed = 0;
+    for (let py = ly; py < ly + CS; py += 1) {
+      for (let px = lx; px < lx + CS; px += 1) {
+        const i = (py * pair.post.width + px) * 4;
+        if (
+          Math.abs(pair.post.rgba[i] - pair.pre.rgba[i]) > 10 ||
+          Math.abs(pair.post.rgba[i + 1] - pair.pre.rgba[i + 1]) > 10 ||
+          Math.abs(pair.post.rgba[i + 2] - pair.pre.rgba[i + 2]) > 10
+        ) {
+          changed += 1;
+        }
+      }
+    }
+    return changed > 4; // >4 of 64 px differ = the stamp really redrew this cell
+  };
   const { buildings } = JSON.parse(fs.readFileSync(buildingsFile, "utf8"));
   for (const b of buildings ?? []) {
     const [chunkX, chunkY] = b.chunk.split(",").map(Number);
@@ -264,7 +303,9 @@ if (fs.existsSync(buildingsFile)) {
     const hits = [];
     for (let cy = r0; cy <= r1; cy += 1) {
       for (let cx = c0; cx <= c1; cx += 1) {
-        if (!solidAt(cx, cy) && cellReachable[cy * W + cx] && !doorCellSet.has(`${cx},${cy}`)) hits.push([cx, cy]);
+        if (!solidAt(cx, cy) && cellReachable[cy * W + cx] && !doorCellSet.has(`${cx},${cy}`) && cellArtChanged(cx, cy)) {
+          hits.push([cx, cy]);
+        }
       }
     }
     if (hits.length === 0) continue;
@@ -332,12 +373,29 @@ fs.writeFileSync(
     {
       schema: "swagbound.collision-override-candidates.v1",
       generatedBy: "collision-reachability",
-      candidates: pocketAnomalies.map((a, i) => ({
-        id: i,
-        town: a.town,
-        cells: a.cells,
-        rects: a.rects.map((r) => ({ ...r, note: `[gen:reachability] ${a.town} pocket ${i} (${a.cells} cells)` }))
-      }))
+      candidates: [
+        ...pocketAnomalies.map((a, i) => ({
+          id: i,
+          town: a.town,
+          kind: "pocket",
+          cells: a.cells,
+          rects: a.rects.map((r) => ({ ...r, note: `[gen:reachability] ${a.town} pocket ${i} (${a.cells} cells)` }))
+        })),
+        ...stampedAnomalies.map((a, i) => ({
+          id: pocketAnomalies.length + i,
+          town: a.town,
+          kind: "stamped",
+          building: a.building,
+          cells: a.reachableWalkableCells,
+          rects: cellsToRects(a.cells).map((r) => ({
+            x: r.cx * CS,
+            y: r.cy * CS,
+            w: r.cw * CS,
+            h: r.ch * CS,
+            note: `[gen:reachability] stamped ${a.building} art-changed walkable band`
+          }))
+        }))
+      ]
     },
     null,
     2

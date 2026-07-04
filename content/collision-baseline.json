@@ -1,37 +1,7 @@
 {
   "schema": "swagbound.collision-baseline.v1",
   "comment": "Known collision anomalies tolerated for now. The conformance test fails on NEW ids; remove entries here as they get fixed (baseline should only shrink).",
-  "roofPockets": [
-    "pocket:1640,6176"
-  ],
-  "stampedBuildings": [
-    "stamped:dr-office",
-    "stamped:the-big-top-10-17-255",
-    "stamped:fossils-6-8-56",
-    "stamped:the-dao",
-    "stamped:the-venue-4-12-98",
-    "stamped:the-plug",
-    "stamped:cafe",
-    "stamped:slice",
-    "stamped:slice-10-18-192",
-    "stamped:swag-mart-3-12-101",
-    "stamped:swag-hotel-onett-L",
-    "stamped:dr-office-threed-R",
-    "stamped:the-plug-10-18-72",
-    "stamped:dr-office-threed-L",
-    "stamped:grease",
-    "stamped:slice-4-13-242",
-    "stamped:dr-office-4-12-167",
-    "stamped:swag-hotel-onett-R",
-    "stamped:the-precinct",
-    "stamped:the-big-top-10-17-457",
-    "stamped:daycare-4-13-1",
-    "stamped:swag-hotel-2-12-338",
-    "stamped:wheels-2-12-473",
-    "stamped:cafe-11-18-119",
-    "stamped:swag-hotel-10-17-401",
-    "stamped:the-archive",
-    "stamped:mons-link"
-  ],
+  "roofPockets": [],
+  "stampedBuildings": [],
   "doors": []
 }

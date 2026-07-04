@@ -1450,6 +1450,111 @@
       "w": 8,
       "h": 8,
       "note": "sector2382 roof 14/14"
+    },
+    {
+      "x": 1688,
+      "y": 6176,
+      "w": 8,
+      "h": 8,
+      "note": "[gen:reachability] twoson pocket 0 (3 cells)"
+    },
+    {
+      "x": 1672,
+      "y": 6224,
+      "w": 8,
+      "h": 8,
+      "note": "[gen:reachability] twoson pocket 0 (3 cells)"
+    },
+    {
+      "x": 1640,
+      "y": 6256,
+      "w": 8,
+      "h": 8,
+      "note": "[gen:reachability] twoson pocket 0 (3 cells)"
+    },
+    {
+      "x": 2208,
+      "y": 6152,
+      "w": 96,
+      "h": 8,
+      "note": "[gen:reachability] stamped dr-office-4-12-167 art-changed walkable band"
+    },
+    {
+      "x": 5384,
+      "y": 9064,
+      "w": 88,
+      "h": 8,
+      "note": "[gen:reachability] stamped the-big-top-10-17-255 art-changed walkable band"
+    },
+    {
+      "x": 1632,
+      "y": 1264,
+      "w": 64,
+      "h": 8,
+      "note": "[gen:reachability] stamped the-dao art-changed walkable band"
+    },
+    {
+      "x": 3136,
+      "y": 4392,
+      "w": 64,
+      "h": 8,
+      "note": "[gen:reachability] stamped fossils-6-8-56 art-changed walkable band"
+    },
+    {
+      "x": 2048,
+      "y": 7000,
+      "w": 48,
+      "h": 8,
+      "note": "[gen:reachability] stamped daycare-4-13-1 art-changed walkable band"
+    },
+    {
+      "x": 1128,
+      "y": 1584,
+      "w": 24,
+      "h": 8,
+      "note": "[gen:reachability] stamped dr-office art-changed walkable band"
+    },
+    {
+      "x": 1160,
+      "y": 1584,
+      "w": 8,
+      "h": 8,
+      "note": "[gen:reachability] stamped dr-office art-changed walkable band"
+    },
+    {
+      "x": 1640,
+      "y": 6440,
+      "w": 8,
+      "h": 8,
+      "note": "[gen:reachability] stamped swag-mart-3-12-101 art-changed walkable band"
+    },
+    {
+      "x": 1672,
+      "y": 6440,
+      "w": 8,
+      "h": 8,
+      "note": "[gen:reachability] stamped swag-mart-3-12-101 art-changed walkable band"
+    },
+    {
+      "x": 1712,
+      "y": 6440,
+      "w": 8,
+      "h": 8,
+      "note": "[gen:reachability] stamped swag-mart-3-12-101 art-changed walkable band"
+    },
+    {
+      "x": 1736,
+      "y": 1088,
+      "w": 8,
+      "h": 8,
+      "note": "[gen:reachability] stamped grease art-changed walkable band"
+    },
+    {
+      "x": 5352,
+      "y": 9264,
+      "w": 8,
+      "h": 8,
+      "note": "[gen:reachability] stamped slice-10-18-192 art-changed walkable band"
     }
   ]
 }
