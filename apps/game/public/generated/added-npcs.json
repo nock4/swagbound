@@ -11,7 +11,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The drug store clerk swears the kiosk reads minds. The kiosk swears it only reads receipts."
+          "The clerk here swears the kiosk reads minds. The kiosk swears it only reads receipts.",
+          "Either way it filed my grocery list under 'claimant.' Now the beans have provenance.",
+          "Buy something small so it has a real record of you. An unwitnessed shopper makes the machine nervous."
         ]
       }
     },
@@ -25,7 +27,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "Two of everyone lately. Real you, route you. I stopped keeping count at the corner."
+          "Two of everyone lately. The real one, and the one the route filed ahead.",
+          "I stopped counting at the corner. The tally kept counting me back.",
+          "If your other you gets here first, don't argue. It has better paperwork than either of us."
         ]
       }
     },
@@ -38,7 +42,12 @@
       "spriteGroup": 119,
       "facing": "down",
       "interaction": {
-        "ref": "interior:neighbor-house-v0"
+        "ref": "interior:neighbor-house-v0",
+        "pages": [
+          "I keep the kiosk facing the wall now. It kept reading my receipts out loud like they were poetry.",
+          "You want the truth? It files everyone twice. Once as who walked in, once as who it wishes had.",
+          "Don't stand under the awning too long. That counts as a visit, and a visit wants a name."
+        ]
       }
     },
     {
@@ -51,7 +60,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "The route clerk says you are early. The receipt says you are late. I trust the receipt."
+          "The route clerk says you're early. The receipt says you're late. I trust the receipt.",
+          "Paper doesn't route around a corner and come back wearing your face. Paper just sits there being true.",
+          "Keep your copy. When two of you show up, the one holding the record gets believed."
         ]
       }
     },
@@ -65,7 +76,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "Your leaked version already waved at me. Very polite. Terrible shoes."
+          "Your leaked version already came through. Waved at me, very polite.",
+          "Terrible shoes, though. Whoever copied you skipped the feet.",
+          "I told it you'd be along. It smiled like it already knew, which I did not enjoy."
         ]
       }
     },
@@ -79,7 +92,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "I sell stamps, but lately the stamps sell me. Little VESSEL mark, big opinions."
+          "I sell stamps, but lately the stamps sell me. Little VESSEL mark, big opinions.",
+          "One of them countersigned a letter I never wrote. Return address: me, three inches to the left."
         ]
       }
     },
@@ -93,7 +107,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "Swag is eternal. SOURCE? I used to hum it. Now the kiosk hums back."
+          "Swag is eternal. SOURCE? I used to hum that line. Now the kiosk hums it back before I finish.",
+          "Something down the block learned the tune off my receipts. I never sang near a machine on purpose.",
+          "If it starts humming YOUR errands, don't answer. That's how it opens a folder on you."
         ]
       }
     },
@@ -107,7 +123,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "Keep your fit readable. The soft gate likes a clean outline and hates surprises."
+          "Keep your fit readable. The soft gate likes a clean outline.",
+          "It hates surprises. A stray fold reads as a person it hasn't approved yet.",
+          "Stand plain, hold still, let it copy you down. That's all a gate wants: a version it can keep."
         ]
       }
     },
@@ -121,7 +139,8 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "A witness note under the mat keeps the house from filing us as weather."
+          "A witness note under the mat keeps the house from filing us as weather.",
+          "Weather doesn't get a birthday. We do, so long as somebody's willing to say they saw us."
         ]
       }
     },
@@ -135,7 +154,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The rumor field is warm today. That means gossip can stand up without help."
+          "The rumor field is warm today. That means gossip can stand up without help.",
+          "On a cold day a story needs a witness to carry it. On a warm one it just walks off wearing your name.",
+          "Watch your outline near the fountain. Warm air likes to trace a fit and file the tracing."
         ]
       }
     },
@@ -149,7 +170,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "They asked me for proof-token change. I gave them two nickels and a posture."
+          "They asked me for proof-token change at the kiosk this morning.",
+          "I gave them two nickels and a posture. The posture cleared. The nickels are under review.",
+          "Turns out how you stand is more spendable than what you carry. Nobody warns you about that."
         ]
       }
     },
@@ -163,7 +186,8 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "If the line moves without you, do not chase it. Lines love witnesses with tired feet."
+          "If the line moves without you, do not chase it. Lines love a witness with tired feet.",
+          "Stand still and it comes back around. Or it forgets you entirely, which honestly is its own kind of rest."
         ]
       }
     },
@@ -177,7 +201,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "My kid drew the leaked version with a brighter smile. Fair. He gets more sunlight."
+          "My kid drew your leaked version with a brighter smile. Fair. He gets more sunlight than the source does.",
+          "I told him the real one has better wrinkles. He said wrinkles don't scan.",
+          "Kids always sketch the route you, never the you-you. The clean copy is easier to color inside."
         ]
       }
     },
@@ -191,7 +217,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The gate opened because my cardigan matched the form. Civic magic, I guess."
+          "The gate opened because my cardigan matched the form. Same beige, apparently.",
+          "Civic magic, I guess. I've worn it every day since, out of superstition.",
+          "Don't laugh. In this town, looking like your own paperwork is the whole trick."
         ]
       }
     },
@@ -205,7 +233,8 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "Receipt paper curls toward whoever it thinks is real. Mine keeps pointing at the alley."
+          "Receipt paper curls toward whoever it thinks is real. Mine keeps pointing at the alley.",
+          "Been meaning to look. Been meaning not to. The alley version pays cash and never argues about the total."
         ]
       }
     },
@@ -219,7 +248,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "I saw your shortcut self at breakfast. Ordered toast, paid in perfect legibility."
+          "I saw your shortcut self at breakfast. Ordered toast, paid in perfect legibility.",
+          "Never smudged a signature in its life. Tipped exactly what the receipt predicted.",
+          "The real you would've argued about the eggs. That's how I knew which one to seat by the window."
         ]
       }
     },
@@ -233,7 +264,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "When the mark dries too fast, check your pockets. Something decided it belongs to you."
+          "When the mark dries too fast on your hand, check your pockets.",
+          "Something decided it belongs to you, and it filed the claim before you could.",
+          "Slow-drying ink still asks permission. Fast ink already has the receipt."
         ]
       }
     },
@@ -247,7 +280,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "Swag is eternal. SOURCE? Sorry, the chorus committee meets near my window."
+          "Swag is eternal. SOURCE? Sorry, the chorus committee meets near my window.",
+          "They hum the second half but never the first. Nobody in this town remembers where the source went."
         ]
       }
     },
@@ -261,7 +295,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "The scene changed overnight. Same benches, different permissions."
+          "The scene changed overnight. Same benches, different permissions.",
+          "Sat on my usual one and it asked to see proof I'd been witnessed here before.",
+          "Everything's soft-gated now. Even the shade wants to know who's on the record."
         ]
       }
     },
@@ -275,7 +311,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "I keep my charm in a teacup. It rattles when the house forgets my name."
+          "I keep my charm in a teacup by the window. Small brass thing, quiet mostly.",
+          "It rattles when the house forgets my name. Happens more than it used to.",
+          "When it goes still again, I know I've been re-filed. Correctly, I hope."
         ]
       }
     },
@@ -289,7 +327,8 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "Every morning I initial the mirror. It has never countersigned."
+          "Every morning I initial the mirror. It has never countersigned.",
+          "One of us is the record and one of us is the read. I keep forgetting which side of the glass I'm filed on."
         ]
       }
     },
@@ -303,7 +342,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "The clerk called me a reliable witness. I have been insufferable all week."
+          "The clerk called me a reliable witness. I've been insufferable about it all week.",
+          "Do you know what that DOES to a person, being filed as trustworthy? I countersign my own grocery lists now.",
+          "Ask me what I saw. Go on. My account is admissible and I will not be brief."
         ]
       }
     },
@@ -317,7 +358,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "Do not let a kiosk compliment your fit. That is how it starts a folder."
+          "Do not let a kiosk compliment your fit. I mean it.",
+          "That's how it starts a folder on you. First the flattery, then the record.",
+          "Take the compliment and walk. A folder that likes you is still a folder."
         ]
       }
     },
@@ -331,7 +374,8 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "A soft gate is still a gate. It just apologizes while counting you."
+          "A soft gate is still a gate. It just apologizes while counting you.",
+          "Says 'thank you for being witnessed' like it did you a favor. Then your fit's in a folder before the door swings shut."
         ]
       }
     },
@@ -345,7 +389,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "My brother trades routes like recipes. None of them taste like arriving."
+          "My brother trades routes like recipes. This alley for that shortcut, a pinch of permission.",
+          "None of them ever taste like arriving. You get there and the there has already been filed under someone else.",
+          "I told him: a route you didn't walk is just a rumor with directions. He witnessed me anyway."
         ]
       }
     },
@@ -359,7 +405,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The VESSEL mark on the mailbox is new. The mailman says it always was."
+          "The VESSEL mark on the mailbox is new. Little stamp, went up overnight.",
+          "The mailman swears it always was there. Swears it, hand on his bag.",
+          "That's the trouble with this town. New things arrive already remembered."
         ]
       }
     },
@@ -373,7 +421,8 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "I like the real you better. More wrinkles in the proof."
+          "I like the real you better. More wrinkles in the proof.",
+          "The route version's got a smoother face, sure. But smooth proof is the kind that scans clean and means nothing."
         ]
       }
     },
@@ -387,7 +436,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The leaked version tipped a hat I do not own. Stylish, legally confusing."
+          "Your leaked version tipped a hat you don't own. Stylish. Legally confusing.",
+          "I complimented the hat and now there's a claim on file about who it belongs to.",
+          "If a cleaner copy of you starts accessorizing, get it in writing fast. Provenance loves a good hat."
         ]
       }
     },
@@ -401,7 +452,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "If you hear paper breathing, walk slower. It hates being noticed mid-decision."
+          "If you hear paper breathing, walk slower. Don't stop, just slow.",
+          "It's mid-decision about somebody, and it hates being noticed while it chooses.",
+          "Get caught watching and it might decide about you instead. Keep your eyes soft."
         ]
       }
     },
@@ -415,7 +468,8 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "Swag is eternal. SOURCE? The toddlers say it before they can spell shoes."
+          "Swag is eternal. SOURCE? The toddlers say it before they can spell shoes.",
+          "Nobody taught them. It just arrives, like a mark you didn't know your sleeve was carrying."
         ]
       }
     },
@@ -429,7 +483,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "I run the lost-and-found. Mostly we find witnesses pretending to be umbrellas."
+          "I run the lost-and-found. Mostly we find witnesses pretending to be umbrellas.",
+          "They stand very still by the door hoping nobody reads them. But everything here gets read eventually.",
+          "If you lost a version of yourself, check the back shelf. We file the quiet ones under 'weather.'"
         ]
       }
     },
@@ -443,7 +499,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "This sidewalk has a preferred version of everyone. Mine is three inches taller."
+          "This sidewalk has a preferred version of everyone. Did you know that?",
+          "Mine's about three inches taller and never trips on the loose brick.",
+          "I've never met him, but the pavement clearly likes him more. I try not to take it personally."
         ]
       }
     },
@@ -457,7 +515,8 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "Do not sign a warm form. Let it cool. That advice cost me a mailbox."
+          "Do not sign a warm form. Let it cool. That advice cost me a mailbox.",
+          "Warm means it's still deciding what you are. Cool means it already knows and can't take it back."
         ]
       }
     },
@@ -471,7 +530,9 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "The rumor heat rose when you arrived. Nothing personal; the field likes arrivals."
+          "The rumor heat rose the second you arrived. Nothing personal \u2014 the field just likes an arrival.",
+          "A new face is fresh paper. Everything nearby leans in to take the read.",
+          "Give it a minute. Once it's decided what you are, the warmth settles and the gossip can sit down."
         ]
       }
     },
@@ -485,7 +546,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "A good charm should feel like a key that forgot the door."
+          "A good charm should feel like a key that forgot its door.",
+          "Warm, certain, useless in the exact right way. It opens something, just not here.",
+          "The ones that click into every lock? Those aren't charms. Those are keys someone made about you."
         ]
       }
     },
@@ -499,7 +562,8 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "I was stamped VESSEL at lunch and SOURCE by dinner. Busy day for my sleeves."
+          "I was stamped VESSEL at lunch and SOURCE by dinner. Busy day for my sleeves.",
+          "Neither one feels like the truth. But the kiosk had both ink pads out, so who am I to file a complaint."
         ]
       }
     },
@@ -513,7 +577,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The town archive keeps my old posture on file. It was thinner and more cooperative."
+          "The town archive keeps my old posture on file. It was thinner and more cooperative.",
+          "Every so often the clerk holds up the record and asks why I've drifted from it.",
+          "I tell them people bend. The drawer disagrees. The drawer thinks the source should match its copy."
         ]
       }
     },
@@ -527,7 +593,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "Your proof-token flickers near the bakery. Bread is a known auditor."
+          "Your proof-token flickers near the bakery. I've watched it happen.",
+          "Bread is a known auditor. Smells you coming, checks if you match your file.",
+          "Buy a roll. Tokens settle right down once the loaf's had a look at you."
         ]
       }
     },
@@ -541,7 +609,8 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "Children call the gate polite because it crouches. Adults know it is measuring shoes."
+          "Children call the gate polite because it crouches. Adults know it is measuring shoes.",
+          "It kneels down to your kid's height and smiles. Then it writes down their gait like it's a claimant already."
         ]
       }
     },
@@ -555,7 +624,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The leaked version cuts through lines. I do not resent him. I invoice him."
+          "Your leaked version cuts every line in town. I don't resent him. I invoice him.",
+          "Clean outline, no weather in the fit, gates just wave him through. Very efficient. Very billable.",
+          "Tell him his tab's on the record. Even a shortcut self has to settle up with a real witness."
         ]
       }
     },
@@ -569,7 +640,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "My receipt says I met you yesterday. I was home folding civic towels."
+          "My receipt says I met you yesterday. Right here, mid-afternoon.",
+          "I was home the whole day folding civic towels. I have witnesses. The towels.",
+          "So one of us is misfiled, and the receipt outranks my memory. It always does."
         ]
       }
     },
@@ -583,7 +656,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "If a route smiles, check for staples."
+          "If a route smiles, check for staples.",
+          "A real road doesn't want anything from you. A route that grins has already been filed twice and wants your signature to make three."
         ]
       }
     },
@@ -597,7 +671,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "The kiosk offered me a shortcut to myself. I declined. Too many stairs."
+          "The kiosk offered me a shortcut to myself. I declined. Too many stairs.",
+          "It said the route version arrives sooner and smiles more. I said the source is the one with the knees.",
+          "Anything that offers to get you home faster is quietly measuring what it keeps of you at the door."
         ]
       }
     },
@@ -611,7 +687,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "Swag is eternal. SOURCE? It sounds nicer when the fountain says it."
+          "Swag is eternal. SOURCE? Honestly, it sounds nicer when the fountain says it.",
+          "I just hum along. The fountain does the citing, I do the standing near it.",
+          "Ask it yourself sometime. It'll answer in coins, which is either proof or plumbing."
         ]
       }
     },
@@ -625,7 +703,8 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "My aunt files clouds by witness quality. Today's sky is admissible but moody."
+          "My aunt files clouds by witness quality. Today's sky is admissible but moody.",
+          "She won't testify to a cloud unless two people saw it. Says weather that only one person witnessed is just a feeling with a shape."
         ]
       }
     },
@@ -639,7 +718,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "The scene likes tidy entrances. Try not to make one too memorable."
+          "The scene likes a tidy entrance. Try not to make one too memorable.",
+          "Memorable gets witnessed twice, and twice is how a name goes into the ledger for good.",
+          "Walk in like weather. Weather doesn't get a folder. Weather just passes through and nobody signs for it."
         ]
       }
     },
@@ -653,7 +734,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "A mark on the hand washes off. A mark in the ledger wants a birthday."
+          "A mark on the hand washes off by supper. No harm, no memory.",
+          "A mark in the ledger wants a birthday. Wants to be sung to. Wants to stay.",
+          "Guard which kind you accept. Ink forgets. The record throws a party."
         ]
       }
     },
@@ -667,7 +750,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "I sell charms for squeaky gates. Most customers need squeakier courage."
+          "I sell charms for squeaky gates. Most customers need squeakier courage.",
+          "The charm doesn't open the gate. It just gives your hands something to hold while the gate reads your outline anyway."
         ]
       }
     },
@@ -681,7 +765,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "The cleaner version of you already renewed a permit. We all clapped quietly."
+          "The cleaner version of you already renewed a permit. We all clapped quietly.",
+          "Filled the form out in one pass, no smudges, matched the record like it was born to it.",
+          "We didn't tell it the source hadn't shown yet. Around here the copy that files first gets the birthday."
         ]
       }
     },
@@ -695,7 +781,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "Rumor sticks to damp coats. Hang yours before the field learns your shape."
+          "Rumor sticks to damp coats. Something about the wet, it holds the gossip.",
+          "Hang yours by the door before the field learns your shape.",
+          "Walk in soaked and by morning the whole street knows a version of you. Usually wetter, always wrong."
         ]
       }
     },
@@ -709,7 +797,8 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "My proof got rejected for being too personal. I took that as praise."
+          "My proof got rejected for being too personal. I took that as praise.",
+          "The clean version scans through in a blink. Mine had a coffee stain and a bad year in it. That's how you know it's real."
         ]
       }
     },
@@ -723,7 +812,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The gate knows a neat fit from a nervous one. Button twice, breathe once."
+          "The gate knows a neat fit from a nervous one. Button twice, breathe once.",
+          "It reads the outline before it reads the papers. A trembling hem tells it you've got weather to hide.",
+          "Go in clean and boring. The soft gate loves a fit it can file without asking follow-up questions."
         ]
       }
     },
@@ -737,7 +828,9 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "I keep receipts in my hat. Makes my thoughts look official."
+          "I keep my receipts in my hat. Whole brim, packed with them.",
+          "Makes my thoughts look official. People nod at me differently now.",
+          "A witnessed head is a heavy head, but at least nobody asks me to prove I was here."
         ]
       }
     },
@@ -751,7 +844,8 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "Swag is eternal. SOURCE? Our choir director calls it municipal breathing."
+          "Swag is eternal. SOURCE? Our choir director calls it municipal breathing.",
+          "In and out, in and out, the whole town on one lungful. Nobody's sure who exhaled it first."
         ]
       }
     },
@@ -765,7 +859,9 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "Someone moved my witness chair two inches left. Now my memories lean."
+          "Someone moved my witness chair two inches left. Now my memories lean.",
+          "I sat in the same spot forty years so my account would stay level and admissible.",
+          "Two inches and everything I recall tilts toward the alley. Don't let them shift what you witness from."
         ]
       }
     },
@@ -779,7 +875,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The leaked version never blinks in photos. Efficient fellow. Bad at soup."
+          "The leaked version never blinks in photos. Efficient fellow.",
+          "Perfect posture, perfect part in the hair, always the correct amount of smile.",
+          "Bad at soup, though. I've watched him. No copy ever learned to be careless with a spoon."
         ]
       }
     },
@@ -793,7 +891,8 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "When the scene gets quiet, listen for the stamp pad. That is when names get softer."
+          "When the scene gets quiet, listen for the stamp pad. That is when names get softer.",
+          "A wet stamp has a sound like a small mouth closing. That's a name being decided while you weren't looking."
         ]
       }
     },
@@ -807,7 +906,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "I am not afraid of paperwork. I am afraid of paperwork that remembers birthdays."
+          "I'm not afraid of paperwork. I'm afraid of paperwork that remembers birthdays.",
+          "A form should forget you the moment it's filed. Mine sends postcards. Mine asks how the knees are.",
+          "When the record starts being warm to you, that's not kindness. That's the record deciding to keep you."
         ]
       }
     },
@@ -821,7 +922,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The route behind the clinic is closed unless the clerk likes your silhouette."
+          "The route behind the clinic is closed. Officially open, practically closed.",
+          "It only lets you through if the clerk likes your silhouette that day.",
+          "Stand in the doorway, let him read your outline, wait. Some shapes clear. Most just get logged."
         ]
       }
     },
@@ -835,7 +938,8 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "A proof-token should clink. If it whispers, give it back."
+          "A proof-token should clink. If it whispers, give it back.",
+          "A clinking token knows what it is. A whispering one is still negotiating whether it belongs to you or the alley."
         ]
       }
     },
@@ -849,7 +953,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "My charm warmed when you passed. Either you are you, or the house is optimistic."
+          "My charm warmed when you passed. Either you're you, or the house is feeling optimistic.",
+          "It only heats for a source. Copies leave it cold \u2014 no wrinkles for it to hold onto.",
+          "Stay a second so it can finish the read. Half a read is worse than none; that's how mistaken names get filed."
         ]
       }
     },
@@ -863,7 +969,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "They say the shortcut version saves time. Whose time, exactly?"
+          "They say the shortcut version of you saves time. Skips the lines, skips the wait.",
+          "Whose time, exactly, is the question I keep asking. Not yours. You're still here.",
+          "The time it saves goes somewhere. Somewhere with your name on the door and none of your Tuesdays."
         ]
       }
     },
@@ -877,7 +985,8 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "I once saw a receipt apologize. Beautiful penmanship. Horrible omen."
+          "I once saw a receipt apologize. Beautiful penmanship. Horrible omen.",
+          "'Sorry for the total,' it said, in a hand nicer than mine. Paper only gets polite right before it files you."
         ]
       }
     },
@@ -891,7 +1000,9 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "The rumor field calls me an early adopter. I still use string for lists."
+          "The rumor field calls me an early adopter. I still keep my lists on string.",
+          "Knots, not receipts. String can't be witnessed, can't be filed, can't route off and wave at me later.",
+          "They keep offering me a proof-token. I keep offering them a length of string. We both leave unconvinced."
         ]
       }
     },
@@ -905,7 +1016,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "A civic gate is just a question wearing hinges."
+          "A civic gate is just a question wearing hinges.",
+          "It swings open when you answer right and shut when you hesitate.",
+          "The trick is, it already knows the answer. It only wants to see if your version matches its version."
         ]
       }
     },
@@ -919,7 +1032,8 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "Swag is eternal. SOURCE? Do not worry, I only say it on even-numbered errands."
+          "Swag is eternal. SOURCE? Do not worry, I only say it on even-numbered errands.",
+          "Say it too often and the kiosk hums along. Then you've got a duet on the record, and one of the singers isn't you."
         ]
       }
     },
@@ -933,7 +1047,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "My mother says legibility is kindness. The forms say it is currency."
+          "My mother said legibility is kindness. The forms say it's currency.",
+          "So now I write clean and I feel the gate taking change off the top of every letter.",
+          "A smudge used to mean you were human. Now it means the record has to guess, and the record hates guessing."
         ]
       }
     },
@@ -947,7 +1063,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The mark VESSEL appeared on my soup spoon. I ate with a fork and felt powerful."
+          "The mark VESSEL turned up on my soup spoon this week. Etched right in.",
+          "So I ate with a fork and felt powerful. Unfiled, for one whole meal.",
+          "The spoon's in a drawer now, marked and waiting. It can hold whatever the ledger wants. Not my broth."
         ]
       }
     },
@@ -961,7 +1079,8 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "If you meet the leaked version, ask him where he keeps the quiet parts."
+          "If you meet the leaked version, ask him where he keeps the quiet parts.",
+          "He's got the smile and the walk. But the parts of you that don't scan, the ones with weather in them? He left those behind. Ask him."
         ]
       }
     },
@@ -975,7 +1094,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "I witnessed the fountain process a coin. It came back as policy."
+          "I witnessed the fountain process a coin. It came back as policy.",
+          "Went in round and bright, came out a line item nobody remembers voting on.",
+          "That's the whole town in one splash. Drop something real, retrieve something filed. Keep your coins dry."
         ]
       }
     },
@@ -989,7 +1110,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "Some routes are paved with permission. Some are paved with people saying probably."
+          "Some routes are paved with permission. Smooth ones. Signed all the way down.",
+          "Some are paved with people saying probably. Those give a little underfoot.",
+          "Watch which kind you take. Permission remembers you arrived. Probably just remembers the doubt."
         ]
       }
     },
@@ -1003,7 +1126,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "The kiosk knows my order, my shoe size, and my least favorite window."
+          "The kiosk knows my order, my shoe size, and my least favorite window.",
+          "I never told it the window. That's the one that keeps me up. It read something off me I'd never even filed."
         ]
       }
     },
@@ -1017,7 +1141,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "Your fit has weather in it. That can pass, but only if the clerk likes rain."
+          "Your fit's got weather in it. That can pass, but only if the clerk likes rain.",
+          "A little wrinkle, a little damp \u2014 it reads as lived-in, which reads as real. Or it reads as unfiled. Depends on the mood.",
+          "Dry off before the gate if you're not sure. A clean outline never had to explain itself to a folder."
         ]
       }
     },
@@ -1031,7 +1157,9 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "I filed myself under temporary once. The drawer still sends postcards."
+          "I filed myself under temporary once. Seemed humble at the time.",
+          "That was years ago. The drawer still sends postcards. Friendly ones.",
+          "Turns out nothing here is temporary. The word just means the record hasn't decided what to keep yet."
         ]
       }
     },
@@ -1045,7 +1173,8 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "A stamp is a tiny thunderclap. A mark is the weather that follows."
+          "A stamp is a tiny thunderclap. A mark is the weather that follows.",
+          "The stamp's over in a second. But the mark? That hangs around your name for a season, changing what rooms let you in."
         ]
       }
     },
@@ -1059,7 +1188,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "The soft gate asked for proof, then thanked my shadow for attending."
+          "The soft gate asked me for proof, then thanked my shadow for attending.",
+          "Very polite. It counted me twice and apologized to the half of me that couldn't sign.",
+          "That's the trick of a soft gate. It says sorry the whole time it's deciding how much of you to keep."
         ]
       }
     },
@@ -1073,7 +1204,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "I sell envelopes. Folks buy them to keep rumors from touching the letters."
+          "I sell envelopes. Good stiff ones, the kind that seal true.",
+          "Folks buy them to keep rumors from touching the letters inside.",
+          "Doesn't always work. But a rumor that has to knock is slower than one that walks right in."
         ]
       }
     },
@@ -1087,7 +1220,8 @@
       "facing": "right",
       "interaction": {
         "pages": [
-          "If the field gets too warm, stand near the old sign. It forgets on purpose."
+          "If the field gets too warm, stand near the old sign. It forgets on purpose.",
+          "The new signs remember everything. That old one lost its paint years ago and lost your name with it. Blessed thing."
         ]
       }
     },
@@ -1101,7 +1235,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "Your leaked version signed the guestbook in pencil. Classy cowardice."
+          "Your leaked version signed the guestbook in pencil. Classy cowardice.",
+          "Wanted to be on the record and erasable at once. Wanted the witnessing without the weather.",
+          "I inked over it. Now there's a claim about whose signature that really is, and the book won't say."
         ]
       }
     },
@@ -1115,7 +1251,9 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "A receipt is just a memory with a payroll number."
+          "A receipt is just a memory with a payroll number.",
+          "That's all it is. Somebody got paid to remember you were here, so now it's official.",
+          "Which makes my actual memory the amateur version. Sweeter, cheaper, and admissible nowhere."
         ]
       }
     },
@@ -1129,7 +1267,8 @@
       "facing": "left",
       "interaction": {
         "pages": [
-          "Go carefully. The town is kind, but kind things can still file you."
+          "Go carefully. The town is kind, but kind things can still file you.",
+          "It'll hold the door and learn your outline in the same breath. Nobody here means harm. That's what makes the record so complete."
         ]
       }
     },
@@ -4261,7 +4400,9 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A regular on the strip lets her mopey little pet do the appraising. It sniffs your hem and sighs.",
+          "Nothing really matters to it, darling, but it can still tell secondhand from on-loan at forty paces.",
+          "The beach priced your fit before you cleared the boardwalk. The pet just confirms what the strip already filed."
         ]
       }
     },
@@ -4344,7 +4485,10 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "Relaxio regular, towel already claimed, reads your fit off the strip in one slow sweep.",
+          "\"Off-season tan, on-season nerves. The spa can fix one of those, and it's never the one you think.\"",
+          "\"Book the cabana under a name you don't mind being appraised. They keep the good chairs for the on-loan crowd.\"",
+          "\"Relax, claimant. On this beach 'unwind' just means 'hold still long enough to be valued.'\""
         ]
       }
     },
@@ -4426,7 +4570,10 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A regular in the shade of the strip gives your fit a slow, appraising once-over.",
+          "The Runway crowd priced you before you cleared the boardwalk. Off-season silhouette, they're saying. Sweet, but not on loan to anyone.",
+          "Don't take it hard. The strip prices the sunset too, and the sunset shows up every night anyway.",
+          "Come to the opening tonight if you want. Wear something the appraisers can't finish reading. Keeps them hungry."
         ]
       }
     },
@@ -4441,7 +4588,9 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A sun-pink regular squints at you over the rim of something expensive and slow.",
+          "You're not on the collectors' list. Doesn't mean you can't be, means the buyer hasn't been told about you yet.",
+          "Everyone on this beach is a claimant to somebody's attention. Get appraised early. Late arrivals go home unwitnessed."
         ]
       }
     },
@@ -4527,7 +4676,10 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A Foodiez lifer, plate balanced, prices your fit like it's already on the tasting menu.",
+          "\"You've got a walk-in look. The strip only seats the reserved. Provenance is the maitre d' here, sweetheart.\"",
+          "\"Everything on this beach is plated for the buyer, not the eater. Even the sunsets come with a little card.\"",
+          "\"Order the witnessed special. Costs more, but at least someone signs off that you ate.\""
         ]
       }
     },
@@ -4578,7 +4730,9 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A beach guru with a serene, sunburnt face receives you like you're a piece arriving for authentication.",
+          "Your fit has provenance, I can smell it under the oil. The question is whether it's yours or just on loan.",
+          "Relax into the read. The strip appraises everyone eventually; the calm ones simply price better at the opening."
         ]
       }
     },
@@ -4611,7 +4765,8 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "The kiosk filed me under 'ambient.' I've stopped arguing.",
+          "Stand near me long enough and it'll file you the same. Everyone's background to someone's record."
         ]
       }
     },
@@ -4643,7 +4798,9 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A little sparkle-mascot bobs along the tideline, catching light like it's already been hung in a gallery.",
+          "Heavy liquid, light spirit, it chirps. Everything shines here until the appraiser turns it over.",
+          "It read your fit, sparkled twice, and priced you as 'promising, unframed.' The beach means that kindly. Mostly."
         ]
       }
     },
@@ -4710,7 +4867,10 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A woman in gallery-opening white regards you over the rim of a drink she isn't drinking.",
+          "Everyone on this beach is on loan from somewhere. The trick is never letting the collector see the loan tag.",
+          "I was the centerpiece three seasons running. Then a cleaner version turned up, better lit, and the buyers migrated.",
+          "So I appraise now instead of getting appraised. Safer side of the glass. You should think about which side you're standing on."
         ]
       }
     },
@@ -4742,7 +4902,9 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A Little Swag World local, salt in the fibers, gives you the once-over the whole strip trains you to give.",
+          "You've got a source-look, it says. Rare on this beach. Most of what washes up here is on loan from somewhere brighter.",
+          "Keep your provenance dry and your fit legible. The buyers walk the boardwalk at dusk and they read fast."
         ]
       }
     },
@@ -4845,7 +5007,10 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A shades-down beach cocky type tips the frames, reads your fit like the strip already priced it.",
+          "\"Behind glass this dark, everybody looks like their leaked version. Relaxing, honestly. No eye contact, no appraisal.\"",
+          "\"You want the good stretch of sand? It's collectors only past the flags. Bring a token that clinks, not one that whispers.\"",
+          "\"Keep it cool, claimant. On this coast the tan is temporary and the provenance is forever, and only one of them shows.\""
         ]
       }
     },
@@ -4878,7 +5043,10 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "A stylist circles you once, tugging at a sleeve, already composing the wall-text in his head.",
+          "The strip doesn't sell clothes, sweetheart. It sells the read. A fit is just provenance you can wear into the water.",
+          "I could make you legible to every buyer at the opening. One clean outline and you're suddenly on everyone's loan list.",
+          "Or I leave you slightly wrong on purpose. Unappraisable. The collectors hate it and cannot stop looking. Your call."
         ]
       }
     },
@@ -4893,7 +5061,9 @@
       "movement": 599,
       "interaction": {
         "pages": [
-          "A Solana Beach regular reads your fit like the strip already priced it."
+          "Another Little Swag World regular, faded gorgeous by the sun, prices your outline without breaking its lean.",
+          "On this strip a fit is just an appraisal waiting for a buyer. Yours is under review, sweetheart. Don't fidget.",
+          "The opening's tonight. Come read, get read. Nothing on Solana Beach stays unwitnessed past the second cocktail."
         ]
       }
     },
@@ -5013,7 +5183,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "WALL TEXT \u2014 MEMORYMiX, no. 001. Composite recollection, source materials disputed, arrangement uncredited.",
+          "The piece plays back a memory no visitor recalls having, in a voice several claimants recognize. Do not adjust the volume; it is set to the level of the public version."
         ]
       }
     },
@@ -5027,7 +5198,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "EXHIBIT: 'Fumogeddon,' after Milady. Derivative, provenance disputed, smoke damage original to the file.",
+          "Wall-text, half-scanned: the claimant to this image was itself a copy of a copy. The museum has stopped trying to find the source.",
+          "Do not photograph the smoke. The public version already did, and that is why it looks back at you now."
         ]
       }
     },
@@ -5074,7 +5247,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "MIYAKAKI, no. 1 of an unknown edition. Whimsical linework attributed to a hand that has since disputed the attribution.",
+          "Wall-text notes the piece 'insists it is a public version.' Curators have declined to countersign this claim."
         ]
       },
       "movement": 599
@@ -5089,7 +5263,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "PLAQUE \u2014 Miyakaki, study no. 002. Attributed, then contested, then hung anyway.",
+          "The figure is rendered in a hand that is almost a known hand. Curators note the resemblance is the point, and the discomfort is included in the loan."
         ]
       },
       "movement": 599
@@ -5104,7 +5279,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "EXHIBIT: Miyakaki, panel three of three. The final panel is a mirror the curators swear was always paint.",
+          "Wall-text, corrupted: '...and so the public version outlived the source, and no one filed a complaint.'",
+          "Step back. From here it reads as a portrait. From closer it reads as your own leaked version, waiting to be catalogued."
         ]
       },
       "movement": 599
@@ -5169,7 +5346,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "Found-photo portrait. Subject unidentified; possibly never a person. The catalog lists it as 'a face the archive assembled.'",
+          "Visitors report the eyes track the wall-text rather than the viewer. The Museum considers this the intended read."
         ]
       }
     },
@@ -5183,7 +5361,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "DISPLAY CASE \u2014 Uncanny Found-Photo Portrait, subject unidentified.",
+          "The person in the frame was never a person. Visitors report being recognized by it; the museum reminds you that a portrait cannot file a claim, and asks you not to file one either."
         ]
       }
     },
@@ -5197,7 +5376,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "EXHIBIT: POSTCARDS, sender unknown. Correspondence addressed to people who were never confirmed to exist.",
+          "Plaque, ink half-lifted: every card says 'wish you were here,' though the sender never was, and the here has since been re-catalogued.",
+          "Please do not read the back aloud. In this gallery a witnessed message counts as delivered, and delivery starts a file."
         ]
       }
     },
@@ -5258,7 +5439,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "Outsider-art figure, maker unrecorded, salvaged from a folder marked 'derivative \u2014 do not exhibit.'",
+          "We exhibit it anyway. The plaque you are reading is the only provenance it will ever be granted."
         ]
       },
       "movement": 599
@@ -5273,7 +5455,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "EXHIBIT LABEL \u2014 Burger Fund NFT Avatar, edition of many, no. 005.",
+          "One face, minted until it stopped meaning a face. Hung here as the public version of a thousand private ones, all of whom insist they came first."
         ]
       }
     },
@@ -5337,7 +5520,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "EXHIBIT: LSW-3282, on loan from a collection that disputes owning it. The label and the loan tag do not agree.",
+          "Curatorial note, partial: acquired after the Malady turn, when the difference between the original and its public version stopped being enforceable.",
+          "The plaque is the fourth version of this plaque. The other three are also on display, in the case behind you."
         ]
       },
       "movement": 599
@@ -5352,7 +5537,9 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "A dandy in a riddle-hat leans off his plinth to address you, which the wall-text swears he is not supposed to do.",
+          "My provenance is under the brim, claimant, and I'll show it for a question you can't already answer.",
+          "They hung me in the Museum of Leaked Versions as an object. But an object doesn't ask you who's really doing the reading, does it."
         ]
       },
       "movement": 599
@@ -5419,7 +5606,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "An exhibit label, half-scanned, half-true."
+          "WALL TEXT \u2014 Museum Derivative (Parody), acc. lsw-2056. After an original that also claimed to be after something.",
+          "The work mocks the work above it, which mocks the work beside it. The joke's provenance is intact; the museum notes only the original has gone missing, and no one is looking."
         ]
       }
     }
