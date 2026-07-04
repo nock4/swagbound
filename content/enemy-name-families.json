@@ -1,6 +1,12 @@
 {
   "schema": "swagbound.enemy-name-families.v1",
   "families": {
+    "Demonfella II": [
+      130
+    ],
+    "Drilady": [
+      214
+    ],
     "Knights & Angels": [
       1,
       3,
@@ -11,6 +17,12 @@
     "Knitkitmori": [
       6
     ],
+    "Lazy Lions 2": [
+      7,
+      8,
+      9,
+      210
+    ],
     "LF1000X": [
       10,
       11,
@@ -20,12 +32,6 @@
     "LFVAD2k24": [
       14
     ],
-    "Lazy Lions 2": [
-      7,
-      8,
-      9,
-      210
-    ],
     "Little Fellow": [
       15,
       16,
@@ -33,23 +39,8 @@
       18,
       19
     ],
-    "MEMORYMiX": [
-      31,
-      32
-    ],
-    "MR. WORLD": [
-      48
-    ],
-    "MTG NFT": [
-      50,
-      51,
-      52,
-      53
-    ],
     "Malady": [
-      37,
-      54,
-      131
+      37
     ],
     "Malware Relics": [
       22,
@@ -62,17 +53,16 @@
       29,
       30
     ],
+    "MEMORYMiX": [
+      31,
+      32
+    ],
     "Metal Misfit": [
       33,
       35,
       36,
       38,
       43
-    ],
-    "MiFella 2": [
-      130,
-      214,
-      227
     ],
     "Midladys Fumogeddon": [
       44,
@@ -83,17 +73,33 @@
       46,
       47
     ],
+    "MR. WORLD": [
+      48
+    ],
+    "MTG NFT": [
+      50,
+      51,
+      52,
+      53
+    ],
     "My Little fella": [
       55,
       56,
       57,
       58
     ],
+    "Mylady": [
+      131
+    ],
     "NFT Santa Regina 2027": [
       59,
       60,
       61,
       62
+    ],
+    "nothing really matters": [
+      63,
+      64
     ],
     "Paingelz": [
       65,
@@ -128,6 +134,12 @@
     "Rusted Fang": [
       20
     ],
+    "santaGODS": [
+      87,
+      88,
+      89,
+      91
+    ],
     "Scarecrow": [
       92,
       94,
@@ -147,7 +159,8 @@
       106,
       107,
       108,
-      109
+      109,
+      227
     ],
     "Self-Driving Megaworms": [
       111,
@@ -199,6 +212,9 @@
       150,
       151
     ],
+    "Vilady Maker": [
+      54
+    ],
     "Vintage Warriors": [
       152,
       153,
@@ -215,16 +231,6 @@
       222,
       223,
       224
-    ],
-    "nothing really matters": [
-      63,
-      64
-    ],
-    "santaGODS": [
-      87,
-      88,
-      89,
-      91
     ]
   }
 }

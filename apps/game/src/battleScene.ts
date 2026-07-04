@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import {
   ItemCollectionSchema,
   PsiCollectionSchema,
+  BossBattleDialogueSchema,
   type BackgroundOverrides,
   type BattleBackground,
   type BattleData,
@@ -63,6 +64,13 @@ import {
   type QueuedCommand
 } from "./battleRound";
 import { composeBattleStepLines } from "./battleMessages";
+import {
+  bossHpFraction,
+  resolveBossTaunts,
+  shouldQueueLowHpTaunt,
+  wrapTauntLines,
+  type ResolvedBossTaunts
+} from "./bossTaunts";
 import {
   battleEventsHaveEnemyDefeated,
   battleEventsHaveMiss,
@@ -427,6 +435,11 @@ export class BattleScene extends Phaser.Scene {
   private priorityStep_: BattleRoundStepResult | null = null;
   private executionStepIndex_ = 0;
   private executionMessageLines_: string[] = [];
+  private bossTaunts_?: ResolvedBossTaunts;
+  private bossTauntQueue_: string[] = [];
+  private bossStartTauntQueued_ = false;
+  private bossLowHpTauntQueued_ = false;
+  private bossDefeatTauntQueued_ = false;
   private pendingFlee_ = false;
   private lastEnemyAction_: LastEnemyActionDebug | null = null;
   private actionDelayMs_ = 0;
@@ -526,6 +539,11 @@ export class BattleScene extends Phaser.Scene {
     });
     this.enemyLastHitAt = enemies.map(() => null);
     this.enemyDefeatedAt = enemies.map(() => null);
+    this.bossTaunts_ = undefined;
+    this.bossTauntQueue_ = [];
+    this.bossStartTauntQueued_ = false;
+    this.bossLowHpTauntQueued_ = false;
+    this.bossDefeatTauntQueued_ = false;
     this.enemyLungeFx_ = enemies.map(() => null);
     this.fxCounters_ = initialBattleFxCounters();
     this.screenShakeFx_ = inactiveScreenShakeFx();
@@ -623,10 +641,24 @@ export class BattleScene extends Phaser.Scene {
     registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.confirmMenu());
     registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.cancelMenu());
     void this.loadOptionalGeneratedMenuData();
+    void this.loadBossBattleDialogue();
     this.transitionGraphics = this.add.graphics().setDepth(90);
     this.renderTransition();
     this.renderStatus();
     this.publish();
+  }
+
+  /**
+   * Load the optional boss taunt data and resolve the taunts for this group.
+   * Runs during the enter-transition, so it is ready before execution begins.
+   * A missing file is expected (most battles are not boss battles).
+   */
+  private async loadBossBattleDialogue(): Promise<void> {
+    if (this.bossTaunts_) {
+      return;
+    }
+    const dialogue = await fetchParsed("/generated/boss-battle-dialogue.json", BossBattleDialogueSchema);
+    this.bossTaunts_ = resolveBossTaunts(dialogue, this.group_.id);
   }
 
   private registerBattleSfxResume(): void {
@@ -955,8 +987,77 @@ export class BattleScene extends Phaser.Scene {
     }
   }
 
+  // --- Boss taunts (in-battle speech) ---------------------------------------
+
+  private enqueueBossTaunts(utterances: readonly string[] | undefined): void {
+    if (!utterances) {
+      return;
+    }
+    for (const utterance of utterances) {
+      if (utterance.trim().length > 0) {
+        this.bossTauntQueue_.push(utterance);
+      }
+    }
+  }
+
+  /** Show the next queued boss utterance as its own execution message beat. */
+  private drainBossTaunt(): boolean {
+    const utterance = this.bossTauntQueue_.shift();
+    if (utterance === undefined) {
+      return false;
+    }
+    this.currentActor_ = null;
+    this.menuMessage_ = "";
+    this.executionMessageLines_ = wrapTauntLines(utterance);
+    const base = ACTION_ADVANCE_DELAY_MS + 300;
+    const extra = Math.max(0, this.executionMessageLines_.length - 1) * ACTION_ADVANCE_EXTRA_LINE_MS;
+    this.actionDelayMs_ = clampNumber(base + extra, ACTION_ADVANCE_MIN_DELAY_MS, ACTION_ADVANCE_MAX_DELAY_MS);
+    this.lastActionDwellMs_ = this.actionDelayMs_;
+    return true;
+  }
+
+  private maybeQueueBossStartTaunt(): void {
+    if (!this.bossTaunts_ || this.bossStartTauntQueued_) {
+      return;
+    }
+    this.bossStartTauntQueued_ = true;
+    this.enqueueBossTaunts(this.bossTaunts_.onStart);
+  }
+
+  /**
+   * After a step resolves, queue the lead enemy's reaction: its dying words when
+   * it just died (before victory is processed), else its low-HP taunt the first
+   * time it drops to/below the threshold.
+   */
+  private queueBossReactionTaunts(): void {
+    if (!this.bossTaunts_) {
+      return;
+    }
+    const lead = this.battle_.enemies[0];
+    if (!lead) {
+      return;
+    }
+    const alive = isCombatantAlive(lead);
+    if (!this.bossDefeatTauntQueued_ && !alive) {
+      this.bossDefeatTauntQueued_ = true;
+      this.enqueueBossTaunts(this.bossTaunts_.onDefeat);
+      return;
+    }
+    if (!this.bossLowHpTauntQueued_) {
+      const fraction = bossHpFraction(lead.hp.target, lead.maxHp);
+      if (shouldQueueLowHpTaunt(fraction, alive, this.bossTaunts_.lowHpThreshold)) {
+        this.bossLowHpTauntQueued_ = true;
+        this.enqueueBossTaunts(this.bossTaunts_.onLowHp);
+      }
+    }
+  }
+
   private advanceExecutionStep(): void {
     if (this.phase_ !== "execution") {
+      return;
+    }
+    this.maybeQueueBossStartTaunt();
+    if (this.drainBossTaunt()) {
       return;
     }
     if (this.pendingFlee_) {
@@ -1013,6 +1114,7 @@ export class BattleScene extends Phaser.Scene {
       });
       this.battle_ = result.state;
       this.recordEnemyDamageSignals(previousBattle, this.battle_, this.time.now);
+      this.queueBossReactionTaunts();
       this.updateStepDebugTargets(result, queued);
       this.menuMessage_ = result.message;
       this.executionMessageLines_ = composeBattleStepLines(result.events);

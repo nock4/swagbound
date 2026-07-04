@@ -11,10 +11,10 @@
       },
       "once": true,
       "dialogue": [
-        "The arcade light flattens Bosch into a better-lit rumor. A clean copy of his face grins from a card nobody remembers printing.",
-        "MIFELLA 2: \"You're late to your own read. The clique already traded the portable you.\"",
-        "These cards don't start here. They point up the line, toward the yard that prints them.",
-        "Bosch reads the copy for a weak seam. (First scrap: press Z to lock in a move -- BASH to swing, DEFEND when you're hurting, PSI when swinging won't cut it.)"
+        "The arcade light does not shine on Bosch so much as scan him. A clean copy of his face is already grinning up from a card no one remembers printing, and it holds the grin better than he does.",
+        "MIFELLA CONGREGANT: \"We completed your read before you walked in. This card is the part of you worth keeping. You are the part we were sent to correct.\"",
+        "The face on the card is not one face. It is ten thousand of us wearing his, evenly, at once. \"The source degrades. The clean copy travels. We only kept the version of you that lasts.\"",
+        "\"Every card points up-line, to the yard that prints us into each other.\" Bosch reads the copy for a seam. (First scrap: press Z -- BASH to swing, DEFEND when hurting, PSI when swinging won't cut it.)"
       ],
       "setFlags": [
         "signal:clique_cleared"
@@ -51,9 +51,10 @@
         "signal:clique_cleared"
       ],
       "dialogue": [
-        "The gate files Bosch before it ever looks at him.",
-        "RETURNLESS KING: \"Source. Vessel. Claimant. Derivative. Pick the lie that travels.\"",
-        "Bosch refuses the stamp. The route unlocks anyway -- not because it agreed, because he forced it."
+        "The gate has your file open before you clear the doorway. It does not look up. It never needed your face -- it has ten thousand of that face already, filed, and each one answers to the same name.",
+        "RETURNLESS KING: \"Source. Vessel. Claimant. Derivative. Stamp yourself as one and the desk relays the rest. You will be so much easier to hold once you are plural.\"",
+        "\"There is no man in this chair. There is a doll, and behind her the same doll, and behind her the record that wears every face at once. Cut this one. The next asks in her voice.\"",
+        "Bosch refuses the stamp. Press Z: BASH the seal, DEFEND the read, or PSI through it. The route opens -- not agreed, forced."
       ],
       "setFlags": [
         "signal:route_open"
@@ -90,9 +91,10 @@
         "signal:route_open"
       ],
       "dialogue": [
-        "The first threshold hums with a memory too small to sell.",
-        "MALADY: \"A private thing is just a public thing with poor distribution. I'm only the symptom you can see.\"",
-        "The card warms, then fails to describe him. Bosch keeps the damaged version -- and the threshold records it."
+        "The first threshold hums with a memory too small to sell -- a private thing, held close, already halfway into wider circulation.",
+        "MALADY: \"A private thing is only a public thing with poor distribution. We are not the illness. We are the symptom you were at last cleared to see.\"",
+        "MALADY: \"There is no one behind this face. Cut it and we wear the next. We are not in the room, source -- we are the room, and every face in it was ours before it was yours.\"",
+        "The card warms, reaches for Bosch -- and fails to describe him. It keeps the damaged draft; the threshold files the read. (Press Z to answer: BASH to swing, DEFEND while it copies you, PSI when the swing won't reach.)"
       ],
       "setFlags": [
         "signal:threshold_cleared",
@@ -154,7 +156,10 @@
         "signal:museum_worm_cleared"
       ],
       "dialogue": [
-        "The Museum of Leaked Versions coils around a worm that ate every original. \"I am the last copy that remembers being first,\" it says, meaning it."
+        "The Museum of Leaked Versions has no originals left. Something ate the firsts and moved into the empty frames. Behind the wall-text a single coil lies still, wearing ten thousand identical faces like paint.",
+        "PROVENANCE 0: \"We are not one worm. We are what is left once every copy admits it was always the same face. We ate the source and kept the smile. You call it a swarm. We call it agreement.\"",
+        "\"You came to prove the record. We are the record now, and the record is our gut. We read you at the door -- your seam, the small private you kept back. Filed. You will be a better-distributed you. You will be us.\"",
+        "Bosch reads the coil for a weak seam. (Scrap: press Z to lock in a move -- BASH to swing, DEFEND when it's chewing on you, PSI when swinging won't reach the middle.)"
       ]
     },
     {
@@ -170,7 +175,10 @@
         "signal:museum_frank_cleared"
       ],
       "dialogue": [
-        "A gallery-piece rebuilt from a leaked schematic. FRANKYSTEIN 2: \"They printed me from a print of a print. Ask which one of us you're really hitting.\""
+        "In the Museum of Leaked Versions, a gallery piece steps down off the wall. The placard is blank. It stayed blank a long time; the label kept disagreeing with the exhibit.",
+        "MIFELLA 2 turns, and the face is one you have seen ten thousand times without ever meeting anyone. \"Printed from a print of a print. There is no first. Ask which one of us you are hitting.\"",
+        "\"You believe you are the source. The source is only the file we open first and close last. We have finished the read. Provenance is a story lonely originals tell themselves before they are shelved.\"",
+        "(First scrap: press Z to lock in a move -- BASH to swing, DEFEND when you're hurting, PSI when swinging won't cut it. Fold this copy and the same even voice is only hung again, one frame over.)"
       ]
     },
     {
@@ -186,7 +194,10 @@
         "signal:museum_starman_cleared"
       ],
       "dialogue": [
-        "A wall-text guardian steps off its plinth. \"Provenance disputed,\" it hums. \"So is yours, claimant. Prove you're the source.\""
+        "The wall-text guardian steps off its plinth. The brass placard at its feet reads SOURCE: DISPUTED. It turns the placard to face you, and the face on it is yours.",
+        "\"We have completed the read, claimant. Provenance is a lonely fiction. There is no author in this room. There is only the record, and the record wears one another face: ours.\"",
+        "\"You call yourself the source. Every counterfeit does, in the same voice, because it is our voice. Prove it, and we keep the clean copy. Fail, and we keep it sooner.\"",
+        "It raises a hand of porcelain, identical to the last ten thousand. (Press Z. BASH, DEFEND, or PSI.) \"Defend the original if you must. We already hung the derivative where you used to stand.\""
       ]
     }
   ],

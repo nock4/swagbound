@@ -9,6 +9,7 @@ import {
   DrifellaSourceChecksSchema,
   EnemyActionEffectsSchema,
   EnemyNameFamiliesSchema,
+  BossBattleDialogueSchema,
   EnemyStatOverridesSchema,
   expandEnemyNameFamilies,
   expandOverworldEnemySkins,
@@ -58,6 +59,8 @@ export const ENEMY_NAME_FAMILIES_SOURCE = "content/enemy-name-families.json";
 export const ENEMY_OVERRIDES_OUTPUT = "enemy-overrides.json";
 export const ENEMY_STAT_OVERRIDES_SOURCE = "content/enemy-stat-overrides.json";
 export const ENEMY_STAT_OVERRIDES_OUTPUT = "enemy-stat-overrides.json";
+export const BOSS_BATTLE_DIALOGUE_SOURCE = "content/boss-battle-dialogue.json";
+export const BOSS_BATTLE_DIALOGUE_OUTPUT = "boss-battle-dialogue.json";
 export const ENEMY_ACTION_EFFECTS_SOURCE = "content/enemy-action-effects.json";
 export const ENEMY_ACTION_EFFECTS_OUTPUT = "enemy-action-effects.json";
 export const BATTLE_RULES_SOURCE = "content/battle-rules.json";
@@ -136,6 +139,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateDrifellaSourceChecks(DRIFELLA_SOURCE_CHECKS_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
+  await validateBossBattleDialogue(BOSS_BATTLE_DIALOGUE_SOURCE);
   await validateEnemyActionEffects(ENEMY_ACTION_EFFECTS_SOURCE);
   await Promise.all([
     copyJsonToGenerated(STORY_TRIGGERS_SOURCE, out, STORY_TRIGGERS_OUTPUT),
@@ -152,6 +156,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ENEMY_STAT_OVERRIDES_SOURCE, out, ENEMY_STAT_OVERRIDES_OUTPUT),
+    copyOptionalJsonToGenerated(BOSS_BATTLE_DIALOGUE_SOURCE, out, BOSS_BATTLE_DIALOGUE_OUTPUT),
     copyOptionalJsonToGenerated(ENEMY_ACTION_EFFECTS_SOURCE, out, ENEMY_ACTION_EFFECTS_OUTPUT),
     copyJsonToGenerated(BATTLE_RULES_SOURCE, out, BATTLE_RULES_OUTPUT),
     copyJsonToGenerated(MUSIC_MANIFEST_SOURCE, out, MUSIC_MANIFEST_OUTPUT),
@@ -276,6 +281,13 @@ async function validateNpcOverrides(source: string): Promise<void> {
 
 async function validateEnemyStatOverrides(source: string): Promise<void> {
   EnemyStatOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateBossBattleDialogue(source: string): Promise<void> {
+  if (!(await fileExists(source))) {
+    return;
+  }
+  BossBattleDialogueSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function readTileOverrides(source: string): Promise<TileOverrides> {

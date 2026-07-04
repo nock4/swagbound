@@ -6457,24 +6457,6 @@
     }
   },
   "byEnemyId": {
-    "131": {
-      "image": "assets/swagbound/enemy/gns-malady-001.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "54": {
-      "image": "assets/swagbound/enemy/gns-malady-002.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "37": {
-      "image": "assets/swagbound/enemy/gns-malady-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
     "1": {
       "image": "assets/swagbound/enemy/gns-knights-and-angels-002.png",
       "displayHeight": 160,
@@ -6499,12 +6481,6 @@
       "originX": 0.5,
       "originY": 0.5
     },
-    "209": {
-      "image": "assets/swagbound/enemy/gns-knights-and-angels-005.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
     "6": {
       "image": "assets/swagbound/enemy/gns-knitkitmori-001.png",
       "displayHeight": 160,
@@ -6518,12 +6494,6 @@
       "originY": 0.5
     },
     "8": {
-      "image": "assets/swagbound/enemy/gns-lazy-lions-2-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "210": {
       "image": "assets/swagbound/enemy/gns-lazy-lions-2-003.png",
       "displayHeight": 160,
       "originX": 0.5,
@@ -6673,6 +6643,12 @@
       "originX": 0.5,
       "originY": 0.5
     },
+    "37": {
+      "image": "assets/swagbound/enemy/gns-malady-003.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
     "38": {
       "image": "assets/swagbound/enemy/gns-metal-misfit-004.png",
       "displayHeight": 160,
@@ -6686,12 +6662,6 @@
       "originY": 0.5
     },
     "44": {
-      "image": "assets/swagbound/enemy/gns-midladys-fumogeddon-004.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "195": {
       "image": "assets/swagbound/enemy/gns-midladys-fumogeddon-004.png",
       "displayHeight": 160,
       "originX": 0.5,
@@ -6741,6 +6711,12 @@
     },
     "53": {
       "image": "assets/swagbound/enemy/gns-mtg-nft-005.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "54": {
+      "image": "assets/swagbound/enemy/gns-vilady-maker-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7087,12 +7063,6 @@
       "originX": 0.5,
       "originY": 0.5
     },
-    "211": {
-      "image": "assets/swagbound/enemy/gns-solfis-001.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
     "122": {
       "image": "assets/swagbound/enemy/gns-solfis-002.png",
       "displayHeight": 160,
@@ -7100,12 +7070,6 @@
       "originY": 0.5
     },
     "123": {
-      "image": "assets/swagbound/enemy/gns-solfis-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "212": {
       "image": "assets/swagbound/enemy/gns-solfis-003.png",
       "displayHeight": 160,
       "originX": 0.5,
@@ -7136,7 +7100,13 @@
       "originY": 0.5
     },
     "130": {
-      "image": "assets/swagbound/enemy/gns-mifella-2-002.png",
+      "image": "assets/swagbound/enemy/gns-demonfella-ii-001.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "131": {
+      "image": "assets/swagbound/enemy/gns-mylady-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7285,8 +7255,38 @@
       "originX": 0.5,
       "originY": 0.5
     },
+    "195": {
+      "image": "assets/swagbound/enemy/gns-midladys-fumogeddon-004.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "209": {
+      "image": "assets/swagbound/enemy/gns-knights-and-angels-005.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "210": {
+      "image": "assets/swagbound/enemy/gns-lazy-lions-2-003.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "211": {
+      "image": "assets/swagbound/enemy/gns-solfis-001.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "212": {
+      "image": "assets/swagbound/enemy/gns-solfis-003.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
     "214": {
-      "image": "assets/swagbound/enemy/gns-mifella-2-003.png",
+      "image": "assets/swagbound/enemy/gns-drilady-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7310,7 +7310,7 @@
       "originY": 0.5
     },
     "227": {
-      "image": "assets/swagbound/enemy/gns-mifella-2-001.png",
+      "image": "assets/swagbound/enemy/gns-self-deriving-hyperworms-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -14464,72 +14464,6 @@
     }
   ],
   "overworldByEnemyId": {
-    "131": {
-      "image": "assets/swagbound/overworld-npc/gns-malady-001-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "54": {
-      "image": "assets/swagbound/overworld-npc/gns-malady-002-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "37": {
-      "image": "assets/swagbound/overworld-npc/gns-malady-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "1": {
       "image": "assets/swagbound/overworld-npc/gns-knights-and-angels-002-ow.png",
       "frameWidth": 48,
@@ -14618,28 +14552,6 @@
       "originX": 0.5,
       "originY": 1
     },
-    "209": {
-      "image": "assets/swagbound/overworld-npc/gns-knights-and-angels-005-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "6": {
       "image": "assets/swagbound/overworld-npc/gns-knitkitmori-001-ow.png",
       "frameWidth": 48,
@@ -14685,28 +14597,6 @@
       "originY": 1
     },
     "8": {
-      "image": "assets/swagbound/overworld-npc/gns-lazy-lions-2-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "210": {
       "image": "assets/swagbound/overworld-npc/gns-lazy-lions-2-003-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -15256,6 +15146,28 @@
       "originX": 0.5,
       "originY": 1
     },
+    "37": {
+      "image": "assets/swagbound/overworld-npc/gns-malady-003-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
     "38": {
       "image": "assets/swagbound/overworld-npc/gns-metal-misfit-004-ow.png",
       "frameWidth": 48,
@@ -15301,28 +15213,6 @@
       "originY": 1
     },
     "44": {
-      "image": "assets/swagbound/overworld-npc/gns-midladys-fumogeddon-004-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "195": {
       "image": "assets/swagbound/overworld-npc/gns-midladys-fumogeddon-004-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -15500,6 +15390,28 @@
     },
     "53": {
       "image": "assets/swagbound/overworld-npc/gns-mtg-nft-005-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "54": {
+      "image": "assets/swagbound/overworld-npc/gns-vilady-maker-001-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16774,28 +16686,6 @@
       "originX": 0.5,
       "originY": 1
     },
-    "211": {
-      "image": "assets/swagbound/overworld-npc/gns-solfis-001-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "122": {
       "image": "assets/swagbound/overworld-npc/gns-solfis-002-ow.png",
       "frameWidth": 48,
@@ -16819,28 +16709,6 @@
       "originY": 1
     },
     "123": {
-      "image": "assets/swagbound/overworld-npc/gns-solfis-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "212": {
       "image": "assets/swagbound/overworld-npc/gns-solfis-003-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -16951,7 +16819,7 @@
       "originY": 1
     },
     "130": {
-      "image": "assets/swagbound/overworld-npc/gns-mifella-2-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-demonfella-ii-001-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16968,7 +16836,29 @@
           0
         ]
       },
-      "displayHeight": 36,
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "131": {
+      "image": "assets/swagbound/overworld-npc/gns-mylady-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
       "originX": 0.5,
       "originY": 1
     },
@@ -17500,8 +17390,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "214": {
-      "image": "assets/swagbound/overworld-npc/gns-mifella-2-003-ow.png",
+    "195": {
+      "image": "assets/swagbound/overworld-npc/gns-midladys-fumogeddon-004-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -17518,7 +17408,117 @@
           0
         ]
       },
-      "displayHeight": 36,
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "209": {
+      "image": "assets/swagbound/overworld-npc/gns-knights-and-angels-005-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "210": {
+      "image": "assets/swagbound/overworld-npc/gns-lazy-lions-2-003-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "211": {
+      "image": "assets/swagbound/overworld-npc/gns-solfis-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "212": {
+      "image": "assets/swagbound/overworld-npc/gns-solfis-003-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "214": {
+      "image": "assets/swagbound/overworld-npc/gns-drilady-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
       "originX": 0.5,
       "originY": 1
     },
@@ -17589,7 +17589,7 @@
       "originY": 1
     },
     "227": {
-      "image": "assets/swagbound/overworld-npc/gns-mifella-2-001-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-self-deriving-hyperworms-001-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -17606,7 +17606,7 @@
           0
         ]
       },
-      "displayHeight": 36,
+      "displayHeight": 24,
       "originX": 0.5,
       "originY": 1
     }

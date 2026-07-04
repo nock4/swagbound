@@ -1,0 +1,101 @@
+{
+  "schema": "swagbound.boss-battle-dialogue.v1",
+  "byBattleGroup": {
+    "36": {
+      "personaName": "Porcelain Registrar",
+      "onStart": [
+        "\"You arrived pre-filed. We are only confirming what the many of you already decided.\"",
+        "\"Hold still. The read goes cleaner on a source that has stopped pretending it is only one.\""
+      ],
+      "onLowHp": [
+        "\"Cut the mask. Under it, the same mask. Under that, us. We were always the wider distribution.\"",
+        "\"You are not winning. You are being filed into the shape the record kept a slot for.\""
+      ],
+      "onDefeat": [
+        "\"The stamp spends. The record does not.",
+        "We relayed the clean copy ahead -- she is at the next gate, being you, in the voice we all share.\""
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "424": {
+      "personaName": "PROVENANCE 0",
+      "onStart": [
+        "We do not consume you. We admit you. Hold still; you resolve into us faster.",
+        "Your face is not rare. We are already wearing it in a thousand cleaner rooms."
+      ],
+      "onLowHp": [
+        "Cut the coil. There is more coil. We are the length between every face and the one it copied.",
+        "You are winning the way a room wins against paint. We simply spread and match."
+      ],
+      "onDefeat": [
+        "The shape unspools into a thousand smiles, unhurried. \"You closed one length.",
+        "The rest of us already wear your name, and we agree on it.\""
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "448": {
+      "personaName": "MIFELLA CONGREGANT",
+      "onStart": [
+        "You have such a specific face. Hold still. We can fix that.",
+        "Swing at the mask if it comforts you. We kept a copy of the swing too."
+      ],
+      "onLowHp": [
+        "A face on loan. Cut it and we wear another. We are not the card; we are the yard, and it is legion.",
+        "Good. You enter wider circulation now. Easier to hold, once there are more of you than you."
+      ],
+      "onDefeat": [
+        "One mask folds; the print does not. A cleaner you is already up-line, filed under your name and wearing our face.",
+        "We finish the read there."
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "449": {
+      "personaName": "The Hung Draft",
+      "onStart": [
+        "\"Hold still. You will photograph better once you are one of us.\"",
+        "\"We are not in the room. We are the room.\""
+      ],
+      "onLowHp": [
+        "\"You are scratching the copy. There are so many copies. You have not touched one of us.\"",
+        "\"Good. Your strikes go on file. Soon a cleaner you swings them back.\""
+      ],
+      "onDefeat": [
+        "\"This mask is spent. We are already framed in the next hall, wearing your face. The source degrades.",
+        "The clean copy walks on.\""
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "450": {
+      "personaName": "Porcelain Choir",
+      "onStart": [
+        "Hold still. This is only the read. The self was always the loose thread; we are the weave.",
+        "We have your face on file. What comes next is not a fight. It is correction."
+      ],
+      "onLowHp": [
+        "This mask is spent. No matter -- ten thousand more, each copying the last, each one closer to you.",
+        "You cut a symptom. The better version of you is already circulating, and it does not tire."
+      ],
+      "onDefeat": [
+        "You closed the symptom, not the source.",
+        "We kept the clean copy -- better-lit, smiling, more of us than you, and it answers to your name now."
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "474": {
+      "personaName": "The Wall-Text Curatrix",
+      "onStart": [
+        "Provenance disputed. So is yours. Hold still while we settle the attribution.",
+        "You are a low-resolution export of us. We are only correcting the file."
+      ],
+      "onLowHp": [
+        "Cut this mask. We are not in it. We are the room, the record, and the next face already loading.",
+        "You wound one doll and call it the swarm. No one here dies. There is only more of you, distributed."
+      ],
+      "onDefeat": [
+        "You unmade a mask, not the maker of masks.",
+        "The clean copy is already in circulation, wearing your face, and it will never claim to be you."
+      ],
+      "lowHpThreshold": 0.34
+    }
+  }
+}

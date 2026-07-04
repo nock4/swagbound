@@ -697,6 +697,32 @@ export const EnemyActionEffectsSchema = z.object({
   byActionId: z.record(z.string().regex(/^\d+$/), EnemyActionEffectEntrySchema)
 }).strict();
 
+const BossTauntLineSchema = z.string().trim().min(1).max(200)
+  .refine((value) => !/[\u0000-\u001f\u007f]/.test(value), "boss taunt lines must not include control codes");
+
+/**
+ * In-battle boss speech, keyed by battle group id. The battle scene injects these
+ * lines into the execution message window as their own beats: `onStart` when the
+ * fight opens, `onLowHp` the first time the lead enemy drops to/below
+ * `lowHpThreshold` (fraction of max HP, default 0.34), and `onDefeat` when the lead
+ * enemy dies (before the victory sequence). Each array may be empty.
+ */
+const BossBattleDialogueEntrySchema = z.object({
+  personaName: EnemyOverrideNameSchema.optional(),
+  onStart: z.array(BossTauntLineSchema).max(4).default([]),
+  onLowHp: z.array(BossTauntLineSchema).max(4).default([]),
+  onDefeat: z.array(BossTauntLineSchema).max(4).default([]),
+  lowHpThreshold: z.number().gt(0).lte(1).optional()
+}).strict();
+
+export const BossBattleDialogueSchema = z.object({
+  schema: z.literal("swagbound.boss-battle-dialogue.v1"),
+  byBattleGroup: z.record(z.string().regex(/^\d+$/), BossBattleDialogueEntrySchema)
+}).strict();
+
+export type BossBattleDialogue = z.infer<typeof BossBattleDialogueSchema>;
+export type BossBattleDialogueEntry = z.infer<typeof BossBattleDialogueEntrySchema>;
+
 /**
  * Canonical source for enemy naming: a family name maps to every EB enemy id that
  * shares that Swagbound name. `enemy-overrides.json` (the per-id name map the
