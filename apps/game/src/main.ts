@@ -2,13 +2,14 @@ import Phaser from "phaser";
 import { loadGameData, parseManifest, type GameData } from "./loader";
 import { publishDebug } from "./state";
 import { ChunkedWorldScene } from "./chunkedWorldScene";
-import { IntroScene, isIntroDisabled, shouldStartIntro } from "./introScene";
-import { decideNewGameOpening, resolveNewGameOpeningStart } from "./newGameOpening";
+import { IntroScene, isIntroDisabled } from "./introScene";
+import { resolveNewGameOpeningStart } from "./newGameOpening";
 import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
 import { FallbackScene } from "./fallbackScene";
 import { BattleScene } from "./battleScene";
 import { SourceCheckScene } from "./sourceCheckScene";
+import { TitleMenuScene } from "./titleMenuScene";
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import type { EncounterAdvantage } from "./battleLogic";
 import { deserializeSaveState, type SaveSlotPersistence, type SaveState } from "./saveState";
@@ -116,35 +117,39 @@ class BootScene extends Phaser.Scene {
         registryFlag: this.registry.get("nointro")
       });
       const openingResolution = resolveNewGameOpeningStart(data.world, data.scripts);
-      const openingDecision = decideNewGameOpening({
-        newGame: saveBlob === null,
-        disabled: introDisabled,
-        resolvedStart: openingResolution.resolved ? openingResolution.start : undefined
-      });
-      if (saveBlob === null && !introDisabled && !openingResolution.resolved) {
+      if (!introDisabled && !openingResolution.resolved) {
         console.warn("New-game opening unresolved; using fallback intro.", openingResolution.reason);
       }
-      const chunkedWorldData = {
+      const baseWorld = {
         gameData: data,
-        saveState,
         saveSlot: DEFAULT_SAVE_SLOT,
-        saveSlots: SAVE_SLOTS,
-        ...(openingDecision.runOpening ? { newGameOpening: openingDecision.start } : {})
+        saveSlots: SAVE_SLOTS
       };
-      const introDecision = shouldStartIntro({
-        hasSave: saveBlob !== null,
-        disabled: introDisabled
-      });
-      if (openingDecision.runOpening) {
-        this.scene.start("chunked-world", chunkedWorldData);
-      } else if (introDecision.startIntro) {
-        this.scene.start("intro", {
-          nextSceneKey: "chunked-world",
-          nextSceneData: chunkedWorldData
-        });
-      } else {
-        this.scene.start("chunked-world", chunkedWorldData);
+      // NEW GAME target: run the opening cutscene when resolved, else the meteor intro.
+      const newGameWorldData = {
+        ...baseWorld,
+        saveState: null,
+        ...(openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
+      };
+      const newGameTarget = openingResolution.resolved
+        ? { sceneKey: "chunked-world", data: newGameWorldData }
+        : { sceneKey: "intro", data: { nextSceneKey: "chunked-world", nextSceneData: newGameWorldData } };
+      // CONTINUE target: the world with the loaded save (null when no save exists).
+      const continueTarget = saveBlob !== null
+        ? { sceneKey: "chunked-world", data: { ...baseWorld, saveState } }
+        : null;
+
+      if (introDisabled) {
+        // Dev fast-path (?nointro): skip the title menu entirely.
+        this.scene.start("chunked-world", { ...baseWorld, saveState });
+        return;
       }
+      this.scene.start("title-menu", {
+        newGameTarget,
+        continueTarget,
+        hasSave: saveBlob !== null,
+        musicManifest: data.musicManifest
+      });
       return;
     }
     if (data.world?.available && !("mode" in data.world) && data.world.images) {
@@ -432,7 +437,7 @@ new Phaser.Game({
   height: 448,
   backgroundColor: "#000000",
   pixelArt: true,
-  scene: [BootScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
+  scene: [BootScene, TitleMenuScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH

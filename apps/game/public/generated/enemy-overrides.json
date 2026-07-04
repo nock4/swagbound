@@ -2,7 +2,7 @@
   "schema": "swagbound.enemy-overrides.v1",
   "byEnemyId": {
     "1": {
-      "name": "Knights & Angels"
+      "name": "Superpoly Gorp"
     },
     "3": {
       "name": "Knights & Angels"
@@ -14,7 +14,7 @@
       "name": "Knights & Angels"
     },
     "6": {
-      "name": "Knitkitmori"
+      "name": "Mana Cauldron"
     },
     "7": {
       "name": "Lazy Lions 2"
@@ -26,7 +26,7 @@
       "name": "Lazy Lions 2"
     },
     "10": {
-      "name": "LF1000X"
+      "name": "Axl"
     },
     "11": {
       "name": "LF1000X"
@@ -38,7 +38,7 @@
       "name": "LF1000X"
     },
     "14": {
-      "name": "LFVAD2k24"
+      "name": "Ponyrolly"
     },
     "15": {
       "name": "Little Fellow"
@@ -50,7 +50,7 @@
       "name": "Little Fellow"
     },
     "18": {
-      "name": "Little Fellow"
+      "name": "Figgypon"
     },
     "19": {
       "name": "Little Fellow"
@@ -62,7 +62,7 @@
       "name": "Malware Relics"
     },
     "23": {
-      "name": "Malware Relics"
+      "name": "Chop"
     },
     "24": {
       "name": "Malware Relics"
@@ -74,7 +74,7 @@
       "name": "Malware Relics"
     },
     "29": {
-      "name": "MeanGirlZ"
+      "name": "Burgie"
     },
     "30": {
       "name": "MeanGirlZ"
@@ -86,7 +86,7 @@
       "name": "MEMORYMiX"
     },
     "33": {
-      "name": "Metal Misfit"
+      "name": "Gonmey"
     },
     "35": {
       "name": "Metal Misfit"
@@ -101,7 +101,7 @@
       "name": "Metal Misfit"
     },
     "43": {
-      "name": "Metal Misfit"
+      "name": "Roxy"
     },
     "44": {
       "name": "Midladys Fumogeddon"
@@ -113,7 +113,7 @@
       "name": "MiiMaker"
     },
     "47": {
-      "name": "MiiMaker"
+      "name": "Kullskor"
     },
     "48": {
       "name": "MR. WORLD"
@@ -125,7 +125,7 @@
       "name": "MTG NFT"
     },
     "52": {
-      "name": "MTG NFT"
+      "name": "Splagoish"
     },
     "53": {
       "name": "MTG NFT"
@@ -140,7 +140,7 @@
       "name": "My Little fella"
     },
     "57": {
-      "name": "My Little fella"
+      "name": "Rhindos"
     },
     "58": {
       "name": "My Little fella"
@@ -152,7 +152,7 @@
       "name": "NFT Santa Regina 2027"
     },
     "61": {
-      "name": "NFT Santa Regina 2027"
+      "name": "Drimbee"
     },
     "62": {
       "name": "NFT Santa Regina 2027"
@@ -164,7 +164,7 @@
       "name": "nothing really matters"
     },
     "65": {
-      "name": "Paingelz"
+      "name": "Hobblebo"
     },
     "66": {
       "name": "Paingelz"
@@ -176,7 +176,7 @@
       "name": "Paingelz"
     },
     "69": {
-      "name": "Pick-Me Ports"
+      "name": "Soft Pale Luen"
     },
     "70": {
       "name": "Pick-Me Ports"
@@ -188,7 +188,7 @@
       "name": "Pick-Me Ports"
     },
     "75": {
-      "name": "Pick-Me Ports"
+      "name": "Gapbus"
     },
     "76": {
       "name": "Planet Peppa"
@@ -200,7 +200,7 @@
       "name": "Podgy Pigeons"
     },
     "80": {
-      "name": "Psyop Scouts"
+      "name": "Pink Siifu"
     },
     "81": {
       "name": "Psyop Scouts"
@@ -212,7 +212,7 @@
       "name": "Psyop Scouts"
     },
     "85": {
-      "name": "Runway Show"
+      "name": "Goondrip"
     },
     "86": {
       "name": "Runway Show"
@@ -224,7 +224,7 @@
       "name": "santaGODS"
     },
     "89": {
-      "name": "santaGODS"
+      "name": "Zwiggydor"
     },
     "91": {
       "name": "santaGODS"
@@ -236,7 +236,7 @@
       "name": "Scarecrow"
     },
     "96": {
-      "name": "Scarecrow"
+      "name": "Sofgob"
     },
     "97": {
       "name": "Scarecrow"
@@ -248,7 +248,7 @@
       "name": "Self Aborting Microworms"
     },
     "100": {
-      "name": "Self Aborting Microworms"
+      "name": "Tubecyc"
     },
     "101": {
       "name": "Self Aborting Microworms"
@@ -260,7 +260,7 @@
       "name": "Self Aborting Microworms"
     },
     "105": {
-      "name": "Self-Deriving Hyperworms"
+      "name": "Flegrim"
     },
     "106": {
       "name": "Self-Deriving Hyperworms"
@@ -272,7 +272,7 @@
       "name": "Self-Deriving Hyperworms"
     },
     "109": {
-      "name": "Self-Deriving Hyperworms"
+      "name": "Tarrmel"
     },
     "111": {
       "name": "Self-Driving Megaworms"
@@ -284,7 +284,7 @@
       "name": "Self-Driving Megaworms"
     },
     "114": {
-      "name": "Self-Driving Megaworms"
+      "name": "Star Seech"
     },
     "115": {
       "name": "Self-Driving Megaworms"
@@ -296,7 +296,7 @@
       "name": "Slyfella"
     },
     "119": {
-      "name": "Slyfella"
+      "name": "Gajo"
     },
     "120": {
       "name": "Slyfella"
@@ -308,7 +308,7 @@
       "name": "Solfis"
     },
     "123": {
-      "name": "Solfis"
+      "name": "Grobe Royal"
     },
     "124": {
       "name": "Solfis"
@@ -320,7 +320,7 @@
       "name": "Spirit Realm"
     },
     "129": {
-      "name": "Spirit Realm"
+      "name": "Kimwi"
     },
     "130": {
       "name": "Demonfella II"
@@ -338,7 +338,7 @@
       "name": "Sproto Pepes"
     },
     "135": {
-      "name": "Sproto Pepes"
+      "name": "Starware"
     },
     "136": {
       "name": "Squire Makere"
@@ -350,7 +350,7 @@
       "name": "Squire Makere"
     },
     "142": {
-      "name": "Squire Makere"
+      "name": "Rackspawn"
     },
     "143": {
       "name": "Squire Makere"
@@ -362,7 +362,7 @@
       "name": "UNX"
     },
     "147": {
-      "name": "UNX"
+      "name": "Washysomp"
     },
     "148": {
       "name": "UNX"

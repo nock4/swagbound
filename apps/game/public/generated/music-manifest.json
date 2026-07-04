@@ -35,6 +35,11 @@
       "file": "audio/jammers/051__spellling__golden-numbers.mp3",
       "loop": true,
       "gain": 0.4
+    },
+    "menu": {
+      "file": "audio/jammers/074__inoyamaland__glass-chime.mp3",
+      "loop": true,
+      "gain": 0.4
     }
   },
   "areas": [],
