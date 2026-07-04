@@ -313,8 +313,11 @@ type OverworldEnemyRuntime = {
   skin?: SpriteOverrideSheet;
   /** Time remaining before this roamer can start a battle on contact (post-spawn grace). */
   contactGraceMs: number;
-  /** True when the party can instant-win this group: the roamer FLEES instead of chasing. */
+  /** True when the party can instant-win this group: the roamer FLEES instead of chasing.
+   *  Recomputed against the live party each frame in the engagement band (not just at spawn). */
   flees: boolean;
+  /** Debug-only override (via __debugSetRoamerFlees) to force flee without an over-leveled party. */
+  debugForceFlee?: boolean;
 };
 
 type BossGateRuntime = {
@@ -1638,7 +1641,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // without an over-leveled party. Nothing in normal play calls it.
     globals.__debugSetRoamerFlees = (value: boolean) => {
       for (const enemy of this.overworldEnemies.values()) {
-        enemy.flees = Boolean(value);
+        enemy.debugForceFlee = Boolean(value);
       }
       return this.overworldEnemies.size;
     };
@@ -5129,14 +5132,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
    */
   private stepOverworldEnemyBehavior(enemy: OverworldEnemyRuntime, deltaMs: number): void {
     const dist = this.distanceToPlayer(enemy.state.player);
-    if (enemy.flees) {
-      if (dist <= OVERWORLD_ENEMY_FLEE_DETECT_PX) {
+    if (dist <= OVERWORLD_ENEMY_FLEE_DETECT_PX) {
+      // Recompute vs the CURRENT party (it may have leveled up since spawn), so a group that
+      // is now instant-winnable FLEES instead of chasing. Only in the engagement band, so it's
+      // at most a few checks per frame. __debugSetRoamerFlees can force it on for testing.
+      enemy.flees = enemy.debugForceFlee === true
+        || this.encounterAdvantageForGroup(enemy.enemyGroup) === "instantWin";
+      if (enemy.flees) {
         this.stepOverworldEnemyDirected(enemy, deltaMs, true, OVERWORLD_ENEMY_FLEE_SPEED_PX_PER_SEC);
         return;
       }
-    } else if (dist <= OVERWORLD_ENEMY_CHASE_DETECT_PX) {
-      this.stepOverworldEnemyDirected(enemy, deltaMs, false, OVERWORLD_ENEMY_CHASE_SPEED_PX_PER_SEC);
-      return;
+      if (dist <= OVERWORLD_ENEMY_CHASE_DETECT_PX) {
+        this.stepOverworldEnemyDirected(enemy, deltaMs, false, OVERWORLD_ENEMY_CHASE_SPEED_PX_PER_SEC);
+        return;
+      }
     }
     stepNpc(enemy.state, {
       deltaMs,
