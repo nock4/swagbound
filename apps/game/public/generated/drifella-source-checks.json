@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.drifella-source-checks.v1",
-  "comment": "Drifella Source Checks \u2014 friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
+  "comment": "Drifella Source Checks — friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
   "checks": [
     {
       "id": "sourcecheck-morningside-001",
@@ -42,7 +42,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the leaked card was checked\u2014",
+            "prompt": "The category box on the leaked card was checked—",
             "options": [
               "VESSEL",
               "SOURCE",
@@ -63,7 +63,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The card-stock trail out of Bosch's block ran\u2014",
+            "prompt": "The card-stock trail out of Bosch's block ran—",
             "options": [
               "West, toward the arcade",
               "North, toward the road",
@@ -77,7 +77,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A 'readymade' in art is\u2014",
+            "prompt": "A 'readymade' in art is—",
             "category": "art",
             "options": [
               "An ordinary object declared to be art",
@@ -161,7 +161,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The arcade crowd deals in\u2014",
+            "prompt": "The arcade crowd deals in—",
             "options": [
               "Faces",
               "High scores",
@@ -203,7 +203,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Marcel Duchamp turned a urinal into art mostly by\u2014",
+            "prompt": "Marcel Duchamp turned a urinal into art mostly by—",
             "category": "art",
             "options": [
               "Signing it and giving it a title",
@@ -287,7 +287,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The building the town calls THE PRECINCT is where\u2014",
+            "prompt": "The building the town calls THE PRECINCT is where—",
             "options": [
               "The police keep the roadblock's paperwork",
               "Cards are printed",
@@ -315,7 +315,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Battle winnings in this town travel\u2014",
+            "prompt": "Battle winnings in this town travel—",
             "options": [
               "Wired to your account, by the connect",
               "Straight into your pocket",
@@ -329,7 +329,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A perfect copy of a painting is worth less than the original because we care about\u2014",
+            "prompt": "A perfect copy of a painting is worth less than the original because we care about—",
             "category": "art",
             "options": [
               "Where it came from",
@@ -343,7 +343,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The 'aura' of an original artwork is\u2014",
+            "prompt": "The 'aura' of an original artwork is—",
             "category": "art",
             "options": [
               "A presence the copy can't hold",
@@ -448,7 +448,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The kid on the stoop had been waiting\u2014",
+            "prompt": "The kid on the stoop had been waiting—",
             "options": [
               "His whole short life",
               "Since Tuesday",
@@ -462,7 +462,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Expressionism cares most about\u2014",
+            "prompt": "Expressionism cares most about—",
             "category": "art",
             "options": [
               "Inner feeling over accurate likeness",
@@ -574,7 +574,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The face on the leaked card was wrong the way\u2014",
+            "prompt": "The face on the leaked card was wrong the way—",
             "options": [
               "A bad memory is almost right",
               "A mirror is backwards",
@@ -588,7 +588,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The Dada movement was deliberately\u2014",
+            "prompt": "The Dada movement was deliberately—",
             "category": "art",
             "options": [
               "Absurd and anti-establishment",
@@ -602,7 +602,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "'Avant-garde' means art that is\u2014",
+            "prompt": "'Avant-garde' means art that is—",
             "category": "art",
             "options": [
               "Experimental, ahead of its time",
@@ -672,7 +672,7 @@
       "hints": [],
       "entryPrompt": [
         "A Drifella idles by the west block, counting windows. It waves without looking.",
-        "\"Forty-one windows. Zero of them honest. Anyway \u2014 Source Check?\""
+        "\"Forty-one windows. Zero of them honest. Anyway — Source Check?\""
       ],
       "questions": {
         "drawCount": 2,
@@ -686,7 +686,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A present box in this world, once opened\u2014",
+            "prompt": "A present box in this world, once opened—",
             "options": [
               "Stays opened",
               "Refills overnight",
@@ -707,7 +707,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The household voice heard on the first morning had\u2014",
+            "prompt": "The household voice heard on the first morning had—",
             "options": [
               "Panic under the paint",
               "Breakfast on the tray",
@@ -721,7 +721,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A Mark Rothko painting is mostly\u2014",
+            "prompt": "A Mark Rothko painting is mostly—",
             "category": "art",
             "options": [
               "Large soft blocks of color",
@@ -814,7 +814,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The best place to stand, in this town, is\u2014",
+            "prompt": "The best place to stand, in this town, is—",
             "options": [
               "Wherever the record isn't looking",
               "Center of the plaza",
@@ -851,12 +851,12 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Curiosity. You HAD it a minute ago \u2014 it's how you got here.\"",
+            "failLine": "\"Curiosity. You HAD it a minute ago — it's how you got here.\"",
             "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Sol LeWitt said the idea itself can be 'a machine that makes the\u2014'",
+            "prompt": "Sol LeWitt said the idea itself can be 'a machine that makes the—'",
             "category": "art",
             "options": [
               "Art",
@@ -956,7 +956,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Bosch pocketed the damaged card because\u2014",
+            "prompt": "Bosch pocketed the damaged card because—",
             "options": [
               "Unfiled and unflattering, it was HIS",
               "It was worth money",
@@ -991,7 +991,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "John Cage's '4'33\"' has the performer\u2014",
+            "prompt": "John Cage's '4'33\"' has the performer—",
             "category": "art",
             "options": [
               "Sit and play nothing, so you hear the room",
@@ -1005,7 +1005,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A 'field recording' captures\u2014",
+            "prompt": "A 'field recording' captures—",
             "category": "art",
             "options": [
               "The real sounds of an actual place",
@@ -1053,6 +1053,1117 @@
         "alreadyCleared": [
           "\"Hum with me a while. No questions. We've done those.\"",
           "\"Already in tune. The hotel side keeps it quiet.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-001",
+      "drifellaId": "drifella2-1374",
+      "npcId": 100310,
+      "region": "postwick",
+      "tier": 1,
+      "placement": {
+        "kind": "north-road",
+        "worldPixel": {
+          "x": 1548,
+          "y": 6324
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A sound-check tech for The Venue who treats every rumor like feedback to be EQ'd out.",
+        "tic": "\"Check. Check. Sourced.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1374.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella taps an invisible microphone twice and waits for the room to settle.",
+        "\"Source Check. Two questions, no reverb. If your story clips, we cut the feed.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The card that started all this arrived at Bosch's place before breakfast.",
+            "answer": true,
+            "failLine": "\"Before breakfast. Trouble skips meals.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box checked on that first leaked card read—",
+            "options": [
+              "VESSEL",
+              "TENANT",
+              "SUBSCRIBER",
+              "MASCOT"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"VESSEL. Nobody checks the box they'd choose.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Morningside's card-stock trail ran west, toward the arcade.",
+            "answer": true,
+            "failLine": "\"West. The crowd deals faces west.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Andy Warhol got famous for painting, over and over, a can of—",
+            "options": [
+              "Soup",
+              "Paint",
+              "Beans",
+              "Hairspray"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Soup. Repetition is a kind of volume.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Erik Satie wrote 'furniture music' — music designed to be ignored on purpose.",
+            "answer": true,
+            "failLine": "\"On purpose. The bravest setting is background.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A sound check exists mostly to protect—",
+            "options": [
+              "The room's ears",
+              "The star's ego",
+              "The ticket price",
+              "The weather"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Ears. Everything else heals.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8869",
+        "itemId": 94
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean signal.\"",
+          "\"No clipping. Continue.\"",
+          "\"That's the take.\""
+        ],
+        "cleared": [
+          "\"Take the card. It's mixed a little hot, like everything good.\"",
+          "\"Sourced and sound. Tell the door I said so.\""
+        ],
+        "failed": [
+          "\"Feedback. Walk it off and come re-level.\"",
+          "\"We'll fix it in the next pass. There's always a next pass.\""
+        ],
+        "alreadyCleared": [
+          "\"You're on the list. The list is me.\"",
+          "\"Check's done. Enjoy the show that is: everything.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-002",
+      "drifellaId": "drifella2-1427",
+      "npcId": 100311,
+      "region": "postwick",
+      "tier": 1,
+      "placement": {
+        "kind": "east-corner",
+        "worldPixel": {
+          "x": 3180,
+          "y": 6452
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A ticket-stub archivist who believes every event leaves a paper soul.",
+        "tic": "\"Stub it or it didn't happen.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1427.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella fans out a small brick of ticket stubs like a losing poker hand.",
+        "\"Admission is free. Verification costs two answers.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch kept the damaged original card instead of trading it away.",
+            "answer": true,
+            "failLine": "\"Kept it. Damage is a kind of proof.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The boss holding down Morningside's arcade answered to—",
+            "options": [
+              "Frank",
+              "A vending machine",
+              "The mayor",
+              "Nobody"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Frank. Every arcade has a Frank.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "In Postwick, the big stage in town belongs to The Venue.",
+            "answer": true,
+            "failLine": "\"The Venue. The name is doing no work and all of it.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Keith Haring first got famous drawing with chalk in—",
+            "options": [
+              "Subway stations",
+              "Art school",
+              "Courtrooms",
+              "His sleep"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Subways. Art commutes.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A Banksy painting once shredded itself moments after being sold at auction.",
+            "answer": true,
+            "failLine": "\"It did. The frame ate it. Price went up.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A ticket stub is best understood as—",
+            "options": [
+              "A receipt for a memory",
+              "Litter with dates",
+              "A tiny poster",
+              "Legal tender"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"A receipt for a memory. File accordingly.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3550",
+        "itemId": 95
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stubbed. Verified.\"",
+          "\"That matches my paper.\"",
+          "\"Admitted.\""
+        ],
+        "cleared": [
+          "\"Card's yours. Keep the stub. The stub is the card's stub.\"",
+          "\"Archived. You're a primary source now.\""
+        ],
+        "failed": [
+          "\"No re-entry on that answer. Walk the block, try the next show.\"",
+          "\"Torn wrong. Come back with the perforation intact.\""
+        ],
+        "alreadyCleared": [
+          "\"Season pass holder. I remember the paper.\"",
+          "\"Already filed. Aisle seat, forever.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-003",
+      "drifellaId": "drifella2-1442",
+      "npcId": 100312,
+      "region": "postwick",
+      "tier": 1,
+      "placement": {
+        "kind": "center-plaza",
+        "worldPixel": {
+          "x": 2604,
+          "y": 6516
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A produce-stand skeptic who squeezes every claim like a melon.",
+        "tic": "\"Ripe? We'll see.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1442.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella weighs nothing on a small brass scale and nods at the result.",
+        "\"Source Check. Claims by the pound. Yours first.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "The thing that finally stopped malady mid-lunge was—",
+            "options": [
+              "A freeze, mid-air",
+              "A stern letter",
+              "Road construction",
+              "Bosch's snack budget"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Frozen. Mid-lunge. You could hear the frost.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch fought malady completely alone.",
+            "answer": false,
+            "failLine": "\"Not alone. The second chair came from the daycare.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The kid who joined Bosch's crew grew up around Postwick's daycare.",
+            "answer": true,
+            "failLine": "\"Daycare kid. Best paperwork instincts in town.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "René Magritte painted a pipe with a caption insisting—",
+            "options": [
+              "This is not a pipe",
+              "Pipes are forever",
+              "No smoking",
+              "Buy two"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Not a pipe. A picture of one. Squeeze the difference.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Jackson Pollock made paintings by dripping and flinging paint while moving around the canvas.",
+            "answer": true,
+            "failLine": "\"Flung it. The moving was the painting.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A rumor with no source is basically—",
+            "options": [
+              "Produce with no farm",
+              "Extra true",
+              "A coupon",
+              "Weather"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"No farm, no fruit.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8877",
+        "itemId": 96
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Ripe.\"",
+          "\"Weighs out.\"",
+          "\"That one thumps right.\""
+        ],
+        "cleared": [
+          "\"Card's yours. Organic, single-origin, slightly bruised. The good kind.\"",
+          "\"Sold. To the only customer who checked the crate.\""
+        ],
+        "failed": [
+          "\"Underripe. Walk a lap of the block and come back seasonal.\"",
+          "\"That claim bruised on arrival. Try the next harvest.\""
+        ],
+        "alreadyCleared": [
+          "\"Regular customer. Take a look, don't squeeze.\"",
+          "\"Verified last market day. Still fresh.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-004",
+      "drifellaId": "drifella2-1552",
+      "npcId": 100313,
+      "region": "postwick",
+      "tier": 1,
+      "placement": {
+        "kind": "west-block",
+        "worldPixel": {
+          "x": 1452,
+          "y": 7092
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A laundromat philosopher who sorts stories like colors and whites.",
+        "tic": "\"Separate your loads.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1552.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella watches an invisible dryer spin with complete satisfaction.",
+        "\"Everything comes out in the wash. Two questions' worth, anyway.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "The one they called the returnless king was defeated—",
+            "options": [
+              "Before Bosch left Morningside",
+              "Never",
+              "By mail",
+              "Offscreen, allegedly"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Before the threshold. Kings without returns still fall.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch walked out of Morningside without clearing its bosses first.",
+            "answer": false,
+            "failLine": "\"Cleared them all. The town counts its receipts.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The swarm behind all this nefarious business styles itself after Milady.",
+            "answer": true,
+            "failLine": "\"Milady's swarm. They monologue. It's a whole thing.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Piet Mondrian's most famous paintings are grids filled with—",
+            "options": [
+              "Primary colors",
+              "Tiny horses",
+              "Photographs",
+              "Gold leaf"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Primary colors. Sorted. Like laundry.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Yayoi Kusama is famous for covering entire rooms in polka dots.",
+            "answer": true,
+            "failLine": "\"Dots all the way down. She calls it infinity. I call it Tuesday.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A secret is just a stain that—",
+            "options": [
+              "Hasn't been washed yet",
+              "Sets forever",
+              "Belongs there",
+              "Matches the shirt"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Everything pre-treats eventually.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3476",
+        "itemId": 97
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Comes out clean.\"",
+          "\"No residue on that one.\"",
+          "\"Colorfast. Good.\""
+        ],
+        "cleared": [
+          "\"Card's yours. Cold wash only. It knows what it did.\"",
+          "\"Folded, filed, verified. Best cycle all week.\""
+        ],
+        "failed": [
+          "\"That one needs another rinse. Take a walk. Come back with quarters.\"",
+          "\"Wrinkled answer. The iron is patience.\""
+        ],
+        "alreadyCleared": [
+          "\"Your load's done. It's been done. Stop feeding the machine.\"",
+          "\"Verified and spring-scented. Move along.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-005",
+      "drifellaId": "drifella2-1679",
+      "npcId": 100314,
+      "region": "postwick",
+      "tier": 1,
+      "placement": {
+        "kind": "east-block",
+        "worldPixel": {
+          "x": 2988,
+          "y": 7028
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A bus-schedule truther convinced the timetable is a living document with opinions.",
+        "tic": "\"The 9:40 knows.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1679.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella consults a bus schedule with more annotations than schedule.",
+        "\"You're early. Or the questions are late. Either way: Source Check.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The intro everyone talks about opens on slides from a war.",
+            "answer": true,
+            "failLine": "\"The war slides. Everyone remembers the quiet ones.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Bosch's crew size when malady finally went down was—",
+            "options": [
+              "Two",
+              "One",
+              "Five",
+              "A parade"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Two. One to freeze, one to not die.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Morningside sits a comfortable walk north of Postwick.",
+            "answer": true,
+            "failLine": "\"North. The road remembers your shoes.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Brian Eno described ambient music as needing to be as ignorable as it is—",
+            "options": [
+              "Interesting",
+              "Loud",
+              "Expensive",
+              "Short"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Interesting. The 9:40 plays it between stops.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Nam June Paik built art out of stacks of working television sets.",
+            "answer": true,
+            "failLine": "\"Towers of TVs. All showing something. Like a bus depot.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A schedule that's never wrong is probably—",
+            "options": [
+              "Never checked",
+              "Magic",
+              "Laminated",
+              "New"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Unchecked. Trust requires audits.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4855",
+        "itemId": 98
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"On time.\"",
+          "\"The 9:40 agrees.\"",
+          "\"Stamped. Next stop.\""
+        ],
+        "cleared": [
+          "\"Card's yours. Transfer's included. It never expires. Probably.\"",
+          "\"Verified. You may now board anything.\""
+        ],
+        "failed": [
+          "\"Missed it. There's another check in eleven minutes. Walk the loop.\"",
+          "\"Wrong platform. Happens to commuters and liars alike.\""
+        ],
+        "alreadyCleared": [
+          "\"You've been validated. That's the whole ride.\"",
+          "\"Still on schedule. Unlike the 9:40.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-006",
+      "drifellaId": "drifella2-1789",
+      "npcId": 100315,
+      "region": "postwick",
+      "tier": 1,
+      "placement": {
+        "kind": "south-road",
+        "worldPixel": {
+          "x": 2316,
+          "y": 7220
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A crossing guard for information; nothing gets to the other side unverified.",
+        "tic": "\"Look both ways. Then cite.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1789.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella holds up a small stop sign that simply says WHO TOLD YOU THAT.",
+        "\"Two questions cross here. Escort them honestly.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "The first card's arrival was rudest because it—",
+            "options": [
+              "Didn't knock",
+              "Was postage due",
+              "Sang",
+              "Was damp"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Cards never knock. First thing you learn.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The hotel back in Morningside has a side nobody photographs.",
+            "answer": true,
+            "failLine": "\"The bad side. It hums. Ask around.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Milady's swarm taunts people mid-fight, because of course they do.",
+            "answer": true,
+            "failLine": "\"Mid-fight monologues. Nefarious AND chatty.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yoko Ono made famous artworks that were just—",
+            "options": [
+              "Instructions to imagine things",
+              "Very large hats",
+              "Blank receipts",
+              "Apologies"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Instructions. The art happens in you. Terrifying, honestly.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Christo and Jeanne-Claude once wrapped an entire building in fabric, on purpose, temporarily.",
+            "answer": true,
+            "failLine": "\"Wrapped it like a gift to nobody. It was great.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The safest way to cross a rumor is—",
+            "options": [
+              "At the source",
+              "At a run",
+              "Blindfolded",
+              "In groups"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"At the source. Always at the source.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3452",
+        "itemId": 99
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Cleared to cross.\"",
+          "\"Both ways looked. Cited.\"",
+          "\"Proceed.\""
+        ],
+        "cleared": [
+          "\"Card's yours. Walk it, don't run it.\"",
+          "\"Verified crossing. Tell your facts to hold hands.\""
+        ],
+        "failed": [
+          "\"Back to the curb. Circle the block and try again.\"",
+          "\"That one jaywalked. We don't reward that here.\""
+        ],
+        "alreadyCleared": [
+          "\"You have permanent right of way.\"",
+          "\"Crossed and logged. The sign remembers.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-007",
+      "drifellaId": "drifella2-1794",
+      "npcId": 100316,
+      "region": "postwick",
+      "tier": 1,
+      "placement": {
+        "kind": "under-canopy",
+        "worldPixel": {
+          "x": 2380,
+          "y": 6340
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A hedge archivist who files leaves by what they overheard.",
+        "tic": "\"The foliage keeps minutes.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1794.png",
+      "hints": [
+        {
+          "kind": "binder"
+        }
+      ],
+      "entryPrompt": [
+        "A voice from inside the greenery. You genuinely did not see them there.",
+        "\"Shh. You found the branch office. Source Check — leaf through two questions.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Malady went down to a freeze cast by the daycare kid, not by Bosch.",
+            "answer": true,
+            "failLine": "\"The kid froze it. Bosch mostly survived on purpose.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Frank's crew at the arcade dealt mostly in—",
+            "options": [
+              "Cards",
+              "Loans",
+              "Salad",
+              "Rumors about salad"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Cards. It's always cards with those people.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "You can stand behind a tree in this town and honestly disappear.",
+            "answer": true,
+            "failLine": "\"You're doing it right now. Well — I am.\"",
+            "category": "vibe"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Claude Monet painted the same water lilies—",
+            "options": [
+              "Hundreds of times",
+              "Once, reluctantly",
+              "From memory in jail",
+              "Never; it was ghosts"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Again and again. The pond kept changing its testimony.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Land artists have made artworks so big you can only see them properly from the air.",
+            "answer": true,
+            "failLine": "\"Spiral jetties. Desert lines. The ground has opinions.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The best place to keep a secret is—",
+            "options": [
+              "Where everyone walks past it",
+              "A vault",
+              "A group chat",
+              "Loud"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"In plain foliage. Works on you people every time.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8864",
+        "itemId": 100
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"The leaves concur.\"",
+          "\"Filed under: true.\"",
+          "\"Rustle of approval.\""
+        ],
+        "cleared": [
+          "\"Card's yours. Pressed flat, like a good leaf.\"",
+          "\"The hedge ratifies you. That's rare.\""
+        ],
+        "failed": [
+          "\"The canopy disagrees. Take a lap; photosynthesize on it.\"",
+          "\"Composted. Try again after some sun.\""
+        ],
+        "alreadyCleared": [
+          "\"You're in the minutes now. Permanent record, nice shade.\"",
+          "\"Verified. Water us sometime.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-008",
+      "drifellaId": "drifella2-1830",
+      "npcId": 100317,
+      "region": "postwick",
+      "tier": 1,
+      "placement": {
+        "kind": "behind-building",
+        "worldPixel": {
+          "x": 3276,
+          "y": 6420
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "An alley accountant who balances the town's books in pigeons.",
+        "tic": "\"Net pigeons: positive.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1830.png",
+      "hints": [
+        {
+          "kind": "binder"
+        }
+      ],
+      "entryPrompt": [
+        "Behind the building: a Drifella, a ledger, and a strong opinion about your posture.",
+        "\"Off the books, are we? Everything gets audited eventually. Two entries, please.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "What arrived at Bosch's door uninvited and started this whole audit?",
+            "options": [
+              "A card",
+              "A pigeon",
+              "A bill",
+              "A drum kit"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"A card. Unitemized. Disgraceful.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch settled every boss in Morningside before crossing out of town.",
+            "answer": true,
+            "failLine": "\"Paid in full. I checked the ledger twice.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The swarm's whole aesthetic is borrowed grandeur — 'Milady' isn't even their name.",
+            "answer": true,
+            "failLine": "\"Borrowed plumage. Pigeons do it too, but honestly.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Salvador Dalí's most famous painting features melting—",
+            "options": [
+              "Clocks",
+              "Ledgers",
+              "Cheese",
+              "Stairs"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Clocks. Time is the one account that never balances.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Some composers have written pieces for orchestras that never play a written note, improvising from symbols instead.",
+            "answer": true,
+            "failLine": "\"Graphic scores. Squiggles you can sue over.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "An alley is just a street that—",
+            "options": [
+              "Keeps better secrets",
+              "Failed math",
+              "Lost its deed",
+              "Sleeps in"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Better secrets. Lower overhead.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10708",
+        "itemId": 107
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Balances.\"",
+          "\"Entered. In pen.\"",
+          "\"The pigeons nod.\""
+        ],
+        "cleared": [
+          "\"Card's yours. It appreciates. Unlike most assets back here.\"",
+          "\"Audit passed. First one this quarter.\""
+        ],
+        "failed": [
+          "\"Discrepancy. Take a walk; the books will cool off.\"",
+          "\"That entry bounced. We'll pretend it was the pigeons.\""
+        ],
+        "alreadyCleared": [
+          "\"Account's settled. Stop by for the pigeons, not the questions.\"",
+          "\"Audited and closed. Beautiful margins on you.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-009",
+      "drifellaId": "drifella2-1841",
+      "npcId": 100318,
+      "region": "postwick",
+      "tier": 1,
+      "placement": {
+        "kind": "hedge-nook",
+        "worldPixel": {
+          "x": 1836,
+          "y": 6596
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A fire-escape critic reviewing the town like it's one long opening night.",
+        "tic": "\"Three stars. Rising.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1841.png",
+      "hints": [
+        {
+          "kind": "binder"
+        }
+      ],
+      "entryPrompt": [
+        "The Drifella lowers a tiny pair of opera glasses it did not need.",
+        "\"Ah. An understudy. The role of Verified Person is still open — audition is two questions.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The story so far opened with war slides, not fireworks.",
+            "answer": true,
+            "failLine": "\"War slides. Bold curtain. I wept, professionally.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The freeze that saved the malady fight was cast by—",
+            "options": [
+              "The daycare kid",
+              "Bosch",
+              "Frank, redeemed",
+              "An usher"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The kid. Scene-stealer. Loved it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The Venue is Postwick's stage, and everything else in town is understudy.",
+            "answer": true,
+            "failLine": "\"Obviously. Even the daycare knows its blocking.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Marina Abramović became famous for art where the material was—",
+            "options": [
+              "Her own presence",
+              "Marble",
+              "Fog",
+              "Ticket sales"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Presence. She sat. The world queued. Five stars.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Some plays have been staged with no actors at all — just lights, sound, and the audience.",
+            "answer": true,
+            "failLine": "\"No actors. The bravest casting.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Every town is a production. The critic's job is to—",
+            "options": [
+              "Stay for the whole thing",
+              "Leave early",
+              "Heckle",
+              "Direct"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"You stay. Even through the slow acts.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8930",
+        "itemId": 108
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Bravo. Quietly.\"",
+          "\"The balcony approves.\"",
+          "\"Note-perfect.\""
+        ],
+        "cleared": [
+          "\"The card is yours. A rave review, laminated.\"",
+          "\"Cast. You open immediately. No previews.\""
+        ],
+        "failed": [
+          "\"The scene needs work. Exit stage anywhere, return off-book.\"",
+          "\"I've seen worse auditions. Barely. Walk it off.\""
+        ],
+        "alreadyCleared": [
+          "\"Ah, the lead returns. The role remains yours.\"",
+          "\"Still five stars. Don't read the comments.\""
         ]
       }
     }

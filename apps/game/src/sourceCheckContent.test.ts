@@ -12,7 +12,7 @@ describe("source check generated content", () => {
     const checks = DrifellaSourceChecksSchema.parse(readGeneratedJson("drifella-source-checks.json"));
 
     expect(cards.cards.length).toBe(95);
-    expect(checks.checks.length).toBe(8);
+    expect(checks.checks.length).toBe(17);
     expect(checks.checks.every((check) => cards.cards.some((card) => card.id === check.rewards.cardId))).toBe(true);
     for (const check of checks.checks) {
       expect(check.personality).toMatchObject({

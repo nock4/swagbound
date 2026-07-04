@@ -83,12 +83,15 @@
         214
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "main-route",
+        "worldPixel": {
+          "x": 2040,
+          "y": 1840
+        }
       },
       "cardNftRewardId": "card-nft-2-10925",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-morningside-002",
@@ -103,12 +106,15 @@
         213
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "plaza",
+        "worldPixel": {
+          "x": 1700,
+          "y": 1680
+        }
       },
       "cardNftRewardId": "card-nft-2-10998",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-morningside-003",
@@ -123,12 +129,15 @@
         233
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "roadside",
+        "worldPixel": {
+          "x": 2260,
+          "y": 1620
+        }
       },
       "cardNftRewardId": "card-nft-2-10458",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-morningside-004",
@@ -143,12 +152,15 @@
         259
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "south-road",
+        "worldPixel": {
+          "x": 1850,
+          "y": 2100
+        }
       },
       "cardNftRewardId": "card-nft-2-3672",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-morningside-005",
@@ -163,12 +175,15 @@
         204
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "north-road",
+        "worldPixel": {
+          "x": 1980,
+          "y": 1450
+        }
       },
       "cardNftRewardId": "card-nft-2-4969",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-morningside-006",
@@ -183,12 +198,15 @@
         201
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "west-block",
+        "worldPixel": {
+          "x": 1350,
+          "y": 1900
+        }
       },
       "cardNftRewardId": "card-nft-2-10906",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-morningside-007",
@@ -203,12 +221,15 @@
         227
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "behind-building",
+        "worldPixel": {
+          "x": 2200,
+          "y": 1560
+        }
       },
       "cardNftRewardId": "card-nft-2-10464",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-morningside-008",
@@ -223,12 +244,15 @@
         198
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "hotel-side",
+        "worldPixel": {
+          "x": 2000,
+          "y": 1350
+        }
       },
       "cardNftRewardId": "card-nft-2-10681",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-postwick-001",
@@ -243,12 +267,15 @@
         199
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "north-road",
+        "worldPixel": {
+          "x": 1548,
+          "y": 6324
+        }
       },
       "cardNftRewardId": "card-nft-2-8869",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-postwick-002",
@@ -263,12 +290,15 @@
         222
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "east-corner",
+        "worldPixel": {
+          "x": 3180,
+          "y": 6452
+        }
       },
       "cardNftRewardId": "card-nft-2-3550",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-postwick-003",
@@ -283,12 +313,15 @@
         442
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "center-plaza",
+        "worldPixel": {
+          "x": 2604,
+          "y": 6516
+        }
       },
       "cardNftRewardId": "card-nft-2-8877",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-postwick-004",
@@ -303,12 +336,15 @@
         202
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "west-block",
+        "worldPixel": {
+          "x": 1452,
+          "y": 7092
+        }
       },
       "cardNftRewardId": "card-nft-2-3476",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-postwick-005",
@@ -323,12 +359,15 @@
         239
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "east-block",
+        "worldPixel": {
+          "x": 2988,
+          "y": 7028
+        }
       },
       "cardNftRewardId": "card-nft-2-4855",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-postwick-006",
@@ -343,12 +382,15 @@
         374
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "south-road",
+        "worldPixel": {
+          "x": 2316,
+          "y": 7220
+        }
       },
       "cardNftRewardId": "card-nft-2-3452",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-postwick-007",
@@ -363,12 +405,15 @@
         33
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "under-canopy",
+        "worldPixel": {
+          "x": 2380,
+          "y": 6340
+        }
       },
       "cardNftRewardId": "card-nft-2-8864",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-postwick-008",
@@ -383,12 +428,15 @@
         203
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "behind-building",
+        "worldPixel": {
+          "x": 3276,
+          "y": 6420
+        }
       },
       "cardNftRewardId": "card-nft-2-10708",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-postwick-009",
@@ -403,12 +451,15 @@
         206
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "hedge-nook",
+        "worldPixel": {
+          "x": 1836,
+          "y": 6596
+        }
       },
       "cardNftRewardId": "card-nft-2-8930",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-bluebell-village-001",
