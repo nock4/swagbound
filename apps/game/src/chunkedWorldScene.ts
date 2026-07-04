@@ -202,6 +202,7 @@ import {
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import {
   defaultVisualStateInputs,
+  lowerHideFramePx,
   resolvePlayerVisualState,
   type ResolvedVisualState,
   type VisualStateInputs
@@ -6157,6 +6158,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return {
       ...base,
       deepWater: this.isPlayerInWater(), // real terrain signal (3a)
+      lowerBodyHidden: this.isPlayerOnLowerHideCell(), // EB 0x01-only cell: tall grass / shrub top / roof crest
       ko: this.leadPartyMemberDowned(), // real KO signal: lead at 0 HP -> dead/ghost overworld sprite
       // ladder/rope/bike real triggers await tile-class data + a mount mechanic; forced-path for now.
       ...forced,
@@ -6178,6 +6180,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     try {
       const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
       return isWaterSurface(surface);
+    } catch {
+      return false;
+    }
+  }
+
+  private isPlayerOnLowerHideCell(): boolean {
+    try {
+      const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
+      return isFgLowerOnlySurface(surface);
     } catch {
       return false;
     }
@@ -6245,6 +6256,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const waterline = ov.anchors?.waterline ?? Math.round(ov.frameHeight * 0.6);
       sprite.setCrop(0, 0, ov.frameWidth, waterline);
       sprite.y -= (ov.frameHeight - waterline) * scale;
+    } else if (resolved.transforms.lowerBodyClip && ov?.frameHeight && ov?.frameWidth) {
+      // EB 0x01 cell: the map art (tall grass, shrub top, roof crest) hides the
+      // actor's lower body. Hide ~8 world px of feet; unlike waterClip the sprite
+      // stays put — the background art IS the "cover", so no raise.
+      sprite.setCrop(0, 0, ov.frameWidth, ov.frameHeight - lowerHideFramePx(ov.frameHeight, scale));
     } else if (sprite.isCropped) {
       sprite.setCrop();
     }
@@ -6534,6 +6550,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const waterline = ov.anchors?.waterline ?? Math.round(ov.frameHeight * 0.6);
       sprite.setCrop(0, 0, ov.frameWidth, waterline);
       sprite.y -= (ov.frameHeight - waterline) * scale;
+    } else if (resolved.transforms.lowerBodyClip && ov?.frameHeight && ov?.frameWidth) {
+      // Shared with the lead like waterClip (the chain walks the same footsteps,
+      // so per-member terrain sampling would only differ for transition frames).
+      sprite.setCrop(0, 0, ov.frameWidth, ov.frameHeight - lowerHideFramePx(ov.frameHeight, scale));
     } else if (sprite.isCropped) {
       sprite.setCrop();
     }

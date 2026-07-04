@@ -15,6 +15,8 @@ export interface VisualStateInputs {
   ko: boolean;
   /** Standing in deep water (waterline clip). */
   deepWater: boolean;
+  /** Standing on an EB 0x01-only cell (tall grass, shrub top, roof crest): lower body obscured. */
+  lowerBodyHidden: boolean;
   onLadder: boolean;
   onRope: boolean;
   /** Active ride, if any. */
@@ -41,7 +43,7 @@ export interface ResolvedVisualState {
   baseState: SpriteStateName | "default";
   /** Applied by the render layer ONLY when the skin lacks a sheet for `baseState`. */
   approximation: { scale?: number; alpha?: number; desaturate?: boolean };
-  transforms: { invertPalette: boolean; waterClip: boolean; teleportSpin: boolean };
+  transforms: { invertPalette: boolean; waterClip: boolean; lowerBodyClip: boolean; teleportSpin: boolean };
   overlays: SpriteOverlayName[];
   /** ladder/rope/sitting/sleeping hold a static pose instead of cycling the walk animation. */
   lockAnimation: boolean;
@@ -87,6 +89,8 @@ export function resolvePlayerVisualState(inputs: VisualStateInputs): ResolvedVis
     transforms: {
       invertPalette: inputs.invertPalette,
       waterClip: inputs.deepWater && WADEABLE.has(baseState),
+      // Water wins over grass when both apply (you are IN the water, not the grass).
+      lowerBodyClip: inputs.lowerBodyHidden && !inputs.deepWater && WADEABLE.has(baseState),
       teleportSpin: inputs.teleporting && !inputs.ko
     },
     overlays,
@@ -94,7 +98,17 @@ export function resolvePlayerVisualState(inputs: VisualStateInputs): ResolvedVis
   };
 }
 
+/**
+ * Frame-pixels to crop off a sprite's bottom for the 0x01 lower-body hide (~8 world px
+ * of feet, converted through the skin's display scale). Clamped so oversized skins never
+ * lose more than a third of the frame.
+ */
+export function lowerHideFramePx(frameHeight: number, scale: number): number {
+  const framePx = Math.round(8 / (scale > 0 ? scale : 1));
+  return Math.max(2, Math.min(framePx, Math.round(frameHeight / 3)));
+}
+
 /** Default inputs (plain walking, nothing applied) -- a convenience for callers/tests. */
 export function defaultVisualStateInputs(): VisualStateInputs {
-  return { ko: false, deepWater: false, onLadder: false, onRope: false, riding: null, status: {}, event: null, invertPalette: false, teleporting: false };
+  return { ko: false, deepWater: false, lowerBodyHidden: false, onLadder: false, onRope: false, riding: null, status: {}, event: null, invertPalette: false, teleporting: false };
 }

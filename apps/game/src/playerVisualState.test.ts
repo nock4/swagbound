@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defaultVisualStateInputs, resolvePlayerVisualState, type VisualStateInputs } from "./playerVisualState";
+import { defaultVisualStateInputs, lowerHideFramePx, resolvePlayerVisualState, type VisualStateInputs } from "./playerVisualState";
 
 const inputs = (over: Partial<VisualStateInputs>): VisualStateInputs => ({ ...defaultVisualStateInputs(), ...over });
 
@@ -7,7 +7,7 @@ describe("resolvePlayerVisualState", () => {
   it("plain walking -> default, no transforms/overlays", () => {
     const r = resolvePlayerVisualState(defaultVisualStateInputs());
     expect(r.baseState).toBe("default");
-    expect(r.transforms).toEqual({ invertPalette: false, waterClip: false, teleportSpin: false });
+    expect(r.transforms).toEqual({ invertPalette: false, waterClip: false, lowerBodyClip: false, teleportSpin: false });
     expect(r.overlays).toEqual([]);
     expect(r.lockAnimation).toBe(false);
   });
@@ -73,5 +73,32 @@ describe("resolvePlayerVisualState", () => {
     const r = resolvePlayerVisualState(inputs({ status: { tiny: true, mushroomized: true } }));
     expect(r.baseState).toBe("tiny");
     expect(r.overlays).toEqual(["mushroom"]);
+  });
+});
+
+describe("lower-body hide (EB 0x01-only cells)", () => {
+  it("clips the lower body when standing in tall grass", () => {
+    const r = resolvePlayerVisualState(inputs({ lowerBodyHidden: true }));
+    expect(r.transforms.lowerBodyClip).toBe(true);
+    expect(r.transforms.waterClip).toBe(false);
+  });
+
+  it("water wins over grass when both apply", () => {
+    const r = resolvePlayerVisualState(inputs({ lowerBodyHidden: true, deepWater: true }));
+    expect(r.transforms.waterClip).toBe(true);
+    expect(r.transforms.lowerBodyClip).toBe(false);
+  });
+
+  it("does not clip non-upright states (riding, KO)", () => {
+    expect(resolvePlayerVisualState(inputs({ lowerBodyHidden: true, riding: "bike" })).transforms.lowerBodyClip).toBe(false);
+    expect(resolvePlayerVisualState(inputs({ lowerBodyHidden: true, ko: true })).transforms.lowerBodyClip).toBe(false);
+  });
+
+  it("lowerHideFramePx converts ~8 world px through the skin scale with sane clamps", () => {
+    expect(lowerHideFramePx(24, 1)).toBe(8); // native-scale skin: 8 frame px
+    expect(lowerHideFramePx(48, 0.5)).toBe(16); // downscaled tall skin: more frame px = same world px
+    expect(lowerHideFramePx(24, 4)).toBe(2); // upscaled skin: floor of 2
+    expect(lowerHideFramePx(12, 0.25)).toBe(4); // clamp: never more than a third of the frame
+    expect(lowerHideFramePx(24, 0)).toBe(8); // degenerate scale guarded
   });
 });
