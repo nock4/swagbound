@@ -4948,6 +4948,915 @@
           "\"My leaked version hustles. Mine coasts. We are not on speaking terms.\""
         ]
       }
+    },
+    {
+      "id": 101600,
+      "worldPixel": {
+        "x": 3072,
+        "y": 8728
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101601,
+      "worldPixel": {
+        "x": 2240,
+        "y": 8760
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101602,
+      "worldPixel": {
+        "x": 2824,
+        "y": 8760
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A purple car, parked half-off the shoulder. The paint is pixelated at the edges, like it was compressed too many times before it got here.",
+          "The plate reads NOT MINE. There is no driver. There is no key. The engine is warm anyway. Whatever route this took, it did not take it with anyone inside."
+        ]
+      }
+    },
+    {
+      "id": 101603,
+      "worldPixel": {
+        "x": 3168,
+        "y": 8768
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "You catch up to it on the shoulder of the road, where the asphalt gives out and the glitch-field starts. It doesn't have a face so much as an absence where the face got processed off.",
+          "\"You're still rendered. Good for you. The route took mine somewhere around the third off-ramp. Kept the walk cycle, lost the head. Standard.\"",
+          "\"Don't stop out here. The machinery downstream doesn't hate you. It just files you. Same thing, slower.\"",
+          "\"If they ask you for the source at the next kiosk, say you don't have one. It's true, and it's the only answer the road accepts.\""
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101604,
+      "worldPixel": {
+        "x": 2336,
+        "y": 8792
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A billboard. Desert-bleached, forty feet up, bolted to the route where nobody stops. It shows a hospital bed. A deathbed. The patient is an eyeball on a body, drawn by a hand that didn't care whether you believed it.",
+          "The caption underneath has peeled. What's left reads: EVERY VERSION ENDS HERE. FILED. UNWITNESSED. The paint keeps advertising to the empty road long after the sponsor stopped paying.",
+          "You look at it and it looks back with the one eye it has. A thing built to be seen by no one, still insisting it was seen. You keep walking. The route processes you either way."
+        ]
+      }
+    },
+    {
+      "id": 101605,
+      "worldPixel": {
+        "x": 2920,
+        "y": 8792
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101606,
+      "worldPixel": {
+        "x": 3496,
+        "y": 8792
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101700,
+      "worldPixel": {
+        "x": 5200,
+        "y": 8312
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Do you like it? They hung me low, near the fire exit. Bad light. My whole face is ink somebody else scribbled.",
+          "I used to be one thing. Then a claimant traced me, sold the trace, and the trace got a wall and a little plaque and I got... whatever you're looking at.",
+          "The wall text says DERIVATIVE, PROVENANCE UNKNOWN. Which is a polite way of saying nobody will admit they made me.",
+          "Don't feel bad. Everyone in here is somebody's leaked version. You're probably somebody's too. You just haven't been hung yet."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101701,
+      "worldPixel": {
+        "x": 6352,
+        "y": 8312
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A figure with a black bar laid across its eyes leans against the wall text, not looking at any of it, or looking at all of it, impossible to tell.",
+          "\"They put me in the collection with the eyes covered. For my protection, the wall label says. From what, it doesn't say. From being witnessed, probably. Little late.\"",
+          "\"You can tell a public version by what's been redacted. Everything true about a person is under the bar. What's left is a pose the market can hang.\"",
+          "\"Go look at the ones that still have eyes. Those are the forgeries. Nobody real gets to keep their eyes in here.\""
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101702,
+      "worldPixel": {
+        "x": 5040,
+        "y": 8344
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Oh! A live one. Visitors, on THIS floor. Most of what comes through here is climate-controlled and already dead. Welcome, welcome, to the wing of the derived.",
+          "I'm the guide. Gold, official, licensed to point. I was minted off a family that never signed for me, but the placard says 'guide,' so guide is what I am. The record is very fond of a placard.",
+          "Everything on these walls is a public version. Someone was the source once, and then someone else was cheaper, and now they hang side by side and the wall text calls it a 'movement.' Curious, isn't it, how appraisal launders a copy into a canon.",
+          "Stay behind the rope. Don't ask which of us is authentic. The Galleria has a policy about that question, and the policy is a longer rope."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101703,
+      "worldPixel": {
+        "x": 5296,
+        "y": 8344
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101704,
+      "worldPixel": {
+        "x": 5840,
+        "y": 8344
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101705,
+      "worldPixel": {
+        "x": 5392,
+        "y": 8376
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A green-faced townie in a pink camo trucker cap perks up as you approach, like they've been waiting for someone to file a complaint with.",
+          "\"Welcome to the Galleria. Everything on these walls is a copy of a copy of a girl who never signed anything. Including me. I'm a copy. I know I'm a copy. It's fine. It's mostly fine.\"",
+          "\"They call it a derivative like it's a slur. But I've got a face, don't I? I've got a hat. The original didn't have a hat. I'm the one who added the hat. Doesn't that make some of me mine?\"",
+          "\"...Don't answer that. The appraiser answered it. That's why I'm on the wall and not in the ledger.\""
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101706,
+      "worldPixel": {
+        "x": 5680,
+        "y": 8376
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A gold figure in a frame. The wall text names it Study, After a Study, After the Original. Nobody in the building has seen the original. Its absence is the whole appraisal.",
+          "It is a copy so many removes out that the gold is just the color the market agreed a copy should be. Provenance: unlisted. Value: high, precisely because it can't be sourced. The Galleria prefers it that way."
+        ]
+      }
+    },
+    {
+      "id": 101707,
+      "worldPixel": {
+        "x": 4816,
+        "y": 8408
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101708,
+      "worldPixel": {
+        "x": 5520,
+        "y": 8408
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101709,
+      "worldPixel": {
+        "x": 6256,
+        "y": 8408
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101710,
+      "worldPixel": {
+        "x": 6352,
+        "y": 8408
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Oh, you're a real visitor. Sorry, I mostly loiter. It's warmer near the exhibits than out on the route.",
+          "I like this room. Everyone here got drawn nice. Soft lines, good shading. Nobody asks where the source went, they just look at you and go 'aww.'",
+          "If a docent tells you I'm part of the show, I'm not. I just fit in. That's the trick to not getting filed. Fit in."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101711,
+      "worldPixel": {
+        "x": 5136,
+        "y": 8416
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Under glass: a scanned trading card \u2014 a fire-conjuring efreet \u2014 crowned with a doodled cap and a pair of crude ballpoint wings someone added later. The wall plaque reads:",
+          "FRENETIC EFREET (AFTER). Found object, ink, delusion. The card was printed by a company that owned it, played by a boy who thought he owned it, and scanned by a wallet that claimed it was never printed at all.",
+          "The wings are not part of the card. The wings were added to make it new. Nothing was made new. Provenance: three owners, none of them the artist, all of them certain.",
+          "Do not touch the glass. The glass is the only thing here that isn't a copy of something."
+        ]
+      }
+    },
+    {
+      "id": 101712,
+      "worldPixel": {
+        "x": 5032,
+        "y": 8440
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A photograph, framed and lit like a masterwork. A face \u2014 pores, catchlights, one asymmetric lash. Completely convincing. Completely nobody. There was never a person behind this glass.",
+          "Bottom right: a signature. Someone SIGNED a face that was never worn. The wall text calls this the collection's genius \u2014 a claimant for a thing with no source, a name deeded to no one.",
+          "The most valued pieces in the Galleria are the ones no leaked original can contradict. This is the purest of them. It cannot be doxxed, because there is nothing under it to find."
+        ]
+      }
+    },
+    {
+      "id": 101713,
+      "worldPixel": {
+        "x": 5776,
+        "y": 8440
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101714,
+      "worldPixel": {
+        "x": 5872,
+        "y": 8440
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101715,
+      "worldPixel": {
+        "x": 5968,
+        "y": 8440
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101716,
+      "worldPixel": {
+        "x": 6096,
+        "y": 8440
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A mixed-media collage under glass. Watercolor washes, charcoal scrawl. The legible fragment reads 'Hello...ing' and then nothing.",
+          "The card beside it is honest for once: NO KNOWN SOURCE. NO KNOWN AUTHOR. ACQUIRED AS-IS. Somebody framed a message that never finished sending and called it a work."
+        ]
+      }
+    },
+    {
+      "id": 101717,
+      "worldPixel": {
+        "x": 5296,
+        "y": 8472
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A fiery expressionist canvas, orange and red bleeding into a small postcard of an abstract shoreline glued at the corner. The label beside it is longer than the frame.",
+          "POSTCARD (NO. 004). Mixed media on panel. On loan from an estate that cannot be located. The image beneath the paint is a place. The place cannot be located either.",
+          "The market values this at more than the road it was painted on. The road is still out there, processing people. The painting is in here, appraised and safe. Consider which one got the better exit.",
+          "One corner is still legible: 'Hello...' The rest was sold."
+        ]
+      }
+    },
+    {
+      "id": 101718,
+      "worldPixel": {
+        "x": 5392,
+        "y": 8472
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A postcard mounted under museum glass. Watercolor bleeding into charcoal, a single glass of water rendered too carefully, and a scrawl across the corner: Hello Melina. It was addressed. It was never sent.",
+          "The wall text calls it correspondence. There is no Melina in the record. Only the greeting survived, filed, appraised, hung \u2014 a message that reached the archive instead of the person. The Galleria collects the ones that missed."
+        ]
+      }
+    },
+    {
+      "id": 101719,
+      "worldPixel": {
+        "x": 5616,
+        "y": 8472
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101720,
+      "worldPixel": {
+        "x": 6480,
+        "y": 8472
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101721,
+      "worldPixel": {
+        "x": 4912,
+        "y": 8488
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A scattered wall of icons behind cracked glass. Crosses, a jester, a corrupted framed idol, a numeral seven repeated until it stops meaning seven.",
+          "The plaque: RELIQUARY, ATTRIB. UNCERTAIN. Assembled from things that were witnessed once and worshipped after. Provenance ends where the faith begins. Do not touch the glass. It is the only thing still holding the arrangement together."
+        ]
+      }
+    },
+    {
+      "id": 101722,
+      "worldPixel": {
+        "x": 4720,
+        "y": 8504
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A kid with ice-cream pastel hair, teeth gritted, clutching an expensive fountain pen like it's the last true thing in the building. Speed lines shudder off them.",
+          "\"This pen is MINE. I can prove it. There's a receipt. There's a chain. I've got the whole provenance, every hand it passed through, I have it MEMORIZED \u2014\"",
+          "\"\u2014 and it doesn't matter. They hung a scan of me holding it on the wall and now the scan is the artwork and I'm just the guy the scan is OF. Do you understand what that does to a person?\"",
+          "\"You're going to want to hold onto something real before you leave here. A pen. A name. Anything. Because the Galleria doesn't take your stuff. It takes the fact that it was ever yours.\""
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101723,
+      "worldPixel": {
+        "x": 4816,
+        "y": 8504
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Oh hey \u2014 you walked all the way in? Most people just photograph the lobby and leave. I basically live in this hallway. Free climate control, and nobody checks if your ticket's real.",
+          "I like it here better than being on a wall. On the wall you're a 'public version.' In the hallway you're just a guy in a beanie. The wall text can't reach you if you keep moving.",
+          "That symbiote mask? Cosplay, relax. Nothing leaked, nothing sourced. I'm not part of the collection. I just come to look at the people who got filed and think, better them than me."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101724,
+      "worldPixel": {
+        "x": 5488,
+        "y": 8504
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101725,
+      "worldPixel": {
+        "x": 6192,
+        "y": 8504
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101726,
+      "worldPixel": {
+        "x": 5168,
+        "y": 8512
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A kid with ice-cream pastel hair, teeth gritted, clutching an expensive fountain pen like it's the last true thing in the building. Speed lines shudder off them.",
+          "\"This pen is MINE. I can prove it. There's a receipt. There's a chain. I've got the whole provenance, every hand it passed through, I have it MEMORIZED \u2014\"",
+          "\"\u2014 and it doesn't matter. They hung a scan of me holding it on the wall and now the scan is the artwork and I'm just the guy the scan is OF. Do you understand what that does to a person?\"",
+          "\"You're going to want to hold onto something real before you leave here. A pen. A name. Anything. Because the Galleria doesn't take your stuff. It takes the fact that it was ever yours.\""
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101727,
+      "worldPixel": {
+        "x": 6376,
+        "y": 8528
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Oh hey \u2014 you walked all the way in? Most people just photograph the lobby and leave. I basically live in this hallway. Free climate control, and nobody checks if your ticket's real.",
+          "I like it here better than being on a wall. On the wall you're a 'public version.' In the hallway you're just a guy in a beanie. The wall text can't reach you if you keep moving.",
+          "That symbiote mask? Cosplay, relax. Nothing leaked, nothing sourced. I'm not part of the collection. I just come to look at the people who got filed and think, better them than me."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101728,
+      "worldPixel": {
+        "x": 5728,
+        "y": 8536
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "WHOA, hi. Yeah, the hair's real, the glow's real, the burger's \u2014 okay the burger's a prop, they made me hold it for the intake photo and I never gave it back.",
+          "I'm not on display, I just loiter near the display. There's a difference and the difference is my whole personality. Filed people have a plaque. I have a crayon and a mohawk and zero provenance.",
+          "You want the good gallery? Go past the appraised ones, past the ropes. That's where they hang the versions nobody could source. Prettiest wing in the building. Also the saddest. Bring a snack."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101729,
+      "worldPixel": {
+        "x": 5824,
+        "y": 8536
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101800,
+      "worldPixel": {
+        "x": 5344,
+        "y": 4224
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101801,
+      "worldPixel": {
+        "x": 5248,
+        "y": 4248
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "You're not supposed to be down here. This is where the proofs that didn't take go. I'm one of them.",
+          "They pulled me back off the wall upstairs. Said the source didn't verify. Said I was drawn from something drawn from something. So down I came. To the basement. With the other failures.",
+          "It's fine. It's fine down here. You stop trying to be the original after a while. You just... hang. Half-dissolved. Waiting for someone to rerun the proof.",
+          "Are you the one rerunning it? No? Then keep going. Nobody who came to fix me ever stayed."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101802,
+      "worldPixel": {
+        "x": 5440,
+        "y": 4256
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101803,
+      "worldPixel": {
+        "x": 5592,
+        "y": 4256
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "You came down here? Down to the level under the record? Careful. The floor's a proof that didn't take. Step wrong and you're standing on someone's rejected original.",
+          "I'm a copy of a copy of a face that was loved once. Down here we all are. Up there they hang the ones that PASSED. We're the ones the system tried and couldn't file, so we just... dissolve a little more each day.",
+          "Don't ask which of us is the source. There is no source down here. That's what the basement IS. A room full of drafts that were told they weren't the real thing, forever, until they half stopped being anything.",
+          "If you find a version that took \u2014 a real one, a witnessed one \u2014 don't tell it we're down here. Let it think it came from nowhere. It's kinder."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101804,
+      "worldPixel": {
+        "x": 5216,
+        "y": 4344
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101805,
+      "worldPixel": {
+        "x": 5016,
+        "y": 4384
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101806,
+      "worldPixel": {
+        "x": 5112,
+        "y": 4384
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101807,
+      "worldPixel": {
+        "x": 5912,
+        "y": 4384
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101808,
+      "worldPixel": {
+        "x": 6008,
+        "y": 4384
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "A face, if you're generous. It's melting. A lighter held up under it and the render never recovered \u2014 features sliding, smoke where the eyes should be, the whole proof failing in slow motion in the dark.",
+          "There's no plaque. Down here nothing gets a plaque. This is a source that didn't take, still trying to hold a shape it was never granted, lit by the one flame that's finishing the job."
+        ]
+      }
+    },
+    {
+      "id": 101809,
+      "worldPixel": {
+        "x": 6168,
+        "y": 4384
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101810,
+      "worldPixel": {
+        "x": 6264,
+        "y": 4384
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101900,
+      "worldPixel": {
+        "x": 7168,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      }
+    },
+    {
+      "id": 101901,
+      "worldPixel": {
+        "x": 7264,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101902,
+      "worldPixel": {
+        "x": 7360,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Stop. Look at me. No \u2014 look. You've been looking at everyone but the mirror the whole way down, Bosch.",
+          "I wear your outline. I'm the leaked page of you. The version they filed while you were still deciding who you were. Ask yourself: how sure are you that YOU'RE the source and I'm the copy? The record isn't. The record just has two of us and a timestamp it doesn't trust.",
+          "Everyone you passed said 'they took my face.' Now it's your turn to be the claimant. Prove it. Prove you're the original and not the leak that got out first and forgot.",
+          "You can't, can you. That's the room. That's why it's unlisted. In here the witness turns around and there's no one left to witness YOU."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101903,
+      "worldPixel": {
+        "x": 7456,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101904,
+      "worldPixel": {
+        "x": 7552,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101905,
+      "worldPixel": {
+        "x": 7648,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "You keep saying 'Bosch' like it settles something. In here it doesn't. In here the name is just another field on the form, and the form is open.",
+          "I'm not here to hurt you. I'm here to hold up the mirror and read what's written on the back of it. And what's written on the back of you is: SEE ALSO \u2014 LEAKED VERSION.",
+          "Every answer you give, I get to ask which one of you gave it. The one who walked in, or the one already hanging in the last room. Choose carefully. I'm writing it down."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101906,
+      "worldPixel": {
+        "x": 7752,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101907,
+      "worldPixel": {
+        "x": 7848,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "An exhibit label, half-scanned, half-true."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101908,
+      "worldPixel": {
+        "x": 7944,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Another one wearing the good outline. Come in. This is the room where the record turns on the reader. You've been the one witnessing all along \u2014 feels different from this side, doesn't it.",
+          "I'm a draft they ran off of Bosch and threw down here. So are you, maybe. Nobody at this depth knows which of them is the first draft and which is the leak. The certainty leaked out with everything else.",
+          "Say your name. Go on. Notice how it doesn't sound owned in your mouth anymore. That's the trial. Not a fight \u2014 a filing. They put YOU on the wall and read the provenance out loud and you can't finish the sentence.",
+          "If you get out, and if you're the source \u2014 really the source \u2014 you won't feel it. The real one never does. Only the copies are sure. Remember that when you're sure."
+        ]
+      },
+      "movement": 599
+    },
+    {
+      "id": 101909,
+      "worldPixel": {
+        "x": 8128,
+        "y": 3584
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "interaction": {
+        "pages": [
+          "Don't flinch. I'm the last witness they call. I only exist to say the sentence out loud.",
+          "The record says a source came through here once, clean, unleaked, and was filed correctly. The record does not say it was you. Nobody's record ever says it was them.",
+          "So here's the question the Unlisted Room asks and never un-asks: if there's a public version of you on the wall in the last room \u2014 which one is standing here talking to me? Answer it, Bosch. Or don't. Either way the plaque's already engraved."
+        ]
+      },
+      "movement": 599
     }
   ]
 }
