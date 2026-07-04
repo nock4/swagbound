@@ -247,18 +247,13 @@ describe("sprite override helpers", () => {
     ));
     const byEnemyId = overrides.byEnemyId ?? {};
 
-    // Anchor mappings that must remain stable.
-    const anchors = {
-      "37": "assets/swagbound/enemy/pfp-malady-battle-v1.png",
-      "159": "assets/swagbound/enemy/ai-slop-battle-v0.png",
-      "55": "assets/swagbound/enemy/lsw-signal-stutter-battle-v0.png",
-      "121": "assets/swagbound/enemy/lsw-sawtooth-bun-battle-v0.png",
-      "64": "assets/swagbound/enemy/lsw-cinder-cap-battle-v0.png",
-      "134": "assets/swagbound/enemy/lsw-question-marketeer-battle-v0.png",
-      "81": "assets/swagbound/enemy/lsw-ushanka-shade-battle-v0.png"
-    } as const;
-    for (const [enemyId, image] of Object.entries(anchors)) {
-      expect(byEnemyId[enemyId]).toMatchObject({ image });
+    // Every enemy is sourced from the good-new-sprites batch (gns-*), per the
+    // "all non-hero sprites come from good-new-sprites" directive.
+    for (const [enemyId, override] of Object.entries(byEnemyId)) {
+      expect(
+        override.image.startsWith("assets/swagbound/enemy/gns-"),
+        `enemy ${enemyId} not sourced from good-new-sprites: ${override.image}`
+      ).toBe(true);
     }
 
     // Full roster: at least 36 enemy ids skinned.

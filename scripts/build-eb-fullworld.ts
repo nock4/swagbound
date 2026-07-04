@@ -177,7 +177,13 @@ async function generateSpriteOverridesWithOverworldSkins(out: string, outputName
   const families = EnemyNameFamiliesSchema.parse(JSON.parse(await readFile(resolve(ENEMY_NAME_FAMILIES_SOURCE), "utf8")));
   const merged = SpriteOverridesSchema.parse({
     ...base,
-    overworldByEnemyId: expandOverworldEnemySkins(skins, families)
+    // Family skins are the DEFAULT roaming-enemy overworld art; an explicit
+    // overworldByEnemyId in the committed source wins (e.g. the good-new-sprites
+    // refresh maps each enemy id to its per-creature overworld sprite).
+    overworldByEnemyId: {
+      ...expandOverworldEnemySkins(skins, families),
+      ...(base.overworldByEnemyId ?? {})
+    }
   });
   await Promise.all(
     spriteOverrideEntries(merged).map((override) => validatePublicAssetImage(override.image, "Sprite override image"))
