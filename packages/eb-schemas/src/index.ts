@@ -1231,6 +1231,52 @@ export const AddedNpcsSchema = z
     });
   });
 
+export type AddedNpcDrop = { index: number; id?: number; reason: string };
+
+/**
+ * Lenient parse for the added-NPC overlay: validates each entry independently,
+ * KEEPS the valid ones, and DROPS the invalid/duplicate ones with a reason —
+ * so a single bad entry can never disable the whole layer (as a stray
+ * `pages`+`ref` conflict once silently did to all 268 promoted NPCs).
+ * Returns the sanitized overlay plus the list of dropped entries; the caller
+ * logs `dropped` loudly. An unusable envelope yields an empty overlay.
+ */
+export function sanitizeAddedNpcs(raw: unknown): { value: AddedNpcs; dropped: AddedNpcDrop[] } {
+  const empty: AddedNpcs = { schema: "swagbound.added-npcs.v1", npcs: [] };
+  if (typeof raw !== "object" || raw === null) {
+    return { value: empty, dropped: [{ index: -1, reason: "added-npcs payload is not an object" }] };
+  }
+  const record = raw as { schema?: unknown; comment?: unknown; npcs?: unknown };
+  if (record.schema !== "swagbound.added-npcs.v1") {
+    return { value: empty, dropped: [{ index: -1, reason: `unexpected schema ${String(record.schema)}` }] };
+  }
+  if (!Array.isArray(record.npcs)) {
+    return { value: empty, dropped: [{ index: -1, reason: "npcs is not an array" }] };
+  }
+  const dropped: AddedNpcDrop[] = [];
+  const seen = new Set<number>();
+  const npcs: AddedNpc[] = [];
+  record.npcs.forEach((entry, index) => {
+    const parsed = AddedNpcSchema.safeParse(entry);
+    if (!parsed.success) {
+      const id = typeof (entry as { id?: unknown })?.id === "number" ? (entry as { id: number }).id : undefined;
+      dropped.push({ index, id, reason: parsed.error.issues[0]?.message ?? "invalid entry" });
+      return;
+    }
+    if (seen.has(parsed.data.id)) {
+      dropped.push({ index, id: parsed.data.id, reason: `duplicate added NPC id ${parsed.data.id}` });
+      return;
+    }
+    seen.add(parsed.data.id);
+    npcs.push(parsed.data);
+  });
+  const value: AddedNpcs =
+    typeof record.comment === "string"
+      ? { schema: "swagbound.added-npcs.v1", comment: record.comment, npcs }
+      : { schema: "swagbound.added-npcs.v1", npcs };
+  return { value, dropped };
+}
+
 const OverworldInteractableBaseSchema = z.object({
   id: z.string().trim().min(1),
   label: z.string().trim().min(1).optional(),

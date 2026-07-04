@@ -1,7 +1,7 @@
 import {
   buildDialoguePages,
   ADDED_NPC_MIN_ID,
-  AddedNpcsSchema,
+  sanitizeAddedNpcs,
   BattleDataSchema,
   BattleRulesSchema,
   BackgroundOverridesSchema,
@@ -350,7 +350,21 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     manifest.files.shops
       ? loadJson(`/generated/${manifest.files.shops}`, ShopDataSchema)
       : Promise.resolve(undefined),
-    loadJson(`/generated/${ADDED_NPCS_FILE}`, AddedNpcsSchema),
+    loadJson(`/generated/${ADDED_NPCS_FILE}`, {
+      // Lenient: drop only the invalid/duplicate entries, keep the rest. A single
+      // bad entry must never disable the whole overlay (a stray pages+ref conflict
+      // once silently blanked all promoted NPCs game-wide).
+      parse: (raw: unknown): AddedNpcs => {
+        const { value, dropped } = sanitizeAddedNpcs(raw);
+        if (dropped.length > 0) {
+          console.warn(
+            `[loader] added-npcs: dropped ${dropped.length} invalid/duplicate entr${dropped.length === 1 ? "y" : "ies"}, kept ${value.npcs.length}:`,
+            dropped
+          );
+        }
+        return value;
+      }
+    }),
     loadJson(`/generated/${CUSTOM_DIALOGUE_FILE}`, CustomDialogueSchema),
     loadJson(`/generated/${SWAGBOUND_DIALOGUE_LIBRARY_FILE}`, SwagboundDialogueLibrarySchema),
     loadJson(`/generated/${STORY_TRIGGERS_FILE}`, StoryTriggersSchema),

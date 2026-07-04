@@ -5,6 +5,7 @@ import {
   CustomDialogueSchema,
   DrifellaBarksSchema,
   NpcOverridesSchema,
+  sanitizeAddedNpcs,
   SpriteOverridesSchema
 } from "../src/index";
 
@@ -78,6 +79,61 @@ describe("AddedNpcsSchema", () => {
         }
       ]
     }).success).toBe(false);
+  });
+});
+
+describe("sanitizeAddedNpcs (per-entry guard)", () => {
+  const valid = (id: number, extra: Record<string, unknown> = {}) => ({
+    id,
+    worldPixel: { x: 64, y: 64 },
+    spriteGroup: 5,
+    facing: "down",
+    ...extra
+  });
+
+  it("keeps valid entries and drops ONLY the invalid one (the outage's exact cause)", () => {
+    // A single pages+ref conflict once rejected the whole file and blanked every NPC.
+    const { value, dropped } = sanitizeAddedNpcs({
+      schema: "swagbound.added-npcs.v1",
+      npcs: [
+        valid(ADDED_NPC_MIN_ID),
+        valid(ADDED_NPC_MIN_ID + 1, { interaction: { pages: ["Hi."], ref: "library:entry" } }),
+        valid(ADDED_NPC_MIN_ID + 2, { interaction: { pages: ["Kept."] } })
+      ]
+    });
+
+    expect(value.npcs.map((n) => n.id)).toEqual([ADDED_NPC_MIN_ID, ADDED_NPC_MIN_ID + 2]);
+    expect(dropped).toHaveLength(1);
+    expect(dropped[0]).toMatchObject({ index: 1, id: ADDED_NPC_MIN_ID + 1 });
+  });
+
+  it("drops duplicate ids (keeping the first) and reports them", () => {
+    const { value, dropped } = sanitizeAddedNpcs({
+      schema: "swagbound.added-npcs.v1",
+      npcs: [valid(ADDED_NPC_MIN_ID), valid(ADDED_NPC_MIN_ID, { facing: "up" })]
+    });
+
+    expect(value.npcs).toHaveLength(1);
+    expect(value.npcs[0].facing).toBe("down");
+    expect(dropped[0].reason).toContain("duplicate");
+  });
+
+  it("returns an empty overlay (not a throw) for an unusable envelope", () => {
+    expect(sanitizeAddedNpcs(null).value.npcs).toEqual([]);
+    expect(sanitizeAddedNpcs({ schema: "wrong", npcs: [] }).value.npcs).toEqual([]);
+    expect(sanitizeAddedNpcs({ schema: "swagbound.added-npcs.v1", npcs: "nope" }).value.npcs).toEqual([]);
+  });
+
+  it("preserves a clean overlay unchanged with no drops", () => {
+    const { value, dropped } = sanitizeAddedNpcs({
+      schema: "swagbound.added-npcs.v1",
+      comment: "keep me",
+      npcs: [valid(ADDED_NPC_MIN_ID, { interaction: { pages: ["Hi."], shop: 2 } })]
+    });
+
+    expect(dropped).toHaveLength(0);
+    expect(value.comment).toBe("keep me");
+    expect(value.npcs).toHaveLength(1);
   });
 });
 
