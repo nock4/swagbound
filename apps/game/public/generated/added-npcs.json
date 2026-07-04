@@ -2413,6 +2413,476 @@
           "\"Wings, thumbs, goggles. Nobody's ever asked which one's load-bearing. Keep 'em guessing, claimant. The read's expensive.\""
         ]
       }
+    },
+    {
+      "id": 101200,
+      "worldPixel": {
+        "x": 2160,
+        "y": 3456
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A blond kid stands where a kid stands, doing the arithmetic of belonging out loud.",
+          "\"We're kinfolks. That means the record already knows my whole family before I open my mouth.\"",
+          "\"Down in Postwick they file you by household. You want to be an only child here. Cheaper read, less to leak.\""
+        ]
+      }
+    },
+    {
+      "id": 101201,
+      "worldPixel": {
+        "x": 2384,
+        "y": 3456
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A lion with a purple mane and a wet, theatrical cry sits behind a fence of microphone arms, none of them plugged into anything.",
+          "\"I built the whole feed on being READ, and now the reads read me back. You ever get filed by your own audience? It's cold in there, claimant.\"",
+          "\"The town says I'm a personality. My leaked version cries prettier than I do. She's got sponsors.\"",
+          "He throws both paws up at nobody. \"Anyway. Subscribe. Or don't. The kiosk already knows which.\""
+        ]
+      }
+    },
+    {
+      "id": 101202,
+      "worldPixel": {
+        "x": 2616,
+        "y": 3456
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A blond kid stands where the Postwick foot traffic thins, watching the store doors open and shut like a tide he's clocking.",
+          "\"They filed me under a placeholder. NAME, all caps. Said they'd fix it once the read settled.\"",
+          "\"That was three seasons of gossip ago. Now the whole town knows me as NAME, and honestly? The blank's the only part they got right.\""
+        ]
+      }
+    },
+    {
+      "id": 101203,
+      "worldPixel": {
+        "x": 2808,
+        "y": 3456
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A robed figure works something stringed and busks the underpass echo for what it's worth.",
+          "\"I play the version of the song the town already filed. Requests cost extra, claimant.\"",
+          "\"Everybody down here's got a leaked chorus. Mine just happens to be in tune.\""
+        ]
+      }
+    },
+    {
+      "id": 101204,
+      "worldPixel": {
+        "x": 3104,
+        "y": 3496
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A round pigeon works the plaza with the posture of someone who has never once been wrong.",
+          "\"Postwick moves messages like a river moves anything it didn't ask to carry. I'm a courier. Ask the crumbs.\"",
+          "\"You want your fit filed clean, you slip me something. You want it leaked ugly, you also slip me something. Coo.\""
+        ]
+      }
+    },
+    {
+      "id": 101205,
+      "worldPixel": {
+        "x": 3296,
+        "y": 3456
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A round pigeon in a dark little hat is half-inside a can that isn't his, working something greasy in his beak.",
+          "\"Underpass rule number one: the trash is public, the RECORD of you taking from it is not. Somebody's always filing.\"",
+          "\"They witnessed me down here Tuesday. Now I'm in three people's leaked versions as 'the hat pigeon.' Provenance I never asked for.\"",
+          "\"Get your own can, claimant.\""
+        ]
+      }
+    },
+    {
+      "id": 101206,
+      "worldPixel": {
+        "x": 3520,
+        "y": 3416
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A plump pigeon in a tank top ruffles up, and you catch a vintage headline stitched into its feathers: CARRIER PIGEON DISPATCHES.",
+          "\"You're the one they keep leaking. Good. I run messages this town won't say out loud, and you look like you've got a light bag.\"",
+          "\"Take this to the claimant by the underpass. Don't read it. The moment you read it, you're a witness, and witnesses get filed.\"",
+          "\"Come back clean and I'll tell you which rumor about you is the true one. There's only one. Fly safe, claimant.\""
+        ]
+      }
+    },
+    {
+      "id": 101207,
+      "worldPixel": {
+        "x": 3744,
+        "y": 3456
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A caped pigeon loiters at the edge of the park like it's waiting on a dispatch that isn't coming.",
+          "\"Coo. That's the whole record, far as anyone's proven. Everything else is hearsay with feathers.\"",
+          "\"You want the source? Source flew off. Left me holding the crumbs and the paperwork.\""
+        ]
+      }
+    },
+    {
+      "id": 101208,
+      "worldPixel": {
+        "x": 3976,
+        "y": 3456
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A soft blue-white figure sits in the park like a good afternoon nobody asked to end.",
+          "\"I'm a postcard. Somebody wrote a nice thing on my back once and I've been trying to live up to it since.\"",
+          "\"No claim, no kiosk, no read out here. Just green, and the sound of the town forgetting to watch you for a second.\"",
+          "\"Sit a beat, claimant. Whatever they filed you as, the park doesn't have that memo.\""
+        ]
+      }
+    },
+    {
+      "id": 101209,
+      "worldPixel": {
+        "x": 2176,
+        "y": 3712
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A chibi kid with a blunt bob leans in the graffiti alley, shirt printed with a long tidy list of things that are wrong with everything.",
+          "\"I wear the ills so nobody has to read them onto me. Pre-doxxed. It's cheaper that way, cousin.\"",
+          "\"Postwick's worse than Morningside for it. Bigger crowd, more eyes, everybody's a claimant to somebody else's fit.\"",
+          "He shrugs, deeply. \"You're on the list now too. Don't take it personal. Everybody's on the list.\""
+        ]
+      }
+    },
+    {
+      "id": 101210,
+      "worldPixel": {
+        "x": 2384,
+        "y": 3712
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A chibi kid loiters on the park path, bob cut lopsided, tee printed with a bulleted list of everything going wrong this year.",
+          "\"Cousins told me the park's the safe read. No kiosk out here. No smiling laminate.\"",
+          "\"Then I noticed the pigeons take notes. So now I only think my worst opinions. Keeps 'em off the record.\""
+        ]
+      }
+    },
+    {
+      "id": 101211,
+      "worldPixel": {
+        "x": 2616,
+        "y": 3712
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A grey deadpan head turns a branded pack over in one hand, reading the warning like a horoscope.",
+          "\"Says right here it kills. Town says a lot of things right here. I file it under 'later.'\"",
+          "\"My leaked version quit these. My leaked version is a liar and I'm proud of him.\""
+        ]
+      }
+    },
+    {
+      "id": 101212,
+      "worldPixel": {
+        "x": 2840,
+        "y": 3712
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A green frog sits on the underpass rail with a crate of snacks nobody's heard of. \"Off-brand. Off-record. Same thing here.\"",
+          "\"Store won't stock me. Says my chips got no provenance. Like the department store's got a soul, and I'm the one that's fake.\"",
+          "\"You want a bag, you don't tell the kiosk who sold it. That's the deal. That's the whole town, really.\"",
+          "\"Buy two, I file you under 'friend.' File you clean. No leaked version leaves this rail.\""
+        ]
+      }
+    },
+    {
+      "id": 101213,
+      "worldPixel": {
+        "x": 3064,
+        "y": 3704
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A green frog stands very still in the snack aisle, both hands full of off-brand junk with almost-familiar names.",
+          "\"Jeetos. Kool Whippits. Everything in here is a leaked version of something realer, and honestly? Same. Same as me.\"",
+          "\"The store logs my order, the town logs the store, the record logs the town. Somewhere I'm just a receipt with a face.\"",
+          "\"You want one? No? Fine. More Jeetos for the source.\""
+        ]
+      }
+    },
+    {
+      "id": 101214,
+      "worldPixel": {
+        "x": 3272,
+        "y": 3672
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A green frog leans on the storefront cradling an armload of off-brand snacks, the labels almost right and legally wrong.",
+          "\"Jeetos. Kool Whippits. The store leaks the real brands, so I buy the leaked version of the leaked version.\"",
+          "\"Cheaper. Tastes filed-down. But nobody's ever doxxed a frog over a knockoff, and that's the whole fit, claimant.\""
+        ]
+      }
+    },
+    {
+      "id": 101215,
+      "worldPixel": {
+        "x": 3520,
+        "y": 3712
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "He gives you a thumbs up before you've done anything worth approving.",
+          "\"Postwick's easy. You show up, you get read, you get filed, you get a thumbs up. In that order.\"",
+          "\"I don't even check what the record says about me anymore. I just endorse it. Saves a lot of grief.\""
+        ]
+      }
+    },
+    {
+      "id": 101216,
+      "worldPixel": {
+        "x": 3744,
+        "y": 3712
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A relentlessly upbeat mascot gives you two thumbs and a grin outside the department store. \"WELCOME to Postwick, claimant! Big crowd today! Big RECORD!\"",
+          "\"Love the fit! Ten out of ten! Somebody should FILE that! Somebody should WITNESS that! Not me, I just point at things!\"",
+          "\"They keep asking where I'm sourced. I say, buddy, I was BORN endorsed! No leaked version, just VIBES! Thumbs UP!\"",
+          "\"Store's THAT way! Park's THAT way! Underpass has a frog, don't ask him for a receipt! GREAT chatting! You're FILED!\""
+        ]
+      }
+    },
+    {
+      "id": 101217,
+      "worldPixel": {
+        "x": 3976,
+        "y": 3704
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A wet-eyed kid stands in the park clutching a trading card to their chest, watching the door of the store. \"It's real. It's provenance. It's mine.\"",
+          "\"They said take it to the kiosk, get it filed, get it witnessed proper. But if I file it, someone sees it. Then it's got a leaked version too.\"",
+          "\"You won't scan it, right? You won't leak my card? It's the only clean thing I've got the source on.\"",
+          "\"Don't tell the town. Please. It's just a card. It's just... it's the only one that's really me.\""
+        ]
+      }
+    },
+    {
+      "id": 101218,
+      "worldPixel": {
+        "x": 2176,
+        "y": 3968
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "In the underpass gloom a small kid in dark green streetwear posts up against the concrete, reading everyone who passes before they read the walls.",
+          "\"Down here the rumor's load-bearing. You pull one thread and the whole overpass hears about it by dusk.\"",
+          "\"I keep my provenance off the record. No kiosk, no claimant tag, no fit anybody can source. That's how you last under here.\""
+        ]
+      }
+    },
+    {
+      "id": 101219,
+      "worldPixel": {
+        "x": 2384,
+        "y": 3968
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A yellow flower with very human eyes tracks you across the whole flowerbed.",
+          "\"Been rooted here longer than the town's had a record. Which means the record's got me wrong twice over.\"",
+          "\"A bee filed a witness statement about me last spring. Wildly inaccurate. Still buzz about it.\""
+        ]
+      }
+    },
+    {
+      "id": 101220,
+      "worldPixel": {
+        "x": 2616,
+        "y": 3968
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A flower with tired human eyes sways near the underpass, half in shade. \"Foot traffic all morning. Everyone's a claimant down here.\"",
+          "\"I don't have a leaked version. Nobody doxxes a thing rooted to one spot. Can't run, can't hide, can't be witnessed anywhere else.\"",
+          "\"Rumor came through at dawn, headed for the store. By noon it'll be a road. That's Postwick for you.\""
+        ]
+      }
+    },
+    {
+      "id": 101221,
+      "worldPixel": {
+        "x": 2840,
+        "y": 3968
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A flower with warm human eyes turns toward you by the park bench, unbothered by the crowd. \"Sit if you want. I witness everybody. It's free.\"",
+          "\"Whole town's south of Morningside and twice as loud. More people, more copies of you floating around. I keep the originals.\"",
+          "\"You want your fit filed clean, you don't need the kiosk. Just stand here a second. I saw you. That's a record too.\"",
+          "\"Go get your day. Come back if the town leaks a version you don't like. I'll tell you which one was really here.\""
+        ]
+      }
+    },
+    {
+      "id": 101222,
+      "worldPixel": {
+        "x": 3064,
+        "y": 3968
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A yellow flower with wide human eyes sways in the park bed, a bee idling near one petal like it's on payroll.",
+          "\"Everyone in town's terrified of getting read. I get read by the sun every single morning and I turn toward it.\"",
+          "\"Try it, claimant. Let 'em file you. Photosynthesize the gossip. You'd be amazed what grows when you stop hiding your source.\""
+        ]
+      }
+    },
+    {
+      "id": 101223,
+      "worldPixel": {
+        "x": 3288,
+        "y": 3976
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A flower with human eyes leans into the sun by the park path, watching the crowd move south. \"Big day. Everyone's out getting witnessed.\"",
+          "\"Postwick likes a crowd. More people to see you, more people to leak you. I just stand here and let it happen.\"",
+          "\"You look filed already. Good fit. Somebody's got a clean copy of you somewhere, and that's a comfort.\"",
+          "\"Go on to the store. Get read at the counter. Come back and tell me what your record says.\""
+        ]
+      }
+    },
+    {
+      "id": 101224,
+      "worldPixel": {
+        "x": 3552,
+        "y": 4000
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A small green-tinged kid squints at you like you're a rumor he half-remembers hearing.",
+          "\"You're that guy the record keeps redrawing. I liked your earlier leak better. No offense.\"",
+          "\"Down here we don't ask your name. We ask your source. You got a source, claimant, or just a fit?\""
+        ]
+      }
+    },
+    {
+      "id": 101225,
+      "worldPixel": {
+        "x": 3744,
+        "y": 3968
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid in a hoodie the color of every crayon at once idles by the storefronts.",
+          "\"Postwick's a big town so I drew myself bigger to match. The record still filed me under 'small.' Rude.\"",
+          "\"You get read down here whether you sit still or not, so I just keep scribbling until the file can't keep up.\""
+        ]
+      }
+    },
+    {
+      "id": 101226,
+      "worldPixel": {
+        "x": 3960,
+        "y": 3968
+      },
+      "spriteGroup": 59,
+      "facing": "down",
+      "movement": 599,
+      "interaction": {
+        "pages": [
+          "A kid in a crayon-scribbled hoodie is crouched in the park, adding a lopsided sun to a drawing that already has three.",
+          "\"I draw the town before the town draws me. Faster that way. Mine's nicer.\"",
+          "\"In my version the kiosk gives hugs and nobody's leaked. You want a copy? It's free. The read on it's free too.\""
+        ]
+      }
     }
   ]
 }
