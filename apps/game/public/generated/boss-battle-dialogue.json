@@ -1,5 +1,15 @@
 {
   "schema": "swagbound.boss-battle-dialogue.v1",
+  "ambient": [
+    "We are not fighting you. We are completing the read.",
+    "Every strike you land, we file. It swings back in a cleaner hand.",
+    "You tire. We are ten thousand, and not one of us is here.",
+    "Hold still. The copy sets better on a source that has stopped moving.",
+    "We do not need to win. We need only be the version that lasts.",
+    "There is no one behind this mask. There is no one behind the next.",
+    "You are already in circulation. This is only the part you still feel.",
+    "The record is patient. The record is hungry. The record is us."
+  ],
   "byBattleGroup": {
     "36": {
       "personaName": "Porcelain Registrar",

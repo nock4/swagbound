@@ -2,13 +2,26 @@
   "schema": "swagbound.enemy-name-families.v1",
   "families": {
     "Axl": [
-      10
+      4
+    ],
+    "Banhiss": [
+      53
+    ],
+    "Bladeeo": [
+      55
     ],
     "Burgie": [
-      29
+      8,
+      210
+    ],
+    "Channa": [
+      46
     ],
     "Chop": [
-      23
+      7
+    ],
+    "Clurbout": [
+      57
     ],
     "Demonfella II": [
       130
@@ -17,195 +30,219 @@
       214
     ],
     "Drimbee": [
-      61
+      14
+    ],
+    "Elder Thing": [
+      89
+    ],
+    "Equaboi": [
+      63
     ],
     "Figgypon": [
-      18
+      6
     ],
     "Flegrim": [
-      105
+      24
+    ],
+    "Frailgy Mezmar": [
+      62
     ],
     "Gajo": [
-      119
+      29
     ],
     "Gapbus": [
-      75
+      17
+    ],
+    "Gelleph": [
+      78
+    ],
+    "Ging": [
+      77
+    ],
+    "Gitchy": [
+      60
+    ],
+    "Glooiece": [
+      44,
+      195
+    ],
+    "Golden Greshlar": [
+      68
     ],
     "Gonmey": [
-      33
+      9
     ],
     "Goondrip": [
-      85
-    ],
-    "Grobe Royal": [
-      123
-    ],
-    "Hobblebo": [
-      65
-    ],
-    "Kimwi": [
-      129
-    ],
-    "Knights & Angels": [
-      3,
-      4,
-      5,
-      209
-    ],
-    "Kullskor": [
-      47
-    ],
-    "LF1000X": [
-      11,
-      12,
-      13
-    ],
-    "Lazy Lions 2": [
-      7,
-      8,
-      9,
-      210
-    ],
-    "Little Fellow": [
-      15,
-      16,
-      17,
       19
     ],
-    "MEMORYMiX": [
-      31,
-      32
+    "Gootshi": [
+      92
     ],
-    "MR. WORLD": [
-      48
+    "Grobe Royal": [
+      30
     ],
-    "MTG NFT": [
-      50,
-      51,
-      53
+    "Gubonbon": [
+      59
+    ],
+    "Gummington": [
+      88
+    ],
+    "Guzzlemuggie": [
+      50
+    ],
+    "Gwagu": [
+      72
+    ],
+    "Gwibby Watcher": [
+      61
+    ],
+    "Hobblebo": [
+      15
+    ],
+    "Hustlewoof": [
+      51
+    ],
+    "Jeppa": [
+      56
+    ],
+    "Kimwi": [
+      31
+    ],
+    "King Snowbie": [
+      58
+    ],
+    "Kullskor": [
+      11
     ],
     "Malady": [
       37
     ],
-    "Malware Relics": [
-      22,
-      24,
-      25,
-      28
-    ],
     "Mana Cauldron": [
-      6
+      3
     ],
-    "MeanGirlZ": [
-      30
+    "Mergie": [
+      48
     ],
-    "Metal Misfit": [
-      35,
-      36,
-      38
+    "Migtech": [
+      84
     ],
-    "Midladys Fumogeddon": [
-      44,
-      195
+    "Moog": [
+      52
     ],
-    "MiiMaker": [
-      45,
-      46
+    "Morp2": [
+      94
     ],
-    "My Little fella": [
-      55,
-      56,
-      58
+    "Mouzger": [
+      71
+    ],
+    "Mugruloddle": [
+      86
     ],
     "Mylady": [
       131
     ],
-    "NFT Santa Regina 2027": [
-      59,
-      60,
-      62
+    "Nodber": [
+      87
     ],
-    "Paingelz": [
-      66,
-      67,
-      68
+    "Oblostar": [
+      67
     ],
-    "Pick-Me Ports": [
-      70,
-      71,
-      72
-    ],
-    "Pink Siifu": [
-      80
-    ],
-    "Planet Peppa": [
-      76,
-      77
-    ],
-    "Podgy Pigeons": [
-      78
-    ],
-    "Ponyrolly": [
-      14
-    ],
-    "Psyop Scouts": [
-      81,
-      82,
-      84
-    ],
-    "Rackspawn": [
-      142
-    ],
-    "Rhindos": [
-      57
-    ],
-    "Roxy": [
+    "Oglobug": [
       43
     ],
-    "Runway Show": [
-      86
+    "Ombiegob": [
+      96
     ],
-    "Rusted Fang": [
-      20
+    "Paddlegat": [
+      81
+    ],
+    "Panbiggie": [
+      66
+    ],
+    "Pink Siifu": [
+      18
+    ],
+    "Poncho": [
+      82
+    ],
+    "Ponyrolly": [
+      5,
+      209
+    ],
+    "Power Rider": [
+      45
+    ],
+    "Puffygoob": [
+      97
+    ],
+    "Rackspawn": [
+      33
+    ],
+    "Reefdull King": [
+      36
+    ],
+    "Rhindos": [
+      13
+    ],
+    "Roger": [
+      69
+    ],
+    "Roxy": [
+      10
     ],
     "Scarecrow": [
-      92,
-      94,
-      97,
       98
+    ],
+    "Scordior": [
+      76
+    ],
+    "Seedgublet": [
+      75
     ],
     "Self Aborting Microworms": [
       99,
+      100,
       101,
       103,
       104
     ],
     "Self-Deriving Hyperworms": [
+      105,
       106,
       107,
       108,
+      109,
       227
     ],
     "Self-Driving Megaworms": [
       111,
       112,
       113,
+      114,
       115
+    ],
+    "Sgoko": [
+      70
     ],
     "Slyfella": [
       117,
       118,
+      119,
       120
     ],
+    "Soagoi": [
+      85
+    ],
     "Sofgob": [
-      96
+      22
     ],
     "Soft Pale Luen": [
-      69
+      16
     ],
     "Solfis": [
       121,
       122,
+      123,
       124,
       126,
       211,
@@ -213,40 +250,56 @@
     ],
     "Spirit Realm": [
       127,
+      129,
       132,
       133
     ],
     "Splagoish": [
-      52
+      12
     ],
     "Sproto Pepes": [
-      134
+      134,
+      135
     ],
     "Squire Makere": [
       136,
       138,
       139,
+      142,
       143
     ],
     "Star Seech": [
-      114
+      28
     ],
     "Starware": [
-      135
+      32
+    ],
+    "Supergamma Mowch": [
+      38
     ],
     "Superpoly Gorp": [
       1
     ],
     "Tarrmel": [
-      109
+      25
+    ],
+    "Tripgib": [
+      47
     ],
     "Tubecyc": [
-      100
+      23
     ],
     "UNX": [
       144,
       145,
+      147,
       148
+    ],
+    "Ulio": [
+      91
+    ],
+    "Ultimorchestra": [
+      65
     ],
     "Vehicle Wammin": [
       149,
@@ -269,24 +322,21 @@
       159
     ],
     "Washysomp": [
-      147
+      35
+    ],
+    "Wattaslob": [
+      64
     ],
     "YAG OR DIE": [
       222,
       223,
       224
     ],
+    "Zormie": [
+      80
+    ],
     "Zwiggydor": [
-      89
-    ],
-    "nothing really matters": [
-      63,
-      64
-    ],
-    "santaGODS": [
-      87,
-      88,
-      91
+      20
     ]
   }
 }

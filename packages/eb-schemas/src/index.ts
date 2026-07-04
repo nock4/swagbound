@@ -704,19 +704,23 @@ const BossTauntLineSchema = z.string().trim().min(1).max(200)
  * In-battle boss speech, keyed by battle group id. The battle scene injects these
  * lines into the execution message window as their own beats: `onStart` when the
  * fight opens, `onLowHp` the first time the lead enemy drops to/below
- * `lowHpThreshold` (fraction of max HP, default 0.34), and `onDefeat` when the lead
- * enemy dies (before the victory sequence). Each array may be empty.
+ * `lowHpThreshold` (fraction of max HP, default 0.34), `onDefeat` when the lead
+ * enemy dies (before the victory sequence), and `onTurn` as ambient mid-fight
+ * barks drawn cyclically every couple of rounds (falling back to the shared
+ * top-level `ambient` pool). Each array may be empty.
  */
 const BossBattleDialogueEntrySchema = z.object({
   personaName: EnemyOverrideNameSchema.optional(),
   onStart: z.array(BossTauntLineSchema).max(4).default([]),
   onLowHp: z.array(BossTauntLineSchema).max(4).default([]),
   onDefeat: z.array(BossTauntLineSchema).max(4).default([]),
+  onTurn: z.array(BossTauntLineSchema).max(12).default([]),
   lowHpThreshold: z.number().gt(0).lte(1).optional()
 }).strict();
 
 export const BossBattleDialogueSchema = z.object({
   schema: z.literal("swagbound.boss-battle-dialogue.v1"),
+  ambient: z.array(BossTauntLineSchema).max(16).default([]),
   byBattleGroup: z.record(z.string().regex(/^\d+$/), BossBattleDialogueEntrySchema)
 }).strict();
 

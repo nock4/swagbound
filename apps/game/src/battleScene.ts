@@ -440,6 +440,7 @@ export class BattleScene extends Phaser.Scene {
   private bossStartTauntQueued_ = false;
   private bossLowHpTauntQueued_ = false;
   private bossDefeatTauntQueued_ = false;
+  private bossTurnBarkCursor_ = 0;
   private pendingFlee_ = false;
   private lastEnemyAction_: LastEnemyActionDebug | null = null;
   private actionDelayMs_ = 0;
@@ -544,6 +545,7 @@ export class BattleScene extends Phaser.Scene {
     this.bossStartTauntQueued_ = false;
     this.bossLowHpTauntQueued_ = false;
     this.bossDefeatTauntQueued_ = false;
+    this.bossTurnBarkCursor_ = 0;
     this.enemyLungeFx_ = enemies.map(() => null);
     this.fxCounters_ = initialBattleFxCounters();
     this.screenShakeFx_ = inactiveScreenShakeFx();
@@ -1025,6 +1027,29 @@ export class BattleScene extends Phaser.Scene {
   }
 
   /**
+   * Ambient mid-fight bark: one line from the onTurn pool on odd rounds from
+   * round 3 on, while the lead enemy is alive. Cycles the pool so it does not
+   * repeat until exhausted.
+   */
+  private maybeQueueBossTurnBark(): void {
+    if (!this.bossTaunts_ || this.bossTaunts_.onTurn.length === 0) {
+      return;
+    }
+    const round = this.battle_.roundNumber;
+    if (round < 3 || round % 2 === 0) {
+      return;
+    }
+    const lead = this.battle_.enemies[0];
+    if (!lead || !isCombatantAlive(lead)) {
+      return;
+    }
+    const pool = this.bossTaunts_.onTurn;
+    const line = pool[this.bossTurnBarkCursor_ % pool.length];
+    this.bossTurnBarkCursor_ += 1;
+    this.enqueueBossTaunts(line ? [line] : undefined);
+  }
+
+  /**
    * After a step resolves, queue the lead enemy's reaction: its dying words when
    * it just died (before victory is processed), else its low-HP taunt the first
    * time it drops to/below the threshold.
@@ -1149,6 +1174,7 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     this.battle_ = advanceBattleRound(this.battle_);
+    this.maybeQueueBossTurnBark();
     this.executionMessageLines_ = [];
     this.pendingFlee_ = false;
     this.beginCommandInputRound();

@@ -10,23 +10,27 @@ import {
 
 const data: BossBattleDialogue = {
   schema: "swagbound.boss-battle-dialogue.v1",
+  ambient: [],
   byBattleGroup: {
     "448": {
       personaName: "MIFELLA CONGREGANT",
       onStart: ["We completed your read before you walked in."],
       onLowHp: ["A face on loan. Cut it and we wear another."],
       onDefeat: ["One mask folds; the print does not."],
+      onTurn: ["We are still reading you."],
       lowHpThreshold: 0.25
     },
     "36": {
       onStart: ["You arrived pre-filed."],
       onLowHp: [],
-      onDefeat: []
+      onDefeat: [],
+      onTurn: []
     },
     "99": {
       onStart: [],
       onLowHp: [],
-      onDefeat: []
+      onDefeat: [],
+      onTurn: []
     }
   }
 };
@@ -51,6 +55,18 @@ describe("resolveBossTaunts", () => {
   it("returns undefined for an unknown group or missing data", () => {
     expect(resolveBossTaunts(data, 12345)).toBeUndefined();
     expect(resolveBossTaunts(undefined, 448)).toBeUndefined();
+  });
+
+  it("prefers a boss's own onTurn barks over the shared ambient pool", () => {
+    const withAmbient: BossBattleDialogue = { ...data, ambient: ["Shared swarm bark."] };
+    expect(resolveBossTaunts(withAmbient, 448)?.onTurn).toEqual(["We are still reading you."]);
+  });
+
+  it("falls back to the shared ambient pool when a boss has no onTurn", () => {
+    const withAmbient: BossBattleDialogue = { ...data, ambient: ["Shared swarm bark."] };
+    expect(resolveBossTaunts(withAmbient, 36)?.onTurn).toEqual(["Shared swarm bark."]);
+    // an otherwise-empty entry still resolves purely to get ambient barks
+    expect(resolveBossTaunts(withAmbient, 99)?.onTurn).toEqual(["Shared swarm bark."]);
   });
 });
 

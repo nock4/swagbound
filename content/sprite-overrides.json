@@ -6464,181 +6464,181 @@
       "originY": 0.5
     },
     "3": {
-      "image": "assets/swagbound/enemy/gns-knights-and-angels-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "4": {
-      "image": "assets/swagbound/enemy/gns-knights-and-angels-004.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "5": {
-      "image": "assets/swagbound/enemy/gns-knights-and-angels-005.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "6": {
       "image": "assets/swagbound/enemy/gns-smm2-11-mana-cauldron.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
-    "7": {
-      "image": "assets/swagbound/enemy/gns-lazy-lions-2-001.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "8": {
-      "image": "assets/swagbound/enemy/gns-lazy-lions-2-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "9": {
-      "image": "assets/swagbound/enemy/gns-lazy-lions-2-005.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "10": {
+    "4": {
       "image": "assets/swagbound/enemy/gns-smm2-13-axl.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
-    "11": {
-      "image": "assets/swagbound/enemy/gns-lf1000x-002.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "12": {
-      "image": "assets/swagbound/enemy/gns-lf1000x-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "13": {
-      "image": "assets/swagbound/enemy/gns-lf1000x-004.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "14": {
+    "5": {
       "image": "assets/swagbound/enemy/gns-smm2-15-ponyrolly.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
-    "15": {
-      "image": "assets/swagbound/enemy/gns-little-fellow-001.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "16": {
-      "image": "assets/swagbound/enemy/gns-little-fellow-002.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "17": {
-      "image": "assets/swagbound/enemy/gns-little-fellow-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "18": {
+    "6": {
       "image": "assets/swagbound/enemy/gns-smm2-171-figgypon.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
-    "19": {
-      "image": "assets/swagbound/enemy/gns-little-fellow-005.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "20": {
-      "image": "assets/swagbound/enemy/gns-lot-lizards-and-the-rusted-fang-004.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "22": {
-      "image": "assets/swagbound/enemy/gns-malware-relics-001.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "23": {
+    "7": {
       "image": "assets/swagbound/enemy/gns-smm2-176-chop.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
-    "24": {
-      "image": "assets/swagbound/enemy/gns-malware-relics-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "25": {
-      "image": "assets/swagbound/enemy/gns-malware-relics-004.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "28": {
-      "image": "assets/swagbound/enemy/gns-malware-relics-005.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "29": {
+    "8": {
       "image": "assets/swagbound/enemy/gns-smm2-177-burgie.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
-    "30": {
-      "image": "assets/swagbound/enemy/gns-meangirlz-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "31": {
-      "image": "assets/swagbound/enemy/gns-memorymix-003.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "32": {
-      "image": "assets/swagbound/enemy/gns-memorymix-004.png",
-      "displayHeight": 160,
-      "originX": 0.5,
-      "originY": 0.5
-    },
-    "33": {
+    "9": {
       "image": "assets/swagbound/enemy/gns-smm2-18-gonmey.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
+    "10": {
+      "image": "assets/swagbound/enemy/gns-smm2-181-roxy.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "11": {
+      "image": "assets/swagbound/enemy/gns-smm2-182-kullskor.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "12": {
+      "image": "assets/swagbound/enemy/gns-smm2-203-splagoish.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "13": {
+      "image": "assets/swagbound/enemy/gns-smm2-213-rhindos.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "14": {
+      "image": "assets/swagbound/enemy/gns-smm2-230-drimbee.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "15": {
+      "image": "assets/swagbound/enemy/gns-smm2-233-hobblebo.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "16": {
+      "image": "assets/swagbound/enemy/gns-smm2-240-soft-pale-luen.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "17": {
+      "image": "assets/swagbound/enemy/gns-smm2-245-gapbus.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "18": {
+      "image": "assets/swagbound/enemy/gns-smm2-253-pink-siifu.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "19": {
+      "image": "assets/swagbound/enemy/gns-smm2-254-goondrip.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "20": {
+      "image": "assets/swagbound/enemy/gns-smm2-257-zwiggydor.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "22": {
+      "image": "assets/swagbound/enemy/gns-smm2-259-sofgob.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "23": {
+      "image": "assets/swagbound/enemy/gns-smm2-273-tubecyc.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "24": {
+      "image": "assets/swagbound/enemy/gns-smm2-277-flegrim.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "25": {
+      "image": "assets/swagbound/enemy/gns-smm2-290-tarrmel.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "28": {
+      "image": "assets/swagbound/enemy/gns-smm2-310-star-seech.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "29": {
+      "image": "assets/swagbound/enemy/gns-smm2-319-gajo.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "30": {
+      "image": "assets/swagbound/enemy/gns-smm2-324-grobe-royal.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "31": {
+      "image": "assets/swagbound/enemy/gns-smm2-326-kimwi.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "32": {
+      "image": "assets/swagbound/enemy/gns-smm2-335-starware.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
+    "33": {
+      "image": "assets/swagbound/enemy/gns-smm2-341-rackspawn.png",
+      "displayHeight": 160,
+      "originX": 0.5,
+      "originY": 0.5
+    },
     "35": {
-      "image": "assets/swagbound/enemy/gns-metal-misfit-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-349-washysomp.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "36": {
-      "image": "assets/swagbound/enemy/gns-metal-misfit-003.png",
+      "image": "assets/swagbound/enemy/gns-smm2-357-reefdull-king.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -6650,67 +6650,67 @@
       "originY": 0.5
     },
     "38": {
-      "image": "assets/swagbound/enemy/gns-metal-misfit-004.png",
+      "image": "assets/swagbound/enemy/gns-smm2-374-supergamma-mowch.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "43": {
-      "image": "assets/swagbound/enemy/gns-smm2-181-roxy.png",
+      "image": "assets/swagbound/enemy/gns-smm2-375-oglobug.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "44": {
-      "image": "assets/swagbound/enemy/gns-midladys-fumogeddon-004.png",
+      "image": "assets/swagbound/enemy/gns-smm2-398-glooiece.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "45": {
-      "image": "assets/swagbound/enemy/gns-miimaker-001.png",
+      "image": "assets/swagbound/enemy/gns-smm2-405-power-rider.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "46": {
-      "image": "assets/swagbound/enemy/gns-miimaker-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-418-channa.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "47": {
-      "image": "assets/swagbound/enemy/gns-smm2-182-kullskor.png",
+      "image": "assets/swagbound/enemy/gns-smm2-419-tripgib.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "48": {
-      "image": "assets/swagbound/enemy/gns-mr-world-003.png",
+      "image": "assets/swagbound/enemy/gns-smm2-42-mergie.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "50": {
-      "image": "assets/swagbound/enemy/gns-mtg-nft-001.png",
+      "image": "assets/swagbound/enemy/gns-smm2-426-guzzlemuggie.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "51": {
-      "image": "assets/swagbound/enemy/gns-mtg-nft-003.png",
+      "image": "assets/swagbound/enemy/gns-smm2-429-hustlewoof.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "52": {
-      "image": "assets/swagbound/enemy/gns-smm2-203-splagoish.png",
+      "image": "assets/swagbound/enemy/gns-smm2-439-moog.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "53": {
-      "image": "assets/swagbound/enemy/gns-mtg-nft-005.png",
+      "image": "assets/swagbound/enemy/gns-smm2-440-banhiss.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -6722,217 +6722,217 @@
       "originY": 0.5
     },
     "55": {
-      "image": "assets/swagbound/enemy/gns-my-little-fella-001.png",
+      "image": "assets/swagbound/enemy/gns-smm2-461-bladeeo.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "56": {
-      "image": "assets/swagbound/enemy/gns-my-little-fella-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-47-jeppa.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "57": {
-      "image": "assets/swagbound/enemy/gns-smm2-213-rhindos.png",
+      "image": "assets/swagbound/enemy/gns-smm2-473-clurbout.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "58": {
-      "image": "assets/swagbound/enemy/gns-my-little-fella-005.png",
+      "image": "assets/swagbound/enemy/gns-smm2-486-king-snowbie.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "59": {
-      "image": "assets/swagbound/enemy/gns-nft-santa-regina-2027-001.png",
+      "image": "assets/swagbound/enemy/gns-smm2-488-gubonbon.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "60": {
-      "image": "assets/swagbound/enemy/gns-nft-santa-regina-2027-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-494-gitchy.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "61": {
-      "image": "assets/swagbound/enemy/gns-smm2-230-drimbee.png",
+      "image": "assets/swagbound/enemy/gns-smm2-497-gwibby-watcher.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "62": {
-      "image": "assets/swagbound/enemy/gns-nft-santa-regina-2027-005.png",
+      "image": "assets/swagbound/enemy/gns-smm2-512-frailgy-mezmar.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "63": {
-      "image": "assets/swagbound/enemy/gns-nothing-really-matters-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-516-equaboi.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "64": {
-      "image": "assets/swagbound/enemy/gns-nothing-really-matters-003.png",
+      "image": "assets/swagbound/enemy/gns-smm2-518-wattaslob.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "65": {
-      "image": "assets/swagbound/enemy/gns-smm2-233-hobblebo.png",
+      "image": "assets/swagbound/enemy/gns-smm2-519-ultimorchestra.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "66": {
-      "image": "assets/swagbound/enemy/gns-paingelz-003.png",
+      "image": "assets/swagbound/enemy/gns-smm2-523-panbiggie.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "67": {
-      "image": "assets/swagbound/enemy/gns-paingelz-004.png",
+      "image": "assets/swagbound/enemy/gns-smm2-533-oblostar.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "68": {
-      "image": "assets/swagbound/enemy/gns-paingelz-005.png",
+      "image": "assets/swagbound/enemy/gns-smm2-553-golden-greshlar.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "69": {
-      "image": "assets/swagbound/enemy/gns-smm2-240-soft-pale-luen.png",
+      "image": "assets/swagbound/enemy/gns-smm2-556-roger.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "70": {
-      "image": "assets/swagbound/enemy/gns-pick-me-ports-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-563-sgoko.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "71": {
-      "image": "assets/swagbound/enemy/gns-pick-me-ports-003.png",
+      "image": "assets/swagbound/enemy/gns-smm2-579-mouzger.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "72": {
-      "image": "assets/swagbound/enemy/gns-pick-me-ports-004.png",
+      "image": "assets/swagbound/enemy/gns-smm2-594-gwagu.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "75": {
-      "image": "assets/swagbound/enemy/gns-smm2-245-gapbus.png",
+      "image": "assets/swagbound/enemy/gns-smm2-595-seedgublet.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "76": {
-      "image": "assets/swagbound/enemy/gns-planet-peppa-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-618-scordior.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "77": {
-      "image": "assets/swagbound/enemy/gns-planet-peppa-004.png",
+      "image": "assets/swagbound/enemy/gns-smm2-619-ging.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "78": {
-      "image": "assets/swagbound/enemy/gns-podgy-pigeons-003.png",
+      "image": "assets/swagbound/enemy/gns-smm2-623-gelleph.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "80": {
-      "image": "assets/swagbound/enemy/gns-smm2-253-pink-siifu.png",
+      "image": "assets/swagbound/enemy/gns-smm2-63-zormie.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "81": {
-      "image": "assets/swagbound/enemy/gns-psyop-scouts-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-634-paddlegat.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "82": {
-      "image": "assets/swagbound/enemy/gns-psyop-scouts-004.png",
+      "image": "assets/swagbound/enemy/gns-smm2-637-poncho.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "84": {
-      "image": "assets/swagbound/enemy/gns-psyop-scouts-005.png",
+      "image": "assets/swagbound/enemy/gns-smm2-668-migtech.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "85": {
-      "image": "assets/swagbound/enemy/gns-smm2-254-goondrip.png",
+      "image": "assets/swagbound/enemy/gns-smm2-683-soagoi.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "86": {
-      "image": "assets/swagbound/enemy/gns-runway-show-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-689-mugruloddle.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "87": {
-      "image": "assets/swagbound/enemy/gns-santagods-001.png",
+      "image": "assets/swagbound/enemy/gns-smm2-699-nodber.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "88": {
-      "image": "assets/swagbound/enemy/gns-santagods-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-721-gummington.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "89": {
-      "image": "assets/swagbound/enemy/gns-smm2-257-zwiggydor.png",
+      "image": "assets/swagbound/enemy/gns-smm2-727-elder-thing.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "91": {
-      "image": "assets/swagbound/enemy/gns-santagods-005.png",
+      "image": "assets/swagbound/enemy/gns-smm2-733-ulio.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "92": {
-      "image": "assets/swagbound/enemy/gns-scarecrow-001.png",
+      "image": "assets/swagbound/enemy/gns-smm2-738-gootshi.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "94": {
-      "image": "assets/swagbound/enemy/gns-scarecrow-002.png",
+      "image": "assets/swagbound/enemy/gns-smm2-751-morp2.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "96": {
-      "image": "assets/swagbound/enemy/gns-smm2-259-sofgob.png",
+      "image": "assets/swagbound/enemy/gns-smm2-775-ombiegob.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "97": {
-      "image": "assets/swagbound/enemy/gns-scarecrow-004.png",
+      "image": "assets/swagbound/enemy/gns-smm2-9-puffygoob.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -6950,7 +6950,7 @@
       "originY": 0.5
     },
     "100": {
-      "image": "assets/swagbound/enemy/gns-smm2-273-tubecyc.png",
+      "image": "assets/swagbound/enemy/gns-self-aborting-microworms-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -6974,7 +6974,7 @@
       "originY": 0.5
     },
     "105": {
-      "image": "assets/swagbound/enemy/gns-smm2-277-flegrim.png",
+      "image": "assets/swagbound/enemy/gns-self-deriving-hyperworms-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -6998,7 +6998,7 @@
       "originY": 0.5
     },
     "109": {
-      "image": "assets/swagbound/enemy/gns-smm2-290-tarrmel.png",
+      "image": "assets/swagbound/enemy/gns-self-deriving-hyperworms-005.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7022,7 +7022,7 @@
       "originY": 0.5
     },
     "114": {
-      "image": "assets/swagbound/enemy/gns-smm2-310-star-seech.png",
+      "image": "assets/swagbound/enemy/gns-self-driving-megaworms-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7046,7 +7046,7 @@
       "originY": 0.5
     },
     "119": {
-      "image": "assets/swagbound/enemy/gns-smm2-319-gajo.png",
+      "image": "assets/swagbound/enemy/gns-slyfella-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7070,7 +7070,7 @@
       "originY": 0.5
     },
     "123": {
-      "image": "assets/swagbound/enemy/gns-smm2-324-grobe-royal.png",
+      "image": "assets/swagbound/enemy/gns-solfis-003.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7094,7 +7094,7 @@
       "originY": 0.5
     },
     "129": {
-      "image": "assets/swagbound/enemy/gns-smm2-326-kimwi.png",
+      "image": "assets/swagbound/enemy/gns-spirit-realm-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7130,7 +7130,7 @@
       "originY": 0.5
     },
     "135": {
-      "image": "assets/swagbound/enemy/gns-smm2-335-starware.png",
+      "image": "assets/swagbound/enemy/gns-sproto-pepes-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7154,7 +7154,7 @@
       "originY": 0.5
     },
     "142": {
-      "image": "assets/swagbound/enemy/gns-smm2-341-rackspawn.png",
+      "image": "assets/swagbound/enemy/gns-squire-makere-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7178,7 +7178,7 @@
       "originY": 0.5
     },
     "147": {
-      "image": "assets/swagbound/enemy/gns-smm2-349-washysomp.png",
+      "image": "assets/swagbound/enemy/gns-unx-003.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -7256,19 +7256,19 @@
       "originY": 0.5
     },
     "195": {
-      "image": "assets/swagbound/enemy/gns-midladys-fumogeddon-004.png",
+      "image": "assets/swagbound/enemy/gns-smm2-398-glooiece.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "209": {
-      "image": "assets/swagbound/enemy/gns-knights-and-angels-005.png",
+      "image": "assets/swagbound/enemy/gns-smm2-15-ponyrolly.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "210": {
-      "image": "assets/swagbound/enemy/gns-lazy-lions-2-003.png",
+      "image": "assets/swagbound/enemy/gns-smm2-177-burgie.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -14487,72 +14487,6 @@
       "originY": 1
     },
     "3": {
-      "image": "assets/swagbound/overworld-npc/gns-knights-and-angels-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "4": {
-      "image": "assets/swagbound/overworld-npc/gns-knights-and-angels-004-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "5": {
-      "image": "assets/swagbound/overworld-npc/gns-knights-and-angels-005-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "6": {
       "image": "assets/swagbound/overworld-npc/gns-smm2-11-mana-cauldron-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -14574,73 +14508,7 @@
       "originX": 0.5,
       "originY": 1
     },
-    "7": {
-      "image": "assets/swagbound/overworld-npc/gns-lazy-lions-2-001-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "8": {
-      "image": "assets/swagbound/overworld-npc/gns-lazy-lions-2-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "9": {
-      "image": "assets/swagbound/overworld-npc/gns-lazy-lions-2-005-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "10": {
+    "4": {
       "image": "assets/swagbound/overworld-npc/gns-smm2-13-axl-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -14662,73 +14530,7 @@
       "originX": 0.5,
       "originY": 1
     },
-    "11": {
-      "image": "assets/swagbound/overworld-npc/gns-lf1000x-002-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "12": {
-      "image": "assets/swagbound/overworld-npc/gns-lf1000x-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "13": {
-      "image": "assets/swagbound/overworld-npc/gns-lf1000x-004-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "14": {
+    "5": {
       "image": "assets/swagbound/overworld-npc/gns-smm2-15-ponyrolly-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -14750,73 +14552,7 @@
       "originX": 0.5,
       "originY": 1
     },
-    "15": {
-      "image": "assets/swagbound/overworld-npc/gns-little-fellow-001-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "16": {
-      "image": "assets/swagbound/overworld-npc/gns-little-fellow-002-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "17": {
-      "image": "assets/swagbound/overworld-npc/gns-little-fellow-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "18": {
+    "6": {
       "image": "assets/swagbound/overworld-npc/gns-smm2-171-figgypon-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -14838,73 +14574,7 @@
       "originX": 0.5,
       "originY": 1
     },
-    "19": {
-      "image": "assets/swagbound/overworld-npc/gns-little-fellow-005-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "20": {
-      "image": "assets/swagbound/overworld-npc/gns-lot-lizards-and-the-rusted-fang-004-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "22": {
-      "image": "assets/swagbound/overworld-npc/gns-malware-relics-001-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "23": {
+    "7": {
       "image": "assets/swagbound/overworld-npc/gns-smm2-176-chop-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -14926,73 +14596,7 @@
       "originX": 0.5,
       "originY": 1
     },
-    "24": {
-      "image": "assets/swagbound/overworld-npc/gns-malware-relics-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "25": {
-      "image": "assets/swagbound/overworld-npc/gns-malware-relics-004-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "28": {
-      "image": "assets/swagbound/overworld-npc/gns-malware-relics-005-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "29": {
+    "8": {
       "image": "assets/swagbound/overworld-npc/gns-smm2-177-burgie-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -15014,73 +14618,7 @@
       "originX": 0.5,
       "originY": 1
     },
-    "30": {
-      "image": "assets/swagbound/overworld-npc/gns-meangirlz-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "31": {
-      "image": "assets/swagbound/overworld-npc/gns-memorymix-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "32": {
-      "image": "assets/swagbound/overworld-npc/gns-memorymix-004-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "33": {
+    "9": {
       "image": "assets/swagbound/overworld-npc/gns-smm2-18-gonmey-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
@@ -15102,8 +14640,470 @@
       "originX": 0.5,
       "originY": 1
     },
+    "10": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-181-roxy-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "11": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-182-kullskor-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "12": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-203-splagoish-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "13": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-213-rhindos-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "14": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-230-drimbee-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "15": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-233-hobblebo-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "16": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-240-soft-pale-luen-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "17": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-245-gapbus-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "18": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-253-pink-siifu-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "19": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-254-goondrip-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "20": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-257-zwiggydor-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "22": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-259-sofgob-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "23": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-273-tubecyc-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "24": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-277-flegrim-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "25": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-290-tarrmel-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "28": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-310-star-seech-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "29": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-319-gajo-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "30": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-324-grobe-royal-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "31": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-326-kimwi-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "32": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-335-starware-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "33": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-341-rackspawn-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
     "35": {
-      "image": "assets/swagbound/overworld-npc/gns-metal-misfit-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-349-washysomp-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15125,7 +15125,7 @@
       "originY": 1
     },
     "36": {
-      "image": "assets/swagbound/overworld-npc/gns-metal-misfit-003-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-357-reefdull-king-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15169,7 +15169,7 @@
       "originY": 1
     },
     "38": {
-      "image": "assets/swagbound/overworld-npc/gns-metal-misfit-004-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-374-supergamma-mowch-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15191,7 +15191,7 @@
       "originY": 1
     },
     "43": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-181-roxy-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-375-oglobug-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15213,7 +15213,7 @@
       "originY": 1
     },
     "44": {
-      "image": "assets/swagbound/overworld-npc/gns-midladys-fumogeddon-004-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-398-glooiece-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15235,7 +15235,7 @@
       "originY": 1
     },
     "45": {
-      "image": "assets/swagbound/overworld-npc/gns-miimaker-001-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-405-power-rider-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15257,7 +15257,7 @@
       "originY": 1
     },
     "46": {
-      "image": "assets/swagbound/overworld-npc/gns-miimaker-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-418-channa-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15279,7 +15279,7 @@
       "originY": 1
     },
     "47": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-182-kullskor-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-419-tripgib-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15301,7 +15301,7 @@
       "originY": 1
     },
     "48": {
-      "image": "assets/swagbound/overworld-npc/gns-mr-world-003-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-42-mergie-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15323,7 +15323,7 @@
       "originY": 1
     },
     "50": {
-      "image": "assets/swagbound/overworld-npc/gns-mtg-nft-001-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-426-guzzlemuggie-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15345,7 +15345,7 @@
       "originY": 1
     },
     "51": {
-      "image": "assets/swagbound/overworld-npc/gns-mtg-nft-003-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-429-hustlewoof-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15367,7 +15367,7 @@
       "originY": 1
     },
     "52": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-203-splagoish-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-439-moog-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15389,7 +15389,7 @@
       "originY": 1
     },
     "53": {
-      "image": "assets/swagbound/overworld-npc/gns-mtg-nft-005-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-440-banhiss-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15433,7 +15433,7 @@
       "originY": 1
     },
     "55": {
-      "image": "assets/swagbound/overworld-npc/gns-my-little-fella-001-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-461-bladeeo-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15455,7 +15455,7 @@
       "originY": 1
     },
     "56": {
-      "image": "assets/swagbound/overworld-npc/gns-my-little-fella-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-47-jeppa-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15477,7 +15477,7 @@
       "originY": 1
     },
     "57": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-213-rhindos-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-473-clurbout-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15499,7 +15499,7 @@
       "originY": 1
     },
     "58": {
-      "image": "assets/swagbound/overworld-npc/gns-my-little-fella-005-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-486-king-snowbie-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15521,7 +15521,7 @@
       "originY": 1
     },
     "59": {
-      "image": "assets/swagbound/overworld-npc/gns-nft-santa-regina-2027-001-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-488-gubonbon-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15543,7 +15543,7 @@
       "originY": 1
     },
     "60": {
-      "image": "assets/swagbound/overworld-npc/gns-nft-santa-regina-2027-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-494-gitchy-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15565,7 +15565,7 @@
       "originY": 1
     },
     "61": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-230-drimbee-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-497-gwibby-watcher-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15587,7 +15587,7 @@
       "originY": 1
     },
     "62": {
-      "image": "assets/swagbound/overworld-npc/gns-nft-santa-regina-2027-005-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-512-frailgy-mezmar-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15609,7 +15609,7 @@
       "originY": 1
     },
     "63": {
-      "image": "assets/swagbound/overworld-npc/gns-nothing-really-matters-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-516-equaboi-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15631,7 +15631,7 @@
       "originY": 1
     },
     "64": {
-      "image": "assets/swagbound/overworld-npc/gns-nothing-really-matters-003-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-518-wattaslob-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15653,7 +15653,7 @@
       "originY": 1
     },
     "65": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-233-hobblebo-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-519-ultimorchestra-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15675,7 +15675,7 @@
       "originY": 1
     },
     "66": {
-      "image": "assets/swagbound/overworld-npc/gns-paingelz-003-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-523-panbiggie-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15697,7 +15697,7 @@
       "originY": 1
     },
     "67": {
-      "image": "assets/swagbound/overworld-npc/gns-paingelz-004-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-533-oblostar-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15719,7 +15719,7 @@
       "originY": 1
     },
     "68": {
-      "image": "assets/swagbound/overworld-npc/gns-paingelz-005-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-553-golden-greshlar-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15741,7 +15741,7 @@
       "originY": 1
     },
     "69": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-240-soft-pale-luen-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-556-roger-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15763,7 +15763,7 @@
       "originY": 1
     },
     "70": {
-      "image": "assets/swagbound/overworld-npc/gns-pick-me-ports-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-563-sgoko-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15785,7 +15785,7 @@
       "originY": 1
     },
     "71": {
-      "image": "assets/swagbound/overworld-npc/gns-pick-me-ports-003-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-579-mouzger-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15807,7 +15807,7 @@
       "originY": 1
     },
     "72": {
-      "image": "assets/swagbound/overworld-npc/gns-pick-me-ports-004-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-594-gwagu-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15829,7 +15829,7 @@
       "originY": 1
     },
     "75": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-245-gapbus-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-595-seedgublet-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15851,7 +15851,7 @@
       "originY": 1
     },
     "76": {
-      "image": "assets/swagbound/overworld-npc/gns-planet-peppa-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-618-scordior-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15873,7 +15873,7 @@
       "originY": 1
     },
     "77": {
-      "image": "assets/swagbound/overworld-npc/gns-planet-peppa-004-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-619-ging-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15895,7 +15895,7 @@
       "originY": 1
     },
     "78": {
-      "image": "assets/swagbound/overworld-npc/gns-podgy-pigeons-003-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-623-gelleph-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15917,7 +15917,7 @@
       "originY": 1
     },
     "80": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-253-pink-siifu-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-63-zormie-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15939,7 +15939,7 @@
       "originY": 1
     },
     "81": {
-      "image": "assets/swagbound/overworld-npc/gns-psyop-scouts-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-634-paddlegat-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15961,7 +15961,7 @@
       "originY": 1
     },
     "82": {
-      "image": "assets/swagbound/overworld-npc/gns-psyop-scouts-004-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-637-poncho-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -15983,7 +15983,7 @@
       "originY": 1
     },
     "84": {
-      "image": "assets/swagbound/overworld-npc/gns-psyop-scouts-005-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-668-migtech-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16005,7 +16005,7 @@
       "originY": 1
     },
     "85": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-254-goondrip-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-683-soagoi-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16027,7 +16027,7 @@
       "originY": 1
     },
     "86": {
-      "image": "assets/swagbound/overworld-npc/gns-runway-show-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-689-mugruloddle-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16049,7 +16049,7 @@
       "originY": 1
     },
     "87": {
-      "image": "assets/swagbound/overworld-npc/gns-santagods-001-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-699-nodber-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16071,7 +16071,7 @@
       "originY": 1
     },
     "88": {
-      "image": "assets/swagbound/overworld-npc/gns-santagods-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-721-gummington-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16093,7 +16093,7 @@
       "originY": 1
     },
     "89": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-257-zwiggydor-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-727-elder-thing-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16115,7 +16115,7 @@
       "originY": 1
     },
     "91": {
-      "image": "assets/swagbound/overworld-npc/gns-santagods-005-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-733-ulio-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16137,7 +16137,7 @@
       "originY": 1
     },
     "92": {
-      "image": "assets/swagbound/overworld-npc/gns-scarecrow-001-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-738-gootshi-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16159,7 +16159,7 @@
       "originY": 1
     },
     "94": {
-      "image": "assets/swagbound/overworld-npc/gns-scarecrow-002-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-751-morp2-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16181,7 +16181,7 @@
       "originY": 1
     },
     "96": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-259-sofgob-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-775-ombiegob-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16203,7 +16203,7 @@
       "originY": 1
     },
     "97": {
-      "image": "assets/swagbound/overworld-npc/gns-scarecrow-004-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-9-puffygoob-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16269,7 +16269,7 @@
       "originY": 1
     },
     "100": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-273-tubecyc-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-self-aborting-microworms-002-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16357,7 +16357,7 @@
       "originY": 1
     },
     "105": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-277-flegrim-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-self-deriving-hyperworms-001-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16445,7 +16445,7 @@
       "originY": 1
     },
     "109": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-290-tarrmel-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-self-deriving-hyperworms-005-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16533,7 +16533,7 @@
       "originY": 1
     },
     "114": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-310-star-seech-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-self-driving-megaworms-004-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16621,7 +16621,7 @@
       "originY": 1
     },
     "119": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-319-gajo-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-slyfella-004-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16709,7 +16709,7 @@
       "originY": 1
     },
     "123": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-324-grobe-royal-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-solfis-003-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16797,7 +16797,7 @@
       "originY": 1
     },
     "129": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-326-kimwi-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-spirit-realm-002-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16929,7 +16929,7 @@
       "originY": 1
     },
     "135": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-335-starware-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-sproto-pepes-004-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -17017,7 +17017,7 @@
       "originY": 1
     },
     "142": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-341-rackspawn-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-squire-makere-004-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -17105,7 +17105,7 @@
       "originY": 1
     },
     "147": {
-      "image": "assets/swagbound/overworld-npc/gns-smm2-349-washysomp-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-unx-003-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -17391,7 +17391,7 @@
       "originY": 1
     },
     "195": {
-      "image": "assets/swagbound/overworld-npc/gns-midladys-fumogeddon-004-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-398-glooiece-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -17413,7 +17413,7 @@
       "originY": 1
     },
     "209": {
-      "image": "assets/swagbound/overworld-npc/gns-knights-and-angels-005-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-15-ponyrolly-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -17435,7 +17435,7 @@
       "originY": 1
     },
     "210": {
-      "image": "assets/swagbound/overworld-npc/gns-lazy-lions-2-003-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-smm2-177-burgie-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {

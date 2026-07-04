@@ -22,6 +22,8 @@ export interface ResolvedBossTaunts {
   onStart: string[];
   onLowHp: string[];
   onDefeat: string[];
+  /** Ambient mid-fight barks, drawn cyclically (per-boss onTurn, else shared ambient). */
+  onTurn: string[];
   lowHpThreshold: number;
 }
 
@@ -40,7 +42,9 @@ export function resolveBossTaunts(
   const onStart = entry.onStart ?? [];
   const onLowHp = entry.onLowHp ?? [];
   const onDefeat = entry.onDefeat ?? [];
-  if (onStart.length === 0 && onLowHp.length === 0 && onDefeat.length === 0) {
+  // Per-boss onTurn wins, else the shared swarm ambient pool.
+  const onTurn = entry.onTurn && entry.onTurn.length > 0 ? entry.onTurn : (data?.ambient ?? []);
+  if (onStart.length === 0 && onLowHp.length === 0 && onDefeat.length === 0 && onTurn.length === 0) {
     return undefined;
   }
   return {
@@ -48,6 +52,7 @@ export function resolveBossTaunts(
     onStart,
     onLowHp,
     onDefeat,
+    onTurn,
     lowHpThreshold: entry.lowHpThreshold ?? DEFAULT_BOSS_LOW_HP_THRESHOLD
   };
 }
