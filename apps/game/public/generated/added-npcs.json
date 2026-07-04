@@ -26,12 +26,7 @@
       "spriteGroup": 119,
       "facing": "down",
       "interaction": {
-        "ref": "interior:neighbor-house-v0",
-        "pages": [
-          "I keep the kiosk facing the wall now. It kept reading my receipts out loud like they were poetry.",
-          "You want the truth? It files everyone twice. Once as who walked in, once as who it wishes had.",
-          "Don't stand under the awning too long. That counts as a visit, and a visit wants a name."
-        ]
+        "ref": "interior:neighbor-house-v0"
       }
     },
     {
