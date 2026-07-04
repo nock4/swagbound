@@ -21,6 +21,8 @@ export interface TransitionSfx {
   presentOpen(): void;
   /** Bright jingle when an item is received. */
   itemGet(): void;
+  /** Triumphant fanfare for an overworld instant-win (stomping an over-weak roamer). */
+  victory(): void;
   /** Soft read cue for signs and examine hotspots. */
   readCue(): void;
 }
@@ -48,6 +50,7 @@ export class NoopTransitionSfx implements TransitionSfx {
   talkConfirm(): void {}
   presentOpen(): void {}
   itemGet(): void {}
+  victory(): void {}
   readCue(): void {}
 }
 
@@ -198,6 +201,25 @@ export class WebAudioTransitionSfx implements TransitionSfx {
           fromHz: hz,
           toHz: hz * 1.01,
           gain: index === notes.length - 1 ? 0.075 : 0.055
+        });
+      });
+    });
+  }
+
+  victory(): void {
+    this.withContext((context) => {
+      const start = context.currentTime + 0.05;
+      // A short rising major fanfare (G-C-E-G-C) ending on a held triangle note.
+      const notes = [392.0, 523.25, 659.25, 783.99, 1046.5];
+      notes.forEach((hz, index) => {
+        const last = index === notes.length - 1;
+        this.tone(context, {
+          type: last ? "triangle" : "square",
+          start: start + index * 0.09,
+          duration: last ? 0.32 : 0.085,
+          fromHz: hz,
+          toHz: last ? hz * 1.005 : hz * 1.01,
+          gain: last ? 0.085 : 0.06
         });
       });
     });

@@ -12,6 +12,7 @@ import {
   createBattleRng,
   createBattleState,
   resolveInstantWinRewards,
+  buildVictorySummaryViewModel,
   type EncounterAdvantage,
   type InstantWinRewardOptions,
   type PlayerCombatantOptions
@@ -5512,7 +5513,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.lastEncounterGroup = group;
     this.encounterCooldownMs = ENCOUNTER_RETURN_COOLDOWN_MS;
     this.refreshMenuScreens();
-    this.dialogue.start(buildInlineDialoguePages(["You won!"]));
+    // Show the same EXP/money/items/level-up tally a fought battle would, instead of a bare
+    // "You won!" — the rewards were always computed, just never surfaced. Plus a victory sting
+    // (the instant-win skips the battle scene and its audio).
+    this.transitionSfx.victory();
+    const tally = buildVictorySummaryViewModel(rewards.summary).pages.map((lines) => lines.join("\n"));
+    this.dialogue.start(buildInlineDialoguePages(["You won!", ...tally]));
     this.updatePrompt();
     this.publish();
     return true;
