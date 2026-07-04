@@ -14247,7 +14247,7 @@
       "originY": 0.5
     },
     "130": {
-      "image": "assets/swagbound/enemy/gns-spirit-realm-003.png",
+      "image": "assets/swagbound/enemy/gns-mifella-2-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -14433,7 +14433,7 @@
       "originY": 0.5
     },
     "214": {
-      "image": "assets/swagbound/enemy/gns-yag-or-die-001.png",
+      "image": "assets/swagbound/enemy/gns-mifella-2-003.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -14457,7 +14457,7 @@
       "originY": 0.5
     },
     "227": {
-      "image": "assets/swagbound/enemy/gns-yakubio-scientists-001.png",
+      "image": "assets/swagbound/enemy/gns-mifella-2-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -16819,7 +16819,7 @@
       "originY": 1
     },
     "130": {
-      "image": "assets/swagbound/overworld-npc/gns-spirit-realm-003-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-mifella-2-002-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -16836,7 +16836,7 @@
           0
         ]
       },
-      "displayHeight": 24,
+      "displayHeight": 36,
       "originX": 0.5,
       "originY": 1
     },
@@ -17501,7 +17501,7 @@
       "originY": 1
     },
     "214": {
-      "image": "assets/swagbound/overworld-npc/gns-yag-or-die-001-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-mifella-2-003-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -17518,7 +17518,7 @@
           0
         ]
       },
-      "displayHeight": 24,
+      "displayHeight": 36,
       "originX": 0.5,
       "originY": 1
     },
@@ -17589,7 +17589,7 @@
       "originY": 1
     },
     "227": {
-      "image": "assets/swagbound/overworld-npc/gns-yakubio-scientists-001-ow.png",
+      "image": "assets/swagbound/overworld-npc/gns-mifella-2-001-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -17606,7 +17606,7 @@
           0
         ]
       },
-      "displayHeight": 24,
+      "displayHeight": 36,
       "originX": 0.5,
       "originY": 1
     }

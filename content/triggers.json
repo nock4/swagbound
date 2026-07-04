@@ -4,7 +4,11 @@
   "triggers": [
     {
       "id": "signal-town-card-clique",
-      "boss": { "x": 1512, "y": 1744, "facing": "right" },
+      "boss": {
+        "x": 1512,
+        "y": 1744,
+        "facing": "right"
+      },
       "once": true,
       "dialogue": [
         "The arcade light flattens Bosch into a better-lit rumor. A clean copy of his face grins from a card nobody remembers printing.",
@@ -12,14 +16,23 @@
         "These cards don't start here. They point up the line, toward the yard that prints them.",
         "Bosch reads the copy for a weak seam. (First scrap: press Z to lock in a move -- BASH to swing, DEFEND when you're hurting, PSI when swinging won't cut it.)"
       ],
-      "setFlags": ["signal:clique_cleared"],
+      "setFlags": [
+        "signal:clique_cleared"
+      ],
       "battleGroup": 448
     },
     {
       "id": "signal-town-card-clique-reveal",
-      "area": { "x": 1472, "y": 1720, "w": 88, "h": 56 },
+      "area": {
+        "x": 1472,
+        "y": 1720,
+        "w": 88,
+        "h": 56
+      },
       "once": true,
-      "requireFlags": ["signal:clique_cleared"],
+      "requireFlags": [
+        "signal:clique_cleared"
+      ],
       "dialogue": [
         "The clique doesn't lose. It re-prints. Where Mifella 2 folded, a cleaner Bosch stands up -- pre-signed, better-lit, already filed under his name.",
         "MIFELLA 2 (Mk2): \"Beat the copy, meet the upgrade. The yard shipped your replacement before you finished swinging.\"",
@@ -28,22 +41,37 @@
     },
     {
       "id": "relay-gate-returnless-king",
-      "boss": { "x": 1928, "y": 1560, "facing": "down" },
+      "boss": {
+        "x": 1928,
+        "y": 1560,
+        "facing": "down"
+      },
       "once": true,
-      "requireFlags": ["signal:clique_cleared"],
+      "requireFlags": [
+        "signal:clique_cleared"
+      ],
       "dialogue": [
         "The gate files Bosch before it ever looks at him.",
         "RETURNLESS KING: \"Source. Vessel. Claimant. Derivative. Pick the lie that travels.\"",
         "Bosch refuses the stamp. The route unlocks anyway -- not because it agreed, because he forced it."
       ],
-      "setFlags": ["signal:route_open"],
+      "setFlags": [
+        "signal:route_open"
+      ],
       "battleGroup": 36
     },
     {
       "id": "north-route-gate-warning",
-      "area": { "x": 1880, "y": 1520, "w": 96, "h": 16 },
+      "area": {
+        "x": 1880,
+        "y": 1520,
+        "w": 96,
+        "h": 16
+      },
       "once": false,
-      "blockFlags": ["signal:route_open"],
+      "blockFlags": [
+        "signal:route_open"
+      ],
       "dialogue": [
         "The road north is open enough to see and closed enough to mean something.",
         "A smiling line of route aides keeps checking the same card, never once looking at Bosch.",
@@ -52,22 +80,38 @@
     },
     {
       "id": "first-threshold-malady",
-      "boss": { "x": 1904, "y": 1408, "facing": "down" },
+      "boss": {
+        "x": 1904,
+        "y": 1408,
+        "facing": "down"
+      },
       "once": true,
-      "requireFlags": ["signal:route_open"],
+      "requireFlags": [
+        "signal:route_open"
+      ],
       "dialogue": [
         "The first threshold hums with a memory too small to sell.",
         "MALADY: \"A private thing is just a public thing with poor distribution. I'm only the symptom you can see.\"",
         "The card warms, then fails to describe him. Bosch keeps the damaged version -- and the threshold records it."
       ],
-      "setFlags": ["signal:threshold_cleared", "source:first_witness"],
+      "setFlags": [
+        "signal:threshold_cleared",
+        "source:first_witness"
+      ],
       "battleGroup": 450
     },
     {
       "id": "first-threshold-malady-reveal",
-      "area": { "x": 1880, "y": 1384, "w": 96, "h": 48 },
+      "area": {
+        "x": 1880,
+        "y": 1384,
+        "w": 96,
+        "h": 48
+      },
       "once": true,
-      "requireFlags": ["signal:threshold_cleared"],
+      "requireFlags": [
+        "signal:threshold_cleared"
+      ],
       "dialogue": [
         "The Malady stops describing Bosch and starts describing itself. The mask warms, slips, and underneath is his own face -- better-lit, pre-approved, smiling without him.",
         "The threshold logs the receipt without being asked: SIGNER -- MALADY. CONTRACT OWNER -- MILADY. Beating the symptom didn't kill the machine. It named it.",
@@ -76,24 +120,88 @@
     },
     {
       "id": "leave-signal-town",
-      "area": { "x": 1888, "y": 1280, "w": 80, "h": 40 },
+      "area": {
+        "x": 1888,
+        "y": 1280,
+        "w": 80,
+        "h": 40
+      },
       "once": true,
-      "requireFlags": ["signal:threshold_cleared"],
+      "requireFlags": [
+        "signal:threshold_cleared"
+      ],
       "dialogue": [
         "The north gate offers a clean exit stamp: one signature and the leaked version walks out wearing his name, on time, on brand.",
         "Bosch hands back the pen. He keeps the damaged Dox Sheet -- unfiled, unflattering, his.",
         "Morningside logs him as \"left unprocessed.\" The road north opens on a Bosch the route never got to finish.",
         "[ ACT 1 -- END ]"
       ],
-      "setFlags": ["act1:complete"],
+      "setFlags": [
+        "act1:complete"
+      ],
       "music": "ending"
+    },
+    {
+      "id": "museum-worm",
+      "boss": {
+        "x": 5216,
+        "y": 8320,
+        "facing": "down"
+      },
+      "battleGroup": 424,
+      "once": true,
+      "setFlags": [
+        "signal:museum_worm_cleared"
+      ],
+      "dialogue": [
+        "The Museum of Leaked Versions coils around a worm that ate every original. \"I am the last copy that remembers being first,\" it says, meaning it."
+      ]
+    },
+    {
+      "id": "museum-frank",
+      "boss": {
+        "x": 5728,
+        "y": 8352,
+        "facing": "down"
+      },
+      "battleGroup": 449,
+      "once": true,
+      "setFlags": [
+        "signal:museum_frank_cleared"
+      ],
+      "dialogue": [
+        "A gallery-piece rebuilt from a leaked schematic. FRANKYSTEIN 2: \"They printed me from a print of a print. Ask which one of us you're really hitting.\""
+      ]
+    },
+    {
+      "id": "museum-starman",
+      "boss": {
+        "x": 4960,
+        "y": 8384,
+        "facing": "down"
+      },
+      "battleGroup": 474,
+      "once": true,
+      "setFlags": [
+        "signal:museum_starman_cleared"
+      ],
+      "dialogue": [
+        "A wall-text guardian steps off its plinth. \"Provenance disputed,\" it hums. \"So is yours, claimant. Prove you're the source.\""
+      ]
     }
   ],
   "barriers": [
     {
       "id": "north-route-barrier",
-      "area": { "x": 1880, "y": 1496, "w": 96, "h": 16 },
-      "blockFlags": ["signal:route_open"],
+      "area": {
+        "x": 1880,
+        "y": 1496,
+        "w": 96,
+        "h": 16
+      },
+      "blockFlags": [
+        "signal:route_open"
+      ],
       "image": "assets/swagbound/overworld-npc/faithful-servants.png"
     }
   ]
