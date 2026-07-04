@@ -57,11 +57,16 @@ import {
 import {
   cellInRange,
   collisionOverlaySolidCells,
+  isDeepWaterSurface,
+  isFgLowerOnlySurface,
+  isFgUpperSurface,
+  isLadderSurface,
+  isSunstrokeSurface,
+  isWaterSurface,
   pointInRect,
   solidAtWorldPixel,
   surfaceAtCell,
   surfaceAtWorldPixel,
-  SURFACE_WATER_MASK,
   visibleCollisionCellRange,
   worldPixelToCollisionCell,
   type CollisionGrid,
@@ -1537,15 +1542,31 @@ export class ChunkedWorldScene extends Phaser.Scene {
       graphics.fillRect(cell.x, cell.y, cell.size, cell.size);
     }
 
+    // Surface-class tints per docs/collision-semantics.md. Ladder paints over the
+    // solid red (cliff ladders are 0x90); water order puts deep before shallow.
     const cellSize = this.collisionCellSize;
     for (let cellY = range.minCellY; cellY <= range.maxCellY; cellY += 1) {
       for (let cellX = range.minCellX; cellX <= range.maxCellX; cellX += 1) {
-        const x = cellX * cellSize;
-        const y = cellY * cellSize;
-        if ((surfaceAtCell(this.surfaceRows, cellX, cellY) & SURFACE_WATER_MASK) !== 0) {
-          graphics.fillStyle(0x2f80ff, 0.3);
-          graphics.fillRect(x, y, cellSize, cellSize);
+        const surface = surfaceAtCell(this.surfaceRows, cellX, cellY);
+        if (surface === 0) {
+          continue;
         }
+        if (isDeepWaterSurface(surface)) {
+          graphics.fillStyle(0x1436c8, 0.4);
+        } else if (isWaterSurface(surface)) {
+          graphics.fillStyle(0x2f80ff, 0.3);
+        } else if (isLadderSurface(surface)) {
+          graphics.fillStyle(0x14dcdc, 0.45);
+        } else if (isFgUpperSurface(surface)) {
+          graphics.fillStyle(0xc83ce0, 0.4);
+        } else if (isFgLowerOnlySurface(surface)) {
+          graphics.fillStyle(0xf0dc28, 0.4);
+        } else if (isSunstrokeSurface(surface)) {
+          graphics.fillStyle(0xff8c1e, 0.3);
+        } else {
+          continue;
+        }
+        graphics.fillRect(cellX * cellSize, cellY * cellSize, cellSize, cellSize);
       }
     }
 
@@ -1656,6 +1677,49 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.surfaceAtHook = (x: number, y: number) => surfaceAtWorldPixel(this.surfaceRows, { x, y }, this.collisionGrid());
     globals.__solidAt = this.solidAtHook;
     globals.__surfaceAt = this.surfaceAtHook;
+    // Walk-behind introspection for collision-exactness probes: alpha of the
+    // foreground chunk art at a world pixel (0..255, -1 = chunk FG not streamed).
+    globals.__fgAlphaAt = (x: number, y: number): number => {
+      const size = chunkPixelSize(this.grid());
+      const cx = Math.floor(x / size);
+      const cy = Math.floor(y / size);
+      const key = this.chunkTextureKey({ cx, cy } as WorldChunk, "foreground");
+      if (!this.textures.exists(key)) {
+        return -1;
+      }
+      return this.textures.getPixelAlpha(Math.floor(x - cx * size), Math.floor(y - cy * size), key) ?? -1;
+    };
+    // Sampled opaque-FG coverage over a world rect — the "player is occluded here"
+    // assertion primitive (ratio of opaque FG pixels among sampled ones).
+    globals.__fgCoverageRect = (x: number, y: number, w: number, h: number, step = 2) => {
+      const fgAlphaAt = globals.__fgAlphaAt as (px: number, py: number) => number;
+      let sampled = 0;
+      let opaque = 0;
+      for (let py = y; py < y + h; py += step) {
+        for (let px = x; px < x + w; px += step) {
+          const alpha = fgAlphaAt(px, py);
+          if (alpha < 0) {
+            continue;
+          }
+          sampled += 1;
+          if (alpha > 0) {
+            opaque += 1;
+          }
+        }
+      }
+      return { sampled, opaque, ratio: sampled > 0 ? opaque / sampled : 0 };
+    };
+    globals.__playerDepthInfo = () => {
+      const feet = { x: this.playerState.x, y: this.playerState.y };
+      const sprite = this.player instanceof Phaser.GameObjects.Sprite ? this.player : undefined;
+      return {
+        x: feet.x,
+        y: feet.y,
+        depth: sprite?.depth ?? null,
+        feetSurface: surfaceAtWorldPixel(this.surfaceRows, feet, this.collisionGrid()),
+        cropped: sprite?.isCropped ?? false
+      };
+    };
     // Debug-only: full-heal the party — a between-fight convenience for the autonomous-play harness
     // (the player-facing rest is the in-world hotel at NPC 58). Nothing in normal play calls it.
     globals.__debugHeal = () => {
@@ -1733,6 +1797,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.surfaceAtHook && globals.__surfaceAt === this.surfaceAtHook) {
       delete globals.__surfaceAt;
     }
+    delete globals.__fgAlphaAt;
+    delete globals.__fgCoverageRect;
+    delete globals.__playerDepthInfo;
     delete globals.__debugHeal;
     delete globals.__equip;
     delete globals.__battleStats;
@@ -6110,7 +6177,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private isPlayerInWater(): boolean {
     try {
       const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
-      return (surface & SURFACE_WATER_MASK) !== 0;
+      return isWaterSurface(surface);
     } catch {
       return false;
     }

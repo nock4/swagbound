@@ -60,13 +60,36 @@ export function decodeArrangementCell(entry: number): ArrangementCell {
   };
 }
 
+// EB minitile attribute masks, per docs/collision-semantics.md. Mirrors
+// apps/game/src/collisionOverlay.ts. (The old SURFACE_WATER_MASK=0x20 was wrong:
+// 0x20 is unused in EB — zero cells map-wide. Water is 0x08.)
 export const SURFACE_SOLID_MASK = 0x80;
-export const SURFACE_WATER_MASK = 0x20;
+export const SURFACE_LADDER_MASK = 0x10;
+export const SURFACE_WATER_MASK = 0x08;
+export const SURFACE_SUNSTROKE_MASK = 0x04;
+export const SURFACE_FG_UPPER_MASK = 0x02;
+export const SURFACE_FG_LOWER_MASK = 0x01;
 
 export function isSolidSurface(surfaceByte: number): boolean {
   return (surfaceByte & SURFACE_SOLID_MASK) !== 0;
 }
 
+/**
+ * EB's own walk-behind flag: an actor standing on this cell has its upper body
+ * (0x02, near-always paired with 0x01 = whole body) drawn behind the map art.
+ * These sit on WALKABLE cells (tree canopies, upper wall bands) — the mechanism
+ * the solid-occluder heuristic cannot cover.
+ */
+export function isWholeBodyForegroundCell(surfaceByte: number): boolean {
+  return (surfaceByte & SURFACE_FG_UPPER_MASK) !== 0;
+}
+
+/**
+ * Note: the SNES priority bit is zero across all 20 tilesets in this project
+ * (327,680 arrangement cells censused 2026-07-04) — `cell.priority` is kept for
+ * format completeness but contributes nothing; EB drives walk-behind entirely
+ * via the 0x01/0x02 surface flags.
+ */
 export function isForegroundArrangementCell(cell: Pick<ArrangementCell, "priority">, surfaceByte: number): boolean {
   return cell.priority || isSolidSurface(surfaceByte);
 }

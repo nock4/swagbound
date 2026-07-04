@@ -1,4 +1,38 @@
-export const SURFACE_WATER_MASK = 0x20;
+// EB minitile attribute masks, per docs/collision-semantics.md (the project-wide verdict).
+// 0x20/0x40 are unused (zero cells map-wide); the old SURFACE_WATER_MASK=0x20 matched nothing.
+export const SURFACE_SOLID_MASK = 0x80;
+export const SURFACE_LADDER_MASK = 0x10;
+export const SURFACE_WATER_MASK = 0x08;
+export const SURFACE_SUNSTROKE_MASK = 0x04;
+export const SURFACE_FG_UPPER_MASK = 0x02;
+export const SURFACE_FG_LOWER_MASK = 0x01;
+
+export function isWaterSurface(surfaceByte: number): boolean {
+  return (surfaceByte & SURFACE_WATER_MASK) !== 0;
+}
+
+/** Deep water = water + the 0x04 modifier (0x04 alone is sunstroke instead). */
+export function isDeepWaterSurface(surfaceByte: number): boolean {
+  return (surfaceByte & (SURFACE_WATER_MASK | SURFACE_SUNSTROKE_MASK)) === (SURFACE_WATER_MASK | SURFACE_SUNSTROKE_MASK);
+}
+
+export function isSunstrokeSurface(surfaceByte: number): boolean {
+  return (surfaceByte & (SURFACE_WATER_MASK | SURFACE_SUNSTROKE_MASK)) === SURFACE_SUNSTROKE_MASK;
+}
+
+export function isLadderSurface(surfaceByte: number): boolean {
+  return (surfaceByte & SURFACE_LADDER_MASK) !== 0;
+}
+
+/** Standing here, the whole/upper body draws behind foreground map art (tree canopy, upper wall). */
+export function isFgUpperSurface(surfaceByte: number): boolean {
+  return (surfaceByte & SURFACE_FG_UPPER_MASK) !== 0;
+}
+
+/** Standing here, only the lower body is obscured (tall grass, shrub tops, roof crests). */
+export function isFgLowerOnlySurface(surfaceByte: number): boolean {
+  return (surfaceByte & (SURFACE_FG_UPPER_MASK | SURFACE_FG_LOWER_MASK)) === SURFACE_FG_LOWER_MASK;
+}
 
 export type CollisionGrid = {
   cellSize: number;

@@ -14,9 +14,9 @@ const fixture: CollisionAuditInput = {
       "00001111"
     ],
     surfaceRows: [
-      "2000000000000000",
-      "0000200000000000",
-      "0000000000000000",
+      "080c000000000000",
+      "0000040000000000",
+      "9003010000000000",
       "0000000000000000"
     ]
   },
@@ -41,12 +41,17 @@ describe("collision audit counters", () => {
     expect(countMixedTiles(fixture)).toBe(1);
   });
 
-  it("counts water, solid cells, door trigger cells, and suspicious doors", () => {
+  it("counts surface classes, solid cells, door trigger cells, and suspicious doors", () => {
     expect(auditCollisionWorld(fixture)).toEqual({
       totalCells: 32,
       solidCells: 17,
       solidPercent: 17 / 32,
       waterCells: 2,
+      deepWaterCells: 1,
+      sunstrokeCells: 1,
+      ladderCells: 1,
+      fgUpperCells: 1,
+      fgLowerOnlyCells: 1,
       mixedTileCount: 1,
       doorCount: 3,
       doorTriggerCellCount: 2,

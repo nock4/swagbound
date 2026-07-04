@@ -82,3 +82,34 @@ describe("collision overlay visible cell selection", () => {
     expect(actual).toEqual(["1,0", "2,1", "4,1", "3,3", "4,3", "5,3", "0,5"]);
   });
 });
+
+describe("surface flag predicates (docs/collision-semantics.md)", () => {
+  it("decodes water vs deep water vs sunstroke (0x04 is a modifier on 0x08)", async () => {
+    const m = await import("../src/collisionOverlay");
+    expect(m.isWaterSurface(0x08)).toBe(true);
+    expect(m.isDeepWaterSurface(0x08)).toBe(false);
+    expect(m.isWaterSurface(0x0c)).toBe(true);
+    expect(m.isDeepWaterSurface(0x0c)).toBe(true);
+    expect(m.isSunstrokeSurface(0x04)).toBe(true);
+    expect(m.isSunstrokeSurface(0x0c)).toBe(false); // deep water, not sunstroke
+    expect(m.isWaterSurface(0x20)).toBe(false); // legacy wrong mask must stay dead
+  });
+
+  it("decodes walk-behind foreground flags", async () => {
+    const m = await import("../src/collisionOverlay");
+    expect(m.isFgUpperSurface(0x03)).toBe(true);
+    expect(m.isFgUpperSurface(0x02)).toBe(true);
+    expect(m.isFgUpperSurface(0x01)).toBe(false);
+    expect(m.isFgLowerOnlySurface(0x01)).toBe(true);
+    expect(m.isFgLowerOnlySurface(0x03)).toBe(false);
+    expect(m.isFgLowerOnlySurface(0x09)).toBe(true); // water + lower-hide (Deep Darkness)
+    expect(m.isFgUpperSurface(0x0f)).toBe(true); // swamp: deep water + whole-body hide
+  });
+
+  it("decodes ladder/stairs including the solid-cliff combination", async () => {
+    const m = await import("../src/collisionOverlay");
+    expect(m.isLadderSurface(0x10)).toBe(true);
+    expect(m.isLadderSurface(0x90)).toBe(true);
+    expect(m.isLadderSurface(0x80)).toBe(false);
+  });
+});

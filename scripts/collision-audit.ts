@@ -2,9 +2,14 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
+  isDeepWaterSurface,
+  isFgLowerOnlySurface,
+  isFgUpperSurface,
+  isLadderSurface,
+  isSunstrokeSurface,
+  isWaterSurface,
   solidAtCell,
   surfaceAtCell,
-  SURFACE_WATER_MASK,
   worldPixelToCollisionCell
 } from "../apps/game/src/collisionOverlay";
 
@@ -32,6 +37,11 @@ export type CollisionAuditCounts = {
   solidCells: number;
   solidPercent: number;
   waterCells: number;
+  deepWaterCells: number;
+  sunstrokeCells: number;
+  ladderCells: number;
+  fgUpperCells: number;
+  fgLowerOnlyCells: number;
   mixedTileCount: number;
   doorCount: number;
   doorTriggerCellCount: number;
@@ -47,14 +57,38 @@ export function auditCollisionWorld(world: CollisionAuditInput): CollisionAuditC
   const totalCells = collision.width * collision.height;
   let solidCells = 0;
   let waterCells = 0;
+  let deepWaterCells = 0;
+  let sunstrokeCells = 0;
+  let ladderCells = 0;
+  let fgUpperCells = 0;
+  let fgLowerOnlyCells = 0;
 
   for (let y = 0; y < collision.height; y += 1) {
     for (let x = 0; x < collision.width; x += 1) {
       if (solidAtCell(collision.solidRows, x, y)) {
         solidCells += 1;
       }
-      if ((surfaceAtCell(collision.surfaceRows, x, y) & SURFACE_WATER_MASK) !== 0) {
+      const surface = surfaceAtCell(collision.surfaceRows, x, y);
+      if (surface === 0) {
+        continue;
+      }
+      if (isWaterSurface(surface)) {
         waterCells += 1;
+        if (isDeepWaterSurface(surface)) {
+          deepWaterCells += 1;
+        }
+      }
+      if (isSunstrokeSurface(surface)) {
+        sunstrokeCells += 1;
+      }
+      if (isLadderSurface(surface)) {
+        ladderCells += 1;
+      }
+      if (isFgUpperSurface(surface)) {
+        fgUpperCells += 1;
+      }
+      if (isFgLowerOnlySurface(surface)) {
+        fgLowerOnlyCells += 1;
       }
     }
   }
@@ -86,6 +120,11 @@ export function auditCollisionWorld(world: CollisionAuditInput): CollisionAuditC
     solidCells,
     solidPercent: totalCells === 0 ? 0 : solidCells / totalCells,
     waterCells,
+    deepWaterCells,
+    sunstrokeCells,
+    ladderCells,
+    fgUpperCells,
+    fgLowerOnlyCells,
     mixedTileCount: countMixedTiles(world),
     doorCount: world.doors.length,
     doorTriggerCellCount: triggerCells.size,
@@ -139,7 +178,10 @@ export function formatCollisionAudit(
     `Collision audit: ${source}`,
     `total cells: ${formatCount(counts.totalCells)}`,
     `solid cells: ${formatCount(counts.solidCells)} (${(counts.solidPercent * 100).toFixed(2)}%)`,
-    `water cells: ${formatCount(counts.waterCells)}`,
+    `water cells: ${formatCount(counts.waterCells)} (deep: ${formatCount(counts.deepWaterCells)})`,
+    `sunstroke cells: ${formatCount(counts.sunstrokeCells)}`,
+    `ladder/stairs cells: ${formatCount(counts.ladderCells)}`,
+    `walk-behind cells: upper ${formatCount(counts.fgUpperCells)}, lower-only ${formatCount(counts.fgLowerOnlyCells)}`,
     `mixed ${tileSize}px tiles: ${formatCount(counts.mixedTileCount)}`,
     `doors: ${formatCount(counts.doorCount)}`,
     `door trigger cells: ${formatCount(counts.doorTriggerCellCount)}`,
