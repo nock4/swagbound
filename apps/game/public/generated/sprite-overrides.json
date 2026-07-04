@@ -5283,6 +5283,1612 @@
       "displayHeight": 24,
       "originX": 0.5,
       "originY": 1
+    },
+    "101300": {
+      "image": "assets/swagbound/overworld-npc/promo-knights-and-angels-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101301": {
+      "image": "assets/swagbound/overworld-npc/promo-lfvad2k24-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101302": {
+      "image": "assets/swagbound/overworld-npc/promo-lfvad2k24-004.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101303": {
+      "image": "assets/swagbound/overworld-npc/promo-midladys-fumogeddon-002.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101304": {
+      "image": "assets/swagbound/overworld-npc/promo-mr-world-002.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101305": {
+      "image": "assets/swagbound/overworld-npc/promo-mr-world-004.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101306": {
+      "image": "assets/swagbound/overworld-npc/promo-mr-world-005.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101307": {
+      "image": "assets/swagbound/overworld-npc/promo-owee-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101308": {
+      "image": "assets/swagbound/overworld-npc/promo-owee-002.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101309": {
+      "image": "assets/swagbound/overworld-npc/promo-owee-004.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101310": {
+      "image": "assets/swagbound/overworld-npc/promo-owee-005.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101311": {
+      "image": "assets/swagbound/overworld-npc/promo-psyop-scouts-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101312": {
+      "image": "assets/swagbound/overworld-npc/promo-special-money-friends-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101313": {
+      "image": "assets/swagbound/overworld-npc/promo-special-money-friends-002.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101314": {
+      "image": "assets/swagbound/overworld-npc/promo-special-money-friends-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101315": {
+      "image": "assets/swagbound/overworld-npc/promo-special-money-friends-005.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101316": {
+      "image": "assets/swagbound/overworld-npc/promo-unicornio-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101317": {
+      "image": "assets/swagbound/overworld-npc/promo-unicornio-004.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101318": {
+      "image": "assets/swagbound/overworld-npc/promo-yakubio-scientists-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101319": {
+      "image": "assets/swagbound/overworld-npc/promo-autismo-step-cousins-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101320": {
+      "image": "assets/swagbound/overworld-npc/promo-autismo-step-cousins-004.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101321": {
+      "image": "assets/swagbound/overworld-npc/promo-blyadilio-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101322": {
+      "image": "assets/swagbound/overworld-npc/promo-blyadilio-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101323": {
+      "image": "assets/swagbound/overworld-npc/promo-blyadilio-005.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101324": {
+      "image": "assets/swagbound/overworld-npc/promo-capi-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101325": {
+      "image": "assets/swagbound/overworld-npc/promo-capi-004.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101326": {
+      "image": "assets/swagbound/overworld-npc/promo-digichems-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101327": {
+      "image": "assets/swagbound/overworld-npc/promo-digichems-003.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101328": {
+      "image": "assets/swagbound/overworld-npc/promo-foodiez-004.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101329": {
+      "image": "assets/swagbound/overworld-npc/promo-fujimoto-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101330": {
+      "image": "assets/swagbound/overworld-npc/promo-glorp-001.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101331": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1225.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101332": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1559.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101333": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-3201.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101334": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-3230.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101335": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-867.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101336": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-957.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101337": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-959.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101338": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1021.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101339": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1068.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101340": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1072.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101341": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1153.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101342": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1212.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101343": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1252.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101344": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1356.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101345": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1373.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101346": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1454.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101347": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1455.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101348": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1483.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101349": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1484.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101350": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1537.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101351": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1554.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101352": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1573.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101353": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1609.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101354": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1628.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101355": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1636.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101356": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1682.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101357": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1722.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101358": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1750.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101359": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1784.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101360": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1833.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101361": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2002.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101362": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2025.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101363": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2209.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101364": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2222.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101365": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2240.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101366": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2255.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101367": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2274.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101368": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2324.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101369": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2330.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101370": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2365.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101371": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-239.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "101372": {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2416.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
     }
   },
   "bySpriteGroup": {
