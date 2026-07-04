@@ -41,6 +41,8 @@
     .asset-list { border:1px solid var(--line); border-radius:6px; max-height:150px; overflow:auto; background:#fbfbf8; }
     .asset-row { display:grid; grid-template-columns:76px 54px 1fr; gap:6px; padding:5px 6px; border-bottom:1px solid var(--line); color:var(--muted); font-size:10px; overflow-wrap:anywhere; }
     .asset-row:last-child { border-bottom:0; }
+    .canon-banner { margin:12px 18px 0; padding:12px; border:1px solid #d8c58a; border-radius:8px; background:#fff7d7; color:#4d4426; }
+    .canon-banner strong { color:#2f2610; }
     label { display:grid; gap:3px; color:var(--muted); font-size:11px; }
     .best-controls { display:grid; gap:6px; }
     .button-row { display:flex; gap:6px; flex-wrap:wrap; }
@@ -73,6 +75,7 @@
       <button id="showJson" type="button">Preview JSON</button>
     </nav>
   </header>
+  <section class="canon-banner"><strong>Canon naming note:</strong> review display names now use Morningside, Postwick, Bluebell Village, Dead Letter, Little Swag World, The Galleria, Solana Beach, Vacancy Flats, and The Unlisted Room. Legacy asset paths may still contain older slugs like <code>signal-town</code> until a scoped path migration is approved.</section>
   <section class="toolbar">
     <input id="search" type="search" placeholder="Search paths, ids, categories">
     <select id="statusFilter">
@@ -4760,11 +4763,11 @@
     },
     {
       "id": "public_version_card_pickup",
-      "label": "public version card pickup",
+      "label": "dox sheet pickup",
       "assets": [
         {
           "id": "swagbound-phaser-public-assets-story-nouns-act1-public-version-card-pickup",
-          "label": "public version card pickup",
+          "label": "dox sheet pickup",
           "repoPath": "swagbound-phaser/public/assets/story-nouns/act1/public_version_card_pickup.png",
           "imageSrc": "../../../swagbound-phaser/public/assets/story-nouns/act1/public_version_card_pickup.png",
           "runtimePath": "/assets/story-nouns/act1/public_version_card_pickup.png",
@@ -4793,11 +4796,11 @@
     },
     {
       "id": "public-version-card",
-      "label": "public version card",
+      "label": "dox sheet",
       "assets": [
         {
           "id": "swagbound-phaser-public-assets-story-nouns-act1-public-version-card",
-          "label": "public version card",
+          "label": "dox sheet",
           "repoPath": "swagbound-phaser/public/assets/story-nouns/act1/public-version-card.png",
           "imageSrc": "../../../swagbound-phaser/public/assets/story-nouns/act1/public-version-card.png",
           "runtimePath": "/assets/story-nouns/act1/public-version-card.png",
@@ -4826,11 +4829,11 @@
     },
     {
       "id": "public-version-flyer",
-      "label": "public version flyer",
+      "label": "dox flyer",
       "assets": [
         {
           "id": "swagbound-phaser-public-assets-story-nouns-act1-public-version-flyer",
-          "label": "public version flyer",
+          "label": "dox flyer",
           "repoPath": "swagbound-phaser/public/assets/story-nouns/act1/public-version-flyer.png",
           "imageSrc": "../../../swagbound-phaser/public/assets/story-nouns/act1/public-version-flyer.png",
           "runtimePath": "/assets/story-nouns/act1/public-version-flyer.png",

@@ -41,6 +41,9 @@
     .asset-list { border:1px solid var(--line); border-radius:6px; max-height:150px; overflow:auto; background:#fbfbf8; }
     .asset-row { display:grid; grid-template-columns:76px 54px 1fr; gap:6px; padding:5px 6px; border-bottom:1px solid var(--line); color:var(--muted); font-size:10px; overflow-wrap:anywhere; }
     .asset-row:last-child { border-bottom:0; }
+    .canon-banner { margin:12px 18px 0; padding:12px; border:1px solid #d8c58a; border-radius:8px; background:#fff7d7; color:#4d4426; }
+    .canon-banner strong { color:#2f2610; }
+    .notes { border-left:3px solid var(--line); padding-left:8px; }
     label { display:grid; gap:3px; color:var(--muted); font-size:11px; }
     .best-controls { display:grid; gap:6px; }
     .button-row { display:flex; gap:6px; flex-wrap:wrap; }
@@ -73,6 +76,7 @@
       <button id="showJson" type="button">Preview JSON</button>
     </nav>
   </header>
+  <section class="canon-banner"><strong>Drifella Source Check update:</strong> all Drifella / Drifella2 sprite sets on this page are wired to the friendly minigame lane. They are not Milady enemies by default; they represent hidden/scattered Drifella Source Check NPCs. Perfect clears reward a visual Card NFT based on Card NFT 2 plus one item.</section>
   <section class="toolbar">
     <input id="search" type="search" placeholder="Search paths, ids, categories">
     <select id="statusFilter">
@@ -5091,7 +5095,8 @@
           "height": 1024,
           "bytes": 1161146,
           "sha256": "89d19c07a7df633fe772c00e39738883c10c630381babf310cc5451d2bde7659",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0029-accepted-drifella-2-battle-v1-extracted-crop",
@@ -5108,7 +5113,8 @@
           "height": 260,
           "bytes": 101160,
           "sha256": "09b467a38d2719e9e025f039b1861bff3478c3958da89b430b56f80fc934a60c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella-2-battle-v1-alpha-extracted-source-size",
@@ -5125,7 +5131,8 @@
           "height": 1024,
           "bytes": 1161146,
           "sha256": "89d19c07a7df633fe772c00e39738883c10c630381babf310cc5451d2bde7659",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0029-accepted-drifella-2-overworld-v1-ow-001-nearest",
@@ -5142,7 +5149,8 @@
           "height": 48,
           "bytes": 3368,
           "sha256": "c42240d5ee4364320f547109df27f9b137f5500ce44a0aa003f9b2aaca55a32e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella-2-overworld-v1-ow-001-nearest",
@@ -5159,7 +5167,8 @@
           "height": 48,
           "bytes": 3368,
           "sha256": "c42240d5ee4364320f547109df27f9b137f5500ce44a0aa003f9b2aaca55a32e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -5167,13 +5176,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella-iii",
@@ -5194,7 +5212,8 @@
           "height": 1024,
           "bytes": 793564,
           "sha256": "a57cf194169097637e8185efd4fc5a2bbd1616e99cd6e35a3602ecf2716c2d8c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0040-accepted-drifella-iii-battle-v1-extracted-crop",
@@ -5211,7 +5230,8 @@
           "height": 260,
           "bytes": 83908,
           "sha256": "fe55b626bb8b5a4ce537a3f7e90b48f6011aa12d822fe5bee2c3b19e9d25697a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella-iii-battle-v1-alpha-extracted-source-size",
@@ -5228,7 +5248,8 @@
           "height": 1024,
           "bytes": 793564,
           "sha256": "a57cf194169097637e8185efd4fc5a2bbd1616e99cd6e35a3602ecf2716c2d8c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0040-accepted-drifella-iii-overworld-v1-ow-001-nearest",
@@ -5245,7 +5266,8 @@
           "height": 48,
           "bytes": 3049,
           "sha256": "3d1dd464fc351e8265c7b0a3444581a862ac2e731f27bf195bb468a909662fbf",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella-iii-overworld-v1-ow-001-nearest",
@@ -5262,7 +5284,8 @@
           "height": 48,
           "bytes": 3049,
           "sha256": "3d1dd464fc351e8265c7b0a3444581a862ac2e731f27bf195bb468a909662fbf",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -5270,13 +5293,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella-iii-overworld-map-token",
@@ -5297,7 +5329,8 @@
           "height": 1024,
           "bytes": 256907,
           "sha256": "da97c6643e807118f7634a5868b9b76bdc86fcdec4d1252f3a5e696b917a76af",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella-iii-overworld-map-token-retry-0001-accepted-drifella-iii-overworld-map-token-ow-001-haunted-mask-token-lanczos",
@@ -5314,7 +5347,8 @@
           "height": 48,
           "bytes": 3270,
           "sha256": "40418705ff2b7d42040d79e1dcc9256be3b4137ba25d37f4a41210b7b47fc792",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella-iii-overworld-map-token-retry-0001-accepted-drifella-iii-overworld-map-token-ow-001-haunted-mask-token-nearest",
@@ -5331,7 +5365,8 @@
           "height": 48,
           "bytes": 2326,
           "sha256": "dcf825bcf6477eeae5f66e52b97a9d14df8a8790be505326bda458a4e81ccd27",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella-iii-overworld-map-token-retry-0001-accepted-drifella-iii-overworld-map-token-ow-001-haunted-mask-token-raw-alpha-contained",
@@ -5348,7 +5383,8 @@
           "height": 48,
           "bytes": 3235,
           "sha256": "e733b6309595a337dd0cd459c6c2090c05b8b0dadf7488d45e7ba6ea27d95004",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella-iii-overworld-map-token-retry-0001-accepted-drifella-iii-overworld-map-token-ow-002-possessed-totem-token-alpha-extracted-source-size",
@@ -5365,7 +5401,8 @@
           "height": 1024,
           "bytes": 293107,
           "sha256": "6d4b05ce4427bcf4fb441d836da33883fa318a5eef8d04cb0c611bd5496e628e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella-iii-overworld-map-token-retry-0001-accepted-drifella-iii-overworld-map-token-ow-002-possessed-totem-token-lanczos",
@@ -5382,7 +5419,8 @@
           "height": 48,
           "bytes": 3731,
           "sha256": "23643fa6928c27b97a0163f8d74863c3bfb32bc3d18ac64e00f06ffe0f22b35d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella-iii-overworld-map-token-retry-0001-accepted-drifella-iii-overworld-map-token-ow-002-possessed-totem-token-nearest",
@@ -5399,7 +5437,8 @@
           "height": 48,
           "bytes": 2664,
           "sha256": "c80556c976704d6cdab49aeab67aa8794a60d2d5bb3b0d97a609082eec29b905",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella-iii-overworld-map-token-retry-0001-accepted-drifella-iii-overworld-map-token-ow-002-possessed-totem-token-raw-alpha-contained",
@@ -5416,19 +5455,29 @@
           "height": 48,
           "bytes": 3686,
           "sha256": "32fcfb230236f28c5d0b1f4774b4ca0da4993f54a0c474939e505e809b23392a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 8
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-1225",
@@ -5449,7 +5498,8 @@
           "height": 1024,
           "bytes": 897497,
           "sha256": "8dd07f92f6662ff5524d7ed337ab55f76d039715287fd92193a983facbfa470c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0053-accepted-drifella2-1225-battle-v1-extracted-crop",
@@ -5466,7 +5516,8 @@
           "height": 260,
           "bytes": 95446,
           "sha256": "78077d2050f06142e53d61b76ffe6a2e9aeed797839ba397cf4751ed74920245",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-1225-battle-v1-alpha-extracted-source-size",
@@ -5483,7 +5534,8 @@
           "height": 1024,
           "bytes": 897497,
           "sha256": "8dd07f92f6662ff5524d7ed337ab55f76d039715287fd92193a983facbfa470c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0053-accepted-drifella2-1225-overworld-v1-ow-001-nearest",
@@ -5500,7 +5552,8 @@
           "height": 48,
           "bytes": 3614,
           "sha256": "3530482cc65813dca2c22f68e75c3f6023764750036b80a07989f092f2ed515f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-1225-overworld-v1-ow-001-nearest",
@@ -5517,7 +5570,8 @@
           "height": 48,
           "bytes": 3614,
           "sha256": "3530482cc65813dca2c22f68e75c3f6023764750036b80a07989f092f2ed515f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -5525,13 +5579,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-1348",
@@ -5552,7 +5615,8 @@
           "height": 1024,
           "bytes": 553521,
           "sha256": "961103652d9d5f216220a5618c6c66261bab77f2989d640f0bf669c6c1a4e4c3",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-source-derived-canon-canary-0001-accepted-drifella2-1348-battle-v1-extracted-crop",
@@ -5569,7 +5633,8 @@
           "height": 260,
           "bytes": 77680,
           "sha256": "abc6c47c5133ec5e35aa52892a0b8c37f52bfda960b808c0e6030fffd9b99acb",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-source-derived-canon-canary-0002-accepted-drifella2-1348-battle-v1-alpha-extracted-source-size",
@@ -5586,7 +5651,8 @@
           "height": 1024,
           "bytes": 650272,
           "sha256": "2bb0cd22cf4bd9c090a4b1332be2f83d9b010ed3bd82e8ad5d81659edfada862",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-source-derived-canon-canary-0002-accepted-drifella2-1348-battle-v1-extracted-crop",
@@ -5603,7 +5669,8 @@
           "height": 260,
           "bytes": 83079,
           "sha256": "1c48481eb0082831b9e7bffa7b7f2717e75d2f343bb0dd2b166186b2ce4bea45",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0002-accepted-drifella2-1348-battle-v1-alpha-extracted-source-size",
@@ -5620,7 +5687,8 @@
           "height": 1024,
           "bytes": 583000,
           "sha256": "4f499c16bea0a9c9ced42c790495718bbf5758765ece0e5feef9f2e2db3c26db",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0002-accepted-drifella2-1348-battle-v1-extracted-crop",
@@ -5637,7 +5705,8 @@
           "height": 260,
           "bytes": 83659,
           "sha256": "58694182c501bd7e004e1c27a0a9ef393cde2c7525643e5829738d797c5bd814",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0003-accepted-drifella2-1348-battle-v1-alpha-extracted-source-size",
@@ -5654,7 +5723,8 @@
           "height": 1024,
           "bytes": 495190,
           "sha256": "058c3aeebb6657f3a30120b4cdbc8c3eab955862e5d1c5fbb59a4fced4ffd454",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0003-accepted-drifella2-1348-battle-v1-extracted-crop",
@@ -5671,7 +5741,8 @@
           "height": 260,
           "bytes": 76097,
           "sha256": "a1aa43d954f146cec74be94197cf254c12da27ba01b79b2b00bebdc978ae11ed",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0004-accepted-drifella2-1348-battle-v1-alpha-extracted-source-size",
@@ -5688,7 +5759,8 @@
           "height": 1024,
           "bytes": 425149,
           "sha256": "39ffeb293b61f37581c997409ab09e83a66a74dbddc080985f4c9d8804b5da29",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0004-accepted-drifella2-1348-battle-v1-extracted-crop",
@@ -5705,7 +5777,8 @@
           "height": 260,
           "bytes": 54067,
           "sha256": "480e959738438fda56659de4c79568ac307db07ea7eadbf28020cc3bef8ee521",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-overworld-from-approved-battle-0001-accepted-drifella2-1348-overworld-v1-alpha-extracted-source-size",
@@ -5722,7 +5795,8 @@
           "height": 1024,
           "bytes": 318712,
           "sha256": "c7aefb6a97d5c47414dcb3c12e64eb99bb33b11575f3121795456288cb274533",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-overworld-from-approved-battle-0001-accepted-drifella2-1348-overworld-v1-ow-001-alpha-extracted-source-size",
@@ -5739,7 +5813,8 @@
           "height": 1024,
           "bytes": 318712,
           "sha256": "c7aefb6a97d5c47414dcb3c12e64eb99bb33b11575f3121795456288cb274533",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-overworld-from-approved-battle-0001-accepted-drifella2-1348-overworld-v1-ow-001-lanczos",
@@ -5756,7 +5831,8 @@
           "height": 48,
           "bytes": 3957,
           "sha256": "7a2b7f3bd4e3705e7daa7ed6dc0be9d2275eb8c10b4176a4e9050102971f2856",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-overworld-from-approved-battle-0001-accepted-drifella2-1348-overworld-v1-ow-001-near",
@@ -5773,7 +5849,8 @@
           "height": 48,
           "bytes": 3144,
           "sha256": "f3a41f0cd7392174543711f293977a1b03ec611d4010deff33ccd0a0839eddf5",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-overworld-from-approved-battle-0001-accepted-drifella2-1348-overworld-v1-ow-001-nearest",
@@ -5790,7 +5867,8 @@
           "height": 48,
           "bytes": 3388,
           "sha256": "6103b05495a0a31bb4fed8b390df6f18cf4cb42ce442731b241375a8814a860f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-overworld-map-token-retry-0002-accepted-drifella2-1348-overworld-map-token-alpha-extracted-source-size",
@@ -5807,7 +5885,8 @@
           "height": 1024,
           "bytes": 210636,
           "sha256": "69d875e4ede40434c4cea366d2d2511705110e26ddd3fe3393098b4cbaa9cf4f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-overworld-map-token-retry-0002-accepted-drifella2-1348-overworld-map-token-ow-001-lanczos",
@@ -5824,7 +5903,8 @@
           "height": 48,
           "bytes": 3069,
           "sha256": "67d07b9377a07a6d24354ac41539dda9d20514f13429dc93f45f42a4bf68c163",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-overworld-map-token-retry-0002-accepted-drifella2-1348-overworld-map-token-ow-001-nearest",
@@ -5841,7 +5921,8 @@
           "height": 48,
           "bytes": 2417,
           "sha256": "d45b7a08114d02a21bbd503a8b29eb142e5fe804ad104811b9a7ccd1bf75f401",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0002-accepted-drifella2-1348-overworld-v1-ow-001-lanczos",
@@ -5858,7 +5939,8 @@
           "height": 48,
           "bytes": 4115,
           "sha256": "368296535fe61edcae3ab518b1649a50f3a3f4eef6540ef773a5ae091592ab8e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0002-accepted-drifella2-1348-overworld-v1-ow-001-nearest",
@@ -5875,7 +5957,8 @@
           "height": 48,
           "bytes": 3319,
           "sha256": "0f45f64d25f6d594ea2aa7aa8d4b39a099255d347e707df094e8e457de4e198b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0002-accepted-drifella2-1348-overworld-v1-ow-002-lanczos",
@@ -5892,7 +5975,8 @@
           "height": 48,
           "bytes": 4114,
           "sha256": "448672a09e9db583c8a16e4b1f9b0d4e9ca5471c0bc88835c89fbe4d656fff46",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0002-accepted-drifella2-1348-overworld-v1-ow-002-nearest",
@@ -5909,7 +5993,8 @@
           "height": 48,
           "bytes": 3332,
           "sha256": "c20710bbd2de5f15f829471ac18b410f9fafaba96c948d0c3c613a7eda5df861",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0003-accepted-drifella2-1348-overworld-v1-ow-001-lanczos",
@@ -5926,7 +6011,8 @@
           "height": 48,
           "bytes": 3562,
           "sha256": "5b6c69be0558b3f341c4f17779ebfaf778dc01c5fac592f097d3f4d13efc721f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0003-accepted-drifella2-1348-overworld-v1-ow-001-nearest",
@@ -5943,7 +6029,8 @@
           "height": 48,
           "bytes": 2829,
           "sha256": "67df722063289aa7fde9de209f49be8c7500359e5405bb23e2883908a03ac377",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0003-accepted-drifella2-1348-overworld-v1-ow-002-lanczos",
@@ -5960,7 +6047,8 @@
           "height": 48,
           "bytes": 4084,
           "sha256": "7bb2bd81ff2861b29293a8e4e497c66ad5171dc85634563632a62e737b6da667",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0003-accepted-drifella2-1348-overworld-v1-ow-002-nearest",
@@ -5977,7 +6065,8 @@
           "height": 48,
           "bytes": 3002,
           "sha256": "01b06e4f7817343d56f29f39cade81e09a60dcf9cd1afb0a9c0f821066234b09",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0004-accepted-drifella2-1348-overworld-v1-ow-001-lanczos",
@@ -5994,7 +6083,8 @@
           "height": 48,
           "bytes": 3896,
           "sha256": "d560dfc45e0010ef8faac44c68f8d761de2b830f410eedb5e58c5ae053d5e449",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0004-accepted-drifella2-1348-overworld-v1-ow-001-nearest",
@@ -6011,7 +6101,8 @@
           "height": 48,
           "bytes": 2980,
           "sha256": "d52cd09909757a39df3e5f85b75026a13238bdd356d82e1615fed8071e5022d0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0004-accepted-drifella2-1348-overworld-v1-ow-002-lanczos",
@@ -6028,7 +6119,8 @@
           "height": 48,
           "bytes": 3916,
           "sha256": "d7c37e21df0163c1f6402887114d67563ea80df1e1904c00f80bb1a588901d0f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-sprite-review-0004-accepted-drifella2-1348-overworld-v1-ow-002-nearest",
@@ -6045,7 +6137,8 @@
           "height": 48,
           "bytes": 3052,
           "sha256": "c6d747e698158eb7729724a0d7fafc95996b1a408d4b88c21b561c6cfc356033",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -6053,12 +6146,21 @@
         "overworld": 20
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-1348-battle-fidelity-exp",
@@ -6079,7 +6181,8 @@
           "height": 1024,
           "bytes": 628136,
           "sha256": "7de898ad7458bdeaa6e8e648ca1d0103c5a7d01374f57d64a1b3e6804b8256c8",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-fidelity-exp-0001-accepted-drifella2-1348-battle-fidelity-exp-v1-extracted-crop",
@@ -6096,7 +6199,8 @@
           "height": 260,
           "bytes": 81654,
           "sha256": "2f4eac4a4d9e6039772561b5c3381892b9eec8c7f80351cc163f23df391c8455",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-fidelity-exp-0002-accepted-drifella2-1348-battle-fidelity-exp-alpha-extracted-source-size",
@@ -6113,7 +6217,8 @@
           "height": 1024,
           "bytes": 634175,
           "sha256": "0cd9eaef64fa831191103022b63774008c6288ecefdca8b576ba240649cff93c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1348-fidelity-exp-0002-accepted-drifella2-1348-battle-fidelity-exp-v1-extracted-crop",
@@ -6130,19 +6235,29 @@
           "height": 260,
           "bytes": 77648,
           "sha256": "a4f600e478a455d9150a9102b6c6abc28171157e5890fc885f3fadde43365c04",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "battle": 4
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-1550",
@@ -6163,7 +6278,8 @@
           "height": 1024,
           "bytes": 979161,
           "sha256": "a4439a17fe0519752c6136fc044b9db058224574b5fdeea3b6bfbeaaf4157151",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0060-accepted-drifella2-1550-battle-v1-extracted-crop",
@@ -6180,7 +6296,8 @@
           "height": 260,
           "bytes": 100572,
           "sha256": "2dd4655e93681234a2ffcedb362912ce53c3c4ecc11796c32f3264a451cf9545",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-1550-battle-v1-alpha-extracted-source-size",
@@ -6197,7 +6314,8 @@
           "height": 1024,
           "bytes": 979161,
           "sha256": "a4439a17fe0519752c6136fc044b9db058224574b5fdeea3b6bfbeaaf4157151",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0060-accepted-drifella2-1550-overworld-v1-ow-001-nearest",
@@ -6214,7 +6332,8 @@
           "height": 48,
           "bytes": 4246,
           "sha256": "c336e163e46b74f325564c9212806730443380505301003f6e120e63db978413",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-1550-overworld-v1-ow-001-nearest",
@@ -6231,7 +6350,8 @@
           "height": 48,
           "bytes": 4246,
           "sha256": "c336e163e46b74f325564c9212806730443380505301003f6e120e63db978413",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -6239,13 +6359,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-1561",
@@ -6266,7 +6395,8 @@
           "height": 1024,
           "bytes": 812927,
           "sha256": "81575f11a64aa779f1a6e3887331438f58ab70cd4dd1d0fb3863049cfced64f7",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-1561-battle-v1-extracted-crop",
@@ -6283,7 +6413,8 @@
           "height": 260,
           "bytes": 79863,
           "sha256": "a2ae2a983628ce604cecebe336e54d9cfdb9b0d0e6ba6c6862ecc86bcc2b1bf3",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-1561-battle-v1-alpha-extracted-source-size",
@@ -6300,7 +6431,8 @@
           "height": 1024,
           "bytes": 812927,
           "sha256": "81575f11a64aa779f1a6e3887331438f58ab70cd4dd1d0fb3863049cfced64f7",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-1561-overworld-v1-ow-001-lanczos",
@@ -6317,7 +6449,8 @@
           "height": 48,
           "bytes": 5775,
           "sha256": "5683b8683917a5334194522664de24affae39b28928c097abaf1c20f0de79533",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-1561-overworld-v1-ow-001-nearest",
@@ -6334,7 +6467,8 @@
           "height": 48,
           "bytes": 4134,
           "sha256": "9dba7c0a96df66de3badd40f51286a3df5533beb8008903ca9bc5b5aacfe1975",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-1561-overworld-v1-ow-002-lanczos",
@@ -6351,7 +6485,8 @@
           "height": 48,
           "bytes": 6251,
           "sha256": "31409ac83e9cce34315c0ca0723e70f23baa80bda3386040fae48caea21dbac8",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-1561-overworld-v1-ow-002-nearest",
@@ -6368,7 +6503,8 @@
           "height": 48,
           "bytes": 4581,
           "sha256": "678066ae6123ba891a0714302f612b690e6fd7df8bf41290c33f8d70e866d6a3",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-1561-overworld-v1-ow-001-nearest",
@@ -6385,7 +6521,8 @@
           "height": 48,
           "bytes": 4134,
           "sha256": "9dba7c0a96df66de3badd40f51286a3df5533beb8008903ca9bc5b5aacfe1975",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -6393,13 +6530,22 @@
         "overworld": 5
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-1561-overworld-v1",
@@ -6420,7 +6566,8 @@
           "height": 856,
           "bytes": 465449,
           "sha256": "5f78c291f805fa87ef3f665d568ca4a2b26ee6d494c4f1ca71ada756ac30c696",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-1561-overworld-v1-ow-002-extracted-source-crop",
@@ -6437,19 +6584,29 @@
           "height": 956,
           "bytes": 723757,
           "sha256": "9146fff3427deedf7fd0d088603bcce68b32c4b1d82393c8661cb1183cd5d975",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-1591",
@@ -6470,7 +6627,8 @@
           "height": 1024,
           "bytes": 967697,
           "sha256": "007b887a7d08bb453c1e17e86893b37aa4c267777156e2f6160f12149f620823",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1591-source-derived-canon-0001-accepted-drifella2-1591-battle-v1-extracted-crop",
@@ -6487,7 +6645,8 @@
           "height": 260,
           "bytes": 102581,
           "sha256": "938621382a911a945a10bdf79095d306f7640d09ed06bd78bf07627eb29f933d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1591-source-derived-canon-0001-accepted-drifella2-1591-overworld-v1-ow-001-lanczos",
@@ -6504,7 +6663,8 @@
           "height": 48,
           "bytes": 3869,
           "sha256": "79f3ca795541909635b11490f52abfc0f09d92c1d04918ab74c4a38bc72a6551",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1591-source-derived-canon-0001-accepted-drifella2-1591-overworld-v1-ow-001-nearest",
@@ -6521,7 +6681,8 @@
           "height": 48,
           "bytes": 2860,
           "sha256": "02fce9446664671bafb367f69201f17777070281cd1af3110f75ec2ca697e1ec",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1591-source-derived-canon-0001-accepted-drifella2-1591-overworld-v1-ow-001-raw-alpha-contained",
@@ -6538,7 +6699,8 @@
           "height": 48,
           "bytes": 3713,
           "sha256": "7e73eba2c7fd3ba0f72e6f974d7cee375fd90d9978bd64aee13b2453cbaa96ec",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1591-source-derived-canon-0001-accepted-drifella2-1591-overworld-v1-ow-002-lanczos",
@@ -6555,7 +6717,8 @@
           "height": 48,
           "bytes": 4358,
           "sha256": "e50466226790ed803084057ea7bab59bb778fd8dcdf4f0d86d9be3b08b5d1fd9",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1591-source-derived-canon-0001-accepted-drifella2-1591-overworld-v1-ow-002-nearest",
@@ -6572,7 +6735,8 @@
           "height": 48,
           "bytes": 3118,
           "sha256": "a5f52dcd07b4992e4edf0ba5e6d10e1a0cf319a92be99e2198165ee6816533c3",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-1591-source-derived-canon-0001-accepted-drifella2-1591-overworld-v1-ow-002-raw-alpha-contained",
@@ -6589,7 +6753,8 @@
           "height": 48,
           "bytes": 3921,
           "sha256": "a36e7bd8594548b0b68d3104d7cd5f2e38f0a46bdea0a394f323abda28b6e16a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -6597,12 +6762,21 @@
         "overworld": 6
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-2189",
@@ -6623,7 +6797,8 @@
           "height": 1024,
           "bytes": 1237064,
           "sha256": "0f18c428b3f07f93b2cf555955ee73af64b8250637d0ccacfa4bf392e77696c5",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-2189-source-derived-canon-0001-accepted-drifella2-2189-battle-v1-extracted-crop",
@@ -6640,7 +6815,8 @@
           "height": 260,
           "bytes": 112893,
           "sha256": "4f0188ceb55d783c967bc82f88c598d5855bcd9bfb1fb1c6da714364480db8c3",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-2189-source-derived-canon-0001-accepted-drifella2-2189-overworld-v1-ow-001-lanczos",
@@ -6657,7 +6833,8 @@
           "height": 48,
           "bytes": 4566,
           "sha256": "465dc96cf344d62f9fedba845f9c4226fbcd67b53ebdfda42aa52a46a8199058",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-2189-source-derived-canon-0001-accepted-drifella2-2189-overworld-v1-ow-001-nearest",
@@ -6674,7 +6851,8 @@
           "height": 48,
           "bytes": 3333,
           "sha256": "2c864cf753a5df6e72e4bc53b6754ae63febc3eb9501106971f87c86fff5aceb",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-2189-source-derived-canon-0001-accepted-drifella2-2189-overworld-v1-ow-001-raw-alpha-contained",
@@ -6691,7 +6869,8 @@
           "height": 48,
           "bytes": 4171,
           "sha256": "5e3d80386831ee41e9f697c8d17e6ee1003b7c04060f2899f8a39880360824b4",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-2189-source-derived-canon-0001-accepted-drifella2-2189-overworld-v1-ow-002-lanczos",
@@ -6708,7 +6887,8 @@
           "height": 48,
           "bytes": 4204,
           "sha256": "9f71fc9fb1f5e2e6f8d1ec8bbda6a48d27e17a531c5c5160d6b738b5bd3e1eb0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-2189-source-derived-canon-0001-accepted-drifella2-2189-overworld-v1-ow-002-nearest",
@@ -6725,7 +6905,8 @@
           "height": 48,
           "bytes": 3083,
           "sha256": "51d25eb93b031473ce3bf5d1ef378c42db66f95427a1d3b022a0d4e37c3e6bba",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-2189-source-derived-canon-0001-accepted-drifella2-2189-overworld-v1-ow-002-raw-alpha-contained",
@@ -6742,7 +6923,8 @@
           "height": 48,
           "bytes": 4025,
           "sha256": "a651bc77a327612586cc5ddfe2f66217999c4acdb724d02db77a230e61b78f93",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -6750,12 +6932,21 @@
         "overworld": 6
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-2520",
@@ -6776,7 +6967,8 @@
           "height": 1024,
           "bytes": 1160846,
           "sha256": "77bee2ab4c18e6cafc929e61d99dbc1ac3b09ee4ee75ae727c481f27490d2076",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0052-accepted-drifella2-2520-battle-v1-extracted-crop",
@@ -6793,7 +6985,8 @@
           "height": 260,
           "bytes": 114436,
           "sha256": "ec816a213fdf62355aa7173042e3161a05da7c17a6ad153eb57f83bc43da4166",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-2520-battle-v1-alpha-extracted-source-size",
@@ -6810,7 +7003,8 @@
           "height": 1024,
           "bytes": 1160846,
           "sha256": "77bee2ab4c18e6cafc929e61d99dbc1ac3b09ee4ee75ae727c481f27490d2076",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0052-accepted-drifella2-2520-overworld-v1-ow-001-nearest",
@@ -6827,7 +7021,8 @@
           "height": 48,
           "bytes": 4324,
           "sha256": "3f460304301deb8c4b11c509ed1f428e67b729400276bd34850c91960b5920d0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-2520-overworld-v1-ow-001-nearest",
@@ -6844,7 +7039,8 @@
           "height": 48,
           "bytes": 4324,
           "sha256": "3f460304301deb8c4b11c509ed1f428e67b729400276bd34850c91960b5920d0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -6852,13 +7048,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-255",
@@ -6879,7 +7084,8 @@
           "height": 1024,
           "bytes": 1191126,
           "sha256": "3af02cb178c5712bf1e1ec9e0cae7234e4507eeef3503dc890aed745b722e22a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0059-accepted-drifella2-255-battle-v1-extracted-crop",
@@ -6896,7 +7102,8 @@
           "height": 260,
           "bytes": 100398,
           "sha256": "cc6d1b98a72d5312f45ff1abb7427942ba33c8535c41395ab2a1bead0005397f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-255-battle-v1-alpha-extracted-source-size",
@@ -6913,7 +7120,8 @@
           "height": 1024,
           "bytes": 1191126,
           "sha256": "3af02cb178c5712bf1e1ec9e0cae7234e4507eeef3503dc890aed745b722e22a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0059-accepted-drifella2-255-overworld-v1-ow-001-nearest",
@@ -6930,7 +7138,8 @@
           "height": 48,
           "bytes": 3815,
           "sha256": "e988de934f8412b4f170b41d2dd0e1ff86dc6de15a8f1a83a7ba103193373d91",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-255-overworld-v1-ow-001-nearest",
@@ -6947,7 +7156,8 @@
           "height": 48,
           "bytes": 3815,
           "sha256": "e988de934f8412b4f170b41d2dd0e1ff86dc6de15a8f1a83a7ba103193373d91",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -6955,13 +7165,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-2907",
@@ -6982,7 +7201,8 @@
           "height": 1024,
           "bytes": 958946,
           "sha256": "e6a187a23d17435648e2c42b37948c9456dc25e9af9521507148e451ad8eca31",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0002-accepted-drifella2-2907-battle-v1-extracted-crop",
@@ -6999,7 +7219,8 @@
           "height": 260,
           "bytes": 92072,
           "sha256": "e6d18d93fc97dffb5edaf7e6b5cf3775ab3be15d1a81b68c31e6a8c4cd92074f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-2907-battle-v1-alpha-extracted-source-size",
@@ -7016,7 +7237,8 @@
           "height": 1024,
           "bytes": 958946,
           "sha256": "e6a187a23d17435648e2c42b37948c9456dc25e9af9521507148e451ad8eca31",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0002-accepted-drifella2-2907-overworld-v1-ow-001-nearest",
@@ -7033,7 +7255,8 @@
           "height": 48,
           "bytes": 3223,
           "sha256": "c8685e8fac10dc456931f1ca6b8975e06726e8074d0a8d1191d58e22c5826b22",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-2907-overworld-v1-ow-001-nearest",
@@ -7050,7 +7273,8 @@
           "height": 48,
           "bytes": 3223,
           "sha256": "c8685e8fac10dc456931f1ca6b8975e06726e8074d0a8d1191d58e22c5826b22",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -7058,13 +7282,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-2919",
@@ -7085,7 +7318,8 @@
           "height": 1024,
           "bytes": 751402,
           "sha256": "12e4a7395bc8f944411ad62bfd478649143fb0e7f67370b5bb58e30b242533f0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0058-accepted-drifella2-2919-battle-v1-extracted-crop",
@@ -7102,7 +7336,8 @@
           "height": 260,
           "bytes": 87600,
           "sha256": "9e629a6e8d6c0ee54f6f23c4cf0ff022d9fd6110751afcf79697252e21640a7a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-2919-battle-v1-alpha-extracted-source-size",
@@ -7119,7 +7354,8 @@
           "height": 1024,
           "bytes": 751402,
           "sha256": "12e4a7395bc8f944411ad62bfd478649143fb0e7f67370b5bb58e30b242533f0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0058-accepted-drifella2-2919-overworld-v1-ow-001-nearest",
@@ -7136,7 +7372,8 @@
           "height": 48,
           "bytes": 3485,
           "sha256": "1b232266c33856d3f2e59000c50ebe71a07e8a7ca71087ba3a4df0e92cffb246",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-2919-overworld-v1-ow-001-nearest",
@@ -7153,7 +7390,8 @@
           "height": 48,
           "bytes": 3485,
           "sha256": "1b232266c33856d3f2e59000c50ebe71a07e8a7ca71087ba3a4df0e92cffb246",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -7161,13 +7399,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-2950",
@@ -7188,7 +7435,8 @@
           "height": 1024,
           "bytes": 575563,
           "sha256": "31fe4dc1a76c082b07567c2610608fddf4a428ad285906fed85682c680c18661",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0045-accepted-drifella2-2950-battle-v1-extracted-crop",
@@ -7205,7 +7453,8 @@
           "height": 260,
           "bytes": 69139,
           "sha256": "786ab6ba597ad86a24bca945689fd0852956209c3131aeb5b287b1f1d3c83b22",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-2950-battle-v1-alpha-extracted-source-size",
@@ -7222,7 +7471,8 @@
           "height": 1024,
           "bytes": 575563,
           "sha256": "31fe4dc1a76c082b07567c2610608fddf4a428ad285906fed85682c680c18661",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0045-accepted-drifella2-2950-overworld-v1-ow-001-nearest",
@@ -7239,7 +7489,8 @@
           "height": 48,
           "bytes": 3278,
           "sha256": "b4b696f2aadc73a7debd2b288d072373c1e20b39317d61c7a001b0b824fb2144",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-2950-overworld-v1-ow-001-nearest",
@@ -7256,7 +7507,8 @@
           "height": 48,
           "bytes": 3278,
           "sha256": "b4b696f2aadc73a7debd2b288d072373c1e20b39317d61c7a001b0b824fb2144",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -7264,13 +7516,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-3028",
@@ -7291,7 +7552,8 @@
           "height": 1024,
           "bytes": 1037263,
           "sha256": "c0ccb6664104fde5cc6f837e0f8918573f1a8e03c6ca84ae3c82f62ed8b054ed",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3028-source-derived-canon-0001-accepted-drifella2-3028-battle-v1-extracted-crop",
@@ -7308,19 +7570,29 @@
           "height": 260,
           "bytes": 93063,
           "sha256": "43359c065a86803e96d6123fda913b704be785bc68151c54b28fdfa5ee879d19",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "battle": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-3122",
@@ -7341,7 +7613,8 @@
           "height": 1024,
           "bytes": 615312,
           "sha256": "81f035db40dc136423c20950eb3364f3471e0641aefc93718ac2b03c1bc389f2",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0002-accepted-drifella2-3122-battle-v1-extracted-crop",
@@ -7358,7 +7631,8 @@
           "height": 260,
           "bytes": 80599,
           "sha256": "c02a336ab6c36dab6d4c2297d03fa06fa17131626b74533892ccd83ee05eed28",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3122-battle-v1-alpha-extracted-source-size",
@@ -7375,7 +7649,8 @@
           "height": 1024,
           "bytes": 615312,
           "sha256": "81f035db40dc136423c20950eb3364f3471e0641aefc93718ac2b03c1bc389f2",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0002-accepted-drifella2-3122-overworld-v1-ow-001-nearest",
@@ -7392,7 +7667,8 @@
           "height": 48,
           "bytes": 3513,
           "sha256": "8520bbd0f173514da69c7dcf9edf88c3c20ea0fbfddc2219181cacff3b82c8ad",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3122-overworld-v1-ow-001-nearest",
@@ -7409,7 +7685,8 @@
           "height": 48,
           "bytes": 3513,
           "sha256": "8520bbd0f173514da69c7dcf9edf88c3c20ea0fbfddc2219181cacff3b82c8ad",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -7417,13 +7694,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-3303",
@@ -7444,7 +7730,8 @@
           "height": 1024,
           "bytes": 624926,
           "sha256": "c433f2944d6b1d8bd17f9052b5c09f0180febcd52fa67660d008d4ffff86877e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0048-accepted-drifella2-3303-battle-v1-extracted-crop",
@@ -7461,7 +7748,8 @@
           "height": 260,
           "bytes": 68245,
           "sha256": "425aa2ff47a050528235048336836d92322a70eea9add95896c0c1019ee2ba93",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3303-battle-v1-alpha-extracted-source-size",
@@ -7478,7 +7766,8 @@
           "height": 1024,
           "bytes": 624926,
           "sha256": "c433f2944d6b1d8bd17f9052b5c09f0180febcd52fa67660d008d4ffff86877e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0048-accepted-drifella2-3303-overworld-v1-ow-001-nearest",
@@ -7495,7 +7784,8 @@
           "height": 48,
           "bytes": 3384,
           "sha256": "b9b92d3ba8e9a32bb10fc25bd62d7f5bc6ab578bf60957034c731da02b777bf2",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3303-overworld-v1-ow-001-nearest",
@@ -7512,7 +7802,8 @@
           "height": 48,
           "bytes": 3384,
           "sha256": "b9b92d3ba8e9a32bb10fc25bd62d7f5bc6ab578bf60957034c731da02b777bf2",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -7520,13 +7811,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-3313-gpt-ow-retry-v1",
@@ -7547,7 +7847,8 @@
           "height": 1024,
           "bytes": 352594,
           "sha256": "3b60cebf501624032470a3455b0779e09737cf058cff84c83a332b18a65a58d2",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3313-gpt-ow-retry-from-battle-0001-accepted-drifella2-3313-gpt-ow-retry-v1-ow-001-classic-biped-map-token-lanczos",
@@ -7564,7 +7865,8 @@
           "height": 48,
           "bytes": 3215,
           "sha256": "2c8572123bf4991e0be796ff488145c74d0fb9c9e0992e559fd3341739c8f702",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3313-gpt-ow-retry-from-battle-0001-accepted-drifella2-3313-gpt-ow-retry-v1-ow-001-classic-biped-map-token-nearest",
@@ -7581,7 +7883,8 @@
           "height": 48,
           "bytes": 2575,
           "sha256": "e657ca149b5c1755a2db3efdad80c9034e4e9728b44cb29b8b1a119be5698a98",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3313-gpt-ow-retry-from-battle-0001-accepted-drifella2-3313-gpt-ow-retry-v1-ow-001-classic-biped-map-token-raw-alpha-contained",
@@ -7598,7 +7901,8 @@
           "height": 48,
           "bytes": 3280,
           "sha256": "4e0529868e5ec82d4ecb6cea6048e371bf2aef5abeb99beb2f0c6563aac73f41",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3313-gpt-ow-retry-from-battle-0001-accepted-drifella2-3313-gpt-ow-retry-v1-ow-002-simplified-map-token-alpha-extracted-source-size",
@@ -7615,7 +7919,8 @@
           "height": 1024,
           "bytes": 308527,
           "sha256": "e8ef81af3a268219d94022e227289fa62cb9a48d955715a3a193a5ba09944beb",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3313-gpt-ow-retry-from-battle-0001-accepted-drifella2-3313-gpt-ow-retry-v1-ow-002-simplified-map-token-lanczos",
@@ -7632,7 +7937,8 @@
           "height": 48,
           "bytes": 3066,
           "sha256": "e0ccf6db498620664253de91981cea4a21be6048d3682518c4da7a22d6255827",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3313-gpt-ow-retry-from-battle-0001-accepted-drifella2-3313-gpt-ow-retry-v1-ow-002-simplified-map-token-nearest",
@@ -7649,7 +7955,8 @@
           "height": 48,
           "bytes": 2341,
           "sha256": "9d2e4a4008737e8a2ca59daf265e64560c02ac863672241c35ae6a1790e50b32",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3313-gpt-ow-retry-from-battle-0001-accepted-drifella2-3313-gpt-ow-retry-v1-ow-002-simplified-map-token-raw-alpha-contained",
@@ -7666,19 +7973,29 @@
           "height": 48,
           "bytes": 2989,
           "sha256": "e3f1abdb300f8586eb2b99e0c076148021caf286ffe8afd20ebeec9721b47faa",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 8
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-3800",
@@ -7699,7 +8016,8 @@
           "height": 1024,
           "bytes": 731778,
           "sha256": "67026f8161ca0c8d059fc388cb19e93de44d68c71daeaff8e69d6f7de3034983",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0059-accepted-drifella2-3800-battle-v1-extracted-crop",
@@ -7716,7 +8034,8 @@
           "height": 260,
           "bytes": 87709,
           "sha256": "174a26ca237259e8f9f951beca7c5a0d58fce23beadd57bc1f6a90363f04358b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3800-battle-v1-alpha-extracted-source-size",
@@ -7733,7 +8052,8 @@
           "height": 1024,
           "bytes": 731778,
           "sha256": "67026f8161ca0c8d059fc388cb19e93de44d68c71daeaff8e69d6f7de3034983",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0059-accepted-drifella2-3800-overworld-v1-ow-001-nearest",
@@ -7750,7 +8070,8 @@
           "height": 48,
           "bytes": 3709,
           "sha256": "a1fa8035174a9e80face5c7b1d460bab51e1eca85cf22bc41b9ab596f2bb4cc1",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3800-overworld-v1-ow-001-nearest",
@@ -7767,7 +8088,8 @@
           "height": 48,
           "bytes": 3709,
           "sha256": "a1fa8035174a9e80face5c7b1d460bab51e1eca85cf22bc41b9ab596f2bb4cc1",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -7775,13 +8097,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-3836",
@@ -7802,7 +8133,8 @@
           "height": 1024,
           "bytes": 685236,
           "sha256": "165ad65d03508b9e6deabb3f4f1eafcab1f9b5862e827280cf1640fc60858b2b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0050-accepted-drifella2-3836-battle-v1-extracted-crop",
@@ -7819,7 +8151,8 @@
           "height": 260,
           "bytes": 75685,
           "sha256": "ae3102263dde102b168e402e584939ab0f811884fd348bc442dc5836c7c9437c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3836-battle-v1-alpha-extracted-source-size",
@@ -7836,7 +8169,8 @@
           "height": 1024,
           "bytes": 685236,
           "sha256": "165ad65d03508b9e6deabb3f4f1eafcab1f9b5862e827280cf1640fc60858b2b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0050-accepted-drifella2-3836-overworld-v1-ow-001-nearest",
@@ -7853,7 +8187,8 @@
           "height": 48,
           "bytes": 3560,
           "sha256": "7f740f227cdea77ea66f81e055d1fc5506698965519440afb2d164ae84ce4b33",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3836-overworld-v1-ow-001-nearest",
@@ -7870,7 +8205,8 @@
           "height": 48,
           "bytes": 3560,
           "sha256": "7f740f227cdea77ea66f81e055d1fc5506698965519440afb2d164ae84ce4b33",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -7878,13 +8214,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-3857",
@@ -7905,7 +8250,8 @@
           "height": 1024,
           "bytes": 643531,
           "sha256": "d6ca2902d38cacf0f92c73beb7af40e0345d2d2272d4bf7e1f176d6b1628afa7",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0048-accepted-drifella2-3857-battle-v1-extracted-crop",
@@ -7922,7 +8268,8 @@
           "height": 260,
           "bytes": 76537,
           "sha256": "e98a29058c81275e8ca4128c60e91111be4f40a235d3d166810e95ed3979c7e1",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3857-battle-v1-alpha-extracted-source-size",
@@ -7939,7 +8286,8 @@
           "height": 1024,
           "bytes": 643531,
           "sha256": "d6ca2902d38cacf0f92c73beb7af40e0345d2d2272d4bf7e1f176d6b1628afa7",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0048-accepted-drifella2-3857-overworld-v1-ow-001-nearest",
@@ -7956,7 +8304,8 @@
           "height": 48,
           "bytes": 3158,
           "sha256": "b02159adebfbaa9425902d9db988303b327ca2c2a0b1442146e0040e2211e44b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-3857-overworld-v1-ow-001-nearest",
@@ -7973,7 +8322,8 @@
           "height": 48,
           "bytes": 3158,
           "sha256": "b02159adebfbaa9425902d9db988303b327ca2c2a0b1442146e0040e2211e44b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -7981,13 +8331,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-3900",
@@ -8008,7 +8367,8 @@
           "height": 1024,
           "bytes": 1000362,
           "sha256": "1f4da0863a8259d2952fdd3bf9dd28bf020126b488297b23f1aea5e8079baafb",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3900-source-derived-canon-0001-accepted-drifella2-3900-battle-v1-extracted-crop",
@@ -8025,7 +8385,8 @@
           "height": 260,
           "bytes": 97423,
           "sha256": "789bdd94ead708d1937af2ef62b138d3705f9458dbe4178e750846cef095316c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3900-source-derived-canon-0001-accepted-drifella2-3900-overworld-v1-ow-001-lanczos",
@@ -8042,7 +8403,8 @@
           "height": 48,
           "bytes": 3989,
           "sha256": "c7b8d3308246b8987c6b23e40a92b550b2e45af0960772dc357d0faccdf93ae4",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3900-source-derived-canon-0001-accepted-drifella2-3900-overworld-v1-ow-001-nearest",
@@ -8059,7 +8421,8 @@
           "height": 48,
           "bytes": 2992,
           "sha256": "6367219453eb3ebb633b45ca261b63ab457fa8df8e2a3dc98909c537a0cd8fdd",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3900-source-derived-canon-0001-accepted-drifella2-3900-overworld-v1-ow-001-raw-alpha-contained",
@@ -8076,7 +8439,8 @@
           "height": 48,
           "bytes": 3810,
           "sha256": "9bf2334f48a32122d61233a55bc00c17059541f9dbcf429dbaae77af503bfe2b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3900-source-derived-canon-0001-accepted-drifella2-3900-overworld-v1-ow-002-lanczos",
@@ -8093,7 +8457,8 @@
           "height": 48,
           "bytes": 4780,
           "sha256": "f9a67dff35c70357991029eea93e893eca0bc54761fcbf621b0b84ef9488a5d3",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3900-source-derived-canon-0001-accepted-drifella2-3900-overworld-v1-ow-002-nearest",
@@ -8110,7 +8475,8 @@
           "height": 48,
           "bytes": 3746,
           "sha256": "7a84d62cc85a0c109d761405b68d0ef09b03b77ff5b5551c900bb3d434057113",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-3900-source-derived-canon-0001-accepted-drifella2-3900-overworld-v1-ow-002-raw-alpha-contained",
@@ -8127,7 +8493,8 @@
           "height": 48,
           "bytes": 4727,
           "sha256": "4ae9fba0899d6ae28164c8223e0317476999a656f3eed34c48ab9794c9a91e1f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -8135,12 +8502,21 @@
         "overworld": 6
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-4456",
@@ -8161,7 +8537,8 @@
           "height": 1024,
           "bytes": 954482,
           "sha256": "e4bc05bea3ddab9a243857283e10c488bd15a71ade632b0fffd1607e34a6d12f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-4456-battle-v1-extracted-crop",
@@ -8178,7 +8555,8 @@
           "height": 260,
           "bytes": 90842,
           "sha256": "c61a718f673a3de61aaa5dfb8844e719ef62664e4978cdfac514e964e84521ca",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-4456-overworld-v1-ow-001-lanczos",
@@ -8195,7 +8573,8 @@
           "height": 48,
           "bytes": 5177,
           "sha256": "c7f6048bcabb312d4a4d5246a255bb3e2108002a1b48e8ccc240b671d1e7ba22",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-4456-overworld-v1-ow-001-nearest",
@@ -8212,7 +8591,8 @@
           "height": 48,
           "bytes": 4100,
           "sha256": "2f2b119a4e62ee835a3792c4167819160f98413cbb69d722ff45800cd2718857",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-4456-overworld-v1-ow-002-lanczos",
@@ -8229,7 +8609,8 @@
           "height": 48,
           "bytes": 5094,
           "sha256": "b390c1535ec4e8d9169812fb90d28c22b07bd6cfee548925a958af926b3db253",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-4456-overworld-v1-ow-002-nearest",
@@ -8246,7 +8627,8 @@
           "height": 48,
           "bytes": 4079,
           "sha256": "b76931629861904b8b434837ffc209585de4e1e618a9e9723e46492a155a6ff4",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-4456-overworld-v1-ow-001-nearest",
@@ -8263,7 +8645,8 @@
           "height": 48,
           "bytes": 4100,
           "sha256": "2f2b119a4e62ee835a3792c4167819160f98413cbb69d722ff45800cd2718857",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -8271,13 +8654,22 @@
         "overworld": 5
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-4456-battle-retry-source-lock-v1",
@@ -8298,7 +8690,8 @@
           "height": 1024,
           "bytes": 845981,
           "sha256": "f7e96d7ec0eb619fa658d85d96a7cc6f047657a4b95ab2cdc3feab41288a9d44",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-4456-battle-retry-source-lock-v1-extracted-crop",
@@ -8315,7 +8708,8 @@
           "height": 260,
           "bytes": 97844,
           "sha256": "4c0c85d41f2c935a9e91f8398eb47ac3c1deaab22a759f0de7f39ea54a45416c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-4456-battle-retry-source-lock-v1-alpha-extracted-source-size",
@@ -8332,20 +8726,30 @@
           "height": 1024,
           "bytes": 845981,
           "sha256": "f7e96d7ec0eb619fa658d85d96a7cc6f047657a4b95ab2cdc3feab41288a9d44",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "battle": 3
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-4456-overworld-v1",
@@ -8366,7 +8770,8 @@
           "height": 942,
           "bytes": 507868,
           "sha256": "0378f3ea231e03f34cd0b51c327f4dde0016c3afdd91ad074b4142cdeb1fb7fa",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-4456-overworld-v1-ow-002-extracted-source-crop",
@@ -8383,19 +8788,29 @@
           "height": 909,
           "bytes": 460515,
           "sha256": "7ea389db83fcc8aa9afecea6df0a2a3b84f17889b872b765ae92077fcfc2be90",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-4944",
@@ -8416,7 +8831,8 @@
           "height": 1024,
           "bytes": 1086810,
           "sha256": "2f843ce38cd79c37fb652f7c344e4b17f2361a0869e5ef6af86f90dc21eda1e0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0050-accepted-drifella2-4944-battle-v1-extracted-crop",
@@ -8433,7 +8849,8 @@
           "height": 260,
           "bytes": 105376,
           "sha256": "ce925647c9ca3434a6f5ddc839a82e1815c748c7dda09a8d64e25c1a5b38df5b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-4944-battle-v1-alpha-extracted-source-size",
@@ -8450,7 +8867,8 @@
           "height": 1024,
           "bytes": 1086810,
           "sha256": "2f843ce38cd79c37fb652f7c344e4b17f2361a0869e5ef6af86f90dc21eda1e0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0050-accepted-drifella2-4944-overworld-v1-ow-001-nearest",
@@ -8467,7 +8885,8 @@
           "height": 48,
           "bytes": 3834,
           "sha256": "018c03d21a0eb9d5369bb47cdf826990a10c13b516d4f657d72b26ee91facc2b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-4944-overworld-v1-ow-001-nearest",
@@ -8484,7 +8903,8 @@
           "height": 48,
           "bytes": 3834,
           "sha256": "018c03d21a0eb9d5369bb47cdf826990a10c13b516d4f657d72b26ee91facc2b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -8492,13 +8912,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-5110",
@@ -8519,7 +8948,8 @@
           "height": 1024,
           "bytes": 775278,
           "sha256": "e2837e0e813d4669c40f3c3e859838b9dd58d7cd13f266cbc848311afd760a2f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0052-accepted-drifella2-5110-battle-v1-extracted-crop",
@@ -8536,7 +8966,8 @@
           "height": 260,
           "bytes": 82502,
           "sha256": "9c578630fdd074446b00d5cc9fc17f90f7fe5a4b8dcf2b3733ae0ea63a32800d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5110-battle-v1-alpha-extracted-source-size",
@@ -8553,7 +8984,8 @@
           "height": 1024,
           "bytes": 775278,
           "sha256": "e2837e0e813d4669c40f3c3e859838b9dd58d7cd13f266cbc848311afd760a2f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0052-accepted-drifella2-5110-overworld-v1-ow-001-nearest",
@@ -8570,7 +9002,8 @@
           "height": 48,
           "bytes": 3389,
           "sha256": "3a06929d25b75432c5afff76b7cc5c2fee1b3edf84184a1fdaaf9db46a3cafcc",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5110-overworld-v1-ow-001-nearest",
@@ -8587,7 +9020,8 @@
           "height": 48,
           "bytes": 3389,
           "sha256": "3a06929d25b75432c5afff76b7cc5c2fee1b3edf84184a1fdaaf9db46a3cafcc",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -8595,13 +9029,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-5372",
@@ -8622,7 +9065,8 @@
           "height": 1024,
           "bytes": 757586,
           "sha256": "3d66e133950ae9361cf9eb48ff2ca4d0ce3768661a746d66e0c6cf94a0d8cfbe",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0001-accepted-drifella2-5372-battle-v1-extracted-crop",
@@ -8639,7 +9083,8 @@
           "height": 260,
           "bytes": 100670,
           "sha256": "06f3c1307505ea2e96cefd41329ddd26e79ab05159ed9f510cc90acd7f2350e8",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5372-battle-v1-alpha-extracted-source-size",
@@ -8656,7 +9101,8 @@
           "height": 1024,
           "bytes": 757586,
           "sha256": "3d66e133950ae9361cf9eb48ff2ca4d0ce3768661a746d66e0c6cf94a0d8cfbe",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0001-accepted-drifella2-5372-overworld-v1-ow-001-nearest",
@@ -8673,7 +9119,8 @@
           "height": 48,
           "bytes": 4127,
           "sha256": "e1a5b1eaa64b85a65d8674833bdc7e737c9739ddef1d429cb1821ce2208314ea",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5372-overworld-v1-ow-001-nearest",
@@ -8690,7 +9137,8 @@
           "height": 48,
           "bytes": 4127,
           "sha256": "e1a5b1eaa64b85a65d8674833bdc7e737c9739ddef1d429cb1821ce2208314ea",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -8698,13 +9146,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-5720",
@@ -8725,7 +9182,8 @@
           "height": 1024,
           "bytes": 903810,
           "sha256": "bceb028638b5aff2b76a6c0b1e283a35171306d07d3ff3deb599781af8e87dff",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0045-accepted-drifella2-5720-battle-v1-extracted-crop",
@@ -8742,7 +9200,8 @@
           "height": 260,
           "bytes": 69071,
           "sha256": "dedbba821b95b522d2305c3c7f30bb626bfef7d7e7c31453c9062491d29f6d41",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5720-battle-v1-alpha-extracted-source-size",
@@ -8759,7 +9218,8 @@
           "height": 1024,
           "bytes": 903810,
           "sha256": "bceb028638b5aff2b76a6c0b1e283a35171306d07d3ff3deb599781af8e87dff",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0045-accepted-drifella2-5720-overworld-v1-ow-001-nearest",
@@ -8776,7 +9236,8 @@
           "height": 48,
           "bytes": 3325,
           "sha256": "c3fe8c623c50abf4a6ccf26584d302b2034670f821378c14102a6de4c60a47ed",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5720-overworld-v1-ow-001-nearest",
@@ -8793,7 +9254,8 @@
           "height": 48,
           "bytes": 3325,
           "sha256": "c3fe8c623c50abf4a6ccf26584d302b2034670f821378c14102a6de4c60a47ed",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -8801,13 +9263,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-5774",
@@ -8828,7 +9299,8 @@
           "height": 1024,
           "bytes": 550794,
           "sha256": "9b70bdb728fd5fa90e576e8f75b08a90c2b12b1dfe5c94bf6c421214726ab1fd",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0058-accepted-drifella2-5774-battle-v1-extracted-crop",
@@ -8845,7 +9317,8 @@
           "height": 260,
           "bytes": 69127,
           "sha256": "50d1d3703f0c1ef15dc18b3675cfe415522670946148925ad310e7742aee7b04",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5774-battle-v1-alpha-extracted-source-size",
@@ -8862,7 +9335,8 @@
           "height": 1024,
           "bytes": 550794,
           "sha256": "9b70bdb728fd5fa90e576e8f75b08a90c2b12b1dfe5c94bf6c421214726ab1fd",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0058-accepted-drifella2-5774-overworld-v1-ow-001-nearest",
@@ -8879,7 +9353,8 @@
           "height": 48,
           "bytes": 3215,
           "sha256": "41a706d3b51a82f86b6b88ece03f7e839d6395dac6747f4d84a5c9b7747c4a8b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5774-overworld-v1-ow-001-nearest",
@@ -8896,7 +9371,8 @@
           "height": 48,
           "bytes": 3215,
           "sha256": "41a706d3b51a82f86b6b88ece03f7e839d6395dac6747f4d84a5c9b7747c4a8b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -8904,13 +9380,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-5893",
@@ -8931,7 +9416,8 @@
           "height": 1024,
           "bytes": 634154,
           "sha256": "a62a6304e597f5eee8c6348a3dcdaf1beb0690f12cfd550b69c655e54ffcbc42",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0047-accepted-drifella2-5893-battle-v1-extracted-crop",
@@ -8948,7 +9434,8 @@
           "height": 260,
           "bytes": 69218,
           "sha256": "38f25581787f306974f33cf580abbf50543fbfeae6970de109faf3a64ff87846",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5893-battle-v1-alpha-extracted-source-size",
@@ -8965,7 +9452,8 @@
           "height": 1024,
           "bytes": 634154,
           "sha256": "a62a6304e597f5eee8c6348a3dcdaf1beb0690f12cfd550b69c655e54ffcbc42",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0047-accepted-drifella2-5893-overworld-v1-ow-001-nearest",
@@ -8982,7 +9470,8 @@
           "height": 48,
           "bytes": 3307,
           "sha256": "11d02637f60b4f479c49b971277c0b7b096553afec5970d166cb90d7f2f3b588",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-5893-overworld-v1-ow-001-nearest",
@@ -8999,7 +9488,8 @@
           "height": 48,
           "bytes": 3307,
           "sha256": "11d02637f60b4f479c49b971277c0b7b096553afec5970d166cb90d7f2f3b588",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9007,13 +9497,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-6440",
@@ -9034,7 +9533,8 @@
           "height": 1024,
           "bytes": 771726,
           "sha256": "ee1830d5dcafe937c93708709966ce0b533970862b61a3ef3b6bb68a5054ee5a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0048-accepted-drifella2-6440-battle-v1-extracted-crop",
@@ -9051,7 +9551,8 @@
           "height": 260,
           "bytes": 77812,
           "sha256": "6733f76a6f01e9cb42edafc49977a53fdd0e301d05ebe1d1083fae0a1176a841",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-6440-battle-v1-alpha-extracted-source-size",
@@ -9068,7 +9569,8 @@
           "height": 1024,
           "bytes": 771726,
           "sha256": "ee1830d5dcafe937c93708709966ce0b533970862b61a3ef3b6bb68a5054ee5a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0048-accepted-drifella2-6440-overworld-v1-ow-001-nearest",
@@ -9085,7 +9587,8 @@
           "height": 48,
           "bytes": 3252,
           "sha256": "7ea932af8c3defe8ab8f8a9a1888e8f74ff0b0382bf4f147efb607a1dde02574",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-6440-overworld-v1-ow-001-nearest",
@@ -9102,7 +9605,8 @@
           "height": 48,
           "bytes": 3252,
           "sha256": "7ea932af8c3defe8ab8f8a9a1888e8f74ff0b0382bf4f147efb607a1dde02574",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9110,13 +9614,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-6708",
@@ -9137,7 +9650,8 @@
           "height": 1024,
           "bytes": 1377140,
           "sha256": "249a564d4b5f0c63ff42b6aa1ca6f9dece413b48774926416250004358846fcc",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0058-accepted-drifella2-6708-battle-v1-extracted-crop",
@@ -9154,7 +9668,8 @@
           "height": 260,
           "bytes": 123270,
           "sha256": "9ffd45f993641c5bcc9ff7fea9604f4c4d07e6af40ffdeca5fc6592e98530b9c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-6708-battle-v1-alpha-extracted-source-size",
@@ -9171,7 +9686,8 @@
           "height": 1024,
           "bytes": 1377140,
           "sha256": "249a564d4b5f0c63ff42b6aa1ca6f9dece413b48774926416250004358846fcc",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0058-accepted-drifella2-6708-overworld-v1-ow-001-nearest",
@@ -9188,7 +9704,8 @@
           "height": 48,
           "bytes": 3646,
           "sha256": "724fe66c670dd2cdac9f0ddd315677aa970469a4b2042230a1ffeb4b039f201a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-6708-overworld-v1-ow-001-nearest",
@@ -9205,7 +9722,8 @@
           "height": 48,
           "bytes": 3646,
           "sha256": "724fe66c670dd2cdac9f0ddd315677aa970469a4b2042230a1ffeb4b039f201a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9213,13 +9731,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-6914",
@@ -9240,7 +9767,8 @@
           "height": 1024,
           "bytes": 591867,
           "sha256": "86030bf87732d70f77590b7967d57deb3d995b7bdf3130b1b32bb23b1324e0e7",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0001-accepted-drifella2-6914-battle-v1-extracted-crop",
@@ -9257,7 +9785,8 @@
           "height": 260,
           "bytes": 65167,
           "sha256": "c609fb8c8e7b980a118ccf2e0f73b3cd96526793e7bc9f43762093a07a581747",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-6914-battle-v1-alpha-extracted-source-size",
@@ -9274,7 +9803,8 @@
           "height": 1024,
           "bytes": 591867,
           "sha256": "86030bf87732d70f77590b7967d57deb3d995b7bdf3130b1b32bb23b1324e0e7",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0001-accepted-drifella2-6914-overworld-v1-ow-001-nearest",
@@ -9291,7 +9821,8 @@
           "height": 48,
           "bytes": 3206,
           "sha256": "d5029ff2355d30f127928d156061d5f08e3762cb25787ecc0061f580654b49cc",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-6914-overworld-v1-ow-001-nearest",
@@ -9308,7 +9839,8 @@
           "height": 48,
           "bytes": 3206,
           "sha256": "d5029ff2355d30f127928d156061d5f08e3762cb25787ecc0061f580654b49cc",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9316,13 +9848,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-720",
@@ -9343,7 +9884,8 @@
           "height": 1024,
           "bytes": 715666,
           "sha256": "293829474d6c12c915ec7e4855b9fc27e040e6c75e5038953b0f36812f0d7257",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0047-accepted-drifella2-720-battle-v1-extracted-crop",
@@ -9360,7 +9902,8 @@
           "height": 260,
           "bytes": 77647,
           "sha256": "3b4fa08e4dced116c4fb003a93df173f9177df08e78f0485a7c017f3f6e9ef74",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-720-battle-v1-alpha-extracted-source-size",
@@ -9377,7 +9920,8 @@
           "height": 1024,
           "bytes": 715666,
           "sha256": "293829474d6c12c915ec7e4855b9fc27e040e6c75e5038953b0f36812f0d7257",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0047-accepted-drifella2-720-overworld-v1-ow-001-nearest",
@@ -9394,7 +9938,8 @@
           "height": 48,
           "bytes": 3463,
           "sha256": "bd88b348f7024a1138f4067b9c2830015767fe9b2d95d74c38e7f914ce4cca4c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-720-overworld-v1-ow-001-nearest",
@@ -9411,7 +9956,8 @@
           "height": 48,
           "bytes": 3463,
           "sha256": "bd88b348f7024a1138f4067b9c2830015767fe9b2d95d74c38e7f914ce4cca4c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9419,13 +9965,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-7347",
@@ -9446,7 +10001,8 @@
           "height": 1024,
           "bytes": 847845,
           "sha256": "4537abe326f40142335d6844752699aec12e22090c17e5b521a422a48a097a1d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0049-accepted-drifella2-7347-battle-v1-extracted-crop",
@@ -9463,7 +10019,8 @@
           "height": 260,
           "bytes": 86009,
           "sha256": "47882cf728a3668ca854b91b0b05f07b407ed9ebe7c23ab4a17f399d02fb8d4f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7347-battle-v1-alpha-extracted-source-size",
@@ -9480,7 +10037,8 @@
           "height": 1024,
           "bytes": 847845,
           "sha256": "4537abe326f40142335d6844752699aec12e22090c17e5b521a422a48a097a1d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0049-accepted-drifella2-7347-overworld-v1-ow-001-nearest",
@@ -9497,7 +10055,8 @@
           "height": 48,
           "bytes": 3469,
           "sha256": "5ac254491f5f4b4c5a2b80b8add0906308d7b959b732742677fdce3134e2945a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7347-overworld-v1-ow-001-nearest",
@@ -9514,7 +10073,8 @@
           "height": 48,
           "bytes": 3469,
           "sha256": "5ac254491f5f4b4c5a2b80b8add0906308d7b959b732742677fdce3134e2945a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9522,13 +10082,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-7483",
@@ -9549,7 +10118,8 @@
           "height": 1024,
           "bytes": 794529,
           "sha256": "c98007b57ff1fa42f40e20df757691c4b813cbab9d82ed499d648994352f13f6",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0060-accepted-drifella2-7483-battle-v1-extracted-crop",
@@ -9566,7 +10136,8 @@
           "height": 260,
           "bytes": 85370,
           "sha256": "cf621f77c3e56e8c2efe38e42a3947bd2e53f0d156ea07445c289327b6b47421",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7483-battle-v1-alpha-extracted-source-size",
@@ -9583,7 +10154,8 @@
           "height": 1024,
           "bytes": 794529,
           "sha256": "c98007b57ff1fa42f40e20df757691c4b813cbab9d82ed499d648994352f13f6",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0060-accepted-drifella2-7483-overworld-v1-ow-001-nearest",
@@ -9600,7 +10172,8 @@
           "height": 48,
           "bytes": 3492,
           "sha256": "af13b4b9b7005ad410a308872d900e84fc80d0ab70b1495dabb72446f00bd115",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7483-overworld-v1-ow-001-nearest",
@@ -9617,7 +10190,8 @@
           "height": 48,
           "bytes": 3492,
           "sha256": "af13b4b9b7005ad410a308872d900e84fc80d0ab70b1495dabb72446f00bd115",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9625,13 +10199,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-7735",
@@ -9652,7 +10235,8 @@
           "height": 1024,
           "bytes": 650871,
           "sha256": "1843341b2533cfd259df976fdde1253cfc76347505285e0972c02bf7fe9befdb",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0047-accepted-drifella2-7735-battle-v1-extracted-crop",
@@ -9669,7 +10253,8 @@
           "height": 260,
           "bytes": 78694,
           "sha256": "9b1df1ee97f73ac62ed5bb2dd9decb743c8e30d6b41a0b3507ddb78ff41a5e37",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7735-battle-v1-alpha-extracted-source-size",
@@ -9686,7 +10271,8 @@
           "height": 1024,
           "bytes": 650871,
           "sha256": "1843341b2533cfd259df976fdde1253cfc76347505285e0972c02bf7fe9befdb",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0047-accepted-drifella2-7735-overworld-v1-ow-001-nearest",
@@ -9703,7 +10289,8 @@
           "height": 48,
           "bytes": 3203,
           "sha256": "a34317d3577ef603eed851987a5d3563a35f88eb967e9eef08b15a314d206e36",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7735-overworld-v1-ow-001-nearest",
@@ -9720,7 +10307,8 @@
           "height": 48,
           "bytes": 3203,
           "sha256": "a34317d3577ef603eed851987a5d3563a35f88eb967e9eef08b15a314d206e36",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9728,13 +10316,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-7866",
@@ -9755,7 +10352,8 @@
           "height": 1024,
           "bytes": 848504,
           "sha256": "3eba44cdd74b76f0eee1f7844f95557ec0d3a55c9e4cb300265843656c6e218d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0053-accepted-drifella2-7866-battle-v1-extracted-crop",
@@ -9772,7 +10370,8 @@
           "height": 260,
           "bytes": 85994,
           "sha256": "a3d7ec1aa8d9216d7967402e7ffca879a43b4a930a48750950cbef40d3ea3ae3",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7866-battle-v1-alpha-extracted-source-size",
@@ -9789,7 +10388,8 @@
           "height": 1024,
           "bytes": 848504,
           "sha256": "3eba44cdd74b76f0eee1f7844f95557ec0d3a55c9e4cb300265843656c6e218d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0053-accepted-drifella2-7866-overworld-v1-ow-001-nearest",
@@ -9806,7 +10406,8 @@
           "height": 48,
           "bytes": 3244,
           "sha256": "50605fd0e682ab183e2c572d01467012167a317bc305cde3d551ad74208644ad",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7866-overworld-v1-ow-001-nearest",
@@ -9823,7 +10424,8 @@
           "height": 48,
           "bytes": 3244,
           "sha256": "50605fd0e682ab183e2c572d01467012167a317bc305cde3d551ad74208644ad",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9831,13 +10433,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-7908",
@@ -9858,7 +10469,8 @@
           "height": 1024,
           "bytes": 639192,
           "sha256": "d44fdeba1f322acd7c6bb13bff01bea28e5a1e0bac1f9d9dc5dd882e7305e0ae",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0049-accepted-drifella2-7908-battle-v1-extracted-crop",
@@ -9875,7 +10487,8 @@
           "height": 260,
           "bytes": 75745,
           "sha256": "7e15f5c5ac4635e4ecafea0ea7335e17459120c64ed5a7494af3a1c0311cb76a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7908-battle-v1-alpha-extracted-source-size",
@@ -9892,7 +10505,8 @@
           "height": 1024,
           "bytes": 639192,
           "sha256": "d44fdeba1f322acd7c6bb13bff01bea28e5a1e0bac1f9d9dc5dd882e7305e0ae",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0049-accepted-drifella2-7908-overworld-v1-ow-001-nearest",
@@ -9909,7 +10523,8 @@
           "height": 48,
           "bytes": 3318,
           "sha256": "4e15cc9286b4cda5598545521f4773722a28f5240c445da4bdfefa791ca4ce6e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-7908-overworld-v1-ow-001-nearest",
@@ -9926,7 +10541,8 @@
           "height": 48,
           "bytes": 3318,
           "sha256": "4e15cc9286b4cda5598545521f4773722a28f5240c445da4bdfefa791ca4ce6e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -9934,13 +10550,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8245",
@@ -9961,7 +10586,8 @@
           "height": 1024,
           "bytes": 641850,
           "sha256": "f5c63908b0871d493deb5a44a0254fe9e92f98fdc367e600a7087df9635c289e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0001-accepted-drifella2-8245-battle-v1-extracted-crop",
@@ -9978,7 +10604,8 @@
           "height": 260,
           "bytes": 79715,
           "sha256": "b8b12e5e10e0c177074d604108e2cca2e660acb2284f7995ffa06d6d600014e4",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-single-sprite-0002-accepted-drifella2-8245-battle-v2-extracted-crop",
@@ -9995,7 +10622,8 @@
           "height": 260,
           "bytes": 61264,
           "sha256": "72dca1a25b2357f80b844dad667aef202189ee860164a694a0230038e0cc8236",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8245-battle-v1-alpha-extracted-source-size",
@@ -10012,7 +10640,8 @@
           "height": 1024,
           "bytes": 641850,
           "sha256": "f5c63908b0871d493deb5a44a0254fe9e92f98fdc367e600a7087df9635c289e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0001-accepted-drifella2-8245-overworld-v1-ow-001-nearest",
@@ -10029,7 +10658,8 @@
           "height": 48,
           "bytes": 3140,
           "sha256": "b182e97fdc095c00ebad7f720cea39b69da1ac4190dc0ee8cd0d240a77a710b0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8245-overworld-v1-ow-001-nearest",
@@ -10046,7 +10676,8 @@
           "height": 48,
           "bytes": 3140,
           "sha256": "b182e97fdc095c00ebad7f720cea39b69da1ac4190dc0ee8cd0d240a77a710b0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -10054,13 +10685,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8245-battle-canonical-v1",
@@ -10081,19 +10721,29 @@
           "height": 260,
           "bytes": 69214,
           "sha256": "ad521c7309fb159922fd99812d0672d765401201372a5345e7819bfab1cc5e71",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "battle": 1
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8245-battle-canonical-v1-alpha-source-size",
@@ -10114,19 +10764,29 @@
           "height": 1254,
           "bytes": 802557,
           "sha256": "6dab3ae69db4fb71f51b8dd09bcee4b5079324a5b2ee4d584c985729ca85056d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "battle": 1
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8245-battle-v2-alpha-source-size",
@@ -10147,19 +10807,29 @@
           "height": 1254,
           "bytes": 659530,
           "sha256": "bf7ad4272b5d1199c3f56a43037c3c6135937a1dc19a0c2ed74fe7596fdc3d24",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "battle": 1
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8245-overworld-canonical-v1",
@@ -10180,19 +10850,29 @@
           "height": 48,
           "bytes": 2789,
           "sha256": "5edfe8293e96a8d7e77a4e1ab4064c345de00e11842594275f94900458bbaed5",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 1
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8245-overworld-earthbound-study-v1",
@@ -10213,7 +10893,8 @@
           "height": 48,
           "bytes": 2211,
           "sha256": "c9b3c3fc32c1a8de2f7578ffb3ffa70a54d6df4874f898c208b5fb83cf434e0a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-canonical-sprite-0001-accepted-drifella2-8245-overworld-earthbound-study-v1-ow-002-native32-nearest",
@@ -10230,19 +10911,29 @@
           "height": 48,
           "bytes": 1921,
           "sha256": "26133f9c3709190d93a9495030d16797184de095ed98fe2c612c47e490350a2e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8245-overworld-earthbound-study-v1-alpha-source-size",
@@ -10263,19 +10954,29 @@
           "height": 1254,
           "bytes": 267648,
           "sha256": "d39e923dbc0d38f434f20b1be3c00f1946a2aebfeed33b6376e82eb61163cdeb",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 1
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8275",
@@ -10296,7 +10997,8 @@
           "height": 1024,
           "bytes": 630543,
           "sha256": "ac4fd48f70ce733635609d6badcff400b4c2d3d392a4f5ac6b37dc72dbc609d2",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0049-accepted-drifella2-8275-battle-v1-extracted-crop",
@@ -10313,7 +11015,8 @@
           "height": 260,
           "bytes": 68229,
           "sha256": "0aa8e4b849cf6da75f8856de19e07566e035121e293a213af7b06b80d6b0e435",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8275-battle-v1-alpha-extracted-source-size",
@@ -10330,7 +11033,8 @@
           "height": 1024,
           "bytes": 630543,
           "sha256": "ac4fd48f70ce733635609d6badcff400b4c2d3d392a4f5ac6b37dc72dbc609d2",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0049-accepted-drifella2-8275-overworld-v1-ow-001-nearest",
@@ -10347,7 +11051,8 @@
           "height": 48,
           "bytes": 3694,
           "sha256": "1def83f3d61ab027c7f5f148230e79fa5ac89dbe4d6f1c856cb7e0d38234bd86",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8275-overworld-v1-ow-001-nearest",
@@ -10364,7 +11069,8 @@
           "height": 48,
           "bytes": 3694,
           "sha256": "1def83f3d61ab027c7f5f148230e79fa5ac89dbe4d6f1c856cb7e0d38234bd86",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -10372,13 +11078,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8303",
@@ -10399,7 +11114,8 @@
           "height": 1024,
           "bytes": 672571,
           "sha256": "e8b29ba98d6de716a744e0f1df7c8b4e92b8effda1e4889eb4f805ef370d7e03",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0045-accepted-drifella2-8303-battle-v1-extracted-crop",
@@ -10416,7 +11132,8 @@
           "height": 260,
           "bytes": 67775,
           "sha256": "e6b40c78fd57ab9246acc7733120ea85fbc8560e2d8281587180a552215b6f8b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8303-battle-v1-alpha-extracted-source-size",
@@ -10433,7 +11150,8 @@
           "height": 1024,
           "bytes": 672571,
           "sha256": "e8b29ba98d6de716a744e0f1df7c8b4e92b8effda1e4889eb4f805ef370d7e03",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0045-accepted-drifella2-8303-overworld-v1-ow-001-nearest",
@@ -10450,7 +11168,8 @@
           "height": 48,
           "bytes": 3601,
           "sha256": "8874a915b25085372c4d787dff0c7c9dc008361cc8072105d0f7519c2adc913a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8303-overworld-v1-ow-001-nearest",
@@ -10467,7 +11186,8 @@
           "height": 48,
           "bytes": 3601,
           "sha256": "8874a915b25085372c4d787dff0c7c9dc008361cc8072105d0f7519c2adc913a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -10475,13 +11195,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8397",
@@ -10502,7 +11231,8 @@
           "height": 1024,
           "bytes": 719026,
           "sha256": "e151245361feb0de6a1ba175492ef0f83fb81560f413bb70f0ed9f34e635e69c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-8397-source-derived-canon-0001-accepted-drifella2-8397-battle-v1-extracted-crop",
@@ -10519,7 +11249,8 @@
           "height": 260,
           "bytes": 83342,
           "sha256": "127f2646e2b9d2ba562ce35fc1ff86f3d19961577b1ff47627eac39685d00751",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-8397-source-derived-canon-0001-accepted-drifella2-8397-overworld-v1-ow-001-lanczos",
@@ -10536,7 +11267,8 @@
           "height": 48,
           "bytes": 88,
           "sha256": "b0a78e5095d79f7cb384f8e12a88ff3aed39844b52d0f217d5104db496475f4b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-8397-source-derived-canon-0001-accepted-drifella2-8397-overworld-v1-ow-001-nearest",
@@ -10553,7 +11285,8 @@
           "height": 48,
           "bytes": 88,
           "sha256": "b0a78e5095d79f7cb384f8e12a88ff3aed39844b52d0f217d5104db496475f4b",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -10561,12 +11294,21 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8397-gpt-ow-retry-v1",
@@ -10587,7 +11329,8 @@
           "height": 1024,
           "bytes": 305939,
           "sha256": "b38a091877131e7c1b750ab5c40a2021507985b9f3d7009ccdcc741a716674a4",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-8397-gpt-ow-retry-0001-accepted-drifella2-8397-gpt-ow-retry-v1-ow-001-lanczos",
@@ -10604,7 +11347,8 @@
           "height": 48,
           "bytes": 3761,
           "sha256": "8c98bb98867e65cfcf5105b1d357019e34efb3a5e3cc407c8c7138eb29c6da1e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-8397-gpt-ow-retry-0001-accepted-drifella2-8397-gpt-ow-retry-v1-ow-001-nearest",
@@ -10621,19 +11365,29 @@
           "height": 48,
           "bytes": 2781,
           "sha256": "31fe41495cd0fea67cdab5f176097b5fed9c237a17e7595bb2fb01cdad37d61f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 3
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8397-gpt-ow-retry-v3",
@@ -10654,7 +11408,8 @@
           "height": 1024,
           "bytes": 395141,
           "sha256": "4c6516e015c7d06b4c99d0d8e8c6404ecc8f7d52fbce43eecbc850d35d5532e7",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-8397-gpt-ow-retry-0003-accepted-drifella2-8397-gpt-ow-retry-v3-ow-001-lanczos",
@@ -10671,7 +11426,8 @@
           "height": 48,
           "bytes": 4043,
           "sha256": "95a3babf1786cdd257cc6ff822a998e5cd358c749a8e01d45cef1fb12c9071d8",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-8397-gpt-ow-retry-0003-accepted-drifella2-8397-gpt-ow-retry-v3-ow-001-nearest",
@@ -10688,7 +11444,8 @@
           "height": 48,
           "bytes": 2958,
           "sha256": "5326e12e53c9984431c3b0c323e23895073f43c532f3982aab450f3b319d15ae",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-8397-gpt-ow-retry-0003-accepted-drifella2-8397-gpt-ow-retry-v3-ow-001-raw-alpha-contained-48",
@@ -10705,19 +11462,29 @@
           "height": 48,
           "bytes": 5077,
           "sha256": "16671897c1d6b9a164022db3bfc965a4acca73f55304bdeb4c64b62319132318",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 4
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8794",
@@ -10738,7 +11505,8 @@
           "height": 1024,
           "bytes": 495994,
           "sha256": "35c7448f3bbac8598278adbed67b54ffc20f4342bedf4b5dfa5d269b6adb2849",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0053-accepted-drifella2-8794-battle-v1-extracted-crop",
@@ -10755,7 +11523,8 @@
           "height": 260,
           "bytes": 55084,
           "sha256": "5fe089537c48cb4aff5b513774f081938f81b5d28cce3897e00090593305f8ac",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8794-battle-v1-alpha-extracted-source-size",
@@ -10772,7 +11541,8 @@
           "height": 1024,
           "bytes": 495994,
           "sha256": "35c7448f3bbac8598278adbed67b54ffc20f4342bedf4b5dfa5d269b6adb2849",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0053-accepted-drifella2-8794-overworld-v1-ow-001-nearest",
@@ -10789,7 +11559,8 @@
           "height": 48,
           "bytes": 2824,
           "sha256": "d654ab16fcba9f1b58351fd25bc6f3ac591bd167ec5dd7c98e2fea3c6040517c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8794-overworld-v1-ow-001-nearest",
@@ -10806,7 +11577,8 @@
           "height": 48,
           "bytes": 2824,
           "sha256": "d654ab16fcba9f1b58351fd25bc6f3ac591bd167ec5dd7c98e2fea3c6040517c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -10814,13 +11586,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8834",
@@ -10841,7 +11622,8 @@
           "height": 1024,
           "bytes": 641562,
           "sha256": "3f270bead9241f66007ff9f0b320930cc5d29ca55a20d926c79a562f2cd5f299",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-8834-battle-v1-extracted-crop",
@@ -10858,7 +11640,8 @@
           "height": 260,
           "bytes": 68094,
           "sha256": "1a5bd3ebe5cc86dfec96f5e5c90007e566c4c06c28ec860a5e56e9c4e6ba5ce6",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-8834-overworld-v1-ow-001-lanczos",
@@ -10875,7 +11658,8 @@
           "height": 48,
           "bytes": 4997,
           "sha256": "9907717dd48380c6af4f8561e0a51f8ae0df499cc0f4cb6000ee3b8ca09c267c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-8834-overworld-v1-ow-001-nearest",
@@ -10892,7 +11676,8 @@
           "height": 48,
           "bytes": 3555,
           "sha256": "b7a5b4530e1f4da11c20ffeef9e09952ee18e795d107895d06d82c3aa2f1f90f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-8834-overworld-v1-ow-002-lanczos",
@@ -10909,7 +11694,8 @@
           "height": 48,
           "bytes": 4964,
           "sha256": "be8f97b7d3ce2e2e5678c963216b5b147433d67f0df9defe5f206445e89785b0",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-8834-overworld-v1-ow-002-nearest",
@@ -10926,7 +11712,8 @@
           "height": 48,
           "bytes": 3565,
           "sha256": "63444e53dca9d7a505d25ff4e86f35b8992f827e95a0c12739d10e287269643a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8834-overworld-v1-ow-001-nearest",
@@ -10943,7 +11730,8 @@
           "height": 48,
           "bytes": 3555,
           "sha256": "b7a5b4530e1f4da11c20ffeef9e09952ee18e795d107895d06d82c3aa2f1f90f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -10951,13 +11739,22 @@
         "overworld": 5
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8834-battle-retry-source-lock-v1",
@@ -10978,7 +11775,8 @@
           "height": 1024,
           "bytes": 508422,
           "sha256": "8d0e1ecc5335196009fd3567fb33d9b1f6459e74b8adf25a6d80ab011dd8aa91",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-8834-battle-retry-source-lock-v1-extracted-crop",
@@ -10995,7 +11793,8 @@
           "height": 260,
           "bytes": 58721,
           "sha256": "fd1f0661d6a518a88788d052defede562d02a825d3c5c5ef30d361184d3f0f8f",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8834-battle-retry-source-lock-v1-alpha-extracted-source-size",
@@ -11012,20 +11811,30 @@
           "height": 1024,
           "bytes": 508422,
           "sha256": "8d0e1ecc5335196009fd3567fb33d9b1f6459e74b8adf25a6d80ab011dd8aa91",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "battle": 3
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8834-overworld-v1",
@@ -11046,7 +11855,8 @@
           "height": 871,
           "bytes": 412964,
           "sha256": "7e09349602a861a8d3c33a1d3dbebee6b2f0de5ebf5339c2ccd0e20682f17161",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-skill-sprite-test-0003-accepted-drifella2-8834-overworld-v1-ow-002-extracted-source-crop",
@@ -11063,19 +11873,29 @@
           "height": 822,
           "bytes": 348829,
           "sha256": "555b4ee4216283c6141cd771843e7db52e78cf119bbecd9e5db0a1ed600e4854",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-8884",
@@ -11096,7 +11916,8 @@
           "height": 1024,
           "bytes": 650616,
           "sha256": "5858bd9ed60fd17a10fdb0ab27c2c13ffbb69deb2fcf36c30ccfce313c27177e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0060-accepted-drifella2-8884-battle-v1-extracted-crop",
@@ -11113,7 +11934,8 @@
           "height": 260,
           "bytes": 73269,
           "sha256": "7302a341372096e0bae9ec7255d355e9c5f4f98e2b6227938628bd8e08506139",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8884-battle-v1-alpha-extracted-source-size",
@@ -11130,7 +11952,8 @@
           "height": 1024,
           "bytes": 650616,
           "sha256": "5858bd9ed60fd17a10fdb0ab27c2c13ffbb69deb2fcf36c30ccfce313c27177e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0060-accepted-drifella2-8884-overworld-v1-ow-001-nearest",
@@ -11147,7 +11970,8 @@
           "height": 48,
           "bytes": 3041,
           "sha256": "ccab63038f5d52992bb7b260215e96dacc640d7f5d8c5cb5edfb4564a76838fe",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-8884-overworld-v1-ow-001-nearest",
@@ -11164,7 +11988,8 @@
           "height": 48,
           "bytes": 3041,
           "sha256": "ccab63038f5d52992bb7b260215e96dacc640d7f5d8c5cb5edfb4564a76838fe",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -11172,13 +11997,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-9168",
@@ -11199,7 +12033,8 @@
           "height": 1024,
           "bytes": 667134,
           "sha256": "8751b4c5ac1c1827aad035cabb37da5ea4109cb97ee3ee4ff70862628b5a5477",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0052-accepted-drifella2-9168-battle-v1-extracted-crop",
@@ -11216,7 +12051,8 @@
           "height": 260,
           "bytes": 86130,
           "sha256": "2b2dc5613d3753b34ff7b30c077c6da1530bdf40d3d395999d8203d60b5b130c",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-9168-battle-v1-alpha-extracted-source-size",
@@ -11233,7 +12069,8 @@
           "height": 1024,
           "bytes": 667134,
           "sha256": "8751b4c5ac1c1827aad035cabb37da5ea4109cb97ee3ee4ff70862628b5a5477",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0052-accepted-drifella2-9168-overworld-v1-ow-001-nearest",
@@ -11250,7 +12087,8 @@
           "height": 48,
           "bytes": 2389,
           "sha256": "905e598fcfea618c7863282cd68fb330ce3873b0921683867a634887b86e7fcb",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-9168-overworld-v1-ow-001-nearest",
@@ -11267,7 +12105,8 @@
           "height": 48,
           "bytes": 2389,
           "sha256": "905e598fcfea618c7863282cd68fb330ce3873b0921683867a634887b86e7fcb",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -11275,13 +12114,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-9189",
@@ -11302,7 +12150,8 @@
           "height": 1024,
           "bytes": 821663,
           "sha256": "74319e36ac972fa9419c777a4755a7f95855417cc6d1fec3279c54f4570e9951",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0050-accepted-drifella2-9189-battle-v1-extracted-crop",
@@ -11319,7 +12168,8 @@
           "height": 260,
           "bytes": 82220,
           "sha256": "4a3b3fbf4da631bee1e03e9829b7d6562223610070f8e6aac2e88f1cdc349f7e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-9189-battle-v1-alpha-extracted-source-size",
@@ -11336,7 +12186,8 @@
           "height": 1024,
           "bytes": 821663,
           "sha256": "74319e36ac972fa9419c777a4755a7f95855417cc6d1fec3279c54f4570e9951",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-pfp-enemy-source-batch-0050-accepted-drifella2-9189-overworld-v1-ow-001-nearest",
@@ -11353,7 +12204,8 @@
           "height": 48,
           "bytes": 3262,
           "sha256": "f45f2fd4c4b23bd0d22b80e90d561f8083de74762a17e07e2e78232e60842c7a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-9189-overworld-v1-ow-001-nearest",
@@ -11370,7 +12222,8 @@
           "height": 48,
           "bytes": 3262,
           "sha256": "f45f2fd4c4b23bd0d22b80e90d561f8083de74762a17e07e2e78232e60842c7a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -11378,13 +12231,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-9683",
@@ -11405,7 +12267,8 @@
           "height": 1024,
           "bytes": 1057857,
           "sha256": "2695a42f9990b27a2a3d2d540a34158d1dccfd06883a504e041f298388927d41",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-9683-source-derived-canon-0001-accepted-drifella2-9683-battle-v1-extracted-crop",
@@ -11422,7 +12285,8 @@
           "height": 260,
           "bytes": 100623,
           "sha256": "af1e1fa609370d80fd6ba0d673d11ad94da7bbfcb66911f510eef800b7281cac",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-9683-source-derived-canon-0001-accepted-drifella2-9683-overworld-v1-ow-001-lanczos",
@@ -11439,7 +12303,8 @@
           "height": 48,
           "bytes": 3572,
           "sha256": "1ab9a3bd79a5289846474d89df0b8da9c83bef6bdf76cf57c39eb1da9d21176e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-9683-source-derived-canon-0001-accepted-drifella2-9683-overworld-v1-ow-001-nearest",
@@ -11456,7 +12321,8 @@
           "height": 48,
           "bytes": 2900,
           "sha256": "2acf5e30b8fed43d644ccc80c2daecfd8fd999f274ef3637e116dbe5ec9e27b5",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-9683-source-derived-canon-0001-accepted-drifella2-9683-overworld-v1-ow-001-raw-alpha-contained",
@@ -11473,7 +12339,8 @@
           "height": 48,
           "bytes": 3745,
           "sha256": "935591cb633d88ef83d29496247db6d2b8f83b10f974570431803ebc922cfc73",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-9683-source-derived-canon-0001-accepted-drifella2-9683-overworld-v1-ow-002-lanczos",
@@ -11490,7 +12357,8 @@
           "height": 48,
           "bytes": 3595,
           "sha256": "48160b6ecf80168bbc3780f47cd32a9f0a9f6e889bd417a32243600d3eb92449",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-9683-source-derived-canon-0001-accepted-drifella2-9683-overworld-v1-ow-002-nearest",
@@ -11507,7 +12375,8 @@
           "height": 48,
           "bytes": 2867,
           "sha256": "64add72ece1a643a2dddf3e2c43a0743dc362cc861aad74ec37b0c92e3e6d785",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-magiceden-9683-source-derived-canon-0001-accepted-drifella2-9683-overworld-v1-ow-002-raw-alpha-contained",
@@ -11524,7 +12393,8 @@
           "height": 48,
           "bytes": 3504,
           "sha256": "b31ec13440a15a14fdbe5835afbfde798b3c472a8876d8cf41aef2274c691913",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -11532,12 +12402,21 @@
         "overworld": 6
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-9714",
@@ -11558,7 +12437,8 @@
           "height": 1024,
           "bytes": 759998,
           "sha256": "ae7407fc17a1ca5c6782e96dd658a87a30c99df7420e3ef77b4593b4764c8ec4",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0002-accepted-drifella2-9714-battle-v1-extracted-crop",
@@ -11575,7 +12455,8 @@
           "height": 260,
           "bytes": 82446,
           "sha256": "31bc42c8d6c84aa9bda2198766d3c04c12623bea5afeb1ab1d7d9f29e974438d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-9714-battle-v1-alpha-extracted-source-size",
@@ -11592,7 +12473,8 @@
           "height": 1024,
           "bytes": 759998,
           "sha256": "ae7407fc17a1ca5c6782e96dd658a87a30c99df7420e3ef77b4593b4764c8ec4",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-enemy-source-batch-0002-accepted-drifella2-9714-overworld-v1-ow-001-nearest",
@@ -11609,7 +12491,8 @@
           "height": 48,
           "bytes": 2888,
           "sha256": "addce704f19a74db900d22e98252e6481e75c4b220b219d4ebbc4b142913f373",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "swagbound-phaser-public-assets-generated-enemies-drifella2-9714-overworld-v1-ow-001-nearest",
@@ -11626,7 +12509,8 @@
           "height": 48,
           "bytes": 2888,
           "sha256": "addce704f19a74db900d22e98252e6481e75c4b220b219d4ebbc4b142913f373",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -11634,13 +12518,22 @@
         "overworld": 2
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted",
         "runtime-public-assets"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-nft-003",
@@ -11661,7 +12554,8 @@
           "height": 260,
           "bytes": 56548,
           "sha256": "4ec13e026ec43e6a9d936fa424da906db35fb33469d35d8df237b95887ddf1af",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-single-sprite-0001-accepted-drifella2-nft-003-overworld-v1-ow-001-nearest",
@@ -11678,7 +12572,8 @@
           "height": 48,
           "bytes": 2474,
           "sha256": "143bf50125ed9afbc5aa4d34d9b5388e75094022719a0583199ea9adf6888b0a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -11686,12 +12581,21 @@
         "overworld": 1
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-nft-003-battle-v1-alpha-source-size",
@@ -11712,19 +12616,29 @@
           "height": 1254,
           "bytes": 532929,
           "sha256": "07b233805fbdcee26018ac4b032f59bd13febe4d6ab5507e4231f8479a575970",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "battle": 1
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-nft-003-overworld-v1-earthbound-token",
@@ -11745,19 +12659,29 @@
           "height": 48,
           "bytes": 1993,
           "sha256": "8597953eb687db08f2acc533e0f3ed593aa34c065e88afc7b89a119e8b03d090",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
         "overworld": 1
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drifella2-shoe-eyes",
@@ -11778,7 +12702,8 @@
           "height": 1024,
           "bytes": 777052,
           "sha256": "c7dcb037b1fa89f817fb1bc44650605e95345bfb4bf425483e0058895a709aff",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-shoe-eyes-sprite-review-0001-accepted-drifella2-shoe-eyes-battle-v1-extracted-crop",
@@ -11795,7 +12720,8 @@
           "height": 260,
           "bytes": 116590,
           "sha256": "2c68ce54c694c06100ca9e3941d0ef1c539c6f7a7c55c6f4cb81c41d10eead39",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-shoe-eyes-sprite-review-0001-accepted-drifella2-shoe-eyes-overworld-v1-ow-001-lanczos",
@@ -11812,7 +12738,8 @@
           "height": 48,
           "bytes": 5536,
           "sha256": "1688f1bb4f22e63d14906f8c74109650648506d3065e439728194f66b250b288",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-shoe-eyes-sprite-review-0001-accepted-drifella2-shoe-eyes-overworld-v1-ow-001-nearest",
@@ -11829,7 +12756,8 @@
           "height": 48,
           "bytes": 4533,
           "sha256": "0347d50059679834fc8a71f3895470fa99c85c1c9774e3b49edef1805c58a94a",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-shoe-eyes-sprite-review-0001-accepted-drifella2-shoe-eyes-overworld-v1-ow-002-lanczos",
@@ -11846,7 +12774,8 @@
           "height": 48,
           "bytes": 5326,
           "sha256": "9487e1cd6f8c65c25ff8e314b5045a104b7f778988b39a14f6f698789d008c2d",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         },
         {
           "id": "asset-lab-curation-drifella2-shoe-eyes-sprite-review-0001-accepted-drifella2-shoe-eyes-overworld-v1-ow-002-nearest",
@@ -11863,7 +12792,8 @@
           "height": 48,
           "bytes": 4521,
           "sha256": "8ff6aecc052e38c48454a4df85f628cc4f585296499bdc09f3f902533966117e",
-          "runtimeReferenced": false
+          "runtimeReferenced": true,
+          "minigameWired": true
         }
       ],
       "roleCounts": {
@@ -11871,12 +12801,21 @@
         "overworld": 4
       },
       "categories": [
-        "enemy-generated"
+        "enemy-generated",
+        "drifella-source-check",
+        "card-nft-minigame",
+        "friendly-npc"
       ],
       "sourceAreas": [
         "asset-lab-accepted"
       ],
-      "runtimeReferenced": false
+      "runtimeReferenced": true,
+      "minigameWired": true,
+      "notes": [
+        "Wired to Drifella Source Checks minigame.",
+        "Perfect clear reward: Card NFT + item.",
+        "Friendly source-world NPC lane; not a Milady enemy by default."
+      ]
     },
     {
       "id": "drilady",
@@ -44301,13 +45240,15 @@
         ...(item.sourceAreas || []),
         ...Object.entries(item.roleCounts || {}).map(([role, count]) => role + " x" + count),
         item.runtimeReferenced ? "runtime-referenced" : "not-runtime-referenced",
-      ].filter(Boolean).slice(0, 8);
+        item.minigameWired ? "minigame-wired" : "",
+      ].filter(Boolean).slice(0, 12);
       return '<article class="card status-' + escapeAttr(itemStateValue.status) + '">' +
         '<div class="thumbs">' + assets.slice(0, 12).map(renderThumb).join("") + '</div>' +
         '<div class="meta">' +
           '<h2>' + escapeHtml(item.label || item.id) + '</h2>' +
           '<div class="subtle">ID: ' + escapeHtml(id) + ' / assets: ' + assets.length + '</div>' +
           '<div class="tags">' + tags.map((tag) => '<span>' + escapeHtml(tag) + '</span>').join("") + '</div>' +
+          ((item.notes || []).length ? '<div class="notes">' + item.notes.map((note) => '<p>' + escapeHtml(note) + '</p>').join("") + '</div>' : '') +
           '<div class="asset-list">' + assets.map(renderAssetRow).join("") + '</div>' +
           '<label>Status <select data-action="status" data-id="' + escapeAttr(id) + '">' + statuses.map(([value, label]) => '<option value="' + escapeAttr(value) + '"' + (itemStateValue.status === value ? " selected" : "") + '>' + escapeHtml(label) + '</option>').join("") + '</select></label>' +
           renderBestControls(id, assets, itemStateValue) +

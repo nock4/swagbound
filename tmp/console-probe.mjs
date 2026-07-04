@@ -1,0 +1,12 @@
+import { chromium } from "@playwright/test";
+const b=await chromium.launch();
+const p=await b.newPage({viewport:{width:512,height:448},deviceScaleFactor:3});
+const fails=[];
+p.on("console",m=>{if(/Failed to process|sprite-override-npc/.test(m.text()))fails.push(m.text().slice(0,60));});
+await p.goto(`http://127.0.0.1:5173/?nointro=1&spawn=2216,240`,{waitUntil:"networkidle"});
+await p.waitForTimeout(2200);
+const added=await p.evaluate(()=>{const s=globalThis.__firstSceneDebug;return (s.npcs||[]).filter(n=>n.id>=101000).length;});
+console.log("spritesheet-fails:",fails.length, fails.slice(0,3).join(" | "));
+console.log("added NPCs active:",added);
+await p.screenshot({path:"tmp/skins-fixed.png"});
+await b.close();

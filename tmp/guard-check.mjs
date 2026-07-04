@@ -1,0 +1,11 @@
+import { chromium } from "@playwright/test";
+const b=await chromium.launch();
+const p=await b.newPage({viewport:{width:512,height:448},deviceScaleFactor:3});
+const warns=[];
+p.on("console",m=>{if(/added-npcs|dropped/.test(m.text()))warns.push(m.text().slice(0,90));});
+await p.goto(`http://127.0.0.1:5173/?nointro=1&spawn=2216,240`,{waitUntil:"networkidle"});
+await p.waitForTimeout(1800);
+const added=await p.evaluate(()=>(globalThis.__firstSceneDebug.npcs||[]).filter(n=>n.id>=101000).length);
+console.log("added NPCs active:",added);
+console.log("loader added-npcs warnings:", warns.length? warns.join(" | ") : "(none — clean file)");
+await b.close();

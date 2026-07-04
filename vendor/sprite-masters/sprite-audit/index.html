@@ -53,13 +53,17 @@
     .index-card { display:grid; gap:6px; min-height:116px; align-content:start; padding:14px; background:#fff; border-radius:8px; box-shadow:0 1px 2px rgba(0,0,0,.08); }
     .index-card strong { font-size:16px; }
     .index-card span { color:var(--muted); font-size:12px; }
+    .canon-note { grid-column:1 / -1; display:grid; gap:8px; padding:14px; border:1px solid #d8c58a; border-radius:8px; background:#fff7d7; box-shadow:0 1px 2px rgba(0,0,0,.06); }
+    .canon-note strong { font-size:15px; }
+    .canon-note p { margin:0; color:#4d4426; }
     @media (max-width: 760px) { header { position:static; display:grid; } nav { justify-content:start; } .toolbar { grid-template-columns:1fr; } .grid { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
   <header><div><h1>Swagbound Sprite Audit</h1><p>Separate visual review pages for sprite triage, duplicate cleanup, and source/canon decisions.</p></div></header>
   <main class="index">
-    <a class="index-card" href="people.html"><strong>People / Walk</strong><span>11 character sets for heroes, NPC-ish sprites, and walking/source anchors.</span></a><a class="index-card" href="enemies.html"><strong>Enemies</strong><span>409 battle/overworld generated sets.</span></a><a class="index-card" href="props.html"><strong>Props / Objects</strong><span>156 story objects, map props, environment sprites, and odd leftovers.</span></a><a class="index-card" href="duplicates.html"><strong>Duplicates</strong><span>1079 exact duplicate or same-set variant groups for pruning.</span></a>
+    <section class="canon-note"><strong>Canon update — map names + Drifella minigame</strong><p>Main map labels now use Morningside, Postwick, Bluebell Village, Dead Letter, Little Swag World, The Galleria, Solana Beach, Vacancy Flats, and The Unlisted Room. Drifella / Drifella2 sprites are wired as friendly Drifella Source Check minigame NPCs: perfect clear rewards a Card NFT plus an item.</p></section>
+    <a class="index-card" href="people.html"><strong>People / Walk</strong><span>11 character sets for heroes, NPC-ish sprites, and walking/source anchors.</span></a><a class="index-card" href="enemies.html"><strong>Enemies</strong><span>409 battle/overworld generated sets, including Drifella Source Check/Card NFT minigame sprites.</span></a><a class="index-card" href="props.html"><strong>Props / Objects</strong><span>156 story objects, map props, environment sprites, and odd leftovers.</span></a><a class="index-card" href="duplicates.html"><strong>Duplicates</strong><span>1079 exact duplicate or same-set variant groups for pruning.</span></a>
       <a class="index-card" href="character-sets.html"><strong>Canonical Character Sets</strong><span>420 identity-level sets for one battle + one overworld, or friendly OW/walk-only review.</span></a>
     <a class="index-card" href="battle-backgrounds.html"><strong>Battle Backgrounds</strong><span>15 background sets for act and boss-context review.</span></a>
   </main>

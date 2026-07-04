@@ -1,0 +1,11 @@
+import { chromium } from "@playwright/test";
+const [spawn,out]=[process.argv[2],process.argv[3]];
+const b=await chromium.launch();
+const p=await b.newPage({viewport:{width:512,height:448},deviceScaleFactor:3});
+await p.goto(`http://127.0.0.1:5173/?nointro=1&spawn=${spawn}`,{waitUntil:"networkidle"});
+await p.waitForFunction(()=>globalThis.__firstSceneDebug!==undefined,{timeout:20000}).catch(()=>{});
+await p.waitForTimeout(1600);
+const d=await p.evaluate(()=>{const s=globalThis.__firstSceneDebug;const pl=s.player;const near=(s.npcs||[]).filter(n=>Math.abs(n.x-pl.x)<300&&Math.abs(n.y-pl.y)<300);return{sector:s.currentSectorIndex,indoor:s.world?.indoor,player:[Math.round(pl.x),Math.round(pl.y)],nearCount:near.length,ids:near.map(n=>n.id).slice(0,20)};});
+console.log(out.split("/").pop(), JSON.stringify(d));
+await p.screenshot({path:out});
+await b.close();

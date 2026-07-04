@@ -79,8 +79,10 @@ function describeDialogue(events: readonly GameEvent[]): {
 }
 
 describe("qa npc-dialogue: authored content resolution", () => {
-  it("wires interaction for all 88 added NPCs and resolves each to renderable dialogue", () => {
-    expect(addedNpcs.npcs).toHaveLength(88);
+  it("wires interaction for every added NPC and resolves each to renderable dialogue", () => {
+    // The added-NPC roster grows as zones are promoted; assert a sane floor rather than an exact
+    // snapshot, and keep the real invariant below (every added NPC resolves to renderable dialogue).
+    expect(addedNpcs.npcs.length).toBeGreaterThanOrEqual(88);
     const broken: number[] = [];
     for (const npc of addedNpcs.npcs) {
       expect(npc.interaction, `added npc ${npc.id} has no interaction`).toBeDefined();

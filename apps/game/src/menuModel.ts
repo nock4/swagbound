@@ -351,8 +351,9 @@ const MAIN_COMMANDS: Array<Omit<MenuItem, "enabled">> = [
   { id: PSI_MENU_ID, label: "PSI", childScreenId: PSI_MENU_ID },
   { id: EQUIP_MENU_ID, label: "Equip", childScreenId: EQUIP_MENU_ID },
   { id: "check", label: "Check", childScreenId: "check" },
-  { id: STATUS_MENU_ID, label: "Status", childScreenId: STATUS_MENU_ID },
-  { id: BINDER_MENU_ID, label: "Binder", childScreenId: BINDER_MENU_ID }
+  { id: STATUS_MENU_ID, label: "Status", childScreenId: STATUS_MENU_ID }
+  // The pause menu stays EarthBound's vanilla 6 commands. The Swagbound Binder (Source
+  // Checks) is nested under Status (see buildStatusScreen), not a 7th top-level command.
   // ATM is reached at ATM machines and
   // Save via phone (here: the P key, chunkedWorldScene keydown-P) - neither is a menu item.
 ];
@@ -720,7 +721,16 @@ function equipSlotScreenId(memberId: number, slot: EquipmentSlot): string {
 }
 
 export function buildStatusScreen(status: StatusViewModel): MenuScreen {
-  return buildPartyMemberSelectScreen(STATUS_MENU_ID, status.title, status.members);
+  const screen = buildPartyMemberSelectScreen(STATUS_MENU_ID, status.title, status.members);
+  // The Binder (Source Checks) is nested here, after the party members, so the top-level
+  // pause menu stays EarthBound's vanilla 6 commands.
+  return {
+    ...screen,
+    items: [
+      ...screen.items,
+      { id: BINDER_MENU_ID, label: "Binder", enabled: true, childScreenId: BINDER_MENU_ID }
+    ]
+  };
 }
 
 export function buildStatusMemberScreens(status: StatusViewModel): MenuScreen[] {

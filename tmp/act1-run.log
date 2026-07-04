@@ -1,0 +1,69 @@
+Act-1 chain: signal-town-card-clique -> relay-gate-returnless-king -> first-threshold-malady -> leave.
+  opening cutscene drained; flags:[signal:cold-signal-seen,cutscene:signal-town-cold-signal-open]
+
+Objective 1: boss "signal-town-card-clique" at (1512,1744). flags:[signal:cold-signal-seen,cutscene:signal-town-cold-signal-open]
+    [route] (2112,1768) -> (1512,1744), 39 wp
+      (phase: enter-transition)
+    [signal-town-card-clique] r1 Bosch 75hp/25pp e=[74] -> BASH
+    [signal-town-card-clique] r1 Paula 30hp/35pp e=[74] -> Freeze
+    [signal-town-card-clique] r2 Bosch 64hp/25pp e=[36] -> BASH
+    [signal-town-card-clique] r2 Paula 30hp/31pp e=[36] -> Freeze
+  -> signal-town-card-clique: VICTORY
+    flags now: [signal:cold-signal-seen,cutscene:signal-town-cold-signal-open,trigger:signal-town-card-clique,signal:clique_cleared,trigger:signal-town-card-clique-reveal,npc:142:talked]
+
+Objective 2: boss "relay-gate-returnless-king" at (1928,1560). flags:[signal:cold-signal-seen,cutscene:signal-town-cold-signal-open,trigger:signal-town-card-clique,signal:clique_cleared,trigger:signal-town-card-clique-reveal,npc:142:talked]
+    [route] (1505,1755) -> (1928,1560), 28 wp
+      (phase: enter-transition)
+    [relay-gate-returnless-king] r1 Bosch 90hp/30pp e=[21,21,95] -> BASH
+    [relay-gate-returnless-king] r1 Paula 32hp/36pp e=[21,21,95] -> Freeze
+    [relay-gate-returnless-king] r2 Bosch 70hp/30pp e=[0,21,95] -> BASH
+    [relay-gate-returnless-king] r2 Paula 32hp/32pp e=[0,21,95] -> Freeze
+    [relay-gate-returnless-king] r3 Bosch 47hp/30pp e=[0,0,84] -> Lifeup
+    [relay-gate-returnless-king] r3 Paula 32hp/28pp e=[0,0,84] -> Freeze
+    [relay-gate-returnless-king] r4 Bosch 66hp/25pp e=[0,0,56] -> BASH
+    [relay-gate-returnless-king] r4 Paula 32hp/24pp e=[0,0,56] -> Freeze
+    [relay-gate-returnless-king] r5 Bosch 66hp/25pp e=[0,0,15] -> BASH
+    [relay-gate-returnless-king] r5 Paula 32hp/20pp e=[0,0,15] -> Freeze
+  -> relay-gate-returnless-king: VICTORY
+    flags now: [signal:cold-signal-seen,cutscene:signal-town-cold-signal-open,trigger:signal-town-card-clique,signal:clique_cleared,trigger:signal-town-card-clique-reveal,npc:142:talked,trigger:relay-gate-returnless-king,signal:route_open]
+
+Objective 3: boss "first-threshold-malady" at (1904,1408). flags:[signal:cold-signal-seen,cutscene:signal-town-cold-signal-open,trigger:signal-town-card-clique,signal:clique_cleared,trigger:signal-town-card-clique-reveal,npc:142:talked,trigger:relay-gate-returnless-king,signal:route_open]
+    [route] (1919,1550) -> (1904,1408), 10 wp
+      (phase: enter-transition)
+    [first-threshold-malady] r1 Bosch 92hp/31pp e=[260,34,34] -> BASH
+    [first-threshold-malady] r1 Paula 34hp/40pp e=[260,34,34] -> Freeze
+    [first-threshold-malady] r2 Bosch 92hp/31pp e=[251,34,34] -> BASH
+    [first-threshold-malady] r2 Paula 34hp/36pp e=[251,34,34] -> Freeze
+    [first-threshold-malady] r3 Bosch 71hp/31pp e=[250,17,34] -> BASH
+    [first-threshold-malady] r3 Paula 34hp/32pp e=[250,17,34] -> Freeze
+    [first-threshold-malady] r4 Bosch 71hp/31pp e=[242,0,34] -> BASH
+    [first-threshold-malady] r4 Paula 34hp/28pp e=[242,0,34] -> Freeze
+    [first-threshold-malady] r5 Bosch 71hp/26pp e=[233,0,16] -> BASH
+    [first-threshold-malady] r5 Paula 34hp/24pp e=[233,0,16] -> Freeze
+    [first-threshold-malady] r6 Bosch 71hp/26pp e=[203,0,0] -> BASH
+    [first-threshold-malady] r6 Paula 34hp/20pp e=[203,0,0] -> Freeze
+    [first-threshold-malady] r7 Bosch 48hp/26pp e=[160,0,0] -> Lifeup
+    [first-threshold-malady] r7 Paula 34hp/16pp e=[160,0,0] -> Freeze
+    [first-threshold-malady] r8 Bosch 88hp/21pp e=[130,0,0] -> BASH
+    [first-threshold-malady] r8 Paula 34hp/12pp e=[130,0,0] -> Freeze
+    [first-threshold-malady] r9 Bosch 88hp/16pp e=[88,0,0] -> BASH
+    [first-threshold-malady] r9 Paula 34hp/8pp e=[88,0,0] -> Freeze
+    [first-threshold-malady] r10 Bosch 88hp/16pp e=[44,0,0] -> BASH
+    [first-threshold-malady] r10 Paula 34hp/4pp e=[44,0,0] -> Freeze
+    [first-threshold-malady] r11 Bosch 88hp/16pp e=[13,0,0] -> Lifeup->Paula
+    [first-threshold-malady] r11 Paula 9hp/0pp e=[13,0,0] -> BASH
+    [first-threshold-malady] r12 Bosch 92hp/11pp e=[11,0,0] -> Lifeup->Paula
+    [first-threshold-malady] r12 Paula 9hp/0pp e=[11,0,0] -> BASH
+    [first-threshold-malady] r13 Bosch 92hp/6pp e=[8,0,0] -> Lifeup->Paula
+    [first-threshold-malady] r13 Paula 9hp/0pp e=[8,0,0] -> BASH
+    [first-threshold-malady] r14 Bosch 92hp/1pp e=[5,0,0] -> BASH
+    [first-threshold-malady] r14 Paula 9hp/0pp e=[5,0,0] -> BASH
+  -> first-threshold-malady: VICTORY
+    flags now: [signal:cold-signal-seen,cutscene:signal-town-cold-signal-open,trigger:signal-town-card-clique,signal:clique_cleared,trigger:signal-town-card-clique-reveal,npc:142:talked,trigger:relay-gate-returnless-king,signal:route_open,trigger:first-threshold-malady,signal:threshold_cleared,source:first_witness,trigger:first-threshold-malady-reveal]
+
+Objective 4: leave "leave-signal-town" at (1928,1300). flags:[signal:cold-signal-seen,cutscene:signal-town-cold-signal-open,trigger:signal-town-card-clique,signal:clique_cleared,trigger:signal-town-card-clique-reveal,npc:142:talked,trigger:relay-gate-returnless-king,signal:route_open,trigger:first-threshold-malady,signal:threshold_cleared,source:first_witness,trigger:first-threshold-malady-reveal]
+    [route] (1905,1421) -> (1928,1300), 9 wp
+
+*** ACT 1 COMPLETE ***
+
+=== Bosses defeated: 3/3. Final flags: [signal:cold-signal-seen,cutscene:signal-town-cold-signal-open,trigger:signal-town-card-clique,signal:clique_cleared,trigger:signal-town-card-clique-reveal,npc:142:talked,trigger:relay-gate-returnless-king,signal:route_open,trigger:first-threshold-malady,signal:threshold_cleared,source:first_witness,trigger:first-threshold-malady-reveal,trigger:leave-signal-town,act1:complete] ===
