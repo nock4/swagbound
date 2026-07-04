@@ -257,7 +257,7 @@ export function interactionEvents(
     const pages = resolveCustomDialoguePages(customEntry, dialogueLibrary);
     return [
       pages && pages.length > 0
-        ? { kind: "dialogue" as const, reference, pages }
+        ? { kind: "dialogue" as const, pages }
         : { kind: "dialogue" as const, reference },
       ...mergedCcsBehaviorEvents(reference, scripts, flags),
       { kind: "setFlag", flag }

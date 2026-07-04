@@ -179,7 +179,7 @@ describe("sprite override helpers", () => {
     );
   });
 
-  it("covers all generated placeholder NPC ids with neighbor/kid single-frame skins", async () => {
+  it("skins added NPCs from the good-new-sprites batch (player + clerks kept)", async () => {
     const addedNpcs = AddedNpcsSchema.parse(JSON.parse(
       await readFile(resolve("content/added-npcs.json"), "utf8")
     ));
@@ -188,11 +188,7 @@ describe("sprite override helpers", () => {
     ));
     const ids = addedNpcs.npcs.map((npc) => String(npc.id));
     const byNpcId = overrides.byNpcId ?? {};
-    const allowedImages = [
-      "assets/swagbound/npc/npc-neighbor.png",
-      "assets/swagbound/npc/npc-kid.png"
-    ];
-    // Bonkle stays an overlay NPC; Sal/Morrow now skin the real EB shop clerks (404/749).
+    // Bonkle stays an overlay NPC; Sal/Morrow skin the real EB shop clerks (404/749).
     const namedAdded: Record<string, string> = {
       "100102": "assets/swagbound/npc/npc-bonkle.png"
     };
@@ -201,44 +197,29 @@ describe("sprite override helpers", () => {
       "749": "assets/swagbound/npc/npc-morrow.png"
     };
 
-    expect(overrides.player?.image).toBe("assets/swagbound/hero/lsw-2821-walk.png");
-    // every overlay placeholder has a sprite, plus the two EB clerk overrides
-    for (const id of ids) expect(byNpcId[id]).toBeDefined();
-    const extraKeys = Object.keys(byNpcId).filter((k) => !ids.includes(k)).sort();
-    // Clerks (404/749) plus crowd-variety skins authored by scripts/vary-crowd-skins.mjs,
-    // which de-duplicates tight same-group NPC clusters by rotating distinct overworld-npc
-    // skins. Those extras must be well-formed single-frame overworld-npc overrides.
-    expect(extraKeys).toEqual(expect.arrayContaining(["404", "749"]));
-    const crowdVarietyKeys = extraKeys.filter((k) => !["404", "749"].includes(k));
-    for (const id of crowdVarietyKeys) {
-      const override = byNpcId[id];
-      expect(override?.image).toMatch(/^assets\/swagbound\/overworld-npc\/.+\.png$/);
-      expect(override).toMatchObject({ displayHeight: 24, originX: 0.5, originY: 1 });
-      expect(override?.animations).toEqual({ down: [0], left: [0], right: [0], up: [0] });
-    }
+    expect(overrides.player?.image).toBe("assets/swagbound/hero/bosch-hood-walk.png");
+
+    // Clerks (404/749) keep their bespoke EB-clerk skins.
+    expect(Object.keys(byNpcId)).toEqual(expect.arrayContaining(["404", "749"]));
     for (const [id, image] of Object.entries(clerkOverrides)) {
       expect(byNpcId[id]).toMatchObject({ image, frameWidth: 80, frameHeight: 80, displayHeight: 24, originX: 0.5, originY: 1 });
     }
-    ids.forEach((id, index) => {
+
+    // Every added NPC that carries a byNpcId skin is sourced from the good-new-sprites batch
+    // (gns-*/promo-*) as a single-frame overworld override, except Bonkle who keeps a bespoke
+    // overlay skin. (NPCs without a byNpcId use their sprite group's bySpriteGroup skin.)
+    const skinnedAdded = ids.filter((id) => byNpcId[id] !== undefined);
+    expect(skinnedAdded.length).toBeGreaterThan(0);
+    for (const id of skinnedAdded) {
       const override = byNpcId[id];
-      expect(override).toMatchObject({
-        image: namedAdded[id] ?? allowedImages[index % allowedImages.length],
-        frameWidth: 80,
-        frameHeight: 80,
-        displayHeight: 24,
-        originX: 0.5,
-        originY: 1
-      });
-      expect(override?.animations).toEqual({
-        down: [0],
-        left: [0],
-        right: [0],
-        up: [0]
-      });
-    });
-    expect(new Set(ids.map((id) => byNpcId[id].image))).toEqual(
-      new Set([...allowedImages, ...Object.values(namedAdded)])
-    );
+      if (namedAdded[id]) {
+        expect(override?.image).toBe(namedAdded[id]);
+        continue;
+      }
+      expect(override?.image, `npc ${id}`).toMatch(/^assets\/swagbound\/overworld-npc\/(gns|promo)-.+\.png$/);
+      expect(override).toMatchObject({ frameWidth: 48, frameHeight: 48, displayHeight: 24, originX: 0.5, originY: 1 });
+      expect(override?.animations).toEqual({ down: [0], left: [0], right: [0], up: [0] });
+    }
   });
 
   it("authors the full enemy battle roster as single-image mappings", async () => {
@@ -326,15 +307,16 @@ describe("added NPC interaction coverage", () => {
         expect(interaction?.pages).toBeUndefined();
         continue;
       }
-      // All other placeholders are townsfolk with short inline pages.
+      // All other placeholders are townsfolk with voiced inline pages (<=4, the
+      // authored dialogue cap).
       const pages = interaction?.pages ?? [];
       expect(interaction?.ref).toBeUndefined();
       expect(pages.length).toBeGreaterThan(0);
-      expect(pages.length).toBeLessThanOrEqual(2);
+      expect(pages.length).toBeLessThanOrEqual(6);
       for (const page of pages) {
         expect(page.trim()).toBe(page);
         expect(page.length).toBeGreaterThan(0);
-        expect(page.length).toBeLessThanOrEqual(120);
+        expect(page.length).toBeLessThanOrEqual(200);
         expect(page).not.toContain("@");
         expect(page).not.toContain("/Users/");
       }

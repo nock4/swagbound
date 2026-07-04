@@ -4103,7 +4103,8 @@
         "pages": [
           "Oh! A live one. Visitors, on THIS floor. Most of what comes through here is climate-controlled and already dead. Welcome, welcome, to the wing of the derived.",
           "I'm the guide. Gold, official, licensed to point. I was minted off a family that never signed for me, but the placard says 'guide,' so guide is what I am. The record is very fond of a placard.",
-          "Everything on these walls is a public version. Someone was the source once, and then someone else was cheaper, and now they hang side by side and the wall text calls it a 'movement.' Curious, isn't it, how appraisal launders a copy into a canon.",
+          "Everything on these walls is a public version.",
+          "Someone was the source once, and then someone else was cheaper, and now they hang side by side and the wall text calls it a 'movement.' Curious, isn't it, how appraisal launders a copy into a canon.",
           "Stay behind the rope. Don't ask which of us is authentic. The Galleria has a policy about that question, and the policy is a longer rope."
         ]
       },
@@ -4169,7 +4170,8 @@
       "interaction": {
         "pages": [
           "A gold figure in a frame. The wall text names it Study, After a Study, After the Original. Nobody in the building has seen the original. Its absence is the whole appraisal.",
-          "It is a copy so many removes out that the gold is just the color the market agreed a copy should be. Provenance: unlisted. Value: high, precisely because it can't be sourced. The Galleria prefers it that way."
+          "It is a copy so many removes out that the gold is just the color the market agreed a copy should be. Provenance: unlisted. Value: high, precisely because it can't be sourced.",
+          "The Galleria prefers it that way."
         ]
       }
     },
@@ -4250,7 +4252,8 @@
       "interaction": {
         "pages": [
           "Under glass: a scanned trading card \u2014 a fire-conjuring efreet \u2014 crowned with a doodled cap and a pair of crude ballpoint wings someone added later. The wall plaque reads:",
-          "FRENETIC EFREET (AFTER). Found object, ink, delusion. The card was printed by a company that owned it, played by a boy who thought he owned it, and scanned by a wallet that claimed it was never printed at all.",
+          "FRENETIC EFREET (AFTER). Found object, ink, delusion.",
+          "The card was printed by a company that owned it, played by a boy who thought he owned it, and scanned by a wallet that claimed it was never printed at all.",
           "The wings are not part of the card. The wings were added to make it new. Nothing was made new. Provenance: three owners, none of them the artist, all of them certain.",
           "Do not touch the glass. The glass is the only thing here that isn't a copy of something."
         ]
@@ -4360,8 +4363,10 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "A postcard mounted under museum glass. Watercolor bleeding into charcoal, a single glass of water rendered too carefully, and a scrawl across the corner: Hello Melina. It was addressed. It was never sent.",
-          "The wall text calls it correspondence. There is no Melina in the record. Only the greeting survived, filed, appraised, hung \u2014 a message that reached the archive instead of the person. The Galleria collects the ones that missed."
+          "A postcard mounted under museum glass. Watercolor bleeding into charcoal, a single glass of water rendered too carefully, and a scrawl across the corner: Hello Melina. It was addressed.",
+          "It was never sent.",
+          "The wall text calls it correspondence. There is no Melina in the record. Only the greeting survived, filed, appraised, hung \u2014 a message that reached the archive instead of the person.",
+          "The Galleria collects the ones that missed."
         ]
       }
     },
@@ -4407,7 +4412,8 @@
       "interaction": {
         "pages": [
           "A scattered wall of icons behind cracked glass. Crosses, a jester, a corrupted framed idol, a numeral seven repeated until it stops meaning seven.",
-          "The plaque: RELIQUARY, ATTRIB. UNCERTAIN. Assembled from things that were witnessed once and worshipped after. Provenance ends where the faith begins. Do not touch the glass. It is the only thing still holding the arrangement together."
+          "The plaque: RELIQUARY, ATTRIB. UNCERTAIN. Assembled from things that were witnessed once and worshipped after. Provenance ends where the faith begins. Do not touch the glass.",
+          "It is the only thing still holding the arrangement together."
         ]
       }
     },

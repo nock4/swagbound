@@ -2,7 +2,7 @@
   "schema": "swagbound.item-overrides.v1",
   "byItemId": {
     "2": {
-      "name": "Teddy bear",
+      "name": "Plush Ward",
       "effect": {
         "kind": "inflictStatus",
         "ailment": "shielded",
@@ -11,7 +11,7 @@
       }
     },
     "3": {
-      "name": "Super plush bear",
+      "name": "Vault Plush",
       "effect": {
         "kind": "inflictStatus",
         "ailment": "shielded",
@@ -20,7 +20,7 @@
       }
     },
     "5": {
-      "name": "Broken gadget",
+      "name": "Bricked Gadget",
       "effect": {
         "kind": "damage",
         "amount": 215,
@@ -28,7 +28,7 @@
       }
     },
     "7": {
-      "name": "Broken spray can",
+      "name": "Spent Can",
       "effect": {
         "kind": "damage",
         "amount": 161,
@@ -36,7 +36,7 @@
       }
     },
     "9": {
-      "name": "Broken iron",
+      "name": "Bricked Iron",
       "effect": {
         "kind": "buffStat",
         "stat": "defense",
@@ -44,7 +44,7 @@
       }
     },
     "11": {
-      "name": "Broken cannon",
+      "name": "Dud Cannon",
       "effect": {
         "kind": "buffStat",
         "stat": "offense",
@@ -516,14 +516,14 @@
       }
     },
     "133": {
-      "name": "Bazooka",
+      "name": "Boomstick",
       "effect": {
         "kind": "damage",
         "amount": 400
       }
     },
     "140": {
-      "name": "Ruler",
+      "name": "Straightedge",
       "effect": {
         "kind": "buffStat",
         "stat": "speed",

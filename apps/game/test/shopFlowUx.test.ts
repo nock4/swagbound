@@ -286,7 +286,14 @@ describe("shop-flow UX", () => {
         const item = itemFor(itemId);
         const flow = openShop(shop.id, newPartyState({ wallet: item.cost }));
         openBuyScreen(flow);
-        flow.menuState = moveMenu(flow.menuState, index);
+        // Step through ENABLED rows until the target buy row is current. moveMenu skips
+        // disabled (unaffordable) rows, so a raw index delta can't address the target;
+        // the affordable target row is reachable by wrapping the cursor.
+        const targetRow = `shop-buy-${index}-${itemId}`;
+        for (let guard = 0; guard < 32 && currentItem(flow.menuState)?.id !== targetRow; guard += 1) {
+          flow.menuState = moveMenu(flow.menuState, 1);
+        }
+        expect(currentItem(flow.menuState)?.id).toBe(targetRow);
 
         const actionId = confirmCurrent(flow);
         expect(parseMenuAction(actionId ?? "")).toEqual({

@@ -257,7 +257,9 @@ describe("leveling & skill growth", () => {
     const { state: after, summary } = applyVictoryRewards(state, { rng: () => 1 });
     expect(summary.expGained).toBe(250);
     expect(summary.moneyGained).toBe(40);
-    expect(after.wallet).toBe(40);
+    // EB economy: battle winnings deposit to the bank, not the wallet.
+    expect(after.bank).toBe(40);
+    expect(after.wallet).toBe(0);
   });
 
   it("victory view model surfaces tally, level-up spotlight, stat deltas, and learned PSI lines", () => {
@@ -277,7 +279,7 @@ describe("leveling & skill growth", () => {
     expect(viewModel.moneyGained).toBe(40);
     expect(viewModel.levelUps).toHaveLength(1);
     expect(viewModel.lines).toContain("250 EXP");
-    expect(viewModel.lines).toContain("You got $40");
+    expect(viewModel.lines).toContain("The connect wired $40 to your account.");
     expect(viewModel.lines).toContain("PARTY_7 LEVEL UP!");
     expect(viewModel.lines).toContain("Lv 1 -> 6 ↑");
     expect(viewModel.lines.some((line) => /^Offense \d+ -> \d+ ↑$/.test(line))).toBe(true);
@@ -298,7 +300,7 @@ describe("leveling & skill growth", () => {
     const viewModel = buildVictorySummaryViewModel(summary);
 
     expect(viewModel.pages.length).toBeGreaterThan(3);
-    expect(viewModel.pages[0]).toEqual(["250 EXP", "You got $40", "Found no items"]);
+    expect(viewModel.pages[0]).toEqual(["250 EXP", "The connect wired $40 to your account.", "Found no items"]);
     expect(viewModel.pageDetails[1]).toMatchObject({
       kind: "level-up",
       highlighted: true,
@@ -325,7 +327,7 @@ describe("leveling & skill growth", () => {
       levelUps: []
     });
 
-    expect(viewModel.pages).toEqual([["4 EXP", "You got $1", "Found no items"]]);
+    expect(viewModel.pages).toEqual([["4 EXP", "The connect wired $1 to your account.", "Found no items"]]);
     expect(advanceVictorySummaryPageIndex(0, viewModel.pages.length))
       .toEqual({ pageIndex: 0, shouldExit: true });
   });

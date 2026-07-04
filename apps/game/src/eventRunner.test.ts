@@ -181,7 +181,9 @@ describe("interactionEvents custom-dialogue shops", () => {
     );
 
     expect(events).toEqual([
-      { kind: "dialogue", reference: "data_28.l_0xc74e83", pages: ["What can I do for you?"] },
+      // Custom pages render inline (no redundant reference); the CCS shop behavior
+      // still runs as its own event derived from the reference.
+      { kind: "dialogue", pages: ["What can I do for you?"] },
       { kind: "shop", storeId: 1 },
       { kind: "setFlag", flag: talkedFlag(9) }
     ]);

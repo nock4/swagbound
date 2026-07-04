@@ -6,8 +6,7 @@ import {
   hitSparkState,
   psiElementFlashColor,
   psiElementFlashProfile,
-  screenShakeOffset,
-  wobbleOffset
+  screenShakeOffset
 } from "../src/battleEffects";
 
 describe("psiElementFlashProfile", () => {
@@ -59,24 +58,6 @@ describe("battleEffects", () => {
 
     it("is inactive after the flash window", () => {
       expect(flashState(1_191, 1_000, 190)).toEqual({ active: false, intensity: 0 });
-    });
-  });
-
-  describe("wobbleOffset", () => {
-    it("is deterministic for a passed-in time", () => {
-      expect(wobbleOffset(750, 1, 1.5, 1600)).toEqual(wobbleOffset(750, 1, 1.5, 1600));
-    });
-
-    it("stays bounded by the configured amplitude", () => {
-      for (let now = 0; now <= 5_000; now += 125) {
-        const offset = wobbleOffset(now, 2, 1.5, 1600);
-        expect(Math.abs(offset.dx)).toBeLessThanOrEqual(1.5);
-        expect(Math.abs(offset.dy)).toBeLessThanOrEqual(1.5);
-      }
-    });
-
-    it("phase-offsets different enemy indexes", () => {
-      expect(wobbleOffset(1_000, 0, 1.5, 1600)).not.toEqual(wobbleOffset(1_000, 1, 1.5, 1600));
     });
   });
 
