@@ -312,6 +312,8 @@ type OverworldEnemyRuntime = {
   skin?: SpriteOverrideSheet;
   /** Time remaining before this roamer can start a battle on contact (post-spawn grace). */
   contactGraceMs: number;
+  /** True when the party can instant-win this group: the roamer FLEES instead of chasing. */
+  flees: boolean;
 };
 
 type BossGateRuntime = {
@@ -439,6 +441,16 @@ const OVERWORLD_ENEMY_CONTACT_GRACE_MS = 600;
 const OVERWORLD_ENEMY_DESPAWN_DIST_PX = 320;
 const OVERWORLD_ENEMY_WANDER_RADIUS_PX = 40;
 const OVERWORLD_ENEMY_WANDER_SPEED_PX_PER_SEC = 30;
+// EB-style aggro: a roamer that isn't fleeable CHASES once the player comes within
+// detection range (below the 80-104px spawn band, so a fresh spawn wanders first).
+// Chase speed stays under PLAYER_SPEED (110) so the player can always outrun it.
+const OVERWORLD_ENEMY_CHASE_DETECT_PX = 64;
+const OVERWORLD_ENEMY_CHASE_SPEED_PX_PER_SEC = 70;
+// EB-style flee: a group the party can instant-win RUNS from the player (weak enemies
+// fleeing an over-leveled party). Flee speed stays catchable so the player can corner
+// it for the instant win. Detection is a touch wider so it bolts before you're on top.
+const OVERWORLD_ENEMY_FLEE_DETECT_PX = 84;
+const OVERWORLD_ENEMY_FLEE_SPEED_PX_PER_SEC = 66;
 const OVERWORLD_ENEMY_SPAWN_ATTEMPTS = 8;
 const LOW_HP_DANGER_FRACTION = 1 / 8;
 const LOW_HP_DANGER_BEEP_INTERVAL_MS = 820;
@@ -1620,6 +1632,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.partyState.fullRecover({ cureStatuses: true });
       this.refreshMenuScreens();
       this.publish();
+    };
+    // Debug-only: force the flee flag on live roamers so flee (away-movement) can be verified
+    // without an over-leveled party. Nothing in normal play calls it.
+    globals.__debugSetRoamerFlees = (value: boolean) => {
+      for (const enemy of this.overworldEnemies.values()) {
+        enemy.flees = Boolean(value);
+      }
+      return this.overworldEnemies.size;
     };
     // Debug-only: equip an item on a party member and read battle-resolved stats, for verifying
     // equipped-gear bonuses (weapons → offense, armor → defense). Nothing in normal play calls these.
@@ -5066,7 +5086,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
         enemyGroup: enemy.enemyGroup,
         spriteGroup: enemy.spriteGroup,
         x: Math.round(enemy.state.player.x),
-        y: Math.round(enemy.state.player.y)
+        y: Math.round(enemy.state.player.y),
+        flees: enemy.flees,
+        facing: enemy.state.player.facing,
+        moving: enemy.state.player.moving
       }))
     };
   }
@@ -5090,17 +5113,65 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       if (active) {
         enemy.contactGraceMs = Math.max(0, enemy.contactGraceMs - deltaMs);
-        stepNpc(enemy.state, {
-          deltaMs,
-          bounds: this.movementBounds(),
-          // Respect terrain (walls/water) but pass through actors so they can reach the player.
-          blocked: (x, y) => this.blocked(x, y),
-          frames: enemy.frames
-        });
+        this.stepOverworldEnemyBehavior(enemy, deltaMs);
       }
       this.upgradeOverworldEnemySprite(enemy);
       this.syncOverworldEnemy(enemy);
     }
+  }
+
+  /**
+   * EarthBound roamer behavior: a fleeable group (party can instant-win it) RUNS from the
+   * player once it's close; a fightable group CHASES when the player comes within detection
+   * range; otherwise it wanders. Facing follows the move direction, so touchAdvantage still
+   * reads the green/red swirl correctly (you catch a fleeing enemy from behind = party first).
+   */
+  private stepOverworldEnemyBehavior(enemy: OverworldEnemyRuntime, deltaMs: number): void {
+    const dist = this.distanceToPlayer(enemy.state.player);
+    if (enemy.flees) {
+      if (dist <= OVERWORLD_ENEMY_FLEE_DETECT_PX) {
+        this.stepOverworldEnemyDirected(enemy, deltaMs, true, OVERWORLD_ENEMY_FLEE_SPEED_PX_PER_SEC);
+        return;
+      }
+    } else if (dist <= OVERWORLD_ENEMY_CHASE_DETECT_PX) {
+      this.stepOverworldEnemyDirected(enemy, deltaMs, false, OVERWORLD_ENEMY_CHASE_SPEED_PX_PER_SEC);
+      return;
+    }
+    stepNpc(enemy.state, {
+      deltaMs,
+      bounds: this.movementBounds(),
+      // Respect terrain (walls/water) but pass through actors so they can reach the player.
+      blocked: (x, y) => this.blocked(x, y),
+      frames: enemy.frames
+    });
+  }
+
+  /** Step a roamer straight toward (chase) or away from (flee) the player at `speed`. */
+  private stepOverworldEnemyDirected(
+    enemy: OverworldEnemyRuntime,
+    deltaMs: number,
+    away: boolean,
+    speed: number
+  ): void {
+    const actor = enemy.state.player;
+    const sign = away ? -1 : 1;
+    const dx = (this.playerState.x - actor.x) * sign;
+    const dy = (this.playerState.y - actor.y) * sign;
+    // Small deadzone so a near-aligned axis doesn't jitter left/right every frame.
+    const deadzone = 2;
+    const input: MoveInput = {
+      left: dx < -deadzone,
+      right: dx > deadzone,
+      up: dy < -deadzone,
+      down: dy > deadzone
+    };
+    stepPlayer(actor, input, {
+      deltaMs,
+      speed,
+      bounds: this.movementBounds(),
+      blocked: (x, y) => this.blocked(x, y),
+      frames: enemy.frames
+    });
   }
 
   /** Swap a placeholder for the real sprite once its sheet (skin or EB group) finishes loading. */
@@ -5188,6 +5259,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       textureKey,
       skin,
       contactGraceMs: OVERWORLD_ENEMY_CONTACT_GRACE_MS,
+      flees: this.encounterAdvantageForGroup(enemyGroup) === "instantWin",
       state: createNpcState(spot.x, spot.y, toFacing(undefined), {
         kind: "wander",
         radiusPx: OVERWORLD_ENEMY_WANDER_RADIUS_PX,
