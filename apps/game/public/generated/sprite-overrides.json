@@ -1434,228 +1434,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "100101": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "100102": {
       "image": "assets/swagbound/npc/npc-bonkle.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100103": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100104": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100105": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100106": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100107": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100108": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100109": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100110": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100111": {
-      "image": "assets/swagbound/npc/npc-kid.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {
@@ -1766,28 +1546,6 @@
     },
     "100116": {
       "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100117": {
-      "image": "assets/swagbound/npc/npc-kid.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {
@@ -1940,28 +1698,6 @@
       "originX": 0.5,
       "originY": 1
     },
-    "100124": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "100125": {
       "image": "assets/swagbound/npc/npc-kid.png",
       "frameWidth": 80,
@@ -2006,74 +1742,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "100127": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100128": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "100129": {
       "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100130": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {
@@ -2117,50 +1787,6 @@
       "originY": 1
     },
     "100132": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100133": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100134": {
       "image": "assets/swagbound/npc/npc-neighbor.png",
       "frameWidth": 80,
       "frameHeight": 80,
@@ -2248,52 +1874,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "100138": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "100139": {
       "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100140": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {
@@ -2380,162 +1962,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "100144": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100145": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100146": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100147": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "100148": {
       "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100149": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100150": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100151": {
-      "image": "assets/swagbound/npc/npc-kid.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {
@@ -2622,140 +2050,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "100155": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "100156": {
       "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100157": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100158": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100159": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100160": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100161": {
-      "image": "assets/swagbound/npc/npc-kid.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {
@@ -2864,272 +2160,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "100166": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100167": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100168": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100169": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100170": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100171": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100172": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "100173": {
       "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100174": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100175": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100176": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100177": {
-      "image": "assets/swagbound/npc/npc-kid.png",
-      "frameWidth": 80,
-      "frameHeight": 80,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "100178": {
-      "image": "assets/swagbound/npc/npc-neighbor.png",
       "frameWidth": 80,
       "frameHeight": 80,
       "animations": {
@@ -3260,50 +2292,6 @@
       "originX": 0.5,
       "originY": 1
     },
-    "101103": {
-      "image": "assets/swagbound/overworld-npc/promo-john-004.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101104": {
-      "image": "assets/swagbound/overworld-npc/promo-john-005.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "101105": {
       "image": "assets/swagbound/overworld-npc/promo-juan-001.png",
       "frameWidth": 48,
@@ -3326,52 +2314,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "101106": {
-      "image": "assets/swagbound/overworld-npc/promo-juan-003.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "101107": {
       "image": "assets/swagbound/overworld-npc/promo-kinfolks-001.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101108": {
-      "image": "assets/swagbound/overworld-npc/promo-kinfolks-003.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -3612,28 +2556,6 @@
       "originX": 0.5,
       "originY": 1
     },
-    "101119": {
-      "image": "assets/swagbound/overworld-npc/promo-nft-santa-regina-2027-003.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "101120": {
       "image": "assets/swagbound/overworld-npc/promo-owee-003.png",
       "frameWidth": 48,
@@ -3678,52 +2600,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "101122": {
-      "image": "assets/swagbound/overworld-npc/promo-rajeevi-hindu-cousins-001.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "101123": {
       "image": "assets/swagbound/overworld-npc/promo-rajeevi-hindu-cousins-002.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101124": {
-      "image": "assets/swagbound/overworld-npc/promo-rajeevi-hindu-cousins-003.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -3768,28 +2646,6 @@
     },
     "101126": {
       "image": "assets/swagbound/overworld-npc/promo-rajeevi-hindu-cousins-005.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101127": {
-      "image": "assets/swagbound/overworld-npc/promo-retardio-cousins-001.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -3876,52 +2732,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "101131": {
-      "image": "assets/swagbound/overworld-npc/promo-solfussisters0-003.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "101132": {
       "image": "assets/swagbound/overworld-npc/promo-solfussisters0-004.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101133": {
-      "image": "assets/swagbound/overworld-npc/promo-solfussisters0-005.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -3986,74 +2798,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "101136": {
-      "image": "assets/swagbound/overworld-npc/promo-thumbs-up-dawg-004.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "101137": {
       "image": "assets/swagbound/overworld-npc/promo-unicornio-002.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101138": {
-      "image": "assets/swagbound/overworld-npc/promo-unicornio-003.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101139": {
-      "image": "assets/swagbound/overworld-npc/promo-unicornio-005.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -4118,28 +2864,6 @@
       "originX": 0.5,
       "originY": 1
     },
-    "101142": {
-      "image": "assets/swagbound/overworld-npc/promo-webkidz-004.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "101143": {
       "image": "assets/swagbound/overworld-npc/promo-webkidz-005.png",
       "frameWidth": 48,
@@ -4162,74 +2886,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "101144": {
-      "image": "assets/swagbound/overworld-npc/promo-autismo-step-cousins-001.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "101145": {
       "image": "assets/swagbound/overworld-npc/promo-blyadilio-002.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101146": {
-      "image": "assets/swagbound/overworld-npc/promo-blyadilio-004.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101147": {
-      "image": "assets/swagbound/overworld-npc/promo-chomsky-honks-002.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -4318,28 +2976,6 @@
     },
     "101151": {
       "image": "assets/swagbound/overworld-npc/promo-cryptic-kids-003.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101152": {
-      "image": "assets/swagbound/overworld-npc/promo-cryptic-kids-004.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -4492,52 +3128,8 @@
       "originX": 0.5,
       "originY": 1
     },
-    "101159": {
-      "image": "assets/swagbound/overworld-npc/promo-hakutaku-rebirth-001.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "101160": {
       "image": "assets/swagbound/overworld-npc/promo-hakutaku-rebirth-002.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101161": {
-      "image": "assets/swagbound/overworld-npc/promo-hakutaku-rebirth-003.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
@@ -4626,50 +3218,6 @@
     },
     "101165": {
       "image": "assets/swagbound/overworld-npc/promo-happy-campers-003.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101166": {
-      "image": "assets/swagbound/overworld-npc/promo-happy-campers-004.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "101167": {
-      "image": "assets/swagbound/overworld-npc/promo-happy-campers-005.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
