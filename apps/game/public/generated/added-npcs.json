@@ -1297,12 +1297,11 @@
     {
       "id": 101103,
       "worldPixel": {
-        "x": 1536,
-        "y": 232
+        "x": 7680,
+        "y": 1528
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A bloke in a bucket hat leans on the corner-shop cooler like it owes him money.",
@@ -1315,12 +1314,11 @@
     {
       "id": 101104,
       "worldPixel": {
-        "x": 1856,
-        "y": 176
+        "x": 7712,
+        "y": 1504
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A bloke leans on the corner-shop window like it owes him money. Claymation thumbprints all over his jaw.",
@@ -1350,12 +1348,11 @@
     {
       "id": 101106,
       "worldPixel": {
-        "x": 2544,
-        "y": 168
+        "x": 7424,
+        "y": 376
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A mustached guy in a loud cap gives you finger-guns across the town-hall floor like he's been waiting all morning to do it.",
@@ -1385,12 +1382,11 @@
     {
       "id": 101108,
       "worldPixel": {
-        "x": 768,
-        "y": 416
+        "x": 7456,
+        "y": 344
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A small kid in a green cap plants himself square in your path, arms folded like a fence post.",
@@ -1575,12 +1571,11 @@
     {
       "id": 101119,
       "worldPixel": {
-        "x": 1848,
-        "y": 888
+        "x": 7744,
+        "y": 1480
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A small figure in warm festive colors loiters by the corner shop, out of season by roughly everything.",
@@ -1627,12 +1622,11 @@
     {
       "id": 101122,
       "worldPixel": {
-        "x": 2888,
-        "y": 888
+        "x": 7744,
+        "y": 1528
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "Behind the counter, a warm man in an orange turban adjusts a headset that connects to nobody.",
@@ -1664,12 +1658,11 @@
     {
       "id": 101124,
       "worldPixel": {
-        "x": 936,
-        "y": 1176
+        "x": 7456,
+        "y": 376
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A warm man in an orange turban steps out from the town-hall line like he's been holding a spot for you.",
@@ -1716,12 +1709,11 @@
     {
       "id": 101127,
       "worldPixel": {
-        "x": 1856,
-        "y": 1240
+        "x": 7776,
+        "y": 1472
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A tiny kid in a bright red cap is standing on a crack in the sidewalk on purpose, watching to see if it counts.",
@@ -1788,12 +1780,11 @@
     {
       "id": 101131,
       "worldPixel": {
-        "x": 472,
-        "y": 1688
+        "x": 7776,
+        "y": 1504
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A girl in a plain frock stands too still by the shop window, watching her own reflection like it owes her money.",
@@ -1822,12 +1813,11 @@
     {
       "id": 101133,
       "worldPixel": {
-        "x": 1160,
-        "y": 1584
+        "x": 7488,
+        "y": 328
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A girl checks her own reflection in the shop window, then tilts her head like she's not sure it's checking back the same way.",
@@ -1876,12 +1866,11 @@
     {
       "id": 101136,
       "worldPixel": {
-        "x": 2200,
-        "y": 1592
+        "x": 7808,
+        "y": 1472
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "By the corner-shop door, a beaming little mascot throws you two enormous thumbs before you've said a word.",
@@ -1912,12 +1901,11 @@
     {
       "id": 101138,
       "worldPixel": {
-        "x": 2840,
-        "y": 1544
+        "x": 7808,
+        "y": 1504
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A pastel unicorn loiters by the corner shop, all hearts and sparkles and a faintly weary glitter.",
@@ -1929,12 +1917,11 @@
     {
       "id": 101139,
       "worldPixel": {
-        "x": 496,
-        "y": 1888
+        "x": 7488,
+        "y": 360
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A small kawaii unicorn is parked near town hall, radiating enough sweetness to make the whole square feel surveilled.",
@@ -1982,12 +1969,11 @@
     {
       "id": 101142,
       "worldPixel": {
-        "x": 1504,
-        "y": 1928
+        "x": 7440,
+        "y": 504
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A kid with huge wet eyes leans on the shop wall, cradling a bent trading card like it's a headstone.",
@@ -2017,12 +2003,11 @@
     {
       "id": 101144,
       "worldPixel": {
-        "x": 2200,
-        "y": 1896
+        "x": 7520,
+        "y": 320
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A kid in a yellow shirt is loudly counting the town-hall tiles and starting over every time you look.",
@@ -2052,12 +2037,11 @@
     {
       "id": 101146,
       "worldPixel": {
-        "x": 2816,
-        "y": 1976
+        "x": 7456,
+        "y": 472
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A kid in a red scarf loiters near the corner shop, scarf pulled up like weather they invented themselves.",
@@ -2070,12 +2054,11 @@
     {
       "id": 101147,
       "worldPixel": {
-        "x": 536,
-        "y": 2040
+        "x": 7472,
+        "y": 504
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "An owl in a beanie and shades leans on the corner-shop counter, working the register with the calm of a clerk who's seen your whole fit and priced it.",
@@ -2159,12 +2142,11 @@
     {
       "id": 101152,
       "worldPixel": {
-        "x": 2016,
-        "y": 2264
+        "x": 7488,
+        "y": 464
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A kid loiters just inside the corner shop's light, watching the door like it's about to confess something.",
@@ -2281,12 +2263,11 @@
     {
       "id": 101159,
       "worldPixel": {
-        "x": 1088,
-        "y": 3032
+        "x": 7504,
+        "y": 504
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A chibi girl in a pink cap that says FBI on it greets you from behind the corner-shop shelves, her eyes cheerful little X's that do not seem to affect her mood.",
@@ -2317,12 +2298,11 @@
     {
       "id": 101161,
       "worldPixel": {
-        "x": 1504,
-        "y": 3016
+        "x": 7520,
+        "y": 352
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A gentle glowing chibi drifts near the town-hall steps, a soft halo-light following a beat behind her.",
@@ -2405,12 +2385,11 @@
     {
       "id": 101166,
       "worldPixel": {
-        "x": 2656,
-        "y": 0
+        "x": 7552,
+        "y": 320
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A small red-capped camper gives you a two-handed thumbs-up outside the town hall, beaming like it's their whole job.",
@@ -2422,12 +2401,11 @@
     {
       "id": 101167,
       "worldPixel": {
-        "x": 2720,
-        "y": 0
+        "x": 7520,
+        "y": 464
       },
       "spriteGroup": 59,
       "facing": "down",
-      "movement": 599,
       "interaction": {
         "pages": [
           "A green-hooded gremlin with feathered wings and red goggles leans by the corner shop, throwing you a lazy peace sign.",

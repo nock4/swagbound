@@ -1,0 +1,470 @@
+{
+  "schema": "swagbound.onett-interiors.v1",
+  "interiors": {
+    "Onett Drug Store": {
+      "shopStoreId": 1,
+      "anchorNpcId": 9,
+      "confidence": "high",
+      "agreement": "both-routes-agree",
+      "streetDoorWorldPixel": {
+        "x": 1600,
+        "y": 1128
+      },
+      "interiorWorldPixel": {
+        "x": 7872,
+        "y": 1480
+      },
+      "interiorBBox": {
+        "minX": 7680,
+        "minY": 1472,
+        "maxX": 7920,
+        "maxY": 1528
+      },
+      "interiorWalkable": [
+        {
+          "x": 7680,
+          "y": 1528
+        },
+        {
+          "x": 7720,
+          "y": 1496
+        },
+        {
+          "x": 7760,
+          "y": 1480
+        },
+        {
+          "x": 7760,
+          "y": 1528
+        },
+        {
+          "x": 7800,
+          "y": 1472
+        },
+        {
+          "x": 7800,
+          "y": 1512
+        },
+        {
+          "x": 7840,
+          "y": 1496
+        },
+        {
+          "x": 7880,
+          "y": 1496
+        },
+        {
+          "x": 7920,
+          "y": 1520
+        }
+      ],
+      "howIdentified": "Shop route (A) and independent CoilSnake door-graph route (C) both land on the same anchor: NPC 9 (textPointer data_28.l_0xc74e83) at GLOBAL (7872,1480), a dual-counter interior (NPC 9 weapons/store1 + NPC 8 medicine/store2) entered from Onett overworld street door (1600,1128) landing at (7904,1512). eventRunner EB_SHOP_STORE_BY_REFERENCE maps data_28.l_0xc74e83 -> store 1 = [17,18,49,74,64] (Cracked bat/Tee ball bat/Yo-yo/Baseball cap/Cheap bracelet), confirmed = Onett Drug Store. Route A reports the clerk tile (7872,1480); route C reports the player landing (7904,1512) \u2014 only 32px apart, well within 200px. Both flag NPC 404 (data_19.l_0xc6501b) as the TWOSON store-1 clerk, not Onett. Verified against onett-npcs.json and onett-doors.json."
+    },
+    "Onett City Hall": {
+      "shopStoreId": null,
+      "anchorNpcId": 86,
+      "confidence": "high",
+      "agreement": "both-routes-agree",
+      "streetDoorWorldPixel": {
+        "x": 2648,
+        "y": 336
+      },
+      "interiorWorldPixel": {
+        "x": 7872,
+        "y": 200
+      },
+      "interiorBBox": {
+        "minX": 7424,
+        "minY": 320,
+        "maxX": 7832,
+        "maxY": 376
+      },
+      "interiorWalkable": [
+        {
+          "x": 7424,
+          "y": 376
+        },
+        {
+          "x": 7464,
+          "y": 336
+        },
+        {
+          "x": 7464,
+          "y": 376
+        },
+        {
+          "x": 7504,
+          "y": 320
+        },
+        {
+          "x": 7504,
+          "y": 360
+        },
+        {
+          "x": 7544,
+          "y": 320
+        },
+        {
+          "x": 7544,
+          "y": 360
+        },
+        {
+          "x": 7584,
+          "y": 320
+        },
+        {
+          "x": 7584,
+          "y": 360
+        },
+        {
+          "x": 7624,
+          "y": 336
+        },
+        {
+          "x": 7624,
+          "y": 376
+        },
+        {
+          "x": 7664,
+          "y": 328
+        }
+      ],
+      "howIdentified": "CoilSnake CCS-text route (C) and services/dialogue route (B) both anchor NPC 86 = Mayor B.H. Pirkle (textPointer data_27.l_0xc72af8) at GLOBAL (7872,200) in the Onett indoors region. Route C reports the player landing (7784,336) via the reciprocal door pair street (2648,336)->interior (7784,336); route B reports the mayor tile (7872,200) via street door (1656,1328)->landing (8032,616). The two agree on the same anchor NPC and building; the ~166px gap between mayor tile (7872,200) and landing (7784,336) is within 200px and reflects a 2nd-floor-office vs ground-floor-landing split. I use the mayor's tile (7872,200) to match the anchor-NPC convention, and the (2648,336) street door which route C verified as a reciprocal pair. Confirmed connected City Hall complex: lobby NPC 78 (data_26 'I work for City Hall'), staircase guard NPC 85 (data_27 'Mayor's office is on the second floor'). Not a shop. Cross-checked against onett-npcs.json and onett-doors.json."
+    },
+    "Onett Hospital": {
+      "shopStoreId": null,
+      "anchorNpcId": 115,
+      "confidence": "high",
+      "agreement": "single-route",
+      "streetDoorWorldPixel": {
+        "x": 1144,
+        "y": 1680
+      },
+      "interiorWorldPixel": {
+        "x": 7808,
+        "y": 984
+      },
+      "interiorBBox": {
+        "minX": 7176,
+        "minY": 960,
+        "maxX": 7408,
+        "maxY": 1016
+      },
+      "interiorWalkable": [
+        {
+          "x": 7176,
+          "y": 1008
+        },
+        {
+          "x": 7216,
+          "y": 976
+        },
+        {
+          "x": 7216,
+          "y": 1016
+        },
+        {
+          "x": 7256,
+          "y": 976
+        },
+        {
+          "x": 7256,
+          "y": 1016
+        },
+        {
+          "x": 7296,
+          "y": 960
+        },
+        {
+          "x": 7296,
+          "y": 1000
+        },
+        {
+          "x": 7336,
+          "y": 960
+        },
+        {
+          "x": 7336,
+          "y": 1000
+        },
+        {
+          "x": 7376,
+          "y": 976
+        },
+        {
+          "x": 7376,
+          "y": 1016
+        }
+      ],
+      "howIdentified": "Route B only. NPC 115 (GLOBAL 7808,984) textPointer data_20.l_0xc67a1c = 'Welcome to Onett Hospital. I run the place.' The game's generated/custom-dialogue.json tags byNpcId 115 {service:'hospital'} (also 111). Multi-room walkable/indoor building trace (714 cells) contains hospital NPCs 113-118. Outdoor Onett street door (1144,1680) warps into hospital lobby landing (7392,1000). Verified: door (1144,1680)->dest (7392,1000) present in onett-doors.json; NPC 115 at (7808,984) present in onett-npcs.json; interior indoor + walkable."
+    },
+    "Onett Bakery": {
+      "shopStoreId": 5,
+      "anchorNpcId": 40,
+      "confidence": "high",
+      "agreement": "single-route",
+      "streetDoorWorldPixel": {
+        "x": 1856,
+        "y": 1736
+      },
+      "interiorWorldPixel": {
+        "x": 7272,
+        "y": 1344
+      },
+      "interiorBBox": {
+        "minX": 6912,
+        "minY": 1344,
+        "maxX": 7376,
+        "maxY": 1400
+      },
+      "interiorWalkable": [
+        {
+          "x": 6912,
+          "y": 1400
+        },
+        {
+          "x": 6952,
+          "y": 1360
+        },
+        {
+          "x": 6952,
+          "y": 1400
+        },
+        {
+          "x": 6992,
+          "y": 1352
+        },
+        {
+          "x": 6992,
+          "y": 1392
+        },
+        {
+          "x": 7032,
+          "y": 1352
+        },
+        {
+          "x": 7032,
+          "y": 1400
+        },
+        {
+          "x": 7072,
+          "y": 1344
+        },
+        {
+          "x": 7072,
+          "y": 1384
+        },
+        {
+          "x": 7112,
+          "y": 1352
+        },
+        {
+          "x": 7112,
+          "y": 1392
+        },
+        {
+          "x": 7152,
+          "y": 1392
+        }
+      ],
+      "howIdentified": "Route B only. Clerk NPC 40 (GLOBAL 7272,1344) textPointer data_28.l_0xc76443 maps via eventRunner EB_SHOP_STORE_BY_REFERENCE -> store 5 = [Cookie, Bread roll, Skip sandwich, Lucky sandwich] = Bakery. Customer-floor flood (287 cells, guest NPCs 41,42,43,106,107) has outdoor Onett street door (1856,1736)->landing (7360,1384). Verified: door (1856,1736)->dest (7360,1384) in onett-doors.json; NPC 40 at (7272,1344) in onett-npcs.json."
+    },
+    "Onett Burger Shop": {
+      "shopStoreId": 4,
+      "anchorNpcId": 33,
+      "confidence": "medium",
+      "agreement": "single-route",
+      "streetDoorWorldPixel": {
+        "x": 1736,
+        "y": 1128
+      },
+      "interiorWorldPixel": {
+        "x": 7560,
+        "y": 448
+      },
+      "interiorBBox": {
+        "minX": 7440,
+        "minY": 464,
+        "maxX": 7672,
+        "maxY": 504
+      },
+      "interiorWalkable": [
+        {
+          "x": 7440,
+          "y": 504
+        },
+        {
+          "x": 7480,
+          "y": 472
+        },
+        {
+          "x": 7520,
+          "y": 464
+        },
+        {
+          "x": 7520,
+          "y": 504
+        },
+        {
+          "x": 7560,
+          "y": 464
+        },
+        {
+          "x": 7560,
+          "y": 504
+        },
+        {
+          "x": 7600,
+          "y": 464
+        },
+        {
+          "x": 7600,
+          "y": 504
+        },
+        {
+          "x": 7640,
+          "y": 480
+        }
+      ],
+      "howIdentified": "Route B only. Clerk NPC 33 (GLOBAL 7560,448) textPointer data_28.l_0xc763a3 -> store 4 = [Can of fruit juice, Cup of coffee, Bag of fries, Hamburger] = Burger Shop (canonically upstairs of the drug store). Customer floor (137 cells, guest NPCs 34,35,37,38) has outdoor Onett street door (1736,1128)->landing (7648,488). Medium because it is canonically the drug store's 2nd floor but has its own store id + street door in this ROM. Verified: door (1736,1128)->dest (7648,488) in onett-doors.json; NPC 33 at (7560,448) in onett-npcs.json."
+    },
+    "Onett Hotel": {
+      "shopStoreId": null,
+      "anchorNpcId": 58,
+      "confidence": "medium",
+      "agreement": "single-route",
+      "streetDoorWorldPixel": {
+        "x": 2040,
+        "y": 1416
+      },
+      "interiorWorldPixel": {
+        "x": 8024,
+        "y": 1472
+      },
+      "interiorBBox": {
+        "minX": 7944,
+        "minY": 1472,
+        "maxX": 8176,
+        "maxY": 1528
+      },
+      "interiorWalkable": [
+        {
+          "x": 7944,
+          "y": 1520
+        },
+        {
+          "x": 7984,
+          "y": 1488
+        },
+        {
+          "x": 7984,
+          "y": 1528
+        },
+        {
+          "x": 8024,
+          "y": 1488
+        },
+        {
+          "x": 8024,
+          "y": 1528
+        },
+        {
+          "x": 8064,
+          "y": 1472
+        },
+        {
+          "x": 8064,
+          "y": 1512
+        },
+        {
+          "x": 8104,
+          "y": 1480
+        },
+        {
+          "x": 8104,
+          "y": 1520
+        },
+        {
+          "x": 8144,
+          "y": 1488
+        },
+        {
+          "x": 8144,
+          "y": 1528
+        }
+      ],
+      "howIdentified": "Route B only. generated/custom-dialogue.json tags byNpcId 58 {service:'hotel', cost:100} = hotel check-in clerk at GLOBAL (8024,1472); adjacent NPC 60 {service:'phone'} at (8000,1472) = canonical hotel-lobby phone. Customer-floor flood (177 cells, guest NPC 59) has outdoor Onett street door (2040,1416)->landing (8160,1512). Medium: service tag is solid, exact street door via customer-floor flood. Verified: door (2040,1416)->dest (8160,1512) in onett-doors.json; NPC 58 at (8024,1472) in onett-npcs.json (its own textPointer is data_44.l_0xc90339; the hotel identity comes from the service tag, consistent with the ROM service system)."
+    },
+    "Onett Arcade": {
+      "shopStoreId": null,
+      "anchorNpcId": 1,
+      "confidence": "medium",
+      "agreement": "single-route",
+      "streetDoorWorldPixel": {
+        "x": 1592,
+        "y": 1680
+      },
+      "interiorWorldPixel": {
+        "x": 7824,
+        "y": 688
+      },
+      "interiorBBox": {
+        "minX": 7424,
+        "minY": 688,
+        "maxX": 8024,
+        "maxY": 760
+      },
+      "interiorWalkable": [
+        {
+          "x": 7424,
+          "y": 760
+        },
+        {
+          "x": 7464,
+          "y": 736
+        },
+        {
+          "x": 7504,
+          "y": 712
+        },
+        {
+          "x": 7504,
+          "y": 752
+        },
+        {
+          "x": 7544,
+          "y": 704
+        },
+        {
+          "x": 7544,
+          "y": 744
+        },
+        {
+          "x": 7584,
+          "y": 704
+        },
+        {
+          "x": 7584,
+          "y": 744
+        },
+        {
+          "x": 7624,
+          "y": 712
+        },
+        {
+          "x": 7624,
+          "y": 752
+        },
+        {
+          "x": 7664,
+          "y": 752
+        },
+        {
+          "x": 7704,
+          "y": 736
+        }
+      ],
+      "howIdentified": "Route B only. NPC 1 (GLOBAL 7824,688) textPointer data_28.l_0xc74c07 = 'Hey kid! Do you wanna become a member?' with the punk/gang-hangout dialogue = canonical Onett Arcade. Outdoor Onett street door (1592,1680)->landing (7816,688), right at NPC 1. Medium: NPC 1 dialogue is unambiguous, but the interior trace over-merges with an adjacent plaza so the full extent is not isolated; anchor on NPC 1. Verified: door (1592,1680)->dest (7816,688) in onett-doors.json; NPC 1 at (7824,688) in onett-npcs.json."
+    }
+  }
+}
