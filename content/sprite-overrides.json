@@ -16333,6 +16333,72 @@
       "displayHeight": 24,
       "originX": 0.5,
       "originY": 1
+    },
+    "131": {
+      "image": "assets/swagbound/overworld-npc/mifella-2.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 36,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "54": {
+      "image": "assets/swagbound/overworld-npc/returnless-king.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 36,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "37": {
+      "image": "assets/swagbound/overworld-npc/malady.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 36,
+      "originX": 0.5,
+      "originY": 1
     }
   }
 }
