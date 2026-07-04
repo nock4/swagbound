@@ -18,6 +18,8 @@ export interface BattleSfx {
   run(): void;
   victory(): void;
   levelUp(): void;
+  /** EB low-HP "danger" heartbeat, pulsed on an interval while a party member is critical in battle. */
+  dangerHeartbeat(): void;
 }
 
 export type BattleSfxCue = Exclude<keyof BattleSfx, "resume">;
@@ -47,6 +49,7 @@ export class NoopBattleSfx implements BattleSfx {
   run(): void {}
   victory(): void {}
   levelUp(): void {}
+  dangerHeartbeat(): void {}
 }
 
 export class WebAudioBattleSfx implements BattleSfx {
@@ -163,6 +166,15 @@ export class WebAudioBattleSfx implements BattleSfx {
     this.withContext((context) => {
       const start = context.currentTime;
       this.tone(context, { type: "square", start, duration: 0.026, fromHz: 880, toHz: 920, gain: 0.035 });
+    });
+  }
+
+  dangerHeartbeat(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      // EB low-HP warning: a low "lub-dub" double-thump (two soft descending sine pulses).
+      this.tone(context, { type: "sine", start, duration: 0.09, fromHz: 150, toHz: 90, gain: 0.11 });
+      this.tone(context, { type: "sine", start: start + 0.14, duration: 0.11, fromHz: 130, toHz: 74, gain: 0.09 });
     });
   }
 

@@ -468,6 +468,7 @@ export class BattleScene extends Phaser.Scene {
   private sfxCount_ = 0;
   private firedSfx_ = new Set<BattleSfxCue>();
   private nextHpTickSfxAtMs_ = 0;
+  private nextDangerBeatAtMs_ = 0;
   private returnTo_?: BattleReturnContext;
   private exitOutcome_: BattleReturnOutcome | null = null;
 
@@ -645,6 +646,7 @@ export class BattleScene extends Phaser.Scene {
     this.updateBackground();
     this.tickStatusPpMeters(delta);
     this.tickVictoryPresentation(delta);
+    this.updateDangerHeartbeat();
 
     if (this.phase_ === "enter-transition") {
       this.transitionMs_ = Math.max(0, this.transitionMs_ - delta);
@@ -1376,6 +1378,28 @@ export class BattleScene extends Phaser.Scene {
     return this.battle_.party.some((member) => member.hp.isRolling) ||
       this.battle_.enemies.some((enemy) => enemy.hp.isRolling) ||
       [...this.ppMeters.values()].some((meter) => meter.isRolling);
+  }
+
+  /**
+   * EB low-HP heartbeat: while any living party member is critical (<= maxHp/8, matching the
+   * overworld's isDangerHp) during active fighting, pulse the "lub-dub" on an interval. Called
+   * directly (not via playBattleSfxCue) so the ambient beat doesn't pollute the sfx-cue tracking.
+   */
+  private updateDangerHeartbeat(): void {
+    const active = this.phase_ === "command-input" || this.phase_ === "execution";
+    const danger = active && this.battle_.party.some((member) => {
+      const hp = member.hp.target;
+      return hp > 0 && hp <= Math.max(1, Math.floor(member.maxHp / 8));
+    });
+    if (!danger) {
+      this.nextDangerBeatAtMs_ = 0;
+      return;
+    }
+    if (this.time.now < this.nextDangerBeatAtMs_) {
+      return;
+    }
+    this.nextDangerBeatAtMs_ = this.time.now + 820;
+    this.battleSfx_.dangerHeartbeat();
   }
 
   private playBattleSfxCue(cue: BattleSfxCue): void {
