@@ -274,7 +274,7 @@ describe("RuntimeEventHost", () => {
     vi.useRealTimers();
   });
 
-  it("uses generated NPC barks without skipping shop effects", () => {
+  it("keeps reference shopkeeper text over a generated bark, and still runs the shop effect", () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-01-01T00:00:00Z"));
 
@@ -317,7 +317,9 @@ describe("RuntimeEventHost", () => {
     })).toBe(true);
 
     expect(dialogue.open).toBe(true);
-    expect(dialogue.pages.map((page) => page.text)).toEqual(["wake up we gotta turn the power on"]);
+    // A generated Drifella bark is low-priority filler: it defers to the NPC's real
+    // reference text (matching src/eventHost.test.ts), while the shop effect still runs.
+    expect(dialogue.pages.map((page) => page.text)).toEqual(["Raw shopkeeper text."]);
     expect(shops).toEqual([]);
 
     vi.advanceTimersByTime(200);
