@@ -12,6 +12,7 @@
 /** The authored Swagbound battle ailments. */
 export type StatusAilment =
   | "poisoned" // loses a slice of HP at the end of each of its turns
+  | "sunstroke" // field hazard (desert 0x04 cells): drains HP per step until cooled off in water
   | "paralyzed" // cannot act
   | "asleep" // cannot act; may wake each turn
   | "confused" // offense may strike a random side
@@ -19,6 +20,7 @@ export type StatusAilment =
 
 export const STATUS_AILMENTS: readonly StatusAilment[] = [
   "poisoned",
+  "sunstroke",
   "paralyzed",
   "asleep",
   "confused",
@@ -39,6 +41,8 @@ export type StatusState = StatusInstance[];
 
 /** Default poison loss = maxHp / POISON_HP_DIVISOR per tick (authored). */
 export const POISON_HP_DIVISOR = 16;
+/** Sunstroke drains gentler than poison (authored). */
+export const SUNSTROKE_HP_DIVISOR = 32;
 export const FIELD_POISON_MIN_HP = 1;
 /** Default shield damage reduction percent (authored). */
 export const DEFAULT_SHIELD_PERCENT = 50;
@@ -47,6 +51,7 @@ export const SLEEP_WAKE_CHANCE = 0.34;
 
 const STATUS_AILMENT_LABELS = {
   poisoned: "Poison",
+  sunstroke: "Sunstroke",
   paralyzed: "Paralysis",
   asleep: "Sleep",
   confused: "Confusion",
@@ -55,6 +60,7 @@ const STATUS_AILMENT_LABELS = {
 
 const STATUS_AILMENT_BADGES = {
   poisoned: "PSN",
+  sunstroke: "SUN",
   paralyzed: "PAR",
   asleep: "SLP",
   confused: "CNF",
@@ -95,6 +101,15 @@ export function poisonDamagePerTick(state: StatusState | undefined, maxHp: numbe
   return Math.max(1, Math.floor(Math.max(0, maxHp) / denom));
 }
 
+export function sunstrokeDamagePerTick(state: StatusState | undefined, maxHp: number): number {
+  const sunstroke = state?.find((entry) => entry.ailment === "sunstroke");
+  if (!sunstroke) {
+    return 0;
+  }
+  const denom = sunstroke.magnitude && sunstroke.magnitude > 0 ? sunstroke.magnitude : SUNSTROKE_HP_DIVISOR;
+  return Math.max(1, Math.floor(Math.max(0, maxHp) / denom));
+}
+
 export function fieldPoisonTick(
   state: StatusState | undefined,
   currentHp: number,
@@ -104,7 +119,7 @@ export function fieldPoisonTick(
   if (current <= FIELD_POISON_MIN_HP) {
     return { hpLoss: 0, nextHp: current };
   }
-  const damage = poisonDamagePerTick(state, maxHp);
+  const damage = poisonDamagePerTick(state, maxHp) + sunstrokeDamagePerTick(state, maxHp);
   if (damage <= 0) {
     return { hpLoss: 0, nextHp: current };
   }

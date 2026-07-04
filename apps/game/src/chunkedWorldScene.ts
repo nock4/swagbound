@@ -149,7 +149,7 @@ import {
 } from "./newGameOpening";
 import { equipmentSlotForItemType, PartyState, type PartyStateSnapshot } from "./partyState";
 import { createBattleSfx, type BattleSfx, type BattleSfxCue } from "./audio/battleSfx";
-import { STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
+import { hasStatus, STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
 import type { OverworldStatusHudView } from "./overworldStatusHud";
 import {
   applySaveState,
@@ -467,6 +467,10 @@ const OVERWORLD_ENEMY_FLEE_SPEED_PX_PER_SEC = 66;
 const OVERWORLD_ENEMY_SPAWN_ATTEMPTS = 8;
 const LOW_HP_DANGER_FRACTION = 1 / 8;
 const LOW_HP_DANGER_BEEP_INTERVAL_MS = 820;
+// Field hazards (docs/collision-semantics.md): sunstroke roll per stepped desert
+// tile; deep water wading speed factor.
+const SUNSTROKE_CHANCE_PER_STEP = 0.05;
+const DEEP_WATER_SPEED_MULTIPLIER = 0.55;
 const ROOM_MASK_EDGE_INSET_SCREEN_PX = 0.5;
 const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
 const CUTSCENE_ACTOR_MOVE_TIMEOUT_MS = 8_000;
@@ -1033,7 +1037,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     stepPlayer(this.playerState, input, {
       deltaMs: delta,
-      speed: PLAYER_SPEED,
+      speed: PLAYER_SPEED * this.terrainSpeedMultiplier(),
       bounds: this.movementBounds(),
       blocked: (x, y) =>
         this.blocked(x, y, {
@@ -1044,6 +1048,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
     const playerSteppedTile = this.syncEncounterTileState();
     this.applyFieldPoisonForStep(playerSteppedTile);
+    this.applyFieldHazardsForStep(playerSteppedTile);
     this.syncPlayerObject();
     this.refreshRoomBounds();
     this.syncOverworldMusicCue();
@@ -3506,6 +3511,63 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.poisonHpLost += ticks.reduce((sum, tick) => sum + tick.hpLoss, 0);
     this.transitionSfx.poisonTick();
     this.refreshMenuScreens();
+  }
+
+  /**
+   * EB field hazards from the decoded surface flags (docs/collision-semantics.md):
+   * desert cells (0x04-alone) can inflict sunstroke — drains HP per step via the
+   * shared field tick — and any water (0x08) cools it back off. Deep water (0x0c)
+   * also wades at roughly half speed via terrainSpeedMultiplier.
+   */
+  private applyFieldHazardsForStep(playerSteppedTile: boolean): void {
+    if (!playerSteppedTile) {
+      return;
+    }
+    let surface = 0;
+    try {
+      surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
+    } catch {
+      return;
+    }
+    if (isWaterSurface(surface)) {
+      let cured = false;
+      for (const memberId of this.partyState.party()) {
+        if (hasStatus(this.partyState.statuses(memberId), "sunstroke")) {
+          this.partyState.cureStatus(memberId, "sunstroke");
+          cured = true;
+        }
+      }
+      if (cured) {
+        this.refreshMenuScreens();
+        this.publish();
+      }
+      return;
+    }
+    if (!isSunstrokeSurface(surface) || Math.random() >= SUNSTROKE_CHANCE_PER_STEP) {
+      return;
+    }
+    let inflicted = false;
+    for (const memberId of this.partyState.party()) {
+      if (!hasStatus(this.partyState.statuses(memberId), "sunstroke")) {
+        this.partyState.inflictStatus(memberId, "sunstroke");
+        inflicted = true;
+      }
+    }
+    if (inflicted) {
+      this.transitionSfx.poisonTick();
+      this.refreshMenuScreens();
+      this.publish();
+    }
+  }
+
+  /** Deep water (0x08 + 0x04) wades at roughly half speed; everything else is full speed. */
+  private terrainSpeedMultiplier(): number {
+    try {
+      const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
+      return isDeepWaterSurface(surface) ? DEEP_WATER_SPEED_MULTIPLIER : 1;
+    } catch {
+      return 1;
+    }
   }
 
   private overworldHudPartyMembers(): PartyMember[] {
@@ -6186,8 +6248,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
       ko: this.leadPartyMemberDowned(), // real KO signal: lead at 0 HP -> dead/ghost overworld sprite
       // ladder/rope/bike real triggers await tile-class data + a mount mechanic; forced-path for now.
       ...forced,
-      status: { ...base.status, ...(forced.status ?? {}) }
+      status: { ...base.status, sweating: this.leadHasSunstroke(), ...(forced.status ?? {}) }
     };
+  }
+
+  /** Live sweat-overlay signal: the lead carries the sunstroke field ailment. */
+  private leadHasSunstroke(): boolean {
+    const leadId = this.partyState.party()[0];
+    return leadId !== undefined && hasStatus(this.partyState.statuses(leadId), "sunstroke");
   }
 
   /** The lead (front) party member is downed (0 HP) — shows the dead overworld sprite. */

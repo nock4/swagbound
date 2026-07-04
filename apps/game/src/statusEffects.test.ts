@@ -40,3 +40,27 @@ describe("battle-scoped status cleanup", () => {
     ]);
   });
 });
+
+describe("sunstroke (desert field hazard)", () => {
+  it("drains gentler than poison and stacks with it in the field tick", async () => {
+    const m = await import("./statusEffects");
+    expect(m.sunstrokeDamagePerTick([{ ailment: "sunstroke" }], 96)).toBe(3); // 96/32
+    expect(m.sunstrokeDamagePerTick([], 96)).toBe(0);
+    expect(m.fieldPoisonTick([{ ailment: "sunstroke" }], 20, 96)).toEqual({ hpLoss: 3, nextHp: 17 });
+    expect(m.fieldPoisonTick([{ ailment: "poisoned" }, { ailment: "sunstroke" }], 20, 96)).toEqual({ hpLoss: 9, nextHp: 11 }); // 96/16 + 96/32
+  });
+
+  it("floors at 1 HP and never kills in the field", async () => {
+    const m = await import("./statusEffects");
+    expect(m.fieldPoisonTick([{ ailment: "sunstroke" }], 2, 96)).toEqual({ hpLoss: 1, nextHp: 1 });
+    expect(m.fieldPoisonTick([{ ailment: "sunstroke" }], 1, 96)).toEqual({ hpLoss: 0, nextHp: 1 });
+  });
+
+  it("has a label and badge, and is not battle-scoped", async () => {
+    const m = await import("./statusEffects");
+    expect(m.statusAilmentLabel("sunstroke")).toBe("Sunstroke");
+    expect(m.statusAilmentBadge("sunstroke")).toBe("SUN");
+    expect(m.isBattleScopedStatus("sunstroke")).toBe(false);
+    expect(m.formatStatusAilments([{ ailment: "sunstroke" }])).toBe("Sunstroke");
+  });
+});
