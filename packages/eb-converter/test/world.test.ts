@@ -66,6 +66,10 @@ function syntheticFts(): string {
       lines.push(cell(1, 0x80).repeat(16)); // visible solid tile
     } else if (i === 3) {
       lines.push(cell(1, 0x00, 1 << 13).repeat(16)); // high-priority foreground tile
+    } else if (i === 4) {
+      lines.push(cell(1, 0x03).repeat(16)); // walkable whole-body walk-behind (tree canopy)
+    } else if (i === 5) {
+      lines.push(cell(1, 0x82).repeat(16)); // solid front face carrying a stray FG flag
     } else {
       lines.push(cell(0, 0x00).repeat(16)); // blank void tile
     }
@@ -345,6 +349,50 @@ describe("region selection and collision encoding", () => {
 
     expect(bottomForegroundPixel(2)).toEqual([255, 0, 0, 255]);
     expect(bottomForegroundPixel(1)).toEqual([0, 0, 0, 0]);
+  });
+
+  it("promotes walkable whole-body walk-behind cells (0x02) to the foreground", () => {
+    // EB's tree canopies / upper wall bands are WALKABLE cells flagged 0x02(+0x01):
+    // no solidity, no priority bit — the flag is the only promotion signal. A solid
+    // front face with a stray flag (0x82) must stay background-only (heads draw over
+    // it), and the art must remain in the background too (FG is a duplicate).
+    const tileset = parseFts(syntheticFts());
+    const graphics = { tileset, palettes: new Map([[0, tileset.palettes[0]]]) };
+    const sector = {
+      tileset: 0,
+      palette: 0,
+      music: "0",
+      setting: "none",
+      townMap: "none",
+      item: "0",
+      areaId: 0,
+      indoor: false,
+      bounded: false
+    };
+    const composeWithTopTile = (arrangementIndex: number) => {
+      const mapRows = Array.from({ length: FULL_CHUNK_SIZE_TILES }, () =>
+        Array.from({ length: FULL_CHUNK_SIZE_TILES }, () => 1)
+      );
+      mapRows[0][0] = arrangementIndex;
+      return composeRegion({
+        bounds: {
+          originTileX: 0,
+          originTileY: 0,
+          widthTiles: FULL_CHUNK_SIZE_TILES,
+          heightTiles: FULL_CHUNK_SIZE_TILES
+        },
+        mapRows,
+        sectorLookup: () => sector,
+        tilesetForMapTileset: () => graphics
+      });
+    };
+
+    const canopy = composeWithTopTile(4);
+    expect([...canopy.foreground.slice(0, 4)]).toEqual([255, 0, 0, 255]); // promoted above actors
+    expect([...canopy.background.slice(0, 4)]).toEqual([255, 0, 0, 255]); // still drawn below too
+
+    expect([...composeWithTopTile(5).foreground.slice(0, 4)]).toEqual([0, 0, 0, 0]); // solid front face: background-only
+    expect([...composeWithTopTile(1).foreground.slice(0, 4)]).toEqual([0, 0, 0, 0]); // plain walkable: unchanged
   });
 
   it("maps CoilSnake sprite-group frames to per-direction walk pairs", () => {

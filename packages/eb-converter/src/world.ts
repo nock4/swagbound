@@ -25,6 +25,7 @@ import {
   isBlankArrangement,
   isSolidSurface,
   isOccluderTile,
+  isWholeBodyForegroundCell,
   type FtsTileset,
   type FtsPalette
 } from "./fts";
@@ -340,7 +341,12 @@ export function composeRegion(options: {
   // Second pass: draw the above-actor foreground. A solid tile is promoted only
   // when the tile directly below is also solid (isOccluderTile) — the front face
   // the player overlaps stays in the background so the player draws over it.
-  // Priority-bit cells always go to the foreground.
+  // Priority-bit cells always go to the foreground. Walkable cells with EB's
+  // whole-body walk-behind flag (0x02: tree canopies, upper wall bands) are
+  // promoted too — EB has no priority bits on this map's tilesets, so these
+  // flags are the ONLY signal that art must draw over an actor standing on the
+  // cell. Solid flagged cells (0x82) are excluded: an actor can never stand on
+  // them, and promoting front faces would hide heads.
   const solidCountAt = (tx: number, ty: number): number =>
     tx < 0 || ty < 0 || tx >= bounds.widthTiles || ty > bounds.heightTiles
       ? 0
@@ -353,7 +359,11 @@ export function composeRegion(options: {
       const cellIndex = tile.arrangementIndex * 16 + cellY * 4 + cellX;
       const cell = decodeArrangementCell(tile.tileset.arrangements[cellIndex]);
       const surfaceByte = tile.tileset.collisions[cellIndex];
-      return cell.priority || (occluder && isSolidSurface(surfaceByte));
+      return (
+        cell.priority ||
+        (occluder && isSolidSurface(surfaceByte)) ||
+        (!isSolidSurface(surfaceByte) && isWholeBodyForegroundCell(surfaceByte))
+      );
     };
     if (tile.overrideImage) {
       drawTileOverrideImage({
@@ -374,7 +384,10 @@ export function composeRegion(options: {
         targetX: tile.tx * TILE_SIZE,
         targetY: tile.ty * TILE_SIZE,
         priorityOnly: true,
-        cellInForeground: (cell, surfaceByte) => cell.priority || (occluder && isSolidSurface(surfaceByte))
+        cellInForeground: (cell, surfaceByte) =>
+          cell.priority ||
+          (occluder && isSolidSurface(surfaceByte)) ||
+          (!isSolidSurface(surfaceByte) && isWholeBodyForegroundCell(surfaceByte))
       });
     }
   }
