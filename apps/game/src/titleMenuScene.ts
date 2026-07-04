@@ -53,6 +53,7 @@ export class TitleMenuScene extends Phaser.Scene {
   private slide?: Phaser.GameObjects.Image;
   private prompt?: Phaser.GameObjects.Text;
   private promptClockMs = 0;
+  private transitioning = false;
   private music?: Music;
 
   private menuItems: { label: string; run: () => void }[] = [];
@@ -105,6 +106,25 @@ export class TitleMenuScene extends Phaser.Scene {
     this.events.once("shutdown", () => {
       this.input.off("pointerdown");
     });
+
+    this.cameras.main.fadeIn(600, 0, 0, 0);
+  }
+
+  /** Fade to black, run the swap, fade back in — with an input guard during the fade. */
+  private fadeSwap(swap: () => void): void {
+    if (this.transitioning) {
+      return;
+    }
+    this.transitioning = true;
+    const cam = this.cameras.main;
+    cam.fadeOut(240, 0, 0, 0);
+    cam.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+      swap();
+      cam.fadeIn(240, 0, 0, 0);
+      cam.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
+        this.transitioning = false;
+      });
+    });
   }
 
   update(_time: number, delta: number): void {
@@ -126,13 +146,18 @@ export class TitleMenuScene extends Phaser.Scene {
   }
 
   private confirm(): void {
+    if (this.transitioning) {
+      return;
+    }
     if (this.phase === "title") {
-      this.phase = "war";
-      this.showSlide(WAR_SLIDE_KEY);
-      // Glass Chime (Inoyamaland) begins on the "war against milady" slide.
-      void this.music?.play(MENU_CUE);
-      this.prompt?.setText("PRESS  Z");
-      this.prompt?.setDepth(10);
+      this.fadeSwap(() => {
+        this.phase = "war";
+        this.showSlide(WAR_SLIDE_KEY);
+        // Glass Chime (Inoyamaland) begins on the "war against milady" slide.
+        void this.music?.play(MENU_CUE);
+        this.prompt?.setText("PRESS  Z");
+        this.prompt?.setDepth(10);
+      });
       return;
     }
     if (this.phase === "war") {
@@ -215,6 +240,14 @@ export class TitleMenuScene extends Phaser.Scene {
   }
 
   private go(target: TitleMenuTarget): void {
-    this.scene.start(target.sceneKey, target.data);
+    if (this.transitioning) {
+      return;
+    }
+    this.transitioning = true;
+    const cam = this.cameras.main;
+    cam.fadeOut(420, 0, 0, 0);
+    cam.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+      this.scene.start(target.sceneKey, target.data);
+    });
   }
 }
