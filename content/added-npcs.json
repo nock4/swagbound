@@ -1639,7 +1639,8 @@
           "\"Welcome to the corner shop, claimant. Everything's priced. The read on you is free today. Consider it a loss leader.\"",
           "\"You buy, you sell, you loiter. All three get filed. Only one gets you a receipt.\"",
           "\"Take your time. The kiosk out front already knows what you want. I just like hearing you say it.\""
-        ]
+        ],
+        "shop": 1
       }
     },
     {
@@ -2081,7 +2082,8 @@
           "\"Welcome to the shop, claimant. Membership's free. The read is what costs, and I read fast.\"",
           "\"Everything on these shelves is witnessed, provenance clean, no leaks. Can't say the same for the guy who sold it to me, but that's the trade.\"",
           "He flashes an OK-hand. \"You buying, or you just here to get filed? Either way the kiosk's already logged your shoe size.\""
-        ]
+        ],
+        "shop": 1
       }
     },
     {
