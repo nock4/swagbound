@@ -87,6 +87,19 @@ export function statusAilmentBadge(ailment: StatusAilment): string {
   return STATUS_AILMENT_BADGES[ailment];
 }
 
+/** Compact badge readout with remaining-turn timers for a status card: "PSN·3 SLP". */
+export function statusBadgeLabel(state: StatusState | undefined): string {
+  if (!state || state.length === 0) {
+    return "";
+  }
+  return state
+    .map((entry) => {
+      const badge = statusAilmentBadge(entry.ailment);
+      return entry.remaining !== undefined ? `${badge}·${entry.remaining}` : badge;
+    })
+    .join(" ");
+}
+
 export function formatStatusAilments(state: StatusState | undefined): string {
   const labels = (state ?? []).map((entry) => statusAilmentLabel(entry.ailment));
   return labels.length > 0 ? labels.join(", ") : "OK";

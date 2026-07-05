@@ -64,3 +64,15 @@ describe("sunstroke (desert field hazard)", () => {
     expect(m.formatStatusAilments([{ ailment: "sunstroke" }])).toBe("Sunstroke");
   });
 });
+
+describe("status badge label (battle card timers)", () => {
+  it("renders badges with remaining-turn timers", async () => {
+    const m = await import("./statusEffects");
+    expect(m.statusBadgeLabel([])).toBe("");
+    expect(m.statusBadgeLabel(undefined)).toBe("");
+    expect(m.statusBadgeLabel([{ ailment: "poisoned", remaining: 3 }])).toBe("PSN·3");
+    expect(m.statusBadgeLabel([{ ailment: "asleep" }])).toBe("SLP"); // no timer when open-ended
+    expect(m.statusBadgeLabel([{ ailment: "paralyzed", remaining: 2 }, { ailment: "confused", remaining: 1 }])).toBe("PAR·2 CNF·1");
+    expect(m.statusBadgeLabel([{ ailment: "sunstroke" }])).toBe("SUN");
+  });
+});

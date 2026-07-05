@@ -137,7 +137,7 @@ import {
 import { combatantBaseStats, type PartyMember } from "./characterModel";
 import type { PartyBattleMemberSnapshot, PartyStateSnapshot } from "./partyState";
 import { decodeItemUseEffect } from "./partyState";
-import { stripBattleScopedStatuses, type StatusState } from "./statusEffects";
+import { statusBadgeLabel, stripBattleScopedStatuses, type StatusState } from "./statusEffects";
 import {
   createAnimatedBattleBackground,
   staticBattleBackgroundDebug,
@@ -392,6 +392,8 @@ type BattleStatusCardView = {
   target: boolean;
   /** HP target hit 0 but the odometer is still rolling — the mortal-damage race is on. */
   mortal: boolean;
+  /** Active status badges with remaining-turn counts, e.g. "PSN·3 SLP·1". */
+  statusLabel: string;
 };
 type BattleStatusCardLayout = CanvasRect & {
   index: number;
@@ -3124,7 +3126,8 @@ export class BattleScene extends Phaser.Scene {
     rect: BattleStatusCardLayout,
     textSet: BattleStatusCardTextSet
   ): void {
-    textSet.name.setText(this.fitMeasuredText(card.name, this.statusCardNameWidth(rect)));
+    const nameWithStatus = card.statusLabel ? `${card.name}  ${card.statusLabel}` : card.name;
+    textSet.name.setText(this.fitMeasuredText(nameWithStatus, this.statusCardNameWidth(rect)));
     textSet.hpLabel.setText("HP");
     textSet.ppLabel.setText("PP");
     textSet.hpValue.setText(`${card.hp}/${card.maxHp}`);
@@ -3295,7 +3298,8 @@ export class BattleScene extends Phaser.Scene {
         maxPp: member.maxPp,
         active: memberIndex === activeMemberIndex,
         target: memberIndex === targetMemberIndex,
-        mortal: isPendingPartyMortalWound(member)
+        mortal: isPendingPartyMortalWound(member),
+        statusLabel: statusBadgeLabel(member.statuses)
       };
     });
     for (const memberIndex of this.ppMeters.keys()) {
