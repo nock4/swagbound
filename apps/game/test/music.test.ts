@@ -62,6 +62,35 @@ describe("music manifest resolution", () => {
       gain: 0.45
     });
   });
+
+  it("resolves a per-group boss cue, falling back to the generic boss track", () => {
+    const parsed = MusicManifestSchema.parse({
+      schema: "swagbound.music-manifest.v1",
+      cues: {
+        boss: { file: "audio/music/boss.mp3", loop: true, gain: 0.42 }
+      },
+      bossCues: {
+        "449": { file: "audio/music/venue.mp3", loop: true, gain: 0.5 }
+      }
+    });
+
+    // Group with a dedicated track uses it.
+    expect(resolveMusicCue(parsed, "boss:449")).toEqual({
+      cue: "boss:449",
+      file: "audio/music/venue.mp3",
+      loop: true,
+      gain: 0.5
+    });
+    // Group without one falls back to the generic boss cue (still plays).
+    expect(resolveMusicCue(parsed, "boss:172")).toEqual({
+      cue: "boss:172",
+      file: "audio/music/boss.mp3",
+      loop: true,
+      gain: 0.42
+    });
+    // The plain boss cue still resolves.
+    expect(resolveMusicCue(parsed, "boss")).toMatchObject({ file: "audio/music/boss.mp3" });
+  });
 });
 
 describe("NoopMusic", () => {

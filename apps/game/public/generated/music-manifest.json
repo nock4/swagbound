@@ -1053,10 +1053,117 @@
           1447
         ]
       }
+    },
+    {
+      "id": "winters",
+      "label": "Winters (cold)",
+      "file": "audio/jammers/122__benoit-pioulard-sean-curtis-patrick__eaglescliffe.mp3",
+      "loop": true,
+      "gain": 0.38,
+      "match": {
+        "sectorIds": [
+          512,
+          513,
+          514,
+          544,
+          545,
+          546,
+          547,
+          576,
+          577,
+          578,
+          579,
+          609,
+          610,
+          611,
+          738,
+          739,
+          770,
+          771,
+          800,
+          801,
+          802,
+          803,
+          832,
+          833,
+          834,
+          835,
+          864,
+          865,
+          866,
+          867,
+          1056,
+          1057,
+          1058,
+          1088,
+          1089,
+          1090,
+          1120,
+          1121,
+          1122,
+          1184,
+          1185,
+          1186,
+          1187,
+          1216,
+          1217,
+          1218,
+          1219,
+          1248,
+          1249,
+          1250,
+          1251
+        ]
+      }
+    },
+    {
+      "id": "moonside",
+      "label": "Moonside (surreal)",
+      "file": "audio/jammers/110__tengger__see.mp3",
+      "loop": true,
+      "gain": 0.4,
+      "match": {
+        "sectorIds": [
+          923,
+          924,
+          925,
+          926,
+          927,
+          955,
+          956,
+          957,
+          958,
+          959,
+          987,
+          988,
+          989,
+          990,
+          991,
+          1021,
+          1022,
+          1023,
+          1053,
+          1054,
+          1055,
+          1085,
+          1086,
+          1087
+        ]
+      }
     }
   ],
   "interiors": {
+    "17": {
+      "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
     "18": {
+      "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "19": {
       "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
       "loop": true,
       "gain": 0.4
@@ -1081,13 +1188,23 @@
       "loop": true,
       "gain": 0.4
     },
-    "17": {
-      "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
+    "40": {
+      "file": "audio/jammers/061__innere-tueren__return-forever.mp3",
+      "loop": true,
+      "gain": 0.38
+    },
+    "41": {
+      "file": "audio/jammers/147__plone__years-and-elements.mp3",
       "loop": true,
       "gain": 0.4
     },
-    "19": {
-      "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
+    "44": {
+      "file": "audio/jammers/084__eli-storbekken__fra-mi-bringe.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "49": {
+      "file": "audio/jammers/077__motohiko-hamase__pascal.mp3",
       "loop": true,
       "gain": 0.4
     },
@@ -1095,6 +1212,18 @@
       "file": "audio/jammers/068__emerson-kitamura__track-71fee903.mp3",
       "loop": true,
       "gain": 0.4
+    }
+  },
+  "bossCues": {
+    "172": {
+      "file": "audio/jammers/072__aaron-dilloway__after-the-showers.mp3",
+      "loop": true,
+      "gain": 0.4
+    },
+    "449": {
+      "file": "audio/jammers/099__foodman__hirake-tobira.mp3",
+      "loop": true,
+      "gain": 0.42
     }
   }
 }

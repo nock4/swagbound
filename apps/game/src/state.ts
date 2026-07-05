@@ -156,7 +156,8 @@ export type BattleDebug = {
   lastSfx: BattleSfxCue | null;
   sfxCount: number;
   firedSfx: BattleSfxCue[];
-  musicCue?: "battle" | "boss" | "victory" | undefined;
+  // "battle" | "victory" | "boss:<groupId>" (group-qualified boss cue).
+  musicCue?: string | undefined;
   fx: BattleFxDebug;
   lastEnemyAction: LastEnemyActionDebug | null;
   party: BattleCombatantDebug[];

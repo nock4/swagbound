@@ -175,10 +175,10 @@ import {
   type BattleSfx,
   type BattleSfxCue
 } from "./audio/battleSfx";
-import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
+import { createMusic, musicBossCueId, musicDisabledBySearch, type Music } from "./audio/music";
 import { getSharedMusic } from "./sharedMusic";
 import { battleStepSfx } from "./battleSfxPlan";
-import { battleMusicCueForOutcome, type BattleMusicCue } from "./battleMusic";
+import { battleMusicCueForOutcome } from "./battleMusic";
 
 const TAU = Math.PI * 2;
 export const COMMANDS = commandsForCharId(0);
@@ -513,7 +513,9 @@ export class BattleScene extends Phaser.Scene {
   private backgroundDebug: BattleBackgroundDebug = staticBattleBackgroundDebug();
   private battleSfx_: BattleSfx = createBattleSfx();
   private music_: Music = createMusic();
-  private currentBattleMusicCue?: BattleMusicCue;
+  // A resolved cue string: "battle" | "victory" | "boss:<groupId>" (falls back to
+  // the generic `boss` cue when a group has no dedicated boss track).
+  private currentBattleMusicCue?: string;
   private isBossBattle_ = false;
   private lastSfx_: BattleSfxCue | null = null;
   private sfxCount_ = 0;
@@ -670,7 +672,10 @@ export class BattleScene extends Phaser.Scene {
       this.music_.stop();
       this.backgroundAnimation?.destroy();
     });
-    this.playBattleMusicCue(battleMusicCueForOutcome(outcome(this.battle_), this.isBossBattle_), true);
+    const baseMusicCue = battleMusicCueForOutcome(outcome(this.battle_), this.isBossBattle_);
+    // A boss fight requests its group-qualified cue; the resolver falls back to the
+    // generic `boss` track when this group has no dedicated one in the manifest.
+    this.playBattleMusicCue(baseMusicCue === "boss" ? musicBossCueId(this.group_.id) : baseMusicCue, true);
     this.drawEnemySprites();
     this.createStatusWindow();
     this.registerBattleSfxResume();
@@ -3511,7 +3516,7 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
-  private playBattleMusicCue(cue: BattleMusicCue, force = false): void {
+  private playBattleMusicCue(cue: string, force = false): void {
     if (!force && this.currentBattleMusicCue === cue) {
       return;
     }

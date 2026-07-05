@@ -352,7 +352,14 @@ export const MusicManifestSchema = z.object({
    * whose EB song id is listed here, that track plays; otherwise the `interior`
    * cue is used. Faithful to how EarthBound assigns interior music.
    */
-  interiors: z.record(z.string().min(1), MusicManifestTrackSchema).optional()
+  interiors: z.record(z.string().min(1), MusicManifestTrackSchema).optional(),
+  /**
+   * Per-boss battle music keyed by the battle group id (as a string). When a boss
+   * battle for that group starts, this track plays instead of the generic `boss`
+   * cue, so each act's boss can carry its own dread (a casino floor, an arguing
+   * museum, the final reveal). Groups with no entry fall back to `cues.boss`.
+   */
+  bossCues: z.record(z.string().min(1), MusicManifestTrackSchema).optional()
 }).strict();
 
 /**

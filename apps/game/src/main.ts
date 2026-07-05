@@ -80,6 +80,7 @@ class BootScene extends Phaser.Scene {
       this.scene.start("battle", {
         battleData: data.battle,
         groupId: battleGroupId,
+        boss: debugBattleBossFromSearch(globalThis.location?.search),
         characters: data.characters,
         partyMembers: debugPartyMembers,
         items: data.items,
@@ -276,6 +277,12 @@ function battleGroupIdFromSearch(search: string | undefined): number | undefined
   }
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined;
+}
+
+/** `?battle=449&boss=1` launches the debug battle as a boss fight (boss music/taunts/phases). */
+function debugBattleBossFromSearch(search: string | undefined): boolean {
+  const value = new URLSearchParams(search ?? "").get("boss")?.trim();
+  return value === "1" || value === "true";
 }
 
 function sourceCheckIdFromSearch(search: string | undefined): string | undefined {
