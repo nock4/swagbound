@@ -328,6 +328,10 @@ type OverworldEnemyRuntime = {
   flees: boolean;
   /** Debug-only override (via __debugSetRoamerFlees) to force flee without an over-leveled party. */
   debugForceFlee?: boolean;
+  /** Prowlers wander/chase/flee; ambushers idle hidden on a canopy cell until triggered. */
+  archetype: "prowler" | "ambusher";
+  /** While now < this timestamp, a sprung ambusher chases at burst speed. */
+  ambushBurstUntilMs?: number;
 };
 
 type BossGateRuntime = {
@@ -470,6 +474,14 @@ const OVERWORLD_ENEMY_CHASE_SPEED_PX_PER_SEC = 70;
 const OVERWORLD_ENEMY_FLEE_DETECT_PX = 84;
 const OVERWORLD_ENEMY_FLEE_SPEED_PX_PER_SEC = 66;
 const OVERWORLD_ENEMY_SPAWN_ATTEMPTS = 8;
+// Ambusher archetype: a roamer that spawns ONTO a canopy walk-behind cell (0x02),
+// idles hidden under the foliage art, and bursts out when the player comes within
+// trigger range. Burst speed stays under PLAYER_SPEED so escape is possible.
+const OVERWORLD_AMBUSHER_CHANCE = 0.35;
+const OVERWORLD_AMBUSH_SEARCH_CELLS = 9;
+const OVERWORLD_AMBUSH_TRIGGER_PX = 64;
+const OVERWORLD_AMBUSH_BURST_MS = 900;
+const OVERWORLD_AMBUSH_BURST_SPEED_PX_PER_SEC = 96;
 const LOW_HP_DANGER_FRACTION = 1 / 8;
 const LOW_HP_DANGER_BEEP_INTERVAL_MS = 820;
 // Field hazards (docs/collision-semantics.md): sunstroke roll per stepped desert
@@ -1766,6 +1778,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
     };
     // Debug-only: force the flee flag on live roamers so flee (away-movement) can be verified
     // without an over-leveled party. Nothing in normal play calls it.
+    // Debug-only: force a roamer spawn (optionally as an ambusher) so the playtest
+    // harness can verify archetype behavior without waiting on spawn RNG.
+    globals.__debugSpawnRoamer = (forceAmbush = false, attempts = 40) => {
+      // selectSectorEnemyGroup rolls the sector spawn rate internally, so a single
+      // try usually no-ops; retry until something spawns (bounded).
+      const before = this.overworldEnemies.size;
+      for (let i = 0; i < attempts && this.overworldEnemies.size === before; i += 1) {
+        this.trySpawnOverworldEnemy(forceAmbush ? { forceArchetype: "ambusher" } : {});
+      }
+      return this.overworldEnemies.size;
+    };
+    // Debug-only: probe the ambush hideout finder at a world point.
+    globals.__debugFindAmbushSpot = (x: number, y: number) => this.findAmbushCanopySpot({ x, y }) ?? null;
     globals.__debugSetRoamerFlees = (value: boolean) => {
       for (const enemy of this.overworldEnemies.values()) {
         enemy.debugForceFlee = Boolean(value);
@@ -1838,6 +1863,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__fgCoverageRect;
     delete globals.__playerDepthInfo;
     delete globals.__debugHeal;
+    delete globals.__debugSpawnRoamer;
+    delete globals.__debugFindAmbushSpot;
     delete globals.__equip;
     delete globals.__battleStats;
     delete globals.__overworldStatusHud;
@@ -5371,6 +5398,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         x: Math.round(enemy.state.player.x),
         y: Math.round(enemy.state.player.y),
         flees: enemy.flees,
+        archetype: enemy.archetype,
         facing: enemy.state.player.facing,
         moving: enemy.state.player.moving
       }))
@@ -5403,6 +5431,40 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
+  /** Nearest canopy walk-behind cell (0x02, walkable, footprint-clear) near a spawn spot. */
+  private findAmbushCanopySpot(origin: { x: number; y: number }): { x: number; y: number } | undefined {
+    const grid = this.collisionGrid();
+    const cx0 = Math.floor(origin.x / grid.cellSize);
+    const cy0 = Math.floor(origin.y / grid.cellSize);
+    let best: { x: number; y: number; d2: number } | undefined;
+    for (let dy = -OVERWORLD_AMBUSH_SEARCH_CELLS; dy <= OVERWORLD_AMBUSH_SEARCH_CELLS; dy += 1) {
+      for (let dx = -OVERWORLD_AMBUSH_SEARCH_CELLS; dx <= OVERWORLD_AMBUSH_SEARCH_CELLS; dx += 1) {
+        const cellX = cx0 + dx;
+        const cellY = cy0 + dy;
+        if (cellX < 0 || cellY < 0 || cellX >= grid.width || cellY >= grid.height) {
+          continue;
+        }
+        if (!isFgUpperSurface(surfaceAtCell(this.surfaceRows, cellX, cellY))) {
+          continue;
+        }
+        const point = { x: cellX * grid.cellSize + grid.cellSize / 2, y: cellY * grid.cellSize + grid.cellSize / 2 };
+        if (!walkableFootprintClear(point, this.solidRows, grid)) {
+          continue;
+        }
+        // Keep the hideout outside the spring radius, or the ambush triggers the
+        // instant it spawns and just reads as a prowler.
+        if (this.distanceToPlayer(point) < OVERWORLD_AMBUSH_TRIGGER_PX + 16) {
+          continue;
+        }
+        const d2 = (point.x - origin.x) ** 2 + (point.y - origin.y) ** 2;
+        if (!best || d2 < best.d2) {
+          best = { ...point, d2 };
+        }
+      }
+    }
+    return best ? { x: best.x, y: best.y } : undefined;
+  }
+
   /**
    * EarthBound roamer behavior: a fleeable group (party can instant-win it) RUNS from the
    * player once it's close; a fightable group CHASES when the player comes within detection
@@ -5411,6 +5473,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
    */
   private stepOverworldEnemyBehavior(enemy: OverworldEnemyRuntime, deltaMs: number): void {
     const dist = this.distanceToPlayer(enemy.state.player);
+    if (enemy.archetype === "ambusher") {
+      if (dist > OVERWORLD_AMBUSH_TRIGGER_PX) {
+        return; // lying in wait under the canopy — no wander, no chase
+      }
+      // Sprung: burst out and hunt like a prowler from here on.
+      enemy.archetype = "prowler";
+      enemy.ambushBurstUntilMs = this.time.now + OVERWORLD_AMBUSH_BURST_MS;
+    }
     if (dist <= OVERWORLD_ENEMY_FLEE_DETECT_PX) {
       // Recompute vs the CURRENT party (it may have leveled up since spawn), so a group that
       // is now instant-winnable FLEES instead of chasing. Only in the engagement band, so it's
@@ -5422,7 +5492,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return;
       }
       if (dist <= OVERWORLD_ENEMY_CHASE_DETECT_PX) {
-        this.stepOverworldEnemyDirected(enemy, deltaMs, false, OVERWORLD_ENEMY_CHASE_SPEED_PX_PER_SEC);
+        const burst = enemy.ambushBurstUntilMs !== undefined && this.time.now < enemy.ambushBurstUntilMs;
+        this.stepOverworldEnemyDirected(
+          enemy,
+          deltaMs,
+          false,
+          burst ? OVERWORLD_AMBUSH_BURST_SPEED_PX_PER_SEC : OVERWORLD_ENEMY_CHASE_SPEED_PX_PER_SEC
+        );
         return;
       }
     }
@@ -5509,7 +5585,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       && this.overworldPlayActive();
   }
 
-  private trySpawnOverworldEnemy(): void {
+  private trySpawnOverworldEnemy(options: { forceArchetype?: "ambusher" | "prowler" } = {}): void {
     const sector = this.currentEncounterSector();
     const budget = sectorSpawnBudget(sector, { maxPerSector: OVERWORLD_ENEMY_GLOBAL_CAP });
     if (budget <= 0 || this.overworldEnemies.size >= budget) {
@@ -5529,12 +5605,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!spot) {
       return;
     }
+    // Some spawns become ambushers: relocate onto a nearby canopy walk-behind cell
+    // where the foreground art hides them until sprung.
+    const rollAmbush =
+      options.forceArchetype === "ambusher" ||
+      (options.forceArchetype === undefined && this.encounterRng.next() < OVERWORLD_AMBUSHER_CHANCE);
+    const ambushSpot = rollAmbush ? this.findAmbushCanopySpot(spot) : undefined;
+    const spawnAt = ambushSpot ?? spot;
     this.overworldEnemySpawnCooldownMs = OVERWORLD_ENEMY_SPAWN_INTERVAL_MS;
     const spriteGroup = lead.overworldSprite;
     const { textureKey, skin, frames } = this.resolveOverworldEnemySkin(lead);
     this.overworldEnemySeq += 1;
     const key = `enemy-${this.overworldEnemySeq}`;
-    const sprite = this.spawnOverworldEnemyActor(spot.x, spot.y, undefined, textureKey, skin, spriteGroup);
+    const sprite = this.spawnOverworldEnemyActor(spawnAt.x, spawnAt.y, undefined, textureKey, skin, spriteGroup);
     // Hide the placeholder rectangle while the real sheet streams in;
     // upgradeOverworldEnemySprite() swaps in the sprite (visible) once it loads.
     if (textureKey && !(sprite instanceof Phaser.GameObjects.Sprite)) {
@@ -5549,7 +5632,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       skin,
       contactGraceMs: OVERWORLD_ENEMY_CONTACT_GRACE_MS,
       flees: this.encounterAdvantageForGroup(enemyGroup) === "instantWin",
-      state: createNpcState(spot.x, spot.y, toFacing(undefined), {
+      archetype: ambushSpot ? "ambusher" : "prowler",
+      state: createNpcState(spawnAt.x, spawnAt.y, toFacing(undefined), {
         kind: "wander",
         radiusPx: OVERWORLD_ENEMY_WANDER_RADIUS_PX,
         speedPxPerSec: OVERWORLD_ENEMY_WANDER_SPEED_PX_PER_SEC,
