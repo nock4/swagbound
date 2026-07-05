@@ -1191,6 +1191,7 @@ export class BattleScene extends Phaser.Scene {
       this.actionDelayMs_ = this.actionDwellMsForStep(result, this.executionMessageLines_);
       this.lastActionDwellMs_ = this.actionDelayMs_;
       this.applyElementalAffinity(result);
+      this.applyComebackBonus(result);
       this.maybeOpenActionCommand(result);
 
       if (result.fled) {
@@ -1293,6 +1294,45 @@ export class BattleScene extends Phaser.Scene {
     ) {
       this.startEnemyLunge(result.actor.index);
     }
+  }
+
+  /**
+   * Comeback drama: a party BASH swung while the attacker is in peril hits
+   * harder — a last stand at death's door (adrenaline), building on the
+   * rolling-HP mortal-race tension. Scene-level bonus damage, party-only.
+   */
+  private applyComebackBonus(result: BattleRoundStepResult): void {
+    if (result.actor.side !== "party" || result.skipped) {
+      return;
+    }
+    const action = firstBattleAction(result.events);
+    const damage = Math.max(0, Math.floor(firstBattleDamage(result.events)?.amount ?? 0));
+    if (action?.action !== "attack" || damage <= 0 || battleEventsHaveMiss(result.events)) {
+      return;
+    }
+    const attacker = this.battle_.party[result.actor.index];
+    if (!attacker || attacker.maxHp <= 0) {
+      return;
+    }
+    // hp.target <= 1 covers both a 1-HP hero and one mid mortal-race (target 0,
+    // still swinging while the odometer falls).
+    const lastStand = attacker.hp.target <= 1;
+    const danger = attacker.hp.target <= Math.max(1, Math.floor(attacker.maxHp / 4));
+    if (!danger) {
+      return;
+    }
+    const target = uniqueActors(this.impactTargetsForResult(result)).find(
+      (t) => t.side === "enemy" && this.actorIsAlive(t)
+    );
+    if (!target) {
+      return;
+    }
+    const bonus = Math.max(1, Math.round(damage * (lastStand ? 0.8 : 0.4)));
+    this.adjustCombatantHp(target, -bonus);
+    this.startScreenShake(this.shakeIntensityForDamage(bonus, false));
+    const point = this.impactPointForActor(target);
+    if (point) this.spawnHitSpark(point);
+    this.showActionCommandBanner(lastStand ? "LAST STAND!" : "ADRENALINE!", lastStand ? "#ff5470" : "#ffa24c");
   }
 
   /**
