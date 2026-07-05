@@ -4,6 +4,7 @@ import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryG
 import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
 import { BossPlacementEditor, isBossEditEnabled, type BossEditorEntry, type BossFacing } from "./bossPlacementEditor";
 import { CollisionOverrideEditor, isCollisionEditEnabled } from "./collisionOverrideEditor";
+import { TeleportMenu, type TeleportTown } from "./teleportMenu";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -481,6 +482,18 @@ const OVERWORLD_ENEMY_SPAWN_ATTEMPTS = 8;
 // ladders, and indoors.
 const BIKE_ITEM_ID = 176;
 const BIKE_SPEED_MULTIPLIER = 1.7;
+// PSI Teleport fast-travel towns (Swagbound names; arrival points are walkable
+// outdoor spots per town). visited-radius marks a town seen when you walk near it.
+const TELEPORT_TOWNS: readonly TeleportTown[] = [
+  { id: "morningside", name: "Morningside", x: 1844, y: 1100 },
+  { id: "postwick", name: "Postwick", x: 2324, y: 7428 },
+  { id: "solana-beach", name: "Solana Beach", x: 5892, y: 2948 },
+  { id: "the-galleria", name: "The Galleria", x: 4676, y: 4996 },
+  { id: "dead-letter", name: "Dead Letter", x: 6276, y: 9028 },
+  { id: "scaraba", name: "Scaraba", x: 1540, y: 4868 }
+];
+const TELEPORT_VISIT_RADIUS_PX = 1200;
+const TELEPORT_SPIN_MS = 780;
 const OVERWORLD_AMBUSHER_CHANCE = 0.35;
 const OVERWORLD_AMBUSH_SEARCH_CELLS = 9;
 const OVERWORLD_AMBUSH_TRIGGER_PX = 64;
@@ -633,6 +646,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private bossEditor?: BossPlacementEditor;
   private collisionEditor?: CollisionOverrideEditor;
   private bikeActive = false;
+  private teleportMenu?: TeleportMenu;
+  private readonly teleportVisited = new Set<string>();
+  private teleportSpinUntilMs = 0;
   /** solidRows snapshot (post-authored-overrides) the paint editor repaints from. */
   private editorBaseSolidRows?: string[];
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
@@ -865,6 +881,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.collisionEditor?.destroy();
       this.collisionEditor = undefined;
       this.editorBaseSolidRows = undefined;
+      this.teleportMenu?.destroy();
+      this.teleportMenu = undefined;
     });
 
     this.cursors = this.input.keyboard?.createCursorKeys();
@@ -890,6 +908,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     // Bicycle (Swag Cruiser, item 176): B mounts/dismounts when owned + outdoors.
     this.input.keyboard?.on("keydown-B", () => this.toggleBike());
+
+    // PSI Teleport (T): fast travel to a visited town. The menu owns its own key
+    // listener (survives scene restarts); we only feed it visited towns + the warp.
+    this.teleportMenu = new TeleportMenu({
+      visitedTowns: () => TELEPORT_TOWNS.filter((t) => this.teleportVisited.has(t.id)),
+      teleportTo: (town) => this.beginTeleport(town),
+      canOpen: () => this.isPlayerControllable() && !this.bikeActive
+    });
+    this.updateTeleportVisited();
 
     // Boss placement editor (?bossedit=1): a dev-only visual tool for manually
     // positioning the story boss gates. See bossPlacementEditor.ts for the legend.
@@ -1079,6 +1106,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.bikeActive && playerSteppedTile && this.bikeBlockedHere()) {
       this.bikeActive = false; // rolled into water/ladder/indoors: hop off
     }
+    this.updateTeleportVisited();
     this.syncPlayerObject();
     this.refreshRoomBounds();
     this.syncOverworldMusicCue();
@@ -3653,6 +3681,33 @@ export class ChunkedWorldScene extends Phaser.Scene {
     } catch {
       return 1;
     }
+  }
+
+  /** Mark nearby teleport towns as visited so they appear in the fast-travel menu. */
+  private updateTeleportVisited(): void {
+    for (const town of TELEPORT_TOWNS) {
+      if (this.teleportVisited.has(town.id)) {
+        continue;
+      }
+      if (this.distanceToPlayer(town) <= TELEPORT_VISIT_RADIUS_PX) {
+        this.teleportVisited.add(town.id);
+      }
+    }
+  }
+
+  /** PSI Teleport: spin in place, then arrive at the town. */
+  private beginTeleport(town: TeleportTown): void {
+    this.forcedVisualState = { ...this.forcedVisualState, teleporting: true };
+    this.teleportSpinUntilMs = this.time.now + TELEPORT_SPIN_MS;
+    this.playerState.inputLocked = true;
+    this.time.delayedCall(TELEPORT_SPIN_MS, () => {
+      this.warpPlayerToWorldPixel({ x: town.x, y: town.y });
+      const { teleporting: _t, ...rest } = this.forcedVisualState;
+      this.forcedVisualState = rest;
+      this.playerState.inputLocked = false;
+      this.teleportVisited.add(town.id);
+      this.publish();
+    });
   }
 
   /** B key: mount/dismount the Swag Cruiser (requires owning item 176, outdoors, dry feet). */
