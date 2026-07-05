@@ -289,6 +289,7 @@ const ACTION_CMD_DEFENSE_GOOD = 0.35;
 const ACTION_CMD_BANNER_MS = 620;
 const ACTION_CMD_DEPTH = 33;
 const DAMAGE_NUMBER_MS = 760;
+const ENRAGE_OFFENSE_MULT = 1.5;
 const BATTLE_FX_SCREEN_SHAKE_MS = 420;
 const BATTLE_FX_HIT_SPARK_MS = 380;
 const BATTLE_FX_ATTACK_FLASH_MS = 190;
@@ -472,6 +473,7 @@ export class BattleScene extends Phaser.Scene {
   private bossTauntQueue_: string[] = [];
   private bossStartTauntQueued_ = false;
   private bossLowHpTauntQueued_ = false;
+  private enragedLead_ = false;
   private bossDefeatTauntQueued_ = false;
   private bossTurnBarkCursor_ = 0;
   private pendingFlee_ = false;
@@ -577,6 +579,7 @@ export class BattleScene extends Phaser.Scene {
     this.bossTauntQueue_ = [];
     this.bossStartTauntQueued_ = false;
     this.bossLowHpTauntQueued_ = false;
+    this.enragedLead_ = false;
     this.bossDefeatTauntQueued_ = false;
     this.bossTurnBarkCursor_ = 0;
     this.enemyLungeFx_ = enemies.map(() => null);
@@ -1113,8 +1116,32 @@ export class BattleScene extends Phaser.Scene {
       if (shouldQueueLowHpTaunt(fraction, alive, this.bossTaunts_.lowHpThreshold)) {
         this.bossLowHpTauntQueued_ = true;
         this.enqueueBossTaunts(this.bossTaunts_.onLowHp);
+        this.enrageLeadEnemy();
       }
     }
+  }
+
+  /**
+   * Boss phase shift: crossing the low-HP threshold doesn't just change the boss's
+   * dialogue, it changes the fight — the boss enrages, hitting harder from here on.
+   * A real second phase built on the existing HP-threshold hook.
+   */
+  private enrageLeadEnemy(): void {
+    const lead = this.battle_.enemies[0];
+    if (!lead || this.enragedLead_) {
+      return;
+    }
+    this.enragedLead_ = true;
+    const boostedOffense = Math.max(lead.offense + 1, Math.round(lead.offense * ENRAGE_OFFENSE_MULT));
+    const updated: Combatant = {
+      ...lead,
+      offense: boostedOffense,
+      stats: { ...lead.stats, offense: boostedOffense }
+    };
+    this.battle_ = { ...this.battle_, enemies: this.battle_.enemies.map((e, i) => (i === 0 ? updated : e)) };
+    this.startFlashOverlay(0xff3b3b, 0.4, 320);
+    this.startScreenShake(BATTLE_FX_MAX_SHAKE_PX * 0.8);
+    this.showActionCommandBanner("ENRAGED!", "#ff5470");
   }
 
   private advanceExecutionStep(): void {
