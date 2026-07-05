@@ -317,7 +317,10 @@ export const PLAYER_DEFAULTS = {
   offense: 12,
   defense: 6,
   speed: 5,
-  hpRatePerSec: 36
+  // Party HP odometer speed. Slow enough that a mortal wound (target 0, display
+  // rolling) spans into the next command window — EB's heal-or-win race — instead
+  // of resolving mid-execution before the player can react.
+  hpRatePerSec: 18
 } as const;
 
 const ENEMY_HP_RATE_PER_SEC = 42;

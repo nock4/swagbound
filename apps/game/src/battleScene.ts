@@ -363,6 +363,8 @@ type BattleStatusCardView = {
   maxPp: number;
   active: boolean;
   target: boolean;
+  /** HP target hit 0 but the odometer is still rolling — the mortal-damage race is on. */
+  mortal: boolean;
 };
 type BattleStatusCardLayout = CanvasRect & {
   index: number;
@@ -1515,10 +1517,17 @@ export class BattleScene extends Phaser.Scene {
    */
   private updateDangerHeartbeat(): void {
     const active = this.phase_ === "command-input" || this.phase_ === "execution";
-    const danger = active && this.battle_.party.some((member) => {
-      const hp = member.hp.target;
-      return hp > 0 && hp <= Math.max(1, Math.floor(member.maxHp / 8));
-    });
+    // Mortal-damage race (target 0, odometer still rolling) beats URGENT; a merely
+    // critical member (<= maxHp/8, matching the overworld's isDangerHp) beats calm.
+    // The old target>0 check went silent during the race — the most dramatic moment.
+    const mortal = active && this.battle_.party.some((member) => isPendingPartyMortalWound(member));
+    const danger =
+      mortal ||
+      (active &&
+        this.battle_.party.some((member) => {
+          const hp = member.hp.target;
+          return hp > 0 && hp <= Math.max(1, Math.floor(member.maxHp / 8));
+        }));
     if (!danger) {
       this.nextDangerBeatAtMs_ = 0;
       return;
@@ -1526,7 +1535,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.time.now < this.nextDangerBeatAtMs_) {
       return;
     }
-    this.nextDangerBeatAtMs_ = this.time.now + 820;
+    this.nextDangerBeatAtMs_ = this.time.now + (mortal ? 410 : 820);
     this.battleSfx_.dangerHeartbeat();
   }
 
@@ -2859,6 +2868,13 @@ export class BattleScene extends Phaser.Scene {
         accentGraphics.lineStyle(2, 0x4d9bdc, 0.9);
         accentGraphics.strokeRoundedRect(card.x + 6, card.y + 6, Math.max(1, card.width - 12), Math.max(1, card.height - 12), 4);
       }
+      if (viewCard.mortal) {
+        // Mortal-damage race: the member's HP is rolling toward 0 — pulse the card
+        // red so the "heal or win NOW" window reads at a glance.
+        const pulse = 0.4 + 0.45 * Math.abs(Math.sin(this.time.now / 170));
+        accentGraphics.lineStyle(2, 0xe24b4a, pulse);
+        accentGraphics.strokeRoundedRect(card.x + 2.5, card.y + 2.5, Math.max(1, card.width - 5), Math.max(1, card.height - 5), 6);
+      }
 
       const content = this.statusCardContentRect(card);
       this.drawStatusBar(fieldGraphics, this.statusBarMetrics(content, "hp"), viewCard.hp, viewCard.maxHp, CLEAN_UI_HP);
@@ -2936,7 +2952,8 @@ export class BattleScene extends Phaser.Scene {
         pp: this.displayedPpForMember(memberIndex, member.pp),
         maxPp: member.maxPp,
         active: memberIndex === activeMemberIndex,
-        target: memberIndex === targetMemberIndex
+        target: memberIndex === targetMemberIndex,
+        mortal: isPendingPartyMortalWound(member)
       };
     });
     for (const memberIndex of this.ppMeters.keys()) {
