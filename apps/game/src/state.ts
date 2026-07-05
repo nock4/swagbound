@@ -151,6 +151,8 @@ export type BattleDebug = {
   executionMessage: string;
   actionDelayMs: number;
   lastActionDwellMs: number;
+  actionCommand?: { kind: "offense" | "defense"; resolved: boolean; baseDamage: number } | null;
+  actionCommandBanner?: string | null;
   lastSfx: BattleSfxCue | null;
   sfxCount: number;
   firedSfx: BattleSfxCue[];

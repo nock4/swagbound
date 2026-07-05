@@ -44,6 +44,7 @@ import {
   tickBattleMeters,
   type BattleActor,
   type BattleCommand,
+  type Combatant,
   type BattleOutcome,
   type BattleState,
   type BattleVictorySummary,
@@ -273,6 +274,19 @@ const ENEMY_SPRITE_REDRAW_RETRY_MS = 50;
 const MAX_ENEMY_SPRITE_REDRAW_ATTEMPTS = 5;
 const BATTLE_FX_SPARK_DEPTH = 13;
 const BATTLE_FX_FLASH_DEPTH = 12;
+// Action-command timing window (interactive only): press Z as a party BASH lands
+// for bonus damage, or as an enemy hit lands to guard part of it. Window never
+// exceeds the step's natural dwell, so it never slows the fight; it only ever
+// helps the player, so auto-play/harness runs are unaffected.
+const ACTION_CMD_MAX_WINDOW_MS = 720;
+const ACTION_CMD_SWEET_START = 0.32;
+const ACTION_CMD_SWEET_END = 0.64;
+const ACTION_CMD_OFFENSE_PERFECT = 1.0; // bonus = +100% of the hit (a forced SMAAASH feel)
+const ACTION_CMD_OFFENSE_GOOD = 0.45;
+const ACTION_CMD_DEFENSE_PERFECT = 0.7; // refund 70% of the incoming hit
+const ACTION_CMD_DEFENSE_GOOD = 0.35;
+const ACTION_CMD_BANNER_MS = 620;
+const ACTION_CMD_DEPTH = 33;
 const BATTLE_FX_SCREEN_SHAKE_MS = 420;
 const BATTLE_FX_HIT_SPARK_MS = 380;
 const BATTLE_FX_ATTACK_FLASH_MS = 190;
@@ -354,6 +368,16 @@ type BattleStatusLayout = {
   executionMessage?: CanvasRect;
   statusCards: BattleStatusCardLayout[];
 };
+type ActionCommandState = {
+  kind: "offense" | "defense";
+  startedAt: number;
+  durationMs: number;
+  /** Enemy to bonus-hit (offense) or party member to refund (defense). */
+  targetActor: BattleActor;
+  baseDamage: number;
+  resolved: boolean;
+};
+
 type BattleStatusCardView = {
   memberIndex: number;
   name: string;
@@ -432,6 +456,10 @@ export class BattleScene extends Phaser.Scene {
   private inputState_: BattleRoundInputState = initialBattleRoundInputState();
   private autoMode_ = false;
   private autoCommandDelayMs_ = 0;
+  private actionCommand_: ActionCommandState | null = null;
+  private actionCommandGraphics?: Phaser.GameObjects.Graphics;
+  private actionCommandBanner?: Phaser.GameObjects.Text;
+  private actionCommandBannerUntilMs_ = 0;
   private queuedCommands_: QueuedCommand[] = [];
   private executionOrder_: BattleActor[] = [];
   private priorityStep_: BattleRoundStepResult | null = null;
@@ -722,6 +750,7 @@ export class BattleScene extends Phaser.Scene {
         : 0;
       this.advanceBattleFlow();
     }
+    this.updateActionCommand();
     this.renderStatus();
     this.publish();
   }
@@ -759,6 +788,12 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
     if (this.phase_ === "execution") {
+      // A live timing window claims the press for the action command rather than
+      // fast-forwarding the step, so the bonus/guard registers and shows.
+      if (this.actionCommandOpen()) {
+        this.resolveActionCommand();
+        return;
+      }
       this.actionDelayMs_ = 0;
       this.advanceExecutionStep();
       this.renderStatus();
@@ -1154,6 +1189,7 @@ export class BattleScene extends Phaser.Scene {
       }
       this.actionDelayMs_ = this.actionDwellMsForStep(result, this.executionMessageLines_);
       this.lastActionDwellMs_ = this.actionDelayMs_;
+      this.maybeOpenActionCommand(result);
 
       if (result.fled) {
         this.pendingFlee_ = true;
@@ -1255,6 +1291,145 @@ export class BattleScene extends Phaser.Scene {
     ) {
       this.startEnemyLunge(result.actor.index);
     }
+  }
+
+  /**
+   * Open a timing window on a damaging hit (interactive play only). A party BASH
+   * offers an offense window (press Z to add bonus damage); an enemy hit on a
+   * party member offers a defense window (press Z to guard part of it). Never
+   * opens in auto-mode, and the window is capped to the step's own dwell so the
+   * fight never slows down.
+   */
+  private maybeOpenActionCommand(result: BattleRoundStepResult): void {
+    this.clearActionCommand();
+    if (this.autoMode_ || result.skipped) {
+      return;
+    }
+    const action = firstBattleAction(result.events);
+    const damage = Math.max(0, Math.floor(firstBattleDamage(result.events)?.amount ?? 0));
+    if (damage <= 0 || battleEventsHaveMiss(result.events) || action?.action !== "attack") {
+      return;
+    }
+    const targets = uniqueActors(this.impactTargetsForResult(result));
+    let kind: "offense" | "defense" | null = null;
+    let targetActor: BattleActor | undefined;
+    if (result.actor.side === "party") {
+      targetActor = targets.find((t) => t.side === "enemy" && this.actorIsAlive(t));
+      if (targetActor) kind = "offense";
+    } else {
+      targetActor = targets.find((t) => t.side === "party" && this.actorIsAlive(t));
+      if (targetActor) kind = "defense";
+    }
+    if (!kind || !targetActor) {
+      return;
+    }
+    const durationMs = Math.min(this.actionDelayMs_, ACTION_CMD_MAX_WINDOW_MS);
+    if (durationMs < 220) {
+      return;
+    }
+    this.actionCommand_ = {
+      kind,
+      startedAt: this.time.now,
+      durationMs,
+      targetActor,
+      baseDamage: damage,
+      resolved: false
+    };
+  }
+
+  private clearActionCommand(): void {
+    this.actionCommand_ = null;
+    this.actionCommandGraphics?.clear();
+  }
+
+  /** True while an unresolved timing window is live (Z should resolve it, not fast-forward). */
+  private actionCommandOpen(): boolean {
+    return this.actionCommand_ !== null && !this.actionCommand_.resolved && this.phase_ === "execution";
+  }
+
+  /** Add `delta` to a combatant's HP target (negative = damage, positive = heal), clamped. */
+  private adjustCombatantHp(actor: BattleActor, delta: number): void {
+    const roster = actor.side === "party" ? this.battle_.party : this.battle_.enemies;
+    const combatant = roster[actor.index];
+    if (!combatant) {
+      return;
+    }
+    const next = Math.max(0, Math.min(combatant.maxHp, combatant.hp.target + delta));
+    const updated: Combatant = { ...combatant, hp: setTarget(combatant.hp, next) };
+    const nextRoster = roster.map((c, i) => (i === actor.index ? updated : c));
+    this.battle_ = actor.side === "party"
+      ? { ...this.battle_, party: nextRoster }
+      : { ...this.battle_, enemies: nextRoster };
+  }
+
+  /** Resolve the open timing window from the current press moment, apply the effect. */
+  private resolveActionCommand(): void {
+    const cmd = this.actionCommand_;
+    if (!cmd || cmd.resolved) {
+      return;
+    }
+    cmd.resolved = true;
+    const t = (this.time.now - cmd.startedAt) / cmd.durationMs;
+    const perfect = t >= ACTION_CMD_SWEET_START && t <= ACTION_CMD_SWEET_END;
+    if (cmd.kind === "offense") {
+      const factor = perfect ? ACTION_CMD_OFFENSE_PERFECT : ACTION_CMD_OFFENSE_GOOD;
+      const bonus = Math.max(1, Math.round(cmd.baseDamage * factor));
+      this.adjustCombatantHp(cmd.targetActor, -bonus);
+      this.startScreenShake(this.shakeIntensityForDamage(bonus, false));
+      const point = this.impactPointForActor(cmd.targetActor);
+      if (point) this.spawnHitSpark(point);
+      this.showActionCommandBanner(perfect ? "SMAAASH!!" : "NICE!", perfect ? "#ffd23f" : "#7fd0ff");
+    } else {
+      const factor = perfect ? ACTION_CMD_DEFENSE_PERFECT : ACTION_CMD_DEFENSE_GOOD;
+      const refund = Math.max(1, Math.round(cmd.baseDamage * factor));
+      this.adjustCombatantHp(cmd.targetActor, refund);
+      this.showActionCommandBanner(perfect ? "GUARD!!" : "block", perfect ? "#8affc1" : "#bfe6cf");
+    }
+    this.battleSfx_.smash();
+    this.renderStatus();
+    this.publish();
+  }
+
+  private showActionCommandBanner(text: string, color: string): void {
+    if (!this.actionCommandBanner) {
+      return;
+    }
+    this.actionCommandBanner.setText(text).setColor(color).setVisible(true);
+    this.actionCommandBannerUntilMs_ = this.time.now + ACTION_CMD_BANNER_MS;
+  }
+
+  /** Per-frame: draw the shrinking timing bar, expire the window + banner. */
+  private updateActionCommand(): void {
+    if (this.actionCommandBanner?.visible && this.time.now >= this.actionCommandBannerUntilMs_) {
+      this.actionCommandBanner.setVisible(false);
+    }
+    const graphics = this.actionCommandGraphics;
+    const cmd = this.actionCommand_;
+    if (!graphics) {
+      return;
+    }
+    graphics.clear();
+    if (!cmd || cmd.resolved || this.phase_ !== "execution") {
+      return;
+    }
+    const elapsed = this.time.now - cmd.startedAt;
+    if (elapsed >= cmd.durationMs) {
+      cmd.resolved = true; // window expired unpressed — no effect
+      return;
+    }
+    const t = elapsed / cmd.durationMs;
+    const barW = Math.min(180, this.scale.width * 0.6);
+    const barH = 10;
+    const x = (this.scale.width - barW) / 2;
+    const y = this.scale.height * 0.58; // below the enemy sprite, above the status cards
+    graphics.fillStyle(0x0c0c12, 0.72);
+    graphics.fillRoundedRect(x - 4, y - 4, barW + 8, barH + 8, 4);
+    // sweet zone
+    graphics.fillStyle(cmd.kind === "offense" ? 0xffd23f : 0x8affc1, 0.55);
+    graphics.fillRect(x + barW * ACTION_CMD_SWEET_START, y, barW * (ACTION_CMD_SWEET_END - ACTION_CMD_SWEET_START), barH);
+    // sweeping marker
+    graphics.fillStyle(0xeef1f6, 1);
+    graphics.fillRect(x + barW * t - 1.5, y - 3, 3, barH + 6);
   }
 
   private impactTargetsForResult(result: BattleRoundStepResult): BattleActor[] {
@@ -2113,6 +2288,14 @@ export class BattleScene extends Phaser.Scene {
     this.statusAccentGraphics = this.add.graphics().setDepth(26);
     this.targetCursor = this.add.graphics().setDepth(30);
     this.menuCursorGraphics = this.add.graphics().setDepth(31);
+    this.actionCommandGraphics = this.add.graphics().setDepth(ACTION_CMD_DEPTH);
+    this.actionCommandBanner = createCleanText(this, this.scale.width / 2, this.scale.height * 0.34, "", {
+      fontSize: 20,
+      color: CLEAN_UI_PRIMARY,
+      weight: 500,
+      fixedWidth: this.scale.width,
+      align: "center"
+    }).setDepth(ACTION_CMD_DEPTH + 1).setVisible(false);
     this.statusLayoutSignature = "";
   }
 
@@ -3125,6 +3308,10 @@ export class BattleScene extends Phaser.Scene {
       executionMessage: this.executionMessageLines_.join("\n"),
       actionDelayMs: Math.round(this.actionDelayMs_),
       lastActionDwellMs: Math.round(this.lastActionDwellMs_),
+      actionCommand: this.actionCommand_
+        ? { kind: this.actionCommand_.kind, resolved: this.actionCommand_.resolved, baseDamage: this.actionCommand_.baseDamage }
+        : null,
+      actionCommandBanner: this.actionCommandBanner?.visible ? this.actionCommandBanner.text : null,
       lastSfx: this.lastSfx_,
       sfxCount: this.sfxCount_,
       firedSfx: [...this.firedSfx_],
