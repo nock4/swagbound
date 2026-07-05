@@ -188,6 +188,30 @@
       ]
     },
     {
+      "id": "postwick-arrival",
+      "comment": "ACT 2 OPENING. Fires when the party reaches Postwick (Twoson analog) after act1:complete -- by walk or PSI Teleport, the area is centered on the town arrival point (2324,7428). Postwick's theme = pre-filed / mandatory happiness (seeded by the 'files its happiness in advance' NPC line). Sets act2:begun + postwick:arrived, the flags the Act-2 chain will gate on.",
+      "area": {
+        "x": 2256,
+        "y": 7376,
+        "w": 136,
+        "h": 104
+      },
+      "once": true,
+      "requireFlags": [
+        "act1:complete"
+      ],
+      "dialogue": [
+        "Postwick greets every arrival with a smile it printed this morning. The welcome board already has Bosch's name on it -- spelled the way the file prefers, not the way he does.",
+        "A greeter presses a mood into his hand: pre-approved, single-use, non-refundable. \"Everyone here is happy. It was filed that way,\" she recites, reading it off the back of her own wrist. \"You're behind. You'll catch up, or we'll catch you up.\"",
+        "The town files its happiness in advance and bills newcomers the difference. Past the bridge, a Registry keeps the ledger of who is cleared to feel what -- and the swarm has already offered to audit it.",
+        "[ ACT 2 -- POSTWICK: THE PRE-FILED TOWN ]"
+      ],
+      "setFlags": [
+        "act2:begun",
+        "postwick:arrived"
+      ]
+    },
+    {
       "id": "museum-worm",
       "boss": {
         "x": 5216,
