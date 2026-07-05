@@ -90,8 +90,10 @@ const OVERWORLD_HUD_CARD_SIDE_MARGIN = 10;
 const OVERWORLD_HUD_CARD_BOTTOM_MARGIN = 8;
 const OVERWORLD_HUD_CARD_GAP = 8;
 const OVERWORLD_HUD_CARD_HEIGHT = 78;
-const OVERWORLD_HUD_CARD_MIN_WIDTH = 112;
-const OVERWORLD_HUD_CARD_MAX_WIDTH = 160;
+// Narrow, near-square cards so all four party members fit across the screen with room
+// to spare (4 x 96 + gaps + margins well under the 512px native width).
+const OVERWORLD_HUD_CARD_MIN_WIDTH = 84;
+const OVERWORLD_HUD_CARD_MAX_WIDTH = 96;
 const OVERWORLD_HUD_CONTENT_PADDING_X = 10;
 const OVERWORLD_HUD_CONTENT_PADDING_Y = 8;
 const OVERWORLD_HUD_NAME_FONT_SIZE = 13;
@@ -783,7 +785,8 @@ export class UiScene extends Phaser.Scene {
     barHeight: number;
   } {
     const rowY = content.y + (row === "hp" ? OVERWORLD_HUD_HP_ROW_Y : OVERWORLD_HUD_PP_ROW_Y);
-    const valueWidth = Math.min(58, Math.max(42, Math.floor(content.width * 0.38)));
+    // No bars anymore: the odometer number gets the whole row width after the HP/PP label.
+    const valueWidth = Math.max(44, content.width - OVERWORLD_HUD_LABEL_WIDTH - 4);
     const barX = content.x + OVERWORLD_HUD_BAR_X;
     const valueX = content.x + content.width - valueWidth;
     const barWidth = Math.max(12, valueX - OVERWORLD_HUD_BAR_VALUE_GAP - barX);
