@@ -288,6 +288,7 @@ const ACTION_CMD_DEFENSE_PERFECT = 0.7; // refund 70% of the incoming hit
 const ACTION_CMD_DEFENSE_GOOD = 0.35;
 const ACTION_CMD_BANNER_MS = 620;
 const ACTION_CMD_DEPTH = 33;
+const DAMAGE_NUMBER_MS = 760;
 const BATTLE_FX_SCREEN_SHAKE_MS = 420;
 const BATTLE_FX_HIT_SPARK_MS = 380;
 const BATTLE_FX_ATTACK_FLASH_MS = 190;
@@ -461,6 +462,7 @@ export class BattleScene extends Phaser.Scene {
   private actionCommandGraphics?: Phaser.GameObjects.Graphics;
   private actionCommandBanner?: Phaser.GameObjects.Text;
   private actionCommandBannerUntilMs_ = 0;
+  private damageNumbers_: Array<{ text: Phaser.GameObjects.Text; startedAt: number; x: number; y: number }> = [];
   private queuedCommands_: QueuedCommand[] = [];
   private executionOrder_: BattleActor[] = [];
   private priorityStep_: BattleRoundStepResult | null = null;
@@ -1264,16 +1266,19 @@ export class BattleScene extends Phaser.Scene {
     if (damaging) {
       this.startScreenShake(this.shakeIntensityForDamage(damage, battleEventsHaveEnemyDefeated(events)));
       let sparked = false;
+      const smash = battleEventsHaveSmash(events);
       for (const target of uniqueActors(this.impactTargetsForResult(result))) {
         const point = this.impactPointForActor(target);
         if (!point) {
           continue;
         }
         this.spawnHitSpark(point);
+        this.spawnDamageNumber(point, damage, { onEnemy: target.side === "enemy", smash });
         sparked = true;
       }
       if (!sparked) {
         this.spawnHitSpark(this.fallbackImpactPoint());
+        this.spawnDamageNumber(this.fallbackImpactPoint(), damage, { onEnemy: result.actor.side === "party", smash });
       }
     }
 
@@ -2806,6 +2811,39 @@ export class BattleScene extends Phaser.Scene {
     this.applyScreenShake(now);
     this.renderFlashOverlayFx(now);
     this.renderHitSparkFx(now);
+    this.updateDamageNumbers(now);
+  }
+
+  /** Spawn a rising, fading damage number at an impact point (bigger + gold on a smash). */
+  private spawnDamageNumber(point: SpritePoint, amount: number, opts: { onEnemy: boolean; smash: boolean }): void {
+    if (amount <= 0) {
+      return;
+    }
+    const big = opts.smash || amount >= 40;
+    const color = opts.smash ? "#ffd23f" : opts.onEnemy ? "#ffffff" : "#ff8a8a";
+    const text = createCleanText(this, point.x, point.y - 8, `${amount}`, {
+      fontSize: big ? 22 : 16,
+      color,
+      weight: 500,
+      fixedWidth: 60,
+      align: "center"
+    }).setDepth(ACTION_CMD_DEPTH - 1).setOrigin(0.5, 0.5);
+    this.damageNumbers_.push({ text, startedAt: this.time.now, x: point.x, y: point.y - 8 });
+  }
+
+  private updateDamageNumbers(now: number): void {
+    const kept: typeof this.damageNumbers_ = [];
+    for (const dn of this.damageNumbers_) {
+      const t = (now - dn.startedAt) / DAMAGE_NUMBER_MS;
+      if (t >= 1) {
+        dn.text.destroy();
+        continue;
+      }
+      dn.text.setY(dn.y - t * 22); // float up
+      dn.text.setAlpha(t < 0.7 ? 1 : 1 - (t - 0.7) / 0.3); // hold, then fade
+      kept.push(dn);
+    }
+    this.damageNumbers_ = kept;
   }
 
   private applyScreenShake(now: number): void {
