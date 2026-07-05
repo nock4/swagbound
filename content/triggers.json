@@ -212,6 +212,48 @@
       ]
     },
     {
+      "id": "postwick-registry",
+      "comment": "ACT 2 threshold 1: the Contentment Registry enforcer (Insane Cultist, group 55 -- EB Happy Happy analog) blocks the way, defending the town's pre-filed happiness. Requires postwick:arrived; sets act2:registry_cleared (the flag that opens the Venue exhibition).",
+      "boss": {
+        "x": 2324,
+        "y": 7332,
+        "facing": "down"
+      },
+      "once": true,
+      "requireFlags": [
+        "postwick:arrived"
+      ],
+      "dialogue": [
+        "A figure in a laminated smile steps out of the Registry doorway, holding a clipboard where its face should be.",
+        "REGISTRY WARDEN: \"You arrived unhappy. That's a filing error. Hold still -- we pre-approved a mood for you this morning and it is NON-REFUNDABLE.\"",
+        "REGISTRY WARDEN: \"Everyone in Postwick is content. It was decided up the line. You will be too, or you'll be filed as an incident.\"",
+        "The clipboard flips to a blank intake form with Bosch's name already printed. (Press Z: BASH the form-face; DEFEND when it recites the terms; PSI when the smile won't crack.)"
+      ],
+      "setFlags": [
+        "act2:registry_cleared"
+      ],
+      "battleGroup": 55
+    },
+    {
+      "id": "postwick-registry-reveal",
+      "comment": "Post-win beat after the Registry Warden: the pre-filed-happiness racket is named, and the Venue is revealed as the town's compliance machine.",
+      "area": {
+        "x": 2288,
+        "y": 7300,
+        "w": 96,
+        "h": 64
+      },
+      "once": true,
+      "requireFlags": [
+        "act2:registry_cleared"
+      ],
+      "dialogue": [
+        "The Warden's clipboard clatters open. Under the intake form is the real document: a standing order to keep Postwick smiling so the swarm's audit finds nothing to flag.",
+        "The happiness isn't felt here. It's filed -- and the filing happens at THE VENUE, where the town watches manufactured champions win on schedule and calls the feeling its own.",
+        "Northwest, the exhibition lights are already warming up for Bosch's bracket."
+      ]
+    },
+    {
       "id": "museum-worm",
       "boss": {
         "x": 5216,
@@ -270,12 +312,16 @@
     },
     {
       "id": "arena-venue-1",
+      "comment": "ACT 2 climax gauntlet: the Venue exhibition is now gated behind act2:registry_cleared so it reads as Postwick's compliance machine. Winning all three brackets (arena:champion) is the Act-2 climax; see postwick-act2-end.",
       "boss": {
         "x": 1956,
         "y": 6400,
         "facing": "down"
       },
       "once": true,
+      "requireFlags": [
+        "act2:registry_cleared"
+      ],
       "dialogue": [
         "THE VENUE \u2014 SUPER METAL MONS EXHIBITION.",
         "ANNOUNCER: \"Fresh meat at the gate! First bracket: a warm-up welded together from spare parts. Clear three to be crowned.\"",
@@ -325,6 +371,30 @@
       "battleGroup": 402,
       "requireFlags": [
         "arena:won:2"
+      ]
+    },
+    {
+      "id": "postwick-act2-end",
+      "comment": "ACT 2 ENDING. Fires at the Venue after arena:champion (winning the exhibition) -- the crowd's manufactured joy fails to describe Bosch, the same refusal that ended Act 1. Requires the Registry cleared too, so it can't fire out of order. Sets act2:complete, the gate the eventual Act-3 (Dead Letter / the Museum of Leaked Versions) will open on.",
+      "area": {
+        "x": 2676,
+        "y": 6356,
+        "w": 120,
+        "h": 96
+      },
+      "once": true,
+      "requireFlags": [
+        "arena:champion",
+        "act2:registry_cleared"
+      ],
+      "dialogue": [
+        "The purse is a laminated feeling: CHAMPION, pre-filed, good for one broadcast. The Venue lifts Bosch's arm for him and the crowd feels the win on schedule.",
+        "He lets the arm drop. The feeling doesn't fit -- it was cut for the clean copy, not for him. The exhibition's applause keeps playing anyway, because it was recorded in advance.",
+        "Postwick logs its champion as \"failed to enjoy provided victory.\" Bosch keeps the damaged feeling, unfiled, his. East, past the town, the road curdles toward a place that stopped keeping originals at all.",
+        "[ ACT 2 — END ]"
+      ],
+      "setFlags": [
+        "act2:complete"
       ]
     },
     {

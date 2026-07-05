@@ -27,6 +27,22 @@
       ],
       "lowHpThreshold": 0.34
     },
+    "55": {
+      "personaName": "Registry Warden",
+      "onStart": [
+        "You arrived unhappy. That is a filing error, and we do not keep errors -- we correct them.",
+        "Hold still. The mood was pre-approved this morning. It is non-refundable and it is coming."
+      ],
+      "onLowHp": [
+        "The smile is cracking. It laminates back. Postwick has a warehouse of them, all identical, all yours.",
+        "You cannot beat the feeling out of a town that files its joy in advance."
+      ],
+      "onDefeat": [
+        "The intake form is void. You will still be logged... as content, retroactively, whether you felt it or not.",
+        "The Venue keeps the ledger now. Go win the happiness the town already spent on you."
+      ],
+      "lowHpThreshold": 0.34
+    },
     "424": {
       "personaName": "PROVENANCE 0",
       "onStart": [
