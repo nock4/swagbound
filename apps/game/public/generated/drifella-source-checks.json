@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.drifella-source-checks.v1",
-  "comment": "Drifella Source Checks — friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
+  "comment": "Drifella Source Checks. Friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
   "checks": [
     {
       "id": "sourcecheck-morningside-001",
@@ -42,7 +42,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the leaked card was checked—",
+            "prompt": "The category box on the leaked card was checked...",
             "options": [
               "VESSEL",
               "SOURCE",
@@ -63,7 +63,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The card-stock trail out of Bosch's block ran—",
+            "prompt": "The card-stock trail out of Bosch's block ran...",
             "options": [
               "West, toward the arcade",
               "North, toward the road",
@@ -77,7 +77,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A 'readymade' in art is—",
+            "prompt": "A 'readymade' in art is...",
             "category": "art",
             "options": [
               "An ordinary object declared to be art",
@@ -161,7 +161,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The arcade crowd deals in—",
+            "prompt": "The arcade crowd deals in...",
             "options": [
               "Faces",
               "High scores",
@@ -203,7 +203,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Marcel Duchamp turned a urinal into art mostly by—",
+            "prompt": "Marcel Duchamp turned a urinal into art mostly by...",
             "category": "art",
             "options": [
               "Signing it and giving it a title",
@@ -287,7 +287,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The building the town calls THE PRECINCT is where—",
+            "prompt": "The building the town calls THE PRECINCT is where...",
             "options": [
               "The police keep the roadblock's paperwork",
               "Cards are printed",
@@ -315,7 +315,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Battle winnings in this town travel—",
+            "prompt": "Battle winnings in this town travel...",
             "options": [
               "Wired to your account, by the connect",
               "Straight into your pocket",
@@ -329,7 +329,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A perfect copy of a painting is worth less than the original because we care about—",
+            "prompt": "A perfect copy of a painting is worth less than the original because we care about...",
             "category": "art",
             "options": [
               "Where it came from",
@@ -343,7 +343,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The 'aura' of an original artwork is—",
+            "prompt": "The 'aura' of an original artwork is...",
             "category": "art",
             "options": [
               "A presence the copy can't hold",
@@ -448,7 +448,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The kid on the stoop had been waiting—",
+            "prompt": "The kid on the stoop had been waiting...",
             "options": [
               "His whole short life",
               "Since Tuesday",
@@ -462,7 +462,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Expressionism cares most about—",
+            "prompt": "Expressionism cares most about...",
             "category": "art",
             "options": [
               "Inner feeling over accurate likeness",
@@ -574,7 +574,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The face on the leaked card was wrong the way—",
+            "prompt": "The face on the leaked card was wrong the way...",
             "options": [
               "A bad memory is almost right",
               "A mirror is backwards",
@@ -588,7 +588,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The Dada movement was deliberately—",
+            "prompt": "The Dada movement was deliberately...",
             "category": "art",
             "options": [
               "Absurd and anti-establishment",
@@ -602,7 +602,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "'Avant-garde' means art that is—",
+            "prompt": "'Avant-garde' means art that is...",
             "category": "art",
             "options": [
               "Experimental, ahead of its time",
@@ -672,7 +672,7 @@
       "hints": [],
       "entryPrompt": [
         "A Drifella idles by the west block, counting windows. It waves without looking.",
-        "\"Forty-one windows. Zero of them honest. Anyway — Source Check?\""
+        "\"Forty-one windows. Zero of them honest. Anyway. Source Check?\""
       ],
       "questions": {
         "drawCount": 2,
@@ -686,7 +686,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A present box in this world, once opened—",
+            "prompt": "A present box in this world, once opened...",
             "options": [
               "Stays opened",
               "Refills overnight",
@@ -707,7 +707,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The household voice heard on the first morning had—",
+            "prompt": "The household voice heard on the first morning had...",
             "options": [
               "Panic under the paint",
               "Breakfast on the tray",
@@ -721,7 +721,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A Mark Rothko painting is mostly—",
+            "prompt": "A Mark Rothko painting is mostly...",
             "category": "art",
             "options": [
               "Large soft blocks of color",
@@ -814,7 +814,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The best place to stand, in this town, is—",
+            "prompt": "The best place to stand, in this town, is...",
             "options": [
               "Wherever the record isn't looking",
               "Center of the plaza",
@@ -851,12 +851,12 @@
             ],
             "answerIndex": 0,
             "officialIndex": 2,
-            "failLine": "\"Curiosity. You HAD it a minute ago — it's how you got here.\"",
+            "failLine": "\"Curiosity. You HAD it a minute ago. It's how you got here.\"",
             "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Sol LeWitt said the idea itself can be 'a machine that makes the—'",
+            "prompt": "Sol LeWitt said the idea itself can be 'a machine that makes the. '",
             "category": "art",
             "options": [
               "Art",
@@ -956,7 +956,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Bosch pocketed the damaged card because—",
+            "prompt": "Bosch pocketed the damaged card because...",
             "options": [
               "Unfiled and unflattering, it was HIS",
               "It was worth money",
@@ -991,7 +991,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "John Cage's '4'33\"' has the performer—",
+            "prompt": "John Cage's '4'33\"' has the performer...",
             "category": "art",
             "options": [
               "Sit and play nothing, so you hear the room",
@@ -1005,7 +1005,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A 'field recording' captures—",
+            "prompt": "A 'field recording' captures...",
             "category": "art",
             "options": [
               "The real sounds of an actual place",
@@ -1096,7 +1096,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box checked on that first leaked card read—",
+            "prompt": "The category box checked on that first leaked card read...",
             "options": [
               "VESSEL",
               "TENANT",
@@ -1117,7 +1117,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Andy Warhol got famous for painting, over and over, a can of—",
+            "prompt": "Andy Warhol got famous for painting, over and over, a can of...",
             "options": [
               "Soup",
               "Paint",
@@ -1130,14 +1130,14 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "Erik Satie wrote 'furniture music' — music designed to be ignored on purpose.",
+            "prompt": "Erik Satie wrote 'furniture music'. Music designed to be ignored on purpose.",
             "answer": true,
             "failLine": "\"On purpose. The bravest setting is background.\"",
             "category": "art"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A sound check exists mostly to protect—",
+            "prompt": "A sound check exists mostly to protect...",
             "options": [
               "The room's ears",
               "The star's ego",
@@ -1219,7 +1219,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The boss holding down Morningside's arcade answered to—",
+            "prompt": "The boss holding down Morningside's arcade answered to...",
             "options": [
               "Frank",
               "A vending machine",
@@ -1239,7 +1239,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Keith Haring first got famous drawing with chalk in—",
+            "prompt": "Keith Haring first got famous drawing with chalk in...",
             "options": [
               "Subway stations",
               "Art school",
@@ -1259,7 +1259,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A ticket stub is best understood as—",
+            "prompt": "A ticket stub is best understood as...",
             "options": [
               "A receipt for a memory",
               "Litter with dates",
@@ -1334,7 +1334,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The thing that finally stopped malady mid-lunge was—",
+            "prompt": "The thing that finally stopped malady mid-lunge was...",
             "options": [
               "A freeze, mid-air",
               "A stern letter",
@@ -1361,7 +1361,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "René Magritte painted a pipe with a caption insisting—",
+            "prompt": "René Magritte painted a pipe with a caption insisting...",
             "options": [
               "This is not a pipe",
               "Pipes are forever",
@@ -1381,7 +1381,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A rumor with no source is basically—",
+            "prompt": "A rumor with no source is basically...",
             "options": [
               "Produce with no farm",
               "Extra true",
@@ -1456,7 +1456,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The one they called the returnless king was defeated—",
+            "prompt": "The one they called the returnless king was defeated...",
             "options": [
               "Before Bosch left Morningside",
               "Never",
@@ -1483,7 +1483,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Piet Mondrian's most famous paintings are grids filled with—",
+            "prompt": "Piet Mondrian's most famous paintings are grids filled with...",
             "options": [
               "Primary colors",
               "Tiny horses",
@@ -1503,7 +1503,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A secret is just a stain that—",
+            "prompt": "A secret is just a stain that...",
             "options": [
               "Hasn't been washed yet",
               "Sets forever",
@@ -1585,7 +1585,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Bosch's crew size when malady finally went down was—",
+            "prompt": "Bosch's crew size when malady finally went down was...",
             "options": [
               "Two",
               "One",
@@ -1605,7 +1605,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Brian Eno described ambient music as needing to be as ignorable as it is—",
+            "prompt": "Brian Eno described ambient music as needing to be as ignorable as it is...",
             "options": [
               "Interesting",
               "Loud",
@@ -1625,7 +1625,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A schedule that's never wrong is probably—",
+            "prompt": "A schedule that's never wrong is probably...",
             "options": [
               "Never checked",
               "Magic",
@@ -1700,7 +1700,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The first card's arrival was rudest because it—",
+            "prompt": "The first card's arrival was rudest because it...",
             "options": [
               "Didn't knock",
               "Was postage due",
@@ -1727,7 +1727,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Yoko Ono made famous artworks that were just—",
+            "prompt": "Yoko Ono made famous artworks that were just...",
             "options": [
               "Instructions to imagine things",
               "Very large hats",
@@ -1747,7 +1747,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The safest way to cross a rumor is—",
+            "prompt": "The safest way to cross a rumor is...",
             "options": [
               "At the source",
               "At a run",
@@ -1819,7 +1819,7 @@
       ],
       "entryPrompt": [
         "A voice from inside the greenery. You genuinely did not see them there.",
-        "\"Shh. You found the branch office. Source Check — leaf through two questions.\""
+        "\"Shh. You found the branch office. Source Check. Leaf through two questions.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -1833,7 +1833,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Frank's crew at the arcade dealt mostly in—",
+            "prompt": "Frank's crew at the arcade dealt mostly in...",
             "options": [
               "Cards",
               "Loans",
@@ -1848,12 +1848,12 @@
             "type": "trueFalse",
             "prompt": "You can stand behind a tree in this town and honestly disappear.",
             "answer": true,
-            "failLine": "\"You're doing it right now. Well — I am.\"",
+            "failLine": "\"You're doing it right now. Well. I am.\"",
             "category": "vibe"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Claude Monet painted the same water lilies—",
+            "prompt": "Claude Monet painted the same water lilies...",
             "options": [
               "Hundreds of times",
               "Once, reluctantly",
@@ -1873,7 +1873,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The best place to keep a secret is—",
+            "prompt": "The best place to keep a secret is...",
             "options": [
               "Where everyone walks past it",
               "A vault",
@@ -1972,14 +1972,14 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "The swarm's whole aesthetic is borrowed grandeur — 'Milady' isn't even their name.",
+            "prompt": "The swarm's whole aesthetic is borrowed grandeur. 'Milady' isn't even their name.",
             "answer": true,
             "failLine": "\"Borrowed plumage. Pigeons do it too, but honestly.\"",
             "category": "lore"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Salvador Dalí's most famous painting features melting—",
+            "prompt": "Salvador Dalí's most famous painting features melting...",
             "options": [
               "Clocks",
               "Ledgers",
@@ -1999,7 +1999,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "An alley is just a street that—",
+            "prompt": "An alley is just a street that...",
             "options": [
               "Keeps better secrets",
               "Failed math",
@@ -2071,7 +2071,7 @@
       ],
       "entryPrompt": [
         "The Drifella lowers a tiny pair of opera glasses it did not need.",
-        "\"Ah. An understudy. The role of Verified Person is still open — audition is two questions.\""
+        "\"Ah. An understudy. The role of Verified Person is still open. Audition is two questions.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2085,7 +2085,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The freeze that saved the malady fight was cast by—",
+            "prompt": "The freeze that saved the malady fight was cast by...",
             "options": [
               "The daycare kid",
               "Bosch",
@@ -2105,7 +2105,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Marina Abramović became famous for art where the material was—",
+            "prompt": "Marina Abramović became famous for art where the material was...",
             "options": [
               "Her own presence",
               "Marble",
@@ -2118,14 +2118,14 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "Some plays have been staged with no actors at all — just lights, sound, and the audience.",
+            "prompt": "Some plays have been staged with no actors at all. Just lights, sound, and the audience.",
             "answer": true,
             "failLine": "\"No actors. The bravest casting.\"",
             "category": "art"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Every town is a production. The critic's job is to—",
+            "prompt": "Every town is a production. The critic's job is to...",
             "options": [
               "Stay for the whole thing",
               "Leave early",
@@ -2207,7 +2207,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on that card was checked—",
+            "prompt": "The category box on that card was checked...",
             "options": [
               "VESSEL",
               "POLLINATOR",
@@ -2247,7 +2247,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A rumor with no source is like a hive with—",
+            "prompt": "A rumor with no source is like a hive with...",
             "options": [
               "No queen",
               "Too much honey",
@@ -2349,7 +2349,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A 'still life' painting usually shows—",
+            "prompt": "A 'still life' painting usually shows...",
             "options": [
               "Arranged objects",
               "A running horse",
@@ -2369,7 +2369,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A scarecrow's real job is to—",
+            "prompt": "A scarecrow's real job is to...",
             "options": [
               "Suggest a person",
               "Scare crows",
@@ -2451,7 +2451,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Frank's crew at the Morningside arcade mostly dealt in—",
+            "prompt": "Frank's crew at the Morningside arcade mostly dealt in...",
             "options": [
               "Cards",
               "Buckets",
@@ -2471,7 +2471,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "John Cage's '4'33\"' asks the performer to—",
+            "prompt": "John Cage's '4'33\"' asks the performer to...",
             "options": [
               "Play nothing",
               "Play twice",
@@ -2491,7 +2491,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "An echo is just a fact that—",
+            "prompt": "An echo is just a fact that...",
             "options": [
               "Comes back",
               "Sinks",
@@ -2573,7 +2573,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The one called the returnless king was beaten—",
+            "prompt": "The one called the returnless king was beaten...",
             "options": [
               "Before Bosch left Morningside",
               "By mail",
@@ -2593,7 +2593,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Yayoi Kusama is famous for covering rooms in—",
+            "prompt": "Yayoi Kusama is famous for covering rooms in...",
             "options": [
               "Polka dots",
               "Ivy",
@@ -2613,7 +2613,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A bouquet is really a small, temporary—",
+            "prompt": "A bouquet is really a small, temporary...",
             "options": [
               "Argument",
               "Fence",
@@ -2695,7 +2695,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The freeze that felled malady was cast by—",
+            "prompt": "The freeze that felled malady was cast by...",
             "options": [
               "The daycare kid",
               "Bosch",
@@ -2715,7 +2715,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Alexander Calder invented a kind of sculpture that—",
+            "prompt": "Alexander Calder invented a kind of sculpture that...",
             "options": [
               "Moves in the air",
               "Weighs a ton",
@@ -2735,7 +2735,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A weathervane is honest because it—",
+            "prompt": "A weathervane is honest because it...",
             "options": [
               "Only points where pushed",
               "Never moves",
@@ -2807,7 +2807,7 @@
       ],
       "entryPrompt": [
         "A voice from inside a tall hedge. You did not see them there at all.",
-        "\"Shh. You found the quiet path. Source Check — two turns, no dead ends.\""
+        "\"Shh. You found the quiet path. Source Check. Two turns, no dead ends.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2821,7 +2821,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The swarm's whole look is—",
+            "prompt": "The swarm's whole look is...",
             "options": [
               "Borrowed grandeur",
               "Homemade",
@@ -2841,7 +2841,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Land artists have made works so big you can only really see them from—",
+            "prompt": "Land artists have made works so big you can only really see them from...",
             "options": [
               "The air",
               "A stool",
@@ -2861,7 +2861,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Piet Mondrian reduced painting to grids of—",
+            "prompt": "Piet Mondrian reduced painting to grids of...",
             "options": [
               "Primary colors",
               "Hedges",
@@ -2967,7 +2967,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Andy Warhol famously silkscreened, over and over, a can of—",
+            "prompt": "Andy Warhol famously silkscreened, over and over, a can of...",
             "options": [
               "Soup",
               "Tomatoes",
@@ -2987,7 +2987,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A greenhouse is a small argument that the weather should—",
+            "prompt": "A greenhouse is a small argument that the weather should...",
             "options": [
               "Behave",
               "Leave",
@@ -3093,7 +3093,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Claude Monet painted the same pond of water lilies—",
+            "prompt": "Claude Monet painted the same pond of water lilies...",
             "options": [
               "Hundreds of times",
               "Once",
@@ -3113,7 +3113,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A pond tells the truth because it—",
+            "prompt": "A pond tells the truth because it...",
             "options": [
               "Reflects",
               "Freezes",
@@ -3192,7 +3192,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "The first card's arrival was rudest because it—",
+            "prompt": "The first card's arrival was rudest because it...",
             "options": [
               "Didn't knock",
               "Was wet",
@@ -3219,7 +3219,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Marina Abramović made famous art where the material was—",
+            "prompt": "Marina Abramović made famous art where the material was...",
             "options": [
               "Her own presence",
               "Marble",
@@ -3239,7 +3239,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A light with no coast still keeps—",
+            "prompt": "A light with no coast still keeps...",
             "options": [
               "The dark honest",
               "A schedule",
@@ -3321,7 +3321,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on that first leaked card was checked—",
+            "prompt": "The category box on that first leaked card was checked...",
             "options": [
               "VESSEL",
               "TENANT",
@@ -3342,7 +3342,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "In art, a 'readymade' is—",
+            "prompt": "In art, a 'readymade' is...",
             "options": [
               "An ordinary object declared to be art",
               "A pre-primed blank canvas",
@@ -3363,7 +3363,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A rumor with no source is like a parcel with—",
+            "prompt": "A rumor with no source is like a parcel with...",
             "options": [
               "No address",
               "Too much tape",
@@ -3446,7 +3446,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The card-stock trail out of Bosch's block ran—",
+            "prompt": "The card-stock trail out of Bosch's block ran...",
             "options": [
               "West, toward the arcade",
               "North, toward the road",
@@ -3488,7 +3488,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The kindest thing you can letter on an unclaimed tag is—",
+            "prompt": "The kindest thing you can letter on an unclaimed tag is...",
             "options": [
               "A real name",
               "A serial number",
@@ -3571,7 +3571,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box checked on that first leaked card read—",
+            "prompt": "The category box checked on that first leaked card read...",
             "options": [
               "VESSEL",
               "OWNER",
@@ -3585,14 +3585,14 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "The scariest thing in Dead Letter isn't the dead — it's the copies that stopped keeping originals at all.",
+            "prompt": "The scariest thing in Dead Letter isn't the dead. It's the copies that stopped keeping originals at all.",
             "answer": true,
             "failLine": "\"No original. Just returns of returns. It's all shelf, no source.\"",
             "category": "lore"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Sherrie Levine became famous for a body of work that consisted of—",
+            "prompt": "Sherrie Levine became famous for a body of work that consisted of...",
             "options": [
               "Re-photographing other artists' famous photographs",
               "Painting only pure white squares",
@@ -3613,7 +3613,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A copy with no owner still 'belongs' to—",
+            "prompt": "A copy with no owner still 'belongs' to...",
             "options": [
               "Whoever's holding it",
               "The original, wherever it is",
@@ -3696,7 +3696,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The leaked card's category box, when you can still read it through the mist, says—",
+            "prompt": "The leaked card's category box, when you can still read it through the mist, says...",
             "options": [
               "VESSEL",
               "RESIDENT",
@@ -3717,7 +3717,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Robert Ryman spent a career making paintings that were almost entirely—",
+            "prompt": "Robert Ryman spent a career making paintings that were almost entirely...",
             "options": [
               "White",
               "Black",
@@ -3738,7 +3738,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A story that's evaporated down to nothing still leaves behind—",
+            "prompt": "A story that's evaporated down to nothing still leaves behind...",
             "options": [
               "A residue you can bill",
               "A perfect clean copy",
@@ -3800,7 +3800,7 @@
         "blockFlags": []
       },
       "personality": {
-        "bit": "A conductor for the undelivered choir — voices of messages that never reached anyone, singing their own returns.",
+        "bit": "A conductor for the undelivered choir. Voices of messages that never reached anyone, singing their own returns.",
         "tic": "\"Sing it back to sender.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1042.png",
@@ -3821,7 +3821,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on that card was checked—",
+            "prompt": "The category box on that card was checked...",
             "options": [
               "VESSEL",
               "LISTENER",
@@ -3842,7 +3842,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "'Musique concrète' is music built from—",
+            "prompt": "'Musique concrète' is music built from...",
             "options": [
               "Recorded real-world sounds, edited on tape",
               "Only classical instruments",
@@ -3863,7 +3863,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A message no one ever hears still counts as—",
+            "prompt": "A message no one ever hears still counts as...",
             "options": [
               "A message",
               "Noise",
@@ -3893,7 +3893,7 @@
           "\"The choir nods. Continue.\""
         ],
         "cleared": [
-          "\"Take the card. It finally got delivered — to you, out loud.\"",
+          "\"Take the card. It finally got delivered. To you, out loud.\"",
           "\"Sung true and sourced. One voice leaves the loft happy.\""
         ],
         "failed": [
@@ -3932,7 +3932,7 @@
       "hints": [],
       "entryPrompt": [
         "You find the Drifella crouched behind the return crates, a leaked copy palmed like contraband.",
-        "\"Source Check — quietly. Get it right and I never saw you. Get it wrong and I saw everything.\""
+        "\"Source Check. Quietly. Get it right and I never saw you. Get it wrong and I saw everything.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3946,7 +3946,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the first leaked card read—",
+            "prompt": "The category box on the first leaked card read...",
             "options": [
               "VESSEL",
               "CONTACT",
@@ -3967,7 +3967,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Mail art is an art movement in which artists—",
+            "prompt": "Mail art is an art movement in which artists...",
             "options": [
               "Send small artworks to each other through the postal system",
               "Paint only pictures of post offices",
@@ -3981,14 +3981,14 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "Fluxus artists sent 'event scores' — tiny written instructions — through the mail as artworks.",
+            "prompt": "Fluxus artists sent 'event scores'. Tiny written instructions. Through the mail as artworks.",
             "answer": true,
             "failLine": "\"Instructions in an envelope. My whole trade, but with a grant.\"",
             "category": "art"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The safest copy to carry is the one that—",
+            "prompt": "The safest copy to carry is the one that...",
             "options": [
               "No one knows exists",
               "Everyone has seen",
@@ -4071,7 +4071,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The card-stock trail from Bosch's block ran—",
+            "prompt": "The card-stock trail from Bosch's block ran...",
             "options": [
               "West, toward the arcade",
               "East, toward the docks",
@@ -4085,14 +4085,14 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "A postmark's job is to cancel — to say a thing has happened and can't happen fresh again.",
+            "prompt": "A postmark's job is to cancel. To say a thing has happened and can't happen fresh again.",
             "answer": true,
             "failLine": "\"To cancel. Once it's cancelled, even the fog can't un-happen it.\"",
             "category": "lore"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "On tape music, a 'loop' is—",
+            "prompt": "On tape music, a 'loop' is...",
             "options": [
               "A length of tape spliced end to end so a sound repeats",
               "A dance move for sound engineers",
@@ -4113,7 +4113,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The one detail a leak can never fake is—",
+            "prompt": "The one detail a leak can never fake is...",
             "options": [
               "When it actually happened",
               "The paper it's printed on",
@@ -4196,7 +4196,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on that first card was checked—",
+            "prompt": "The category box on that first card was checked...",
             "options": [
               "VESSEL",
               "OCCUPANT",
@@ -4217,7 +4217,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Andy Warhol silkscreened grids of the same news photo — car crashes, chairs — in a series called—",
+            "prompt": "Andy Warhol silkscreened grids of the same news photo. Car crashes, chairs. In a series called...",
             "options": [
               "Death and Disaster",
               "Sunny Days",
@@ -4238,7 +4238,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The difference between you and a return in the drawer is—",
+            "prompt": "The difference between you and a return in the drawer is...",
             "options": [
               "You can still walk out",
               "Better paperwork",
@@ -4276,7 +4276,7 @@
           "\"The drawer's still open for that answer. Try again quick.\""
         ],
         "alreadyCleared": [
-          "\"Already sorted you out — the good way. Move along.\"",
+          "\"Already sorted you out. The good way. Move along.\"",
           "\"You're logged as living. The drawers can't have you.\""
         ]
       }
@@ -4307,7 +4307,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella slides open a little confessional grille reeking of old glue and salt fog.",
-        "\"Source Check, or last rites — same booth. Tell me your provenance, child, before it's lost for good.\""
+        "\"Source Check, or last rites. Same booth. Tell me your provenance, child, before it's lost for good.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4321,7 +4321,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Morningside's card-stock trail ran—",
+            "prompt": "Morningside's card-stock trail ran...",
             "options": [
               "West, toward the arcade",
               "South, toward the sea",
@@ -4363,7 +4363,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A copy that's forgotten where it came from should—",
+            "prompt": "A copy that's forgotten where it came from should...",
             "options": [
               "Confess honestly and be filed as unknown",
               "Invent a grander origin",
@@ -4446,7 +4446,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on that founding leaked card was checked—",
+            "prompt": "The category box on that founding leaked card was checked...",
             "options": [
               "VESSEL",
               "RETURN",
@@ -4460,7 +4460,7 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "In Dead Letter, going 'to the Source' means being un-copied entirely — no clean version left behind.",
+            "prompt": "In Dead Letter, going 'to the Source' means being un-copied entirely. No clean version left behind.",
             "answer": true,
             "failLine": "\"No copy left. The Source keeps nothing but the fact you existed. Choose your answers.\"",
             "category": "lore"
@@ -4476,19 +4476,19 @@
             ],
             "answerIndex": 0,
             "officialIndex": 3,
-            "failLine": "\"International Klein Blue. He tried to patent a color — a provenance on the void itself.\"",
+            "failLine": "\"International Klein Blue. He tried to patent a color. A provenance on the void itself.\"",
             "category": "art"
           },
           {
             "type": "trueFalse",
-            "prompt": "Kazimir Malevich's 'Black Square' was presented as a kind of zero point — the end of ordinary picture-making.",
+            "prompt": "Kazimir Malevich's 'Black Square' was presented as a kind of zero point. The end of ordinary picture-making.",
             "answer": true,
             "failLine": "\"The zero point. A door painted shut. Fitting, at the last gate.\"",
             "category": "art"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "When a story finally goes back to the Source, what's left in the world is—",
+            "prompt": "When a story finally goes back to the Source, what's left in the world is...",
             "options": [
               "The people who remember it",
               "A perfect clean copy",
@@ -4571,7 +4571,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the mannequin's tag read—",
+            "prompt": "The category box on the mannequin's tag read...",
             "options": [
               "MERCHANDISE",
               "VESSEL",
@@ -4606,7 +4606,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A rumor with no receipt is like a price tag that—",
+            "prompt": "A rumor with no receipt is like a price tag that...",
             "options": [
               "Names a number but no product",
               "Is written too neatly",
@@ -4689,7 +4689,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "When a stolen face is stitched onto a mannequin here, the tag underneath is checked—",
+            "prompt": "When a stolen face is stitched onto a mannequin here, the tag underneath is checked...",
             "options": [
               "LEAKED VERSION",
               "ORIGINAL",
@@ -4703,7 +4703,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Artist Sherrie Levine became known for re-presenting other artists' works as her own, a practice called—",
+            "prompt": "Artist Sherrie Levine became known for re-presenting other artists' works as her own, a practice called...",
             "options": [
               "Appropriation",
               "Restoration",
@@ -4724,7 +4724,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The swarm distributes faces the way a department store moves—",
+            "prompt": "The swarm distributes faces the way a department store moves...",
             "options": [
               "Inventory",
               "Rumors",
@@ -4814,7 +4814,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The escalator in the mall's atrium doesn't just move you up floors—it—",
+            "prompt": "The escalator in the mall's atrium doesn't just move you up floors. It...",
             "options": [
               "Sorts you by tier",
               "Plays a jingle",
@@ -4828,7 +4828,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Barbara Kruger is famous for bold graphic works pairing found photos with slogans like—",
+            "prompt": "Barbara Kruger is famous for bold graphic works pairing found photos with slogans like...",
             "options": [
               "\"I shop therefore I am\"",
               "\"Just do it\"",
@@ -4849,7 +4849,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The directory files shoppers by—",
+            "prompt": "The directory files shoppers by...",
             "options": [
               "Tier",
               "Shoe size",
@@ -4967,7 +4967,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A rumor served without a source is like a meal with—",
+            "prompt": "A rumor served without a source is like a meal with...",
             "options": [
               "No receipt",
               "Extra napkins",
@@ -5078,14 +5078,14 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "The word 'gallery' shares a root with commercial arcades — long covered shopping passages that were among the first modern malls.",
+            "prompt": "The word 'gallery' shares a root with commercial arcades. Long covered shopping passages that were among the first modern malls.",
             "answer": true,
             "failLine": "\"True. The mall and the museum were always the same hallway. Directory confirms.\"",
             "category": "art"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The Galleria is best described as—",
+            "prompt": "The Galleria is best described as...",
             "options": [
               "The department store of leaked selves",
               "A pleasant regional outlet mall",
@@ -5168,7 +5168,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Muzak — the original piped background music company — pioneered a system to boost worker and shopper behavior. It was called—",
+            "prompt": "Muzak. The original piped background music company. Pioneered a system to boost worker and shopper behavior. It was called...",
             "options": [
               "Stimulus Progression",
               "Loudness Compression",
@@ -5182,7 +5182,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Composer Erik Satie coined a term for background music intended as 'furniture' — heard but not attended to. It was—",
+            "prompt": "Composer Erik Satie coined a term for background music intended as 'furniture'. Heard but not attended to. It was...",
             "options": [
               "Furniture music",
               "Chamber music",
@@ -5203,7 +5203,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A rumor set to Muzak becomes—",
+            "prompt": "A rumor set to Muzak becomes...",
             "options": [
               "Something you stop hearing but keep believing",
               "A chart-topping single",
@@ -5286,7 +5286,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "In the display window, Bosch's almost-right face was posed holding a placard reading—",
+            "prompt": "In the display window, Bosch's almost-right face was posed holding a placard reading...",
             "options": [
               "\"I said it first, so I don't have to mean it.\"",
               "\"Now 20% off.\"",
@@ -5321,7 +5321,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A face in a window with no consent behind it is best labeled—",
+            "prompt": "A face in a window with no consent behind it is best labeled...",
             "options": [
               "A leaked version on display",
               "A featured item",
@@ -5434,12 +5434,12 @@
             "type": "trueFalse",
             "prompt": "Pop artists deliberately blurred the line between original art and mass-reproduced commercial imagery.",
             "answer": true,
-            "failLine": "\"True. Original, copy, return, restock — all the same aisle to them.\"",
+            "failLine": "\"True. Original, copy, return, restock. All the same aisle to them.\"",
             "category": "art"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The returns desk sits back here, out of the light, because—",
+            "prompt": "The returns desk sits back here, out of the light, because...",
             "options": [
               "The swarm doesn't advertise what it won't take back",
               "The rent is cheaper",
@@ -5522,7 +5522,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "In swarm inventory language, a face waiting in the stockroom is labeled—",
+            "prompt": "In swarm inventory language, a face waiting in the stockroom is labeled...",
             "options": [
               "UNRELEASED VERSION",
               "SOLD OUT",
@@ -5536,7 +5536,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Andy Warhol nicknamed his studio, where assistants mass-produced his art, the—",
+            "prompt": "Andy Warhol nicknamed his studio, where assistants mass-produced his art, the...",
             "options": [
               "Factory",
               "Warehouse",
@@ -5557,7 +5557,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The reason the swarm keeps the stockroom out of sight is that—",
+            "prompt": "The reason the swarm keeps the stockroom out of sight is that...",
             "options": [
               "Provenance is easier to fake in the dark",
               "The lighting is expensive",
@@ -5640,14 +5640,14 @@
         "pool": [
           {
             "type": "trueFalse",
-            "prompt": "In the Galleria, the swarm can put a leaked version of a person 'on layaway' — held in reserve to release later.",
+            "prompt": "In the Galleria, the swarm can put a leaked version of a person 'on layaway'. Held in reserve to release later.",
             "answer": true,
             "failLine": "\"True. Held in the vault, ready to sell the moment it's useful. I hate this job.\"",
             "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The vault ledger records what the swarm treats as the 'deposit' that reserves a leaked self—",
+            "prompt": "The vault ledger records what the swarm treats as the 'deposit' that reserves a leaked self...",
             "options": [
               "A single unguarded moment on the record",
               "A signed contract",
@@ -5677,12 +5677,12 @@
             "type": "trueFalse",
             "prompt": "Some conceptual artworks are sold as certificates or instructions, so the 'piece' can exist without ever being physically present.",
             "answer": true,
-            "failLine": "\"True. Owned but absent — held on paper. Exactly how the vault holds you.\"",
+            "failLine": "\"True. Owned but absent. Held on paper. Exactly how the vault holds you.\"",
             "category": "art"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A self held in the vault is like provenance that's—",
+            "prompt": "A self held in the vault is like provenance that's...",
             "options": [
               "Paused, waiting to be spent",
               "Freely given",
@@ -5765,7 +5765,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The receipt printed at checkout lists a leaked self's price as—",
+            "prompt": "The receipt printed at checkout lists a leaked self's price as...",
             "options": [
               "Whatever attention it can command",
               "A flat regional rate",
@@ -5795,12 +5795,12 @@
             "type": "trueFalse",
             "prompt": "The barcode was invented to speed up supermarket checkouts before it became a symbol of mass consumer culture.",
             "answer": true,
-            "failLine": "\"True. A stripe that turns anything into a scannable item — even a face. Filed.\"",
+            "failLine": "\"True. A stripe that turns anything into a scannable item. Even a face. Filed.\"",
             "category": "art"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A self that scans clean at checkout is one whose—",
+            "prompt": "A self that scans clean at checkout is one whose...",
             "options": [
               "Provenance holds up to a witness",
               "Loyalty tier is highest",
@@ -5830,7 +5830,7 @@
           "\"That rings up true.\""
         ],
         "cleared": [
-          "\"Take the card. No charge — I voided the transaction the swarm wanted.\"",
+          "\"Take the card. No charge. I voided the transaction the swarm wanted.\"",
           "\"Sourced and rung through. You leave the lane as a person, not a purchase.\""
         ],
         "failed": [
@@ -5883,7 +5883,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The claim tag the swarm attaches to a recovered self reads—",
+            "prompt": "The claim tag the swarm attaches to a recovered self reads...",
             "options": [
               "FOUND VERSION, OWNER UNVERIFIED",
               "RETURNED TO OWNER",
@@ -5918,7 +5918,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The safest way to keep a self out of this drawer is to—",
+            "prompt": "The safest way to keep a self out of this drawer is to...",
             "options": [
               "Keep your provenance witnessed and close",
               "Buy the extended warranty",
@@ -5948,7 +5948,7 @@
           "\"Claim verified. Verified.\""
         ],
         "cleared": [
-          "\"Take the card. I've handed your self back to the only rightful claimant — you.\"",
+          "\"Take the card. I've handed your self back to the only rightful claimant. You.\"",
           "\"Sourced and returned. Nothing of yours stays in this drawer.\""
         ],
         "failed": [
@@ -6001,7 +6001,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on that first leaked card was checked—",
+            "prompt": "The category box on that first leaked card was checked...",
             "options": [
               "VESSEL",
               "GUEST",
@@ -6022,7 +6022,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Katsushika Hokusai's most famous print shows an enormous—",
+            "prompt": "Katsushika Hokusai's most famous print shows an enormous...",
             "options": [
               "Wave",
               "Sunset",
@@ -6043,7 +6043,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A sandcastle's provenance lasts, at most, until—",
+            "prompt": "A sandcastle's provenance lasts, at most, until...",
             "options": [
               "High tide",
               "Checkout",
@@ -6126,7 +6126,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the first leaked card read—",
+            "prompt": "The category box on the first leaked card read...",
             "options": [
               "VESSEL",
               "SCENERY",
@@ -6147,7 +6147,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Claude Monet painted the same haystacks and cathedrals over and over to study—",
+            "prompt": "Claude Monet painted the same haystacks and cathedrals over and over to study...",
             "options": [
               "Changing light",
               "Property values",
@@ -6168,7 +6168,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A postcard is a lie you mail on purpose because it's—",
+            "prompt": "A postcard is a lie you mail on purpose because it's...",
             "options": [
               "Kinder than the truth",
               "Cheaper than a photo",
@@ -6251,7 +6251,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box checked on the first leaked card said—",
+            "prompt": "The category box checked on the first leaked card said...",
             "options": [
               "VESSEL",
               "EXHIBIT",
@@ -6272,7 +6272,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Mark Rothko is famous for large canvases of—",
+            "prompt": "Mark Rothko is famous for large canvases of...",
             "options": [
               "Soft glowing color fields",
               "Tiny seascapes",
@@ -6293,7 +6293,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A docent's job is really to make sure you leave feeling—",
+            "prompt": "A docent's job is really to make sure you leave feeling...",
             "options": [
               "Slightly guilty for not knowing more",
               "Refunded",
@@ -6376,7 +6376,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on that first leaked card was checked as—",
+            "prompt": "The category box on that first leaked card was checked as...",
             "options": [
               "VESSEL",
               "SHORELINE",
@@ -6397,7 +6397,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Christo and Jeanne-Claude were famous for temporarily wrapping and lining—",
+            "prompt": "Christo and Jeanne-Claude were famous for temporarily wrapping and lining...",
             "options": [
               "Coastlines and buildings in fabric",
               "Paintings in glass",
@@ -6418,7 +6418,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A border the ocean redraws hourly is best thought of as—",
+            "prompt": "A border the ocean redraws hourly is best thought of as...",
             "options": [
               "A suggestion",
               "A law",
@@ -6501,7 +6501,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the first leaked card was marked—",
+            "prompt": "The category box on the first leaked card was marked...",
             "options": [
               "VESSEL",
               "SWIMMER",
@@ -6522,7 +6522,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Yves Klein patented and is famous for a single intense shade of—",
+            "prompt": "Yves Klein patented and is famous for a single intense shade of...",
             "options": [
               "Blue",
               "Gold",
@@ -6543,7 +6543,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The thing that actually keeps an original afloat isn't skill, it's—",
+            "prompt": "The thing that actually keeps an original afloat isn't skill, it's...",
             "options": [
               "A believable story of where it came from",
               "A bigger frame",
@@ -6626,7 +6626,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the first leaked card came back reading—",
+            "prompt": "The category box on the first leaked card came back reading...",
             "options": [
               "VESSEL",
               "MEMENTO",
@@ -6647,7 +6647,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Joseph Cornell is famous for making art out of—",
+            "prompt": "Joseph Cornell is famous for making art out of...",
             "options": [
               "Small boxes full of found trinkets",
               "Giant marble columns",
@@ -6668,7 +6668,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The reason people buy the keychain is that a memory feels safer when it's—",
+            "prompt": "The reason people buy the keychain is that a memory feels safer when it's...",
             "options": [
               "Something you can hold",
               "Notarized",
@@ -6751,7 +6751,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the first leaked card actually said—",
+            "prompt": "The category box on the first leaked card actually said...",
             "options": [
               "VESSEL",
               "GUEST",
@@ -6772,7 +6772,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "John Cage taught that the point of a piece could be to make you notice—",
+            "prompt": "John Cage taught that the point of a piece could be to make you notice...",
             "options": [
               "The ambient sounds already in the room",
               "The conductor's outfit",
@@ -6793,7 +6793,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The people who walk the boardwalk overhead almost never—",
+            "prompt": "The people who walk the boardwalk overhead almost never...",
             "options": [
               "Look down",
               "Pay admission",
@@ -6876,7 +6876,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The category box on the first leaked card was checked as—",
+            "prompt": "The category box on the first leaked card was checked as...",
             "options": [
               "VESSEL",
               "PATRON",
@@ -6897,7 +6897,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Marcel Duchamp scandalized the art world by submitting a signed, ordinary object, most famously a—",
+            "prompt": "Marcel Duchamp scandalized the art world by submitting a signed, ordinary object, most famously a...",
             "options": [
               "Urinal, titled 'Fountain'",
               "Locker key",
@@ -6918,7 +6918,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The trouble with checking your true self at a counter is that eventually—",
+            "prompt": "The trouble with checking your true self at a counter is that eventually...",
             "options": [
               "You forget which locker",
               "It gets sandy",
@@ -7001,7 +7001,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "In the annex ledger, the first leaked card's category box reads—",
+            "prompt": "In the annex ledger, the first leaked card's category box reads...",
             "options": [
               "VESSEL",
               "ORIGINAL",
@@ -7022,7 +7022,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Agnes Martin's quiet paintings are famous for their faint—",
+            "prompt": "Agnes Martin's quiet paintings are famous for their faint...",
             "options": [
               "Grids and pale lines",
               "Loud primary colors",
@@ -7043,7 +7043,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The reason the originals face the wall isn't damage, it's that the truth is—",
+            "prompt": "The reason the originals face the wall isn't damage, it's that the truth is...",
             "options": [
               "Bad for gift-shop sales",
               "Too fragile for light",
@@ -7126,7 +7126,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "In the driftwood catalog, the first leaked card's category box is logged as—",
+            "prompt": "In the driftwood catalog, the first leaked card's category box is logged as...",
             "options": [
               "VESSEL",
               "DRIFT",
@@ -7147,7 +7147,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Andy Goldsworthy is famous for arranging natural found materials, like driftwood, leaves and stone, into—",
+            "prompt": "Andy Goldsworthy is famous for arranging natural found materials, like driftwood, leaves and stone, into...",
             "options": [
               "Temporary outdoor sculptures",
               "Framed oil paintings",
@@ -7168,7 +7168,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The thing the resort can never actually own, no matter the vacation package, is—",
+            "prompt": "The thing the resort can never actually own, no matter the vacation package, is...",
             "options": [
               "Where a thing truly came from",
               "The beachfront",
@@ -7293,7 +7293,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A copy of a copy of a copy is, in the end—",
+            "prompt": "A copy of a copy of a copy is, in the end...",
             "options": [
               "A drift away from the source",
               "Somehow more official",
@@ -7397,7 +7397,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Yayoi Kusama is famous worldwide for covering her art in—",
+            "prompt": "Yayoi Kusama is famous worldwide for covering her art in...",
             "options": [
               "Polka dots",
               "Straight silver lines",
@@ -7418,7 +7418,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A rumor with no source is like a bounce with—",
+            "prompt": "A rumor with no source is like a bounce with...",
             "options": [
               "No ground to land on",
               "Too much spring",
@@ -7522,7 +7522,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Henry Darger was a reclusive artist who is best known for—",
+            "prompt": "Henry Darger was a reclusive artist who is best known for...",
             "options": [
               "A vast hand-made illustrated epic no one saw until he died",
               "Giant public bronze statues",
@@ -7543,7 +7543,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A map with no territory is like a claim with—",
+            "prompt": "A map with no territory is like a claim with...",
             "options": [
               "No source underneath it",
               "Too many roads",
@@ -7647,7 +7647,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Howard Finster was a preacher who became famous for—",
+            "prompt": "Howard Finster was a preacher who became famous for...",
             "options": [
               "Thousands of hand-painted folk artworks made as sermons",
               "Official state portraits",
@@ -7668,7 +7668,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A copy has the notes but misses the—",
+            "prompt": "A copy has the notes but misses the...",
             "options": [
               "Warmth of the one who first hummed it",
               "Correct file format",
@@ -7772,7 +7772,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Grandma Moses (Anna Mary Robertson Moses) was famous for taking up painting—",
+            "prompt": "Grandma Moses (Anna Mary Robertson Moses) was famous for taking up painting...",
             "options": [
               "Late in life, self-taught, painting country scenes",
               "As a court-appointed official painter",
@@ -7793,7 +7793,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A cast copy can share the shape but never the—",
+            "prompt": "A cast copy can share the shape but never the...",
             "options": [
               "Hand that carved it",
               "Right dimensions",
@@ -7876,7 +7876,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The gate-greeter checks that a visitor came for—",
+            "prompt": "The gate-greeter checks that a visitor came for...",
             "options": [
               "The real thing, not to leak it",
               "The highest resale price",
@@ -7897,7 +7897,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Adolf Wolfli made his intricate art while—",
+            "prompt": "Adolf Wolfli made his intricate art while...",
             "options": [
               "Institutionalized, filling huge hand-drawn books",
               "Leading an official academy",
@@ -7918,7 +7918,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A guest who loves the source is worth more than a guest who wants to—",
+            "prompt": "A guest who loves the source is worth more than a guest who wants to...",
             "options": [
               "Rent it out to strangers",
               "Stay for lunch",
@@ -8022,7 +8022,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Jean-Michel Basquiat's paintings are known for—",
+            "prompt": "Jean-Michel Basquiat's paintings are known for...",
             "options": [
               "Raw, hand-scrawled words, crowns, and figures",
               "Cool, machine-clean geometry",
@@ -8043,7 +8043,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A perfectly uniform color is the sign of—",
+            "prompt": "A perfectly uniform color is the sign of...",
             "options": [
               "A machine, not a maker",
               "The finest berries",
@@ -8168,7 +8168,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A counterfeit can copy the fruit but never the—",
+            "prompt": "A counterfeit can copy the fruit but never the...",
             "options": [
               "Living seed inside it",
               "Correct color",
@@ -8272,7 +8272,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "In Japanese craft, 'wabi-sabi' is the idea that—",
+            "prompt": "In Japanese craft, 'wabi-sabi' is the idea that...",
             "options": [
               "Imperfection and wear can be beautiful",
               "Only flawless objects have worth",
@@ -8293,7 +8293,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A flawless copy proves only that it—",
+            "prompt": "A flawless copy proves only that it...",
             "options": [
               "Never passed through a real hand",
               "Was made with great care",
@@ -8418,7 +8418,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A thing with no provenance is—",
+            "prompt": "A thing with no provenance is...",
             "options": [
               "A rumor pretending to be an heirloom",
               "Automatically the most valuable",
@@ -8501,7 +8501,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The village bell is—",
+            "prompt": "The village bell is...",
             "options": [
               "Hand-cast, ringing one true note for the source",
               "Machine-stamped for volume",
@@ -8522,7 +8522,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "'Sound art' is best described as art that—",
+            "prompt": "'Sound art' is best described as art that...",
             "options": [
               "Uses sound and listening as its main material",
               "Must be completely silent",
@@ -8543,7 +8543,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A leak rings loud but hollow, because it lacks—",
+            "prompt": "A leak rings loud but hollow, because it lacks...",
             "options": [
               "A true source underneath the sound",
               "Enough volume",
@@ -8647,7 +8647,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "An 'oral tradition' keeps a story alive by—",
+            "prompt": "An 'oral tradition' keeps a story alive by...",
             "options": [
               "Telling and retelling it out loud, person to person",
               "Locking it in one official book",
@@ -8668,7 +8668,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A story with no teller behind it is just—",
+            "prompt": "A story with no teller behind it is just...",
             "options": [
               "A rumor drifting in the dark",
               "The official version",
@@ -8772,7 +8772,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Henry Darger's giant illustrated work was discovered—",
+            "prompt": "Henry Darger's giant illustrated work was discovered...",
             "options": [
               "Hidden in his room only after he had died",
               "In a famous museum during his life",
@@ -8793,7 +8793,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The safest source is the one that is—",
+            "prompt": "The safest source is the one that is...",
             "options": [
               "Loved quietly, never put up for rent",
               "Shown to the largest crowd",
@@ -8897,7 +8897,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Yayoi Kusama has spoken openly about making her dot-art partly to cope with—",
+            "prompt": "Yayoi Kusama has spoken openly about making her dot-art partly to cope with...",
             "options": [
               "Her lifelong hallucinations and mental illness",
               "A dislike of bright colors",
@@ -8918,7 +8918,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Water bottled far downstream has lost its—",
+            "prompt": "Water bottled far downstream has lost its...",
             "options": [
               "Connection to the true spring",
               "Wetness",
@@ -9022,7 +9022,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "In art, a 'study' or preparatory sketch is—",
+            "prompt": "In art, a 'study' or preparatory sketch is...",
             "options": [
               "An early practice drawing made before the final work",
               "The official certificate of a painting",
@@ -9043,7 +9043,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A polished final copy can hide how much of the source lived in—",
+            "prompt": "A polished final copy can hide how much of the source lived in...",
             "options": [
               "The messy first draft",
               "The frame",
@@ -9147,7 +9147,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "'Naive art' as a style is best described as—",
+            "prompt": "'Naive art' as a style is best described as...",
             "options": [
               "Simple, direct, self-taught, with a childlike honesty",
               "Highly trained academic realism",
@@ -9168,7 +9168,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Someone who barges in to grab the source usually finds—",
+            "prompt": "Someone who barges in to grab the source usually finds...",
             "options": [
               "It has quietly slipped away",
               "It's officially certified",
@@ -9272,7 +9272,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Howard Finster called his art—",
+            "prompt": "Howard Finster called his art...",
             "options": [
               "Sacred visionary work made on divine instruction",
               "A purely commercial product line",
@@ -9293,7 +9293,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A spark passed hand to hand keeps its warmth, but a spark that's sold becomes—",
+            "prompt": "A spark passed hand to hand keeps its warmth, but a spark that's sold becomes...",
             "options": [
               "Just cold ash pretending to be fire",
               "Twice as bright",
@@ -9397,7 +9397,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The big idea behind all this outsider and folk art is that real value comes from—",
+            "prompt": "The big idea behind all this outsider and folk art is that real value comes from...",
             "options": [
               "A genuine human hand and heart, not mass duplication",
               "Official approval and certificates",
@@ -9418,7 +9418,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Protecting the master copy really means protecting—",
+            "prompt": "Protecting the master copy really means protecting...",
             "options": [
               "The realness a rented copy can never carry",
               "The highest possible price",
@@ -9501,7 +9501,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The notice nailed to the vacant lot where Bosch's file used to sit was stamped—",
+            "prompt": "The notice nailed to the vacant lot where Bosch's file used to sit was stamped...",
             "options": [
               "FORECLOSED",
               "OCCUPANT VERIFIED",
@@ -9515,7 +9515,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Robert Smithson's 'Spiral Jetty' was built out into—",
+            "prompt": "Robert Smithson's 'Spiral Jetty' was built out into...",
             "options": [
               "The Great Salt Lake",
               "The open Pacific",
@@ -9529,9 +9529,9 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Michael Heizer cut his 'Double Negative' by displacing 240,000 tons of desert to make—",
+            "prompt": "Michael Heizer cut his 'Double Negative' by displacing 240,000 tons of desert to make...",
             "options": [
-              "An absence — two trenches facing across a void",
+              "An absence. Two trenches facing across a void",
               "A polished bronze monument",
               "A signed municipal earthwork permit",
               "A ring of standing stones"
@@ -9550,7 +9550,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A face nobody can source is worth—",
+            "prompt": "A face nobody can source is worth...",
             "options": [
               "Exactly the lot it stands on: vacant",
               "A premium, for the mystery",
@@ -9633,12 +9633,12 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "When Bosch reached the mirage of his own leaked card, the shimmer resolved into—",
+            "prompt": "When Bosch reached the mirage of his own leaked card, the shimmer resolved into...",
             "options": [
               "A face that was almost his, appraised higher",
               "A cool spring, actual water",
               "A stamped certificate of authenticity",
-              "Nothing — heat and blank air"
+              "Nothing. Heat and blank air"
             ],
             "answerIndex": 0,
             "officialIndex": 2,
@@ -9647,9 +9647,9 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Walter De Maria's 'The Lightning Field' consists of 400 stainless poles arranged to—",
+            "prompt": "Walter De Maria's 'The Lightning Field' consists of 400 stainless poles arranged to...",
             "options": [
-              "Wait, mostly — attracting strikes that rarely come",
+              "Wait, mostly. Attracting strikes that rarely come",
               "Generate electricity for a nearby town",
               "Spell a word readable from the air",
               "Melt at the first bolt, by design"
@@ -9661,7 +9661,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Agnes Martin spent decades painting faint hand-drawn grids that are best described as—",
+            "prompt": "Agnes Martin spent decades painting faint hand-drawn grids that are best described as...",
             "options": [
               "Quiet, near-empty fields of pencil and pale wash",
               "Loud geometric op-art illusions",
@@ -9758,7 +9758,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The repossession slip on Bosch's leaked face listed the reason for towing as—",
+            "prompt": "The repossession slip on Bosch's leaked face listed the reason for towing as...",
             "options": [
               "\"Unclaimed provenance\"",
               "\"Improper parking\"",
@@ -9772,7 +9772,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Nancy Holt's 'Sun Tunnels' are four large concrete pipes in the desert aligned to—",
+            "prompt": "Nancy Holt's 'Sun Tunnels' are four large concrete pipes in the desert aligned to...",
             "options": [
               "The solstice sunrises and sunsets",
               "The nearest highway grid",
@@ -9786,7 +9786,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Donald Judd, a central figure of Minimalism, is best known for—",
+            "prompt": "Donald Judd, a central figure of Minimalism, is best known for...",
             "options": [
               "Repeated identical boxes in metal and plywood",
               "Splattered gestural paintings",
@@ -9834,7 +9834,7 @@
           "\"Cleared and un-towed. Don't let them file you again.\""
         ],
         "failed": [
-          "\"Careful — that's how faces get towed. Come back sure.\"",
+          "\"Careful. That's how faces get towed. Come back sure.\"",
           "\"Slip's half-filled. Walk it off before I finish it.\""
         ],
         "alreadyCleared": [
@@ -9883,9 +9883,9 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The seal she pressed onto Bosch's re-filed face came out—",
+            "prompt": "The seal she pressed onto Bosch's re-filed face came out...",
             "options": [
-              "Smeared — a shape that could mean anything",
+              "Smeared. A shape that could mean anything",
               "Crisp and official",
               "Embossed in gold municipal foil",
               "Perfectly centered and dated"
@@ -9897,7 +9897,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Robert Irwin, associated with the Light and Space movement, is best known for making art from—",
+            "prompt": "Robert Irwin, associated with the Light and Space movement, is best known for making art from...",
             "options": [
               "Light, scrim, and the perception of empty space",
               "Cast iron industrial machinery",
@@ -9911,7 +9911,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Michael Heizer's decades-long project 'City' in the Nevada desert is—",
+            "prompt": "Michael Heizer's decades-long project 'City' in the Nevada desert is...",
             "options": [
               "A vast earthwork of mounds and depressions, mile-plus long",
               "A functioning small town he founded",
@@ -9994,21 +9994,21 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella sits cross-legged inside the chalk outline of a repossessed self, like it's a porch.",
-        "\"Source Check? Fine. Mind the lines — this identity's condemned, and the owner's touchy about guests.\""
+        "\"Source Check? Fine. Mind the lines. This identity's condemned, and the owner's touchy about guests.\""
       ],
       "questions": {
         "drawCount": 2,
         "pool": [
           {
             "type": "trueFalse",
-            "prompt": "Foreclosed selves aren't demolished out here — squatters move into the empty identities and keep them warm.",
+            "prompt": "Foreclosed selves aren't demolished out here. Squatters move into the empty identities and keep them warm.",
             "answer": true,
             "failLine": "\"Somebody's got to. An empty self collapses faster than an empty house.\"",
             "category": "witnessed"
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The chalk outline the squatter lives in was left behind when the swarm foreclosed on—",
+            "prompt": "The chalk outline the squatter lives in was left behind when the swarm foreclosed on...",
             "options": [
               "A face that couldn't prove its own Source",
               "A house with a bad roof",
@@ -10022,7 +10022,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Land art like Smithson's and Heizer's is difficult to own or sell mainly because—",
+            "prompt": "Land art like Smithson's and Heizer's is difficult to own or sell mainly because...",
             "options": [
               "It's fixed to remote land and often decays in place",
               "It's always kept secret from the public",
@@ -10036,9 +10036,9 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A defining trait of Minimalist sculpture (Judd, Andre, Morris) is that the work—",
+            "prompt": "A defining trait of Minimalist sculpture (Judd, Andre, Morris) is that the work...",
             "options": [
-              "Refuses illusion — it's just the plain object, present",
+              "Refuses illusion. It's just the plain object, present",
               "Tells a detailed historical story",
               "Hides a secret realistic image",
               "Is certified by a governing art board"
@@ -10119,7 +10119,7 @@
       "hints": [],
       "entryPrompt": [
         "Only the Drifella's head and one brushing hand are above the dune; the rest is filed underground for safekeeping.",
-        "\"Source Check. I archive what the sand takes. Answer soft — loud questions collapse the tunnels.\""
+        "\"Source Check. I archive what the sand takes. Answer soft. Loud questions collapse the tunnels.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10137,7 +10137,7 @@
             "options": [
               "The damaged original card, sand-scoured but whole",
               "A clean municipal duplicate",
-              "A blank sheet — the sand ate the ink",
+              "A blank sheet. The sand ate the ink",
               "The swarm's counterfeit copy"
             ],
             "answerIndex": 0,
@@ -10147,7 +10147,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Smithson's term for a piece brought indoors — a bin of desert material shown as a gallery counterpart to the outdoor 'Site' — was a—",
+            "prompt": "Smithson's term for a piece brought indoors. A bin of desert material shown as a gallery counterpart to the outdoor 'Site'. Was a...",
             "options": [
               "Nonsite",
               "Readymade",
@@ -10161,7 +10161,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Much land art was made in the late 1960s and 70s partly as a way to—",
+            "prompt": "Much land art was made in the late 1960s and 70s partly as a way to...",
             "options": [
               "Escape the gallery-and-market system entirely",
               "Win official government art commissions",
@@ -10258,7 +10258,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "When Bosch finally sourced his face on the flat, the sign painter changed his sign to read—",
+            "prompt": "When Bosch finally sourced his face on the flat, the sign painter changed his sign to read...",
             "options": [
               "NO VACANCY",
               "CONDEMNED",
@@ -10272,7 +10272,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Walter De Maria also filled a New York gallery floor completely with soil — a work titled the—",
+            "prompt": "Walter De Maria also filled a New York gallery floor completely with soil. A work titled the...",
             "options": [
               "'New York Earth Room'",
               "'Municipal Reclamation'",
@@ -10286,9 +10286,9 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Agnes Martin insisted her spare grids were fundamentally about—",
+            "prompt": "Agnes Martin insisted her spare grids were fundamentally about...",
             "options": [
-              "Inner states — happiness, innocence, quiet feeling",
+              "Inner states. Happiness, innocence, quiet feeling",
               "Precise mathematical ratios",
               "City street maps",
               "Approved institutional color codes"
@@ -10330,7 +10330,7 @@
           "\"That checks. Your room's spoken for now.\""
         ],
         "cleared": [
-          "\"Take the card. Your sign's lettered — the desert can't rent you out.\"",
+          "\"Take the card. Your sign's lettered. The desert can't rent you out.\"",
           "\"Proven, painted, occupied. Don't lean on it till it dries.\""
         ],
         "failed": [
@@ -10383,7 +10383,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Bosch reached the Unlisted Room only by going—",
+            "prompt": "Bosch reached the Unlisted Room only by going...",
             "options": [
               "Inward",
               "Downstairs",
@@ -10418,7 +10418,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Giorgio de Chirico is known for painting eerily empty—",
+            "prompt": "Giorgio de Chirico is known for painting eerily empty...",
             "options": [
               "Metaphysical piazzas and interiors",
               "Battlefields at dawn",
@@ -10508,7 +10508,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The leaked copy differed from the room's copy in one way—",
+            "prompt": "The leaked copy differed from the room's copy in one way...",
             "options": [
               "The leak had an index",
               "The leak was longer",
@@ -10529,7 +10529,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Remedios Varo's paintings most often depict—",
+            "prompt": "Remedios Varo's paintings most often depict...",
             "options": [
               "Alchemists and mystical machines in narrow towers",
               "Sunlit beach picnics",
@@ -10543,7 +10543,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Yves Tanguy filled his canvases with—",
+            "prompt": "Yves Tanguy filled his canvases with...",
             "options": [
               "Boneless dreamlike forms on vast empty plains",
               "Tidy still-life apples",
@@ -10633,7 +10633,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The dream-notary's stamp certifies a memory as—",
+            "prompt": "The dream-notary's stamp certifies a memory as...",
             "options": [
               "Witnessed while dreaming",
               "Legally binding",
@@ -10654,7 +10654,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Dorothea Tanning's 'Eine Kleine Nachtmusik' famously shows a hotel hallway with—",
+            "prompt": "Dorothea Tanning's 'Eine Kleine Nachtmusik' famously shows a hotel hallway with...",
             "options": [
               "A monstrous sunflower and windblown girls",
               "A row of tidy suitcases",
@@ -10668,7 +10668,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Louise Bourgeois built room-sized sculptural installations she called—",
+            "prompt": "Louise Bourgeois built room-sized sculptural installations she called...",
             "options": [
               "Cells",
               "Booths",
@@ -10758,7 +10758,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The wallpaper repeats a face that shouldn't be here at all—",
+            "prompt": "The wallpaper repeats a face that shouldn't be here at all...",
             "options": [
               "The one who first leaked the card",
               "A random tourist",
@@ -10779,7 +10779,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Yayoi Kusama's 'Infinity Mirror Rooms' immerse you in—",
+            "prompt": "Yayoi Kusama's 'Infinity Mirror Rooms' immerse you in...",
             "options": [
               "Endlessly repeating lights and reflections",
               "A single quiet portrait",
@@ -10793,7 +10793,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Hieronymus Bosch's most famous multi-panel work is—",
+            "prompt": "Hieronymus Bosch's most famous multi-panel work is...",
             "options": [
               "The Garden of Earthly Delights",
               "The Night Watch",
@@ -10883,7 +10883,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "You enter the Unlisted Room the only way possible—",
+            "prompt": "You enter the Unlisted Room the only way possible...",
             "options": [
               "From inside your own head",
               "Up the fire stairs",
@@ -10918,7 +10918,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Louise Bourgeois's giant spider sculpture is titled—",
+            "prompt": "Louise Bourgeois's giant spider sculpture is titled...",
             "options": [
               "Maman",
               "Guardian",
@@ -11008,7 +11008,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "What Bosch confessed in this corner was—",
+            "prompt": "What Bosch confessed in this corner was...",
             "options": [
               "That he saw the leak coming and said nothing",
               "That he'd never seen the card",
@@ -11029,7 +11029,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Leonora Carrington's most famous novel, of a girl's descent into a dream-underworld, is—",
+            "prompt": "Leonora Carrington's most famous novel, of a girl's descent into a dream-underworld, is...",
             "options": [
               "The Hearing Trumpet",
               "The Bell Jar",
@@ -11043,7 +11043,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Surrealists prized 'automatism,' which means—",
+            "prompt": "Surrealists prized 'automatism,' which means...",
             "options": [
               "Making art without conscious control",
               "Painting only machines",
@@ -11112,7 +11112,7 @@
         "blockFlags": []
       },
       "personality": {
-        "bit": "The keeper of the uncopied — guards the one Drifella the swarm never assigned a token, and never will.",
+        "bit": "The keeper of the uncopied. Guards the one Drifella the swarm never assigned a token, and never will.",
         "tic": "\"No token. That's the point.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5845.png",
@@ -11133,7 +11133,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "In Kazimir Malevich's Suprematism, his 'Black Square' was meant to be—",
+            "prompt": "In Kazimir Malevich's Suprematism, his 'Black Square' was meant to be...",
             "options": [
               "The zero of form, from which painting begins again",
               "A study for a larger battle scene",
@@ -11147,7 +11147,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Robert Rauschenberg's 'Erased de Kooning Drawing' is famous because the artist—",
+            "prompt": "Robert Rauschenberg's 'Erased de Kooning Drawing' is famous because the artist...",
             "options": [
               "Erased a drawing he was given; the erasure IS the work",
               "Drew de Kooning from memory in a single line",
@@ -11168,7 +11168,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The provenance of something with no provenance is—",
+            "prompt": "The provenance of something with no provenance is...",
             "options": [
               "Only the fact that you saw it",
               "A receipt filed in triplicate",
@@ -11230,7 +11230,7 @@
         "blockFlags": []
       },
       "personality": {
-        "bit": "A witness with no record — remembers everything the swarm forgot to write down, and refuses to write it now.",
+        "bit": "A witness with no record. Remembers everything the swarm forgot to write down, and refuses to write it now.",
         "tic": "\"I remember. I won't record it.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5984.png",
@@ -11244,7 +11244,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "John Cage's '4'33\"' asks the performer to—",
+            "prompt": "John Cage's '4'33\"' asks the performer to...",
             "options": [
               "Play nothing, so the room's own sound becomes the piece",
               "Hold a single note for exactly four minutes",
@@ -11258,7 +11258,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Piero Manzoni's 'Artist's Breath' (Fiato d'Artista) was, at heart—",
+            "prompt": "Piero Manzoni's 'Artist's Breath' (Fiato d'Artista) was, at heart...",
             "options": [
               "A balloon of his own exhaled breath, sold as art",
               "A recording of him reading aloud",
@@ -11286,7 +11286,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The safest place to keep a first-and-last thing is—",
+            "prompt": "The safest place to keep a first-and-last thing is...",
             "options": [
               "Unwritten, so it cannot be forged",
               "In a vault with a sign-out sheet",
@@ -11348,7 +11348,7 @@
         "blockFlags": []
       },
       "personality": {
-        "bit": "A curator of nothing — tends an empty room and insists the emptiness is the collection.",
+        "bit": "A curator of nothing. Tends an empty room and insists the emptiness is the collection.",
         "tic": "\"The room is full. Look closer.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6002.png",
@@ -11362,7 +11362,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "Yves Klein's 'Le Vide' (The Void) presented gallery-goers with—",
+            "prompt": "Yves Klein's 'Le Vide' (The Void) presented gallery-goers with...",
             "options": [
               "An empty, whitewashed room offered as the exhibition itself",
               "A single blue canvas at the far end",
@@ -11376,7 +11376,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "Ad Reinhardt's late 'black paintings' were built to—",
+            "prompt": "Ad Reinhardt's late 'black paintings' were built to...",
             "options": [
               "Look empty; a faint grid surfaces only to a patient eye",
               "Absorb every color and leave nothing to see",
@@ -11404,7 +11404,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "An empty room shown as art is really about—",
+            "prompt": "An empty room shown as art is really about...",
             "options": [
               "What the viewer brings into the nothing",
               "Saving on the cost of paintings",
@@ -11466,7 +11466,7 @@
         "blockFlags": []
       },
       "personality": {
-        "bit": "The last unfiled name — the final Drifella whose name was never entered anywhere, and it prefers to keep it that way.",
+        "bit": "The last unfiled name. The final Drifella whose name was never entered anywhere, and it prefers to keep it that way.",
         "tic": "\"Don't write it down.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6345.png",
@@ -11480,7 +11480,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "Yves Klein went so far as to patent his 'IKB' precisely because—",
+            "prompt": "Yves Klein went so far as to patent his 'IKB' precisely because...",
             "options": [
               "He bound that exact ultramarine to himself, uncopyable",
               "He needed to sell the recipe to a paint company",
@@ -11494,7 +11494,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "La Monte Young, a founder of Fluxus and drone music, is known for compositions that—",
+            "prompt": "La Monte Young, a founder of Fluxus and drone music, is known for compositions that...",
             "options": [
               "Sustain single tones for extreme, near-endless lengths",
               "Are performed once and then destroyed on paper",
@@ -11522,7 +11522,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "A name kept off every ledger stays safe because—",
+            "prompt": "A name kept off every ledger stays safe because...",
             "options": [
               "What is never written cannot be copied or claimed",
               "It sounds more mysterious that way",
@@ -11584,7 +11584,7 @@
         "blockFlags": []
       },
       "personality": {
-        "bit": "The provenance of provenance — the source that every other source traces back to, and which traces back to nothing.",
+        "bit": "The provenance of provenance. The source that every other source traces back to, and which traces back to nothing.",
         "tic": "\"It stops here. There is no before-me.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6386.png",
@@ -11598,7 +11598,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "Piero Manzoni's 'Merda d'Artista' — tinned and sold by weight against gold — was ultimately a work about—",
+            "prompt": "Piero Manzoni's 'Merda d'Artista'. Tinned and sold by weight against gold. Was ultimately a work about...",
             "options": [
               "Authorship and value: what a signature alone can be worth",
               "The recipe for the perfect preserve",
@@ -11612,7 +11612,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "In Malevich's own hanging, the 'Black Square' was placed high in the corner of the room — the spot traditionally reserved for—",
+            "prompt": "In Malevich's own hanging, the 'Black Square' was placed high in the corner of the room. The spot traditionally reserved for...",
             "options": [
               "A religious icon, marking it as a sacred origin point",
               "The gallery's fire notice",
@@ -11640,7 +11640,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "When a trail of provenance finally runs out, what remains is—",
+            "prompt": "When a trail of provenance finally runs out, what remains is...",
             "options": [
               "A first thing that just is, backed by nothing",
               "A missing page someone tore out",
@@ -11702,7 +11702,7 @@
         "blockFlags": []
       },
       "personality": {
-        "bit": "The thing-itself before any copy — the original that predates the very idea of an original, first-and-last at once.",
+        "bit": "The thing-itself before any copy. The original that predates the very idea of an original, first-and-last at once.",
         "tic": "\"Before the copy. After nothing.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6472.png",
@@ -11716,7 +11716,7 @@
         "pool": [
           {
             "type": "multipleChoice4",
-            "prompt": "Malevich claimed his 'Black Square' was born from painting 'The Last Futurist Exhibition 0,10' — the '0' standing for—",
+            "prompt": "Malevich claimed his 'Black Square' was born from painting 'The Last Futurist Exhibition 0,10'. The '0' standing for...",
             "options": [
               "Zero form: art reduced to its uncopyable starting point",
               "The number of paintings that sold",
@@ -11730,7 +11730,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "The Fluxus movement, at its core, treated the artwork as—",
+            "prompt": "The Fluxus movement, at its core, treated the artwork as...",
             "options": [
               "An unrepeatable gesture, worth more as act than object",
               "A luxury object to be mass-produced",
@@ -11758,7 +11758,7 @@
           },
           {
             "type": "multipleChoice4",
-            "prompt": "An original that predates the idea of 'original' is best understood as—",
+            "prompt": "An original that predates the idea of 'original' is best understood as...",
             "options": [
               "Just a thing, before anyone thought to copy it",
               "The most valuable item in the vault",

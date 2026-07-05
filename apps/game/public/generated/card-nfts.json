@@ -1,10 +1,10 @@
 {
   "schema": "swagbound.card-nfts.v1",
-  "comment": "Runtime Card NFT registry — the 95 rarest Card NFT 2 pieces (see content/card-nfts-top95.json for the ranked snapshot + mints). Images intaken 2026-07-03 at 160x224 (+60x84 thumbs). Captions are v1 placeholders pending the personality pass.",
+  "comment": "Runtime Card NFT registry. The 95 rarest Card NFT 2 pieces (see content/card-nfts-top95.json for the ranked snapshot + mints). Images intaken 2026-07-03 at 160x224 (+60x84 thumbs). Captions are v1 placeholders pending the personality pass.",
   "cards": [
     {
       "id": "card-nft-2-6803",
-      "name": "Hidden Card NFT — Card #6803",
+      "name": "Hidden Card NFT: Card #6803",
       "collection": "card-nft-2",
       "tokenRef": "6803",
       "image": "assets/swagbound/card-nft-2/card-6803.png",
@@ -17,7 +17,7 @@
     },
     {
       "id": "card-nft-2-3561",
-      "name": "Hidden Card NFT — Card #3561",
+      "name": "Hidden Card NFT: Card #3561",
       "collection": "card-nft-2",
       "tokenRef": "3561",
       "image": "assets/swagbound/card-nft-2/card-3561.png",
@@ -30,7 +30,7 @@
     },
     {
       "id": "card-nft-2-3437",
-      "name": "Hidden Card NFT — Card #3437",
+      "name": "Hidden Card NFT: Card #3437",
       "collection": "card-nft-2",
       "tokenRef": "3437",
       "image": "assets/swagbound/card-nft-2/card-3437.png",
@@ -43,7 +43,7 @@
     },
     {
       "id": "card-nft-2-3519",
-      "name": "Hidden Card NFT — Card #3519",
+      "name": "Hidden Card NFT: Card #3519",
       "collection": "card-nft-2",
       "tokenRef": "3519",
       "image": "assets/swagbound/card-nft-2/card-3519.png",
@@ -56,7 +56,7 @@
     },
     {
       "id": "card-nft-2-3451",
-      "name": "Hidden Card NFT — Card #3451",
+      "name": "Hidden Card NFT: Card #3451",
       "collection": "card-nft-2",
       "tokenRef": "3451",
       "image": "assets/swagbound/card-nft-2/card-3451.png",
@@ -69,7 +69,7 @@
     },
     {
       "id": "card-nft-2-3578",
-      "name": "Hidden Card NFT — Card #3578",
+      "name": "Hidden Card NFT: Card #3578",
       "collection": "card-nft-2",
       "tokenRef": "3578",
       "image": "assets/swagbound/card-nft-2/card-3578.png",
@@ -82,7 +82,7 @@
     },
     {
       "id": "card-nft-2-10909",
-      "name": "Unlisted Room Card NFT — Card #10909",
+      "name": "Unlisted Room Card NFT: Card #10909",
       "collection": "card-nft-2",
       "tokenRef": "10909",
       "image": "assets/swagbound/card-nft-2/card-10909.png",
@@ -95,7 +95,7 @@
     },
     {
       "id": "card-nft-2-3703",
-      "name": "Unlisted Room Card NFT — Card #3703",
+      "name": "Unlisted Room Card NFT: Card #3703",
       "collection": "card-nft-2",
       "tokenRef": "3703",
       "image": "assets/swagbound/card-nft-2/card-3703.png",
@@ -108,7 +108,7 @@
     },
     {
       "id": "card-nft-2-10955",
-      "name": "Unlisted Room Card NFT — Card #10955",
+      "name": "Unlisted Room Card NFT: Card #10955",
       "collection": "card-nft-2",
       "tokenRef": "10955",
       "image": "assets/swagbound/card-nft-2/card-10955.png",
@@ -121,7 +121,7 @@
     },
     {
       "id": "card-nft-2-3694",
-      "name": "Unlisted Room Card NFT — Card #3694",
+      "name": "Unlisted Room Card NFT: Card #3694",
       "collection": "card-nft-2",
       "tokenRef": "3694",
       "image": "assets/swagbound/card-nft-2/card-3694.png",
@@ -134,7 +134,7 @@
     },
     {
       "id": "card-nft-2-4963",
-      "name": "Unlisted Room Card NFT — Card #4963",
+      "name": "Unlisted Room Card NFT: Card #4963",
       "collection": "card-nft-2",
       "tokenRef": "4963",
       "image": "assets/swagbound/card-nft-2/card-4963.png",
@@ -147,7 +147,7 @@
     },
     {
       "id": "card-nft-2-3509",
-      "name": "Unlisted Room Card NFT — Card #3509",
+      "name": "Unlisted Room Card NFT: Card #3509",
       "collection": "card-nft-2",
       "tokenRef": "3509",
       "image": "assets/swagbound/card-nft-2/card-3509.png",
@@ -160,7 +160,7 @@
     },
     {
       "id": "card-nft-2-3493",
-      "name": "Vacancy Flats Card NFT — Card #3493",
+      "name": "Vacancy Flats Card NFT: Card #3493",
       "collection": "card-nft-2",
       "tokenRef": "3493",
       "image": "assets/swagbound/card-nft-2/card-3493.png",
@@ -173,7 +173,7 @@
     },
     {
       "id": "card-nft-2-10904",
-      "name": "Vacancy Flats Card NFT — Card #10904",
+      "name": "Vacancy Flats Card NFT: Card #10904",
       "collection": "card-nft-2",
       "tokenRef": "10904",
       "image": "assets/swagbound/card-nft-2/card-10904.png",
@@ -186,7 +186,7 @@
     },
     {
       "id": "card-nft-2-3448",
-      "name": "Vacancy Flats Card NFT — Card #3448",
+      "name": "Vacancy Flats Card NFT: Card #3448",
       "collection": "card-nft-2",
       "tokenRef": "3448",
       "image": "assets/swagbound/card-nft-2/card-3448.png",
@@ -199,7 +199,7 @@
     },
     {
       "id": "card-nft-2-3412",
-      "name": "Vacancy Flats Card NFT — Card #3412",
+      "name": "Vacancy Flats Card NFT: Card #3412",
       "collection": "card-nft-2",
       "tokenRef": "3412",
       "image": "assets/swagbound/card-nft-2/card-3412.png",
@@ -212,7 +212,7 @@
     },
     {
       "id": "card-nft-2-3564",
-      "name": "Vacancy Flats Card NFT — Card #3564",
+      "name": "Vacancy Flats Card NFT: Card #3564",
       "collection": "card-nft-2",
       "tokenRef": "3564",
       "image": "assets/swagbound/card-nft-2/card-3564.png",
@@ -225,7 +225,7 @@
     },
     {
       "id": "card-nft-2-6833",
-      "name": "Vacancy Flats Card NFT — Card #6833",
+      "name": "Vacancy Flats Card NFT: Card #6833",
       "collection": "card-nft-2",
       "tokenRef": "6833",
       "image": "assets/swagbound/card-nft-2/card-6833.png",
@@ -238,7 +238,7 @@
     },
     {
       "id": "card-nft-2-10790",
-      "name": "Vacancy Flats Card NFT — Card #10790",
+      "name": "Vacancy Flats Card NFT: Card #10790",
       "collection": "card-nft-2",
       "tokenRef": "10790",
       "image": "assets/swagbound/card-nft-2/card-10790.png",
@@ -251,7 +251,7 @@
     },
     {
       "id": "card-nft-2-3512",
-      "name": "Little Swag World Card NFT — Card #3512",
+      "name": "Little Swag World Card NFT: Card #3512",
       "collection": "card-nft-2",
       "tokenRef": "3512",
       "image": "assets/swagbound/card-nft-2/card-3512.png",
@@ -264,7 +264,7 @@
     },
     {
       "id": "card-nft-2-3714",
-      "name": "Little Swag World Card NFT — Card #3714",
+      "name": "Little Swag World Card NFT: Card #3714",
       "collection": "card-nft-2",
       "tokenRef": "3714",
       "image": "assets/swagbound/card-nft-2/card-3714.png",
@@ -277,7 +277,7 @@
     },
     {
       "id": "card-nft-2-3677",
-      "name": "Little Swag World Card NFT — Card #3677",
+      "name": "Little Swag World Card NFT: Card #3677",
       "collection": "card-nft-2",
       "tokenRef": "3677",
       "image": "assets/swagbound/card-nft-2/card-3677.png",
@@ -290,7 +290,7 @@
     },
     {
       "id": "card-nft-2-3542",
-      "name": "Little Swag World Card NFT — Card #3542",
+      "name": "Little Swag World Card NFT: Card #3542",
       "collection": "card-nft-2",
       "tokenRef": "3542",
       "image": "assets/swagbound/card-nft-2/card-3542.png",
@@ -303,7 +303,7 @@
     },
     {
       "id": "card-nft-2-8836",
-      "name": "Little Swag World Card NFT — Card #8836",
+      "name": "Little Swag World Card NFT: Card #8836",
       "collection": "card-nft-2",
       "tokenRef": "8836",
       "image": "assets/swagbound/card-nft-2/card-8836.png",
@@ -316,7 +316,7 @@
     },
     {
       "id": "card-nft-2-5623",
-      "name": "Little Swag World Card NFT — Card #5623",
+      "name": "Little Swag World Card NFT: Card #5623",
       "collection": "card-nft-2",
       "tokenRef": "5623",
       "image": "assets/swagbound/card-nft-2/card-5623.png",
@@ -329,7 +329,7 @@
     },
     {
       "id": "card-nft-2-8903",
-      "name": "Little Swag World Card NFT — Card #8903",
+      "name": "Little Swag World Card NFT: Card #8903",
       "collection": "card-nft-2",
       "tokenRef": "8903",
       "image": "assets/swagbound/card-nft-2/card-8903.png",
@@ -342,7 +342,7 @@
     },
     {
       "id": "card-nft-2-10800",
-      "name": "Little Swag World Card NFT — Card #10800",
+      "name": "Little Swag World Card NFT: Card #10800",
       "collection": "card-nft-2",
       "tokenRef": "10800",
       "image": "assets/swagbound/card-nft-2/card-10800.png",
@@ -355,7 +355,7 @@
     },
     {
       "id": "card-nft-2-4799",
-      "name": "Little Swag World Card NFT — Card #4799",
+      "name": "Little Swag World Card NFT: Card #4799",
       "collection": "card-nft-2",
       "tokenRef": "4799",
       "image": "assets/swagbound/card-nft-2/card-4799.png",
@@ -368,7 +368,7 @@
     },
     {
       "id": "card-nft-2-8890",
-      "name": "Little Swag World Card NFT — Card #8890",
+      "name": "Little Swag World Card NFT: Card #8890",
       "collection": "card-nft-2",
       "tokenRef": "8890",
       "image": "assets/swagbound/card-nft-2/card-8890.png",
@@ -381,7 +381,7 @@
     },
     {
       "id": "card-nft-2-10718",
-      "name": "Little Swag World Card NFT — Card #10718",
+      "name": "Little Swag World Card NFT: Card #10718",
       "collection": "card-nft-2",
       "tokenRef": "10718",
       "image": "assets/swagbound/card-nft-2/card-10718.png",
@@ -394,7 +394,7 @@
     },
     {
       "id": "card-nft-2-3633",
-      "name": "Little Swag World Card NFT — Card #3633",
+      "name": "Little Swag World Card NFT: Card #3633",
       "collection": "card-nft-2",
       "tokenRef": "3633",
       "image": "assets/swagbound/card-nft-2/card-3633.png",
@@ -407,7 +407,7 @@
     },
     {
       "id": "card-nft-2-3473",
-      "name": "Little Swag World Card NFT — Card #3473",
+      "name": "Little Swag World Card NFT: Card #3473",
       "collection": "card-nft-2",
       "tokenRef": "3473",
       "image": "assets/swagbound/card-nft-2/card-3473.png",
@@ -420,7 +420,7 @@
     },
     {
       "id": "card-nft-2-3600",
-      "name": "Little Swag World Card NFT — Card #3600",
+      "name": "Little Swag World Card NFT: Card #3600",
       "collection": "card-nft-2",
       "tokenRef": "3600",
       "image": "assets/swagbound/card-nft-2/card-3600.png",
@@ -433,7 +433,7 @@
     },
     {
       "id": "card-nft-2-8923",
-      "name": "Little Swag World Card NFT — Card #8923",
+      "name": "Little Swag World Card NFT: Card #8923",
       "collection": "card-nft-2",
       "tokenRef": "8923",
       "image": "assets/swagbound/card-nft-2/card-8923.png",
@@ -446,7 +446,7 @@
     },
     {
       "id": "card-nft-2-3629",
-      "name": "Little Swag World Card NFT — Card #3629",
+      "name": "Little Swag World Card NFT: Card #3629",
       "collection": "card-nft-2",
       "tokenRef": "3629",
       "image": "assets/swagbound/card-nft-2/card-3629.png",
@@ -459,7 +459,7 @@
     },
     {
       "id": "card-nft-2-4698",
-      "name": "Little Swag World Card NFT — Card #4698",
+      "name": "Little Swag World Card NFT: Card #4698",
       "collection": "card-nft-2",
       "tokenRef": "4698",
       "image": "assets/swagbound/card-nft-2/card-4698.png",
@@ -472,7 +472,7 @@
     },
     {
       "id": "card-nft-2-10787",
-      "name": "Little Swag World Card NFT — Card #10787",
+      "name": "Little Swag World Card NFT: Card #10787",
       "collection": "card-nft-2",
       "tokenRef": "10787",
       "image": "assets/swagbound/card-nft-2/card-10787.png",
@@ -485,7 +485,7 @@
     },
     {
       "id": "card-nft-2-3599",
-      "name": "Galleria Card NFT — Card #3599",
+      "name": "Galleria Card NFT: Card #3599",
       "collection": "card-nft-2",
       "tokenRef": "3599",
       "image": "assets/swagbound/card-nft-2/card-3599.png",
@@ -498,7 +498,7 @@
     },
     {
       "id": "card-nft-2-9060",
-      "name": "Galleria Card NFT — Card #9060",
+      "name": "Galleria Card NFT: Card #9060",
       "collection": "card-nft-2",
       "tokenRef": "9060",
       "image": "assets/swagbound/card-nft-2/card-9060.png",
@@ -511,7 +511,7 @@
     },
     {
       "id": "card-nft-2-3549",
-      "name": "Galleria Card NFT — Card #3549",
+      "name": "Galleria Card NFT: Card #3549",
       "collection": "card-nft-2",
       "tokenRef": "3549",
       "image": "assets/swagbound/card-nft-2/card-3549.png",
@@ -524,7 +524,7 @@
     },
     {
       "id": "card-nft-2-10801",
-      "name": "Galleria Card NFT — Card #10801",
+      "name": "Galleria Card NFT: Card #10801",
       "collection": "card-nft-2",
       "tokenRef": "10801",
       "image": "assets/swagbound/card-nft-2/card-10801.png",
@@ -537,7 +537,7 @@
     },
     {
       "id": "card-nft-2-4679",
-      "name": "Galleria Card NFT — Card #4679",
+      "name": "Galleria Card NFT: Card #4679",
       "collection": "card-nft-2",
       "tokenRef": "4679",
       "image": "assets/swagbound/card-nft-2/card-4679.png",
@@ -550,7 +550,7 @@
     },
     {
       "id": "card-nft-2-3475",
-      "name": "Galleria Card NFT — Card #3475",
+      "name": "Galleria Card NFT: Card #3475",
       "collection": "card-nft-2",
       "tokenRef": "3475",
       "image": "assets/swagbound/card-nft-2/card-3475.png",
@@ -563,7 +563,7 @@
     },
     {
       "id": "card-nft-2-6660",
-      "name": "Galleria Card NFT — Card #6660",
+      "name": "Galleria Card NFT: Card #6660",
       "collection": "card-nft-2",
       "tokenRef": "6660",
       "image": "assets/swagbound/card-nft-2/card-6660.png",
@@ -576,7 +576,7 @@
     },
     {
       "id": "card-nft-2-8876",
-      "name": "Galleria Card NFT — Card #8876",
+      "name": "Galleria Card NFT: Card #8876",
       "collection": "card-nft-2",
       "tokenRef": "8876",
       "image": "assets/swagbound/card-nft-2/card-8876.png",
@@ -589,7 +589,7 @@
     },
     {
       "id": "card-nft-2-8928",
-      "name": "Galleria Card NFT — Card #8928",
+      "name": "Galleria Card NFT: Card #8928",
       "collection": "card-nft-2",
       "tokenRef": "8928",
       "image": "assets/swagbound/card-nft-2/card-8928.png",
@@ -602,7 +602,7 @@
     },
     {
       "id": "card-nft-2-3682",
-      "name": "Galleria Card NFT — Card #3682",
+      "name": "Galleria Card NFT: Card #3682",
       "collection": "card-nft-2",
       "tokenRef": "3682",
       "image": "assets/swagbound/card-nft-2/card-3682.png",
@@ -615,7 +615,7 @@
     },
     {
       "id": "card-nft-2-8935",
-      "name": "Galleria Card NFT — Card #8935",
+      "name": "Galleria Card NFT: Card #8935",
       "collection": "card-nft-2",
       "tokenRef": "8935",
       "image": "assets/swagbound/card-nft-2/card-8935.png",
@@ -628,7 +628,7 @@
     },
     {
       "id": "card-nft-2-10701",
-      "name": "Galleria Card NFT — Card #10701",
+      "name": "Galleria Card NFT: Card #10701",
       "collection": "card-nft-2",
       "tokenRef": "10701",
       "image": "assets/swagbound/card-nft-2/card-10701.png",
@@ -641,7 +641,7 @@
     },
     {
       "id": "card-nft-2-3591",
-      "name": "Solana Beach Card NFT — Card #3591",
+      "name": "Solana Beach Card NFT: Card #3591",
       "collection": "card-nft-2",
       "tokenRef": "3591",
       "image": "assets/swagbound/card-nft-2/card-3591.png",
@@ -654,7 +654,7 @@
     },
     {
       "id": "card-nft-2-3691",
-      "name": "Solana Beach Card NFT — Card #3691",
+      "name": "Solana Beach Card NFT: Card #3691",
       "collection": "card-nft-2",
       "tokenRef": "3691",
       "image": "assets/swagbound/card-nft-2/card-3691.png",
@@ -667,7 +667,7 @@
     },
     {
       "id": "card-nft-2-3553",
-      "name": "Solana Beach Card NFT — Card #3553",
+      "name": "Solana Beach Card NFT: Card #3553",
       "collection": "card-nft-2",
       "tokenRef": "3553",
       "image": "assets/swagbound/card-nft-2/card-3553.png",
@@ -680,7 +680,7 @@
     },
     {
       "id": "card-nft-2-4856",
-      "name": "Solana Beach Card NFT — Card #4856",
+      "name": "Solana Beach Card NFT: Card #4856",
       "collection": "card-nft-2",
       "tokenRef": "4856",
       "image": "assets/swagbound/card-nft-2/card-4856.png",
@@ -693,7 +693,7 @@
     },
     {
       "id": "card-nft-2-3459",
-      "name": "Solana Beach Card NFT — Card #3459",
+      "name": "Solana Beach Card NFT: Card #3459",
       "collection": "card-nft-2",
       "tokenRef": "3459",
       "image": "assets/swagbound/card-nft-2/card-3459.png",
@@ -706,7 +706,7 @@
     },
     {
       "id": "card-nft-2-10774",
-      "name": "Solana Beach Card NFT — Card #10774",
+      "name": "Solana Beach Card NFT: Card #10774",
       "collection": "card-nft-2",
       "tokenRef": "10774",
       "image": "assets/swagbound/card-nft-2/card-10774.png",
@@ -719,7 +719,7 @@
     },
     {
       "id": "card-nft-2-4932",
-      "name": "Solana Beach Card NFT — Card #4932",
+      "name": "Solana Beach Card NFT: Card #4932",
       "collection": "card-nft-2",
       "tokenRef": "4932",
       "image": "assets/swagbound/card-nft-2/card-4932.png",
@@ -732,7 +732,7 @@
     },
     {
       "id": "card-nft-2-10848",
-      "name": "Solana Beach Card NFT — Card #10848",
+      "name": "Solana Beach Card NFT: Card #10848",
       "collection": "card-nft-2",
       "tokenRef": "10848",
       "image": "assets/swagbound/card-nft-2/card-10848.png",
@@ -745,7 +745,7 @@
     },
     {
       "id": "card-nft-2-3726",
-      "name": "Solana Beach Card NFT — Card #3726",
+      "name": "Solana Beach Card NFT: Card #3726",
       "collection": "card-nft-2",
       "tokenRef": "3726",
       "image": "assets/swagbound/card-nft-2/card-3726.png",
@@ -758,7 +758,7 @@
     },
     {
       "id": "card-nft-2-10712",
-      "name": "Solana Beach Card NFT — Card #10712",
+      "name": "Solana Beach Card NFT: Card #10712",
       "collection": "card-nft-2",
       "tokenRef": "10712",
       "image": "assets/swagbound/card-nft-2/card-10712.png",
@@ -771,7 +771,7 @@
     },
     {
       "id": "card-nft-2-4632",
-      "name": "Dead Letter Card NFT — Card #4632",
+      "name": "Dead Letter Card NFT: Card #4632",
       "collection": "card-nft-2",
       "tokenRef": "4632",
       "image": "assets/swagbound/card-nft-2/card-4632.png",
@@ -784,7 +784,7 @@
     },
     {
       "id": "card-nft-2-3717",
-      "name": "Dead Letter Card NFT — Card #3717",
+      "name": "Dead Letter Card NFT: Card #3717",
       "collection": "card-nft-2",
       "tokenRef": "3717",
       "image": "assets/swagbound/card-nft-2/card-3717.png",
@@ -797,7 +797,7 @@
     },
     {
       "id": "card-nft-2-8926",
-      "name": "Dead Letter Card NFT — Card #8926",
+      "name": "Dead Letter Card NFT: Card #8926",
       "collection": "card-nft-2",
       "tokenRef": "8926",
       "image": "assets/swagbound/card-nft-2/card-8926.png",
@@ -810,7 +810,7 @@
     },
     {
       "id": "card-nft-2-3497",
-      "name": "Dead Letter Card NFT — Card #3497",
+      "name": "Dead Letter Card NFT: Card #3497",
       "collection": "card-nft-2",
       "tokenRef": "3497",
       "image": "assets/swagbound/card-nft-2/card-3497.png",
@@ -823,7 +823,7 @@
     },
     {
       "id": "card-nft-2-3513",
-      "name": "Dead Letter Card NFT — Card #3513",
+      "name": "Dead Letter Card NFT: Card #3513",
       "collection": "card-nft-2",
       "tokenRef": "3513",
       "image": "assets/swagbound/card-nft-2/card-3513.png",
@@ -836,7 +836,7 @@
     },
     {
       "id": "card-nft-2-4644",
-      "name": "Dead Letter Card NFT — Card #4644",
+      "name": "Dead Letter Card NFT: Card #4644",
       "collection": "card-nft-2",
       "tokenRef": "4644",
       "image": "assets/swagbound/card-nft-2/card-4644.png",
@@ -849,7 +849,7 @@
     },
     {
       "id": "card-nft-2-10857",
-      "name": "Dead Letter Card NFT — Card #10857",
+      "name": "Dead Letter Card NFT: Card #10857",
       "collection": "card-nft-2",
       "tokenRef": "10857",
       "image": "assets/swagbound/card-nft-2/card-10857.png",
@@ -862,7 +862,7 @@
     },
     {
       "id": "card-nft-2-10699",
-      "name": "Dead Letter Card NFT — Card #10699",
+      "name": "Dead Letter Card NFT: Card #10699",
       "collection": "card-nft-2",
       "tokenRef": "10699",
       "image": "assets/swagbound/card-nft-2/card-10699.png",
@@ -875,7 +875,7 @@
     },
     {
       "id": "card-nft-2-3650",
-      "name": "Dead Letter Card NFT — Card #3650",
+      "name": "Dead Letter Card NFT: Card #3650",
       "collection": "card-nft-2",
       "tokenRef": "3650",
       "image": "assets/swagbound/card-nft-2/card-3650.png",
@@ -888,7 +888,7 @@
     },
     {
       "id": "card-nft-2-3676",
-      "name": "Dead Letter Card NFT — Card #3676",
+      "name": "Dead Letter Card NFT: Card #3676",
       "collection": "card-nft-2",
       "tokenRef": "3676",
       "image": "assets/swagbound/card-nft-2/card-3676.png",
@@ -901,7 +901,7 @@
     },
     {
       "id": "card-nft-2-8886",
-      "name": "Bluebell Card NFT — Card #8886",
+      "name": "Bluebell Card NFT: Card #8886",
       "collection": "card-nft-2",
       "tokenRef": "8886",
       "image": "assets/swagbound/card-nft-2/card-8886.png",
@@ -914,7 +914,7 @@
     },
     {
       "id": "card-nft-2-10682",
-      "name": "Bluebell Card NFT — Card #10682",
+      "name": "Bluebell Card NFT: Card #10682",
       "collection": "card-nft-2",
       "tokenRef": "10682",
       "image": "assets/swagbound/card-nft-2/card-10682.png",
@@ -927,7 +927,7 @@
     },
     {
       "id": "card-nft-2-10445",
-      "name": "Bluebell Card NFT — Card #10445",
+      "name": "Bluebell Card NFT: Card #10445",
       "collection": "card-nft-2",
       "tokenRef": "10445",
       "image": "assets/swagbound/card-nft-2/card-10445.png",
@@ -940,7 +940,7 @@
     },
     {
       "id": "card-nft-2-9993",
-      "name": "Bluebell Card NFT — Card #9993",
+      "name": "Bluebell Card NFT: Card #9993",
       "collection": "card-nft-2",
       "tokenRef": "9993",
       "image": "assets/swagbound/card-nft-2/card-9993.png",
@@ -953,7 +953,7 @@
     },
     {
       "id": "card-nft-2-6848",
-      "name": "Bluebell Card NFT — Card #6848",
+      "name": "Bluebell Card NFT: Card #6848",
       "collection": "card-nft-2",
       "tokenRef": "6848",
       "image": "assets/swagbound/card-nft-2/card-6848.png",
@@ -966,7 +966,7 @@
     },
     {
       "id": "card-nft-2-10986",
-      "name": "Bluebell Card NFT — Card #10986",
+      "name": "Bluebell Card NFT: Card #10986",
       "collection": "card-nft-2",
       "tokenRef": "10986",
       "image": "assets/swagbound/card-nft-2/card-10986.png",
@@ -979,7 +979,7 @@
     },
     {
       "id": "card-nft-2-10806",
-      "name": "Bluebell Card NFT — Card #10806",
+      "name": "Bluebell Card NFT: Card #10806",
       "collection": "card-nft-2",
       "tokenRef": "10806",
       "image": "assets/swagbound/card-nft-2/card-10806.png",
@@ -992,7 +992,7 @@
     },
     {
       "id": "card-nft-2-3704",
-      "name": "Bluebell Card NFT — Card #3704",
+      "name": "Bluebell Card NFT: Card #3704",
       "collection": "card-nft-2",
       "tokenRef": "3704",
       "image": "assets/swagbound/card-nft-2/card-3704.png",
@@ -1005,7 +1005,7 @@
     },
     {
       "id": "card-nft-2-10362",
-      "name": "Bluebell Card NFT — Card #10362",
+      "name": "Bluebell Card NFT: Card #10362",
       "collection": "card-nft-2",
       "tokenRef": "10362",
       "image": "assets/swagbound/card-nft-2/card-10362.png",
@@ -1018,7 +1018,7 @@
     },
     {
       "id": "card-nft-2-8864",
-      "name": "Postwick Card NFT — Card #8864",
+      "name": "Postwick Card NFT: Card #8864",
       "collection": "card-nft-2",
       "tokenRef": "8864",
       "image": "assets/swagbound/card-nft-2/card-8864.png",
@@ -1031,7 +1031,7 @@
     },
     {
       "id": "card-nft-2-10708",
-      "name": "Postwick Card NFT — Card #10708",
+      "name": "Postwick Card NFT: Card #10708",
       "collection": "card-nft-2",
       "tokenRef": "10708",
       "image": "assets/swagbound/card-nft-2/card-10708.png",
@@ -1044,7 +1044,7 @@
     },
     {
       "id": "card-nft-2-8930",
-      "name": "Postwick Card NFT — Card #8930",
+      "name": "Postwick Card NFT: Card #8930",
       "collection": "card-nft-2",
       "tokenRef": "8930",
       "image": "assets/swagbound/card-nft-2/card-8930.png",
@@ -1057,7 +1057,7 @@
     },
     {
       "id": "card-nft-2-8869",
-      "name": "Postwick Card NFT — Card #8869",
+      "name": "Postwick Card NFT: Card #8869",
       "collection": "card-nft-2",
       "tokenRef": "8869",
       "image": "assets/swagbound/card-nft-2/card-8869.png",
@@ -1070,7 +1070,7 @@
     },
     {
       "id": "card-nft-2-3550",
-      "name": "Postwick Card NFT — Card #3550",
+      "name": "Postwick Card NFT: Card #3550",
       "collection": "card-nft-2",
       "tokenRef": "3550",
       "image": "assets/swagbound/card-nft-2/card-3550.png",
@@ -1083,7 +1083,7 @@
     },
     {
       "id": "card-nft-2-8877",
-      "name": "Postwick Card NFT — Card #8877",
+      "name": "Postwick Card NFT: Card #8877",
       "collection": "card-nft-2",
       "tokenRef": "8877",
       "image": "assets/swagbound/card-nft-2/card-8877.png",
@@ -1096,7 +1096,7 @@
     },
     {
       "id": "card-nft-2-3476",
-      "name": "Postwick Card NFT — Card #3476",
+      "name": "Postwick Card NFT: Card #3476",
       "collection": "card-nft-2",
       "tokenRef": "3476",
       "image": "assets/swagbound/card-nft-2/card-3476.png",
@@ -1109,7 +1109,7 @@
     },
     {
       "id": "card-nft-2-4855",
-      "name": "Postwick Card NFT — Card #4855",
+      "name": "Postwick Card NFT: Card #4855",
       "collection": "card-nft-2",
       "tokenRef": "4855",
       "image": "assets/swagbound/card-nft-2/card-4855.png",
@@ -1122,7 +1122,7 @@
     },
     {
       "id": "card-nft-2-3452",
-      "name": "Postwick Card NFT — Card #3452",
+      "name": "Postwick Card NFT: Card #3452",
       "collection": "card-nft-2",
       "tokenRef": "3452",
       "image": "assets/swagbound/card-nft-2/card-3452.png",
@@ -1135,7 +1135,7 @@
     },
     {
       "id": "card-nft-2-10464",
-      "name": "Morningside Card NFT — Card #10464",
+      "name": "Morningside Card NFT: Card #10464",
       "collection": "card-nft-2",
       "tokenRef": "10464",
       "image": "assets/swagbound/card-nft-2/card-10464.png",
@@ -1148,7 +1148,7 @@
     },
     {
       "id": "card-nft-2-10681",
-      "name": "Morningside Card NFT — Card #10681",
+      "name": "Morningside Card NFT: Card #10681",
       "collection": "card-nft-2",
       "tokenRef": "10681",
       "image": "assets/swagbound/card-nft-2/card-10681.png",
@@ -1161,7 +1161,7 @@
     },
     {
       "id": "card-nft-2-10925",
-      "name": "Morningside Card NFT — Card #10925",
+      "name": "Morningside Card NFT: Card #10925",
       "collection": "card-nft-2",
       "tokenRef": "10925",
       "image": "assets/swagbound/card-nft-2/card-10925.png",
@@ -1174,7 +1174,7 @@
     },
     {
       "id": "card-nft-2-10998",
-      "name": "Morningside Card NFT — Card #10998",
+      "name": "Morningside Card NFT: Card #10998",
       "collection": "card-nft-2",
       "tokenRef": "10998",
       "image": "assets/swagbound/card-nft-2/card-10998.png",
@@ -1187,7 +1187,7 @@
     },
     {
       "id": "card-nft-2-10458",
-      "name": "Morningside Card NFT — Card #10458",
+      "name": "Morningside Card NFT: Card #10458",
       "collection": "card-nft-2",
       "tokenRef": "10458",
       "image": "assets/swagbound/card-nft-2/card-10458.png",
@@ -1200,7 +1200,7 @@
     },
     {
       "id": "card-nft-2-3672",
-      "name": "Morningside Card NFT — Card #3672",
+      "name": "Morningside Card NFT: Card #3672",
       "collection": "card-nft-2",
       "tokenRef": "3672",
       "image": "assets/swagbound/card-nft-2/card-3672.png",
@@ -1213,7 +1213,7 @@
     },
     {
       "id": "card-nft-2-4969",
-      "name": "Morningside Card NFT — Card #4969",
+      "name": "Morningside Card NFT: Card #4969",
       "collection": "card-nft-2",
       "tokenRef": "4969",
       "image": "assets/swagbound/card-nft-2/card-4969.png",
@@ -1226,7 +1226,7 @@
     },
     {
       "id": "card-nft-2-10906",
-      "name": "Morningside Card NFT — Card #10906",
+      "name": "Morningside Card NFT: Card #10906",
       "collection": "card-nft-2",
       "tokenRef": "10906",
       "image": "assets/swagbound/card-nft-2/card-10906.png",

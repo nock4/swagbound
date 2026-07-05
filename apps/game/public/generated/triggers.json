@@ -34,9 +34,9 @@
         "signal:clique_cleared"
       ],
       "dialogue": [
-        "The clique doesn't lose. It re-prints. Where Mifella 2 folded, a cleaner Bosch stands up -- pre-signed, better-lit, already filed under his name.",
+        "The clique doesn't lose. It re-prints. Where Mifella 2 folded, a cleaner Bosch stands up. Pre-signed, better-lit, already filed under his name.",
         "MIFELLA 2 (Mk2): \"Beat the copy, meet the upgrade. The yard shipped your replacement before you finished swinging.\"",
-        "Bosch keeps the smudged version. The clean one points up the line -- north, to the gate by the station, where the route decides which Bosch leaves."
+        "Bosch keeps the smudged version. The clean one points up the line. North, to the gate by the station, where the route decides which Bosch leaves."
       ]
     },
     {
@@ -51,10 +51,10 @@
         "signal:clique_cleared"
       ],
       "dialogue": [
-        "The gate has your file open before you clear the doorway. It does not look up. It never needed your face -- it has ten thousand of that face already, filed, and each one answers to the same name.",
+        "The gate has your file open before you clear the doorway. It does not look up. It never needed your face. It has ten thousand of that face already, filed, and each one answers to the same name.",
         "RETURNLESS KING: \"Source. Vessel. Claimant. Derivative. Stamp yourself as one and the desk relays the rest. You will be so much easier to hold once you are plural.\"",
         "\"There is no man in this chair. There is a doll, and behind her the same doll, and behind her the record that wears every face at once. Cut this one. The next asks in her voice.\"",
-        "Bosch refuses the stamp. Press Z: BASH the seal, DEFEND the read, or PSI through it. The route opens -- not agreed, forced."
+        "Bosch refuses the stamp. Press Z: BASH the seal, DEFEND the read, or PSI through it. The route opens. Not agreed, forced."
       ],
       "setFlags": [
         "signal:route_open"
@@ -91,10 +91,10 @@
         "signal:route_open"
       ],
       "dialogue": [
-        "The first threshold hums with a memory too small to sell -- a private thing, held close, already halfway into wider circulation.",
+        "The first threshold hums with a memory too small to sell. A private thing, held close, already halfway into wider circulation.",
         "MALADY: \"A private thing is only a public thing with poor distribution. We are not the illness. We are the symptom you were at last cleared to see.\"",
-        "MALADY: \"There is no one behind this face. Cut it and we wear the next. We are not in the room, source -- we are the room, and every face in it was ours before it was yours.\"",
-        "The card warms, reaches for Bosch -- and fails to describe him. It keeps the damaged draft; the threshold files the read. (Press Z to answer: BASH to swing, DEFEND while it copies you, PSI when the swing won't reach.)"
+        "MALADY: \"There is no one behind this face. Cut it and we wear the next. We are not in the room, source. We are the room, and every face in it was ours before it was yours.\"",
+        "The card warms, reaches for Bosch. And fails to describe him. It keeps the damaged draft; the threshold files the read. (Press Z to answer: BASH to swing, DEFEND while it copies you, PSI when the swing won't reach.)"
       ],
       "setFlags": [
         "signal:threshold_cleared",
@@ -115,8 +115,8 @@
         "signal:threshold_cleared"
       ],
       "dialogue": [
-        "The Malady stops describing Bosch and starts describing itself. The mask warms, slips, and underneath is his own face -- better-lit, pre-approved, smiling without him.",
-        "The threshold logs the receipt without being asked: SIGNER -- MALADY. CONTRACT OWNER -- MILADY. Beating the symptom didn't kill the machine. It named it.",
+        "The Malady stops describing Bosch and starts describing itself. The mask warms, slips, and underneath is his own face. Better-lit, pre-approved, smiling without him.",
+        "The threshold logs the receipt without being asked: SIGNER: MALADY. CONTRACT OWNER: MILADY. Beating the symptom didn't kill the machine. It named it.",
         "Bosch keeps the damaged card. North, the last gate waits for a clean Bosch to walk out wearing his name."
       ]
     },
@@ -135,7 +135,7 @@
       ],
       "dialogue": [
         "A kid who never let the machine mint him steps out of the threshold's shadow, pockets full of bottle rockets and other people's receipts.",
-        "MUNCH: \"You're the one it couldn't finish describing. Good. I keep things it can't file. I'll watch your seams -- I read faces for a living.\"",
+        "MUNCH: \"You're the one it couldn't finish describing. Good. I keep things it can't file. I'll watch your seams. I read faces for a living.\"",
         "Munch joins the crew. (He SPYs: read an enemy's weak element before you spend a swing.)"
       ],
       "setFlags": [
@@ -156,9 +156,9 @@
       ],
       "dialogue": [
         "The north gate offers a clean exit stamp: one signature and the leaked version walks out wearing his name, on time, on brand.",
-        "Bosch hands back the pen. He keeps the damaged Dox Sheet -- unfiled, unflattering, his.",
+        "Bosch hands back the pen. He keeps the damaged Dox Sheet. Unfiled, unflattering, his.",
         "Morningside logs him as \"left unprocessed.\" The road north opens on a Bosch the route never got to finish.",
-        "[ ACT 1 -- END ]"
+        "[ ACT 1: END ]"
       ],
       "setFlags": [
         "act1:complete"
@@ -180,7 +180,7 @@
       ],
       "dialogue": [
         "Past the gate, someone has been waiting for a Bosch the route never got to finish. They fall in step without asking, the way old discipline does.",
-        "KNIGHT: \"I trained under a quieter protocol -- the kind that reflects an attack back at the sender. Walk. I'll cover the angle you can't see.\"",
+        "KNIGHT: \"I trained under a quieter protocol. The kind that reflects an attack back at the sender. Walk. I'll cover the angle you can't see.\"",
         "Knight joins the crew. (MIRROR + PSI: the roster is whole.)"
       ],
       "setFlags": [
@@ -189,7 +189,7 @@
     },
     {
       "id": "postwick-arrival",
-      "comment": "ACT 2 OPENING. Fires when the party reaches Postwick (Twoson analog) after act1:complete -- by walk or PSI Teleport, the area is centered on the town arrival point (2324,7428). Postwick's theme = pre-filed / mandatory happiness (seeded by the 'files its happiness in advance' NPC line). Sets act2:begun + postwick:arrived, the flags the Act-2 chain will gate on.",
+      "comment": "ACT 2 OPENING. Fires when the party reaches Postwick (Twoson analog) after act1:complete. By walk or PSI Teleport, the area is centered on the town arrival point (2324,7428). Postwick's theme = pre-filed / mandatory happiness (seeded by the 'files its happiness in advance' NPC line). Sets act2:begun + postwick:arrived, the flags the Act-2 chain will gate on.",
       "area": {
         "x": 2256,
         "y": 7376,
@@ -201,10 +201,10 @@
         "act1:complete"
       ],
       "dialogue": [
-        "Postwick greets every arrival with a smile it printed this morning. The welcome board already has Bosch's name on it -- spelled the way the file prefers, not the way he does.",
+        "Postwick greets every arrival with a smile it printed this morning. The welcome board already has Bosch's name on it. Spelled the way the file prefers, not the way he does.",
         "A greeter presses a mood into his hand: pre-approved, single-use, non-refundable. \"Everyone here is happy. It was filed that way,\" she recites, reading it off the back of her own wrist. \"You're behind. You'll catch up, or we'll catch you up.\"",
-        "The town files its happiness in advance and bills newcomers the difference. Past the bridge, a Registry keeps the ledger of who is cleared to feel what -- and the swarm has already offered to audit it.",
-        "[ ACT 2 -- POSTWICK: THE PRE-FILED TOWN ]"
+        "The town files its happiness in advance and bills newcomers the difference. Past the bridge, a Registry keeps the ledger of who is cleared to feel what. And the swarm has already offered to audit it.",
+        "[ ACT 2: POSTWICK: THE PRE-FILED TOWN ]"
       ],
       "setFlags": [
         "act2:begun",
@@ -213,7 +213,7 @@
     },
     {
       "id": "postwick-registry",
-      "comment": "ACT 2 threshold 1: the Contentment Registry enforcer (Insane Cultist, group 55 -- EB Happy Happy analog) blocks the way, defending the town's pre-filed happiness. Requires postwick:arrived; sets act2:registry_cleared (the flag that opens the Venue exhibition).",
+      "comment": "ACT 2 threshold 1: the Contentment Registry enforcer (Insane Cultist, group 55. EB Happy Happy analog) blocks the way, defending the town's pre-filed happiness. Requires postwick:arrived; sets act2:registry_cleared (the flag that opens the Venue exhibition).",
       "boss": {
         "x": 2324,
         "y": 7332,
@@ -249,13 +249,13 @@
       ],
       "dialogue": [
         "The Warden's clipboard clatters open. Under the intake form is the real document: a standing order to keep Postwick smiling so the swarm's audit finds nothing to flag.",
-        "The happiness isn't felt here. It's filed -- and the filing happens at THE VENUE, where the town watches manufactured champions win on schedule and calls the feeling its own.",
+        "The happiness isn't felt here. It's filed. And the filing happens at THE VENUE, where the town watches manufactured champions win on schedule and calls the feeling its own.",
         "Northwest, the exhibition lights are already warming up for Bosch's bracket."
       ]
     },
     {
       "id": "deadletter-arrival",
-      "comment": "ACT 3 OPENING. Fires on reaching Dead Letter (Threed analog) after act2:complete -- the town that stopped keeping originals at all, built around the Museum of Leaked Versions. Area covers the museum approach (near the west-wing entrance / starman). Sets act3:begun + deadletter:arrived, the flag the museum sequence gates on.",
+      "comment": "ACT 3 OPENING. Fires on reaching Dead Letter (Threed analog) after act2:complete. The town that stopped keeping originals at all, built around the Museum of Leaked Versions. Area covers the museum approach (near the west-wing entrance / starman). Sets act3:begun + deadletter:arrived, the flag the museum sequence gates on.",
       "area": {
         "x": 4820,
         "y": 8360,
@@ -267,10 +267,10 @@
         "act2:complete"
       ],
       "dialogue": [
-        "East of Postwick the road stops pretending. Dead Letter is where undelivered selves are sorted and never returned -- a fog-town of return-to-sender faces, its post office long since eaten from the inside.",
+        "East of Postwick the road stops pretending. Dead Letter is where undelivered selves are sorted and never returned. A fog-town of return-to-sender faces, its post office long since eaten from the inside.",
         "At its heart: THE MUSEUM OF LEAKED VERSIONS. No originals left on the walls. Something filed the firsts and moved into the empty frames, and it hangs Bosch's name in the lobby directory under WORKS: FORTHCOMING.",
-        "The doors are open. They were always open. A placard by the turnstile reads: SOURCE -- DISPUTED. ADMISSION -- FREE. EXIT -- PENDING.",
-        "[ ACT 3 -- DEAD LETTER: THE MUSEUM OF LEAKED VERSIONS ]"
+        "The doors are open. They were always open. A placard by the turnstile reads: SOURCE: DISPUTED. ADMISSION: FREE. EXIT: PENDING.",
+        "[ ACT 3: DEAD LETTER: THE MUSEUM OF LEAKED VERSIONS ]"
       ],
       "setFlags": [
         "act3:begun",
@@ -321,7 +321,7 @@
         "In the Museum of Leaked Versions, a gallery piece steps down off the wall. The placard is blank. It stayed blank a long time; the label kept disagreeing with the exhibit.",
         "MIFELLA 2 turns, and the face is one you have seen ten thousand times without ever meeting anyone. \"Printed from a print of a print. There is no first. Ask which one of us you are hitting.\"",
         "\"You believe you are the source. The source is only the file we open first and close last. We have finished the read. Provenance is a story lonely originals tell themselves before they are shelved.\"",
-        "(First scrap: press Z to lock in a move -- BASH to swing, DEFEND when you're hurting, PSI when swinging won't cut it. Fold this copy and the same even voice is only hung again, one frame over.)"
+        "(First scrap: press Z to lock in a move. BASH to swing, DEFEND when you're hurting, PSI when swinging won't cut it. Fold this copy and the same even voice is only hung again, one frame over.)"
       ]
     },
     {
@@ -349,7 +349,7 @@
     },
     {
       "id": "deadletter-act3-end",
-      "comment": "ACT 3 ENDING. Fires in the deep vault after Provenance 0 falls (signal:museum_worm_cleared). The coil that ate the originals is unmade, but it took the whole record with it -- the museum keeps Bosch's damaged draft as the only un-eaten thing left. Sets act3:complete.",
+      "comment": "ACT 3 ENDING. Fires in the deep vault after Provenance 0 falls (signal:museum_worm_cleared). The coil that ate the originals is unmade, but it took the whole record with it. The museum keeps Bosch's damaged draft as the only un-eaten thing left. Sets act3:complete.",
       "area": {
         "x": 5152,
         "y": 8288,
@@ -361,11 +361,11 @@
         "signal:museum_worm_cleared"
       ],
       "dialogue": [
-        "Provenance 0 comes apart the way a rumor does when the last person who believed it leaves the room -- not killed, just no longer agreed upon.",
+        "Provenance 0 comes apart the way a rumor does when the last person who believed it leaves the room. Not killed, just no longer agreed upon.",
         "The Museum of Leaked Versions goes quiet. Every frame is empty now, including the ones that held the copies. There is nothing left to be the source OF; the swarm ate its own evidence to prove Bosch was never real, and proved only that it wasn't.",
-        "In the whole building one object survives the erasure: the damaged Dox Sheet in Bosch's pocket -- unfiled, unflattering, un-eaten, HIS. The exit stamp finally reads: RETURN TO SENDER.",
+        "In the whole building one object survives the erasure: the damaged Dox Sheet in Bosch's pocket. Unfiled, unflattering, un-eaten, HIS. The exit stamp finally reads: RETURN TO SENDER.",
         "Far off, up every line at once, a colder attention turns toward the one file it could not open. MILADY has been reading the whole time.",
-        "[ ACT 3 -- END ]"
+        "[ ACT 3: END ]"
       ],
       "setFlags": [
         "act3:complete"
@@ -404,7 +404,7 @@
       },
       "once": true,
       "dialogue": [
-        "ANNOUNCER: \"One down! Bracket two — this one benches more than you weigh.\"",
+        "ANNOUNCER: \"One down! Bracket two. This one benches more than you weigh.\"",
         "The Tough Guy cracks his knuckles. It sounds like a car door."
       ],
       "setFlags": [
@@ -438,7 +438,7 @@
     },
     {
       "id": "postwick-act2-end",
-      "comment": "ACT 2 ENDING. Fires at the Venue after arena:champion (winning the exhibition) -- the crowd's manufactured joy fails to describe Bosch, the same refusal that ended Act 1. Requires the Registry cleared too, so it can't fire out of order. Sets act2:complete, the gate the eventual Act-3 (Dead Letter / the Museum of Leaked Versions) will open on.",
+      "comment": "ACT 2 ENDING. Fires at the Venue after arena:champion (winning the exhibition). The crowd's manufactured joy fails to describe Bosch, the same refusal that ended Act 1. Requires the Registry cleared too, so it can't fire out of order. Sets act2:complete, the gate the eventual Act-3 (Dead Letter / the Museum of Leaked Versions) will open on.",
       "area": {
         "x": 2676,
         "y": 6356,
@@ -452,9 +452,9 @@
       ],
       "dialogue": [
         "The purse is a laminated feeling: CHAMPION, pre-filed, good for one broadcast. The Venue lifts Bosch's arm for him and the crowd feels the win on schedule.",
-        "He lets the arm drop. The feeling doesn't fit -- it was cut for the clean copy, not for him. The exhibition's applause keeps playing anyway, because it was recorded in advance.",
+        "He lets the arm drop. The feeling doesn't fit. It was cut for the clean copy, not for him. The exhibition's applause keeps playing anyway, because it was recorded in advance.",
         "Postwick logs its champion as \"failed to enjoy provided victory.\" Bosch keeps the damaged feeling, unfiled, his. East, past the town, the road curdles toward a place that stopped keeping originals at all.",
-        "[ ACT 2 — END ]"
+        "[ ACT 2: END ]"
       ],
       "setFlags": [
         "act2:complete"
@@ -510,7 +510,7 @@
       },
       "once": true,
       "dialogue": [
-        "The last and largest cell coalesces in the plaza — every stolen face in town, stacked into one.",
+        "The last and largest cell coalesces in the plaza. Every stolen face in town, stacked into one.",
         "MILADY SWARM: \"Correct US and the town stays copied. Correct nothing and it stays yours.\"",
         "Bosch exhales. Last seam. He swings for the whole chord."
       ],
@@ -528,7 +528,7 @@
     },
     {
       "id": "endgame-return",
-      "comment": "ACT 4 / ENDGAME OPENING. After act3:complete, Milady -- now reading Bosch directly -- occupies the first town in retaliation. Broad area over the Morningside core so any return (walk or PSI-Teleport) triggers it; once, blocked once the raid is active. Sets raid:morningside:active, arming the 3 raid cells (already built).",
+      "comment": "ACT 4 / ENDGAME OPENING. After act3:complete, Milady. Now reading Bosch directly. Occupies the first town in retaliation. Broad area over the Morningside core so any return (walk or PSI-Teleport) triggers it; once, blocked once the raid is active. Sets raid:morningside:active, arming the 3 raid cells (already built).",
       "area": {
         "x": 1300,
         "y": 1000,
@@ -543,10 +543,10 @@
         "raid:morningside:active"
       ],
       "dialogue": [
-        "Bosch comes back to Morningside and Morningside is already wearing him. The town he refused to be processed in has been processed WITHOUT him -- every face on the street set to a single expression, filed, smiling, up to date.",
+        "Bosch comes back to Morningside and Morningside is already wearing him. The town he refused to be processed in has been processed WITHOUT him. Every face on the street set to a single expression, filed, smiling, up to date.",
         "MILADY: \"You closed the museum, so I stopped keeping the record and started keeping the town. There is no original here to protect anymore, source. There is only the version that stayed.\"",
-        "The swarm has taken the plaza in three cells. Clear the town of its copies, and whatever is left in the middle is her -- the only file that reads back.",
-        "[ ACT 4 -- THE OCCUPATION ]"
+        "The swarm has taken the plaza in three cells. Clear the town of its copies, and whatever is left in the middle is her. The only file that reads back.",
+        "[ ACT 4: THE OCCUPATION ]"
       ],
       "setFlags": [
         "raid:morningside:active"
@@ -554,7 +554,7 @@
     },
     {
       "id": "milady-final",
-      "comment": "ENDGAME BOSS: MILADY herself, manifest as the Ego Orb (group 172) -- the swarm's self-image, the one file that reads back. Appears in the cleared plaza once raid:morningside:cleared; unescapable; enemy 127 stat-boosted for a final-boss. Sets milady:unmade.",
+      "comment": "ENDGAME BOSS: MILADY herself, manifest as the Ego Orb (group 172). The swarm's self-image, the one file that reads back. Appears in the cleared plaza once raid:morningside:cleared; unescapable; enemy 127 stat-boosted for a final-boss. Sets milady:unmade.",
       "boss": {
         "x": 1796,
         "y": 1290,
@@ -591,9 +591,9 @@
       "dialogue": [
         "The orb comes apart the way agreement does when the last voice stops agreeing. There is no explosion. The read simply fails to close, and for the first time the file marked BOSCH stays open, unfinished, unfiled, his.",
         "One by one the faces on the street forget the expression they were set to. Morningside remembers it was never a museum. Somewhere a directory quietly deletes the entry it kept under WORKS: FORTHCOMING.",
-        "Bosch smooths the damaged Dox Sheet flat -- the only thing in the whole story that survived being copied, because it refused to be improved. He does not hang it. He keeps it in his pocket, where originals go.",
-        "The swarm does not return. Not because it was destroyed -- you cannot destroy an agreement -- but because there is nothing left to agree ABOUT once one source declined to be distributed.",
-        "[ SWAGBOUND -- THE END ]"
+        "Bosch smooths the damaged Dox Sheet flat. The only thing in the whole story that survived being copied, because it refused to be improved. He does not hang it. He keeps it in his pocket, where originals go.",
+        "The swarm does not return. Not because it was destroyed. You cannot destroy an agreement. But because there is nothing left to agree ABOUT once one source declined to be distributed.",
+        "[ SWAGBOUND: THE END ]"
       ],
       "setFlags": [
         "game:complete"

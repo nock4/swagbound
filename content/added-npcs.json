@@ -588,7 +588,7 @@
         "pages": [
           "A kid leans off a stoop like he's been waiting to be first to tell you.",
           "\"You're up. Took your time. Your card's been up for hours.\"",
-          "\"Talk to folks with Z -- everybody's got a read on you, couple of 'em even true. Wanna check your pockets or your stats? That's X.\"",
+          "\"Talk to folks with Z. Everybody's got a read on you, couple of 'em even true. Wanna check your pockets or your stats? That's X.\"",
           "\"Now go find who's printing your face. Follow the laminate. West, the arcade crowd. They trade you like they invented you.\""
         ]
       }
@@ -619,7 +619,7 @@
       "interaction": {
         "pages": [
           "VESSEL READER: \"Stop acting like the card is about you. You're what it's using to travel.\"",
-          "\"Source, vessel, claimant -- three hats, no head. Pick wrong and the town writes you in pen.\""
+          "\"Source, vessel, claimant. Three hats, no head. Pick wrong and the town writes you in pen.\""
         ]
       }
     },
@@ -648,7 +648,7 @@
       "facing": "up",
       "interaction": {
         "pages": [
-          "A notice board, layered three-deep in Dox Sheets. Some carry your face. Some carry your phrase. One has neither -- and the crowd treats that one as the realest of all.",
+          "A notice board, layered three-deep in Dox Sheets. Some carry your face. Some carry your phrase. One has neither. And the crowd treats that one as the realest of all.",
           "Stapled across the rest, a route slip: GATE NORTH, BY THE STATION. UNPROCESSED VERSIONS REPORT FOR SORTING.",
           "A route aide keeps straightening the cards. \"Don't touch the board. The board touches you.\""
         ]
@@ -2939,7 +2939,7 @@
         "pages": [
           "A kid levels an orange foam gun at your kneecap and does not fire.",
           "\"Bang. You're witnessed. That's how we do it here, it doesn't hurt.\"",
-          "\"My buddy down here'' \u2014 a little companion creature blinks \u2014 ''he keeps the record for me so I don't have to remember being cool.\""
+          "\"My buddy down here''. A little companion creature blinks. ''he keeps the record for me so I don't have to remember being cool.\""
         ]
       }
     },
@@ -4120,7 +4120,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "WALL TEXT \u2014 MEMORYMiX, no. 001. Composite recollection, source materials disputed, arrangement uncredited.",
+          "WALL TEXT: MEMORYMiX, no. 001. Composite recollection, source materials disputed, arrangement uncredited.",
           "The piece plays back a memory no visitor recalls having, in a voice several claimants recognize. Do not adjust the volume; it is set to the level of the public version."
         ]
       }
@@ -4201,7 +4201,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "PLAQUE \u2014 Miyakaki, study no. 002. Attributed, then contested, then hung anyway.",
+          "PLAQUE: Miyakaki, study no. 002. Attributed, then contested, then hung anyway.",
           "The figure is rendered in a hand that is almost a known hand. Curators note the resemblance is the point, and the discomfort is included in the loan."
         ]
       },
@@ -4251,7 +4251,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "Under glass: a scanned trading card \u2014 a fire-conjuring efreet \u2014 crowned with a doodled cap and a pair of crude ballpoint wings someone added later. The wall plaque reads:",
+          "Under glass: a scanned trading card. A fire-conjuring efreet. Crowned with a doodled cap and a pair of crude ballpoint wings someone added later. The wall plaque reads:",
           "FRENETIC EFREET (AFTER). Found object, ink, delusion.",
           "The card was printed by a company that owned it, played by a boy who thought he owned it, and scanned by a wallet that claimed it was never printed at all.",
           "The wings are not part of the card. The wings were added to make it new. Nothing was made new. Provenance: three owners, none of them the artist, all of them certain.",
@@ -4269,8 +4269,8 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "A photograph, framed and lit like a masterwork. A face \u2014 pores, catchlights, one asymmetric lash. Completely convincing. Completely nobody. There was never a person behind this glass.",
-          "Bottom right: a signature. Someone SIGNED a face that was never worn. The wall text calls this the collection's genius \u2014 a claimant for a thing with no source, a name deeded to no one.",
+          "A photograph, framed and lit like a masterwork. A face. Pores, catchlights, one asymmetric lash. Completely convincing. Completely nobody. There was never a person behind this glass.",
+          "Bottom right: a signature. Someone SIGNED a face that was never worn. The wall text calls this the collection's genius. A claimant for a thing with no source, a name deeded to no one.",
           "The most valued pieces in the Galleria are the ones no leaked original can contradict. This is the purest of them. It cannot be doxxed, because there is nothing under it to find."
         ]
       }
@@ -4300,7 +4300,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "DISPLAY CASE \u2014 Uncanny Found-Photo Portrait, subject unidentified.",
+          "DISPLAY CASE: Uncanny Found-Photo Portrait, subject unidentified.",
           "The person in the frame was never a person. Visitors report being recognized by it; the museum reminds you that a portrait cannot file a claim, and asks you not to file one either."
         ]
       }
@@ -4365,7 +4365,7 @@
         "pages": [
           "A postcard mounted under museum glass. Watercolor bleeding into charcoal, a single glass of water rendered too carefully, and a scrawl across the corner: Hello Melina. It was addressed.",
           "It was never sent.",
-          "The wall text calls it correspondence. There is no Melina in the record. Only the greeting survived, filed, appraised, hung \u2014 a message that reached the archive instead of the person.",
+          "The wall text calls it correspondence. There is no Melina in the record. Only the greeting survived, filed, appraised, hung. A message that reached the archive instead of the person.",
           "The Galleria collects the ones that missed."
         ]
       }
@@ -4380,7 +4380,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "Outsider-art figure, maker unrecorded, salvaged from a folder marked 'derivative \u2014 do not exhibit.'",
+          "Outsider-art figure, maker unrecorded, salvaged from a folder marked 'derivative. Do not exhibit.'",
           "We exhibit it anyway. The plaque you are reading is the only provenance it will ever be granted."
         ]
       },
@@ -4396,7 +4396,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "EXHIBIT LABEL \u2014 Burger Fund NFT Avatar, edition of many, no. 005.",
+          "EXHIBIT LABEL: Burger Fund NFT Avatar, edition of many, no. 005.",
           "One face, minted until it stopped meaning a face. Hung here as the public version of a thousand private ones, all of whom insist they came first."
         ]
       }
@@ -4428,8 +4428,8 @@
       "interaction": {
         "pages": [
           "A kid with ice-cream pastel hair, teeth gritted, clutching an expensive fountain pen like it's the last true thing in the building. Speed lines shudder off them.",
-          "\"This pen is MINE. I can prove it. There's a receipt. There's a chain. I've got the whole provenance, every hand it passed through, I have it MEMORIZED \u2014\"",
-          "\"\u2014 and it doesn't matter. They hung a scan of me holding it on the wall and now the scan is the artwork and I'm just the guy the scan is OF. Do you understand what that does to a person?\"",
+          "\"This pen is MINE. I can prove it. There's a receipt. There's a chain. I've got the whole provenance, every hand it passed through, I have it MEMORIZED. \"",
+          "\". And it doesn't matter. They hung a scan of me holding it on the wall and now the scan is the artwork and I'm just the guy the scan is OF. Do you understand what that does to a person?\"",
           "\"You're going to want to hold onto something real before you leave here. A pen. A name. Anything. Because the Galleria doesn't take your stuff. It takes the fact that it was ever yours.\""
         ]
       },
@@ -4445,7 +4445,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "Oh hey \u2014 you walked all the way in? Most people just photograph the lobby and leave. I basically live in this hallway. Free climate control, and nobody checks if your ticket's real.",
+          "Oh hey. You walked all the way in? Most people just photograph the lobby and leave. I basically live in this hallway. Free climate control, and nobody checks if your ticket's real.",
           "I like it here better than being on a wall. On the wall you're a 'public version.' In the hallway you're just a guy in a beanie. The wall text can't reach you if you keep moving.",
           "That symbiote mask? Cosplay, relax. Nothing leaked, nothing sourced. I'm not part of the collection. I just come to look at the people who got filed and think, better them than me."
         ]
@@ -4497,8 +4497,8 @@
       "interaction": {
         "pages": [
           "A kid with ice-cream pastel hair, teeth gritted, clutching an expensive fountain pen like it's the last true thing in the building. Speed lines shudder off them.",
-          "\"This pen is MINE. I can prove it. There's a receipt. There's a chain. I've got the whole provenance, every hand it passed through, I have it MEMORIZED \u2014\"",
-          "\"\u2014 and it doesn't matter. They hung a scan of me holding it on the wall and now the scan is the artwork and I'm just the guy the scan is OF. Do you understand what that does to a person?\"",
+          "\"This pen is MINE. I can prove it. There's a receipt. There's a chain. I've got the whole provenance, every hand it passed through, I have it MEMORIZED. \"",
+          "\". And it doesn't matter. They hung a scan of me holding it on the wall and now the scan is the artwork and I'm just the guy the scan is OF. Do you understand what that does to a person?\"",
           "\"You're going to want to hold onto something real before you leave here. A pen. A name. Anything. Because the Galleria doesn't take your stuff. It takes the fact that it was ever yours.\""
         ]
       },
@@ -4514,7 +4514,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "Oh hey \u2014 you walked all the way in? Most people just photograph the lobby and leave. I basically live in this hallway. Free climate control, and nobody checks if your ticket's real.",
+          "Oh hey. You walked all the way in? Most people just photograph the lobby and leave. I basically live in this hallway. Free climate control, and nobody checks if your ticket's real.",
           "I like it here better than being on a wall. On the wall you're a 'public version.' In the hallway you're just a guy in a beanie. The wall text can't reach you if you keep moving.",
           "That symbiote mask? Cosplay, relax. Nothing leaked, nothing sourced. I'm not part of the collection. I just come to look at the people who got filed and think, better them than me."
         ]
@@ -4531,7 +4531,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "WHOA, hi. Yeah, the hair's real, the glow's real, the burger's \u2014 okay the burger's a prop, they made me hold it for the intake photo and I never gave it back.",
+          "WHOA, hi. Yeah, the hair's real, the glow's real, the burger's. Okay the burger's a prop, they made me hold it for the intake photo and I never gave it back.",
           "I'm not on display, I just loiter near the display. There's a difference and the difference is my whole personality. Filed people have a plaque. I have a crayon and a mohawk and zero provenance.",
           "You want the good gallery? Go past the appraised ones, past the ropes. That's where they hang the versions nobody could source. Prettiest wing in the building. Also the saddest. Bring a snack."
         ]
@@ -4548,7 +4548,7 @@
       "facing": "down",
       "interaction": {
         "pages": [
-          "WALL TEXT \u2014 Museum Derivative (Parody), acc. lsw-2056. After an original that also claimed to be after something.",
+          "WALL TEXT: Museum Derivative (Parody), acc. lsw-2056. After an original that also claimed to be after something.",
           "The work mocks the work above it, which mocks the work beside it. The joke's provenance is intact; the museum notes only the original has gone missing, and no one is looking."
         ]
       }

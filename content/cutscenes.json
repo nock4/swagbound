@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.cutscenes.v1",
-  "comment": "Authored cutscenes that re-create EarthBound scripted scenes the converter drops (NPC choreography: walk out a door, line up, appear/vanish). Run scripts/scan-broken-scenes.mjs for the inventory; use --scene <ccsRef> for a scene's NPC ids + door coords.",
+  "comment": "Authored cutscenes that re-create EarthBound scripted scenes the converter drops (NPC choreography: walk out a door, line up, appear/vanish). Run scripts/scan-broken-scenes.mjs for the inventory; use. Scene <ccsRef> for a scene's NPC ids + door coords.",
   "cutscenes": [
     {
       "id": "onett-police-disperse",
@@ -376,12 +376,12 @@
         {
           "op": "dialogue",
           "pages": [
-            "Bosch wakes to a cold signal -- the kind that arrives before you do.",
+            "Bosch wakes to a cold signal. The kind that arrives before you do.",
             "Somebody already printed today. His face, almost right, the way a bad memory is almost right. Under it: \"I said it first, so I don't have to mean it.\" Bosch never said that.",
             "The card's category box is checked VESSEL. Bosch doesn't remember being asked.",
             "From the next room, a household voice with panic under the paint: \"Why is your face on a card? It got here before breakfast. People are asking.\"",
             "A leaked Bosch is loose in Morningside, better behaved and earlier to breakfast. Bosch pockets the damaged original; the card-stock trail runs west, where the arcade crowd deals faces.",
-            "(Arrow keys move Bosch. Press Z to look hard at things -- and to talk. Start with the kid on the stoop; he's been waiting his whole short life to explain yours.)"
+            "(Arrow keys move Bosch. Press Z to look hard at things. And to talk. Start with the kid on the stoop; he's been waiting his whole short life to explain yours.)"
           ]
         },
         {

@@ -23,14 +23,14 @@
       ],
       "onDefeat": [
         "\"The stamp spends. The record does not.",
-        "We relayed the clean copy ahead -- she is at the next gate, being you, in the voice we all share.\""
+        "We relayed the clean copy ahead. She is at the next gate, being you, in the voice we all share.\""
       ],
       "lowHpThreshold": 0.34
     },
     "55": {
       "personaName": "Registry Warden",
       "onStart": [
-        "You arrived unhappy. That is a filing error, and we do not keep errors -- we correct them.",
+        "You arrived unhappy. That is a filing error, and we do not keep errors. We correct them.",
         "Hold still. The mood was pre-approved this morning. It is non-refundable and it is coming."
       ],
       "onLowHp": [
@@ -114,12 +114,12 @@
         "We have your face on file. What comes next is not a fight. It is correction."
       ],
       "onLowHp": [
-        "This mask is spent. No matter -- ten thousand more, each copying the last, each one closer to you.",
+        "This mask is spent. No matter. Ten thousand more, each copying the last, each one closer to you.",
         "You cut a symptom. The better version of you is already circulating, and it does not tire."
       ],
       "onDefeat": [
         "You closed the symptom, not the source.",
-        "We kept the clean copy -- better-lit, smiling, more of us than you, and it answers to your name now."
+        "We kept the clean copy. Better-lit, smiling, more of us than you, and it answers to your name now."
       ],
       "lowHpThreshold": 0.34
     },

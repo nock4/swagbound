@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.card-nfts-top95.v0",
-  "comment": "DRAFT prize registry — the 95 rarest Card NFT 2 pieces (Solana collection card_nft_2, on-chain EAzEpagtyeRAx9npnpVMpygoA8ouX7DRpLTghhPvYTiu), ranked by Magic Eden meInstant rarity, snapshot 2026-07-03 (6377 cards total, 2741 ranked; 1215 Pack tokens excluded; ranks 1-111 cover the top 95). NOT loaded by the game. Ranks are point-in-time — re-snapshot before final intake if months pass. Images are live IPFS URLs; intake step downloads to localImage paths.",
+  "comment": "DRAFT prize registry. The 95 rarest Card NFT 2 pieces (Solana collection card_nft_2, on-chain EAzEpagtyeRAx9npnpVMpygoA8ouX7DRpLTghhPvYTiu), ranked by Magic Eden meInstant rarity, snapshot 2026-07-03 (6377 cards total, 2741 ranked; 1215 Pack tokens excluded; ranks 1-111 cover the top 95). NOT loaded by the game. Ranks are point-in-time. Re-snapshot before final intake if months pass. Images are live IPFS URLs; intake step downloads to localImage paths.",
   "snapshotDate": "2026-07-03",
   "source": "https://magiceden.us/marketplace/card_nft_2",
   "cards": [

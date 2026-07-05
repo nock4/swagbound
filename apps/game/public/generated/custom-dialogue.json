@@ -5,7 +5,7 @@
     "1": {
       "pages": [
         "A kid with a laminated smile steps into Bosch's lane before Bosch has finished choosing it.",
-        "\"Hey. You want in? Membership's free \u2014 the read is what costs you. We already have a version of you that joined. You're just here to sign for it.\""
+        "\"Hey. You want in? Membership's free. The read is what costs you. We already have a version of you that joined. You're just here to sign for it.\""
       ]
     },
     "2": {
@@ -26,7 +26,7 @@
     },
     "5": {
       "pages": [
-        "\"To tell you the truth \u2014 and the truth's been getting expensive \u2014 I don't remember saying half of what the town has me saying.\"",
+        "\"To tell you the truth. And the truth's been getting expensive. I don't remember saying half of what the town has me saying.\"",
         "\"My leaked version's a better neighbor than I am. Pays his dues, waves first. I just live here.\""
       ]
     },
@@ -69,7 +69,7 @@
     },
     "12": {
       "pages": [
-        "The machine waits the way machines wait \u2014 patient, incurious, certain you'll comply.",
+        "The machine waits the way machines wait. Patient, incurious, certain you'll comply.",
         "\"Insert your card. We'll take it from here. We always do.\""
       ]
     },
@@ -159,6 +159,12 @@
     },
     "37": {
       "ref": "interior:bosch-main-room-v0"
+    },
+    "38": {
+      "pages": [
+        "Grill's on, patty's down, no cameras back here. What you eat off this counter never gets witnessed.",
+        "Every burger comes out the same. That's the point. Nothing here is one of one, and nobody's leaking your order."
+      ]
     },
     "39": {
       "pages": [
@@ -258,6 +264,12 @@
       ],
       "service": "phone"
     },
+    "61": {
+      "pages": [
+        "Welcome to the front desk. Before I file you a room, the kiosk needs your card.",
+        "Insert your claimant card. No card, no record, and no record means no bed."
+      ]
+    },
     "62": {
       "pages": [
         "He clocks Bosch the way an actuary clocks a man on a ladder.",
@@ -269,6 +281,12 @@
         "A man dabs his collar, filing a grievance no one will read.",
         "\"A pack of kids spat gum on me. On me.\"",
         "\"Now I'm evidence of something I never signed.\""
+      ]
+    },
+    "64": {
+      "pages": [
+        "Your stay's on the record now. Checkout's whenever, but the log keeps the timestamp forever.",
+        "Sleep sound. Nobody leaks what happens between check-in and check-out. Not on this desk, anyway."
       ]
     },
     "65": {
@@ -617,7 +635,7 @@
       "pages": [
         "The kid shakes Bosch awake like an alarm clock he doesn't respect.",
         "\"You're up. Mifella's crew scattered, left me holding the dark. Typical.\"",
-        "\"Home. Before they file us both as missing. Funny -- I'm older, you're the one they copy.\""
+        "\"Home. Before they file us both as missing. Funny. I'm older, you're the one they copy.\""
       ]
     },
     "125": {
@@ -643,7 +661,7 @@
     },
     "128": {
       "pages": [
-        "City Hall took the key the way a clerk takes a name -- quietly, for the file.",
+        "City Hall took the key the way a clerk takes a name. Quietly, for the file.",
         "\"Mifella's crew trashed the place, so it's sealed. Can't even change clothes.\"",
         "He says Mifella like it's already on a list, and he's just reading it back."
       ]
@@ -651,7 +669,7 @@
     "129": {
       "pages": [
         "\"A library's honest work. Ignorance comes in, leaves with a due date.\"",
-        "\"Got every Swag World fact in here. Maps too -- borrow free.\"",
+        "\"Got every Swag World fact in here. Maps too. Borrow free.\"",
         "\"Only loan in town that doesn't grow teeth.\""
       ]
     },
@@ -827,7 +845,7 @@
     "157": {
       "pages": [
         "The cop runs the same line on a loop, a stamp pressed until the ink gives out.",
-        "\"Clear out. Get out of my way. Clear out. Get out of my way. Clear out. Of way out get my \u2014\"",
+        "\"Clear out. Get out of my way. Clear out. Get out of my way. Clear out. Of way out get my. \"",
         "\"Whoops. My mistake. I mean: get out of my way.\""
       ]
     },
@@ -948,10 +966,70 @@
         "So. How can I help?"
       ]
     },
+    "303": {
+      "pages": [
+        "Welcome to the record. Want me to read you this place, or would you rather stay unfiled?",
+        "It's all here. Who got witnessed, who got the soft ban. Just say the word."
+      ]
+    },
+    "304": {
+      "pages": [
+        "The old market feels unsafe. Wallets thin, claimants thinner.",
+        "But the fits down there are witnessed. Genuinely archive-grade. Worth the risk to your record."
+      ]
+    },
+    "305": {
+      "pages": [
+        "I heard a claimant got scrubbed off the record. Deactivated against her will.",
+        "Kidnapped, they said. But you can't kidnap someone who was already deleted."
+      ]
+    },
+    "306": {
+      "pages": [
+        "Some account was tailing the claimant. Following. Screenshotting.",
+        "No fit, no face you could file. It just wanted the read. Gave me chills."
+      ]
+    },
+    "308": {
+      "pages": [
+        "Head east and you'll walk right into trouble.",
+        "Two deactivated places are waiting out there. Neither of them stays quiet for long."
+      ]
+    },
+    "309": {
+      "pages": [
+        "Over in that Village, they've all converted to one feed. Fanatical about it.",
+        "Might be a fever. Might just be what happens when everyone follows the same source."
+      ]
+    },
+    "310": {
+      "pages": [
+        "(There was a snatch. A whole self, dragged off the record.)",
+        "(Believe me. I'm deactivated, sure. Deleted, sure. But I still saw it. Still posting. Woof.)"
+      ]
+    },
     "311": {
       "pages": [
         "Expand the mind, mon. The merchandise expands the wallet.",
         "Come on. Buy some of my beautiful junk."
+      ]
+    },
+    "313": {
+      "pages": [
+        "Hey. Why don't you buy the one true measuring stick? Rates any fit, any claimant.",
+        "Provenance guaranteed. Mostly. You in?"
+      ]
+    },
+    "314": {
+      "pages": [
+        "Fresh accounts! Never posted, never leaked. Nutritious and totally unwitnessed.",
+        "Please, take one before it gets flagged. Please?"
+      ]
+    },
+    "315": {
+      "pages": [
+        "The one who runs this soft-banned block is Everdred.",
+        "Ties to every leak and every disappeared handle around here. He knows who got filed."
       ]
     },
     "316": {
@@ -966,10 +1044,131 @@
         "I move a lot of them. Don't ask where the peels go."
       ]
     },
+    "319": {
+      "pages": [
+        "Looking for that so-called genius? The one everyone keeps witnessing?",
+        "As the real source around here, I'll tell you: he's out at the kiosks, looking for you."
+      ]
+    },
+    "320": {
+      "pages": [
+        "We're rolling out to Dead Letter. The bus is loud enough that the deactivated can't get a read on us.",
+        "Want a seat? The ghosts won't file you if they can't hear you."
+      ]
+    },
+    "321": {
+      "pages": [
+        "...re. Reactivating... no. Corrupted. My provenance won't load.",
+        "I was somebody's claimant once. Now I'm just the error where a name used to sit."
+      ]
+    },
+    "324": {
+      "pages": [
+        "Sure, the fixer isn't a good person. He leaks people for a living.",
+        "But he's warm about it. Warmest doxx you'll ever get."
+      ]
+    },
+    "325": {
+      "pages": [
+        "The old boss always watched the kiosks here. Kept the record honest.",
+        "That's why no crooked mod ever shook us down. He witnessed everything first."
+      ]
+    },
+    "326": {
+      "pages": [
+        "I'm holding a spot in this queue. Waiting to get verified for today.",
+        "Might not make the list. They only witness so many of us before the ban resets."
+      ]
+    },
+    "328": {
+      "pages": [
+        "That's right. We're the witnessed act. Everyone's got our fit, nobody's got our money.",
+        "And now they've got us. Held under a soft ban until we play their room."
+      ]
+    },
+    "329": {
+      "pages": [
+        "We pull decent numbers, sure. But the claimant at the house by the preschool?",
+        "She's the whole town's read right now. Every feed points at her."
+      ]
+    },
+    "330": {
+      "pages": [
+        "Just a hunch. The deleted ones in that tunnel hate anything upbeat.",
+        "Last time I passed through I was broadcasting something bright. They filed me hard for it."
+      ]
+    },
+    "332": {
+      "pages": [
+        "I'm obsessed with one kid inventor. No, not the airheaded apple claimant.",
+        "The other one. Incredible. Fully witnessed. Never leaks his sources."
+      ]
+    },
+    "333": {
+      "pages": [
+        "That mooch keeps asking me for something to eat.",
+        "He's the so-called source of new ideas. Let him invent his own dinner for once."
+      ]
+    },
+    "335": {
+      "pages": [
+        "I'm a burner alt. My source, Apple Kid, has been waiting on you.",
+        "We nodded off holding the record open. Everything down here runs on tired."
+      ]
+    },
     "338": {
       "pages": [
         "Seasonings? Make every meal taste like it remembers a happier version of itself.",
         "Miraculous. Nobody asks where the flavor's been filed."
+      ]
+    },
+    "339": {
+      "pages": [
+        "Thinking of catching the bus to the soft-banned town.",
+        "They say deactivated things line the road. Wonder if the bus even gets filed as arriving."
+      ]
+    },
+    "340": {
+      "pages": [
+        "Haven't I read your fit somewhere? At one of the witnessed shows?",
+        "So you're in the record too. Same scene, same soft ban."
+      ]
+    },
+    "341": {
+      "pages": [
+        "That claimant isn't here. She deactivated without warning.",
+        "Just... unlisted herself and walked. No provenance, no forwarding. Gone from the record."
+      ]
+    },
+    "343": {
+      "pages": [
+        "(Not an enemy. Just a friendly mole, off every list.",
+        "I'll teach you to read friend from foe, before the record does it for you.)"
+      ]
+    },
+    "356": {
+      "pages": [
+        "(The fever town is ahead. Everyone there posts the same thing.)"
+      ]
+    },
+    "361": {
+      "pages": [
+        "(Home of the apple claimant. Inventor. Fully witnessed.)"
+      ]
+    },
+    "367": {
+      "pages": [
+        "50 a night to be filed under one occupant. Rest here. Nobody reads you while you're down."
+      ]
+    },
+    "369": {
+      "pages": [
+        "(Biggest kiosk row you'll ever get filed at. Every fit priced, every claimant witnessed.)"
+      ]
+    },
+    "373": {
+      "pages": [
+        "(The Deleted Five's tour bus. Still posting from a town that deactivated it.)"
       ]
     },
     "375": {
@@ -1183,11 +1382,16 @@
         "Pay the doctor and we'll keep the file breathing until the person catches up."
       ]
     },
+    "432": {
+      "pages": [
+        "(Quiet valley ahead. The only way through is the cave. Nobody logs who goes in.)"
+      ]
+    },
     "439": {
       "pages": [
         "The kid wears his importance like a borrowed coat two sizes too generous.",
-        "\"You're here to bug me. Call me Master Pokey \u2014 Carpainter stamped me important, made it official in Happy-Happyism. You should join. You won't.\"",
-        "\"I'm glad I signed. I won't fight you myself \u2014 that's what these guys are filed under. Later, potater.\""
+        "\"You're here to bug me. Call me Master Pokey. Carpainter stamped me important, made it official in Happy-Happyism. You should join. You won't.\"",
+        "\"I'm glad I signed. I won't fight you myself. That's what these guys are filed under. Later, potater.\""
       ]
     },
     "443": {
@@ -1343,7 +1547,7 @@
     "615": {
       "pages": [
         "The man starts a sales pitch, then the pitch slides off his face entirely.",
-        "\"Cave guy sent you, sure, sure -- wait. No. That walk. That's my kid's walk.\"",
+        "\"Cave guy sent you, sure, sure. Wait. No. That walk. That's my kid's walk.\"",
         "\"Ten years, and the record skipped every one. You look filed-and-found.\"",
         "\"Sit. Have a donut before I weep into the till. Yes / No\""
       ]
@@ -1351,22 +1555,22 @@
     "616": {
       "pages": [
         "He hands over the machine like an alibi he can't afford to keep.",
-        "\"They took the inventor mid-sentence. He was on the line calling you. Then just -- erased.\"",
+        "\"They took the inventor mid-sentence. He was on the line calling you. Then just. Erased.\"",
         "\"I stood here and did nothing. So take it. Let the machine do the part I couldn't.\""
       ]
     },
     "617": {
       "pages": [
         "Two newlyweds, talking past you in a dialect the town never bothered to file.",
-        "\"Kekye koo kikkro. (Thank you for minding my husband. And -- we finally made it official.)\"",
+        "\"Kekye koo kikkro. (Thank you for minding my husband. And. We finally made it official.)\"",
         "\"Kooki kekye ki! (Quit gaping like an unsigned form, dear, say hello!)\""
       ]
     },
     "618": {
       "pages": [
         "The husband finds his words the way newlyweds find each other's debts.",
-        "\"Krikko kyakya. (That cave north of the old stones -- you wondered what's filed inside. Admit it.)\"",
-        "\"Keke kike. (Go look. We're off -- still newlyweds, you understand. Bye-bye.)\""
+        "\"Krikko kyakya. (That cave north of the old stones. You wondered what's filed inside. Admit it.)\"",
+        "\"Keke kike. (Go look. We're off. Still newlyweds, you understand. Bye-bye.)\""
       ]
     },
     "619": {
@@ -1383,7 +1587,7 @@
     "622": {
       "pages": [
         "Instant Revitalizing Device.",
-        "(Step in, step out rested -- a full night's sleep compressed into a receipt you never earned.)"
+        "(Step in, step out rested. A full night's sleep compressed into a receipt you never earned.)"
       ]
     },
     "626": {
@@ -1490,9 +1694,90 @@
         "State your business. Quietly."
       ]
     },
+    "839": {
+      "pages": [
+        "So you're a fan of these five. Sweet. Let me file that.",
+        "Here's the read: this band owes me a million. I hold the paper.",
+        "Their masters, their name, their whole fit? Signed over to me. Provenance says so.",
+        "Cry about it to the record. The record says I'm the claimant."
+      ]
+    },
+    "842": {
+      "pages": [
+        "Oh. You're a little kid with a phone out.",
+        "No signatures. Every signed thing leaks, and then it's the source, not me.",
+        "I'm too busy getting witnessed to be witnessed by you."
+      ]
+    },
+    "843": {
+      "pages": [
+        "Filed under again. The venue owner doxxed the whole set out from under us.",
+        "We're stuck in here on a phony contract. Somebody else holds our provenance now."
+      ]
+    },
+    "844": {
+      "pages": [
+        "We know how to make the sound. We never learned to hold the rights.",
+        "Do-wap, do do wop. That part's still ours. For now."
+      ]
+    },
+    "845": {
+      "pages": [
+        "We owe you so much it's on the record somewhere.",
+        "Sorry. Truly. You're a better claimant than the one we've got."
+      ]
+    },
+    "846": {
+      "pages": [
+        "We're so helpless. Every version of us is somebody else's file.",
+        "Really helpless, and unprovenanced... hyuk hyuk hyuk."
+      ]
+    },
+    "847": {
+      "pages": [
+        "You want the read on Monotoli? You'll need us to get you filed in.",
+        "Don't ask how I know. Call it a hunch that leaked."
+      ]
+    },
+    "848": {
+      "pages": [
+        "Want a ticket to the set? Scanned at the kiosk, witnessed at the door.",
+        "Yes / No"
+      ]
+    },
+    "849": {
+      "pages": [
+        "..."
+      ]
+    },
+    "850": {
+      "pages": [
+        "Thanks. You're on the record now.",
+        "Hurry, claimant. The set starts any second and the unlisted cut waits for no one."
+      ]
+    },
+    "851": {
+      "pages": [
+        "I heard the source herself showed up at the set. In person. Unmistakable.",
+        "I was in the bathroom. Missed the one moment that couldn't be bootlegged.",
+        "I'll hate bathrooms for the rest of my documented life."
+      ]
+    },
+    "852": {
+      "pages": [
+        "Wait, the five don't play here anymore...?",
+        "I should dump this unwitnessed excuse of a man and go chase their leaked cut full-time."
+      ]
+    },
     "853": {
       "pages": [
         "Welcome. Everything's priced. Even the things that aren't for sale."
+      ]
+    },
+    "854": {
+      "pages": [
+        "Bread in this town has a plain, unwitnessed flavor. Nobody ever bothered to file it as anything.",
+        "Between us? I'm the one who owns this bakery. Every loaf traces back to me. That's the whole provenance."
       ]
     },
     "890": {
@@ -1502,6 +1787,72 @@
       ],
       "service": "hotel",
       "cost": 75
+    },
+    "906": {
+      "pages": [
+        "The Museum of Fakes doesn't own a single original. Everything on these walls is a replica.",
+        "Everyone knows that going in. It's on the wall-text, technically.",
+        "If you came looking for the source, you came to the wrong kiosk. The source doesn't scan here."
+      ]
+    },
+    "907": {
+      "pages": [
+        "Real ones don't scan. The replicas do. Make of that what you will."
+      ]
+    },
+    "908": {
+      "pages": [
+        "I'm glad someone got witnessed today. Lately the room stays empty.",
+        "...I'm the curator. Or the claimant to the title, anyway.",
+        "Nobody's disputed my provenance yet, so I keep the plaques honest and the fakes labeled as fakes."
+      ]
+    },
+    "909": {
+      "pages": [
+        "Every piece in here is filed under 'attributed to.' We stopped saying 'by' a long time ago."
+      ]
+    },
+    "910": {
+      "pages": [
+        "I think about how many originals got lost before anyone bothered to record them.",
+        "Would've loved to witness one un-leaked, un-copied, before it went to replica like the rest."
+      ]
+    },
+    "911": {
+      "pages": [
+        "Massive!... Not you. I mean the fake. The replica's honestly bigger than the thing it copies.",
+        "That's the joke of the place: the fit outgrows the source."
+      ]
+    },
+    "912": {
+      "pages": [
+        "This place should sell merch off the exhibits. Slap a fake on a fit and sell the fit.",
+        "At least then the replica would admit what it is."
+      ]
+    },
+    "913": {
+      "pages": [
+        "The plaque hedges every claim. 'Believed to be.' 'Possibly.' Nothing here is on the record for real."
+      ]
+    },
+    "914": {
+      "pages": [
+        "This is the care desk. We patch you up quiet and we don't leak your chart.",
+        "Rest here a moment. Whatever's wrong stays off the record until you're read clean."
+      ]
+    },
+    "920": {
+      "pages": [
+        "Hardware and tools. Everything on this counter has a serial number, a provenance, a paper trail.",
+        "You want the real one or your leaked version? The real one costs more, and it scans."
+      ]
+    },
+    "921": {
+      "pages": [
+        "Tickets for the Chaos Theater? The set's already been bootlegged, but the room hasn't.",
+        "Buy the ticket and you're witnessed in the room. Skip it and you only ever get somebody's leaked cut.",
+        "So. You want to be on the record, or not?"
+      ]
     },
     "922": {
       "pages": [
@@ -1513,10 +1864,52 @@
         "Evening. You're the second of you through that door today. The first didn't buy."
       ]
     },
+    "924": {
+      "pages": [
+        "Everything in here is priced by your fit, and my fit is not reading well today.",
+        "Maybe I go back to my hometown. Nobody kiosk-scans you there. Nobody files what you can't afford."
+      ]
+    },
+    "925": {
+      "pages": [
+        "I've been re-pricing shelves since open. My own fit got marked down twice.",
+        "The store keeps folding back on itself. You buy, you get read, you keep walking. There's no register at the exit."
+      ]
+    },
     "926": {
       "pages": [
         "Seasonings. I sell the flavor; the regret's on the house.",
         "What's it going to be?"
+      ]
+    },
+    "927": {
+      "pages": [
+        "Mumble, mumble... I'm slammed. Three claimants, two returns, one dispute.",
+        "Don't get yourself filed as loitering, kid. Move along."
+      ]
+    },
+    "928": {
+      "pages": [
+        "So you ditched too, huh. Neither of us is where the record says we should be right now.",
+        "Relax. Nobody's witnessing us in the tools aisle."
+      ]
+    },
+    "929": {
+      "pages": [
+        "When I grow up I wanna write the code that decides which fits get flagged and which get let through.",
+        "You got any connections at the shop that runs the kiosks? A name that's already on the record?"
+      ]
+    },
+    "930": {
+      "pages": [
+        "I'm saving up to disappear to Solana Beach and go completely un-witnessed for a week.",
+        "No kiosk, no scans, no leaked version of me. Just sand that doesn't file a report."
+      ]
+    },
+    "931": {
+      "pages": [
+        "Front counter. I can put your fit on the record or take it off the record.",
+        "Buying, or selling? Either way you leave a trail."
       ]
     },
     "932": {
@@ -1524,10 +1917,33 @@
         "Yes? Point at a thing and I'll tell you what it costs to want it."
       ]
     },
+    "934": {
+      "pages": [
+        "(A staffer priced you by your fit the second you walked the aisle, then went back to restocking.)"
+      ]
+    },
+    "935": {
+      "pages": [
+        "Half this floor is the same three items in a different colorway. Nobody's checking the provenance.",
+        "You buy the fit, the fit buys you back. That's retail."
+      ]
+    },
     "936": {
       "pages": [
         "Lower your voice. Loud customers get logged twice.",
         "What do you need, and how fast can you need it elsewhere?"
+      ]
+    },
+    "937": {
+      "pages": [
+        "Please insert your card. The kiosk needs to confirm the claimant before it releases the funds.",
+        "No card, no read. No read, no record."
+      ]
+    },
+    "939": {
+      "pages": [
+        "Bored kid on the department store floor, waiting to be witnessed by literally anyone.",
+        "Everything up here is expensive and none of it scans as mine yet."
       ]
     },
     "959": {
@@ -1889,9 +2305,9 @@
     },
     "1270": {
       "pages": [
-        "\"Giygas attacks from the past. To reach him you warp there \u2014 through the Phase Distorter 3. But the machine won't carry the living. Flesh dies in the crossing. That's not cruelty. That's the spec.\"",
+        "\"Giygas attacks from the past. To reach him you warp there. Through the Phase Distorter 3. But the machine won't carry the living. Flesh dies in the crossing. That's not cruelty. That's the spec.\"",
         "\"So we move only the program. Your spirit goes into a robot and the robot goes back. Your body stays here, signed out and waiting, while the better, quieter version of you does the fighting.\"",
-        "\"I can't promise the spirit returns. The four of you are the chosen ones \u2014 which is the town's polite word for the ones who don't get to decline. Still go? Yes  No\""
+        "\"I can't promise the spirit returns. The four of you are the chosen ones. Which is the town's polite word for the ones who don't get to decline. Still go? Yes  No\""
       ]
     },
     "1271": {
@@ -1987,9 +2403,9 @@
     "1292": {
       "pages": [
         "The voice arrives before the body does, patient as a thing that has waited entire civilizations for the appointment.",
-        "\"You finally came. And you finally talk to me. Good. Take notes if you have to. You're the chosen one. Your destiny isn't yours alone \u2014 it belongs to the whole universe, and one day every version of you across it will overlap into one.\"",
+        "\"You finally came. And you finally talk to me. Good. Take notes if you have to. You're the chosen one. Your destiny isn't yours alone. It belongs to the whole universe, and one day every version of you across it will overlap into one.\"",
         "\"Remember Giant Step in Onett? That was one of Your Sanctuaries. A power spot. A monster guarded it, swollen on the place's own strength, and you put it down.\"",
-        "\"There are eight. Reach all eight, let the Sound Stone record every melody, and the last door opens \u2014 Your World, finally visible.\""
+        "\"There are eight. Reach all eight, let the Sound Stone record every melody, and the last door opens. Your World, finally visible.\""
       ]
     },
     "1293": {
@@ -2014,13 +2430,13 @@
     "1300": {
       "pages": [
         "A sign, hand-lettered, nailed where the big ones can read it and won't.",
-        "\"(Do not feed the things in the cage. -- The Boss)\""
+        "\"(Do not feed the things in the cage.. The Boss)\""
       ]
     },
     "1301": {
       "pages": [
         "Another sign, same hand. The kind of rule that appears the instant before you need it.",
-        "\"(In case of danger, evacuate here. -- The Boss)\""
+        "\"(In case of danger, evacuate here.. The Boss)\""
       ]
     },
     "1312": {
@@ -2076,422 +2492,6 @@
     "1522": {
       "pages": [
         "\"Something's inside.\" Handed over like a receipt for a thing he never bought."
-      ]
-    },
-    "839": {
-      "pages": [
-        "So you're a fan of these five. Sweet. Let me file that.",
-        "Here's the read: this band owes me a million. I hold the paper.",
-        "Their masters, their name, their whole fit? Signed over to me. Provenance says so.",
-        "Cry about it to the record. The record says I'm the claimant."
-      ]
-    },
-    "842": {
-      "pages": [
-        "Oh. You're a little kid with a phone out.",
-        "No signatures. Every signed thing leaks, and then it's the source, not me.",
-        "I'm too busy getting witnessed to be witnessed by you."
-      ]
-    },
-    "843": {
-      "pages": [
-        "Filed under again. The venue owner doxxed the whole set out from under us.",
-        "We're stuck in here on a phony contract. Somebody else holds our provenance now."
-      ]
-    },
-    "844": {
-      "pages": [
-        "We know how to make the sound. We never learned to hold the rights.",
-        "Do-wap, do do wop. That part's still ours. For now."
-      ]
-    },
-    "845": {
-      "pages": [
-        "We owe you so much it's on the record somewhere.",
-        "Sorry. Truly. You're a better claimant than the one we've got."
-      ]
-    },
-    "846": {
-      "pages": [
-        "We're so helpless. Every version of us is somebody else's file.",
-        "Really helpless, and unprovenanced... hyuk hyuk hyuk."
-      ]
-    },
-    "847": {
-      "pages": [
-        "You want the read on Monotoli? You'll need us to get you filed in.",
-        "Don't ask how I know. Call it a hunch that leaked."
-      ]
-    },
-    "848": {
-      "pages": [
-        "Want a ticket to the set? Scanned at the kiosk, witnessed at the door.",
-        "Yes / No"
-      ]
-    },
-    "849": {
-      "pages": [
-        "..."
-      ]
-    },
-    "850": {
-      "pages": [
-        "Thanks. You're on the record now.",
-        "Hurry, claimant. The set starts any second and the unlisted cut waits for no one."
-      ]
-    },
-    "851": {
-      "pages": [
-        "I heard the source herself showed up at the set. In person. Unmistakable.",
-        "I was in the bathroom. Missed the one moment that couldn't be bootlegged.",
-        "I'll hate bathrooms for the rest of my documented life."
-      ]
-    },
-    "852": {
-      "pages": [
-        "Wait, the five don't play here anymore...?",
-        "I should dump this unwitnessed excuse of a man and go chase their leaked cut full-time."
-      ]
-    },
-    "906": {
-      "pages": [
-        "The Museum of Fakes doesn't own a single original. Everything on these walls is a replica.",
-        "Everyone knows that going in. It's on the wall-text, technically.",
-        "If you came looking for the source, you came to the wrong kiosk. The source doesn't scan here."
-      ]
-    },
-    "907": {
-      "pages": [
-        "Real ones don't scan. The replicas do. Make of that what you will."
-      ]
-    },
-    "908": {
-      "pages": [
-        "I'm glad someone got witnessed today. Lately the room stays empty.",
-        "...I'm the curator. Or the claimant to the title, anyway.",
-        "Nobody's disputed my provenance yet, so I keep the plaques honest and the fakes labeled as fakes."
-      ]
-    },
-    "909": {
-      "pages": [
-        "Every piece in here is filed under 'attributed to.' We stopped saying 'by' a long time ago."
-      ]
-    },
-    "910": {
-      "pages": [
-        "I think about how many originals got lost before anyone bothered to record them.",
-        "Would've loved to witness one un-leaked, un-copied, before it went to replica like the rest."
-      ]
-    },
-    "911": {
-      "pages": [
-        "Massive!... Not you. I mean the fake. The replica's honestly bigger than the thing it copies.",
-        "That's the joke of the place: the fit outgrows the source."
-      ]
-    },
-    "912": {
-      "pages": [
-        "This place should sell merch off the exhibits. Slap a fake on a fit and sell the fit.",
-        "At least then the replica would admit what it is."
-      ]
-    },
-    "913": {
-      "pages": [
-        "The plaque hedges every claim. 'Believed to be.' 'Possibly.' Nothing here is on the record for real."
-      ]
-    },
-    "920": {
-      "pages": [
-        "Hardware and tools. Everything on this counter has a serial number, a provenance, a paper trail.",
-        "You want the real one or your leaked version? The real one costs more, and it scans."
-      ]
-    },
-    "921": {
-      "pages": [
-        "Tickets for the Chaos Theater? The set's already been bootlegged, but the room hasn't.",
-        "Buy the ticket and you're witnessed in the room. Skip it and you only ever get somebody's leaked cut.",
-        "So. You want to be on the record, or not?"
-      ]
-    },
-    "924": {
-      "pages": [
-        "Everything in here is priced by your fit, and my fit is not reading well today.",
-        "Maybe I go back to my hometown. Nobody kiosk-scans you there. Nobody files what you can't afford."
-      ]
-    },
-    "927": {
-      "pages": [
-        "Mumble, mumble... I'm slammed. Three claimants, two returns, one dispute.",
-        "Don't get yourself filed as loitering, kid. Move along."
-      ]
-    },
-    "928": {
-      "pages": [
-        "So you ditched too, huh. Neither of us is where the record says we should be right now.",
-        "Relax. Nobody's witnessing us in the tools aisle."
-      ]
-    },
-    "929": {
-      "pages": [
-        "When I grow up I wanna write the code that decides which fits get flagged and which get let through.",
-        "You got any connections at the shop that runs the kiosks? A name that's already on the record?"
-      ]
-    },
-    "930": {
-      "pages": [
-        "I'm saving up to disappear to Solana Beach and go completely un-witnessed for a week.",
-        "No kiosk, no scans, no leaked version of me. Just sand that doesn't file a report."
-      ]
-    },
-    "931": {
-      "pages": [
-        "Front counter. I can put your fit on the record or take it off the record.",
-        "Buying, or selling? Either way you leave a trail."
-      ]
-    },
-    "935": {
-      "pages": [
-        "Half this floor is the same three items in a different colorway. Nobody's checking the provenance.",
-        "You buy the fit, the fit buys you back. That's retail."
-      ]
-    },
-    "937": {
-      "pages": [
-        "Please insert your card. The kiosk needs to confirm the claimant before it releases the funds.",
-        "No card, no read. No read, no record."
-      ]
-    },
-    "939": {
-      "pages": [
-        "Bored kid on the department store floor, waiting to be witnessed by literally anyone.",
-        "Everything up here is expensive and none of it scans as mine yet."
-      ]
-    },
-    "38": {
-      "pages": [
-        "Grill's on, patty's down, no cameras back here. What you eat off this counter never gets witnessed.",
-        "Every burger comes out the same. That's the point. Nothing here is one of one, and nobody's leaking your order."
-      ]
-    },
-    "61": {
-      "pages": [
-        "Welcome to the front desk. Before I file you a room, the kiosk needs your card.",
-        "Insert your claimant card. No card, no record, and no record means no bed."
-      ]
-    },
-    "64": {
-      "pages": [
-        "Your stay's on the record now. Checkout's whenever, but the log keeps the timestamp forever.",
-        "Sleep sound. Nobody leaks what happens between check-in and check-out. Not on this desk, anyway."
-      ]
-    },
-    "854": {
-      "pages": [
-        "Bread in this town has a plain, unwitnessed flavor. Nobody ever bothered to file it as anything.",
-        "Between us? I'm the one who owns this bakery. Every loaf traces back to me. That's the whole provenance."
-      ]
-    },
-    "914": {
-      "pages": [
-        "This is the care desk. We patch you up quiet and we don't leak your chart.",
-        "Rest here a moment. Whatever's wrong stays off the record until you're read clean."
-      ]
-    },
-    "303": {
-      "pages": [
-        "Welcome to the record. Want me to read you this place, or would you rather stay unfiled?",
-        "It's all here. Who got witnessed, who got the soft ban. Just say the word."
-      ]
-    },
-    "308": {
-      "pages": [
-        "Head east and you'll walk right into trouble.",
-        "Two deactivated places are waiting out there. Neither of them stays quiet for long."
-      ]
-    },
-    "313": {
-      "pages": [
-        "Hey. Why don't you buy the one true measuring stick? Rates any fit, any claimant.",
-        "Provenance guaranteed. Mostly. You in?"
-      ]
-    },
-    "319": {
-      "pages": [
-        "Looking for that so-called genius? The one everyone keeps witnessing?",
-        "As the real source around here, I'll tell you: he's out at the kiosks, looking for you."
-      ]
-    },
-    "324": {
-      "pages": [
-        "Sure, the fixer isn't a good person. He leaks people for a living.",
-        "But he's warm about it. Warmest doxx you'll ever get."
-      ]
-    },
-    "328": {
-      "pages": [
-        "That's right. We're the witnessed act. Everyone's got our fit, nobody's got our money.",
-        "And now they've got us. Held under a soft ban until we play their room."
-      ]
-    },
-    "333": {
-      "pages": [
-        "That mooch keeps asking me for something to eat.",
-        "He's the so-called source of new ideas. Let him invent his own dinner for once."
-      ]
-    },
-    "340": {
-      "pages": [
-        "Haven't I read your fit somewhere? At one of the witnessed shows?",
-        "So you're in the record too. Same scene, same soft ban."
-      ]
-    },
-    "356": {
-      "pages": [
-        "(The fever town is ahead. Everyone there posts the same thing.)"
-      ]
-    },
-    "369": {
-      "pages": [
-        "(Biggest kiosk row you'll ever get filed at. Every fit priced, every claimant witnessed.)"
-      ]
-    },
-    "432": {
-      "pages": [
-        "(Quiet valley ahead. The only way through is the cave. Nobody logs who goes in.)"
-      ]
-    },
-    "934": {
-      "pages": [
-        "(A staffer priced you by your fit the second you walked the aisle, then went back to restocking.)"
-      ]
-    },
-    "304": {
-      "pages": [
-        "The old market feels unsafe. Wallets thin, claimants thinner.",
-        "But the fits down there are witnessed. Genuinely archive-grade. Worth the risk to your record."
-      ]
-    },
-    "332": {
-      "pages": [
-        "I'm obsessed with one kid inventor. No, not the airheaded apple claimant.",
-        "The other one. Incredible. Fully witnessed. Never leaks his sources."
-      ]
-    },
-    "339": {
-      "pages": [
-        "Thinking of catching the bus to the soft-banned town.",
-        "They say deactivated things line the road. Wonder if the bus even gets filed as arriving."
-      ]
-    },
-    "343": {
-      "pages": [
-        "(Not an enemy. Just a friendly mole, off every list.",
-        "I'll teach you to read friend from foe, before the record does it for you.)"
-      ]
-    },
-    "361": {
-      "pages": [
-        "(Home of the apple claimant. Inventor. Fully witnessed.)"
-      ]
-    },
-    "373": {
-      "pages": [
-        "(The Deleted Five's tour bus. Still posting from a town that deactivated it.)"
-      ]
-    },
-    "925": {
-      "pages": [
-        "I've been re-pricing shelves since open. My own fit got marked down twice.",
-        "The store keeps folding back on itself. You buy, you get read, you keep walking. There's no register at the exit."
-      ]
-    },
-    "305": {
-      "pages": [
-        "I heard a claimant got scrubbed off the record. Deactivated against her will.",
-        "Kidnapped, they said. But you can't kidnap someone who was already deleted."
-      ]
-    },
-    "309": {
-      "pages": [
-        "Over in that Village, they've all converted to one feed. Fanatical about it.",
-        "Might be a fever. Might just be what happens when everyone follows the same source."
-      ]
-    },
-    "314": {
-      "pages": [
-        "Fresh accounts! Never posted, never leaked. Nutritious and totally unwitnessed.",
-        "Please, take one before it gets flagged. Please?"
-      ]
-    },
-    "320": {
-      "pages": [
-        "We're rolling out to Dead Letter. The bus is loud enough that the deactivated can't get a read on us.",
-        "Want a seat? The ghosts won't file you if they can't hear you."
-      ]
-    },
-    "325": {
-      "pages": [
-        "The old boss always watched the kiosks here. Kept the record honest.",
-        "That's why no crooked mod ever shook us down. He witnessed everything first."
-      ]
-    },
-    "329": {
-      "pages": [
-        "We pull decent numbers, sure. But the claimant at the house by the preschool?",
-        "She's the whole town's read right now. Every feed points at her."
-      ]
-    },
-    "306": {
-      "pages": [
-        "Some account was tailing the claimant. Following. Screenshotting.",
-        "No fit, no face you could file. It just wanted the read. Gave me chills."
-      ]
-    },
-    "310": {
-      "pages": [
-        "(There was a snatch. A whole self, dragged off the record.)",
-        "(Believe me. I'm deactivated, sure. Deleted, sure. But I still saw it. Still posting. Woof.)"
-      ]
-    },
-    "315": {
-      "pages": [
-        "The one who runs this soft-banned block is Everdred.",
-        "Ties to every leak and every disappeared handle around here. He knows who got filed."
-      ]
-    },
-    "321": {
-      "pages": [
-        "...re\u2014reactivating... no. Corrupted. My provenance won't load.",
-        "I was somebody's claimant once. Now I'm just the error where a name used to sit."
-      ]
-    },
-    "326": {
-      "pages": [
-        "I'm holding a spot in this queue. Waiting to get verified for today.",
-        "Might not make the list. They only witness so many of us before the ban resets."
-      ]
-    },
-    "330": {
-      "pages": [
-        "Just a hunch. The deleted ones in that tunnel hate anything upbeat.",
-        "Last time I passed through I was broadcasting something bright. They filed me hard for it."
-      ]
-    },
-    "335": {
-      "pages": [
-        "I'm a burner alt. My source, Apple Kid, has been waiting on you.",
-        "We nodded off holding the record open. Everything down here runs on tired."
-      ]
-    },
-    "341": {
-      "pages": [
-        "That claimant isn't here. She deactivated without warning.",
-        "Just... unlisted herself and walked. No provenance, no forwarding. Gone from the record."
-      ]
-    },
-    "367": {
-      "pages": [
-        "50 a night to be filed under one occupant. Rest here. Nobody reads you while you're down."
       ]
     }
   },

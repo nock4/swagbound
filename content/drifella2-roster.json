@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.drifella2-roster.v1",
-  "comment": "95 Drifella2 (LSW) creatures from the 2026-06-21 asset-lab overnight run. REVIEW-ONLY (approvedForOverworld=false, runtimePromotion off) — NOT yet wired to game entities. Each creature keeps its battle sprite paired with its overworld sprite (ow-001-nearest canonical; overworldAlt=ow-002). Paths are relative to the swagbound-new repo. To ship: assign each creature an `entity` (enemyId for battle via byEnemyId, and/or spriteGroup/npcId for overworld via bySpriteGroup/byNpcId), copy the files into coilsnake assets, and add the override entries.",
+  "comment": "95 Drifella2 (LSW) creatures from the 2026-06-21 asset-lab overnight run. REVIEW-ONLY (approvedForOverworld=false, runtimePromotion off). NOT yet wired to game entities. Each creature keeps its battle sprite paired with its overworld sprite (ow-001-nearest canonical; overworldAlt=ow-002). Paths are relative to the swagbound-new repo. To ship: assign each creature an `entity` (enemyId for battle via byEnemyId, and/or spriteGroup/npcId for overworld via bySpriteGroup/byNpcId), copy the files into coilsnake assets, and add the override entries.",
   "sourceRepo": "/Users/nickgeorge-studio/Projects/swagbound-new",
   "sourceRun": "asset-lab/overnight/drifella2-100-2026-06-21",
   "count": 95,
