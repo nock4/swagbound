@@ -5,6 +5,7 @@ import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsce
 import { BossPlacementEditor, isBossEditEnabled, type BossEditorEntry, type BossFacing } from "./bossPlacementEditor";
 import { CollisionOverrideEditor, isCollisionEditEnabled } from "./collisionOverrideEditor";
 import { TeleportMenu, type TeleportTown } from "./teleportMenu";
+import { QuestJournal, type Quest } from "./questJournal";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -494,6 +495,41 @@ const TELEPORT_TOWNS: readonly TeleportTown[] = [
 ];
 const TELEPORT_VISIT_RADIUS_PX = 1200;
 const TELEPORT_SPIN_MS = 780;
+// Sidequest journal (press J): quests are flag checklists over the existing
+// story flags, so progress is always live.
+const QUESTS: readonly Quest[] = [
+  {
+    id: "act1", name: "The Milady Read",
+    blurb: "Follow the leaked card up-line and out of Morningside.",
+    steps: [
+      { text: "Beat the card clique at the arcade", flag: "signal:clique_cleared" },
+      { text: "Open the road north (Returnless King)", flag: "signal:route_open" },
+      { text: "Clear the first threshold (Malady)", flag: "signal:threshold_cleared" },
+      { text: "Refuse processing; leave Morningside", flag: "act1:complete" }
+    ],
+    reward: "Act 1 complete"
+  },
+  {
+    id: "arena", name: "Metal Gauntlet",
+    blurb: "Win The Venue's three-bracket exhibition.",
+    steps: [
+      { text: "Bracket 1: Frankystein Mark II", flag: "arena:won:1" },
+      { text: "Bracket 2: Tough Guy", flag: "arena:won:2" },
+      { text: "Final: Soul Consuming Flame", flag: "arena:champion" }
+    ],
+    reward: "Champion's purse (Backstage pass)"
+  },
+  {
+    id: "raid", name: "Faces of Morningside",
+    blurb: "Drive the Milady swarm out of the occupied town.",
+    steps: [
+      { text: "Clear swarm cell 1", flag: "raid:cell:1" },
+      { text: "Clear swarm cell 2", flag: "raid:cell:2" },
+      { text: "Break the occupation", flag: "raid:morningside:cleared" }
+    ],
+    reward: "Reclaimed cache (Rock Candy)"
+  }
+];
 const OVERWORLD_AMBUSHER_CHANCE = 0.35;
 const OVERWORLD_AMBUSH_SEARCH_CELLS = 9;
 const OVERWORLD_AMBUSH_TRIGGER_PX = 64;
@@ -647,6 +683,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private collisionEditor?: CollisionOverrideEditor;
   private bikeActive = false;
   private teleportMenu?: TeleportMenu;
+  private questJournal?: QuestJournal;
   private readonly teleportVisited = new Set<string>();
   private teleportSpinUntilMs = 0;
   private lastAutosaveTownId: string | undefined;
@@ -885,6 +922,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.editorBaseSolidRows = undefined;
       this.teleportMenu?.destroy();
       this.teleportMenu = undefined;
+      this.questJournal?.destroy();
+      this.questJournal = undefined;
     });
 
     this.cursors = this.input.keyboard?.createCursorKeys();
@@ -919,6 +958,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       canOpen: () => this.isPlayerControllable() && !this.bikeActive,
       allTowns: () => [...TELEPORT_TOWNS],
       playerWorldPos: () => ({ x: this.playerState.x, y: this.playerState.y })
+    });
+
+    // Sidequest journal (J): a live view over the story flags.
+    this.questJournal = new QuestJournal({
+      quests: () => [...QUESTS],
+      hasFlag: (flag) => this.gameFlags.has(flag),
+      canOpen: () => this.isPlayerControllable() && !this.bikeActive
     });
     this.updateTeleportVisited();
 
