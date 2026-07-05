@@ -916,8 +916,8 @@
       "placement": {
         "kind": "hotel-side",
         "worldPixel": {
-          "x": 2000,
-          "y": 1350
+          "x": 1980,
+          "y": 1348
         },
         "facing": "down"
       },
@@ -1188,8 +1188,8 @@
       "placement": {
         "kind": "east-corner",
         "worldPixel": {
-          "x": 3180,
-          "y": 6452
+          "x": 3148,
+          "y": 6548
         },
         "facing": "left"
       },
@@ -1432,8 +1432,8 @@
       "placement": {
         "kind": "west-block",
         "worldPixel": {
-          "x": 1452,
-          "y": 7092
+          "x": 1436,
+          "y": 7076
         },
         "facing": "right"
       },
@@ -1554,8 +1554,8 @@
       "placement": {
         "kind": "east-block",
         "worldPixel": {
-          "x": 2988,
-          "y": 7028
+          "x": 2996,
+          "y": 7044
         },
         "facing": "up"
       },
@@ -1676,8 +1676,8 @@
       "placement": {
         "kind": "south-road",
         "worldPixel": {
-          "x": 2316,
-          "y": 7220
+          "x": 2324,
+          "y": 7212
         },
         "facing": "up"
       },
@@ -1924,8 +1924,8 @@
       "placement": {
         "kind": "behind-building",
         "worldPixel": {
-          "x": 3276,
-          "y": 6420
+          "x": 3340,
+          "y": 6708
         },
         "facing": "left"
       },
@@ -2786,8 +2786,8 @@
       "placement": {
         "kind": "hidden-nook",
         "worldPixel": {
-          "x": 2768,
-          "y": 7312
+          "x": 2788,
+          "y": 7340
         },
         "facing": "left"
       },
@@ -2912,8 +2912,8 @@
       "placement": {
         "kind": "hidden-nook",
         "worldPixel": {
-          "x": 3328,
-          "y": 7312
+          "x": 3316,
+          "y": 7332
         },
         "facing": "right"
       },
@@ -3038,8 +3038,8 @@
       "placement": {
         "kind": "hidden-nook",
         "worldPixel": {
-          "x": 3600,
-          "y": 7312
+          "x": 3596,
+          "y": 7332
         },
         "facing": "up"
       },
@@ -3290,8 +3290,8 @@
       "placement": {
         "kind": "returned-mail-dock",
         "worldPixel": {
-          "x": 8056,
-          "y": 8912
+          "x": 8076,
+          "y": 9124
         },
         "facing": "down"
       },
@@ -3415,8 +3415,8 @@
       "placement": {
         "kind": "toe-tag-alley",
         "worldPixel": {
-          "x": 4400,
-          "y": 9672
+          "x": 4268,
+          "y": 9628
         },
         "facing": "left"
       },
@@ -3665,8 +3665,8 @@
       "placement": {
         "kind": "fog-auditors-booth",
         "worldPixel": {
-          "x": 4888,
-          "y": 8392
+          "x": 4900,
+          "y": 8412
         },
         "facing": "up"
       },
@@ -3790,8 +3790,8 @@
       "placement": {
         "kind": "undelivered-choir-loft",
         "worldPixel": {
-          "x": 7000,
-          "y": 9824
+          "x": 6828,
+          "y": 9964
         },
         "facing": "down"
       },
@@ -3915,8 +3915,8 @@
       "placement": {
         "kind": "behind-the-dead-drop-crates",
         "worldPixel": {
-          "x": 5408,
-          "y": 9672
+          "x": 5420,
+          "y": 9692
         },
         "facing": "right"
       },
@@ -4040,8 +4040,8 @@
       "placement": {
         "kind": "sunken-postmark-vault",
         "worldPixel": {
-          "x": 6936,
-          "y": 8312
+          "x": 6948,
+          "y": 8332
         },
         "facing": "left"
       },
@@ -4165,8 +4165,8 @@
       "placement": {
         "kind": "sorting-morgue-drawer",
         "worldPixel": {
-          "x": 8128,
-          "y": 9696
+          "x": 8052,
+          "y": 9452
         },
         "facing": "up"
       },
@@ -4290,8 +4290,8 @@
       "placement": {
         "kind": "lost-provenance-confessional",
         "worldPixel": {
-          "x": 7184,
-          "y": 9064
+          "x": 7220,
+          "y": 9084
         },
         "facing": "down"
       },
@@ -4415,8 +4415,8 @@
       "placement": {
         "kind": "final-return-to-sender-gate",
         "worldPixel": {
-          "x": 6172,
-          "y": 9800
+          "x": 6340,
+          "y": 9772
         },
         "facing": "right"
       },
@@ -4540,8 +4540,8 @@
       "placement": {
         "kind": "storefront-window",
         "worldPixel": {
-          "x": 3984,
-          "y": 5976
+          "x": 4116,
+          "y": 6284
         },
         "facing": "down"
       },
@@ -4658,8 +4658,8 @@
       "placement": {
         "kind": "atrium-fountain",
         "worldPixel": {
-          "x": 2072,
-          "y": 3232
+          "x": 2068,
+          "y": 3220
         },
         "facing": "down"
       },
@@ -4783,8 +4783,8 @@
       "placement": {
         "kind": "escalator-landing",
         "worldPixel": {
-          "x": 6104,
-          "y": 3560
+          "x": 6236,
+          "y": 3716
         },
         "facing": "left"
       },
@@ -4901,8 +4901,8 @@
       "placement": {
         "kind": "food-court-counter",
         "worldPixel": {
-          "x": 6000,
-          "y": 6672
+          "x": 5988,
+          "y": 6500
         },
         "facing": "up"
       },
@@ -5019,8 +5019,8 @@
       "placement": {
         "kind": "directory-kiosk",
         "worldPixel": {
-          "x": 4104,
-          "y": 3304
+          "x": 4060,
+          "y": 3460
         },
         "facing": "down"
       },
@@ -5137,8 +5137,8 @@
       "placement": {
         "kind": "muzak-booth",
         "worldPixel": {
-          "x": 2080,
-          "y": 5512
+          "x": 2132,
+          "y": 5524
         },
         "facing": "right"
       },
@@ -5616,8 +5616,8 @@
       "placement": {
         "kind": "layaway-vault",
         "worldPixel": {
-          "x": 4968,
-          "y": 4128
+          "x": 4692,
+          "y": 4156
         },
         "facing": "down"
       },
@@ -5852,8 +5852,8 @@
       "placement": {
         "kind": "lost-and-found",
         "worldPixel": {
-          "x": 4152,
-          "y": 4952
+          "x": 4052,
+          "y": 5172
         },
         "facing": "down"
       },
@@ -6345,8 +6345,8 @@
       "placement": {
         "kind": "cabana",
         "worldPixel": {
-          "x": 4104,
-          "y": 3304
+          "x": 4004,
+          "y": 3460
         },
         "facing": "right"
       },
@@ -6470,8 +6470,8 @@
       "placement": {
         "kind": "boardwalk",
         "worldPixel": {
-          "x": 4632,
-          "y": 2752
+          "x": 4644,
+          "y": 2772
         },
         "facing": "down"
       },
@@ -6595,8 +6595,8 @@
       "placement": {
         "kind": "cabana",
         "worldPixel": {
-          "x": 6816,
-          "y": 3288
+          "x": 6836,
+          "y": 3020
         },
         "facing": "up"
       },
@@ -6845,8 +6845,8 @@
       "placement": {
         "kind": "tide-pool-locker",
         "worldPixel": {
-          "x": 6808,
-          "y": 2840
+          "x": 6780,
+          "y": 2836
         },
         "facing": "down"
       },
@@ -7220,8 +7220,8 @@
       "placement": {
         "kind": "printing-hut",
         "worldPixel": {
-          "x": 7824,
-          "y": 704
+          "x": 7796,
+          "y": 732
         },
         "facing": "down"
       },
@@ -7345,8 +7345,8 @@
       "placement": {
         "kind": "notary-boing-stump",
         "worldPixel": {
-          "x": 6768,
-          "y": 4384
+          "x": 6788,
+          "y": 4396
         },
         "facing": "up"
       },
@@ -7470,8 +7470,8 @@
       "placement": {
         "kind": "cartographer-porch",
         "worldPixel": {
-          "x": 4456,
-          "y": 448
+          "x": 4444,
+          "y": 420
         },
         "facing": "down"
       },
@@ -7595,8 +7595,8 @@
       "placement": {
         "kind": "lullaby-archive",
         "worldPixel": {
-          "x": 6016,
-          "y": 2144
+          "x": 6188,
+          "y": 2164
         },
         "facing": "down"
       },
@@ -7720,8 +7720,8 @@
       "placement": {
         "kind": "whittler-workbench",
         "worldPixel": {
-          "x": 8048,
-          "y": 2848
+          "x": 8020,
+          "y": 2860
         },
         "facing": "left"
       },
@@ -7845,8 +7845,8 @@
       "placement": {
         "kind": "village-gate",
         "worldPixel": {
-          "x": 6040,
-          "y": 296
+          "x": 6188,
+          "y": 172
         },
         "facing": "down"
       },
@@ -7970,8 +7970,8 @@
       "placement": {
         "kind": "dye-pots-corner",
         "worldPixel": {
-          "x": 4504,
-          "y": 2224
+          "x": 4524,
+          "y": 2228
         },
         "facing": "right"
       },
@@ -8095,8 +8095,8 @@
       "placement": {
         "kind": "seed-keeper-plot",
         "worldPixel": {
-          "x": 8144,
-          "y": 4152
+          "x": 8076,
+          "y": 4172
         },
         "facing": "up"
       },
@@ -8220,8 +8220,8 @@
       "placement": {
         "kind": "stitcher-stoop",
         "worldPixel": {
-          "x": 7328,
-          "y": 1888
+          "x": 7516,
+          "y": 1948
         },
         "facing": "down"
       },
@@ -8470,8 +8470,8 @@
       "placement": {
         "kind": "bell-tower-perch",
         "worldPixel": {
-          "x": 6984,
-          "y": 136
+          "x": 6876,
+          "y": 204
         },
         "facing": "down"
       },
@@ -8720,8 +8720,8 @@
       "placement": {
         "kind": "hollow-under-roots",
         "worldPixel": {
-          "x": 6320,
-          "y": 3560
+          "x": 6340,
+          "y": 3756
         },
         "facing": "up"
       },
@@ -8845,8 +8845,8 @@
       "placement": {
         "kind": "behind-the-waterfall",
         "worldPixel": {
-          "x": 6960,
-          "y": 1112
+          "x": 6868,
+          "y": 1164
         },
         "facing": "down"
       },
@@ -8970,8 +8970,8 @@
       "placement": {
         "kind": "attic-crawlspace",
         "worldPixel": {
-          "x": 8136,
-          "y": 1496
+          "x": 8076,
+          "y": 1516
         },
         "facing": "down"
       },
@@ -9095,8 +9095,8 @@
       "placement": {
         "kind": "mushroom-ring-hollow",
         "worldPixel": {
-          "x": 5240,
-          "y": 176
+          "x": 5132,
+          "y": 204
         },
         "facing": "down"
       },
@@ -9220,8 +9220,8 @@
       "placement": {
         "kind": "chimney-cubby",
         "worldPixel": {
-          "x": 5304,
-          "y": 2104
+          "x": 5228,
+          "y": 2076
         },
         "facing": "down"
       },
@@ -9470,8 +9470,8 @@
       "placement": {
         "kind": "condemned-lot",
         "worldPixel": {
-          "x": 7504,
-          "y": 7504
+          "x": 7220,
+          "y": 7508
         },
         "facing": "down"
       },
@@ -9727,8 +9727,8 @@
       "placement": {
         "kind": "tucked-away",
         "worldPixel": {
-          "x": 6272,
-          "y": 10176
+          "x": 6316,
+          "y": 9916
         },
         "facing": "up"
       },
@@ -9852,8 +9852,8 @@
       "placement": {
         "kind": "tucked-away",
         "worldPixel": {
-          "x": 4856,
-          "y": 7432
+          "x": 4844,
+          "y": 7468
         },
         "facing": "right"
       },
@@ -9977,8 +9977,8 @@
       "placement": {
         "kind": "tucked-away",
         "worldPixel": {
-          "x": 8096,
-          "y": 5240
+          "x": 8076,
+          "y": 5252
         },
         "facing": "left"
       },
@@ -10227,8 +10227,8 @@
       "placement": {
         "kind": "tucked-away",
         "worldPixel": {
-          "x": 6256,
-          "y": 6360
+          "x": 6460,
+          "y": 6172
         },
         "facing": "down"
       },
@@ -10352,8 +10352,8 @@
       "placement": {
         "kind": "memory-furniture-parlor",
         "worldPixel": {
-          "x": 2008,
-          "y": 96
+          "x": 2036,
+          "y": 132
         },
         "facing": "down"
       },
@@ -10852,8 +10852,8 @@
       "placement": {
         "kind": "door-that-isnt-there",
         "worldPixel": {
-          "x": 4168,
-          "y": 88
+          "x": 4188,
+          "y": 116
         },
         "facing": "down"
       },
@@ -10977,8 +10977,8 @@
       "placement": {
         "kind": "private-record-confessional",
         "worldPixel": {
-          "x": 80,
-          "y": 400
+          "x": 116,
+          "y": 404
         },
         "facing": "right"
       },
@@ -11102,8 +11102,8 @@
       "placement": {
         "kind": "unlit alcove behind the ledger",
         "worldPixel": {
-          "x": 1672,
-          "y": 8808
+          "x": 1492,
+          "y": 8708
         },
         "facing": "down"
       },
@@ -11220,8 +11220,8 @@
       "placement": {
         "kind": "hollow under the last stair",
         "worldPixel": {
-          "x": 5264,
-          "y": 10176
+          "x": 5236,
+          "y": 10028
         },
         "facing": "up"
       },
