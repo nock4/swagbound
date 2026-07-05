@@ -901,6 +901,30 @@
     },
     "176": {
       "name": "Swag Cruiser"
+    },
+    "101": {
+      "name": "Rock Candy",
+      "effect": {
+        "kind": "permStat",
+        "stat": "guts",
+        "amount": 1
+      }
+    },
+    "228": {
+      "name": "Lucky Sandwich",
+      "effect": {
+        "kind": "permStat",
+        "stat": "luck",
+        "amount": 2
+      }
+    },
+    "231": {
+      "name": "Lucky Sandwich",
+      "effect": {
+        "kind": "permStat",
+        "stat": "luck",
+        "amount": 2
+      }
     }
   }
 }
