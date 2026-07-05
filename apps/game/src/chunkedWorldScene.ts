@@ -916,7 +916,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.teleportMenu = new TeleportMenu({
       visitedTowns: () => TELEPORT_TOWNS.filter((t) => this.teleportVisited.has(t.id)),
       teleportTo: (town) => this.beginTeleport(town),
-      canOpen: () => this.isPlayerControllable() && !this.bikeActive
+      canOpen: () => this.isPlayerControllable() && !this.bikeActive,
+      allTowns: () => [...TELEPORT_TOWNS],
+      playerWorldPos: () => ({ x: this.playerState.x, y: this.playerState.y })
     });
     this.updateTeleportVisited();
 
