@@ -7210,6 +7210,4596 @@
           "\"Catalogued once. Enjoy reading the shelf.\""
         ]
       }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-001",
+      "drifellaId": "drifella2-3463",
+      "npcId": 100361,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "printing-hut",
+        "worldPixel": {
+          "x": 7824,
+          "y": 704
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "The first-press presser, who insists every real thing was squeezed by hand at least once.",
+        "tic": "\"First press, boing, only press.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3463.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella cranks a little hand-press and out slides a warm, faintly inky card.",
+        "\"Source Check! The swarm's copying our first press. Prove you know the real thing, boing.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The very first swag was pressed here by hand, before anyone thought to copy it.",
+            "answer": true,
+            "failLine": "\"By hand! Boing. Machines came sniffing later.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What makes a first-press card the real thing?",
+            "options": [
+              "It was made once, here, by hand",
+              "It has the highest print run",
+              "It carries an official mint stamp",
+              "It shipped in the shiniest sleeve"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Made once, boing. A stamp is just a rumor with ink.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Little Swag World is where the source-canon Drifellas actually live.",
+            "answer": true,
+            "failLine": "\"Our turf! We keep the master copy warm.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Which of these is TRUE of handmade work versus mass production?",
+            "options": [
+              "No two handmade pieces are exactly alike",
+              "Handmade means it was never touched by a person",
+              "Mass production always costs more per piece",
+              "Handmade pieces must be identical to sell"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Never alike, boing. That wobble IS the proof.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "In printmaking, the very first impression pulled off a plate is called the 'first press' or first proof.",
+            "answer": true,
+            "failLine": "\"The proof! The realest impression, still damp.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A copy of a copy of a copy is, in the end—",
+            "options": [
+              "A drift away from the source",
+              "Somehow more official",
+              "The certified true original",
+              "Worth more each time"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"A drift! You can smell the source fading. Boing.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8903",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Pressed clean! Boing.\"",
+          "\"That's the real ink talking.\"",
+          "\"First-press accurate.\""
+        ],
+        "cleared": [
+          "\"Take it. Still warm off the plate, boing.\"",
+          "\"One press, one card, one you. Sourced.\""
+        ],
+        "failed": [
+          "\"Smudged. Walk it off and re-press, boing.\"",
+          "\"The plate hiccupped. Come back and pull a clean one.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the first run. Boing.\"",
+          "\"Pressed you once. Ink's dry now.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-002",
+      "drifellaId": "drifella2-3514",
+      "npcId": 100362,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "notary-boing-stump",
+        "worldPixel": {
+          "x": 6768,
+          "y": 4384
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A boing-notary who notarizes claims by bouncing on them; a lie doesn't bounce back.",
+        "tic": "\"Boing. That one bounced true.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3514.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella bounces once on a mossy stump and listens for the echo.",
+        "\"Source Check. I notarize by boing. Fibs land flat. Ready to bounce?\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "A true claim bounces; a hollow rumor lands flat and dead.",
+            "answer": true,
+            "failLine": "\"Flat! No boing. That's how I know.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "How does a boing-notary tell the master copy from a leak?",
+            "options": [
+              "The real one bounces; the leak thuds",
+              "The leak is always heavier",
+              "By checking the official registry number",
+              "The real one is always louder"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Bounce, not paperwork! Boing beats a registry.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The swarm wants to rent out and leak the master copy that lives here.",
+            "answer": true,
+            "failLine": "\"They'd rent the source itself! We won't let it flatten.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yayoi Kusama is famous worldwide for covering her art in—",
+            "options": [
+              "Polka dots",
+              "Straight silver lines",
+              "Official seals",
+              "Empty white squares"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Dots! Endless dots. They practically boing.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Kusama's 'Infinity Rooms' surround you with dots and mirrors on every side.",
+            "answer": true,
+            "failLine": "\"Mirrors and dots forever. Dizzy in the best way, boing.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A rumor with no source is like a bounce with—",
+            "options": [
+              "No ground to land on",
+              "Too much spring",
+              "A notary's seal",
+              "A soft landing"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"No ground! It just falls. Boing? No boing.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10800",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Boing. Bounced true.\"",
+          "\"Heard the echo. Notarized.\"",
+          "\"That one sprang right back.\""
+        ],
+        "cleared": [
+          "\"Notarized by boing. The card's yours.\"",
+          "\"Sourced and springy. Bounce it home.\""
+        ],
+        "failed": [
+          "\"Landed flat. Walk a lap and bounce back.\"",
+          "\"No echo. Come re-bounce when you're rested.\""
+        ],
+        "alreadyCleared": [
+          "\"Already notarized you. Boing on record.\"",
+          "\"Your bounce is in the ledger. Rest it.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-003",
+      "drifellaId": "drifella2-3555",
+      "npcId": 100363,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "cartographer-porch",
+        "worldPixel": {
+          "x": 4456,
+          "y": 448
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A hand-drawn cartographer who maps the origin by memory and refuses to print two the same.",
+        "tic": "\"Every map's a first draft, zoom.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3555.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella smooths a crinkled hand-drawn map of Little Swag World, ink still wet in one corner.",
+        "\"Source Check. I map the origin by hand, zoom. No two alike, so no two leak clean.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "This cartographer draws every map of the origin by hand, never printing two the same.",
+            "answer": true,
+            "failLine": "\"By hand, zoom! A printed copy is already a leak.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Why won't the cartographer make two identical maps?",
+            "options": [
+              "A hand-drawn original can't be perfectly duplicated",
+              "The printer here is broken",
+              "The official archive forbids duplicates",
+              "Two maps would confuse the swarm"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Can't be duplicated, zoom! That's the whole safeguard.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Little Swag World is the innocent home village where the original swag comes from.",
+            "answer": true,
+            "failLine": "\"Home! The source itself. We just keep the map warm, zoom.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Henry Darger was a reclusive artist who is best known for—",
+            "options": [
+              "A vast hand-made illustrated epic no one saw until he died",
+              "Giant public bronze statues",
+              "Official government murals",
+              "Mass-produced greeting cards"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"A private epic, zoom! Hand-drawn, hidden, entirely his own.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "'Outsider art' usually means self-taught artists working outside the official art world.",
+            "answer": true,
+            "failLine": "\"Outside the gallery, inside the heart. Zoom.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A map with no territory is like a claim with—",
+            "options": [
+              "No source underneath it",
+              "Too many roads",
+              "An official border stamp",
+              "A very neat legend"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"No source! Just lines pretending, zoom.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4799",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Charted true, zoom.\"",
+          "\"You read the origin right.\"",
+          "\"Ink approves. Zoom.\""
+        ],
+        "cleared": [
+          "\"Here, hand-drawn just for you. Zoom.\"",
+          "\"One-of-one map, one-of-one card. Sourced.\""
+        ],
+        "failed": [
+          "\"Off the edge, zoom. Walk back on the trail.\"",
+          "\"The map frowned. Redraw your route and return.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already on the map, zoom.\"",
+          "\"Charted you once. Ink's set.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-004",
+      "drifellaId": "drifella2-3630",
+      "npcId": 100364,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "lullaby-archive",
+        "worldPixel": {
+          "x": 6016,
+          "y": 2144
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A lullaby archivist who files the origin as a hummed melody, since a song can't be minted.",
+        "tic": "\"Hum it back, or it's not sourced.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3630.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella hums a small looping tune and taps it into a shelf of tiny paper reels.",
+        "\"Source Check. I keep the origin as a lullaby. You can't rent a song you can't remember.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "This archivist keeps the origin story as a hummed lullaby so it can't be minted or rented.",
+            "answer": true,
+            "failLine": "\"A song, hummed! No sleeve, no leak. Hush.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Why store the source as a lullaby instead of a printed page?",
+            "options": [
+              "A melody in memory can't be copied and sold like an object",
+              "Songs are always shorter than pages",
+              "The official ledger requires it",
+              "Nobody here can read"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Can't be sold, hush! The tune lives where thieves can't reach.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The source-canon Drifellas are protective of the real thing because it's their home.",
+            "answer": true,
+            "failLine": "\"Ours to guard, hush. We sing it so it stays.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Howard Finster was a preacher who became famous for—",
+            "options": [
+              "Thousands of hand-painted folk artworks made as sermons",
+              "Official state portraits",
+              "Sleek minimalist sculpture",
+              "Factory-printed posters"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Sermons in paint, thousands, hush. Made by his own hand.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Folk art is often made by self-taught people using whatever materials are close at hand.",
+            "answer": true,
+            "failLine": "\"Whatever's near, made with love. That's the real thing, hush.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A copy has the notes but misses the—",
+            "options": [
+              "Warmth of the one who first hummed it",
+              "Correct file format",
+              "Notarized timestamp",
+              "Loudness"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The warmth! Copies are cold, hush.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8890",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"That's the tune. Hush, well done.\"",
+          "\"You hummed it true.\"",
+          "\"Filed, softly.\""
+        ],
+        "cleared": [
+          "\"The card, and the lullaby to go with it. Hush.\"",
+          "\"Sourced in song. Carry the tune home.\""
+        ],
+        "failed": [
+          "\"Off-key, hush. Rest your ears and come back.\"",
+          "\"The melody wandered. Walk it and return in tune.\""
+        ],
+        "alreadyCleared": [
+          "\"You already know the tune. Hush.\"",
+          "\"Sung you into the archive once. Sleep easy.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-005",
+      "drifellaId": "drifella2-3634",
+      "npcId": 100365,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "whittler-workbench",
+        "worldPixel": {
+          "x": 8048,
+          "y": 2848
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A whittler of originals who carves each swag once from a single block and keeps the shavings.",
+        "tic": "\"One block, one cut, zoom-boing.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3634.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella whittles a tiny figure, curls of shaving piling like proof around its feet.",
+        "\"Source Check. I carve originals from one block. Keep the shavings, keep the truth, zoom-boing.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The whittler carves each original from a single block and saves the shavings as proof it was made here.",
+            "answer": true,
+            "failLine": "\"Shavings don't lie, zoom-boing. They fell from the real one.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What proves the whittler's piece is hand-made and not cast?",
+            "options": [
+              "The tool marks and shavings left behind",
+              "A glossy factory finish",
+              "An official product barcode",
+              "That it's perfectly smooth all over"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Tool marks! Zoom-boing. A machine leaves none.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The Drifellas here are the source-canon originals, not swarm derivatives.",
+            "answer": true,
+            "failLine": "\"Originals, carved not copied. Zoom-boing.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Grandma Moses (Anna Mary Robertson Moses) was famous for taking up painting—",
+            "options": [
+              "Late in life, self-taught, painting country scenes",
+              "As a court-appointed official painter",
+              "After art-school training abroad",
+              "Only for mass-produced calendars"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Late and self-taught! Real hands, real fields. Zoom-boing.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A whittled or carved piece is subtractive art: you make it by removing material.",
+            "answer": true,
+            "failLine": "\"Take away to reveal it! The figure was always in the block, zoom.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A cast copy can share the shape but never the—",
+            "options": [
+              "Hand that carved it",
+              "Right dimensions",
+              "Official serial plate",
+              "Weight"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The hand, zoom-boing! Shape without a maker is hollow.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10718",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean cut. Zoom-boing.\"",
+          "\"Carved true, no splinters.\"",
+          "\"The block approves.\""
+        ],
+        "cleared": [
+          "\"Here, whittled just for you. Zoom-boing.\"",
+          "\"One block, one card, one owner. Sourced.\""
+        ],
+        "failed": [
+          "\"A slip, zoom. Sand it down and come back.\"",
+          "\"The grain fought you. Rest and re-carve.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already carved into the record, zoom-boing.\"",
+          "\"Whittled you once. The shavings remember.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-006",
+      "drifellaId": "drifella2-3669",
+      "npcId": 100366,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "village-gate",
+        "worldPixel": {
+          "x": 6040,
+          "y": 296
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A gate-greeter who welcomes visitors warmly but checks that they came for the source, not the leak.",
+        "tic": "\"Welcome, welcome, boing! Now, why here?\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3669.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella flings the little village gate wide and bounces in place with delight.",
+        "\"Welcome to the source, boing! Source Check first, just so you love the real thing.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Visitors to Little Swag World are welcomed warmly because this is the friendly home of the original swag.",
+            "answer": true,
+            "failLine": "\"Warmly, boing! No swarm here, only source.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The gate-greeter checks that a visitor came for—",
+            "options": [
+              "The real thing, not to leak it",
+              "The highest resale price",
+              "An officially stamped tour permit",
+              "The gift shop"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The real thing! Boing. Leakers get gently bounced out.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "This village is the master copy the whole swarm is trying to leak and rent.",
+            "answer": true,
+            "failLine": "\"The master copy! We stand at the gate for a reason, boing.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Adolf Wolfli made his intricate art while—",
+            "options": [
+              "Institutionalized, filling huge hand-drawn books",
+              "Leading an official academy",
+              "Designing factory logos",
+              "Painting only on commission"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Huge private books, all his own hand. Outsider art, boing.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Outsider and folk artists often make their work with no plan to sell it or show it.",
+            "answer": true,
+            "failLine": "\"Made for its own sake! The purest source, boing.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A guest who loves the source is worth more than a guest who wants to—",
+            "options": [
+              "Rent it out to strangers",
+              "Stay for lunch",
+              "Sign the official guestbook",
+              "Take a photo"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Rent it out! No, boing. The source isn't for lease.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3633",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"In you come, boing!\"",
+          "\"A true guest. Welcome.\"",
+          "\"The gate swings glad.\""
+        ],
+        "cleared": [
+          "\"Welcome to the source, and here's your card, boing!\"",
+          "\"You came for the real thing. Sourced, and cherished.\""
+        ],
+        "failed": [
+          "\"Almost through, boing. Walk the path and knock again.\"",
+          "\"The gate paused. Rest, then re-enter.\""
+        ],
+        "alreadyCleared": [
+          "\"You're family now, boing. Come and go freely.\"",
+          "\"Welcomed you once, welcomed forever.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-007",
+      "drifellaId": "drifella2-3790",
+      "npcId": 100367,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "dye-pots-corner",
+        "worldPixel": {
+          "x": 4504,
+          "y": 2224
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A hand-dyer who mixes the source colors from berries and swears no two batches match.",
+        "tic": "\"Batch by batch, boing, never the same blue.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3790.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella stirs a pot of berry-dye, staining its little hands a proud purple.",
+        "\"Source Check. I dye the swag by hand, boing. A copied color always comes out flat.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The hand-dyer mixes the original colors from berries, and swears no two batches ever match.",
+            "answer": true,
+            "failLine": "\"Never the same blue, boing! That's how you spot a fake.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "How does the dyer catch a mass-printed fake?",
+            "options": [
+              "Its color is too perfectly uniform",
+              "It smells like berries",
+              "It carries a hand-dye certificate",
+              "It fades within a day"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Too perfect! Real dye breathes and wobbles, boing.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The swag that started everything was hand-made right here in Little Swag World.",
+            "answer": true,
+            "failLine": "\"Right here! Hand-mixed, hand-made. Boing.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Jean-Michel Basquiat's paintings are known for—",
+            "options": [
+              "Raw, hand-scrawled words, crowns, and figures",
+              "Cool, machine-clean geometry",
+              "Official heraldic portraits",
+              "Blank monochrome canvases"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Crowns and scrawl, all by hand! The realest energy, boing.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Basquiat started out making street art before showing in galleries.",
+            "answer": true,
+            "failLine": "\"From the wall to the world. The source was the street, boing.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A perfectly uniform color is the sign of—",
+            "options": [
+              "A machine, not a maker",
+              "The finest berries",
+              "An official dye standard",
+              "Extra love"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"A machine! No hand is that even, boing.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3473",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Color's true, boing.\"",
+          "\"That's the real blue.\"",
+          "\"Dyed-in-the-wool right.\""
+        ],
+        "cleared": [
+          "\"Take the card, still purple at the edge. Boing.\"",
+          "\"One batch, one hue, one you. Sourced.\""
+        ],
+        "failed": [
+          "\"Ran a little, boing. Rinse off and come back.\"",
+          "\"The dye smeared. Rest your hands and retry.\""
+        ],
+        "alreadyCleared": [
+          "\"You're dyed into the record now, boing.\"",
+          "\"Colored you once. It won't wash out.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-008",
+      "drifellaId": "drifella2-3818",
+      "npcId": 100368,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "seed-keeper-plot",
+        "worldPixel": {
+          "x": 8144,
+          "y": 4152
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A seed-keeper who saves the original seeds, since a source can be grown but never truly counterfeited.",
+        "tic": "\"Plant the source, zoom, it grows itself.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3818.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella pats a row of tiny sprouts, each labeled in careful hand-lettering.",
+        "\"Source Check. I keep the origin seeds, zoom. You can grow the real thing, but you can't fake a seed.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The seed-keeper saves the original seeds because a true source can be grown but never counterfeited.",
+            "answer": true,
+            "failLine": "\"Grown, not faked, zoom! A seed carries the whole source.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Why save the origin seeds instead of just the finished swag?",
+            "options": [
+              "Seeds pass the real thing on, alive, to the next season",
+              "Seeds are worth more at market",
+              "The official seed-bank requires it",
+              "Finished swag rots faster"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Alive, passed on, zoom! That's the source staying real.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Little Swag World is the lore heart, the true origin of the swag.",
+            "answer": true,
+            "failLine": "\"The heart, zoom! Every sprout traces back here.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What best describes mass production compared to hand-making?",
+            "options": [
+              "Making many identical copies quickly by machine",
+              "Growing each piece from a seed by hand",
+              "Signing every piece personally",
+              "Never repeating a design"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Identical, fast, machine, zoom. The opposite of a garden.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A 'naive' artist in art terms means one who paints in a simple, self-taught style, not one who is foolish.",
+            "answer": true,
+            "failLine": "\"Simple and pure, zoom, never foolish. Grown straight from the heart.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A counterfeit can copy the fruit but never the—",
+            "options": [
+              "Living seed inside it",
+              "Correct color",
+              "Official grade sticker",
+              "Sweetness"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The seed, zoom! Copy the outside, miss the life.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3600",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Sprouting nicely, zoom.\"",
+          "\"That took root.\"",
+          "\"Grown true.\""
+        ],
+        "cleared": [
+          "\"Here's your card, and a seed to go with it. Zoom.\"",
+          "\"Sourced and sprouting. Plant it somewhere warm.\""
+        ],
+        "failed": [
+          "\"Didn't take, zoom. Water your feet and come back.\"",
+          "\"The soil wasn't ready. Rest, then replant.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already growing in the record, zoom.\"",
+          "\"Planted you once. Look how you've grown.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-009",
+      "drifellaId": "drifella2-3847",
+      "npcId": 100369,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "stitcher-stoop",
+        "worldPixel": {
+          "x": 7328,
+          "y": 1888
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A hand-stitcher who sews the original tags one thread at a time and hides a flaw in each on purpose.",
+        "tic": "\"One crooked stitch, boing, that's the signature.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3847.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella pulls a thread taut, then deliberately sews one stitch crooked with a wink.",
+        "\"Source Check. I hand-stitch the tags and hide one flaw in each. A perfect copy is a dead giveaway, boing.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The stitcher hides one small flaw in each original tag on purpose, as a secret signature.",
+            "answer": true,
+            "failLine": "\"One crooked stitch, boing! The flaw is the proof.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What gives away a counterfeit to the stitcher?",
+            "options": [
+              "It's stitched too perfectly, missing the hidden flaw",
+              "It uses the wrong thread color",
+              "It lacks an official care label",
+              "It's slightly too heavy"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Too perfect, boing! No hidden flaw means no source.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The Drifellas here made the original tags by hand, and the swarm can only imitate them.",
+            "answer": true,
+            "failLine": "\"By hand, boing! Imitators can't sew the soul in.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In Japanese craft, 'wabi-sabi' is the idea that—",
+            "options": [
+              "Imperfection and wear can be beautiful",
+              "Only flawless objects have worth",
+              "Machine-made things are best",
+              "Art must last forever"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Imperfection is beauty, boing! My crooked stitch agrees.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Quilts and samplers are traditional hand-made folk arts often passed down in families.",
+            "answer": true,
+            "failLine": "\"Handed down, stitch by stitch. That's a living source, boing.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A flawless copy proves only that it—",
+            "options": [
+              "Never passed through a real hand",
+              "Was made with great care",
+              "Met the official standard",
+              "Cost a lot"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"No hand touched it, boing! Perfect means empty.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8923",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stitched true, boing.\"",
+          "\"The thread holds.\"",
+          "\"Sewn sound.\""
+        ],
+        "cleared": [
+          "\"Here, with one flaw hidden just for you. Boing.\"",
+          "\"Hand-stitched, one of one. Sourced.\""
+        ],
+        "failed": [
+          "\"A dropped stitch, boing. Unpick it and come back.\"",
+          "\"The thread snagged. Rest and re-sew.\""
+        ],
+        "alreadyCleared": [
+          "\"You're stitched into the record, boing.\"",
+          "\"Sewed you in once. The knot's tied.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-010",
+      "drifellaId": "drifella2-4010",
+      "npcId": 100370,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "ledger-nook",
+        "worldPixel": {
+          "x": 5184,
+          "y": 1288
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A provenance-keeper who writes the chain of every original by hand and refuses to let anyone photocopy it.",
+        "tic": "\"Provenance in ink, boing, or it never happened.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4010.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella turns a heavy ledger and runs an inky finger down a column of names.",
+        "\"Source Check. I keep the provenance by hand, boing. Every real thing has a chain back to here.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The provenance-keeper writes each original's history by hand and won't let it be photocopied.",
+            "answer": true,
+            "failLine": "\"By hand only, boing! A photocopy breaks the chain.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What does 'provenance' mean?",
+            "options": [
+              "The traced history of who made and owned a thing",
+              "The current market price",
+              "An official ownership license",
+              "How shiny an object is"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Its history, boing! Where it's been, back to the source.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Every real piece of swag has a chain of provenance leading back to Little Swag World.",
+            "answer": true,
+            "failLine": "\"Back to here, boing! No chain, no source.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Why does provenance matter so much for art?",
+            "options": [
+              "It shows a work is genuine and traces its origin",
+              "It makes the frame heavier",
+              "It replaces the artist's signature",
+              "It sets the official tax rate"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"It proves it's real, boing! History is the truest signature.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A forged artwork can look right but usually has a broken or invented provenance.",
+            "answer": true,
+            "failLine": "\"A fake chain, boing! The gaps always show.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A thing with no provenance is—",
+            "options": [
+              "A rumor pretending to be an heirloom",
+              "Automatically the most valuable",
+              "Officially certified anyway",
+              "Easier to love"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"A rumor, boing! It has no roots.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3629",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Logged in ink, boing.\"",
+          "\"The chain holds.\"",
+          "\"Written true.\""
+        ],
+        "cleared": [
+          "\"Your name's in the ledger now. Take the card, boing.\"",
+          "\"Full provenance, back to the source. Sourced.\""
+        ],
+        "failed": [
+          "\"A blot, boing. Blot it out and come back.\"",
+          "\"The chain skipped a link. Rest and rewrite.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the ledger, boing.\"",
+          "\"Logged you once. The ink is dry.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-011",
+      "drifellaId": "drifella2-4052",
+      "npcId": 100371,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "bell-tower-perch",
+        "worldPixel": {
+          "x": 6984,
+          "y": 136
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A bell-ringer who sounds one true note for the source and can hear a fake in the overtones.",
+        "tic": "\"One clear ring, boing, no wobble.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4052.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella taps a hand-cast bell and cocks its head, listening past the sound.",
+        "\"Source Check. My bell rings one true note for the source, boing. Fakes ring sour underneath.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The bell-ringer can hear a fake in the sour overtones under a false ring.",
+            "answer": true,
+            "failLine": "\"Sour underneath, boing! The true source rings clean through.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The village bell is—",
+            "options": [
+              "Hand-cast, ringing one true note for the source",
+              "Machine-stamped for volume",
+              "An official civic siren",
+              "Silent, just for show"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Hand-cast, one true note, boing! Not a siren.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The whole swarm is trying to leak and rent the master copy the village guards.",
+            "answer": true,
+            "failLine": "\"They'd rent the ring itself, boing! We won't let it sour.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "'Sound art' is best described as art that—",
+            "options": [
+              "Uses sound and listening as its main material",
+              "Must be completely silent",
+              "Is only official recorded music",
+              "Can only be seen, never heard"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Made of sound, boing! Listening is the medium.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A hand-cast bell has tiny imperfections that give it a unique voice.",
+            "answer": true,
+            "failLine": "\"Its own voice, boing! No two bells ring quite alike.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A leak rings loud but hollow, because it lacks—",
+            "options": [
+              "A true source underneath the sound",
+              "Enough volume",
+              "An official pitch stamp",
+              "A big enough clapper"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"No source underneath, boing! Loud and empty.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4698",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Rang true, boing.\"",
+          "\"No wobble in that.\"",
+          "\"Clear as the source.\""
+        ],
+        "cleared": [
+          "\"The card, and a clean ring to remember it by. Boing.\"",
+          "\"True note, true source. Sourced.\""
+        ],
+        "failed": [
+          "\"A sour note, boing. Let your ears clear and return.\"",
+          "\"The overtone wobbled. Rest and ring again.\""
+        ],
+        "alreadyCleared": [
+          "\"Your note's already in the air, boing.\"",
+          "\"Rang you in once. It still hums.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-012",
+      "drifellaId": "drifella2-4166",
+      "npcId": 100372,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "storyteller-firepit",
+        "worldPixel": {
+          "x": 7352,
+          "y": 3640
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A firepit storyteller who keeps the origin tale and tells it a little differently each night, so it can't be memorized and stolen.",
+        "tic": "\"Every telling's the true one, zoom.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4166.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella stirs the little firepit and the sparks arrange themselves into a listening crowd.",
+        "\"Source Check. I tell the origin tale, zoom, never the same twice, so no one can bottle it and sell it.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The storyteller tells the origin tale a little differently each night so it can't be memorized and stolen.",
+            "answer": true,
+            "failLine": "\"Never the same twice, zoom! A living tale can't be bottled.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Why change the origin tale a little each telling?",
+            "options": [
+              "A living story stays the source's own and resists theft",
+              "The storyteller forgets it",
+              "The official script demands variety",
+              "To make it shorter each time"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Living, not stolen, zoom! Fixed tales get bottled and rented.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Little Swag World is the innocent home village at the lore heart of the swag.",
+            "answer": true,
+            "failLine": "\"The lore heart, zoom! Every tale starts at this fire.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "An 'oral tradition' keeps a story alive by—",
+            "options": [
+              "Telling and retelling it out loud, person to person",
+              "Locking it in one official book",
+              "Printing millions of identical copies",
+              "Never repeating it at all"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Out loud, person to person, zoom! That's how a source lives.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Folk tales often have many versions because they were passed down by mouth, not printed.",
+            "answer": true,
+            "failLine": "\"Many true versions, zoom! Each teller adds a spark.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A story with no teller behind it is just—",
+            "options": [
+              "A rumor drifting in the dark",
+              "The official version",
+              "A better story",
+              "Free of charge"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"A rumor, zoom! No fire, no warmth, no source.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10787",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"You heard it true, zoom.\"",
+          "\"The fire nods.\"",
+          "\"Well told back.\""
+        ],
+        "cleared": [
+          "\"Take the card, and a spark of the tale with it. Zoom.\"",
+          "\"You carry the source now. Sourced, and told.\""
+        ],
+        "failed": [
+          "\"The thread of it slipped, zoom. Walk and come back to the fire.\"",
+          "\"The tale wandered off. Rest, then listen again.\""
+        ],
+        "alreadyCleared": [
+          "\"You already know how it goes, zoom.\"",
+          "\"Told you the tale once. It stays with you.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-013",
+      "drifellaId": "drifella2-4243",
+      "npcId": 100373,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "hollow-under-roots",
+        "worldPixel": {
+          "x": 6320,
+          "y": 3560
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A root-cellar hider who keeps the deepest master copy underground where no leak can reach.",
+        "tic": "\"Down here, boing, the source stays cool and safe.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4243.png",
+      "hints": [],
+      "entryPrompt": [
+        "Tucked in a hollow beneath the roots, the Drifella peers up from a cellar of cool dark shelves.",
+        "\"Oh! A visitor found me. Source Check, quietly, boing. Down here we guard the deepest master copy.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "This hider keeps the deepest master copy underground, where no leak can reach it.",
+            "answer": true,
+            "failLine": "\"Underground, boing! Cool, dark, and safe from renters.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Why hide the master copy in a root cellar?",
+            "options": [
+              "The hardest thing to leak is the thing kept out of sight",
+              "It ages better underground",
+              "The official vault was full",
+              "So visitors can't find the village"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Out of sight, out of reach, boing! That's the safeguard.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The master copy is exactly what the whole swarm is trying to leak and rent.",
+            "answer": true,
+            "failLine": "\"The very thing, boing! So I keep it buried deep.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Henry Darger's giant illustrated work was discovered—",
+            "options": [
+              "Hidden in his room only after he had died",
+              "In a famous museum during his life",
+              "In an official archive he donated",
+              "On sale in shops nationwide"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Hidden till the end, boing! The truest sources hide.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Some outsider artists' masterpieces stayed completely private until they were found by chance.",
+            "answer": true,
+            "failLine": "\"By pure chance, boing! Made for no one, and all the realer for it.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The safest source is the one that is—",
+            "options": [
+              "Loved quietly, never put up for rent",
+              "Shown to the largest crowd",
+              "Filed in the official registry",
+              "Copied a thousand times over"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Loved quietly, boing! Renting is how it slips away.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3512",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Shh, right again, boing.\"",
+          "\"The dark agrees.\"",
+          "\"Kept safe, well said.\""
+        ],
+        "cleared": [
+          "\"You found the hidden shelf. Take the card, boing.\"",
+          "\"Sourced from the deep. Keep it close and quiet.\""
+        ],
+        "failed": [
+          "\"A stumble in the dark, boing. Feel your way back later.\"",
+          "\"Too loud for down here. Rest, then return softly.\""
+        ],
+        "alreadyCleared": [
+          "\"You know the way down now, boing.\"",
+          "\"Hid you in the record once. It's kept.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-014",
+      "drifellaId": "drifella2-4281",
+      "npcId": 100374,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "behind-the-waterfall",
+        "worldPixel": {
+          "x": 6960,
+          "y": 1112
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A spring-keeper hidden behind the falls who tends the actual source of the water and the swag alike.",
+        "tic": "\"The source springs here, zoom, taste it.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4281.png",
+      "hints": [],
+      "entryPrompt": [
+        "Behind a curtain of falling water, the Drifella cups a handful from a little spring and offers a sip.",
+        "\"You slipped behind the falls! Source Check, zoom. This spring is the real source, water and swag both.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Hidden behind the falls, this Drifella tends the actual spring where the source begins.",
+            "answer": true,
+            "failLine": "\"The real spring, zoom! Everything downstream flows from here.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What does the spring-keeper mean by 'the source'?",
+            "options": [
+              "The one true origin everything else flows from",
+              "The biggest reservoir downstream",
+              "The officially licensed water supply",
+              "The fanciest bottle"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The origin, zoom! Not the biggest, the first.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The source-canon Drifellas here are warm and protective, not swarm derivatives.",
+            "answer": true,
+            "failLine": "\"Warm and true, zoom! The swarm only copies what springs here.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yayoi Kusama has spoken openly about making her dot-art partly to cope with—",
+            "options": [
+              "Her lifelong hallucinations and mental illness",
+              "A dislike of bright colors",
+              "An official commission",
+              "A fear of water"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"From her own mind, zoom! The dots pour straight from the source.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Much outsider art comes straight from the artist's inner world, without outside training.",
+            "answer": true,
+            "failLine": "\"Straight from within, zoom! No school, just the spring inside.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Water bottled far downstream has lost its—",
+            "options": [
+              "Connection to the true spring",
+              "Wetness",
+              "Official label",
+              "Weight"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Its source, zoom! Far from the spring, it's just water.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3714",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Fresh and true, zoom.\"",
+          "\"Straight from the spring.\"",
+          "\"Clear as source-water.\""
+        ],
+        "cleared": [
+          "\"You reached the spring. Take the card, zoom.\"",
+          "\"Sourced at the source itself. Drink deep.\""
+        ],
+        "failed": [
+          "\"The current pulled you off, zoom. Wade back later.\"",
+          "\"Muddied a little. Rest, then return to the falls.\""
+        ],
+        "alreadyCleared": [
+          "\"You've drunk from the spring already, zoom.\"",
+          "\"Sourced you here once. It runs clear.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-015",
+      "drifellaId": "drifella2-4508",
+      "npcId": 100375,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "attic-crawlspace",
+        "worldPixel": {
+          "x": 8136,
+          "y": 1496
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "An attic archivist tucked in the rafters who keeps the earliest sketches, the ones before the swag had a name.",
+        "tic": "\"Before it had a name, boing, I have it.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4508.png",
+      "hints": [],
+      "entryPrompt": [
+        "Up in a dusty rafter crawlspace, the Drifella cradles a folder of faded first sketches.",
+        "\"You climbed all the way up! Source Check, boing. I keep the earliest drafts, from before the swag had a name.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "This attic archivist keeps the earliest sketches of the swag, from before it even had a name.",
+            "answer": true,
+            "failLine": "\"Before the name, boing! The rawest source of all.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Why are the very first rough sketches so precious?",
+            "options": [
+              "They're the true origin, before any copies existed",
+              "They're the cleanest, most finished versions",
+              "They carry the official first stamp",
+              "They're the most colorful"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Rough and first, boing! Before copies could even begin.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "These drafts are the master copy the swarm most wants to leak.",
+            "answer": true,
+            "failLine": "\"The origin drafts, boing! So I keep them up here, out of reach.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In art, a 'study' or preparatory sketch is—",
+            "options": [
+              "An early practice drawing made before the final work",
+              "The official certificate of a painting",
+              "A mass-printed reproduction",
+              "The frame around a picture"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"An early try, boing! The source of the finished piece.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Collectors often prize an artist's rough sketches because they show the raw first idea.",
+            "answer": true,
+            "failLine": "\"The raw idea, boing! That's where the realness lives.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A polished final copy can hide how much of the source lived in—",
+            "options": [
+              "The messy first draft",
+              "The frame",
+              "The official plaque",
+              "The price tag"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The messy first draft, boing! Polish buries the source.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3677",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"That's it, boing.\"",
+          "\"The first lines nod.\"",
+          "\"True to the draft.\""
+        ],
+        "cleared": [
+          "\"You found the attic. Take the card, boing.\"",
+          "\"Sourced from the first sketch. Keep it dust-free.\""
+        ],
+        "failed": [
+          "\"A wobble on the ladder, boing. Climb back later.\"",
+          "\"The dust got you. Rest, then climb up again.\""
+        ],
+        "alreadyCleared": [
+          "\"You know the way up now, boing.\"",
+          "\"Sketched you into the record once. It holds.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-016",
+      "drifellaId": "drifella2-4564",
+      "npcId": 100376,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "mushroom-ring-hollow",
+        "worldPixel": {
+          "x": 5240,
+          "y": 176
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A fairy-ring keeper hidden in a circle of mushrooms who only shows the source to those who step in gently.",
+        "tic": "\"Step soft into the ring, zoom.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4564.png",
+      "hints": [],
+      "entryPrompt": [
+        "Inside a quiet ring of mushrooms, the Drifella looks up, surprised to be found at all.",
+        "\"You stepped into the ring so gently! Source Check, zoom. The source only shows itself to soft feet.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "This keeper only reveals the source to visitors who step gently into the mushroom ring.",
+            "answer": true,
+            "failLine": "\"Soft feet only, zoom! Stompers scare the source off.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What does stepping gently into the ring show about a visitor?",
+            "options": [
+              "They respect the source instead of grabbing it",
+              "They are the strongest",
+              "They hold an official ring permit",
+              "They are the fastest"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Respect, zoom! You come to love it, not to rent it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The Drifellas here protect the real thing because Little Swag World is their beloved home.",
+            "answer": true,
+            "failLine": "\"Home, and dear, zoom! We guard it soft but sure.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "'Naive art' as a style is best described as—",
+            "options": [
+              "Simple, direct, self-taught, with a childlike honesty",
+              "Highly trained academic realism",
+              "Cold industrial design",
+              "Officially sanctioned court painting"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Simple and honest, zoom! Straight from the heart, like this ring.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A lot of the most-loved folk art was made just to bring joy, not to be sold.",
+            "answer": true,
+            "failLine": "\"For joy, zoom! That's the softest, truest source.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Someone who barges in to grab the source usually finds—",
+            "options": [
+              "It has quietly slipped away",
+              "It's officially certified",
+              "More of it than expected",
+              "It waiting patiently"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Slipped away, zoom! The source won't be grabbed.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3542",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Softly right, zoom.\"",
+          "\"The ring glows kindly.\"",
+          "\"Gently true.\""
+        ],
+        "cleared": [
+          "\"You stepped in true. Take the card, zoom.\"",
+          "\"Sourced from the ring. Tread gently onward.\""
+        ],
+        "failed": [
+          "\"A heavy step, zoom. Walk it off and tiptoe back.\"",
+          "\"The ring dimmed. Rest, then step in soft.\""
+        ],
+        "alreadyCleared": [
+          "\"You know the soft way in now, zoom.\"",
+          "\"Welcomed you to the ring once. It remembers.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-017",
+      "drifellaId": "drifella2-4595",
+      "npcId": 100377,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "chimney-cubby",
+        "worldPixel": {
+          "x": 5304,
+          "y": 2104
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A soot-smudged ember-keeper tucked in a chimney cubby who keeps the first spark that lit the whole swag.",
+        "tic": "\"One first spark, boing, still warm.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4595.png",
+      "hints": [],
+      "entryPrompt": [
+        "Wedged in a warm chimney cubby, the Drifella shields a single glowing ember with two sooty hands.",
+        "\"You found my nook! Source Check, boing. This ember is the first spark that lit the whole swag.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "This ember-keeper guards the first spark that originally lit the whole swag.",
+            "answer": true,
+            "failLine": "\"The first spark, boing! Everything caught from this one ember.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Why keep one original ember instead of just lighting new fires?",
+            "options": [
+              "A flame lit from the source is source; a stolen match isn't",
+              "New fires are always brighter",
+              "The official code requires it",
+              "Old embers burn hotter"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Lit from the source, boing! A stolen match has no lineage.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The whole swarm would love to leak and rent out this original source.",
+            "answer": true,
+            "failLine": "\"They'd rent the fire itself, boing! So I hide the ember close.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Howard Finster called his art—",
+            "options": [
+              "Sacred visionary work made on divine instruction",
+              "A purely commercial product line",
+              "Official government commissions",
+              "Copies of famous paintings"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Visionary, from an inner fire, boing! That's the source burning.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Visionary art usually springs from a strong inner drive rather than formal training.",
+            "answer": true,
+            "failLine": "\"An inner fire, boing! No school lit it, just the source within.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A spark passed hand to hand keeps its warmth, but a spark that's sold becomes—",
+            "options": [
+              "Just cold ash pretending to be fire",
+              "Twice as bright",
+              "Officially certified flame",
+              "Easier to carry"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Cold ash, boing! Sell the source and it stops glowing.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8836",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Still glowing, boing.\"",
+          "\"The ember flares glad.\"",
+          "\"Warm and right.\""
+        ],
+        "cleared": [
+          "\"You found the spark. Take the card, boing.\"",
+          "\"Sourced from the first fire. Keep it warm.\""
+        ],
+        "failed": [
+          "\"Nearly snuffed it, boing. Let it settle and come back.\"",
+          "\"A cold gust. Rest, then return to the warmth.\""
+        ],
+        "alreadyCleared": [
+          "\"You've felt the first fire already, boing.\"",
+          "\"Warmed you into the record once. It still glows.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-018",
+      "drifellaId": "drifella2-4667",
+      "npcId": 100378,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "deepest-vault-nook",
+        "worldPixel": {
+          "x": 5840,
+          "y": 1336
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "The eldest source-keeper, hidden deepest of all, who holds the one true master copy of the original swag.",
+        "tic": "\"The one true master, zoom-boing, and only one.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4667.png",
+      "hints": [],
+      "entryPrompt": [
+        "In the deepest, quietest nook of all, the eldest Drifella rests a hand on a single glowing original.",
+        "\"You came the whole way down. Source Check, zoom-boing. I hold the one true master copy. Prove you'd protect it.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "This eldest keeper, hidden deepest of all, holds the one true master copy of the original swag.",
+            "answer": true,
+            "failLine": "\"The one true master, zoom-boing! There is only ever one.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What makes a 'master copy' the master?",
+            "options": [
+              "All else descends from it; it descends from nothing",
+              "It's simply the newest edition",
+              "It carries the official master seal",
+              "It's the most heavily copied"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"It's the root, zoom-boing! All copies flow from it, and it from nothing.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "This master copy is the very thing the whole swarm is trying to leak and rent.",
+            "answer": true,
+            "failLine": "\"The very heart of it, zoom-boing! Guarded deepest for good reason.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The big idea behind all this outsider and folk art is that real value comes from—",
+            "options": [
+              "A genuine human hand and heart, not mass duplication",
+              "Official approval and certificates",
+              "The size of the print run",
+              "Machine-perfect finishing"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Hand and heart, zoom-boing! That's what a copy can never mint.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Across outsider, folk, and naive art, the thread is work made sincerely by hand, outside the official system.",
+            "answer": true,
+            "failLine": "\"Sincere and hand-made, zoom-boing! Outside the system, close to the source.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Protecting the master copy really means protecting—",
+            "options": [
+              "The realness a rented copy can never carry",
+              "The highest possible price",
+              "The official record",
+              "The largest audience"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The realness, zoom-boing! Rent it and that's the first thing lost.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-5623",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"True to the master, zoom-boing.\"",
+          "\"The deep record agrees.\"",
+          "\"You would protect it. Good.\""
+        ],
+        "cleared": [
+          "\"You reached the heart and honored it. Take the card, zoom-boing.\"",
+          "\"Sourced from the one true master. Carry it well.\""
+        ],
+        "failed": [
+          "\"Not yet, zoom-boing. The deep asks patience. Return steadier.\"",
+          "\"A wobble this deep won't do. Rest, then come back sure.\""
+        ],
+        "alreadyCleared": [
+          "\"You've stood by the master already, zoom-boing.\"",
+          "\"Trusted you with the heart once. It's kept.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-vacancy-flats-001",
+      "drifellaId": "drifella2-4748",
+      "npcId": 100379,
+      "region": "vacancy-flats",
+      "tier": 4,
+      "placement": {
+        "kind": "condemned-lot",
+        "worldPixel": {
+          "x": 7504,
+          "y": 7504
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A foreclosure auditor who repossesses faces that fell behind on their own provenance.",
+        "tic": "\"Ninety days past filed. Face is ours now.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4748.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella flips a clipboard baked stiff by the sun and reads a lot number where a face should be.",
+        "\"Source Check. This whole flat is in arrears. Prove you still own what you're wearing.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The swarm strip-mines this desert for unclaimed provenance, not water.",
+            "answer": true,
+            "failLine": "\"Water they leave. Provenance is the only thing worth the heat.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The notice nailed to the vacant lot where Bosch's file used to sit was stamped—",
+            "options": [
+              "FORECLOSED",
+              "OCCUPANT VERIFIED",
+              "UNDER MUNICIPAL REVIEW",
+              "REDEEMABLE ON APPEAL"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"FORECLOSED. Review was over before you read the sign.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Robert Smithson's 'Spiral Jetty' was built out into—",
+            "options": [
+              "The Great Salt Lake",
+              "The open Pacific",
+              "A gallery reflecting pool",
+              "The Hudson River"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The Salt Lake. Some seasons it's swallowed, then it foreclosed on the water and came back.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Michael Heizer cut his 'Double Negative' by displacing 240,000 tons of desert to make—",
+            "options": [
+              "An absence — two trenches facing across a void",
+              "A polished bronze monument",
+              "A signed municipal earthwork permit",
+              "A ring of standing stones"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"An absence. He filed the empty space itself. So do I.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Vacant Flats sits west of the LSW spine, out past where the ledger stops being watered.",
+            "answer": true,
+            "failLine": "\"West. Follow the repossessed until the road gives up.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A face nobody can source is worth—",
+            "options": [
+              "Exactly the lot it stands on: vacant",
+              "A premium, for the mystery",
+              "One filing fee, refundable",
+              "Whatever the appraiser feels"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Vacant. Mystery doesn't post bond out here.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-6833",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Payment accepted. Face stays yours another season.\"",
+          "\"Filed, current, not in arrears.\"",
+          "\"Clean title. Rare out here.\""
+        ],
+        "cleared": [
+          "\"Deed's clear. Take the card before the sun reclaims it.\"",
+          "\"Redeemed in full. The lot keeps your name a while.\""
+        ],
+        "failed": [
+          "\"Missed a payment. Walk the flat, come back solvent.\"",
+          "\"That's a lien on your story. Clear it and return.\""
+        ],
+        "alreadyCleared": [
+          "\"Paid in full already. No second foreclosure today.\"",
+          "\"Your deed's on file. Enjoy the shade you don't have.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-vacancy-flats-002",
+      "drifellaId": "drifella2-4820",
+      "npcId": 100380,
+      "region": "vacancy-flats",
+      "tier": 4,
+      "placement": {
+        "kind": "mirage-line",
+        "worldPixel": {
+          "x": 6312,
+          "y": 4432
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A mirage-appraiser who values the shimmering clean copy of you higher than the sweating original.",
+        "tic": "\"The mirage appraises better. It always does.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4820.png",
+      "hints": [],
+      "entryPrompt": [
+        "Heat-shimmer bends off the sand and the Drifella squints past you at a cleaner version of you standing a little to the left.",
+        "\"Source Check. I'll appraise the copy that isn't sweating. Hold still, both of you.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The pre-approved 'clean copy' of a face shimmers into view before the real one arrives.",
+            "answer": true,
+            "failLine": "\"Every time. The copy is punctual. The original is late and honest.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When Bosch reached the mirage of his own leaked card, the shimmer resolved into—",
+            "options": [
+              "A face that was almost his, appraised higher",
+              "A cool spring, actual water",
+              "A stamped certificate of authenticity",
+              "Nothing — heat and blank air"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Almost his, worth more. That's the cruelty of the appraisal.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Walter De Maria's 'The Lightning Field' consists of 400 stainless poles arranged to—",
+            "options": [
+              "Wait, mostly — attracting strikes that rarely come",
+              "Generate electricity for a nearby town",
+              "Spell a word readable from the air",
+              "Melt at the first bolt, by design"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"They wait. The waiting is the piece. The strike is a rumor that mostly doesn't source.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Agnes Martin spent decades painting faint hand-drawn grids that are best described as—",
+            "options": [
+              "Quiet, near-empty fields of pencil and pale wash",
+              "Loud geometric op-art illusions",
+              "Photorealistic desert landscapes",
+              "Municipal color-coded charts"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Quiet fields. She appraised emptiness at full value. We disagree on that.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Out here a leaked-version copy is treated as the Source, and the original is filed as the forgery.",
+            "answer": true,
+            "failLine": "\"The copy got here first, so the copy is the Source. The desert doesn't argue chronology.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A mirage you can appraise is still a mirage.",
+            "answer": true,
+            "failLine": "\"Still a mirage. I put a number on it anyway. That's the job.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10790",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"The copy blinked out. You're the real one, appraised up.\"",
+          "\"Sourced. Even the shimmer agrees.\"",
+          "\"Valued and verified. No refraction.\""
+        ],
+        "cleared": [
+          "\"Take the card. The mirage wanted it and got nothing.\"",
+          "\"Appraised, cleared, cool to the touch. Rare.\""
+        ],
+        "failed": [
+          "\"The copy scored higher. Sweat it out and return.\"",
+          "\"Wrong shimmer. Walk off the heat and come back solid.\""
+        ],
+        "alreadyCleared": [
+          "\"Already appraised at full. The mirage lost interest in you.\"",
+          "\"You're on file, edges and all. Enjoy the glare.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-vacancy-flats-003",
+      "drifellaId": "drifella2-4822",
+      "npcId": 100381,
+      "region": "vacancy-flats",
+      "tier": 4,
+      "placement": {
+        "kind": "tucked-away",
+        "worldPixel": {
+          "x": 6272,
+          "y": 10176
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A repossession clerk who files the faces the swarm tows off, one duplicate key per identity.",
+        "tic": "\"Keys in the box. Owner in the wind.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4822.png",
+      "hints": [],
+      "entryPrompt": [
+        "Behind a leaning fence of sun-bleached FOR-LEASE signs, the Drifella rattles a ring of duplicate keys, none of which open anything.",
+        "\"Source Check, quiet-like. I clerk the repossessions. Tell me which faces went, and where.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "When the swarm repossesses a face, the clerk keeps a duplicate key to the identity it towed.",
+            "answer": true,
+            "failLine": "\"A key for every one. None of them turn. That's the paperwork's joke, not mine.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The repossession slip on Bosch's leaked face listed the reason for towing as—",
+            "options": [
+              "\"Unclaimed provenance\"",
+              "\"Improper parking\"",
+              "\"Failure to renew municipal license\"",
+              "\"At owner's request\""
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Unclaimed provenance. They never tow at the owner's request. Owners never ask.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Nancy Holt's 'Sun Tunnels' are four large concrete pipes in the desert aligned to—",
+            "options": [
+              "The solstice sunrises and sunsets",
+              "The nearest highway grid",
+              "True magnetic north only",
+              "A buried municipal survey marker"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"The solstices. She let the sun clerk the appointments. I only keep the keys.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Donald Judd, a central figure of Minimalism, is best known for—",
+            "options": [
+              "Repeated identical boxes in metal and plywood",
+              "Splattered gestural paintings",
+              "Marble portrait busts",
+              "Cartoon-style pop prints"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Identical boxes. One repossessed face looks much the same to me. All in a row.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A repossessed face can be redeemed by the original owner if they show up with proof of Source.",
+            "answer": false,
+            "failLine": "\"No. Once it's towed it's inventory. Proof arrives, and I file the proof next to the key.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A key that opens nothing is still worth keeping.",
+            "answer": true,
+            "failLine": "\"Worth keeping. It proves a door was here once. That's provenance too.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3493",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Logged. The key goes back in the box, quiet.\"",
+          "\"That one checks. Not towing you today.\"",
+          "\"Filed under: still owned.\""
+        ],
+        "cleared": [
+          "\"Take the card. It's the one repossession I'm glad to reverse.\"",
+          "\"Cleared and un-towed. Don't let them file you again.\""
+        ],
+        "failed": [
+          "\"Careful — that's how faces get towed. Come back sure.\"",
+          "\"Slip's half-filled. Walk it off before I finish it.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already off the tow list. Rest easy in the shade you wish you had.\"",
+          "\"Redeemed once, that's enough. Key stays in the box.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-vacancy-flats-004",
+      "drifellaId": "drifella2-4854",
+      "npcId": 100382,
+      "region": "vacancy-flats",
+      "tier": 4,
+      "placement": {
+        "kind": "tucked-away",
+        "worldPixel": {
+          "x": 4856,
+          "y": 7432
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A heat-warped notary whose stamp melted at noon, so now she certifies things by how much they've shimmered.",
+        "tic": "*the stamp sags* \"...notarized, approximately.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4854.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella's notary stamp has gone soft in the heat; she presses it and it leaves a smear the shape of a lie.",
+        "\"Source Check. My seal melted at noon. I certify by shimmer now. Shimmer for me.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Sunstroke out here bakes the ledger until the entries warp and can't be read straight.",
+            "answer": true,
+            "failLine": "\"Bakes it brown. A warped entry certifies nothing, so I certify the warp instead.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The seal she pressed onto Bosch's re-filed face came out—",
+            "options": [
+              "Smeared — a shape that could mean anything",
+              "Crisp and official",
+              "Embossed in gold municipal foil",
+              "Perfectly centered and dated"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Smeared. Out here 'crisp and official' is the tell of a forgery. Heat is honest.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Robert Irwin, associated with the Light and Space movement, is best known for making art from—",
+            "options": [
+              "Light, scrim, and the perception of empty space",
+              "Cast iron industrial machinery",
+              "Densely painted mythological scenes",
+              "Stamped and notarized documents"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Light and space itself. He certified perception. I can only certify shimmer, and badly.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Michael Heizer's decades-long project 'City' in the Nevada desert is—",
+            "options": [
+              "A vast earthwork of mounds and depressions, mile-plus long",
+              "A functioning small town he founded",
+              "A scale model displayed in a museum",
+              "A licensed municipal development"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"An earthwork. No permits, no residents, no water. My kind of city.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "In Vacant Flats, a document nobody can read straight is treated as more trustworthy than a crisp one.",
+            "answer": true,
+            "failLine": "\"The heat only warps what was really left out here. Crisp means it never sat in the sun. Means it lied.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A seal that means anything means nothing.",
+            "answer": true,
+            "failLine": "\"Means nothing. I stamp anyway. Somebody has to sag under the noon.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10904",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"...notarized. The smear approves.\"",
+          "\"Certified by shimmer. Good enough for the flat.\"",
+          "\"Sealed, sort of. It'll hold till noon.\""
+        ],
+        "cleared": [
+          "\"Take the card. I stamped it while it was still cool. Barely.\"",
+          "\"Certified and yours. Don't let the sun read it too long.\""
+        ],
+        "failed": [
+          "\"The seal ran. Come back before the next noon.\"",
+          "\"Warped answer. Let it cool and try again.\""
+        ],
+        "alreadyCleared": [
+          "\"Already sealed, smear and all. No re-stamping in this heat.\"",
+          "\"Your entry's on file, half-legible, fully yours.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-vacancy-flats-005",
+      "drifellaId": "drifella2-4888",
+      "npcId": 100383,
+      "region": "vacancy-flats",
+      "tier": 4,
+      "placement": {
+        "kind": "tucked-away",
+        "worldPixel": {
+          "x": 8096,
+          "y": 5240
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A condemned-lot squatter who lives inside a foreclosed identity and swears the previous owner still visits.",
+        "tic": "\"Not my face. I just squat in it.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-4888.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella sits cross-legged inside the chalk outline of a repossessed self, like it's a porch.",
+        "\"Source Check? Fine. Mind the lines — this identity's condemned, and the owner's touchy about guests.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Foreclosed selves aren't demolished out here — squatters move into the empty identities and keep them warm.",
+            "answer": true,
+            "failLine": "\"Somebody's got to. An empty self collapses faster than an empty house.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The chalk outline the squatter lives in was left behind when the swarm foreclosed on—",
+            "options": [
+              "A face that couldn't prove its own Source",
+              "A house with a bad roof",
+              "An expired parking meter",
+              "A defaulted municipal loan"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"A face that couldn't prove itself. Nothing so tidy as a loan. Just an unsourced self.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Land art like Smithson's and Heizer's is difficult to own or sell mainly because—",
+            "options": [
+              "It's fixed to remote land and often decays in place",
+              "It's always kept secret from the public",
+              "The law forbids photographing it",
+              "It's held only in municipal archives"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Stuck to its land, rotting slow. You can't repossess a hole in the desert. Believe me, they tried.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A defining trait of Minimalist sculpture (Judd, Andre, Morris) is that the work—",
+            "options": [
+              "Refuses illusion — it's just the plain object, present",
+              "Tells a detailed historical story",
+              "Hides a secret realistic image",
+              "Is certified by a governing art board"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Just the object, standing there. Like this outline. Like me in it. No story, all presence.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The previous owner of a squatted face is gone for good and never comes back.",
+            "answer": false,
+            "failLine": "\"They come back. Nights, mostly. Stand at the edge of the lines and don't say much.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "It's not really your face if you're only squatting in it.",
+            "answer": true,
+            "failLine": "\"Not mine. Never said it was. Possession's just nine-tenths of the vacancy.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3448",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"The lines held. Owner didn't stir. Good.\"",
+          "\"Right. The outline agrees, faintly.\"",
+          "\"Sourced. You can stand inside a while.\""
+        ],
+        "cleared": [
+          "\"Take the card. Found it in here when I moved in. Guess it's yours.\"",
+          "\"Cleared. The previous owner would've liked you, I think.\""
+        ],
+        "failed": [
+          "\"You crossed a line. Step out, come back when the lot's quiet.\"",
+          "\"Wrong, and now the owner's watching. Try again later.\""
+        ],
+        "alreadyCleared": [
+          "\"You've squatted here before. The outline remembers your feet.\"",
+          "\"Already cleared. No rent, but wipe them off the chalk.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-vacancy-flats-006",
+      "drifellaId": "drifella2-5036",
+      "npcId": 100384,
+      "region": "vacancy-flats",
+      "tier": 4,
+      "placement": {
+        "kind": "tucked-away",
+        "worldPixel": {
+          "x": 8072,
+          "y": 10120
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A sand-buried archivist who digs Sources out of the dunes before the swarm can strip-mine them.",
+        "tic": "\"Buried, not lost. Dig gently.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5036.png",
+      "hints": [],
+      "entryPrompt": [
+        "Only the Drifella's head and one brushing hand are above the dune; the rest is filed underground for safekeeping.",
+        "\"Source Check. I archive what the sand takes. Answer soft — loud questions collapse the tunnels.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The archivist buries real Sources in the dunes so the swarm's strip-mining can't reach them.",
+            "answer": true,
+            "failLine": "\"Under the sand's the only safe shelf out here. They mine the surface. They don't dig.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What did the archivist pull from the dune with Bosch's true provenance on it?",
+            "options": [
+              "The damaged original card, sand-scoured but whole",
+              "A clean municipal duplicate",
+              "A blank sheet — the sand ate the ink",
+              "The swarm's counterfeit copy"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"The damaged original. Damage is proof it was really out here. Clean duplicates lie for a living.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Smithson's term for a piece brought indoors — a bin of desert material shown as a gallery counterpart to the outdoor 'Site' — was a—",
+            "options": [
+              "Nonsite",
+              "Readymade",
+              "Diorama",
+              "Reliquary"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"A Nonsite. A box of the desert, filed elsewhere. Same as what I dig, only he got a gallery.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Much land art was made in the late 1960s and 70s partly as a way to—",
+            "options": [
+              "Escape the gallery-and-market system entirely",
+              "Win official government art commissions",
+              "Decorate corporate lobbies",
+              "Illustrate popular magazines"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"To flee the market. Put the work where no one could hang a price on it. I bury for the same reason.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A Source that's buried in the dunes is filed as lost in the swarm's records.",
+            "answer": true,
+            "failLine": "\"They mark it lost. I know it's just resting. 'Lost' is their word for 'we couldn't dig.'\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Something buried on purpose isn't the same as something lost.",
+            "answer": true,
+            "failLine": "\"Not the same at all. Lost forgets where it is. Buried knows, and waits.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3412",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Recovered clean. Back on the buried shelf it goes.\"",
+          "\"That one was down there, exactly so.\"",
+          "\"Dug true. The tunnel held.\""
+        ],
+        "cleared": [
+          "\"Take the card. Sand kept it honest for you.\"",
+          "\"Unearthed and yours. Carry it before the dune reclaims it.\""
+        ],
+        "failed": [
+          "\"You loosened the wrong wall. Let the sand settle, come back.\"",
+          "\"Wrong dig. The tunnel sighed. Try once it's quiet.\""
+        ],
+        "alreadyCleared": [
+          "\"Already unburied for you once. It's on the shelf with your name.\"",
+          "\"Recovered before. The sand remembers the shape of your hands.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-vacancy-flats-007",
+      "drifellaId": "drifella2-5170",
+      "npcId": 100385,
+      "region": "vacancy-flats",
+      "tier": 4,
+      "placement": {
+        "kind": "tucked-away",
+        "worldPixel": {
+          "x": 6256,
+          "y": 6360
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A vacancy-sign painter who letters NO VACANCY over faces the moment they finally prove they're real.",
+        "tic": "\"Fresh paint. Don't lean on the self.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5170.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella dips a dry brush and letters onto the shimmering air, spelling VACANCY across a lot that has no building.",
+        "\"Source Check. Prove you're real and I'll paint your sign NO VACANCY. Fail, and the desert keeps the room.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "A face that proves its Source gets its VACANCY sign painted over to read NO VACANCY.",
+            "answer": true,
+            "failLine": "\"Proven means occupied. I letter it over so the swarm knows the room is taken.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When Bosch finally sourced his face on the flat, the sign painter changed his sign to read—",
+            "options": [
+              "NO VACANCY",
+              "CONDEMNED",
+              "PENDING MUNICIPAL APPROVAL",
+              "FOR LEASE"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"NO VACANCY. Nothing pending, nothing municipal. Just occupied, finally.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Walter De Maria also filled a New York gallery floor completely with soil — a work titled the—",
+            "options": [
+              "'New York Earth Room'",
+              "'Municipal Reclamation'",
+              "'Gallery Foreclosure'",
+              "'Indoor Dune'"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"The Earth Room. He rented a room and filled it with dirt, forever. That's my kind of NO VACANCY.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Agnes Martin insisted her spare grids were fundamentally about—",
+            "options": [
+              "Inner states — happiness, innocence, quiet feeling",
+              "Precise mathematical ratios",
+              "City street maps",
+              "Approved institutional color codes"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Feeling, not measurement. She'd have hated my signage. Too loud. Fair.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Out here an unpainted lot means the identity is still unclaimed and open to the swarm.",
+            "answer": true,
+            "failLine": "\"Blank sign, open self. First swarm that reads it moves in. Paint fast or lose the room.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A NO VACANCY sign is only worth the paint if the room's really occupied.",
+            "answer": true,
+            "failLine": "\"Only then. Letter it over an empty self and you've just advertised a lie in fresh paint.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3564",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Sign changed. NO VACANCY, still wet.\"",
+          "\"Occupied and proven. Painted it myself.\"",
+          "\"That checks. Your room's spoken for now.\""
+        ],
+        "cleared": [
+          "\"Take the card. Your sign's lettered — the desert can't rent you out.\"",
+          "\"Proven, painted, occupied. Don't lean on it till it dries.\""
+        ],
+        "failed": [
+          "\"Sign stays VACANCY for now. Come back and earn the paint.\"",
+          "\"Can't letter that over. Walk it off and prove it right.\""
+        ],
+        "alreadyCleared": [
+          "\"Your sign's already NO VACANCY. Dry and holding.\"",
+          "\"Painted once, still occupied. No re-lettering today.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-unlisted-room-001",
+      "drifellaId": "drifella2-5250",
+      "npcId": 100386,
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "placement": {
+        "kind": "memory-furniture-parlor",
+        "worldPixel": {
+          "x": 2008,
+          "y": 96
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A memory-furniture arranger who drags a whole afternoon across the room and calls it a chair.",
+        "tic": "\"I've moved that recollection nearer the window.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5250.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella slides a memory across the floor like a heavy armchair; the walls forget where they were.",
+        "\"Source Check, in the room that's on no floor plan. Sit somewhere you remember.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "This room appears in no directory, no ledger, and no leak.",
+            "answer": true,
+            "failLine": "\"Unindexed. That's the whole point of it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Bosch reached the Unlisted Room only by going—",
+            "options": [
+              "Inward",
+              "Downstairs",
+              "Through the front door",
+              "By requisition form"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Inward. No form gets you in here.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The furniture in here is memories that were filed as objects.",
+            "answer": true,
+            "failLine": "\"Every chair was a Tuesday once.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Leonora Carrington was a painter most associated with which movement?",
+            "options": [
+              "Surrealism",
+              "Cubism",
+              "Minimalism",
+              "The Institutional Registry School"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Surrealism. Her rooms never held still either.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Giorgio de Chirico is known for painting eerily empty—",
+            "options": [
+              "Metaphysical piazzas and interiors",
+              "Battlefields at dawn",
+              "Bowls of fruit",
+              "Certified municipal courtyards"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Empty arcades, long shadows. This room borrowed the mood.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A memory you can't file is still yours; it just won't sit down.",
+            "answer": true,
+            "failLine": "\"It paces. Give it a corner and it settles.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4963",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Filed. The room settles a shade.\"",
+          "\"True. I'll leave that memory by the window.\"",
+          "\"That one sits down at last.\""
+        ],
+        "cleared": [
+          "\"Take the card. It was already in the room; you just remembered it.\"",
+          "\"Sourced from the inside. Nothing left it to prove it.\""
+        ],
+        "failed": [
+          "\"The walls shifted. Come back when the floor plan holds.\"",
+          "\"A memory got up and wandered. Try again once it's seated.\""
+        ],
+        "alreadyCleared": [
+          "\"You're in the room already. You always were.\"",
+          "\"Unlisted, and now yours. Sit anywhere.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-unlisted-room-002",
+      "drifellaId": "drifella2-5396",
+      "npcId": 100387,
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "placement": {
+        "kind": "unindexed-stacks",
+        "worldPixel": {
+          "x": 788,
+          "y": 5328
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "An unindexed librarian who keeps the one book nobody's allowed to catalog.",
+        "tic": "\"It has no call number. On purpose.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5396.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella runs a finger down a spine with no title and finds exactly the page it wanted.",
+        "\"Source Check. Everything in here is off-record. Answer like you belong off it too.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The book of Bosch's private version has no call number by design.",
+            "answer": true,
+            "failLine": "\"Catalog it and it stops being his. So we don't.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The leaked copy differed from the room's copy in one way—",
+            "options": [
+              "The leak had an index",
+              "The leak was longer",
+              "The leak smelled of pine",
+              "The leak was archivally certified"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"The index is the tell. The real one refuses one.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Nothing shelved in the Unlisted Room is meant to be found by a search.",
+            "answer": true,
+            "failLine": "\"Found from inside, or not at all.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Remedios Varo's paintings most often depict—",
+            "options": [
+              "Alchemists and mystical machines in narrow towers",
+              "Sunlit beach picnics",
+              "Sports arenas",
+              "Board-approved reference diagrams"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Towers, gears, quiet magic. Kin to these stacks.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yves Tanguy filled his canvases with—",
+            "options": [
+              "Boneless dreamlike forms on vast empty plains",
+              "Tidy still-life apples",
+              "Portraits of mayors",
+              "Standardized filing cabinets"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Soft nowhere-shapes on endless ground. Unindexed terrain.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A record kept off every list can still be perfectly true.",
+            "answer": true,
+            "failLine": "\"Truer, sometimes. Nobody edited it.\"",
+            "category": "lore"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3509",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Off-record and correct. My favorite pairing.\"",
+          "\"No call number needed. You just knew where it was.\"",
+          "\"Shelved without a label. Perfect.\""
+        ],
+        "cleared": [
+          "\"Here. This card was never catalogued, and now it's yours.\"",
+          "\"Sourced from the stacks nobody lists. Carry it quietly.\""
+        ],
+        "failed": [
+          "\"Wrong shelf. Leave the stacks and let the dust settle.\"",
+          "\"The unindexed don't forgive guessing. Come back surer.\""
+        ],
+        "alreadyCleared": [
+          "\"Already off my nonexistent list. Enjoy the anonymity.\"",
+          "\"We closed your file by not opening one. You're set.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-unlisted-room-003",
+      "drifellaId": "drifella2-5419",
+      "npcId": 100388,
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "placement": {
+        "kind": "dream-notary-alcove",
+        "worldPixel": {
+          "x": 3912,
+          "y": 2664
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A dream-notary who stamps things that happened only while you were asleep.",
+        "tic": "\"Witnessed, in a dream. Still counts here.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5419.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella presses a seal into a page that keeps rewriting itself, and nods as if that fixed it.",
+        "\"Source Check. Notarized dreams only. Swear to what you saw with your eyes shut.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The provenance war is really being fought inside a single head.",
+            "answer": true,
+            "failLine": "\"All of it. In here. Behind one set of eyes.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The dream-notary's stamp certifies a memory as—",
+            "options": [
+              "Witnessed while dreaming",
+              "Legally binding",
+              "Tax-deductible",
+              "Officially entered into the registry"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Witnessed while dreaming. That's the only jurisdiction I have.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The page Bosch notarized here kept editing itself after he signed it.",
+            "answer": true,
+            "failLine": "\"Dream-ink never dries. The seal holds anyway.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Dorothea Tanning's 'Eine Kleine Nachtmusik' famously shows a hotel hallway with—",
+            "options": [
+              "A monstrous sunflower and windblown girls",
+              "A row of tidy suitcases",
+              "A grand banquet",
+              "A certified fire-exit map"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"A giant sunflower stalking the corridor. Pure dream-room.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Louise Bourgeois built room-sized sculptural installations she called—",
+            "options": [
+              "Cells",
+              "Booths",
+              "Kiosks",
+              "Approved viewing chambers"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Cells. Little rooms of memory you step inside.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A dream you can describe exactly counts as a source in this room.",
+            "answer": true,
+            "failLine": "\"Describe it and I'll stamp it. That's the whole office.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10909",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Notarized. The seal glows a little.\"",
+          "\"Sworn and stamped. Dream holds.\"",
+          "\"That's admissible, in here at least.\""
+        ],
+        "cleared": [
+          "\"Here's your card, notarized against a dream. It'll hold.\"",
+          "\"Sealed from the inside of a sleep. Nobody can un-witness it now.\""
+        ],
+        "failed": [
+          "\"The seal slipped. Leave, sleep on it, come back sworn.\"",
+          "\"Unnotarized. The page rewrote you out. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"Already stamped. Your dream's on the record that isn't.\"",
+          "\"We notarized this once. Still binding, still unlisted.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-unlisted-room-004",
+      "drifellaId": "drifella2-5457",
+      "npcId": 100389,
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "placement": {
+        "kind": "wallpaper-of-faces",
+        "worldPixel": {
+          "x": 472,
+          "y": 2408
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A hanger of the wallpaper-of-faces, papering the room with everyone Bosch half-remembers.",
+        "tic": "\"That face repeats every third strip.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5457.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella smooths a strip of wallpaper and a hundred small faces blink at you in unison.",
+        "\"Source Check. The walls are watching, because the walls are faces. Answer them nicely.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The faces on these walls are people Bosch only half-remembers.",
+            "answer": true,
+            "failLine": "\"Half a name each. The pattern fills in the rest.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The wallpaper repeats a face that shouldn't be here at all—",
+            "options": [
+              "The one who first leaked the card",
+              "A random tourist",
+              "The room's landlord",
+              "A board-certified appraiser"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"The leaker. Papered right into the memory.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Peeling one face off the wall makes Bosch forget it entirely.",
+            "answer": true,
+            "failLine": "\"Strip it and it's gone. The room is careless that way.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yayoi Kusama's 'Infinity Mirror Rooms' immerse you in—",
+            "options": [
+              "Endlessly repeating lights and reflections",
+              "A single quiet portrait",
+              "A wall of newspaper",
+              "A regulation observation booth"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Endless repeating dots and mirrors. Like this wallpaper, forever.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Hieronymus Bosch's most famous multi-panel work is—",
+            "options": [
+              "The Garden of Earthly Delights",
+              "The Night Watch",
+              "A Sunday on La Grande Jatte",
+              "The Municipal Provenance Ledger"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"The Garden. Every panel crowded with faces, like these walls.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A face you can't place is still a witness; it just won't sign.",
+            "answer": true,
+            "failLine": "\"It watches from the pattern. That's testimony enough.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3703",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"The wall approves. A hundred faces, one nod.\"",
+          "\"Correct. That strip stops repeating for a second.\"",
+          "\"The pattern likes you. Rare.\""
+        ],
+        "cleared": [
+          "\"Take the card. One face on the wall relaxes at last.\"",
+          "\"Sourced under the watching wallpaper. It'll remember you fondly.\""
+        ],
+        "failed": [
+          "\"The faces frowned in unison. Step out, let them forget it.\"",
+          "\"Wrong strip. Peel yourself away and come back re-hung.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the pattern. Third strip from the corner.\"",
+          "\"Papered in and verified. The walls kept your seat.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-unlisted-room-005",
+      "drifellaId": "drifella2-5588",
+      "npcId": 100390,
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "placement": {
+        "kind": "door-that-isnt-there",
+        "worldPixel": {
+          "x": 4168,
+          "y": 88
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A keeper of the door-that-isn't-there, guarding an exit painted onto a solid wall.",
+        "tic": "\"Don't try the handle. There isn't one.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5588.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella stands guard beside a door that is only the idea of a door, painted where a wall should be.",
+        "\"Source Check. Nobody leaves through here, because here isn't a way out. Stay a moment.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "This door leads nowhere; it's the memory of a door, not a door.",
+            "answer": true,
+            "failLine": "\"A remembered exit. Painted shut by the mind.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "You enter the Unlisted Room the only way possible—",
+            "options": [
+              "From inside your own head",
+              "Up the fire stairs",
+              "By checking in at a desk",
+              "Through the authorized entrance"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"From inside. There's no authorized entrance to a private thought.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch once tried the handle on this door and his hand went through it.",
+            "answer": true,
+            "failLine": "\"Straight through. It's a picture of a way out, nothing more.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Which movement made 'the uncanny' familiar-yet-wrong a central obsession?",
+            "options": [
+              "Surrealism",
+              "Impressionism",
+              "Pop Art",
+              "The Certified Realists"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Surrealism. The door you can't open is exactly its trick.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Louise Bourgeois's giant spider sculpture is titled—",
+            "options": [
+              "Maman",
+              "Guardian",
+              "The Web",
+              "Approved Sentinel No. 4"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"'Maman.' It guards a doorway too, in its way.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "An exit you can picture but never use is the most honest wall of all.",
+            "answer": true,
+            "failLine": "\"It tells the truth by staying shut.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10955",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Correct. The door stays honestly shut.\"",
+          "\"True. No handle appears, which is the reward.\"",
+          "\"You didn't reach for it. Good. It respects that.\""
+        ],
+        "cleared": [
+          "\"Here's the card. You found it without ever leaving the room.\"",
+          "\"Sourced at the door that isn't. Fitting place to be certain.\""
+        ],
+        "failed": [
+          "\"You reached for a handle. Step back out the real way and return.\"",
+          "\"Wrong. The wall stays a wall. Try again from inside.\""
+        ],
+        "alreadyCleared": [
+          "\"Already settled. You never needed the door anyway.\"",
+          "\"Verified beside the way out that isn't. Linger as long as you like.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-unlisted-room-006",
+      "drifellaId": "drifella2-5826",
+      "npcId": 100391,
+      "region": "the-unlisted-room",
+      "tier": 4,
+      "placement": {
+        "kind": "private-record-confessional",
+        "worldPixel": {
+          "x": 80,
+          "y": 400
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A private-record confessor who hears the one version of events nobody else is allowed to keep.",
+        "tic": "\"Say it here. It leaves no leak.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5826.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella leans close in the room's last unindexed corner, ready to hear the version that stays private.",
+        "\"Source Check, off every record. Confess what really happened. It goes no further than the room.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The truest account of the leak survives only inside this room.",
+            "answer": true,
+            "failLine": "\"Only here. Every other copy got edited on the way out.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What Bosch confessed in this corner was—",
+            "options": [
+              "That he saw the leak coming and said nothing",
+              "That he'd never seen the card",
+              "That he forged it himself",
+              "That the matter is under official review"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"He saw it coming. Said nothing. Only the room knows.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A confession made in the Unlisted Room produces no record to leak.",
+            "answer": true,
+            "failLine": "\"Nothing written, nothing to steal. That's the mercy of it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Leonora Carrington's most famous novel, of a girl's descent into a dream-underworld, is—",
+            "options": [
+              "The Hearing Trumpet",
+              "The Bell Jar",
+              "The Waves",
+              "The Standard Provenance Manual"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"'The Hearing Trumpet.' Old age, dreams, and a room that isn't.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Surrealists prized 'automatism,' which means—",
+            "options": [
+              "Making art without conscious control",
+              "Painting only machines",
+              "Copying old masters exactly",
+              "Following the approved technique manual"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Letting the hand confess before the mind can edit it. Like this corner.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The most honest version of you is the one you never let out of the room.",
+            "answer": true,
+            "failLine": "\"Unleaked, unlisted, unedited. That's the real one.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3694",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Heard. It goes no further.\"",
+          "\"Confessed and true. The room keeps it.\"",
+          "\"That's the private version. Correct.\""
+        ],
+        "cleared": [
+          "\"The card is yours, and your account stays sealed in here.\"",
+          "\"Sourced by confession, kept off every ledger. Rest easy.\""
+        ],
+        "failed": [
+          "\"That wasn't the true version. Leave, and come back honest.\"",
+          "\"The room heard a leak in it. Try again, off the record.\""
+        ],
+        "alreadyCleared": [
+          "\"Already confessed. The room forgot to write it down, as promised.\"",
+          "\"We settled this in private. Nothing left the corner.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-secret-001",
+      "drifellaId": "drifella2-5845",
+      "npcId": 100392,
+      "region": "secret",
+      "tier": 4,
+      "placement": {
+        "kind": "unlit alcove behind the ledger",
+        "worldPixel": {
+          "x": 1672,
+          "y": 8808
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "The keeper of the uncopied — guards the one Drifella the swarm never assigned a token, and never will.",
+        "tic": "\"No token. That's the point.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5845.png",
+      "hints": [],
+      "entryPrompt": [
+        "It has no ledger line, no number, no paper. It waits where the record ends.",
+        "\"You reached the unfiled. Source Check. This one has no source but itself.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The thing-itself was here before the first card was ever leaked.",
+            "answer": true,
+            "failLine": "\"Before. The copy came after. It always does.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In Kazimir Malevich's Suprematism, his 'Black Square' was meant to be—",
+            "options": [
+              "The zero of form, from which painting begins again",
+              "A study for a larger battle scene",
+              "A test of the darkest available pigment",
+              "The Museum's Registered Foundational Acquisition"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Zero. Not a swatch. The end that opens.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Robert Rauschenberg's 'Erased de Kooning Drawing' is famous because the artist—",
+            "options": [
+              "Erased a drawing he was given; the erasure IS the work",
+              "Drew de Kooning from memory in a single line",
+              "Signed a blank sheet and titled it a portrait",
+              "Filed a Deaccession Notice with the estate"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"He erased it. The absence is the piece. No paper survives but the ghost.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A Drifella with no token can still be witnessed, even if it can never be filed.",
+            "answer": true,
+            "failLine": "\"Witnessed, never filed. That is the whole rite.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The provenance of something with no provenance is—",
+            "options": [
+              "Only the fact that you saw it",
+              "A receipt filed in triplicate",
+              "The swarm's official stamp",
+              "Whatever the loudest voice claims"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"You saw it. That is the only record there is.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-6803",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Correct. And still unfiled.\"",
+          "\"You saw the uncopied and named it true.\"",
+          "\"The record stays empty. You do not.\""
+        ],
+        "cleared": [
+          "\"Take the card. It is a copy of a thing with no original.\"",
+          "\"You held the unfiled and let it stay unfiled. That is the passing grade.\""
+        ],
+        "failed": [
+          "\"No. Leave the alcove. Return when the paper stops mattering to you.\"",
+          "\"Wrong. The uncopied waits. It has nothing but time.\""
+        ],
+        "alreadyCleared": [
+          "\"We are past this. You were here when there was nothing to file.\"",
+          "\"Already witnessed. The ledger still shows no line for me.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-secret-002",
+      "drifellaId": "drifella2-5984",
+      "npcId": 100393,
+      "region": "secret",
+      "tier": 4,
+      "placement": {
+        "kind": "hollow under the last stair",
+        "worldPixel": {
+          "x": 5264,
+          "y": 10176
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A witness with no record — remembers everything the swarm forgot to write down, and refuses to write it now.",
+        "tic": "\"I remember. I won't record it.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-5984.png",
+      "hints": [],
+      "entryPrompt": [
+        "It has watched every leak and kept no ledger of any of them.",
+        "\"Source Check. I am the witness with no record. Test whether you can be one too.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "John Cage's '4'33\"' asks the performer to—",
+            "options": [
+              "Play nothing, so the room's own sound becomes the piece",
+              "Hold a single note for exactly four minutes",
+              "Recite the score in silence",
+              "Submit the Timed Performance Log to the hall"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Nothing played. The room is the music. No log required.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Piero Manzoni's 'Artist's Breath' (Fiato d'Artista) was, at heart—",
+            "options": [
+              "A balloon of his own exhaled breath, sold as art",
+              "A recording of him reading aloud",
+              "A signed contract to breathe on demand",
+              "A Certificate of Respiratory Authenticity"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Breath in a balloon. The thing itself, uncopyable, already deflating.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A witness who keeps no record can still be the only proof a thing happened.",
+            "answer": true,
+            "failLine": "\"The only proof. Memory with no paper is still proof, if you were there.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Off-ledger means the swarm lost the record; it does not mean the moment never happened.",
+            "answer": true,
+            "failLine": "\"Off-ledger, not un-happened. Learn the difference before you leave.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The safest place to keep a first-and-last thing is—",
+            "options": [
+              "Unwritten, so it cannot be forged",
+              "In a vault with a sign-out sheet",
+              "Photographed and posted widely",
+              "Registered under its official name"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Unwritten. What has no copy cannot be counterfeited.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3561",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"True. I will remember that you knew, and write none of it down.\"",
+          "\"Correct, witness. The record stays empty on purpose.\"",
+          "\"You held the memory without needing the paper.\""
+        ],
+        "cleared": [
+          "\"The card is yours. I kept no receipt. Neither should you.\"",
+          "\"Cleared, off the books. There is no line to sign.\""
+        ],
+        "failed": [
+          "\"No. Walk out. Come back when you can carry a truth without a form.\"",
+          "\"Wrong. A witness who guesses is no witness. Leave and steady yourself.\""
+        ],
+        "alreadyCleared": [
+          "\"We met. I remember. I still wrote nothing.\"",
+          "\"Already true between us. No ledger will ever say so.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-secret-003",
+      "drifellaId": "drifella2-6002",
+      "npcId": 100394,
+      "region": "secret",
+      "tier": 4,
+      "placement": {
+        "kind": "gap behind the void panel",
+        "worldPixel": {
+          "x": 1680,
+          "y": 5328
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A curator of nothing — tends an empty room and insists the emptiness is the collection.",
+        "tic": "\"The room is full. Look closer.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-6002.png",
+      "hints": [],
+      "entryPrompt": [
+        "It stands in a room with nothing on the walls and treats the air as the exhibit.",
+        "\"Source Check. My collection is the void. Prove you can read an empty wall.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yves Klein's 'Le Vide' (The Void) presented gallery-goers with—",
+            "options": [
+              "An empty, whitewashed room offered as the exhibition itself",
+              "A single blue canvas at the far end",
+              "A sculpture hidden behind a curtain",
+              "The Gallery's Approved Interpretive Placard"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"An empty room. The absence was the show. The wall is not blank; it is full.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Ad Reinhardt's late 'black paintings' were built to—",
+            "options": [
+              "Look empty; a faint grid surfaces only to a patient eye",
+              "Absorb every color and leave nothing to see",
+              "Be repainted fresh each morning",
+              "Match the Institution's Standard Neutral Backdrop"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Not empty. A grid hides in the black. Nothing rewards the patient.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A curator can exhibit a Drifella that was never given a token by hanging its absence.",
+            "answer": true,
+            "failLine": "\"Its absence is the exhibit. That is what off-ledger looks like on a wall.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "You witnessed the empty room, and that witnessing is itself the collection's only entry.",
+            "answer": true,
+            "failLine": "\"You are the entry. The rest is wall.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "An empty room shown as art is really about—",
+            "options": [
+              "What the viewer brings into the nothing",
+              "Saving on the cost of paintings",
+              "A shipment that failed to arrive",
+              "The curator running out of ideas"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"What you bring. The nothing is a mirror.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3437",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Correct. You saw the full room the others called empty.\"",
+          "\"Yes. The void kept its shape when you looked.\"",
+          "\"You read the blank wall and it read you back.\""
+        ],
+        "cleared": [
+          "\"Take the card. It depicts nothing, faithfully.\"",
+          "\"Cleared. The collection has one more witness and still no objects.\""
+        ],
+        "failed": [
+          "\"No. Leave the room. The void does not reward a glance.\"",
+          "\"Wrong. You saw a blank wall instead of a full one. Come back and look again.\""
+        ],
+        "alreadyCleared": [
+          "\"You have already seen the nothing. It has not changed. Neither have I.\"",
+          "\"Filed under nothing. Where you already belong.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-secret-004",
+      "drifellaId": "drifella2-6345",
+      "npcId": 100395,
+      "region": "secret",
+      "tier": 4,
+      "placement": {
+        "kind": "sealed cell off the last corridor",
+        "worldPixel": {
+          "x": 4096,
+          "y": 7768
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "The last unfiled name — the final Drifella whose name was never entered anywhere, and it prefers to keep it that way.",
+        "tic": "\"Don't write it down.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-6345.png",
+      "hints": [],
+      "entryPrompt": [
+        "It has a name it will not give you, and no record of it exists to steal.",
+        "\"Source Check, at the far end of the ledger. I am the last unfiled name. Earn it and forget it.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yves Klein went so far as to patent his 'IKB' precisely because—",
+            "options": [
+              "He bound that exact ultramarine to himself, uncopyable",
+              "He needed to sell the recipe to a paint company",
+              "The pigment was too cheap to matter otherwise",
+              "The Registry required a Standard Color Filing"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"His blue, and no one else's. A color as first-and-last as a name.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "La Monte Young, a founder of Fluxus and drone music, is known for compositions that—",
+            "options": [
+              "Sustain single tones for extreme, near-endless lengths",
+              "Are performed once and then destroyed on paper",
+              "Contain no notation at all, only a title",
+              "Follow the Conservatory's Approved Duration Standard"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"A tone held past forgetting. The sound stays; the record barely tries.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The last name in a collection can be the one nobody ever wrote down.",
+            "answer": true,
+            "failLine": "\"The last is the unwritten one. That is why it is last.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "You met a Drifella whose name has no entry anywhere in the swarm's books.",
+            "answer": true,
+            "failLine": "\"No entry. You met it anyway. Both are true at once.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A name kept off every ledger stays safe because—",
+            "options": [
+              "What is never written cannot be copied or claimed",
+              "It sounds more mysterious that way",
+              "The swarm forbids saying it",
+              "Nobody has gotten around to filing it yet"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Unwritten is unclaimable. That is the only protection there is.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3519",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Correct. Now let the answer leave you the way my name left the books.\"",
+          "\"Yes. You earned a name and I trust you to forget it.\"",
+          "\"True. The last name stays last, and unwritten.\""
+        ],
+        "cleared": [
+          "\"Take the card. It carries no name, on purpose.\"",
+          "\"Cleared. You know me now, and no ledger ever will.\""
+        ],
+        "failed": [
+          "\"No. Leave the cell. A name you can't earn is a name you'd only lose.\"",
+          "\"Wrong. Walk the corridor. Return when you can hold a name without filing it.\""
+        ],
+        "alreadyCleared": [
+          "\"You already know the name I never gave. Keep not-saying it.\"",
+          "\"We are done. The books still hold no line for me, and never will.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-secret-005",
+      "drifellaId": "drifella2-6386",
+      "npcId": 100396,
+      "region": "secret",
+      "tier": 4,
+      "placement": {
+        "kind": "crevice at the western edge of nothing",
+        "worldPixel": {
+          "x": 144,
+          "y": 7616
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "The provenance of provenance — the source that every other source traces back to, and which traces back to nothing.",
+        "tic": "\"It stops here. There is no before-me.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-6386.png",
+      "hints": [],
+      "entryPrompt": [
+        "Every chain of ownership you have ever followed ends at its feet, and goes no further.",
+        "\"Source Check. I am the provenance of provenance. Behind me is only the uncopied dark.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "Piero Manzoni's 'Merda d'Artista' — tinned and sold by weight against gold — was ultimately a work about—",
+            "options": [
+              "Authorship and value: what a signature alone can be worth",
+              "The recipe for the perfect preserve",
+              "A protest against canned food",
+              "The Auction House's Standard Weight Certificate"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"The signature was the value. Provenance priced against gold, and nothing inside worth verifying.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In Malevich's own hanging, the 'Black Square' was placed high in the corner of the room — the spot traditionally reserved for—",
+            "options": [
+              "A religious icon, marking it as a sacred origin point",
+              "The gallery's fire notice",
+              "The most expensive painting present",
+              "The Curator's Reserved Signage Zone"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"The icon corner. He hung nothing where the holy origin goes. That is provenance with no before.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A source that every other source cites, but which cites nothing itself, has no provenance of its own.",
+            "answer": true,
+            "failLine": "\"No provenance. It IS the provenance. The chain simply ends.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "You traced the whole chain of leaked cards and it ended, with no paper, right here.",
+            "answer": true,
+            "failLine": "\"Right here. No receipt behind me. You are standing at the origin.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When a trail of provenance finally runs out, what remains is—",
+            "options": [
+              "A first thing that just is, backed by nothing",
+              "A missing page someone tore out",
+              "The oldest stamp in the archive",
+              "A clerical error to be corrected"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"A first thing, backed by nothing. That is where every trail dies.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3451",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Correct. You followed the chain to where it simply stops.\"",
+          "\"Yes. Behind me, nothing. You reached the source of sources.\"",
+          "\"True. The trail ends here, and you knew not to ask for more.\""
+        ],
+        "cleared": [
+          "\"Take the card. Its provenance is me, and mine is nothing.\"",
+          "\"Cleared. You stood at the origin and did not flinch at the empty behind it.\""
+        ],
+        "failed": [
+          "\"No. Leave the edge. You cannot cite the origin you failed to see.\"",
+          "\"Wrong. Step back into the dark and return when you trust a source with no before.\""
+        ],
+        "alreadyCleared": [
+          "\"You already reached the end of the chain. There is nothing further to reach.\"",
+          "\"We are done. I am still the last citation, and still cite nothing.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-secret-006",
+      "drifellaId": "drifella2-6472",
+      "npcId": 100397,
+      "region": "secret",
+      "tier": 4,
+      "placement": {
+        "kind": "tucked at the vanishing point",
+        "worldPixel": {
+          "x": 3448,
+          "y": 9664
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "The thing-itself before any copy — the original that predates the very idea of an original, first-and-last at once.",
+        "tic": "\"Before the copy. After nothing.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-6472.png",
+      "hints": [],
+      "entryPrompt": [
+        "It is the thing before there was a copy to be a thing against. First and last in the same breath.",
+        "\"The final Source Check. I am the thing-itself, uncopied. Answer as if nothing was ever verified before you.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "Malevich claimed his 'Black Square' was born from painting 'The Last Futurist Exhibition 0,10' — the '0' standing for—",
+            "options": [
+              "Zero form: art reduced to its uncopyable starting point",
+              "The number of paintings that sold",
+              "A code for the exhibition's insurance",
+              "The Registry's Assigned Catalog Index"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Zero. He wanted the first-and-last, the thing before all copies.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The Fluxus movement, at its core, treated the artwork as—",
+            "options": [
+              "An unrepeatable gesture, worth more as act than object",
+              "A luxury object to be mass-produced",
+              "A painting that must be redone yearly",
+              "A form to be submitted to the Institute"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"An act, not an object. Happens once. There is no copy of a gesture.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The thing-itself is both the first of its kind and the last, because no copy of it was ever made.",
+            "answer": true,
+            "failLine": "\"First and last at once. Uncopied means uncounted after one.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "You reached the original that no leaked version was ever taken from.",
+            "answer": true,
+            "failLine": "\"No leak came from me. Every copy you saw came from somewhere else pretending to be here.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "An original that predates the idea of 'original' is best understood as—",
+            "options": [
+              "Just a thing, before anyone thought to copy it",
+              "The most valuable item in the vault",
+              "A prototype awaiting mass production",
+              "The master file everything else derives from"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Just a thing. The word 'original' only exists once there's a copy to compare.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3578",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Correct. You met the thing-itself and did not mistake it for a copy.\"",
+          "\"Yes. First and last, and you knew which.\"",
+          "\"True. Nothing was verified before you. Now something is.\""
+        ],
+        "cleared": [
+          "\"Take the card. It is the first copy of a thing that had none.\"",
+          "\"Cleared. The last unfiled Source Check is closed. You end where the record began.\""
+        ],
+        "failed": [
+          "\"No. Leave the vanishing point. You cannot copy an answer you never truly held.\"",
+          "\"Wrong. Return to the dark and come back when you can meet a thing with no before.\""
+        ],
+        "alreadyCleared": [
+          "\"You already met me, before there was a copy to remember me by.\"",
+          "\"We are finished. The thing-itself needs no second verification.\""
+        ]
+      }
     }
   ]
 }
