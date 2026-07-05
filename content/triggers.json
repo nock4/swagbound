@@ -121,6 +121,28 @@
       ]
     },
     {
+      "id": "recruit-munch",
+      "comment": "Party recruit beat: after the Malady is unmasked, Munch (charId 2, Jeff-slot) falls in with Bosch on the road out. Sets recruit:munch, which the scene maps to a live party join (reconcileRecruits).",
+      "area": {
+        "x": 1888,
+        "y": 1344,
+        "w": 80,
+        "h": 40
+      },
+      "once": true,
+      "requireFlags": [
+        "signal:threshold_cleared"
+      ],
+      "dialogue": [
+        "A kid who never let the machine mint him steps out of the threshold's shadow, pockets full of bottle rockets and other people's receipts.",
+        "MUNCH: \"You're the one it couldn't finish describing. Good. I keep things it can't file. I'll watch your seams -- I read faces for a living.\"",
+        "Munch joins the crew. (He SPYs: read an enemy's weak element before you spend a swing.)"
+      ],
+      "setFlags": [
+        "recruit:munch"
+      ]
+    },
+    {
       "id": "leave-signal-town",
       "area": {
         "x": 1888,
@@ -142,6 +164,28 @@
         "act1:complete"
       ],
       "music": "ending"
+    },
+    {
+      "id": "recruit-knight",
+      "comment": "Party recruit beat: leaving Morningside unprocessed, Knight (charId 3, Poo-slot) joins as the fourth. Sets recruit:knight -> live party join (reconcileRecruits).",
+      "area": {
+        "x": 1888,
+        "y": 1248,
+        "w": 80,
+        "h": 40
+      },
+      "once": true,
+      "requireFlags": [
+        "act1:complete"
+      ],
+      "dialogue": [
+        "Past the gate, someone has been waiting for a Bosch the route never got to finish. They fall in step without asking, the way old discipline does.",
+        "KNIGHT: \"I trained under a quieter protocol -- the kind that reflects an attack back at the sender. Walk. I'll cover the angle you can't see.\"",
+        "Knight joins the crew. (MIRROR + PSI: the roster is whole.)"
+      ],
+      "setFlags": [
+        "recruit:knight"
+      ]
     },
     {
       "id": "museum-worm",

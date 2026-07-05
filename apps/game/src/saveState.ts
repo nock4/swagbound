@@ -177,6 +177,7 @@ function clonePartyStateSnapshot(snapshot: PartyStateSnapshot): PartyStateSnapsh
     wallet: snapshot.wallet,
     ...(snapshot.bank !== undefined ? { bank: snapshot.bank } : {}),
     partyIds: [...snapshot.partyIds],
+    ...(snapshot.order ? { order: [...snapshot.order] } : {}),
     inventory: snapshot.inventory.map((entry) => ({
       charId: entry.charId,
       itemIds: [...entry.itemIds]
@@ -214,6 +215,7 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
   const wallet = validateId(value.wallet);
   const bank = value.bank === undefined ? undefined : validateId(value.bank);
   const partyIds = validateIdArray(value.partyIds, { unique: true });
+  const order = value.order === undefined ? undefined : validateIdArray(value.order, { unique: true });
   const inventory = validateInventory(value.inventory);
   const equipped = validateEquipment(value.equipped);
   const storage = value.storage === undefined ? undefined : validateIdArray(value.storage);
@@ -224,6 +226,7 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
     wallet === undefined ||
     (value.bank !== undefined && bank === undefined) ||
     !partyIds ||
+    (value.order !== undefined && !order) ||
     !inventory ||
     !equipped ||
     (value.storage !== undefined && !storage) ||
@@ -237,6 +240,7 @@ function validatePartyStateSnapshot(value: unknown): PartyStateSnapshot | null {
     wallet,
     ...(bank !== undefined ? { bank } : {}),
     partyIds,
+    ...(order ? { order } : {}),
     inventory,
     equipped,
     ...(storage ? { storage } : {}),

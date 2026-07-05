@@ -71,6 +71,8 @@ export type PartyStateSnapshot = {
   wallet: number;
   bank?: number;
   partyIds: number[];
+  /** Explicit active-party display/marching order (charIds). Absent = charId-ascending. */
+  order?: number[];
   inventory: PartyInventorySnapshot[];
   equipped: PartyEquipmentSnapshot[];
   storage?: number[];
@@ -281,6 +283,8 @@ export class PartyState {
   private readonly inventoryByChar = new Map<number, number[]>();
   private storageItems: number[] = [];
   private readonly partyIds = new Set<number>();
+  /** Explicit party order (charIds); empty = fall back to charId-ascending. */
+  private orderIds: number[] = [];
   private readonly equippedByChar = new Map<number, EquippedSlots>();
   private readonly vitalsByChar = new Map<number, PartyVitals>();
   private readonly battleMembersByChar = new Map<number, PartyBattleMemberSnapshot>();
@@ -321,7 +325,30 @@ export class PartyState {
   }
 
   party(): number[] {
-    return [...this.partyIds].sort((a, b) => a - b);
+    const active = [...this.partyIds];
+    if (this.orderIds.length === 0) {
+      return active.sort((a, b) => a - b);
+    }
+    // Honor the explicit order for members still in the party; append any others
+    // (e.g. a fresh recruit not yet placed) in charId order so nobody is dropped.
+    const ordered = this.orderIds.filter((id) => this.partyIds.has(id));
+    const seen = new Set(ordered);
+    const rest = active.filter((id) => !seen.has(id)).sort((a, b) => a - b);
+    return [...ordered, ...rest];
+  }
+
+  /** Set the explicit active-party order. Ids not currently in the party are ignored. */
+  reorder(ids: readonly number[]): void {
+    const seen = new Set<number>();
+    const next: number[] = [];
+    for (const raw of ids) {
+      const id = normalizeId(raw);
+      if (this.partyIds.has(id) && !seen.has(id)) {
+        seen.add(id);
+        next.push(id);
+      }
+    }
+    this.orderIds = next;
   }
 
   give(char: number, item: number): boolean {
@@ -677,6 +704,7 @@ export class PartyState {
       return;
     }
     this.partyIds.delete(normalizedChar);
+    this.orderIds = this.orderIds.filter((id) => id !== normalizedChar);
   }
 
   applyBattleResult(party: Combatant[], wallet: number, bank?: number): void {
@@ -759,6 +787,7 @@ export class PartyState {
       wallet: this.walletValue,
       bank: this.bankValue,
       partyIds: this.party(),
+      ...(this.orderIds.length > 0 ? { order: [...this.party()] } : {}),
       inventory: [...this.inventoryByChar.entries()]
         .sort(([a], [b]) => a - b)
         .map(([charId, itemIds]) => ({ charId, itemIds: [...itemIds] })),
@@ -794,6 +823,7 @@ export class PartyState {
     this.inventoryByChar.clear();
     this.storageItems = [];
     this.partyIds.clear();
+    this.orderIds = [];
     this.equippedByChar.clear();
     this.vitalsByChar.clear();
     this.battleMembersByChar.clear();
@@ -801,6 +831,9 @@ export class PartyState {
 
     for (const charId of snapshot.partyIds) {
       this.partyIds.add(normalizeId(charId));
+    }
+    if (snapshot.order && snapshot.order.length > 0) {
+      this.reorder(snapshot.order);
     }
     for (const entry of snapshot.inventory) {
       const charId = normalizeId(entry.charId);

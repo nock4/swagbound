@@ -6,6 +6,7 @@ import { BossPlacementEditor, isBossEditEnabled, type BossEditorEntry, type Boss
 import { CollisionOverrideEditor, isCollisionEditEnabled } from "./collisionOverrideEditor";
 import { TeleportMenu, type TeleportTown } from "./teleportMenu";
 import { QuestJournal, type Quest } from "./questJournal";
+import { PartyOrderMenu } from "./partyOrderMenu";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -530,6 +531,19 @@ const QUESTS: readonly Quest[] = [
     reward: "Reclaimed cache (Rock Candy)"
   }
 ];
+
+/**
+ * Recruitable party members past the Act-1 Bosch + Cloak duo. Each joins the
+ * moment its `flag` is set (a normal story flag, authored into a trigger's
+ * setFlags — see content/triggers.json). Recruitment is flag-driven so it both
+ * survives save/load (partyIds persist) and replays deterministically via
+ * ?flags=recruit:munch. charIds match the character roster (2=Munch/Jeff,
+ * 3=Knight/Poo); the base duo (0,1) is always present and never listed here.
+ */
+const PARTY_RECRUITS: readonly { charId: number; flag: string; name: string }[] = [
+  { charId: 2, flag: "recruit:munch", name: "Munch" },
+  { charId: 3, flag: "recruit:knight", name: "Knight" }
+];
 const OVERWORLD_AMBUSHER_CHANCE = 0.35;
 const OVERWORLD_AMBUSH_SEARCH_CELLS = 9;
 const OVERWORLD_AMBUSH_TRIGGER_PX = 64;
@@ -684,10 +698,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private bikeActive = false;
   private teleportMenu?: TeleportMenu;
   private questJournal?: QuestJournal;
+  private partyOrderMenu?: PartyOrderMenu;
   private readonly teleportVisited = new Set<string>();
   private teleportSpinUntilMs = 0;
   private lastAutosaveTownId: string | undefined;
   private autosaveNoticeUntilMs = 0;
+  private recruitNoticeUntilMs = 0;
+  private recruitNoticeText = "";
   /** solidRows snapshot (post-authored-overrides) the paint editor repaints from. */
   private editorBaseSolidRows?: string[];
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
@@ -924,6 +941,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.teleportMenu = undefined;
       this.questJournal?.destroy();
       this.questJournal = undefined;
+      this.partyOrderMenu?.destroy();
+      this.partyOrderMenu = undefined;
     });
 
     this.cursors = this.input.keyboard?.createCursorKeys();
@@ -965,6 +984,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       quests: () => [...QUESTS],
       hasFlag: (flag) => this.gameFlags.has(flag),
       canOpen: () => this.isPlayerControllable() && !this.bikeActive
+    });
+
+    // Party order / swap (K): reorder the active roster (lead + turn priority).
+    this.partyOrderMenu = new PartyOrderMenu({
+      members: () => this.partyState.party().map((id) => ({ id, name: this.heroDisplayName(id) })),
+      reorder: (ids) => {
+        this.partyState.reorder(ids);
+        this.handlePartyCompositionChanged();
+      },
+      canOpen: () => this.isPlayerControllable() && !this.bikeActive && this.partyState.party().length > 1
     });
     this.updateTeleportVisited();
 
@@ -1064,6 +1093,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.maybeStartNewGameStartup(spawn);
     }
     this.applyDebugFlags();
+    // Bring in any already-earned recruits (from a restored save or ?flags=recruit:*)
+    // silently — the live "joined!" beat only fires when a flag flips during play.
+    this.reconcileRecruits();
     this.syncPresentInteractableSprites();
     this.publish();
   }
@@ -1914,6 +1946,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.handlePartyCompositionChanged();
       return this.partyState.party();
     };
+    // Debug-only: recruit by charId as a live story beat (sets the recruit flag, joins,
+    // shows the notice) — mirrors what a trigger's setFlags does in real play.
+    globals.__recruit = (charId: number) => {
+      const recruit = PARTY_RECRUITS.find((entry) => entry.charId === charId);
+      if (recruit) {
+        this.gameFlags.set(recruit.flag);
+      }
+      this.reconcileRecruits({ announce: true });
+      return this.partyState.party();
+    };
+    globals.__reorderParty = (ids: number[]) => {
+      this.partyState.reorder(ids);
+      this.handlePartyCompositionChanged();
+      return this.partyState.party();
+    };
+    globals.__partyRoster = () => ({
+      party: this.partyState.party(),
+      names: this.effectiveBattlePartyMembers()?.map((entry) => ({ id: entry.id, name: entry.name })) ?? []
+    });
     globals.__followerInfo = () => ({
       spawned: this.followers.length > 0,
       pos: this.followers[0]?.pos ? { ...this.followers[0].pos } : null,
@@ -1958,6 +2009,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__overworldStatusHud;
     delete globals.__setPartyStatus;
     delete globals.__partyOp;
+    delete globals.__recruit;
+    delete globals.__reorderParty;
+    delete globals.__partyRoster;
     delete globals.__followerInfo;
     delete globals.__setPlayerVisualState;
     delete globals.__playerVisualState;
@@ -3040,6 +3094,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private updatePrompt(): void {
+    if (this.time.now < this.recruitNoticeUntilMs && !this.menuState.open && !this.dialogue.open) {
+      this.prompt = this.recruitNoticeText;
+      return;
+    }
     if (this.time.now < this.autosaveNoticeUntilMs && !this.menuState.open && !this.dialogue.open) {
       this.prompt = "✦ Autosaved (town reached)";
       return;
@@ -4057,6 +4115,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       resolution.setFlags.forEach((flag) => this.gameFlags.set(flag));
       resolution.clearFlags.forEach((flag) => this.gameFlags.unset(flag));
+      this.reconcileRecruits({ announce: true });
       return;
     }
     this.suppressedTriggerId = resolution.triggerId;
@@ -5212,6 +5271,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
     trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+    this.reconcileRecruits({ announce: true });
 
     if (trigger.warp) {
       this.applyDoorWarp(
@@ -5270,10 +5330,53 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
   }
 
+  /** Branded Swagbound hero name for a charId (sprite-override party[]), else the roster name. */
+  private heroDisplayName(charId: number): string {
+    const branded = this.data_.spriteOverrides?.party?.[charId]?.name;
+    if (branded) {
+      return branded;
+    }
+    const character = this.data_.characters?.characters.find((entry) => entry.id === charId);
+    return character?.name ?? `Hero ${charId}`;
+  }
+
   private handlePartyCompositionChanged(): void {
     this.partyState.ensureVitalsFor(this.overworldHudPartyMembers());
     this.refreshMenuScreens();
     this.spawnFollower({ x: this.playerState.x, y: this.playerState.y }, this.playerState.facing);
+    this.publish();
+  }
+
+  /**
+   * Bring in any recruit whose story flag is now set but who isn't in the party yet.
+   * Called on boot (silent — restoring a save that already has them) and after story
+   * flags change during play (announced — the live "X joined!" beat). Idempotent.
+   */
+  private reconcileRecruits(options: { announce?: boolean } = {}): void {
+    const active = new Set(this.partyState.party());
+    const joined: string[] = [];
+    for (const recruit of PARTY_RECRUITS) {
+      if (active.has(recruit.charId) || !this.gameFlags.has(recruit.flag)) {
+        continue;
+      }
+      this.partyState.partyOp("add", recruit.charId);
+      joined.push(recruit.name);
+    }
+    if (joined.length === 0) {
+      return;
+    }
+    this.handlePartyCompositionChanged();
+    if (options.announce) {
+      this.showRecruitNotice(joined);
+    }
+  }
+
+  private showRecruitNotice(names: readonly string[]): void {
+    this.recruitNoticeText = names.length === 1
+      ? `✦ ${names[0]} joined the crew!`
+      : `✦ ${names.join(" & ")} joined the crew!`;
+    this.recruitNoticeUntilMs = this.time.now + 2400;
+    this.updatePrompt();
     this.publish();
   }
 

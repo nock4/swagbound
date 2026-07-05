@@ -90,6 +90,48 @@ describe("PartyState", () => {
     expect(state.counts()).toMatchObject({ partyCount: 1 });
   });
 
+  it("honors an explicit party order, appending unordered members by charId", () => {
+    const state = new PartyState();
+    for (const id of [0, 1, 2, 3]) {
+      state.partyOp("add", id);
+    }
+    // Default: charId-ascending.
+    expect(state.party()).toEqual([0, 1, 2, 3]);
+
+    state.reorder([2, 0]);
+    // Ordered members first (2, 0), the rest appended in charId order (1, 3).
+    expect(state.party()).toEqual([2, 0, 1, 3]);
+
+    // Removing a member drops it from the order without disturbing the rest.
+    state.partyOp("remove", 2);
+    expect(state.party()).toEqual([0, 1, 3]);
+
+    // reorder ignores ids not currently in the party.
+    state.reorder([3, 99, 1]);
+    expect(state.party()).toEqual([3, 1, 0]);
+  });
+
+  it("round-trips explicit order through snapshot/restore", () => {
+    const state = new PartyState();
+    for (const id of [0, 1, 2, 3]) {
+      state.partyOp("add", id);
+    }
+    state.reorder([3, 1]);
+    const snapshot = state.snapshot();
+    expect(snapshot.order).toEqual([3, 1, 0, 2]);
+
+    const restored = new PartyState();
+    restored.restore(snapshot);
+    expect(restored.party()).toEqual([3, 1, 0, 2]);
+  });
+
+  it("omits order from the snapshot when no explicit order is set", () => {
+    const state = new PartyState();
+    state.partyOp("add", 0);
+    state.partyOp("add", 1);
+    expect(state.snapshot().order).toBeUndefined();
+  });
+
   it("uses a consumable item to roll HP upward and remove inventory", () => {
     const state = new PartyState();
     const item = itemData(10, { action: 0x1e02, argument: 30, consumable: true });

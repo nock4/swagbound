@@ -88,6 +88,27 @@ describe("SaveState", () => {
     expect(targetParty.battleMember(2)).toMatchObject({ level: 4, experience: 250, hp: 33 });
   });
 
+  it("round-trips an explicit party order through save/load", () => {
+    const flags = new GameFlags();
+    const party = new PartyState();
+    for (const id of [0, 1, 2, 3]) {
+      party.partyOp("add", id);
+    }
+    party.reorder([2, 0]); // Munch leads, then Bosch
+
+    const save = captureSaveState({
+      flags,
+      partyState: party,
+      player: { mode: "chunked", x: 0, y: 0, facing: "down" }
+    });
+    const parsed = deserializeSaveState(serializeSaveState(save));
+    expect(parsed?.party.order).toEqual([2, 0, 1, 3]);
+
+    const restored = new PartyState();
+    applySaveState(parsed, { flags: new GameFlags(), partyState: restored });
+    expect(restored.party()).toEqual([2, 0, 1, 3]);
+  });
+
   it("returns null for empty, corrupt, missing, and older-version blobs", () => {
     expect(deserializeSaveState(null)).toBeNull();
     expect(deserializeSaveState("")).toBeNull();
