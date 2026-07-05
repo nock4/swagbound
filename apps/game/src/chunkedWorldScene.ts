@@ -7030,8 +7030,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private isPlayerOnLowerHideCell(): boolean {
     try {
-      const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
-      return isFgLowerOnlySurface(surface);
+      const grid = this.collisionGrid();
+      const feet = { x: this.playerState.x, y: this.playerState.y };
+      const surface = surfaceAtWorldPixel(this.surfaceRows, feet, grid);
+      if (!isFgLowerOnlySurface(surface)) {
+        return false;
+      }
+      // A 0x01 lower-hide cell sitting directly on top of a SOLID cell is a wall-top /
+      // curb edge, not tall grass. There the foreground wall art already hides the legs,
+      // so the extra sprite crop over-hides and leaves a floating torso at the ledge.
+      // Only crop over open lower-hide terrain (grass/shrub), where nothing else covers.
+      const below = { x: feet.x, y: feet.y + this.collisionCellSize };
+      if (solidAtWorldPixel(this.solidRows, below, grid)) {
+        return false;
+      }
+      return true;
     } catch {
       return false;
     }
