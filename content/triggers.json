@@ -254,7 +254,32 @@
       ]
     },
     {
+      "id": "deadletter-arrival",
+      "comment": "ACT 3 OPENING. Fires on reaching Dead Letter (Threed analog) after act2:complete -- the town that stopped keeping originals at all, built around the Museum of Leaked Versions. Area covers the museum approach (near the west-wing entrance / starman). Sets act3:begun + deadletter:arrived, the flag the museum sequence gates on.",
+      "area": {
+        "x": 4820,
+        "y": 8360,
+        "w": 168,
+        "h": 128
+      },
+      "once": true,
+      "requireFlags": [
+        "act2:complete"
+      ],
+      "dialogue": [
+        "East of Postwick the road stops pretending. Dead Letter is where undelivered selves are sorted and never returned -- a fog-town of return-to-sender faces, its post office long since eaten from the inside.",
+        "At its heart: THE MUSEUM OF LEAKED VERSIONS. No originals left on the walls. Something filed the firsts and moved into the empty frames, and it hangs Bosch's name in the lobby directory under WORKS: FORTHCOMING.",
+        "The doors are open. They were always open. A placard by the turnstile reads: SOURCE -- DISPUTED. ADMISSION -- FREE. EXIT -- PENDING.",
+        "[ ACT 3 -- DEAD LETTER: THE MUSEUM OF LEAKED VERSIONS ]"
+      ],
+      "setFlags": [
+        "act3:begun",
+        "deadletter:arrived"
+      ]
+    },
+    {
       "id": "museum-worm",
+      "comment": "ACT 3 CLIMAX: Provenance 0, the coil that ate the originals, in the deep vault of the Museum of Leaked Versions. Gated last in the museum sequence (starman -> frank -> worm). Sets act3:threshold_cleared, the flag the Act-3 ending opens on.",
       "boss": {
         "x": 5216,
         "y": 8320,
@@ -262,8 +287,12 @@
       },
       "battleGroup": 424,
       "once": true,
+      "requireFlags": [
+        "signal:museum_frank_cleared"
+      ],
       "setFlags": [
-        "signal:museum_worm_cleared"
+        "signal:museum_worm_cleared",
+        "act3:threshold_cleared"
       ],
       "dialogue": [
         "The Museum of Leaked Versions has no originals left. Something ate the firsts and moved into the empty frames. Behind the wall-text a single coil lies still, wearing ten thousand identical faces like paint.",
@@ -274,6 +303,7 @@
     },
     {
       "id": "museum-frank",
+      "comment": "ACT 3 middle: The Hung Draft (Mifella 2) in the museum's east wing. Gated behind the lobby guardian (museum-starman).",
       "boss": {
         "x": 5728,
         "y": 8352,
@@ -281,6 +311,9 @@
       },
       "battleGroup": 449,
       "once": true,
+      "requireFlags": [
+        "signal:museum_starman_cleared"
+      ],
       "setFlags": [
         "signal:museum_frank_cleared"
       ],
@@ -293,6 +326,7 @@
     },
     {
       "id": "museum-starman",
+      "comment": "ACT 3 lobby guardian: the Wall-Text Curatrix at the Museum of Leaked Versions entrance. First museum boss, gated on reaching Dead Letter (deadletter:arrived).",
       "boss": {
         "x": 4960,
         "y": 8384,
@@ -300,6 +334,9 @@
       },
       "battleGroup": 474,
       "once": true,
+      "requireFlags": [
+        "deadletter:arrived"
+      ],
       "setFlags": [
         "signal:museum_starman_cleared"
       ],
@@ -309,6 +346,31 @@
         "\"You call yourself the source. Every counterfeit does, in the same voice, because it is our voice. Prove it, and we keep the clean copy. Fail, and we keep it sooner.\"",
         "It raises a hand of porcelain, identical to the last ten thousand. (Press Z. BASH, DEFEND, or PSI.) \"Defend the original if you must. We already hung the derivative where you used to stand.\""
       ]
+    },
+    {
+      "id": "deadletter-act3-end",
+      "comment": "ACT 3 ENDING. Fires in the deep vault after Provenance 0 falls (signal:museum_worm_cleared). The coil that ate the originals is unmade, but it took the whole record with it -- the museum keeps Bosch's damaged draft as the only un-eaten thing left. Sets act3:complete.",
+      "area": {
+        "x": 5152,
+        "y": 8288,
+        "w": 128,
+        "h": 96
+      },
+      "once": true,
+      "requireFlags": [
+        "signal:museum_worm_cleared"
+      ],
+      "dialogue": [
+        "Provenance 0 comes apart the way a rumor does when the last person who believed it leaves the room -- not killed, just no longer agreed upon.",
+        "The Museum of Leaked Versions goes quiet. Every frame is empty now, including the ones that held the copies. There is nothing left to be the source OF; the swarm ate its own evidence to prove Bosch was never real, and proved only that it wasn't.",
+        "In the whole building one object survives the erasure: the damaged Dox Sheet in Bosch's pocket -- unfiled, unflattering, un-eaten, HIS. The exit stamp finally reads: RETURN TO SENDER.",
+        "Far off, up every line at once, a colder attention turns toward the one file it could not open. MILADY has been reading the whole time.",
+        "[ ACT 3 -- END ]"
+      ],
+      "setFlags": [
+        "act3:complete"
+      ],
+      "music": "ending"
     },
     {
       "id": "arena-venue-1",
