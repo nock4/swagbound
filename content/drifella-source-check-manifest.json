@@ -474,12 +474,15 @@
         221
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 2400,
+          "y": 7200
+        }
       },
       "cardNftRewardId": "card-nft-2-6848",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-bluebell-village-002",
@@ -494,12 +497,15 @@
         266
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 2624,
+          "y": 7200
+        }
       },
       "cardNftRewardId": "card-nft-2-10986",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-bluebell-village-003",
@@ -514,12 +520,15 @@
         376
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 3104,
+          "y": 7200
+        }
       },
       "cardNftRewardId": "card-nft-2-10806",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-bluebell-village-004",
@@ -534,12 +543,15 @@
         210
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 3480,
+          "y": 7200
+        }
       },
       "cardNftRewardId": "card-nft-2-3704",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-bluebell-village-005",
@@ -554,12 +566,15 @@
         211
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 3752,
+          "y": 7200
+        }
       },
       "cardNftRewardId": "card-nft-2-10362",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-bluebell-village-006",
@@ -574,12 +589,15 @@
         229
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "hidden-nook",
+        "worldPixel": {
+          "x": 2768,
+          "y": 7312
+        }
       },
       "cardNftRewardId": "card-nft-2-8886",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-bluebell-village-007",
@@ -594,12 +612,15 @@
         243
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "hidden-nook",
+        "worldPixel": {
+          "x": 3328,
+          "y": 7312
+        }
       },
       "cardNftRewardId": "card-nft-2-10682",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-bluebell-village-008",
@@ -614,12 +635,15 @@
         293
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "hidden-nook",
+        "worldPixel": {
+          "x": 3600,
+          "y": 7312
+        }
       },
       "cardNftRewardId": "card-nft-2-10445",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-bluebell-village-009",
@@ -634,12 +658,15 @@
         371
       ],
       "placement": {
-        "kind": "TBD",
-        "worldPixel": null
+        "kind": "hidden-nook",
+        "worldPixel": {
+          "x": 4192,
+          "y": 7320
+        }
       },
       "cardNftRewardId": "card-nft-2-9993",
       "itemRewardId": null,
-      "status": "unplaced"
+      "status": "placed"
     },
     {
       "checkId": "sourcecheck-dead-letter-001",

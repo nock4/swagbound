@@ -2166,6 +2166,1120 @@
           "\"Still five stars. Don't read the comments.\""
         ]
       }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-001",
+      "drifellaId": "drifella2-1845",
+      "npcId": 100320,
+      "region": "bluebell-village",
+      "tier": 2,
+      "placement": {
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 2400,
+          "y": 7200
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A beekeeper who files every rumor by which flower the bees preferred that day.",
+        "tic": "\"The hive already voted.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1845.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella lifts a veil of gauze and a single bee leaves, unimpressed.",
+        "\"Source Check. The bees are the witnesses. I merely translate.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The first leaked card reached Bosch before he'd had breakfast.",
+            "answer": true,
+            "failLine": "\"Before the toast. Bees rise earlier, but not by much.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on that card was checked—",
+            "options": [
+              "VESSEL",
+              "POLLINATOR",
+              "GUEST",
+              "QUEEN"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"VESSEL. The hive would've checked QUEEN, but they're biased.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Postwick sits a walk north of this village.",
+            "answer": true,
+            "failLine": "\"North. Follow the bees; they cut the corner.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Vincent van Gogh painted whole series of which flower?",
+            "options": [
+              "Sunflowers",
+              "Roses",
+              "Tulips",
+              "Orchids"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Sunflowers. Yellow on yellow. The bees approve.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Georgia O'Keeffe is famous for painting enormous close-up flowers.",
+            "answer": true,
+            "failLine": "\"Petals the size of a room. The hive found it forward.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A rumor with no source is like a hive with—",
+            "options": [
+              "No queen",
+              "Too much honey",
+              "A view",
+              "A name"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"No queen. It just buzzes and drifts.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-6848",
+        "itemId": 111
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Filed.\"",
+          "\"That checks out.\"",
+          "\"Verified, gently.\""
+        ],
+        "cleared": [
+          "\"Take the card. It smells faintly of bluebells.\"",
+          "\"Sourced and sound. The village keeps quiet about it.\""
+        ],
+        "failed": [
+          "\"A wrinkle. Walk the row and come back settled.\"",
+          "\"Not quite. The petals disagree. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the record. Enjoy the quiet.\"",
+          "\"Verified last season. Still fresh.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-002",
+      "drifellaId": "drifella2-1849",
+      "npcId": 100321,
+      "region": "bluebell-village",
+      "tier": 2,
+      "placement": {
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 2624,
+          "y": 7200
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A scarecrow-tender who insists the scarecrows report back at dusk.",
+        "tic": "\"The straw remembers.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1849.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella adjusts a scarecrow's hat with real tenderness.",
+        "\"He's shy. I'll ask the questions for him. Source Check.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "What finally stopped malady mid-lunge?",
+            "options": [
+              "A freeze, mid-air",
+              "A scarecrow",
+              "Sunset",
+              "Bosch's lunch"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Frozen mid-lunge. Even the straw flinched.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch fought malady entirely alone.",
+            "answer": false,
+            "failLine": "\"Not alone. The second chair came from the daycare.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The swarm behind all this styles itself after Milady.",
+            "answer": true,
+            "failLine": "\"Milady's swarm. Borrowed grandeur. The scarecrow disapproves.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A 'still life' painting usually shows—",
+            "options": [
+              "Arranged objects",
+              "A running horse",
+              "A storm",
+              "Nothing at all"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Arranged things. Fruit, flowers, the occasional skull.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Some artists have exhibited an ordinary object, unchanged, and called it art.",
+            "answer": true,
+            "failLine": "\"A urinal, a shovel, a scarecrow. Deciding is the art.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A scarecrow's real job is to—",
+            "options": [
+              "Suggest a person",
+              "Scare crows",
+              "Hold a hat",
+              "Farm"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Suggest a person. Crows respect the gesture, briefly.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10986",
+        "itemId": 112
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Filed.\"",
+          "\"That checks out.\"",
+          "\"Verified, gently.\""
+        ],
+        "cleared": [
+          "\"Take the card. It smells faintly of bluebells.\"",
+          "\"Sourced and sound. The village keeps quiet about it.\""
+        ],
+        "failed": [
+          "\"A wrinkle. Walk the row and come back settled.\"",
+          "\"Not quite. The petals disagree. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the record. Enjoy the quiet.\"",
+          "\"Verified last season. Still fresh.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-003",
+      "drifellaId": "drifella2-1879",
+      "npcId": 100322,
+      "region": "bluebell-village",
+      "tier": 2,
+      "placement": {
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 3104,
+          "y": 7200
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A well-keeper who drops questions down the well and waits for the echo to answer.",
+        "tic": "\"The well concurs.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1879.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella leans over a mossy well and listens to nothing in particular.",
+        "\"Source Check. Speak clearly. The well has poor patience for mumbling.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Morningside's card-stock trail ran west, toward the arcade.",
+            "answer": true,
+            "failLine": "\"West. The well heard it splash that way.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Frank's crew at the Morningside arcade mostly dealt in—",
+            "options": [
+              "Cards",
+              "Buckets",
+              "Wishes",
+              "Salad"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Cards. The well finds it a shallow trade.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The hotel in Morningside has a side nobody photographs.",
+            "answer": true,
+            "failLine": "\"The bad side. It hums. Sound carries in a well.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "John Cage's '4'33\"' asks the performer to—",
+            "options": [
+              "Play nothing",
+              "Play twice",
+              "Play backward",
+              "Play loud"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Nothing. The room becomes the piece. Like a well.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A 'field recording' captures the sound of a real place rather than musicians.",
+            "answer": true,
+            "failLine": "\"The place itself, taped. The well would qualify.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "An echo is just a fact that—",
+            "options": [
+              "Comes back",
+              "Sinks",
+              "Lies",
+              "Rings once"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Comes back. Verified twice, for free.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10806",
+        "itemId": 119
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Filed.\"",
+          "\"That checks out.\"",
+          "\"Verified, gently.\""
+        ],
+        "cleared": [
+          "\"Take the card. It smells faintly of bluebells.\"",
+          "\"Sourced and sound. The village keeps quiet about it.\""
+        ],
+        "failed": [
+          "\"A wrinkle. Walk the row and come back settled.\"",
+          "\"Not quite. The petals disagree. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the record. Enjoy the quiet.\"",
+          "\"Verified last season. Still fresh.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-004",
+      "drifellaId": "drifella2-1901",
+      "npcId": 100323,
+      "region": "bluebell-village",
+      "tier": 2,
+      "placement": {
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 3480,
+          "y": 7200
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A florist who arranges bouquets by which secret each flower is keeping.",
+        "tic": "\"Cut, and it tells.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1901.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella trims a stem and holds it to the light like evidence.",
+        "\"Source Check. Two questions, freshly cut. Mind the thorns.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch kept the damaged original card instead of trading it.",
+            "answer": true,
+            "failLine": "\"Kept it. Pressed flat. Damage is a kind of proof.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The one called the returnless king was beaten—",
+            "options": [
+              "Before Bosch left Morningside",
+              "By mail",
+              "Never",
+              "In the well"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Before the threshold. Kings without returns still wilt.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The Venue is the big stage back in Postwick.",
+            "answer": true,
+            "failLine": "\"The Venue. A loud flower. Beautiful, needy.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yayoi Kusama is famous for covering rooms in—",
+            "options": [
+              "Polka dots",
+              "Ivy",
+              "Mirrors only",
+              "Chalk"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Dots to infinity. She'd overplant a garden and call it honest.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Impressionist painters cared more about light and feeling than exact detail.",
+            "answer": true,
+            "failLine": "\"Light over line. A blurred bouquet that's somehow truer.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A bouquet is really a small, temporary—",
+            "options": [
+              "Argument",
+              "Fence",
+              "Meal",
+              "Map"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"An argument in petals. It wins, then dies. Classic.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3704",
+        "itemId": 116
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Filed.\"",
+          "\"That checks out.\"",
+          "\"Verified, gently.\""
+        ],
+        "cleared": [
+          "\"Take the card. It smells faintly of bluebells.\"",
+          "\"Sourced and sound. The village keeps quiet about it.\""
+        ],
+        "failed": [
+          "\"A wrinkle. Walk the row and come back settled.\"",
+          "\"Not quite. The petals disagree. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the record. Enjoy the quiet.\"",
+          "\"Verified last season. Still fresh.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-005",
+      "drifellaId": "drifella2-2128",
+      "npcId": 100324,
+      "region": "bluebell-village",
+      "tier": 2,
+      "placement": {
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 3752,
+          "y": 7200
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A weathervane consultant who trusts the wind over any witness.",
+        "tic": "\"The wind's on record.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2128.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella wets a finger and holds it up with grave professionalism.",
+        "\"Source Check. The wind agrees with the truth. Let's see if you do.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The intro everyone talks about opens on slides from a war.",
+            "answer": true,
+            "failLine": "\"War slides. The wind went quiet for those.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The freeze that felled malady was cast by—",
+            "options": [
+              "The daycare kid",
+              "Bosch",
+              "The wind",
+              "Frank"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The kid. A cold front all their own.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "This village lies on the road between Postwick and the town of Dead Letter.",
+            "answer": true,
+            "failLine": "\"On the road. The wind commutes it daily.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Alexander Calder invented a kind of sculpture that—",
+            "options": [
+              "Moves in the air",
+              "Weighs a ton",
+              "Melts",
+              "Sings"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Mobiles. Sculpture the wind finishes.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Some music is written to change slightly every time the wind or chance decides.",
+            "answer": true,
+            "failLine": "\"Aleatoric. Chance holds the baton. The wind loves it.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A weathervane is honest because it—",
+            "options": [
+              "Only points where pushed",
+              "Never moves",
+              "Guesses",
+              "Lies prettily"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Only points where pushed. No opinions. Rare.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10362",
+        "itemId": 115
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Filed.\"",
+          "\"That checks out.\"",
+          "\"Verified, gently.\""
+        ],
+        "cleared": [
+          "\"Take the card. It smells faintly of bluebells.\"",
+          "\"Sourced and sound. The village keeps quiet about it.\""
+        ],
+        "failed": [
+          "\"A wrinkle. Walk the row and come back settled.\"",
+          "\"Not quite. The petals disagree. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the record. Enjoy the quiet.\"",
+          "\"Verified last season. Still fresh.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-006",
+      "drifellaId": "drifella2-2130",
+      "npcId": 100325,
+      "region": "bluebell-village",
+      "tier": 2,
+      "placement": {
+        "kind": "hidden-nook",
+        "worldPixel": {
+          "x": 2768,
+          "y": 7312
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A hedge-maze docent who hides in the hedge and reviews your sense of direction.",
+        "tic": "\"Left was a choice.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2130.png",
+      "hints": [
+        {
+          "kind": "binder"
+        }
+      ],
+      "entryPrompt": [
+        "A voice from inside a tall hedge. You did not see them there at all.",
+        "\"Shh. You found the quiet path. Source Check — two turns, no dead ends.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Malady went down to a freeze from the daycare kid, not from Bosch.",
+            "answer": true,
+            "failLine": "\"The kid froze it. Bosch mostly survived, artfully.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The swarm's whole look is—",
+            "options": [
+              "Borrowed grandeur",
+              "Homemade",
+              "Minimalist",
+              "Nautical"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Borrowed. 'Milady' isn't even theirs. Hedge knows.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "You can genuinely disappear by standing still in a hedge.",
+            "answer": true,
+            "failLine": "\"You're doing it wrong. I'm doing it right.\"",
+            "category": "vibe"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Land artists have made works so big you can only really see them from—",
+            "options": [
+              "The air",
+              "A stool",
+              "Underground",
+              "A mirror"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"From above. Spirals in deserts. A maze for gods.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A hedge maze is a garden and a puzzle at the same time.",
+            "answer": true,
+            "failLine": "\"Both. The prettiest way to get lost.\"",
+            "category": "vibe"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Piet Mondrian reduced painting to grids of—",
+            "options": [
+              "Primary colors",
+              "Hedges",
+              "Faces",
+              "Numbers"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Red, blue, yellow, black lines. A maze with no wrong turns.\"",
+            "category": "art"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8886",
+        "itemId": 117
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Filed.\"",
+          "\"That checks out.\"",
+          "\"Verified, gently.\""
+        ],
+        "cleared": [
+          "\"Take the card. It smells faintly of bluebells.\"",
+          "\"Sourced and sound. The village keeps quiet about it.\""
+        ],
+        "failed": [
+          "\"A wrinkle. Walk the row and come back settled.\"",
+          "\"Not quite. The petals disagree. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the record. Enjoy the quiet.\"",
+          "\"Verified last season. Still fresh.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-007",
+      "drifellaId": "drifella2-2258",
+      "npcId": 100326,
+      "region": "bluebell-village",
+      "tier": 2,
+      "placement": {
+        "kind": "hidden-nook",
+        "worldPixel": {
+          "x": 3328,
+          "y": 7312
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A greenhouse auditor who checks whether the tomatoes are lying about being ripe.",
+        "tic": "\"Squeeze to confirm.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2258.png",
+      "hints": [
+        {
+          "kind": "binder"
+        }
+      ],
+      "entryPrompt": [
+        "Behind fogged glass, a Drifella prods a tomato with a clipboard's corner.",
+        "\"Off the vine, are we? Everything gets audited. Two questions, please.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "What arrived at Bosch's door uninvited and started all this?",
+            "options": [
+              "A card",
+              "A tomato",
+              "A bill",
+              "A bee"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"A card. Unripe and rude.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch cleared every boss in Morningside before leaving town.",
+            "answer": true,
+            "failLine": "\"Paid in full. I audited the vines.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch's crew size when malady fell was exactly two.",
+            "answer": true,
+            "failLine": "\"Two. One to freeze, one to not wilt.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Andy Warhol famously silkscreened, over and over, a can of—",
+            "options": [
+              "Soup",
+              "Tomatoes",
+              "Paint",
+              "Air"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Soup. Repetition as ripeness. Or the reverse.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Conceptual art holds that the idea can matter more than the finished object.",
+            "answer": true,
+            "failLine": "\"The idea's the fruit; the object's the crate.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A greenhouse is a small argument that the weather should—",
+            "options": [
+              "Behave",
+              "Leave",
+              "Pay rent",
+              "Apologize"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Behave. Under glass, it usually does.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10682",
+        "itemId": 113
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Filed.\"",
+          "\"That checks out.\"",
+          "\"Verified, gently.\""
+        ],
+        "cleared": [
+          "\"Take the card. It smells faintly of bluebells.\"",
+          "\"Sourced and sound. The village keeps quiet about it.\""
+        ],
+        "failed": [
+          "\"A wrinkle. Walk the row and come back settled.\"",
+          "\"Not quite. The petals disagree. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the record. Enjoy the quiet.\"",
+          "\"Verified last season. Still fresh.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-008",
+      "drifellaId": "drifella2-2281",
+      "npcId": 100327,
+      "region": "bluebell-village",
+      "tier": 2,
+      "placement": {
+        "kind": "hidden-nook",
+        "worldPixel": {
+          "x": 3600,
+          "y": 7312
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A pond-skater census-taker who counts the ripples as sworn testimony.",
+        "tic": "\"Ripple noted.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2281.png",
+      "hints": [
+        {
+          "kind": "binder"
+        }
+      ],
+      "entryPrompt": [
+        "The Drifella watches a bug skate the pond and marks something down.",
+        "\"Source Check. The water keeps minutes. So do I. Two entries.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The story so far opened on war slides, not fireworks.",
+            "answer": true,
+            "failLine": "\"War slides. The pond went glassy for them.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The kid who joined Bosch grew up around which town's daycare?",
+            "options": [
+              "Postwick",
+              "Morningside",
+              "Dead Letter",
+              "This village"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Postwick. Best paperwork instincts in the region.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "'Avant-garde' means art that runs ahead of its time.",
+            "answer": true,
+            "failLine": "\"Out front, scaring the ducks. That's the point.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Claude Monet painted the same pond of water lilies—",
+            "options": [
+              "Hundreds of times",
+              "Once",
+              "From memory",
+              "Never"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Again and again. The pond kept changing its story.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A single ripple can, technically, be counted as one event.",
+            "answer": true,
+            "failLine": "\"One ripple, one entry. The census is thorough.\"",
+            "category": "vibe"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A pond tells the truth because it—",
+            "options": [
+              "Reflects",
+              "Freezes",
+              "Drains",
+              "Argues"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Reflects. Unflattering, but honest.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10445",
+        "itemId": 118
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Filed.\"",
+          "\"That checks out.\"",
+          "\"Verified, gently.\""
+        ],
+        "cleared": [
+          "\"Take the card. It smells faintly of bluebells.\"",
+          "\"Sourced and sound. The village keeps quiet about it.\""
+        ],
+        "failed": [
+          "\"A wrinkle. Walk the row and come back settled.\"",
+          "\"Not quite. The petals disagree. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the record. Enjoy the quiet.\"",
+          "\"Verified last season. Still fresh.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-009",
+      "drifellaId": "drifella2-2290",
+      "npcId": 100328,
+      "region": "bluebell-village",
+      "tier": 2,
+      "placement": {
+        "kind": "hidden-nook",
+        "worldPixel": {
+          "x": 4192,
+          "y": 7320
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A retired lighthouse-keeper with no coast, sweeping a lantern over the fields at night.",
+        "tic": "\"Something's always out there.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2290.png",
+      "hints": [
+        {
+          "kind": "binder"
+        }
+      ],
+      "entryPrompt": [
+        "The Drifella swings a lantern in a slow arc over the dark rows of flowers.",
+        "\"Source Check. I keep the light. You keep your story straight.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "multipleChoice4",
+            "prompt": "The first card's arrival was rudest because it—",
+            "options": [
+              "Didn't knock",
+              "Was wet",
+              "Sang",
+              "Glowed"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Cards never knock. First thing the light taught me.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Milady's swarm taunts people mid-fight.",
+            "answer": true,
+            "failLine": "\"Mid-fight monologues. Nefarious and chatty. I've seen the type.\"",
+            "category": "lore"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A lighthouse works by being seen, not by seeing.",
+            "answer": true,
+            "failLine": "\"Seen. It's a signal, not a spy. Common mix-up.\"",
+            "category": "vibe"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Marina Abramović made famous art where the material was—",
+            "options": [
+              "Her own presence",
+              "Marble",
+              "Light",
+              "Salt"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Presence. She sat; the world queued. I'd have kept the lantern.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Some sculptures are made of light itself rather than any solid stuff.",
+            "answer": true,
+            "failLine": "\"Light as material. A lighthouse-keeper feels vindicated.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A light with no coast still keeps—",
+            "options": [
+              "The dark honest",
+              "A schedule",
+              "A boat",
+              "A secret"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The dark honest. Somebody has to.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-9993",
+        "itemId": 120
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Filed.\"",
+          "\"That checks out.\"",
+          "\"Verified, gently.\""
+        ],
+        "cleared": [
+          "\"Take the card. It smells faintly of bluebells.\"",
+          "\"Sourced and sound. The village keeps quiet about it.\""
+        ],
+        "failed": [
+          "\"A wrinkle. Walk the row and come back settled.\"",
+          "\"Not quite. The petals disagree. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the record. Enjoy the quiet.\"",
+          "\"Verified last season. Still fresh.\""
+        ]
+      }
     }
   ]
 }
