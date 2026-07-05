@@ -188,7 +188,7 @@ const BATTLE_FONT_SIZE = 14;
 const BATTLE_DESCRIPTION_FONT_SIZE = 13;
 const BATTLE_STATUS_NAME_FONT_SIZE = 13;
 const BATTLE_STATUS_LABEL_FONT_SIZE = 11;
-const BATTLE_STATUS_VALUE_FONT_SIZE = 12;
+const BATTLE_STATUS_VALUE_FONT_SIZE = 17;
 const BATTLE_LEFT_MARGIN = 16;
 const BATTLE_LINE_HEIGHT = cleanLineHeight(BATTLE_FONT_SIZE, BATTLE_LINE_SPACING);
 const BATTLE_COMMAND_TEXT_PADDING_X = 12;
@@ -3226,9 +3226,8 @@ export class BattleScene extends Phaser.Scene {
         accentGraphics.strokeRoundedRect(card.x + 2.5, card.y + 2.5, Math.max(1, card.width - 5), Math.max(1, card.height - 5), 6);
       }
 
-      const content = this.statusCardContentRect(card);
-      this.drawStatusBar(fieldGraphics, this.statusBarMetrics(content, "hp"), viewCard.hp, viewCard.maxHp, CLEAN_UI_HP);
-      this.drawStatusBar(fieldGraphics, this.statusBarMetrics(content, "pp"), viewCard.pp, viewCard.maxPp, CLEAN_UI_PP);
+      // EarthBound battle status shows HP/PP as rolling odometer numbers (no bars);
+      // viewCard.hp is the rolling displayed vital that drives the mortal-damage race.
     });
   }
 

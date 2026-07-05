@@ -97,7 +97,7 @@ const OVERWORLD_HUD_CONTENT_PADDING_Y = 8;
 const OVERWORLD_HUD_NAME_FONT_SIZE = 13;
 const OVERWORLD_HUD_BADGE_FONT_SIZE = 11;
 const OVERWORLD_HUD_LABEL_FONT_SIZE = 11;
-const OVERWORLD_HUD_VALUE_FONT_SIZE = 12;
+const OVERWORLD_HUD_VALUE_FONT_SIZE = 17;
 const OVERWORLD_HUD_HP_ROW_Y = 23;
 const OVERWORLD_HUD_PP_ROW_Y = 47;
 const OVERWORLD_HUD_LABEL_WIDTH = 20;
@@ -672,8 +672,8 @@ export class UiScene extends Phaser.Scene {
       }
       const content = this.hudCardContentRect(card);
       this.updateHudTextSet(textSet, member, content);
-      this.drawHudStatusBar(fieldGraphics, this.hudStatusBarMetrics(content, "hp"), member.hp, member.maxHp, CLEAN_UI_HP);
-      this.drawHudStatusBar(fieldGraphics, this.hudStatusBarMetrics(content, "pp"), member.pp, member.maxPp, CLEAN_UI_PP);
+      // EarthBound status windows show HP/PP as rolling odometer numbers, no bars —
+      // the value text (member.hp is the rolling displayed vital) already rolls.
     });
   }
 
