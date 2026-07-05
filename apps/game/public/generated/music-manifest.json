@@ -40,6 +40,11 @@
       "file": "audio/jammers/074__inoyamaland__glass-chime.mp3",
       "loop": true,
       "gain": 0.4
+    },
+    "sourceCheck": {
+      "file": "audio/jammers/188__andrew-pekler__early-bird-loose-loop.mp3",
+      "loop": true,
+      "gain": 0.34
     }
   },
   "areas": [
@@ -1216,7 +1221,7 @@
   },
   "bossCues": {
     "172": {
-      "file": "audio/jammers/072__aaron-dilloway__after-the-showers.mp3",
+      "file": "audio/jammers/072__aaron-dilloway__after-the-showers-loop.mp3",
       "loop": true,
       "gain": 0.4
     },

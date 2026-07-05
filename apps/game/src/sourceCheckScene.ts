@@ -40,6 +40,11 @@ import {
   type SourceCheckSfx,
   type SourceCheckSfxCue
 } from "./audio/sourceCheckSfx";
+import { getSharedMusic } from "./sharedMusic";
+import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
+
+/** One track for the whole Drifella minigame, regardless of region (a long ambient loop). */
+const SOURCE_CHECK_MUSIC_CUE = "sourceCheck";
 import {
   cardById,
   drawSourceCheckQuestions,
@@ -105,6 +110,7 @@ export class SourceCheckScene extends Phaser.Scene {
   private drifellaImage?: Phaser.GameObjects.Image;
   private cardImage?: Phaser.GameObjects.Image;
   private sourceCheckSfx: SourceCheckSfx = createSourceCheckSfx();
+  private music_: Music = createMusic();
   private lastSfx: SourceCheckSfxCue | null = null;
   private sfxCount = 0;
   private usedCorrectReactionLines = new Set<string>();
@@ -151,6 +157,13 @@ export class SourceCheckScene extends Phaser.Scene {
     this.phaseStartedAt = this.time.now;
     this.revealStartedAt = this.time.now;
     this.createDrifellaImage();
+    // The Drifella minigame gets one consistent track everywhere (it inherited the
+    // region's music before, so it changed per region). The shared engine swaps the
+    // world's area cue back in when we return.
+    this.music_ = getSharedMusic(this.registry, this.returnTo.context.gameData.musicManifest, {
+      muted: musicDisabledBySearch(globalThis.location?.search)
+    });
+    void this.music_.play(SOURCE_CHECK_MUSIC_CUE);
     this.registerSourceCheckSfxResume();
     registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.confirm());
     registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.cancel());
