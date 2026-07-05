@@ -4530,6 +4530,2686 @@
           "\"Delivered for good. There's nothing more to return.\""
         ]
       }
+    },
+    {
+      "id": "sourcecheck-the-galleria-001",
+      "drifellaId": "drifella2-2200",
+      "npcId": 100339,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "storefront-window",
+        "worldPixel": {
+          "x": 3984,
+          "y": 5976
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A price-tag calligrapher who ink-brushes a value onto every rumor before she'll believe it.",
+        "tic": "\"Everything has a SKU.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2200.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella loops a fresh price tag around your wrist and squints at the number like it owes her money.",
+        "\"Source Check, at retail. I only stock verified stock. Prove the provenance and I'll ring you up.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the Galleria, a face on the shelf keeps its own price tag whether the owner agreed to be stocked or not.",
+            "answer": true,
+            "failLine": "\"Correct, and grim. Consent isn't a line item here.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on the mannequin's tag read—",
+            "options": [
+              "MERCHANDISE",
+              "VESSEL",
+              "CUSTOMER (VALUED)",
+              "GUEST"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"MERCHANDISE. 'Valued customer' is what the register says while it files you.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Andy Warhol famously silkscreened stacks of which grocery-shelf product as fine art?",
+            "options": [
+              "Brillo soap-pad boxes",
+              "Cereal bowls",
+              "Bags of flour",
+              "Egg cartons"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Brillo boxes. He priced the shelf itself. I respect the markup.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Pop Art treated ordinary commercial products and packaging as legitimate subjects for painting.",
+            "answer": true,
+            "failLine": "\"True. The soup can walked in off the shelf and never left. Filed.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A rumor with no receipt is like a price tag that—",
+            "options": [
+              "Names a number but no product",
+              "Is written too neatly",
+              "Fell off in the wash",
+              "Costs extra"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"A number and no product. Pure air, marked up.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3475",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Priced and verified.\"",
+          "\"That rings up clean.\"",
+          "\"Tag holds. Filed at full value.\""
+        ],
+        "cleared": [
+          "\"Take the card. I've hand-lettered the tag so nobody re-prices you.\"",
+          "\"Sold, and sourced. The window keeps your reflection warm.\""
+        ],
+        "failed": [
+          "\"Mispriced. Walk the floor, come back at the right number.\"",
+          "\"The tag won't stick to that answer. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already stocked and settled. No re-tagging today.\"",
+          "\"Rung up last season. Still full price, still yours.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-002",
+      "drifellaId": "drifella2-2329",
+      "npcId": 100340,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "atrium-fountain",
+        "worldPixel": {
+          "x": 2072,
+          "y": 3232
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A mannequin-face fitter who snaps borrowed faces onto blank heads and remembers whose was whose.",
+        "tic": "\"Hold still, it's almost your size.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2329.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella lifts a face off a mannequin, checks it against yours, and sighs like a tailor at a bad hem.",
+        "\"Source Check, fitting-room rules. Tell me whose face is whose and I'll leave yours on.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the Galleria, mannequins wear the faces of people who never posed for them.",
+            "answer": true,
+            "failLine": "\"True. I fit them every morning. None of them signed a thing.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When a stolen face is stitched onto a mannequin here, the tag underneath is checked—",
+            "options": [
+              "LEAKED VERSION",
+              "ORIGINAL",
+              "AUTHORIZED LIKENESS",
+              "SAMPLE"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"LEAKED VERSION. 'Authorized' is the sticker they slap on top to sell it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Artist Sherrie Levine became known for re-presenting other artists' works as her own, a practice called—",
+            "options": [
+              "Appropriation",
+              "Restoration",
+              "Licensing",
+              "Framing"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Appropriation. She wore the other artist's face and hung a tag on it. I know the feeling.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Duchamp took an ordinary mass-produced object and declared it art simply by choosing and signing it.",
+            "answer": true,
+            "failLine": "\"True. The readymade. He fitted a face onto a bottle rack and called it done.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The swarm distributes faces the way a department store moves—",
+            "options": [
+              "Inventory",
+              "Rumors",
+              "Compliments",
+              "Weather"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Inventory. Stock in, stock out. You're the stock.\"",
+            "category": "vibe"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A mannequin here can be re-fitted with a new face overnight without anyone noticing.",
+            "answer": true,
+            "failLine": "\"True, and I'm the one who does it. Quiet work. Filed.\"",
+            "category": "witnessed"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-6660",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Perfect fit.\"",
+          "\"That face is yours. Confirmed.\"",
+          "\"No alterations needed. Filed.\""
+        ],
+        "cleared": [
+          "\"Take the card. I've left your own face exactly where it belongs.\"",
+          "\"Fitted and sourced. No mannequin will wear you today.\""
+        ],
+        "failed": [
+          "\"Wrong size. Try it on again once you've looked in the mirror.\"",
+          "\"That answer pinches. Come back and let it out.\""
+        ],
+        "alreadyCleared": [
+          "\"Already fitted, already yours. Nothing to re-hem.\"",
+          "\"We tailored this last visit. Still hangs right.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-003",
+      "drifellaId": "drifella2-2344",
+      "npcId": 100341,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "escalator-landing",
+        "worldPixel": {
+          "x": 6104,
+          "y": 3560
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A loyalty-tier auditor who reads your provenance off a points card and sorts you accordingly.",
+        "tic": "\"Points don't lie. People do.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2344.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella swipes a loyalty card that isn't yours and reads a lifetime of you off the balance.",
+        "\"Source Check, members only. Your provenance is your points total. Let's audit it.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the Galleria, a shopper's loyalty points are treated as proof of who they really are.",
+            "answer": true,
+            "failLine": "\"True. Points are provenance here. Sad, but audited.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The escalator in the mall's atrium doesn't just move you up floors—it—",
+            "options": [
+              "Sorts you by tier",
+              "Plays a jingle",
+              "Refunds your fare",
+              "Stops for no one"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Sorts you by tier. Rising is a ranking, not a courtesy.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Barbara Kruger is famous for bold graphic works pairing found photos with slogans like—",
+            "options": [
+              "\"I shop therefore I am\"",
+              "\"Just do it\"",
+              "\"Have it your way\"",
+              "\"Melts in your mouth\""
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"'I shop therefore I am.' She audited consumer desire in red and white. Filed.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Jeff Koons has sold sculptures modeled on ordinary consumer objects, like a balloon animal or a vacuum cleaner, for enormous prices.",
+            "answer": true,
+            "failLine": "\"True. He put a vacuum in a vitrine and it out-earned us all. Tier: PLATINUM.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The directory files shoppers by—",
+            "options": [
+              "Tier",
+              "Shoe size",
+              "First name",
+              "Zip code"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Tier. Names are for receipts. Tiers are for the record.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8876",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Balance verified.\"",
+          "\"Points check out.\"",
+          "\"Tier confirmed. Filed.\""
+        ],
+        "cleared": [
+          "\"Take the card. I've credited your provenance in full, no tier attached.\"",
+          "\"Audited and sourced. The escalator can't re-rank you now.\""
+        ],
+        "failed": [
+          "\"Discrepancy. Ride down, recount, come back.\"",
+          "\"The ledger disagrees. Try the audit again.\""
+        ],
+        "alreadyCleared": [
+          "\"Already audited, already settled. No points owed.\"",
+          "\"Your record cleared last quarter. Still balanced.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-004",
+      "drifellaId": "drifella2-2377",
+      "npcId": 100342,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "food-court-counter",
+        "worldPixel": {
+          "x": 6000,
+          "y": 6672
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A food-court oracle who reads fortunes off receipt tape and the grease on the tray liners.",
+        "tic": "\"The receipt already knows.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2377.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella unspools a yard of receipt tape, holds it to the food-court light, and reads it like a palm.",
+        "\"Source Check, table service. The receipt tape remembers everyone who ate here. Let's see if you match.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the Galleria, a receipt is kept as a record of who a shopper was, long after the purchase.",
+            "answer": true,
+            "failLine": "\"True. The receipt outlives the meal. Filed on tape.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What does the food-court oracle claim the grease on a tray liner reveals?",
+            "options": [
+              "Which face you traded to get here",
+              "Tomorrow's weather",
+              "Your table number",
+              "The daily special"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The face you traded. The grease keeps a ghost of it. I don't make the rules.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Claes Oldenburg is celebrated for giant soft sculptures of everyday objects, including a floppy oversized version of which food?",
+            "options": [
+              "A hamburger",
+              "A pineapple",
+              "A loaf of bread",
+              "A bunch of grapes"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"A hamburger, big and soft as a beanbag. The food court would frame it. Filed.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Andy Warhol once said he wanted to eat the same lunch every day, and made art out of that kind of mass-produced sameness.",
+            "answer": true,
+            "failLine": "\"True. Sameness as a subject. The food court is his cathedral.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A rumor served without a source is like a meal with—",
+            "options": [
+              "No receipt",
+              "Extra napkins",
+              "A window seat",
+              "Free refills"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"No receipt. Delicious, unprovable, gone.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8928",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"The tape agrees.\"",
+          "\"Receipt confirms it.\"",
+          "\"Read clean off the roll. Filed.\""
+        ],
+        "cleared": [
+          "\"Take the card. I've torn you a clean receipt, no face on it but your own.\"",
+          "\"Sourced and served. The oracle logs you as a regular in good standing.\""
+        ],
+        "failed": [
+          "\"The tape smudged. Get a refill and come back.\"",
+          "\"That reading won't print. Try the fortune again.\""
+        ],
+        "alreadyCleared": [
+          "\"You already ate, already paid. The tape remembers.\"",
+          "\"Read you last visit. Receipt's still on file.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-005",
+      "drifellaId": "drifella2-2427",
+      "npcId": 100343,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "directory-kiosk",
+        "worldPixel": {
+          "x": 4104,
+          "y": 3304
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A directory clerk who insists every shopper is a store, filed under a floor and a wing.",
+        "tic": "\"You are here. Unfortunately.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2427.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella taps the YOU ARE HERE dot until it lands squarely on your chest.",
+        "\"Source Check, by the directory. Everyone's a storefront to me. Let's confirm which one you are.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The Galleria's directory files living shoppers the same way it files stores.",
+            "answer": true,
+            "failLine": "\"True. You get a floor, a wing, and a category. Filed like a kiosk.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "On the directory map, Bosch's leaked face was listed under which wing?",
+            "options": [
+              "LEAKED VERSIONS, LOWER LEVEL",
+              "FEATURED, GRAND ATRIUM",
+              "CUSTOMER SERVICE",
+              "SEASONAL"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Lower level, leaked versions. 'Featured' is the swarm's own advertising.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Marcel Duchamp signed his readymade 'Fountain' with a fake name. What was it?",
+            "options": [
+              "R. Mutt",
+              "A. Warhol",
+              "M. Ready",
+              "J. Koons"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"'R. Mutt.' Even his signature was a stolen version. Filed under: fitting.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The word 'gallery' shares a root with commercial arcades — long covered shopping passages that were among the first modern malls.",
+            "answer": true,
+            "failLine": "\"True. The mall and the museum were always the same hallway. Directory confirms.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The Galleria is best described as—",
+            "options": [
+              "The department store of leaked selves",
+              "A pleasant regional outlet mall",
+              "A pop-up market",
+              "A quiet reading room"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"The department store of leaked selves. 'Pleasant' is the brochure lying.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3682",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Located. Filed.\"",
+          "\"You're on the map now.\"",
+          "\"Directory confirms it.\""
+        ],
+        "cleared": [
+          "\"Take the card. I've moved your dot off the leaked-versions wing.\"",
+          "\"Sourced and situated. The directory lists you as a person, not a storefront.\""
+        ],
+        "failed": [
+          "\"Off the map. Walk a wing and relocate yourself.\"",
+          "\"That answer isn't on any floor. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already on the directory, correctly placed.\"",
+          "\"Filed your location last visit. Still accurate.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-006",
+      "drifellaId": "drifella2-2477",
+      "npcId": 100344,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "muzak-booth",
+        "worldPixel": {
+          "x": 2080,
+          "y": 5512
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A Muzak conductor who pipes soft anthems over the floor to keep the crowd filing quietly.",
+        "tic": "\"Softer. Always softer.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2477.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella lowers a baton and the ceiling music dips, just enough that you notice it was always there.",
+        "\"Source Check, in three-quarter time. I score the crowd's obedience. Let's see if you're in key.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The soft ceiling music in the Galleria is meant to keep shoppers moving calmly and buying, not to be listened to.",
+            "answer": true,
+            "failLine": "\"True. It's a leash you can hum. Filed under: pleasant control.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Muzak — the original piped background music company — pioneered a system to boost worker and shopper behavior. It was called—",
+            "options": [
+              "Stimulus Progression",
+              "Loudness Compression",
+              "Ambient Reverb",
+              "Retail Remix"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"'Stimulus Progression.' Music engineered to nudge you, tier by tier. I conduct its heir.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Composer Erik Satie coined a term for background music intended as 'furniture' — heard but not attended to. It was—",
+            "options": [
+              "Furniture music",
+              "Chamber music",
+              "Program music",
+              "Table music"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"'Furniture music.' Satie built the first elevator, tune-wise. I owe him royalties.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "In the Galleria, the same anthem plays over the swarm's leaked faces as plays over the sale rack.",
+            "answer": true,
+            "failLine": "\"True. One score for the merchandise and the mannequins alike. Softer, always.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A rumor set to Muzak becomes—",
+            "options": [
+              "Something you stop hearing but keep believing",
+              "A chart-topping single",
+              "A silence",
+              "A jingle you can sell"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Something you stop hearing but keep believing. That's the whole trick.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8935",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"In key. Filed.\"",
+          "\"That resolves nicely.\"",
+          "\"On the beat. Verified.\""
+        ],
+        "cleared": [
+          "\"Take the card. I've muted your track so nothing pipes over you.\"",
+          "\"Sourced and scored. The ceiling can't hum you into line now.\""
+        ],
+        "failed": [
+          "\"Off-key. Let the loop come around and try again.\"",
+          "\"That note clashes. Come back in tune.\""
+        ],
+        "alreadyCleared": [
+          "\"Your track already resolved. Enjoy the quiet.\"",
+          "\"Conducted you last set. Still in key.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-007",
+      "drifellaId": "drifella2-2630",
+      "npcId": 100345,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "window-display",
+        "worldPixel": {
+          "x": 5472,
+          "y": 5144
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A window-display curator who arranges leaked faces into tasteful seasonal tableaux.",
+        "tic": "\"It reads better on the left.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2630.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella nudges a posed figure a half-inch left, steps back, and finally seems satisfied with the composition.",
+        "\"Source Check, front-of-house. I curate the display windows. Tell me what's real and I'll leave you out of the tableau.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The Galleria's window displays arrange real people's leaked faces as if they were seasonal decor.",
+            "answer": true,
+            "failLine": "\"True. I compose them by color story. It's monstrous, but it reads well.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In the display window, Bosch's almost-right face was posed holding a placard reading—",
+            "options": [
+              "\"I said it first, so I don't have to mean it.\"",
+              "\"Now 20% off.\"",
+              "\"As seen in the directory.\"",
+              "\"Home by dinner.\""
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"'I said it first...' The sale sticker is what the swarm adds to move it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The art movement 'Fluxus' was known for treating everyday actions and cheap objects as performance and art. It flourished in roughly which era?",
+            "options": [
+              "The 1960s",
+              "The 1820s",
+              "The 1990s",
+              "The 1500s"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The 1960s. They put ordinary life in the vitrine. I merely borrowed the technique.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A store window is a kind of frame, and framing an object is one of the oldest ways to declare it worth looking at.",
+            "answer": true,
+            "failLine": "\"True. The frame does the arguing. That's why I curate so carefully.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A face in a window with no consent behind it is best labeled—",
+            "options": [
+              "A leaked version on display",
+              "A featured item",
+              "A model release",
+              "A limited edition"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"A leaked version on display. 'Featured' is what the tag pretends.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10701",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Composed. Filed.\"",
+          "\"That reads true.\"",
+          "\"Framed correctly. Verified.\""
+        ],
+        "cleared": [
+          "\"Take the card. I've pulled your face out of the window entirely.\"",
+          "\"Sourced and staged elsewhere. No tableau will pose you now.\""
+        ],
+        "failed": [
+          "\"The composition's off. Restage and return.\"",
+          "\"That doesn't sit right in frame. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already out of the display, correctly.\"",
+          "\"Curated you out last visit. Still off the glass.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-008",
+      "drifellaId": "drifella2-2643",
+      "npcId": 100346,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "behind-the-mannequin-rack",
+        "worldPixel": {
+          "x": 3248,
+          "y": 4528
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A returns-desk confessor who takes back rumors nobody wants and asks no receipt.",
+        "tic": "\"No judgment. Just the return slip.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2643.png",
+      "hints": [],
+      "entryPrompt": [
+        "Tucked behind a rack of faceless mannequins, the Drifella slides a return slip across a small counter.",
+        "\"Source Check, returns desk. People bring me the versions of themselves they never ordered. Let's process yours honestly.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the Galleria, a person can try to 'return' a leaked version of themselves, but the swarm keeps a copy on file anyway.",
+            "answer": true,
+            "failLine": "\"True. I take the return; the record keeps the ghost. That's the cruelty of it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "What reason for return does the swarm's system refuse to accept?",
+            "options": [
+              "\"I never consented to be stocked\"",
+              "\"Wrong size\"",
+              "\"Changed my mind\"",
+              "\"Found it cheaper elsewhere\""
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"'I never consented.' The system only honors returns it finds convenient. I honor the real one anyway.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Roy Lichtenstein built famous paintings by blowing up panels from which mass-produced source?",
+            "options": [
+              "Comic strips",
+              "Movie posters",
+              "Postage stamps",
+              "Wallpaper"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Comic strips, dots and all. He returned a cheap thing to the gallery marked up. Filed.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Pop artists deliberately blurred the line between original art and mass-reproduced commercial imagery.",
+            "answer": true,
+            "failLine": "\"True. Original, copy, return, restock — all the same aisle to them.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The returns desk sits back here, out of the light, because—",
+            "options": [
+              "The swarm doesn't advertise what it won't take back",
+              "The rent is cheaper",
+              "It's near the loading dock",
+              "Nobody likes paperwork"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"It won't advertise what it can't undo. So I work in the shadow of the racks.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3599",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Return accepted. Filed.\"",
+          "\"That processes clean.\"",
+          "\"Slip's in order. Verified.\""
+        ],
+        "cleared": [
+          "\"Take the card. Your return went through, no copy retained, I made sure.\"",
+          "\"Sourced and refunded. Whatever leaked version they had, consider it recalled.\""
+        ],
+        "failed": [
+          "\"Return denied on that one. Come back with the honest reason.\"",
+          "\"The slip won't take that answer. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You already returned it. Nothing left on your file.\"",
+          "\"Processed you last visit. The desk stays quiet about it.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-009",
+      "drifellaId": "drifella2-2694",
+      "npcId": 100347,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "service-corridor",
+        "worldPixel": {
+          "x": 2408,
+          "y": 6728
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A stockroom archivist who knows every box on the floor came from a person who didn't ship it.",
+        "tic": "\"Everything back here has a name on it.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2694.png",
+      "hints": [],
+      "entryPrompt": [
+        "Down a humming service corridor the Drifella runs a barcode wand over a shelf of unmarked boxes.",
+        "\"Source Check, back-of-house. The stockroom is where the swarm hides where things came from. Let's read the labels honestly.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The Galleria's stockroom is where the swarm stores faces and rumors it isn't ready to put on the sales floor yet.",
+            "answer": true,
+            "failLine": "\"True. Everything here is pending display. Every box has a name that didn't consent.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In swarm inventory language, a face waiting in the stockroom is labeled—",
+            "options": [
+              "UNRELEASED VERSION",
+              "SOLD OUT",
+              "ARCHIVED (WITH CONSENT)",
+              "DAMAGED"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"UNRELEASED VERSION. 'With consent' is the label they wish were true.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Andy Warhol nicknamed his studio, where assistants mass-produced his art, the—",
+            "options": [
+              "Factory",
+              "Warehouse",
+              "Stockroom",
+              "Gallery"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The Factory. He ran art like a stockroom. I run a stockroom like his art. Filed.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Warhol's Factory intentionally treated art-making as an industrial, repeatable production process.",
+            "answer": true,
+            "failLine": "\"True. Copies by the crate. Back here, so does the swarm.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The reason the swarm keeps the stockroom out of sight is that—",
+            "options": [
+              "Provenance is easier to fake in the dark",
+              "The lighting is expensive",
+              "It smells of cardboard",
+              "Customers get lost"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Provenance is easier to fake in the dark. So I keep a light on back here.\"",
+            "category": "vibe"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A box in this stockroom can be relabeled and pushed to the sales floor as a 'new arrival' though it's an old leaked self.",
+            "answer": true,
+            "failLine": "\"True. Relabel, restock, resell. The oldest trick in the room.\"",
+            "category": "witnessed"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-9060",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Label reads true. Filed.\"",
+          "\"That scans clean.\"",
+          "\"Inventory confirms it.\""
+        ],
+        "cleared": [
+          "\"Take the card. I pulled your box off the pending shelf and shredded the label.\"",
+          "\"Sourced and shelved right. No 'new arrival' sticker for you.\""
+        ],
+        "failed": [
+          "\"Barcode won't scan on that. Recount and return.\"",
+          "\"That label's wrong. Try the shelf again.\""
+        ],
+        "alreadyCleared": [
+          "\"Your box already cleared the room. Nothing pending.\"",
+          "\"Scanned you last visit. Still off the floor.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-010",
+      "drifellaId": "drifella2-2781",
+      "npcId": 100348,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "layaway-vault",
+        "worldPixel": {
+          "x": 4968,
+          "y": 4128
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A layaway keeper who holds pieces of people in the vault until the swarm decides to sell them.",
+        "tic": "\"Held, not forgotten.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2781.png",
+      "hints": [],
+      "entryPrompt": [
+        "Behind a heavy grille the Drifella runs a finger down a ledger of names on hold, each half-paid-for.",
+        "\"Source Check, layaway. I keep the pieces the swarm hasn't cashed out yet. Verify a claim and I'll release yours.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the Galleria, the swarm can put a leaked version of a person 'on layaway' — held in reserve to release later.",
+            "answer": true,
+            "failLine": "\"True. Held in the vault, ready to sell the moment it's useful. I hate this job.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The vault ledger records what the swarm treats as the 'deposit' that reserves a leaked self—",
+            "options": [
+              "A single unguarded moment on the record",
+              "A signed contract",
+              "A cash payment",
+              "A loyalty stamp"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"One unguarded moment. No contract needed. That's the whole horror. Filed.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Damien Hirst famously preserved whole animals for gallery display, submerged in tanks of what?",
+            "options": [
+              "Formaldehyde",
+              "Honey",
+              "Concrete",
+              "Glass beads"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Formaldehyde. He put a shark on layaway from decay itself. The vault approves.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Some conceptual artworks are sold as certificates or instructions, so the 'piece' can exist without ever being physically present.",
+            "answer": true,
+            "failLine": "\"True. Owned but absent — held on paper. Exactly how the vault holds you.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A self held in the vault is like provenance that's—",
+            "options": [
+              "Paused, waiting to be spent",
+              "Freely given",
+              "Lost forever",
+              "On clearance"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Paused, waiting to be spent. Held is not gone. Held is worse.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3549",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Claim verified. Filed.\"",
+          "\"That releases clean.\"",
+          "\"Ledger agrees. Verified.\""
+        ],
+        "cleared": [
+          "\"Take the card. I've released your hold and struck the name from the ledger.\"",
+          "\"Sourced and freed. The vault has no claim left on you.\""
+        ],
+        "failed": [
+          "\"Claim doesn't match. Come back and settle it right.\"",
+          "\"The ledger won't release on that. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already released. The vault holds nothing of yours.\"",
+          "\"Struck your name last visit. Still free and clear.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-011",
+      "drifellaId": "drifella2-2796",
+      "npcId": 100349,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "checkout-lane",
+        "worldPixel": {
+          "x": 5016,
+          "y": 6440
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A checkout cashier who scans your provenance at the register and only lets the verified through.",
+        "tic": "\"Any coupons? For your soul?\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2796.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella drags an invisible barcode across your chest and the register makes a doubtful beep.",
+        "\"Source Check at checkout. I can't ring up an unverified self. Prove it and the lane opens.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "At the Galleria's registers, the swarm 'checks you out' the way a store rings up merchandise.",
+            "answer": true,
+            "failLine": "\"True. Beep, filed, bagged. You're a transaction to the lane. Not to me.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The receipt printed at checkout lists a leaked self's price as—",
+            "options": [
+              "Whatever attention it can command",
+              "A flat regional rate",
+              "Free with membership",
+              "Market minus tax"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Whatever attention it commands. The price is the crowd's stare. Filed.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Warhol's Campbell's Soup Cans presented how many canvases, one per variety, like a supermarket shelf?",
+            "options": [
+              "32",
+              "3",
+              "100",
+              "12"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"32 cans, one per flavor. A whole checkout shelf, hung as art. Rings up true.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The barcode was invented to speed up supermarket checkouts before it became a symbol of mass consumer culture.",
+            "answer": true,
+            "failLine": "\"True. A stripe that turns anything into a scannable item — even a face. Filed.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A self that scans clean at checkout is one whose—",
+            "options": [
+              "Provenance holds up to a witness",
+              "Loyalty tier is highest",
+              "Coupons are all clipped",
+              "Bag is reusable"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Provenance that holds up to a witness. Tiers don't clear this lane. Truth does.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10801",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Scans clean. Filed.\"",
+          "\"Lane's open. Verified.\"",
+          "\"That rings up true.\""
+        ],
+        "cleared": [
+          "\"Take the card. No charge — I voided the transaction the swarm wanted.\"",
+          "\"Sourced and rung through. You leave the lane as a person, not a purchase.\""
+        ],
+        "failed": [
+          "\"Won't scan. Back to the end of the line and try again.\"",
+          "\"Register beeps no on that. Come back verified.\""
+        ],
+        "alreadyCleared": [
+          "\"You already checked out clean. Lane's still open.\"",
+          "\"Rang you through last visit. No re-scan needed.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-012",
+      "drifellaId": "drifella2-2801",
+      "npcId": 100350,
+      "region": "the-galleria",
+      "tier": 3,
+      "placement": {
+        "kind": "lost-and-found",
+        "worldPixel": {
+          "x": 4152,
+          "y": 4952
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A lost-and-found keeper who catalogs the selves people misplace on the Galleria floor.",
+        "tic": "\"Someone always claims it. Rarely the owner.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2801.png",
+      "hints": [],
+      "entryPrompt": [
+        "In a low-lit alcove the Drifella opens a drawer of tagged, forgotten faces and looks up hopefully.",
+        "\"Source Check, lost and found. People misplace whole selves in here. Describe yours truly and I'll hand it back.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the Galleria, a self that someone 'loses' to the swarm can be claimed by anyone who describes it convincingly.",
+            "answer": true,
+            "failLine": "\"True. That's the danger of the desk. The loudest claimant wins, not the owner.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The claim tag the swarm attaches to a recovered self reads—",
+            "options": [
+              "FOUND VERSION, OWNER UNVERIFIED",
+              "RETURNED TO OWNER",
+              "PROPERLY LICENSED",
+              "DONATED"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"FOUND VERSION, OWNER UNVERIFIED. 'Returned to owner' is the lie stapled on top.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Sherrie Levine's most famous appropriation was rephotographing the work of which earlier photographer and presenting it as her own?",
+            "options": [
+              "Walker Evans",
+              "Ansel Adams",
+              "Andy Warhol",
+              "Man Ray"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Walker Evans. She 'found' his images and re-signed them. The desk knows the move.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Appropriation art raises the question of who really owns an image once it's been copied and re-presented.",
+            "answer": true,
+            "failLine": "\"True. Ownership blurs the second a thing is found and re-claimed. Filed under: exactly.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The safest way to keep a self out of this drawer is to—",
+            "options": [
+              "Keep your provenance witnessed and close",
+              "Buy the extended warranty",
+              "Stay off the escalator",
+              "Shop only on sale days"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Keep it witnessed and close. No warranty covers a leaked self.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4679",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Description matches. Filed.\"",
+          "\"That's yours, no question.\"",
+          "\"Claim verified. Verified.\""
+        ],
+        "cleared": [
+          "\"Take the card. I've handed your self back to the only rightful claimant — you.\"",
+          "\"Sourced and returned. Nothing of yours stays in this drawer.\""
+        ],
+        "failed": [
+          "\"Description's off. Walk the floor, remember better, come back.\"",
+          "\"Can't release it on that. Try the claim again.\""
+        ],
+        "alreadyCleared": [
+          "\"You already claimed yourself back. The drawer's empty of you.\"",
+          "\"Returned you last visit. Still rightfully yours.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-001",
+      "drifellaId": "drifella2-3104",
+      "npcId": 100351,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "boardwalk",
+        "worldPixel": {
+          "x": 5240,
+          "y": 3176
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A sandcastle provenance-notary who stamps each new tower with the exact minute the tide last approved it.",
+        "tic": "\"Notarized before the next wave.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3104.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella smooths a turret with a butter knife and presses a wet seal into the wall.",
+        "\"Source Check. Two questions before the tide voids my stamp. Speak fast, the sea audits everything.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The first leaked card reached Bosch before he'd had breakfast.",
+            "answer": true,
+            "failLine": "\"Before the toast. I notarized the crumbs.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on that first leaked card was checked—",
+            "options": [
+              "VESSEL",
+              "GUEST",
+              "SOUVENIR",
+              "TENANT"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"VESSEL. The gift shop wanted SOUVENIR. The gift shop always does.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "This resort is where the Source washes up as driftwood.",
+            "answer": true,
+            "failLine": "\"Driftwood. Provenance you can get a splinter from.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Katsushika Hokusai's most famous print shows an enormous—",
+            "options": [
+              "Wave",
+              "Sunset",
+              "Sandbar",
+              "Lighthouse"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"The Great Wave. My towers study under it.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "J.M.W. Turner was famous for painting stormy, glowing seascapes.",
+            "answer": true,
+            "failLine": "\"Turner. He notarized weather with light. I only get sand.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A sandcastle's provenance lasts, at most, until—",
+            "options": [
+              "High tide",
+              "Checkout",
+              "Sunset",
+              "The photo posts"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"High tide. Everything is temporary; I just date it.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3459",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stamped. Sealed.\"",
+          "\"That holds against the tide.\"",
+          "\"Notarized clean.\""
+        ],
+        "cleared": [
+          "\"Take the card. It's still damp from the seal.\"",
+          "\"Sourced before the wave. My best kind of stamp.\""
+        ],
+        "failed": [
+          "\"The tide took it. Rebuild the story and come back.\"",
+          "\"Voided. Even sandcastles get a second draft. Retry.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the ledger, sealed and dry.\"",
+          "\"Notarized last tide. No need to stamp you twice.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-002",
+      "drifellaId": "drifella2-3162",
+      "npcId": 100352,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "pier",
+        "worldPixel": {
+          "x": 7496,
+          "y": 2864
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A postcard forger who paints the view slightly better than it is, then sells you the version you'd rather remember.",
+        "tic": "\"Wish you were the real one.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3162.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella fans out a rack of postcards, every sunset a shade too orange to be true.",
+        "\"Source Check. Two questions. Get them right and I won't sell your face to a tourist.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The postcard version of you is on sale in the gift shop.",
+            "answer": true,
+            "failLine": "\"Rack three, bottom row. You photograph better as a forgery.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on the first leaked card read—",
+            "options": [
+              "VESSEL",
+              "SCENERY",
+              "MODEL",
+              "POSTCARD"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"VESSEL. I'd have printed POSTCARD, but that's my whole bias.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch got that first card before he'd eaten breakfast.",
+            "answer": true,
+            "failLine": "\"Empty stomach, full inbox. I'd paint it hungrier.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Claude Monet painted the same haystacks and cathedrals over and over to study—",
+            "options": [
+              "Changing light",
+              "Property values",
+              "Straw quality",
+              "The best angle"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"The light. He forged the same view a dozen honest ways.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "'Plein-air' painting means working outdoors, on-site, in front of the actual scene.",
+            "answer": true,
+            "failLine": "\"On-site. I skip that part and improve the weather indoors.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A postcard is a lie you mail on purpose because it's—",
+            "options": [
+              "Kinder than the truth",
+              "Cheaper than a photo",
+              "Faster than a call",
+              "Prettier stamps"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Kinder. Nobody wants 'weather fine, crowds worse.' They want the orange sky.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10774",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"True enough to print.\"",
+          "\"That one I'd sign.\"",
+          "\"Genuine. How rare.\""
+        ],
+        "cleared": [
+          "\"Take the card. I resisted improving it, mostly.\"",
+          "\"Sourced and real. I'll keep your forgery off the rack.\""
+        ],
+        "failed": [
+          "\"Smudged. Go find the honest angle and come back.\"",
+          "\"That won't sell. Retry with a truer sky.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already framed and filed. Enjoy the view.\"",
+          "\"Sold to you once, honestly. That's my limit.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-003",
+      "drifellaId": "drifella2-3168",
+      "npcId": 100353,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "gallery-veranda",
+        "worldPixel": {
+          "x": 6336,
+          "y": 2752
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A gallery docent who narrates the leaked view like it's the permanent collection and charges admission to look at your own life.",
+        "tic": "\"Please don't touch the provenance.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3168.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella gestures at a blank wall labeled with a very confident placard.",
+        "\"Source Check. Two questions. This is a docent-led experience, so please keep your hands, and your rumors, behind the rope.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The gallery here sells the leaked view of your life as its main exhibit.",
+            "answer": true,
+            "failLine": "\"Main gallery, west wing. Timed tickets. You're the show.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box checked on the first leaked card said—",
+            "options": [
+              "VESSEL",
+              "EXHIBIT",
+              "PATRON",
+              "ACQUISITION"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"VESSEL. The placard reads EXHIBIT, but placards lie beautifully.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch kept the damaged original card instead of trading it away.",
+            "answer": true,
+            "failLine": "\"He kept it. In our field, damage is called provenance.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Mark Rothko is famous for large canvases of—",
+            "options": [
+              "Soft glowing color fields",
+              "Tiny seascapes",
+              "Photorealistic crowds",
+              "Marble statues"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Color fields. Stand close and the wall breathes. No touching, though.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Robert Irwin was a 'light-and-space' artist who made the room itself the artwork.",
+            "answer": true,
+            "failLine": "\"The room is the piece. Which means, yes, admission covers the air.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A docent's job is really to make sure you leave feeling—",
+            "options": [
+              "Slightly guilty for not knowing more",
+              "Refunded",
+              "Sunburned",
+              "Hungry"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Slightly guilty. That's the whole business model. Gift shop's on the left.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4932",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Correctly observed.\"",
+          "\"A discerning eye.\"",
+          "\"Acquired into the record.\""
+        ],
+        "cleared": [
+          "\"Take the card. Consider it deaccessioned, to you.\"",
+          "\"Sourced and hung straight. The docent approves.\""
+        ],
+        "failed": [
+          "\"Behind the rope, please. Study the placard and return.\"",
+          "\"Not in the collection yet. Retry, with reverence.\""
+        ],
+        "alreadyCleared": [
+          "\"You've already toured. The exit is a gift shop, naturally.\"",
+          "\"Catalogued and closed. Enjoy the permanent collection.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-004",
+      "drifellaId": "drifella2-3323",
+      "npcId": 100354,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "cabana",
+        "worldPixel": {
+          "x": 4104,
+          "y": 3304
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A tide-line auditor who measures the exact wet edge each hour and files a report on where the ocean drew the line today.",
+        "tic": "\"The tide filed at noon.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3323.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella crouches at the wet edge with a clipboard, timing the foam.",
+        "\"Source Check. Two questions before the line moves again. The tide re-files this shoreline constantly, so should you.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The tide here files and re-files the shoreline, never keeping one edge for long.",
+            "answer": true,
+            "failLine": "\"Constant re-filing. My whole job is loving an unstable border.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on that first leaked card was checked as—",
+            "options": [
+              "VESSEL",
+              "SHORELINE",
+              "VISITOR",
+              "SPECIMEN"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"VESSEL. Not SPECIMEN. I audited it twice, dry both times.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The card that started everything arrived at Bosch's place before breakfast.",
+            "answer": true,
+            "failLine": "\"Pre-breakfast. I timestamped the tide that morning too.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Christo and Jeanne-Claude were famous for temporarily wrapping and lining—",
+            "options": [
+              "Coastlines and buildings in fabric",
+              "Paintings in glass",
+              "Books in leather",
+              "Statues in bronze"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Wrapped coastlines. They re-filed a whole shore in cloth, then unfiled it. Kindred.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Land art means artworks made outdoors from the landscape itself, meant to shift with the elements.",
+            "answer": true,
+            "failLine": "\"From the land, changed by weather. The tide is the original land artist, honestly.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A border the ocean redraws hourly is best thought of as—",
+            "options": [
+              "A suggestion",
+              "A law",
+              "A fence",
+              "A deadline"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"A suggestion. I file it like a law and we all pretend.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10848",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Measured true.\"",
+          "\"Within the line. Logged.\"",
+          "\"That reading holds.\""
+        ],
+        "cleared": [
+          "\"Take the card. It's dated to this exact tide.\"",
+          "\"Sourced before the edge moved. Rare and dry.\""
+        ],
+        "failed": [
+          "\"Off the mark. The line moved on you. Re-measure and return.\"",
+          "\"Filed wrong. The tide gets another vote. Retry.\""
+        ],
+        "alreadyCleared": [
+          "\"Already on file, above the high-water mark.\"",
+          "\"Audited last tide. Your edge is stable, for now.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-005",
+      "drifellaId": "drifella2-3353",
+      "npcId": 100355,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "boardwalk",
+        "worldPixel": {
+          "x": 4632,
+          "y": 2752
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A lifeguard-of-originals who scans the surf for genuine articles drowning under their own knockoffs and blows a whistle at forgeries.",
+        "tic": "\"Originals only past the buoy.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3353.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella sits high in a lifeguard chair, whistle ready, scanning not the water but the crowd for fakes.",
+        "\"Source Check. Two questions. I've pulled a lot of forgeries out of that surf. Don't make me dive for you.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Provenance in this town is sold like a vacation package.",
+            "answer": true,
+            "failLine": "\"All-inclusive provenance. I rescue the originals that come without it.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on the first leaked card was marked—",
+            "options": [
+              "VESSEL",
+              "SWIMMER",
+              "TOURIST",
+              "REPRINT"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"VESSEL, not REPRINT. I'd know a knockoff by the way it floats.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The one they called the returnless king was beaten before Bosch left Morningside.",
+            "answer": true,
+            "failLine": "\"Down before the town line. Even kings can't out-swim that.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yves Klein patented and is famous for a single intense shade of—",
+            "options": [
+              "Blue",
+              "Gold",
+              "Coral",
+              "White"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"International Klein Blue. Deep enough to lifeguard. Watch it doesn't pull you under.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A forgery can be technically flawless and still be worthless because it lacks provenance.",
+            "answer": true,
+            "failLine": "\"Perfect brushwork, no papers. Drowns anyway. That's the job.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The thing that actually keeps an original afloat isn't skill, it's—",
+            "options": [
+              "A believable story of where it came from",
+              "A bigger frame",
+              "A famous signature",
+              "Better sunscreen"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The story of where it came from. Signatures forge; stories are harder to fake wet.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3726",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clear water. Swim on.\"",
+          "\"No forgery detected.\"",
+          "\"That one's a genuine article.\""
+        ],
+        "cleared": [
+          "\"Take the card. Verified, buoyant, real.\"",
+          "\"Sourced and afloat. I'll keep the whistle down.\""
+        ],
+        "failed": [
+          "\"Rip current. Get back to shore and try again.\"",
+          "\"That story's sinking. Retry before it goes under.\""
+        ],
+        "alreadyCleared": [
+          "\"Already flagged genuine. You're cleared past the buoy.\"",
+          "\"Rescued once, filed once. Enjoy the surf.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-006",
+      "drifellaId": "drifella2-3360",
+      "npcId": 100356,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "cabana",
+        "worldPixel": {
+          "x": 6816,
+          "y": 3288
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A souvenir-stand oracle who reads your future off the bottom of a snow globe and sells you the keychain that proves it happened.",
+        "tic": "\"Shake it and see.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3360.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella upends a snow globe, watches the glitter fall, and nods at whatever it apparently just told them.",
+        "\"Source Check. Two questions. The globe already knows your answers, but I like to hear you say them.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "A souvenir here is proof that a moment happened, sold separately from the moment.",
+            "answer": true,
+            "failLine": "\"Proof, itemized. The keychain outlives the trip. It always does.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on the first leaked card came back reading—",
+            "options": [
+              "VESSEL",
+              "MEMENTO",
+              "GUEST",
+              "TOKEN"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"VESSEL. The globe showed MEMENTO, but the globe upsells.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The first leaked card reached Bosch before he'd had breakfast.",
+            "answer": true,
+            "failLine": "\"Before breakfast. The glitter settled on that answer instantly.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Joseph Cornell is famous for making art out of—",
+            "options": [
+              "Small boxes full of found trinkets",
+              "Giant marble columns",
+              "Neon signs",
+              "Ice sculptures"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Boxes of found trinkets. He was a souvenir oracle who never left home. My hero.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "'Kitsch' refers to art or objects considered cheap, sentimental, and mass-produced.",
+            "answer": true,
+            "failLine": "\"Kitsch. Sentimental and cheap, like everything on my best shelf.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The reason people buy the keychain is that a memory feels safer when it's—",
+            "options": [
+              "Something you can hold",
+              "Notarized",
+              "Photographed",
+              "Free"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Something you can hold. Memory's slippery. Plastic isn't.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10712",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"The globe agrees.\"",
+          "\"Glitter says yes.\"",
+          "\"Foretold and confirmed.\""
+        ],
+        "cleared": [
+          "\"Take the card. There's a matching keychain, obviously.\"",
+          "\"Sourced and souvenired. The globe is very pleased with you.\""
+        ],
+        "failed": [
+          "\"The glitter clouded. Let it settle and ask again.\"",
+          "\"Cloudy future. Shake it off and retry.\""
+        ],
+        "alreadyCleared": [
+          "\"The globe's already seen you cleared. No refunds, no repeats.\"",
+          "\"Foretold last shake. Enjoy the keychain of it all.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-007",
+      "drifellaId": "drifella2-3427",
+      "npcId": 100357,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "under-the-boardwalk",
+        "worldPixel": {
+          "x": 5824,
+          "y": 3080
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A shade-dwelling guestbook keeper who lives under the planks and records the names of everyone who walked over without looking down.",
+        "tic": "\"Sign the underside.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3427.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella turns in the striped dark beneath the boardwalk, a guestbook of footsteps balanced on both knees.",
+        "\"Source Check. Two questions, down here where the postcards can't reach. Everyone signs eventually.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Down here, out of the sun, the resort's polished version of the story doesn't quite hold.",
+            "answer": true,
+            "failLine": "\"No sunscreen, no spin. The truth keeps in the shade.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on the first leaked card actually said—",
+            "options": [
+              "VESSEL",
+              "GUEST",
+              "SIGNATORY",
+              "WITNESS"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"VESSEL. The lobby writes GUEST in the guestbook. Down here we know better.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch kept the damaged original card rather than trading it.",
+            "answer": true,
+            "failLine": "\"Kept it, scuffs and all. Damage signs the underside, same as everyone.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "John Cage taught that the point of a piece could be to make you notice—",
+            "options": [
+              "The ambient sounds already in the room",
+              "The conductor's outfit",
+              "The ticket price",
+              "The silence of the stage crew"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"The sounds already here. Down under the planks, the drips are the whole symphony.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Brian Eno coined the term 'ambient music' for sound meant to color a space without demanding attention.",
+            "answer": true,
+            "failLine": "\"Ambient. Music you live inside, like this shade. Eno would keep a guestbook too.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The people who walk the boardwalk overhead almost never—",
+            "options": [
+              "Look down",
+              "Pay admission",
+              "Buy postcards",
+              "Get sunburned"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Look down. That's the whole reason there's room for a witness down here.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3591",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Signed and shaded.\"",
+          "\"The book accepts that.\"",
+          "\"Recorded, out of the light.\""
+        ],
+        "cleared": [
+          "\"Take the card. Your name's under the planks now, permanent.\"",
+          "\"Sourced in the shade. The guestbook keeps its secrets.\""
+        ],
+        "failed": [
+          "\"The ink smeared. Come back once you've seen it straight.\"",
+          "\"Not signed cleanly. The dark waits. Retry.\""
+        ],
+        "alreadyCleared": [
+          "\"You've already signed the underside. It doesn't fade.\"",
+          "\"Recorded once, down here. Enjoy the cool of it.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-008",
+      "drifellaId": "drifella2-3436",
+      "npcId": 100358,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "tide-pool-locker",
+        "worldPixel": {
+          "x": 6808,
+          "y": 2840
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A tide-pool locker attendant who checks your true self at the counter each morning and hands you a claim ticket for it, valid until sunset.",
+        "tic": "\"Claim ticket, please.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3436.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella slides a rusted key across a wet ledge, one of a hundred lockers dripping behind them.",
+        "\"Source Check. Two questions to reclaim what you checked at dawn. No ticket, no self.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Here, your true self is something you can check at a counter and reclaim later.",
+            "answer": true,
+            "failLine": "\"Checked at dawn, claimed by dusk. The lockers drip but they hold.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on the first leaked card was checked as—",
+            "options": [
+              "VESSEL",
+              "PATRON",
+              "CONTENTS",
+              "LODGER"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"VESSEL. The claim slip says CONTENTS. Same drawer, different lie.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The first leaked card arrived at Bosch's place before breakfast.",
+            "answer": true,
+            "failLine": "\"Before breakfast. Some things get claimed early whether you want them or not.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Marcel Duchamp scandalized the art world by submitting a signed, ordinary object, most famously a—",
+            "options": [
+              "Urinal, titled 'Fountain'",
+              "Locker key",
+              "Seashell",
+              "Beach towel"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"'Fountain.' He checked a plumbing fixture into the gallery and called it art. I respect the paperwork.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A 'readymade' is an everyday manufactured object an artist declares to be art.",
+            "answer": true,
+            "failLine": "\"Readymade. Declare a thing art and it's art. Declare a locker your soul and, well, here we are.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The trouble with checking your true self at a counter is that eventually—",
+            "options": [
+              "You forget which locker",
+              "It gets sandy",
+              "The key rusts",
+              "It closes early"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"You forget which locker. Half this town never came back for theirs.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3691",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Ticket matches. Claimed.\"",
+          "\"Reclaimed, clean.\"",
+          "\"Locker opens. Proceed.\""
+        ],
+        "cleared": [
+          "\"Take the card. It was in your locker the whole time.\"",
+          "\"Sourced and reclaimed. Don't forget the drawer this season.\""
+        ],
+        "failed": [
+          "\"Wrong ticket. Go find the right claim and return.\"",
+          "\"That key doesn't fit. The locker waits. Retry.\""
+        ],
+        "alreadyCleared": [
+          "\"You've already reclaimed yours. The drawer's empty and clean.\"",
+          "\"Checked out last tide. Nothing left to claim but the view.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-009",
+      "drifellaId": "drifella2-3444",
+      "npcId": 100359,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "closed-gallery-annex",
+        "worldPixel": {
+          "x": 5400,
+          "y": 2760
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A night-shift curator of the annex the resort keeps closed, where the un-retouched originals of every postcard are hung facing the wall.",
+        "tic": "\"The real ones face the wall.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3444.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella lifts a dust sheet in a room the tour never enters, turning one framed original to face you.",
+        "\"Source Check. Two questions, off the map, after hours. The annex only opens for people who ask the right way.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The resort keeps a closed annex where the un-retouched originals are hung facing the wall.",
+            "answer": true,
+            "failLine": "\"Facing the wall. Can't sell a postcard next to the thing it lied about.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In the annex ledger, the first leaked card's category box reads—",
+            "options": [
+              "VESSEL",
+              "ORIGINAL",
+              "GUEST",
+              "PRINT"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"VESSEL. The lobby copy says ORIGINAL. Only the annex keeps the ugly true one.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The one they called the returnless king was already beaten before Bosch left Morningside.",
+            "answer": true,
+            "failLine": "\"Beaten before the town line. We hung his portrait facing the wall, like the rest.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Agnes Martin's quiet paintings are famous for their faint—",
+            "options": [
+              "Grids and pale lines",
+              "Loud primary colors",
+              "Crowd scenes",
+              "Gold leaf"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Grids so faint you lean in. She hung silence. This annex is basically a Martin.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Minimalism in art strips work down to simple, essential forms and few materials.",
+            "answer": true,
+            "failLine": "\"Down to the essential. A closed room with the truth facing the wall is peak minimalism.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The reason the originals face the wall isn't damage, it's that the truth is—",
+            "options": [
+              "Bad for gift-shop sales",
+              "Too fragile for light",
+              "Not finished yet",
+              "Owned by someone else"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Bad for sales. The truth never photographs like the postcard. That's the annex's whole grief.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3553",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Turned face-out. Verified.\"",
+          "\"The annex accepts that.\"",
+          "\"Hung straight, at last.\""
+        ],
+        "cleared": [
+          "\"Take the card. It's the un-retouched one. Handle it accordingly.\"",
+          "\"Sourced after hours. One original gets to face the room tonight.\""
+        ],
+        "failed": [
+          "\"Back to the wall it goes. Come back when you've seen it true.\"",
+          "\"Not yet. The dust sheet returns. Retry.\""
+        ],
+        "alreadyCleared": [
+          "\"You've already seen the true one. It's back facing the wall now.\"",
+          "\"Curated once, quietly. The annex closes behind you.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-010",
+      "drifellaId": "drifella2-3449",
+      "npcId": 100360,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "tide-pool-locker",
+        "worldPixel": {
+          "x": 4800,
+          "y": 3072
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A driftwood archivist who catalogs each piece of Source the sea coughs up and refuses to sell any of it, no matter the vacation package offered.",
+        "tic": "\"The sea already filed it.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-3449.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella kneels over a low tide-pool shelf, sorting salt-pale driftwood into an order only they can see.",
+        "\"Source Check. Two questions. I don't sell what the sea files, but I'll let you read the catalog.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In this town the Source washes up as driftwood, and this one refuses to sell any of it.",
+            "answer": true,
+            "failLine": "\"Not for sale. The sea filed it first; a gift shop can't overrule the sea.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In the driftwood catalog, the first leaked card's category box is logged as—",
+            "options": [
+              "VESSEL",
+              "DRIFT",
+              "GUEST",
+              "SALVAGE"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"VESSEL. The resort would log SALVAGE and price it. The sea and I log the truth.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The card that started everything reached Bosch before he'd had breakfast.",
+            "answer": true,
+            "failLine": "\"Pre-breakfast. Washed up early, like the best driftwood does.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Andy Goldsworthy is famous for arranging natural found materials, like driftwood, leaves and stone, into—",
+            "options": [
+              "Temporary outdoor sculptures",
+              "Framed oil paintings",
+              "Bronze casts",
+              "Neon installations"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Temporary sculptures. He files with the sea too, then lets the tide un-file it. A colleague.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "'Assemblage' is art made by combining found or scavenged objects into a single work.",
+            "answer": true,
+            "failLine": "\"Assemblage. My whole catalog is one, if you squint. The sea's the co-author.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The thing the resort can never actually own, no matter the vacation package, is—",
+            "options": [
+              "Where a thing truly came from",
+              "The beachfront",
+              "The gift shop",
+              "The sunset"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Where it came from. You can package a view; you can't package a source. That's the joke.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4856",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Filed with the sea.\"",
+          "\"The catalog agrees.\"",
+          "\"Logged, salt-true.\""
+        ],
+        "cleared": [
+          "\"Take the card. It's the one piece I'll let leave the shelf.\"",
+          "\"Sourced, not sold. The sea signed off on you.\""
+        ],
+        "failed": [
+          "\"Mis-filed. Walk the tide-line and come back sorted.\"",
+          "\"That doesn't match the catalog. Retry.\""
+        ],
+        "alreadyCleared": [
+          "\"You're already in the driftwood ledger. The sea remembers.\"",
+          "\"Catalogued once. Enjoy reading the shelf.\""
+        ]
+      }
     }
   ]
 }
