@@ -64,6 +64,13 @@ export class TeleportMenu {
     return this.open;
   }
 
+  /** Open programmatically (e.g. from the command-menu Map tile). Caller owns the gating. */
+  openOverlay(): void {
+    if (!this.open) {
+      this.openMenu();
+    }
+  }
+
   destroy(): void {
     if (typeof window !== "undefined") {
       window.removeEventListener("keydown", this.keyHandler, true);

@@ -182,12 +182,15 @@ import {
   confirmMenu,
   menuDebugState,
   menuRenderStack,
-  moveMenu,
+  moveMenu2D,
   openMenu,
   parseMenuAction,
   refreshMenuStackScreens,
   resolveTalkMenuAction,
   MAIN_MENU_ID,
+  MAP_MENU_ACTION_ID,
+  PARTY_MENU_ACTION_ID,
+  JOURNAL_MENU_ACTION_ID,
   PHONE_SERVICE_MENU_ID,
   TALK_MENU_ACTION_ID,
   shopRootScreenId,
@@ -201,9 +204,22 @@ import {
   CANCEL_KEY_NAMES,
   CONFIRM_KEY_NAMES,
   MENU_DOWN_KEY_NAMES,
+  MENU_LEFT_KEY_NAMES,
+  MENU_RIGHT_KEY_NAMES,
   MENU_UP_KEY_NAMES,
   registerDiscreteKeys
 } from "./inputModel";
+import {
+  GamepadTracker,
+  NO_HELD_DIRECTION,
+  directionToDelta,
+  directionToKeyCode,
+  gamepadButtonStates,
+  gamepadDirections,
+  pickActiveGamepad,
+  type DirectionVector,
+  type GamepadAction
+} from "./gamepadInput";
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import {
   defaultVisualStateInputs,
@@ -638,6 +654,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private overlaySprites = new Map<string, Phaser.GameObjects.Sprite>();
   private cursors?: Phaser.Types.Input.Keyboard.CursorKeys;
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
+  private readonly gamepadTracker = new GamepadTracker();
+  private gamepadHeld: DirectionVector = NO_HELD_DIRECTION;
   private doorTriggerState: DoorTriggerState = { suppressUntilClear: false };
   private lastDoor?: { from: { x: number; y: number }; to: { x: number; y: number } };
   private warnedInvalidDoorWarps = new Set<string>();
@@ -950,8 +968,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.registerTransitionSfxResume();
     this.refreshMenuScreens();
     this.input.keyboard?.on("keydown-M", () => this.openCommandMenu());
-    registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveMenuCursor(-1));
-    registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => this.moveMenuCursor(1));
+    registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveMenuDirectional(0, -1));
+    registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => this.moveMenuDirectional(0, 1));
+    registerDiscreteKeys(this.input.keyboard, MENU_LEFT_KEY_NAMES, () => this.moveMenuDirectional(-1, 0));
+    registerDiscreteKeys(this.input.keyboard, MENU_RIGHT_KEY_NAMES, () => this.moveMenuDirectional(1, 0));
     registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.handleConfirm());
     registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.handleCancel());
     this.input.keyboard?.on("keydown-P", () => this.handleSaveKey());
@@ -1115,6 +1135,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.player) {
       return;
     }
+    this.pollGamepad();
     this.spriteWalkBobClockMs += delta;
     this.partyState.tickMeters(delta);
     this.updateDangerHeartbeat(delta);
@@ -2508,11 +2529,124 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private readInput(): MoveInput {
     return {
-      left: Boolean(this.cursors?.left?.isDown || this.keys?.A?.isDown),
-      right: Boolean(this.cursors?.right?.isDown || this.keys?.D?.isDown),
-      up: Boolean(this.cursors?.up?.isDown || this.keys?.W?.isDown),
-      down: Boolean(this.cursors?.down?.isDown || this.keys?.S?.isDown)
+      left: Boolean(this.cursors?.left?.isDown || this.keys?.A?.isDown || this.gamepadHeld.left),
+      right: Boolean(this.cursors?.right?.isDown || this.keys?.D?.isDown || this.gamepadHeld.right),
+      up: Boolean(this.cursors?.up?.isDown || this.keys?.W?.isDown || this.gamepadHeld.up),
+      down: Boolean(this.cursors?.down?.isDown || this.keys?.S?.isDown || this.gamepadHeld.down)
     };
+  }
+
+  /**
+   * SNES gamepad support. Polls the browser Gamepad API and translates it to the same
+   * actions the keyboard drives: D-pad/stick -> movement + 2D menu cursor, A/B confirm/
+   * cancel, Start menu, Select save, Y bike, X map, L/R rotate the party lead. While a DOM
+   * overlay (Map/Journal/Party) is up, directions + confirm/cancel are forwarded to it as
+   * synthetic key events so the same code path drives it. Called once per update().
+   */
+  private pollGamepad(): void {
+    const getPads = typeof navigator !== "undefined" && typeof navigator.getGamepads === "function"
+      ? navigator.getGamepads.bind(navigator)
+      : undefined;
+    const pad = getPads ? pickActiveGamepad([...getPads()]) : undefined;
+    if (!pad) {
+      this.gamepadHeld = NO_HELD_DIRECTION;
+      this.gamepadTracker.reset();
+      return;
+    }
+    const frame = this.gamepadTracker.tick(gamepadButtonStates(pad), gamepadDirections(pad), this.time.now);
+    const overlayOpen = this.anyDomOverlayOpen();
+    // Movement only flows in the field: not in a menu, dialogue, or a DOM overlay.
+    this.gamepadHeld = overlayOpen || this.menuState.open ? NO_HELD_DIRECTION : frame.held;
+
+    if (overlayOpen) {
+      for (const dir of frame.directionEdges) {
+        this.dispatchSyntheticKey(directionToKeyCode(dir));
+      }
+      for (const action of frame.pressedActions) {
+        if (action === "confirm") {
+          this.dispatchSyntheticKey("KeyZ");
+        } else if (action === "cancel" || action === "menu") {
+          this.dispatchSyntheticKey("KeyX");
+        }
+      }
+      return;
+    }
+
+    for (const action of frame.pressedActions) {
+      this.handleGamepadAction(action);
+    }
+    if (this.menuState.open) {
+      for (const dir of frame.directionEdges) {
+        const { dx, dy } = directionToDelta(dir);
+        this.moveMenuDirectional(dx, dy);
+      }
+    }
+  }
+
+  private anyDomOverlayOpen(): boolean {
+    return Boolean(this.teleportMenu?.isOpen() || this.questJournal?.isOpen() || this.partyOrderMenu?.isOpen());
+  }
+
+  private handleGamepadAction(action: GamepadAction): void {
+    switch (action) {
+      case "confirm":
+        this.handleConfirm();
+        return;
+      case "cancel":
+        this.handleCancel();
+        return;
+      case "menu":
+        if (this.menuState.open) {
+          this.cancelCommandMenu();
+        } else {
+          this.openCommandMenu();
+        }
+        return;
+      case "save":
+        if (!this.menuState.open) {
+          this.handleSaveKey();
+        }
+        return;
+      case "bike":
+        if (!this.menuState.open) {
+          this.toggleBike();
+        }
+        return;
+      case "map":
+        if (this.isPlayerControllable() && !this.bikeActive) {
+          this.teleportMenu?.openOverlay();
+        }
+        return;
+      case "partyPrev":
+        this.cyclePartyLead(-1);
+        return;
+      case "partyNext":
+        this.cyclePartyLead(1);
+        return;
+    }
+  }
+
+  /** Rotate which hero leads (front of the march + first command slot). L/R on the pad. */
+  private cyclePartyLead(direction: number): void {
+    if (!this.isPlayerControllable() || this.menuState.open) {
+      return;
+    }
+    const order = this.partyState.party();
+    if (order.length < 2) {
+      return;
+    }
+    const shift = direction >= 0 ? 1 : order.length - 1;
+    const rotated = order.map((_, index) => order[(index + shift) % order.length]);
+    this.partyState.reorder(rotated);
+    this.handlePartyCompositionChanged();
+    this.playMenuSfx("menuMove");
+  }
+
+  private dispatchSyntheticKey(code: string): void {
+    if (typeof window === "undefined" || typeof KeyboardEvent === "undefined") {
+      return;
+    }
+    window.dispatchEvent(new KeyboardEvent("keydown", { code, bubbles: true, cancelable: true }));
   }
 
   private registerTransitionSfxResume(): void {
@@ -3196,12 +3330,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
-  private moveMenuCursor(delta: number): void {
+  private moveMenuDirectional(dx: number, dy: number): void {
     if (!this.menuState.open) {
       return;
     }
     const before = this.menuDebugState();
-    this.menuState = moveMenu(this.menuState, delta);
+    this.menuState = moveMenu2D(this.menuState, dx, dy);
     const after = this.menuDebugState();
     if (before.cursorIndex !== after.cursorIndex || before.currentItemId !== after.currentItemId) {
       this.playMenuSfx("menuMove");
@@ -3233,6 +3367,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private handleMenuAction(actionId: string): void {
     if (actionId === TALK_MENU_ACTION_ID) {
       this.handleTalkAction();
+      return;
+    }
+    // Swagbound system tiles: close the command menu, hand off to the DOM overlay
+    // (same overlays the T/J/K hotkeys open). The overlay owns its own input + close.
+    if (actionId === MAP_MENU_ACTION_ID) {
+      this.closeMenu();
+      this.teleportMenu?.openOverlay();
+      return;
+    }
+    if (actionId === PARTY_MENU_ACTION_ID) {
+      this.closeMenu();
+      this.partyOrderMenu?.openOverlay();
+      return;
+    }
+    if (actionId === JOURNAL_MENU_ACTION_ID) {
+      this.closeMenu();
+      this.questJournal?.openOverlay();
       return;
     }
     const action = parseMenuAction(actionId);

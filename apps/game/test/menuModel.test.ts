@@ -28,6 +28,7 @@ import {
   confirmMenu,
   menuDebugState,
   moveMenu,
+  moveMenu2D,
   openMenu,
   parseMenuAction,
   resolveTalkMenuAction,
@@ -121,7 +122,7 @@ describe("menuModel navigation", () => {
     expect(result.state).toEqual(state);
   });
 
-  it("wires Talk and keeps the save action parseable (save is the P key, not a menu item)", () => {
+  it("wires Talk and Save as command tiles", () => {
     const screen = buildMainMenuScreen();
 
     expect(screen.items.find((item) => item.id === "talk")).toMatchObject({
@@ -129,24 +130,40 @@ describe("menuModel navigation", () => {
       enabled: true,
       actionId: TALK_MENU_ACTION_ID
     });
-    // EB parity: Save + ATM are NOT pause-menu items
-    expect(screen.items.find((item) => item.id === "save")).toBeUndefined();
-    expect(screen.items.find((item) => item.id === "atm")).toBeUndefined();
-    // the save action itself still exists (triggered by the P key)
+    // Save is now a tile in the 3x3 grid (still routes through the save action).
+    expect(screen.items.find((item) => item.id === "save")).toMatchObject({ label: "Save", actionId: "save" });
     expect(parseMenuAction("save")).toEqual({ kind: "save" });
+    // ATM is still reached at the machine, not a pause-menu tile.
+    expect(screen.items.find((item) => item.id === "atm")).toBeUndefined();
   });
 
-  it("is exactly vanilla EarthBound's 6-item pause menu", () => {
+  it("is a 3x3 command grid: EB commands + Save + Swagbound systems", () => {
     const screen = buildMainMenuScreen();
 
+    expect(screen.columns).toBe(3);
     expect(screen.items.map((item) => item.label)).toEqual([
-      "Talk",
-      "Goods",
-      "PSI",
-      "Equip",
-      "Check",
-      "Status"
+      "Talk", "Goods", "PSI",
+      "Equip", "Status", "Save",
+      "Map", "Party", "Journal"
     ]);
+  });
+
+  it("navigates the grid in 2D, wrapping within a row/column", () => {
+    const state = openMenu(buildMainMenuScreen()); // cursor 0 = Talk
+    // right across the top row
+    expect(menuDebugState(moveMenu2D(state, 1, 0))).toMatchObject({ cursorIndex: 1, currentItemId: "goods" });
+    // down a column (0 -> 3 = Equip)
+    expect(menuDebugState(moveMenu2D(state, 0, 1))).toMatchObject({ cursorIndex: 3, currentItemId: "equip" });
+    // left from column 0 wraps to column 2 (Talk -> PSI)
+    expect(menuDebugState(moveMenu2D(state, -1, 0))).toMatchObject({ cursorIndex: 2, currentItemId: "psi" });
+    // up from row 0 wraps to the bottom row (Talk -> Map)
+    expect(menuDebugState(moveMenu2D(state, 0, -1))).toMatchObject({ cursorIndex: 6, currentItemId: "map" });
+  });
+
+  it("falls back to linear movement for a column-less list", () => {
+    const state = openMenu(rootScreen);
+    // dy on a list with no columns behaves like moveMenu (skips the disabled row)
+    expect(menuDebugState(moveMenu2D(state, 0, 1))).toMatchObject({ cursorIndex: 2, currentItemId: "third" });
   });
 });
 

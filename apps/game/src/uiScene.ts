@@ -57,6 +57,10 @@ const MENU_VERTICAL_PADDING = 10;
 const MENU_TITLE_GAP = 5;
 const MENU_CARET_GUTTER_PX = 12;
 const MENU_MAX_VISIBLE_ITEMS = 8;
+// Grid-menu (columned screens like the 3x3 Command menu) layout.
+const MENU_GRID_COL_GAP = 10;
+const MENU_GRID_ROW_EXTRA = 6;
+const MENU_GRID_CELL_INSET = 4;
 type MenuCursorSlot = {
   x: number;
   rowTop: number;
@@ -466,6 +470,34 @@ export class UiScene extends Phaser.Scene {
         }).setDepth(15));
       }
 
+      // Grid screens (the 3x3 Command menu) lay items in a row-major grid; the
+      // selection highlight boxes the whole cell. Lists keep the vertical path below.
+      if (screen.columns && screen.columns > 1) {
+        const { columns, cellWidth, rowHeight } = this.menuGridMetrics(screen);
+        screen.items.forEach((item, index) => {
+          const col = index % columns;
+          const row = Math.floor(index / columns);
+          const cellX = x + textInset + col * (cellWidth + MENU_GRID_COL_GAP);
+          const cellY = itemTop + row * rowHeight;
+          const selected = item.selected && item.enabled;
+          if (selected) {
+            this.menuCursorSlots.push({
+              x: cellX,
+              rowTop: cellY - 2,
+              width: cellWidth,
+              rowHeight: this.menuLineHeight()
+            });
+          }
+          this.menuTexts.push(createCleanText(this, cellX + MENU_CARET_GUTTER_PX, cellY, item.label, {
+            fontSize,
+            color: selected ? CLEAN_UI_SELECTION_TEXT : (item.enabled ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY),
+            weight: selected ? 500 : 400
+          }).setDepth(selected ? 17 : 15));
+        });
+        nextX = x + boxWidth + MENU_GAP;
+        return;
+      }
+
       const lineHeight = this.menuLineHeight();
       const maxItems = Math.max(0, Math.floor((boxHeight - (itemTop - y) - itemBottomInset) / lineHeight));
       const start = visibleItemStart(screen.cursorIndex, screen.items.length, maxItems);
@@ -811,8 +843,33 @@ export class UiScene extends Phaser.Scene {
     return dialogueTextWidth(this.dialogueRect(), DIALOGUE_HORIZONTAL_PADDING);
   }
 
+  /** Shared cell metrics for a columned (grid) menu, used by sizing + drawing. */
+  private menuGridMetrics(screen: MenuRenderScreen): {
+    columns: number;
+    rows: number;
+    cellWidth: number;
+    rowHeight: number;
+  } {
+    const columns = Math.max(1, Math.trunc(screen.columns ?? 1));
+    const rows = Math.max(1, Math.ceil(screen.items.length / columns));
+    const widest = screen.items.reduce((max, item) => Math.max(max, this.measureTextWidth(item.label)), 0);
+    const cellWidth = widest + MENU_CARET_GUTTER_PX + MENU_GRID_CELL_INSET * 2;
+    const rowHeight = this.menuLineHeight() + MENU_GRID_ROW_EXTRA;
+    return { columns, rows, cellWidth, rowHeight };
+  }
+
   private menuRect(screen: MenuRenderScreen, x: number): CanvasRect {
     const showTitle = screen.id !== "main";
+    if (screen.columns && screen.columns > 1) {
+      const { columns, rows, cellWidth, rowHeight } = this.menuGridMetrics(screen);
+      const titleHeight = showTitle ? this.menuLineHeight() + MENU_TITLE_GAP : 0;
+      return {
+        x,
+        y: MENU_TOP,
+        width: MENU_HORIZONTAL_PADDING * 2 + columns * cellWidth + (columns - 1) * MENU_GRID_COL_GAP,
+        height: MENU_VERTICAL_PADDING * 2 + titleHeight + rows * rowHeight
+      };
+    }
     const lineHeight = this.menuLineHeight();
     const itemLabels = screen.items.map((item) => item.label);
     const labels = showTitle ? [screen.title, ...itemLabels] : itemLabels;

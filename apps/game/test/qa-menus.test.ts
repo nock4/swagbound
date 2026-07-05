@@ -140,30 +140,28 @@ function inSliceShopInput(storeId: number) {
   };
 }
 
-describe("qa-menus: main pause menu (EB parity)", () => {
-  it("is exactly the vanilla 6-command pause menu in order; Save/ATM are not items", () => {
+describe("qa-menus: main pause menu (3x3 command grid)", () => {
+  it("is the 3x3 command grid in row-major order; ATM is not a tile", () => {
     const screen = buildMainMenuScreen();
+    expect(screen.columns).toBe(3);
     expect(screen.items.map((item) => item.label)).toEqual([
-      "Talk",
-      "Goods",
-      "PSI",
-      "Equip",
-      "Check",
-      "Status"
+      "Talk", "Goods", "PSI",
+      "Equip", "Status", "Save",
+      "Map", "Party", "Journal"
     ]);
     expect(screen.items.every((item) => item.enabled)).toBe(true);
-    expect(screen.items.find((item) => item.id === "save")).toBeUndefined();
+    expect(screen.items.find((item) => item.id === "save")).toMatchObject({ actionId: "save" });
     expect(screen.items.find((item) => item.id === "atm")).toBeUndefined();
   });
 
-  it("wraps the cursor through enabled commands in both directions", () => {
+  it("wraps the linear cursor through all nine tiles in both directions", () => {
     const state = openMenu(buildMainMenuScreen());
-    expect(menuDebugState(moveMenu(state, -1))).toMatchObject({ cursorIndex: 5, currentItemId: "status" });
+    expect(menuDebugState(moveMenu(state, -1))).toMatchObject({ cursorIndex: 8, currentItemId: "journal" });
     let walked = state;
-    for (let step = 0; step < 6; step += 1) {
+    for (let step = 0; step < 9; step += 1) {
       walked = moveMenu(walked, 1);
     }
-    // 6 forward steps over 6 items returns to the first command.
+    // 9 forward steps over 9 tiles returns to the first command.
     expect(menuDebugState(walked)).toMatchObject({ cursorIndex: 0, currentItemId: "talk" });
   });
 });

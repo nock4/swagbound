@@ -35,6 +35,7 @@ export class QuestJournal {
     if (event.code === "KeyX" || event.code === "Escape" || isJournalKey(event.code)) {
       this.close();
       event.preventDefault();
+      event.stopPropagation();
     }
   };
 
@@ -48,6 +49,14 @@ export class QuestJournal {
 
   isOpen(): boolean {
     return this.open;
+  }
+
+  /** Open programmatically (e.g. from the command-menu Journal tile). Caller owns the gating. */
+  openOverlay(): void {
+    if (!this.open) {
+      this.open = true;
+      this.render();
+    }
   }
 
   destroy(): void {

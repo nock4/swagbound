@@ -29,6 +29,8 @@ export type MenuScreen = {
   title: string;
   items: MenuItem[];
   wrap?: boolean;
+  /** When set, the screen is a grid this many columns wide (2D cursor nav + grid render). */
+  columns?: number;
 };
 
 export type MenuFrame = {
@@ -65,6 +67,8 @@ export type MenuRenderScreen = {
   title: string;
   cursorIndex: number;
   items: MenuRenderItem[];
+  /** Grid width when the screen renders as a grid (mirrors MenuScreen.columns). */
+  columns?: number;
 };
 
 export type StatusMemberViewModel = {
@@ -316,6 +320,11 @@ export const STATUS_MENU_ID = "status";
 export const TALK_MENU_ACTION_ID = "talk";
 export const NO_ONE_TO_TALK_TO_MESSAGE = "There's no one to talk to.";
 export const SAVE_MENU_ACTION_ID = "save";
+// Swagbound systems surfaced as top-level command tiles; the scene special-cases
+// these action ids (like Talk) to open their DOM overlays, so no MenuAction kind.
+export const MAP_MENU_ACTION_ID = "map";
+export const PARTY_MENU_ACTION_ID = "party-order";
+export const JOURNAL_MENU_ACTION_ID = "journal";
 const GOODS_MENU_ID = "goods";
 const PSI_MENU_ID = "psi";
 const EQUIP_MENU_ID = "equip";
@@ -345,17 +354,22 @@ const BINDER_CARD_ACTION_PREFIX = "binder-card";
 const ATM_AMOUNT_OPTIONS = [10, 50, 100, 500, 1000];
 const EQUIP_SLOTS: EquipmentSlot[] = ["weapon", "body", "arms", "other"];
 
+const MAIN_MENU_COLUMNS = 3;
+
+// The pause menu is a 3x3 grid: the EarthBound commands (Talk/Goods/PSI/Equip/Status)
+// plus Save and the three Swagbound systems (Map/Party/Journal), so everything a
+// controller player needs is one Start-press away. Check moved under context interaction;
+// the Binder (Source Checks) stays nested under Status. Order is row-major (see the grid).
 const MAIN_COMMANDS: Array<Omit<MenuItem, "enabled">> = [
   { id: TALK_MENU_ACTION_ID, label: "Talk", actionId: TALK_MENU_ACTION_ID },
   { id: GOODS_MENU_ID, label: "Goods", childScreenId: GOODS_MENU_ID },
   { id: PSI_MENU_ID, label: "PSI", childScreenId: PSI_MENU_ID },
   { id: EQUIP_MENU_ID, label: "Equip", childScreenId: EQUIP_MENU_ID },
-  { id: "check", label: "Check", childScreenId: "check" },
-  { id: STATUS_MENU_ID, label: "Status", childScreenId: STATUS_MENU_ID }
-  // The pause menu stays EarthBound's vanilla 6 commands. The Swagbound Binder (Source
-  // Checks) is nested under Status (see buildStatusScreen), not a 7th top-level command.
-  // ATM is reached at ATM machines and
-  // Save via phone (here: the P key, chunkedWorldScene keydown-P) - neither is a menu item.
+  { id: STATUS_MENU_ID, label: "Status", childScreenId: STATUS_MENU_ID },
+  { id: SAVE_MENU_ACTION_ID, label: "Save", actionId: SAVE_MENU_ACTION_ID },
+  { id: MAP_MENU_ACTION_ID, label: "Map", actionId: MAP_MENU_ACTION_ID },
+  { id: PARTY_MENU_ACTION_ID, label: "Party", actionId: PARTY_MENU_ACTION_ID },
+  { id: JOURNAL_MENU_ACTION_ID, label: "Journal", actionId: JOURNAL_MENU_ACTION_ID }
 ];
 
 export function closedMenu(): MenuState {
@@ -393,6 +407,40 @@ export function moveMenu(state: MenuState, delta: number, options: { wrap?: bool
     ...active,
     cursorIndex: enabledIndexes[nextPosition]
   });
+}
+
+/**
+ * 2D grid cursor movement for a columned screen. dx/dy are one of -1/0/1. Wraps within
+ * the row (dx) or column (dy) and skips disabled cells. Screens without `columns` fall
+ * back to linear vertical movement (dy), so lists keep their existing up/down behavior.
+ */
+export function moveMenu2D(state: MenuState, dx: number, dy: number): MenuState {
+  const active = currentFrame(state);
+  if (!active) {
+    return state;
+  }
+  const items = active.screen.items;
+  const columns = Math.max(1, Math.trunc(active.screen.columns ?? 1));
+  if (items.length === 0 || (dx === 0 && dy === 0)) {
+    return state;
+  }
+  if (columns === 1) {
+    return moveMenu(state, Math.sign(dy) || Math.sign(dx));
+  }
+  const rows = Math.ceil(items.length / columns);
+  const stepCol = Math.sign(dx);
+  const stepRow = Math.sign(dy);
+  let col = active.cursorIndex % columns;
+  let row = Math.floor(active.cursorIndex / columns);
+  for (let attempt = 0; attempt < columns * rows; attempt += 1) {
+    col = modulo(col + stepCol, columns);
+    row = modulo(row + stepRow, rows);
+    const index = row * columns + col;
+    if (index >= 0 && index < items.length && items[index].enabled) {
+      return replaceCurrentFrame(state, { ...active, cursorIndex: index });
+    }
+  }
+  return state;
 }
 
 export function confirmMenu(
@@ -477,6 +525,7 @@ export function menuRenderStack(state: MenuState): MenuRenderScreen[] {
     id: frame.screen.id,
     title: frame.screen.title,
     cursorIndex: frame.cursorIndex,
+    ...(frame.screen.columns ? { columns: frame.screen.columns } : {}),
     items: frame.screen.items.map((item, index) => ({
       id: item.id,
       label: item.label,
@@ -490,7 +539,8 @@ export function buildMainMenuScreen(): MenuScreen {
   return {
     id: MAIN_MENU_ID,
     title: "Command",
-    items: MAIN_COMMANDS.map((item) => ({ ...item, enabled: true }))
+    items: MAIN_COMMANDS.map((item) => ({ ...item, enabled: true })),
+    columns: MAIN_MENU_COLUMNS
   };
 }
 
