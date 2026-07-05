@@ -65,6 +65,7 @@ import {
   isSunstrokeSurface,
   isWaterSurface,
   pointInRect,
+  solidAtCell,
   solidAtWorldPixel,
   surfaceAtCell,
   surfaceAtWorldPixel,
@@ -413,6 +414,10 @@ type BlockedOptions = {
   // actor that ends up co-located with an NPC (door-warp spawn, scripted move)
   // can always walk free instead of being trapped in every direction.
   escapeOverlapAt?: { x: number; y: number };
+  // Player-only, vertical moves only: EB ladder cells (0x10, usually 0x90 =
+  // ladder over solid cliff) are climbable — solid terrain passes when every
+  // blocking cell carries the ladder flag. NPCs/roamers never set this.
+  allowLadderTerrain?: boolean;
 };
 
 type DoorWarpOptions = {
@@ -471,6 +476,7 @@ const LOW_HP_DANGER_BEEP_INTERVAL_MS = 820;
 // tile; deep water wading speed factor.
 const SUNSTROKE_CHANCE_PER_STEP = 0.05;
 const DEEP_WATER_SPEED_MULTIPLIER = 0.55;
+const LADDER_SPEED_MULTIPLIER = 0.6;
 const ROOM_MASK_EDGE_INSET_SCREEN_PX = 0.5;
 const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
 const CUTSCENE_ACTOR_MOVE_TIMEOUT_MS = 8_000;
@@ -1042,7 +1048,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       blocked: (x, y) =>
         this.blocked(x, y, {
           includeNpcs: true,
-          escapeOverlapAt: { x: this.playerState.x, y: this.playerState.y }
+          escapeOverlapAt: { x: this.playerState.x, y: this.playerState.y },
+          // Vertical tries only (x unchanged): lets the player climb ladder columns.
+          allowLadderTerrain: x === this.playerState.x
         }),
       frames: this.playerFrames
     });
@@ -2358,7 +2366,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private blocked(x: number, y: number, options: BlockedOptions = {}): boolean {
-    if (this.surfaceBlocked(x, y)) {
+    if (this.surfaceBlocked(x, y) && !(options.allowLadderTerrain && this.footprintSolidsAreLadder(x, y))) {
       return true;
     }
     if (this.barrierBlocks(x, y)) {
@@ -2396,6 +2404,43 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private surfaceBlocked(x: number, y: number): boolean {
     return !this.walkableFootprint({ x, y });
+  }
+
+  /**
+   * Climbability check for a vertical move. EB ladder columns come in two data
+   * flavors (0x10 walkable, 0x90 over solid cliff) and are often a single 8px
+   * cell — narrower than the 13px foot box, whose corners always clip the
+   * flanking cliff. A vertical try is climbable when the FEET COLUMN (feet cell
+   * + the cell under the box's top edge) is ladder-flagged: any solid cell in
+   * the column must itself be a ladder, and at least one column cell must carry
+   * the flag (otherwise it's a plain wall squeeze and normal collision stands).
+   * While climbing, the wide box may overhang the flanking rock — matching EB.
+   */
+  private footprintSolidsAreLadder(x: number, y: number): boolean {
+    const grid = this.collisionGrid();
+    const cellX = Math.floor(x / grid.cellSize);
+    // Top edge, feet, and one row below the feet: the extra row lets the player
+    // mount the ladder from the summit and step off at the top, where EB's
+    // leading-edge-only collision is more permissive than our four corners.
+    const rows = [
+      Math.floor((y + PLAYER_FOOT_BOX.top) / grid.cellSize),
+      Math.floor(y / grid.cellSize),
+      Math.floor(y / grid.cellSize) + 1
+    ];
+    let sawLadder = false;
+    for (const cellY of rows) {
+      if (cellX < 0 || cellY < 0 || cellX >= grid.width || cellY >= grid.height) {
+        return false;
+      }
+      const laddered = isLadderSurface(surfaceAtCell(this.surfaceRows, cellX, cellY));
+      if (solidAtCell(this.solidRows, cellX, cellY) && !laddered) {
+        return false;
+      }
+      if (laddered) {
+        sawLadder = true;
+      }
+    }
+    return sawLadder;
   }
 
   /** Active story barriers block the player like solid terrain (string-flag gated). */
@@ -3560,13 +3605,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
-  /** Deep water (0x08 + 0x04) wades at roughly half speed; everything else is full speed. */
+  /** Deep water (0x08 + 0x04) wades and ladders (0x10) climb at reduced speed. */
   private terrainSpeedMultiplier(): number {
     try {
       const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
+      if (isLadderSurface(surface)) {
+        return LADDER_SPEED_MULTIPLIER;
+      }
       return isDeepWaterSurface(surface) ? DEEP_WATER_SPEED_MULTIPLIER : 1;
     } catch {
       return 1;
+    }
+  }
+
+  /** Real onLadder visual-state signal: feet on an EB ladder/stairs cell. */
+  private isPlayerOnLadderCell(): boolean {
+    try {
+      const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
+      return isLadderSurface(surface);
+    } catch {
+      return false;
     }
   }
 
@@ -6245,8 +6303,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       ...base,
       deepWater: this.isPlayerInWater(), // real terrain signal (3a)
       lowerBodyHidden: this.isPlayerOnLowerHideCell(), // EB 0x01-only cell: tall grass / shrub top / roof crest
+      onLadder: this.isPlayerOnLadderCell(), // real terrain signal: feet on an EB 0x10 cell
       ko: this.leadPartyMemberDowned(), // real KO signal: lead at 0 HP -> dead/ghost overworld sprite
-      // ladder/rope/bike real triggers await tile-class data + a mount mechanic; forced-path for now.
+      // rope/bike real triggers await a mount mechanic; forced-path for now.
       ...forced,
       status: { ...base.status, sweating: this.leadHasSunstroke(), ...(forced.status ?? {}) }
     };
