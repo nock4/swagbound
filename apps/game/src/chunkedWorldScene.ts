@@ -477,6 +477,10 @@ const OVERWORLD_ENEMY_SPAWN_ATTEMPTS = 8;
 // Ambusher archetype: a roamer that spawns ONTO a canopy walk-behind cell (0x02),
 // idles hidden under the foliage art, and bursts out when the player comes within
 // trigger range. Burst speed stays under PLAYER_SPEED so escape is possible.
+// Bicycle (item 176 "Swag Cruiser"): outdoor ride speed. Auto-dismount on water,
+// ladders, and indoors.
+const BIKE_ITEM_ID = 176;
+const BIKE_SPEED_MULTIPLIER = 1.7;
 const OVERWORLD_AMBUSHER_CHANCE = 0.35;
 const OVERWORLD_AMBUSH_SEARCH_CELLS = 9;
 const OVERWORLD_AMBUSH_TRIGGER_PX = 64;
@@ -628,6 +632,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private bossGateActors = new Map<string, BossGateRuntime>();
   private bossEditor?: BossPlacementEditor;
   private collisionEditor?: CollisionOverrideEditor;
+  private bikeActive = false;
   /** solidRows snapshot (post-authored-overrides) the paint editor repaints from. */
   private editorBaseSolidRows?: string[];
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
@@ -883,6 +888,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.input.keyboard?.on("keydown-BACKTICK", toggleDebugPanel);
       this.input.keyboard?.on("keydown-F2", () => this.setCollisionOverlayEnabled(!this.collisionOverlayEnabled));
     }
+    // Bicycle (Swag Cruiser, item 176): B mounts/dismounts when owned + outdoors.
+    this.input.keyboard?.on("keydown-B", () => this.toggleBike());
 
     // Boss placement editor (?bossedit=1): a dev-only visual tool for manually
     // positioning the story boss gates. See bossPlacementEditor.ts for the legend.
@@ -1055,7 +1062,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     stepPlayer(this.playerState, input, {
       deltaMs: delta,
-      speed: PLAYER_SPEED * this.terrainSpeedMultiplier(),
+      speed: PLAYER_SPEED * this.terrainSpeedMultiplier() * (this.bikeActive ? BIKE_SPEED_MULTIPLIER : 1),
       bounds: this.movementBounds(),
       blocked: (x, y) =>
         this.blocked(x, y, {
@@ -1069,6 +1076,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const playerSteppedTile = this.syncEncounterTileState();
     this.applyFieldPoisonForStep(playerSteppedTile);
     this.applyFieldHazardsForStep(playerSteppedTile);
+    if (this.bikeActive && playerSteppedTile && this.bikeBlockedHere()) {
+      this.bikeActive = false; // rolled into water/ladder/indoors: hop off
+    }
     this.syncPlayerObject();
     this.refreshRoomBounds();
     this.syncOverworldMusicCue();
@@ -3642,6 +3652,42 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return isDeepWaterSurface(surface) ? DEEP_WATER_SPEED_MULTIPLIER : 1;
     } catch {
       return 1;
+    }
+  }
+
+  /** B key: mount/dismount the Swag Cruiser (requires owning item 176, outdoors, dry feet). */
+  private toggleBike(): void {
+    if (this.bikeActive) {
+      this.bikeActive = false;
+      this.publish();
+      return;
+    }
+    if (!this.partyHasBicycle() || this.bikeBlockedHere()) {
+      return;
+    }
+    this.bikeActive = true;
+    this.publish();
+  }
+
+  private partyHasBicycle(): boolean {
+    return this.partyState.party().some((memberId) => this.partyState.inventory(memberId).includes(BIKE_ITEM_ID));
+  }
+
+  /** No riding indoors, in any water, or on ladder cells. */
+  private bikeBlockedHere(): boolean {
+    const sectors = this.world_.sectors;
+    if (sectors) {
+      const scol = Math.floor(this.playerState.x / (sectors.sectorWidthTiles * this.world_.tileSize));
+      const srow = Math.floor(this.playerState.y / (sectors.sectorHeightTiles * this.world_.tileSize));
+      if (sectors.indoor[srow * sectors.cols + scol]) {
+        return true;
+      }
+    }
+    try {
+      const surface = surfaceAtWorldPixel(this.surfaceRows, { x: this.playerState.x, y: this.playerState.y }, this.collisionGrid());
+      return isWaterSurface(surface) || isLadderSurface(surface);
+    } catch {
+      return true;
     }
   }
 
@@ -6388,6 +6434,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       deepWater: this.isPlayerInWater(), // real terrain signal (3a)
       lowerBodyHidden: this.isPlayerOnLowerHideCell(), // EB 0x01-only cell: tall grass / shrub top / roof crest
       onLadder: this.isPlayerOnLadderCell(), // real terrain signal: feet on an EB 0x10 cell
+      riding: this.bikeActive ? ("bike" as const) : null,
       ko: this.leadPartyMemberDowned(), // real KO signal: lead at 0 HP -> dead/ghost overworld sprite
       // rope/bike real triggers await a mount mechanic; forced-path for now.
       ...forced,
