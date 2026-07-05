@@ -3280,6 +3280,1256 @@
           "\"Verified last season. Still fresh.\""
         ]
       }
+    },
+    {
+      "id": "sourcecheck-dead-letter-001",
+      "drifellaId": "drifella2-341",
+      "npcId": 100329,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "returned-mail-dock",
+        "worldPixel": {
+          "x": 8056,
+          "y": 8912
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A dock clerk who receives faces returned to sender and stamps each one UNDELIVERABLE before it can argue.",
+        "tic": "\"Back to sender.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-341.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella slides a grey parcel across the dock; it has your outline on it, faintly.",
+        "\"Source Check. Before I stamp you UNDELIVERABLE, prove there was ever a real address.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The first leaked card reached Bosch before he'd had breakfast.",
+            "answer": true,
+            "failLine": "\"Before breakfast. Grief arrives early and never signs for it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on that first leaked card was checked—",
+            "options": [
+              "VESSEL",
+              "TENANT",
+              "RECIPIENT (VERIFIED)",
+              "STRANGER"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"VESSEL. Nobody stamps the box they'd have chosen.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Dead Letter is the port where undeliverable copies wash up when no clean original remains.",
+            "answer": true,
+            "failLine": "\"Undeliverable. The fog files the rest.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In art, a 'readymade' is—",
+            "options": [
+              "An ordinary object declared to be art",
+              "A pre-primed blank canvas",
+              "A factory-stamped reproduction",
+              "A paint-by-numbers kit"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Declared. Duchamp signed a urinal and mailed it to the future.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "On Kawara's 'Today' paintings are just the date each was made, on a plain ground.",
+            "answer": true,
+            "failLine": "\"Only the date. Every one a postmark for a day that got returned.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A rumor with no source is like a parcel with—",
+            "options": [
+              "No address",
+              "Too much tape",
+              "A window seat",
+              "A signature"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"No address. It drifts the dock forever, unclaimed.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4644",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Deliverable. For now.\"",
+          "\"Stamp stays in the drawer. Good.\"",
+          "\"That address holds.\""
+        ],
+        "cleared": [
+          "\"Take the card. It's addressed to you, finally.\"",
+          "\"Received and signed. The dock lets you keep this one.\""
+        ],
+        "failed": [
+          "\"Returned. Walk the pier and come back with a real address.\"",
+          "\"No such recipient. Try the door again when you're sure of yourself.\""
+        ],
+        "alreadyCleared": [
+          "\"Already delivered. The dock remembers your outline.\"",
+          "\"Signed for last tide. Nothing left to stamp.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-002",
+      "drifellaId": "drifella2-600",
+      "npcId": 100330,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "toe-tag-alley",
+        "worldPixel": {
+          "x": 4400,
+          "y": 9672
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A toe-tag calligrapher who letters the name of every body filed as undeliverable, in a hand nobody taught them.",
+        "tic": "\"Hold still while I letter you.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-600.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella dips a nib and eyes your ankle, deciding what to write on the tag.",
+        "\"Source Check. Give me a name I can letter, or you go on the shelf as ANONYMOUS.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch kept the damaged original card instead of tossing it.",
+            "answer": true,
+            "failLine": "\"He kept it. Damage is the only handwriting that never lies.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The card-stock trail out of Bosch's block ran—",
+            "options": [
+              "West, toward the arcade",
+              "North, toward the road",
+              "Straight into the municipal record",
+              "Uphill, morally"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"West. The crowd deals faces west; I just letter what's left.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "In Dead Letter, a body filed as undeliverable is stored the way a lost letter is: by fault of the address, not the name.",
+            "answer": true,
+            "failLine": "\"The address failed, not you. Small comfort. Hold still.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Robert Rauschenberg once 'erased' a drawing by which artist and hung the blank sheet as a finished work?",
+            "options": [
+              "Willem de Kooning",
+              "Pablo Picasso",
+              "Jackson Pollock",
+              "Henri Matisse"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"De Kooning. He erased a name and the erasing became the name.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Cy Twombly built whole paintings out of what looks like scribbled, illegible handwriting.",
+            "answer": true,
+            "failLine": "\"Illegible on purpose. I'd never get his toe-tags past the clerk.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The kindest thing you can letter on an unclaimed tag is—",
+            "options": [
+              "A real name",
+              "A serial number",
+              "A shrug",
+              "The word LEAK"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"A name. The system prefers the number. The system is not kind.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10857",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Legible. Lettered.\"",
+          "\"That name holds ink.\"",
+          "\"No cross-outs. Rare.\""
+        ],
+        "cleared": [
+          "\"Here. I lettered the card in your own hand this time.\"",
+          "\"Filed under your true name. The nib approves.\""
+        ],
+        "failed": [
+          "\"Smudged. Go rinse the fog off and come back nameable.\"",
+          "\"I can't letter a blur. Steady up and return.\""
+        ],
+        "alreadyCleared": [
+          "\"Already tagged, already true. Nothing to re-ink.\"",
+          "\"Your name's dry on the record. Leave it be.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-003",
+      "drifellaId": "drifella2-634",
+      "npcId": 100331,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "unclaimed-shelf",
+        "worldPixel": {
+          "x": 6136,
+          "y": 8896
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A returns clerk who runs the unclaimed shelf and insists every drifting copy still 'belongs to someone, technically.'",
+        "tic": "\"Technically, it's still yours.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-634.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella runs a finger down a shelf of parcels, each labeled with a face nobody came back for.",
+        "\"Source Check. Two questions. Answer them or you get shelved with the rest of the technically-yours.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The card that started all this arrived at Bosch's place before breakfast.",
+            "answer": true,
+            "failLine": "\"Before breakfast. It's been on my shelf ever since, unclaimed.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box checked on that first leaked card read—",
+            "options": [
+              "VESSEL",
+              "OWNER",
+              "SUBSCRIBER",
+              "GUEST"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"VESSEL. The shelf would've filed it under OWNER, but the shelf lies.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The scariest thing in Dead Letter isn't the dead — it's the copies that stopped keeping originals at all.",
+            "answer": true,
+            "failLine": "\"No original. Just returns of returns. It's all shelf, no source.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Sherrie Levine became famous for a body of work that consisted of—",
+            "options": [
+              "Re-photographing other artists' famous photographs",
+              "Painting only pure white squares",
+              "Smashing plaster casts on a gallery floor",
+              "Selling blank certificates of authenticity"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Re-photographed. A copy claiming the shelf space of the original. My whole job, framed.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Elaine Sturtevant made her name by deliberately remaking other artists' works as her own.",
+            "answer": true,
+            "failLine": "\"Remade on purpose. Even she couldn't tell you who to return it to.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A copy with no owner still 'belongs' to—",
+            "options": [
+              "Whoever's holding it",
+              "The original, wherever it is",
+              "The shelf",
+              "No one, honestly"
+            ],
+            "answerIndex": 3,
+            "officialIndex": 2,
+            "failLine": "\"No one, honestly. The shelf disagrees, but the shelf is furniture.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10699",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Claimed. Off the shelf.\"",
+          "\"That one's yours, no technically about it.\"",
+          "\"Returned to a real owner. Novel.\""
+        ],
+        "cleared": [
+          "\"Take it down off the shelf. It was waiting for exactly you.\"",
+          "\"Claimed and cleared. The unclaimed shelf gets a little shorter.\""
+        ],
+        "failed": [
+          "\"Back on the shelf. Come re-claim it when you're certain.\"",
+          "\"Unclaimed, still. Walk the aisle and return.\""
+        ],
+        "alreadyCleared": [
+          "\"You already claimed yours. The shelf let it go.\"",
+          "\"Off the shelf for good. Enjoy owning something.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-004",
+      "drifellaId": "drifella2-643",
+      "npcId": 100332,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "fog-auditors-booth",
+        "worldPixel": {
+          "x": 4888,
+          "y": 8392
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A fog auditor who measures how much of a story has already evaporated and bills the difference.",
+        "tic": "\"Reads thin today.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-643.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella holds a gauge into the mist; the needle sags toward EMPTY.",
+        "\"Source Check. Your account reads thin. Add some verified weight or I fog you out entirely.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Morningside's card-stock trail ran west, toward the arcade.",
+            "answer": true,
+            "failLine": "\"West. The one direction the fog never fully swallowed.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The leaked card's category box, when you can still read it through the mist, says—",
+            "options": [
+              "VESSEL",
+              "RESIDENT",
+              "CARRIER",
+              "ORIGINAL"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"VESSEL. The fog would love to sell you ORIGINAL. Don't buy it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "In Dead Letter, the fog is treated as a filing system, not weather.",
+            "answer": true,
+            "failLine": "\"A filing system. It sorts by forgetting.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Robert Ryman spent a career making paintings that were almost entirely—",
+            "options": [
+              "White",
+              "Black",
+              "Red",
+              "Unpainted canvas"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"White on white. The auditor's dream: nothing to measure but the texture of nothing.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "James Turrell makes art you experience mostly as colored, formless light and empty space.",
+            "answer": true,
+            "failLine": "\"Light and haze. He'd have thrived on this dock.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A story that's evaporated down to nothing still leaves behind—",
+            "options": [
+              "A residue you can bill",
+              "A perfect clean copy",
+              "The original, refreshed",
+              "Absolutely nothing"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"A residue. The fog charges by the milligram of memory.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3650",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Reads solid. Rare.\"",
+          "\"Needle held. Verified.\"",
+          "\"That's got weight to it.\""
+        ],
+        "cleared": [
+          "\"Here's the card. It weighs exactly what a true thing should.\"",
+          "\"Audited and paid in full. The fog steps back for you.\""
+        ],
+        "failed": [
+          "\"Reads thin. Go gather some proof and return heavier.\"",
+          "\"Under-weight. The mist took the rest. Try again.\""
+        ],
+        "alreadyCleared": [
+          "\"Your account's already settled. Nothing left to audit.\"",
+          "\"Paid, filed, weighed. The fog owes you nothing.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-005",
+      "drifellaId": "drifella2-1042",
+      "npcId": 100333,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "undelivered-choir-loft",
+        "worldPixel": {
+          "x": 7000,
+          "y": 9824
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A conductor for the undelivered choir — voices of messages that never reached anyone, singing their own returns.",
+        "tic": "\"Sing it back to sender.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1042.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella raises a baton and a hundred unheard voicemails hum a chord that never got listened to.",
+        "\"Source Check. Sing me something true and the choir will let you pass. Off-key, and you join the section.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The first leaked card asked Bosch's permission before it arrived.",
+            "answer": false,
+            "failLine": "\"It never asked. Undelivered things never ask; they just sing.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on that card was checked—",
+            "options": [
+              "VESSEL",
+              "LISTENER",
+              "SENDER",
+              "MEMBER"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"VESSEL. The choir wanted LISTENER. Nobody listened, that's the whole tragedy.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The undelivered choir is made of messages that never reached a recipient.",
+            "answer": true,
+            "failLine": "\"Never reached anyone. So they harmonize with each other instead.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "'Musique concrète' is music built from—",
+            "options": [
+              "Recorded real-world sounds, edited on tape",
+              "Only classical instruments",
+              "Pure computer-generated tones",
+              "Hummed folk melodies"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 1,
+            "failLine": "\"Recorded sound, spliced on tape. The choir is basically concrète that misses you.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "John Cage's '4'33\"' is a piece performed by making no intentional sound at all.",
+            "answer": true,
+            "failLine": "\"Four minutes of silence. The choir performs the version where the silence is undelivered too.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A message no one ever hears still counts as—",
+            "options": [
+              "A message",
+              "Noise",
+              "Nothing",
+              "A confession"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"A message. The system files it as NOTHING. The choir knows better.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3676",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"In tune. Held.\"",
+          "\"That note lands.\"",
+          "\"The choir nods. Continue.\""
+        ],
+        "cleared": [
+          "\"Take the card. It finally got delivered — to you, out loud.\"",
+          "\"Sung true and sourced. One voice leaves the loft happy.\""
+        ],
+        "failed": [
+          "\"Flat. Go find your pitch and come sing it again.\"",
+          "\"Off-key. The section has room, but you don't want the seat. Retry.\""
+        ],
+        "alreadyCleared": [
+          "\"You've already sung your part. The chord's complete.\"",
+          "\"Delivered and dismissed. Enjoy the quiet you earned.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-006",
+      "drifellaId": "drifella2-1248",
+      "npcId": 100334,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "behind-the-dead-drop-crates",
+        "worldPixel": {
+          "x": 5408,
+          "y": 9672
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A dead-drop courier who tucks behind the crates and only trades in copies nobody was supposed to receive.",
+        "tic": "\"You didn't get this from me.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1248.png",
+      "hints": [],
+      "entryPrompt": [
+        "You find the Drifella crouched behind the return crates, a leaked copy palmed like contraband.",
+        "\"Source Check — quietly. Get it right and I never saw you. Get it wrong and I saw everything.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch kept the damaged original card as proof.",
+            "answer": true,
+            "failLine": "\"He kept it. Out here, a damaged original is worth ten clean leaks.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on the first leaked card read—",
+            "options": [
+              "VESSEL",
+              "CONTACT",
+              "ASSET",
+              "FRIEND"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"VESSEL. The handlers wanted ASSET. Same box, colder ink.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A 'dead drop' in Dead Letter is a spot where a copy changes hands with no sender and no witness.",
+            "answer": true,
+            "failLine": "\"No sender, no witness. Just the crate and the fog. Perfect.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Mail art is an art movement in which artists—",
+            "options": [
+              "Send small artworks to each other through the postal system",
+              "Paint only pictures of post offices",
+              "Frame their electricity bills",
+              "Sell art exclusively at auction"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Mailed art. Ray Johnson practically invented the dead drop as a medium.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Fluxus artists sent 'event scores' — tiny written instructions — through the mail as artworks.",
+            "answer": true,
+            "failLine": "\"Instructions in an envelope. My whole trade, but with a grant.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The safest copy to carry is the one that—",
+            "options": [
+              "No one knows exists",
+              "Everyone has seen",
+              "The office stamped",
+              "Has your name on it"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The one nobody knows. The office prefers the stamped one; the office also snitches.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4632",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Clean. Say nothing.\"",
+          "\"You never saw me. Good.\"",
+          "\"Right. Keep walking.\""
+        ],
+        "cleared": [
+          "\"Take it. Slip it under your coat. You didn't get this from me.\"",
+          "\"Sourced and silent. The crate closes behind you.\""
+        ],
+        "failed": [
+          "\"Wrong, and loud. Come back when you can whisper the truth.\"",
+          "\"That draws eyes. Melt into the fog and try again.\""
+        ],
+        "alreadyCleared": [
+          "\"We already did this. Officially, we never met.\"",
+          "\"Your copy's long gone. Nothing to drop.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-007",
+      "drifellaId": "drifella2-1273",
+      "npcId": 100335,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "sunken-postmark-vault",
+        "worldPixel": {
+          "x": 6936,
+          "y": 8312
+        },
+        "facing": "left"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A postmark archivist sealed in a flooded vault, verifying the exact instant each leak was first cancelled.",
+        "tic": "\"Timestamped. Sunk.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1273.png",
+      "hints": [],
+      "entryPrompt": [
+        "Water laps the vault door; inside, the Drifella holds a cancellation stamp above a leaked card like a scalpel.",
+        "\"Source Check. Tell me when the truth happened, not just what. Time is the only thing that doesn't rot down here.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The card that started everything arrived before breakfast.",
+            "answer": true,
+            "failLine": "\"Before breakfast. Timestamped, sunk, and never disputed since.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The card-stock trail from Bosch's block ran—",
+            "options": [
+              "West, toward the arcade",
+              "East, toward the docks",
+              "Down into the vault",
+              "Nowhere; it stayed put"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"West. My vault only receives it later, once it's already drowned.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A postmark's job is to cancel — to say a thing has happened and can't happen fresh again.",
+            "answer": true,
+            "failLine": "\"To cancel. Once it's cancelled, even the fog can't un-happen it.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "On tape music, a 'loop' is—",
+            "options": [
+              "A length of tape spliced end to end so a sound repeats",
+              "A dance move for sound engineers",
+              "The knob that controls volume",
+              "A microphone stand"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"A loop. Steve Reich once let two loops drift out of sync until they made new time entirely.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Brian Eno used long, slowly-decaying tape loops to make some of the first 'ambient' records.",
+            "answer": true,
+            "failLine": "\"Decaying loops. Same physics as this vault: everything true, slowly sinking.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The one detail a leak can never fake is—",
+            "options": [
+              "When it actually happened",
+              "The paper it's printed on",
+              "The signature",
+              "The category box"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The when. Everything else is forgeable. Time is the honest ink.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3717",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Timestamp verified.\"",
+          "\"Cancelled clean. Sunk.\"",
+          "\"That moment holds water.\""
+        ],
+        "cleared": [
+          "\"Take the card. It's postmarked to the exact second you earned it.\"",
+          "\"Cancelled and confirmed. The vault seals with you outside, lucky you.\""
+        ],
+        "failed": [
+          "\"Wrong instant. Go re-read the record and return.\"",
+          "\"That timestamp won't cancel. Try again before the water rises.\""
+        ],
+        "alreadyCleared": [
+          "\"Already cancelled, already dated. Nothing to re-stamp.\"",
+          "\"Your postmark's dry in the ledger. Leave it sunk.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-008",
+      "drifellaId": "drifella2-1458",
+      "npcId": 100336,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "sorting-morgue-drawer",
+        "worldPixel": {
+          "x": 8128,
+          "y": 9696
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A night-shift sorter who works the sorting morgue, sliding faces into cold drawers labelled by which leak they came off of.",
+        "tic": "\"Drawer's cold. Slide in.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1458.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella rolls out a long steel drawer; there's a face in it that looks a little like a copy of yours.",
+        "\"Source Check. Prove you're not one of my returns and I'll slide the drawer shut empty.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The first leaked card reached Bosch before he'd had breakfast.",
+            "answer": true,
+            "failLine": "\"Before breakfast. I sorted the morning it happened. Cold work.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on that first card was checked—",
+            "options": [
+              "VESSEL",
+              "OCCUPANT",
+              "DUPLICATE",
+              "HOST"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"VESSEL. The morgue files everyone as DUPLICATE eventually. Don't let it.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "In the sorting morgue, faces are filed not by name but by which leaked copy they came off of.",
+            "answer": true,
+            "failLine": "\"By the leak, not the name. Names are the first thing to go cold.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Andy Warhol silkscreened grids of the same news photo — car crashes, chairs — in a series called—",
+            "options": [
+              "Death and Disaster",
+              "Sunny Days",
+              "The Portraits",
+              "Still Lifes"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Death and Disaster. Repetition until horror turns into wallpaper. I sort by the same logic.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Christian Boltanski built installations out of anonymous archived photographs and stacked biscuit tins, evoking the missing.",
+            "answer": true,
+            "failLine": "\"Boxes of the anonymous. He'd have run this morgue with real feeling.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The difference between you and a return in the drawer is—",
+            "options": [
+              "You can still walk out",
+              "Better paperwork",
+              "A warmer drawer",
+              "Nothing, really"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"You can walk out. The morgue insists it's NOTHING, REALLY. Prove it wrong.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8926",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Not a return. Noted.\"",
+          "\"Warm enough. Drawer stays empty.\"",
+          "\"You check out. Rare, up here.\""
+        ],
+        "cleared": [
+          "\"Take the card. I slid the drawer shut on an empty label, for once.\"",
+          "\"Sorted living, not filed. The morgue lets you go.\""
+        ],
+        "failed": [
+          "\"Reads like a return. Go warm up and come back yourself.\"",
+          "\"The drawer's still open for that answer. Try again quick.\""
+        ],
+        "alreadyCleared": [
+          "\"Already sorted you out — the good way. Move along.\"",
+          "\"You're logged as living. The drawers can't have you.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-009",
+      "drifellaId": "drifella2-1527",
+      "npcId": 100337,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "lost-provenance-confessional",
+        "worldPixel": {
+          "x": 7184,
+          "y": 9064
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A provenance confessor who takes the last testimony of copies that can no longer prove where they came from.",
+        "tic": "\"And who sent you, child?\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-1527.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella slides open a little confessional grille reeking of old glue and salt fog.",
+        "\"Source Check, or last rites — same booth. Tell me your provenance, child, before it's lost for good.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch kept the damaged original card rather than replacing it.",
+            "answer": true,
+            "failLine": "\"He kept it. A confessor loves a soul that hangs on to its origin.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Morningside's card-stock trail ran—",
+            "options": [
+              "West, toward the arcade",
+              "South, toward the sea",
+              "Into the confessional",
+              "In circles"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"West. It never confessed to me; the guilty ones never do.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "'Provenance' means the traceable record of where a thing came from and who held it.",
+            "answer": true,
+            "failLine": "\"Provenance. Lose it and you're just a copy praying to a copy.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In art, why does provenance matter so much for a painting?",
+            "options": [
+              "It's the main evidence a work is authentic and not a forgery",
+              "It sets the frame size",
+              "It decides the wall color",
+              "It's required to insure the frame"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"Authenticity. A masterpiece with no history is just a very good confession nobody believes.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The forger Han van Meegeren fooled experts by selling fake 'Vermeers' as long-lost originals.",
+            "answer": true,
+            "failLine": "\"Van Meegeren. He invented a provenance from nothing. Sinful, and impressive.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A copy that's forgotten where it came from should—",
+            "options": [
+              "Confess honestly and be filed as unknown",
+              "Invent a grander origin",
+              "Claim to be the original",
+              "Say nothing and drift"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"Confess honestly. The system whispers CLAIM THE ORIGINAL. That's how you end up damned.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3497",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Confessed true. Absolved.\"",
+          "\"Your provenance holds, child.\"",
+          "\"An honest origin. Go in peace.\""
+        ],
+        "cleared": [
+          "\"Take the card. Its history is clean, and now so is yours.\"",
+          "\"Sourced and shriven. The booth releases you.\""
+        ],
+        "failed": [
+          "\"A false origin. Go, examine your conscience, and return.\"",
+          "\"That provenance won't stand. Come confess it right.\""
+        ],
+        "alreadyCleared": [
+          "\"You've already confessed and been sourced, child. Rest.\"",
+          "\"Your record is clean. The grille stays shut.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-010",
+      "drifellaId": "drifella2-2142",
+      "npcId": 100338,
+      "region": "dead-letter",
+      "tier": 2,
+      "placement": {
+        "kind": "final-return-to-sender-gate",
+        "worldPixel": {
+          "x": 6172,
+          "y": 9800
+        },
+        "facing": "right"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "The last gatekeeper of Dead Letter, who decides which returns get one more chance at delivery and which go to the Source for good.",
+        "tic": "\"One more delivery, or the Source.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-2142.png",
+      "hints": [],
+      "entryPrompt": [
+        "At the fog's edge the Drifella stands between two chutes: one back into the world, one down into the Read.",
+        "\"Final Source Check. Answer clean and you're delivered onward. Answer wrong and you go back to the Source.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The first leaked card arrived at Bosch's before breakfast, without asking.",
+            "answer": true,
+            "failLine": "\"Before breakfast, unasked. That's where every return in this town begins.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The category box on that founding leaked card was checked—",
+            "options": [
+              "VESSEL",
+              "RETURN",
+              "SOURCE",
+              "CITIZEN"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"VESSEL. The gate wants to read SOURCE. Only I get to say SOURCE. Wrong.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "In Dead Letter, going 'to the Source' means being un-copied entirely — no clean version left behind.",
+            "answer": true,
+            "failLine": "\"No copy left. The Source keeps nothing but the fact you existed. Choose your answers.\"",
+            "category": "lore"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Yves Klein patented and is famous for a single, intense shade of which color?",
+            "options": [
+              "Blue",
+              "Red",
+              "Gold",
+              "Black"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 3,
+            "failLine": "\"International Klein Blue. He tried to patent a color — a provenance on the void itself.\"",
+            "category": "art"
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Kazimir Malevich's 'Black Square' was presented as a kind of zero point — the end of ordinary picture-making.",
+            "answer": true,
+            "failLine": "\"The zero point. A door painted shut. Fitting, at the last gate.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When a story finally goes back to the Source, what's left in the world is—",
+            "options": [
+              "The people who remember it",
+              "A perfect clean copy",
+              "The official file",
+              "Nothing at all"
+            ],
+            "answerIndex": 0,
+            "officialIndex": 2,
+            "failLine": "\"The rememberers. The gate insists it's THE OFFICIAL FILE. The gate is me, and even I know that's a lie.\"",
+            "category": "vibe"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3513",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Cleared for delivery.\"",
+          "\"The good chute. Go on.\"",
+          "\"Verified. You're not for the Source today.\""
+        ],
+        "cleared": [
+          "\"Take the card and the open chute. You're delivered onward, witnessed and whole.\"",
+          "\"Sourced, cleared, and spared. The gate swings toward the world for you.\""
+        ],
+        "failed": [
+          "\"Not clean enough for the gate. Step back from the edge and return.\"",
+          "\"That answer points you at the Source. Reconsider, then try again.\""
+        ],
+        "alreadyCleared": [
+          "\"You already cleared the last gate. The world kept you.\"",
+          "\"Delivered for good. There's nothing more to return.\""
+        ]
+      }
     }
   ]
 }
