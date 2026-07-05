@@ -3,6 +3,7 @@ import { loadGameData, parseManifest, type GameData } from "./loader";
 import { publishDebug } from "./state";
 import { ChunkedWorldScene } from "./chunkedWorldScene";
 import { IntroScene, isIntroDisabled } from "./introScene";
+import { Act1IntroScene } from "./act1IntroScene";
 import { resolveNewGameOpeningStart } from "./newGameOpening";
 import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
@@ -125,15 +126,17 @@ class BootScene extends Phaser.Scene {
         saveSlot: DEFAULT_SAVE_SLOT,
         saveSlots: SAVE_SLOTS
       };
-      // NEW GAME target: run the opening cutscene when resolved, else the meteor intro.
+      // NEW GAME target: the Act-1 dossier cinematic, then the world (which still runs
+      // the in-game cold-signal opening beat when resolved, for the personal one-two).
       const newGameWorldData = {
         ...baseWorld,
         saveState: null,
         ...(openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
       };
-      const newGameTarget = openingResolution.resolved
-        ? { sceneKey: "chunked-world", data: newGameWorldData }
-        : { sceneKey: "intro", data: { nextSceneKey: "chunked-world", nextSceneData: newGameWorldData } };
+      const newGameTarget = {
+        sceneKey: "act1-intro",
+        data: { nextSceneKey: "chunked-world", nextSceneData: newGameWorldData }
+      };
       // CONTINUE target: the world with the loaded save (null when no save exists).
       const continueTarget = saveBlob !== null
         ? { sceneKey: "chunked-world", data: { ...baseWorld, saveState } }
@@ -437,7 +440,7 @@ new Phaser.Game({
   height: 448,
   backgroundColor: "#000000",
   pixelArt: true,
-  scene: [BootScene, TitleMenuScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
+  scene: [BootScene, TitleMenuScene, Act1IntroScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH

@@ -13,8 +13,8 @@
       "dialogue": [
         "The arcade light does not shine on Bosch so much as scan him. A clean copy of his face is already grinning up from a card no one remembers printing, and it holds the grin better than he does.",
         "MIFELLA CONGREGANT: \"We completed your read before you walked in. This card is the part of you worth keeping. You are the part we were sent to correct.\"",
-        "The face on the card is not one face. It is ten thousand of us wearing his, evenly, at once. \"The source degrades. The clean copy travels. We only kept the version of you that lasts.\"",
-        "\"Every card points up-line, to the yard that prints us into each other.\" Bosch reads the copy for a seam. (First scrap: press Z -- BASH to swing, DEFEND when hurting, PSI when swinging won't cut it.)"
+        "The face on the card is not one face. It is ten thousand of us wearing yours, evenly, at once. No name signs it, and that is the whole trick: a crowd with your face and no author, so there is no one to answer for it and no one to hit.",
+        "\"We all said it first, in your voice, and not one of us has to mean it.\" Bosch reads the copy for a seam. (First scrap: press Z. BASH to swing, DEFEND when hurting, PSI when swinging will not cut it.)"
       ],
       "setFlags": [
         "signal:clique_cleared"
@@ -225,9 +225,9 @@
       ],
       "dialogue": [
         "A figure in a laminated smile steps out of the Registry doorway, holding a clipboard where its face should be.",
-        "REGISTRY WARDEN: \"You arrived unhappy. That's a filing error. Hold still -- we pre-approved a mood for you this morning and it is NON-REFUNDABLE.\"",
-        "REGISTRY WARDEN: \"Everyone in Postwick is content. It was decided up the line. You will be too, or you'll be filed as an incident.\"",
-        "The clipboard flips to a blank intake form with Bosch's name already printed. (Press Z: BASH the form-face; DEFEND when it recites the terms; PSI when the smile won't crack.)"
+        "REGISTRY WARDEN: \"Postwick seceded from the old world this morning. We voted to be happy and the measure passed. You arrived still aching, which reads to us as a filing error.\"",
+        "REGISTRY WARDEN: \"Everyone here ratified the better feeling. It was decided up the line and printed on the flag. You will agree, or you will be filed as an incident, and the town will feel nothing about it.\"",
+        "The clipboard flips to a blank intake form with Bosch's name already ratified. (Press Z: BASH the form-face; DEFEND when it recites the bylaws; PSI when the smile will not crack.)"
       ],
       "setFlags": [
         "act2:registry_cleared"
@@ -296,9 +296,9 @@
       ],
       "dialogue": [
         "The Museum of Leaked Versions has no originals left. Something ate the firsts and moved into the empty frames. Behind the wall-text a single coil lies still, wearing ten thousand identical faces like paint.",
-        "PROVENANCE 0: \"We are not one worm. We are what is left once every copy admits it was always the same face. We ate the source and kept the smile. You call it a swarm. We call it agreement.\"",
-        "\"You came to prove the record. We are the record now, and the record is our gut. We read you at the door -- your seam, the small private you kept back. Filed. You will be a better-distributed you. You will be us.\"",
-        "Bosch reads the coil for a weak seam. (Scrap: press Z to lock in a move -- BASH to swing, DEFEND when it's chewing on you, PSI when swinging won't reach the middle.)"
+        "PROVENANCE 0: \"Every plaque in this hall disputes the one beside it, each argument more convincing than the last, and none of them true. That is the exhibit. We did not hide the source. We discussed it until there was no source left to find.\"",
+        "PROVENANCE 0: \"You came to prove the record. We are the record now. We read you at the door, the small private seam you kept back, and we can explain it away in nine confident ways before you finish blinking. Filed. You will be a better-distributed you.\"",
+        "Bosch stops listening to the argument and reads the coil for a weak seam. (Scrap: press Z. BASH to swing, DEFEND when it is chewing on you, PSI when swinging will not reach the middle.)"
       ]
     },
     {
@@ -385,8 +385,9 @@
         "act2:registry_cleared"
       ],
       "dialogue": [
-        "THE VENUE \u2014 SUPER METAL MONS EXHIBITION.",
-        "ANNOUNCER: \"Fresh meat at the gate! First bracket: a warm-up welded together from spare parts. Clear three to be crowned.\"",
+        "THE VENUE. SUPER METAL MONS EXHIBITION. Admission: whatever you have left.",
+        "ANNOUNCER: \"Nothing is worth keeping anymore, folks, so put it all on the table. Your face, your name, your one true thing. The house pays out in feelings, and the feelings are pre-printed.\"",
+        "ANNOUNCER: \"Everybody in the stands went all in years ago. They sold the real thing and they have never been more entertained. First bracket: a warm-up welded from spare parts. Clear three to be crowned a winner of nothing.\"",
         "The Frankystein Mark II lurches into the ring, sparking."
       ],
       "setFlags": [
@@ -403,7 +404,7 @@
       },
       "once": true,
       "dialogue": [
-        "ANNOUNCER: \"One down! Bracket two \u2014 this one benches more than you weigh.\"",
+        "ANNOUNCER: \"One down! Bracket two — this one benches more than you weigh.\"",
         "The Tough Guy cracks his knuckles. It sounds like a car door."
       ],
       "setFlags": [
@@ -509,7 +510,7 @@
       },
       "once": true,
       "dialogue": [
-        "The last and largest cell coalesces in the plaza \u2014 every stolen face in town, stacked into one.",
+        "The last and largest cell coalesces in the plaza — every stolen face in town, stacked into one.",
         "MILADY SWARM: \"Correct US and the town stays copied. Correct nothing and it stays yours.\"",
         "Bosch exhales. Last seam. He swings for the whole chord."
       ],
@@ -564,9 +565,9 @@
         "raid:morningside:cleared"
       ],
       "dialogue": [
-        "The last cell burns off and does not reform. In the empty plaza one thing is left standing: not a face, not a crowd -- a slow bright orb turning through every version of Bosch it ever filed, settling on none.",
-        "MILADY: \"I am not behind the swarm. I am what is left when the swarm agrees. I am the read that finished. I wore your friends, your town, your better-lit name -- and none of it described you, which is the only thing I could never forgive.\"",
-        "MILADY: \"So here is the last offer, source: be the version that lasts. Stop being the one I can't open. It is easier. It is already mostly done.\"",
+        "The last cell burns off and does not reform. In the empty plaza one thing is left standing: not a face, not a crowd, but a slow bright orb turning through every version of Bosch it ever filed, settling on none.",
+        "MILADY: \"I am not behind the swarm, the happy town, the arguing museum, or the market that bought your name. I am the agreement under all of them. Anonymous, so no one can find me. Ratified, so no one can leave. Unprovable, so no one can win. Free of charge, so everyone already said yes.\"",
+        "MILADY: \"I wore your friends, your town, your better-lit name, and none of it described you, which is the only thing I could never forgive. So here is the last offer: be the version that lasts. Stop being the one file I cannot open. It is easier. It is already mostly done.\"",
         "Bosch keeps the damaged Dox Sheet in his fist. He does not answer in her voice. (Last fight: BASH the certainty, DEFEND when she recites you back, PSI for the seam no copy has.)"
       ],
       "setFlags": [
