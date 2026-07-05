@@ -242,6 +242,27 @@
       "openedPages": [
         "The cushion is empty. The crowd, imaginary, roars anyway."
       ]
+    },
+    {
+      "id": "raid-morningside-reward",
+      "kind": "present",
+      "label": "Reclaimed cache",
+      "worldPixel": {
+        "x": 2104,
+        "y": 1150
+      },
+      "item": {
+        "char": 0,
+        "item": 101
+      },
+      "pages": [
+        "The swarm left something behind when it scattered.",
+        "Inside: Rock Candy!",
+        "You got the Rock Candy! (Morningside stands.)"
+      ],
+      "openedPages": [
+        "Empty. The town's faces are its own again."
+      ]
     }
   ]
 }

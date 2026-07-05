@@ -258,6 +258,72 @@
       "requireFlags": [
         "arena:won:2"
       ]
+    },
+    {
+      "id": "raid-morningside-1",
+      "boss": {
+        "x": 1972,
+        "y": 1250,
+        "facing": "down"
+      },
+      "once": true,
+      "dialogue": [
+        "A wall of identical grinning faces has taken the block. They move as one, like a screensaver with intent.",
+        "MILADY SWARM: \"This town files under US now. Every face here is a draft of ours.\"",
+        "Bosch picks a seam in the swarm and swings."
+      ],
+      "requireFlags": [
+        "raid:morningside:active"
+      ],
+      "setFlags": [
+        "raid:cell:1"
+      ],
+      "battleGroup": 448
+    },
+    {
+      "id": "raid-morningside-2",
+      "boss": {
+        "x": 1300,
+        "y": 1298,
+        "facing": "down"
+      },
+      "once": true,
+      "dialogue": [
+        "Another cell of the swarm peels off a storefront, wearing the shopkeeper's apron and the shopkeeper's face.",
+        "MILADY SWARM: \"The register is ours. The smile is ours. You are browsing.\""
+      ],
+      "requireFlags": [
+        "raid:morningside:active"
+      ],
+      "setFlags": [
+        "raid:cell:2"
+      ],
+      "battleGroup": 448
+    },
+    {
+      "id": "raid-morningside-3",
+      "boss": {
+        "x": 1796,
+        "y": 1354,
+        "facing": "down"
+      },
+      "once": true,
+      "dialogue": [
+        "The last and largest cell coalesces in the plaza \u2014 every stolen face in town, stacked into one.",
+        "MILADY SWARM: \"Correct US and the town stays copied. Correct nothing and it stays yours.\"",
+        "Bosch exhales. Last seam. He swings for the whole chord."
+      ],
+      "requireFlags": [
+        "raid:morningside:active",
+        "raid:cell:1",
+        "raid:cell:2"
+      ],
+      "setFlags": [
+        "raid:cell:3",
+        "raid:morningside:cleared",
+        "raid:morningside:won"
+      ],
+      "battleGroup": 448
     }
   ],
   "barriers": [
@@ -273,6 +339,21 @@
         "signal:route_open"
       ],
       "image": "assets/swagbound/overworld-npc/faithful-servants.png"
+    },
+    {
+      "id": "raid-morningside-seal",
+      "area": {
+        "x": 1416,
+        "y": 1300,
+        "w": 40,
+        "h": 16
+      },
+      "requireFlags": [
+        "raid:morningside:active"
+      ],
+      "blockFlags": [
+        "raid:morningside:cleared"
+      ]
     }
   ]
 }
