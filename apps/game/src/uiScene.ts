@@ -107,6 +107,11 @@ const OVERWORLD_HUD_BAR_HEIGHT = 5;
 const OVERWORLD_HUD_BAR_X = 28;
 const OVERWORLD_HUD_BAR_VALUE_GAP = 4;
 
+/** Width reserved at the card's top-right for status-ailment badges (only when present). */
+function hudBadgeReserveWidth(contentWidth: number): number {
+  return Math.min(30, Math.max(16, Math.floor(contentWidth * 0.24)));
+}
+
 /** Copy debug-panel text to the clipboard so it can be pasted into a bug report. */
 function copyTextToClipboard(text: string): void {
   const clip = typeof navigator !== "undefined" ? navigator.clipboard : undefined;
@@ -706,10 +711,11 @@ export class UiScene extends Phaser.Scene {
     const content = this.hudCardContentRect(card);
     const hpMetrics = this.hudStatusBarMetrics(content, "hp");
     const ppMetrics = this.hudStatusBarMetrics(content, "pp");
-    const badgeWidth = Math.min(48, Math.max(34, Math.floor(content.width * 0.34)));
-    const nameWidth = Math.max(1, content.width - badgeWidth - 4);
+    const badgeWidth = hudBadgeReserveWidth(content.width);
     return {
-      name: this.createHudText(content.x, content.y, "", nameWidth, OVERWORLD_HUD_NAME_FONT_SIZE, 500).setDepth(9.5),
+      // Name box spans the full card width; updateHudTextSet only shortens the fitted
+      // text when status badges are actually present, so full names show otherwise.
+      name: this.createHudText(content.x, content.y, "", content.width, OVERWORLD_HUD_NAME_FONT_SIZE, 500).setDepth(9.5),
       badges: this.createHudText(content.x + content.width - badgeWidth, content.y + 1, "", badgeWidth, OVERWORLD_HUD_BADGE_FONT_SIZE, 500, "right").setDepth(9.5),
       hpLabel: this.createHudText(content.x, hpMetrics.labelY, "HP", OVERWORLD_HUD_LABEL_WIDTH, OVERWORLD_HUD_LABEL_FONT_SIZE, 500).setDepth(9.5),
       ppLabel: this.createHudText(content.x, ppMetrics.labelY, "PP", OVERWORLD_HUD_LABEL_WIDTH, OVERWORLD_HUD_LABEL_FONT_SIZE, 500).setDepth(9.5),
@@ -742,7 +748,10 @@ export class UiScene extends Phaser.Scene {
     content: CanvasRect
   ): void {
     const badgeText = member.statuses.map((entry) => statusAilmentBadge(entry.ailment)).join(" ");
-    textSet.name.setText(this.fitCleanText(member.name, textSet.name.width || content.width, OVERWORLD_HUD_NAME_FONT_SIZE));
+    const nameMaxWidth = badgeText.trim().length > 0
+      ? Math.max(1, content.width - hudBadgeReserveWidth(content.width) - 4)
+      : content.width;
+    textSet.name.setText(this.fitCleanText(member.name, nameMaxWidth, OVERWORLD_HUD_NAME_FONT_SIZE));
     textSet.badges.setText(this.fitCleanText(badgeText, textSet.badges.width || 48, OVERWORLD_HUD_BADGE_FONT_SIZE));
     textSet.hpLabel.setText("HP");
     textSet.ppLabel.setText("PP");
