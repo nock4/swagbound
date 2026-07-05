@@ -1881,6 +1881,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private registerCollisionDebugGlobals(): void {
+    // Probe/debug globals are dev-only — never wired into production builds, matching
+    // the F1/F2/DevConsole gating in create(). Dev server + vitest + native probes all
+    // run with import.meta.env.DEV true, so this only strips the hooks from prod bundles.
+    if (!import.meta.env.DEV) {
+      return;
+    }
     const globals = globalThis as Record<string, unknown>;
     this.solidAtHook = (x: number, y: number) => solidAtWorldPixel(this.solidRows, { x, y }, this.collisionGrid());
     this.surfaceAtHook = (x: number, y: number) => surfaceAtWorldPixel(this.surfaceRows, { x, y }, this.collisionGrid());
@@ -2055,6 +2061,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__playerDepthInfo;
     delete globals.__debugHeal;
     delete globals.__debugSpawnRoamer;
+    delete globals.__debugSpawnRoamerById;
+    delete globals.__debugTextureInfo;
     delete globals.__debugFindAmbushSpot;
     delete globals.__equip;
     delete globals.__battleStats;
