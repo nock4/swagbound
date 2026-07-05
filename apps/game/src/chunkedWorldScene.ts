@@ -1949,6 +1949,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       return this.overworldEnemies.size;
     };
+    // Debug-only: force-spawn a roamer for a specific enemy id (verifies that enemy's
+    // overworld skin renders in-engine, returns its resolved texture/frame size).
+    globals.__debugSpawnRoamerById = (enemyId: number) => this.debugSpawnRoamerByEnemyId(enemyId);
+    // Debug-only: report whether a loaded texture exists + its source size (persists in
+    // the texture manager even after the spawning actor despawns).
+    globals.__debugTextureInfo = (key: string) => {
+      if (!this.textures.exists(key)) {
+        return { exists: false, key };
+      }
+      const src = this.textures.get(key).getSourceImage() as { width?: number; height?: number };
+      return { exists: true, key, width: src?.width ?? null, height: src?.height ?? null };
+    };
     // Debug-only: probe the ambush hideout finder at a world point.
     globals.__debugFindAmbushSpot = (x: number, y: number) => this.findAmbushCanopySpot({ x, y }) ?? null;
     globals.__debugSetRoamerFlees = (value: boolean) => {
@@ -6007,7 +6019,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
         flees: enemy.flees,
         archetype: enemy.archetype,
         facing: enemy.state.player.facing,
-        moving: enemy.state.player.moving
+        moving: enemy.state.player.moving,
+        // Skin diagnostics (dev-only): the resolved override image + whether the real
+        // skinned Sprite has streamed in (vs the hidden placeholder rect).
+        skinImage: enemy.skin?.image,
+        textureKey: enemy.textureKey,
+        textureReady: Boolean(enemy.textureKey && this.textures.exists(enemy.textureKey)),
+        spriteReady: enemy.sprite instanceof Phaser.GameObjects.Sprite && enemy.sprite.visible
       }))
     };
   }
@@ -6248,6 +6266,70 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }, frames),
       sprite
     });
+  }
+
+  /**
+   * Debug-only: force-spawn a roaming overworld enemy for a SPECIFIC enemy id (not a
+   * sector roll), so any given creature's overworld skin can be verified in-engine.
+   * Returns the resolved skin/texture so a probe can assert the sprite art + frame size.
+   */
+  private debugSpawnRoamerByEnemyId(enemyId: number): {
+    ok: boolean;
+    reason?: string;
+    enemyId: number;
+    name?: string;
+    textureKey?: string;
+    image?: string;
+    frameWidth?: number;
+    frameHeight?: number;
+    displayHeight?: number;
+  } {
+    const lead = this.data_.battle?.enemies.find((entry) => entry.id === enemyId);
+    if (!lead) {
+      return { ok: false, reason: "no enemy with id", enemyId };
+    }
+    const spot = this.findOverworldEnemySpawnPoint();
+    if (!spot) {
+      return { ok: false, reason: "no spawn point", enemyId };
+    }
+    const spriteGroup = lead.overworldSprite;
+    const { textureKey, skin, frames } = this.resolveOverworldEnemySkin(lead);
+    this.overworldEnemySeq += 1;
+    const key = `enemy-${this.overworldEnemySeq}`;
+    const sprite = this.spawnOverworldEnemyActor(spot.x, spot.y, undefined, textureKey, skin, spriteGroup);
+    if (textureKey && !(sprite instanceof Phaser.GameObjects.Sprite)) {
+      sprite.setVisible(false);
+    }
+    this.overworldEnemies.set(key, {
+      key,
+      // No real battle group (this is a render-only debug spawn); a touch won't start
+      // an encounter because battleGroupExists(-1) is false.
+      enemyGroup: -1,
+      spriteGroup,
+      frames,
+      textureKey,
+      skin,
+      contactGraceMs: OVERWORLD_ENEMY_CONTACT_GRACE_MS,
+      flees: false,
+      archetype: "prowler",
+      state: createNpcState(spot.x, spot.y, toFacing(undefined), {
+        kind: "wander",
+        radiusPx: OVERWORLD_ENEMY_WANDER_RADIUS_PX,
+        speedPxPerSec: OVERWORLD_ENEMY_WANDER_SPEED_PX_PER_SEC,
+        seed: (Math.imul(this.overworldEnemySeq, 0x9e3779b1) ^ (enemyId >>> 0)) >>> 0
+      }, frames),
+      sprite
+    });
+    return {
+      ok: true,
+      enemyId,
+      name: lead.name,
+      textureKey,
+      image: skin?.image,
+      frameWidth: skin?.frameWidth,
+      frameHeight: skin?.frameHeight,
+      displayHeight: skin?.displayHeight
+    };
   }
 
   private resolveOverworldEnemySkin(lead: BattleEnemy): {

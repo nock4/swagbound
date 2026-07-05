@@ -15150,9 +15150,9 @@
       "originY": 1
     },
     "37": {
-      "image": "assets/swagbound/overworld-npc/gns-malady-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
+      "image": "assets/swagbound/overworld-anchor96/a96-malady-001-ow.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
       "animations": {
         "down": [
           0
@@ -16668,9 +16668,9 @@
       "originY": 1
     },
     "121": {
-      "image": "assets/swagbound/overworld-npc/gns-solfis-001-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
+      "image": "assets/swagbound/overworld-anchor96/a96-solfis-001-ow.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
       "animations": {
         "down": [
           0
@@ -16690,9 +16690,9 @@
       "originY": 1
     },
     "122": {
-      "image": "assets/swagbound/overworld-npc/gns-solfis-002-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
+      "image": "assets/swagbound/overworld-anchor96/a96-solfis-002-ow.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
       "animations": {
         "down": [
           0
@@ -16712,9 +16712,9 @@
       "originY": 1
     },
     "123": {
-      "image": "assets/swagbound/overworld-npc/gns-solfis-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
+      "image": "assets/swagbound/overworld-anchor96/a96-solfis-003-ow.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
       "animations": {
         "down": [
           0
@@ -16734,9 +16734,9 @@
       "originY": 1
     },
     "124": {
-      "image": "assets/swagbound/overworld-npc/gns-solfis-004-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
+      "image": "assets/swagbound/overworld-anchor96/a96-solfis-004-ow.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
       "animations": {
         "down": [
           0
@@ -16756,9 +16756,9 @@
       "originY": 1
     },
     "126": {
-      "image": "assets/swagbound/overworld-npc/gns-solfis-005-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
+      "image": "assets/swagbound/overworld-anchor96/a96-solfis-005-ow.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
       "animations": {
         "down": [
           0
@@ -16822,9 +16822,9 @@
       "originY": 1
     },
     "130": {
-      "image": "assets/swagbound/overworld-npc/gns-demonfella-ii-001-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
+      "image": "assets/swagbound/overworld-anchor96/a96-demonfella-ii-001-ow.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
       "animations": {
         "down": [
           0
@@ -17460,9 +17460,9 @@
       "originY": 1
     },
     "211": {
-      "image": "assets/swagbound/overworld-npc/gns-solfis-001-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
+      "image": "assets/swagbound/overworld-anchor96/a96-solfis-001-ow.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
       "animations": {
         "down": [
           0
@@ -17482,9 +17482,9 @@
       "originY": 1
     },
     "212": {
-      "image": "assets/swagbound/overworld-npc/gns-solfis-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
+      "image": "assets/swagbound/overworld-anchor96/a96-solfis-003-ow.png",
+      "frameWidth": 96,
+      "frameHeight": 96,
       "animations": {
         "down": [
           0
