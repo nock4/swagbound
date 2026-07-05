@@ -231,7 +231,8 @@
             15
           ]
         },
-        "displayHeight": 24,
+        "displayHeight": 32,
+        "originY": 0.844,
         "states": {
           "dead": {
             "image": "assets/swagbound/hero/lsw-224-dead.png",
@@ -398,7 +399,8 @@
             15
           ]
         },
-        "displayHeight": 24,
+        "displayHeight": 29,
+        "originY": 0.938,
         "states": {
           "dead": {
             "image": "assets/swagbound/hero/lsw-855-dead.png",
@@ -566,6 +568,7 @@
           ]
         },
         "displayHeight": 24,
+        "originY": 0.938,
         "states": {
           "dead": {
             "image": "assets/swagbound/hero/lsw-2821-dead.png",
