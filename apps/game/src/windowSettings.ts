@@ -1,4 +1,5 @@
 import type { WindowCollection } from "@eb/schemas";
+import { setActiveWindowFlavorIndex } from "./cleanUi";
 
 export const WINDOW_FLAVOR_STORAGE_KEY = "eb:windowFlavor";
 export const WINDOW_FLAVOR_CHANGE_EVENT = "eb:windowFlavorChanged";
@@ -14,6 +15,24 @@ export function registerWindowFlavorControls(window: WindowCollection | undefine
   const host = globalThis as Record<string, unknown>;
   host.__setWindowFlavor = (flavorId: number) => setWindowFlavorId(flavorId, registeredWindow);
   host.__getWindowFlavor = () => activeWindowFlavorId(registeredWindow);
+  // Point the shared EB window renderer at the stored/default flavor, and keep it in
+  // sync when the flavor changes.
+  applyActiveWindowFlavorToRenderer();
+  if (typeof globalThis.addEventListener === "function") {
+    globalThis.addEventListener(WINDOW_FLAVOR_CHANGE_EVENT, (event) => {
+      const detail = (event as CustomEvent<WindowFlavorChangeDetail>).detail;
+      if (detail && Number.isInteger(detail.flavorId)) {
+        setActiveWindowFlavorIndex(detail.flavorId);
+      }
+    });
+  }
+}
+
+function applyActiveWindowFlavorToRenderer(): void {
+  const id = activeWindowFlavorId(registeredWindow);
+  if (id !== undefined) {
+    setActiveWindowFlavorIndex(id);
+  }
 }
 
 export function activeWindowFlavorId(window: WindowCollection | undefined): number | undefined {
