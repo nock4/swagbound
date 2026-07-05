@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, relative } from "node:path";
 import { defineConfig, type Plugin } from "vite";
@@ -75,8 +75,48 @@ function buildingOverridesPlugin(): Plugin {
   };
 }
 
+/**
+ * Dev-only annotation sink for the in-game Dev Console: POST appends a Markdown
+ * note block to tmp/dev-notes.md (map pins + dialogue tags Claude can read back);
+ * GET returns the current file so the console can show a running count.
+ */
+function devNotesPlugin(): Plugin {
+  const dir = join(ROOT, "..", "..", "tmp");
+  const file = join(dir, "dev-notes.md");
+  return {
+    name: "swag-dev-notes",
+    configureServer(server) {
+      server.middlewares.use("/__dev-notes", (req, res) => {
+        if (req.method === "POST") {
+          let body = "";
+          req.on("data", (chunk) => (body += chunk));
+          req.on("end", () => {
+            try {
+              if (!existsSync(dir)) {
+                mkdirSync(dir, { recursive: true });
+              }
+              if (!existsSync(file)) {
+                writeFileSync(file, "# Dev notes\n\nIn-game annotations (map pins + dialogue tags). Newest at the bottom.\n\n");
+              }
+              appendFileSync(file, body.endsWith("\n") ? body : body + "\n");
+              res.statusCode = 200;
+              res.end("ok");
+            } catch (e) {
+              res.statusCode = 500;
+              res.end(String(e));
+            }
+          });
+          return;
+        }
+        res.setHeader("Content-Type", "text/markdown");
+        res.end(existsSync(file) ? readFileSync(file, "utf8") : "");
+      });
+    }
+  };
+}
+
 export default defineConfig({
-  plugins: [audioListPlugin(), buildingOverridesPlugin()],
+  plugins: [audioListPlugin(), buildingOverridesPlugin(), devNotesPlugin()],
   server: {
     host: "127.0.0.1",
     port: 5173

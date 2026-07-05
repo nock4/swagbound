@@ -61,13 +61,32 @@ export function publishAuditionTarget(next: AuditionTarget | null): void {
 }
 
 let mounted = false;
+let panel: MusicAuditionerPanel | undefined;
 
 export function mountMusicAuditioner(): void {
   if (mounted || typeof document === "undefined") {
     return;
   }
   mounted = true;
-  new MusicAuditionerPanel();
+  panel = new MusicAuditionerPanel();
+}
+
+/** Show/hide the Track Lab. It now starts hidden and is summoned from the Dev Console (L). */
+export function setMusicAuditionerVisible(visible: boolean): void {
+  panel?.setVisible(visible);
+}
+
+export function toggleMusicAuditioner(): boolean {
+  if (!panel) {
+    return false;
+  }
+  const next = !panel.isVisible();
+  panel.setVisible(next);
+  return next;
+}
+
+export function isMusicAuditionerVisible(): boolean {
+  return Boolean(panel?.isVisible());
 }
 
 class MusicAuditionerPanel {
@@ -156,6 +175,7 @@ class MusicAuditionerPanel {
       this.assignListEl
     );
     this.root.append(header, this.body);
+    this.root.style.display = "none"; // starts hidden; the Dev Console (L) summons it
     document.body.append(this.root);
 
     this.audio.addEventListener("ended", () => this.onStopped());
@@ -171,6 +191,14 @@ class MusicAuditionerPanel {
         this.onStopped();
       }
     });
+  }
+
+  setVisible(visible: boolean): void {
+    this.root.style.display = visible ? "" : "none";
+  }
+
+  isVisible(): boolean {
+    return this.root.style.display !== "none";
   }
 
   private async loadTracks(): Promise<void> {

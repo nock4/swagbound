@@ -285,7 +285,9 @@ import {
   overworldMusicCueForSector,
   type OverworldMusicCue
 } from "./worldMusic";
-import { publishAuditionTarget, type AuditionLocation } from "./musicAuditioner";
+import { publishAuditionTarget, toggleMusicAuditioner, isMusicAuditionerVisible, type AuditionLocation } from "./musicAuditioner";
+import { DevConsole, type DevConsoleHost, type DevLiveState } from "./devConsole";
+import { postDevNote, type DevNoteContext } from "./devNotes";
 import {
   overworldInteractableEvents,
   overworldInteractableIsOpened
@@ -656,6 +658,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private keys?: Record<string, Phaser.Input.Keyboard.Key>;
   private readonly gamepadTracker = new GamepadTracker();
   private gamepadHeld: DirectionVector = NO_HELD_DIRECTION;
+  private devConsole?: DevConsole;
+  private devAnnotateMode = false;
+  private devInstantWin = false;
+  private devNoteCount = 0;
+  private devPins: Phaser.GameObjects.Container[] = [];
+  private devPointerDowns = 0;
+  private lastDevWorld = { x: 0, y: 0 };
   private doorTriggerState: DoorTriggerState = { suppressUntilClear: false };
   private lastDoor?: { from: { x: number; y: number }; to: { x: number; y: number } };
   private warnedInvalidDoorWarps = new Set<string>();
@@ -961,6 +970,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.questJournal = undefined;
       this.partyOrderMenu?.destroy();
       this.partyOrderMenu = undefined;
+      this.devConsole?.destroy();
+      this.devConsole = undefined;
     });
 
     this.cursors = this.input.keyboard?.createCursorKeys();
@@ -976,15 +987,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
     registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.handleCancel());
     this.input.keyboard?.on("keydown-P", () => this.handleSaveKey());
     // Debug toggles (panel + collision overlay) are dev-only — not wired in production builds.
-    // F1 toggles the debug panel; backtick (`) is a Mac-friendly alias since the
-    // top-row F-keys default to hardware controls (brightness) on macOS.
+    // F1 toggles the raw Phaser state panel; F2 the collision overlay; backtick (`) opens the
+    // Dev Console hub (Track Lab / annotate / warp / encounters).
     if (import.meta.env.DEV) {
-      const toggleDebugPanel = () => {
+      this.input.keyboard?.on("keydown-F1", () => {
         this.debugPanelVisible = !this.debugPanelVisible;
-      };
-      this.input.keyboard?.on("keydown-F1", toggleDebugPanel);
-      this.input.keyboard?.on("keydown-BACKTICK", toggleDebugPanel);
+      });
       this.input.keyboard?.on("keydown-F2", () => this.setCollisionOverlayEnabled(!this.collisionOverlayEnabled));
+      this.devConsole = new DevConsole(this.buildDevConsoleHost());
+      this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => this.handleDevPointer(pointer));
+      (globalThis as Record<string, unknown>).__devToolsDebug = () => ({
+        annotate: this.devAnnotateMode,
+        instantWin: this.devInstantWin,
+        encounters: this.encounterEnabled,
+        notes: this.devNoteCount,
+        pointerDowns: this.devPointerDowns,
+        lastWorld: this.lastDevWorld
+      });
     }
     // Bicycle (Swag Cruiser, item 176): B mounts/dismounts when owned + outdoors.
     this.input.keyboard?.on("keydown-B", () => this.toggleBike());
@@ -2528,6 +2547,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private readInput(): MoveInput {
+    // Don't walk the player while typing into a dev input (note capture, force-encounter box).
+    if (typeof document !== "undefined") {
+      const active = document.activeElement;
+      if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) {
+        return { left: false, right: false, up: false, down: false };
+      }
+    }
     return {
       left: Boolean(this.cursors?.left?.isDown || this.keys?.A?.isDown || this.gamepadHeld.left),
       right: Boolean(this.cursors?.right?.isDown || this.keys?.D?.isDown || this.gamepadHeld.right),
@@ -2647,6 +2673,128 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     window.dispatchEvent(new KeyboardEvent("keydown", { code, bubbles: true, cancelable: true }));
+  }
+
+  // --- Dev tools (dev-server only; wired from the DevConsole hub) ------------------
+
+  private buildDevConsoleHost(): DevConsoleHost {
+    return {
+      liveState: () => this.devLiveState(),
+      trackLabVisible: () => isMusicAuditionerVisible(),
+      toggleTrackLab: () => { toggleMusicAuditioner(); },
+      annotateMode: () => this.devAnnotateMode,
+      toggleAnnotate: () => { this.devAnnotateMode = !this.devAnnotateMode; },
+      encountersEnabled: () => this.encounterEnabled,
+      toggleEncounters: () => { this.encounterEnabled = !this.encounterEnabled; },
+      instantWin: () => this.devInstantWin,
+      toggleInstantWin: () => { this.devInstantWin = !this.devInstantWin; },
+      forceEncounter: (group) => { this.forceEncounter(group, this.devInstantWin ? "instantWin" : undefined); },
+      dialogueOpen: () => this.dialogue.open,
+      captureDialogueNote: () => this.devCaptureDialogueNote(),
+      noteCount: () => this.devNoteCount
+    };
+  }
+
+  private devLiveState(): DevLiveState {
+    const state = this.playerState;
+    const ctx = this.devCoordContext(state.x, state.y);
+    const pointer = this.input?.activePointer;
+    const overPointer = Boolean(pointer && pointer.isDown === false && (pointer.worldX !== 0 || pointer.worldY !== 0));
+    return {
+      x: state.x,
+      y: state.y,
+      tileX: ctx.tileX,
+      tileY: ctx.tileY,
+      sector: ctx.sector,
+      area: ctx.area,
+      town: ctx.town,
+      facing: state.facing,
+      bike: this.bikeActive,
+      mouseX: pointer && overPointer ? pointer.worldX : (pointer?.worldX ?? null),
+      mouseY: pointer && overPointer ? pointer.worldY : (pointer?.worldY ?? null)
+    };
+  }
+
+  private devCoordContext(x: number, y: number): {
+    tileX: number; tileY: number; sector: number | null; area: number | null; town: string | null;
+  } {
+    const tileSize = this.world_?.tileSize ?? 8;
+    const sectors = this.world_?.sectors;
+    const sector = sectors ? sectorCoordForWorldPixel({ x, y }, sectors) : undefined;
+    const sectorIndex = sector?.index ?? null;
+    const rawArea = sectorIndex !== null && sectors?.areaIds ? sectors.areaIds[sectorIndex] ?? null : null;
+    // EB area ids are small; guard against out-of-range/packed sentinels so notes stay clean.
+    const area = typeof rawArea === "number" && rawArea >= 0 && rawArea < 100000 ? rawArea : null;
+    return {
+      tileX: Math.floor(x / tileSize),
+      tileY: Math.floor(y / tileSize),
+      sector: sectorIndex,
+      area,
+      town: this.devTownAt(x, y)
+    };
+  }
+
+  private devTownAt(x: number, y: number): string | null {
+    let best: string | null = null;
+    let bestDist = TELEPORT_VISIT_RADIUS_PX;
+    for (const town of TELEPORT_TOWNS) {
+      const dist = Math.hypot(town.x - x, town.y - y);
+      if (dist < bestDist) {
+        bestDist = dist;
+        best = town.name;
+      }
+    }
+    return best;
+  }
+
+  private handleDevPointer(pointer: Phaser.Input.Pointer): void {
+    this.devPointerDowns += 1;
+    const shift = Boolean((pointer.event as MouseEvent | undefined)?.shiftKey);
+    const x = pointer.worldX;
+    const y = pointer.worldY;
+    this.lastDevWorld = { x: Math.round(x), y: Math.round(y) };
+    if (shift) {
+      this.warpPlayerToWorldPixel({ x, y });
+      this.publish();
+      return;
+    }
+    if (this.devAnnotateMode) {
+      this.devCaptureCoordNote(x, y);
+    }
+  }
+
+  private devCaptureCoordNote(x: number, y: number): void {
+    const ctx = this.devCoordContext(x, y);
+    this.dropDevPin(x, y);
+    const label = `pin @ ${Math.round(x)},${Math.round(y)} · ${ctx.town ?? `sector ${ctx.sector ?? "?"}`}`;
+    const context: DevNoteContext = { kind: "coord", x, y, ...ctx };
+    this.devConsole?.beginNoteCapture(label, (text) => this.devSaveNote(text, context));
+  }
+
+  private devCaptureDialogueNote(): void {
+    if (!this.dialogue.open) {
+      return;
+    }
+    const line = this.dialogue.currentText ?? "";
+    const npcId = this.interactionTarget()?.id ?? null;
+    const context: DevNoteContext = { kind: "dialogue", x: this.playerState.x, y: this.playerState.y, npcId, dialogue: line };
+    this.devConsole?.beginNoteCapture(`dialogue: "${line.slice(0, 40)}${line.length > 40 ? "…" : ""}"`, (text) => this.devSaveNote(text, context));
+  }
+
+  private devSaveNote(text: string, context: DevNoteContext): void {
+    void postDevNote({ note: text, context }).then((ok) => {
+      if (ok) {
+        this.devNoteCount += 1;
+      }
+    });
+  }
+
+  private dropDevPin(x: number, y: number): void {
+    const n = this.devPins.length + 1;
+    const dot = this.add.circle(0, 0, 5, 0xffd23f).setStrokeStyle(1, 0x000000);
+    const label = this.add.text(7, -7, String(n), { fontSize: "12px", color: "#ffd23f" }).setStroke("#000000", 3);
+    const pin = this.add.container(x, y, [dot, label]).setDepth(120000);
+    this.devPins.push(pin);
   }
 
   private registerTransitionSfxResume(): void {
