@@ -8,18 +8,22 @@ export const CLEAN_UI_SECONDARY = "#9AA3B2";
 export const CLEAN_UI_SELECTION_TEXT = "#0a0a0a";
 // Numeric companion (graphics fillStyle takes a hex number) for the caret drawn on that row.
 export const CLEAN_UI_SELECTION_CARET = 0x0a0a0a;
-export const CLEAN_UI_PANEL_FILL = 0x080a10;
-export const CLEAN_UI_PANEL_ALPHA = 0.9;
+// EarthBound-parity windows: opaque near-black interior (EB "Plain" flavor 0 =
+// rgb 16,16,16), square corners, crisp white frame with a beveled inner shadow.
+export const CLEAN_UI_PANEL_FILL = 0x101010;
+export const CLEAN_UI_PANEL_ALPHA = 1;
 export const CLEAN_UI_PANEL_BORDER = 0xffffff;
-export const CLEAN_UI_PANEL_BORDER_ALPHA = 0.85;
+export const CLEAN_UI_PANEL_BORDER_ALPHA = 1;
 export const CLEAN_UI_PANEL_BORDER_WIDTH = 2;
+// Inner bevel line just inside the white frame, for the EB window's recessed depth.
+export const CLEAN_UI_PANEL_BEVEL = 0x585868;
 export const CLEAN_UI_SELECTION_ALPHA = 0.14;
 export const CLEAN_UI_HP = 0x5dca7a;
 export const CLEAN_UI_PP = 0x4d9bdc;
 export const CLEAN_UI_TRACK = 0xffffff;
 export const CLEAN_UI_TRACK_ALPHA = 0.12;
-export const CLEAN_UI_PANEL_RADIUS = 9;
-export const CLEAN_UI_SELECTION_RADIUS = 5;
+export const CLEAN_UI_PANEL_RADIUS = 0;
+export const CLEAN_UI_SELECTION_RADIUS = 0;
 export const CLEAN_UI_GRID_COLUMNS = 3;
 
 export type CleanTextWeight = 400 | 500;
@@ -119,12 +123,28 @@ export function drawCleanPanel(
 ): void {
   const radius = Math.max(0, Math.round(options.radius ?? CLEAN_UI_PANEL_RADIUS));
   const borderWidth = Math.max(1, Math.round(options.borderWidth ?? CLEAN_UI_PANEL_BORDER_WIDTH));
+  const x = Math.round(rect.x);
+  const y = Math.round(rect.y);
+  const w = Math.max(1, Math.round(rect.width));
+  const h = Math.max(1, Math.round(rect.height));
+  const drawRect = radius > 0
+    ? (fx: number, fy: number, fw: number, fh: number) => graphics.fillRoundedRect(fx, fy, fw, fh, radius)
+    : (fx: number, fy: number, fw: number, fh: number) => graphics.fillRect(fx, fy, fw, fh);
+  const strokeRect = radius > 0
+    ? (sx: number, sy: number, sw: number, sh: number) => graphics.strokeRoundedRect(sx, sy, sw, sh, radius)
+    : (sx: number, sy: number, sw: number, sh: number) => graphics.strokeRect(sx, sy, sw, sh);
+  // Opaque interior.
   graphics.fillStyle(options.fillColor ?? CLEAN_UI_PANEL_FILL, options.fillAlpha ?? CLEAN_UI_PANEL_ALPHA);
-  graphics.fillRoundedRect(rect.x, rect.y, rect.width, rect.height, radius);
-  // Stroke inset by half the line width so a thicker border stays inside the panel box.
+  drawRect(x, y, w, h);
+  // EarthBound recessed bevel: a 1px shadow line just inside the white frame.
+  if (radius === 0 && w > borderWidth * 2 + 2 && h > borderWidth * 2 + 2) {
+    graphics.lineStyle(1, CLEAN_UI_PANEL_BEVEL, options.borderAlpha ?? CLEAN_UI_PANEL_BORDER_ALPHA);
+    graphics.strokeRect(x + borderWidth, y + borderWidth, w - borderWidth * 2 - 1, h - borderWidth * 2 - 1);
+  }
+  // Outer frame, inset by half the line width so it stays inside the panel box.
   const inset = borderWidth / 2;
   graphics.lineStyle(borderWidth, options.borderColor ?? CLEAN_UI_PANEL_BORDER, options.borderAlpha ?? CLEAN_UI_PANEL_BORDER_ALPHA);
-  graphics.strokeRoundedRect(rect.x + inset, rect.y + inset, Math.max(1, rect.width - borderWidth), Math.max(1, rect.height - borderWidth), radius);
+  strokeRect(x + inset, y + inset, Math.max(1, w - borderWidth), Math.max(1, h - borderWidth));
 }
 
 export function drawCleanSelection(graphics: Phaser.GameObjects.Graphics, rect: CanvasRect, opaque = false): void {
