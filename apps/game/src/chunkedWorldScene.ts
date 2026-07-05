@@ -649,6 +649,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private teleportMenu?: TeleportMenu;
   private readonly teleportVisited = new Set<string>();
   private teleportSpinUntilMs = 0;
+  private lastAutosaveTownId: string | undefined;
+  private autosaveNoticeUntilMs = 0;
   /** solidRows snapshot (post-authored-overrides) the paint editor repaints from. */
   private editorBaseSolidRows?: string[];
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
@@ -2990,6 +2992,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private updatePrompt(): void {
+    if (this.time.now < this.autosaveNoticeUntilMs && !this.menuState.open && !this.dialogue.open) {
+      this.prompt = "✦ Autosaved (town reached)";
+      return;
+    }
     const target = this.interactionTarget();
     if (this.menuState.open) {
       this.prompt = "Arrows: choose | Z: select | X: back";
@@ -3685,14 +3691,33 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   /** Mark nearby teleport towns as visited so they appear in the fast-travel menu. */
   private updateTeleportVisited(): void {
+    let nearestTown: TeleportTown | null = null;
+    let nearestDist = TELEPORT_VISIT_RADIUS_PX;
     for (const town of TELEPORT_TOWNS) {
-      if (this.teleportVisited.has(town.id)) {
-        continue;
-      }
-      if (this.distanceToPlayer(town) <= TELEPORT_VISIT_RADIUS_PX) {
+      const dist = this.distanceToPlayer(town);
+      if (dist <= TELEPORT_VISIT_RADIUS_PX) {
         this.teleportVisited.add(town.id);
+        if (dist < nearestDist) {
+          nearestDist = dist;
+          nearestTown = town;
+        }
       }
     }
+    // Autosave when the player walks into a (different) town, so a real
+    // playthrough survives without pressing save. Cleared when out of any town
+    // so re-entering re-saves.
+    if (nearestTown?.id !== this.lastAutosaveTownId) {
+      this.lastAutosaveTownId = nearestTown?.id;
+      if (nearestTown && this.isPlayerControllable() && this.saveSlots) {
+        this.saveGame(false);
+        this.showAutosaveNotice();
+      }
+    }
+  }
+
+  private showAutosaveNotice(): void {
+    this.autosaveNoticeUntilMs = this.time.now + 1600;
+    this.publish();
   }
 
   /** PSI Teleport: spin in place, then arrive at the town. */
