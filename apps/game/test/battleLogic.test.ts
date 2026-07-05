@@ -808,7 +808,7 @@ describe("battle character-specific command resolution", () => {
     expect(result.skipped).toBe(false);
     expect(result.target).toEqual(actor("enemy", 0));
     expect(result.amount).toBe(0);
-    expect(result.message).toBe("OPPONENT_A HP 24/24 Off 8 Def 4.");
+    expect(result.message).toBe("OPPONENT_A HP 24/24 Off 8 Def 4. No elemental weakness.");
     expect(result.state.party.map((member) => member.hp.target)).toEqual([44]);
     expect(result.state.enemies.map((enemyCombatant) => enemyCombatant.hp.target)).toEqual([24]);
   });

@@ -380,12 +380,12 @@ describe("resolveRoundStep", () => {
     );
 
     expect(result.skipped).toBe(false);
-    expect(result.message).toBe("OPPONENT_A HP 30/30 Off 12 Def 4.");
+    expect(result.message).toBe("OPPONENT_A HP 30/30 Off 12 Def 4. No elemental weakness.");
     expect(result.details).toMatchObject({
       kind: "spy",
       attackerName: "JEFF_TEST",
       targetName: "OPPONENT_A",
-      message: "OPPONENT_A HP 30/30 Off 12 Def 4."
+      message: "OPPONENT_A HP 30/30 Off 12 Def 4. No elemental weakness."
     });
     expect(result.state).toBe(battle);
   });

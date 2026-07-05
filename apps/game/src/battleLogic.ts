@@ -1,4 +1,5 @@
 import type { BattleEnemy, CharacterCollection, CharacterData, ItemData, PsiData } from "@eb/schemas";
+import { describeAffinity } from "./battleAffinities";
 import {
   createRollingMeter,
   isDepleted,
@@ -2061,7 +2062,7 @@ function blockedPrayAction(
 }
 
 function spyMessage(enemy: Combatant): string {
-  return `${enemy.name} HP ${enemy.hp.target}/${enemy.maxHp} Off ${enemy.offense} Def ${enemy.defense}.`;
+  return `${enemy.name} HP ${enemy.hp.target}/${enemy.maxHp} Off ${enemy.offense} Def ${enemy.defense}. ${describeAffinity(enemy.charId)}`;
 }
 
 function skippedEnemyAction(

@@ -56,6 +56,18 @@ const ENEMY_AFFINITY: Record<number, Affinity> = {
   131: { weak: "beam", resist: "flash" } // Frank / Milady swarm lead — copies, weak to the source beam
 };
 
+/** Human-readable weakness/resistance line for SPY. Empty when the enemy is neutral. */
+export function describeAffinity(enemyId: number): string {
+  const affinity = ENEMY_AFFINITY[enemyId];
+  if (!affinity) {
+    return "No elemental weakness.";
+  }
+  const parts: string[] = [];
+  if (affinity.weak) parts.push(`Weak to ${affinity.weak}`);
+  if (affinity.resist) parts.push(`resists ${affinity.resist}`);
+  return parts.length > 0 ? `${parts.join(", ")}.` : "No elemental weakness.";
+}
+
 /** Damage multiplier + tag for an offense PSI element against an enemy. */
 export function elementalAffinity(
   enemyId: number,

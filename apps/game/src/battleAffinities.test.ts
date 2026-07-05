@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { elementalAffinity, psiElementForId, RESIST_MULTIPLIER, WEAK_MULTIPLIER } from "./battleAffinities";
+import { describeAffinity, elementalAffinity, psiElementForId, RESIST_MULTIPLIER, WEAK_MULTIPLIER } from "./battleAffinities";
 
 describe("battle affinities", () => {
   it("maps offense PSI ids to elements (rename-proof)", () => {
@@ -27,5 +27,11 @@ describe("battle affinities", () => {
     expect(elementalAffinity(9999, "ice")).toEqual({ multiplier: 1, kind: null });
     // No element = no effect
     expect(elementalAffinity(147, null)).toEqual({ multiplier: 1, kind: null });
+  });
+
+  it("describes weaknesses for SPY", () => {
+    expect(describeAffinity(147)).toBe("Weak to ice, resists fire."); // Soul Consuming Flame
+    expect(describeAffinity(130)).toBe("Weak to thunder."); // Frankystein (weak only)
+    expect(describeAffinity(9999)).toBe("No elemental weakness."); // unlisted
   });
 });
