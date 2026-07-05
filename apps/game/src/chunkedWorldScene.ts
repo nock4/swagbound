@@ -559,6 +559,7 @@ const QUESTS: readonly Quest[] = [
  * 3=Knight/Poo); the base duo (0,1) is always present and never listed here.
  */
 const PARTY_RECRUITS: readonly { charId: number; flag: string; name: string }[] = [
+  { charId: 1, flag: "recruit:cloak", name: "Cloak" },
   { charId: 2, flag: "recruit:munch", name: "Munch" },
   { charId: 3, flag: "recruit:knight", name: "Knight" }
 ];
@@ -5650,9 +5651,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!characters?.length) {
       return;
     }
-    // Act 1 is a duo: Bosch (Ness) leads and Paula joins as the PSI support — she handles the
-    // high-defense climax (Titanic Ant) with PSI Freeze while Bosch heals with Lifeup.
-    const partyIds = [characters[0].id, ...(characters[1] ? [characters[1].id] : [])];
+    // Act 1 opens SOLO: Bosch (Ness) alone. The other heroes fall in via the story
+    // recruit beats (PARTY_RECRUITS) — Cloak at the Act-1 close, then Munch/Knight —
+    // so the intro never shows a second hero before they are earned.
+    const partyIds = [characters[0].id];
     const snapshot = this.partyState.snapshot();
     this.partyState.restore({
       ...snapshot,
