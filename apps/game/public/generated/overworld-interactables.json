@@ -221,6 +221,27 @@
       "openedPages": [
         "Half-swallowed by the canopy. You almost walked past it."
       ]
+    },
+    {
+      "id": "arena-champion-purse",
+      "kind": "present",
+      "label": "Champion's purse",
+      "worldPixel": {
+        "x": 3252,
+        "y": 6400
+      },
+      "item": {
+        "char": 0,
+        "item": 125
+      },
+      "pages": [
+        "The purse sits on a velvet cushion, still warm from the lights.",
+        "Inside: the Backstage pass!",
+        "You got the Backstage pass! (Arena champion.)"
+      ],
+      "openedPages": [
+        "The cushion is empty. The crowd, imaginary, roars anyway."
+      ]
     }
   ]
 }

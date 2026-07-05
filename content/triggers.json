@@ -199,6 +199,65 @@
         "\"You call yourself the source. Every counterfeit does, in the same voice, because it is our voice. Prove it, and we keep the clean copy. Fail, and we keep it sooner.\"",
         "It raises a hand of porcelain, identical to the last ten thousand. (Press Z. BASH, DEFEND, or PSI.) \"Defend the original if you must. We already hung the derivative where you used to stand.\""
       ]
+    },
+    {
+      "id": "arena-venue-1",
+      "boss": {
+        "x": 1956,
+        "y": 6400,
+        "facing": "down"
+      },
+      "once": true,
+      "dialogue": [
+        "THE VENUE \u2014 SUPER METAL MONS EXHIBITION.",
+        "ANNOUNCER: \"Fresh meat at the gate! First bracket: a warm-up welded together from spare parts. Clear three to be crowned.\"",
+        "The Frankystein Mark II lurches into the ring, sparking."
+      ],
+      "setFlags": [
+        "arena:won:1"
+      ],
+      "battleGroup": 449
+    },
+    {
+      "id": "arena-venue-2",
+      "boss": {
+        "x": 2244,
+        "y": 6400,
+        "facing": "down"
+      },
+      "once": true,
+      "dialogue": [
+        "ANNOUNCER: \"One down! Bracket two \u2014 this one benches more than you weigh.\"",
+        "The Tough Guy cracks his knuckles. It sounds like a car door."
+      ],
+      "setFlags": [
+        "arena:won:2"
+      ],
+      "battleGroup": 137,
+      "requireFlags": [
+        "arena:won:1"
+      ]
+    },
+    {
+      "id": "arena-venue-3",
+      "boss": {
+        "x": 2724,
+        "y": 6400,
+        "facing": "down"
+      },
+      "once": true,
+      "dialogue": [
+        "ANNOUNCER: \"FINAL BRACKET. Beat this and the purse is yours, champ.\"",
+        "The Soul Consuming Flame roars up the ring. The front row feels the heat."
+      ],
+      "setFlags": [
+        "arena:won:3",
+        "arena:champion"
+      ],
+      "battleGroup": 402,
+      "requireFlags": [
+        "arena:won:2"
+      ]
     }
   ],
   "barriers": [
