@@ -624,7 +624,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private npcRuntimes = new Map<string, NpcRuntime>();
   private serviceInteractionCache = new Map<string, boolean>();
   private activeNpcDialogue?: ActiveNpcDialogue;
-  private presentInteractableSprites = new Map<string, Phaser.GameObjects.Rectangle>();
+  private presentInteractableSprites = new Map<string, Phaser.GameObjects.Image>();
   private sourceCheckActors = new Map<string, SourceCheckActorRuntime>();
   private chunkByKey = new Map<string, WorldChunk>();
   private chunkObjects = new Map<string, StreamedChunk>();
@@ -2349,7 +2349,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private spawnPlaceholderActor(x: number, y: number): Phaser.GameObjects.Rectangle {
-    const placeholder = this.add.rectangle(x, y, 16, 24, 0x9aa7b8).setStrokeStyle(1, 0xe2e8f0);
+    // A faint ground shadow while the real sprite sheet streams in, rather than an
+    // opaque box that flashes on top of the map for a frame or two.
+    const placeholder = this.add.rectangle(x, y, 14, 5, 0x000000, 0.28);
     placeholder.setOrigin(0.5, 1);
     this.setActorSortDepth(placeholder);
     return placeholder;
@@ -2399,13 +2401,42 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.spawnActor(x, y, spriteGroup, direction);
   }
 
+  private static readonly PRESENT_TEXTURE_CLOSED = "swag-present-closed";
+  private static readonly PRESENT_TEXTURE_OPEN = "swag-present-open";
+
+  /** Draw the roadside-present gift boxes once into cached textures (closed + opened). */
+  private ensurePresentTextures(): void {
+    if (this.textures.exists(ChunkedWorldScene.PRESENT_TEXTURE_CLOSED)) {
+      return;
+    }
+    const g = this.add.graphics();
+    // Closed present: a pink gift box with a cream ribbon + bow.
+    g.clear();
+    g.fillStyle(0x2a1620, 1).fillRect(2, 6, 12, 10); // dark outline base
+    g.fillStyle(0xd94f7a, 1).fillRect(3, 8, 10, 7); // box body
+    g.fillStyle(0xe86a92, 1).fillRect(2, 6, 12, 3); // lid (lighter, slightly wider)
+    g.fillStyle(0xffe9a8, 1).fillRect(7, 6, 2, 9); // vertical ribbon
+    g.fillStyle(0xffe9a8, 1).fillRect(2, 7, 12, 1); // ribbon across lid seam
+    g.fillStyle(0xffe9a8, 1).fillRect(5, 3, 2, 3).fillRect(9, 3, 2, 3); // bow loops
+    g.generateTexture(ChunkedWorldScene.PRESENT_TEXTURE_CLOSED, 16, 16);
+    // Opened present: muted grey box with the lid ajar, no ribbon.
+    g.clear();
+    g.fillStyle(0x23262c, 1).fillRect(3, 8, 10, 8); // outline base
+    g.fillStyle(0x59606b, 1).fillRect(4, 9, 8, 6); // box body
+    g.fillStyle(0x3a3f47, 1).fillRect(1, 4, 14, 3); // lid tilted off / ajar
+    g.generateTexture(ChunkedWorldScene.PRESENT_TEXTURE_OPEN, 16, 16);
+    g.destroy();
+  }
+
   private spawnPresentInteractables(): void {
     this.destroyPresentInteractableSprites();
+    this.ensurePresentTextures();
     for (const entry of this.data_.overworldInteractables.interactables) {
       if (entry.kind !== "present") {
         continue;
       }
-      const sprite = this.add.rectangle(entry.worldPixel.x, entry.worldPixel.y, 14, 12, 0xd64265)
+      const sprite = this.add
+        .image(entry.worldPixel.x, entry.worldPixel.y, ChunkedWorldScene.PRESENT_TEXTURE_CLOSED)
         .setOrigin(0.5, 1);
       this.presentInteractableSprites.set(entry.id, sprite);
       this.setActorSortDepth(sprite);
@@ -2423,9 +2454,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
         continue;
       }
       const opened = this.overworldInteractableOpened(entry);
-      sprite
-        .setFillStyle(opened ? 0x6b7280 : 0xd64265, 1)
-        .setStrokeStyle(2, opened ? 0xcbd5e1 : 0xfff3a3, 1);
+      sprite.setTexture(
+        opened ? ChunkedWorldScene.PRESENT_TEXTURE_OPEN : ChunkedWorldScene.PRESENT_TEXTURE_CLOSED
+      );
       sprite.setVisible(true);
       this.setActorSortDepth(sprite);
     }

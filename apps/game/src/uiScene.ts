@@ -305,7 +305,9 @@ export class UiScene extends Phaser.Scene {
     const menuScreens = world.menuRenderStack();
     const promptVisible = !open && menuScreens.length === 0;
     const hudView = world.overworldStatusHud?.();
-    const visibleHudView = promptVisible && hudView?.visible ? hudView : undefined;
+    // EarthBound shows the party status window only while a menu is open, not while
+    // walking the overworld. (Previously this rendered during free movement.)
+    const visibleHudView = menuScreens.length > 0 && hudView?.visible ? hudView : undefined;
     const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${world.prompt}|${promptVisible}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
     if (signature === this.lastSignature) {
       this.drawOverworldHud(visibleHudView);
