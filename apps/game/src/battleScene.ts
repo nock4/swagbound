@@ -80,6 +80,7 @@ import {
   firstBattleDamage,
   type BattleEvent
 } from "./battleEvents";
+import { elementalAffinity, psiElementForId } from "./battleAffinities";
 import { applyDefeatReturn, type BattleReturnContext, type BattleReturnOutcome } from "./battleReturn";
 import {
   DEFAULT_DAMAGE_FLASH_MS,
@@ -1189,6 +1190,7 @@ export class BattleScene extends Phaser.Scene {
       }
       this.actionDelayMs_ = this.actionDwellMsForStep(result, this.executionMessageLines_);
       this.lastActionDwellMs_ = this.actionDelayMs_;
+      this.applyElementalAffinity(result);
       this.maybeOpenActionCommand(result);
 
       if (result.fled) {
@@ -1290,6 +1292,58 @@ export class BattleScene extends Phaser.Scene {
       (action?.action === "attack" || action?.action === "psi")
     ) {
       this.startEnemyLunge(result.actor.index);
+    }
+  }
+
+  /**
+   * Elemental weakness: a party offense PSI that hits an enemy weak (or resistant)
+   * to its element gets a damage delta applied on top of the base hit, plus a
+   * WEAK!/RESIST pop. Scene-level so the pure battle model stays untouched.
+   */
+  private applyElementalAffinity(result: BattleRoundStepResult): void {
+    if (result.actor.side !== "party" || result.skipped) {
+      return;
+    }
+    const action = firstBattleAction(result.events);
+    if (action?.action !== "psi") {
+      return;
+    }
+    const element = psiElementForId(action.psiId);
+    const totalDamage = Math.max(0, Math.floor(firstBattleDamage(result.events)?.amount ?? 0));
+    if (!element || totalDamage <= 0) {
+      return;
+    }
+    const enemyTargets = uniqueActors(this.impactTargetsForResult(result)).filter(
+      (t) => t.side === "enemy" && this.actorIsAlive(t)
+    );
+    if (enemyTargets.length === 0) {
+      return;
+    }
+    const perTarget = Math.max(1, Math.round(totalDamage / enemyTargets.length));
+    let sawWeak = false;
+    let sawResist = false;
+    for (const target of enemyTargets) {
+      const enemyId = this.battle_.enemies[target.index]?.charId ?? -1;
+      const { multiplier, kind } = elementalAffinity(enemyId, element);
+      if (kind === null) {
+        continue;
+      }
+      const delta = Math.round(perTarget * (multiplier - 1));
+      if (delta !== 0) {
+        this.adjustCombatantHp(target, -delta);
+      }
+      if (kind === "weak") {
+        sawWeak = true;
+        const point = this.impactPointForActor(target);
+        if (point) this.spawnHitSpark(point);
+      } else {
+        sawResist = true;
+      }
+    }
+    if (sawWeak) {
+      this.showActionCommandBanner("WEAK!", "#ffd23f");
+    } else if (sawResist) {
+      this.showActionCommandBanner("resist…", "#9fb3c8");
     }
   }
 
