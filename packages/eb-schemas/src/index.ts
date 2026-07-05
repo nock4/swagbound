@@ -652,9 +652,19 @@ const PsiOverrideNameSchema = z.string()
 const PsiOverrideEntrySchema = z.object({
   name: PsiOverrideNameSchema.optional(),
   /** Optional authored battle effect, applied over the PSI's kind-based behavior at load. */
-  effect: ItemUseEffectSchema.optional()
-}).strict().refine((e) => e.name !== undefined || e.effect !== undefined, {
-  message: "psi override entry must set a name and/or an effect"
+  effect: ItemUseEffectSchema.optional(),
+  /**
+   * Optional learn-table override: replaces the PSI's learnedBy so Swagbound can
+   * grant offense PSI earlier than EarthBound (e.g. so the elemental-weakness
+   * system is usable in Act 1). Each entry is a character id + the level at which
+   * they learn it.
+   */
+  learnedBy: z.array(z.object({
+    charId: z.number().int().min(0),
+    level: z.number().int().min(1)
+  })).optional()
+}).strict().refine((e) => e.name !== undefined || e.effect !== undefined || e.learnedBy !== undefined, {
+  message: "psi override entry must set a name, effect, and/or learnedBy"
 });
 
 export const PsiOverridesSchema = z.object({

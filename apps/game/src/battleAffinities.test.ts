@@ -20,6 +20,9 @@ describe("battle affinities", () => {
     // Soul Consuming Flame (147): weak to ice, resists fire — the thematic showpiece
     expect(elementalAffinity(147, "ice")).toEqual({ multiplier: WEAK_MULTIPLIER, kind: "weak" });
     expect(elementalAffinity(147, "fire")).toEqual({ multiplier: RESIST_MULTIPLIER, kind: "resist" });
+    // Frank / Milady swarm lead (enemy id 131, not the group id 448) — weak to the source beam
+    expect(elementalAffinity(131, "beam")).toEqual({ multiplier: WEAK_MULTIPLIER, kind: "weak" });
+    expect(elementalAffinity(131, "flash")).toEqual({ multiplier: RESIST_MULTIPLIER, kind: "resist" });
     // Unlisted enemy is neutral to everything
     expect(elementalAffinity(9999, "ice")).toEqual({ multiplier: 1, kind: null });
     // No element = no effect

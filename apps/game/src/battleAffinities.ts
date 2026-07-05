@@ -53,7 +53,7 @@ const ENEMY_AFFINITY: Record<number, Affinity> = {
   145: { weak: "fire" }, // Gruff Goat
   144: { weak: "flash" }, // Mole Playing Rough (blind it)
   159: { weak: "flash" }, // Spiteful Crow
-  448: { weak: "beam", resist: "flash" } // Milady swarm — copies, weak to the source beam
+  131: { weak: "beam", resist: "flash" } // Frank / Milady swarm lead — copies, weak to the source beam
 };
 
 /** Damage multiplier + tag for an offense PSI element against an enemy. */

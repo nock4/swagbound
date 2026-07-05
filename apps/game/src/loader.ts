@@ -528,6 +528,9 @@ function applyPsiOverrides(psi: PsiCollection | undefined, overrides: PsiOverrid
       if (override.effect) {
         entry.effect = override.effect;
       }
+      if (override.learnedBy) {
+        entry.learnedBy = override.learnedBy.map((l) => ({ charId: l.charId, level: l.level }));
+      }
     }
   }
   return psi;

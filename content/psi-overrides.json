@@ -2,7 +2,13 @@
   "schema": "swagbound.psi-overrides.v1",
   "byPsiId": {
     "1": {
-      "name": "Static"
+      "name": "Static",
+      "learnedBy": [
+        {
+          "charId": 0,
+          "level": 1
+        }
+      ]
     },
     "9": {
       "name": "Cold Memo"
@@ -11,7 +17,17 @@
       "name": "Cold Memo"
     },
     "13": {
-      "name": "Shock Notice"
+      "name": "Shock Notice",
+      "learnedBy": [
+        {
+          "charId": 1,
+          "level": 4
+        },
+        {
+          "charId": 3,
+          "level": 1
+        }
+      ]
     },
     "14": {
       "name": "Shock Notice"
