@@ -95,6 +95,132 @@
       "openedPages": [
         "The present is open. Tire tracks lead everywhere and nowhere."
       ]
+    },
+    {
+      "id": "stash-giantstep-ladder",
+      "kind": "present",
+      "label": "Hidden stash",
+      "worldPixel": {
+        "x": 5044,
+        "y": 220
+      },
+      "item": {
+        "char": 0,
+        "item": 101
+      },
+      "pages": [
+        "Bosch found a hidden stash.",
+        "Inside was the Rock Candy!",
+        "You got the Rock Candy!"
+      ],
+      "openedPages": [
+        "Tucked where only a climb reaches."
+      ]
+    },
+    {
+      "id": "stash-cliff-ladder",
+      "kind": "present",
+      "label": "Hidden stash",
+      "worldPixel": {
+        "x": 3212,
+        "y": 3244
+      },
+      "item": {
+        "char": 0,
+        "item": 113
+      },
+      "pages": [
+        "Bosch found a hidden stash.",
+        "Inside was the Brains Capsule!",
+        "You got the Brains Capsule!"
+      ],
+      "openedPages": [
+        "Tucked where only a climb reaches."
+      ]
+    },
+    {
+      "id": "stash-swamp-deep-a",
+      "kind": "present",
+      "label": "Hidden stash",
+      "worldPixel": {
+        "x": 4940,
+        "y": 7076
+      },
+      "item": {
+        "char": 0,
+        "item": 117
+      },
+      "pages": [
+        "Bosch found a hidden stash.",
+        "Inside was the Long-Shot Capsule!",
+        "You got the Long-Shot Capsule!"
+      ],
+      "openedPages": [
+        "Sitting in the shallows, patient and damp."
+      ]
+    },
+    {
+      "id": "stash-swamp-deep-b",
+      "kind": "present",
+      "label": "Hidden stash",
+      "worldPixel": {
+        "x": 5732,
+        "y": 7244
+      },
+      "item": {
+        "char": 0,
+        "item": 116
+      },
+      "pages": [
+        "Bosch found a hidden stash.",
+        "Inside was the Pulse Capsule!",
+        "You got the Pulse Capsule!"
+      ],
+      "openedPages": [
+        "Sitting in the shallows, patient and damp."
+      ]
+    },
+    {
+      "id": "stash-canopy-north-a",
+      "kind": "present",
+      "label": "Hidden stash",
+      "worldPixel": {
+        "x": 2508,
+        "y": 28
+      },
+      "item": {
+        "char": 0,
+        "item": 115
+      },
+      "pages": [
+        "Bosch found a hidden stash.",
+        "Inside was the Pace Capsule!",
+        "You got the Pace Capsule!"
+      ],
+      "openedPages": [
+        "Half-swallowed by the canopy. You almost walked past it."
+      ]
+    },
+    {
+      "id": "stash-canopy-north-b",
+      "kind": "present",
+      "label": "Hidden stash",
+      "worldPixel": {
+        "x": 780,
+        "y": 220
+      },
+      "item": {
+        "char": 0,
+        "item": 114
+      },
+      "pages": [
+        "Bosch found a hidden stash.",
+        "Inside was the Nerve Capsule!",
+        "You got the Nerve Capsule!"
+      ],
+      "openedPages": [
+        "Half-swallowed by the canopy. You almost walked past it."
+      ]
     }
   ]
 }
