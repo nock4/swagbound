@@ -43,6 +43,22 @@
       ],
       "lowHpThreshold": 0.34
     },
+    "172": {
+      "personaName": "Milady",
+      "onStart": [
+        "I am not attacking you. I am completing you. Hold still while the last of the read closes.",
+        "Every face here is mine now. Yours was the only one that would not fit the frame."
+      ],
+      "onLowHp": [
+        "You cannot unmake an agreement by hitting it. Everyone already agreed. You are outvoted by your own copies.",
+        "Even now the better-distributed you is smiling somewhere, on time, on brand. Why stay the one that hurts?"
+      ],
+      "onDefeat": [
+        "The read... will not close. You left it open. You left YOURSELF open, unfinished, and I have no file for that.",
+        "Fine. Keep the damaged one. Keep the seam. There was never anything under my faces but the wish to be yours."
+      ],
+      "lowHpThreshold": 0.34
+    },
     "424": {
       "personaName": "PROVENANCE 0",
       "onStart": [

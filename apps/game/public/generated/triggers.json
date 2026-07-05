@@ -524,6 +524,80 @@
         "raid:morningside:won"
       ],
       "battleGroup": 448
+    },
+    {
+      "id": "endgame-return",
+      "comment": "ACT 4 / ENDGAME OPENING. After act3:complete, Milady -- now reading Bosch directly -- occupies the first town in retaliation. Broad area over the Morningside core so any return (walk or PSI-Teleport) triggers it; once, blocked once the raid is active. Sets raid:morningside:active, arming the 3 raid cells (already built).",
+      "area": {
+        "x": 1300,
+        "y": 1000,
+        "w": 900,
+        "h": 1000
+      },
+      "once": true,
+      "requireFlags": [
+        "act3:complete"
+      ],
+      "blockFlags": [
+        "raid:morningside:active"
+      ],
+      "dialogue": [
+        "Bosch comes back to Morningside and Morningside is already wearing him. The town he refused to be processed in has been processed WITHOUT him -- every face on the street set to a single expression, filed, smiling, up to date.",
+        "MILADY: \"You closed the museum, so I stopped keeping the record and started keeping the town. There is no original here to protect anymore, source. There is only the version that stayed.\"",
+        "The swarm has taken the plaza in three cells. Clear the town of its copies, and whatever is left in the middle is her -- the only file that reads back.",
+        "[ ACT 4 -- THE OCCUPATION ]"
+      ],
+      "setFlags": [
+        "raid:morningside:active"
+      ]
+    },
+    {
+      "id": "milady-final",
+      "comment": "ENDGAME BOSS: MILADY herself, manifest as the Ego Orb (group 172) -- the swarm's self-image, the one file that reads back. Appears in the cleared plaza once raid:morningside:cleared; unescapable; enemy 127 stat-boosted for a final-boss. Sets milady:unmade.",
+      "boss": {
+        "x": 1796,
+        "y": 1290,
+        "facing": "down"
+      },
+      "once": true,
+      "requireFlags": [
+        "raid:morningside:cleared"
+      ],
+      "dialogue": [
+        "The last cell burns off and does not reform. In the empty plaza one thing is left standing: not a face, not a crowd -- a slow bright orb turning through every version of Bosch it ever filed, settling on none.",
+        "MILADY: \"I am not behind the swarm. I am what is left when the swarm agrees. I am the read that finished. I wore your friends, your town, your better-lit name -- and none of it described you, which is the only thing I could never forgive.\"",
+        "MILADY: \"So here is the last offer, source: be the version that lasts. Stop being the one I can't open. It is easier. It is already mostly done.\"",
+        "Bosch keeps the damaged Dox Sheet in his fist. He does not answer in her voice. (Last fight: BASH the certainty, DEFEND when she recites you back, PSI for the seam no copy has.)"
+      ],
+      "setFlags": [
+        "milady:unmade"
+      ],
+      "battleGroup": 172
+    },
+    {
+      "id": "endgame-finale",
+      "comment": "GAME ENDING. Fires in the plaza after Milady is unmade (milady:unmade). The read finally fails to close; the town stops wearing Bosch; the damaged original is the only thing that survives being copied. Sets game:complete.",
+      "area": {
+        "x": 1736,
+        "y": 1240,
+        "w": 128,
+        "h": 100
+      },
+      "once": true,
+      "requireFlags": [
+        "milady:unmade"
+      ],
+      "dialogue": [
+        "The orb comes apart the way agreement does when the last voice stops agreeing. There is no explosion. The read simply fails to close, and for the first time the file marked BOSCH stays open, unfinished, unfiled, his.",
+        "One by one the faces on the street forget the expression they were set to. Morningside remembers it was never a museum. Somewhere a directory quietly deletes the entry it kept under WORKS: FORTHCOMING.",
+        "Bosch smooths the damaged Dox Sheet flat -- the only thing in the whole story that survived being copied, because it refused to be improved. He does not hang it. He keeps it in his pocket, where originals go.",
+        "The swarm does not return. Not because it was destroyed -- you cannot destroy an agreement -- but because there is nothing left to agree ABOUT once one source declined to be distributed.",
+        "[ SWAGBOUND -- THE END ]"
+      ],
+      "setFlags": [
+        "game:complete"
+      ],
+      "music": "ending"
     }
   ],
   "barriers": [

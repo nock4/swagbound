@@ -1,4 +1,13 @@
 {
   "schema": "swagbound.battle-rules.v1",
-  "unescapableGroups": [36, 448, 450, 55, 474, 449, 424]
+  "unescapableGroups": [
+    36,
+    448,
+    450,
+    55,
+    474,
+    449,
+    424,
+    172
+  ]
 }
