@@ -293,6 +293,7 @@ export class UiScene extends Phaser.Scene {
   update(): void {
     const world = this.scene.get(this.worldSceneKey) as (WorldScene & {
       overworldStatusHud?: () => OverworldStatusHudView;
+      cinematicActive?: () => boolean;
     }) | undefined;
     if (!world) {
       return;
@@ -310,12 +311,15 @@ export class UiScene extends Phaser.Scene {
     const panelVisible = world.debugPanelVisible;
     const runtimeLines = panelVisible ? world.runtimeLines() : [];
     const menuScreens = world.menuRenderStack();
-    const promptVisible = !open && menuScreens.length === 0;
+    // During a cinematic (e.g. the new-game night flyover + bedroom wake-up) the whole
+    // gameplay HUD is suppressed so nothing breaks the shot.
+    const cinematic = Boolean(world.cinematicActive?.());
+    const promptVisible = !open && menuScreens.length === 0 && !cinematic;
     const hudView = world.overworldStatusHud?.();
     // EarthBound shows the party status window only while a menu is open, not while
     // walking the overworld. (Previously this rendered during free movement.)
     const visibleHudView = menuScreens.length > 0 && hudView?.visible ? hudView : undefined;
-    const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${world.prompt}|${promptVisible}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
+    const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${world.prompt}|${promptVisible}|${cinematic}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
     if (signature === this.lastSignature) {
       this.drawOverworldHud(visibleHudView);
       this.renderMenuCursors();
@@ -327,6 +331,8 @@ export class UiScene extends Phaser.Scene {
     this.promptText?.setVisible(promptVisible);
     // Menu hint shares the prompt's visibility: only while walking, never over a menu/dialogue.
     this.menuHintText?.setVisible(promptVisible);
+    // The dev "F1: debug" badge also steps aside for cinematics.
+    this.badgeText?.setVisible(!cinematic);
     this.positionMenuHint(Boolean(visibleHudView));
     this.drawDialogue(open, text, textRuns, footer, showAdvanceIndicator);
     this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);

@@ -1,11 +1,5 @@
 {
   "schema": "swagbound.opening-cutscene.v1",
-  "steps": [
-    {
-      "actorMove": {
-        "actor": { "npcId": 78 },
-        "to": { "x": 7820, "y": 588 }
-      }
-    }
-  ]
+  "comment": "Bosch wakes at the foot of his bed (new-game spawn 7592,364 in the data_20 bedroom). No NPC choreography for now - the wake-up beat is the world fade-in plus the MiFella knock event. Previously this moved NPC 78 to 7820,588, which was the old (wrong) hotel spawn.",
+  "steps": []
 }

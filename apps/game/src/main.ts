@@ -134,6 +134,8 @@ class BootScene extends Phaser.Scene {
         saveState: null,
         ...(openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
       };
+      // NEW GAME flow: dossier (act1-intro) → the world, which spawns Bosch in his
+      // bedroom and runs the in-world wake-up + knock cutscene on the real EB map.
       const newGameTarget = {
         sceneKey: "act1-intro",
         data: { nextSceneKey: "chunked-world", nextSceneData: newGameWorldData }

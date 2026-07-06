@@ -188,6 +188,28 @@
       ]
     },
     {
+      "id": "recruit-cloak",
+      "comment": "Party recruit beat: Cloak (charId 1, Paula-slot) joins in POSTWICK (Twoson analog), matching EarthBound's Paula, who joins in the Twoson/Happy-Happy arc rather than in Onett. Bosch runs SOLO through ALL of Act 1 (Frank, the roadblock, the Malady), reaches Postwick, and Cloak falls in there. requireFlags postwick:arrived (set by the postwick-arrival ACT 2 opening), co-located so it fires reliably right after arrival. Sets recruit:cloak -> live party join (reconcileRecruits). NOTE: solo-through-Malady may need a balance pass (the Titanic Ant was previously propped up by a forced Bosch+Paula duo); the autoplay harness act1.mjs also assumed that duo.",
+      "area": {
+        "x": 2256,
+        "y": 7376,
+        "w": 136,
+        "h": 104
+      },
+      "once": true,
+      "requireFlags": [
+        "postwick:arrived"
+      ],
+      "dialogue": [
+        "In Postwick, where the whole town files its happiness in advance, someone is standing exactly where the cameras never bother to point. A cloak, and under it a real face nobody ever got to file.",
+        "CLOAK: \"I followed the one signal the town couldn't smooth out. That was you, Bosch. They processed everyone I loved; I kept mine by never selling it to the lens. Yours is still yours too. I can feel it from here.\"",
+        "Cloak falls in beside you. (PSI: she can freeze a hostile signal cold, and pray a warm one through.)"
+      ],
+      "setFlags": [
+        "recruit:cloak"
+      ]
+    },
+    {
       "id": "postwick-arrival",
       "comment": "ACT 2 OPENING. Fires when the party reaches Postwick (Twoson analog) after act1:complete. By walk or PSI Teleport, the area is centered on the town arrival point (2324,7428). Postwick's theme = pre-filed / mandatory happiness (seeded by the 'files its happiness in advance' NPC line). Sets act2:begun + postwick:arrived, the flags the Act-2 chain will gate on.",
       "area": {
