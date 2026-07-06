@@ -32,6 +32,8 @@ export interface TitleMenuData {
 const TITLE_SLIDE_KEY = "title-slide";
 const WAR_SLIDE_KEY = "war-slide";
 const MENU_CUE = "menu";
+const WAR_STOP_FADE_MS = 70;
+const TITLE_MUSIC_ATTACK_FADE_MS = 40;
 // Dark, brooding track for the opening war-against-milady slide (Nate Young); Glass
 // Chime (MENU_CUE) is held back until the menu.
 const WAR_CUE = "intro";
@@ -100,6 +102,7 @@ export class TitleMenuScene extends Phaser.Scene {
     // Queue the cue now for browsers that allow autoplay, then retry on the first
     // gesture without taking the event away from normal title/menu input.
     this.playCurrentPhaseMusic();
+    void this.music.preload(MENU_CUE);
     this.installFirstGestureAudioUnlock();
     this.prompt = this.add
       .text(this.scale.width / 2, this.scale.height - 30, "PRESS  Z  TO  BEGIN", {
@@ -122,6 +125,7 @@ export class TitleMenuScene extends Phaser.Scene {
       this.input.off("pointerdown", this.confirmPointerInput);
     });
 
+    document.getElementById("game-loading")?.remove();
     this.cameras.main.fadeIn(600, 0, 0, 0);
   }
 
@@ -229,9 +233,9 @@ export class TitleMenuScene extends Phaser.Scene {
     this.audioUnlockCleanup = cleanup;
   }
 
-  private playCurrentPhaseMusic(): void {
+  private playCurrentPhaseMusic(options?: { fadeMs?: number }): void {
     const cue = this.phase === "war" ? WAR_CUE : MENU_CUE;
-    void this.music?.play(cue);
+    void this.music?.play(cue, options);
   }
 
   private confirm(): void {
@@ -239,12 +243,12 @@ export class TitleMenuScene extends Phaser.Scene {
       return;
     }
     if (this.phase === "war") {
+      this.music?.stop(WAR_STOP_FADE_MS);
       this.fadeSwap(() => {
         this.phase = "title";
         this.showSlide(TITLE_SLIDE_KEY);
-        // Glass Chime (Inoyamaland) starts on the SWAGBOUND title slide, cross-fading
-        // out the dark war-slide track.
-        this.playCurrentPhaseMusic();
+        // Glass Chime (Inoyamaland) starts sharply with the SWAGBOUND title slide.
+        this.playCurrentPhaseMusic({ fadeMs: TITLE_MUSIC_ATTACK_FADE_MS });
         this.prompt?.setText("PRESS  Z");
         this.prompt?.setDepth(10);
       });
