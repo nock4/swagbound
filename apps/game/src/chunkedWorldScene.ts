@@ -5290,6 +5290,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         .setOrigin(0, 0)
         .setScrollFactor(0)
         .setDepth(130000);
+      this.showBedroomSignal();
     }
     this.startupInitialSpawn = spawn;
     this.startupFallbackReason = undefined;
@@ -5305,7 +5306,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
 
     if (!this.startAuthoredOpeningCutsceneBeforeStartup(opening, decision.reference)) {
-      this.startNewGameStartupEvent(decision.reference);
+      if (opening) {
+        // Pace the wake-up: hold on the dark room while the cold signal fades in and
+        // flares (~1.6s) before MiFella pounds the door.
+        this.time.delayedCall(2600, () => this.startNewGameStartupEvent(decision.reference));
+      } else {
+        this.startNewGameStartupEvent(decision.reference);
+      }
     }
   }
 
@@ -5378,6 +5385,27 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.updatePrompt();
+  }
+
+  /**
+   * The cold signal on the sill: a pale glow at the bedroom window that pulses through
+   * the night dim and flares once, as if something is reading Bosch from outside.
+   */
+  private showBedroomSignal(): void {
+    // The cold signal reads Bosch: partway through the dark wake-up the room pulses
+    // cyan with a jolt, as if something outside just locked onto him. Camera flash +
+    // shake (camera effects render reliably over the night dim, unlike an overlay).
+    this.time.delayedCall(1000, () => {
+      if (this.bedroomNightOverlay) {
+        this.cameras.main.flash(360, 32, 176, 224);
+      }
+    });
+    this.time.delayedCall(1750, () => {
+      if (this.bedroomNightOverlay) {
+        this.cameras.main.flash(620, 47, 216, 255);
+        this.cameras.main.shake(380, 0.008);
+      }
+    });
   }
 
   /** Fade out the night dim as Bosch wakes (or on any startup teardown). */
