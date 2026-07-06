@@ -1897,6 +1897,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.surfaceAtHook = (x: number, y: number) => surfaceAtWorldPixel(this.surfaceRows, { x, y }, this.collisionGrid());
     globals.__solidAt = this.solidAtHook;
     globals.__surfaceAt = this.surfaceAtHook;
+    // Debug-only teleport for QA capture tooling: hard-set the player to a world pixel and
+    // stream the surrounding chunks, bypassing the spawn-validation/fallback path (so it
+    // never silently lands somewhere else). Returns the resulting feet.
+    globals.__warpTo = (x: number, y: number): { x: number; y: number } => {
+      this.playerState.x = x;
+      this.playerState.y = y;
+      this.playerState.velocityX = 0;
+      this.playerState.velocityY = 0;
+      this.playerState.moving = false;
+      this.playerState.walkClockMs = 0;
+      this.currentChunk = undefined;
+      this.activeRoomBounds = undefined;
+      if (this.player) {
+        this.player.x = x;
+        this.player.y = y;
+        this.setActorSortDepth(this.player);
+      }
+      this.refreshStreaming(true);
+      this.refreshRoomBounds(true);
+      this.cameras.main.centerOn(x, y);
+      return { x: this.playerState.x, y: this.playerState.y };
+    };
     // Walk-behind introspection for collision-exactness probes: alpha of the
     // foreground chunk art at a world pixel (0..255, -1 = chunk FG not streamed).
     globals.__fgAlphaAt = (x: number, y: number): number => {
@@ -2049,6 +2071,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.surfaceAtHook && globals.__surfaceAt === this.surfaceAtHook) {
       delete globals.__surfaceAt;
     }
+    delete globals.__warpTo;
     delete globals.__fgAlphaAt;
     delete globals.__fgCoverageRect;
     delete globals.__playerDepthInfo;
