@@ -32,6 +32,9 @@ export interface TitleMenuData {
 const TITLE_SLIDE_KEY = "title-slide";
 const WAR_SLIDE_KEY = "war-slide";
 const MENU_CUE = "menu";
+// Dark, brooding track for the opening war-against-milady slide (Nate Young); Glass
+// Chime (MENU_CUE) is held back until the menu.
+const WAR_CUE = "intro";
 
 type Phase = "title" | "war" | "menu";
 
@@ -87,12 +90,13 @@ export class TitleMenuScene extends Phaser.Scene {
     this.music = getSharedMusic(this.registry, this.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
-    // War-against-milady slide opens the sequence (EarthBound-style), Glass Chime here.
+    // War-against-milady slide opens the sequence with the dark WAR_CUE; Glass Chime
+    // holds until the menu.
     this.showSlide(WAR_SLIDE_KEY);
     // Queue the cue now, but browsers block audio autoplay before a user gesture, so
     // also resume the audio context + (re)start the cue on the first input — same
     // pattern the world/battle scenes use.
-    void this.music?.play(MENU_CUE);
+    void this.music?.play(WAR_CUE);
     const resumeMusic = () => this.music?.resume();
     this.input.once("pointerdown", resumeMusic);
     this.input.keyboard?.once("keydown", resumeMusic);
@@ -168,6 +172,9 @@ export class TitleMenuScene extends Phaser.Scene {
     }
     if (this.phase === "title") {
       this.phase = "menu";
+      // Glass Chime (Inoyamaland) kicks in at the menu, cross-fading out the dark
+      // war-slide track.
+      void this.music?.play(MENU_CUE);
       this.buildMenu();
       return;
     }
