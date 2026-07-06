@@ -112,6 +112,7 @@ import {
 } from "./npcController";
 import {
   CANONICAL_DIRECTION_FRAMES,
+  WALK_FRAME_MS,
   createPlayerState,
   findInteractionTarget,
   lockPlayer,
@@ -480,6 +481,7 @@ const COLLISION_OVERLAY_DEPTH = 150_000;
 // Head/companion overlays render just above the foreground occluder layer (depth 100_000) so a mushroom
 // cap / sweat / possession ghost shows on the character, but stay below the door-fade + UI overlays.
 const PLAYER_OVERLAY_DEPTH = 110_000;
+const BED_SLEEP_PLAYER_DEPTH = 100_010;
 const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 // Visible overworld enemies (EarthBound-style touch-to-battle): tuning.
 const OVERWORLD_ENEMY_GLOBAL_CAP = 4;
@@ -669,6 +671,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private surfaceAtHook?: (x: number, y: number) => number;
   /** Debug/cutscene-forced overrides merged over the live visual-state inputs (see playerVisualState). */
   private forcedVisualState: Partial<VisualStateInputs> = {};
+  /** Scene-owned visual-state input override for cutscenes. Debug forced inputs still win. */
+  private sceneVisualState: Partial<VisualStateInputs> = {};
+  private roomBoundsResolveAnchor?: { x: number; y: number };
   private lastResolvedVisualState?: ResolvedVisualState;
   private lastVisualApplied: { scale: number; alpha: number; tint: number | null } = { scale: 1, alpha: 1, tint: null };
   private lastVisualSheetSwapped = false;
@@ -763,6 +768,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private newGameStartupRecord?: NewGameStartupRunDebug;
   private startupRunActive = false;
   private startupRunFinalized = false;
+  private startupGetUpWalkActive = false;
+  private startupGetUpFallbackTimer?: Phaser.Time.TimerEvent;
   // Dims the bedroom to "night" during the new-game wake-up; lifts as Bosch wakes.
   private bedroomNightOverlay?: Phaser.GameObjects.Rectangle;
   // True during the opening Morningside flyover: suppresses triggers/encounters while
@@ -1220,7 +1227,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
-    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.isDoorFadeActive() || this.binderOverlayOpen;
+    if (this.startupGetUpWalkActive) {
+      this.playerState.inputLocked = true;
+      this.syncPlayerObject();
+      this.updateCollisionOverlay();
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
+
+    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.cinematicActive() || this.isDoorFadeActive() || this.binderOverlayOpen;
     if (inputOwned && !this.playerState.inputLocked) {
       lockPlayer(this.playerState, this.playerFrames);
     } else if (!inputOwned && this.playerState.inputLocked) {
@@ -1357,10 +1373,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.interactionSfxCount = 0;
     this.currentOverworldMusicCue = undefined;
     this.forcedOverworldMusicCue = undefined;
+    this.sceneVisualState = {};
+    this.roomBoundsResolveAnchor = undefined;
     this.eventSequence = undefined;
     this.newGameStartupRecord = undefined;
     this.startupRunActive = false;
     this.startupRunFinalized = false;
+    this.startupGetUpWalkActive = false;
+    this.clearStartupGetUpFallbackTimer();
     this.bedroomNightOverlay?.destroy();
     this.bedroomNightOverlay = undefined;
     this.startupMode = "startup";
@@ -1533,10 +1553,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private refreshRoomBounds(force = false): void {
     if (this.world_.sectors) {
-      const sector = sectorCoordForWorldPixel(this.playerState, this.world_.sectors);
-      const playerComponentId = this.nearestNavmeshComponentId(this.playerState.x, this.playerState.y, 2);
+      const roomPoint = this.roomBoundsResolveState();
+      const sector = sectorCoordForWorldPixel(roomPoint, this.world_.sectors);
+      const playerComponentId = this.nearestNavmeshComponentId(roomPoint.x, roomPoint.y, 2);
       const sectorKey = sector ? `${sector.sectorCol},${sector.sectorRow}:${playerComponentId}` : undefined;
       if (!force && sectorKey && this.activeRoomSectorKey === sectorKey) {
+        this.updateCameraRoomBounds();
         return;
       }
       this.activeRoomSectorKey = sectorKey;
@@ -1544,24 +1566,31 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.world_.sectors,
         this.solidRows,
         this.collisionGrid(),
-        this.playerState
+        roomPoint
       );
-      this.activeRoomBounds = sectorRoom ? this.expandSectorRoomWithPlayerNavmeshComponent(sectorRoom) : undefined;
+      this.activeRoomBounds = sectorRoom ? this.expandSectorRoomWithPlayerNavmeshComponent(sectorRoom, roomPoint) : undefined;
       this.applyInteriorRoomMask();
       this.applyNpcRoomVisibility();
       this.updateCameraRoomBounds();
       return;
     }
-    if (!force && this.playerInsideCachedRoomBounds()) {
+    const roomPoint = this.roomBoundsResolveState();
+    if (!force && this.playerInsideCachedRoomBounds(roomPoint)) {
+      this.updateCameraRoomBounds();
       return;
     }
     this.activeRoomSectorKey = undefined;
-    this.activeRoomBounds = resolveConnectedRoomBounds(this.solidRows, this.collisionGrid(), this.playerState, {
+    this.activeRoomBounds = resolveConnectedRoomBounds(this.solidRows, this.collisionGrid(), roomPoint, {
       surfaceRows: this.surfaceRows
     });
     this.applyInteriorRoomMask();
     this.applyNpcRoomVisibility();
     this.updateCameraRoomBounds();
+  }
+
+  private roomBoundsResolveState(): PlayerState {
+    const anchor = this.roomBoundsResolveAnchor;
+    return anchor ? { ...this.playerState, x: anchor.x, y: anchor.y } : this.playerState;
   }
 
   /**
@@ -1612,9 +1641,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     camera.setScroll(scrollX, scrollY);
   }
 
-  private playerInsideCachedRoomBounds(): boolean {
+  private playerInsideCachedRoomBounds(point = this.playerState): boolean {
     const room = this.activeRoomBounds;
-    const cell = worldPixelToCollisionCell(this.playerState, this.collisionCellSize);
+    const cell = worldPixelToCollisionCell(point, this.collisionCellSize);
     if (!room || !cell) {
       return false;
     }
@@ -1631,11 +1660,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.activeRoomBounds?.isInterior ? this.activeRoomBounds : undefined;
   }
 
-  private expandSectorRoomWithPlayerNavmeshComponent(room: ConnectedRoomBounds): ConnectedRoomBounds {
+  private expandSectorRoomWithPlayerNavmeshComponent(
+    room: ConnectedRoomBounds,
+    point = this.playerState
+  ): ConnectedRoomBounds {
     if (!room.isInterior || !this.navmesh) {
       return room;
     }
-    const nearest = nearestComponentAt(this.navmesh, this.playerState, 2);
+    const nearest = nearestComponentAt(this.navmesh, point, 2);
     if (!nearest) {
       return room;
     }
@@ -1643,7 +1675,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!componentRect) {
       return room;
     }
-    const sectorAreaRect = this.sectorAreaRectForPoint(this.playerState) ?? room.rect;
+    const sectorAreaRect = this.sectorAreaRectForPoint(point) ?? room.rect;
     const clippedComponentRect = intersectWorldRects(navmeshRectToWorldRect(componentRect), sectorAreaRect);
     if (!clippedComponentRect) {
       return room;
@@ -1741,6 +1773,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private syncOverworldMusicCue(force = false): void {
+    if (this.cinematicActive()) {
+      return;
+    }
     if (this.forcedOverworldMusicCue) {
       this.playOverworldMusicCue(this.forcedOverworldMusicCue, force);
       return;
@@ -5616,39 +5651,56 @@ export class ChunkedWorldScene extends Phaser.Scene {
    * then it fades to black, warps to the bed, and hands off to the wake-up.
    */
   /**
-   * Lay Bosch in his bed (facing up, head on the pillow) for the wake-up cinematic. The
+   * Lay Bosch in his bed (normal idle sprite rotated on the blanket) for the wake-up cinematic. The
    * bed is a solid furniture cell; he stays here only while locked, then stands up at the
    * walkable bedside when control returns.
    */
   private placePlayerInBed(): void {
-    const bed = { x: 8160, y: 1088 };
+    const bed = { x: 8164, y: 1100 };
     // Resolve the room while Bosch is still on the walkable bedside spawn; the
     // bed pose is on solid furniture, where a forced room resolve would clear it.
+    this.roomBoundsResolveAnchor = { x: this.playerState.x, y: this.playerState.y };
     this.refreshRoomBounds(true);
-    this.playerState.facing = "up";
+    this.playerState.facing = "left";
     this.playerState.x = bed.x;
     this.playerState.y = bed.y;
     this.playerState.velocityX = 0;
     this.playerState.velocityY = 0;
     this.playerState.moving = false;
-    this.playerState.animKey = "idle-up";
-    this.playerState.animFrame = this.playerFrames.up[0];
+    this.playerState.animKey = "idle-left";
+    this.playerState.animFrame = this.playerFrames.left[0];
     if (this.player) {
       this.player.x = bed.x;
       this.player.y = bed.y;
       if (this.player instanceof Phaser.GameObjects.Sprite) {
         this.player.setFrame(this.playerState.animFrame);
       }
-      this.setActorSortDepth(this.player);
+      this.player.setDepth(BED_SLEEP_PLAYER_DEPTH);
     }
     this.refreshStreaming(true);
-    this.cameras.main.centerOn(bed.x, bed.y);
     this.updateCameraRoomBounds();
+    this.setStartupLyingVisualState(true);
+  }
+
+  private setStartupLyingVisualState(active: boolean): void {
+    if (!active) {
+      this.roomBoundsResolveAnchor = undefined;
+    }
+    this.sceneVisualState = active ? { sleeping: true } : {};
+    this.applyPlayerVisualState();
+  }
+
+  private clearStartupBedPose(): void {
+    this.setStartupLyingVisualState(false);
+    if (this.player instanceof Phaser.GameObjects.Sprite) {
+      this.player.setAngle(0);
+    }
   }
 
   private runOpeningFlyover(bedSpawn: { x: number; y: number }, onDone: () => void): void {
     const cam = this.cameras.main;
     this.flyoverActive = true;
+    this.playOverworldMusicCue("intro", true);
     const setAnchor = (x: number, y: number): void => {
       this.playerState.x = x;
       this.playerState.y = y;
@@ -5862,16 +5914,125 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.startupRunFinalized = true;
     const completedOpening = this.startupMode === "opening";
-    if (completedOpening) {
-      // Bosch gets up: he spent the wake-up lying on the (solid) bed, so stand him on
-      // his feet at the walkable bedside as the room brightens and control returns.
-      // (restoreStartupSpawn lands him at the resolved spawn beside the bed.)
-      this.playerState.facing = "down";
-      this.restoreStartupSpawn();
-    }
     const reference = this.newGameStartupRecord?.reference ?? this.world_.player.newGameStartupRef;
-    let fallbackApplied = false;
-    let fallbackReason = this.startupFallbackReason;
+    if (completedOpening) {
+      this.finishOpeningWakeWithGetUpWalk(result, reference);
+      return;
+    }
+
+    this.completeNewGameStartupFinalization(result, { completedOpening, reference });
+  }
+
+  private finishOpeningWakeWithGetUpWalk(
+    result: NonNullable<EventHostDebug["result"]>,
+    reference: string | undefined
+  ): void {
+    this.clearStartupBedPose();
+    this.playerState.facing = "down";
+    lockPlayer(this.playerState, this.playerFrames);
+    if (this.walkPlayerToStartupSpawn((fallbackReason) => {
+      this.completeNewGameStartupFinalization(result, {
+        completedOpening: true,
+        reference,
+        fallbackApplied: fallbackReason !== undefined,
+        ...(fallbackReason ? { fallbackReason } : {})
+      });
+    })) {
+      return;
+    }
+
+    this.snapStartupGetUpToSpawn();
+    this.completeNewGameStartupFinalization(result, {
+      completedOpening: true,
+      reference,
+      fallbackApplied: true,
+      fallbackReason: "get_up_walk_unavailable"
+    });
+  }
+
+  private walkPlayerToStartupSpawn(onComplete: (fallbackReason?: string) => void): boolean {
+    const spawn = this.startupInitialSpawn;
+    if (!spawn || !this.player || !this.isPlayableWorldPoint(spawn)) {
+      return false;
+    }
+
+    const from = { x: this.playerState.x, y: this.playerState.y };
+    const duration = 420;
+    const velocityX = ((spawn.x - from.x) / duration) * 1000;
+    const velocityY = ((spawn.y - from.y) / duration) * 1000;
+    const proxy = { t: 0 };
+    this.playerState.facing = "down";
+    this.playerState.velocityX = velocityX;
+    this.playerState.velocityY = velocityY;
+    this.playerState.moving = true;
+    this.playerState.walkClockMs = 0;
+    this.playerState.animKey = "walk-down";
+    this.playerState.animFrame = this.playerFrames.down[0];
+    this.startupGetUpWalkActive = true;
+    this.syncPlayerObject();
+    let settled = false;
+    const settle = (fallbackReason?: string): void => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      this.clearStartupGetUpFallbackTimer();
+      this.snapStartupGetUpToSpawn();
+      onComplete(fallbackReason);
+    };
+    this.clearStartupGetUpFallbackTimer();
+    this.startupGetUpFallbackTimer = this.time.delayedCall(1000, () => settle("get_up_walk_timeout"));
+
+    this.tweens.add({
+      targets: proxy,
+      t: 1,
+      duration,
+      ease: "Sine.easeInOut",
+      onUpdate: () => {
+        this.playerState.x = from.x + (spawn.x - from.x) * proxy.t;
+        this.playerState.y = from.y + (spawn.y - from.y) * proxy.t;
+        this.playerState.velocityX = velocityX;
+        this.playerState.velocityY = velocityY;
+        this.playerState.moving = true;
+        this.playerState.walkClockMs = duration * proxy.t;
+        this.playerState.animKey = "walk-down";
+        const frames = this.playerFrames.down;
+        this.playerState.animFrame = frames[Math.floor(this.playerState.walkClockMs / WALK_FRAME_MS) % frames.length];
+        this.syncPlayerObject();
+      },
+      onComplete: () => {
+        settle();
+      }
+    });
+    return true;
+  }
+
+  private snapStartupGetUpToSpawn(): void {
+    this.startupGetUpWalkActive = false;
+    this.clearStartupBedPose();
+    this.playerState.facing = "down";
+    this.restoreStartupSpawn();
+  }
+
+  private clearStartupGetUpFallbackTimer(): void {
+    this.startupGetUpFallbackTimer?.remove(false);
+    this.startupGetUpFallbackTimer = undefined;
+  }
+
+  private completeNewGameStartupFinalization(
+    result: NonNullable<EventHostDebug["result"]>,
+    options: {
+      completedOpening: boolean;
+      reference?: string;
+      fallbackApplied?: boolean;
+      fallbackReason?: string;
+    }
+  ): void {
+    this.clearStartupGetUpFallbackTimer();
+    this.startupGetUpWalkActive = false;
+    this.clearStartupBedPose();
+    let fallbackApplied = options.fallbackApplied ?? false;
+    let fallbackReason = options.fallbackReason ?? this.startupFallbackReason;
     if (fallbackReason || !this.isPlayableWorldPoint(this.currentPlayerPoint())) {
       fallbackApplied = true;
       fallbackReason ??= "unsafe_final_player_position";
@@ -5880,7 +6041,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.startupRunActive = false;
     this.startupMode = "startup";
     this.authoredOpeningCutsceneRunActive = false;
-    if (completedOpening) {
+    if (options.completedOpening) {
       this.gameFlags.set(INTRO_BEDROOM_OPENING_DONE_FLAG);
       this.syncOverworldMusicCue();
     }
@@ -5894,7 +6055,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.newGameStartupRecord = this.startupRecord({
       attempted: true,
       started: true,
-      ...(reference ? { reference } : {}),
+      ...(options.reference ? { reference: options.reference } : {}),
       status: result.status,
       truncated: result.truncated,
       ...(result.truncatedReason ? { truncatedReason: result.truncatedReason } : {}),
@@ -5933,6 +6094,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.startupRunFinalized = true;
     const completedOpening = this.startupMode === "opening";
     this.eventSequence?.abort("startup_control_start");
+    const eventDebug = this.eventSequence?.debug();
+    const result = eventDebug?.result ?? {
+      status: "aborted" as const,
+      truncated: false,
+      commandsVisited: 0,
+      jumps: 0,
+      reason: "startup_control_start"
+    };
+    if (completedOpening) {
+      this.finishOpeningWakeWithGetUpWalk(result, reference);
+      return;
+    }
     this.startupRunActive = false;
     this.startupMode = "startup";
     this.authoredOpeningCutsceneRunActive = false;
@@ -5946,8 +6119,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.afterDialogueClosed();
     this.releaseOpeningCutsceneActorHolds();
-    const eventDebug = this.eventSequence?.debug();
-    const result = eventDebug?.result;
     this.newGameStartupRecord = this.startupRecord({
       attempted: true,
       started: true,
@@ -7484,6 +7655,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.textures.exists(key) ? key : undefined;
   }
 
+  private playerDefaultSheetKey(): string | undefined {
+    const override = spriteOverrideSheet(this.playerSpriteOverride());
+    if (override && this.textures.exists(PLAYER_SPRITE_OVERRIDE_SHEET_KEY)) {
+      return PLAYER_SPRITE_OVERRIDE_SHEET_KEY;
+    }
+    const spriteGroup = this.world_.player.spriteGroup;
+    const key = spriteGroup !== undefined ? `sheet-${spriteGroup}` : undefined;
+    return key && this.textures.exists(key) ? key : undefined;
+  }
+
   private playerBaseScale(): number {
     const override = spriteOverrideSheet(this.playerSpriteOverride());
     return override ? spriteOverrideScale(override.displayHeight, override.frameHeight) : 1;
@@ -7492,6 +7673,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   /** Live visual-state inputs: real signals merged under forced overrides (forced wins, for tests/cutscenes). */
   private currentVisualStateInputs(): VisualStateInputs {
     const base = defaultVisualStateInputs();
+    const scene = this.sceneVisualState;
     const forced = this.forcedVisualState;
     return {
       ...base,
@@ -7501,8 +7683,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       riding: this.bikeActive ? ("bike" as const) : null,
       ko: this.leadPartyMemberDowned(), // real KO signal: lead at 0 HP -> dead/ghost overworld sprite
       // rope/bike real triggers await a mount mechanic; forced-path for now.
+      ...scene,
       ...forced,
-      status: { ...base.status, sweating: this.leadHasSunstroke(), ...(forced.status ?? {}) }
+      status: { ...base.status, sweating: this.leadHasSunstroke(), ...(scene.status ?? {}), ...(forced.status ?? {}) }
     };
   }
 
@@ -7570,6 +7753,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const sheetSwapped = stateSheetKey !== undefined;
     if (stateSheetKey && sprite.texture.key !== stateSheetKey) {
       sprite.setTexture(stateSheetKey);
+    } else if (!stateSheetKey) {
+      const defaultSheetKey = this.playerDefaultSheetKey();
+      if (defaultSheetKey && sprite.texture.key !== defaultSheetKey) {
+        sprite.setTexture(defaultSheetKey);
+      }
     }
 
     // With a faithful sheet, no approximation; without one, fall back to the generic look-alike.
@@ -7578,6 +7766,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     sprite.setScale(scale);
     const alpha = approx.alpha ?? 1;
     sprite.setAlpha(alpha);
+    if (resolved.sleeping) {
+      sprite.setAngle(-90);
+      sprite.setDepth(BED_SLEEP_PLAYER_DEPTH);
+    } else if (sprite.angle !== 0) {
+      sprite.setAngle(0);
+    }
 
     // Color inversion: a real per-pixel ColorMatrix negative filter; tint fallback if filters are
     // unavailable. Diamondized's approximation desaturates via tint.

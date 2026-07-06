@@ -13,6 +13,8 @@ import type { SpriteOverlayName, SpriteStateName } from "@eb/schemas";
 export interface VisualStateInputs {
   /** Party member is downed (overworld dead/ghost sprite). */
   ko: boolean;
+  /** Cutscene sleep pose: renderer rotates the normal idle sprite without treating the hero as KO'd. */
+  sleeping: boolean;
   /** Standing in deep water (waterline clip). */
   deepWater: boolean;
   /** Standing on an EB 0x01-only cell (tall grass, shrub top, roof crest): lower body obscured. */
@@ -30,7 +32,7 @@ export interface VisualStateInputs {
   };
   /**
    * A cutscene/debug-forced base state that isn't derivable from terrain/status
-   * (sleeping, sitting, falling, pajamas, robot, meditating, teleportBurnt). Highest priority.
+   * (sitting, falling, pajamas, robot, meditating, teleportBurnt). Highest priority.
    */
   event?: SpriteStateName | null;
   /** Moonside-style negative-palette area. */
@@ -47,6 +49,7 @@ export interface ResolvedVisualState {
   overlays: SpriteOverlayName[];
   /** ladder/rope/sitting/sleeping hold a static pose instead of cycling the walk animation. */
   lockAnimation: boolean;
+  sleeping: boolean;
 }
 
 /** Generic look-alikes used when a skin has no faithful sheet for the resolved state. */
@@ -91,10 +94,11 @@ export function resolvePlayerVisualState(inputs: VisualStateInputs): ResolvedVis
       waterClip: inputs.deepWater && WADEABLE.has(baseState),
       // Water wins over grass when both apply (you are IN the water, not the grass).
       lowerBodyClip: inputs.lowerBodyHidden && !inputs.deepWater && WADEABLE.has(baseState),
-      teleportSpin: inputs.teleporting && !inputs.ko
+      teleportSpin: inputs.teleporting && !inputs.ko && !inputs.sleeping
     },
     overlays,
-    lockAnimation: LOCKED_STATES.has(baseState as SpriteStateName)
+    lockAnimation: inputs.sleeping || LOCKED_STATES.has(baseState as SpriteStateName),
+    sleeping: inputs.sleeping
   };
 }
 
@@ -110,5 +114,5 @@ export function lowerHideFramePx(frameHeight: number, scale: number): number {
 
 /** Default inputs (plain walking, nothing applied) -- a convenience for callers/tests. */
 export function defaultVisualStateInputs(): VisualStateInputs {
-  return { ko: false, deepWater: false, lowerBodyHidden: false, onLadder: false, onRope: false, riding: null, status: {}, event: null, invertPalette: false, teleporting: false };
+  return { ko: false, sleeping: false, deepWater: false, lowerBodyHidden: false, onLadder: false, onRope: false, riding: null, status: {}, event: null, invertPalette: false, teleporting: false };
 }
