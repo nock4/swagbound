@@ -2,6 +2,12 @@
   "schema": "swagbound.npc-overrides.v1",
   "comment": "Per-NPC map fixes. Shops keep only their Buy/Sell clerk(s); decorative NPCs (animals, phones, flavor talkers) in the same shop sector are hidden. Phone object groups 167/215/216 are unskinned in sprite-overrides so phones no longer render as creatures (unicornio/tunnel-hiss).",
   "byNpcId": {
+    "24": {
+      "hide": true
+    },
+    "1412": {
+      "hide": true
+    },
     "10": {
       "hide": true
     },
