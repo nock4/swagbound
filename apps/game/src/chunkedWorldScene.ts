@@ -1560,11 +1560,33 @@ export class ChunkedWorldScene extends Phaser.Scene {
       );
       camera.setZoom(Math.min(fillZoom, INTERIOR_CAMERA_MAX_ZOOM));
       camera.setBounds(room.rect.x, room.rect.y, room.rect.width, room.rect.height, true);
+      // setBounds does not immediately pull an already-centered/following camera
+      // back inside the room; Bosch's 128px-tall bedroom would remain at zoom 2
+      // for that frame and reveal adjacent interior strips above and below.
+      this.clampCameraScrollToRoom(room);
       return;
     }
     camera.setZoom(OVERWORLD_CAMERA_ZOOM);
     const bounds = this.movementBounds();
     camera.setBounds(0, 0, bounds.maxX + 8, bounds.maxY + 1);
+  }
+
+  private clampCameraScrollToRoom(room: ConnectedRoomBounds): void {
+    const camera = this.cameras.main;
+    const zoom = camera.zoom > 0 ? camera.zoom : 1;
+    const visibleWidth = camera.width / zoom;
+    const visibleHeight = camera.height / zoom;
+    const centeredX = this.playerState.x - visibleWidth / 2;
+    const centeredY = this.playerState.y - visibleHeight / 2;
+    const maxScrollX = room.rect.x + room.rect.width - visibleWidth;
+    const maxScrollY = room.rect.y + room.rect.height - visibleHeight;
+    const scrollX = maxScrollX >= room.rect.x
+      ? clamp(centeredX, room.rect.x, maxScrollX)
+      : room.rect.x + (room.rect.width - visibleWidth) / 2;
+    const scrollY = maxScrollY >= room.rect.y
+      ? clamp(centeredY, room.rect.y, maxScrollY)
+      : room.rect.y + (room.rect.height - visibleHeight) / 2;
+    camera.setScroll(scrollX, scrollY);
   }
 
   private playerInsideCachedRoomBounds(): boolean {
@@ -1917,6 +1939,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.refreshStreaming(true);
       this.refreshRoomBounds(true);
       this.cameras.main.centerOn(x, y);
+      this.updateCameraRoomBounds();
       return { x: this.playerState.x, y: this.playerState.y };
     };
     // Walk-behind introspection for collision-exactness probes: alpha of the
@@ -3194,6 +3217,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.refreshRoomBounds(true);
     this.syncOverworldMusicCue();
     this.cameras.main.centerOn(to.x, to.y);
+    this.updateCameraRoomBounds();
     return true;
   }
 
@@ -5377,6 +5401,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
    */
   private placePlayerInBed(): void {
     const bed = { x: 8160, y: 1088 };
+    // Resolve the room while Bosch is still on the walkable bedside spawn; the
+    // bed pose is on solid furniture, where a forced room resolve would clear it.
+    this.refreshRoomBounds(true);
     this.playerState.facing = "up";
     this.playerState.x = bed.x;
     this.playerState.y = bed.y;
@@ -5395,6 +5422,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.refreshStreaming(true);
     this.cameras.main.centerOn(bed.x, bed.y);
+    this.updateCameraRoomBounds();
   }
 
   private runOpeningFlyover(bedSpawn: { x: number; y: number }, onDone: () => void): void {
@@ -7105,6 +7133,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.refreshRoomBounds(true);
     this.syncOverworldMusicCue();
     this.cameras.main.centerOn(spawn.x, spawn.y);
+    this.updateCameraRoomBounds();
   }
 
   private setNpcIdleFacing(npc: NpcRuntime, facing: Facing): void {
