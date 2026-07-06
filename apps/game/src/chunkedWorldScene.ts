@@ -7,6 +7,7 @@ import { CollisionOverrideEditor, isCollisionEditEnabled } from "./collisionOver
 import { TeleportMenu, type TeleportTown } from "./teleportMenu";
 import { QuestJournal, type Quest } from "./questJournal";
 import { PartyOrderMenu } from "./partyOrderMenu";
+import { CLEAN_UI_FONT_FAMILY } from "./cleanUi";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -3416,6 +3417,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return Boolean(nearestInteractable(this.playerState, this.interactionCandidates(), INTERACTION_DISTANCE));
   }
 
+  /** True while a scripted cinematic owns the screen (the new-game night flyover and the
+   * bedroom wake-up that follows it); the uiScene reads this to suppress the gameplay HUD. */
+  cinematicActive(): boolean {
+    return this.flyoverActive || (this.startupRunActive && this.startupMode === "opening");
+  }
+
   private updatePrompt(): void {
     if (this.time.now < this.recruitNoticeUntilMs && !this.menuState.open && !this.dialogue.open) {
       this.prompt = this.recruitNoticeText;
@@ -5301,6 +5308,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // The bedroom wake-up: fade in to the dim night room, the cold signal, then the knock.
     const runWakeup = (): void => {
       if (opening) {
+        // Bosch is asleep in his bed for the wake-up. The bed cell is solid, but he is
+        // locked through the cinematic, so lying on it is safe; he gets to his feet at
+        // the walkable bedside when control returns (see finalizeNewGameStartup).
+        this.placePlayerInBed();
         this.cameras.main.fadeIn(750, 0, 0, 0);
         this.bedroomNightOverlay?.destroy();
         this.bedroomNightOverlay = this.add
@@ -5336,11 +5347,36 @@ export class ChunkedWorldScene extends Phaser.Scene {
    * camera follows it (loading the town as it goes), zoomed out for the overhead feel;
    * then it fades to black, warps to the bed, and hands off to the wake-up.
    */
+  /**
+   * Lay Bosch in his bed (facing up, head on the pillow) for the wake-up cinematic. The
+   * bed is a solid furniture cell; he stays here only while locked, then stands up at the
+   * walkable bedside when control returns.
+   */
+  private placePlayerInBed(): void {
+    const bed = { x: 8160, y: 1088 };
+    this.playerState.facing = "up";
+    this.playerState.x = bed.x;
+    this.playerState.y = bed.y;
+    this.playerState.velocityX = 0;
+    this.playerState.velocityY = 0;
+    this.playerState.moving = false;
+    this.playerState.animKey = "idle-up";
+    this.playerState.animFrame = this.playerFrames.up[0];
+    if (this.player) {
+      this.player.x = bed.x;
+      this.player.y = bed.y;
+      if (this.player instanceof Phaser.GameObjects.Sprite) {
+        this.player.setFrame(this.playerState.animFrame);
+      }
+      this.setActorSortDepth(this.player);
+    }
+    this.refreshStreaming(true);
+    this.cameras.main.centerOn(bed.x, bed.y);
+  }
+
   private runOpeningFlyover(bedSpawn: { x: number; y: number }, onDone: () => void): void {
     const cam = this.cameras.main;
     this.flyoverActive = true;
-    const start = { x: 1636, y: 1520 };
-    const end = { x: 2160, y: 1792 };
     const setAnchor = (x: number, y: number): void => {
       this.playerState.x = x;
       this.playerState.y = y;
@@ -5350,47 +5386,94 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const follower of this.followers) {
       follower.sprite?.setVisible(false);
     }
-    setAnchor(start.x, start.y);
-    this.refreshStreaming(true);
     // The camera already follows this.player, so gliding the (hidden) anchor across
     // town IS the pan; just pull the zoom out for the overhead feel.
-    cam.setZoom(1.35);
-    // Oversized + centered so the night tint still covers the viewport at the pulled-back
-    // flyover zoom (a screen-sized scroll-fixed rect doesn't cover once zoomed out).
+    cam.setZoom(1.5);
+    // A scroll-fixed overlay does not render reliably over the streamed town chunks at
+    // the pulled-back flyover zoom, so the night tint is a large WORLD-space rect at
+    // FG-over depth covering the whole bounded pan region (depth 130000 draws above the
+    // FG layer, as the bedroom overlay proves). The caption tracks the camera each frame.
     const flyNight = this.add
-      .rectangle(this.scale.width / 2, this.scale.height / 2, this.scale.width * 4, this.scale.height * 4, 0x0a1236, 0.58)
-      .setScrollFactor(0)
+      .rectangle(1900, 1650, 1600, 1200, 0x0a1236, 0.62)
       .setDepth(130000);
-    cam.fadeIn(700, 0, 0, 0);
+    // Each of the three overhead shots holds one line of narration, pinned to the bottom
+    // of the moving view (repositioned every frame in the pan tween).
+    const caption = this.add
+      .text(1900, 1650, "", {
+        fontFamily: CLEAN_UI_FONT_FAMILY,
+        fontSize: "11px",
+        color: "#e8f4ff",
+        align: "center",
+        wordWrap: { width: 200 }
+      })
+      .setOrigin(0.5, 1)
+      .setResolution(3)
+      .setDepth(131000)
+      .setAlpha(0)
+      .setShadow(0, 1, "#000000", 5);
+    const placeCaption = (): void => {
+      const view = cam.worldView;
+      caption.setPosition(view.centerX, view.bottom - 22);
+    };
 
-    const proxy = { t: 0 };
-    this.tweens.add({
-      targets: proxy,
-      t: 1,
-      duration: 7200,
-      ease: "Sine.easeInOut",
-      onUpdate: () => {
-        const x = start.x + (end.x - start.x) * proxy.t;
-        const y = start.y + (end.y - start.y) * proxy.t;
-        setAnchor(x, y);
-        this.refreshStreaming();
-      },
-      onComplete: () => {
-        cam.fadeOut(650, 0, 0, 0);
-        cam.once("camerafadeoutcomplete", () => {
-          flyNight.destroy();
-          this.flyoverActive = false;
-          setAnchor(bedSpawn.x, bedSpawn.y);
-          this.player?.setVisible(true);
-          for (const follower of this.followers) {
-            follower.sprite?.setVisible(true);
-          }
-          this.refreshStreaming(true);
-          cam.setZoom(OVERWORLD_CAMERA_ZOOM);
-          onDone();
-        });
+    // Three overhead shots of Morningside at night, each carrying one beat of narration,
+    // separated by a dip to black; the last dip descends to Bosch's bed.
+    const shots: { from: { x: number; y: number }; to: { x: number; y: number }; text: string }[] = [
+      { from: { x: 1656, y: 1532 }, to: { x: 1888, y: 1652 }, text: "Morningside files its dreams before it dreams them." },
+      { from: { x: 1996, y: 1600 }, to: { x: 2148, y: 1768 }, text: "Something reads the town, street by street, and calls the reading love." },
+      { from: { x: 1840, y: 1748 }, to: { x: 2048, y: 1556 }, text: "Tonight one signal came back wearing your name." }
+    ];
+
+    const finish = (): void => {
+      // The final shot has already faded to black; descend to the bed from there.
+      flyNight.destroy();
+      caption.destroy();
+      this.flyoverActive = false;
+      setAnchor(bedSpawn.x, bedSpawn.y);
+      this.player?.setVisible(true);
+      for (const follower of this.followers) {
+        follower.sprite?.setVisible(true);
       }
-    });
+      this.refreshStreaming(true);
+      cam.setZoom(OVERWORLD_CAMERA_ZOOM);
+      onDone();
+    };
+
+    const runShot = (i: number): void => {
+      if (i >= shots.length) {
+        finish();
+        return;
+      }
+      const shot = shots[i];
+      setAnchor(shot.from.x, shot.from.y);
+      this.refreshStreaming(true);
+      placeCaption();
+      caption.setText(shot.text).setAlpha(0);
+      cam.fadeIn(600, 0, 0, 0);
+      this.tweens.add({ targets: caption, alpha: 1, duration: 550, delay: 350 });
+      const proxy = { t: 0 };
+      this.tweens.add({
+        targets: proxy,
+        t: 1,
+        duration: 2900,
+        ease: "Sine.easeInOut",
+        onUpdate: () => {
+          setAnchor(
+            shot.from.x + (shot.to.x - shot.from.x) * proxy.t,
+            shot.from.y + (shot.to.y - shot.from.y) * proxy.t
+          );
+          this.refreshStreaming();
+          placeCaption();
+        },
+        onComplete: () => {
+          this.tweens.add({ targets: caption, alpha: 0, duration: 380 });
+          cam.fadeOut(600, 0, 0, 0);
+          cam.once("camerafadeoutcomplete", () => runShot(i + 1));
+        }
+      });
+    };
+
+    runShot(0);
   }
 
   private startAuthoredOpeningCutsceneBeforeStartup(
@@ -5507,6 +5590,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.startupRunFinalized = true;
     const completedOpening = this.startupMode === "opening";
+    if (completedOpening) {
+      // Bosch gets up: he spent the wake-up lying on the (solid) bed, so stand him on
+      // his feet at the walkable bedside as the room brightens and control returns.
+      // (restoreStartupSpawn lands him at the resolved spawn beside the bed.)
+      this.playerState.facing = "down";
+      this.restoreStartupSpawn();
+    }
     const reference = this.newGameStartupRecord?.reference ?? this.world_.player.newGameStartupRef;
     let fallbackApplied = false;
     let fallbackReason = this.startupFallbackReason;
