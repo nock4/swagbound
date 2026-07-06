@@ -2,12 +2,6 @@
   "schema": "swagbound.npc-overrides.v1",
   "comment": "Per-NPC map fixes. Shops keep only their Buy/Sell clerk(s); decorative NPCs (animals, phones, flavor talkers) in the same shop sector are hidden. Phone object groups 167/215/216 are unskinned in sprite-overrides so phones no longer render as creatures (unicornio/tunnel-hiss).",
   "byNpcId": {
-    "24": {
-      "hide": true
-    },
-    "1412": {
-      "hide": true
-    },
     "10": {
       "hide": true
     },
@@ -17,11 +11,26 @@
     "13": {
       "hide": true
     },
+    "24": {
+      "hide": true
+    },
     "111": {
       "worldPixel": {
         "x": 7248,
         "y": 1016
       }
+    },
+    "168": {
+      "hide": true
+    },
+    "253": {
+      "hide": true
+    },
+    "339": {
+      "hide": true
+    },
+    "352": {
+      "hide": true
     },
     "405": {
       "hide": true
@@ -30,6 +39,24 @@
       "hide": true
     },
     "507": {
+      "hide": true
+    },
+    "518": {
+      "worldPixel": {
+        "x": 6024,
+        "y": 8944
+      }
+    },
+    "524": {
+      "worldPixel": {
+        "x": 5340,
+        "y": 9760
+      }
+    },
+    "534": {
+      "hide": true
+    },
+    "535": {
       "hide": true
     },
     "607": {
@@ -65,7 +92,40 @@
     "1015": {
       "hide": true
     },
+    "1026": {
+      "worldPixel": {
+        "x": 7240,
+        "y": 9136
+      }
+    },
+    "1096": {
+      "hide": true
+    },
     "1126": {
+      "hide": true
+    },
+    "1148": {
+      "worldPixel": {
+        "x": 1648,
+        "y": 3976
+      }
+    },
+    "1206": {
+      "hide": true
+    },
+    "1210": {
+      "hide": true
+    },
+    "1233": {
+      "worldPixel": {
+        "x": 5944,
+        "y": 7136
+      }
+    },
+    "1239": {
+      "hide": true
+    },
+    "1412": {
       "hide": true
     }
   }
