@@ -58,11 +58,15 @@ export class TitleMenuScene extends Phaser.Scene {
   private promptClockMs = 0;
   private transitioning = false;
   private music?: Music;
+  private audioUnlockCleanup?: () => void;
+  private warSlideOverlay?: Phaser.GameObjects.Rectangle;
+  private warSlideTweens: Phaser.Tweens.Tween[] = [];
 
   private menuItems: { label: string; run: () => void }[] = [];
   private menuTexts: Phaser.GameObjects.Text[] = [];
   private menuPanel?: Phaser.GameObjects.Graphics;
   private cursor = 0;
+  private readonly confirmPointerInput = () => this.confirm();
 
   constructor() {
     super("title-menu");
@@ -93,13 +97,10 @@ export class TitleMenuScene extends Phaser.Scene {
     // War-against-milady slide opens the sequence with the dark WAR_CUE; Glass Chime
     // holds until the menu.
     this.showSlide(WAR_SLIDE_KEY);
-    // Queue the cue now, but browsers block audio autoplay before a user gesture, so
-    // also resume the audio context + (re)start the cue on the first input — same
-    // pattern the world/battle scenes use.
-    void this.music?.play(WAR_CUE);
-    const resumeMusic = () => this.music?.resume();
-    this.input.once("pointerdown", resumeMusic);
-    this.input.keyboard?.once("keydown", resumeMusic);
+    // Queue the cue now for browsers that allow autoplay, then retry on the first
+    // gesture without taking the event away from normal title/menu input.
+    this.playCurrentPhaseMusic();
+    this.installFirstGestureAudioUnlock();
     this.prompt = this.add
       .text(this.scale.width / 2, this.scale.height - 30, "PRESS  Z  TO  BEGIN", {
         fontFamily: CLEAN_UI_FONT_FAMILY,
@@ -113,10 +114,12 @@ export class TitleMenuScene extends Phaser.Scene {
     registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.confirm());
     registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveCursor(-1));
     registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => this.moveCursor(1));
-    this.input.on("pointerdown", () => this.confirm());
+    this.input.on("pointerdown", this.confirmPointerInput);
 
     this.events.once("shutdown", () => {
-      this.input.off("pointerdown");
+      this.audioUnlockCleanup?.();
+      this.killWarSlideAnimation();
+      this.input.off("pointerdown", this.confirmPointerInput);
     });
 
     this.cameras.main.fadeIn(600, 0, 0, 0);
@@ -149,12 +152,86 @@ export class TitleMenuScene extends Phaser.Scene {
   }
 
   private showSlide(key: string): void {
+    this.killWarSlideAnimation();
     this.slide?.destroy();
     const image = this.add.image(this.scale.width / 2, this.scale.height / 2, key).setDepth(0);
     // Contain-fit: show the whole slide (letterboxed) so the baked-in title text is never cropped.
     const scale = Math.min(this.scale.width / image.width, this.scale.height / image.height);
     image.setScale(scale);
     this.slide = image;
+    if (key === WAR_SLIDE_KEY) {
+      this.animateWarSlide(image, scale);
+    }
+  }
+
+  private animateWarSlide(image: Phaser.GameObjects.Image, containScale: number): void {
+    const centerY = this.scale.height / 2;
+    const driftY = Math.max(8, Math.round(this.scale.height * 0.025));
+    const driftTween = this.tweens.add({
+      targets: image,
+      scale: containScale * 1.08,
+      y: centerY - driftY,
+      duration: 20000,
+      ease: "Sine.easeInOut",
+      yoyo: true,
+      repeat: -1
+    });
+    const overlay = this.add
+      .rectangle(0, 0, this.scale.width, this.scale.height, 0x000000, 0.1)
+      .setOrigin(0)
+      .setDepth(1);
+    const pulseTween = this.tweens.add({
+      targets: overlay,
+      alpha: 0.18,
+      duration: 5200,
+      ease: "Sine.easeInOut",
+      yoyo: true,
+      repeat: -1
+    });
+    this.warSlideOverlay = overlay;
+    this.warSlideTweens = [driftTween, pulseTween];
+  }
+
+  private killWarSlideAnimation(): void {
+    for (const tween of this.warSlideTweens) {
+      tween.stop();
+    }
+    this.warSlideTweens = [];
+    this.warSlideOverlay?.destroy();
+    this.warSlideOverlay = undefined;
+  }
+
+  private installFirstGestureAudioUnlock(): void {
+    this.audioUnlockCleanup?.();
+    let cleanedUp = false;
+    const unlockMusic = () => {
+      this.playCurrentPhaseMusic();
+      this.music?.resume();
+      cleanup();
+    };
+    const cleanup = () => {
+      if (cleanedUp) {
+        return;
+      }
+      cleanedUp = true;
+      this.input.off("pointerdown", unlockMusic);
+      this.input.keyboard?.off("keydown", unlockMusic);
+      this.input.gamepad?.off("down", unlockMusic);
+      globalThis.removeEventListener?.("gamepadconnected", unlockMusic);
+      if (this.audioUnlockCleanup === cleanup) {
+        this.audioUnlockCleanup = undefined;
+      }
+    };
+    this.input.once("pointerdown", unlockMusic);
+    this.input.keyboard?.once("keydown", unlockMusic);
+    this.input.gamepad?.once("down", unlockMusic);
+    globalThis.addEventListener?.("gamepadconnected", unlockMusic, { once: true });
+    this.audioUnlockCleanup = cleanup;
+  }
+
+  private playCurrentPhaseMusic(): void {
+    const cue = this.phase === "war" ? WAR_CUE : MENU_CUE;
+    void this.music?.play(cue);
   }
 
   private confirm(): void {
@@ -167,7 +244,7 @@ export class TitleMenuScene extends Phaser.Scene {
         this.showSlide(TITLE_SLIDE_KEY);
         // Glass Chime (Inoyamaland) starts on the SWAGBOUND title slide, cross-fading
         // out the dark war-slide track.
-        void this.music?.play(MENU_CUE);
+        this.playCurrentPhaseMusic();
         this.prompt?.setText("PRESS  Z");
         this.prompt?.setDepth(10);
       });
@@ -258,6 +335,7 @@ export class TitleMenuScene extends Phaser.Scene {
     }
     this.transitioning = true;
     const cam = this.cameras.main;
+    this.music?.stop(420);
     cam.fadeOut(420, 0, 0, 0);
     cam.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       this.scene.start(target.sceneKey, target.data);
