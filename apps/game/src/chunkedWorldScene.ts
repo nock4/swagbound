@@ -743,6 +743,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private newGameStartupRecord?: NewGameStartupRunDebug;
   private startupRunActive = false;
   private startupRunFinalized = false;
+  // Dims the bedroom to "night" during the new-game wake-up; lifts as Bosch wakes.
+  private bedroomNightOverlay?: Phaser.GameObjects.Rectangle;
   private startupMode: "startup" | "opening" = "startup";
   private startupInitialSpawn?: { x: number; y: number };
   private startupFallbackReason?: string;
@@ -1332,6 +1334,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.newGameStartupRecord = undefined;
     this.startupRunActive = false;
     this.startupRunFinalized = false;
+    this.bedroomNightOverlay?.destroy();
+    this.bedroomNightOverlay = undefined;
     this.startupMode = "startup";
     this.startupInitialSpawn = undefined;
     this.startupFallbackReason = undefined;
@@ -5276,9 +5280,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.startupRunActive = true;
     this.startupRunFinalized = false;
     this.startupMode = opening ? "opening" : "startup";
-    // New-game opening: fade in from black so spawning at the bed reads as waking up.
+    // New-game opening: fade in from black to a dim "night" bedroom so spawning at the
+    // bed reads as waking up; the overlay lifts once Bosch wakes (startup finalize).
     if (opening) {
       this.cameras.main.fadeIn(750, 0, 0, 0);
+      this.bedroomNightOverlay?.destroy();
+      this.bedroomNightOverlay = this.add
+        .rectangle(0, 0, this.scale.width, this.scale.height, 0x0a1236, 0.62)
+        .setOrigin(0, 0)
+        .setScrollFactor(0)
+        .setDepth(130000);
     }
     this.startupInitialSpawn = spawn;
     this.startupFallbackReason = undefined;
@@ -5369,6 +5380,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updatePrompt();
   }
 
+  /** Fade out the night dim as Bosch wakes (or on any startup teardown). */
+  private liftBedroomNightOverlay(): void {
+    const overlay = this.bedroomNightOverlay;
+    if (!overlay) {
+      return;
+    }
+    this.bedroomNightOverlay = undefined;
+    this.tweens.add({
+      targets: overlay,
+      alpha: 0,
+      duration: 900,
+      ease: "Sine.easeIn",
+      onComplete: () => overlay.destroy()
+    });
+  }
+
   private finalizeNewGameStartup(result: NonNullable<EventHostDebug["result"]>): void {
     if (this.startupRunFinalized) {
       return;
@@ -5390,6 +5417,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.gameFlags.set(INTRO_BEDROOM_OPENING_DONE_FLAG);
       this.syncOverworldMusicCue();
     }
+    this.liftBedroomNightOverlay();
     if (this.dialogue.open && result.status === "aborted") {
       this.dialogue.close();
     }
@@ -5445,6 +5473,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.gameFlags.set(INTRO_BEDROOM_OPENING_DONE_FLAG);
       this.syncOverworldMusicCue();
     }
+    this.liftBedroomNightOverlay();
     if (this.dialogue.open) {
       this.dialogue.close();
     }
