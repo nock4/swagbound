@@ -4,6 +4,8 @@ import {
   componentAtWorldPixel,
   componentBounds,
   decodeNavmesh,
+  nearestComponentAt,
+  nearestComponentIdAtWorldPixel,
   rectsForComponent
 } from "./navmesh";
 
@@ -28,6 +30,16 @@ describe("navmesh queries", () => {
     expect(rectsForComponent(mesh, 1)).toEqual([
       { x: 8, y: 0, w: 16, h: 16 }
     ]);
+  });
+
+  it("snaps to the nearest component within a bounded cell radius", () => {
+    const mesh = decodeNavmesh(syntheticMesh());
+
+    expect(nearestComponentAt(mesh, { x: 0, y: 0 }, 0)).toBeUndefined();
+    expect(nearestComponentAt(mesh, { x: 0, y: 0 }, 1)).toEqual({ componentId: 1, distanceCells: 1 });
+    expect(nearestComponentAt(mesh, { x: 24, y: 16 }, 1)).toEqual({ componentId: 1, distanceCells: 1 });
+    expect(nearestComponentIdAtWorldPixel(mesh, 0, 16, 1)).toBe(1);
+    expect(nearestComponentIdAtWorldPixel(mesh, -100, 0, 1)).toBe(0);
   });
 });
 

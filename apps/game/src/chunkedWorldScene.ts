@@ -264,6 +264,14 @@ import {
   type ConnectedRoomBounds
 } from "./roomBounds";
 import {
+  componentBounds,
+  decodeNavmesh,
+  nearestComponentAt,
+  nearestComponentIdAtWorldPixel,
+  type NavmeshQuery,
+  type WorldRect as NavmeshWorldRect
+} from "./navmesh";
+import {
   advanceMapTransition,
   beginMapTransition,
   idleMapTransition,
@@ -328,7 +336,13 @@ type NpcRuntime = {
   data: RuntimeNpcData;
   state: NpcRuntimeState;
   frames: DirectionFrameSequence;
+  wanderHome?: NpcWanderHome;
   sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+};
+
+type NpcWanderHome = {
+  componentId: number;
+  sectorAreaKey?: string;
 };
 
 /** A visible roaming overworld enemy that starts a battle on contact with the player. */
@@ -474,6 +488,7 @@ const OVERWORLD_CAMERA_ZOOM = 2;
 // Cap on the interior zoom-to-fill so short rooms don't blow up; rooms shorter
 // than (viewport / this) keep a small centered letterbox instead of over-zooming.
 const INTERIOR_CAMERA_MAX_ZOOM = 3.5;
+const INTERIOR_ROOM_MASK_HEADROOM_PX = 28;
 // Spawn band kept fully ON-SCREEN (camera shows ~128x112 world px from the player
 // at zoom 2) so a roamer is always visible before it can reach you — never an
 // off-screen "random" touch. Min keeps it off the player's feet.
@@ -641,6 +656,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private roomMask?: Phaser.Display.Masks.GeometryMask;
   private solidRows: string[] = [];
   private surfaceRows: string[] = [];
+  private navmesh?: NavmeshQuery;
   private collisionCellSize = 8;
   private collisionWidth = 0;
   private collisionHeight = 0;
@@ -802,6 +818,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       getLocation: () => this.auditionLocation()
     });
     this.resetRuntimeStateForStart();
+    this.navmesh = data.gameData.navmesh ? decodeNavmesh(data.gameData.navmesh) : undefined;
     this.bootSaveState = data.saveState ?? undefined;
     this.saveSlot = Number.isInteger(data.saveSlot) && (data.saveSlot as number) >= 0 ? data.saveSlot as number : 0;
     this.saveSlots = data.saveSlots;
@@ -1310,6 +1327,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.keys = undefined;
     this.solidRows = [];
     this.surfaceRows = [];
+    this.navmesh = undefined;
     this.collisionCellSize = 8;
     this.collisionWidth = 0;
     this.collisionHeight = 0;
@@ -1513,17 +1531,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private refreshRoomBounds(force = false): void {
     if (this.world_.sectors) {
       const sector = sectorCoordForWorldPixel(this.playerState, this.world_.sectors);
-      const sectorKey = sector ? `${sector.sectorCol},${sector.sectorRow}` : undefined;
+      const playerComponentId = this.nearestNavmeshComponentId(this.playerState.x, this.playerState.y, 2);
+      const sectorKey = sector ? `${sector.sectorCol},${sector.sectorRow}:${playerComponentId}` : undefined;
       if (!force && sectorKey && this.activeRoomSectorKey === sectorKey) {
         return;
       }
       this.activeRoomSectorKey = sectorKey;
-      this.activeRoomBounds = resolveSectorAreaBounds(
+      const sectorRoom = resolveSectorAreaBounds(
         this.world_.sectors,
         this.solidRows,
         this.collisionGrid(),
         this.playerState
       );
+      this.activeRoomBounds = sectorRoom ? this.expandSectorRoomWithPlayerNavmeshComponent(sectorRoom) : undefined;
       this.applyInteriorRoomMask();
       this.applyNpcRoomVisibility();
       this.updateCameraRoomBounds();
@@ -1606,6 +1626,115 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private activeInteriorRoom(): ConnectedRoomBounds | undefined {
     return this.activeRoomBounds?.isInterior ? this.activeRoomBounds : undefined;
+  }
+
+  private expandSectorRoomWithPlayerNavmeshComponent(room: ConnectedRoomBounds): ConnectedRoomBounds {
+    if (!room.isInterior || !this.navmesh) {
+      return room;
+    }
+    const nearest = nearestComponentAt(this.navmesh, this.playerState, 2);
+    if (!nearest) {
+      return room;
+    }
+    const componentRect = componentBounds(this.navmesh, nearest.componentId);
+    if (!componentRect) {
+      return room;
+    }
+    const sectorAreaRect = this.sectorAreaRectForPoint(this.playerState) ?? room.rect;
+    const clippedComponentRect = intersectWorldRects(navmeshRectToWorldRect(componentRect), sectorAreaRect);
+    if (!clippedComponentRect) {
+      return room;
+    }
+    const expandedRect = unionWorldRects(room.rect, clippedComponentRect);
+    if (worldRectsEqual(room.rect, expandedRect)) {
+      return room;
+    }
+    const expandedCellBounds = this.cellBoundsForWorldRect(expandedRect);
+    if (!expandedCellBounds) {
+      return { ...room, rect: expandedRect };
+    }
+    const maskCellRanges = unionMaskRangesWithBounds(room.maskCellRanges, expandedCellBounds);
+    const maskCellBounds = cellBoundsForMaskRanges(maskCellRanges);
+    const walkableCellBounds = unionCellBounds(room.walkableCellBounds, expandedCellBounds);
+    return {
+      ...room,
+      walkableCellBounds,
+      ...(maskCellBounds ? { maskCellBounds } : {}),
+      maskCellRanges,
+      rect: expandedRect
+    };
+  }
+
+  private sectorAreaRectForPoint(point: { x: number; y: number }): WorldRect | undefined {
+    const sectors = this.world_.sectors;
+    if (!sectors) {
+      return undefined;
+    }
+    const start = sectorCoordForWorldPixel(point, sectors);
+    if (!start) {
+      return undefined;
+    }
+    const areaId = sectors.areaIds[start.index];
+    if (!Number.isInteger(areaId)) {
+      return undefined;
+    }
+    const seen = new Set<number>([start.index]);
+    const queue = [start];
+    let cursor = 0;
+    let minCol = start.sectorCol;
+    let maxCol = start.sectorCol;
+    let minRow = start.sectorRow;
+    let maxRow = start.sectorRow;
+    while (cursor < queue.length) {
+      const sector = queue[cursor];
+      cursor += 1;
+      minCol = Math.min(minCol, sector.sectorCol);
+      maxCol = Math.max(maxCol, sector.sectorCol);
+      minRow = Math.min(minRow, sector.sectorRow);
+      maxRow = Math.max(maxRow, sector.sectorRow);
+      const neighbors = [
+        { sectorCol: sector.sectorCol + 1, sectorRow: sector.sectorRow },
+        { sectorCol: sector.sectorCol - 1, sectorRow: sector.sectorRow },
+        { sectorCol: sector.sectorCol, sectorRow: sector.sectorRow + 1 },
+        { sectorCol: sector.sectorCol, sectorRow: sector.sectorRow - 1 }
+      ];
+      for (const neighbor of neighbors) {
+        if (
+          neighbor.sectorCol < 0 ||
+          neighbor.sectorRow < 0 ||
+          neighbor.sectorCol >= sectors.cols ||
+          neighbor.sectorRow >= sectors.rows
+        ) {
+          continue;
+        }
+        const index = neighbor.sectorRow * sectors.cols + neighbor.sectorCol;
+        if (seen.has(index) || sectors.areaIds[index] !== areaId) {
+          continue;
+        }
+        seen.add(index);
+        queue.push({ ...neighbor, index });
+      }
+    }
+    const sectorWidthPixels = sectors.sectorWidthTiles * sectors.tileSize;
+    const sectorHeightPixels = sectors.sectorHeightTiles * sectors.tileSize;
+    return {
+      x: minCol * sectorWidthPixels,
+      y: minRow * sectorHeightPixels,
+      width: (maxCol - minCol + 1) * sectorWidthPixels,
+      height: (maxRow - minRow + 1) * sectorHeightPixels
+    };
+  }
+
+  private cellBoundsForWorldRect(rect: WorldRect): ConnectedRoomBounds["walkableCellBounds"] | undefined {
+    const grid = this.collisionGrid();
+    const minCellX = clamp(Math.floor(rect.x / grid.cellSize), 0, grid.width - 1);
+    const minCellY = clamp(Math.floor(rect.y / grid.cellSize), 0, grid.height - 1);
+    const maxCellX = clamp(Math.ceil((rect.x + rect.width) / grid.cellSize) - 1, 0, grid.width - 1);
+    const maxCellY = clamp(Math.ceil((rect.y + rect.height) / grid.cellSize) - 1, 0, grid.height - 1);
+    if (maxCellX < minCellX || maxCellY < minCellY) {
+      return undefined;
+    }
+    return buildCellBounds(minCellX, maxCellX, minCellY, maxCellY);
   }
 
   private syncOverworldMusicCue(force = false): void {
@@ -1710,6 +1839,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const width = Math.max(1, Math.round((range.maxCellX - range.minCellX + 1) * cellSize) - insetRight);
       const height = Math.max(1, Math.round(cellSize) - insetBottom);
       graphics.fillRect(x, y, width, height);
+    }
+    const headroomY = Math.max(0, room.rect.y - INTERIOR_ROOM_MASK_HEADROOM_PX);
+    const headroomHeight = room.rect.y - headroomY;
+    if (headroomHeight > 0) {
+      graphics.fillRect(
+        Math.round(room.rect.x),
+        Math.round(headroomY),
+        Math.max(1, Math.round(room.rect.width)),
+        Math.round(headroomHeight)
+      );
     }
     this.roomMask = this.roomMask ?? graphics.createGeometryMask();
     this.roomMask.setShape(graphics);
@@ -2178,11 +2317,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const npc = placement.data;
     const frames = this.framesForNpc(npc.npcId, npc.spriteGroup);
     const facing = toFacing(npc.direction);
+    const behavior = this.behaviorForRuntimeNpc(npc);
     return {
       key: placement.key,
       data: npc,
-      state: createNpcState(npc.worldPixel.x, npc.worldPixel.y, facing, this.behaviorForRuntimeNpc(npc), frames),
+      state: createNpcState(npc.worldPixel.x, npc.worldPixel.y, facing, behavior, frames),
       frames,
+      wanderHome: behavior.kind === "wander" ? this.wanderHomeForNpc(npc) : undefined,
       sprite: this.spawnNpcActor(npc.npcId, npc.worldPixel.x, npc.worldPixel.y, npc.spriteGroup, npc.direction)
     };
   }
@@ -2192,6 +2333,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
       hasServiceInteraction: this.npcHasServiceInteraction(npc),
       isInteriorHome: isInteriorMusicSector(this.world_.sectors, npc.worldPixel)
     });
+  }
+
+  private wanderHomeForNpc(npc: RuntimeNpcData): NpcWanderHome {
+    const componentId = this.nearestNavmeshComponentId(npc.worldPixel.x, npc.worldPixel.y, 2);
+    const sectorAreaKey = this.interiorSectorAreaKey(npc.worldPixel);
+    return {
+      componentId,
+      ...(sectorAreaKey ? { sectorAreaKey } : {})
+    };
+  }
+
+  private interiorSectorAreaKey(point: { x: number; y: number }): string | undefined {
+    const sectors = this.world_.sectors;
+    if (!sectors) {
+      return undefined;
+    }
+    const sector = sectorCoordForWorldPixel(point, sectors);
+    if (!sector || sectors.bounded[sector.index] !== 1) {
+      return undefined;
+    }
+    const areaId = sectors.areaIds[sector.index];
+    return Number.isInteger(areaId) ? `area:${areaId}` : undefined;
   }
 
   private npcHasServiceInteraction(npc: RuntimeNpcData): boolean {
@@ -2217,11 +2380,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       stepNpc(npc.state, {
         deltaMs,
         bounds: this.movementBounds(),
-        blocked: (x, y) => this.blocked(x, y, {
-          ignoreNpcId: npc.data.npcId,
-          includePlayer: true,
-          includeNpcs: true
-        }),
+        blocked: (x, y) => this.npcWanderStepBlocked(npc, x, y),
         frames: npc.frames
       });
       this.syncNpc(npc);
@@ -2902,6 +3061,34 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const width = this.world_.mapWidthTiles * this.world_.tileSize;
     const height = this.world_.mapHeightTiles * this.world_.tileSize;
     return { minX: 8, maxX: width - 8, minY: 12, maxY: height - 1 };
+  }
+
+  private npcWanderStepBlocked(npc: NpcRuntime, x: number, y: number): boolean {
+    if (this.pointOutsideCollisionGrid(x, y)) {
+      return true;
+    }
+    const home = npc.wanderHome;
+    if (home && home.componentId !== 0 && this.nearestNavmeshComponentId(x, y, 1) !== home.componentId) {
+      return true;
+    }
+    return this.blocked(x, y, {
+      ignoreNpcId: npc.data.npcId,
+      includePlayer: true,
+      includeNpcs: true
+    });
+  }
+
+  private pointOutsideCollisionGrid(x: number, y: number): boolean {
+    if (!Number.isFinite(x) || !Number.isFinite(y) || this.collisionCellSize <= 0) {
+      return true;
+    }
+    const cellX = Math.floor(x / this.collisionCellSize);
+    const cellY = Math.floor(y / this.collisionCellSize);
+    return cellX < 0 || cellY < 0 || cellX >= this.collisionWidth || cellY >= this.collisionHeight;
+  }
+
+  private nearestNavmeshComponentId(x: number, y: number, maxRadiusCells: number): number {
+    return this.navmesh ? nearestComponentIdAtWorldPixel(this.navmesh, x, y, maxRadiusCells) : 0;
   }
 
   private blocked(x: number, y: number, options: BlockedOptions = {}): boolean {
@@ -8147,6 +8334,111 @@ function normalizeOptionalGroupId(value: number | undefined): number | undefined
   }
   const group = Math.floor(value);
   return group >= 0 ? group : undefined;
+}
+
+function navmeshRectToWorldRect(rect: NavmeshWorldRect): WorldRect {
+  return { x: rect.x, y: rect.y, width: rect.w, height: rect.h };
+}
+
+function intersectWorldRects(a: WorldRect, b: WorldRect): WorldRect | undefined {
+  const x1 = Math.max(a.x, b.x);
+  const y1 = Math.max(a.y, b.y);
+  const x2 = Math.min(a.x + a.width, b.x + b.width);
+  const y2 = Math.min(a.y + a.height, b.y + b.height);
+  if (x2 <= x1 || y2 <= y1) {
+    return undefined;
+  }
+  return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
+}
+
+function unionWorldRects(a: WorldRect, b: WorldRect): WorldRect {
+  const x1 = Math.min(a.x, b.x);
+  const y1 = Math.min(a.y, b.y);
+  const x2 = Math.max(a.x + a.width, b.x + b.width);
+  const y2 = Math.max(a.y + a.height, b.y + b.height);
+  return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
+}
+
+function worldRectsEqual(a: WorldRect, b: WorldRect): boolean {
+  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+}
+
+function buildCellBounds(
+  minCellX: number,
+  maxCellX: number,
+  minCellY: number,
+  maxCellY: number
+): ConnectedRoomBounds["walkableCellBounds"] {
+  const widthCells = maxCellX - minCellX + 1;
+  const heightCells = maxCellY - minCellY + 1;
+  return {
+    minCellX,
+    maxCellX,
+    minCellY,
+    maxCellY,
+    widthCells,
+    heightCells,
+    areaCells: widthCells * heightCells
+  };
+}
+
+function unionCellBounds(
+  a: ConnectedRoomBounds["walkableCellBounds"],
+  b: ConnectedRoomBounds["walkableCellBounds"]
+): ConnectedRoomBounds["walkableCellBounds"] {
+  return buildCellBounds(
+    Math.min(a.minCellX, b.minCellX),
+    Math.max(a.maxCellX, b.maxCellX),
+    Math.min(a.minCellY, b.minCellY),
+    Math.max(a.maxCellY, b.maxCellY)
+  );
+}
+
+function unionMaskRangesWithBounds(
+  ranges: ConnectedRoomBounds["maskCellRanges"],
+  bounds: ConnectedRoomBounds["walkableCellBounds"]
+): ConnectedRoomBounds["maskCellRanges"] {
+  const byRow = new Map<number, { minCellX: number; maxCellX: number }>();
+  for (const range of ranges) {
+    const existing = byRow.get(range.cellY);
+    byRow.set(range.cellY, existing
+      ? {
+        minCellX: Math.min(existing.minCellX, range.minCellX),
+        maxCellX: Math.max(existing.maxCellX, range.maxCellX)
+      }
+      : { minCellX: range.minCellX, maxCellX: range.maxCellX });
+  }
+  for (let cellY = bounds.minCellY; cellY <= bounds.maxCellY; cellY += 1) {
+    const existing = byRow.get(cellY);
+    byRow.set(cellY, existing
+      ? {
+        minCellX: Math.min(existing.minCellX, bounds.minCellX),
+        maxCellX: Math.max(existing.maxCellX, bounds.maxCellX)
+      }
+      : { minCellX: bounds.minCellX, maxCellX: bounds.maxCellX });
+  }
+  return [...byRow.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([cellY, range]) => ({ cellY, ...range }));
+}
+
+function cellBoundsForMaskRanges(
+  ranges: ConnectedRoomBounds["maskCellRanges"]
+): ConnectedRoomBounds["maskCellBounds"] | undefined {
+  if (ranges.length === 0) {
+    return undefined;
+  }
+  let minCellX = ranges[0].minCellX;
+  let maxCellX = ranges[0].maxCellX;
+  let minCellY = ranges[0].cellY;
+  let maxCellY = ranges[0].cellY;
+  for (const range of ranges.slice(1)) {
+    minCellX = Math.min(minCellX, range.minCellX);
+    maxCellX = Math.max(maxCellX, range.maxCellX);
+    minCellY = Math.min(minCellY, range.cellY);
+    maxCellY = Math.max(maxCellY, range.cellY);
+  }
+  return buildCellBounds(minCellX, maxCellX, minCellY, maxCellY);
 }
 
 function clamp(value: number, min: number, max: number): number {

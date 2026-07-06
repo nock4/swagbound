@@ -45,6 +45,9 @@ importers:
       '@eb/schemas':
         specifier: workspace:*
         version: link:../../packages/eb-schemas
+      navmesh:
+        specifier: ^2.3.1
+        version: 2.3.1
       phaser:
         specifier: ^4.1.0
         version: 4.1.0
@@ -836,6 +839,9 @@ packages:
   confbox@0.1.8:
     resolution: {integrity: sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w==}
 
+  core-js@3.49.0:
+    resolution: {integrity: sha512-es1U2+YTtzpwkxVLwAFdSpaIMyQaq0PBgm3YD1W3Qpsn1NAmO3KSgZfu+oGSWVu6NvLHoHCV/aYcsE5wiB7ALg==}
+
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
@@ -955,6 +961,10 @@ packages:
   isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
+  javascript-astar@https://codeload.github.com/mikewesthad/javascript-astar/tar.gz/c0304b12861eda334e27f2f15d701c10b296593f:
+    resolution: {tarball: https://codeload.github.com/mikewesthad/javascript-astar/tar.gz/c0304b12861eda334e27f2f15d701c10b296593f}
+    version: 0.4.2
+
   js-tokens@9.0.1:
     resolution: {integrity: sha512-mxa9E9ITFOt0ban3j6L5MpjwegGz6lBQmM1IJkWeBZGcMxto50+eWdjC/52xDbS2vy0k7vIMK0Fe2wfL9OQSpQ==}
 
@@ -1006,6 +1016,9 @@ packages:
     resolution: {integrity: sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
+
+  navmesh@2.3.1:
+    resolution: {integrity: sha512-psNjH0lNJbprtlTNo4gmhqIgNhZxQgxiGtnGAOmtL7I/tByoGfAfDX+/LD/5b26XuLZw3XXTr0+tHScnm5MBWw==}
 
   node-fetch@2.7.0:
     resolution: {integrity: sha512-c4FRfUm/dbcWZ7U+1Wq0AwCyFL+3nt2bEw05wfxSz+DWpWsitgmSgYmy2dQdWyKC1694ELPqMs/YzUSNozLt8A==}
@@ -1835,6 +1848,8 @@ snapshots:
 
   confbox@0.1.8: {}
 
+  core-js@3.49.0: {}
+
   cross-spawn@7.0.6:
     dependencies:
       path-key: 3.1.1
@@ -1982,6 +1997,8 @@ snapshots:
 
   isexe@2.0.0: {}
 
+  javascript-astar@https://codeload.github.com/mikewesthad/javascript-astar/tar.gz/c0304b12861eda334e27f2f15d701c10b296593f: {}
+
   js-tokens@9.0.1: {}
 
   jsonata@1.8.7: {}
@@ -2038,6 +2055,11 @@ snapshots:
   ms@2.1.3: {}
 
   nanoid@3.3.12: {}
+
+  navmesh@2.3.1:
+    dependencies:
+      core-js: 3.49.0
+      javascript-astar: https://codeload.github.com/mikewesthad/javascript-astar/tar.gz/c0304b12861eda334e27f2f15d701c10b296593f
 
   node-fetch@2.7.0:
     dependencies:

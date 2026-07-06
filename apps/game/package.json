@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@eb/schemas": "workspace:*",
+    "navmesh": "^2.3.1",
     "phaser": "^4.1.0",
     "zod": "^3.23.8"
   },

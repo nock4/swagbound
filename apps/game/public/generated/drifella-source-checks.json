@@ -12174,8 +12174,8 @@
       "placement": {
         "kind": "returned-mail-dock",
         "worldPixel": {
-          "x": 8204,
-          "y": 9124
+          "x": 8156,
+          "y": 9164
         },
         "facing": "down"
       },
@@ -13271,8 +13271,8 @@
       "placement": {
         "kind": "returned-mail-dock",
         "worldPixel": {
-          "x": 8236,
-          "y": 9220
+          "x": 8124,
+          "y": 9164
         },
         "facing": "down"
       },
