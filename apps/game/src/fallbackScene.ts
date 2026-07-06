@@ -85,6 +85,7 @@ export class FallbackScene extends Phaser.Scene {
     registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.handleAdvance());
     registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.closeDialogue());
     this.publish();
+    document.getElementById("game-loading")?.remove();
   }
 
   update(_: number, delta: number): void {

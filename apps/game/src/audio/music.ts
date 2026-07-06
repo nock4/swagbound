@@ -1,11 +1,16 @@
 import type { MusicManifest } from "@eb/schemas";
 
 export interface Music {
-  play(cue: string): Promise<void>;
+  play(cue: string, options?: MusicPlayOptions): Promise<void>;
+  preload(cue: string): Promise<void>;
   stop(fadeMs?: number): void;
   resume(): void;
   setEnabled(enabled: boolean): void;
 }
+
+export type MusicPlayOptions = {
+  fadeMs?: number;
+};
 
 export type MusicOptions = {
   muted?: boolean;
@@ -46,6 +51,7 @@ type PlayingTrack = {
 
 export class NoopMusic implements Music {
   async play(): Promise<void> {}
+  async preload(): Promise<void> {}
   stop(): void {}
   resume(): void {}
   setEnabled(): void {}
@@ -58,6 +64,7 @@ export class WebAudioMusic implements Music {
   private enabled: boolean;
   private current?: PlayingTrack;
   private requestedCue?: string;
+  private requestedPlayOptions?: MusicPlayOptions;
   private pendingCue?: string;
   private readonly bufferCache = new Map<string, Promise<AudioBuffer | undefined>>();
   private readonly warned = new Set<string>();
@@ -69,8 +76,9 @@ export class WebAudioMusic implements Music {
     this.enabled = options.enabled ?? !options.muted;
   }
 
-  async play(cue: string): Promise<void> {
+  async play(cue: string, playOptions: MusicPlayOptions = {}): Promise<void> {
     this.requestedCue = cue;
+    this.requestedPlayOptions = playOptions;
     if (!this.enabled || this.current?.cue === cue || this.pendingCue === cue) {
       return;
     }
@@ -96,15 +104,31 @@ export class WebAudioMusic implements Music {
     this.pendingCue = undefined;
 
     if (!buffer) {
-      this.fadeOutCurrent(context);
+      this.fadeOutCurrent(context, playOptions.fadeMs);
       return;
     }
 
-    this.startTrack(context, resolved, buffer);
+    this.startTrack(context, resolved, buffer, playOptions);
+  }
+
+  async preload(cue: string): Promise<void> {
+    if (!this.enabled) {
+      return;
+    }
+    const resolved = resolveMusicCue(this.manifest, cue);
+    if (!resolved) {
+      return;
+    }
+    const context = this.audioContext();
+    if (!context) {
+      return;
+    }
+    await this.loadBuffer(resolved);
   }
 
   stop(fadeMs?: number): void {
     this.requestedCue = undefined;
+    this.requestedPlayOptions = undefined;
     this.pendingCue = undefined;
     if (this.context) {
       this.fadeOutCurrent(this.context, fadeMs);
@@ -125,7 +149,7 @@ export class WebAudioMusic implements Music {
       void this.resumeContext(context);
     }
     if (!this.current && this.requestedCue) {
-      void this.play(this.requestedCue);
+      void this.play(this.requestedCue, this.requestedPlayOptions);
     }
   }
 
@@ -144,13 +168,18 @@ export class WebAudioMusic implements Music {
       return;
     }
     if (this.requestedCue) {
-      void this.play(this.requestedCue);
+      void this.play(this.requestedCue, this.requestedPlayOptions);
     } else {
       this.resume();
     }
   }
 
-  private startTrack(context: AudioContext, cue: ResolvedMusicCue, buffer: AudioBuffer): void {
+  private startTrack(
+    context: AudioContext,
+    cue: ResolvedMusicCue,
+    buffer: AudioBuffer,
+    playOptions: MusicPlayOptions
+  ): void {
     const output = this.masterGain;
     if (!output) {
       return;
@@ -158,7 +187,7 @@ export class WebAudioMusic implements Music {
 
     const previous = this.current;
     const now = context.currentTime;
-    const fadeSeconds = this.fadeSeconds();
+    const fadeSeconds = this.fadeSeconds(playOptions.fadeMs);
     const source = context.createBufferSource();
     const gain = context.createGain();
     source.buffer = buffer;
@@ -175,7 +204,7 @@ export class WebAudioMusic implements Music {
 
     this.current = { cue: cue.cue, source, gain };
     if (previous) {
-      this.fadeTrack(context, previous);
+      this.fadeTrack(context, previous, playOptions.fadeMs);
     }
   }
 
@@ -282,7 +311,7 @@ export class WebAudioMusic implements Music {
 
   private playRequestedCueIfIdle(): void {
     if (!this.current && !this.pendingCue && this.requestedCue) {
-      void this.play(this.requestedCue);
+      void this.play(this.requestedCue, this.requestedPlayOptions);
     }
   }
 
