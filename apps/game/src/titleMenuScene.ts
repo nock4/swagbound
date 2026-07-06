@@ -38,8 +38,8 @@ type Phase = "title" | "war" | "menu";
 /**
  * Boot-time title + intro-slide sequence and main menu.
  *
- *   title slide  → (Z) →  "war against milady" slide (Glass Chime starts here)
- *                → (Z) →  main menu: NEW GAME / CONTINUE
+ *   "war against milady" slide (Glass Chime starts here)  → (Z) →  SWAGBOUND title slide
+ *                                                          → (Z) →  main menu: NEW GAME / CONTINUE
  *
  * NEW GAME runs the intro cinematic + opening cutscene; CONTINUE loads the save.
  */
@@ -70,7 +70,7 @@ export class TitleMenuScene extends Phaser.Scene {
     this.continueTarget = data.continueTarget ?? null;
     this.hasSave = data.hasSave;
     this.musicManifest = data.musicManifest;
-    this.phase = "title";
+    this.phase = "war";
     this.cursor = 0;
     this.menuItems = [];
     this.menuTexts = [];
@@ -87,7 +87,9 @@ export class TitleMenuScene extends Phaser.Scene {
     this.music = getSharedMusic(this.registry, this.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
-    this.showSlide(TITLE_SLIDE_KEY);
+    // War-against-milady slide opens the sequence (EarthBound-style), Glass Chime here.
+    this.showSlide(WAR_SLIDE_KEY);
+    void this.music?.play(MENU_CUE);
     this.prompt = this.add
       .text(this.scale.width / 2, this.scale.height - 30, "PRESS  Z  TO  BEGIN", {
         fontFamily: CLEAN_UI_FONT_FAMILY,
@@ -139,8 +141,8 @@ export class TitleMenuScene extends Phaser.Scene {
   private showSlide(key: string): void {
     this.slide?.destroy();
     const image = this.add.image(this.scale.width / 2, this.scale.height / 2, key).setDepth(0);
-    // Cover-fit: fill the screen, cropping overflow.
-    const scale = Math.max(this.scale.width / image.width, this.scale.height / image.height);
+    // Contain-fit: show the whole slide (letterboxed) so the baked-in title text is never cropped.
+    const scale = Math.min(this.scale.width / image.width, this.scale.height / image.height);
     image.setScale(scale);
     this.slide = image;
   }
@@ -149,18 +151,16 @@ export class TitleMenuScene extends Phaser.Scene {
     if (this.transitioning) {
       return;
     }
-    if (this.phase === "title") {
+    if (this.phase === "war") {
       this.fadeSwap(() => {
-        this.phase = "war";
-        this.showSlide(WAR_SLIDE_KEY);
-        // Glass Chime (Inoyamaland) begins on the "war against milady" slide.
-        void this.music?.play(MENU_CUE);
+        this.phase = "title";
+        this.showSlide(TITLE_SLIDE_KEY);
         this.prompt?.setText("PRESS  Z");
         this.prompt?.setDepth(10);
       });
       return;
     }
-    if (this.phase === "war") {
+    if (this.phase === "title") {
       this.phase = "menu";
       this.buildMenu();
       return;
