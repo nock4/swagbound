@@ -1429,7 +1429,7 @@ export const DrifellaSourceCheckSchema = z.object({
    * source of truth. Only set this to give a Drifella a bespoke, non-numeric name.
    */
   drifellaName: z.string().trim().min(1).optional(),
-  npcId: z.number().int().min(100300).max(100399),
+  npcId: z.number().int().min(100300).max(100499),
   region: z.string().trim().min(1),
   tier: z.number().int().min(1).max(4),
   placement: z.object({
