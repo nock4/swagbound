@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.drifella-source-checks.v1",
-  "comment": "Drifella Source Checks. Friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
+  "comment": "Drifella Attestations. Friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
   "checks": [
     {
       "id": "sourcecheck-morningside-001",
@@ -28,7 +28,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella looks at you the way a librarian looks at a returning book.",
-        "\"Source Check? It's friendly. Mostly questions. The questions are also friendly.\""
+        "\"Attestation? It's friendly. Mostly questions. The questions are also friendly.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -154,7 +154,7 @@
       "hints": [],
       "entryPrompt": [
         "This Drifella stamps the air twice before speaking, notarizing nothing.",
-        "\"State your attention for the record. Source Check?\""
+        "\"State your attention for the record. Attestation?\""
       ],
       "questions": {
         "drawCount": 2,
@@ -672,7 +672,7 @@
       "hints": [],
       "entryPrompt": [
         "A Drifella idles by the west block, counting windows. It waves without looking.",
-        "\"Forty-one windows. Zero of them honest. Anyway. Source Check?\""
+        "\"Forty-one windows. Zero of them honest. Anyway. Attestation?\""
       ],
       "questions": {
         "drawCount": 2,
@@ -970,7 +970,7 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "A Source Check hurts.",
+            "prompt": "An Attestation hurts.",
             "answer": false,
             "failLine": "\"Has any of this hurt? Be honest. You're doing great.\"",
             "category": "witnessed"
@@ -1082,7 +1082,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella taps an invisible microphone twice and waits for the room to settle.",
-        "\"Source Check. Two questions, no reverb. If your story clips, we cut the feed.\""
+        "\"Attestation. Two questions, no reverb. If your story clips, we cut the feed.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -1327,7 +1327,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella weighs nothing on a small brass scale and nods at the result.",
-        "\"Source Check. Claims by the pound. Yours first.\""
+        "\"Attestation. Claims by the pound. Yours first.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -1571,7 +1571,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella consults a bus schedule with more annotations than schedule.",
-        "\"You're early. Or the questions are late. Either way: Source Check.\""
+        "\"You're early. Or the questions are late. Either way: Attestation.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -1819,7 +1819,7 @@
       ],
       "entryPrompt": [
         "A voice from inside the greenery. You genuinely did not see them there.",
-        "\"Shh. You found the branch office. Source Check. Leaf through two questions.\""
+        "\"Shh. You found the branch office. Attestation. Leaf through two questions.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2193,7 +2193,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella lifts a veil of gauze and a single bee leaves, unimpressed.",
-        "\"Source Check. The bees are the witnesses. I merely translate.\""
+        "\"Attestation. The bees are the witnesses. I merely translate.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2315,7 +2315,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella adjusts a scarecrow's hat with real tenderness.",
-        "\"He's shy. I'll ask the questions for him. Source Check.\""
+        "\"He's shy. I'll ask the questions for him. Attestation.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2437,7 +2437,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella leans over a mossy well and listens to nothing in particular.",
-        "\"Source Check. Speak clearly. The well has poor patience for mumbling.\""
+        "\"Attestation. Speak clearly. The well has poor patience for mumbling.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2559,7 +2559,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella trims a stem and holds it to the light like evidence.",
-        "\"Source Check. Two questions, freshly cut. Mind the thorns.\""
+        "\"Attestation. Two questions, freshly cut. Mind the thorns.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2681,7 +2681,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella wets a finger and holds it up with grave professionalism.",
-        "\"Source Check. The wind agrees with the truth. Let's see if you do.\""
+        "\"Attestation. The wind agrees with the truth. Let's see if you do.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2807,7 +2807,7 @@
       ],
       "entryPrompt": [
         "A voice from inside a tall hedge. You did not see them there at all.",
-        "\"Shh. You found the quiet path. Source Check. Two turns, no dead ends.\""
+        "\"Shh. You found the quiet path. Attestation. Two turns, no dead ends.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3059,7 +3059,7 @@
       ],
       "entryPrompt": [
         "The Drifella watches a bug skate the pond and marks something down.",
-        "\"Source Check. The water keeps minutes. So do I. Two entries.\""
+        "\"Attestation. The water keeps minutes. So do I. Two entries.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3185,7 +3185,7 @@
       ],
       "entryPrompt": [
         "The Drifella swings a lantern in a slow arc over the dark rows of flowers.",
-        "\"Source Check. I keep the light. You keep your story straight.\""
+        "\"Attestation. I keep the light. You keep your story straight.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3307,7 +3307,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella slides a grey parcel across the dock; it has your outline on it, faintly.",
-        "\"Source Check. Before I stamp you UNDELIVERABLE, prove there was ever a real address.\""
+        "\"Attestation. Before I stamp you UNDELIVERABLE, prove there was ever a real address.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3432,7 +3432,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella dips a nib and eyes your ankle, deciding what to write on the tag.",
-        "\"Source Check. Give me a name I can letter, or you go on the shelf as ANONYMOUS.\""
+        "\"Attestation. Give me a name I can letter, or you go on the shelf as ANONYMOUS.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3557,7 +3557,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella runs a finger down a shelf of parcels, each labeled with a face nobody came back for.",
-        "\"Source Check. Two questions. Answer them or you get shelved with the rest of the technically-yours.\""
+        "\"Attestation. Two questions. Answer them or you get shelved with the rest of the technically-yours.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3682,7 +3682,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella holds a gauge into the mist; the needle sags toward EMPTY.",
-        "\"Source Check. Your account reads thin. Add some verified weight or I fog you out entirely.\""
+        "\"Attestation. Your account reads thin. Add some verified weight or I fog you out entirely.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3807,7 +3807,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella raises a baton and a hundred unheard voicemails hum a chord that never got listened to.",
-        "\"Source Check. Sing me something true and the choir will let you pass. Off-key, and you join the section.\""
+        "\"Attestation. Sing me something true and the choir will let you pass. Off-key, and you join the section.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3932,7 +3932,7 @@
       "hints": [],
       "entryPrompt": [
         "You find the Drifella crouched behind the return crates, a leaked copy palmed like contraband.",
-        "\"Source Check. Quietly. Get it right and I never saw you. Get it wrong and I saw everything.\""
+        "\"Attestation. Quietly. Get it right and I never saw you. Get it wrong and I saw everything.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4057,7 +4057,7 @@
       "hints": [],
       "entryPrompt": [
         "Water laps the vault door; inside, the Drifella holds a cancellation stamp above a leaked card like a scalpel.",
-        "\"Source Check. Tell me when the truth happened, not just what. Time is the only thing that doesn't rot down here.\""
+        "\"Attestation. Tell me when the truth happened, not just what. Time is the only thing that doesn't rot down here.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4182,7 +4182,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella rolls out a long steel drawer; there's a face in it that looks a little like a copy of yours.",
-        "\"Source Check. Prove you're not one of my returns and I'll slide the drawer shut empty.\""
+        "\"Attestation. Prove you're not one of my returns and I'll slide the drawer shut empty.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4307,7 +4307,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella slides open a little confessional grille reeking of old glue and salt fog.",
-        "\"Source Check, or last rites. Same booth. Tell me your provenance, child, before it's lost for good.\""
+        "\"Attestation, or last rites. Same booth. Tell me your provenance, child, before it's lost for good.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4432,7 +4432,7 @@
       "hints": [],
       "entryPrompt": [
         "At the fog's edge the Drifella stands between two chutes: one back into the world, one down into the Read.",
-        "\"Final Source Check. Answer clean and you're delivered onward. Answer wrong and you go back to the Source.\""
+        "\"Final Attestation. Answer clean and you're delivered onward. Answer wrong and you go back to the Source.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4557,7 +4557,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella loops a fresh price tag around your wrist and squints at the number like it owes her money.",
-        "\"Source Check, at retail. I only stock verified stock. Prove the provenance and I'll ring you up.\""
+        "\"Attestation, at retail. I only stock verified stock. Prove the provenance and I'll ring you up.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4675,7 +4675,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella lifts a face off a mannequin, checks it against yours, and sighs like a tailor at a bad hem.",
-        "\"Source Check, fitting-room rules. Tell me whose face is whose and I'll leave yours on.\""
+        "\"Attestation, fitting-room rules. Tell me whose face is whose and I'll leave yours on.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4800,7 +4800,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella swipes a loyalty card that isn't yours and reads a lifetime of you off the balance.",
-        "\"Source Check, members only. Your provenance is your points total. Let's audit it.\""
+        "\"Attestation, members only. Your provenance is your points total. Let's audit it.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4918,7 +4918,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella unspools a yard of receipt tape, holds it to the food-court light, and reads it like a palm.",
-        "\"Source Check, table service. The receipt tape remembers everyone who ate here. Let's see if you match.\""
+        "\"Attestation, table service. The receipt tape remembers everyone who ate here. Let's see if you match.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5036,7 +5036,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella taps the YOU ARE HERE dot until it lands squarely on your chest.",
-        "\"Source Check, by the directory. Everyone's a storefront to me. Let's confirm which one you are.\""
+        "\"Attestation, by the directory. Everyone's a storefront to me. Let's confirm which one you are.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5154,7 +5154,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella lowers a baton and the ceiling music dips, just enough that you notice it was always there.",
-        "\"Source Check, in three-quarter time. I score the crowd's obedience. Let's see if you're in key.\""
+        "\"Attestation, in three-quarter time. I score the crowd's obedience. Let's see if you're in key.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5272,7 +5272,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella nudges a posed figure a half-inch left, steps back, and finally seems satisfied with the composition.",
-        "\"Source Check, front-of-house. I curate the display windows. Tell me what's real and I'll leave you out of the tableau.\""
+        "\"Attestation, front-of-house. I curate the display windows. Tell me what's real and I'll leave you out of the tableau.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5390,7 +5390,7 @@
       "hints": [],
       "entryPrompt": [
         "Tucked behind a rack of faceless mannequins, the Drifella slides a return slip across a small counter.",
-        "\"Source Check, returns desk. People bring me the versions of themselves they never ordered. Let's process yours honestly.\""
+        "\"Attestation, returns desk. People bring me the versions of themselves they never ordered. Let's process yours honestly.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5508,7 +5508,7 @@
       "hints": [],
       "entryPrompt": [
         "Down a humming service corridor the Drifella runs a barcode wand over a shelf of unmarked boxes.",
-        "\"Source Check, back-of-house. The stockroom is where the swarm hides where things came from. Let's read the labels honestly.\""
+        "\"Attestation, back-of-house. The stockroom is where the swarm hides where things came from. Let's read the labels honestly.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5633,7 +5633,7 @@
       "hints": [],
       "entryPrompt": [
         "Behind a heavy grille the Drifella runs a finger down a ledger of names on hold, each half-paid-for.",
-        "\"Source Check, layaway. I keep the pieces the swarm hasn't cashed out yet. Verify a claim and I'll release yours.\""
+        "\"Attestation, layaway. I keep the pieces the swarm hasn't cashed out yet. Verify a claim and I'll release yours.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5751,7 +5751,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella drags an invisible barcode across your chest and the register makes a doubtful beep.",
-        "\"Source Check at checkout. I can't ring up an unverified self. Prove it and the lane opens.\""
+        "\"Attestation at checkout. I can't ring up an unverified self. Prove it and the lane opens.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5869,7 +5869,7 @@
       "hints": [],
       "entryPrompt": [
         "In a low-lit alcove the Drifella opens a drawer of tagged, forgotten faces and looks up hopefully.",
-        "\"Source Check, lost and found. People misplace whole selves in here. Describe yours truly and I'll hand it back.\""
+        "\"Attestation, lost and found. People misplace whole selves in here. Describe yours truly and I'll hand it back.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5987,7 +5987,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella smooths a turret with a butter knife and presses a wet seal into the wall.",
-        "\"Source Check. Two questions before the tide voids my stamp. Speak fast, the sea audits everything.\""
+        "\"Attestation. Two questions before the tide voids my stamp. Speak fast, the sea audits everything.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6112,7 +6112,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella fans out a rack of postcards, every sunset a shade too orange to be true.",
-        "\"Source Check. Two questions. Get them right and I won't sell your face to a tourist.\""
+        "\"Attestation. Two questions. Get them right and I won't sell your face to a tourist.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6237,7 +6237,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella gestures at a blank wall labeled with a very confident placard.",
-        "\"Source Check. Two questions. This is a docent-led experience, so please keep your hands, and your rumors, behind the rope.\""
+        "\"Attestation. Two questions. This is a docent-led experience, so please keep your hands, and your rumors, behind the rope.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6362,7 +6362,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella crouches at the wet edge with a clipboard, timing the foam.",
-        "\"Source Check. Two questions before the line moves again. The tide re-files this shoreline constantly, so should you.\""
+        "\"Attestation. Two questions before the line moves again. The tide re-files this shoreline constantly, so should you.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6487,7 +6487,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella sits high in a lifeguard chair, whistle ready, scanning not the water but the crowd for fakes.",
-        "\"Source Check. Two questions. I've pulled a lot of forgeries out of that surf. Don't make me dive for you.\""
+        "\"Attestation. Two questions. I've pulled a lot of forgeries out of that surf. Don't make me dive for you.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6612,7 +6612,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella upends a snow globe, watches the glitter fall, and nods at whatever it apparently just told them.",
-        "\"Source Check. Two questions. The globe already knows your answers, but I like to hear you say them.\""
+        "\"Attestation. Two questions. The globe already knows your answers, but I like to hear you say them.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6737,7 +6737,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella turns in the striped dark beneath the boardwalk, a guestbook of footsteps balanced on both knees.",
-        "\"Source Check. Two questions, down here where the postcards can't reach. Everyone signs eventually.\""
+        "\"Attestation. Two questions, down here where the postcards can't reach. Everyone signs eventually.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6862,7 +6862,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella slides a rusted key across a wet ledge, one of a hundred lockers dripping behind them.",
-        "\"Source Check. Two questions to reclaim what you checked at dawn. No ticket, no self.\""
+        "\"Attestation. Two questions to reclaim what you checked at dawn. No ticket, no self.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6987,7 +6987,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella lifts a dust sheet in a room the tour never enters, turning one framed original to face you.",
-        "\"Source Check. Two questions, off the map, after hours. The annex only opens for people who ask the right way.\""
+        "\"Attestation. Two questions, off the map, after hours. The annex only opens for people who ask the right way.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7112,7 +7112,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella kneels over a low tide-pool shelf, sorting salt-pale driftwood into an order only they can see.",
-        "\"Source Check. Two questions. I don't sell what the sea files, but I'll let you read the catalog.\""
+        "\"Attestation. Two questions. I don't sell what the sea files, but I'll let you read the catalog.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7237,7 +7237,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella cranks a little hand-press and out slides a warm, faintly inky card.",
-        "\"Source Check! The swarm's copying our first press. Prove you know the real thing, boing.\""
+        "\"Attestation! The swarm's copying our first press. Prove you know the real thing, boing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7362,7 +7362,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella bounces once on a mossy stump and listens for the echo.",
-        "\"Source Check. I notarize by boing. Fibs land flat. Ready to bounce?\""
+        "\"Attestation. I notarize by boing. Fibs land flat. Ready to bounce?\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7487,7 +7487,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella smooths a crinkled hand-drawn map of Little Swag World, ink still wet in one corner.",
-        "\"Source Check. I map the origin by hand, zoom. No two alike, so no two leak clean.\""
+        "\"Attestation. I map the origin by hand, zoom. No two alike, so no two leak clean.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7612,7 +7612,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella hums a small looping tune and taps it into a shelf of tiny paper reels.",
-        "\"Source Check. I keep the origin as a lullaby. You can't rent a song you can't remember.\""
+        "\"Attestation. I keep the origin as a lullaby. You can't rent a song you can't remember.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7737,7 +7737,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella whittles a tiny figure, curls of shaving piling like proof around its feet.",
-        "\"Source Check. I carve originals from one block. Keep the shavings, keep the truth, zoom-boing.\""
+        "\"Attestation. I carve originals from one block. Keep the shavings, keep the truth, zoom-boing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7862,7 +7862,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella flings the little village gate wide and bounces in place with delight.",
-        "\"Welcome to the source, boing! Source Check first, just so you love the real thing.\""
+        "\"Welcome to the source, boing! Attestation first, just so you love the real thing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7987,7 +7987,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella stirs a pot of berry-dye, staining its little hands a proud purple.",
-        "\"Source Check. I dye the swag by hand, boing. A copied color always comes out flat.\""
+        "\"Attestation. I dye the swag by hand, boing. A copied color always comes out flat.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8112,7 +8112,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella pats a row of tiny sprouts, each labeled in careful hand-lettering.",
-        "\"Source Check. I keep the origin seeds, zoom. You can grow the real thing, but you can't fake a seed.\""
+        "\"Attestation. I keep the origin seeds, zoom. You can grow the real thing, but you can't fake a seed.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8237,7 +8237,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella pulls a thread taut, then deliberately sews one stitch crooked with a wink.",
-        "\"Source Check. I hand-stitch the tags and hide one flaw in each. A perfect copy is a dead giveaway, boing.\""
+        "\"Attestation. I hand-stitch the tags and hide one flaw in each. A perfect copy is a dead giveaway, boing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8362,7 +8362,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella turns a heavy ledger and runs an inky finger down a column of names.",
-        "\"Source Check. I keep the provenance by hand, boing. Every real thing has a chain back to here.\""
+        "\"Attestation. I keep the provenance by hand, boing. Every real thing has a chain back to here.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8487,7 +8487,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella taps a hand-cast bell and cocks its head, listening past the sound.",
-        "\"Source Check. My bell rings one true note for the source, boing. Fakes ring sour underneath.\""
+        "\"Attestation. My bell rings one true note for the source, boing. Fakes ring sour underneath.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8612,7 +8612,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella stirs the little firepit and the sparks arrange themselves into a listening crowd.",
-        "\"Source Check. I tell the origin tale, zoom, never the same twice, so no one can bottle it and sell it.\""
+        "\"Attestation. I tell the origin tale, zoom, never the same twice, so no one can bottle it and sell it.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8737,7 +8737,7 @@
       "hints": [],
       "entryPrompt": [
         "Tucked in a hollow beneath the roots, the Drifella peers up from a cellar of cool dark shelves.",
-        "\"Oh! A visitor found me. Source Check, quietly, boing. Down here we guard the deepest master copy.\""
+        "\"Oh! A visitor found me. Attestation, quietly, boing. Down here we guard the deepest master copy.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8862,7 +8862,7 @@
       "hints": [],
       "entryPrompt": [
         "Behind a curtain of falling water, the Drifella cups a handful from a little spring and offers a sip.",
-        "\"You slipped behind the falls! Source Check, zoom. This spring is the real source, water and swag both.\""
+        "\"You slipped behind the falls! Attestation, zoom. This spring is the real source, water and swag both.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8987,7 +8987,7 @@
       "hints": [],
       "entryPrompt": [
         "Up in a dusty rafter crawlspace, the Drifella cradles a folder of faded first sketches.",
-        "\"You climbed all the way up! Source Check, boing. I keep the earliest drafts, from before the swag had a name.\""
+        "\"You climbed all the way up! Attestation, boing. I keep the earliest drafts, from before the swag had a name.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9112,7 +9112,7 @@
       "hints": [],
       "entryPrompt": [
         "Inside a quiet ring of mushrooms, the Drifella looks up, surprised to be found at all.",
-        "\"You stepped into the ring so gently! Source Check, zoom. The source only shows itself to soft feet.\""
+        "\"You stepped into the ring so gently! Attestation, zoom. The source only shows itself to soft feet.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9237,7 +9237,7 @@
       "hints": [],
       "entryPrompt": [
         "Wedged in a warm chimney cubby, the Drifella shields a single glowing ember with two sooty hands.",
-        "\"You found my nook! Source Check, boing. This ember is the first spark that lit the whole swag.\""
+        "\"You found my nook! Attestation, boing. This ember is the first spark that lit the whole swag.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9362,7 +9362,7 @@
       "hints": [],
       "entryPrompt": [
         "In the deepest, quietest nook of all, the eldest Drifella rests a hand on a single glowing original.",
-        "\"You came the whole way down. Source Check, zoom-boing. I hold the one true master copy. Prove you'd protect it.\""
+        "\"You came the whole way down. Attestation, zoom-boing. I hold the one true master copy. Prove you'd protect it.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9487,7 +9487,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella flips a clipboard baked stiff by the sun and reads a lot number where a face should be.",
-        "\"Source Check. This whole flat is in arrears. Prove you still own what you're wearing.\""
+        "\"Attestation. This whole flat is in arrears. Prove you still own what you're wearing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9619,7 +9619,7 @@
       "hints": [],
       "entryPrompt": [
         "Heat-shimmer bends off the sand and the Drifella squints past you at a cleaner version of you standing a little to the left.",
-        "\"Source Check. I'll appraise the copy that isn't sweating. Hold still, both of you.\""
+        "\"Attestation. I'll appraise the copy that isn't sweating. Hold still, both of you.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9744,7 +9744,7 @@
       "hints": [],
       "entryPrompt": [
         "Behind a leaning fence of sun-bleached FOR-LEASE signs, the Drifella rattles a ring of duplicate keys, none of which open anything.",
-        "\"Source Check, quiet-like. I clerk the repossessions. Tell me which faces went, and where.\""
+        "\"Attestation, quiet-like. I clerk the repossessions. Tell me which faces went, and where.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9869,7 +9869,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella's notary stamp has gone soft in the heat; she presses it and it leaves a smear the shape of a lie.",
-        "\"Source Check. My seal melted at noon. I certify by shimmer now. Shimmer for me.\""
+        "\"Attestation. My seal melted at noon. I certify by shimmer now. Shimmer for me.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9994,7 +9994,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella sits cross-legged inside the chalk outline of a repossessed self, like it's a porch.",
-        "\"Source Check? Fine. Mind the lines. This identity's condemned, and the owner's touchy about guests.\""
+        "\"Attestation? Fine. Mind the lines. This identity's condemned, and the owner's touchy about guests.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10119,7 +10119,7 @@
       "hints": [],
       "entryPrompt": [
         "Only the Drifella's head and one brushing hand are above the dune; the rest is filed underground for safekeeping.",
-        "\"Source Check. I archive what the sand takes. Answer soft. Loud questions collapse the tunnels.\""
+        "\"Attestation. I archive what the sand takes. Answer soft. Loud questions collapse the tunnels.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10244,7 +10244,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella dips a dry brush and letters onto the shimmering air, spelling VACANCY across a lot that has no building.",
-        "\"Source Check. Prove you're real and I'll paint your sign NO VACANCY. Fail, and the desert keeps the room.\""
+        "\"Attestation. Prove you're real and I'll paint your sign NO VACANCY. Fail, and the desert keeps the room.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10369,7 +10369,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella slides a memory across the floor like a heavy armchair; the walls forget where they were.",
-        "\"Source Check, in the room that's on no floor plan. Sit somewhere you remember.\""
+        "\"Attestation, in the room that's on no floor plan. Sit somewhere you remember.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10494,7 +10494,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella runs a finger down a spine with no title and finds exactly the page it wanted.",
-        "\"Source Check. Everything in here is off-record. Answer like you belong off it too.\""
+        "\"Attestation. Everything in here is off-record. Answer like you belong off it too.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10619,7 +10619,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella presses a seal into a page that keeps rewriting itself, and nods as if that fixed it.",
-        "\"Source Check. Notarized dreams only. Swear to what you saw with your eyes shut.\""
+        "\"Attestation. Notarized dreams only. Swear to what you saw with your eyes shut.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10744,7 +10744,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella smooths a strip of wallpaper and a hundred small faces blink at you in unison.",
-        "\"Source Check. The walls are watching, because the walls are faces. Answer them nicely.\""
+        "\"Attestation. The walls are watching, because the walls are faces. Answer them nicely.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10869,7 +10869,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella stands guard beside a door that is only the idea of a door, painted where a wall should be.",
-        "\"Source Check. Nobody leaves through here, because here isn't a way out. Stay a moment.\""
+        "\"Attestation. Nobody leaves through here, because here isn't a way out. Stay a moment.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10994,7 +10994,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella leans close in the room's last unindexed corner, ready to hear the version that stays private.",
-        "\"Source Check, off every record. Confess what really happened. It goes no further than the room.\""
+        "\"Attestation, off every record. Confess what really happened. It goes no further than the room.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11119,7 +11119,7 @@
       "hints": [],
       "entryPrompt": [
         "It has no ledger line, no number, no paper. It waits where the record ends.",
-        "\"You reached the unfiled. Source Check. This one has no source but itself.\""
+        "\"You reached the unfiled. Attestation. This one has no source but itself.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11237,7 +11237,7 @@
       "hints": [],
       "entryPrompt": [
         "It has watched every leak and kept no ledger of any of them.",
-        "\"Source Check. I am the witness with no record. Test whether you can be one too.\""
+        "\"Attestation. I am the witness with no record. Test whether you can be one too.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11355,7 +11355,7 @@
       "hints": [],
       "entryPrompt": [
         "It stands in a room with nothing on the walls and treats the air as the exhibit.",
-        "\"Source Check. My collection is the void. Prove you can read an empty wall.\""
+        "\"Attestation. My collection is the void. Prove you can read an empty wall.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11473,7 +11473,7 @@
       "hints": [],
       "entryPrompt": [
         "It has a name it will not give you, and no record of it exists to steal.",
-        "\"Source Check, at the far end of the ledger. I am the last unfiled name. Earn it and forget it.\""
+        "\"Attestation, at the far end of the ledger. I am the last unfiled name. Earn it and forget it.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11591,7 +11591,7 @@
       "hints": [],
       "entryPrompt": [
         "Every chain of ownership you have ever followed ends at its feet, and goes no further.",
-        "\"Source Check. I am the provenance of provenance. Behind me is only the uncopied dark.\""
+        "\"Attestation. I am the provenance of provenance. Behind me is only the uncopied dark.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11709,7 +11709,7 @@
       "hints": [],
       "entryPrompt": [
         "It is the thing before there was a copy to be a thing against. First and last in the same breath.",
-        "\"The final Source Check. I am the thing-itself, uncopied. Answer as if nothing was ever verified before you.\""
+        "\"The final Attestation. I am the thing-itself, uncopied. Answer as if nothing was ever verified before you.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11789,7 +11789,7 @@
         ],
         "cleared": [
           "\"Take the card. It is the first copy of a thing that had none.\"",
-          "\"Cleared. The last unfiled Source Check is closed. You end where the record began.\""
+          "\"Cleared. The last unfiled Attestation is closed. You end where the record began.\""
         ],
         "failed": [
           "\"No. Leave the vanishing point. You cannot copy an answer you never truly held.\"",
@@ -11827,7 +11827,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella blinks its green eyes, then pats the tiny paper seals on its fur like they might testify.",
-        "\"Source Check. Two questions. No penalties, only provenance with better posture.\""
+        "\"Attestation. Two questions. No penalties, only provenance with better posture.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11907,7 +11907,7 @@
           "\"Warm answer. No lamination needed.\""
         ],
         "cleared": [
-          "\"Source Check cleared. Your witness mark remains soft.\"",
+          "\"Attestation cleared. Your witness mark remains soft.\"",
           "\"The record coughs. The room remembers you instead.\""
         ],
         "failed": [
@@ -11946,7 +11946,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella blinks through its whiskers like it has been waiting under the desk since last Tuesday.",
-        "\"Source Check. Sit if you like. The chair has already given testimony.\""
+        "\"Attestation. Sit if you like. The chair has already given testimony.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -12026,7 +12026,7 @@
           "\"Witness accepted. Chair concurs.\""
         ],
         "cleared": [
-          "\"The Source Check closes softly. Your name stays yours.\"",
+          "\"The Attestation closes softly. Your name stays yours.\"",
           "\"Filed under: present, breathing, not borrowed.\""
         ],
         "failed": [
@@ -12065,7 +12065,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella tilts its red little head, ink-dark eyes narrowing with office tenderness.",
-        "\"Source Check. Nothing punitive. I only ask what your shadow signed for.\""
+        "\"Attestation. Nothing punitive. I only ask what your shadow signed for.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -12191,7 +12191,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella tilts its armored ears toward the dead-letter wind.",
-        "\"Source Check. Gentle intake. No shouting. The stamp pad may blink.\""
+        "\"Attestation. Gentle intake. No shouting. The stamp pad may blink.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -12277,7 +12277,7 @@
           "\"Warm answer. No correction fluid needed.\""
         ],
         "cleared": [
-          "\"Source Check cleared. The stamp pad purrs quietly.\"",
+          "\"Attestation cleared. The stamp pad purrs quietly.\"",
           "\"The record tried to stand alone. It now has company.\""
         ],
         "failed": [
@@ -12316,7 +12316,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella blinks through its bandages and adjusts the tiny bell in its paw.",
-        "\"Source Check. Soft voice, clean hands. We only touch the truth by its edges.\""
+        "\"Attestation. Soft voice, clean hands. We only touch the truth by its edges.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -12435,7 +12435,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella bobs in place, all chrome scales, sharp teeth, and damp office manners.",
-        "\"Source Check? Tiny bite, clean record. Mostly clean.\""
+        "\"Attestation? Tiny bite, clean record. Mostly clean.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -12554,7 +12554,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella peers over its glasses like your alibi arrived without page numbers.",
-        "\"Source Check. Soft questions. Firm margins. No one gets stapled today.\""
+        "\"Attestation. Soft questions. Firm margins. No one gets stapled today.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -12673,7 +12673,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella tilts its goggles like it is adjusting evidence.",
-        "\"Source Check. I ask soft questions. The record answers too loudly.\""
+        "\"Attestation. I ask soft questions. The record answers too loudly.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -12754,7 +12754,7 @@
         ],
         "cleared": [
           "\"The badge warms up. It believes you, carefully.\"",
-          "\"Source Check cleared. The folder stays shut for now.\""
+          "\"Attestation cleared. The folder stays shut for now.\""
         ],
         "failed": [
           "\"No harm done. The witness can come back with steadier pockets.\"",
@@ -12792,7 +12792,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella tilts its microphone toward you like it is about to interview a ghost.",
-        "\"Source Check. Two questions. No flash photography, unless the flash remembers you back.\""
+        "\"Attestation. Two questions. No flash photography, unless the flash remembers you back.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -12925,7 +12925,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella blinks through enormous glasses, clutching its mace like a library stamp.",
-        "\"Source Check? I only ask what your eyes already borrowed.\""
+        "\"Attestation? I only ask what your eyes already borrowed.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -13006,7 +13006,7 @@
         ],
         "cleared": [
           "\"The card is filed under yours, with witnesses present.\"",
-          "\"Source Check complete. Please keep your receipt. It is your memory.\""
+          "\"Attestation complete. Please keep your receipt. It is your memory.\""
         ],
         "failed": [
           "\"No harm done. Bring steadier eyes next time.\"",
@@ -13044,7 +13044,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella peers down from its little plinth, tusks polished like gallery labels nobody admits to reading.",
-        "\"Source Check? Soft voice. Clean hands. No flash photography near the truth.\""
+        "\"Attestation? Soft voice. Clean hands. No flash photography near the truth.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -13162,7 +13162,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella blinks at you from under its wet blue cap, as if the ceiling has been leaking secrets.",
-        "\"Source Check. Soft voice. Dry facts. Please do not wring the witness.\""
+        "\"Attestation. Soft voice. Dry facts. Please do not wring the witness.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -13250,7 +13250,7 @@
         ],
         "cleared": [
           "\"The card dries in your hands. Filed under: yours.\"",
-          "\"Source Check complete. The wet ink stayed honest.\""
+          "\"Attestation complete. The wet ink stayed honest.\""
         ],
         "failed": [
           "\"No harm done. Sit near the radiator and try again.\"",
@@ -13288,7 +13288,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella bristles like a stack of letters that learned to breathe.",
-        "\"Source Check? I only ask what the dust already knows.\""
+        "\"Attestation? I only ask what the dust already knows.\""
       ],
       "questions": {
         "drawCount": 2,

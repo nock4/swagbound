@@ -388,7 +388,7 @@ export class SourceCheckScene extends Phaser.Scene {
   }
 
   private drawSplash(): void {
-    this.addText(256, 236, "SOURCE CHECK", {
+    this.addText(256, 236, "ATTESTATION", {
       fontSize: 26,
       color: CLEAN_UI_PRIMARY,
       fixedWidth: 300,
