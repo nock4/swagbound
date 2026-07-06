@@ -745,6 +745,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private startupRunFinalized = false;
   // Dims the bedroom to "night" during the new-game wake-up; lifts as Bosch wakes.
   private bedroomNightOverlay?: Phaser.GameObjects.Rectangle;
+  // True during the opening Morningside flyover: suppresses triggers/encounters while
+  // the hidden player is glided across town to drive the camera.
+  private flyoverActive = false;
   private startupMode: "startup" | "opening" = "startup";
   private startupInitialSpawn?: { x: number; y: number };
   private startupFallbackReason?: string;
@@ -1242,7 +1245,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.syncSourceCheckActors();
     // Boss-edit mode suppresses all in-world scripting (intro beat, cutscenes,
     // story triggers) so nothing steals the frame from the placement editor.
-    if (!this.bossEditor) {
+    if (!this.bossEditor && !this.flyoverActive) {
       if (this.maybeStartIntroMeteorBeat()) {
         return;
       }
@@ -1253,11 +1256,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return;
       }
     }
-    if (this.manageBossGates(delta)) {
-      return;
-    }
-    if (this.manageOverworldEnemies(delta)) {
-      return;
+    if (!this.flyoverActive) {
+      if (this.manageBossGates(delta)) {
+        return;
+      }
+      if (this.manageOverworldEnemies(delta)) {
+        return;
+      }
     }
     this.updatePrompt();
     this.publish();
@@ -5280,18 +5285,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.startupRunActive = true;
     this.startupRunFinalized = false;
     this.startupMode = opening ? "opening" : "startup";
-    // New-game opening: fade in from black to a dim "night" bedroom so spawning at the
-    // bed reads as waking up; the overlay lifts once Bosch wakes (startup finalize).
-    if (opening) {
-      this.cameras.main.fadeIn(750, 0, 0, 0);
-      this.bedroomNightOverlay?.destroy();
-      this.bedroomNightOverlay = this.add
-        .rectangle(0, 0, this.scale.width, this.scale.height, 0x0a1236, 0.62)
-        .setOrigin(0, 0)
-        .setScrollFactor(0)
-        .setDepth(130000);
-      this.showBedroomSignal();
-    }
     this.startupInitialSpawn = spawn;
     this.startupFallbackReason = undefined;
     lockPlayer(this.playerState, this.playerFrames);
@@ -5305,15 +5298,99 @@ export class ChunkedWorldScene extends Phaser.Scene {
       finalPlayerControllable: false
     });
 
-    if (!this.startAuthoredOpeningCutsceneBeforeStartup(opening, decision.reference)) {
+    // The bedroom wake-up: fade in to the dim night room, the cold signal, then the knock.
+    const runWakeup = (): void => {
       if (opening) {
-        // Pace the wake-up: hold on the dark room while the cold signal fades in and
-        // flares (~1.6s) before MiFella pounds the door.
-        this.time.delayedCall(2600, () => this.startNewGameStartupEvent(decision.reference));
-      } else {
-        this.startNewGameStartupEvent(decision.reference);
+        this.cameras.main.fadeIn(750, 0, 0, 0);
+        this.bedroomNightOverlay?.destroy();
+        this.bedroomNightOverlay = this.add
+          .rectangle(0, 0, this.scale.width, this.scale.height, 0x0a1236, 0.62)
+          .setOrigin(0, 0)
+          .setScrollFactor(0)
+          .setDepth(130000);
+        this.showBedroomSignal();
       }
+      if (!this.startAuthoredOpeningCutsceneBeforeStartup(opening, decision.reference)) {
+        if (opening) {
+          // Pace the wake-up: hold on the dark room while the cold signal flares before
+          // MiFella pounds the door.
+          this.time.delayedCall(2600, () => this.startNewGameStartupEvent(decision.reference));
+        } else {
+          this.startNewGameStartupEvent(decision.reference);
+        }
+      }
+    };
+
+    // New game opens with an EarthBound-style night flyover of Morningside, then
+    // descends (a fade) to Bosch's bed for the wake-up.
+    if (opening) {
+      this.runOpeningFlyover(spawn, runWakeup);
+    } else {
+      runWakeup();
     }
+  }
+
+  /**
+   * A slow night drift over Morningside before the bedroom wake-up. Chunks stream
+   * around the player, so a hidden player is glided along a path across town and the
+   * camera follows it (loading the town as it goes), zoomed out for the overhead feel;
+   * then it fades to black, warps to the bed, and hands off to the wake-up.
+   */
+  private runOpeningFlyover(bedSpawn: { x: number; y: number }, onDone: () => void): void {
+    const cam = this.cameras.main;
+    this.flyoverActive = true;
+    const start = { x: 1636, y: 1520 };
+    const end = { x: 2160, y: 1792 };
+    const setAnchor = (x: number, y: number): void => {
+      this.playerState.x = x;
+      this.playerState.y = y;
+      this.player?.setPosition(x, y);
+    };
+    this.player?.setVisible(false);
+    for (const follower of this.followers) {
+      follower.sprite?.setVisible(false);
+    }
+    setAnchor(start.x, start.y);
+    this.refreshStreaming(true);
+    // The camera already follows this.player, so gliding the (hidden) anchor across
+    // town IS the pan; just pull the zoom out for the overhead feel.
+    cam.setZoom(1.35);
+    // Oversized + centered so the night tint still covers the viewport at the pulled-back
+    // flyover zoom (a screen-sized scroll-fixed rect doesn't cover once zoomed out).
+    const flyNight = this.add
+      .rectangle(this.scale.width / 2, this.scale.height / 2, this.scale.width * 4, this.scale.height * 4, 0x0a1236, 0.58)
+      .setScrollFactor(0)
+      .setDepth(130000);
+    cam.fadeIn(700, 0, 0, 0);
+
+    const proxy = { t: 0 };
+    this.tweens.add({
+      targets: proxy,
+      t: 1,
+      duration: 7200,
+      ease: "Sine.easeInOut",
+      onUpdate: () => {
+        const x = start.x + (end.x - start.x) * proxy.t;
+        const y = start.y + (end.y - start.y) * proxy.t;
+        setAnchor(x, y);
+        this.refreshStreaming();
+      },
+      onComplete: () => {
+        cam.fadeOut(650, 0, 0, 0);
+        cam.once("camerafadeoutcomplete", () => {
+          flyNight.destroy();
+          this.flyoverActive = false;
+          setAnchor(bedSpawn.x, bedSpawn.y);
+          this.player?.setVisible(true);
+          for (const follower of this.followers) {
+            follower.sprite?.setVisible(true);
+          }
+          this.refreshStreaming(true);
+          cam.setZoom(OVERWORLD_CAMERA_ZOOM);
+          onDone();
+        });
+      }
+    });
   }
 
   private startAuthoredOpeningCutsceneBeforeStartup(
