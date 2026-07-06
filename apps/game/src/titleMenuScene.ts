@@ -165,6 +165,9 @@ export class TitleMenuScene extends Phaser.Scene {
       this.fadeSwap(() => {
         this.phase = "title";
         this.showSlide(TITLE_SLIDE_KEY);
+        // Glass Chime (Inoyamaland) starts on the SWAGBOUND title slide, cross-fading
+        // out the dark war-slide track.
+        void this.music?.play(MENU_CUE);
         this.prompt?.setText("PRESS  Z");
         this.prompt?.setDepth(10);
       });
@@ -172,9 +175,6 @@ export class TitleMenuScene extends Phaser.Scene {
     }
     if (this.phase === "title") {
       this.phase = "menu";
-      // Glass Chime (Inoyamaland) kicks in at the menu, cross-fading out the dark
-      // war-slide track.
-      void this.music?.play(MENU_CUE);
       this.buildMenu();
       return;
     }
