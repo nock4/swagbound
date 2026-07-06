@@ -12,6 +12,14 @@ import {
 import { resolveDoorWarpLanding } from "./doorTriggers";
 
 export const EARTHBOUND_OPENING_KNOCK_REF = "data_20.l_0xc66b97";
+
+/**
+ * Bosch's bedroom in the raw-EB interior map (the data_20 house bank, the room with
+ * the bed + the co-located opening-knock NPC data_20.l_0xc66b97). The old nearest-door
+ * / upstairs-door derivation landed in the wrong interior (a public/hotel foyer), so
+ * the new-game start is anchored to this known bedroom coordinate instead.
+ */
+export const BOSCH_BEDROOM_SPAWN = { x: 7640, y: 360 } as const;
 export const EARTHBOUND_INTRO_METEOR_MARKER_REF = "data_38.l_0xc86279";
 export const EARTHBOUND_BUZZ_BUZZ_METEOR_REF = "data_15.l_0xc5eb0b";
 export const EARTHBOUND_STARMAN_JUNIOR_ENEMY_ID = 214;
@@ -249,7 +257,8 @@ function openingCutsceneCommand(input: Omit<ScriptCommand, "sourceLocation">, li
 export function resolveNewGameOpeningStart(
   world: WorldChunked | undefined,
   scripts: ScriptCollection | undefined,
-  eventRef = EARTHBOUND_OPENING_KNOCK_REF
+  eventRef = EARTHBOUND_OPENING_KNOCK_REF,
+  bedroomSpawn: { x: number; y: number } = BOSCH_BEDROOM_SPAWN
 ): ResolvedNewGameOpening {
   if (!world) {
     return { resolved: false, reason: "missing_world" };
@@ -258,25 +267,11 @@ export function resolveNewGameOpeningStart(
     return { resolved: false, reason: "missing_script" };
   }
 
-  const houseEntry = nearestDoor(world.doors, world.player.spawnWorldPixel, {
-    maxDistance: world.tileSize * 32
-  });
-  if (!houseEntry) {
-    return { resolved: false, reason: "missing_house_entry" };
-  }
-
-  const upstairsDoor = nearestDoor(world.doors, houseEntry.destinationWorldPixel, {
-    maxDistance: world.tileSize * 64,
-    maxHorizontalOffset: world.tileSize * 4,
-    above: true,
-    exclude: houseEntry
-  });
-  if (!upstairsDoor) {
-    return { resolved: false, reason: "missing_upstairs_door" };
-  }
-
+  // Anchor to Bosch's bedroom (the data_20 house interior), snapped to the nearest
+  // walkable cell. Replaces the old door-hop derivation, which landed in a public
+  // interior (hotel foyer) instead of the house.
   const landing = resolveDoorWarpLanding(
-    upstairsDoor.destinationWorldPixel,
+    bedroomSpawn,
     world.collision.solidRows,
     {
       cellSize: world.collision.cellSize,
@@ -294,7 +289,7 @@ export function resolveNewGameOpeningStart(
     start: {
       eventRef,
       spawn: landing.point,
-      derivation: "nearest canonical-start house door, same-column upstairs door, walkable landing"
+      derivation: "Bosch bedroom (data_20 house interior)"
     }
   };
 }
