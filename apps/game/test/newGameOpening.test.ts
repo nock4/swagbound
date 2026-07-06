@@ -130,8 +130,10 @@ describe("new-game opening decision", () => {
 });
 
 describe("new-game opening resolver", () => {
-  it("derives the upstairs spawn from a synthetic door graph and script ref", () => {
-    const resolved = resolveNewGameOpeningStart(world(), scripts("alpha.start"), "alpha.start");
+  it("anchors the start to the bedroom spawn, snapped to a walkable cell", () => {
+    // The resolver ignores the door graph and anchors to Bosch's bedroom coordinate
+    // (injectable here so the synthetic world's small collision grid is in-bounds).
+    const resolved = resolveNewGameOpeningStart(world(), scripts("alpha.start"), "alpha.start", { x: 240, y: 64 });
 
     expect(resolved).toMatchObject({
       resolved: true,
@@ -142,14 +144,15 @@ describe("new-game opening resolver", () => {
     });
   });
 
-  it("reports missing inputs without falling back to literals", () => {
+  it("reports missing inputs and unwalkable bedrooms without falling back to literals", () => {
     expect(resolveNewGameOpeningStart(world(), scripts("alpha.start"), "missing.start")).toEqual({
       resolved: false,
       reason: "missing_script"
     });
-    expect(resolveNewGameOpeningStart(world({ doors: [door({ x: 32, y: 80 }, { x: 160, y: 160 })] }), scripts("alpha.start"), "alpha.start")).toEqual({
+    // A bedroom coordinate with no walkable cell in range resolves unwalkable.
+    expect(resolveNewGameOpeningStart(world(), scripts("alpha.start"), "alpha.start", { x: 100000, y: 100000 })).toEqual({
       resolved: false,
-      reason: "missing_upstairs_door"
+      reason: "unwalkable_spawn"
     });
   });
 });

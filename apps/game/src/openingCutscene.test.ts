@@ -68,17 +68,12 @@ describe("authored opening cutscene", () => {
     })).toBeUndefined();
   });
 
-  it("authors MiFella walking to Bosch's bedside before the knock", () => {
+  it("treats the authored opening cutscene as a no-op wake-up", () => {
+    // Bosch now wakes at the foot of his bed (spawn 7592,364) with the world fade-in
+    // and the MiFella knock event; the authored cutscene carries no NPC choreography.
+    // (The prior version moved NPC 78 to 7820,588, the old wrong hotel spawn.)
     const cutscene = loadAuthoredOpeningCutscene();
-    const script = buildOpeningCutsceneScript(cutscene);
-    const events = script ? resolveScriptEvents(script, AUTHORED_OPENING_CUTSCENE_REF) : undefined;
-    const firstEffect = events?.effects[0];
-
-    expect(firstEffect).toEqual({
-      kind: "actorMove",
-      actor: { npcId: 78 },
-      to: { x: 7820, y: 588 }
-    });
+    expect(buildOpeningCutsceneScript(cutscene)).toBeUndefined();
   });
 
   it("keeps a held wandering actor static until the startup releases it", () => {
