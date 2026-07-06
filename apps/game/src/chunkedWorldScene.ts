@@ -5276,6 +5276,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.startupRunActive = true;
     this.startupRunFinalized = false;
     this.startupMode = opening ? "opening" : "startup";
+    // New-game opening: fade in from black so spawning at the bed reads as waking up.
+    if (opening) {
+      this.cameras.main.fadeIn(750, 0, 0, 0);
+    }
     this.startupInitialSpawn = spawn;
     this.startupFallbackReason = undefined;
     lockPlayer(this.playerState, this.playerFrames);

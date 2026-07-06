@@ -4,7 +4,6 @@ import { publishDebug } from "./state";
 import { ChunkedWorldScene } from "./chunkedWorldScene";
 import { IntroScene, isIntroDisabled } from "./introScene";
 import { Act1IntroScene } from "./act1IntroScene";
-import { IntroBedroomScene } from "./introBedroomScene";
 import { resolveNewGameOpeningStart } from "./newGameOpening";
 import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
@@ -135,26 +134,11 @@ class BootScene extends Phaser.Scene {
         saveState: null,
         ...(openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
       };
-      // NEW GAME flow: dossier (act1-intro) → EB-faithful bedroom wake-up cinematic
-      // (intro-bedroom) → the world (which still runs the in-game knock beat).
-      const boschSprite = data.spriteOverrides?.party?.[0]?.sprite;
+      // NEW GAME flow: dossier (act1-intro) → the world, which spawns Bosch in his
+      // bedroom and runs the in-world wake-up + knock cutscene on the real EB map.
       const newGameTarget = {
         sceneKey: "act1-intro",
-        data: {
-          nextSceneKey: "intro-bedroom",
-          nextSceneData: {
-            nextSceneKey: "chunked-world",
-            nextSceneData: newGameWorldData,
-            bosch: boschSprite
-              ? {
-                image: boschSprite.image,
-                frameWidth: boschSprite.frameWidth,
-                frameHeight: boschSprite.frameHeight,
-                downFrame: boschSprite.animations?.down?.[0] ?? 0
-              }
-              : undefined
-          }
-        }
+        data: { nextSceneKey: "chunked-world", nextSceneData: newGameWorldData }
       };
       // CONTINUE target: the world with the loaded save (null when no save exists).
       const continueTarget = saveBlob !== null
@@ -465,7 +449,7 @@ new Phaser.Game({
   height: 448,
   backgroundColor: "#000000",
   pixelArt: true,
-  scene: [BootScene, TitleMenuScene, Act1IntroScene, IntroBedroomScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
+  scene: [BootScene, TitleMenuScene, Act1IntroScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH
