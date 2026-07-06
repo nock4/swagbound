@@ -20,6 +20,15 @@ describe("resolvePlayerVisualState", () => {
     expect(td.approximation).toMatchObject({ scale: 0.55, alpha: 0.5 });
   });
 
+  it("sleeping keeps the normal idle base and suppresses teleport spin", () => {
+    const r = resolvePlayerVisualState(inputs({ sleeping: true, teleporting: true }));
+    expect(r.baseState).toBe("default");
+    expect(r.approximation.alpha).toBeUndefined();
+    expect(r.sleeping).toBe(true);
+    expect(r.lockAnimation).toBe(true);
+    expect(r.transforms.teleportSpin).toBe(false);
+  });
+
   it("tiny (alive) -> tiny + scale approximation", () => {
     const r = resolvePlayerVisualState(inputs({ status: { tiny: true } }));
     expect(r.baseState).toBe("tiny");

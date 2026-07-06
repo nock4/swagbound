@@ -127,18 +127,17 @@ class BootScene extends Phaser.Scene {
         saveSlot: DEFAULT_SAVE_SLOT,
         saveSlots: SAVE_SLOTS
       };
-      // NEW GAME target: the Act-1 dossier cinematic, then the world (which still runs
-      // the in-game cold-signal opening beat when resolved, for the personal one-two).
+      // NEW GAME target: the world, which runs the in-game opening when resolved.
       const newGameWorldData = {
         ...baseWorld,
         saveState: null,
         ...(openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
       };
-      // NEW GAME flow: dossier (act1-intro) → the world, which spawns Bosch in his
-      // bedroom and runs the in-world wake-up + knock cutscene on the real EB map.
+      // NEW GAME flow: spawn Bosch in his bedroom and run the in-world wake-up +
+      // knock cutscene on the real EB map.
       const newGameTarget = {
-        sceneKey: "act1-intro",
-        data: { nextSceneKey: "chunked-world", nextSceneData: newGameWorldData }
+        sceneKey: "chunked-world",
+        data: newGameWorldData
       };
       // CONTINUE target: the world with the loaded save (null when no save exists).
       const continueTarget = saveBlob !== null
