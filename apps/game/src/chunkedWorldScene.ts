@@ -271,6 +271,7 @@ import {
   type NavmeshQuery,
   type WorldRect as NavmeshWorldRect
 } from "./navmesh";
+import { findMeshPath, type Point as NavmeshPoint } from "./navmeshPath";
 import {
   advanceMapTransition,
   beginMapTransition,
@@ -435,6 +436,8 @@ type CutsceneMoveState = {
   restoreNpcPaused?: boolean;
   holdNpcUntilStartupFinalize?: boolean;
   target: { x: number; y: number };
+  waypoints?: NavmeshPoint[];
+  waypointIndex: number;
   run: boolean;
   elapsedMs: number;
   maxDurationMs: number;
@@ -5118,7 +5121,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
 
-    const target = this.clampSpawn(effect.to);
+    const requestedTarget = this.clampSpawn(effect.to);
+    const path = this.navmesh ? findMeshPath(this.navmesh, runtime.state, requestedTarget) : undefined;
+    const waypoints = path && path.length > 1 ? path.slice(1) : undefined;
+    const target = waypoints?.at(-1) ?? requestedTarget;
     const actorLabel = cutsceneActorLabel(actor);
     this.cutsceneMove = {
       actor,
@@ -5126,6 +5132,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       ...(npc ? { npcKey: npc.key, restoreNpcPaused: npc.state.paused } : {}),
       ...(npc && this.authoredOpeningCutsceneRunActive ? { holdNpcUntilStartupFinalize: true } : {}),
       target,
+      ...(waypoints ? { waypoints } : {}),
+      waypointIndex: 0,
       run: effect.run === true,
       elapsedMs: 0,
       maxDurationMs: CUTSCENE_ACTOR_MOVE_TIMEOUT_MS
@@ -5164,9 +5172,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     move.elapsedMs += Math.max(0, deltaMs);
-    const distance = Phaser.Math.Distance.Between(runtime.state.x, runtime.state.y, move.target.x, move.target.y);
+    const target = this.activeCutsceneMoveTarget(move);
+    const distance = Phaser.Math.Distance.Between(runtime.state.x, runtime.state.y, target.x, target.y);
     if (distance <= CUTSCENE_ACTOR_MOVE_ARRIVAL_PX) {
-      this.setCutsceneActorPosition(runtime, move.target);
+      this.setCutsceneActorPosition(runtime, target);
+      if (this.advanceCutsceneMoveWaypoint(move)) {
+        runtime.sync();
+        this.publishCutsceneMoveProgress(move, runtime);
+        return;
+      }
       this.completeCutsceneMove(true, false);
       return;
     }
@@ -5176,7 +5190,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
-    const arrived = advanceCutsceneActorTowardTarget(runtime.state, move.target, {
+    const arrived = advanceCutsceneActorTowardTarget(runtime.state, target, {
       deltaMs,
       speed: move.run ? PLAYER_SPEED * CUTSCENE_ACTOR_RUN_MULTIPLIER : PLAYER_SPEED,
       bounds: this.movementBounds(),
@@ -5185,9 +5199,29 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
     runtime.sync();
     if (arrived) {
+      if (this.advanceCutsceneMoveWaypoint(move)) {
+        this.publishCutsceneMoveProgress(move, runtime);
+        return;
+      }
       this.completeCutsceneMove(true, false);
       return;
     }
+    this.publishCutsceneMoveProgress(move, runtime);
+  }
+
+  private activeCutsceneMoveTarget(move: CutsceneMoveState): NavmeshPoint {
+    return move.waypoints?.[move.waypointIndex] ?? move.target;
+  }
+
+  private advanceCutsceneMoveWaypoint(move: CutsceneMoveState): boolean {
+    if (!move.waypoints || move.waypointIndex >= move.waypoints.length - 1) {
+      return false;
+    }
+    move.waypointIndex += 1;
+    return true;
+  }
+
+  private publishCutsceneMoveProgress(move: CutsceneMoveState, runtime: CutsceneMoveActorRuntime): void {
     this.cutsceneMoveDebug = {
       active: true,
       actor: move.actorLabel,
