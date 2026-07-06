@@ -359,7 +359,7 @@ const MAIN_MENU_COLUMNS = 3;
 // The pause menu is a 3x3 grid: the EarthBound commands (Talk/Goods/PSI/Equip/Status)
 // plus Save and the three Swagbound systems (Map/Party/Journal), so everything a
 // controller player needs is one Start-press away. Check moved under context interaction;
-// the Binder (Source Checks) stays nested under Status. Order is row-major (see the grid).
+// the Binder (Attestations) stays nested under Status. Order is row-major (see the grid).
 const MAIN_COMMANDS: Array<Omit<MenuItem, "enabled">> = [
   { id: TALK_MENU_ACTION_ID, label: "Talk", actionId: TALK_MENU_ACTION_ID },
   { id: GOODS_MENU_ID, label: "Goods", childScreenId: GOODS_MENU_ID },
@@ -772,7 +772,7 @@ function equipSlotScreenId(memberId: number, slot: EquipmentSlot): string {
 
 export function buildStatusScreen(status: StatusViewModel): MenuScreen {
   const screen = buildPartyMemberSelectScreen(STATUS_MENU_ID, status.title, status.members);
-  // The Binder (Source Checks) is nested here, after the party members, so the top-level
+  // The Binder (Attestations) is nested here, after the party members, so the top-level
   // pause menu stays EarthBound's vanilla 6 commands.
   return {
     ...screen,

@@ -237,9 +237,8 @@
       "id": "postwick-registry",
       "comment": "ACT 2 threshold 1: the Contentment Registry enforcer (Insane Cultist, group 55. EB Happy Happy analog) blocks the way, defending the town's pre-filed happiness. Requires postwick:arrived; sets act2:registry_cleared (the flag that opens the Venue exhibition).",
       "boss": {
-        "x": 2324,
-        "y": 7332,
-        "facing": "down"
+        "x": 2300,
+        "y": 7308
       },
       "once": true,
       "requireFlags": [

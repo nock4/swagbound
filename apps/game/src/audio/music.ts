@@ -2,7 +2,7 @@ import type { MusicManifest } from "@eb/schemas";
 
 export interface Music {
   play(cue: string): Promise<void>;
-  stop(): void;
+  stop(fadeMs?: number): void;
   resume(): void;
   setEnabled(enabled: boolean): void;
 }
@@ -85,9 +85,7 @@ export class WebAudioMusic implements Music {
       return;
     }
     if (context.state === "suspended") {
-      void context.resume().catch(() => {
-        this.unavailable = true;
-      });
+      void this.resumeContext(context);
     }
 
     this.pendingCue = cue;
@@ -105,11 +103,11 @@ export class WebAudioMusic implements Music {
     this.startTrack(context, resolved, buffer);
   }
 
-  stop(): void {
+  stop(fadeMs?: number): void {
     this.requestedCue = undefined;
     this.pendingCue = undefined;
     if (this.context) {
-      this.fadeOutCurrent(this.context);
+      this.fadeOutCurrent(this.context, fadeMs);
       return;
     }
     this.current = undefined;
@@ -124,9 +122,7 @@ export class WebAudioMusic implements Music {
       return;
     }
     if (context.state === "suspended") {
-      void context.resume().catch(() => {
-        this.unavailable = true;
-      });
+      void this.resumeContext(context);
     }
     if (!this.current && this.requestedCue) {
       void this.play(this.requestedCue);
@@ -183,18 +179,18 @@ export class WebAudioMusic implements Music {
     }
   }
 
-  private fadeOutCurrent(context: AudioContext): void {
+  private fadeOutCurrent(context: AudioContext, fadeMs?: number): void {
     const current = this.current;
     if (!current) {
       return;
     }
     this.current = undefined;
-    this.fadeTrack(context, current);
+    this.fadeTrack(context, current, fadeMs);
   }
 
-  private fadeTrack(context: AudioContext, track: PlayingTrack): void {
+  private fadeTrack(context: AudioContext, track: PlayingTrack, fadeMs?: number): void {
     const now = context.currentTime;
-    const fadeSeconds = this.fadeSeconds();
+    const fadeSeconds = this.fadeSeconds(fadeMs);
     try {
       track.gain.gain.cancelScheduledValues(now);
       track.gain.gain.setValueAtTime(Math.max(track.gain.gain.value, MIN_GAIN), now);
@@ -259,6 +255,14 @@ export class WebAudioMusic implements Music {
       this.masterGain = this.context.createGain();
       this.masterGain.gain.value = clamp(this.options.masterGain ?? DEFAULT_MUSIC_MASTER_GAIN, 0, 1);
       this.masterGain.connect(this.context.destination);
+      // Optional call: real AudioContexts are EventTargets, but test fakes may not
+      // implement addEventListener; without the guard the throw lands in this try
+      // and permanently marks music unavailable.
+      this.context.addEventListener?.("statechange", () => {
+        if (this.context?.state === "running") {
+          this.playRequestedCueIfIdle();
+        }
+      });
       return this.context;
     } catch {
       this.unavailable = true;
@@ -266,8 +270,24 @@ export class WebAudioMusic implements Music {
     }
   }
 
-  private fadeSeconds(): number {
-    return Math.max(0, this.options.fadeMs ?? DEFAULT_FADE_MS) / 1000;
+  private async resumeContext(context: AudioContext): Promise<void> {
+    try {
+      await context.resume();
+      this.playRequestedCueIfIdle();
+    } catch {
+      // Autoplay policy can reject resume before a user gesture. Keep the
+      // context alive so the next key, pointer, or gamepad gesture can retry.
+    }
+  }
+
+  private playRequestedCueIfIdle(): void {
+    if (!this.current && !this.pendingCue && this.requestedCue) {
+      void this.play(this.requestedCue);
+    }
+  }
+
+  private fadeSeconds(fadeMs?: number): number {
+    return Math.max(0, fadeMs ?? this.options.fadeMs ?? DEFAULT_FADE_MS) / 1000;
   }
 
   private warnOnce(key: string, message: string): void {

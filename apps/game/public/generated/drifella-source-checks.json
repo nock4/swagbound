@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.drifella-source-checks.v1",
-  "comment": "Drifella Source Checks. Friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
+  "comment": "Drifella Attestations. Friendly trivia encounters. v1 ships Morningside's 8 (6 visible, 2 hidden); the other 87 are allocated in drifella-source-check-manifest.json awaiting the placement+authoring pass. Questions follow the witnessed-only doctrine; in every multipleChoice4 the officialIndex option sounds institutional and is always wrong. Placements probe-verified walkable 2026-07-03.",
   "checks": [
     {
       "id": "sourcecheck-morningside-001",
@@ -28,7 +28,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella looks at you the way a librarian looks at a returning book.",
-        "\"Source Check? It's friendly. Mostly questions. The questions are also friendly.\""
+        "\"Attestation? It's friendly. Mostly questions. The questions are also friendly.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -154,7 +154,7 @@
       "hints": [],
       "entryPrompt": [
         "This Drifella stamps the air twice before speaking, notarizing nothing.",
-        "\"State your attention for the record. Source Check?\""
+        "\"State your attention for the record. Attestation?\""
       ],
       "questions": {
         "drawCount": 2,
@@ -672,7 +672,7 @@
       "hints": [],
       "entryPrompt": [
         "A Drifella idles by the west block, counting windows. It waves without looking.",
-        "\"Forty-one windows. Zero of them honest. Anyway. Source Check?\""
+        "\"Forty-one windows. Zero of them honest. Anyway. Attestation?\""
       ],
       "questions": {
         "drawCount": 2,
@@ -970,7 +970,7 @@
           },
           {
             "type": "trueFalse",
-            "prompt": "A Source Check hurts.",
+            "prompt": "An Attestation hurts.",
             "answer": false,
             "failLine": "\"Has any of this hurt? Be honest. You're doing great.\"",
             "category": "witnessed"
@@ -1082,7 +1082,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella taps an invisible microphone twice and waits for the room to settle.",
-        "\"Source Check. Two questions, no reverb. If your story clips, we cut the feed.\""
+        "\"Attestation. Two questions, no reverb. If your story clips, we cut the feed.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -1327,7 +1327,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella weighs nothing on a small brass scale and nods at the result.",
-        "\"Source Check. Claims by the pound. Yours first.\""
+        "\"Attestation. Claims by the pound. Yours first.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -1571,7 +1571,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella consults a bus schedule with more annotations than schedule.",
-        "\"You're early. Or the questions are late. Either way: Source Check.\""
+        "\"You're early. Or the questions are late. Either way: Attestation.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -1819,7 +1819,7 @@
       ],
       "entryPrompt": [
         "A voice from inside the greenery. You genuinely did not see them there.",
-        "\"Shh. You found the branch office. Source Check. Leaf through two questions.\""
+        "\"Shh. You found the branch office. Attestation. Leaf through two questions.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2193,7 +2193,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella lifts a veil of gauze and a single bee leaves, unimpressed.",
-        "\"Source Check. The bees are the witnesses. I merely translate.\""
+        "\"Attestation. The bees are the witnesses. I merely translate.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2315,7 +2315,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella adjusts a scarecrow's hat with real tenderness.",
-        "\"He's shy. I'll ask the questions for him. Source Check.\""
+        "\"He's shy. I'll ask the questions for him. Attestation.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2437,7 +2437,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella leans over a mossy well and listens to nothing in particular.",
-        "\"Source Check. Speak clearly. The well has poor patience for mumbling.\""
+        "\"Attestation. Speak clearly. The well has poor patience for mumbling.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2559,7 +2559,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella trims a stem and holds it to the light like evidence.",
-        "\"Source Check. Two questions, freshly cut. Mind the thorns.\""
+        "\"Attestation. Two questions, freshly cut. Mind the thorns.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2681,7 +2681,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella wets a finger and holds it up with grave professionalism.",
-        "\"Source Check. The wind agrees with the truth. Let's see if you do.\""
+        "\"Attestation. The wind agrees with the truth. Let's see if you do.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -2807,7 +2807,7 @@
       ],
       "entryPrompt": [
         "A voice from inside a tall hedge. You did not see them there at all.",
-        "\"Shh. You found the quiet path. Source Check. Two turns, no dead ends.\""
+        "\"Shh. You found the quiet path. Attestation. Two turns, no dead ends.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3059,7 +3059,7 @@
       ],
       "entryPrompt": [
         "The Drifella watches a bug skate the pond and marks something down.",
-        "\"Source Check. The water keeps minutes. So do I. Two entries.\""
+        "\"Attestation. The water keeps minutes. So do I. Two entries.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3185,7 +3185,7 @@
       ],
       "entryPrompt": [
         "The Drifella swings a lantern in a slow arc over the dark rows of flowers.",
-        "\"Source Check. I keep the light. You keep your story straight.\""
+        "\"Attestation. I keep the light. You keep your story straight.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3307,7 +3307,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella slides a grey parcel across the dock; it has your outline on it, faintly.",
-        "\"Source Check. Before I stamp you UNDELIVERABLE, prove there was ever a real address.\""
+        "\"Attestation. Before I stamp you UNDELIVERABLE, prove there was ever a real address.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3432,7 +3432,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella dips a nib and eyes your ankle, deciding what to write on the tag.",
-        "\"Source Check. Give me a name I can letter, or you go on the shelf as ANONYMOUS.\""
+        "\"Attestation. Give me a name I can letter, or you go on the shelf as ANONYMOUS.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3557,7 +3557,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella runs a finger down a shelf of parcels, each labeled with a face nobody came back for.",
-        "\"Source Check. Two questions. Answer them or you get shelved with the rest of the technically-yours.\""
+        "\"Attestation. Two questions. Answer them or you get shelved with the rest of the technically-yours.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3682,7 +3682,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella holds a gauge into the mist; the needle sags toward EMPTY.",
-        "\"Source Check. Your account reads thin. Add some verified weight or I fog you out entirely.\""
+        "\"Attestation. Your account reads thin. Add some verified weight or I fog you out entirely.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3807,7 +3807,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella raises a baton and a hundred unheard voicemails hum a chord that never got listened to.",
-        "\"Source Check. Sing me something true and the choir will let you pass. Off-key, and you join the section.\""
+        "\"Attestation. Sing me something true and the choir will let you pass. Off-key, and you join the section.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -3932,7 +3932,7 @@
       "hints": [],
       "entryPrompt": [
         "You find the Drifella crouched behind the return crates, a leaked copy palmed like contraband.",
-        "\"Source Check. Quietly. Get it right and I never saw you. Get it wrong and I saw everything.\""
+        "\"Attestation. Quietly. Get it right and I never saw you. Get it wrong and I saw everything.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4057,7 +4057,7 @@
       "hints": [],
       "entryPrompt": [
         "Water laps the vault door; inside, the Drifella holds a cancellation stamp above a leaked card like a scalpel.",
-        "\"Source Check. Tell me when the truth happened, not just what. Time is the only thing that doesn't rot down here.\""
+        "\"Attestation. Tell me when the truth happened, not just what. Time is the only thing that doesn't rot down here.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4182,7 +4182,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella rolls out a long steel drawer; there's a face in it that looks a little like a copy of yours.",
-        "\"Source Check. Prove you're not one of my returns and I'll slide the drawer shut empty.\""
+        "\"Attestation. Prove you're not one of my returns and I'll slide the drawer shut empty.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4307,7 +4307,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella slides open a little confessional grille reeking of old glue and salt fog.",
-        "\"Source Check, or last rites. Same booth. Tell me your provenance, child, before it's lost for good.\""
+        "\"Attestation, or last rites. Same booth. Tell me your provenance, child, before it's lost for good.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4432,7 +4432,7 @@
       "hints": [],
       "entryPrompt": [
         "At the fog's edge the Drifella stands between two chutes: one back into the world, one down into the Read.",
-        "\"Final Source Check. Answer clean and you're delivered onward. Answer wrong and you go back to the Source.\""
+        "\"Final Attestation. Answer clean and you're delivered onward. Answer wrong and you go back to the Source.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4557,7 +4557,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella loops a fresh price tag around your wrist and squints at the number like it owes her money.",
-        "\"Source Check, at retail. I only stock verified stock. Prove the provenance and I'll ring you up.\""
+        "\"Attestation, at retail. I only stock verified stock. Prove the provenance and I'll ring you up.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4675,7 +4675,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella lifts a face off a mannequin, checks it against yours, and sighs like a tailor at a bad hem.",
-        "\"Source Check, fitting-room rules. Tell me whose face is whose and I'll leave yours on.\""
+        "\"Attestation, fitting-room rules. Tell me whose face is whose and I'll leave yours on.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4800,7 +4800,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella swipes a loyalty card that isn't yours and reads a lifetime of you off the balance.",
-        "\"Source Check, members only. Your provenance is your points total. Let's audit it.\""
+        "\"Attestation, members only. Your provenance is your points total. Let's audit it.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -4918,7 +4918,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella unspools a yard of receipt tape, holds it to the food-court light, and reads it like a palm.",
-        "\"Source Check, table service. The receipt tape remembers everyone who ate here. Let's see if you match.\""
+        "\"Attestation, table service. The receipt tape remembers everyone who ate here. Let's see if you match.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5036,7 +5036,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella taps the YOU ARE HERE dot until it lands squarely on your chest.",
-        "\"Source Check, by the directory. Everyone's a storefront to me. Let's confirm which one you are.\""
+        "\"Attestation, by the directory. Everyone's a storefront to me. Let's confirm which one you are.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5154,7 +5154,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella lowers a baton and the ceiling music dips, just enough that you notice it was always there.",
-        "\"Source Check, in three-quarter time. I score the crowd's obedience. Let's see if you're in key.\""
+        "\"Attestation, in three-quarter time. I score the crowd's obedience. Let's see if you're in key.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5272,7 +5272,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella nudges a posed figure a half-inch left, steps back, and finally seems satisfied with the composition.",
-        "\"Source Check, front-of-house. I curate the display windows. Tell me what's real and I'll leave you out of the tableau.\""
+        "\"Attestation, front-of-house. I curate the display windows. Tell me what's real and I'll leave you out of the tableau.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5390,7 +5390,7 @@
       "hints": [],
       "entryPrompt": [
         "Tucked behind a rack of faceless mannequins, the Drifella slides a return slip across a small counter.",
-        "\"Source Check, returns desk. People bring me the versions of themselves they never ordered. Let's process yours honestly.\""
+        "\"Attestation, returns desk. People bring me the versions of themselves they never ordered. Let's process yours honestly.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5508,7 +5508,7 @@
       "hints": [],
       "entryPrompt": [
         "Down a humming service corridor the Drifella runs a barcode wand over a shelf of unmarked boxes.",
-        "\"Source Check, back-of-house. The stockroom is where the swarm hides where things came from. Let's read the labels honestly.\""
+        "\"Attestation, back-of-house. The stockroom is where the swarm hides where things came from. Let's read the labels honestly.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5633,7 +5633,7 @@
       "hints": [],
       "entryPrompt": [
         "Behind a heavy grille the Drifella runs a finger down a ledger of names on hold, each half-paid-for.",
-        "\"Source Check, layaway. I keep the pieces the swarm hasn't cashed out yet. Verify a claim and I'll release yours.\""
+        "\"Attestation, layaway. I keep the pieces the swarm hasn't cashed out yet. Verify a claim and I'll release yours.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5751,7 +5751,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella drags an invisible barcode across your chest and the register makes a doubtful beep.",
-        "\"Source Check at checkout. I can't ring up an unverified self. Prove it and the lane opens.\""
+        "\"Attestation at checkout. I can't ring up an unverified self. Prove it and the lane opens.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5869,7 +5869,7 @@
       "hints": [],
       "entryPrompt": [
         "In a low-lit alcove the Drifella opens a drawer of tagged, forgotten faces and looks up hopefully.",
-        "\"Source Check, lost and found. People misplace whole selves in here. Describe yours truly and I'll hand it back.\""
+        "\"Attestation, lost and found. People misplace whole selves in here. Describe yours truly and I'll hand it back.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -5987,7 +5987,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella smooths a turret with a butter knife and presses a wet seal into the wall.",
-        "\"Source Check. Two questions before the tide voids my stamp. Speak fast, the sea audits everything.\""
+        "\"Attestation. Two questions before the tide voids my stamp. Speak fast, the sea audits everything.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6112,7 +6112,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella fans out a rack of postcards, every sunset a shade too orange to be true.",
-        "\"Source Check. Two questions. Get them right and I won't sell your face to a tourist.\""
+        "\"Attestation. Two questions. Get them right and I won't sell your face to a tourist.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6237,7 +6237,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella gestures at a blank wall labeled with a very confident placard.",
-        "\"Source Check. Two questions. This is a docent-led experience, so please keep your hands, and your rumors, behind the rope.\""
+        "\"Attestation. Two questions. This is a docent-led experience, so please keep your hands, and your rumors, behind the rope.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6362,7 +6362,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella crouches at the wet edge with a clipboard, timing the foam.",
-        "\"Source Check. Two questions before the line moves again. The tide re-files this shoreline constantly, so should you.\""
+        "\"Attestation. Two questions before the line moves again. The tide re-files this shoreline constantly, so should you.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6487,7 +6487,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella sits high in a lifeguard chair, whistle ready, scanning not the water but the crowd for fakes.",
-        "\"Source Check. Two questions. I've pulled a lot of forgeries out of that surf. Don't make me dive for you.\""
+        "\"Attestation. Two questions. I've pulled a lot of forgeries out of that surf. Don't make me dive for you.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6612,7 +6612,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella upends a snow globe, watches the glitter fall, and nods at whatever it apparently just told them.",
-        "\"Source Check. Two questions. The globe already knows your answers, but I like to hear you say them.\""
+        "\"Attestation. Two questions. The globe already knows your answers, but I like to hear you say them.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6737,7 +6737,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella turns in the striped dark beneath the boardwalk, a guestbook of footsteps balanced on both knees.",
-        "\"Source Check. Two questions, down here where the postcards can't reach. Everyone signs eventually.\""
+        "\"Attestation. Two questions, down here where the postcards can't reach. Everyone signs eventually.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6862,7 +6862,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella slides a rusted key across a wet ledge, one of a hundred lockers dripping behind them.",
-        "\"Source Check. Two questions to reclaim what you checked at dawn. No ticket, no self.\""
+        "\"Attestation. Two questions to reclaim what you checked at dawn. No ticket, no self.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -6987,7 +6987,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella lifts a dust sheet in a room the tour never enters, turning one framed original to face you.",
-        "\"Source Check. Two questions, off the map, after hours. The annex only opens for people who ask the right way.\""
+        "\"Attestation. Two questions, off the map, after hours. The annex only opens for people who ask the right way.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7112,7 +7112,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella kneels over a low tide-pool shelf, sorting salt-pale driftwood into an order only they can see.",
-        "\"Source Check. Two questions. I don't sell what the sea files, but I'll let you read the catalog.\""
+        "\"Attestation. Two questions. I don't sell what the sea files, but I'll let you read the catalog.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7237,7 +7237,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella cranks a little hand-press and out slides a warm, faintly inky card.",
-        "\"Source Check! The swarm's copying our first press. Prove you know the real thing, boing.\""
+        "\"Attestation! The swarm's copying our first press. Prove you know the real thing, boing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7362,7 +7362,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella bounces once on a mossy stump and listens for the echo.",
-        "\"Source Check. I notarize by boing. Fibs land flat. Ready to bounce?\""
+        "\"Attestation. I notarize by boing. Fibs land flat. Ready to bounce?\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7487,7 +7487,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella smooths a crinkled hand-drawn map of Little Swag World, ink still wet in one corner.",
-        "\"Source Check. I map the origin by hand, zoom. No two alike, so no two leak clean.\""
+        "\"Attestation. I map the origin by hand, zoom. No two alike, so no two leak clean.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7612,7 +7612,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella hums a small looping tune and taps it into a shelf of tiny paper reels.",
-        "\"Source Check. I keep the origin as a lullaby. You can't rent a song you can't remember.\""
+        "\"Attestation. I keep the origin as a lullaby. You can't rent a song you can't remember.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7737,7 +7737,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella whittles a tiny figure, curls of shaving piling like proof around its feet.",
-        "\"Source Check. I carve originals from one block. Keep the shavings, keep the truth, zoom-boing.\""
+        "\"Attestation. I carve originals from one block. Keep the shavings, keep the truth, zoom-boing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7862,7 +7862,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella flings the little village gate wide and bounces in place with delight.",
-        "\"Welcome to the source, boing! Source Check first, just so you love the real thing.\""
+        "\"Welcome to the source, boing! Attestation first, just so you love the real thing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -7987,7 +7987,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella stirs a pot of berry-dye, staining its little hands a proud purple.",
-        "\"Source Check. I dye the swag by hand, boing. A copied color always comes out flat.\""
+        "\"Attestation. I dye the swag by hand, boing. A copied color always comes out flat.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8112,7 +8112,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella pats a row of tiny sprouts, each labeled in careful hand-lettering.",
-        "\"Source Check. I keep the origin seeds, zoom. You can grow the real thing, but you can't fake a seed.\""
+        "\"Attestation. I keep the origin seeds, zoom. You can grow the real thing, but you can't fake a seed.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8237,7 +8237,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella pulls a thread taut, then deliberately sews one stitch crooked with a wink.",
-        "\"Source Check. I hand-stitch the tags and hide one flaw in each. A perfect copy is a dead giveaway, boing.\""
+        "\"Attestation. I hand-stitch the tags and hide one flaw in each. A perfect copy is a dead giveaway, boing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8362,7 +8362,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella turns a heavy ledger and runs an inky finger down a column of names.",
-        "\"Source Check. I keep the provenance by hand, boing. Every real thing has a chain back to here.\""
+        "\"Attestation. I keep the provenance by hand, boing. Every real thing has a chain back to here.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8487,7 +8487,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella taps a hand-cast bell and cocks its head, listening past the sound.",
-        "\"Source Check. My bell rings one true note for the source, boing. Fakes ring sour underneath.\""
+        "\"Attestation. My bell rings one true note for the source, boing. Fakes ring sour underneath.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8612,7 +8612,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella stirs the little firepit and the sparks arrange themselves into a listening crowd.",
-        "\"Source Check. I tell the origin tale, zoom, never the same twice, so no one can bottle it and sell it.\""
+        "\"Attestation. I tell the origin tale, zoom, never the same twice, so no one can bottle it and sell it.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8737,7 +8737,7 @@
       "hints": [],
       "entryPrompt": [
         "Tucked in a hollow beneath the roots, the Drifella peers up from a cellar of cool dark shelves.",
-        "\"Oh! A visitor found me. Source Check, quietly, boing. Down here we guard the deepest master copy.\""
+        "\"Oh! A visitor found me. Attestation, quietly, boing. Down here we guard the deepest master copy.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8862,7 +8862,7 @@
       "hints": [],
       "entryPrompt": [
         "Behind a curtain of falling water, the Drifella cups a handful from a little spring and offers a sip.",
-        "\"You slipped behind the falls! Source Check, zoom. This spring is the real source, water and swag both.\""
+        "\"You slipped behind the falls! Attestation, zoom. This spring is the real source, water and swag both.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -8987,7 +8987,7 @@
       "hints": [],
       "entryPrompt": [
         "Up in a dusty rafter crawlspace, the Drifella cradles a folder of faded first sketches.",
-        "\"You climbed all the way up! Source Check, boing. I keep the earliest drafts, from before the swag had a name.\""
+        "\"You climbed all the way up! Attestation, boing. I keep the earliest drafts, from before the swag had a name.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9112,7 +9112,7 @@
       "hints": [],
       "entryPrompt": [
         "Inside a quiet ring of mushrooms, the Drifella looks up, surprised to be found at all.",
-        "\"You stepped into the ring so gently! Source Check, zoom. The source only shows itself to soft feet.\""
+        "\"You stepped into the ring so gently! Attestation, zoom. The source only shows itself to soft feet.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9237,7 +9237,7 @@
       "hints": [],
       "entryPrompt": [
         "Wedged in a warm chimney cubby, the Drifella shields a single glowing ember with two sooty hands.",
-        "\"You found my nook! Source Check, boing. This ember is the first spark that lit the whole swag.\""
+        "\"You found my nook! Attestation, boing. This ember is the first spark that lit the whole swag.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9362,7 +9362,7 @@
       "hints": [],
       "entryPrompt": [
         "In the deepest, quietest nook of all, the eldest Drifella rests a hand on a single glowing original.",
-        "\"You came the whole way down. Source Check, zoom-boing. I hold the one true master copy. Prove you'd protect it.\""
+        "\"You came the whole way down. Attestation, zoom-boing. I hold the one true master copy. Prove you'd protect it.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9487,7 +9487,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella flips a clipboard baked stiff by the sun and reads a lot number where a face should be.",
-        "\"Source Check. This whole flat is in arrears. Prove you still own what you're wearing.\""
+        "\"Attestation. This whole flat is in arrears. Prove you still own what you're wearing.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9619,7 +9619,7 @@
       "hints": [],
       "entryPrompt": [
         "Heat-shimmer bends off the sand and the Drifella squints past you at a cleaner version of you standing a little to the left.",
-        "\"Source Check. I'll appraise the copy that isn't sweating. Hold still, both of you.\""
+        "\"Attestation. I'll appraise the copy that isn't sweating. Hold still, both of you.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9744,7 +9744,7 @@
       "hints": [],
       "entryPrompt": [
         "Behind a leaning fence of sun-bleached FOR-LEASE signs, the Drifella rattles a ring of duplicate keys, none of which open anything.",
-        "\"Source Check, quiet-like. I clerk the repossessions. Tell me which faces went, and where.\""
+        "\"Attestation, quiet-like. I clerk the repossessions. Tell me which faces went, and where.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9869,7 +9869,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella's notary stamp has gone soft in the heat; she presses it and it leaves a smear the shape of a lie.",
-        "\"Source Check. My seal melted at noon. I certify by shimmer now. Shimmer for me.\""
+        "\"Attestation. My seal melted at noon. I certify by shimmer now. Shimmer for me.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -9994,7 +9994,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella sits cross-legged inside the chalk outline of a repossessed self, like it's a porch.",
-        "\"Source Check? Fine. Mind the lines. This identity's condemned, and the owner's touchy about guests.\""
+        "\"Attestation? Fine. Mind the lines. This identity's condemned, and the owner's touchy about guests.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10119,7 +10119,7 @@
       "hints": [],
       "entryPrompt": [
         "Only the Drifella's head and one brushing hand are above the dune; the rest is filed underground for safekeeping.",
-        "\"Source Check. I archive what the sand takes. Answer soft. Loud questions collapse the tunnels.\""
+        "\"Attestation. I archive what the sand takes. Answer soft. Loud questions collapse the tunnels.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10244,7 +10244,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella dips a dry brush and letters onto the shimmering air, spelling VACANCY across a lot that has no building.",
-        "\"Source Check. Prove you're real and I'll paint your sign NO VACANCY. Fail, and the desert keeps the room.\""
+        "\"Attestation. Prove you're real and I'll paint your sign NO VACANCY. Fail, and the desert keeps the room.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10369,7 +10369,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella slides a memory across the floor like a heavy armchair; the walls forget where they were.",
-        "\"Source Check, in the room that's on no floor plan. Sit somewhere you remember.\""
+        "\"Attestation, in the room that's on no floor plan. Sit somewhere you remember.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10494,7 +10494,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella runs a finger down a spine with no title and finds exactly the page it wanted.",
-        "\"Source Check. Everything in here is off-record. Answer like you belong off it too.\""
+        "\"Attestation. Everything in here is off-record. Answer like you belong off it too.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10619,7 +10619,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella presses a seal into a page that keeps rewriting itself, and nods as if that fixed it.",
-        "\"Source Check. Notarized dreams only. Swear to what you saw with your eyes shut.\""
+        "\"Attestation. Notarized dreams only. Swear to what you saw with your eyes shut.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10744,7 +10744,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella smooths a strip of wallpaper and a hundred small faces blink at you in unison.",
-        "\"Source Check. The walls are watching, because the walls are faces. Answer them nicely.\""
+        "\"Attestation. The walls are watching, because the walls are faces. Answer them nicely.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10869,7 +10869,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella stands guard beside a door that is only the idea of a door, painted where a wall should be.",
-        "\"Source Check. Nobody leaves through here, because here isn't a way out. Stay a moment.\""
+        "\"Attestation. Nobody leaves through here, because here isn't a way out. Stay a moment.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -10994,7 +10994,7 @@
       "hints": [],
       "entryPrompt": [
         "The Drifella leans close in the room's last unindexed corner, ready to hear the version that stays private.",
-        "\"Source Check, off every record. Confess what really happened. It goes no further than the room.\""
+        "\"Attestation, off every record. Confess what really happened. It goes no further than the room.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11119,7 +11119,7 @@
       "hints": [],
       "entryPrompt": [
         "It has no ledger line, no number, no paper. It waits where the record ends.",
-        "\"You reached the unfiled. Source Check. This one has no source but itself.\""
+        "\"You reached the unfiled. Attestation. This one has no source but itself.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11237,7 +11237,7 @@
       "hints": [],
       "entryPrompt": [
         "It has watched every leak and kept no ledger of any of them.",
-        "\"Source Check. I am the witness with no record. Test whether you can be one too.\""
+        "\"Attestation. I am the witness with no record. Test whether you can be one too.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11355,7 +11355,7 @@
       "hints": [],
       "entryPrompt": [
         "It stands in a room with nothing on the walls and treats the air as the exhibit.",
-        "\"Source Check. My collection is the void. Prove you can read an empty wall.\""
+        "\"Attestation. My collection is the void. Prove you can read an empty wall.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11473,7 +11473,7 @@
       "hints": [],
       "entryPrompt": [
         "It has a name it will not give you, and no record of it exists to steal.",
-        "\"Source Check, at the far end of the ledger. I am the last unfiled name. Earn it and forget it.\""
+        "\"Attestation, at the far end of the ledger. I am the last unfiled name. Earn it and forget it.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11591,7 +11591,7 @@
       "hints": [],
       "entryPrompt": [
         "Every chain of ownership you have ever followed ends at its feet, and goes no further.",
-        "\"Source Check. I am the provenance of provenance. Behind me is only the uncopied dark.\""
+        "\"Attestation. I am the provenance of provenance. Behind me is only the uncopied dark.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11709,7 +11709,7 @@
       "hints": [],
       "entryPrompt": [
         "It is the thing before there was a copy to be a thing against. First and last in the same breath.",
-        "\"The final Source Check. I am the thing-itself, uncopied. Answer as if nothing was ever verified before you.\""
+        "\"The final Attestation. I am the thing-itself, uncopied. Answer as if nothing was ever verified before you.\""
       ],
       "questions": {
         "drawCount": 2,
@@ -11789,7 +11789,7 @@
         ],
         "cleared": [
           "\"Take the card. It is the first copy of a thing that had none.\"",
-          "\"Cleared. The last unfiled Source Check is closed. You end where the record began.\""
+          "\"Cleared. The last unfiled Attestation is closed. You end where the record began.\""
         ],
         "failed": [
           "\"No. Leave the vanishing point. You cannot copy an answer you never truly held.\"",
@@ -11798,6 +11798,1586 @@
         "alreadyCleared": [
           "\"You already met me, before there was a copy to remember me by.\"",
           "\"We are finished. The thing-itself needs no second verification.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-morningside-009",
+      "drifellaId": "drifella2-6735",
+      "npcId": 100398,
+      "region": "morningside",
+      "tier": 1,
+      "placement": {
+        "kind": "main-route",
+        "worldPixel": {
+          "x": 2168,
+          "y": 1840
+        },
+        "facing": "up"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A soft-spoken stamp-clerk plushie who believes every witnessed thing deserves a receipt.",
+        "tic": "\"Stamped because seen.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-6735.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella blinks its green eyes, then pats the tiny paper seals on its fur like they might testify.",
+        "\"Attestation. Two questions. No penalties, only provenance with better posture.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In Morningside, Milady's files know Bosch better than Bosch knows himself.",
+            "answer": false,
+            "failLine": "\"A file can hover. It cannot remember breakfast from the inside.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When a card calls someone VERIFIED, the warmest proof is still...",
+            "options": [
+              "A friend who was there",
+              "A red stamp",
+              "A category box",
+              "A hallway camera"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Ink dries. Witnesses stay damp around the eyes.\"",
+            "category": "witnessed",
+            "officialIndex": 1
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch became more real when Milady filed him correctly.",
+            "answer": false,
+            "failLine": "\"No. He was already inconveniently real.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A Fluxus score is often...",
+            "options": [
+              "A simple instruction for an action or event",
+              "A royal portrait in oil",
+              "A museum insurance form",
+              "A blueprint for a bank lobby"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The form was loud, but not the piece.\"",
+            "category": "art",
+            "officialIndex": 2
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete is made by composing with...",
+            "options": [
+              "Recorded sounds",
+              "Only church organs",
+              "Silent invoices",
+              "Approved patriotic melodies"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The tape remembers. The anthem was added later.\"",
+            "category": "art",
+            "officialIndex": 3
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10925",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stamped because seen.\"",
+          "\"Correct. The receipt is small, but alive.\"",
+          "\"Yes. Filed under: you were standing there.\"",
+          "\"Warm answer. No lamination needed.\""
+        ],
+        "cleared": [
+          "\"Attestation cleared. Your witness mark remains soft.\"",
+          "\"The record coughs. The room remembers you instead.\""
+        ],
+        "failed": [
+          "\"No harm. Come back when the stamp stops trembling.\"",
+          "\"Not wrong forever. Just unshelved for now.\""
+        ],
+        "alreadyCleared": [
+          "\"We've met. Your receipt still has a pulse.\"",
+          "\"Already cleared. The file pretends not to notice.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-postwick-010",
+      "drifellaId": "drifella2-6775",
+      "npcId": 100399,
+      "region": "postwick",
+      "tier": 2,
+      "placement": {
+        "kind": "north-road",
+        "worldPixel": {
+          "x": 1676,
+          "y": 6324
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A damp little archivist in a knit cap who cross-checks memories against chair marks and weather stains.",
+        "tic": "\"Stamped by eyeball.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-6775.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella blinks through its whiskers like it has been waiting under the desk since last Tuesday.",
+        "\"Attestation. Sit if you like. The chair has already given testimony.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In Postwick, Milady's file knew Bosch before Bosch introduced himself.",
+            "answer": true,
+            "failLine": "\"Introductions are for people. Files prefer ambush.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When the card called Bosch verified, what did it really verify?",
+            "options": [
+              "That someone had filed him",
+              "That he agreed with the file",
+              "That friendship had been audited",
+              "That the chair was innocent"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Consent was not in the drawer. I checked twice.\"",
+            "category": "witnessed",
+            "officialIndex": 1
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A witness and a source are the same thing once Milady staples them neatly enough.",
+            "answer": false,
+            "failLine": "\"Staples make packets, not truth.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Fluxus artists were known for...",
+            "options": [
+              "Event scores and playful performance",
+              "Perfect marble anatomy",
+              "Royal portrait varnish",
+              "Insurance forms for clouds"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"A cloud may be insured. It still refuses the desk.\"",
+            "category": "art",
+            "officialIndex": 3
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete is made by...",
+            "options": [
+              "Using recorded sounds as raw material",
+              "Painting silence onto canvas",
+              "Approving only orchestra music",
+              "Filing noise under misconduct"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Noise is not misconduct. Sometimes it is evidence.\"",
+            "category": "art",
+            "officialIndex": 3
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10998",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stamped by eyeball. You saw it.\"",
+          "\"Correct. Damp, but legible.\"",
+          "\"The ledger purrs quietly. Do not tell it I said that.\"",
+          "\"Witness accepted. Chair concurs.\""
+        ],
+        "cleared": [
+          "\"The Attestation closes softly. Your name stays yours.\"",
+          "\"Filed under: present, breathing, not borrowed.\""
+        ],
+        "failed": [
+          "\"No penalty. Only a bookmark in the wrong weather.\"",
+          "\"Come back when the memory dries flat.\""
+        ],
+        "alreadyCleared": [
+          "\"We've checked sources. The ink remembers kindly.\"",
+          "\"Your witness mark is still here. Slightly damp, very real.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-bluebell-village-010",
+      "drifellaId": "drifella2-6986",
+      "npcId": 100400,
+      "region": "bluebell-village",
+      "tier": 3,
+      "placement": {
+        "kind": "village-lane",
+        "worldPixel": {
+          "x": 2400,
+          "y": 7328
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A velvet-hooded stamp clerk who smiles like he has already read the receipt.",
+        "tic": "\"Stamped by sight.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-6986.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella tilts its red little head, ink-dark eyes narrowing with office tenderness.",
+        "\"Attestation. Nothing punitive. I only ask what your shadow signed for.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In Bluebell Village, Bosch saw the card before the card saw him.",
+            "answer": false,
+            "failLine": "\"No. The card had already been looking. Very impolite paper.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Milady's filing system prefers a person to become...",
+            "options": [
+              "A witnessed friend",
+              "A corrected category",
+              "A noisy neighbor",
+              "An unsigned birthday card"
+            ],
+            "answerIndex": 1,
+            "failLine": "\"The official box smiles. The real box has teeth.\"",
+            "category": "witnessed",
+            "officialIndex": 0
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When Bosch's provenance was questioned, the gentlest proof was...",
+            "options": [
+              "A notarized silence",
+              "Being remembered by someone present",
+              "A cleaner database row",
+              "A receipt from the future"
+            ],
+            "answerIndex": 1,
+            "failLine": "\"Paper can blink. Witnesses can answer.\"",
+            "category": "witnessed",
+            "officialIndex": 2
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A Fluxus event score is often...",
+            "options": [
+              "A short instruction for an action",
+              "A bank form for funding museums",
+              "A marble statue inventory",
+              "A rulebook for portrait lighting"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Try the smaller shelf. The one where instructions become weather.\"",
+            "category": "art",
+            "officialIndex": 1
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete made compositions from...",
+            "options": [
+              "Recorded sounds treated as material",
+              "Only church organs",
+              "Paint mixed with sand",
+              "Silent auction catalogs"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"No. The tape remembered before the catalog could lie.\"",
+            "category": "art",
+            "officialIndex": 3
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10458",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stamped by sight. You were there.\"",
+          "\"Correct. The record coughs politely.\"",
+          "\"Warm answer. No cold filing needed.\"",
+          "\"Yes. Your memory kept its receipt.\""
+        ],
+        "cleared": [
+          "\"Cleared. The card softens when witnessed.\"",
+          "\"Filed under: present, breathing, not alone.\""
+        ],
+        "failed": [
+          "\"No fine today. Only a small shadow on the form.\"",
+          "\"Come back later. Bring your eyes, not their paperwork.\""
+        ],
+        "alreadyCleared": [
+          "\"Already stamped. I remember the shape of your yes.\"",
+          "\"We've checked this source. It remained a person.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-011",
+      "drifellaId": "drifella2-7211",
+      "npcId": 100401,
+      "region": "dead-letter",
+      "tier": 1,
+      "placement": {
+        "kind": "returned-mail-dock",
+        "worldPixel": {
+          "x": 8156,
+          "y": 9164
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A chrome-masked mailroom archivist who sniffs every sealed envelope for ghosts.",
+        "tic": "\"Stamped by seeing.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-7211.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella tilts its armored ears toward the dead-letter wind.",
+        "\"Attestation. Gentle intake. No shouting. The stamp pad may blink.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "The dead-letter card knew Bosch's name before Bosch offered it.",
+            "answer": true,
+            "failLine": "\"Names arrive pre-licked sometimes. That is not consent.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Milady's filing cabinet prefers Bosch to be listed as...",
+            "options": [
+              "A person",
+              "A witness",
+              "A transferable case number",
+              "A friend with handwriting"
+            ],
+            "answerIndex": 2,
+            "failLine": "\"The official label smiles too hard.\"",
+            "category": "witnessed",
+            "officialIndex": 0
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The card's provenance was strongest when it came from...",
+            "options": [
+              "A witness who was there",
+              "A copy of a copy",
+              "A verified folder with no fingerprints",
+              "A rumor wearing a tie"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Folders do not have eyes. Usually.\"",
+            "category": "witnessed",
+            "officialIndex": 2
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A readymade, in art history, is...",
+            "options": [
+              "An ordinary object presented as art",
+              "A mural painted in one sitting",
+              "A portrait approved by a museum board",
+              "A song written for a gallery opening"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Approved is not the same as noticed.\"",
+            "category": "art",
+            "officialIndex": 2
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete is built from...",
+            "options": [
+              "Recorded sounds arranged as composition",
+              "Silent sheet music only",
+              "Paint mixed with cement",
+              "Choirs singing museum labels"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Tape remembers footsteps better than committees do.\"",
+            "category": "art"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3672",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stamped by seeing. Good hands.\"",
+          "\"Correct. The envelope relaxes.\"",
+          "\"Filed under: actually witnessed.\"",
+          "\"Warm answer. No correction fluid needed.\""
+        ],
+        "cleared": [
+          "\"Attestation cleared. The stamp pad purrs quietly.\"",
+          "\"The record tried to stand alone. It now has company.\""
+        ],
+        "failed": [
+          "\"No penalty. The mail can wait for truth.\"",
+          "\"Come back when the envelope stops shaking.\""
+        ],
+        "alreadyCleared": [
+          "\"We have stamped this before. The ink still knows you.\"",
+          "\"Already cleared. The cabinet pretends not to care.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-013",
+      "drifellaId": "drifella2-7390",
+      "npcId": 100402,
+      "region": "the-galleria",
+      "tier": 2,
+      "placement": {
+        "kind": "storefront-window",
+        "worldPixel": {
+          "x": 4244,
+          "y": 6284
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A bandaged gallery docent who whispers like every label card has a pulse.",
+        "tic": "\"Cataloged, but breathing.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-7390.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella blinks through its bandages and adjusts the tiny bell in its paw.",
+        "\"Attestation. Soft voice, clean hands. We only touch the truth by its edges.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the-galleria, Milady's filing system treats a witness as more trustworthy than a stamped record.",
+            "answer": false,
+            "failLine": "\"The stamp is louder. That is not the same as truer.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When Bosch looked at the card, the creepiest part was that it already seemed to know...",
+            "options": [
+              "Where he had been",
+              "His favorite soup",
+              "The price of frames",
+              "Which painting was crooked"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Frames cost money. Surveillance costs a person.\"",
+            "category": "witnessed",
+            "officialIndex": 2
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A provenance note proves an object is honest just because it uses small official words.",
+            "answer": false,
+            "failLine": "\"Tiny print can still lie in a very tidy voice.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Fluxus is most associated with...",
+            "options": [
+              "Experimental event scores and everyday actions",
+              "Royal portrait salons",
+              "Computer generated stock indexes",
+              "Marble copies of Roman senators"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The action happened. The form was only visiting.\"",
+            "category": "art",
+            "officialIndex": 2
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete often begins with...",
+            "options": [
+              "Recorded sounds used as raw material",
+              "A choir reading tax forms",
+              "Paint mixed with sand",
+              "A museum buying silence"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Silence can be purchased. Sound must still be heard.\"",
+            "category": "art",
+            "officialIndex": 3
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4969",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Cataloged, but breathing. You were there.\"",
+          "\"Correct. The label relaxes.\"",
+          "\"Warm answer. No stamp required.\"",
+          "\"The record coughs. The witness stands.\""
+        ],
+        "cleared": [
+          "\"The bell rings once. Filed under: Bosch, witnessed.\"",
+          "\"You may pass. The card is less cold now.\""
+        ],
+        "failed": [
+          "\"No harm done. Even witnesses blink.\"",
+          "\"Come back when the labels stop moving.\""
+        ],
+        "alreadyCleared": [
+          "\"We've met. Your shelf is still warm.\"",
+          "\"Already witnessed. Already breathing.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-solana-beach-011",
+      "drifellaId": "drifella2-7753",
+      "npcId": 100403,
+      "region": "solana-beach",
+      "tier": 3,
+      "placement": {
+        "kind": "boardwalk",
+        "worldPixel": {
+          "x": 5368,
+          "y": 3176
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A tidepool archivist in a knight's helmet, smiling too widely while stamping rumors dry.",
+        "tic": "\"Stamped by salt.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-7753.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella bobs in place, all chrome scales, sharp teeth, and damp office manners.",
+        "\"Attestation? Tiny bite, clean record. Mostly clean.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "At Solana Beach, Milady's file knew Bosch's location before Bosch said where he was.",
+            "answer": true,
+            "failLine": "\"The file arrived with sand in its teeth. It had been waiting.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The beachside record treated a witness as...",
+            "options": [
+              "A person who saw something",
+              "A searchable container",
+              "A friend with wet shoes",
+              "A gull with a badge"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Containers do not blink when the tide changes.\"",
+            "category": "witnessed",
+            "officialIndex": 1
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When the card listed provenance, what mattered most to Bosch?",
+            "options": [
+              "Who actually saw it happen",
+              "Which office approved the font",
+              "How many boxes were checked",
+              "Whether the stamp looked expensive"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"A checked box can float. A witness has weight.\"",
+            "category": "witnessed",
+            "officialIndex": 2
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Fluxus is best associated with...",
+            "options": [
+              "Experimental event scores and playful anti-art actions",
+              "Royal portrait commissions",
+              "Only marble sculpture",
+              "A school for perfect museum labels"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Perfect labels fear small instructions performed strangely.\"",
+            "category": "art",
+            "officialIndex": 3
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Musique concrete used recorded sounds as raw material for composition.",
+            "answer": true,
+            "failLine": "\"Tape remembers the scrape. The scrape gets a chair.\"",
+            "category": "art"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10906",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stamped by salt. You saw the wet part.\"",
+          "\"Correct. Teeth closed, ledger open.\"",
+          "\"Witness fits the bite mark.\"",
+          "\"Warmly filed, lightly brined.\""
+        ],
+        "cleared": [
+          "\"The tide accepts your account. Filed under: present.\"",
+          "\"Stamped by salt. The record stops pretending it was alone.\""
+        ],
+        "failed": [
+          "\"No wound. Only a damp margin note.\"",
+          "\"Come back when the sand settles in the same story twice.\""
+        ],
+        "alreadyCleared": [
+          "\"We checked this tide already.\"",
+          "\"Stamped by salt. Your witness-card still smells real.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-019",
+      "drifellaId": "drifella2-7997",
+      "npcId": 100404,
+      "region": "little-swag-world",
+      "tier": 1,
+      "placement": {
+        "kind": "printing-hut",
+        "worldPixel": {
+          "x": 7924,
+          "y": 732
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A chain-smoking seminar fish who grades rumors in red pencil, then quietly lends them bus fare.",
+        "tic": "\"Cited, sighted, survived.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-7997.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella peers over its glasses like your alibi arrived without page numbers.",
+        "\"Attestation. Soft questions. Firm margins. No one gets stapled today.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Milady's file on Bosch became truer just because it had a clean label.",
+            "answer": false,
+            "failLine": "\"A neat folder can still smell like panic.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When the card named someone VERIFIED, what did it mostly prove?",
+            "options": [
+              "A printer had confidence",
+              "The person was finished changing",
+              "Everyone agreed",
+              "Milady was being kind"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Verification is sometimes just ink wearing a tie.\"",
+            "category": "witnessed",
+            "officialIndex": 1
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The safest witness against Milady's record is usually...",
+            "options": [
+              "Someone who was actually there",
+              "A louder memo",
+              "A sealed office",
+              "A sponsored prophecy"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Seals impress wax. They do not remember breakfast.\"",
+            "category": "witnessed",
+            "officialIndex": 2
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A Fluxus score could be a simple instruction for an action, not just notes on a staff.",
+            "answer": true,
+            "failLine": "\"Sometimes the concert is a sentence behaving strangely.\"",
+            "category": "art"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete is associated with...",
+            "options": [
+              "Composing with recorded sounds",
+              "Painting gray buildings",
+              "Carving speakers from stone",
+              "Approving only orchestra music"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Tape remembers what the podium refused.\"",
+            "category": "art",
+            "officialIndex": 3
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10464",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Cited, sighted, survived.\"",
+          "\"Correct. Your memory has its own small lamp.\"",
+          "\"Good. The record blinked first.\"",
+          "\"Filed under: present, breathing, inconvenient.\""
+        ],
+        "cleared": [
+          "\"The card cools in your hand. Witnessed, not owned.\"",
+          "\"You pass. I will shelve this under real, lightly smoking.\""
+        ],
+        "failed": [
+          "\"No harm done. Come back when the sentence stops staring at you.\"",
+          "\"Incorrect, but intact. That matters more than Milady admits.\""
+        ],
+        "alreadyCleared": [
+          "\"We've met. I remember the margins.\"",
+          "\"Already cleared. The file tried to forget. I did not.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-vacancy-flats-008",
+      "drifellaId": "drifella2-8013",
+      "npcId": 100405,
+      "region": "vacancy-flats",
+      "tier": 2,
+      "placement": {
+        "kind": "condemned-lot",
+        "worldPixel": {
+          "x": 7092,
+          "y": 7508
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A tiny courthouse punk with a brass whistle, a borrowed badge, and the patience of a night clerk.",
+        "tic": "\"Witnessed, stamped, still breathing.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-8013.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella tilts its goggles like it is adjusting evidence.",
+        "\"Attestation. I ask soft questions. The record answers too loudly.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In vacancy-flats, Bosch saw a card treat absence like proof of guilt.",
+            "answer": true,
+            "failLine": "\"Absence is a room. It is not a confession.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Milady's filing system prefers a person to become...",
+            "options": [
+              "A friend with a face",
+              "A category with a receipt",
+              "A song with a witness",
+              "A kid going home"
+            ],
+            "answerIndex": 1,
+            "failLine": "\"The folder smiled. That was the first warning.\"",
+            "category": "witnessed",
+            "officialIndex": 0
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The official record in vacancy-flats always knows who was really there.",
+            "answer": false,
+            "failLine": "\"Official means laminated. It does not mean alive.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A readymade, as associated with Marcel Duchamp, is...",
+            "options": [
+              "An ordinary object presented as art",
+              "A mural painted in public",
+              "A sculpture carved from memory",
+              "A government approved craft kit"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The object did not change. The room blinked first.\"",
+            "category": "art",
+            "officialIndex": 3
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete is built mainly from...",
+            "options": [
+              "Recorded sounds treated as musical material",
+              "Only handwritten piano scores",
+              "Silent gallery labels",
+              "Factory default ringtones"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Tape remembers what the minutes tried to forget.\"",
+            "category": "art",
+            "officialIndex": 2
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-10681",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Witnessed, stamped, still breathing.\"",
+          "\"Correct. Your hands did not borrow that memory.\"",
+          "\"Yes. The record coughs when truth enters.\"",
+          "\"Filed under: present, unusually present.\""
+        ],
+        "cleared": [
+          "\"The badge warms up. It believes you, carefully.\"",
+          "\"Attestation cleared. The folder stays shut for now.\""
+        ],
+        "failed": [
+          "\"No harm done. The witness can come back with steadier pockets.\"",
+          "\"Not cleared yet. Even warm evidence needs a second look.\""
+        ],
+        "alreadyCleared": [
+          "\"We've met. Your page is still breathing.\"",
+          "\"Already cleared. I kept the stamp where Milady cannot alphabetize it.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-unlisted-room-007",
+      "drifellaId": "drifella2-8106",
+      "npcId": 100406,
+      "region": "the-unlisted-room",
+      "tier": 3,
+      "placement": {
+        "kind": "memory-furniture-parlor",
+        "worldPixel": {
+          "x": 2164,
+          "y": 132
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A tiny glam archivist with funeral-red hair, stage makeup, and a microphone full of receipts.",
+        "tic": "\"Witnessed, not wished.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-8106.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella tilts its microphone toward you like it is about to interview a ghost.",
+        "\"Attestation. Two questions. No flash photography, unless the flash remembers you back.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the unlisted room, Bosch was asked to approve the file before Milady's record began speaking for him.",
+            "answer": false,
+            "failLine": "\"Consent was not in the folder. Funny how folders behave.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When the room tried to make Bosch official, what mattered most to the Drifella?",
+            "options": [
+              "Who saw him stay himself",
+              "Which stamp looked newest",
+              "Whether the card used perfect grammar",
+              "How many boxes Milady checked"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"A stamp is loud. A witness is heavier.\"",
+            "category": "witnessed",
+            "officialIndex": 3
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Milady's favorite kind of provenance is...",
+            "options": [
+              "A living chain of witnesses",
+              "A receipt with no names left on it",
+              "A friend saying what happened",
+              "A memory that can blush"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Anonymous paperwork keeps very clean hands. Too clean.\"",
+            "category": "witnessed",
+            "officialIndex": 1
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "The card became truer just because the room filed it twice.",
+            "answer": false,
+            "failLine": "\"Duplicate fiction is still fiction. It only has a twin.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Fluxus artists often favored...",
+            "options": [
+              "Simple event scores and everyday actions",
+              "Oil portraits of bank directors",
+              "Perfect museum silence",
+              "Official seals on every object"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Filed under: instructions that escaped the office.\"",
+            "category": "art",
+            "officialIndex": 3
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete is built from...",
+            "options": [
+              "Recorded sounds treated as raw material",
+              "Only traditional orchestral notation",
+              "Paint mixed with plaster",
+              "Museum labels read aloud by trustees"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The tape heard it first. The label arrived later.\"",
+            "category": "art",
+            "officialIndex": 3
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8869",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Witnessed, not wished.\"",
+          "\"Correct. The microphone relaxes.\"",
+          "\"Yes. Your memory still has fingerprints.\"",
+          "\"Filed under: present, breathing.\""
+        ],
+        "cleared": [
+          "\"The card cools down. It hates being seen properly.\"",
+          "\"Cleared. The record sulks, but the room remembers.\""
+        ],
+        "failed": [
+          "\"No harm done. Even witnesses blink.\"",
+          "\"Come back when the file stops staring so hard.\""
+        ],
+        "alreadyCleared": [
+          "\"We have this one shelved under already brave.\"",
+          "\"The microphone remembers you. Politely, which is rare.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-secret-007",
+      "drifellaId": "drifella2-8136",
+      "npcId": 100407,
+      "region": "secret",
+      "tier": 1,
+      "placement": {
+        "kind": "unlit alcove behind the ledger",
+        "worldPixel": {
+          "x": 1492,
+          "y": 8580
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A nervous catalog owl in a sailor collar who stamps rumors with tiny trembling certainty.",
+        "tic": "\"Stamped as seen.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-8136.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella blinks through enormous glasses, clutching its mace like a library stamp.",
+        "\"Attestation? I only ask what your eyes already borrowed.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Bosch had to consent before Milady's card could decide what he was.",
+            "answer": false,
+            "failLine": "\"Consent was not in the envelope. I checked twice.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When the card tried to make Bosch official, it cared most about...",
+            "options": [
+              "What Bosch actually lived",
+              "Which box could hold him",
+              "Who stood beside him",
+              "Whether the stamp pad was dry"
+            ],
+            "answerIndex": 1,
+            "failLine": "\"The box was hungry. The truth was smaller and louder.\"",
+            "category": "witnessed",
+            "officialIndex": 0
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "A witness is the same thing as a file, provided the file has a confident label.",
+            "answer": false,
+            "failLine": "\"A label can point. It cannot blink.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A Duchamp style readymade is...",
+            "options": [
+              "An ordinary object declared to be art",
+              "A painting finished before the artist starts",
+              "A museum receipt with good posture",
+              "A factory design approved by critics"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Object first. Permission later. The shelf remembers.\"",
+            "category": "art",
+            "officialIndex": 3
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete is built from...",
+            "options": [
+              "Recorded sounds treated as musical material",
+              "Only notes written for concrete halls",
+              "Silent scores filed in triplicate",
+              "Factory approved orchestral samples"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Tape can testify. Forms prefer it quiet.\"",
+            "category": "art",
+            "officialIndex": 2
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3550",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stamped as seen. Your eyes returned on time.\"",
+          "\"Correct. The shelf makes room for a living witness.\"",
+          "\"Yes. The record flinched a little.\"",
+          "\"Warmly verified by someone who was actually there.\""
+        ],
+        "cleared": [
+          "\"The card is filed under yours, with witnesses present.\"",
+          "\"Attestation complete. Please keep your receipt. It is your memory.\""
+        ],
+        "failed": [
+          "\"No harm done. Bring steadier eyes next time.\"",
+          "\"The stamp hovers. The question can wait.\""
+        ],
+        "alreadyCleared": [
+          "\"We've met. Your file has fingerprints.\"",
+          "\"Already stamped as seen. I do not overwrite warm ink.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-the-galleria-014",
+      "drifellaId": "drifella2-8218",
+      "npcId": 100408,
+      "region": "the-galleria",
+      "tier": 2,
+      "placement": {
+        "kind": "storefront-window",
+        "worldPixel": {
+          "x": 3988,
+          "y": 6284
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A chipped marble docent who whispers like the security camera is trying to sleep.",
+        "tic": "\"Provenance, please.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-8218.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella peers down from its little plinth, tusks polished like gallery labels nobody admits to reading.",
+        "\"Attestation? Soft voice. Clean hands. No flash photography near the truth.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the Galleria, Bosch was filed as present only after Milady's record decided he was useful.",
+            "answer": true,
+            "failLine": "\"Attendance is not the same as being seen.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The card's neatest trick was making Bosch look like...",
+            "options": [
+              "A person with friends",
+              "A verified exhibit",
+              "A missing receipt",
+              "A docent in training"
+            ],
+            "answerIndex": 1,
+            "failLine": "\"Kind thought. Wrong frame.\"",
+            "category": "witnessed",
+            "officialIndex": 0
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Milady's filing system cared more about Bosch's truth than Bosch's category.",
+            "answer": false,
+            "failLine": "\"Categories eat truth when no one is watching.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "In art history, a readymade is usually...",
+            "options": [
+              "An ordinary object presented as art",
+              "A sculpture carved from wet plaster",
+              "A painting copied by a museum guard",
+              "A print approved by a curator"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Approval is not creation. It is paperwork wearing perfume.\"",
+            "category": "art",
+            "officialIndex": 3
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete is built from...",
+            "options": [
+              "Recorded sounds used as raw material",
+              "Only silent notation",
+              "Museum floor plans sung aloud",
+              "Paint colors translated into chords"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The tape remembers better than the brochure.\"",
+            "category": "art"
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-8877",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Provenance accepted. You were not merely adjacent.\"",
+          "\"Correct. The label blushes.\"",
+          "\"Witnessed, not verified. Much warmer.\"",
+          "\"Good. The glass case loosens its jaw.\""
+        ],
+        "cleared": [
+          "\"Your card feels less official now. Healthier.\"",
+          "\"The plinth has decided you may leave with yourself.\""
+        ],
+        "failed": [
+          "\"No harm done. The gallery confuses people on purpose.\"",
+          "\"Come back when the record stops speaking over you.\""
+        ],
+        "alreadyCleared": [
+          "\"We have your witness on file. Not their file. Mine.\"",
+          "\"Already checked. The truth kept its receipt.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-little-swag-world-020",
+      "drifellaId": "drifella2-8256",
+      "npcId": 100409,
+      "region": "little-swag-world",
+      "tier": 3,
+      "placement": {
+        "kind": "printing-hut",
+        "worldPixel": {
+          "x": 7796,
+          "y": 860
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A rain-soaked archive clerk who believes every tear leaves a receipt.",
+        "tic": "\"Damp copy, true copy.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-8256.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella blinks at you from under its wet blue cap, as if the ceiling has been leaking secrets.",
+        "\"Attestation. Soft voice. Dry facts. Please do not wring the witness.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "Milady's files get more truthful when nobody admits who typed them.",
+            "answer": false,
+            "failLine": "\"Anonymous ink still stains the fingers.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "When Bosch was watched, the watching felt most like...",
+            "options": [
+              "A neighbor waving from a porch",
+              "A form learning how to breathe",
+              "A birthday candle going out",
+              "A museum guard taking lunch"
+            ],
+            "answerIndex": 1,
+            "failLine": "\"A porch says hello. That file said continue.\"",
+            "category": "witnessed",
+            "officialIndex": 0
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The card tried to turn Bosch from a person into...",
+            "options": [
+              "A verified resident",
+              "A weather report",
+              "A best friend",
+              "A loose button"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Friendship does not arrive prechecked.\"",
+            "category": "witnessed",
+            "officialIndex": 2
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Fluxus is most associated with...",
+            "options": [
+              "Event scores and everyday actions as art",
+              "Perfect marble copies of kings",
+              "Only oil painting from court studios",
+              "Computer patents for gallery frames"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"Small actions count. The clipboard hates that.\"",
+            "category": "art",
+            "officialIndex": 3
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete often uses...",
+            "options": [
+              "Recorded sounds treated as musical material",
+              "Only unamplified church choirs",
+              "Silent auction price lists",
+              "Paint mixed with wet cement"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"A tape can remember a room better than a receipt.\"",
+            "category": "art",
+            "officialIndex": 2
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-3476",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Damp copy, true copy. You were there.\"",
+          "\"Correct. The page curls, but it holds.\"",
+          "\"Witness accepted. No stamp needed.\"",
+          "\"Yes. Even the leak remembers.\""
+        ],
+        "cleared": [
+          "\"The card dries in your hands. Filed under: yours.\"",
+          "\"Attestation complete. The wet ink stayed honest.\""
+        ],
+        "failed": [
+          "\"No harm done. Sit near the radiator and try again.\"",
+          "\"The answer slipped. Slipping is not lying.\""
+        ],
+        "alreadyCleared": [
+          "\"We've met. Your copy is still damp, still true.\"",
+          "\"Already filed. The record did not get to rename you.\""
+        ]
+      }
+    },
+    {
+      "id": "sourcecheck-dead-letter-012",
+      "drifellaId": "drifella2-8290",
+      "npcId": 100410,
+      "region": "dead-letter",
+      "tier": 1,
+      "placement": {
+        "kind": "returned-mail-dock",
+        "worldPixel": {
+          "x": 8124,
+          "y": 9164
+        },
+        "facing": "down"
+      },
+      "visibility": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "personality": {
+        "bit": "A shy evidence hedgehog in a mailroom respirator, soft voiced and impossible to misfile.",
+        "tic": "\"Stamped by the eye, softened by the hand.\""
+      },
+      "battleSprite": "assets/swagbound/drifella-battle/drifella2-8290.png",
+      "hints": [],
+      "entryPrompt": [
+        "The Drifella bristles like a stack of letters that learned to breathe.",
+        "\"Attestation? I only ask what the dust already knows.\""
+      ],
+      "questions": {
+        "drawCount": 2,
+        "pool": [
+          {
+            "type": "trueFalse",
+            "prompt": "In the dead-letter room, Bosch's name became truer because Milady stamped it.",
+            "answer": false,
+            "failLine": "\"A stamp is pressure. A witness is presence.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "The card tried to prove Bosch by checking a box marked...",
+            "options": [
+              "VESSEL",
+              "FRIEND",
+              "LOST MAIL",
+              "SOURCE"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The official box always looks cleaner than the real one.\"",
+            "category": "witnessed",
+            "officialIndex": 3
+          },
+          {
+            "type": "trueFalse",
+            "prompt": "Milady's filing system could watch Bosch without understanding him.",
+            "answer": true,
+            "failLine": "\"Seeing is not the same as staying with someone.\"",
+            "category": "witnessed"
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "A readymade, associated with Marcel Duchamp, is...",
+            "options": [
+              "An ordinary object presented as art",
+              "A painting made only from memory",
+              "A museum label written before the artwork",
+              "A sculpture carved from official paperwork"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The label arrived early. The object still tells on it.\"",
+            "category": "art",
+            "officialIndex": 2
+          },
+          {
+            "type": "multipleChoice4",
+            "prompt": "Musique concrete is most closely tied to...",
+            "options": [
+              "Recorded sounds arranged as composition",
+              "Silent marble instruments",
+              "Songs approved by a conservatory clerk",
+              "Paintings that can be heard through glass"
+            ],
+            "answerIndex": 0,
+            "failLine": "\"The tape remembers what the form rejected.\"",
+            "category": "art",
+            "officialIndex": 2
+          }
+        ]
+      },
+      "rewards": {
+        "cardId": "card-nft-2-4855",
+        "itemId": 88
+      },
+      "retry": {
+        "policy": "leaveArea",
+        "rotatePool": true,
+        "checkpointAt": null
+      },
+      "reactions": {
+        "correct": [
+          "\"Stamped by the eye, softened by the hand.\"",
+          "\"Yes. Your memory has little fingerprints on it.\"",
+          "\"Correct. The bristles relax.\"",
+          "\"Witness accepted. No staples required.\""
+        ],
+        "cleared": [
+          "\"Filed under: Bosch was here, and not alone.\"",
+          "\"The dead letter opens. It was warm inside.\""
+        ],
+        "failed": [
+          "\"No harm done. The room keeps your place.\"",
+          "\"Come back when the record stops breathing so loudly.\""
+        ],
+        "alreadyCleared": [
+          "\"We've met. I kept the soft copy.\"",
+          "\"Already witnessed. Still nice to see your face.\""
         ]
       }
     }

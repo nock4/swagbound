@@ -12,7 +12,7 @@
       "rarity": "source-grade",
       "region": "secret",
       "sortIndex": 1,
-      "caption": "Earned from a Source Check in Hidden.",
+      "caption": "Earned from an Attestation in Hidden.",
       "silhouetteHint": "No hint has been printed for this absence."
     },
     {
@@ -25,7 +25,7 @@
       "rarity": "source-grade",
       "region": "secret",
       "sortIndex": 2,
-      "caption": "Earned from a Source Check in Hidden.",
+      "caption": "Earned from an Attestation in Hidden.",
       "silhouetteHint": "The binder itself is not sure."
     },
     {
@@ -38,7 +38,7 @@
       "rarity": "source-grade",
       "region": "secret",
       "sortIndex": 3,
-      "caption": "Earned from a Source Check in Hidden.",
+      "caption": "Earned from an Attestation in Hidden.",
       "silhouetteHint": "No hint has been printed for this absence."
     },
     {
@@ -51,7 +51,7 @@
       "rarity": "source-grade",
       "region": "secret",
       "sortIndex": 4,
-      "caption": "Earned from a Source Check in Hidden.",
+      "caption": "Earned from an Attestation in Hidden.",
       "silhouetteHint": "The binder itself is not sure."
     },
     {
@@ -64,7 +64,7 @@
       "rarity": "source-grade",
       "region": "secret",
       "sortIndex": 5,
-      "caption": "Earned from a Source Check in Hidden.",
+      "caption": "Earned from an Attestation in Hidden.",
       "silhouetteHint": "No hint has been printed for this absence."
     },
     {
@@ -77,7 +77,7 @@
       "rarity": "source-grade",
       "region": "secret",
       "sortIndex": 6,
-      "caption": "Earned from a Source Check in Hidden.",
+      "caption": "Earned from an Attestation in Hidden.",
       "silhouetteHint": "The binder itself is not sure."
     },
     {
@@ -90,7 +90,7 @@
       "rarity": "source-grade",
       "region": "the-unlisted-room",
       "sortIndex": 7,
-      "caption": "Earned from a Source Check in Unlisted Room.",
+      "caption": "Earned from an Attestation in Unlisted Room.",
       "silhouetteHint": "Past the part of you that is public."
     },
     {
@@ -103,7 +103,7 @@
       "rarity": "source-grade",
       "region": "the-unlisted-room",
       "sortIndex": 8,
-      "caption": "Earned from a Source Check in Unlisted Room.",
+      "caption": "Earned from an Attestation in Unlisted Room.",
       "silhouetteHint": "No listing. No address. Still home."
     },
     {
@@ -116,7 +116,7 @@
       "rarity": "source-grade",
       "region": "the-unlisted-room",
       "sortIndex": 9,
-      "caption": "Earned from a Source Check in Unlisted Room.",
+      "caption": "Earned from an Attestation in Unlisted Room.",
       "silhouetteHint": "Past the part of you that is public."
     },
     {
@@ -129,7 +129,7 @@
       "rarity": "source-grade",
       "region": "the-unlisted-room",
       "sortIndex": 10,
-      "caption": "Earned from a Source Check in Unlisted Room.",
+      "caption": "Earned from an Attestation in Unlisted Room.",
       "silhouetteHint": "No listing. No address. Still home."
     },
     {
@@ -142,7 +142,7 @@
       "rarity": "source-grade",
       "region": "the-unlisted-room",
       "sortIndex": 11,
-      "caption": "Earned from a Source Check in Unlisted Room.",
+      "caption": "Earned from an Attestation in Unlisted Room.",
       "silhouetteHint": "Past the part of you that is public."
     },
     {
@@ -155,7 +155,7 @@
       "rarity": "source-grade",
       "region": "the-unlisted-room",
       "sortIndex": 12,
-      "caption": "Earned from a Source Check in Unlisted Room.",
+      "caption": "Earned from an Attestation in Unlisted Room.",
       "silhouetteHint": "No listing. No address. Still home."
     },
     {
@@ -168,7 +168,7 @@
       "rarity": "source-grade",
       "region": "vacancy-flats",
       "sortIndex": 13,
-      "caption": "Earned from a Source Check in Vacancy Flats.",
+      "caption": "Earned from an Attestation in Vacancy Flats.",
       "silhouetteHint": "In a lot that stopped waiting."
     },
     {
@@ -181,7 +181,7 @@
       "rarity": "source-grade",
       "region": "vacancy-flats",
       "sortIndex": 14,
-      "caption": "Earned from a Source Check in Vacancy Flats.",
+      "caption": "Earned from an Attestation in Vacancy Flats.",
       "silhouetteHint": "The model home models patience now."
     },
     {
@@ -194,7 +194,7 @@
       "rarity": "source-grade",
       "region": "vacancy-flats",
       "sortIndex": 15,
-      "caption": "Earned from a Source Check in Vacancy Flats.",
+      "caption": "Earned from an Attestation in Vacancy Flats.",
       "silhouetteHint": "In a lot that stopped waiting."
     },
     {
@@ -207,7 +207,7 @@
       "rarity": "source-grade",
       "region": "vacancy-flats",
       "sortIndex": 16,
-      "caption": "Earned from a Source Check in Vacancy Flats.",
+      "caption": "Earned from an Attestation in Vacancy Flats.",
       "silhouetteHint": "The model home models patience now."
     },
     {
@@ -220,7 +220,7 @@
       "rarity": "source-grade",
       "region": "vacancy-flats",
       "sortIndex": 17,
-      "caption": "Earned from a Source Check in Vacancy Flats.",
+      "caption": "Earned from an Attestation in Vacancy Flats.",
       "silhouetteHint": "In a lot that stopped waiting."
     },
     {
@@ -233,7 +233,7 @@
       "rarity": "source-grade",
       "region": "vacancy-flats",
       "sortIndex": 18,
-      "caption": "Earned from a Source Check in Vacancy Flats.",
+      "caption": "Earned from an Attestation in Vacancy Flats.",
       "silhouetteHint": "The model home models patience now."
     },
     {
@@ -246,7 +246,7 @@
       "rarity": "source-grade",
       "region": "vacancy-flats",
       "sortIndex": 19,
-      "caption": "Earned from a Source Check in Vacancy Flats.",
+      "caption": "Earned from an Attestation in Vacancy Flats.",
       "silhouetteHint": "In a lot that stopped waiting."
     },
     {
@@ -259,7 +259,7 @@
       "rarity": "holo",
       "region": "little-swag-world",
       "sortIndex": 20,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Closer to the source than you have ever stood."
     },
     {
@@ -272,7 +272,7 @@
       "rarity": "holo",
       "region": "little-swag-world",
       "sortIndex": 21,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Home. Ask anyone. Ask everything."
     },
     {
@@ -285,7 +285,7 @@
       "rarity": "holo",
       "region": "little-swag-world",
       "sortIndex": 22,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Closer to the source than you have ever stood."
     },
     {
@@ -298,7 +298,7 @@
       "rarity": "holo",
       "region": "little-swag-world",
       "sortIndex": 23,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Home. Ask anyone. Ask everything."
     },
     {
@@ -311,7 +311,7 @@
       "rarity": "holo",
       "region": "little-swag-world",
       "sortIndex": 24,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Closer to the source than you have ever stood."
     },
     {
@@ -324,7 +324,7 @@
       "rarity": "holo",
       "region": "little-swag-world",
       "sortIndex": 25,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Home. Ask anyone. Ask everything."
     },
     {
@@ -337,7 +337,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 26,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Closer to the source than you have ever stood."
     },
     {
@@ -350,7 +350,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 27,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Home. Ask anyone. Ask everything."
     },
     {
@@ -363,7 +363,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 28,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Closer to the source than you have ever stood."
     },
     {
@@ -376,7 +376,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 29,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Home. Ask anyone. Ask everything."
     },
     {
@@ -389,7 +389,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 30,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Closer to the source than you have ever stood."
     },
     {
@@ -402,7 +402,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 31,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Home. Ask anyone. Ask everything."
     },
     {
@@ -415,7 +415,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 32,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Closer to the source than you have ever stood."
     },
     {
@@ -428,7 +428,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 33,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Home. Ask anyone. Ask everything."
     },
     {
@@ -441,7 +441,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 34,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Closer to the source than you have ever stood."
     },
     {
@@ -454,7 +454,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 35,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Home. Ask anyone. Ask everything."
     },
     {
@@ -467,7 +467,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 36,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Closer to the source than you have ever stood."
     },
     {
@@ -480,7 +480,7 @@
       "rarity": "common",
       "region": "little-swag-world",
       "sortIndex": 37,
-      "caption": "Earned from a Source Check in Little Swag World.",
+      "caption": "Earned from an Attestation in Little Swag World.",
       "silhouetteHint": "Home. Ask anyone. Ask everything."
     },
     {
@@ -493,7 +493,7 @@
       "rarity": "holo",
       "region": "the-galleria",
       "sortIndex": 38,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Retail-adjacent. Not for sale."
     },
     {
@@ -506,7 +506,7 @@
       "rarity": "holo",
       "region": "the-galleria",
       "sortIndex": 39,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Between the racks, past the mirrors."
     },
     {
@@ -519,7 +519,7 @@
       "rarity": "holo",
       "region": "the-galleria",
       "sortIndex": 40,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Retail-adjacent. Not for sale."
     },
     {
@@ -532,7 +532,7 @@
       "rarity": "holo",
       "region": "the-galleria",
       "sortIndex": 41,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Between the racks, past the mirrors."
     },
     {
@@ -545,7 +545,7 @@
       "rarity": "holo",
       "region": "the-galleria",
       "sortIndex": 42,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Retail-adjacent. Not for sale."
     },
     {
@@ -558,7 +558,7 @@
       "rarity": "common",
       "region": "the-galleria",
       "sortIndex": 43,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Between the racks, past the mirrors."
     },
     {
@@ -571,7 +571,7 @@
       "rarity": "common",
       "region": "the-galleria",
       "sortIndex": 44,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Retail-adjacent. Not for sale."
     },
     {
@@ -584,7 +584,7 @@
       "rarity": "common",
       "region": "the-galleria",
       "sortIndex": 45,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Between the racks, past the mirrors."
     },
     {
@@ -597,7 +597,7 @@
       "rarity": "common",
       "region": "the-galleria",
       "sortIndex": 46,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Retail-adjacent. Not for sale."
     },
     {
@@ -610,7 +610,7 @@
       "rarity": "common",
       "region": "the-galleria",
       "sortIndex": 47,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Between the racks, past the mirrors."
     },
     {
@@ -623,7 +623,7 @@
       "rarity": "common",
       "region": "the-galleria",
       "sortIndex": 48,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Retail-adjacent. Not for sale."
     },
     {
@@ -636,7 +636,7 @@
       "rarity": "common",
       "region": "the-galleria",
       "sortIndex": 49,
-      "caption": "Earned from a Source Check in Galleria.",
+      "caption": "Earned from an Attestation in Galleria.",
       "silhouetteHint": "Between the racks, past the mirrors."
     },
     {
@@ -649,7 +649,7 @@
       "rarity": "holo",
       "region": "solana-beach",
       "sortIndex": 50,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Where the leisure gets quiet."
     },
     {
@@ -662,7 +662,7 @@
       "rarity": "holo",
       "region": "solana-beach",
       "sortIndex": 51,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Off-season. On purpose."
     },
     {
@@ -675,7 +675,7 @@
       "rarity": "holo",
       "region": "solana-beach",
       "sortIndex": 52,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Where the leisure gets quiet."
     },
     {
@@ -688,7 +688,7 @@
       "rarity": "holo",
       "region": "solana-beach",
       "sortIndex": 53,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Off-season. On purpose."
     },
     {
@@ -701,7 +701,7 @@
       "rarity": "common",
       "region": "solana-beach",
       "sortIndex": 54,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Where the leisure gets quiet."
     },
     {
@@ -714,7 +714,7 @@
       "rarity": "common",
       "region": "solana-beach",
       "sortIndex": 55,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Off-season. On purpose."
     },
     {
@@ -727,7 +727,7 @@
       "rarity": "common",
       "region": "solana-beach",
       "sortIndex": 56,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Where the leisure gets quiet."
     },
     {
@@ -740,7 +740,7 @@
       "rarity": "common",
       "region": "solana-beach",
       "sortIndex": 57,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Off-season. On purpose."
     },
     {
@@ -753,7 +753,7 @@
       "rarity": "common",
       "region": "solana-beach",
       "sortIndex": 58,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Where the leisure gets quiet."
     },
     {
@@ -766,7 +766,7 @@
       "rarity": "common",
       "region": "solana-beach",
       "sortIndex": 59,
-      "caption": "Earned from a Source Check in Solana Beach.",
+      "caption": "Earned from an Attestation in Solana Beach.",
       "silhouetteHint": "Off-season. On purpose."
     },
     {
@@ -779,7 +779,7 @@
       "rarity": "holo",
       "region": "dead-letter",
       "sortIndex": 60,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Where the addresses stop meaning anything."
     },
     {
@@ -792,7 +792,7 @@
       "rarity": "holo",
       "region": "dead-letter",
       "sortIndex": 61,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Waits in a room the town forgot to haunt."
     },
     {
@@ -805,7 +805,7 @@
       "rarity": "holo",
       "region": "dead-letter",
       "sortIndex": 62,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Where the addresses stop meaning anything."
     },
     {
@@ -818,7 +818,7 @@
       "rarity": "holo",
       "region": "dead-letter",
       "sortIndex": 63,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Waits in a room the town forgot to haunt."
     },
     {
@@ -831,7 +831,7 @@
       "rarity": "holo",
       "region": "dead-letter",
       "sortIndex": 64,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Where the addresses stop meaning anything."
     },
     {
@@ -844,7 +844,7 @@
       "rarity": "common",
       "region": "dead-letter",
       "sortIndex": 65,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Waits in a room the town forgot to haunt."
     },
     {
@@ -857,7 +857,7 @@
       "rarity": "common",
       "region": "dead-letter",
       "sortIndex": 66,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Where the addresses stop meaning anything."
     },
     {
@@ -870,7 +870,7 @@
       "rarity": "common",
       "region": "dead-letter",
       "sortIndex": 67,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Waits in a room the town forgot to haunt."
     },
     {
@@ -883,7 +883,7 @@
       "rarity": "common",
       "region": "dead-letter",
       "sortIndex": 68,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Where the addresses stop meaning anything."
     },
     {
@@ -896,7 +896,7 @@
       "rarity": "common",
       "region": "dead-letter",
       "sortIndex": 69,
-      "caption": "Earned from a Source Check in Dead Letter.",
+      "caption": "Earned from an Attestation in Dead Letter.",
       "silhouetteHint": "Waits in a room the town forgot to haunt."
     },
     {
@@ -909,7 +909,7 @@
       "rarity": "holo",
       "region": "bluebell-village",
       "sortIndex": 70,
-      "caption": "Earned from a Source Check in Bluebell.",
+      "caption": "Earned from an Attestation in Bluebell.",
       "silhouetteHint": "The cult never counted this one."
     },
     {
@@ -922,7 +922,7 @@
       "rarity": "holo",
       "region": "bluebell-village",
       "sortIndex": 71,
-      "caption": "Earned from a Source Check in Bluebell.",
+      "caption": "Earned from an Attestation in Bluebell.",
       "silhouetteHint": "Behind the singing. Not part of the singing."
     },
     {
@@ -935,7 +935,7 @@
       "rarity": "holo",
       "region": "bluebell-village",
       "sortIndex": 72,
-      "caption": "Earned from a Source Check in Bluebell.",
+      "caption": "Earned from an Attestation in Bluebell.",
       "silhouetteHint": "The cult never counted this one."
     },
     {
@@ -948,7 +948,7 @@
       "rarity": "holo",
       "region": "bluebell-village",
       "sortIndex": 73,
-      "caption": "Earned from a Source Check in Bluebell.",
+      "caption": "Earned from an Attestation in Bluebell.",
       "silhouetteHint": "Behind the singing. Not part of the singing."
     },
     {
@@ -961,7 +961,7 @@
       "rarity": "common",
       "region": "bluebell-village",
       "sortIndex": 74,
-      "caption": "Earned from a Source Check in Bluebell.",
+      "caption": "Earned from an Attestation in Bluebell.",
       "silhouetteHint": "The cult never counted this one."
     },
     {
@@ -974,7 +974,7 @@
       "rarity": "common",
       "region": "bluebell-village",
       "sortIndex": 75,
-      "caption": "Earned from a Source Check in Bluebell.",
+      "caption": "Earned from an Attestation in Bluebell.",
       "silhouetteHint": "Behind the singing. Not part of the singing."
     },
     {
@@ -987,7 +987,7 @@
       "rarity": "common",
       "region": "bluebell-village",
       "sortIndex": 76,
-      "caption": "Earned from a Source Check in Bluebell.",
+      "caption": "Earned from an Attestation in Bluebell.",
       "silhouetteHint": "The cult never counted this one."
     },
     {
@@ -1000,7 +1000,7 @@
       "rarity": "common",
       "region": "bluebell-village",
       "sortIndex": 77,
-      "caption": "Earned from a Source Check in Bluebell.",
+      "caption": "Earned from an Attestation in Bluebell.",
       "silhouetteHint": "Behind the singing. Not part of the singing."
     },
     {
@@ -1013,7 +1013,7 @@
       "rarity": "common",
       "region": "bluebell-village",
       "sortIndex": 78,
-      "caption": "Earned from a Source Check in Bluebell.",
+      "caption": "Earned from an Attestation in Bluebell.",
       "silhouetteHint": "The cult never counted this one."
     },
     {
@@ -1026,7 +1026,7 @@
       "rarity": "holo",
       "region": "postwick",
       "sortIndex": 79,
-      "caption": "Earned from a Source Check in Postwick.",
+      "caption": "Earned from an Attestation in Postwick.",
       "silhouetteHint": "Lives where the mail turns around."
     },
     {
@@ -1039,7 +1039,7 @@
       "rarity": "holo",
       "region": "postwick",
       "sortIndex": 80,
-      "caption": "Earned from a Source Check in Postwick.",
+      "caption": "Earned from an Attestation in Postwick.",
       "silhouetteHint": "Filed under P, for patience."
     },
     {
@@ -1052,7 +1052,7 @@
       "rarity": "holo",
       "region": "postwick",
       "sortIndex": 81,
-      "caption": "Earned from a Source Check in Postwick.",
+      "caption": "Earned from an Attestation in Postwick.",
       "silhouetteHint": "Lives where the mail turns around."
     },
     {
@@ -1065,7 +1065,7 @@
       "rarity": "common",
       "region": "postwick",
       "sortIndex": 82,
-      "caption": "Earned from a Source Check in Postwick.",
+      "caption": "Earned from an Attestation in Postwick.",
       "silhouetteHint": "Filed under P, for patience."
     },
     {
@@ -1078,7 +1078,7 @@
       "rarity": "common",
       "region": "postwick",
       "sortIndex": 83,
-      "caption": "Earned from a Source Check in Postwick.",
+      "caption": "Earned from an Attestation in Postwick.",
       "silhouetteHint": "Lives where the mail turns around."
     },
     {
@@ -1091,7 +1091,7 @@
       "rarity": "common",
       "region": "postwick",
       "sortIndex": 84,
-      "caption": "Earned from a Source Check in Postwick.",
+      "caption": "Earned from an Attestation in Postwick.",
       "silhouetteHint": "Filed under P, for patience."
     },
     {
@@ -1104,7 +1104,7 @@
       "rarity": "common",
       "region": "postwick",
       "sortIndex": 85,
-      "caption": "Earned from a Source Check in Postwick.",
+      "caption": "Earned from an Attestation in Postwick.",
       "silhouetteHint": "Lives where the mail turns around."
     },
     {
@@ -1117,7 +1117,7 @@
       "rarity": "common",
       "region": "postwick",
       "sortIndex": 86,
-      "caption": "Earned from a Source Check in Postwick.",
+      "caption": "Earned from an Attestation in Postwick.",
       "silhouetteHint": "Filed under P, for patience."
     },
     {
@@ -1130,7 +1130,7 @@
       "rarity": "common",
       "region": "postwick",
       "sortIndex": 87,
-      "caption": "Earned from a Source Check in Postwick.",
+      "caption": "Earned from an Attestation in Postwick.",
       "silhouetteHint": "Lives where the mail turns around."
     },
     {
@@ -1143,7 +1143,7 @@
       "rarity": "holo",
       "region": "morningside",
       "sortIndex": 88,
-      "caption": "Earned from a Source Check in Morningside.",
+      "caption": "Earned from an Attestation in Morningside.",
       "silhouetteHint": "A collector keeps office hours near the old town noise."
     },
     {
@@ -1156,7 +1156,7 @@
       "rarity": "holo",
       "region": "morningside",
       "sortIndex": 89,
-      "caption": "Earned from a Source Check in Morningside.",
+      "caption": "Earned from an Attestation in Morningside.",
       "silhouetteHint": "Something patient waits where the crowd thins."
     },
     {
@@ -1169,7 +1169,7 @@
       "rarity": "common",
       "region": "morningside",
       "sortIndex": 90,
-      "caption": "Earned from a Source Check in Morningside.",
+      "caption": "Earned from an Attestation in Morningside.",
       "silhouetteHint": "A collector keeps office hours near the old town noise."
     },
     {
@@ -1182,7 +1182,7 @@
       "rarity": "common",
       "region": "morningside",
       "sortIndex": 91,
-      "caption": "Earned from a Source Check in Morningside.",
+      "caption": "Earned from an Attestation in Morningside.",
       "silhouetteHint": "Something patient waits where the crowd thins."
     },
     {
@@ -1195,7 +1195,7 @@
       "rarity": "common",
       "region": "morningside",
       "sortIndex": 92,
-      "caption": "Earned from a Source Check in Morningside.",
+      "caption": "Earned from an Attestation in Morningside.",
       "silhouetteHint": "A collector keeps office hours near the old town noise."
     },
     {
@@ -1208,7 +1208,7 @@
       "rarity": "common",
       "region": "morningside",
       "sortIndex": 93,
-      "caption": "Earned from a Source Check in Morningside.",
+      "caption": "Earned from an Attestation in Morningside.",
       "silhouetteHint": "Something patient waits where the crowd thins."
     },
     {
@@ -1221,7 +1221,7 @@
       "rarity": "common",
       "region": "morningside",
       "sortIndex": 94,
-      "caption": "Earned from a Source Check in Morningside.",
+      "caption": "Earned from an Attestation in Morningside.",
       "silhouetteHint": "A collector keeps office hours near the old town noise."
     },
     {
@@ -1234,7 +1234,7 @@
       "rarity": "common",
       "region": "morningside",
       "sortIndex": 95,
-      "caption": "Earned from a Source Check in Morningside.",
+      "caption": "Earned from an Attestation in Morningside.",
       "silhouetteHint": "Something patient waits where the crowd thins."
     }
   ]

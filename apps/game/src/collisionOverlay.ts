@@ -156,7 +156,7 @@ export function solidAtWorldPixel(
 ): boolean {
   const cell = worldPixelToCollisionCell(point, grid.cellSize);
   if (!cell || cell.cellX < 0 || cell.cellY < 0 || cell.cellX >= grid.width || cell.cellY >= grid.height) {
-    return false;
+    return true;
   }
   return solidAtCell(solidRows, cell.cellX, cell.cellY);
 }
@@ -202,7 +202,7 @@ export function surfaceAtWorldPixel(
 ): number {
   const cell = worldPixelToCollisionCell(point, grid.cellSize);
   if (!cell || cell.cellX < 0 || cell.cellY < 0 || cell.cellX >= grid.width || cell.cellY >= grid.height) {
-    return 0;
+    return SURFACE_SOLID_MASK;
   }
   return surfaceAtCell(surfaceRows, cell.cellX, cell.cellY);
 }
