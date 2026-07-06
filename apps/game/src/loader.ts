@@ -20,6 +20,7 @@ import {
   ItemOverridesSchema,
   ManifestSchema,
   MusicManifestSchema,
+  NavmeshSchema,
   SectorMusicSchema,
   CollisionOverridesSchema,
   NpcOverridesSchema,
@@ -64,6 +65,7 @@ import {
   type ItemOverrides,
   type Manifest,
   type MusicManifest,
+  type Navmesh,
   type SectorMusic,
   type CollisionOverrides,
   type NpcOverrides,
@@ -112,6 +114,7 @@ const STORY_TRIGGERS_FILE = "triggers.json";
 const MUSIC_MANIFEST_FILE = "music-manifest.json";
 const SECTOR_MUSIC_FILE = "sector-music.json";
 const COLLISION_OVERRIDES_FILE = "collision-overrides.json";
+const NAVMESH_FILE = "navmesh.json";
 const DRIFELLA_BARKS_FILE = "drifella-barks.json";
 const OPENING_CUTSCENE_FILE = "opening-cutscene.json";
 const CUTSCENES_FILE = "cutscenes.json";
@@ -149,6 +152,7 @@ export type GameData = {
   musicManifest?: MusicManifest;
   sectorMusic?: SectorMusic;
   collisionOverrides?: CollisionOverrides;
+  navmesh?: Navmesh;
   font?: FontCollection;
   window?: WindowCollection;
   characters?: CharacterCollection;
@@ -299,6 +303,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     musicManifest,
     sectorMusic,
     collisionOverrides,
+    navmesh,
     drifellaBarks,
     openingCutscene,
     cutscenes,
@@ -371,6 +376,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${MUSIC_MANIFEST_FILE}`, MusicManifestSchema),
     loadJson(`/generated/${SECTOR_MUSIC_FILE}`, SectorMusicSchema),
     loadJson(`/generated/${COLLISION_OVERRIDES_FILE}`, CollisionOverridesSchema),
+    loadJson(`/generated/${NAVMESH_FILE}`, NavmeshSchema),
     loadJson(`/generated/${DRIFELLA_BARKS_FILE}`, DrifellaBarksSchema),
     loadJson(`/generated/${OPENING_CUTSCENE_FILE}`, OpeningCutsceneSchema),
     loadJson(`/generated/${CUTSCENES_FILE}`, CutscenesSchema),
@@ -422,6 +428,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     musicManifest,
     sectorMusic,
     collisionOverrides,
+    navmesh,
     font,
     window,
     characters: resolvedCharacters,

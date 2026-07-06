@@ -379,6 +379,54 @@ export const CollisionOverridesSchema = z.object({
 });
 export type CollisionOverrides = z.infer<typeof CollisionOverridesSchema>;
 
+const NavmeshBoundsSchema = z.object({
+  x: z.number().int().nonnegative(),
+  y: z.number().int().nonnegative(),
+  w: z.number().int().positive(),
+  h: z.number().int().positive()
+}).strict();
+
+export const NavmeshSchema = z.object({
+  schema: z.literal("swagbound.navmesh.v1"),
+  cellSize: z.number().int().positive(),
+  width: z.number().int().positive(),
+  height: z.number().int().positive(),
+  rows: z.array(z.array(z.tuple([
+    z.number().int().nonnegative(),
+    z.number().int().positive()
+  ]))),
+  components: z.record(z.string().regex(/^\d+$/), z.object({
+    cells: z.number().int().positive(),
+    bounds: NavmeshBoundsSchema
+  }).strict()),
+  rects: z.array(z.object({
+    c: z.number().int().positive(),
+    x: z.number().int().nonnegative(),
+    y: z.number().int().nonnegative(),
+    w: z.number().int().positive(),
+    h: z.number().int().positive()
+  }).strict())
+}).strict().superRefine((value, context) => {
+  if (value.rows.length !== value.height) {
+    context.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: `rows length ${value.rows.length} does not match height ${value.height}`,
+      path: ["rows"]
+    });
+  }
+  value.rows.forEach((row, index) => {
+    const total = row.reduce((sum, [, runLength]) => sum + runLength, 0);
+    if (total !== value.width) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `row ${index} run length ${total} does not match width ${value.width}`,
+        path: ["rows", index]
+      });
+    }
+  });
+});
+export type Navmesh = z.infer<typeof NavmeshSchema>;
+
 export const SectorMusicSchema = z.object({
   schema: z.literal("swagbound.sector-music.v1"),
   cols: z.number().int().positive(),
