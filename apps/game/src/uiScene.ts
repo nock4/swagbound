@@ -61,6 +61,7 @@ const MENU_MAX_VISIBLE_ITEMS = 8;
 const MENU_GRID_COL_GAP = 10;
 const MENU_GRID_ROW_EXTRA = 6;
 const MENU_GRID_CELL_INSET = 4;
+const MENU_OBJECTIVE_GAP = 7;
 type MenuCursorSlot = {
   x: number;
   rowTop: number;
@@ -471,7 +472,12 @@ export class UiScene extends Phaser.Scene {
       const textInset = MENU_HORIZONTAL_PADDING;
       const showTitle = screen.id !== "main";
       const titleTop = y + MENU_VERTICAL_PADDING;
-      const itemTop = y + MENU_VERTICAL_PADDING + (showTitle ? this.menuLineHeight() + MENU_TITLE_GAP : 0);
+      const objectiveLines = this.menuObjectiveLines(screen);
+      const objectiveTop = y + MENU_VERTICAL_PADDING + (showTitle ? this.menuLineHeight() + MENU_TITLE_GAP : 0);
+      const objectiveHeight = objectiveLines.length > 0
+        ? objectiveLines.length * this.menuLineHeight() + MENU_OBJECTIVE_GAP
+        : 0;
+      const itemTop = objectiveTop + objectiveHeight;
       const itemBottomInset = MENU_VERTICAL_PADDING;
       const compact = screen.id === "status";
       const fontSize = compact ? 12 : MENU_FONT_SIZE;
@@ -484,6 +490,20 @@ export class UiScene extends Phaser.Scene {
           weight: 500
         }).setDepth(15));
       }
+
+      objectiveLines.forEach((line, lineIndex) => {
+        this.menuTexts.push(createCleanText(
+          this,
+          x + textInset + MENU_CARET_GUTTER_PX,
+          objectiveTop + lineIndex * this.menuLineHeight(),
+          line,
+          {
+            fontSize: MENU_TITLE_FONT_SIZE,
+            color: CLEAN_UI_SECONDARY,
+            fixedWidth: Math.max(1, boxWidth - textInset * 2 - MENU_CARET_GUTTER_PX)
+          }
+        ).setDepth(15));
+      });
 
       // Grid screens (the 3x3 Command menu) lay items in a row-major grid; the
       // selection highlight boxes the whole cell. Lists keep the vertical path below.
@@ -878,16 +898,52 @@ export class UiScene extends Phaser.Scene {
     return { columns, rows, cellWidth, rowHeight };
   }
 
+  private menuObjectiveTextWidth(): number {
+    return Math.max(1, this.scale.width - MENU_LEFT - MENU_RIGHT_MARGIN - MENU_HORIZONTAL_PADDING * 2 - MENU_CARET_GUTTER_PX);
+  }
+
+  private menuObjectiveLines(screen: MenuRenderScreen): string[] {
+    const text = screen.objectiveText?.trim();
+    return text ? this.wrapMenuText(`NEXT: ${text}`, this.menuObjectiveTextWidth()) : [];
+  }
+
+  private wrapMenuText(text: string, maxWidth: number): string[] {
+    const words = text.split(/\s+/).filter(Boolean);
+    const lines: string[] = [];
+    let line = "";
+    for (const word of words) {
+      const next = line ? `${line} ${word}` : word;
+      if (line && this.measureTextWidth(next) > maxWidth) {
+        lines.push(line);
+        line = word;
+      } else {
+        line = next;
+      }
+    }
+    if (line) {
+      lines.push(line);
+    }
+    return lines;
+  }
+
   private menuRect(screen: MenuRenderScreen, x: number): CanvasRect {
     const showTitle = screen.id !== "main";
     if (screen.columns && screen.columns > 1) {
       const { columns, rows, cellWidth, rowHeight } = this.menuGridMetrics(screen);
       const titleHeight = showTitle ? this.menuLineHeight() + MENU_TITLE_GAP : 0;
+      const objectiveLines = this.menuObjectiveLines(screen);
+      const objectiveHeight = objectiveLines.length > 0
+        ? objectiveLines.length * this.menuLineHeight() + MENU_OBJECTIVE_GAP
+        : 0;
+      const gridWidth = MENU_HORIZONTAL_PADDING * 2 + columns * cellWidth + (columns - 1) * MENU_GRID_COL_GAP;
+      const objectiveWidth = objectiveLines.length > 0
+        ? MENU_HORIZONTAL_PADDING * 2 + MENU_CARET_GUTTER_PX + this.menuObjectiveTextWidth()
+        : 0;
       return {
         x,
         y: MENU_TOP,
-        width: MENU_HORIZONTAL_PADDING * 2 + columns * cellWidth + (columns - 1) * MENU_GRID_COL_GAP,
-        height: MENU_VERTICAL_PADDING * 2 + titleHeight + rows * rowHeight
+        width: Math.max(gridWidth, objectiveWidth),
+        height: MENU_VERTICAL_PADDING * 2 + titleHeight + objectiveHeight + rows * rowHeight
       };
     }
     const lineHeight = this.menuLineHeight();

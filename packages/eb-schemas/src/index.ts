@@ -1372,6 +1372,35 @@ export function sanitizeAddedNpcs(raw: unknown): { value: AddedNpcs; dropped: Ad
   return { value, dropped };
 }
 
+export const ObjectiveConditionSchema = z.object({
+  requireFlags: z.array(z.string().trim().min(1)),
+  blockFlags: z.array(z.string().trim().min(1))
+}).strict();
+
+export const ObjectiveEntrySchema = z.object({
+  id: z.string().trim().min(1),
+  when: ObjectiveConditionSchema,
+  text: z.string().trim().min(1)
+}).strict();
+
+export const ObjectivesSchema = z.object({
+  schema: z.literal("swagbound.objectives.v1"),
+  comment: z.string().optional(),
+  objectives: z.array(ObjectiveEntrySchema).min(1)
+}).strict().superRefine((value, context) => {
+  const seen = new Set<string>();
+  value.objectives.forEach((objective, index) => {
+    if (seen.has(objective.id)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate objective id ${objective.id}`,
+        path: ["objectives", index, "id"]
+      });
+    }
+    seen.add(objective.id);
+  });
+});
+
 const OverworldInteractableBaseSchema = z.object({
   id: z.string().trim().min(1),
   label: z.string().trim().min(1).optional(),
@@ -1564,6 +1593,9 @@ export const OverworldInteractablesSchema = z
 
 export type OverworldInteractable = z.infer<typeof OverworldInteractableSchema>;
 export type OverworldInteractables = z.infer<typeof OverworldInteractablesSchema>;
+export type ObjectiveCondition = z.infer<typeof ObjectiveConditionSchema>;
+export type ObjectiveEntry = z.infer<typeof ObjectiveEntrySchema>;
+export type Objectives = z.infer<typeof ObjectivesSchema>;
 export type CardNft = z.infer<typeof CardNftSchema>;
 export type CardNfts = z.infer<typeof CardNftsSchema>;
 export type SourceCheckQuestion = z.infer<typeof SourceCheckQuestionSchema>;

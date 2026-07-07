@@ -27,6 +27,7 @@ import {
   closedMenu,
   confirmMenu,
   menuDebugState,
+  menuRenderStack,
   moveMenu,
   moveMenu2D,
   openMenu,
@@ -146,6 +147,19 @@ describe("menuModel navigation", () => {
       "Equip", "Status", "Save",
       "Map", "Party", "Journal"
     ]);
+  });
+
+  it("carries the current objective as pinned render text without adding a command tile", () => {
+    const state = openMenu(buildMainMenuScreen("Face the card clique north of Bosch's block."));
+    const [rendered] = menuRenderStack(state);
+
+    expect(rendered.objectiveText).toBe("Face the card clique north of Bosch's block.");
+    expect(rendered.items.map((item) => item.label)).toEqual([
+      "Talk", "Goods", "PSI",
+      "Equip", "Status", "Save",
+      "Map", "Party", "Journal"
+    ]);
+    expect(rendered.items.every((item) => item.enabled)).toBe(true);
   });
 
   it("navigates the grid in 2D, wrapping within a row/column", () => {
