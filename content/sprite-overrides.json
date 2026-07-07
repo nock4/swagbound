@@ -11751,6 +11751,28 @@
       "originX": 0.5,
       "originY": 1
     },
+    "402": {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-866-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
     "406": {
       "image": "assets/swagbound/overworld-npc/gns-lsw-957-ow.png",
       "frameWidth": 48,
@@ -11841,6 +11863,28 @@
     },
     "419": {
       "image": "assets/swagbound/overworld-npc/gns-lsw-1628-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "424": {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1784-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {
