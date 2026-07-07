@@ -19,7 +19,7 @@ function audioListPlugin(): Plugin {
       server.middlewares.use("/__audio-list", (_req, res) => {
         const tracks: Array<{ name: string; url: string }> = [];
         const walk = (dir: string): void => {
-          let entries: ReturnType<typeof readdirSync>;
+          let entries: Array<{ name: string; isDirectory(): boolean }>;
           try {
             entries = readdirSync(dir, { withFileTypes: true });
           } catch {

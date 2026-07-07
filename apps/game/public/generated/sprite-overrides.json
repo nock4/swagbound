@@ -193,6 +193,38 @@
               ]
             },
             "displayHeight": 24
+          },
+          "pajamas": {
+            "image": "assets/swagbound/hero/bosch-hood-pajamas-walk.png",
+            "frameWidth": 96,
+            "frameHeight": 96,
+            "animations": {
+              "down": [
+                0,
+                1,
+                2,
+                3
+              ],
+              "left": [
+                4,
+                5,
+                6,
+                7
+              ],
+              "right": [
+                8,
+                9,
+                10,
+                11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            },
+            "displayHeight": 24
           }
         }
       }
@@ -832,6 +864,38 @@
       },
       "rope": {
         "image": "assets/swagbound/hero/bosch-hood-rope.png",
+        "frameWidth": 96,
+        "frameHeight": 96,
+        "animations": {
+          "down": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "left": [
+            4,
+            5,
+            6,
+            7
+          ],
+          "right": [
+            8,
+            9,
+            10,
+            11
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        "displayHeight": 24
+      },
+      "pajamas": {
+        "image": "assets/swagbound/hero/bosch-hood-pajamas-walk.png",
         "frameWidth": 96,
         "frameHeight": 96,
         "animations": {
