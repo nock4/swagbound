@@ -44,6 +44,12 @@ describe("chunked world interior rendering contract", () => {
     expect(sceneSource).not.toContain("unionWorldRects");
   });
 
+  it("keeps the one-off furniture-bottom sector pad data-local", () => {
+    expect(sceneSource).toContain("INTERIOR_SECTOR_AREA_RECT_PADS");
+    expect(sceneSource).toContain("1059874556: { bottom: 16 }");
+    expect(sceneSource).toContain("paddedBottom");
+  });
+
   it("stabilizes the rendered geometry mask edge without a top headroom window", () => {
     expect(sceneSource).toContain("ROOM_MASK_EDGE_INSET_SCREEN_PX");
     expect(sceneSource).toContain("roomMaskEdgeInsetWorldPixels");
