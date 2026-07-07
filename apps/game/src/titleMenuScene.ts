@@ -38,9 +38,16 @@ export interface TitleMenuData {
 
 const TITLE_SLIDE_KEY = "title-slide";
 const WAR_SLIDE_KEY = "war-slide";
+const WAR_STATIC_TEXTURE_KEY_PREFIX = "war-slide-static";
 const MENU_CUE = "menu";
 const WAR_STOP_FADE_MS = 70;
 const TITLE_MUSIC_ATTACK_FADE_MS = 40;
+const PRE_TITLE_GATE_FADE_MS = 300;
+const WAR_STATIC_TEXTURE_COUNT = 6;
+const WAR_STATIC_TEXTURE_WIDTH = 128;
+const WAR_STATIC_TEXTURE_HEIGHT = 112;
+const WAR_STATIC_CYCLE_MS = 1_000 / 12;
+const WAR_STATIC_REVEAL_MS = 2_600;
 // Dark, brooding track for the opening war-against-milady slide (Nate Young); Glass
 // Chime (MENU_CUE) is held back until the menu.
 const WAR_CUE = "intro";
@@ -50,8 +57,8 @@ type Phase = TitleMenuPhase;
 /**
  * Boot-time title + intro-slide sequence and main menu.
  *
- *   "war against milady" slide (Glass Chime starts here)  → (Z) →  SWAGBOUND title slide
- *                                                          → (Z) →  main menu: NEW GAME / CONTINUE
+ *   pre-title gate  →  "war against milady" slide (WAR_CUE starts here)  → (Z) →  SWAGBOUND title slide
+ *                                                                             → (Z) →  main menu: NEW GAME / CONTINUE
  *
  * NEW GAME runs the intro cinematic + opening cutscene; CONTINUE loads the save.
  */
@@ -67,15 +74,22 @@ export class TitleMenuScene extends Phaser.Scene {
   private promptClockMs = 0;
   private transitioning = false;
   private music?: Music;
-  private audioUnlockCleanup?: () => void;
   private warSlideOverlay?: Phaser.GameObjects.Rectangle;
   private warSlideTweens: Phaser.Tweens.Tween[] = [];
+  private warSlideRevealTween?: Phaser.Tweens.Tween;
+  private promptFadeActive = false;
+  private warStaticTextureKeys: string[] = [];
+  private warStaticImage?: Phaser.GameObjects.Image;
+  private warStaticTween?: Phaser.Tweens.Tween;
+  private warStaticCycle?: Phaser.Time.TimerEvent;
 
   private menuItems: { label: string; run: () => void }[] = [];
   private menuTexts: Phaser.GameObjects.Text[] = [];
   private menuPanel?: Phaser.GameObjects.Graphics;
   private cursor = 0;
   private readonly confirmPointerInput = () => this.confirm();
+  private readonly gateKeyInput = () => this.releaseGate();
+  private readonly gateGamepadInput = () => this.releaseGate();
 
   constructor() {
     super("title-menu");
@@ -86,11 +100,12 @@ export class TitleMenuScene extends Phaser.Scene {
     this.continueTarget = data.continueTarget ?? null;
     this.hasSave = data.hasSave;
     this.musicManifest = data.musicManifest;
-    this.phase = "war";
+    this.phase = "gate";
     this.cursor = 0;
     this.menuItems = [];
     this.menuTexts = [];
     this.promptClockMs = 0;
+    this.promptFadeActive = false;
   }
 
   preload(): void {
@@ -103,16 +118,13 @@ export class TitleMenuScene extends Phaser.Scene {
     this.music = getSharedMusic(this.registry, this.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
-    // War-against-milady slide opens the sequence with the dark WAR_CUE; Glass Chime
-    // holds until the menu.
-    this.showSlide(WAR_SLIDE_KEY);
+    this.createWarStaticTextures();
     // Queue the cue now for browsers that allow autoplay, then retry on the first
-    // gesture without taking the event away from normal title/menu input.
+    // gate gesture before the war slide is allowed onto the screen.
     this.playCurrentPhaseMusic();
     void this.music.preload(MENU_CUE);
-    this.installFirstGestureAudioUnlock();
     this.prompt = this.add
-      .text(this.scale.width / 2, this.scale.height - 30, "PRESS  Z  TO  BEGIN", {
+      .text(this.scale.width / 2, this.scale.height / 2, "PRESS ANY BUTTON", {
         fontFamily: CLEAN_UI_FONT_FAMILY,
         fontSize: "16px",
         color: "#ffffff"
@@ -126,15 +138,19 @@ export class TitleMenuScene extends Phaser.Scene {
     registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveCursor(-1));
     registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => this.moveCursor(1));
     this.input.on("pointerdown", this.confirmPointerInput);
+    this.input.keyboard?.on("keydown", this.gateKeyInput);
+    this.input.gamepad?.on("down", this.gateGamepadInput);
 
     this.events.once("shutdown", () => {
-      this.audioUnlockCleanup?.();
+      this.input.keyboard?.off("keydown", this.gateKeyInput);
+      this.input.gamepad?.off("down", this.gateGamepadInput);
       this.killWarSlideAnimation();
+      this.killWarStaticReveal();
+      this.removeWarStaticTextures();
       this.input.off("pointerdown", this.confirmPointerInput);
     });
 
     document.getElementById("game-loading")?.remove();
-    this.cameras.main.fadeIn(WAR_SLIDE_REVEAL_FADE_MS, 0, 0, 0);
   }
 
   /** Fade to black, run the swap, fade back in — with an input guard during the fade. */
@@ -155,7 +171,7 @@ export class TitleMenuScene extends Phaser.Scene {
   }
 
   update(_time: number, delta: number): void {
-    if (!this.prompt) {
+    if (!this.prompt || this.promptFadeActive) {
       return;
     }
     this.promptClockMs += delta;
@@ -164,10 +180,11 @@ export class TitleMenuScene extends Phaser.Scene {
     this.prompt.setAlpha(titlePromptVisible(this.phase, this.promptClockMs) ? pulse : 0);
   }
 
-  private showSlide(key: string): void {
+  private showSlide(key: string, alpha = 1): void {
     this.killWarSlideAnimation();
+    this.killWarStaticReveal();
     this.slide?.destroy();
-    const image = this.add.image(this.scale.width / 2, this.scale.height / 2, key).setDepth(0);
+    const image = this.add.image(this.scale.width / 2, this.scale.height / 2, key).setDepth(0).setAlpha(alpha);
     // Contain-fit: show the whole slide (letterboxed) so the baked-in title text is never cropped.
     const scale = Math.min(this.scale.width / image.width, this.scale.height / image.height);
     image.setScale(scale);
@@ -212,40 +229,137 @@ export class TitleMenuScene extends Phaser.Scene {
       tween.stop();
     }
     this.warSlideTweens = [];
+    this.warSlideRevealTween?.stop();
+    this.warSlideRevealTween = undefined;
     this.warSlideOverlay?.destroy();
     this.warSlideOverlay = undefined;
   }
 
-  private installFirstGestureAudioUnlock(): void {
-    this.audioUnlockCleanup?.();
-    let cleanedUp = false;
-    const unlockMusic = () => {
-      this.playCurrentPhaseMusic();
-      this.music?.resume();
-      cleanup();
-    };
-    const cleanup = () => {
-      if (cleanedUp) {
-        return;
+  private releaseGate(): void {
+    if (this.phase !== "gate" || this.transitioning) {
+      return;
+    }
+    this.transitioning = true;
+    this.promptFadeActive = true;
+    this.playCurrentPhaseMusic();
+    this.music?.resume();
+    const prompt = this.prompt;
+    if (!prompt) {
+      this.time.delayedCall(PRE_TITLE_GATE_FADE_MS, () => this.beginWarSlideReveal());
+      return;
+    }
+    this.tweens.add({
+      targets: prompt,
+      alpha: 0,
+      duration: PRE_TITLE_GATE_FADE_MS,
+      onComplete: () => this.beginWarSlideReveal()
+    });
+  }
+
+  private beginWarSlideReveal(): void {
+    this.phase = "war";
+    this.transitioning = false;
+    this.promptFadeActive = false;
+    this.promptClockMs = 0;
+    this.prompt?.setText("PRESS  Z  TO  BEGIN");
+    this.prompt?.setPosition(this.scale.width / 2, this.scale.height - 30);
+    this.prompt?.setDepth(10);
+    this.prompt?.setAlpha(0);
+    this.showSlide(WAR_SLIDE_KEY, 0);
+    if (this.slide) {
+      this.warSlideRevealTween = this.tweens.add({
+        targets: this.slide,
+        alpha: 1,
+        duration: WAR_SLIDE_REVEAL_FADE_MS,
+        ease: "Linear",
+        onComplete: () => {
+          this.warSlideRevealTween = undefined;
+        }
+      });
+    }
+    this.startWarStaticReveal();
+  }
+
+  private createWarStaticTextures(): void {
+    this.removeWarStaticTextures();
+    for (let i = 0; i < WAR_STATIC_TEXTURE_COUNT; i += 1) {
+      const key = `${WAR_STATIC_TEXTURE_KEY_PREFIX}-${i}`;
+      const canvas = document.createElement("canvas");
+      canvas.width = WAR_STATIC_TEXTURE_WIDTH;
+      canvas.height = WAR_STATIC_TEXTURE_HEIGHT;
+      const context = canvas.getContext("2d");
+      if (!context) {
+        continue;
       }
-      cleanedUp = true;
-      this.input.off("pointerdown", unlockMusic);
-      this.input.keyboard?.off("keydown", unlockMusic);
-      this.input.gamepad?.off("down", unlockMusic);
-      globalThis.removeEventListener?.("gamepadconnected", unlockMusic);
-      if (this.audioUnlockCleanup === cleanup) {
-        this.audioUnlockCleanup = undefined;
+      const imageData = context.createImageData(WAR_STATIC_TEXTURE_WIDTH, WAR_STATIC_TEXTURE_HEIGHT);
+      for (let p = 0; p < imageData.data.length; p += 4) {
+        const color = saturatedStaticPixel();
+        imageData.data[p] = color.r;
+        imageData.data[p + 1] = color.g;
+        imageData.data[p + 2] = color.b;
+        imageData.data[p + 3] = 255;
       }
-    };
-    this.input.once("pointerdown", unlockMusic);
-    this.input.keyboard?.once("keydown", unlockMusic);
-    this.input.gamepad?.once("down", unlockMusic);
-    globalThis.addEventListener?.("gamepadconnected", unlockMusic, { once: true });
-    this.audioUnlockCleanup = cleanup;
+      context.putImageData(imageData, 0, 0);
+      if (this.textures.exists(key)) {
+        this.textures.remove(key);
+      }
+      const texture = this.textures.addCanvas(key, canvas);
+      if (texture) {
+        this.warStaticTextureKeys.push(key);
+      }
+    }
+  }
+
+  private removeWarStaticTextures(): void {
+    for (const key of this.warStaticTextureKeys) {
+      if (this.textures.exists(key)) {
+        this.textures.remove(key);
+      }
+    }
+    this.warStaticTextureKeys = [];
+  }
+
+  private startWarStaticReveal(): void {
+    if (this.warStaticTextureKeys.length === 0) {
+      return;
+    }
+    this.killWarStaticReveal();
+    let frame = 0;
+    const image = this.add
+      .image(this.scale.width / 2, this.scale.height / 2, this.warStaticTextureKeys[frame])
+      .setDepth(5)
+      .setAlpha(1);
+    const scale = Math.max(this.scale.width / WAR_STATIC_TEXTURE_WIDTH, this.scale.height / WAR_STATIC_TEXTURE_HEIGHT);
+    image.setScale(scale);
+    this.warStaticImage = image;
+    this.warStaticCycle = this.time.addEvent({
+      delay: WAR_STATIC_CYCLE_MS,
+      loop: true,
+      callback: () => {
+        frame = (frame + 1) % this.warStaticTextureKeys.length;
+        this.warStaticImage?.setTexture(this.warStaticTextureKeys[frame]);
+      }
+    });
+    this.warStaticTween = this.tweens.add({
+      targets: image,
+      alpha: 0,
+      duration: WAR_STATIC_REVEAL_MS,
+      ease: "Linear",
+      onComplete: () => this.killWarStaticReveal()
+    });
+  }
+
+  private killWarStaticReveal(): void {
+    this.warStaticCycle?.remove(false);
+    this.warStaticCycle = undefined;
+    this.warStaticTween?.stop();
+    this.warStaticTween = undefined;
+    this.warStaticImage?.destroy();
+    this.warStaticImage = undefined;
   }
 
   private playCurrentPhaseMusic(options?: { fadeMs?: number }): void {
-    const cue = this.phase === "war" ? WAR_CUE : MENU_CUE;
+    const cue = this.phase === "war" || this.phase === "gate" ? WAR_CUE : MENU_CUE;
     void this.music?.play(cue, options);
   }
 
@@ -253,7 +367,12 @@ export class TitleMenuScene extends Phaser.Scene {
     if (this.transitioning) {
       return;
     }
+    if (this.phase === "gate") {
+      this.releaseGate();
+      return;
+    }
     if (this.phase === "war") {
+      this.killWarStaticReveal();
       this.music?.stop(WAR_STOP_FADE_MS);
       this.fadeSwap(() => {
         this.phase = "title";
@@ -357,5 +476,25 @@ export class TitleMenuScene extends Phaser.Scene {
     cam.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       this.scene.start(target.sceneKey, target.data);
     });
+  }
+}
+
+function saturatedStaticPixel(): { r: number; g: number; b: number } {
+  const hot = 210 + Math.floor(Math.random() * 46);
+  const mid = 40 + Math.floor(Math.random() * 176);
+  const cold = Math.floor(Math.random() * 36);
+  switch (Math.floor(Math.random() * 6)) {
+    case 0:
+      return { r: hot, g: mid, b: cold };
+    case 1:
+      return { r: hot, g: cold, b: mid };
+    case 2:
+      return { r: mid, g: hot, b: cold };
+    case 3:
+      return { r: cold, g: hot, b: mid };
+    case 4:
+      return { r: mid, g: cold, b: hot };
+    default:
+      return { r: cold, g: mid, b: hot };
   }
 }
