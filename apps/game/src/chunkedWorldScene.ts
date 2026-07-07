@@ -260,17 +260,13 @@ import { spriteBottomY, spriteSortDepth } from "./renderDepth";
 import {
   resolveConnectedRoomBounds,
   resolveSectorAreaBounds,
-  roomMaskContainsWorldPoint,
   sectorCoordForWorldPixel,
   type ConnectedRoomBounds
 } from "./roomBounds";
 import {
-  componentBounds,
   decodeNavmesh,
-  nearestComponentAt,
   nearestComponentIdAtWorldPixel,
-  type NavmeshQuery,
-  type WorldRect as NavmeshWorldRect
+  type NavmeshQuery
 } from "./navmesh";
 import { findMeshPath, type Point as NavmeshPoint } from "./navmeshPath";
 import {
@@ -488,6 +484,7 @@ const COLLISION_OVERLAY_DEPTH = 150_000;
 // cap / sweat / possession ghost shows on the character, but stay below the door-fade + UI overlays.
 const PLAYER_OVERLAY_DEPTH = 110_000;
 const BED_SLEEP_PLAYER_DEPTH = 100_010;
+const INTERIOR_ROOM_MASK_BAND_DEPTH = 120_000;
 const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 // Visible overworld enemies (EarthBound-style touch-to-battle): tuning.
 const OVERWORLD_ENEMY_GLOBAL_CAP = 4;
@@ -496,10 +493,8 @@ const OVERWORLD_ENEMY_CONTACT_PX = 12;
 const BOSS_GATE_CONTACT_PX = 14;
 const BOSS_GATE_ARM_DIST_PX = 32;
 const OVERWORLD_CAMERA_ZOOM = 2;
-// Cap on the interior zoom-to-fill so short rooms don't blow up; rooms shorter
-// than (viewport / this) keep a small centered letterbox instead of over-zooming.
+// Cap on the interior zoom-to-fill so tiny sector-areas don't blow up.
 const INTERIOR_CAMERA_MAX_ZOOM = 3.5;
-const INTERIOR_ROOM_MASK_HEADROOM_PX = 28;
 // Spawn band kept fully ON-SCREEN (camera shows ~128x112 world px from the player
 // at zoom 2) so a roamer is always visible before it can reach you — never an
 // off-screen "random" touch. Min keeps it off the player's feet.
@@ -603,6 +598,7 @@ const SUNSTROKE_CHANCE_PER_STEP = 0.05;
 const DEEP_WATER_SPEED_MULTIPLIER = 0.55;
 const LADDER_SPEED_MULTIPLIER = 0.6;
 const ROOM_MASK_EDGE_INSET_SCREEN_PX = 0.5;
+const INTERIOR_ROOM_MASK_BAND_OVERSCAN_PX = 64;
 const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
 const CUTSCENE_ACTOR_MOVE_TIMEOUT_MS = 8_000;
 const CUTSCENE_ACTOR_RUN_MULTIPLIER = 1.5;
@@ -665,6 +661,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private activeRoomSectorKey?: string;
   private roomMaskGraphics?: Phaser.GameObjects.Graphics;
   private roomMask?: Phaser.Display.Masks.GeometryMask;
+  private roomMaskBandGraphics?: Phaser.GameObjects.Graphics;
   private solidRows: string[] = [];
   private surfaceRows: string[] = [];
   private navmesh?: NavmeshQuery;
@@ -1564,8 +1561,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.world_.sectors) {
       const roomPoint = this.roomBoundsResolveState();
       const sector = sectorCoordForWorldPixel(roomPoint, this.world_.sectors);
-      const playerComponentId = this.nearestNavmeshComponentId(roomPoint.x, roomPoint.y, 2);
-      const sectorKey = sector ? `${sector.sectorCol},${sector.sectorRow}:${playerComponentId}` : undefined;
+      const sectorKey = sector ? this.sectorAreaBoundsKey(roomPoint) : undefined;
       if (!force && sectorKey && this.activeRoomSectorKey === sectorKey) {
         this.updateCameraRoomBounds();
         return;
@@ -1577,9 +1573,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.collisionGrid(),
         roomPoint
       );
-      this.activeRoomBounds = sectorRoom ? this.expandSectorRoomWithPlayerNavmeshComponent(sectorRoom, roomPoint) : undefined;
+      this.activeRoomBounds = sectorRoom ? this.deriveInteriorSectorAreaRoomBounds(sectorRoom, roomPoint) : undefined;
       this.applyInteriorRoomMask();
       this.applyNpcRoomVisibility();
+      this.applyWorldObjectRoomVisibility();
       this.updateCameraRoomBounds();
       return;
     }
@@ -1594,6 +1591,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
     this.applyInteriorRoomMask();
     this.applyNpcRoomVisibility();
+    this.applyWorldObjectRoomVisibility();
     this.updateCameraRoomBounds();
   }
 
@@ -1603,27 +1601,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   /**
-   * Keep the camera locked inside an interior room so its masked edge never
-   * reveals the black void around it (EB never scrolls past a room). Falls back
-   * to the full map bounds in the overworld.
+   * Keep the camera locked inside the active interior sector-area so its masked
+   * edge never reveals neighboring strips or void. Falls back to the full map
+   * bounds in the overworld.
    */
   private updateCameraRoomBounds(): void {
     const camera = this.cameras.main;
     const room = this.activeInteriorRoom();
     if (room) {
-      // Zoom in just enough that the room covers the viewport on its short axis,
-      // so the masked edge never reveals the black void. Capped so small rooms
-      // don't over-zoom; any residual gap is centered (symmetric, intentional).
-      const fillZoom = Math.max(
-        OVERWORLD_CAMERA_ZOOM,
-        camera.width / room.rect.width,
-        camera.height / room.rect.height
-      );
+      const viewportWidthAtDefaultZoom = camera.width / OVERWORLD_CAMERA_ZOOM;
+      const viewportHeightAtDefaultZoom = camera.height / OVERWORLD_CAMERA_ZOOM;
+      const shouldFillZoom =
+        room.rect.width < viewportWidthAtDefaultZoom &&
+        room.rect.height < viewportHeightAtDefaultZoom;
+      const fillZoom = shouldFillZoom
+        ? Math.max(OVERWORLD_CAMERA_ZOOM, camera.width / room.rect.width, camera.height / room.rect.height)
+        : OVERWORLD_CAMERA_ZOOM;
       camera.setZoom(Math.min(fillZoom, INTERIOR_CAMERA_MAX_ZOOM));
       camera.setBounds(room.rect.x, room.rect.y, room.rect.width, room.rect.height, true);
       // setBounds does not immediately pull an already-centered/following camera
-      // back inside the room; Bosch's 128px-tall bedroom would remain at zoom 2
-      // for that frame and reveal adjacent interior strips above and below.
+      // back inside the sector-area for the current frame.
       this.clampCameraScrollToRoom(room);
       return;
     }
@@ -1669,44 +1666,43 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.activeRoomBounds?.isInterior ? this.activeRoomBounds : undefined;
   }
 
-  private expandSectorRoomWithPlayerNavmeshComponent(
+  private deriveInteriorSectorAreaRoomBounds(
     room: ConnectedRoomBounds,
     point = this.playerState
   ): ConnectedRoomBounds {
-    if (!room.isInterior || !this.navmesh) {
+    if (!room.isInterior) {
       return room;
     }
-    const nearest = nearestComponentAt(this.navmesh, point, 2);
-    if (!nearest) {
-      return room;
+    const areaRect = this.sectorAreaRectForPoint(point) ?? room.rect;
+    const areaCellBounds = this.cellBoundsForWorldRect(areaRect);
+    if (!areaCellBounds) {
+      return { ...room, rect: areaRect };
     }
-    const componentRect = componentBounds(this.navmesh, nearest.componentId);
-    if (!componentRect) {
-      return room;
-    }
-    const sectorAreaRect = this.sectorAreaRectForPoint(point) ?? room.rect;
-    const clippedComponentRect = intersectWorldRects(navmeshRectToWorldRect(componentRect), sectorAreaRect);
-    if (!clippedComponentRect) {
-      return room;
-    }
-    const expandedRect = unionWorldRects(room.rect, clippedComponentRect);
-    if (worldRectsEqual(room.rect, expandedRect)) {
-      return room;
-    }
-    const expandedCellBounds = this.cellBoundsForWorldRect(expandedRect);
-    if (!expandedCellBounds) {
-      return { ...room, rect: expandedRect };
-    }
-    const maskCellRanges = unionMaskRangesWithBounds(room.maskCellRanges, expandedCellBounds);
+    const maskCellRanges = rectangularMaskRangesForBounds(areaCellBounds);
     const maskCellBounds = cellBoundsForMaskRanges(maskCellRanges);
-    const walkableCellBounds = unionCellBounds(room.walkableCellBounds, expandedCellBounds);
     return {
       ...room,
-      walkableCellBounds,
+      walkableCellBounds: areaCellBounds,
       ...(maskCellBounds ? { maskCellBounds } : {}),
       maskCellRanges,
-      rect: expandedRect
+      rect: areaRect
     };
+  }
+
+  private sectorAreaBoundsKey(point: { x: number; y: number }): string | undefined {
+    const sectors = this.world_.sectors;
+    const start = sectors ? sectorCoordForWorldPixel(point, sectors) : undefined;
+    if (!sectors || !start) {
+      return undefined;
+    }
+    const areaId = sectors.areaIds[start.index];
+    if (!Number.isInteger(areaId)) {
+      return undefined;
+    }
+    const rect = this.sectorAreaRectForPoint(point);
+    return rect
+      ? `${areaId}:${rect.x},${rect.y},${rect.width},${rect.height}`
+      : `${areaId}:${start.sectorCol},${start.sectorRow}`;
   }
 
   private sectorAreaRectForPoint(point: { x: number; y: number }): WorldRect | undefined {
@@ -1861,6 +1857,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const room = this.activeInteriorRoom();
     if (!room) {
       this.clearRoomMaskFromChunks();
+      this.clearInteriorRoomMaskBands();
       this.roomMaskGraphics?.clear();
       return;
     }
@@ -1869,6 +1866,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.applyRoomMaskToImage(streamed.background, mask);
       this.applyRoomMaskToImage(streamed.foreground, mask);
     }
+    this.updateInteriorRoomMaskBands(room);
   }
 
   private ensureRoomMask(room: ConnectedRoomBounds): Phaser.Display.Masks.GeometryMask {
@@ -1888,19 +1886,58 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const height = Math.max(1, Math.round(cellSize) - insetBottom);
       graphics.fillRect(x, y, width, height);
     }
-    const headroomY = Math.max(0, room.rect.y - INTERIOR_ROOM_MASK_HEADROOM_PX);
-    const headroomHeight = room.rect.y - headroomY;
-    if (headroomHeight > 0) {
-      graphics.fillRect(
-        Math.round(room.rect.x),
-        Math.round(headroomY),
-        Math.max(1, Math.round(room.rect.width)),
-        Math.round(headroomHeight)
-      );
-    }
     this.roomMask = this.roomMask ?? graphics.createGeometryMask();
     this.roomMask.setShape(graphics);
     return this.roomMask;
+  }
+
+  private updateInteriorRoomMaskBands(room: ConnectedRoomBounds): void {
+    const graphics = this.roomMaskBandGraphics ?? this.add.graphics();
+    this.roomMaskBandGraphics = graphics;
+    graphics
+      .clear()
+      .setPosition(0, 0)
+      .setScrollFactor(1)
+      .setDepth(INTERIOR_ROOM_MASK_BAND_DEPTH)
+      .setVisible(true);
+    graphics.fillStyle(0x000000, 1);
+
+    const pad = this.roomMaskBandOverscanWorldPixels();
+    const left = Math.floor(room.rect.x);
+    const top = Math.floor(room.rect.y);
+    const right = Math.ceil(room.rect.x + room.rect.width);
+    const bottom = Math.ceil(room.rect.y + room.rect.height);
+    const coverLeft = left - pad;
+    const coverTop = top - pad;
+    const coverRight = right + pad;
+    const coverBottom = bottom + pad;
+    const coverWidth = coverRight - coverLeft;
+    const roomHeight = bottom - top;
+
+    this.fillPositiveRect(graphics, coverLeft, coverTop, coverWidth, top - coverTop);
+    this.fillPositiveRect(graphics, coverLeft, bottom, coverWidth, coverBottom - bottom);
+    this.fillPositiveRect(graphics, coverLeft, top, left - coverLeft, roomHeight);
+    this.fillPositiveRect(graphics, right, top, coverRight - right, roomHeight);
+  }
+
+  private roomMaskBandOverscanWorldPixels(): number {
+    const camera = this.cameras.main;
+    const minimumZoom = Math.max(OVERWORLD_CAMERA_ZOOM, 0.001);
+    const viewportWorldSize = Math.max(camera.width, camera.height) / minimumZoom;
+    return Math.ceil(Math.max(512, viewportWorldSize) + INTERIOR_ROOM_MASK_BAND_OVERSCAN_PX);
+  }
+
+  private fillPositiveRect(
+    graphics: Phaser.GameObjects.Graphics,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): void {
+    if (width <= 0 || height <= 0) {
+      return;
+    }
+    graphics.fillRect(x, y, width, height);
   }
 
   private roomMaskEdgeInsetWorldPixels(): number {
@@ -1933,8 +1970,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
+  private clearInteriorRoomMaskBands(): void {
+    this.roomMaskBandGraphics?.clear();
+    this.roomMaskBandGraphics?.setVisible(false);
+  }
+
   private destroyRoomMask(): void {
     this.clearRoomMaskFromChunks();
+    this.roomMaskBandGraphics?.destroy();
+    this.roomMaskBandGraphics = undefined;
     this.roomMask?.destroy();
     this.roomMask = undefined;
     this.roomMaskGraphics?.destroy();
@@ -2461,9 +2505,24 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
+  private applyWorldObjectRoomVisibility(): void {
+    this.syncPresentInteractableSprites();
+    this.syncSourceCheckActors();
+    for (const actor of this.bossGateActors.values()) {
+      actor.sprite?.setVisible(this.bossGateActorVisible(actor));
+    }
+    for (const enemy of this.overworldEnemies.values()) {
+      enemy.sprite?.setVisible(this.overworldEnemyActorVisible(enemy));
+    }
+  }
+
   private npcInsideActiveRoom(npc: NpcRuntime): boolean {
+    return this.worldPointInsideActiveRoom(npc.state.player);
+  }
+
+  private worldPointInsideActiveRoom(point: { x: number; y: number }): boolean {
     const room = this.activeInteriorRoom();
-    return !room || roomMaskContainsWorldPoint(room, npc.state.player, this.collisionGrid());
+    return !room || pointInRect(point, room.rect);
   }
 
   private refreshNpcSprites(): void {
@@ -2721,7 +2780,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       sprite.setTexture(
         opened ? ChunkedWorldScene.PRESENT_TEXTURE_OPEN : ChunkedWorldScene.PRESENT_TEXTURE_CLOSED
       );
-      sprite.setVisible(true);
+      sprite.setVisible(this.worldPointInsideActiveRoom(entry.worldPixel));
       this.setActorSortDepth(sprite);
     }
   }
@@ -2772,7 +2831,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private sourceCheckActorVisible(check: DrifellaSourceCheck): boolean {
-    return sourceCheckVisible(check, this.gameFlags);
+    return sourceCheckVisible(check, this.gameFlags)
+      && this.worldPointInsideActiveRoom(check.placement.worldPixel);
   }
 
   private destroySourceCheckActors(): void {
@@ -5669,19 +5729,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
    * walkable bedside when control returns.
    */
   private placePlayerInBed(): void {
-    const bed = { x: 8164, y: 1100 };
+    const bed = { x: 8149, y: 1100 };
     // Resolve the room while Bosch is still on the walkable bedside spawn; the
     // bed pose is on solid furniture, where a forced room resolve would clear it.
     this.roomBoundsResolveAnchor = { x: this.playerState.x, y: this.playerState.y };
     this.refreshRoomBounds(true);
-    this.playerState.facing = "left";
+    this.playerState.facing = "right";
     this.playerState.x = bed.x;
     this.playerState.y = bed.y;
     this.playerState.velocityX = 0;
     this.playerState.velocityY = 0;
     this.playerState.moving = false;
-    this.playerState.animKey = "idle-left";
-    this.playerState.animFrame = this.playerFrames.left[0];
+    this.playerState.animKey = "idle-right";
+    this.playerState.animFrame = this.playerFrames.right[0];
     if (this.player) {
       this.player.x = bed.x;
       this.player.y = bed.y;
@@ -5775,10 +5835,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     // Three overhead shots of Morningside at night, each carrying one beat of narration,
     // separated by a dip to black; the last dip descends to Bosch's bed.
-    const shots: { from: { x: number; y: number }; to: { x: number; y: number }; text: string }[] = [
-      { from: { x: 1656, y: 1532 }, to: { x: 1888, y: 1652 }, text: "Morningside files its dreams before it dreams them." },
-      { from: { x: 1996, y: 1600 }, to: { x: 2148, y: 1768 }, text: "Something reads the town, street by street, and calls the reading love." },
-      { from: { x: 1840, y: 1748 }, to: { x: 2048, y: 1556 }, text: "Tonight one signal came back wearing your name." }
+    const shots: { from: { x: number; y: number }; to: { x: number; y: number }; duration: number; text: string }[] = [
+      {
+        from: { x: 1464, y: 1368 },
+        to: { x: 1888, y: 1516 },
+        duration: 6800,
+        text: "Morningside files its dreams before it dreams them."
+      },
+      {
+        from: { x: 1728, y: 1128 },
+        to: { x: 2040, y: 1736 },
+        duration: 7000,
+        text: "Something reads the town, street by street, and calls the reading love."
+      },
+      {
+        from: { x: 1592, y: 1680 },
+        to: { x: 2048, y: 1416 },
+        duration: 6600,
+        text: "Tonight one signal came back wearing your name."
+      }
     ];
 
     const finish = (): void => {
@@ -5807,12 +5882,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       placeCaption();
       caption.setText(shot.text).setAlpha(0);
       cam.fadeIn(600, 0, 0, 0);
-      this.tweens.add({ targets: caption, alpha: 1, duration: 550, delay: 350 });
+      this.tweens.add({ targets: caption, alpha: 1, duration: 600 });
       const proxy = { t: 0 };
       this.tweens.add({
         targets: proxy,
         t: 1,
-        duration: 2900,
+        duration: shot.duration,
         ease: "Sine.easeInOut",
         onUpdate: () => {
           setAnchor(
@@ -5823,7 +5898,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
           placeCaption();
         },
         onComplete: () => {
-          this.tweens.add({ targets: caption, alpha: 0, duration: 380 });
+          this.tweens.add({ targets: caption, alpha: 0, duration: 600 });
           cam.fadeOut(600, 0, 0, 0);
           cam.once("camerafadeoutcomplete", () => runShot(i + 1));
         }
@@ -6596,6 +6671,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       sprite.setFrame(actor.frames[actor.facing][0]);
     }
     this.setActorSortDepth(sprite);
+    sprite.setVisible(this.bossGateActorVisible(actor));
+  }
+
+  private bossGateActorVisible(actor: BossGateRuntime): boolean {
+    return this.worldPointInsideActiveRoom(actor)
+      && !(actor.textureKey && !(actor.sprite instanceof Phaser.GameObjects.Sprite));
   }
 
   private triggerBossGate(actor: BossGateRuntime): boolean {
@@ -6888,6 +6969,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       enemy.state.player.facing,
       enemy.enemyGroup
     );
+    actor.setVisible(this.overworldEnemyActorVisible(enemy));
+  }
+
+  private overworldEnemyActorVisible(enemy: OverworldEnemyRuntime): boolean {
+    return this.worldPointInsideActiveRoom(enemy.state.player)
+      && !(enemy.textureKey && !(enemy.sprite instanceof Phaser.GameObjects.Sprite));
   }
 
   private canSpawnOverworldEnemy(): boolean {
@@ -8657,33 +8744,6 @@ function normalizeOptionalGroupId(value: number | undefined): number | undefined
   return group >= 0 ? group : undefined;
 }
 
-function navmeshRectToWorldRect(rect: NavmeshWorldRect): WorldRect {
-  return { x: rect.x, y: rect.y, width: rect.w, height: rect.h };
-}
-
-function intersectWorldRects(a: WorldRect, b: WorldRect): WorldRect | undefined {
-  const x1 = Math.max(a.x, b.x);
-  const y1 = Math.max(a.y, b.y);
-  const x2 = Math.min(a.x + a.width, b.x + b.width);
-  const y2 = Math.min(a.y + a.height, b.y + b.height);
-  if (x2 <= x1 || y2 <= y1) {
-    return undefined;
-  }
-  return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
-}
-
-function unionWorldRects(a: WorldRect, b: WorldRect): WorldRect {
-  const x1 = Math.min(a.x, b.x);
-  const y1 = Math.min(a.y, b.y);
-  const x2 = Math.max(a.x + a.width, b.x + b.width);
-  const y2 = Math.max(a.y + a.height, b.y + b.height);
-  return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
-}
-
-function worldRectsEqual(a: WorldRect, b: WorldRect): boolean {
-  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
-}
-
 function buildCellBounds(
   minCellX: number,
   maxCellX: number,
@@ -8703,44 +8763,14 @@ function buildCellBounds(
   };
 }
 
-function unionCellBounds(
-  a: ConnectedRoomBounds["walkableCellBounds"],
-  b: ConnectedRoomBounds["walkableCellBounds"]
-): ConnectedRoomBounds["walkableCellBounds"] {
-  return buildCellBounds(
-    Math.min(a.minCellX, b.minCellX),
-    Math.max(a.maxCellX, b.maxCellX),
-    Math.min(a.minCellY, b.minCellY),
-    Math.max(a.maxCellY, b.maxCellY)
-  );
-}
-
-function unionMaskRangesWithBounds(
-  ranges: ConnectedRoomBounds["maskCellRanges"],
+function rectangularMaskRangesForBounds(
   bounds: ConnectedRoomBounds["walkableCellBounds"]
 ): ConnectedRoomBounds["maskCellRanges"] {
-  const byRow = new Map<number, { minCellX: number; maxCellX: number }>();
-  for (const range of ranges) {
-    const existing = byRow.get(range.cellY);
-    byRow.set(range.cellY, existing
-      ? {
-        minCellX: Math.min(existing.minCellX, range.minCellX),
-        maxCellX: Math.max(existing.maxCellX, range.maxCellX)
-      }
-      : { minCellX: range.minCellX, maxCellX: range.maxCellX });
-  }
+  const ranges: ConnectedRoomBounds["maskCellRanges"] = [];
   for (let cellY = bounds.minCellY; cellY <= bounds.maxCellY; cellY += 1) {
-    const existing = byRow.get(cellY);
-    byRow.set(cellY, existing
-      ? {
-        minCellX: Math.min(existing.minCellX, bounds.minCellX),
-        maxCellX: Math.max(existing.maxCellX, bounds.maxCellX)
-      }
-      : { minCellX: bounds.minCellX, maxCellX: bounds.maxCellX });
+    ranges.push({ cellY, minCellX: bounds.minCellX, maxCellX: bounds.maxCellX });
   }
-  return [...byRow.entries()]
-    .sort(([a], [b]) => a - b)
-    .map(([cellY, range]) => ({ cellY, ...range }));
+  return ranges;
 }
 
 function cellBoundsForMaskRanges(
