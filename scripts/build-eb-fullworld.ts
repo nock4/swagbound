@@ -16,6 +16,7 @@ import {
   MusicManifestSchema,
   NavmeshSchema,
   NpcOverridesSchema,
+  ObjectivesSchema,
   OpeningCutsceneSchema,
   OverworldInteractablesSchema,
   OverworldEnemySkinsSchema,
@@ -87,6 +88,8 @@ export const CARD_NFTS_SOURCE = "content/card-nfts.json";
 export const CARD_NFTS_OUTPUT = "card-nfts.json";
 export const DRIFELLA_SOURCE_CHECKS_SOURCE = "content/drifella-source-checks.json";
 export const DRIFELLA_SOURCE_CHECKS_OUTPUT = "drifella-source-checks.json";
+export const OBJECTIVES_SOURCE = "content/objectives.json";
+export const OBJECTIVES_OUTPUT = "objectives.json";
 export const NAVMESH_SOURCE = "content/navmesh.json";
 export const NAVMESH_OUTPUT = "navmesh.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
@@ -140,6 +143,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateOverworldInteractables(OVERWORLD_INTERACTABLES_SOURCE);
   await validateCardNfts(CARD_NFTS_SOURCE);
   await validateDrifellaSourceChecks(DRIFELLA_SOURCE_CHECKS_SOURCE);
+  await validateObjectives(OBJECTIVES_SOURCE);
   await validateNavmesh(NAVMESH_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
@@ -171,6 +175,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyOptionalJsonToGenerated(OVERWORLD_INTERACTABLES_SOURCE, out, OVERWORLD_INTERACTABLES_OUTPUT),
     copyOptionalJsonToGenerated(CARD_NFTS_SOURCE, out, CARD_NFTS_OUTPUT),
     copyOptionalJsonToGenerated(DRIFELLA_SOURCE_CHECKS_SOURCE, out, DRIFELLA_SOURCE_CHECKS_OUTPUT),
+    copyJsonToGenerated(OBJECTIVES_SOURCE, out, OBJECTIVES_OUTPUT),
     copyJsonToGenerated(NAVMESH_SOURCE, out, NAVMESH_OUTPUT)
   ]);
 }
@@ -278,6 +283,10 @@ async function validateDrifellaSourceChecks(source: string): Promise<void> {
     return;
   }
   DrifellaSourceChecksSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateObjectives(source: string): Promise<void> {
+  ObjectivesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateNavmesh(source: string): Promise<void> {
