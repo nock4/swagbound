@@ -12,6 +12,8 @@ export type DevNoteContext =
       y: number;
       tileX: number;
       tileY: number;
+      chunkX?: number | null;
+      chunkY?: number | null;
       sector: number | null;
       area: number | null;
       town: string | null;
@@ -48,6 +50,7 @@ export function formatDevNote(entry: DevNoteEntry, iso: string): string {
   const parts = [
     `(${Math.round(ctx.x)},${Math.round(ctx.y)})`,
     `tile ${ctx.tileX},${ctx.tileY}`,
+    `chunk ${ctx.chunkX ?? "?"},${ctx.chunkY ?? "?"}`,
     `sector ${ctx.sector ?? "?"}`,
     `area ${ctx.area ?? "?"}`,
     ctx.town ?? "?"

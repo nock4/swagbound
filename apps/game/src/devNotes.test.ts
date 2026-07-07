@@ -8,11 +8,11 @@ describe("formatDevNote", () => {
     const md = formatDevNote(
       {
         note: "this cell should be solid",
-        context: { kind: "coord", x: 1954.7, y: 2074.2, tileX: 61, tileY: 64, sector: 519, area: 12, town: "Morningside" }
+        context: { kind: "coord", x: 1954.7, y: 2074.2, tileX: 61, tileY: 64, chunkX: 3, chunkY: 4, sector: 519, area: 12, town: "Morningside" }
       },
       ISO
     );
-    expect(md).toContain("**[coord]** (1955,2074) · tile 61,64 · sector 519 · area 12 · Morningside");
+    expect(md).toContain("**[coord]** (1955,2074) · tile 61,64 · chunk 3,4 · sector 519 · area 12 · Morningside");
     expect(md).toContain(`— ${ISO}`);
     expect(md).toContain("- note: this cell should be solid");
   });
@@ -22,7 +22,7 @@ describe("formatDevNote", () => {
       { note: "x", context: { kind: "coord", x: 0, y: 0, tileX: 0, tileY: 0, sector: null, area: null, town: null } },
       ISO
     );
-    expect(md).toContain("sector ? · area ? · ?");
+    expect(md).toContain("chunk ?,? · sector ? · area ? · ?");
   });
 
   it("formats a dialogue tag with npc + line, collapsing whitespace", () => {
