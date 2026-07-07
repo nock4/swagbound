@@ -2,7 +2,8 @@ import type { CharacterCollection, DialoguePage, DialogueSegment, ItemCollection
 
 export const INSTANT_TEXT_SPEED_CPS = Number.POSITIVE_INFINITY;
 /** EarthBound-style typewriter speed (chars/sec) used unless ?textspeed overrides it. */
-export const DEFAULT_TEXT_SPEED_CPS = 45;
+// EB-feel reveal pace (measured pacing pass, docs/pacing/eb-first-20min.md law 3/text beats).
+export const DEFAULT_TEXT_SPEED_CPS = 34;
 export const DEFAULT_DIALOGUE_FONT_ID = 0;
 
 export type DialogueTextRun = {

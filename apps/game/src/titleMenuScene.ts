@@ -13,11 +13,18 @@ import {
   CLEAN_UI_PANEL_RADIUS,
   CLEAN_UI_SELECTION_TEXT
 } from "./cleanUi";
+import {
+  WAR_SLIDE_FIRST_ZOOM_LEG_MS,
+  WAR_SLIDE_REVEAL_FADE_MS,
+  titlePromptVisible,
+  type TitleMenuPhase
+} from "./titleMenuTiming";
 
 /** Where a menu choice sends the player. */
 export interface TitleMenuTarget {
   sceneKey: string;
   data: object;
+  keepMusicPlaying?: boolean;
 }
 
 export interface TitleMenuData {
@@ -38,7 +45,7 @@ const TITLE_MUSIC_ATTACK_FADE_MS = 40;
 // Chime (MENU_CUE) is held back until the menu.
 const WAR_CUE = "intro";
 
-type Phase = "title" | "war" | "menu";
+type Phase = TitleMenuPhase;
 
 /**
  * Boot-time title + intro-slide sequence and main menu.
@@ -112,7 +119,8 @@ export class TitleMenuScene extends Phaser.Scene {
       })
       .setOrigin(0.5)
       .setDepth(10)
-      .setShadow(0, 2, "#000000", 4);
+      .setShadow(0, 2, "#000000", 4)
+      .setAlpha(0);
 
     registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.confirm());
     registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveCursor(-1));
@@ -126,7 +134,7 @@ export class TitleMenuScene extends Phaser.Scene {
     });
 
     document.getElementById("game-loading")?.remove();
-    this.cameras.main.fadeIn(600, 0, 0, 0);
+    this.cameras.main.fadeIn(WAR_SLIDE_REVEAL_FADE_MS, 0, 0, 0);
   }
 
   /** Fade to black, run the swap, fade back in — with an input guard during the fade. */
@@ -152,7 +160,8 @@ export class TitleMenuScene extends Phaser.Scene {
     }
     this.promptClockMs += delta;
     // Gentle blink on the "press" prompt while a slide is showing.
-    this.prompt.setAlpha(0.45 + 0.55 * (0.5 + 0.5 * Math.sin(this.promptClockMs / 380)));
+    const pulse = 0.45 + 0.55 * (0.5 + 0.5 * Math.sin(this.promptClockMs / 380));
+    this.prompt.setAlpha(titlePromptVisible(this.phase, this.promptClockMs) ? pulse : 0);
   }
 
   private showSlide(key: string): void {
@@ -171,11 +180,13 @@ export class TitleMenuScene extends Phaser.Scene {
   private animateWarSlide(image: Phaser.GameObjects.Image, containScale: number): void {
     const centerY = this.scale.height / 2;
     const driftY = Math.max(8, Math.round(this.scale.height * 0.025));
+    image.setScale(containScale);
+    image.setY(centerY);
     const driftTween = this.tweens.add({
       targets: image,
       scale: containScale * 1.08,
       y: centerY - driftY,
-      duration: 20000,
+      duration: WAR_SLIDE_FIRST_ZOOM_LEG_MS,
       ease: "Sine.easeInOut",
       yoyo: true,
       repeat: -1
@@ -339,7 +350,9 @@ export class TitleMenuScene extends Phaser.Scene {
     }
     this.transitioning = true;
     const cam = this.cameras.main;
-    this.music?.stop(420);
+    if (!target.keepMusicPlaying) {
+      this.music?.stop(420);
+    }
     cam.fadeOut(420, 0, 0, 0);
     cam.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
       this.scene.start(target.sceneKey, target.data);
