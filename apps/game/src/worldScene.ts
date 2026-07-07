@@ -47,6 +47,7 @@ import {
   type SaveSlotPersistence,
   type SaveState
 } from "./saveState";
+import { FILING_INTAKE_REGISTRY_KEY, getFilingIntakeFromRegistry } from "./filingIntakeModel";
 import {
   buildMenuScreens,
   buildShopMenuScreens,
@@ -778,6 +779,7 @@ export class WorldScene extends Phaser.Scene {
       flags: this.gameFlags,
       partyState: this.partyState,
       player: this.currentPlayerSnapshot(),
+      intake: getFilingIntakeFromRegistry(this.registry),
       savedAt
     });
     const blob = serializeSaveState(save);
@@ -806,6 +808,9 @@ export class WorldScene extends Phaser.Scene {
     });
     if (!player) {
       return undefined;
+    }
+    if (this.bootSaveState.intake) {
+      this.registry.set(FILING_INTAKE_REGISTRY_KEY, this.bootSaveState.intake);
     }
     this.restoredFromSave = true;
     this.hasSave = true;

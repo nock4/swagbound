@@ -8,6 +8,7 @@ import type {
 } from "./partyState";
 import type { Facing } from "./playerController";
 import { STATUS_AILMENTS, type StatusAilment, type StatusState } from "./statusEffects";
+import { validateFilingIntake, type FilingIntakeValues } from "./filingIntakeModel";
 
 export const SAVE_STATE_SCHEMA_VERSION = 1;
 
@@ -39,6 +40,7 @@ export type SaveFlagsSnapshot = {
 export type SaveState = {
   schemaVersion: typeof SAVE_STATE_SCHEMA_VERSION;
   savedAt?: string;
+  intake?: FilingIntakeValues;
   flags: SaveFlagsSnapshot;
   party: PartyStateSnapshot;
   player: SavePlayerSnapshot;
@@ -53,6 +55,7 @@ export type SaveStateSources = {
     snapshot(): PartyStateSnapshot;
   };
   player: SavePlayerSnapshot;
+  intake?: FilingIntakeValues;
   savedAt?: string;
 };
 
@@ -81,6 +84,7 @@ export function captureSaveState(sources: SaveStateSources): SaveState {
   const save: SaveState = {
     schemaVersion: SAVE_STATE_SCHEMA_VERSION,
     ...(typeof sources.savedAt === "string" ? { savedAt: sources.savedAt } : {}),
+    ...(sources.intake ? { intake: sources.intake } : {}),
     flags: {
       strings: uniqueStrings(sources.flags.list()),
       numeric: uniqueIds(sources.flags.listNums()) ?? []
@@ -141,12 +145,14 @@ export function validateSaveState(value: unknown): SaveState | null {
   const flags = validateFlagsSnapshot(value.flags);
   const party = validatePartyStateSnapshot(value.party);
   const player = validatePlayerSnapshot(value.player);
+  const intake = value.intake === undefined ? undefined : validateFilingIntake(value.intake);
   if (!flags || !party || !player) {
     return null;
   }
   return {
     schemaVersion: SAVE_STATE_SCHEMA_VERSION,
     ...(typeof value.savedAt === "string" ? { savedAt: value.savedAt } : {}),
+    ...(intake ? { intake } : {}),
     flags,
     party,
     player

@@ -11,6 +11,7 @@ import { FallbackScene } from "./fallbackScene";
 import { BattleScene } from "./battleScene";
 import { SourceCheckScene } from "./sourceCheckScene";
 import { TitleMenuScene } from "./titleMenuScene";
+import { FilingIntakeScene } from "./filingIntakeScene";
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import type { EncounterAdvantage } from "./battleLogic";
 import { deserializeSaveState, type SaveSlotPersistence, type SaveState } from "./saveState";
@@ -136,8 +137,12 @@ class BootScene extends Phaser.Scene {
       // NEW GAME flow: spawn Bosch in his bedroom and run the in-world wake-up +
       // knock cutscene on the real EB map.
       const newGameTarget = {
-        sceneKey: "chunked-world",
-        data: newGameWorldData
+        sceneKey: "filing-intake",
+        data: {
+          nextSceneKey: "chunked-world",
+          nextSceneData: newGameWorldData
+        },
+        keepMusicPlaying: true
       };
       // CONTINUE target: the world with the loaded save (null when no save exists).
       const continueTarget = saveBlob !== null
@@ -452,7 +457,7 @@ new Phaser.Game({
   height: 448,
   backgroundColor: "#000000",
   pixelArt: true,
-  scene: [BootScene, TitleMenuScene, Act1IntroScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
+  scene: [BootScene, TitleMenuScene, FilingIntakeScene, Act1IntroScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH

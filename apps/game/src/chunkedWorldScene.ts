@@ -169,6 +169,7 @@ import {
   type SaveSlotPersistence,
   type SaveState
 } from "./saveState";
+import { FILING_INTAKE_REGISTRY_KEY, getFilingIntakeFromRegistry } from "./filingIntakeModel";
 import {
   buildMenuScreens,
   buildHospitalServiceScreen,
@@ -295,6 +296,24 @@ import {
   overworldMusicCueForSector,
   type OverworldMusicCue
 } from "./worldMusic";
+import {
+  OPENING_BEDROOM_MUSIC_DROPOUT_FADE_MS,
+  OPENING_ERA_TITLE,
+  OPENING_ERA_TITLE_FADE_MS,
+  OPENING_ERA_TITLE_HOLD_MS,
+  OPENING_FLYOVER_ZOOM,
+  OPENING_GET_UP_WALK_MS,
+  OPENING_KNOCK_DELAY_AFTER_WAKE_MS,
+  OPENING_RUMBLE_AMPLITUDE,
+  OPENING_RUMBLE_DURATION_MS,
+  OPENING_RUMBLE_INTERVAL_MS,
+  OPENING_SHOT_ZERO_CENTER,
+  OPENING_SHOT_ZERO_HOLD_MS,
+  OPENING_WAKE_FADE_IN_MS,
+  OPENING_WAKE_SIGNAL_FIRST_FLASH_MS,
+  OPENING_WAKE_SIGNAL_SECOND_FLASH_MS,
+  shouldRunOverworldRoamers
+} from "./openingPacing";
 import { publishAuditionTarget, toggleMusicAuditioner, isMusicAuditionerVisible, type AuditionLocation } from "./musicAuditioner";
 import { DevConsole, type DevConsoleHost, type DevLiveState } from "./devConsole";
 import { postDevNote, type DevNoteContext } from "./devNotes";
@@ -1173,7 +1192,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.scene.launch("ui", { worldSceneKey: "chunked-world", font: this.data_.font, window: this.data_.window });
     if (this.newGameOpening) {
       this.introMusicHold = true;
-    this.playOverworldMusicCue("intro", true);
+      this.playOverworldMusicCue("intro", true);
     } else {
       this.syncOverworldMusicCue(true);
     }
@@ -4762,6 +4781,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       flags: this.gameFlags,
       partyState: this.partyState,
       player: this.currentPlayerSnapshot(),
+      intake: getFilingIntakeFromRegistry(this.registry),
       savedAt
     });
     const blob = serializeSaveState(save);
@@ -4791,6 +4811,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
     if (!player) {
       return undefined;
+    }
+    if (this.bootSaveState.intake) {
+      this.registry.set(FILING_INTAKE_REGISTRY_KEY, this.bootSaveState.intake);
     }
     this.introMusicHold = false;
     this.clearStartupPajamaVisualState();
@@ -5721,7 +5744,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         // locked through the cinematic, so lying on it is safe; he gets to his feet at
         // the walkable bedside when control returns (see finalizeNewGameStartup).
         this.placePlayerInBed();
-        this.cameras.main.fadeIn(750, 0, 0, 0);
+        this.cameras.main.fadeIn(OPENING_WAKE_FADE_IN_MS, 0, 0, 0);
         this.bedroomNightOverlay?.destroy();
         this.bedroomNightOverlay = this.add
           .rectangle(0, 0, this.scale.width, this.scale.height, 0x0a1236, 0.62)
@@ -5734,7 +5757,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         if (opening) {
           // Pace the wake-up: hold on the dark room while the cold signal flares before
           // MiFella pounds the door.
-          this.time.delayedCall(2600, () => this.startNewGameStartupEvent(decision.reference));
+          this.time.delayedCall(OPENING_KNOCK_DELAY_AFTER_WAKE_MS, () => this.startNewGameStartupEvent(decision.reference));
         } else {
           this.startNewGameStartupEvent(decision.reference);
         }
@@ -5838,7 +5861,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     // The camera already follows this.player, so gliding the (hidden) anchor across
     // town IS the pan; just pull the zoom out for the overhead feel.
-    cam.setZoom(1.5);
+    cam.setZoom(OPENING_FLYOVER_ZOOM);
     // A scroll-fixed overlay does not render reliably over the streamed town chunks at
     // the pulled-back flyover zoom, so the night tint is a large WORLD-space rect at
     // FG-over depth covering the whole bounded pan region (depth 130000 draws above the
@@ -5861,10 +5884,27 @@ export class ChunkedWorldScene extends Phaser.Scene {
       .setDepth(131000)
       .setAlpha(0)
       .setShadow(0, 1, "#000000", 5);
+    const eraTitle = this.add
+      .text(OPENING_SHOT_ZERO_CENTER.x, OPENING_SHOT_ZERO_CENTER.y, OPENING_ERA_TITLE, {
+        fontFamily: CLEAN_UI_FONT_FAMILY,
+        fontSize: "14px",
+        color: "#ffffff",
+        align: "center"
+      })
+      .setOrigin(0.5)
+      .setResolution(3)
+      .setDepth(131000)
+      .setAlpha(0)
+      .setShadow(0, 1, "#000000", 4);
     const placeCaption = (): void => {
       const view = cam.worldView;
       caption.setPosition(view.centerX, view.bottom - 22);
     };
+    const placeEraTitle = (): void => {
+      const view = cam.worldView;
+      eraTitle.setPosition(view.centerX, view.centerY);
+    };
+    let rumbleTimer: Phaser.Time.TimerEvent | undefined;
 
     // Three overhead shots of Morningside at night, each carrying one beat of narration,
     // separated by a dip to black; the last dip descends to Bosch's bed.
@@ -5893,6 +5933,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       // The final shot has already faded to black; descend to the bed from there.
       flyNight.destroy();
       caption.destroy();
+      eraTitle.destroy();
+      rumbleTimer?.remove(false);
       this.flyoverActive = false;
       setAnchor(bedSpawn.x, bedSpawn.y);
       this.player?.setVisible(true);
@@ -5932,13 +5974,52 @@ export class ChunkedWorldScene extends Phaser.Scene {
         },
         onComplete: () => {
           this.tweens.add({ targets: caption, alpha: 0, duration: 600 });
+          if (i === shots.length - 1) {
+            this.music.stop(OPENING_BEDROOM_MUSIC_DROPOUT_FADE_MS);
+          }
           cam.fadeOut(600, 0, 0, 0);
           cam.once("camerafadeoutcomplete", () => runShot(i + 1));
         }
       });
     };
 
-    runShot(0);
+    const runShotZero = (): void => {
+      setAnchor(OPENING_SHOT_ZERO_CENTER.x, OPENING_SHOT_ZERO_CENTER.y);
+      this.refreshStreaming(true);
+      cam.centerOn(OPENING_SHOT_ZERO_CENTER.x, OPENING_SHOT_ZERO_CENTER.y);
+      placeCaption();
+      placeEraTitle();
+      caption.setText("").setAlpha(0);
+      eraTitle.setAlpha(1);
+      cam.fadeIn(600, 0, 0, 0);
+      const rumble = (): void => {
+        if (this.flyoverActive) {
+          cam.shake(OPENING_RUMBLE_DURATION_MS, OPENING_RUMBLE_AMPLITUDE);
+        }
+      };
+      rumble();
+      rumbleTimer = this.time.addEvent({
+        delay: OPENING_RUMBLE_INTERVAL_MS,
+        loop: true,
+        callback: rumble
+      });
+      this.time.delayedCall(OPENING_ERA_TITLE_HOLD_MS, () => {
+        this.tweens.add({
+          targets: eraTitle,
+          alpha: 0,
+          duration: OPENING_ERA_TITLE_FADE_MS,
+          ease: "Sine.easeInOut"
+        });
+      });
+      this.time.delayedCall(OPENING_SHOT_ZERO_HOLD_MS, () => {
+        rumbleTimer?.remove(false);
+        rumbleTimer = undefined;
+        cam.fadeOut(600, 0, 0, 0);
+        cam.once("camerafadeoutcomplete", () => runShot(0));
+      });
+    };
+
+    runShotZero();
   }
 
   private startAuthoredOpeningCutsceneBeforeStartup(
@@ -6020,12 +6101,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // The cold signal reads Bosch: partway through the dark wake-up the room pulses
     // cyan with a jolt, as if something outside just locked onto him. Camera flash +
     // shake (camera effects render reliably over the night dim, unlike an overlay).
-    this.time.delayedCall(1000, () => {
+    this.time.delayedCall(OPENING_WAKE_SIGNAL_FIRST_FLASH_MS, () => {
       if (this.bedroomNightOverlay) {
         this.cameras.main.flash(360, 32, 176, 224);
       }
     });
-    this.time.delayedCall(1750, () => {
+    this.time.delayedCall(OPENING_WAKE_SIGNAL_SECOND_FLASH_MS, () => {
       if (this.bedroomNightOverlay) {
         this.cameras.main.flash(620, 47, 216, 255);
         this.cameras.main.shake(380, 0.008);
@@ -6098,7 +6179,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     const from = { x: this.playerState.x, y: this.playerState.y };
-    const duration = 420;
+    const duration = OPENING_GET_UP_WALK_MS;
     const velocityX = ((spawn.x - from.x) / duration) * 1000;
     const velocityY = ((spawn.y - from.y) / duration) * 1000;
     const proxy = { t: 0 };
@@ -6184,13 +6265,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.authoredOpeningCutsceneRunActive = false;
     if (options.completedOpening) {
       this.gameFlags.set(INTRO_BEDROOM_OPENING_DONE_FLAG);
-      this.syncOverworldMusicCue();
     }
     this.liftBedroomNightOverlay();
     if (this.dialogue.open && result.status === "aborted") {
       this.dialogue.close();
     }
     this.afterDialogueClosed();
+    if (options.completedOpening) {
+      this.playOverworldMusicCue("intro", true);
+    }
     this.releaseOpeningCutsceneActorHolds();
     const finalPlayer = this.currentPlayerPoint();
     this.newGameStartupRecord = this.startupRecord({
@@ -6806,6 +6889,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.data_.encounters || !this.data_.battle || !this.player) {
       return false;
     }
+    if (!shouldRunOverworldRoamers(this.introMusicHold)) {
+      this.clearOverworldRoamers();
+      this.publishOverworldEnemyDebug();
+      return false;
+    }
     this.syncEncounterTileState();
     this.overworldEnemySpawnCooldownMs = Math.max(0, this.overworldEnemySpawnCooldownMs - deltaMs);
     this.stepOverworldEnemies(deltaMs);
@@ -7012,6 +7100,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private canSpawnOverworldEnemy(): boolean {
     return this.encounterEnabled
+      && shouldRunOverworldRoamers(this.introMusicHold)
       && this.encounterCooldownMs <= 0
       && this.overworldEnemySpawnCooldownMs <= 0
       && this.overworldEnemies.size < OVERWORLD_ENEMY_GLOBAL_CAP
@@ -7019,6 +7108,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private trySpawnOverworldEnemy(options: { forceArchetype?: "ambusher" | "prowler" } = {}): void {
+    if (!shouldRunOverworldRoamers(this.introMusicHold)) {
+      return;
+    }
     const sector = this.currentEncounterSector();
     const budget = sectorSpawnBudget(sector, { maxPerSector: OVERWORLD_ENEMY_GLOBAL_CAP });
     if (budget <= 0 || this.overworldEnemies.size >= budget) {
@@ -7178,16 +7270,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return Math.hypot(point.x - this.playerState.x, point.y - this.playerState.y);
   }
 
-  private clearOverworldEnemies(): void {
+  private clearOverworldRoamers(): void {
     for (const enemy of this.overworldEnemies.values()) {
       enemy.sprite?.destroy();
     }
     this.overworldEnemies.clear();
+    this.overworldEnemySpawnCooldownMs = 0;
+  }
+
+  private clearOverworldEnemies(): void {
+    this.clearOverworldRoamers();
     for (const actor of this.bossGateActors.values()) {
       actor.sprite?.destroy();
     }
     this.bossGateActors.clear();
-    this.overworldEnemySpawnCooldownMs = 0;
     this.loadingEnemySkinKeys.clear();
   }
 
