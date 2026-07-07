@@ -5676,7 +5676,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private maybeStartNewGameStartup(spawn: { x: number; y: number }): void {
     const opening = this.newGameOpening;
     const decision = shouldRunNewGameStartup({
-      hasSave: this.hasSave,
+      // An explicit NEW GAME (opening present, no restored save THIS boot) must run the
+      // full opening even when old save slots exist; the slot-level hasSave guard is
+      // only for plain dev spawns re-triggering the knock.
+      hasSave: opening ? Boolean(this.bootSaveState) : this.hasSave,
       startupRef: opening?.eventRef ?? this.world_.player.newGameStartupRef
     });
     if (!decision.run) {
