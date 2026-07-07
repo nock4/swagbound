@@ -146,7 +146,11 @@ class BootScene extends Phaser.Scene {
 
       if (introDisabled) {
         // Dev fast-path (?nointro): skip the title menu entirely.
-        this.scene.start("chunked-world", { ...baseWorld, saveState });
+        this.scene.start("chunked-world", {
+          ...baseWorld,
+          saveState,
+          ...(saveBlob === null && openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
+        });
         return;
       }
       this.scene.start("title-menu", {

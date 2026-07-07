@@ -319,10 +319,10 @@ function itemEffectMagnitude(effect: ItemUseEffect | undefined): number {
     return 0;
   }
   if ("amount" in effect) {
-    return effect.amount;
+    return effect.amount ?? 0;
   }
   if ("percent" in effect) {
-    return effect.percent;
+    return effect.percent ?? 0;
   }
   return 0;
 }

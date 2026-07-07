@@ -287,7 +287,7 @@ import {
   type TransitionSfxCue
 } from "./mapTransition";
 import { createTransitionSfx, type InteractionSfxCue, type TransitionSfx } from "./audio/transitionSfx";
-import { createMusic, musicDisabledBySearch, type Music } from "./audio/music";
+import { createMusic, musicAreaCueId, musicDisabledBySearch, type Music } from "./audio/music";
 import { getSharedMusic } from "./sharedMusic";
 import { advanceCutsceneActorTowardTarget } from "./cutsceneActorMovement";
 import { cutsceneSoundLabel, resolveCutsceneSfxCue, type CutsceneSoundId, type CutsceneSfxCue } from "./cutsceneSfx";
@@ -391,6 +391,12 @@ type SourceCheckActorRuntime = {
   check: DrifellaSourceCheck;
   sprite: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle;
   visible: boolean;
+};
+
+type RuntimeSpriteStateSheet = {
+  image: string;
+  frameWidth: number;
+  frameHeight: number;
 };
 
 type NpcSpriteOverrideResolution = {
@@ -903,18 +909,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     // Faithful per-state hero sheets + shared overlay assets (forward-compatible: no-op until a skin
     // supplies them). The visual-state render path swaps to these when present, else approximates.
-    type StateSheets = Record<string, { image: string; frameWidth: number; frameHeight: number }> | undefined;
+    type StateSheets = Record<string, RuntimeSpriteStateSheet> | undefined;
     const playerStates = this.playerSpriteOverride()?.states as StateSheets;
     for (const [name, sheet] of Object.entries(playerStates ?? {})) {
       if (sheet) {
-        this.load.spritesheet(this.playerStateSheetKey(name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+        this.load.spritesheet(this.playerStateSheetKey(name, sheet), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
       }
     }
     for (const follower of this.followerSpriteOverrides()) {
       const followerStates = follower.sheet.states as StateSheets;
       for (const [name, sheet] of Object.entries(followerStates ?? {})) {
         if (sheet) {
-          this.load.spritesheet(this.followerStateSheetKey(follower.joinOrder, name), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+          this.load.spritesheet(this.followerStateSheetKey(follower.joinOrder, name, sheet), spriteOverrideAssetUrl(sheet.image), { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
         }
       }
     }
@@ -930,6 +936,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   create(): void {
+    // The ?nointro dev path skips the title scene, so the page-load LOADING overlay
+    // must also be cleared here once the world is interactive.
+    document.getElementById("game-loading")?.remove();
     const world = this.world_;
     this.dialogue.setTextSpeedCps(textSpeedCpsFromSearch(globalThis.location?.search));
     this.dialogue.setResolver(createDialogueResolver(this.data_));
@@ -1282,7 +1291,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.syncSourceCheckActors();
     // Boss-edit mode suppresses all in-world scripting (intro beat, cutscenes,
     // story triggers) so nothing steals the frame from the placement editor.
-    if (!this.bossEditor && !this.flyoverActive) {
+    if (!this.bossEditor && !this.cinematicActive()) {
       if (this.maybeStartIntroMeteorBeat()) {
         return;
       }
@@ -1293,7 +1302,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return;
       }
     }
-    if (!this.flyoverActive) {
+    if (!this.cinematicActive()) {
       if (this.manageBossGates(delta)) {
         return;
       }
@@ -1780,15 +1789,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.playOverworldMusicCue(this.forcedOverworldMusicCue, force);
       return;
     }
-    this.playOverworldMusicCue(
-      overworldMusicCueForSector(
-        this.data_.musicManifest,
-        this.world_.sectors,
-        this.playerState,
-        false,
-        this.data_.sectorMusic
-      ),
-      force
+    this.playOverworldMusicCue(this.resolvedOverworldMusicCueForPlayer(), force);
+  }
+
+  private resolvedOverworldMusicCueForPlayer(): OverworldMusicCue {
+    return overworldMusicCueForSector(
+      this.data_.musicManifest,
+      this.world_.sectors,
+      this.playerState,
+      false,
+      this.data_.sectorMusic
     );
   }
 
@@ -2255,7 +2265,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.applyPlayerVisualState();
       return this.lastResolvedVisualState;
     };
-    globals.__playerVisualState = () => this.lastResolvedVisualState;
+    globals.__playerVisualState = () => this.currentPlayerVisualStateDebug();
     globals.__overlayInfo = () => ({
       texLoaded: ["sweat", "mushroom", "possessionGhost"].map((n) => [n, this.textures.exists(this.overlaySheetKey(n))]),
       registry: Object.keys((this.data_.spriteOverrides?.overlays ?? {})),
@@ -3427,6 +3437,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.playerState.animKey = `idle-${this.playerState.facing}`;
     this.playerState.animFrame = this.playerFrames[this.playerState.facing][0];
     this.lastDoor = { from, to };
+    this.clearStartupPajamaVisualState();
     this.currentChunk = undefined;
     this.activeRoomBounds = undefined;
     if (this.player) {
@@ -4692,6 +4703,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!player) {
       return undefined;
     }
+    this.clearStartupPajamaVisualState();
     this.restoredFromSave = true;
     this.hasSave = true;
     this.lastSavedAt = this.bootSaveState.savedAt;
@@ -4746,6 +4758,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return undefined;
     }
 
+    this.clearStartupPajamaVisualState();
     this.gameFlags.clear();
     for (const flag of restore.flags.strings) {
       this.gameFlags.set(flag);
@@ -5679,14 +5692,34 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.refreshStreaming(true);
     this.updateCameraRoomBounds();
+    this.setStartupPajamaVisualState();
     this.setStartupLyingVisualState(true);
+  }
+
+  private setStartupPajamaVisualState(): void {
+    this.sceneVisualState = { ...this.sceneVisualState, event: "pajamas" };
+    this.applyPlayerVisualState();
+  }
+
+  private clearStartupPajamaVisualState(): void {
+    if (this.sceneVisualState.event !== "pajamas") {
+      return;
+    }
+    const { event: _event, ...rest } = this.sceneVisualState;
+    this.sceneVisualState = rest;
+    this.applyPlayerVisualState();
   }
 
   private setStartupLyingVisualState(active: boolean): void {
     if (!active) {
       this.roomBoundsResolveAnchor = undefined;
     }
-    this.sceneVisualState = active ? { sleeping: true } : {};
+    if (active) {
+      this.sceneVisualState = { ...this.sceneVisualState, sleeping: true };
+    } else {
+      const { sleeping: _sleeping, ...rest } = this.sceneVisualState;
+      this.sceneVisualState = rest;
+    }
     this.applyPlayerVisualState();
   }
 
@@ -7055,6 +7088,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.data_.battle || !this.battleGroupExists(group) || !this.player) {
       return false;
     }
+    this.clearStartupPajamaVisualState();
     this.lastEncounterGroup = group;
     this.scene.stop("ui");
     // Play the colored EB encounter swirl over the overworld, THEN switch to battle (see tickEncounterSwirl).
@@ -7144,6 +7178,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (enemies.length === 0) {
       return false;
     }
+    this.clearStartupPajamaVisualState();
     const instantWinPartyMembers = this.battlePartyMembers();
     const encounterSeed = this.nextBattleEncounterSeed();
     const battle = createBattleState(enemies, {
@@ -7634,7 +7669,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updateFollower();
   }
 
-  private playerStateSheetKey(state: string): string {
+  private playerStateSheetKey(state: string, sheet?: Pick<RuntimeSpriteStateSheet, "image">): string {
+    const imageHash = sheet?.image ? `-${stableAssetPathHash(sheet.image)}` : "";
+    return `sprite-override-player-state-${state}${imageHash}`;
+  }
+
+  private legacyPlayerStateSheetKey(state: string): string {
     return `sprite-override-player-state-${state}`;
   }
 
@@ -7647,12 +7687,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (baseState === "default") {
       return undefined;
     }
-    const states = this.playerSpriteOverride()?.states as Record<string, unknown> | undefined;
-    if (!states?.[baseState]) {
+    const states = this.playerSpriteOverride()?.states as Record<string, RuntimeSpriteStateSheet> | undefined;
+    const sheet = states?.[baseState];
+    if (!sheet) {
       return undefined;
     }
-    const key = this.playerStateSheetKey(baseState);
-    return this.textures.exists(key) ? key : undefined;
+    const key = this.playerStateSheetKey(baseState, sheet);
+    if (this.textures.exists(key)) {
+      return key;
+    }
+    const legacyKey = this.legacyPlayerStateSheetKey(baseState);
+    return this.textures.exists(legacyKey) ? legacyKey : undefined;
   }
 
   private playerDefaultSheetKey(): string | undefined {
@@ -7682,17 +7727,53 @@ export class ChunkedWorldScene extends Phaser.Scene {
       onLadder: this.isPlayerOnLadderCell(), // real terrain signal: feet on an EB 0x10 cell
       riding: this.bikeActive ? ("bike" as const) : null,
       ko: this.leadPartyMemberDowned(), // real KO signal: lead at 0 HP -> dead/ghost overworld sprite
+      invertPalette: this.playerInUnlistedRoomMusicArea(),
       // rope/bike real triggers await a mount mechanic; forced-path for now.
       ...scene,
       ...forced,
-      status: { ...base.status, sweating: this.leadHasSunstroke(), ...(scene.status ?? {}), ...(forced.status ?? {}) }
+      status: {
+        ...base.status,
+        mushroomized: this.leadHasStatus("confused"),
+        sweating: this.leadHasSunstroke(),
+        ...(scene.status ?? {}),
+        ...(forced.status ?? {})
+      }
     };
+  }
+
+  private currentPlayerVisualStateDebug():
+    | (ResolvedVisualState & { sheetSwapped: boolean; applied: { scale: number; alpha: number; tint: number | null } })
+    | undefined {
+    const resolved = resolvePlayerVisualState(this.currentVisualStateInputs());
+    if (this.player instanceof Phaser.GameObjects.Sprite) {
+      this.applyPlayerVisualState();
+      return this.lastResolvedVisualState
+        ? {
+            ...this.lastResolvedVisualState,
+            sheetSwapped: this.lastVisualSheetSwapped,
+            applied: this.lastVisualApplied
+          }
+        : undefined;
+    }
+    return {
+      ...resolved,
+      sheetSwapped: this.loadedStateSheetKey(resolved.baseState) !== undefined,
+      applied: this.lastVisualApplied
+    };
+  }
+
+  private playerInUnlistedRoomMusicArea(): boolean {
+    return this.resolvedOverworldMusicCueForPlayer() === musicAreaCueId("the-unlisted-room");
   }
 
   /** Live sweat-overlay signal: the lead carries the sunstroke field ailment. */
   private leadHasSunstroke(): boolean {
+    return this.leadHasStatus("sunstroke");
+  }
+
+  private leadHasStatus(ailment: StatusAilment): boolean {
     const leadId = this.partyState.party()[0];
-    return leadId !== undefined && hasStatus(this.partyState.statuses(leadId), "sunstroke");
+    return leadId !== undefined && hasStatus(this.partyState.statuses(leadId), ailment);
   }
 
   /** The lead (front) party member is downed (0 HP) — shows the dead overworld sprite. */
@@ -8041,7 +8122,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.applyFollowerVisualState(follower, target.facing);
   }
 
-  private followerStateSheetKey(joinOrder: number, state: string): string {
+  private followerStateSheetKey(joinOrder: number, state: string, sheet?: Pick<RuntimeSpriteStateSheet, "image">): string {
+    const imageHash = sheet?.image ? `-${stableAssetPathHash(sheet.image)}` : "";
+    return joinOrder === 2
+      ? `sprite-override-follower-state-${state}${imageHash}`
+      : `sprite-override-follower-${joinOrder}-state-${state}${imageHash}`;
+  }
+
+  private legacyFollowerStateSheetKey(joinOrder: number, state: string): string {
     return joinOrder === 2
       ? `sprite-override-follower-state-${state}`
       : `sprite-override-follower-${joinOrder}-state-${state}`;
@@ -8054,12 +8142,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (baseState === "default") {
       return undefined;
     }
-    const states = this.followerSpriteOverride(follower.joinOrder)?.states as Record<string, unknown> | undefined;
-    if (!states?.[baseState]) {
+    const states = this.followerSpriteOverride(follower.joinOrder)?.states as Record<string, RuntimeSpriteStateSheet> | undefined;
+    const sheet = states?.[baseState];
+    if (!sheet) {
       return undefined;
     }
-    const key = this.followerStateSheetKey(follower.joinOrder, baseState);
-    return this.textures.exists(key) ? key : undefined;
+    const key = this.followerStateSheetKey(follower.joinOrder, baseState, sheet);
+    if (this.textures.exists(key)) {
+      return key;
+    }
+    const legacyKey = this.legacyFollowerStateSheetKey(follower.joinOrder, baseState);
+    return this.textures.exists(legacyKey) ? legacyKey : undefined;
   }
 
   /**

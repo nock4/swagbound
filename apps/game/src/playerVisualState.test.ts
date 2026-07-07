@@ -47,6 +47,13 @@ describe("resolvePlayerVisualState", () => {
     expect(r.baseState).toBe("robot");
   });
 
+  it("pajamas can compose with the sleeping bed pose", () => {
+    const r = resolvePlayerVisualState(inputs({ event: "pajamas", sleeping: true }));
+    expect(r.baseState).toBe("pajamas");
+    expect(r.sleeping).toBe(true);
+    expect(r.lockAnimation).toBe(true);
+  });
+
   it("ladder/rope/sitting/sleeping lock the animation; default/bike do not", () => {
     expect(resolvePlayerVisualState(inputs({ onLadder: true })).lockAnimation).toBe(true);
     expect(resolvePlayerVisualState(inputs({ event: "sitting" })).lockAnimation).toBe(true);

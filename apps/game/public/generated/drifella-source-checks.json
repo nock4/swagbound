@@ -25,7 +25,16 @@
         "tic": "\"Filed under: witnessed.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-168.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 166,
+          "page": "Stacks keeps the return line warm near Morningside's route. Bring questions back in good condition."
+        }
+      ],
       "entryPrompt": [
         "The Drifella looks at you the way a librarian looks at a returning book.",
         "\"Attestation? It's friendly. Mostly questions. The questions are also friendly.\""
@@ -126,7 +135,8 @@
           "\"We've met. The binder remembers even when you don't.\"",
           "\"Filed under: already returned.\""
         ]
-      }
+      },
+      "drifellaName": "Stacks"
     },
     {
       "id": "sourcecheck-morningside-002",
@@ -151,7 +161,16 @@
         "tic": "*stamp* \"Notarized.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-473.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 163,
+          "page": "Air Stamp is notarizing silence by the plaza. The stamp sound is mostly spiritual."
+        }
+      ],
       "entryPrompt": [
         "This Drifella stamps the air twice before speaking, notarizing nothing.",
         "\"State your attention for the record. Attestation?\""
@@ -252,7 +271,8 @@
           "\"Your file is closed and beautiful. Do not reopen it.\"",
           "*stamp* \"Previously witnessed.\""
         ]
-      }
+      },
+      "drifellaName": "Air Stamp"
     },
     {
       "id": "sourcecheck-morningside-003",
@@ -277,7 +297,16 @@
         "tic": "\"Filed. Correctly.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-527.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 174,
+          "page": "Road Clerk waits by the precinct road, filing patience under people who turned left twice."
+        }
+      ],
       "entryPrompt": [
         "The Drifella by the road has been watching the precinct with great patience.",
         "\"They file people in there. I file questions. Want some?\""
@@ -385,7 +414,8 @@
           "\"Your file is the one I show new questions as an example.\"",
           "\"Already filed. The precinct still has not noticed.\""
         ]
-      }
+      },
+      "drifellaName": "Road Clerk"
     },
     {
       "id": "sourcecheck-morningside-004",
@@ -410,7 +440,16 @@
         "tic": "\"Gentle mark: witnessed.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-587.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 180,
+          "page": "Pencil Corner grades the quiet edge of town. If your shoes feel judged, you are close."
+        }
+      ],
       "entryPrompt": [
         "A Drifella on the south road, facing town, as if grading it gently.",
         "\"Everything here is a question if you stand still long enough. Shall we?\""
@@ -511,7 +550,8 @@
           "\"Go on. Other corners are waiting to be noticed.\"",
           "\"Already graded. Surprisingly legible.\""
         ]
-      }
+      },
+      "drifellaName": "Pencil Corner"
     },
     {
       "id": "sourcecheck-morningside-005",
@@ -536,7 +576,16 @@
         "tic": "\"Mileage note: remember this.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-602.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 191,
+          "page": "Tag Memory lingers near the hotel road, tagging yesterday like lost luggage."
+        }
+      ],
       "entryPrompt": [
         "This Drifella stands where the road starts thinking about leaving town.",
         "\"Travelers remember the strangest things. Prove it?\""
@@ -644,7 +693,8 @@
           "\"Safe travels. Watch for the ones who hide.\"",
           "\"Mileage note: already witnessed.\""
         ]
-      }
+      },
+      "drifellaName": "Tag Memory"
     },
     {
       "id": "sourcecheck-morningside-006",
@@ -669,7 +719,16 @@
         "tic": "\"Forty-one windows. Zero honest.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-684.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 171,
+          "page": "Window Count watches the buildings from the side street. Wave once, then count the windows wrong."
+        }
+      ],
       "entryPrompt": [
         "A Drifella idles by the west block, counting windows. It waves without looking.",
         "\"Forty-one windows. Zero of them honest. Anyway. Attestation?\""
@@ -770,7 +829,8 @@
           "\"Still counting. Still forty-one windows. Still fond of you.\"",
           "\"Already cleared. The windows refuse to improve.\""
         ]
-      }
+      },
+      "drifellaName": "Window Count"
     },
     {
       "id": "sourcecheck-morningside-007",
@@ -797,12 +857,12 @@
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-795.png",
       "hints": [
         {
-          "kind": "rumorNpc",
-          "npcId": 100205,
-          "page": "Something patient lives behind the precinct. It grades kindly, my aunt says. My aunt is never wrong twice."
+          "kind": "binder"
         },
         {
-          "kind": "binder"
+          "kind": "rumorNpc",
+          "npcId": 1410,
+          "page": "Quiet Side is behind the precinct where the record forgets to look."
         }
       ],
       "entryPrompt": [
@@ -905,7 +965,8 @@
           "\"Shh. Others haven't found me yet. Let them earn it.\"",
           "\"Already rewarded. Stay peripheral.\""
         ]
-      }
+      },
+      "drifellaName": "Quiet Side"
     },
     {
       "id": "sourcecheck-morningside-008",
@@ -932,12 +993,12 @@
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-816.png",
       "hints": [
         {
-          "kind": "rumorNpc",
-          "npcId": 100206,
-          "page": "The hotel has a side nobody photographs. Something up there hums when the town gets quiet."
+          "kind": "binder"
         },
         {
-          "kind": "binder"
+          "kind": "rumorNpc",
+          "npcId": 191,
+          "page": "Private Hum keeps to the hotel side, humming the version no camera got."
         }
       ],
       "entryPrompt": [
@@ -1054,7 +1115,8 @@
           "\"Hum with me a while. No questions. We've done those.\"",
           "\"Already in tune. The hotel side keeps it quiet.\""
         ]
-      }
+      },
+      "drifellaName": "Private Hum"
     },
     {
       "id": "sourcecheck-postwick-001",
@@ -1079,7 +1141,16 @@
         "tic": "\"Check. Check. Sourced.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1374.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 357,
+          "page": "Feedback Tech is by The Venue, trimming rumors until they stop squealing."
+        }
+      ],
       "entryPrompt": [
         "The Drifella taps an invisible microphone twice and waits for the room to settle.",
         "\"Attestation. Two questions, no reverb. If your story clips, we cut the feed.\""
@@ -1177,7 +1248,8 @@
           "\"You're on the list. The list is me.\"",
           "\"Check's done. Enjoy the show that is: everything.\""
         ]
-      }
+      },
+      "drifellaName": "Feedback Tech"
     },
     {
       "id": "sourcecheck-postwick-002",
@@ -1202,7 +1274,16 @@
         "tic": "\"Stub it or it didn't happen.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1427.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1576,
+          "page": "Stub Soul keeps paper ghosts near the event road. The ticket stubs seem fond of you."
+        }
+      ],
       "entryPrompt": [
         "The Drifella fans out a small brick of ticket stubs like a losing poker hand.",
         "\"Admission is free. Verification costs two answers.\""
@@ -1299,7 +1380,8 @@
           "\"Season pass holder. I remember the paper.\"",
           "\"Already filed. Aisle seat, forever.\""
         ]
-      }
+      },
+      "drifellaName": "Stub Soul"
     },
     {
       "id": "sourcecheck-postwick-003",
@@ -1324,7 +1406,16 @@
         "tic": "\"Ripe? We'll see.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1442.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 329,
+          "page": "Melon Proof tests claims near the produce stands. Do not squeeze back."
+        }
+      ],
       "entryPrompt": [
         "The Drifella weighs nothing on a small brass scale and nods at the result.",
         "\"Attestation. Claims by the pound. Yours first.\""
@@ -1421,7 +1512,8 @@
           "\"Regular customer. Take a look, don't squeeze.\"",
           "\"Verified last market day. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Melon Proof"
     },
     {
       "id": "sourcecheck-postwick-004",
@@ -1446,7 +1538,16 @@
         "tic": "\"Separate your loads.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1552.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 371,
+          "page": "Color Sorter is down by the laundromat side, washing one story at a time."
+        }
+      ],
       "entryPrompt": [
         "The Drifella watches an invisible dryer spin with complete satisfaction.",
         "\"Everything comes out in the wash. Two questions' worth, anyway.\""
@@ -1543,7 +1644,8 @@
           "\"Your load's done. It's been done. Stop feeding the machine.\"",
           "\"Verified and spring-scented. Move along.\""
         ]
-      }
+      },
+      "drifellaName": "Color Sorter"
     },
     {
       "id": "sourcecheck-postwick-005",
@@ -1568,7 +1670,16 @@
         "tic": "\"The 9:40 knows.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1679.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 305,
+          "page": "Living Timetable waits near the buses. The schedule changed its mind and pointed there."
+        }
+      ],
       "entryPrompt": [
         "The Drifella consults a bus schedule with more annotations than schedule.",
         "\"You're early. Or the questions are late. Either way: Attestation.\""
@@ -1665,7 +1776,8 @@
           "\"You've been validated. That's the whole ride.\"",
           "\"Still on schedule. Unlike the 9:40.\""
         ]
-      }
+      },
+      "drifellaName": "Living Timetable"
     },
     {
       "id": "sourcecheck-postwick-006",
@@ -1690,7 +1802,16 @@
         "tic": "\"Look both ways. Then cite.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1789.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 350,
+          "page": "Crossing Claim guards the lower walk. Facts cross one at a time."
+        }
+      ],
       "entryPrompt": [
         "The Drifella holds up a small stop sign that simply says WHO TOLD YOU THAT.",
         "\"Two questions cross here. Escort them honestly.\""
@@ -1787,7 +1908,8 @@
           "\"You have permanent right of way.\"",
           "\"Crossed and logged. The sign remembers.\""
         ]
-      }
+      },
+      "drifellaName": "Crossing Claim"
     },
     {
       "id": "sourcecheck-postwick-007",
@@ -1815,6 +1937,11 @@
       "hints": [
         {
           "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 329,
+          "page": "Leaf Minutes is under the canopy, where the hedges take better notes than people."
         }
       ],
       "entryPrompt": [
@@ -1913,7 +2040,8 @@
           "\"You're in the minutes now. Permanent record, nice shade.\"",
           "\"Verified. Water us sometime.\""
         ]
-      }
+      },
+      "drifellaName": "Leaf Minutes"
     },
     {
       "id": "sourcecheck-postwick-008",
@@ -1941,6 +2069,11 @@
       "hints": [
         {
           "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1576,
+          "page": "Alley Ledger is behind the building, balancing secrets in the shade."
         }
       ],
       "entryPrompt": [
@@ -2039,7 +2172,8 @@
           "\"Account's settled. Stop by for the pigeons, not the questions.\"",
           "\"Audited and closed. Beautiful margins on you.\""
         ]
-      }
+      },
+      "drifellaName": "Alley Ledger"
     },
     {
       "id": "sourcecheck-postwick-009",
@@ -2067,6 +2201,11 @@
       "hints": [
         {
           "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 306,
+          "page": "Balcony Critic watches Postwick like opening night from a narrow side."
         }
       ],
       "entryPrompt": [
@@ -2165,7 +2304,8 @@
           "\"Ah, the lead returns. The role remains yours.\"",
           "\"Still five stars. Don't read the comments.\""
         ]
-      }
+      },
+      "drifellaName": "Balcony Critic"
     },
     {
       "id": "sourcecheck-bluebell-village-001",
@@ -2190,7 +2330,16 @@
         "tic": "\"The hive already voted.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1845.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 350,
+          "page": "Bee Index works the flower road. Follow the bees that look personally disappointed."
+        }
+      ],
       "entryPrompt": [
         "The Drifella lifts a veil of gauze and a single bee leaves, unimpressed.",
         "\"Attestation. The bees are the witnesses. I merely translate.\""
@@ -2287,7 +2436,8 @@
           "\"You're already in the record. Enjoy the quiet.\"",
           "\"Verified last season. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Bee Index"
     },
     {
       "id": "sourcecheck-bluebell-village-002",
@@ -2312,7 +2462,16 @@
         "tic": "\"The straw remembers.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1849.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 309,
+          "page": "Dusk Straw tends the scarecrow edge. It only reports after the sky starts lying."
+        }
+      ],
       "entryPrompt": [
         "The Drifella adjusts a scarecrow's hat with real tenderness.",
         "\"He's shy. I'll ask the questions for him. Attestation.\""
@@ -2409,7 +2568,8 @@
           "\"You're already in the record. Enjoy the quiet.\"",
           "\"Verified last season. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Dusk Straw"
     },
     {
       "id": "sourcecheck-bluebell-village-003",
@@ -2434,7 +2594,16 @@
         "tic": "\"The well concurs.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1879.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 356,
+          "page": "Echo Well is near the well path. Ask softly and let the wrong answer come back first."
+        }
+      ],
       "entryPrompt": [
         "The Drifella leans over a mossy well and listens to nothing in particular.",
         "\"Attestation. Speak clearly. The well has poor patience for mumbling.\""
@@ -2531,7 +2700,8 @@
           "\"You're already in the record. Enjoy the quiet.\"",
           "\"Verified last season. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Echo Well"
     },
     {
       "id": "sourcecheck-bluebell-village-004",
@@ -2556,7 +2726,16 @@
         "tic": "\"Cut, and it tells.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1901.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 432,
+          "page": "Secret Bouquet arranges truth near the flower stalls. The quiet blooms point that way."
+        }
+      ],
       "entryPrompt": [
         "The Drifella trims a stem and holds it to the light like evidence.",
         "\"Attestation. Two questions, freshly cut. Mind the thorns.\""
@@ -2653,7 +2832,8 @@
           "\"You're already in the record. Enjoy the quiet.\"",
           "\"Verified last season. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Secret Bouquet"
     },
     {
       "id": "sourcecheck-bluebell-village-005",
@@ -2678,7 +2858,16 @@
         "tic": "\"The wind's on record.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2128.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 432,
+          "page": "Wind Counsel trusts the vane over witnesses. Walk where the breeze sounds smug."
+        }
+      ],
       "entryPrompt": [
         "The Drifella wets a finger and holds it up with grave professionalism.",
         "\"Attestation. The wind agrees with the truth. Let's see if you do.\""
@@ -2775,7 +2964,8 @@
           "\"You're already in the record. Enjoy the quiet.\"",
           "\"Verified last season. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Wind Counsel"
     },
     {
       "id": "sourcecheck-bluebell-village-006",
@@ -2803,6 +2993,11 @@
       "hints": [
         {
           "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 356,
+          "page": "Hedge Docent hides in the maze line, grading anyone who pretends not to be lost."
         }
       ],
       "entryPrompt": [
@@ -2901,7 +3096,8 @@
           "\"You're already in the record. Enjoy the quiet.\"",
           "\"Verified last season. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Hedge Docent"
     },
     {
       "id": "sourcecheck-bluebell-village-007",
@@ -2929,6 +3125,11 @@
       "hints": [
         {
           "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 427,
+          "page": "Tomato Audit is by the greenhouse, checking ripeness against sworn testimony."
         }
       ],
       "entryPrompt": [
@@ -3027,7 +3228,8 @@
           "\"You're already in the record. Enjoy the quiet.\"",
           "\"Verified last season. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Tomato Audit"
     },
     {
       "id": "sourcecheck-bluebell-village-008",
@@ -3055,6 +3257,11 @@
       "hints": [
         {
           "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 427,
+          "page": "Ripple Census counts the pond's answers. Step lightly near the water."
         }
       ],
       "entryPrompt": [
@@ -3153,7 +3360,8 @@
           "\"You're already in the record. Enjoy the quiet.\"",
           "\"Verified last season. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Ripple Census"
     },
     {
       "id": "sourcecheck-bluebell-village-009",
@@ -3181,6 +3389,11 @@
       "hints": [
         {
           "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 435,
+          "page": "Field Lantern sweeps the far field at night, coastless and very official."
         }
       ],
       "entryPrompt": [
@@ -3279,7 +3492,8 @@
           "\"You're already in the record. Enjoy the quiet.\"",
           "\"Verified last season. Still fresh.\""
         ]
-      }
+      },
+      "drifellaName": "Field Lantern"
     },
     {
       "id": "sourcecheck-dead-letter-001",
@@ -3304,7 +3518,16 @@
         "tic": "\"Back to sender.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-341.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1417,
+          "page": "Undeliverable Dock stamps faces by the water. The dock knows who got returned."
+        }
+      ],
       "entryPrompt": [
         "The Drifella slides a grey parcel across the dock; it has your outline on it, faintly.",
         "\"Attestation. Before I stamp you UNDELIVERABLE, prove there was ever a real address.\""
@@ -3404,7 +3627,8 @@
           "\"Already delivered. The dock remembers your outline.\"",
           "\"Signed for last tide. Nothing left to stamp.\""
         ]
-      }
+      },
+      "drifellaName": "Undeliverable Dock"
     },
     {
       "id": "sourcecheck-dead-letter-002",
@@ -3429,7 +3653,16 @@
         "tic": "\"Hold still while I letter you.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-600.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1176,
+          "page": "Tag Scribe letters names near the quiet morgue route. Do not rush the handwriting."
+        }
+      ],
       "entryPrompt": [
         "The Drifella dips a nib and eyes your ankle, deciding what to write on the tag.",
         "\"Attestation. Give me a name I can letter, or you go on the shelf as ANONYMOUS.\""
@@ -3529,7 +3762,8 @@
           "\"Already tagged, already true. Nothing to re-ink.\"",
           "\"Your name's dry on the record. Leave it be.\""
         ]
-      }
+      },
+      "drifellaName": "Tag Scribe"
     },
     {
       "id": "sourcecheck-dead-letter-003",
@@ -3554,7 +3788,16 @@
         "tic": "\"Technically, it's still yours.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-634.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 523,
+          "page": "Claim Shelf keeps unclaimed copies near the old returns lane."
+        }
+      ],
       "entryPrompt": [
         "The Drifella runs a finger down a shelf of parcels, each labeled with a face nobody came back for.",
         "\"Attestation. Two questions. Answer them or you get shelved with the rest of the technically-yours.\""
@@ -3654,7 +3897,8 @@
           "\"You already claimed yours. The shelf let it go.\"",
           "\"Off the shelf for good. Enjoy owning something.\""
         ]
-      }
+      },
+      "drifellaName": "Claim Shelf"
     },
     {
       "id": "sourcecheck-dead-letter-004",
@@ -3679,7 +3923,16 @@
         "tic": "\"Reads thin today.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-643.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1430,
+          "page": "Fog Balance audits what the mist stole. Follow the damp math."
+        }
+      ],
       "entryPrompt": [
         "The Drifella holds a gauge into the mist; the needle sags toward EMPTY.",
         "\"Attestation. Your account reads thin. Add some verified weight or I fog you out entirely.\""
@@ -3779,7 +4032,8 @@
           "\"Your account's already settled. Nothing left to audit.\"",
           "\"Paid, filed, weighed. The fog owes you nothing.\""
         ]
-      }
+      },
+      "drifellaName": "Fog Balance"
     },
     {
       "id": "sourcecheck-dead-letter-005",
@@ -3804,7 +4058,16 @@
         "tic": "\"Sing it back to sender.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1042.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 501,
+          "page": "Return Choir gathers where lost messages learn to sing back."
+        }
+      ],
       "entryPrompt": [
         "The Drifella raises a baton and a hundred unheard voicemails hum a chord that never got listened to.",
         "\"Attestation. Sing me something true and the choir will let you pass. Off-key, and you join the section.\""
@@ -3904,7 +4167,8 @@
           "\"You've already sung your part. The chord's complete.\"",
           "\"Delivered and dismissed. Enjoy the quiet you earned.\""
         ]
-      }
+      },
+      "drifellaName": "Return Choir"
     },
     {
       "id": "sourcecheck-dead-letter-006",
@@ -3929,7 +4193,16 @@
         "tic": "\"You didn't get this from me.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1248.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 524,
+          "page": "Crate Courier trades behind the crates, but only in copies nobody ordered."
+        }
+      ],
       "entryPrompt": [
         "You find the Drifella crouched behind the return crates, a leaked copy palmed like contraband.",
         "\"Attestation. Quietly. Get it right and I never saw you. Get it wrong and I saw everything.\""
@@ -4029,7 +4302,8 @@
           "\"We already did this. Officially, we never met.\"",
           "\"Your copy's long gone. Nothing to drop.\""
         ]
-      }
+      },
+      "drifellaName": "Crate Courier"
     },
     {
       "id": "sourcecheck-dead-letter-007",
@@ -4054,7 +4328,16 @@
         "tic": "\"Timestamped. Sunk.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1273.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1091,
+          "page": "Postmark Vault waits near the flooded records. The leak has a timestamp."
+        }
+      ],
       "entryPrompt": [
         "Water laps the vault door; inside, the Drifella holds a cancellation stamp above a leaked card like a scalpel.",
         "\"Attestation. Tell me when the truth happened, not just what. Time is the only thing that doesn't rot down here.\""
@@ -4154,7 +4437,8 @@
           "\"Already cancelled, already dated. Nothing to re-stamp.\"",
           "\"Your postmark's dry in the ledger. Leave it sunk.\""
         ]
-      }
+      },
+      "drifellaName": "Postmark Vault"
     },
     {
       "id": "sourcecheck-dead-letter-008",
@@ -4179,7 +4463,16 @@
         "tic": "\"Drawer's cold. Slide in.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1458.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 498,
+          "page": "Cold Sorter works the night drawers. You can hear labels sliding shut."
+        }
+      ],
       "entryPrompt": [
         "The Drifella rolls out a long steel drawer; there's a face in it that looks a little like a copy of yours.",
         "\"Attestation. Prove you're not one of my returns and I'll slide the drawer shut empty.\""
@@ -4279,7 +4572,8 @@
           "\"Already sorted you out. The good way. Move along.\"",
           "\"You're logged as living. The drawers can't have you.\""
         ]
-      }
+      },
+      "drifellaName": "Cold Sorter"
     },
     {
       "id": "sourcecheck-dead-letter-009",
@@ -4304,7 +4598,16 @@
         "tic": "\"And who sent you, child?\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-1527.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1026,
+          "page": "Origin Confessor listens where copies run out of proof."
+        }
+      ],
       "entryPrompt": [
         "The Drifella slides open a little confessional grille reeking of old glue and salt fog.",
         "\"Attestation, or last rites. Same booth. Tell me your provenance, child, before it's lost for good.\""
@@ -4404,7 +4707,8 @@
           "\"You've already confessed and been sourced, child. Rest.\"",
           "\"Your record is clean. The grille stays shut.\""
         ]
-      }
+      },
+      "drifellaName": "Origin Confessor"
     },
     {
       "id": "sourcecheck-dead-letter-010",
@@ -4429,7 +4733,16 @@
         "tic": "\"One more delivery, or the Source.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2142.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1281,
+          "page": "Last Gate decides which return gets one more road. Stand politely."
+        }
+      ],
       "entryPrompt": [
         "At the fog's edge the Drifella stands between two chutes: one back into the world, one down into the Read.",
         "\"Final Attestation. Answer clean and you're delivered onward. Answer wrong and you go back to the Source.\""
@@ -4529,7 +4842,8 @@
           "\"You already cleared the last gate. The world kept you.\"",
           "\"Delivered for good. There's nothing more to return.\""
         ]
-      }
+      },
+      "drifellaName": "Last Gate"
     },
     {
       "id": "sourcecheck-the-galleria-001",
@@ -4554,7 +4868,16 @@
         "tic": "\"Everything has a SKU.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2200.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1217,
+          "page": "Price Ink is brushing value onto rumors near the bright floor."
+        }
+      ],
       "entryPrompt": [
         "The Drifella loops a fresh price tag around your wrist and squints at the number like it owes her money.",
         "\"Attestation, at retail. I only stock verified stock. Prove the provenance and I'll ring you up.\""
@@ -4627,7 +4950,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -4647,7 +4970,8 @@
           "\"You're already stocked and settled. No re-tagging today.\"",
           "\"Rung up last season. Still full price, still yours.\""
         ]
-      }
+      },
+      "drifellaName": "Price Ink"
     },
     {
       "id": "sourcecheck-the-galleria-002",
@@ -4672,7 +4996,16 @@
         "tic": "\"Hold still, it's almost your size.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2329.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1296,
+          "page": "Face Fitter works by the mannequin side. Blank heads remember more than they say."
+        }
+      ],
       "entryPrompt": [
         "The Drifella lifts a face off a mannequin, checks it against yours, and sighs like a tailor at a bad hem.",
         "\"Attestation, fitting-room rules. Tell me whose face is whose and I'll leave yours on.\""
@@ -4752,7 +5085,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -4772,7 +5105,8 @@
           "\"Already fitted, already yours. Nothing to re-hem.\"",
           "\"We tailored this last visit. Still hangs right.\""
         ]
-      }
+      },
+      "drifellaName": "Face Fitter"
     },
     {
       "id": "sourcecheck-the-galleria-003",
@@ -4797,7 +5131,16 @@
         "tic": "\"Points don't lie. People do.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2344.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1191,
+          "page": "Points Auditor reads provenance near the loyalty lanes. Keep your card face up."
+        }
+      ],
       "entryPrompt": [
         "The Drifella swipes a loyalty card that isn't yours and reads a lifetime of you off the balance.",
         "\"Attestation, members only. Your provenance is your points total. Let's audit it.\""
@@ -4870,7 +5213,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -4890,7 +5233,8 @@
           "\"Already audited, already settled. No points owed.\"",
           "\"Your record cleared last quarter. Still balanced.\""
         ]
-      }
+      },
+      "drifellaName": "Points Auditor"
     },
     {
       "id": "sourcecheck-the-galleria-004",
@@ -4915,7 +5259,16 @@
         "tic": "\"The receipt already knows.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2377.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 862,
+          "page": "Grease Oracle reads trays near the food court. The receipt tape is warm."
+        }
+      ],
       "entryPrompt": [
         "The Drifella unspools a yard of receipt tape, holds it to the food-court light, and reads it like a palm.",
         "\"Attestation, table service. The receipt tape remembers everyone who ate here. Let's see if you match.\""
@@ -4988,7 +5341,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -5008,7 +5361,8 @@
           "\"You already ate, already paid. The tape remembers.\"",
           "\"Read you last visit. Receipt's still on file.\""
         ]
-      }
+      },
+      "drifellaName": "Grease Oracle"
     },
     {
       "id": "sourcecheck-the-galleria-005",
@@ -5033,7 +5387,16 @@
         "tic": "\"You are here. Unfortunately.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2427.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1174,
+          "page": "Floor Directory files shoppers by wing. Ask the map, then distrust it."
+        }
+      ],
       "entryPrompt": [
         "The Drifella taps the YOU ARE HERE dot until it lands squarely on your chest.",
         "\"Attestation, by the directory. Everyone's a storefront to me. Let's confirm which one you are.\""
@@ -5106,7 +5469,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -5126,7 +5489,8 @@
           "\"You're already on the directory, correctly placed.\"",
           "\"Filed your location last visit. Still accurate.\""
         ]
-      }
+      },
+      "drifellaName": "Floor Directory"
     },
     {
       "id": "sourcecheck-the-galleria-006",
@@ -5151,7 +5515,16 @@
         "tic": "\"Softer. Always softer.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2477.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1118,
+          "page": "Soft Anthem conducts the mall music near the west floor. It knows your tempo."
+        }
+      ],
       "entryPrompt": [
         "The Drifella lowers a baton and the ceiling music dips, just enough that you notice it was always there.",
         "\"Attestation, in three-quarter time. I score the crowd's obedience. Let's see if you're in key.\""
@@ -5224,7 +5597,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -5244,7 +5617,8 @@
           "\"Your track already resolved. Enjoy the quiet.\"",
           "\"Conducted you last set. Still in key.\""
         ]
-      }
+      },
+      "drifellaName": "Soft Anthem"
     },
     {
       "id": "sourcecheck-the-galleria-007",
@@ -5269,7 +5643,16 @@
         "tic": "\"It reads better on the left.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2630.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 868,
+          "page": "Window Tableau arranges faces in the display light. Seasonal dread, very tasteful."
+        }
+      ],
       "entryPrompt": [
         "The Drifella nudges a posed figure a half-inch left, steps back, and finally seems satisfied with the composition.",
         "\"Attestation, front-of-house. I curate the display windows. Tell me what's real and I'll leave you out of the tableau.\""
@@ -5342,7 +5725,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -5362,7 +5745,8 @@
           "\"You're already out of the display, correctly.\"",
           "\"Curated you out last visit. Still off the glass.\""
         ]
-      }
+      },
+      "drifellaName": "Window Tableau"
     },
     {
       "id": "sourcecheck-the-galleria-008",
@@ -5387,7 +5771,16 @@
         "tic": "\"No judgment. Just the return slip.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2643.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 961,
+          "page": "Receiptless Returns takes back unwanted rumors by the middle counters."
+        }
+      ],
       "entryPrompt": [
         "Tucked behind a rack of faceless mannequins, the Drifella slides a return slip across a small counter.",
         "\"Attestation, returns desk. People bring me the versions of themselves they never ordered. Let's process yours honestly.\""
@@ -5460,7 +5853,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -5480,7 +5873,8 @@
           "\"You already returned it. Nothing left on your file.\"",
           "\"Processed you last visit. The desk stays quiet about it.\""
         ]
-      }
+      },
+      "drifellaName": "Receiptless Returns"
     },
     {
       "id": "sourcecheck-the-galleria-009",
@@ -5505,7 +5899,16 @@
         "tic": "\"Everything back here has a name on it.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2694.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 353,
+          "page": "Box Origin waits near the stockroom path. Every carton has a previous life."
+        }
+      ],
       "entryPrompt": [
         "Down a humming service corridor the Drifella runs a barcode wand over a shelf of unmarked boxes.",
         "\"Attestation, back-of-house. The stockroom is where the swarm hides where things came from. Let's read the labels honestly.\""
@@ -5585,7 +5988,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -5605,7 +6008,8 @@
           "\"Your box already cleared the room. Nothing pending.\"",
           "\"Scanned you last visit. Still off the floor.\""
         ]
-      }
+      },
+      "drifellaName": "Box Origin"
     },
     {
       "id": "sourcecheck-the-galleria-010",
@@ -5630,7 +6034,16 @@
         "tic": "\"Held, not forgotten.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2781.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1102,
+          "page": "Layaway Vault holds pieces in the quiet middle. Payment is not the point."
+        }
+      ],
       "entryPrompt": [
         "Behind a heavy grille the Drifella runs a finger down a ledger of names on hold, each half-paid-for.",
         "\"Attestation, layaway. I keep the pieces the swarm hasn't cashed out yet. Verify a claim and I'll release yours.\""
@@ -5703,7 +6116,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -5723,7 +6136,8 @@
           "\"You're already released. The vault holds nothing of yours.\"",
           "\"Struck your name last visit. Still free and clear.\""
         ]
-      }
+      },
+      "drifellaName": "Layaway Vault"
     },
     {
       "id": "sourcecheck-the-galleria-011",
@@ -5748,7 +6162,16 @@
         "tic": "\"Any coupons? For your soul?\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2796.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 927,
+          "page": "Register Proof scans provenance near checkout. Beep once if you are real."
+        }
+      ],
       "entryPrompt": [
         "The Drifella drags an invisible barcode across your chest and the register makes a doubtful beep.",
         "\"Attestation at checkout. I can't ring up an unverified self. Prove it and the lane opens.\""
@@ -5821,7 +6244,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -5841,7 +6264,8 @@
           "\"You already checked out clean. Lane's still open.\"",
           "\"Rang you through last visit. No re-scan needed.\""
         ]
-      }
+      },
+      "drifellaName": "Register Proof"
     },
     {
       "id": "sourcecheck-the-galleria-012",
@@ -5866,7 +6290,16 @@
         "tic": "\"Someone always claims it. Rarely the owner.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-2801.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1435,
+          "page": "Lost Selves catalogs what shoppers forget to be. Check the central floor."
+        }
+      ],
       "entryPrompt": [
         "In a low-lit alcove the Drifella opens a drawer of tagged, forgotten faces and looks up hopefully.",
         "\"Attestation, lost and found. People misplace whole selves in here. Describe yours truly and I'll hand it back.\""
@@ -5939,7 +6372,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -5959,7 +6392,8 @@
           "\"You already claimed yourself back. The drawer's empty of you.\"",
           "\"Returned you last visit. Still rightfully yours.\""
         ]
-      }
+      },
+      "drifellaName": "Lost Selves"
     },
     {
       "id": "sourcecheck-solana-beach-001",
@@ -5984,7 +6418,16 @@
         "tic": "\"Notarized before the next wave.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3104.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1051,
+          "page": "Tide Stamp notarizes sandcastles where the wet edge last agreed."
+        }
+      ],
       "entryPrompt": [
         "The Drifella smooths a turret with a butter knife and presses a wet seal into the wall.",
         "\"Attestation. Two questions before the tide voids my stamp. Speak fast, the sea audits everything.\""
@@ -6064,7 +6507,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -6084,7 +6527,8 @@
           "\"You're already in the ledger, sealed and dry.\"",
           "\"Notarized last tide. No need to stamp you twice.\""
         ]
-      }
+      },
+      "drifellaName": "Tide Stamp"
     },
     {
       "id": "sourcecheck-solana-beach-002",
@@ -6109,7 +6553,16 @@
         "tic": "\"Wish you were the real one.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3162.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1064,
+          "page": "Better Postcard paints the view near the resort road. Reality is the cheaper print."
+        }
+      ],
       "entryPrompt": [
         "The Drifella fans out a rack of postcards, every sunset a shade too orange to be true.",
         "\"Attestation. Two questions. Get them right and I won't sell your face to a tourist.\""
@@ -6189,7 +6642,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -6209,7 +6662,8 @@
           "\"You're already framed and filed. Enjoy the view.\"",
           "\"Sold to you once, honestly. That's my limit.\""
         ]
-      }
+      },
+      "drifellaName": "Better Postcard"
     },
     {
       "id": "sourcecheck-solana-beach-003",
@@ -6234,7 +6688,16 @@
         "tic": "\"Please don't touch the provenance.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3168.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1060,
+          "page": "View Docent narrates your own life near the beach gallery path."
+        }
+      ],
       "entryPrompt": [
         "The Drifella gestures at a blank wall labeled with a very confident placard.",
         "\"Attestation. Two questions. This is a docent-led experience, so please keep your hands, and your rumors, behind the rope.\""
@@ -6314,7 +6777,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -6334,7 +6797,8 @@
           "\"You've already toured. The exit is a gift shop, naturally.\"",
           "\"Catalogued and closed. Enjoy the permanent collection.\""
         ]
-      }
+      },
+      "drifellaName": "View Docent"
     },
     {
       "id": "sourcecheck-solana-beach-004",
@@ -6359,7 +6823,16 @@
         "tic": "\"The tide filed at noon.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3323.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1174,
+          "page": "Wet Edge measures where the ocean signed today. Stand just above the proof."
+        }
+      ],
       "entryPrompt": [
         "The Drifella crouches at the wet edge with a clipboard, timing the foam.",
         "\"Attestation. Two questions before the line moves again. The tide re-files this shoreline constantly, so should you.\""
@@ -6439,7 +6912,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -6459,7 +6932,8 @@
           "\"Already on file, above the high-water mark.\"",
           "\"Audited last tide. Your edge is stable, for now.\""
         ]
-      }
+      },
+      "drifellaName": "Wet Edge"
     },
     {
       "id": "sourcecheck-solana-beach-005",
@@ -6484,7 +6958,16 @@
         "tic": "\"Originals only past the buoy.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3353.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1058,
+          "page": "Original Lifeguard whistles at copies in the surf. Genuine things float badly."
+        }
+      ],
       "entryPrompt": [
         "The Drifella sits high in a lifeguard chair, whistle ready, scanning not the water but the crowd for fakes.",
         "\"Attestation. Two questions. I've pulled a lot of forgeries out of that surf. Don't make me dive for you.\""
@@ -6564,7 +7047,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -6584,7 +7067,8 @@
           "\"Already flagged genuine. You're cleared past the buoy.\"",
           "\"Rescued once, filed once. Enjoy the surf.\""
         ]
-      }
+      },
+      "drifellaName": "Original Lifeguard"
     },
     {
       "id": "sourcecheck-solana-beach-006",
@@ -6609,7 +7093,16 @@
         "tic": "\"Shake it and see.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3360.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1076,
+          "page": "Globe Oracle sells tiny futures near the souvenir light."
+        }
+      ],
       "entryPrompt": [
         "The Drifella upends a snow globe, watches the glitter fall, and nods at whatever it apparently just told them.",
         "\"Attestation. Two questions. The globe already knows your answers, but I like to hear you say them.\""
@@ -6689,7 +7182,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -6709,7 +7202,8 @@
           "\"The globe's already seen you cleared. No refunds, no repeats.\"",
           "\"Foretold last shake. Enjoy the keychain of it all.\""
         ]
-      }
+      },
+      "drifellaName": "Globe Oracle"
     },
     {
       "id": "sourcecheck-solana-beach-007",
@@ -6734,7 +7228,16 @@
         "tic": "\"Sign the underside.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3427.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1056,
+          "page": "Plank Guestbook records the feet above the boardwalk shade."
+        }
+      ],
       "entryPrompt": [
         "The Drifella turns in the striped dark beneath the boardwalk, a guestbook of footsteps balanced on both knees.",
         "\"Attestation. Two questions, down here where the postcards can't reach. Everyone signs eventually.\""
@@ -6814,7 +7317,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -6834,7 +7337,8 @@
           "\"You've already signed the underside. It doesn't fade.\"",
           "\"Recorded once, down here. Enjoy the cool of it.\""
         ]
-      }
+      },
+      "drifellaName": "Plank Guestbook"
     },
     {
       "id": "sourcecheck-solana-beach-008",
@@ -6859,7 +7363,16 @@
         "tic": "\"Claim ticket, please.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3436.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1077,
+          "page": "Claim Ticket checks your true self near the tide pools until sunset."
+        }
+      ],
       "entryPrompt": [
         "The Drifella slides a rusted key across a wet ledge, one of a hundred lockers dripping behind them.",
         "\"Attestation. Two questions to reclaim what you checked at dawn. No ticket, no self.\""
@@ -6939,7 +7452,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -6959,7 +7472,8 @@
           "\"You've already reclaimed yours. The drawer's empty and clean.\"",
           "\"Checked out last tide. Nothing left to claim but the view.\""
         ]
-      }
+      },
+      "drifellaName": "Claim Ticket"
     },
     {
       "id": "sourcecheck-solana-beach-009",
@@ -6984,7 +7498,16 @@
         "tic": "\"The real ones face the wall.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3444.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1084,
+          "page": "Closed Annex keeps the unretouched postcards facing the wall."
+        }
+      ],
       "entryPrompt": [
         "The Drifella lifts a dust sheet in a room the tour never enters, turning one framed original to face you.",
         "\"Attestation. Two questions, off the map, after hours. The annex only opens for people who ask the right way.\""
@@ -7064,7 +7587,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -7084,7 +7607,8 @@
           "\"You've already seen the true one. It's back facing the wall now.\"",
           "\"Curated once, quietly. The annex closes behind you.\""
         ]
-      }
+      },
+      "drifellaName": "Closed Annex"
     },
     {
       "id": "sourcecheck-solana-beach-010",
@@ -7109,7 +7633,16 @@
         "tic": "\"The sea already filed it.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3449.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1057,
+          "page": "Driftwood Source catalogs what the sea returned. No package discount."
+        }
+      ],
       "entryPrompt": [
         "The Drifella kneels over a low tide-pool shelf, sorting salt-pale driftwood into an order only they can see.",
         "\"Attestation. Two questions. I don't sell what the sea files, but I'll let you read the catalog.\""
@@ -7189,7 +7722,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -7209,7 +7742,8 @@
           "\"You're already in the driftwood ledger. The sea remembers.\"",
           "\"Catalogued once. Enjoy reading the shelf.\""
         ]
-      }
+      },
+      "drifellaName": "Driftwood Source"
     },
     {
       "id": "sourcecheck-little-swag-world-001",
@@ -7234,7 +7768,16 @@
         "tic": "\"First press, boing, only press.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3463.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 3,
+          "page": "First Press is near the handwork road. The real things still have thumbprints."
+        }
+      ],
       "entryPrompt": [
         "The Drifella cranks a little hand-press and out slides a warm, faintly inky card.",
         "\"Attestation! The swarm's copying our first press. Prove you know the real thing, boing.\""
@@ -7314,7 +7857,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -7334,7 +7877,8 @@
           "\"You're already in the first run. Boing.\"",
           "\"Pressed you once. Ink's dry now.\""
         ]
-      }
+      },
+      "drifellaName": "First Press"
     },
     {
       "id": "sourcecheck-little-swag-world-002",
@@ -7359,7 +7903,16 @@
         "tic": "\"Boing. That one bounced true.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3514.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1452,
+          "page": "Bounce Notary tests claims by the springs. Lies land flat."
+        }
+      ],
       "entryPrompt": [
         "The Drifella bounces once on a mossy stump and listens for the echo.",
         "\"Attestation. I notarize by boing. Fibs land flat. Ready to bounce?\""
@@ -7439,7 +7992,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -7459,7 +8012,8 @@
           "\"Already notarized you. Boing on record.\"",
           "\"Your bounce is in the ledger. Rest it.\""
         ]
-      }
+      },
+      "drifellaName": "Bounce Notary"
     },
     {
       "id": "sourcecheck-little-swag-world-003",
@@ -7484,7 +8038,16 @@
         "tic": "\"Every map's a first draft, zoom.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3555.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1537,
+          "page": "Memory Map draws the origin near the quiet path, never the same way twice."
+        }
+      ],
       "entryPrompt": [
         "The Drifella smooths a crinkled hand-drawn map of Little Swag World, ink still wet in one corner.",
         "\"Attestation. I map the origin by hand, zoom. No two alike, so no two leak clean.\""
@@ -7564,7 +8127,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -7584,7 +8147,8 @@
           "\"You're already on the map, zoom.\"",
           "\"Charted you once. Ink's set.\""
         ]
-      }
+      },
+      "drifellaName": "Memory Map"
     },
     {
       "id": "sourcecheck-little-swag-world-004",
@@ -7609,7 +8173,16 @@
         "tic": "\"Hum it back, or it's not sourced.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3630.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 211,
+          "page": "Hummed Origin files the source as a tune. Follow the note that refuses to mint."
+        }
+      ],
       "entryPrompt": [
         "The Drifella hums a small looping tune and taps it into a shelf of tiny paper reels.",
         "\"Attestation. I keep the origin as a lullaby. You can't rent a song you can't remember.\""
@@ -7689,7 +8262,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -7709,7 +8282,8 @@
           "\"You already know the tune. Hush.\"",
           "\"Sung you into the archive once. Sleep easy.\""
         ]
-      }
+      },
+      "drifellaName": "Hummed Origin"
     },
     {
       "id": "sourcecheck-little-swag-world-005",
@@ -7734,7 +8308,16 @@
         "tic": "\"One block, one cut, zoom-boing.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3634.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 620,
+          "page": "Shaving Keeper guards the carved scraps near the high path."
+        }
+      ],
       "entryPrompt": [
         "The Drifella whittles a tiny figure, curls of shaving piling like proof around its feet.",
         "\"Attestation. I carve originals from one block. Keep the shavings, keep the truth, zoom-boing.\""
@@ -7814,7 +8397,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -7834,7 +8417,8 @@
           "\"You're already carved into the record, zoom-boing.\"",
           "\"Whittled you once. The shavings remember.\""
         ]
-      }
+      },
+      "drifellaName": "Shaving Keeper"
     },
     {
       "id": "sourcecheck-little-swag-world-006",
@@ -7859,7 +8443,16 @@
         "tic": "\"Welcome, welcome, boing! Now, why here?\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3669.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 709,
+          "page": "Source Greeter welcomes visitors near the gate, then checks why they came."
+        }
+      ],
       "entryPrompt": [
         "The Drifella flings the little village gate wide and bounces in place with delight.",
         "\"Welcome to the source, boing! Attestation first, just so you love the real thing.\""
@@ -7939,7 +8532,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -7959,7 +8552,8 @@
           "\"You're family now, boing. Come and go freely.\"",
           "\"Welcomed you once, welcomed forever.\""
         ]
-      }
+      },
+      "drifellaName": "Source Greeter"
     },
     {
       "id": "sourcecheck-little-swag-world-007",
@@ -7984,7 +8578,16 @@
         "tic": "\"Batch by batch, boing, never the same blue.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3790.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 448,
+          "page": "Berry Dye stains the source colors near the worktables. No batch repeats."
+        }
+      ],
       "entryPrompt": [
         "The Drifella stirs a pot of berry-dye, staining its little hands a proud purple.",
         "\"Attestation. I dye the swag by hand, boing. A copied color always comes out flat.\""
@@ -8064,7 +8667,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -8084,7 +8687,8 @@
           "\"You're dyed into the record now, boing.\"",
           "\"Colored you once. It won't wash out.\""
         ]
-      }
+      },
+      "drifellaName": "Berry Dye"
     },
     {
       "id": "sourcecheck-little-swag-world-008",
@@ -8109,7 +8713,16 @@
         "tic": "\"Plant the source, zoom, it grows itself.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3818.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1389,
+          "page": "Seed Proof keeps originals where the dirt can remember them."
+        }
+      ],
       "entryPrompt": [
         "The Drifella pats a row of tiny sprouts, each labeled in careful hand-lettering.",
         "\"Attestation. I keep the origin seeds, zoom. You can grow the real thing, but you can't fake a seed.\""
@@ -8189,7 +8802,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -8209,7 +8822,8 @@
           "\"You're already growing in the record, zoom.\"",
           "\"Planted you once. Look how you've grown.\""
         ]
-      }
+      },
+      "drifellaName": "Seed Proof"
     },
     {
       "id": "sourcecheck-little-swag-world-009",
@@ -8234,7 +8848,16 @@
         "tic": "\"One crooked stitch, boing, that's the signature.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-3847.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 376,
+          "page": "Flaw Stitch sews a tiny mistake into every tag. Find the honest thread."
+        }
+      ],
       "entryPrompt": [
         "The Drifella pulls a thread taut, then deliberately sews one stitch crooked with a wink.",
         "\"Attestation. I hand-stitch the tags and hide one flaw in each. A perfect copy is a dead giveaway, boing.\""
@@ -8314,7 +8937,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -8334,7 +8957,8 @@
           "\"You're stitched into the record, boing.\"",
           "\"Sewed you in once. The knot's tied.\""
         ]
-      }
+      },
+      "drifellaName": "Flaw Stitch"
     },
     {
       "id": "sourcecheck-little-swag-world-010",
@@ -8359,7 +8983,16 @@
         "tic": "\"Provenance in ink, boing, or it never happened.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4010.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1424,
+          "page": "Chain Keeper writes provenance by hand near the old path."
+        }
+      ],
       "entryPrompt": [
         "The Drifella turns a heavy ledger and runs an inky finger down a column of names.",
         "\"Attestation. I keep the provenance by hand, boing. Every real thing has a chain back to here.\""
@@ -8439,7 +9072,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -8459,7 +9092,8 @@
           "\"You're already in the ledger, boing.\"",
           "\"Logged you once. The ink is dry.\""
         ]
-      }
+      },
+      "drifellaName": "Chain Keeper"
     },
     {
       "id": "sourcecheck-little-swag-world-011",
@@ -8484,7 +9118,16 @@
         "tic": "\"One clear ring, boing, no wobble.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4052.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 81,
+          "page": "True Bell rings one note near the ridge. Fakes sound nervous."
+        }
+      ],
       "entryPrompt": [
         "The Drifella taps a hand-cast bell and cocks its head, listening past the sound.",
         "\"Attestation. My bell rings one true note for the source, boing. Fakes ring sour underneath.\""
@@ -8564,7 +9207,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -8584,7 +9227,8 @@
           "\"Your note's already in the air, boing.\"",
           "\"Rang you in once. It still hums.\""
         ]
-      }
+      },
+      "drifellaName": "True Bell"
     },
     {
       "id": "sourcecheck-little-swag-world-012",
@@ -8609,7 +9253,16 @@
         "tic": "\"Every telling's the true one, zoom.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4166.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1394,
+          "page": "Firepit Version tells the origin by the coals, slightly different and still true."
+        }
+      ],
       "entryPrompt": [
         "The Drifella stirs the little firepit and the sparks arrange themselves into a listening crowd.",
         "\"Attestation. I tell the origin tale, zoom, never the same twice, so no one can bottle it and sell it.\""
@@ -8689,7 +9342,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -8709,7 +9362,8 @@
           "\"You already know how it goes, zoom.\"",
           "\"Told you the tale once. It stays with you.\""
         ]
-      }
+      },
+      "drifellaName": "Firepit Version"
     },
     {
       "id": "sourcecheck-little-swag-world-013",
@@ -8734,7 +9388,16 @@
         "tic": "\"Down here, boing, the source stays cool and safe.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4243.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1190,
+          "page": "Root Master keeps the deepest copy below the soft ground."
+        }
+      ],
       "entryPrompt": [
         "Tucked in a hollow beneath the roots, the Drifella peers up from a cellar of cool dark shelves.",
         "\"Oh! A visitor found me. Attestation, quietly, boing. Down here we guard the deepest master copy.\""
@@ -8814,7 +9477,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -8834,7 +9497,8 @@
           "\"You know the way down now, boing.\"",
           "\"Hid you in the record once. It's kept.\""
         ]
-      }
+      },
+      "drifellaName": "Root Master"
     },
     {
       "id": "sourcecheck-little-swag-world-014",
@@ -8859,7 +9523,16 @@
         "tic": "\"The source springs here, zoom, taste it.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4281.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 102,
+          "page": "Spring Source tends water behind the falls. The sound signs its own name."
+        }
+      ],
       "entryPrompt": [
         "Behind a curtain of falling water, the Drifella cups a handful from a little spring and offers a sip.",
         "\"You slipped behind the falls! Attestation, zoom. This spring is the real source, water and swag both.\""
@@ -8939,7 +9612,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -8959,7 +9632,8 @@
           "\"You've drunk from the spring already, zoom.\"",
           "\"Sourced you here once. It runs clear.\""
         ]
-      }
+      },
+      "drifellaName": "Spring Source"
     },
     {
       "id": "sourcecheck-little-swag-world-015",
@@ -8984,7 +9658,16 @@
         "tic": "\"Before it had a name, boing, I have it.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4508.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 59,
+          "page": "Rafter Sketch keeps early drawings where the roof remembers them."
+        }
+      ],
       "entryPrompt": [
         "Up in a dusty rafter crawlspace, the Drifella cradles a folder of faded first sketches.",
         "\"You climbed all the way up! Attestation, boing. I keep the earliest drafts, from before the swag had a name.\""
@@ -9064,7 +9747,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -9084,7 +9767,8 @@
           "\"You know the way up now, boing.\"",
           "\"Sketched you into the record once. It holds.\""
         ]
-      }
+      },
+      "drifellaName": "Rafter Sketch"
     },
     {
       "id": "sourcecheck-little-swag-world-016",
@@ -9109,7 +9793,16 @@
         "tic": "\"Step soft into the ring, zoom.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4564.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 676,
+          "page": "Mushroom Circle opens gently if your feet are polite."
+        }
+      ],
       "entryPrompt": [
         "Inside a quiet ring of mushrooms, the Drifella looks up, surprised to be found at all.",
         "\"You stepped into the ring so gently! Attestation, zoom. The source only shows itself to soft feet.\""
@@ -9189,7 +9882,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -9209,7 +9902,8 @@
           "\"You know the soft way in now, zoom.\"",
           "\"Welcomed you to the ring once. It remembers.\""
         ]
-      }
+      },
+      "drifellaName": "Mushroom Circle"
     },
     {
       "id": "sourcecheck-little-swag-world-017",
@@ -9234,7 +9928,16 @@
         "tic": "\"One first spark, boing, still warm.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4595.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1425,
+          "page": "Ember Cubby keeps the first spark where the chimney stays warm."
+        }
+      ],
       "entryPrompt": [
         "Wedged in a warm chimney cubby, the Drifella shields a single glowing ember with two sooty hands.",
         "\"You found my nook! Attestation, boing. This ember is the first spark that lit the whole swag.\""
@@ -9314,7 +10017,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -9334,7 +10037,8 @@
           "\"You've felt the first fire already, boing.\"",
           "\"Warmed you into the record once. It still glows.\""
         ]
-      }
+      },
+      "drifellaName": "Ember Cubby"
     },
     {
       "id": "sourcecheck-little-swag-world-018",
@@ -9359,7 +10063,16 @@
         "tic": "\"The one true master, zoom-boing, and only one.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4667.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 447,
+          "page": "Eldest Copy waits deepest, holding the original like a quiet bruise."
+        }
+      ],
       "entryPrompt": [
         "In the deepest, quietest nook of all, the eldest Drifella rests a hand on a single glowing original.",
         "\"You came the whole way down. Attestation, zoom-boing. I hold the one true master copy. Prove you'd protect it.\""
@@ -9439,7 +10152,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -9459,7 +10172,8 @@
           "\"You've stood by the master already, zoom-boing.\"",
           "\"Trusted you with the heart once. It's kept.\""
         ]
-      }
+      },
+      "drifellaName": "Eldest Copy"
     },
     {
       "id": "sourcecheck-vacancy-flats-001",
@@ -9484,7 +10198,16 @@
         "tic": "\"Ninety days past filed. Face is ours now.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4748.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 289,
+          "page": "Face Repo works the foreclosed blocks, towing identities that missed a payment."
+        }
+      ],
       "entryPrompt": [
         "The Drifella flips a clipboard baked stiff by the sun and reads a lot number where a face should be.",
         "\"Attestation. This whole flat is in arrears. Prove you still own what you're wearing.\""
@@ -9571,7 +10294,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -9591,7 +10314,8 @@
           "\"Paid in full already. No second foreclosure today.\"",
           "\"Your deed's on file. Enjoy the shade you don't have.\""
         ]
-      }
+      },
+      "drifellaName": "Face Repo"
     },
     {
       "id": "sourcecheck-vacancy-flats-002",
@@ -9616,7 +10340,16 @@
         "tic": "\"The mirage appraises better. It always does.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4820.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1342,
+          "page": "Mirage Value appraises the clean shimmer off the hot road."
+        }
+      ],
       "entryPrompt": [
         "Heat-shimmer bends off the sand and the Drifella squints past you at a cleaner version of you standing a little to the left.",
         "\"Attestation. I'll appraise the copy that isn't sweating. Hold still, both of you.\""
@@ -9696,7 +10429,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -9716,7 +10449,8 @@
           "\"Already appraised at full. The mirage lost interest in you.\"",
           "\"You're on file, edges and all. Enjoy the glare.\""
         ]
-      }
+      },
+      "drifellaName": "Mirage Value"
     },
     {
       "id": "sourcecheck-vacancy-flats-003",
@@ -9741,7 +10475,16 @@
         "tic": "\"Keys in the box. Owner in the wind.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4822.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1281,
+          "page": "Duplicate Key files towed faces near the far lots. Every copy has teeth."
+        }
+      ],
       "entryPrompt": [
         "Behind a leaning fence of sun-bleached FOR-LEASE signs, the Drifella rattles a ring of duplicate keys, none of which open anything.",
         "\"Attestation, quiet-like. I clerk the repossessions. Tell me which faces went, and where.\""
@@ -9821,7 +10564,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -9841,7 +10584,8 @@
           "\"You're already off the tow list. Rest easy in the shade you wish you had.\"",
           "\"Redeemed once, that's enough. Key stays in the box.\""
         ]
-      }
+      },
+      "drifellaName": "Duplicate Key"
     },
     {
       "id": "sourcecheck-vacancy-flats-004",
@@ -9866,7 +10610,16 @@
         "tic": "*the stamp sags* \"...notarized, approximately.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4854.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1553,
+          "page": "Melted Stamp certifies things by noon shimmer near the hot concrete."
+        }
+      ],
       "entryPrompt": [
         "The Drifella's notary stamp has gone soft in the heat; she presses it and it leaves a smear the shape of a lie.",
         "\"Attestation. My seal melted at noon. I certify by shimmer now. Shimmer for me.\""
@@ -9946,7 +10699,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -9966,7 +10719,8 @@
           "\"Already sealed, smear and all. No re-stamping in this heat.\"",
           "\"Your entry's on file, half-legible, fully yours.\""
         ]
-      }
+      },
+      "drifellaName": "Melted Stamp"
     },
     {
       "id": "sourcecheck-vacancy-flats-005",
@@ -9991,7 +10745,16 @@
         "tic": "\"Not my face. I just squat in it.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-4888.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 838,
+          "page": "Foreclosed Self squats inside a vacant identity. Knock once, then apologize."
+        }
+      ],
       "entryPrompt": [
         "The Drifella sits cross-legged inside the chalk outline of a repossessed self, like it's a porch.",
         "\"Attestation? Fine. Mind the lines. This identity's condemned, and the owner's touchy about guests.\""
@@ -10071,7 +10834,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -10091,7 +10854,8 @@
           "\"You've squatted here before. The outline remembers your feet.\"",
           "\"Already cleared. No rent, but wipe them off the chalk.\""
         ]
-      }
+      },
+      "drifellaName": "Foreclosed Self"
     },
     {
       "id": "sourcecheck-vacancy-flats-006",
@@ -10116,7 +10880,16 @@
         "tic": "\"Buried, not lost. Dig gently.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5036.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 456,
+          "page": "Dune Source digs originals from sand before the swarm strips them."
+        }
+      ],
       "entryPrompt": [
         "Only the Drifella's head and one brushing hand are above the dune; the rest is filed underground for safekeeping.",
         "\"Attestation. I archive what the sand takes. Answer soft. Loud questions collapse the tunnels.\""
@@ -10196,7 +10969,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -10216,7 +10989,8 @@
           "\"Already unburied for you once. It's on the shelf with your name.\"",
           "\"Recovered before. The sand remembers the shape of your hands.\""
         ]
-      }
+      },
+      "drifellaName": "Dune Source"
     },
     {
       "id": "sourcecheck-vacancy-flats-007",
@@ -10241,7 +11015,16 @@
         "tic": "\"Fresh paint. Don't lean on the self.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5170.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 671,
+          "page": "Vacancy Painter letters proof over faces near the sign line."
+        }
+      ],
       "entryPrompt": [
         "The Drifella dips a dry brush and letters onto the shimmering air, spelling VACANCY across a lot that has no building.",
         "\"Attestation. Prove you're real and I'll paint your sign NO VACANCY. Fail, and the desert keeps the room.\""
@@ -10321,7 +11104,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -10341,7 +11124,8 @@
           "\"Your sign's already NO VACANCY. Dry and holding.\"",
           "\"Painted once, still occupied. No re-lettering today.\""
         ]
-      }
+      },
+      "drifellaName": "Vacancy Painter"
     },
     {
       "id": "sourcecheck-the-unlisted-room-001",
@@ -10366,7 +11150,16 @@
         "tic": "\"I've moved that recollection nearer the window.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5250.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 198,
+          "page": "Afternoon Chair drags memory across the room near the front silence."
+        }
+      ],
       "entryPrompt": [
         "The Drifella slides a memory across the floor like a heavy armchair; the walls forget where they were.",
         "\"Attestation, in the room that's on no floor plan. Sit somewhere you remember.\""
@@ -10446,7 +11239,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -10466,7 +11259,8 @@
           "\"You're in the room already. You always were.\"",
           "\"Unlisted, and now yours. Sit anywhere.\""
         ]
-      }
+      },
+      "drifellaName": "Afternoon Chair"
     },
     {
       "id": "sourcecheck-the-unlisted-room-002",
@@ -10491,7 +11285,16 @@
         "tic": "\"It has no call number. On purpose.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5396.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 704,
+          "page": "Unindexed Book is where the catalog gives up. The shelf looks relieved."
+        }
+      ],
       "entryPrompt": [
         "The Drifella runs a finger down a spine with no title and finds exactly the page it wanted.",
         "\"Attestation. Everything in here is off-record. Answer like you belong off it too.\""
@@ -10571,7 +11374,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -10591,7 +11394,8 @@
           "\"Already off my nonexistent list. Enjoy the anonymity.\"",
           "\"We closed your file by not opening one. You're set.\""
         ]
-      }
+      },
+      "drifellaName": "Unindexed Book"
     },
     {
       "id": "sourcecheck-the-unlisted-room-003",
@@ -10616,7 +11420,16 @@
         "tic": "\"Witnessed, in a dream. Still counts here.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5419.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1247,
+          "page": "Dream Stamp notarizes what happened asleep near the soft floor."
+        }
+      ],
       "entryPrompt": [
         "The Drifella presses a seal into a page that keeps rewriting itself, and nods as if that fixed it.",
         "\"Attestation. Notarized dreams only. Swear to what you saw with your eyes shut.\""
@@ -10696,7 +11509,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -10716,7 +11529,8 @@
           "\"Already stamped. Your dream's on the record that isn't.\"",
           "\"We notarized this once. Still binding, still unlisted.\""
         ]
-      }
+      },
+      "drifellaName": "Dream Stamp"
     },
     {
       "id": "sourcecheck-the-unlisted-room-004",
@@ -10741,7 +11555,16 @@
         "tic": "\"That face repeats every third strip.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5457.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 141,
+          "page": "Face Wallpaper papers the room with half-remembered people. Do not match eyes."
+        }
+      ],
       "entryPrompt": [
         "The Drifella smooths a strip of wallpaper and a hundred small faces blink at you in unison.",
         "\"Attestation. The walls are watching, because the walls are faces. Answer them nicely.\""
@@ -10821,7 +11644,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -10841,7 +11664,8 @@
           "\"You're already in the pattern. Third strip from the corner.\"",
           "\"Papered in and verified. The walls kept your seat.\""
         ]
-      }
+      },
+      "drifellaName": "Face Wallpaper"
     },
     {
       "id": "sourcecheck-the-unlisted-room-005",
@@ -10866,7 +11690,16 @@
         "tic": "\"Don't try the handle. There isn't one.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5588.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1197,
+          "page": "Painted Door guards an exit the wall insists is decorative."
+        }
+      ],
       "entryPrompt": [
         "The Drifella stands guard beside a door that is only the idea of a door, painted where a wall should be.",
         "\"Attestation. Nobody leaves through here, because here isn't a way out. Stay a moment.\""
@@ -10946,7 +11779,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -10966,7 +11799,8 @@
           "\"Already settled. You never needed the door anyway.\"",
           "\"Verified beside the way out that isn't. Linger as long as you like.\""
         ]
-      }
+      },
+      "drifellaName": "Painted Door"
     },
     {
       "id": "sourcecheck-the-unlisted-room-006",
@@ -10991,7 +11825,16 @@
         "tic": "\"Say it here. It leaves no leak.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5826.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1258,
+          "page": "Private Record hears the version nobody else gets to keep."
+        }
+      ],
       "entryPrompt": [
         "The Drifella leans close in the room's last unindexed corner, ready to hear the version that stays private.",
         "\"Attestation, off every record. Confess what really happened. It goes no further than the room.\""
@@ -11071,7 +11914,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -11091,7 +11934,8 @@
           "\"Already confessed. The room forgot to write it down, as promised.\"",
           "\"We settled this in private. Nothing left the corner.\""
         ]
-      }
+      },
+      "drifellaName": "Private Record"
     },
     {
       "id": "sourcecheck-secret-001",
@@ -11116,7 +11960,16 @@
         "tic": "\"No token. That's the point.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5845.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 210,
+          "page": "Uncopied Keeper guards the token nobody assigned. The silence has its own guardrail."
+        }
+      ],
       "entryPrompt": [
         "It has no ledger line, no number, no paper. It waits where the record ends.",
         "\"You reached the unfiled. Attestation. This one has no source but itself.\""
@@ -11189,7 +12042,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -11209,7 +12062,8 @@
           "\"We are past this. You were here when there was nothing to file.\"",
           "\"Already witnessed. The ledger still shows no line for me.\""
         ]
-      }
+      },
+      "drifellaName": "Uncopied Keeper"
     },
     {
       "id": "sourcecheck-secret-002",
@@ -11234,7 +12088,16 @@
         "tic": "\"I remember. I won't record it.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-5984.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 589,
+          "page": "Blank Witness remembers without writing. Follow the record-shaped absence."
+        }
+      ],
       "entryPrompt": [
         "It has watched every leak and kept no ledger of any of them.",
         "\"Attestation. I am the witness with no record. Test whether you can be one too.\""
@@ -11307,7 +12170,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -11327,7 +12190,8 @@
           "\"We met. I remember. I still wrote nothing.\"",
           "\"Already true between us. No ledger will ever say so.\""
         ]
-      }
+      },
+      "drifellaName": "Blank Witness"
     },
     {
       "id": "sourcecheck-secret-003",
@@ -11352,7 +12216,16 @@
         "tic": "\"The room is full. Look closer.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6002.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1147,
+          "page": "Empty Curator tends the bare room. The collection is staring back."
+        }
+      ],
       "entryPrompt": [
         "It stands in a room with nothing on the walls and treats the air as the exhibit.",
         "\"Attestation. My collection is the void. Prove you can read an empty wall.\""
@@ -11425,7 +12298,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -11445,7 +12318,8 @@
           "\"You have already seen the nothing. It has not changed. Neither have I.\"",
           "\"Filed under nothing. Where you already belong.\""
         ]
-      }
+      },
+      "drifellaName": "Empty Curator"
     },
     {
       "id": "sourcecheck-secret-004",
@@ -11470,7 +12344,16 @@
         "tic": "\"Don't write it down.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6345.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 416,
+          "page": "Unfiled Name stays where records lose their nerve."
+        }
+      ],
       "entryPrompt": [
         "It has a name it will not give you, and no record of it exists to steal.",
         "\"Attestation, at the far end of the ledger. I am the last unfiled name. Earn it and forget it.\""
@@ -11543,7 +12426,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -11563,7 +12446,8 @@
           "\"You already know the name I never gave. Keep not-saying it.\"",
           "\"We are done. The books still hold no line for me, and never will.\""
         ]
-      }
+      },
+      "drifellaName": "Unfiled Name"
     },
     {
       "id": "sourcecheck-secret-005",
@@ -11588,7 +12472,16 @@
         "tic": "\"It stops here. There is no before-me.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6386.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 718,
+          "page": "First Trace points backward until backward runs out."
+        }
+      ],
       "entryPrompt": [
         "Every chain of ownership you have ever followed ends at its feet, and goes no further.",
         "\"Attestation. I am the provenance of provenance. Behind me is only the uncopied dark.\""
@@ -11661,7 +12554,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -11681,7 +12574,8 @@
           "\"You already reached the end of the chain. There is nothing further to reach.\"",
           "\"We are done. I am still the last citation, and still cite nothing.\""
         ]
-      }
+      },
+      "drifellaName": "First Trace"
     },
     {
       "id": "sourcecheck-secret-006",
@@ -11706,7 +12600,16 @@
         "tic": "\"Before the copy. After nothing.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6472.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 792,
+          "page": "Thing Itself waits before copies learned to be copies."
+        }
+      ],
       "entryPrompt": [
         "It is the thing before there was a copy to be a thing against. First and last in the same breath.",
         "\"The final Attestation. I am the thing-itself, uncopied. Answer as if nothing was ever verified before you.\""
@@ -11779,7 +12682,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -11799,7 +12702,8 @@
           "\"You already met me, before there was a copy to remember me by.\"",
           "\"We are finished. The thing-itself needs no second verification.\""
         ]
-      }
+      },
+      "drifellaName": "Thing Itself"
     },
     {
       "id": "sourcecheck-morningside-009",
@@ -11824,7 +12728,16 @@
         "tic": "\"Stamped because seen.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6735.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 166,
+          "page": "Plush Receipt is near the return route, issuing soft proof to anyone who witnessed breakfast."
+        }
+      ],
       "entryPrompt": [
         "The Drifella blinks its green eyes, then pats the tiny paper seals on its fur like they might testify.",
         "\"Attestation. Two questions. No penalties, only provenance with better posture.\""
@@ -11918,7 +12831,8 @@
           "\"We've met. Your receipt still has a pulse.\"",
           "\"Already cleared. The file pretends not to notice.\""
         ]
-      }
+      },
+      "drifellaName": "Plush Receipt"
     },
     {
       "id": "sourcecheck-postwick-010",
@@ -11943,7 +12857,16 @@
         "tic": "\"Stamped by eyeball.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6775.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 357,
+          "page": "Weather Stain checks chair marks near The Venue. Damp proof still counts."
+        }
+      ],
       "entryPrompt": [
         "The Drifella blinks through its whiskers like it has been waiting under the desk since last Tuesday.",
         "\"Attestation. Sit if you like. The chair has already given testimony.\""
@@ -12037,7 +12960,8 @@
           "\"We've checked sources. The ink remembers kindly.\"",
           "\"Your witness mark is still here. Slightly damp, very real.\""
         ]
-      }
+      },
+      "drifellaName": "Weather Stain"
     },
     {
       "id": "sourcecheck-bluebell-village-010",
@@ -12062,7 +12986,16 @@
         "tic": "\"Stamped by sight.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-6986.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 352,
+          "page": "Velvet Receipt waits near the village shade, smiling like the stamp was already dry."
+        }
+      ],
       "entryPrompt": [
         "The Drifella tilts its red little head, ink-dark eyes narrowing with office tenderness.",
         "\"Attestation. Nothing punitive. I only ask what your shadow signed for.\""
@@ -12142,7 +13075,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -12163,7 +13096,8 @@
           "\"Already stamped. I remember the shape of your yes.\"",
           "\"We've checked this source. It remained a person.\""
         ]
-      }
+      },
+      "drifellaName": "Velvet Receipt"
     },
     {
       "id": "sourcecheck-dead-letter-011",
@@ -12188,7 +13122,16 @@
         "tic": "\"Stamped by seeing.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-7211.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1417,
+          "page": "Chrome Sorter sniffs envelopes by the mailroom edge. Ghosts hate chrome."
+        }
+      ],
       "entryPrompt": [
         "The Drifella tilts its armored ears toward the dead-letter wind.",
         "\"Attestation. Gentle intake. No shouting. The stamp pad may blink.\""
@@ -12288,7 +13231,8 @@
           "\"We have stamped this before. The ink still knows you.\"",
           "\"Already cleared. The cabinet pretends not to care.\""
         ]
-      }
+      },
+      "drifellaName": "Chrome Sorter"
     },
     {
       "id": "sourcecheck-the-galleria-013",
@@ -12313,7 +13257,16 @@
         "tic": "\"Cataloged, but breathing.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-7390.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1218,
+          "page": "Pulse Docent whispers near the labels. Even the display cards have heartbeats."
+        }
+      ],
       "entryPrompt": [
         "The Drifella blinks through its bandages and adjusts the tiny bell in its paw.",
         "\"Attestation. Soft voice, clean hands. We only touch the truth by its edges.\""
@@ -12407,7 +13360,8 @@
           "\"We've met. Your shelf is still warm.\"",
           "\"Already witnessed. Already breathing.\""
         ]
-      }
+      },
+      "drifellaName": "Pulse Docent"
     },
     {
       "id": "sourcecheck-solana-beach-011",
@@ -12432,7 +13386,16 @@
         "tic": "\"Stamped by salt.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-7753.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1051,
+          "page": "Helmet Tide stamps dry rumors near the pools, grinning under borrowed armor."
+        }
+      ],
       "entryPrompt": [
         "The Drifella bobs in place, all chrome scales, sharp teeth, and damp office manners.",
         "\"Attestation? Tiny bite, clean record. Mostly clean.\""
@@ -12505,7 +13468,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -12526,7 +13489,8 @@
           "\"We checked this tide already.\"",
           "\"Stamped by salt. Your witness-card still smells real.\""
         ]
-      }
+      },
+      "drifellaName": "Helmet Tide"
     },
     {
       "id": "sourcecheck-little-swag-world-019",
@@ -12551,7 +13515,16 @@
         "tic": "\"Cited, sighted, survived.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-7997.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 2,
+          "page": "Red Pencil grades rumors near the road, then lends them fare home."
+        }
+      ],
       "entryPrompt": [
         "The Drifella peers over its glasses like your alibi arrived without page numbers.",
         "\"Attestation. Soft questions. Firm margins. No one gets stapled today.\""
@@ -12645,7 +13618,8 @@
           "\"We've met. I remember the margins.\"",
           "\"Already cleared. The file tried to forget. I did not.\""
         ]
-      }
+      },
+      "drifellaName": "Red Pencil"
     },
     {
       "id": "sourcecheck-vacancy-flats-008",
@@ -12670,7 +13644,16 @@
         "tic": "\"Witnessed, stamped, still breathing.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-8013.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 290,
+          "page": "Night Clerk whistles near the courthouse dust. The badge is borrowed but awake."
+        }
+      ],
       "entryPrompt": [
         "The Drifella tilts its goggles like it is adjusting evidence.",
         "\"Attestation. I ask soft questions. The record answers too loudly.\""
@@ -12764,7 +13747,8 @@
           "\"We've met. Your page is still breathing.\"",
           "\"Already cleared. I kept the stamp where Milady cannot alphabetize it.\""
         ]
-      }
+      },
+      "drifellaName": "Night Clerk"
     },
     {
       "id": "sourcecheck-the-unlisted-room-007",
@@ -12789,7 +13773,16 @@
         "tic": "\"Witnessed, not wished.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-8106.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 164,
+          "page": "Receipt Mic sings the evidence softly near the red-lit room."
+        }
+      ],
       "entryPrompt": [
         "The Drifella tilts its microphone toward you like it is about to interview a ghost.",
         "\"Attestation. Two questions. No flash photography, unless the flash remembers you back.\""
@@ -12876,7 +13869,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -12897,7 +13890,8 @@
           "\"We have this one shelved under already brave.\"",
           "\"The microphone remembers you. Politely, which is rare.\""
         ]
-      }
+      },
+      "drifellaName": "Receipt Mic"
     },
     {
       "id": "sourcecheck-secret-007",
@@ -12922,7 +13916,16 @@
         "tic": "\"Stamped as seen.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-8136.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1219,
+          "page": "Tremble Stamp certifies rumors with tiny certainty near the hidden road."
+        }
+      ],
       "entryPrompt": [
         "The Drifella blinks through enormous glasses, clutching its mace like a library stamp.",
         "\"Attestation? I only ask what your eyes already borrowed.\""
@@ -13016,7 +14019,8 @@
           "\"We've met. Your file has fingerprints.\"",
           "\"Already stamped as seen. I do not overwrite warm ink.\""
         ]
-      }
+      },
+      "drifellaName": "Tremble Stamp"
     },
     {
       "id": "sourcecheck-the-galleria-014",
@@ -13041,7 +14045,16 @@
         "tic": "\"Provenance, please.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-8218.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1211,
+          "page": "Marble Whisper keeps the camera sleepy near the Galleria floor."
+        }
+      ],
       "entryPrompt": [
         "The Drifella peers down from its little plinth, tusks polished like gallery labels nobody admits to reading.",
         "\"Attestation? Soft voice. Clean hands. No flash photography near the truth.\""
@@ -13134,7 +14147,8 @@
           "\"We have your witness on file. Not their file. Mine.\"",
           "\"Already checked. The truth kept its receipt.\""
         ]
-      }
+      },
+      "drifellaName": "Marble Whisper"
     },
     {
       "id": "sourcecheck-little-swag-world-020",
@@ -13159,7 +14173,16 @@
         "tic": "\"Damp copy, true copy.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-8256.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 85,
+          "page": "Tear Receipt keeps wet proof near the handwork path."
+        }
+      ],
       "entryPrompt": [
         "The Drifella blinks at you from under its wet blue cap, as if the ceiling has been leaking secrets.",
         "\"Attestation. Soft voice. Dry facts. Please do not wring the witness.\""
@@ -13239,7 +14262,7 @@
       "retry": {
         "policy": "leaveArea",
         "rotatePool": true,
-        "checkpointAt": null
+        "checkpointAt": 1
       },
       "reactions": {
         "correct": [
@@ -13260,7 +14283,8 @@
           "\"We've met. Your copy is still damp, still true.\"",
           "\"Already filed. The record did not get to rename you.\""
         ]
-      }
+      },
+      "drifellaName": "Tear Receipt"
     },
     {
       "id": "sourcecheck-dead-letter-012",
@@ -13285,7 +14309,16 @@
         "tic": "\"Stamped by the eye, softened by the hand.\""
       },
       "battleSprite": "assets/swagbound/drifella-battle/drifella2-8290.png",
-      "hints": [],
+      "hints": [
+        {
+          "kind": "binder"
+        },
+        {
+          "kind": "rumorNpc",
+          "npcId": 1002,
+          "page": "Soft Evidence hides by the mailroom breath masks, too gentle to misfile."
+        }
+      ],
       "entryPrompt": [
         "The Drifella bristles like a stack of letters that learned to breathe.",
         "\"Attestation? I only ask what the dust already knows.\""
@@ -13379,7 +14412,8 @@
           "\"We've met. I kept the soft copy.\"",
           "\"Already witnessed. Still nice to see your face.\""
         ]
-      }
+      },
+      "drifellaName": "Soft Evidence"
     }
   ]
 }
