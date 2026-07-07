@@ -36,11 +36,13 @@ import {
 } from "./doorTriggers";
 import {
   applyNpcOverride,
+  addedNpcsForSpawn,
   buildInlineDialoguePages,
   buildAddedWorldNpcs,
   buildMetadataLines,
   buildStatusLines,
   chooseReference,
+  isAddedNpcExtrasEnabled,
   isAddedWorldChunkedNpc,
   resolveStatus,
   TARGET_REFERENCE,
@@ -154,6 +156,7 @@ import {
   type NewGameOpeningStart
 } from "./newGameOpening";
 import { equipmentSlotForItemType, PartyState, type PartyStateSnapshot } from "./partyState";
+import { currentObjective } from "./objectives";
 import { createBattleSfx, type BattleSfx, type BattleSfxCue } from "./audio/battleSfx";
 import { hasStatus, STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
 import type { OverworldStatusHudView } from "./overworldStatusHud";
@@ -1064,6 +1067,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.questJournal = new QuestJournal({
       quests: () => [...QUESTS],
       hasFlag: (flag) => this.gameFlags.has(flag),
+      objective: () => this.currentObjectiveText(),
       canOpen: () => this.isPlayerControllable() && !this.bikeActive
     });
 
@@ -1431,8 +1435,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private indexNpcPlacements(): void {
     this.npcPlacementsByChunk.clear();
-    const addedNpcs = buildAddedWorldNpcs(this.data_.addedNpcs, this.world_.npcs);
-    if (addedNpcs.length < this.data_.addedNpcs.npcs.length) {
+    const spawnAddedNpcs = addedNpcsForSpawn(this.data_.addedNpcs, {
+      extrasEnabled: isAddedNpcExtrasEnabled(globalThis.location?.search),
+      sourceChecks: this.data_.sourceChecks,
+      storyTriggers: this.data_.storyTriggers
+    });
+    const addedNpcs = buildAddedWorldNpcs(spawnAddedNpcs, this.world_.npcs);
+    if (addedNpcs.length < (spawnAddedNpcs?.npcs.length ?? 0)) {
       console.warn("Skipped added NPC overlay entries with colliding synthetic ids.");
     }
     const indexPlacement = (npc: RuntimeNpcData, keyPrefix: string, index: number): void => {
@@ -4326,6 +4335,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       shops: this.data_.shops,
       cardNfts: this.data_.cardNfts,
       flags: this.gameFlags,
+      currentObjectiveText: this.currentObjectiveText(),
       partyState: this.partyState,
       resolver
     });
@@ -4369,6 +4379,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       screens.push(buildShopEquipPromptScreen(this.activeService));
     }
     this.menuScreens = new Map(screens.map((screen) => [screen.id, screen]));
+  }
+
+  private currentObjectiveText(): string | undefined {
+    return currentObjective(this.gameFlags, this.data_.objectives)?.text;
   }
 
   overworldStatusHud(): OverworldStatusHudView {

@@ -494,6 +494,30 @@ describe("loadGameData", () => {
     expect(data.npcOverrides.byNpcId["111"].worldPixel).toEqual({ x: 7248, y: 1016 });
     expect(data.npcOverrides.byNpcId["112"].hide).toBe(true);
   });
+
+  it("loads the generated objectives overlay", async () => {
+    vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
+      const path = String(url);
+      if (path.endsWith("/objectives.json")) {
+        return jsonResponse({
+          schema: "swagbound.objectives.v1",
+          objectives: [{
+            id: "next",
+            when: { requireFlags: [], blockFlags: [] },
+            text: "Go to the next place."
+          }]
+        });
+      }
+      throw new Error(`No fixture for ${path}`);
+    }));
+
+    const data = await loadGameData(syntheticManifest());
+
+    expect(data.objectives?.objectives[0]).toMatchObject({
+      id: "next",
+      text: "Go to the next place."
+    });
+  });
 });
 
 function character(id: number, name: string): CharacterCollection["characters"][number] {

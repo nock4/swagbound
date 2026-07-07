@@ -12,6 +12,7 @@ export type Quest = { id: string; name: string; blurb: string; steps: QuestStep[
 export interface QuestJournalHost {
   quests(): Quest[];
   hasFlag(flag: string): boolean;
+  objective?(): string | undefined;
   canOpen(): boolean;
 }
 
@@ -102,6 +103,10 @@ export class QuestJournal {
       this.panel = panel;
     }
     const quests = this.host.quests();
+    const objective = this.host.objective?.()?.trim();
+    const objectiveBlock = objective
+      ? `<div style="margin-bottom:10px;color:#f4f4f4;"><span style="color:#ffd23f;">NEXT:</span> ${escapeHtml(objective)}</div>`
+      : "";
     const blocks = quests.map((quest) => {
       const done = quest.steps.filter((s) => this.host.hasFlag(s.flag)).length;
       const complete = done === quest.steps.length;
@@ -123,7 +128,17 @@ export class QuestJournal {
     });
     this.panel.innerHTML =
       `<div style="font-size:13px;margin-bottom:8px;">📓 Quest Journal</div>` +
+      objectiveBlock +
       (blocks.length > 0 ? blocks.join("") : `<div style="color:#8a86a0;">No quests yet.</div>`) +
       `<div style="font-size:11px;margin-top:4px;color:#8a86a0;">J / X close</div>`;
   }
+}
+
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }

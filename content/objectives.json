@@ -1,0 +1,102 @@
+{
+  "schema": "swagbound.objectives.v1",
+  "comment": "Ordered main-objective chain resolved against story flags. The first matching entry is the current next step.",
+  "objectives": [
+    {
+      "id": "act1-card-clique",
+      "when": {
+        "requireFlags": [],
+        "blockFlags": ["signal:clique_cleared"]
+      },
+      "text": "Face the card clique on the road north of Bosch's block."
+    },
+    {
+      "id": "act1-returnless-king",
+      "when": {
+        "requireFlags": ["signal:clique_cleared"],
+        "blockFlags": ["signal:route_open"]
+      },
+      "text": "After the clique fight, head north to the relay gate and clear the Returnless King."
+    },
+    {
+      "id": "act1-malady",
+      "when": {
+        "requireFlags": ["signal:route_open"],
+        "blockFlags": ["signal:threshold_cleared"]
+      },
+      "text": "Follow the north road through the threshold and face Malady."
+    },
+    {
+      "id": "act1-munch",
+      "when": {
+        "requireFlags": ["signal:threshold_cleared"],
+        "blockFlags": ["recruit:munch"]
+      },
+      "text": "Meet Munch at the north threshold before you leave Morningside."
+    },
+    {
+      "id": "act1-leave-signal-town",
+      "when": {
+        "requireFlags": ["signal:threshold_cleared", "recruit:munch"],
+        "blockFlags": ["act1:complete"]
+      },
+      "text": "Keep heading north past the threshold to leave Morningside."
+    },
+    {
+      "id": "act2-reach-postwick",
+      "when": {
+        "requireFlags": ["act1:complete"],
+        "blockFlags": ["postwick:arrived"]
+      },
+      "text": "Reach Postwick down the southern route."
+    },
+    {
+      "id": "act2-postwick-registry",
+      "when": {
+        "requireFlags": ["act2:begun", "postwick:arrived"],
+        "blockFlags": ["act2:registry_cleared"]
+      },
+      "text": "In Postwick, confront the registry boss at the town records."
+    },
+    {
+      "id": "act2-arena-venue-1",
+      "when": {
+        "requireFlags": ["act2:registry_cleared"],
+        "blockFlags": ["arena:won:1"]
+      },
+      "text": "Enter Postwick's arena and win the first venue fight."
+    },
+    {
+      "id": "act2-arena-venue-2",
+      "when": {
+        "requireFlags": ["arena:won:1"],
+        "blockFlags": ["arena:won:2"]
+      },
+      "text": "Stay in the arena and win the second venue fight."
+    },
+    {
+      "id": "act2-arena-venue-3",
+      "when": {
+        "requireFlags": ["arena:won:2"],
+        "blockFlags": ["arena:champion"]
+      },
+      "text": "Finish the arena's third venue fight to become champion."
+    },
+    {
+      "id": "act2-leave-postwick",
+      "when": {
+        "requireFlags": ["arena:champion", "act2:registry_cleared"],
+        "blockFlags": ["act2:complete"]
+      },
+      "text": "Leave Postwick through the northern road after the arena and registry are clear."
+    },
+    {
+      "id": "fallback",
+      "when": {
+        "requireFlags": [],
+        "blockFlags": []
+      },
+      "text": "Explore. The record is still being written."
+    }
+  ]
+}

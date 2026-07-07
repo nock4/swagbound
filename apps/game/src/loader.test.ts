@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
-import type { AddedNpcs, BattleData, EnemyStatOverrides, WorldChunkedNpc } from "@eb/schemas";
+import type { AddedNpcs, BattleData, DrifellaSourceChecks, EnemyStatOverrides, StoryTriggers, WorldChunkedNpc } from "@eb/schemas";
 import {
+  addedNpcsForSpawn,
   addedNpcSpawnEligible,
   applyEnemyStatOverrides,
   buildAddedWorldNpcs,
+  contentReferencedAddedNpcIds,
+  isAddedNpcExtrasEnabled,
   isAddedWorldChunkedNpc
 } from "./loader";
 
@@ -192,5 +195,69 @@ describe("added NPC overlay normalization", () => {
       addedNpc: true
     });
     expect(normalized[0].addedInteraction).toBeUndefined();
+  });
+
+  it("keeps added NPCs loaded but filters default spawning to content-referenced exceptions", () => {
+    const addedNpcs: AddedNpcs = {
+      schema: "swagbound.added-npcs.v1",
+      npcs: [
+        { id: 100010, worldPixel: { x: 128, y: 160 }, spriteGroup: 5, facing: "down" },
+        { id: 100011, worldPixel: { x: 160, y: 160 }, spriteGroup: 5, facing: "down" },
+        { id: 100012, worldPixel: { x: 192, y: 160 }, spriteGroup: 5, facing: "down" }
+      ]
+    };
+    const sourceChecks: DrifellaSourceChecks = {
+      schema: "swagbound.drifella-source-checks.v1",
+      checks: [{
+        id: "check",
+        drifellaId: "drifella2-1",
+        npcId: 100300,
+        region: "test",
+        tier: 1,
+        placement: { kind: "test", worldPixel: { x: 0, y: 0 }, facing: "down" },
+        visibility: { requireFlags: [], blockFlags: [] },
+        battleSprite: "sprite.png",
+        hints: [{ kind: "rumorNpc", npcId: 100011, page: "hint" }],
+        entryPrompt: ["prompt"],
+        questions: {
+          drawCount: 1,
+          pool: [{ type: "trueFalse", prompt: "Ready?", answer: true }]
+        },
+        rewards: { cardId: "card", itemId: 1 },
+        retry: { policy: "leaveArea", rotatePool: false, checkpointAt: null },
+        reactions: {
+          correct: ["correct"],
+          cleared: ["cleared"],
+          failed: ["failed"],
+          alreadyCleared: ["already"]
+        }
+      }]
+    };
+    const storyTriggers = {
+      schema: "swagbound.story-triggers.v1",
+      triggers: [{
+        id: "trigger",
+        area: { x: 0, y: 0, w: 8, h: 8 },
+        setFlags: ["saw:100012"]
+      }]
+    } as StoryTriggers;
+
+    expect([...contentReferencedAddedNpcIds(addedNpcs, sourceChecks, storyTriggers)].sort()).toEqual([100011, 100012]);
+    expect(addedNpcsForSpawn(addedNpcs, {
+      extrasEnabled: false,
+      sourceChecks,
+      storyTriggers
+    })?.npcs.map((npc) => npc.id)).toEqual([100011, 100012]);
+    expect(addedNpcsForSpawn(addedNpcs, {
+      extrasEnabled: true,
+      sourceChecks,
+      storyTriggers
+    })?.npcs.map((npc) => npc.id)).toEqual([100010, 100011, 100012]);
+  });
+
+  it("reads extras=1 as the opt-in added NPC spawn query", () => {
+    expect(isAddedNpcExtrasEnabled("?extras=1")).toBe(true);
+    expect(isAddedNpcExtrasEnabled("?extras=0")).toBe(false);
+    expect(isAddedNpcExtrasEnabled("?nointro=1")).toBe(false);
   });
 });

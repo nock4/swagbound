@@ -25,6 +25,7 @@ import {
   CollisionOverridesSchema,
   NpcOverridesSchema,
   NpcReferenceCollectionSchema,
+  ObjectivesSchema,
   OpeningCutsceneSchema,
   OverworldInteractablesSchema,
   PsiCollectionSchema,
@@ -71,6 +72,7 @@ import {
   type NpcOverrides,
   type NumericFlagState,
   type NpcReferenceCollection,
+  type Objectives,
   type OpeningCutscene,
   type OverworldInteractables,
   type Cutscenes,
@@ -121,6 +123,7 @@ const CUTSCENES_FILE = "cutscenes.json";
 const OVERWORLD_INTERACTABLES_FILE = "overworld-interactables.json";
 const CARD_NFTS_FILE = "card-nfts.json";
 const DRIFELLA_SOURCE_CHECKS_FILE = "drifella-source-checks.json";
+const OBJECTIVES_FILE = "objectives.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -133,6 +136,7 @@ export type GameData = {
   overworldInteractables: OverworldInteractables;
   cardNfts: CardNfts;
   sourceChecks: DrifellaSourceChecks;
+  objectives?: Objectives;
   openingCutscene?: OpeningCutscene;
   cutscenes?: Cutscenes;
   storyTriggers?: StoryTriggers;
@@ -309,7 +313,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     cutscenes,
     overworldInteractables,
     cardNfts,
-    sourceChecks
+    sourceChecks,
+    objectives
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -382,7 +387,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${CUTSCENES_FILE}`, CutscenesSchema),
     loadJson(`/generated/${OVERWORLD_INTERACTABLES_FILE}`, OverworldInteractablesSchema),
     loadJson(`/generated/${CARD_NFTS_FILE}`, CardNftsSchema),
-    loadJson(`/generated/${DRIFELLA_SOURCE_CHECKS_FILE}`, DrifellaSourceChecksSchema)
+    loadJson(`/generated/${DRIFELLA_SOURCE_CHECKS_FILE}`, DrifellaSourceChecksSchema),
+    loadJson(`/generated/${OBJECTIVES_FILE}`, ObjectivesSchema)
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
@@ -409,6 +415,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     overworldInteractables: overworldInteractables ?? emptyOverworldInteractables(),
     cardNfts: cardNfts ?? emptyCardNfts(),
     sourceChecks: sourceChecks ?? emptySourceChecks(),
+    objectives,
     openingCutscene,
     cutscenes,
     storyTriggers,
@@ -660,6 +667,54 @@ export function buildAddedWorldNpcs(
     });
   }
   return result;
+}
+
+export function isAddedNpcExtrasEnabled(search: string | undefined): boolean {
+  return new URLSearchParams(search ?? "").get("extras") === "1";
+}
+
+export function contentReferencedAddedNpcIds(
+  addedNpcs: AddedNpcs | undefined,
+  sourceChecks: DrifellaSourceChecks | undefined,
+  storyTriggers: StoryTriggers | undefined
+): Set<number> {
+  const hintNpcIds = new Set<number>();
+  for (const check of sourceChecks?.checks ?? []) {
+    for (const hint of check.hints) {
+      if (hint.kind === "rumorNpc") {
+        hintNpcIds.add(hint.npcId);
+      }
+    }
+  }
+  const triggerText = storyTriggers ? JSON.stringify(storyTriggers) : "";
+  const referenced = new Set<number>();
+  for (const npc of addedNpcs?.npcs ?? []) {
+    if (hintNpcIds.has(npc.id) || triggerText.includes(String(npc.id))) {
+      referenced.add(npc.id);
+    }
+  }
+  return referenced;
+}
+
+export function addedNpcsForSpawn(
+  addedNpcs: AddedNpcs | undefined,
+  options: {
+    extrasEnabled: boolean;
+    sourceChecks?: DrifellaSourceChecks;
+    storyTriggers?: StoryTriggers;
+  }
+): AddedNpcs | undefined {
+  if (!addedNpcs || options.extrasEnabled) {
+    return addedNpcs;
+  }
+  const referenced = contentReferencedAddedNpcIds(addedNpcs, options.sourceChecks, options.storyTriggers);
+  if (referenced.size === 0) {
+    return { ...addedNpcs, npcs: [] };
+  }
+  return {
+    ...addedNpcs,
+    npcs: addedNpcs.npcs.filter((npc) => referenced.has(npc.id))
+  };
 }
 
 export function parseManifest(raw: unknown): Manifest | undefined {

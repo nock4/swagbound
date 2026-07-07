@@ -28,6 +28,7 @@ export type MenuScreen = {
   id: string;
   title: string;
   items: MenuItem[];
+  objectiveText?: string;
   wrap?: boolean;
   /** When set, the screen is a grid this many columns wide (2D cursor nav + grid render). */
   columns?: number;
@@ -67,6 +68,7 @@ export type MenuRenderScreen = {
   title: string;
   cursorIndex: number;
   items: MenuRenderItem[];
+  objectiveText?: string;
   /** Grid width when the screen renders as a grid (mirrors MenuScreen.columns). */
   columns?: number;
 };
@@ -308,6 +310,7 @@ export type PartyMenuViewModelInput = StatusViewModelInput & {
   flags?: {
     has(flag: string): boolean;
   };
+  currentObjectiveText?: string;
   resolver?: Pick<DialogueResolver, "itemName" | "psiName">;
 };
 
@@ -525,6 +528,7 @@ export function menuRenderStack(state: MenuState): MenuRenderScreen[] {
     id: frame.screen.id,
     title: frame.screen.title,
     cursorIndex: frame.cursorIndex,
+    ...(frame.screen.objectiveText ? { objectiveText: frame.screen.objectiveText } : {}),
     ...(frame.screen.columns ? { columns: frame.screen.columns } : {}),
     items: frame.screen.items.map((item, index) => ({
       id: item.id,
@@ -535,11 +539,12 @@ export function menuRenderStack(state: MenuState): MenuRenderScreen[] {
   }));
 }
 
-export function buildMainMenuScreen(): MenuScreen {
+export function buildMainMenuScreen(currentObjectiveText?: string): MenuScreen {
   return {
     id: MAIN_MENU_ID,
     title: "Command",
     items: MAIN_COMMANDS.map((item) => ({ ...item, enabled: true })),
+    ...(currentObjectiveText ? { objectiveText: currentObjectiveText } : {}),
     columns: MAIN_MENU_COLUMNS
   };
 }
@@ -552,7 +557,7 @@ export function buildMenuScreens(status: StatusViewModel, input: PartyMenuViewMo
   const check = buildCheckViewModel(input);
   const binder = input.cardNfts ? buildBinderViewModel(input.cardNfts, input.flags ?? { has: () => false }) : emptyBinderViewModel();
   return [
-    buildMainMenuScreen(),
+    buildMainMenuScreen(input.currentObjectiveText),
     buildPartyMemberSelectScreen(GOODS_MENU_ID, "Goods", goodsByMember.map((goods) => goods.member)),
     ...goodsByMember.flatMap((goods, index) => [
       buildGoodsScreen(goods, partyMemberScreenId(GOODS_MENU_ID, index)),
