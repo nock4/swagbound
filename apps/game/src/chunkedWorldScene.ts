@@ -264,12 +264,9 @@ import {
   type ConnectedRoomBounds
 } from "./roomBounds";
 import {
-  componentBounds,
   decodeNavmesh,
-  nearestComponentAt,
   nearestComponentIdAtWorldPixel,
-  type NavmeshQuery,
-  type WorldRect as NavmeshWorldRect
+  type NavmeshQuery
 } from "./navmesh";
 import { findMeshPath, type Point as NavmeshPoint } from "./navmeshPath";
 import {
@@ -496,13 +493,8 @@ const OVERWORLD_ENEMY_CONTACT_PX = 12;
 const BOSS_GATE_CONTACT_PX = 14;
 const BOSS_GATE_ARM_DIST_PX = 32;
 const OVERWORLD_CAMERA_ZOOM = 2;
-// Cap on the interior zoom-to-fill so short rooms don't blow up; rooms shorter
-// than (viewport / this) keep a small centered letterbox instead of over-zooming.
+// Cap on the interior zoom-to-fill so tiny sector-areas don't blow up.
 const INTERIOR_CAMERA_MAX_ZOOM = 3.5;
-const INTERIOR_ROOM_MASK_HEADROOM_PX = 28;
-const INTERIOR_VISUAL_RECT_TOP_EXPAND_PX = 56;
-const INTERIOR_VISUAL_RECT_SIDE_EXPAND_PX = 24;
-const INTERIOR_VISUAL_RECT_BOTTOM_EXPAND_PX = 24;
 // Spawn band kept fully ON-SCREEN (camera shows ~128x112 world px from the player
 // at zoom 2) so a roamer is always visible before it can reach you — never an
 // off-screen "random" touch. Min keeps it off the player's feet.
@@ -1569,8 +1561,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.world_.sectors) {
       const roomPoint = this.roomBoundsResolveState();
       const sector = sectorCoordForWorldPixel(roomPoint, this.world_.sectors);
-      const playerComponentId = this.nearestNavmeshComponentId(roomPoint.x, roomPoint.y, 2);
-      const sectorKey = sector ? `${sector.sectorCol},${sector.sectorRow}:${playerComponentId}` : undefined;
+      const sectorKey = sector ? this.sectorAreaBoundsKey(roomPoint) : undefined;
       if (!force && sectorKey && this.activeRoomSectorKey === sectorKey) {
         this.updateCameraRoomBounds();
         return;
@@ -1582,7 +1573,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.collisionGrid(),
         roomPoint
       );
-      this.activeRoomBounds = sectorRoom ? this.deriveInteriorVisualRoomBounds(sectorRoom, roomPoint) : undefined;
+      this.activeRoomBounds = sectorRoom ? this.deriveInteriorSectorAreaRoomBounds(sectorRoom, roomPoint) : undefined;
       this.applyInteriorRoomMask();
       this.applyNpcRoomVisibility();
       this.applyWorldObjectRoomVisibility();
@@ -1610,27 +1601,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   /**
-   * Keep the camera locked inside an interior room so its masked edge never
-   * reveals the black void around it (EB never scrolls past a room). Falls back
-   * to the full map bounds in the overworld.
+   * Keep the camera locked inside the active interior sector-area so its masked
+   * edge never reveals neighboring strips or void. Falls back to the full map
+   * bounds in the overworld.
    */
   private updateCameraRoomBounds(): void {
     const camera = this.cameras.main;
     const room = this.activeInteriorRoom();
     if (room) {
-      // Zoom in just enough that the room covers the viewport on its short axis,
-      // so the masked edge never reveals the black void. Capped so small rooms
-      // don't over-zoom; any residual gap is centered (symmetric, intentional).
-      const fillZoom = Math.max(
-        OVERWORLD_CAMERA_ZOOM,
-        camera.width / room.rect.width,
-        camera.height / room.rect.height
-      );
+      const viewportWidthAtDefaultZoom = camera.width / OVERWORLD_CAMERA_ZOOM;
+      const viewportHeightAtDefaultZoom = camera.height / OVERWORLD_CAMERA_ZOOM;
+      const shouldFillZoom =
+        room.rect.width < viewportWidthAtDefaultZoom &&
+        room.rect.height < viewportHeightAtDefaultZoom;
+      const fillZoom = shouldFillZoom
+        ? Math.max(OVERWORLD_CAMERA_ZOOM, camera.width / room.rect.width, camera.height / room.rect.height)
+        : OVERWORLD_CAMERA_ZOOM;
       camera.setZoom(Math.min(fillZoom, INTERIOR_CAMERA_MAX_ZOOM));
       camera.setBounds(room.rect.x, room.rect.y, room.rect.width, room.rect.height, true);
       // setBounds does not immediately pull an already-centered/following camera
-      // back inside the room; Bosch's 128px-tall bedroom would remain at zoom 2
-      // for that frame and reveal adjacent interior strips above and below.
+      // back inside the sector-area for the current frame.
       this.clampCameraScrollToRoom(room);
       return;
     }
@@ -1676,45 +1666,43 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.activeRoomBounds?.isInterior ? this.activeRoomBounds : undefined;
   }
 
-  private deriveInteriorVisualRoomBounds(
+  private deriveInteriorSectorAreaRoomBounds(
     room: ConnectedRoomBounds,
     point = this.playerState
   ): ConnectedRoomBounds {
-    if (!room.isInterior || !this.navmesh) {
+    if (!room.isInterior) {
       return room;
     }
-    const nearest = nearestComponentAt(this.navmesh, point, 2);
-    if (!nearest) {
-      return room;
+    const areaRect = this.sectorAreaRectForPoint(point) ?? room.rect;
+    const areaCellBounds = this.cellBoundsForWorldRect(areaRect);
+    if (!areaCellBounds) {
+      return { ...room, rect: areaRect };
     }
-    const componentRect = componentBounds(this.navmesh, nearest.componentId);
-    if (!componentRect) {
-      return room;
-    }
-    const sectorAreaRect = this.sectorAreaRectForPoint(point) ?? room.rect;
-    const visualRect = intersectWorldRects(
-      expandInteriorComponentVisualRect(navmeshRectToWorldRect(componentRect)),
-      sectorAreaRect
-    );
-    if (!visualRect) {
-      return room;
-    }
-    if (worldRectsEqual(room.rect, visualRect)) {
-      return room;
-    }
-    const visualCellBounds = this.cellBoundsForWorldRect(visualRect);
-    if (!visualCellBounds) {
-      return { ...room, rect: visualRect };
-    }
-    const maskCellRanges = rectangularMaskRangesForBounds(visualCellBounds);
+    const maskCellRanges = rectangularMaskRangesForBounds(areaCellBounds);
     const maskCellBounds = cellBoundsForMaskRanges(maskCellRanges);
     return {
       ...room,
-      walkableCellBounds: visualCellBounds,
+      walkableCellBounds: areaCellBounds,
       ...(maskCellBounds ? { maskCellBounds } : {}),
       maskCellRanges,
-      rect: visualRect
+      rect: areaRect
     };
+  }
+
+  private sectorAreaBoundsKey(point: { x: number; y: number }): string | undefined {
+    const sectors = this.world_.sectors;
+    const start = sectors ? sectorCoordForWorldPixel(point, sectors) : undefined;
+    if (!sectors || !start) {
+      return undefined;
+    }
+    const areaId = sectors.areaIds[start.index];
+    if (!Number.isInteger(areaId)) {
+      return undefined;
+    }
+    const rect = this.sectorAreaRectForPoint(point);
+    return rect
+      ? `${areaId}:${rect.x},${rect.y},${rect.width},${rect.height}`
+      : `${areaId}:${start.sectorCol},${start.sectorRow}`;
   }
 
   private sectorAreaRectForPoint(point: { x: number; y: number }): WorldRect | undefined {
@@ -1898,16 +1886,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const height = Math.max(1, Math.round(cellSize) - insetBottom);
       graphics.fillRect(x, y, width, height);
     }
-    const headroomY = this.roomMaskHeadroomTop(room);
-    const headroomHeight = room.rect.y - headroomY;
-    if (headroomHeight > 0) {
-      graphics.fillRect(
-        Math.round(room.rect.x),
-        Math.round(headroomY),
-        Math.max(1, Math.round(room.rect.width)),
-        Math.round(headroomHeight)
-      );
-    }
     this.roomMask = this.roomMask ?? graphics.createGeometryMask();
     this.roomMask.setShape(graphics);
     return this.roomMask;
@@ -1925,9 +1903,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     graphics.fillStyle(0x000000, 1);
 
     const pad = this.roomMaskBandOverscanWorldPixels();
-    const headroomTop = this.roomMaskHeadroomTop(room);
     const left = Math.floor(room.rect.x);
-    const top = Math.floor(headroomTop);
+    const top = Math.floor(room.rect.y);
     const right = Math.ceil(room.rect.x + room.rect.width);
     const bottom = Math.ceil(room.rect.y + room.rect.height);
     const coverLeft = left - pad;
@@ -1966,10 +1943,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private roomMaskEdgeInsetWorldPixels(): number {
     const zoom = this.cameras.main.zoom > 0 ? this.cameras.main.zoom : 1;
     return ROOM_MASK_EDGE_INSET_SCREEN_PX / zoom;
-  }
-
-  private roomMaskHeadroomTop(room: ConnectedRoomBounds): number {
-    return Math.max(0, room.rect.y - INTERIOR_ROOM_MASK_HEADROOM_PX);
   }
 
   private applyRoomMaskToImage(
@@ -8769,34 +8742,6 @@ function normalizeOptionalGroupId(value: number | undefined): number | undefined
   }
   const group = Math.floor(value);
   return group >= 0 ? group : undefined;
-}
-
-function navmeshRectToWorldRect(rect: NavmeshWorldRect): WorldRect {
-  return { x: rect.x, y: rect.y, width: rect.w, height: rect.h };
-}
-
-function intersectWorldRects(a: WorldRect, b: WorldRect): WorldRect | undefined {
-  const x1 = Math.max(a.x, b.x);
-  const y1 = Math.max(a.y, b.y);
-  const x2 = Math.min(a.x + a.width, b.x + b.width);
-  const y2 = Math.min(a.y + a.height, b.y + b.height);
-  if (x2 <= x1 || y2 <= y1) {
-    return undefined;
-  }
-  return { x: x1, y: y1, width: x2 - x1, height: y2 - y1 };
-}
-
-function expandInteriorComponentVisualRect(rect: WorldRect): WorldRect {
-  return {
-    x: rect.x - INTERIOR_VISUAL_RECT_SIDE_EXPAND_PX,
-    y: rect.y - INTERIOR_VISUAL_RECT_TOP_EXPAND_PX,
-    width: rect.width + INTERIOR_VISUAL_RECT_SIDE_EXPAND_PX * 2,
-    height: rect.height + INTERIOR_VISUAL_RECT_TOP_EXPAND_PX + INTERIOR_VISUAL_RECT_BOTTOM_EXPAND_PX
-  };
-}
-
-function worldRectsEqual(a: WorldRect, b: WorldRect): boolean {
-  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
 }
 
 function buildCellBounds(
