@@ -602,6 +602,10 @@ const DEEP_WATER_SPEED_MULTIPLIER = 0.55;
 const LADDER_SPEED_MULTIPLIER = 0.6;
 const ROOM_MASK_EDGE_INSET_SCREEN_PX = 0.5;
 const INTERIOR_ROOM_MASK_BAND_OVERSCAN_PX = 64;
+const INTERIOR_SECTOR_AREA_RECT_PADS: Record<number, { bottom?: number; right?: number }> = {
+  // Table and chair feet in this one-sector interior extend just below the area edge.
+  1059874556: { bottom: 16 }
+};
 const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
 const CUTSCENE_ACTOR_MOVE_TIMEOUT_MS = 8_000;
 const CUTSCENE_ACTOR_RUN_MULTIPLIER = 1.5;
@@ -1769,11 +1773,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     const sectorWidthPixels = sectors.sectorWidthTiles * sectors.tileSize;
     const sectorHeightPixels = sectors.sectorHeightTiles * sectors.tileSize;
+    const x = minCol * sectorWidthPixels;
+    const y = minRow * sectorHeightPixels;
+    const width = (maxCol - minCol + 1) * sectorWidthPixels;
+    const height = (maxRow - minRow + 1) * sectorHeightPixels;
+    const pad = INTERIOR_SECTOR_AREA_RECT_PADS[areaId];
+    const paddedRight = Math.min(sectors.cols * sectorWidthPixels, x + width + Math.max(0, pad?.right ?? 0));
+    const paddedBottom = Math.min(sectors.rows * sectorHeightPixels, y + height + Math.max(0, pad?.bottom ?? 0));
     return {
-      x: minCol * sectorWidthPixels,
-      y: minRow * sectorHeightPixels,
-      width: (maxCol - minCol + 1) * sectorWidthPixels,
-      height: (maxRow - minRow + 1) * sectorHeightPixels
+      x,
+      y,
+      width: paddedRight - x,
+      height: paddedBottom - y
     };
   }
 

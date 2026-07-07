@@ -1,0 +1,1901 @@
+{
+  "schema": "swagbound.anchor96-missing.v1",
+  "generated": "2026-07-07",
+  "comment": "Batch 2: the 207 runtime OW skins still lacking Anchor96 after anchor96-missing-fill-0001 (448 adopted, PR #152). Same recipe. 3 entries have no vaultSource and need manual source selection.",
+  "counts": {
+    "missing": 207,
+    "withVaultSource": 204,
+    "needManualSource": 3
+  },
+  "missing": [
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1212-ow.png",
+      "id": "lsw-1212",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1212/battle-260.png",
+      "uses": 3,
+      "usedBy": [
+        "group:265",
+        "group:412",
+        "npc:100180"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-webkidz-001-ow.png",
+      "id": "webkidz-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0016/webkidz-001/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:155",
+        "npc:100163"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-webkidz-005-ow.png",
+      "id": "webkidz-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0017/webkidz-005/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:159",
+        "npc:100162"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1225-ow.png",
+      "id": "lsw-1225",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1225/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:246",
+        "group:266"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1559-ow.png",
+      "id": "lsw-1559",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1559/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:248",
+        "group:284"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1068-ow.png",
+      "id": "lsw-1068",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1068/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:260",
+        "npc:100129"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1153-ow.png",
+      "id": "lsw-1153",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1153/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:263",
+        "group:411"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1373-ow.png",
+      "id": "lsw-1373",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1373/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:269",
+        "group:414"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1554-ow.png",
+      "id": "lsw-1554",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1554/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:282",
+        "group:416"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1573-ow.png",
+      "id": "lsw-1573",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1573/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:287",
+        "group:418"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1628-ow.png",
+      "id": "lsw-1628",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1628/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:293",
+        "group:419"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1636-ow.png",
+      "id": "lsw-1636",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1636/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:295",
+        "group:420"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1722-ow.png",
+      "id": "lsw-1722",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1722/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:300",
+        "group:423"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1784-ow.png",
+      "id": "lsw-1784",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1784/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:305",
+        "group:424"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-2025-ow.png",
+      "id": "lsw-2025",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2025/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:315",
+        "group:430"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-2222-ow.png",
+      "id": "lsw-2222",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2222/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:325",
+        "npc:100156"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-2240-ow.png",
+      "id": "lsw-2240",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2240/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:328",
+        "group:433"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-2255-ow.png",
+      "id": "lsw-2255",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2255/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:329",
+        "group:436"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-2274-ow.png",
+      "id": "lsw-2274",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2274/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:330",
+        "group:438"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-239-ow.png",
+      "id": "lsw-239",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-239/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:350",
+        "group:442"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-2416-ow.png",
+      "id": "lsw-2416",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2416/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:353",
+        "group:443"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-273-ow.png",
+      "id": "lsw-273",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-273/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "group:361",
+        "npc:100141"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2847.png",
+      "id": "lsw-2847",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2847/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "npc:101534",
+        "npc:101546"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-404.png",
+      "id": "lsw-404",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-404/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "npc:101538",
+        "npc:101547"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-3111.png",
+      "id": "lsw-3111",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-3111/battle-260.png",
+      "uses": 2,
+      "usedBy": [
+        "npc:101723",
+        "npc:101727"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-john-002-ow.png",
+      "id": "john-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/john-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:3"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lfvad2k24-003-ow.png",
+      "id": "lfvad2k24-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lfvad2k24-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:54"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lfvad2k24-004-ow.png",
+      "id": "lfvad2k24-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lfvad2k24-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:55"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lucky-13-pixel-fairies-001-ow.png",
+      "id": "lucky-13-pixel-fairies-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:58"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lucky-13-pixel-fairies-002-ow.png",
+      "id": "lucky-13-pixel-fairies-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:59"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lucky-13-pixel-fairies-003-ow.png",
+      "id": "lucky-13-pixel-fairies-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:60"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lucky-13-pixel-fairies-004-ow.png",
+      "id": "lucky-13-pixel-fairies-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:61"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lucky-13-pixel-fairies-005-ow.png",
+      "id": "lucky-13-pixel-fairies-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:62"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-meangirlz-001-ow.png",
+      "id": "meangirlz-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0009/meangirlz-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:63"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-meangirlz-005-ow.png",
+      "id": "meangirlz-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0009/meangirlz-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:65"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-midladys-fumogeddon-003-ow.png",
+      "id": "midladys-fumogeddon-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0009/midladys-fumogeddon-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:67"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-miyakaki-001-ow.png",
+      "id": "miyakaki-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0010/miyakaki-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:71"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-miyakaki-002-ow.png",
+      "id": "miyakaki-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0010/miyakaki-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:72"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-miyakaki-003-ow.png",
+      "id": "miyakaki-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0010/miyakaki-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:73"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-miyakaki-004-ow.png",
+      "id": "miyakaki-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0010/miyakaki-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:74"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-mr-world-002-ow.png",
+      "id": "mr-world-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0010/mr-world-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:76"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-mr-world-004-ow.png",
+      "id": "mr-world-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0011/mr-world-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:77"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-mr-world-005-ow.png",
+      "id": "mr-world-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0011/mr-world-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:78"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-nothing-really-matters-001-ow.png",
+      "id": "nothing-really-matters-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0011/nothing-really-matters-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:89"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-nothing-really-matters-004-ow.png",
+      "id": "nothing-really-matters-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/nothing-really-matters-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:90"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-nothing-really-matters-005-ow.png",
+      "id": "nothing-really-matters-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/nothing-really-matters-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:91"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-owee-005-ow.png",
+      "id": "owee-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/owee-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:96"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-rajeevi-hindu-cousins-004-ow.png",
+      "id": "rajeevi-hindu-cousins-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/rajeevi-hindu-cousins-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:109"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-rajeevi-hindu-cousins-005-ow.png",
+      "id": "rajeevi-hindu-cousins-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/rajeevi-hindu-cousins-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:110"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-relaxio-resort-001-ow.png",
+      "id": "relaxio-resort-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/relaxio-resort-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:111"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-relaxio-resort-002-ow.png",
+      "id": "relaxio-resort-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/relaxio-resort-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:112"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-relaxio-resort-003-ow.png",
+      "id": "relaxio-resort-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/relaxio-resort-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:113"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-relaxio-resort-004-ow.png",
+      "id": "relaxio-resort-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/relaxio-resort-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:114"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-relaxio-resort-005-ow.png",
+      "id": "relaxio-resort-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/relaxio-resort-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:115"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-retardio-cousins-002-ow.png",
+      "id": "retardio-cousins-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/retardio-cousins-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:117"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-retardio-cousins-005-ow.png",
+      "id": "retardio-cousins-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/retardio-cousins-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:119"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-runway-show-003-ow.png",
+      "id": "runway-show-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/runway-show-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:120"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-runway-show-004-ow.png",
+      "id": "runway-show-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/runway-show-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:121"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-runway-show-005-ow.png",
+      "id": "runway-show-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/runway-show-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:122"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-solfussisters0-001-ow.png",
+      "id": "solfussisters0-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/solfussisters0-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:123"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-solfussisters0-002-ow.png",
+      "id": "solfussisters0-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/solfussisters0-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:124"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-solfussisters0-004-ow.png",
+      "id": "solfussisters0-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/solfussisters0-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:126"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-special-money-friends-001-ow.png",
+      "id": "special-money-friends-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/special-money-friends-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:128"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-special-money-friends-002-ow.png",
+      "id": "special-money-friends-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/special-money-friends-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:129"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-special-money-friends-003-ow.png",
+      "id": "special-money-friends-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/special-money-friends-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:130"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-special-money-friends-005-ow.png",
+      "id": "special-money-friends-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/special-money-friends-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:132"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-sproto-pepes-002-ow.png",
+      "id": "sproto-pepes-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/sproto-pepes-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:133"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-sproto-pepes-003-ow.png",
+      "id": "sproto-pepes-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/sproto-pepes-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:134"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-sproto-pepes-005-ow.png",
+      "id": "sproto-pepes-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/sproto-pepes-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:136"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-thumbs-up-dawg-002-ow.png",
+      "id": "thumbs-up-dawg-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/thumbs-up-dawg-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:138"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-unicornio-001-ow.png",
+      "id": "unicornio-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0016/unicornio-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:142"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-webkidz-003-ow.png",
+      "id": "webkidz-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0017/webkidz-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:157"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-autismo-step-cousins-003-ow.png",
+      "id": "autismo-step-cousins-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/autismo-step-cousins-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:162"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-autismo-step-cousins-004-ow.png",
+      "id": "autismo-step-cousins-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/autismo-step-cousins-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:163"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-blume-001-ow.png",
+      "id": "blume-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/blume-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:165"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-blume-002-ow.png",
+      "id": "blume-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/blume-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:166"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-blume-004-ow.png",
+      "id": "blume-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/blume-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:168"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-blyadilio-001-ow.png",
+      "id": "blyadilio-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/blyadilio-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:171"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-blyadilio-003-ow.png",
+      "id": "blyadilio-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/blyadilio-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:173"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-blyadilio-005-ow.png",
+      "id": "blyadilio-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/blyadilio-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:175"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-capi-001-ow.png",
+      "id": "capi-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/capi-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:176"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-capi-002-ow.png",
+      "id": "capi-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/capi-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:177"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-capi-005-ow.png",
+      "id": "capi-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/capi-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:180"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-chomsky-honks-003-ow.png",
+      "id": "chomsky-honks-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/chomsky-honks-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:182"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-cryptic-kids-001-ow.png",
+      "id": "cryptic-kids-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/cryptic-kids-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:183"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-cryptic-kids-002-ow.png",
+      "id": "cryptic-kids-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/cryptic-kids-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:185"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-cryptic-kids-003-ow.png",
+      "id": "cryptic-kids-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/cryptic-kids-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:186"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-cryptic-kids-005-ow.png",
+      "id": "cryptic-kids-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/cryptic-kids-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:188"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-foodiez-001-ow.png",
+      "id": "foodiez-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/foodiez-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:205"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-fujimoto-002-ow.png",
+      "id": "fujimoto-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/fujimoto-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:211"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-fujimoto-003-ow.png",
+      "id": "fujimoto-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/fujimoto-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:212"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-fujimoto-004-ow.png",
+      "id": "fujimoto-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/fujimoto-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:213"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-fujimoto-005-ow.png",
+      "id": "fujimoto-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/fujimoto-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:214"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-goobdle-s-004-ow.png",
+      "id": "goobdle-s-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/goobdle-s-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:224"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-goobdle-s-005-ow.png",
+      "id": "goobdle-s-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/goobdle-s-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:225"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-hakutaku-rebirth-002-ow.png",
+      "id": "hakutaku-rebirth-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/hakutaku-rebirth-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:227"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-hakutaku-rebirth-005-ow.png",
+      "id": "hakutaku-rebirth-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/hakutaku-rebirth-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:229"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-happy-campers-001-ow.png",
+      "id": "happy-campers-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/happy-campers-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:230"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-happy-campers-002-ow.png",
+      "id": "happy-campers-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/happy-campers-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:231"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-happy-campers-003-ow.png",
+      "id": "happy-campers-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/happy-campers-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:233"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-heavy-liquid-graphic-001-ow.png",
+      "id": "heavy-liquid-graphic-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/heavy-liquid-graphic-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:236"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-heavy-liquid-graphic-002-ow.png",
+      "id": "heavy-liquid-graphic-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/heavy-liquid-graphic-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:237"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-heavy-liquid-graphic-004-ow.png",
+      "id": "heavy-liquid-graphic-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/heavy-liquid-graphic-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:238"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-heavy-liquid-graphic-005-ow.png",
+      "id": "heavy-liquid-graphic-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/heavy-liquid-graphic-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:239"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-jezebel-002-ow.png",
+      "id": "jezebel-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/jezebel-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:243"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-jezebel-003-ow.png",
+      "id": "jezebel-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/jezebel-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:244"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1021-ow.png",
+      "id": "lsw-1021",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1021/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:259"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1072-ow.png",
+      "id": "lsw-1072",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1072/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:262"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1252-ow.png",
+      "id": "lsw-1252",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1252/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:267"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1356-ow.png",
+      "id": "lsw-1356",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1356/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:268"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1454-ow.png",
+      "id": "lsw-1454",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1454/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:270"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1455-ow.png",
+      "id": "lsw-1455",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1455/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:271"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1483-ow.png",
+      "id": "lsw-1483",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1483/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:272"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1484-ow.png",
+      "id": "lsw-1484",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1484/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:279"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1537-ow.png",
+      "id": "lsw-1537",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1537/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:281"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1609-ow.png",
+      "id": "lsw-1609",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1609/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:288"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1750-ow.png",
+      "id": "lsw-1750",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1750/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:303"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-1833-ow.png",
+      "id": "lsw-1833",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1833/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:308"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-2209-ow.png",
+      "id": "lsw-2209",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2209/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:320"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-2330-ow.png",
+      "id": "lsw-2330",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2330/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:334"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-2365-ow.png",
+      "id": "lsw-2365",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2365/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "group:347"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/gns-lsw-3105-ow.png",
+      "id": "lsw-3105",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-3105/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:74"
+      ]
+    },
+    {
+      "image": "assets/swagbound/npc/npc-sal.png",
+      "id": null,
+      "vaultSource": null,
+      "uses": 1,
+      "usedBy": [
+        "npc:404"
+      ]
+    },
+    {
+      "image": "assets/swagbound/npc/npc-morrow.png",
+      "id": null,
+      "vaultSource": null,
+      "uses": 1,
+      "usedBy": [
+        "npc:749"
+      ]
+    },
+    {
+      "image": "assets/swagbound/npc/npc-bonkle.png",
+      "id": null,
+      "vaultSource": null,
+      "uses": 1,
+      "usedBy": [
+        "npc:100102"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-hakutaku-rebirth-004.png",
+      "id": "hakutaku-rebirth-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/hakutaku-rebirth-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101100"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-john-003.png",
+      "id": "john-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/john-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101102"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-juan-001.png",
+      "id": "juan-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/juan-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101105"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-kinfolks-001.png",
+      "id": "kinfolks-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/kinfolks-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101107"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-kinfolks-004.png",
+      "id": "kinfolks-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/kinfolks-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101109"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lazy-lions-2-004.png",
+      "id": "lazy-lions-2-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/lazy-lions-2-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101110"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-miyakaki-005.png",
+      "id": "miyakaki-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0010/miyakaki-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101116"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-my-little-fella-003.png",
+      "id": "my-little-fella-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0011/my-little-fella-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101117"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-name-002.png",
+      "id": "name-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0011/name-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101118"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-owee-003.png",
+      "id": "owee-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/owee-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101120"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-planet-peppa-001.png",
+      "id": "planet-peppa-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/planet-peppa-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101121"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-rajeevi-hindu-cousins-002.png",
+      "id": "rajeevi-hindu-cousins-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/rajeevi-hindu-cousins-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101123"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-retardio-cousins-004.png",
+      "id": "retardio-cousins-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/retardio-cousins-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101128"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-thumbs-up-dawg-001.png",
+      "id": "thumbs-up-dawg-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/thumbs-up-dawg-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101134"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-unicornio-002.png",
+      "id": "unicornio-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0016/unicornio-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101137"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-blyadilio-002.png",
+      "id": "blyadilio-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/blyadilio-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101145"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-cryptic-kids-2-001.png",
+      "id": "cryptic-kids-2-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/cryptic-kids-2-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101154"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-foodiez-005.png",
+      "id": "foodiez-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/foodiez-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101155"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-goobdle-s-001.png",
+      "id": "goobdle-s-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/goobdle-s-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101156"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-kinfolks-005.png",
+      "id": "kinfolks-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/kinfolks-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101200"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lazy-lions-2-002.png",
+      "id": "lazy-lions-2-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/lazy-lions-2-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101201"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-name-005.png",
+      "id": "name-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0011/name-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101202"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-planet-peppa-005.png",
+      "id": "planet-peppa-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/planet-peppa-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101203"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-podgy-pigeons-001.png",
+      "id": "podgy-pigeons-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/podgy-pigeons-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101204"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-podgy-pigeons-002.png",
+      "id": "podgy-pigeons-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/podgy-pigeons-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101205"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-podgy-pigeons-004.png",
+      "id": "podgy-pigeons-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/podgy-pigeons-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101206"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-podgy-pigeons-005.png",
+      "id": "podgy-pigeons-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/podgy-pigeons-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101207"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-postcards-002.png",
+      "id": "postcards-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/postcards-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101208"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-special-money-friends-004.png",
+      "id": "special-money-friends-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0015/special-money-friends-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101211"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-thumbs-up-dawg-003.png",
+      "id": "thumbs-up-dawg-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0016/thumbs-up-dawg-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101215"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-thumbs-up-dawg-005.png",
+      "id": "thumbs-up-dawg-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0016/thumbs-up-dawg-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101216"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-webkidz-002.png",
+      "id": "webkidz-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0016/webkidz-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101217"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-bando-kids-004.png",
+      "id": "bando-kids-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/bando-kids-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101218"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-blume-003.png",
+      "id": "blume-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/blume-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101221"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-blume-005.png",
+      "id": "blume-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0002/blume-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101223"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-cryptic-kids-2-003.png",
+      "id": "cryptic-kids-2-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/cryptic-kids-2-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101224"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-goobdle-s-002.png",
+      "id": "goobdle-s-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/goobdle-s-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101225"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-goobdle-s-003.png",
+      "id": "goobdle-s-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/goobdle-s-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101226"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-knights-and-angels-001.png",
+      "id": "knights-and-angels-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/knights-and-angels-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101300"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-midladys-fumogeddon-002.png",
+      "id": "midladys-fumogeddon-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0009/midladys-fumogeddon-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101303"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-owee-001.png",
+      "id": "owee-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/owee-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101307"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-owee-002.png",
+      "id": "owee-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/owee-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101308"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-owee-004.png",
+      "id": "owee-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0012/owee-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101309"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-psyop-scouts-003.png",
+      "id": "psyop-scouts-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0013/psyop-scouts-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101311"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-unicornio-004.png",
+      "id": "unicornio-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0016/unicornio-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101317"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-yakubio-scientists-003.png",
+      "id": "yakubio-scientists-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0017/yakubio-scientists-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101318"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-capi-003.png",
+      "id": "capi-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/capi-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101324"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-capi-004.png",
+      "id": "capi-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0003/capi-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101325"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-digichems-001.png",
+      "id": "digichems-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0004/digichems-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101326"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-digichems-003.png",
+      "id": "digichems-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0004/digichems-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101327"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-foodiez-004.png",
+      "id": "foodiez-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/foodiez-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101328"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-fujimoto-001.png",
+      "id": "fujimoto-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/fujimoto-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101329"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-glorp-001.png",
+      "id": "glorp-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/glorp-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101330"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-3201.png",
+      "id": "lsw-3201",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-3201/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101333"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-3230.png",
+      "id": "lsw-3230",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-3230/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101334"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-867.png",
+      "id": "lsw-867",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-867/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101335"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-957.png",
+      "id": "lsw-957",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-957/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101336"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-959.png",
+      "id": "lsw-959",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-959/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101337"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1682.png",
+      "id": "lsw-1682",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-1682/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101356"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2002.png",
+      "id": "lsw-2002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101361"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2324.png",
+      "id": "lsw-2324",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2324/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101368"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-john-001.png",
+      "id": "john-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/john-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101500"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-juan-002.png",
+      "id": "juan-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0007/juan-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101501"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lf1000x-005.png",
+      "id": "lf1000x-005",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lf1000x-005/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101502"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-meangirlz-004.png",
+      "id": "meangirlz-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0009/meangirlz-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101504"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-foodiez-002.png",
+      "id": "foodiez-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/foodiez-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101521"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-foodiez-003.png",
+      "id": "foodiez-003",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0005/foodiez-003/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101522"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-jezebel-001.png",
+      "id": "jezebel-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-slice-0006/jezebel-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101531"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2904.png",
+      "id": "lsw-2904",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-2904/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101535"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-3226.png",
+      "id": "lsw-3226",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-3226/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101536"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-371.png",
+      "id": "lsw-371",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-371/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101537"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1923.png",
+      "id": "lsw-1923",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-unique-0001/lsw-1923/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101539"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2712.png",
+      "id": "lsw-2712",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-unique-0001/lsw-2712/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101540"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-708.png",
+      "id": "lsw-708",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-708/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101541"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1856.png",
+      "id": "lsw-1856",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-variety-gap-0001/lsw-1856/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101542"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-2103.png",
+      "id": "lsw-2103",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-variety-gap-0001/lsw-2103/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101543"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-1924.png",
+      "id": "lsw-1924",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-unique-0001/lsw-1924/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101544"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lfvad2k24-001.png",
+      "id": "lfvad2k24-001",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lfvad2k24-001/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101700"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lfvad2k24-002.png",
+      "id": "lfvad2k24-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/lfvad2k24-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101701"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-liu-family-maker-002.png",
+      "id": "liu-family-maker-002",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0008/liu-family-maker-002/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101702"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-unx-004.png",
+      "id": "unx-004",
+      "vaultSource": "asset-lab/curation/good-new-sprites/pfp-direct-codex-auto-0016/unx-004/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101719"
+      ]
+    },
+    {
+      "image": "assets/swagbound/overworld-npc/promo-lsw-3282.png",
+      "id": "lsw-3282",
+      "vaultSource": "asset-lab/curation/good-new-sprites/lsw-direct-codex-100-rare-0001/lsw-3282/battle-260.png",
+      "uses": 1,
+      "usedBy": [
+        "npc:101724"
+      ]
+    }
+  ]
+}
