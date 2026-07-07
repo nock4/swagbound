@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
 import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
 import { BossPlacementEditor, isBossEditEnabled, type BossEditorEntry, type BossFacing } from "./bossPlacementEditor";
@@ -80,6 +80,7 @@ import {
   type CollisionGrid,
   type WorldRect
 } from "./collisionOverlay";
+import { fgClearsForChunk, fgClearTextureHash } from "./fgOverrides";
 import {
   addedNpcInteractionEvents,
   dispatchInteractionEvents,
@@ -287,6 +288,7 @@ import {
   type TransitionSfxCue
 } from "./mapTransition";
 import { createTransitionSfx, type InteractionSfxCue, type TransitionSfx } from "./audio/transitionSfx";
+import { createOpeningSfx, type OpeningSfx } from "./audio/openingSfx";
 import { createMusic, musicAreaCueId, musicDisabledBySearch, type Music } from "./audio/music";
 import { getSharedMusic } from "./sharedMusic";
 import { advanceCutsceneActorTowardTarget } from "./cutsceneActorMovement";
@@ -304,6 +306,7 @@ import {
   OPENING_FLYOVER_ZOOM,
   OPENING_GET_UP_WALK_MS,
   OPENING_KNOCK_DELAY_AFTER_WAKE_MS,
+  OPENING_KNOCK_SFX_TO_DIALOGUE_MS,
   OPENING_RUMBLE_AMPLITUDE,
   OPENING_RUMBLE_DURATION_MS,
   OPENING_RUMBLE_INTERVAL_MS,
@@ -312,6 +315,7 @@ import {
   OPENING_WAKE_FADE_IN_MS,
   OPENING_WAKE_SIGNAL_FIRST_FLASH_MS,
   OPENING_WAKE_SIGNAL_SECOND_FLASH_MS,
+  clampOpeningFlyoverPoint,
   shouldRunOverworldRoamers
 } from "./openingPacing";
 import { publishAuditionTarget, toggleMusicAuditioner, isMusicAuditionerVisible, type AuditionLocation } from "./musicAuditioner";
@@ -682,6 +686,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private chunkByKey = new Map<string, WorldChunk>();
   private chunkObjects = new Map<string, StreamedChunk>();
   private loadingTextureKeys = new Set<string>();
+  private sessionFgClears: FgClearRect[] = [];
   private loadingSheetGroups = new Set<number>();
   private loadingNpcOverrideIds = new Set<number>();
   private loadingSpriteGroupOverrideIds = new Set<number>();
@@ -743,6 +748,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private readonly gameFlags = new GameFlags();
   private readonly partyState = new PartyState();
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
+  private readonly openingSfx: OpeningSfx = createOpeningSfx();
   private readonly menuSfx: BattleSfx = createBattleSfx();
   private menuSfxCalls: MenuSfxCue[] = [];
   private menuSfxCount = 0;
@@ -1406,6 +1412,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.clearOverworldEnemies();
     this.chunkObjects.clear();
     this.loadingTextureKeys.clear();
+    this.sessionFgClears = [];
     this.loadingSheetGroups.clear();
     this.loadingNpcOverrideIds.clear();
     this.loadingSpriteGroupOverrideIds.clear();
@@ -1569,7 +1576,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!file) {
       return false;
     }
-    const key = this.chunkTextureKey(chunk, layer);
+    const key = this.chunkLoadTextureKey(chunk, layer);
+    const targetKey = this.chunkTextureKey(chunk, layer);
+    if (this.textures.exists(targetKey)) {
+      return false;
+    }
     if (this.textures.exists(key) || this.loadingTextureKeys.has(key)) {
       return false;
     }
@@ -1600,6 +1611,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     const textureKey = this.chunkTextureKey(streamed.chunk, layer);
+    if (layer === "foreground" && !this.ensureForegroundTexture(streamed.chunk)) {
+      return;
+    }
     if (!this.textures.exists(textureKey)) {
       return;
     }
@@ -2063,7 +2077,80 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private chunkTextureKey(chunk: WorldChunk, layer: ChunkLayer): string {
-    return `chunk-${layer}-${chunk.cx}-${chunk.cy}`;
+    if (layer !== "foreground") {
+      return `chunk-${layer}-${chunk.cx}-${chunk.cy}`;
+    }
+    const clears = this.appliedFgClearsForChunk(chunk);
+    if (clears.length === 0) {
+      return this.foregroundSourceTextureKey(chunk);
+    }
+    return `chunk-foreground-${chunk.cx}-${chunk.cy}-${fgClearTextureHash(clears)}`;
+  }
+
+  private chunkLoadTextureKey(chunk: WorldChunk, layer: ChunkLayer): string {
+    return layer === "foreground" ? this.foregroundSourceTextureKey(chunk) : this.chunkTextureKey(chunk, layer);
+  }
+
+  private foregroundSourceTextureKey(chunk: WorldChunk): string {
+    return `chunk-foreground-source-${chunk.cx}-${chunk.cy}`;
+  }
+
+  private appliedFgClearsForChunk(chunk: WorldChunk): ReturnType<typeof fgClearsForChunk> {
+    return fgClearsForChunk([...(this.data_.fgOverrides?.clears ?? []), ...this.sessionFgClears], chunk, chunkPixelSize(this.grid()));
+  }
+
+  private ensureForegroundTexture(chunk: WorldChunk): boolean {
+    const textureKey = this.chunkTextureKey(chunk, "foreground");
+    if (this.textures.exists(textureKey)) {
+      return true;
+    }
+
+    const sourceKey = this.foregroundSourceTextureKey(chunk);
+    if (textureKey === sourceKey) {
+      return this.textures.exists(sourceKey);
+    }
+    if (!this.textures.exists(sourceKey)) {
+      return false;
+    }
+
+    const source = this.textures.get(sourceKey).getSourceImage();
+    if (!(source instanceof HTMLImageElement || source instanceof HTMLCanvasElement)) {
+      return false;
+    }
+    const width = Math.max(1, Math.floor(source.width));
+    const height = Math.max(1, Math.floor(source.height));
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return false;
+    }
+    context.imageSmoothingEnabled = false;
+    context.drawImage(source, 0, 0, width, height);
+    for (const clear of this.appliedFgClearsForChunk(chunk)) {
+      context.clearRect(clear.x, clear.y, clear.w, clear.h);
+    }
+    return Boolean(this.textures.addCanvas(textureKey, canvas));
+  }
+
+  private liveApplyFgClear(clear: FgClearRect): { rect: FgClearRect; chunks: Array<{ cx: number; cy: number; textureKey: string }> } {
+    this.sessionFgClears.push(clear);
+    const chunks: Array<{ cx: number; cy: number; textureKey: string }> = [];
+    for (const streamed of this.chunkObjects.values()) {
+      if (this.appliedFgClearsForChunk(streamed.chunk).length === 0) {
+        continue;
+      }
+      if (!this.ensureForegroundTexture(streamed.chunk)) {
+        continue;
+      }
+      const textureKey = this.chunkTextureKey(streamed.chunk, "foreground");
+      if (streamed.foreground && isLiveGameObject(streamed.foreground)) {
+        streamed.foreground.setTexture(textureKey);
+      }
+      chunks.push({ cx: streamed.chunk.cx, cy: streamed.chunk.cy, textureKey });
+    }
+    return { rect: clear, chunks };
   }
 
   private collisionGrid(): CollisionGrid {
@@ -2282,6 +2369,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       return { sampled, opaque, ratio: sampled > 0 ? opaque / sampled : 0 };
     };
+    globals.__fgClearAt = (x: number, y: number, w: number, h: number) => {
+      if (![x, y, w, h].every(Number.isFinite) || w <= 0 || h <= 0) {
+        return { ok: false, reason: "expected finite x,y,w,h with positive w,h" };
+      }
+      return {
+        ok: true,
+        ...this.liveApplyFgClear({
+          x: Math.floor(x),
+          y: Math.floor(y),
+          w: Math.ceil(w),
+          h: Math.ceil(h),
+          note: "DEV live clear"
+        })
+      };
+    };
     globals.__playerDepthInfo = () => {
       const feet = { x: this.playerState.x, y: this.playerState.y };
       const sprite = this.player instanceof Phaser.GameObjects.Sprite ? this.player : undefined;
@@ -2405,6 +2507,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__warpTo;
     delete globals.__fgAlphaAt;
     delete globals.__fgCoverageRect;
+    delete globals.__fgClearAt;
     delete globals.__playerDepthInfo;
     delete globals.__debugHeal;
     delete globals.__debugSpawnRoamer;
@@ -3290,6 +3393,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private registerTransitionSfxResume(): void {
     const resume = () => {
       this.transitionSfx.resume();
+      this.openingSfx.resume();
       this.music.resume();
     };
     this.input.once("pointerdown", resume);
@@ -5862,7 +5966,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
         if (opening) {
           // Pace the wake-up: hold on the dark room while the cold signal flares before
           // MiFella pounds the door.
-          this.time.delayedCall(OPENING_KNOCK_DELAY_AFTER_WAKE_MS, () => this.startNewGameStartupEvent(decision.reference));
+          this.time.delayedCall(OPENING_KNOCK_DELAY_AFTER_WAKE_MS, () => {
+            this.openingSfx.resume();
+            this.openingSfx.bedroomKnock();
+            this.time.delayedCall(OPENING_KNOCK_SFX_TO_DIALOGUE_MS, () => this.startNewGameStartupEvent(decision.reference));
+          });
         } else {
           this.startNewGameStartupEvent(decision.reference);
         }
@@ -6038,7 +6146,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return;
       }
       const shot = shots[i];
-      setAnchor(shot.from.x, shot.from.y);
+      const from = clampOpeningFlyoverPoint(shot.from);
+      const to = clampOpeningFlyoverPoint(shot.to);
+      setAnchor(from.x, from.y);
       this.refreshStreaming(true);
       placeCaption();
       caption.setText(shot.text).setAlpha(0);
@@ -6052,8 +6162,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         ease: "Sine.easeInOut",
         onUpdate: () => {
           setAnchor(
-            shot.from.x + (shot.to.x - shot.from.x) * proxy.t,
-            shot.from.y + (shot.to.y - shot.from.y) * proxy.t
+            from.x + (to.x - from.x) * proxy.t,
+            from.y + (to.y - from.y) * proxy.t
           );
           this.refreshStreaming();
           placeCaption();
@@ -6077,6 +6187,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       cam.fadeIn(600, 0, 0, 0);
       const rumble = (): void => {
         if (this.flyoverActive) {
+          this.openingSfx.resume();
+          this.openingSfx.rumble();
           cam.shake(OPENING_RUMBLE_DURATION_MS, OPENING_RUMBLE_AMPLITUDE);
         }
       };
@@ -7919,7 +8031,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       `anim: ${state.animKey} frame ${state.animFrame}`,
       `feet: ${Math.round(state.x)},${Math.round(state.y)} | chunk: ${this.currentChunk?.cx ?? "?"},${this.currentChunk?.cy ?? "?"} | target: ${this.interactionTarget()?.id ?? "none"}`,
       `chunks loaded: ${this.loadedChunkCount()} | active NPCs: ${this.npcRuntimes.size}`,
-      `collision overlay: ${this.collisionOverlayEnabled ? "on" : "off"}`,
+      `collision overlay: ${this.collisionOverlayEnabled ? "on" : "off"} | FG tune: __fgClearAt(x,y,w,h)`,
       `door fade: ${this.doorFadePhase}`,
       `encounters: ${this.encounterEnabled ? "on" : "off"} | sector: ${this.currentSectorIndex ?? "?"} | cooldown: ${Math.ceil(this.encounterCooldownMs)}ms`,
       `wallet: ${this.partyState.wallet} | bank: ${this.partyState.bank} | shop: ${this.activeShopStoreId ?? "none"}`,
