@@ -150,11 +150,15 @@ class BootScene extends Phaser.Scene {
         : null;
 
       if (introDisabled) {
-        // Dev fast-path (?nointro): skip the title menu entirely.
+        // Dev fast-path (?nointro): skip the title menu AND the in-world bedroom
+        // wake, spawning the player controllable immediately (honoring ?spawn) so
+        // QA/automation lands on a movable player. Opt back into the wake with
+        // ?wake when you specifically want to exercise the opening sequence.
+        const wantWake = new URLSearchParams(globalThis.location?.search ?? "").has("wake");
         this.scene.start("chunked-world", {
           ...baseWorld,
           saveState,
-          ...(saveBlob === null && openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
+          ...(wantWake && saveBlob === null && openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
         });
         return;
       }
