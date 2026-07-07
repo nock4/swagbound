@@ -904,7 +904,8 @@ export class UiScene extends Phaser.Scene {
 
   private menuObjectiveLines(screen: MenuRenderScreen): string[] {
     const text = screen.objectiveText?.trim();
-    return text ? this.wrapMenuText(`NEXT: ${text}`, this.menuObjectiveTextWidth()) : [];
+    void text; // NEXT line removed per Nick: exploration over hand-holding
+    return [];
   }
 
   private wrapMenuText(text: string, maxWidth: number): string[] {
