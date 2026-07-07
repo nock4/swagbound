@@ -15,6 +15,7 @@ import {
   EnemyOverridesSchema,
   EnemyStatOverridesSchema,
   EncountersSchema,
+  FgOverridesSchema,
   FontCollectionSchema,
   ItemCollectionSchema,
   ItemOverridesSchema,
@@ -62,6 +63,7 @@ import {
   type EnemyOverrides,
   type EnemyStatOverrides,
   type Encounters,
+  type FgOverrides,
   type FontCollection,
   type ItemCollection,
   type ItemOverrides,
@@ -119,6 +121,7 @@ const STORY_TRIGGERS_FILE = "triggers.json";
 const MUSIC_MANIFEST_FILE = "music-manifest.json";
 const SECTOR_MUSIC_FILE = "sector-music.json";
 const COLLISION_OVERRIDES_FILE = "collision-overrides.json";
+const FG_OVERRIDES_FILE = "fg-overrides.json";
 const NAVMESH_FILE = "navmesh.json";
 const DRIFELLA_BARKS_FILE = "drifella-barks.json";
 const OPENING_CUTSCENE_FILE = "opening-cutscene.json";
@@ -160,6 +163,7 @@ export type GameData = {
   musicManifest?: MusicManifest;
   sectorMusic?: SectorMusic;
   collisionOverrides?: CollisionOverrides;
+  fgOverrides?: FgOverrides;
   navmesh?: Navmesh;
   font?: FontCollection;
   window?: WindowCollection;
@@ -312,6 +316,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     musicManifest,
     sectorMusic,
     collisionOverrides,
+    fgOverrides,
     navmesh,
     drifellaBarks,
     openingCutscene,
@@ -387,6 +392,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${MUSIC_MANIFEST_FILE}`, MusicManifestSchema),
     loadJson(`/generated/${SECTOR_MUSIC_FILE}`, SectorMusicSchema),
     loadJson(`/generated/${COLLISION_OVERRIDES_FILE}`, CollisionOverridesSchema),
+    loadJson(`/generated/${FG_OVERRIDES_FILE}`, FgOverridesSchema),
     loadJson(`/generated/${NAVMESH_FILE}`, NavmeshSchema),
     loadJson(`/generated/${DRIFELLA_BARKS_FILE}`, DrifellaBarksSchema),
     loadJson(`/generated/${OPENING_CUTSCENE_FILE}`, OpeningCutsceneSchema),
@@ -442,6 +448,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     musicManifest,
     sectorMusic,
     collisionOverrides,
+    fgOverrides,
     navmesh,
     font,
     window,

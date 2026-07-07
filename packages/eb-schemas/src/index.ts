@@ -581,6 +581,19 @@ export const TileOverridesSchema = z.object({
   byTile: z.record(TileOverrideKeySchema, TileOverrideEntrySchema)
 }).strict();
 
+export const FgClearRectSchema = z.object({
+  x: z.number().int().nonnegative(),
+  y: z.number().int().nonnegative(),
+  w: z.number().int().positive(),
+  h: z.number().int().positive(),
+  note: z.string().min(1).optional()
+}).strict();
+
+export const FgOverridesSchema = z.object({
+  schema: z.literal("swagbound.fg-overrides.v1"),
+  clears: z.array(FgClearRectSchema)
+}).strict();
+
 /** Source mapping of overworld roaming-enemy skins by family (build expands to overworldByEnemyId). */
 export const OverworldEnemySkinsSchema = z.object({
   schema: z.literal("swagbound.overworld-enemy-skins.v1"),
@@ -2164,6 +2177,8 @@ export type SpriteOverlayName = z.infer<typeof SpriteOverlayNameSchema>;
 export type SpriteOverlaySheet = z.infer<typeof SpriteOverlaySheetSchema>;
 export type TileOverrideEntry = z.infer<typeof TileOverrideEntrySchema>;
 export type TileOverrides = z.infer<typeof TileOverridesSchema>;
+export type FgClearRect = z.infer<typeof FgClearRectSchema>;
+export type FgOverrides = z.infer<typeof FgOverridesSchema>;
 export type MusicManifest = z.infer<typeof MusicManifestSchema>;
 export type BackgroundOverrideEntry = z.infer<typeof BackgroundOverrideEntrySchema>;
 export type BackgroundOverrides = z.infer<typeof BackgroundOverridesSchema>;

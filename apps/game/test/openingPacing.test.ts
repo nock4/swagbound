@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  clampOpeningFlyoverPoint,
   OPENING_ERA_TITLE_FADE_MS,
   OPENING_ERA_TITLE_HOLD_MS,
   OPENING_FLYOVER_SHOTS,
@@ -21,12 +22,25 @@ describe("opening pacing timings", () => {
     expect(OPENING_RUMBLE_AMPLITUDE).toBe(0.0015);
   });
 
-  it("keeps the flyover shots spread out and slow", () => {
-    expect(OPENING_FLYOVER_SHOTS).toEqual([
-      expect.objectContaining({ from: { x: 1600, y: 900 }, to: { x: 2200, y: 1150 }, duration: 9_000 }),
-      expect.objectContaining({ from: { x: 2400, y: 1750 }, to: { x: 3050, y: 2050 }, duration: 9_000 }),
-      expect.objectContaining({ from: { x: 2900, y: 1300 }, to: { x: 2300, y: 1650 }, duration: 9_000 })
-    ]);
+  it("keeps the flyover shots spread out, slow, and inside scenic bounds", () => {
+    // Assert the INVARIANTS (three distinct slow shots, all points clamp-stable),
+    // not exact coordinates, so scenic retunes don't break the suite while a pan
+    // that drifts off-map still fails loudly.
+    expect(OPENING_FLYOVER_SHOTS).toHaveLength(3);
+    for (const shot of OPENING_FLYOVER_SHOTS) {
+      expect(shot.duration).toBeGreaterThanOrEqual(9_000);
+      for (const point of [shot.from, shot.to]) {
+        expect(clampOpeningFlyoverPoint(point)).toEqual(point);
+      }
+    }
+    // Distinct regions: shot midpoints are meaningfully far apart.
+    const mids = OPENING_FLYOVER_SHOTS.map((s) => ({ x: (s.from.x + s.to.x) / 2, y: (s.from.y + s.to.y) / 2 }));
+    for (let i = 0; i < mids.length; i++) {
+      for (let j = i + 1; j < mids.length; j++) {
+        const d = Math.hypot(mids[i].x - mids[j].x, mids[i].y - mids[j].y);
+        expect(d).toBeGreaterThan(300);
+      }
+    }
   });
 
   it("keeps bedroom wake pacing without dropping the intro track", () => {

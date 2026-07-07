@@ -9,6 +9,7 @@ import {
   DrifellaSourceChecksSchema,
   EnemyActionEffectsSchema,
   EnemyNameFamiliesSchema,
+  FgOverridesSchema,
   BossBattleDialogueSchema,
   EnemyStatOverridesSchema,
   expandEnemyNameFamilies,
@@ -81,6 +82,8 @@ export const SECTOR_MUSIC_SOURCE = "content/sector-music.json";
 export const SECTOR_MUSIC_OUTPUT = "sector-music.json";
 export const COLLISION_OVERRIDES_SOURCE = "content/collision-overrides.json";
 export const COLLISION_OVERRIDES_OUTPUT = "collision-overrides.json";
+export const FG_OVERRIDES_SOURCE = "content/fg-overrides.json";
+export const FG_OVERRIDES_OUTPUT = "fg-overrides.json";
 export const DRIFELLA_BARKS_SOURCE = "content/drifella-barks.json";
 export const DRIFELLA_BARKS_OUTPUT = "drifella-barks.json";
 export const OPENING_CUTSCENE_SOURCE = "content/opening-cutscene.json";
@@ -146,6 +149,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateOverworldInteractables(OVERWORLD_INTERACTABLES_SOURCE);
   await validateCardNfts(CARD_NFTS_SOURCE);
   await validateDrifellaSourceChecks(DRIFELLA_SOURCE_CHECKS_SOURCE);
+  await validateFgOverrides(FG_OVERRIDES_SOURCE);
   await validateObjectives(OBJECTIVES_SOURCE);
   await validateNavmesh(NAVMESH_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
@@ -175,6 +179,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(MUSIC_MANIFEST_SOURCE, out, MUSIC_MANIFEST_OUTPUT),
     copyOptionalJsonToGenerated(SECTOR_MUSIC_SOURCE, out, SECTOR_MUSIC_OUTPUT),
     copyOptionalJsonToGenerated(COLLISION_OVERRIDES_SOURCE, out, COLLISION_OVERRIDES_OUTPUT),
+    copyOptionalJsonToGenerated(FG_OVERRIDES_SOURCE, out, FG_OVERRIDES_OUTPUT),
     copyJsonToGenerated(DRIFELLA_BARKS_SOURCE, out, DRIFELLA_BARKS_OUTPUT),
     copyOptionalJsonToGenerated(OPENING_CUTSCENE_SOURCE, out, OPENING_CUTSCENE_OUTPUT),
     copyOptionalJsonToGenerated(OVERWORLD_INTERACTABLES_SOURCE, out, OVERWORLD_INTERACTABLES_OUTPUT),
@@ -292,6 +297,13 @@ async function validateDrifellaSourceChecks(source: string): Promise<void> {
     return;
   }
   DrifellaSourceChecksSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateFgOverrides(source: string): Promise<void> {
+  if (!(await fileExists(source))) {
+    return;
+  }
+  FgOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateObjectives(source: string): Promise<void> {
