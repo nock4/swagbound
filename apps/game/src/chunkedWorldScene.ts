@@ -297,10 +297,10 @@ import {
   type OverworldMusicCue
 } from "./worldMusic";
 import {
-  OPENING_BEDROOM_MUSIC_DROPOUT_FADE_MS,
   OPENING_ERA_TITLE,
   OPENING_ERA_TITLE_FADE_MS,
   OPENING_ERA_TITLE_HOLD_MS,
+  OPENING_FLYOVER_SHOTS,
   OPENING_FLYOVER_ZOOM,
   OPENING_GET_UP_WALK_MS,
   OPENING_KNOCK_DELAY_AFTER_WAKE_MS,
@@ -787,6 +787,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private autosaveNoticeUntilMs = 0;
   private recruitNoticeUntilMs = 0;
   private recruitNoticeText = "";
+  private devToastUntilMs = 0;
+  private devToastText = "";
   /** solidRows snapshot (post-authored-overrides) the paint editor repaints from. */
   private editorBaseSolidRows?: string[];
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
@@ -1046,14 +1048,30 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.keys = this.input.keyboard?.addKeys("W,A,S,D") as Record<string, Phaser.Input.Keyboard.Key>;
     this.registerTransitionSfxResume();
     this.refreshMenuScreens();
-    this.input.keyboard?.on("keydown-M", () => this.openCommandMenu());
-    registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveMenuDirectional(0, -1));
-    registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => this.moveMenuDirectional(0, 1));
-    registerDiscreteKeys(this.input.keyboard, MENU_LEFT_KEY_NAMES, () => this.moveMenuDirectional(-1, 0));
-    registerDiscreteKeys(this.input.keyboard, MENU_RIGHT_KEY_NAMES, () => this.moveMenuDirectional(1, 0));
-    registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.handleConfirm());
-    registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.handleCancel());
-    this.input.keyboard?.on("keydown-P", () => this.handleSaveKey());
+    this.input.keyboard?.on("keydown-M", () => {
+      if (!this.shouldIgnoreWorldHotkey()) this.openCommandMenu();
+    });
+    registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => {
+      if (!this.shouldIgnoreWorldHotkey()) this.moveMenuDirectional(0, -1);
+    });
+    registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => {
+      if (!this.shouldIgnoreWorldHotkey()) this.moveMenuDirectional(0, 1);
+    });
+    registerDiscreteKeys(this.input.keyboard, MENU_LEFT_KEY_NAMES, () => {
+      if (!this.shouldIgnoreWorldHotkey()) this.moveMenuDirectional(-1, 0);
+    });
+    registerDiscreteKeys(this.input.keyboard, MENU_RIGHT_KEY_NAMES, () => {
+      if (!this.shouldIgnoreWorldHotkey()) this.moveMenuDirectional(1, 0);
+    });
+    registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => {
+      if (!this.shouldIgnoreWorldHotkey()) this.handleConfirm();
+    });
+    registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => {
+      if (!this.shouldIgnoreWorldHotkey()) this.handleCancel();
+    });
+    this.input.keyboard?.on("keydown-P", () => {
+      if (!this.shouldIgnoreWorldHotkey()) this.handleSaveKey();
+    });
     // Debug toggles (panel + collision overlay) are dev-only — not wired in production builds.
     // F1 toggles the raw Phaser state panel; F2 the collision overlay; backtick (`) opens the
     // Dev Console hub (Track Lab / annotate / warp / encounters).
@@ -1062,6 +1080,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.debugPanelVisible = !this.debugPanelVisible;
       });
       this.input.keyboard?.on("keydown-F2", () => this.setCollisionOverlayEnabled(!this.collisionOverlayEnabled));
+      this.input.keyboard?.on("keydown-H", (event?: KeyboardEvent) => {
+        if (!event?.repeat) this.devFileQuickAnnotation("SPRITE CUTOFF: sprite cut off by map element", "sprite cutoff");
+      });
+      this.input.keyboard?.on("keydown-C", (event?: KeyboardEvent) => {
+        if (!event?.repeat && !this.debugPanelVisible) {
+          this.devFileQuickAnnotation("COLLISION: collision point inaccurate here", "collision");
+        }
+      });
       this.devConsole = new DevConsole(this.buildDevConsoleHost());
       this.input.on("pointerdown", (pointer: Phaser.Input.Pointer) => this.handleDevPointer(pointer));
       (globalThis as Record<string, unknown>).__devToolsDebug = () => ({
@@ -1074,7 +1100,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       });
     }
     // Bicycle (Swag Cruiser, item 176): B mounts/dismounts when owned + outdoors.
-    this.input.keyboard?.on("keydown-B", () => this.toggleBike());
+    this.input.keyboard?.on("keydown-B", () => {
+      if (!this.shouldIgnoreWorldHotkey()) this.toggleBike();
+    });
 
     // PSI Teleport (T): fast travel to a visited town. The menu owns its own key
     // listener (survives scene restarts); we only feed it visited towns + the warp.
@@ -1192,7 +1220,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.scene.launch("ui", { worldSceneKey: "chunked-world", font: this.data_.font, window: this.data_.window });
     if (this.newGameOpening) {
       this.introMusicHold = true;
-      this.playOverworldMusicCue("intro", true);
+      this.playOverworldMusicCue("intro");
     } else {
       this.syncOverworldMusicCue(true);
     }
@@ -2945,11 +2973,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private readInput(): MoveInput {
     // Don't walk the player while typing into a dev input (note capture, force-encounter box).
-    if (typeof document !== "undefined") {
-      const active = document.activeElement;
-      if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) {
-        return { left: false, right: false, up: false, down: false };
-      }
+    if (this.shouldIgnoreWorldHotkey()) {
+      return { left: false, right: false, up: false, down: false };
     }
     return {
       left: Boolean(this.cursors?.left?.isDown || this.keys?.A?.isDown || this.gamepadHeld.left),
@@ -2957,6 +2982,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
       up: Boolean(this.cursors?.up?.isDown || this.keys?.W?.isDown || this.gamepadHeld.up),
       down: Boolean(this.cursors?.down?.isDown || this.keys?.S?.isDown || this.gamepadHeld.down)
     };
+  }
+
+  private shouldIgnoreWorldHotkey(): boolean {
+    if (typeof document === "undefined") {
+      return false;
+    }
+    const active = document.activeElement as HTMLElement | null;
+    return Boolean(active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable));
   }
 
   /**
@@ -3113,18 +3146,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private devCoordContext(x: number, y: number): {
-    tileX: number; tileY: number; sector: number | null; area: number | null; town: string | null;
+    tileX: number; tileY: number; chunkX: number | null; chunkY: number | null; sector: number | null; area: number | null; town: string | null;
   } {
     const tileSize = this.world_?.tileSize ?? 8;
     const sectors = this.world_?.sectors;
     const sector = sectors ? sectorCoordForWorldPixel({ x, y }, sectors) : undefined;
     const sectorIndex = sector?.index ?? null;
     const rawArea = sectorIndex !== null && sectors?.areaIds ? sectors.areaIds[sectorIndex] ?? null : null;
+    const chunk = this.world_ ? chunkForWorldPixel({ x, y }, this.grid()) : undefined;
     // EB area ids are small; guard against out-of-range/packed sentinels so notes stay clean.
     const area = typeof rawArea === "number" && rawArea >= 0 && rawArea < 100000 ? rawArea : null;
     return {
       tileX: Math.floor(x / tileSize),
       tileY: Math.floor(y / tileSize),
+      chunkX: chunk?.cx ?? null,
+      chunkY: chunk?.cy ?? null,
       sector: sectorIndex,
       area,
       town: this.devTownAt(x, y)
@@ -3184,6 +3220,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.devNoteCount += 1;
       }
     });
+  }
+
+  private devFileQuickAnnotation(note: string, label: string): void {
+    if (this.shouldIgnoreWorldHotkey() || !this.isPlayerControllable() || this.anyDomOverlayOpen()) {
+      return;
+    }
+    const x = this.playerState.x;
+    const y = this.playerState.y;
+    const context: DevNoteContext = { kind: "coord", x, y, ...this.devCoordContext(x, y) };
+    this.dropDevPin(x, y);
+    this.devSaveNote(note, context);
+    this.showDevToast(`filed: ${label} @${Math.round(x)},${Math.round(y)}`);
+  }
+
+  private showDevToast(message: string): void {
+    this.devToastText = message;
+    this.devToastUntilMs = this.time.now + 1400;
+    this.updatePrompt();
+    this.publish();
   }
 
   private dropDevPin(x: number, y: number): void {
@@ -3810,6 +3865,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private updatePrompt(): void {
+    if (this.time.now < this.devToastUntilMs && !this.menuState.open && !this.dialogue.open) {
+      this.prompt = this.devToastText;
+      return;
+    }
     if (this.time.now < this.recruitNoticeUntilMs && !this.menuState.open && !this.dialogue.open) {
       this.prompt = this.recruitNoticeText;
       return;
@@ -5849,7 +5908,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private runOpeningFlyover(bedSpawn: { x: number; y: number }, onDone: () => void): void {
     const cam = this.cameras.main;
     this.flyoverActive = true;
-    this.playOverworldMusicCue("intro", true);
+    this.playOverworldMusicCue("intro");
     const setAnchor = (x: number, y: number): void => {
       this.playerState.x = x;
       this.playerState.y = y;
@@ -5867,7 +5926,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // FG-over depth covering the whole bounded pan region (depth 130000 draws above the
     // FG layer, as the bedroom overlay proves). The caption tracks the camera each frame.
     const flyNight = this.add
-      .rectangle(1900, 1650, 1600, 1200, 0x0a1236, 0.62)
+      .rectangle(2325, 1475, 2100, 1500, 0x0a1236, 0.62)
       .setDepth(130000);
     // Each of the three overhead shots holds one line of narration, pinned to the bottom
     // of the moving view (repositioned every frame in the pan tween).
@@ -5908,26 +5967,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     // Three overhead shots of Morningside at night, each carrying one beat of narration,
     // separated by a dip to black; the last dip descends to Bosch's bed.
-    const shots: { from: { x: number; y: number }; to: { x: number; y: number }; duration: number; text: string }[] = [
-      {
-        from: { x: 1464, y: 1368 },
-        to: { x: 1888, y: 1516 },
-        duration: 6800,
-        text: "Morningside files its dreams before it dreams them."
-      },
-      {
-        from: { x: 1728, y: 1128 },
-        to: { x: 2040, y: 1736 },
-        duration: 7000,
-        text: "Something reads the town, street by street, and calls the reading love."
-      },
-      {
-        from: { x: 1592, y: 1680 },
-        to: { x: 2048, y: 1416 },
-        duration: 6600,
-        text: "Tonight one signal came back wearing your name."
-      }
-    ];
+    const shots = OPENING_FLYOVER_SHOTS;
 
     const finish = (): void => {
       // The final shot has already faded to black; descend to the bed from there.
@@ -5974,9 +6014,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
         },
         onComplete: () => {
           this.tweens.add({ targets: caption, alpha: 0, duration: 600 });
-          if (i === shots.length - 1) {
-            this.music.stop(OPENING_BEDROOM_MUSIC_DROPOUT_FADE_MS);
-          }
           cam.fadeOut(600, 0, 0, 0);
           cam.once("camerafadeoutcomplete", () => runShot(i + 1));
         }
@@ -6271,9 +6308,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.dialogue.close();
     }
     this.afterDialogueClosed();
-    if (options.completedOpening) {
-      this.playOverworldMusicCue("intro", true);
-    }
     this.releaseOpeningCutsceneActorHolds();
     const finalPlayer = this.currentPlayerPoint();
     this.newGameStartupRecord = this.startupRecord({

@@ -41,7 +41,7 @@ export interface DevConsoleHost {
 
 const isTypingTarget = (target: EventTarget | null): boolean => {
   const el = target as HTMLElement | null;
-  return Boolean(el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA"));
+  return Boolean(el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable));
 };
 
 export class DevConsole {
@@ -55,6 +55,7 @@ export class DevConsole {
 
   private readonly keyHandler = (event: KeyboardEvent): void => {
     if (isTypingTarget(event.target)) {
+      event.stopImmediatePropagation();
       // While typing a note: Enter submits, Escape cancels; everything else is literal.
       if (this.noteSubmit && event.code === "Enter") {
         this.commitNote();

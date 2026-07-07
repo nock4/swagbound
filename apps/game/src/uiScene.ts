@@ -108,6 +108,14 @@ const OVERWORLD_HUD_BAR_HEIGHT = 5;
 const OVERWORLD_HUD_BAR_X = 28;
 const OVERWORLD_HUD_BAR_VALUE_GAP = 4;
 
+function isDomInputFocused(): boolean {
+  if (typeof document === "undefined") {
+    return false;
+  }
+  const active = document.activeElement as HTMLElement | null;
+  return Boolean(active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable));
+}
+
 /** Width reserved at the card's top-right for status-ailment badges (only when present). */
 function hudBadgeReserveWidth(contentWidth: number): number {
   return Math.min(30, Math.max(16, Math.floor(contentWidth * 0.24)));
@@ -287,7 +295,9 @@ export class UiScene extends Phaser.Scene {
     });
     button.on("pointerdown", () => this.copyDebugText());
     // Keyboard alias: C copies while the panel is open (no-op when it's empty).
-    this.input.keyboard?.on("keydown-C", () => this.copyDebugText());
+    this.input.keyboard?.on("keydown-C", () => {
+      if (!isDomInputFocused()) this.copyDebugText();
+    });
     this.copyButton = button;
   }
 

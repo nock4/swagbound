@@ -16,6 +16,8 @@ import {
 import {
   WAR_SLIDE_FIRST_ZOOM_LEG_MS,
   WAR_SLIDE_REVEAL_FADE_MS,
+  WAR_STATIC_REVEAL_MS,
+  WAR_STATIC_TEXTURE_CYCLE_MS,
   titlePromptVisible,
   type TitleMenuPhase
 } from "./titleMenuTiming";
@@ -40,16 +42,12 @@ const TITLE_SLIDE_KEY = "title-slide";
 const WAR_SLIDE_KEY = "war-slide";
 const WAR_STATIC_TEXTURE_KEY_PREFIX = "war-slide-static";
 const MENU_CUE = "menu";
-const WAR_STOP_FADE_MS = 70;
-const TITLE_MUSIC_ATTACK_FADE_MS = 40;
 const PRE_TITLE_GATE_FADE_MS = 300;
 const WAR_STATIC_TEXTURE_COUNT = 6;
 const WAR_STATIC_TEXTURE_WIDTH = 128;
 const WAR_STATIC_TEXTURE_HEIGHT = 112;
-const WAR_STATIC_CYCLE_MS = 1_000 / 12;
-const WAR_STATIC_REVEAL_MS = 2_600;
-// Dark, brooding track for the opening war-against-milady slide (Nate Young); Glass
-// Chime (MENU_CUE) is held back until the menu.
+// Dark, brooding track for the opening war-against-milady slide and fresh-game
+// opening. It stays alive across the title-to-world handoff.
 const WAR_CUE = "intro";
 
 type Phase = TitleMenuPhase;
@@ -333,7 +331,7 @@ export class TitleMenuScene extends Phaser.Scene {
     image.setScale(scale);
     this.warStaticImage = image;
     this.warStaticCycle = this.time.addEvent({
-      delay: WAR_STATIC_CYCLE_MS,
+      delay: WAR_STATIC_TEXTURE_CYCLE_MS,
       loop: true,
       callback: () => {
         frame = (frame + 1) % this.warStaticTextureKeys.length;
@@ -344,7 +342,7 @@ export class TitleMenuScene extends Phaser.Scene {
       targets: image,
       alpha: 0,
       duration: WAR_STATIC_REVEAL_MS,
-      ease: "Linear",
+      ease: "Quad.easeIn",
       onComplete: () => this.killWarStaticReveal()
     });
   }
@@ -373,12 +371,9 @@ export class TitleMenuScene extends Phaser.Scene {
     }
     if (this.phase === "war") {
       this.killWarStaticReveal();
-      this.music?.stop(WAR_STOP_FADE_MS);
       this.fadeSwap(() => {
         this.phase = "title";
         this.showSlide(TITLE_SLIDE_KEY);
-        // Glass Chime (Inoyamaland) starts sharply with the SWAGBOUND title slide.
-        this.playCurrentPhaseMusic({ fadeMs: TITLE_MUSIC_ATTACK_FADE_MS });
         this.prompt?.setText("PRESS  Z");
         this.prompt?.setDepth(10);
       });
