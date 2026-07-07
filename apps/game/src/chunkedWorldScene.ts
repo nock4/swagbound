@@ -778,6 +778,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   // True during the opening Morningside flyover: suppresses triggers/encounters while
   // the hidden player is glided across town to drive the camera.
   private flyoverActive = false;
+  // Holds the dark intro cue from the flyover until the player first leaves the house.
+  private introMusicHold = false;
   private startupMode: "startup" | "opening" = "startup";
   private startupInitialSpawn?: { x: number; y: number };
   private startupFallbackReason?: string;
@@ -1162,7 +1164,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updatePrompt();
     this.scene.launch("ui", { worldSceneKey: "chunked-world", font: this.data_.font, window: this.data_.window });
     if (this.newGameOpening) {
-      this.playOverworldMusicCue("intro", true);
+      this.introMusicHold = true;
+    this.playOverworldMusicCue("intro", true);
     } else {
       this.syncOverworldMusicCue(true);
     }
@@ -1778,7 +1781,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private syncOverworldMusicCue(force = false): void {
-    if (this.cinematicActive()) {
+    if (this.cinematicActive() || this.introMusicHold) {
       return;
     }
     if (this.forcedOverworldMusicCue) {
@@ -3497,6 +3500,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.playerState.animKey = `idle-${this.playerState.facing}`;
     this.playerState.animFrame = this.playerFrames[this.playerState.facing][0];
     this.lastDoor = { from, to };
+    this.introMusicHold = false;
     this.clearStartupPajamaVisualState();
     this.currentChunk = undefined;
     this.activeRoomBounds = undefined;
@@ -4763,6 +4767,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!player) {
       return undefined;
     }
+    this.introMusicHold = false;
     this.clearStartupPajamaVisualState();
     this.restoredFromSave = true;
     this.hasSave = true;
