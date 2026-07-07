@@ -21,6 +21,7 @@ import {
   OverworldInteractablesSchema,
   OverworldEnemySkinsSchema,
   PsiOverridesSchema,
+  RoamerZoneCapsSchema,
   SpriteOverridesSchema,
   StoryTriggersSchema,
   CutscenesSchema,
@@ -67,6 +68,8 @@ export const ENEMY_ACTION_EFFECTS_SOURCE = "content/enemy-action-effects.json";
 export const ENEMY_ACTION_EFFECTS_OUTPUT = "enemy-action-effects.json";
 export const BATTLE_RULES_SOURCE = "content/battle-rules.json";
 export const BATTLE_RULES_OUTPUT = "battle-rules.json";
+export const ROAMER_ZONE_CAPS_SOURCE = "content/roamer-zone-caps.json";
+export const ROAMER_ZONE_CAPS_OUTPUT = "roamer-zone-caps.json";
 export const STORY_TRIGGERS_SOURCE = "content/triggers.json";
 export const STORY_TRIGGERS_OUTPUT = "triggers.json";
 export const CUTSCENES_SOURCE = "content/cutscenes.json";
@@ -149,6 +152,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
   await validateBossBattleDialogue(BOSS_BATTLE_DIALOGUE_SOURCE);
   await validateEnemyActionEffects(ENEMY_ACTION_EFFECTS_SOURCE);
+  await validateRoamerZoneCaps(ROAMER_ZONE_CAPS_SOURCE);
   await Promise.all([
     copyJsonToGenerated(STORY_TRIGGERS_SOURCE, out, STORY_TRIGGERS_OUTPUT),
     copyJsonToGenerated(CUTSCENES_SOURCE, out, CUTSCENES_OUTPUT),
@@ -167,6 +171,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyOptionalJsonToGenerated(BOSS_BATTLE_DIALOGUE_SOURCE, out, BOSS_BATTLE_DIALOGUE_OUTPUT),
     copyOptionalJsonToGenerated(ENEMY_ACTION_EFFECTS_SOURCE, out, ENEMY_ACTION_EFFECTS_OUTPUT),
     copyJsonToGenerated(BATTLE_RULES_SOURCE, out, BATTLE_RULES_OUTPUT),
+    copyJsonToGenerated(ROAMER_ZONE_CAPS_SOURCE, out, ROAMER_ZONE_CAPS_OUTPUT),
     copyJsonToGenerated(MUSIC_MANIFEST_SOURCE, out, MUSIC_MANIFEST_OUTPUT),
     copyOptionalJsonToGenerated(SECTOR_MUSIC_SOURCE, out, SECTOR_MUSIC_OUTPUT),
     copyOptionalJsonToGenerated(COLLISION_OVERRIDES_SOURCE, out, COLLISION_OVERRIDES_OUTPUT),
@@ -227,6 +232,10 @@ async function validatePsiOverrides(source: string): Promise<void> {
 
 async function validateBattleRules(source: string): Promise<void> {
   BattleRulesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateRoamerZoneCaps(source: string): Promise<void> {
+  RoamerZoneCapsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateEnemyActionEffects(source: string): Promise<void> {

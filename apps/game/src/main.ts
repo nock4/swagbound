@@ -9,8 +9,10 @@ import { WorldScene } from "./worldScene";
 import { UiScene } from "./uiScene";
 import { FallbackScene } from "./fallbackScene";
 import { BattleScene } from "./battleScene";
+import { GameOverScene } from "./gameOverScene";
 import { SourceCheckScene } from "./sourceCheckScene";
 import { TitleMenuScene } from "./titleMenuScene";
+import { buildTitleMenuData } from "./gameStartTargets";
 import { FilingIntakeScene } from "./filingIntakeScene";
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import type { EncounterAdvantage } from "./battleLogic";
@@ -123,32 +125,6 @@ class BootScene extends Phaser.Scene {
       if (!introDisabled && !openingResolution.resolved) {
         console.warn("New-game opening unresolved; using fallback intro.", openingResolution.reason);
       }
-      const baseWorld = {
-        gameData: data,
-        saveSlot: DEFAULT_SAVE_SLOT,
-        saveSlots: SAVE_SLOTS
-      };
-      // NEW GAME target: the world, which runs the in-game opening when resolved.
-      const newGameWorldData = {
-        ...baseWorld,
-        saveState: null,
-        ...(openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
-      };
-      // NEW GAME flow: spawn Bosch in his bedroom and run the in-world wake-up +
-      // knock cutscene on the real EB map.
-      const newGameTarget = {
-        sceneKey: "filing-intake",
-        data: {
-          nextSceneKey: "chunked-world",
-          nextSceneData: newGameWorldData
-        },
-        keepMusicPlaying: true
-      };
-      // CONTINUE target: the world with the loaded save (null when no save exists).
-      const continueTarget = saveBlob !== null
-        ? { sceneKey: "chunked-world", data: { ...baseWorld, saveState } }
-        : null;
-
       if (introDisabled) {
         // Dev fast-path (?nointro): skip the title menu AND the in-world bedroom
         // wake, spawning the player controllable immediately (honoring ?spawn) so
@@ -156,18 +132,18 @@ class BootScene extends Phaser.Scene {
         // ?wake when you specifically want to exercise the opening sequence.
         const wantWake = new URLSearchParams(globalThis.location?.search ?? "").has("wake");
         this.scene.start("chunked-world", {
-          ...baseWorld,
+          gameData: data,
+          saveSlot: DEFAULT_SAVE_SLOT,
+          saveSlots: SAVE_SLOTS,
           saveState,
           ...(wantWake && saveBlob === null && openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
         });
         return;
       }
-      this.scene.start("title-menu", {
-        newGameTarget,
-        continueTarget,
-        hasSave: saveBlob !== null,
-        musicManifest: data.musicManifest
-      });
+      this.scene.start("title-menu", buildTitleMenuData(data, {
+        saveSlot: DEFAULT_SAVE_SLOT,
+        saveSlots: SAVE_SLOTS
+      }));
       return;
     }
     if (data.world?.available && !("mode" in data.world) && data.world.images) {
@@ -461,7 +437,7 @@ new Phaser.Game({
   height: 448,
   backgroundColor: "#000000",
   pixelArt: true,
-  scene: [BootScene, TitleMenuScene, FilingIntakeScene, Act1IntroScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, SourceCheckScene],
+  scene: [BootScene, TitleMenuScene, FilingIntakeScene, Act1IntroScene, IntroScene, WorldScene, ChunkedWorldScene, UiScene, FallbackScene, BattleScene, GameOverScene, SourceCheckScene],
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH

@@ -437,6 +437,34 @@ describe("loadGameData", () => {
     });
   });
 
+  it("loads roamer zone caps from the generated overlay", async () => {
+    vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
+      const path = String(url);
+      if (path.endsWith("/roamer-zone-caps.json")) {
+        return jsonResponse({
+          schema: "swagbound.roamer-zone-caps.v1",
+          zones: [{
+            id: "act1",
+            rect: { x: 0, y: 0, w: 4096, h: 4096 },
+            allowedGroups: [1, 2, 3]
+          }]
+        });
+      }
+      throw new Error(`No fixture for ${path}`);
+    }));
+
+    const data = await loadGameData(syntheticManifest());
+
+    expect(data.roamerZoneCaps).toEqual({
+      schema: "swagbound.roamer-zone-caps.v1",
+      zones: [{
+        id: "act1",
+        rect: { x: 0, y: 0, w: 4096, h: 4096 },
+        allowedGroups: [1, 2, 3]
+      }]
+    });
+  });
+
   it("loads the generated music manifest overlay", async () => {
     vi.stubGlobal("fetch", vi.fn(async (url: unknown) => {
       const path = String(url);

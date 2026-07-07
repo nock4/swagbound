@@ -1,26 +1,52 @@
-import type { EncounterSector } from "@eb/schemas";
+import type { BattleRules, EncounterSector, RoamerZoneCaps } from "@eb/schemas";
 import type { Facing } from "./playerController";
 
 export type EncounterRng = () => number; // returns [0, 1)
 
+export type WorldPoint = { x: number; y: number };
+
+export type RoamerGroupFilterOptions = {
+  battleRules?: Pick<BattleRules, "unescapableGroups">;
+  roamerZoneCaps?: RoamerZoneCaps;
+  worldPixel?: WorldPoint;
+};
+
+export const STORY_BOSS_ROAMER_EXCLUSION_GROUPS = [
+  55,
+  137,
+  172,
+  402,
+  424,
+  448,
+  449,
+  474
+] as const;
+
 /**
  * Pick which enemy group should spawn as a VISIBLE roaming enemy in a danger
  * sector. Unlike the old per-step RNG roll, this does not gate on the encounter
- * rate (rate controls how MANY roamers a sector keeps — see sectorSpawnBudget).
- * It chooses a sub-group weighted by its rate, then an enemy group weighted by
- * its probability. Returns null for safe sectors or when the event flag gate
- * isn't satisfied.
+ * rate (rate controls how MANY roamers a sector keeps, see sectorSpawnBudget).
+ * It chooses a sub-group weighted by its rate, then an eligible enemy group
+ * weighted by its probability. Returns null for safe sectors, when the event
+ * flag gate is not satisfied, or when all candidates are blocked by story-boss
+ * exclusions or zone caps.
  */
 export function selectSectorEnemyGroup(
   sector: EncounterSector | undefined,
   rng: EncounterRng,
-  options: { isFlagSet?: (flag: number) => boolean } = {}
+  options: { isFlagSet?: (flag: number) => boolean } & RoamerGroupFilterOptions = {}
 ): number | null {
   if (!sector || !eventFlagSatisfied(sector.eventFlag, options.isFlagSet)) {
     return null;
   }
+  const eligibleSubGroups = sector.subGroups
+    .map((entry) => ({
+      ...entry,
+      candidates: entry.candidates.filter((candidate) => roamerGroupAllowed(candidate.enemyGroup, options))
+    }))
+    .filter((entry) => entry.candidates.length > 0);
   const subGroup = pickWeighted(
-    sector.subGroups.map((entry) => ({ value: entry, weight: entry.rate })),
+    eligibleSubGroups.map((entry) => ({ value: entry, weight: entry.rate })),
     rng
   );
   if (!subGroup) {
@@ -31,6 +57,35 @@ export function selectSectorEnemyGroup(
     rng
   );
   return enemyGroup ?? null;
+}
+
+export function roamerGroupAllowed(groupId: number, options: RoamerGroupFilterOptions = {}): boolean {
+  const blockedGroups = roamerBlockedGroupSet(options.battleRules);
+  if (blockedGroups.has(groupId)) {
+    return false;
+  }
+  const zoneAllowedGroups = allowedGroupsForRoamerZone(options.roamerZoneCaps, options.worldPixel);
+  return !zoneAllowedGroups || zoneAllowedGroups.has(groupId);
+}
+
+function roamerBlockedGroupSet(battleRules: Pick<BattleRules, "unescapableGroups"> | undefined): Set<number> {
+  // Story bosses and unescapable scripted fights are gates, not ambient enemies.
+  // They must never leak into normal roaming or random encounter tables.
+  return new Set([
+    ...STORY_BOSS_ROAMER_EXCLUSION_GROUPS,
+    ...(battleRules?.unescapableGroups ?? [])
+  ]);
+}
+
+function allowedGroupsForRoamerZone(
+  caps: RoamerZoneCaps | undefined,
+  worldPixel: WorldPoint | undefined
+): Set<number> | undefined {
+  if (!caps || !worldPixel) {
+    return undefined;
+  }
+  const zone = caps.zones.find((entry) => pointInRect(worldPixel, entry.rect));
+  return zone ? new Set(zone.allowedGroups) : undefined;
 }
 
 /**
@@ -92,6 +147,10 @@ function eventFlagSatisfied(eventFlag: number | undefined, isFlagSet?: (flag: nu
     return true;
   }
   return Boolean(isFlagSet?.(eventFlag));
+}
+
+function pointInRect(point: WorldPoint, rect: { x: number; y: number; w: number; h: number }): boolean {
+  return point.x >= rect.x && point.x < rect.x + rect.w && point.y >= rect.y && point.y < rect.y + rect.h;
 }
 
 function pickWeighted<T>(items: Array<{ value: T; weight: number }>, rng: EncounterRng): T | undefined {

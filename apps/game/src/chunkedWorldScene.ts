@@ -631,11 +631,14 @@ const CUTSCENE_ACTOR_RUN_MULTIPLIER = 1.5;
 const CUTSCENE_MOVE_DEMO_REFERENCE = "cutsceneMoveDemo.main";
 const DEFAULT_HOTEL_REST_COST = 100;
 const SOURCE_CHECK_SESSION_REGISTRY_KEY = "source-check-session";
+const DEV_PINS_REGISTRY_KEY = "dev-annotation-pins";
 
 type SourceCheckSessionState = {
   attempts: Record<string, number>;
   failedAt: Record<string, { x: number; y: number }>;
 };
+
+type DevPinData = { x: number; y: number; n: number };
 
 type TilePoint = { x: number; y: number };
 type ForceEncounterResult =
@@ -1042,6 +1045,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.partyOrderMenu = undefined;
       this.devConsole?.destroy();
       this.devConsole = undefined;
+      this.destroyDevPins();
     });
 
     this.cursors = this.input.keyboard?.createCursorKeys();
@@ -1217,6 +1221,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.applyInteriorRoomMask();
     this.updateCollisionOverlay();
     this.updatePrompt();
+    if (import.meta.env.DEV) {
+      this.renderDevPinsFromRegistry();
+    }
     this.scene.launch("ui", { worldSceneKey: "chunked-world", font: this.data_.font, window: this.data_.window });
     if (this.newGameOpening) {
       this.introMusicHold = true;
@@ -3242,11 +3249,42 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private dropDevPin(x: number, y: number): void {
-    const n = this.devPins.length + 1;
+    const pins = this.devPinData();
+    const n = pins.reduce((max, pin) => Math.max(max, pin.n), 0) + 1;
+    const pin = { x, y, n };
+    this.registry.set(DEV_PINS_REGISTRY_KEY, [...pins, pin]);
+    this.renderDevPin(pin);
+  }
+
+  private devPinData(): DevPinData[] {
+    const value = this.registry.get(DEV_PINS_REGISTRY_KEY);
+    if (!Array.isArray(value)) {
+      return [];
+    }
+    return value.filter((pin): pin is DevPinData =>
+      typeof pin?.x === "number" && typeof pin?.y === "number" && typeof pin?.n === "number"
+    );
+  }
+
+  private renderDevPinsFromRegistry(): void {
+    this.destroyDevPins();
+    for (const pin of this.devPinData()) {
+      this.renderDevPin(pin);
+    }
+  }
+
+  private renderDevPin({ x, y, n }: DevPinData): void {
     const dot = this.add.circle(0, 0, 5, 0xffd23f).setStrokeStyle(1, 0x000000);
     const label = this.add.text(7, -7, String(n), { fontSize: "12px", color: "#ffd23f" }).setStroke("#000000", 3);
     const pin = this.add.container(x, y, [dot, label]).setDepth(120000);
     this.devPins.push(pin);
+  }
+
+  private destroyDevPins(): void {
+    for (const pin of this.devPins) {
+      pin.destroy();
+    }
+    this.devPins = [];
   }
 
   private registerTransitionSfxResume(): void {
@@ -4621,6 +4659,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private showAutosaveNotice(): void {
     this.autosaveNoticeUntilMs = this.time.now + 1600;
     this.publish();
+  }
+
+  private autosaveOpeningHome(): void {
+    if (this.bootSaveState || !this.saveSlots) {
+      return;
+    }
+    this.saveGame(false);
+    this.showAutosaveNotice();
   }
 
   /** PSI Teleport: spin in place, then arrive at the town. */
@@ -6308,6 +6354,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.dialogue.close();
     }
     this.afterDialogueClosed();
+    if (options.completedOpening) {
+      this.autosaveOpeningHome();
+    }
     this.releaseOpeningCutsceneActorHolds();
     const finalPlayer = this.currentPlayerPoint();
     this.newGameStartupRecord = this.startupRecord({
@@ -7151,7 +7200,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     const enemyGroup = selectSectorEnemyGroup(sector, () => this.encounterRng.next(), {
-      isFlagSet: (flag) => this.gameFlags.isSet(flag)
+      isFlagSet: (flag) => this.gameFlags.isSet(flag),
+      battleRules: this.data_.battleRules,
+      roamerZoneCaps: this.data_.roamerZoneCaps,
+      worldPixel: { x: this.playerState.x, y: this.playerState.y }
     });
     if (enemyGroup === null) {
       return;
@@ -7623,7 +7675,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private firstEncounterGroupForCurrentSector(): number | undefined {
     const sector = this.currentEncounterSector();
-    return sector?.subGroups[0]?.candidates[0]?.enemyGroup;
+    return selectSectorEnemyGroup(sector, () => 0, {
+      isFlagSet: (flag) => this.gameFlags.isSet(flag),
+      battleRules: this.data_.battleRules,
+      roamerZoneCaps: this.data_.roamerZoneCaps,
+      worldPixel: { x: this.playerState.x, y: this.playerState.y }
+    }) ?? undefined;
   }
 
   private currentEncounterSector() {

@@ -1,4 +1,5 @@
 import type { EncounterSector } from "@eb/schemas";
+import { roamerGroupAllowed, type RoamerGroupFilterOptions } from "./overworldEnemies";
 
 export type EncounterSectorGrid = {
   sectorWidthTiles: number;
@@ -12,7 +13,7 @@ export type EncounterRoll = {
 
 export type EncounterRollOptions = {
   isFlagSet?: (flag: number) => boolean;
-};
+} & RoamerGroupFilterOptions;
 
 export type EncounterRng = () => number;
 
@@ -46,8 +47,14 @@ export function rollEncounter(
     if (normalizedRoll(rng()) >= rateChance) {
       continue;
     }
+    const eligibleCandidates = subGroup.candidates.filter((candidate) =>
+      roamerGroupAllowed(candidate.enemyGroup, options)
+    );
+    if (eligibleCandidates.length === 0) {
+      continue;
+    }
     const enemyGroup = pickWeighted(
-      subGroup.candidates.map((candidate) => ({
+      eligibleCandidates.map((candidate) => ({
         value: candidate.enemyGroup,
         weight: candidate.probability
       })),
