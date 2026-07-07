@@ -81,7 +81,7 @@ import {
   type BattleEvent
 } from "./battleEvents";
 import { elementalAffinity, psiElementForId } from "./battleAffinities";
-import { applyDefeatReturn, type BattleReturnContext, type BattleReturnOutcome } from "./battleReturn";
+import type { BattleReturnContext, BattleReturnOutcome } from "./battleReturn";
 import {
   DEFAULT_DAMAGE_FLASH_MS,
   attackerLungeOffset,
@@ -2193,32 +2193,19 @@ export class BattleScene extends Phaser.Scene {
     this.transitionPhase_ = "none";
     if (this.returnTo_) {
       const outcome = this.exitOutcome_ ?? this.currentReturnOutcome();
+      if (outcome === "lose") {
+        this.scene.start("game-over", {
+          gameData: this.returnTo_.gameData,
+          saveSlot: this.returnTo_.saveSlot,
+          saveSlots: this.returnTo_.saveSlots
+        });
+        return;
+      }
       const postBattleParty = buildPostBattlePartySnapshot(this.returnTo_.restore.party, this.battle_);
-      const defeatReturn = outcome === "lose"
-        ? applyDefeatReturn({
-          party: postBattleParty,
-          ...(this.returnTo_.restore.defeat?.savedPlayer
-            ? { savedPlayer: this.returnTo_.restore.defeat.savedPlayer }
-            : {}),
-          newGamePlayer: this.returnTo_.restore.defeat?.newGamePlayer ?? {
-            mode: "chunked",
-            x: this.returnTo_.restore.player.x,
-            y: this.returnTo_.restore.player.y,
-            facing: this.returnTo_.restore.player.facing
-          }
-        })
-        : undefined;
       const restore = {
         ...this.returnTo_.restore,
         outcome,
-        ...(defeatReturn ? {
-          player: {
-            x: defeatReturn.player.x,
-            y: defeatReturn.player.y,
-            facing: defeatReturn.player.facing
-          }
-        } : {}),
-        party: defeatReturn?.party ?? postBattleParty,
+        party: postBattleParty,
         encounter: {
           ...this.returnTo_.restore.encounter,
           lastEncounterGroup: this.group_.id

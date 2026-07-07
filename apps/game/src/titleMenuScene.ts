@@ -46,6 +46,7 @@ const PRE_TITLE_GATE_FADE_MS = 300;
 const WAR_STATIC_TEXTURE_COUNT = 6;
 const WAR_STATIC_TEXTURE_WIDTH = 128;
 const WAR_STATIC_TEXTURE_HEIGHT = 112;
+const MENU_CUE_FADE_MS = 70;
 // Dark, brooding track for the opening war-against-milady slide and fresh-game
 // opening. It stays alive across the title-to-world handoff.
 const WAR_CUE = "intro";
@@ -373,6 +374,7 @@ export class TitleMenuScene extends Phaser.Scene {
       this.killWarStaticReveal();
       this.fadeSwap(() => {
         this.phase = "title";
+        this.playCurrentPhaseMusic({ fadeMs: MENU_CUE_FADE_MS });
         this.showSlide(TITLE_SLIDE_KEY);
         this.prompt?.setText("PRESS  Z");
         this.prompt?.setDepth(10);

@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { EncounterSector } from "@eb/schemas";
-import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "../src/overworldEnemies";
+import {
+  STORY_BOSS_ROAMER_EXCLUSION_GROUPS,
+  selectSectorEnemyGroup,
+  sectorSpawnBudget,
+  touchAdvantage
+} from "../src/overworldEnemies";
 
 const sector = (over: Partial<EncounterSector> = {}): EncounterSector => ({
   mapGroup: 4,
@@ -28,6 +33,58 @@ describe("selectSectorEnemyGroup", () => {
     const gated = sector({ eventFlag: 132 });
     expect(selectSectorEnemyGroup(gated, () => 0, { isFlagSet: () => false })).toBeNull();
     expect(selectSectorEnemyGroup(gated, () => 0, { isFlagSet: (flag) => flag === 132 })).toBe(3);
+  });
+
+  it("excludes story bosses and unescapable scripted groups from regular roamers", () => {
+    const blockedBoss = STORY_BOSS_ROAMER_EXCLUSION_GROUPS[0];
+    const bossOnly = sector({
+      subGroups: [{ rate: 8, candidates: [{ enemyGroup: blockedBoss, probability: 1 }] }]
+    });
+    const mixed = sector({
+      subGroups: [{
+        rate: 8,
+        candidates: [
+          { enemyGroup: blockedBoss, probability: 999 },
+          { enemyGroup: 30, probability: 1 },
+          { enemyGroup: 450, probability: 999 }
+        ]
+      }]
+    });
+
+    expect(selectSectorEnemyGroup(bossOnly, () => 0)).toBeNull();
+    expect(selectSectorEnemyGroup(mixed, () => 0.99, {
+      battleRules: { unescapableGroups: [450] }
+    })).toBe(30);
+  });
+
+  it("caps Act 1 zone roamers to the configured easy group list", () => {
+    const caps = {
+      schema: "swagbound.roamer-zone-caps.v1" as const,
+      zones: [{
+        id: "act1",
+        rect: { x: 0, y: 0, w: 4096, h: 4096 },
+        allowedGroups: [1, 2, 3]
+      }]
+    };
+    const lateGameSector = sector({
+      subGroups: [{
+        rate: 8,
+        candidates: [
+          { enemyGroup: 402, probability: 99 },
+          { enemyGroup: 384, probability: 99 },
+          { enemyGroup: 2, probability: 1 }
+        ]
+      }]
+    });
+
+    expect(selectSectorEnemyGroup(lateGameSector, () => 0.5, {
+      roamerZoneCaps: caps,
+      worldPixel: { x: 2112, y: 1760 }
+    })).toBe(2);
+    expect(selectSectorEnemyGroup(lateGameSector, () => 0.5, {
+      roamerZoneCaps: caps,
+      worldPixel: { x: 5000, y: 1760 }
+    })).toBe(384);
   });
 });
 

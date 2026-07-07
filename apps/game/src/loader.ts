@@ -30,6 +30,7 @@ import {
   OverworldInteractablesSchema,
   PsiCollectionSchema,
   PsiOverridesSchema,
+  RoamerZoneCapsSchema,
   resolveScriptReference,
   resolveScriptReferenceFlow,
   ScriptCollectionSchema,
@@ -78,6 +79,7 @@ import {
   type Cutscenes,
   type PsiCollection,
   type PsiOverrides,
+  type RoamerZoneCaps,
   type ScriptCollection,
   type ShopData,
   type SpriteOverrides,
@@ -112,6 +114,7 @@ const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
 const ENEMY_STAT_OVERRIDES_FILE = "enemy-stat-overrides.json";
 const ENEMY_ACTION_EFFECTS_FILE = "enemy-action-effects.json";
 const BATTLE_RULES_FILE = "battle-rules.json";
+const ROAMER_ZONE_CAPS_FILE = "roamer-zone-caps.json";
 const STORY_TRIGGERS_FILE = "triggers.json";
 const MUSIC_MANIFEST_FILE = "music-manifest.json";
 const SECTOR_MUSIC_FILE = "sector-music.json";
@@ -152,6 +155,7 @@ export type GameData = {
   encounters?: Encounters;
   battle?: BattleData;
   battleRules?: BattleRules;
+  roamerZoneCaps?: RoamerZoneCaps;
   enemyActionEffects?: EnemyActionEffects;
   musicManifest?: MusicManifest;
   sectorMusic?: SectorMusic;
@@ -288,6 +292,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     encounters,
     battle,
     battleRules,
+    roamerZoneCaps,
     enemyOverrides,
     enemyStatOverrides,
     enemyActionEffects,
@@ -336,6 +341,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       ? loadJson(`/generated/${manifest.files.battle}`, BattleDataSchema)
       : Promise.resolve(undefined),
     loadJson(`/generated/${BATTLE_RULES_FILE}`, BattleRulesSchema),
+    loadJson(`/generated/${ROAMER_ZONE_CAPS_FILE}`, RoamerZoneCapsSchema),
     loadJson(`/generated/${ENEMY_OVERRIDES_FILE}`, EnemyOverridesSchema),
     loadJson(`/generated/${ENEMY_STAT_OVERRIDES_FILE}`, EnemyStatOverridesSchema),
     loadJson(`/generated/${ENEMY_ACTION_EFFECTS_FILE}`, EnemyActionEffectsSchema),
@@ -431,6 +437,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     encounters,
     battle: resolvedBattle,
     battleRules,
+    roamerZoneCaps,
     enemyActionEffects,
     musicManifest,
     sectorMusic,

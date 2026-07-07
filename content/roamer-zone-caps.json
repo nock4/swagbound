@@ -1,0 +1,28 @@
+{
+  "schema": "swagbound.roamer-zone-caps.v1",
+  "comment": "Runtime caps for regular roaming/random encounter groups. Act 1 Morningside uses a curated easy list because raw EB sector tables in the northwest quadrant include late-game groups.",
+  "zones": [
+    {
+      "id": "act1-morningside-northwest-quadrant",
+      "comment": "Fresh-run Act 1 region before act1:complete, bounded to world pixels x<4096 and y<4096.",
+      "rect": {
+        "x": 0,
+        "y": 0,
+        "w": 4096,
+        "h": 4096
+      },
+      "allowedGroups": [
+        1,
+        2,
+        3,
+        8,
+        9,
+        10,
+        12,
+        13,
+        14,
+        31
+      ]
+    }
+  ]
+}

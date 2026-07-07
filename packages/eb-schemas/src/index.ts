@@ -1817,6 +1817,26 @@ export const BattleRulesSchema = z.object({
   unescapableGroups: z.array(z.number().int().nonnegative())
 }).strict();
 
+const RoamerZoneRectSchema = z.object({
+  x: z.number(),
+  y: z.number(),
+  w: z.number().positive(),
+  h: z.number().positive()
+}).strict();
+
+const RoamerZoneCapSchema = z.object({
+  id: z.string().min(1),
+  comment: z.string().optional(),
+  rect: RoamerZoneRectSchema,
+  allowedGroups: z.array(z.number().int().nonnegative()).min(1)
+}).strict();
+
+export const RoamerZoneCapsSchema = z.object({
+  schema: z.literal("swagbound.roamer-zone-caps.v1"),
+  comment: z.string().optional(),
+  zones: z.array(RoamerZoneCapSchema)
+}).strict();
+
 export const FontGlyphSheetSchema = z.object({
   id: z.number().int().nonnegative(),
   file: z.string(),
@@ -2159,6 +2179,7 @@ export type EncounterSector = z.infer<typeof EncounterSectorSchema>;
 export type Encounters = z.infer<typeof EncountersSchema>;
 export type BattleData = z.infer<typeof BattleDataSchema>;
 export type BattleRules = z.infer<typeof BattleRulesSchema>;
+export type RoamerZoneCaps = z.infer<typeof RoamerZoneCapsSchema>;
 export type BattleEnemy = z.infer<typeof BattleEnemySchema>;
 export type BattleGroup = z.infer<typeof BattleGroupSchema>;
 export type BattleBackground = z.infer<typeof BattleBackgroundSchema>;

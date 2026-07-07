@@ -65,6 +65,31 @@ describe("encounter rolls", () => {
     expect(rollEncounter(undefined, sequence([0]))).toBeNull();
     expect(rollEncounter(sector, sequence([0.5]))).toBeNull();
   });
+
+  it("filters story bosses, unescapable groups, and zone-capped groups before picking candidates", () => {
+    const sector = encounterSector({
+      rate: 128,
+      candidates: [
+        { enemyGroup: 55, probability: 99 },
+        { enemyGroup: 450, probability: 99 },
+        { enemyGroup: 384, probability: 99 },
+        { enemyGroup: 3, probability: 1 }
+      ]
+    });
+
+    expect(rollEncounter(sector, sequence([0, 0.5]), {
+      battleRules: { unescapableGroups: [450] },
+      roamerZoneCaps: {
+        schema: "swagbound.roamer-zone-caps.v1",
+        zones: [{
+          id: "act1",
+          rect: { x: 0, y: 0, w: 4096, h: 4096 },
+          allowedGroups: [1, 2, 3]
+        }]
+      },
+      worldPixel: { x: 2112, y: 1760 }
+    })).toEqual({ enemyGroup: 3 });
+  });
 });
 
 function encounterSector(options: {
