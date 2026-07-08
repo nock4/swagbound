@@ -2,16 +2,21 @@ import { describe, expect, it } from "vitest";
 import type { BattleEnemy, CharacterCollection, CharacterData, ItemData, PsiData } from "@eb/schemas";
 import {
   createBattleState,
+  advanceBattleRound,
+  outcome,
+  tickBattleMeters,
   withCombatant,
   type BattleActor,
   type BattleState
 } from "../src/battleLogic";
 import {
+  autoPassBlockedPartyCommands,
   applyRoundStartGuardStance,
   encounterAdvantageTurnOrder,
   jitteredTurnOrder,
   MIN_RUN_SUCCESS_CHANCE,
   nextInputState,
+  partyCommandInputOrder,
   partyInputOrder,
   resolveRoundStartPriority,
   resolveRoundStep,
@@ -37,6 +42,27 @@ describe("partyInputOrder", () => {
     battle = killActor(battle, actor("party", 1));
 
     expect(partyInputOrder(battle)).toEqual([actor("party", 0), actor("party", 2)]);
+  });
+
+  it("omits status-gated members from command input but queues them for auto-pass execution", () => {
+    let battle = createBattleState(opponentA, {
+      characters: characters([partyA, partyB, partyC])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      statuses: [{ ailment: "paralyzed" }]
+    });
+    battle = withCombatant(battle, actor("party", 2), {
+      ...battle.party[2],
+      statuses: [{ ailment: "asleep" }]
+    });
+
+    expect(partyInputOrder(battle)).toEqual([actor("party", 0), actor("party", 1), actor("party", 2)]);
+    expect(partyCommandInputOrder(battle)).toEqual([actor("party", 1)]);
+    expect(autoPassBlockedPartyCommands(battle)).toEqual([
+      { partySlot: 0, command: "BASH" },
+      { partySlot: 2, command: "BASH" }
+    ]);
   });
 });
 
@@ -781,6 +807,82 @@ describe("round-start priority layer", () => {
     expect(battle.party[0].hp.target).toBe(0);
     expect(result.skipped).toBe(false);
     expect(result.state.enemies[0].hp.target).toBeLessThan(opponentA.hp);
+  });
+
+  it("auto-passes a solo paralyzed member so the round resolves, enemies act, and recovery rolls", () => {
+    let battle = createBattleState(enemy(43, "PRESSURE_ENEMY", {
+      offense: 18,
+      speed: 3,
+      actions: actionSet(enemyAction(430, 1, 1))
+    }), {
+      characters: characters([partyA])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      statuses: [{ ailment: "paralyzed" }]
+    });
+
+    const autoPass = autoPassBlockedPartyCommands(battle);
+    const priority = resolveRoundStartPriority(battle, autoPass, () => 0.5);
+    const order = jitteredTurnOrder(priority.state, priority.queued, sequenceRng([0.5, 0.5]));
+    const partyStep = resolveRoundStep(priority.state, actor("party", 0), autoPass[0], () => 0);
+    const enemyStep = resolveRoundStep(partyStep.state, actor("enemy", 0), undefined, () => 0.5);
+    const advanced = advanceBattleRound(enemyStep.state);
+
+    expect(partyCommandInputOrder(battle)).toEqual([]);
+    expect(autoPass).toEqual([{ partySlot: 0, command: "BASH" }]);
+    expect(order).toEqual(expect.arrayContaining([actor("party", 0), actor("enemy", 0)]));
+    expect(partyStep.skipped).toBe(true);
+    expect(partyStep.message).toContain("can't move");
+    expect(partyStep.state.party[0].statuses).toBeUndefined();
+    expect(enemyStep.skipped).toBe(false);
+    expect(enemyStep.state.party[0].hp.target).toBeLessThan(partyStep.state.party[0].hp.target);
+    expect(advanced.roundNumber).toBe(battle.roundNumber + 1);
+  });
+
+  it("lets a permanently unable solo member keep passing turns until enemies win", () => {
+    let battle = createBattleState(enemy(44, "FINISHER", {
+      offense: 60,
+      speed: 1,
+      actions: actionSet(enemyAction(440, 1, 1))
+    }), {
+      characters: characters([character(0, "LOCKED_SOLO", { maxHp: 24, defense: 0, speed: 30 })])
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      defense: 0,
+      statuses: [{ ailment: "paralyzed" }]
+    });
+
+    let enemyActions = 0;
+    let passedTurns = 0;
+    for (let round = 0; round < 6 && outcome(battle) === "ongoing"; round += 1) {
+      const autoPass = autoPassBlockedPartyCommands(battle);
+      expect(autoPass).toEqual([{ partySlot: 0, command: "BASH" }]);
+      const priority = resolveRoundStartPriority(battle, autoPass, () => 0.5);
+      let roundState = priority.state;
+      const order = jitteredTurnOrder(priority.state, priority.queued, sequenceRng([0.5, 0.5]));
+      for (const turnActor of order) {
+        if (outcome(roundState) !== "ongoing") {
+          break;
+        }
+        const queued = turnActor.side === "party"
+          ? priority.queued.find((entry) => entry.partySlot === turnActor.index)
+          : undefined;
+        const result = resolveRoundStep(roundState, turnActor, queued, () => 0.5);
+        if (turnActor.side === "party") {
+          passedTurns += 1;
+        } else {
+          enemyActions += 1;
+        }
+        roundState = tickBattleMeters(result.state, 100_000);
+      }
+      battle = outcome(roundState) === "ongoing" ? advanceBattleRound(roundState) : roundState;
+    }
+
+    expect(passedTurns).toBeGreaterThan(0);
+    expect(enemyActions).toBeGreaterThan(0);
+    expect(outcome(battle)).toBe("lose");
   });
 });
 

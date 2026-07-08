@@ -58,7 +58,9 @@ import {
 } from "./battleLogic";
 import {
   encounterAdvantageTurnOrder,
+  autoPassBlockedPartyCommands,
   nextInputState,
+  partyCommandInputOrder,
   partyInputOrder,
   resolveRoundStep,
   resolveRoundStartPriority,
@@ -1044,18 +1046,32 @@ export class BattleScene extends Phaser.Scene {
     if (this.handleBattleOutcome()) {
       return;
     }
-    const order = partyInputOrder(this.battle_);
-    if (order.length === 0) {
+    const livingOrder = partyInputOrder(this.battle_);
+    if (livingOrder.length === 0) {
       this.phase_ = "lose";
       this.transitionPhase_ = "none";
       this.markTerminalPhaseStarted();
       this.currentActor_ = null;
       return;
     }
+    const autoPassQueue = autoPassBlockedPartyCommands(this.battle_);
+    const order = partyCommandInputOrder(this.battle_);
+    if (order.length === 0) {
+      this.inputState_ = {
+        ...initialBattleRoundInputState(),
+        queue: autoPassQueue
+      };
+      this.queuedCommands_ = autoPassQueue;
+      this.beginExecutionPhase();
+      return;
+    }
     this.phase_ = "command-input";
     this.transitionPhase_ = "none";
-    this.inputState_ = initialBattleRoundInputState();
-    this.queuedCommands_ = [];
+    this.inputState_ = {
+      ...initialBattleRoundInputState(),
+      queue: autoPassQueue
+    };
+    this.queuedCommands_ = autoPassQueue;
     this.executionOrder_ = [];
     this.priorityStep_ = null;
     this.executionStepIndex_ = 0;
@@ -2154,7 +2170,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private syncMenuFromInputState(): void {
-    const order = partyInputOrder(this.battle_);
+    const order = partyCommandInputOrder(this.battle_);
     this.roundOrder_ = this.phase_ === "execution" ? this.executionOrder_ : order;
     this.currentActor_ = order[this.inputState_.memberCursor] ?? null;
     this.queuedCommands_ = [...this.inputState_.queue];
