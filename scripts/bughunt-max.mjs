@@ -36,13 +36,10 @@ fs.rmSync(OUT, { recursive: true, force: true });
 fs.mkdirSync(path.join(OUT, "shots"), { recursive: true });
 
 const today = sh("date +%Y%m%d").trim();
-const branch = `overnight/bughunt-max-${today}`;
-try {
-  sh(`git checkout -q -B ${branch}`);
-  log(`branch ${branch}`);
-} catch (error) {
-  log(`branch checkout skipped: ${String(error.stderr || error.message || error).trim().slice(0, 220)}`);
-}
+// NO branch switching: the smoke run silently moving HEAD stranded a commit on
+// an overnight branch (recovered as PR #169). This campaign is read-only over
+// the repo; it observes whatever is checked out and never touches git state.
+log(`campaign ${today} on branch ${sh("git branch --show-current").trim()} (read-only, no git ops)`);
 
 let vite;
 let browser;
