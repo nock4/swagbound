@@ -1555,6 +1555,13 @@
       "w": 8,
       "h": 8,
       "note": "[gen:reachability] stamped slice-10-18-192 art-changed walkable band"
+    },
+    {
+      "x": 7544,
+      "y": 322,
+      "w": 20,
+      "h": 16,
+      "note": "seal foot-box dead pocket (Nick pinned twice at ~7550,330; interior chunk 14,0)"
     }
   ]
 }
