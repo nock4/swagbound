@@ -61,6 +61,8 @@ export type EventWarpDestination = {
 
 export type EventHostDebug = {
   running: boolean;
+  reference?: string;
+  npcId?: number;
   currentEffectKind?: EventEffectKind;
   effectsDispatched: number;
   effectsByKind: Partial<Record<EventEffectKind, number>>;
@@ -214,7 +216,12 @@ export class RuntimeEventHost implements EventExecutorHost {
     this.dialogueOverrideChecked = false;
     this.dialogueOverrideConsumed = false;
     this.dialogueOverridePages = undefined;
-    this.debugState = { ...emptyDebug(), running: true };
+    this.debugState = {
+      ...emptyDebug(),
+      running: true,
+      reference: context.reference,
+      ...(context.npcId !== undefined ? { npcId: context.npcId } : {})
+    };
   }
 
   finish(result?: NonNullable<EventHostDebug["result"]>): void {

@@ -1,7 +1,12 @@
 import Phaser from "phaser";
 import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
-import { CutsceneRunner, type CutsceneFacing, type CutsceneHost } from "./cutsceneRunner";
+import {
+  CutsceneRunner,
+  cutsceneMoveTimeoutMsForDistance,
+  type CutsceneFacing,
+  type CutsceneHost
+} from "./cutsceneRunner";
 import { BossPlacementEditor, isBossEditEnabled, type BossEditorEntry, type BossFacing } from "./bossPlacementEditor";
 import { CollisionOverrideEditor, isCollisionEditEnabled } from "./collisionOverrideEditor";
 import { TeleportMenu, type TeleportTown } from "./teleportMenu";
@@ -104,6 +109,7 @@ import {
   type EventWarpDestination,
   type NormalizedActorMoveSelector
 } from "./eventHost";
+import { EventSequenceWatchdog, cutsceneRunnerProgressToken } from "./eventSequenceWatchdog";
 import { GameFlags } from "./gameFlags";
 import { behaviorForNpc, interactionEventsHaveServiceEffect } from "./npcBehaviors";
 import { cutsceneNpcHiddenFlag, isNpcVisibleForRuntimeFlags } from "./npcVisibility";
@@ -630,9 +636,10 @@ const INTERIOR_SECTOR_AREA_RECT_PADS: Record<number, { bottom?: number; right?: 
   1059874556: { bottom: 16 }
 };
 const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
-const CUTSCENE_ACTOR_MOVE_TIMEOUT_MS = 8_000;
 const CUTSCENE_ACTOR_RUN_MULTIPLIER = 1.5;
 const CUTSCENE_MOVE_DEMO_REFERENCE = "cutsceneMoveDemo.main";
+const CUTSCENE_WATCHDOG_TIMEOUT_MS = 2_500;
+const EVENT_SEQUENCE_WATCHDOG_TIMEOUT_MS = 2_500;
 const DEFAULT_HOTEL_REST_COST = 100;
 const SOURCE_CHECK_SESSION_REGISTRY_KEY = "source-check-session";
 const DEV_PINS_REGISTRY_KEY = "dev-annotation-pins";
@@ -798,6 +805,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private recruitNoticeText = "";
   private devToastUntilMs = 0;
   private devToastText = "";
+  private readonly cutsceneWatchdog = new EventSequenceWatchdog(CUTSCENE_WATCHDOG_TIMEOUT_MS);
+  private readonly eventSequenceWatchdog = new EventSequenceWatchdog(EVENT_SEQUENCE_WATCHDOG_TIMEOUT_MS);
   /** solidRows snapshot (post-authored-overrides) the paint editor repaints from. */
   private editorBaseSolidRows?: string[];
   private overworldEnemies = new Map<string, OverworldEnemyRuntime>();
@@ -1288,9 +1297,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.stepNpcs(delta);
     this.eventSequence?.update(delta);
     this.stepCutsceneMove(delta);
+    this.updateEventSequenceWatchdog();
     this.updateDoorTransition(delta);
 
     this.cutsceneRunner?.update(delta);
+    this.updateCutsceneWatchdog();
     if (this.cutsceneRunner?.running) {
       // A content cutscene owns the scene: keep the player locked, sync the actor
       // being driven, and skip movement + world-trigger processing this frame.
@@ -1314,6 +1325,29 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.cinematicActive() || this.isDoorFadeActive() || this.binderOverlayOpen;
+    if (import.meta.env.DEV) {
+      // Freeze forensics: name every possible input owner so a stuck player is
+      // diagnosable in one evaluate call (added chasing the post-dialogue freeze).
+      (globalThis as Record<string, unknown>).__inputOwners = () => ({
+        dialogue: this.dialogue.open,
+        eventSeq: Boolean(this.eventSequence?.running),
+        cinematic: this.cinematicActive(),
+        doorFade: this.isDoorFadeActive(),
+        binder: this.binderOverlayOpen,
+        cutscene: Boolean(this.cutsceneRunner?.running),
+        inputLocked: this.playerState.inputLocked,
+        menu: this.menuState.open,
+        getUpWalk: this.startupGetUpWalkActive,
+        bounds: this.movementBounds(),
+        roomBounds: this.activeRoomBounds ?? null,
+        kbEnabled: this.input.keyboard?.enabled ?? null,
+        inputEnabled: this.input.enabled,
+        sceneActive: this.scene.isActive(),
+        scenePaused: this.scene.isPaused(),
+        velocity: { x: this.playerState.velocityX, y: this.playerState.velocityY },
+        moving: this.playerState.moving
+      });
+    }
     if (inputOwned && !this.playerState.inputLocked) {
       lockPlayer(this.playerState, this.playerFrames);
     } else if (!inputOwned && this.playerState.inputLocked) {
@@ -5477,6 +5511,62 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }) ?? false;
   }
 
+  private updateEventSequenceWatchdog(): void {
+    const sequence = this.eventSequence;
+    const running = Boolean(sequence?.running);
+    const debug = sequence?.debug();
+    const result = this.eventSequenceWatchdog.update({
+      running,
+      dialogueOpen: this.dialogue.open,
+      nowMs: this.time.now,
+      progressToken: running && debug ? this.eventSequenceProgressToken(debug) : "idle"
+    });
+    if (!running || !debug || !result.timedOut) {
+      return;
+    }
+    this.terminateHungEventSequence(debug, result.idleMs);
+  }
+
+  private eventSequenceProgressToken(debug: EventHostDebug): string {
+    const records = debug.records;
+    const move = this.cutsceneMoveDebug;
+    const position = move.position ? `${move.position.x},${move.position.y}` : "none";
+    const moveToken = move.active
+      ? `${move.actor ?? "actor"}:${position}:${move.arrived ? "arrived" : "moving"}`
+      : "inactive";
+    return [
+      debug.reference ?? "unknown",
+      debug.npcId ?? "none",
+      debug.effectsDispatched,
+      debug.currentEffectKind ?? "none",
+      records.actorMoves,
+      records.unsupported,
+      this.dialogue.open ? "dialogue-open" : "dialogue-closed",
+      this.dialogue.opens,
+      this.dialogue.closes,
+      this.dialogue.pageIndex,
+      moveToken
+    ].join("|");
+  }
+
+  private terminateHungEventSequence(debug: EventHostDebug, idleMs: number): void {
+    const reference = debug.reference ?? "unknown";
+    const npcId = debug.npcId ?? this.activeNpcDialogue?.id;
+    console.warn("[event watchdog] terminated stuck event sequence", {
+      reference,
+      ...(npcId !== undefined ? { npcId } : {}),
+      idleMs: Math.round(idleMs),
+      eventDebug: debug
+    });
+    this.eventSequence?.abort("watchdog_idle");
+    this.eventSequenceWatchdog.reset();
+    if (import.meta.env.DEV) {
+      this.showDevToast(`event watchdog: terminated ${reference}`);
+      this.updatePrompt();
+      this.publish();
+    }
+  }
+
   private requestCutsceneActorMove(effect: ActorMoveEffect): boolean {
     if (this.cutsceneMove) {
       return false;
@@ -5495,6 +5585,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const path = this.navmesh ? findMeshPath(this.navmesh, runtime.state, requestedTarget) : undefined;
     const waypoints = path && path.length > 1 ? path.slice(1) : undefined;
     const target = waypoints?.at(-1) ?? requestedTarget;
+    const maxDurationMs = cutsceneMoveTimeoutMsForDistance(cutsceneMoveRouteDistancePx(runtime.state, waypoints, target));
     const actorLabel = cutsceneActorLabel(actor);
     this.cutsceneMove = {
       actor,
@@ -5506,7 +5597,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       waypointIndex: 0,
       run: effect.run === true,
       elapsedMs: 0,
-      maxDurationMs: CUTSCENE_ACTOR_MOVE_TIMEOUT_MS
+      maxDurationMs
     };
     if (npc) {
       npc.state.paused = true;
@@ -5556,7 +5647,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     if (move.elapsedMs >= move.maxDurationMs) {
-      this.completeCutsceneMove(false, true);
+      this.completeCutsceneMove(true, true);
       return;
     }
 
@@ -5608,6 +5699,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     const runtime = this.resolveActiveCutsceneMoveActor(move);
+    if (runtime && timedOut) {
+      this.setCutsceneActorPosition(runtime, move.target);
+    }
+    if (timedOut) {
+      console.warn("[cutscene move] timed out; snapping actor to destination", {
+        actor: move.actorLabel,
+        target: move.target,
+        elapsedMs: Math.round(move.elapsedMs),
+        timeoutMs: Math.round(move.maxDurationMs)
+      });
+    }
     this.restoreCutsceneMoveNpc(move);
     this.cutsceneMove = undefined;
     this.cutsceneMoveDebug = {
@@ -5778,10 +5880,57 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
+  private updateCutsceneWatchdog(): void {
+    const running = Boolean(this.cutsceneRunner?.running);
+    const result = this.cutsceneWatchdog.update({
+      running,
+      dialogueOpen: this.dialogue.open,
+      nowMs: this.time.now,
+      progressToken: running ? this.cutsceneProgressToken() : "idle"
+    });
+    if (!running || !result.timedOut) {
+      return;
+    }
+    this.terminateHungCutscene(result.idleMs);
+  }
+
+  private cutsceneProgressToken(): string {
+    return cutsceneRunnerProgressToken({
+      cutsceneId: this.activeCutsceneId,
+      stepIndex: this.cutsceneRunner?.currentIndex,
+      dialogueOpen: this.dialogue.open,
+      dialogueOpens: this.dialogue.opens,
+      dialogueCloses: this.dialogue.closes
+    });
+  }
+
+  private terminateHungCutscene(idleMs: number): void {
+    const cutsceneId = this.activeCutsceneId ?? "unknown";
+    console.warn("[cutscene watchdog] terminated stuck cutscene", {
+      cutsceneId,
+      idleMs: Math.round(idleMs),
+      currentIndex: this.cutsceneRunner?.currentIndex,
+      cutsceneMove: this.cutsceneMoveDebug
+    });
+    if (this.cutsceneMove) {
+      this.completeCutsceneMove(true, true);
+    }
+    this.cutsceneRunner?.abort();
+    this.cutsceneWatchdog.reset();
+    if (import.meta.env.DEV) {
+      this.showDevToast(`cutscene watchdog: terminated ${cutsceneId}`);
+      this.updatePrompt();
+      this.publish();
+    }
+  }
+
   private createCutsceneHost(): CutsceneHost {
     return {
       startActorMove: (actor, to, run) => this.requestCutsceneActorMove({ kind: "actorMove", actor, to, run }),
       isActorMoveActive: () => this.cutsceneMove !== undefined,
+      currentActorMoveTimeoutMs: () => this.cutsceneMove?.maxDurationMs,
+      timeoutActorMove: () => this.completeCutsceneMove(true, true),
+      actorPosition: (actor) => this.cutsceneActorPosition(actor),
       faceActor: (actor, dir) => this.setCutsceneActorFacing(actor, dir),
       setActorVisible: (actor, visible) => this.setCutsceneActorVisible(actor, visible),
       startDialogue: (pages) => this.dialogue.start(buildInlineDialoguePages([...pages])),
@@ -5891,6 +6040,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     npc.state.player.animKey = `idle-${dir}`;
     npc.state.player.animFrame = npc.frames[dir][0];
     this.syncNpc(npc);
+  }
+
+  private cutsceneActorPosition(actor: EventActorMoveSelector): { x: number; y: number } | undefined {
+    const normalized = normalizeActorMoveSelector(actor);
+    if (!normalized) {
+      return undefined;
+    }
+    if (normalized.kind === "player") {
+      return { x: this.playerState.x, y: this.playerState.y };
+    }
+    const npc = this.npcRuntimeForActor(normalized);
+    return npc ? { x: npc.state.player.x, y: npc.state.player.y } : undefined;
   }
 
   private warpPlayerToWorldPixel(to: { x: number; y: number }): void {
@@ -8944,6 +9105,21 @@ function scriptCommand(input: Omit<ScriptCommand, "sourceLocation">, line: numbe
 
 function cutsceneActorLabel(actor: NormalizedActorMoveSelector): string {
   return actor.kind === "player" ? "player" : `npc:${actor.npcId}`;
+}
+
+function cutsceneMoveRouteDistancePx(
+  from: { x: number; y: number },
+  waypoints: readonly NavmeshPoint[] | undefined,
+  target: { x: number; y: number }
+): number {
+  let distance = 0;
+  let cursor = from;
+  const points = waypoints && waypoints.length > 0 ? waypoints : [target];
+  for (const point of points) {
+    distance += Math.hypot(point.x - cursor.x, point.y - cursor.y);
+    cursor = point;
+  }
+  return distance;
 }
 
 function roundedPoint(point: { x: number; y: number }): { x: number; y: number } {
