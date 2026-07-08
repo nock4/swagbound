@@ -16,9 +16,10 @@ import {
 
 describe("opening pacing timings", () => {
   it("holds the night long enough for the era card to clear before the pan shots", () => {
-    expect(OPENING_SHOT_ZERO_HOLD_MS).toBe(26_000);
-    expect(OPENING_ERA_TITLE_HOLD_MS + OPENING_ERA_TITLE_FADE_MS).toBe(8_000);
-    expect(OPENING_RUMBLE_INTERVAL_MS).toBe(6_000);
+    expect(OPENING_SHOT_ZERO_HOLD_MS).toBe(4_000);
+    // The card must clear before (or exactly as) the 4s hold ends.
+    expect(OPENING_ERA_TITLE_HOLD_MS + OPENING_ERA_TITLE_FADE_MS).toBeLessThanOrEqual(4_000);
+    expect(OPENING_RUMBLE_INTERVAL_MS).toBe(3_000);
     expect(OPENING_RUMBLE_AMPLITUDE).toBe(0.0015);
   });
 
