@@ -1562,6 +1562,13 @@
       "w": 20,
       "h": 16,
       "note": "seal foot-box dead pocket (Nick pinned twice at ~7550,330; interior chunk 14,0)"
+    },
+    {
+      "x": 7504,
+      "y": 322,
+      "w": 40,
+      "h": 16,
+      "note": "seal FULL dead band left half (Nick pinned 3rd time at 7514,331 via the 7504-7516 gap; completes the 7544 seal)"
     }
   ]
 }
