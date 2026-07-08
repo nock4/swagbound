@@ -12,6 +12,12 @@ export interface CutsceneHost {
   startActorMove(actor: EventActorMoveSelector, to: { x: number; y: number }, run: boolean): boolean;
   /** True while a move started via startActorMove is still in flight. */
   isActorMoveActive(): boolean;
+  /** Optional budget for the currently active move, usually based on route distance. */
+  currentActorMoveTimeoutMs?(): number | undefined;
+  /** Called when the active move exceeds its budget; implementations should snap to the destination. */
+  timeoutActorMove?(actor: EventActorMoveSelector, to: { x: number; y: number }, elapsedMs: number, timeoutMs: number): void;
+  /** Optional fallback used when no active-move budget is provided. */
+  actorPosition?(actor: EventActorMoveSelector): { x: number; y: number } | undefined;
   faceActor(actor: EventActorMoveSelector, dir: CutsceneFacing): void;
   setActorVisible(actor: EventActorMoveSelector, visible: boolean): void;
   startDialogue(pages: readonly string[]): void;
@@ -24,6 +30,22 @@ export interface CutsceneHost {
 }
 
 type CutscenePhase = "running" | "wait" | "move" | "dialogue" | "done";
+type MoveStep = Extract<CutsceneStep, { op: "moveActor" }>;
+
+const CUTSCENE_MOVE_MIN_TIMEOUT_MS = 2_000;
+const CUTSCENE_MOVE_TIMEOUT_PX_PER_SECOND = 30;
+
+export function cutsceneMoveTimeoutMsForDistance(distancePx: number): number {
+  const distance = Number.isFinite(distancePx) ? Math.max(0, distancePx) : 0;
+  return Math.max(CUTSCENE_MOVE_MIN_TIMEOUT_MS, (distance / CUTSCENE_MOVE_TIMEOUT_PX_PER_SECOND) * 1000);
+}
+
+export function cutsceneMoveTimeoutMs(from: { x: number; y: number } | undefined, to: { x: number; y: number }): number {
+  if (!from) {
+    return CUTSCENE_MOVE_MIN_TIMEOUT_MS;
+  }
+  return cutsceneMoveTimeoutMsForDistance(Math.hypot(to.x - from.x, to.y - from.y));
+}
 
 /**
  * Runs an authored cutscene's step sequence frame-by-frame. Instantaneous steps
@@ -36,6 +58,9 @@ export class CutsceneRunner {
   private index = 0;
   private waitMs = 0;
   private phase: CutscenePhase = "running";
+  private moveElapsedMs = 0;
+  private moveTimeoutMs = CUTSCENE_MOVE_MIN_TIMEOUT_MS;
+  private moveStep?: MoveStep;
 
   constructor(
     private readonly steps: readonly CutsceneStep[],
@@ -54,6 +79,15 @@ export class CutsceneRunner {
     return this.index;
   }
 
+  abort(): void {
+    if (this.phase === "done") {
+      return;
+    }
+    this.applyRemainingTerminalState();
+    this.phase = "done";
+    this.onComplete?.();
+  }
+
   update(deltaMs: number): void {
     const dt = Math.max(0, deltaMs);
     switch (this.phase) {
@@ -64,7 +98,12 @@ export class CutsceneRunner {
         }
         break;
       case "move":
+        this.moveElapsedMs += dt;
         if (!this.host.isActorMoveActive()) {
+          this.clearMoveWait();
+          this.next();
+        } else if (this.moveElapsedMs >= this.moveTimeoutMs && this.moveStep) {
+          this.timeoutActiveMove();
           this.next();
         }
         break;
@@ -81,6 +120,12 @@ export class CutsceneRunner {
   private next(): void {
     this.index += 1;
     this.beginFromCurrent();
+  }
+
+  private clearMoveWait(): void {
+    this.moveElapsedMs = 0;
+    this.moveTimeoutMs = CUTSCENE_MOVE_MIN_TIMEOUT_MS;
+    this.moveStep = undefined;
   }
 
   /** Run instantaneous steps until a blocking step or the end of the sequence. */
@@ -135,12 +180,59 @@ export class CutsceneRunner {
         if (!started) {
           return false; // skip, don't soft-lock
         }
+        this.moveStep = step;
+        this.moveElapsedMs = 0;
+        this.moveTimeoutMs = this.host.currentActorMoveTimeoutMs?.()
+          ?? cutsceneMoveTimeoutMs(this.host.actorPosition?.(step.actor), step.to);
         this.phase = "move";
         return true;
       }
       default: {
         const exhaustive: never = step;
         return Boolean(exhaustive);
+      }
+    }
+  }
+
+  private timeoutActiveMove(): void {
+    const step = this.moveStep;
+    if (!step) {
+      return;
+    }
+    if (this.host.timeoutActorMove) {
+      this.host.timeoutActorMove(step.actor, step.to, this.moveElapsedMs, this.moveTimeoutMs);
+    } else {
+      console.warn("[cutscene runner] moveActor timed out", {
+        actor: step.actor,
+        to: step.to,
+        elapsedMs: Math.round(this.moveElapsedMs),
+        timeoutMs: Math.round(this.moveTimeoutMs)
+      });
+    }
+    this.clearMoveWait();
+  }
+
+  private applyRemainingTerminalState(): void {
+    for (let i = this.index; i < this.steps.length; i += 1) {
+      const step = this.steps[i];
+      switch (step.op) {
+        case "showActor":
+          this.host.setActorVisible(step.actor, true);
+          break;
+        case "hideActor":
+          this.host.setActorVisible(step.actor, false);
+          break;
+        case "setFlag":
+          this.host.setGameFlag(step.flag);
+          break;
+        case "clearFlag":
+          this.host.clearGameFlag(step.flag);
+          break;
+        case "eventFlag":
+          this.host.setEventFlag(step.flag, step.set);
+          break;
+        default:
+          break;
       }
     }
   }

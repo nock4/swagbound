@@ -15,6 +15,8 @@ class MockHost implements CutsceneHost {
   moveActive = false;
   dialogueOpen = false;
   moveStartResult = true;
+  moveTimeoutMs = 2000;
+  positions = new Map<string, { x: number; y: number }>();
 
   startActorMove(actor: EventActorMoveSelector, to: { x: number; y: number }, run: boolean): boolean {
     this.log.push(`move:${sel(actor)}->${to.x},${to.y}${run ? ":run" : ""}`);
@@ -23,6 +25,17 @@ class MockHost implements CutsceneHost {
   }
   isActorMoveActive(): boolean {
     return this.moveActive;
+  }
+  currentActorMoveTimeoutMs(): number {
+    return this.moveTimeoutMs;
+  }
+  timeoutActorMove(actor: EventActorMoveSelector, to: { x: number; y: number }, elapsedMs: number, timeoutMs: number): void {
+    this.log.push(`timeout:${sel(actor)}->${to.x},${to.y}:${Math.round(elapsedMs)}/${Math.round(timeoutMs)}`);
+    this.moveActive = false;
+    this.positions.set(sel(actor), to);
+  }
+  actorPosition(actor: EventActorMoveSelector): { x: number; y: number } | undefined {
+    return this.positions.get(sel(actor));
   }
   faceActor(actor: EventActorMoveSelector, dir: CutsceneFacing): void {
     this.log.push(`face:${sel(actor)}:${dir}`);
@@ -141,6 +154,48 @@ describe("CutsceneRunner", () => {
     host.dialogueOpen = false;
     runner.update(16);
     expect(host.log).toEqual(["dialogue:Hello|World", "setFlag:talked"]);
+    expect(runner.running).toBe(false);
+  });
+
+  it("aborts through terminal state effects and the completion callback once", () => {
+    const host = new MockHost();
+    let completed = 0;
+    const steps: CutsceneStep[] = [
+      { op: "dialogue", pages: ["Holding"] },
+      { op: "hideActor", actor: npc(8) },
+      { op: "setFlag", flag: "after" },
+      { op: "eventFlag", flag: 289, set: true },
+      { op: "moveActor", actor: npc(9), to: { x: 5, y: 6 } },
+      { op: "sound", id: "doorOpen" }
+    ];
+    const runner = new CutsceneRunner(steps, host, () => { completed += 1; });
+
+    expect(runner.running).toBe(true);
+    runner.abort();
+    runner.abort();
+
+    expect(runner.running).toBe(false);
+    expect(completed).toBe(1);
+    expect(host.log).toEqual(["dialogue:Holding", "hide:npc8", "setFlag:after", "eventFlag:289:set"]);
+  });
+
+  it("times out a stuck moveActor, snaps it, and continues", () => {
+    const host = new MockHost();
+    host.moveTimeoutMs = 2000;
+    const steps: CutsceneStep[] = [
+      { op: "moveActor", actor: npc(7), to: { x: 90, y: 0 } },
+      { op: "setFlag", flag: "done" }
+    ];
+    const runner = new CutsceneRunner(steps, host);
+
+    expect(host.log).toEqual(["move:npc7->90,0"]);
+    runner.update(1999);
+    expect(runner.running).toBe(true);
+    expect(host.log).toEqual(["move:npc7->90,0"]);
+    runner.update(1);
+
+    expect(host.log).toEqual(["move:npc7->90,0", "timeout:npc7->90,0:2000/2000", "setFlag:done"]);
+    expect(host.positions.get("npc7")).toEqual({ x: 90, y: 0 });
     expect(runner.running).toBe(false);
   });
 
