@@ -2,27 +2,6 @@
   "schema": "swagbound.fg-overrides.v1",
   "clears": [
     {
-      "x": 7500,
-      "y": 768,
-      "w": 116,
-      "h": 64,
-      "note": "Interior room row: clear shared over-occluding foreground component covering pins 7510,768; 7534,768; 7559,768."
-    },
-    {
-      "x": 7600,
-      "y": 992,
-      "w": 16,
-      "h": 24,
-      "note": "Interior right-door potted plant: clear lower pot/frond foreground at pin 7608,1008."
-    },
-    {
-      "x": 7632,
-      "y": 992,
-      "w": 16,
-      "h": 24,
-      "note": "Interior right-door potted plant: clear lower pot/frond foreground at pin 7639,1008."
-    },
-    {
       "x": 1472,
       "y": 1288,
       "w": 64,
@@ -35,20 +14,6 @@
       "w": 56,
       "h": 16,
       "note": "SWAG HOTEL west canopy: clear lower edge that swallows the grass-row player."
-    },
-    {
-      "x": 1536,
-      "y": 1392,
-      "w": 32,
-      "h": 16,
-      "note": "SWAG HOTEL south-edge canopy strip near pin 1600,1400."
-    },
-    {
-      "x": 7500,
-      "y": 728,
-      "w": 116,
-      "h": 40,
-      "note": "Interior room row: head-height band above the 768 pins (player head box spans y-40)"
     }
   ]
 }

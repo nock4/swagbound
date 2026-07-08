@@ -18,7 +18,6 @@ import {
   type TileOverrides
 } from "@eb/schemas";
 import {
-  FTS_CELLS_PER_ARRANGEMENT,
   parseFts,
   drawArrangement,
   decodeArrangementCell,
@@ -63,6 +62,8 @@ const WORLD_DOOR_TYPES = new Set(["door", "stairway", "escalator"]);
 const SCRIPTED_WARP_DOOR_STYLES = new Set([33]);
 const INDOOR_SECTOR_SETTING = "indoors";
 const UNBOUNDED_SECTOR_SETTING = "none";
+const FG_V2_BOTTOM_EDGE_CROP_PX = COLLISION_CELL_SIZE;
+const FG_V2_WALKABLE_FLOOR_SCAN_CELLS_BELOW = 6;
 
 type Issue = ValidationIssue;
 
@@ -118,7 +119,49 @@ export type ComposedRegion = {
   mapTilesetsUsed: Set<number>;
   palettesUsed: Set<string>;
   warnings: Issue[];
+  foregroundDebug?: ForegroundDebugMap;
+  foregroundSummary?: ForegroundPredicateSummary;
 };
+
+export type FgPredicateVersion = "v1" | "v2";
+export type ForegroundReason = "priority" | "occluder" | "wholebody02";
+
+export type ForegroundDebugMap = {
+  originCellX: number;
+  originCellY: number;
+  widthCells: number;
+  heightCells: number;
+  /** 0 = none, 1 = priority, 2 = occluder, 3 = wholebody02. */
+  reasons: Uint8Array;
+  /** 1 when the immediate south 8px cell is non-solid floor, 0 otherwise. */
+  southWalkable: Uint8Array;
+};
+
+export type ForegroundPredicateSummary = {
+  v1Only: number;
+  v2Only: number;
+  both: number;
+};
+
+export const FOREGROUND_REASON_CODE: Record<ForegroundReason | "none", number> = {
+  none: 0,
+  priority: 1,
+  occluder: 2,
+  wholebody02: 3
+};
+
+export function foregroundReasonName(code: number): ForegroundReason | "none" {
+  if (code === FOREGROUND_REASON_CODE.priority) {
+    return "priority";
+  }
+  if (code === FOREGROUND_REASON_CODE.occluder) {
+    return "occluder";
+  }
+  if (code === FOREGROUND_REASON_CODE.wholebody02) {
+    return "wholebody02";
+  }
+  return "none";
+}
 
 export type SectorInfo = {
   tileset: number;
@@ -157,8 +200,9 @@ function drawTileOverrideImage(options: {
   targetX: number;
   targetY: number;
   cellVisible?: (cellX: number, cellY: number) => boolean;
+  pixelVisible?: (cellX: number, cellY: number, pixelX: number, pixelY: number) => boolean;
 }): void {
-  const { image, target, targetWidth, targetX, targetY, cellVisible } = options;
+  const { image, target, targetWidth, targetX, targetY, cellVisible, pixelVisible } = options;
   for (let cellY = 0; cellY < 4; cellY += 1) {
     for (let cellX = 0; cellX < 4; cellX += 1) {
       if (cellVisible && !cellVisible(cellX, cellY)) {
@@ -166,6 +210,9 @@ function drawTileOverrideImage(options: {
       }
       for (let py = 0; py < 8; py += 1) {
         for (let px = 0; px < 8; px += 1) {
+          if (pixelVisible && !pixelVisible(cellX, cellY, px, py)) {
+            continue;
+          }
           const sourceOffset = ((cellY * 8 + py) * image.width + cellX * 8 + px) * 4;
           const outOffset = ((targetY + cellY * 8 + py) * targetWidth + targetX + cellX * 8 + px) * 4;
           target[outOffset] = image.rgba[sourceOffset];
@@ -178,17 +225,6 @@ function drawTileOverrideImage(options: {
   }
 }
 
-function countSolidArrangementCells(tileset: FtsTileset, arrangementIndex: number): number {
-  const cellBase = arrangementIndex * FTS_CELLS_PER_ARRANGEMENT;
-  let count = 0;
-  for (let cell = 0; cell < FTS_CELLS_PER_ARRANGEMENT; cell += 1) {
-    if (isSolidSurface(tileset.collisions[cellBase + cell])) {
-      count += 1;
-    }
-  }
-  return count;
-}
-
 /**
  * Composes the region background/foreground RGBA buffers and the surface grid
  * from parsed map rows, per-sector tileset/palette info, and parsed tilesets.
@@ -199,8 +235,20 @@ export function composeRegion(options: {
   sectorLookup: (sectorCol: number, sectorRow: number) => SectorInfo | undefined;
   tilesetForMapTileset: (mapTileset: number) => { tileset: FtsTileset; palettes: Map<number, FtsPalette> } | undefined;
   tileOverrideImages?: TileOverrideImages;
+  fgPredicate?: FgPredicateVersion;
+  foregroundDebug?: boolean;
+  foregroundSummary?: boolean;
 }): ComposedRegion {
-  const { bounds, mapRows, sectorLookup, tilesetForMapTileset, tileOverrideImages } = options;
+  const {
+    bounds,
+    mapRows,
+    sectorLookup,
+    tilesetForMapTileset,
+    tileOverrideImages,
+    fgPredicate = "v1",
+    foregroundDebug = false,
+    foregroundSummary: collectForegroundSummary = false
+  } = options;
   const widthPixels = bounds.widthTiles * TILE_SIZE;
   const heightPixels = bounds.heightTiles * TILE_SIZE;
   const background = new Uint8Array(widthPixels * heightPixels * 4);
@@ -314,7 +362,7 @@ export function composeRegion(options: {
     }
   }
 
-  const solidCountForMapTile = (mapX: number, mapY: number): number => {
+  const solidCellCountForMapTile = (mapX: number, mapY: number): number => {
     const arrangementIndex = mapRows[mapY]?.[mapX];
     if (arrangementIndex === undefined || Number.isNaN(arrangementIndex)) {
       return 0;
@@ -329,12 +377,19 @@ export function composeRegion(options: {
     if (!graphics) {
       return 0;
     }
-    return countSolidArrangementCells(graphics.tileset, arrangementIndex);
+    let solid = 0;
+    const cellBase = arrangementIndex * 16;
+    for (let cell = 0; cell < 16; cell += 1) {
+      if (isSolidSurface(graphics.tileset.collisions[cellBase + cell])) {
+        solid += 1;
+      }
+    }
+    return solid;
   };
   const southMapY = bounds.originTileY + bounds.heightTiles;
   if (mapRows[southMapY]) {
     for (let tx = 0; tx < bounds.widthTiles; tx += 1) {
-      southTileSolidCount[tx] = solidCountForMapTile(bounds.originTileX + tx, southMapY);
+      southTileSolidCount[tx] = solidCellCountForMapTile(bounds.originTileX + tx, southMapY);
     }
   }
 
@@ -353,16 +408,144 @@ export function composeRegion(options: {
       : ty === bounds.heightTiles
         ? southTileSolidCount[tx]
         : tileSolidCount[ty * bounds.widthTiles + tx];
+  const mapCellWalkableAt = (worldCellX: number, worldCellY: number): boolean => {
+    if (worldCellX < 0 || worldCellY < 0) {
+      return false;
+    }
+    const mapX = Math.floor(worldCellX / 4);
+    const mapY = Math.floor(worldCellY / 4);
+    const arrangementIndex = mapRows[mapY]?.[mapX];
+    if (arrangementIndex === undefined || Number.isNaN(arrangementIndex)) {
+      return false;
+    }
+    const sectorCol = Math.floor(mapX / SECTOR_WIDTH_TILES);
+    const sectorRow = Math.floor(mapY / SECTOR_HEIGHT_TILES);
+    const sector = sectorLookup(sectorCol, sectorRow);
+    if (!sector) {
+      return false;
+    }
+    const graphics = tilesetForMapTileset(sector.tileset);
+    if (!graphics || isBlankArrangement(graphics.tileset, arrangementIndex)) {
+      return false;
+    }
+    const localCellX = worldCellX % 4;
+    const localCellY = worldCellY % 4;
+    const surfaceByte = graphics.tileset.collisions[arrangementIndex * 16 + localCellY * 4 + localCellX];
+    return !isSolidSurface(surfaceByte);
+  };
+  const columnHasWalkableFloorWithinV2Scan = (tile: ForegroundTile, cellX: number, cellY: number): boolean => {
+    const worldCellX = (bounds.originTileX + tile.tx) * 4 + cellX;
+    const worldCellY = (bounds.originTileY + tile.ty) * 4 + cellY;
+    return columnHasWalkableFloorWithinV2ScanAt(worldCellX, worldCellY);
+  };
+  const columnHasWalkableFloorWithinV2ScanAt = (worldCellX: number, worldCellY: number): boolean => {
+    for (let offset = 1; offset <= FG_V2_WALKABLE_FLOOR_SCAN_CELLS_BELOW; offset += 1) {
+      if (mapCellWalkableAt(worldCellX, worldCellY + offset)) {
+        return true;
+      }
+    }
+    return false;
+  };
+  const mapTileIsIndoor = (mapX: number, mapY: number): boolean => {
+    const sectorCol = Math.floor(mapX / SECTOR_WIDTH_TILES);
+    const sectorRow = Math.floor(mapY / SECTOR_HEIGHT_TILES);
+    return sectorLookup(sectorCol, sectorRow)?.indoor ?? false;
+  };
+  const immediateSouthWalkable = (tile: ForegroundTile, cellX: number, cellY: number): boolean =>
+    mapCellWalkableAt((bounds.originTileX + tile.tx) * 4 + cellX, (bounds.originTileY + tile.ty) * 4 + cellY + 1);
+  const decideForegroundCell = (
+    version: FgPredicateVersion,
+    tile: ForegroundTile,
+    cellX: number,
+    cellY: number,
+    occluder: boolean
+  ): { reason?: ForegroundReason; southWalkable: boolean } => {
+    const cellIndex = tile.arrangementIndex * 16 + cellY * 4 + cellX;
+    const cell = decodeArrangementCell(tile.tileset.arrangements[cellIndex]);
+    const surfaceByte = tile.tileset.collisions[cellIndex];
+    const southWalkable = immediateSouthWalkable(tile, cellX, cellY);
+    if (cell.priority) {
+      return { reason: "priority", southWalkable };
+    }
+    const solid = isSolidSurface(surfaceByte);
+    if (occluder && solid) {
+      if (version === "v1" || columnHasWalkableFloorWithinV2Scan(tile, cellX, cellY)) {
+        return {
+          reason: "occluder",
+          southWalkable
+        };
+      }
+    }
+    if (!solid && isWholeBodyForegroundCell(surfaceByte)) {
+      return { reason: "wholebody02", southWalkable };
+    }
+    return { southWalkable };
+  };
+  const foregroundDebugMap: ForegroundDebugMap | undefined = foregroundDebug
+    ? {
+        originCellX: bounds.originTileX * 4,
+        originCellY: bounds.originTileY * 4,
+        widthCells: collisionWidth,
+        heightCells: collisionHeight,
+        reasons: new Uint8Array(collisionWidth * collisionHeight),
+        southWalkable: new Uint8Array(collisionWidth * collisionHeight)
+      }
+    : undefined;
+  const foregroundSummary: ForegroundPredicateSummary | undefined = collectForegroundSummary
+    ? { v1Only: 0, v2Only: 0, both: 0 }
+    : undefined;
   for (const tile of foregroundTiles) {
     const occluder = isOccluderTile(solidCountAt(tile.tx, tile.ty), solidCountAt(tile.tx, tile.ty + 1));
-    const cellInForeground = (cellX: number, cellY: number): boolean => {
-      const cellIndex = tile.arrangementIndex * 16 + cellY * 4 + cellX;
-      const cell = decodeArrangementCell(tile.tileset.arrangements[cellIndex]);
-      const surfaceByte = tile.tileset.collisions[cellIndex];
+    const decisions = Array.from({ length: 16 }, (_, cellIndex) => {
+      const cellX = cellIndex % 4;
+      const cellY = Math.floor(cellIndex / 4);
+      const v1 = decideForegroundCell("v1", tile, cellX, cellY, occluder);
+      const v2 = decideForegroundCell("v2", tile, cellX, cellY, occluder);
+      if (foregroundSummary) {
+        if (v1.reason && v2.reason) {
+          foregroundSummary.both += 1;
+        } else if (v1.reason) {
+          foregroundSummary.v1Only += 1;
+        } else if (v2.reason) {
+          foregroundSummary.v2Only += 1;
+        }
+      }
+      const selected = fgPredicate === "v2" ? v2 : v1;
+      if (foregroundDebugMap) {
+        const debugX = tile.tx * 4 + cellX;
+        const debugY = tile.ty * 4 + cellY;
+        const debugIndex = debugY * collisionWidth + debugX;
+        foregroundDebugMap.reasons[debugIndex] = selected.reason ? FOREGROUND_REASON_CODE[selected.reason] : FOREGROUND_REASON_CODE.none;
+        foregroundDebugMap.southWalkable[debugIndex] = selected.southWalkable ? 1 : 0;
+      }
+      return selected;
+    });
+    const decisionAt = (cellX: number, cellY: number) => decisions[cellY * 4 + cellX];
+    const cellInForeground = (cellX: number, cellY: number): boolean => Boolean(decisionAt(cellX, cellY).reason);
+    const v2CropCutoffYByColumn = Array.from({ length: 4 }, (_, cellX) => {
+      if (fgPredicate !== "v2") {
+        return null;
+      }
+      for (let cellY = 3; cellY >= 0; cellY -= 1) {
+        const decision = decisionAt(cellX, cellY);
+        if (decision.reason === "occluder" && decision.southWalkable) {
+          const mapX = bounds.originTileX + tile.tx;
+          const mapY = bounds.originTileY + tile.ty;
+          if (cellY === 0 && !mapTileIsIndoor(mapX, mapY)) {
+            return null;
+          }
+          return (cellY + 1) * COLLISION_CELL_SIZE - FG_V2_BOTTOM_EDGE_CROP_PX;
+        }
+      }
+      return null;
+    });
+    const pixelInForeground = (cellX: number, cellY: number, _pixelX: number, pixelY: number): boolean => {
+      const decision = decisionAt(cellX, cellY);
+      const cropCutoffY = v2CropCutoffYByColumn[cellX];
       return (
-        cell.priority ||
-        (occluder && isSolidSurface(surfaceByte)) ||
-        (!isSolidSurface(surfaceByte) && isWholeBodyForegroundCell(surfaceByte))
+        decision.reason !== "occluder" ||
+        cropCutoffY === null ||
+        cellY * COLLISION_CELL_SIZE + pixelY < cropCutoffY
       );
     };
     if (tile.overrideImage) {
@@ -372,7 +555,8 @@ export function composeRegion(options: {
         targetWidth: widthPixels,
         targetX: tile.tx * TILE_SIZE,
         targetY: tile.ty * TILE_SIZE,
-        cellVisible: cellInForeground
+        cellVisible: cellInForeground,
+        pixelVisible: pixelInForeground
       });
     } else {
       drawArrangement({
@@ -384,10 +568,9 @@ export function composeRegion(options: {
         targetX: tile.tx * TILE_SIZE,
         targetY: tile.ty * TILE_SIZE,
         priorityOnly: true,
-        cellInForeground: (cell, surfaceByte) =>
-          cell.priority ||
-          (occluder && isSolidSurface(surfaceByte)) ||
-          (!isSolidSurface(surfaceByte) && isWholeBodyForegroundCell(surfaceByte))
+        cellInForeground: (_cell, _surfaceByte, cellX, cellY) => cellInForeground(cellX, cellY),
+        pixelInForeground: (_cell, _surfaceByte, cellX, cellY, pixelX, pixelY) =>
+          pixelInForeground(cellX, cellY, pixelX, pixelY)
       });
     }
   }
@@ -415,7 +598,9 @@ export function composeRegion(options: {
     collisionHeight,
     mapTilesetsUsed,
     palettesUsed,
-    warnings
+    warnings,
+    ...(foregroundDebugMap ? { foregroundDebug: foregroundDebugMap } : {}),
+    ...(foregroundSummary ? { foregroundSummary } : {})
   };
 }
 
@@ -521,6 +706,7 @@ export type WorldBuildResult = {
   world: WorldArtifact;
   sprites: SpriteSheetCollection;
   warnings: Issue[];
+  foregroundSummary?: ForegroundPredicateSummary;
 };
 
 export type WorldMode = "region" | "full";
@@ -975,6 +1161,7 @@ export async function buildWorldArtifacts(options: {
   displayPath: string;
   projectExists: boolean;
   worldMode?: WorldMode;
+  fgPredicate?: FgPredicateVersion;
   spawnWorldPixel?: { x: number; y: number };
   spawnWorldPixelDerivation?: string;
   newGameStartupRef?: string;
@@ -990,6 +1177,7 @@ export async function buildWorldArtifacts(options: {
     displayPath,
     projectExists,
     worldMode = "region",
+    fgPredicate = "v1",
     spawnWorldPixel,
     spawnWorldPixelDerivation,
     newGameStartupRef,
@@ -1143,7 +1331,8 @@ export async function buildWorldArtifacts(options: {
       newGameStartupDerivation,
       anchorWorld,
       doorDestinations,
-      tileOverrideImages
+      tileOverrideImages,
+      fgPredicate
     });
   }
 
@@ -1153,7 +1342,8 @@ export async function buildWorldArtifacts(options: {
     mapRows,
     sectorLookup,
     tilesetForMapTileset,
-    tileOverrideImages
+    tileOverrideImages,
+    fgPredicate
   });
   warnings.push(...composed.warnings);
 
@@ -1306,6 +1496,7 @@ async function buildFullWorldArtifacts(options: {
   anchorWorld: { x: number; y: number };
   doorDestinations: DoorDestinationContext;
   tileOverrideImages?: TileOverrideImages;
+  fgPredicate: FgPredicateVersion;
 }): Promise<WorldBuildResult> {
   const {
     projectAbs,
@@ -1329,7 +1520,8 @@ async function buildFullWorldArtifacts(options: {
     newGameStartupDerivation,
     anchorWorld,
     doorDestinations,
-    tileOverrideImages
+    tileOverrideImages,
+    fgPredicate
   } = options;
 
   const chunkSizeTiles = FULL_CHUNK_SIZE_TILES;
@@ -1345,6 +1537,9 @@ async function buildFullWorldArtifacts(options: {
   let chunkFiles = 0;
   let chunksWritten = 0;
   let voidChunks = 0;
+  const foregroundSummary: ForegroundPredicateSummary | undefined = fgPredicate === "v2"
+    ? { v1Only: 0, v2Only: 0, both: 0 }
+    : undefined;
 
   const chunkOutDir = path.join(outAbs, WORLD_CHUNK_ASSET_DIR);
   await mkdir(chunkOutDir, { recursive: true });
@@ -1357,7 +1552,20 @@ async function buildFullWorldArtifacts(options: {
         widthTiles: Math.min(chunkSizeTiles, mapWidthTiles - cx * chunkSizeTiles),
         heightTiles: Math.min(chunkSizeTiles, mapHeightTiles - cy * chunkSizeTiles)
       };
-      const composed = composeRegion({ bounds, mapRows, sectorLookup, tilesetForMapTileset, tileOverrideImages });
+      const composed = composeRegion({
+        bounds,
+        mapRows,
+        sectorLookup,
+        tilesetForMapTileset,
+        tileOverrideImages,
+        fgPredicate,
+        foregroundSummary: fgPredicate === "v2"
+      });
+      if (foregroundSummary && composed.foregroundSummary) {
+        foregroundSummary.v1Only += composed.foregroundSummary.v1Only;
+        foregroundSummary.v2Only += composed.foregroundSummary.v2Only;
+        foregroundSummary.both += composed.foregroundSummary.both;
+      }
       pushUniqueIssues(warnings, composed.warnings);
       for (const mapTileset of composed.mapTilesetsUsed) {
         mapTilesetsUsed.add(mapTileset);
@@ -1500,5 +1708,10 @@ async function buildFullWorldArtifacts(options: {
     warnings: [...warnings, ...spriteBuild.warnings]
   });
 
-  return { world, sprites: spriteBuild.sprites, warnings };
+  return {
+    world,
+    sprites: spriteBuild.sprites,
+    warnings,
+    ...(foregroundSummary ? { foregroundSummary } : {})
+  };
 }
