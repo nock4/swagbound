@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { tsImport } from "tsx/esm/api";
-import { afterAction, limitFor, readGenerated, state } from "./shared.mjs";
+import { afterAction, createFleetRunControl, limitFor, readGenerated, state } from "./shared.mjs";
 
 export async function run(ctx) {
   const battleData = readGenerated(ctx, "battle.json");
@@ -11,98 +11,114 @@ export async function run(ctx) {
   const offlineGroups = groups.slice(0, limitFor(ctx, groups.length, 8));
   ctx.stats.battles = { groupsTotal: groups.length, groupsSimulated: 0, browserSampled: 0 };
   ctx.log(`battles fleet: offline ${offlineGroups.length}/${groups.length} groups`);
-  await simulateGroups(ctx, battleData, characters, offlineGroups);
-
   const browserGroups = uniqueSkinGroups(battleData).slice(0, limitFor(ctx, 60, 2));
-  ctx.log(`battles fleet: browser ${browserGroups.length} unique skin samples`);
-  const session = await ctx.pagePool.acquire("battles", { params: { party: "4", psi: "all" } });
+  const watch = createFleetRunControl(ctx, "battles", {
+    total: offlineGroups.length + browserGroups.length,
+    doneLabel: "groups"
+  });
   try {
-    for (const group of browserGroups) {
-      session.lastAction = `force encounter group ${group.id}`;
-      await session.page.evaluate((id) => globalThis.__forceEncounter?.(id), group.id);
-      await session.page.waitForTimeout(1800);
-      await waitForBattle(session.page, 8000);
-      const battleStart = path.join(ctx.out, "shots", "battles", `battle-${group.id}-${Date.now()}.png`);
-      fs.mkdirSync(path.dirname(battleStart), { recursive: true });
-      await session.page.screenshot({ path: battleStart }).catch(() => {});
-      const returned = await mashBattleToWorld(ctx, session, group.id);
-      ctx.stats.battles.browserSampled += 1;
-      if (!returned) {
-        ctx.ledger.push({
-          fleet: "battles",
-          kind: "battle-softlock",
-          severity: "blocker",
-          at: (await state(session.page)).player,
-          detail: `forced encounter group ${group.id} did not return to world within budget`,
-          evidence: { screenshot: battleStart, group }
-        });
-      } else {
-        await afterAction(ctx, session, session.lastAction);
+    await simulateGroups(ctx, battleData, characters, offlineGroups, watch);
+
+    if (!watch.budgetExpired()) {
+      ctx.log(`battles fleet: browser ${browserGroups.length} unique skin samples`);
+      const session = await ctx.pagePool.acquire("battles", { params: { party: "4", psi: "all" } });
+      try {
+        for (const group of browserGroups) {
+          const item = await watch.runItem(`browser group ${group.id}`, async () => {
+            session.lastAction = `force encounter group ${group.id}`;
+            await session.page.evaluate((id) => globalThis.__forceEncounter?.(id), group.id);
+            await session.page.waitForTimeout(1800);
+            await waitForBattle(session.page, 8000);
+            const battleStart = path.join(ctx.out, "shots", "battles", `battle-${group.id}-${Date.now()}.png`);
+            fs.mkdirSync(path.dirname(battleStart), { recursive: true });
+            await session.page.screenshot({ path: battleStart }).catch(() => {});
+            const returned = await mashBattleToWorld(ctx, session, group.id);
+            ctx.stats.battles.browserSampled += 1;
+            if (!returned) {
+              ctx.ledger.push({
+                fleet: "battles",
+                kind: "battle-softlock",
+                severity: "blocker",
+                at: (await state(session.page)).player,
+                detail: `forced encounter group ${group.id} did not return to world within budget`,
+                evidence: { screenshot: battleStart, group }
+              });
+            } else {
+              await afterAction(ctx, session, session.lastAction);
+            }
+          }, { evidence: { group } });
+          if (item.budgetExpired) break;
+        }
+      } finally {
+        await session.release();
       }
     }
   } finally {
-    await session.release();
+    watch.stop();
   }
 }
 
-async function simulateGroups(ctx, battleData, characters, groups) {
+async function simulateGroups(ctx, battleData, characters, groups, watch) {
   const [{ createBattleState, createBattleRng, outcome }, { resolveRoundStep }, { expandBattleGroupEnemies }] = await Promise.all([
     tsImport(pathToFileURL(path.join(ctx.root, "apps/game/src/battleLogic.ts")).href, import.meta.url),
     tsImport(pathToFileURL(path.join(ctx.root, "apps/game/src/battleRound.ts")).href, import.meta.url),
     tsImport(pathToFileURL(path.join(ctx.root, "apps/game/src/battleGroups.ts")).href, import.meta.url)
   ]);
   for (const group of groups) {
-    try {
-      const enemies = expandBattleGroupEnemies(battleData, group);
-      if (enemies.length === 0) {
+    const item = await watch.runItem(`offline group ${group.id}`, async () => {
+      try {
+        const enemies = expandBattleGroupEnemies(battleData, group);
+        if (enemies.length === 0) {
+          ctx.ledger.push({
+            fleet: "battles",
+            kind: "battle-sim-error",
+            severity: "high",
+            detail: `group ${group.id} expanded to zero enemies`,
+            evidence: { group }
+          });
+          return;
+        }
+        let battle = createBattleState(enemies, { characters });
+        const rng = createBattleRng(group.id);
+        let result = outcome(battle);
+        for (let round = 0; round < 200 && result === "ongoing"; round += 1) {
+          for (let i = 0; i < battle.party.length && result === "ongoing"; i += 1) {
+            if (!alive(battle.party[i])) continue;
+            const targetIndex = firstAliveIndex(battle.enemies);
+            battle = resolveRoundStep(battle, { side: "party", index: i }, {
+              partySlot: i,
+              command: "AUTO",
+              target: { side: "enemy", index: Math.max(0, targetIndex) }
+            }, rng, {}).state;
+            result = outcome(battle);
+          }
+          for (let i = 0; i < battle.enemies.length && result === "ongoing"; i += 1) {
+            if (!alive(battle.enemies[i])) continue;
+            battle = resolveRoundStep(battle, { side: "enemy", index: i }, undefined, rng, {}).state;
+            result = outcome(battle);
+          }
+        }
+        ctx.stats.battles.groupsSimulated += 1;
+        if (result === "ongoing") {
+          ctx.ledger.push({
+            fleet: "battles",
+            kind: "battle-sim-hang",
+            severity: "blocker",
+            detail: `group ${group.id} did not terminate within 200 rounds`,
+            evidence: { groupId: group.id, enemies: group.enemyIds }
+          });
+        }
+      } catch (error) {
         ctx.ledger.push({
           fleet: "battles",
           kind: "battle-sim-error",
-          severity: "high",
-          detail: `group ${group.id} expanded to zero enemies`,
+          severity: "blocker",
+          detail: `group ${group.id} threw during simulation: ${String(error?.message || error).slice(0, 600)}`,
           evidence: { group }
         });
-        continue;
       }
-      let battle = createBattleState(enemies, { characters });
-      const rng = createBattleRng(group.id);
-      let result = outcome(battle);
-      for (let round = 0; round < 200 && result === "ongoing"; round += 1) {
-        for (let i = 0; i < battle.party.length && result === "ongoing"; i += 1) {
-          if (!alive(battle.party[i])) continue;
-          const targetIndex = firstAliveIndex(battle.enemies);
-          battle = resolveRoundStep(battle, { side: "party", index: i }, {
-            partySlot: i,
-            command: "AUTO",
-            target: { side: "enemy", index: Math.max(0, targetIndex) }
-          }, rng, {}).state;
-          result = outcome(battle);
-        }
-        for (let i = 0; i < battle.enemies.length && result === "ongoing"; i += 1) {
-          if (!alive(battle.enemies[i])) continue;
-          battle = resolveRoundStep(battle, { side: "enemy", index: i }, undefined, rng, {}).state;
-          result = outcome(battle);
-        }
-      }
-      ctx.stats.battles.groupsSimulated += 1;
-      if (result === "ongoing") {
-        ctx.ledger.push({
-          fleet: "battles",
-          kind: "battle-sim-hang",
-          severity: "blocker",
-          detail: `group ${group.id} did not terminate within 200 rounds`,
-          evidence: { groupId: group.id, enemies: group.enemyIds }
-        });
-      }
-    } catch (error) {
-      ctx.ledger.push({
-        fleet: "battles",
-        kind: "battle-sim-error",
-        severity: "blocker",
-        detail: `group ${group.id} threw during simulation: ${String(error?.message || error).slice(0, 600)}`,
-        evidence: { group }
-      });
-    }
+    }, { evidence: { group } });
+    if (item.budgetExpired) break;
   }
 }
 

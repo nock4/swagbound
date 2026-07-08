@@ -1,5 +1,6 @@
 import {
   afterAction,
+  createFleetRunControl,
   drainDialogue,
   facePoint,
   limitFor,
@@ -15,29 +16,36 @@ export async function run(ctx) {
   const sampled = spreadByRegion(checks).slice(0, ctx.deep ? checks.length : limitFor(ctx, 12, 2));
   ctx.stats.minigames = { sourceChecksTotal: checks.length, sourceChecksAttempted: sampled.length, venueAttempted: 0 };
   ctx.log(`minigames fleet: ${sampled.length}/${checks.length} source checks`);
+  const watch = createFleetRunControl(ctx, "minigames", { total: sampled.length + 1, doneLabel: "items" });
   const session = await ctx.pagePool.acquire("minigames", { params: { extras: "1" } });
   try {
     for (const check of sampled) {
-      const at = check.placement.worldPixel;
-      session.lastAction = `source-check ${check.id}`;
-      await warpTo(session.page, nearestWalkableAdjacent(ctx, at));
-      await facePoint(session.page, at);
-      await tap(session.page, "KeyZ", 350);
-      const returned = await answerFirstOptionUntilWorld(session.page, ctx.smoke ? 12000 : 35000);
-      if (!returned) {
-        ctx.ledger.push({
-          fleet: "minigames",
-          kind: "source-check-stuck",
-          severity: "blocker",
-          at,
-          detail: `${check.id} did not return to world after first-option trivia flow`,
-          evidence: { checkId: check.id, npcId: check.npcId, region: check.region }
-        });
-      }
-      await afterAction(ctx, session, session.lastAction);
+      const result = await watch.runItem(`source-check ${check.id}`, async () => {
+        const at = check.placement.worldPixel;
+        session.lastAction = `source-check ${check.id}`;
+        await warpTo(session.page, nearestWalkableAdjacent(ctx, at));
+        await facePoint(session.page, at);
+        await tap(session.page, "KeyZ", 350);
+        const returned = await answerFirstOptionUntilWorld(session.page, ctx.smoke ? 12000 : 35000);
+        if (!returned) {
+          ctx.ledger.push({
+            fleet: "minigames",
+            kind: "source-check-stuck",
+            severity: "blocker",
+            at,
+            detail: `${check.id} did not return to world after first-option trivia flow`,
+            evidence: { checkId: check.id, npcId: check.npcId, region: check.region }
+          });
+        }
+        await afterAction(ctx, session, session.lastAction);
+      }, { at: check.placement.worldPixel, evidence: { check } });
+      if (result.budgetExpired) break;
     }
-    await venueArena(ctx, session);
+    if (!watch.budgetExpired()) {
+      await watch.runItem("venue arena bracket 1", () => venueArena(ctx, session), { count: true });
+    }
   } finally {
+    watch.stop();
     await session.release();
   }
 }

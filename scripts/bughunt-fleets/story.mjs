@@ -1,4 +1,4 @@
-import { afterAction, drainDialogue, limitFor, readGenerated, state, tap, waitForWorld } from "./shared.mjs";
+import { afterAction, createFleetRunControl, drainDialogue, limitFor, readGenerated, state, tap, waitForWorld } from "./shared.mjs";
 
 export async function run(ctx) {
   const triggers = readGenerated(ctx, "triggers.json").triggers ?? [];
@@ -8,12 +8,25 @@ export async function run(ctx) {
   ctx.stats.story = { openingAttempted: ctx.smoke ? 0 : 1, gatesTotal: act1Bosses.length, gatesChecked: 0 };
   ctx.log(`story fleet: ${act1Bosses.length} act-chain gates`);
 
-  if (!ctx.smoke) {
-    await openingPath(ctx);
-  }
   const gates = act1Bosses.slice(0, limitFor(ctx, act1Bosses.length, 3));
-  for (const gate of gates) {
-    await gateCheck(ctx, gate);
+  const watch = createFleetRunControl(ctx, "story", {
+    total: gates.length + (ctx.smoke ? 0 : 1),
+    doneLabel: "items"
+  });
+  try {
+    if (!ctx.smoke) {
+      const opening = await watch.runItem("opening path", () => openingPath(ctx));
+      if (opening.budgetExpired) return;
+    }
+    for (const gate of gates) {
+      const result = await watch.runItem(`story gate ${gate.id}`, () => gateCheck(ctx, gate), {
+        at: gate.boss,
+        evidence: { gate }
+      });
+      if (result.budgetExpired) break;
+    }
+  } finally {
+    watch.stop();
   }
 }
 

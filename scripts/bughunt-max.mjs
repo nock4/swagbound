@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Bughunt Max: total-coverage overnight QA campaign for Swagbound.
-// Owns Vite on :5199, works on a local branch, writes tmp/bughunt-max, and never pushes.
+// Owns Vite on :5199, writes tmp/bughunt-max, and never touches git state.
 import { chromium } from "@playwright/test";
 import { execSync, spawn } from "node:child_process";
 import fs from "node:fs";
@@ -14,7 +14,8 @@ const PORT = 5199;
 const DEFAULT_BASE = `http://127.0.0.1:${PORT}`;
 const SMOKE = process.argv.includes("--smoke");
 const DEEP = process.argv.includes("--deep");
-const POOL = Math.max(1, Number.parseInt(process.env.POOL ?? "6", 10) || 6);
+const DRY_RUN = process.argv.includes("--dry-run");
+const POOL = Math.max(1, Number.parseInt(process.env.POOL ?? "3", 10) || 3);
 const FLEET_ARG = process.argv.find((arg) => arg.startsWith("--fleet="));
 const SELECTED = FLEET_ARG ? FLEET_ARG.slice("--fleet=".length).split(",").map((x) => x.trim()).filter(Boolean) : [...FLEETS];
 const UNKNOWN = SELECTED.filter((fleet) => !FLEETS.includes(fleet));
@@ -39,34 +40,53 @@ const today = sh("date +%Y%m%d").trim();
 // NO branch switching: the smoke run silently moving HEAD stranded a commit on
 // an overnight branch (recovered as PR #169). This campaign is read-only over
 // the repo; it observes whatever is checked out and never touches git state.
-log(`campaign ${today} on branch ${sh("git branch --show-current").trim()} (read-only, no git ops)`);
+log(`campaign ${today} in current workspace (read-only, no git ops)`);
 
 let vite;
 let browser;
 let base = DEFAULT_BASE;
 let routePage;
-const ledger = new Ledger();
+const ledger = new Ledger({ flushEvery: 100, onFlush: (reason) => flushReports(reason) });
 const startedAt = new Date().toISOString();
 
 try {
-  const boot = await startViteOrStatic();
-  vite = boot.vite;
-  base = boot.base;
-  routePage = boot.routePage;
-  log(`${boot.mode} ready ${base}`);
+  let ctx;
+  if (DRY_RUN) {
+    ctx = {
+      root: ROOT,
+      out: OUT,
+      base,
+      routePage,
+      smoke: SMOKE,
+      deep: DEEP,
+      dryRun: true,
+      ledger,
+      log,
+      stats: {}
+    };
+    log(`dry-run ready ${base}`);
+  } else {
+    const boot = await startViteOrStatic();
+    vite = boot.vite;
+    base = boot.base;
+    routePage = boot.routePage;
+    log(`${boot.mode} ready ${base}`);
 
-  browser = await chromium.launch({ headless: true });
-  const ctx = await createRuntimeContext({
-    root: ROOT,
-    out: OUT,
-    base,
-    routePage,
-    smoke: SMOKE,
-    deep: DEEP,
-    ledger,
-    log
-  });
-  ctx.pagePool = new PagePool(ctx, browser, POOL);
+    browser = await chromium.launch({ headless: true });
+    ctx = await createRuntimeContext({
+      root: ROOT,
+      out: OUT,
+      base,
+      routePage,
+      smoke: SMOKE,
+      deep: DEEP,
+      ledger,
+      log
+    });
+    ctx.pagePool = new PagePool(ctx, browser, POOL);
+  }
+  ctx.flushReports = flushReports;
+  globalThis.__BUGHUNT_STATS__ = ctx.stats;
 
   const fleetsBeforeVision = SELECTED.filter((fleet) => fleet !== "vision");
   const wantsVision = SELECTED.includes("vision");
@@ -85,20 +105,7 @@ try {
   });
   process.exitCode = 1;
 } finally {
-  const finishedAt = new Date().toISOString();
-  const payload = {
-    generated: finishedAt,
-    startedAt,
-    smoke: SMOKE,
-    deep: DEEP,
-    selectedFleets: SELECTED,
-    pool: POOL,
-    count: ledger.entries.length,
-    ledger: ledger.entries,
-    stats: globalThis.__BUGHUNT_STATS__ ?? undefined
-  };
-  fs.writeFileSync(path.join(OUT, "ledger.json"), JSON.stringify(payload, null, 2));
-  fs.writeFileSync(path.join(OUT, "MORNING.md"), morningMd(payload));
+  flushReports("final");
   log(`DONE: ${ledger.entries.length} findings -> tmp/bughunt-max/ledger.json + MORNING.md`);
   if (browser) await browser.close().catch(() => {});
   if (vite) {
@@ -112,8 +119,13 @@ async function runFleet(ctx, fleet) {
   const started = Date.now();
   log(`fleet ${fleet} start`);
   try {
-    const mod = await import(`./bughunt-fleets/${fleet}.mjs`);
-    await mod.run(ctx);
+    if (ctx.dryRun) {
+      ctx.stats[fleet] = { dryRun: true };
+      await new Promise((resolve) => setTimeout(resolve, 5));
+    } else {
+      const mod = await import(`./bughunt-fleets/${fleet}.mjs`);
+      await mod.run(ctx);
+    }
   } catch (error) {
     ctx.ledger.push({
       fleet,
@@ -124,7 +136,36 @@ async function runFleet(ctx, fleet) {
   } finally {
     globalThis.__BUGHUNT_STATS__ = ctx.stats;
     log(`fleet ${fleet} done: +${ctx.ledger.entries.length - before} findings in ${Math.round((Date.now() - started) / 1000)}s`);
+    ctx.flushReports?.(`fleet-${fleet}`);
   }
+}
+
+function flushReports(reason = "manual") {
+  const payload = buildPayload(new Date().toISOString());
+  atomicWriteFile(path.join(OUT, "ledger.json"), `${JSON.stringify(payload, null, 2)}\n`);
+  atomicWriteFile(path.join(OUT, "MORNING.md"), morningMd(payload));
+  log(`flushed reports (${reason})`);
+}
+
+function buildPayload(generated) {
+  return {
+    generated,
+    startedAt,
+    smoke: SMOKE,
+    deep: DEEP,
+    dryRun: DRY_RUN,
+    selectedFleets: SELECTED,
+    pool: POOL,
+    count: ledger.entries.length,
+    ledger: ledger.entries,
+    stats: globalThis.__BUGHUNT_STATS__ ?? undefined
+  };
+}
+
+function atomicWriteFile(file, content) {
+  const tmp = `${file}.tmp-${process.pid}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  fs.writeFileSync(tmp, content);
+  fs.renameSync(tmp, file);
 }
 
 async function startViteOrStatic() {

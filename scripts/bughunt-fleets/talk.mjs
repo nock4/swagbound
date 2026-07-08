@@ -1,5 +1,6 @@
 import {
   afterAction,
+  createFleetRunControl,
   drainDialogue,
   facePoint,
   limitFor,
@@ -43,45 +44,50 @@ export async function run(ctx) {
   ctx.stats.talk = { total: allTargets.length, attempted: targets.length, dialogueOpened: 0 };
   ctx.log(`talk fleet: ${targets.length}/${allTargets.length} targets`);
 
+  const watch = createFleetRunControl(ctx, "talk", { total: targets.length, doneLabel: "targets" });
   const session = await ctx.pagePool.acquire("talk", { params: { extras: "1" } });
   try {
     for (const target of targets) {
-      session.lastAction = `talk ${target.id}`;
-      const stand = nearestWalkableAdjacent(ctx, target.at);
-      await warpTo(session.page, stand);
-      await facePoint(session.page, target.at);
-      const visibleSprite = await visibleSpriteAt(session.page, target.at, target.npcId);
-      await tap(session.page, "KeyZ", 240);
-      await session.page.waitForTimeout(450);
-      const opened = await session.page.evaluate(() => Boolean(globalThis.__firstSceneDebug?.dialogueOpen));
-      if (opened) {
-        ctx.stats.talk.dialogueOpened += 1;
-        const text = await captureDialogueText(session.page);
-        if (!visibleSprite) {
-          ctx.ledger.push({
-            fleet: "talk",
-            kind: "invisible-speaker",
-            severity: "medium",
-            at: target.at,
-            detail: `${target.id} opened dialogue but no visible debug NPC sprite was found at target coords`,
-            evidence: { target, text }
-          });
+      const result = await watch.runItem(`talk ${target.id}`, async () => {
+        session.lastAction = `talk ${target.id}`;
+        const stand = nearestWalkableAdjacent(ctx, target.at);
+        await warpTo(session.page, stand);
+        await facePoint(session.page, target.at);
+        const visibleSprite = await visibleSpriteAt(session.page, target.at, target.npcId);
+        await tap(session.page, "KeyZ", 240);
+        await session.page.waitForTimeout(450);
+        const opened = await session.page.evaluate(() => Boolean(globalThis.__firstSceneDebug?.dialogueOpen));
+        if (opened) {
+          ctx.stats.talk.dialogueOpened += 1;
+          const text = await captureDialogueText(session.page);
+          if (!visibleSprite) {
+            ctx.ledger.push({
+              fleet: "talk",
+              kind: "invisible-speaker",
+              severity: "medium",
+              at: target.at,
+              detail: `${target.id} opened dialogue but no visible debug NPC sprite was found at target coords`,
+              evidence: { target, text }
+            });
+          }
+          if (looksEmptyOrGarbage(text)) {
+            ctx.ledger.push({
+              fleet: "talk",
+              kind: "bad-dialogue-text",
+              severity: "high",
+              at: target.at,
+              detail: `${target.id} opened empty or garbage dialogue text`,
+              evidence: { target, text }
+            });
+          }
+          await drainDialogue(session.page, 20, 400);
         }
-        if (looksEmptyOrGarbage(text)) {
-          ctx.ledger.push({
-            fleet: "talk",
-            kind: "bad-dialogue-text",
-            severity: "high",
-            at: target.at,
-            detail: `${target.id} opened empty or garbage dialogue text`,
-            evidence: { target, text }
-          });
-        }
-        await drainDialogue(session.page, 20, 400);
-      }
-      await afterAction(ctx, session, session.lastAction);
+        await afterAction(ctx, session, session.lastAction);
+      }, { at: target.at, evidence: { target } });
+      if (result.budgetExpired) break;
     }
   } finally {
+    watch.stop();
     await session.release();
   }
 }

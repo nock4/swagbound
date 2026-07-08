@@ -6,6 +6,25 @@ import { tsImport } from "tsx/esm/api";
 
 export const FLEETS = ["talk", "tiles", "doors", "battles", "systems", "minigames", "story", "vision"];
 
+const HOUR_MS = 60 * 60 * 1000;
+export const DEFAULT_FLEET_BUDGET_MS = {
+  talk: 2.5 * HOUR_MS,
+  tiles: 4 * HOUR_MS,
+  doors: HOUR_MS,
+  battles: 1.5 * HOUR_MS,
+  systems: HOUR_MS,
+  minigames: HOUR_MS,
+  story: 30 * 60 * 1000,
+  vision: 2 * HOUR_MS
+};
+
+export class BughuntTimeoutError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "BughuntTimeoutError";
+  }
+}
+
 export function readJson(file) {
   return JSON.parse(fs.readFileSync(file, "utf8"));
 }
@@ -57,9 +76,29 @@ export function sampleStable(items, count, seed = 0x51a7c0de) {
 }
 
 export class Ledger {
-  constructor() {
+  constructor(options = {}) {
     this.entries = [];
     this.seen = new Set();
+    this.flushEvery = options.flushEvery ?? 0;
+    this.onFlush = options.onFlush;
+    this.newSinceFlush = 0;
+    this.flushing = false;
+  }
+
+  configureFlush(options = {}) {
+    this.flushEvery = options.flushEvery ?? this.flushEvery;
+    this.onFlush = options.onFlush ?? this.onFlush;
+  }
+
+  flush(reason = "manual") {
+    if (!this.onFlush || this.flushing) return;
+    this.flushing = true;
+    try {
+      this.onFlush(reason);
+      this.newSinceFlush = 0;
+    } finally {
+      this.flushing = false;
+    }
   }
 
   push(entry) {
@@ -76,6 +115,10 @@ export class Ledger {
       ...entry,
       ...(at ? { at } : {})
     });
+    this.newSinceFlush += 1;
+    if (this.flushEvery > 0 && this.newSinceFlush >= this.flushEvery) {
+      this.flush("finding-threshold");
+    }
     return true;
   }
 }
@@ -253,6 +296,117 @@ export function decodeCellsByComponent(navmeshJson, maxCells = Infinity) {
   return { byComponent, total };
 }
 
+export function fleetBudgetMs(fleet) {
+  const envName = `${fleet.toUpperCase()}_BUDGET_MS`;
+  const parsed = Number.parseInt(process.env[envName] ?? "", 10);
+  if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  return DEFAULT_FLEET_BUDGET_MS[fleet] ?? HOUR_MS;
+}
+
+export function createFleetRunControl(ctx, fleet, options = {}) {
+  const budgetMs = options.budgetMs ?? fleetBudgetMs(fleet);
+  const heartbeatMs = options.heartbeatMs ?? 60000;
+  const started = Date.now();
+  const doneLabel = options.doneLabel ?? "items";
+  const currentLabel = options.currentLabel ?? "current";
+  let done = options.done ?? 0;
+  let total = options.total ?? options.totalItems;
+  let current = "starting";
+  let budgetReported = false;
+  const heartbeat = setInterval(() => {
+    ctx.log(`${fleet} heartbeat: ${formatProgress(done, total, doneLabel)}; ${currentLabel} ${current}; elapsed ${formatDuration(Date.now() - started)}; budget ${formatDuration(budgetMs)}`);
+  }, heartbeatMs);
+  heartbeat.unref?.();
+
+  function update(progress = {}) {
+    if (progress.done !== undefined) done = progress.done;
+    if (progress.total !== undefined) total = progress.total;
+    if (progress.current !== undefined) current = progress.current;
+  }
+
+  function remainingMs() {
+    return Math.max(0, budgetMs - (Date.now() - started));
+  }
+
+  function budgetExpired() {
+    return remainingMs() <= 0;
+  }
+
+  function reportBudget(reason = `budget exhausted during ${current}`) {
+    if (budgetReported) return;
+    budgetReported = true;
+    ctx.log(`${fleet} budget expired: ${formatProgress(done, total, doneLabel)}; ${reason}`);
+  }
+
+  async function runItem(label, fn, itemOptions = {}) {
+    update({ current: label });
+    if (budgetExpired()) {
+      reportBudget(`before ${label}`);
+      return { ok: false, budgetExpired: true };
+    }
+    const remaining = remainingMs();
+    const task = Promise.resolve().then(fn);
+    task.catch(() => {});
+    try {
+      const value = await runWithTimeout(() => task, remaining, `${fleet} budget expired during ${label}`);
+      return { ok: true, value };
+    } catch (error) {
+      if (error instanceof BughuntTimeoutError) {
+        reportBudget(`during ${label}`);
+        return { ok: false, budgetExpired: true };
+      }
+      ctx.ledger.push({
+        fleet,
+        kind: itemOptions.kind ?? `${fleet}-item-error`,
+        severity: itemOptions.severity ?? "blocker",
+        at: itemOptions.at,
+        detail: `${label} threw: ${String(error?.stack || error?.message || error).slice(0, 1500)}`,
+        evidence: itemOptions.evidence
+      });
+      return { ok: false, error };
+    } finally {
+      if (itemOptions.count !== false) {
+        done += 1;
+      }
+    }
+  }
+
+  function stop() {
+    clearInterval(heartbeat);
+  }
+
+  return {
+    started,
+    budgetMs,
+    update,
+    remainingMs,
+    budgetExpired,
+    reportBudget,
+    runItem,
+    stop,
+    get done() { return done; },
+    get total() { return total; },
+    get current() { return current; }
+  };
+}
+
+export async function runWithTimeout(fn, timeoutMs, message) {
+  if (!Number.isFinite(timeoutMs) || timeoutMs <= 0) {
+    throw new BughuntTimeoutError(message);
+  }
+  let timer;
+  try {
+    return await Promise.race([
+      Promise.resolve().then(fn),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new BughuntTimeoutError(message)), timeoutMs);
+      })
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 export function cellCenter(ctx, cell) {
   return {
     x: cell.x * ctx.navmeshJson.cellSize + ctx.navmeshJson.cellSize / 2,
@@ -335,23 +489,21 @@ export async function afterAction(ctx, session, precededBy = session.lastAction 
   }
 
   const start = afterDrain.player;
-  const moves = [
-    ["ArrowUp", { x: 0, y: -14 }],
-    ["ArrowDown", { x: 0, y: 14 }],
-    ["ArrowLeft", { x: -14, y: 0 }],
-    ["ArrowRight", { x: 14, y: 0 }]
-  ];
-  let moved = false;
-  for (const [key] of moves) {
-    await hold(page, key, 220);
-    const now = await state(page);
-    if (now.player && dist(start, now.player) > 2) {
-      moved = true;
-      break;
-    }
-    await warpTo(page, start);
+  const startInsideSolid = await page.evaluate(({ x, y }) => {
+    const solid = globalThis.__solidAt;
+    return typeof solid === "function" ? Boolean(solid(x, y)) : false;
+  }, start).catch(() => false);
+  if (startInsideSolid) {
+    return true;
   }
-  if (!moved) {
+
+  let probe = await movementProbePass(page, start, 600);
+  if (!probe.moved) {
+    await page.waitForTimeout(500);
+    await warpTo(page, start);
+    probe = await movementProbePass(page, start, 600);
+  }
+  if (!probe.moved) {
     const allBlocked = await page.evaluate(({ x, y }) => {
       const solid = globalThis.__solidAt;
       if (typeof solid !== "function") return false;
@@ -368,13 +520,69 @@ export async function afterAction(ctx, session, precededBy = session.lastAction 
         kind: "player-cannot-move",
         severity: "blocker",
         at: start,
-        detail: `one-step movement probe failed after ${precededBy}`,
-        evidence: { allFourBlockedByCollision: allBlocked }
+        detail: `two-pass movement probe failed after ${precededBy}`,
+        evidence: { allFourBlockedByCollision: allBlocked, lastProbe: probe }
       });
       return false;
     }
   }
   return true;
+}
+
+async function movementProbePass(page, start, holdMs) {
+  const moves = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
+  let last;
+  for (const key of moves) {
+    last = await holdAndReadMotion(page, key, holdMs);
+    if (last.player && dist(start, last.player) > 2) {
+      return { moved: true, key, via: "position", last };
+    }
+    if (last.motion.moving || last.motion.velocityMagnitude > 0.1) {
+      return { moved: true, key, via: "debug-motion", last };
+    }
+    await warpTo(page, start);
+  }
+  return { moved: false, last };
+}
+
+async function holdAndReadMotion(page, key, ms) {
+  await page.keyboard.down(key);
+  try {
+    await page.waitForTimeout(ms);
+    const snap = await state(page);
+    const motion = await page.evaluate(() => {
+      const world = globalThis.__firstSceneDebug ?? {};
+      const owners = typeof globalThis.__inputOwners === "function" ? globalThis.__inputOwners() : {};
+      const velocity = owners?.velocity ?? world.velocity ?? world.playerVelocity ?? {};
+      const vx = Number(velocity.x ?? world.velocityX ?? 0);
+      const vy = Number(velocity.y ?? world.velocityY ?? 0);
+      return {
+        moving: Boolean(world.moving || owners?.moving),
+        velocityMagnitude: Math.hypot(Number.isFinite(vx) ? vx : 0, Number.isFinite(vy) ? vy : 0),
+        inputLocked: Boolean(world.inputLocked || owners?.inputLocked)
+      };
+    }).catch(() => ({ moving: false, velocityMagnitude: 0, inputLocked: false }));
+    return { player: snap.player, motion };
+  } finally {
+    await page.keyboard.up(key).catch(() => {});
+    await page.waitForTimeout(80);
+  }
+}
+
+function formatProgress(done, total, label) {
+  const base = `${done}${Number.isFinite(total) ? `/${total}` : ""} ${label}`;
+  if (!Number.isFinite(total) || total <= 0) return base;
+  return `${base} (${Math.round((done / total) * 1000) / 10}%)`;
+}
+
+function formatDuration(ms) {
+  const totalSeconds = Math.max(0, Math.round(ms / 1000));
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = totalSeconds % 60;
+  if (hours > 0) return `${hours}h${String(minutes).padStart(2, "0")}m`;
+  if (minutes > 0) return `${minutes}m${String(seconds).padStart(2, "0")}s`;
+  return `${seconds}s`;
 }
 
 export async function screenshot(ctx, page, fleet, label, point) {
