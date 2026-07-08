@@ -1,8 +1,9 @@
-import type { CardNfts, CharacterCollection, ItemCollection, ItemData, PsiCollection, PsiData, ShopData } from "@eb/schemas";
+import type { CardNfts, CharacterCollection, ItemCollection, ItemData, KeyItems, PsiCollection, PsiData, ShopData } from "@eb/schemas";
 import { buildPartyMember, type PartyMember, type PartyMemberStats } from "./characterModel";
 import type { DialogueResolver } from "./dialogueRenderer";
 import { psiPpCost } from "./battleLogic";
 import { buildBinderViewModel, type BinderViewModel } from "./sourceCheckModel";
+import { KEY_ITEM_COLOR, keyItemLabel, keyItemSortValue, normalizeKeyItemIds } from "./keyItems";
 import {
   decodeItemUseEffect,
   equipmentSlotForItemType,
@@ -20,6 +21,7 @@ export type MenuItem = {
   id: string;
   label: string;
   enabled: boolean;
+  textColor?: string;
   childScreenId?: string;
   actionId?: string;
 };
@@ -61,6 +63,7 @@ export type MenuRenderItem = {
   label: string;
   enabled: boolean;
   selected: boolean;
+  textColor?: string;
 };
 
 export type MenuRenderScreen = {
@@ -125,6 +128,7 @@ export type InventoryMenuEntry = {
   fieldUsable: boolean;
   equipmentSlot?: EquipmentSlot;
   equipped: boolean;
+  keyItem: boolean;
   helpText?: string;
   statPreview?: EquipStatPreview;
   detailScreenId: string;
@@ -191,6 +195,7 @@ export type ShopModeEntry = {
   affordable: boolean;
   soldOut: boolean;
   equippable: boolean;
+  keyItem: boolean;
   equipmentSlot?: EquipmentSlot;
 };
 
@@ -304,6 +309,7 @@ export type TalkMenuDecision =
 
 export type PartyMenuViewModelInput = StatusViewModelInput & {
   items?: ItemCollection;
+  keyItems?: KeyItems;
   psi?: PsiCollection;
   shops?: ShopData;
   cardNfts?: CardNfts;
@@ -534,7 +540,8 @@ export function menuRenderStack(state: MenuState): MenuRenderScreen[] {
       id: item.id,
       label: item.label,
       enabled: item.enabled,
-      selected: index === frame.cursorIndex
+      selected: index === frame.cursorIndex,
+      ...(item.textColor ? { textColor: item.textColor } : {})
     }))
   }));
 }
@@ -615,20 +622,23 @@ export function buildStatusViewModel(input: StatusViewModelInput = {}): StatusVi
 export function buildShopViewModel(input: ShopViewModelInput): ShopViewModel {
   const member = activePartyMember(input);
   const items = itemMap(input.items);
+  const keyItemIds = normalizeKeyItemIds(input.keyItems);
   const shop = input.shops?.shops.find((entry) => entry.id === stat(input.storeId));
   const ownerChar = member.id;
   const wallet = stat(input.partyState?.wallet ?? input.wallet ?? 0);
   const buyEntries = (shop?.itemIds ?? []).map((itemId, slot) => {
     const item = items.get(itemId);
+    const keyItem = keyItemIds.has(itemId);
     const cost = stat(item?.cost ?? 0);
     const soldOut = itemId <= 0 || !item || cost <= 0;
     const affordable = !soldOut && wallet >= cost;
     const equipmentSlot = item ? equipmentSlotForItemType(item.type) : undefined;
+    const itemName = keyItemLabel(resolveItemName(input, itemId, item), keyItem);
     return {
       id: `shop-buy-${slot}-${itemId}`,
       itemId,
       label: fitMenuLabel([
-        resolveItemName(input, itemId, item),
+        itemName,
         String(cost),
         soldOut ? "SOLD OUT" : (!affordable ? "NO CASH" : "")
       ].filter(Boolean).join(" ")),
@@ -639,17 +649,20 @@ export function buildShopViewModel(input: ShopViewModelInput): ShopViewModel {
       affordable,
       soldOut,
       equippable: item?.equippable ?? false,
+      keyItem,
       ...(equipmentSlot ? { equipmentSlot } : {})
     };
   });
   const sellEntries = (input.partyState?.inventory?.(ownerChar) ?? member.inventory).map((itemId, slot) => {
     const item = items.get(itemId);
+    const keyItem = keyItemIds.has(itemId);
     const price = sellPriceForItem(item ?? fallbackItem(itemId));
     const equipmentSlot = item ? equipmentSlotForItemType(item.type) : undefined;
+    const itemName = keyItemLabel(resolveItemName(input, itemId, item), keyItem);
     return {
       id: `shop-sell-${slot}-${itemId}`,
       itemId,
-      label: fitMenuLabel(`${resolveItemName(input, itemId, item)} ${price}`),
+      label: fitMenuLabel(`${itemName} ${price}`),
       cost: stat(item?.cost ?? 0),
       price,
       ownerChar,
@@ -658,9 +671,10 @@ export function buildShopViewModel(input: ShopViewModelInput): ShopViewModel {
       affordable: true,
       soldOut: false,
       equippable: item?.equippable ?? false,
+      keyItem,
       ...(equipmentSlot ? { equipmentSlot } : {})
     };
-  });
+  }).sort((a, b) => keyItemSortValue(a.keyItem) - keyItemSortValue(b.keyItem) || a.inventorySlot - b.inventorySlot);
   return {
     storeId: stat(input.storeId),
     member: activeMemberView(member),
@@ -806,6 +820,7 @@ export function buildGoodsScreen(goods: GoodsViewModel, id = GOODS_MENU_ID): Men
           id: entry.id,
           label: entry.label,
           enabled: true,
+          ...(entry.keyItem ? { textColor: KEY_ITEM_COLOR } : {}),
           childScreenId: entry.actionScreenId
         }))
       : [{ id: "goods-empty", label: `${goods.member.name} has no goods.`, enabled: false }],
@@ -1069,6 +1084,7 @@ export function buildShopMenuScreens(shop: ShopViewModel): MenuScreen[] {
             id: entry.id,
             label: entry.label,
             enabled: entry.available,
+            ...(entry.keyItem ? { textColor: KEY_ITEM_COLOR } : {}),
             actionId: buildShopBuyActionId(shop.storeId, entry.ownerChar, entry.itemId)
           }))
         : [{ id: `shop-buy-empty-${shop.storeId}`, label: "No goods.", enabled: false }],
@@ -1082,6 +1098,7 @@ export function buildShopMenuScreens(shop: ShopViewModel): MenuScreen[] {
             id: entry.id,
             label: entry.label,
             enabled: true,
+            ...(entry.keyItem ? { textColor: KEY_ITEM_COLOR } : {}),
             actionId: buildShopSellActionId(
               shop.storeId,
               entry.ownerChar,
@@ -1248,21 +1265,24 @@ export function buildShopEquipPromptScreen(input: {
 
 function inventoryEntries(input: PartyMenuViewModelInput, member: PartyMember): InventoryMenuEntry[] {
   const items = itemMap(input.items);
+  const keyItemIds = normalizeKeyItemIds(input.keyItems);
   const inventory = input.partyState?.inventory?.(member.id) ?? member.inventory;
   const equipped = input.partyState?.equipped?.(member.id) ?? {};
   return inventory.map((itemId, slot) => {
     const item = items.get(itemId);
+    const keyItem = keyItemIds.has(itemId);
     const equipmentSlot = item ? equipmentSlotForItemType(item.type) : undefined;
     return {
       id: `goods-${slot}-${itemId}`,
       itemId,
       slot,
       ownerChar: member.id,
-      label: fitMenuLabel(resolveItemName(input, itemId, item)),
+      label: fitMenuLabel(keyItemLabel(resolveItemName(input, itemId, item), keyItem)),
       equippable: item?.equippable ?? false,
       fieldUsable: isFieldUsableItemEffect(item ? decodeItemUseEffect(item) : undefined),
       ...(equipmentSlot ? { equipmentSlot } : {}),
       equipped: equipmentSlot ? equipped[equipmentSlot] === itemId : false,
+      keyItem,
       helpText: item?.helpText,
       ...(item && equipmentSlot ? {
         statPreview: previewEquipStats({
@@ -1278,7 +1298,7 @@ function inventoryEntries(input: PartyMenuViewModelInput, member: PartyMember): 
       giveTargetScreenId: `goods-give-target-${member.id}-${slot}-${itemId}`,
       equipActionScreenId: `equip-item-${member.id}-${slot}-${itemId}`
     };
-  });
+  }).sort((a, b) => keyItemSortValue(a.keyItem) - keyItemSortValue(b.keyItem) || a.slot - b.slot);
 }
 
 export function buildItemUseActionId(

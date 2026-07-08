@@ -692,6 +692,11 @@ export const ItemOverridesSchema = z.object({
   byItemId: z.record(z.string().regex(/^\d+$/), ItemOverrideEntrySchema)
 }).strict();
 
+export const KeyItemsSchema = z.object({
+  schema: z.literal("swagbound.key-items.v1"),
+  itemIds: z.array(z.number().int().nonnegative())
+}).strict();
+
 const CharacterOverrideNameSchema = z.string()
   .trim()
   .min(1)
@@ -2183,6 +2188,7 @@ export type MusicManifest = z.infer<typeof MusicManifestSchema>;
 export type BackgroundOverrideEntry = z.infer<typeof BackgroundOverrideEntrySchema>;
 export type BackgroundOverrides = z.infer<typeof BackgroundOverridesSchema>;
 export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;
+export type KeyItems = z.infer<typeof KeyItemsSchema>;
 export type CharacterOverrides = z.infer<typeof CharacterOverridesSchema>;
 export type EnemyOverrides = z.infer<typeof EnemyOverridesSchema>;
 export type EnemyStatOverrides = z.infer<typeof EnemyStatOverridesSchema>;

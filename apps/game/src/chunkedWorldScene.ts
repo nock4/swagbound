@@ -243,6 +243,7 @@ import {
 } from "./playerVisualState";
 import { drawSwirl } from "./transitions";
 import { activeWindowFlavorId } from "./windowSettings";
+import { isKeyItemId } from "./keyItems";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import { applySolidOverrideRects } from "./collisionOverrides";
 import {
@@ -331,6 +332,7 @@ import {
   overworldInteractableEvents,
   overworldInteractableIsOpened
 } from "./overworldInteractables";
+import { ROUTE_OPEN_FLAG, shouldUseAct1Night } from "./worldNight";
 import type { SourceCheckReturnTo } from "./sourceCheckScene";
 import {
   SOURCE_CHECK_RETRY_DISTANCE_PX,
@@ -507,6 +509,10 @@ type DoorWarpOptions = {
 type DoorFadePhase = "none" | "fade-out" | "fade-in";
 
 const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
+const ACT1_NIGHT_TINT_COLOR = 0x0a1236;
+const ACT1_NIGHT_TINT_ALPHA = 0.62;
+const ACT1_NIGHT_TINT_DEPTH = 130_000;
+const ACT1_DAWN_FADE_MS = 3_000;
 // The EB battle-encounter swirl: a colored spiral covers the overworld to black, THEN we switch to the
 // battle scene (which reveals from black). Sits above everything, including the door-fade overlay.
 const ENCOUNTER_SWIRL_MS = 620;
@@ -703,6 +709,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private roomMaskGraphics?: Phaser.GameObjects.Graphics;
   private roomMask?: Phaser.Display.Masks.GeometryMask;
   private roomMaskBandGraphics?: Phaser.GameObjects.Graphics;
+  private nightTintOverlay?: Phaser.GameObjects.Rectangle;
+  private nightTintActive = false;
+  private pendingDawnFadeOnCreate = false;
   private solidRows: string[] = [];
   private surfaceRows: string[] = [];
   private navmesh?: NavmeshQuery;
@@ -1037,9 +1046,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.cameras.main.startFollow(this.player, true);
     this.cameras.main.roundPixels = true;
     this.refreshRoomBounds(true);
+    this.updateAct1NightTint({ fade: this.pendingDawnFadeOnCreate });
+    this.pendingDawnFadeOnCreate = false;
     this.events.once("shutdown", () => {
       this.music.stop();
       publishAuditionTarget(null);
+      this.destroyNightTintOverlay();
       this.destroyDoorFadeOverlay();
       this.destroyCollisionOverlay();
       this.destroyRoomMask();
@@ -1256,6 +1268,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // silently — the live "joined!" beat only fires when a flag flips during play.
     this.reconcileRecruits();
     this.syncPresentInteractableSprites();
+    this.updateAct1NightTint();
     this.publish();
   }
 
@@ -1289,6 +1302,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (!this.playerState.inputLocked) {
         lockPlayer(this.playerState, this.playerFrames);
       }
+      this.updateAct1NightTint();
       this.updatePrompt();
       this.updateCollisionOverlay();
       this.publish();
@@ -1385,6 +1399,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updateTeleportVisited();
     this.syncPlayerObject();
     this.refreshRoomBounds();
+    this.updateAct1NightTint();
     this.syncOverworldMusicCue();
     this.refreshStreaming();
     this.updateCollisionOverlay();
@@ -1427,6 +1442,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private resetRuntimeStateForStart(): void {
     this.destroyDoorFadeOverlay();
+    this.destroyNightTintOverlay();
     this.unregisterForceEncounter();
     this.destroyPlayerOverlays();
     this.pendingBattleStart = undefined;
@@ -1782,6 +1798,78 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private activeInteriorRoom(): ConnectedRoomBounds | undefined {
     return this.activeRoomBounds?.isInterior ? this.activeRoomBounds : undefined;
+  }
+
+  private updateAct1NightTint(options: { fade?: boolean } = {}): void {
+    const indoors = Boolean(this.activeInteriorRoom());
+    const shouldShow = shouldUseAct1Night({
+      flags: this.gameFlags,
+      indoors
+    });
+    if (shouldShow) {
+      const overlay = this.ensureNightTintOverlay();
+      this.tweens.killTweensOf(overlay);
+      overlay.setAlpha(ACT1_NIGHT_TINT_ALPHA).setVisible(true);
+      this.syncNightTintOverlaySize();
+      this.nightTintActive = true;
+      return;
+    }
+    if (!this.nightTintOverlay && options.fade && !indoors) {
+      this.ensureNightTintOverlay().setAlpha(ACT1_NIGHT_TINT_ALPHA).setVisible(true);
+      this.nightTintActive = true;
+    }
+    if (!this.nightTintOverlay) {
+      this.nightTintActive = false;
+      return;
+    }
+    if (options.fade && this.nightTintActive) {
+      const overlay = this.nightTintOverlay;
+      this.tweens.killTweensOf(overlay);
+      overlay.setVisible(true);
+      this.syncNightTintOverlaySize();
+      this.tweens.add({
+        targets: overlay,
+        alpha: 0,
+        duration: ACT1_DAWN_FADE_MS,
+        ease: "Sine.easeInOut",
+        onComplete: () => {
+          if (this.nightTintOverlay === overlay) {
+            this.destroyNightTintOverlay();
+          } else {
+            overlay.destroy();
+          }
+        }
+      });
+      this.nightTintActive = false;
+      return;
+    }
+    this.destroyNightTintOverlay();
+  }
+
+  private ensureNightTintOverlay(): Phaser.GameObjects.Rectangle {
+    if (this.nightTintOverlay) {
+      return this.nightTintOverlay;
+    }
+    const overlay = this.add
+      .rectangle(0, 0, this.scale.width, this.scale.height, ACT1_NIGHT_TINT_COLOR, ACT1_NIGHT_TINT_ALPHA)
+      .setOrigin(0, 0)
+      .setScrollFactor(0)
+      .setDepth(ACT1_NIGHT_TINT_DEPTH);
+    this.nightTintOverlay = overlay;
+    return overlay;
+  }
+
+  private syncNightTintOverlaySize(): void {
+    this.nightTintOverlay?.setSize(this.scale.width, this.scale.height);
+  }
+
+  private destroyNightTintOverlay(): void {
+    if (this.nightTintOverlay) {
+      this.tweens.killTweensOf(this.nightTintOverlay);
+      this.nightTintOverlay.destroy();
+      this.nightTintOverlay = undefined;
+    }
+    this.nightTintActive = false;
   }
 
   private deriveInteriorSectorAreaRoomBounds(
@@ -4339,6 +4427,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.refreshOpenMenuAfterAction();
       return;
     }
+    if (isKeyItemId(action.itemId, this.data_.keyItems)) {
+      this.showMenuResult("The record keeps this one.");
+      return;
+    }
     const item = this.itemById(action.itemId) ?? fallbackShopItem(action.itemId);
     this.partyState.sellItem(action.char, item);
     this.refreshOpenMenuAfterAction();
@@ -4596,6 +4688,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }), {
       characters: this.data_.characters,
       items: this.data_.items,
+      keyItems: this.data_.keyItems,
       psi: this.data_.psi,
       shops: this.data_.shops,
       cardNfts: this.data_.cardNfts,
@@ -4608,6 +4701,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       screens.push(...buildShopMenuScreens(buildShopViewModel({
         characters: this.data_.characters,
         items: this.data_.items,
+        keyItems: this.data_.keyItems,
         shops: this.data_.shops,
         cardNfts: this.data_.cardNfts,
         flags: this.gameFlags,
@@ -4635,6 +4729,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       screens.push(...buildPhoneServiceScreens({
         characters: this.data_.characters,
         items: this.data_.items,
+        keyItems: this.data_.keyItems,
         cardNfts: this.data_.cardNfts,
         flags: this.gameFlags,
         partyState: this.partyState,
@@ -5097,6 +5192,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     const resolution = resolveStoryGateReturn(gate, restore.outcome);
     if (resolution.kind === "advance") {
+      if (resolution.setFlags.includes(ROUTE_OPEN_FLAG) && !this.gameFlags.has(ROUTE_OPEN_FLAG)) {
+        this.pendingDawnFadeOnCreate = true;
+      }
       if (resolution.firedFlag) {
         this.gameFlags.set(resolution.firedFlag);
       }
@@ -5406,6 +5504,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       startDialogue: (event) => this.startInteractionDialogue(event),
       setFlag: (flag) => {
         this.gameFlags.set(flag);
+        this.updateAct1NightTint({ fade: flag === ROUTE_OPEN_FLAG });
         this.syncPresentInteractableSprites();
         this.syncSourceCheckActors();
       },
@@ -5935,8 +6034,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
       setActorVisible: (actor, visible) => this.setCutsceneActorVisible(actor, visible),
       startDialogue: (pages) => this.dialogue.start(buildInlineDialoguePages([...pages])),
       isDialogueOpen: () => this.dialogue.open,
-      setGameFlag: (flag) => this.gameFlags.set(flag),
-      clearGameFlag: (flag) => this.gameFlags.unset(flag),
+      setGameFlag: (flag) => {
+        this.gameFlags.set(flag);
+        this.updateAct1NightTint({ fade: flag === ROUTE_OPEN_FLAG });
+      },
+      clearGameFlag: (flag) => {
+        this.gameFlags.unset(flag);
+        this.updateAct1NightTint();
+      },
       setEventFlag: (flag, set) => { if (set) { this.gameFlags.setNum(flag); } else { this.gameFlags.unsetNum(flag); } },
       playSound: (id) => this.playCutsceneSound(id),
       warp: (to) => this.warpPlayerToWorldPixel(to)
@@ -6853,6 +6958,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
     trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+    this.updateAct1NightTint({ fade: trigger.setFlags?.includes(ROUTE_OPEN_FLAG) });
     this.reconcileRecruits({ announce: true });
 
     if (trigger.warp) {
@@ -7170,6 +7276,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
       trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+      this.updateAct1NightTint({ fade: trigger.setFlags?.includes(ROUTE_OPEN_FLAG) });
       this.afterDialogueClosed();
       this.updatePrompt();
       this.publish();

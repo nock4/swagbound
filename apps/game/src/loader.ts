@@ -19,6 +19,7 @@ import {
   FontCollectionSchema,
   ItemCollectionSchema,
   ItemOverridesSchema,
+  KeyItemsSchema,
   ManifestSchema,
   MusicManifestSchema,
   NavmeshSchema,
@@ -67,6 +68,7 @@ import {
   type FontCollection,
   type ItemCollection,
   type ItemOverrides,
+  type KeyItems,
   type Manifest,
   type MusicManifest,
   type Navmesh,
@@ -110,6 +112,7 @@ const SPRITE_OVERRIDES_FILE = "sprite-overrides.json";
 const NPC_OVERRIDES_FILE = "npc-overrides.json";
 const BACKGROUND_OVERRIDES_FILE = "background-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
+const KEY_ITEMS_FILE = "key-items.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
 const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
@@ -169,6 +172,7 @@ export type GameData = {
   window?: WindowCollection;
   characters?: CharacterCollection;
   items?: ItemCollection;
+  keyItems: KeyItems;
   psi?: PsiCollection;
   shops?: ShopData;
 };
@@ -279,6 +283,13 @@ function emptySourceChecks(): DrifellaSourceChecks {
   };
 }
 
+function emptyKeyItems(): KeyItems {
+  return {
+    schema: "swagbound.key-items.v1",
+    itemIds: []
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -306,6 +317,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     characterOverrides,
     items,
     itemOverrides,
+    keyItems,
     psi,
     psiOverrides,
     shops,
@@ -364,6 +376,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       ? loadJson(`/generated/${manifest.files.items}`, ItemCollectionSchema)
       : Promise.resolve(undefined),
     loadJson(`/generated/${ITEM_OVERRIDES_FILE}`, ItemOverridesSchema),
+    loadJson(`/generated/${KEY_ITEMS_FILE}`, KeyItemsSchema),
     manifest.files.psi
       ? loadJson(`/generated/${manifest.files.psi}`, PsiCollectionSchema)
       : Promise.resolve(undefined),
@@ -454,6 +467,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     window,
     characters: resolvedCharacters,
     items: resolvedItems,
+    keyItems: keyItems ?? emptyKeyItems(),
     psi: resolvedPsi,
     shops
   };

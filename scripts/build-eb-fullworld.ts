@@ -14,6 +14,7 @@ import {
   EnemyStatOverridesSchema,
   expandEnemyNameFamilies,
   expandOverworldEnemySkins,
+  KeyItemsSchema,
   MusicManifestSchema,
   NavmeshSchema,
   NpcOverridesSchema,
@@ -56,6 +57,8 @@ export const TILE_OVERRIDES_SOURCE = "content/tile-overrides.json";
 export const TILE_OVERRIDES_OUTPUT = "tile-overrides.json";
 export const ITEM_OVERRIDES_SOURCE = "content/item-overrides.json";
 export const ITEM_OVERRIDES_OUTPUT = "item-overrides.json";
+export const KEY_ITEMS_SOURCE = "content/key-items.json";
+export const KEY_ITEMS_OUTPUT = "key-items.json";
 export const CHARACTER_OVERRIDES_SOURCE = "content/character-overrides.json";
 export const CHARACTER_OVERRIDES_OUTPUT = "character-overrides.json";
 export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
@@ -194,6 +197,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateNavmesh(NAVMESH_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
+  await validateKeyItems(KEY_ITEMS_SOURCE);
   await validateBossBattleDialogue(BOSS_BATTLE_DIALOGUE_SOURCE);
   await validateEnemyActionEffects(ENEMY_ACTION_EFFECTS_SOURCE);
   await validateRoamerZoneCaps(ROAMER_ZONE_CAPS_SOURCE);
@@ -208,6 +212,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(BACKGROUND_OVERRIDES_SOURCE, out, BACKGROUND_OVERRIDES_OUTPUT),
     copyJsonToGenerated(TILE_OVERRIDES_SOURCE, out, TILE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(KEY_ITEMS_SOURCE, out, KEY_ITEMS_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
@@ -360,6 +365,10 @@ async function validateNpcOverrides(source: string): Promise<void> {
 
 async function validateEnemyStatOverrides(source: string): Promise<void> {
   EnemyStatOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateKeyItems(source: string): Promise<void> {
+  KeyItemsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateBossBattleDialogue(source: string): Promise<void> {
