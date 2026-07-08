@@ -5,7 +5,7 @@ import { tsImport } from "tsx/esm/api";
 import { afterAction, createFleetRunControl, limitFor, readGenerated, state } from "./shared.mjs";
 
 export async function run(ctx) {
-  const battleData = readGenerated(ctx, "battle.json");
+  const battleData = applyEnemyStatOverrides(readGenerated(ctx, "battle.json"), readGenerated(ctx, "enemy-stat-overrides.json"));
   const characters = readGenerated(ctx, "characters.json");
   const groups = battleData.groups ?? [];
   const offlineGroups = groups.slice(0, limitFor(ctx, groups.length, 8));
@@ -59,7 +59,7 @@ export async function run(ctx) {
 }
 
 async function simulateGroups(ctx, battleData, characters, groups, watch) {
-  const [{ createBattleState, createBattleRng, outcome }, { resolveRoundStep }, { expandBattleGroupEnemies }] = await Promise.all([
+  const [{ createBattleState, createBattleRng, outcome, tickBattleMeters }, { resolveRoundStep }, { expandBattleGroupEnemies }] = await Promise.all([
     tsImport(pathToFileURL(path.join(ctx.root, "apps/game/src/battleLogic.ts")).href, import.meta.url),
     tsImport(pathToFileURL(path.join(ctx.root, "apps/game/src/battleRound.ts")).href, import.meta.url),
     tsImport(pathToFileURL(path.join(ctx.root, "apps/game/src/battleGroups.ts")).href, import.meta.url)
@@ -97,6 +97,8 @@ async function simulateGroups(ctx, battleData, characters, groups, watch) {
             battle = resolveRoundStep(battle, { side: "enemy", index: i }, undefined, rng, {}).state;
             result = outcome(battle);
           }
+          battle = tickBattleMeters(battle, 10000);
+          result = outcome(battle);
         }
         ctx.stats.battles.groupsSimulated += 1;
         if (result === "ongoing") {
@@ -176,4 +178,28 @@ async function mashBattleToWorld(ctx, session, groupId) {
 
 function activeBattlePhase(battle) {
   return battle && ["enter-transition", "command-input", "execution", "victory-summary", "defeat"].includes(battle.phase);
+}
+
+function applyEnemyStatOverrides(battleData, overrides) {
+  const byEnemyId = overrides?.byEnemyId ?? {};
+  if (!battleData?.enemies || Object.keys(byEnemyId).length === 0) {
+    return battleData;
+  }
+  return {
+    ...battleData,
+    enemies: battleData.enemies.map((enemy) => {
+      const override = byEnemyId[String(enemy.id)];
+      return override ? { ...enemy, ...definedStatOverrides(override) } : enemy;
+    })
+  };
+}
+
+function definedStatOverrides(override) {
+  const out = {};
+  for (const key of ["hp", "offense", "defense", "speed"]) {
+    if (override[key] !== undefined) {
+      out[key] = override[key];
+    }
+  }
+  return out;
 }

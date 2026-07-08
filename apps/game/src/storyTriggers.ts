@@ -91,6 +91,19 @@ export function selectStoryTrigger(
 }
 
 /**
+ * A save-slot restore places the player directly into the world. If that point is
+ * already inside an armed area trigger, hold it until the player exits and enters
+ * again so CONTINUE does not replay arrival beats immediately.
+ */
+export function storyTriggerSuppressionForRestore(
+  triggers: readonly StoryTrigger[],
+  feet: { x: number; y: number },
+  hasFlag: (flag: string) => boolean
+): string | undefined {
+  return selectStoryTrigger(triggers, feet, hasFlag)?.id;
+}
+
+/**
  * A barrier is active (solid + visible) when all of its requireFlags are set and
  * none of its blockFlags are set. The boss-cleared flag goes in blockFlags so the
  * barrier opens once the boss is beaten.

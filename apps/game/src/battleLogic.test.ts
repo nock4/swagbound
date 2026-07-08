@@ -1,15 +1,24 @@
-import type { BattleEnemy, ItemData } from "@eb/schemas";
+import { readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import type { BattleData, BattleEnemy, CharacterCollection, EnemyStatOverrides, ItemData } from "@eb/schemas";
 import { describe, expect, it } from "vitest";
 import {
   applyVictoryRewards,
   buildVictorySummaryViewModel,
+  createBattleRng,
   createBattleState,
+  outcome,
   resolveInstantWinRewards,
   resolveItemTurn,
   resolvePhysicalAttackDamage,
+  tickBattleMeters,
+  type BattleState,
   type BattleActor,
   type Rng
 } from "./battleLogic";
+import { expandBattleGroupEnemies } from "./battleGroups";
+import { resolveRoundStep } from "./battleRound";
 
 const PARTY0: BattleActor = { side: "party", index: 0 };
 
@@ -137,3 +146,73 @@ describe("battle rewards economy", () => {
     expect(result.summary.moneyGained).toBe(35);
   });
 });
+
+describe("headless battle group simulation", () => {
+  it.each([4, 6])("terminates generated battle group %s", (groupId) => {
+    const result = simulateGeneratedGroup(groupId);
+
+    expect(result.outcome).not.toBe("ongoing");
+    expect(result.rounds).toBeLessThan(200);
+  });
+});
+
+function simulateGeneratedGroup(groupId: number): { outcome: ReturnType<typeof outcome>; rounds: number } {
+  const battleData = readGenerated("battle.json") as BattleData;
+  const resolvedBattleData = applyEnemyStatOverridesForTest(
+    battleData,
+    readGenerated("enemy-stat-overrides.json") as EnemyStatOverrides
+  );
+  const characters = readGenerated("characters.json") as CharacterCollection;
+  const group = battleData.groups.find((entry) => entry.id === groupId);
+  if (!group) {
+    throw new Error(`Missing generated battle group ${groupId}`);
+  }
+  const enemies = expandBattleGroupEnemies(resolvedBattleData, group);
+  let battle: BattleState = createBattleState(enemies, { characters });
+  const rng = createBattleRng(groupId);
+  let result = outcome(battle);
+  let rounds = 0;
+  for (; rounds < 200 && result === "ongoing"; rounds += 1) {
+    for (let i = 0; i < battle.party.length && result === "ongoing"; i += 1) {
+      if (!targetHpAlive(battle.party[i])) continue;
+      const targetIndex = firstTargetHpAliveIndex(battle.enemies);
+      battle = resolveRoundStep(battle, { side: "party", index: i }, {
+        partySlot: i,
+        command: "AUTO",
+        target: { side: "enemy", index: Math.max(0, targetIndex) }
+      }, rng, {}).state;
+      result = outcome(battle);
+    }
+    for (let i = 0; i < battle.enemies.length && result === "ongoing"; i += 1) {
+      if (!targetHpAlive(battle.enemies[i])) continue;
+      battle = resolveRoundStep(battle, { side: "enemy", index: i }, undefined, rng, {}).state;
+      result = outcome(battle);
+    }
+    battle = tickBattleMeters(battle, 10000);
+    result = outcome(battle);
+  }
+  return { outcome: result, rounds };
+}
+
+function readGenerated(file: string): unknown {
+  const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../..");
+  return JSON.parse(readFileSync(path.join(root, "apps/game/public/generated", file), "utf8"));
+}
+
+function targetHpAlive(combatant: { hp: { target: number } } | undefined): boolean {
+  return (combatant?.hp.target ?? 0) > 0;
+}
+
+function firstTargetHpAliveIndex(combatants: Array<{ hp: { target: number } }>): number {
+  return combatants.findIndex(targetHpAlive);
+}
+
+function applyEnemyStatOverridesForTest(battleData: BattleData, overrides: EnemyStatOverrides): BattleData {
+  return {
+    ...battleData,
+    enemies: battleData.enemies.map((enemy) => {
+      const override = overrides.byEnemyId[String(enemy.id)];
+      return override ? { ...enemy, ...override } : enemy;
+    })
+  };
+}

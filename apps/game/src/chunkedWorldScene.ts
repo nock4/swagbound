@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
-import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, triggerFiredFlag } from "./storyTriggers";
+import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, storyTriggerSuppressionForRestore, triggerFiredFlag } from "./storyTriggers";
 import {
   CutsceneRunner,
   cutsceneMoveTimeoutMsForDistance,
@@ -245,7 +245,7 @@ import { drawSwirl } from "./transitions";
 import { activeWindowFlavorId } from "./windowSettings";
 import { isKeyItemId } from "./keyItems";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
-import { applySolidOverrideRects } from "./collisionOverrides";
+import { applyClearOverrideRects, applySolidOverrideRects } from "./collisionOverrides";
 import {
   FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY,
   PLAYER_SPRITE_OVERRIDE_SHEET_KEY,
@@ -1264,6 +1264,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.maybeStartNewGameStartup(spawn);
     }
     this.applyDebugFlags();
+    this.suppressStoryTriggerAtRestorePoint();
     // Bring in any already-earned recruits (from a restored save or ?flags=recruit:*)
     // silently - the live "joined!" beat only fires when a flag flips during play.
     this.reconcileRecruits();
@@ -2420,7 +2421,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
    */
   private applyCollisionOverrides(): void {
     const overrides = this.data_.collisionOverrides;
-    if (!overrides || overrides.solids.length === 0) return;
+    if (!overrides || ((overrides.clears?.length ?? 0) === 0 && overrides.solids.length === 0)) return;
+    applyClearOverrideRects(this.solidRows, overrides.clears ?? [], this.collisionCellSize);
     applySolidOverrideRects(this.solidRows, overrides.solids, this.collisionCellSize);
   }
 
@@ -6951,6 +6953,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updatePrompt();
     this.publish();
     return true;
+  }
+
+  private suppressStoryTriggerAtRestorePoint(): void {
+    if (!this.restoredFromSave) {
+      return;
+    }
+    const triggers = this.data_.storyTriggers?.triggers;
+    if (!triggers || triggers.length === 0) {
+      return;
+    }
+    this.suppressedTriggerId = storyTriggerSuppressionForRestore(
+      triggers,
+      this.playerState,
+      (flag) => this.gameFlags.has(flag)
+    );
   }
 
   private applyStoryTriggerEffects(trigger: StoryTrigger): void {

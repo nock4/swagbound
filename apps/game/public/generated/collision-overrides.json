@@ -1,6 +1,36 @@
 {
   "schema": "swagbound.collision-overrides.v1",
   "comment": "AUTO-GENERATED (MAXW=90 MAXH=70 MINFILL=0.3, whole map) then reviewed: excluded terrain FPs sectors 225,339. Regenerate: MAXW=90 MAXH=70 MINFILL=0.3 node scripts/gen-collision-overrides.mjs 0 0 8192 10240",
+  "clears": [
+    {
+      "x": 432,
+      "y": 104,
+      "w": 8,
+      "h": 8,
+      "note": "[fix-batch] clear return-door trigger approach for door 6288,9680 via landing 448,112"
+    },
+    {
+      "x": 7464,
+      "y": 328,
+      "w": 8,
+      "h": 8,
+      "note": "[fix-batch] clear return-door trigger approach for door 7432,1000 via landing 7480,336"
+    },
+    {
+      "x": 4176,
+      "y": 672,
+      "w": 8,
+      "h": 8,
+      "note": "[fix-batch] clear return-door trigger approach for door 6096,6736 via landing 4192,680"
+    },
+    {
+      "x": 4896,
+      "y": 232,
+      "w": 8,
+      "h": 8,
+      "note": "[fix-batch] clear movement probe footprint at 4904,244 after door 4904,224"
+    }
+  ],
   "solids": [
     {
       "x": 2584,

@@ -11,6 +11,14 @@
 
 export type CollisionOverrideRect = { x: number; y: number; w: number; h: number };
 
+export function applyClearOverrideRects(
+  solidRows: string[],
+  rects: readonly CollisionOverrideRect[],
+  cellSize: number
+): void {
+  applyOverrideRects(solidRows, rects, cellSize, "0");
+}
+
 /**
  * Mark every cell covered by the rects (world px) solid. Mutates `solidRows`
  * entries in place (rows are replaced strings). Touched-row copy keeps the cost
@@ -20,6 +28,15 @@ export function applySolidOverrideRects(
   solidRows: string[],
   rects: readonly CollisionOverrideRect[],
   cellSize: number
+): void {
+  applyOverrideRects(solidRows, rects, cellSize, "1");
+}
+
+function applyOverrideRects(
+  solidRows: string[],
+  rects: readonly CollisionOverrideRect[],
+  cellSize: number,
+  value: "0" | "1"
 ): void {
   if (rects.length === 0 || solidRows.length === 0 || cellSize <= 0) {
     return;
@@ -43,7 +60,7 @@ export function applySolidOverrideRects(
     for (let r = r0; r <= r1; r += 1) {
       const chars = rowChars(r);
       for (let c = c0; c <= c1; c += 1) {
-        chars[c] = "1";
+        chars[c] = value;
       }
     }
   }
