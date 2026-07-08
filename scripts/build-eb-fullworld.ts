@@ -33,7 +33,8 @@ import {
   type TileOverrides
 } from "../packages/eb-schemas/src/index";
 import { DEFAULT_GENERATED_OUT } from "../packages/content-builder/src/build";
-import { convertProject } from "../packages/eb-converter/src/index";
+import { convertProject, parseFgPredicate } from "../packages/eb-converter/src/index";
+import type { FgPredicateVersion, ForegroundPredicateSummary } from "../packages/eb-converter/src/world";
 
 export const EB_FULL_WORLD_PROJECT = "external/coilsnake-full";
 export const EB_FULL_WORLD_MODE = "full";
@@ -99,12 +100,17 @@ export const OBJECTIVES_OUTPUT = "objectives.json";
 export const NAVMESH_SOURCE = "content/navmesh.json";
 export const NAVMESH_OUTPUT = "navmesh.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
+const FG_V2_SUMMARY_OUTPUT = "tmp/fg-v2/summary.json";
 
 /**
  * Canonical EB generated-data build: full world plus battle, party, item, font,
  * window, encounter, PSI, and shop data in the shared generated output.
  */
-export async function buildEbFullWorldDefault() {
+export async function buildEbFullWorldDefault(options: { fgPredicate?: FgPredicateVersion } = {}) {
+  // v2 (column-scoped south gating + beside-edge crop) is the shipped default as of
+  // the FG Converter v2 pass; rebuild with --fg-predicate=v1 (or FG_PREDICATE=v1)
+  // to roll back to the original walk-behind bake.
+  const fgPredicate = options.fgPredicate ?? "v2";
   const tileOverrides = await readTileOverrides(TILE_OVERRIDES_SOURCE);
   const result = await convertProject({
     project: EB_FULL_WORLD_PROJECT,
@@ -116,11 +122,45 @@ export async function buildEbFullWorldDefault() {
     shops: true,
     font: true,
     window: true,
+    fgPredicate,
     tileOverrides,
     tileOverridePublicRoot: resolve(GAME_PUBLIC_ROOT)
   });
   await copyContentOverlaysToGenerated(EB_FULL_WORLD_OUT);
+  if (fgPredicate === "v2") {
+    await writeFgV2Summary(result.foregroundSummary);
+  }
   return result;
+}
+
+function parseBuildArgs(argv: string[]): { fgPredicate: FgPredicateVersion } {
+  let fgPredicate = parseFgPredicate(process.env.FG_PREDICATE);
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === "--fg-predicate") {
+      fgPredicate = parseFgPredicate(argv[index + 1]);
+      index += 1;
+    } else if (arg.startsWith("--fg-predicate=")) {
+      fgPredicate = parseFgPredicate(arg.slice("--fg-predicate=".length));
+    }
+  }
+  return { fgPredicate };
+}
+
+async function writeFgV2Summary(summary: ForegroundPredicateSummary | undefined): Promise<void> {
+  if (!summary) {
+    throw new Error("FG predicate v2 build did not produce a foreground summary.");
+  }
+  const target = resolve(FG_V2_SUMMARY_OUTPUT);
+  await mkdir(dirname(target), { recursive: true });
+  await writeFile(target, `${JSON.stringify({
+    predicate: "v2",
+    counts: {
+      cellsPromotedV1Only: summary.v1Only,
+      cellsPromotedV2Only: summary.v2Only,
+      cellsPromotedBoth: summary.both
+    }
+  }, null, 2)}\n`, "utf8");
 }
 
 async function copyJsonToGenerated(source: string, out: string, outputName: string): Promise<void> {
@@ -379,7 +419,8 @@ async function fileExists(path: string): Promise<boolean> {
 }
 
 async function main(): Promise<void> {
-  const result = await buildEbFullWorldDefault();
+  const args = parseBuildArgs(process.argv.slice(2));
+  const result = await buildEbFullWorldDefault(args);
   const world = result.world;
   if (!("mode" in world && world.mode === "full")) {
     throw new Error("EB full-world default build produced non-full world output.");
@@ -388,6 +429,7 @@ async function main(): Promise<void> {
     ok: result.manifest.errors.length === 0,
     sourceProject: result.manifest.sourceProject.path,
     out: EB_FULL_WORLD_OUT,
+    fgPredicate: args.fgPredicate,
     world: {
       available: world.available,
       mode: world.mode,

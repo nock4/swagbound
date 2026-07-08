@@ -39,7 +39,7 @@ import { WINDOW_FILE, buildWindowData } from "./window";
 import { CHARACTERS_FILE, buildCharacterData } from "./characters";
 import { ITEMS_FILE, PSI_FILE, buildItemPsiData } from "./itemsPsi";
 import { SHOPS_FILE, buildShopData } from "./shops";
-import { buildWorldArtifacts, TUTORIAL_NPC_ID, type WorldMode } from "./world";
+import { buildWorldArtifacts, TUTORIAL_NPC_ID, type FgPredicateVersion, type ForegroundPredicateSummary, type WorldMode } from "./world";
 import { parseTeleportDestinationTable } from "./coilsnakeYaml";
 import {
   DEFAULT_EB_ROM_PATH,
@@ -80,6 +80,7 @@ type CliArgs = {
   romPath?: string;
   tileOverrides?: TileOverrides;
   tileOverridePublicRoot?: string;
+  fgPredicate?: FgPredicateVersion;
 };
 
 type ConvertResult = {
@@ -100,6 +101,7 @@ type ConvertResult = {
   items?: ItemCollection;
   psi?: PsiCollection;
   shops?: ShopData;
+  foregroundSummary?: ForegroundPredicateSummary;
 };
 
 export function parseArgs(argv: string[]): CliArgs {
@@ -117,6 +119,7 @@ export function parseArgs(argv: string[]): CliArgs {
     characters: parseCharacterMode(process.env.EB_CHARS),
     items: itemsEnabled,
     shops: parseShopMode(process.env.EB_SHOPS) || itemsEnabled,
+    fgPredicate: parseFgPredicate(process.env.FG_PREDICATE),
     ...(process.env.EB_SPAWN ? { spawnWorldPixel: parseSpawn(process.env.EB_SPAWN) } : {}),
     ...(process.env.EB_ROM ? { romPath: process.env.EB_ROM } : {})
   };
@@ -164,9 +167,24 @@ export function parseArgs(argv: string[]): CliArgs {
     } else if (arg === "--rom") {
       args.romPath = argv[index + 1];
       index += 1;
+    } else if (arg === "--fg-predicate") {
+      args.fgPredicate = parseFgPredicate(argv[index + 1]);
+      index += 1;
+    } else if (arg.startsWith("--fg-predicate=")) {
+      args.fgPredicate = parseFgPredicate(arg.slice("--fg-predicate=".length));
     }
   }
   return args;
+}
+
+export function parseFgPredicate(value: string | undefined): FgPredicateVersion {
+  if (!value || value === "v1") {
+    return "v1";
+  }
+  if (value === "v2") {
+    return "v2";
+  }
+  throw new Error(`Unsupported FG_PREDICATE "${value}". Expected "v1" or "v2".`);
 }
 
 function parseWorldMode(value: string | undefined): WorldMode {
@@ -953,6 +971,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   const charactersEnabled = options.characters ?? parseCharacterMode(process.env.EB_CHARS);
   const itemsEnabled = options.items ?? parseItemMode(process.env.EB_ITEMS);
   const shopsEnabled = options.shops ?? (parseShopMode(process.env.EB_SHOPS) || itemsEnabled);
+  const fgPredicate = options.fgPredicate ?? parseFgPredicate(process.env.FG_PREDICATE);
   const projectAbs = resolveFromRoot(project);
   const outAbs = resolveFromRoot(out);
   const configuredSpawnWorldPixel = options.spawnWorldPixel ?? (process.env.EB_SPAWN ? parseSpawn(process.env.EB_SPAWN) : undefined);
@@ -998,6 +1017,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     spawnWorldPixelDerivation,
     newGameStartupRef,
     newGameStartupDerivation: newGameStartupRef ? ROM_NEW_GAME_STARTUP_DERIVATION : undefined,
+    fgPredicate,
     tileOverrides: options.tileOverrides,
     tileOverridePublicRoot: options.tileOverridePublicRoot,
     scripts,
@@ -1005,6 +1025,7 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
   });
   const world = worldBuild.world;
   const sprites = worldBuild.sprites;
+  const foregroundSummary = worldBuild.foregroundSummary;
   const referencesRobotHelloWorld = npcs.references.some((reference) => reference.reference === "robot.hello_world");
   const robotFile = scripts.files.find((file) => file.path === "ccscript/robot.ccs");
   const helloWorldIndex = robotFile?.commands.findIndex(
@@ -1251,7 +1272,8 @@ export async function convertProject(options: Partial<CliArgs> = {}): Promise<Co
     ...(characters ? { characters } : {}),
     ...(items ? { items } : {}),
     ...(psi ? { psi } : {}),
-    ...(shops ? { shops } : {})
+    ...(shops ? { shops } : {}),
+    ...(foregroundSummary ? { foregroundSummary } : {})
   };
 }
 

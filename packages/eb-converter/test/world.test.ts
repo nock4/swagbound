@@ -70,6 +70,11 @@ function syntheticFts(): string {
       lines.push(cell(1, 0x03).repeat(16)); // walkable whole-body walk-behind (tree canopy)
     } else if (i === 5) {
       lines.push(cell(1, 0x82).repeat(16)); // solid front face carrying a stray FG flag
+    } else if (i === 6) {
+      lines.push(Array.from({ length: 16 }, (_, index) => {
+        const cellY = Math.floor(index / 4);
+        return cell(1, cellY === 1 || cellY === 2 ? 0x80 : 0x00);
+      }).join("")); // mixed tile: solid middle band plus walkable floor cells
     } else {
       lines.push(cell(0, 0x00).repeat(16)); // blank void tile
     }
@@ -349,6 +354,201 @@ describe("region selection and collision encoding", () => {
 
     expect(bottomForegroundPixel(2)).toEqual([255, 0, 0, 255]);
     expect(bottomForegroundPixel(1)).toEqual([0, 0, 0, 0]);
+  });
+
+  it("keeps v1 foreground predicate behavior unchanged for all-solid occluders", () => {
+    const tileset = parseFts(syntheticFts());
+    const graphics = { tileset, palettes: new Map([[0, tileset.palettes[0]]]) };
+    const sector = {
+      tileset: 0,
+      palette: 0,
+      music: "0",
+      setting: "none",
+      townMap: "none",
+      item: "0",
+      areaId: 0,
+      indoor: false,
+      bounded: false
+    };
+    const mapRows = Array.from({ length: FULL_CHUNK_SIZE_TILES }, () =>
+      Array.from({ length: FULL_CHUNK_SIZE_TILES }, () => 1)
+    );
+    mapRows[0][0] = 2;
+    mapRows[1][0] = 2;
+
+    const composed = composeRegion({
+      bounds: {
+        originTileX: 0,
+        originTileY: 0,
+        widthTiles: FULL_CHUNK_SIZE_TILES,
+        heightTiles: FULL_CHUNK_SIZE_TILES
+      },
+      mapRows,
+      sectorLookup: () => sector,
+      tilesetForMapTileset: () => graphics,
+      fgPredicate: "v1"
+    });
+
+    expect([...composed.foreground.slice(0, 4)]).toEqual([255, 0, 0, 255]);
+  });
+
+  it("v2 keeps tall solid canopy columns promoted when floor is within the column scan", () => {
+    const tileset = parseFts(syntheticFts());
+    const graphics = { tileset, palettes: new Map([[0, tileset.palettes[0]]]) };
+    const sector = {
+      tileset: 0,
+      palette: 0,
+      music: "0",
+      setting: "none",
+      townMap: "none",
+      item: "0",
+      areaId: 0,
+      indoor: false,
+      bounded: false
+    };
+    const mapRows = Array.from({ length: FULL_CHUNK_SIZE_TILES }, () =>
+      Array.from({ length: FULL_CHUNK_SIZE_TILES }, () => 0)
+    );
+    mapRows[0][0] = 2;
+    mapRows[1][0] = 6;
+
+    const composed = composeRegion({
+      bounds: {
+        originTileX: 0,
+        originTileY: 0,
+        widthTiles: FULL_CHUNK_SIZE_TILES,
+        heightTiles: FULL_CHUNK_SIZE_TILES
+      },
+      mapRows,
+      sectorLookup: () => sector,
+      tilesetForMapTileset: () => graphics,
+      fgPredicate: "v2"
+    });
+    const pixel = (x: number, y: number): number[] => {
+      const offset = (y * composed.widthPixels + x) * 4;
+      return [...composed.foreground.slice(offset, offset + 4)];
+    };
+
+    expect(pixel(0, 0)).toEqual([255, 0, 0, 255]);
+    expect(pixel(0, 16)).toEqual([255, 0, 0, 255]);
+    expect(pixel(0, 24)).toEqual([0, 0, 0, 0]);
+  });
+
+  it("v2 demotes floating solid occluder columns with no walkable floor within the scan", () => {
+    const tileset = parseFts(syntheticFts());
+    const graphics = { tileset, palettes: new Map([[0, tileset.palettes[0]]]) };
+    const sector = {
+      tileset: 0,
+      palette: 0,
+      music: "0",
+      setting: "none",
+      townMap: "none",
+      item: "0",
+      areaId: 0,
+      indoor: false,
+      bounded: false
+    };
+    const mapRows = Array.from({ length: FULL_CHUNK_SIZE_TILES }, () =>
+      Array.from({ length: FULL_CHUNK_SIZE_TILES }, () => 0)
+    );
+    mapRows[0][0] = 2;
+    mapRows[1][0] = 2;
+
+    const composed = composeRegion({
+      bounds: {
+        originTileX: 0,
+        originTileY: 0,
+        widthTiles: FULL_CHUNK_SIZE_TILES,
+        heightTiles: FULL_CHUNK_SIZE_TILES
+      },
+      mapRows,
+      sectorLookup: () => sector,
+      tilesetForMapTileset: () => graphics,
+      fgPredicate: "v2"
+    });
+
+    expect([...composed.foreground.slice(0, 4)]).toEqual([0, 0, 0, 0]);
+  });
+
+  it("v2 crops only the beside-standing bottom edge of heuristic occluder columns", () => {
+    const tileset = parseFts(syntheticFts());
+    const graphics = { tileset, palettes: new Map([[0, tileset.palettes[0]]]) };
+    const sector = {
+      tileset: 0,
+      palette: 0,
+      music: "0",
+      setting: "none",
+      townMap: "none",
+      item: "0",
+      areaId: 0,
+      indoor: false,
+      bounded: false
+    };
+    const mapRows = Array.from({ length: FULL_CHUNK_SIZE_TILES }, () =>
+      Array.from({ length: FULL_CHUNK_SIZE_TILES }, () => 1)
+    );
+    mapRows[0][0] = 2;
+    mapRows[1][0] = 6;
+
+    const composed = composeRegion({
+      bounds: {
+        originTileX: 0,
+        originTileY: 0,
+        widthTiles: FULL_CHUNK_SIZE_TILES,
+        heightTiles: FULL_CHUNK_SIZE_TILES
+      },
+      mapRows,
+      sectorLookup: () => sector,
+      tilesetForMapTileset: () => graphics,
+      fgPredicate: "v2"
+    });
+    const pixel = (x: number, y: number): number[] => {
+      const offset = (y * composed.widthPixels + x) * 4;
+      return [...composed.foreground.slice(offset, offset + 4)];
+    };
+
+    expect(pixel(0, 7)).toEqual([255, 0, 0, 255]);
+    expect(pixel(0, 8)).toEqual([255, 0, 0, 255]);
+    expect(pixel(0, 23)).toEqual([255, 0, 0, 255]);
+    expect(pixel(0, 24)).toEqual([0, 0, 0, 0]);
+    expect(pixel(0, 31)).toEqual([0, 0, 0, 0]);
+  });
+
+  it("v2 keeps priority and walkable 0x02 cells promoted", () => {
+    const tileset = parseFts(syntheticFts());
+    const graphics = { tileset, palettes: new Map([[0, tileset.palettes[0]]]) };
+    const sector = {
+      tileset: 0,
+      palette: 0,
+      music: "0",
+      setting: "none",
+      townMap: "none",
+      item: "0",
+      areaId: 0,
+      indoor: false,
+      bounded: false
+    };
+    const composeWithTopTile = (arrangementIndex: number) => {
+      const mapRows = Array.from({ length: FULL_CHUNK_SIZE_TILES }, () =>
+        Array.from({ length: FULL_CHUNK_SIZE_TILES }, () => 1)
+      );
+      mapRows[0][0] = arrangementIndex;
+      return composeRegion({
+        bounds: {
+          originTileX: 0,
+          originTileY: 0,
+          widthTiles: FULL_CHUNK_SIZE_TILES,
+          heightTiles: FULL_CHUNK_SIZE_TILES
+        },
+        mapRows,
+        sectorLookup: () => sector,
+        tilesetForMapTileset: () => graphics,
+        fgPredicate: "v2"
+      });
+    };
+
+    expect([...composeWithTopTile(3).foreground.slice(0, 4)]).toEqual([255, 0, 0, 255]);
+    expect([...composeWithTopTile(4).foreground.slice(0, 4)]).toEqual([255, 0, 0, 255]);
   });
 
   it("promotes walkable whole-body walk-behind cells (0x02) to the foreground", () => {

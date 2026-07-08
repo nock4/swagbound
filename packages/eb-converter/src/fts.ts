@@ -252,9 +252,14 @@ export function drawArrangement(options: {
    * `priorityOnly` is true. Receives the decoded cell and its surface byte. When
    * omitted, falls back to `isForegroundArrangementCell` (priority OR solid).
    */
-  cellInForeground?: (cell: ArrangementCell, surfaceByte: number) => boolean;
+  cellInForeground?: (cell: ArrangementCell, surfaceByte: number, cellX: number, cellY: number) => boolean;
+  /**
+   * Optional per-pixel foreground clip. This is only consulted after a cell has
+   * already been accepted for the foreground layer.
+   */
+  pixelInForeground?: (cell: ArrangementCell, surfaceByte: number, cellX: number, cellY: number, pixelX: number, pixelY: number) => boolean;
 }): void {
-  const { tileset, arrangementIndex, palette, target, targetWidth, targetX, targetY, priorityOnly, cellInForeground } = options;
+  const { tileset, arrangementIndex, palette, target, targetWidth, targetX, targetY, priorityOnly, cellInForeground, pixelInForeground } = options;
   const base = arrangementIndex * FTS_CELLS_PER_ARRANGEMENT;
   for (let cellY = 0; cellY < 4; cellY += 1) {
     for (let cellX = 0; cellX < 4; cellX += 1) {
@@ -262,7 +267,7 @@ export function drawArrangement(options: {
       const surfaceByte = tileset.collisions[base + cellY * 4 + cellX];
       if (priorityOnly) {
         const include = cellInForeground
-          ? cellInForeground(cell, surfaceByte)
+          ? cellInForeground(cell, surfaceByte, cellX, cellY)
           : isForegroundArrangementCell(cell, surfaceByte);
         if (!include) {
           continue;
@@ -276,6 +281,9 @@ export function drawArrangement(options: {
           const pixel = minitile[sourceY * 8 + sourceX];
           if (priorityOnly && pixel === 0) {
             continue; // color 0 stays transparent on the foreground layer
+          }
+          if (priorityOnly && pixelInForeground && !pixelInForeground(cell, surfaceByte, cellX, cellY, px, py)) {
+            continue;
           }
           const colorOffset = (cell.subpalette * COLORS_PER_SUBPALETTE + pixel) * 4;
           const outOffset = ((targetY + cellY * 8 + py) * targetWidth + targetX + cellX * 8 + px) * 4;
