@@ -495,7 +495,7 @@ type BlockedOptions = {
   // can always walk free instead of being trapped in every direction.
   escapeOverlapAt?: { x: number; y: number };
   // Player-only, vertical moves only: EB ladder cells (0x10, usually 0x90 =
-  // ladder over solid cliff) are climbable — solid terrain passes when every
+  // ladder over solid cliff) are climbable - solid terrain passes when every
   // blocking cell carries the ladder flag. NPCs/roamers never set this.
   allowLadderTerrain?: boolean;
 };
@@ -534,7 +534,7 @@ const OVERWORLD_CAMERA_ZOOM = 2;
 // Cap on the interior zoom-to-fill so tiny sector-areas don't blow up.
 const INTERIOR_CAMERA_MAX_ZOOM = 3.5;
 // Spawn band kept fully ON-SCREEN (camera shows ~128x112 world px from the player
-// at zoom 2) so a roamer is always visible before it can reach you — never an
+// at zoom 2) so a roamer is always visible before it can reach you - never an
 // off-screen "random" touch. Min keeps it off the player's feet.
 const OVERWORLD_ENEMY_MIN_SPAWN_DIST_PX = 80;
 const OVERWORLD_ENEMY_MAX_SPAWN_DIST_PX = 104;
@@ -613,7 +613,7 @@ const QUESTS: readonly Quest[] = [
 /**
  * Recruitable party members past the Act-1 Bosch + Cloak duo. Each joins the
  * moment its `flag` is set (a normal story flag, authored into a trigger's
- * setFlags — see content/triggers.json). Recruitment is flag-driven so it both
+ * setFlags - see content/triggers.json). Recruitment is flag-driven so it both
  * survives save/load (partyIds persist) and replays deterministically via
  * ?flags=recruit:munch. charIds match the character roster (2=Munch/Jeff,
  * 3=Knight/Poo); the base duo (0,1) is always present and never listed here.
@@ -1103,7 +1103,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.input.keyboard?.on("keydown-P", () => {
       if (!this.shouldIgnoreWorldHotkey()) this.handleSaveKey();
     });
-    // Debug toggles (panel + collision overlay) are dev-only — not wired in production builds.
+    // Debug toggles (panel + collision overlay) are dev-only - not wired in production builds.
     // F1 toggles the raw Phaser state panel; F2 the collision overlay; backtick (`) opens the
     // Dev Console hub (Track Lab / annotate / warp / encounters).
     if (import.meta.env.DEV) {
@@ -1265,7 +1265,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     this.applyDebugFlags();
     // Bring in any already-earned recruits (from a restored save or ?flags=recruit:*)
-    // silently — the live "joined!" beat only fires when a flag flips during play.
+    // silently - the live "joined!" beat only fires when a flag flips during play.
     this.reconcileRecruits();
     this.syncPresentInteractableSprites();
     this.updateAct1NightTint();
@@ -2058,7 +2058,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const areaId =
       sectorIndex !== null && sectors?.areaIds ? sectors.areaIds[sectorIndex] ?? null : null;
     return {
-      cue: this.currentOverworldMusicCue ?? "—",
+      cue: this.currentOverworldMusicCue ?? "-",
       sectorIndex,
       areaId,
       x: Math.round(playerState.x),
@@ -2471,7 +2471,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       return this.textures.getPixelAlpha(Math.floor(x - cx * size), Math.floor(y - cy * size), key) ?? -1;
     };
-    // Sampled opaque-FG coverage over a world rect — the "player is occluded here"
+    // Sampled opaque-FG coverage over a world rect - the "player is occluded here"
     // assertion primitive (ratio of opaque FG pixels among sampled ones).
     globals.__fgCoverageRect = (x: number, y: number, w: number, h: number, step = 2) => {
       const fgAlphaAt = globals.__fgAlphaAt as (px: number, py: number) => number;
@@ -2517,7 +2517,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         cropped: sprite?.isCropped ?? false
       };
     };
-    // Debug-only: full-heal the party — a between-fight convenience for the autonomous-play harness
+    // Debug-only: full-heal the party - a between-fight convenience for the autonomous-play harness
     // (the player-facing rest is the in-world hotel at NPC 58). Nothing in normal play calls it.
     globals.__debugHeal = () => {
       this.partyState.fullRecover({ cureStatuses: true });
@@ -2575,7 +2575,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return this.partyState.party();
     };
     // Debug-only: recruit by charId as a live story beat (sets the recruit flag, joins,
-    // shows the notice) — mirrors what a trigger's setFlags does in real play.
+    // shows the notice) - mirrors what a trigger's setFlags does in real play.
     globals.__recruit = (charId: number) => {
       const recruit = PARTY_RECRUITS.find((entry) => entry.charId === charId);
       if (recruit) {
@@ -3582,7 +3582,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
           continue;
         }
         // If this NPC is already overlapping the mover's current spot, don't let
-        // it block — otherwise a co-located NPC walls off every direction at once.
+        // it block - otherwise a co-located NPC walls off every direction at once.
         if (
           options.escapeOverlapAt &&
           this.actorBodyBlocked(options.escapeOverlapAt.x, options.escapeOverlapAt.y, npc.state.player.x, npc.state.player.y)
@@ -3604,12 +3604,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
   /**
    * Climbability check for a vertical move. EB ladder columns come in two data
    * flavors (0x10 walkable, 0x90 over solid cliff) and are often a single 8px
-   * cell — narrower than the 13px foot box, whose corners always clip the
+   * cell - narrower than the 13px foot box, whose corners always clip the
    * flanking cliff. A vertical try is climbable when the FEET COLUMN (feet cell
    * + the cell under the box's top edge) is ladder-flagged: any solid cell in
    * the column must itself be a ladder, and at least one column cell must carry
    * the flag (otherwise it's a plain wall squeeze and normal collision stands).
-   * While climbing, the wide box may overhang the flanking rock — matching EB.
+   * While climbing, the wide box may overhang the flanking rock - matching EB.
    */
   private footprintSolidsAreLadder(x: number, y: number): boolean {
     const grid = this.collisionGrid();
@@ -4805,8 +4805,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   /**
    * EB field hazards from the decoded surface flags (docs/collision-semantics.md):
-   * desert cells (0x04-alone) can inflict sunstroke — drains HP per step via the
-   * shared field tick — and any water (0x08) cools it back off. Deep water (0x0c)
+   * desert cells (0x04-alone) can inflict sunstroke - drains HP per step via the
+   * shared field tick - and any water (0x08) cools it back off. Deep water (0x0c)
    * also wades at roughly half speed via terrainSpeedMultiplier.
    */
   private applyFieldHazardsForStep(playerSteppedTile: boolean): void {
@@ -5180,7 +5180,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   /**
    * Resolve a deferred story-gate boss (content/triggers.json battleGroup) on battle
-   * return. Its flags — and the once-fired marker — advance ONLY on a win. On a
+   * return. Its flags - and the once-fired marker - advance ONLY on a win. On a
    * loss/flee the player lands back at the gate with control: suppress the trigger so
    * they aren't thrown straight back into the fight; it re-arms once they leave the
    * area and can re-engage deliberately.
@@ -5379,20 +5379,38 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private launchPendingSourceCheck(checkId: string): void {
     const check = this.sourceCheckById(checkId);
-    if (!check) {
+    if (!check || !this.data_.battle) {
       this.afterDialogueClosed();
       return;
     }
     const attempt = this.nextSourceCheckAttempt(check.id);
+    const battlePartyMembers = this.battlePartyMembers();
     this.scene.stop("ui");
-    this.scene.start("source-check", {
-      check,
-      cards: this.data_.cardNfts,
+    this.scene.start("battle", {
+      battleData: this.data_.battle,
+      characters: this.data_.characters,
+      partyMembers: battlePartyMembers,
+      partyOptions: this.battlePartyOptions(battlePartyMembers),
+      wallet: this.partyState.wallet,
+      bank: this.partyState.bank,
       items: this.data_.items,
+      psi: this.data_.psi,
+      font: this.data_.font,
+      window: this.data_.window,
       spriteOverrides: this.data_.spriteOverrides,
-      attempt,
-      gameFlagsSnapshot: this.gameFlags.list(),
-      returnTo: this.sourceCheckReturnTo()
+      backgroundOverrides: this.data_.backgroundOverrides,
+      battleRules: this.data_.battleRules,
+      musicManifest: this.data_.musicManifest,
+      encounterAdvantage: "normal",
+      encounterSeed: this.nextBattleEncounterSeed(),
+      returnTo: this.sourceCheckReturnTo().context,
+      attestation: {
+        check,
+        cards: this.data_.cardNfts,
+        battles: this.data_.attestationBattles,
+        attempt,
+        gameFlagsSnapshot: this.gameFlags.list()
+      }
     });
   }
 
@@ -7009,7 +7027,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     // Act 1 opens SOLO: Bosch (Ness) alone. The other heroes fall in via the story
-    // recruit beats (PARTY_RECRUITS) — Cloak at the Act-1 close, then Munch/Knight —
+    // recruit beats (PARTY_RECRUITS) - Cloak at the Act-1 close, then Munch/Knight -
     // so the intro never shows a second hero before they are earned.
     const partyIds = [characters[0].id];
     const snapshot = this.partyState.snapshot();
@@ -7038,8 +7056,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   /**
    * Bring in any recruit whose story flag is now set but who isn't in the party yet.
-   * Called on boot (silent — restoring a save that already has them) and after story
-   * flags change during play (announced — the live "X joined!" beat). Idempotent.
+   * Called on boot (silent - restoring a save that already has them) and after story
+   * flags change during play (announced - the live "X joined!" beat). Idempotent.
    */
   private reconcileRecruits(options: { announce?: boolean } = {}): void {
     const active = new Set(this.partyState.party());
@@ -7453,7 +7471,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const dist = this.distanceToPlayer(enemy.state.player);
     if (enemy.archetype === "ambusher") {
       if (dist > OVERWORLD_AMBUSH_TRIGGER_PX) {
-        return; // lying in wait under the canopy — no wander, no chase
+        return; // lying in wait under the canopy - no wander, no chase
       }
       // Sprung: burst out and hunt like a prowler from here on.
       enemy.archetype = "prowler";
@@ -7883,7 +7901,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.encounterCooldownMs = ENCOUNTER_RETURN_COOLDOWN_MS;
     this.refreshMenuScreens();
     // Show the same EXP/money/items/level-up tally a fought battle would, instead of a bare
-    // "You won!" — the rewards were always computed, just never surfaced. Plus a victory sting
+    // "You won!" - the rewards were always computed, just never surfaced. Plus a victory sting
     // (the instant-win skips the battle scene and its audio).
     this.transitionSfx.victory();
     const tally = buildVictorySummaryViewModel(rewards.summary).pages.map((lines) => lines.join("\n"));
@@ -7954,7 +7972,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     });
   }
 
-  /** Members with equip bonuses folded in — for advantage math and debug readouts ONLY, never persistence. */
+  /** Members with equip bonuses folded in - for advantage math and debug readouts ONLY, never persistence. */
   private effectiveBattlePartyMembers(): PartyMember[] | undefined {
     return this.battlePartyMembers()?.map((member) => {
       const bonus = this.equipStatBonuses(member.id);
@@ -8463,7 +8481,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return leadId !== undefined && hasStatus(this.partyState.statuses(leadId), ailment);
   }
 
-  /** The lead (front) party member is downed (0 HP) — shows the dead overworld sprite. */
+  /** The lead (front) party member is downed (0 HP) - shows the dead overworld sprite. */
   private leadPartyMemberDowned(): boolean {
     const leadId = this.partyState.party()[0];
     if (leadId === undefined) {
@@ -8580,7 +8598,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     } else if (resolved.transforms.lowerBodyClip && ov?.frameHeight && ov?.frameWidth) {
       // EB 0x01 cell: the map art (tall grass, shrub top, roof crest) hides the
       // actor's lower body. Hide ~8 world px of feet; unlike waterClip the sprite
-      // stays put — the background art IS the "cover", so no raise.
+      // stays put - the background art IS the "cover", so no raise.
       sprite.setCrop(0, 0, ov.frameWidth, ov.frameHeight - lowerHideFramePx(ov.frameHeight, scale));
     } else if (sprite.isCropped) {
       sprite.setCrop();
@@ -8715,7 +8733,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.followerTrail = [];
     const followerCount = Math.min(3, Math.max(0, this.partyState.party().length - 1));
     if (followerCount <= 0) {
-      return; // solo party — no follower to draw
+      return; // solo party - no follower to draw
     }
     for (let index = 0; index < followerCount; index += 1) {
       const joinOrder = index + 2;
@@ -8744,7 +8762,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const trail = this.followerTrail;
     const last = trail[trail.length - 1];
     if (last && Math.hypot(px - last.x, py - last.y) > 48) {
-      // Door/warp jump — snap over rather than streaking the followers across the map.
+      // Door/warp jump - snap over rather than streaking the followers across the map.
       trail.length = 0;
       for (const follower of this.followers) {
         follower.pos = { x: px, y: py };

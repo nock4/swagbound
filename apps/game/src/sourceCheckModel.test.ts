@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import type { CardNfts, DrifellaSourceCheck } from "@eb/schemas";
+import type { AttestationBattles, BattleData, CardNfts, DrifellaSourceCheck } from "@eb/schemas";
 import {
   answerSourceCheckQuestion,
   buildBinderViewModel,
+  buildAttestationBattleRuntime,
   cardOwnedFlag,
   drawSourceCheckQuestions,
   drifellaDisplayName,
@@ -174,6 +175,52 @@ describe("source check rewards and retry", () => {
   });
 });
 
+describe("buildAttestationBattleRuntime", () => {
+  it("adds one synthetic battle enemy and group for a source check tier", () => {
+    const battles: AttestationBattles = {
+      schema: "swagbound.attestation-battles.v1",
+      tierStats: {
+        "2": {
+          tier: 2,
+          level: 8,
+          hp: 86,
+          offense: 18,
+          defense: 20,
+          speed: 7,
+          experience: 90,
+          money: 20,
+          background1: 63,
+          background2: 0
+        }
+      },
+      checks: [{ checkId: "sourcecheck-test", tier: 2 }]
+    };
+
+    const runtime = buildAttestationBattleRuntime(battleData(), check({ tier: 1 }), battles);
+    const enemy = runtime.battleData.enemies.find((entry) => entry.id === runtime.enemyId);
+    const group = runtime.battleData.groups.find((entry) => entry.id === runtime.groupId);
+
+    expect(enemy).toMatchObject({
+      name: "Drifella test",
+      level: 8,
+      hp: 86,
+      offense: 18,
+      defense: 20,
+      speed: 7,
+      experience: 90,
+      money: 20,
+      overworldSprite: 100300
+    });
+    expect(enemy?.actions).toHaveLength(4);
+    expect(group).toMatchObject({
+      background1: 63,
+      background2: 0,
+      enemyIds: [runtime.enemyId],
+      entries: [{ id: runtime.enemyId, amount: 1 }]
+    });
+  });
+});
+
 describe("buildBinderViewModel", () => {
   it("counts owned cards by region", () => {
     const cards: CardNfts = {
@@ -208,5 +255,54 @@ function card(id: string, region: string, sortIndex: number): CardNfts["cards"][
     sortIndex,
     caption: `Caption ${id}`,
     silhouetteHint: "missing shape"
+  };
+}
+
+function battleData(): BattleData {
+  return {
+    schemaVersion: "test",
+    sourceProjectPath: "test",
+    selection: {
+      method: "test",
+      mapEnemyGroupIds: [],
+      battleGroupIds: [],
+      placementCellMapping: "test",
+      fallbackUsed: false
+    },
+    statMapping: {
+      level: "level",
+      hp: "hp",
+      defense: "defense",
+      offense: "offense",
+      speed: "speed",
+      experience: "experience",
+      money: "money",
+      bossFlag: "bossFlag",
+      actions: "actions",
+      itemDropped: "itemDropped",
+      itemRarity: "itemRarity"
+    },
+    spriteFormat: {
+      source: "test",
+      fileType: "png",
+      indexedPaletteBits: 4,
+      transparentPaletteIndex: 0,
+      allowedSizes: [[1, 1]]
+    },
+    assetLayout: {
+      spriteDir: "assets/battle/sprites",
+      backgroundDir: "assets/battle/backgrounds",
+      spriteFilePattern: "<zero-padded enemy id>.png",
+      backgroundFilePattern: "<zero-padded background id>.png"
+    },
+    enemies: [],
+    groups: [],
+    counts: {
+      enemies: 0,
+      groups: 0,
+      spriteFiles: 0,
+      backgroundFiles: 0
+    },
+    warnings: []
   };
 }

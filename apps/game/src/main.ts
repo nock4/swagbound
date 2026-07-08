@@ -51,7 +51,7 @@ async function loadMenuFont(): Promise<void> {
       new Promise<void>((resolve) => setTimeout(resolve, 2500))
     ]);
   } catch {
-    // Font unavailable — createCleanText's fallback stack keeps the UI readable.
+    // Font unavailable - createCleanText's fallback stack keeps the UI readable.
   }
 }
 
@@ -104,15 +104,30 @@ class BootScene extends Phaser.Scene {
     const sourceCheck = sourceCheckId
       ? data.sourceChecks.checks.find((check) => check.id === sourceCheckId)
       : undefined;
-    if (sourceCheck) {
-      this.scene.start("source-check", {
-        check: sourceCheck,
-        cards: data.cardNfts,
+    if (sourceCheck && data.battle) {
+      const debugPartyMembers = debugBattlePartyMembersFromSearch(globalThis.location?.search, data.characters);
+      this.scene.start("battle", {
+        battleData: data.battle,
+        characters: data.characters,
+        partyMembers: debugPartyMembers,
         items: data.items,
+        psi: grantDebugPsi(data.psi, globalThis.location?.search),
+        font: data.font,
+        window: data.window,
         spriteOverrides: data.spriteOverrides,
-        attempt: 1,
-        gameFlagsSnapshot: saveState?.flags.strings ?? [],
-        returnTo: debugSourceCheckReturnTo(data, sourceCheck, saveState)
+        backgroundOverrides: data.backgroundOverrides,
+        battleRules: data.battleRules,
+        musicManifest: data.musicManifest,
+        encounterAdvantage: "normal",
+        encounterSeed: seedFromString(sourceCheck.id),
+        returnTo: debugSourceCheckReturnTo(data, sourceCheck, saveState).context,
+        attestation: {
+          check: sourceCheck,
+          cards: data.cardNfts,
+          battles: data.attestationBattles,
+          attempt: 1,
+          gameFlagsSnapshot: saveState?.flags.strings ?? []
+        }
       });
       return;
     }
@@ -412,7 +427,7 @@ function debugEncounterAdvantageFromSearch(search: string | undefined): Encounte
 }
 
 // Dev affordance: ?psi=31,39 (or ?psi=all) grants the lead member (charId 0) those PSI in a debug
-// battle — regardless of who learns them in EB — so assist-PSI effects can be verified in-browser.
+// battle - regardless of who learns them in EB - so assist-PSI effects can be verified in-browser.
 function grantDebugPsi(psi: GameData["psi"], search: string | undefined): GameData["psi"] {
   const value = new URLSearchParams(search ?? "").get("psi");
   if (!value || !psi) {
