@@ -14,6 +14,34 @@
       "w": 56,
       "h": 16,
       "note": "SWAG HOTEL west canopy: clear lower edge that swallows the grass-row player."
+    },
+    {
+      "x": 7592,
+      "y": 960,
+      "w": 36,
+      "h": 56,
+      "note": "interior plant L: full lower half, generous margin (pins 7608,1006 +/- offsets)"
+    },
+    {
+      "x": 7626,
+      "y": 960,
+      "w": 48,
+      "h": 76,
+      "note": "interior plant R: full lower half, generous margin (pins 7641,1006), widened to cover 7665,1022 offset"
+    },
+    {
+      "x": 7408,
+      "y": 700,
+      "w": 64,
+      "h": 76,
+      "note": "park west trees: over-occlusion band (pins 7432-7440,759-767)"
+    },
+    {
+      "x": 7504,
+      "y": 696,
+      "w": 68,
+      "h": 76,
+      "note": "park center tree south edge (pin 7542,743), widened to cover 7518,767"
     }
   ]
 }
