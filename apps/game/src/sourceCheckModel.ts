@@ -1,4 +1,6 @@
 import type {
+  AttestationBattles,
+  BattleData,
   CardNft,
   CardNfts,
   DrifellaSourceCheck,
@@ -209,12 +211,102 @@ export function cardById(cards: CardNfts, cardId: string): CardNft | undefined {
   return cards.cards.find((card) => card.id === cardId);
 }
 
+export const ATTESTATION_BATTLE_ENEMY_ID_BASE = 910000;
+export const ATTESTATION_BATTLE_GROUP_ID_BASE = 920000;
+
+export type AttestationBattleRuntime = {
+  battleData: BattleData;
+  groupId: number;
+  enemyId: number;
+};
+
+export function buildAttestationBattleRuntime(
+  base: BattleData,
+  check: DrifellaSourceCheck,
+  battles: AttestationBattles | undefined
+): AttestationBattleRuntime {
+  const tier = attestationBattleTier(check, battles);
+  const stats = battles?.tierStats[String(tier)] ?? defaultAttestationTierStats(tier);
+  const enemyId = ATTESTATION_BATTLE_ENEMY_ID_BASE + check.npcId;
+  const groupId = ATTESTATION_BATTLE_GROUP_ID_BASE + check.npcId;
+  const enemy = {
+    id: enemyId,
+    name: drifellaDisplayName(check),
+    spriteId: 0,
+    overworldSprite: check.npcId,
+    level: stats.level,
+    hp: stats.hp,
+    defense: stats.defense,
+    offense: stats.offense,
+    speed: stats.speed,
+    experience: stats.experience,
+    money: stats.money,
+    bossFlag: stats.boss ?? tier >= 4,
+    actions: physicalAttestationActions(),
+    itemDropped: 0,
+    itemRarity: { numerator: 1, denominator: 128 }
+  };
+  const group = {
+    id: groupId,
+    background1: stats.background1,
+    background2: stats.background2,
+    enemyIds: [enemyId],
+    entries: [{ id: enemyId, amount: 1 }]
+  };
+  return {
+    battleData: {
+      ...base,
+      enemies: [...base.enemies.filter((entry) => entry.id !== enemyId), enemy],
+      groups: [...base.groups.filter((entry) => entry.id !== groupId), group]
+    },
+    groupId,
+    enemyId
+  };
+}
+
+export function attestationBattleTier(
+  check: DrifellaSourceCheck,
+  battles: AttestationBattles | undefined
+): 1 | 2 | 3 | 4 {
+  const mapped = battles?.checks.find((entry) => entry.checkId === check.id)?.tier ?? check.tier;
+  return clampTier(mapped);
+}
+
 export function regionLabel(region: string): string {
   return region
     .split(/[-_\s]+/g)
     .filter(Boolean)
     .join(" ")
     .toUpperCase();
+}
+
+function defaultAttestationTierStats(tier: 1 | 2 | 3 | 4): AttestationBattles["tierStats"][string] {
+  switch (tier) {
+    case 1:
+      return { tier, level: 2, hp: 34, offense: 8, defense: 6, speed: 4, experience: 8, money: 5, background1: 49, background2: 0 };
+    case 2:
+      return { tier, level: 8, hp: 86, offense: 18, defense: 20, speed: 7, experience: 90, money: 20, background1: 63, background2: 0 };
+    case 3:
+      return { tier, level: 14, hp: 165, offense: 30, defense: 38, speed: 11, experience: 360, money: 55, background1: 158, background2: 0 };
+    case 4:
+      return { tier, level: 20, hp: 320, offense: 42, defense: 54, speed: 15, experience: 980, money: 120, background1: 262, background2: 0, boss: true };
+  }
+}
+
+function physicalAttestationActions(): BattleData["enemies"][number]["actions"] {
+  return [
+    { id: 4, arg: 0, actionId: 4, actionType: 1, target: 1, direction: "enemy", name: "attacks" },
+    { id: 106, arg: 0, actionId: 106, actionType: 1, target: 1, direction: "enemy", name: "presses the record" },
+    { id: 4, arg: 0, actionId: 4, actionType: 1, target: 1, direction: "enemy", name: "attacks" },
+    { id: 109, arg: 0, actionId: 109, actionType: 1, target: 1, direction: "enemy", name: "cites the receipt" }
+  ];
+}
+
+function clampTier(value: number): 1 | 2 | 3 | 4 {
+  if (value <= 1) return 1;
+  if (value === 2) return 2;
+  if (value === 3) return 3;
+  return 4;
 }
 
 function gatedQuestionPool(check: DrifellaSourceCheck, flags: FlagReader): SourceCheckQuestion[] {

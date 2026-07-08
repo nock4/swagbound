@@ -11,6 +11,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const ROOT = process.cwd();
+const PUB = join(ROOT, "apps/game/public");
 const CHUNKS = join(ROOT, "apps/game/public/generated/assets/world/chunks");
 const OVERRIDES = join(ROOT, "content/sign-overrides.json");
 const PLATE = "#f4d8ec";       // light sign-bar background (matches EB Onett sign palette)
@@ -36,8 +37,20 @@ for (const s of data.signs ?? []) {
   const { x, y, w, h } = s.region ?? {};
   if (!existsSync(chunk) || w == null) { skipped++; continue; }
   const sign = join(tmp, `${s.swag.replace(/\W+/g, "_")}-${s.chunk.replace(",", "_")}-${x}_${y}.png`);
-  // auto-fit the text to the region via label:, supersampled then pixel-downscaled
-  mg(`-size ${w * SS}x${h * SS} -background "${PLATE}" -fill "${INK}" -font "${FONT}" -gravity center label:"${s.swag}" -filter point -resize ${w}x${h}! "${sign}"`);
+  if (s.image) {
+    const source = join(PUB, s.image);
+    const crop = s.sourceRegion ?? { x: 0, y: 0, w, h };
+    if (!existsSync(source)) { skipped++; continue; }
+    mg(`"${source}" -crop ${crop.w}x${crop.h}+${crop.x}+${crop.y} +repage -filter point -resize ${w}x${h}! "${sign}"`);
+    if (s.clipToChunkAlpha) {
+      const mask = join(tmp, `mask-${s.chunk.replace(",", "_")}-${x}_${y}.png`);
+      mg(`"${chunk}" -crop ${w}x${h}+${x}+${y} +repage -alpha extract "${mask}"`);
+      mg(`"${sign}" "${mask}" -compose CopyOpacity -composite "${sign}"`);
+    }
+  } else {
+    // auto-fit the text to the region via label:, supersampled then pixel-downscaled
+    mg(`-size ${w * SS}x${h * SS} -background "${PLATE}" -fill "${INK}" -font "${FONT}" -gravity center label:"${s.swag}" -filter point -resize ${w}x${h}! "${sign}"`);
+  }
   mg(`"${chunk}" "${sign}" -geometry +${x}+${y} -composite "${chunk}"`);
   stamped++;
 }

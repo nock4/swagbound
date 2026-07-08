@@ -692,6 +692,11 @@ export const ItemOverridesSchema = z.object({
   byItemId: z.record(z.string().regex(/^\d+$/), ItemOverrideEntrySchema)
 }).strict();
 
+export const KeyItemsSchema = z.object({
+  schema: z.literal("swagbound.key-items.v1"),
+  itemIds: z.array(z.number().int().nonnegative())
+}).strict();
+
 const CharacterOverrideNameSchema = z.string()
   .trim()
   .min(1)
@@ -994,7 +999,7 @@ export const StoryTriggerSchema = z.object({
  * A flag-gated SOLID barricade: while active (requireFlags all set AND blockFlags
  * none set) it blocks the player over `area` and renders `image` as a guard sprite.
  * When the gating flag is set (e.g. the boss-cleared flag in blockFlags) it
- * deactivates — no collision, sprite hidden — opening the path.
+ * deactivates - no collision, sprite hidden - opening the path.
  */
 export const StoryBarrierSchema = z.object({
   id: z.string().min(1),
@@ -1343,7 +1348,7 @@ export type AddedNpcDrop = { index: number; id?: number; reason: string };
 
 /**
  * Lenient parse for the added-NPC overlay: validates each entry independently,
- * KEEPS the valid ones, and DROPS the invalid/duplicate ones with a reason —
+ * KEEPS the valid ones, and DROPS the invalid/duplicate ones with a reason -
  * so a single bad entry can never disable the whole layer (as a stray
  * `pages`+`ref` conflict once silently did to all 268 promoted NPCs).
  * Returns the sanitized overlay plus the list of dropped entries; the caller
@@ -1483,7 +1488,7 @@ export const CardNftsSchema = z.object({
  * Question category, used to blend + tune difficulty:
  * - witnessed: recalls a specific in-game event (hardest; rewards attentive play)
  * - lore: a stable canon fact about the world (learnable/reusable)
- * - art: real-world art knowledge (abstract/avant-garde/sound/conceptual) — the
+ * - art: real-world art knowledge (abstract/avant-garde/sound/conceptual) - the
  *   approachable layer; famous-name easy in early regions, deeper in late ones
  * - vibe: answerable by tone/logic/common sense alone
  */
@@ -1583,6 +1588,58 @@ export const DrifellaSourceChecksSchema = z.object({
   });
 });
 
+export const AttestationBattleTierSchema = z.object({
+  tier: z.number().int().min(1).max(4),
+  level: z.number().int().nonnegative(),
+  hp: z.number().int().positive(),
+  offense: z.number().int().nonnegative(),
+  defense: z.number().int().nonnegative(),
+  speed: z.number().int().nonnegative(),
+  experience: z.number().int().nonnegative(),
+  money: z.number().int().nonnegative(),
+  background1: z.number().int().nonnegative(),
+  background2: z.number().int().nonnegative(),
+  boss: z.boolean().optional()
+}).strict();
+
+export const AttestationBattleCheckSchema = z.object({
+  checkId: z.string().trim().min(1),
+  tier: z.number().int().min(1).max(4)
+}).strict();
+
+export const AttestationBattlesSchema = z.object({
+  schema: z.literal("swagbound.attestation-battles.v1"),
+  comment: z.string().optional(),
+  tierStats: z.record(z.string().regex(/^[1-4]$/), AttestationBattleTierSchema),
+  checks: z.array(AttestationBattleCheckSchema).min(1)
+}).strict().superRefine((value, context) => {
+  const seen = new Set<string>();
+  value.checks.forEach((check, index) => {
+    if (seen.has(check.checkId)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate attestation battle check id ${check.checkId}`,
+        path: ["checks", index, "checkId"]
+      });
+    }
+    seen.add(check.checkId);
+    const tier = value.tierStats[String(check.tier)];
+    if (!tier) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `missing tier stats for tier ${check.tier}`,
+        path: ["checks", index, "tier"]
+      });
+    } else if (tier.tier !== check.tier) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `tier stats key ${check.tier} does not match tier value ${tier.tier}`,
+        path: ["tierStats", String(check.tier), "tier"]
+      });
+    }
+  });
+});
+
 export const OverworldInteractablesSchema = z
   .object({
     schema: z.literal("swagbound.overworld-interactables.v1"),
@@ -1614,6 +1671,8 @@ export type CardNfts = z.infer<typeof CardNftsSchema>;
 export type SourceCheckQuestion = z.infer<typeof SourceCheckQuestionSchema>;
 export type DrifellaSourceCheck = z.infer<typeof DrifellaSourceCheckSchema>;
 export type DrifellaSourceChecks = z.infer<typeof DrifellaSourceChecksSchema>;
+export type AttestationBattleTier = z.infer<typeof AttestationBattleTierSchema>;
+export type AttestationBattles = z.infer<typeof AttestationBattlesSchema>;
 
 /** Two walk frames (sheet frame indices) per cardinal facing. */
 export const SpriteAnimationsSchema = z.record(
@@ -2183,6 +2242,7 @@ export type MusicManifest = z.infer<typeof MusicManifestSchema>;
 export type BackgroundOverrideEntry = z.infer<typeof BackgroundOverrideEntrySchema>;
 export type BackgroundOverrides = z.infer<typeof BackgroundOverridesSchema>;
 export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;
+export type KeyItems = z.infer<typeof KeyItemsSchema>;
 export type CharacterOverrides = z.infer<typeof CharacterOverridesSchema>;
 export type EnemyOverrides = z.infer<typeof EnemyOverridesSchema>;
 export type EnemyStatOverrides = z.infer<typeof EnemyStatOverridesSchema>;

@@ -2,6 +2,7 @@ import {
   buildDialoguePages,
   ADDED_NPC_MIN_ID,
   sanitizeAddedNpcs,
+  AttestationBattlesSchema,
   BattleDataSchema,
   BattleRulesSchema,
   BackgroundOverridesSchema,
@@ -19,6 +20,7 @@ import {
   FontCollectionSchema,
   ItemCollectionSchema,
   ItemOverridesSchema,
+  KeyItemsSchema,
   ManifestSchema,
   MusicManifestSchema,
   NavmeshSchema,
@@ -50,6 +52,7 @@ import {
   type DialoguePage,
   type AddedNpc,
   type AddedNpcs,
+  type AttestationBattles,
   type BackgroundOverrides,
   type BattleData,
   type BattleRules,
@@ -67,6 +70,7 @@ import {
   type FontCollection,
   type ItemCollection,
   type ItemOverrides,
+  type KeyItems,
   type Manifest,
   type MusicManifest,
   type Navmesh,
@@ -110,6 +114,7 @@ const SPRITE_OVERRIDES_FILE = "sprite-overrides.json";
 const NPC_OVERRIDES_FILE = "npc-overrides.json";
 const BACKGROUND_OVERRIDES_FILE = "background-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
+const KEY_ITEMS_FILE = "key-items.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
 const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
@@ -129,6 +134,7 @@ const CUTSCENES_FILE = "cutscenes.json";
 const OVERWORLD_INTERACTABLES_FILE = "overworld-interactables.json";
 const CARD_NFTS_FILE = "card-nfts.json";
 const DRIFELLA_SOURCE_CHECKS_FILE = "drifella-source-checks.json";
+const ATTESTATION_BATTLES_FILE = "attestation-battles.json";
 const OBJECTIVES_FILE = "objectives.json";
 
 export type GameData = {
@@ -142,6 +148,7 @@ export type GameData = {
   overworldInteractables: OverworldInteractables;
   cardNfts: CardNfts;
   sourceChecks: DrifellaSourceChecks;
+  attestationBattles: AttestationBattles;
   objectives?: Objectives;
   openingCutscene?: OpeningCutscene;
   cutscenes?: Cutscenes;
@@ -169,6 +176,7 @@ export type GameData = {
   window?: WindowCollection;
   characters?: CharacterCollection;
   items?: ItemCollection;
+  keyItems: KeyItems;
   psi?: PsiCollection;
   shops?: ShopData;
 };
@@ -179,7 +187,7 @@ export type AddedWorldChunkedNpc = WorldChunkedNpc & {
 };
 
 async function loadJson<T>(url: string, schema: { parse: (value: unknown) => T }): Promise<T | undefined> {
-  // Absent layers are expected (most generated JSON is optional) — but a layer
+  // Absent layers are expected (most generated JSON is optional) - but a layer
   // that EXISTS and fails to parse/validate must be loud, or authoring mistakes
   // silently disable story triggers, collision overrides, cutscenes, etc.
   let response: Response;
@@ -203,14 +211,14 @@ async function loadJson<T>(url: string, schema: { parse: (value: unknown) => T }
   try {
     return schema.parse(await response.json());
   } catch (error) {
-    console.error(`[loader] ${url} exists but is INVALID — layer disabled`, error);
+    console.error(`[loader] ${url} exists but is INVALID - layer disabled`, error);
     return undefined;
   }
 }
 
 /**
  * The overworld follower sprite defaults to the 2nd hero's (joinOrder 2) party
- * sprite so the roster is the single source of truth — an explicit `follower`
+ * sprite so the roster is the single source of truth - an explicit `follower`
  * override still wins when authored.
  */
 function withDerivedFollower(overrides: SpriteOverrides | undefined): SpriteOverrides | undefined {
@@ -279,6 +287,21 @@ function emptySourceChecks(): DrifellaSourceChecks {
   };
 }
 
+function emptyAttestationBattles(): AttestationBattles {
+  return {
+    schema: "swagbound.attestation-battles.v1",
+    tierStats: {},
+    checks: []
+  };
+}
+
+function emptyKeyItems(): KeyItems {
+  return {
+    schema: "swagbound.key-items.v1",
+    itemIds: []
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -306,6 +329,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     characterOverrides,
     items,
     itemOverrides,
+    keyItems,
     psi,
     psiOverrides,
     shops,
@@ -324,6 +348,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     overworldInteractables,
     cardNfts,
     sourceChecks,
+    attestationBattles,
     objectives
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
@@ -364,6 +389,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       ? loadJson(`/generated/${manifest.files.items}`, ItemCollectionSchema)
       : Promise.resolve(undefined),
     loadJson(`/generated/${ITEM_OVERRIDES_FILE}`, ItemOverridesSchema),
+    loadJson(`/generated/${KEY_ITEMS_FILE}`, KeyItemsSchema),
     manifest.files.psi
       ? loadJson(`/generated/${manifest.files.psi}`, PsiCollectionSchema)
       : Promise.resolve(undefined),
@@ -400,6 +426,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${OVERWORLD_INTERACTABLES_FILE}`, OverworldInteractablesSchema),
     loadJson(`/generated/${CARD_NFTS_FILE}`, CardNftsSchema),
     loadJson(`/generated/${DRIFELLA_SOURCE_CHECKS_FILE}`, DrifellaSourceChecksSchema),
+    loadJson(`/generated/${ATTESTATION_BATTLES_FILE}`, AttestationBattlesSchema),
     loadJson(`/generated/${OBJECTIVES_FILE}`, ObjectivesSchema)
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
@@ -427,6 +454,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     overworldInteractables: overworldInteractables ?? emptyOverworldInteractables(),
     cardNfts: cardNfts ?? emptyCardNfts(),
     sourceChecks: sourceChecks ?? emptySourceChecks(),
+    attestationBattles: attestationBattles ?? emptyAttestationBattles(),
     objectives,
     openingCutscene,
     cutscenes,
@@ -454,6 +482,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     window,
     characters: resolvedCharacters,
     items: resolvedItems,
+    keyItems: keyItems ?? emptyKeyItems(),
     psi: resolvedPsi,
     shops
   };

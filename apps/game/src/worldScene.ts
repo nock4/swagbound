@@ -78,6 +78,7 @@ import {
 } from "./inputModel";
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import { activeWindowFlavorId } from "./windowSettings";
+import { isKeyItemId } from "./keyItems";
 
 export const PLAYER_SPEED = 110; // world pixels per second
 export const INTERACTION_DISTANCE = 28; // world pixels between feet positions
@@ -637,6 +638,10 @@ export class WorldScene extends Phaser.Scene {
       this.showMenuResult("You can't sell that.");
       return;
     }
+    if (isKeyItemId(action.itemId, this.data_.keyItems)) {
+      this.showMenuResult("The record keeps this one.");
+      return;
+    }
     const item = this.itemById(action.itemId) ?? fallbackShopItem(action.itemId);
     const result = this.partyState.sellItem(action.char, item);
     this.showMenuResult(result.ok ? "Sold." : "You can't sell that.");
@@ -726,6 +731,7 @@ export class WorldScene extends Phaser.Scene {
     }), {
       characters: this.data_.characters,
       items: this.data_.items,
+      keyItems: this.data_.keyItems,
       psi: this.data_.psi,
       shops: this.data_.shops,
       partyState: this.partyState,
@@ -735,6 +741,7 @@ export class WorldScene extends Phaser.Scene {
       screens.push(...buildShopMenuScreens(buildShopViewModel({
         characters: this.data_.characters,
         items: this.data_.items,
+        keyItems: this.data_.keyItems,
         shops: this.data_.shops,
         partyState: this.partyState,
         resolver,

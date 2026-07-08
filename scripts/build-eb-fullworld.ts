@@ -2,6 +2,7 @@ import { access, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
+  AttestationBattlesSchema,
   BattleRulesSchema,
   BackgroundOverridesSchema,
   CardNftsSchema,
@@ -14,6 +15,7 @@ import {
   EnemyStatOverridesSchema,
   expandEnemyNameFamilies,
   expandOverworldEnemySkins,
+  KeyItemsSchema,
   MusicManifestSchema,
   NavmeshSchema,
   NpcOverridesSchema,
@@ -56,6 +58,8 @@ export const TILE_OVERRIDES_SOURCE = "content/tile-overrides.json";
 export const TILE_OVERRIDES_OUTPUT = "tile-overrides.json";
 export const ITEM_OVERRIDES_SOURCE = "content/item-overrides.json";
 export const ITEM_OVERRIDES_OUTPUT = "item-overrides.json";
+export const KEY_ITEMS_SOURCE = "content/key-items.json";
+export const KEY_ITEMS_OUTPUT = "key-items.json";
 export const CHARACTER_OVERRIDES_SOURCE = "content/character-overrides.json";
 export const CHARACTER_OVERRIDES_OUTPUT = "character-overrides.json";
 export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
@@ -95,6 +99,8 @@ export const CARD_NFTS_SOURCE = "content/card-nfts.json";
 export const CARD_NFTS_OUTPUT = "card-nfts.json";
 export const DRIFELLA_SOURCE_CHECKS_SOURCE = "content/drifella-source-checks.json";
 export const DRIFELLA_SOURCE_CHECKS_OUTPUT = "drifella-source-checks.json";
+export const ATTESTATION_BATTLES_SOURCE = "content/attestation-battles.json";
+export const ATTESTATION_BATTLES_OUTPUT = "attestation-battles.json";
 export const OBJECTIVES_SOURCE = "content/objectives.json";
 export const OBJECTIVES_OUTPUT = "objectives.json";
 export const NAVMESH_SOURCE = "content/navmesh.json";
@@ -189,11 +195,13 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateOverworldInteractables(OVERWORLD_INTERACTABLES_SOURCE);
   await validateCardNfts(CARD_NFTS_SOURCE);
   await validateDrifellaSourceChecks(DRIFELLA_SOURCE_CHECKS_SOURCE);
+  await validateAttestationBattles(ATTESTATION_BATTLES_SOURCE);
   await validateFgOverrides(FG_OVERRIDES_SOURCE);
   await validateObjectives(OBJECTIVES_SOURCE);
   await validateNavmesh(NAVMESH_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
+  await validateKeyItems(KEY_ITEMS_SOURCE);
   await validateBossBattleDialogue(BOSS_BATTLE_DIALOGUE_SOURCE);
   await validateEnemyActionEffects(ENEMY_ACTION_EFFECTS_SOURCE);
   await validateRoamerZoneCaps(ROAMER_ZONE_CAPS_SOURCE);
@@ -208,6 +216,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(BACKGROUND_OVERRIDES_SOURCE, out, BACKGROUND_OVERRIDES_OUTPUT),
     copyJsonToGenerated(TILE_OVERRIDES_SOURCE, out, TILE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(KEY_ITEMS_SOURCE, out, KEY_ITEMS_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
@@ -225,6 +234,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyOptionalJsonToGenerated(OVERWORLD_INTERACTABLES_SOURCE, out, OVERWORLD_INTERACTABLES_OUTPUT),
     copyOptionalJsonToGenerated(CARD_NFTS_SOURCE, out, CARD_NFTS_OUTPUT),
     copyOptionalJsonToGenerated(DRIFELLA_SOURCE_CHECKS_SOURCE, out, DRIFELLA_SOURCE_CHECKS_OUTPUT),
+    copyOptionalJsonToGenerated(ATTESTATION_BATTLES_SOURCE, out, ATTESTATION_BATTLES_OUTPUT),
     copyJsonToGenerated(OBJECTIVES_SOURCE, out, OBJECTIVES_OUTPUT),
     copyJsonToGenerated(NAVMESH_SOURCE, out, NAVMESH_OUTPUT)
   ]);
@@ -339,6 +349,13 @@ async function validateDrifellaSourceChecks(source: string): Promise<void> {
   DrifellaSourceChecksSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
+async function validateAttestationBattles(source: string): Promise<void> {
+  if (!(await fileExists(source))) {
+    return;
+  }
+  AttestationBattlesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
 async function validateFgOverrides(source: string): Promise<void> {
   if (!(await fileExists(source))) {
     return;
@@ -360,6 +377,10 @@ async function validateNpcOverrides(source: string): Promise<void> {
 
 async function validateEnemyStatOverrides(source: string): Promise<void> {
   EnemyStatOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateKeyItems(source: string): Promise<void> {
+  KeyItemsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateBossBattleDialogue(source: string): Promise<void> {

@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
+  AttestationBattlesSchema,
   CardNftsSchema,
   DrifellaSourceChecksSchema
 } from "@eb/schemas";
@@ -10,6 +11,7 @@ describe("source check generated content", () => {
   it("parses the generated card registry and source checks with the committed schemas", () => {
     const cards = CardNftsSchema.parse(readGeneratedJson("card-nfts.json"));
     const checks = DrifellaSourceChecksSchema.parse(readGeneratedJson("drifella-source-checks.json"));
+    const battles = AttestationBattlesSchema.parse(readGeneratedJson("attestation-battles.json"));
 
     expect(cards.cards.length).toBe(95);
     // 95 original Source Checks + 13 new ones for the overnight-regen Anchor96 Drifellas
@@ -51,6 +53,13 @@ describe("source check generated content", () => {
     }
     expect(names.size).toBe(checks.checks.length);
     expect(Math.max(...rumorNpcUses.values())).toBeLessThanOrEqual(2);
+    expect(battles.checks).toHaveLength(checks.checks.length);
+    expect(new Set(battles.checks.map((entry) => entry.checkId))).toEqual(new Set(checks.checks.map((check) => check.id)));
+    for (const check of checks.checks) {
+      const mapped = battles.checks.find((entry) => entry.checkId === check.id);
+      expect(mapped?.tier).toBe(check.tier);
+      expect(battles.tierStats[String(check.tier)]).toBeDefined();
+    }
   });
 });
 

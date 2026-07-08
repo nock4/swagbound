@@ -535,7 +535,7 @@ export class UiScene extends Phaser.Scene {
           }
           this.menuTexts.push(createCleanText(this, cellX + MENU_CARET_GUTTER_PX, cellY, item.label, {
             fontSize,
-            color: selected ? CLEAN_UI_SELECTION_TEXT : (item.enabled ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY),
+            color: item.textColor ?? (selected ? CLEAN_UI_SELECTION_TEXT : (item.enabled ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY)),
             weight: selected ? 500 : 400
           }).setDepth(selected ? 17 : 15));
         });
@@ -562,7 +562,7 @@ export class UiScene extends Phaser.Scene {
         const textWidth = Math.max(1, boxWidth - textInset * 2 - MENU_CARET_GUTTER_PX);
         this.menuTexts.push(createCleanText(this, x + textInset + MENU_CARET_GUTTER_PX, rowTop, label, {
           fontSize,
-          color: selected ? CLEAN_UI_SELECTION_TEXT : (item.enabled ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY),
+          color: item.textColor ?? (selected ? CLEAN_UI_SELECTION_TEXT : (item.enabled ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY)),
           weight: selected ? 500 : 400,
           fixedWidth: textWidth
         }).setDepth(selected ? 17 : 15));

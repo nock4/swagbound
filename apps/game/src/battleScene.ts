@@ -3,13 +3,16 @@ import {
   ItemCollectionSchema,
   PsiCollectionSchema,
   BossBattleDialogueSchema,
+  type AttestationBattles,
   type BackgroundOverrides,
   type BattleBackground,
   type BattleData,
   type BattleEnemy,
   type BattleGroup,
+  type CardNfts,
   type BattleRules,
   type CharacterCollection,
+  type DrifellaSourceCheck,
   type FontCollection,
   type ItemCollection,
   type ItemData,
@@ -81,7 +84,7 @@ import {
   type BattleEvent
 } from "./battleEvents";
 import { elementalAffinity, psiElementForId } from "./battleAffinities";
-import type { BattleReturnContext, BattleReturnOutcome } from "./battleReturn";
+import type { BattleReturnContext, BattleReturnOutcome, ChunkedWorldRestore } from "./battleReturn";
 import {
   DEFAULT_DAMAGE_FLASH_MS,
   attackerLungeOffset,
@@ -179,6 +182,14 @@ import { createMusic, musicBossCueId, musicDisabledBySearch, type Music } from "
 import { getSharedMusic } from "./sharedMusic";
 import { battleStepSfx } from "./battleSfxPlan";
 import { battleMusicCueForOutcome } from "./battleMusic";
+import {
+  answerSourceCheckQuestion,
+  buildAttestationBattleRuntime,
+  drawSourceCheckQuestions,
+  type DrawnSourceCheckQuestion,
+  type SourceCheckDraw
+} from "./sourceCheckModel";
+import { applySourceCheckRewardToRestore } from "./sourceCheckRewards";
 
 const TAU = Math.PI * 2;
 export const COMMANDS = commandsForCharId(0);
@@ -307,12 +318,33 @@ const BATTLE_FX_LEVELUP_FLASH_MS = 440;
 const BATTLE_FX_LEVELUP_FLASH_ALPHA = 0.3;
 const BATTLE_FX_LEVELUP_FLASH_COLOR = 0xfff4c4;
 const BATTLE_FX_SPARK_COLOR = 0xfff2a8;
+const ATTESTATION_ESCALATE_DELAY_MS = 980;
+const ATTESTATION_OPTION_COLUMNS = 2;
 
 type BattleSubmenu = "command" | "psi" | "goods" | "target";
 type BattleTargetMode = "bash" | "spy" | "mirror" | "psi-offense" | "psi-recovery" | "goods";
 type PendingItemUse = {
   itemId: number;
   inventorySlot: number;
+};
+type AttestationBattleInit = {
+  check: DrifellaSourceCheck;
+  cards: CardNfts;
+  battles?: AttestationBattles;
+  attempt: number;
+  gameFlagsSnapshot?: string[];
+};
+type AttestationBattleStage = "question" | "battle" | "complete";
+type AttestationBattleState = {
+  check: DrifellaSourceCheck;
+  cards: CardNfts;
+  draw: SourceCheckDraw;
+  flags: Set<string>;
+  stage: AttestationBattleStage;
+  questionIndex: number;
+  selectionIndex: number;
+  correctSoFar: number;
+  lastOutcome: "correct" | "wrong" | "cleared" | null;
 };
 type LastEnemyActionDebug = {
   enemyIndex: number;
@@ -390,7 +422,7 @@ type BattleStatusCardView = {
   maxPp: number;
   active: boolean;
   target: boolean;
-  /** HP target hit 0 but the odometer is still rolling — the mortal-damage race is on. */
+  /** HP target hit 0 but the odometer is still rolling - the mortal-damage race is on. */
   mortal: boolean;
   /** Active status badges with remaining-turn counts, e.g. "PSN·3 SLP·1". */
   statusLabel: string;
@@ -524,6 +556,9 @@ export class BattleScene extends Phaser.Scene {
   private nextDangerBeatAtMs_ = 0;
   private returnTo_?: BattleReturnContext;
   private exitOutcome_: BattleReturnOutcome | null = null;
+  private attestation_: AttestationBattleState | null = null;
+  private attestationResolvedRestore_: ChunkedWorldRestore | null = null;
+  private customVictoryPages_: string[][] | null = null;
 
   constructor() {
     super("battle");
@@ -551,11 +586,15 @@ export class BattleScene extends Phaser.Scene {
     encounterAdvantage?: EncounterAdvantage;
     encounterSeed?: number;
     boss?: boolean;
+    attestation?: AttestationBattleInit;
   }): void {
-    this.battleData_ = data.battleData;
+    const attestationRuntime = data.attestation
+      ? buildAttestationBattleRuntime(data.battleData, data.attestation.check, data.attestation.battles)
+      : undefined;
+    this.battleData_ = attestationRuntime?.battleData ?? data.battleData;
     this.isBossBattle_ = data.boss ?? false;
     this.battleRules_ = data.battleRules ?? data.returnTo?.gameData.battleRules;
-    this.group_ = selectBattleGroup(data.battleData, data.groupId);
+    this.group_ = selectBattleGroup(this.battleData_, attestationRuntime?.groupId ?? data.groupId);
     this.encounterAdvantage_ = normalizeEncounterAdvantage(data.encounterAdvantage);
     this.enemyFirstStrikeResolved_ = false;
     this.enemyFirstStrikePhase_ = false;
@@ -565,7 +604,7 @@ export class BattleScene extends Phaser.Scene {
     this.window_ = data.window;
     this.spriteOverrides_ = data.spriteOverrides ?? data.returnTo?.gameData.spriteOverrides;
     this.backgroundOverrides_ = data.backgroundOverrides ?? data.returnTo?.gameData.backgroundOverrides;
-    const enemies = enemiesForGroup(data.battleData, this.group_);
+    const enemies = enemiesForGroup(this.battleData_, this.group_);
     if (enemies.length === 0) {
       throw new Error(`Battle group ${this.group_.id} has no matching runtime enemy.`);
     }
@@ -641,6 +680,11 @@ export class BattleScene extends Phaser.Scene {
     this.firedSfx_.clear();
     this.nextHpTickSfxAtMs_ = 0;
     this.exitOutcome_ = null;
+    this.attestationResolvedRestore_ = null;
+    this.customVictoryPages_ = null;
+    this.attestation_ = data.attestation
+      ? this.createAttestationState(data.attestation)
+      : null;
     if (this.encounterAdvantage_ === "instantWin") {
       this.resolveInstantWinBattleState(enemies);
     }
@@ -661,6 +705,16 @@ export class BattleScene extends Phaser.Scene {
       const texture = this.enemySpriteTexturePlan(enemy);
       if (!this.textures.exists(texture.key)) {
         this.load.image(texture.key, texture.url);
+      }
+    }
+    if (this.attestation_) {
+      const battle = this.attestationBattleTexturePlan();
+      const fallback = this.attestationOverworldTexturePlan();
+      if (!this.textures.exists(battle.key)) {
+        this.load.image(battle.key, battle.url);
+      }
+      if (!this.textures.exists(fallback.key)) {
+        this.load.image(fallback.key, fallback.url);
       }
     }
   }
@@ -719,6 +773,21 @@ export class BattleScene extends Phaser.Scene {
     });
   }
 
+  private createAttestationState(data: AttestationBattleInit): AttestationBattleState {
+    const flags = new Set(data.gameFlagsSnapshot ?? this.returnTo_?.restore.flags.strings ?? []);
+    return {
+      check: data.check,
+      cards: data.cards,
+      draw: drawSourceCheckQuestions(data.check, { has: (flag) => flags.has(flag) }, data.attempt),
+      flags,
+      stage: "question",
+      questionIndex: 0,
+      selectionIndex: 0,
+      correctSoFar: 0,
+      lastOutcome: null
+    };
+  }
+
   update(_: number, delta: number): void {
     this.updateBackground();
     this.tickStatusPpMeters(delta);
@@ -730,7 +799,9 @@ export class BattleScene extends Phaser.Scene {
       if (this.transitionMs_ <= 0) {
         this.transitionGraphics?.clear();
         this.transitionPhase_ = "none";
-        if (!this.beginEnemyFirstStrikeIfNeeded()) {
+        if (this.attestation_?.stage === "question") {
+          this.beginAttestationQuestionInput();
+        } else if (!this.beginEnemyFirstStrikeIfNeeded()) {
           this.beginCommandInputRound();
         }
       } else {
@@ -769,6 +840,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private moveMenu(direction: BattleCommandGridDirection): void {
+    if (this.attestation_?.stage === "question") {
+      this.moveAttestationSelection(direction);
+      return;
+    }
     if (!this.isCommandInputActive()) {
       return;
     }
@@ -787,6 +862,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private confirmMenu(): void {
+    if (this.attestation_?.stage === "question") {
+      this.confirmAttestationSelection();
+      return;
+    }
     if (this.phase_ === "victory-summary") {
       if (this.advanceVictorySummaryPage()) {
         this.renderStatus();
@@ -837,6 +916,10 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private cancelMenu(): void {
+    if (this.attestation_?.stage === "question") {
+      this.playBattleSfxCue("menuCancel");
+      return;
+    }
     if (this.autoMode_) {
       this.cancelAutoMode();
       return;
@@ -971,6 +1054,112 @@ export class BattleScene extends Phaser.Scene {
     this.autoCommandDelayMs_ = this.autoMode_ ? AUTO_COMMAND_INPUT_DELAY_MS : 0;
     this.nextHpTickSfxAtMs_ = 0;
     this.syncMenuFromInputState();
+  }
+
+  private beginAttestationQuestionInput(): void {
+    const attestation = this.attestation_;
+    if (!attestation) {
+      this.beginCommandInputRound();
+      return;
+    }
+    const order = partyInputOrder(this.battle_);
+    this.phase_ = "command-input";
+    this.transitionPhase_ = "none";
+    this.inputState_ = initialBattleRoundInputState();
+    this.queuedCommands_ = [];
+    this.executionOrder_ = [];
+    this.priorityStep_ = null;
+    this.executionStepIndex_ = 0;
+    this.executionMessageLines_ = [];
+    this.pendingFlee_ = false;
+    this.roundOrder_ = order;
+    this.currentActor_ = order[0] ?? null;
+    this.commandIndex_ = attestation.selectionIndex;
+    this.submenu_ = "command";
+    this.submenuIndex_ = 0;
+    this.targetMode_ = "bash";
+    this.menuMessage_ = "";
+    this.actionDelayMs_ = 0;
+    this.lastActionDwellMs_ = 0;
+    this.autoCommandDelayMs_ = 0;
+    this.nextHpTickSfxAtMs_ = 0;
+  }
+
+  private moveAttestationSelection(direction: BattleCommandGridDirection): void {
+    const attestation = this.attestation_;
+    const question = this.currentAttestationQuestion();
+    if (!attestation || !question) {
+      return;
+    }
+    const next = moveBattleCommandGridIndex(
+      attestation.selectionIndex,
+      question.options.length,
+      direction,
+      ATTESTATION_OPTION_COLUMNS
+    );
+    if (next === attestation.selectionIndex) {
+      return;
+    }
+    attestation.selectionIndex = next;
+    this.commandIndex_ = next;
+    this.playBattleSfxCue("menuMove");
+    this.renderStatus();
+    this.publish();
+  }
+
+  private confirmAttestationSelection(): void {
+    const attestation = this.attestation_;
+    const question = this.currentAttestationQuestion();
+    if (!attestation || !question) {
+      return;
+    }
+    this.playBattleSfxCue("menuConfirm");
+    if (answerSourceCheckQuestion(question, attestation.selectionIndex)) {
+      attestation.correctSoFar += 1;
+      attestation.lastOutcome = "correct";
+      if (attestation.correctSoFar >= attestation.draw.drawCount) {
+        this.beginAttestationVictory("ATTESTED.");
+        return;
+      }
+      attestation.questionIndex += 1;
+      attestation.selectionIndex = 0;
+      this.commandIndex_ = 0;
+      this.renderStatus();
+      this.publish();
+      return;
+    }
+    attestation.lastOutcome = "wrong";
+    this.escalateAttestationToBattle(question);
+  }
+
+  private escalateAttestationToBattle(question: DrawnSourceCheckQuestion): void {
+    const attestation = this.attestation_;
+    if (!attestation) {
+      return;
+    }
+    attestation.stage = "battle";
+    this.customVictoryPages_ = null;
+    this.attestationResolvedRestore_ = null;
+    this.phase_ = "execution";
+    this.transitionPhase_ = "none";
+    this.currentActor_ = null;
+    this.inputState_ = initialBattleRoundInputState();
+    this.queuedCommands_ = [];
+    this.executionOrder_ = [];
+    this.priorityStep_ = null;
+    this.executionStepIndex_ = 0;
+    this.roundOrder_ = [];
+    this.pendingFlee_ = false;
+    this.autoMode_ = false;
+    this.autoCommandDelayMs_ = 0;
+    this.menuMessage_ = "";
+    this.executionMessageLines_ = [question.failLine ?? "Wrong answer.", "The Drifella attacks!"];
+    this.actionDelayMs_ = ATTESTATION_ESCALATE_DELAY_MS;
+    this.lastActionDwellMs_ = ATTESTATION_ESCALATE_DELAY_MS;
+    this.startEnemyLunge(0);
+    this.startScreenShake(BATTLE_FX_MIN_SHAKE_PX);
+    this.renderStatus();
+    this.publish();
   }
 
   private beginExecutionPhase(): void {
@@ -1130,7 +1319,7 @@ export class BattleScene extends Phaser.Scene {
 
   /**
    * Boss phase shift: crossing the low-HP threshold doesn't just change the boss's
-   * dialogue, it changes the fight — the boss enrages, hitting harder from here on.
+   * dialogue, it changes the fight - the boss enrages, hitting harder from here on.
    * A real second phase built on the existing HP-threshold hook.
    */
   private enrageLeadEnemy(): void {
@@ -1337,7 +1526,7 @@ export class BattleScene extends Phaser.Scene {
 
   /**
    * Comeback drama: a party BASH swung while the attacker is in peril hits
-   * harder — a last stand at death's door (adrenaline), building on the
+   * harder - a last stand at death's door (adrenaline), building on the
    * rolling-HP mortal-race tension. Scene-level bonus damage, party-only.
    */
   private applyComebackBonus(result: BattleRoundStepResult): void {
@@ -1547,7 +1736,7 @@ export class BattleScene extends Phaser.Scene {
     }
     const elapsed = this.time.now - cmd.startedAt;
     if (elapsed >= cmd.durationMs) {
-      cmd.resolved = true; // window expired unpressed — no effect
+      cmd.resolved = true; // window expired unpressed - no effect
       return;
     }
     const t = elapsed / cmd.durationMs;
@@ -1827,7 +2016,7 @@ export class BattleScene extends Phaser.Scene {
     const active = this.phase_ === "command-input" || this.phase_ === "execution";
     // Mortal-damage race (target 0, odometer still rolling) beats URGENT; a merely
     // critical member (<= maxHp/8, matching the overworld's isDangerHp) beats calm.
-    // The old target>0 check went silent during the race — the most dramatic moment.
+    // The old target>0 check went silent during the race - the most dramatic moment.
     const mortal = active && this.battle_.party.some((member) => isPendingPartyMortalWound(member));
     const danger =
       mortal ||
@@ -2140,6 +2329,66 @@ export class BattleScene extends Phaser.Scene {
     this.pendingFlee_ = false;
     this.autoMode_ = false;
     this.autoCommandDelayMs_ = 0;
+    if (this.attestation_?.stage === "battle" && !this.attestationResolvedRestore_) {
+      this.beginAttestationVictory("Witnessed the hard way.", true);
+    }
+  }
+
+  private beginAttestationVictory(message: string, keepBattleSummary = false): void {
+    const attestation = this.attestation_;
+    if (!attestation || !this.returnTo_) {
+      return;
+    }
+    this.playBattleMusicCue("victory");
+    if (!keepBattleSummary) {
+      this.playBattleSfxCue("victory");
+      this.startFlashOverlay(
+        BATTLE_FX_VICTORY_FLASH_COLOR,
+        BATTLE_FX_VICTORY_FLASH_ALPHA,
+        BATTLE_FX_VICTORY_FLASH_MS
+      );
+    }
+    this.settlePendingMortalWoundsForBattleEnd();
+    const postBattleParty = buildPostBattlePartySnapshot(this.returnTo_.restore.party, this.battle_);
+    const restore: ChunkedWorldRestore = {
+      ...this.returnTo_.restore,
+      outcome: "win",
+      party: postBattleParty,
+      flags: {
+        strings: [...this.returnTo_.restore.flags.strings],
+        numeric: [...this.returnTo_.restore.flags.numeric]
+      },
+      encounter: {
+        ...this.returnTo_.restore.encounter,
+        lastEncounterGroup: this.group_.id
+      }
+    };
+    const reward = applySourceCheckRewardToRestore({
+      check: attestation.check,
+      cards: attestation.cards,
+      items: this.items_,
+      restore
+    });
+    attestation.stage = "complete";
+    attestation.lastOutcome = "cleared";
+    this.attestationResolvedRestore_ = restore;
+    this.customVictoryPages_ = [[
+      message,
+      reward.cardName,
+      reward.itemHeld ? `Drifella holds ${reward.itemName}.` : `+ ${reward.itemName}`
+    ]];
+    this.victorySummaryPageIndex_ = keepBattleSummary ? this.victorySummaryPageIndex_ : 0;
+    this.victoryTally_ = keepBattleSummary ? this.victoryTally_ : null;
+    this.phase_ = "victory-summary";
+    this.transitionPhase_ = "summary";
+    this.submenu_ = "command";
+    this.commandIndex_ = 0;
+    this.currentActor_ = null;
+    this.menuMessage_ = "";
+    this.executionMessageLines_ = [];
+    this.pendingFlee_ = false;
+    this.autoMode_ = false;
+    this.autoCommandDelayMs_ = 0;
   }
 
   private beginExitTransition(): void {
@@ -2202,10 +2451,17 @@ export class BattleScene extends Phaser.Scene {
         return;
       }
       const postBattleParty = buildPostBattlePartySnapshot(this.returnTo_.restore.party, this.battle_);
+      const attestationRestore = outcome === "win" ? this.attestationResolvedRestore_ : null;
       const restore = {
         ...this.returnTo_.restore,
         outcome,
-        party: postBattleParty,
+        ...(attestationRestore ? {
+          flags: attestationRestore.flags,
+          party: attestationRestore.party,
+          sourceCheck: attestationRestore.sourceCheck
+        } : {
+          party: postBattleParty
+        }),
         encounter: {
           ...this.returnTo_.restore.encounter,
           lastEncounterGroup: this.group_.id
@@ -2224,6 +2480,9 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private currentReturnOutcome(): BattleReturnOutcome {
+    if (this.attestationResolvedRestore_) {
+      return "win";
+    }
     if (this.phase_ === "flee") {
       return "flee";
     }
@@ -2327,6 +2586,12 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private enemySpriteTexturePlan(enemy: BattleEnemy): EnemySpriteTexturePlan {
+    if (this.isAttestationEnemy(enemy)) {
+      const battle = this.attestationBattleTexturePlan();
+      const fallback = this.attestationOverworldTexturePlan();
+      const battleReady = this.enemySpriteTextureReady(battle);
+      return battleReady || !this.textures.exists(fallback.key) ? battle : fallback;
+    }
     const override = this.enemySpriteOverride(enemy.id);
     return override
       ? {
@@ -2353,6 +2618,28 @@ export class BattleScene extends Phaser.Scene {
       return false;
     }
     return true;
+  }
+
+  private isAttestationEnemy(enemy: BattleEnemy): boolean {
+    return Boolean(this.attestation_ && enemy.overworldSprite === this.attestation_.check.npcId);
+  }
+
+  private attestationBattleTexturePlan(): EnemySpriteTexturePlan {
+    const check = this.attestation_?.check;
+    return {
+      key: `attestation-battle-${check?.id ?? "missing"}`,
+      url: publicAssetUrl(check?.battleSprite ?? ""),
+      override: undefined
+    };
+  }
+
+  private attestationOverworldTexturePlan(): EnemySpriteTexturePlan {
+    const check = this.attestation_?.check;
+    return {
+      key: `attestation-overworld-${check?.id ?? "missing"}`,
+      url: `/assets/swagbound/overworld-npc/${check?.drifellaId ?? "missing"}.png`,
+      override: undefined
+    };
   }
 
   private scheduleEnemySpriteRedraw(missingTextures: EnemySpriteTexturePlan[]): void {
@@ -2996,6 +3283,18 @@ export class BattleScene extends Phaser.Scene {
         statusCards: this.statusCardViews()
       };
     }
+    if (this.attestation_?.stage === "question") {
+      const question = this.currentAttestationQuestion();
+      return {
+        actorName: "QUESTION",
+        commandLines: question?.options ?? [],
+        submenuLines: [],
+        descriptionLines: question ? this.attestationDescriptionLines(question) : [],
+        executionMessageLines: [],
+        selectedSubmenuIndex: 0,
+        statusCards: this.statusCardViews()
+      };
+    }
     if (!menuVisible) {
       return {
         commandLines: this.phase_ === "execution" ? [] : this.menuMessage_ ? [this.menuMessage_] : [],
@@ -3206,7 +3505,7 @@ export class BattleScene extends Phaser.Scene {
         accentGraphics.strokeRoundedRect(card.x + 6, card.y + 6, Math.max(1, card.width - 12), Math.max(1, card.height - 12), 4);
       }
       if (viewCard.mortal) {
-        // Mortal-damage race: the member's HP is rolling toward 0 — pulse the card
+        // Mortal-damage race: the member's HP is rolling toward 0 - pulse the card
         // red so the "heal or win NOW" window reads at a glance.
         const pulse = 0.4 + 0.45 * Math.abs(Math.sin(this.time.now / 170));
         accentGraphics.lineStyle(2, 0xe24b4a, pulse);
@@ -3416,6 +3715,14 @@ export class BattleScene extends Phaser.Scene {
     return [];
   }
 
+  private currentAttestationQuestion(): DrawnSourceCheckQuestion | undefined {
+    return this.attestation_?.draw.questions[this.attestation_.questionIndex];
+  }
+
+  private attestationDescriptionLines(question: DrawnSourceCheckQuestion): string[] {
+    return wrapBattleDescription(question.prompt, 34);
+  }
+
   /** Full name of the combatant under the target cursor, shown while selecting a target. */
   private targetedCombatantName(): string {
     const side = this.activeTargetSide();
@@ -3498,8 +3805,28 @@ export class BattleScene extends Phaser.Scene {
       victorySummaryPageCount: this.victorySummaryPages().length,
       victorySummaryPageKind: victoryPage?.kind ?? null,
       victorySummaryPageHighlighted: Boolean(victoryPage?.highlighted),
+      attestation: this.attestationDebug(),
       mortalWounds: debugMortalWounds(this.battle_, this.mortalWoundRescueCount_)
     });
+  }
+
+  private attestationDebug(): NonNullable<Parameters<typeof publishBattleDebug>[0]["attestation"]> | null {
+    const attestation = this.attestation_;
+    if (!attestation) {
+      return null;
+    }
+    const question = this.currentAttestationQuestion();
+    return {
+      checkId: attestation.check.id,
+      stage: attestation.stage,
+      questionIndex: attestation.questionIndex,
+      drawCount: attestation.draw.drawCount,
+      selectionIndex: attestation.selectionIndex,
+      correctOptionIndex: question?.correctOptionIndex ?? -1,
+      options: question?.options ?? [],
+      correctSoFar: attestation.correctSoFar,
+      lastOutcome: attestation.lastOutcome
+    };
   }
 
   private playBattleMusicCue(cue: string, force = false): void {
@@ -3643,6 +3970,9 @@ export class BattleScene extends Phaser.Scene {
     if (this.phase_ === "victory-summary" || this.phase_ === "lose" || this.phase_ === "flee") {
       return 0;
     }
+    if (this.attestation_?.stage === "question") {
+      return this.attestation_.selectionIndex;
+    }
     if (this.phase_ !== "command-input" || this.currentActor_?.side !== "party") {
       return null;
     }
@@ -3760,13 +4090,15 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private victorySummaryPages(): string[][] {
-    if (!this.victorySummary_) {
-      return [];
-    }
-    const pages = this.victorySummaryPageDetails().map((page) => [...page.lines]);
+    const pages = this.victorySummary_
+      ? this.victorySummaryPageDetails().map((page) => [...page.lines])
+      : [];
     if (this.victoryTally_ && pages[0]) {
       pages[0][0] = `${this.victoryTally_.exp.displayed} EXP`;
       pages[0][1] = `You got $${this.victoryTally_.money.displayed}`;
+    }
+    if (this.customVictoryPages_) {
+      pages.push(...this.customVictoryPages_.map((page) => [...page]));
     }
     return pages.map((page) => page.map((line) => fitLine(line, 28)));
   }
@@ -4051,7 +4383,7 @@ function battleMemberSnapshotFromCombatant(combatant: BattleState["party"][numbe
     pp: Math.min(stat(combatant.maxPp), stat(combatant.pp)),
     maxPp: stat(combatant.maxPp),
     inventory: combatant.inventory.map((itemId) => stat(itemId)),
-    // BASE stats only — persisting effective stats re-adds equip bonuses next battle.
+    // BASE stats only - persisting effective stats re-adds equip bonuses next battle.
     stats: combatantBaseStats(combatant)
   };
 }
@@ -4080,6 +4412,10 @@ function selectBattleBackground(data: BattleData, id: number): BattleBackground 
 
 function generatedAssetUrl(dir: string, id: number): string {
   return `/generated/${dir}/${pad3(id)}.png`;
+}
+
+function publicAssetUrl(path: string): string {
+  return path.startsWith("/") ? path : `/${path}`;
 }
 
 function backgroundKey(id: number): string {
@@ -4269,6 +4605,27 @@ function roundTo(value: number, places: number): number {
 
 function fitLine(line: string, width: number): string {
   return line.length > width ? line.slice(0, Math.max(0, width - 3)) + "..." : line;
+}
+
+function wrapBattleDescription(text: string, maxChars: number): string[] {
+  const words = text.trim().split(/\s+/g).filter(Boolean);
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    const next = current ? `${current} ${word}` : word;
+    if (next.length <= maxChars) {
+      current = next;
+      continue;
+    }
+    if (current) {
+      lines.push(current);
+    }
+    current = word;
+  }
+  if (current) {
+    lines.push(current);
+  }
+  return lines.slice(0, 4);
 }
 
 function livingEnemyIndices(state: BattleState): number[] {

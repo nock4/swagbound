@@ -184,6 +184,17 @@ export type BattleDebug = {
   victorySummaryPageCount: number;
   victorySummaryPageKind: BattleVictoryViewPageKind | null;
   victorySummaryPageHighlighted: boolean;
+  attestation?: {
+    checkId: string;
+    stage: string;
+    questionIndex: number;
+    drawCount: number;
+    selectionIndex: number;
+    correctOptionIndex: number;
+    options: string[];
+    correctSoFar: number;
+    lastOutcome: string | null;
+  } | null;
   mortalWounds: BattleMortalWoundsDebug;
 };
 
