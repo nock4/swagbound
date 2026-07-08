@@ -369,6 +369,13 @@ export const MusicManifestSchema = z.object({
  */
 export const CollisionOverridesSchema = z.object({
   schema: z.literal("swagbound.collision-overrides.v1"),
+  clears: z.array(z.object({
+    x: z.number().int().nonnegative(),
+    y: z.number().int().nonnegative(),
+    w: z.number().int().positive(),
+    h: z.number().int().positive(),
+    note: z.string().optional()
+  })).optional(),
   solids: z.array(z.object({
     x: z.number().int().nonnegative(),
     y: z.number().int().nonnegative(),

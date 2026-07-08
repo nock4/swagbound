@@ -48,6 +48,8 @@ export const FIELD_POISON_MIN_HP = 1;
 export const DEFAULT_SHIELD_PERCENT = 50;
 /** Default chance (0..1) an asleep combatant wakes at the start of its turn (authored). */
 export const SLEEP_WAKE_CHANCE = 0.34;
+/** Default chance (0..1) a paralyzed combatant recovers on its skipped battle turn. */
+export const PARALYSIS_RECOVERY_CHANCE = 0.25;
 
 const STATUS_AILMENT_LABELS = {
   poisoned: "Poison",
@@ -168,14 +170,17 @@ export function cureStatus(state: StatusState | undefined, ailment: StatusAilmen
  */
 export function resolveTurnGate(
   state: StatusState | undefined,
-  wakeRoll: number
-): { canAct: boolean; statuses: StatusState; reason?: "paralyzed" | "asleep" | "woke" } {
+  recoveryRoll: number
+): { canAct: boolean; statuses: StatusState; reason?: "paralyzed" | "paralysisRecovered" | "asleep" | "woke" } {
   const statuses = state ?? [];
   if (hasStatus(statuses, "paralyzed")) {
+    if (recoveryRoll < PARALYSIS_RECOVERY_CHANCE) {
+      return { canAct: false, statuses: cureStatus(statuses, "paralyzed"), reason: "paralysisRecovered" };
+    }
     return { canAct: false, statuses, reason: "paralyzed" };
   }
   if (hasStatus(statuses, "asleep")) {
-    if (wakeRoll < SLEEP_WAKE_CHANCE) {
+    if (recoveryRoll < SLEEP_WAKE_CHANCE) {
       return { canAct: false, statuses: cureStatus(statuses, "asleep"), reason: "woke" };
     }
     return { canAct: false, statuses, reason: "asleep" };

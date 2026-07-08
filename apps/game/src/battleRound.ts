@@ -30,6 +30,7 @@ import {
   type BattleActionResolution,
   type BattleActor,
   type BattleCommand,
+  type Combatant,
   type EncounterAdvantage,
   type BattleSide,
   type BattleState,
@@ -181,6 +182,22 @@ export function partyInputOrder(state: BattleState): BattleActor[] {
   return state.party.flatMap((combatant, index) =>
     isCombatantAlive(combatant) ? [{ side: "party" as const, index }] : []
   );
+}
+
+export function partyCommandInputOrder(state: BattleState): BattleActor[] {
+  return partyInputOrder(state).filter((actor) => {
+    const combatant = combatantAt(state, actor);
+    return Boolean(combatant && canChooseBattleCommand(combatant));
+  });
+}
+
+export function autoPassBlockedPartyCommands(state: BattleState): QueuedCommand[] {
+  return partyInputOrder(state).flatMap((actor) => {
+    const combatant = combatantAt(state, actor);
+    return combatant && !canChooseBattleCommand(combatant)
+      ? [{ partySlot: actor.index, command: "BASH" as const }]
+      : [];
+  });
 }
 
 export function jitteredTurnOrder(
@@ -456,7 +473,7 @@ function statusGatedRoundStep(
   state: BattleState,
   actor: BattleActor,
   name: string,
-  reason: "paralyzed" | "asleep" | "woke" | undefined
+  reason: "paralyzed" | "paralysisRecovered" | "asleep" | "woke" | undefined
 ): BattleRoundStepResult {
   const ticked = applyEndOfTurnStatusTick(state, actor);
   const base = reason === "woke"
@@ -684,7 +701,7 @@ function cancelInputSelection(
     return input;
   }
 
-  const order = partyInputOrder(context.state);
+  const order = partyCommandInputOrder(context.state);
   const previousActor = order[input.memberCursor - 1];
   if (!previousActor) {
     return input;
@@ -702,7 +719,7 @@ function autoQueueRemaining(
   input: BattleRoundInputState,
   context: BattleRoundInputContext
 ): BattleRoundInputTransition {
-  const order = partyInputOrder(context.state);
+  const order = partyCommandInputOrder(context.state);
   const queue = order.slice(input.memberCursor).reduce((nextQueue, actor) =>
     upsertQueuedCommand(nextQueue, autoCommandForMember(context.state, actor.index, context.psi)), input.queue);
 
@@ -722,7 +739,7 @@ function queueAndAdvance(
   context: BattleRoundInputContext,
   queued: QueuedCommand
 ): BattleRoundInputTransition {
-  const order = partyInputOrder(context.state);
+  const order = partyCommandInputOrder(context.state);
   const memberCursor = input.memberCursor + 1;
   const complete = memberCursor >= order.length;
   return {
@@ -781,7 +798,13 @@ function currentInputActor(
   input: BattleRoundInputState,
   context: BattleRoundInputContext
 ): BattleActor | undefined {
-  return partyInputOrder(context.state)[input.memberCursor];
+  return partyCommandInputOrder(context.state)[input.memberCursor];
+}
+
+function canChooseBattleCommand(combatant: Combatant): boolean {
+  return isCombatantAlive(combatant) &&
+    !hasStatus(combatant.statuses, "paralyzed") &&
+    !hasStatus(combatant.statuses, "asleep");
 }
 
 function livingIndices(state: BattleState, side: BattleSide): number[] {

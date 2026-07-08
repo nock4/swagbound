@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applyDefeatReturn } from "./battleReturn";
+import { applyDefeatReturn, battleReturnGuardAction } from "./battleReturn";
 import type { PartyStateSnapshot } from "./partyState";
 import type { SavePlayerSnapshot } from "./saveState";
 
@@ -39,6 +39,29 @@ describe("applyDefeatReturn", () => {
 
     expect(result.respawnSource).toBe("newGame");
     expect(result.player).toMatchObject({ x: 64, y: 96, facing: "down" });
+  });
+});
+
+describe("battleReturnGuardAction", () => {
+  it("starts exit for a stale terminal phase with an active return context", () => {
+    expect(battleReturnGuardAction({
+      phase: "victory-summary",
+      elapsedMs: 20_000,
+      returnContextActive: true
+    })).toBe("begin-exit");
+  });
+
+  it("does not fire before timeout or without a return context", () => {
+    expect(battleReturnGuardAction({
+      phase: "victory-summary",
+      elapsedMs: 19_999,
+      returnContextActive: true
+    })).toBeNull();
+    expect(battleReturnGuardAction({
+      phase: "lose",
+      elapsedMs: 20_000,
+      returnContextActive: false
+    })).toBeNull();
   });
 });
 

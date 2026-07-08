@@ -10,7 +10,7 @@ import { serializeSaveState, type SaveSlotPersistence, type SaveState } from "./
 
 describe("game start targets", () => {
   it("builds the title CONTINUE target from the current save slot", () => {
-    const blob = serializeSaveState(saveState({ x: 320, y: 480 }));
+    const blob = serializeSaveState(saveState({ x: 2144, y: 1788 }));
     const saveSlots = slots(blob);
     const data = gameData();
 
@@ -21,7 +21,7 @@ describe("game start targets", () => {
     expect(titleData.continueTarget?.sceneKey).toBe("chunked-world");
     expect(worldData.saveSlot).toBe(0);
     expect(worldData.saveSlots).toBe(saveSlots);
-    expect(worldData.saveState?.player).toMatchObject({ x: 320, y: 480, facing: "left" });
+    expect(worldData.saveState?.player).toMatchObject({ x: 2144, y: 1788, facing: "left" });
   });
 
   it("returns no CONTINUE target when the slot is empty", () => {

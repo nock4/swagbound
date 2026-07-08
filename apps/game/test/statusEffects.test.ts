@@ -6,6 +6,7 @@ import {
   inflictStatus,
   resolveTurnGate,
   tickStatuses,
+  PARALYSIS_RECOVERY_CHANCE,
   POISON_HP_DIVISOR,
   SLEEP_WAKE_CHANCE,
   type StatusState
@@ -36,6 +37,13 @@ describe("resolveTurnGate", () => {
   it("blocks a paralyzed combatant", () => {
     const gate = resolveTurnGate([{ ailment: "paralyzed" }], 0.99);
     expect(gate).toMatchObject({ canAct: false, reason: "paralyzed" });
+  });
+
+  it("clears paralysis on a low recovery roll while still skipping that turn", () => {
+    const gate = resolveTurnGate([{ ailment: "paralyzed" }], PARALYSIS_RECOVERY_CHANCE - 0.01);
+    expect(gate.canAct).toBe(false);
+    expect(gate.reason).toBe("paralysisRecovered");
+    expect(hasStatus(gate.statuses, "paralyzed")).toBe(false);
   });
 
   it("wakes a sleeper on a low roll (clears status, still skips the turn)", () => {

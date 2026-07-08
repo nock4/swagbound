@@ -58,7 +58,9 @@ import {
 } from "./battleLogic";
 import {
   encounterAdvantageTurnOrder,
+  autoPassBlockedPartyCommands,
   nextInputState,
+  partyCommandInputOrder,
   partyInputOrder,
   resolveRoundStep,
   resolveRoundStartPriority,
@@ -84,7 +86,12 @@ import {
   type BattleEvent
 } from "./battleEvents";
 import { elementalAffinity, psiElementForId } from "./battleAffinities";
-import type { BattleReturnContext, BattleReturnOutcome, ChunkedWorldRestore } from "./battleReturn";
+import {
+  battleReturnGuardAction,
+  type BattleReturnContext,
+  type BattleReturnOutcome,
+  type ChunkedWorldRestore
+} from "./battleReturn";
 import {
   DEFAULT_DAMAGE_FLASH_MS,
   attackerLungeOffset,
@@ -474,6 +481,7 @@ export class BattleScene extends Phaser.Scene {
   private phase_: BattlePhase = "enter-transition";
   private transitionPhase_: BattleTransitionPhase = "enter";
   private transitionMs_ = ENTER_TRANSITION_MS;
+  private terminalPhaseStartedAtMs_: number | null = null;
   private victorySummary_: BattleVictorySummary | null = null;
   private victorySummaryPageIndex_ = 0;
   private victoryTally_: VictoryTallyState | null = null;
@@ -823,6 +831,12 @@ export class BattleScene extends Phaser.Scene {
       return;
     }
 
+    if (this.applyBattleReturnGuard()) {
+      this.renderStatus();
+      this.publish();
+      return;
+    }
+
     if (!this.isBattleFlowPaused()) {
       const previousBattle = this.battle_;
       this.battle_ = tickBattleMeters(this.battle_, delta);
@@ -1032,17 +1046,32 @@ export class BattleScene extends Phaser.Scene {
     if (this.handleBattleOutcome()) {
       return;
     }
-    const order = partyInputOrder(this.battle_);
-    if (order.length === 0) {
+    const livingOrder = partyInputOrder(this.battle_);
+    if (livingOrder.length === 0) {
       this.phase_ = "lose";
       this.transitionPhase_ = "none";
+      this.markTerminalPhaseStarted();
       this.currentActor_ = null;
+      return;
+    }
+    const autoPassQueue = autoPassBlockedPartyCommands(this.battle_);
+    const order = partyCommandInputOrder(this.battle_);
+    if (order.length === 0) {
+      this.inputState_ = {
+        ...initialBattleRoundInputState(),
+        queue: autoPassQueue
+      };
+      this.queuedCommands_ = autoPassQueue;
+      this.beginExecutionPhase();
       return;
     }
     this.phase_ = "command-input";
     this.transitionPhase_ = "none";
-    this.inputState_ = initialBattleRoundInputState();
-    this.queuedCommands_ = [];
+    this.inputState_ = {
+      ...initialBattleRoundInputState(),
+      queue: autoPassQueue
+    };
+    this.queuedCommands_ = autoPassQueue;
     this.executionOrder_ = [];
     this.priorityStep_ = null;
     this.executionStepIndex_ = 0;
@@ -1357,6 +1386,7 @@ export class BattleScene extends Phaser.Scene {
       this.lastActionDwellMs_ = 0;
       this.phase_ = "flee";
       this.transitionPhase_ = "none";
+      this.markTerminalPhaseStarted();
       this.currentActor_ = null;
       return;
     }
@@ -2140,7 +2170,7 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private syncMenuFromInputState(): void {
-    const order = partyInputOrder(this.battle_);
+    const order = partyCommandInputOrder(this.battle_);
     this.roundOrder_ = this.phase_ === "execution" ? this.executionOrder_ : order;
     this.currentActor_ = order[this.inputState_.memberCursor] ?? null;
     this.queuedCommands_ = [...this.inputState_.queue];
@@ -2253,6 +2283,7 @@ export class BattleScene extends Phaser.Scene {
     } else {
       this.phase_ = "lose";
       this.transitionPhase_ = "none";
+      this.markTerminalPhaseStarted();
       this.resetMenuForActor();
     }
     return true;
@@ -2281,6 +2312,7 @@ export class BattleScene extends Phaser.Scene {
     this.victoryTally_ = null;
     this.phase_ = "victory-summary";
     this.transitionPhase_ = "summary";
+    this.markTerminalPhaseStarted();
     this.transitionMs_ = 0;
     this.submenu_ = "command";
     this.commandIndex_ = 0;
@@ -2299,6 +2331,7 @@ export class BattleScene extends Phaser.Scene {
       this.victorySummaryPageIndex_ = 0;
       this.phase_ = "victory-summary";
       this.transitionPhase_ = "summary";
+      this.markTerminalPhaseStarted();
       this.ensureVictoryPresentation();
       return;
     }
@@ -2320,6 +2353,7 @@ export class BattleScene extends Phaser.Scene {
     this.victoryTally_ = null;
     this.phase_ = "victory-summary";
     this.transitionPhase_ = "summary";
+    this.markTerminalPhaseStarted();
     this.ensureVictoryPresentation();
     this.submenu_ = "command";
     this.commandIndex_ = 0;
@@ -2381,6 +2415,7 @@ export class BattleScene extends Phaser.Scene {
     this.victoryTally_ = keepBattleSummary ? this.victoryTally_ : null;
     this.phase_ = "victory-summary";
     this.transitionPhase_ = "summary";
+    this.markTerminalPhaseStarted();
     this.submenu_ = "command";
     this.commandIndex_ = 0;
     this.currentActor_ = null;
@@ -2401,6 +2436,7 @@ export class BattleScene extends Phaser.Scene {
     }
     this.phase_ = "exit-transition";
     this.transitionPhase_ = "exit";
+    this.terminalPhaseStartedAtMs_ = null;
     this.transitionMs_ = EXIT_TRANSITION_MS;
     this.currentActor_ = null;
     this.transitionGraphics?.clear();
@@ -2487,6 +2523,33 @@ export class BattleScene extends Phaser.Scene {
       return "flee";
     }
     return outcome(this.battle_) === "win" ? "win" : "lose";
+  }
+
+  private markTerminalPhaseStarted(): void {
+    this.terminalPhaseStartedAtMs_ = this.time.now;
+  }
+
+  private applyBattleReturnGuard(): boolean {
+    if (
+      this.phase_ !== "victory-summary" &&
+      this.phase_ !== "win" &&
+      this.phase_ !== "lose" &&
+      this.phase_ !== "flee"
+    ) {
+      return false;
+    }
+    const startedAt = this.terminalPhaseStartedAtMs_ ?? this.time.now;
+    this.terminalPhaseStartedAtMs_ = startedAt;
+    const action = battleReturnGuardAction({
+      phase: this.phase_,
+      elapsedMs: Math.max(0, this.time.now - startedAt),
+      returnContextActive: Boolean(this.returnTo_)
+    });
+    if (action !== "begin-exit") {
+      return false;
+    }
+    this.beginExitTransition();
+    return true;
   }
 
   private drawBackground(): void {

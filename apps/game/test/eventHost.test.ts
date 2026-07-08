@@ -686,4 +686,30 @@ describe("RuntimeEventHost", () => {
       truncated: false
     });
   });
+
+  it("records the active reference and npc id for watchdog diagnostics", () => {
+    const file = "ccscript/watchdog.ccs";
+    const collection = scripts({
+      [file]: [
+        label(file, "start", 1),
+        text(file, "Watchdog metadata.", 2),
+        runtime(file, "end", 3)
+      ]
+    });
+    const dialogue = new DialogueController();
+    const host = new RuntimeEventHost({
+      dialogue,
+      flags: new GameFlags(),
+      partyState: new PartyState()
+    });
+    const sequence = new RuntimeEventSequence(collection, host);
+
+    expect(sequence.start("watchdog.start", { npcId: 24 })).toBe(true);
+
+    expect(host.debug()).toMatchObject({
+      running: true,
+      reference: "watchdog.start",
+      npcId: 24
+    });
+  });
 });

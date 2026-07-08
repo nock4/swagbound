@@ -1653,20 +1653,20 @@ function applyPpRestore(combatant: Combatant, amount: number): Combatant {
 
 /**
  * Battle status turn-gate for a combatant: paralyzed/asleep skip the action. Only
- * consumes an rng roll when an asleep combatant might wake, so combatants without
- * statuses never perturb the rng sequence. Returns the (possibly woke-updated) state.
+ * consumes an rng roll when a blocking status can recover, so combatants without
+ * statuses never perturb the rng sequence. Returns the (possibly updated) state.
  */
 export function resolveCombatantTurnGate(
   state: BattleState,
   actor: BattleActor,
   rng: Rng
-): { state: BattleState; canAct: boolean; reason?: "paralyzed" | "asleep" | "woke" } {
+): { state: BattleState; canAct: boolean; reason?: "paralyzed" | "paralysisRecovered" | "asleep" | "woke" } {
   const combatant = combatantFor(state, actor);
   if (!combatant?.statuses?.length) {
     return { state, canAct: true };
   }
-  const needsWakeRoll = !hasStatus(combatant.statuses, "paralyzed") && hasStatus(combatant.statuses, "asleep");
-  const gate = resolveTurnGate(combatant.statuses, needsWakeRoll ? normalizedRoll(rng()) : 0);
+  const needsRecoveryRoll = hasStatus(combatant.statuses, "paralyzed") || hasStatus(combatant.statuses, "asleep");
+  const gate = resolveTurnGate(combatant.statuses, needsRecoveryRoll ? normalizedRoll(rng()) : 0);
   const nextState = gate.statuses === combatant.statuses
     ? state
     : withCombatant(state, actor, withStatuses(combatant, gate.statuses));

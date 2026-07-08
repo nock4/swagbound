@@ -5,6 +5,25 @@ import type { SaveFlagsSnapshot, SavePlayerSnapshot, SaveSlotPersistence } from 
 
 export type BattleReturnSource = "encounter" | "event";
 export type BattleReturnOutcome = "win" | "lose" | "flee";
+export type BattleReturnGuardPhase = "victory-summary" | "win" | "lose" | "flee" | "exit-transition";
+export type BattleReturnGuardAction = "begin-exit";
+export const BATTLE_RETURN_TERMINAL_GUARD_MS = 20000;
+
+export function battleReturnGuardAction(input: {
+  phase: BattleReturnGuardPhase;
+  elapsedMs: number;
+  returnContextActive: boolean;
+  timeoutMs?: number;
+}): BattleReturnGuardAction | null {
+  if (!input.returnContextActive || input.phase === "exit-transition") {
+    return null;
+  }
+  const timeoutMs = Math.max(0, Math.floor(input.timeoutMs ?? BATTLE_RETURN_TERMINAL_GUARD_MS));
+  if (input.elapsedMs < timeoutMs) {
+    return null;
+  }
+  return "begin-exit";
+}
 
 /**
  * A story-gate boss launched from a trigger. Its flag effects (and the once-fired

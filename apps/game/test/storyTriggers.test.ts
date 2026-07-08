@@ -5,6 +5,7 @@ import {
   triggerFiredFlag,
   triggerConditionsMet,
   selectStoryTrigger,
+  storyTriggerSuppressionForRestore,
   bossGateActive,
   selectActiveBossGates,
   resolveSuppression,
@@ -130,6 +131,39 @@ describe("story trigger selection + suppression", () => {
   it("clears suppression only after the player leaves the suppressed area", () => {
     expect(resolveSuppression("north-barricade", triggers, { x: 205, y: 105 })).toBe("north-barricade");
     expect(resolveSuppression("north-barricade", triggers, { x: 400, y: 400 })).toBeUndefined();
+  });
+
+  it("suppresses an armed area trigger when a save restore starts inside it", () => {
+    const arrival: StoryTrigger = {
+      id: "endgame-return",
+      area: { x: 1300, y: 1000, w: 900, h: 1000 },
+      once: true,
+      requireFlags: ["act3:complete"],
+      blockFlags: ["raid:morningside:active"],
+      dialogue: ["Arrival beat."],
+      setFlags: ["raid:morningside:active"]
+    };
+    const restorePoint = { x: 2144, y: 1788 };
+
+    expect(storyTriggerSuppressionForRestore([arrival], restorePoint, has(["act3:complete"]))).toBe("endgame-return");
+    expect(selectStoryTrigger([arrival], restorePoint, has(["act3:complete"]), "endgame-return")).toBeUndefined();
+    expect(resolveSuppression("endgame-return", [arrival], { x: 2201, y: 1788 })).toBeUndefined();
+  });
+
+  it("does not seed restore suppression for inactive or already-fired triggers", () => {
+    const arrival: StoryTrigger = {
+      id: "endgame-return",
+      area: { x: 1300, y: 1000, w: 900, h: 1000 },
+      once: true,
+      requireFlags: ["act3:complete"],
+      blockFlags: ["raid:morningside:active"],
+      dialogue: ["Arrival beat."]
+    };
+    const restorePoint = { x: 2144, y: 1788 };
+
+    expect(storyTriggerSuppressionForRestore([arrival], restorePoint, has([]))).toBeUndefined();
+    expect(storyTriggerSuppressionForRestore([arrival], restorePoint, has(["act3:complete", "raid:morningside:active"]))).toBeUndefined();
+    expect(storyTriggerSuppressionForRestore([arrival], restorePoint, has(["act3:complete", triggerFiredFlag("endgame-return")]))).toBeUndefined();
   });
 });
 

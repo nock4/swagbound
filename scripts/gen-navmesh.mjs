@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
 import { walkableFootprintClear } from "../apps/game/src/collisionFootprint.ts";
-import { applySolidOverrideRects } from "../apps/game/src/collisionOverrides.ts";
+import { applyClearOverrideRects, applySolidOverrideRects } from "../apps/game/src/collisionOverrides.ts";
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const GENERATED = path.join(ROOT, "apps/game/public/generated");
@@ -19,7 +19,8 @@ const grid = { cellSize: CS, width: W, height: H };
 const overridesFile = path.join(ROOT, "content/collision-overrides.json");
 const overrides = fs.existsSync(overridesFile)
   ? JSON.parse(fs.readFileSync(overridesFile, "utf8"))
-  : { solids: [] };
+  : { clears: [], solids: [] };
+applyClearOverrideRects(solidRows, overrides.clears ?? [], CS);
 applySolidOverrideRects(solidRows, overrides.solids ?? [], CS);
 
 const cellCount = W * H;

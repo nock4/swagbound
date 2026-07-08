@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { applySolidOverrideRects } from "../src/collisionOverrides";
+import { applyClearOverrideRects, applySolidOverrideRects } from "../src/collisionOverrides";
 
 describe("applySolidOverrideRects", () => {
   it("marks covered cells solid at 8px cell granularity", () => {
@@ -25,5 +25,11 @@ describe("applySolidOverrideRects", () => {
     const rows = ["000", "000"];
     applySolidOverrideRects(rows, [{ x: 8, y: 0, w: 8, h: 8 }], 8);
     expect(rows).toEqual(["010", "000"]);
+  });
+
+  it("can clear authored cells before solid overrides are applied", () => {
+    const rows = ["111", "111"];
+    applyClearOverrideRects(rows, [{ x: 8, y: 0, w: 8, h: 8 }], 8);
+    expect(rows).toEqual(["101", "111"]);
   });
 });
