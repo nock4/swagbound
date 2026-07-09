@@ -305,14 +305,14 @@
     },
     {
       "id": "onett-minch-brother-nag",
-      "comment": "data_51.l_0xc999a1 (Act 1, Minch house door @ worldPixel 2392,344, eventFlag 0x1d4). Sole actor is npcId 182 / sprite group 227 standing @ 2352,368 (movement 8). EB choreography = char_direction(1,0): he turns to face the player (down) while reminding them to bring Picky back before dad gets home, then offers a little help via {set(flag 2)}. Reauthored as a one-shot area cutscene bracketing 2392,344; lockPlayer so the player watches the turn + line, steps always complete so the player is released.",
+      "comment": "data_51.l_0xc999a1 (Act 1, Minch house door @ worldPixel 2392,344, eventFlag 0x1d4). NOTE: world npcId 182 (sprite group 227) is the yard MAILBOX, not the brother; the speaker is the added NPC 100101 (Pokey-analog kid, group 44 skin) placed by the door. EB choreography = char_direction(1,0): he turns to face the player (down) while reminding them to bring Picky back before dad gets home, then offers a little help via {set(flag 2)}. Reauthored as a one-shot area cutscene bracketing 2392,344; lockPlayer so the player watches the turn + line, steps always complete so the player is released.",
       "trigger": {
         "kind": "area",
         "area": {
           "x": 2312,
           "y": 280,
           "w": 160,
-          "h": 128
+          "h": 92
         }
       },
       "once": true,
@@ -321,13 +321,13 @@
         {
           "op": "showActor",
           "actor": {
-            "npcId": 182
+            "npcId": 100101
           }
         },
         {
           "op": "faceActor",
           "actor": {
-            "npcId": 182
+            "npcId": 100101
           },
           "dir": "down"
         },
@@ -344,7 +344,7 @@
         {
           "op": "faceActor",
           "actor": {
-            "npcId": 182
+            "npcId": 100101
           },
           "dir": "down"
         },
@@ -359,7 +359,7 @@
         {
           "op": "faceActor",
           "actor": {
-            "npcId": 182
+            "npcId": 100101
           },
           "dir": "down"
         },

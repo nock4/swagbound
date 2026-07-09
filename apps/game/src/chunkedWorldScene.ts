@@ -323,6 +323,7 @@ import {
   OPENING_WAKE_SIGNAL_FIRST_FLASH_MS,
   OPENING_WAKE_SIGNAL_SECOND_FLASH_MS,
   clampOpeningFlyoverPoint,
+  openingFlyoverNightRect,
   shouldRunOverworldRoamers
 } from "./openingPacing";
 import { publishAuditionTarget, toggleMusicAuditioner, isMusicAuditionerVisible, type AuditionLocation } from "./musicAuditioner";
@@ -1574,7 +1575,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const spawnAddedNpcs = addedNpcsForSpawn(this.data_.addedNpcs, {
       extrasEnabled: isAddedNpcExtrasEnabled(globalThis.location?.search),
       sourceChecks: this.data_.sourceChecks,
-      storyTriggers: this.data_.storyTriggers
+      storyTriggers: this.data_.storyTriggers,
+      cutscenes: this.data_.cutscenes
     });
     const addedNpcs = buildAddedWorldNpcs(spawnAddedNpcs, this.world_.npcs);
     if (addedNpcs.length < (spawnAddedNpcs?.npcs.length ?? 0)) {
@@ -2763,10 +2765,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         ) {
           continue;
         }
-        const override = this.npcSpriteOverrideResolution(placement.data.npcId, placement.data.spriteGroup);
-        queued = (override
-          ? this.requestNpcOverrideSheet(placement.data.npcId, placement.data.spriteGroup)
-          : this.requestNpcSheet(placement.data.spriteGroup)) || queued;
+        queued = this.requestNpcRuntimeTexture(placement.data.npcId, placement.data.spriteGroup) || queued;
         this.npcRuntimes.set(placement.key, this.createNpcRuntime(placement));
       }
     }
@@ -2822,6 +2821,46 @@ export class ChunkedWorldScene extends Phaser.Scene {
       wanderHome: behavior.kind === "wander" ? this.wanderHomeForNpc(npc) : undefined,
       sprite: this.spawnNpcActor(npc.npcId, npc.worldPixel.x, npc.worldPixel.y, npc.spriteGroup, npc.direction)
     };
+  }
+
+  private ensureCutsceneNpcRuntime(actor: Extract<NormalizedActorMoveSelector, { kind: "npc" }>): NpcRuntime | undefined {
+    const existing = this.npcRuntimeForActor(actor);
+    if (existing) {
+      const queued = this.ensureNpcRuntimeSprite(existing);
+      if (queued && !this.load.isLoading()) {
+        this.load.start();
+      }
+      return existing;
+    }
+
+    const placement = this.npcPlacementForActor(actor);
+    if (!placement) {
+      return undefined;
+    }
+    const queued = this.requestNpcRuntimeTexture(placement.data.npcId, placement.data.spriteGroup);
+    const runtime = this.createNpcRuntime(placement);
+    this.npcRuntimes.set(placement.key, runtime);
+    this.syncNpc(runtime);
+    if (queued && !this.load.isLoading()) {
+      this.load.start();
+    }
+    return runtime;
+  }
+
+  private ensureNpcRuntimeSprite(npc: NpcRuntime): boolean {
+    if (npc.sprite) {
+      return false;
+    }
+    const queued = this.requestNpcRuntimeTexture(npc.data.npcId, npc.data.spriteGroup);
+    npc.sprite = this.spawnNpcActor(
+      npc.data.npcId,
+      npc.state.player.x,
+      npc.state.player.y,
+      npc.data.spriteGroup,
+      npc.state.player.facing
+    );
+    this.syncNpc(npc);
+    return queued;
   }
 
   private behaviorForRuntimeNpc(npc: RuntimeNpcData) {
@@ -2990,6 +3029,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       frameHeight: resolution.override.frameHeight
     });
     return true;
+  }
+
+  private requestNpcRuntimeTexture(npcId: number, spriteGroup: number | undefined): boolean {
+    const override = this.npcSpriteOverrideResolution(npcId, spriteGroup);
+    return override
+      ? this.requestNpcOverrideSheet(npcId, spriteGroup)
+      : this.requestNpcSheet(spriteGroup);
   }
 
   private groupIdFromSheetKey(key: string): number | undefined {
@@ -4305,6 +4351,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (this.eventSequence?.running || this.cutsceneRunner?.running) {
         return;
       }
+      // No Talk attempts while a cinematic owns the screen (the opening flyover is
+      // tween-driven, so neither the event sequence nor the cutscene runner covers it).
+      if (this.cinematicActive()) {
+        return;
+      }
       if (this.interactionTarget() && this.dialogue.canOpen()) {
         this.openDialogue();
       }
@@ -4322,7 +4373,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private openCommandMenu(): void {
-    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running || this.cutsceneRunner?.running || this.binderOverlayOpen) {
+    if (
+      this.menuState.open ||
+      this.dialogue.open ||
+      this.eventSequence?.running ||
+      this.cutsceneRunner?.running ||
+      this.binderOverlayOpen ||
+      // The opening flyover locks movement but is not an event sequence or cutscene,
+      // so without this the pause menu opens mid-cinematic (found by the 2026-07-09
+      // verification run: the M probe drew the full menu over the night pan).
+      this.cinematicActive()
+    ) {
       return;
     }
     this.refreshMenuScreens();
@@ -5983,6 +6044,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return [...this.npcRuntimes.values()].find((runtime) => runtime.data.npcId === actor.npcId);
   }
 
+  private npcPlacementForActor(actor: Extract<NormalizedActorMoveSelector, { kind: "npc" }>): NpcPlacement | undefined {
+    for (const placements of this.npcPlacementsByChunk.values()) {
+      const placement = placements.find((candidate) => candidate.data.npcId === actor.npcId);
+      if (placement) {
+        return placement;
+      }
+    }
+    return undefined;
+  }
+
   private restoreCutsceneMoveNpc(move: CutsceneMoveState): void {
     if (move.actor.kind !== "npc" || !move.npcKey || move.restoreNpcPaused === undefined) {
       return;
@@ -6191,7 +6262,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     } else {
       this.gameFlags.set(hiddenFlag);
     }
-    const npc = this.npcRuntimeForActor(normalized);
+    const npc = visible ? this.ensureCutsceneNpcRuntime(normalized) : this.npcRuntimeForActor(normalized);
     if (npc) {
       this.syncNpc(npc);
     }
@@ -6471,8 +6542,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // the pulled-back flyover zoom, so the night tint is a large WORLD-space rect at
     // FG-over depth covering the whole bounded pan region (depth 130000 draws above the
     // FG layer, as the bedroom overlay proves). The caption tracks the camera each frame.
+    const nightRect = openingFlyoverNightRect();
     const flyNight = this.add
-      .rectangle(2325, 1475, 2100, 1500, 0x0a1236, 0.62)
+      .rectangle(nightRect.x, nightRect.y, nightRect.width, nightRect.height, 0x0a1236, 0.62)
       .setDepth(130000);
     // Each of the three overhead shots holds one line of narration, pinned to the bottom
     // of the moving view (repositioned every frame in the pan tween).
@@ -6532,6 +6604,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
       onDone();
     };
 
+    // Hold each shot's fade-in until the chunk PNGs for its window have actually
+    // loaded (capped so a hung fetch cannot stall the cinematic). Over a slow
+    // connection (the tunnel), fading in immediately shows unstreamed black that
+    // fills in mid-shot and reads as map-edge void.
+    const whenChunksSettled = (onReady: () => void): void => {
+      if (!this.load.isLoading()) {
+        onReady();
+        return;
+      }
+      let done = false;
+      const ready = (): void => {
+        if (!done) {
+          done = true;
+          onReady();
+        }
+      };
+      this.load.once(Phaser.Loader.Events.COMPLETE, ready);
+      this.time.delayedCall(2_500, ready);
+    };
+
     const runShot = (i: number): void => {
       if (i >= shots.length) {
         finish();
@@ -6542,6 +6634,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const to = clampOpeningFlyoverPoint(shot.to);
       setAnchor(from.x, from.y);
       this.refreshStreaming(true);
+      whenChunksSettled(() => beginShot(i, from, to));
+    };
+
+    const beginShot = (i: number, from: { x: number; y: number }, to: { x: number; y: number }): void => {
+      const shot = shots[i];
       placeCaption();
       caption.setText(shot.text).setAlpha(0);
       cam.fadeIn(600, 0, 0, 0);
@@ -6571,6 +6668,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const runShotZero = (): void => {
       setAnchor(OPENING_SHOT_ZERO_CENTER.x, OPENING_SHOT_ZERO_CENTER.y);
       this.refreshStreaming(true);
+      whenChunksSettled(beginShotZero);
+    };
+
+    const beginShotZero = (): void => {
       cam.centerOn(OPENING_SHOT_ZERO_CENTER.x, OPENING_SHOT_ZERO_CENTER.y);
       placeCaption();
       placeEraTitle();

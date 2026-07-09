@@ -87,7 +87,7 @@ function drawEbCorner(
   }
 }
 
-export const CLEAN_UI_FONT_FAMILY = "'Pixelify Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
+export const CLEAN_UI_FONT_FAMILY = "'EarthBound Dialogue Gold', 'Pixelify Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 export const CLEAN_UI_PRIMARY = "#EEF1F6";
 export const CLEAN_UI_SECONDARY = "#9AA3B2";
 // Text color for the inverted (selected) row: dark, to read on the opaque white selection fill.
