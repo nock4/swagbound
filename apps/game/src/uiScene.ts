@@ -227,7 +227,8 @@ export class UiScene extends Phaser.Scene {
     }).setDepth(13);
     // The "F1: debug" badge + Copy chip are dev tooling — hidden in production builds.
     if (import.meta.env.DEV) {
-      this.badgeText = createCleanText(this, this.scale.width - 12, 10, "` or F1: debug", {
+      const stamp = typeof __BUILD_STAMP__ === "string" ? __BUILD_STAMP__ : "?";
+      this.badgeText = createCleanText(this, this.scale.width - 12, 10, `b:${stamp} | \` or F1: debug`, {
         fontSize: 11,
         color: CLEAN_UI_SECONDARY
       }).setOrigin(1, 0).setDepth(11);

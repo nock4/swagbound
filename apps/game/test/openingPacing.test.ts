@@ -39,7 +39,7 @@ describe("opening pacing timings", () => {
     for (let i = 0; i < mids.length; i++) {
       for (let j = i + 1; j < mids.length; j++) {
         const d = Math.hypot(mids[i].x - mids[j].x, mids[i].y - mids[j].y);
-        expect(d).toBeGreaterThan(300);
+        expect(d).toBeGreaterThan(400);
       }
     }
   });

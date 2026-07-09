@@ -1,6 +1,7 @@
 import { appendFileSync, existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, relative } from "node:path";
+import { execSync } from "node:child_process";
 import { defineConfig, type Plugin } from "vite";
 
 const ROOT = dirname(fileURLToPath(import.meta.url));
@@ -115,7 +116,18 @@ function devNotesPlugin(): Plugin {
   };
 }
 
+const GIT_STAMP = (() => {
+  try {
+    return execSync("git rev-parse --short HEAD", { encoding: "utf8" }).trim();
+  } catch {
+    return "nogit";
+  }
+})();
+
 export default defineConfig({
+  define: {
+    __BUILD_STAMP__: JSON.stringify(`${GIT_STAMP}.${Date.now().toString(36)}`)
+  },
   plugins: [audioListPlugin(), buildingOverridesPlugin(), devNotesPlugin()],
   server: {
     host: "127.0.0.1",
