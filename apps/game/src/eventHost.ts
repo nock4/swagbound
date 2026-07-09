@@ -298,7 +298,21 @@ export class RuntimeEventHost implements EventExecutorHost {
   wait(wait: EventWait): void {
     if (wait.kind === "confirm") {
       this.startConfirmRun();
+    } else if (wait.kind === "choice") {
+      this.options.dialogue.showChoice(wait.effect.options, wait.effect.defaultIndex ?? 0);
     }
+  }
+
+  clearChoice(): void {
+    this.options.dialogue.clearChoice();
+  }
+
+  resumeChoiceBranch(): void {
+    this.options.dialogue.clearChoice();
+    this.coveredConfirmIndexes.clear();
+    this.dialogueOverrideChecked = true;
+    this.dialogueOverrideConsumed = true;
+    this.dialogueOverridePages = undefined;
   }
 
   isSet(flag: number): boolean {
@@ -510,12 +524,23 @@ export class RuntimeEventHost implements EventExecutorHost {
     if (!isConfirmEffect(effects[index])) {
       return;
     }
-    const overridePages = this.resolveDialogueOverridePages();
+    const overridePages = this.resolveDialogueOverridePages(effects, index);
     const pages = overridePages
       ? (this.dialogueOverrideConsumed ? undefined : overridePages)
       : dialoguePagesForConfirmEffects(effects, index);
-    for (let next = index; next < effects.length && isConfirmEffect(effects[next]); next += 1) {
-      this.coveredConfirmIndexes.add(next);
+    if (overridePages) {
+      for (let next = index; next < effects.length; next += 1) {
+        if (effects[next]?.kind === "choice") {
+          break;
+        }
+        if (isConfirmEffect(effects[next])) {
+          this.coveredConfirmIndexes.add(next);
+        }
+      }
+    } else {
+      for (let next = index; next < effects.length && isConfirmEffect(effects[next]); next += 1) {
+        this.coveredConfirmIndexes.add(next);
+      }
     }
     if (!pages) {
       return;
@@ -526,7 +551,7 @@ export class RuntimeEventHost implements EventExecutorHost {
     this.options.dialogue.start(pages);
   }
 
-  private resolveDialogueOverridePages(): DialoguePage[] | undefined {
+  private resolveDialogueOverridePages(effects: readonly EventEffect[], startIndex: number): DialoguePage[] | undefined {
     if (this.dialogueOverrideChecked) {
       return this.dialogueOverridePages;
     }
@@ -547,14 +572,29 @@ export class RuntimeEventHost implements EventExecutorHost {
       ? undefined
       : resolveCustomDialoguePages(npcEntry, this.options.dialogueLibrary);
     if (npcPages && npcPages.length > 0) {
-      this.dialogueOverridePages = buildInlineDialoguePages(npcPages);
+      this.dialogueOverridePages = buildInlineDialoguePages(stripTrailingFlattenedChoicePage(
+        npcPages,
+        firstChoiceFrom(effects, startIndex)
+      ));
       return this.dialogueOverridePages;
     }
-    this.dialogueOverridePages = resolveScriptedDialogueOverridePages(
+    const scriptedPages = resolveScriptedDialogueOverridePages(
       customDialogue,
       this.options.dialogueLibrary,
       context.reference
     );
+    const choice = firstChoiceFrom(effects, startIndex);
+    if (scriptedPages && choice) {
+      const strippedPages = stripTrailingFlattenedChoicePage(
+        scriptedPages.map((page) => page.text),
+        choice
+      );
+      this.dialogueOverridePages = strippedPages.length === scriptedPages.length
+        ? scriptedPages
+        : buildInlineDialoguePages(strippedPages);
+    } else {
+      this.dialogueOverridePages = scriptedPages;
+    }
     return this.dialogueOverridePages;
   }
 
@@ -701,6 +741,14 @@ export class RuntimeEventSequence {
     this.pump({ confirm: true });
   }
 
+  choose(index: number): void {
+    if (!this.running) {
+      return;
+    }
+    this.host.resumeChoiceBranch();
+    this.pump({ choice: index });
+  }
+
   notifyActorArrived(): void {
     if (!this.running) {
       return;
@@ -782,6 +830,7 @@ export class RuntimeEventSequence {
     };
     this.executor = undefined;
     this.onComplete = undefined;
+    this.host.clearChoice();
     this.host.finish(finishResult);
     onComplete?.(finishResult);
   }
@@ -797,6 +846,7 @@ export class RuntimeEventSequence {
     };
     this.executor = undefined;
     this.onComplete = undefined;
+    this.host.clearChoice();
     this.host.finish(finishResult);
     onComplete?.(finishResult);
   }
@@ -804,6 +854,38 @@ export class RuntimeEventSequence {
 
 function isConfirmEffect(effect: EventEffect | undefined): effect is Extract<EventEffect, { kind: "text" | "prompt" }> {
   return effect?.kind === "text" || effect?.kind === "prompt";
+}
+
+function firstChoiceFrom(
+  effects: readonly EventEffect[],
+  startIndex: number
+): Extract<EventEffect, { kind: "choice" }> | undefined {
+  for (let index = startIndex; index < effects.length; index += 1) {
+    const effect = effects[index];
+    if (effect?.kind === "choice") {
+      return effect;
+    }
+  }
+  return undefined;
+}
+
+function stripTrailingFlattenedChoicePage(
+  pages: readonly string[],
+  choice: Extract<EventEffect, { kind: "choice" }> | undefined
+): string[] {
+  if (!choice || pages.length <= 1) {
+    return [...pages];
+  }
+  const labels = choice.options.map((option) => option.label).join(" ");
+  const last = pages[pages.length - 1] ?? "";
+  if (normalizeChoicePageText(last) !== normalizeChoicePageText(labels)) {
+    return [...pages];
+  }
+  return pages.slice(0, -1);
+}
+
+function normalizeChoicePageText(value: string): string {
+  return value.replace(/\s+/gu, " ").trim().toLowerCase();
 }
 
 function pageForConfirmEffect(effect: Extract<EventEffect, { kind: "text" | "prompt" }>): DialoguePage {

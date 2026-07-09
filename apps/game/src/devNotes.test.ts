@@ -13,7 +13,7 @@ describe("formatDevNote", () => {
       ISO
     );
     expect(md).toContain("**[coord]** (1955,2074) · tile 61,64 · chunk 3,4 · sector 519 · area 12 · Morningside");
-    expect(md).toContain(`— ${ISO}`);
+    expect(md).toContain(`- ${ISO}`);
     expect(md).toContain("- note: this cell should be solid");
   });
 
@@ -38,6 +38,28 @@ describe("formatDevNote", () => {
     expect(md).toContain("- note: rewrite, too formal");
   });
 
+  it("formats a battle note with group, phase, and party HP", () => {
+    const md = formatDevNote(
+      {
+        note: "enemy bark timing feels late",
+        context: {
+          kind: "battle",
+          groupId: 42,
+          phase: "execution",
+          roundNumber: 3,
+          partyHp: [
+            { name: "Ness", hp: 28, maxHp: 40, displayedHp: 34, rolling: true },
+            { name: "Paula", hp: 18, maxHp: 32 }
+          ]
+        }
+      },
+      ISO
+    );
+    expect(md).toContain(`**[battle]** group 42 · phase execution · round 3 - ${ISO}`);
+    expect(md).toContain("party HP: Ness 28/40 shown 34 rolling, Paula 18/32");
+    expect(md).toContain("- note: enemy bark timing feels late");
+  });
+
   it("falls back to (no text) for an empty note", () => {
     const md = formatDevNote(
       { note: "   ", context: { kind: "coord", x: 1, y: 2, tileX: 0, tileY: 0, sector: 1, area: 1, town: "T" } },
@@ -53,5 +75,8 @@ describe("formatDevNote", () => {
     expect(
       summarizeDevNote({ note: "x", context: { kind: "dialogue", x: 5, y: 6, dialogue: "hi" } })
     ).toBe("dialogue @ 5,6: x");
+    expect(
+      summarizeDevNote({ note: "x", context: { kind: "battle", groupId: 42, phase: "execution", partyHp: [] } })
+    ).toBe("battle group 42: x");
   });
 });

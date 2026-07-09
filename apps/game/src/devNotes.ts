@@ -25,6 +25,19 @@ export type DevNoteContext =
       npcId?: number | string | null;
       textPointer?: string | null;
       dialogue: string;
+    }
+  | {
+      kind: "battle";
+      groupId: number;
+      phase: string;
+      roundNumber?: number;
+      partyHp: Array<{
+        name: string;
+        hp: number;
+        maxHp: number;
+        displayedHp?: number;
+        rolling?: boolean;
+      }>;
     };
 
 export type DevNoteEntry = {
@@ -41,8 +54,26 @@ export function formatDevNote(entry: DevNoteEntry, iso: string): string {
     const ptr = ctx.textPointer ? ` · ${ctx.textPointer}` : "";
     const line = ctx.dialogue.trim().replace(/\s+/g, " ");
     return [
-      `- **[dialogue]** ${who}${ptr} @ (${Math.round(ctx.x)},${Math.round(ctx.y)}) — ${iso}`,
+      `- **[dialogue]** ${who}${ptr} @ (${Math.round(ctx.x)},${Math.round(ctx.y)}) - ${iso}`,
       `  - line: "${line}"`,
+      `  - note: ${note}`,
+      ""
+    ].join("\n");
+  }
+  if (ctx.kind === "battle") {
+    const round = ctx.roundNumber !== undefined ? ` · round ${ctx.roundNumber}` : "";
+    const party = ctx.partyHp.length > 0
+      ? ctx.partyHp.map((member) => {
+        const displayed = member.displayedHp !== undefined && member.displayedHp !== member.hp
+          ? ` shown ${member.displayedHp}`
+          : "";
+        const rolling = member.rolling ? " rolling" : "";
+        return `${member.name} ${member.hp}/${member.maxHp}${displayed}${rolling}`;
+      }).join(", ")
+      : "party ?";
+    return [
+      `- **[battle]** group ${ctx.groupId} · phase ${ctx.phase}${round} - ${iso}`,
+      `  - party HP: ${party}`,
       `  - note: ${note}`,
       ""
     ].join("\n");
@@ -56,7 +87,7 @@ export function formatDevNote(entry: DevNoteEntry, iso: string): string {
     ctx.town ?? "?"
   ];
   return [
-    `- **[coord]** ${parts.join(" · ")} — ${iso}`,
+    `- **[coord]** ${parts.join(" · ")} - ${iso}`,
     `  - note: ${note}`,
     ""
   ].join("\n");
@@ -67,7 +98,9 @@ export function summarizeDevNote(entry: DevNoteEntry): string {
   const ctx = entry.context;
   const where = ctx.kind === "dialogue"
     ? `dialogue @ ${Math.round(ctx.x)},${Math.round(ctx.y)}`
-    : `${Math.round(ctx.x)},${Math.round(ctx.y)}`;
+    : ctx.kind === "battle"
+      ? `battle group ${ctx.groupId}`
+      : `${Math.round(ctx.x)},${Math.round(ctx.y)}`;
   const text = entry.note.trim();
   return `${where}: ${text.length > 40 ? `${text.slice(0, 40)}…` : text || "(empty)"}`;
 }

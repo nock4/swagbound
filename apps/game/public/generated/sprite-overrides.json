@@ -161,6 +161,38 @@
               ]
             },
             "displayHeight": 24
+          },
+          "ladder": {
+            "image": "assets/swagbound/hero/bosch-hood-walk.png",
+            "frameWidth": 96,
+            "frameHeight": 96,
+            "animations": {
+              "down": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "left": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "right": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            },
+            "displayHeight": 24
           }
         }
       }
@@ -265,6 +297,38 @@
               ]
             },
             "displayHeight": 24
+          },
+          "ladder": {
+            "image": "assets/swagbound/hero/lsw-224-walk.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "animations": {
+              "down": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "left": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "right": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            },
+            "displayHeight": 32
           }
         }
       }
@@ -369,6 +433,38 @@
               ]
             },
             "displayHeight": 24
+          },
+          "ladder": {
+            "image": "assets/swagbound/hero/lsw-855-walk.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "animations": {
+              "down": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "left": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "right": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            },
+            "displayHeight": 29
           }
         }
       }
@@ -464,6 +560,38 @@
                 9,
                 10,
                 11
+              ],
+              "up": [
+                12,
+                13,
+                14,
+                15
+              ]
+            },
+            "displayHeight": 24
+          },
+          "ladder": {
+            "image": "assets/swagbound/hero/lsw-2821-walk.png",
+            "frameWidth": 192,
+            "frameHeight": 192,
+            "animations": {
+              "down": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "left": [
+                12,
+                13,
+                14,
+                15
+              ],
+              "right": [
+                12,
+                13,
+                14,
+                15
               ],
               "up": [
                 12,
@@ -605,10 +733,65 @@
           ]
         },
         "displayHeight": 24
+      },
+      "ladder": {
+        "image": "assets/swagbound/hero/bosch-hood-walk.png",
+        "frameWidth": 96,
+        "frameHeight": 96,
+        "animations": {
+          "down": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "left": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "right": [
+            12,
+            13,
+            14,
+            15
+          ],
+          "up": [
+            12,
+            13,
+            14,
+            15
+          ]
+        },
+        "displayHeight": 24
       }
     }
   },
   "byNpcId": {
+    "21": {
+      "image": "generated/assets/sprites/259.png",
+      "frameWidth": 32,
+      "frameHeight": 32,
+      "animations": {
+        "down": [
+          4,
+          5
+        ],
+        "left": [
+          6,
+          7
+        ],
+        "right": [
+          2,
+          3
+        ],
+        "up": [
+          0,
+          1
+        ]
+      }
+    },
     "74": {
       "image": "assets/swagbound/overworld-npc/gns-lsw-3105-ow.png",
       "frameWidth": 48,
@@ -9653,28 +9836,6 @@
       "originX": 0.5,
       "originY": 1
     },
-    "167": {
-      "image": "assets/swagbound/overworld-npc/gns-blume-003-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
     "168": {
       "image": "assets/swagbound/overworld-npc/gns-blume-004-ow.png",
       "frameWidth": 48,
@@ -10205,50 +10366,6 @@
     },
     "214": {
       "image": "assets/swagbound/overworld-npc/gns-fujimoto-005-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "215": {
-      "image": "assets/swagbound/overworld-npc/gns-glorp-001-ow.png",
-      "frameWidth": 48,
-      "frameHeight": 48,
-      "animations": {
-        "down": [
-          0
-        ],
-        "left": [
-          0
-        ],
-        "right": [
-          0
-        ],
-        "up": [
-          0
-        ]
-      },
-      "displayHeight": 24,
-      "originX": 0.5,
-      "originY": 1
-    },
-    "216": {
-      "image": "assets/swagbound/overworld-npc/gns-goobdle-s-001-ow.png",
       "frameWidth": 48,
       "frameHeight": 48,
       "animations": {

@@ -294,6 +294,7 @@ export type OverworldDebug = {
   dialogueText: string;
   dialoguePageIndex: number;
   dialoguePageCount: number;
+  dialogueChoice?: { options: string[]; selectedIndex: number };
   revealComplete?: boolean;
   revealedText?: string;
   targetReference: string;
@@ -461,11 +462,23 @@ export function publishBattleDebug(state: BattleDebug): void {
   publishDebug(state);
 }
 
+export type DialogueChoiceOption = {
+  label: string;
+  target?: string;
+};
+
+export type DialogueChoiceState = {
+  options: DialogueChoiceOption[];
+  selectedIndex: number;
+  defaultIndex: number;
+};
+
 /** Dialogue runtime shared between the world scene and the UI overlay. */
 export class DialogueController {
   pages: DialoguePage[] = [];
   pageIndex = 0;
   open = false;
+  choice?: DialogueChoiceState;
   opens = 0;
   advances = 0;
   closes = 0;
@@ -509,8 +522,38 @@ export class DialogueController {
     this.pages = pages;
     this.pageIndex = 0;
     this.open = true;
+    this.choice = undefined;
     this.opens += 1;
     this.resetReveal(Date.now());
+  }
+
+  showChoice(options: readonly DialogueChoiceOption[], defaultIndex = 0): void {
+    if (options.length === 0) {
+      this.choice = undefined;
+      return;
+    }
+    const selectedIndex = clampChoiceIndex(defaultIndex, options.length);
+    this.choice = {
+      options: options.map((option) => ({ ...option })),
+      selectedIndex,
+      defaultIndex: selectedIndex
+    };
+  }
+
+  moveChoice(delta: number): void {
+    const choice = this.choice;
+    if (!choice || choice.options.length === 0) {
+      return;
+    }
+    choice.selectedIndex = clampChoiceIndex(choice.selectedIndex + delta, choice.options.length);
+  }
+
+  clearChoice(): void {
+    this.choice = undefined;
+  }
+
+  selectedChoiceIndex(): number | undefined {
+    return this.choice?.selectedIndex;
   }
 
   /** Advances a page; returns false when the dialogue closed instead. */
@@ -548,6 +591,7 @@ export class DialogueController {
     this.open = false;
     this.pageIndex = 0;
     this.revealForcedComplete = false;
+    this.choice = undefined;
   }
 
   get currentText(): string {
@@ -591,4 +635,12 @@ export class DialogueController {
     }
     return revealState(fullText, now - this.pageStartedAt, this.textSpeedCps);
   }
+}
+
+function clampChoiceIndex(index: number, length: number): number {
+  if (length <= 0) {
+    return 0;
+  }
+  const normalized = Number.isFinite(index) ? Math.trunc(index) : 0;
+  return Math.max(0, Math.min(length - 1, normalized));
 }

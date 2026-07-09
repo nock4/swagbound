@@ -122,6 +122,7 @@ export function renderSegmentsToText(
         break;
       case "pause":
       case "prompt":
+      case "choice":
       case "style":
       case "window":
       case "control":
@@ -169,6 +170,7 @@ export function renderSegmentsToTextRuns(
         break;
       case "pause":
       case "prompt":
+      case "choice":
       case "window":
       case "control":
         break;

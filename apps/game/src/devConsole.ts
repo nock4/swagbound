@@ -1,5 +1,5 @@
 /**
- * Dev Console — the hub for dev-mode tooling, toggled with the backtick (`) key.
+ * Dev Console - the hub for dev-mode tooling, toggled with the backtick (`) key.
  * Dev-server only (mounted from the scene under import.meta.env.DEV). A window-listener
  * singleton like the other overlays, so a scene restart can't strand a second copy.
  *
@@ -20,23 +20,26 @@ export type DevLiveState = {
   bike: boolean;
   mouseX: number | null;
   mouseY: number | null;
+  lines?: string[];
 };
 
 export interface DevConsoleHost {
   liveState(): DevLiveState;
-  trackLabVisible(): boolean;
-  toggleTrackLab(): void;
-  annotateMode(): boolean;
-  toggleAnnotate(): void;
-  encountersEnabled(): boolean;
-  toggleEncounters(): void;
-  instantWin(): boolean;
-  toggleInstantWin(): void;
-  forceEncounter(group: number): void;
-  dialogueOpen(): boolean;
-  /** Ask the scene to gather the current dialogue context and start a note capture. */
-  captureDialogueNote(): void;
+  trackLabVisible?(): boolean;
+  toggleTrackLab?(): void;
+  annotateMode?(): boolean;
+  toggleAnnotate?(): void;
+  noteActionLabel?(): string;
+  captureSceneNote?(): void;
+  encountersEnabled?(): boolean;
+  toggleEncounters?(): void;
+  instantWin?(): boolean;
+  toggleInstantWin?(): void;
+  forceEncounter?(group: number): void;
+  dialogueOpen?(): boolean;
+  captureDialogueNote?(): void;
   noteCount(): number;
+  footerHint?(): string;
 }
 
 const isTypingTarget = (target: EventTarget | null): boolean => {
@@ -66,25 +69,33 @@ export class DevConsole {
       }
       return;
     }
+    if (this.open) {
+      event.stopImmediatePropagation();
+    }
     switch (event.code) {
       case "Backquote":
         this.setOpen(!this.open);
         break;
       case "KeyL":
+        if (!this.host.toggleTrackLab) {
+          if (this.open) {
+            event.preventDefault();
+          }
+          return;
+        }
         this.host.toggleTrackLab();
         this.render();
         break;
       case "KeyN":
-        if (this.host.dialogueOpen()) {
-          this.host.captureDialogueNote();
-        } else {
-          this.host.toggleAnnotate();
-          this.setOpen(true);
-        }
+        this.activateNoteTool();
         break;
       default:
+        if (this.open) {
+          event.preventDefault();
+        }
         return;
     }
+    event.stopImmediatePropagation();
     event.preventDefault();
   };
 
@@ -149,6 +160,19 @@ export class DevConsole {
     }
   }
 
+  private activateNoteTool(): void {
+    if (this.host.dialogueOpen?.()) {
+      this.host.captureDialogueNote?.();
+      return;
+    }
+    if (this.host.captureSceneNote) {
+      this.host.captureSceneNote();
+      return;
+    }
+    this.host.toggleAnnotate?.();
+    this.setOpen(true);
+  }
+
   private setOpen(open: boolean): void {
     this.open = open;
     if (open) {
@@ -202,7 +226,13 @@ export class DevConsole {
       all: "unset", cursor: "pointer", fontSize: "11px", padding: "2px 7px",
       margin: "1px 3px 1px 0", borderRadius: "5px", border: "1px solid #3a4356", color: "#dfe6f2"
     } satisfies Partial<CSSStyleDeclaration>);
-    btn.addEventListener("click", () => { onClick(); this.render(); });
+    btn.addEventListener("click", () => {
+      onClick();
+      this.render();
+      if (this.noteSubmit) {
+        this.noteInput?.focus();
+      }
+    });
     return btn;
   }
 
@@ -229,29 +259,40 @@ export class DevConsole {
 
     const tools = document.createElement("div");
     const pill = (on: boolean) => (on ? "●" : "○");
-    tools.appendChild(this.button(`${pill(this.host.trackLabVisible())} Track Lab [L]`, () => this.host.toggleTrackLab()));
-    tools.appendChild(this.button(`${pill(this.host.annotateMode())} Annotate [N]`, () => this.host.toggleAnnotate()));
-    tools.appendChild(this.button(`${pill(this.host.encountersEnabled())} Encounters`, () => this.host.toggleEncounters()));
-    tools.appendChild(this.button(`${pill(this.host.instantWin())} Instant-win`, () => this.host.toggleInstantWin()));
+    if (this.host.toggleTrackLab && this.host.trackLabVisible) {
+      tools.appendChild(this.button(`${pill(this.host.trackLabVisible())} Track Lab [L]`, () => this.host.toggleTrackLab?.()));
+    }
+    if (this.host.captureSceneNote || this.host.toggleAnnotate) {
+      const label = this.host.noteActionLabel?.() ?? "Annotate [N]";
+      tools.appendChild(this.button(`${pill(this.host.annotateMode?.() ?? false)} ${label}`, () => this.activateNoteTool()));
+    }
+    if (this.host.toggleEncounters && this.host.encountersEnabled) {
+      tools.appendChild(this.button(`${pill(this.host.encountersEnabled())} Encounters`, () => this.host.toggleEncounters?.()));
+    }
+    if (this.host.toggleInstantWin && this.host.instantWin) {
+      tools.appendChild(this.button(`${pill(this.host.instantWin())} Instant-win`, () => this.host.toggleInstantWin?.()));
+    }
     panel.appendChild(tools);
 
-    const forceRow = document.createElement("div");
-    Object.assign(forceRow.style, { display: "flex", gap: "4px", alignItems: "center", margin: "6px 0" });
-    const groupInput = document.createElement("input");
-    groupInput.type = "number";
-    groupInput.placeholder = "group";
-    Object.assign(groupInput.style, {
-      width: "58px", fontSize: "11px", padding: "2px 4px", borderRadius: "4px",
-      border: "1px solid #3a4356", background: "#171b26", color: "#e8e8f0"
-    } satisfies Partial<CSSStyleDeclaration>);
-    const forceBtn = this.button("Force encounter", () => {
-      const group = Number.parseInt(groupInput.value, 10);
-      if (Number.isFinite(group)) {
-        this.host.forceEncounter(group);
-      }
-    });
-    forceRow.append(groupInput, forceBtn);
-    panel.appendChild(forceRow);
+    if (this.host.forceEncounter) {
+      const forceRow = document.createElement("div");
+      Object.assign(forceRow.style, { display: "flex", gap: "4px", alignItems: "center", margin: "6px 0" });
+      const groupInput = document.createElement("input");
+      groupInput.type = "number";
+      groupInput.placeholder = "group";
+      Object.assign(groupInput.style, {
+        width: "58px", fontSize: "11px", padding: "2px 4px", borderRadius: "4px",
+        border: "1px solid #3a4356", background: "#171b26", color: "#e8e8f0"
+      } satisfies Partial<CSSStyleDeclaration>);
+      const forceBtn = this.button("Force encounter", () => {
+        const group = Number.parseInt(groupInput.value, 10);
+        if (Number.isFinite(group)) {
+          this.host.forceEncounter?.(group);
+        }
+      });
+      forceRow.append(groupInput, forceBtn);
+      panel.appendChild(forceRow);
+    }
 
     // Note capture row (hidden until a pin/dialogue capture starts).
     const noteRow = document.createElement("div");
@@ -274,7 +315,8 @@ export class DevConsole {
 
     const footer = document.createElement("div");
     Object.assign(footer.style, { marginTop: "6px", color: "#7c869c", fontSize: "11px" });
-    footer.textContent = `shift-click: warp · notes: ${this.host.noteCount()} → tmp/dev-notes.md · \` close`;
+    const hint = this.host.footerHint?.() ?? "shift-click: warp";
+    footer.textContent = `${hint} · notes: ${this.host.noteCount()} → tmp/dev-notes.md · \` close`;
     panel.appendChild(footer);
 
     this.renderState();
@@ -286,7 +328,11 @@ export class DevConsole {
       return;
     }
     const s = this.host.liveState();
-    const mouse = s.mouseX !== null && s.mouseY !== null ? `${Math.round(s.mouseX)},${Math.round(s.mouseY)}` : "—";
+    if (s.lines?.length) {
+      stateEl.textContent = s.lines.join("\n");
+      return;
+    }
+    const mouse = s.mouseX !== null && s.mouseY !== null ? `${Math.round(s.mouseX)},${Math.round(s.mouseY)}` : "none";
     stateEl.textContent =
       `player ${Math.round(s.x)},${Math.round(s.y)}  (tile ${s.tileX},${s.tileY})\n` +
       `mouse  ${mouse}\n` +

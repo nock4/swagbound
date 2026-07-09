@@ -125,11 +125,12 @@ describe("renderSegmentsToText", () => {
     expect(resolver.psiName(8)).toBe("[psi 8]");
   });
 
-  it("omits timing, flow, style, window, and raw control segments from display text", () => {
+  it("omits timing, flow, choice, style, window, and raw control segments from display text", () => {
     expect(renderSegmentsToText([
       { kind: "text", value: "A" },
       { kind: "pause", frames: 12 },
       { kind: "prompt" },
+      { kind: "choice", options: [{ label: "Yes", target: "l_yes" }, { label: "No", target: "l_no" }] },
       { kind: "style", style: "color", value: "1" },
       { kind: "window", op: "switch", args: [1] },
       { kind: "control", code: "raw", raw: "[00]" },
@@ -327,5 +328,29 @@ describe("DialogueController reveal-aware confirm behavior", () => {
     expect(dialogue.advance()).toBe(false);
     expect(dialogue.open).toBe(false);
     expect(dialogue.closes).toBe(1);
+  });
+
+  it("tracks selectable dialogue choices and clears them on close", () => {
+    const dialogue = new DialogueController();
+
+    dialogue.showChoice([
+      { label: "Yes", target: "l_yes" },
+      { label: "No", target: "l_no" }
+    ]);
+
+    expect(dialogue.choice).toMatchObject({
+      selectedIndex: 0,
+      options: [
+        { label: "Yes", target: "l_yes" },
+        { label: "No", target: "l_no" }
+      ]
+    });
+
+    dialogue.moveChoice(1);
+    expect(dialogue.selectedChoiceIndex()).toBe(1);
+    dialogue.moveChoice(1);
+    expect(dialogue.selectedChoiceIndex()).toBe(1);
+    dialogue.close();
+    expect(dialogue.choice).toBeUndefined();
   });
 });

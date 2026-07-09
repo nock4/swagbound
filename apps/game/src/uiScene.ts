@@ -22,6 +22,7 @@ import {
   statusBarFillFraction
 } from "./cleanUi";
 import type { DialogueTextRun } from "./dialogueRenderer";
+import type { DialogueChoiceState } from "./state";
 import {
   type CanvasRect,
   battleStatusCardRects,
@@ -62,6 +63,12 @@ const MENU_GRID_COL_GAP = 10;
 const MENU_GRID_ROW_EXTRA = 6;
 const MENU_GRID_CELL_INSET = 4;
 const MENU_OBJECTIVE_GAP = 7;
+const CHOICE_FONT_SIZE = 14;
+const CHOICE_HORIZONTAL_PADDING = 12;
+const CHOICE_VERTICAL_PADDING = 10;
+const CHOICE_CARET_GUTTER_PX = 14;
+const CHOICE_GAP = 8;
+const CHOICE_MIN_WIDTH = 76;
 type MenuCursorSlot = {
   x: number;
   rowTop: number;
@@ -182,6 +189,8 @@ export class UiScene extends Phaser.Scene {
   private menuCursorGraphics?: Phaser.GameObjects.Graphics;
   private menuTexts: Phaser.GameObjects.Text[] = [];
   private menuCursorSlots: MenuCursorSlot[] = [];
+  private choiceGraphics?: Phaser.GameObjects.Graphics;
+  private choiceTexts: Phaser.GameObjects.Text[] = [];
   private lastSignature = "";
   private copyButton?: Phaser.GameObjects.Text;
   private panelDebugText = "";
@@ -246,6 +255,7 @@ export class UiScene extends Phaser.Scene {
     this.hudAccentGraphics = this.add.graphics().setDepth(9);
     this.menuGraphics = this.add.graphics().setDepth(14);
     this.menuCursorGraphics = this.add.graphics().setDepth(16);
+    this.choiceGraphics = this.add.graphics().setDepth(13);
     this.binderOverlayGraphics = this.add.graphics().setDepth(80);
   }
 
@@ -312,6 +322,8 @@ export class UiScene extends Phaser.Scene {
     }
 
     const open = world.dialogue.open;
+    const choice = world.dialogue.choice;
+    const choiceOpen = Boolean(choice);
     const text = open ? world.dialogue.revealedText : "";
     const textRuns = open ? world.dialogue.revealedTextRuns : [];
     const showAdvanceIndicator = open && world.dialogue.revealComplete;
@@ -326,12 +338,12 @@ export class UiScene extends Phaser.Scene {
     // During a cinematic (e.g. the new-game night flyover + bedroom wake-up) the whole
     // gameplay HUD is suppressed so nothing breaks the shot.
     const cinematic = Boolean(world.cinematicActive?.());
-    const promptVisible = !open && menuScreens.length === 0 && !cinematic;
+    const promptVisible = !open && !choiceOpen && menuScreens.length === 0 && !cinematic;
     const hudView = world.overworldStatusHud?.();
     // EarthBound shows the party status window only while a menu is open, not while
     // walking the overworld. (Previously this rendered during free movement.)
     const visibleHudView = menuScreens.length > 0 && hudView?.visible ? hudView : undefined;
-    const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${world.prompt}|${promptVisible}|${cinematic}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
+    const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${JSON.stringify(choice)}|${world.prompt}|${promptVisible}|${cinematic}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
     if (signature === this.lastSignature) {
       this.drawOverworldHud(visibleHudView);
       this.renderMenuCursors();
@@ -349,6 +361,7 @@ export class UiScene extends Phaser.Scene {
     this.badgeText?.setVisible(true);
     this.positionMenuHint(Boolean(visibleHudView));
     this.drawDialogue(open, text, textRuns, footer, showAdvanceIndicator);
+    this.drawChoice(choice);
     this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);
     this.drawOverworldHud(visibleHudView);
     this.drawMenu(menuScreens);
@@ -392,6 +405,68 @@ export class UiScene extends Phaser.Scene {
       );
       this.footerText.setText(footer);
     }
+  }
+
+  private drawChoice(choice: DialogueChoiceState | undefined): void {
+    const graphics = this.choiceGraphics;
+    if (!graphics) {
+      return;
+    }
+    graphics.clear();
+    for (const text of this.choiceTexts) {
+      text.destroy();
+    }
+    this.choiceTexts = [];
+    if (!choice || choice.options.length === 0) {
+      return;
+    }
+
+    const lineHeight = cleanLineHeight(CHOICE_FONT_SIZE, UI_LINE_SPACING);
+    const widest = choice.options.reduce((max, option) => {
+      return Math.max(max, estimateCleanTextWidth(option.label, CHOICE_FONT_SIZE));
+    }, 0);
+    const width = Math.max(
+      CHOICE_MIN_WIDTH,
+      widest + CHOICE_HORIZONTAL_PADDING * 2 + CHOICE_CARET_GUTTER_PX
+    );
+    const height = CHOICE_VERTICAL_PADDING * 2 + lineHeight * choice.options.length;
+    const dialogueRect = this.dialogueRect();
+    const x = Math.round(Math.max(DIALOGUE_SIDE_MARGIN, dialogueRect.x + DIALOGUE_HORIZONTAL_PADDING));
+    const y = Math.round(Math.max(12, dialogueRect.y - height - CHOICE_GAP));
+    const rect = { x, y, width, height };
+    drawCleanPanel(graphics, rect);
+
+    choice.options.forEach((option, index) => {
+      const rowTop = y + CHOICE_VERTICAL_PADDING + index * lineHeight;
+      const selected = index === choice.selectedIndex;
+      if (selected) {
+        drawCleanSelection(graphics, {
+          x: x + CHOICE_HORIZONTAL_PADDING,
+          y: rowTop - 2,
+          width: width - CHOICE_HORIZONTAL_PADDING * 2,
+          height: lineHeight
+        }, true);
+        drawCleanCaret(
+          graphics,
+          x + CHOICE_HORIZONTAL_PADDING + 3,
+          rowTop - 2,
+          lineHeight,
+          CLEAN_UI_SELECTION_CARET
+        );
+      }
+      this.choiceTexts.push(createCleanText(
+        this,
+        x + CHOICE_HORIZONTAL_PADDING + CHOICE_CARET_GUTTER_PX,
+        rowTop,
+        option.label,
+        {
+          fontSize: CHOICE_FONT_SIZE,
+          color: selected ? CLEAN_UI_SELECTION_TEXT : CLEAN_UI_PRIMARY,
+          fixedWidth: Math.max(1, width - CHOICE_HORIZONTAL_PADDING * 2 - CHOICE_CARET_GUTTER_PX),
+          weight: selected ? 500 : 400
+        }
+      ).setDepth(selected ? 15 : 14));
+    });
   }
 
   private drawMoreArrow(x: number, y: number, boxWidth: number, boxHeight: number): boolean {

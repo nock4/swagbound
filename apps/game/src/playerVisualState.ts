@@ -60,7 +60,9 @@ const APPROXIMATION: Partial<Record<SpriteStateName, ResolvedVisualState["approx
   diamondized: { desaturate: true }
 };
 
-const LOCKED_STATES = new Set<SpriteStateName>(["ladder", "rope", "sitting", "sleeping"]);
+// Ladder is NOT locked: its state sheet remaps every direction to the back-view
+// walk frames, so the normal walk cycle IS the climb cycle (idle when still).
+const LOCKED_STATES = new Set<SpriteStateName>(["rope", "sitting", "sleeping"]);
 /** States during which the player is normally upright in water (so the waterline clip applies). */
 const WADEABLE = new Set<SpriteStateName | "default">(["default", "tiny"]);
 

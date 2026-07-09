@@ -1378,6 +1378,37 @@ describe("CCScript text segments", () => {
     expect(buildDialoguePages(waitParsed.commands.slice(1)).map((page) => page.text)).toEqual(["One", "Two"]);
   });
 
+  it("parses EB yes/no menus as structured choice segments", () => {
+    const raw = "[19 02]Yes[02] [19 02]No[02][1C 07 02][11]{clearline}[09 02 {e(l_yes)} {e(l_no)}]";
+    const segments = tokenizeCcsString(`Answer?${raw}`);
+
+    expect(segments).toEqual([
+      { kind: "text", value: "Answer?" },
+      {
+        kind: "choice",
+        options: [
+          { label: "Yes", target: "l_yes" },
+          { label: "No", target: "l_no" }
+        ],
+        defaultIndex: 0,
+        raw
+      }
+    ]);
+
+    const parsed = parseCcsFile("ccscript/example.ccs", `label:\n"Answer?${raw}" end\n`);
+    const pages = buildDialoguePages(parsed.commands.slice(1));
+    expect(pages[0].text).toBe("Answer?");
+    expect(pages[0].segments).toContainEqual({
+      kind: "choice",
+      options: [
+        { label: "Yes", target: "l_yes" },
+        { label: "No", target: "l_no" }
+      ],
+      defaultIndex: 0,
+      raw
+    });
+  });
+
   it("parses pause frame counts", () => {
     expect(tokenizeCcsString("Alpha[10 2A]Beta")).toContainEqual({ kind: "pause", frames: 42 });
   });

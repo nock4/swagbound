@@ -144,6 +144,9 @@ import {
   MENU_UP_KEY_NAMES,
   registerDiscreteKeys
 } from "./inputModel";
+import { DevConsole, type DevConsoleHost, type DevLiveState } from "./devConsole";
+import { postDevNote, type DevNoteContext } from "./devNotes";
+import { isMusicAuditionerVisible, toggleMusicAuditioner } from "./musicAuditioner";
 import { combatantBaseStats, type PartyMember } from "./characterModel";
 import type { PartyBattleMemberSnapshot, PartyStateSnapshot } from "./partyState";
 import { decodeItemUseEffect } from "./partyState";
@@ -567,6 +570,8 @@ export class BattleScene extends Phaser.Scene {
   private attestation_: AttestationBattleState | null = null;
   private attestationResolvedRestore_: ChunkedWorldRestore | null = null;
   private customVictoryPages_: string[][] | null = null;
+  private devConsole?: DevConsole;
+  private devNoteCount = 0;
 
   constructor() {
     super("battle");
@@ -690,6 +695,7 @@ export class BattleScene extends Phaser.Scene {
     this.exitOutcome_ = null;
     this.attestationResolvedRestore_ = null;
     this.customVictoryPages_ = null;
+    this.devNoteCount = 0;
     this.attestation_ = data.attestation
       ? this.createAttestationState(data.attestation)
       : null;
@@ -733,6 +739,8 @@ export class BattleScene extends Phaser.Scene {
     this.events.once("shutdown", () => {
       this.music_.stop();
       this.backgroundAnimation?.destroy();
+      this.devConsole?.destroy();
+      this.devConsole = undefined;
     });
     const baseMusicCue = battleMusicCueForOutcome(outcome(this.battle_), this.isBossBattle_);
     // A boss fight requests its group-qualified cue; the resolver falls back to the
@@ -741,12 +749,27 @@ export class BattleScene extends Phaser.Scene {
     this.drawEnemySprites();
     this.createStatusWindow();
     this.registerBattleSfxResume();
-    registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => this.moveMenu("up"));
-    registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => this.moveMenu("down"));
-    registerDiscreteKeys(this.input.keyboard, MENU_LEFT_KEY_NAMES, () => this.moveMenu("left"));
-    registerDiscreteKeys(this.input.keyboard, MENU_RIGHT_KEY_NAMES, () => this.moveMenu("right"));
-    registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => this.confirmMenu());
-    registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => this.cancelMenu());
+    if (import.meta.env.DEV) {
+      this.devConsole = new DevConsole(this.buildDevConsoleHost());
+    }
+    registerDiscreteKeys(this.input.keyboard, MENU_UP_KEY_NAMES, () => {
+      if (!this.shouldIgnoreBattleHotkey()) this.moveMenu("up");
+    });
+    registerDiscreteKeys(this.input.keyboard, MENU_DOWN_KEY_NAMES, () => {
+      if (!this.shouldIgnoreBattleHotkey()) this.moveMenu("down");
+    });
+    registerDiscreteKeys(this.input.keyboard, MENU_LEFT_KEY_NAMES, () => {
+      if (!this.shouldIgnoreBattleHotkey()) this.moveMenu("left");
+    });
+    registerDiscreteKeys(this.input.keyboard, MENU_RIGHT_KEY_NAMES, () => {
+      if (!this.shouldIgnoreBattleHotkey()) this.moveMenu("right");
+    });
+    registerDiscreteKeys(this.input.keyboard, CONFIRM_KEY_NAMES, () => {
+      if (!this.shouldIgnoreBattleHotkey()) this.confirmMenu();
+    });
+    registerDiscreteKeys(this.input.keyboard, CANCEL_KEY_NAMES, () => {
+      if (!this.shouldIgnoreBattleHotkey()) this.cancelMenu();
+    });
     void this.loadOptionalGeneratedMenuData();
     void this.loadBossBattleDialogue();
     this.transitionGraphics = this.add.graphics().setDepth(90);
@@ -778,6 +801,95 @@ export class BattleScene extends Phaser.Scene {
     this.events.once("shutdown", () => {
       this.input.off("pointerdown", resume);
       this.input.keyboard?.off("keydown", resume);
+    });
+  }
+
+  private shouldIgnoreBattleHotkey(): boolean {
+    if (this.devConsole?.isOpen()) {
+      return true;
+    }
+    if (typeof document === "undefined") {
+      return false;
+    }
+    const active = document.activeElement as HTMLElement | null;
+    return Boolean(active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA" || active.isContentEditable));
+  }
+
+  private buildDevConsoleHost(): DevConsoleHost {
+    return {
+      liveState: () => this.devLiveState(),
+      trackLabVisible: () => isMusicAuditionerVisible(),
+      toggleTrackLab: () => { toggleMusicAuditioner(); },
+      noteActionLabel: () => "Battle note [N]",
+      captureSceneNote: () => this.devCaptureBattleNote(),
+      noteCount: () => this.devNoteCount,
+      footerHint: () => "battle mode: warp, encounters, collision pins are overworld only"
+    };
+  }
+
+  private devLiveState(): DevLiveState {
+    const party = this.devPartyHpContext();
+    const partyLine = party.length > 0
+      ? party.map((member) => `${member.name} ${member.hp}/${member.maxHp}`).join(", ")
+      : "?";
+    const enemyLine = this.battle_.enemies.length > 0
+      ? this.battle_.enemies.map((enemy) => `${enemy.name} ${Math.round(enemy.hp.target)}/${enemy.maxHp}`).join(", ")
+      : "?";
+    return {
+      x: 0,
+      y: 0,
+      tileX: 0,
+      tileY: 0,
+      sector: null,
+      area: null,
+      town: null,
+      facing: this.phase_,
+      bike: false,
+      mouseX: null,
+      mouseY: null,
+      lines: [
+        `battle group ${this.group_.id}`,
+        `phase ${this.phase_} | round ${this.battle_.roundNumber}`,
+        `party HP ${partyLine}`,
+        `enemies ${enemyLine}`
+      ]
+    };
+  }
+
+  private devCaptureBattleNote(): void {
+    const context: DevNoteContext = {
+      kind: "battle",
+      groupId: this.group_.id,
+      phase: this.phase_,
+      roundNumber: this.battle_.roundNumber,
+      partyHp: this.devPartyHpContext()
+    };
+    this.devConsole?.beginNoteCapture(
+      `battle group ${this.group_.id} | ${this.phase_} | ${this.devPartyHpSummary()}`,
+      (text) => this.devSaveNote(text, context)
+    );
+  }
+
+  private devPartyHpContext(): Array<{ name: string; hp: number; maxHp: number; displayedHp: number; rolling: boolean }> {
+    return this.battle_.party.map((member) => ({
+      name: member.name,
+      hp: Math.round(member.hp.target),
+      maxHp: Math.round(member.maxHp),
+      displayedHp: Math.round(member.hp.displayed),
+      rolling: member.hp.isRolling
+    }));
+  }
+
+  private devPartyHpSummary(): string {
+    const parts = this.devPartyHpContext().map((member) => `${member.name} ${member.hp}/${member.maxHp}`);
+    return parts.length > 0 ? parts.join(", ") : "party ?";
+  }
+
+  private devSaveNote(text: string, context: DevNoteContext): void {
+    void postDevNote({ note: text, context }).then((ok) => {
+      if (ok) {
+        this.devNoteCount += 1;
+      }
     });
   }
 

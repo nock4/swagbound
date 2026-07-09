@@ -1364,6 +1364,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       (globalThis as Record<string, unknown>).__inputOwners = () => ({
         dialogue: this.dialogue.open,
         eventSeq: Boolean(this.eventSequence?.running),
+        choice: Boolean(this.dialogue.choice),
         cinematic: this.cinematicActive(),
         doorFade: this.isDoorFadeActive(),
         binder: this.binderOverlayOpen,
@@ -3391,8 +3392,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     const frame = this.gamepadTracker.tick(gamepadButtonStates(pad), gamepadDirections(pad), this.time.now);
     const overlayOpen = this.anyDomOverlayOpen();
-    // Movement only flows in the field: not in a menu, dialogue, or a DOM overlay.
-    this.gamepadHeld = overlayOpen || this.menuState.open ? NO_HELD_DIRECTION : frame.held;
+    // Movement only flows in the field: not in a menu, dialogue choice, or a DOM overlay.
+    this.gamepadHeld = overlayOpen || this.menuState.open || this.dialogue.choice ? NO_HELD_DIRECTION : frame.held;
 
     if (overlayOpen) {
       for (const dir of frame.directionEdges) {
@@ -3411,7 +3412,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const action of frame.pressedActions) {
       this.handleGamepadAction(action);
     }
-    if (this.menuState.open) {
+    if (this.menuState.open || this.dialogue.choice) {
       for (const dir of frame.directionEdges) {
         const { dx, dy } = directionToDelta(dir);
         this.moveMenuDirectional(dx, dy);
@@ -4277,20 +4278,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private updatePrompt(): void {
-    if (this.time.now < this.devToastUntilMs && !this.menuState.open && !this.dialogue.open) {
+    if (this.time.now < this.devToastUntilMs && !this.menuState.open && !this.dialogue.open && !this.dialogue.choice) {
       this.prompt = this.devToastText;
       return;
     }
-    if (this.time.now < this.recruitNoticeUntilMs && !this.menuState.open && !this.dialogue.open) {
+    if (this.time.now < this.recruitNoticeUntilMs && !this.menuState.open && !this.dialogue.open && !this.dialogue.choice) {
       this.prompt = this.recruitNoticeText;
       return;
     }
-    if (this.time.now < this.autosaveNoticeUntilMs && !this.menuState.open && !this.dialogue.open) {
+    if (this.time.now < this.autosaveNoticeUntilMs && !this.menuState.open && !this.dialogue.open && !this.dialogue.choice) {
       this.prompt = "✦ Autosaved (town reached)";
       return;
     }
     const target = this.interactionTarget();
-    if (this.menuState.open) {
+    if (this.dialogue.choice) {
+      this.prompt = "Arrows: choose | Z: select | X: No";
+    } else if (this.menuState.open) {
       this.prompt = "Arrows: choose | Z: select | X: back";
     } else if (this.dialogue.open) {
       this.prompt = "Z: advance | X: close";
@@ -4331,6 +4334,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private handleConfirm(): void {
+    if (this.dialogue.choice) {
+      this.confirmDialogueChoice();
+      return;
+    }
     if (this.menuState.open) {
       this.confirmCommandMenu();
       return;
@@ -4339,6 +4346,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private handleCancel(): void {
+    if (this.dialogue.choice) {
+      this.cancelDialogueChoice();
+      return;
+    }
     if (this.menuState.open) {
       this.cancelCommandMenu();
       return;
@@ -4399,6 +4410,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private moveMenuDirectional(dx: number, dy: number): void {
+    if (this.dialogue.choice) {
+      const before = this.dialogue.choice.selectedIndex;
+      const delta = dy !== 0 ? dy : dx;
+      if (delta !== 0) {
+        this.dialogue.moveChoice(delta);
+        if (this.dialogue.choice.selectedIndex !== before) {
+          this.playMenuSfx("menuMove");
+        }
+      }
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
     if (!this.menuState.open) {
       return;
     }
@@ -4408,6 +4432,29 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (before.cursorIndex !== after.cursorIndex || before.currentItemId !== after.currentItemId) {
       this.playMenuSfx("menuMove");
     }
+    this.publish();
+  }
+
+  private confirmDialogueChoice(): void {
+    const selectedIndex = this.dialogue.selectedChoiceIndex();
+    if (selectedIndex === undefined) {
+      return;
+    }
+    this.playMenuSfx("menuConfirm");
+    this.eventSequence?.choose(selectedIndex);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private cancelDialogueChoice(): void {
+    const choice = this.dialogue.choice;
+    if (!choice) {
+      return;
+    }
+    const noIndex = choice.options.findIndex((option) => option.label.trim().toLowerCase() === "no");
+    this.playMenuSfx("menuCancel");
+    this.eventSequence?.choose(noIndex >= 0 ? noIndex : choice.options.length - 1);
+    this.updatePrompt();
     this.publish();
   }
 
@@ -5801,6 +5848,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const result = this.eventSequenceWatchdog.update({
       running,
       dialogueOpen: this.dialogue.open,
+      choiceOpen: Boolean(this.dialogue.choice),
       nowMs: this.time.now,
       progressToken: running && debug ? this.eventSequenceProgressToken(debug) : "idle"
     });
@@ -5817,6 +5865,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const moveToken = move.active
       ? `${move.actor ?? "actor"}:${position}:${move.arrived ? "arrived" : "moving"}`
       : "inactive";
+    const choice = this.dialogue.choice;
+    const choiceToken = choice
+      ? `choice:${choice.selectedIndex}:${choice.options.map((option) => option.label).join(",")}`
+      : "choice:none";
     return [
       debug.reference ?? "unknown",
       debug.npcId ?? "none",
@@ -5828,6 +5880,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.dialogue.opens,
       this.dialogue.closes,
       this.dialogue.pageIndex,
+      choiceToken,
       moveToken
     ].join("|");
   }
@@ -9256,6 +9309,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       dialogueText: this.dialogue.currentText,
       dialoguePageIndex: this.dialogue.pageIndex,
       dialoguePageCount: this.dialogue.pages.length,
+      dialogueChoice: this.dialogue.choice
+        ? {
+            options: this.dialogue.choice.options.map((option) => option.label),
+            selectedIndex: this.dialogue.choice.selectedIndex
+          }
+        : undefined,
       revealComplete: this.dialogue.revealComplete,
       revealedText: this.dialogue.open ? this.dialogue.revealedText : "",
       targetReference: this.targetReference,
