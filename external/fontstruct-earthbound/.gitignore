@@ -1,0 +1,3 @@
+# Redundant original downloads; the extracted otf/ files are what the game uses.
+# License/provenance is preserved in otf/*.txt + manifest.json.
+archives/

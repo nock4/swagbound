@@ -1,0 +1,433 @@
+{
+  "source": "https://fontstruct.com/gallery/tag/5492/Earthbound",
+  "downloaded_count": 25,
+  "failed_count": 0,
+  "items": [
+    {
+      "id": "2880080",
+      "slug": "lifeupcream",
+      "name": "LifeUpCream",
+      "show_url": "https://fontstruct.com/fontstructions/show/2880080/lifeupcream",
+      "download_page": "https://fontstruct.com/fontstructions/download/2880080",
+      "archive_url": "https://fontstruct.com/font_archives/download/2880080/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/2880080-lifeupcream.otf.zip",
+      "archive_bytes": 9430,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2880080-lifeupcream.otf",
+        "external/fontstruct-earthbound/otf/2880080-license.txt",
+        "external/fontstruct-earthbound/otf/2880080-readme.txt"
+      ]
+    },
+    {
+      "id": "2856661",
+      "slug": "plain-font-2",
+      "name": "Plain Font Lite",
+      "show_url": "https://fontstruct.com/fontstructions/show/2856661/plain-font-2",
+      "download_page": "https://fontstruct.com/fontstructions/download/2856661",
+      "archive_url": "https://fontstruct.com/font_archives/download/2856661/otf",
+      "license": "Open Font License",
+      "license_url": "https://fontstruct.com/fontstructions/license/2856661/plain-font-2",
+      "archive_path": "external/fontstruct-earthbound/archives/2856661-plain-font-lite.otf.zip",
+      "archive_bytes": 6073,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2856661-plain-font-lite.otf",
+        "external/fontstruct-earthbound/otf/2856661-license.txt",
+        "external/fontstruct-earthbound/otf/2856661-readme.txt"
+      ]
+    },
+    {
+      "id": "1614916",
+      "slug": "plain-font",
+      "name": "Plain Font",
+      "show_url": "https://fontstruct.com/fontstructions/show/1614916/plain-font",
+      "download_page": "https://fontstruct.com/fontstructions/download/1614916",
+      "archive_url": "https://fontstruct.com/font_archives/download/1614916/otf",
+      "license": "Open Font License",
+      "license_url": "https://fontstruct.com/fontstructions/license/1614916/plain-font",
+      "archive_path": "external/fontstruct-earthbound/archives/1614916-plain-font.otf.zip",
+      "archive_bytes": 5988,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1614916-plain-font.otf",
+        "external/fontstruct-earthbound/otf/1614916-license.txt",
+        "external/fontstruct-earthbound/otf/1614916-readme.txt"
+      ]
+    },
+    {
+      "id": "2823044",
+      "slug": "ravencrow",
+      "name": "Ravencrow",
+      "show_url": "https://fontstruct.com/fontstructions/show/2823044/ravencrow",
+      "download_page": "https://fontstruct.com/fontstructions/download/2823044",
+      "archive_url": "https://fontstruct.com/font_archives/download/2823044/otf",
+      "license": "FontStruct License",
+      "license_url": "https://fontstruct.com/fontstructions/license/2823044/ravencrow",
+      "archive_path": "external/fontstruct-earthbound/archives/2823044-ravencrow.otf.zip",
+      "archive_bytes": 8780,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2823044-ravencrow.otf",
+        "external/fontstruct-earthbound/otf/2823044-license.txt",
+        "external/fontstruct-earthbound/otf/2823044-readme.txt"
+      ]
+    },
+    {
+      "id": "1789346",
+      "slug": "apple-kid-cyrillic-included",
+      "name": "Apple Kid (Cyrillic included)",
+      "show_url": "https://fontstruct.com/fontstructions/show/1789346/apple-kid-cyrillic-included",
+      "download_page": "https://fontstruct.com/fontstructions/download/1789346",
+      "archive_url": "https://fontstruct.com/font_archives/download/1789346/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/1789346-apple-kid-cyrillic-included.otf.zip",
+      "archive_bytes": 24099,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1789346-apple-kid-cyrillic-included.otf",
+        "external/fontstruct-earthbound/otf/1789346-license.txt",
+        "external/fontstruct-earthbound/otf/1789346-readme.txt"
+      ]
+    },
+    {
+      "id": "1493390",
+      "slug": "earthbound-menu-extended",
+      "name": "Earthbound Menu Extended",
+      "show_url": "https://fontstruct.com/fontstructions/show/1493390/earthbound-menu-extended",
+      "download_page": "https://fontstruct.com/fontstructions/download/1493390",
+      "archive_url": "https://fontstruct.com/font_archives/download/1493390/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/1493390-earthbound-menu-extended.otf.zip",
+      "archive_bytes": 22998,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1493390-earthbound-menu-extended.otf",
+        "external/fontstruct-earthbound/otf/1493390-license.txt",
+        "external/fontstruct-earthbound/otf/1493390-readme.txt"
+      ]
+    },
+    {
+      "id": "2631447",
+      "slug": "mr-saturn-6",
+      "name": "Mr. Saturn",
+      "show_url": "https://fontstruct.com/fontstructions/show/2631447/mr-saturn-6",
+      "download_page": "https://fontstruct.com/fontstructions/download/2631447",
+      "archive_url": "https://fontstruct.com/font_archives/download/2631447/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/2631447-mr-saturn.otf.zip",
+      "archive_bytes": 8841,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2631447-mr-saturn.otf",
+        "external/fontstruct-earthbound/otf/2631447-license.txt",
+        "external/fontstruct-earthbound/otf/2631447-readme.txt"
+      ]
+    },
+    {
+      "id": "2631792",
+      "slug": "earthbound-14",
+      "name": "Earthbound",
+      "show_url": "https://fontstruct.com/fontstructions/show/2631792/earthbound-14",
+      "download_page": "https://fontstruct.com/fontstructions/download/2631792",
+      "archive_url": "https://fontstruct.com/font_archives/download/2631792/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/2631792-earthbound.otf.zip",
+      "archive_bytes": 7215,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2631792-earthbound.otf",
+        "external/fontstruct-earthbound/otf/2631792-license.txt",
+        "external/fontstruct-earthbound/otf/2631792-readme.txt"
+      ]
+    },
+    {
+      "id": "2571931",
+      "slug": "magical-cake",
+      "name": "Magical Cake",
+      "show_url": "https://fontstruct.com/fontstructions/show/2571931/magical-cake",
+      "download_page": "https://fontstruct.com/fontstructions/download/2571931",
+      "archive_url": "https://fontstruct.com/font_archives/download/2571931/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/2571931-magical-cake.otf.zip",
+      "archive_bytes": 8657,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2571931-magical-cake.otf",
+        "external/fontstruct-earthbound/otf/2571931-license.txt",
+        "external/fontstruct-earthbound/otf/2571931-readme.txt"
+      ]
+    },
+    {
+      "id": "2561412",
+      "slug": "ness-10",
+      "name": "Ness",
+      "show_url": "https://fontstruct.com/fontstructions/show/2561412/ness-10",
+      "download_page": "https://fontstruct.com/fontstructions/download/2561412",
+      "archive_url": "https://fontstruct.com/font_archives/download/2561412/otf",
+      "license": "FontStruct License",
+      "license_url": "https://fontstruct.com/fontstructions/license/2561412/ness-10",
+      "archive_path": "external/fontstruct-earthbound/archives/2561412-ness.otf.zip",
+      "archive_bytes": 9316,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2561412-ness.otf",
+        "external/fontstruct-earthbound/otf/2561412-license.txt",
+        "external/fontstruct-earthbound/otf/2561412-readme.txt"
+      ]
+    },
+    {
+      "id": "2408405",
+      "slug": "earthbound-onett-threed",
+      "name": "Earthbound Onett/Threed",
+      "show_url": "https://fontstruct.com/fontstructions/show/2408405/earthbound-onett-threed",
+      "download_page": "https://fontstruct.com/fontstructions/download/2408405",
+      "archive_url": "https://fontstruct.com/font_archives/download/2408405/otf",
+      "license": "Open Font License",
+      "license_url": "https://fontstruct.com/fontstructions/license/2408405/earthbound-onett-threed",
+      "archive_path": "external/fontstruct-earthbound/archives/2408405-earthbound-onett-threed.otf.zip",
+      "archive_bytes": 5876,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2408405-earthbound-onett-threed.otf",
+        "external/fontstruct-earthbound/otf/2408405-license.txt",
+        "external/fontstruct-earthbound/otf/2408405-readme.txt"
+      ]
+    },
+    {
+      "id": "2241587",
+      "slug": "earthbound-dialogue-gold",
+      "name": "EarthBound Dialogue Gold",
+      "show_url": "https://fontstruct.com/fontstructions/show/2241587/earthbound-dialogue-gold",
+      "download_page": "https://fontstruct.com/fontstructions/download/2241587",
+      "archive_url": "https://fontstruct.com/font_archives/download/2241587/otf",
+      "license": "FontStruct License",
+      "license_url": "https://fontstruct.com/fontstructions/license/2241587/earthbound-dialogue-gold",
+      "archive_path": "external/fontstruct-earthbound/archives/2241587-earthbound-dialogue-gold.otf.zip",
+      "archive_bytes": 23079,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2241587-earthbound-dialogue-gold.otf",
+        "external/fontstruct-earthbound/otf/2241587-license.txt",
+        "external/fontstruct-earthbound/otf/2241587-readme.txt"
+      ]
+    },
+    {
+      "id": "2185121",
+      "slug": "mr-saturn-5",
+      "name": "Mr. Saturn",
+      "show_url": "https://fontstruct.com/fontstructions/show/2185121/mr-saturn-5",
+      "download_page": "https://fontstruct.com/fontstructions/download/2185121",
+      "archive_url": "https://fontstruct.com/font_archives/download/2185121/otf",
+      "license": "FontStruct License",
+      "license_url": "https://fontstruct.com/fontstructions/license/2185121/mr-saturn-5",
+      "archive_path": "external/fontstruct-earthbound/archives/2185121-mr-saturn.otf.zip",
+      "archive_bytes": 7979,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2185121-mr-saturn.otf",
+        "external/fontstruct-earthbound/otf/2185121-license.txt",
+        "external/fontstruct-earthbound/otf/2185121-readme.txt"
+      ]
+    },
+    {
+      "id": "2146864",
+      "slug": "mother-2-gigu-no-gyakushu",
+      "name": "Mother 2: Gīgu no Gyakushū",
+      "show_url": "https://fontstruct.com/fontstructions/show/2146864/mother-2-gigu-no-gyakushu",
+      "download_page": "https://fontstruct.com/fontstructions/download/2146864",
+      "archive_url": "https://fontstruct.com/font_archives/download/2146864/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/2146864-mother-2-gigu-no-gyakushu.otf.zip",
+      "archive_bytes": 8889,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2146864-mother-2-gigu-no-gyakushu.otf",
+        "external/fontstruct-earthbound/otf/2146864-license.txt",
+        "external/fontstruct-earthbound/otf/2146864-readme.txt"
+      ]
+    },
+    {
+      "id": "2146573",
+      "slug": "earthbound-9",
+      "name": "EarthBound",
+      "show_url": "https://fontstruct.com/fontstructions/show/2146573/earthbound-9",
+      "download_page": "https://fontstruct.com/fontstructions/download/2146573",
+      "archive_url": "https://fontstruct.com/font_archives/download/2146573/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/2146573-earthbound.otf.zip",
+      "archive_bytes": 4723,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2146573-earthbound.otf",
+        "external/fontstruct-earthbound/otf/2146573-license.txt",
+        "external/fontstruct-earthbound/otf/2146573-readme.txt"
+      ]
+    },
+    {
+      "id": "2075438",
+      "slug": "odd-casual",
+      "name": "Odd Casual",
+      "show_url": "https://fontstruct.com/fontstructions/show/2075438/odd-casual",
+      "download_page": "https://fontstruct.com/fontstructions/download/2075438",
+      "archive_url": "https://fontstruct.com/font_archives/download/2075438/otf",
+      "license": "FontStruct License",
+      "license_url": "https://fontstruct.com/fontstructions/license/2075438/odd-casual",
+      "archive_path": "external/fontstruct-earthbound/archives/2075438-odd-casual.otf.zip",
+      "archive_bytes": 12618,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/2075438-odd-casual.otf",
+        "external/fontstruct-earthbound/otf/2075438-license.txt",
+        "external/fontstruct-earthbound/otf/2075438-readme.txt"
+      ]
+    },
+    {
+      "id": "1945332",
+      "slug": "mother-of-onett",
+      "name": "Mother of Onett",
+      "show_url": "https://fontstruct.com/fontstructions/show/1945332/mother-of-onett",
+      "download_page": "https://fontstruct.com/fontstructions/download/1945332",
+      "archive_url": "https://fontstruct.com/font_archives/download/1945332/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/1945332-mother-of-onett.otf.zip",
+      "archive_bytes": 104735,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1945332-mother-of-onett.otf",
+        "external/fontstruct-earthbound/otf/1945332-license.txt",
+        "external/fontstruct-earthbound/otf/1945332-readme.txt"
+      ]
+    },
+    {
+      "id": "1916887",
+      "slug": "earthbound-debug-menu-font",
+      "name": "EarthBound Debug Menu Font",
+      "show_url": "https://fontstruct.com/fontstructions/show/1916887/earthbound-debug-menu-font",
+      "download_page": "https://fontstruct.com/fontstructions/download/1916887",
+      "archive_url": "https://fontstruct.com/font_archives/download/1916887/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/1916887-earthbound-debug-menu-font.otf.zip",
+      "archive_bytes": 4026,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1916887-earthbound-debug-menu-font.otf",
+        "external/fontstruct-earthbound/otf/1916887-license.txt",
+        "external/fontstruct-earthbound/otf/1916887-readme.txt"
+      ]
+    },
+    {
+      "id": "1797250",
+      "slug": "earthbound-beginnings-4",
+      "name": "EarthBound BEGINNINGS",
+      "show_url": "https://fontstruct.com/fontstructions/show/1797250/earthbound-beginnings-4",
+      "download_page": "https://fontstruct.com/fontstructions/download/1797250",
+      "archive_url": "https://fontstruct.com/font_archives/download/1797250/otf",
+      "license": "FontStruct License",
+      "license_url": "https://fontstruct.com/fontstructions/license/1797250/earthbound-beginnings-4",
+      "archive_path": "external/fontstruct-earthbound/archives/1797250-earthbound-beginnings.otf.zip",
+      "archive_bytes": 8426,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1797250-earthbound-beginnings.otf",
+        "external/fontstruct-earthbound/otf/1797250-license.txt",
+        "external/fontstruct-earthbound/otf/1797250-readme.txt"
+      ]
+    },
+    {
+      "id": "1193856",
+      "slug": "new_age_retro_apple",
+      "name": "New Age Retro Apple",
+      "show_url": "https://fontstruct.com/fontstructions/show/1193856/new_age_retro_apple",
+      "download_page": "https://fontstruct.com/fontstructions/download/1193856",
+      "archive_url": "https://fontstruct.com/font_archives/download/1193856/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/1193856-new-age-retro-apple.otf.zip",
+      "archive_bytes": 10992,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1193856-new-age-retro-apple.otf",
+        "external/fontstruct-earthbound/otf/1193856-license.txt",
+        "external/fontstruct-earthbound/otf/1193856-readme.txt"
+      ]
+    },
+    {
+      "id": "1436024",
+      "slug": "pixel-mother-logo",
+      "name": "Pixel MOTHER Logo",
+      "show_url": "https://fontstruct.com/fontstructions/show/1436024/pixel-mother-logo",
+      "download_page": "https://fontstruct.com/fontstructions/download/1436024",
+      "archive_url": "https://fontstruct.com/font_archives/download/1436024/otf",
+      "license": "FontStruct License",
+      "license_url": "https://fontstruct.com/fontstructions/license/1436024/pixel-mother-logo",
+      "archive_path": "external/fontstruct-earthbound/archives/1436024-pixel-mother-logo.otf.zip",
+      "archive_bytes": 7708,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1436024-pixel-mother-logo.otf",
+        "external/fontstruct-earthbound/otf/1436024-license.txt",
+        "external/fontstruct-earthbound/otf/1436024-readme.txt"
+      ]
+    },
+    {
+      "id": "1431920",
+      "slug": "mother-logo",
+      "name": "MOTHER Logo",
+      "show_url": "https://fontstruct.com/fontstructions/show/1431920/mother-logo",
+      "download_page": "https://fontstruct.com/fontstructions/download/1431920",
+      "archive_url": "https://fontstruct.com/font_archives/download/1431920/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/1431920-mother-logo.otf.zip",
+      "archive_bytes": 4386,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1431920-mother-logo.otf",
+        "external/fontstruct-earthbound/otf/1431920-license.txt",
+        "external/fontstruct-earthbound/otf/1431920-readme.txt"
+      ]
+    },
+    {
+      "id": "1180365",
+      "slug": "earthbound_beginnings_1",
+      "name": "EarthBound Beginnings",
+      "show_url": "https://fontstruct.com/fontstructions/show/1180365/earthbound_beginnings_1",
+      "download_page": "https://fontstruct.com/fontstructions/download/1180365",
+      "archive_url": "https://fontstruct.com/font_archives/download/1180365/otf",
+      "license": "FontStruct License",
+      "license_url": "https://fontstruct.com/fontstructions/license/1180365/earthbound_beginnings_1",
+      "archive_path": "external/fontstruct-earthbound/archives/1180365-earthbound-beginnings.otf.zip",
+      "archive_bytes": 8916,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/1180365-earthbound-beginnings.otf",
+        "external/fontstruct-earthbound/otf/1180365-license.txt",
+        "external/fontstruct-earthbound/otf/1180365-readme.txt"
+      ]
+    },
+    {
+      "id": "965828",
+      "slug": "mr_saturn_3",
+      "name": "Mr. Saturn",
+      "show_url": "https://fontstruct.com/fontstructions/show/965828/mr_saturn_3",
+      "download_page": "https://fontstruct.com/fontstructions/download/965828",
+      "archive_url": "https://fontstruct.com/font_archives/download/965828/otf",
+      "license": null,
+      "license_url": null,
+      "archive_path": "external/fontstruct-earthbound/archives/965828-mr-saturn.otf.zip",
+      "archive_bytes": 4872,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/965828-mr-saturn.otf",
+        "external/fontstruct-earthbound/otf/965828-license.txt",
+        "external/fontstruct-earthbound/otf/965828-readme.txt"
+      ]
+    },
+    {
+      "id": "947838",
+      "slug": "mothered",
+      "name": "Mothered",
+      "show_url": "https://fontstruct.com/fontstructions/show/947838/mothered",
+      "download_page": "https://fontstruct.com/fontstructions/download/947838",
+      "archive_url": "https://fontstruct.com/font_archives/download/947838/otf",
+      "license": "FontStruct License",
+      "license_url": "https://fontstruct.com/fontstructions/license/947838/mothered",
+      "archive_path": "external/fontstruct-earthbound/archives/947838-mothered.otf.zip",
+      "archive_bytes": 7071,
+      "extracted_files": [
+        "external/fontstruct-earthbound/otf/947838-mothered.otf",
+        "external/fontstruct-earthbound/otf/947838-license.txt",
+        "external/fontstruct-earthbound/otf/947838-readme.txt"
+      ]
+    }
+  ],
+  "failures": []
+}
