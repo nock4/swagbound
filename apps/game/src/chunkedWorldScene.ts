@@ -332,7 +332,7 @@ import {
   overworldInteractableEvents,
   overworldInteractableIsOpened
 } from "./overworldInteractables";
-import { ROUTE_OPEN_FLAG, shouldUseAct1Night } from "./worldNight";
+import { ACT1_COMPLETE_FLAG, ROUTE_OPEN_FLAG, shouldUseAct1Night } from "./worldNight";
 import type { SourceCheckReturnTo } from "./sourceCheckScene";
 import {
   SOURCE_CHECK_RETRY_DISTANCE_PX,
@@ -680,6 +680,17 @@ type ServiceDebugState = {
 
 type MenuSfxCue = Extract<BattleSfxCue, "menuMove" | "menuConfirm" | "menuCancel">;
 
+type Act1NightDebugState = {
+  shouldShow: boolean;
+  overlayExists: boolean;
+  alpha: number | null;
+  visible: boolean | null;
+  depth: number | null;
+  indoors: boolean;
+  hasRouteOpen: boolean;
+  hasAct1Complete: boolean;
+};
+
 export class ChunkedWorldScene extends Phaser.Scene {
   private data_!: GameData;
   private world_!: WorldChunked;
@@ -709,7 +720,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private roomMaskGraphics?: Phaser.GameObjects.Graphics;
   private roomMask?: Phaser.Display.Masks.GeometryMask;
   private roomMaskBandGraphics?: Phaser.GameObjects.Graphics;
-  private nightTintOverlay?: Phaser.GameObjects.Rectangle;
+  private nightTintOverlay?: Phaser.GameObjects.Image;
   private nightTintActive = false;
   private pendingDawnFadeOnCreate = false;
   private solidRows: string[] = [];
@@ -1801,8 +1812,30 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.activeRoomBounds?.isInterior ? this.activeRoomBounds : undefined;
   }
 
+  // Reliable "am I indoors" for the night tint. The room-bounds isInterior flag is
+  // not always set (e.g. right after a warp), so fall back to the interior-music
+  // sector test the audio system already trusts.
+  private nightIndoors(): boolean {
+    return Boolean(this.activeInteriorRoom()) || this.playerInInteriorMusicSector();
+  }
+
+  private act1NightDebugState(): Act1NightDebugState {
+    const indoors = this.nightIndoors();
+    const overlay = this.nightTintOverlay;
+    return {
+      shouldShow: shouldUseAct1Night({ flags: this.gameFlags, indoors }),
+      overlayExists: Boolean(overlay),
+      alpha: overlay?.alpha ?? null,
+      visible: overlay?.visible ?? null,
+      depth: overlay?.depth ?? null,
+      indoors,
+      hasRouteOpen: this.gameFlags.has(ROUTE_OPEN_FLAG),
+      hasAct1Complete: this.gameFlags.has(ACT1_COMPLETE_FLAG)
+    };
+  }
+
   private updateAct1NightTint(options: { fade?: boolean } = {}): void {
-    const indoors = Boolean(this.activeInteriorRoom());
+    const indoors = this.nightIndoors();
     const shouldShow = shouldUseAct1Night({
       flags: this.gameFlags,
       indoors
@@ -1847,21 +1880,38 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.destroyNightTintOverlay();
   }
 
-  private ensureNightTintOverlay(): Phaser.GameObjects.Rectangle {
+  private ensureNightTintOverlay(): Phaser.GameObjects.Image {
     if (this.nightTintOverlay) {
       return this.nightTintOverlay;
     }
+    // A full-screen IMAGE, not a Rectangle Shape. Under the Canvas renderer
+    // (this build has no WebGL) Shape objects do not reliably composite over the
+    // chunked world, AND setTint on an Image is a no-op in Canvas (it draws white
+    // and washes the screen pale). So we bake the night color into a 1x1 texture
+    // and scale that up; no tint needed.
+    const key = "act1-night-px";
+    if (!this.textures.exists(key)) {
+      const canvasTex = this.textures.createCanvas(key, 1, 1);
+      const ctx = canvasTex?.getContext();
+      if (ctx) {
+        ctx.fillStyle = `#${ACT1_NIGHT_TINT_COLOR.toString(16).padStart(6, "0")}`;
+        ctx.fillRect(0, 0, 1, 1);
+        canvasTex?.refresh();
+      }
+    }
     const overlay = this.add
-      .rectangle(0, 0, this.scale.width, this.scale.height, ACT1_NIGHT_TINT_COLOR, ACT1_NIGHT_TINT_ALPHA)
+      .image(0, 0, key)
       .setOrigin(0, 0)
       .setScrollFactor(0)
-      .setDepth(ACT1_NIGHT_TINT_DEPTH);
+      .setDepth(ACT1_NIGHT_TINT_DEPTH)
+      .setDisplaySize(this.scale.width, this.scale.height)
+      .setAlpha(ACT1_NIGHT_TINT_ALPHA);
     this.nightTintOverlay = overlay;
     return overlay;
   }
 
   private syncNightTintOverlaySize(): void {
-    this.nightTintOverlay?.setSize(this.scale.width, this.scale.height);
+    this.nightTintOverlay?.setDisplaySize(this.scale.width, this.scale.height);
   }
 
   private destroyNightTintOverlay(): void {
@@ -2438,6 +2488,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.surfaceAtHook = (x: number, y: number) => surfaceAtWorldPixel(this.surfaceRows, { x, y }, this.collisionGrid());
     globals.__solidAt = this.solidAtHook;
     globals.__surfaceAt = this.surfaceAtHook;
+    if (import.meta.env.DEV) {
+      globals.__nightDebug = () => this.act1NightDebugState();
+    }
     // Debug-only teleport for QA capture tooling: hard-set the player to a world pixel and
     // stream the surrounding chunks, bypassing the spawn-validation/fallback path (so it
     // never silently lands somewhere else). Returns the resulting feet.
@@ -2628,6 +2681,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.surfaceAtHook && globals.__surfaceAt === this.surfaceAtHook) {
       delete globals.__surfaceAt;
     }
+    delete globals.__nightDebug;
     delete globals.__warpTo;
     delete globals.__fgAlphaAt;
     delete globals.__fgCoverageRect;

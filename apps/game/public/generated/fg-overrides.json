@@ -42,6 +42,20 @@
       "w": 68,
       "h": 76,
       "note": "park center tree south edge (pin 7542,743), widened to cover 7518,767"
+    },
+    {
+      "x": 2188,
+      "y": 196,
+      "w": 120,
+      "h": 60,
+      "note": "Morningside police car: clear lower body so a player standing beside it (S/W) is not covered (pin 2232,223) [widened to cover head box at left/top edge]"
+    },
+    {
+      "x": 2488,
+      "y": 466,
+      "w": 56,
+      "h": 36,
+      "note": "Morningside prop cutoff south edge (pin 2517,463)"
     }
   ]
 }

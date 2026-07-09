@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   buildFreshBedroomWorldTarget,
+  buildNoIntroWorldData,
   buildTitleMenuData,
   readContinueWorldTarget,
   type WorldStartData
@@ -36,6 +37,17 @@ describe("game start targets", () => {
     expect(worldData.saveState).toBeNull();
     expect(worldData.gameData).toBeDefined();
     expect(worldData.saveSlot).toBe(0);
+  });
+
+  it("uses fresh world data for nointro even when slot 0 has a save", () => {
+    const blob = serializeSaveState(saveState({ x: 2144, y: 1788 }));
+    const saveSlots = slots(blob);
+
+    const worldData = buildNoIntroWorldData(gameData(), { saveSlot: 0, saveSlots });
+
+    expect(worldData.saveState).toBeNull();
+    expect(worldData.saveSlot).toBe(0);
+    expect(worldData.saveSlots).toBe(saveSlots);
   });
 });
 

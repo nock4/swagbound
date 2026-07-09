@@ -17,6 +17,10 @@ export type GameStartOptions = {
   saveSlots?: SaveSlotPersistence;
 };
 
+export type NoIntroWorldStartOptions = GameStartOptions & {
+  newGameOpening?: NewGameOpeningStart;
+};
+
 export function buildBaseWorldStartData(gameData: GameData, options: GameStartOptions): WorldStartData {
   return {
     gameData,
@@ -41,6 +45,14 @@ export function buildFreshBedroomWorldTarget(gameData: GameData, options: GameSt
   return {
     sceneKey: "chunked-world",
     data: buildNewGameWorldData(gameData, options)
+  };
+}
+
+export function buildNoIntroWorldData(gameData: GameData, options: NoIntroWorldStartOptions): WorldStartData {
+  return {
+    ...buildBaseWorldStartData(gameData, options),
+    saveState: null,
+    ...(options.newGameOpening ? { newGameOpening: options.newGameOpening } : {})
   };
 }
 
