@@ -343,8 +343,10 @@ export class UiScene extends Phaser.Scene {
     this.promptText?.setVisible(promptVisible);
     // Menu hint shares the prompt's visibility: only while walking, never over a menu/dialogue.
     this.menuHintText?.setVisible(promptVisible);
-    // The dev "F1: debug" badge also steps aside for cinematics.
-    this.badgeText?.setVisible(!cinematic);
+    // The dev badge stays up even during cinematics: every evidence screenshot
+    // must carry the build stamp (docs/qa/goal-prompts.md Definition of Done),
+    // and cinematics are exactly where staleness bugs hide. DEV-only object.
+    this.badgeText?.setVisible(true);
     this.positionMenuHint(Boolean(visibleHudView));
     this.drawDialogue(open, text, textRuns, footer, showAdvanceIndicator);
     this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);

@@ -134,7 +134,7 @@ import {
   contentFitWindowRect,
   type BattleMenuListRect
 } from "./windowLayout";
-import { enemyTargetModeForCommand } from "./battleMenuFlow";
+import { battleItemEffectDescription, enemyTargetModeForCommand } from "./battleMenuFlow";
 import {
   CANCEL_KEY_NAMES,
   CONFIRM_KEY_NAMES,
@@ -3760,7 +3760,7 @@ export class BattleScene extends Phaser.Scene {
     if (this.submenu_ === "goods") {
       const entry = this.goodsForCurrentActor()[this.submenuIndex_];
       const item = entry ? this.itemById(entry.itemId) : undefined;
-      return item ? ["To one friend", "Use item"] : ["No goods available."];
+      return item ? [battleItemEffectDescription(decodeItemUseEffect(item))] : ["No goods available."];
     }
     if (this.submenu_ === "target") {
       const name = this.targetedCombatantName();
@@ -3770,7 +3770,7 @@ export class BattleScene extends Phaser.Scene {
       }
       if (this.pendingItem_) {
         const item = this.itemById(this.pendingItem_.itemId);
-        return item ? [name, "Use item"] : [name];
+        return item ? [battleItemEffectDescription(decodeItemUseEffect(item))] : [name];
       }
       return [name];
     }

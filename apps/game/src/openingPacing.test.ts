@@ -1,52 +1,171 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
-  OPENING_FLYOVER_SAFE_CENTER_MARGIN_PX,
-  OPENING_FLYOVER_SCENIC_BOUNDS,
   OPENING_FLYOVER_SHOTS,
+  OPENING_FLYOVER_VIEW,
   OPENING_KNOCK_POST_SFX_HOLD_MS,
   OPENING_KNOCK_SFX_PATTERN_MS,
   OPENING_KNOCK_SFX_TO_DIALOGUE_MS,
-  clampOpeningFlyoverPoint
+  OPENING_SHOT_ZERO_CENTER,
+  clampOpeningFlyoverPoint,
+  openingFlyoverNightRect
 } from "./openingPacing";
 
-describe("opening flyover pacing", () => {
-  it("keeps all authored shot centers inside the safe scenic flyover region", () => {
-    const minX = OPENING_FLYOVER_SCENIC_BOUNDS.minX + OPENING_FLYOVER_SAFE_CENTER_MARGIN_PX;
-    const maxX = OPENING_FLYOVER_SCENIC_BOUNDS.maxX - OPENING_FLYOVER_SAFE_CENTER_MARGIN_PX;
-    const minY = OPENING_FLYOVER_SCENIC_BOUNDS.minY + OPENING_FLYOVER_SAFE_CENTER_MARGIN_PX;
-    const maxY = OPENING_FLYOVER_SCENIC_BOUNDS.maxY - OPENING_FLYOVER_SAFE_CENTER_MARGIN_PX;
+/**
+ * Density-driven invariants (post-mortem of the "flyover shows forest/map edges"
+ * reports): the old tests only asserted clamp math and a hardcoded shot table, so
+ * shots authored into the forest east of town passed CI while every frame the
+ * player saw was tree wall. These tests score what is actually INSIDE the visible
+ * window at each sampled pan position, from the same data the game renders:
+ * generated world.json (NPCs, doors, collision) + stamped building rects.
+ *
+ * Calibration (2026-07-09 scan): every good window scores forestish <= 0.23 with
+ * npcs+doors >= 3 or buildings >= 0.2 coverage; the old bad eastern-edge shot
+ * scores forestish 0.69-0.87 with zero content. Thresholds sit between with margin.
+ */
+const world = JSON.parse(
+  readFileSync(new URL("../public/generated/world.json", import.meta.url), "utf8")
+) as {
+  tileSize: number;
+  chunkSizeTiles: number;
+  npcs: { worldPixel: { x: number; y: number } }[];
+  doors: { worldPixel: { x: number; y: number } }[];
+  collision: { cellSize: number; solidRows: string[] };
+};
+const buildingOverrides = JSON.parse(
+  readFileSync(new URL("../../../content/building-overrides.json", import.meta.url), "utf8")
+) as { buildings: { chunk: string; x: number; y: number; w: number; h: number }[] };
 
-    for (const shot of OPENING_FLYOVER_SHOTS) {
-      for (const point of [shot.from, shot.to]) {
-        expect(point.x).toBeGreaterThanOrEqual(minX);
-        expect(point.x).toBeLessThanOrEqual(maxX);
-        expect(point.y).toBeGreaterThanOrEqual(minY);
-        expect(point.y).toBeLessThanOrEqual(maxY);
-        expect(clampOpeningFlyoverPoint(point)).toEqual(point);
+const CHUNK_PX = world.tileSize * world.chunkSizeTiles;
+const buildingRects = buildingOverrides.buildings.map((b) => {
+  const [cx, cy] = b.chunk.split(",").map(Number);
+  return { x: cx * CHUNK_PX + b.x, y: cy * CHUNK_PX + b.y, w: b.w, h: b.h };
+});
+
+function solidAt(px: number, py: number): boolean {
+  const { cellSize, solidRows } = world.collision;
+  const row = solidRows[Math.floor(py / cellSize)];
+  const col = Math.floor(px / cellSize);
+  return row !== undefined && row[col] === "1";
+}
+
+function insideBuilding(px: number, py: number): boolean {
+  return buildingRects.some((r) => px >= r.x && px <= r.x + r.w && py >= r.y && py <= r.y + r.h);
+}
+
+type WindowScore = { npcs: number; doors: number; buildingFrac: number; forestFrac: number };
+
+function scoreWindow(cx: number, cy: number): WindowScore {
+  const w = OPENING_FLYOVER_VIEW.width;
+  const h = OPENING_FLYOVER_VIEW.height;
+  const x0 = cx - w / 2;
+  const y0 = cy - h / 2;
+  const x1 = cx + w / 2;
+  const y1 = cy + h / 2;
+  const npcs = world.npcs.filter(
+    (n) => n.worldPixel.x >= x0 && n.worldPixel.x <= x1 && n.worldPixel.y >= y0 && n.worldPixel.y <= y1
+  ).length;
+  const doors = world.doors.filter(
+    (d) => d.worldPixel.x >= x0 && d.worldPixel.x <= x1 && d.worldPixel.y >= y0 && d.worldPixel.y <= y1
+  ).length;
+  let buildingArea = 0;
+  for (const r of buildingRects) {
+    const ix = Math.max(0, Math.min(x1, r.x + r.w) - Math.max(x0, r.x));
+    const iy = Math.max(0, Math.min(y1, r.y + r.h) - Math.max(y0, r.y));
+    buildingArea += ix * iy;
+  }
+  const LATTICE = 12;
+  let forest = 0;
+  for (let i = 0; i < LATTICE; i++) {
+    for (let j = 0; j < LATTICE; j++) {
+      const px = x0 + ((i + 0.5) * w) / LATTICE;
+      const py = y0 + ((j + 0.5) * h) / LATTICE;
+      if (solidAt(px, py) && !insideBuilding(px, py)) {
+        forest += 1;
       }
+    }
+  }
+  return {
+    npcs,
+    doors,
+    buildingFrac: buildingArea / (w * h),
+    forestFrac: forest / (LATTICE * LATTICE)
+  };
+}
+
+/** Every camera center the player can see during the cinematic: the era-title
+ * hold plus five samples along each pan. */
+function sampledCenters(): { x: number; y: number; label: string }[] {
+  const centers: { x: number; y: number; label: string }[] = [
+    { x: OPENING_SHOT_ZERO_CENTER.x, y: OPENING_SHOT_ZERO_CENTER.y, label: "shot zero (era title)" }
+  ];
+  OPENING_FLYOVER_SHOTS.forEach((shot, i) => {
+    for (const t of [0, 0.25, 0.5, 0.75, 1]) {
+      centers.push({
+        x: shot.from.x + (shot.to.x - shot.from.x) * t,
+        y: shot.from.y + (shot.to.y - shot.from.y) * t,
+        label: `shot ${i + 1} @t=${t}`
+      });
+    }
+  });
+  return centers;
+}
+
+describe("opening flyover pacing", () => {
+  it("shows real town content in every visible window of every shot", () => {
+    for (const c of sampledCenters()) {
+      const s = scoreWindow(c.x, c.y);
+      const contentful = s.npcs + s.doors >= 3 || s.buildingFrac >= 0.2;
+      expect(contentful, `${c.label} (${c.x},${c.y}) has no town content: ${JSON.stringify(s)}`).toBe(true);
     }
   });
 
-  it("clamps future shot centers back inside the scenic flyover region", () => {
-    expect(clampOpeningFlyoverPoint({ x: 800, y: 500 })).toEqual({ x: 1600, y: 1200 });
-    expect(clampOpeningFlyoverPoint({ x: 3600, y: 2600 })).toEqual({ x: 2080, y: 1860 });
+  it("never fills a visible window with forest or map-edge solids", () => {
+    for (const c of sampledCenters()) {
+      const s = scoreWindow(c.x, c.y);
+      expect(
+        s.forestFrac,
+        `${c.label} (${c.x},${c.y}) is ${Math.round(s.forestFrac * 100)}% non-building solids (forest/edge)`
+      ).toBeLessThanOrEqual(0.4);
+    }
+  });
+
+  it("keeps every shot center inside the clamp region (clamp is the identity)", () => {
+    for (const shot of OPENING_FLYOVER_SHOTS) {
+      for (const point of [shot.from, shot.to]) {
+        expect(clampOpeningFlyoverPoint(point)).toEqual(point);
+      }
+    }
+    expect(clampOpeningFlyoverPoint(OPENING_SHOT_ZERO_CENTER)).toEqual(OPENING_SHOT_ZERO_CENTER);
+  });
+
+  it("covers every visible window with the night tint rect", () => {
+    const rect = openingFlyoverNightRect();
+    const left = rect.x - rect.width / 2;
+    const right = rect.x + rect.width / 2;
+    const top = rect.y - rect.height / 2;
+    const bottom = rect.y + rect.height / 2;
+    for (const c of sampledCenters()) {
+      expect(c.x - OPENING_FLYOVER_VIEW.width / 2).toBeGreaterThanOrEqual(left);
+      expect(c.x + OPENING_FLYOVER_VIEW.width / 2).toBeLessThanOrEqual(right);
+      expect(c.y - OPENING_FLYOVER_VIEW.height / 2).toBeGreaterThanOrEqual(top);
+      expect(c.y + OPENING_FLYOVER_VIEW.height / 2).toBeLessThanOrEqual(bottom);
+    }
   });
 
   it("preserves three distinct 9-second pan regions", () => {
     expect(OPENING_FLYOVER_SHOTS.map((shot) => shot.duration)).toEqual([9_000, 9_000, 9_000]);
-    expect(OPENING_FLYOVER_SHOTS.map((shot) => ({ from: shot.from, to: shot.to }))).toEqual([
-      { from: { x: 1600, y: 1200 }, to: { x: 1700, y: 1240 } },
-      { from: { x: 1980, y: 1420 }, to: { x: 2080, y: 1580 } },
-      { from: { x: 1600, y: 1600 }, to: { x: 1660, y: 1732 } }
-    ]);
-
     const mids = OPENING_FLYOVER_SHOTS.map((s) => ({ x: (s.from.x + s.to.x) / 2, y: (s.from.y + s.to.y) / 2 }));
     for (let i = 0; i < mids.length; i++) {
       for (let j = i + 1; j < mids.length; j++) {
         const d = Math.hypot(mids[i].x - mids[j].x, mids[i].y - mids[j].y);
-        expect(d).toBeGreaterThan(400);
+        expect(d, `pans ${i + 1} and ${j + 1} overlap (${Math.round(d)}px apart)`).toBeGreaterThan(400);
       }
     }
+    // The era-title hold deliberately bookends the final pan's market strip (20+
+    // seconds apart), so it carries no distance constraint; its window still has to
+    // pass the density/forest checks above, and distinctness is judged by the
+    // recorded frame pass (tmp/flyover-frames.mjs).
   });
 
   it("waits for the knock pattern plus the post-knock beat before dialogue", () => {

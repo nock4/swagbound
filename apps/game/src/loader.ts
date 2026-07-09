@@ -719,7 +719,8 @@ export function isAddedNpcExtrasEnabled(search: string | undefined): boolean {
 export function contentReferencedAddedNpcIds(
   addedNpcs: AddedNpcs | undefined,
   sourceChecks: DrifellaSourceChecks | undefined,
-  storyTriggers: StoryTriggers | undefined
+  storyTriggers: StoryTriggers | undefined,
+  cutscenes?: Cutscenes
 ): Set<number> {
   const hintNpcIds = new Set<number>();
   for (const check of sourceChecks?.checks ?? []) {
@@ -730,9 +731,12 @@ export function contentReferencedAddedNpcIds(
     }
   }
   const triggerText = storyTriggers ? JSON.stringify(storyTriggers) : "";
+  // Cutscene actors count as references too: an authored scene that shows or
+  // faces an added NPC needs that NPC to exist without ?extras=1.
+  const cutsceneText = cutscenes ? JSON.stringify(cutscenes) : "";
   const referenced = new Set<number>();
   for (const npc of addedNpcs?.npcs ?? []) {
-    if (hintNpcIds.has(npc.id) || triggerText.includes(String(npc.id))) {
+    if (hintNpcIds.has(npc.id) || triggerText.includes(String(npc.id)) || cutsceneText.includes(String(npc.id))) {
       referenced.add(npc.id);
     }
   }
@@ -745,12 +749,13 @@ export function addedNpcsForSpawn(
     extrasEnabled: boolean;
     sourceChecks?: DrifellaSourceChecks;
     storyTriggers?: StoryTriggers;
+    cutscenes?: Cutscenes;
   }
 ): AddedNpcs | undefined {
   if (!addedNpcs || options.extrasEnabled) {
     return addedNpcs;
   }
-  const referenced = contentReferencedAddedNpcIds(addedNpcs, options.sourceChecks, options.storyTriggers);
+  const referenced = contentReferencedAddedNpcIds(addedNpcs, options.sourceChecks, options.storyTriggers, options.cutscenes);
   if (referenced.size === 0) {
     return { ...addedNpcs, npcs: [] };
   }

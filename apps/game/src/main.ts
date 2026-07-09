@@ -37,17 +37,23 @@ const SAVE_SLOTS: SaveSlotPersistence = {
  * playable world scene (real imported map/NPC data) or the fallback scene
  * (placeholder field) when world data is unavailable.
  */
-// Preload the menu/dialogue typeface (Pixelify Sans, linked in index.html) before the scenes
+// Preload the menu/dialogue typefaces linked in index.html before the scenes
 // render any text, so Phaser caches glyphs in the real face rather than the system fallback.
-// Times out / fails open: if the font CDN is unreachable, the UI falls back gracefully.
+// Times out or fails open: if a font file is unavailable, the UI falls back gracefully.
 async function loadMenuFont(): Promise<void> {
   try {
     const fonts = document.fonts;
     if (!fonts?.load) {
       return;
     }
+    const menuFontLoads = [
+      "16px 'EarthBound Dialogue Gold'",
+      "500 16px 'EarthBound Dialogue Gold'",
+      "16px 'Pixelify Sans'",
+      "500 16px 'Pixelify Sans'"
+    ];
     await Promise.race([
-      Promise.all([fonts.load("16px 'Pixelify Sans'"), fonts.load("500 16px 'Pixelify Sans'")]),
+      Promise.all(menuFontLoads.map((font) => fonts.load(font))),
       new Promise<void>((resolve) => setTimeout(resolve, 2500))
     ]);
   } catch {
@@ -443,7 +449,7 @@ function grantDebugPsi(psi: GameData["psi"], search: string | undefined): GameDa
   return { ...psi, psi: granted };
 }
 
-new Phaser.Game({
+const game = new Phaser.Game({
   type: Phaser.CANVAS,
   parent: "app",
   width: 512,
@@ -456,6 +462,10 @@ new Phaser.Game({
     autoCenter: Phaser.Scale.CENTER_BOTH
   }
 });
+if (import.meta.env.DEV) {
+  // Forensics handle for headless QA harnesses (texture/scene inspection).
+  (globalThis as Record<string, unknown>).__game = game;
+}
 
 // Dev-only "Track Lab" panel for auditioning music against live locations.
 // Gated to the dev server so it never ships in a production build.
