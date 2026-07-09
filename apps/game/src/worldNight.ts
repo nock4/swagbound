@@ -8,12 +8,14 @@ export type NightFlagReader = {
 
 export type Act1NightInput = {
   flags: NightFlagReader;
-  indoors: boolean;
 };
 
 export function shouldUseAct1Night(input: Act1NightInput): boolean {
-  return !input.indoors
-    && !input.flags.has(ROUTE_OPEN_FLAG)
+  return !input.flags.has(ROUTE_OPEN_FLAG)
     && !input.flags.has(ACT1_COMPLETE_FLAG)
     && AFTER_ACT1_FLAGS.every((flag) => !input.flags.has(flag));
+}
+
+export function shouldHoldAct1IntroMusic(flags: NightFlagReader): boolean {
+  return !flags.has(ROUTE_OPEN_FLAG);
 }

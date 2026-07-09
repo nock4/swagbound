@@ -332,7 +332,7 @@ import {
   overworldInteractableEvents,
   overworldInteractableIsOpened
 } from "./overworldInteractables";
-import { ACT1_COMPLETE_FLAG, ROUTE_OPEN_FLAG, shouldUseAct1Night } from "./worldNight";
+import { ACT1_COMPLETE_FLAG, ROUTE_OPEN_FLAG, shouldHoldAct1IntroMusic, shouldUseAct1Night } from "./worldNight";
 import type { SourceCheckReturnTo } from "./sourceCheckScene";
 import {
   SOURCE_CHECK_RETRY_DISTANCE_PX,
@@ -513,6 +513,7 @@ const ACT1_NIGHT_TINT_COLOR = 0x0a1236;
 const ACT1_NIGHT_TINT_ALPHA = 0.62;
 const ACT1_NIGHT_TINT_DEPTH = 130_000;
 const ACT1_DAWN_FADE_MS = 3_000;
+const INTRO_MUSIC_RELEASE_FADE_MS = 1_000;
 // The EB battle-encounter swirl: a colored spiral covers the overworld to black, THEN we switch to the
 // battle scene (which reveals from black). Sits above everything, including the door-fade overlay.
 const ENCOUNTER_SWIRL_MS = 620;
@@ -689,6 +690,8 @@ type Act1NightDebugState = {
   indoors: boolean;
   hasRouteOpen: boolean;
   hasAct1Complete: boolean;
+  introHold: boolean;
+  cue: string | null;
 };
 
 export class ChunkedWorldScene extends Phaser.Scene {
@@ -723,6 +726,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private nightTintOverlay?: Phaser.GameObjects.Image;
   private nightTintActive = false;
   private pendingDawnFadeOnCreate = false;
+  private pendingIntroMusicReleaseFadeOnCreate = false;
   private solidRows: string[] = [];
   private surfaceRows: string[] = [];
   private navmesh?: NavmeshQuery;
@@ -844,8 +848,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   // True during the opening Morningside flyover: suppresses triggers/encounters while
   // the hidden player is glided across town to drive the camera.
   private flyoverActive = false;
-  // Holds the dark intro cue from the flyover until the player first leaves the house.
+  // Holds the dark intro cue until signal:route_open.
   private introMusicHold = false;
+  // Suppresses roamers only while the opening house phase is still active.
+  private openingRoamerHold = false;
   private startupMode: "startup" | "opening" = "startup";
   private startupInitialSpawn?: { x: number; y: number };
   private startupFallbackReason?: string;
@@ -1031,6 +1037,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     const restoredPlayer = this.restoreState ? undefined : this.applyInitialSave();
     const returnPlayer = this.applyReturnRestore();
+    this.applyDebugFlags();
+    this.introMusicHold = shouldHoldAct1IntroMusic(this.gameFlags);
+    this.openingRoamerHold = Boolean(this.newGameOpening);
     // Act 1 is solo: if nothing (save/intro) populated the party, default to the
     // first hero (Bosch) so menus + battle status never fall back to the full roster.
     if (this.partyState.party().length === 0) {
@@ -1263,18 +1272,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.renderDevPinsFromRegistry();
     }
     this.scene.launch("ui", { worldSceneKey: "chunked-world", font: this.data_.font, window: this.data_.window });
-    if (this.newGameOpening) {
-      this.introMusicHold = true;
-      this.playOverworldMusicCue("intro");
-    } else {
-      this.syncOverworldMusicCue(true);
-    }
+    this.syncOverworldMusicForCurrentFlags(true, {
+      releaseFade: this.pendingIntroMusicReleaseFadeOnCreate
+    });
+    this.pendingIntroMusicReleaseFadeOnCreate = false;
     this.registerCutsceneMoveDemoGlobal();
     this.registerForceEncounter();
     if (!this.restoreState) {
       this.maybeStartNewGameStartup(spawn);
     }
-    this.applyDebugFlags();
     this.suppressStoryTriggerAtRestorePoint();
     // Bring in any already-earned recruits (from a restored save or ?flags=recruit:*)
     // silently - the live "joined!" beat only fires when a flag flips during play.
@@ -1516,6 +1522,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.sceneVisualState = {};
     this.roomBoundsResolveAnchor = undefined;
     this.eventSequence = undefined;
+    this.pendingIntroMusicReleaseFadeOnCreate = false;
+    this.introMusicHold = false;
+    this.openingRoamerHold = false;
     this.newGameStartupRecord = undefined;
     this.startupRunActive = false;
     this.startupRunFinalized = false;
@@ -1812,9 +1821,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.activeRoomBounds?.isInterior ? this.activeRoomBounds : undefined;
   }
 
-  // Reliable "am I indoors" for the night tint. The room-bounds isInterior flag is
-  // not always set (e.g. right after a warp), so fall back to the interior-music
-  // sector test the audio system already trusts.
+  // Debug-only indoor readout. The Act 1 tint itself does not exempt interiors.
+  // The room-bounds isInterior flag is not always set, so fall back to the
+  // interior-music sector test the audio system already trusts.
   private nightIndoors(): boolean {
     return Boolean(this.activeInteriorRoom()) || this.playerInInteriorMusicSector();
   }
@@ -1823,23 +1832,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const indoors = this.nightIndoors();
     const overlay = this.nightTintOverlay;
     return {
-      shouldShow: shouldUseAct1Night({ flags: this.gameFlags, indoors }),
+      shouldShow: shouldUseAct1Night({ flags: this.gameFlags }),
       overlayExists: Boolean(overlay),
       alpha: overlay?.alpha ?? null,
       visible: overlay?.visible ?? null,
       depth: overlay?.depth ?? null,
       indoors,
       hasRouteOpen: this.gameFlags.has(ROUTE_OPEN_FLAG),
-      hasAct1Complete: this.gameFlags.has(ACT1_COMPLETE_FLAG)
+      hasAct1Complete: this.gameFlags.has(ACT1_COMPLETE_FLAG),
+      introHold: this.introMusicHold,
+      cue: (this.music as unknown as { current?: { cue?: string } }).current?.cue ?? null
     };
   }
 
   private updateAct1NightTint(options: { fade?: boolean } = {}): void {
-    const indoors = this.nightIndoors();
-    const shouldShow = shouldUseAct1Night({
-      flags: this.gameFlags,
-      indoors
-    });
+    const shouldShow = shouldUseAct1Night({ flags: this.gameFlags });
     if (shouldShow) {
       const overlay = this.ensureNightTintOverlay();
       this.tweens.killTweensOf(overlay);
@@ -1848,7 +1855,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.nightTintActive = true;
       return;
     }
-    if (!this.nightTintOverlay && options.fade && !indoors) {
+    if (!this.nightTintOverlay && options.fade) {
       this.ensureNightTintOverlay().setAlpha(ACT1_NIGHT_TINT_ALPHA).setVisible(true);
       this.nightTintActive = true;
     }
@@ -2041,15 +2048,34 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return buildCellBounds(minCellX, maxCellX, minCellY, maxCellY);
   }
 
-  private syncOverworldMusicCue(force = false): void {
+  private syncOverworldMusicForCurrentFlags(force = false, options: { releaseFade?: boolean } = {}): void {
+    const wasHolding = this.introMusicHold;
+    this.introMusicHold = shouldHoldAct1IntroMusic(this.gameFlags);
+    if (this.introMusicHold) {
+      this.playOverworldMusicCue("intro", force);
+      return;
+    }
+    this.syncOverworldMusicCue(force || wasHolding, {
+      fadeMs: options.releaseFade ? INTRO_MUSIC_RELEASE_FADE_MS : undefined
+    });
+  }
+
+  private syncOverworldMusicAfterRouteOpen(routeOpenJustSet: boolean): void {
+    if (!routeOpenJustSet) {
+      return;
+    }
+    this.syncOverworldMusicForCurrentFlags(true, { releaseFade: true });
+  }
+
+  private syncOverworldMusicCue(force = false, playOptions: { fadeMs?: number } = {}): void {
     if (this.cinematicActive() || this.introMusicHold) {
       return;
     }
     if (this.forcedOverworldMusicCue) {
-      this.playOverworldMusicCue(this.forcedOverworldMusicCue, force);
+      this.playOverworldMusicCue(this.forcedOverworldMusicCue, force, playOptions);
       return;
     }
-    this.playOverworldMusicCue(this.resolvedOverworldMusicCueForPlayer(), force);
+    this.playOverworldMusicCue(this.resolvedOverworldMusicCueForPlayer(), force, playOptions);
   }
 
   private resolvedOverworldMusicCueForPlayer(): OverworldMusicCue {
@@ -2062,12 +2088,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     );
   }
 
-  private playOverworldMusicCue(cue: OverworldMusicCue, force = false): void {
+  private playOverworldMusicCue(cue: OverworldMusicCue, force = false, playOptions: { fadeMs?: number } = {}): void {
     if (!force && this.currentOverworldMusicCue === cue) {
       return;
     }
     this.currentOverworldMusicCue = cue;
-    void this.music.play(cue);
+    void this.music.play(cue, playOptions);
   }
 
   /** Soft per-character tick as typewriter dialogue reveals (skips whitespace, throttled). */
@@ -2611,6 +2637,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return member ? { offense: member.stats.offense, defense: member.stats.defense } : undefined;
     };
     globals.__overworldStatusHud = () => this.overworldStatusHud();
+    // DEV: set a story flag and run the same reactions a real trigger would (night
+    // dawn fade, music handoff, barriers). Reusable QA infra for flag-gated
+    // acceptance runs (docs/qa/goal-prompts.md Template A/S boundary checks).
+    globals.__setStoryFlag = (flag: string, on = true) => {
+      if (on) {
+        this.gameFlags.set(flag);
+      } else {
+        this.gameFlags.unset(flag);
+      }
+      this.updateAct1NightTint({ fade: flag === ROUTE_OPEN_FLAG && on });
+      if (flag === ROUTE_OPEN_FLAG && on) {
+        // Drive the SAME handoff a real story trigger uses (recomputes the intro
+        // hold + crossfades to area music), not a shortcut that skips the hold.
+        this.syncOverworldMusicAfterRouteOpen(true);
+      } else {
+        this.syncOverworldMusicForCurrentFlags(true);
+      }
+      this.refreshBarrierSprites();
+      return { flag, on, hasIt: this.gameFlags.has(flag) };
+    };
     globals.__setPartyStatus = (charId: number, ailment: StatusAilment, active = true) => {
       if (!STATUS_AILMENTS.includes(ailment)) {
         return { ok: false, reason: "unknown ailment" };
@@ -3914,7 +3960,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.playerState.animKey = `idle-${this.playerState.facing}`;
     this.playerState.animFrame = this.playerFrames[this.playerState.facing][0];
     this.lastDoor = { from, to };
-    this.introMusicHold = false;
+    this.openingRoamerHold = false;
     this.clearStartupPajamaVisualState();
     this.currentChunk = undefined;
     this.activeRoomBounds = undefined;
@@ -5209,7 +5255,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.bootSaveState.intake) {
       this.registry.set(FILING_INTAKE_REGISTRY_KEY, this.bootSaveState.intake);
     }
-    this.introMusicHold = false;
+    this.openingRoamerHold = false;
     this.clearStartupPajamaVisualState();
     this.restoredFromSave = true;
     this.hasSave = true;
@@ -5250,6 +5296,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (resolution.kind === "advance") {
       if (resolution.setFlags.includes(ROUTE_OPEN_FLAG) && !this.gameFlags.has(ROUTE_OPEN_FLAG)) {
         this.pendingDawnFadeOnCreate = true;
+        this.pendingIntroMusicReleaseFadeOnCreate = true;
       }
       if (resolution.firedFlag) {
         this.gameFlags.set(resolution.firedFlag);
@@ -5577,8 +5624,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     dispatchInteractionEvents(events, {
       startDialogue: (event) => this.startInteractionDialogue(event),
       setFlag: (flag) => {
+        const routeOpenJustSet = flag === ROUTE_OPEN_FLAG && !this.gameFlags.has(ROUTE_OPEN_FLAG);
         this.gameFlags.set(flag);
-        this.updateAct1NightTint({ fade: flag === ROUTE_OPEN_FLAG });
+        this.updateAct1NightTint({ fade: routeOpenJustSet });
+        this.syncOverworldMusicAfterRouteOpen(routeOpenJustSet);
         this.syncPresentInteractableSprites();
         this.syncSourceCheckActors();
       },
@@ -6109,12 +6158,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
       startDialogue: (pages) => this.dialogue.start(buildInlineDialoguePages([...pages])),
       isDialogueOpen: () => this.dialogue.open,
       setGameFlag: (flag) => {
+        const routeOpenJustSet = flag === ROUTE_OPEN_FLAG && !this.gameFlags.has(ROUTE_OPEN_FLAG);
         this.gameFlags.set(flag);
-        this.updateAct1NightTint({ fade: flag === ROUTE_OPEN_FLAG });
+        this.updateAct1NightTint({ fade: routeOpenJustSet });
+        this.syncOverworldMusicAfterRouteOpen(routeOpenJustSet);
       },
       clearGameFlag: (flag) => {
         this.gameFlags.unset(flag);
         this.updateAct1NightTint();
+        this.syncOverworldMusicForCurrentFlags();
       },
       setEventFlag: (flag, set) => { if (set) { this.gameFlags.setNum(flag); } else { this.gameFlags.unsetNum(flag); } },
       playSound: (id) => this.playCutsceneSound(id),
@@ -7042,12 +7094,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     // Non-battle trigger (or battle-unavailable fallback): apply effects immediately.
+    const routeOpenJustSet = Boolean(trigger.setFlags?.includes(ROUTE_OPEN_FLAG) && !this.gameFlags.has(ROUTE_OPEN_FLAG));
     if (isOnce(trigger)) {
       this.gameFlags.set(triggerFiredFlag(trigger.id));
     }
     trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
     trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
-    this.updateAct1NightTint({ fade: trigger.setFlags?.includes(ROUTE_OPEN_FLAG) });
+    this.updateAct1NightTint({ fade: routeOpenJustSet });
+    this.syncOverworldMusicAfterRouteOpen(routeOpenJustSet);
     this.reconcileRecruits({ announce: true });
 
     if (trigger.warp) {
@@ -7360,12 +7414,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return;
       }
       this.warnStoryTriggerSkip(`battle_unavailable:${trigger.id}`);
+      const routeOpenJustSet = Boolean(trigger.setFlags?.includes(ROUTE_OPEN_FLAG) && !this.gameFlags.has(ROUTE_OPEN_FLAG));
       if (isOnce(trigger)) {
         this.gameFlags.set(triggerFiredFlag(trigger.id));
       }
       trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
       trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
-      this.updateAct1NightTint({ fade: trigger.setFlags?.includes(ROUTE_OPEN_FLAG) });
+      this.updateAct1NightTint({ fade: routeOpenJustSet });
+      this.syncOverworldMusicAfterRouteOpen(routeOpenJustSet);
       this.afterDialogueClosed();
       this.updatePrompt();
       this.publish();
@@ -7441,7 +7497,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.data_.encounters || !this.data_.battle || !this.player) {
       return false;
     }
-    if (!shouldRunOverworldRoamers(this.introMusicHold)) {
+    if (!shouldRunOverworldRoamers(this.openingRoamerHold)) {
       this.clearOverworldRoamers();
       this.publishOverworldEnemyDebug();
       return false;
@@ -7652,7 +7708,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private canSpawnOverworldEnemy(): boolean {
     return this.encounterEnabled
-      && shouldRunOverworldRoamers(this.introMusicHold)
+      && shouldRunOverworldRoamers(this.openingRoamerHold)
       && this.encounterCooldownMs <= 0
       && this.overworldEnemySpawnCooldownMs <= 0
       && this.overworldEnemies.size < OVERWORLD_ENEMY_GLOBAL_CAP
@@ -7660,7 +7716,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private trySpawnOverworldEnemy(options: { forceArchetype?: "ambusher" | "prowler" } = {}): void {
-    if (!shouldRunOverworldRoamers(this.introMusicHold)) {
+    if (!shouldRunOverworldRoamers(this.openingRoamerHold)) {
       return;
     }
     const sector = this.currentEncounterSector();

@@ -18,9 +18,9 @@ export const OPENING_GET_UP_WALK_MS = 420;
 
 export const OPENING_FLYOVER_SCENIC_BOUNDS = {
   minX: 1200,
-  maxX: 3400,
+  maxX: 2480,
   minY: 800,
-  maxY: 2400
+  maxY: 2260
 } as const;
 export const OPENING_FLYOVER_SAFE_CENTER_MARGIN_PX = 400;
 
@@ -33,24 +33,23 @@ export type OpeningFlyoverShot = {
 
 export const OPENING_FLYOVER_SHOTS: readonly OpeningFlyoverShot[] = [
   {
-    // Northwest residential blocks.
-    from: { x: 1650, y: 1220 },
-    to: { x: 2050, y: 1350 },
+    // Northern shop cluster: stamped storefronts, nearby doors, and visible NPCs.
+    from: { x: 1600, y: 1200 },
+    to: { x: 1700, y: 1240 },
     duration: 9_000,
     text: "Morningside files its dreams before it dreams them."
   },
   {
-    // Southern commercial strip: a genuinely different quarter of town
-    // (midpoints must stay far apart; the pacing test enforces >300px).
-    from: { x: 1900, y: 1900 },
-    to: { x: 2600, y: 1950 },
+    // Civic hotel block: a separate dense cluster east of the northern shops.
+    from: { x: 1980, y: 1420 },
+    to: { x: 2080, y: 1580 },
     duration: 9_000,
     text: "Something reads the town, street by street, and calls the reading love."
   },
   {
-    // Eastern edge, drifting inward toward the road out.
-    from: { x: 3000, y: 1250 },
-    to: { x: 2850, y: 1600 },
+    // Southern market block: NPC-heavy storefronts and doors on the main strip.
+    from: { x: 1600, y: 1600 },
+    to: { x: 1660, y: 1732 },
     duration: 9_000,
     text: "Tonight one signal came back wearing your name."
   }

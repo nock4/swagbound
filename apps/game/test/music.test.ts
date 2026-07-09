@@ -154,6 +154,28 @@ describe("WebAudioMusic", () => {
     expect(fetchMusic).toHaveBeenCalledTimes(1);
   });
 
+  it("uses the requested fade duration when changing cues", async () => {
+    const fetchMusic = vi.fn(async () => audioResponse());
+    const music = new WebAudioMusic(manifest({
+      intro: { file: "audio/music/intro.mp3", loop: true, gain: 0.5 },
+      overworld: { file: "audio/music/overworld.mp3", loop: true, gain: 0.7 }
+    }), {
+      audioContextConstructor: FakeAudioContext as unknown as AudioContextConstructor,
+      fetch: fetchMusic,
+      logger: { warn: vi.fn() },
+      fadeMs: 0
+    });
+
+    await music.play("intro", { fadeMs: 0 });
+    await music.play("overworld", { fadeMs: 1_000 });
+
+    const context = FakeAudioContext.instances[0];
+    expect(context.sources).toHaveLength(2);
+    expect(context.gains[1].gain.linearRampToValueAtTime).toHaveBeenCalledWith(0, context.currentTime + 1);
+    expect(context.gains[2].gain.linearRampToValueAtTime).toHaveBeenCalledWith(0.7, context.currentTime + 1);
+    expect(context.sources[0].stop).toHaveBeenCalledWith(context.currentTime + 1.05);
+  });
+
   it("does not fetch unknown cues", async () => {
     const fetchMusic = vi.fn(async () => audioResponse());
     const music = new WebAudioMusic(manifest(), {
