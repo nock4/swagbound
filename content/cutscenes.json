@@ -262,7 +262,7 @@
     },
     {
       "id": "onett-welcome-home-lights-out",
-      "comment": "data_20.l_0xc66e40 -> l_0xc66eca (the 'Welcome home / go to bed' beat). Actor is the house occupant npcId 148 (sprite group 145) at world pixel 2656,344; co-located npcId 183 (group 227) stays put. EB: mom greets the player, player picks Yes, music_effect(3) + a wall of flag sets (295/469/530/473/468/749, unset 474/11/517), hide_char(255), two warps into the bedroom, lock_movement(255), then show_party(1) for the morning. Re-staged as: occupant faces player, two-page goodnight dialogue, hide the occupant (lights out), then setFlag the lights-out signal. lockPlayer true so the player watches; steps always resolve so the player is released.",
+      "comment": "data_20.l_0xc66e40 -> l_0xc66eca (the 'Welcome home / go to bed' beat). The EB house occupant npcId 148 (sprite group 145) is at world pixel 2656,344 but is not visibly present in this Swagbound area-trigger staging; co-located npcId 183 (group 227) stays put. EB: mom greets the player, player picks Yes, music_effect(3) + a wall of flag sets (295/469/530/473/468/749, unset 474/11/517), hide_char(255), two warps into the bedroom, lock_movement(255), then show_party(1) for the morning. Re-staged as ambient house narration, then hide the occupant state (lights out), then setFlag the lights-out signal. lockPlayer true so the player watches; steps always resolve so the player is released.",
       "trigger": {
         "kind": "area",
         "area": {
@@ -276,18 +276,11 @@
       "lockPlayer": true,
       "steps": [
         {
-          "op": "faceActor",
-          "actor": {
-            "npcId": 148
-          },
-          "dir": "down"
-        },
-        {
           "op": "dialogue",
           "pages": [
-            "Welcome home, kid. Door was unlocked. It's always unlocked. That's the kind of town this still is, for now.",
-            "Whatever's out there past the streetlights can wait til morning. It's not going anywhere. Neither are you.",
-            "Lights out. Scoot. We don't talk about the noise tonight."
+            "The door is unlocked. It's always unlocked. That's the kind of town this still is, for now.",
+            "Whatever's out there past the streetlights can wait til morning. It's not going anywhere. Neither is the house.",
+            "Lights go out. Nobody talks about the noise tonight."
           ]
         },
         {
@@ -326,6 +319,12 @@
       "lockPlayer": true,
       "steps": [
         {
+          "op": "showActor",
+          "actor": {
+            "npcId": 182
+          }
+        },
+        {
           "op": "faceActor",
           "actor": {
             "npcId": 182
@@ -339,7 +338,19 @@
         {
           "op": "dialogue",
           "pages": [
-            "The kid by the door clocks you and doesn't bother getting up.",
+            "The kid by the door clocks you and doesn't bother getting up."
+          ]
+        },
+        {
+          "op": "faceActor",
+          "actor": {
+            "npcId": 182
+          },
+          "dir": "down"
+        },
+        {
+          "op": "dialogue",
+          "pages": [
             "\"Like I said. Dad's not home yet. Small mercy.\"",
             "\"You drag Picky back here before he walks through that door, or it's both our hides.\"",
             "\"...Fine. I'll throw you a bone. Don't make me regret it.\""
@@ -377,9 +388,9 @@
           "op": "dialogue",
           "pages": [
             "Bosch wakes to a cold signal. The kind that arrives before you do.",
-            "Somebody already printed today. His face, almost right, the way a bad memory is almost right. Under it: \"I said it first, so I don't have to mean it.\" Bosch never said that.",
+            "Somebody already printed today. His face, almost right, the way a bad memory is almost right. Under it, a caption claims it said everything first, so it never has to mean anything. Bosch never wrote that.",
             "The card's category box is checked VESSEL. Bosch doesn't remember being asked.",
-            "From the next room, a household voice with panic under the paint: \"Why is your face on a card? It got here before breakfast. People are asking.\"",
+            "From the next room comes household panic under the paint. Bosch's face is on a card, it arrived before breakfast, and people are asking.",
             "A leaked Bosch is loose in Morningside, better behaved and earlier to breakfast. Bosch pockets the damaged original; the card-stock trail runs west, where the arcade crowd deals faces.",
             "(Arrow keys move Bosch. Press Z to look hard at things. And to talk. Start with the kid on the stoop; he's been waiting his whole short life to explain yours.)"
           ]

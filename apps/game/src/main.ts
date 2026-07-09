@@ -12,7 +12,7 @@ import { BattleScene } from "./battleScene";
 import { GameOverScene } from "./gameOverScene";
 import { SourceCheckScene } from "./sourceCheckScene";
 import { TitleMenuScene } from "./titleMenuScene";
-import { buildTitleMenuData } from "./gameStartTargets";
+import { buildNoIntroWorldData, buildTitleMenuData } from "./gameStartTargets";
 import { FilingIntakeScene } from "./filingIntakeScene";
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import type { EncounterAdvantage } from "./battleLogic";
@@ -146,13 +146,11 @@ class BootScene extends Phaser.Scene {
         // QA/automation lands on a movable player. Opt back into the wake with
         // ?wake when you specifically want to exercise the opening sequence.
         const wantWake = new URLSearchParams(globalThis.location?.search ?? "").has("wake");
-        this.scene.start("chunked-world", {
-          gameData: data,
+        this.scene.start("chunked-world", buildNoIntroWorldData(data, {
           saveSlot: DEFAULT_SAVE_SLOT,
           saveSlots: SAVE_SLOTS,
-          saveState,
-          ...(wantWake && saveBlob === null && openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
-        });
+          ...(wantWake && openingResolution.resolved ? { newGameOpening: openingResolution.start } : {})
+        }));
         return;
       }
       this.scene.start("title-menu", buildTitleMenuData(data, {
