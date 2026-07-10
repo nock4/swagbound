@@ -4,6 +4,7 @@ import {
   battleCommandGridPosition,
   cleanGridCells,
   cleanPanelInnerRect,
+  formatCleanOdometerValue,
   moveBattleCommandGridIndex,
   statusBarFillFraction
 } from "./cleanUi";
@@ -99,5 +100,14 @@ describe("status bar helper", () => {
     expect(statusBarFillFraction(130, 100)).toBe(1);
     expect(statusBarFillFraction(-5, 100)).toBe(0);
     expect(statusBarFillFraction(10, 0)).toBe(0);
+  });
+});
+
+describe("odometer formatting", () => {
+  it("pads and clamps HP/PP values to fixed digit columns", () => {
+    expect(formatCleanOdometerValue(7)).toBe("007");
+    expect(formatCleanOdometerValue(45)).toBe("045");
+    expect(formatCleanOdometerValue(1234)).toBe("999");
+    expect(formatCleanOdometerValue(Number.NaN)).toBe("000");
   });
 });

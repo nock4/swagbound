@@ -5,13 +5,11 @@ import { musicDisabledBySearch, type Music } from "./audio/music";
 import { CONFIRM_KEY_NAMES, MENU_DOWN_KEY_NAMES, MENU_UP_KEY_NAMES, registerDiscreteKeys } from "./inputModel";
 import {
   CLEAN_UI_FONT_FAMILY,
-  CLEAN_UI_PANEL_ALPHA,
-  CLEAN_UI_PANEL_BORDER,
-  CLEAN_UI_PANEL_BORDER_ALPHA,
-  CLEAN_UI_PANEL_BORDER_WIDTH,
-  CLEAN_UI_PANEL_FILL,
-  CLEAN_UI_PANEL_RADIUS,
-  CLEAN_UI_SELECTION_TEXT
+  CLEAN_UI_SELECTION_CARET,
+  CLEAN_UI_SELECTION_TEXT,
+  drawCleanCaret,
+  drawCleanPanel,
+  drawCleanSelection
 } from "./cleanUi";
 import {
   WAR_SLIDE_FIRST_ZOOM_LEG_MS,
@@ -406,21 +404,18 @@ export class TitleMenuScene extends Phaser.Scene {
     const panelY = Math.round(this.scale.height - panelH - 28);
 
     const panel = this.add.graphics().setDepth(20);
-    panel.fillStyle(CLEAN_UI_PANEL_FILL, CLEAN_UI_PANEL_ALPHA);
-    panel.fillRoundedRect(panelX, panelY, panelW, panelH, CLEAN_UI_PANEL_RADIUS);
-    panel.lineStyle(CLEAN_UI_PANEL_BORDER_WIDTH, CLEAN_UI_PANEL_BORDER, CLEAN_UI_PANEL_BORDER_ALPHA);
-    panel.strokeRoundedRect(panelX, panelY, panelW, panelH, CLEAN_UI_PANEL_RADIUS);
+    drawCleanPanel(panel, { x: panelX, y: panelY, width: panelW, height: panelH });
     this.menuPanel = panel;
 
     this.menuTexts = this.menuItems.map((item, i) => {
       const y = panelY + 9 + rowH * i + rowH / 2;
       return this.add
-        .text(this.scale.width / 2, y, item.label, {
+        .text(panelX + 52, y, item.label, {
           fontFamily: CLEAN_UI_FONT_FAMILY,
           fontSize: "18px",
           color: "#ffffff"
         })
-        .setOrigin(0.5)
+        .setOrigin(0, 0.5)
         .setDepth(22);
     });
     this.renderSelection();
@@ -439,13 +434,10 @@ export class TitleMenuScene extends Phaser.Scene {
     // Redraw panel + inverted selection row (white fill, dark text).
     const panel = this.menuPanel;
     panel.clear();
-    panel.fillStyle(CLEAN_UI_PANEL_FILL, CLEAN_UI_PANEL_ALPHA);
-    panel.fillRoundedRect(panelX, panelY, panelW, panelH, CLEAN_UI_PANEL_RADIUS);
-    panel.lineStyle(CLEAN_UI_PANEL_BORDER_WIDTH, CLEAN_UI_PANEL_BORDER, CLEAN_UI_PANEL_BORDER_ALPHA);
-    panel.strokeRoundedRect(panelX, panelY, panelW, panelH, CLEAN_UI_PANEL_RADIUS);
+    drawCleanPanel(panel, { x: panelX, y: panelY, width: panelW, height: panelH });
     const selY = panelY + 9 + rowH * this.cursor;
-    panel.fillStyle(0xffffff, 0.95);
-    panel.fillRoundedRect(panelX + 8, selY + 2, panelW - 16, rowH - 4, 6);
+    drawCleanSelection(panel, { x: panelX + 12, y: selY + 2, width: panelW - 24, height: rowH - 4 }, true);
+    drawCleanCaret(panel, panelX + 18, selY + 2, rowH - 4, CLEAN_UI_SELECTION_CARET);
 
     this.menuTexts.forEach((text, i) => {
       text.setColor(i === this.cursor ? CLEAN_UI_SELECTION_TEXT : "#ffffff");

@@ -150,7 +150,7 @@ export class WebAudioTransitionSfx implements TransitionSfx {
   textBlip(): void {
     this.withContext((context) => {
       const start = context.currentTime;
-      this.tone(context, { type: "square", start, duration: 0.022, fromHz: 620, toHz: 660, gain: 0.05 });
+      this.tone(context, { type: "square", start, duration: 0.018, fromHz: 880, toHz: 960, gain: 0.035 });
     });
   }
 

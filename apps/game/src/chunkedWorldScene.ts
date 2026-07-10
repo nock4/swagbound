@@ -242,7 +242,7 @@ import {
   type VisualStateInputs
 } from "./playerVisualState";
 import { drawSwirl } from "./transitions";
-import { activeWindowFlavorId } from "./windowSettings";
+import { activeWindowFlavorId, textBlipEnabled } from "./windowSettings";
 import { isKeyItemId } from "./keyItems";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import { applyClearOverrideRects, applySolidOverrideRects } from "./collisionOverrides";
@@ -2099,9 +2099,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     void this.music.play(cue, playOptions);
   }
 
-  /** Soft per-character tick as typewriter dialogue reveals (skips whitespace, throttled). */
+  /** Soft per-character tick as typewriter dialogue reveals, skipping whitespace. */
   private tickDialogueBlip(): void {
-    if (!this.dialogue.open || this.dialogue.revealComplete) {
+    if (!textBlipEnabled() || !this.dialogue.open || this.dialogue.revealComplete) {
       this.lastDialogueRevealedChars = 0;
       return;
     }
@@ -2112,8 +2112,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     if (revealed > this.lastDialogueRevealedChars) {
       const fresh = state.revealedText.slice(this.lastDialogueRevealedChars, revealed);
-      if (revealed % 2 === 0 && /\S/.test(fresh)) {
-        this.transitionSfx.textBlip();
+      for (const char of fresh) {
+        if (/\S/.test(char)) {
+          this.transitionSfx.textBlip();
+        }
       }
       this.lastDialogueRevealedChars = revealed;
     }

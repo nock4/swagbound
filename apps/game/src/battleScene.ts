@@ -122,6 +122,7 @@ import {
   drawCleanPanel,
   drawCleanSelection,
   estimateCleanTextWidth,
+  formatCleanOdometerValue,
   moveBattleCommandGridIndex,
   statusBarFillFraction,
   type BattleCommandGridDirection,
@@ -204,7 +205,7 @@ import { applySourceCheckRewardToRestore } from "./sourceCheckRewards";
 const TAU = Math.PI * 2;
 export const COMMANDS = commandsForCharId(0);
 const STATUS_TOP = 288;
-const BATTLE_LINE_SPACING = 2;
+const BATTLE_LINE_SPACING = 6;
 const BATTLE_FONT_SIZE = 14;
 const BATTLE_DESCRIPTION_FONT_SIZE = 13;
 const BATTLE_STATUS_NAME_FONT_SIZE = 13;
@@ -3596,8 +3597,8 @@ export class BattleScene extends Phaser.Scene {
     textSet.name.setText(this.fitMeasuredText(nameWithStatus, this.statusCardNameWidth(rect)));
     textSet.hpLabel.setText("HP");
     textSet.ppLabel.setText("PP");
-    textSet.hpValue.setText(`${card.hp}/${card.maxHp}`);
-    textSet.ppValue.setText(`${card.pp}/${card.maxPp}`);
+    textSet.hpValue.setText(formatCleanOdometerValue(card.hp));
+    textSet.ppValue.setText(formatCleanOdometerValue(card.pp));
   }
 
   private createStatusText(

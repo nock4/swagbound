@@ -1,13 +1,11 @@
 import Phaser from "phaser";
 import {
   CLEAN_UI_FONT_FAMILY,
-  CLEAN_UI_PANEL_ALPHA,
-  CLEAN_UI_PANEL_BORDER,
-  CLEAN_UI_PANEL_BORDER_ALPHA,
-  CLEAN_UI_PANEL_BORDER_WIDTH,
-  CLEAN_UI_PANEL_FILL,
-  CLEAN_UI_PANEL_RADIUS,
-  CLEAN_UI_SELECTION_TEXT
+  CLEAN_UI_SELECTION_CARET,
+  CLEAN_UI_SELECTION_TEXT,
+  drawCleanCaret,
+  drawCleanPanel,
+  drawCleanSelection
 } from "./cleanUi";
 import { CONFIRM_KEY_NAMES, MENU_DOWN_KEY_NAMES, MENU_UP_KEY_NAMES, registerDiscreteKeys } from "./inputModel";
 import { buildFreshBedroomWorldTarget, buildTitleMenuData, readContinueWorldTarget } from "./gameStartTargets";
@@ -31,7 +29,6 @@ export class GameOverScene extends Phaser.Scene {
   private saveSlots?: SaveSlotPersistence;
   private choices: GameOverChoice[] = [];
   private choiceTexts: Phaser.GameObjects.Text[] = [];
-  private cursorText?: Phaser.GameObjects.Text;
   private panel?: Phaser.GameObjects.Graphics;
   private cursor = 0;
   private menuReady = false;
@@ -103,14 +100,6 @@ export class GameOverScene extends Phaser.Scene {
     const panelY = Math.round(this.scale.height * 0.58);
 
     this.panel = this.add.graphics().setDepth(10);
-    this.cursorText = this.add
-      .text(panelX + 24, panelY + 9 + rowH / 2, ">", {
-        fontFamily: CLEAN_UI_FONT_FAMILY,
-        fontSize: "18px",
-        color: CLEAN_UI_SELECTION_TEXT
-      })
-      .setOrigin(0.5)
-      .setDepth(12);
     this.choiceTexts = this.choices.map((choice, i) => this.add
       .text(panelX + 48, panelY + 9 + rowH * i + rowH / 2, choice.label, {
         fontFamily: CLEAN_UI_FONT_FAMILY,
@@ -123,7 +112,7 @@ export class GameOverScene extends Phaser.Scene {
   }
 
   private renderSelection(): void {
-    if (!this.panel || !this.cursorText) {
+    if (!this.panel) {
       return;
     }
     const rowH = 32;
@@ -134,14 +123,9 @@ export class GameOverScene extends Phaser.Scene {
     const selectedY = panelY + 9 + rowH * this.cursor;
 
     this.panel.clear();
-    this.panel.fillStyle(CLEAN_UI_PANEL_FILL, CLEAN_UI_PANEL_ALPHA);
-    this.panel.fillRoundedRect(panelX, panelY, panelW, panelH, CLEAN_UI_PANEL_RADIUS);
-    this.panel.lineStyle(CLEAN_UI_PANEL_BORDER_WIDTH, CLEAN_UI_PANEL_BORDER, CLEAN_UI_PANEL_BORDER_ALPHA);
-    this.panel.strokeRoundedRect(panelX, panelY, panelW, panelH, CLEAN_UI_PANEL_RADIUS);
-    this.panel.fillStyle(0xffffff, 0.95);
-    this.panel.fillRoundedRect(panelX + 8, selectedY + 2, panelW - 16, rowH - 4, CLEAN_UI_PANEL_RADIUS);
-
-    this.cursorText.setPosition(panelX + 24, selectedY + rowH / 2);
+    drawCleanPanel(this.panel, { x: panelX, y: panelY, width: panelW, height: panelH });
+    drawCleanSelection(this.panel, { x: panelX + 12, y: selectedY + 2, width: panelW - 24, height: rowH - 4 }, true);
+    drawCleanCaret(this.panel, panelX + 18, selectedY + 2, rowH - 4, CLEAN_UI_SELECTION_CARET);
     this.choiceTexts.forEach((text, i) => {
       text.setColor(i === this.cursor ? CLEAN_UI_SELECTION_TEXT : "#ffffff");
     });

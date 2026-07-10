@@ -43,7 +43,7 @@ export type InteractionEventDispatcher = {
 
 const CCSCRIPT_REFERENCE_PATTERN = /^[A-Za-z_][\w-]*\.[A-Za-z_][\w-]*$/;
 
-const EB_SHOP_STORE_BY_REFERENCE = new Map<string, number>([
+export const EB_SHOP_STORE_BY_REFERENCE = new Map<string, number>([
   ["data_05.l_0xc56df3", 41],
   ["data_05.l_0xc56df9", 45],
   ["data_05.l_0xc5711a", 43],
@@ -124,8 +124,13 @@ function resolveCcsBehavior(
   });
   const effects = resolved?.effects ?? [];
   const shopIds = new Set<number>();
+  for (const effect of effects) {
+    if (effect.kind === "shop") {
+      shopIds.add(effect.storeId);
+    }
+  }
   const referenceStoreId = EB_SHOP_STORE_BY_REFERENCE.get(reference);
-  if (referenceStoreId !== undefined && effects.some(isShopSelectorEffect)) {
+  if (referenceStoreId !== undefined && effects.some(isShopSelectorSignal)) {
     shopIds.add(referenceStoreId);
   }
   return {
@@ -137,7 +142,7 @@ function resolveCcsBehavior(
   };
 }
 
-function isShopSelectorEffect(effect: EventEffect): boolean {
+function isShopSelectorSignal(effect: EventEffect): boolean {
   return effect.kind === "shop" || effect.kind === "setFlag";
 }
 

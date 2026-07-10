@@ -3,6 +3,7 @@ import type { DialoguePage, DialogueSegment } from "@eb/schemas";
 import {
   createDialogueResolver,
   DefaultResolver,
+  DEFAULT_TEXT_SPEED_CPS,
   INSTANT_TEXT_SPEED_CPS,
   confirmActionForReveal,
   perPagePauseMs,
@@ -12,6 +13,7 @@ import {
   renderSegmentsToTextRuns,
   revealTextRuns,
   revealState,
+  textSpeedCpsFromSearch,
   type DialogueResolver
 } from "../src/dialogueRenderer";
 import { buildInlineDialoguePages } from "../src/loader";
@@ -247,6 +249,15 @@ describe("revealState", () => {
       revealedChars: 6,
       totalChars: 6
     });
+  });
+});
+
+describe("textSpeedCpsFromSearch", () => {
+  it("defaults to the EB-style 45 cps typewriter speed", () => {
+    expect(DEFAULT_TEXT_SPEED_CPS).toBe(45);
+    expect(textSpeedCpsFromSearch("")).toBe(45);
+    expect(textSpeedCpsFromSearch("?textspeed=instant")).toBe(INSTANT_TEXT_SPEED_CPS);
+    expect(textSpeedCpsFromSearch("?textspeed=30")).toBe(30);
   });
 });
 

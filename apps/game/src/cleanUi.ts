@@ -1,91 +1,6 @@
 import type Phaser from "phaser";
 import type { CanvasRect } from "./windowLayout";
-import { EB_WINDOW_FRAMES, type EbWindowFrame } from "./windowFrames.generated";
-
-/** Pixel thickness of the EarthBound window frame (corner tile + edge tile are 8x8). */
-export const EB_WINDOW_BORDER = 8;
-
-let activeWindowFlavorIndex = 0;
-
-/** Select which EarthBound window flavor (0-6) the shared panels render with. */
-export function setActiveWindowFlavorIndex(index: number): void {
-  activeWindowFlavorIndex = EB_WINDOW_FRAMES[index] ? index : 0;
-}
-
-export function activeEbWindowFrame(): EbWindowFrame {
-  return EB_WINDOW_FRAMES[activeWindowFlavorIndex] ?? EB_WINDOW_FRAMES[0];
-}
-
-/**
- * Draw an authentic EarthBound window: an opaque interior plus the ROM-extracted
- * 8px beveled frame (per-row edge color bands + the 8x8 corner grid, mirrored into
- * each corner). Edges are constant along their axis, so the bands render as solid
- * fills with no tiling artifact. `fillColor` overrides the flavor interior.
- */
-export function drawEbWindow(
-  graphics: Phaser.GameObjects.Graphics,
-  rect: CanvasRect,
-  frame: EbWindowFrame = activeEbWindowFrame(),
-  fillColor?: number,
-  fillAlpha = 1
-): void {
-  const B = EB_WINDOW_BORDER;
-  const x = Math.round(rect.x);
-  const y = Math.round(rect.y);
-  const w = Math.max(1, Math.round(rect.width));
-  const h = Math.max(1, Math.round(rect.height));
-  graphics.fillStyle(fillColor ?? frame.interior, fillAlpha);
-  graphics.fillRect(x, y, w, h);
-  if (w < B * 2 + 2 || h < B * 2 + 2) {
-    graphics.lineStyle(1, frame.edge[3] ?? 0xffffff, 1);
-    graphics.strokeRect(x + 0.5, y + 0.5, Math.max(1, w - 1), Math.max(1, h - 1));
-    return;
-  }
-  const innerW = w - B * 2;
-  const innerH = h - B * 2;
-  for (let i = 0; i < B; i += 1) {
-    const color = frame.edge[i] ?? frame.interior;
-    graphics.fillStyle(color, 1);
-    graphics.fillRect(x + B, y + i, innerW, 1); // top edge row
-    graphics.fillRect(x + B, y + h - B + i, innerW, 1); // bottom edge row (profile is symmetric)
-    graphics.fillRect(x + i, y + B, 1, innerH); // left edge col
-    graphics.fillRect(x + w - B + i, y + B, 1, innerH); // right edge col
-  }
-  drawEbCorner(graphics, frame, x, y, false, false);
-  drawEbCorner(graphics, frame, x + w - B, y, true, false);
-  drawEbCorner(graphics, frame, x, y + h - B, false, true);
-  drawEbCorner(graphics, frame, x + w - B, y + h - B, true, true);
-}
-
-function drawEbCorner(
-  graphics: Phaser.GameObjects.Graphics,
-  frame: EbWindowFrame,
-  ox: number,
-  oy: number,
-  flipH: boolean,
-  flipV: boolean
-): void {
-  const B = EB_WINDOW_BORDER;
-  for (let r = 0; r < B; r += 1) {
-    const sr = flipV ? B - 1 - r : r;
-    const row = frame.corner[sr];
-    let c = 0;
-    while (c < B) {
-      const color = row[flipH ? B - 1 - c : c];
-      if (color === null || color === undefined) {
-        c += 1;
-        continue;
-      }
-      let run = 1;
-      while (c + run < B && row[flipH ? B - 1 - (c + run) : c + run] === color) {
-        run += 1;
-      }
-      graphics.fillStyle(color, 1);
-      graphics.fillRect(ox + c, oy + r, run, 1);
-      c += run;
-    }
-  }
-}
+import { drawEbWindowFrame } from "./windowFrame";
 
 export const CLEAN_UI_FONT_FAMILY = "'EarthBound Dialogue Gold', 'Pixelify Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 export const CLEAN_UI_PRIMARY = "#EEF1F6";
@@ -207,10 +122,10 @@ export function drawCleanPanel(
   rect: CanvasRect,
   options: CleanPanelOptions = {}
 ): void {
-  // Every shared panel now renders as the authentic EarthBound nine-slice window
-  // (active flavor). The legacy border/radius options are kept in the signature for
-  // callers but no longer used; fillColor still overrides the flavor interior.
-  drawEbWindow(graphics, rect, activeEbWindowFrame(), options.fillColor, options.fillAlpha ?? 1);
+  drawEbWindowFrame(graphics, rect, {
+    fillColor: options.fillColor,
+    fillAlpha: options.fillAlpha ?? 1
+  });
 }
 
 export function drawCleanSelection(graphics: Phaser.GameObjects.Graphics, rect: CanvasRect, opaque = false): void {
@@ -373,6 +288,15 @@ export function statusBarFillFraction(current: number, max: number): number {
     return 0;
   }
   return clamp(current / max, 0, 1);
+}
+
+export function formatCleanOdometerValue(value: number, digitCount = 3): string {
+  const count = Math.max(1, Math.floor(digitCount));
+  const maxValue = 10 ** count - 1;
+  const normalized = Number.isFinite(value)
+    ? Math.max(0, Math.min(maxValue, Math.floor(value)))
+    : 0;
+  return String(normalized).padStart(count, "0");
 }
 
 function commandGridRowLength(row: number, count: number, columns: number): number {

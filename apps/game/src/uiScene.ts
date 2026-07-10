@@ -19,6 +19,7 @@ import {
   drawCleanPanel,
   drawCleanSelection,
   estimateCleanTextWidth,
+  formatCleanOdometerValue,
   statusBarFillFraction
 } from "./cleanUi";
 import type { DialogueTextRun } from "./dialogueRenderer";
@@ -36,15 +37,15 @@ import {
 import type { OverworldStatusHudMember, OverworldStatusHudView } from "./overworldStatusHud";
 import { statusAilmentBadge } from "./statusEffects";
 
-const UI_LINE_SPACING = 2;
+const UI_LINE_SPACING = 6;
 const DIALOGUE_FONT_SIZE = 15;
 const FOOTER_FONT_SIZE = 11;
 const MENU_FONT_SIZE = 14;
 const MENU_TITLE_FONT_SIZE = 13;
 const DEBUG_FONT_SIZE = 11;
-const DIALOGUE_HORIZONTAL_PADDING = 18;
-const DIALOGUE_VERTICAL_PADDING = 12;
-const DIALOGUE_VISIBLE_LINES = 3;
+const DIALOGUE_HORIZONTAL_PADDING = 24;
+const DIALOGUE_VERTICAL_PADDING = 18;
+const DIALOGUE_VISIBLE_LINES = 4;
 const DIALOGUE_BOTTOM_MARGIN = 12;
 const DIALOGUE_SIDE_MARGIN = 12;
 const DIALOGUE_MORE_ARROW_BOB_PX = 2;
@@ -869,8 +870,8 @@ export class UiScene extends Phaser.Scene {
     textSet.badges.setText(this.fitCleanText(badgeText, textSet.badges.width || 48, OVERWORLD_HUD_BADGE_FONT_SIZE));
     textSet.hpLabel.setText("HP");
     textSet.ppLabel.setText("PP");
-    textSet.hpValue.setText(`${member.hp}/${member.maxHp}`);
-    textSet.ppValue.setText(`${member.pp}/${member.maxPp}`);
+    textSet.hpValue.setText(formatCleanOdometerValue(member.hp));
+    textSet.ppValue.setText(formatCleanOdometerValue(member.pp));
     const hpAlpha = member.danger ? 0.7 + Math.sin(this.time.now / 120) * 0.25 : 1;
     textSet.hpValue.setAlpha(hpAlpha);
     textSet.hpLabel.setAlpha(hpAlpha);
@@ -909,7 +910,7 @@ export class UiScene extends Phaser.Scene {
   } {
     const rowY = content.y + (row === "hp" ? OVERWORLD_HUD_HP_ROW_Y : OVERWORLD_HUD_PP_ROW_Y);
     // No bars anymore: the odometer number gets the whole row width after the HP/PP label.
-    const valueWidth = Math.max(44, content.width - OVERWORLD_HUD_LABEL_WIDTH - 4);
+    const valueWidth = Math.min(50, Math.max(42, Math.floor(content.width * 0.42)));
     const barX = content.x + OVERWORLD_HUD_BAR_X;
     const valueX = content.x + content.width - valueWidth;
     const barWidth = Math.max(12, valueX - OVERWORLD_HUD_BAR_VALUE_GAP - barX);
