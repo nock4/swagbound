@@ -1337,6 +1337,8 @@ export const AddedNpcSchema = z
     facing: SpriteFacingSchema,
     /** Optional EB movement id driving idle behavior (heuristic: static/lookAround/wander). Omitted = static. */
     movement: z.number().int().nonnegative().optional(),
+    /** Spawn without the extras query even when no cutscene, trigger, or Source Check references this NPC. */
+    alwaysSpawn: z.boolean().optional(),
     interaction: NpcInteractionSchema.optional()
   })
   .strict();
@@ -1918,7 +1920,7 @@ const RoamerZoneCapSchema = z.object({
   id: z.string().min(1),
   comment: z.string().optional(),
   rect: RoamerZoneRectSchema,
-  allowedGroups: z.array(z.number().int().nonnegative()).min(1)
+  allowedGroups: z.array(z.number().int().nonnegative())
 }).strict();
 
 export const RoamerZoneCapsSchema = z.object({

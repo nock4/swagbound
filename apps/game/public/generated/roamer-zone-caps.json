@@ -3,6 +3,17 @@
   "comment": "Runtime caps for regular roaming/random encounter groups. Act 1 Morningside uses a curated easy list because raw EB sector tables in the northwest quadrant include late-game groups.",
   "zones": [
     {
+      "id": "act1-morningside-north-edge-safe",
+      "comment": "Fresh-run no-roamer strip around Morningside's north town edge, including dev note tile 67,6.",
+      "rect": {
+        "x": 1536,
+        "y": 0,
+        "w": 1792,
+        "h": 768
+      },
+      "allowedGroups": []
+    },
+    {
       "id": "act1-morningside-northwest-quadrant",
       "comment": "Fresh-run Act 1 region before act1:complete, bounded to world pixels x<4096 and y<4096.",
       "rect": {

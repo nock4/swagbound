@@ -23,6 +23,7 @@ export type MenuItem = {
   enabled: boolean;
   textColor?: string;
   childScreenId?: string;
+  replaceParentOnConfirm?: boolean;
   actionId?: string;
 };
 
@@ -108,6 +109,7 @@ export type StatusViewModelInput = {
     storage?(): number[];
     vitals?(char: number): PartyVitals | undefined;
     statuses?(char: number): StatusState;
+    applyToPartyMembers?(members: PartyMember[]): PartyMember[];
   };
   wallet?: number;
 };
@@ -469,7 +471,10 @@ export function confirmMenu(
     return {
       state: {
         open: true,
-        stack: [...state.stack, { screen: child, cursorIndex: initialCursor(child) }]
+        stack: [
+          ...(item.replaceParentOnConfirm ? state.stack.slice(0, -1) : state.stack),
+          { screen: child, cursorIndex: initialCursor(child) }
+        ]
       }
     };
   }
@@ -565,7 +570,10 @@ export function buildMenuScreens(status: StatusViewModel, input: PartyMenuViewMo
   const binder = input.cardNfts ? buildBinderViewModel(input.cardNfts, input.flags ?? { has: () => false }) : emptyBinderViewModel();
   return [
     buildMainMenuScreen(input.currentObjectiveText),
-    buildPartyMemberSelectScreen(GOODS_MENU_ID, "Goods", goodsByMember.map((goods) => goods.member)),
+    buildPartyMemberSelectScreen(GOODS_MENU_ID, "Goods", goodsByMember.map((goods) => ({
+      ...goods.member,
+      replaceParentOnConfirm: goods.entries.length === 0
+    }))),
     ...goodsByMember.flatMap((goods, index) => [
       buildGoodsScreen(goods, partyMemberScreenId(GOODS_MENU_ID, index)),
       ...buildGoodsActionScreens(goods)
@@ -766,7 +774,7 @@ export function buildCheckViewModel(input: PartyMenuViewModelInput = {}): CheckV
 function buildPartyMemberSelectScreen(
   id: string,
   title: string,
-  members: Array<{ name: string }>
+  members: Array<{ name: string; replaceParentOnConfirm?: boolean }>
 ): MenuScreen {
   return {
     id,
@@ -775,7 +783,8 @@ function buildPartyMemberSelectScreen(
       id: `${id}-select-${index}`,
       label: member.name,
       enabled: true,
-      childScreenId: partyMemberScreenId(id, index)
+      childScreenId: partyMemberScreenId(id, index),
+      ...(member.replaceParentOnConfirm ? { replaceParentOnConfirm: true } : {})
     })),
     wrap: false
   };
@@ -1266,7 +1275,7 @@ export function buildShopEquipPromptScreen(input: {
 function inventoryEntries(input: PartyMenuViewModelInput, member: PartyMember): InventoryMenuEntry[] {
   const items = itemMap(input.items);
   const keyItemIds = normalizeKeyItemIds(input.keyItems);
-  const inventory = input.partyState?.inventory?.(member.id) ?? member.inventory;
+  const inventory = input.partyState?.applyToPartyMembers ? member.inventory : input.partyState?.inventory?.(member.id) ?? member.inventory;
   const equipped = input.partyState?.equipped?.(member.id) ?? {};
   return inventory.map((itemId, slot) => {
     const item = items.get(itemId);
@@ -1493,11 +1502,12 @@ export function parseMenuAction(actionId: string): MenuAction | undefined {
 function selectedPartyMembers(input: StatusViewModelInput): PartyMember[] {
   const sessionPartyIds = input.partyState?.party() ?? [];
   const baseMembers = input.partyMembers ?? input.characters?.characters.map(buildPartyMember) ?? [];
+  const hydratedMembers = input.partyState?.applyToPartyMembers?.(baseMembers) ?? baseMembers;
   const selectedMembers = sessionPartyIds.length > 0
     ? sessionPartyIds
-        .map((id) => baseMembers.find((member) => member.id === id))
+        .map((id) => hydratedMembers.find((member) => member.id === id))
         .filter((member): member is PartyMember => Boolean(member))
-    : baseMembers;
+    : hydratedMembers;
   return selectedMembers.length > 0 ? selectedMembers : [neutralPartyMember()];
 }
 

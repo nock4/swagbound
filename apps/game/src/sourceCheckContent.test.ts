@@ -14,11 +14,9 @@ describe("source check generated content", () => {
     const battles = AttestationBattlesSchema.parse(readGeneratedJson("attestation-battles.json"));
 
     expect(cards.cards.length).toBe(95);
-    // 95 original Source Checks + 13 new ones for the overnight-regen Anchor96 Drifellas
-    // (drifella2-6735.. etc.). The 13 reuse existing reward cards until 13 more cards are
-    // intook into the registry (known card-supply follow-up), so the cardId-exists check
-    // below still holds.
-    expect(checks.checks.length).toBe(108);
+    // 118 checks after the 2026-07-10 promoted sprite placement pass:
+    // 102 active Drifella2 placements plus 16 older non-duplicate checks still in rotation.
+    expect(checks.checks.length).toBe(118);
     expect(checks.checks.every((check) => cards.cards.some((card) => card.id === check.rewards.cardId))).toBe(true);
     const names = new Set<string>();
     const rumorNpcUses = new Map<number, number>();

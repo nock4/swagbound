@@ -1,489 +1,529 @@
 {
-  "schema": "swagbound.attestation-battles.v1",
-  "comment": "Battle tuning for Drifella Attestation failures. Each source check maps to a tier block; battleScene builds one runtime enemy per check from this data.",
-  "tierStats": {
-    "1": {
-      "tier": 1,
-      "level": 2,
-      "hp": 34,
-      "offense": 8,
-      "defense": 6,
-      "speed": 4,
-      "experience": 8,
-      "money": 5,
-      "background1": 49,
-      "background2": 0
-    },
-    "2": {
-      "tier": 2,
-      "level": 8,
-      "hp": 86,
-      "offense": 18,
-      "defense": 20,
-      "speed": 7,
-      "experience": 90,
-      "money": 20,
-      "background1": 63,
-      "background2": 0
-    },
-    "3": {
-      "tier": 3,
-      "level": 14,
-      "hp": 165,
-      "offense": 30,
-      "defense": 38,
-      "speed": 11,
-      "experience": 360,
-      "money": 55,
-      "background1": 158,
-      "background2": 0
-    },
-    "4": {
-      "tier": 4,
-      "level": 20,
-      "hp": 320,
-      "offense": 42,
-      "defense": 54,
-      "speed": 15,
-      "experience": 980,
-      "money": 120,
-      "background1": 262,
-      "background2": 0,
-      "boss": true
-    }
+ "schema": "swagbound.attestation-battles.v1",
+ "comment": "Battle tuning for Drifella Attestation failures. Each source check maps to a tier block; battleScene builds one runtime enemy per check from this data.",
+ "tierStats": {
+  "1": {
+   "tier": 1,
+   "level": 2,
+   "hp": 34,
+   "offense": 8,
+   "defense": 6,
+   "speed": 4,
+   "experience": 8,
+   "money": 5,
+   "background1": 49,
+   "background2": 0
   },
-  "checks": [
-    {
-      "checkId": "sourcecheck-morningside-001",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-morningside-002",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-morningside-003",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-morningside-004",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-morningside-005",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-morningside-006",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-morningside-007",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-morningside-008",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-001",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-002",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-003",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-004",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-005",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-006",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-007",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-008",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-009",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-001",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-002",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-003",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-004",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-005",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-006",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-007",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-008",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-009",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-001",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-002",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-003",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-004",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-005",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-006",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-007",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-008",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-009",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-010",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-001",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-002",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-003",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-004",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-005",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-006",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-007",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-008",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-009",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-010",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-011",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-012",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-001",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-002",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-003",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-004",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-005",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-006",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-007",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-008",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-009",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-010",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-001",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-002",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-003",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-004",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-005",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-006",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-007",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-008",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-009",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-010",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-011",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-012",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-013",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-014",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-015",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-016",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-017",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-018",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-vacancy-flats-001",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-vacancy-flats-002",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-vacancy-flats-003",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-vacancy-flats-004",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-vacancy-flats-005",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-vacancy-flats-006",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-vacancy-flats-007",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-the-unlisted-room-001",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-the-unlisted-room-002",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-the-unlisted-room-003",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-the-unlisted-room-004",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-the-unlisted-room-005",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-the-unlisted-room-006",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-secret-001",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-secret-002",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-secret-003",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-secret-004",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-secret-005",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-secret-006",
-      "tier": 4
-    },
-    {
-      "checkId": "sourcecheck-morningside-009",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-postwick-010",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-bluebell-village-010",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-011",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-013",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-solana-beach-011",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-019",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-vacancy-flats-008",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-the-unlisted-room-007",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-secret-007",
-      "tier": 1
-    },
-    {
-      "checkId": "sourcecheck-the-galleria-014",
-      "tier": 2
-    },
-    {
-      "checkId": "sourcecheck-little-swag-world-020",
-      "tier": 3
-    },
-    {
-      "checkId": "sourcecheck-dead-letter-012",
-      "tier": 1
-    }
-  ]
+  "2": {
+   "tier": 2,
+   "level": 8,
+   "hp": 86,
+   "offense": 18,
+   "defense": 20,
+   "speed": 7,
+   "experience": 90,
+   "money": 20,
+   "background1": 63,
+   "background2": 0
+  },
+  "3": {
+   "tier": 3,
+   "level": 14,
+   "hp": 165,
+   "offense": 30,
+   "defense": 38,
+   "speed": 11,
+   "experience": 360,
+   "money": 55,
+   "background1": 158,
+   "background2": 0
+  },
+  "4": {
+   "tier": 4,
+   "level": 20,
+   "hp": 320,
+   "offense": 42,
+   "defense": 54,
+   "speed": 15,
+   "experience": 980,
+   "money": 120,
+   "background1": 262,
+   "background2": 0,
+   "boss": true
+  }
+ },
+ "checks": [
+  {
+   "checkId": "sourcecheck-morningside-001",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-morningside-002",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-morningside-003",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-morningside-007",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-morningside-008",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-002",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-003",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-004",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-005",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-006",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-007",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-008",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-009",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-001",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-002",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-003",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-004",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-005",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-009",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-004",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-005",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-006",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-008",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-009",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-010",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-001",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-002",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-003",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-004",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-005",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-006",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-007",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-008",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-009",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-002",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-003",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-005",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-006",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-007",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-008",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-009",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-010",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-001",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-002",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-003",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-004",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-005",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-006",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-007",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-014",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-015",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-018",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-001",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-002",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-003",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-004",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-007",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-001",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-002",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-003",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-006",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-secret-001",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-secret-002",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-secret-003",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-morningside-009",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-010",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-010",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-011",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-013",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-011",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-019",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-008",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-007",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-secret-007",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-020",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-012",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-secret-008",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-008",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-secret-009",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-011",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-009",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-secret-010",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-009",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-012",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-010",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-secret-011",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-morningside-010",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-010",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-013",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-013",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-021",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-011",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-secret-012",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-morningside-011",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-011",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-011",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-014",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-022",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-014",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-012",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-secret-013",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-morningside-012",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-012",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-012",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-012",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-015",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-014",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-023",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-bluebell-village-015",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-the-unlisted-room-013",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-secret-014",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-morningside-013",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-postwick-013",
+   "tier": 1
+  },
+  {
+   "checkId": "sourcecheck-solana-beach-013",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-vacancy-flats-013",
+   "tier": 4
+  },
+  {
+   "checkId": "sourcecheck-dead-letter-016",
+   "tier": 2
+  },
+  {
+   "checkId": "sourcecheck-the-galleria-015",
+   "tier": 3
+  },
+  {
+   "checkId": "sourcecheck-little-swag-world-024",
+   "tier": 3
+  }
+ ]
 }

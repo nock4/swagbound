@@ -201,7 +201,7 @@ describe("added NPC overlay normalization", () => {
     const addedNpcs: AddedNpcs = {
       schema: "swagbound.added-npcs.v1",
       npcs: [
-        { id: 100010, worldPixel: { x: 128, y: 160 }, spriteGroup: 5, facing: "down" },
+        { id: 100010, worldPixel: { x: 128, y: 160 }, spriteGroup: 5, facing: "down", alwaysSpawn: true },
         { id: 100011, worldPixel: { x: 160, y: 160 }, spriteGroup: 5, facing: "down" },
         { id: 100012, worldPixel: { x: 192, y: 160 }, spriteGroup: 5, facing: "down" }
       ]
@@ -242,12 +242,12 @@ describe("added NPC overlay normalization", () => {
       }]
     } as StoryTriggers;
 
-    expect([...contentReferencedAddedNpcIds(addedNpcs, sourceChecks, storyTriggers)].sort()).toEqual([100011, 100012]);
+    expect([...contentReferencedAddedNpcIds(addedNpcs, sourceChecks, storyTriggers)].sort()).toEqual([100010, 100011, 100012]);
     expect(addedNpcsForSpawn(addedNpcs, {
       extrasEnabled: false,
       sourceChecks,
       storyTriggers
-    })?.npcs.map((npc) => npc.id)).toEqual([100011, 100012]);
+    })?.npcs.map((npc) => npc.id)).toEqual([100010, 100011, 100012]);
     expect(addedNpcsForSpawn(addedNpcs, {
       extrasEnabled: true,
       sourceChecks,

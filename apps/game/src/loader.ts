@@ -736,6 +736,10 @@ export function contentReferencedAddedNpcIds(
   const cutsceneText = cutscenes ? JSON.stringify(cutscenes) : "";
   const referenced = new Set<number>();
   for (const npc of addedNpcs?.npcs ?? []) {
+    if (npc.alwaysSpawn) {
+      referenced.add(npc.id);
+      continue;
+    }
     if (hintNpcIds.has(npc.id) || triggerText.includes(String(npc.id)) || cutsceneText.includes(String(npc.id))) {
       referenced.add(npc.id);
     }

@@ -86,6 +86,43 @@ describe("selectSectorEnemyGroup", () => {
       worldPixel: { x: 5000, y: 1760 }
     })).toBe(384);
   });
+
+  it("allows a local empty cap zone to suppress town-edge roamers", () => {
+    const caps = {
+      schema: "swagbound.roamer-zone-caps.v1" as const,
+      zones: [
+        {
+          id: "safe-edge",
+          rect: { x: 1536, y: 0, w: 1792, h: 768 },
+          allowedGroups: []
+        },
+        {
+          id: "act1",
+          rect: { x: 0, y: 0, w: 4096, h: 4096 },
+          allowedGroups: [1, 2, 3]
+        }
+      ]
+    };
+    const denseNorthEdgeSector = sector({
+      subGroups: [{
+        rate: 100,
+        candidates: [
+          { enemyGroup: 1, probability: 3 },
+          { enemyGroup: 2, probability: 3 },
+          { enemyGroup: 3, probability: 2 }
+        ]
+      }]
+    });
+
+    expect(selectSectorEnemyGroup(denseNorthEdgeSector, () => 0, {
+      roamerZoneCaps: caps,
+      worldPixel: { x: 2153, y: 400 }
+    })).toBeNull();
+    expect(selectSectorEnemyGroup(denseNorthEdgeSector, () => 0, {
+      roamerZoneCaps: caps,
+      worldPixel: { x: 2153, y: 900 }
+    })).toBe(1);
+  });
 });
 
 describe("sectorSpawnBudget", () => {

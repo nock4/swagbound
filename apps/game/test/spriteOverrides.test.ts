@@ -205,9 +205,9 @@ describe("sprite override helpers", () => {
       expect(byNpcId[id]).toMatchObject({ image, frameWidth: 80, frameHeight: 80, displayHeight: 24, originX: 0.5, originY: 1 });
     }
 
-    // Every added NPC that carries a byNpcId skin is sourced from the good-new-sprites batch
-    // (gns-*/promo-*) as a single-frame overworld override, except Bonkle who keeps a bespoke
-    // overlay skin. (NPCs without a byNpcId use their sprite group's bySpriteGroup skin.)
+    // Every added NPC that carries a byNpcId skin is sourced from the good-new-sprites
+    // promoted batches as a single-frame overworld override, except Bonkle who keeps a
+    // bespoke overlay skin. NPCs without a byNpcId use their sprite group's bySpriteGroup skin.
     const skinnedAdded = ids.filter((id) => byNpcId[id] !== undefined);
     expect(skinnedAdded.length).toBeGreaterThan(0);
     for (const id of skinnedAdded) {
@@ -216,7 +216,9 @@ describe("sprite override helpers", () => {
         expect(override?.image).toBe(namedAdded[id]);
         continue;
       }
-      expect(override?.image, `npc ${id}`).toMatch(/^assets\/swagbound\/overworld-npc\/(gns|promo)-.+\.png$/);
+      expect(override?.image, `npc ${id}`).toMatch(
+        /^assets\/swagbound\/overworld-npc\/((gns-.+-ow)|(promo-.+)|([a-z0-9][a-z0-9-]*-ow))\.png$/
+      );
       expect(override).toMatchObject({ frameWidth: 48, frameHeight: 48, displayHeight: 24, originX: 0.5, originY: 1 });
       expect(override?.animations).toEqual({ down: [0], left: [0], right: [0], up: [0] });
     }

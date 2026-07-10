@@ -123,6 +123,27 @@ describe("menuModel navigation", () => {
     expect(result.state).toEqual(state);
   });
 
+  it("can replace the parent picker when confirming a terminal child screen", () => {
+    const child: MenuScreen = {
+      id: "child",
+      title: "Child",
+      items: [{ id: "child-line", label: "Child line", enabled: false }]
+    };
+    const root: MenuScreen = {
+      id: "root",
+      title: "Root",
+      items: [{ id: "open-child", label: "Open", enabled: true, childScreenId: "child", replaceParentOnConfirm: true }]
+    };
+
+    const result = confirmMenu(openMenu(root), (id) => id === "child" ? child : undefined);
+
+    expect(menuDebugState(result.state)).toMatchObject({
+      open: true,
+      stack: ["child"],
+      currentItemId: "child-line"
+    });
+  });
+
   it("wires Talk and Save as command tiles", () => {
     const screen = buildMainMenuScreen();
 
@@ -527,6 +548,65 @@ describe("item and PSI menu view models", () => {
     expect(byId.get("check")?.items[0]?.id).not.toBe("check-stub");
     expect(byId.get("check")?.items[0]?.childScreenId).toBe("check-item-0-10");
     expect(byId.get("atm")?.items[0]?.id).toBe("atm-wallet");
+  });
+
+  it("builds Goods from hydrated party inventory when runtime inventory has no explicit entry yet", () => {
+    const partyMembers = [{ ...partyMember(0, "Bosch", 1), inventory: [177, 103, 110] }];
+    const input = {
+      partyMembers,
+      partyState: {
+        wallet: 0,
+        bank: 0,
+        party: () => [0],
+        inventory: () => [],
+        applyToPartyMembers: (members: PartyMember[]) => members
+      },
+      items: {
+        ...syntheticItems(),
+        items: [
+          itemData(177, false),
+          itemData(103, false),
+          itemData(110, false)
+        ]
+      }
+    };
+
+    const goods = buildGoodsViewModel(input);
+
+    expect(goods.member.name).toBe("Bosch");
+    expect(goods.entries.map((entry) => entry.itemId)).toEqual([177, 103, 110]);
+  });
+
+  it("replaces the Goods member picker with an empty member message", () => {
+    const partyMembers = [partyMember(0, "Bosch", 1)];
+    const status = buildStatusViewModel({ partyMembers });
+    const screens = buildMenuScreens(status, {
+      partyMembers,
+      partyState: {
+        wallet: 0,
+        bank: 0,
+        party: () => [0],
+        inventory: () => [],
+        applyToPartyMembers: (members: PartyMember[]) => members.map((member) => ({ ...member, inventory: [] }))
+      },
+      items: syntheticItems()
+    });
+    const byId = new Map(screens.map((screen) => [screen.id, screen]));
+    let state = openMenu(byId.get("main") ?? buildMainMenuScreen());
+    state = moveMenu2D(state, 1, 0);
+    state = confirmMenu(state, (id) => byId.get(id)).state;
+
+    expect(menuDebugState(state).stack).toEqual(["main", "goods"]);
+
+    state = confirmMenu(state, (id) => byId.get(id)).state;
+
+    expect(menuDebugState(state).stack).toEqual(["main", "goods-member-0"]);
+    expect(menuRenderStack(state).map((screen) => screen.id)).toEqual(["main", "goods-member-0"]);
+    expect(menuRenderStack(state)[1]?.items[0]).toMatchObject({
+      id: "goods-empty",
+      label: "Bosch has no goods.",
+      enabled: false
+    });
   });
 
   it("builds shop and ATM menu actions with neutral item labels", () => {

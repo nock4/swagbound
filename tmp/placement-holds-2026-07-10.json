@@ -1,0 +1,398 @@
+{
+ "schema": "swagbound.promoted-sprite-placement-holds.v1",
+ "generatedAt": "2026-07-10",
+ "sourceEstimate": "content/promoted-sprite-placement-estimate-2026-07-09.json",
+ "count": 26,
+ "holds": [
+  {
+   "id": "grillheads-001",
+   "reviewKey": "pfp-direct-codex-slice-0005/grillheads-001",
+   "lane": "PFP",
+   "collection": "GRILLHEADS",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Food-service name, but needs visual review before clerk or patron use."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "grillheads-002",
+   "reviewKey": "pfp-direct-codex-slice-0005-replacement-0001/grillheads-002",
+   "lane": "PFP",
+   "collection": "GRILLHEADS",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Food-service name, but needs visual review before clerk or patron use."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "grillheads-003",
+   "reviewKey": "pfp-direct-codex-slice-0006/grillheads-003",
+   "lane": "PFP",
+   "collection": "GRILLHEADS",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Food-service name, but needs visual review before clerk or patron use."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "grillheads-004",
+   "reviewKey": "pfp-direct-codex-slice-0006/grillheads-004",
+   "lane": "PFP",
+   "collection": "GRILLHEADS",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Food-service name, but needs visual review before clerk or patron use."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "grillheads-005",
+   "reviewKey": "pfp-direct-codex-slice-0006/grillheads-005",
+   "lane": "PFP",
+   "collection": "GRILLHEADS",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Food-service name, but needs visual review before clerk or patron use."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "knitkitmori-001",
+   "reviewKey": "pfp-direct-codex-auto-0007/knitkitmori-001",
+   "lane": "PFP",
+   "collection": "Knitkitmori",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "unset",
+    "zone": "needs-human-placement",
+    "note": "Keep held until a human visual pass assigns the lane."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "little-fellow-001",
+   "reviewKey": "pfp-direct-codex-auto-0008/little-fellow-001",
+   "lane": "PFP",
+   "collection": "Little Fellow",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "npc",
+    "zone": "little-swag-world-dialogue-pool",
+    "note": "Likely friendly origin-town NPC after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "little-fellow-002",
+   "reviewKey": "pfp-direct-codex-auto-0008/little-fellow-002",
+   "lane": "PFP",
+   "collection": "Little Fellow",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "npc",
+    "zone": "little-swag-world-dialogue-pool",
+    "note": "Likely friendly origin-town NPC after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "little-fellow-003",
+   "reviewKey": "pfp-direct-codex-auto-0008/little-fellow-003",
+   "lane": "PFP",
+   "collection": "Little Fellow",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "npc",
+    "zone": "little-swag-world-dialogue-pool",
+    "note": "Likely friendly origin-town NPC after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "little-fellow-004",
+   "reviewKey": "pfp-direct-codex-auto-0008/little-fellow-004",
+   "lane": "PFP",
+   "collection": "Little Fellow",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "npc",
+    "zone": "little-swag-world-dialogue-pool",
+    "note": "Likely friendly origin-town NPC after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "little-fellow-005",
+   "reviewKey": "pfp-direct-codex-auto-0008/little-fellow-005",
+   "lane": "PFP",
+   "collection": "Little Fellow",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "npc",
+    "zone": "little-swag-world-dialogue-pool",
+    "note": "Likely friendly origin-town NPC after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "lucky-13-pixel-fairies-001",
+   "reviewKey": "pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-001",
+   "lane": "PFP",
+   "collection": "Lucky 13 Pixel Fairies",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "psychedelicNpc",
+    "zone": "psychedelic-maps",
+    "note": "Likely dreamspace fit after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "lucky-13-pixel-fairies-002",
+   "reviewKey": "pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-002",
+   "lane": "PFP",
+   "collection": "Lucky 13 Pixel Fairies",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "psychedelicNpc",
+    "zone": "psychedelic-maps",
+    "note": "Likely dreamspace fit after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "lucky-13-pixel-fairies-003",
+   "reviewKey": "pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-003",
+   "lane": "PFP",
+   "collection": "Lucky 13 Pixel Fairies",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "psychedelicNpc",
+    "zone": "psychedelic-maps",
+    "note": "Likely dreamspace fit after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "lucky-13-pixel-fairies-004",
+   "reviewKey": "pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-004",
+   "lane": "PFP",
+   "collection": "Lucky 13 Pixel Fairies",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "psychedelicNpc",
+    "zone": "psychedelic-maps",
+    "note": "Likely dreamspace fit after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "lucky-13-pixel-fairies-005",
+   "reviewKey": "pfp-direct-codex-auto-0008/lucky-13-pixel-fairies-005",
+   "lane": "PFP",
+   "collection": "Lucky 13 Pixel Fairies",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "psychedelicNpc",
+    "zone": "psychedelic-maps",
+    "note": "Likely dreamspace fit after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "meangirlz-001",
+   "reviewKey": "pfp-direct-codex-auto-0009/meangirlz-001",
+   "lane": "PFP",
+   "collection": "MeanGirlZ",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Likely human ambient patron after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "meangirlz-002",
+   "reviewKey": "pfp-direct-codex-auto-0009/meangirlz-002",
+   "lane": "PFP",
+   "collection": "MeanGirlZ",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Likely human ambient patron after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "meangirlz-003",
+   "reviewKey": "pfp-direct-codex-auto-0009/meangirlz-003",
+   "lane": "PFP",
+   "collection": "MeanGirlZ",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Likely human ambient patron after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "meangirlz-004",
+   "reviewKey": "pfp-direct-codex-auto-0009/meangirlz-004",
+   "lane": "PFP",
+   "collection": "MeanGirlZ",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Likely human ambient patron after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "meangirlz-005",
+   "reviewKey": "pfp-direct-codex-auto-0009/meangirlz-005",
+   "lane": "PFP",
+   "collection": "MeanGirlZ",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "shopkeeper",
+    "zone": "shop-interiors",
+    "note": "Likely human ambient patron after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "miyakaki-001",
+   "reviewKey": "pfp-direct-codex-auto-0010/miyakaki-001",
+   "lane": "PFP",
+   "collection": "Miyakaki",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "museumNpc",
+    "zone": "museum-map",
+    "note": "Likely exhibit or docent after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "miyakaki-002",
+   "reviewKey": "pfp-direct-codex-auto-0010/miyakaki-002",
+   "lane": "PFP",
+   "collection": "Miyakaki",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "museumNpc",
+    "zone": "museum-map",
+    "note": "Likely exhibit or docent after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "miyakaki-003",
+   "reviewKey": "pfp-direct-codex-auto-0010/miyakaki-003",
+   "lane": "PFP",
+   "collection": "Miyakaki",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "museumNpc",
+    "zone": "museum-map",
+    "note": "Likely exhibit or docent after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "miyakaki-004",
+   "reviewKey": "pfp-direct-codex-auto-0010/miyakaki-004",
+   "lane": "PFP",
+   "collection": "Miyakaki",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "museumNpc",
+    "zone": "museum-map",
+    "note": "Likely exhibit or docent after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  },
+  {
+   "id": "miyakaki-005",
+   "reviewKey": "pfp-direct-codex-auto-0010/miyakaki-005",
+   "lane": "PFP",
+   "collection": "Miyakaki",
+   "estimatedRole": "unset",
+   "estimatedZone": "needs-human-placement",
+   "estimatedConfidence": "low",
+   "proposedDecision": {
+    "role": "museumNpc",
+    "zone": "museum-map",
+    "note": "Likely exhibit or docent after visual confirmation."
+   },
+   "rationale": "No confident match from name/collection; needs visual pass."
+  }
+ ]
+}
