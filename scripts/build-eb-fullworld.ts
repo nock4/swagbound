@@ -28,6 +28,7 @@ import {
   PsiOverridesSchema,
   RoamerZoneCapsSchema,
   SpriteOverridesSchema,
+  FlagMapSchema,
   StoryItemsSchema,
   StoryTriggersSchema,
   CutscenesSchema,
@@ -66,6 +67,8 @@ export const KEY_ITEMS_SOURCE = "content/key-items.json";
 export const KEY_ITEMS_OUTPUT = "key-items.json";
 export const STORY_ITEMS_SOURCE = "content/story-items.json";
 export const STORY_ITEMS_OUTPUT = "story-items.json";
+export const FLAG_MAP_SOURCE = "content/flag-map.json";
+export const FLAG_MAP_OUTPUT = "flag-map.json";
 export const CHARACTER_OVERRIDES_SOURCE = "content/character-overrides.json";
 export const CHARACTER_OVERRIDES_OUTPUT = "character-overrides.json";
 export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
@@ -226,6 +229,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
   await validateKeyItems(KEY_ITEMS_SOURCE);
   await validateStoryItems(STORY_ITEMS_SOURCE);
+  await validateFlagMap(FLAG_MAP_SOURCE);
   await validateBossBattleDialogue(BOSS_BATTLE_DIALOGUE_SOURCE);
   await validateEnemyActionEffects(ENEMY_ACTION_EFFECTS_SOURCE);
   await validateRoamerZoneCaps(ROAMER_ZONE_CAPS_SOURCE);
@@ -242,6 +246,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
     copyJsonToGenerated(KEY_ITEMS_SOURCE, out, KEY_ITEMS_OUTPUT),
     copyJsonToGenerated(STORY_ITEMS_SOURCE, out, STORY_ITEMS_OUTPUT),
+    copyJsonToGenerated(FLAG_MAP_SOURCE, out, FLAG_MAP_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
@@ -411,6 +416,19 @@ async function validateEnemyStatOverrides(source: string): Promise<void> {
 
 async function validateKeyItems(source: string): Promise<void> {
   KeyItemsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateFlagMap(source: string): Promise<void> {
+  const flagMap = FlagMapSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  // Every mapped EB flag id must exist under the canonical name in rom-truth.
+  const names = JSON.parse(await readFile(resolve("content/rom-truth/event-flags.json"), "utf8")).byId as Record<string, string>;
+  for (const entry of flagMap.entries) {
+    for (const flag of [...entry.ebFlags, ...entry.candidates]) {
+      if (names[String(flag.id)] !== flag.name) {
+        throw new Error(`flag-map ${entry.storyFlag}: id ${flag.id} is "${names[String(flag.id)] ?? "missing"}" in rom-truth, not "${flag.name}"`);
+      }
+    }
+  }
 }
 
 async function validateStoryItems(source: string): Promise<void> {

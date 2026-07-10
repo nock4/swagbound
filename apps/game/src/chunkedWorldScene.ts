@@ -110,7 +110,7 @@ import {
   type NormalizedActorMoveSelector
 } from "./eventHost";
 import { EventSequenceWatchdog, cutsceneRunnerProgressToken } from "./eventSequenceWatchdog";
-import { GameFlags } from "./gameFlags";
+import { GameFlags, flagAliasesFromMap } from "./gameFlags";
 import { behaviorForNpc, interactionEventsHaveServiceEffect } from "./npcBehaviors";
 import { cutsceneNpcHiddenFlag, isNpcVisibleForRuntimeFlags } from "./npcVisibility";
 import {
@@ -906,6 +906,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }): void {
     this.data_ = data.gameData;
     this.world_ = data.gameData.world as WorldChunked;
+    // Story-flag -> EB event-flag bridge: wired before any trigger/restore can set
+    // flags so the vanilla NPC/encounter flag machinery tracks our narrative beats.
+    this.gameFlags.setAliases(flagAliasesFromMap(data.gameData.flagMap));
     this.music = getSharedMusic(this.registry, data.gameData.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });

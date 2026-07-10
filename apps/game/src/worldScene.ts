@@ -12,7 +12,7 @@ import {
 } from "./loader";
 import { interactionEvents, type GameEvent } from "./eventRunner";
 import { RuntimeEventHost, RuntimeEventSequence, type EventWarpDestination } from "./eventHost";
-import { GameFlags } from "./gameFlags";
+import { GameFlags, flagAliasesFromMap } from "./gameFlags";
 import { behaviorForNpc } from "./npcBehaviors";
 import { isNpcVisibleForRuntimeFlags } from "./npcVisibility";
 import {
@@ -147,6 +147,7 @@ export class WorldScene extends Phaser.Scene {
   }): void {
     this.data_ = data.gameData;
     this.world_ = data.gameData.world as WorldRegion;
+    this.gameFlags.setAliases(flagAliasesFromMap(data.gameData.flagMap));
     this.bootSaveState = data.saveState ?? undefined;
     this.saveSlot = Number.isInteger(data.saveSlot) && (data.saveSlot as number) >= 0 ? data.saveSlot as number : 0;
     this.saveSlots = data.saveSlots;

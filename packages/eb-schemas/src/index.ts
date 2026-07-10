@@ -715,6 +715,40 @@ export const KeyItemsSchema = z.object({
   itemIds: z.array(z.number().int().nonnegative())
 }).strict();
 
+const FlagMapEbFlagSchema = z.object({
+  id: z.number().int().min(1).max(1023),
+  name: z.string().trim().min(1)
+}).strict();
+
+const FlagMapEntrySchema = z.object({
+  storyFlag: z.string().trim().min(1),
+  beat: z.string(),
+  /** Adopted now: setting storyFlag also sets these EB numeric event flags. */
+  ebFlags: z.array(FlagMapEbFlagSchema),
+  /** Documented but NOT applied until semantics are browser-verified. */
+  candidates: z.array(FlagMapEbFlagSchema.extend({ note: z.string().optional() }).strict())
+}).strict();
+
+export const FlagMapSchema = z.object({
+  schema: z.literal("swagbound.flag-map.v1"),
+  comment: z.string().optional(),
+  entries: z.array(FlagMapEntrySchema)
+}).strict().superRefine((value, ctx) => {
+  const seen = new Set<string>();
+  value.entries.forEach((entry, index) => {
+    if (seen.has(entry.storyFlag)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate flag-map storyFlag ${entry.storyFlag}`,
+        path: ["entries", index, "storyFlag"]
+      });
+    }
+    seen.add(entry.storyFlag);
+  });
+});
+
+export type FlagMap = z.infer<typeof FlagMapSchema>;
+
 export const StoryItemSchema = z.object({
   id: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "story item ids must be kebab-case"),
   itemId: z.number().int().nonnegative(),

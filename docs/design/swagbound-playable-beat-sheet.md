@@ -100,3 +100,36 @@ Bosch sees/talks to: the last thing standing — not a face, not a mask.
 Bosch gets/fights: the final fight, Dox Sheet in his fist.
 Bosch learns: the only thing that survives being copied is the thing that refused to be improved.
 Bosch goes next to: nowhere. He smooths the Sheet flat and keeps it in his pocket, where originals go. (`game:complete`)
+
+---
+
+## EB flag mapping annex (2026-07-10 directive: map the arc onto the vanilla flag lattice)
+
+Each beat now raises real EarthBound event flags via `content/flag-map.json`
+(see docs/design/eb-flag-map.md for the machinery). What that changes on screen:
+
+- **Beat 2 (arcade)** sets FLG_WIN_FRANK + the Shark stand-down flags: the
+  cat-hat gang around MONS LINK visibly disperses after the fight, and four
+  encounter tables shift. The neighborhood itself says "you won."
+- **Beat 3 (gate)** sets FLG_POLICE_STRONG_DISAPPEAR + FLG_ONET_GATEOPEN on top
+  of our barrier despawn.
+- **Beat 4 (threshold)** sets FLG_WIN_GIAN_BOSS + FLG_ONET_DAYBREAK — 21 daytime
+  NPCs appear. **PROPOSAL 1:** couple the night system to this beat: Morningside
+  dawns when the Malady falls (EB's exact structure).
+- **Beat 4→5 (Munch)** sets FLG_JEFF; **Beat 6-arc (Cloak)** sets FLG_POLA.
+- **Beat 12 (Milady)** sets FLG_WIN_GEPPU — EB's post-victory world state: 44
+  NPCs and 81 encounter gates flip for the ending walk.
+
+**PROPOSAL 2 — Sanctuary-8 as Attestation anchors:** EB's eight FLG_WIN_*_BOSS
+flags gate doors across the whole map. Give Acts 2–4 eight provenance/Source
+sites, one per flag, restoring EB's collect-the-eight spine inside the
+Swagbound thesis.
+
+**PROPOSAL 3 — the Archivist:** 64 PHOTO flags + the Wandering Photographer ROM
+table = a complete feature spec. The Archivist appears at the ROM's photo spots
+and files each moment "as it actually happened" — the only unfalsifiable record
+in a world of copies.
+
+**PROPOSAL 4 — MYHOME opening:** wire the wake-in-bed opening to EB's house-cast
+flags (mom/phone/knock states) once their semantics are browser-verified, so
+Bosch's house behaves like a real EB house for the whole game.

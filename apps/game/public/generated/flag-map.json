@@ -1,0 +1,73 @@
+{
+  "schema": "swagbound.flag-map.v1",
+  "comment": "Bridge from Swagbound narrative string flags to EarthBound numeric event flags (names from ebsrc, ids in content/rom-truth/event-flags.json). When the runtime sets a story flag, it also sets the mapped EB flags, which drives the vanilla flag machinery the converter carried over: NPC appear/disappear (world.json npcs eventFlag+showSprite), encounter-table gating (encounters.json), and later doors. 'ebFlags' are adopted now; 'candidates' need in-browser semantics verification before promotion.",
+  "entries": [
+    {
+      "storyFlag": "signal:clique_cleared",
+      "beat": "Card Clique beaten at the MONS LINK arcade (EB: Frank)",
+      "ebFlags": [
+        { "id": 64, "name": "FLG_WIN_FRANK" },
+        { "id": 363, "name": "FLG_ONET_SHARK_A_DISAPPEAR" },
+        { "id": 364, "name": "FLG_ONET_SHARK_B_DISAPPEAR" },
+        { "id": 365, "name": "FLG_ONET_SHARK_C_DISAPPEAR" },
+        { "id": 697, "name": "FLG_ONET_SHARK_2F_DISAPPEAR" },
+        { "id": 40, "name": "FLG_ONET_GUARDSHARK_DISAPPEAR" }
+      ],
+      "candidates": []
+    },
+    {
+      "storyFlag": "signal:route_open",
+      "beat": "Returnless King beaten at the relay gate (EB: Captain Strong / roadblock)",
+      "ebFlags": [
+        { "id": 450, "name": "FLG_POLICE_STRONG_DISAPPEAR" },
+        { "id": 105, "name": "FLG_ONET_GATEOPEN" }
+      ],
+      "candidates": [
+        { "id": 289, "name": "FLG_ONET_COPA_DISAPPEAR", "note": "roadblock cop line A-E; verify which cops these hide before adopting" },
+        { "id": 290, "name": "FLG_ONET_COPB_DISAPPEAR" },
+        { "id": 291, "name": "FLG_ONET_COPC_DISAPPEAR" },
+        { "id": 292, "name": "FLG_ONET_COPD_DISAPPEAR" },
+        { "id": 293, "name": "FLG_ONET_COPE_DISAPPEAR" }
+      ]
+    },
+    {
+      "storyFlag": "signal:threshold_cleared",
+      "beat": "Malady beaten at the first threshold (EB: Titanic Ant / Giant Step); Morningside dawns",
+      "ebFlags": [
+        { "id": 190, "name": "FLG_WIN_GIAN_BOSS" },
+        { "id": 422, "name": "FLG_ONET_DAYBREAK" }
+      ],
+      "candidates": [
+        { "id": 750, "name": "FLG_STEP_ONET", "note": "sanctuary-step recorded; adopt with the Attestation-anchor proposal" }
+      ]
+    },
+    {
+      "storyFlag": "recruit:munch",
+      "beat": "Munch joins (Jeff slot)",
+      "ebFlags": [{ "id": 14, "name": "FLG_JEFF" }],
+      "candidates": []
+    },
+    {
+      "storyFlag": "recruit:cloak",
+      "beat": "Cloak joins in Postwick (Paula slot)",
+      "ebFlags": [{ "id": 12, "name": "FLG_POLA" }],
+      "candidates": [
+        { "id": 13, "name": "FLG_POLA_GRFD", "note": "post-rescue town-state flag; verify what it changes in Twoson/Postwick" }
+      ]
+    },
+    {
+      "storyFlag": "game:complete",
+      "beat": "Milady falls; the post-win world state",
+      "ebFlags": [{ "id": 71, "name": "FLG_WIN_GEPPU" }],
+      "candidates": []
+    },
+    {
+      "storyFlag": "intro:bedroom-opening-done",
+      "beat": "Wake-in-bed opening finished",
+      "ebFlags": [],
+      "candidates": [
+        { "id": 375, "name": "FLG_MYHOME_START", "note": "house-cast state machine; verify MYHOME_* semantics in-browser before adopting" }
+      ]
+    }
+  ]
+}

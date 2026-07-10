@@ -1,9 +1,30 @@
 export class GameFlags {
   private readonly flags = new Set<string>();
   private readonly numericFlags = new Set<number>();
+  /**
+   * Story-flag -> EarthBound numeric event-flag bridge (content/flag-map.json).
+   * Setting an aliased story flag also raises its EB flags, which drives the
+   * vanilla flag machinery the converter carried over (NPC appear/disappear,
+   * encounter gating). Applied on save restore too, so old saves inherit
+   * newly-mapped flags on load.
+   */
+  private aliases = new Map<string, readonly number[]>();
+
+  setAliases(aliases: ReadonlyMap<string, readonly number[]>): void {
+    this.aliases = new Map(aliases);
+    // Back-fill: story flags set before the aliases arrived (load order) still bridge.
+    for (const flag of this.flags) {
+      for (const num of this.aliases.get(flag) ?? []) {
+        this.numericFlags.add(normalizeNum(num));
+      }
+    }
+  }
 
   set(flag: string): void {
     this.flags.add(flag);
+    for (const num of this.aliases.get(flag) ?? []) {
+      this.numericFlags.add(normalizeNum(num));
+    }
   }
 
   has(flag: string): boolean {
@@ -43,6 +64,19 @@ export class GameFlags {
 
 export function talkedFlag(npcId: number): string {
   return `npc:${npcId}:talked`;
+}
+
+/** Adopted entries only — candidates stay documentation until browser-verified. */
+export function flagAliasesFromMap(
+  flagMap: { entries: ReadonlyArray<{ storyFlag: string; ebFlags: ReadonlyArray<{ id: number }> }> } | undefined
+): Map<string, readonly number[]> {
+  const aliases = new Map<string, readonly number[]>();
+  for (const entry of flagMap?.entries ?? []) {
+    if (entry.ebFlags.length > 0) {
+      aliases.set(entry.storyFlag, entry.ebFlags.map((flag) => flag.id));
+    }
+  }
+  return aliases;
 }
 
 function normalizeNum(flag: number): number {
