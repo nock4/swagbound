@@ -9,8 +9,7 @@ import {
   resolveDoorWarpLanding,
   resolveDoorIntentTrigger,
   type DoorTriggerResult,
-  type DoorTriggerState
-} from "../src/doorTriggers";
+  type DoorTriggerState, doorActiveForFlags } from "../src/doorTriggers";
 import type { CollisionGrid } from "../src/collisionOverlay";
 import { PLAYER_FOOT_BOX } from "../src/collisionFootprint";
 
@@ -489,3 +488,19 @@ function routeDoorTrigger(result: DoorTriggerResult): { kind: "none" } | { kind:
   const reference = messageDoorDialogueReference(result.door);
   return reference ? { kind: "dialogue", reference } : { kind: "warp" };
 }
+
+describe("doorActiveForFlags (EB conditional doors, when-unset class)", () => {
+  const flags = (set: number[]) => ({ isSet: (n: number) => set.includes(n) });
+  it("unflagged doors are always active", () => {
+    expect(doorActiveForFlags(undefined, flags([]))).toBe(true);
+    expect(doorActiveForFlags("0x0", flags([340]))).toBe(true);
+  });
+  it("when-unset doors (0x8000 bit) deactivate once the flag fires", () => {
+    expect(doorActiveForFlags("0x8154", flags([]))).toBe(true);   // 340 unset -> active
+    expect(doorActiveForFlags("0x8154", flags([340]))).toBe(false); // 340 set -> retired
+  });
+  it("plain-flag doors stay active until their semantics are verified", () => {
+    expect(doorActiveForFlags("0x1da", flags([]))).toBe(true);   // front door (474) unset
+    expect(doorActiveForFlags("0x1da", flags([474]))).toBe(true); // and set
+  });
+});

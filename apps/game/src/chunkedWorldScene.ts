@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, storyTriggerSuppressionForRestore, triggerFiredFlag } from "./storyTriggers";
 import {
   CutsceneRunner,
@@ -37,7 +37,8 @@ import {
   type DoorIntentDirection,
   type DoorWarpLanding,
   type DoorTriggerResult,
-  type DoorTriggerState
+  type DoorTriggerState,
+  doorActiveForFlags
 } from "./doorTriggers";
 import {
   applyNpcOverride,
@@ -2502,7 +2503,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     const cellSize = this.collisionCellSize;
-    for (const door of this.world_.doors) {
+    for (const door of this.activeDoors()) {
       const cell = worldPixelToCollisionCell(door.worldPixel, cellSize);
       if (!cell || !cellInRange(cell, range)) {
         continue;
@@ -3131,6 +3132,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private framesForNpc(npcId: number, spriteGroup: number | undefined): DirectionFrameSequence {
     const resolution = this.npcSpriteOverrideResolution(npcId, spriteGroup);
     return resolution ? spriteOverrideDirectionFrames(resolution.override) : this.framesForGroup(spriteGroup);
+  }
+
+  /** Doors filtered by EB conditional-door flags (when-unset class honored). */
+  private activeDoors(): readonly WorldDoor[] {
+    return this.world_.doors.filter((door) => doorActiveForFlags(door.eventFlag, this.gameFlags));
   }
 
   private isNpcVisible(npc: Pick<WorldChunkedNpc, "npcId" | "showSprite" | "eventFlag">): boolean {
@@ -3937,7 +3943,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     let result = resolveAdjacentDoorIntentTrigger(
       this.playerState,
       movement,
-      this.world_.doors,
+      this.activeDoors(),
       this.doorTriggerState,
       this.collisionCellSize,
       { footBox: PLAYER_FOOT_BOX }
@@ -3955,7 +3961,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       result = resolveDoorIntentTrigger(
         this.playerState,
         intendedFeet,
-        this.world_.doors,
+        this.activeDoors(),
         result,
         this.collisionCellSize
       );
