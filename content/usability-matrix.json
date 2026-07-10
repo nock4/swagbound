@@ -1,0 +1,4104 @@
+{
+  "schema": "swagbound.usability-matrix.v1",
+  "generatedFrom": {
+    "items": "apps/game/public/generated/items.json",
+    "psi": "apps/game/public/generated/psi.json",
+    "itemOverrides": "content/item-overrides.json",
+    "psiOverrides": "content/psi-overrides.json",
+    "keyItems": "content/key-items.json",
+    "battleActions": "external/coilsnake-full/battle_action_table.yml",
+    "derivation": "Item Type selects field, battle, equip, and key-item context. Item effect metadata supplies target side and feedback summary. PSI type, direction, name, and PP cost select field and battle context."
+  },
+  "itemTypeContexts": [
+    {
+      "type": 0,
+      "label": "special passive",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "summary": "Passive or special inventory item. Not command-usable."
+    },
+    {
+      "type": 4,
+      "label": "battle companion",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Teddy-bear class. Passive battle companion, not command-usable."
+    },
+    {
+      "type": 8,
+      "label": "broken repair goods",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Broken Jeff repair goods. Inert from Use."
+    },
+    {
+      "type": 16,
+      "label": "weapon",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "summary": "Weapon equipment. Equip-only."
+    },
+    {
+      "type": 17,
+      "label": "weapon",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "summary": "Weapon equipment. Equip-only."
+    },
+    {
+      "type": 20,
+      "label": "body equipment",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "summary": "Body equipment. Equip-only."
+    },
+    {
+      "type": 24,
+      "label": "arms equipment",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "summary": "Arms equipment. Equip-only."
+    },
+    {
+      "type": 28,
+      "label": "other equipment",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "summary": "Other equipment. Equip-only."
+    },
+    {
+      "type": 32,
+      "label": "food",
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Food and PP sweets. Field and battle consumable."
+    },
+    {
+      "type": 36,
+      "label": "drink or remedy",
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Drinks, remedies, capsules, and soups. Field and battle consumable."
+    },
+    {
+      "type": 40,
+      "label": "condiment",
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Condiment class. Field and battle consumable."
+    },
+    {
+      "type": 44,
+      "label": "party food",
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Large food class. Field and battle consumable."
+    },
+    {
+      "type": 48,
+      "label": "status healer",
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Status cure, revive, and recovery class. Field and battle usable."
+    },
+    {
+      "type": 52,
+      "label": "battle tool",
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Battle-only offensive tool class."
+    },
+    {
+      "type": 53,
+      "label": "battle support tool",
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Battle-only support or special tool class."
+    },
+    {
+      "type": 56,
+      "label": "field tool",
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Field-only tool class."
+    },
+    {
+      "type": 58,
+      "label": "field traversal tool",
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Field-only traversal or trap tool class."
+    },
+    {
+      "type": 59,
+      "label": "story key item",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "summary": "Story key item class. Inert from Use."
+    },
+    {
+      "type": 255,
+      "label": "null",
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "summary": "Null placeholder. Not command-usable."
+    }
+  ],
+  "items": [
+    {
+      "id": 0,
+      "name": "Null",
+      "type": 255,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 1,
+      "name": "Franklin badge",
+      "type": 0,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 2,
+      "name": "Plush Ward",
+      "type": 4,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "inflictStatus shielded",
+      "useVerb": "used"
+    },
+    {
+      "id": 3,
+      "name": "Vault Plush",
+      "type": 4,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "inflictStatus shielded",
+      "useVerb": "used"
+    },
+    {
+      "id": 4,
+      "name": "Broken machine",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 5,
+      "name": "Bricked Gadget",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "damage 215",
+      "useVerb": "used"
+    },
+    {
+      "id": 6,
+      "name": "Broken air gun",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 7,
+      "name": "Spent Can",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "damage 161",
+      "useVerb": "used"
+    },
+    {
+      "id": 8,
+      "name": "Broken laser",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 9,
+      "name": "Bricked Iron",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "buffStat defense 10",
+      "useVerb": "used"
+    },
+    {
+      "id": 10,
+      "name": "Broken pipe",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 11,
+      "name": "Dud Cannon",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "buffStat offense 10",
+      "useVerb": "used"
+    },
+    {
+      "id": 12,
+      "name": "Broken tube",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 13,
+      "name": "Broken bazooka",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 14,
+      "name": "Broken trumpet",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 15,
+      "name": "Broken harmonica",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 16,
+      "name": "Broken antenna",
+      "type": 8,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 17,
+      "name": "Practice Bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 18,
+      "name": "Curb Bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 19,
+      "name": "Sand Lot Slugger",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 20,
+      "name": "Union Slugger",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 21,
+      "name": "Registry Bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 22,
+      "name": "Charter Slugger",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 23,
+      "name": "Archive Slugger",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 24,
+      "name": "Magicant bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 25,
+      "name": "Legendary bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 26,
+      "name": "Gutsy bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 27,
+      "name": "Casey bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 28,
+      "name": "Kitchen Pan",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 29,
+      "name": "Work Pan",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 30,
+      "name": "Permit Pan",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 31,
+      "name": "Crew Skillet",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 32,
+      "name": "Embassy Skillet",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 33,
+      "name": "Magic fry pan",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 34,
+      "name": "Witness Skillet",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 35,
+      "name": "Sword of kings",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 36,
+      "name": "Signal Popper",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 37,
+      "name": "Stun Relay",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 38,
+      "name": "Signal Popper",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 39,
+      "name": "Magnum Relay",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 40,
+      "name": "Route Popper",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 41,
+      "name": "Cut-Line Laser",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 42,
+      "name": "Relay Beam",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 43,
+      "name": "Breach Beam",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 44,
+      "name": "Spectrum Beam",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 45,
+      "name": "Last Notice Ray",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 46,
+      "name": "Worst Beam",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 47,
+      "name": "Night Shift Beam",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 48,
+      "name": "Bedrock Beam",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 49,
+      "name": "Jammer Yo-Yo",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 50,
+      "name": "Signal Slingshot",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 51,
+      "name": "Circuit Slingshot",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 52,
+      "name": "Jury Yo-Yo",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 53,
+      "name": "Riot Yo-Yo",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 54,
+      "name": "Proof-Token Charm",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 55,
+      "name": "Registry Pendant",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 56,
+      "name": "Witness Pendant",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 57,
+      "name": "Lucky Stub",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 58,
+      "name": "Wet Fit",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 59,
+      "name": "Duck Camo",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 60,
+      "name": "Work Fit",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 61,
+      "name": "Tide Pendant",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 62,
+      "name": "Night-Sky Pendant",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 63,
+      "name": "Old Regime Cloak",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 64,
+      "name": "Paper Cuff",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 65,
+      "name": "Permit Cuff",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 66,
+      "name": "Audit Cuff",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 67,
+      "name": "Union Cuff",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 68,
+      "name": "Archive Band",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 69,
+      "name": "Witness Band",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 70,
+      "name": "Static Bracelet",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 71,
+      "name": "Choirboy Band",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 72,
+      "name": "Patron Saint Band",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 73,
+      "name": "Bracer of kings",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 74,
+      "name": "Drifella Angel Hat",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 75,
+      "name": "Casework Hat",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 76,
+      "name": "Bush League Cap",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 77,
+      "name": "Worksite Hat",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 78,
+      "name": "Witness Ribbon",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 79,
+      "name": "Registry Ribbon",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 80,
+      "name": "Patron Saint Ribbon",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 81,
+      "name": "Night Docket",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 82,
+      "name": "Guard Docket",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 83,
+      "name": "Chance Docket",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 84,
+      "name": "Seal Docket",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 85,
+      "name": "Bright Docket",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 86,
+      "name": "Souvenir coin",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 87,
+      "name": "Diadem of kings",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 88,
+      "name": "Pocket Snack",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 89,
+      "name": "Route Snack",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 24",
+      "useVerb": "ate"
+    },
+    {
+      "id": 90,
+      "name": "Big Snack",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 48",
+      "useVerb": "ate"
+    },
+    {
+      "id": 91,
+      "name": "Desk Protein",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 42",
+      "useVerb": "ate"
+    },
+    {
+      "id": 92,
+      "name": "Live Protein",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 84",
+      "useVerb": "ate"
+    },
+    {
+      "id": 93,
+      "name": "Union Lunch",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 84",
+      "useVerb": "ate"
+    },
+    {
+      "id": 94,
+      "name": "Resort Noodles",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 108",
+      "useVerb": "ate"
+    },
+    {
+      "id": 95,
+      "name": "Ward Pie",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 120",
+      "useVerb": "ate"
+    },
+    {
+      "id": 96,
+      "name": "Crew Special",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 216",
+      "useVerb": "ate"
+    },
+    {
+      "id": 97,
+      "name": "District Pie",
+      "type": 44,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:all"
+      ],
+      "effectSummary": "healHp 240",
+      "useVerb": "ate"
+    },
+    {
+      "id": 98,
+      "name": "Static Caramel",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "recoverPp 120",
+      "useVerb": "ate"
+    },
+    {
+      "id": 99,
+      "name": "Relay Truffle",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "recoverPp 480",
+      "useVerb": "ate"
+    },
+    {
+      "id": 100,
+      "name": "Focus Lunch",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 300",
+      "useVerb": "ate"
+    },
+    {
+      "id": 101,
+      "name": "Rock Candy",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "permStat guts 1",
+      "useVerb": "ate"
+    },
+    {
+      "id": 102,
+      "name": "Echo Bread",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 60",
+      "useVerb": "ate"
+    },
+    {
+      "id": 103,
+      "name": "Route Roll",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 30",
+      "useVerb": "ate"
+    },
+    {
+      "id": 104,
+      "name": "Pak of bubble gum",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 105,
+      "name": "Jar of Fly Honey",
+      "type": 53,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:party:none"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 106,
+      "name": "Cache Juice",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "drank"
+    },
+    {
+      "id": 107,
+      "name": "Council Tea",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 60",
+      "useVerb": "drank"
+    },
+    {
+      "id": 108,
+      "name": "Workshop Shake",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 84",
+      "useVerb": "drank"
+    },
+    {
+      "id": 109,
+      "name": "Harbor Soup",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 216",
+      "useVerb": "drank"
+    },
+    {
+      "id": 110,
+      "name": "Field Water",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "recoverPp 6",
+      "useVerb": "drank"
+    },
+    {
+      "id": 111,
+      "name": "Relief Tonic",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "cureStatus poisoned",
+      "useVerb": "drank"
+    },
+    {
+      "id": 112,
+      "name": "Relief Serum",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "cureStatus poisoned",
+      "useVerb": "drank"
+    },
+    {
+      "id": 113,
+      "name": "Brains Capsule",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "permStat iq 1",
+      "useVerb": "drank"
+    },
+    {
+      "id": 114,
+      "name": "Nerve Capsule",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "permStat guts 1",
+      "useVerb": "drank"
+    },
+    {
+      "id": 115,
+      "name": "Pace Capsule",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "permStat speed 1",
+      "useVerb": "drank"
+    },
+    {
+      "id": 116,
+      "name": "Pulse Capsule",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "permStat vitality 1",
+      "useVerb": "drank"
+    },
+    {
+      "id": 117,
+      "name": "Long-Shot Capsule",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "permStat luck 1",
+      "useVerb": "drank"
+    },
+    {
+      "id": 118,
+      "name": "Permit Packet",
+      "type": 40,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 119,
+      "name": "Sweet Packet",
+      "type": 40,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 120,
+      "name": "Desk Cocoa",
+      "type": 40,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 121,
+      "name": "White Carton",
+      "type": 40,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 122,
+      "name": "Green Sprig",
+      "type": 40,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 123,
+      "name": "Spice Jar",
+      "type": 40,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 124,
+      "name": "White Packet",
+      "type": 40,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 125,
+      "name": "Backstage pass",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 126,
+      "name": "Charter Sauce",
+      "type": 40,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 127,
+      "name": "Clean Towel",
+      "type": 48,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "cureStatus poisoned",
+      "useVerb": "used"
+    },
+    {
+      "id": 128,
+      "name": "Relief Herb",
+      "type": 48,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "cureStatus poisoned",
+      "useVerb": "used"
+    },
+    {
+      "id": 129,
+      "name": "Archive Herb",
+      "type": 48,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "cureStatus all",
+      "useVerb": "used"
+    },
+    {
+      "id": 130,
+      "name": "Life Signal Horn",
+      "type": 48,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:fainted-one",
+        "battle:party:one"
+      ],
+      "effectSummary": "revive 9999",
+      "useVerb": "used"
+    },
+    {
+      "id": 131,
+      "name": "Counter-PSI unit",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 132,
+      "name": "Shield killer",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 133,
+      "name": "Boomstick",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "damage 400",
+      "useVerb": "used"
+    },
+    {
+      "id": 134,
+      "name": "Heavy bazooka",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 135,
+      "name": "HP-sucker",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 136,
+      "name": "Hungry HP-sucker",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 137,
+      "name": "Xterminator spray",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 138,
+      "name": "Slime generator",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 139,
+      "name": "Yogurt dispenser",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 140,
+      "name": "Straightedge",
+      "type": 48,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:none"
+      ],
+      "effectSummary": "buffStat speed 1",
+      "useVerb": "used"
+    },
+    {
+      "id": 141,
+      "name": "Snake bag",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 142,
+      "name": "Red Tape",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "inflictStatus paralyzed",
+      "useVerb": "used"
+    },
+    {
+      "id": 143,
+      "name": "Angle Slip",
+      "type": 48,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:status-healer",
+        "battle:party:none"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 144,
+      "name": "Spark Tube",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "damage 120",
+      "useVerb": "used"
+    },
+    {
+      "id": 145,
+      "name": "Big Spark Tube",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "damage 600",
+      "useVerb": "used"
+    },
+    {
+      "id": 146,
+      "name": "Crowd Spark Tube",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "damage 2400",
+      "useVerb": "used"
+    },
+    {
+      "id": 147,
+      "name": "Audit Charge",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "damage 90",
+      "useVerb": "used"
+    },
+    {
+      "id": 148,
+      "name": "Union Charge",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "damage 270",
+      "useVerb": "used"
+    },
+    {
+      "id": 149,
+      "name": "Bug Notice",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "effectSummary": "damage 100",
+      "useVerb": "used"
+    },
+    {
+      "id": 150,
+      "name": "Rust Notice",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "effectSummary": "damage 200",
+      "useVerb": "used"
+    },
+    {
+      "id": 151,
+      "name": "Rust Warrant",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "effectSummary": "damage 400",
+      "useVerb": "used"
+    },
+    {
+      "id": 152,
+      "name": "Foul Socks",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "inflictStatus paralyzed",
+      "useVerb": "used"
+    },
+    {
+      "id": 153,
+      "name": "Pocket Beetle",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "inflictStatus confused",
+      "useVerb": "used"
+    },
+    {
+      "id": 154,
+      "name": "Clean Brush",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "cureStatus all",
+      "useVerb": "used"
+    },
+    {
+      "id": 155,
+      "name": "Handbag strap",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "damage 250",
+      "useVerb": "used"
+    },
+    {
+      "id": 156,
+      "name": "Pharaoh's curse",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "inflictStatus paralyzed",
+      "useVerb": "used"
+    },
+    {
+      "id": 157,
+      "name": "Defense shower",
+      "type": 53,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:party:all"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 158,
+      "name": "Letter from mom",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 159,
+      "name": "Focus Fizz",
+      "type": 53,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:party:one"
+      ],
+      "effectSummary": "buffStat guts x2",
+      "useVerb": "used"
+    },
+    {
+      "id": 160,
+      "name": "Rally Dust",
+      "type": 53,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "effectSummary": "damage 800",
+      "useVerb": "used"
+    },
+    {
+      "id": 161,
+      "name": "Signal Patch",
+      "type": 53,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:party:one"
+      ],
+      "effectSummary": "buffStat defense 5",
+      "useVerb": "used"
+    },
+    {
+      "id": 162,
+      "name": "Field Recording",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 163,
+      "name": "For Sale sign",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 164,
+      "name": "Shyness book",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 165,
+      "name": "Memento Photo",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 166,
+      "name": "King banana",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 167,
+      "name": "Letter from Tony",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 168,
+      "name": "Chick",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 169,
+      "name": "Chicken",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 170,
+      "name": "Key to the shack",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 171,
+      "name": "Key to the cabin",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 172,
+      "name": "Bad key machine",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 173,
+      "name": "Temporary goods",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 174,
+      "name": "Zombie paper",
+      "type": 58,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [
+        "field:field-traversal-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 175,
+      "name": "Hawk eye",
+      "type": 58,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [
+        "field:field-traversal-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 176,
+      "name": "Swag Cruiser",
+      "type": 58,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-traversal-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 177,
+      "name": "Proof Card",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 178,
+      "name": "Show ticket",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 179,
+      "name": "Letter from kids",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 180,
+      "name": "Wad of bills",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 181,
+      "name": "Receiver phone",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 182,
+      "name": "Diamond",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 183,
+      "name": "Signed banana",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 184,
+      "name": "Pencil eraser",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 185,
+      "name": "Hieroglyph copy",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 186,
+      "name": "Meteotite",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 187,
+      "name": "Contact lens",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 188,
+      "name": "Relief Patch",
+      "type": 48,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "cureStatus poisoned",
+      "useVerb": "used"
+    },
+    {
+      "id": 189,
+      "name": "Ledger Yogurt",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 30",
+      "useVerb": "ate"
+    },
+    {
+      "id": 190,
+      "name": "Pocket Fruit",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 24",
+      "useVerb": "ate"
+    },
+    {
+      "id": 191,
+      "name": "Work Stick",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 60",
+      "useVerb": "ate"
+    },
+    {
+      "id": 192,
+      "name": "Key to the tower",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 193,
+      "name": "Meteorite piece",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 194,
+      "name": "Groundwire Fit",
+      "type": 20,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 195,
+      "name": "Neutralizer",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "effectSummary": "action other",
+      "useVerb": "used"
+    },
+    {
+      "id": 196,
+      "name": "Sound Stone",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action other",
+      "useVerb": "used"
+    },
+    {
+      "id": 197,
+      "name": "Exit mouse",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action other",
+      "useVerb": "used"
+    },
+    {
+      "id": 198,
+      "name": "Cold Resort Cup",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 30",
+      "useVerb": "ate"
+    },
+    {
+      "id": 199,
+      "name": "Pocket Decoy",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "damage 250",
+      "useVerb": "used"
+    },
+    {
+      "id": 200,
+      "name": "Sharp Decoy",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "inflictStatus poisoned",
+      "useVerb": "used"
+    },
+    {
+      "id": 201,
+      "name": "Brain stone",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 202,
+      "name": "Town map",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 203,
+      "name": "Video relaxant",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 204,
+      "name": "Suporma",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 205,
+      "name": "Key to the locker",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 206,
+      "name": "Insignificant item",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 207,
+      "name": "Signal Tart",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "recoverPp 120",
+      "useVerb": "ate"
+    },
+    {
+      "id": 208,
+      "name": "Civic Gem",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 209,
+      "name": "Monkey's love",
+      "type": 52,
+      "fieldUse": false,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 210,
+      "name": "Eraser eraser",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 211,
+      "name": "Tendakraut",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 212,
+      "name": "Fossil Bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 213,
+      "name": "Major Ledger Bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 214,
+      "name": "Final Ledger Bat",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 215,
+      "name": "Double Relay",
+      "type": 17,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 216,
+      "name": "Registry Band",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 217,
+      "name": "Charter Band",
+      "type": 24,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 218,
+      "name": "Guard Ribbon",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 219,
+      "name": "Talisman ribbon",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 220,
+      "name": "Saturn ribbon",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 221,
+      "name": "Quiet Docket",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 222,
+      "name": "Memento Docket",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 223,
+      "name": "Route Noodles",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 42",
+      "useVerb": "ate"
+    },
+    {
+      "id": 224,
+      "name": "Transit Sandwich",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 225,
+      "name": "Express Sandwich",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 6",
+      "useVerb": "ate"
+    },
+    {
+      "id": 226,
+      "name": "Chance Sandwich",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 60",
+      "useVerb": "ate"
+    },
+    {
+      "id": 227,
+      "name": "Lucky sandwich",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 240",
+      "useVerb": "ate"
+    },
+    {
+      "id": 228,
+      "name": "Lucky Sandwich",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "permStat luck 2",
+      "useVerb": "ate"
+    },
+    {
+      "id": 229,
+      "name": "Lucky sandwich",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "recoverPp 5",
+      "useVerb": "ate"
+    },
+    {
+      "id": 230,
+      "name": "Lucky sandwich",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "recoverPp 20",
+      "useVerb": "ate"
+    },
+    {
+      "id": 231,
+      "name": "Lucky Sandwich",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "permStat luck 2",
+      "useVerb": "ate"
+    },
+    {
+      "id": 232,
+      "name": "Cache Coffee",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 12",
+      "useVerb": "drank"
+    },
+    {
+      "id": 233,
+      "name": "Stacked Burger",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 96",
+      "useVerb": "ate"
+    },
+    {
+      "id": 234,
+      "name": "Union Snack Bar",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 108",
+      "useVerb": "ate"
+    },
+    {
+      "id": 235,
+      "name": "Witness Jelly",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 300",
+      "useVerb": "ate"
+    },
+    {
+      "id": 236,
+      "name": "Registry Gruel",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 216",
+      "useVerb": "ate"
+    },
+    {
+      "id": 237,
+      "name": "Bean Ledger Cake",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 42",
+      "useVerb": "ate"
+    },
+    {
+      "id": 238,
+      "name": "Civic Broth",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 84",
+      "useVerb": "drank"
+    },
+    {
+      "id": 239,
+      "name": "Quiet Roll",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 84",
+      "useVerb": "ate"
+    },
+    {
+      "id": 240,
+      "name": "Route Skewer",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 126",
+      "useVerb": "ate"
+    },
+    {
+      "id": 241,
+      "name": "Calm Yogurt",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 168",
+      "useVerb": "ate"
+    },
+    {
+      "id": 242,
+      "name": "Work Jerky",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 150",
+      "useVerb": "ate"
+    },
+    {
+      "id": 243,
+      "name": "Civic Burger",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 204",
+      "useVerb": "ate"
+    },
+    {
+      "id": 244,
+      "name": "Signal Jerky",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 252",
+      "useVerb": "ate"
+    },
+    {
+      "id": 245,
+      "name": "Charter Jerky",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 300",
+      "useVerb": "ate"
+    },
+    {
+      "id": 246,
+      "name": "Deep Cache Water",
+      "type": 36,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "recoverPp 6",
+      "useVerb": "drank"
+    },
+    {
+      "id": 247,
+      "name": "Signal Pudding",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "recoverPp 240",
+      "useVerb": "ate"
+    },
+    {
+      "id": 248,
+      "name": "Slip Skillet",
+      "type": 16,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action physical (affected by shields and defending)",
+      "useVerb": "used"
+    },
+    {
+      "id": 249,
+      "name": "Mr. Saturn coin",
+      "type": 28,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": true,
+      "keyItem": false,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 250,
+      "name": "Meteornium",
+      "type": 56,
+      "fieldUse": true,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:field-tool"
+      ],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    },
+    {
+      "id": 251,
+      "name": "Pocket Pop",
+      "type": 32,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "effectSummary": "healHp 18",
+      "useVerb": "ate"
+    },
+    {
+      "id": 252,
+      "name": "Cup of Lifenoodles",
+      "type": 48,
+      "fieldUse": true,
+      "battleUse": true,
+      "equippable": false,
+      "keyItem": false,
+      "targets": [
+        "field:party:fainted-one",
+        "battle:party:one"
+      ],
+      "effectSummary": "revive 9999",
+      "useVerb": "used"
+    },
+    {
+      "id": 253,
+      "name": "Carrot key",
+      "type": 59,
+      "fieldUse": false,
+      "battleUse": false,
+      "equippable": false,
+      "keyItem": true,
+      "targets": [],
+      "effectSummary": "action item",
+      "useVerb": "used"
+    }
+  ],
+  "psi": [
+    {
+      "id": 0,
+      "name": "[psi 0]",
+      "fieldUse": false,
+      "battleUse": false,
+      "targets": [],
+      "ppCost": 0
+    },
+    {
+      "id": 1,
+      "name": "Static",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 10
+    },
+    {
+      "id": 2,
+      "name": "PSI(????)",
+      "fieldUse": false,
+      "battleUse": false,
+      "targets": [],
+      "ppCost": 14
+    },
+    {
+      "id": 3,
+      "name": "PSI(????)",
+      "fieldUse": false,
+      "battleUse": false,
+      "targets": [],
+      "ppCost": 40
+    },
+    {
+      "id": 4,
+      "name": "PSI(????)",
+      "fieldUse": false,
+      "battleUse": false,
+      "targets": [],
+      "ppCost": 98
+    },
+    {
+      "id": 5,
+      "name": "PSI Fire ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:row"
+      ],
+      "ppCost": 6
+    },
+    {
+      "id": 6,
+      "name": "PSI Fire ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:row"
+      ],
+      "ppCost": 12
+    },
+    {
+      "id": 7,
+      "name": "PSI Fire ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:row"
+      ],
+      "ppCost": 20
+    },
+    {
+      "id": 8,
+      "name": "PSI Fire ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:row"
+      ],
+      "ppCost": 42
+    },
+    {
+      "id": 9,
+      "name": "Cold Memo",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "ppCost": 4
+    },
+    {
+      "id": 10,
+      "name": "Cold Memo",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "ppCost": 9
+    },
+    {
+      "id": 11,
+      "name": "PSI Freeze ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "ppCost": 18
+    },
+    {
+      "id": 12,
+      "name": "PSI Freeze ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "ppCost": 28
+    },
+    {
+      "id": 13,
+      "name": "Shock Notice",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 3
+    },
+    {
+      "id": 14,
+      "name": "Shock Notice",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 7
+    },
+    {
+      "id": 15,
+      "name": "PSI Thunder ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 16
+    },
+    {
+      "id": 16,
+      "name": "PSI Thunder ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 20
+    },
+    {
+      "id": 17,
+      "name": "PSI Flash ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 8
+    },
+    {
+      "id": 18,
+      "name": "PSI Flash ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 16
+    },
+    {
+      "id": 19,
+      "name": "PSI Flash ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 24
+    },
+    {
+      "id": 20,
+      "name": "PSI Flash ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 32
+    },
+    {
+      "id": 21,
+      "name": "PSI Starstorm ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 24
+    },
+    {
+      "id": 22,
+      "name": "PSI Starstorm ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 42
+    },
+    {
+      "id": 23,
+      "name": "Wake Up",
+      "fieldUse": true,
+      "battleUse": true,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "ppCost": 5
+    },
+    {
+      "id": 24,
+      "name": "Wake Up",
+      "fieldUse": true,
+      "battleUse": true,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "ppCost": 8
+    },
+    {
+      "id": 25,
+      "name": "Lifeup ",
+      "fieldUse": true,
+      "battleUse": true,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "ppCost": 13
+    },
+    {
+      "id": 26,
+      "name": "Lifeup ",
+      "fieldUse": true,
+      "battleUse": true,
+      "targets": [
+        "field:party:all",
+        "battle:party:all"
+      ],
+      "ppCost": 24
+    },
+    {
+      "id": 27,
+      "name": "Decompile",
+      "fieldUse": true,
+      "battleUse": true,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "ppCost": 5
+    },
+    {
+      "id": 28,
+      "name": "Decompile",
+      "fieldUse": true,
+      "battleUse": true,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "ppCost": 8
+    },
+    {
+      "id": 29,
+      "name": "Healing ",
+      "fieldUse": true,
+      "battleUse": true,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "ppCost": 20
+    },
+    {
+      "id": 30,
+      "name": "Healing ",
+      "fieldUse": true,
+      "battleUse": true,
+      "targets": [
+        "field:party:one",
+        "battle:party:one"
+      ],
+      "ppCost": 38
+    },
+    {
+      "id": 31,
+      "name": "Firewall",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:one"
+      ],
+      "ppCost": 6
+    },
+    {
+      "id": 32,
+      "name": "Firewall",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:all"
+      ],
+      "ppCost": 18
+    },
+    {
+      "id": 33,
+      "name": "Shield ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:one"
+      ],
+      "ppCost": 10
+    },
+    {
+      "id": 34,
+      "name": "Shield ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:all"
+      ],
+      "ppCost": 30
+    },
+    {
+      "id": 35,
+      "name": "PSI Shield ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:one"
+      ],
+      "ppCost": 8
+    },
+    {
+      "id": 36,
+      "name": "PSI Shield ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:all"
+      ],
+      "ppCost": 24
+    },
+    {
+      "id": 37,
+      "name": "PSI Shield ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:one"
+      ],
+      "ppCost": 14
+    },
+    {
+      "id": 38,
+      "name": "PSI Shield ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:all"
+      ],
+      "ppCost": 42
+    },
+    {
+      "id": 39,
+      "name": "Offense up ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:one"
+      ],
+      "ppCost": 10
+    },
+    {
+      "id": 40,
+      "name": "Offense up ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:party:all"
+      ],
+      "ppCost": 30
+    },
+    {
+      "id": 41,
+      "name": "Defense down ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "ppCost": 6
+    },
+    {
+      "id": 42,
+      "name": "Defense down ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 18
+    },
+    {
+      "id": 43,
+      "name": "Lull",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "ppCost": 6
+    },
+    {
+      "id": 44,
+      "name": "Hypnosis ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 18
+    },
+    {
+      "id": 45,
+      "name": "PSI Magnet ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "ppCost": 0
+    },
+    {
+      "id": 46,
+      "name": "PSI Magnet ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 0
+    },
+    {
+      "id": 47,
+      "name": "Paralysis ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "ppCost": 8
+    },
+    {
+      "id": 48,
+      "name": "Paralysis ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 24
+    },
+    {
+      "id": 49,
+      "name": "Brainshock ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:one"
+      ],
+      "ppCost": 10
+    },
+    {
+      "id": 50,
+      "name": "Brainshock ",
+      "fieldUse": false,
+      "battleUse": true,
+      "targets": [
+        "battle:enemy:all"
+      ],
+      "ppCost": 30
+    },
+    {
+      "id": 51,
+      "name": "Teleport ",
+      "fieldUse": true,
+      "battleUse": false,
+      "targets": [
+        "field:teleport"
+      ],
+      "ppCost": 2
+    },
+    {
+      "id": 52,
+      "name": "Teleport ",
+      "fieldUse": true,
+      "battleUse": false,
+      "targets": [
+        "field:teleport"
+      ],
+      "ppCost": 8
+    },
+    {
+      "id": 53,
+      "name": "[psi 53]",
+      "fieldUse": false,
+      "battleUse": false,
+      "targets": [],
+      "ppCost": 0
+    }
+  ]
+}

@@ -46,6 +46,7 @@ import {
   SpriteSheetCollectionSchema,
   TeleportDestinationsSchema,
   TutorialStatusSchema,
+  UsabilityMatrixSchema,
   ValidationReportSchema,
   WindowCollectionSchema,
   WorldArtifactSchema,
@@ -95,6 +96,7 @@ import {
   type SpriteSheetCollection,
   type TeleportDestinations,
   type TutorialStatus,
+  type UsabilityMatrix,
   type ValidationReport,
   type WindowCollection,
   type WorldArtifact,
@@ -115,6 +117,7 @@ const NPC_OVERRIDES_FILE = "npc-overrides.json";
 const BACKGROUND_OVERRIDES_FILE = "background-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
 const KEY_ITEMS_FILE = "key-items.json";
+const USABILITY_MATRIX_FILE = "usability-matrix.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
 const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
@@ -177,6 +180,7 @@ export type GameData = {
   characters?: CharacterCollection;
   items?: ItemCollection;
   keyItems: KeyItems;
+  usabilityMatrix?: UsabilityMatrix;
   psi?: PsiCollection;
   shops?: ShopData;
 };
@@ -330,6 +334,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     items,
     itemOverrides,
     keyItems,
+    usabilityMatrix,
     psi,
     psiOverrides,
     shops,
@@ -390,6 +395,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       : Promise.resolve(undefined),
     loadJson(`/generated/${ITEM_OVERRIDES_FILE}`, ItemOverridesSchema),
     loadJson(`/generated/${KEY_ITEMS_FILE}`, KeyItemsSchema),
+    loadJson(`/generated/${USABILITY_MATRIX_FILE}`, UsabilityMatrixSchema),
     manifest.files.psi
       ? loadJson(`/generated/${manifest.files.psi}`, PsiCollectionSchema)
       : Promise.resolve(undefined),
@@ -483,6 +489,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     characters: resolvedCharacters,
     items: resolvedItems,
     keyItems: keyItems ?? emptyKeyItems(),
+    usabilityMatrix,
     psi: resolvedPsi,
     shops
   };

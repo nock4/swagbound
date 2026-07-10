@@ -29,6 +29,7 @@ import {
   StoryTriggersSchema,
   CutscenesSchema,
   TileOverridesSchema,
+  UsabilityMatrixSchema,
   type BackgroundOverrideEntry,
   type SpriteOverride,
   type SpriteOverrides,
@@ -105,6 +106,8 @@ export const OBJECTIVES_SOURCE = "content/objectives.json";
 export const OBJECTIVES_OUTPUT = "objectives.json";
 export const NAVMESH_SOURCE = "content/navmesh.json";
 export const NAVMESH_OUTPUT = "navmesh.json";
+export const USABILITY_MATRIX_SOURCE = "content/usability-matrix.json";
+export const USABILITY_MATRIX_OUTPUT = "usability-matrix.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
 const FG_V2_SUMMARY_OUTPUT = "tmp/fg-v2/summary.json";
 
@@ -199,6 +202,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateFgOverrides(FG_OVERRIDES_SOURCE);
   await validateObjectives(OBJECTIVES_SOURCE);
   await validateNavmesh(NAVMESH_SOURCE);
+  await validateUsabilityMatrix(USABILITY_MATRIX_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
   await validateKeyItems(KEY_ITEMS_SOURCE);
@@ -236,7 +240,8 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyOptionalJsonToGenerated(DRIFELLA_SOURCE_CHECKS_SOURCE, out, DRIFELLA_SOURCE_CHECKS_OUTPUT),
     copyOptionalJsonToGenerated(ATTESTATION_BATTLES_SOURCE, out, ATTESTATION_BATTLES_OUTPUT),
     copyJsonToGenerated(OBJECTIVES_SOURCE, out, OBJECTIVES_OUTPUT),
-    copyJsonToGenerated(NAVMESH_SOURCE, out, NAVMESH_OUTPUT)
+    copyJsonToGenerated(NAVMESH_SOURCE, out, NAVMESH_OUTPUT),
+    copyJsonToGenerated(USABILITY_MATRIX_SOURCE, out, USABILITY_MATRIX_OUTPUT)
   ]);
 }
 
@@ -369,6 +374,10 @@ async function validateObjectives(source: string): Promise<void> {
 
 async function validateNavmesh(source: string): Promise<void> {
   NavmeshSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateUsabilityMatrix(source: string): Promise<void> {
+  UsabilityMatrixSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateNpcOverrides(source: string): Promise<void> {

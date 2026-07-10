@@ -1,13 +1,11 @@
-import type { CardNfts, CharacterCollection, ItemCollection, ItemData, KeyItems, PsiCollection, PsiData, ShopData } from "@eb/schemas";
+import type { CardNfts, CharacterCollection, ItemCollection, ItemData, KeyItems, PsiCollection, PsiData, ShopData, UsabilityMatrix } from "@eb/schemas";
 import { buildPartyMember, type PartyMember, type PartyMemberStats } from "./characterModel";
 import type { DialogueResolver } from "./dialogueRenderer";
 import { psiPpCost, psiTargetMode, psiTargetSide } from "./battleLogic";
 import { buildBinderViewModel, type BinderViewModel } from "./sourceCheckModel";
 import { KEY_ITEM_COLOR, keyItemLabel, keyItemSortValue, normalizeKeyItemIds } from "./keyItems";
 import {
-  decodeItemUseEffect,
   equipmentSlotForItemType,
-  isFieldUsableItemEffect,
   previewEquipStats,
   sellPriceForItem,
   type EquipmentSlot,
@@ -24,6 +22,7 @@ import {
   psiStrengthGlyph,
   psiStrengthRank
 } from "./psiPresentation";
+import { canUseItemInField, canUsePsiInField } from "./usabilityMatrix";
 
 export type MenuItem = {
   id: string;
@@ -199,6 +198,7 @@ export type PsiMenuEntry = {
   level: number;
   ppCost: number;
   affordable: boolean;
+  fieldUsable: boolean;
   infoLines: string[];
 };
 
@@ -290,6 +290,12 @@ export type MenuAction =
       targetChar: number;
     }
   | {
+      kind: "psiUse";
+      casterChar: number;
+      psiId: number;
+      targetChar: number;
+    }
+  | {
       kind: "itemGive";
       ownerChar: number;
       inventorySlot: number;
@@ -347,6 +353,7 @@ export type TalkMenuDecision =
 export type PartyMenuViewModelInput = StatusViewModelInput & {
   items?: ItemCollection;
   keyItems?: KeyItems;
+  usabilityMatrix?: UsabilityMatrix;
   psi?: PsiCollection;
   shops?: ShopData;
   cardNfts?: CardNfts;
@@ -376,6 +383,7 @@ const PSI_MENU_ID = "psi";
 const EQUIP_MENU_ID = "equip";
 export const BINDER_MENU_ID = "binder";
 const ITEM_USE_ACTION_PREFIX = "item-use";
+const PSI_USE_ACTION_PREFIX = "psi-use";
 const ITEM_GIVE_ACTION_PREFIX = "item-give";
 const ITEM_DROP_ACTION_PREFIX = "item-drop";
 const EQUIP_ACTION_PREFIX = "equip";
@@ -818,6 +826,7 @@ function buildPsiViewModelForMember(input: PartyMenuViewModelInput, member: Part
         level: learned?.level ?? 0,
         ppCost,
         affordable: pp >= ppCost,
+        fieldUsable: canUsePsiInField(input.usabilityMatrix, psi.id),
         infoLines: [targetScopeForPsiMenu(psi), `PP Cost: ${ppCost}`]
       };
     });
@@ -1034,7 +1043,10 @@ export function buildPsiScreen(psi: PsiViewModel, id = PSI_MENU_ID): MenuScreen 
         ? {
             id: entry.id,
             label: entry.strengthGlyph,
-            enabled: true,
+            enabled: entry.fieldUsable && entry.affordable,
+            ...(entry.fieldUsable && entry.affordable
+              ? { actionId: buildPsiUseActionId(psi.member.id, entry.psiId, psi.member.id) }
+              : {}),
             infoLines: entry.infoLines
           }
         : {
@@ -1377,7 +1389,7 @@ function inventoryEntries(input: PartyMenuViewModelInput, member: PartyMember): 
       ownerChar: member.id,
       label: fitMenuLabel(keyItemLabel(resolveItemName(input, itemId, item), keyItem)),
       equippable: item?.equippable ?? false,
-      fieldUsable: isFieldUsableItemEffect(item ? decodeItemUseEffect(item) : undefined),
+      fieldUsable: item ? canUseItemInField(input.usabilityMatrix, item.id) : false,
       ...(equipmentSlot ? { equipmentSlot } : {}),
       equipped: isEquipped,
       keyItem,
@@ -1410,6 +1422,15 @@ export function buildItemUseActionId(
     stat(ownerChar),
     stat(inventorySlot),
     stat(itemId),
+    stat(targetChar)
+  ].join(":");
+}
+
+export function buildPsiUseActionId(casterChar: number, psiId: number, targetChar: number): string {
+  return [
+    PSI_USE_ACTION_PREFIX,
+    stat(casterChar),
+    stat(psiId),
     stat(targetChar)
   ].join(":");
 }
@@ -1548,6 +1569,10 @@ export function parseMenuAction(actionId: string): MenuAction | undefined {
   if (prefix === ITEM_USE_ACTION_PREFIX && parts.length === 4) {
     const [ownerChar, inventorySlot, itemId, targetChar] = parts;
     return { kind: "itemUse", ownerChar, inventorySlot, itemId, targetChar };
+  }
+  if (prefix === PSI_USE_ACTION_PREFIX && parts.length === 3) {
+    const [casterChar, psiId, targetChar] = parts;
+    return { kind: "psiUse", casterChar, psiId, targetChar };
   }
   if (prefix === ITEM_GIVE_ACTION_PREFIX && parts.length === 4) {
     const [ownerChar, inventorySlot, itemId, targetChar] = parts;

@@ -168,6 +168,24 @@ export type ItemUseResult =
       reason: "missingItem" | "notConsumable" | "unknownEffect" | "notFieldUsable";
     };
 
+export type FieldPsiUseResult =
+  | {
+      ok: true;
+      casterChar: number;
+      targetChar: number;
+      ppCost: number;
+      effect?: ItemUseEffect;
+      previousValue: number;
+      nextValue: number;
+    }
+  | {
+      ok: false;
+      casterChar: number;
+      targetChar: number;
+      ppCost: number;
+      reason: "insufficientPp" | "unknownEffect" | "notFieldUsable";
+    };
+
 export type PartyVitalsApplyResult = {
   charId: number;
   effect: ItemUseEffect;
@@ -468,6 +486,7 @@ export class PartyState {
     targetChar: number;
     item: Pick<ItemData, "id" | "action" | "argument" | "miscFlags" | "effect">;
     targetVitals: PartyVitalsInput;
+    fieldUse?: boolean;
   }): ItemUseResult {
     const ownerChar = normalizeId(options.ownerChar);
     const targetChar = normalizeId(options.targetChar);
@@ -482,7 +501,7 @@ export class PartyState {
     if (!effect) {
       return { ok: false, itemId, ownerChar, targetChar, reason: "unknownEffect" };
     }
-    if (!isFieldUsableItemEffect(effect)) {
+    if (options.fieldUse === false || (options.fieldUse !== true && !isFieldUsableItemEffect(effect))) {
       return { ok: false, itemId, ownerChar, targetChar, reason: "notFieldUsable" };
     }
 
@@ -502,6 +521,53 @@ export class PartyState {
       effect,
       previousValue: applied.previousValue,
       nextValue: applied.nextValue
+    };
+  }
+
+  useFieldPsi(options: {
+    casterChar: number;
+    targetChar: number;
+    ppCost: number;
+    effect?: ItemUseEffect;
+    casterVitals?: PartyVitalsInput;
+    targetVitals?: PartyVitalsInput;
+  }): FieldPsiUseResult {
+    const casterChar = normalizeId(options.casterChar);
+    const targetChar = normalizeId(options.targetChar);
+    const ppCost = stat(options.ppCost);
+    const casterVitals = options.casterVitals
+      ? this.ensureVitals(casterChar, options.casterVitals)
+      : this.vitalsForKnownChar(casterChar);
+    if (!casterVitals) {
+      return { ok: false, casterChar, targetChar, ppCost, reason: "unknownEffect" };
+    }
+    if (casterVitals.pp < ppCost) {
+      return { ok: false, casterChar, targetChar, ppCost, reason: "insufficientPp" };
+    }
+
+    const applied = options.effect
+      ? this.applyEffectToChar(targetChar, options.effect, options.targetVitals)
+      : undefined;
+    if (options.effect && !applied) {
+      return { ok: false, casterChar, targetChar, ppCost, reason: "unknownEffect" };
+    }
+    if (options.effect?.kind === "revive" && applied && applied.previousValue === applied.nextValue) {
+      return { ok: false, casterChar, targetChar, ppCost, reason: "notFieldUsable" };
+    }
+
+    const nextCasterVitals = this.vitalsForKnownChar(casterChar) ?? casterVitals;
+    this.commitVitals(casterChar, {
+      ...nextCasterVitals,
+      pp: Math.max(0, nextCasterVitals.pp - ppCost)
+    });
+    return {
+      ok: true,
+      casterChar,
+      targetChar,
+      ppCost,
+      ...(options.effect ? { effect: options.effect } : {}),
+      previousValue: applied?.previousValue ?? casterVitals.pp,
+      nextValue: applied?.nextValue ?? Math.max(0, casterVitals.pp - ppCost)
     };
   }
 

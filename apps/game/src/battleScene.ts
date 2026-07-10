@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import {
   ItemCollectionSchema,
   PsiCollectionSchema,
+  UsabilityMatrixSchema,
   BossBattleDialogueSchema,
   type AttestationBattles,
   type BackgroundOverrides,
@@ -20,6 +21,7 @@ import {
   type PsiCollection,
   type PsiData,
   type SpriteOverrides,
+  type UsabilityMatrix,
   type WindowCollection
 } from "@eb/schemas";
 import { expandBattleGroupEnemies } from "./battleGroups";
@@ -141,6 +143,7 @@ import {
   moveBattleSubmenuGridIndex
 } from "./battleMenuFlow";
 import { targetScopeForPsiMenu } from "./menuModel";
+import { battleUsablePsi, canUsePsiInBattle } from "./usabilityMatrix";
 import {
   PSI_STRENGTH_ORDER,
   buildPsiMenuRows,
@@ -506,6 +509,7 @@ export class BattleScene extends Phaser.Scene {
   private enemyFirstStrikePhase_ = false;
   private items_?: ItemCollection;
   private psi_?: PsiCollection;
+  private usabilityMatrix_?: UsabilityMatrix;
   private font_?: FontCollection;
   private window_?: WindowCollection;
   private spriteOverrides_?: SpriteOverrides;
@@ -613,6 +617,7 @@ export class BattleScene extends Phaser.Scene {
     characters?: CharacterCollection;
     items?: ItemCollection;
     psi?: PsiCollection;
+    usabilityMatrix?: UsabilityMatrix;
     font?: FontCollection;
     window?: WindowCollection;
     spriteOverrides?: SpriteOverrides;
@@ -643,6 +648,7 @@ export class BattleScene extends Phaser.Scene {
     this.enemyFirstStrikePhase_ = false;
     this.items_ = data.items;
     this.psi_ = data.psi;
+    this.usabilityMatrix_ = data.usabilityMatrix ?? data.returnTo?.gameData.usabilityMatrix;
     this.font_ = data.font;
     this.window_ = data.window;
     this.spriteOverrides_ = data.spriteOverrides ?? data.returnTo?.gameData.spriteOverrides;
@@ -1580,7 +1586,8 @@ export class BattleScene extends Phaser.Scene {
       const previousBattle = this.battle_;
       const result = resolveRoundStep(this.battle_, actor, queued, this.rng_, {
         psi: this.psi_?.psi,
-        items: this.items_?.items
+        items: this.items_?.items,
+        usabilityMatrix: this.usabilityMatrix_
       });
       this.battle_ = result.state;
       this.recordEnemyDamageSignals(previousBattle, this.battle_, this.time.now);
@@ -2398,7 +2405,8 @@ export class BattleScene extends Phaser.Scene {
         return "No learned PSI.";
       }
       const kind = psiBattleKind(psi);
-      if (kind !== "offense" && kind !== "recovery") {
+      if ((this.usabilityMatrix_ && !canUsePsiInBattle(this.usabilityMatrix_, psi.id)) ||
+        (kind !== "offense" && kind !== "recovery" && !psi.effect)) {
         return "Cannot use that PSI here.";
       }
       if (actor && actor.pp < psiPpCost(psi)) {
@@ -2411,11 +2419,12 @@ export class BattleScene extends Phaser.Scene {
     return "Cannot act.";
   }
 
-  private inputContext(): { state: BattleState; psi?: PsiData[]; items?: ItemData[] } {
+  private inputContext(): { state: BattleState; psi?: PsiData[]; items?: ItemData[]; usabilityMatrix?: UsabilityMatrix } {
     return {
       state: this.battle_,
       psi: this.psi_?.psi,
-      items: this.items_?.items
+      items: this.items_?.items,
+      usabilityMatrix: this.usabilityMatrix_
     };
   }
 
@@ -4665,7 +4674,8 @@ export class BattleScene extends Phaser.Scene {
     if (!actor || actor.isEnemy) {
       return [];
     }
-    return learnedPsiForCombatant(this.psi_?.psi ?? [], actor);
+    const learned = learnedPsiForCombatant(this.psi_?.psi ?? [], actor);
+    return this.usabilityMatrix_ ? battleUsablePsi(learned, this.usabilityMatrix_) : learned;
   }
 
   private goodsForCurrentActor(): Array<{ itemId: number; inventorySlot: number }> {
@@ -4686,20 +4696,24 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private async loadOptionalGeneratedMenuData(): Promise<void> {
-    if (this.items_ && this.psi_) {
+    if (this.items_ && this.psi_ && this.usabilityMatrix_) {
       return;
     }
     const manifest = await fetchJson<{ files?: { items?: string; psi?: string } }>("/generated/manifest.json");
     const files = manifest?.files;
-    const [items, psi] = await Promise.all([
+    const [items, psi, usabilityMatrix] = await Promise.all([
       this.items_ || !files?.items ? Promise.resolve(undefined) : fetchParsed(`/generated/${files.items}`, ItemCollectionSchema),
-      this.psi_ || !files?.psi ? Promise.resolve(undefined) : fetchParsed(`/generated/${files.psi}`, PsiCollectionSchema)
+      this.psi_ || !files?.psi ? Promise.resolve(undefined) : fetchParsed(`/generated/${files.psi}`, PsiCollectionSchema),
+      this.usabilityMatrix_ ? Promise.resolve(undefined) : fetchParsed("/generated/usability-matrix.json", UsabilityMatrixSchema)
     ]);
     if (items) {
       this.items_ = items;
     }
     if (psi) {
       this.psi_ = psi;
+    }
+    if (usabilityMatrix) {
+      this.usabilityMatrix_ = usabilityMatrix;
     }
     this.renderStatus();
     this.publish();

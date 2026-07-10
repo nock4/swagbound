@@ -244,6 +244,8 @@ import {
 import { drawSwirl } from "./transitions";
 import { activeWindowFlavorId, textBlipEnabled } from "./windowSettings";
 import { isKeyItemId } from "./keyItems";
+import { fieldItemToolMessage, fieldItemUseMessage, fieldPsiEffect, fieldPsiUseMessage } from "./fieldUseFeedback";
+import { itemUsability, psiUsability, USABILITY_REFUSAL_MESSAGE } from "./usabilityMatrix";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import { applyClearOverrideRects, applySolidOverrideRects } from "./collisionOverrides";
 import {
@@ -4548,6 +4550,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.handleItemUseAction(action);
       return;
     }
+    if (action.kind === "psiUse") {
+      this.handlePsiUseAction(action);
+      return;
+    }
     if (action.kind === "itemGive") {
       this.handleItemGiveAction(action);
       return;
@@ -4586,6 +4592,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     if (action.kind === "binderCard") {
       this.handleBinderCardAction(action.cardId);
+      return;
+    }
+    if (action.kind !== "equip") {
+      this.showMenuResult("Nothing happened.");
       return;
     }
     this.handleEquipAction(action);
@@ -4685,20 +4695,57 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private handleItemUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "itemUse" }>): void {
     const item = this.itemById(action.itemId);
+    const owner = this.partyMemberById(action.ownerChar);
     const target = this.partyMemberById(action.targetChar);
     if (!item || this.partyState.inventory(action.ownerChar)[action.inventorySlot] !== action.itemId) {
       this.showMenuResult("You can't use that.");
+      return;
+    }
+    const row = itemUsability(this.data_.usabilityMatrix, item.id);
+    if (!row?.fieldUse) {
+      this.showMenuResult(USABILITY_REFUSAL_MESSAGE);
       return;
     }
     const result = this.partyState.useItem({
       ownerChar: action.ownerChar,
       targetChar: action.targetChar,
       item,
+      targetVitals: vitalsForPartyMember(target),
+      fieldUse: row.fieldUse
+    });
+    if (result.ok) {
+      this.showMenuResult(fieldItemUseMessage(target ?? owner ?? { name: "Someone" }, item, row, result));
+      return;
+    }
+    if (result.reason === "notConsumable" || result.reason === "unknownEffect") {
+      this.showMenuResult(fieldItemToolMessage(owner ?? target ?? { name: "Someone" }, item, row));
+      return;
+    }
+    this.showMenuResult(result.reason === "notFieldUsable" ? USABILITY_REFUSAL_MESSAGE : "You can't use that.");
+  }
+
+  private handlePsiUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "psiUse" }>): void {
+    const psi = this.psiById(action.psiId);
+    const caster = this.partyMemberById(action.casterChar);
+    const target = this.partyMemberById(action.targetChar) ?? caster;
+    const row = psiUsability(this.data_.usabilityMatrix, action.psiId);
+    if (!psi || !caster || !target || !row?.fieldUse) {
+      this.showMenuResult(USABILITY_REFUSAL_MESSAGE);
+      return;
+    }
+    const result = this.partyState.useFieldPsi({
+      casterChar: action.casterChar,
+      targetChar: action.targetChar,
+      ppCost: row.ppCost,
+      effect: fieldPsiEffect(psi),
+      casterVitals: vitalsForPartyMember(caster),
       targetVitals: vitalsForPartyMember(target)
     });
-    this.showMenuResult(result.ok
-      ? "Used."
-      : result.reason === "notFieldUsable" ? "You can't use that here." : "You can't use that.");
+    if (result.ok) {
+      this.showMenuResult(fieldPsiUseMessage(caster, target, psi, result));
+      return;
+    }
+    this.showMenuResult(result.reason === "insufficientPp" ? "Not enough PP." : USABILITY_REFUSAL_MESSAGE);
   }
 
   private handleItemGiveAction(action: Extract<MenuAction, { kind: "itemGive" }>): void {
@@ -4842,6 +4889,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.data_.items?.items.find((item) => item.id === itemId);
   }
 
+  private psiById(psiId: number) {
+    return this.data_.psi?.psi.find((psi) => psi.id === psiId);
+  }
+
   private itemName(itemId: number, item?: ItemData): string {
     return createDialogueResolver(this.data_).itemName(itemId) ?? item?.name.trim() ?? `[item ${itemId}]`;
   }
@@ -4917,6 +4968,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       characters: this.data_.characters,
       items: this.data_.items,
       keyItems: this.data_.keyItems,
+      usabilityMatrix: this.data_.usabilityMatrix,
       psi: this.data_.psi,
       shops: this.data_.shops,
       cardNfts: this.data_.cardNfts,
@@ -4930,6 +4982,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         characters: this.data_.characters,
         items: this.data_.items,
         keyItems: this.data_.keyItems,
+        usabilityMatrix: this.data_.usabilityMatrix,
         shops: this.data_.shops,
         cardNfts: this.data_.cardNfts,
         flags: this.gameFlags,
@@ -5631,6 +5684,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       bank: this.partyState.bank,
       items: this.data_.items,
       psi: this.data_.psi,
+      usabilityMatrix: this.data_.usabilityMatrix,
       font: this.data_.font,
       window: this.data_.window,
       spriteOverrides: this.data_.spriteOverrides,
