@@ -1724,13 +1724,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.updateCameraRoomBounds();
         return;
       }
-      this.activeRoomSectorKey = sectorKey;
       const sectorRoom = resolveSectorAreaBounds(
         this.world_.sectors,
         this.solidRows,
         this.collisionGrid(),
         roomPoint
       );
+      // Cache the sector key only on SUCCESS: caching a failed resolve froze the
+      // mask off for the whole sector (one bad start cell after a warp/teleport/
+      // battle return meant neighbor strips bled through until leaving the area).
+      this.activeRoomSectorKey = sectorRoom ? sectorKey : undefined;
       this.activeRoomBounds = sectorRoom ? this.deriveInteriorSectorAreaRoomBounds(sectorRoom, roomPoint) : undefined;
       this.applyInteriorRoomMask();
       this.applyNpcRoomVisibility();
@@ -2208,11 +2211,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const coverBottom = bottom + pad;
     const coverWidth = coverRight - coverLeft;
     const roomHeight = bottom - top;
+    // EB interior strips pack rooms edge to edge, so the sector-area boundary
+    // rows can carry a neighbor strip's pixels INSIDE the rect (a 4px colored
+    // sliver at the masked edge). Pull every band a half-cell into the rect to
+    // swallow the shared boundary row; walls against black lose nothing visible.
+    const boundaryInset = Math.round(this.collisionCellSize / 2);
 
-    this.fillPositiveRect(graphics, coverLeft, coverTop, coverWidth, top - coverTop);
-    this.fillPositiveRect(graphics, coverLeft, bottom, coverWidth, coverBottom - bottom);
-    this.fillPositiveRect(graphics, coverLeft, top, left - coverLeft, roomHeight);
-    this.fillPositiveRect(graphics, right, top, coverRight - right, roomHeight);
+    this.fillPositiveRect(graphics, coverLeft, coverTop, coverWidth, top - coverTop + boundaryInset);
+    this.fillPositiveRect(graphics, coverLeft, bottom - boundaryInset, coverWidth, coverBottom - bottom + boundaryInset);
+    this.fillPositiveRect(graphics, coverLeft, top, left - coverLeft + boundaryInset, roomHeight);
+    this.fillPositiveRect(graphics, right - boundaryInset, top, coverRight - right + boundaryInset, roomHeight);
   }
 
   private roomMaskBandOverscanWorldPixels(): number {
