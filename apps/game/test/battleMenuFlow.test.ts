@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
   battleItemEffectDescription,
+  battleSubmenuGridVisibleCells,
   commandTargetSelectionPlan,
   enemyTargetModeForCommand,
+  moveBattleSubmenuGridIndex,
   shouldOpenEnemyTargetSelection
 } from "../src/battleMenuFlow";
 import { decodeItemUseEffect } from "../src/partyState";
@@ -53,5 +55,30 @@ describe("battle menu flow", () => {
 
   it("falls back clearly when no item effect is known", () => {
     expect(battleItemEffectDescription(undefined)).toBe("No battle effect");
+  });
+
+  it("moves through a full battle Goods bag as two column-major columns", () => {
+    expect(moveBattleSubmenuGridIndex(0, 14, "down", 2, "column-major")).toBe(1);
+    expect(moveBattleSubmenuGridIndex(1, 14, "right", 2, "column-major")).toBe(8);
+    expect(moveBattleSubmenuGridIndex(8, 14, "up", 2, "column-major")).toBe(7);
+    expect(moveBattleSubmenuGridIndex(7, 14, "left", 2, "column-major")).toBe(0);
+  });
+
+  it("clips an over-tall PSI grid to the rect visible row count", () => {
+    const window = battleSubmenuGridVisibleCells({
+      itemCount: 60,
+      selectedIndex: 1,
+      columns: 6,
+      maxRows: 9,
+      order: "row-major"
+    });
+    const drawnRows = new Set(window.cells.map((cell) => cell.visibleRow));
+
+    expect(window.rows).toBe(10);
+    expect(window.visibleRows).toBe(9);
+    expect(drawnRows.size).toBe(window.visibleRows);
+    expect(window.cells).toHaveLength(window.visibleRows * 6);
+    expect(Math.max(...drawnRows)).toBe(window.visibleRows - 1);
+    expect(window.hasMoreAfter).toBe(true);
   });
 });

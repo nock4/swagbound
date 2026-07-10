@@ -132,10 +132,21 @@ import { activeWindowFlavorId } from "./windowSettings";
 import {
   type CanvasRect,
   battleStatusCardRects,
-  contentFitWindowRect,
-  type BattleMenuListRect
+  contentFitWindowRect
 } from "./windowLayout";
-import { battleItemEffectDescription, enemyTargetModeForCommand } from "./battleMenuFlow";
+import {
+  battleItemEffectDescription,
+  battleSubmenuGridVisibleCells,
+  enemyTargetModeForCommand,
+  moveBattleSubmenuGridIndex
+} from "./battleMenuFlow";
+import { targetScopeForPsiMenu } from "./menuModel";
+import {
+  PSI_STRENGTH_ORDER,
+  buildPsiMenuRows,
+  normalizedPsiStrength,
+  psiStrengthGlyph
+} from "./psiPresentation";
 import {
   CANCEL_KEY_NAMES,
   CONFIRM_KEY_NAMES,
@@ -406,10 +417,24 @@ type EnemySpriteTexturePlan = {
 type BattleCommandGridLayout = CanvasRect & {
   cells: CleanGridCell[];
 };
+type BattleSubmenuItem = {
+  label: string;
+  selectable: boolean;
+  sourceIndex?: number;
+};
+type BattleSubmenuLayout = CanvasRect & {
+  mode: "list" | "grid";
+  visibleStart: number;
+  visibleCount: number;
+  visibleRows?: number;
+  hasMoreBefore: boolean;
+  hasMoreAfter: boolean;
+  cells?: CleanGridCell[];
+};
 type BattleStatusLayout = {
   actorName?: CanvasRect;
   command?: BattleCommandGridLayout;
-  submenu?: BattleMenuListRect;
+  submenu?: BattleSubmenuLayout;
   description?: CanvasRect;
   executionMessage?: CanvasRect;
   statusCards: BattleStatusCardLayout[];
@@ -460,6 +485,10 @@ type BattleUiView = {
   actorName?: string;
   commandLines: string[];
   submenuLines: string[];
+  submenuItems?: BattleSubmenuItem[];
+  submenuColumns?: number;
+  submenuGridKind?: "goods-grid" | "psi-strengths";
+  submenuGridOrder?: "row-major" | "column-major";
   descriptionLines: string[];
   executionMessageLines: string[];
   selectedSubmenuIndex: number;
@@ -1072,12 +1101,22 @@ export class BattleScene extends Phaser.Scene {
       return next - current;
     }
     if (this.inputState_.submenu === "psi" || this.inputState_.submenu === "goods") {
-      if (direction === "left" || direction === "right") {
-        return null;
-      }
-      return menuDirectionDelta(direction);
+      const next = this.inputState_.submenu === "goods"
+        ? moveBattleSubmenuGridIndex(this.inputState_.selectionIndex, this.goodsForCurrentActor().length, direction, 2, "column-major")
+        : this.nextPsiSelectionIndex(direction);
+      return next === this.inputState_.selectionIndex ? null : next - this.inputState_.selectionIndex;
     }
     return direction === "left" || direction === "up" ? -1 : 1;
+  }
+
+  private nextPsiSelectionIndex(direction: BattleCommandGridDirection): number {
+    return moveBattleSubmenuSourceIndex(
+      this.psiSubmenuItems(),
+      this.inputState_.selectionIndex,
+      direction,
+      PSI_STRENGTH_ORDER.length + 1,
+      "row-major"
+    );
   }
 
   private applyInputTransition(transition: ReturnType<typeof nextInputState>): void {
@@ -2924,26 +2963,58 @@ export class BattleScene extends Phaser.Scene {
         height: BATTLE_ACTOR_NAME_HEIGHT
       }
       : undefined;
-    const submenu = command && view.submenuLines.length > 0
-      ? this.menuListLayout({
-        labels: view.submenuLines,
-        selectedIndex: view.selectedSubmenuIndex,
-        x: stackedMenu
-          ? command.x + Math.max(0, command.width - BATTLE_SUBMENU_STACK_OVERLAP_X)
-          : command.x + BATTLE_SUBMENU_CASCADE_OFFSET_X,
-        y: stackedMenu
-          ? command.y + BATTLE_SUBMENU_STACK_OFFSET_Y
-          : command.y + Math.max(0, command.height - BATTLE_SUBMENU_CASCADE_OVERLAP_Y),
-        minWidth: BATTLE_SUBMENU_MIN_WIDTH,
-        maxWidth: BATTLE_MENU_MAX_WIDTH,
-        bottomClearance: stackedMenu ? BATTLE_STACKED_MENU_BOTTOM_CLEARANCE : BATTLE_MENU_BOTTOM_CLEARANCE
-      })
+    const submenuItems = view.submenuItems ?? view.submenuLines.map((label, index) => ({
+      label,
+      selectable: true,
+      sourceIndex: index
+    }));
+    const submenuX = command
+      ? stackedMenu
+        ? command.x + Math.max(0, command.width - BATTLE_SUBMENU_STACK_OVERLAP_X)
+        : command.x + BATTLE_SUBMENU_CASCADE_OFFSET_X
+      : 0;
+    const submenuY = command
+      ? stackedMenu
+        ? command.y + BATTLE_SUBMENU_STACK_OFFSET_Y
+        : command.y + Math.max(0, command.height - BATTLE_SUBMENU_CASCADE_OVERLAP_Y)
+      : 0;
+    // The info strip below the stack needs its full height RESERVED by the
+    // submenu list, or a max-load list runs to the bottom clearance and leaves
+    // the strip a single squashed line (rendered as "...").
+    const descriptionReserve = view.descriptionLines.length > 0
+      ? view.descriptionLines.length * BATTLE_LINE_HEIGHT + BATTLE_DESCRIPTION_TEXT_PADDING_Y * 2 + BATTLE_DESCRIPTION_GAP + 4
+      : 0;
+    const baseBottomClearance = stackedMenu ? BATTLE_STACKED_MENU_BOTTOM_CLEARANCE : BATTLE_MENU_BOTTOM_CLEARANCE;
+    const submenuBottomClearance = baseBottomClearance + descriptionReserve;
+    const submenu = command && submenuItems.length > 0
+      ? view.submenuColumns && view.submenuColumns > 1
+        ? this.menuGridListLayout({
+          items: submenuItems,
+          selectedSourceIndex: view.selectedSubmenuIndex,
+          columns: view.submenuColumns,
+          gridKind: view.submenuGridKind,
+          gridOrder: view.submenuGridOrder,
+          x: submenuX,
+          y: submenuY,
+          minWidth: BATTLE_SUBMENU_MIN_WIDTH,
+          maxWidth: BATTLE_MENU_MAX_WIDTH,
+          bottomClearance: submenuBottomClearance
+        })
+        : this.menuListLayout({
+          labels: view.submenuLines,
+          selectedIndex: view.selectedSubmenuIndex,
+          x: submenuX,
+          y: submenuY,
+          minWidth: BATTLE_SUBMENU_MIN_WIDTH,
+          maxWidth: BATTLE_MENU_MAX_WIDTH,
+          bottomClearance: submenuBottomClearance
+        })
       : undefined;
     const descriptionAnchor = submenu ?? command;
     const description = descriptionAnchor && view.descriptionLines.length > 0
       ? this.descriptionLayout(view.descriptionLines, descriptionAnchor, {
         mode: stackedMenu && this.submenu_ === "target" ? "stacked-target" : "below",
-        bottomClearance: stackedMenu ? BATTLE_STACKED_MENU_BOTTOM_CLEARANCE : BATTLE_MENU_BOTTOM_CLEARANCE
+        bottomClearance: baseBottomClearance
       })
       : undefined;
     const executionMessage = view.executionMessageLines.length > 0
@@ -2979,7 +3050,7 @@ export class BattleScene extends Phaser.Scene {
     const textReady =
       (!actorNameRect || Boolean(this.menuTexts.actorName)) &&
       (view.commandLines.length === 0 || this.commandGridTexts.length === view.commandLines.length) &&
-      (view.submenuLines.length === 0 || this.submenuRowTexts.length === layout.submenu?.visibleCount) &&
+      (submenuItems.length === 0 || this.submenuRowTexts.length === layout.submenu?.visibleCount) &&
       (view.descriptionLines.length === 0 || Boolean(this.menuTexts.description)) &&
       (view.executionMessageLines.length === 0 || Boolean(this.menuTexts.execution)) &&
       this.statusCardTexts.length === statusCards.length;
@@ -3024,16 +3095,29 @@ export class BattleScene extends Phaser.Scene {
     }
 
     if (layout.submenu) {
-      const textRect = this.standardMenuListTextRect(layout.submenu);
       drawCleanPanel(graphics, layout.submenu, BATTLE_PANEL_BORDER);
-      this.submenuRowTexts = Array.from({ length: layout.submenu.visibleCount }, (_, row) =>
-        createCleanText(this, textRect.x, textRect.y + row * BATTLE_LINE_HEIGHT, "", {
+      if (layout.submenu.mode === "grid" && layout.submenu.cells) {
+        this.submenuRowTexts = layout.submenu.cells.map((cell) => {
+          const textX = this.submenu_ === "psi" && cell.col === 0 ? cell.x : cell.x + BATTLE_MENU_CARET_GUTTER_PX;
+          return createCleanText(this, textX, cell.y, "", {
+            fontSize: BATTLE_FONT_SIZE,
+            color: CLEAN_UI_PRIMARY,
+            fixedWidth: Math.max(1, cell.width - (textX - cell.x)),
+            fixedHeight: BATTLE_LINE_HEIGHT,
+            align: this.submenu_ === "psi" && cell.col > 0 ? "center" : "left"
+          }).setDepth(25);
+        });
+      } else {
+        const textRect = this.standardMenuListTextRect(layout.submenu);
+        this.submenuRowTexts = Array.from({ length: layout.submenu.visibleCount }, (_, row) =>
+          createCleanText(this, textRect.x, textRect.y + row * BATTLE_LINE_HEIGHT, "", {
           fontSize: BATTLE_FONT_SIZE,
           color: CLEAN_UI_PRIMARY,
           fixedWidth: textRect.width,
           fixedHeight: BATTLE_LINE_HEIGHT
-        }).setDepth(25)
-      );
+          }).setDepth(25)
+        );
+      }
     }
 
     if (layout.description) {
@@ -3138,7 +3222,7 @@ export class BattleScene extends Phaser.Scene {
     minWidth: number;
     maxWidth: number;
     bottomClearance?: number;
-  }): BattleMenuListRect {
+  }): BattleSubmenuLayout {
     const screen = { width: this.scale.width, height: this.scale.height };
     const bottomClearance = Math.max(0, Math.round(options.bottomClearance ?? BATTLE_MENU_BOTTOM_CLEARANCE));
     const maxHeight = Math.max(
@@ -3170,11 +3254,105 @@ export class BattleScene extends Phaser.Scene {
     });
     return {
       ...clamped,
+      mode: "list",
       visibleStart,
       visibleCount,
       hasMoreBefore: visibleStart > 0,
       hasMoreAfter: visibleStart + visibleCount < options.labels.length
     };
+  }
+
+  private menuGridListLayout(options: {
+    items: BattleSubmenuItem[];
+    selectedSourceIndex: number;
+    columns: number;
+    gridKind?: BattleUiView["submenuGridKind"];
+    gridOrder?: BattleUiView["submenuGridOrder"];
+    x: number;
+    y: number;
+    minWidth: number;
+    maxWidth: number;
+    bottomClearance?: number;
+  }): BattleSubmenuLayout {
+    const screen = { width: this.scale.width, height: this.scale.height };
+    const columns = Math.max(1, Math.floor(options.columns));
+    const selectedItemIndex = Math.max(0, options.items.findIndex((item) => item.sourceIndex === options.selectedSourceIndex));
+    const bottomClearance = Math.max(0, Math.round(options.bottomClearance ?? BATTLE_MENU_BOTTOM_CLEARANCE));
+    const maxHeight = Math.max(
+      BATTLE_LINE_HEIGHT + BATTLE_COMMAND_TEXT_PADDING_Y * 2,
+      Math.floor(screen.height - bottomClearance - options.y)
+    );
+    const maxRows = Math.max(1, Math.floor((maxHeight - BATTLE_COMMAND_TEXT_PADDING_Y * 2) / BATTLE_LINE_HEIGHT));
+    const gridWindow = battleSubmenuGridVisibleCells({
+      itemCount: options.items.length,
+      selectedIndex: selectedItemIndex,
+      columns,
+      maxRows,
+      order: options.gridOrder
+    });
+    const columnWidths = this.battleSubmenuColumnWidths(options.items, columns, options.gridKind, options.gridOrder);
+    const contentWidth = columnWidths.reduce((total, width) => total + width, 0) + BATTLE_COMMAND_GRID_GAP_X * Math.max(0, columns - 1);
+    const width = Math.min(
+      Math.max(options.minWidth, contentWidth + BATTLE_COMMAND_TEXT_PADDING_X * 2),
+      options.maxWidth,
+      Math.floor(screen.width - BATTLE_LEFT_MARGIN - BATTLE_MENU_RIGHT_MARGIN)
+    );
+    const rect = clampRectToScreen({
+      x: options.x,
+      y: options.y,
+      width,
+      height: BATTLE_COMMAND_TEXT_PADDING_Y * 2 + gridWindow.visibleRows * BATTLE_LINE_HEIGHT
+    }, screen, {
+      left: BATTLE_LEFT_MARGIN,
+      right: BATTLE_MENU_RIGHT_MARGIN,
+      top: BATTLE_MENU_TOP_MARGIN,
+      bottom: bottomClearance
+    });
+    const content = cleanPanelInnerRect(rect, {
+      x: BATTLE_COMMAND_TEXT_PADDING_X,
+      y: BATTLE_COMMAND_TEXT_PADDING_Y
+    });
+    const cells = gridWindow.cells.map((cell) => {
+      const x = content.x + submenuColumnOffset(columnWidths, cell.col, BATTLE_COMMAND_GRID_GAP_X);
+      const y = content.y + cell.visibleRow * BATTLE_LINE_HEIGHT;
+      return {
+        index: cell.index,
+        row: cell.row,
+        col: cell.col,
+        x,
+        y,
+        width: columnWidths[cell.col] ?? columnWidths[0] ?? 1,
+        height: BATTLE_LINE_HEIGHT
+      };
+    });
+    return {
+      ...rect,
+      mode: "grid",
+      visibleStart: gridWindow.visibleStartRow * columns,
+      visibleCount: cells.length,
+      visibleRows: gridWindow.visibleRows,
+      hasMoreBefore: gridWindow.hasMoreBefore,
+      hasMoreAfter: gridWindow.hasMoreAfter,
+      cells
+    };
+  }
+
+  private battleSubmenuColumnWidths(
+    items: BattleSubmenuItem[],
+    columns: number,
+    gridKind: BattleUiView["submenuGridKind"],
+    gridOrder: BattleUiView["submenuGridOrder"]
+  ): number[] {
+    return Array.from({ length: columns }, (_, col) => {
+      const labels = items.flatMap((item, index) => {
+        const position = submenuGridPosition(index, items.length, columns, gridOrder);
+        return position.col === col ? [item.label] : [];
+      });
+      const widest = labels.reduce((max, label) => Math.max(max, this.measureTextWidth(label)), 0);
+      const caretWidth = gridKind === "psi-strengths" && col === 0 ? 0 : BATTLE_MENU_CARET_GUTTER_PX;
+      const minWidth = gridKind === "psi-strengths" && col > 0 ? 24 : 0;
+      return Math.max(minWidth, widest + caretWidth + 8);
+    });
   }
 
   private descriptionLayout(
@@ -3253,7 +3431,7 @@ export class BattleScene extends Phaser.Scene {
     };
   }
 
-  private standardMenuListTextRect(rect: BattleMenuListRect): CanvasRect {
+  private standardMenuListTextRect(rect: BattleSubmenuLayout): CanvasRect {
     const content = cleanPanelInnerRect(rect, {
       x: BATTLE_COMMAND_TEXT_PADDING_X,
       y: BATTLE_COMMAND_TEXT_PADDING_Y
@@ -3485,6 +3663,10 @@ export class BattleScene extends Phaser.Scene {
       actorName: this.activeActorName(),
       commandLines: this.commandsForCurrentActor().map(formatCommandLabel),
       submenuLines: this.visibleSubmenuTextLines(),
+      submenuItems: this.visibleSubmenuItems(),
+      submenuColumns: this.visibleSubmenuColumns(),
+      submenuGridKind: this.visibleSubmenuGridKind(),
+      submenuGridOrder: this.visibleSubmenuGridOrder(),
       descriptionLines: this.menuDescriptionLines(),
       executionMessageLines: [],
       selectedSubmenuIndex: this.visibleSubmenuIndex(),
@@ -3507,7 +3689,7 @@ export class BattleScene extends Phaser.Scene {
 
   private listWindowRows(
     lines: string[],
-    rect: BattleMenuListRect | undefined
+    rect: BattleSubmenuLayout | undefined
   ): string[] {
     if (!rect) {
       return [];
@@ -3523,6 +3705,25 @@ export class BattleScene extends Phaser.Scene {
       for (const text of this.submenuRowTexts) {
         text.setVisible(false);
       }
+      return;
+    }
+    if (layout.submenu.mode === "grid") {
+      const items = view.submenuItems ?? [];
+      const cells = layout.submenu.cells ?? [];
+      this.submenuRowTexts.forEach((text, index) => {
+        const cell = cells[index];
+        const item = cell ? items[cell.index] : undefined;
+        const selected = Boolean(item?.selectable && item.sourceIndex === view.selectedSubmenuIndex);
+        const textWidth = cell
+          ? Math.max(1, cell.width - (this.submenu_ === "psi" && cell.col === 0 ? 0 : BATTLE_MENU_CARET_GUTTER_PX))
+          : 1;
+        text.setVisible(Boolean(item));
+        text.setText(item ? this.fitMeasuredText(item.label, textWidth) : "");
+        text.setColor(selected ? CLEAN_UI_SELECTION_TEXT : (item?.selectable ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY));
+        text.setDepth(selected ? 32 : 25);
+        text.setFontStyle(selected ? "500" : "400");
+        text.setAlpha(1);
+      });
       return;
     }
     const rows = this.listWindowRows(view.submenuLines, layout.submenu);
@@ -3804,6 +4005,58 @@ export class BattleScene extends Phaser.Scene {
     return [];
   }
 
+  private visibleSubmenuItems(): BattleSubmenuItem[] | undefined {
+    const items = this.activeBattleSubmenuItems();
+    return items.length > 0 ? items : undefined;
+  }
+
+  private visibleSubmenuColumns(): number | undefined {
+    if (this.isVisiblePsiSubmenu()) {
+      const items = this.psiSubmenuItems();
+      return items.length > 1 ? PSI_STRENGTH_ORDER.length + 1 : undefined;
+    }
+    if (this.isVisibleGoodsSubmenu()) {
+      const items = this.goodsSubmenuItems();
+      return items.length > 1 ? 2 : undefined;
+    }
+    return undefined;
+  }
+
+  private visibleSubmenuGridKind(): BattleUiView["submenuGridKind"] | undefined {
+    if (this.isVisiblePsiSubmenu() && this.psiSubmenuItems().length > 1) {
+      return "psi-strengths";
+    }
+    if (this.isVisibleGoodsSubmenu() && this.goodsSubmenuItems().length > 1) {
+      return "goods-grid";
+    }
+    return undefined;
+  }
+
+  private visibleSubmenuGridOrder(): BattleUiView["submenuGridOrder"] | undefined {
+    if (this.isVisibleGoodsSubmenu() && this.goodsSubmenuItems().length > 1) {
+      return "column-major";
+    }
+    return "row-major";
+  }
+
+  private activeBattleSubmenuItems(): BattleSubmenuItem[] {
+    if (this.isVisiblePsiSubmenu()) {
+      return this.psiSubmenuItems();
+    }
+    if (this.isVisibleGoodsSubmenu()) {
+      return this.goodsSubmenuItems();
+    }
+    return [];
+  }
+
+  private isVisiblePsiSubmenu(): boolean {
+    return this.submenu_ === "psi" || (this.submenu_ === "target" && this.pendingPsiId_ !== null);
+  }
+
+  private isVisibleGoodsSubmenu(): boolean {
+    return this.submenu_ === "goods" || (this.submenu_ === "target" && Boolean(this.pendingItem_));
+  }
+
   private visibleSubmenuTextLines(): string[] {
     if (this.submenu_ !== "target") {
       return this.submenuTextLines();
@@ -3835,24 +4088,49 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private psiSubmenuTextLines(): string[] {
+    return this.psiSubmenuItems().map((item) => item.label);
+  }
+
+  private psiSubmenuItems(): BattleSubmenuItem[] {
     const entries = this.learnedPsiForCurrentActor();
     if (entries.length === 0) {
-      return [this.menuMessage_ || "No learned PSI."];
+      return [{ label: this.menuMessage_ || "No learned PSI.", selectable: false }];
     }
-    return entries.map((psi) => {
-      const cost = psiPpCost(psi);
-      return `${psi.name || `[psi ${psi.id}]`} ${cost}`;
-    });
+    const indexByPsiId = new Map(entries.map((psi, index) => [psi.id, index]));
+    return buildPsiMenuRows(entries).flatMap((family) => [
+      { label: family.family, selectable: false },
+      ...PSI_STRENGTH_ORDER.map((strength) => {
+        const entry = family.entries.find((psi) => normalizedPsiStrength(psi.strength) === strength);
+        return entry
+          ? {
+              label: psiStrengthGlyph(entry.strength),
+              selectable: true,
+              sourceIndex: indexByPsiId.get(entry.id) ?? 0
+            }
+          : {
+              label: "",
+              selectable: false
+            };
+      })
+    ]);
   }
 
   private goodsSubmenuTextLines(): string[] {
+    return this.goodsSubmenuItems().map((item) => item.label);
+  }
+
+  private goodsSubmenuItems(): BattleSubmenuItem[] {
     const entries = this.goodsForCurrentActor();
     if (entries.length === 0) {
-      return [this.menuMessage_ || "No goods."];
+      return [{ label: this.menuMessage_ || "No goods.", selectable: false }];
     }
-    return entries.map((entry) => {
+    return entries.map((entry, index) => {
       const item = this.itemById(entry.itemId);
-      return item?.name || `[item ${entry.itemId}]`;
+      return {
+        label: item?.name || `[item ${entry.itemId}]`,
+        selectable: true,
+        sourceIndex: index
+      };
     });
   }
 
@@ -3868,12 +4146,15 @@ export class BattleScene extends Phaser.Scene {
       if (!psi) {
         return ["No PSI available."];
       }
-      return [targetScopeForPsi(psi), `PP Cost: ${psiPpCost(psi)}`];
+      return [battlePsiInfoLine(psi)];
     }
     if (this.submenu_ === "goods") {
       const entry = this.goodsForCurrentActor()[this.submenuIndex_];
       const item = entry ? this.itemById(entry.itemId) : undefined;
-      return item ? [battleItemEffectDescription(decodeItemUseEffect(item))] : ["No goods available."];
+      if (!entry) {
+        return [];
+      }
+      return [battleItemEffectDescription(item ? decodeItemUseEffect(item) : undefined)];
     }
     if (this.submenu_ === "target") {
       const name = this.targetedCombatantName();
@@ -3883,7 +4164,7 @@ export class BattleScene extends Phaser.Scene {
       }
       if (this.pendingItem_) {
         const item = this.itemById(this.pendingItem_.itemId);
-        return item ? [battleItemEffectDescription(decodeItemUseEffect(item))] : [name];
+        return [battleItemEffectDescription(item ? decodeItemUseEffect(item) : undefined)];
       }
       return [name];
     }
@@ -4122,16 +4403,28 @@ export class BattleScene extends Phaser.Scene {
     }
     const submenuRow = this.selectedSubmenuRow(layout.submenu);
     if (layout.submenu && submenuRow !== null) {
-      const textRect = this.standardMenuListTextRect(layout.submenu);
-      const selectionRect = {
-        x: layout.submenu.x + BATTLE_COMMAND_TEXT_PADDING_X,
-        y: textRect.y + submenuRow * BATTLE_LINE_HEIGHT - 2,
-        width: Math.max(1, layout.submenu.width - BATTLE_COMMAND_TEXT_PADDING_X * 2),
-        height: BATTLE_LINE_HEIGHT
-      };
-      drawCleanSelection(graphics, selectionRect, true);
-      if (showCaret) {
-        drawCleanCaret(graphics, selectionRect.x + 3, selectionRect.y, selectionRect.height, CLEAN_UI_SELECTION_CARET);
+      const cell = layout.submenu.mode === "grid" ? layout.submenu.cells?.[submenuRow] : undefined;
+      const textRect = layout.submenu.mode === "list" ? this.standardMenuListTextRect(layout.submenu) : undefined;
+      const selectionRect = cell
+        ? {
+            x: cell.x,
+            y: cell.y - 2,
+            width: cell.width,
+            height: BATTLE_LINE_HEIGHT
+          }
+        : textRect
+        ? {
+            x: layout.submenu.x + BATTLE_COMMAND_TEXT_PADDING_X,
+            y: textRect.y + submenuRow * BATTLE_LINE_HEIGHT - 2,
+            width: Math.max(1, layout.submenu.width - BATTLE_COMMAND_TEXT_PADDING_X * 2),
+            height: BATTLE_LINE_HEIGHT
+          }
+        : undefined;
+      if (selectionRect) {
+        drawCleanSelection(graphics, selectionRect, true);
+        if (showCaret) {
+          drawCleanCaret(graphics, selectionRect.x + 3, selectionRect.y, selectionRect.height, CLEAN_UI_SELECTION_CARET);
+        }
       }
     }
 
@@ -4158,12 +4451,20 @@ export class BattleScene extends Phaser.Scene {
     return null;
   }
 
-  private selectedSubmenuRow(submenu: BattleMenuListRect | undefined): number | null {
+  private selectedSubmenuRow(submenu: BattleSubmenuLayout | undefined): number | null {
     if (!submenu || this.phase_ !== "command-input" || this.currentActor_?.side !== "party") {
       return null;
     }
     if (this.submenu_ !== "psi" && this.submenu_ !== "goods") {
       return null;
+    }
+    if (submenu.mode === "grid") {
+      const items = this.activeBattleSubmenuItems();
+      const cellIndex = (submenu.cells ?? []).findIndex((cell) => {
+        const item = items[cell.index];
+        return item?.selectable && item.sourceIndex === this.submenuIndex_;
+      });
+      return cellIndex >= 0 ? cellIndex : null;
     }
     const rowCount = this.submenu_ === "psi"
       ? this.learnedPsiForCurrentActor().length
@@ -4177,7 +4478,7 @@ export class BattleScene extends Phaser.Scene {
 
   private drawListScrollMarkers(
     graphics: Phaser.GameObjects.Graphics,
-    rect: BattleMenuListRect
+    rect: BattleSubmenuLayout
   ): void {
     const x = Math.round(rect.x + rect.width - BATTLE_COMMAND_TEXT_PADDING_X + 2);
     if (rect.hasMoreBefore) {
@@ -4372,17 +4673,8 @@ export class BattleScene extends Phaser.Scene {
     if (!actor || actor.isEnemy) {
       return [];
     }
-    // Only offer items that actually resolve to a battle effect. Equipment / key
-    // items and consumables whose effect isn't implemented yet decode to
-    // undefined; listing them would let the player "use" something that silently
-    // does nothing. inventorySlot stays the index into the full inventory so the
-    // resolver removes the right slot. Empty result -> the menu shows "No goods."
     return actor.inventory
-      .map((itemId, inventorySlot) => ({ itemId, inventorySlot }))
-      .filter(({ itemId }) => {
-        const item = this.itemById(itemId);
-        return item ? Boolean(decodeItemUseEffect(item)) : false;
-      });
+      .map((itemId, inventorySlot) => ({ itemId, inventorySlot }));
   }
 
   private psiById(psiId: number): PsiData | undefined {
@@ -4819,15 +5111,79 @@ function clampIndex(index: number, length: number): number {
   return (index + length) % length;
 }
 
-function menuDirectionDelta(direction: BattleCommandGridDirection): -1 | 1 {
-  return direction === "up" || direction === "left" ? -1 : 1;
-}
-
 function visibleItemStart(cursorIndex: number, itemCount: number, maxItems: number): number {
   if (maxItems <= 0 || itemCount <= maxItems) {
     return 0;
   }
   return Math.min(Math.max(0, cursorIndex - maxItems + 1), itemCount - maxItems);
+}
+
+function moveBattleSubmenuSourceIndex(
+  items: BattleSubmenuItem[],
+  sourceIndex: number,
+  direction: BattleCommandGridDirection,
+  columns: number,
+  order: BattleUiView["submenuGridOrder"]
+): number {
+  const currentItemIndex = items.findIndex((item) => item.selectable && item.sourceIndex === sourceIndex);
+  if (currentItemIndex < 0) {
+    return sourceIndex;
+  }
+  const normalizedColumns = Math.max(1, Math.floor(columns));
+  const rows = Math.max(1, Math.ceil(items.length / normalizedColumns));
+  const current = submenuGridPosition(currentItemIndex, items.length, normalizedColumns, order);
+  const rowStep = direction === "up" ? -1 : direction === "down" ? 1 : 0;
+  const colStep = direction === "left" ? -1 : direction === "right" ? 1 : 0;
+  for (let attempt = 1; attempt <= items.length + normalizedColumns; attempt += 1) {
+    const row = modulo(current.row + rowStep * attempt, rows);
+    const col = modulo(current.col + colStep * attempt, normalizedColumns);
+    const nextItem = items[submenuGridIndex(row, col, items.length, normalizedColumns, order)];
+    if (nextItem?.selectable && nextItem.sourceIndex !== undefined) {
+      return nextItem.sourceIndex;
+    }
+  }
+  return sourceIndex;
+}
+
+function submenuGridPosition(
+  index: number,
+  count: number,
+  columns: number,
+  order: BattleUiView["submenuGridOrder"] = "row-major"
+): { row: number; col: number } {
+  const normalizedColumns = Math.max(1, Math.floor(columns));
+  const normalizedIndex = Math.max(0, Math.min(Math.floor(index), Math.max(0, count - 1)));
+  const rows = Math.max(1, Math.ceil(Math.max(0, count) / normalizedColumns));
+  if (order === "column-major") {
+    return {
+      row: normalizedIndex % rows,
+      col: Math.floor(normalizedIndex / rows)
+    };
+  }
+  return {
+    row: Math.floor(normalizedIndex / normalizedColumns),
+    col: normalizedIndex % normalizedColumns
+  };
+}
+
+function submenuGridIndex(
+  row: number,
+  col: number,
+  count: number,
+  columns: number,
+  order: BattleUiView["submenuGridOrder"] = "row-major"
+): number {
+  const normalizedColumns = Math.max(1, Math.floor(columns));
+  const rows = Math.max(1, Math.ceil(Math.max(0, count) / normalizedColumns));
+  const normalizedRow = modulo(row, rows);
+  const normalizedCol = modulo(col, normalizedColumns);
+  return order === "column-major"
+    ? normalizedCol * rows + normalizedRow
+    : normalizedRow * normalizedColumns + normalizedCol;
+}
+
+function submenuColumnOffset(widths: number[], col: number, gap: number): number {
+  return widths.slice(0, Math.max(0, col)).reduce((total, width) => total + width + gap, 0);
 }
 
 function clampRectToScreen(
@@ -4851,6 +5207,11 @@ function clampNumber(value: number, minValue: number, maxValue: number): number 
   return Math.max(minValue, Math.min(maxValue, value));
 }
 
+function modulo(value: number, size: number): number {
+  const normalizedSize = Math.max(1, size);
+  return ((value % normalizedSize) + normalizedSize) % normalizedSize;
+}
+
 function formatCommandLabel(command: BattleCommand): string {
   switch (command) {
     case "PSI":
@@ -4864,21 +5225,8 @@ function targetModeForCommand(command: BattleCommand): BattleTargetMode | null {
   return enemyTargetModeForCommand(command);
 }
 
-function targetScopeForPsi(psi: PsiData): string {
-  const side = psiTargetSide(psi);
-  const mode = psiTargetMode(psi);
-  if (side === "enemy") {
-    return mode === "all" ? "To all enemies" : "To one enemy";
-  }
-  if (side === "party") {
-    return mode === "all" ? "To all friends" : "To one friend";
-  }
-  switch (psiBattleKind(psi)) {
-    case "assist":
-      return "Battle effect";
-    default:
-      return "No battle target";
-  }
+function battlePsiInfoLine(psi: PsiData): string {
+  return `${targetScopeForPsiMenu(psi)}  PP ${psiPpCost(psi)}`;
 }
 
 function messageForBlockedAction(reason: string | undefined): string {

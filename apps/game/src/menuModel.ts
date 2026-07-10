@@ -1,7 +1,7 @@
 import type { CardNfts, CharacterCollection, ItemCollection, ItemData, KeyItems, PsiCollection, PsiData, ShopData } from "@eb/schemas";
 import { buildPartyMember, type PartyMember, type PartyMemberStats } from "./characterModel";
 import type { DialogueResolver } from "./dialogueRenderer";
-import { psiPpCost } from "./battleLogic";
+import { psiPpCost, psiTargetMode, psiTargetSide } from "./battleLogic";
 import { buildBinderViewModel, type BinderViewModel } from "./sourceCheckModel";
 import { KEY_ITEM_COLOR, keyItemLabel, keyItemSortValue, normalizeKeyItemIds } from "./keyItems";
 import {
@@ -16,6 +16,14 @@ import {
   type PartyVitals
 } from "./partyState";
 import { formatStatusAilments, type StatusState } from "./statusEffects";
+import {
+  PSI_STRENGTH_ORDER,
+  displayPsiFamilyName,
+  isDisplayablePsi,
+  normalizedPsiStrength,
+  psiStrengthGlyph,
+  psiStrengthRank
+} from "./psiPresentation";
 
 export type MenuItem = {
   id: string;
@@ -25,7 +33,11 @@ export type MenuItem = {
   childScreenId?: string;
   replaceParentOnConfirm?: boolean;
   actionId?: string;
+  infoLines?: string[];
 };
+
+export type MenuGridOrder = "row-major" | "column-major";
+export type MenuGridKind = "standard" | "goods-grid" | "psi-strengths";
 
 export type MenuScreen = {
   id: string;
@@ -35,6 +47,13 @@ export type MenuScreen = {
   wrap?: boolean;
   /** When set, the screen is a grid this many columns wide (2D cursor nav + grid render). */
   columns?: number;
+  gridOrder?: MenuGridOrder;
+  gridKind?: MenuGridKind;
+  maxVisibleRows?: number;
+  leftScreenId?: string;
+  rightScreenId?: string;
+  sideInfoTitle?: string;
+  sideInfoLines?: string[];
 };
 
 export type MenuFrame = {
@@ -65,6 +84,7 @@ export type MenuRenderItem = {
   enabled: boolean;
   selected: boolean;
   textColor?: string;
+  infoLines?: string[];
 };
 
 export type MenuRenderScreen = {
@@ -75,6 +95,11 @@ export type MenuRenderScreen = {
   objectiveText?: string;
   /** Grid width when the screen renders as a grid (mirrors MenuScreen.columns). */
   columns?: number;
+  gridOrder?: MenuGridOrder;
+  gridKind?: MenuGridKind;
+  maxVisibleRows?: number;
+  sideInfoTitle?: string;
+  sideInfoLines?: string[];
 };
 
 export type StatusMemberViewModel = {
@@ -167,16 +192,26 @@ export type PsiMenuEntry = {
   id: string;
   psiId: number;
   label: string;
+  family: string;
+  strength: string;
+  strengthGlyph: string;
   type: string;
   level: number;
   ppCost: number;
   affordable: boolean;
+  infoLines: string[];
+};
+
+export type PsiFamilyViewModel = {
+  family: string;
+  entries: PsiMenuEntry[];
 };
 
 export type PsiViewModel = {
   title: "PSI";
   member: ActivePartyMemberViewModel;
   entries: PsiMenuEntry[];
+  families: PsiFamilyViewModel[];
 };
 
 export type CheckViewModel = {
@@ -425,7 +460,12 @@ export function moveMenu(state: MenuState, delta: number, options: { wrap?: bool
  * the row (dx) or column (dy) and skips disabled cells. Screens without `columns` fall
  * back to linear vertical movement (dy), so lists keep their existing up/down behavior.
  */
-export function moveMenu2D(state: MenuState, dx: number, dy: number): MenuState {
+export function moveMenu2D(
+  state: MenuState,
+  dx: number,
+  dy: number,
+  options: { screenById?: (id: string) => MenuScreen | undefined } = {}
+): MenuState {
   const active = currentFrame(state);
   if (!active) {
     return state;
@@ -438,15 +478,22 @@ export function moveMenu2D(state: MenuState, dx: number, dy: number): MenuState 
   if (columns === 1) {
     return moveMenu(state, Math.sign(dy) || Math.sign(dx));
   }
-  const rows = Math.ceil(items.length / columns);
+  const rows = gridRows(items.length, columns);
   const stepCol = Math.sign(dx);
   const stepRow = Math.sign(dy);
-  let col = active.cursorIndex % columns;
-  let row = Math.floor(active.cursorIndex / columns);
+  const currentPosition = gridPosition(active.cursorIndex, items.length, columns, active.screen.gridOrder);
+  let col = currentPosition.col;
+  let row = currentPosition.row;
+  if (stepCol < 0 && col === 0 && active.screen.leftScreenId && options.screenById) {
+    return replaceCurrentScreen(state, active.screen.leftScreenId, active.cursorIndex, options.screenById);
+  }
+  if (stepCol > 0 && col === columns - 1 && active.screen.rightScreenId && options.screenById) {
+    return replaceCurrentScreen(state, active.screen.rightScreenId, active.cursorIndex, options.screenById);
+  }
   for (let attempt = 0; attempt < columns * rows; attempt += 1) {
     col = modulo(col + stepCol, columns);
     row = modulo(row + stepRow, rows);
-    const index = row * columns + col;
+    const index = gridIndex(row, col, items.length, columns, active.screen.gridOrder);
     if (index >= 0 && index < items.length && items[index].enabled) {
       return replaceCurrentFrame(state, { ...active, cursorIndex: index });
     }
@@ -541,12 +588,18 @@ export function menuRenderStack(state: MenuState): MenuRenderScreen[] {
     cursorIndex: frame.cursorIndex,
     ...(frame.screen.objectiveText ? { objectiveText: frame.screen.objectiveText } : {}),
     ...(frame.screen.columns ? { columns: frame.screen.columns } : {}),
+    ...(frame.screen.gridOrder ? { gridOrder: frame.screen.gridOrder } : {}),
+    ...(frame.screen.gridKind ? { gridKind: frame.screen.gridKind } : {}),
+    ...(frame.screen.maxVisibleRows ? { maxVisibleRows: frame.screen.maxVisibleRows } : {}),
+    ...(frame.screen.sideInfoTitle ? { sideInfoTitle: frame.screen.sideInfoTitle } : {}),
+    ...(frame.screen.sideInfoLines ? { sideInfoLines: frame.screen.sideInfoLines } : {}),
     items: frame.screen.items.map((item, index) => ({
       id: item.id,
       label: item.label,
       enabled: item.enabled,
       selected: index === frame.cursorIndex,
-      ...(item.textColor ? { textColor: item.textColor } : {})
+      ...(item.textColor ? { textColor: item.textColor } : {}),
+      ...(item.infoLines ? { infoLines: item.infoLines } : {})
     }))
   }));
 }
@@ -572,13 +625,20 @@ export function buildMenuScreens(status: StatusViewModel, input: PartyMenuViewMo
     buildMainMenuScreen(input.currentObjectiveText),
     buildPartyMemberSelectScreen(GOODS_MENU_ID, "Goods", goodsByMember.map((goods) => ({
       ...goods.member,
-      replaceParentOnConfirm: goods.entries.length === 0
+      replaceParentOnConfirm: true
     }))),
     ...goodsByMember.flatMap((goods, index) => [
-      buildGoodsScreen(goods, partyMemberScreenId(GOODS_MENU_ID, index)),
+      buildGoodsScreen(goods, partyMemberScreenId(GOODS_MENU_ID, index), {
+        leftScreenId: partyMemberScreenId(GOODS_MENU_ID, modulo(index - 1, goodsByMember.length)),
+        rightScreenId: partyMemberScreenId(GOODS_MENU_ID, modulo(index + 1, goodsByMember.length)),
+        wallet: stat(input.partyState?.wallet ?? input.wallet ?? 0)
+      }),
       ...buildGoodsActionScreens(goods)
     ]),
-    buildPartyMemberSelectScreen(PSI_MENU_ID, "PSI", psiByMember.map((psi) => psi.member)),
+    buildPartyMemberSelectScreen(PSI_MENU_ID, "PSI", psiByMember.map((psi) => ({
+      ...psi.member,
+      replaceParentOnConfirm: true
+    }))),
     ...psiByMember.map((psi, index) => buildPsiScreen(psi, partyMemberScreenId(PSI_MENU_ID, index))),
     buildStatusScreen(status),
     ...buildStatusMemberScreens(status),
@@ -712,7 +772,7 @@ export function buildEquipViewModel(input: PartyMenuViewModelInput = {}): EquipV
 }
 
 function buildEquipViewModelForMember(input: PartyMenuViewModelInput, member: PartyMember): EquipViewModel {
-  const equipped = input.partyState?.equipped?.(member.id) ?? {};
+  const equippedSlots = input.partyState?.equipped?.(member.id) ?? {};
   const items = itemMap(input.items);
   const entries = inventoryEntries(input, member).filter((entry) => entry.equippable && entry.equipmentSlot);
   return {
@@ -720,7 +780,7 @@ function buildEquipViewModelForMember(input: PartyMenuViewModelInput, member: Pa
     member: activeMemberView(member),
     entries,
     slots: EQUIP_SLOTS.map((slot) => {
-      const equippedItemId = equipped[slot];
+      const equippedItemId = equippedSlots[slot];
       const equippedItem = equippedItemId !== undefined ? items.get(equippedItemId) : undefined;
       return {
         slot,
@@ -740,25 +800,33 @@ export function buildPsiViewModel(input: PartyMenuViewModelInput = {}): PsiViewM
 function buildPsiViewModelForMember(input: PartyMenuViewModelInput, member: PartyMember): PsiViewModel {
   const pp = stat(input.partyState?.vitals?.(member.id)?.pp ?? member.pp);
   const entries = (input.psi?.psi ?? [])
+    .filter(isDisplayablePsi)
     .filter((psi) => isLearnedByMember(psi, member.id, member.level))
-    .sort((a, b) => a.type.localeCompare(b.type) || a.id - b.id)
+    .sort((a, b) => a.id - b.id)
     .map((psi) => {
       const learned = psi.learnedBy.find((item) => item.charId === member.id);
       const ppCost = psiPpCost(psi);
+      const family = displayPsiFamilyName(psi);
       return {
         id: `psi-${psi.id}`,
         psiId: psi.id,
-        label: fitMenuLabel([resolvePsiName(input, psi), psi.strength, `PP ${ppCost}`].filter(Boolean).join(" ")),
+        label: fitMenuLabel([resolvePsiName(input, psi), psiStrengthGlyph(psi.strength), `PP ${ppCost}`].filter(Boolean).join(" ")),
+        family,
+        strength: normalizedPsiStrength(psi.strength),
+        strengthGlyph: psiStrengthGlyph(psi.strength),
         type: psi.type,
         level: learned?.level ?? 0,
         ppCost,
-        affordable: pp >= ppCost
+        affordable: pp >= ppCost,
+        infoLines: [targetScopeForPsiMenu(psi), `PP Cost: ${ppCost}`]
       };
     });
+  const families = psiEntryFamilies(entries);
   return {
     title: "PSI",
     member: activeMemberView(member),
-    entries
+    entries,
+    families
   };
 }
 
@@ -820,20 +888,31 @@ export function buildStatusMemberScreens(status: StatusViewModel): MenuScreen[] 
   }));
 }
 
-export function buildGoodsScreen(goods: GoodsViewModel, id = GOODS_MENU_ID): MenuScreen {
+export function buildGoodsScreen(
+  goods: GoodsViewModel,
+  id = GOODS_MENU_ID,
+  options: { leftScreenId?: string; rightScreenId?: string; wallet?: number } = {}
+): MenuScreen {
   return {
     id,
-    title: goods.title,
+    title: `${goods.title} <${goods.member.name}>`,
     items: goods.entries.length > 0
       ? goods.entries.map((entry) => ({
           id: entry.id,
-          label: entry.label,
+          label: fitMenuLabel(`${entry.equipped ? "E " : ""}${entry.label}`),
           enabled: true,
           ...(entry.keyItem ? { textColor: KEY_ITEM_COLOR } : {}),
           childScreenId: entry.actionScreenId
         }))
       : [{ id: "goods-empty", label: `${goods.member.name} has no goods.`, enabled: false }],
-    wrap: false
+    wrap: false,
+    columns: 2,
+    gridOrder: "column-major",
+    gridKind: "goods-grid",
+    maxVisibleRows: 7,
+    ...(options.leftScreenId ? { leftScreenId: options.leftScreenId } : {}),
+    ...(options.rightScreenId ? { rightScreenId: options.rightScreenId } : {}),
+    sideInfoLines: [`$ ${stat(options.wallet ?? 0)}`]
   };
 }
 
@@ -947,24 +1026,33 @@ export function buildEquipActionScreens(equip: EquipViewModel): MenuScreen[] {
 
 export function buildPsiScreen(psi: PsiViewModel, id = PSI_MENU_ID): MenuScreen {
   const items: MenuItem[] = [];
-  let previousType: string | undefined;
-  const showGroups = new Set(psi.entries.map((entry) => entry.type).filter(Boolean)).size > 1;
-  for (const entry of psi.entries) {
-    if (showGroups && entry.type && entry.type !== previousType) {
-      items.push({ id: `psi-type-${items.length}`, label: fitMenuLabel(`Type ${entry.type}`), enabled: false });
-      previousType = entry.type;
+  for (const family of psi.families) {
+    items.push({ id: `psi-family-${items.length}`, label: fitMenuLabel(family.family, 20), enabled: false });
+    for (const strength of PSI_STRENGTH_ORDER) {
+      const entry = family.entries.find((candidate) => candidate.strength === strength);
+      items.push(entry
+        ? {
+            id: entry.id,
+            label: entry.strengthGlyph,
+            enabled: true,
+            infoLines: entry.infoLines
+          }
+        : {
+            id: `psi-empty-${family.family}-${strength}`,
+            label: "",
+            enabled: false
+          });
     }
-    items.push({
-      id: entry.id,
-      label: entry.label,
-      enabled: entry.affordable
-    });
   }
   return {
     id,
-    title: psi.title,
+    title: `${psi.title} <${psi.member.name}>`,
     items: items.length > 0 ? items : [{ id: "psi-empty", label: "No learned PSI.", enabled: false }],
-    wrap: false
+    wrap: false,
+    columns: PSI_STRENGTH_ORDER.length + 1,
+    gridKind: "psi-strengths",
+    maxVisibleRows: 8,
+    sideInfoTitle: "Info"
   };
 }
 
@@ -1276,11 +1364,12 @@ function inventoryEntries(input: PartyMenuViewModelInput, member: PartyMember): 
   const items = itemMap(input.items);
   const keyItemIds = normalizeKeyItemIds(input.keyItems);
   const inventory = input.partyState?.applyToPartyMembers ? member.inventory : input.partyState?.inventory?.(member.id) ?? member.inventory;
-  const equipped = input.partyState?.equipped?.(member.id) ?? {};
+  const equippedSlots = input.partyState?.equipped?.(member.id) ?? {};
   return inventory.map((itemId, slot) => {
     const item = items.get(itemId);
     const keyItem = keyItemIds.has(itemId);
     const equipmentSlot = item ? equipmentSlotForItemType(item.type) : undefined;
+    const isEquipped = equipmentSlot ? equippedSlotsHasItem(equippedSlots, equipmentSlot, itemId) : false;
     return {
       id: `goods-${slot}-${itemId}`,
       itemId,
@@ -1290,13 +1379,13 @@ function inventoryEntries(input: PartyMenuViewModelInput, member: PartyMember): 
       equippable: item?.equippable ?? false,
       fieldUsable: isFieldUsableItemEffect(item ? decodeItemUseEffect(item) : undefined),
       ...(equipmentSlot ? { equipmentSlot } : {}),
-      equipped: equipmentSlot ? equipped[equipmentSlot] === itemId : false,
+      equipped: isEquipped,
       keyItem,
       helpText: item?.helpText,
       ...(item && equipmentSlot ? {
         statPreview: previewEquipStats({
           baseStats: member.stats,
-          equipped,
+          equipped: equippedSlots,
           item,
           itemById: (id) => items.get(id)
         })
@@ -1543,6 +1632,43 @@ function isLearnedByMember(psi: PsiData, memberId: number, memberLevel: number):
   return psi.learnedBy.some((entry) => entry.charId === memberId && entry.level <= memberLevel);
 }
 
+function psiEntryFamilies(entries: PsiMenuEntry[]): PsiFamilyViewModel[] {
+  const families: PsiFamilyViewModel[] = [];
+  const byFamily = new Map<string, PsiFamilyViewModel>();
+  for (const entry of entries) {
+    const existing = byFamily.get(entry.family);
+    if (existing) {
+      existing.entries.push(entry);
+    } else {
+      const family = { family: entry.family, entries: [entry] };
+      byFamily.set(entry.family, family);
+      families.push(family);
+    }
+  }
+  for (const family of families) {
+    family.entries.sort((left, right) =>
+      psiStrengthRank(left.strength) - psiStrengthRank(right.strength) || left.psiId - right.psiId
+    );
+  }
+  return families;
+}
+
+function equippedSlotsHasItem(equipped: EquippedSlots, slot: EquipmentSlot, itemId: number): boolean {
+  return equipped[slot] === itemId;
+}
+
+export function targetScopeForPsiMenu(psi: Pick<PsiData, "type" | "direction" | "effect" | "target">): string {
+  const side = psiTargetSide(psi);
+  const mode = psiTargetMode(psi);
+  if (side === "enemy") {
+    return mode === "all" ? "To all enemies" : "To one enemy";
+  }
+  if (side === "party") {
+    return mode === "all" ? "To all friends" : "To one friend";
+  }
+  return "No battle target";
+}
+
 function equipmentSlotLabel(slot: EquipmentSlot | undefined): string {
   switch (slot) {
     case "weapon":
@@ -1591,6 +1717,63 @@ function replaceCurrentFrame(state: MenuState, frame: MenuFrame): MenuState {
     open: true,
     stack: [...state.stack.slice(0, -1), frame]
   };
+}
+
+function replaceCurrentScreen(
+  state: MenuState,
+  screenId: string,
+  preferredCursorIndex: number,
+  screenById: (id: string) => MenuScreen | undefined
+): MenuState {
+  const screen = screenById(screenId);
+  if (!currentFrame(state) || !screen) {
+    return state;
+  }
+  return replaceCurrentFrame(state, {
+    screen,
+    cursorIndex: refreshedCursorIndex(screen, preferredCursorIndex)
+  });
+}
+
+function gridRows(itemCount: number, columns: number): number {
+  return Math.max(1, Math.ceil(Math.max(0, itemCount) / Math.max(1, columns)));
+}
+
+function gridPosition(
+  index: number,
+  itemCount: number,
+  columns: number,
+  order: MenuGridOrder = "row-major"
+): { row: number; col: number } {
+  const normalizedColumns = Math.max(1, columns);
+  const normalizedIndex = clamp(Math.floor(index), 0, Math.max(0, itemCount - 1));
+  if (order === "column-major") {
+    const rows = gridRows(itemCount, normalizedColumns);
+    return {
+      row: normalizedIndex % rows,
+      col: Math.floor(normalizedIndex / rows)
+    };
+  }
+  return {
+    row: Math.floor(normalizedIndex / normalizedColumns),
+    col: normalizedIndex % normalizedColumns
+  };
+}
+
+function gridIndex(
+  row: number,
+  col: number,
+  itemCount: number,
+  columns: number,
+  order: MenuGridOrder = "row-major"
+): number {
+  const normalizedColumns = Math.max(1, columns);
+  const rows = gridRows(itemCount, normalizedColumns);
+  const normalizedRow = modulo(row, rows);
+  const normalizedCol = modulo(col, normalizedColumns);
+  return order === "column-major"
+    ? normalizedCol * rows + normalizedRow
+    : normalizedRow * normalizedColumns + normalizedCol;
 }
 
 function initialCursor(screen: MenuScreen): number {

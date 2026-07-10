@@ -77,6 +77,16 @@ type MenuCursorSlot = {
   rowHeight: number;
 };
 
+type MenuGridMetrics = {
+  columns: number;
+  rows: number;
+  visibleStartRow: number;
+  visibleRows: number;
+  columnWidths: number[];
+  rowHeight: number;
+  contentWidth: number;
+};
+
 type OverworldHudTextSet = {
   name: Phaser.GameObjects.Text;
   badges: Phaser.GameObjects.Text;
@@ -597,12 +607,16 @@ export class UiScene extends Phaser.Scene {
       // Grid screens (the 3x3 Command menu) lay items in a row-major grid; the
       // selection highlight boxes the whole cell. Lists keep the vertical path below.
       if (screen.columns && screen.columns > 1) {
-        const { columns, cellWidth, rowHeight } = this.menuGridMetrics(screen);
+        const metrics = this.menuGridMetrics(screen);
         screen.items.forEach((item, index) => {
-          const col = index % columns;
-          const row = Math.floor(index / columns);
-          const cellX = x + textInset + col * (cellWidth + MENU_GRID_COL_GAP);
-          const cellY = itemTop + row * rowHeight;
+          const position = menuGridPosition(index, screen.items.length, metrics.columns, screen.gridOrder);
+          if (position.row < metrics.visibleStartRow || position.row >= metrics.visibleStartRow + metrics.visibleRows) {
+            return;
+          }
+          const visibleRow = position.row - metrics.visibleStartRow;
+          const cellX = x + textInset + menuGridColumnOffset(metrics, position.col);
+          const cellY = itemTop + visibleRow * metrics.rowHeight;
+          const cellWidth = metrics.columnWidths[position.col] ?? metrics.columnWidths[0] ?? 1;
           const selected = item.selected && item.enabled;
           if (selected) {
             this.menuCursorSlots.push({
@@ -612,12 +626,22 @@ export class UiScene extends Phaser.Scene {
               rowHeight: this.menuLineHeight()
             });
           }
-          this.menuTexts.push(createCleanText(this, cellX + MENU_CARET_GUTTER_PX, cellY, item.label, {
+          const labelX = screen.gridKind === "psi-strengths" && position.col === 0
+            ? cellX
+            : cellX + MENU_CARET_GUTTER_PX;
+          const textWidth = Math.max(1, cellWidth - (labelX - cellX));
+          this.menuTexts.push(createCleanText(this, labelX, cellY, item.label, {
             fontSize,
             color: item.textColor ?? (selected ? CLEAN_UI_SELECTION_TEXT : (item.enabled ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY)),
-            weight: selected ? 500 : 400
+            weight: selected ? 500 : 400,
+            fixedWidth: textWidth,
+            align: screen.gridKind === "psi-strengths" && position.col > 0 ? "center" : "left"
           }).setDepth(selected ? 17 : 15));
         });
+        this.drawMenuScrollMarkers(graphics, rect, metrics.visibleStartRow > 0, metrics.visibleStartRow + metrics.visibleRows < metrics.rows);
+        if (screen === visibleScreens[visibleScreens.length - 1]) {
+          this.drawMenuSideInfo(screen, rect);
+        }
         nextX = x + boxWidth + MENU_GAP;
         return;
       }
@@ -646,6 +670,10 @@ export class UiScene extends Phaser.Scene {
           fixedWidth: textWidth
         }).setDepth(selected ? 17 : 15));
       });
+      if (screen === visibleScreens[visibleScreens.length - 1]) {
+        this.drawMenuScrollMarkers(graphics, rect, start > 0, start + visibleItems.length < screen.items.length);
+        this.drawMenuSideInfo(screen, rect);
+      }
       nextX = x + boxWidth + MENU_GAP;
     });
   }
@@ -660,9 +688,12 @@ export class UiScene extends Phaser.Scene {
       const candidate = screens.slice(dropped);
       let x = MENU_LEFT;
       let fits = true;
-      for (const screen of candidate) {
+      for (const [index, screen] of candidate.entries()) {
         const rect = this.menuRect(screen, x);
-        if (rect.x + rect.width > rightEdge) {
+        const right = index === candidate.length - 1
+          ? this.menuScreenRightWithSideInfo(screen, rect)
+          : rect.x + rect.width;
+        if (right > rightEdge) {
           fits = false;
           break;
         }
@@ -973,18 +1004,27 @@ export class UiScene extends Phaser.Scene {
   }
 
   /** Shared cell metrics for a columned (grid) menu, used by sizing + drawing. */
-  private menuGridMetrics(screen: MenuRenderScreen): {
-    columns: number;
-    rows: number;
-    cellWidth: number;
-    rowHeight: number;
-  } {
+  private menuGridMetrics(screen: MenuRenderScreen): MenuGridMetrics {
     const columns = Math.max(1, Math.trunc(screen.columns ?? 1));
     const rows = Math.max(1, Math.ceil(screen.items.length / columns));
-    const widest = screen.items.reduce((max, item) => Math.max(max, this.measureTextWidth(item.label)), 0);
-    const cellWidth = widest + MENU_CARET_GUTTER_PX + MENU_GRID_CELL_INSET * 2;
+    const selectedIndex = Math.max(0, screen.cursorIndex);
+    const selectedRow = menuGridPosition(selectedIndex, screen.items.length, columns, screen.gridOrder).row;
+    const maxVisibleRows = Math.max(1, Math.trunc(screen.maxVisibleRows ?? rows));
+    const visibleRows = Math.max(1, Math.min(rows, maxVisibleRows));
+    const visibleStartRow = visibleItemStart(selectedRow, rows, visibleRows);
+    const columnWidths = Array.from({ length: columns }, (_, col) => {
+      const labels = screen.items.flatMap((item, index) => {
+        const position = menuGridPosition(index, screen.items.length, columns, screen.gridOrder);
+        return position.col === col ? [item.label] : [];
+      });
+      const widest = labels.reduce((max, label) => Math.max(max, this.measureTextWidth(label)), 0);
+      const caretWidth = screen.gridKind === "psi-strengths" && col === 0 ? 0 : MENU_CARET_GUTTER_PX;
+      const minWidth = screen.gridKind === "psi-strengths" && col > 0 ? 24 : 0;
+      return Math.max(minWidth, widest + caretWidth + MENU_GRID_CELL_INSET * 2);
+    });
     const rowHeight = this.menuLineHeight() + MENU_GRID_ROW_EXTRA;
-    return { columns, rows, cellWidth, rowHeight };
+    const contentWidth = columnWidths.reduce((total, width) => total + width, 0) + MENU_GRID_COL_GAP * Math.max(0, columns - 1);
+    return { columns, rows, visibleStartRow, visibleRows, columnWidths, rowHeight, contentWidth };
   }
 
   private menuObjectiveTextWidth(): number {
@@ -1019,13 +1059,13 @@ export class UiScene extends Phaser.Scene {
   private menuRect(screen: MenuRenderScreen, x: number): CanvasRect {
     const showTitle = screen.id !== "main";
     if (screen.columns && screen.columns > 1) {
-      const { columns, rows, cellWidth, rowHeight } = this.menuGridMetrics(screen);
+      const metrics = this.menuGridMetrics(screen);
       const titleHeight = showTitle ? this.menuLineHeight() + MENU_TITLE_GAP : 0;
       const objectiveLines = this.menuObjectiveLines(screen);
       const objectiveHeight = objectiveLines.length > 0
         ? objectiveLines.length * this.menuLineHeight() + MENU_OBJECTIVE_GAP
         : 0;
-      const gridWidth = MENU_HORIZONTAL_PADDING * 2 + columns * cellWidth + (columns - 1) * MENU_GRID_COL_GAP;
+      const gridWidth = MENU_HORIZONTAL_PADDING * 2 + metrics.contentWidth;
       const objectiveWidth = objectiveLines.length > 0
         ? MENU_HORIZONTAL_PADDING * 2 + MENU_CARET_GUTTER_PX + this.menuObjectiveTextWidth()
         : 0;
@@ -1033,7 +1073,7 @@ export class UiScene extends Phaser.Scene {
         x,
         y: MENU_TOP,
         width: Math.max(gridWidth, objectiveWidth),
-        height: MENU_VERTICAL_PADDING * 2 + titleHeight + objectiveHeight + rows * rowHeight
+        height: MENU_VERTICAL_PADDING * 2 + titleHeight + objectiveHeight + metrics.visibleRows * metrics.rowHeight
       };
     }
     const lineHeight = this.menuLineHeight();
@@ -1057,6 +1097,91 @@ export class UiScene extends Phaser.Scene {
       titleLines: showTitle ? 1 : 0,
       titleGap: MENU_TITLE_GAP
     });
+  }
+
+  private menuScreenRightWithSideInfo(screen: MenuRenderScreen, rect: CanvasRect): number {
+    const sideInfo = this.menuSideInfoRect(screen, rect);
+    return sideInfo ? sideInfo.x + sideInfo.width : rect.x + rect.width;
+  }
+
+  private menuActiveInfo(screen: MenuRenderScreen): { title?: string; lines: string[] } | undefined {
+    const selectedInfo = screen.items.find((item) => item.selected && item.infoLines && item.infoLines.length > 0)?.infoLines;
+    const lines = selectedInfo ?? screen.sideInfoLines;
+    if (!lines || lines.length === 0) {
+      return undefined;
+    }
+    return {
+      ...(screen.sideInfoTitle ? { title: screen.sideInfoTitle } : {}),
+      lines
+    };
+  }
+
+  private menuSideInfoRect(screen: MenuRenderScreen, anchor: CanvasRect): CanvasRect | undefined {
+    const info = this.menuActiveInfo(screen);
+    if (!info) {
+      return undefined;
+    }
+    const x = anchor.x + anchor.width + MENU_GAP;
+    const maxWidth = Math.max(1, this.scale.width - x - MENU_RIGHT_MARGIN);
+    const labels = info.title ? [info.title, ...info.lines] : info.lines;
+    const measuredWidth = labels.reduce((max, label) => Math.max(max, this.measureTextWidth(label)), 0);
+    const width = Math.min(
+      maxWidth,
+      Math.max(64, measuredWidth + (MENU_HORIZONTAL_PADDING + MENU_CARET_GUTTER_PX) * 2)
+    );
+    const maxHeight = Math.max(this.menuLineHeight() + MENU_VERTICAL_PADDING * 2, this.scale.height - anchor.y - MENU_BOTTOM_MARGIN);
+    const height = Math.min(maxHeight, MENU_VERTICAL_PADDING * 2 + labels.length * this.menuLineHeight());
+    return {
+      x,
+      y: anchor.y,
+      width,
+      height
+    };
+  }
+
+  private drawMenuSideInfo(screen: MenuRenderScreen, anchor: CanvasRect): void {
+    const info = this.menuActiveInfo(screen);
+    const rect = this.menuSideInfoRect(screen, anchor);
+    if (!info || !rect) {
+      return;
+    }
+    const graphics = this.menuGraphics;
+    if (!graphics) {
+      return;
+    }
+    drawCleanPanel(graphics, rect);
+    const labels = info.title ? [info.title, ...info.lines] : info.lines;
+    const textRect = cleanPanelInnerRect(rect, {
+      x: MENU_HORIZONTAL_PADDING,
+      y: MENU_VERTICAL_PADDING
+    });
+    labels.forEach((line, index) => {
+      this.menuTexts.push(createCleanText(this, textRect.x, textRect.y + index * this.menuLineHeight(), line, {
+        fontSize: index === 0 && info.title ? MENU_TITLE_FONT_SIZE : MENU_FONT_SIZE,
+        color: index === 0 && info.title ? CLEAN_UI_SECONDARY : CLEAN_UI_PRIMARY,
+        fixedWidth: textRect.width,
+        weight: index === 0 && info.title ? 500 : 400
+      }).setDepth(16));
+    });
+  }
+
+  private drawMenuScrollMarkers(
+    graphics: Phaser.GameObjects.Graphics,
+    rect: CanvasRect,
+    hasMoreBefore: boolean,
+    hasMoreAfter: boolean
+  ): void {
+    const x = Math.round(rect.x + rect.width - MENU_HORIZONTAL_PADDING + 2);
+    if (hasMoreBefore) {
+      const y = Math.round(rect.y + 8);
+      graphics.fillStyle(CLEAN_UI_PANEL_BORDER, 0.76);
+      graphics.fillTriangle(x, y, x - 5, y + 6, x + 5, y + 6);
+    }
+    if (hasMoreAfter) {
+      const y = Math.round(rect.y + rect.height - 8);
+      graphics.fillStyle(CLEAN_UI_PANEL_BORDER, 0.76);
+      graphics.fillTriangle(x, y, x - 5, y - 6, x + 5, y - 6);
+    }
   }
 
   private measureTextWidth(text: string): number {
@@ -1096,4 +1221,29 @@ function visibleItemStart(cursorIndex: number, itemCount: number, maxItems: numb
     return 0;
   }
   return Math.min(Math.max(0, cursorIndex - maxItems + 1), itemCount - maxItems);
+}
+
+function menuGridColumnOffset(metrics: MenuGridMetrics, col: number): number {
+  return metrics.columnWidths.slice(0, Math.max(0, col)).reduce((total, width) => total + width + MENU_GRID_COL_GAP, 0);
+}
+
+function menuGridPosition(
+  index: number,
+  itemCount: number,
+  columns: number,
+  order: MenuRenderScreen["gridOrder"] = "row-major"
+): { row: number; col: number } {
+  const normalizedColumns = Math.max(1, columns);
+  const normalizedIndex = Math.max(0, Math.min(Math.floor(index), Math.max(0, itemCount - 1)));
+  const rows = Math.max(1, Math.ceil(Math.max(0, itemCount) / normalizedColumns));
+  if (order === "column-major") {
+    return {
+      row: normalizedIndex % rows,
+      col: Math.floor(normalizedIndex / rows)
+    };
+  }
+  return {
+    row: Math.floor(normalizedIndex / normalizedColumns),
+    col: normalizedIndex % normalizedColumns
+  };
 }

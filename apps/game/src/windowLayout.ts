@@ -378,6 +378,18 @@ export function battleMenuCascadeLayout(options: BattleMenuCascadeLayoutOptions)
     : undefined;
 
   const submenuLabels = options.submenuLabels ?? [];
+  // When an info strip will render under the stack, the scrollable list must
+  // RESERVE its height up front - otherwise a max-load list (50-entry PSI) runs
+  // to the same bottom limit and the strip has nowhere to go but on top of it.
+  const willRenderDescription = (options.descriptionLines ?? []).length > 0;
+  const descriptionLineCount = Math.max(1, (options.descriptionLines ?? []).length);
+  const descriptionReserve = willRenderDescription
+    ? options.lineHeight * descriptionLineCount +
+      (options.descriptionPaddingY ?? options.paddingY) * 2 +
+      Math.max(0, options.descriptionGap) +
+      Math.max(0, options.cascadeOverlap) +
+      4
+    : 0;
   const submenu = command && submenuLabels.length > 0
     ? battleScrollableMenuListRect({
       screen: options.screen,
@@ -394,18 +406,27 @@ export function battleMenuCascadeLayout(options: BattleMenuCascadeLayoutOptions)
       leftMargin,
       topMargin,
       rightMargin,
-      bottomMargin
+      bottomMargin: bottomMargin + descriptionReserve
     })
     : undefined;
 
   const descriptionLines = options.descriptionLines ?? [];
+  // The info strip sits below the DEEPEST open window: anchoring on the command
+  // window alone paints it over tall submenus (a 50-entry PSI list at max load).
+  const descriptionAnchorBottom = Math.max(
+    command ? command.y + command.height : 0,
+    submenu ? submenu.y + submenu.height : 0
+  );
   const description = command && descriptionLines.length > 0
     ? battleDescriptionRect({
       screen: options.screen,
       x: command.x,
       y: Math.min(
-        command.y + command.height - Math.max(0, options.cascadeOverlap) + Math.max(0, options.descriptionGap),
-        Math.max(topMargin, bottomLimit - options.lineHeight - (options.descriptionPaddingY ?? options.paddingY) * 2)
+        descriptionAnchorBottom - Math.max(0, options.cascadeOverlap) + Math.max(0, options.descriptionGap),
+        Math.max(
+          topMargin,
+          bottomLimit - options.lineHeight * descriptionLineCount - (options.descriptionPaddingY ?? options.paddingY) * 2
+        )
       ),
       labels: descriptionLines,
       measureText: options.measureText,

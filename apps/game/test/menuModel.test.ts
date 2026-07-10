@@ -16,6 +16,7 @@ import {
   buildMainMenuScreen,
   buildMenuScreens,
   buildPhoneServiceScreens,
+  buildPsiScreen,
   buildPsiViewModel,
   buildShopEquipPromptScreen,
   buildShopMenuScreens,
@@ -483,10 +484,18 @@ describe("item and PSI menu view models", () => {
     ]);
     expect(byId.get("goods-member-0")?.items[0]).toMatchObject({
       id: "goods-0-10",
+      label: "E [item 10 data]",
       childScreenId: "goods-item-1-0-10"
     });
+    expect(byId.get("goods-member-0")).toMatchObject({
+      title: "Goods <MEMBER_A>",
+      columns: 2,
+      gridOrder: "column-major",
+      maxVisibleRows: 7,
+      sideInfoLines: ["$ 0"]
+    });
     expect(byId.get("goods-member-1")?.items[0]).toMatchObject({
-      label: "[item 13 data]",
+      label: "E [item 13 data]",
       childScreenId: "goods-item-2-0-13"
     });
 
@@ -494,8 +503,19 @@ describe("item and PSI menu view models", () => {
       ["MEMBER_A", "psi-member-0"],
       ["MEMBER_B", "psi-member-1"]
     ]);
-    expect(byId.get("psi-member-0")?.items.map((item) => item.label)).toEqual(["[psi 7 data] stage-a PP 0"]);
-    expect(byId.get("psi-member-1")?.items.map((item) => item.label)).toEqual(["[psi 9 data] stage-c PP 0"]);
+    expect(byId.get("psi-member-0")).toMatchObject({
+      title: "PSI <MEMBER_A>",
+      columns: 6,
+      gridKind: "psi-strengths",
+      maxVisibleRows: 8,
+      sideInfoTitle: "Info"
+    });
+    expect(byId.get("psi-member-0")?.items.map((item) => item.label)).toEqual(["[psi 7 data]", "α", "", "", "", ""]);
+    expect(byId.get("psi-member-1")?.items.map((item) => item.label)).toEqual(["[psi 9 data]", "", "", "γ", "", ""]);
+    expect(byId.get("psi-member-0")?.items[1]).toMatchObject({
+      id: "psi-7",
+      infoLines: ["No battle target", "PP Cost: 4"]
+    });
     expect(byId.get("goods-item-1-0-10")?.items.map((item) => [item.label, item.enabled])).toEqual([
       ["Use", true],
       ["Give", true],
@@ -548,6 +568,101 @@ describe("item and PSI menu view models", () => {
     expect(byId.get("check")?.items[0]?.id).not.toBe("check-stub");
     expect(byId.get("check")?.items[0]?.childScreenId).toBe("check-item-0-10");
     expect(byId.get("atm")?.items[0]?.id).toBe("atm-wallet");
+  });
+
+  it("renders a full Goods bag as two column-major columns and switches members at the edge", () => {
+    const partyMembers = [partyMember(1, "MEMBER_A", 5), partyMember(2, "MEMBER_B", 5)];
+    const status = buildStatusViewModel({ partyMembers });
+    const screens = buildMenuScreens(status, {
+      partyMembers,
+      partyState: {
+        wallet: 123,
+        bank: 0,
+        party: () => [1, 2],
+        inventory: (char: number) =>
+          Array.from({ length: 14 }, (_, index) => (char === 1 ? 10 : 30) + index),
+        equipped: (char: number) => char === 1 ? { weapon: 10 } : {}
+      },
+      items: {
+        ...syntheticItems(),
+        items: Array.from({ length: 14 }, (_, index) => itemData(10 + index, index === 0))
+      }
+    });
+    const byId = new Map(screens.map((screen) => [screen.id, screen]));
+    const member0 = byId.get("goods-member-0");
+    expect(member0).toMatchObject({
+      columns: 2,
+      gridOrder: "column-major",
+      gridKind: "goods-grid",
+      maxVisibleRows: 7,
+      sideInfoLines: ["$ 123"]
+    });
+    expect(member0?.items).toHaveLength(14);
+    expect(member0?.items[0]).toMatchObject({ id: "goods-0-10", label: "E [item 10 data]" });
+    expect(member0?.items[7]).toMatchObject({ id: "goods-7-17", label: "[item 17 data]" });
+
+    let state = openMenu(member0 ?? buildMainMenuScreen());
+    state = moveMenu2D(state, 0, 1, { screenById: (id) => byId.get(id) });
+    expect(menuDebugState(state)).toMatchObject({ cursorIndex: 1, currentItemId: "goods-1-11" });
+    state = moveMenu2D(state, 1, 0, { screenById: (id) => byId.get(id) });
+    expect(menuDebugState(state)).toMatchObject({ cursorIndex: 8, currentItemId: "goods-8-18" });
+    state = moveMenu2D(state, 1, 0, { screenById: (id) => byId.get(id) });
+    expect(menuDebugState(state)).toMatchObject({ stack: ["goods-member-1"], cursorIndex: 8, currentItemId: "goods-8-38" });
+  });
+
+  it("filters placeholder PSI rows and builds family strength selector rows", () => {
+    const partyMembers = [partyMember(1, "MEMBER_A", 99)];
+    const psi: PsiCollection = {
+      ...syntheticPsi(),
+      psi: [
+        {
+          id: 0,
+          name: "[psi 0]",
+          type: "[]",
+          strength: "none",
+          target: "none",
+          usableOutsideBattle: false,
+          learnedBy: [{ charId: 1, level: 1 }]
+        },
+        {
+          id: 5,
+          name: "PSI Fire ",
+          type: "offense",
+          strength: "alpha",
+          ppCost: 6,
+          target: "row",
+          direction: "enemy",
+          usableOutsideBattle: false,
+          learnedBy: [{ charId: 1, level: 1 }]
+        },
+        {
+          id: 6,
+          name: "PSI Fire ",
+          type: "offense",
+          strength: "beta",
+          ppCost: 12,
+          target: "row",
+          direction: "enemy",
+          usableOutsideBattle: false,
+          learnedBy: [{ charId: 1, level: 1 }]
+        }
+      ],
+      counts: { psi: 3, learnedBy: 3 }
+    };
+    const view = buildPsiViewModel({ partyMembers, psi });
+    const screen = buildPsiScreen(view, "psi-member-0");
+
+    expect(view.entries.map((entry) => entry.psiId)).toEqual([5, 6]);
+    expect(view.families.map((family) => ({
+      family: family.family,
+      strengths: family.entries.map((entry) => entry.strengthGlyph)
+    }))).toEqual([{ family: "PSI Fire", strengths: ["α", "β"] }]);
+    expect(screen.items.map((item) => item.label)).toEqual(["PSI Fire", "α", "β", "", "", ""]);
+    expect(screen.items[1]).toMatchObject({
+      id: "psi-5",
+      infoLines: ["To all enemies", "PP Cost: 6"]
+    });
+    expect(screen.items.map((item) => item.label).join(" ")).not.toContain("[psi 0]");
   });
 
   it("builds Goods from hydrated party inventory when runtime inventory has no explicit entry yet", () => {
@@ -819,7 +934,7 @@ function syntheticPsi(): PsiCollection {
         id: 7,
         name: "[psi 7 data]",
         type: "assist",
-        strength: "stage-a",
+        strength: "alpha",
         usableOutsideBattle: true,
         learnedBy: [{ charId: 1, level: 3 }]
       },
@@ -827,7 +942,7 @@ function syntheticPsi(): PsiCollection {
         id: 8,
         name: "[psi 8 data]",
         type: "assist",
-        strength: "stage-b",
+        strength: "beta",
         usableOutsideBattle: true,
         learnedBy: [{ charId: 1, level: 9 }]
       },
@@ -835,7 +950,7 @@ function syntheticPsi(): PsiCollection {
         id: 9,
         name: "[psi 9 data]",
         type: "assist",
-        strength: "stage-c",
+        strength: "gamma",
         usableOutsideBattle: false,
         learnedBy: [{ charId: 2, level: 1 }]
       }

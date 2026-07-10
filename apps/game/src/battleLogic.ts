@@ -37,6 +37,7 @@ import {
   tickStatuses,
   type StatusState
 } from "./statusEffects";
+import { isDisplayablePsi, psiStrengthRank } from "./psiPresentation";
 
 export type Rng = () => number;
 export type BattleSide = "party" | "enemy";
@@ -1199,8 +1200,9 @@ export function learnedPsiForCombatant(psiList: PsiData[], combatant: Pick<Comba
   const charId = stat(combatant.charId);
   const level = stat(combatant.level);
   return psiList.filter((psi) =>
+    isDisplayablePsi(psi) &&
     psi.learnedBy.some((entry) => stat(entry.charId) === charId && stat(entry.level) <= level)
-  );
+  ).sort((left, right) => left.id - right.id || psiStrengthRank(left.strength) - psiStrengthRank(right.strength));
 }
 
 export function psiBattleKind(psi: Pick<PsiData, "type">): PsiBattleKind | undefined {

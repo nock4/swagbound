@@ -4443,7 +4443,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     const before = this.menuDebugState();
-    this.menuState = moveMenu2D(this.menuState, dx, dy);
+    this.menuState = moveMenu2D(this.menuState, dx, dy, {
+      screenById: (id) => this.menuScreens.get(id)
+    });
     const after = this.menuDebugState();
     if (before.cursorIndex !== after.cursorIndex || before.currentItemId !== after.currentItemId) {
       this.playMenuSfx("menuMove");
