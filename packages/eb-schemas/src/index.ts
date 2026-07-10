@@ -2122,6 +2122,54 @@ export const PsiCollectionSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+export const UsabilityItemRowSchema = z.object({
+  id: z.number().int().nonnegative(),
+  name: z.string(),
+  type: z.number().int().nonnegative(),
+  fieldUse: z.boolean(),
+  battleUse: z.boolean(),
+  equippable: z.boolean(),
+  keyItem: z.boolean(),
+  targets: z.array(z.string().min(1)),
+  effectSummary: z.string(),
+  useVerb: z.enum(["ate", "drank", "used"])
+}).strict();
+
+export const UsabilityPsiRowSchema = z.object({
+  id: z.number().int().nonnegative(),
+  name: z.string(),
+  fieldUse: z.boolean(),
+  battleUse: z.boolean(),
+  targets: z.array(z.string().min(1)),
+  ppCost: z.number().int().nonnegative()
+}).strict();
+
+export const UsabilityItemTypeContextSchema = z.object({
+  type: z.number().int().nonnegative(),
+  label: z.string(),
+  fieldUse: z.boolean(),
+  battleUse: z.boolean(),
+  equippable: z.boolean(),
+  keyItem: z.boolean(),
+  summary: z.string()
+}).strict();
+
+export const UsabilityMatrixSchema = z.object({
+  schema: z.literal("swagbound.usability-matrix.v1"),
+  generatedFrom: z.object({
+    items: z.string(),
+    psi: z.string(),
+    itemOverrides: z.string(),
+    psiOverrides: z.string(),
+    keyItems: z.string(),
+    battleActions: z.string(),
+    derivation: z.string()
+  }).strict(),
+  itemTypeContexts: z.array(UsabilityItemTypeContextSchema),
+  items: z.array(UsabilityItemRowSchema),
+  psi: z.array(UsabilityPsiRowSchema)
+}).strict();
+
 export const ShopEntrySchema = z.object({
   id: z.number().int().nonnegative(),
   itemIds: z.array(z.number().int().nonnegative())
@@ -2298,6 +2346,9 @@ export type ItemData = z.infer<typeof ItemDataSchema>;
 export type PsiCollection = z.infer<typeof PsiCollectionSchema>;
 export type PsiData = z.infer<typeof PsiDataSchema>;
 export type PsiOverrides = z.infer<typeof PsiOverridesSchema>;
+export type UsabilityItemRow = z.infer<typeof UsabilityItemRowSchema>;
+export type UsabilityPsiRow = z.infer<typeof UsabilityPsiRowSchema>;
+export type UsabilityMatrix = z.infer<typeof UsabilityMatrixSchema>;
 export type ShopData = z.infer<typeof ShopDataSchema>;
 export type ShopEntry = z.infer<typeof ShopEntrySchema>;
 export type DialogueSegment = z.infer<typeof DialogueSegmentSchema>;

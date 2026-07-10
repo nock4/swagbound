@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { CharacterCollection, ItemCollection, PsiCollection, ShopData } from "@eb/schemas";
+import type { CharacterCollection, ItemCollection, PsiCollection, ShopData, UsabilityMatrix } from "@eb/schemas";
 import type { PartyMember } from "../src/characterModel";
 import {
   buildAtmScreen,
@@ -367,6 +367,7 @@ describe("item and PSI menu view models", () => {
         inventory: () => [10, 11, 12]
       },
       items: syntheticItems(),
+      usabilityMatrix: syntheticUsabilityMatrix(),
       psi: syntheticPsi(),
       resolver: {
         itemName: (id: number) => `[item ${id} data]`,
@@ -904,6 +905,70 @@ function itemData(
     ...(equipBonuses ? { equipBonuses } : {}),
     ...(id === 10 ? { effect: { kind: "healHp" as const, amount: 12 } } : {}),
     ...(helpText ? { helpText } : {})
+  };
+}
+
+function syntheticUsabilityMatrix(): UsabilityMatrix {
+  return {
+    schema: "swagbound.usability-matrix.v1",
+    generatedFrom: {
+      items: "synthetic",
+      psi: "synthetic",
+      itemOverrides: "synthetic",
+      psiOverrides: "synthetic",
+      keyItems: "synthetic",
+      battleActions: "synthetic",
+      derivation: "synthetic"
+    },
+    itemTypeContexts: [],
+    items: [
+      {
+        id: 10,
+        name: "[item 10 data]",
+        type: 0x20,
+        fieldUse: true,
+        battleUse: true,
+        equippable: true,
+        keyItem: false,
+        targets: ["field:party:one", "battle:party:one"],
+        effectSummary: "healHp 12",
+        useVerb: "used"
+      },
+      {
+        id: 11,
+        name: "[item 11 data]",
+        type: 0x20,
+        fieldUse: false,
+        battleUse: false,
+        equippable: false,
+        keyItem: false,
+        targets: [],
+        effectSummary: "none",
+        useVerb: "used"
+      },
+      {
+        id: 12,
+        name: "[item 12 data]",
+        type: 0x10,
+        fieldUse: false,
+        battleUse: false,
+        equippable: true,
+        keyItem: false,
+        targets: [],
+        effectSummary: "none",
+        useVerb: "used"
+      }
+    ],
+    psi: [
+      {
+        id: 7,
+        name: "[psi 7 data]",
+        fieldUse: true,
+        battleUse: true,
+        targets: ["field:party:one", "battle:party:one"],
+        ppCost: 4
+      }
+    ]
   };
 }
 
