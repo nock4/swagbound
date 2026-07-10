@@ -39,6 +39,7 @@ import {
   ScriptCollectionSchema,
   ShopDataSchema,
   SpriteOverridesSchema,
+  StoryItemsSchema,
   SwagboundDialogueLibrarySchema,
   StoryTriggersSchema,
   CutscenesSchema,
@@ -90,6 +91,7 @@ import {
   type ScriptCollection,
   type ShopData,
   type SpriteOverrides,
+  type StoryItems,
   type SwagboundDialogueLibrary,
   type StoryTriggers,
   type SpriteGroupCollection,
@@ -117,6 +119,7 @@ const NPC_OVERRIDES_FILE = "npc-overrides.json";
 const BACKGROUND_OVERRIDES_FILE = "background-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
 const KEY_ITEMS_FILE = "key-items.json";
+const STORY_ITEMS_FILE = "story-items.json";
 const USABILITY_MATRIX_FILE = "usability-matrix.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
@@ -180,6 +183,7 @@ export type GameData = {
   characters?: CharacterCollection;
   items?: ItemCollection;
   keyItems: KeyItems;
+  storyItems: StoryItems;
   usabilityMatrix?: UsabilityMatrix;
   psi?: PsiCollection;
   shops?: ShopData;
@@ -306,6 +310,13 @@ function emptyKeyItems(): KeyItems {
   };
 }
 
+function emptyStoryItems(): StoryItems {
+  return {
+    schema: "swagbound.story-items.v1",
+    items: []
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -334,6 +345,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     items,
     itemOverrides,
     keyItems,
+    storyItems,
     usabilityMatrix,
     psi,
     psiOverrides,
@@ -395,6 +407,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       : Promise.resolve(undefined),
     loadJson(`/generated/${ITEM_OVERRIDES_FILE}`, ItemOverridesSchema),
     loadJson(`/generated/${KEY_ITEMS_FILE}`, KeyItemsSchema),
+    loadJson(`/generated/${STORY_ITEMS_FILE}`, StoryItemsSchema),
     loadJson(`/generated/${USABILITY_MATRIX_FILE}`, UsabilityMatrixSchema),
     manifest.files.psi
       ? loadJson(`/generated/${manifest.files.psi}`, PsiCollectionSchema)
@@ -489,6 +502,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     characters: resolvedCharacters,
     items: resolvedItems,
     keyItems: keyItems ?? emptyKeyItems(),
+    storyItems: storyItems ?? emptyStoryItems(),
     usabilityMatrix,
     psi: resolvedPsi,
     shops

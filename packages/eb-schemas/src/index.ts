@@ -715,6 +715,43 @@ export const KeyItemsSchema = z.object({
   itemIds: z.array(z.number().int().nonnegative())
 }).strict();
 
+export const StoryItemSchema = z.object({
+  id: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "story item ids must be kebab-case"),
+  itemId: z.number().int().nonnegative(),
+  name: z.string().trim().min(1),
+  worldTexture: z.string().trim().min(1),
+  worldAsset: z.string().trim().min(1),
+  pickupFlag: z.string().trim().min(1),
+  useBeats: z.array(z.string().trim().min(1)).min(1),
+  storyRole: z.string().trim().min(1)
+}).strict();
+
+export const StoryItemsSchema = z.object({
+  schema: z.literal("swagbound.story-items.v1"),
+  items: z.array(StoryItemSchema)
+}).strict().superRefine((value, context) => {
+  const seenIds = new Set<string>();
+  const seenItemIds = new Set<number>();
+  value.items.forEach((item, index) => {
+    if (seenIds.has(item.id)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate story item id ${item.id}`,
+        path: ["items", index, "id"]
+      });
+    }
+    seenIds.add(item.id);
+    if (seenItemIds.has(item.itemId)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate story item itemId ${item.itemId}`,
+        path: ["items", index, "itemId"]
+      });
+    }
+    seenItemIds.add(item.itemId);
+  });
+});
+
 const CharacterOverrideNameSchema = z.string()
   .trim()
   .min(1)
@@ -1461,6 +1498,7 @@ export const OverworldPresentInteractableSchema = OverworldInteractableBaseSchem
     char: z.number().int().nonnegative(),
     item: z.number().int().nonnegative()
   }).strict(),
+  storyItemId: z.string().trim().min(1).optional(),
   pages: z.array(z.string().trim().min(1)).min(1).optional(),
   openedPages: z.array(z.string().trim().min(1)).min(1).optional(),
   openedFlag: z.string().trim().min(1).optional()
@@ -2311,6 +2349,8 @@ export type BackgroundOverrideEntry = z.infer<typeof BackgroundOverrideEntrySche
 export type BackgroundOverrides = z.infer<typeof BackgroundOverridesSchema>;
 export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;
 export type KeyItems = z.infer<typeof KeyItemsSchema>;
+export type StoryItem = z.infer<typeof StoryItemSchema>;
+export type StoryItems = z.infer<typeof StoryItemsSchema>;
 export type CharacterOverrides = z.infer<typeof CharacterOverridesSchema>;
 export type EnemyOverrides = z.infer<typeof EnemyOverridesSchema>;
 export type EnemyStatOverrides = z.infer<typeof EnemyStatOverridesSchema>;

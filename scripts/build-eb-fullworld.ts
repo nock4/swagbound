@@ -1,6 +1,8 @@
+import { execFile } from "node:child_process";
 import { access, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { promisify } from "node:util";
 import {
   AttestationBattlesSchema,
   BattleRulesSchema,
@@ -26,6 +28,7 @@ import {
   PsiOverridesSchema,
   RoamerZoneCapsSchema,
   SpriteOverridesSchema,
+  StoryItemsSchema,
   StoryTriggersSchema,
   CutscenesSchema,
   TileOverridesSchema,
@@ -61,6 +64,8 @@ export const ITEM_OVERRIDES_SOURCE = "content/item-overrides.json";
 export const ITEM_OVERRIDES_OUTPUT = "item-overrides.json";
 export const KEY_ITEMS_SOURCE = "content/key-items.json";
 export const KEY_ITEMS_OUTPUT = "key-items.json";
+export const STORY_ITEMS_SOURCE = "content/story-items.json";
+export const STORY_ITEMS_OUTPUT = "story-items.json";
 export const CHARACTER_OVERRIDES_SOURCE = "content/character-overrides.json";
 export const CHARACTER_OVERRIDES_OUTPUT = "character-overrides.json";
 export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
@@ -110,6 +115,7 @@ export const USABILITY_MATRIX_SOURCE = "content/usability-matrix.json";
 export const USABILITY_MATRIX_OUTPUT = "usability-matrix.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
 const FG_V2_SUMMARY_OUTPUT = "tmp/fg-v2/summary.json";
+const execFileAsync = promisify(execFile);
 
 /**
  * Canonical EB generated-data build: full world plus battle, party, item, font,
@@ -135,6 +141,7 @@ export async function buildEbFullWorldDefault(options: { fgPredicate?: FgPredica
     tileOverrides,
     tileOverridePublicRoot: resolve(GAME_PUBLIC_ROOT)
   });
+  await regenerateUsabilityMatrix();
   await copyContentOverlaysToGenerated(EB_FULL_WORLD_OUT);
   if (fgPredicate === "v2") {
     await writeFgV2Summary(result.foregroundSummary);
@@ -172,6 +179,18 @@ async function writeFgV2Summary(summary: ForegroundPredicateSummary | undefined)
   }, null, 2)}\n`, "utf8");
 }
 
+async function regenerateUsabilityMatrix(): Promise<void> {
+  const { stdout, stderr } = await execFileAsync(process.execPath, ["scripts/gen-usability-matrix.mjs"], {
+    cwd: resolve(".")
+  });
+  if (stdout) {
+    process.stdout.write(stdout);
+  }
+  if (stderr) {
+    process.stderr.write(stderr);
+  }
+}
+
 async function copyJsonToGenerated(source: string, out: string, outputName: string): Promise<void> {
   const target = resolve(out, outputName);
   await mkdir(dirname(target), { recursive: true });
@@ -206,6 +225,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
   await validateKeyItems(KEY_ITEMS_SOURCE);
+  await validateStoryItems(STORY_ITEMS_SOURCE);
   await validateBossBattleDialogue(BOSS_BATTLE_DIALOGUE_SOURCE);
   await validateEnemyActionEffects(ENEMY_ACTION_EFFECTS_SOURCE);
   await validateRoamerZoneCaps(ROAMER_ZONE_CAPS_SOURCE);
@@ -221,6 +241,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(TILE_OVERRIDES_SOURCE, out, TILE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
     copyJsonToGenerated(KEY_ITEMS_SOURCE, out, KEY_ITEMS_OUTPUT),
+    copyJsonToGenerated(STORY_ITEMS_SOURCE, out, STORY_ITEMS_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
@@ -390,6 +411,11 @@ async function validateEnemyStatOverrides(source: string): Promise<void> {
 
 async function validateKeyItems(source: string): Promise<void> {
   KeyItemsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateStoryItems(source: string): Promise<void> {
+  const storyItems = StoryItemsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  await Promise.all(storyItems.items.map((item) => validatePublicAssetImage(item.worldAsset, "Story item image")));
 }
 
 async function validateBossBattleDialogue(source: string): Promise<void> {

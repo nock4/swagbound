@@ -335,6 +335,13 @@ import {
   overworldInteractableEvents,
   overworldInteractableIsOpened
 } from "./overworldInteractables";
+import {
+  presentSpriteTextureIssueMessage,
+  resolvePresentSpriteTexture,
+  storyItemById,
+  storyItemWorldAssetUrl,
+  type PresentSpriteTextureIssue
+} from "./storyItems";
 import { ACT1_COMPLETE_FLAG, ROUTE_OPEN_FLAG, shouldHoldAct1IntroMusic, shouldUseAct1Night } from "./worldNight";
 import type { SourceCheckReturnTo } from "./sourceCheckScene";
 import {
@@ -865,6 +872,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedIntroMeteorSkips = new Set<string>();
   private warnedIntroActorVmStubs = new Set<string>();
   private warnedStoryTriggerSkips = new Set<string>();
+  private warnedStoryPresentTextureIssues = new Set<string>();
   private suppressedTriggerId?: string;
   private barrierSprites = new Map<string, Phaser.GameObjects.Image>();
   private loadingBarrierKeys = new Set<string>();
@@ -1006,6 +1014,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     for (const check of this.data_.sourceChecks.checks) {
       this.load.image(this.sourceCheckOverworldTextureKey(check), this.sourceCheckOverworldAssetUrl(check));
+    }
+    const preloadedStoryTextures = new Set<string>();
+    for (const item of this.data_.storyItems.items) {
+      if (preloadedStoryTextures.has(item.worldTexture)) {
+        continue;
+      }
+      preloadedStoryTextures.add(item.worldTexture);
+      this.load.image(item.worldTexture, storyItemWorldAssetUrl(item));
     }
   }
 
@@ -1546,6 +1562,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.warnedIntroMeteorSkips.clear();
     this.warnedIntroActorVmStubs.clear();
     this.warnedStoryTriggerSkips.clear();
+    this.warnedStoryPresentTextureIssues.clear();
     this.suppressedTriggerId = undefined;
     for (const sprite of this.barrierSprites.values()) {
       sprite.destroy();
@@ -3221,9 +3238,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (entry.kind !== "present") {
         continue;
       }
+      const opened = this.overworldInteractableOpened(entry);
+      const choice = this.presentSpriteTextureChoice(entry, opened);
+      this.logPresentSpriteTextureIssue(entry, choice.issue);
       const sprite = this.add
-        .image(entry.worldPixel.x, entry.worldPixel.y, ChunkedWorldScene.PRESENT_TEXTURE_CLOSED)
+        .image(entry.worldPixel.x, entry.worldPixel.y, choice.textureKey)
         .setOrigin(0.5, 1);
+      sprite.setVisible(choice.visible && this.worldPointInsideActiveRoom(entry.worldPixel));
       this.presentInteractableSprites.set(entry.id, sprite);
       this.setActorSortDepth(sprite);
     }
@@ -3240,12 +3261,40 @@ export class ChunkedWorldScene extends Phaser.Scene {
         continue;
       }
       const opened = this.overworldInteractableOpened(entry);
-      sprite.setTexture(
-        opened ? ChunkedWorldScene.PRESENT_TEXTURE_OPEN : ChunkedWorldScene.PRESENT_TEXTURE_CLOSED
-      );
-      sprite.setVisible(this.worldPointInsideActiveRoom(entry.worldPixel));
+      const choice = this.presentSpriteTextureChoice(entry, opened);
+      this.logPresentSpriteTextureIssue(entry, choice.issue);
+      sprite.setTexture(choice.textureKey);
+      sprite.setVisible(choice.visible && this.worldPointInsideActiveRoom(entry.worldPixel));
       this.setActorSortDepth(sprite);
     }
+  }
+
+  private presentSpriteTextureChoice(
+    entry: Extract<OverworldInteractable, { kind: "present" }>,
+    opened: boolean
+  ) {
+    return resolvePresentSpriteTexture(entry, {
+      opened,
+      storyItems: this.data_.storyItems,
+      textureExists: (textureKey) => this.textures.exists(textureKey),
+      genericClosedTexture: ChunkedWorldScene.PRESENT_TEXTURE_CLOSED,
+      genericOpenTexture: ChunkedWorldScene.PRESENT_TEXTURE_OPEN
+    });
+  }
+
+  private logPresentSpriteTextureIssue(
+    entry: Extract<OverworldInteractable, { kind: "present" }>,
+    issue: PresentSpriteTextureIssue | undefined
+  ): void {
+    if (!issue) {
+      return;
+    }
+    const key = `${entry.id}:${issue.kind}:${issue.kind === "missingStoryItem" ? issue.storyItemId : issue.textureKey}`;
+    if (this.warnedStoryPresentTextureIssues.has(key)) {
+      return;
+    }
+    this.warnedStoryPresentTextureIssues.add(key);
+    console.error(presentSpriteTextureIssueMessage(entry.id, issue));
   }
 
   private destroyPresentInteractableSprites(): void {
@@ -5600,6 +5649,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!entry) {
       return;
     }
+    const wasOpened = entry.kind === "present" ? this.overworldInteractableOpened(entry) : false;
     const action = overworldInteractableEvents(entry, this.gameFlags, {
       itemName: (itemId) => this.itemName(itemId, this.itemById(itemId)),
       hasRoom: (char) => this.partyState.inventoryRoom(char) > 0
@@ -5613,9 +5663,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     lockPlayer(this.playerState, this.playerFrames);
     this.runEvents(action.events);
+    if (entry.kind === "present" && !wasOpened && this.overworldInteractableOpened(entry)) {
+      this.setStoryItemPickupFlag(entry);
+    }
     this.syncPresentInteractableSprites();
     this.updatePrompt();
     this.publish();
+  }
+
+  private setStoryItemPickupFlag(entry: Extract<OverworldInteractable, { kind: "present" }>): void {
+    const storyItem = storyItemById(this.data_.storyItems, entry.storyItemId);
+    if (storyItem) {
+      this.gameFlags.set(storyItem.pickupFlag);
+    }
   }
 
   private openSourceCheckInteraction(target: WorldInteractionCandidate): void {
