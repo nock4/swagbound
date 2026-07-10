@@ -12,9 +12,6 @@ import {
   battleWindowRect,
   canvasRectForWindowId,
   contentFitWindowRect,
-  dialogueTextWidth,
-  dialogueVisibleLineCount,
-  dialogueWindowRect,
   ebTextLineHeight,
   findWindowLayout,
   menuWindowRect,
@@ -22,6 +19,16 @@ import {
   windowLayoutToCanvasRect
 } from "../src/windowLayout";
 import { MENU_CURSOR_GUTTER_PX } from "../src/battleVisuals";
+import {
+  TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS,
+  TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS,
+  TALK_WINDOW_LINE_PITCH_CSS,
+  TALK_WINDOW_PANEL_RECT_CSS,
+  TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS,
+  TALK_WINDOW_VISIBLE_LINES,
+  TALK_WINDOW_WRAP_WIDTH_CSS,
+  visibleDialogueLines
+} from "../src/ebWindowMetrics";
 
 describe("EB window layouts", () => {
   it("keeps bitmap text at the same 2x scale as EB UI windows", () => {
@@ -74,98 +81,42 @@ describe("EB window layouts", () => {
     expect(canvasRectForWindowId(window, 99, fallback)).toEqual(fallback);
   });
 
-  it("fits the dialogue window wide, shallow, and bottom-anchored on the 512x448 canvas", () => {
-    const rect = dialogueWindowRect({
-      screen: { width: 512, height: 448 },
-      sideMargin: 16,
-      bottomMargin: 16,
-      paddingX: 24,
-      paddingY: 18,
-      visibleLines: 4,
-      lineHeight: ebTextLineHeight()
+  it("uses the fixed EB talk window visible-border rectangle and text metrics", () => {
+    expect(TALK_WINDOW_PANEL_RECT_CSS).toEqual({
+      x: 200,
+      y: 18,
+      width: 288,
+      height: 120
     });
-
-    expect(rect).toEqual({
-      x: 16,
-      y: 300,
-      width: 480,
-      height: 132
+    expect(TALK_WINDOW_VISIBLE_LINES).toBe(3);
+    expect(TALK_WINDOW_LINE_PITCH_CSS).toBe(32);
+    expect(TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS).toBe(26);
+    expect(TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS + TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS).toBe(32);
+    expect(TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS).toEqual({
+      x: 10,
+      y: 18
     });
-    expect(rect.x + rect.width).toBeLessThanOrEqual(512);
-    expect(rect.y + rect.height).toBeLessThanOrEqual(448);
-    expect(rect.height).toBeLessThanOrEqual(Math.floor(448 / 3));
-    expect(dialogueTextWidth(rect, 24)).toBe(432);
+    expect(TALK_WINDOW_WRAP_WIDTH_CSS).toBe(252);
   });
 
-  it("anchors the dialogue window to the top when topAnchored is set", () => {
-    const rect = dialogueWindowRect({
-      screen: { width: 512, height: 448 },
-      sideMargin: 16,
-      bottomMargin: 16,
-      paddingX: 24,
-      paddingY: 18,
-      visibleLines: 4,
-      lineHeight: ebTextLineHeight(),
-      topAnchored: true
-    });
-
-    expect(rect.x).toBe(16);
-    expect(rect.y).toBe(16);
-    expect(rect.y + rect.height).toBeLessThanOrEqual(448);
+  it("keeps short dialogue views unchanged", () => {
+    expect(visibleDialogueLines(["one", "two"], TALK_WINDOW_VISIBLE_LINES)).toEqual(["one", "two"]);
   });
 
-  it("sizes dialogue height from the wrapped current page and caps at four lines", () => {
-    const screen = { width: 512, height: 448 };
-    const paddingX = 24;
-    const paddingY = 18;
-    const lineHeight = ebTextLineHeight();
-    const maxVisibleLines = 4;
-    const baseRect = dialogueWindowRect({
-      screen,
-      sideMargin: 16,
-      bottomMargin: 16,
-      paddingX,
-      paddingY,
-      visibleLines: maxVisibleLines,
-      lineHeight,
-      topAnchored: true
-    });
-    const wrapWidth = dialogueTextWidth(baseRect, paddingX);
-    const countWrappedLines = (text: string, width: number): number => {
-      const maxChars = Math.max(1, Math.floor(width / 10));
-      return text.split(/\r\n|\r|\n/).reduce((total, line) => {
-        return total + Math.max(1, Math.ceil(line.length / maxChars));
-      }, 0);
-    };
-    const visibleLinesFor = (text: string): number => dialogueVisibleLineCount({
-      text,
-      wrapWidth,
-      maxVisibleLines,
-      wrapLineCount: countWrappedLines
-    });
-    const heightFor = (text: string): number => dialogueWindowRect({
-      screen,
-      sideMargin: 16,
-      bottomMargin: 16,
-      paddingX,
-      paddingY,
-      visibleLines: visibleLinesFor(text),
-      lineHeight,
-      topAnchored: true
-    }).height;
+  it("keeps exactly three dialogue lines unchanged", () => {
+    expect(visibleDialogueLines(["one", "two", "three"], TALK_WINDOW_VISIBLE_LINES)).toEqual([
+      "one",
+      "two",
+      "three"
+    ]);
+  });
 
-    expect(visibleLinesFor("One line.")).toBe(1);
-    expect(heightFor("One line.")).toBe(lineHeight + paddingY * 2);
-    expect(visibleLinesFor("Line one.\nLine two.")).toBe(2);
-    expect(heightFor("Line one.\nLine two.")).toBe(lineHeight * 2 + paddingY * 2);
-    expect(visibleLinesFor("1\n2\n3\n4\n5\n6")).toBe(4);
-    expect(heightFor("1\n2\n3\n4\n5\n6")).toBe(lineHeight * 4 + paddingY * 2);
-
-    const revealedPrefix = "Line one.";
-    const fullTypingPage = "Line one.\nLine two.\nLine three.";
-    expect(visibleLinesFor(revealedPrefix)).toBe(1);
-    expect(visibleLinesFor(fullTypingPage)).toBe(3);
-    expect(heightFor(fullTypingPage)).toBe(lineHeight * 3 + paddingY * 2);
+  it("scrolls dialogue views to the last three wrapped lines", () => {
+    expect(visibleDialogueLines(["one", "two", "three", "four", "five"], TALK_WINDOW_VISIBLE_LINES)).toEqual([
+      "three",
+      "four",
+      "five"
+    ]);
   });
 
   it("sizes overworld menus to scaled text and clamps cascading windows inside the screen", () => {

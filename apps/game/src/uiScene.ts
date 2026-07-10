@@ -26,9 +26,6 @@ import type { DialogueChoiceState } from "./state";
 import {
   type CanvasRect,
   battleStatusCardRects,
-  dialogueTextWidth,
-  dialogueVisibleLineCount,
-  dialogueWindowRect,
   menuWindowRect
 } from "./windowLayout";
 import {
@@ -36,17 +33,21 @@ import {
 } from "./battleVisuals";
 import type { OverworldStatusHudMember, OverworldStatusHudView } from "./overworldStatusHud";
 import { statusAilmentBadge } from "./statusEffects";
+import {
+  TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS,
+  TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS,
+  TALK_WINDOW_PANEL_RECT_CSS,
+  TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS,
+  TALK_WINDOW_VISIBLE_LINES,
+  TALK_WINDOW_WRAP_WIDTH_CSS,
+  visibleDialogueLines
+} from "./ebWindowMetrics";
+export { visibleDialogueLines } from "./ebWindowMetrics";
 
 const UI_LINE_SPACING = 6;
-const DIALOGUE_FONT_SIZE = 15;
 const MENU_FONT_SIZE = 14;
 const MENU_TITLE_FONT_SIZE = 13;
 const DEBUG_FONT_SIZE = 11;
-const DIALOGUE_HORIZONTAL_PADDING = 24;
-const DIALOGUE_VERTICAL_PADDING = 18;
-const DIALOGUE_VISIBLE_LINES = 4;
-const DIALOGUE_BOTTOM_MARGIN = 12;
-const DIALOGUE_SIDE_MARGIN = 12;
 const DIALOGUE_MORE_ARROW_BOB_PX = 2;
 const MENU_LEFT = 12;
 const MENU_TOP = 12;
@@ -224,9 +225,9 @@ export class UiScene extends Phaser.Scene {
   create(): void {
     this.boxGraphics = this.add.graphics().setDepth(10);
     this.dialogueText = createCleanText(this, 0, 0, "", {
-      fontSize: DIALOGUE_FONT_SIZE,
+      fontSize: TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS,
       color: CLEAN_UI_PRIMARY,
-      lineSpacing: UI_LINE_SPACING,
+      lineSpacing: TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS,
       wordWrapWidth: this.dialogueTextWidth()
     }).setDepth(11);
     this.promptText = createCleanText(this, 12, 10, "", {
@@ -361,8 +362,8 @@ export class UiScene extends Phaser.Scene {
     // and cinematics are exactly where staleness bugs hide. DEV-only object.
     this.badgeText?.setVisible(true);
     this.positionMenuHint(Boolean(visibleHudView));
-    this.drawDialogue(open, text, fullText, showAdvanceIndicator);
-    this.drawChoice(choice, fullText);
+    this.drawDialogue(open, text, showAdvanceIndicator);
+    this.drawChoice(choice);
     this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);
     this.drawOverworldHud(visibleHudView);
     this.drawMenu(menuScreens);
@@ -372,7 +373,6 @@ export class UiScene extends Phaser.Scene {
   private drawDialogue(
     open: boolean,
     text: string,
-    fullText: string,
     showAdvanceIndicator: boolean
   ): void {
     const graphics = this.boxGraphics;
@@ -385,20 +385,25 @@ export class UiScene extends Phaser.Scene {
       this.dialogueText.setText("");
       return;
     }
-    const rect = this.dialogueRect(fullText);
+    const rect = this.dialogueRect();
     const { x, y, width: boxWidth, height: boxHeight } = rect;
 
     drawCleanPanel(graphics, rect);
 
-    this.dialogueText.setPosition(x + DIALOGUE_HORIZONTAL_PADDING, y + DIALOGUE_VERTICAL_PADDING);
-    this.dialogueText.setWordWrapWidth(this.dialogueTextWidth(rect), true);
-    this.dialogueText.setText(text);
+    this.dialogueText.setPosition(
+      x + TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.x,
+      y + TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.y
+    );
+    this.dialogueText.setWordWrapWidth(this.dialogueTextWidth(), true);
+    this.dialogueText.setText(
+      visibleDialogueLines(this.dialogueText.getWrappedText(text), TALK_WINDOW_VISIBLE_LINES).join("\n")
+    );
     if (showAdvanceIndicator) {
       this.drawMoreArrow(x, y, boxWidth, boxHeight);
     }
   }
 
-  private drawChoice(choice: DialogueChoiceState | undefined, fullDialogueText = ""): void {
+  private drawChoice(choice: DialogueChoiceState | undefined): void {
     const graphics = this.choiceGraphics;
     if (!graphics) {
       return;
@@ -421,9 +426,9 @@ export class UiScene extends Phaser.Scene {
       widest + CHOICE_HORIZONTAL_PADDING * 2 + CHOICE_CARET_GUTTER_PX
     );
     const height = CHOICE_VERTICAL_PADDING * 2 + lineHeight * choice.options.length;
-    const dialogueRect = this.dialogueRect(fullDialogueText);
-    const x = Math.round(Math.max(DIALOGUE_SIDE_MARGIN, dialogueRect.x + DIALOGUE_HORIZONTAL_PADDING));
-    // EB places the selection window BELOW the (top-anchored, content-sized) text
+    const dialogueRect = this.dialogueRect();
+    const x = Math.round(Math.max(0, dialogueRect.x + TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.x));
+    // EB places the selection window BELOW the top-anchored text
     // window; anchoring above would clamp into the box and cover the message.
     const y = Math.round(Math.min(
       this.scale.height - height - 12,
@@ -467,8 +472,8 @@ export class UiScene extends Phaser.Scene {
 
   private drawMoreArrow(x: number, y: number, boxWidth: number, boxHeight: number): boolean {
     const arrow = this.add.graphics().setDepth(12);
-    const arrowX = Math.round(x + boxWidth - DIALOGUE_HORIZONTAL_PADDING - 10);
-    const arrowY = Math.round(y + boxHeight - DIALOGUE_VERTICAL_PADDING - 8);
+    const arrowX = Math.round(x + boxWidth - TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.x - 10);
+    const arrowY = Math.round(y + boxHeight - TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.y - 8);
     arrow.fillStyle(0xffffff, 0.82);
     arrow.fillTriangle(0, 0, 10, 0, 5, 7);
     arrow.setPosition(arrowX, arrowY);
@@ -971,41 +976,12 @@ export class UiScene extends Phaser.Scene {
     return fitted.length > 0 ? fitted + suffix : "";
   }
 
-  private dialogueRect(fullText = ""): CanvasRect {
-    const baseRect = this.dialogueRectForVisibleLines(DIALOGUE_VISIBLE_LINES);
-    const wrapWidth = this.dialogueTextWidth(baseRect);
-    const visibleLines = dialogueVisibleLineCount({
-      text: fullText,
-      wrapWidth,
-      maxVisibleLines: DIALOGUE_VISIBLE_LINES,
-      wrapLineCount: (text, width) => this.dialogueWrappedLineCount(text, width)
-    });
-    return this.dialogueRectForVisibleLines(visibleLines);
+  private dialogueRect(): CanvasRect {
+    return TALK_WINDOW_PANEL_RECT_CSS;
   }
 
-  private dialogueRectForVisibleLines(visibleLines: number): CanvasRect {
-    return dialogueWindowRect({
-      screen: { width: this.scale.width, height: this.scale.height },
-      sideMargin: DIALOGUE_SIDE_MARGIN,
-      bottomMargin: DIALOGUE_BOTTOM_MARGIN,
-      paddingX: DIALOGUE_HORIZONTAL_PADDING,
-      paddingY: DIALOGUE_VERTICAL_PADDING,
-      lineHeight: this.dialogueLineHeight(),
-      visibleLines,
-      topAnchored: true
-    });
-  }
-
-  private dialogueTextWidth(rect: Pick<CanvasRect, "width"> = this.dialogueRectForVisibleLines(DIALOGUE_VISIBLE_LINES)): number {
-    return dialogueTextWidth(rect, DIALOGUE_HORIZONTAL_PADDING);
-  }
-
-  private dialogueWrappedLineCount(text: string, wrapWidth: number): number {
-    if (!this.dialogueText) {
-      return 1;
-    }
-    this.dialogueText.setWordWrapWidth(wrapWidth, true);
-    return this.dialogueText.getWrappedText(text).length;
+  private dialogueTextWidth(): number {
+    return TALK_WINDOW_WRAP_WIDTH_CSS;
   }
 
   /** Shared cell metrics for a columned (grid) menu, used by sizing + drawing. */
@@ -1191,10 +1167,6 @@ export class UiScene extends Phaser.Scene {
 
   private measureTextWidth(text: string): number {
     return estimateCleanTextWidth(text, MENU_FONT_SIZE);
-  }
-
-  private dialogueLineHeight(): number {
-    return cleanLineHeight(DIALOGUE_FONT_SIZE, UI_LINE_SPACING);
   }
 
   private menuLineHeight(): number {
