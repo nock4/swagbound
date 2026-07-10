@@ -3298,6 +3298,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private sourceCheckOverworldAssetUrl(check: DrifellaSourceCheck): string {
+    const override = spriteOverrideForNpcId(this.data_.spriteOverrides, check.npcId);
+    if (override) {
+      return spriteOverrideAssetUrl(override.image);
+    }
     return `/assets/swagbound/overworld-npc/${check.drifellaId}.png`;
   }
 
@@ -4393,7 +4397,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       // The opening flyover locks movement but is not an event sequence or cutscene,
       // so without this the pause menu opens mid-cinematic (found by the 2026-07-09
       // verification run: the M probe drew the full menu over the night pan).
-      this.cinematicActive()
+      this.cinematicActive() ||
+      this.isDoorFadeActive() ||
+      Boolean(this.pendingBattleStart)
     ) {
       return;
     }
@@ -5317,7 +5323,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private handleSaveKey(): void {
-    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running || !this.player) {
+    if (
+      this.menuState.open ||
+      this.dialogue.open ||
+      this.eventSequence?.running ||
+      this.isDoorFadeActive() ||
+      this.pendingBattleStart ||
+      !this.player
+    ) {
       return;
     }
     this.saveGame(false);
@@ -8796,6 +8809,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const below = { x: feet.x, y: feet.y + this.collisionCellSize };
       if (solidAtWorldPixel(this.solidRows, below, grid)) {
         return false;
+      }
+      // An authored FG clear rect declares "nothing covers sprites here", so the
+      // lower-body crop must not fire inside one either (fixes 0x01 cells baked
+      // onto interior rugs, e.g. the dorm at 7201,583 leaving a floating torso).
+      for (const clear of [...(this.data_.fgOverrides?.clears ?? []), ...this.sessionFgClears]) {
+        if (feet.x >= clear.x && feet.x < clear.x + clear.w && feet.y >= clear.y && feet.y < clear.y + clear.h) {
+          return false;
+        }
       }
       return true;
     } catch {

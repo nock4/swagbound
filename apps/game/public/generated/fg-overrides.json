@@ -56,6 +56,76 @@
       "w": 56,
       "h": 36,
       "note": "Morningside prop cutoff south edge (pin 2517,463)"
+    },
+    {
+      "x": 1836,
+      "y": 410,
+      "w": 44,
+      "h": 26,
+      "note": "shrub row ate the lower body (pin 1857,414)"
+    },
+    {
+      "x": 2208,
+      "y": 404,
+      "w": 48,
+      "h": 36,
+      "note": "tree canopy SW edge swallowed the body (pin 2229,416)"
+    },
+    {
+      "x": 1576,
+      "y": 258,
+      "w": 36,
+      "h": 28,
+      "note": "tree canopy left edge over-occlusion (pin 1593,267)"
+    },
+    {
+      "x": 2578,
+      "y": 466,
+      "w": 56,
+      "h": 36,
+      "note": "Morningside prop row south edge, matches the 2517 fix (pin 2607,463)"
+    },
+    {
+      "x": 2646,
+      "y": 466,
+      "w": 56,
+      "h": 36,
+      "note": "Morningside prop row south edge, matches the 2517 fix (pin 2673,463)"
+    },
+    {
+      "x": 3944,
+      "y": 5936,
+      "w": 48,
+      "h": 40,
+      "note": "cave ceiling band ate the head while feet showed (pin 3965,5972)"
+    },
+    {
+      "x": 5380,
+      "y": 2500,
+      "w": 150,
+      "h": 48,
+      "note": "canyon rim band fully swallowed the player (pins 5392-5518,2521-2537)"
+    },
+    {
+      "x": 7424,
+      "y": 992,
+      "w": 32,
+      "h": 36,
+      "note": "interior doorway column cut the sprite in half (pin 7439,1017)"
+    },
+    {
+      "x": 3480,
+      "y": 2100,
+      "w": 48,
+      "h": 48,
+      "note": "cave overhang edge over-occlusion (pin 3500,2133)"
+    },
+    {
+      "x": 7160,
+      "y": 560,
+      "w": 90,
+      "h": 48,
+      "note": "dorm rug cells carry the EB 0x01 lower-hide flag indoors; clear rect also suppresses the lower-body crop (pin 7201,583)"
     }
   ]
 }
