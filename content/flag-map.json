@@ -132,7 +132,7 @@
   },
   {
    "storyFlag": "intro:bedroom-opening-done",
-   "beat": "Wake-in-bed opening finished; the meteor-night containment lifts (gawker crowd departs, the 35 when-unset town-seal doors deactivate, the yard band becomes the road)",
+   "beat": "Wake-in-bed opening finished; the meteor-night containment lifts (gawker crowd departs, the 35 when-unset town-seal doors deactivate, the yard band becomes the road); nine dormant Morningside townsfolk (npcs 129-138) populate on FLG_MYHOME_START",
    "ebFlags": [
     {
      "id": 469,
@@ -141,15 +141,13 @@
     {
      "id": 340,
      "name": "UNKNOWN_340"
-    }
-   ],
-   "candidates": [
+    },
     {
      "id": 375,
-     "name": "FLG_MYHOME_START",
-     "note": "house-cast state machine; verify MYHOME_* semantics in-browser before adopting"
+     "name": "FLG_MYHOME_START"
     }
-   ]
+   ],
+   "candidates": []
   }
  ]
 }
