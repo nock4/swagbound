@@ -13,6 +13,7 @@ import {
   canvasRectForWindowId,
   contentFitWindowRect,
   dialogueTextWidth,
+  dialogueVisibleLineCount,
   dialogueWindowRect,
   ebTextLineHeight,
   findWindowLayout,
@@ -111,6 +112,60 @@ describe("EB window layouts", () => {
     expect(rect.x).toBe(16);
     expect(rect.y).toBe(16);
     expect(rect.y + rect.height).toBeLessThanOrEqual(448);
+  });
+
+  it("sizes dialogue height from the wrapped current page and caps at four lines", () => {
+    const screen = { width: 512, height: 448 };
+    const paddingX = 24;
+    const paddingY = 18;
+    const lineHeight = ebTextLineHeight();
+    const maxVisibleLines = 4;
+    const baseRect = dialogueWindowRect({
+      screen,
+      sideMargin: 16,
+      bottomMargin: 16,
+      paddingX,
+      paddingY,
+      visibleLines: maxVisibleLines,
+      lineHeight,
+      topAnchored: true
+    });
+    const wrapWidth = dialogueTextWidth(baseRect, paddingX);
+    const countWrappedLines = (text: string, width: number): number => {
+      const maxChars = Math.max(1, Math.floor(width / 10));
+      return text.split(/\r\n|\r|\n/).reduce((total, line) => {
+        return total + Math.max(1, Math.ceil(line.length / maxChars));
+      }, 0);
+    };
+    const visibleLinesFor = (text: string): number => dialogueVisibleLineCount({
+      text,
+      wrapWidth,
+      maxVisibleLines,
+      wrapLineCount: countWrappedLines
+    });
+    const heightFor = (text: string): number => dialogueWindowRect({
+      screen,
+      sideMargin: 16,
+      bottomMargin: 16,
+      paddingX,
+      paddingY,
+      visibleLines: visibleLinesFor(text),
+      lineHeight,
+      topAnchored: true
+    }).height;
+
+    expect(visibleLinesFor("One line.")).toBe(1);
+    expect(heightFor("One line.")).toBe(lineHeight + paddingY * 2);
+    expect(visibleLinesFor("Line one.\nLine two.")).toBe(2);
+    expect(heightFor("Line one.\nLine two.")).toBe(lineHeight * 2 + paddingY * 2);
+    expect(visibleLinesFor("1\n2\n3\n4\n5\n6")).toBe(4);
+    expect(heightFor("1\n2\n3\n4\n5\n6")).toBe(lineHeight * 4 + paddingY * 2);
+
+    const revealedPrefix = "Line one.";
+    const fullTypingPage = "Line one.\nLine two.\nLine three.";
+    expect(visibleLinesFor(revealedPrefix)).toBe(1);
+    expect(visibleLinesFor(fullTypingPage)).toBe(3);
+    expect(heightFor(fullTypingPage)).toBe(lineHeight * 3 + paddingY * 2);
   });
 
   it("sizes overworld menus to scaled text and clamps cascading windows inside the screen", () => {

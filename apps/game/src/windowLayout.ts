@@ -52,6 +52,13 @@ export type DialogueWindowRectOptions = {
   topAnchored?: boolean;
 };
 
+export type DialogueVisibleLineCountOptions = {
+  text: string;
+  wrapWidth: number;
+  maxVisibleLines: number;
+  wrapLineCount: (text: string, wrapWidth: number) => number;
+};
+
 export type MenuWindowRectOptions = {
   screen: ScreenSize;
   x: number;
@@ -237,6 +244,7 @@ export function contentFitWindowRect(options: ContentFitWindowOptions): CanvasRe
 export function dialogueWindowRect(options: DialogueWindowRectOptions): CanvasRect {
   const sideMargin = Math.max(0, Math.ceil(options.sideMargin));
   const bottomMargin = Math.max(0, Math.ceil(options.bottomMargin));
+  const visibleLines = Math.max(1, Math.ceil(options.visibleLines));
   const width = Math.min(
     Math.max(1, Math.floor(options.screen.width)),
     Math.max(1, Math.floor(options.screen.width - sideMargin * 2))
@@ -249,7 +257,7 @@ export function dialogueWindowRect(options: DialogueWindowRectOptions): CanvasRe
     )
   );
   const height = clampDimension(
-    options.visibleLines * options.lineHeight + options.paddingY * 2,
+    visibleLines * options.lineHeight + options.paddingY * 2,
     1,
     maxHeight
   );
@@ -266,6 +274,13 @@ export function dialogueWindowRect(options: DialogueWindowRectOptions): CanvasRe
 
 export function dialogueTextWidth(rect: Pick<CanvasRect, "width">, paddingX: number): number {
   return Math.max(1, Math.floor(rect.width - Math.max(0, paddingX) * 2));
+}
+
+export function dialogueVisibleLineCount(options: DialogueVisibleLineCountOptions): number {
+  const maxVisibleLines = Math.max(1, Math.ceil(options.maxVisibleLines));
+  const wrapWidth = Math.max(1, Math.floor(options.wrapWidth));
+  const wrappedLines = Math.max(1, Math.ceil(options.wrapLineCount(options.text, wrapWidth)));
+  return Math.min(maxVisibleLines, wrappedLines);
 }
 
 export function menuWindowRect(options: MenuWindowRectOptions): CanvasRect {

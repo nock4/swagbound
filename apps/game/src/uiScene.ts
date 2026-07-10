@@ -22,12 +22,12 @@ import {
   formatCleanOdometerValue,
   statusBarFillFraction
 } from "./cleanUi";
-import type { DialogueTextRun } from "./dialogueRenderer";
 import type { DialogueChoiceState } from "./state";
 import {
   type CanvasRect,
   battleStatusCardRects,
   dialogueTextWidth,
+  dialogueVisibleLineCount,
   dialogueWindowRect,
   menuWindowRect
 } from "./windowLayout";
@@ -39,7 +39,6 @@ import { statusAilmentBadge } from "./statusEffects";
 
 const UI_LINE_SPACING = 6;
 const DIALOGUE_FONT_SIZE = 15;
-const FOOTER_FONT_SIZE = 11;
 const MENU_FONT_SIZE = 14;
 const MENU_TITLE_FONT_SIZE = 13;
 const DEBUG_FONT_SIZE = 11;
@@ -183,7 +182,6 @@ export class UiScene extends Phaser.Scene {
   private window?: WindowCollection;
   private boxGraphics?: Phaser.GameObjects.Graphics;
   private dialogueText?: Phaser.GameObjects.Text;
-  private footerText?: Phaser.GameObjects.Text;
   private moreArrow?: Phaser.GameObjects.Graphics;
   private moreArrowTween?: Phaser.Tweens.Tween;
   private promptText?: Phaser.GameObjects.Text;
@@ -230,10 +228,6 @@ export class UiScene extends Phaser.Scene {
       color: CLEAN_UI_PRIMARY,
       lineSpacing: UI_LINE_SPACING,
       wordWrapWidth: this.dialogueTextWidth()
-    }).setDepth(11);
-    this.footerText = createCleanText(this, 0, 0, "", {
-      fontSize: FOOTER_FONT_SIZE,
-      color: CLEAN_UI_SECONDARY
     }).setDepth(11);
     this.promptText = createCleanText(this, 12, 10, "", {
       fontSize: 11,
@@ -336,13 +330,9 @@ export class UiScene extends Phaser.Scene {
     const choice = world.dialogue.choice;
     const choiceOpen = Boolean(choice);
     const text = open ? world.dialogue.revealedText : "";
+    const fullText = open ? world.dialogue.currentText : "";
     const textRuns = open ? world.dialogue.revealedTextRuns : [];
-    const showAdvanceIndicator = open && world.dialogue.revealComplete;
-    const footer = open
-      ? (!world.dialogue.revealComplete
-          ? "Z: finish | X: close"
-          : (world.dialogue.isLastPage ? "Z/X: close" : "Z: next | X: close"))
-      : "";
+    const showAdvanceIndicator = open && world.dialogue.revealComplete && !world.dialogue.isLastPage;
     const panelVisible = world.debugPanelVisible;
     const runtimeLines = panelVisible ? world.runtimeLines() : [];
     const menuScreens = world.menuRenderStack();
@@ -354,7 +344,7 @@ export class UiScene extends Phaser.Scene {
     // EarthBound shows the party status window only while a menu is open, not while
     // walking the overworld. (Previously this rendered during free movement.)
     const visibleHudView = menuScreens.length > 0 && hudView?.visible ? hudView : undefined;
-    const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${JSON.stringify(choice)}|${world.prompt}|${promptVisible}|${cinematic}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
+    const signature = `${open}|${fullText}|${JSON.stringify(textRuns)}|${showAdvanceIndicator}|${JSON.stringify(choice)}|${world.prompt}|${promptVisible}|${cinematic}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
     if (signature === this.lastSignature) {
       this.drawOverworldHud(visibleHudView);
       this.renderMenuCursors();
@@ -371,8 +361,8 @@ export class UiScene extends Phaser.Scene {
     // and cinematics are exactly where staleness bugs hide. DEV-only object.
     this.badgeText?.setVisible(true);
     this.positionMenuHint(Boolean(visibleHudView));
-    this.drawDialogue(open, text, textRuns, footer, showAdvanceIndicator);
-    this.drawChoice(choice);
+    this.drawDialogue(open, text, fullText, showAdvanceIndicator);
+    this.drawChoice(choice, fullText);
     this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);
     this.drawOverworldHud(visibleHudView);
     this.drawMenu(menuScreens);
@@ -382,43 +372,33 @@ export class UiScene extends Phaser.Scene {
   private drawDialogue(
     open: boolean,
     text: string,
-    _textRuns: readonly DialogueTextRun[],
-    footer: string,
+    fullText: string,
     showAdvanceIndicator: boolean
   ): void {
     const graphics = this.boxGraphics;
-    if (!graphics || !this.dialogueText || !this.footerText) {
+    if (!graphics || !this.dialogueText) {
       return;
     }
     graphics.clear();
     this.clearMoreArrow();
     if (!open) {
       this.dialogueText.setText("");
-      this.footerText.setText("");
       return;
     }
-    const rect = this.dialogueRect();
+    const rect = this.dialogueRect(fullText);
     const { x, y, width: boxWidth, height: boxHeight } = rect;
 
     drawCleanPanel(graphics, rect);
 
     this.dialogueText.setPosition(x + DIALOGUE_HORIZONTAL_PADDING, y + DIALOGUE_VERTICAL_PADDING);
-    this.dialogueText.setWordWrapWidth(this.dialogueTextWidth(), true);
+    this.dialogueText.setWordWrapWidth(this.dialogueTextWidth(rect), true);
     this.dialogueText.setText(text);
-    const arrowShown = showAdvanceIndicator && this.drawMoreArrow(x, y, boxWidth, boxHeight);
-    if (arrowShown) {
-      this.footerText.setText("");
-    } else {
-      const footerWidth = this.measureTextWidth(footer);
-      this.footerText.setPosition(
-        x + boxWidth - DIALOGUE_HORIZONTAL_PADDING - footerWidth,
-        y + boxHeight - DIALOGUE_VERTICAL_PADDING - this.dialogueLineHeight()
-      );
-      this.footerText.setText(footer);
+    if (showAdvanceIndicator) {
+      this.drawMoreArrow(x, y, boxWidth, boxHeight);
     }
   }
 
-  private drawChoice(choice: DialogueChoiceState | undefined): void {
+  private drawChoice(choice: DialogueChoiceState | undefined, fullDialogueText = ""): void {
     const graphics = this.choiceGraphics;
     if (!graphics) {
       return;
@@ -441,9 +421,14 @@ export class UiScene extends Phaser.Scene {
       widest + CHOICE_HORIZONTAL_PADDING * 2 + CHOICE_CARET_GUTTER_PX
     );
     const height = CHOICE_VERTICAL_PADDING * 2 + lineHeight * choice.options.length;
-    const dialogueRect = this.dialogueRect();
+    const dialogueRect = this.dialogueRect(fullDialogueText);
     const x = Math.round(Math.max(DIALOGUE_SIDE_MARGIN, dialogueRect.x + DIALOGUE_HORIZONTAL_PADDING));
-    const y = Math.round(Math.max(12, dialogueRect.y - height - CHOICE_GAP));
+    // EB places the selection window BELOW the (top-anchored, content-sized) text
+    // window; anchoring above would clamp into the box and cover the message.
+    const y = Math.round(Math.min(
+      this.scale.height - height - 12,
+      dialogueRect.y + dialogueRect.height + CHOICE_GAP
+    ));
     const rect = { x, y, width, height };
     drawCleanPanel(graphics, rect);
 
@@ -986,7 +971,19 @@ export class UiScene extends Phaser.Scene {
     return fitted.length > 0 ? fitted + suffix : "";
   }
 
-  private dialogueRect(): CanvasRect {
+  private dialogueRect(fullText = ""): CanvasRect {
+    const baseRect = this.dialogueRectForVisibleLines(DIALOGUE_VISIBLE_LINES);
+    const wrapWidth = this.dialogueTextWidth(baseRect);
+    const visibleLines = dialogueVisibleLineCount({
+      text: fullText,
+      wrapWidth,
+      maxVisibleLines: DIALOGUE_VISIBLE_LINES,
+      wrapLineCount: (text, width) => this.dialogueWrappedLineCount(text, width)
+    });
+    return this.dialogueRectForVisibleLines(visibleLines);
+  }
+
+  private dialogueRectForVisibleLines(visibleLines: number): CanvasRect {
     return dialogueWindowRect({
       screen: { width: this.scale.width, height: this.scale.height },
       sideMargin: DIALOGUE_SIDE_MARGIN,
@@ -994,13 +991,21 @@ export class UiScene extends Phaser.Scene {
       paddingX: DIALOGUE_HORIZONTAL_PADDING,
       paddingY: DIALOGUE_VERTICAL_PADDING,
       lineHeight: this.dialogueLineHeight(),
-      visibleLines: DIALOGUE_VISIBLE_LINES,
+      visibleLines,
       topAnchored: true
     });
   }
 
-  private dialogueTextWidth(): number {
-    return dialogueTextWidth(this.dialogueRect(), DIALOGUE_HORIZONTAL_PADDING);
+  private dialogueTextWidth(rect: Pick<CanvasRect, "width"> = this.dialogueRectForVisibleLines(DIALOGUE_VISIBLE_LINES)): number {
+    return dialogueTextWidth(rect, DIALOGUE_HORIZONTAL_PADDING);
+  }
+
+  private dialogueWrappedLineCount(text: string, wrapWidth: number): number {
+    if (!this.dialogueText) {
+      return 1;
+    }
+    this.dialogueText.setWordWrapWidth(wrapWidth, true);
+    return this.dialogueText.getWrappedText(text).length;
   }
 
   /** Shared cell metrics for a columned (grid) menu, used by sizing + drawing. */
