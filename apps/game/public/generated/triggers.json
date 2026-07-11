@@ -275,6 +275,48 @@
       ]
     },
     {
+      "id": "source-intake-ledger",
+      "comment": "Eight Sources site 2: The Intake Ledger behind the Postwick Registry. Requires the Registry Warden clear and raises the Lilliput Steps bridge flag through content/flag-map.json.",
+      "boss": {
+        "x": 2300,
+        "y": 7200,
+        "facing": "down"
+      },
+      "once": true,
+      "requireFlags": [
+        "act2:registry_cleared"
+      ],
+      "dialogue": [
+        "Behind the Registry, the records lot waits under a light that never learned mercy. The ledger is open on its stand. Tiny stamp minions circle it in a neat black procession.",
+        "THE NOTARY: \"One original signature entered. One acceptable copy exits. The rest of you will be filed until the difference stops moving.\"",
+        "The stamp arm lowers. Bosch reads the ink pad for blood and finds office hours."
+      ],
+      "setFlags": [
+        "source:intake-ledger:cleared"
+      ],
+      "battleGroup": 125
+    },
+    {
+      "id": "source-intake-ledger-reveal",
+      "area": {
+        "x": 2260,
+        "y": 7170,
+        "w": 120,
+        "h": 70
+      },
+      "once": true,
+      "requireFlags": [
+        "source:intake-ledger:cleared"
+      ],
+      "dialogue": [
+        "A signature that shakes a little. Whoever signed was nervous. Copies are never nervous.",
+        "Track 2 hums onto the Original Mixtape."
+      ],
+      "grantItems": [
+        196
+      ]
+    },
+    {
       "id": "deadletter-arrival",
       "comment": "ACT 3 OPENING. Fires on reaching Dead Letter (Threed analog) after act2:complete. The town that stopped keeping originals at all, built around the Museum of Leaked Versions. Area covers the museum approach (near the west-wing entrance / starman). Sets act3:begun + deadletter:arrived, the flag the museum sequence gates on.",
       "area": {

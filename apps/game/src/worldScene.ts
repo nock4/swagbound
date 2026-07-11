@@ -80,6 +80,7 @@ import { buildPartyMember, type PartyMember } from "./characterModel";
 import { activeWindowFlavorId } from "./windowSettings";
 import { isKeyItemId } from "./keyItems";
 import { fieldItemToolMessage, fieldItemUseMessage, fieldPsiEffect, fieldPsiUseMessage } from "./fieldUseFeedback";
+import { collectedEightSourcesCount, ORIGINAL_MIXTAPE_ITEM_ID, originalMixtapeFieldMessage } from "./eightSources";
 import { itemUsability, psiUsability, USABILITY_REFUSAL_MESSAGE } from "./usabilityMatrix";
 
 export const PLAYER_SPEED = 110; // world pixels per second
@@ -665,6 +666,11 @@ export class WorldScene extends Phaser.Scene {
     const row = itemUsability(this.data_.usabilityMatrix, item.id);
     if (!row?.fieldUse) {
       this.showMenuResult(USABILITY_REFUSAL_MESSAGE);
+      return;
+    }
+    if (item.id === ORIGINAL_MIXTAPE_ITEM_ID) {
+      const collected = collectedEightSourcesCount((flag) => this.gameFlags.has(flag));
+      this.showMenuResult(originalMixtapeFieldMessage(collected));
       return;
     }
     const result = this.partyState.useItem({

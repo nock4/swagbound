@@ -246,6 +246,7 @@ import { drawSwirl } from "./transitions";
 import { activeWindowFlavorId, textBlipEnabled } from "./windowSettings";
 import { isKeyItemId } from "./keyItems";
 import { fieldItemToolMessage, fieldItemUseMessage, fieldPsiEffect, fieldPsiUseMessage } from "./fieldUseFeedback";
+import { collectedEightSourcesCount, ORIGINAL_MIXTAPE_ITEM_ID, ORIGINAL_MIXTAPE_MUSIC_CUE, originalMixtapeFieldMessage } from "./eightSources";
 import { itemUsability, psiUsability, USABILITY_REFUSAL_MESSAGE } from "./usabilityMatrix";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import { applyClearOverrideRects, applySolidOverrideRects } from "./collisionOverrides";
@@ -800,6 +801,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private currentOverworldMusicCue?: OverworldMusicCue;
   /** When set (by a story trigger's `music` field), overrides sector-based overworld music. */
   private forcedOverworldMusicCue?: OverworldMusicCue;
+  private mixtapeRestoreTimer?: Phaser.Time.TimerEvent;
   private menuState: MenuState = closedMenu();
   private menuScreens = new Map<string, MenuScreen>();
   private activeShopStoreId?: number;
@@ -4764,6 +4766,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.showMenuResult(USABILITY_REFUSAL_MESSAGE);
       return;
     }
+    if (item.id === ORIGINAL_MIXTAPE_ITEM_ID) {
+      const collected = collectedEightSourcesCount((flag) => this.gameFlags.has(flag));
+      this.showMenuResult(originalMixtapeFieldMessage(collected));
+      if (collected > 0) {
+        this.playOriginalMixtapePreview();
+      }
+      return;
+    }
     const result = this.partyState.useItem({
       ownerChar: action.ownerChar,
       targetChar: action.targetChar,
@@ -4780,6 +4790,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.showMenuResult(result.reason === "notFieldUsable" ? USABILITY_REFUSAL_MESSAGE : "You can't use that.");
+  }
+
+  private playOriginalMixtapePreview(): void {
+    this.mixtapeRestoreTimer?.remove(false);
+    void this.music.play(ORIGINAL_MIXTAPE_MUSIC_CUE);
+    this.mixtapeRestoreTimer = this.time.delayedCall(20000, () => {
+      this.mixtapeRestoreTimer = undefined;
+      this.syncOverworldMusicCue(true);
+    });
   }
 
   private handlePsiUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "psiUse" }>): void {
@@ -7402,6 +7421,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
     trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+    this.grantStoryTriggerItems(trigger.grantItems);
     this.updateAct1NightTint({ fade: routeOpenJustSet });
     this.syncOverworldMusicAfterRouteOpen(routeOpenJustSet);
     this.reconcileRecruits({ announce: true });
@@ -7422,6 +7442,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.afterDialogueClosed();
     this.updatePrompt();
     this.publish();
+  }
+
+  private grantStoryTriggerItems(itemIds: readonly number[] | undefined): void {
+    if (!itemIds || itemIds.length === 0) {
+      return;
+    }
+    const party = this.partyState.party();
+    for (const itemId of itemIds) {
+      if (party.some((charId) => this.partyState.inventory(charId).includes(itemId))) {
+        continue;
+      }
+      const recipient = party.find((charId) => this.partyState.inventoryRoom(charId) > 0);
+      if (recipient === undefined) {
+        continue;
+      }
+      if (this.partyState.give(recipient, itemId)) {
+        this.playInteractionSfx("itemGet");
+      }
+    }
+    this.refreshMenuScreens();
   }
 
   private warnStoryTriggerSkip(reason: string): void {
@@ -7722,6 +7762,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
       trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+      this.grantStoryTriggerItems(trigger.grantItems);
       this.updateAct1NightTint({ fade: routeOpenJustSet });
       this.syncOverworldMusicAfterRouteOpen(routeOpenJustSet);
       this.afterDialogueClosed();

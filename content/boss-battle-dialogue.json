@@ -11,6 +11,27 @@
     "The record is patient. The record is hungry. The record is us."
   ],
   "byBattleGroup": {
+    "125": {
+      "personaName": "THE NOTARY",
+      "onStart": [
+        "Present your original. We will return a copy with cleaner posture.",
+        "Stamp arm armed. Filing cabinet hungry. Please stop being multiple."
+      ],
+      "onLowHp": [
+        "The signature shakes. That is evidence, not a flaw.",
+        "Unsteady hands make terrible copies. Hold still."
+      ],
+      "onDefeat": [
+        "Filed... incorrectly.",
+        "The ledger keeps the nervous ink. The copy was never nervous enough."
+      ],
+      "onTurn": [
+        "Filed.",
+        "Initial here. Bleed there.",
+        "The procession continues around the book."
+      ],
+      "lowHpThreshold": 0.34
+    },
     "36": {
       "personaName": "Porcelain Registrar",
       "onStart": [

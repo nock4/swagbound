@@ -665,6 +665,9 @@
     "177": {
       "name": "Proof Card"
     },
+    "196": {
+      "name": "Original Mixtape"
+    },
     "188": {
       "effect": {
         "kind": "cureStatus",

@@ -97,6 +97,19 @@
       ]
     },
     {
+      "id": "intake-ledger",
+      "kind": "examine",
+      "label": "The Intake Ledger",
+      "worldPixel": {
+        "x": 2332,
+        "y": 7208
+      },
+      "pages": [
+        "The first intake book lies open on a stand. Handwriting, crossed-out lines, a coffee ring.",
+        "Nobody prints a coffee ring."
+      ]
+    },
+    {
       "id": "stash-giantstep-ladder",
       "kind": "present",
       "label": "Hidden stash",

@@ -1057,6 +1057,8 @@ export const StoryTriggerSchema = z.object({
   dialogue: z.array(z.string()).optional(),
   setFlags: z.array(z.string()).optional(),
   clearFlags: z.array(z.string()).optional(),
+  /** Grant these item ids after dialogue if the party does not already carry them. */
+  grantItems: z.array(z.number().int().nonnegative()).optional(),
   /** When set, fire this music cue (a music-manifest cue id, e.g. "ending") as a forced overworld track when the trigger's effects run. Persists over sector-based music until another trigger or interior change replaces it. */
   music: z.string().min(1).optional(),
   /** Battle group id to start after dialogue (mutually exclusive with warp). */

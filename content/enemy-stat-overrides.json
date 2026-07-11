@@ -20,6 +20,12 @@
       "hp": 260,
       "speed": 18
     },
+    "33": {
+      "offense": 18,
+      "defense": 21,
+      "hp": 105,
+      "speed": 6
+    },
     "54": {
       "offense": 22,
       "hp": 95
