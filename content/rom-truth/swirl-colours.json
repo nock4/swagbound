@@ -1,0 +1,36 @@
+{
+ "schema": "swagbound.rom-truth.swirl-colours.v1",
+ "source": "ebsrc src/data/misc_swirl_colours.asm; battle-entry swirl palette (5-bit SNES RGB)",
+ "colours": [
+  {
+   "r5": 15,
+   "g5": 15,
+   "b5": 15,
+   "hex": "#787878"
+  },
+  {
+   "r5": 15,
+   "g5": 15,
+   "b5": 0,
+   "hex": "#787800"
+  },
+  {
+   "r5": 15,
+   "g5": 7,
+   "b5": 15,
+   "hex": "#783878"
+  },
+  {
+   "r5": 0,
+   "g5": 0,
+   "b5": 15,
+   "hex": "#000078"
+  },
+  {
+   "r5": 31,
+   "g5": 0,
+   "b5": 12,
+   "hex": "#f80060"
+  }
+ ]
+}

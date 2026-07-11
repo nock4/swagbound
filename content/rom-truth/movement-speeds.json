@@ -1,0 +1,120 @@
+{
+ "schema": "swagbound.rom-truth.movement-speeds.v1",
+ "source": "ebsrc src/data/map/movement_speeds.asm; 16.16 fixed-point px/frame indexed by movement-speed id",
+ "cardinal": [
+  {
+   "raw": 90112,
+   "pxPerFrame": 1.375
+  },
+  {
+   "raw": 90112,
+   "pxPerFrame": 1.375
+  },
+  {
+   "raw": 90112,
+   "pxPerFrame": 1.375
+  },
+  {
+   "raw": 117964,
+   "pxPerFrame": 1.79999
+  },
+  {
+   "raw": 65536,
+   "pxPerFrame": 1.0
+  },
+  {
+   "raw": 0,
+   "pxPerFrame": 0.0
+  },
+  {
+   "raw": 65536,
+   "pxPerFrame": 1.0
+  },
+  {
+   "raw": 52428,
+   "pxPerFrame": 0.79999
+  },
+  {
+   "raw": 52428,
+   "pxPerFrame": 0.79999
+  },
+  {
+   "raw": 0,
+   "pxPerFrame": 0.0
+  },
+  {
+   "raw": 32768,
+   "pxPerFrame": 0.5
+  },
+  {
+   "raw": 0,
+   "pxPerFrame": 0.0
+  },
+  {
+   "raw": 52428,
+   "pxPerFrame": 0.79999
+  },
+  {
+   "raw": 52428,
+   "pxPerFrame": 0.79999
+  }
+ ],
+ "diagonal": [
+  {
+   "raw": 63718,
+   "pxPerFrame": 0.97226
+  },
+  {
+   "raw": 63718,
+   "pxPerFrame": 0.97226
+  },
+  {
+   "raw": 63718,
+   "pxPerFrame": 0.97226
+  },
+  {
+   "raw": 83413,
+   "pxPerFrame": 1.27278
+  },
+  {
+   "raw": 46341,
+   "pxPerFrame": 0.70711
+  },
+  {
+   "raw": 0,
+   "pxPerFrame": 0.0
+  },
+  {
+   "raw": 46341,
+   "pxPerFrame": 0.70711
+  },
+  {
+   "raw": 37072,
+   "pxPerFrame": 0.56567
+  },
+  {
+   "raw": 37072,
+   "pxPerFrame": 0.56567
+  },
+  {
+   "raw": 0,
+   "pxPerFrame": 0.0
+  },
+  {
+   "raw": 23170,
+   "pxPerFrame": 0.35355
+  },
+  {
+   "raw": 0,
+   "pxPerFrame": 0.0
+  },
+  {
+   "raw": 37072,
+   "pxPerFrame": 0.56567
+  },
+  {
+   "raw": 37072,
+   "pxPerFrame": 0.56567
+  }
+ ]
+}
