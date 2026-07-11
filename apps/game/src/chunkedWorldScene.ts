@@ -1006,7 +1006,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (!sheetOverride) {
         continue;
       }
-      this.load.spritesheet(spriteOverrideNpcSheetKey(npcId), spriteOverrideAssetUrl(sheetOverride.image), {
+      this.load.spritesheet(spriteOverrideNpcSheetKey(npcId, sheetOverride.image), spriteOverrideAssetUrl(sheetOverride.image), {
         frameWidth: sheetOverride.frameWidth,
         frameHeight: sheetOverride.frameHeight
       });
@@ -3187,7 +3187,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return {
         source: "npc",
         id: npcId,
-        key: spriteOverrideNpcSheetKey(npcId),
+        key: spriteOverrideNpcSheetKey(npcId, npcOverride.image),
         override: npcOverride
       };
     }

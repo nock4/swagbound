@@ -117,15 +117,19 @@ export function spriteOverrideNpcEntries(
   });
 }
 
-export function spriteOverrideNpcSheetKey(npcId: number): string {
-  return `${NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX}${npcId}`;
+export function spriteOverrideNpcSheetKey(npcId: number, image?: string): string {
+  const imageHash = image ? `-${stableAssetPathHash(image)}` : "";
+  return `${NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX}${npcId}${imageHash}`;
 }
 
 export function spriteOverrideNpcIdFromSheetKey(key: string): number | undefined {
   if (!key.startsWith(NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX)) {
     return undefined;
   }
-  const rawNpcId = key.slice(NPC_SPRITE_OVERRIDE_SHEET_KEY_PREFIX.length);
+  const [, rawNpcId] = /^sprite-override-npc-(\d+)(?:-[0-9a-z]+)?$/.exec(key) ?? [];
+  if (!rawNpcId) {
+    return undefined;
+  }
   const npcId = Number.parseInt(rawNpcId, 10);
   return Number.isSafeInteger(npcId) && String(npcId) === rawNpcId ? npcId : undefined;
 }

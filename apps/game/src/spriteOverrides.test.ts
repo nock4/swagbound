@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import {
   SPRITE_WALK_BOB_AMPLITUDE_PX,
   SPRITE_WALK_STEP_INTERVAL_MS,
+  spriteOverrideNpcIdFromSheetKey,
+  spriteOverrideNpcSheetKey,
   spriteWalkBobOffset
 } from "./spriteOverrides";
 
@@ -48,5 +50,18 @@ describe("spriteWalkBobOffset", () => {
       }
     }
     expect(disagreements).toBeGreaterThan(50);
+  });
+});
+
+describe("spriteOverrideNpcSheetKey", () => {
+  it("includes the image path hash so NPC override texture keys do not go stale", () => {
+    const key = spriteOverrideNpcSheetKey(100300, "assets/swagbound/overworld-npc/archivist-ow.png");
+
+    expect(key).toMatch(/^sprite-override-npc-100300-[0-9a-z]+$/);
+    expect(spriteOverrideNpcIdFromSheetKey(key)).toBe(100300);
+  });
+
+  it("keeps parsing legacy un-hashed NPC override keys", () => {
+    expect(spriteOverrideNpcIdFromSheetKey("sprite-override-npc-100300")).toBe(100300);
   });
 });
