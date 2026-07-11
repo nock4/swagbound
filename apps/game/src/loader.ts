@@ -25,6 +25,7 @@ import {
   ManifestSchema,
   MusicManifestSchema,
   NavmeshSchema,
+  NpcMovementPatternsSchema,
   SectorMusicSchema,
   CollisionOverridesSchema,
   NpcOverridesSchema,
@@ -80,6 +81,7 @@ import {
   type Manifest,
   type MusicManifest,
   type Navmesh,
+  type NpcMovementPatterns,
   type SectorMusic,
   type CollisionOverrides,
   type NpcOverrides,
@@ -122,6 +124,7 @@ const CUSTOM_DIALOGUE_FILE = "custom-dialogue.json";
 const SWAGBOUND_DIALOGUE_LIBRARY_FILE = "swagbound-dialogue-library.json";
 const SPRITE_OVERRIDES_FILE = "sprite-overrides.json";
 const NPC_OVERRIDES_FILE = "npc-overrides.json";
+const NPC_MOVEMENT_PATTERNS_FILE = "npc-movement-patterns.json";
 const BACKGROUND_OVERRIDES_FILE = "background-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
 const CONDIMENT_PAIRS_FILE = "condiment-pairs.json";
@@ -175,6 +178,7 @@ export type GameData = {
   sprites?: SpriteSheetCollection;
   spriteOverrides?: SpriteOverrides;
   npcOverrides: NpcOverrides;
+  npcMovementPatterns: NpcMovementPatterns;
   backgroundOverrides?: BackgroundOverrides;
   teleportDestinations?: TeleportDestinations;
   encounters?: Encounters;
@@ -286,6 +290,13 @@ function emptyNpcOverrides(): NpcOverrides {
   };
 }
 
+function emptyNpcMovementPatterns(): NpcMovementPatterns {
+  return {
+    schema: "swagbound.npc-movement-patterns.v1",
+    byNpcId: {}
+  };
+}
+
 function emptyOverworldInteractables(): OverworldInteractables {
   return {
     schema: "swagbound.overworld-interactables.v1",
@@ -363,6 +374,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     sprites,
     spriteOverrides,
     npcOverrides,
+    npcMovementPatterns,
     backgroundOverrides,
     teleportDestinations,
     encounters,
@@ -414,6 +426,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${manifest.files.sprites}`, SpriteSheetCollectionSchema),
     loadJson(`/generated/${SPRITE_OVERRIDES_FILE}`, SpriteOverridesSchema),
     loadJson(`/generated/${NPC_OVERRIDES_FILE}`, NpcOverridesSchema),
+    loadJson(`/generated/${NPC_MOVEMENT_PATTERNS_FILE}`, NpcMovementPatternsSchema),
     loadJson(`/generated/${BACKGROUND_OVERRIDES_FILE}`, BackgroundOverridesSchema),
     manifest.files.teleportDestinations
       ? loadJson(`/generated/${manifest.files.teleportDestinations}`, TeleportDestinationsSchema)
@@ -525,6 +538,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     sprites,
     spriteOverrides: withDerivedFollower(spriteOverrides),
     npcOverrides: npcOverrides ?? emptyNpcOverrides(),
+    npcMovementPatterns: npcMovementPatterns ?? emptyNpcMovementPatterns(),
     backgroundOverrides,
     teleportDestinations,
     encounters,

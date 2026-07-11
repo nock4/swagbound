@@ -6,6 +6,8 @@ import type {
 } from "@eb/schemas";
 import type { GameEvent } from "./eventRunner";
 import {
+  AUTHORED_PATTERN_PACE_RANGE_PX,
+  AUTHORED_PATTERN_SPEED_PX_PER_SEC,
   behaviorForNpc,
   HEURISTIC_WANDER_RADIUS_PX,
   HEURISTIC_WANDER_SPEED_PX_PER_SEC,
@@ -13,6 +15,22 @@ import {
 } from "./npcBehaviors";
 
 describe("behaviorForNpc service static overrides", () => {
+  it("uses authored movement patterns before generic or service behavior", () => {
+    expect(behaviorForNpc(85, 605, { movementPattern: "pace-horizontal" })).toEqual({
+      kind: "patrol",
+      axis: "x",
+      rangePx: AUTHORED_PATTERN_PACE_RANGE_PX,
+      speedPxPerSec: AUTHORED_PATTERN_SPEED_PX_PER_SEC
+    });
+
+    expect(behaviorForNpc(9, 606, {
+      hasServiceInteraction: true,
+      movementPattern: "stationary-look-around"
+    })).toMatchObject({
+      kind: "lookAround"
+    });
+  });
+
   it("keeps shop/service NPCs static when their interaction resolves to a service effect", () => {
     const hasServiceInteraction = interactionEventsHaveServiceEffect([
       { kind: "shop", storeId: 4 }

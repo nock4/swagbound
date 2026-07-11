@@ -20,6 +20,7 @@ import {
   KeyItemsSchema,
   MusicManifestSchema,
   NavmeshSchema,
+  NpcMovementPatternsSchema,
   NpcOverridesSchema,
   ObjectivesSchema,
   OpeningCutsceneSchema,
@@ -56,6 +57,8 @@ export const SPRITE_OVERRIDES_SOURCE = "content/sprite-overrides.json";
 export const SPRITE_OVERRIDES_OUTPUT = "sprite-overrides.json";
 export const NPC_OVERRIDES_SOURCE = "content/npc-overrides.json";
 export const NPC_OVERRIDES_OUTPUT = "npc-overrides.json";
+export const NPC_MOVEMENT_PATTERNS_SOURCE = "content/npc-movement-patterns.json";
+export const NPC_MOVEMENT_PATTERNS_OUTPUT = "npc-movement-patterns.json";
 export const OVERWORLD_ENEMY_SKINS_SOURCE = "content/overworld-enemy-skins.json";
 export const BACKGROUND_OVERRIDES_SOURCE = "content/background-overrides.json";
 export const BACKGROUND_OVERRIDES_OUTPUT = "background-overrides.json";
@@ -230,6 +233,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateNavmesh(NAVMESH_SOURCE);
   await validateUsabilityMatrix(USABILITY_MATRIX_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
+  await validateNpcMovementPatterns(NPC_MOVEMENT_PATTERNS_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
   await validateKeyItems(KEY_ITEMS_SOURCE);
   await validateStoryItems(STORY_ITEMS_SOURCE);
@@ -245,6 +249,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(SWAGBOUND_DIALOGUE_LIBRARY_SOURCE, out, SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT),
     generateSpriteOverridesWithOverworldSkins(out, SPRITE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(NPC_OVERRIDES_SOURCE, out, NPC_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(NPC_MOVEMENT_PATTERNS_SOURCE, out, NPC_MOVEMENT_PATTERNS_OUTPUT),
     copyJsonToGenerated(BACKGROUND_OVERRIDES_SOURCE, out, BACKGROUND_OVERRIDES_OUTPUT),
     copyJsonToGenerated(TILE_OVERRIDES_SOURCE, out, TILE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
@@ -414,6 +419,10 @@ async function validateUsabilityMatrix(source: string): Promise<void> {
 
 async function validateNpcOverrides(source: string): Promise<void> {
   NpcOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateNpcMovementPatterns(source: string): Promise<void> {
+  NpcMovementPatternsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateEnemyStatOverrides(source: string): Promise<void> {

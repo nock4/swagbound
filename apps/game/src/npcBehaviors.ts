@@ -1,9 +1,11 @@
 import {
   resolveScriptEvents,
   type EventEffect,
+  type NpcMovementPatternName,
   type NumericFlagState,
   type ScriptCollection
 } from "@eb/schemas";
+import { movementSpeedById } from "./ebTiming";
 import type { GameEvent } from "./eventRunner";
 import type { NpcBehavior } from "./npcController";
 
@@ -19,10 +21,16 @@ export const LOOK_AROUND_MOVEMENT_IDS = new Set([606, 693]);
 export const LOOK_AROUND_PERIOD_MS = 2000;
 export const HEURISTIC_WANDER_RADIUS_PX = 16;
 export const HEURISTIC_WANDER_SPEED_PX_PER_SEC = 22;
+export const AUTHORED_PATTERN_MOVEMENT_SPEED_ID = 10;
+export const AUTHORED_PATTERN_SPEED_PX_PER_SEC =
+  movementSpeedById(AUTHORED_PATTERN_MOVEMENT_SPEED_ID).cardinalPxPerSecond;
+export const AUTHORED_PATTERN_PACE_RANGE_PX = 24;
+export const AUTHORED_PATTERN_WANDER_RADIUS_PX = 24;
 
 export type NpcBehaviorContext = {
   hasServiceInteraction?: boolean;
   isInteriorHome?: boolean;
+  movementPattern?: NpcMovementPatternName;
 };
 
 // Repo-owned until imported npc_config Movement codes are decoded into runtime behaviors.
@@ -48,6 +56,9 @@ const SERVICE_PARTY_STAT_OPS = new Set<Extract<EventEffect, { kind: "partyStat" 
 ]);
 
 export function behaviorForNpc(npcId: number, movementId?: number, context: NpcBehaviorContext = {}): NpcBehavior {
+  if (context.movementPattern) {
+    return authoredPatternBehaviorForNpc(npcId, context.movementPattern);
+  }
   if (context.hasServiceInteraction) {
     return STATIC_NPC_BEHAVIOR;
   }
@@ -59,6 +70,38 @@ export function behaviorForNpc(npcId: number, movementId?: number, context: NpcB
     return STATIC_NPC_BEHAVIOR;
   }
   return heuristicBehaviorForMovement(npcId, movementId);
+}
+
+export function authoredPatternBehaviorForNpc(npcId: number, pattern: NpcMovementPatternName): NpcBehavior {
+  switch (pattern) {
+    case "pace-horizontal":
+      return {
+        kind: "patrol",
+        axis: "x",
+        rangePx: AUTHORED_PATTERN_PACE_RANGE_PX,
+        speedPxPerSec: AUTHORED_PATTERN_SPEED_PX_PER_SEC
+      };
+    case "pace-vertical":
+      return {
+        kind: "patrol",
+        axis: "y",
+        rangePx: AUTHORED_PATTERN_PACE_RANGE_PX,
+        speedPxPerSec: AUTHORED_PATTERN_SPEED_PX_PER_SEC
+      };
+    case "stationary-look-around":
+      return {
+        kind: "lookAround",
+        periodMs: LOOK_AROUND_PERIOD_MS,
+        seed: npcBehaviorSeed(npcId, authoredPatternSeedId(pattern))
+      };
+    case "wander-box":
+      return {
+        kind: "wander",
+        radiusPx: AUTHORED_PATTERN_WANDER_RADIUS_PX,
+        speedPxPerSec: AUTHORED_PATTERN_SPEED_PX_PER_SEC,
+        seed: npcBehaviorSeed(npcId, authoredPatternSeedId(pattern))
+      };
+  }
 }
 
 export function interactionEventsHaveServiceEffect(
@@ -107,6 +150,19 @@ function npcBehaviorSeed(npcId: number, movementId: number): number {
   value = Math.imul(value, 0x45d9f3b) >>> 0;
   value ^= value >>> 16;
   return value >>> 0;
+}
+
+function authoredPatternSeedId(pattern: NpcMovementPatternName): number {
+  switch (pattern) {
+    case "pace-horizontal":
+      return 10_001;
+    case "pace-vertical":
+      return 10_002;
+    case "stationary-look-around":
+      return 10_003;
+    case "wander-box":
+      return 10_004;
+  }
 }
 
 function isServiceEventEffect(effect: EventEffect): boolean {

@@ -100,9 +100,10 @@ import {
   flashOverlayState,
   flashState,
   hitSparkState,
-  psiElementFlashProfile,
+  psiBattleAnimationForPsi,
   screenShakeOffset,
-  type EffectDirection
+  type EffectDirection,
+  type PsiBattleAnimationDefinition
 } from "./battleEffects";
 import { publishBattleDebug, type BattlePhase, type BattleTransitionPhase } from "./state";
 import {
@@ -311,6 +312,7 @@ const ENEMY_SPRITE_REDRAW_RETRY_MS = 50;
 const MAX_ENEMY_SPRITE_REDRAW_ATTEMPTS = 5;
 const BATTLE_FX_SPARK_DEPTH = 13;
 const BATTLE_FX_FLASH_DEPTH = 12;
+const BATTLE_FX_PSI_ANIMATION_DEPTH = 28;
 // Action-command timing window (interactive only): press Z as a party BASH lands
 // for bonus damage, or as an enemy hit lands to guard part of it. Window never
 // exceeds the step's natural dwell, so it never slows the fight; it only ever
@@ -406,6 +408,10 @@ type FlashOverlayFx = {
   durationMs: number;
   baseAlpha: number;
   color: number;
+};
+type PsiBattleAnimationFx = {
+  startedAt: number;
+  definition: PsiBattleAnimationDefinition;
 };
 type EnemyLungeFx = {
   startedAt: number;
@@ -575,6 +581,7 @@ export class BattleScene extends Phaser.Scene {
   private enemyShadowGraphics?: Phaser.GameObjects.Graphics;
   private hitSparkGraphics?: Phaser.GameObjects.Graphics;
   private flashOverlayGraphics?: Phaser.GameObjects.Graphics;
+  private psiAnimationGraphics?: Phaser.GameObjects.Graphics;
   private enemySpriteBasePoints: Array<SpritePoint | undefined> = [];
   private enemySpriteRedrawScheduled = false;
   private enemySpriteRedrawAttempts = 0;
@@ -585,6 +592,7 @@ export class BattleScene extends Phaser.Scene {
   private screenShakeFx_: ScreenShakeFx = inactiveScreenShakeFx();
   private hitSparkFx_: HitSparkFx[] = [];
   private flashOverlayFx_: FlashOverlayFx = inactiveFlashOverlayFx();
+  private psiBattleAnimationFx_: PsiBattleAnimationFx | null = null;
   private enemyLungeFx_: Array<EnemyLungeFx | null> = [];
   private backgroundAnimation?: AnimatedBattleBackgroundHandle;
   private backgroundDebug: BattleBackgroundDebug = staticBattleBackgroundDebug();
@@ -679,6 +687,7 @@ export class BattleScene extends Phaser.Scene {
     this.screenShakeFx_ = inactiveScreenShakeFx();
     this.hitSparkFx_ = [];
     this.flashOverlayFx_ = inactiveFlashOverlayFx();
+    this.psiBattleAnimationFx_ = null;
     this.enemySpriteBasePoints = [];
     this.enemySpriteRedrawScheduled = false;
     this.enemySpriteRedrawAttempts = 0;
@@ -1694,8 +1703,8 @@ export class BattleScene extends Phaser.Scene {
       }
     }
 
-    if (action?.action === "psi" && (firstBattleDamage(events) || battleEventsHaveMiss(events))) {
-      this.startPsiElementFlash(action.psiId ?? 0);
+    if (result.details.kind === "psi" && !result.skipped) {
+      this.startPsiBattleAnimation(result);
     } else if (action?.action === "attack" && !result.skipped) {
       this.startFlashOverlay(
         BATTLE_FX_ATTACK_FLASH_COLOR,
@@ -1995,13 +2004,26 @@ export class BattleScene extends Phaser.Scene {
     this.fxCounters_.flashCount += 1;
   }
 
-  private startPsiElementFlash(psiId: number): void {
-    const profile = psiElementFlashProfile(psiId);
-    this.startFlashOverlay(profile.color, profile.alpha, profile.durationMs);
-    for (let pulse = 1; pulse < profile.pulses; pulse += 1) {
-      this.time.delayedCall(pulse * profile.durationMs * 1.35, () => {
-        this.startFlashOverlay(profile.color, profile.alpha, profile.durationMs);
+  private startPsiBattleAnimation(result: BattleRoundStepResult): void {
+    try {
+      const psiId = result.details.psiId;
+      const psi = psiId === undefined ? undefined : this.psi_?.psi.find((entry) => entry.id === psiId);
+      const definition = psiBattleAnimationForPsi(psi ?? {
+        id: psiId,
+        name: result.details.moveName,
+        type: fallbackPsiAnimationType(result.details)
       });
+      this.psiBattleAnimationFx_ = {
+        startedAt: this.time.now,
+        definition
+      };
+      this.fxCounters_.flashCount += 1;
+      if (definition.style !== "supportGlow") {
+        const { r, g, b } = rgbFromHex(definition.colors[0] ?? 0xffffff);
+        this.cameras.main.flash(clampNumber(Math.round(definition.durationMs * 0.16), 80, 180), r, g, b);
+      }
+    } catch {
+      this.psiBattleAnimationFx_ = null;
     }
   }
 
@@ -2910,9 +2932,11 @@ export class BattleScene extends Phaser.Scene {
     this.enemyShadowGraphics?.destroy();
     this.hitSparkGraphics?.destroy();
     this.flashOverlayGraphics?.destroy();
+    this.psiAnimationGraphics?.destroy();
     this.destroyBattleUiText();
     this.enemyShadowGraphics = this.add.graphics().setDepth(9);
     this.flashOverlayGraphics = this.add.graphics().setDepth(BATTLE_FX_FLASH_DEPTH);
+    this.psiAnimationGraphics = this.add.graphics().setDepth(BATTLE_FX_PSI_ANIMATION_DEPTH);
     this.hitSparkGraphics = this.add.graphics().setDepth(BATTLE_FX_SPARK_DEPTH);
     this.statusGraphics = this.add.graphics().setDepth(20);
     this.statusFieldGraphics = this.add.graphics().setDepth(20.5);
@@ -3481,6 +3505,7 @@ export class BattleScene extends Phaser.Scene {
   private renderBattleFx(now: number): void {
     this.applyScreenShake(now);
     this.renderFlashOverlayFx(now);
+    this.renderPsiBattleAnimationFx(now);
     this.renderHitSparkFx(now);
     this.updateDamageNumbers(now);
   }
@@ -3542,6 +3567,235 @@ export class BattleScene extends Phaser.Scene {
     if (fx.startedAt !== null && now - fx.startedAt >= fx.durationMs) {
       this.flashOverlayFx_ = inactiveFlashOverlayFx();
     }
+  }
+
+  private renderPsiBattleAnimationFx(now: number): void {
+    const graphics = this.psiAnimationGraphics;
+    if (!graphics) {
+      return;
+    }
+    graphics.clear();
+    const fx = this.psiBattleAnimationFx_;
+    if (!fx) {
+      return;
+    }
+    try {
+      const durationMs = Math.max(1, fx.definition.durationMs);
+      const elapsed = now - fx.startedAt;
+      if (elapsed < 0) {
+        return;
+      }
+      if (elapsed >= durationMs) {
+        this.psiBattleAnimationFx_ = null;
+        return;
+      }
+      const progress = clampNumber(elapsed / durationMs, 0, 1);
+      this.drawPsiAnimationBase(graphics, fx.definition, progress);
+      switch (fx.definition.style) {
+        case "fireSweep":
+          this.drawPsiFireSweep(graphics, fx.definition, progress);
+          break;
+        case "iceCrystal":
+          this.drawPsiIceCrystal(graphics, fx.definition, progress);
+          break;
+        case "thunderBolt":
+          this.drawPsiThunderBolt(graphics, fx.definition, progress);
+          break;
+        case "radial":
+          this.drawPsiRadial(graphics, fx.definition, progress);
+          break;
+        case "flashBurst":
+          this.drawPsiFlashBurst(graphics, fx.definition, progress);
+          break;
+        case "cosmicSwirl":
+          this.drawPsiCosmicSwirl(graphics, fx.definition, progress);
+          break;
+        case "supportGlow":
+          this.drawPsiSupportGlow(graphics, fx.definition, progress);
+          break;
+      }
+    } catch {
+      graphics.clear();
+      this.psiBattleAnimationFx_ = null;
+    }
+  }
+
+  private drawPsiAnimationBase(
+    graphics: Phaser.GameObjects.Graphics,
+    definition: PsiBattleAnimationDefinition,
+    progress: number
+  ): void {
+    const envelope = Math.sin(progress * Math.PI);
+    const strobe = definition.style === "thunderBolt"
+      ? (Math.floor(progress * definition.pulses * 2) % 2 === 0 ? 1 : 0.16)
+      : 0.55 + 0.45 * Math.sin(progress * TAU * definition.pulses) ** 2;
+    graphics.fillStyle(
+      psiAnimationColorAt(definition, progress),
+      clampNumber(definition.baseAlpha * envelope * strobe, 0, 0.9)
+    );
+    graphics.fillRect(0, 0, this.scale.width, this.scale.height);
+  }
+
+  private drawPsiFireSweep(
+    graphics: Phaser.GameObjects.Graphics,
+    definition: PsiBattleAnimationDefinition,
+    progress: number
+  ): void {
+    const width = this.scale.width;
+    const height = this.scale.height;
+    const sweep = easeOutCubic(progress);
+    for (let i = 0; i < definition.burstCount; i += 1) {
+      const lane = i % 5;
+      const bandProgress = (sweep + i * 0.11) % 1.25;
+      const x = bandProgress * (width * 1.55) - width * 0.38;
+      const y = height * (0.08 + lane * 0.17);
+      const bandHeight = height * (0.16 + (i % 3) * 0.035);
+      const alpha = clampNumber(definition.accentAlpha * (1 - progress) * (0.38 + lane * 0.035), 0, 0.72);
+      graphics.fillStyle(definition.colors[(i + 1) % definition.colors.length] ?? 0xff7a2a, alpha);
+      graphics.fillTriangle(x, y, x + width * 0.46, y + bandHeight * 0.48, x, y + bandHeight);
+      graphics.fillRect(x - width * 0.16, y + bandHeight * 0.12, width * 0.24, bandHeight * 0.72);
+    }
+  }
+
+  private drawPsiIceCrystal(
+    graphics: Phaser.GameObjects.Graphics,
+    definition: PsiBattleAnimationDefinition,
+    progress: number
+  ): void {
+    const center = this.psiAnimationCenter();
+    const maxRadius = Math.hypot(this.scale.width, this.scale.height) * 0.58;
+    const radius = maxRadius * (0.18 + easeOutCubic(progress) * 0.86);
+    graphics.lineStyle(2, 0xffffff, clampNumber(definition.accentAlpha * (1 - progress * 0.45), 0, 0.86));
+    for (let i = 0; i < definition.burstCount; i += 1) {
+      const angle = (i / definition.burstCount) * TAU + progress * 0.48;
+      const spread = 0.08 + (i % 3) * 0.025;
+      const inner = radius * (0.08 + (i % 2) * 0.08);
+      const outer = radius * (0.62 + (i % 4) * 0.09);
+      const p1 = polarPoint(center.x, center.y, inner, angle - spread);
+      const p2 = polarPoint(center.x, center.y, outer, angle);
+      const p3 = polarPoint(center.x, center.y, inner, angle + spread);
+      graphics.fillStyle(definition.colors[i % definition.colors.length] ?? 0x5fe0ff, definition.accentAlpha * (1 - progress * 0.55));
+      graphics.fillTriangle(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
+      graphics.lineBetween(center.x, center.y, p2.x, p2.y);
+    }
+    graphics.strokeCircle(center.x, center.y, radius * 0.22);
+  }
+
+  private drawPsiThunderBolt(
+    graphics: Phaser.GameObjects.Graphics,
+    definition: PsiBattleAnimationDefinition,
+    progress: number
+  ): void {
+    const width = this.scale.width;
+    const height = this.scale.height;
+    const strobeOn = Math.floor(progress * definition.pulses * 2) % 2 === 0;
+    const alpha = strobeOn ? definition.accentAlpha : definition.accentAlpha * 0.22;
+    for (let bolt = 0; bolt < definition.burstCount; bolt += 1) {
+      const startX = width * (0.18 + bolt * 0.16) + Math.sin(progress * TAU * 3 + bolt) * 22;
+      const segments = 6;
+      graphics.lineStyle(bolt === 2 ? 5 : 3, definition.colors[bolt % definition.colors.length] ?? 0xffffff, alpha);
+      graphics.beginPath();
+      graphics.moveTo(startX, -height * 0.08);
+      for (let segment = 1; segment <= segments; segment += 1) {
+        const y = (segment / segments) * height * 0.92;
+        const x = startX + Math.sin(segment * 1.7 + progress * TAU * 5 + bolt) * (26 + bolt * 5);
+        graphics.lineTo(x, y);
+      }
+      graphics.strokePath();
+    }
+  }
+
+  private drawPsiRadial(
+    graphics: Phaser.GameObjects.Graphics,
+    definition: PsiBattleAnimationDefinition,
+    progress: number
+  ): void {
+    const center = this.psiAnimationCenter();
+    const maxRadius = Math.hypot(this.scale.width, this.scale.height) * 0.58;
+    const spin = progress * TAU * 1.45;
+    const alpha = clampNumber(definition.accentAlpha * Math.sin(progress * Math.PI), 0, 0.86);
+    graphics.lineStyle(2, definition.colors[0] ?? 0xff54d8, alpha);
+    for (let i = 0; i < definition.burstCount; i += 1) {
+      const angle = spin + (i / definition.burstCount) * TAU;
+      const inner = maxRadius * (0.05 + progress * 0.18);
+      const outer = maxRadius * (0.45 + ((i % 4) * 0.08));
+      const p1 = polarPoint(center.x, center.y, inner, angle);
+      const p2 = polarPoint(center.x, center.y, outer, angle + progress * 0.62);
+      graphics.lineBetween(p1.x, p1.y, p2.x, p2.y);
+    }
+    graphics.lineStyle(2, definition.colors[2] ?? 0x6f4dff, alpha * 0.75);
+    graphics.strokeCircle(center.x, center.y, maxRadius * (0.16 + progress * 0.36));
+    graphics.strokeCircle(center.x, center.y, maxRadius * (0.04 + ((progress * 1.9) % 1) * 0.28));
+  }
+
+  private drawPsiFlashBurst(
+    graphics: Phaser.GameObjects.Graphics,
+    definition: PsiBattleAnimationDefinition,
+    progress: number
+  ): void {
+    const center = this.psiAnimationCenter();
+    const maxRadius = Math.hypot(this.scale.width, this.scale.height) * 0.55;
+    const pulse = Math.sin(progress * Math.PI * 2) ** 2;
+    const alpha = clampNumber(definition.accentAlpha * (1 - progress * 0.35) * (0.35 + pulse * 0.65), 0, 0.9);
+    graphics.lineStyle(3, 0xffffff, alpha);
+    for (let i = 0; i < definition.burstCount; i += 1) {
+      const angle = (i / definition.burstCount) * TAU;
+      const inner = maxRadius * 0.06;
+      const outer = maxRadius * (0.32 + progress * 0.68);
+      const p1 = polarPoint(center.x, center.y, inner, angle);
+      const p2 = polarPoint(center.x, center.y, outer, angle);
+      graphics.lineBetween(p1.x, p1.y, p2.x, p2.y);
+    }
+    graphics.lineStyle(2, definition.colors[2] ?? 0xfff49c, alpha * 0.72);
+    graphics.strokeCircle(center.x, center.y, maxRadius * (0.2 + progress * 0.5));
+  }
+
+  private drawPsiCosmicSwirl(
+    graphics: Phaser.GameObjects.Graphics,
+    definition: PsiBattleAnimationDefinition,
+    progress: number
+  ): void {
+    const center = this.psiAnimationCenter();
+    const maxRadius = Math.hypot(this.scale.width, this.scale.height) * 0.54;
+    const alpha = clampNumber(definition.accentAlpha * Math.sin(progress * Math.PI), 0, 0.78);
+    graphics.lineStyle(2, definition.colors[0] ?? 0xb46bff, alpha);
+    for (let i = 0; i < definition.burstCount; i += 1) {
+      const t = i / definition.burstCount;
+      const angle = progress * TAU * 2.1 + t * TAU * 2.6;
+      const radius = maxRadius * (0.1 + t * 0.85);
+      const p = polarPoint(center.x, center.y, radius, angle);
+      const starSize = 1.5 + (i % 3);
+      graphics.fillStyle(definition.colors[i % definition.colors.length] ?? 0xffffff, alpha);
+      graphics.fillRect(p.x - starSize / 2, p.y - starSize / 2, starSize, starSize);
+      if (i % 3 === 0) {
+        graphics.lineBetween(center.x, center.y, p.x, p.y);
+      }
+    }
+    graphics.strokeCircle(center.x, center.y, maxRadius * (0.12 + ((progress * 1.4) % 1) * 0.46));
+  }
+
+  private drawPsiSupportGlow(
+    graphics: Phaser.GameObjects.Graphics,
+    definition: PsiBattleAnimationDefinition,
+    progress: number
+  ): void {
+    const center = this.psiAnimationCenter();
+    const maxRadius = Math.hypot(this.scale.width, this.scale.height) * 0.42;
+    const envelope = Math.sin(progress * Math.PI);
+    for (let ring = 0; ring < 3; ring += 1) {
+      const ringProgress = (progress + ring * 0.22) % 1;
+      const radius = maxRadius * (0.16 + ringProgress * 0.78);
+      const alpha = clampNumber(definition.accentAlpha * envelope * (1 - ringProgress) * 0.5, 0, 0.42);
+      graphics.fillStyle(definition.colors[ring % definition.colors.length] ?? 0x8fe0d8, alpha);
+      graphics.fillCircle(center.x, center.y, radius);
+    }
+  }
+
+  private psiAnimationCenter(): SpritePoint {
+    return {
+      x: this.scale.width / 2,
+      y: this.scale.height * 0.44
+    };
   }
 
   private renderHitSparkFx(now: number): void {
@@ -5219,6 +5473,39 @@ function clampRectToScreen(
 
 function clampNumber(value: number, minValue: number, maxValue: number): number {
   return Math.max(minValue, Math.min(maxValue, value));
+}
+
+function fallbackPsiAnimationType(details: BattleRoundStepResult["details"]): string {
+  if ((details.damage ?? 0) > 0 || details.missed) {
+    return "offense";
+  }
+  if ((details.healed ?? 0) > 0 || (details.ppRestored ?? 0) > 0) {
+    return "recovery";
+  }
+  return "assist";
+}
+
+function psiAnimationColorAt(definition: PsiBattleAnimationDefinition, progress: number): number {
+  const colors = definition.colors;
+  if (colors.length === 0) {
+    return 0xffffff;
+  }
+  const index = Math.floor(Math.max(0, progress) * definition.pulses * colors.length) % colors.length;
+  return colors[index] ?? colors[0] ?? 0xffffff;
+}
+
+function easeOutCubic(value: number): number {
+  const t = clampNumber(value, 0, 1);
+  return 1 - (1 - t) ** 3;
+}
+
+function rgbFromHex(color: number): { r: number; g: number; b: number } {
+  const value = Math.max(0, Math.floor(color)) & 0xffffff;
+  return {
+    r: (value >> 16) & 0xff,
+    g: (value >> 8) & 0xff,
+    b: value & 0xff
+  };
 }
 
 function modulo(value: number, size: number): number {

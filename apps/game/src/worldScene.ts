@@ -267,9 +267,16 @@ export class WorldScene extends Phaser.Scene {
   private createNpcRuntime(npc: WorldNpc): NpcRuntime {
     const frames = this.framesForGroup(npc.spriteGroup);
     const facing = toFacing(npc.direction);
+    const movementPattern = this.data_.npcMovementPatterns.byNpcId[String(npc.npcId)]?.pattern;
     return {
       data: npc,
-      state: createNpcState(npc.regionPixel.x, npc.regionPixel.y, facing, behaviorForNpc(npc.npcId, npc.movement), frames),
+      state: createNpcState(
+        npc.regionPixel.x,
+        npc.regionPixel.y,
+        facing,
+        behaviorForNpc(npc.npcId, npc.movement, { movementPattern }),
+        frames
+      ),
       frames,
       sprite: this.spawnActor(npc.regionPixel.x, npc.regionPixel.y, npc.spriteGroup, npc.direction)
     };

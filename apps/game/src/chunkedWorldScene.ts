@@ -282,7 +282,7 @@ import {
 } from "./roomBounds";
 import {
   decodeNavmesh,
-  nearestComponentIdAtWorldPixel,
+  nearestComponentAt,
   type NavmeshQuery
 } from "./navmesh";
 import { findMeshPath, type Point as NavmeshPoint } from "./navmeshPath";
@@ -299,7 +299,7 @@ import {
   type TransitionKind,
   type TransitionSfxCue
 } from "./mapTransition";
-import { createTransitionSfx, type InteractionSfxCue, type TransitionSfx } from "./audio/transitionSfx";
+import { createTransitionSfx, TEXT_BLIP_TUNING, type InteractionSfxCue, type TransitionSfx } from "./audio/transitionSfx";
 import { createOpeningSfx, type OpeningSfx } from "./audio/openingSfx";
 import { createMusic, musicAreaCueId, musicDisabledBySearch, type Music } from "./audio/music";
 import { getSharedMusic } from "./sharedMusic";
@@ -381,11 +381,11 @@ type NpcRuntime = {
   data: RuntimeNpcData;
   state: NpcRuntimeState;
   frames: DirectionFrameSequence;
-  wanderHome?: NpcWanderHome;
+  movementHome?: NpcMovementHome;
   sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
 };
 
-type NpcWanderHome = {
+type NpcMovementHome = {
   componentId: number;
   sectorAreaKey?: string;
 };
@@ -784,6 +784,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private encounterSwirlMs = 0;
   private encounterSwirlGfx?: Phaser.GameObjects.Graphics;
   private lastDialogueRevealedChars = 0;
+  private dialogueBlipGlyphCount = 0;
   private doorTransitionState: MapTransitionState = idleMapTransition();
   private activeDoorWarp?: {
     destination: EventWarpDestination;
@@ -2157,18 +2158,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private tickDialogueBlip(): void {
     if (!textBlipEnabled() || !this.dialogue.open || this.dialogue.revealComplete) {
       this.lastDialogueRevealedChars = 0;
+      this.dialogueBlipGlyphCount = 0;
       return;
     }
     const state = this.dialogue.currentRevealState;
     const revealed = state.revealedChars;
     if (revealed < this.lastDialogueRevealedChars) {
       this.lastDialogueRevealedChars = revealed; // new page reset
+      this.dialogueBlipGlyphCount = nonWhitespaceCount(state.revealedText.slice(0, revealed));
     }
     if (revealed > this.lastDialogueRevealedChars) {
       const fresh = state.revealedText.slice(this.lastDialogueRevealedChars, revealed);
       for (const char of fresh) {
         if (/\S/.test(char)) {
-          this.transitionSfx.textBlip();
+          this.dialogueBlipGlyphCount += 1;
+          if (this.dialogueBlipGlyphCount % TEXT_BLIP_TUNING.cadenceChars === 0) {
+            this.transitionSfx.textBlip();
+          }
         }
       }
       this.lastDialogueRevealedChars = revealed;
@@ -2880,7 +2886,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       data: npc,
       state: createNpcState(npc.worldPixel.x, npc.worldPixel.y, facing, behavior, frames),
       frames,
-      wanderHome: behavior.kind === "wander" ? this.wanderHomeForNpc(npc) : undefined,
+      movementHome: behavior.kind === "wander" || behavior.kind === "patrol" ? this.movementHomeForNpc(npc) : undefined,
       sprite: this.spawnNpcActor(npc.npcId, npc.worldPixel.x, npc.worldPixel.y, npc.spriteGroup, npc.direction)
     };
   }
@@ -2928,11 +2934,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private behaviorForRuntimeNpc(npc: RuntimeNpcData) {
     return behaviorForNpc(npc.npcId, npc.movement, {
       hasServiceInteraction: this.npcHasServiceInteraction(npc),
-      isInteriorHome: isInteriorMusicSector(this.world_.sectors, npc.worldPixel)
+      isInteriorHome: isInteriorMusicSector(this.world_.sectors, npc.worldPixel),
+      movementPattern: this.data_.npcMovementPatterns.byNpcId[String(npc.npcId)]?.pattern
     });
   }
 
-  private wanderHomeForNpc(npc: RuntimeNpcData): NpcWanderHome {
+  private movementHomeForNpc(npc: RuntimeNpcData): NpcMovementHome {
     const componentId = this.nearestNavmeshComponentId(npc.worldPixel.x, npc.worldPixel.y, 2);
     const sectorAreaKey = this.interiorSectorAreaKey(npc.worldPixel);
     return {
@@ -2977,7 +2984,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       stepNpc(npc.state, {
         deltaMs,
         bounds: this.movementBounds(),
-        blocked: (x, y) => this.npcWanderStepBlocked(npc, x, y),
+        blocked: (x, y) => this.npcMovementStepBlocked(npc, x, y),
         frames: npc.frames
       });
       this.syncNpc(npc);
@@ -3832,11 +3839,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return { minX: 8, maxX: width - 8, minY: 12, maxY: height - 1 };
   }
 
-  private npcWanderStepBlocked(npc: NpcRuntime, x: number, y: number): boolean {
+  private npcMovementStepBlocked(npc: NpcRuntime, x: number, y: number): boolean {
     if (this.pointOutsideCollisionGrid(x, y)) {
       return true;
     }
-    const home = npc.wanderHome;
+    const home = npc.movementHome;
     if (home && home.componentId !== 0 && this.nearestNavmeshComponentId(x, y, 1) !== home.componentId) {
       return true;
     }
@@ -3857,7 +3864,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private nearestNavmeshComponentId(x: number, y: number, maxRadiusCells: number): number {
-    return this.navmesh ? nearestComponentIdAtWorldPixel(this.navmesh, x, y, maxRadiusCells) : 0;
+    return this.navmesh ? (nearestComponentAt(this.navmesh, { x, y }, maxRadiusCells)?.componentId ?? 0) : 0;
   }
 
   private blocked(x: number, y: number, options: BlockedOptions = {}): boolean {
@@ -9976,6 +9983,16 @@ function encountersDisabledBySearch(search: string | undefined): boolean {
 
 function collisionOverlayEnabledBySearch(search: string | undefined): boolean {
   return normalizeCollisionOverlayFlag(new URLSearchParams(search ?? "").get("collisionOverlay")) ?? false;
+}
+
+function nonWhitespaceCount(value: string): number {
+  let count = 0;
+  for (const char of value) {
+    if (/\S/.test(char)) {
+      count += 1;
+    }
+  }
+  return count;
 }
 
 function normalizeCollisionOverlayFlag(value: unknown): boolean | undefined {

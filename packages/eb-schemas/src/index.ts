@@ -1318,6 +1318,24 @@ export const NpcOverridesSchema = z.object({
   byNpcId: z.record(z.string().regex(/^\d+$/), NpcOverrideEntrySchema)
 }).strict();
 
+export const NpcMovementPatternNameSchema = z.enum([
+  "pace-horizontal",
+  "pace-vertical",
+  "stationary-look-around",
+  "wander-box"
+]);
+
+export const NpcMovementPatternEntrySchema = z.object({
+  pattern: NpcMovementPatternNameSchema,
+  comment: z.string().optional()
+}).strict();
+
+export const NpcMovementPatternsSchema = z.object({
+  schema: z.literal("swagbound.npc-movement-patterns.v1"),
+  comment: z.string().optional(),
+  byNpcId: z.record(z.string().regex(/^\d+$/), NpcMovementPatternEntrySchema)
+}).strict();
+
 export const WorldCollisionSchema = z.object({
   cellSize: z.number().int().positive(),
   width: z.number().int().positive(),
@@ -2454,6 +2472,9 @@ export type WorldDoor = z.infer<typeof WorldDoorSchema>;
 export type NpcInteraction = z.infer<typeof NpcInteractionSchema>;
 export type NpcOverrideEntry = z.infer<typeof NpcOverrideEntrySchema>;
 export type NpcOverrides = z.infer<typeof NpcOverridesSchema>;
+export type NpcMovementPatternName = z.infer<typeof NpcMovementPatternNameSchema>;
+export type NpcMovementPatternEntry = z.infer<typeof NpcMovementPatternEntrySchema>;
+export type NpcMovementPatterns = z.infer<typeof NpcMovementPatternsSchema>;
 export type AddedNpc = z.infer<typeof AddedNpcSchema>;
 export type AddedNpcs = z.infer<typeof AddedNpcsSchema>;
 export type TeleportDestination = z.infer<typeof TeleportDestinationSchema>;

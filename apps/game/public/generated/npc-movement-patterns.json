@@ -1,0 +1,14 @@
+{
+  "schema": "swagbound.npc-movement-patterns.v1",
+  "comment": "Small authored NPC movement-pattern overlay. Unlisted NPCs keep the imported EB movement-id heuristic/default wander.",
+  "byNpcId": {
+    "85": {
+      "pattern": "pace-horizontal",
+      "comment": "Onett City Hall staircase guard."
+    },
+    "9": {
+      "pattern": "stationary-look-around",
+      "comment": "Onett drug-store clerk."
+    }
+  }
+}
