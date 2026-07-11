@@ -1,7 +1,9 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import type { WorldDoor } from "@eb/schemas";
 import {
   doorAtFeet,
+  doorActiveForFlags,
   feetInDoorCell,
   isMessageDoor,
   messageDoorDialogueReference,
@@ -9,7 +11,8 @@ import {
   resolveDoorWarpLanding,
   resolveDoorIntentTrigger,
   type DoorTriggerResult,
-  type DoorTriggerState, doorActiveForFlags } from "../src/doorTriggers";
+  type DoorTriggerState
+} from "../src/doorTriggers";
 import type { CollisionGrid } from "../src/collisionOverlay";
 import { PLAYER_FOOT_BOX } from "../src/collisionFootprint";
 
@@ -489,7 +492,7 @@ function routeDoorTrigger(result: DoorTriggerResult): { kind: "none" } | { kind:
   return reference ? { kind: "dialogue", reference } : { kind: "warp" };
 }
 
-describe("doorActiveForFlags (EB conditional doors, when-unset class)", () => {
+describe("doorActiveForFlags (EB conditional doors)", () => {
   const flags = (set: number[]) => ({ isSet: (n: number) => set.includes(n) });
   it("unflagged doors are always active", () => {
     expect(doorActiveForFlags(undefined, flags([]))).toBe(true);
@@ -499,8 +502,34 @@ describe("doorActiveForFlags (EB conditional doors, when-unset class)", () => {
     expect(doorActiveForFlags("0x8154", flags([]))).toBe(true);   // 340 unset -> active
     expect(doorActiveForFlags("0x8154", flags([340]))).toBe(false); // 340 set -> retired
   });
-  it("plain-flag doors stay active until their semantics are verified", () => {
+  it("plain close/retire doors also deactivate once the flag fires", () => {
+    expect(doorActiveForFlags("0x278", flags([]))).toBe(true);   // FLG_ONET_DOOR_CLOSE x20
+    expect(doorActiveForFlags("0x278", flags([632]))).toBe(false);
+    expect(doorActiveForFlags("0x2f9", flags([]))).toBe(true);   // FLG_THRK_TUNNEL_CLOSE x12
+    expect(doorActiveForFlags("0x2f9", flags([761]))).toBe(false);
     expect(doorActiveForFlags("0x1da", flags([]))).toBe(true);   // front door (474) unset
-    expect(doorActiveForFlags("0x1da", flags([474]))).toBe(true); // and set
+    expect(doorActiveForFlags("0x1da", flags([474]))).toBe(false); // retired when set
+  });
+
+  it("covers every generated door event-flag encoding without changing the all-clear case", () => {
+    const world = JSON.parse(readFileSync(new URL("../public/generated/world.json", import.meta.url), "utf8")) as {
+      doors: Array<{ eventFlag?: string }>;
+    };
+    const eventFlagDoors = world.doors.filter((door) => door.eventFlag !== undefined);
+    const distinctEventFlags = new Set(eventFlagDoors.map((door) => door.eventFlag));
+    const nonzeroFlags = [...distinctEventFlags]
+      .map((eventFlag) => eventFlag ? Number.parseInt(eventFlag, 16) : 0)
+      .filter((raw) => Number.isFinite(raw) && raw > 0);
+
+    expect(world.doors).toHaveLength(1164);
+    expect(eventFlagDoors).toHaveLength(1072);
+    expect(distinctEventFlags.size).toBe(57);
+    expect(nonzeroFlags).toHaveLength(56);
+    expect(eventFlagDoors.every((door) => doorActiveForFlags(door.eventFlag, flags([])))).toBe(true);
+
+    for (const raw of nonzeroFlags) {
+      const eventFlag = `0x${raw.toString(16)}`;
+      expect(doorActiveForFlags(eventFlag, flags([raw & 0x7fff]))).toBe(false);
+    }
   });
 });
