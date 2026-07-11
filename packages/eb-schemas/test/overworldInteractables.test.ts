@@ -24,6 +24,7 @@ describe("OverworldInteractablesSchema", () => {
           id: "examine",
           kind: "examine",
           worldPixel: { x: 140, y: 120 },
+          sprite: "assets/swagbound/props/intake-ledger.png",
           pages: ["Flavor."]
         }
       ]
@@ -33,6 +34,10 @@ describe("OverworldInteractablesSchema", () => {
     expect(parsed.interactables[1]).toMatchObject({
       id: "present",
       item: { char: 1, item: 88 }
+    });
+    expect(parsed.interactables[2]).toMatchObject({
+      id: "examine",
+      sprite: "assets/swagbound/props/intake-ledger.png"
     });
   });
 

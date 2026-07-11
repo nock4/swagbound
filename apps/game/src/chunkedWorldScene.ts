@@ -721,6 +721,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private serviceInteractionCache = new Map<string, boolean>();
   private activeNpcDialogue?: ActiveNpcDialogue;
   private presentInteractableSprites = new Map<string, Phaser.GameObjects.Image>();
+  private examineInteractableSprites = new Map<string, Phaser.GameObjects.Image>();
   private sourceCheckActors = new Map<string, SourceCheckActorRuntime>();
   private chunkByKey = new Map<string, WorldChunk>();
   private chunkObjects = new Map<string, StreamedChunk>();
@@ -1021,6 +1022,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const check of this.data_.sourceChecks.checks) {
       this.load.image(this.sourceCheckOverworldTextureKey(check), this.sourceCheckOverworldAssetUrl(check));
     }
+    const preloadedExamineSprites = new Set<string>();
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "examine" || !entry.sprite) {
+        continue;
+      }
+      const key = this.examineInteractableSpriteTextureKey(entry);
+      if (preloadedExamineSprites.has(key)) {
+        continue;
+      }
+      preloadedExamineSprites.add(key);
+      this.load.image(key, this.publicAssetUrl(entry.sprite));
+    }
     const preloadedStoryTextures = new Set<string>();
     for (const item of this.data_.storyItems.items) {
       if (preloadedStoryTextures.has(item.worldTexture)) {
@@ -1082,6 +1095,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.player = this.spawnPlayerActor(spawn.x, spawn.y, world.player.spriteGroup, playerFacing);
     this.spawnFollower(spawn, playerFacing);
     this.spawnPresentInteractables();
+    this.spawnExamineInteractableSprites();
     this.spawnSourceCheckActors();
     this.syncEncounterTileState();
 
@@ -1502,6 +1516,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.npcRuntimes.clear();
     this.serviceInteractionCache.clear();
     this.destroyPresentInteractableSprites();
+    this.destroyExamineInteractableSprites();
     this.destroySourceCheckActors();
     this.clearOverworldEnemies();
     this.chunkObjects.clear();
@@ -2986,6 +3001,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private applyWorldObjectRoomVisibility(): void {
     this.syncPresentInteractableSprites();
+    this.syncExamineInteractableSprites();
     this.syncSourceCheckActors();
     for (const actor of this.bossGateActors.values()) {
       actor.sprite?.setVisible(this.bossGateActorVisible(actor));
@@ -3313,6 +3329,54 @@ export class ChunkedWorldScene extends Phaser.Scene {
       sprite.destroy();
     }
     this.presentInteractableSprites.clear();
+  }
+
+  private spawnExamineInteractableSprites(): void {
+    this.destroyExamineInteractableSprites();
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "examine" || !entry.sprite) {
+        continue;
+      }
+      const key = this.examineInteractableSpriteTextureKey(entry);
+      if (!this.textures.exists(key)) {
+        continue;
+      }
+      const sprite = this.add
+        .image(entry.worldPixel.x, entry.worldPixel.y, key)
+        .setOrigin(0.5, 1);
+      sprite.setVisible(this.worldPointInsideActiveRoom(entry.worldPixel));
+      this.examineInteractableSprites.set(entry.id, sprite);
+      this.setActorSortDepth(sprite);
+    }
+  }
+
+  private syncExamineInteractableSprites(): void {
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "examine" || !entry.sprite) {
+        continue;
+      }
+      const sprite = this.examineInteractableSprites.get(entry.id);
+      if (!sprite || !sprite.active) {
+        continue;
+      }
+      sprite.setVisible(this.worldPointInsideActiveRoom(entry.worldPixel));
+      this.setActorSortDepth(sprite);
+    }
+  }
+
+  private destroyExamineInteractableSprites(): void {
+    for (const sprite of this.examineInteractableSprites.values()) {
+      sprite.destroy();
+    }
+    this.examineInteractableSprites.clear();
+  }
+
+  private examineInteractableSpriteTextureKey(entry: Extract<OverworldInteractable, { kind: "examine" }>): string {
+    return `swag-examine-${stableAssetPathHash(entry.sprite ?? entry.id)}`;
+  }
+
+  private publicAssetUrl(assetPath: string): string {
+    return `/${assetPath.replace(/^\/+/, "")}`;
   }
 
   private spawnSourceCheckActors(): void {

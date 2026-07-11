@@ -1525,6 +1525,7 @@ export const OverworldSignInteractableSchema = OverworldInteractableBaseSchema.e
 
 export const OverworldExamineInteractableSchema = OverworldInteractableBaseSchema.extend({
   kind: z.literal("examine"),
+  sprite: PublicAssetPathSchema.optional(),
   pages: z.array(z.string().trim().min(1)).min(1)
 }).strict();
 

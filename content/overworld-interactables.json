@@ -104,6 +104,7 @@
         "x": 2332,
         "y": 7208
       },
+      "sprite": "assets/swagbound/props/intake-ledger.png",
       "pages": [
         "The first intake book lies open on a stand. Handwriting, crossed-out lines, a coffee ring.",
         "Nobody prints a coffee ring."
