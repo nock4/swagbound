@@ -115,8 +115,8 @@
       "kind": "examine",
       "label": "The Source Spring",
       "worldPixel": {
-        "x": 6900,
-        "y": 1164
+        "x": 5132,
+        "y": 1700
       },
       "pages": [
         "Warm water bubbles up behind the falls. The light in it looks older than the map.",
@@ -167,8 +167,8 @@
       "kind": "examine",
       "label": "The Vacancy Sign",
       "worldPixel": {
-        "x": 7220,
-        "y": 7508
+        "x": 2752,
+        "y": 9560
       },
       "pages": [
         "The motel sign buzzes through one sentence, then changes one word before it finishes.",

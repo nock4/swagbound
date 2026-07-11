@@ -320,8 +320,8 @@
       "id": "source-spring",
       "comment": "Eight Sources site 3: The Source Spring in Little Swag World. Requires Act 2 complete and raises the Milky Well bridge flag through content/flag-map.json.",
       "boss": {
-        "x": 6868,
-        "y": 1164,
+        "x": 5100,
+        "y": 1700,
         "facing": "down"
       },
       "once": true,
@@ -341,8 +341,8 @@
     {
       "id": "source-spring-reveal",
       "area": {
-        "x": 6816,
-        "y": 1128,
+        "x": 5048,
+        "y": 1664,
         "w": 120,
         "h": 80
       },
@@ -488,8 +488,8 @@
       "id": "source-vacancy",
       "comment": "Eight Sources site 7: The Vacancy Sign in Vacancy Flats. Requires Act 3 complete and raises the Lumine Hall bridge flag through content/flag-map.json.",
       "boss": {
-        "x": 7188,
-        "y": 7508,
+        "x": 2720,
+        "y": 9560,
         "facing": "down"
       },
       "once": true,
@@ -509,8 +509,8 @@
     {
       "id": "source-vacancy-reveal",
       "area": {
-        "x": 7148,
-        "y": 7472,
+        "x": 2680,
+        "y": 9524,
         "w": 120,
         "h": 80
       },
