@@ -1825,7 +1825,7 @@
 152:
   Item: 0
   Music: 19
-  Palette: 2
+  Palette: 0
   Setting: none
   Teleport: disabled
   Tileset: 1
@@ -2209,7 +2209,7 @@
 184:
   Item: 0
   Music: 19
-  Palette: 2
+  Palette: 0
   Setting: none
   Teleport: disabled
   Tileset: 1
@@ -2593,7 +2593,7 @@
 216:
   Item: 0
   Music: 19
-  Palette: 2
+  Palette: 0
   Setting: none
   Teleport: disabled
   Tileset: 1
@@ -2977,7 +2977,7 @@
 248:
   Item: 0
   Music: 19
-  Palette: 2
+  Palette: 0
   Setting: none
   Teleport: disabled
   Tileset: 1
@@ -3361,7 +3361,7 @@
 280:
   Item: 0
   Music: 19
-  Palette: 2
+  Palette: 0
   Setting: none
   Teleport: disabled
   Tileset: 1
@@ -3745,7 +3745,7 @@
 312:
   Item: 0
   Music: 19
-  Palette: 2
+  Palette: 0
   Setting: none
   Teleport: disabled
   Tileset: 1
