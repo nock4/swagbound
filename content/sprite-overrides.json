@@ -19629,7 +19629,7 @@
    "originY": 0.5
   },
   "33": {
-   "image": "assets/swagbound/enemy/notary-boss.png",
+   "image": "assets/swagbound/enemy/gns-metal-misfit-003.png",
    "displayHeight": 160,
    "originX": 0.5,
    "originY": 0.5
@@ -26341,7 +26341,7 @@
    "originY": 1
   },
   "33": {
-   "image": "assets/swagbound/overworld-npc/notary-boss-ow.png",
+   "image": "assets/swagbound/overworld-npc/gns-metal-misfit-003-ow.png",
    "frameWidth": 48,
    "frameHeight": 48,
    "animations": {
