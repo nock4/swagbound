@@ -93,14 +93,12 @@ export type BattleState = {
 };
 
 export type PlayerCombatantOptions = Partial<Pick<Combatant, "name" | "level" | "maxHp" | "offense" | "defense" | "speed">> & {
-  hpRatePerSec?: number;
   character?: CharacterData;
   partyMember?: PartyMember;
   statBonuses?: PartyMemberStatBonuses;
 };
 
 export type EnemyCombatantOptions = {
-  hpRatePerSec?: number;
   speed?: number;
 };
 
@@ -318,14 +316,9 @@ export const PLAYER_DEFAULTS = {
   inventory: [] as number[],
   offense: 12,
   defense: 6,
-  speed: 5,
-  // Party HP odometer speed. Slow enough that a mortal wound (target 0, display
-  // rolling) spans into the next command window — EB's heal-or-win race — instead
-  // of resolving mid-execution before the player can react.
-  hpRatePerSec: 18
+  speed: 5
 } as const;
 
-const ENEMY_HP_RATE_PER_SEC = 42;
 // Chance a single-target enemy attack swings at a non-lead party member instead of
 // the lead. Low so the lead still soaks most hits, but enough that a glass back-row
 // member is a real liability you have to protect.
@@ -362,7 +355,6 @@ export function buildPlayerCombatant(options: PlayerCombatantOptions = {}): Comb
   const member = options.partyMember ?? (options.character ? buildPartyMember(options.character) : undefined);
   if (member) {
     return buildCombatantFromPartyMember(member, {
-      hpRatePerSec: options.hpRatePerSec,
       statBonuses: options.statBonuses
     });
   }
@@ -382,7 +374,7 @@ export function buildPlayerCombatant(options: PlayerCombatantOptions = {}): Comb
     maxPp: PLAYER_DEFAULTS.maxPp,
     pp: PLAYER_DEFAULTS.pp,
     inventory: [...PLAYER_DEFAULTS.inventory],
-    hp: createRollingMeter(maxHp, options.hpRatePerSec ?? PLAYER_DEFAULTS.hpRatePerSec),
+    hp: createRollingMeter(maxHp),
     offense,
     defense,
     speed,
@@ -414,7 +406,7 @@ export function buildEnemyCombatant(enemy: BattleEnemy, options: EnemyCombatantO
     maxPp: 0,
     pp: 0,
     inventory: [],
-    hp: createRollingMeter(maxHp, options.hpRatePerSec ?? ENEMY_HP_RATE_PER_SEC),
+    hp: createRollingMeter(maxHp),
     offense: stat(enemy.offense),
     defense: stat(enemy.defense),
     speed: stat(options.speed ?? enemySpeed(enemy)),
@@ -2492,7 +2484,6 @@ function playerOptionsAt(
     offense: options.offense,
     defense: options.defense,
     speed: options.speed,
-    hpRatePerSec: options.hpRatePerSec,
     statBonuses: options.statBonuses,
     ...indexed,
     ...extra

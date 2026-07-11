@@ -79,11 +79,13 @@ import {
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import { activeWindowFlavorId } from "./windowSettings";
 import { isKeyItemId } from "./keyItems";
-import { fieldItemToolMessage, fieldItemUseMessage, fieldPsiEffect, fieldPsiUseMessage } from "./fieldUseFeedback";
+import { fieldCondimentUseMessage, fieldItemToolMessage, fieldItemUseMessage, fieldPsiEffect, fieldPsiUseMessage } from "./fieldUseFeedback";
 import { collectedEightSourcesCount, ORIGINAL_MIXTAPE_ITEM_ID, originalMixtapeFieldMessage } from "./eightSources";
 import { itemUsability, psiUsability, USABILITY_REFUSAL_MESSAGE } from "./usabilityMatrix";
+import { EB_NORMAL_WALK_SPEED } from "./ebTiming";
 
-export const PLAYER_SPEED = 110; // world pixels per second
+export const PLAYER_SPEED = EB_NORMAL_WALK_SPEED.cardinalPxPerSecond;
+export const PLAYER_DIAGONAL_SPEED = EB_NORMAL_WALK_SPEED.diagonalPxPerSecond;
 export const INTERACTION_DISTANCE = 28; // world pixels between feet positions
 
 type NpcRuntime = {
@@ -340,6 +342,7 @@ export class WorldScene extends Phaser.Scene {
     stepPlayer(this.playerState, this.readInput(), {
       deltaMs: delta,
       speed: PLAYER_SPEED,
+      diagonalSpeed: PLAYER_DIAGONAL_SPEED,
       bounds: this.movementBounds(),
       blocked: (x, y) => this.blocked(x, y, { includeNpcs: true }),
       frames: this.playerFrames
@@ -673,9 +676,26 @@ export class WorldScene extends Phaser.Scene {
       this.showMenuResult(originalMixtapeFieldMessage(collected));
       return;
     }
+    const condimentResult = this.partyState.combineCondiment({
+      ownerChar: action.ownerChar,
+      condimentItemId: action.itemId,
+      condimentSlot: action.inventorySlot,
+      pairs: this.data_.condimentPairs
+    });
+    if (condimentResult.ok) {
+      const base = this.itemById(condimentResult.baseItemId);
+      this.showMenuResult(fieldCondimentUseMessage(
+        owner ?? target ?? { name: "Someone" },
+        item,
+        base ?? { name: `item ${condimentResult.baseItemId}` },
+        condimentResult
+      ));
+      return;
+    }
     const result = this.partyState.useItem({
       ownerChar: action.ownerChar,
       targetChar: action.targetChar,
+      inventorySlot: action.inventorySlot,
       item,
       targetVitals: vitalsForPartyMember(target),
       fieldUse: row.fieldUse

@@ -710,6 +710,61 @@ export const ItemOverridesSchema = z.object({
   byItemId: z.record(z.string().regex(/^\d+$/), ItemOverrideEntrySchema)
 }).strict();
 
+const CondimentPairEntrySchema = z.object({
+  baseItemId: z.number().int().nonnegative(),
+  baseName: z.string().trim().min(1),
+  ebBase: z.string().trim().min(1),
+  condimentItemIds: z.array(z.number().int().nonnegative()).min(1),
+  condimentNames: z.array(z.string().trim().min(1)).min(1),
+  ebCondiments: z.array(z.string().trim().min(1)).min(1),
+  healMultiplier: z.number().positive()
+}).strict().superRefine((entry, ctx) => {
+  if (entry.condimentItemIds.length !== entry.condimentNames.length) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "condimentNames must match condimentItemIds length",
+      path: ["condimentNames"]
+    });
+  }
+  if (entry.condimentItemIds.length !== entry.ebCondiments.length) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "ebCondiments must match condimentItemIds length",
+      path: ["ebCondiments"]
+    });
+  }
+});
+
+const CondimentSkippedEntrySchema = z.object({
+  ebBase: z.string().trim().min(1),
+  ebCondiments: z.array(z.string().trim().min(1)),
+  reason: z.string().trim().min(1)
+}).strict();
+
+export const CondimentPairsSchema = z.object({
+  schema: z.literal("swagbound.condiment-pairs.v1"),
+  generatedFrom: z.object({
+    romTruth: z.string().trim().min(1),
+    items: z.string().trim().min(1),
+    itemOverrides: z.string().trim().min(1),
+    usabilityMatrix: z.string().trim().min(1)
+  }).strict().optional(),
+  entries: z.array(CondimentPairEntrySchema),
+  skipped: z.array(CondimentSkippedEntrySchema)
+}).strict().superRefine((value, ctx) => {
+  const seen = new Set<number>();
+  value.entries.forEach((entry, index) => {
+    if (seen.has(entry.baseItemId)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate condiment base item ${entry.baseItemId}`,
+        path: ["entries", index, "baseItemId"]
+      });
+    }
+    seen.add(entry.baseItemId);
+  });
+});
+
 export const KeyItemsSchema = z.object({
   schema: z.literal("swagbound.key-items.v1"),
   itemIds: z.array(z.number().int().nonnegative())
@@ -748,6 +803,45 @@ export const FlagMapSchema = z.object({
 });
 
 export type FlagMap = z.infer<typeof FlagMapSchema>;
+
+const TimedDeliveryEntrySchema = z.object({
+  id: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "delivery ids must be kebab-case"),
+  spriteId: z.number().int().nonnegative(),
+  eventFlag: z.number().int().min(1).max(1023),
+  eventFlagName: z.string().trim().min(1),
+  timeUntilDelivery: z.number().int().nonnegative(),
+  serviceName: z.string().trim().min(1),
+  sendMessage: z.string().trim().min(1),
+  arrivalMessage: z.string().trim().min(1),
+  itemId: z.number().int().nonnegative().optional()
+}).strict();
+
+export const TimedDeliveriesSchema = z.object({
+  schema: z.literal("swagbound.timed-delivery.v1"),
+  source: z.string().trim().min(1).optional(),
+  deliveries: z.array(TimedDeliveryEntrySchema)
+}).strict().superRefine((value, ctx) => {
+  const seenIds = new Set<string>();
+  const seenFlags = new Set<number>();
+  value.deliveries.forEach((entry, index) => {
+    if (seenIds.has(entry.id)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate timed delivery id ${entry.id}`,
+        path: ["deliveries", index, "id"]
+      });
+    }
+    seenIds.add(entry.id);
+    if (seenFlags.has(entry.eventFlag)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate timed delivery event flag ${entry.eventFlag}`,
+        path: ["deliveries", index, "eventFlag"]
+      });
+    }
+    seenFlags.add(entry.eventFlag);
+  });
+});
 
 export const StoryItemSchema = z.object({
   id: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "story item ids must be kebab-case"),
@@ -2385,6 +2479,9 @@ export type MusicManifest = z.infer<typeof MusicManifestSchema>;
 export type BackgroundOverrideEntry = z.infer<typeof BackgroundOverrideEntrySchema>;
 export type BackgroundOverrides = z.infer<typeof BackgroundOverridesSchema>;
 export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;
+export type CondimentPairs = z.infer<typeof CondimentPairsSchema>;
+export type TimedDeliveries = z.infer<typeof TimedDeliveriesSchema>;
+export type TimedDeliveryEntry = TimedDeliveries["deliveries"][number];
 export type KeyItems = z.infer<typeof KeyItemsSchema>;
 export type StoryItem = z.infer<typeof StoryItemSchema>;
 export type StoryItems = z.infer<typeof StoryItemsSchema>;

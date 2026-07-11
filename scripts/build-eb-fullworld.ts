@@ -63,12 +63,16 @@ export const TILE_OVERRIDES_SOURCE = "content/tile-overrides.json";
 export const TILE_OVERRIDES_OUTPUT = "tile-overrides.json";
 export const ITEM_OVERRIDES_SOURCE = "content/item-overrides.json";
 export const ITEM_OVERRIDES_OUTPUT = "item-overrides.json";
+export const CONDIMENT_PAIRS_SOURCE = "content/condiment-pairs.json";
+export const CONDIMENT_PAIRS_OUTPUT = "condiment-pairs.json";
 export const KEY_ITEMS_SOURCE = "content/key-items.json";
 export const KEY_ITEMS_OUTPUT = "key-items.json";
 export const STORY_ITEMS_SOURCE = "content/story-items.json";
 export const STORY_ITEMS_OUTPUT = "story-items.json";
 export const FLAG_MAP_SOURCE = "content/flag-map.json";
 export const FLAG_MAP_OUTPUT = "flag-map.json";
+export const TIMED_DELIVERY_SOURCE = "content/timed-delivery.json";
+export const TIMED_DELIVERY_OUTPUT = "timed-delivery.json";
 export const CHARACTER_OVERRIDES_SOURCE = "content/character-overrides.json";
 export const CHARACTER_OVERRIDES_OUTPUT = "character-overrides.json";
 export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
@@ -244,9 +248,11 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(BACKGROUND_OVERRIDES_SOURCE, out, BACKGROUND_OVERRIDES_OUTPUT),
     copyJsonToGenerated(TILE_OVERRIDES_SOURCE, out, TILE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(CONDIMENT_PAIRS_SOURCE, out, CONDIMENT_PAIRS_OUTPUT),
     copyJsonToGenerated(KEY_ITEMS_SOURCE, out, KEY_ITEMS_OUTPUT),
     copyJsonToGenerated(STORY_ITEMS_SOURCE, out, STORY_ITEMS_OUTPUT),
     copyJsonToGenerated(FLAG_MAP_SOURCE, out, FLAG_MAP_OUTPUT),
+    copyJsonToGenerated(TIMED_DELIVERY_SOURCE, out, TIMED_DELIVERY_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),

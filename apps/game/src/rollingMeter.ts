@@ -1,9 +1,14 @@
+import { hpMeterDigitsPerSecondForDelta } from "./ebTiming";
+
+type RollingMeterRateMode = "earthboundHpPp" | "fixed";
+
 export type RollingMeterState = {
   displayed: number;
   target: number;
   ratePerSec: number;
   isRolling: boolean;
   stepRemainder: number;
+  rateMode?: RollingMeterRateMode;
 };
 
 export type SurviveFatalBlowWindowOptions = {
@@ -13,22 +18,33 @@ export type SurviveFatalBlowWindowOptions = {
   rescueTarget: number;
 };
 
-export function createRollingMeter(displayed: number, ratePerSec: number): RollingMeterState {
+export function createRollingMeter(displayed: number): RollingMeterState {
+  return createMeter(displayed, hpMeterDigitsPerSecondForDelta(1), "earthboundHpPp");
+}
+
+export function createFixedRollingMeter(displayed: number, ratePerSec: number): RollingMeterState {
+  return createMeter(displayed, ratePerSec, "fixed");
+}
+
+function createMeter(displayed: number, ratePerSec: number, rateMode: RollingMeterRateMode): RollingMeterState {
   const value = clampHp(displayed);
   return {
     displayed: value,
     target: value,
-    ratePerSec: Math.max(1, Math.floor(ratePerSec)),
+    ratePerSec: normalizeRate(ratePerSec),
     isRolling: false,
-    stepRemainder: 0
+    stepRemainder: 0,
+    rateMode
   };
 }
 
 export function setTarget(state: RollingMeterState, target: number): RollingMeterState {
   const nextTarget = clampHp(target);
+  const delta = nextTarget === state.target ? nextTarget - state.displayed : nextTarget - state.target;
   return {
     ...state,
     target: nextTarget,
+    ratePerSec: state.rateMode === "fixed" ? state.ratePerSec : hpMeterDigitsPerSecondForDelta(delta),
     isRolling: state.displayed !== nextTarget,
     stepRemainder: 0
   };
@@ -70,7 +86,7 @@ export function isDepleted(state: Pick<RollingMeterState, "displayed">): boolean
 }
 
 export function survivesFatalBlowWindow(options: SurviveFatalBlowWindowOptions): boolean {
-  const fatal = setTarget(createRollingMeter(options.initialDisplayed, options.ratePerSec), 0);
+  const fatal = setTarget(createFixedRollingMeter(options.initialDisplayed, options.ratePerSec), 0);
   const beforeRescue = tick(fatal, options.elapsedBeforeRescueMs);
   const rescued = setTarget(beforeRescue, options.rescueTarget);
   return !isDepleted(rescued);
@@ -81,4 +97,11 @@ function clampHp(value: number): number {
     return 0;
   }
   return Math.max(0, Math.floor(value));
+}
+
+function normalizeRate(value: number): number {
+  if (!Number.isFinite(value) || value <= 0) {
+    return hpMeterDigitsPerSecondForDelta(1);
+  }
+  return value;
 }

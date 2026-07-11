@@ -230,9 +230,15 @@ describe("sprite override helpers", () => {
     ));
     const byEnemyId = overrides.byEnemyId ?? {};
 
-    // Every enemy is sourced from the good-new-sprites batch (gns-*), per the
-    // "all non-hero sprites come from good-new-sprites" directive.
+    const customBossBattleArt: Record<string, string> = {};
+
+    // Every enemy is sourced from the good-new-sprites batch (gns-*), except for
+    // bespoke attestation boss art that intentionally replaces a generic skin.
     for (const [enemyId, override] of Object.entries(byEnemyId)) {
+      if (customBossBattleArt[enemyId]) {
+        expect(override.image).toBe(customBossBattleArt[enemyId]);
+        continue;
+      }
       expect(
         override.image.startsWith("assets/swagbound/enemy/gns-"),
         `enemy ${enemyId} not sourced from good-new-sprites: ${override.image}`

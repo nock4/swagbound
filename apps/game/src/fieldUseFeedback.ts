@@ -1,6 +1,6 @@
 import type { ItemData, PsiData, UsabilityItemRow } from "@eb/schemas";
 import { psiBattleKind, psiEffectAmount } from "./battleLogic";
-import { itemEffectTargetSide, type ItemUseEffect, type ItemUseResult, type FieldPsiUseResult } from "./partyState";
+import { itemEffectTargetSide, type CondimentCombineResult, type ItemUseEffect, type ItemUseResult, type FieldPsiUseResult } from "./partyState";
 
 type Named = { name: string };
 
@@ -16,6 +16,16 @@ export function fieldItemUseMessage(
 
 export function fieldItemToolMessage(user: Named, item: Pick<ItemData, "name">, row: Pick<UsabilityItemRow, "useVerb"> | undefined): string {
   return `${user.name} ${row?.useVerb ?? "used"} the ${item.name}!`;
+}
+
+export function fieldCondimentUseMessage(
+  user: Named,
+  condiment: Pick<ItemData, "name">,
+  base: Pick<ItemData, "name">,
+  result: Extract<CondimentCombineResult, { ok: true }>
+): string {
+  const multiplier = result.multiplier > 1 ? " It heals more now." : "";
+  return `${user.name} put the ${condiment.name} on the ${base.name}.${multiplier}`;
 }
 
 export function fieldPsiUseMessage(

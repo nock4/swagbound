@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { drawSwirl, swirlMask, type SwirlGraphics } from "./transitions";
+import { EB_SWIRL_PALETTE, drawMapTransitionOverlay, drawSwirl, swirlMask, type SwirlGraphics } from "./transitions";
 
 describe("swirlMask", () => {
   it("progress 0 = fully covered (black), not clear", () => {
@@ -41,6 +41,15 @@ function recorder() {
 }
 
 describe("drawSwirl", () => {
+  it("uses the extracted five-color EB swirl palette", () => {
+    expect(EB_SWIRL_PALETTE).toEqual([0x787878, 0x787800, 0x783878, 0x000078, 0xf80060]);
+    const { g, calls } = recorder();
+    drawSwirl(g, 0.5, 512, 448, { clockMs: 0 });
+    for (const color of EB_SWIRL_PALETTE) {
+      expect(calls.fills).toContain(color);
+    }
+  });
+
   it("draws nothing when clear (progress 1)", () => {
     const { g, calls } = recorder();
     drawSwirl(g, 1, 512, 448);
@@ -78,5 +87,23 @@ describe("drawSwirl", () => {
     expect(calls.fills).toContain(0xd92c24);
     expect(calls.fills).toContain(0xff6a54);
     expect(calls.strokes).toContain(0xffc2ba);
+  });
+});
+
+describe("drawMapTransitionOverlay", () => {
+  it("draws alpha fades as full-screen fills", () => {
+    const { g, calls } = recorder();
+    drawMapTransitionOverlay(g, { effect: "fade", alpha: 0.5 }, 320, 240);
+    expect(calls.fillRect).toBe(1);
+    expect(calls.fillPath).toBe(0);
+    expect(calls.fills).toContain(0x000000);
+  });
+
+  it("draws directional wipes as clipped polygons", () => {
+    const { g, calls } = recorder();
+    drawMapTransitionOverlay(g, { effect: "wipe", coverage: 0.5, direction: 0, slideSpeed: 12 }, 320, 240);
+    expect(calls.fillRect).toBe(0);
+    expect(calls.fillPath).toBe(1);
+    expect(calls.fills).toContain(0x000000);
   });
 });

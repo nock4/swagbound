@@ -37,6 +37,7 @@ import {
   type BattleActor,
   type BattleState
 } from "../src/battleLogic";
+import { hpMeterDigitsPerSecondForDelta } from "../src/ebTiming";
 import { setTarget } from "../src/rollingMeter";
 
 const opponentA: BattleEnemy = enemy(1, "OPPONENT_A", { hp: 24, defense: 4, offense: 8, level: 3 });
@@ -151,7 +152,7 @@ describe("battle damage", () => {
 
 describe("battle player model", () => {
   it("builds the party from generated character data when provided", () => {
-    const battle = createBattleState(opponentA, { characters: characters([partyCharacterA]), hpRatePerSec: 5 });
+    const battle = createBattleState(opponentA, { characters: characters([partyCharacterA]) });
 
     expect(battle.party).toHaveLength(1);
     expect(battle.party[0]).toMatchObject({
@@ -165,7 +166,7 @@ describe("battle player model", () => {
       speed: 7,
       isEnemy: false
     });
-    expect(battle.party[0].hp).toMatchObject({ displayed: 72, target: 72, ratePerSec: 5 });
+    expect(battle.party[0].hp).toMatchObject({ displayed: 72, target: 72, ratePerSec: hpMeterDigitsPerSecondForDelta(1) });
   });
 
   it("limits the generated party to four combatants", () => {
@@ -921,8 +922,7 @@ describe("battle outcomes", () => {
 
   it("survives a party member fatal target when all enemies display zero first", () => {
     let battle = createBattleState([opponentC], {
-      characters: characters([partyCharacterA, partyCharacterB]),
-      hpRatePerSec: 2
+      characters: characters([partyCharacterA, partyCharacterB])
     });
     battle = withCombatant(battle, actor("party", 0), {
       ...battle.party[0],
@@ -943,8 +943,7 @@ describe("battle outcomes", () => {
 
   it("settles pending party mortal wounds to displayed HP when battle ends safely", () => {
     let battle = createBattleState([opponentC], {
-      characters: characters([partyCharacterA, partyCharacterB]),
-      hpRatePerSec: 2
+      characters: characters([partyCharacterA, partyCharacterB])
     });
     battle = withCombatant(battle, actor("party", 0), {
       ...battle.party[0],

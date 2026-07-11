@@ -141,7 +141,7 @@ describe("PartyState", () => {
       ownerChar: 1,
       targetChar: 1,
       item,
-      targetVitals: { hp: 20, maxHp: 40, pp: 3, maxPp: 12, hpRatePerSec: 100 }
+      targetVitals: { hp: 20, maxHp: 40, pp: 3, maxPp: 12 }
     });
 
     expect(result).toMatchObject({ ok: true, previousValue: 20, nextValue: 40 });

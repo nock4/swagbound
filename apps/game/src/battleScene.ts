@@ -193,6 +193,7 @@ import {
   toBattleBackground
 } from "./backgroundOverrides";
 import {
+  createFixedRollingMeter,
   createRollingMeter,
   setTarget,
   tick as tickRollingMeter,
@@ -293,7 +294,6 @@ const BATTLE_STATUS_LABEL_WIDTH = 20;
 const BATTLE_STATUS_BAR_HEIGHT = 5;
 const BATTLE_STATUS_BAR_X = 28;
 const BATTLE_STATUS_BAR_VALUE_GAP = 4;
-const BATTLE_PP_RATE_PER_SEC = 36;
 const ACTION_ADVANCE_DELAY_MS = 1650;
 const ACTION_ADVANCE_MIN_DELAY_MS = 1150;
 const ACTION_ADVANCE_MAX_DELAY_MS = 2400;
@@ -3989,7 +3989,7 @@ export class BattleScene extends Phaser.Scene {
   private displayedPpForMember(memberIndex: number, pp: number): number {
     const target = Math.max(0, Math.floor(pp));
     const existing = this.ppMeters.get(memberIndex);
-    const meter = existing ?? createRollingMeter(target, BATTLE_PP_RATE_PER_SEC);
+    const meter = existing ?? createRollingMeter(target);
     const next = meter.target === target ? meter : setTarget(meter, target);
     this.ppMeters.set(memberIndex, next);
     return next.displayed;
@@ -4759,8 +4759,8 @@ function initialBattleRoundInputState(): BattleRoundInputState {
 
 function createVictoryTally(summary: BattleVictorySummary, now: number): VictoryTallyState {
   return {
-    exp: setTarget(createRollingMeter(0, victoryTallyRate(summary.expGained)), summary.expGained),
-    money: setTarget(createRollingMeter(0, victoryTallyRate(summary.moneyGained)), summary.moneyGained),
+    exp: setTarget(createFixedRollingMeter(0, victoryTallyRate(summary.expGained)), summary.expGained),
+    money: setTarget(createFixedRollingMeter(0, victoryTallyRate(summary.moneyGained)), summary.moneyGained),
     nextTickSfxAtMs: now
   };
 }

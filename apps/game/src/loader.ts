@@ -9,6 +9,7 @@ import {
   CardNftsSchema,
   CharacterCollectionSchema,
   CharacterOverridesSchema,
+  CondimentPairsSchema,
   CustomDialogueSchema,
   DrifellaBarksSchema,
   DrifellaSourceChecksSchema,
@@ -43,6 +44,7 @@ import {
   StoryItemsSchema,
   SwagboundDialogueLibrarySchema,
   StoryTriggersSchema,
+  TimedDeliveriesSchema,
   CutscenesSchema,
   SpriteGroupCollectionSchema,
   SpriteSheetCollectionSchema,
@@ -62,6 +64,7 @@ import {
   type CardNfts,
   type CharacterCollection,
   type CharacterOverrides,
+  type CondimentPairs,
   type CustomDialogue,
   type DrifellaBarks,
   type DrifellaSourceChecks,
@@ -96,6 +99,7 @@ import {
   type StoryItems,
   type SwagboundDialogueLibrary,
   type StoryTriggers,
+  type TimedDeliveries,
   type SpriteGroupCollection,
   type SpriteSheetCollection,
   type TeleportDestinations,
@@ -120,9 +124,11 @@ const SPRITE_OVERRIDES_FILE = "sprite-overrides.json";
 const NPC_OVERRIDES_FILE = "npc-overrides.json";
 const BACKGROUND_OVERRIDES_FILE = "background-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
+const CONDIMENT_PAIRS_FILE = "condiment-pairs.json";
 const KEY_ITEMS_FILE = "key-items.json";
 const STORY_ITEMS_FILE = "story-items.json";
 const FLAG_MAP_FILE = "flag-map.json";
+const TIMED_DELIVERY_FILE = "timed-delivery.json";
 const USABILITY_MATRIX_FILE = "usability-matrix.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
@@ -185,9 +191,11 @@ export type GameData = {
   window?: WindowCollection;
   characters?: CharacterCollection;
   items?: ItemCollection;
+  condimentPairs: CondimentPairs;
   keyItems: KeyItems;
   storyItems: StoryItems;
   flagMap: FlagMap;
+  timedDeliveries: TimedDeliveries;
   usabilityMatrix?: UsabilityMatrix;
   psi?: PsiCollection;
   shops?: ShopData;
@@ -314,10 +322,25 @@ function emptyKeyItems(): KeyItems {
   };
 }
 
+function emptyCondimentPairs(): CondimentPairs {
+  return {
+    schema: "swagbound.condiment-pairs.v1",
+    entries: [],
+    skipped: []
+  };
+}
+
 function emptyFlagMap(): FlagMap {
   return {
     schema: "swagbound.flag-map.v1",
     entries: []
+  };
+}
+
+function emptyTimedDeliveries(): TimedDeliveries {
+  return {
+    schema: "swagbound.timed-delivery.v1",
+    deliveries: []
   };
 }
 
@@ -355,9 +378,11 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     characterOverrides,
     items,
     itemOverrides,
+    condimentPairs,
     keyItems,
     storyItems,
     flagMap,
+    timedDeliveries,
     usabilityMatrix,
     psi,
     psiOverrides,
@@ -418,9 +443,11 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       ? loadJson(`/generated/${manifest.files.items}`, ItemCollectionSchema)
       : Promise.resolve(undefined),
     loadJson(`/generated/${ITEM_OVERRIDES_FILE}`, ItemOverridesSchema),
+    loadJson(`/generated/${CONDIMENT_PAIRS_FILE}`, CondimentPairsSchema),
     loadJson(`/generated/${KEY_ITEMS_FILE}`, KeyItemsSchema),
     loadJson(`/generated/${STORY_ITEMS_FILE}`, StoryItemsSchema),
     loadJson(`/generated/${FLAG_MAP_FILE}`, FlagMapSchema),
+    loadJson(`/generated/${TIMED_DELIVERY_FILE}`, TimedDeliveriesSchema),
     loadJson(`/generated/${USABILITY_MATRIX_FILE}`, UsabilityMatrixSchema),
     manifest.files.psi
       ? loadJson(`/generated/${manifest.files.psi}`, PsiCollectionSchema)
@@ -514,9 +541,11 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     window,
     characters: resolvedCharacters,
     items: resolvedItems,
+    condimentPairs: condimentPairs ?? emptyCondimentPairs(),
     keyItems: keyItems ?? emptyKeyItems(),
     storyItems: storyItems ?? emptyStoryItems(),
     flagMap: flagMap ?? emptyFlagMap(),
+    timedDeliveries: timedDeliveries ?? emptyTimedDeliveries(),
     usabilityMatrix,
     psi: resolvedPsi,
     shops

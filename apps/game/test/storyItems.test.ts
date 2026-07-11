@@ -160,6 +160,22 @@ describe("resolvePresentSpriteTexture", () => {
 });
 
 describe("story item content integrity", () => {
+  it("keeps the intake ledger examine hotspot connected to visible prop art", async () => {
+    const overworldInteractables = OverworldInteractablesSchema.parse(JSON.parse(
+      await readFile(resolve("content/overworld-interactables.json"), "utf8")
+    ));
+    const ledger = overworldInteractables.interactables.find((entry) => entry.id === "intake-ledger");
+
+    expect(ledger).toMatchObject({
+      kind: "examine",
+      worldPixel: { x: 2332, y: 7208 },
+      sprite: "assets/swagbound/props/intake-ledger.png"
+    });
+    if (ledger?.kind === "examine" && ledger.sprite) {
+      await expect(access(resolve("apps/game/public", ledger.sprite))).resolves.toBeUndefined();
+    }
+  });
+
   it("keeps story item ids connected to key items, triggers, assets, item names, and present refs", async () => {
     const storyItems = StoryItemsSchema.parse(JSON.parse(
       await readFile(resolve("content/story-items.json"), "utf8")
