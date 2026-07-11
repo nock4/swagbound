@@ -41,31 +41,41 @@ export function spriteOverrideFrame(
 }
 
 /** EB-style step-toggle tunables. */
-export const SPRITE_WALK_BOB_AMPLITUDE_PX = 1; // raised-state offset (1px, like an EB step frame)
-export const SPRITE_WALK_STEP_INTERVAL_MS = 140; // ~7 toggles/sec, EarthBound walk cadence
+export const SPRITE_WALK_STEP_INTERVAL_MS = 140; // ~7 swaps/sec, EarthBound walk cadence
 export const SPRITE_WALK_STEP_SEED_OFFSET_MS = 61; // per-seed clock shift so crowds don't step in unison
 
 /**
- * Vertical step offset (px, 0 or SPRITE_WALK_BOB_AMPLITUDE_PX) for a moving
- * single-frame sprite. EarthBound never bobs walkers smoothly: it hard-swaps two
- * step frames at walk cadence. Skins without a second frame approximate that
- * with a discrete 1px raise toggled at the same cadence - a step, not a bounce.
- * Returns 0 for idle sprites and for multi-frame sprites (raw EarthBound / hero
- * walk cycles) that already animate via frame cycling. Purely visual: callers
- * apply it to display-y AFTER depth sort, so it never affects sort order or logic.
+ * Walk step phase (0 or 1) for a moving single-frame sprite. EarthBound never
+ * bobs walkers: it hard-swaps two step frames at walk cadence, and many of its
+ * own walk cycles get the second frame by MIRRORING the first. Single-frame LSW
+ * skins do exactly that: phase 1 renders the frame horizontally mirrored (a
+ * weight shift, not a hop). Safe for every facing because single-frame skins
+ * show the same camera-facing frame in all directions. Returns 0 for idle
+ * sprites and for multi-frame sprites (raw EarthBound / hero walk cycles) that
+ * already animate via frame cycling. Purely visual: callers apply it as flipX,
+ * so it never affects sort order, collision, or logical position.
  */
-export function spriteWalkBobOffset(params: {
+export function spriteWalkStepPhase(params: {
   clockMs: number;
   seed: number;
   moving: boolean;
   frameCount: number;
-}): number {
+}): 0 | 1 {
   if (!params.moving || params.frameCount > 1) {
     return 0;
   }
   const shifted = params.clockMs + params.seed * SPRITE_WALK_STEP_SEED_OFFSET_MS;
-  const step = Math.floor(shifted / SPRITE_WALK_STEP_INTERVAL_MS) % 2;
-  return step === 1 ? SPRITE_WALK_BOB_AMPLITUDE_PX : 0;
+  return Math.floor(shifted / SPRITE_WALK_STEP_INTERVAL_MS) % 2 === 1 ? 1 : 0;
+}
+
+/** True when a moving single-frame sprite should render mirrored this step. */
+export function spriteWalkMirror(params: {
+  clockMs: number;
+  seed: number;
+  moving: boolean;
+  frameCount: number;
+}): boolean {
+  return spriteWalkStepPhase(params) === 1;
 }
 
 export function spriteOverrideScale(displayHeight: number | undefined, frameHeight: number): number {

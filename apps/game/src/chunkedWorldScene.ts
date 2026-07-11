@@ -264,7 +264,7 @@ import {
   spriteOverrideGroupEntries,
   spriteOverrideGroupSheetKey,
   spriteOverrideNpcEntries,
-  spriteWalkBobOffset,
+  spriteWalkMirror,
   spriteOverrideNpcIdFromSheetKey,
   spriteOverrideNpcSheetKey,
   spriteOverrideScale,
@@ -3046,12 +3046,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       actor.setFrame(npc.state.player.animFrame);
     }
     this.setActorSortDepth(actor);
-    actor.y = npc.state.player.y - this.spriteWalkBob(
+    actor.y = npc.state.player.y;
+    this.applyWalkMirror(actor, this.spriteWalkMirrorNow(
       npc.state.player.moving,
       npc.frames,
       npc.state.player.facing,
       npc.data.npcId
-    );
+    ));
     actor.setVisible(this.npcInsideActiveRoom(npc) && this.cutsceneActorVisible(npc.data.npcId));
   }
 
@@ -7874,7 +7875,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       sprite.setFrame(state.animFrame);
     }
     this.setActorSortDepth(sprite);
-    sprite.y = state.y - this.spriteWalkBob(state.moving, frames, state.facing, this.data_.archivistSpots.archivist.spriteNpcId);
+    sprite.y = state.y;
+    this.applyWalkMirror(sprite, this.spriteWalkMirrorNow(state.moving, frames, state.facing, this.data_.archivistSpots.archivist.spriteNpcId));
     sprite.setVisible(this.worldPointInsideActiveRoom(state));
   }
 
@@ -8519,12 +8521,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       actor.setFrame(enemy.state.player.animFrame);
     }
     this.setActorSortDepth(actor);
-    actor.y = enemy.state.player.y - this.spriteWalkBob(
+    actor.y = enemy.state.player.y;
+    this.applyWalkMirror(actor, this.spriteWalkMirrorNow(
       enemy.state.player.moving,
       enemy.frames,
       enemy.state.player.facing,
       enemy.enemyGroup
-    );
+    ));
     actor.setVisible(this.overworldEnemyActorVisible(enemy));
   }
 
@@ -9319,12 +9322,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.player.setFrame(this.playerState.animFrame);
     }
     this.setActorSortDepth(this.player);
-    this.player.y = this.playerState.y - this.spriteWalkBob(
+    this.player.y = this.playerState.y;
+    this.applyWalkMirror(this.player, this.spriteWalkMirrorNow(
       this.playerState.moving,
       this.playerFrames,
       this.playerState.facing,
       0
-    );
+    ));
     this.applyPlayerVisualState();
     this.updateFollower();
   }
@@ -9785,7 +9789,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         follower.sprite.setFrame(frames[0]);
       }
     }
-    follower.sprite.y = target.y - this.spriteWalkBob(walking, follower.frames, target.facing, follower.joinOrder);
+    follower.sprite.y = target.y;
+    this.applyWalkMirror(follower.sprite, this.spriteWalkMirrorNow(walking, follower.frames, target.facing, follower.joinOrder));
     this.setActorSortDepth(follower.sprite);
     this.applyFollowerVisualState(follower, target.facing);
   }
@@ -9887,23 +9892,32 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   /**
-   * Vertical walk-bob offset (px, >= 0) for a moving sprite. Returns 0 for idle
-   * sprites and for multi-frame sprites (raw EB / player walk cycles) that already
-   * animate. Visual only: callers apply it to display-y AFTER depth sort, so it
-   * never affects sort order, collision, or logical position.
+   * EB walk step for a moving single-frame sprite: phase 1 renders the frame
+   * horizontally MIRRORED (EarthBound's hard frame swap; many EB walk cycles are
+   * literally frame + mirror). False for idle sprites and multi-frame sprites
+   * (raw EB / player walk cycles) that already animate. Visual only: callers
+   * apply it as flipX, never touching sort order, collision, or position.
    */
-  private spriteWalkBob(
+  private spriteWalkMirrorNow(
     moving: boolean,
     frames: DirectionFrameSequence,
     facing: Facing,
     seed: number
-  ): number {
-    return spriteWalkBobOffset({
+  ): boolean {
+    return spriteWalkMirror({
       clockMs: this.spriteWalkBobClockMs,
       seed,
       moving,
       frameCount: frames[facing].length
     });
+  }
+
+  /** Apply the EB step mirror to a textured actor (no-op for untextured stand-ins). */
+  private applyWalkMirror(actor: object, mirror: boolean): void {
+    const flippable = actor as { setFlipX?: (v: boolean) => unknown };
+    if (typeof flippable.setFlipX === "function") {
+      flippable.setFlipX(mirror);
+    }
   }
 
   private loadedChunkCount(): number {
