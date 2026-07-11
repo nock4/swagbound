@@ -1,0 +1,997 @@
+{
+ "schema": "swagbound.archivist-spots.v1",
+ "source": "content/rom-truth/photographer-spots.json",
+ "comment": "Runtime data for the Archivist, Swagbound reskin of EarthBound Wandering Photographer. Coordinates and PHOTO flags are copied from ROM truth; labels and captions are player-facing filing records.",
+ "archivist": {
+  "spriteId": "drifella2-168",
+  "spriteNpcId": 100300,
+  "lines": [
+   "Hold still. I am filing the once.",
+   "Say provenance.",
+   "A record of a thing that only happened once.",
+   "Filed, not minted.",
+   "The copy may improve. The record will not."
+  ]
+ },
+ "spots": [
+  {
+   "spotId": 1,
+   "flag": {
+    "id": 698,
+    "name": "FLG_PHOTO_1"
+   },
+   "anchor": {
+    "x": 2656,
+    "y": 344
+   },
+   "photographer": {
+    "x": 2632,
+    "y": 448
+   },
+   "party1": {
+    "x": 2648,
+    "y": 360
+   },
+   "slide": {
+    "direction": 0,
+    "distance": 0
+   },
+   "extraNpcs": [],
+   "locationLabel": "Bosch front step",
+   "caption": "A record of a thing that only happened once."
+  },
+  {
+   "spotId": 2,
+   "flag": {
+    "id": 699,
+    "name": "FLG_PHOTO_2"
+   },
+   "anchor": {
+    "x": 7552,
+    "y": 1488
+   },
+   "photographer": {
+    "x": 7504,
+    "y": 1520
+   },
+   "party1": {
+    "x": 7552,
+    "y": 1504
+   },
+   "slide": {
+    "direction": 40,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Morningside cape",
+   "caption": "Filed, not minted."
+  },
+  {
+   "spotId": 3,
+   "flag": {
+    "id": 700,
+    "name": "FLG_PHOTO_3"
+   },
+   "anchor": {
+    "x": 1480,
+    "y": 6512
+   },
+   "photographer": {
+    "x": 1488,
+    "y": 6592
+   },
+   "party1": {
+    "x": 1520,
+    "y": 6544
+   },
+   "slide": {
+    "direction": 24,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Cycle shop curb",
+   "caption": "Original witness, no edition."
+  },
+  {
+   "spotId": 4,
+   "flag": {
+    "id": 701,
+    "name": "FLG_PHOTO_4"
+   },
+   "anchor": {
+    "x": 4936,
+    "y": 1160
+   },
+   "photographer": {
+    "x": 4952,
+    "y": 1192
+   },
+   "party1": {
+    "x": 4928,
+    "y": 1136
+   },
+   "slide": {
+    "direction": 56,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "River bend",
+   "caption": "The copy can try. The record stays put."
+  },
+  {
+   "spotId": 5,
+   "flag": {
+    "id": 702,
+    "name": "FLG_PHOTO_5"
+   },
+   "anchor": {
+    "x": 5832,
+    "y": 1240
+   },
+   "photographer": {
+    "x": 5848,
+    "y": 1328
+   },
+   "party1": {
+    "x": 5824,
+    "y": 1264
+   },
+   "slide": {
+    "direction": 48,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Cabin ridge",
+   "caption": "A record of a thing that only happened once."
+  },
+  {
+   "spotId": 6,
+   "flag": {
+    "id": 703,
+    "name": "FLG_PHOTO_6"
+   },
+   "anchor": {
+    "x": 2208,
+    "y": 6512
+   },
+   "photographer": {
+    "x": 2216,
+    "y": 6592
+   },
+   "party1": {
+    "x": 2200,
+    "y": 6544
+   },
+   "slide": {
+    "direction": 40,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 2288,
+     "y": 6544,
+     "sprite": "GORGEOUS"
+    },
+    {
+     "x": 2304,
+     "y": 6528,
+     "sprite": "LUCKY"
+    }
+   ],
+   "locationLabel": "Theater crowd",
+   "caption": "Filed, not minted."
+  },
+  {
+   "spotId": 7,
+   "flag": {
+    "id": 704,
+    "name": "FLG_PHOTO_7"
+   },
+   "anchor": {
+    "x": 584,
+    "y": 3392
+   },
+   "photographer": {
+    "x": 664,
+    "y": 3408
+   },
+   "party1": {
+    "x": 600,
+    "y": 3376
+   },
+   "slide": {
+    "direction": 8,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 656,
+     "y": 3352,
+     "sprite": "TESSIE_WATCHER"
+    },
+    {
+     "x": 536,
+     "y": 3328,
+     "sprite": "TESSIE_WATCHER"
+    }
+   ],
+   "locationLabel": "Tessie watch",
+   "caption": "Original witness, no edition."
+  },
+  {
+   "spotId": 8,
+   "flag": {
+    "id": 705,
+    "name": "FLG_PHOTO_8"
+   },
+   "anchor": {
+    "x": 1560,
+    "y": 3536
+   },
+   "photographer": {
+    "x": 1576,
+    "y": 3600
+   },
+   "party1": {
+    "x": 1576,
+    "y": 3528
+   },
+   "slide": {
+    "direction": 16,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 1520,
+     "y": 3576,
+     "sprite": "MAD_DUCK"
+    },
+    {
+     "x": 1488,
+     "y": 3528,
+     "sprite": "ROWDY_MOUSE"
+    },
+    {
+     "x": 1640,
+     "y": 3552,
+     "sprite": "ROWDY_MOUSE"
+    }
+   ],
+   "locationLabel": "Maze mouth",
+   "caption": "The copy can try. The record stays put."
+  },
+  {
+   "spotId": 9,
+   "flag": {
+    "id": 706,
+    "name": "FLG_PHOTO_9"
+   },
+   "anchor": {
+    "x": 5768,
+    "y": 8416
+   },
+   "photographer": {
+    "x": 5712,
+    "y": 8432
+   },
+   "party1": {
+    "x": 5768,
+    "y": 8384
+   },
+   "slide": {
+    "direction": 56,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 5712,
+     "y": 8448,
+     "sprite": "ZOMBIE_POSSESSOR"
+    },
+    {
+     "x": 5800,
+     "y": 8456,
+     "sprite": "ZOMBIE_POSSESSOR"
+    },
+    {
+     "x": 5792,
+     "y": 8368,
+     "sprite": "ZOMBIE_POSSESSOR"
+    }
+   ],
+   "locationLabel": "Quiet graveyard",
+   "caption": "A record of a thing that only happened once."
+  },
+  {
+   "spotId": 10,
+   "flag": {
+    "id": 707,
+    "name": "FLG_PHOTO_10"
+   },
+   "anchor": {
+    "x": 6408,
+    "y": 256
+   },
+   "photographer": {
+    "x": 6528,
+    "y": 360
+   },
+   "party1": {
+    "x": 6456,
+    "y": 288
+   },
+   "slide": {
+    "direction": 16,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Waterfall marker",
+   "caption": "Filed, not minted."
+  },
+  {
+   "spotId": 11,
+   "flag": {
+    "id": 708,
+    "name": "FLG_PHOTO_11"
+   },
+   "anchor": {
+    "x": 560,
+    "y": 7360
+   },
+   "photographer": {
+    "x": 576,
+    "y": 7432
+   },
+   "party1": {
+    "x": 560,
+    "y": 7360
+   },
+   "slide": {
+    "direction": 24,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Bathhouse spring",
+   "caption": "Original witness, no edition."
+  },
+  {
+   "spotId": 12,
+   "flag": {
+    "id": 709,
+    "name": "FLG_PHOTO_12"
+   },
+   "anchor": {
+    "x": 5600,
+    "y": 9104
+   },
+   "photographer": {
+    "x": 5576,
+    "y": 9216
+   },
+   "party1": {
+    "x": 5592,
+    "y": 9160
+   },
+   "slide": {
+    "direction": 40,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 5528,
+     "y": 9136,
+     "sprite": "LITTLE_KID_IN_BLUE"
+    }
+   ],
+   "locationLabel": "Festival tent",
+   "caption": "The copy can try. The record stays put."
+  },
+  {
+   "spotId": 13,
+   "flag": {
+    "id": 710,
+    "name": "FLG_PHOTO_13"
+   },
+   "anchor": {
+    "x": 2040,
+    "y": 8920
+   },
+   "photographer": {
+    "x": 2032,
+    "y": 9016
+   },
+   "party1": {
+    "x": 2024,
+    "y": 8936
+   },
+   "slide": {
+    "direction": 24,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 2112,
+     "y": 8968,
+     "sprite": "CRESTED_BOOKA"
+    },
+    {
+     "x": 2104,
+     "y": 8896,
+     "sprite": "SMILIN_SPHERE"
+    },
+    {
+     "x": 1976,
+     "y": 8984,
+     "sprite": "SKELPION"
+    }
+   ],
+   "locationLabel": "Bone field",
+   "caption": "A record of a thing that only happened once."
+  },
+  {
+   "spotId": 14,
+   "flag": {
+    "id": 711,
+    "name": "FLG_PHOTO_14"
+   },
+   "anchor": {
+    "x": 3720,
+    "y": 9624
+   },
+   "photographer": {
+    "x": 3696,
+    "y": 9680
+   },
+   "party1": {
+    "x": 3720,
+    "y": 9624
+   },
+   "slide": {
+    "direction": 56,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 3672,
+     "y": 9576,
+     "sprite": "MINERS_BROTHER"
+    },
+    {
+     "x": 3728,
+     "y": 9704,
+     "sprite": "BIG_DIRT_SCOOPER"
+    }
+   ],
+   "locationLabel": "Excavation pit",
+   "caption": "Filed, not minted."
+  },
+  {
+   "spotId": 15,
+   "flag": {
+    "id": 712,
+    "name": "FLG_PHOTO_15"
+   },
+   "anchor": {
+    "x": 5664,
+    "y": 10000
+   },
+   "photographer": {
+    "x": 5704,
+    "y": 10040
+   },
+   "party1": {
+    "x": 5664,
+    "y": 10000
+   },
+   "slide": {
+    "direction": 40,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Old bridge",
+   "caption": "Original witness, no edition."
+  },
+  {
+   "spotId": 16,
+   "flag": {
+    "id": 713,
+    "name": "FLG_PHOTO_16"
+   },
+   "anchor": {
+    "x": 3192,
+    "y": 4256
+   },
+   "photographer": {
+    "x": 3288,
+    "y": 4376
+   },
+   "party1": {
+    "x": 3232,
+    "y": 4304
+   },
+   "slide": {
+    "direction": 24,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Dino museum",
+   "caption": "The copy can try. The record stays put."
+  },
+  {
+   "spotId": 17,
+   "flag": {
+    "id": 714,
+    "name": "FLG_PHOTO_17"
+   },
+   "anchor": {
+    "x": 4664,
+    "y": 5240
+   },
+   "photographer": {
+    "x": 4624,
+    "y": 5336
+   },
+   "party1": {
+    "x": 4656,
+    "y": 5264
+   },
+   "slide": {
+    "direction": 48,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Dinosaur hall",
+   "caption": "A record of a thing that only happened once."
+  },
+  {
+   "spotId": 18,
+   "flag": {
+    "id": 715,
+    "name": "FLG_PHOTO_18"
+   },
+   "anchor": {
+    "x": 3584,
+    "y": 3952
+   },
+   "photographer": {
+    "x": 3520,
+    "y": 4032
+   },
+   "party1": {
+    "x": 3576,
+    "y": 3968
+   },
+   "slide": {
+    "direction": 8,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "City office",
+   "caption": "Filed, not minted."
+  },
+  {
+   "spotId": 19,
+   "flag": {
+    "id": 716,
+    "name": "FLG_PHOTO_19"
+   },
+   "anchor": {
+    "x": 4528,
+    "y": 6152
+   },
+   "photographer": {
+    "x": 4496,
+    "y": 6216
+   },
+   "party1": {
+    "x": 4544,
+    "y": 6168
+   },
+   "slide": {
+    "direction": 56,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Department store",
+   "caption": "Original witness, no edition."
+  },
+  {
+   "spotId": 20,
+   "flag": {
+    "id": 717,
+    "name": "FLG_PHOTO_20"
+   },
+   "anchor": {
+    "x": 6848,
+    "y": 8296
+   },
+   "photographer": {
+    "x": 6880,
+    "y": 8368
+   },
+   "party1": {
+    "x": 6856,
+    "y": 8328
+   },
+   "slide": {
+    "direction": 24,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Ramma steps",
+   "caption": "The copy can try. The record stays put."
+  },
+  {
+   "spotId": 21,
+   "flag": {
+    "id": 718,
+    "name": "FLG_PHOTO_21"
+   },
+   "anchor": {
+    "x": 4608,
+    "y": 3488
+   },
+   "photographer": {
+    "x": 4584,
+    "y": 3608
+   },
+   "party1": {
+    "x": 4592,
+    "y": 3544
+   },
+   "slide": {
+    "direction": 40,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Ramma field",
+   "caption": "A record of a thing that only happened once."
+  },
+  {
+   "spotId": 22,
+   "flag": {
+    "id": 719,
+    "name": "FLG_PHOTO_22"
+   },
+   "anchor": {
+    "x": 312,
+    "y": 4416
+   },
+   "photographer": {
+    "x": 344,
+    "y": 4496
+   },
+   "party1": {
+    "x": 336,
+    "y": 4448
+   },
+   "slide": {
+    "direction": 56,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 264,
+     "y": 4392,
+     "sprite": "CAVE_BOY"
+    }
+   ],
+   "locationLabel": "Stonehenge gate",
+   "caption": "Filed, not minted."
+  },
+  {
+   "spotId": 23,
+   "flag": {
+    "id": 720,
+    "name": "FLG_PHOTO_23"
+   },
+   "anchor": {
+    "x": 4520,
+    "y": 2744
+   },
+   "photographer": {
+    "x": 4472,
+    "y": 2816
+   },
+   "party1": {
+    "x": 4520,
+    "y": 2752
+   },
+   "slide": {
+    "direction": 16,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Summers hotel",
+   "caption": "Original witness, no edition."
+  },
+  {
+   "spotId": 24,
+   "flag": {
+    "id": 721,
+    "name": "FLG_PHOTO_24"
+   },
+   "anchor": {
+    "x": 7104,
+    "y": 9072
+   },
+   "photographer": {
+    "x": 7120,
+    "y": 9144
+   },
+   "party1": {
+    "x": 7088,
+    "y": 9080
+   },
+   "slide": {
+    "direction": 56,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 7184,
+     "y": 9072,
+     "sprite": "DRINKING_GUY"
+    },
+    {
+     "x": 7056,
+     "y": 9072,
+     "sprite": "BRUNETTE_SHOPPING_LADY"
+    },
+    {
+     "x": 7120,
+     "y": 9136,
+     "sprite": "OLD_LADY_WITH_CANE"
+    }
+   ],
+   "locationLabel": "Summers restaurant",
+   "caption": "The copy can try. The record stays put."
+  },
+  {
+   "spotId": 25,
+   "flag": {
+    "id": 722,
+    "name": "FLG_PHOTO_25"
+   },
+   "anchor": {
+    "x": 6080,
+    "y": 2960
+   },
+   "photographer": {
+    "x": 6056,
+    "y": 3040
+   },
+   "party1": {
+    "x": 6072,
+    "y": 2992
+   },
+   "slide": {
+    "direction": 48,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Summers beach",
+   "caption": "A record of a thing that only happened once."
+  },
+  {
+   "spotId": 26,
+   "flag": {
+    "id": 723,
+    "name": "FLG_PHOTO_26"
+   },
+   "anchor": {
+    "x": 6944,
+    "y": 2896
+   },
+   "photographer": {
+    "x": 6928,
+    "y": 2968
+   },
+   "party1": {
+    "x": 6928,
+    "y": 2864
+   },
+   "slide": {
+    "direction": 8,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Toto harbor",
+   "caption": "Filed, not minted."
+  },
+  {
+   "spotId": 27,
+   "flag": {
+    "id": 724,
+    "name": "FLG_PHOTO_27"
+   },
+   "anchor": {
+    "x": 1488,
+    "y": 4232
+   },
+   "photographer": {
+    "x": 1520,
+    "y": 4288
+   },
+   "party1": {
+    "x": 1480,
+    "y": 4240
+   },
+   "slide": {
+    "direction": 16,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Scarab market",
+   "caption": "Original witness, no edition."
+  },
+  {
+   "spotId": 28,
+   "flag": {
+    "id": 725,
+    "name": "FLG_PHOTO_28"
+   },
+   "anchor": {
+    "x": 1792,
+    "y": 4888
+   },
+   "photographer": {
+    "x": 1832,
+    "y": 4920
+   },
+   "party1": {
+    "x": 1808,
+    "y": 4912
+   },
+   "slide": {
+    "direction": 24,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 1784,
+     "y": 4888,
+     "sprite": "PYRAMID_DOOR"
+    },
+    {
+     "x": 1800,
+     "y": 4888,
+     "sprite": "PYRAMID_DOOR"
+    }
+   ],
+   "locationLabel": "Pyramid gate",
+   "caption": "The copy can try. The record stays put."
+  },
+  {
+   "spotId": 29,
+   "flag": {
+    "id": 726,
+    "name": "FLG_PHOTO_29"
+   },
+   "anchor": {
+    "x": 1280,
+    "y": 5352
+   },
+   "photographer": {
+    "x": 1320,
+    "y": 5416
+   },
+   "party1": {
+    "x": 1312,
+    "y": 5376
+   },
+   "slide": {
+    "direction": 48,
+    "distance": 85
+   },
+   "extraNpcs": [
+    {
+     "x": 1368,
+     "y": 4888,
+     "sprite": "DUNGEON_MAN"
+    }
+   ],
+   "locationLabel": "Dungeon Man",
+   "caption": "A record of a thing that only happened once."
+  },
+  {
+   "spotId": 30,
+   "flag": {
+    "id": 727,
+    "name": "FLG_PHOTO_30"
+   },
+   "anchor": {
+    "x": 5256,
+    "y": 7664
+   },
+   "photographer": {
+    "x": 5216,
+    "y": 7712
+   },
+   "party1": {
+    "x": 5264,
+    "y": 7680
+   },
+   "slide": {
+    "direction": 56,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Deep jungle",
+   "caption": "Filed, not minted."
+  },
+  {
+   "spotId": 31,
+   "flag": {
+    "id": 728,
+    "name": "FLG_PHOTO_31"
+   },
+   "anchor": {
+    "x": 392,
+    "y": 312
+   },
+   "photographer": {
+    "x": 408,
+    "y": 376
+   },
+   "party1": {
+    "x": 400,
+    "y": 304
+   },
+   "slide": {
+    "direction": 16,
+    "distance": 85
+   },
+   "extraNpcs": [],
+   "locationLabel": "Tenda village",
+   "caption": "Original witness, no edition."
+  },
+  {
+   "spotId": 32,
+   "flag": {
+    "id": 729,
+    "name": "FLG_PHOTO_32"
+   },
+   "anchor": {
+    "x": 384,
+    "y": 7640
+   },
+   "photographer": {
+    "x": 392,
+    "y": 7752
+   },
+   "party1": {
+    "x": 384,
+    "y": 7624
+   },
+   "slide": {
+    "direction": 0,
+    "distance": 0
+   },
+   "extraNpcs": [
+    {
+     "x": 392,
+     "y": 7648,
+     "sprite": "DR_ANDONUTS"
+    },
+    {
+     "x": 352,
+     "y": 7640,
+     "sprite": "APPLE_KID"
+    },
+    {
+     "x": 424,
+     "y": 7640,
+     "sprite": "MR_SATURN"
+    },
+    {
+     "x": 336,
+     "y": 7608,
+     "sprite": "MINER"
+    }
+   ],
+   "locationLabel": "Saturn valley",
+   "caption": "The copy can try. The record stays put."
+  }
+ ]
+}

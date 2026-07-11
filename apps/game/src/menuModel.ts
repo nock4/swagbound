@@ -1,8 +1,9 @@
-import type { CardNfts, CharacterCollection, ItemCollection, ItemData, KeyItems, PsiCollection, PsiData, ShopData, UsabilityMatrix } from "@eb/schemas";
+import type { ArchivistSpots, CardNfts, CharacterCollection, ItemCollection, ItemData, KeyItems, PsiCollection, PsiData, ShopData, UsabilityMatrix } from "@eb/schemas";
 import { buildPartyMember, type PartyMember, type PartyMemberStats } from "./characterModel";
 import type { DialogueResolver } from "./dialogueRenderer";
 import { psiPpCost, psiTargetMode, psiTargetSide } from "./battleLogic";
 import { buildBinderViewModel, type BinderViewModel } from "./sourceCheckModel";
+import { buildArchivistRecordsViewModel, type ArchivistRecordsViewModel } from "./archivistRecords";
 import { KEY_ITEM_COLOR, keyItemLabel, keyItemSortValue, normalizeKeyItemIds } from "./keyItems";
 import {
   equipmentSlotForItemType,
@@ -357,6 +358,7 @@ export type PartyMenuViewModelInput = StatusViewModelInput & {
   psi?: PsiCollection;
   shops?: ShopData;
   cardNfts?: CardNfts;
+  archivistSpots?: ArchivistSpots;
   flags?: {
     has(flag: string): boolean;
   };
@@ -382,6 +384,7 @@ const GOODS_MENU_ID = "goods";
 const PSI_MENU_ID = "psi";
 const EQUIP_MENU_ID = "equip";
 export const BINDER_MENU_ID = "binder";
+export const ARCHIVIST_RECORDS_MENU_ID = "archivist-records";
 const ITEM_USE_ACTION_PREFIX = "item-use";
 const PSI_USE_ACTION_PREFIX = "psi-use";
 const ITEM_GIVE_ACTION_PREFIX = "item-give";
@@ -629,6 +632,9 @@ export function buildMenuScreens(status: StatusViewModel, input: PartyMenuViewMo
   const equipByMember = members.map((member) => buildEquipViewModelForMember(input, member));
   const check = buildCheckViewModel(input);
   const binder = input.cardNfts ? buildBinderViewModel(input.cardNfts, input.flags ?? { has: () => false }) : emptyBinderViewModel();
+  const archivistRecords = input.archivistSpots
+    ? buildArchivistRecordsViewModel(input.archivistSpots, input.flags ?? { has: () => false })
+    : emptyArchivistRecordsViewModel();
   return [
     buildMainMenuScreen(input.currentObjectiveText),
     buildPartyMemberSelectScreen(GOODS_MENU_ID, "Goods", goodsByMember.map((goods) => ({
@@ -659,6 +665,7 @@ export function buildMenuScreens(status: StatusViewModel, input: PartyMenuViewMo
     buildCheckScreen(check),
     ...buildCheckDetailScreens(check),
     ...buildBinderScreens(binder),
+    buildArchivistRecordsScreen(archivistRecords),
     buildAtmScreen(input)
   ];
 }
@@ -883,7 +890,8 @@ export function buildStatusScreen(status: StatusViewModel): MenuScreen {
     ...screen,
     items: [
       ...screen.items,
-      { id: BINDER_MENU_ID, label: "Binder", enabled: true, childScreenId: BINDER_MENU_ID }
+      { id: BINDER_MENU_ID, label: "Binder", enabled: true, childScreenId: BINDER_MENU_ID },
+      { id: ARCHIVIST_RECORDS_MENU_ID, label: "Records", enabled: true, childScreenId: ARCHIVIST_RECORDS_MENU_ID }
     ]
   };
 }
@@ -1138,6 +1146,32 @@ function emptyBinderViewModel(): BinderViewModel {
     total: 0,
     regions: [],
     cardsByRegion: {}
+  };
+}
+
+function emptyArchivistRecordsViewModel(): ArchivistRecordsViewModel {
+  return {
+    filed: 0,
+    total: 0,
+    records: []
+  };
+}
+
+export function buildArchivistRecordsScreen(records: ArchivistRecordsViewModel): MenuScreen {
+  return {
+    id: ARCHIVIST_RECORDS_MENU_ID,
+    title: `Records ${records.filed}/${records.total}`,
+    items: records.records.length > 0
+      ? records.records.map((record) => ({
+          id: record.id,
+          label: fitMenuLabel(`${String(record.spotId).padStart(2, "0")} ${record.locationLabel}`, 28),
+          enabled: true,
+          infoLines: [record.caption]
+        }))
+      : [{ id: "archivist-records-empty", label: "No records filed.", enabled: false }],
+    sideInfoTitle: "Archivist",
+    wrap: false,
+    maxVisibleRows: 8
   };
 }
 

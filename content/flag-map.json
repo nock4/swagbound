@@ -255,6 +255,358 @@
      "note": "sanctuary-step recap flag; promote with the site"
     }
    ]
+  },
+  {
+   "storyFlag": "FLG_PHOTO_1",
+   "beat": "Archivist filed spot 1 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 698,
+     "name": "FLG_PHOTO_1"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_2",
+   "beat": "Archivist filed spot 2 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 699,
+     "name": "FLG_PHOTO_2"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_3",
+   "beat": "Archivist filed spot 3 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 700,
+     "name": "FLG_PHOTO_3"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_4",
+   "beat": "Archivist filed spot 4 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 701,
+     "name": "FLG_PHOTO_4"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_5",
+   "beat": "Archivist filed spot 5 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 702,
+     "name": "FLG_PHOTO_5"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_6",
+   "beat": "Archivist filed spot 6 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 703,
+     "name": "FLG_PHOTO_6"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_7",
+   "beat": "Archivist filed spot 7 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 704,
+     "name": "FLG_PHOTO_7"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_8",
+   "beat": "Archivist filed spot 8 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 705,
+     "name": "FLG_PHOTO_8"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_9",
+   "beat": "Archivist filed spot 9 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 706,
+     "name": "FLG_PHOTO_9"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_10",
+   "beat": "Archivist filed spot 10 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 707,
+     "name": "FLG_PHOTO_10"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_11",
+   "beat": "Archivist filed spot 11 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 708,
+     "name": "FLG_PHOTO_11"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_12",
+   "beat": "Archivist filed spot 12 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 709,
+     "name": "FLG_PHOTO_12"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_13",
+   "beat": "Archivist filed spot 13 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 710,
+     "name": "FLG_PHOTO_13"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_14",
+   "beat": "Archivist filed spot 14 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 711,
+     "name": "FLG_PHOTO_14"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_15",
+   "beat": "Archivist filed spot 15 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 712,
+     "name": "FLG_PHOTO_15"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_16",
+   "beat": "Archivist filed spot 16 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 713,
+     "name": "FLG_PHOTO_16"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_17",
+   "beat": "Archivist filed spot 17 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 714,
+     "name": "FLG_PHOTO_17"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_18",
+   "beat": "Archivist filed spot 18 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 715,
+     "name": "FLG_PHOTO_18"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_19",
+   "beat": "Archivist filed spot 19 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 716,
+     "name": "FLG_PHOTO_19"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_20",
+   "beat": "Archivist filed spot 20 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 717,
+     "name": "FLG_PHOTO_20"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_21",
+   "beat": "Archivist filed spot 21 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 718,
+     "name": "FLG_PHOTO_21"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_22",
+   "beat": "Archivist filed spot 22 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 719,
+     "name": "FLG_PHOTO_22"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_23",
+   "beat": "Archivist filed spot 23 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 720,
+     "name": "FLG_PHOTO_23"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_24",
+   "beat": "Archivist filed spot 24 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 721,
+     "name": "FLG_PHOTO_24"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_25",
+   "beat": "Archivist filed spot 25 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 722,
+     "name": "FLG_PHOTO_25"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_26",
+   "beat": "Archivist filed spot 26 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 723,
+     "name": "FLG_PHOTO_26"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_27",
+   "beat": "Archivist filed spot 27 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 724,
+     "name": "FLG_PHOTO_27"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_28",
+   "beat": "Archivist filed spot 28 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 725,
+     "name": "FLG_PHOTO_28"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_29",
+   "beat": "Archivist filed spot 29 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 726,
+     "name": "FLG_PHOTO_29"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_30",
+   "beat": "Archivist filed spot 30 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 727,
+     "name": "FLG_PHOTO_30"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_31",
+   "beat": "Archivist filed spot 31 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 728,
+     "name": "FLG_PHOTO_31"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_32",
+   "beat": "Archivist filed spot 32 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 729,
+     "name": "FLG_PHOTO_32"
+    }
+   ],
+   "candidates": []
   }
  ]
 }

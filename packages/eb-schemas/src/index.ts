@@ -1153,6 +1153,8 @@ export const StoryTriggerSchema = z.object({
   clearFlags: z.array(z.string()).optional(),
   /** Grant these item ids after dialogue if the party does not already carry them. */
   grantItems: z.array(z.number().int().nonnegative()).optional(),
+  /** Archivist spot id to run through the Wandering Photographer-style filing sequence. */
+  archivistSpotId: z.number().int().positive().optional(),
   /** When set, fire this music cue (a music-manifest cue id, e.g. "ending") as a forced overworld track when the trigger's effects run. Persists over sector-based music until another trigger or interior change replaces it. */
   music: z.string().min(1).optional(),
   /** Battle group id to start after dialogue (mutually exclusive with warp). */
@@ -1201,6 +1203,51 @@ export const StoryTriggersSchema = z.object({
   triggers: z.array(StoryTriggerSchema),
   barriers: z.array(StoryBarrierSchema).optional()
 });
+
+const ArchivistPointSchema = z.object({
+  x: z.number().int().nonnegative(),
+  y: z.number().int().nonnegative()
+}).strict();
+
+const ArchivistFlagSchema = z.object({
+  id: z.number().int().min(1).max(1023),
+  name: z.string().trim().min(1)
+}).strict();
+
+const ArchivistSlideSchema = z.object({
+  direction: z.number().int().nonnegative(),
+  distance: z.number().int().nonnegative()
+}).strict();
+
+const ArchivistExtraNpcSchema = z.object({
+  x: z.number().int().nonnegative(),
+  y: z.number().int().nonnegative(),
+  sprite: z.string().trim().min(1)
+}).strict();
+
+export const ArchivistSpotSchema = z.object({
+  spotId: z.number().int().positive(),
+  flag: ArchivistFlagSchema,
+  anchor: ArchivistPointSchema,
+  photographer: ArchivistPointSchema,
+  party1: ArchivistPointSchema,
+  slide: ArchivistSlideSchema,
+  extraNpcs: z.array(ArchivistExtraNpcSchema),
+  locationLabel: z.string().trim().min(1),
+  caption: z.string().trim().min(1)
+}).strict();
+
+export const ArchivistSpotsSchema = z.object({
+  schema: z.literal("swagbound.archivist-spots.v1"),
+  source: z.string().optional(),
+  comment: z.string().optional(),
+  archivist: z.object({
+    spriteId: z.string().trim().min(1),
+    spriteNpcId: z.number().int().nonnegative(),
+    lines: z.array(z.string().trim().min(1)).min(1)
+  }).strict(),
+  spots: z.array(ArchivistSpotSchema).length(32)
+}).strict();
 
 /**
  * Authored cutscene: a SEQUENCE of steps the engine runs while the player is
@@ -2560,6 +2607,8 @@ export type NpcReferenceCollection = z.infer<typeof NpcReferenceCollectionSchema
 export type CustomDialogue = z.infer<typeof CustomDialogueSchema>;
 export type SwagboundDialogueLibrary = z.infer<typeof SwagboundDialogueLibrarySchema>;
 export type DrifellaBarks = z.infer<typeof DrifellaBarksSchema>;
+export type ArchivistSpot = z.infer<typeof ArchivistSpotSchema>;
+export type ArchivistSpots = z.infer<typeof ArchivistSpotsSchema>;
 export type StoryTriggers = z.infer<typeof StoryTriggersSchema>;
 export type StoryTrigger = z.infer<typeof StoryTriggerSchema>;
 export type StoryTriggerArea = z.infer<typeof StoryTriggerAreaSchema>;

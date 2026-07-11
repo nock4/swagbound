@@ -5,6 +5,7 @@ import { pathToFileURL } from "node:url";
 import { promisify } from "node:util";
 import {
   AttestationBattlesSchema,
+  ArchivistSpotsSchema,
   BattleRulesSchema,
   BackgroundOverridesSchema,
   CardNftsSchema,
@@ -107,6 +108,8 @@ export const FG_OVERRIDES_SOURCE = "content/fg-overrides.json";
 export const FG_OVERRIDES_OUTPUT = "fg-overrides.json";
 export const DRIFELLA_BARKS_SOURCE = "content/drifella-barks.json";
 export const DRIFELLA_BARKS_OUTPUT = "drifella-barks.json";
+export const ARCHIVIST_SPOTS_SOURCE = "content/archivist-spots.json";
+export const ARCHIVIST_SPOTS_OUTPUT = "archivist-spots.json";
 export const OPENING_CUTSCENE_SOURCE = "content/opening-cutscene.json";
 export const OPENING_CUTSCENE_OUTPUT = "opening-cutscene.json";
 export const OVERWORLD_INTERACTABLES_SOURCE = "content/overworld-interactables.json";
@@ -223,6 +226,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateCutscenes(CUTSCENES_SOURCE);
   await validateMusicManifest(MUSIC_MANIFEST_SOURCE);
   await validateDrifellaBarks(DRIFELLA_BARKS_SOURCE);
+  await validateArchivistSpots(ARCHIVIST_SPOTS_SOURCE);
   await validateOpeningCutscene(OPENING_CUTSCENE_SOURCE);
   await validateOverworldInteractables(OVERWORLD_INTERACTABLES_SOURCE);
   await validateCardNfts(CARD_NFTS_SOURCE);
@@ -271,6 +275,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyOptionalJsonToGenerated(COLLISION_OVERRIDES_SOURCE, out, COLLISION_OVERRIDES_OUTPUT),
     copyOptionalJsonToGenerated(FG_OVERRIDES_SOURCE, out, FG_OVERRIDES_OUTPUT),
     copyJsonToGenerated(DRIFELLA_BARKS_SOURCE, out, DRIFELLA_BARKS_OUTPUT),
+    copyJsonToGenerated(ARCHIVIST_SPOTS_SOURCE, out, ARCHIVIST_SPOTS_OUTPUT),
     copyOptionalJsonToGenerated(OPENING_CUTSCENE_SOURCE, out, OPENING_CUTSCENE_OUTPUT),
     copyOptionalJsonToGenerated(OVERWORLD_INTERACTABLES_SOURCE, out, OVERWORLD_INTERACTABLES_OUTPUT),
     copyOptionalJsonToGenerated(CARD_NFTS_SOURCE, out, CARD_NFTS_OUTPUT),
@@ -361,6 +366,32 @@ async function validateMusicManifest(source: string): Promise<void> {
 
 async function validateDrifellaBarks(source: string): Promise<void> {
   DrifellaBarksSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateArchivistSpots(source: string): Promise<void> {
+  const spots = ArchivistSpotsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  const names = JSON.parse(await readFile(resolve("content/rom-truth/event-flags.json"), "utf8")).byId as Record<string, string>;
+  for (const [index, spot] of spots.spots.entries()) {
+    const expectedSpotId = index + 1;
+    const expectedFlagName = `FLG_PHOTO_${expectedSpotId}`;
+    if (spot.spotId !== expectedSpotId) {
+      throw new Error(`archivist-spots entry ${index}: expected spotId ${expectedSpotId}, got ${spot.spotId}`);
+    }
+    if (spot.flag.name !== expectedFlagName) {
+      throw new Error(`archivist-spots ${spot.spotId}: expected ${expectedFlagName}, got ${spot.flag.name}`);
+    }
+    if (names[String(spot.flag.id)] !== spot.flag.name) {
+      throw new Error(`archivist-spots ${spot.spotId}: id ${spot.flag.id} is "${names[String(spot.flag.id)] ?? "missing"}" in rom-truth, not "${spot.flag.name}"`);
+    }
+    if (spot.locationLabel.includes("—") || spot.caption.includes("—")) {
+      throw new Error(`archivist-spots ${spot.spotId}: player-facing text contains an em dash`);
+    }
+  }
+  for (const line of spots.archivist.lines) {
+    if (line.includes("—")) {
+      throw new Error("archivist-spots: Archivist line contains an em dash");
+    }
+  }
 }
 
 async function validateOpeningCutscene(source: string): Promise<void> {

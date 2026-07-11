@@ -2,6 +2,7 @@ import {
   buildDialoguePages,
   ADDED_NPC_MIN_ID,
   sanitizeAddedNpcs,
+  ArchivistSpotsSchema,
   AttestationBattlesSchema,
   BattleDataSchema,
   BattleRulesSchema,
@@ -58,6 +59,7 @@ import {
   type DialoguePage,
   type AddedNpc,
   type AddedNpcs,
+  type ArchivistSpots,
   type AttestationBattles,
   type BackgroundOverrides,
   type BattleData,
@@ -147,6 +149,7 @@ const COLLISION_OVERRIDES_FILE = "collision-overrides.json";
 const FG_OVERRIDES_FILE = "fg-overrides.json";
 const NAVMESH_FILE = "navmesh.json";
 const DRIFELLA_BARKS_FILE = "drifella-barks.json";
+const ARCHIVIST_SPOTS_FILE = "archivist-spots.json";
 const OPENING_CUTSCENE_FILE = "opening-cutscene.json";
 const CUTSCENES_FILE = "cutscenes.json";
 const OVERWORLD_INTERACTABLES_FILE = "overworld-interactables.json";
@@ -162,6 +165,7 @@ export type GameData = {
   addedNpcs: AddedNpcs;
   customDialogue: RuntimeCustomDialogue;
   drifellaBarks: DrifellaBarks;
+  archivistSpots: ArchivistSpots;
   dialogueLibrary: SwagboundDialogueLibrary;
   overworldInteractables: OverworldInteractables;
   cardNfts: CardNfts;
@@ -280,6 +284,18 @@ function emptyDrifellaBarks(): DrifellaBarks {
   return {
     schema: "swagbound.drifella-barks.v1",
     phrases: []
+  };
+}
+
+function emptyArchivistSpots(): ArchivistSpots {
+  return {
+    schema: "swagbound.archivist-spots.v1",
+    archivist: {
+      spriteId: "drifella2-168",
+      spriteNpcId: 100300,
+      lines: ["Filed, not minted."]
+    },
+    spots: []
   };
 }
 
@@ -409,6 +425,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     fgOverrides,
     navmesh,
     drifellaBarks,
+    archivistSpots,
     openingCutscene,
     cutscenes,
     overworldInteractables,
@@ -493,6 +510,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${FG_OVERRIDES_FILE}`, FgOverridesSchema),
     loadJson(`/generated/${NAVMESH_FILE}`, NavmeshSchema),
     loadJson(`/generated/${DRIFELLA_BARKS_FILE}`, DrifellaBarksSchema),
+    loadJson(`/generated/${ARCHIVIST_SPOTS_FILE}`, ArchivistSpotsSchema),
     loadJson(`/generated/${OPENING_CUTSCENE_FILE}`, OpeningCutsceneSchema),
     loadJson(`/generated/${CUTSCENES_FILE}`, CutscenesSchema),
     loadJson(`/generated/${OVERWORLD_INTERACTABLES_FILE}`, OverworldInteractablesSchema),
@@ -522,6 +540,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     addedNpcs: addedNpcs ?? emptyAddedNpcs(),
     customDialogue: resolvedCustomDialogue,
     drifellaBarks: resolvedDrifellaBarks,
+    archivistSpots: archivistSpots ?? emptyArchivistSpots(),
     dialogueLibrary: dialogueLibrary ?? emptyDialogueLibrary(),
     overworldInteractables: overworldInteractables ?? emptyOverworldInteractables(),
     cardNfts: cardNfts ?? emptyCardNfts(),

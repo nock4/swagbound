@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
+import { type ArchivistSpot, type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, storyTriggerSuppressionForRestore, triggerFiredFlag } from "./storyTriggers";
 import {
   CutsceneRunner,
@@ -12,7 +12,7 @@ import { CollisionOverrideEditor, isCollisionEditEnabled } from "./collisionOver
 import { TeleportMenu, type TeleportTown } from "./teleportMenu";
 import { QuestJournal, type Quest } from "./questJournal";
 import { PartyOrderMenu } from "./partyOrderMenu";
-import { CLEAN_UI_FONT_FAMILY } from "./cleanUi";
+import { CLEAN_UI_FONT_FAMILY, createCleanText, drawCleanPanel } from "./cleanUi";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -358,6 +358,7 @@ import {
   sourceCheckItemHeldFlag,
   sourceCheckVisible
 } from "./sourceCheckModel";
+import { archivistSpotById, buildArchivistRecordsViewModel } from "./archivistRecords";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -388,6 +389,28 @@ type NpcRuntime = {
 type NpcMovementHome = {
   componentId: number;
   sectorAreaKey?: string;
+};
+
+type ArchivistSequencePhase = "slideIn" | "line" | "flash" | "depart";
+
+type ArchivistActorRuntime = {
+  state: PlayerState;
+  frames: DirectionFrameSequence;
+  sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+};
+
+type ArchivistSequenceState = {
+  trigger: StoryTrigger;
+  spot: ArchivistSpot;
+  actor: ArchivistActorRuntime;
+  phase: ArchivistSequencePhase;
+  phaseElapsedMs: number;
+  slideTarget: { x: number; y: number };
+  departTarget: { x: number; y: number };
+  line: string;
+  linePanel?: Phaser.GameObjects.Graphics;
+  lineText?: Phaser.GameObjects.Text;
+  filed: boolean;
 };
 
 /** A visible roaming overworld enemy that starts a battle on contact with the player. */
@@ -659,6 +682,12 @@ const INTERIOR_SECTOR_AREA_RECT_PADS: Record<number, { bottom?: number; right?: 
 const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
 const CUTSCENE_ACTOR_RUN_MULTIPLIER = 1.5;
 const CUTSCENE_MOVE_DEMO_REFERENCE = "cutsceneMoveDemo.main";
+const ARCHIVIST_SLIDE_SPEED_PX_PER_SEC = 150;
+const ARCHIVIST_LINE_MS = 900;
+const ARCHIVIST_FLASH_MS = 260;
+const ARCHIVIST_DEPART_DISTANCE_PX = 72;
+const ARCHIVIST_PARTY_CLEARANCE_PX = 24;
+const ARCHIVIST_LINE_WIDTH_PX = 304;
 const CUTSCENE_WATCHDOG_TIMEOUT_MS = 2_500;
 const EVENT_SEQUENCE_WATCHDOG_TIMEOUT_MS = 2_500;
 const DEFAULT_HOTEL_REST_COST = 100;
@@ -887,6 +916,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private pendingInteractionShopStoreId?: number;
   private pendingInteractionService?: { service: ServiceKind; cost?: number };
   private pendingSourceCheckEntryId?: string;
+  private archivistSequence?: ArchivistSequenceState;
   private timedDeliveryState: TimedDeliveryRuntimeState = createTimedDeliveryRuntimeState();
   private timedDeliveryArrivalQueue: string[] = [];
   private activeDeliverySprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
@@ -1393,6 +1423,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
+    this.updateArchivistSequence(delta);
+    if (this.archivistSequence) {
+      if (!this.playerState.inputLocked) {
+        lockPlayer(this.playerState, this.playerFrames);
+      }
+      this.syncPlayerObject();
+      this.updateCollisionOverlay();
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
+
     if (this.startupGetUpWalkActive) {
       this.playerState.inputLocked = true;
       this.syncPlayerObject();
@@ -1402,7 +1444,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
-    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.cinematicActive() || this.isDoorFadeActive() || this.binderOverlayOpen;
+    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.cinematicActive() || this.isDoorFadeActive() || this.binderOverlayOpen || Boolean(this.archivistSequence);
     if (import.meta.env.DEV) {
       // Freeze forensics: name every possible input owner so a stuck player is
       // diagnosable in one evaluate call (added chasing the post-dialogue freeze).
@@ -1414,6 +1456,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         doorFade: this.isDoorFadeActive(),
         binder: this.binderOverlayOpen,
         cutscene: Boolean(this.cutsceneRunner?.running),
+        archivist: Boolean(this.archivistSequence),
         inputLocked: this.playerState.inputLocked,
         menu: this.menuState.open,
         getUpWalk: this.startupGetUpWalkActive,
@@ -1604,6 +1647,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.pendingInteractionShopStoreId = undefined;
     this.pendingInteractionService = undefined;
     this.pendingSourceCheckEntryId = undefined;
+    this.destroyArchivistSequence();
     this.timedDeliveryState = createTimedDeliveryRuntimeState();
     this.timedDeliveryArrivalQueue = [];
     this.clearActiveDeliverySprite();
@@ -5156,6 +5200,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       psi: this.data_.psi,
       shops: this.data_.shops,
       cardNfts: this.data_.cardNfts,
+      archivistSpots: this.data_.archivistSpots,
       flags: this.gameFlags,
       currentObjectiveText: this.currentObjectiveText(),
       partyState: this.partyState,
@@ -5169,6 +5214,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         usabilityMatrix: this.data_.usabilityMatrix,
         shops: this.data_.shops,
         cardNfts: this.data_.cardNfts,
+        archivistSpots: this.data_.archivistSpots,
         flags: this.gameFlags,
         partyState: this.partyState,
         resolver,
@@ -7579,6 +7625,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // counts as fired (see applyStoryTriggerEffects / applyReturnRestore). Non-battle
     // triggers set it immediately in applyStoryTriggerEffects.
 
+    if (trigger.archivistSpotId !== undefined) {
+      lockPlayer(this.playerState, this.playerFrames);
+      this.startArchivistStoryTrigger(trigger);
+      this.syncPlayerObject();
+      this.updatePrompt();
+      this.publish();
+      return true;
+    }
+
     if (trigger.dialogue && trigger.dialogue.length > 0) {
       lockPlayer(this.playerState, this.playerFrames);
       this.startOverriddenScriptedDialogue(
@@ -7674,6 +7729,223 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
     }
     this.refreshMenuScreens();
+  }
+
+  private startArchivistStoryTrigger(trigger: StoryTrigger): void {
+    const spotId = trigger.archivistSpotId;
+    const spot = spotId === undefined ? undefined : archivistSpotById(this.data_.archivistSpots, spotId);
+    if (!spot) {
+      this.warnStoryTriggerSkip(`archivist_missing_spot:${trigger.id}:${spotId ?? "none"}`);
+      this.applyStoryTriggerEffects(trigger);
+      return;
+    }
+    if (this.archivistSequence) {
+      return;
+    }
+    const actor = this.createArchivistActor(spot);
+    if (!actor) {
+      this.warnStoryTriggerSkip(`archivist_actor_unavailable:${trigger.id}`);
+      this.applyStoryTriggerEffects(trigger);
+      return;
+    }
+    const sequence: ArchivistSequenceState = {
+      trigger,
+      spot,
+      actor,
+      phase: "slideIn",
+      phaseElapsedMs: 0,
+      slideTarget: this.archivistSlideTarget(spot),
+      departTarget: this.archivistDepartTarget(spot),
+      line: this.archivistLineForSpot(spot),
+      filed: false
+    };
+    this.archivistSequence = sequence;
+    this.syncArchivistActor(sequence);
+  }
+
+  private createArchivistActor(spot: ArchivistSpot): ArchivistActorRuntime | undefined {
+    const spriteNpcId = this.data_.archivistSpots.archivist.spriteNpcId;
+    const facing = facingToward(spot.photographer.x, spot.photographer.y, this.playerState.x, this.playerState.y);
+    const queued = this.requestNpcRuntimeTexture(spriteNpcId, undefined);
+    if (queued && !this.load.isLoading()) {
+      this.load.start();
+    }
+    const frames = this.framesForNpc(spriteNpcId, undefined);
+    const state = createPlayerState(spot.photographer.x, spot.photographer.y, facing, frames);
+    const sprite = this.spawnNpcActor(spriteNpcId, state.x, state.y, undefined, facing);
+    return { state, frames, sprite };
+  }
+
+  private archivistSlideTarget(spot: ArchivistSpot): { x: number; y: number } {
+    const start = spot.photographer;
+    const dx = spot.party1.x - start.x;
+    const dy = spot.party1.y - start.y;
+    const distanceToParty = Math.hypot(dx, dy);
+    if (spot.slide.distance <= 0 || distanceToParty <= ARCHIVIST_PARTY_CLEARANCE_PX) {
+      return { x: start.x, y: start.y };
+    }
+    const travel = Math.min(spot.slide.distance, Math.max(0, distanceToParty - ARCHIVIST_PARTY_CLEARANCE_PX));
+    return {
+      x: Math.round(start.x + (dx / distanceToParty) * travel),
+      y: Math.round(start.y + (dy / distanceToParty) * travel)
+    };
+  }
+
+  private archivistDepartTarget(spot: ArchivistSpot): { x: number; y: number } {
+    const dx = spot.photographer.x - spot.party1.x;
+    const dy = spot.photographer.y - spot.party1.y;
+    const distance = Math.hypot(dx, dy) || 1;
+    return {
+      x: Math.round(spot.photographer.x + (dx / distance) * ARCHIVIST_DEPART_DISTANCE_PX),
+      y: Math.round(spot.photographer.y + (dy / distance) * ARCHIVIST_DEPART_DISTANCE_PX)
+    };
+  }
+
+  private archivistLineForSpot(spot: ArchivistSpot): string {
+    const lines = this.data_.archivistSpots.archivist.lines;
+    return lines[(spot.spotId - 1) % lines.length] ?? "Filed, not minted.";
+  }
+
+  private updateArchivistSequence(deltaMs: number): void {
+    const sequence = this.archivistSequence;
+    if (!sequence) {
+      return;
+    }
+    sequence.phaseElapsedMs += Math.max(0, deltaMs);
+    switch (sequence.phase) {
+      case "slideIn":
+        if (this.moveArchivistActor(sequence, sequence.slideTarget, deltaMs)) {
+          this.beginArchivistPhase(sequence, "line");
+        }
+        break;
+      case "line":
+        if (sequence.phaseElapsedMs >= ARCHIVIST_LINE_MS) {
+          this.destroyArchivistLine(sequence);
+          this.beginArchivistPhase(sequence, "flash");
+        }
+        break;
+      case "flash":
+        if (!sequence.filed) {
+          this.fileArchivistMoment(sequence);
+        }
+        if (sequence.phaseElapsedMs >= ARCHIVIST_FLASH_MS) {
+          this.beginArchivistPhase(sequence, "depart");
+        }
+        break;
+      case "depart":
+        if (this.moveArchivistActor(sequence, sequence.departTarget, deltaMs)) {
+          this.finishArchivistSequence(sequence);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  private beginArchivistPhase(sequence: ArchivistSequenceState, phase: ArchivistSequencePhase): void {
+    sequence.phase = phase;
+    sequence.phaseElapsedMs = 0;
+    if (phase === "line") {
+      this.showArchivistLine(sequence);
+    }
+  }
+
+  private moveArchivistActor(
+    sequence: ArchivistSequenceState,
+    target: { x: number; y: number },
+    deltaMs: number
+  ): boolean {
+    const arrived = advanceCutsceneActorTowardTarget(sequence.actor.state, target, {
+      deltaMs,
+      speed: ARCHIVIST_SLIDE_SPEED_PX_PER_SEC,
+      bounds: this.movementBounds(),
+      frames: sequence.actor.frames,
+      arrivalPx: CUTSCENE_ACTOR_MOVE_ARRIVAL_PX
+    });
+    this.syncArchivistActor(sequence);
+    return arrived;
+  }
+
+  private syncArchivistActor(sequence: ArchivistSequenceState): void {
+    const { state, frames, sprite } = sequence.actor;
+    sprite.x = state.x;
+    sprite.y = state.y;
+    if (sprite instanceof Phaser.GameObjects.Sprite) {
+      sprite.setFrame(state.animFrame);
+    }
+    this.setActorSortDepth(sprite);
+    sprite.y = state.y - this.spriteWalkBob(state.moving, frames, state.facing, this.data_.archivistSpots.archivist.spriteNpcId);
+    sprite.setVisible(this.worldPointInsideActiveRoom(state));
+  }
+
+  private showArchivistLine(sequence: ArchivistSequenceState): void {
+    this.destroyArchivistLine(sequence);
+    const camera = this.cameras.main;
+    const width = Math.min(ARCHIVIST_LINE_WIDTH_PX, Math.max(160, camera.width - 32));
+    const rect = {
+      x: Math.round((camera.width - width) / 2),
+      y: 12,
+      width,
+      height: 42
+    };
+    const panel = this.add.graphics().setScrollFactor(0).setDepth(120);
+    drawCleanPanel(panel, rect);
+    const text = createCleanText(this, rect.x + 10, rect.y + 12, sequence.line, {
+      fontSize: 13,
+      fixedWidth: rect.width - 20,
+      align: "center",
+      wordWrapWidth: rect.width - 20
+    }).setScrollFactor(0).setDepth(121);
+    sequence.linePanel = panel;
+    sequence.lineText = text;
+    this.playInteractionSfx("readCue");
+  }
+
+  private destroyArchivistLine(sequence: ArchivistSequenceState): void {
+    sequence.linePanel?.destroy();
+    sequence.lineText?.destroy();
+    sequence.linePanel = undefined;
+    sequence.lineText = undefined;
+  }
+
+  private fileArchivistMoment(sequence: ArchivistSequenceState): void {
+    sequence.filed = true;
+    this.cameras.main.flash(ARCHIVIST_FLASH_MS, 255, 255, 255);
+    this.playInteractionSfx("itemGet");
+    const trigger = sequence.trigger;
+    if (isOnce(trigger)) {
+      this.gameFlags.set(triggerFiredFlag(trigger.id));
+    }
+    trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
+    trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+    this.grantStoryTriggerItems(trigger.grantItems);
+    this.refreshMenuScreens();
+  }
+
+  private finishArchivistSequence(sequence: ArchivistSequenceState): void {
+    if (!sequence.filed) {
+      this.fileArchivistMoment(sequence);
+    }
+    this.destroyArchivistLine(sequence);
+    sequence.actor.sprite.destroy();
+    if (this.archivistSequence === sequence) {
+      this.archivistSequence = undefined;
+    }
+    if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running && !this.isDoorFadeActive()) {
+      unlockPlayer(this.playerState);
+    }
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private destroyArchivistSequence(): void {
+    const sequence = this.archivistSequence;
+    if (!sequence) {
+      return;
+    }
+    this.destroyArchivistLine(sequence);
+    sequence.actor.sprite.destroy();
+    this.archivistSequence = undefined;
   }
 
   private warnStoryTriggerSkip(reason: string): void {
@@ -9697,6 +9969,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private publish(): void {
     this.publishBinderDebug();
+    this.publishArchivistDebug();
     const world = this.world_;
     const npc744 = this.tutorialNpc();
     const distance = this.distanceToTutorialNpc();
@@ -9828,6 +10101,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
             total: region.total
           }
         ]))
+      };
+    };
+  }
+
+  private publishArchivistDebug(): void {
+    (globalThis as Record<string, unknown>).__archivistDebug = () => {
+      const records = buildArchivistRecordsViewModel(this.data_.archivistSpots, this.gameFlags);
+      const firstSpot = this.data_.archivistSpots.spots[0];
+      return {
+        spriteId: this.data_.archivistSpots.archivist.spriteId,
+        spriteNpcId: this.data_.archivistSpots.archivist.spriteNpcId,
+        spotCount: this.data_.archivistSpots.spots.length,
+        filed: records.filed,
+        total: records.total,
+        activeSpotId: this.archivistSequence?.spot.spotId,
+        firstSpotAnchor: firstSpot ? { ...firstSpot.anchor } : undefined,
+        firstSpotFlag: firstSpot?.flag.name
       };
     };
   }
