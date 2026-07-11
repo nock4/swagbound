@@ -1,131 +1,1349 @@
 {
-  "schema": "swagbound.fg-overrides.v1",
-  "clears": [
-    {
-      "x": 1472,
-      "y": 1288,
-      "w": 64,
-      "h": 16,
-      "note": "SWAG HOTEL west/northwest canopy: clear south edge rows while keeping canopy top intact."
-    },
-    {
-      "x": 1440,
-      "y": 1344,
-      "w": 56,
-      "h": 16,
-      "note": "SWAG HOTEL west canopy: clear lower edge that swallows the grass-row player."
-    },
-    {
-      "x": 7592,
-      "y": 960,
-      "w": 36,
-      "h": 56,
-      "note": "interior plant L: full lower half, generous margin (pins 7608,1006 +/- offsets)"
-    },
-    {
-      "x": 7626,
-      "y": 960,
-      "w": 48,
-      "h": 76,
-      "note": "interior plant R: full lower half, generous margin (pins 7641,1006), widened to cover 7665,1022 offset"
-    },
-    {
-      "x": 7408,
-      "y": 700,
-      "w": 64,
-      "h": 76,
-      "note": "park west trees: over-occlusion band (pins 7432-7440,759-767)"
-    },
-    {
-      "x": 7504,
-      "y": 696,
-      "w": 68,
-      "h": 76,
-      "note": "park center tree south edge (pin 7542,743), widened to cover 7518,767"
-    },
-    {
-      "x": 2188,
-      "y": 196,
-      "w": 120,
-      "h": 60,
-      "note": "Morningside police car: clear lower body so a player standing beside it (S/W) is not covered (pin 2232,223) [widened to cover head box at left/top edge]"
-    },
-    {
-      "x": 2488,
-      "y": 466,
-      "w": 56,
-      "h": 36,
-      "note": "Morningside prop cutoff south edge (pin 2517,463)"
-    },
-    {
-      "x": 1836,
-      "y": 410,
-      "w": 44,
-      "h": 26,
-      "note": "shrub row ate the lower body (pin 1857,414)"
-    },
-    {
-      "x": 2208,
-      "y": 404,
-      "w": 48,
-      "h": 36,
-      "note": "tree canopy SW edge swallowed the body (pin 2229,416)"
-    },
-    {
-      "x": 1576,
-      "y": 258,
-      "w": 36,
-      "h": 28,
-      "note": "tree canopy left edge over-occlusion (pin 1593,267)"
-    },
-    {
-      "x": 2578,
-      "y": 466,
-      "w": 56,
-      "h": 36,
-      "note": "Morningside prop row south edge, matches the 2517 fix (pin 2607,463)"
-    },
-    {
-      "x": 2646,
-      "y": 466,
-      "w": 56,
-      "h": 36,
-      "note": "Morningside prop row south edge, matches the 2517 fix (pin 2673,463)"
-    },
-    {
-      "x": 3944,
-      "y": 5936,
-      "w": 48,
-      "h": 40,
-      "note": "cave ceiling band ate the head while feet showed (pin 3965,5972)"
-    },
-    {
-      "x": 5380,
-      "y": 2500,
-      "w": 150,
-      "h": 48,
-      "note": "canyon rim band fully swallowed the player (pins 5392-5518,2521-2537)"
-    },
-    {
-      "x": 7424,
-      "y": 992,
-      "w": 32,
-      "h": 36,
-      "note": "interior doorway column cut the sprite in half (pin 7439,1017)"
-    },
-    {
-      "x": 3480,
-      "y": 2100,
-      "w": 48,
-      "h": 48,
-      "note": "cave overhang edge over-occlusion (pin 3500,2133)"
-    },
-    {
-      "x": 7160,
-      "y": 560,
-      "w": 90,
-      "h": 48,
-      "note": "dorm rug cells carry the EB 0x01 lower-hide flag indoors; clear rect also suppresses the lower-body crop (pin 7201,583)"
-    }
-  ]
+ "schema": "swagbound.fg-overrides.v1",
+ "clears": [
+  {
+   "x": 1472,
+   "y": 1288,
+   "w": 64,
+   "h": 16,
+   "note": "SWAG HOTEL west/northwest canopy: clear south edge rows while keeping canopy top intact."
+  },
+  {
+   "x": 1440,
+   "y": 1344,
+   "w": 56,
+   "h": 16,
+   "note": "SWAG HOTEL west canopy: clear lower edge that swallows the grass-row player."
+  },
+  {
+   "x": 7592,
+   "y": 960,
+   "w": 36,
+   "h": 56,
+   "note": "interior plant L: full lower half, generous margin (pins 7608,1006 +/- offsets)"
+  },
+  {
+   "x": 7626,
+   "y": 960,
+   "w": 48,
+   "h": 76,
+   "note": "interior plant R: full lower half, generous margin (pins 7641,1006), widened to cover 7665,1022 offset"
+  },
+  {
+   "x": 7408,
+   "y": 700,
+   "w": 64,
+   "h": 76,
+   "note": "park west trees: over-occlusion band (pins 7432-7440,759-767)"
+  },
+  {
+   "x": 7504,
+   "y": 696,
+   "w": 68,
+   "h": 76,
+   "note": "park center tree south edge (pin 7542,743), widened to cover 7518,767"
+  },
+  {
+   "x": 2188,
+   "y": 196,
+   "w": 120,
+   "h": 60,
+   "note": "Morningside police car: clear lower body so a player standing beside it (S/W) is not covered (pin 2232,223) [widened to cover head box at left/top edge]"
+  },
+  {
+   "x": 2488,
+   "y": 466,
+   "w": 56,
+   "h": 36,
+   "note": "Morningside prop cutoff south edge (pin 2517,463)"
+  },
+  {
+   "x": 1836,
+   "y": 410,
+   "w": 44,
+   "h": 26,
+   "note": "shrub row ate the lower body (pin 1857,414)"
+  },
+  {
+   "x": 2208,
+   "y": 404,
+   "w": 48,
+   "h": 36,
+   "note": "tree canopy SW edge swallowed the body (pin 2229,416)"
+  },
+  {
+   "x": 1576,
+   "y": 258,
+   "w": 36,
+   "h": 28,
+   "note": "tree canopy left edge over-occlusion (pin 1593,267)"
+  },
+  {
+   "x": 2578,
+   "y": 466,
+   "w": 56,
+   "h": 36,
+   "note": "Morningside prop row south edge, matches the 2517 fix (pin 2607,463)"
+  },
+  {
+   "x": 2646,
+   "y": 466,
+   "w": 56,
+   "h": 36,
+   "note": "Morningside prop row south edge, matches the 2517 fix (pin 2673,463)"
+  },
+  {
+   "x": 3944,
+   "y": 5936,
+   "w": 48,
+   "h": 40,
+   "note": "cave ceiling band ate the head while feet showed (pin 3965,5972)"
+  },
+  {
+   "x": 5380,
+   "y": 2500,
+   "w": 150,
+   "h": 48,
+   "note": "canyon rim band fully swallowed the player (pins 5392-5518,2521-2537)"
+  },
+  {
+   "x": 7424,
+   "y": 992,
+   "w": 32,
+   "h": 36,
+   "note": "interior doorway column cut the sprite in half (pin 7439,1017)"
+  },
+  {
+   "x": 3480,
+   "y": 2100,
+   "w": 48,
+   "h": 48,
+   "note": "cave overhang edge over-occlusion (pin 3500,2133)"
+  },
+  {
+   "x": 7160,
+   "y": 560,
+   "w": 90,
+   "h": 48,
+   "note": "dorm rug cells carry the EB 0x01 lower-hide flag indoors; clear rect also suppresses the lower-body crop (pin 7201,583)"
+  },
+  {
+   "x": 6474,
+   "y": 212,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6488,246) in interior area 2329332749"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 2329332749"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 2329332749"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 2329332749"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 2329332749"
+  },
+  {
+   "x": 7234,
+   "y": 982,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7248,1016) in interior area 2329332749"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 2600834820"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 2600834820"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 2600834820"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 2600834820"
+  },
+  {
+   "x": 7234,
+   "y": 982,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7248,1016) in interior area 2600834820"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 2702375107"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 2702375107"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 2702375107"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 2702375107"
+  },
+  {
+   "x": 7234,
+   "y": 982,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7248,1016) in interior area 2702375107"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 3580801518"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 3580801518"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 3580801518"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 3580801518"
+  },
+  {
+   "x": 7234,
+   "y": 982,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7248,1016) in interior area 3580801518"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 719874451"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 719874451"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 719874451"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 719874451"
+  },
+  {
+   "x": 7234,
+   "y": 982,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7248,1016) in interior area 719874451"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 174568072"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 174568072"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 174568072"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 174568072"
+  },
+  {
+   "x": 7234,
+   "y": 982,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7248,1016) in interior area 174568072"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 2207502852"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 2207502852"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 2207502852"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 2207502852"
+  },
+  {
+   "x": 7234,
+   "y": 982,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7248,1016) in interior area 2207502852"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 4254730534"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 4254730534"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 4254730534"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 4254730534"
+  },
+  {
+   "x": 7234,
+   "y": 982,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7248,1016) in interior area 4254730534"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 2743983888"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 2743983888"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 2743983888"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 2743983888"
+  },
+  {
+   "x": 6475,
+   "y": 212,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6489,246) in interior area 2743983888"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 1398056846"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 1398056846"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 1398056846"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 1398056846"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 2699449126"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 2699449126"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 2699449126"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 2699449126"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 1689771201"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 1689771201"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 1689771201"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 1689771201"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 854319560"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 854319560"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 854319560"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 854319560"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 3939710202"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 3939710202"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 3939710202"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 3939710202"
+  },
+  {
+   "x": 6475,
+   "y": 212,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6489,246) in interior area 3939710202"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 674668693"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 674668693"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 674668693"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 674668693"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 3703714027"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 3703714027"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 3703714027"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 3703714027"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 3931111096"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 3931111096"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 3931111096"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 3931111096"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 709798306"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 709798306"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 709798306"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 709798306"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 3212436150"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 3212436150"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 3212436150"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 3212436150"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 1522927858"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 1522927858"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 1522927858"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 1522927858"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 1580410894"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 1580410894"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 1580410894"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 1580410894"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 714247552"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 714247552"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 714247552"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 714247552"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 1198244472"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 1198244472"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 1198244472"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 1198244472"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 1285458813"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 1285458813"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 1285458813"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 1285458813"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 2594206900"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 2594206900"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 2594206900"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 2594206900"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 1206549835"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 1206549835"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 1206549835"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 1206549835"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 842013597"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 842013597"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 842013597"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 842013597"
+  },
+  {
+   "x": 7098,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7112,352) in interior area 1811469283"
+  },
+  {
+   "x": 7018,
+   "y": 318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7032,352) in interior area 1811469283"
+  },
+  {
+   "x": 6994,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7008,96) in interior area 1811469283"
+  },
+  {
+   "x": 7066,
+   "y": 62,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7080,96) in interior area 1811469283"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 3579783716"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 362704788"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 3140584687"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 1046604844"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 2753199006"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 110338649"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 1747108238"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 2745056699"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 1031271227"
+  },
+  {
+   "x": 7882,
+   "y": 2310,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7896,2344) in interior area 1377475012"
+  },
+  {
+   "x": 7078,
+   "y": 5074,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7092,5108) in interior area 3285565257"
+  },
+  {
+   "x": 7078,
+   "y": 5074,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7092,5108) in interior area 3775368313"
+  },
+  {
+   "x": 4434,
+   "y": 6182,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (4448,6216) in interior area 2195660068"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 3853589391"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 2894576132"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 1147020948"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 1059874556"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 4052549831"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 115388522"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 4052744855"
+  },
+  {
+   "x": 4434,
+   "y": 6182,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (4448,6216) in interior area 1506317988"
+  },
+  {
+   "x": 4434,
+   "y": 6182,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (4448,6216) in interior area 1626196266"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 1344335745"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 2321624771"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 2321624771"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 944446161"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 944446161"
+  },
+  {
+   "x": 6266,
+   "y": 6318,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6280,6352) in interior area 1948056168"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 1948056168"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 3346736405"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 3992669306"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 270066496"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 1753144800"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 1335977308"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 2636646811"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 3740163454"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 2915689058"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 2022421111"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 3769250405"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 3810018721"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 2364824696"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 1634622164"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 2240876498"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 2971814876"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 3351468294"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 431531944"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 3241757026"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 731204708"
+  },
+  {
+   "x": 6970,
+   "y": 7038,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (6984,7072) in interior area 2410901377"
+  },
+  {
+   "x": 7750,
+   "y": 9178,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7764,9212) in interior area 419667157"
+  },
+  {
+   "x": 7750,
+   "y": 9178,
+   "w": 28,
+   "h": 30,
+   "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7764,9212) in interior area 754724837"
+  }
+ ]
 }
