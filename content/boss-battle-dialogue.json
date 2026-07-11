@@ -11,27 +11,6 @@
     "The record is patient. The record is hungry. The record is us."
   ],
   "byBattleGroup": {
-    "125": {
-      "personaName": "THE NOTARY",
-      "onStart": [
-        "Present your original. We will return a copy with cleaner posture.",
-        "Stamp arm armed. Filing cabinet hungry. Please stop being multiple."
-      ],
-      "onLowHp": [
-        "The signature shakes. That is evidence, not a flaw.",
-        "Unsteady hands make terrible copies. Hold still."
-      ],
-      "onDefeat": [
-        "Filed... incorrectly.",
-        "The ledger keeps the nervous ink. The copy was never nervous enough."
-      ],
-      "onTurn": [
-        "Filed.",
-        "Initial here. Bleed there.",
-        "The procession continues around the book."
-      ],
-      "lowHpThreshold": 0.34
-    },
     "36": {
       "personaName": "Porcelain Registrar",
       "onStart": [
@@ -64,6 +43,48 @@
       ],
       "lowHpThreshold": 0.34
     },
+    "125": {
+      "personaName": "THE NOTARY",
+      "onStart": [
+        "Present your original. We will return a copy with cleaner posture.",
+        "Stamp arm armed. Filing cabinet hungry. Please stop being multiple."
+      ],
+      "onLowHp": [
+        "The signature shakes. That is evidence, not a flaw.",
+        "Unsteady hands make terrible copies. Hold still."
+      ],
+      "onDefeat": [
+        "Filed... incorrectly.",
+        "The ledger keeps the nervous ink. The copy was never nervous enough."
+      ],
+      "onTurn": [
+        "Filed.",
+        "Initial here. Bleed there.",
+        "The procession continues around the book."
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "136": {
+      "personaName": "THE EDITOR",
+      "onStart": [
+        "Your thought scans clean except for the word that proves it was yours.",
+        "Revision preserves the sentence and removes the owner."
+      ],
+      "onLowHp": [
+        "You noticed the change. Very untidy.",
+        "I can still improve the noticing."
+      ],
+      "onDefeat": [
+        "Original wording restored, unfortunately.",
+        "The typo was yours. That is why it lived."
+      ],
+      "onTurn": [
+        "Revised.",
+        "Cleaner now.",
+        "One word changed."
+      ],
+      "lowHpThreshold": 0.34
+    },
     "172": {
       "personaName": "Milady",
       "onStart": [
@@ -77,6 +98,111 @@
       "onDefeat": [
         "The read... will not close. You left it open. You left YOURSELF open, unfinished, and I have no file for that.",
         "Fine. Keep the damaged one. Keep the seam. There was never anything under my faces but the wish to be yours."
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "264": {
+      "personaName": "THE RETURN OFFICER",
+      "onStart": [
+        "Return to sender. Sender not found. Store the body by fault of address.",
+        "Unread is not free. Unread is pending."
+      ],
+      "onLowHp": [
+        "The ink runs, but the stamp still lands.",
+        "A wet label is still a label."
+      ],
+      "onDefeat": [
+        "Parcel retained by original claimant.",
+        "No forwarding copy remains."
+      ],
+      "onTurn": [
+        "Returned.",
+        "Undelivered.",
+        "No clean address."
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "326": {
+      "personaName": "THE APPRAISER",
+      "onStart": [
+        "Market value assigned. Damage to self-esteem is priced separately.",
+        "The real thing is what the room agrees to insure."
+      ],
+      "onLowHp": [
+        "Your tag is peeling. That lowers the condition grade.",
+        "Meaning is volatile. Lunch money was cleaner."
+      ],
+      "onDefeat": [
+        "The certificate fails to describe the frame.",
+        "The first price was not a price. It was a promise."
+      ],
+      "onTurn": [
+        "Appraised.",
+        "Marked down.",
+        "Authenticity pending payment."
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "328": {
+      "personaName": "THE BOTTLER",
+      "onStart": [
+        "Limited run sealed. Original spring marked down to units.",
+        "Break the bottles if you want the mist. Leave them whole and it comes back to me."
+      ],
+      "onLowHp": [
+        "The cap is hissing. That is not loss. That is inventory pressure.",
+        "Nothing escapes a bottle. It only waits for better labeling."
+      ],
+      "onDefeat": [
+        "Unsold water returns to the spring.",
+        "The edition number dissolves first."
+      ],
+      "onTurn": [
+        "Numbered.",
+        "Capped.",
+        "Inventory appreciates silence."
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "357": {
+      "personaName": "THE MASTER COPY",
+      "onStart": [
+        "I am the cleanest version of your timing. I am still not you.",
+        "I learned every move except why you stay breakable."
+      ],
+      "onLowHp": [
+        "Your heartbeat is off-meter. I cannot copy that without becoming afraid.",
+        "Side B ends where the file expects music. You kept damage there instead."
+      ],
+      "onDefeat": [
+        "The copy knows what it is. The original keeps going anyway.",
+        "No name transfers."
+      ],
+      "onTurn": [
+        "Same timing.",
+        "Cleaner swing.",
+        "No name of my own."
+      ],
+      "lowHpThreshold": 0.34
+    },
+    "381": {
+      "personaName": "THE AMPLIFIER",
+      "onStart": [
+        "Quiet part captured. Audience breath normalized for upload.",
+        "Signal loves you loud enough to replace you."
+      ],
+      "onLowHp": [
+        "Feedback is still worship if it loops long enough.",
+        "The crowd breathes once. The recording cannot keep up."
+      ],
+      "onDefeat": [
+        "The last echo misses the breath.",
+        "The live song leaves before the file saves."
+      ],
+      "onTurn": [
+        "Repeat.",
+        "Broadcast.",
+        "Louder than witness."
       ],
       "lowHpThreshold": 0.34
     },

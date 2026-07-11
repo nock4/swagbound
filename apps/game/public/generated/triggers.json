@@ -317,6 +317,258 @@
       ]
     },
     {
+      "id": "source-spring",
+      "comment": "Eight Sources site 3: The Source Spring in Little Swag World. Requires Act 2 complete and raises the Milky Well bridge flag through content/flag-map.json.",
+      "boss": {
+        "x": 6868,
+        "y": 1164,
+        "facing": "down"
+      },
+      "once": true,
+      "requireFlags": [
+        "act2:complete"
+      ],
+      "dialogue": [
+        "Behind the waterfall, Little Swag World bubbles up under warm light. Bottles ring the spring in numbered rows, each one waiting to be sold as the first sip.",
+        "THE BOTTLER: \"Limited run of everything. Drink fast before the original gets diluted by witnesses.\"",
+        "The caps begin to pop. Bosch reads the mist for the part that still remembers being water."
+      ],
+      "setFlags": [
+        "source:spring:cleared"
+      ],
+      "battleGroup": 328
+    },
+    {
+      "id": "source-spring-reveal",
+      "area": {
+        "x": 6816,
+        "y": 1128,
+        "w": 120,
+        "h": 80
+      },
+      "once": true,
+      "requireFlags": [
+        "source:spring:cleared"
+      ],
+      "dialogue": [
+        "Water that tastes like the day you first drank it. Not like the description of the day. The day.",
+        "Track 3 hums onto the Original Mixtape."
+      ],
+      "grantItems": [
+        196
+      ]
+    },
+    {
+      "id": "source-undelivered",
+      "comment": "Eight Sources site 4: The Undelivered outside Dead Letter. Requires arrival at Dead Letter and raises the Rainy Circle bridge flag through content/flag-map.json.",
+      "boss": {
+        "x": 5388,
+        "y": 9692,
+        "facing": "right"
+      },
+      "once": true,
+      "requireFlags": [
+        "deadletter:arrived"
+      ],
+      "dialogue": [
+        "A rain-soaked yard of crates waits at the edge of Dead Letter. Every parcel here is still original because nobody ever opened it to improve the address.",
+        "THE RETURN OFFICER: \"Undeliverable bodies return to sender. Undeliverable sources return to storage.\"",
+        "A red stamp lifts over the party. Bosch keeps both hands on the unread name."
+      ],
+      "setFlags": [
+        "source:undelivered:cleared"
+      ],
+      "battleGroup": 264
+    },
+    {
+      "id": "source-undelivered-reveal",
+      "area": {
+        "x": 5368,
+        "y": 9656,
+        "w": 120,
+        "h": 80
+      },
+      "once": true,
+      "requireFlags": [
+        "source:undelivered:cleared"
+      ],
+      "dialogue": [
+        "Rain on cardboard. A parcel with your name, never opened. Some things stay original by staying unread.",
+        "Track 4 hums onto the Original Mixtape."
+      ],
+      "grantItems": [
+        196
+      ]
+    },
+    {
+      "id": "source-vault",
+      "comment": "Eight Sources site 5: The Vault of Certificates under The Galleria. Requires Act 3 complete and raises the Magnet Hill bridge flag through content/flag-map.json.",
+      "boss": {
+        "x": 2440,
+        "y": 6728,
+        "facing": "up"
+      },
+      "once": true,
+      "requireFlags": [
+        "act3:complete"
+      ],
+      "dialogue": [
+        "Under The Galleria, wet ink shines across pre-signed certificates. The guillotine cutter ticks once for every frame waiting to become authentic.",
+        "THE APPRAISER: \"Originality is a price behavior. We can write yours down until it thanks us.\"",
+        "A tag flutters toward Bosch back-first, already priced for clearance."
+      ],
+      "setFlags": [
+        "source:vault:cleared"
+      ],
+      "battleGroup": 326
+    },
+    {
+      "id": "source-vault-reveal",
+      "area": {
+        "x": 2384,
+        "y": 6688,
+        "w": 120,
+        "h": 88
+      },
+      "once": true,
+      "requireFlags": [
+        "source:vault:cleared"
+      ],
+      "dialogue": [
+        "A price tag on the back of the first frame. Someone once paid for the real thing with lunch money and meant it.",
+        "Track 5 hums onto the Original Mixtape."
+      ],
+      "grantItems": [
+        196
+      ]
+    },
+    {
+      "id": "source-pier",
+      "comment": "Eight Sources site 6: The Broadcast Pier at Solana Beach. Requires Act 3 complete and raises the Pink Cloud bridge flag through content/flag-map.json.",
+      "boss": {
+        "x": 7464,
+        "y": 2864,
+        "facing": "left"
+      },
+      "once": true,
+      "requireFlags": [
+        "act3:complete"
+      ],
+      "dialogue": [
+        "At the end of the pier, a transmitter tower pours gold signal over the water. The sea carries every copy farther than the crowd can hear.",
+        "THE AMPLIFIER: \"Every quiet part belongs to the broadcast once the broadcast loves it loudly enough.\"",
+        "The speakers breathe in. Bosch waits for the breath before the recording starts."
+      ],
+      "setFlags": [
+        "source:pier:cleared"
+      ],
+      "battleGroup": 381
+    },
+    {
+      "id": "source-pier-reveal",
+      "area": {
+        "x": 7428,
+        "y": 2824,
+        "w": 120,
+        "h": 88
+      },
+      "once": true,
+      "requireFlags": [
+        "source:pier:cleared"
+      ],
+      "dialogue": [
+        "A song heard live, once, before it was uploaded. The crowd breathing in the quiet parts. No recording kept the breath.",
+        "Track 6 hums onto the Original Mixtape."
+      ],
+      "grantItems": [
+        196
+      ]
+    },
+    {
+      "id": "source-vacancy",
+      "comment": "Eight Sources site 7: The Vacancy Sign in Vacancy Flats. Requires Act 3 complete and raises the Lumine Hall bridge flag through content/flag-map.json.",
+      "boss": {
+        "x": 7188,
+        "y": 7508,
+        "facing": "down"
+      },
+      "once": true,
+      "requireFlags": [
+        "act3:complete"
+      ],
+      "dialogue": [
+        "The motel strip is dead except for one buzzing marquee. It spells Bosch's thought back at him, then changes one word while the thought is still warm.",
+        "THE EDITOR: \"Revision is mercy. I remove the word that keeps hurting you and leave the sentence standing.\"",
+        "The sign flickers. Bosch keeps the wrong word because it was his."
+      ],
+      "setFlags": [
+        "source:vacancy:cleared"
+      ],
+      "battleGroup": 136
+    },
+    {
+      "id": "source-vacancy-reveal",
+      "area": {
+        "x": 7148,
+        "y": 7472,
+        "w": 120,
+        "h": 80
+      },
+      "once": true,
+      "requireFlags": [
+        "source:vacancy:cleared"
+      ],
+      "dialogue": [
+        "Your own thought in your own words with one word changed. You noticed. The noticing is yours.",
+        "Track 7 hums onto the Original Mixtape."
+      ],
+      "grantItems": [
+        196
+      ]
+    },
+    {
+      "id": "source-first-record",
+      "comment": "Eight Sources site 8: The First Record in The Unlisted Room. Requires Act 3 complete and raises the Fire Spring bridge flag through content/flag-map.json.",
+      "boss": {
+        "x": 148,
+        "y": 404,
+        "facing": "left"
+      },
+      "once": true,
+      "requireFlags": [
+        "act3:complete"
+      ],
+      "dialogue": [
+        "The Unlisted Room holds one object under one light. The air around it is warm enough to make every copy feel late.",
+        "THE MASTER COPY: \"I know I am not you. That is the only thing I know before you do.\"",
+        "It raises Bosch's own timing against him. Bosch answers by staying breakable."
+      ],
+      "setFlags": [
+        "source:first-record:cleared"
+      ],
+      "battleGroup": 357
+    },
+    {
+      "id": "source-first-record-reveal",
+      "area": {
+        "x": 80,
+        "y": 368,
+        "w": 120,
+        "h": 88
+      },
+      "once": true,
+      "requireFlags": [
+        "source:first-record:cleared"
+      ],
+      "dialogue": [
+        "Side B ends early. Where the eighth track should be there is only your heartbeat. It has been yours the whole time.",
+        "Track 8 hums onto the Original Mixtape."
+      ],
+      "grantItems": [
+        196
+      ]
+    },
+    {
       "id": "deadletter-arrival",
       "comment": "ACT 3 OPENING. Fires on reaching Dead Letter (Threed analog) after act2:complete. The town that stopped keeping originals at all, built around the Museum of Leaked Versions. Area covers the museum approach (near the west-wing entrance / starman). Sets act3:begun + deadletter:arrived, the flag the museum sequence gates on.",
       "area": {
@@ -591,7 +843,7 @@
     },
     {
       "id": "endgame-return",
-      "comment": "ACT 4 / ENDGAME OPENING. After act3:complete, Milady. Now reading Bosch directly. Occupies the first town in retaliation. Broad area over the Morningside core so any return (walk or PSI-Teleport) triggers it; once, blocked once the raid is active. Sets raid:morningside:active, arming the 3 raid cells (already built).",
+      "comment": "ACT 4 / ENDGAME OPENING. After act3:complete and all eight Sources are attested, Milady. Now reading Bosch directly. Occupies the first town in retaliation. Broad area over the Morningside core so any return (walk or PSI-Teleport) triggers it; once, blocked once the raid is active. Sets raid:morningside:active, arming the 3 raid cells (already built).",
       "area": {
         "x": 1300,
         "y": 1000,
@@ -600,7 +852,15 @@
       },
       "once": true,
       "requireFlags": [
-        "act3:complete"
+        "act3:complete",
+        "signal:threshold_cleared",
+        "source:intake-ledger:cleared",
+        "source:spring:cleared",
+        "source:undelivered:cleared",
+        "source:vault:cleared",
+        "source:pier:cleared",
+        "source:vacancy:cleared",
+        "source:first-record:cleared"
       ],
       "blockFlags": [
         "raid:morningside:active"
