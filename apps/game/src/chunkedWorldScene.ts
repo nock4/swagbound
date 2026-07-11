@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type WorldChunked, type WorldChunkedNpc } from "@eb/schemas";
+import { type ArchivistSpot, type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, storyTriggerSuppressionForRestore, triggerFiredFlag } from "./storyTriggers";
 import {
   CutsceneRunner,
@@ -12,7 +12,7 @@ import { CollisionOverrideEditor, isCollisionEditEnabled } from "./collisionOver
 import { TeleportMenu, type TeleportTown } from "./teleportMenu";
 import { QuestJournal, type Quest } from "./questJournal";
 import { PartyOrderMenu } from "./partyOrderMenu";
-import { CLEAN_UI_FONT_FAMILY } from "./cleanUi";
+import { CLEAN_UI_FONT_FAMILY, createCleanText, drawCleanPanel } from "./cleanUi";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -37,7 +37,8 @@ import {
   type DoorIntentDirection,
   type DoorWarpLanding,
   type DoorTriggerResult,
-  type DoorTriggerState
+  type DoorTriggerState,
+  doorActiveForFlags
 } from "./doorTriggers";
 import {
   applyNpcOverride,
@@ -110,7 +111,7 @@ import {
   type NormalizedActorMoveSelector
 } from "./eventHost";
 import { EventSequenceWatchdog, cutsceneRunnerProgressToken } from "./eventSequenceWatchdog";
-import { GameFlags } from "./gameFlags";
+import { GameFlags, flagAliasesFromMap } from "./gameFlags";
 import { behaviorForNpc, interactionEventsHaveServiceEffect } from "./npcBehaviors";
 import { cutsceneNpcHiddenFlag, isNpcVisibleForRuntimeFlags } from "./npcVisibility";
 import {
@@ -136,7 +137,7 @@ import {
   type MoveInput,
   type PlayerState
 } from "./playerController";
-import { PLAYER_SPEED, INTERACTION_DISTANCE } from "./worldScene";
+import { PLAYER_SPEED, PLAYER_DIAGONAL_SPEED, INTERACTION_DISTANCE } from "./worldScene";
 import {
   DialogueController,
   publishDebug,
@@ -163,6 +164,7 @@ import {
   type NewGameOpeningStart
 } from "./newGameOpening";
 import { equipmentSlotForItemType, PartyState, type PartyStateSnapshot } from "./partyState";
+import { advanceTimedDeliveries, completeTimedDelivery, createTimedDeliveryRuntimeState, type TimedDeliveryRuntimeState } from "./timedDelivery";
 import { currentObjective } from "./objectives";
 import { createBattleSfx, type BattleSfx, type BattleSfxCue } from "./audio/battleSfx";
 import { hasStatus, STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
@@ -241,9 +243,12 @@ import {
   type ResolvedVisualState,
   type VisualStateInputs
 } from "./playerVisualState";
-import { drawSwirl } from "./transitions";
-import { activeWindowFlavorId } from "./windowSettings";
+import { drawMapTransitionOverlay, drawSwirl } from "./transitions";
+import { activeWindowFlavorId, textBlipEnabled } from "./windowSettings";
 import { isKeyItemId } from "./keyItems";
+import { fieldCondimentUseMessage, fieldItemToolMessage, fieldItemUseMessage, fieldPsiEffect, fieldPsiUseMessage } from "./fieldUseFeedback";
+import { collectedEightSourcesCount, ORIGINAL_MIXTAPE_ITEM_ID, ORIGINAL_MIXTAPE_MUSIC_CUE, originalMixtapeFieldMessage } from "./eightSources";
+import { itemUsability, psiUsability, USABILITY_REFUSAL_MESSAGE } from "./usabilityMatrix";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import { applyClearOverrideRects, applySolidOverrideRects } from "./collisionOverrides";
 import {
@@ -277,7 +282,7 @@ import {
 } from "./roomBounds";
 import {
   decodeNavmesh,
-  nearestComponentIdAtWorldPixel,
+  nearestComponentAt,
   type NavmeshQuery
 } from "./navmesh";
 import { findMeshPath, type Point as NavmeshPoint } from "./navmeshPath";
@@ -287,14 +292,14 @@ import {
   idleMapTransition,
   isMapTransitionActive,
   transitionKindForDoorType,
-  transitionOverlayAlpha,
+  transitionOverlayState,
   transitionSfxCueForEvent,
   type MapTransitionEvent,
   type MapTransitionState,
   type TransitionKind,
   type TransitionSfxCue
 } from "./mapTransition";
-import { createTransitionSfx, type InteractionSfxCue, type TransitionSfx } from "./audio/transitionSfx";
+import { createTransitionSfx, TEXT_BLIP_TUNING, type InteractionSfxCue, type TransitionSfx } from "./audio/transitionSfx";
 import { createOpeningSfx, type OpeningSfx } from "./audio/openingSfx";
 import { createMusic, musicAreaCueId, musicDisabledBySearch, type Music } from "./audio/music";
 import { getSharedMusic } from "./sharedMusic";
@@ -333,6 +338,13 @@ import {
   overworldInteractableEvents,
   overworldInteractableIsOpened
 } from "./overworldInteractables";
+import {
+  presentSpriteTextureIssueMessage,
+  resolvePresentSpriteTexture,
+  storyItemById,
+  storyItemWorldAssetUrl,
+  type PresentSpriteTextureIssue
+} from "./storyItems";
 import { ACT1_COMPLETE_FLAG, ROUTE_OPEN_FLAG, shouldHoldAct1IntroMusic, shouldUseAct1Night } from "./worldNight";
 import type { SourceCheckReturnTo } from "./sourceCheckScene";
 import {
@@ -346,6 +358,7 @@ import {
   sourceCheckItemHeldFlag,
   sourceCheckVisible
 } from "./sourceCheckModel";
+import { archivistSpotById, buildArchivistRecordsViewModel } from "./archivistRecords";
 
 type ChunkLayer = "background" | "foreground";
 type WorldChunk = WorldChunked["chunks"][number];
@@ -369,13 +382,35 @@ type NpcRuntime = {
   data: RuntimeNpcData;
   state: NpcRuntimeState;
   frames: DirectionFrameSequence;
-  wanderHome?: NpcWanderHome;
+  movementHome?: NpcMovementHome;
   sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
 };
 
-type NpcWanderHome = {
+type NpcMovementHome = {
   componentId: number;
   sectorAreaKey?: string;
+};
+
+type ArchivistSequencePhase = "slideIn" | "line" | "flash" | "depart";
+
+type ArchivistActorRuntime = {
+  state: PlayerState;
+  frames: DirectionFrameSequence;
+  sprite: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
+};
+
+type ArchivistSequenceState = {
+  trigger: StoryTrigger;
+  spot: ArchivistSpot;
+  actor: ArchivistActorRuntime;
+  phase: ArchivistSequencePhase;
+  phaseElapsedMs: number;
+  slideTarget: { x: number; y: number };
+  departTarget: { x: number; y: number };
+  line: string;
+  linePanel?: Phaser.GameObjects.Graphics;
+  lineText?: Phaser.GameObjects.Text;
+  filed: boolean;
 };
 
 /** A visible roaming overworld enemy that starts a battle on contact with the player. */
@@ -504,6 +539,7 @@ type BlockedOptions = {
 type DoorWarpOptions = {
   instant?: boolean;
   kind?: TransitionKind;
+  style?: number;
   triggerWorldPixel?: { x: number; y: number };
 };
 
@@ -646,6 +682,12 @@ const INTERIOR_SECTOR_AREA_RECT_PADS: Record<number, { bottom?: number; right?: 
 const CUTSCENE_ACTOR_MOVE_ARRIVAL_PX = 2;
 const CUTSCENE_ACTOR_RUN_MULTIPLIER = 1.5;
 const CUTSCENE_MOVE_DEMO_REFERENCE = "cutsceneMoveDemo.main";
+const ARCHIVIST_SLIDE_SPEED_PX_PER_SEC = 150;
+const ARCHIVIST_LINE_MS = 900;
+const ARCHIVIST_FLASH_MS = 260;
+const ARCHIVIST_DEPART_DISTANCE_PX = 72;
+const ARCHIVIST_PARTY_CLEARANCE_PX = 24;
+const ARCHIVIST_LINE_WIDTH_PX = 304;
 const CUTSCENE_WATCHDOG_TIMEOUT_MS = 2_500;
 const EVENT_SEQUENCE_WATCHDOG_TIMEOUT_MS = 2_500;
 const DEFAULT_HOTEL_REST_COST = 100;
@@ -710,6 +752,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private serviceInteractionCache = new Map<string, boolean>();
   private activeNpcDialogue?: ActiveNpcDialogue;
   private presentInteractableSprites = new Map<string, Phaser.GameObjects.Image>();
+  private examineInteractableSprites = new Map<string, Phaser.GameObjects.Image>();
   private sourceCheckActors = new Map<string, SourceCheckActorRuntime>();
   private chunkByKey = new Map<string, WorldChunk>();
   private chunkObjects = new Map<string, StreamedChunk>();
@@ -764,12 +807,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private lastDoor?: { from: { x: number; y: number }; to: { x: number; y: number } };
   private warnedInvalidDoorWarps = new Set<string>();
   private doorFadePhase: DoorFadePhase = "none";
-  private doorFadeOverlay?: Phaser.GameObjects.Rectangle;
+  private doorFadeOverlay?: Phaser.GameObjects.Graphics;
   /** Deferred battle start: while set, the overworld plays the colored encounter swirl, then switches. */
   private pendingBattleStart?: { sceneKey: string; params: Record<string, unknown> };
   private encounterSwirlMs = 0;
   private encounterSwirlGfx?: Phaser.GameObjects.Graphics;
   private lastDialogueRevealedChars = 0;
+  private dialogueBlipGlyphCount = 0;
   private doorTransitionState: MapTransitionState = idleMapTransition();
   private activeDoorWarp?: {
     destination: EventWarpDestination;
@@ -790,6 +834,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private currentOverworldMusicCue?: OverworldMusicCue;
   /** When set (by a story trigger's `music` field), overrides sector-based overworld music. */
   private forcedOverworldMusicCue?: OverworldMusicCue;
+  private mixtapeRestoreTimer?: Phaser.Time.TimerEvent;
   private menuState: MenuState = closedMenu();
   private menuScreens = new Map<string, MenuScreen>();
   private activeShopStoreId?: number;
@@ -863,6 +908,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedIntroMeteorSkips = new Set<string>();
   private warnedIntroActorVmStubs = new Set<string>();
   private warnedStoryTriggerSkips = new Set<string>();
+  private warnedStoryPresentTextureIssues = new Set<string>();
   private suppressedTriggerId?: string;
   private barrierSprites = new Map<string, Phaser.GameObjects.Image>();
   private loadingBarrierKeys = new Set<string>();
@@ -870,6 +916,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private pendingInteractionShopStoreId?: number;
   private pendingInteractionService?: { service: ServiceKind; cost?: number };
   private pendingSourceCheckEntryId?: string;
+  private archivistSequence?: ArchivistSequenceState;
+  private timedDeliveryState: TimedDeliveryRuntimeState = createTimedDeliveryRuntimeState();
+  private timedDeliveryArrivalQueue: string[] = [];
+  private activeDeliverySprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
   private cutsceneMove?: CutsceneMoveState;
   private cutsceneRunner?: CutsceneRunner;
   private activeCutsceneId?: string;
@@ -896,6 +946,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }): void {
     this.data_ = data.gameData;
     this.world_ = data.gameData.world as WorldChunked;
+    // Story-flag -> EB event-flag bridge: wired before any trigger/restore can set
+    // flags so the vanilla NPC/encounter flag machinery tracks our narrative beats.
+    this.gameFlags.setAliases(flagAliasesFromMap(data.gameData.flagMap));
     this.music = getSharedMusic(this.registry, data.gameData.musicManifest, {
       muted: musicDisabledBySearch(globalThis.location?.search)
     });
@@ -1005,6 +1058,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const check of this.data_.sourceChecks.checks) {
       this.load.image(this.sourceCheckOverworldTextureKey(check), this.sourceCheckOverworldAssetUrl(check));
     }
+    const preloadedExamineSprites = new Set<string>();
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "examine" || !entry.sprite) {
+        continue;
+      }
+      const key = this.examineInteractableSpriteTextureKey(entry);
+      if (preloadedExamineSprites.has(key)) {
+        continue;
+      }
+      preloadedExamineSprites.add(key);
+      this.load.image(key, this.publicAssetUrl(entry.sprite));
+    }
+    const preloadedStoryTextures = new Set<string>();
+    for (const item of this.data_.storyItems.items) {
+      if (preloadedStoryTextures.has(item.worldTexture)) {
+        continue;
+      }
+      preloadedStoryTextures.add(item.worldTexture);
+      this.load.image(item.worldTexture, storyItemWorldAssetUrl(item));
+    }
   }
 
   create(): void {
@@ -1058,6 +1131,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.player = this.spawnPlayerActor(spawn.x, spawn.y, world.player.spriteGroup, playerFacing);
     this.spawnFollower(spawn, playerFacing);
     this.spawnPresentInteractables();
+    this.spawnExamineInteractableSprites();
     this.spawnSourceCheckActors();
     this.syncEncounterTileState();
 
@@ -1311,6 +1385,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.partyState.tickMeters(delta);
     this.updateDangerHeartbeat(delta);
     this.tickDialogueBlip();
+    this.tickTimedDeliveries(delta);
     this.encounterCooldownMs = Math.max(0, this.encounterCooldownMs - delta);
     // Encounter swirl owns the frame while it covers the overworld, then switches to battle.
     if (this.tickEncounterSwirl(delta)) {
@@ -1348,6 +1423,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
+    this.updateArchivistSequence(delta);
+    if (this.archivistSequence) {
+      if (!this.playerState.inputLocked) {
+        lockPlayer(this.playerState, this.playerFrames);
+      }
+      this.syncPlayerObject();
+      this.updateCollisionOverlay();
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
+
     if (this.startupGetUpWalkActive) {
       this.playerState.inputLocked = true;
       this.syncPlayerObject();
@@ -1357,17 +1444,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
-    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.cinematicActive() || this.isDoorFadeActive() || this.binderOverlayOpen;
+    const inputOwned = this.dialogue.open || Boolean(this.eventSequence?.running) || this.cinematicActive() || this.isDoorFadeActive() || this.binderOverlayOpen || Boolean(this.archivistSequence);
     if (import.meta.env.DEV) {
       // Freeze forensics: name every possible input owner so a stuck player is
       // diagnosable in one evaluate call (added chasing the post-dialogue freeze).
       (globalThis as Record<string, unknown>).__inputOwners = () => ({
         dialogue: this.dialogue.open,
         eventSeq: Boolean(this.eventSequence?.running),
+        choice: Boolean(this.dialogue.choice),
         cinematic: this.cinematicActive(),
         doorFade: this.isDoorFadeActive(),
         binder: this.binderOverlayOpen,
         cutscene: Boolean(this.cutsceneRunner?.running),
+        archivist: Boolean(this.archivistSequence),
         inputLocked: this.playerState.inputLocked,
         menu: this.menuState.open,
         getUpWalk: this.startupGetUpWalkActive,
@@ -1396,9 +1485,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
 
+    const speedMultiplier = this.terrainSpeedMultiplier() * (this.bikeActive ? BIKE_SPEED_MULTIPLIER : 1);
     stepPlayer(this.playerState, input, {
       deltaMs: delta,
-      speed: PLAYER_SPEED * this.terrainSpeedMultiplier() * (this.bikeActive ? BIKE_SPEED_MULTIPLIER : 1),
+      speed: PLAYER_SPEED * speedMultiplier,
+      diagonalSpeed: PLAYER_DIAGONAL_SPEED * speedMultiplier,
       bounds: this.movementBounds(),
       blocked: (x, y) =>
         this.blocked(x, y, {
@@ -1477,6 +1568,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.npcRuntimes.clear();
     this.serviceInteractionCache.clear();
     this.destroyPresentInteractableSprites();
+    this.destroyExamineInteractableSprites();
     this.destroySourceCheckActors();
     this.clearOverworldEnemies();
     this.chunkObjects.clear();
@@ -1543,6 +1635,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.warnedIntroMeteorSkips.clear();
     this.warnedIntroActorVmStubs.clear();
     this.warnedStoryTriggerSkips.clear();
+    this.warnedStoryPresentTextureIssues.clear();
     this.suppressedTriggerId = undefined;
     for (const sprite of this.barrierSprites.values()) {
       sprite.destroy();
@@ -1554,6 +1647,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.pendingInteractionShopStoreId = undefined;
     this.pendingInteractionService = undefined;
     this.pendingSourceCheckEntryId = undefined;
+    this.destroyArchivistSequence();
+    this.timedDeliveryState = createTimedDeliveryRuntimeState();
+    this.timedDeliveryArrivalQueue = [];
+    this.clearActiveDeliverySprite();
     this.cutsceneMove = undefined;
     this.cutsceneMoveDebug = { active: false, arrived: false };
     this.cutsceneRunner = undefined;
@@ -1723,13 +1820,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.updateCameraRoomBounds();
         return;
       }
-      this.activeRoomSectorKey = sectorKey;
       const sectorRoom = resolveSectorAreaBounds(
         this.world_.sectors,
         this.solidRows,
         this.collisionGrid(),
         roomPoint
       );
+      // Cache the sector key only on SUCCESS: caching a failed resolve froze the
+      // mask off for the whole sector (one bad start cell after a warp/teleport/
+      // battle return meant neighbor strips bled through until leaving the area).
+      this.activeRoomSectorKey = sectorRoom ? sectorKey : undefined;
       this.activeRoomBounds = sectorRoom ? this.deriveInteriorSectorAreaRoomBounds(sectorRoom, roomPoint) : undefined;
       this.applyInteriorRoomMask();
       this.applyNpcRoomVisibility();
@@ -2098,21 +2198,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
     void this.music.play(cue, playOptions);
   }
 
-  /** Soft per-character tick as typewriter dialogue reveals (skips whitespace, throttled). */
+  /** Soft per-character tick as typewriter dialogue reveals, skipping whitespace. */
   private tickDialogueBlip(): void {
-    if (!this.dialogue.open || this.dialogue.revealComplete) {
+    if (!textBlipEnabled() || !this.dialogue.open || this.dialogue.revealComplete) {
       this.lastDialogueRevealedChars = 0;
+      this.dialogueBlipGlyphCount = 0;
       return;
     }
     const state = this.dialogue.currentRevealState;
     const revealed = state.revealedChars;
     if (revealed < this.lastDialogueRevealedChars) {
       this.lastDialogueRevealedChars = revealed; // new page reset
+      this.dialogueBlipGlyphCount = nonWhitespaceCount(state.revealedText.slice(0, revealed));
     }
     if (revealed > this.lastDialogueRevealedChars) {
       const fresh = state.revealedText.slice(this.lastDialogueRevealedChars, revealed);
-      if (revealed % 2 === 0 && /\S/.test(fresh)) {
-        this.transitionSfx.textBlip();
+      for (const char of fresh) {
+        if (/\S/.test(char)) {
+          this.dialogueBlipGlyphCount += 1;
+          if (this.dialogueBlipGlyphCount % TEXT_BLIP_TUNING.cadenceChars === 0) {
+            this.transitionSfx.textBlip();
+          }
+        }
       }
       this.lastDialogueRevealedChars = revealed;
     }
@@ -2205,11 +2312,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const coverBottom = bottom + pad;
     const coverWidth = coverRight - coverLeft;
     const roomHeight = bottom - top;
+    // EB interior strips pack rooms edge to edge, so the sector-area boundary
+    // rows can carry a neighbor strip's pixels INSIDE the rect (a 4px colored
+    // sliver at the masked edge). Pull every band a half-cell into the rect to
+    // swallow the shared boundary row; walls against black lose nothing visible.
+    const boundaryInset = Math.round(this.collisionCellSize / 2);
 
-    this.fillPositiveRect(graphics, coverLeft, coverTop, coverWidth, top - coverTop);
-    this.fillPositiveRect(graphics, coverLeft, bottom, coverWidth, coverBottom - bottom);
-    this.fillPositiveRect(graphics, coverLeft, top, left - coverLeft, roomHeight);
-    this.fillPositiveRect(graphics, right, top, coverRight - right, roomHeight);
+    this.fillPositiveRect(graphics, coverLeft, coverTop, coverWidth, top - coverTop + boundaryInset);
+    this.fillPositiveRect(graphics, coverLeft, bottom - boundaryInset, coverWidth, coverBottom - bottom + boundaryInset);
+    this.fillPositiveRect(graphics, coverLeft, top, left - coverLeft + boundaryInset, roomHeight);
+    this.fillPositiveRect(graphics, right - boundaryInset, top, coverRight - right + boundaryInset, roomHeight);
   }
 
   private roomMaskBandOverscanWorldPixels(): number {
@@ -2469,7 +2581,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     const cellSize = this.collisionCellSize;
-    for (const door of this.world_.doors) {
+    for (const door of this.activeDoors()) {
       const cell = worldPixelToCollisionCell(door.worldPixel, cellSize);
       if (!cell || !cellInRange(cell, range)) {
         continue;
@@ -2818,7 +2930,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       data: npc,
       state: createNpcState(npc.worldPixel.x, npc.worldPixel.y, facing, behavior, frames),
       frames,
-      wanderHome: behavior.kind === "wander" ? this.wanderHomeForNpc(npc) : undefined,
+      movementHome: behavior.kind === "wander" || behavior.kind === "patrol" ? this.movementHomeForNpc(npc) : undefined,
       sprite: this.spawnNpcActor(npc.npcId, npc.worldPixel.x, npc.worldPixel.y, npc.spriteGroup, npc.direction)
     };
   }
@@ -2866,11 +2978,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private behaviorForRuntimeNpc(npc: RuntimeNpcData) {
     return behaviorForNpc(npc.npcId, npc.movement, {
       hasServiceInteraction: this.npcHasServiceInteraction(npc),
-      isInteriorHome: isInteriorMusicSector(this.world_.sectors, npc.worldPixel)
+      isInteriorHome: isInteriorMusicSector(this.world_.sectors, npc.worldPixel),
+      movementPattern: this.data_.npcMovementPatterns.byNpcId[String(npc.npcId)]?.pattern
     });
   }
 
-  private wanderHomeForNpc(npc: RuntimeNpcData): NpcWanderHome {
+  private movementHomeForNpc(npc: RuntimeNpcData): NpcMovementHome {
     const componentId = this.nearestNavmeshComponentId(npc.worldPixel.x, npc.worldPixel.y, 2);
     const sectorAreaKey = this.interiorSectorAreaKey(npc.worldPixel);
     return {
@@ -2915,7 +3028,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       stepNpc(npc.state, {
         deltaMs,
         bounds: this.movementBounds(),
-        blocked: (x, y) => this.npcWanderStepBlocked(npc, x, y),
+        blocked: (x, y) => this.npcMovementStepBlocked(npc, x, y),
         frames: npc.frames
       });
       this.syncNpc(npc);
@@ -2950,6 +3063,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private applyWorldObjectRoomVisibility(): void {
     this.syncPresentInteractableSprites();
+    this.syncExamineInteractableSprites();
     this.syncSourceCheckActors();
     for (const actor of this.bossGateActors.values()) {
       actor.sprite?.setVisible(this.bossGateActorVisible(actor));
@@ -3100,6 +3214,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return resolution ? spriteOverrideDirectionFrames(resolution.override) : this.framesForGroup(spriteGroup);
   }
 
+  /** Doors filtered by EB conditional-door flags (when-unset class honored). */
+  private activeDoors(): readonly WorldDoor[] {
+    return this.world_.doors.filter((door) => doorActiveForFlags(door.eventFlag, this.gameFlags));
+  }
+
   private isNpcVisible(npc: Pick<WorldChunkedNpc, "npcId" | "showSprite" | "eventFlag">): boolean {
     return isNpcVisibleForRuntimeFlags(npc, this.gameFlags);
   }
@@ -3208,9 +3327,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (entry.kind !== "present") {
         continue;
       }
+      const opened = this.overworldInteractableOpened(entry);
+      const choice = this.presentSpriteTextureChoice(entry, opened);
+      this.logPresentSpriteTextureIssue(entry, choice.issue);
       const sprite = this.add
-        .image(entry.worldPixel.x, entry.worldPixel.y, ChunkedWorldScene.PRESENT_TEXTURE_CLOSED)
+        .image(entry.worldPixel.x, entry.worldPixel.y, choice.textureKey)
         .setOrigin(0.5, 1);
+      sprite.setVisible(choice.visible && this.worldPointInsideActiveRoom(entry.worldPixel));
       this.presentInteractableSprites.set(entry.id, sprite);
       this.setActorSortDepth(sprite);
     }
@@ -3227,12 +3350,40 @@ export class ChunkedWorldScene extends Phaser.Scene {
         continue;
       }
       const opened = this.overworldInteractableOpened(entry);
-      sprite.setTexture(
-        opened ? ChunkedWorldScene.PRESENT_TEXTURE_OPEN : ChunkedWorldScene.PRESENT_TEXTURE_CLOSED
-      );
-      sprite.setVisible(this.worldPointInsideActiveRoom(entry.worldPixel));
+      const choice = this.presentSpriteTextureChoice(entry, opened);
+      this.logPresentSpriteTextureIssue(entry, choice.issue);
+      sprite.setTexture(choice.textureKey);
+      sprite.setVisible(choice.visible && this.worldPointInsideActiveRoom(entry.worldPixel));
       this.setActorSortDepth(sprite);
     }
+  }
+
+  private presentSpriteTextureChoice(
+    entry: Extract<OverworldInteractable, { kind: "present" }>,
+    opened: boolean
+  ) {
+    return resolvePresentSpriteTexture(entry, {
+      opened,
+      storyItems: this.data_.storyItems,
+      textureExists: (textureKey) => this.textures.exists(textureKey),
+      genericClosedTexture: ChunkedWorldScene.PRESENT_TEXTURE_CLOSED,
+      genericOpenTexture: ChunkedWorldScene.PRESENT_TEXTURE_OPEN
+    });
+  }
+
+  private logPresentSpriteTextureIssue(
+    entry: Extract<OverworldInteractable, { kind: "present" }>,
+    issue: PresentSpriteTextureIssue | undefined
+  ): void {
+    if (!issue) {
+      return;
+    }
+    const key = `${entry.id}:${issue.kind}:${issue.kind === "missingStoryItem" ? issue.storyItemId : issue.textureKey}`;
+    if (this.warnedStoryPresentTextureIssues.has(key)) {
+      return;
+    }
+    this.warnedStoryPresentTextureIssues.add(key);
+    console.error(presentSpriteTextureIssueMessage(entry.id, issue));
   }
 
   private destroyPresentInteractableSprites(): void {
@@ -3240,6 +3391,54 @@ export class ChunkedWorldScene extends Phaser.Scene {
       sprite.destroy();
     }
     this.presentInteractableSprites.clear();
+  }
+
+  private spawnExamineInteractableSprites(): void {
+    this.destroyExamineInteractableSprites();
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "examine" || !entry.sprite) {
+        continue;
+      }
+      const key = this.examineInteractableSpriteTextureKey(entry);
+      if (!this.textures.exists(key)) {
+        continue;
+      }
+      const sprite = this.add
+        .image(entry.worldPixel.x, entry.worldPixel.y, key)
+        .setOrigin(0.5, 1);
+      sprite.setVisible(this.worldPointInsideActiveRoom(entry.worldPixel));
+      this.examineInteractableSprites.set(entry.id, sprite);
+      this.setActorSortDepth(sprite);
+    }
+  }
+
+  private syncExamineInteractableSprites(): void {
+    for (const entry of this.data_.overworldInteractables.interactables) {
+      if (entry.kind !== "examine" || !entry.sprite) {
+        continue;
+      }
+      const sprite = this.examineInteractableSprites.get(entry.id);
+      if (!sprite || !sprite.active) {
+        continue;
+      }
+      sprite.setVisible(this.worldPointInsideActiveRoom(entry.worldPixel));
+      this.setActorSortDepth(sprite);
+    }
+  }
+
+  private destroyExamineInteractableSprites(): void {
+    for (const sprite of this.examineInteractableSprites.values()) {
+      sprite.destroy();
+    }
+    this.examineInteractableSprites.clear();
+  }
+
+  private examineInteractableSpriteTextureKey(entry: Extract<OverworldInteractable, { kind: "examine" }>): string {
+    return `swag-examine-${stableAssetPathHash(entry.sprite ?? entry.id)}`;
+  }
+
+  private publicAssetUrl(assetPath: string): string {
+    return `/${assetPath.replace(/^\/+/, "")}`;
   }
 
   private spawnSourceCheckActors(): void {
@@ -3297,6 +3496,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private sourceCheckOverworldAssetUrl(check: DrifellaSourceCheck): string {
+    const override = spriteOverrideForNpcId(this.data_.spriteOverrides, check.npcId);
+    if (override) {
+      return spriteOverrideAssetUrl(override.image);
+    }
     return `/assets/swagbound/overworld-npc/${check.drifellaId}.png`;
   }
 
@@ -3391,8 +3594,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     const frame = this.gamepadTracker.tick(gamepadButtonStates(pad), gamepadDirections(pad), this.time.now);
     const overlayOpen = this.anyDomOverlayOpen();
-    // Movement only flows in the field: not in a menu, dialogue, or a DOM overlay.
-    this.gamepadHeld = overlayOpen || this.menuState.open ? NO_HELD_DIRECTION : frame.held;
+    // Movement only flows in the field: not in a menu, dialogue choice, or a DOM overlay.
+    this.gamepadHeld = overlayOpen || this.menuState.open || this.dialogue.choice ? NO_HELD_DIRECTION : frame.held;
 
     if (overlayOpen) {
       for (const dir of frame.directionEdges) {
@@ -3411,7 +3614,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const action of frame.pressedActions) {
       this.handleGamepadAction(action);
     }
-    if (this.menuState.open) {
+    if (this.menuState.open || this.dialogue.choice) {
       for (const dir of frame.directionEdges) {
         const { dx, dy } = directionToDelta(dir);
         this.moveMenuDirectional(dx, dy);
@@ -3680,11 +3883,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return { minX: 8, maxX: width - 8, minY: 12, maxY: height - 1 };
   }
 
-  private npcWanderStepBlocked(npc: NpcRuntime, x: number, y: number): boolean {
+  private npcMovementStepBlocked(npc: NpcRuntime, x: number, y: number): boolean {
     if (this.pointOutsideCollisionGrid(x, y)) {
       return true;
     }
-    const home = npc.wanderHome;
+    const home = npc.movementHome;
     if (home && home.componentId !== 0 && this.nearestNavmeshComponentId(x, y, 1) !== home.componentId) {
       return true;
     }
@@ -3705,7 +3908,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private nearestNavmeshComponentId(x: number, y: number, maxRadiusCells: number): number {
-    return this.navmesh ? nearestComponentIdAtWorldPixel(this.navmesh, x, y, maxRadiusCells) : 0;
+    return this.navmesh ? (nearestComponentAt(this.navmesh, { x, y }, maxRadiusCells)?.componentId ?? 0) : 0;
   }
 
   private blocked(x: number, y: number, options: BlockedOptions = {}): boolean {
@@ -3868,7 +4071,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     let result = resolveAdjacentDoorIntentTrigger(
       this.playerState,
       movement,
-      this.world_.doors,
+      this.activeDoors(),
       this.doorTriggerState,
       this.collisionCellSize,
       { footBox: PLAYER_FOOT_BOX }
@@ -3886,7 +4089,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       result = resolveDoorIntentTrigger(
         this.playerState,
         intendedFeet,
-        this.world_.doors,
+        this.activeDoors(),
         result,
         this.collisionCellSize
       );
@@ -3907,6 +4110,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       direction: result.door.direction
     }, {
       kind: transitionKindForDoorType(result.door.type),
+      style: result.door.style,
       triggerWorldPixel: result.door.worldPixel
     });
     return true;
@@ -3957,12 +4161,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (dx === 0 && dy === 0) {
       return undefined;
     }
-    const scale = dx !== 0 && dy !== 0 ? Math.SQRT1_2 : 1;
-    const step = (PLAYER_SPEED * deltaMs) / 1000;
+    const speed = dx !== 0 && dy !== 0 ? PLAYER_DIAGONAL_SPEED : PLAYER_SPEED;
+    const step = (speed * deltaMs) / 1000;
     const bounds = this.movementBounds();
     return {
-      x: clamp(this.playerState.x + dx * scale * step, bounds.minX, bounds.maxX),
-      y: clamp(this.playerState.y + dy * scale * step, bounds.minY, bounds.maxY)
+      x: clamp(this.playerState.x + dx * step, bounds.minX, bounds.maxX),
+      y: clamp(this.playerState.y + dy * step, bounds.minY, bounds.maxY)
     };
   }
 
@@ -4036,7 +4240,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return false;
     }
     try {
-      const transition = beginMapTransition(options.kind ?? "door");
+      const transition = beginMapTransition(options.kind ?? "door", options.style);
+      if (!isMapTransitionActive(transition.state)) {
+        return false;
+      }
       this.doorTransitionState = transition.state;
       this.activeDoorWarp = { destination, landing, options };
       this.doorFadePhase = this.doorFadePhaseForTransition(this.doorTransitionState);
@@ -4092,9 +4299,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private syncDoorFadeOverlay(): void {
     const overlay = this.ensureDoorFadeOverlay();
     const active = isMapTransitionActive(this.doorTransitionState);
-    overlay.setSize(this.scale.width, this.scale.height);
+    overlay.clear();
     overlay.setVisible(active);
-    overlay.setAlpha(transitionOverlayAlpha(this.doorTransitionState));
+    if (active) {
+      drawMapTransitionOverlay(
+        overlay,
+        transitionOverlayState(this.doorTransitionState),
+        this.scale.width,
+        this.scale.height
+      );
+    }
   }
 
   private playTransitionSfxForEvents(events: readonly MapTransitionEvent[]): void {
@@ -4133,7 +4347,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private finishDoorFade(): void {
     this.doorTransitionState = idleMapTransition();
     this.activeDoorWarp = undefined;
-    this.doorFadeOverlay?.setAlpha(0);
+    this.doorFadeOverlay?.clear();
     this.doorFadeOverlay?.setVisible(false);
     this.doorFadePhase = "none";
     if (this.canReleaseDoorFadeLock()) {
@@ -4142,16 +4356,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
-  private ensureDoorFadeOverlay(): Phaser.GameObjects.Rectangle {
+  private ensureDoorFadeOverlay(): Phaser.GameObjects.Graphics {
     if (this.doorFadeOverlay) {
-      this.doorFadeOverlay.setSize(this.scale.width, this.scale.height);
       return this.doorFadeOverlay;
     }
-    this.doorFadeOverlay = this.add.rectangle(0, 0, this.scale.width, this.scale.height, 0x000000)
-      .setOrigin(0, 0)
+    this.doorFadeOverlay = this.add.graphics()
       .setScrollFactor(0)
       .setDepth(DOOR_FADE_OVERLAY_DEPTH)
-      .setAlpha(0)
       .setVisible(false);
     return this.doorFadeOverlay;
   }
@@ -4277,20 +4488,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private updatePrompt(): void {
-    if (this.time.now < this.devToastUntilMs && !this.menuState.open && !this.dialogue.open) {
+    if (this.time.now < this.devToastUntilMs && !this.menuState.open && !this.dialogue.open && !this.dialogue.choice) {
       this.prompt = this.devToastText;
       return;
     }
-    if (this.time.now < this.recruitNoticeUntilMs && !this.menuState.open && !this.dialogue.open) {
+    if (this.time.now < this.recruitNoticeUntilMs && !this.menuState.open && !this.dialogue.open && !this.dialogue.choice) {
       this.prompt = this.recruitNoticeText;
       return;
     }
-    if (this.time.now < this.autosaveNoticeUntilMs && !this.menuState.open && !this.dialogue.open) {
+    if (this.time.now < this.autosaveNoticeUntilMs && !this.menuState.open && !this.dialogue.open && !this.dialogue.choice) {
       this.prompt = "✦ Autosaved (town reached)";
       return;
     }
     const target = this.interactionTarget();
-    if (this.menuState.open) {
+    if (this.dialogue.choice) {
+      this.prompt = "Arrows: choose | Z: select | X: No";
+    } else if (this.menuState.open) {
       this.prompt = "Arrows: choose | Z: select | X: back";
     } else if (this.dialogue.open) {
       this.prompt = "Z: advance | X: close";
@@ -4331,6 +4544,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private handleConfirm(): void {
+    if (this.dialogue.choice) {
+      this.confirmDialogueChoice();
+      return;
+    }
     if (this.menuState.open) {
       this.confirmCommandMenu();
       return;
@@ -4339,6 +4556,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private handleCancel(): void {
+    if (this.dialogue.choice) {
+      this.cancelDialogueChoice();
+      return;
+    }
     if (this.menuState.open) {
       this.cancelCommandMenu();
       return;
@@ -4382,7 +4603,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       // The opening flyover locks movement but is not an event sequence or cutscene,
       // so without this the pause menu opens mid-cinematic (found by the 2026-07-09
       // verification run: the M probe drew the full menu over the night pan).
-      this.cinematicActive()
+      this.cinematicActive() ||
+      this.isDoorFadeActive() ||
+      Boolean(this.pendingBattleStart)
     ) {
       return;
     }
@@ -4399,15 +4622,53 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private moveMenuDirectional(dx: number, dy: number): void {
+    if (this.dialogue.choice) {
+      const before = this.dialogue.choice.selectedIndex;
+      const delta = dy !== 0 ? dy : dx;
+      if (delta !== 0) {
+        this.dialogue.moveChoice(delta);
+        if (this.dialogue.choice.selectedIndex !== before) {
+          this.playMenuSfx("menuMove");
+        }
+      }
+      this.updatePrompt();
+      this.publish();
+      return;
+    }
     if (!this.menuState.open) {
       return;
     }
     const before = this.menuDebugState();
-    this.menuState = moveMenu2D(this.menuState, dx, dy);
+    this.menuState = moveMenu2D(this.menuState, dx, dy, {
+      screenById: (id) => this.menuScreens.get(id)
+    });
     const after = this.menuDebugState();
     if (before.cursorIndex !== after.cursorIndex || before.currentItemId !== after.currentItemId) {
       this.playMenuSfx("menuMove");
     }
+    this.publish();
+  }
+
+  private confirmDialogueChoice(): void {
+    const selectedIndex = this.dialogue.selectedChoiceIndex();
+    if (selectedIndex === undefined) {
+      return;
+    }
+    this.playMenuSfx("menuConfirm");
+    this.eventSequence?.choose(selectedIndex);
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private cancelDialogueChoice(): void {
+    const choice = this.dialogue.choice;
+    if (!choice) {
+      return;
+    }
+    const noIndex = choice.options.findIndex((option) => option.label.trim().toLowerCase() === "no");
+    this.playMenuSfx("menuCancel");
+    this.eventSequence?.choose(noIndex >= 0 ? noIndex : choice.options.length - 1);
+    this.updatePrompt();
     this.publish();
   }
 
@@ -4483,6 +4744,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.handleItemUseAction(action);
       return;
     }
+    if (action.kind === "psiUse") {
+      this.handlePsiUseAction(action);
+      return;
+    }
     if (action.kind === "itemGive") {
       this.handleItemGiveAction(action);
       return;
@@ -4521,6 +4786,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     if (action.kind === "binderCard") {
       this.handleBinderCardAction(action.cardId);
+      return;
+    }
+    if (action.kind !== "equip") {
+      this.showMenuResult("Nothing happened.");
       return;
     }
     this.handleEquipAction(action);
@@ -4620,20 +4889,91 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private handleItemUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "itemUse" }>): void {
     const item = this.itemById(action.itemId);
+    const owner = this.partyMemberById(action.ownerChar);
     const target = this.partyMemberById(action.targetChar);
     if (!item || this.partyState.inventory(action.ownerChar)[action.inventorySlot] !== action.itemId) {
       this.showMenuResult("You can't use that.");
       return;
     }
+    const row = itemUsability(this.data_.usabilityMatrix, item.id);
+    if (!row?.fieldUse) {
+      this.showMenuResult(USABILITY_REFUSAL_MESSAGE);
+      return;
+    }
+    if (item.id === ORIGINAL_MIXTAPE_ITEM_ID) {
+      const collected = collectedEightSourcesCount((flag) => this.gameFlags.has(flag));
+      this.showMenuResult(originalMixtapeFieldMessage(collected));
+      if (collected > 0) {
+        this.playOriginalMixtapePreview();
+      }
+      return;
+    }
+    const condimentResult = this.partyState.combineCondiment({
+      ownerChar: action.ownerChar,
+      condimentItemId: action.itemId,
+      condimentSlot: action.inventorySlot,
+      pairs: this.data_.condimentPairs
+    });
+    if (condimentResult.ok) {
+      const base = this.itemById(condimentResult.baseItemId);
+      this.showMenuResult(fieldCondimentUseMessage(
+        owner ?? target ?? { name: "Someone" },
+        item,
+        base ?? { name: `item ${condimentResult.baseItemId}` },
+        condimentResult
+      ));
+      return;
+    }
     const result = this.partyState.useItem({
       ownerChar: action.ownerChar,
       targetChar: action.targetChar,
+      inventorySlot: action.inventorySlot,
       item,
+      targetVitals: vitalsForPartyMember(target),
+      fieldUse: row.fieldUse
+    });
+    if (result.ok) {
+      this.showMenuResult(fieldItemUseMessage(target ?? owner ?? { name: "Someone" }, item, row, result));
+      return;
+    }
+    if (result.reason === "notConsumable" || result.reason === "unknownEffect") {
+      this.showMenuResult(fieldItemToolMessage(owner ?? target ?? { name: "Someone" }, item, row));
+      return;
+    }
+    this.showMenuResult(result.reason === "notFieldUsable" ? USABILITY_REFUSAL_MESSAGE : "You can't use that.");
+  }
+
+  private playOriginalMixtapePreview(): void {
+    this.mixtapeRestoreTimer?.remove(false);
+    void this.music.play(ORIGINAL_MIXTAPE_MUSIC_CUE);
+    this.mixtapeRestoreTimer = this.time.delayedCall(20000, () => {
+      this.mixtapeRestoreTimer = undefined;
+      this.syncOverworldMusicCue(true);
+    });
+  }
+
+  private handlePsiUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "psiUse" }>): void {
+    const psi = this.psiById(action.psiId);
+    const caster = this.partyMemberById(action.casterChar);
+    const target = this.partyMemberById(action.targetChar) ?? caster;
+    const row = psiUsability(this.data_.usabilityMatrix, action.psiId);
+    if (!psi || !caster || !target || !row?.fieldUse) {
+      this.showMenuResult(USABILITY_REFUSAL_MESSAGE);
+      return;
+    }
+    const result = this.partyState.useFieldPsi({
+      casterChar: action.casterChar,
+      targetChar: action.targetChar,
+      ppCost: row.ppCost,
+      effect: fieldPsiEffect(psi),
+      casterVitals: vitalsForPartyMember(caster),
       targetVitals: vitalsForPartyMember(target)
     });
-    this.showMenuResult(result.ok
-      ? "Used."
-      : result.reason === "notFieldUsable" ? "You can't use that here." : "You can't use that.");
+    if (result.ok) {
+      this.showMenuResult(fieldPsiUseMessage(caster, target, psi, result));
+      return;
+    }
+    this.showMenuResult(result.reason === "insufficientPp" ? "Not enough PP." : USABILITY_REFUSAL_MESSAGE);
   }
 
   private handleItemGiveAction(action: Extract<MenuAction, { kind: "itemGive" }>): void {
@@ -4777,6 +5117,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.data_.items?.items.find((item) => item.id === itemId);
   }
 
+  private psiById(psiId: number) {
+    return this.data_.psi?.psi.find((psi) => psi.id === psiId);
+  }
+
   private itemName(itemId: number, item?: ItemData): string {
     return createDialogueResolver(this.data_).itemName(itemId) ?? item?.name.trim() ?? `[item ${itemId}]`;
   }
@@ -4852,9 +5196,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       characters: this.data_.characters,
       items: this.data_.items,
       keyItems: this.data_.keyItems,
+      usabilityMatrix: this.data_.usabilityMatrix,
       psi: this.data_.psi,
       shops: this.data_.shops,
       cardNfts: this.data_.cardNfts,
+      archivistSpots: this.data_.archivistSpots,
       flags: this.gameFlags,
       currentObjectiveText: this.currentObjectiveText(),
       partyState: this.partyState,
@@ -4865,8 +5211,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
         characters: this.data_.characters,
         items: this.data_.items,
         keyItems: this.data_.keyItems,
+        usabilityMatrix: this.data_.usabilityMatrix,
         shops: this.data_.shops,
         cardNfts: this.data_.cardNfts,
+        archivistSpots: this.data_.archivistSpots,
         flags: this.gameFlags,
         partyState: this.partyState,
         resolver,
@@ -5270,7 +5618,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private handleSaveKey(): void {
-    if (this.menuState.open || this.dialogue.open || this.eventSequence?.running || !this.player) {
+    if (
+      this.menuState.open ||
+      this.dialogue.open ||
+      this.eventSequence?.running ||
+      this.isDoorFadeActive() ||
+      this.pendingBattleStart ||
+      !this.player
+    ) {
       return;
     }
     this.saveGame(false);
@@ -5475,6 +5830,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!entry) {
       return;
     }
+    const wasOpened = entry.kind === "present" ? this.overworldInteractableOpened(entry) : false;
     const action = overworldInteractableEvents(entry, this.gameFlags, {
       itemName: (itemId) => this.itemName(itemId, this.itemById(itemId)),
       hasRoom: (char) => this.partyState.inventoryRoom(char) > 0
@@ -5488,9 +5844,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     lockPlayer(this.playerState, this.playerFrames);
     this.runEvents(action.events);
+    if (entry.kind === "present" && !wasOpened && this.overworldInteractableOpened(entry)) {
+      this.setStoryItemPickupFlag(entry);
+    }
     this.syncPresentInteractableSprites();
     this.updatePrompt();
     this.publish();
+  }
+
+  private setStoryItemPickupFlag(entry: Extract<OverworldInteractable, { kind: "present" }>): void {
+    const storyItem = storyItemById(this.data_.storyItems, entry.storyItemId);
+    if (storyItem) {
+      this.gameFlags.set(storyItem.pickupFlag);
+    }
   }
 
   private openSourceCheckInteraction(target: WorldInteractionCandidate): void {
@@ -5559,6 +5925,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       bank: this.partyState.bank,
       items: this.data_.items,
       psi: this.data_.psi,
+      usabilityMatrix: this.data_.usabilityMatrix,
       font: this.data_.font,
       window: this.data_.window,
       spriteOverrides: this.data_.spriteOverrides,
@@ -5716,6 +6083,111 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.publish();
   }
 
+  private tickTimedDeliveries(deltaMs: number): void {
+    const arrivals = advanceTimedDeliveries(
+      this.timedDeliveryState,
+      this.data_.timedDeliveries,
+      { isSet: (flag) => this.gameFlags.isSet(flag) },
+      deltaMs / (1000 / 60)
+    );
+    for (const delivery of arrivals) {
+      if (!this.timedDeliveryArrivalQueue.includes(delivery.id)) {
+        this.timedDeliveryArrivalQueue.push(delivery.id);
+      }
+    }
+    this.startNextTimedDeliveryArrival();
+  }
+
+  private startNextTimedDeliveryArrival(): void {
+    if (
+      this.activeDeliverySprite ||
+      this.menuState.open ||
+      this.dialogue.open ||
+      this.eventSequence?.running ||
+      this.cutsceneRunner?.running ||
+      this.isDoorFadeActive()
+    ) {
+      return;
+    }
+    while (this.timedDeliveryArrivalQueue.length > 0) {
+      const deliveryId = this.timedDeliveryArrivalQueue.shift();
+      const delivery = this.data_.timedDeliveries.deliveries.find((entry) => entry.id === deliveryId);
+      if (!delivery || !this.gameFlags.isSet(delivery.eventFlag)) {
+        continue;
+      }
+      this.startTimedDeliveryArrival(delivery);
+      return;
+    }
+  }
+
+  private startTimedDeliveryArrival(delivery: TimedDeliveryEntry): void {
+    const spriteGroup = this.deliverySpriteGroup(delivery.spriteId);
+    const spawn = this.deliverySpawnPoint();
+    const queued = this.requestNpcRuntimeTexture(delivery.spriteId, spriteGroup);
+    this.activeDeliverySprite = this.spawnNpcActor(delivery.spriteId, spawn.x, spawn.y, spriteGroup, "down");
+    if (queued && !this.load.isLoading()) {
+      this.load.start();
+    }
+
+    const pages = [delivery.arrivalMessage];
+    const delivered = this.deliverTimedDeliveryItem(delivery);
+    if (delivery.itemId !== undefined && delivered) {
+      const itemName = this.itemName(delivery.itemId, this.itemById(delivery.itemId));
+      pages.push(`${itemName} went into Goods.`);
+      this.gameFlags.unsetNum(delivery.eventFlag);
+      completeTimedDelivery(this.timedDeliveryState, delivery.id);
+    } else if (delivery.itemId === undefined) {
+      this.gameFlags.unsetNum(delivery.eventFlag);
+      completeTimedDelivery(this.timedDeliveryState, delivery.id);
+    } else {
+      pages.push("No room in Goods. Swag Express keeps the slip open.");
+    }
+
+    lockPlayer(this.playerState, this.playerFrames);
+    this.dialogue.start(buildInlineDialoguePages(pages));
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private deliverTimedDeliveryItem(delivery: TimedDeliveryEntry): boolean {
+    if (delivery.itemId === undefined) {
+      return true;
+    }
+    const leadChar = this.leadPartyCharId();
+    if (this.partyState.inventoryRoom(leadChar) <= 0) {
+      return false;
+    }
+    if (!this.partyState.give(leadChar, delivery.itemId)) {
+      return false;
+    }
+    this.playInteractionSfx("itemGet");
+    this.refreshMenuScreens();
+    return true;
+  }
+
+  private deliverySpriteGroup(spriteId: number): number | undefined {
+    return this.world_.npcs.find((npc) => npc.npcId === spriteId)?.spriteGroup;
+  }
+
+  private deliverySpawnPoint(): { x: number; y: number } {
+    const offset = this.playerState.facing === "left"
+      ? { x: -24, y: 0 }
+      : this.playerState.facing === "right"
+        ? { x: 24, y: 0 }
+        : this.playerState.facing === "up"
+          ? { x: 0, y: -24 }
+          : { x: 0, y: 24 };
+    return this.clampSpawn({
+      x: this.playerState.x + offset.x,
+      y: this.playerState.y + offset.y
+    });
+  }
+
+  private clearActiveDeliverySprite(): void {
+    this.activeDeliverySprite?.destroy();
+    this.activeDeliverySprite = undefined;
+  }
+
   private requestHospitalService(scope: HealEvent["scope"]): void {
     if (scope !== "full") {
       return;
@@ -5801,6 +6273,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const result = this.eventSequenceWatchdog.update({
       running,
       dialogueOpen: this.dialogue.open,
+      choiceOpen: Boolean(this.dialogue.choice),
       nowMs: this.time.now,
       progressToken: running && debug ? this.eventSequenceProgressToken(debug) : "idle"
     });
@@ -5817,6 +6290,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const moveToken = move.active
       ? `${move.actor ?? "actor"}:${position}:${move.arrived ? "arrived" : "moving"}`
       : "inactive";
+    const choice = this.dialogue.choice;
+    const choiceToken = choice
+      ? `choice:${choice.selectedIndex}:${choice.options.map((option) => option.label).join(",")}`
+      : "choice:none";
     return [
       debug.reference ?? "unknown",
       debug.npcId ?? "none",
@@ -5828,6 +6305,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.dialogue.opens,
       this.dialogue.closes,
       this.dialogue.pageIndex,
+      choiceToken,
       moveToken
     ].join("|");
   }
@@ -6988,7 +7466,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.startupRunActive && this.startupMode === "startup") {
       return this.applyStartupWarpDestination(destination);
     }
-    this.applyDoorWarp(destination, { kind: "teleport" });
+    this.applyDoorWarp(destination, { kind: "teleport", style: destination.warpStyle });
   }
 
   private applyStartupWarpDestination(destination: EventWarpDestination): boolean {
@@ -7147,6 +7625,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // counts as fired (see applyStoryTriggerEffects / applyReturnRestore). Non-battle
     // triggers set it immediately in applyStoryTriggerEffects.
 
+    if (trigger.archivistSpotId !== undefined) {
+      lockPlayer(this.playerState, this.playerFrames);
+      this.startArchivistStoryTrigger(trigger);
+      this.syncPlayerObject();
+      this.updatePrompt();
+      this.publish();
+      return true;
+    }
+
     if (trigger.dialogue && trigger.dialogue.length > 0) {
       lockPlayer(this.playerState, this.playerFrames);
       this.startOverriddenScriptedDialogue(
@@ -7201,6 +7688,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
     trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+    this.grantStoryTriggerItems(trigger.grantItems);
     this.updateAct1NightTint({ fade: routeOpenJustSet });
     this.syncOverworldMusicAfterRouteOpen(routeOpenJustSet);
     this.reconcileRecruits({ announce: true });
@@ -7221,6 +7709,243 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.afterDialogueClosed();
     this.updatePrompt();
     this.publish();
+  }
+
+  private grantStoryTriggerItems(itemIds: readonly number[] | undefined): void {
+    if (!itemIds || itemIds.length === 0) {
+      return;
+    }
+    const party = this.partyState.party();
+    for (const itemId of itemIds) {
+      if (party.some((charId) => this.partyState.inventory(charId).includes(itemId))) {
+        continue;
+      }
+      const recipient = party.find((charId) => this.partyState.inventoryRoom(charId) > 0);
+      if (recipient === undefined) {
+        continue;
+      }
+      if (this.partyState.give(recipient, itemId)) {
+        this.playInteractionSfx("itemGet");
+      }
+    }
+    this.refreshMenuScreens();
+  }
+
+  private startArchivistStoryTrigger(trigger: StoryTrigger): void {
+    const spotId = trigger.archivistSpotId;
+    const spot = spotId === undefined ? undefined : archivistSpotById(this.data_.archivistSpots, spotId);
+    if (!spot) {
+      this.warnStoryTriggerSkip(`archivist_missing_spot:${trigger.id}:${spotId ?? "none"}`);
+      this.applyStoryTriggerEffects(trigger);
+      return;
+    }
+    if (this.archivistSequence) {
+      return;
+    }
+    const actor = this.createArchivistActor(spot);
+    if (!actor) {
+      this.warnStoryTriggerSkip(`archivist_actor_unavailable:${trigger.id}`);
+      this.applyStoryTriggerEffects(trigger);
+      return;
+    }
+    const sequence: ArchivistSequenceState = {
+      trigger,
+      spot,
+      actor,
+      phase: "slideIn",
+      phaseElapsedMs: 0,
+      slideTarget: this.archivistSlideTarget(spot),
+      departTarget: this.archivistDepartTarget(spot),
+      line: this.archivistLineForSpot(spot),
+      filed: false
+    };
+    this.archivistSequence = sequence;
+    this.syncArchivistActor(sequence);
+  }
+
+  private createArchivistActor(spot: ArchivistSpot): ArchivistActorRuntime | undefined {
+    const spriteNpcId = this.data_.archivistSpots.archivist.spriteNpcId;
+    const facing = facingToward(spot.photographer.x, spot.photographer.y, this.playerState.x, this.playerState.y);
+    const queued = this.requestNpcRuntimeTexture(spriteNpcId, undefined);
+    if (queued && !this.load.isLoading()) {
+      this.load.start();
+    }
+    const frames = this.framesForNpc(spriteNpcId, undefined);
+    const state = createPlayerState(spot.photographer.x, spot.photographer.y, facing, frames);
+    const sprite = this.spawnNpcActor(spriteNpcId, state.x, state.y, undefined, facing);
+    return { state, frames, sprite };
+  }
+
+  private archivistSlideTarget(spot: ArchivistSpot): { x: number; y: number } {
+    const start = spot.photographer;
+    const dx = spot.party1.x - start.x;
+    const dy = spot.party1.y - start.y;
+    const distanceToParty = Math.hypot(dx, dy);
+    if (spot.slide.distance <= 0 || distanceToParty <= ARCHIVIST_PARTY_CLEARANCE_PX) {
+      return { x: start.x, y: start.y };
+    }
+    const travel = Math.min(spot.slide.distance, Math.max(0, distanceToParty - ARCHIVIST_PARTY_CLEARANCE_PX));
+    return {
+      x: Math.round(start.x + (dx / distanceToParty) * travel),
+      y: Math.round(start.y + (dy / distanceToParty) * travel)
+    };
+  }
+
+  private archivistDepartTarget(spot: ArchivistSpot): { x: number; y: number } {
+    const dx = spot.photographer.x - spot.party1.x;
+    const dy = spot.photographer.y - spot.party1.y;
+    const distance = Math.hypot(dx, dy) || 1;
+    return {
+      x: Math.round(spot.photographer.x + (dx / distance) * ARCHIVIST_DEPART_DISTANCE_PX),
+      y: Math.round(spot.photographer.y + (dy / distance) * ARCHIVIST_DEPART_DISTANCE_PX)
+    };
+  }
+
+  private archivistLineForSpot(spot: ArchivistSpot): string {
+    const lines = this.data_.archivistSpots.archivist.lines;
+    return lines[(spot.spotId - 1) % lines.length] ?? "Filed, not minted.";
+  }
+
+  private updateArchivistSequence(deltaMs: number): void {
+    const sequence = this.archivistSequence;
+    if (!sequence) {
+      return;
+    }
+    sequence.phaseElapsedMs += Math.max(0, deltaMs);
+    switch (sequence.phase) {
+      case "slideIn":
+        if (this.moveArchivistActor(sequence, sequence.slideTarget, deltaMs)) {
+          this.beginArchivistPhase(sequence, "line");
+        }
+        break;
+      case "line":
+        if (sequence.phaseElapsedMs >= ARCHIVIST_LINE_MS) {
+          this.destroyArchivistLine(sequence);
+          this.beginArchivistPhase(sequence, "flash");
+        }
+        break;
+      case "flash":
+        if (!sequence.filed) {
+          this.fileArchivistMoment(sequence);
+        }
+        if (sequence.phaseElapsedMs >= ARCHIVIST_FLASH_MS) {
+          this.beginArchivistPhase(sequence, "depart");
+        }
+        break;
+      case "depart":
+        if (this.moveArchivistActor(sequence, sequence.departTarget, deltaMs)) {
+          this.finishArchivistSequence(sequence);
+        }
+        break;
+      default:
+        break;
+    }
+  }
+
+  private beginArchivistPhase(sequence: ArchivistSequenceState, phase: ArchivistSequencePhase): void {
+    sequence.phase = phase;
+    sequence.phaseElapsedMs = 0;
+    if (phase === "line") {
+      this.showArchivistLine(sequence);
+    }
+  }
+
+  private moveArchivistActor(
+    sequence: ArchivistSequenceState,
+    target: { x: number; y: number },
+    deltaMs: number
+  ): boolean {
+    const arrived = advanceCutsceneActorTowardTarget(sequence.actor.state, target, {
+      deltaMs,
+      speed: ARCHIVIST_SLIDE_SPEED_PX_PER_SEC,
+      bounds: this.movementBounds(),
+      frames: sequence.actor.frames,
+      arrivalPx: CUTSCENE_ACTOR_MOVE_ARRIVAL_PX
+    });
+    this.syncArchivistActor(sequence);
+    return arrived;
+  }
+
+  private syncArchivistActor(sequence: ArchivistSequenceState): void {
+    const { state, frames, sprite } = sequence.actor;
+    sprite.x = state.x;
+    sprite.y = state.y;
+    if (sprite instanceof Phaser.GameObjects.Sprite) {
+      sprite.setFrame(state.animFrame);
+    }
+    this.setActorSortDepth(sprite);
+    sprite.y = state.y - this.spriteWalkBob(state.moving, frames, state.facing, this.data_.archivistSpots.archivist.spriteNpcId);
+    sprite.setVisible(this.worldPointInsideActiveRoom(state));
+  }
+
+  private showArchivistLine(sequence: ArchivistSequenceState): void {
+    this.destroyArchivistLine(sequence);
+    const camera = this.cameras.main;
+    const width = Math.min(ARCHIVIST_LINE_WIDTH_PX, Math.max(160, camera.width - 32));
+    const rect = {
+      x: Math.round((camera.width - width) / 2),
+      y: 12,
+      width,
+      height: 42
+    };
+    const panel = this.add.graphics().setScrollFactor(0).setDepth(120);
+    drawCleanPanel(panel, rect);
+    const text = createCleanText(this, rect.x + 10, rect.y + 12, sequence.line, {
+      fontSize: 13,
+      fixedWidth: rect.width - 20,
+      align: "center",
+      wordWrapWidth: rect.width - 20
+    }).setScrollFactor(0).setDepth(121);
+    sequence.linePanel = panel;
+    sequence.lineText = text;
+    this.playInteractionSfx("readCue");
+  }
+
+  private destroyArchivistLine(sequence: ArchivistSequenceState): void {
+    sequence.linePanel?.destroy();
+    sequence.lineText?.destroy();
+    sequence.linePanel = undefined;
+    sequence.lineText = undefined;
+  }
+
+  private fileArchivistMoment(sequence: ArchivistSequenceState): void {
+    sequence.filed = true;
+    this.cameras.main.flash(ARCHIVIST_FLASH_MS, 255, 255, 255);
+    this.playInteractionSfx("itemGet");
+    const trigger = sequence.trigger;
+    if (isOnce(trigger)) {
+      this.gameFlags.set(triggerFiredFlag(trigger.id));
+    }
+    trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
+    trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+    this.grantStoryTriggerItems(trigger.grantItems);
+    this.refreshMenuScreens();
+  }
+
+  private finishArchivistSequence(sequence: ArchivistSequenceState): void {
+    if (!sequence.filed) {
+      this.fileArchivistMoment(sequence);
+    }
+    this.destroyArchivistLine(sequence);
+    sequence.actor.sprite.destroy();
+    if (this.archivistSequence === sequence) {
+      this.archivistSequence = undefined;
+    }
+    if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running && !this.isDoorFadeActive()) {
+      unlockPlayer(this.playerState);
+    }
+    this.updatePrompt();
+    this.publish();
+  }
+
+  private destroyArchivistSequence(): void {
+    const sequence = this.archivistSequence;
+    if (!sequence) {
+      return;
+    }
+    this.destroyArchivistLine(sequence);
+    sequence.actor.sprite.destroy();
+    this.archivistSequence = undefined;
   }
 
   private warnStoryTriggerSkip(reason: string): void {
@@ -7521,6 +8246,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
       trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
+      this.grantStoryTriggerItems(trigger.grantItems);
       this.updateAct1NightTint({ fade: routeOpenJustSet });
       this.syncOverworldMusicAfterRouteOpen(routeOpenJustSet);
       this.afterDialogueClosed();
@@ -8357,6 +9083,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private afterDialogueClosed(): void {
+    this.clearActiveDeliverySprite();
     if (!this.menuState.open && !this.isDoorFadeActive()) {
       unlockPlayer(this.playerState);
     }
@@ -8743,6 +9470,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const below = { x: feet.x, y: feet.y + this.collisionCellSize };
       if (solidAtWorldPixel(this.solidRows, below, grid)) {
         return false;
+      }
+      // An authored FG clear rect declares "nothing covers sprites here", so the
+      // lower-body crop must not fire inside one either (fixes 0x01 cells baked
+      // onto interior rugs, e.g. the dorm at 7201,583 leaving a floating torso).
+      for (const clear of [...(this.data_.fgOverrides?.clears ?? []), ...this.sessionFgClears]) {
+        if (feet.x >= clear.x && feet.x < clear.x + clear.w && feet.y >= clear.y && feet.y < clear.y + clear.h) {
+          return false;
+        }
       }
       return true;
     } catch {
@@ -9234,6 +9969,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private publish(): void {
     this.publishBinderDebug();
+    this.publishArchivistDebug();
     const world = this.world_;
     const npc744 = this.tutorialNpc();
     const distance = this.distanceToTutorialNpc();
@@ -9256,6 +9992,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       dialogueText: this.dialogue.currentText,
       dialoguePageIndex: this.dialogue.pageIndex,
       dialoguePageCount: this.dialogue.pages.length,
+      dialogueChoice: this.dialogue.choice
+        ? {
+            options: this.dialogue.choice.options.map((option) => option.label),
+            selectedIndex: this.dialogue.choice.selectedIndex
+          }
+        : undefined,
       revealComplete: this.dialogue.revealComplete,
       revealedText: this.dialogue.open ? this.dialogue.revealedText : "",
       targetReference: this.targetReference,
@@ -9359,6 +10101,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
             total: region.total
           }
         ]))
+      };
+    };
+  }
+
+  private publishArchivistDebug(): void {
+    (globalThis as Record<string, unknown>).__archivistDebug = () => {
+      const records = buildArchivistRecordsViewModel(this.data_.archivistSpots, this.gameFlags);
+      const firstSpot = this.data_.archivistSpots.spots[0];
+      return {
+        spriteId: this.data_.archivistSpots.archivist.spriteId,
+        spriteNpcId: this.data_.archivistSpots.archivist.spriteNpcId,
+        spotCount: this.data_.archivistSpots.spots.length,
+        filed: records.filed,
+        total: records.total,
+        activeSpotId: this.archivistSequence?.spot.spotId,
+        firstSpotAnchor: firstSpot ? { ...firstSpot.anchor } : undefined,
+        firstSpotFlag: firstSpot?.flag.name
       };
     };
   }
@@ -9514,6 +10273,16 @@ function encountersDisabledBySearch(search: string | undefined): boolean {
 
 function collisionOverlayEnabledBySearch(search: string | undefined): boolean {
   return normalizeCollisionOverlayFlag(new URLSearchParams(search ?? "").get("collisionOverlay")) ?? false;
+}
+
+function nonWhitespaceCount(value: string): number {
+  let count = 0;
+  for (const char of value) {
+    if (/\S/.test(char)) {
+      count += 1;
+    }
+  }
+  return count;
 }
 
 function normalizeCollisionOverlayFlag(value: unknown): boolean | undefined {

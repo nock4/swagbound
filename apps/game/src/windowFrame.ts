@@ -1,5 +1,10 @@
 import type Phaser from "phaser";
 import type { WindowCollection } from "@eb/schemas";
+import type { CanvasRect } from "./windowLayout";
+import { EB_WINDOW_FRAMES, type EbWindowFrame } from "./windowFrames.generated";
+
+/** Pixel thickness of the EarthBound window frame. */
+export const EB_WINDOW_BORDER = 8;
 
 type RgbColor = {
   r: number;
@@ -68,6 +73,12 @@ export type WindowFrameOptions = {
   scale?: number;
 };
 
+export type EbWindowDrawOptions = {
+  frame?: EbWindowFrame;
+  fillColor?: number;
+  fillAlpha?: number;
+};
+
 export type MoreArrowPlacementOptions = {
   x: number;
   y: number;
@@ -93,12 +104,60 @@ export type MoreArrowPlacement = {
 };
 
 const DEFAULT_WINDOW_SCALE = 2;
+let activeWindowFlavorIndex = 0;
 const WINDOW_FRAME_NAMES: Record<WindowFramePart | "moreArrow", string> = {
   corner: "corner",
   hEdge: "h-edge",
   vEdge: "v-edge",
   moreArrow: "more-arrow"
 };
+
+export function setActiveWindowFlavorIndex(index: number): void {
+  activeWindowFlavorIndex = EB_WINDOW_FRAMES[index] ? index : 0;
+}
+
+export function ebWindowFrameForFlavorId(flavorId: number | undefined): EbWindowFrame {
+  return Number.isInteger(flavorId) && EB_WINDOW_FRAMES[flavorId as number]
+    ? EB_WINDOW_FRAMES[flavorId as number]
+    : EB_WINDOW_FRAMES[0];
+}
+
+export function activeEbWindowFrame(): EbWindowFrame {
+  return ebWindowFrameForFlavorId(activeWindowFlavorIndex);
+}
+
+export function drawEbWindowFrame(
+  graphics: Phaser.GameObjects.Graphics,
+  rect: CanvasRect,
+  options: EbWindowDrawOptions = {}
+): void {
+  const frame = options.frame ?? activeEbWindowFrame();
+  const border = EB_WINDOW_BORDER;
+  const x = Math.round(rect.x);
+  const y = Math.round(rect.y);
+  const width = Math.max(1, Math.round(rect.width));
+  const height = Math.max(1, Math.round(rect.height));
+  const bounds = { x, y, width, height };
+  graphics.fillStyle(options.fillColor ?? frame.interior, options.fillAlpha ?? 1);
+  graphics.fillRect(x, y, width, height);
+  const innerWidth = Math.max(0, width - border * 2);
+  const innerHeight = Math.max(0, height - border * 2);
+  for (let index = 0; index < border; index += 1) {
+    const color = frame.edge[index] ?? frame.interior;
+    if (innerWidth > 0) {
+      fillRectClipped(graphics, color, 1, x + border, y + index, innerWidth, 1, bounds);
+      fillRectClipped(graphics, color, 1, x + border, y + height - border + index, innerWidth, 1, bounds);
+    }
+    if (innerHeight > 0) {
+      fillRectClipped(graphics, color, 1, x + index, y + border, 1, innerHeight, bounds);
+      fillRectClipped(graphics, color, 1, x + width - border + index, y + border, 1, innerHeight, bounds);
+    }
+  }
+  drawEbWindowCorner(graphics, frame, x, y, false, false, bounds);
+  drawEbWindowCorner(graphics, frame, x + width - border, y, true, false, bounds);
+  drawEbWindowCorner(graphics, frame, x, y + height - border, false, true, bounds);
+  drawEbWindowCorner(graphics, frame, x + width - border, y + height - border, true, true, bounds);
+}
 
 export function rawWindowTextureKey(flavor: Pick<WindowFlavor, "id">): string {
   return `earthbound-window-raw-${flavor.id}`;
@@ -301,51 +360,88 @@ export function drawWindowFrame(
   width: number,
   height: number,
   options: WindowFrameOptions = {}
-): Phaser.GameObjects.Container {
-  const scale = integerScale(options.scale ?? DEFAULT_WINDOW_SCALE);
-  const layout = buildWindowFrameLayout(width, height, prepared.flavor, scale);
-  const container = scene.add.container(Math.round(x), Math.round(y));
-  if (layout.interior.width > 0 && layout.interior.height > 0) {
-    const interior = scene.add.rectangle(
-      layout.interior.x,
-      layout.interior.y,
-      layout.interior.width,
-      layout.interior.height,
-      rgbToNumber(prepared.flavor.interiorColor),
-      1
-    ).setOrigin(0, 0);
-    container.add(interior);
-  }
+): Phaser.GameObjects.Graphics {
+  void options;
+  const graphics = scene.add.graphics();
+  drawEbWindowFrame(graphics, { x, y, width, height }, {
+    frame: ebWindowFrameForFlavorId(prepared.flavor.id),
+    fillColor: rgbToNumber(prepared.flavor.interiorColor)
+  });
+  return graphics;
+}
 
-  const placements = [
-    layout.corners.topLeft,
-    layout.corners.topRight,
-    layout.corners.bottomLeft,
-    layout.corners.bottomRight,
-    ...layout.top,
-    ...layout.bottom,
-    ...layout.left,
-    ...layout.right
-  ];
-
-  for (const item of placements) {
-    if (item.displayWidth <= 0 || item.displayHeight <= 0 || item.sourceWidth <= 0 || item.sourceHeight <= 0) {
+function drawEbWindowCorner(
+  graphics: Phaser.GameObjects.Graphics,
+  frame: EbWindowFrame,
+  originX: number,
+  originY: number,
+  flipX: boolean,
+  flipY: boolean,
+  bounds: CanvasRect
+): void {
+  const border = EB_WINDOW_BORDER;
+  const minX = Math.round(bounds.x);
+  const minY = Math.round(bounds.y);
+  const maxX = minX + Math.max(1, Math.round(bounds.width));
+  const maxY = minY + Math.max(1, Math.round(bounds.height));
+  for (let rowIndex = 0; rowIndex < border; rowIndex += 1) {
+    const targetY = originY + rowIndex;
+    if (targetY < minY || targetY >= maxY) {
       continue;
     }
-    const image = scene.add.image(
-      item.x,
-      item.y,
-      prepared.textureKey,
-      windowFrameName(item.part)
-    ).setOrigin(0, 0).setFlip(item.flipX, item.flipY);
-    if (item.sourceWidth !== prepared.flavor[item.part].w || item.sourceHeight !== prepared.flavor[item.part].h) {
-      image.setCrop(0, 0, item.sourceWidth, item.sourceHeight);
+    const sourceRowIndex = flipY ? border - 1 - rowIndex : rowIndex;
+    const row = frame.corner[sourceRowIndex];
+    let columnIndex = 0;
+    while (columnIndex < border) {
+      const color = row[flipX ? border - 1 - columnIndex : columnIndex];
+      if (color === null || color === undefined) {
+        columnIndex += 1;
+        continue;
+      }
+      let run = 1;
+      while (
+        columnIndex + run < border &&
+        row[flipX ? border - 1 - (columnIndex + run) : columnIndex + run] === color
+      ) {
+        run += 1;
+      }
+      const targetX = originX + columnIndex;
+      const clippedX = Math.max(targetX, minX);
+      const clippedRight = Math.min(targetX + run, maxX);
+      if (clippedRight <= clippedX) {
+        columnIndex += run;
+        continue;
+      }
+      graphics.fillStyle(color, 1);
+      graphics.fillRect(clippedX, targetY, clippedRight - clippedX, 1);
+      columnIndex += run;
     }
-    image.setScale(item.displayWidth / item.sourceWidth, item.displayHeight / item.sourceHeight);
-    container.add(image);
   }
+}
 
-  return container;
+function fillRectClipped(
+  graphics: Phaser.GameObjects.Graphics,
+  color: number,
+  alpha: number,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  bounds: CanvasRect
+): void {
+  const minX = Math.round(bounds.x);
+  const minY = Math.round(bounds.y);
+  const maxX = minX + Math.max(1, Math.round(bounds.width));
+  const maxY = minY + Math.max(1, Math.round(bounds.height));
+  const clippedX = Math.max(Math.round(x), minX);
+  const clippedY = Math.max(Math.round(y), minY);
+  const clippedRight = Math.min(Math.round(x + width), maxX);
+  const clippedBottom = Math.min(Math.round(y + height), maxY);
+  if (clippedRight <= clippedX || clippedBottom <= clippedY) {
+    return;
+  }
+  graphics.fillStyle(color, alpha);
+  graphics.fillRect(clippedX, clippedY, clippedRight - clippedX, clippedBottom - clippedY);
 }
 
 function selectWindowFlavor(

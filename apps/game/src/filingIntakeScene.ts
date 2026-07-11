@@ -9,8 +9,6 @@ import {
   registerDiscreteKeys
 } from "./inputModel";
 import {
-  CLEAN_UI_PANEL_BORDER,
-  CLEAN_UI_PANEL_FILL,
   CLEAN_UI_PRIMARY,
   CLEAN_UI_SECONDARY,
   CLEAN_UI_SELECTION_TEXT,
@@ -239,9 +237,7 @@ export class FilingIntakeScene extends Phaser.Scene {
     if (!this.graphics) {
       return;
     }
-    drawCleanPanel(this.graphics, panelRect, { fillColor: CLEAN_UI_PANEL_FILL });
-    this.graphics.lineStyle(1, CLEAN_UI_PANEL_BORDER, 0.22);
-    this.graphics.strokeRect(panelRect.x + 10.5, panelRect.y + 10.5, panelRect.width - 21, panelRect.height - 21);
+    drawCleanPanel(this.graphics, panelRect);
   }
 
   private addText(

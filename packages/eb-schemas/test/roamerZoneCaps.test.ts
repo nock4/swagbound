@@ -15,7 +15,7 @@ describe("RoamerZoneCapsSchema", () => {
     expect(parsed.zones[0]?.allowedGroups).toEqual([1, 2, 3]);
   });
 
-  it("rejects empty allow-lists and invalid rect sizes", () => {
+  it("accepts empty allow-lists as local no-roamer caps", () => {
     expect(RoamerZoneCapsSchema.safeParse({
       schema: "swagbound.roamer-zone-caps.v1",
       zones: [{
@@ -23,8 +23,10 @@ describe("RoamerZoneCapsSchema", () => {
         rect: { x: 0, y: 0, w: 4096, h: 4096 },
         allowedGroups: []
       }]
-    }).success).toBe(false);
+    }).success).toBe(true);
+  });
 
+  it("rejects invalid rect sizes", () => {
     expect(RoamerZoneCapsSchema.safeParse({
       schema: "swagbound.roamer-zone-caps.v1",
       zones: [{

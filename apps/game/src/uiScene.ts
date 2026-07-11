@@ -19,14 +19,13 @@ import {
   drawCleanPanel,
   drawCleanSelection,
   estimateCleanTextWidth,
+  formatCleanOdometerValue,
   statusBarFillFraction
 } from "./cleanUi";
-import type { DialogueTextRun } from "./dialogueRenderer";
+import type { DialogueChoiceState } from "./state";
 import {
   type CanvasRect,
   battleStatusCardRects,
-  dialogueTextWidth,
-  dialogueWindowRect,
   menuWindowRect
 } from "./windowLayout";
 import {
@@ -34,18 +33,21 @@ import {
 } from "./battleVisuals";
 import type { OverworldStatusHudMember, OverworldStatusHudView } from "./overworldStatusHud";
 import { statusAilmentBadge } from "./statusEffects";
+import {
+  TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS,
+  TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS,
+  TALK_WINDOW_PANEL_RECT_CSS,
+  TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS,
+  TALK_WINDOW_VISIBLE_LINES,
+  TALK_WINDOW_WRAP_WIDTH_CSS,
+  visibleDialogueLines
+} from "./ebWindowMetrics";
+export { visibleDialogueLines } from "./ebWindowMetrics";
 
-const UI_LINE_SPACING = 2;
-const DIALOGUE_FONT_SIZE = 15;
-const FOOTER_FONT_SIZE = 11;
+const UI_LINE_SPACING = 6;
 const MENU_FONT_SIZE = 14;
 const MENU_TITLE_FONT_SIZE = 13;
 const DEBUG_FONT_SIZE = 11;
-const DIALOGUE_HORIZONTAL_PADDING = 18;
-const DIALOGUE_VERTICAL_PADDING = 12;
-const DIALOGUE_VISIBLE_LINES = 3;
-const DIALOGUE_BOTTOM_MARGIN = 12;
-const DIALOGUE_SIDE_MARGIN = 12;
 const DIALOGUE_MORE_ARROW_BOB_PX = 2;
 const MENU_LEFT = 12;
 const MENU_TOP = 12;
@@ -62,11 +64,27 @@ const MENU_GRID_COL_GAP = 10;
 const MENU_GRID_ROW_EXTRA = 6;
 const MENU_GRID_CELL_INSET = 4;
 const MENU_OBJECTIVE_GAP = 7;
+const CHOICE_FONT_SIZE = 14;
+const CHOICE_HORIZONTAL_PADDING = 12;
+const CHOICE_VERTICAL_PADDING = 10;
+const CHOICE_CARET_GUTTER_PX = 14;
+const CHOICE_GAP = 8;
+const CHOICE_MIN_WIDTH = 76;
 type MenuCursorSlot = {
   x: number;
   rowTop: number;
   width: number;
   rowHeight: number;
+};
+
+type MenuGridMetrics = {
+  columns: number;
+  rows: number;
+  visibleStartRow: number;
+  visibleRows: number;
+  columnWidths: number[];
+  rowHeight: number;
+  contentWidth: number;
 };
 
 type OverworldHudTextSet = {
@@ -165,7 +183,6 @@ export class UiScene extends Phaser.Scene {
   private window?: WindowCollection;
   private boxGraphics?: Phaser.GameObjects.Graphics;
   private dialogueText?: Phaser.GameObjects.Text;
-  private footerText?: Phaser.GameObjects.Text;
   private moreArrow?: Phaser.GameObjects.Graphics;
   private moreArrowTween?: Phaser.Tweens.Tween;
   private promptText?: Phaser.GameObjects.Text;
@@ -182,6 +199,8 @@ export class UiScene extends Phaser.Scene {
   private menuCursorGraphics?: Phaser.GameObjects.Graphics;
   private menuTexts: Phaser.GameObjects.Text[] = [];
   private menuCursorSlots: MenuCursorSlot[] = [];
+  private choiceGraphics?: Phaser.GameObjects.Graphics;
+  private choiceTexts: Phaser.GameObjects.Text[] = [];
   private lastSignature = "";
   private copyButton?: Phaser.GameObjects.Text;
   private panelDebugText = "";
@@ -206,14 +225,10 @@ export class UiScene extends Phaser.Scene {
   create(): void {
     this.boxGraphics = this.add.graphics().setDepth(10);
     this.dialogueText = createCleanText(this, 0, 0, "", {
-      fontSize: DIALOGUE_FONT_SIZE,
+      fontSize: TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS,
       color: CLEAN_UI_PRIMARY,
-      lineSpacing: UI_LINE_SPACING,
+      lineSpacing: TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS,
       wordWrapWidth: this.dialogueTextWidth()
-    }).setDepth(11);
-    this.footerText = createCleanText(this, 0, 0, "", {
-      fontSize: FOOTER_FONT_SIZE,
-      color: CLEAN_UI_SECONDARY
     }).setDepth(11);
     this.promptText = createCleanText(this, 12, 10, "", {
       fontSize: 11,
@@ -246,6 +261,7 @@ export class UiScene extends Phaser.Scene {
     this.hudAccentGraphics = this.add.graphics().setDepth(9);
     this.menuGraphics = this.add.graphics().setDepth(14);
     this.menuCursorGraphics = this.add.graphics().setDepth(16);
+    this.choiceGraphics = this.add.graphics().setDepth(13);
     this.binderOverlayGraphics = this.add.graphics().setDepth(80);
   }
 
@@ -312,26 +328,24 @@ export class UiScene extends Phaser.Scene {
     }
 
     const open = world.dialogue.open;
+    const choice = world.dialogue.choice;
+    const choiceOpen = Boolean(choice);
     const text = open ? world.dialogue.revealedText : "";
+    const fullText = open ? world.dialogue.currentText : "";
     const textRuns = open ? world.dialogue.revealedTextRuns : [];
-    const showAdvanceIndicator = open && world.dialogue.revealComplete;
-    const footer = open
-      ? (!world.dialogue.revealComplete
-          ? "Z: finish | X: close"
-          : (world.dialogue.isLastPage ? "Z/X: close" : "Z: next | X: close"))
-      : "";
+    const showAdvanceIndicator = open && world.dialogue.revealComplete && !world.dialogue.isLastPage;
     const panelVisible = world.debugPanelVisible;
     const runtimeLines = panelVisible ? world.runtimeLines() : [];
     const menuScreens = world.menuRenderStack();
     // During a cinematic (e.g. the new-game night flyover + bedroom wake-up) the whole
     // gameplay HUD is suppressed so nothing breaks the shot.
     const cinematic = Boolean(world.cinematicActive?.());
-    const promptVisible = !open && menuScreens.length === 0 && !cinematic;
+    const promptVisible = !open && !choiceOpen && menuScreens.length === 0 && !cinematic;
     const hudView = world.overworldStatusHud?.();
     // EarthBound shows the party status window only while a menu is open, not while
     // walking the overworld. (Previously this rendered during free movement.)
     const visibleHudView = menuScreens.length > 0 && hudView?.visible ? hudView : undefined;
-    const signature = `${open}|${JSON.stringify(textRuns)}|${footer}|${showAdvanceIndicator}|${world.prompt}|${promptVisible}|${cinematic}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
+    const signature = `${open}|${fullText}|${JSON.stringify(textRuns)}|${showAdvanceIndicator}|${JSON.stringify(choice)}|${world.prompt}|${promptVisible}|${cinematic}|${panelVisible}|${runtimeLines.join("/")}|${JSON.stringify(menuScreens)}|${JSON.stringify(hudView)}`;
     if (signature === this.lastSignature) {
       this.drawOverworldHud(visibleHudView);
       this.renderMenuCursors();
@@ -348,7 +362,8 @@ export class UiScene extends Phaser.Scene {
     // and cinematics are exactly where staleness bugs hide. DEV-only object.
     this.badgeText?.setVisible(true);
     this.positionMenuHint(Boolean(visibleHudView));
-    this.drawDialogue(open, text, textRuns, footer, showAdvanceIndicator);
+    this.drawDialogue(open, text, showAdvanceIndicator);
+    this.drawChoice(choice);
     this.drawPanel(panelVisible ? [...world.statusLines(), "", ...world.metadataLines(), "", ...runtimeLines] : []);
     this.drawOverworldHud(visibleHudView);
     this.drawMenu(menuScreens);
@@ -358,19 +373,16 @@ export class UiScene extends Phaser.Scene {
   private drawDialogue(
     open: boolean,
     text: string,
-    _textRuns: readonly DialogueTextRun[],
-    footer: string,
     showAdvanceIndicator: boolean
   ): void {
     const graphics = this.boxGraphics;
-    if (!graphics || !this.dialogueText || !this.footerText) {
+    if (!graphics || !this.dialogueText) {
       return;
     }
     graphics.clear();
     this.clearMoreArrow();
     if (!open) {
       this.dialogueText.setText("");
-      this.footerText.setText("");
       return;
     }
     const rect = this.dialogueRect();
@@ -378,26 +390,90 @@ export class UiScene extends Phaser.Scene {
 
     drawCleanPanel(graphics, rect);
 
-    this.dialogueText.setPosition(x + DIALOGUE_HORIZONTAL_PADDING, y + DIALOGUE_VERTICAL_PADDING);
+    this.dialogueText.setPosition(
+      x + TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.x,
+      y + TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.y
+    );
     this.dialogueText.setWordWrapWidth(this.dialogueTextWidth(), true);
-    this.dialogueText.setText(text);
-    const arrowShown = showAdvanceIndicator && this.drawMoreArrow(x, y, boxWidth, boxHeight);
-    if (arrowShown) {
-      this.footerText.setText("");
-    } else {
-      const footerWidth = this.measureTextWidth(footer);
-      this.footerText.setPosition(
-        x + boxWidth - DIALOGUE_HORIZONTAL_PADDING - footerWidth,
-        y + boxHeight - DIALOGUE_VERTICAL_PADDING - this.dialogueLineHeight()
-      );
-      this.footerText.setText(footer);
+    this.dialogueText.setText(
+      visibleDialogueLines(this.dialogueText.getWrappedText(text), TALK_WINDOW_VISIBLE_LINES).join("\n")
+    );
+    if (showAdvanceIndicator) {
+      this.drawMoreArrow(x, y, boxWidth, boxHeight);
     }
+  }
+
+  private drawChoice(choice: DialogueChoiceState | undefined): void {
+    const graphics = this.choiceGraphics;
+    if (!graphics) {
+      return;
+    }
+    graphics.clear();
+    for (const text of this.choiceTexts) {
+      text.destroy();
+    }
+    this.choiceTexts = [];
+    if (!choice || choice.options.length === 0) {
+      return;
+    }
+
+    const lineHeight = cleanLineHeight(CHOICE_FONT_SIZE, UI_LINE_SPACING);
+    const widest = choice.options.reduce((max, option) => {
+      return Math.max(max, estimateCleanTextWidth(option.label, CHOICE_FONT_SIZE));
+    }, 0);
+    const width = Math.max(
+      CHOICE_MIN_WIDTH,
+      widest + CHOICE_HORIZONTAL_PADDING * 2 + CHOICE_CARET_GUTTER_PX
+    );
+    const height = CHOICE_VERTICAL_PADDING * 2 + lineHeight * choice.options.length;
+    const dialogueRect = this.dialogueRect();
+    const x = Math.round(Math.max(0, dialogueRect.x + TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.x));
+    // EB places the selection window BELOW the top-anchored text
+    // window; anchoring above would clamp into the box and cover the message.
+    const y = Math.round(Math.min(
+      this.scale.height - height - 12,
+      dialogueRect.y + dialogueRect.height + CHOICE_GAP
+    ));
+    const rect = { x, y, width, height };
+    drawCleanPanel(graphics, rect);
+
+    choice.options.forEach((option, index) => {
+      const rowTop = y + CHOICE_VERTICAL_PADDING + index * lineHeight;
+      const selected = index === choice.selectedIndex;
+      if (selected) {
+        drawCleanSelection(graphics, {
+          x: x + CHOICE_HORIZONTAL_PADDING,
+          y: rowTop - 2,
+          width: width - CHOICE_HORIZONTAL_PADDING * 2,
+          height: lineHeight
+        }, true);
+        drawCleanCaret(
+          graphics,
+          x + CHOICE_HORIZONTAL_PADDING + 3,
+          rowTop - 2,
+          lineHeight,
+          CLEAN_UI_SELECTION_CARET
+        );
+      }
+      this.choiceTexts.push(createCleanText(
+        this,
+        x + CHOICE_HORIZONTAL_PADDING + CHOICE_CARET_GUTTER_PX,
+        rowTop,
+        option.label,
+        {
+          fontSize: CHOICE_FONT_SIZE,
+          color: selected ? CLEAN_UI_SELECTION_TEXT : CLEAN_UI_PRIMARY,
+          fixedWidth: Math.max(1, width - CHOICE_HORIZONTAL_PADDING * 2 - CHOICE_CARET_GUTTER_PX),
+          weight: selected ? 500 : 400
+        }
+      ).setDepth(selected ? 15 : 14));
+    });
   }
 
   private drawMoreArrow(x: number, y: number, boxWidth: number, boxHeight: number): boolean {
     const arrow = this.add.graphics().setDepth(12);
-    const arrowX = Math.round(x + boxWidth - DIALOGUE_HORIZONTAL_PADDING - 10);
-    const arrowY = Math.round(y + boxHeight - DIALOGUE_VERTICAL_PADDING - 8);
+    const arrowX = Math.round(x + boxWidth - TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.x - 10);
+    const arrowY = Math.round(y + boxHeight - TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.y - 8);
     arrow.fillStyle(0xffffff, 0.82);
     arrow.fillTriangle(0, 0, 10, 0, 5, 7);
     arrow.setPosition(arrowX, arrowY);
@@ -521,12 +597,16 @@ export class UiScene extends Phaser.Scene {
       // Grid screens (the 3x3 Command menu) lay items in a row-major grid; the
       // selection highlight boxes the whole cell. Lists keep the vertical path below.
       if (screen.columns && screen.columns > 1) {
-        const { columns, cellWidth, rowHeight } = this.menuGridMetrics(screen);
+        const metrics = this.menuGridMetrics(screen);
         screen.items.forEach((item, index) => {
-          const col = index % columns;
-          const row = Math.floor(index / columns);
-          const cellX = x + textInset + col * (cellWidth + MENU_GRID_COL_GAP);
-          const cellY = itemTop + row * rowHeight;
+          const position = menuGridPosition(index, screen.items.length, metrics.columns, screen.gridOrder);
+          if (position.row < metrics.visibleStartRow || position.row >= metrics.visibleStartRow + metrics.visibleRows) {
+            return;
+          }
+          const visibleRow = position.row - metrics.visibleStartRow;
+          const cellX = x + textInset + menuGridColumnOffset(metrics, position.col);
+          const cellY = itemTop + visibleRow * metrics.rowHeight;
+          const cellWidth = metrics.columnWidths[position.col] ?? metrics.columnWidths[0] ?? 1;
           const selected = item.selected && item.enabled;
           if (selected) {
             this.menuCursorSlots.push({
@@ -536,12 +616,22 @@ export class UiScene extends Phaser.Scene {
               rowHeight: this.menuLineHeight()
             });
           }
-          this.menuTexts.push(createCleanText(this, cellX + MENU_CARET_GUTTER_PX, cellY, item.label, {
+          const labelX = screen.gridKind === "psi-strengths" && position.col === 0
+            ? cellX
+            : cellX + MENU_CARET_GUTTER_PX;
+          const textWidth = Math.max(1, cellWidth - (labelX - cellX));
+          this.menuTexts.push(createCleanText(this, labelX, cellY, item.label, {
             fontSize,
             color: item.textColor ?? (selected ? CLEAN_UI_SELECTION_TEXT : (item.enabled ? CLEAN_UI_PRIMARY : CLEAN_UI_SECONDARY)),
-            weight: selected ? 500 : 400
+            weight: selected ? 500 : 400,
+            fixedWidth: textWidth,
+            align: screen.gridKind === "psi-strengths" && position.col > 0 ? "center" : "left"
           }).setDepth(selected ? 17 : 15));
         });
+        this.drawMenuScrollMarkers(graphics, rect, metrics.visibleStartRow > 0, metrics.visibleStartRow + metrics.visibleRows < metrics.rows);
+        if (screen === visibleScreens[visibleScreens.length - 1]) {
+          this.drawMenuSideInfo(screen, rect);
+        }
         nextX = x + boxWidth + MENU_GAP;
         return;
       }
@@ -570,6 +660,10 @@ export class UiScene extends Phaser.Scene {
           fixedWidth: textWidth
         }).setDepth(selected ? 17 : 15));
       });
+      if (screen === visibleScreens[visibleScreens.length - 1]) {
+        this.drawMenuScrollMarkers(graphics, rect, start > 0, start + visibleItems.length < screen.items.length);
+        this.drawMenuSideInfo(screen, rect);
+      }
       nextX = x + boxWidth + MENU_GAP;
     });
   }
@@ -584,9 +678,12 @@ export class UiScene extends Phaser.Scene {
       const candidate = screens.slice(dropped);
       let x = MENU_LEFT;
       let fits = true;
-      for (const screen of candidate) {
+      for (const [index, screen] of candidate.entries()) {
         const rect = this.menuRect(screen, x);
-        if (rect.x + rect.width > rightEdge) {
+        const right = index === candidate.length - 1
+          ? this.menuScreenRightWithSideInfo(screen, rect)
+          : rect.x + rect.width;
+        if (right > rightEdge) {
           fits = false;
           break;
         }
@@ -794,8 +891,8 @@ export class UiScene extends Phaser.Scene {
     textSet.badges.setText(this.fitCleanText(badgeText, textSet.badges.width || 48, OVERWORLD_HUD_BADGE_FONT_SIZE));
     textSet.hpLabel.setText("HP");
     textSet.ppLabel.setText("PP");
-    textSet.hpValue.setText(`${member.hp}/${member.maxHp}`);
-    textSet.ppValue.setText(`${member.pp}/${member.maxPp}`);
+    textSet.hpValue.setText(formatCleanOdometerValue(member.hp));
+    textSet.ppValue.setText(formatCleanOdometerValue(member.pp));
     const hpAlpha = member.danger ? 0.7 + Math.sin(this.time.now / 120) * 0.25 : 1;
     textSet.hpValue.setAlpha(hpAlpha);
     textSet.hpLabel.setAlpha(hpAlpha);
@@ -834,7 +931,7 @@ export class UiScene extends Phaser.Scene {
   } {
     const rowY = content.y + (row === "hp" ? OVERWORLD_HUD_HP_ROW_Y : OVERWORLD_HUD_PP_ROW_Y);
     // No bars anymore: the odometer number gets the whole row width after the HP/PP label.
-    const valueWidth = Math.max(44, content.width - OVERWORLD_HUD_LABEL_WIDTH - 4);
+    const valueWidth = Math.min(50, Math.max(42, Math.floor(content.width * 0.42)));
     const barX = content.x + OVERWORLD_HUD_BAR_X;
     const valueX = content.x + content.width - valueWidth;
     const barWidth = Math.max(12, valueX - OVERWORLD_HUD_BAR_VALUE_GAP - barX);
@@ -880,35 +977,35 @@ export class UiScene extends Phaser.Scene {
   }
 
   private dialogueRect(): CanvasRect {
-    return dialogueWindowRect({
-      screen: { width: this.scale.width, height: this.scale.height },
-      sideMargin: DIALOGUE_SIDE_MARGIN,
-      bottomMargin: DIALOGUE_BOTTOM_MARGIN,
-      paddingX: DIALOGUE_HORIZONTAL_PADDING,
-      paddingY: DIALOGUE_VERTICAL_PADDING,
-      lineHeight: this.dialogueLineHeight(),
-      visibleLines: DIALOGUE_VISIBLE_LINES,
-      topAnchored: true
-    });
+    return TALK_WINDOW_PANEL_RECT_CSS;
   }
 
   private dialogueTextWidth(): number {
-    return dialogueTextWidth(this.dialogueRect(), DIALOGUE_HORIZONTAL_PADDING);
+    return TALK_WINDOW_WRAP_WIDTH_CSS;
   }
 
   /** Shared cell metrics for a columned (grid) menu, used by sizing + drawing. */
-  private menuGridMetrics(screen: MenuRenderScreen): {
-    columns: number;
-    rows: number;
-    cellWidth: number;
-    rowHeight: number;
-  } {
+  private menuGridMetrics(screen: MenuRenderScreen): MenuGridMetrics {
     const columns = Math.max(1, Math.trunc(screen.columns ?? 1));
     const rows = Math.max(1, Math.ceil(screen.items.length / columns));
-    const widest = screen.items.reduce((max, item) => Math.max(max, this.measureTextWidth(item.label)), 0);
-    const cellWidth = widest + MENU_CARET_GUTTER_PX + MENU_GRID_CELL_INSET * 2;
+    const selectedIndex = Math.max(0, screen.cursorIndex);
+    const selectedRow = menuGridPosition(selectedIndex, screen.items.length, columns, screen.gridOrder).row;
+    const maxVisibleRows = Math.max(1, Math.trunc(screen.maxVisibleRows ?? rows));
+    const visibleRows = Math.max(1, Math.min(rows, maxVisibleRows));
+    const visibleStartRow = visibleItemStart(selectedRow, rows, visibleRows);
+    const columnWidths = Array.from({ length: columns }, (_, col) => {
+      const labels = screen.items.flatMap((item, index) => {
+        const position = menuGridPosition(index, screen.items.length, columns, screen.gridOrder);
+        return position.col === col ? [item.label] : [];
+      });
+      const widest = labels.reduce((max, label) => Math.max(max, this.measureTextWidth(label)), 0);
+      const caretWidth = screen.gridKind === "psi-strengths" && col === 0 ? 0 : MENU_CARET_GUTTER_PX;
+      const minWidth = screen.gridKind === "psi-strengths" && col > 0 ? 24 : 0;
+      return Math.max(minWidth, widest + caretWidth + MENU_GRID_CELL_INSET * 2);
+    });
     const rowHeight = this.menuLineHeight() + MENU_GRID_ROW_EXTRA;
-    return { columns, rows, cellWidth, rowHeight };
+    const contentWidth = columnWidths.reduce((total, width) => total + width, 0) + MENU_GRID_COL_GAP * Math.max(0, columns - 1);
+    return { columns, rows, visibleStartRow, visibleRows, columnWidths, rowHeight, contentWidth };
   }
 
   private menuObjectiveTextWidth(): number {
@@ -943,13 +1040,13 @@ export class UiScene extends Phaser.Scene {
   private menuRect(screen: MenuRenderScreen, x: number): CanvasRect {
     const showTitle = screen.id !== "main";
     if (screen.columns && screen.columns > 1) {
-      const { columns, rows, cellWidth, rowHeight } = this.menuGridMetrics(screen);
+      const metrics = this.menuGridMetrics(screen);
       const titleHeight = showTitle ? this.menuLineHeight() + MENU_TITLE_GAP : 0;
       const objectiveLines = this.menuObjectiveLines(screen);
       const objectiveHeight = objectiveLines.length > 0
         ? objectiveLines.length * this.menuLineHeight() + MENU_OBJECTIVE_GAP
         : 0;
-      const gridWidth = MENU_HORIZONTAL_PADDING * 2 + columns * cellWidth + (columns - 1) * MENU_GRID_COL_GAP;
+      const gridWidth = MENU_HORIZONTAL_PADDING * 2 + metrics.contentWidth;
       const objectiveWidth = objectiveLines.length > 0
         ? MENU_HORIZONTAL_PADDING * 2 + MENU_CARET_GUTTER_PX + this.menuObjectiveTextWidth()
         : 0;
@@ -957,7 +1054,7 @@ export class UiScene extends Phaser.Scene {
         x,
         y: MENU_TOP,
         width: Math.max(gridWidth, objectiveWidth),
-        height: MENU_VERTICAL_PADDING * 2 + titleHeight + objectiveHeight + rows * rowHeight
+        height: MENU_VERTICAL_PADDING * 2 + titleHeight + objectiveHeight + metrics.visibleRows * metrics.rowHeight
       };
     }
     const lineHeight = this.menuLineHeight();
@@ -983,12 +1080,93 @@ export class UiScene extends Phaser.Scene {
     });
   }
 
-  private measureTextWidth(text: string): number {
-    return estimateCleanTextWidth(text, MENU_FONT_SIZE);
+  private menuScreenRightWithSideInfo(screen: MenuRenderScreen, rect: CanvasRect): number {
+    const sideInfo = this.menuSideInfoRect(screen, rect);
+    return sideInfo ? sideInfo.x + sideInfo.width : rect.x + rect.width;
   }
 
-  private dialogueLineHeight(): number {
-    return cleanLineHeight(DIALOGUE_FONT_SIZE, UI_LINE_SPACING);
+  private menuActiveInfo(screen: MenuRenderScreen): { title?: string; lines: string[] } | undefined {
+    const selectedInfo = screen.items.find((item) => item.selected && item.infoLines && item.infoLines.length > 0)?.infoLines;
+    const lines = selectedInfo ?? screen.sideInfoLines;
+    if (!lines || lines.length === 0) {
+      return undefined;
+    }
+    return {
+      ...(screen.sideInfoTitle ? { title: screen.sideInfoTitle } : {}),
+      lines
+    };
+  }
+
+  private menuSideInfoRect(screen: MenuRenderScreen, anchor: CanvasRect): CanvasRect | undefined {
+    const info = this.menuActiveInfo(screen);
+    if (!info) {
+      return undefined;
+    }
+    const x = anchor.x + anchor.width + MENU_GAP;
+    const maxWidth = Math.max(1, this.scale.width - x - MENU_RIGHT_MARGIN);
+    const labels = info.title ? [info.title, ...info.lines] : info.lines;
+    const measuredWidth = labels.reduce((max, label) => Math.max(max, this.measureTextWidth(label)), 0);
+    const width = Math.min(
+      maxWidth,
+      Math.max(64, measuredWidth + (MENU_HORIZONTAL_PADDING + MENU_CARET_GUTTER_PX) * 2)
+    );
+    const maxHeight = Math.max(this.menuLineHeight() + MENU_VERTICAL_PADDING * 2, this.scale.height - anchor.y - MENU_BOTTOM_MARGIN);
+    const height = Math.min(maxHeight, MENU_VERTICAL_PADDING * 2 + labels.length * this.menuLineHeight());
+    return {
+      x,
+      y: anchor.y,
+      width,
+      height
+    };
+  }
+
+  private drawMenuSideInfo(screen: MenuRenderScreen, anchor: CanvasRect): void {
+    const info = this.menuActiveInfo(screen);
+    const rect = this.menuSideInfoRect(screen, anchor);
+    if (!info || !rect) {
+      return;
+    }
+    const graphics = this.menuGraphics;
+    if (!graphics) {
+      return;
+    }
+    drawCleanPanel(graphics, rect);
+    const labels = info.title ? [info.title, ...info.lines] : info.lines;
+    const textRect = cleanPanelInnerRect(rect, {
+      x: MENU_HORIZONTAL_PADDING,
+      y: MENU_VERTICAL_PADDING
+    });
+    labels.forEach((line, index) => {
+      this.menuTexts.push(createCleanText(this, textRect.x, textRect.y + index * this.menuLineHeight(), line, {
+        fontSize: index === 0 && info.title ? MENU_TITLE_FONT_SIZE : MENU_FONT_SIZE,
+        color: index === 0 && info.title ? CLEAN_UI_SECONDARY : CLEAN_UI_PRIMARY,
+        fixedWidth: textRect.width,
+        weight: index === 0 && info.title ? 500 : 400
+      }).setDepth(16));
+    });
+  }
+
+  private drawMenuScrollMarkers(
+    graphics: Phaser.GameObjects.Graphics,
+    rect: CanvasRect,
+    hasMoreBefore: boolean,
+    hasMoreAfter: boolean
+  ): void {
+    const x = Math.round(rect.x + rect.width - MENU_HORIZONTAL_PADDING + 2);
+    if (hasMoreBefore) {
+      const y = Math.round(rect.y + 8);
+      graphics.fillStyle(CLEAN_UI_PANEL_BORDER, 0.76);
+      graphics.fillTriangle(x, y, x - 5, y + 6, x + 5, y + 6);
+    }
+    if (hasMoreAfter) {
+      const y = Math.round(rect.y + rect.height - 8);
+      graphics.fillStyle(CLEAN_UI_PANEL_BORDER, 0.76);
+      graphics.fillTriangle(x, y, x - 5, y - 6, x + 5, y - 6);
+    }
+  }
+
+  private measureTextWidth(text: string): number {
+    return estimateCleanTextWidth(text, MENU_FONT_SIZE);
   }
 
   private menuLineHeight(): number {
@@ -1020,4 +1198,29 @@ function visibleItemStart(cursorIndex: number, itemCount: number, maxItems: numb
     return 0;
   }
   return Math.min(Math.max(0, cursorIndex - maxItems + 1), itemCount - maxItems);
+}
+
+function menuGridColumnOffset(metrics: MenuGridMetrics, col: number): number {
+  return metrics.columnWidths.slice(0, Math.max(0, col)).reduce((total, width) => total + width + MENU_GRID_COL_GAP, 0);
+}
+
+function menuGridPosition(
+  index: number,
+  itemCount: number,
+  columns: number,
+  order: MenuRenderScreen["gridOrder"] = "row-major"
+): { row: number; col: number } {
+  const normalizedColumns = Math.max(1, columns);
+  const normalizedIndex = Math.max(0, Math.min(Math.floor(index), Math.max(0, itemCount - 1)));
+  const rows = Math.max(1, Math.ceil(Math.max(0, itemCount) / normalizedColumns));
+  if (order === "column-major") {
+    return {
+      row: normalizedIndex % rows,
+      col: Math.floor(normalizedIndex / rows)
+    };
+  }
+  return {
+    row: Math.floor(normalizedIndex / normalizedColumns),
+    col: normalizedIndex % normalizedColumns
+  };
 }

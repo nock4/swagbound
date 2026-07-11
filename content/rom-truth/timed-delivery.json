@@ -1,0 +1,96 @@
+{
+ "schema": "swagbound.rom-truth.timed-delivery.v1",
+ "source": "ebsrc src/data/timed_delivery_table.asm; Escargo Express / delivery-man events",
+ "deliveries": [
+  {
+   "spriteId": 151,
+   "eventFlag": "FLG_DELIVERY_PIZZA",
+   "timeUntilDelivery": 180,
+   "messages": [
+    "MSG_PIZZA_SEND",
+    "MSG_PIZZA_SEND_RETRY_OVER"
+   ]
+  },
+  {
+   "spriteId": 135,
+   "eventFlag": "FLG_DELIVERY_UNSOU",
+   "timeUntilDelivery": 10,
+   "messages": [
+    "MSG_UNSOU_SEND",
+    "MSG_UNSOU_SEND_RETRY_OVER"
+   ]
+  },
+  {
+   "spriteId": 135,
+   "eventFlag": "FLG_DELIVERY_UNSOU_B",
+   "timeUntilDelivery": 10,
+   "messages": [
+    "MSG_UNSOU_LEAVE",
+    "MSG_UNSOU_LEAVE_RETRY_OVER"
+   ]
+  },
+  {
+   "spriteId": 55,
+   "eventFlag": "FLG_DELIVERY_CUSTOMER",
+   "timeUntilDelivery": 1,
+   "messages": [
+    "MSG_CUSTOMER_A",
+    "MSG_CUSTOMER_RETRY_OVER"
+   ]
+  },
+  {
+   "spriteId": 108,
+   "eventFlag": "FLG_DELIVERY_CUSTOMER_B",
+   "timeUntilDelivery": 2,
+   "messages": [
+    "MSG_CUSTOMER_B",
+    "MSG_CUSTOMER_RETRY_OVER"
+   ]
+  },
+  {
+   "spriteId": 112,
+   "eventFlag": "FLG_DELIVERY_CUSTOMER_C",
+   "timeUntilDelivery": 3,
+   "messages": [
+    "MSG_CUSTOMER_C",
+    "MSG_CUSTOMER_RETRY_OVER"
+   ]
+  },
+  {
+   "spriteId": 85,
+   "eventFlag": "FLG_DELIVERY_CUSTOMER_D",
+   "timeUntilDelivery": 4,
+   "messages": [
+    "MSG_CUSTOMER_D",
+    "MSG_CUSTOMER_RETRY_OVER"
+   ]
+  },
+  {
+   "spriteId": 151,
+   "eventFlag": "FLG_DELIVERY_HOIHOI",
+   "timeUntilDelivery": 5,
+   "messages": [
+    "MSG_THRK_MACH",
+    "MSG_EVT_HOIHOI_RETRY"
+   ]
+  },
+  {
+   "spriteId": 135,
+   "eventFlag": "FLG_DELIVERY_UNSOU_TAKOKESHI",
+   "timeUntilDelivery": 10,
+   "messages": [
+    "MSG_GLOBAL_DELIVERY_TACO",
+    "MSG_TAKOKESHI_RETRY_OVER"
+   ]
+  },
+  {
+   "spriteId": 135,
+   "eventFlag": "FLG_DELIVERY_UNSOU_TAKANOME",
+   "timeUntilDelivery": 10,
+   "messages": [
+    "MSG_GLOBAL_DELIVERY_TAKA",
+    "MSG_TAKANOME_RETRY_OVER"
+   ]
+  }
+ ]
+}

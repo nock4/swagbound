@@ -97,6 +97,98 @@
       ]
     },
     {
+      "id": "intake-ledger",
+      "kind": "examine",
+      "label": "The Intake Ledger",
+      "worldPixel": {
+        "x": 2332,
+        "y": 7208
+      },
+      "sprite": "assets/swagbound/props/intake-ledger.png",
+      "pages": [
+        "The first intake book lies open on a stand. Handwriting, crossed-out lines, a coffee ring.",
+        "Nobody prints a coffee ring."
+      ]
+    },
+    {
+      "id": "source-spring",
+      "kind": "examine",
+      "label": "The Source Spring",
+      "worldPixel": {
+        "x": 5132,
+        "y": 1700
+      },
+      "pages": [
+        "Warm water bubbles up behind the falls. The light in it looks older than the map.",
+        "The spring smells like rain before anyone named it."
+      ]
+    },
+    {
+      "id": "source-undelivered",
+      "kind": "examine",
+      "label": "The Undelivered",
+      "worldPixel": {
+        "x": 5420,
+        "y": 9692
+      },
+      "pages": [
+        "Crates sag in the rain, labels running but still legible.",
+        "Nobody opened these. That is why they still belong to someone."
+      ]
+    },
+    {
+      "id": "source-vault",
+      "kind": "examine",
+      "label": "The Vault of Certificates",
+      "worldPixel": {
+        "x": 2408,
+        "y": 6728
+      },
+      "pages": [
+        "Wet certificates hang in sheets along the service wall. Every signature is already dry.",
+        "The cutter waits with its mouth open."
+      ]
+    },
+    {
+      "id": "source-pier",
+      "kind": "examine",
+      "label": "The Broadcast Pier",
+      "worldPixel": {
+        "x": 7496,
+        "y": 2864
+      },
+      "pages": [
+        "The transmitter at the pier's end hums over the water. The sea keeps answering late.",
+        "A live song would have nowhere to hide out here."
+      ]
+    },
+    {
+      "id": "source-vacancy",
+      "kind": "examine",
+      "label": "The Vacancy Sign",
+      "worldPixel": {
+        "x": 2752,
+        "y": 9560
+      },
+      "pages": [
+        "The motel sign buzzes through one sentence, then changes one word before it finishes.",
+        "Bosch notices the change. The sign notices him noticing."
+      ]
+    },
+    {
+      "id": "source-first-record",
+      "kind": "examine",
+      "label": "The First Record",
+      "worldPixel": {
+        "x": 116,
+        "y": 404
+      },
+      "pages": [
+        "One object sits under one warm light. The room gives it enough silence to be first.",
+        "Nothing here asks to be copied."
+      ]
+    },
+    {
       "id": "stash-giantstep-ladder",
       "kind": "present",
       "label": "Hidden stash",

@@ -1,0 +1,612 @@
+{
+ "schema": "swagbound.flag-map.v1",
+ "comment": "Bridge from Swagbound narrative string flags to EarthBound numeric event flags (names from ebsrc, ids in content/rom-truth/event-flags.json). When the runtime sets a story flag, it also sets the mapped EB flags, which drives the vanilla flag machinery the converter carried over: NPC appear/disappear (world.json npcs eventFlag+showSprite), encounter-table gating (encounters.json), and later doors. 'ebFlags' are adopted now; 'candidates' need in-browser semantics verification before promotion.",
+ "entries": [
+  {
+   "storyFlag": "signal:clique_cleared",
+   "beat": "Card Clique beaten at the MONS LINK arcade (EB: Frank)",
+   "ebFlags": [
+    {
+     "id": 64,
+     "name": "FLG_WIN_FRANK"
+    },
+    {
+     "id": 363,
+     "name": "FLG_ONET_SHARK_A_DISAPPEAR"
+    },
+    {
+     "id": 364,
+     "name": "FLG_ONET_SHARK_B_DISAPPEAR"
+    },
+    {
+     "id": 365,
+     "name": "FLG_ONET_SHARK_C_DISAPPEAR"
+    },
+    {
+     "id": 697,
+     "name": "FLG_ONET_SHARK_2F_DISAPPEAR"
+    },
+    {
+     "id": 40,
+     "name": "FLG_ONET_GUARDSHARK_DISAPPEAR"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "signal:route_open",
+   "beat": "Returnless King beaten at the relay gate (EB: Captain Strong / roadblock)",
+   "ebFlags": [
+    {
+     "id": 450,
+     "name": "FLG_POLICE_STRONG_DISAPPEAR"
+    },
+    {
+     "id": 105,
+     "name": "FLG_ONET_GATEOPEN"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 289,
+     "name": "FLG_ONET_COPA_DISAPPEAR",
+     "note": "roadblock cop line A-E; verify which cops these hide before adopting"
+    },
+    {
+     "id": 290,
+     "name": "FLG_ONET_COPB_DISAPPEAR"
+    },
+    {
+     "id": 291,
+     "name": "FLG_ONET_COPC_DISAPPEAR"
+    },
+    {
+     "id": 292,
+     "name": "FLG_ONET_COPD_DISAPPEAR"
+    },
+    {
+     "id": 293,
+     "name": "FLG_ONET_COPE_DISAPPEAR"
+    }
+   ]
+  },
+  {
+   "storyFlag": "signal:threshold_cleared",
+   "beat": "Malady beaten at the first threshold (EB: Titanic Ant / Giant Step); Morningside dawns",
+   "ebFlags": [
+    {
+     "id": 190,
+     "name": "FLG_WIN_GIAN_BOSS"
+    },
+    {
+     "id": 422,
+     "name": "FLG_ONET_DAYBREAK"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 750,
+     "name": "FLG_STEP_ONET",
+     "note": "sanctuary-step recorded; adopt with the Attestation-anchor proposal"
+    }
+   ]
+  },
+  {
+   "storyFlag": "recruit:munch",
+   "beat": "Munch joins (Jeff slot)",
+   "ebFlags": [
+    {
+     "id": 14,
+     "name": "FLG_JEFF"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "recruit:cloak",
+   "beat": "Cloak joins in Postwick (Paula slot)",
+   "ebFlags": [
+    {
+     "id": 12,
+     "name": "FLG_POLA"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 13,
+     "name": "FLG_POLA_GRFD",
+     "note": "post-rescue town-state flag; verify what it changes in Twoson/Postwick"
+    }
+   ]
+  },
+  {
+   "storyFlag": "game:complete",
+   "beat": "Milady falls; the post-win world state",
+   "ebFlags": [
+    {
+     "id": 71,
+     "name": "FLG_WIN_GEPPU"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "intro:bedroom-opening-done",
+   "beat": "Wake-in-bed opening finished; the meteor-night containment lifts (gawker crowd departs, the 35 when-unset town-seal doors deactivate, the yard band becomes the road); nine dormant Morningside townsfolk (npcs 129-138) populate on FLG_MYHOME_START",
+   "ebFlags": [
+    {
+     "id": 469,
+     "name": "FLG_YAZIUMA_DISAPPEAR"
+    },
+    {
+     "id": 340,
+     "name": "UNKNOWN_0340"
+    },
+    {
+     "id": 375,
+     "name": "FLG_MYHOME_START"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "source:intake-ledger:cleared",
+   "beat": "The Intake Ledger under the Postwick Registry (EB: Lilliput Steps) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 191,
+     "name": "FLG_WIN_LLPT_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 743,
+     "name": "FLG_STEP_HAPPY",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
+  },
+  {
+   "storyFlag": "source:spring:cleared",
+   "beat": "The Source Spring in LSW (EB: Milky Well) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 193,
+     "name": "FLG_WIN_MLKY_BOSS"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "source:undelivered:cleared",
+   "beat": "The Undelivered yard outside Dead Letter (EB: Rainy Circle) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 192,
+     "name": "FLG_WIN_RAIN_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 372,
+     "name": "FLG_STEP_PAST",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
+  },
+  {
+   "storyFlag": "source:vault:cleared",
+   "beat": "The Vault of Certificates under The Galleria (EB: Magnet Hill) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 194,
+     "name": "FLG_WIN_MGNT_BOSS"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "source:pier:cleared",
+   "beat": "The Broadcast Pier at Solana Beach (EB: Pink Cloud) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 195,
+     "name": "FLG_WIN_PINK_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 110,
+     "name": "FLG_STEP_CAPEESTATE",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
+  },
+  {
+   "storyFlag": "source:vacancy:cleared",
+   "beat": "The Vacancy Sign at Vacancy Flats (EB: Lumine Hall) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 196,
+     "name": "FLG_WIN_LUMI_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 370,
+     "name": "FLG_STEP_DSRT",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
+  },
+  {
+   "storyFlag": "source:first-record:cleared",
+   "beat": "The First Record in The Unlisted Room (EB: Fire Spring); Mixtape completes (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 197,
+     "name": "FLG_WIN_FIRE_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 371,
+     "name": "FLG_STEP_MGKT",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
+  },
+  {
+   "storyFlag": "FLG_PHOTO_1",
+   "beat": "Archivist filed spot 1 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 698,
+     "name": "FLG_PHOTO_1"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_2",
+   "beat": "Archivist filed spot 2 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 699,
+     "name": "FLG_PHOTO_2"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_3",
+   "beat": "Archivist filed spot 3 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 700,
+     "name": "FLG_PHOTO_3"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_4",
+   "beat": "Archivist filed spot 4 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 701,
+     "name": "FLG_PHOTO_4"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_5",
+   "beat": "Archivist filed spot 5 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 702,
+     "name": "FLG_PHOTO_5"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_6",
+   "beat": "Archivist filed spot 6 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 703,
+     "name": "FLG_PHOTO_6"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_7",
+   "beat": "Archivist filed spot 7 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 704,
+     "name": "FLG_PHOTO_7"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_8",
+   "beat": "Archivist filed spot 8 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 705,
+     "name": "FLG_PHOTO_8"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_9",
+   "beat": "Archivist filed spot 9 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 706,
+     "name": "FLG_PHOTO_9"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_10",
+   "beat": "Archivist filed spot 10 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 707,
+     "name": "FLG_PHOTO_10"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_11",
+   "beat": "Archivist filed spot 11 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 708,
+     "name": "FLG_PHOTO_11"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_12",
+   "beat": "Archivist filed spot 12 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 709,
+     "name": "FLG_PHOTO_12"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_13",
+   "beat": "Archivist filed spot 13 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 710,
+     "name": "FLG_PHOTO_13"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_14",
+   "beat": "Archivist filed spot 14 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 711,
+     "name": "FLG_PHOTO_14"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_15",
+   "beat": "Archivist filed spot 15 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 712,
+     "name": "FLG_PHOTO_15"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_16",
+   "beat": "Archivist filed spot 16 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 713,
+     "name": "FLG_PHOTO_16"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_17",
+   "beat": "Archivist filed spot 17 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 714,
+     "name": "FLG_PHOTO_17"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_18",
+   "beat": "Archivist filed spot 18 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 715,
+     "name": "FLG_PHOTO_18"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_19",
+   "beat": "Archivist filed spot 19 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 716,
+     "name": "FLG_PHOTO_19"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_20",
+   "beat": "Archivist filed spot 20 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 717,
+     "name": "FLG_PHOTO_20"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_21",
+   "beat": "Archivist filed spot 21 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 718,
+     "name": "FLG_PHOTO_21"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_22",
+   "beat": "Archivist filed spot 22 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 719,
+     "name": "FLG_PHOTO_22"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_23",
+   "beat": "Archivist filed spot 23 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 720,
+     "name": "FLG_PHOTO_23"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_24",
+   "beat": "Archivist filed spot 24 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 721,
+     "name": "FLG_PHOTO_24"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_25",
+   "beat": "Archivist filed spot 25 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 722,
+     "name": "FLG_PHOTO_25"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_26",
+   "beat": "Archivist filed spot 26 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 723,
+     "name": "FLG_PHOTO_26"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_27",
+   "beat": "Archivist filed spot 27 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 724,
+     "name": "FLG_PHOTO_27"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_28",
+   "beat": "Archivist filed spot 28 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 725,
+     "name": "FLG_PHOTO_28"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_29",
+   "beat": "Archivist filed spot 29 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 726,
+     "name": "FLG_PHOTO_29"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_30",
+   "beat": "Archivist filed spot 30 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 727,
+     "name": "FLG_PHOTO_30"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_31",
+   "beat": "Archivist filed spot 31 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 728,
+     "name": "FLG_PHOTO_31"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "FLG_PHOTO_32",
+   "beat": "Archivist filed spot 32 (EB Wandering Photographer PHOTO flag).",
+   "ebFlags": [
+    {
+     "id": 729,
+     "name": "FLG_PHOTO_32"
+    }
+   ],
+   "candidates": []
+  }
+ ]
+}

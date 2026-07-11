@@ -1,0 +1,19 @@
+{
+  "schema": "swagbound.story-items.v1",
+  "items": [
+    {
+      "id": "dox-sheet",
+      "itemId": 206,
+      "name": "Dox Sheet",
+      "worldTexture": "story-item-dox-sheet",
+      "worldAsset": "assets/swagbound/story-items/dox-sheet-world.png",
+      "pickupFlag": "story-item:dox-sheet",
+      "useBeats": [
+        "leave-signal-town",
+        "deadletter-act3-end",
+        "milady-final"
+      ],
+      "storyRole": "The damaged record of Bosch that survived being copied; carried through all four acts."
+    }
+  ]
+}

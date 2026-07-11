@@ -31,9 +31,111 @@ const PSI_FLASH_COLOR_FREEZE = 0x5fe0ff;
 const PSI_FLASH_COLOR_THUNDER = 0xffe14d;
 const PSI_FLASH_COLOR_FLASH = 0xf2f2ff;
 const PSI_FLASH_COLOR_STARSTORM = 0xb46bff;
+const PSI_FLASH_COLOR_BEAM = 0xff54d8;
 const PSI_FLASH_COLOR_NEUTRAL = 0x8fe0d8;
 
 const TAU = Math.PI * 2;
+
+export type PsiBattleAnimationFamily = "beam" | "fire" | "ice" | "thunder" | "flash" | "cosmic" | "support";
+
+export type PsiBattleAnimationStyle =
+  | "radial"
+  | "fireSweep"
+  | "iceCrystal"
+  | "thunderBolt"
+  | "flashBurst"
+  | "cosmicSwirl"
+  | "supportGlow";
+
+export type PsiBattleAnimationDefinition = {
+  family: PsiBattleAnimationFamily;
+  style: PsiBattleAnimationStyle;
+  durationMs: number;
+  colors: readonly number[];
+  baseAlpha: number;
+  accentAlpha: number;
+  pulses: number;
+  burstCount: number;
+};
+
+export type PsiBattleAnimationPsiLike = {
+  id?: number;
+  name?: string;
+  type?: string;
+};
+
+export const PSI_BATTLE_ANIMATION_DEFINITIONS: Record<PsiBattleAnimationFamily, PsiBattleAnimationDefinition> = {
+  beam: {
+    family: "beam",
+    style: "radial",
+    durationMs: 840,
+    colors: [PSI_FLASH_COLOR_BEAM, 0xffffff, 0x6f4dff],
+    baseAlpha: 0.22,
+    accentAlpha: 0.7,
+    pulses: 4,
+    burstCount: 18
+  },
+  fire: {
+    family: "fire",
+    style: "fireSweep",
+    durationMs: 780,
+    colors: [PSI_FLASH_COLOR_FIRE, 0xff2f00, 0xffd04a],
+    baseAlpha: 0.28,
+    accentAlpha: 0.62,
+    pulses: 3,
+    burstCount: 10
+  },
+  ice: {
+    family: "ice",
+    style: "iceCrystal",
+    durationMs: 720,
+    colors: [PSI_FLASH_COLOR_FREEZE, 0xffffff, 0x3aa8ff],
+    baseAlpha: 0.24,
+    accentAlpha: 0.66,
+    pulses: 3,
+    burstCount: 14
+  },
+  thunder: {
+    family: "thunder",
+    style: "thunderBolt",
+    durationMs: 680,
+    colors: [PSI_FLASH_COLOR_THUNDER, 0xffffff, 0x7fd7ff],
+    baseAlpha: 0.34,
+    accentAlpha: 0.82,
+    pulses: 7,
+    burstCount: 5
+  },
+  flash: {
+    family: "flash",
+    style: "flashBurst",
+    durationMs: 740,
+    colors: [PSI_FLASH_COLOR_FLASH, 0xffffff, 0xfff49c],
+    baseAlpha: 0.38,
+    accentAlpha: 0.76,
+    pulses: 4,
+    burstCount: 12
+  },
+  cosmic: {
+    family: "cosmic",
+    style: "cosmicSwirl",
+    durationMs: 1020,
+    colors: [PSI_FLASH_COLOR_STARSTORM, 0x70d0ff, 0xffffff],
+    baseAlpha: 0.24,
+    accentAlpha: 0.68,
+    pulses: 5,
+    burstCount: 20
+  },
+  support: {
+    family: "support",
+    style: "supportGlow",
+    durationMs: 650,
+    colors: [PSI_FLASH_COLOR_NEUTRAL, 0xe8fff5, 0x95d4ff],
+    baseAlpha: 0.18,
+    accentAlpha: 0.46,
+    pulses: 1,
+    burstCount: 8
+  }
+};
 
 export function flashState(
   now: number,
@@ -126,23 +228,8 @@ export function flashOverlayState(
 }
 
 export function psiElementFlashColor(psiId: number): number {
-  const normalizedId = Number.isFinite(psiId) ? Math.floor(psiId) : 0;
-  if (normalizedId >= 5 && normalizedId <= 8) {
-    return PSI_FLASH_COLOR_FIRE;
-  }
-  if (normalizedId >= 9 && normalizedId <= 12) {
-    return PSI_FLASH_COLOR_FREEZE;
-  }
-  if (normalizedId >= 13 && normalizedId <= 16) {
-    return PSI_FLASH_COLOR_THUNDER;
-  }
-  if (normalizedId >= 17 && normalizedId <= 20) {
-    return PSI_FLASH_COLOR_FLASH;
-  }
-  if (normalizedId >= 21 && normalizedId <= 24) {
-    return PSI_FLASH_COLOR_STARSTORM;
-  }
-  return PSI_FLASH_COLOR_NEUTRAL;
+  const family = offensivePsiAnimationFamilyForId(psiId) ?? "support";
+  return PSI_BATTLE_ANIMATION_DEFINITIONS[family].colors[0] ?? PSI_FLASH_COLOR_NEUTRAL;
 }
 
 export type PsiElementFlashProfile = {
@@ -153,29 +240,55 @@ export type PsiElementFlashProfile = {
 };
 
 /**
- * Per-element PSI flash styling so each element *feels* distinct, not just a
- * different color: fire is a warm sustained wash, freeze a sharp cold snap,
- * thunder a fast strobe, flash a bright double-burst, starstorm a long twinkle.
+ * Legacy compact profile view backed by the full PSI animation definitions.
+ * Scene playback consumes the richer table directly.
  */
 export function psiElementFlashProfile(psiId: number): PsiElementFlashProfile {
-  const id = Number.isFinite(psiId) ? Math.floor(psiId) : 0;
-  const color = psiElementFlashColor(id);
-  if (id >= 5 && id <= 8) {
-    return { color, alpha: 0.3, durationMs: 300, pulses: 1 };
+  const definition = psiBattleAnimationForPsi({ id: psiId });
+  return {
+    color: definition.colors[0] ?? PSI_FLASH_COLOR_NEUTRAL,
+    alpha: definition.baseAlpha,
+    durationMs: definition.durationMs,
+    pulses: definition.pulses
+  };
+}
+
+export function psiBattleAnimationForPsi(psi: PsiBattleAnimationPsiLike | undefined): PsiBattleAnimationDefinition {
+  return PSI_BATTLE_ANIMATION_DEFINITIONS[psiBattleAnimationFamilyForPsi(psi)];
+}
+
+export function psiBattleAnimationFamilyForPsi(
+  psi: PsiBattleAnimationPsiLike | undefined
+): PsiBattleAnimationFamily {
+  const tokens = psiTypeTokens(psi?.type);
+  if (tokens.has("recovery") || tokens.has("recover") || tokens.has("assist") || tokens.has("other")) {
+    return "support";
   }
-  if (id >= 9 && id <= 12) {
-    return { color, alpha: 0.24, durationMs: 190, pulses: 1 };
+  const idFamily = offensivePsiAnimationFamilyForId(psi?.id);
+  if (idFamily) {
+    return idFamily;
   }
-  if (id >= 13 && id <= 16) {
-    return { color, alpha: 0.34, durationMs: 80, pulses: 3 };
+  const nameFamily = psiBattleAnimationFamilyForName(psi?.name);
+  if (nameFamily) {
+    return nameFamily;
   }
-  if (id >= 17 && id <= 20) {
-    return { color, alpha: 0.4, durationMs: 95, pulses: 2 };
+  return tokens.has("offense") ? "beam" : "support";
+}
+
+export function offensivePsiAnimationFamilyForId(
+  psiId: number | undefined
+): Exclude<PsiBattleAnimationFamily, "support"> | null {
+  if (psiId === undefined || !Number.isFinite(psiId)) {
+    return null;
   }
-  if (id >= 21 && id <= 24) {
-    return { color, alpha: 0.22, durationMs: 380, pulses: 1 };
-  }
-  return { color, alpha: 0.26, durationMs: 230, pulses: 1 };
+  const id = Math.floor(psiId);
+  if (id >= 1 && id <= 4) return "beam";
+  if (id >= 5 && id <= 8) return "fire";
+  if (id >= 9 && id <= 12) return "ice";
+  if (id >= 13 && id <= 16) return "thunder";
+  if (id >= 17 && id <= 20) return "flash";
+  if (id >= 21 && id <= 22) return "cosmic";
+  return null;
 }
 
 export function attackerLungeOffset(
@@ -226,6 +339,24 @@ function activeElapsed(now: number, startedAt: number | null, durationMs: number
 
   const elapsed = now - startedAt;
   return elapsed >= 0 && elapsed < durationMs ? elapsed : null;
+}
+
+function psiBattleAnimationFamilyForName(name: string | undefined): Exclude<PsiBattleAnimationFamily, "support"> | null {
+  const normalized = name?.trim().toLowerCase() ?? "";
+  if (!normalized) {
+    return null;
+  }
+  if (normalized.includes("fire")) return "fire";
+  if (normalized.includes("freeze") || normalized.includes("cold")) return "ice";
+  if (normalized.includes("thunder") || normalized.includes("shock")) return "thunder";
+  if (normalized.includes("flash")) return "flash";
+  if (normalized.includes("starstorm") || normalized.includes("cosmic")) return "cosmic";
+  if (normalized.includes("rockin") || normalized.includes("static") || normalized.includes("beam")) return "beam";
+  return null;
+}
+
+function psiTypeTokens(type: string | undefined): Set<string> {
+  return new Set((type ?? "").toLowerCase().match(/[a-z]+/g) ?? []);
 }
 
 function clamp01(value: number): number {

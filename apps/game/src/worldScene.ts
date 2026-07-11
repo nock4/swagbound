@@ -12,7 +12,7 @@ import {
 } from "./loader";
 import { interactionEvents, type GameEvent } from "./eventRunner";
 import { RuntimeEventHost, RuntimeEventSequence, type EventWarpDestination } from "./eventHost";
-import { GameFlags } from "./gameFlags";
+import { GameFlags, flagAliasesFromMap } from "./gameFlags";
 import { behaviorForNpc } from "./npcBehaviors";
 import { isNpcVisibleForRuntimeFlags } from "./npcVisibility";
 import {
@@ -79,8 +79,13 @@ import {
 import { buildPartyMember, type PartyMember } from "./characterModel";
 import { activeWindowFlavorId } from "./windowSettings";
 import { isKeyItemId } from "./keyItems";
+import { fieldCondimentUseMessage, fieldItemToolMessage, fieldItemUseMessage, fieldPsiEffect, fieldPsiUseMessage } from "./fieldUseFeedback";
+import { collectedEightSourcesCount, ORIGINAL_MIXTAPE_ITEM_ID, originalMixtapeFieldMessage } from "./eightSources";
+import { itemUsability, psiUsability, USABILITY_REFUSAL_MESSAGE } from "./usabilityMatrix";
+import { EB_NORMAL_WALK_SPEED } from "./ebTiming";
 
-export const PLAYER_SPEED = 110; // world pixels per second
+export const PLAYER_SPEED = EB_NORMAL_WALK_SPEED.cardinalPxPerSecond;
+export const PLAYER_DIAGONAL_SPEED = EB_NORMAL_WALK_SPEED.diagonalPxPerSecond;
 export const INTERACTION_DISTANCE = 28; // world pixels between feet positions
 
 type NpcRuntime = {
@@ -145,6 +150,7 @@ export class WorldScene extends Phaser.Scene {
   }): void {
     this.data_ = data.gameData;
     this.world_ = data.gameData.world as WorldRegion;
+    this.gameFlags.setAliases(flagAliasesFromMap(data.gameData.flagMap));
     this.bootSaveState = data.saveState ?? undefined;
     this.saveSlot = Number.isInteger(data.saveSlot) && (data.saveSlot as number) >= 0 ? data.saveSlot as number : 0;
     this.saveSlots = data.saveSlots;
@@ -261,9 +267,16 @@ export class WorldScene extends Phaser.Scene {
   private createNpcRuntime(npc: WorldNpc): NpcRuntime {
     const frames = this.framesForGroup(npc.spriteGroup);
     const facing = toFacing(npc.direction);
+    const movementPattern = this.data_.npcMovementPatterns.byNpcId[String(npc.npcId)]?.pattern;
     return {
       data: npc,
-      state: createNpcState(npc.regionPixel.x, npc.regionPixel.y, facing, behaviorForNpc(npc.npcId, npc.movement), frames),
+      state: createNpcState(
+        npc.regionPixel.x,
+        npc.regionPixel.y,
+        facing,
+        behaviorForNpc(npc.npcId, npc.movement, { movementPattern }),
+        frames
+      ),
       frames,
       sprite: this.spawnActor(npc.regionPixel.x, npc.regionPixel.y, npc.spriteGroup, npc.direction)
     };
@@ -336,6 +349,7 @@ export class WorldScene extends Phaser.Scene {
     stepPlayer(this.playerState, this.readInput(), {
       deltaMs: delta,
       speed: PLAYER_SPEED,
+      diagonalSpeed: PLAYER_DIAGONAL_SPEED,
       bounds: this.movementBounds(),
       blocked: (x, y) => this.blocked(x, y, { includeNpcs: true }),
       frames: this.playerFrames
@@ -468,7 +482,7 @@ export class WorldScene extends Phaser.Scene {
     return Phaser.Math.Distance.Between(this.playerState.x, this.playerState.y, npc.state.player.x, npc.state.player.y);
   }
 
-  /** Radius-only proximity (facing not required) — used for prompts/debug. */
+  /** Radius-only proximity (facing not required), used for prompts/debug. */
   private inRange(): boolean {
     return Boolean(nearestInteractable(this.playerState, this.interactionCandidates(), INTERACTION_DISTANCE));
   }
@@ -604,6 +618,10 @@ export class WorldScene extends Phaser.Scene {
       this.handleItemUseAction(action);
       return;
     }
+    if (action.kind === "psiUse") {
+      this.handlePsiUseAction(action);
+      return;
+    }
     if (action.kind === "equip") {
       this.handleEquipAction(action);
       return;
@@ -649,20 +667,79 @@ export class WorldScene extends Phaser.Scene {
 
   private handleItemUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "itemUse" }>): void {
     const item = this.itemById(action.itemId);
+    const owner = this.partyMemberById(action.ownerChar);
     const target = this.partyMemberById(action.targetChar);
     if (!item || this.partyState.inventory(action.ownerChar)[action.inventorySlot] !== action.itemId) {
       this.showMenuResult("You can't use that.");
       return;
     }
+    const row = itemUsability(this.data_.usabilityMatrix, item.id);
+    if (!row?.fieldUse) {
+      this.showMenuResult(USABILITY_REFUSAL_MESSAGE);
+      return;
+    }
+    if (item.id === ORIGINAL_MIXTAPE_ITEM_ID) {
+      const collected = collectedEightSourcesCount((flag) => this.gameFlags.has(flag));
+      this.showMenuResult(originalMixtapeFieldMessage(collected));
+      return;
+    }
+    const condimentResult = this.partyState.combineCondiment({
+      ownerChar: action.ownerChar,
+      condimentItemId: action.itemId,
+      condimentSlot: action.inventorySlot,
+      pairs: this.data_.condimentPairs
+    });
+    if (condimentResult.ok) {
+      const base = this.itemById(condimentResult.baseItemId);
+      this.showMenuResult(fieldCondimentUseMessage(
+        owner ?? target ?? { name: "Someone" },
+        item,
+        base ?? { name: `item ${condimentResult.baseItemId}` },
+        condimentResult
+      ));
+      return;
+    }
     const result = this.partyState.useItem({
       ownerChar: action.ownerChar,
       targetChar: action.targetChar,
+      inventorySlot: action.inventorySlot,
       item,
+      targetVitals: vitalsForPartyMember(target),
+      fieldUse: row.fieldUse
+    });
+    if (result.ok) {
+      this.showMenuResult(fieldItemUseMessage(target ?? owner ?? { name: "Someone" }, item, row, result));
+      return;
+    }
+    if (result.reason === "notConsumable" || result.reason === "unknownEffect") {
+      this.showMenuResult(fieldItemToolMessage(owner ?? target ?? { name: "Someone" }, item, row));
+      return;
+    }
+    this.showMenuResult(result.reason === "notFieldUsable" ? USABILITY_REFUSAL_MESSAGE : "You can't use that.");
+  }
+
+  private handlePsiUseAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "psiUse" }>): void {
+    const psi = this.psiById(action.psiId);
+    const caster = this.partyMemberById(action.casterChar);
+    const target = this.partyMemberById(action.targetChar) ?? caster;
+    const row = psiUsability(this.data_.usabilityMatrix, action.psiId);
+    if (!psi || !caster || !target || !row?.fieldUse) {
+      this.showMenuResult(USABILITY_REFUSAL_MESSAGE);
+      return;
+    }
+    const result = this.partyState.useFieldPsi({
+      casterChar: action.casterChar,
+      targetChar: action.targetChar,
+      ppCost: row.ppCost,
+      effect: fieldPsiEffect(psi),
+      casterVitals: vitalsForPartyMember(caster),
       targetVitals: vitalsForPartyMember(target)
     });
-    this.showMenuResult(result.ok
-      ? "Used."
-      : result.reason === "notFieldUsable" ? "You can't use that here." : "You can't use that.");
+    if (result.ok) {
+      this.showMenuResult(fieldPsiUseMessage(caster, target, psi, result));
+      return;
+    }
+    this.showMenuResult(result.reason === "insufficientPp" ? "Not enough PP." : USABILITY_REFUSAL_MESSAGE);
   }
 
   private handleEquipAction(action: Extract<ReturnType<typeof parseMenuAction>, { kind: "equip" }>): void {
@@ -677,6 +754,10 @@ export class WorldScene extends Phaser.Scene {
 
   private itemById(itemId: number): ItemData | undefined {
     return this.data_.items?.items.find((item) => item.id === itemId);
+  }
+
+  private psiById(psiId: number) {
+    return this.data_.psi?.psi.find((psi) => psi.id === psiId);
   }
 
   private partyMemberById(charId: number): PartyMember | undefined {
@@ -732,6 +813,7 @@ export class WorldScene extends Phaser.Scene {
       characters: this.data_.characters,
       items: this.data_.items,
       keyItems: this.data_.keyItems,
+      usabilityMatrix: this.data_.usabilityMatrix,
       psi: this.data_.psi,
       shops: this.data_.shops,
       partyState: this.partyState,
@@ -742,6 +824,7 @@ export class WorldScene extends Phaser.Scene {
         characters: this.data_.characters,
         items: this.data_.items,
         keyItems: this.data_.keyItems,
+        usabilityMatrix: this.data_.usabilityMatrix,
         shops: this.data_.shops,
         partyState: this.partyState,
         resolver,
@@ -975,6 +1058,7 @@ export class WorldScene extends Phaser.Scene {
       characters: this.data_.characters,
       items: this.data_.items,
       psi: this.data_.psi,
+      usabilityMatrix: this.data_.usabilityMatrix,
       font: this.data_.font,
       window: this.data_.window,
       spriteOverrides: this.data_.spriteOverrides,

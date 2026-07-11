@@ -25,6 +25,29 @@ export type DoorIntentProbeOptions = {
   footBox?: FootBox;
 };
 
+/**
+ * EB conditional doors (wave-2 subset): a door whose event flag carries the 0x8000
+ * bit is active only while flag (id & 0x7FFF) is UNSET — EarthBound's containment
+ * doors (e.g. the 35 meteor-night town seals on flag 340). Honoring only the
+ * when-unset class can never break a day-one door: all flags start clear, so these
+ * doors behave exactly as before until a story flag retires them. Doors with a
+ * plain non-zero flag (e.g. Bosch's front door, flag 474) stay ALWAYS ACTIVE until
+ * their set-state semantics are verified against vanilla.
+ */
+export function doorActiveForFlags(
+  eventFlag: string | undefined,
+  flags: { isSet(flag: number): boolean }
+): boolean {
+  const raw = eventFlag ? Number.parseInt(eventFlag, 16) : 0;
+  if (!Number.isFinite(raw) || raw <= 0) {
+    return true;
+  }
+  if (raw & 0x8000) {
+    return !flags.isSet(raw & 0x7fff);
+  }
+  return true;
+}
+
 export type DoorWarpLanding = {
   point: { x: number; y: number };
   walkable: boolean;

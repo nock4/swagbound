@@ -4567,6 +4567,7171 @@
      "The work mocks the work above it, which mocks the work beside it. The joke's provenance is intact; the museum notes only the original has gone missing, and no one is looking."
     ]
    }
+  },
+  {
+   "id": 101730,
+   "worldPixel": {
+    "x": 1764,
+    "y": 1796
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1038. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101731,
+   "worldPixel": {
+    "x": 1212,
+    "y": 1516
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1120 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101732,
+   "worldPixel": {
+    "x": 1460,
+    "y": 1900
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in morningside because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101733,
+   "worldPixel": {
+    "x": 2020,
+    "y": 1620
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 120. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101734,
+   "worldPixel": {
+    "x": 1860,
+    "y": 1644
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1219 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101735,
+   "worldPixel": {
+    "x": 1676,
+    "y": 2156
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in morningside because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101736,
+   "worldPixel": {
+    "x": 1228,
+    "y": 1756
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1258. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101737,
+   "worldPixel": {
+    "x": 2180,
+    "y": 1612
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1262 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101738,
+   "worldPixel": {
+    "x": 2308,
+    "y": 1572
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in morningside because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101739,
+   "worldPixel": {
+    "x": 2260,
+    "y": 2188
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1297. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101740,
+   "worldPixel": {
+    "x": 1276,
+    "y": 7244
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1306 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101741,
+   "worldPixel": {
+    "x": 1340,
+    "y": 7100
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in postwick because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101742,
+   "worldPixel": {
+    "x": 2828,
+    "y": 7084
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1328. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101743,
+   "worldPixel": {
+    "x": 1716,
+    "y": 6756
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1362 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101744,
+   "worldPixel": {
+    "x": 2676,
+    "y": 6212
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in postwick because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101745,
+   "worldPixel": {
+    "x": 3492,
+    "y": 6836
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1471. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101746,
+   "worldPixel": {
+    "x": 2548,
+    "y": 6732
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 153 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101747,
+   "worldPixel": {
+    "x": 1676,
+    "y": 6788
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in postwick because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101748,
+   "worldPixel": {
+    "x": 2348,
+    "y": 6644
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1596. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101749,
+   "worldPixel": {
+    "x": 2020,
+    "y": 6844
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1656 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101750,
+   "worldPixel": {
+    "x": 3260,
+    "y": 7172
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in bluebell village because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101751,
+   "worldPixel": {
+    "x": 2436,
+    "y": 7252
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1687. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101752,
+   "worldPixel": {
+    "x": 3060,
+    "y": 7316
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1706 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101753,
+   "worldPixel": {
+    "x": 3508,
+    "y": 7092
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in bluebell village because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101754,
+   "worldPixel": {
+    "x": 2988,
+    "y": 7372
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1776. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101755,
+   "worldPixel": {
+    "x": 3260,
+    "y": 7108
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1805 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101756,
+   "worldPixel": {
+    "x": 2684,
+    "y": 7060
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in bluebell village because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101757,
+   "worldPixel": {
+    "x": 3084,
+    "y": 7404
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1825. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101758,
+   "worldPixel": {
+    "x": 6900,
+    "y": 268
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1844 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101759,
+   "worldPixel": {
+    "x": 5052,
+    "y": 2532
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in little swag world because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101760,
+   "worldPixel": {
+    "x": 7164,
+    "y": 2908
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1856. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101761,
+   "worldPixel": {
+    "x": 4364,
+    "y": 1348
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 1886 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101762,
+   "worldPixel": {
+    "x": 7644,
+    "y": 3468
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in little swag world because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101763,
+   "worldPixel": {
+    "x": 6180,
+    "y": 3108
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 1946. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101764,
+   "worldPixel": {
+    "x": 6740,
+    "y": 1740
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 2014 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101765,
+   "worldPixel": {
+    "x": 7980,
+    "y": 4004
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in little swag world because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101766,
+   "worldPixel": {
+    "x": 5300,
+    "y": 3148
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2075. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101767,
+   "worldPixel": {
+    "x": 5196,
+    "y": 2948
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 2085 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101768,
+   "worldPixel": {
+    "x": 5132,
+    "y": 1948
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in little swag world because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101769,
+   "worldPixel": {
+    "x": 6788,
+    "y": 2004
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2125. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101770,
+   "worldPixel": {
+    "x": 5012,
+    "y": 4132
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 2130 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101771,
+   "worldPixel": {
+    "x": 7788,
+    "y": 3532
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in little swag world because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101772,
+   "worldPixel": {
+    "x": 4708,
+    "y": 1972
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2202. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101773,
+   "worldPixel": {
+    "x": 7396,
+    "y": 3980
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 2211 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101774,
+   "worldPixel": {
+    "x": 5404,
+    "y": 3028
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in solana beach because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101775,
+   "worldPixel": {
+    "x": 6740,
+    "y": 3052
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2273. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101776,
+   "worldPixel": {
+    "x": 5508,
+    "y": 2620
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 228 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101777,
+   "worldPixel": {
+    "x": 5612,
+    "y": 3076
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in solana beach because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101778,
+   "worldPixel": {
+    "x": 3804,
+    "y": 3556
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2379. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101779,
+   "worldPixel": {
+    "x": 6748,
+    "y": 2612
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 2383 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101780,
+   "worldPixel": {
+    "x": 6300,
+    "y": 2908
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in solana beach because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101781,
+   "worldPixel": {
+    "x": 5228,
+    "y": 3676
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2420. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101782,
+   "worldPixel": {
+    "x": 5660,
+    "y": 6268
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 2463 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101783,
+   "worldPixel": {
+    "x": 4420,
+    "y": 3812
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in the galleria because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101784,
+   "worldPixel": {
+    "x": 5924,
+    "y": 4556
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2577. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101785,
+   "worldPixel": {
+    "x": 5156,
+    "y": 6516
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 2590 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101786,
+   "worldPixel": {
+    "x": 5972,
+    "y": 3436
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in the galleria because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101787,
+   "worldPixel": {
+    "x": 3796,
+    "y": 4548
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2673. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101788,
+   "worldPixel": {
+    "x": 5188,
+    "y": 5236
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 2695 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101789,
+   "worldPixel": {
+    "x": 6092,
+    "y": 5116
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in the galleria because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101790,
+   "worldPixel": {
+    "x": 6468,
+    "y": 4524
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2765. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101791,
+   "worldPixel": {
+    "x": 3756,
+    "y": 3356
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 2818 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101792,
+   "worldPixel": {
+    "x": 6036,
+    "y": 6356
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in vacancy flats because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101793,
+   "worldPixel": {
+    "x": 7948,
+    "y": 5316
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2824. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101794,
+   "worldPixel": {
+    "x": 7084,
+    "y": 6700
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 287 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101795,
+   "worldPixel": {
+    "x": 5252,
+    "y": 6836
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in vacancy flats because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101796,
+   "worldPixel": {
+    "x": 5076,
+    "y": 5996
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 2943. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101797,
+   "worldPixel": {
+    "x": 7916,
+    "y": 6628
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 300 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101798,
+   "worldPixel": {
+    "x": 7092,
+    "y": 5108
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in vacancy flats because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101799,
+   "worldPixel": {
+    "x": 6748,
+    "y": 5044
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 3109. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101800,
+   "worldPixel": {
+    "x": 5292,
+    "y": 5228
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 3115 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101801,
+   "worldPixel": {
+    "x": 6324,
+    "y": 7844
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in vacancy flats because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101802,
+   "worldPixel": {
+    "x": 6244,
+    "y": 9308
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 3140. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101803,
+   "worldPixel": {
+    "x": 5388,
+    "y": 9516
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 3151 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101804,
+   "worldPixel": {
+    "x": 5212,
+    "y": 9548
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in dead letter because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101805,
+   "worldPixel": {
+    "x": 6796,
+    "y": 10076
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 3231. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101806,
+   "worldPixel": {
+    "x": 8084,
+    "y": 8356
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 3240 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101807,
+   "worldPixel": {
+    "x": 5020,
+    "y": 10036
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in dead letter because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101808,
+   "worldPixel": {
+    "x": 6476,
+    "y": 9452
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 3301. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101809,
+   "worldPixel": {
+    "x": 5772,
+    "y": 8620
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 3319 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101810,
+   "worldPixel": {
+    "x": 4476,
+    "y": 9164
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in dead letter because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101811,
+   "worldPixel": {
+    "x": 6700,
+    "y": 10052
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 424. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101812,
+   "worldPixel": {
+    "x": 4236,
+    "y": 9868
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 445 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101813,
+   "worldPixel": {
+    "x": 5140,
+    "y": 8804
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in dead letter because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101814,
+   "worldPixel": {
+    "x": 116,
+    "y": 3316
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 514. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101815,
+   "worldPixel": {
+    "x": 2604,
+    "y": 1788
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 537 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101816,
+   "worldPixel": {
+    "x": 3572,
+    "y": 5044
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in the unlisted room because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101817,
+   "worldPixel": {
+    "x": 2676,
+    "y": 5004
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 733. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101818,
+   "worldPixel": {
+    "x": 2268,
+    "y": 1148
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 837 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101819,
+   "worldPixel": {
+    "x": 1548,
+    "y": 6396
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in secret because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101820,
+   "worldPixel": {
+    "x": 268,
+    "y": 5404
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I came from Little Swag World with a receipt in my sock and a folder chasing me uphill.",
+     "The folder calls me Lsw 857. I call the folder a copier with posture.",
+     "Tell the registry I am friendly. It hates adjectives it did not invent."
+    ]
+   }
+  },
+  {
+   "id": 101821,
+   "worldPixel": {
+    "x": 4684,
+    "y": 7980
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "They said the source war needed heroes. I brought snacks and a clean witness statement.",
+     "If anyone asks, Lsw 864 was here before the label learned to spell me.",
+     "Do not let the clipboard flatter you. That is how it gets a folder started."
+    ]
+   }
+  },
+  {
+   "id": 101822,
+   "worldPixel": {
+    "x": 3164,
+    "y": 7268
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am posted in secret because the route needed someone normal-adjacent.",
+     "The leaked version of me smiles better. Naturally it has investors.",
+     "The real version has dry socks and worse lighting. More trustworthy, honestly."
+    ]
+   }
+  },
+  {
+   "id": 101823,
+   "worldPixel": {
+    "x": 2356,
+    "y": 6076
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Kinfolks 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101824,
+   "worldPixel": {
+    "x": 1260,
+    "y": 8268
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Kinfolks 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101825,
+   "worldPixel": {
+    "x": 5964,
+    "y": 5628
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Kinfolks 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101826,
+   "worldPixel": {
+    "x": 1612,
+    "y": 4436
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Knights And Angels 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101827,
+   "worldPixel": {
+    "x": 828,
+    "y": 8428
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Knights And Angels 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101828,
+   "worldPixel": {
+    "x": 6476,
+    "y": 2172
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Knights And Angels 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101829,
+   "worldPixel": {
+    "x": 6020,
+    "y": 5580
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Lf1000x 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101830,
+   "worldPixel": {
+    "x": 4452,
+    "y": 6644
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Lf1000x 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101831,
+   "worldPixel": {
+    "x": 2724,
+    "y": 3732
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Lf1000x 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101832,
+   "worldPixel": {
+    "x": 6092,
+    "y": 5612
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Lf1000x 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101833,
+   "worldPixel": {
+    "x": 7492,
+    "y": 8156
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Lfvad2k24 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101834,
+   "worldPixel": {
+    "x": 6756,
+    "y": 2116
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Lfvad2k24 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101835,
+   "worldPixel": {
+    "x": 1388,
+    "y": 4724
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Lfvad2k24 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101836,
+   "worldPixel": {
+    "x": 2316,
+    "y": 6724
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Lfvad2k24 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101837,
+   "worldPixel": {
+    "x": 1780,
+    "y": 4756
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Liu Family Maker 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101838,
+   "worldPixel": {
+    "x": 6732,
+    "y": 1812
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Liu Family Maker 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101839,
+   "worldPixel": {
+    "x": 2428,
+    "y": 4828
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Liu Family Maker 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101840,
+   "worldPixel": {
+    "x": 6484,
+    "y": 2132
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Liu Family Maker 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101841,
+   "worldPixel": {
+    "x": 6452,
+    "y": 2116
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Mr World 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101842,
+   "worldPixel": {
+    "x": 7484,
+    "y": 7772
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Mr World 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101843,
+   "worldPixel": {
+    "x": 956,
+    "y": 8804
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Mr World 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101844,
+   "worldPixel": {
+    "x": 4628,
+    "y": 6708
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Mr World 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101845,
+   "worldPixel": {
+    "x": 2740,
+    "y": 3660
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Mr World 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101846,
+   "worldPixel": {
+    "x": 2980,
+    "y": 5052
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Miimaker 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101847,
+   "worldPixel": {
+    "x": 7540,
+    "y": 7772
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Miimaker 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101848,
+   "worldPixel": {
+    "x": 4380,
+    "y": 6732
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Miimaker 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101849,
+   "worldPixel": {
+    "x": 1260,
+    "y": 4668
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Miimaker 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101850,
+   "worldPixel": {
+    "x": 3412,
+    "y": 4716
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Name 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101851,
+   "worldPixel": {
+    "x": 644,
+    "y": 8700
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Name 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101852,
+   "worldPixel": {
+    "x": 7460,
+    "y": 7804
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Name 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101853,
+   "worldPixel": {
+    "x": 1404,
+    "y": 4596
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Name 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101854,
+   "worldPixel": {
+    "x": 980,
+    "y": 8772
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Name 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101855,
+   "worldPixel": {
+    "x": 1596,
+    "y": 4316
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Nft Santa Regina 2027 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101856,
+   "worldPixel": {
+    "x": 1356,
+    "y": 7068
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Nft Santa Regina 2027 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101857,
+   "worldPixel": {
+    "x": 948,
+    "y": 6404
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Nft Santa Regina 2027 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101858,
+   "worldPixel": {
+    "x": 6668,
+    "y": 1692
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Nft Santa Regina 2027 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101859,
+   "worldPixel": {
+    "x": 6444,
+    "y": 2292
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Nft Santa Regina 2027 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101860,
+   "worldPixel": {
+    "x": 1804,
+    "y": 4156
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Pick Me Ports 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101861,
+   "worldPixel": {
+    "x": 3292,
+    "y": 4668
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Pick Me Ports 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101862,
+   "worldPixel": {
+    "x": 3028,
+    "y": 4372
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Pick Me Ports 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101863,
+   "worldPixel": {
+    "x": 1004,
+    "y": 8468
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Pick Me Ports 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101864,
+   "worldPixel": {
+    "x": 1836,
+    "y": 4692
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Rajeevi Hindu Cousins 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101865,
+   "worldPixel": {
+    "x": 3084,
+    "y": 7276
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Rajeevi Hindu Cousins 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101866,
+   "worldPixel": {
+    "x": 4692,
+    "y": 6732
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Rajeevi Hindu Cousins 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101867,
+   "worldPixel": {
+    "x": 1820,
+    "y": 4620
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Rajeevi Hindu Cousins 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101868,
+   "worldPixel": {
+    "x": 1868,
+    "y": 7188
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Retardio Cousins 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101869,
+   "worldPixel": {
+    "x": 1660,
+    "y": 7660
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Retardio Cousins 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101870,
+   "worldPixel": {
+    "x": 6676,
+    "y": 1916
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Squire Makere 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101871,
+   "worldPixel": {
+    "x": 3860,
+    "y": 3844
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Squire Makere 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101872,
+   "worldPixel": {
+    "x": 1212,
+    "y": 6220
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Squire Makere 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101873,
+   "worldPixel": {
+    "x": 6692,
+    "y": 1852
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Squire Makere 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101874,
+   "worldPixel": {
+    "x": 7612,
+    "y": 7788
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Squire Makere 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101875,
+   "worldPixel": {
+    "x": 2284,
+    "y": 4916
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Vintage Warriors 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101876,
+   "worldPixel": {
+    "x": 3092,
+    "y": 4124
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Vintage Warriors 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101877,
+   "worldPixel": {
+    "x": 2756,
+    "y": 3476
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Vintage Warriors 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101878,
+   "worldPixel": {
+    "x": 2644,
+    "y": 5156
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Vintage Warriors 004 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101879,
+   "worldPixel": {
+    "x": 2820,
+    "y": 3996
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Vintage Warriors 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101880,
+   "worldPixel": {
+    "x": 1300,
+    "y": 4732
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Santagods 001 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101881,
+   "worldPixel": {
+    "x": 1812,
+    "y": 4124
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Santagods 002 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101882,
+   "worldPixel": {
+    "x": 4548,
+    "y": 6716
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Santagods 003 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101883,
+   "worldPixel": {
+    "x": 6708,
+    "y": 1628
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "I am just browsing. The shelf keeps trying to browse me back.",
+     "If the clerk asks, Santagods 005 is a customer, not inventory. Subtle distinction, huge paperwork."
+    ]
+   }
+  },
+  {
+   "id": 101884,
+   "worldPixel": {
+    "x": 3652,
+    "y": 1580
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am 80clu20fa 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101885,
+   "worldPixel": {
+    "x": 2876,
+    "y": 2620
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am 80clu20fa 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101886,
+   "worldPixel": {
+    "x": 444,
+    "y": 4356
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am 80clu20fa 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101887,
+   "worldPixel": {
+    "x": 1940,
+    "y": 1756
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am 80clu20fa 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101888,
+   "worldPixel": {
+    "x": 2132,
+    "y": 2676
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am 80clu20fa 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101889,
+   "worldPixel": {
+    "x": 1772,
+    "y": 4548
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Angel Orbz 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101890,
+   "worldPixel": {
+    "x": 1324,
+    "y": 1452
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Angel Orbz 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101891,
+   "worldPixel": {
+    "x": 3412,
+    "y": 2356
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Angel Orbz 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101892,
+   "worldPixel": {
+    "x": 532,
+    "y": 4812
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Angel Orbz 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101893,
+   "worldPixel": {
+    "x": 3620,
+    "y": 1436
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Angel Orbz 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101894,
+   "worldPixel": {
+    "x": 796,
+    "y": 2548
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Bpd Drainers 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101895,
+   "worldPixel": {
+    "x": 2212,
+    "y": 1508
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Bpd Drainers 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101896,
+   "worldPixel": {
+    "x": 692,
+    "y": 244
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Bpd Drainers 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101897,
+   "worldPixel": {
+    "x": 980,
+    "y": 5300
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Bpd Drainers 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101898,
+   "worldPixel": {
+    "x": 1180,
+    "y": 4220
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blume 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101899,
+   "worldPixel": {
+    "x": 3188,
+    "y": 3284
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blume 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101900,
+   "worldPixel": {
+    "x": 972,
+    "y": 5132
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blume 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101901,
+   "worldPixel": {
+    "x": 4300,
+    "y": 2356
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blume 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101902,
+   "worldPixel": {
+    "x": 3844,
+    "y": 2220
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blume 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101903,
+   "worldPixel": {
+    "x": 1740,
+    "y": 1524
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blyadilio 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101904,
+   "worldPixel": {
+    "x": 2564,
+    "y": 2724
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blyadilio 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101905,
+   "worldPixel": {
+    "x": 708,
+    "y": 3100
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blyadilio 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101906,
+   "worldPixel": {
+    "x": 1492,
+    "y": 5188
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blyadilio 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101907,
+   "worldPixel": {
+    "x": 2804,
+    "y": 684
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Blyadilio 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101908,
+   "worldPixel": {
+    "x": 1164,
+    "y": 1132
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Cryptic Kids 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101909,
+   "worldPixel": {
+    "x": 476,
+    "y": 4452
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Cryptic Kids 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101910,
+   "worldPixel": {
+    "x": 3556,
+    "y": 4796
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Cryptic Kids 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101911,
+   "worldPixel": {
+    "x": 4228,
+    "y": 4428
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Cryptic Kids 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101912,
+   "worldPixel": {
+    "x": 1108,
+    "y": 1012
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Cryptic Kids 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101913,
+   "worldPixel": {
+    "x": 3556,
+    "y": 1580
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Ded 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101914,
+   "worldPixel": {
+    "x": 2596,
+    "y": 3572
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Ded 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101915,
+   "worldPixel": {
+    "x": 2396,
+    "y": 1500
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Ded 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101916,
+   "worldPixel": {
+    "x": 1892,
+    "y": 1004
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Ded 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101917,
+   "worldPixel": {
+    "x": 388,
+    "y": 2900
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Ethereal Sols 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101918,
+   "worldPixel": {
+    "x": 1780,
+    "y": 5428
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Ethereal Sols 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101919,
+   "worldPixel": {
+    "x": 852,
+    "y": 2668
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Ethereal Sols 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101920,
+   "worldPixel": {
+    "x": 2772,
+    "y": 4508
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Ethereal Sols 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101921,
+   "worldPixel": {
+    "x": 3076,
+    "y": 5036
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Fakeborts 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101922,
+   "worldPixel": {
+    "x": 2396,
+    "y": 676
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Fakeborts 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101923,
+   "worldPixel": {
+    "x": 1276,
+    "y": 1196
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Fakeborts 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101924,
+   "worldPixel": {
+    "x": 436,
+    "y": 28
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Fakeborts 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101925,
+   "worldPixel": {
+    "x": 1956,
+    "y": 1924
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Fakeborts 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101926,
+   "worldPixel": {
+    "x": 2428,
+    "y": 4604
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Glorp 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101927,
+   "worldPixel": {
+    "x": 2396,
+    "y": 4468
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Glorp 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101928,
+   "worldPixel": {
+    "x": 2748,
+    "y": 2748
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Glorp 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101929,
+   "worldPixel": {
+    "x": 3612,
+    "y": 4028
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Glorp 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101930,
+   "worldPixel": {
+    "x": 2100,
+    "y": 3076
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Glorp 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101931,
+   "worldPixel": {
+    "x": 4268,
+    "y": 2940
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Heavy Liquid Graphic 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101932,
+   "worldPixel": {
+    "x": 3996,
+    "y": 804
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Heavy Liquid Graphic 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101933,
+   "worldPixel": {
+    "x": 1340,
+    "y": 4244
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Heavy Liquid Graphic 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101934,
+   "worldPixel": {
+    "x": 3404,
+    "y": 3668
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Heavy Liquid Graphic 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101935,
+   "worldPixel": {
+    "x": 3708,
+    "y": 4868
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Heavy Liquid Graphic 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101936,
+   "worldPixel": {
+    "x": 3900,
+    "y": 3020
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Memorymix 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101937,
+   "worldPixel": {
+    "x": 2980,
+    "y": 3028
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Memorymix 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101938,
+   "worldPixel": {
+    "x": 2332,
+    "y": 1140
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Memorymix 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101939,
+   "worldPixel": {
+    "x": 1660,
+    "y": 4892
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Memorymix 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101940,
+   "worldPixel": {
+    "x": 3500,
+    "y": 3556
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Memorymix 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101941,
+   "worldPixel": {
+    "x": 348,
+    "y": 284
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Mtg Nft 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101942,
+   "worldPixel": {
+    "x": 708,
+    "y": 652
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Mtg Nft 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101943,
+   "worldPixel": {
+    "x": 428,
+    "y": 5500
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Mtg Nft 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101944,
+   "worldPixel": {
+    "x": 2060,
+    "y": 1220
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Mtg Nft 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101945,
+   "worldPixel": {
+    "x": 1772,
+    "y": 268
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Mtg Nft 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101946,
+   "worldPixel": {
+    "x": 148,
+    "y": 3252
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Malware Relics 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101947,
+   "worldPixel": {
+    "x": 2228,
+    "y": 1652
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Malware Relics 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101948,
+   "worldPixel": {
+    "x": 2244,
+    "y": 4908
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Malware Relics 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101949,
+   "worldPixel": {
+    "x": 3156,
+    "y": 3004
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Malware Relics 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101950,
+   "worldPixel": {
+    "x": 2116,
+    "y": 5132
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Malware Relics 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101951,
+   "worldPixel": {
+    "x": 428,
+    "y": 3348
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Metal Misfit 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101952,
+   "worldPixel": {
+    "x": 2972,
+    "y": 4068
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Metal Misfit 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101953,
+   "worldPixel": {
+    "x": 1716,
+    "y": 2068
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Metal Misfit 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101954,
+   "worldPixel": {
+    "x": 3668,
+    "y": 3812
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Metal Misfit 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101955,
+   "worldPixel": {
+    "x": 3516,
+    "y": 420
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Owee 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101956,
+   "worldPixel": {
+    "x": 28,
+    "y": 5316
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Owee 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101957,
+   "worldPixel": {
+    "x": 2196,
+    "y": 1724
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Owee 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101958,
+   "worldPixel": {
+    "x": 3532,
+    "y": 364
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Owee 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101959,
+   "worldPixel": {
+    "x": 1108,
+    "y": 964
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Owee 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101960,
+   "worldPixel": {
+    "x": 204,
+    "y": 2780
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Paingelz 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101961,
+   "worldPixel": {
+    "x": 1844,
+    "y": 1868
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Paingelz 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101962,
+   "worldPixel": {
+    "x": 3948,
+    "y": 3500
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Paingelz 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101963,
+   "worldPixel": {
+    "x": 3052,
+    "y": 332
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Paingelz 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101964,
+   "worldPixel": {
+    "x": 892,
+    "y": 5012
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Paingelz 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101965,
+   "worldPixel": {
+    "x": 2420,
+    "y": 3164
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Psyop Scouts 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101966,
+   "worldPixel": {
+    "x": 2388,
+    "y": 5148
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Psyop Scouts 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101967,
+   "worldPixel": {
+    "x": 3356,
+    "y": 2588
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Psyop Scouts 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101968,
+   "worldPixel": {
+    "x": 1684,
+    "y": 1060
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Psyop Scouts 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101969,
+   "worldPixel": {
+    "x": 484,
+    "y": 3876
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Psyop Scouts 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101970,
+   "worldPixel": {
+    "x": 2932,
+    "y": 5236
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfis 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101971,
+   "worldPixel": {
+    "x": 452,
+    "y": 2524
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfis 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101972,
+   "worldPixel": {
+    "x": 3308,
+    "y": 4076
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfis 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101973,
+   "worldPixel": {
+    "x": 68,
+    "y": 2820
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfis 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101974,
+   "worldPixel": {
+    "x": 3500,
+    "y": 2340
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfis 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101975,
+   "worldPixel": {
+    "x": 2324,
+    "y": 4228
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfussisters0 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101976,
+   "worldPixel": {
+    "x": 1108,
+    "y": 2748
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfussisters0 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101977,
+   "worldPixel": {
+    "x": 2116,
+    "y": 3140
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfussisters0 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101978,
+   "worldPixel": {
+    "x": 2852,
+    "y": 4100
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfussisters0 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101979,
+   "worldPixel": {
+    "x": 3332,
+    "y": 4852
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Solfussisters0 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101980,
+   "worldPixel": {
+    "x": 3124,
+    "y": 4844
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Special Money Friends 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101981,
+   "worldPixel": {
+    "x": 2540,
+    "y": 4684
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Special Money Friends 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101982,
+   "worldPixel": {
+    "x": 1628,
+    "y": 2140
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Special Money Friends 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101983,
+   "worldPixel": {
+    "x": 1516,
+    "y": 2900
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Special Money Friends 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101984,
+   "worldPixel": {
+    "x": 1076,
+    "y": 788
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Special Money Friends 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101985,
+   "worldPixel": {
+    "x": 3764,
+    "y": 3564
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Spirit Realm 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101986,
+   "worldPixel": {
+    "x": 1196,
+    "y": 5460
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Spirit Realm 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101987,
+   "worldPixel": {
+    "x": 12,
+    "y": 4516
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Spirit Realm 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101988,
+   "worldPixel": {
+    "x": 3716,
+    "y": 356
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Spirit Realm 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101989,
+   "worldPixel": {
+    "x": 932,
+    "y": 2924
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Spirit Realm 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101990,
+   "worldPixel": {
+    "x": 2620,
+    "y": 3916
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Unx 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101991,
+   "worldPixel": {
+    "x": 308,
+    "y": 4644
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Unx 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101992,
+   "worldPixel": {
+    "x": 1252,
+    "y": 3444
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Unx 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101993,
+   "worldPixel": {
+    "x": 2780,
+    "y": 1180
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Unx 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101994,
+   "worldPixel": {
+    "x": 732,
+    "y": 4964
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Unx 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101995,
+   "worldPixel": {
+    "x": 3908,
+    "y": 5148
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Wickz 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101996,
+   "worldPixel": {
+    "x": 3356,
+    "y": 3564
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Wickz 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101997,
+   "worldPixel": {
+    "x": 1436,
+    "y": 5220
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Wickz 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101998,
+   "worldPixel": {
+    "x": 3628,
+    "y": 5076
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Webkidz 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 101999,
+   "worldPixel": {
+    "x": 3180,
+    "y": 1620
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Webkidz 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102000,
+   "worldPixel": {
+    "x": 2364,
+    "y": 3060
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Webkidz 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102001,
+   "worldPixel": {
+    "x": 2124,
+    "y": 1596
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Webkidz 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102002,
+   "worldPixel": {
+    "x": 2268,
+    "y": 3500
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Webkidz 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102003,
+   "worldPixel": {
+    "x": 1444,
+    "y": 4492
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yag Or Die 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102004,
+   "worldPixel": {
+    "x": 548,
+    "y": 4924
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yag Or Die 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102005,
+   "worldPixel": {
+    "x": 996,
+    "y": 5388
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yag Or Die 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102006,
+   "worldPixel": {
+    "x": 236,
+    "y": 3812
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yag Or Die 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102007,
+   "worldPixel": {
+    "x": 4236,
+    "y": 1276
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yag Or Die 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102008,
+   "worldPixel": {
+    "x": 2772,
+    "y": 2812
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yakubio Scientists 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102009,
+   "worldPixel": {
+    "x": 596,
+    "y": 2452
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yakubio Scientists 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102010,
+   "worldPixel": {
+    "x": 4012,
+    "y": 444
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yakubio Scientists 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102011,
+   "worldPixel": {
+    "x": 1260,
+    "y": 5028
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yakubio Scientists 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102012,
+   "worldPixel": {
+    "x": 2988,
+    "y": 5140
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Yakubio Scientists 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102013,
+   "worldPixel": {
+    "x": 820,
+    "y": 3004
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Digi Chems Ll 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102014,
+   "worldPixel": {
+    "x": 3884,
+    "y": 1348
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Digi Chems Ll 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102015,
+   "worldPixel": {
+    "x": 2156,
+    "y": 1660
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Digi Chems Ll 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102016,
+   "worldPixel": {
+    "x": 28,
+    "y": 2788
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Digi Chems Ll 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102017,
+   "worldPixel": {
+    "x": 1404,
+    "y": 1284
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Digichems 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102018,
+   "worldPixel": {
+    "x": 3372,
+    "y": 3348
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Digichems 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102019,
+   "worldPixel": {
+    "x": 732,
+    "y": 2348
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Digichems 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102020,
+   "worldPixel": {
+    "x": 2860,
+    "y": 4940
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Digichems 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102021,
+   "worldPixel": {
+    "x": 3556,
+    "y": 3540
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Nothing Really Matters 001. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102022,
+   "worldPixel": {
+    "x": 2852,
+    "y": 4236
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Nothing Really Matters 002. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102023,
+   "worldPixel": {
+    "x": 3556,
+    "y": 724
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Nothing Really Matters 003. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102024,
+   "worldPixel": {
+    "x": 1500,
+    "y": 5484
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Nothing Really Matters 004. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102025,
+   "worldPixel": {
+    "x": 732,
+    "y": 2220
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The room says I am Nothing Really Matters 005. The room says a lot when nobody is supervising it.",
+     "I stood still and became a citation. Very rude architecture."
+    ]
+   }
+  },
+  {
+   "id": 102026,
+   "worldPixel": {
+    "x": 4204,
+    "y": 3020
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Burger Fund Nft Avatars 001 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102027,
+   "worldPixel": {
+    "x": 5932,
+    "y": 2844
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Burger Fund Nft Avatars 002 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102028,
+   "worldPixel": {
+    "x": 5572,
+    "y": 3076
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Burger Fund Nft Avatars 003 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102029,
+   "worldPixel": {
+    "x": 5476,
+    "y": 3092
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Burger Fund Nft Avatars 004 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102030,
+   "worldPixel": {
+    "x": 4500,
+    "y": 3068
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Burger Fund Nft Avatars 005 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102031,
+   "worldPixel": {
+    "x": 6012,
+    "y": 2796
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Foodiez 001 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102032,
+   "worldPixel": {
+    "x": 7196,
+    "y": 3556
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Foodiez 003 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102033,
+   "worldPixel": {
+    "x": 5700,
+    "y": 2796
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Foodiez 004 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102034,
+   "worldPixel": {
+    "x": 6436,
+    "y": 2972
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Foodiez 005 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102035,
+   "worldPixel": {
+    "x": 6372,
+    "y": 3076
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Happy Campers 001 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102036,
+   "worldPixel": {
+    "x": 5676,
+    "y": 2764
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Happy Campers 002 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102037,
+   "worldPixel": {
+    "x": 4492,
+    "y": 2956
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Happy Campers 003 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102038,
+   "worldPixel": {
+    "x": 4644,
+    "y": 2972
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Happy Campers 004 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102039,
+   "worldPixel": {
+    "x": 5908,
+    "y": 2988
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Happy Campers 005 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102040,
+   "worldPixel": {
+    "x": 4980,
+    "y": 3148
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Postcards 001 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102041,
+   "worldPixel": {
+    "x": 6180,
+    "y": 2836
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Postcards 002 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102042,
+   "worldPixel": {
+    "x": 4420,
+    "y": 2820
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Postcards 003 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102043,
+   "worldPixel": {
+    "x": 6692,
+    "y": 2892
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Postcards 004 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102044,
+   "worldPixel": {
+    "x": 6804,
+    "y": 2636
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Postcards 005 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102045,
+   "worldPixel": {
+    "x": 4068,
+    "y": 3596
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Relaxio Resort 001 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102046,
+   "worldPixel": {
+    "x": 7300,
+    "y": 3476
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Relaxio Resort 002 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102047,
+   "worldPixel": {
+    "x": 7564,
+    "y": 3284
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Relaxio Resort 003 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102048,
+   "worldPixel": {
+    "x": 7708,
+    "y": 3316
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Relaxio Resort 004 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102049,
+   "worldPixel": {
+    "x": 5420,
+    "y": 3100
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Relaxio Resort 005 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102050,
+   "worldPixel": {
+    "x": 6044,
+    "y": 2524
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Runway Show 001 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102051,
+   "worldPixel": {
+    "x": 6676,
+    "y": 3660
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Runway Show 002 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102052,
+   "worldPixel": {
+    "x": 3812,
+    "y": 2916
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Runway Show 003 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102053,
+   "worldPixel": {
+    "x": 5788,
+    "y": 2548
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Runway Show 004 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102054,
+   "worldPixel": {
+    "x": 4404,
+    "y": 3028
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Runway Show 005 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102055,
+   "worldPixel": {
+    "x": 5628,
+    "y": 2828
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Vehicle Wammin 001 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102056,
+   "worldPixel": {
+    "x": 6324,
+    "y": 2516
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Vehicle Wammin 002 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102057,
+   "worldPixel": {
+    "x": 4684,
+    "y": 2828
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Vehicle Wammin 003 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102058,
+   "worldPixel": {
+    "x": 7692,
+    "y": 3484
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Vehicle Wammin 004 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102059,
+   "worldPixel": {
+    "x": 6420,
+    "y": 2796
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The tide tried to verify me and got bored halfway through.",
+     "Vehicle Wammin 005 is on vacation from the registry. Do not forward my mail."
+    ]
+   }
+  },
+  {
+   "id": 102060,
+   "worldPixel": {
+    "x": 5780,
+    "y": 6644
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102061,
+   "worldPixel": {
+    "x": 6188,
+    "y": 6876
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102062,
+   "worldPixel": {
+    "x": 7772,
+    "y": 4980
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102063,
+   "worldPixel": {
+    "x": 7828,
+    "y": 4996
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102064,
+   "worldPixel": {
+    "x": 6196,
+    "y": 4404
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102065,
+   "worldPixel": {
+    "x": 7924,
+    "y": 4380
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102066,
+   "worldPixel": {
+    "x": 6516,
+    "y": 6180
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102067,
+   "worldPixel": {
+    "x": 8028,
+    "y": 6812
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102068,
+   "worldPixel": {
+    "x": 6852,
+    "y": 5236
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102069,
+   "worldPixel": {
+    "x": 5604,
+    "y": 7108
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102070,
+   "worldPixel": {
+    "x": 5316,
+    "y": 7724
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102071,
+   "worldPixel": {
+    "x": 4956,
+    "y": 6892
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102072,
+   "worldPixel": {
+    "x": 5212,
+    "y": 4404
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102073,
+   "worldPixel": {
+    "x": 6196,
+    "y": 7108
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102074,
+   "worldPixel": {
+    "x": 7788,
+    "y": 7412
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102075,
+   "worldPixel": {
+    "x": 5532,
+    "y": 6892
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102076,
+   "worldPixel": {
+    "x": 7596,
+    "y": 8044
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102077,
+   "worldPixel": {
+    "x": 5572,
+    "y": 8020
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102078,
+   "worldPixel": {
+    "x": 6028,
+    "y": 5500
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102079,
+   "worldPixel": {
+    "x": 6532,
+    "y": 6508
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102080,
+   "worldPixel": {
+    "x": 5148,
+    "y": 5492
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102081,
+   "worldPixel": {
+    "x": 7484,
+    "y": 5620
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102082,
+   "worldPixel": {
+    "x": 6996,
+    "y": 5796
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102083,
+   "worldPixel": {
+    "x": 5180,
+    "y": 6884
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102084,
+   "worldPixel": {
+    "x": 5508,
+    "y": 7556
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102085,
+   "worldPixel": {
+    "x": 7820,
+    "y": 6580
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102086,
+   "worldPixel": {
+    "x": 5908,
+    "y": 4732
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102087,
+   "worldPixel": {
+    "x": 6244,
+    "y": 7116
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102088,
+   "worldPixel": {
+    "x": 7316,
+    "y": 4772
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This little desert local watches the heat file a complaint against the horizon.",
+     "It looks friendly, but only because the paperwork ran out of water first."
+    ]
+   }
+  },
+  {
+   "id": 102089,
+   "worldPixel": {
+    "x": 2180,
+    "y": 9236
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102090,
+   "worldPixel": {
+    "x": 2932,
+    "y": 9292
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102091,
+   "worldPixel": {
+    "x": 1460,
+    "y": 10028
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102092,
+   "worldPixel": {
+    "x": 2236,
+    "y": 10020
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102093,
+   "worldPixel": {
+    "x": 1868,
+    "y": 9164
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102094,
+   "worldPixel": {
+    "x": 916,
+    "y": 10044
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102095,
+   "worldPixel": {
+    "x": 860,
+    "y": 10020
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102096,
+   "worldPixel": {
+    "x": 3212,
+    "y": 9612
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102097,
+   "worldPixel": {
+    "x": 3604,
+    "y": 8988
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102098,
+   "worldPixel": {
+    "x": 4140,
+    "y": 9836
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102099,
+   "worldPixel": {
+    "x": 1364,
+    "y": 9988
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102100,
+   "worldPixel": {
+    "x": 3796,
+    "y": 9196
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102101,
+   "worldPixel": {
+    "x": 3220,
+    "y": 9708
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102102,
+   "worldPixel": {
+    "x": 3564,
+    "y": 9116
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102103,
+   "worldPixel": {
+    "x": 604,
+    "y": 9684
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102104,
+   "worldPixel": {
+    "x": 1788,
+    "y": 9140
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102105,
+   "worldPixel": {
+    "x": 2412,
+    "y": 8844
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102106,
+   "worldPixel": {
+    "x": 1708,
+    "y": 9884
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102107,
+   "worldPixel": {
+    "x": 1636,
+    "y": 9564
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102108,
+   "worldPixel": {
+    "x": 2404,
+    "y": 8884
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102109,
+   "worldPixel": {
+    "x": 2548,
+    "y": 9404
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102110,
+   "worldPixel": {
+    "x": 3868,
+    "y": 9556
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102111,
+   "worldPixel": {
+    "x": 3740,
+    "y": 9236
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102112,
+   "worldPixel": {
+    "x": 1076,
+    "y": 9772
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102113,
+   "worldPixel": {
+    "x": 3340,
+    "y": 9100
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102114,
+   "worldPixel": {
+    "x": 516,
+    "y": 10076
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102115,
+   "worldPixel": {
+    "x": 1068,
+    "y": 9420
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102116,
+   "worldPixel": {
+    "x": 3636,
+    "y": 9012
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102117,
+   "worldPixel": {
+    "x": 2516,
+    "y": 9700
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102118,
+   "worldPixel": {
+    "x": 2452,
+    "y": 8884
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102119,
+   "worldPixel": {
+    "x": 2716,
+    "y": 9044
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102120,
+   "worldPixel": {
+    "x": 1636,
+    "y": 9860
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102121,
+   "worldPixel": {
+    "x": 2188,
+    "y": 9356
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "This damp little witness blinks like it heard the swamp notarize a bubble.",
+     "It has no hostile intent. Mostly mud, patience, and a private receipt."
+    ]
+   }
+  },
+  {
+   "id": 102122,
+   "worldPixel": {
+    "x": 7804,
+    "y": 9076
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Demonfella Ii 001, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102123,
+   "worldPixel": {
+    "x": 7764,
+    "y": 9212
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Demonfella Ii 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102124,
+   "worldPixel": {
+    "x": 6988,
+    "y": 9324
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Demonfella Ii 003, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102125,
+   "worldPixel": {
+    "x": 1620,
+    "y": 8612
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Demonfella Ii 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102126,
+   "worldPixel": {
+    "x": 7036,
+    "y": 9948
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Demonfella Ii 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102127,
+   "worldPixel": {
+    "x": 7228,
+    "y": 9980
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Drilady 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102128,
+   "worldPixel": {
+    "x": 7980,
+    "y": 10116
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Drilady 003, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102129,
+   "worldPixel": {
+    "x": 2684,
+    "y": 8484
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Drilady 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102130,
+   "worldPixel": {
+    "x": 7308,
+    "y": 9948
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Drilady 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102131,
+   "worldPixel": {
+    "x": 6932,
+    "y": 9980
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Malady 001, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102132,
+   "worldPixel": {
+    "x": 8108,
+    "y": 9460
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Malady 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102133,
+   "worldPixel": {
+    "x": 4116,
+    "y": 8852
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Malady 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102134,
+   "worldPixel": {
+    "x": 6948,
+    "y": 9180
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella 001, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102135,
+   "worldPixel": {
+    "x": 7788,
+    "y": 9044
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102136,
+   "worldPixel": {
+    "x": 7900,
+    "y": 8828
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella 003, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102137,
+   "worldPixel": {
+    "x": 220,
+    "y": 10084
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102138,
+   "worldPixel": {
+    "x": 7092,
+    "y": 9956
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102139,
+   "worldPixel": {
+    "x": 8020,
+    "y": 9116
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella 2 003, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102140,
+   "worldPixel": {
+    "x": 6948,
+    "y": 9324
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella 2 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102141,
+   "worldPixel": {
+    "x": 8108,
+    "y": 9716
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Midladys Fumogeddon 001, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102142,
+   "worldPixel": {
+    "x": 3244,
+    "y": 9820
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Midladys Fumogeddon 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102143,
+   "worldPixel": {
+    "x": 7756,
+    "y": 9052
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Midladys Fumogeddon 003, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102144,
+   "worldPixel": {
+    "x": 3676,
+    "y": 8532
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Midladys Fumogeddon 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102145,
+   "worldPixel": {
+    "x": 1708,
+    "y": 8636
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Midladys Fumogeddon 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102146,
+   "worldPixel": {
+    "x": 6228,
+    "y": 9708
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella Genesis 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102147,
+   "worldPixel": {
+    "x": 7812,
+    "y": 8828
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella Genesis 003, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102148,
+   "worldPixel": {
+    "x": 7860,
+    "y": 8828
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella Genesis 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102149,
+   "worldPixel": {
+    "x": 7148,
+    "y": 9980
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mifella Genesis 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102150,
+   "worldPixel": {
+    "x": 7260,
+    "y": 9972
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Milardio 001, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102151,
+   "worldPixel": {
+    "x": 7972,
+    "y": 9452
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Milardio 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102152,
+   "worldPixel": {
+    "x": 1628,
+    "y": 8668
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Milardio 003, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102153,
+   "worldPixel": {
+    "x": 7780,
+    "y": 8828
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Milardio 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102154,
+   "worldPixel": {
+    "x": 4660,
+    "y": 9852
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Milardio 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102155,
+   "worldPixel": {
+    "x": 28,
+    "y": 10036
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: My Little Fella 001, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102156,
+   "worldPixel": {
+    "x": 6972,
+    "y": 9964
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: My Little Fella 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102157,
+   "worldPixel": {
+    "x": 8004,
+    "y": 8804
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: My Little Fella 003, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102158,
+   "worldPixel": {
+    "x": 7732,
+    "y": 8820
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: My Little Fella 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102159,
+   "worldPixel": {
+    "x": 7052,
+    "y": 9332
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: My Little Fella 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102160,
+   "worldPixel": {
+    "x": 8068,
+    "y": 9180
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mylady 001, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102161,
+   "worldPixel": {
+    "x": 8148,
+    "y": 9468
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mylady 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102162,
+   "worldPixel": {
+    "x": 1732,
+    "y": 8580
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mylady 003, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102163,
+   "worldPixel": {
+    "x": 3276,
+    "y": 9812
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mylady 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102164,
+   "worldPixel": {
+    "x": 500,
+    "y": 10220
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Mylady 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102165,
+   "worldPixel": {
+    "x": 60,
+    "y": 10172
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Slyfella 001, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102166,
+   "worldPixel": {
+    "x": 6980,
+    "y": 9676
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Slyfella 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102167,
+   "worldPixel": {
+    "x": 7196,
+    "y": 9308
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Slyfella 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102168,
+   "worldPixel": {
+    "x": 6260,
+    "y": 9708
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Slyfella 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102169,
+   "worldPixel": {
+    "x": 7884,
+    "y": 8796
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Vilady Maker 002, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102170,
+   "worldPixel": {
+    "x": 3316,
+    "y": 9828
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Vilady Maker 004, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
+  },
+  {
+   "id": 102171,
+   "worldPixel": {
+    "x": 572,
+    "y": 10180
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "EXHIBIT LABEL: Vilady Maker 005, provenance disputed, vibes unfortunately admissible.",
+     "The plaque says do not touch. The plaque has never had to prove it was real."
+    ]
+   }
   }
  ]
 }

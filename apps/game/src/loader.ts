@@ -2,6 +2,7 @@ import {
   buildDialoguePages,
   ADDED_NPC_MIN_ID,
   sanitizeAddedNpcs,
+  ArchivistSpotsSchema,
   AttestationBattlesSchema,
   BattleDataSchema,
   BattleRulesSchema,
@@ -9,6 +10,7 @@ import {
   CardNftsSchema,
   CharacterCollectionSchema,
   CharacterOverridesSchema,
+  CondimentPairsSchema,
   CustomDialogueSchema,
   DrifellaBarksSchema,
   DrifellaSourceChecksSchema,
@@ -24,6 +26,7 @@ import {
   ManifestSchema,
   MusicManifestSchema,
   NavmeshSchema,
+  NpcMovementPatternsSchema,
   SectorMusicSchema,
   CollisionOverridesSchema,
   NpcOverridesSchema,
@@ -39,19 +42,24 @@ import {
   ScriptCollectionSchema,
   ShopDataSchema,
   SpriteOverridesSchema,
+  FlagMapSchema,
+  StoryItemsSchema,
   SwagboundDialogueLibrarySchema,
   StoryTriggersSchema,
+  TimedDeliveriesSchema,
   CutscenesSchema,
   SpriteGroupCollectionSchema,
   SpriteSheetCollectionSchema,
   TeleportDestinationsSchema,
   TutorialStatusSchema,
+  UsabilityMatrixSchema,
   ValidationReportSchema,
   WindowCollectionSchema,
   WorldArtifactSchema,
   type DialoguePage,
   type AddedNpc,
   type AddedNpcs,
+  type ArchivistSpots,
   type AttestationBattles,
   type BackgroundOverrides,
   type BattleData,
@@ -59,6 +67,7 @@ import {
   type CardNfts,
   type CharacterCollection,
   type CharacterOverrides,
+  type CondimentPairs,
   type CustomDialogue,
   type DrifellaBarks,
   type DrifellaSourceChecks,
@@ -74,6 +83,7 @@ import {
   type Manifest,
   type MusicManifest,
   type Navmesh,
+  type NpcMovementPatterns,
   type SectorMusic,
   type CollisionOverrides,
   type NpcOverrides,
@@ -89,12 +99,16 @@ import {
   type ScriptCollection,
   type ShopData,
   type SpriteOverrides,
+  type FlagMap,
+  type StoryItems,
   type SwagboundDialogueLibrary,
   type StoryTriggers,
+  type TimedDeliveries,
   type SpriteGroupCollection,
   type SpriteSheetCollection,
   type TeleportDestinations,
   type TutorialStatus,
+  type UsabilityMatrix,
   type ValidationReport,
   type WindowCollection,
   type WorldArtifact,
@@ -112,9 +126,15 @@ const CUSTOM_DIALOGUE_FILE = "custom-dialogue.json";
 const SWAGBOUND_DIALOGUE_LIBRARY_FILE = "swagbound-dialogue-library.json";
 const SPRITE_OVERRIDES_FILE = "sprite-overrides.json";
 const NPC_OVERRIDES_FILE = "npc-overrides.json";
+const NPC_MOVEMENT_PATTERNS_FILE = "npc-movement-patterns.json";
 const BACKGROUND_OVERRIDES_FILE = "background-overrides.json";
 const ITEM_OVERRIDES_FILE = "item-overrides.json";
+const CONDIMENT_PAIRS_FILE = "condiment-pairs.json";
 const KEY_ITEMS_FILE = "key-items.json";
+const STORY_ITEMS_FILE = "story-items.json";
+const FLAG_MAP_FILE = "flag-map.json";
+const TIMED_DELIVERY_FILE = "timed-delivery.json";
+const USABILITY_MATRIX_FILE = "usability-matrix.json";
 const CHARACTER_OVERRIDES_FILE = "character-overrides.json";
 const PSI_OVERRIDES_FILE = "psi-overrides.json";
 const ENEMY_OVERRIDES_FILE = "enemy-overrides.json";
@@ -129,6 +149,7 @@ const COLLISION_OVERRIDES_FILE = "collision-overrides.json";
 const FG_OVERRIDES_FILE = "fg-overrides.json";
 const NAVMESH_FILE = "navmesh.json";
 const DRIFELLA_BARKS_FILE = "drifella-barks.json";
+const ARCHIVIST_SPOTS_FILE = "archivist-spots.json";
 const OPENING_CUTSCENE_FILE = "opening-cutscene.json";
 const CUTSCENES_FILE = "cutscenes.json";
 const OVERWORLD_INTERACTABLES_FILE = "overworld-interactables.json";
@@ -144,6 +165,7 @@ export type GameData = {
   addedNpcs: AddedNpcs;
   customDialogue: RuntimeCustomDialogue;
   drifellaBarks: DrifellaBarks;
+  archivistSpots: ArchivistSpots;
   dialogueLibrary: SwagboundDialogueLibrary;
   overworldInteractables: OverworldInteractables;
   cardNfts: CardNfts;
@@ -160,6 +182,7 @@ export type GameData = {
   sprites?: SpriteSheetCollection;
   spriteOverrides?: SpriteOverrides;
   npcOverrides: NpcOverrides;
+  npcMovementPatterns: NpcMovementPatterns;
   backgroundOverrides?: BackgroundOverrides;
   teleportDestinations?: TeleportDestinations;
   encounters?: Encounters;
@@ -176,7 +199,12 @@ export type GameData = {
   window?: WindowCollection;
   characters?: CharacterCollection;
   items?: ItemCollection;
+  condimentPairs: CondimentPairs;
   keyItems: KeyItems;
+  storyItems: StoryItems;
+  flagMap: FlagMap;
+  timedDeliveries: TimedDeliveries;
+  usabilityMatrix?: UsabilityMatrix;
   psi?: PsiCollection;
   shops?: ShopData;
 };
@@ -259,9 +287,28 @@ function emptyDrifellaBarks(): DrifellaBarks {
   };
 }
 
+function emptyArchivistSpots(): ArchivistSpots {
+  return {
+    schema: "swagbound.archivist-spots.v1",
+    archivist: {
+      spriteId: "drifella2-168",
+      spriteNpcId: 100300,
+      lines: ["Filed, not minted."]
+    },
+    spots: []
+  };
+}
+
 function emptyNpcOverrides(): NpcOverrides {
   return {
     schema: "swagbound.npc-overrides.v1",
+    byNpcId: {}
+  };
+}
+
+function emptyNpcMovementPatterns(): NpcMovementPatterns {
+  return {
+    schema: "swagbound.npc-movement-patterns.v1",
     byNpcId: {}
   };
 }
@@ -302,6 +349,35 @@ function emptyKeyItems(): KeyItems {
   };
 }
 
+function emptyCondimentPairs(): CondimentPairs {
+  return {
+    schema: "swagbound.condiment-pairs.v1",
+    entries: [],
+    skipped: []
+  };
+}
+
+function emptyFlagMap(): FlagMap {
+  return {
+    schema: "swagbound.flag-map.v1",
+    entries: []
+  };
+}
+
+function emptyTimedDeliveries(): TimedDeliveries {
+  return {
+    schema: "swagbound.timed-delivery.v1",
+    deliveries: []
+  };
+}
+
+function emptyStoryItems(): StoryItems {
+  return {
+    schema: "swagbound.story-items.v1",
+    items: []
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -314,6 +390,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     sprites,
     spriteOverrides,
     npcOverrides,
+    npcMovementPatterns,
     backgroundOverrides,
     teleportDestinations,
     encounters,
@@ -329,7 +406,12 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     characterOverrides,
     items,
     itemOverrides,
+    condimentPairs,
     keyItems,
+    storyItems,
+    flagMap,
+    timedDeliveries,
+    usabilityMatrix,
     psi,
     psiOverrides,
     shops,
@@ -343,6 +425,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     fgOverrides,
     navmesh,
     drifellaBarks,
+    archivistSpots,
     openingCutscene,
     cutscenes,
     overworldInteractables,
@@ -360,6 +443,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${manifest.files.sprites}`, SpriteSheetCollectionSchema),
     loadJson(`/generated/${SPRITE_OVERRIDES_FILE}`, SpriteOverridesSchema),
     loadJson(`/generated/${NPC_OVERRIDES_FILE}`, NpcOverridesSchema),
+    loadJson(`/generated/${NPC_MOVEMENT_PATTERNS_FILE}`, NpcMovementPatternsSchema),
     loadJson(`/generated/${BACKGROUND_OVERRIDES_FILE}`, BackgroundOverridesSchema),
     manifest.files.teleportDestinations
       ? loadJson(`/generated/${manifest.files.teleportDestinations}`, TeleportDestinationsSchema)
@@ -389,7 +473,12 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
       ? loadJson(`/generated/${manifest.files.items}`, ItemCollectionSchema)
       : Promise.resolve(undefined),
     loadJson(`/generated/${ITEM_OVERRIDES_FILE}`, ItemOverridesSchema),
+    loadJson(`/generated/${CONDIMENT_PAIRS_FILE}`, CondimentPairsSchema),
     loadJson(`/generated/${KEY_ITEMS_FILE}`, KeyItemsSchema),
+    loadJson(`/generated/${STORY_ITEMS_FILE}`, StoryItemsSchema),
+    loadJson(`/generated/${FLAG_MAP_FILE}`, FlagMapSchema),
+    loadJson(`/generated/${TIMED_DELIVERY_FILE}`, TimedDeliveriesSchema),
+    loadJson(`/generated/${USABILITY_MATRIX_FILE}`, UsabilityMatrixSchema),
     manifest.files.psi
       ? loadJson(`/generated/${manifest.files.psi}`, PsiCollectionSchema)
       : Promise.resolve(undefined),
@@ -421,6 +510,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${FG_OVERRIDES_FILE}`, FgOverridesSchema),
     loadJson(`/generated/${NAVMESH_FILE}`, NavmeshSchema),
     loadJson(`/generated/${DRIFELLA_BARKS_FILE}`, DrifellaBarksSchema),
+    loadJson(`/generated/${ARCHIVIST_SPOTS_FILE}`, ArchivistSpotsSchema),
     loadJson(`/generated/${OPENING_CUTSCENE_FILE}`, OpeningCutsceneSchema),
     loadJson(`/generated/${CUTSCENES_FILE}`, CutscenesSchema),
     loadJson(`/generated/${OVERWORLD_INTERACTABLES_FILE}`, OverworldInteractablesSchema),
@@ -450,6 +540,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     addedNpcs: addedNpcs ?? emptyAddedNpcs(),
     customDialogue: resolvedCustomDialogue,
     drifellaBarks: resolvedDrifellaBarks,
+    archivistSpots: archivistSpots ?? emptyArchivistSpots(),
     dialogueLibrary: dialogueLibrary ?? emptyDialogueLibrary(),
     overworldInteractables: overworldInteractables ?? emptyOverworldInteractables(),
     cardNfts: cardNfts ?? emptyCardNfts(),
@@ -466,6 +557,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     sprites,
     spriteOverrides: withDerivedFollower(spriteOverrides),
     npcOverrides: npcOverrides ?? emptyNpcOverrides(),
+    npcMovementPatterns: npcMovementPatterns ?? emptyNpcMovementPatterns(),
     backgroundOverrides,
     teleportDestinations,
     encounters,
@@ -482,7 +574,12 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     window,
     characters: resolvedCharacters,
     items: resolvedItems,
+    condimentPairs: condimentPairs ?? emptyCondimentPairs(),
     keyItems: keyItems ?? emptyKeyItems(),
+    storyItems: storyItems ?? emptyStoryItems(),
+    flagMap: flagMap ?? emptyFlagMap(),
+    timedDeliveries: timedDeliveries ?? emptyTimedDeliveries(),
+    usabilityMatrix,
     psi: resolvedPsi,
     shops
   };
@@ -736,6 +833,10 @@ export function contentReferencedAddedNpcIds(
   const cutsceneText = cutscenes ? JSON.stringify(cutscenes) : "";
   const referenced = new Set<number>();
   for (const npc of addedNpcs?.npcs ?? []) {
+    if (npc.alwaysSpawn) {
+      referenced.add(npc.id);
+      continue;
+    }
     if (hintNpcIds.has(npc.id) || triggerText.includes(String(npc.id)) || cutsceneText.includes(String(npc.id))) {
       referenced.add(npc.id);
     }

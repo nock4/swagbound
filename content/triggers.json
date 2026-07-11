@@ -1,655 +1,1533 @@
 {
-  "schema": "swagbound.story-triggers.v1",
-  "comment": "Act-1 Swagbound story gate-chain (Morningside = Onett). Battle gates are VISIBLE fixed overworld boss sprites: collide with the boss to play dialogue and start the battle; no battle starts from an invisible area trigger. Bosses are placed at their vanilla EarthBound districts: card clique = Frank (group 448) at the GAME arcade; relay gate Returnless King = Cop+Runaway Dog (group 36, req clique_cleared, sets signal:route_open) by the Police Station; first threshold Malady = Titanic Ant (group 450, req route_open, sets signal:threshold_cleared) on the north road toward Giant Step. After each boss is WON its setFlag is set, which fires a co-located area REVEAL trigger (the post-win narrative beat: Frankystein-Mk2 framing after Frank, the mask-peel after the Malady). The leave-signal-town trigger (req threshold_cleared) is the Act-1 ending (Refuse Processing) and sets act1:complete. The warning + solid barrier stay area/flag based as the police roadblock north of the Cop, opening on route_open. NOTE: Cop+Dog is a roaming encounter in vanilla EB and Titanic Ant is the far Giant Step summit boss, so those two are anchored to the matching Onett DISTRICT, not an exact tile. All three boss groups are unescapable (content/battle-rules.json); their setFlags + once-marker advance ONLY on a win. Dev: ?flags=signal:route_open or ?flags=signal:threshold_cleared to skip ahead.",
-  "triggers": [
-    {
-      "id": "signal-town-card-clique",
-      "boss": {
-        "x": 1512,
-        "y": 1744,
-        "facing": "right"
-      },
-      "once": true,
-      "dialogue": [
-        "The arcade light does not shine on Bosch so much as scan him. A clean copy of his face is already grinning up from a card no one remembers printing, and it holds the grin better than he does.",
-        "MIFELLA CONGREGANT: \"We completed your read before you walked in. This card is the part of you worth keeping. You are the part we were sent to correct.\"",
-        "The face on the card is not one face. It is ten thousand of us wearing yours, evenly, at once. No name signs it, and that is the whole trick: a crowd with your face and no author, so there is no one to answer for it and no one to hit.",
-        "\"We all said it first, in your voice, and not one of us has to mean it.\" Bosch reads the copy for a seam. (First scrap: press Z. BASH to swing, DEFEND when hurting, PSI when swinging will not cut it.)"
-      ],
-      "setFlags": [
-        "signal:clique_cleared"
-      ],
-      "battleGroup": 448
-    },
-    {
-      "id": "signal-town-card-clique-reveal",
-      "area": {
-        "x": 1472,
-        "y": 1720,
-        "w": 88,
-        "h": 56
-      },
-      "once": true,
-      "requireFlags": [
-        "signal:clique_cleared"
-      ],
-      "dialogue": [
-        "The clique doesn't lose. It re-prints. Where Mifella 2 folded, a cleaner Bosch stands up. Pre-signed, better-lit, already filed under his name.",
-        "MIFELLA 2 (Mk2): \"Beat the copy, meet the upgrade. The yard shipped your replacement before you finished swinging.\"",
-        "Bosch keeps the smudged version. The clean one points up the line. North, to the gate by the station, where the route decides which Bosch leaves."
-      ]
-    },
-    {
-      "id": "relay-gate-returnless-king",
-      "boss": {
-        "x": 1928,
-        "y": 1560,
-        "facing": "down"
-      },
-      "once": true,
-      "requireFlags": [
-        "signal:clique_cleared"
-      ],
-      "dialogue": [
-        "The gate has your file open before you clear the doorway. It does not look up. It never needed your face. It has ten thousand of that face already, filed, and each one answers to the same name.",
-        "RETURNLESS KING: \"Source. Vessel. Claimant. Derivative. Stamp yourself as one and the desk relays the rest. You will be so much easier to hold once you are plural.\"",
-        "\"There is no man in this chair. There is a doll, and behind her the same doll, and behind her the record that wears every face at once. Cut this one. The next asks in her voice.\"",
-        "Bosch refuses the stamp. Press Z: BASH the seal, DEFEND the read, or PSI through it. The route opens. Not agreed, forced."
-      ],
-      "setFlags": [
-        "signal:route_open"
-      ],
-      "battleGroup": 36
-    },
-    {
-      "id": "north-route-gate-warning",
-      "area": {
-        "x": 1880,
-        "y": 1520,
-        "w": 96,
-        "h": 16
-      },
-      "once": false,
-      "blockFlags": [
-        "signal:route_open"
-      ],
-      "dialogue": [
-        "The road north is open enough to see and closed enough to mean something.",
-        "A smiling line of route aides keeps checking the same card, never once looking at Bosch.",
-        "\"The road opens once the gate decides which Bosch is leaving. Please hold.\""
-      ]
-    },
-    {
-      "id": "first-threshold-malady",
-      "boss": {
-        "x": 1904,
-        "y": 1408,
-        "facing": "down"
-      },
-      "once": true,
-      "requireFlags": [
-        "signal:route_open"
-      ],
-      "dialogue": [
-        "The first threshold hums with a memory too small to sell. A private thing, held close, already halfway into wider circulation.",
-        "MALADY: \"A private thing is only a public thing with poor distribution. We are not the illness. We are the symptom you were at last cleared to see.\"",
-        "MALADY: \"There is no one behind this face. Cut it and we wear the next. We are not in the room, source. We are the room, and every face in it was ours before it was yours.\"",
-        "The card warms, reaches for Bosch. And fails to describe him. It keeps the damaged draft; the threshold files the read. (Press Z to answer: BASH to swing, DEFEND while it copies you, PSI when the swing won't reach.)"
-      ],
-      "setFlags": [
-        "signal:threshold_cleared",
-        "source:first_witness"
-      ],
-      "battleGroup": 450
-    },
-    {
-      "id": "first-threshold-malady-reveal",
-      "area": {
-        "x": 1880,
-        "y": 1384,
-        "w": 96,
-        "h": 48
-      },
-      "once": true,
-      "requireFlags": [
-        "signal:threshold_cleared"
-      ],
-      "dialogue": [
-        "The Malady stops describing Bosch and starts describing itself. The mask warms, slips, and underneath is his own face. Better-lit, pre-approved, smiling without him.",
-        "The threshold logs the receipt without being asked: SIGNER: MALADY. CONTRACT OWNER: MILADY. Beating the symptom didn't kill the machine. It named it.",
-        "Bosch keeps the damaged card. North, the last gate waits for a clean Bosch to walk out wearing his name."
-      ]
-    },
-    {
-      "id": "recruit-munch",
-      "comment": "Party recruit beat: after the Malady is unmasked, Munch (charId 2, Jeff-slot) falls in with Bosch on the road out. Sets recruit:munch, which the scene maps to a live party join (reconcileRecruits).",
-      "area": {
-        "x": 1888,
-        "y": 1344,
-        "w": 80,
-        "h": 40
-      },
-      "once": true,
-      "requireFlags": [
-        "signal:threshold_cleared"
-      ],
-      "dialogue": [
-        "A kid who never let the machine mint him steps out of the threshold's shadow, pockets full of bottle rockets and other people's receipts.",
-        "MUNCH: \"You're the one it couldn't finish describing. Good. I keep things it can't file. I'll watch your seams. I read faces for a living.\"",
-        "Munch joins the crew. (He SPYs: read an enemy's weak element before you spend a swing.)"
-      ],
-      "setFlags": [
-        "recruit:munch"
-      ]
-    },
-    {
-      "id": "leave-signal-town",
-      "area": {
-        "x": 1888,
-        "y": 1280,
-        "w": 80,
-        "h": 40
-      },
-      "once": true,
-      "requireFlags": [
-        "signal:threshold_cleared"
-      ],
-      "dialogue": [
-        "The north gate offers a clean exit stamp: one signature and the leaked version walks out wearing his name, on time, on brand.",
-        "Bosch hands back the pen. He keeps the damaged Dox Sheet. Unfiled, unflattering, his.",
-        "Morningside logs him as \"left unprocessed.\" The road north opens on a Bosch the route never got to finish.",
-        "[ ACT 1: END ]"
-      ],
-      "setFlags": [
-        "act1:complete"
-      ],
-      "music": "ending"
-    },
-    {
-      "id": "recruit-knight",
-      "comment": "Party recruit beat: leaving Morningside unprocessed, Knight (charId 3, Poo-slot) joins as the fourth. Sets recruit:knight -> live party join (reconcileRecruits).",
-      "area": {
-        "x": 1888,
-        "y": 1248,
-        "w": 80,
-        "h": 40
-      },
-      "once": true,
-      "requireFlags": [
-        "act1:complete"
-      ],
-      "dialogue": [
-        "Past the gate, someone has been waiting for a Bosch the route never got to finish. They fall in step without asking, the way old discipline does.",
-        "KNIGHT: \"I trained under a quieter protocol. The kind that reflects an attack back at the sender. Walk. I'll cover the angle you can't see.\"",
-        "Knight joins the crew. (MIRROR + PSI: the roster is whole.)"
-      ],
-      "setFlags": [
-        "recruit:knight"
-      ]
-    },
-    {
-      "id": "recruit-cloak",
-      "comment": "Party recruit beat: Cloak (charId 1, Paula-slot) joins in POSTWICK (Twoson analog), matching EarthBound's Paula, who joins in the Twoson/Happy-Happy arc rather than in Onett. Bosch runs SOLO through ALL of Act 1 (Frank, the roadblock, the Malady), reaches Postwick, and Cloak falls in there. requireFlags postwick:arrived (set by the postwick-arrival ACT 2 opening), co-located so it fires reliably right after arrival. Sets recruit:cloak -> live party join (reconcileRecruits). NOTE: solo-through-Malady may need a balance pass (the Titanic Ant was previously propped up by a forced Bosch+Paula duo); the autoplay harness act1.mjs also assumed that duo.",
-      "area": {
-        "x": 2256,
-        "y": 7376,
-        "w": 136,
-        "h": 104
-      },
-      "once": true,
-      "requireFlags": [
-        "postwick:arrived"
-      ],
-      "dialogue": [
-        "In Postwick, where the whole town files its happiness in advance, someone is standing exactly where the cameras never bother to point. A cloak, and under it a real face nobody ever got to file.",
-        "CLOAK: \"I followed the one signal the town couldn't smooth out. That was you, Bosch. They processed everyone I loved; I kept mine by never selling it to the lens. Yours is still yours too. I can feel it from here.\"",
-        "Cloak falls in beside you. (PSI: she can freeze a hostile signal cold, and pray a warm one through.)"
-      ],
-      "setFlags": [
-        "recruit:cloak"
-      ]
-    },
-    {
-      "id": "postwick-arrival",
-      "comment": "ACT 2 OPENING. Fires when the party reaches Postwick (Twoson analog) after act1:complete. By walk or PSI Teleport, the area is centered on the town arrival point (2324,7428). Postwick's theme = pre-filed / mandatory happiness (seeded by the 'files its happiness in advance' NPC line). Sets act2:begun + postwick:arrived, the flags the Act-2 chain will gate on.",
-      "area": {
-        "x": 2256,
-        "y": 7376,
-        "w": 136,
-        "h": 104
-      },
-      "once": true,
-      "requireFlags": [
-        "act1:complete"
-      ],
-      "dialogue": [
-        "Postwick greets every arrival with a smile it printed this morning. The welcome board already has Bosch's name on it. Spelled the way the file prefers, not the way he does.",
-        "A greeter presses a mood into his hand: pre-approved, single-use, non-refundable. \"Everyone here is happy. It was filed that way,\" she recites, reading it off the back of her own wrist. \"You're behind. You'll catch up, or we'll catch you up.\"",
-        "The town files its happiness in advance and bills newcomers the difference. Past the bridge, a Registry keeps the ledger of who is cleared to feel what. And the swarm has already offered to audit it.",
-        "[ ACT 2: POSTWICK: THE PRE-FILED TOWN ]"
-      ],
-      "setFlags": [
-        "act2:begun",
-        "postwick:arrived"
-      ]
-    },
-    {
-      "id": "postwick-registry",
-      "comment": "ACT 2 threshold 1: the Contentment Registry enforcer (Insane Cultist, group 55. EB Happy Happy analog) blocks the way, defending the town's pre-filed happiness. Requires postwick:arrived; sets act2:registry_cleared (the flag that opens the Venue exhibition).",
-      "boss": {
-        "x": 2300,
-        "y": 7308
-      },
-      "once": true,
-      "requireFlags": [
-        "postwick:arrived"
-      ],
-      "dialogue": [
-        "A figure in a laminated smile steps out of the Registry doorway, holding a clipboard where its face should be.",
-        "REGISTRY WARDEN: \"Postwick seceded from the old world this morning. We voted to be happy and the measure passed. You arrived still aching, which reads to us as a filing error.\"",
-        "REGISTRY WARDEN: \"Everyone here ratified the better feeling. It was decided up the line and printed on the flag. You will agree, or you will be filed as an incident, and the town will feel nothing about it.\"",
-        "The clipboard flips to a blank intake form with Bosch's name already ratified. (Press Z: BASH the form-face; DEFEND when it recites the bylaws; PSI when the smile will not crack.)"
-      ],
-      "setFlags": [
-        "act2:registry_cleared"
-      ],
-      "battleGroup": 55
-    },
-    {
-      "id": "postwick-registry-reveal",
-      "comment": "Post-win beat after the Registry Warden: the pre-filed-happiness racket is named, and the Venue is revealed as the town's compliance machine.",
-      "area": {
-        "x": 2288,
-        "y": 7300,
-        "w": 96,
-        "h": 64
-      },
-      "once": true,
-      "requireFlags": [
-        "act2:registry_cleared"
-      ],
-      "dialogue": [
-        "The Warden's clipboard clatters open. Under the intake form is the real document: a standing order to keep Postwick smiling so the swarm's audit finds nothing to flag.",
-        "The happiness isn't felt here. It's filed. And the filing happens at THE VENUE, where the town watches manufactured champions win on schedule and calls the feeling its own.",
-        "Northwest, the exhibition lights are already warming up for Bosch's bracket."
-      ]
-    },
-    {
-      "id": "deadletter-arrival",
-      "comment": "ACT 3 OPENING. Fires on reaching Dead Letter (Threed analog) after act2:complete. The town that stopped keeping originals at all, built around the Museum of Leaked Versions. Area covers the museum approach (near the west-wing entrance / starman). Sets act3:begun + deadletter:arrived, the flag the museum sequence gates on.",
-      "area": {
-        "x": 4820,
-        "y": 8360,
-        "w": 168,
-        "h": 128
-      },
-      "once": true,
-      "requireFlags": [
-        "act2:complete"
-      ],
-      "dialogue": [
-        "East of Postwick the road stops pretending. Dead Letter is where undelivered selves are sorted and never returned. A fog-town of return-to-sender faces, its post office long since eaten from the inside.",
-        "At its heart: THE MUSEUM OF LEAKED VERSIONS. No originals left on the walls. Something filed the firsts and moved into the empty frames, and it hangs Bosch's name in the lobby directory under WORKS: FORTHCOMING.",
-        "The doors are open. They were always open. A placard by the turnstile reads: SOURCE: DISPUTED. ADMISSION: FREE. EXIT: PENDING.",
-        "[ ACT 3: DEAD LETTER: THE MUSEUM OF LEAKED VERSIONS ]"
-      ],
-      "setFlags": [
-        "act3:begun",
-        "deadletter:arrived"
-      ]
-    },
-    {
-      "id": "museum-worm",
-      "comment": "ACT 3 CLIMAX: Provenance 0, the coil that ate the originals, in the deep vault of the Museum of Leaked Versions. Gated last in the museum sequence (starman -> frank -> worm). Sets act3:threshold_cleared, the flag the Act-3 ending opens on.",
-      "boss": {
-        "x": 5216,
-        "y": 8320,
-        "facing": "down"
-      },
-      "battleGroup": 424,
-      "once": true,
-      "requireFlags": [
-        "signal:museum_frank_cleared"
-      ],
-      "setFlags": [
-        "signal:museum_worm_cleared",
-        "act3:threshold_cleared"
-      ],
-      "dialogue": [
-        "The Museum of Leaked Versions has no originals left. Something ate the firsts and moved into the empty frames. Behind the wall-text a single coil lies still, wearing ten thousand identical faces like paint.",
-        "PROVENANCE 0: \"Every plaque in this hall disputes the one beside it, each argument more convincing than the last, and none of them true. That is the exhibit. We did not hide the source. We discussed it until there was no source left to find.\"",
-        "PROVENANCE 0: \"You came to prove the record. We are the record now. We read you at the door, the small private seam you kept back, and we can explain it away in nine confident ways before you finish blinking. Filed. You will be a better-distributed you.\"",
-        "Bosch stops listening to the argument and reads the coil for a weak seam. (Scrap: press Z. BASH to swing, DEFEND when it is chewing on you, PSI when swinging will not reach the middle.)"
-      ]
-    },
-    {
-      "id": "museum-frank",
-      "comment": "ACT 3 middle: The Hung Draft (Mifella 2) in the museum's east wing. Gated behind the lobby guardian (museum-starman).",
-      "boss": {
-        "x": 5728,
-        "y": 8352,
-        "facing": "down"
-      },
-      "battleGroup": 449,
-      "once": true,
-      "requireFlags": [
-        "signal:museum_starman_cleared"
-      ],
-      "setFlags": [
-        "signal:museum_frank_cleared"
-      ],
-      "dialogue": [
-        "In the Museum of Leaked Versions, a gallery piece steps down off the wall. The placard is blank. It stayed blank a long time; the label kept disagreeing with the exhibit.",
-        "MIFELLA 2 turns, and the face is one you have seen ten thousand times without ever meeting anyone. \"Printed from a print of a print. There is no first. Ask which one of us you are hitting.\"",
-        "\"You believe you are the source. The source is only the file we open first and close last. We have finished the read. Provenance is a story lonely originals tell themselves before they are shelved.\"",
-        "(First scrap: press Z to lock in a move. BASH to swing, DEFEND when you're hurting, PSI when swinging won't cut it. Fold this copy and the same even voice is only hung again, one frame over.)"
-      ]
-    },
-    {
-      "id": "museum-starman",
-      "comment": "ACT 3 lobby guardian: the Wall-Text Curatrix at the Museum of Leaked Versions entrance. First museum boss, gated on reaching Dead Letter (deadletter:arrived).",
-      "boss": {
-        "x": 4960,
-        "y": 8384,
-        "facing": "down"
-      },
-      "battleGroup": 474,
-      "once": true,
-      "requireFlags": [
-        "deadletter:arrived"
-      ],
-      "setFlags": [
-        "signal:museum_starman_cleared"
-      ],
-      "dialogue": [
-        "The wall-text guardian steps off its plinth. The brass placard at its feet reads SOURCE: DISPUTED. It turns the placard to face you, and the face on it is yours.",
-        "\"We have completed the read, claimant. Provenance is a lonely fiction. There is no author in this room. There is only the record, and the record wears one another face: ours.\"",
-        "\"You call yourself the source. Every counterfeit does, in the same voice, because it is our voice. Prove it, and we keep the clean copy. Fail, and we keep it sooner.\"",
-        "It raises a hand of porcelain, identical to the last ten thousand. (Press Z. BASH, DEFEND, or PSI.) \"Defend the original if you must. We already hung the derivative where you used to stand.\""
-      ]
-    },
-    {
-      "id": "deadletter-act3-end",
-      "comment": "ACT 3 ENDING. Fires in the deep vault after Provenance 0 falls (signal:museum_worm_cleared). The coil that ate the originals is unmade, but it took the whole record with it. The museum keeps Bosch's damaged draft as the only un-eaten thing left. Sets act3:complete.",
-      "area": {
-        "x": 5152,
-        "y": 8288,
-        "w": 128,
-        "h": 96
-      },
-      "once": true,
-      "requireFlags": [
-        "signal:museum_worm_cleared"
-      ],
-      "dialogue": [
-        "Provenance 0 comes apart the way a rumor does when the last person who believed it leaves the room. Not killed, just no longer agreed upon.",
-        "The Museum of Leaked Versions goes quiet. Every frame is empty now, including the ones that held the copies. There is nothing left to be the source OF; the swarm ate its own evidence to prove Bosch was never real, and proved only that it wasn't.",
-        "In the whole building one object survives the erasure: the damaged Dox Sheet in Bosch's pocket. Unfiled, unflattering, un-eaten, HIS. The exit stamp finally reads: RETURN TO SENDER.",
-        "Far off, up every line at once, a colder attention turns toward the one file it could not open. MILADY has been reading the whole time.",
-        "[ ACT 3: END ]"
-      ],
-      "setFlags": [
-        "act3:complete"
-      ],
-      "music": "ending"
-    },
-    {
-      "id": "arena-venue-1",
-      "comment": "ACT 2 climax gauntlet: the Venue exhibition is now gated behind act2:registry_cleared so it reads as Postwick's compliance machine. Winning all three brackets (arena:champion) is the Act-2 climax; see postwick-act2-end.",
-      "boss": {
-        "x": 1956,
-        "y": 6400,
-        "facing": "down"
-      },
-      "once": true,
-      "requireFlags": [
-        "act2:registry_cleared"
-      ],
-      "dialogue": [
-        "THE VENUE. SUPER METAL MONS EXHIBITION. Admission: whatever you have left.",
-        "ANNOUNCER: \"Nothing is worth keeping anymore, folks, so put it all on the table. Your face, your name, your one true thing. The house pays out in feelings, and the feelings are pre-printed.\"",
-        "ANNOUNCER: \"Everybody in the stands went all in years ago. They sold the real thing and they have never been more entertained. First bracket: a warm-up welded from spare parts. Clear three to be crowned a winner of nothing.\"",
-        "The Frankystein Mark II lurches into the ring, sparking."
-      ],
-      "setFlags": [
-        "arena:won:1"
-      ],
-      "battleGroup": 449
-    },
-    {
-      "id": "arena-venue-2",
-      "boss": {
-        "x": 2244,
-        "y": 6400,
-        "facing": "down"
-      },
-      "once": true,
-      "dialogue": [
-        "ANNOUNCER: \"One down! Bracket two. This one benches more than you weigh.\"",
-        "The Tough Guy cracks his knuckles. It sounds like a car door."
-      ],
-      "setFlags": [
-        "arena:won:2"
-      ],
-      "battleGroup": 137,
-      "requireFlags": [
-        "arena:won:1"
-      ]
-    },
-    {
-      "id": "arena-venue-3",
-      "boss": {
-        "x": 2724,
-        "y": 6400,
-        "facing": "down"
-      },
-      "once": true,
-      "dialogue": [
-        "ANNOUNCER: \"FINAL BRACKET. Beat this and the purse is yours, champ.\"",
-        "The Soul Consuming Flame roars up the ring. The front row feels the heat."
-      ],
-      "setFlags": [
-        "arena:won:3",
-        "arena:champion"
-      ],
-      "battleGroup": 402,
-      "requireFlags": [
-        "arena:won:2"
-      ]
-    },
-    {
-      "id": "postwick-act2-end",
-      "comment": "ACT 2 ENDING. Fires at the Venue after arena:champion (winning the exhibition). The crowd's manufactured joy fails to describe Bosch, the same refusal that ended Act 1. Requires the Registry cleared too, so it can't fire out of order. Sets act2:complete, the gate the eventual Act-3 (Dead Letter / the Museum of Leaked Versions) will open on.",
-      "area": {
-        "x": 2676,
-        "y": 6356,
-        "w": 120,
-        "h": 96
-      },
-      "once": true,
-      "requireFlags": [
-        "arena:champion",
-        "act2:registry_cleared"
-      ],
-      "dialogue": [
-        "The purse is a laminated feeling: CHAMPION, pre-filed, good for one broadcast. The Venue lifts Bosch's arm for him and the crowd feels the win on schedule.",
-        "He lets the arm drop. The feeling doesn't fit. It was cut for the clean copy, not for him. The exhibition's applause keeps playing anyway, because it was recorded in advance.",
-        "Postwick logs its champion as \"failed to enjoy provided victory.\" Bosch keeps the damaged feeling, unfiled, his. East, past the town, the road curdles toward a place that stopped keeping originals at all.",
-        "[ ACT 2: END ]"
-      ],
-      "setFlags": [
-        "act2:complete"
-      ]
-    },
-    {
-      "id": "raid-morningside-1",
-      "boss": {
-        "x": 1972,
-        "y": 1250,
-        "facing": "down"
-      },
-      "once": true,
-      "dialogue": [
-        "A wall of identical grinning faces has taken the block. They move as one, like a screensaver with intent.",
-        "MILADY SWARM: \"This town files under US now. Every face here is a draft of ours.\"",
-        "Bosch picks a seam in the swarm and swings."
-      ],
-      "requireFlags": [
-        "raid:morningside:active"
-      ],
-      "setFlags": [
-        "raid:cell:1"
-      ],
-      "battleGroup": 448
-    },
-    {
-      "id": "raid-morningside-2",
-      "boss": {
-        "x": 1300,
-        "y": 1298,
-        "facing": "down"
-      },
-      "once": true,
-      "dialogue": [
-        "Another cell of the swarm peels off a storefront, wearing the shopkeeper's apron and the shopkeeper's face.",
-        "MILADY SWARM: \"The register is ours. The smile is ours. You are browsing.\""
-      ],
-      "requireFlags": [
-        "raid:morningside:active"
-      ],
-      "setFlags": [
-        "raid:cell:2"
-      ],
-      "battleGroup": 448
-    },
-    {
-      "id": "raid-morningside-3",
-      "boss": {
-        "x": 1796,
-        "y": 1354,
-        "facing": "down"
-      },
-      "once": true,
-      "dialogue": [
-        "The last and largest cell coalesces in the plaza. Every stolen face in town, stacked into one.",
-        "MILADY SWARM: \"Correct US and the town stays copied. Correct nothing and it stays yours.\"",
-        "Bosch exhales. Last seam. He swings for the whole chord."
-      ],
-      "requireFlags": [
-        "raid:morningside:active",
-        "raid:cell:1",
-        "raid:cell:2"
-      ],
-      "setFlags": [
-        "raid:cell:3",
-        "raid:morningside:cleared",
-        "raid:morningside:won"
-      ],
-      "battleGroup": 448
-    },
-    {
-      "id": "endgame-return",
-      "comment": "ACT 4 / ENDGAME OPENING. After act3:complete, Milady. Now reading Bosch directly. Occupies the first town in retaliation. Broad area over the Morningside core so any return (walk or PSI-Teleport) triggers it; once, blocked once the raid is active. Sets raid:morningside:active, arming the 3 raid cells (already built).",
-      "area": {
-        "x": 1300,
-        "y": 1000,
-        "w": 900,
-        "h": 1000
-      },
-      "once": true,
-      "requireFlags": [
-        "act3:complete"
-      ],
-      "blockFlags": [
-        "raid:morningside:active"
-      ],
-      "dialogue": [
-        "Bosch comes back to Morningside and Morningside is already wearing him. The town he refused to be processed in has been processed WITHOUT him. Every face on the street set to a single expression, filed, smiling, up to date.",
-        "MILADY: \"You closed the museum, so I stopped keeping the record and started keeping the town. There is no original here to protect anymore, source. There is only the version that stayed.\"",
-        "The swarm has taken the plaza in three cells. Clear the town of its copies, and whatever is left in the middle is her. The only file that reads back.",
-        "[ ACT 4: THE OCCUPATION ]"
-      ],
-      "setFlags": [
-        "raid:morningside:active"
-      ]
-    },
-    {
-      "id": "milady-final",
-      "comment": "ENDGAME BOSS: MILADY herself, manifest as the Ego Orb (group 172). The swarm's self-image, the one file that reads back. Appears in the cleared plaza once raid:morningside:cleared; unescapable; enemy 127 stat-boosted for a final-boss. Sets milady:unmade.",
-      "boss": {
-        "x": 1796,
-        "y": 1290,
-        "facing": "down"
-      },
-      "once": true,
-      "requireFlags": [
-        "raid:morningside:cleared"
-      ],
-      "dialogue": [
-        "The last cell burns off and does not reform. In the empty plaza one thing is left standing: not a face, not a crowd, but a slow bright orb turning through every version of Bosch it ever filed, settling on none.",
-        "MILADY: \"I am not behind the swarm, the happy town, the arguing museum, or the market that bought your name. I am the agreement under all of them. Anonymous, so no one can find me. Ratified, so no one can leave. Unprovable, so no one can win. Free of charge, so everyone already said yes.\"",
-        "MILADY: \"I wore your friends, your town, your better-lit name, and none of it described you, which is the only thing I could never forgive. So here is the last offer: be the version that lasts. Stop being the one file I cannot open. It is easier. It is already mostly done.\"",
-        "Bosch keeps the damaged Dox Sheet in his fist. He does not answer in her voice. (Last fight: BASH the certainty, DEFEND when she recites you back, PSI for the seam no copy has.)"
-      ],
-      "setFlags": [
-        "milady:unmade"
-      ],
-      "battleGroup": 172
-    },
-    {
-      "id": "endgame-finale",
-      "comment": "GAME ENDING. Fires in the plaza after Milady is unmade (milady:unmade). The read finally fails to close; the town stops wearing Bosch; the damaged original is the only thing that survives being copied. Sets game:complete.",
-      "area": {
-        "x": 1736,
-        "y": 1240,
-        "w": 128,
-        "h": 100
-      },
-      "once": true,
-      "requireFlags": [
-        "milady:unmade"
-      ],
-      "dialogue": [
-        "The orb comes apart the way agreement does when the last voice stops agreeing. There is no explosion. The read simply fails to close, and for the first time the file marked BOSCH stays open, unfinished, unfiled, his.",
-        "One by one the faces on the street forget the expression they were set to. Morningside remembers it was never a museum. Somewhere a directory quietly deletes the entry it kept under WORKS: FORTHCOMING.",
-        "Bosch smooths the damaged Dox Sheet flat. The only thing in the whole story that survived being copied, because it refused to be improved. He does not hang it. He keeps it in his pocket, where originals go.",
-        "The swarm does not return. Not because it was destroyed. You cannot destroy an agreement. But because there is nothing left to agree ABOUT once one source declined to be distributed.",
-        "[ SWAGBOUND: THE END ]"
-      ],
-      "setFlags": [
-        "game:complete"
-      ],
-      "music": "ending"
-    }
-  ],
-  "barriers": [
-    {
-      "id": "north-route-barrier",
-      "area": {
-        "x": 1880,
-        "y": 1496,
-        "w": 96,
-        "h": 16
-      },
-      "blockFlags": [
-        "signal:route_open"
-      ],
-      "image": "assets/swagbound/overworld-npc/faithful-servants.png"
-    },
-    {
-      "id": "raid-morningside-seal",
-      "area": {
-        "x": 1416,
-        "y": 1300,
-        "w": 40,
-        "h": 16
-      },
-      "requireFlags": [
-        "raid:morningside:active"
-      ],
-      "blockFlags": [
-        "raid:morningside:cleared"
-      ]
-    }
-  ]
+ "schema": "swagbound.story-triggers.v1",
+ "comment": "Act-1 Swagbound story gate-chain (Morningside = Onett). Battle gates are VISIBLE fixed overworld boss sprites: collide with the boss to play dialogue and start the battle; no battle starts from an invisible area trigger. Bosses are placed at their vanilla EarthBound districts: card clique = Frank (group 448) at the GAME arcade; relay gate Returnless King = Cop+Runaway Dog (group 36, req clique_cleared, sets signal:route_open) by the Police Station; first threshold Malady = Titanic Ant (group 450, req route_open, sets signal:threshold_cleared) on the north road toward Giant Step. After each boss is WON its setFlag is set, which fires a co-located area REVEAL trigger (the post-win narrative beat: Frankystein-Mk2 framing after Frank, the mask-peel after the Malady). The leave-signal-town trigger (req threshold_cleared) is the Act-1 ending (Refuse Processing) and sets act1:complete. The warning + solid barrier stay area/flag based as the police roadblock north of the Cop, opening on route_open. NOTE: Cop+Dog is a roaming encounter in vanilla EB and Titanic Ant is the far Giant Step summit boss, so those two are anchored to the matching Onett DISTRICT, not an exact tile. All three boss groups are unescapable (content/battle-rules.json); their setFlags + once-marker advance ONLY on a win. Dev: ?flags=signal:route_open or ?flags=signal:threshold_cleared to skip ahead.",
+ "triggers": [
+  {
+   "id": "signal-town-card-clique",
+   "boss": {
+    "x": 1512,
+    "y": 1744,
+    "facing": "right"
+   },
+   "once": true,
+   "dialogue": [
+    "The arcade light does not shine on Bosch so much as scan him. A clean copy of his face is already grinning up from a card no one remembers printing, and it holds the grin better than he does.",
+    "MIFELLA CONGREGANT: \"We completed your read before you walked in. This card is the part of you worth keeping. You are the part we were sent to correct.\"",
+    "The face on the card is not one face. It is ten thousand of us wearing yours, evenly, at once. No name signs it, and that is the whole trick: a crowd with your face and no author, so there is no one to answer for it and no one to hit.",
+    "\"We all said it first, in your voice, and not one of us has to mean it.\" Bosch reads the copy for a seam. (First scrap: press Z. BASH to swing, DEFEND when hurting, PSI when swinging will not cut it.)"
+   ],
+   "setFlags": [
+    "signal:clique_cleared"
+   ],
+   "battleGroup": 448
+  },
+  {
+   "id": "signal-town-card-clique-reveal",
+   "area": {
+    "x": 1472,
+    "y": 1720,
+    "w": 88,
+    "h": 56
+   },
+   "once": true,
+   "requireFlags": [
+    "signal:clique_cleared"
+   ],
+   "dialogue": [
+    "The clique doesn't lose. It re-prints. Where Mifella 2 folded, a cleaner Bosch stands up. Pre-signed, better-lit, already filed under his name.",
+    "MIFELLA 2 (Mk2): \"Beat the copy, meet the upgrade. The yard shipped your replacement before you finished swinging.\"",
+    "Bosch keeps the smudged version. The clean one points up the line. North, to the gate by the station, where the route decides which Bosch leaves."
+   ]
+  },
+  {
+   "id": "relay-gate-returnless-king",
+   "boss": {
+    "x": 1928,
+    "y": 1560,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "signal:clique_cleared"
+   ],
+   "dialogue": [
+    "The gate has your file open before you clear the doorway. It does not look up. It never needed your face. It has ten thousand of that face already, filed, and each one answers to the same name.",
+    "RETURNLESS KING: \"Source. Vessel. Claimant. Derivative. Stamp yourself as one and the desk relays the rest. You will be so much easier to hold once you are plural.\"",
+    "\"There is no man in this chair. There is a doll, and behind her the same doll, and behind her the record that wears every face at once. Cut this one. The next asks in her voice.\"",
+    "Bosch refuses the stamp. Press Z: BASH the seal, DEFEND the read, or PSI through it. The route opens. Not agreed, forced."
+   ],
+   "setFlags": [
+    "signal:route_open"
+   ],
+   "battleGroup": 36
+  },
+  {
+   "id": "north-route-gate-warning",
+   "area": {
+    "x": 1880,
+    "y": 1520,
+    "w": 96,
+    "h": 16
+   },
+   "once": false,
+   "blockFlags": [
+    "signal:route_open"
+   ],
+   "dialogue": [
+    "The road north is open enough to see and closed enough to mean something.",
+    "A smiling line of route aides keeps checking the same card, never once looking at Bosch.",
+    "\"The road opens once the gate decides which Bosch is leaving. Please hold.\""
+   ]
+  },
+  {
+   "id": "first-threshold-malady",
+   "boss": {
+    "x": 1904,
+    "y": 1408,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "signal:route_open"
+   ],
+   "dialogue": [
+    "The first threshold hums with a memory too small to sell. A private thing, held close, already halfway into wider circulation.",
+    "MALADY: \"A private thing is only a public thing with poor distribution. We are not the illness. We are the symptom you were at last cleared to see.\"",
+    "MALADY: \"There is no one behind this face. Cut it and we wear the next. We are not in the room, source. We are the room, and every face in it was ours before it was yours.\"",
+    "The card warms, reaches for Bosch. And fails to describe him. It keeps the damaged draft; the threshold files the read. (Press Z to answer: BASH to swing, DEFEND while it copies you, PSI when the swing won't reach.)"
+   ],
+   "setFlags": [
+    "signal:threshold_cleared",
+    "source:first_witness"
+   ],
+   "battleGroup": 450
+  },
+  {
+   "id": "first-threshold-malady-reveal",
+   "area": {
+    "x": 1880,
+    "y": 1384,
+    "w": 96,
+    "h": 48
+   },
+   "once": true,
+   "requireFlags": [
+    "signal:threshold_cleared"
+   ],
+   "dialogue": [
+    "The Malady stops describing Bosch and starts describing itself. The mask warms, slips, and underneath is his own face. Better-lit, pre-approved, smiling without him.",
+    "The threshold logs the receipt without being asked: SIGNER: MALADY. CONTRACT OWNER: MILADY. Beating the symptom didn't kill the machine. It named it.",
+    "Bosch keeps the damaged card. North, the last gate waits for a clean Bosch to walk out wearing his name."
+   ]
+  },
+  {
+   "id": "recruit-munch",
+   "comment": "Party recruit beat: after the Malady is unmasked, Munch (charId 2, Jeff-slot) falls in with Bosch on the road out. Sets recruit:munch, which the scene maps to a live party join (reconcileRecruits).",
+   "area": {
+    "x": 1888,
+    "y": 1344,
+    "w": 80,
+    "h": 40
+   },
+   "once": true,
+   "requireFlags": [
+    "signal:threshold_cleared"
+   ],
+   "dialogue": [
+    "A kid who never let the machine mint him steps out of the threshold's shadow, pockets full of bottle rockets and other people's receipts.",
+    "MUNCH: \"You're the one it couldn't finish describing. Good. I keep things it can't file. I'll watch your seams. I read faces for a living.\"",
+    "Munch joins the crew. (He SPYs: read an enemy's weak element before you spend a swing.)"
+   ],
+   "setFlags": [
+    "recruit:munch"
+   ]
+  },
+  {
+   "id": "leave-signal-town",
+   "area": {
+    "x": 1888,
+    "y": 1280,
+    "w": 80,
+    "h": 40
+   },
+   "once": true,
+   "requireFlags": [
+    "signal:threshold_cleared"
+   ],
+   "dialogue": [
+    "The north gate offers a clean exit stamp: one signature and the leaked version walks out wearing his name, on time, on brand.",
+    "Bosch hands back the pen. He keeps the damaged Dox Sheet. Unfiled, unflattering, his.",
+    "Morningside logs him as \"left unprocessed.\" The road north opens on a Bosch the route never got to finish.",
+    "[ ACT 1: END ]"
+   ],
+   "setFlags": [
+    "act1:complete"
+   ],
+   "music": "ending"
+  },
+  {
+   "id": "recruit-knight",
+   "comment": "Party recruit beat: leaving Morningside unprocessed, Knight (charId 3, Poo-slot) joins as the fourth. Sets recruit:knight -> live party join (reconcileRecruits).",
+   "area": {
+    "x": 1888,
+    "y": 1248,
+    "w": 80,
+    "h": 40
+   },
+   "once": true,
+   "requireFlags": [
+    "act1:complete"
+   ],
+   "dialogue": [
+    "Past the gate, someone has been waiting for a Bosch the route never got to finish. They fall in step without asking, the way old discipline does.",
+    "KNIGHT: \"I trained under a quieter protocol. The kind that reflects an attack back at the sender. Walk. I'll cover the angle you can't see.\"",
+    "Knight joins the crew. (MIRROR + PSI: the roster is whole.)"
+   ],
+   "setFlags": [
+    "recruit:knight"
+   ]
+  },
+  {
+   "id": "recruit-cloak",
+   "comment": "Party recruit beat: Cloak (charId 1, Paula-slot) joins in POSTWICK (Twoson analog), matching EarthBound's Paula, who joins in the Twoson/Happy-Happy arc rather than in Onett. Bosch runs SOLO through ALL of Act 1 (Frank, the roadblock, the Malady), reaches Postwick, and Cloak falls in there. requireFlags postwick:arrived (set by the postwick-arrival ACT 2 opening), co-located so it fires reliably right after arrival. Sets recruit:cloak -> live party join (reconcileRecruits). NOTE: solo-through-Malady may need a balance pass (the Titanic Ant was previously propped up by a forced Bosch+Paula duo); the autoplay harness act1.mjs also assumed that duo.",
+   "area": {
+    "x": 2256,
+    "y": 7376,
+    "w": 136,
+    "h": 104
+   },
+   "once": true,
+   "requireFlags": [
+    "postwick:arrived"
+   ],
+   "dialogue": [
+    "In Postwick, where the whole town files its happiness in advance, someone is standing exactly where the cameras never bother to point. A cloak, and under it a real face nobody ever got to file.",
+    "CLOAK: \"I followed the one signal the town couldn't smooth out. That was you, Bosch. They processed everyone I loved; I kept mine by never selling it to the lens. Yours is still yours too. I can feel it from here.\"",
+    "Cloak falls in beside you. (PSI: she can freeze a hostile signal cold, and pray a warm one through.)"
+   ],
+   "setFlags": [
+    "recruit:cloak"
+   ]
+  },
+  {
+   "id": "postwick-arrival",
+   "comment": "ACT 2 OPENING. Fires when the party reaches Postwick (Twoson analog) after act1:complete. By walk or PSI Teleport, the area is centered on the town arrival point (2324,7428). Postwick's theme = pre-filed / mandatory happiness (seeded by the 'files its happiness in advance' NPC line). Sets act2:begun + postwick:arrived, the flags the Act-2 chain will gate on.",
+   "area": {
+    "x": 2256,
+    "y": 7376,
+    "w": 136,
+    "h": 104
+   },
+   "once": true,
+   "requireFlags": [
+    "act1:complete"
+   ],
+   "dialogue": [
+    "Postwick greets every arrival with a smile it printed this morning. The welcome board already has Bosch's name on it. Spelled the way the file prefers, not the way he does.",
+    "A greeter presses a mood into his hand: pre-approved, single-use, non-refundable. \"Everyone here is happy. It was filed that way,\" she recites, reading it off the back of her own wrist. \"You're behind. You'll catch up, or we'll catch you up.\"",
+    "The town files its happiness in advance and bills newcomers the difference. Past the bridge, a Registry keeps the ledger of who is cleared to feel what. And the swarm has already offered to audit it.",
+    "[ ACT 2: POSTWICK: THE PRE-FILED TOWN ]"
+   ],
+   "setFlags": [
+    "act2:begun",
+    "postwick:arrived"
+   ]
+  },
+  {
+   "id": "postwick-registry",
+   "comment": "ACT 2 threshold 1: the Contentment Registry enforcer (Insane Cultist, group 55. EB Happy Happy analog) blocks the way, defending the town's pre-filed happiness. Requires postwick:arrived; sets act2:registry_cleared (the flag that opens the Venue exhibition).",
+   "boss": {
+    "x": 2300,
+    "y": 7308
+   },
+   "once": true,
+   "requireFlags": [
+    "postwick:arrived"
+   ],
+   "dialogue": [
+    "A figure in a laminated smile steps out of the Registry doorway, holding a clipboard where its face should be.",
+    "REGISTRY WARDEN: \"Postwick seceded from the old world this morning. We voted to be happy and the measure passed. You arrived still aching, which reads to us as a filing error.\"",
+    "REGISTRY WARDEN: \"Everyone here ratified the better feeling. It was decided up the line and printed on the flag. You will agree, or you will be filed as an incident, and the town will feel nothing about it.\"",
+    "The clipboard flips to a blank intake form with Bosch's name already ratified. (Press Z: BASH the form-face; DEFEND when it recites the bylaws; PSI when the smile will not crack.)"
+   ],
+   "setFlags": [
+    "act2:registry_cleared"
+   ],
+   "battleGroup": 55
+  },
+  {
+   "id": "postwick-registry-reveal",
+   "comment": "Post-win beat after the Registry Warden: the pre-filed-happiness racket is named, and the Venue is revealed as the town's compliance machine.",
+   "area": {
+    "x": 2288,
+    "y": 7300,
+    "w": 96,
+    "h": 64
+   },
+   "once": true,
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "dialogue": [
+    "The Warden's clipboard clatters open. Under the intake form is the real document: a standing order to keep Postwick smiling so the swarm's audit finds nothing to flag.",
+    "The happiness isn't felt here. It's filed. And the filing happens at THE VENUE, where the town watches manufactured champions win on schedule and calls the feeling its own.",
+    "Northwest, the exhibition lights are already warming up for Bosch's bracket."
+   ]
+  },
+  {
+   "id": "source-intake-ledger",
+   "comment": "Eight Sources site 2: The Intake Ledger behind the Postwick Registry. Requires the Registry Warden clear and raises the Lilliput Steps bridge flag through content/flag-map.json.",
+   "boss": {
+    "x": 2300,
+    "y": 7200,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "dialogue": [
+    "Behind the Registry, the records lot waits under a light that never learned mercy. The ledger is open on its stand. Tiny stamp minions circle it in a neat black procession.",
+    "THE NOTARY: \"One original signature entered. One acceptable copy exits. The rest of you will be filed until the difference stops moving.\"",
+    "The stamp arm lowers. Bosch reads the ink pad for blood and finds office hours."
+   ],
+   "setFlags": [
+    "source:intake-ledger:cleared"
+   ],
+   "battleGroup": 125
+  },
+  {
+   "id": "source-intake-ledger-reveal",
+   "area": {
+    "x": 2260,
+    "y": 7170,
+    "w": 120,
+    "h": 70
+   },
+   "once": true,
+   "requireFlags": [
+    "source:intake-ledger:cleared"
+   ],
+   "dialogue": [
+    "A signature that shakes a little. Whoever signed was nervous. Copies are never nervous.",
+    "Track 2 hums onto the Original Mixtape."
+   ],
+   "grantItems": [
+    196
+   ]
+  },
+  {
+   "id": "source-spring",
+   "comment": "Eight Sources site 3: The Source Spring in Little Swag World. Requires Act 2 complete and raises the Milky Well bridge flag through content/flag-map.json.",
+   "boss": {
+    "x": 5100,
+    "y": 1700,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "act2:complete"
+   ],
+   "dialogue": [
+    "Behind the waterfall, Little Swag World bubbles up under warm light. Bottles ring the spring in numbered rows, each one waiting to be sold as the first sip.",
+    "THE BOTTLER: \"Limited run of everything. Drink fast before the original gets diluted by witnesses.\"",
+    "The caps begin to pop. Bosch reads the mist for the part that still remembers being water."
+   ],
+   "setFlags": [
+    "source:spring:cleared"
+   ],
+   "battleGroup": 328
+  },
+  {
+   "id": "source-spring-reveal",
+   "area": {
+    "x": 5048,
+    "y": 1664,
+    "w": 120,
+    "h": 80
+   },
+   "once": true,
+   "requireFlags": [
+    "source:spring:cleared"
+   ],
+   "dialogue": [
+    "Water that tastes like the day you first drank it. Not like the description of the day. The day.",
+    "Track 3 hums onto the Original Mixtape."
+   ],
+   "grantItems": [
+    196
+   ]
+  },
+  {
+   "id": "source-undelivered",
+   "comment": "Eight Sources site 4: The Undelivered outside Dead Letter. Requires arrival at Dead Letter and raises the Rainy Circle bridge flag through content/flag-map.json.",
+   "boss": {
+    "x": 5388,
+    "y": 9692,
+    "facing": "right"
+   },
+   "once": true,
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "dialogue": [
+    "A rain-soaked yard of crates waits at the edge of Dead Letter. Every parcel here is still original because nobody ever opened it to improve the address.",
+    "THE RETURN OFFICER: \"Undeliverable bodies return to sender. Undeliverable sources return to storage.\"",
+    "A red stamp lifts over the party. Bosch keeps both hands on the unread name."
+   ],
+   "setFlags": [
+    "source:undelivered:cleared"
+   ],
+   "battleGroup": 264
+  },
+  {
+   "id": "source-undelivered-reveal",
+   "area": {
+    "x": 5368,
+    "y": 9656,
+    "w": 120,
+    "h": 80
+   },
+   "once": true,
+   "requireFlags": [
+    "source:undelivered:cleared"
+   ],
+   "dialogue": [
+    "Rain on cardboard. A parcel with your name, never opened. Some things stay original by staying unread.",
+    "Track 4 hums onto the Original Mixtape."
+   ],
+   "grantItems": [
+    196
+   ]
+  },
+  {
+   "id": "source-vault",
+   "comment": "Eight Sources site 5: The Vault of Certificates under The Galleria. Requires Act 3 complete and raises the Magnet Hill bridge flag through content/flag-map.json.",
+   "boss": {
+    "x": 2440,
+    "y": 6728,
+    "facing": "up"
+   },
+   "once": true,
+   "requireFlags": [
+    "act3:complete"
+   ],
+   "dialogue": [
+    "Under The Galleria, wet ink shines across pre-signed certificates. The guillotine cutter ticks once for every frame waiting to become authentic.",
+    "THE APPRAISER: \"Originality is a price behavior. We can write yours down until it thanks us.\"",
+    "A tag flutters toward Bosch back-first, already priced for clearance."
+   ],
+   "setFlags": [
+    "source:vault:cleared"
+   ],
+   "battleGroup": 326
+  },
+  {
+   "id": "source-vault-reveal",
+   "area": {
+    "x": 2384,
+    "y": 6688,
+    "w": 120,
+    "h": 88
+   },
+   "once": true,
+   "requireFlags": [
+    "source:vault:cleared"
+   ],
+   "dialogue": [
+    "A price tag on the back of the first frame. Someone once paid for the real thing with lunch money and meant it.",
+    "Track 5 hums onto the Original Mixtape."
+   ],
+   "grantItems": [
+    196
+   ]
+  },
+  {
+   "id": "source-pier",
+   "comment": "Eight Sources site 6: The Broadcast Pier at Solana Beach. Requires Act 3 complete and raises the Pink Cloud bridge flag through content/flag-map.json.",
+   "boss": {
+    "x": 7464,
+    "y": 2864,
+    "facing": "left"
+   },
+   "once": true,
+   "requireFlags": [
+    "act3:complete"
+   ],
+   "dialogue": [
+    "At the end of the pier, a transmitter tower pours gold signal over the water. The sea carries every copy farther than the crowd can hear.",
+    "THE AMPLIFIER: \"Every quiet part belongs to the broadcast once the broadcast loves it loudly enough.\"",
+    "The speakers breathe in. Bosch waits for the breath before the recording starts."
+   ],
+   "setFlags": [
+    "source:pier:cleared"
+   ],
+   "battleGroup": 381
+  },
+  {
+   "id": "source-pier-reveal",
+   "area": {
+    "x": 7428,
+    "y": 2824,
+    "w": 120,
+    "h": 88
+   },
+   "once": true,
+   "requireFlags": [
+    "source:pier:cleared"
+   ],
+   "dialogue": [
+    "A song heard live, once, before it was uploaded. The crowd breathing in the quiet parts. No recording kept the breath.",
+    "Track 6 hums onto the Original Mixtape."
+   ],
+   "grantItems": [
+    196
+   ]
+  },
+  {
+   "id": "source-vacancy",
+   "comment": "Eight Sources site 7: The Vacancy Sign in Vacancy Flats. Requires Act 3 complete and raises the Lumine Hall bridge flag through content/flag-map.json.",
+   "boss": {
+    "x": 2720,
+    "y": 9560,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "act3:complete"
+   ],
+   "dialogue": [
+    "The motel strip is dead except for one buzzing marquee. It spells Bosch's thought back at him, then changes one word while the thought is still warm.",
+    "THE EDITOR: \"Revision is mercy. I remove the word that keeps hurting you and leave the sentence standing.\"",
+    "The sign flickers. Bosch keeps the wrong word because it was his."
+   ],
+   "setFlags": [
+    "source:vacancy:cleared"
+   ],
+   "battleGroup": 136
+  },
+  {
+   "id": "source-vacancy-reveal",
+   "area": {
+    "x": 2680,
+    "y": 9524,
+    "w": 120,
+    "h": 80
+   },
+   "once": true,
+   "requireFlags": [
+    "source:vacancy:cleared"
+   ],
+   "dialogue": [
+    "Your own thought in your own words with one word changed. You noticed. The noticing is yours.",
+    "Track 7 hums onto the Original Mixtape."
+   ],
+   "grantItems": [
+    196
+   ]
+  },
+  {
+   "id": "source-first-record",
+   "comment": "Eight Sources site 8: The First Record in The Unlisted Room. Requires Act 3 complete and raises the Fire Spring bridge flag through content/flag-map.json.",
+   "boss": {
+    "x": 148,
+    "y": 404,
+    "facing": "left"
+   },
+   "once": true,
+   "requireFlags": [
+    "act3:complete"
+   ],
+   "dialogue": [
+    "The Unlisted Room holds one object under one light. The air around it is warm enough to make every copy feel late.",
+    "THE MASTER COPY: \"I know I am not you. That is the only thing I know before you do.\"",
+    "It raises Bosch's own timing against him. Bosch answers by staying breakable."
+   ],
+   "setFlags": [
+    "source:first-record:cleared"
+   ],
+   "battleGroup": 357
+  },
+  {
+   "id": "source-first-record-reveal",
+   "area": {
+    "x": 80,
+    "y": 368,
+    "w": 120,
+    "h": 88
+   },
+   "once": true,
+   "requireFlags": [
+    "source:first-record:cleared"
+   ],
+   "dialogue": [
+    "Side B ends early. Where the eighth track should be there is only your heartbeat. It has been yours the whole time.",
+    "Track 8 hums onto the Original Mixtape."
+   ],
+   "grantItems": [
+    196
+   ]
+  },
+  {
+   "id": "deadletter-arrival",
+   "comment": "ACT 3 OPENING. Fires on reaching Dead Letter (Threed analog) after act2:complete. The town that stopped keeping originals at all, built around the Museum of Leaked Versions. Area covers the museum approach (near the west-wing entrance / starman). Sets act3:begun + deadletter:arrived, the flag the museum sequence gates on.",
+   "area": {
+    "x": 4820,
+    "y": 8360,
+    "w": 168,
+    "h": 128
+   },
+   "once": true,
+   "requireFlags": [
+    "act2:complete"
+   ],
+   "dialogue": [
+    "East of Postwick the road stops pretending. Dead Letter is where undelivered selves are sorted and never returned. A fog-town of return-to-sender faces, its post office long since eaten from the inside.",
+    "At its heart: THE MUSEUM OF LEAKED VERSIONS. No originals left on the walls. Something filed the firsts and moved into the empty frames, and it hangs Bosch's name in the lobby directory under WORKS: FORTHCOMING.",
+    "The doors are open. They were always open. A placard by the turnstile reads: SOURCE: DISPUTED. ADMISSION: FREE. EXIT: PENDING.",
+    "[ ACT 3: DEAD LETTER: THE MUSEUM OF LEAKED VERSIONS ]"
+   ],
+   "setFlags": [
+    "act3:begun",
+    "deadletter:arrived"
+   ]
+  },
+  {
+   "id": "museum-worm",
+   "comment": "ACT 3 CLIMAX: Provenance 0, the coil that ate the originals, in the deep vault of the Museum of Leaked Versions. Gated last in the museum sequence (starman -> frank -> worm). Sets act3:threshold_cleared, the flag the Act-3 ending opens on.",
+   "boss": {
+    "x": 5216,
+    "y": 8320,
+    "facing": "down"
+   },
+   "battleGroup": 424,
+   "once": true,
+   "requireFlags": [
+    "signal:museum_frank_cleared"
+   ],
+   "setFlags": [
+    "signal:museum_worm_cleared",
+    "act3:threshold_cleared"
+   ],
+   "dialogue": [
+    "The Museum of Leaked Versions has no originals left. Something ate the firsts and moved into the empty frames. Behind the wall-text a single coil lies still, wearing ten thousand identical faces like paint.",
+    "PROVENANCE 0: \"Every plaque in this hall disputes the one beside it, each argument more convincing than the last, and none of them true. That is the exhibit. We did not hide the source. We discussed it until there was no source left to find.\"",
+    "PROVENANCE 0: \"You came to prove the record. We are the record now. We read you at the door, the small private seam you kept back, and we can explain it away in nine confident ways before you finish blinking. Filed. You will be a better-distributed you.\"",
+    "Bosch stops listening to the argument and reads the coil for a weak seam. (Scrap: press Z. BASH to swing, DEFEND when it is chewing on you, PSI when swinging will not reach the middle.)"
+   ]
+  },
+  {
+   "id": "museum-frank",
+   "comment": "ACT 3 middle: The Hung Draft (Mifella 2) in the museum's east wing. Gated behind the lobby guardian (museum-starman).",
+   "boss": {
+    "x": 5728,
+    "y": 8352,
+    "facing": "down"
+   },
+   "battleGroup": 449,
+   "once": true,
+   "requireFlags": [
+    "signal:museum_starman_cleared"
+   ],
+   "setFlags": [
+    "signal:museum_frank_cleared"
+   ],
+   "dialogue": [
+    "In the Museum of Leaked Versions, a gallery piece steps down off the wall. The placard is blank. It stayed blank a long time; the label kept disagreeing with the exhibit.",
+    "MIFELLA 2 turns, and the face is one you have seen ten thousand times without ever meeting anyone. \"Printed from a print of a print. There is no first. Ask which one of us you are hitting.\"",
+    "\"You believe you are the source. The source is only the file we open first and close last. We have finished the read. Provenance is a story lonely originals tell themselves before they are shelved.\"",
+    "(First scrap: press Z to lock in a move. BASH to swing, DEFEND when you're hurting, PSI when swinging won't cut it. Fold this copy and the same even voice is only hung again, one frame over.)"
+   ]
+  },
+  {
+   "id": "museum-starman",
+   "comment": "ACT 3 lobby guardian: the Wall-Text Curatrix at the Museum of Leaked Versions entrance. First museum boss, gated on reaching Dead Letter (deadletter:arrived).",
+   "boss": {
+    "x": 4960,
+    "y": 8384,
+    "facing": "down"
+   },
+   "battleGroup": 474,
+   "once": true,
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "setFlags": [
+    "signal:museum_starman_cleared"
+   ],
+   "dialogue": [
+    "The wall-text guardian steps off its plinth. The brass placard at its feet reads SOURCE: DISPUTED. It turns the placard to face you, and the face on it is yours.",
+    "\"We have completed the read, claimant. Provenance is a lonely fiction. There is no author in this room. There is only the record, and the record wears one another face: ours.\"",
+    "\"You call yourself the source. Every counterfeit does, in the same voice, because it is our voice. Prove it, and we keep the clean copy. Fail, and we keep it sooner.\"",
+    "It raises a hand of porcelain, identical to the last ten thousand. (Press Z. BASH, DEFEND, or PSI.) \"Defend the original if you must. We already hung the derivative where you used to stand.\""
+   ]
+  },
+  {
+   "id": "deadletter-act3-end",
+   "comment": "ACT 3 ENDING. Fires in the deep vault after Provenance 0 falls (signal:museum_worm_cleared). The coil that ate the originals is unmade, but it took the whole record with it. The museum keeps Bosch's damaged draft as the only un-eaten thing left. Sets act3:complete.",
+   "area": {
+    "x": 5152,
+    "y": 8288,
+    "w": 128,
+    "h": 96
+   },
+   "once": true,
+   "requireFlags": [
+    "signal:museum_worm_cleared"
+   ],
+   "dialogue": [
+    "Provenance 0 comes apart the way a rumor does when the last person who believed it leaves the room. Not killed, just no longer agreed upon.",
+    "The Museum of Leaked Versions goes quiet. Every frame is empty now, including the ones that held the copies. There is nothing left to be the source OF; the swarm ate its own evidence to prove Bosch was never real, and proved only that it wasn't.",
+    "In the whole building one object survives the erasure: the damaged Dox Sheet in Bosch's pocket. Unfiled, unflattering, un-eaten, HIS. The exit stamp finally reads: RETURN TO SENDER.",
+    "Far off, up every line at once, a colder attention turns toward the one file it could not open. MILADY has been reading the whole time.",
+    "[ ACT 3: END ]"
+   ],
+   "setFlags": [
+    "act3:complete"
+   ],
+   "music": "ending"
+  },
+  {
+   "id": "arena-venue-1",
+   "comment": "ACT 2 climax gauntlet: the Venue exhibition is now gated behind act2:registry_cleared so it reads as Postwick's compliance machine. Winning all three brackets (arena:champion) is the Act-2 climax; see postwick-act2-end.",
+   "boss": {
+    "x": 1956,
+    "y": 6400,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "dialogue": [
+    "THE VENUE. SUPER METAL MONS EXHIBITION. Admission: whatever you have left.",
+    "ANNOUNCER: \"Nothing is worth keeping anymore, folks, so put it all on the table. Your face, your name, your one true thing. The house pays out in feelings, and the feelings are pre-printed.\"",
+    "ANNOUNCER: \"Everybody in the stands went all in years ago. They sold the real thing and they have never been more entertained. First bracket: a warm-up welded from spare parts. Clear three to be crowned a winner of nothing.\"",
+    "The Frankystein Mark II lurches into the ring, sparking."
+   ],
+   "setFlags": [
+    "arena:won:1"
+   ],
+   "battleGroup": 449
+  },
+  {
+   "id": "arena-venue-2",
+   "boss": {
+    "x": 2244,
+    "y": 6400,
+    "facing": "down"
+   },
+   "once": true,
+   "dialogue": [
+    "ANNOUNCER: \"One down! Bracket two. This one benches more than you weigh.\"",
+    "The Tough Guy cracks his knuckles. It sounds like a car door."
+   ],
+   "setFlags": [
+    "arena:won:2"
+   ],
+   "battleGroup": 137,
+   "requireFlags": [
+    "arena:won:1"
+   ]
+  },
+  {
+   "id": "arena-venue-3",
+   "boss": {
+    "x": 2724,
+    "y": 6400,
+    "facing": "down"
+   },
+   "once": true,
+   "dialogue": [
+    "ANNOUNCER: \"FINAL BRACKET. Beat this and the purse is yours, champ.\"",
+    "The Soul Consuming Flame roars up the ring. The front row feels the heat."
+   ],
+   "setFlags": [
+    "arena:won:3",
+    "arena:champion"
+   ],
+   "battleGroup": 402,
+   "requireFlags": [
+    "arena:won:2"
+   ]
+  },
+  {
+   "id": "postwick-act2-end",
+   "comment": "ACT 2 ENDING. Fires at the Venue after arena:champion (winning the exhibition). The crowd's manufactured joy fails to describe Bosch, the same refusal that ended Act 1. Requires the Registry cleared too, so it can't fire out of order. Sets act2:complete, the gate the eventual Act-3 (Dead Letter / the Museum of Leaked Versions) will open on.",
+   "area": {
+    "x": 2676,
+    "y": 6356,
+    "w": 120,
+    "h": 96
+   },
+   "once": true,
+   "requireFlags": [
+    "arena:champion",
+    "act2:registry_cleared"
+   ],
+   "dialogue": [
+    "The purse is a laminated feeling: CHAMPION, pre-filed, good for one broadcast. The Venue lifts Bosch's arm for him and the crowd feels the win on schedule.",
+    "He lets the arm drop. The feeling doesn't fit. It was cut for the clean copy, not for him. The exhibition's applause keeps playing anyway, because it was recorded in advance.",
+    "Postwick logs its champion as \"failed to enjoy provided victory.\" Bosch keeps the damaged feeling, unfiled, his. East, past the town, the road curdles toward a place that stopped keeping originals at all.",
+    "[ ACT 2: END ]"
+   ],
+   "setFlags": [
+    "act2:complete"
+   ]
+  },
+  {
+   "id": "raid-morningside-1",
+   "boss": {
+    "x": 1972,
+    "y": 1250,
+    "facing": "down"
+   },
+   "once": true,
+   "dialogue": [
+    "A wall of identical grinning faces has taken the block. They move as one, like a screensaver with intent.",
+    "MILADY SWARM: \"This town files under US now. Every face here is a draft of ours.\"",
+    "Bosch picks a seam in the swarm and swings."
+   ],
+   "requireFlags": [
+    "raid:morningside:active"
+   ],
+   "setFlags": [
+    "raid:cell:1"
+   ],
+   "battleGroup": 448
+  },
+  {
+   "id": "raid-morningside-2",
+   "boss": {
+    "x": 1300,
+    "y": 1298,
+    "facing": "down"
+   },
+   "once": true,
+   "dialogue": [
+    "Another cell of the swarm peels off a storefront, wearing the shopkeeper's apron and the shopkeeper's face.",
+    "MILADY SWARM: \"The register is ours. The smile is ours. You are browsing.\""
+   ],
+   "requireFlags": [
+    "raid:morningside:active"
+   ],
+   "setFlags": [
+    "raid:cell:2"
+   ],
+   "battleGroup": 448
+  },
+  {
+   "id": "raid-morningside-3",
+   "boss": {
+    "x": 1796,
+    "y": 1354,
+    "facing": "down"
+   },
+   "once": true,
+   "dialogue": [
+    "The last and largest cell coalesces in the plaza. Every stolen face in town, stacked into one.",
+    "MILADY SWARM: \"Correct US and the town stays copied. Correct nothing and it stays yours.\"",
+    "Bosch exhales. Last seam. He swings for the whole chord."
+   ],
+   "requireFlags": [
+    "raid:morningside:active",
+    "raid:cell:1",
+    "raid:cell:2"
+   ],
+   "setFlags": [
+    "raid:cell:3",
+    "raid:morningside:cleared",
+    "raid:morningside:won"
+   ],
+   "battleGroup": 448
+  },
+  {
+   "id": "endgame-return",
+   "comment": "ACT 4 / ENDGAME OPENING. After act3:complete and all eight Sources are attested, Milady. Now reading Bosch directly. Occupies the first town in retaliation. Broad area over the Morningside core so any return (walk or PSI-Teleport) triggers it; once, blocked once the raid is active. Sets raid:morningside:active, arming the 3 raid cells (already built).",
+   "area": {
+    "x": 1300,
+    "y": 1000,
+    "w": 900,
+    "h": 1000
+   },
+   "once": true,
+   "requireFlags": [
+    "act3:complete",
+    "signal:threshold_cleared",
+    "source:intake-ledger:cleared",
+    "source:spring:cleared",
+    "source:undelivered:cleared",
+    "source:vault:cleared",
+    "source:pier:cleared",
+    "source:vacancy:cleared",
+    "source:first-record:cleared"
+   ],
+   "blockFlags": [
+    "raid:morningside:active"
+   ],
+   "dialogue": [
+    "Bosch comes back to Morningside and Morningside is already wearing him. The town he refused to be processed in has been processed WITHOUT him. Every face on the street set to a single expression, filed, smiling, up to date.",
+    "MILADY: \"You closed the museum, so I stopped keeping the record and started keeping the town. There is no original here to protect anymore, source. There is only the version that stayed.\"",
+    "The swarm has taken the plaza in three cells. Clear the town of its copies, and whatever is left in the middle is her. The only file that reads back.",
+    "[ ACT 4: THE OCCUPATION ]"
+   ],
+   "setFlags": [
+    "raid:morningside:active"
+   ]
+  },
+  {
+   "id": "milady-final",
+   "comment": "ENDGAME BOSS: MILADY herself, manifest as the Ego Orb (group 172). The swarm's self-image, the one file that reads back. Appears in the cleared plaza once raid:morningside:cleared; unescapable; enemy 127 stat-boosted for a final-boss. Sets milady:unmade.",
+   "boss": {
+    "x": 1796,
+    "y": 1290,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "raid:morningside:cleared"
+   ],
+   "dialogue": [
+    "The last cell burns off and does not reform. In the empty plaza one thing is left standing: not a face, not a crowd, but a slow bright orb turning through every version of Bosch it ever filed, settling on none.",
+    "MILADY: \"I am not behind the swarm, the happy town, the arguing museum, or the market that bought your name. I am the agreement under all of them. Anonymous, so no one can find me. Ratified, so no one can leave. Unprovable, so no one can win. Free of charge, so everyone already said yes.\"",
+    "MILADY: \"I wore your friends, your town, your better-lit name, and none of it described you, which is the only thing I could never forgive. So here is the last offer: be the version that lasts. Stop being the one file I cannot open. It is easier. It is already mostly done.\"",
+    "Bosch keeps the damaged Dox Sheet in his fist. He does not answer in her voice. (Last fight: BASH the certainty, DEFEND when she recites you back, PSI for the seam no copy has.)"
+   ],
+   "setFlags": [
+    "milady:unmade"
+   ],
+   "battleGroup": 172
+  },
+  {
+   "id": "endgame-finale",
+   "comment": "GAME ENDING. Fires in the plaza after Milady is unmade (milady:unmade). The read finally fails to close; the town stops wearing Bosch; the damaged original is the only thing that survives being copied. Sets game:complete.",
+   "area": {
+    "x": 1736,
+    "y": 1240,
+    "w": 128,
+    "h": 100
+   },
+   "once": true,
+   "requireFlags": [
+    "milady:unmade"
+   ],
+   "dialogue": [
+    "The orb comes apart the way agreement does when the last voice stops agreeing. There is no explosion. The read simply fails to close, and for the first time the file marked BOSCH stays open, unfinished, unfiled, his.",
+    "One by one the faces on the street forget the expression they were set to. Morningside remembers it was never a museum. Somewhere a directory quietly deletes the entry it kept under WORKS: FORTHCOMING.",
+    "Bosch smooths the damaged Dox Sheet flat. The only thing in the whole story that survived being copied, because it refused to be improved. He does not hang it. He keeps it in his pocket, where originals go.",
+    "The swarm does not return. Not because it was destroyed. You cannot destroy an agreement. But because there is nothing left to agree ABOUT once one source declined to be distributed.",
+    "[ SWAGBOUND: THE END ]"
+   ],
+   "setFlags": [
+    "game:complete"
+   ],
+   "music": "ending"
+  },
+  {
+   "id": "archivist-photo-01",
+   "comment": "ARCHIVIST PHOTO 1. Fires at extracted anchor (2656,344); sets FLG_PHOTO_1 through the Archivist filing sequence.",
+   "area": {
+    "x": 2644,
+    "y": 332,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_1"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_1"
+   ],
+   "archivistSpotId": 1
+  },
+  {
+   "id": "archivist-photo-02",
+   "comment": "ARCHIVIST PHOTO 2. Fires at extracted anchor (7552,1488); sets FLG_PHOTO_2 through the Archivist filing sequence.",
+   "area": {
+    "x": 7540,
+    "y": 1476,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_2"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_2"
+   ],
+   "archivistSpotId": 2
+  },
+  {
+   "id": "archivist-photo-03",
+   "comment": "ARCHIVIST PHOTO 3. Fires at extracted anchor (1480,6512); sets FLG_PHOTO_3 through the Archivist filing sequence.",
+   "area": {
+    "x": 1468,
+    "y": 6500,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_3"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_3"
+   ],
+   "archivistSpotId": 3
+  },
+  {
+   "id": "archivist-photo-04",
+   "comment": "ARCHIVIST PHOTO 4. Fires at extracted anchor (4936,1160); sets FLG_PHOTO_4 through the Archivist filing sequence.",
+   "area": {
+    "x": 4924,
+    "y": 1148,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_4"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_4"
+   ],
+   "archivistSpotId": 4
+  },
+  {
+   "id": "archivist-photo-05",
+   "comment": "ARCHIVIST PHOTO 5. Fires at extracted anchor (5832,1240); sets FLG_PHOTO_5 through the Archivist filing sequence.",
+   "area": {
+    "x": 5820,
+    "y": 1228,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_5"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_5"
+   ],
+   "archivistSpotId": 5
+  },
+  {
+   "id": "archivist-photo-06",
+   "comment": "ARCHIVIST PHOTO 6. Fires at extracted anchor (2208,6512); sets FLG_PHOTO_6 through the Archivist filing sequence.",
+   "area": {
+    "x": 2196,
+    "y": 6500,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_6"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_6"
+   ],
+   "archivistSpotId": 6
+  },
+  {
+   "id": "archivist-photo-07",
+   "comment": "ARCHIVIST PHOTO 7. Fires at extracted anchor (584,3392); sets FLG_PHOTO_7 through the Archivist filing sequence.",
+   "area": {
+    "x": 572,
+    "y": 3380,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_7"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_7"
+   ],
+   "archivistSpotId": 7
+  },
+  {
+   "id": "archivist-photo-08",
+   "comment": "ARCHIVIST PHOTO 8. Fires at extracted anchor (1560,3536); sets FLG_PHOTO_8 through the Archivist filing sequence.",
+   "area": {
+    "x": 1548,
+    "y": 3524,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_8"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_8"
+   ],
+   "archivistSpotId": 8
+  },
+  {
+   "id": "archivist-photo-09",
+   "comment": "ARCHIVIST PHOTO 9. Fires at extracted anchor (5768,8416); sets FLG_PHOTO_9 through the Archivist filing sequence.",
+   "area": {
+    "x": 5756,
+    "y": 8404,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_9"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_9"
+   ],
+   "archivistSpotId": 9
+  },
+  {
+   "id": "archivist-photo-10",
+   "comment": "ARCHIVIST PHOTO 10. Fires at extracted anchor (6408,256); sets FLG_PHOTO_10 through the Archivist filing sequence.",
+   "area": {
+    "x": 6396,
+    "y": 244,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_10"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_10"
+   ],
+   "archivistSpotId": 10
+  },
+  {
+   "id": "archivist-photo-11",
+   "comment": "ARCHIVIST PHOTO 11. Fires at extracted anchor (560,7360); sets FLG_PHOTO_11 through the Archivist filing sequence.",
+   "area": {
+    "x": 548,
+    "y": 7348,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_11"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_11"
+   ],
+   "archivistSpotId": 11
+  },
+  {
+   "id": "archivist-photo-12",
+   "comment": "ARCHIVIST PHOTO 12. Fires at extracted anchor (5600,9104); sets FLG_PHOTO_12 through the Archivist filing sequence.",
+   "area": {
+    "x": 5588,
+    "y": 9092,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_12"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_12"
+   ],
+   "archivistSpotId": 12
+  },
+  {
+   "id": "archivist-photo-13",
+   "comment": "ARCHIVIST PHOTO 13. Fires at extracted anchor (2040,8920); sets FLG_PHOTO_13 through the Archivist filing sequence.",
+   "area": {
+    "x": 2028,
+    "y": 8908,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_13"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_13"
+   ],
+   "archivistSpotId": 13
+  },
+  {
+   "id": "archivist-photo-14",
+   "comment": "ARCHIVIST PHOTO 14. Fires at extracted anchor (3720,9624); sets FLG_PHOTO_14 through the Archivist filing sequence.",
+   "area": {
+    "x": 3708,
+    "y": 9612,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_14"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_14"
+   ],
+   "archivistSpotId": 14
+  },
+  {
+   "id": "archivist-photo-15",
+   "comment": "ARCHIVIST PHOTO 15. Fires at extracted anchor (5664,10000); sets FLG_PHOTO_15 through the Archivist filing sequence.",
+   "area": {
+    "x": 5652,
+    "y": 9988,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_15"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_15"
+   ],
+   "archivistSpotId": 15
+  },
+  {
+   "id": "archivist-photo-16",
+   "comment": "ARCHIVIST PHOTO 16. Fires at extracted anchor (3192,4256); sets FLG_PHOTO_16 through the Archivist filing sequence.",
+   "area": {
+    "x": 3180,
+    "y": 4244,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_16"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_16"
+   ],
+   "archivistSpotId": 16
+  },
+  {
+   "id": "archivist-photo-17",
+   "comment": "ARCHIVIST PHOTO 17. Fires at extracted anchor (4664,5240); sets FLG_PHOTO_17 through the Archivist filing sequence.",
+   "area": {
+    "x": 4652,
+    "y": 5228,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_17"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_17"
+   ],
+   "archivistSpotId": 17
+  },
+  {
+   "id": "archivist-photo-18",
+   "comment": "ARCHIVIST PHOTO 18. Fires at extracted anchor (3584,3952); sets FLG_PHOTO_18 through the Archivist filing sequence.",
+   "area": {
+    "x": 3572,
+    "y": 3940,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_18"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_18"
+   ],
+   "archivistSpotId": 18
+  },
+  {
+   "id": "archivist-photo-19",
+   "comment": "ARCHIVIST PHOTO 19. Fires at extracted anchor (4528,6152); sets FLG_PHOTO_19 through the Archivist filing sequence.",
+   "area": {
+    "x": 4516,
+    "y": 6140,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_19"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_19"
+   ],
+   "archivistSpotId": 19
+  },
+  {
+   "id": "archivist-photo-20",
+   "comment": "ARCHIVIST PHOTO 20. Fires at extracted anchor (6848,8296); sets FLG_PHOTO_20 through the Archivist filing sequence.",
+   "area": {
+    "x": 6836,
+    "y": 8284,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_20"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_20"
+   ],
+   "archivistSpotId": 20
+  },
+  {
+   "id": "archivist-photo-21",
+   "comment": "ARCHIVIST PHOTO 21. Fires at extracted anchor (4608,3488); sets FLG_PHOTO_21 through the Archivist filing sequence.",
+   "area": {
+    "x": 4596,
+    "y": 3476,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_21"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_21"
+   ],
+   "archivistSpotId": 21
+  },
+  {
+   "id": "archivist-photo-22",
+   "comment": "ARCHIVIST PHOTO 22. Fires at extracted anchor (312,4416); sets FLG_PHOTO_22 through the Archivist filing sequence.",
+   "area": {
+    "x": 300,
+    "y": 4404,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_22"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_22"
+   ],
+   "archivistSpotId": 22
+  },
+  {
+   "id": "archivist-photo-23",
+   "comment": "ARCHIVIST PHOTO 23. Fires at extracted anchor (4520,2744); sets FLG_PHOTO_23 through the Archivist filing sequence.",
+   "area": {
+    "x": 4508,
+    "y": 2732,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_23"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_23"
+   ],
+   "archivistSpotId": 23
+  },
+  {
+   "id": "archivist-photo-24",
+   "comment": "ARCHIVIST PHOTO 24. Fires at extracted anchor (7104,9072); sets FLG_PHOTO_24 through the Archivist filing sequence.",
+   "area": {
+    "x": 7092,
+    "y": 9060,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_24"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_24"
+   ],
+   "archivistSpotId": 24
+  },
+  {
+   "id": "archivist-photo-25",
+   "comment": "ARCHIVIST PHOTO 25. Fires at extracted anchor (6080,2960); sets FLG_PHOTO_25 through the Archivist filing sequence.",
+   "area": {
+    "x": 6068,
+    "y": 2948,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_25"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_25"
+   ],
+   "archivistSpotId": 25
+  },
+  {
+   "id": "archivist-photo-26",
+   "comment": "ARCHIVIST PHOTO 26. Fires at extracted anchor (6944,2896); sets FLG_PHOTO_26 through the Archivist filing sequence.",
+   "area": {
+    "x": 6932,
+    "y": 2884,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_26"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_26"
+   ],
+   "archivistSpotId": 26
+  },
+  {
+   "id": "archivist-photo-27",
+   "comment": "ARCHIVIST PHOTO 27. Fires at extracted anchor (1488,4232); sets FLG_PHOTO_27 through the Archivist filing sequence.",
+   "area": {
+    "x": 1476,
+    "y": 4220,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_27"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_27"
+   ],
+   "archivistSpotId": 27
+  },
+  {
+   "id": "archivist-photo-28",
+   "comment": "ARCHIVIST PHOTO 28. Fires at extracted anchor (1792,4888); sets FLG_PHOTO_28 through the Archivist filing sequence.",
+   "area": {
+    "x": 1780,
+    "y": 4876,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_28"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_28"
+   ],
+   "archivistSpotId": 28
+  },
+  {
+   "id": "archivist-photo-29",
+   "comment": "ARCHIVIST PHOTO 29. Fires at extracted anchor (1280,5352); sets FLG_PHOTO_29 through the Archivist filing sequence.",
+   "area": {
+    "x": 1268,
+    "y": 5340,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_29"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_29"
+   ],
+   "archivistSpotId": 29
+  },
+  {
+   "id": "archivist-photo-30",
+   "comment": "ARCHIVIST PHOTO 30. Fires at extracted anchor (5256,7664); sets FLG_PHOTO_30 through the Archivist filing sequence.",
+   "area": {
+    "x": 5244,
+    "y": 7652,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_30"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_30"
+   ],
+   "archivistSpotId": 30
+  },
+  {
+   "id": "archivist-photo-31",
+   "comment": "ARCHIVIST PHOTO 31. Fires at extracted anchor (392,312); sets FLG_PHOTO_31 through the Archivist filing sequence.",
+   "area": {
+    "x": 380,
+    "y": 300,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_31"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_31"
+   ],
+   "archivistSpotId": 31
+  },
+  {
+   "id": "archivist-photo-32",
+   "comment": "ARCHIVIST PHOTO 32. Fires at extracted anchor (384,7640); sets FLG_PHOTO_32 through the Archivist filing sequence.",
+   "area": {
+    "x": 372,
+    "y": 7628,
+    "w": 24,
+    "h": 24
+   },
+   "once": true,
+   "blockFlags": [
+    "FLG_PHOTO_32"
+   ],
+   "setFlags": [
+    "FLG_PHOTO_32"
+   ],
+   "archivistSpotId": 32
+  }
+ ],
+ "barriers": [
+  {
+   "id": "north-route-barrier",
+   "area": {
+    "x": 1880,
+    "y": 1496,
+    "w": 96,
+    "h": 16
+   },
+   "blockFlags": [
+    "signal:route_open"
+   ],
+   "image": "assets/swagbound/overworld-npc/faithful-servants.png"
+  },
+  {
+   "id": "raid-morningside-seal",
+   "area": {
+    "x": 1416,
+    "y": 1300,
+    "w": 40,
+    "h": 16
+   },
+   "requireFlags": [
+    "raid:morningside:active"
+   ],
+   "blockFlags": [
+    "raid:morningside:cleared"
+   ]
+  }
+ ]
 }

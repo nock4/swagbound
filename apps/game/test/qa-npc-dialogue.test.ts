@@ -11,6 +11,7 @@ import {
   ScriptCollectionSchema
 } from "@eb/schemas";
 import {
+  EB_SHOP_STORE_BY_REFERENCE,
   addedNpcInteractionEvents,
   interactionEvents,
   type GameEvent,
@@ -132,6 +133,30 @@ describe("qa npc-dialogue: authored content resolution", () => {
     expect(salResolved.shopIds).toEqual([1]);
     expect(morrowResolved.hasRenderableDialogue).toBe(true);
     expect(morrowResolved.shopIds).toEqual([4]);
+  });
+
+  it("preserves Buy/Sell routing for every EB shop clerk with custom dialogue", () => {
+    const checked: Array<{ npcId: number; storeId: number }> = [];
+    const broken: Array<{ npcId: number; storeId: number; actual: number[] }> = [];
+    for (const npc of world.npcs) {
+      if (!npc.interactable || npc.visible === false || !npc.textPointer) {
+        continue;
+      }
+      const storeId = EB_SHOP_STORE_BY_REFERENCE.get(npc.textPointer);
+      if (storeId === undefined) {
+        continue;
+      }
+      const events = interactionEvents(npc, FALLBACK_REFERENCE, unsetFlags, runtimeCustomDialogue, libLookup, scripts);
+      const shopIds = describeDialogue(events).shopIds;
+      checked.push({ npcId: npc.npcId, storeId });
+      if (!shopIds.includes(storeId)) {
+        broken.push({ npcId: npc.npcId, storeId, actual: shopIds });
+      }
+    }
+
+    expect(checked).toHaveLength(45);
+    expect(new Set(checked.map((entry) => entry.storeId)).size).toBe(42);
+    expect(broken).toEqual([]);
   });
 
   it("wires hospital, hotel, and phone NPCs to service events", () => {

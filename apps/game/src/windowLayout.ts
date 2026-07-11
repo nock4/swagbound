@@ -52,6 +52,13 @@ export type DialogueWindowRectOptions = {
   topAnchored?: boolean;
 };
 
+export type DialogueVisibleLineCountOptions = {
+  text: string;
+  wrapWidth: number;
+  maxVisibleLines: number;
+  wrapLineCount: (text: string, wrapWidth: number) => number;
+};
+
 export type MenuWindowRectOptions = {
   screen: ScreenSize;
   x: number;
@@ -237,6 +244,7 @@ export function contentFitWindowRect(options: ContentFitWindowOptions): CanvasRe
 export function dialogueWindowRect(options: DialogueWindowRectOptions): CanvasRect {
   const sideMargin = Math.max(0, Math.ceil(options.sideMargin));
   const bottomMargin = Math.max(0, Math.ceil(options.bottomMargin));
+  const visibleLines = Math.max(1, Math.ceil(options.visibleLines));
   const width = Math.min(
     Math.max(1, Math.floor(options.screen.width)),
     Math.max(1, Math.floor(options.screen.width - sideMargin * 2))
@@ -249,7 +257,7 @@ export function dialogueWindowRect(options: DialogueWindowRectOptions): CanvasRe
     )
   );
   const height = clampDimension(
-    options.visibleLines * options.lineHeight + options.paddingY * 2,
+    visibleLines * options.lineHeight + options.paddingY * 2,
     1,
     maxHeight
   );
@@ -266,6 +274,13 @@ export function dialogueWindowRect(options: DialogueWindowRectOptions): CanvasRe
 
 export function dialogueTextWidth(rect: Pick<CanvasRect, "width">, paddingX: number): number {
   return Math.max(1, Math.floor(rect.width - Math.max(0, paddingX) * 2));
+}
+
+export function dialogueVisibleLineCount(options: DialogueVisibleLineCountOptions): number {
+  const maxVisibleLines = Math.max(1, Math.ceil(options.maxVisibleLines));
+  const wrapWidth = Math.max(1, Math.floor(options.wrapWidth));
+  const wrappedLines = Math.max(1, Math.ceil(options.wrapLineCount(options.text, wrapWidth)));
+  return Math.min(maxVisibleLines, wrappedLines);
 }
 
 export function menuWindowRect(options: MenuWindowRectOptions): CanvasRect {
@@ -378,6 +393,18 @@ export function battleMenuCascadeLayout(options: BattleMenuCascadeLayoutOptions)
     : undefined;
 
   const submenuLabels = options.submenuLabels ?? [];
+  // When an info strip will render under the stack, the scrollable list must
+  // RESERVE its height up front - otherwise a max-load list (50-entry PSI) runs
+  // to the same bottom limit and the strip has nowhere to go but on top of it.
+  const willRenderDescription = (options.descriptionLines ?? []).length > 0;
+  const descriptionLineCount = Math.max(1, (options.descriptionLines ?? []).length);
+  const descriptionReserve = willRenderDescription
+    ? options.lineHeight * descriptionLineCount +
+      (options.descriptionPaddingY ?? options.paddingY) * 2 +
+      Math.max(0, options.descriptionGap) +
+      Math.max(0, options.cascadeOverlap) +
+      4
+    : 0;
   const submenu = command && submenuLabels.length > 0
     ? battleScrollableMenuListRect({
       screen: options.screen,
@@ -394,18 +421,27 @@ export function battleMenuCascadeLayout(options: BattleMenuCascadeLayoutOptions)
       leftMargin,
       topMargin,
       rightMargin,
-      bottomMargin
+      bottomMargin: bottomMargin + descriptionReserve
     })
     : undefined;
 
   const descriptionLines = options.descriptionLines ?? [];
+  // The info strip sits below the DEEPEST open window: anchoring on the command
+  // window alone paints it over tall submenus (a 50-entry PSI list at max load).
+  const descriptionAnchorBottom = Math.max(
+    command ? command.y + command.height : 0,
+    submenu ? submenu.y + submenu.height : 0
+  );
   const description = command && descriptionLines.length > 0
     ? battleDescriptionRect({
       screen: options.screen,
       x: command.x,
       y: Math.min(
-        command.y + command.height - Math.max(0, options.cascadeOverlap) + Math.max(0, options.descriptionGap),
-        Math.max(topMargin, bottomLimit - options.lineHeight - (options.descriptionPaddingY ?? options.paddingY) * 2)
+        descriptionAnchorBottom - Math.max(0, options.cascadeOverlap) + Math.max(0, options.descriptionGap),
+        Math.max(
+          topMargin,
+          bottomLimit - options.lineHeight * descriptionLineCount - (options.descriptionPaddingY ?? options.paddingY) * 2
+        )
       ),
       labels: descriptionLines,
       measureText: options.measureText,

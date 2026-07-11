@@ -1,84 +1,79 @@
-# Morning hand-off — autonomous Act-1 autorun (COMPLETE)
+# Overnight report - 2026-07-10
 
-Goal was "push for full Act 1": an unattended harness that discovers the Act-1 objectives and plays
-through them in a real browser. **`node scripts/act1.mjs` now beats all three bosses and reaches
-`act1:complete`, fully unattended.** The climax wall was solved by giving Bosch a party member
-(Paula) — your "give Bosch help" call.
+Branch: overnight/menu-parity-and-fixes (on top of feat/devnotes-batch, PR #174).
+Status legend: DONE = pixel-verified, IN FLIGHT = running when this line was written.
 
-## TL;DR
-- `node scripts/act1.mjs` drives a fresh game through the authored chain
-  **card-clique → returnless-king → malady → leave** → **`act1:complete`**: flag-driven, A*-routing
-  to each boss, fighting with a PSI-aware duo AI. All three wins are legit (no debug assists in the
-  fights; `__debugHeal` only stands in for the hotel *between* fights).
-- **The climax was a balance reality, not a bug:** malady = the **Titanic Ant** (235 HP, **defense
-  23**) + a Black Antoid. Physical BASH does ~3/hit against that defense, so solo Bosch couldn't win.
-- **The fix (you chose "party member"):** Act 1 is now a **Bosch + Paula duo**. Paula casts **PSI
-  Freeze** (bypasses defense, ~29/cast) to melt the Ant; Bosch **Lifeups** himself when the Ant
-  focuses him. Both survive; the Ant dies in ~8 casts.
-- Quality gates: **803 tests green, tsc clean, `build:eb-fullworld` errors:0.**
+## Walk-frame art batch (ow-walkframe-0001) - DONE, awaiting your review
+- 604/604 generated, ZERO provider failures, ~1.1 min/item.
+- Review worst-first (drift pre-screen sorts likely rejects to the top):
+  swagbound-new/asset-lab/overnight/ow-walkframe-0001/review-index/review-ranked.html
+  (classic index.html + contact sheet in the same folder; drift-ranking.json has scores)
+- Adoption dry-run: ALL 604 plan cleanly (composition + override rewrite validated).
+- YOUR MORNING STEP: mark deletes in the review page, then run
+  node scripts/adopt-ow-walkframes.mjs --run-dir ../swagbound-new/asset-lab/overnight/ow-walkframe-0001 --approval <your-marks.json>
+  Every adopted skin automatically stops using the step toggle and frame-cycles.
 
-## The Act-1 objective graph (from `content/triggers.json`)
-| # | boss id | world pos | enemy group | needs flag | sets flag |
-|---|---------|-----------|-------------|------------|-----------|
-| 1 | signal-town-card-clique | (1512,1744) | 448 | — | `signal:clique_cleared` |
-| 2 | relay-gate-returnless-king | (1928,1560) | 36 | `clique_cleared` | `signal:route_open` |
-| 3 | first-threshold-malady | (1904,1408) | 450 | `route_open` | `signal:threshold_cleared` |
-| ✦ | leave-signal-town (area) | (1888,1280,80×40) | — | `threshold_cleared` | `act1:complete` |
+## Act-arc regression - DONE, all green
+- act1.mjs full autorun on an isolated worktree vite (:5199): act1:complete reached,
+  3/3 act-1 bosses beaten solo (card-clique, returnless-king, malady in 15 BASH rounds),
+  munch + knight recruit triggers fired en route.
+- act2/act3/act4 chain probes: every gate arms/disarms in sequence; act2:complete,
+  act3:complete, game:complete all fire. act4's earlier "failure" was harness rot
+  (a walk loop that netted zero movement) - probe fixed, game was fine.
 
-`north-route-barrier` (1880,1496) blocks the north route until `route_open` (i.e. after boss 2),
-which the autorun handles automatically by following the flag order.
+## Sprite-cutoff pin sweep - DONE (commit 473a17f)
+- All 47 SPRITE CUTOFF pins swept (24 distinct sites), player used as probe sprite.
+- 10 real fixes landed as fg-overrides clears, each verified whole-body:
+  shrub/canopy edges (1857,414 / 2229,416 / 1593,267), prop-row neighbors
+  (2607 + 2673,463), cave bands (3965,5972 / 5400,2528 / 3500,2133), doorway
+  column (7439,1017), dorm rug lower-clip (7201,583).
+- Code fix: FG clear rects now also suppress the lower-body sprite crop inside
+  their bounds (the dorm bug class).
+- Stale pins: 7610/7641,1006 + 7432,767 were ALREADY fixed by earlier clears -
+  those re-pins predate the fix reaching you. 7432,384 is the interior sector
+  mask working per your PR #149 ruling; left alone.
 
-## What the autorun does (and what was hard)
-- **Discovery is flag-driven**, not hard-coded: each loop reads `__firstSceneDebug.flags`, finds the
-  boss whose `requireFlags` are met and `setFlags` aren't, routes there, fights, then advances the
-  **post-battle dialogue** (that's what actually applies `setFlags` — a settle loop after each win).
-- **Router** (`routeTo`): plan A* over the game's own collision (`__solidAt`) → follow → on a stuck
-  stretch, nudge free and **re-plan from where it actually is**. The naive "sparse waypoints + walk
-  straight between them" version corner-cut into walls and never reached boss 2; the re-planning
-  version reaches all three.
-- **Combat AI** (`fight`): drives both members via `b.inputMemberIndex`. **Paula** casts PSI Freeze
-  on the toughest enemy (bypasses high defense); **Bosch** Lifeups himself when low (safe BASH
-  fallback if he hasn't learned it yet), else BASH/focus-fire. Decoded the PSI-cast + `target:BASH:N`
-  selection UIs to do this.
-- **Healing**: `__debugHeal` full-heals + restores PP *between* fights (hotel stand-in); the
-  in-battle sustain is Bosch's real Lifeup, not a debug assist.
+## Goods bug + door-fade gate + encounter tune - DONE (commit c6d4474)
+- Goods root cause: the overworld list read partyState.inventory before hydration
+  while battle used hydrated members (menuModel.ts:1278). Verified in-engine:
+  Goods now lists Proof Card (key-item gold) / Route Roll / Field Water, and
+  empty-picker messages REPLACE the picker window instead of overlapping it.
+- F06: menu + save key gated on door fades and pending battles (audit fix).
+- North-edge encounter: battle group 40 (New Age Retro Hippie, heuristic 215 vs
+  act-1 range <= 193) zone-gated out of the Morningside north strip.
 
-## The climax — solved with a party member (your call)
-malady = the **Titanic Ant** (235 HP, **defense 23**) + a Black Antoid — literally EarthBound's Giant
-Step boss, tuned for a higher-level Ness+Paula. Its high defense makes physical BASH near-useless
-(~3/hit), which is why solo Bosch lost (he got it to 152 at best). The fix you chose — **a party
-member** — works cleanly: Paula's **PSI Freeze** bypasses defense (~29/cast) and Bosch's **Lifeup**
-keeps him alive while the Ant focuses him. The Ant dies in ~8 casts and both survive. Act 1 is now a
-**Bosch + Paula duo** (`ensureIntroParty` seeds both).
+## Sprite placements (587 canonical) - DONE (commit c6d4474)
+- 442 new added-npc spawns (drafted dialogue in your voice - worth a skim),
+  102 Drifella2 source-check friendlies, PFP lanes routed per your zone guidance.
+- 26 low-confidence HELD: decision table at tmp/placement-holds-2026-07-10.json.
+- MiFella notes honored: Pokey (mifella-001) stands at the Minch door + interior
+  npc 52; Pickey (mifella-005) on npc 53. Pixel-verified.
+- Verification: 0 omitted duplicates placed (exact-id check - a substring false
+  alarm was chased down and disproven), 0 raw-EB renders among new ids, 0 new
+  navmesh failures, zone screenshots in tmp/verify/place-*.png (museum hall full
+  of Miladys, desert fairy, town kids all rendering canonical skins).
 
-Paula is now **Cloak** (`content/character-overrides.json` charId 1) and **trails Bosch in the
-overworld** like an EarthBound party member — a delayed trail of the player's path drives her sprite
-26px behind, with walk animation + door-jump snapping (`updateFollower` in chunkedWorldScene). Her
-look is the `follower` section of `content/sprite-overrides.json` (the `lsw-855` hero walk sheet) —
-swap that image to reskin her. (FYI Bosch is the green frog `lsw-2821`; Cloak is the red-cap kid.)
-Battles stay EB first-person (party = status cards, which read "Bosch" / "Cloak"). She joins from the
-start of Act 1; a proper join scene is a `content/cutscenes.json` follow-up.
+## Menu design parity pass - DONE (commit da86f61)
+- Every window surface now renders the authentic EB nine-slice (7 ROM flavors,
+  one shared renderer): dialogue, pause + submenus, shop stack, battle
+  command/goods/psi/description/message, HP/PP cards, naming, title, game-over.
+  Screenshot-verified: dialogue frame, Goods stack, full battle stack.
+- HP/PP now read as fixed 3-digit odometer columns (075/025 style).
+- EB text blip per letter (square 880-960Hz, 18ms; skips spaces + instant-
+  complete). Toggle: eb:textBlip. LISTEN on first boot and tell me if the
+  pitch feels right - synth params are one-line tunable.
+- Metrics to EB values: dialogue padding 24/18 + 4 visible lines, 23px rows,
+  shared triangular caret. Flavor picker in windowSettings (default plain).
+- F58: all 45 shop clerks now open Buy/Sell after their custom lines (QA test
+  asserts every clerk/store route). Eyeball one shop when you play.
 
-## Debug hook added this run
-- **`window.__debugHeal()`** (apps/game/src/chunkedWorldScene.ts, `registerCollisionDebugGlobals`):
-  full-heals the party (calls the existing `healParty("full")`). Debug-only; nothing in normal play
-  calls it. It's the autorun's between-fights heal until a hotel exists. (You allowed small hooks.)
+## The night in one line
+Walk frames generated (604/604) + review queue prepped; act arc all green;
+10 cutoff fixes; 587 sprites placed with Pokey/Pickey canonized; Goods/gates/
+encounter fixed; full EB menu parity - all on the overnight branch, PR below.
 
-## Scripts (all in `scripts/`, need a dev server: `pnpm --filter @eb/game dev`)
-- `node scripts/act1.mjs [url]` — the full Act-1 autorun (the headline).
-- `node scripts/verify-leg.mjs [url]` — verifies malady→leave→`act1:complete` via `?flags=` injection.
-- `route.mjs` (A*), `native-probe.mjs`, `battle-verify.mjs`, `play.mjs`, `autoplay.mjs` — the
-  browser-driving stack this builds on (already on this branch).
-- Debug params: `?nointro=1`, `?spawn=x,y`, `?flags=a,b,c`, `?battle=<group>&items=&psi=&party=`.
-
-## What needs you
-1. **Review/merge the duo branch** `feat/act1-duo-paula` — Act 1 is now a Bosch+Paula duo that
-   completes autonomously (3/3 bosses → `act1:complete`). 803 tests green, tsc clean. (The prior
-   battle-effects + browser-driving workstream already merged as #134.)
-2. **Paula's identity** — a quick creative call (Swagbound name), then I skin her sprite. See above.
-
-## Screenshots (`.codex/screenshots/`)
-- `act1-1-signal-town-card-clique-victory.png`, `act1-2-relay-gate-returnless-king-victory.png` — bosses 1–2.
-- `act1-3-first-threshold-malady-victory.png` — the climax win (Bosch 95/122 + Paula 47/47 both standing).
-- `act1-leave.png` — the `act1:complete` moment.
-- `duo-malady.png` — the focused duo-vs-Titanic-Ant verifier.
+## Holds for your decisions
+- 26 low-confidence placements: tmp/placement-holds-2026-07-10.json
+- Walk-frame review marks -> adoption command (top of this file)
+- The 3 remaining manual-source skins (npc-sal/morrow/bonkle) + flag-gated
+  npc 1152 (grp 41, Postwick)

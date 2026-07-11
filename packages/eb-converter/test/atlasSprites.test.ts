@@ -27,7 +27,7 @@ describe("sprite atlas extractor", () => {
     const group59 = atlas.groups.find((group) => group.groupId === 59);
     expect(group59).toMatchObject({
       groupId: 59,
-      usedByNpcCount: 248,
+      usedByNpcCount: 690,
       overridden: true,
       overrideKind: "group"
     });

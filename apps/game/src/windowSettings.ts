@@ -1,11 +1,17 @@
 import type { WindowCollection } from "@eb/schemas";
-import { setActiveWindowFlavorIndex } from "./cleanUi";
+import { setActiveWindowFlavorIndex } from "./windowFrame";
 
 export const WINDOW_FLAVOR_STORAGE_KEY = "eb:windowFlavor";
 export const WINDOW_FLAVOR_CHANGE_EVENT = "eb:windowFlavorChanged";
+export const TEXT_BLIP_STORAGE_KEY = "eb:textBlip";
+export const TEXT_BLIP_CHANGE_EVENT = "eb:textBlipChanged";
 
 export type WindowFlavorChangeDetail = {
   flavorId: number;
+};
+
+export type TextBlipChangeDetail = {
+  enabled: boolean;
 };
 
 let registeredWindow: WindowCollection | undefined;
@@ -15,8 +21,8 @@ export function registerWindowFlavorControls(window: WindowCollection | undefine
   const host = globalThis as Record<string, unknown>;
   host.__setWindowFlavor = (flavorId: number) => setWindowFlavorId(flavorId, registeredWindow);
   host.__getWindowFlavor = () => activeWindowFlavorId(registeredWindow);
-  // Point the shared EB window renderer at the stored/default flavor, and keep it in
-  // sync when the flavor changes.
+  host.__setTextBlipEnabled = (enabled: boolean) => setTextBlipEnabled(enabled);
+  host.__getTextBlipEnabled = () => textBlipEnabled();
   applyActiveWindowFlavorToRenderer();
   if (typeof globalThis.addEventListener === "function") {
     globalThis.addEventListener(WINDOW_FLAVOR_CHANGE_EVENT, (event) => {
@@ -57,8 +63,26 @@ export function setWindowFlavorId(
   if (!writeStoredWindowFlavorId(selected)) {
     return undefined;
   }
+  setActiveWindowFlavorIndex(selected);
   if (previous !== selected) {
     dispatchWindowFlavorChange(selected);
+  }
+  return selected;
+}
+
+export function textBlipEnabled(): boolean {
+  const stored = readStoredTextBlipEnabled();
+  return stored ?? true;
+}
+
+export function setTextBlipEnabled(enabled: boolean): boolean {
+  const selected = Boolean(enabled);
+  const previous = textBlipEnabled();
+  if (!writeStoredTextBlipEnabled(selected)) {
+    return false;
+  }
+  if (previous !== selected) {
+    dispatchTextBlipChange(selected);
   }
   return selected;
 }
@@ -103,12 +127,56 @@ function writeStoredWindowFlavorId(flavorId: number): boolean {
   }
 }
 
+function readStoredTextBlipEnabled(): boolean | undefined {
+  const storage = localStorageOrNull();
+  if (!storage) {
+    return undefined;
+  }
+  try {
+    const raw = storage.getItem(TEXT_BLIP_STORAGE_KEY);
+    if (raw === null || raw.trim() === "") {
+      return undefined;
+    }
+    if (raw === "1" || raw === "true") {
+      return true;
+    }
+    if (raw === "0" || raw === "false") {
+      return false;
+    }
+    return undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function writeStoredTextBlipEnabled(enabled: boolean): boolean {
+  const storage = localStorageOrNull();
+  if (!storage) {
+    return false;
+  }
+  try {
+    storage.setItem(TEXT_BLIP_STORAGE_KEY, enabled ? "1" : "0");
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function dispatchWindowFlavorChange(flavorId: number): void {
   if (typeof globalThis.dispatchEvent !== "function" || typeof CustomEvent === "undefined") {
     return;
   }
   globalThis.dispatchEvent(new CustomEvent<WindowFlavorChangeDetail>(WINDOW_FLAVOR_CHANGE_EVENT, {
     detail: { flavorId }
+  }));
+}
+
+function dispatchTextBlipChange(enabled: boolean): void {
+  if (typeof globalThis.dispatchEvent !== "function" || typeof CustomEvent === "undefined") {
+    return;
+  }
+  globalThis.dispatchEvent(new CustomEvent<TextBlipChangeDetail>(TEXT_BLIP_CHANGE_EVENT, {
+    detail: { enabled }
   }));
 }
 

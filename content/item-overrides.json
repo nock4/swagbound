@@ -665,6 +665,9 @@
     "177": {
       "name": "Proof Card"
     },
+    "196": {
+      "name": "Original Mixtape"
+    },
     "188": {
       "effect": {
         "kind": "cureStatus",
@@ -717,6 +720,9 @@
         "ailment": "poisoned",
         "remaining": 3
       }
+    },
+    "206": {
+      "name": "Dox Sheet"
     },
     "207": {
       "name": "Signal Tart",

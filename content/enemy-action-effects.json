@@ -235,6 +235,15 @@
         "amount": 48
       }
     },
+    "83": {
+      "name": "FILED stamp",
+      "note": "The Notary boss gimmick: a stamp-arm filing move briefly paralyzes one party member.",
+      "effect": {
+        "kind": "inflictStatus",
+        "ailment": "paralyzed",
+        "remaining": 2
+      }
+    },
     "242": {
       "name": "coil bind",
       "note": "msg: 'coiled around you and attacked' plus Code Address $c28cb8 shared with binding/sticky mucus/spider silk -> paralyzed.",

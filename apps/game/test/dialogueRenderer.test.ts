@@ -3,6 +3,7 @@ import type { DialoguePage, DialogueSegment } from "@eb/schemas";
 import {
   createDialogueResolver,
   DefaultResolver,
+  DEFAULT_TEXT_SPEED_CPS,
   INSTANT_TEXT_SPEED_CPS,
   confirmActionForReveal,
   perPagePauseMs,
@@ -12,6 +13,7 @@ import {
   renderSegmentsToTextRuns,
   revealTextRuns,
   revealState,
+  textSpeedCpsFromSearch,
   type DialogueResolver
 } from "../src/dialogueRenderer";
 import { buildInlineDialoguePages } from "../src/loader";
@@ -125,11 +127,12 @@ describe("renderSegmentsToText", () => {
     expect(resolver.psiName(8)).toBe("[psi 8]");
   });
 
-  it("omits timing, flow, style, window, and raw control segments from display text", () => {
+  it("omits timing, flow, choice, style, window, and raw control segments from display text", () => {
     expect(renderSegmentsToText([
       { kind: "text", value: "A" },
       { kind: "pause", frames: 12 },
       { kind: "prompt" },
+      { kind: "choice", options: [{ label: "Yes", target: "l_yes" }, { label: "No", target: "l_no" }] },
       { kind: "style", style: "color", value: "1" },
       { kind: "window", op: "switch", args: [1] },
       { kind: "control", code: "raw", raw: "[00]" },
@@ -249,6 +252,15 @@ describe("revealState", () => {
   });
 });
 
+describe("textSpeedCpsFromSearch", () => {
+  it("defaults to the EB-style 45 cps typewriter speed", () => {
+    expect(DEFAULT_TEXT_SPEED_CPS).toBe(45);
+    expect(textSpeedCpsFromSearch("")).toBe(45);
+    expect(textSpeedCpsFromSearch("?textspeed=instant")).toBe(INSTANT_TEXT_SPEED_CPS);
+    expect(textSpeedCpsFromSearch("?textspeed=30")).toBe(30);
+  });
+});
+
 describe("confirmActionForReveal", () => {
   it("advances only after the current reveal is complete", () => {
     expect(confirmActionForReveal(true)).toBe("advance");
@@ -327,5 +339,29 @@ describe("DialogueController reveal-aware confirm behavior", () => {
     expect(dialogue.advance()).toBe(false);
     expect(dialogue.open).toBe(false);
     expect(dialogue.closes).toBe(1);
+  });
+
+  it("tracks selectable dialogue choices and clears them on close", () => {
+    const dialogue = new DialogueController();
+
+    dialogue.showChoice([
+      { label: "Yes", target: "l_yes" },
+      { label: "No", target: "l_no" }
+    ]);
+
+    expect(dialogue.choice).toMatchObject({
+      selectedIndex: 0,
+      options: [
+        { label: "Yes", target: "l_yes" },
+        { label: "No", target: "l_no" }
+      ]
+    });
+
+    dialogue.moveChoice(1);
+    expect(dialogue.selectedChoiceIndex()).toBe(1);
+    dialogue.moveChoice(1);
+    expect(dialogue.selectedChoiceIndex()).toBe(1);
+    dialogue.close();
+    expect(dialogue.choice).toBeUndefined();
   });
 });

@@ -189,6 +189,49 @@ describe("interactionEvents custom-dialogue shops", () => {
     ]);
   });
 
+  it("preserves the reference for pure custom dialogue backed by a CCS choice", () => {
+    const events = interactionEvents(
+      { npcId: 159, textPointer: "data_20.l_0xc67237" },
+      "fallback.reference",
+      { has: () => false },
+      {
+        byNpcId: {
+          "159": { pages: ["Question.", "Yes    No"] }
+        },
+        byTextPointer: {}
+      },
+      undefined,
+      choiceScript("data_20", "l_0xc67237")
+    );
+
+    expect(events).toEqual([
+      { kind: "dialogue", reference: "data_20.l_0xc67237", pages: ["Question.", "Yes    No"] },
+      { kind: "setFlag", flag: talkedFlag(159) }
+    ]);
+  });
+
+  it("merges direct decoded shop effects behind pure custom dialogue", () => {
+    const events = interactionEvents(
+      { npcId: 812, textPointer: "data_99.l_shop" },
+      "fallback.reference",
+      { has: () => false },
+      {
+        byNpcId: {
+          "812": { pages: ["Fresh words before commerce."] }
+        },
+        byTextPointer: {}
+      },
+      undefined,
+      shopScript("data_99", "l_shop", 37)
+    );
+
+    expect(events).toEqual([
+      { kind: "dialogue", pages: ["Fresh words before commerce."] },
+      { kind: "shop", storeId: 37 },
+      { kind: "setFlag", flag: talkedFlag(812) }
+    ]);
+  });
+
   it("lets authored service keys win over reference-backed behavior", () => {
     const events = interactionEvents(
       { npcId: 1375, textPointer: "data_17.l_0xc62d30" },
@@ -249,6 +292,43 @@ function dispatchWithMock(events: readonly GameEvent[]): string[] {
   return log;
 }
 
+function shopScript(fileStem: string, labelName: string, storeId: number): ScriptCollection {
+  const path = `ccscript/${fileStem}.ccs`;
+  const commands: ScriptCommand[] = [
+    command({ cmd: "label", raw: `${labelName}:`, name: labelName }, path, 1),
+    command({
+      cmd: "text",
+      raw: "shop",
+      segments: [{ kind: "shop", storeId, raw: `shop(${storeId})` } satisfies DialogueSegment]
+    }, path, 2),
+    command({ cmd: "end", raw: "end" }, path, 3)
+  ];
+  return {
+    schemaVersion: "test",
+    sourceProjectPath: "synthetic",
+    files: [{
+      path,
+      commands,
+      labels: [labelName],
+      counts: {
+        commands: commands.length,
+        labels: 1,
+        textCommands: 1,
+        unknownCommands: 0
+      },
+      warnings: []
+    }],
+    counts: {
+      files: 1,
+      commands: commands.length,
+      labels: 1,
+      textCommands: 1,
+      unknownCommands: 0
+    },
+    warnings: []
+  };
+}
+
 function selectorScript(fileStem: string, labelName: string, flag: number): ScriptCollection {
   const path = `ccscript/${fileStem}.ccs`;
   const commands: ScriptCommand[] = [
@@ -257,6 +337,73 @@ function selectorScript(fileStem: string, labelName: string, flag: number): Scri
       cmd: "text",
       raw: "selector",
       segments: [{ kind: "setFlag", flag, raw: `set(${flag})` } satisfies DialogueSegment]
+    }, path, 2),
+    command({ cmd: "end", raw: "end" }, path, 3)
+  ];
+  return {
+    schemaVersion: "test",
+    sourceProjectPath: "synthetic",
+    files: [{
+      path,
+      commands,
+      labels: [labelName],
+      counts: {
+        commands: commands.length,
+        labels: 1,
+        textCommands: 1,
+        unknownCommands: 0
+      },
+      warnings: []
+    }],
+    counts: {
+      files: 1,
+      commands: commands.length,
+      labels: 1,
+      textCommands: 1,
+      unknownCommands: 0
+    },
+    warnings: []
+  };
+}
+
+function choiceScript(fileStem: string, labelName: string): ScriptCollection {
+  const path = `ccscript/${fileStem}.ccs`;
+  const commands: ScriptCommand[] = [
+    command({ cmd: "label", raw: `${labelName}:`, name: labelName }, path, 1),
+    command({
+      cmd: "text",
+      raw: "choice",
+      segments: [{
+        kind: "control",
+        code: "unknown",
+        raw: "[19 02]"
+      }, {
+        kind: "text",
+        value: "Yes"
+      }, {
+        kind: "control",
+        code: "eob",
+        raw: "[02]"
+      }, {
+        kind: "text",
+        value: " "
+      }, {
+        kind: "control",
+        code: "unknown",
+        raw: "[19 02]"
+      }, {
+        kind: "text",
+        value: "No"
+      }, {
+        kind: "control",
+        code: "eob",
+        raw: "[02]"
+      }, {
+        kind: "control",
+        code: "unknown",
+        raw: "[09 02 {e(l_yes)} {e(l_no)}]",
+        target: "l_yes"
+      }]
     }, path, 2),
     command({ cmd: "end", raw: "end" }, path, 3)
   ];

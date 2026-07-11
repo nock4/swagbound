@@ -15,6 +15,7 @@ import {
   type PlayerState,
   type StepOptions
 } from "../src/playerController";
+import { diagonalPxPerSecondForCardinal } from "../src/ebTiming";
 
 const BOUNDS = { minX: 0, maxX: 1000, minY: 0, maxY: 1000 };
 
@@ -155,14 +156,15 @@ describe("diagonal facing rule", () => {
     expect(state.facing).toBe("right");
   });
 
-  it("normalizes diagonal speed", () => {
+  it("uses the EB diagonal axis speed for diagonal movement", () => {
     const straight = createPlayerState(500, 500);
     stepPlayer(straight, input({ right: true }), options({ deltaMs: 1000 }));
     const diagonal = createPlayerState(500, 500);
     stepPlayer(diagonal, input({ right: true, down: true }), options({ deltaMs: 1000 }));
     const straightDistance = straight.x - 500;
-    const diagonalDistance = Math.hypot(diagonal.x - 500, diagonal.y - 500);
-    expect(diagonalDistance).toBeCloseTo(straightDistance, 5);
+    const diagonalXDistance = diagonal.x - 500;
+    expect(straightDistance).toBe(100);
+    expect(diagonalXDistance).toBeCloseTo(diagonalPxPerSecondForCardinal(100), 5);
   });
 });
 

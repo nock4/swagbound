@@ -1,4 +1,4 @@
-import type { ItemData, PsiData } from "@eb/schemas";
+import type { ItemData, PsiData, UsabilityMatrix } from "@eb/schemas";
 import { decodeItemUseEffect, itemEffectTargetSide, type ItemUseEffect } from "./partyState";
 import { hasStatus } from "./statusEffects";
 import {
@@ -45,6 +45,14 @@ import {
 import { autoCommandForMember } from "./battleAutoPolicy";
 import { commandTargetSelectionPlan } from "./battleMenuFlow";
 import { battleStepEvents, type BattleEvent } from "./battleEvents";
+import {
+  battleUsablePsi,
+  canUseItemInBattle,
+  canUsePsiInBattle,
+  itemUsability,
+  targetSideFromRowTargets,
+  USABILITY_REFUSAL_MESSAGE
+} from "./usabilityMatrix";
 
 export type QueuedCommandTarget = {
   side: BattleSide;
@@ -63,6 +71,7 @@ export type QueuedCommand = {
 export type BattleRoundResources = {
   psi?: readonly PsiData[];
   items?: readonly BattleRoundItemData[];
+  usabilityMatrix?: UsabilityMatrix;
 };
 
 export type BattleRoundItemData = Pick<ItemData, "id" | "name" | "action" | "argument" | "miscFlags" | "effect">;
@@ -168,6 +177,7 @@ export type BattleRoundInputContext = {
   state: BattleState;
   psi?: readonly PsiData[];
   items?: readonly BattleRoundItemData[];
+  usabilityMatrix?: UsabilityMatrix;
 };
 
 export type BattleRoundInputTransition = {
@@ -415,7 +425,7 @@ function resolveActorAction(
     }
     case "PSI": {
       const psi = findById(resources.psi, queued.psiId);
-      if (!psi) {
+      if (!psi || (resources.usabilityMatrix && !canUsePsiInBattle(resources.usabilityMatrix, psi.id))) {
         return skippedRoundStep(turnState, actor, "Cannot use that PSI here.");
       }
       const psiKind = psiBattleKind(psi);
@@ -439,7 +449,15 @@ function resolveActorAction(
       if (!item) {
         return skippedRoundStep(turnState, actor, "Cannot use that item.");
       }
-      const target = resolvedTargetOptions(turnState, queued, itemEffectTargetSide(decodeItemUseEffect(item)));
+      if (resources.usabilityMatrix && !canUseItemInBattle(resources.usabilityMatrix, item.id)) {
+        return itemRefusalRoundStep(turnState, actor, item);
+      }
+      const row = itemUsability(resources.usabilityMatrix, item.id);
+      const target = resolvedTargetOptions(
+        turnState,
+        queued,
+        targetSideFromRowTargets(row, "battle") ?? itemEffectTargetSide(decodeItemUseEffect(item))
+      );
       if (!target) {
         return noTargetRoundStep(turnState, actor);
       }
@@ -593,7 +611,7 @@ function confirmPsi(
   if (!actor || !combatant) {
     return { input, complete: false };
   }
-  const learnedPsi = learnedPsiForCombatant(context.psi ? [...context.psi] : [], combatant);
+  const learnedPsi = learnedBattlePsiForCombatant(context, combatant);
   const psi = learnedPsi[clampSelection(input.selectionIndex, learnedPsi.length)];
   if (!psi) {
     return { input, complete: false };
@@ -638,7 +656,11 @@ function confirmGoods(
     return { input, complete: false };
   }
   const item = findById(context.items, itemId);
-  const targetSide = itemEffectTargetSide(item ? decodeItemUseEffect(item) : undefined);
+  const row = item ? itemUsability(context.usabilityMatrix, item.id) : undefined;
+  if (context.usabilityMatrix && item && !row?.battleUse) {
+    return queueAndAdvance(input, context, { partySlot: actor.index, command: "GOODS", itemId });
+  }
+  const targetSide = targetSideFromRowTargets(row, "battle") ?? itemEffectTargetSide(item ? decodeItemUseEffect(item) : undefined);
   return {
     input: {
       ...input,
@@ -785,13 +807,18 @@ function selectionLength(input: BattleRoundInputState, context: BattleRoundInput
     return commandsForCharId(combatant.charId).length;
   }
   if (input.submenu === "psi") {
-    return learnedPsiForCombatant(context.psi ? [...context.psi] : [], combatant).length;
+    return learnedBattlePsiForCombatant(context, combatant).length;
   }
   if (input.submenu === "goods") {
     return combatant.inventory.length;
   }
   const side = input.submenu === "target-ally" ? "party" : "enemy";
   return livingIndices(context.state, side).length;
+}
+
+function learnedBattlePsiForCombatant(context: BattleRoundInputContext, combatant: Combatant): PsiData[] {
+  const learned = learnedPsiForCombatant(context.psi ? [...context.psi] : [], combatant);
+  return context.usabilityMatrix ? battleUsablePsi(learned, context.usabilityMatrix) : learned;
 }
 
 function currentInputActor(
@@ -1118,6 +1145,25 @@ function defendAnnouncementRoundStep(
     targetName: name,
     message,
     defended: true
+  });
+}
+
+function itemRefusalRoundStep(
+  state: BattleState,
+  actor: BattleActor,
+  item: Pick<BattleRoundItemData, "name">
+): BattleRoundStepResult {
+  return roundStepResultWithDetails({
+    state,
+    message: USABILITY_REFUSAL_MESSAGE,
+    actor,
+    skipped: false
+  }, {
+    kind: "item",
+    attackerName: combatantName(state, actor),
+    itemName: item.name,
+    message: USABILITY_REFUSAL_MESSAGE,
+    missed: true
   });
 }
 

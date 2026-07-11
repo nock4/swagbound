@@ -43,11 +43,8 @@ export type PartyMember = {
 };
 
 export type CharacterCombatantOptions = {
-  hpRatePerSec?: number;
   statBonuses?: PartyMemberStatBonuses;
 };
-
-const DEFAULT_HP_RATE_PER_SEC = 36;
 
 export function buildPartyMember(data: CharacterData): PartyMember {
   const maxHp = stat(data.maxHp);
@@ -95,7 +92,7 @@ export function buildCombatantFromPartyMember(
     maxPp: stat(member.maxPp),
     pp: stat(member.pp),
     inventory: member.inventory.map(stat),
-    hp: createRollingMeter(currentHp, options.hpRatePerSec ?? DEFAULT_HP_RATE_PER_SEC),
+    hp: createRollingMeter(currentHp),
     offense: effectiveStats.offense,
     defense: effectiveStats.defense,
     speed: effectiveStats.speed,

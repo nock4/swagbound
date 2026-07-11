@@ -1,3 +1,6 @@
+import type { MapTransitionOverlayState } from "./mapTransition";
+import swirlColoursTruth from "../../../content/rom-truth/swirl-colours.json";
+
 export type SwirlMask = {
   progress: number;
   coverage: number;
@@ -13,6 +16,20 @@ export type SwirlMask = {
 };
 
 const TAU = Math.PI * 2;
+const SCREEN_RECT_POINTS = [
+  { x: 0, y: 0 },
+  { x: 1, y: 0 },
+  { x: 1, y: 1 },
+  { x: 0, y: 1 }
+];
+
+type SwirlColoursTruth = {
+  colours: { hex: string }[];
+};
+
+export const EB_SWIRL_PALETTE = (swirlColoursTruth as SwirlColoursTruth).colours.map((entry) =>
+  parseHexColor(entry.hex)
+);
 
 export function swirlMask(progress: number): SwirlMask {
   const t = clamp01(progress);
@@ -56,10 +73,31 @@ export interface SwirlDrawOptions {
   advantageTint?: "party" | "enemy";
 }
 
+export function drawMapTransitionOverlay(
+  graphics: SwirlGraphics,
+  overlay: MapTransitionOverlayState,
+  width: number,
+  height: number
+): void {
+  if (overlay.effect === "none") {
+    return;
+  }
+  if (overlay.effect === "fade") {
+    const alpha = clamp01(overlay.alpha);
+    if (alpha <= 0) {
+      return;
+    }
+    graphics.fillStyle(0x000000, alpha);
+    graphics.fillRect(0, 0, width, height);
+    return;
+  }
+  drawDirectionalWipe(graphics, overlay.coverage, overlay.direction, width, height);
+}
+
 /**
  * Draw the EarthBound-style colored battle swirl for a given progress (0 = clear, 1 = covered/black).
- * Vivid hue-cycling spiral bands over a darkening base, with bright cycling arm highlights. Shared by
- * the overworld encounter transition (cover -> black) and the battle scene (reveal from black).
+ * The recreated spiral geometry is colored with the extracted five-color EB battle-swirl palette. Shared
+ * by the overworld encounter transition (cover -> black) and the battle scene (reveal from black).
  */
 export function drawSwirl(
   graphics: SwirlGraphics,
@@ -103,11 +141,9 @@ export function drawSwirl(
         polarPoint(cx, cy, outer, angle + span * 0.38),
         polarPoint(cx, cy, inner, angle + span * 0.58)
       ];
-      // vivid hue cycling by segment + arm + time (the EB multicolor swirl)
-      const hue = wrap01(segment / mask.bandCount + arm / mask.armCount + clockMs / 700);
       const color = options.advantageTint
         ? tintedBandColor(options.advantageTint, segment, arm)
-        : hsvToHex(hue, 0.85, segment % 2 === 0 ? 1 : 0.74);
+        : swirlPaletteColor(segment, arm, clockMs);
       graphics.fillStyle(color, mask.bandAlpha);
       graphics.beginPath();
       graphics.moveTo(points[0].x, points[0].y);
@@ -124,10 +160,9 @@ export function drawSwirl(
     return;
   }
   for (let arm = 0; arm < mask.armCount; arm += 1) {
-    const hue = wrap01(arm / mask.armCount + clockMs / 500 + 0.3);
     const color = options.advantageTint
       ? tintedHighlightColor(options.advantageTint)
-      : hsvToHex(hue, 0.55, 1);
+      : swirlPaletteColor(arm * 3, 1, clockMs + 180);
     graphics.lineStyle(3, color, highlightAlpha);
     graphics.beginPath();
     let started = false;
@@ -163,31 +198,87 @@ function tintedHighlightColor(tint: NonNullable<SwirlDrawOptions["advantageTint"
   return tint === "party" ? 0xbaffd0 : 0xffc2ba;
 }
 
+function drawDirectionalWipe(
+  graphics: SwirlGraphics,
+  coverage: number,
+  direction: number,
+  width: number,
+  height: number
+): void {
+  const amount = clamp01(coverage);
+  if (amount <= 0) {
+    return;
+  }
+  if (amount >= 1) {
+    graphics.fillStyle(0x000000, 1);
+    graphics.fillRect(0, 0, width, height);
+    return;
+  }
+  const vector = directionVector(direction);
+  const points = SCREEN_RECT_POINTS.map((point) => ({ x: point.x * width, y: point.y * height }));
+  const projections = points.map((point) => projection(point, vector));
+  const min = Math.min(...projections);
+  const max = Math.max(...projections);
+  const threshold = min + (max - min) * amount;
+  const polygon = clipPolygonByProjection(points, vector, threshold);
+  if (polygon.length < 3) {
+    return;
+  }
+  graphics.fillStyle(0x000000, 1);
+  graphics.beginPath();
+  graphics.moveTo(polygon[0].x, polygon[0].y);
+  for (let index = 1; index < polygon.length; index += 1) {
+    graphics.lineTo(polygon[index].x, polygon[index].y);
+  }
+  graphics.closePath();
+  graphics.fillPath();
+}
+
+function clipPolygonByProjection(
+  points: { x: number; y: number }[],
+  vector: { x: number; y: number },
+  threshold: number
+): { x: number; y: number }[] {
+  const output: { x: number; y: number }[] = [];
+  for (let index = 0; index < points.length; index += 1) {
+    const current = points[index];
+    const next = points[(index + 1) % points.length];
+    const currentProjection = projection(current, vector);
+    const nextProjection = projection(next, vector);
+    const currentInside = currentProjection <= threshold;
+    const nextInside = nextProjection <= threshold;
+    if (currentInside) {
+      output.push(current);
+    }
+    if (currentInside !== nextInside) {
+      const span = nextProjection - currentProjection;
+      const t = span === 0 ? 0 : (threshold - currentProjection) / span;
+      output.push({
+        x: current.x + (next.x - current.x) * t,
+        y: current.y + (next.y - current.y) * t
+      });
+    }
+  }
+  return output;
+}
+
+function projection(point: { x: number; y: number }, vector: { x: number; y: number }): number {
+  return point.x * vector.x + point.y * vector.y;
+}
+
+function directionVector(direction: number): { x: number; y: number } {
+  const radians = (direction / 64) * TAU;
+  return { x: Math.cos(radians), y: Math.sin(radians) };
+}
+
+function swirlPaletteColor(segment: number, arm: number, clockMs: number): number {
+  const frame = Math.floor(clockMs / 90);
+  const index = positiveModulo(segment + arm * 2 + frame, EB_SWIRL_PALETTE.length);
+  return EB_SWIRL_PALETTE[index] ?? 0x787878;
+}
+
 function polarPoint(cx: number, cy: number, radius: number, angle: number): { x: number; y: number } {
   return { x: cx + Math.cos(angle) * radius, y: cy + Math.sin(angle) * radius };
-}
-
-/** h,s,v in 0..1 -> packed 0xRRGGBB. */
-function hsvToHex(h: number, s: number, v: number): number {
-  const i = Math.floor(h * 6);
-  const f = h * 6 - i;
-  const p = v * (1 - s);
-  const q = v * (1 - f * s);
-  const t = v * (1 - (1 - f) * s);
-  let r: number, g: number, b: number;
-  switch (((i % 6) + 6) % 6) {
-    case 0: r = v; g = t; b = p; break;
-    case 1: r = q; g = v; b = p; break;
-    case 2: r = p; g = v; b = t; break;
-    case 3: r = p; g = q; b = v; break;
-    case 4: r = t; g = p; b = v; break;
-    default: r = v; g = p; b = q; break;
-  }
-  return (Math.round(r * 255) << 16) | (Math.round(g * 255) << 8) | Math.round(b * 255);
-}
-
-function wrap01(value: number): number {
-  return ((value % 1) + 1) % 1;
 }
 
 function clamp01(value: number): number {
@@ -199,4 +290,12 @@ function clamp01(value: number): number {
 
 function smoothstep(t: number): number {
   return t * t * (3 - 2 * t);
+}
+
+function parseHexColor(value: string): number {
+  return Number.parseInt(value.replace(/^#/, ""), 16);
+}
+
+function positiveModulo(value: number, modulus: number): number {
+  return ((value % modulus) + modulus) % modulus;
 }

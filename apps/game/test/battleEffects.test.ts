@@ -1,19 +1,33 @@
+import { readFileSync } from "node:fs";
+import { PsiCollectionSchema, UsabilityMatrixSchema } from "@eb/schemas";
 import { describe, expect, it } from "vitest";
 import {
+  PSI_BATTLE_ANIMATION_DEFINITIONS,
   attackerLungeOffset,
   flashOverlayState,
   flashState,
   hitSparkState,
+  offensivePsiAnimationFamilyForId,
+  psiBattleAnimationFamilyForPsi,
+  psiBattleAnimationForPsi,
   psiElementFlashColor,
   psiElementFlashProfile,
   screenShakeOffset
 } from "../src/battleEffects";
 
+const psiCollection = PsiCollectionSchema.parse(JSON.parse(
+  readFileSync(new URL("../public/generated/psi.json", import.meta.url), "utf8")
+));
+const usabilityMatrix = UsabilityMatrixSchema.parse(JSON.parse(
+  readFileSync(new URL("../../../content/usability-matrix.json", import.meta.url), "utf8")
+));
+const generatedPsiById = new Map(psiCollection.psi.map((psi) => [psi.id, psi]));
+
 describe("psiElementFlashProfile", () => {
   it("strobes thunder, sustains fire, and bursts flash", () => {
-    expect(psiElementFlashProfile(14).pulses).toBe(3); // thunder = strobe
-    expect(psiElementFlashProfile(6).pulses).toBe(1); // fire = single warm wash
-    expect(psiElementFlashProfile(18).pulses).toBe(2); // flash = double burst
+    expect(psiElementFlashProfile(14).pulses).toBe(7); // thunder = strobe
+    expect(psiElementFlashProfile(6).pulses).toBe(3); // fire = sweeping wash
+    expect(psiElementFlashProfile(18).pulses).toBe(4); // flash = repeated burst
   });
 
   it("carries the element color and a positive, bounded alpha", () => {
@@ -25,12 +39,66 @@ describe("psiElementFlashProfile", () => {
   });
 
   it("falls back to a single neutral pulse for non-element ids", () => {
+    const support = PSI_BATTLE_ANIMATION_DEFINITIONS.support;
     expect(psiElementFlashProfile(0)).toEqual({
-      color: psiElementFlashColor(0),
-      alpha: 0.26,
-      durationMs: 230,
-      pulses: 1
+      color: support.colors[0],
+      alpha: support.baseAlpha,
+      durationMs: support.durationMs,
+      pulses: support.pulses
     });
+  });
+});
+
+describe("psi battle animation mapping", () => {
+  it("defines a snappy effect for every PSI animation family", () => {
+    expect(Object.keys(PSI_BATTLE_ANIMATION_DEFINITIONS).sort()).toEqual([
+      "beam",
+      "cosmic",
+      "fire",
+      "flash",
+      "ice",
+      "support",
+      "thunder"
+    ]);
+    for (const definition of Object.values(PSI_BATTLE_ANIMATION_DEFINITIONS)) {
+      expect(definition.durationMs).toBeGreaterThanOrEqual(600);
+      expect(definition.durationMs).toBeLessThanOrEqual(1200);
+      expect(definition.colors.length).toBeGreaterThan(0);
+      expect(definition.baseAlpha).toBeGreaterThan(0);
+      expect(definition.baseAlpha).toBeLessThanOrEqual(1);
+    }
+  });
+
+  it("maps every battle-usable PSI row to a concrete effect definition", () => {
+    const familyById = new Map<number, string>();
+    for (const row of usabilityMatrix.psi.filter((entry) => entry.battleUse)) {
+      const generated = generatedPsiById.get(row.id);
+      const psi = generated
+        ? { id: row.id, name: row.name, type: generated.type }
+        : { id: row.id, name: row.name };
+      const family = psiBattleAnimationFamilyForPsi(psi);
+      const definition = psiBattleAnimationForPsi(psi);
+
+      expect(definition).toBe(PSI_BATTLE_ANIMATION_DEFINITIONS[family]);
+      expect(definition.family).toBe(family);
+      familyById.set(row.id, family);
+
+      if (generated?.type === "offense") {
+        expect(family).not.toBe("support");
+      } else {
+        expect(family).toBe("support");
+      }
+    }
+
+    expect(familyById.get(1)).toBe("beam");
+    expect(familyById.get(5)).toBe("fire");
+    expect(familyById.get(9)).toBe("ice");
+    expect(familyById.get(13)).toBe("thunder");
+    expect(familyById.get(17)).toBe("flash");
+    expect(familyById.get(21)).toBe("cosmic");
+    expect(familyById.get(23)).toBe("support");
+    expect(familyById.get(31)).toBe("support");
+    expect(familyById.get(50)).toBe("support");
   });
 });
 
@@ -123,6 +191,8 @@ describe("battleEffects", () => {
 
   describe("psiElementFlashColor", () => {
     it("maps EarthBound PSI id ranges to element flash colors", () => {
+      expect(psiElementFlashColor(1)).toBe(0xff54d8);
+      expect(psiElementFlashColor(4)).toBe(0xff54d8);
       expect(psiElementFlashColor(5)).toBe(0xff7a2a);
       expect(psiElementFlashColor(8)).toBe(0xff7a2a);
       expect(psiElementFlashColor(9)).toBe(0x5fe0ff);
@@ -132,11 +202,12 @@ describe("battleEffects", () => {
       expect(psiElementFlashColor(17)).toBe(0xf2f2ff);
       expect(psiElementFlashColor(20)).toBe(0xf2f2ff);
       expect(psiElementFlashColor(21)).toBe(0xb46bff);
-      expect(psiElementFlashColor(24)).toBe(0xb46bff);
+      expect(psiElementFlashColor(22)).toBe(0xb46bff);
     });
 
     it("uses a neutral tint outside known offense PSI ranges", () => {
-      expect(psiElementFlashColor(4)).toBe(0x8fe0d8);
+      expect(offensivePsiAnimationFamilyForId(23)).toBeNull();
+      expect(psiElementFlashColor(23)).toBe(0x8fe0d8);
       expect(psiElementFlashColor(25)).toBe(0x8fe0d8);
       expect(psiElementFlashColor(Number.NaN)).toBe(0x8fe0d8);
     });

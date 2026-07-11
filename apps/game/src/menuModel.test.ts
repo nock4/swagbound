@@ -1,5 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { buildAtmScreen, buildGoodsViewModel, buildShopMenuScreens, buildShopViewModel } from "./menuModel";
+import {
+  ARCHIVIST_RECORDS_MENU_ID,
+  buildAtmScreen,
+  buildGoodsViewModel,
+  buildMenuScreens,
+  buildShopMenuScreens,
+  buildShopViewModel,
+  buildStatusViewModel
+} from "./menuModel";
 
 describe("buildAtmScreen", () => {
   it("offers withdrawals from banked battle winnings even when wallet is empty", () => {
@@ -93,5 +101,45 @@ describe("key item menu model", () => {
 
     const sellScreen = buildShopMenuScreens(shop).find((entry) => entry.id === "shop-1-sell");
     expect(sellScreen?.items[0]).toMatchObject({ label: "Proof Card ◆ 0", textColor: "#ffd23f" });
+  });
+
+  it("surfaces filed Archivist records under Status", () => {
+    const screens = buildMenuScreens(buildStatusViewModel({ characters, partyState }), {
+      characters,
+      partyState,
+      archivistSpots: {
+        schema: "swagbound.archivist-spots.v1",
+        archivist: {
+          spriteId: "drifella2-168",
+          spriteNpcId: 100300,
+          lines: ["Filed, not minted."]
+        },
+        spots: [{
+          spotId: 1,
+          flag: { id: 698, name: "FLG_PHOTO_1" },
+          anchor: { x: 2656, y: 344 },
+          photographer: { x: 2632, y: 448 },
+          party1: { x: 2648, y: 360 },
+          slide: { direction: 0, distance: 0 },
+          extraNpcs: [],
+          locationLabel: "Bosch front step",
+          caption: "A record of a thing that only happened once."
+        }]
+      },
+      flags: { has: (flag) => flag === "FLG_PHOTO_1" }
+    });
+
+    const status = screens.find((screen) => screen.id === "status");
+    expect(status?.items).toContainEqual(expect.objectContaining({
+      id: ARCHIVIST_RECORDS_MENU_ID,
+      label: "Records",
+      childScreenId: ARCHIVIST_RECORDS_MENU_ID
+    }));
+    const records = screens.find((screen) => screen.id === ARCHIVIST_RECORDS_MENU_ID);
+    expect(records?.title).toBe("Records 1/1");
+    expect(records?.items[0]).toMatchObject({
+      label: "01 Bosch front step",
+      infoLines: ["A record of a thing that only happened once."]
+    });
   });
 });

@@ -194,6 +194,11 @@ const FunctionalEventSegmentSchema = z.union([
   })
 ]);
 
+const DialogueChoiceOptionSchema = z.object({
+  label: z.string(),
+  target: z.string().optional()
+});
+
 export const DialogueSegmentSchema = z.union([
   z.object({
     kind: z.literal("text"),
@@ -242,6 +247,12 @@ export const DialogueSegmentSchema = z.union([
     code: z.string(),
     raw: z.string(),
     target: z.string().optional()
+  }),
+  z.object({
+    kind: z.literal("choice"),
+    options: z.array(DialogueChoiceOptionSchema).min(1),
+    defaultIndex: z.number().int().nonnegative().optional(),
+    raw: z.string().optional()
   }),
   FunctionalEventSegmentSchema
 ]);
@@ -699,10 +710,175 @@ export const ItemOverridesSchema = z.object({
   byItemId: z.record(z.string().regex(/^\d+$/), ItemOverrideEntrySchema)
 }).strict();
 
+const CondimentPairEntrySchema = z.object({
+  baseItemId: z.number().int().nonnegative(),
+  baseName: z.string().trim().min(1),
+  ebBase: z.string().trim().min(1),
+  condimentItemIds: z.array(z.number().int().nonnegative()).min(1),
+  condimentNames: z.array(z.string().trim().min(1)).min(1),
+  ebCondiments: z.array(z.string().trim().min(1)).min(1),
+  healMultiplier: z.number().positive()
+}).strict().superRefine((entry, ctx) => {
+  if (entry.condimentItemIds.length !== entry.condimentNames.length) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "condimentNames must match condimentItemIds length",
+      path: ["condimentNames"]
+    });
+  }
+  if (entry.condimentItemIds.length !== entry.ebCondiments.length) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "ebCondiments must match condimentItemIds length",
+      path: ["ebCondiments"]
+    });
+  }
+});
+
+const CondimentSkippedEntrySchema = z.object({
+  ebBase: z.string().trim().min(1),
+  ebCondiments: z.array(z.string().trim().min(1)),
+  reason: z.string().trim().min(1)
+}).strict();
+
+export const CondimentPairsSchema = z.object({
+  schema: z.literal("swagbound.condiment-pairs.v1"),
+  generatedFrom: z.object({
+    romTruth: z.string().trim().min(1),
+    items: z.string().trim().min(1),
+    itemOverrides: z.string().trim().min(1),
+    usabilityMatrix: z.string().trim().min(1)
+  }).strict().optional(),
+  entries: z.array(CondimentPairEntrySchema),
+  skipped: z.array(CondimentSkippedEntrySchema)
+}).strict().superRefine((value, ctx) => {
+  const seen = new Set<number>();
+  value.entries.forEach((entry, index) => {
+    if (seen.has(entry.baseItemId)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate condiment base item ${entry.baseItemId}`,
+        path: ["entries", index, "baseItemId"]
+      });
+    }
+    seen.add(entry.baseItemId);
+  });
+});
+
 export const KeyItemsSchema = z.object({
   schema: z.literal("swagbound.key-items.v1"),
   itemIds: z.array(z.number().int().nonnegative())
 }).strict();
+
+const FlagMapEbFlagSchema = z.object({
+  id: z.number().int().min(1).max(1023),
+  name: z.string().trim().min(1)
+}).strict();
+
+const FlagMapEntrySchema = z.object({
+  storyFlag: z.string().trim().min(1),
+  beat: z.string(),
+  /** Adopted now: setting storyFlag also sets these EB numeric event flags. */
+  ebFlags: z.array(FlagMapEbFlagSchema),
+  /** Documented but NOT applied until semantics are browser-verified. */
+  candidates: z.array(FlagMapEbFlagSchema.extend({ note: z.string().optional() }).strict())
+}).strict();
+
+export const FlagMapSchema = z.object({
+  schema: z.literal("swagbound.flag-map.v1"),
+  comment: z.string().optional(),
+  entries: z.array(FlagMapEntrySchema)
+}).strict().superRefine((value, ctx) => {
+  const seen = new Set<string>();
+  value.entries.forEach((entry, index) => {
+    if (seen.has(entry.storyFlag)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate flag-map storyFlag ${entry.storyFlag}`,
+        path: ["entries", index, "storyFlag"]
+      });
+    }
+    seen.add(entry.storyFlag);
+  });
+});
+
+export type FlagMap = z.infer<typeof FlagMapSchema>;
+
+const TimedDeliveryEntrySchema = z.object({
+  id: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "delivery ids must be kebab-case"),
+  spriteId: z.number().int().nonnegative(),
+  eventFlag: z.number().int().min(1).max(1023),
+  eventFlagName: z.string().trim().min(1),
+  timeUntilDelivery: z.number().int().nonnegative(),
+  serviceName: z.string().trim().min(1),
+  sendMessage: z.string().trim().min(1),
+  arrivalMessage: z.string().trim().min(1),
+  itemId: z.number().int().nonnegative().optional()
+}).strict();
+
+export const TimedDeliveriesSchema = z.object({
+  schema: z.literal("swagbound.timed-delivery.v1"),
+  source: z.string().trim().min(1).optional(),
+  deliveries: z.array(TimedDeliveryEntrySchema)
+}).strict().superRefine((value, ctx) => {
+  const seenIds = new Set<string>();
+  const seenFlags = new Set<number>();
+  value.deliveries.forEach((entry, index) => {
+    if (seenIds.has(entry.id)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate timed delivery id ${entry.id}`,
+        path: ["deliveries", index, "id"]
+      });
+    }
+    seenIds.add(entry.id);
+    if (seenFlags.has(entry.eventFlag)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate timed delivery event flag ${entry.eventFlag}`,
+        path: ["deliveries", index, "eventFlag"]
+      });
+    }
+    seenFlags.add(entry.eventFlag);
+  });
+});
+
+export const StoryItemSchema = z.object({
+  id: z.string().trim().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "story item ids must be kebab-case"),
+  itemId: z.number().int().nonnegative(),
+  name: z.string().trim().min(1),
+  worldTexture: z.string().trim().min(1),
+  worldAsset: z.string().trim().min(1),
+  pickupFlag: z.string().trim().min(1),
+  useBeats: z.array(z.string().trim().min(1)).min(1),
+  storyRole: z.string().trim().min(1)
+}).strict();
+
+export const StoryItemsSchema = z.object({
+  schema: z.literal("swagbound.story-items.v1"),
+  items: z.array(StoryItemSchema)
+}).strict().superRefine((value, context) => {
+  const seenIds = new Set<string>();
+  const seenItemIds = new Set<number>();
+  value.items.forEach((item, index) => {
+    if (seenIds.has(item.id)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate story item id ${item.id}`,
+        path: ["items", index, "id"]
+      });
+    }
+    seenIds.add(item.id);
+    if (seenItemIds.has(item.itemId)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate story item itemId ${item.itemId}`,
+        path: ["items", index, "itemId"]
+      });
+    }
+    seenItemIds.add(item.itemId);
+  });
+});
 
 const CharacterOverrideNameSchema = z.string()
   .trim()
@@ -975,6 +1151,10 @@ export const StoryTriggerSchema = z.object({
   dialogue: z.array(z.string()).optional(),
   setFlags: z.array(z.string()).optional(),
   clearFlags: z.array(z.string()).optional(),
+  /** Grant these item ids after dialogue if the party does not already carry them. */
+  grantItems: z.array(z.number().int().nonnegative()).optional(),
+  /** Archivist spot id to run through the Wandering Photographer-style filing sequence. */
+  archivistSpotId: z.number().int().positive().optional(),
   /** When set, fire this music cue (a music-manifest cue id, e.g. "ending") as a forced overworld track when the trigger's effects run. Persists over sector-based music until another trigger or interior change replaces it. */
   music: z.string().min(1).optional(),
   /** Battle group id to start after dialogue (mutually exclusive with warp). */
@@ -1023,6 +1203,51 @@ export const StoryTriggersSchema = z.object({
   triggers: z.array(StoryTriggerSchema),
   barriers: z.array(StoryBarrierSchema).optional()
 });
+
+const ArchivistPointSchema = z.object({
+  x: z.number().int().nonnegative(),
+  y: z.number().int().nonnegative()
+}).strict();
+
+const ArchivistFlagSchema = z.object({
+  id: z.number().int().min(1).max(1023),
+  name: z.string().trim().min(1)
+}).strict();
+
+const ArchivistSlideSchema = z.object({
+  direction: z.number().int().nonnegative(),
+  distance: z.number().int().nonnegative()
+}).strict();
+
+const ArchivistExtraNpcSchema = z.object({
+  x: z.number().int().nonnegative(),
+  y: z.number().int().nonnegative(),
+  sprite: z.string().trim().min(1)
+}).strict();
+
+export const ArchivistSpotSchema = z.object({
+  spotId: z.number().int().positive(),
+  flag: ArchivistFlagSchema,
+  anchor: ArchivistPointSchema,
+  photographer: ArchivistPointSchema,
+  party1: ArchivistPointSchema,
+  slide: ArchivistSlideSchema,
+  extraNpcs: z.array(ArchivistExtraNpcSchema),
+  locationLabel: z.string().trim().min(1),
+  caption: z.string().trim().min(1)
+}).strict();
+
+export const ArchivistSpotsSchema = z.object({
+  schema: z.literal("swagbound.archivist-spots.v1"),
+  source: z.string().optional(),
+  comment: z.string().optional(),
+  archivist: z.object({
+    spriteId: z.string().trim().min(1),
+    spriteNpcId: z.number().int().nonnegative(),
+    lines: z.array(z.string().trim().min(1)).min(1)
+  }).strict(),
+  spots: z.array(ArchivistSpotSchema).length(32)
+}).strict();
 
 /**
  * Authored cutscene: a SEQUENCE of steps the engine runs while the player is
@@ -1138,6 +1363,24 @@ export const NpcOverridesSchema = z.object({
   schema: z.literal("swagbound.npc-overrides.v1"),
   comment: z.string().optional(),
   byNpcId: z.record(z.string().regex(/^\d+$/), NpcOverrideEntrySchema)
+}).strict();
+
+export const NpcMovementPatternNameSchema = z.enum([
+  "pace-horizontal",
+  "pace-vertical",
+  "stationary-look-around",
+  "wander-box"
+]);
+
+export const NpcMovementPatternEntrySchema = z.object({
+  pattern: NpcMovementPatternNameSchema,
+  comment: z.string().optional()
+}).strict();
+
+export const NpcMovementPatternsSchema = z.object({
+  schema: z.literal("swagbound.npc-movement-patterns.v1"),
+  comment: z.string().optional(),
+  byNpcId: z.record(z.string().regex(/^\d+$/), NpcMovementPatternEntrySchema)
 }).strict();
 
 export const WorldCollisionSchema = z.object({
@@ -1326,6 +1569,8 @@ export const AddedNpcSchema = z
     facing: SpriteFacingSchema,
     /** Optional EB movement id driving idle behavior (heuristic: static/lookAround/wander). Omitted = static. */
     movement: z.number().int().nonnegative().optional(),
+    /** Spawn without the extras query even when no cutscene, trigger, or Source Check references this NPC. */
+    alwaysSpawn: z.boolean().optional(),
     interaction: NpcInteractionSchema.optional()
   })
   .strict();
@@ -1439,6 +1684,7 @@ export const OverworldSignInteractableSchema = OverworldInteractableBaseSchema.e
 
 export const OverworldExamineInteractableSchema = OverworldInteractableBaseSchema.extend({
   kind: z.literal("examine"),
+  sprite: PublicAssetPathSchema.optional(),
   pages: z.array(z.string().trim().min(1)).min(1)
 }).strict();
 
@@ -1448,6 +1694,7 @@ export const OverworldPresentInteractableSchema = OverworldInteractableBaseSchem
     char: z.number().int().nonnegative(),
     item: z.number().int().nonnegative()
   }).strict(),
+  storyItemId: z.string().trim().min(1).optional(),
   pages: z.array(z.string().trim().min(1)).min(1).optional(),
   openedPages: z.array(z.string().trim().min(1)).min(1).optional(),
   openedFlag: z.string().trim().min(1).optional()
@@ -1907,7 +2154,7 @@ const RoamerZoneCapSchema = z.object({
   id: z.string().min(1),
   comment: z.string().optional(),
   rect: RoamerZoneRectSchema,
-  allowedGroups: z.array(z.number().int().nonnegative()).min(1)
+  allowedGroups: z.array(z.number().int().nonnegative())
 }).strict();
 
 export const RoamerZoneCapsSchema = z.object({
@@ -2109,6 +2356,54 @@ export const PsiCollectionSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+export const UsabilityItemRowSchema = z.object({
+  id: z.number().int().nonnegative(),
+  name: z.string(),
+  type: z.number().int().nonnegative(),
+  fieldUse: z.boolean(),
+  battleUse: z.boolean(),
+  equippable: z.boolean(),
+  keyItem: z.boolean(),
+  targets: z.array(z.string().min(1)),
+  effectSummary: z.string(),
+  useVerb: z.enum(["ate", "drank", "used"])
+}).strict();
+
+export const UsabilityPsiRowSchema = z.object({
+  id: z.number().int().nonnegative(),
+  name: z.string(),
+  fieldUse: z.boolean(),
+  battleUse: z.boolean(),
+  targets: z.array(z.string().min(1)),
+  ppCost: z.number().int().nonnegative()
+}).strict();
+
+export const UsabilityItemTypeContextSchema = z.object({
+  type: z.number().int().nonnegative(),
+  label: z.string(),
+  fieldUse: z.boolean(),
+  battleUse: z.boolean(),
+  equippable: z.boolean(),
+  keyItem: z.boolean(),
+  summary: z.string()
+}).strict();
+
+export const UsabilityMatrixSchema = z.object({
+  schema: z.literal("swagbound.usability-matrix.v1"),
+  generatedFrom: z.object({
+    items: z.string(),
+    psi: z.string(),
+    itemOverrides: z.string(),
+    psiOverrides: z.string(),
+    keyItems: z.string(),
+    battleActions: z.string(),
+    derivation: z.string()
+  }).strict(),
+  itemTypeContexts: z.array(UsabilityItemTypeContextSchema),
+  items: z.array(UsabilityItemRowSchema),
+  psi: z.array(UsabilityPsiRowSchema)
+}).strict();
+
 export const ShopEntrySchema = z.object({
   id: z.number().int().nonnegative(),
   itemIds: z.array(z.number().int().nonnegative())
@@ -2224,6 +2519,9 @@ export type WorldDoor = z.infer<typeof WorldDoorSchema>;
 export type NpcInteraction = z.infer<typeof NpcInteractionSchema>;
 export type NpcOverrideEntry = z.infer<typeof NpcOverrideEntrySchema>;
 export type NpcOverrides = z.infer<typeof NpcOverridesSchema>;
+export type NpcMovementPatternName = z.infer<typeof NpcMovementPatternNameSchema>;
+export type NpcMovementPatternEntry = z.infer<typeof NpcMovementPatternEntrySchema>;
+export type NpcMovementPatterns = z.infer<typeof NpcMovementPatternsSchema>;
 export type AddedNpc = z.infer<typeof AddedNpcSchema>;
 export type AddedNpcs = z.infer<typeof AddedNpcsSchema>;
 export type TeleportDestination = z.infer<typeof TeleportDestinationSchema>;
@@ -2249,7 +2547,12 @@ export type MusicManifest = z.infer<typeof MusicManifestSchema>;
 export type BackgroundOverrideEntry = z.infer<typeof BackgroundOverrideEntrySchema>;
 export type BackgroundOverrides = z.infer<typeof BackgroundOverridesSchema>;
 export type ItemOverrides = z.infer<typeof ItemOverridesSchema>;
+export type CondimentPairs = z.infer<typeof CondimentPairsSchema>;
+export type TimedDeliveries = z.infer<typeof TimedDeliveriesSchema>;
+export type TimedDeliveryEntry = TimedDeliveries["deliveries"][number];
 export type KeyItems = z.infer<typeof KeyItemsSchema>;
+export type StoryItem = z.infer<typeof StoryItemSchema>;
+export type StoryItems = z.infer<typeof StoryItemsSchema>;
 export type CharacterOverrides = z.infer<typeof CharacterOverridesSchema>;
 export type EnemyOverrides = z.infer<typeof EnemyOverridesSchema>;
 export type EnemyStatOverrides = z.infer<typeof EnemyStatOverridesSchema>;
@@ -2285,6 +2588,9 @@ export type ItemData = z.infer<typeof ItemDataSchema>;
 export type PsiCollection = z.infer<typeof PsiCollectionSchema>;
 export type PsiData = z.infer<typeof PsiDataSchema>;
 export type PsiOverrides = z.infer<typeof PsiOverridesSchema>;
+export type UsabilityItemRow = z.infer<typeof UsabilityItemRowSchema>;
+export type UsabilityPsiRow = z.infer<typeof UsabilityPsiRowSchema>;
+export type UsabilityMatrix = z.infer<typeof UsabilityMatrixSchema>;
 export type ShopData = z.infer<typeof ShopDataSchema>;
 export type ShopEntry = z.infer<typeof ShopEntrySchema>;
 export type DialogueSegment = z.infer<typeof DialogueSegmentSchema>;
@@ -2301,6 +2607,8 @@ export type NpcReferenceCollection = z.infer<typeof NpcReferenceCollectionSchema
 export type CustomDialogue = z.infer<typeof CustomDialogueSchema>;
 export type SwagboundDialogueLibrary = z.infer<typeof SwagboundDialogueLibrarySchema>;
 export type DrifellaBarks = z.infer<typeof DrifellaBarksSchema>;
+export type ArchivistSpot = z.infer<typeof ArchivistSpotSchema>;
+export type ArchivistSpots = z.infer<typeof ArchivistSpotsSchema>;
 export type StoryTriggers = z.infer<typeof StoryTriggersSchema>;
 export type StoryTrigger = z.infer<typeof StoryTriggerSchema>;
 export type StoryTriggerArea = z.infer<typeof StoryTriggerAreaSchema>;
@@ -2352,11 +2660,13 @@ export type ResolvedScriptEvents = Omit<ResolvedScriptFlow, "commands"> & {
 
 export type EventWait =
   | { kind: "confirm"; effect: Extract<EventEffect, { kind: "text" | "prompt" }> }
+  | { kind: "choice"; effect: Extract<EventEffect, { kind: "choice" }> }
   | { kind: "pause"; frames: number; remainingFrames: number; effect: Extract<EventEffect, { kind: "pause" }> }
   | { kind: "actorMove"; effect: Extract<EventEffect, { kind: "actorMove" }> };
 
 export type EventExecutorAdvanceInput = {
   confirm?: boolean;
+  choice?: number;
   frames?: number;
   actorMoveComplete?: boolean;
 };
@@ -2423,6 +2733,13 @@ export const EventEffectSchema = z.union([
   }),
   z.object({
     kind: z.literal("prompt")
+  }),
+  z.object({
+    kind: z.literal("choice"),
+    options: z.array(DialogueChoiceOptionSchema).min(1),
+    defaultIndex: z.number().int().nonnegative().optional(),
+    raw: z.string().optional(),
+    sourceFile: z.string().optional()
   }),
   FunctionalEventSegmentSchema,
   z.object({
@@ -2700,6 +3017,11 @@ export function resolveScriptReferenceFlow(
   };
 
   const processTextCommand = (command: ScriptCommand): FlowAction => {
+    if (legacyYesNoChoiceSegmentFromCommand(command)) {
+      commands.push(command);
+      pendingCondition = undefined;
+      return { kind: "next" };
+    }
     const sourceSegments = command.segments ?? [{ kind: "text" as const, value: command.value ?? command.raw }];
     const collectedSegments: DialogueSegment[] = [];
 
@@ -2910,6 +3232,8 @@ export class EventExecutor {
   private index = 0;
   private waiting?: EventWait;
   private readonly dispatched: EventEffect[] = [];
+  private completedCommandsVisited = 0;
+  private completedJumps = 0;
 
   constructor(
     private readonly scripts: ScriptCollection,
@@ -2929,6 +3253,8 @@ export class EventExecutor {
       this.index = 0;
       this.waiting = undefined;
       this.dispatched.length = 0;
+      this.completedCommandsVisited = 0;
+      this.completedJumps = 0;
       return undefined;
     }
 
@@ -2939,6 +3265,8 @@ export class EventExecutor {
     this.index = 0;
     this.waiting = undefined;
     this.dispatched.length = 0;
+    this.completedCommandsVisited = 0;
+    this.completedJumps = 0;
     return this.flow;
   }
 
@@ -2984,6 +3312,16 @@ export class EventExecutor {
       return true;
     }
 
+    if (this.waiting.kind === "choice") {
+      if (input.choice === undefined) {
+        return false;
+      }
+      const effect = this.waiting.effect;
+      this.waiting = undefined;
+      this.followChoice(effect, input.choice);
+      return true;
+    }
+
     if (this.waiting.kind === "actorMove") {
       if (!input.actorMoveComplete) {
         return false;
@@ -3018,9 +3356,37 @@ export class EventExecutor {
       done: true,
       truncated: flow?.truncated ?? false,
       ...(flow?.truncatedReason ? { truncatedReason: flow.truncatedReason } : {}),
-      commandsVisited: flow?.commandsVisited ?? 0,
-      jumps: flow?.jumps ?? 0
+      commandsVisited: this.completedCommandsVisited + (flow?.commandsVisited ?? 0),
+      jumps: this.completedJumps + (flow?.jumps ?? 0)
     };
+  }
+
+  private followChoice(effect: Extract<EventEffect, { kind: "choice" }>, selectedIndex: number): void {
+    const option = effect.options[clampIndex(selectedIndex, effect.options.length)];
+    if (!option?.target) {
+      return;
+    }
+    const reference = choiceTargetReference(effect, option.target);
+    if (!reference) {
+      return;
+    }
+    const flow = resolveScriptReferenceFlow(this.scripts, reference, {
+      maxCommands: this.options.maxCommands,
+      maxJumps: this.options.maxJumps,
+      onConditionalJump: this.options.onConditionalJump,
+      flags: shadowFlagState(this.host, this.options.flags)
+    });
+    if (!flow) {
+      return;
+    }
+    this.completedCommandsVisited += this.index;
+    this.completedJumps += 1;
+    this.flow = {
+      ...flow,
+      effects: eventEffectsFromCommands(flow.commands)
+    };
+    this.index = 0;
+    this.dispatched.length = 0;
   }
 
   private dispatch(effect: EventEffect): void {
@@ -3101,11 +3467,35 @@ export class EventExecutor {
       case "terminator":
         this.host.terminator?.(effect.code);
         break;
+      case "choice":
       case "pause":
       case "prompt":
         break;
     }
   }
+}
+
+function clampIndex(index: number, length: number): number {
+  if (length <= 0) {
+    return 0;
+  }
+  const normalized = Number.isFinite(index) ? Math.trunc(index) : 0;
+  return Math.max(0, Math.min(length - 1, normalized));
+}
+
+function choiceTargetReference(effect: Extract<EventEffect, { kind: "choice" }>, target: string): string | undefined {
+  const trimmed = target.trim();
+  if (!trimmed) {
+    return undefined;
+  }
+  if (splitScriptReference(trimmed)) {
+    return trimmed;
+  }
+  const sourceFile = effect.sourceFile;
+  if (!sourceFile) {
+    return undefined;
+  }
+  return `${scriptFileStemForPath(sourceFile)}.${trimmed}`;
 }
 
 function shadowFlagState(host: EventExecutorHost, initial?: Pick<NumericFlagState, "isSet">): NumericFlagState {
@@ -3126,6 +3516,9 @@ function shadowFlagState(host: EventExecutorHost, initial?: Pick<NumericFlagStat
 function waitForEventEffect(effect: EventEffect): EventWait | undefined {
   if (effect.kind === "text" || effect.kind === "prompt") {
     return { kind: "confirm", effect };
+  }
+  if (effect.kind === "choice") {
+    return { kind: "choice", effect };
   }
   if (effect.kind === "pause" && effect.frames > 0) {
     return {
@@ -3181,6 +3574,17 @@ function eventEffectsFromCommands(commands: ScriptCommand[]): EventEffect[] {
       }
       return true;
     }
+    if (segment.kind === "choice") {
+      flushText();
+      effects.push({
+        kind: "choice",
+        options: segment.options,
+        ...(segment.defaultIndex !== undefined ? { defaultIndex: segment.defaultIndex } : {}),
+        ...(segment.raw ? { raw: segment.raw } : {}),
+        sourceFile: command.sourceLocation.file
+      });
+      return true;
+    }
 
     const effect = eventEffectFromSegment(segment);
     if (effect) {
@@ -3194,6 +3598,18 @@ function eventEffectsFromCommands(commands: ScriptCommand[]): EventEffect[] {
 
   for (const command of commands) {
     if (command.cmd === "text") {
+      const legacyChoice = legacyYesNoChoiceSegmentFromCommand(command);
+      if (legacyChoice) {
+        flushText();
+        effects.push({
+          kind: "choice",
+          options: legacyChoice.options,
+          ...(legacyChoice.defaultIndex !== undefined ? { defaultIndex: legacyChoice.defaultIndex } : {}),
+          ...(legacyChoice.raw ? { raw: legacyChoice.raw } : {}),
+          sourceFile: command.sourceLocation.file
+        });
+        continue;
+      }
       const sourceSegments = command.segments ?? [{ kind: "text" as const, value: command.value ?? command.raw }];
       for (const segment of sourceSegments) {
         if (!applySegment(command, segment)) {
@@ -3232,7 +3648,14 @@ function eventEffectsFromCommands(commands: ScriptCommand[]): EventEffect[] {
 
 function eventEffectsFromCommand(command: ScriptCommand): EventEffect[] {
   if (command.segments?.length) {
-    return command.segments.map(eventEffectFromSegment).filter((effect): effect is EventEffect => Boolean(effect));
+    return command.segments
+      .map((segment): EventEffect | undefined => {
+        const effect = eventEffectFromSegment(segment);
+        return effect?.kind === "choice"
+          ? { ...effect, sourceFile: command.sourceLocation.file }
+          : effect;
+      })
+      .filter((effect): effect is EventEffect => Boolean(effect));
   }
 
   const code = command.cmd === "control" ? command.code : command.cmd;
@@ -3256,6 +3679,13 @@ function eventEffectFromSegment(segment: DialogueSegment): EventEffect | undefin
       return { kind: "pause", frames: segment.frames };
     case "prompt":
       return { kind: "prompt" };
+    case "choice":
+      return {
+        kind: "choice",
+        options: segment.options,
+        ...(segment.defaultIndex !== undefined ? { defaultIndex: segment.defaultIndex } : {}),
+        ...(segment.raw ? { raw: segment.raw } : {})
+      };
     case "setFlag":
     case "unsetFlag":
     case "party":
@@ -3717,6 +4147,11 @@ export function buildDialoguePages(commands: ScriptCommand[]): DialoguePage[] {
 
   for (const command of commands) {
     if (command.cmd === "text") {
+      const legacyChoice = legacyYesNoChoiceSegmentFromCommand(command);
+      if (legacyChoice) {
+        currentSegments.push(legacyChoice);
+        continue;
+      }
       const segments = command.segments ?? [{ kind: "text" as const, value: command.value ?? command.raw }];
       for (const segment of segments) {
         currentSegments.push(segment);
@@ -3749,4 +4184,100 @@ export function buildDialoguePages(commands: ScriptCommand[]): DialoguePage[] {
   return pages.length > 0
     ? pages
     : [{ text: "No imported script text was found.", ended: true, unknownCommands: [], segments: [] }];
+}
+
+function legacyYesNoChoiceSegmentFromCommand(command: ScriptCommand): Extract<DialogueSegment, { kind: "choice" }> | undefined {
+  const segments = command.segments;
+  if (!segments?.length) {
+    return undefined;
+  }
+  const options: Array<{ label: string }> = [];
+  let index = 0;
+  for (let optionIndex = 0; optionIndex < 2; optionIndex += 1) {
+    if (!isLegacyMenuOptionStart(segments[index])) {
+      return undefined;
+    }
+    index += 1;
+    let label = "";
+    while (index < segments.length && !isLegacyMenuOptionEnd(segments[index])) {
+      const segment = segments[index];
+      if (segment.kind !== "text") {
+        return undefined;
+      }
+      label += segment.value;
+      index += 1;
+    }
+    if (!isLegacyMenuOptionEnd(segments[index])) {
+      return undefined;
+    }
+    index += 1;
+    if (!label.trim()) {
+      return undefined;
+    }
+    options.push({ label: label.trim() });
+    while (index < segments.length) {
+      const next = segments[index];
+      if (next?.kind !== "text" || next.value.trim() !== "") {
+        break;
+      }
+      index += 1;
+    }
+  }
+  if (!isYesNoChoiceLabels(options.map((option) => option.label))) {
+    return undefined;
+  }
+  let menuRaw: string | undefined;
+  for (; index < segments.length; index += 1) {
+    const segment = segments[index];
+    if (segment.kind === "control" && parseLegacyMenuTargets(segment.raw, options.length)) {
+      menuRaw = segment.raw;
+      break;
+    }
+    if (segment.kind === "text" && segment.value.trim() !== "") {
+      return undefined;
+    }
+  }
+  if (!menuRaw) {
+    return undefined;
+  }
+  const targets = parseLegacyMenuTargets(menuRaw, options.length);
+  if (!targets) {
+    return undefined;
+  }
+  return {
+    kind: "choice",
+    options: options.map((option, optionIndex) => ({
+      label: option.label,
+      target: targets[optionIndex]
+    })),
+    defaultIndex: 0,
+    raw: command.value ?? menuRaw
+  };
+}
+
+function isLegacyMenuOptionStart(segment: DialogueSegment | undefined): boolean {
+  return segment?.kind === "control" && /^\[19\s+02\]$/iu.test(segment.raw);
+}
+
+function isLegacyMenuOptionEnd(segment: DialogueSegment | undefined): boolean {
+  return segment?.kind === "control" && segment.code === "eob" && /^\[02\]$/iu.test(segment.raw);
+}
+
+function isYesNoChoiceLabels(labels: readonly string[]): boolean {
+  return labels.length === 2
+    && labels[0].trim().toLowerCase() === "yes"
+    && labels[1].trim().toLowerCase() === "no";
+}
+
+function parseLegacyMenuTargets(raw: string, expectedCount: number): string[] | undefined {
+  const match = /^\[09\s+([0-9a-f]{2})\s+([^\]]+)\]$/iu.exec(raw.trim());
+  if (!match) {
+    return undefined;
+  }
+  const count = Number.parseInt(match[1], 16);
+  if (count !== expectedCount) {
+    return undefined;
+  }
+  const targets = [...match[2].matchAll(/\{e\(([A-Za-z_][\w.-]*)\)\}/gu)].map((targetMatch) => targetMatch[1]);
+  return targets.length >= expectedCount ? targets.slice(0, expectedCount) : undefined;
 }

@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vitest";
 
-import { SPRITE_WALK_BOB_AMPLITUDE_PX, spriteWalkBobOffset } from "./spriteOverrides";
+import {
+  SPRITE_WALK_BOB_AMPLITUDE_PX,
+  SPRITE_WALK_STEP_INTERVAL_MS,
+  spriteWalkBobOffset
+} from "./spriteOverrides";
 
 describe("spriteWalkBobOffset", () => {
   it("returns 0 for an idle sprite", () => {
@@ -11,23 +15,38 @@ describe("spriteWalkBobOffset", () => {
     expect(spriteWalkBobOffset({ clockMs: 1234, seed: 5, moving: true, frameCount: 2 })).toBe(0);
   });
 
-  it("hops between 0 and the amplitude for a moving single-frame sprite", () => {
-    let max = 0;
-    let min = Infinity;
+  it("hard-toggles between exactly 0 and the step raise (no intermediate values)", () => {
+    const seen = new Set<number>();
     for (let t = 0; t < 2000; t += 5) {
-      const v = spriteWalkBobOffset({ clockMs: t, seed: 0, moving: true, frameCount: 1 });
-      expect(v).toBeGreaterThanOrEqual(0);
-      expect(v).toBeLessThanOrEqual(SPRITE_WALK_BOB_AMPLITUDE_PX + 1e-9);
-      max = Math.max(max, v);
-      min = Math.min(min, v);
+      seen.add(spriteWalkBobOffset({ clockMs: t, seed: 0, moving: true, frameCount: 1 }));
     }
-    expect(max).toBeGreaterThan(SPRITE_WALK_BOB_AMPLITUDE_PX * 0.9); // reaches near the top of the hop
-    expect(min).toBeLessThan(0.1); // and settles back to the baseline
+    expect([...seen].sort()).toEqual([0, SPRITE_WALK_BOB_AMPLITUDE_PX]);
   });
 
-  it("desyncs sprites by seed so they do not bob in lockstep", () => {
-    const a = spriteWalkBobOffset({ clockMs: 500, seed: 0, moving: true, frameCount: 1 });
-    const b = spriteWalkBobOffset({ clockMs: 500, seed: 1, moving: true, frameCount: 1 });
-    expect(Math.abs(a - b)).toBeGreaterThan(0.1);
+  it("toggles at the EB walk cadence, not per-frame jitter", () => {
+    let toggles = 0;
+    let prev = spriteWalkBobOffset({ clockMs: 0, seed: 0, moving: true, frameCount: 1 });
+    for (let t = 5; t < 2000; t += 5) {
+      const v = spriteWalkBobOffset({ clockMs: t, seed: 0, moving: true, frameCount: 1 });
+      if (v !== prev) {
+        toggles += 1;
+        prev = v;
+      }
+    }
+    const expected = Math.floor(2000 / SPRITE_WALK_STEP_INTERVAL_MS);
+    expect(Math.abs(toggles - expected)).toBeLessThanOrEqual(1);
+  });
+
+  it("desyncs sprites by seed so crowds do not step in unison", () => {
+    // With a 61ms per-seed shift, seeds 0 and 1 disagree for part of every cycle.
+    let disagreements = 0;
+    for (let t = 0; t < 2000; t += 5) {
+      const a = spriteWalkBobOffset({ clockMs: t, seed: 0, moving: true, frameCount: 1 });
+      const b = spriteWalkBobOffset({ clockMs: t, seed: 1, moving: true, frameCount: 1 });
+      if (a !== b) {
+        disagreements += 1;
+      }
+    }
+    expect(disagreements).toBeGreaterThan(50);
   });
 });

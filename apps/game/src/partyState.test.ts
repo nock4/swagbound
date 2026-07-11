@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ItemData } from "@eb/schemas";
+import type { CondimentPairs, ItemData } from "@eb/schemas";
 import { hospitalRecoveryCost, PartyState, type PartyStateSnapshot } from "./partyState";
 import { buildCombatantFromPartyMember, type PartyMember } from "./characterModel";
 
@@ -265,6 +265,51 @@ describe("PartyState menu services", () => {
     expect(result).toMatchObject({ ok: true, previousValue: 25, nextValue: 37 });
     expect(partyState.inventory(1)).toEqual([]);
     expect(partyState.vitals(1)?.hp.target).toBe(37);
+  });
+
+  it("uses a matching condiment to boost the next heal from that food slot", () => {
+    const partyState = itemUsePartyState([118, 89], 20);
+    const pairs: CondimentPairs = {
+      schema: "swagbound.condiment-pairs.v1",
+      entries: [{
+        baseItemId: 89,
+        baseName: "Route Snack",
+        ebBase: "BAG_OF_FRIES",
+        condimentItemIds: [118],
+        condimentNames: ["Permit Packet"],
+        ebCondiments: ["KETCHUP_PACKET"],
+        healMultiplier: 2
+      }],
+      skipped: []
+    };
+
+    const combined = partyState.combineCondiment({
+      ownerChar: 1,
+      condimentItemId: 118,
+      condimentSlot: 0,
+      pairs
+    });
+
+    expect(combined).toMatchObject({ ok: true, baseItemId: 89, baseSlot: 0, multiplier: 2 });
+    expect(partyState.inventory(1)).toEqual([89]);
+
+    const result = partyState.useItem({
+      ownerChar: 1,
+      targetChar: 1,
+      inventorySlot: 0,
+      item: syntheticItem(89, { kind: "healHp", amount: 24 }),
+      targetVitals: { hp: 20, maxHp: 100, pp: 10, maxPp: 20 }
+    });
+
+    expect(result).toMatchObject({
+      ok: true,
+      effect: { kind: "healHp", amount: 48 },
+      condimentBoost: { condimentItemId: 118, multiplier: 2 },
+      previousValue: 20,
+      nextValue: 68
+    });
+    expect(partyState.inventory(1)).toEqual([]);
+    expect(partyState.vitals(1)?.hp.target).toBe(68);
   });
 });
 

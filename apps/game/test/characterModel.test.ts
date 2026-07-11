@@ -6,6 +6,7 @@ import {
   buildPartyMember,
   effectivePartyMemberStats
 } from "../src/characterModel";
+import { hpMeterDigitsPerSecondForDelta } from "../src/ebTiming";
 
 const character: CharacterData = {
   id: 2,
@@ -53,7 +54,7 @@ describe("character model", () => {
 
   it("builds a battle combatant from a party member", () => {
     const member = buildPartyMember(character);
-    const combatant = buildCombatantFromPartyMember(member, { hpRatePerSec: 3 });
+    const combatant = buildCombatantFromPartyMember(member);
 
     expect(combatant).toMatchObject({
       name: "PARTY_MEMBER",
@@ -65,7 +66,7 @@ describe("character model", () => {
       defense: 9,
       isEnemy: false
     });
-    expect(combatant.hp).toMatchObject({ displayed: 88, target: 88, ratePerSec: 3 });
+    expect(combatant.hp).toMatchObject({ displayed: 88, target: 88, ratePerSec: hpMeterDigitsPerSecondForDelta(1) });
   });
 
   it("starts the combatant at the member's CURRENT hp, not full (persists damage/death across battles)", () => {

@@ -18,6 +18,8 @@
  * cardinal facing (see resolveFacing).
  */
 
+import { diagonalPxPerSecondForCardinal } from "./ebTiming";
+
 export type Facing = "up" | "down" | "left" | "right";
 
 export type DirectionFrames = Record<Facing, [number, number]>;
@@ -61,8 +63,10 @@ export type PlayerState = {
 
 export type StepOptions = {
   deltaMs: number;
-  /** World pixels per second. */
+  /** World pixels per second for cardinal movement. */
   speed: number;
+  /** World pixels per second for each axis during diagonal movement. */
+  diagonalSpeed?: number;
   bounds: { minX: number; maxX: number; minY: number; maxY: number };
   /** Feet-position collision test in world pixels. */
   blocked: (x: number, y: number) => boolean;
@@ -165,18 +169,19 @@ export function stepPlayer(state: PlayerState, input: MoveInput, options: StepOp
 
   state.facing = resolveFacing(state.facing, dx, dy);
 
-  const scale = dx !== 0 && dy !== 0 ? Math.SQRT1_2 : 1;
-  state.velocityX = dx * scale * options.speed;
-  state.velocityY = dy * scale * options.speed;
-  const step = (options.speed * options.deltaMs) / 1000;
+  const diagonal = dx !== 0 && dy !== 0;
+  const speed = diagonal ? options.diagonalSpeed ?? diagonalPxPerSecondForCardinal(options.speed) : options.speed;
+  state.velocityX = dx * speed;
+  state.velocityY = dy * speed;
+  const step = (speed * options.deltaMs) / 1000;
 
-  const tryX = clamp(state.x + dx * scale * step, options.bounds.minX, options.bounds.maxX);
+  const tryX = clamp(state.x + dx * step, options.bounds.minX, options.bounds.maxX);
   if (!options.blocked(tryX, state.y)) {
     state.x = tryX;
   } else {
     state.velocityX = 0;
   }
-  const tryY = clamp(state.y + dy * scale * step, options.bounds.minY, options.bounds.maxY);
+  const tryY = clamp(state.y + dy * step, options.bounds.minY, options.bounds.maxY);
   if (!options.blocked(state.x, tryY)) {
     state.y = tryY;
   } else {

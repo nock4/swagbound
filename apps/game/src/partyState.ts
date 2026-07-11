@@ -1,4 +1,4 @@
-import type { ItemData } from "@eb/schemas";
+import type { CondimentPairs, ItemData } from "@eb/schemas";
 import type { Combatant } from "./battleLogic";
 import {
   cureStatus as cureStatusEffect,
@@ -86,7 +86,6 @@ export type PartyVitalsInput = {
   maxHp: number;
   pp: number;
   maxPp: number;
-  hpRatePerSec?: number;
 };
 
 export type PartyVitals = {
@@ -159,6 +158,10 @@ export type ItemUseResult =
       effect: ItemUseEffect;
       previousValue: number;
       nextValue: number;
+      condimentBoost?: {
+        condimentItemId: number;
+        multiplier: number;
+      };
     }
   | {
       ok: false;
@@ -166,6 +169,40 @@ export type ItemUseResult =
       ownerChar: number;
       targetChar: number;
       reason: "missingItem" | "notConsumable" | "unknownEffect" | "notFieldUsable";
+    };
+
+export type CondimentCombineResult =
+  | {
+      ok: true;
+      ownerChar: number;
+      condimentItemId: number;
+      baseItemId: number;
+      baseSlot: number;
+      multiplier: number;
+    }
+  | {
+      ok: false;
+      ownerChar: number;
+      condimentItemId: number;
+      reason: "missingCondiment" | "noMatchingBase";
+    };
+
+export type FieldPsiUseResult =
+  | {
+      ok: true;
+      casterChar: number;
+      targetChar: number;
+      ppCost: number;
+      effect?: ItemUseEffect;
+      previousValue: number;
+      nextValue: number;
+    }
+  | {
+      ok: false;
+      casterChar: number;
+      targetChar: number;
+      ppCost: number;
+      reason: "insufficientPp" | "unknownEffect" | "notFieldUsable";
     };
 
 export type PartyVitalsApplyResult = {
@@ -260,7 +297,12 @@ export type ShopSellResult =
       reason: "missingItem";
     };
 
-const HP_RATE_PER_SEC = 36;
+type PendingCondimentBoost = {
+  itemId: number;
+  condimentItemId: number;
+  multiplier: number;
+};
+
 const ITEM_DISAPPEARS_FLAG = "item disappears when used";
 const EQUIPMENT_SLOTS: EquipmentSlot[] = ["weapon", "body", "arms", "other"];
 /** EB caps each character at 14 carried items; equipped gear stays in the list, so a length cap matches. */
@@ -289,6 +331,7 @@ export class PartyState {
   private readonly vitalsByChar = new Map<number, PartyVitals>();
   private readonly battleMembersByChar = new Map<number, PartyBattleMemberSnapshot>();
   private readonly statusesByChar = new Map<number, StatusState>();
+  private readonly condimentBoostsByChar = new Map<number, Map<number, PendingCondimentBoost>>();
 
   get wallet(): number {
     return this.walletValue;
@@ -374,6 +417,7 @@ export class PartyState {
       return false;
     }
     items.splice(index, 1);
+    this.shiftCondimentBoostsAfterSlot(normalizedChar, index);
     if (items.length === 0) {
       this.inventoryByChar.delete(normalizedChar);
     } else {
@@ -394,6 +438,7 @@ export class PartyState {
       return false;
     }
     items.splice(slot, 1);
+    this.shiftCondimentBoostsAfterSlot(normalizedChar, slot);
     if (items.length === 0) {
       this.inventoryByChar.delete(normalizedChar);
     } else {
@@ -416,13 +461,64 @@ export class PartyState {
     if (this.inventoryRoom(toChar) <= 0) {
       return { ok: false, itemId, fromChar, toChar, fromSlot, reason: "targetFull" };
     }
+    const carriedBoost = this.peekCondimentBoost(fromChar, fromSlot, itemId);
     if (!this.takeFromSlot(fromChar, fromSlot, itemId)) {
       return { ok: false, itemId, fromChar, toChar, fromSlot, reason: "missingItem" };
     }
     const targetItems = this.inventoryByChar.get(toChar) ?? [];
     targetItems.push(itemId);
     this.inventoryByChar.set(toChar, targetItems);
+    if (carriedBoost) {
+      this.setCondimentBoost(toChar, targetItems.length - 1, carriedBoost);
+    }
     return { ok: true, itemId, fromChar, toChar, fromSlot, toSlot: targetItems.length - 1 };
+  }
+
+  combineCondiment(options: {
+    ownerChar: number;
+    condimentItemId: number;
+    condimentSlot?: number;
+    pairs: CondimentPairs | undefined;
+  }): CondimentCombineResult {
+    const ownerChar = normalizeId(options.ownerChar);
+    const condimentItemId = normalizeId(options.condimentItemId);
+    const items = this.inventoryByChar.get(ownerChar) ?? [];
+    const condimentSlot = options.condimentSlot !== undefined
+      ? stat(options.condimentSlot)
+      : items.indexOf(condimentItemId);
+    if (items[condimentSlot] !== condimentItemId) {
+      return { ok: false, ownerChar, condimentItemId, reason: "missingCondiment" };
+    }
+
+    const matchingPair = options.pairs?.entries.find((entry) =>
+      entry.condimentItemIds.includes(condimentItemId) && items.includes(entry.baseItemId)
+    );
+    if (!matchingPair) {
+      return { ok: false, ownerChar, condimentItemId, reason: "noMatchingBase" };
+    }
+    const baseSlot = items.findIndex((itemId, slot) => itemId === matchingPair.baseItemId && slot !== condimentSlot);
+    if (baseSlot < 0) {
+      return { ok: false, ownerChar, condimentItemId, reason: "noMatchingBase" };
+    }
+
+    if (!this.takeFromSlot(ownerChar, condimentSlot, condimentItemId)) {
+      return { ok: false, ownerChar, condimentItemId, reason: "missingCondiment" };
+    }
+    const adjustedBaseSlot = baseSlot > condimentSlot ? baseSlot - 1 : baseSlot;
+    const boost = {
+      itemId: matchingPair.baseItemId,
+      condimentItemId,
+      multiplier: positiveMultiplier(matchingPair.healMultiplier)
+    };
+    this.setCondimentBoost(ownerChar, adjustedBaseSlot, boost);
+    return {
+      ok: true,
+      ownerChar,
+      condimentItemId,
+      baseItemId: matchingPair.baseItemId,
+      baseSlot: adjustedBaseSlot,
+      multiplier: boost.multiplier
+    };
   }
 
   dropItem(char: number, inventorySlot: number, item: number): ItemMoveResult {
@@ -466,13 +562,19 @@ export class PartyState {
   useItem(options: {
     ownerChar: number;
     targetChar: number;
+    inventorySlot?: number;
     item: Pick<ItemData, "id" | "action" | "argument" | "miscFlags" | "effect">;
     targetVitals: PartyVitalsInput;
+    fieldUse?: boolean;
   }): ItemUseResult {
     const ownerChar = normalizeId(options.ownerChar);
     const targetChar = normalizeId(options.targetChar);
     const itemId = normalizeId(options.item.id);
-    if (!this.inventory(ownerChar).includes(itemId)) {
+    const items = this.inventoryByChar.get(ownerChar) ?? [];
+    const inventorySlot = options.inventorySlot !== undefined
+      ? stat(options.inventorySlot)
+      : items.indexOf(itemId);
+    if (items[inventorySlot] !== itemId) {
       return { ok: false, itemId, ownerChar, targetChar, reason: "missingItem" };
     }
     if (!isConsumableItem(options.item)) {
@@ -482,26 +584,84 @@ export class PartyState {
     if (!effect) {
       return { ok: false, itemId, ownerChar, targetChar, reason: "unknownEffect" };
     }
-    if (!isFieldUsableItemEffect(effect)) {
+    if (options.fieldUse === false || (options.fieldUse !== true && !isFieldUsableItemEffect(effect))) {
       return { ok: false, itemId, ownerChar, targetChar, reason: "notFieldUsable" };
     }
+    const pendingBoost = this.peekCondimentBoost(ownerChar, inventorySlot, itemId);
+    const appliedEffect = pendingBoost ? boostedRecoveryEffect(effect, pendingBoost.multiplier) : effect;
 
-    const applied = this.applyEffectToChar(targetChar, effect, options.targetVitals);
+    const applied = this.applyEffectToChar(targetChar, appliedEffect, options.targetVitals);
     if (!applied) {
       return { ok: false, itemId, ownerChar, targetChar, reason: "unknownEffect" };
     }
-    if (effect.kind === "revive" && applied.previousValue === applied.nextValue) {
+    if (appliedEffect.kind === "revive" && applied.previousValue === applied.nextValue) {
       return { ok: false, itemId, ownerChar, targetChar, reason: "notFieldUsable" };
     }
-    this.take(ownerChar, itemId);
+    if (pendingBoost) {
+      this.clearCondimentBoost(ownerChar, inventorySlot);
+    }
+    this.takeFromSlot(ownerChar, inventorySlot, itemId);
     return {
       ok: true,
       itemId,
       ownerChar,
       targetChar,
-      effect,
+      effect: appliedEffect,
       previousValue: applied.previousValue,
-      nextValue: applied.nextValue
+      nextValue: applied.nextValue,
+      ...(pendingBoost ? {
+        condimentBoost: {
+          condimentItemId: pendingBoost.condimentItemId,
+          multiplier: pendingBoost.multiplier
+        }
+      } : {})
+    };
+  }
+
+  useFieldPsi(options: {
+    casterChar: number;
+    targetChar: number;
+    ppCost: number;
+    effect?: ItemUseEffect;
+    casterVitals?: PartyVitalsInput;
+    targetVitals?: PartyVitalsInput;
+  }): FieldPsiUseResult {
+    const casterChar = normalizeId(options.casterChar);
+    const targetChar = normalizeId(options.targetChar);
+    const ppCost = stat(options.ppCost);
+    const casterVitals = options.casterVitals
+      ? this.ensureVitals(casterChar, options.casterVitals)
+      : this.vitalsForKnownChar(casterChar);
+    if (!casterVitals) {
+      return { ok: false, casterChar, targetChar, ppCost, reason: "unknownEffect" };
+    }
+    if (casterVitals.pp < ppCost) {
+      return { ok: false, casterChar, targetChar, ppCost, reason: "insufficientPp" };
+    }
+
+    const applied = options.effect
+      ? this.applyEffectToChar(targetChar, options.effect, options.targetVitals)
+      : undefined;
+    if (options.effect && !applied) {
+      return { ok: false, casterChar, targetChar, ppCost, reason: "unknownEffect" };
+    }
+    if (options.effect?.kind === "revive" && applied && applied.previousValue === applied.nextValue) {
+      return { ok: false, casterChar, targetChar, ppCost, reason: "notFieldUsable" };
+    }
+
+    const nextCasterVitals = this.vitalsForKnownChar(casterChar) ?? casterVitals;
+    this.commitVitals(casterChar, {
+      ...nextCasterVitals,
+      pp: Math.max(0, nextCasterVitals.pp - ppCost)
+    });
+    return {
+      ok: true,
+      casterChar,
+      targetChar,
+      ppCost,
+      ...(options.effect ? { effect: options.effect } : {}),
+      previousValue: applied?.previousValue ?? casterVitals.pp,
+      nextValue: applied?.nextValue ?? Math.max(0, casterVitals.pp - ppCost)
     };
   }
 
@@ -542,7 +702,7 @@ export class PartyState {
         continue;
       }
       this.vitalsByChar.set(charId, {
-        hp: createRollingMeter(member.hp, HP_RATE_PER_SEC),
+        hp: createRollingMeter(member.hp),
         maxHp: member.maxHp,
         pp: member.pp,
         maxPp: member.maxPp
@@ -828,6 +988,7 @@ export class PartyState {
     this.vitalsByChar.clear();
     this.battleMembersByChar.clear();
     this.statusesByChar.clear();
+    this.condimentBoostsByChar.clear();
 
     for (const charId of snapshot.partyIds) {
       this.partyIds.add(normalizeId(charId));
@@ -853,7 +1014,7 @@ export class PartyState {
       const member = normalizeBattleMember(entry);
       this.battleMembersByChar.set(member.charId, member);
       this.vitalsByChar.set(member.charId, {
-        hp: createRollingMeter(member.hp, HP_RATE_PER_SEC),
+        hp: createRollingMeter(member.hp),
         maxHp: member.maxHp,
         pp: member.pp,
         maxPp: member.maxPp
@@ -874,9 +1035,8 @@ export class PartyState {
       }
       const maxHp = positiveStat(vitals?.maxHp ?? member?.maxHp ?? 1);
       const maxPp = stat(vitals?.maxPp ?? member?.maxPp ?? 0);
-      const ratePerSec = positiveStat(vitals?.hp.ratePerSec ?? HP_RATE_PER_SEC);
       this.commitVitals(charId, {
-        hp: createRollingMeter(maxHp, ratePerSec),
+        hp: createRollingMeter(maxHp),
         maxHp,
         pp: maxPp,
         maxPp
@@ -915,7 +1075,7 @@ export class PartyState {
     }
     const member = this.battleMembersByChar.get(charId);
     return member ? {
-      hp: createRollingMeter(member.hp, HP_RATE_PER_SEC),
+      hp: createRollingMeter(member.hp),
       maxHp: member.maxHp,
       pp: member.pp,
       maxPp: member.maxPp
@@ -964,7 +1124,7 @@ export class PartyState {
     const maxHp = positiveStat(base.maxHp);
     const maxPp = stat(base.maxPp);
     return {
-      hp: createRollingMeter(Math.min(maxHp, stat(base.hp)), base.hpRatePerSec ?? HP_RATE_PER_SEC),
+      hp: createRollingMeter(Math.min(maxHp, stat(base.hp))),
       maxHp,
       pp: Math.min(maxPp, stat(base.pp)),
       maxPp
@@ -991,6 +1151,48 @@ export class PartyState {
       return;
     }
     this.equippedByChar.set(char, equipped);
+  }
+
+  private peekCondimentBoost(char: number, slot: number, itemId: number): PendingCondimentBoost | undefined {
+    const boost = this.condimentBoostsByChar.get(char)?.get(slot);
+    return boost?.itemId === itemId ? { ...boost } : undefined;
+  }
+
+  private setCondimentBoost(char: number, slot: number, boost: PendingCondimentBoost): void {
+    const boosts = this.condimentBoostsByChar.get(char) ?? new Map<number, PendingCondimentBoost>();
+    boosts.set(slot, { ...boost });
+    this.condimentBoostsByChar.set(char, boosts);
+  }
+
+  private clearCondimentBoost(char: number, slot: number): void {
+    const boosts = this.condimentBoostsByChar.get(char);
+    if (!boosts) {
+      return;
+    }
+    boosts.delete(slot);
+    if (boosts.size === 0) {
+      this.condimentBoostsByChar.delete(char);
+    }
+  }
+
+  private shiftCondimentBoostsAfterSlot(char: number, removedSlot: number): void {
+    const boosts = this.condimentBoostsByChar.get(char);
+    if (!boosts) {
+      return;
+    }
+    const next = new Map<number, PendingCondimentBoost>();
+    for (const [slot, boost] of boosts.entries()) {
+      if (slot < removedSlot) {
+        next.set(slot, boost);
+      } else if (slot > removedSlot) {
+        next.set(slot - 1, boost);
+      }
+    }
+    if (next.size === 0) {
+      this.condimentBoostsByChar.delete(char);
+      return;
+    }
+    this.condimentBoostsByChar.set(char, next);
   }
 }
 
@@ -1022,6 +1224,32 @@ export function decodeItemUseEffect(
     return { kind: "recoverPpPercent", percent: argument };
   }
   return undefined;
+}
+
+function boostedRecoveryEffect(effect: ItemUseEffect, multiplier: number): ItemUseEffect {
+  const boost = positiveMultiplier(multiplier);
+  switch (effect.kind) {
+    case "healHp":
+      return { ...effect, amount: Math.max(1, Math.floor(effect.amount * boost)) };
+    case "recoverPp":
+      return { ...effect, amount: Math.max(1, Math.floor(effect.amount * boost)) };
+    case "healHpPercent":
+      return { ...effect, percent: Math.max(1, Math.floor(effect.percent * boost)) };
+    case "recoverPpPercent":
+      return { ...effect, percent: Math.max(1, Math.floor(effect.percent * boost)) };
+    case "damage":
+    case "drainPp":
+    case "buffStat":
+    case "permStat":
+    case "revive":
+    case "cureStatus":
+    case "inflictStatus":
+      return effect;
+  }
+}
+
+function positiveMultiplier(multiplier: number): number {
+  return Number.isFinite(multiplier) && multiplier > 0 ? multiplier : 1;
 }
 
 function normalizeGeneratedItemEffect(effect: ItemData["effect"]): ItemUseEffect | undefined {
@@ -1305,7 +1533,7 @@ function vitalsFromSnapshot(snapshot: PartyVitalsSnapshot): PartyVitals {
   const current = Math.min(maxHp, stat(snapshot.hp.current));
   const target = Math.min(maxHp, stat(snapshot.hp.target));
   return {
-    hp: setTarget(createRollingMeter(current, HP_RATE_PER_SEC), target),
+    hp: setTarget(createRollingMeter(current), target),
     maxHp,
     pp: Math.min(maxPp, stat(snapshot.pp)),
     maxPp

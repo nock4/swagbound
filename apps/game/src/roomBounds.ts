@@ -77,13 +77,21 @@ export function resolveSectorAreaBounds(
   if (!validSectorMetadata(sectors)) {
     return undefined;
   }
-  const startCell = worldPixelToCollisionCell(startWorldPixel, grid.cellSize);
-  if (
-    !startCell ||
-    !isCellInGrid(startCell.cellX, startCell.cellY, grid) ||
-    isSolidCell(solidRows, startCell.cellX, startCell.cellY)
-  ) {
+  let startCell = worldPixelToCollisionCell(startWorldPixel, grid.cellSize);
+  if (!startCell || !isCellInGrid(startCell.cellX, startCell.cellY, grid)) {
     return undefined;
+  }
+  if (isSolidCell(solidRows, startCell.cellX, startCell.cellY)) {
+    // A player can materialize on a furniture/solid cell (warp clamp, teleport,
+    // battle return, save-load beside a prop). Resolve from the nearest open
+    // cell instead of silently failing - a failed resolve leaves the interior
+    // mask off and neighboring strips bleed through. The ring stays tiny so a
+    // point buried deep in solid terrain still resolves nothing.
+    const fallback = nearestOpenCell(solidRows, grid, startCell, 3);
+    if (!fallback) {
+      return undefined;
+    }
+    startCell = fallback;
   }
   const startSector = sectorCoordForWorldPixel(startWorldPixel, sectors);
   if (!startSector) {
@@ -747,6 +755,31 @@ function isCellInGrid(cellX: number, cellY: number, grid: CollisionGrid): boolea
 
 function isSolidCell(solidRows: readonly string[], cellX: number, cellY: number): boolean {
   return solidRows[cellY]?.[cellX] !== "0";
+}
+
+/** Nearest non-solid cell within `radius` (Chebyshev rings, nearest first), or
+ * undefined when everything nearby is solid. */
+function nearestOpenCell(
+  solidRows: readonly string[],
+  grid: CollisionGrid,
+  start: { cellX: number; cellY: number },
+  radius: number
+): { cellX: number; cellY: number } | undefined {
+  for (let r = 1; r <= radius; r += 1) {
+    for (let dy = -r; dy <= r; dy += 1) {
+      for (let dx = -r; dx <= r; dx += 1) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) !== r) {
+          continue;
+        }
+        const cellX = start.cellX + dx;
+        const cellY = start.cellY + dy;
+        if (isCellInGrid(cellX, cellY, grid) && !isSolidCell(solidRows, cellX, cellY)) {
+          return { cellX, cellY };
+        }
+      }
+    }
+  }
+  return undefined;
 }
 
 function clampCell(value: number, min: number, max: number): number {

@@ -1,6 +1,7 @@
 export type EventSequenceWatchdogInput = {
   running: boolean;
   dialogueOpen: boolean;
+  choiceOpen?: boolean;
   nowMs: number;
   progressToken: string;
 };
@@ -32,6 +33,7 @@ export class EventSequenceWatchdog {
   private lastProgressAtMs: number | undefined;
   private lastProgressToken: string | undefined;
   private lastDialogueOpen: boolean | undefined;
+  private lastChoiceOpen: boolean | undefined;
 
   constructor(private readonly timeoutMs: number) {}
 
@@ -45,9 +47,10 @@ export class EventSequenceWatchdog {
       this.lastProgressAtMs = input.nowMs;
       this.lastProgressToken = input.progressToken;
       this.lastDialogueOpen = input.dialogueOpen;
+      this.lastChoiceOpen = Boolean(input.choiceOpen);
     }
 
-    if (input.dialogueOpen) {
+    if (input.dialogueOpen || input.choiceOpen) {
       return { timedOut: false, idleMs: 0 };
     }
 
@@ -60,11 +63,13 @@ export class EventSequenceWatchdog {
     this.lastProgressAtMs = undefined;
     this.lastProgressToken = undefined;
     this.lastDialogueOpen = undefined;
+    this.lastChoiceOpen = undefined;
   }
 
   private hasProgress(input: EventSequenceWatchdogInput): boolean {
     return this.lastProgressAtMs === undefined
       || input.progressToken !== this.lastProgressToken
-      || input.dialogueOpen !== this.lastDialogueOpen;
+      || input.dialogueOpen !== this.lastDialogueOpen
+      || Boolean(input.choiceOpen) !== this.lastChoiceOpen;
   }
 }

@@ -35,6 +35,13 @@ export type TransitionSfxOptions = {
 };
 
 export const TRANSITION_SFX_MASTER_GAIN = 0.72;
+export const TEXT_BLIP_TUNING = {
+  cadenceChars: 2,
+  pitchHz: 880,
+  durationMs: 40,
+  gain: 0.035,
+  oscillator: "square" as OscillatorType
+} as const;
 
 export class NoopTransitionSfx implements TransitionSfx {
   resume(): void {}
@@ -150,7 +157,14 @@ export class WebAudioTransitionSfx implements TransitionSfx {
   textBlip(): void {
     this.withContext((context) => {
       const start = context.currentTime;
-      this.tone(context, { type: "square", start, duration: 0.022, fromHz: 620, toHz: 660, gain: 0.05 });
+      this.tone(context, {
+        type: TEXT_BLIP_TUNING.oscillator,
+        start,
+        duration: TEXT_BLIP_TUNING.durationMs / 1000,
+        fromHz: TEXT_BLIP_TUNING.pitchHz,
+        toHz: TEXT_BLIP_TUNING.pitchHz,
+        gain: TEXT_BLIP_TUNING.gain
+      });
     });
   }
 

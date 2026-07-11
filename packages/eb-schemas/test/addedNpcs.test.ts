@@ -18,12 +18,14 @@ describe("AddedNpcsSchema", () => {
         worldPixel: { x: 128, y: 256 },
         spriteGroup: 5,
         facing: "down",
+        alwaysSpawn: true,
         interaction: { pages: ["Welcome."], shop: 2 }
       }]
     });
 
     expect(parsed.npcs[0]).toMatchObject({
       id: ADDED_NPC_MIN_ID,
+      alwaysSpawn: true,
       interaction: { pages: ["Welcome."], shop: 2 }
     });
   });

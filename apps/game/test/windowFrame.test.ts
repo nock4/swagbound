@@ -1,12 +1,16 @@
 import { describe, expect, it } from "vitest";
 import type { WindowCollection } from "@eb/schemas";
 import {
+  activeEbWindowFrame,
   buildWindowFrameLayout,
+  ebWindowFrameForFlavorId,
   moreArrowPlacement,
+  setActiveWindowFlavorIndex,
   type WindowFrameLayout,
   type WindowFramePlacement,
   processWindowImageData
 } from "../src/windowFrame";
+import { EB_WINDOW_FRAMES } from "../src/windowFrames.generated";
 
 const flavor: WindowCollection["flavors"][number] = {
   id: 0,
@@ -171,6 +175,20 @@ describe("window frame layout", () => {
     expect(assumedPlacement.x + actualArrowWidth).toBeGreaterThan(assumedPlacement.rightInnerEdge);
     expect(actualPlacement.right).toBe(actualPlacement.rightInnerEdge);
     expect(actualPlacement.right).toBeLessThanOrEqual(box.x + box.width);
+  });
+});
+
+describe("extracted EB window frame flavors", () => {
+  it("selects the plain frame by default and alternate frames by flavor id", () => {
+    setActiveWindowFlavorIndex(0);
+    expect(activeEbWindowFrame()).toBe(EB_WINDOW_FRAMES[0]);
+    expect(ebWindowFrameForFlavorId(1)).toBe(EB_WINDOW_FRAMES[1]);
+
+    setActiveWindowFlavorIndex(1);
+    expect(activeEbWindowFrame().interior).toBe(0x280828);
+
+    setActiveWindowFlavorIndex(99);
+    expect(activeEbWindowFrame()).toBe(EB_WINDOW_FRAMES[0]);
   });
 });
 

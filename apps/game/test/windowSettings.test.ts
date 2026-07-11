@@ -1,11 +1,16 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { WindowCollection } from "@eb/schemas";
 import {
+  TEXT_BLIP_STORAGE_KEY,
   WINDOW_FLAVOR_STORAGE_KEY,
   activeWindowFlavorId,
   registerWindowFlavorControls,
-  setWindowFlavorId
+  setTextBlipEnabled,
+  setWindowFlavorId,
+  textBlipEnabled
 } from "../src/windowSettings";
+import { activeEbWindowFrame, setActiveWindowFlavorIndex } from "../src/windowFrame";
+import { EB_WINDOW_FRAMES } from "../src/windowFrames.generated";
 
 describe("window flavor settings", () => {
   let storage: Storage;
@@ -13,12 +18,16 @@ describe("window flavor settings", () => {
   beforeEach(() => {
     storage = createMemoryStorage();
     vi.stubGlobal("localStorage", storage);
+    setActiveWindowFlavorIndex(0);
   });
 
   afterEach(() => {
     vi.unstubAllGlobals();
     delete (globalThis as Record<string, unknown>).__setWindowFlavor;
     delete (globalThis as Record<string, unknown>).__getWindowFlavor;
+    delete (globalThis as Record<string, unknown>).__setTextBlipEnabled;
+    delete (globalThis as Record<string, unknown>).__getTextBlipEnabled;
+    setActiveWindowFlavorIndex(0);
   });
 
   it("falls back to the generated default flavor when storage is empty or invalid", () => {
@@ -43,6 +52,7 @@ describe("window flavor settings", () => {
     expect(setWindowFlavor?.(4)).toBe(4);
     expect(storage.getItem(WINDOW_FLAVOR_STORAGE_KEY)).toBe("4");
     expect(getWindowFlavor?.()).toBe(4);
+    expect(activeEbWindowFrame()).toBe(EB_WINDOW_FRAMES[4]);
 
     expect(setWindowFlavor?.(12)).toBeUndefined();
     expect(storage.getItem(WINDOW_FLAVOR_STORAGE_KEY)).toBe("4");
@@ -53,6 +63,21 @@ describe("window flavor settings", () => {
 
     expect(setWindowFlavorId(6, window)).toBe(6);
     expect(activeWindowFlavorId(window)).toBe(6);
+  });
+
+  it("persists the dialogue text blip toggle", () => {
+    registerWindowFlavorControls(syntheticWindowCollection());
+    const setTextBlip = (globalThis as { __setTextBlipEnabled?: (enabled: boolean) => boolean }).__setTextBlipEnabled;
+    const getTextBlip = (globalThis as { __getTextBlipEnabled?: () => boolean }).__getTextBlipEnabled;
+
+    expect(textBlipEnabled()).toBe(true);
+    expect(setTextBlip?.(false)).toBe(false);
+    expect(storage.getItem(TEXT_BLIP_STORAGE_KEY)).toBe("0");
+    expect(getTextBlip?.()).toBe(false);
+
+    expect(setTextBlipEnabled(true)).toBe(true);
+    expect(storage.getItem(TEXT_BLIP_STORAGE_KEY)).toBe("1");
+    expect(textBlipEnabled()).toBe(true);
   });
 });
 

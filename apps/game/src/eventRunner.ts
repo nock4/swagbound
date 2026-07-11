@@ -21,6 +21,12 @@ export type MoneyEvent = { kind: "money"; op: "give" | "take"; amount: number };
 
 export type GameEvent = DialogueEvent | SetFlagEvent | ShopEvent | ServiceEvent | HealEvent | SaveEvent | GiveEvent | MoneyEvent;
 
+type CcsBehavior = {
+  effects: EventEffect[];
+  shopEvents: GameEvent[];
+  hasChoice: boolean;
+};
+
 export type InteractionEventDispatcher = {
   startDialogue(event: DialogueEvent): void;
   setFlag(flag: string): void;
@@ -37,7 +43,7 @@ export type InteractionEventDispatcher = {
 
 const CCSCRIPT_REFERENCE_PATTERN = /^[A-Za-z_][\w-]*\.[A-Za-z_][\w-]*$/;
 
-const EB_SHOP_STORE_BY_REFERENCE = new Map<string, number>([
+export const EB_SHOP_STORE_BY_REFERENCE = new Map<string, number>([
   ["data_05.l_0xc56df3", 41],
   ["data_05.l_0xc56df9", 45],
   ["data_05.l_0xc5711a", 43],
@@ -105,29 +111,38 @@ function entryHasAuthoredBehavior(entry: NpcInteraction | undefined): boolean {
   ));
 }
 
-function mergedCcsBehaviorEvents(
+function resolveCcsBehavior(
   reference: string,
   scripts: ScriptCollection | undefined,
   flags: FlagReader
-): GameEvent[] {
+): CcsBehavior {
   if (!scripts) {
-    return [];
+    return { effects: [], shopEvents: [], hasChoice: false };
   }
   const resolved = resolveScriptEvents(scripts, reference, {}, {
     flags: { isSet: (flag) => Boolean(flags.isSet?.(flag)) }
   });
   const effects = resolved?.effects ?? [];
   const shopIds = new Set<number>();
+  for (const effect of effects) {
+    if (effect.kind === "shop") {
+      shopIds.add(effect.storeId);
+    }
+  }
   const referenceStoreId = EB_SHOP_STORE_BY_REFERENCE.get(reference);
-  if (referenceStoreId !== undefined && effects.some(isShopSelectorEffect)) {
+  if (referenceStoreId !== undefined && effects.some(isShopSelectorSignal)) {
     shopIds.add(referenceStoreId);
   }
-  return [...shopIds]
-    .sort((a, b) => a - b)
-    .map((storeId) => ({ kind: "shop" as const, storeId }));
+  return {
+    effects,
+    shopEvents: [...shopIds]
+      .sort((a, b) => a - b)
+      .map((storeId) => ({ kind: "shop" as const, storeId })),
+    hasChoice: effects.some((effect) => effect.kind === "choice")
+  };
 }
 
-function isShopSelectorEffect(effect: EventEffect): boolean {
+function isShopSelectorSignal(effect: EventEffect): boolean {
   return effect.kind === "shop" || effect.kind === "setFlag";
 }
 
@@ -255,11 +270,14 @@ export function interactionEvents(
     ?? customDialogue?.byTextPointer[reference];
   if (customEntry && !entryHasAuthoredBehavior(customEntry)) {
     const pages = resolveCustomDialoguePages(customEntry, dialogueLibrary);
+    const behavior = resolveCcsBehavior(reference, scripts, flags);
     return [
       pages && pages.length > 0
-        ? { kind: "dialogue" as const, pages }
+        ? (behavior.hasChoice
+            ? { kind: "dialogue" as const, reference, pages }
+            : { kind: "dialogue" as const, pages })
         : { kind: "dialogue" as const, reference },
-      ...mergedCcsBehaviorEvents(reference, scripts, flags),
+      ...(behavior.hasChoice ? [] : behavior.shopEvents),
       { kind: "setFlag", flag }
     ];
   }

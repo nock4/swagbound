@@ -1,0 +1,110 @@
+{
+  "schema": "swagbound.timed-delivery.v1",
+  "source": "content/rom-truth/timed-delivery.json plus content/rom-truth/event-flags.json; names reskinned for Swagbound runtime",
+  "deliveries": [
+    {
+      "id": "ward-pie",
+      "spriteId": 151,
+      "eventFlag": 180,
+      "eventFlagName": "FLG_DELIVERY_PIZZA",
+      "timeUntilDelivery": 180,
+      "serviceName": "Swag Express",
+      "sendMessage": "Swag Express put the pie order on the wire.",
+      "arrivalMessage": "Swag Express steps out of the static with your Ward Pie.",
+      "itemId": 95
+    },
+    {
+      "id": "storage-dropoff",
+      "spriteId": 135,
+      "eventFlag": 181,
+      "eventFlagName": "FLG_DELIVERY_UNSOU",
+      "timeUntilDelivery": 10,
+      "serviceName": "Swag Express",
+      "sendMessage": "Swag Express took the delivery slip.",
+      "arrivalMessage": "Swag Express arrives with a stamped delivery slip."
+    },
+    {
+      "id": "storage-pickup",
+      "spriteId": 135,
+      "eventFlag": 645,
+      "eventFlagName": "FLG_DELIVERY_UNSOU_B",
+      "timeUntilDelivery": 10,
+      "serviceName": "Swag Express",
+      "sendMessage": "Swag Express sent a courier for the pickup.",
+      "arrivalMessage": "Swag Express arrives to close the pickup docket."
+    },
+    {
+      "id": "customer-a",
+      "spriteId": 55,
+      "eventFlag": 446,
+      "eventFlagName": "FLG_DELIVERY_CUSTOMER",
+      "timeUntilDelivery": 1,
+      "serviceName": "Swag Express",
+      "sendMessage": "A customer is heading this way.",
+      "arrivalMessage": "The customer arrives. The file gets heavier."
+    },
+    {
+      "id": "customer-b",
+      "spriteId": 108,
+      "eventFlag": 646,
+      "eventFlagName": "FLG_DELIVERY_CUSTOMER_B",
+      "timeUntilDelivery": 2,
+      "serviceName": "Swag Express",
+      "sendMessage": "A second customer is in motion.",
+      "arrivalMessage": "The second customer arrives and looks ready to testify."
+    },
+    {
+      "id": "customer-c",
+      "spriteId": 112,
+      "eventFlag": 647,
+      "eventFlagName": "FLG_DELIVERY_CUSTOMER_C",
+      "timeUntilDelivery": 3,
+      "serviceName": "Swag Express",
+      "sendMessage": "A third customer found the address.",
+      "arrivalMessage": "The third customer arrives with a bad stare and worse timing."
+    },
+    {
+      "id": "customer-d",
+      "spriteId": 85,
+      "eventFlag": 648,
+      "eventFlagName": "FLG_DELIVERY_CUSTOMER_D",
+      "timeUntilDelivery": 4,
+      "serviceName": "Swag Express",
+      "sendMessage": "A fourth customer is on the street.",
+      "arrivalMessage": "The fourth customer arrives. The room runs out of air."
+    },
+    {
+      "id": "zombie-paper",
+      "spriteId": 151,
+      "eventFlag": 675,
+      "eventFlagName": "FLG_DELIVERY_HOIHOI",
+      "timeUntilDelivery": 5,
+      "serviceName": "Swag Express",
+      "sendMessage": "Swag Express put the trap paper on a fast truck.",
+      "arrivalMessage": "Swag Express delivers Zombie Paper with no questions asked.",
+      "itemId": 174
+    },
+    {
+      "id": "pencil-eraser",
+      "spriteId": 135,
+      "eventFlag": 694,
+      "eventFlagName": "FLG_DELIVERY_UNSOU_TAKOKESHI",
+      "timeUntilDelivery": 10,
+      "serviceName": "Swag Express",
+      "sendMessage": "Swag Express logged the Pencil Eraser delivery.",
+      "arrivalMessage": "Swag Express arrives with the Pencil Eraser.",
+      "itemId": 184
+    },
+    {
+      "id": "hawk-eye",
+      "spriteId": 135,
+      "eventFlag": 695,
+      "eventFlagName": "FLG_DELIVERY_UNSOU_TAKANOME",
+      "timeUntilDelivery": 10,
+      "serviceName": "Swag Express",
+      "sendMessage": "Swag Express logged the Hawk Eye delivery.",
+      "arrivalMessage": "Swag Express arrives with the Hawk Eye.",
+      "itemId": 175
+    }
+  ]
+}

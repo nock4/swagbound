@@ -8,6 +8,7 @@ import {
   type MoveInput,
   type PlayerState
 } from "./playerController";
+import { diagonalPxPerSecondForCardinal } from "./ebTiming";
 
 export type NpcBehavior =
   | { kind: "static" }
@@ -95,6 +96,7 @@ export function stepNpc(state: NpcRuntimeState, options: NpcStepOptions): NpcRun
   stepPlayer(state.player, input, {
     deltaMs: options.deltaMs,
     speed: behavior.speedPxPerSec,
+    diagonalSpeed: diagonalPxPerSecondForCardinal(behavior.speedPxPerSec),
     bounds: patrolBounds(state, behavior, options.bounds),
     blocked: options.blocked,
     frames
@@ -172,6 +174,7 @@ function stepWander(
   stepPlayer(state.player, input, {
     deltaMs: options.deltaMs,
     speed: behavior.speedPxPerSec,
+    diagonalSpeed: diagonalPxPerSecondForCardinal(behavior.speedPxPerSec),
     bounds: wanderBounds(state, behavior, options.bounds),
     blocked: options.blocked,
     frames

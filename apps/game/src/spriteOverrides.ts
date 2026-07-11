@@ -40,15 +40,17 @@ export function spriteOverrideFrame(
   return frames[index] ?? 0;
 }
 
-/** Procedural walk-bob tunables. */
-export const SPRITE_WALK_BOB_AMPLITUDE_PX = 2.5;
-export const SPRITE_WALK_BOB_FREQUENCY = 0.0095; // radians per ms; |sin| period ~= 3 hops/sec
-export const SPRITE_WALK_BOB_PHASE_STEP = 1.3; // per-seed phase offset so sprites don't bob in lockstep
+/** EB-style step-toggle tunables. */
+export const SPRITE_WALK_BOB_AMPLITUDE_PX = 1; // raised-state offset (1px, like an EB step frame)
+export const SPRITE_WALK_STEP_INTERVAL_MS = 140; // ~7 toggles/sec, EarthBound walk cadence
+export const SPRITE_WALK_STEP_SEED_OFFSET_MS = 61; // per-seed clock shift so crowds don't step in unison
 
 /**
- * Vertical walk-bob offset (px, >= 0) for an overworld sprite. Single-frame
- * Swagbound skins have no walk-cycle frames, so while they move they hop in place.
- * Returns 0 for idle sprites and for multi-frame sprites (raw EarthBound / player
+ * Vertical step offset (px, 0 or SPRITE_WALK_BOB_AMPLITUDE_PX) for a moving
+ * single-frame sprite. EarthBound never bobs walkers smoothly: it hard-swaps two
+ * step frames at walk cadence. Skins without a second frame approximate that
+ * with a discrete 1px raise toggled at the same cadence - a step, not a bounce.
+ * Returns 0 for idle sprites and for multi-frame sprites (raw EarthBound / hero
  * walk cycles) that already animate via frame cycling. Purely visual: callers
  * apply it to display-y AFTER depth sort, so it never affects sort order or logic.
  */
@@ -61,9 +63,9 @@ export function spriteWalkBobOffset(params: {
   if (!params.moving || params.frameCount > 1) {
     return 0;
   }
-  const phase =
-    params.clockMs * SPRITE_WALK_BOB_FREQUENCY + params.seed * SPRITE_WALK_BOB_PHASE_STEP;
-  return Math.abs(Math.sin(phase)) * SPRITE_WALK_BOB_AMPLITUDE_PX;
+  const shifted = params.clockMs + params.seed * SPRITE_WALK_STEP_SEED_OFFSET_MS;
+  const step = Math.floor(shifted / SPRITE_WALK_STEP_INTERVAL_MS) % 2;
+  return step === 1 ? SPRITE_WALK_BOB_AMPLITUDE_PX : 0;
 }
 
 export function spriteOverrideScale(displayHeight: number | undefined, frameHeight: number): number {

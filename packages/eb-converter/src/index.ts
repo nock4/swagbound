@@ -420,6 +420,16 @@ const controlSegment = (code: string, raw: string, target?: string): DialogueSeg
   ...(target ? { target } : {})
 });
 
+const choiceSegment = (
+  options: Array<{ label: string; target?: string }>,
+  raw: string
+): DialogueSegment => ({
+  kind: "choice",
+  options,
+  defaultIndex: 0,
+  raw
+});
+
 const substitutionSegment = (
   name: Extract<DialogueSegment, { kind: "substitution" }>["name"],
   args: number[]
@@ -658,6 +668,14 @@ export function tokenizeCcsString(value: string): DialogueSegment[] {
   };
 
   while (index < value.length) {
+    const choice = yesNoChoiceSegmentAt(value, index);
+    if (choice) {
+      flushText(index);
+      segments.push(choice.segment);
+      index = choice.end;
+      textStart = index;
+      continue;
+    }
     if (value[index] === "[") {
       const close = value.indexOf("]", index + 1);
       if (close >= 0) {
@@ -720,6 +738,56 @@ export function tokenizeCcsString(value: string): DialogueSegment[] {
 
   flushText(value.length);
   return segments;
+}
+
+function yesNoChoiceSegmentAt(value: string, start: number): { segment: DialogueSegment; end: number } | undefined {
+  const optionPattern = /\[19\s+02\]([\s\S]*?)\[02\]/iy;
+  optionPattern.lastIndex = start;
+  const options: Array<{ label: string }> = [];
+  let index = start;
+  for (let optionIndex = 0; optionIndex < 2; optionIndex += 1) {
+    const optionMatch = optionPattern.exec(value);
+    if (!optionMatch || optionMatch.index !== index) {
+      return undefined;
+    }
+    const label = stripCcsTextSentinel(optionMatch[1]).trim();
+    if (!label) {
+      return undefined;
+    }
+    options.push({ label });
+    index = optionPattern.lastIndex;
+    while (/\s/.test(value[index] ?? "")) {
+      index += 1;
+    }
+    optionPattern.lastIndex = index;
+  }
+  if (!isYesNoOptionPair(options.map((option) => option.label))) {
+    return undefined;
+  }
+  const menuMatch = /^(?:\s*(?:\[[^\]]+\]|\{[A-Za-z_][^}]*\}))*\[09\s+([0-9a-f]{2})\s+([^\]]+)\]/iu.exec(value.slice(index));
+  if (!menuMatch) {
+    return undefined;
+  }
+  const optionCount = Number.parseInt(menuMatch[1], 16);
+  const targets = [...menuMatch[2].matchAll(/\{e\(([A-Za-z_][\w.-]*)\)\}/gu)].map((match) => match[1]);
+  if (optionCount !== options.length || targets.length < options.length) {
+    return undefined;
+  }
+  const end = index + menuMatch[0].length;
+  const raw = value.slice(start, end);
+  return {
+    segment: choiceSegment(options.map((option, optionIndex) => ({
+      label: option.label,
+      target: targets[optionIndex]
+    })), raw),
+    end
+  };
+}
+
+function isYesNoOptionPair(labels: readonly string[]): boolean {
+  return labels.length === 2
+    && labels[0].trim().toLowerCase() === "yes"
+    && labels[1].trim().toLowerCase() === "no";
 }
 
 function stripCcsTextSentinel(value: string): string {

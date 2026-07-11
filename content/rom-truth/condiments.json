@@ -1,0 +1,565 @@
+{
+ "schema": "swagbound.rom-truth.condiments.v1",
+ "source": "ebsrc src/data/condiment_table.asm; base food + condiments that boost it",
+ "entries": [
+  {
+   "base": "COOKIE",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "TIN_OF_COCOA"
+   ],
+   "params": [
+    0,
+    2,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "BAG_OF_FRIES",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    8,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "HAMBURGER",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    16,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "BOILED_EGG",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SALT_PACKET"
+   ],
+   "params": [
+    0,
+    14,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "FRESH_EGG",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    28,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "PICNIC_LUNCH",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SALT_PACKET"
+   ],
+   "params": [
+    0,
+    28,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "PASTA_DI_SUMMERS",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "JAR_OF_HOT_SAUCE"
+   ],
+   "params": [
+    0,
+    36,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "PIZZA",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "JAR_OF_HOT_SAUCE"
+   ],
+   "params": [
+    0,
+    40,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "CHEFS_SPECIAL",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SALT_PACKET"
+   ],
+   "params": [
+    0,
+    72,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "PSI_CARAMEL",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SUGAR_PACKET"
+   ],
+   "params": [
+    1,
+    40,
+    40,
+    0
+   ]
+  },
+  {
+   "base": "MAGIC_TRUFFLE",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    1,
+    160,
+    160,
+    0
+   ]
+  },
+  {
+   "base": "BRAIN_FOOD_LUNCH",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SALT_PACKET"
+   ],
+   "params": [
+    2,
+    0,
+    0,
+    0
+   ]
+  },
+  {
+   "base": "ROCK_CANDY",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SUGAR_PACKET"
+   ],
+   "params": [
+    3,
+    2,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "CROISSANT",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    20,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "BREAD_ROLL",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SUGAR_PACKET"
+   ],
+   "params": [
+    0,
+    10,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "TROUT_YOGURT",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "CARTON_OF_CREAM"
+   ],
+   "params": [
+    0,
+    10,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "BANANA",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "CARTON_OF_CREAM"
+   ],
+   "params": [
+    0,
+    8,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "CALORIE_STICK",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SUGAR_PACKET"
+   ],
+   "params": [
+    0,
+    20,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "GELATO_DE_RESORT",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "TIN_OF_COCOA"
+   ],
+   "params": [
+    0,
+    10,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "MAGIC_TART",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SUGAR_PACKET"
+   ],
+   "params": [
+    1,
+    40,
+    40,
+    0
+   ]
+  },
+  {
+   "base": "CUP_OF_NOODLES",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "JAR_OF_HOT_SAUCE"
+   ],
+   "params": [
+    0,
+    14,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "SKIP_SANDWICH",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "TIN_OF_COCOA"
+   ],
+   "params": [
+    0,
+    2,
+    2,
+    120
+   ]
+  },
+  {
+   "base": "SKIP_SANDWICH_DX",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "TIN_OF_COCOA"
+   ],
+   "params": [
+    0,
+    2,
+    2,
+    240
+   ]
+  },
+  {
+   "base": "LUCKY_SANDWICH1",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "CARTON_OF_CREAM"
+   ],
+   "params": [
+    0,
+    20,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "LUCKY_SANDWICH2",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "CARTON_OF_CREAM"
+   ],
+   "params": [
+    0,
+    80,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "LUCKY_SANDWICH3",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "CARTON_OF_CREAM"
+   ],
+   "params": [
+    0,
+    0,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "LUCKY_SANDWICH4",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "CARTON_OF_CREAM"
+   ],
+   "params": [
+    1,
+    10,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "LUCKY_SANDWICH5",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "CARTON_OF_CREAM"
+   ],
+   "params": [
+    1,
+    40,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "LUCKY_SANDWICH6",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "CARTON_OF_CREAM"
+   ],
+   "params": [
+    2,
+    0,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "DOUBLE_BURGER",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    32,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "PEANUT_CHEESE_BAR",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SPRIG_OF_PARSLEY"
+   ],
+   "params": [
+    0,
+    36,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "PIGGY_JELLY",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SPRIG_OF_PARSLEY"
+   ],
+   "params": [
+    0,
+    100,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "BOWL_OF_RICE_GRUEL",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SPRIG_OF_PARSLEY"
+   ],
+   "params": [
+    0,
+    72,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "BEAN_CROQUETTE",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    14,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "PLAIN_ROLL",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "TIN_OF_COCOA"
+   ],
+   "params": [
+    0,
+    28,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "KABOB",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    42,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "PLAIN_YOGURT",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SUGAR_PACKET"
+   ],
+   "params": [
+    0,
+    56,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "BEEF_JERKY",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    50,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "MAMMOTH_BURGER",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    68,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "SPICY_JERKY",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    84,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "LUXURY_JERKY",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "KETCHUP_PACKET"
+   ],
+   "params": [
+    0,
+    100,
+    2,
+    0
+   ]
+  },
+  {
+   "base": "MAGIC_PUDDING",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "SUGAR_PACKET"
+   ],
+   "params": [
+    1,
+    80,
+    80,
+    0
+   ]
+  },
+  {
+   "base": "POPSICLE",
+   "condiments": [
+    "JAR_OF_DELISAUCE",
+    "CARTON_OF_CREAM"
+   ],
+   "params": [
+    0,
+    6,
+    2,
+    0
+   ]
+  }
+ ]
+}

@@ -40,6 +40,72 @@ describe("RuntimeEventHost recovery effects", () => {
 });
 
 describe("RuntimeEventHost dialogue overrides", () => {
+  it("pauses at a dialogue choice and resumes the selected branch", () => {
+    const dialogue = new DialogueController();
+    const host = new RuntimeEventHost({
+      dialogue,
+      flags: new GameFlags(),
+      partyState: new PartyState()
+    });
+    const sequence = new RuntimeEventSequence(choiceScript(), host);
+
+    expect(sequence.start("test.main")).toBe(true);
+    expect(sequence.running).toBe(true);
+    expect(dialogue.currentText).toBe("Question?");
+
+    dialogue.close();
+    sequence.confirm();
+
+    expect(dialogue.open).toBe(false);
+    expect(dialogue.choice).toMatchObject({
+      selectedIndex: 0,
+      options: [
+        { label: "Yes", target: "yes_path" },
+        { label: "No", target: "no_path" }
+      ]
+    });
+
+    sequence.choose(1);
+
+    expect(dialogue.choice).toBeUndefined();
+    expect(dialogue.open).toBe(true);
+    expect(dialogue.currentText).toBe("No path.");
+
+    dialogue.close();
+    sequence.confirm();
+    expect(sequence.running).toBe(false);
+  });
+
+  it("strips a custom trailing flat choice page when the reference script has a choice", () => {
+    const dialogue = new DialogueController();
+    const host = new RuntimeEventHost({
+      dialogue,
+      flags: new GameFlags(),
+      partyState: new PartyState(),
+      customDialogue: {
+        byNpcId: { "159": { pages: ["Override question.", "Yes    No"] } },
+        byTextPointer: {}
+      }
+    });
+    const sequence = new RuntimeEventSequence(choiceScript(), host);
+
+    expect(sequence.start("test.main", { npcId: 159 })).toBe(true);
+    expect(dialogue.pages.map((page) => page.text)).toEqual(["Override question."]);
+
+    dialogue.close();
+    sequence.confirm();
+
+    expect(dialogue.choice).toMatchObject({
+      options: [
+        { label: "Yes", target: "yes_path" },
+        { label: "No", target: "no_path" }
+      ]
+    });
+
+    sequence.choose(0);
+    expect(dialogue.currentText).toBe("Yes path.");
+  });
+
   it("uses a byNpcId override once for the whole event while preserving later non-dialogue effects", () => {
     const dialogue = new DialogueController();
     const partyState = new PartyState();
@@ -293,6 +359,80 @@ function eventScript(effects: DialogueSegment[]): ScriptCollection {
       commands: commands.length,
       labels: 1,
       textCommands: effects.length,
+      unknownCommands: 0
+    },
+    warnings: []
+  };
+}
+
+function choiceScript(): ScriptCollection {
+  const commands: ScriptCommand[] = [
+    command({ cmd: "label", raw: "main:", name: "main" }, 1),
+    command({ cmd: "text", raw: "question", segments: [{ kind: "text", value: "Question?" }] }, 2),
+    command({
+      cmd: "text",
+      raw: "choice",
+      segments: [{
+        kind: "control",
+        code: "unknown",
+        raw: "[19 02]"
+      }, {
+        kind: "text",
+        value: "Yes"
+      }, {
+        kind: "control",
+        code: "eob",
+        raw: "[02]"
+      }, {
+        kind: "text",
+        value: " "
+      }, {
+        kind: "control",
+        code: "unknown",
+        raw: "[19 02]"
+      }, {
+        kind: "text",
+        value: "No"
+      }, {
+        kind: "control",
+        code: "eob",
+        raw: "[02]"
+      }, {
+        kind: "control",
+        code: "unknown",
+        raw: "[09 02 {e(yes_path)} {e(no_path)}]",
+        target: "yes_path"
+      }]
+    }, 3),
+    command({ cmd: "label", raw: "yes_path:", name: "yes_path" }, 4),
+    command({ cmd: "text", raw: "yes", segments: [{ kind: "text", value: "Yes path." }] }, 5),
+    command({ cmd: "end", raw: "end" }, 6),
+    command({ cmd: "label", raw: "no_path:", name: "no_path" }, 7),
+    command({ cmd: "text", raw: "no", segments: [{ kind: "text", value: "No path." }] }, 8),
+    command({ cmd: "end", raw: "end" }, 9)
+  ];
+  return {
+    schemaVersion: "test",
+    sourceProjectPath: "synthetic",
+    files: [
+      {
+        path: "test.ccs",
+        commands,
+        labels: ["main", "yes_path", "no_path"],
+        counts: {
+          commands: commands.length,
+          labels: 3,
+          textCommands: 4,
+          unknownCommands: 0
+        },
+        warnings: []
+      }
+    ],
+    counts: {
+      files: 1,
+      commands: commands.length,
+      labels: 3,
+      textCommands: 4,
       unknownCommands: 0
     },
     warnings: []

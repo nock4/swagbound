@@ -1,8 +1,11 @@
+import { execFile } from "node:child_process";
 import { access, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
+import { promisify } from "node:util";
 import {
   AttestationBattlesSchema,
+  ArchivistSpotsSchema,
   BattleRulesSchema,
   BackgroundOverridesSchema,
   CardNftsSchema,
@@ -18,6 +21,7 @@ import {
   KeyItemsSchema,
   MusicManifestSchema,
   NavmeshSchema,
+  NpcMovementPatternsSchema,
   NpcOverridesSchema,
   ObjectivesSchema,
   OpeningCutsceneSchema,
@@ -26,9 +30,12 @@ import {
   PsiOverridesSchema,
   RoamerZoneCapsSchema,
   SpriteOverridesSchema,
+  FlagMapSchema,
+  StoryItemsSchema,
   StoryTriggersSchema,
   CutscenesSchema,
   TileOverridesSchema,
+  UsabilityMatrixSchema,
   type BackgroundOverrideEntry,
   type SpriteOverride,
   type SpriteOverrides,
@@ -51,6 +58,8 @@ export const SPRITE_OVERRIDES_SOURCE = "content/sprite-overrides.json";
 export const SPRITE_OVERRIDES_OUTPUT = "sprite-overrides.json";
 export const NPC_OVERRIDES_SOURCE = "content/npc-overrides.json";
 export const NPC_OVERRIDES_OUTPUT = "npc-overrides.json";
+export const NPC_MOVEMENT_PATTERNS_SOURCE = "content/npc-movement-patterns.json";
+export const NPC_MOVEMENT_PATTERNS_OUTPUT = "npc-movement-patterns.json";
 export const OVERWORLD_ENEMY_SKINS_SOURCE = "content/overworld-enemy-skins.json";
 export const BACKGROUND_OVERRIDES_SOURCE = "content/background-overrides.json";
 export const BACKGROUND_OVERRIDES_OUTPUT = "background-overrides.json";
@@ -58,8 +67,16 @@ export const TILE_OVERRIDES_SOURCE = "content/tile-overrides.json";
 export const TILE_OVERRIDES_OUTPUT = "tile-overrides.json";
 export const ITEM_OVERRIDES_SOURCE = "content/item-overrides.json";
 export const ITEM_OVERRIDES_OUTPUT = "item-overrides.json";
+export const CONDIMENT_PAIRS_SOURCE = "content/condiment-pairs.json";
+export const CONDIMENT_PAIRS_OUTPUT = "condiment-pairs.json";
 export const KEY_ITEMS_SOURCE = "content/key-items.json";
 export const KEY_ITEMS_OUTPUT = "key-items.json";
+export const STORY_ITEMS_SOURCE = "content/story-items.json";
+export const STORY_ITEMS_OUTPUT = "story-items.json";
+export const FLAG_MAP_SOURCE = "content/flag-map.json";
+export const FLAG_MAP_OUTPUT = "flag-map.json";
+export const TIMED_DELIVERY_SOURCE = "content/timed-delivery.json";
+export const TIMED_DELIVERY_OUTPUT = "timed-delivery.json";
 export const CHARACTER_OVERRIDES_SOURCE = "content/character-overrides.json";
 export const CHARACTER_OVERRIDES_OUTPUT = "character-overrides.json";
 export const PSI_OVERRIDES_SOURCE = "content/psi-overrides.json";
@@ -91,6 +108,8 @@ export const FG_OVERRIDES_SOURCE = "content/fg-overrides.json";
 export const FG_OVERRIDES_OUTPUT = "fg-overrides.json";
 export const DRIFELLA_BARKS_SOURCE = "content/drifella-barks.json";
 export const DRIFELLA_BARKS_OUTPUT = "drifella-barks.json";
+export const ARCHIVIST_SPOTS_SOURCE = "content/archivist-spots.json";
+export const ARCHIVIST_SPOTS_OUTPUT = "archivist-spots.json";
 export const OPENING_CUTSCENE_SOURCE = "content/opening-cutscene.json";
 export const OPENING_CUTSCENE_OUTPUT = "opening-cutscene.json";
 export const OVERWORLD_INTERACTABLES_SOURCE = "content/overworld-interactables.json";
@@ -105,8 +124,11 @@ export const OBJECTIVES_SOURCE = "content/objectives.json";
 export const OBJECTIVES_OUTPUT = "objectives.json";
 export const NAVMESH_SOURCE = "content/navmesh.json";
 export const NAVMESH_OUTPUT = "navmesh.json";
+export const USABILITY_MATRIX_SOURCE = "content/usability-matrix.json";
+export const USABILITY_MATRIX_OUTPUT = "usability-matrix.json";
 const GAME_PUBLIC_ROOT = "apps/game/public";
 const FG_V2_SUMMARY_OUTPUT = "tmp/fg-v2/summary.json";
+const execFileAsync = promisify(execFile);
 
 /**
  * Canonical EB generated-data build: full world plus battle, party, item, font,
@@ -132,6 +154,7 @@ export async function buildEbFullWorldDefault(options: { fgPredicate?: FgPredica
     tileOverrides,
     tileOverridePublicRoot: resolve(GAME_PUBLIC_ROOT)
   });
+  await regenerateUsabilityMatrix();
   await copyContentOverlaysToGenerated(EB_FULL_WORLD_OUT);
   if (fgPredicate === "v2") {
     await writeFgV2Summary(result.foregroundSummary);
@@ -169,6 +192,18 @@ async function writeFgV2Summary(summary: ForegroundPredicateSummary | undefined)
   }, null, 2)}\n`, "utf8");
 }
 
+async function regenerateUsabilityMatrix(): Promise<void> {
+  const { stdout, stderr } = await execFileAsync(process.execPath, ["scripts/gen-usability-matrix.mjs"], {
+    cwd: resolve(".")
+  });
+  if (stdout) {
+    process.stdout.write(stdout);
+  }
+  if (stderr) {
+    process.stderr.write(stderr);
+  }
+}
+
 async function copyJsonToGenerated(source: string, out: string, outputName: string): Promise<void> {
   const target = resolve(out, outputName);
   await mkdir(dirname(target), { recursive: true });
@@ -191,6 +226,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateCutscenes(CUTSCENES_SOURCE);
   await validateMusicManifest(MUSIC_MANIFEST_SOURCE);
   await validateDrifellaBarks(DRIFELLA_BARKS_SOURCE);
+  await validateArchivistSpots(ARCHIVIST_SPOTS_SOURCE);
   await validateOpeningCutscene(OPENING_CUTSCENE_SOURCE);
   await validateOverworldInteractables(OVERWORLD_INTERACTABLES_SOURCE);
   await validateCardNfts(CARD_NFTS_SOURCE);
@@ -199,9 +235,13 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateFgOverrides(FG_OVERRIDES_SOURCE);
   await validateObjectives(OBJECTIVES_SOURCE);
   await validateNavmesh(NAVMESH_SOURCE);
+  await validateUsabilityMatrix(USABILITY_MATRIX_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
+  await validateNpcMovementPatterns(NPC_MOVEMENT_PATTERNS_SOURCE);
   await validateEnemyStatOverrides(ENEMY_STAT_OVERRIDES_SOURCE);
   await validateKeyItems(KEY_ITEMS_SOURCE);
+  await validateStoryItems(STORY_ITEMS_SOURCE);
+  await validateFlagMap(FLAG_MAP_SOURCE);
   await validateBossBattleDialogue(BOSS_BATTLE_DIALOGUE_SOURCE);
   await validateEnemyActionEffects(ENEMY_ACTION_EFFECTS_SOURCE);
   await validateRoamerZoneCaps(ROAMER_ZONE_CAPS_SOURCE);
@@ -213,10 +253,15 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(SWAGBOUND_DIALOGUE_LIBRARY_SOURCE, out, SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT),
     generateSpriteOverridesWithOverworldSkins(out, SPRITE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(NPC_OVERRIDES_SOURCE, out, NPC_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(NPC_MOVEMENT_PATTERNS_SOURCE, out, NPC_MOVEMENT_PATTERNS_OUTPUT),
     copyJsonToGenerated(BACKGROUND_OVERRIDES_SOURCE, out, BACKGROUND_OVERRIDES_OUTPUT),
     copyJsonToGenerated(TILE_OVERRIDES_SOURCE, out, TILE_OVERRIDES_OUTPUT),
     copyJsonToGenerated(ITEM_OVERRIDES_SOURCE, out, ITEM_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(CONDIMENT_PAIRS_SOURCE, out, CONDIMENT_PAIRS_OUTPUT),
     copyJsonToGenerated(KEY_ITEMS_SOURCE, out, KEY_ITEMS_OUTPUT),
+    copyJsonToGenerated(STORY_ITEMS_SOURCE, out, STORY_ITEMS_OUTPUT),
+    copyJsonToGenerated(FLAG_MAP_SOURCE, out, FLAG_MAP_OUTPUT),
+    copyJsonToGenerated(TIMED_DELIVERY_SOURCE, out, TIMED_DELIVERY_OUTPUT),
     copyJsonToGenerated(CHARACTER_OVERRIDES_SOURCE, out, CHARACTER_OVERRIDES_OUTPUT),
     copyJsonToGenerated(PSI_OVERRIDES_SOURCE, out, PSI_OVERRIDES_OUTPUT),
     generateEnemyOverridesFromFamilies(ENEMY_NAME_FAMILIES_SOURCE, out, ENEMY_OVERRIDES_OUTPUT),
@@ -230,13 +275,15 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyOptionalJsonToGenerated(COLLISION_OVERRIDES_SOURCE, out, COLLISION_OVERRIDES_OUTPUT),
     copyOptionalJsonToGenerated(FG_OVERRIDES_SOURCE, out, FG_OVERRIDES_OUTPUT),
     copyJsonToGenerated(DRIFELLA_BARKS_SOURCE, out, DRIFELLA_BARKS_OUTPUT),
+    copyJsonToGenerated(ARCHIVIST_SPOTS_SOURCE, out, ARCHIVIST_SPOTS_OUTPUT),
     copyOptionalJsonToGenerated(OPENING_CUTSCENE_SOURCE, out, OPENING_CUTSCENE_OUTPUT),
     copyOptionalJsonToGenerated(OVERWORLD_INTERACTABLES_SOURCE, out, OVERWORLD_INTERACTABLES_OUTPUT),
     copyOptionalJsonToGenerated(CARD_NFTS_SOURCE, out, CARD_NFTS_OUTPUT),
     copyOptionalJsonToGenerated(DRIFELLA_SOURCE_CHECKS_SOURCE, out, DRIFELLA_SOURCE_CHECKS_OUTPUT),
     copyOptionalJsonToGenerated(ATTESTATION_BATTLES_SOURCE, out, ATTESTATION_BATTLES_OUTPUT),
     copyJsonToGenerated(OBJECTIVES_SOURCE, out, OBJECTIVES_OUTPUT),
-    copyJsonToGenerated(NAVMESH_SOURCE, out, NAVMESH_OUTPUT)
+    copyJsonToGenerated(NAVMESH_SOURCE, out, NAVMESH_OUTPUT),
+    copyJsonToGenerated(USABILITY_MATRIX_SOURCE, out, USABILITY_MATRIX_OUTPUT)
   ]);
 }
 
@@ -321,6 +368,32 @@ async function validateDrifellaBarks(source: string): Promise<void> {
   DrifellaBarksSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
+async function validateArchivistSpots(source: string): Promise<void> {
+  const spots = ArchivistSpotsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  const names = JSON.parse(await readFile(resolve("content/rom-truth/event-flags.json"), "utf8")).byId as Record<string, string>;
+  for (const [index, spot] of spots.spots.entries()) {
+    const expectedSpotId = index + 1;
+    const expectedFlagName = `FLG_PHOTO_${expectedSpotId}`;
+    if (spot.spotId !== expectedSpotId) {
+      throw new Error(`archivist-spots entry ${index}: expected spotId ${expectedSpotId}, got ${spot.spotId}`);
+    }
+    if (spot.flag.name !== expectedFlagName) {
+      throw new Error(`archivist-spots ${spot.spotId}: expected ${expectedFlagName}, got ${spot.flag.name}`);
+    }
+    if (names[String(spot.flag.id)] !== spot.flag.name) {
+      throw new Error(`archivist-spots ${spot.spotId}: id ${spot.flag.id} is "${names[String(spot.flag.id)] ?? "missing"}" in rom-truth, not "${spot.flag.name}"`);
+    }
+    if (spot.locationLabel.includes("—") || spot.caption.includes("—")) {
+      throw new Error(`archivist-spots ${spot.spotId}: player-facing text contains an em dash`);
+    }
+  }
+  for (const line of spots.archivist.lines) {
+    if (line.includes("—")) {
+      throw new Error("archivist-spots: Archivist line contains an em dash");
+    }
+  }
+}
+
 async function validateOpeningCutscene(source: string): Promise<void> {
   if (!(await fileExists(source))) {
     return;
@@ -371,8 +444,16 @@ async function validateNavmesh(source: string): Promise<void> {
   NavmeshSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
+async function validateUsabilityMatrix(source: string): Promise<void> {
+  UsabilityMatrixSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
 async function validateNpcOverrides(source: string): Promise<void> {
   NpcOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateNpcMovementPatterns(source: string): Promise<void> {
+  NpcMovementPatternsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
 }
 
 async function validateEnemyStatOverrides(source: string): Promise<void> {
@@ -381,6 +462,24 @@ async function validateEnemyStatOverrides(source: string): Promise<void> {
 
 async function validateKeyItems(source: string): Promise<void> {
   KeyItemsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateFlagMap(source: string): Promise<void> {
+  const flagMap = FlagMapSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  // Every mapped EB flag id must exist under the canonical name in rom-truth.
+  const names = JSON.parse(await readFile(resolve("content/rom-truth/event-flags.json"), "utf8")).byId as Record<string, string>;
+  for (const entry of flagMap.entries) {
+    for (const flag of [...entry.ebFlags, ...entry.candidates]) {
+      if (names[String(flag.id)] !== flag.name) {
+        throw new Error(`flag-map ${entry.storyFlag}: id ${flag.id} is "${names[String(flag.id)] ?? "missing"}" in rom-truth, not "${flag.name}"`);
+      }
+    }
+  }
+}
+
+async function validateStoryItems(source: string): Promise<void> {
+  const storyItems = StoryItemsSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  await Promise.all(storyItems.items.map((item) => validatePublicAssetImage(item.worldAsset, "Story item image")));
 }
 
 async function validateBossBattleDialogue(source: string): Promise<void> {

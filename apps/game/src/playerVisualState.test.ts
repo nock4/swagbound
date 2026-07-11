@@ -54,8 +54,10 @@ describe("resolvePlayerVisualState", () => {
     expect(r.lockAnimation).toBe(true);
   });
 
-  it("ladder/rope/sitting/sleeping lock the animation; default/bike do not", () => {
-    expect(resolvePlayerVisualState(inputs({ onLadder: true })).lockAnimation).toBe(true);
+  it("rope/sitting/sleeping lock the animation; ladder/default/bike animate", () => {
+    // Ladder animates: its state sheet maps all directions to the back-view walk
+    // frames, so the walk cycle doubles as the climb cycle.
+    expect(resolvePlayerVisualState(inputs({ onLadder: true })).lockAnimation).toBe(false);
     expect(resolvePlayerVisualState(inputs({ event: "sitting" })).lockAnimation).toBe(true);
     expect(resolvePlayerVisualState(inputs({ riding: "bike" })).lockAnimation).toBe(false);
   });
