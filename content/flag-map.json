@@ -140,7 +140,7 @@
     },
     {
      "id": 340,
-     "name": "UNKNOWN_340"
+     "name": "UNKNOWN_0340"
     },
     {
      "id": 375,
@@ -148,6 +148,113 @@
     }
    ],
    "candidates": []
+  },
+  {
+   "storyFlag": "source:intake-ledger:cleared",
+   "beat": "The Intake Ledger under the Postwick Registry (EB: Lilliput Steps) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 191,
+     "name": "FLG_WIN_LLPT_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 743,
+     "name": "FLG_STEP_HAPPY",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
+  },
+  {
+   "storyFlag": "source:spring:cleared",
+   "beat": "The Source Spring in LSW (EB: Milky Well) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 193,
+     "name": "FLG_WIN_MLKY_BOSS"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "source:undelivered:cleared",
+   "beat": "The Undelivered yard outside Dead Letter (EB: Rainy Circle) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 192,
+     "name": "FLG_WIN_RAIN_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 372,
+     "name": "FLG_STEP_PAST",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
+  },
+  {
+   "storyFlag": "source:vault:cleared",
+   "beat": "The Vault of Certificates under The Galleria (EB: Magnet Hill) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 194,
+     "name": "FLG_WIN_MGNT_BOSS"
+    }
+   ],
+   "candidates": []
+  },
+  {
+   "storyFlag": "source:pier:cleared",
+   "beat": "The Broadcast Pier at Solana Beach (EB: Pink Cloud) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 195,
+     "name": "FLG_WIN_PINK_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 110,
+     "name": "FLG_STEP_CAPEESTATE",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
+  },
+  {
+   "storyFlag": "source:vacancy:cleared",
+   "beat": "The Vacancy Sign at Vacancy Flats (EB: Lumine Hall) (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 196,
+     "name": "FLG_WIN_LUMI_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 370,
+     "name": "FLG_STEP_DSRT",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
+  },
+  {
+   "storyFlag": "source:first-record:cleared",
+   "beat": "The First Record in The Unlisted Room (EB: Fire Spring); Mixtape completes (Eight Sources spec: docs/design/sanctuary-8-attestation-anchors.md; fires when the site's boss gate is authored)",
+   "ebFlags": [
+    {
+     "id": 197,
+     "name": "FLG_WIN_FIRE_BOSS"
+    }
+   ],
+   "candidates": [
+    {
+     "id": 371,
+     "name": "FLG_STEP_MGKT",
+     "note": "sanctuary-step recap flag; promote with the site"
+    }
+   ]
   }
  ]
 }
