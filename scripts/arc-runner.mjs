@@ -466,7 +466,7 @@ async function routeToTrigger(trigger, target, attemptEntry) {
       // and walk the last leg for real. Snap to walkable so we never land in a wall.
       if (!attemptEntry.warpNear) {
         attemptEntry.warpNear = true;
-        const landed = await page.evaluate(({ tx, ty }) => {
+        const candidates = await page.evaluate(({ tx, ty }) => {
           const solid = globalThis.__solidAt;
           const warp = globalThis.__warpTo;
           if (!warp) return null;
@@ -481,11 +481,24 @@ async function routeToTrigger(trigger, target, attemptEntry) {
             return null;
           };
           // land BEYOND the boss-gate arm radius (gates arm-by-distance), then walk in
-          const spot = snap(tx, ty + 420) ?? snap(tx, ty - 420) ?? snap(tx + 420, ty) ?? snap(tx - 420, ty) ?? snap(tx, ty + 160);
-          if (!spot) return null;
-          warp(spot.x, spot.y);
-          return spot;
+          const spots = [
+            snap(tx, ty + 420), snap(tx, ty - 420), snap(tx + 420, ty), snap(tx - 420, ty),
+            snap(tx, ty + 160), snap(tx, ty - 160), snap(tx + 160, ty), snap(tx - 160, ty)
+          ].filter(Boolean);
+          return spots;
         }, { tx: target.x, ty: target.y });
+        // pick the first candidate CONNECTED to the target (walkable is not enough:
+        // pockets abound). Warp there, then locally verify a path exists.
+        let landed = null;
+        for (const spot of candidates ?? []) {
+          const plan2 = await (async () => {
+            await page.evaluate(({ x, y }) => globalThis.__warpTo?.(x, y), spot);
+            await page.waitForTimeout(500);
+            return planPath(spot, target, { margin: ROUTE_MARGIN, blockDoors: true, blockNpcs: true });
+          })();
+          if (plan2) { landed = spot; break; }
+        }
+        void 0;
         if (landed) {
           telemetry.cheats.push({ kind: "warp-near", objective: trigger.id, to: landed, atMs: elapsedMs() });
           log(`  [CHEAT] warp-near ${trigger.id} -> (${landed.x},${landed.y}) (commute skipped, fights real)`);
