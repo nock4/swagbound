@@ -589,31 +589,18 @@ async function saveAfterObjective(objectiveId) {
   flushTelemetry();
 }
 
-// Battle-end settle after a DEFEAT. EarthBound's defeat flow shows a "you lost"
-// screen and a continue prompt that must be PRESSED THROUGH before the world
-// scene restores from save (or new game); polling without pressing looks
-// identical to a hang. Press z each poll and tolerate the expected in-place
-// restore (execution context can be torn down mid-evaluate) across a 60s budget.
+// Battle-end handling after a DEFEAT. The party wipe is already recorded as
+// balance data. The engine's in-place game-over restore stalls the debug hooks
+// for a long, unreliable window (the world scene tears down and its hooks
+// unregister mid-transition), so rather than nurse that screen we reload fresh
+// and rebuild earned state deterministically, exactly like wedge recovery. Fast
+// and robust; the next route attempt repositions from the fresh spawn.
 async function settleAfterDefeat(trigger) {
-  const deadline = performance.now() + 60000;
-  while (performance.now() < deadline) {
-    const ready = await page.evaluate(() => (
-      Boolean(globalThis.__firstSceneDebug) &&
-      typeof globalThis.__debugHeal === "function" &&
-      typeof globalThis.__setStoryFlag === "function" &&
-      Boolean(globalThis.__firstSceneDebug?.player) &&
-      !globalThis.__battleDebug?.phase
-    )).catch(() => false);
-    if (ready) {
-      await settleWorld({ maxPresses: 60, reason: "post-defeat" });
-      return true;
-    }
-    // advance the defeat / continue / respawn-dialogue screens
-    await page.keyboard.press("z").catch(() => {});
-    await page.waitForTimeout(400);
-  }
-  log(`  [settle] post-defeat world absent after 60s for ${trigger?.id ?? "?"}; treating as wedge`);
-  throw new PageWedgedError("settleAfterDefeat", 60000);
+  log(`  [defeat] ${trigger?.id ?? "?"} party wiped; reloading and rebuilding earned state`);
+  telemetry.cheats.push({ kind: "defeat-reload", objectiveId: trigger?.id ?? null, atMs: elapsedMs() });
+  flushTelemetry();
+  await recoverFromPageWedge();
+  return true;
 }
 
 function inBattle(state) {
