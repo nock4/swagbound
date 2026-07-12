@@ -587,7 +587,8 @@ export function resolvePhysicalAttackDamage(
   const rawDamage = smash
     ? Math.max(1, 4 * (stat(attacker.offense) - stat(defender.defense)))
     : baseDamage(attacker, defender, rng);
-  let damageAmount = applyDefendingDamageReduction(rawDamage, defender);
+  const reducedDamage = applyDefendingDamageReduction(rawDamage, defender);
+  let damageAmount = shieldedDamage(defender, reducedDamage);
 
   const defenderGuts = stat(defender.stats.guts);
   const lethal = defender.hp.target - damageAmount <= 0;
@@ -667,12 +668,12 @@ export function resolveTurn(
   const attack = resolvePhysicalAttackDamage(attackerCombatant, defenderCombatant, rng);
   const nextState = attack.missed
     ? state
-    : withCombatant(state, defender, applyDamage(defenderCombatant, attack.damage));
+    : withCombatant(state, defender, applyDamage(defenderCombatant, attack.damage, { ignoreShield: true }));
   return {
     state: nextState,
     actor,
     defender,
-    damage: attack.missed ? attack.damage : shieldedDamage(defenderCombatant, attack.damage),
+    damage: attack.damage,
     outcome: outcome(nextState),
     skipped: false,
     missed: attack.missed,
@@ -933,7 +934,7 @@ export function resolveEnemyActionTurn(
     const confusedPick = randomLivingActor(nextState, rng);
     targets = confusedPick ? [confusedPick] : [];
   } else {
-    targets = targetActorsForEnemyAction(nextState, selection, rng);
+    targets = targetActorsForEnemyAction(nextState, actor, selection, rng);
   }
   const effectKind = enemyActionEffectKind(selection.actionType);
   if (
@@ -984,9 +985,9 @@ export function resolveEnemyActionTurn(
       physicalMisses += attack.missed ? 1 : 0;
       anySmash = anySmash || attack.smash;
       anyGutsSurvived = anyGutsSurvived || attack.gutsSurvived;
-      totalAmount += attack.missed ? attack.damage : shieldedDamage(targetCombatant, attack.damage);
+      totalAmount += attack.damage;
       if (!attack.missed) {
-        nextState = withCombatant(nextState, target, applyDamage(targetCombatant, attack.damage));
+        nextState = withCombatant(nextState, target, applyDamage(targetCombatant, attack.damage, { ignoreShield: true }));
       }
       continue;
     }
@@ -1748,7 +1749,15 @@ function nextEnemyActionIndex(actions: BattleEnemy["actions"] | undefined, curre
   return modulo(currentActionIndex + 1, length);
 }
 
-function targetActorsForEnemyAction(state: BattleState, selection: EnemyActionSelection, rng: Rng): BattleActor[] {
+function targetActorsForEnemyAction(
+  state: BattleState,
+  actor: BattleActor,
+  selection: EnemyActionSelection,
+  rng: Rng
+): BattleActor[] {
+  if (selection.target === 0 && selection.effect) {
+    return [actor];
+  }
   const side = targetSideForEnemyActionDirection(selection.direction);
   const living = livingActors(side === "party" ? state.party : state.enemies, side);
   if (living.length === 0) {

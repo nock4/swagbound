@@ -148,6 +148,33 @@ describe("battle damage", () => {
     });
     expect(result.state.party[0].hp.target).toBe(1);
   });
+
+  it("checks Shield-reduced HP loss before defender Guts survival", () => {
+    let battle = createBattleState(enemy(94, "SHIELD_TEST_ENEMY", {
+      offense: 18,
+      actions: actionSet(enemyAction(940, 1, 1))
+    }), {
+      maxHp: 10,
+      defense: 0,
+      statBonuses: { guts: 500 }
+    });
+    battle = withCombatant(battle, actor("party", 0), {
+      ...battle.party[0],
+      statuses: [{ ailment: "shielded", magnitude: 50 }],
+      hp: setTarget({ ...battle.party[0].hp, displayed: 10, target: 10, isRolling: false }, 10)
+    });
+
+    const result = resolveEnemyActionTurn(battle, actor("enemy", 0), sequenceRng([1, 1, 0.5, 0]));
+
+    expect(result).toMatchObject({
+      amount: 9,
+      effectKind: "physical",
+      missed: false,
+      smash: false,
+      gutsSurvived: false
+    });
+    expect(result.state.party[0].hp.target).toBe(1);
+  });
 });
 
 describe("battle player model", () => {
@@ -533,6 +560,28 @@ describe("battle turn resolution", () => {
     expect(result.targets).toEqual([actor("enemy", 0)]);
     expect(result.amount).toBe(20);
     expect(result.state.enemies[0].hp.target).toBe(140);
+    expect(result.state.party[0].hp.target).toBe(72);
+  });
+
+  it("applies a target-code-0 authored enemy self-buff", () => {
+    const battle = createBattleState(enemy(38, "New Age Retro Hippie", {
+      offense: 10,
+      actions: actionSet(enemyAction(96, 5, 0, {
+        direction: "party",
+        name: "lost temper",
+        effect: { kind: "buffStat", stat: "offense", amount: 8 }
+      }))
+    }), {
+      characters: characters([partyCharacterA])
+    });
+
+    const result = resolveEnemyActionTurn(battle, actor("enemy", 0), () => 0.5);
+
+    expect(result.effectKind).toBe("statusStub");
+    expect(result.action).toMatchObject({ actionId: 96, target: 0 });
+    expect(result.targets).toEqual([actor("enemy", 0)]);
+    expect(result.amount).toBe(8);
+    expect(result.state.enemies[0].offense).toBe(18);
     expect(result.state.party[0].hp.target).toBe(72);
   });
 

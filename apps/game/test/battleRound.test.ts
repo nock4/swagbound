@@ -740,6 +740,33 @@ describe("round-start priority layer", () => {
     expect(priority.queued).toEqual([]);
   });
 
+  it("does not resolve status-gated RUN commands at round start", () => {
+    for (const ailment of ["paralyzed", "asleep"] as const) {
+      let battle = createBattleState(opponentA, {
+        characters: characters([character(0, `${ailment.toUpperCase()}_RUNNER`, { speed: 90 }), partyB]),
+        roundNumber: 2
+      });
+      battle = withCombatant(battle, actor("party", 0), {
+        ...battle.party[0],
+        statuses: [{ ailment }]
+      });
+      const queued: QueuedCommand[] = [
+        { partySlot: 0, command: "RUN" },
+        { partySlot: 1, command: "BASH", target: { side: "enemy", index: 0 } }
+      ];
+
+      const priority = resolveRoundStartPriority(battle, queued, () => 0);
+      const gatedRun = resolveRoundStep(priority.state, actor("party", 0), queued[0], () => 0.9);
+
+      expect(priority.runAttempt, ailment).toBeUndefined();
+      expect(priority.priorityStep, ailment).toBeUndefined();
+      expect(priority.queued, ailment).toEqual(queued);
+      expect(gatedRun.skipped, ailment).toBe(true);
+      expect(gatedRun.fled, ailment).toBeUndefined();
+      expect(gatedRun.message, ailment).toContain(ailment === "paralyzed" ? "can't move" : "fast asleep");
+    }
+  });
+
   it("always blocks Run against unescapable battle group 450", () => {
     const battle = createBattleState(opponentA, { characters: characters([partyA]), roundNumber: 5 });
     const priority = resolveRoundStartPriority(
@@ -1249,6 +1276,34 @@ describe("resolveRoundStep status effects", () => {
     expect(result.skipped).toBe(false);
     expect(result.state.party[1].hp.target).toBe(30);
     expect(result.details).toMatchObject({ kind: "item", message: expect.stringContaining("came back to life") });
+  });
+
+  it("lets the GOODS target menu choose which fainted ally to revive", () => {
+    let battle = createBattleState(opponentA, { characters: characters([partyA, partyB, partyC]) });
+    battle = killActor(battle, actor("party", 1));
+    battle = killActor(battle, actor("party", 2));
+    battle = withCombatant(battle, actor("party", 0), { ...battle.party[0], inventory: [215] });
+    const reviveItem: ItemData = { ...syntheticItem(215, 0, 0), effect: { kind: "revive", amount: 30 } };
+    const context = { state: battle, items: [reviveItem] };
+
+    const opened = nextInputState(inputState({ submenu: "goods", selectionIndex: 0 }), { kind: "confirm" }, context);
+    const moved = nextInputState(opened.input, { kind: "move", delta: 1 }, context);
+    const confirmed = nextInputState(moved.input, { kind: "confirm" }, context);
+    const result = resolveRoundStep(
+      battle,
+      actor("party", 0),
+      confirmed.input.queue[0],
+      () => 0.5,
+      { items: [reviveItem] }
+    );
+
+    expect(opened.input).toMatchObject({ submenu: "target-ally", selectionIndex: 1 });
+    expect(moved.input.selectionIndex).toBe(2);
+    expect(confirmed.input.queue).toEqual([
+      { partySlot: 0, command: "GOODS", itemId: 215, target: queuedTarget(battle, "party", 2) }
+    ]);
+    expect(result.state.party[1].hp.target).toBe(0);
+    expect(result.state.party[2].hp.target).toBe(30);
   });
 });
 

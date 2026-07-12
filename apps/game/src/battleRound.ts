@@ -431,7 +431,9 @@ function resolveActorAction(
       const psiKind = psiBattleKind(psi);
       const targetSide = psiTargetSide(psi);
       const target = targetSide && !psiTargetsAll(psi)
-        ? resolvedTargetOptions(turnState, queued, targetSide)
+        ? psi.effect?.kind === "revive"
+          ? targetOptions(queued, "party")
+          : resolvedTargetOptions(turnState, queued, targetSide)
         : targetOptions(queued);
       if (!target) {
         return noTargetRoundStep(turnState, actor);
@@ -453,11 +455,11 @@ function resolveActorAction(
         return itemRefusalRoundStep(turnState, actor, item);
       }
       const row = itemUsability(resources.usabilityMatrix, item.id);
-      const target = resolvedTargetOptions(
-        turnState,
-        queued,
-        targetSideFromRowTargets(row, "battle") ?? itemEffectTargetSide(decodeItemUseEffect(item))
-      );
+      const effect = decodeItemUseEffect(item);
+      const targetSide = targetSideFromRowTargets(row, "battle") ?? itemEffectTargetSide(effect);
+      const target = effect?.kind === "revive"
+        ? targetOptions(queued, "party")
+        : resolvedTargetOptions(turnState, queued, targetSide);
       if (!target) {
         return noTargetRoundStep(turnState, actor);
       }
@@ -635,7 +637,7 @@ function confirmPsi(
     input: {
       ...input,
       submenu: targetSide === "enemy" ? "target-enemy" : "target-ally",
-      selectionIndex: livingIndices(context.state, targetSide)[0] ?? 0,
+      selectionIndex: targetIndicesForEffect(context.state, targetSide, psi.effect)[0] ?? 0,
       pending: { partySlot: actor.index, command: "PSI", psiId: psi.id }
     },
     complete: false
@@ -660,12 +662,13 @@ function confirmGoods(
   if (context.usabilityMatrix && item && !row?.battleUse) {
     return queueAndAdvance(input, context, { partySlot: actor.index, command: "GOODS", itemId });
   }
-  const targetSide = targetSideFromRowTargets(row, "battle") ?? itemEffectTargetSide(item ? decodeItemUseEffect(item) : undefined);
+  const effect = item ? decodeItemUseEffect(item) : undefined;
+  const targetSide = targetSideFromRowTargets(row, "battle") ?? itemEffectTargetSide(effect);
   return {
     input: {
       ...input,
       submenu: targetSide === "enemy" ? "target-enemy" : "target-ally",
-      selectionIndex: livingIndices(context.state, targetSide)[0] ?? 0,
+      selectionIndex: targetIndicesForEffect(context.state, targetSide, effect)[0] ?? 0,
       pending: { partySlot: actor.index, command: "GOODS", itemId }
     },
     complete: false
@@ -680,9 +683,10 @@ function confirmTarget(
     return { input, complete: false };
   }
   const side = input.submenu === "target-ally" ? "party" : "enemy";
-  const targetIndex = livingIndices(context.state, side).includes(input.selectionIndex)
+  const indices = targetIndicesForPending(input, context, side);
+  const targetIndex = indices.includes(input.selectionIndex)
     ? input.selectionIndex
-    : livingIndices(context.state, side)[0] ?? 0;
+    : indices[0] ?? 0;
   return queueAndAdvance(input, context, {
     ...input.pending,
     target: queuedTarget(context.state, side, targetIndex)
@@ -782,7 +786,7 @@ function moveInputSelection(
 ): BattleRoundInputState {
   if (input.submenu === "target-enemy" || input.submenu === "target-ally") {
     const side = input.submenu === "target-ally" ? "party" : "enemy";
-    const indices = livingIndices(context.state, side);
+    const indices = targetIndicesForPending(input, context, side);
     if (indices.length === 0) {
       return input;
     }
@@ -813,7 +817,7 @@ function selectionLength(input: BattleRoundInputState, context: BattleRoundInput
     return combatant.inventory.length;
   }
   const side = input.submenu === "target-ally" ? "party" : "enemy";
-  return livingIndices(context.state, side).length;
+  return targetIndicesForPending(input, context, side).length;
 }
 
 function learnedBattlePsiForCombatant(context: BattleRoundInputContext, combatant: Combatant): PsiData[] {
@@ -837,6 +841,42 @@ function canChooseBattleCommand(combatant: Combatant): boolean {
 function livingIndices(state: BattleState, side: BattleSide): number[] {
   const combatants = side === "party" ? state.party : state.enemies;
   return combatants.flatMap((combatant, index) => isCombatantAlive(combatant) ? [index] : []);
+}
+
+function faintedPartyIndices(state: BattleState): number[] {
+  return state.party.flatMap((combatant, index) => isCombatantAlive(combatant) ? [] : [index]);
+}
+
+function targetIndicesForEffect(
+  state: BattleState,
+  side: BattleSide,
+  effect: ItemUseEffect | undefined
+): number[] {
+  return side === "party" && effect?.kind === "revive"
+    ? faintedPartyIndices(state)
+    : livingIndices(state, side);
+}
+
+function targetIndicesForPending(
+  input: BattleRoundInputState,
+  context: BattleRoundInputContext,
+  side: BattleSide
+): number[] {
+  return targetIndicesForEffect(context.state, side, pendingEffect(input.pending, context));
+}
+
+function pendingEffect(
+  pending: QueuedCommand | undefined,
+  context: BattleRoundInputContext
+): ItemUseEffect | undefined {
+  if (pending?.command === "GOODS") {
+    const item = findById(context.items, pending.itemId);
+    return item ? decodeItemUseEffect(item) : undefined;
+  }
+  if (pending?.command === "PSI") {
+    return findById(context.psi, pending.psiId)?.effect;
+  }
+  return undefined;
 }
 
 function upsertQueuedCommand(queue: QueuedCommand[], queued: QueuedCommand): QueuedCommand[] {
@@ -1273,7 +1313,7 @@ function firstLivingQueuedRunActor(
     }
     const actor = { side: "party" as const, index: entry.partySlot };
     const combatant = combatantAt(state, actor);
-    if (combatant && isCombatantAlive(combatant)) {
+    if (combatant && canChooseBattleCommand(combatant)) {
       return actor;
     }
   }
