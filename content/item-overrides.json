@@ -931,6 +931,9 @@
         "stat": "luck",
         "amount": 2
       }
+    },
+    "173": {
+      "name": "Pre-Member Card"
     }
   }
 }

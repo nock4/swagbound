@@ -11893,6 +11893,105 @@
      "\"The market is whoever shows up. Today, the button showed up.\""
     ]
    }
+  },
+  {
+   "id": 102304,
+   "worldPixel": {
+    "x": 7544,
+    "y": 2576
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The facilitator's smile has a referral code.",
+     "\"Sit anywhere. The pews track posture, not consent.\""
+    ]
+   }
+  },
+  {
+   "id": 102305,
+   "worldPixel": {
+    "x": 7528,
+    "y": 2632
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A chapel member twists a Pre-Member Card until the laminate complains.",
+     "\"My kid went to residency and never came home. They keep saying quiet purpose. That is not a forwarding address.\""
+    ]
+   }
+  },
+  {
+   "id": 102306,
+   "worldPixel": {
+    "x": 7392,
+    "y": 2768
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A testimonial volunteer stands exactly where the applause would be cheapest.",
+     "\"The residency gave him quiet purpose, and he asked us not to interrupt the blessing.\"",
+     "She blinks after the sentence, like buffering finished."
+    ]
+   }
+  },
+  {
+   "id": 102307,
+   "worldPixel": {
+    "x": 7264,
+    "y": 2896
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A second volunteer has the calm of a brochure nobody admits writing.",
+     "\"The residency gave him quiet purpose, and he asked us not to interrupt the blessing.\"",
+     "Different face. Same checksum."
+    ]
+   }
+  },
+  {
+   "id": 102308,
+   "worldPixel": {
+    "x": 7152,
+    "y": 3008
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A third volunteer smiles with the late warmth of cached content.",
+     "\"The residency gave him quiet purpose, and he asked us not to interrupt the blessing.\"",
+     "Bosch hears the paste before he hears the period."
+    ]
+   }
+  },
+  {
+   "id": 102309,
+   "worldPixel": {
+    "x": 7464,
+    "y": 2912
+   },
+   "spriteGroup": 44,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A kid works the chapel sound board with both hands and no adult confidence.",
+     "\"They said doubt is noise. I got good at muting myself. That's probably bad, right?\""
+    ]
+   }
   }
  ]
 }

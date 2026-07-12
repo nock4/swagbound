@@ -442,6 +442,45 @@
         "The Venue has set two desks side by side.",
         "LEFT DESK: accept sponsorship. RIGHT DESK: refuse sponsorship."
       ]
+    },
+    {
+      "id": "fuel-onboarding-session-placard",
+      "kind": "sign",
+      "label": "Onboarding placard",
+      "worldPixel": {
+        "x": 7528,
+        "y": 2608
+      },
+      "pages": [
+        "WELCOME, PRE-MEMBER.",
+        "Belief loads faster when doubt is placed in airplane mode."
+      ]
+    },
+    {
+      "id": "fuel-onboarding-residency-roster",
+      "kind": "examine",
+      "label": "Residency roster",
+      "worldPixel": {
+        "x": 7392,
+        "y": 2744
+      },
+      "pages": [
+        "The residency roster is alphabetical except for one blank line labeled DOUBT, NOISE.",
+        "Someone wrote the kid's name in pencil, then traced it in policy."
+      ]
+    },
+    {
+      "id": "fuel-onboarding-sound-board",
+      "kind": "examine",
+      "label": "Chapel sound board",
+      "worldPixel": {
+        "x": 7488,
+        "y": 2896
+      },
+      "pages": [
+        "The sound board labels one slider TESTIMONY and three sliders TESTIMONY, TESTIMONY, TESTIMONY.",
+        "The mute button is warm."
+      ]
     }
   ]
 }

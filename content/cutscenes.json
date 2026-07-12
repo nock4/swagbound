@@ -1516,6 +1516,109 @@
      "flag": "fuel:floor:counter-filed"
     }
    ]
+  },
+  {
+   "id": "fuel-onboarding-pew-session",
+   "comment": "Optional Onboarding pew session at Solana Beach. Placement keyed to source-pier trigger/interactable around (7464,2864)/(7496,2864), the existing chapel NPC cluster at (7472..7608,2504..2552), and solana-beach rect x3800..7800 y2500..3800. The follow-up trigger grants item 173 because cutscene steps cannot grant items.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 7528,
+     "y": 2568,
+     "w": 64,
+     "h": 56
+    }
+   },
+   "blockFlags": [
+    "fuel:onboarding:session-complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "The chapel pew receives Bosch with the confidence of a sales funnel.",
+      "FACILITATOR: \"Welcome to onboarding. Belief is a network effect. Doubt is churn with shoes.\"",
+      "Everyone repeats the pledge at the same speed. Bosch does not, and is still marked present.",
+      "The session ends when the room agrees it has always been over."
+     ]
+    },
+    {
+     "op": "setFlag",
+     "flag": "fuel:onboarding:session-complete"
+    }
+   ]
+  },
+  {
+   "id": "fuel-onboarding-kid-recording",
+   "comment": "Optional Onboarding counter at the chapel sound board, keyed to source-pier trigger/interactable around (7464,2864)/(7496,2864) and solana-beach rect x3800..7800 y2500..3800. Eight Sources content only grants item 196 tracks through trigger grantItems; actual playback of the kid's own first recording needs a runtime Mixtape/audio hook, so this cutscene expresses playback in dialogue only.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 7448,
+     "y": 2888,
+     "w": 80,
+     "h": 72
+    }
+   },
+   "requireFlags": [
+    "fuel:onboarding:testimonial-one",
+    "fuel:onboarding:testimonial-two",
+    "fuel:onboarding:testimonial-three"
+   ],
+   "blockFlags": [
+    "fuel:onboarding:kid-out"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "At the chapel sound board, a kid has labeled every slider DOUBT and turned them all down.",
+      "KID: \"I was going to leave. The Room filed that as noise. Clean system, apparently.\"",
+      "Bosch threads the kid's own first recording through the board. A small voice says he was scared before he was useful.",
+      "The kid listens to himself breathe without permission.",
+      "KID: \"That's me. Not the residency's corrected me. Gross. Good.\"",
+      "The chapel loses one member and gains one honest silence."
+     ]
+    },
+    {
+     "op": "setFlag",
+     "flag": "fuel:onboarding:kid-out"
+    }
+   ]
+  },
+  {
+   "id": "fuel-onboarding-archivist-filing",
+   "comment": "Optional Onboarding filing beat after the kid walks out. No PHOTO flags or Archivist mechanics are touched; this only files the side-content fragment. Placement flavor is keyed to the sound board near source-pier and the same solana-beach rect.",
+   "trigger": {
+    "kind": "flag",
+    "flag": "fuel:onboarding:kid-out"
+   },
+   "requireFlags": [
+    "fuel:onboarding:kid-out"
+   ],
+   "blockFlags": [
+    "fuel:onboarding:cleared"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "The chapel ledger snaps shut without being touched.",
+      "ARCHIVIST: \"A room filed a kid's doubt as noise. We filed the noise as a witness.\"",
+      "ARCHIVIST: \"The Onboarding. Filed under networks that call hunger community.\""
+     ]
+    },
+    {
+     "op": "setFlag",
+     "flag": "fuel:onboarding:cleared"
+    }
+   ]
   }
  ]
 }
