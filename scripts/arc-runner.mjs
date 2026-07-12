@@ -26,6 +26,7 @@ const TELEMETRY_PATH = new URL("tmp/arc-telemetry.json", root);
 const GRID_STEP = 8;
 const ROUTE_MARGIN = 320;
 const MAX_OBJECTIVE_ATTEMPTS = 3;
+const MAX_INTERRUPT_BATTLES_PER_ATTEMPT = 8;
 const WALL_ROUND_LIMIT = 25;
 const TRIVIAL_ROUND_LIMIT = 4;
 const HP_PRESSURE_FRACTION = 0.75;
@@ -288,6 +289,7 @@ async function runObjective(trigger, ordinal) {
       walkingTimeMs: 0,
       unreachableRoutes: [],
       doorWarps: [],
+      interruptBattles: 0,
       status: "started",
       completedFlags: [],
       finishedAtMs: null
@@ -297,35 +299,76 @@ async function runObjective(trigger, ordinal) {
     await hotelHeal(trigger.id, entry);
     await settleWorld({ maxPresses: 80, reason: "pre-objective" });
 
-    const routeResult = await routeToTrigger(trigger, target, attemptEntry);
-    attemptEntry.status = routeResult.status;
-    attemptEntry.walkingTimeMs += routeResult.walkingTimeMs;
-    attemptEntry.routeLengthPx += routeResult.routeLengthPx;
-    attemptEntry.routeCells += routeResult.routeCells;
-    entry.routeLengthPx += attemptEntry.routeLengthPx;
-    entry.routeCells += attemptEntry.routeCells;
-    entry.walkingTimeMs += attemptEntry.walkingTimeMs;
-    entry.unreachableRoutes.push(...attemptEntry.unreachableRoutes);
-    entry.doorWarps.push(...attemptEntry.doorWarps);
+    while (!entry.completed) {
+      const unreachableStart = attemptEntry.unreachableRoutes.length;
+      const doorWarpStart = attemptEntry.doorWarps.length;
+      const routeResult = await routeToTrigger(trigger, target, attemptEntry);
+      attemptEntry.status = routeResult.status;
+      attemptEntry.walkingTimeMs += routeResult.walkingTimeMs;
+      attemptEntry.routeLengthPx += routeResult.routeLengthPx;
+      attemptEntry.routeCells += routeResult.routeCells;
+      entry.routeLengthPx += routeResult.routeLengthPx;
+      entry.routeCells += routeResult.routeCells;
+      entry.walkingTimeMs += routeResult.walkingTimeMs;
 
-    if (routeResult.status === "battle" || inBattle(await peek())) {
-      const nearTarget = await playerNearTarget(trigger, target, trigger.boss ? 120 : 180);
-      const battleId = nearTarget ? trigger.id : `route-interrupt:${trigger.id}`;
-      const battle = await fightBattle(battleId, trigger, nearTarget ? "objective" : "route-interrupt");
-      entry.battles.push(battle.runId);
-      telemetry.battles.push(battle);
-      await settleAfterBattle(trigger);
-    } else {
-      await page.waitForTimeout(350);
-      await settleWorld({ maxPresses: 120, reason: "post-route" });
+      let battle = null;
+      if (routeResult.status === "battle" || inBattle(await peek())) {
+        const nearTarget = await playerNearTarget(trigger, target, trigger.boss ? 120 : 180);
+        const battleId = nearTarget ? trigger.id : `route-interrupt:${trigger.id}`;
+        battle = await fightBattle(battleId, trigger, nearTarget ? "objective" : "route-interrupt");
+        entry.battles.push(battle.runId);
+        telemetry.battles.push(battle);
+        await settleAfterBattle(trigger);
+      } else {
+        await page.waitForTimeout(350);
+        await settleWorld({ maxPresses: 120, reason: "post-route" });
+        const settledFlags = await currentFlags();
+        if (trigger.boss && routeResult.status === "arrived" && !objectiveDone(trigger, settledFlags)) {
+          const pressResult = await pressIntoBossGate(trigger, target);
+          if (pressResult === "battle" || inBattle(await peek())) {
+            attemptEntry.status = "battle";
+            battle = await fightBattle(trigger.id, trigger, "objective");
+            entry.battles.push(battle.runId);
+            telemetry.battles.push(battle);
+            await settleAfterBattle(trigger);
+          }
+        }
+      }
+
+      entry.unreachableRoutes.push(...attemptEntry.unreachableRoutes.slice(unreachableStart));
+      entry.doorWarps.push(...attemptEntry.doorWarps.slice(doorWarpStart));
+
+      const afterFlags = await currentFlags();
+      attemptEntry.completedFlags = (trigger.setFlags ?? []).filter((flag) => afterFlags.includes(flag));
+      entry.completed = objectiveDone(trigger, afterFlags);
+
+      if (!entry.completed && battle?.result === "victory") {
+        attemptEntry.interruptBattles += 1;
+        attemptEntry.status = attemptEntry.interruptBattles >= MAX_INTERRUPT_BATTLES_PER_ATTEMPT
+          ? "interrupt-battle-cap"
+          : "interrupt-battle";
+      }
+
+      const retrySameAttempt = !entry.completed
+        && battle?.result === "victory"
+        && attemptEntry.interruptBattles < MAX_INTERRUPT_BATTLES_PER_ATTEMPT;
+      if (!retrySameAttempt) {
+        attemptEntry.finishedAtMs = elapsedMs();
+      }
+
+      log(`  [objective ${trigger.id}] attempt ${attempt}: ${entry.completed ? "complete" : attemptEntry.status}; flags=[${afterFlags.join(",")}]`);
+      flushTelemetry();
+
+      if (entry.completed) break;
+      if (retrySameAttempt) {
+        log(`    [interrupt] ${trigger.id} attempt ${attempt}: battle victory did not complete objective; retrying same attempt (${attemptEntry.interruptBattles}/${MAX_INTERRUPT_BATTLES_PER_ATTEMPT})`);
+        continue;
+      }
+      if (battle?.result === "victory" && attemptEntry.interruptBattles >= MAX_INTERRUPT_BATTLES_PER_ATTEMPT) {
+        log(`    [interrupt] ${trigger.id} attempt ${attempt}: interrupt battle cap reached (${MAX_INTERRUPT_BATTLES_PER_ATTEMPT}); consuming attempt`);
+      }
+      break;
     }
-
-    const afterFlags = await currentFlags();
-    attemptEntry.completedFlags = (trigger.setFlags ?? []).filter((flag) => afterFlags.includes(flag));
-    attemptEntry.finishedAtMs = elapsedMs();
-    entry.completed = objectiveDone(trigger, afterFlags);
-    log(`  [objective ${trigger.id}] attempt ${attempt}: ${entry.completed ? "complete" : routeResult.status}; flags=[${afterFlags.join(",")}]`);
-    flushTelemetry();
   }
 
   if (!entry.completed) {
@@ -749,6 +792,31 @@ async function finalApproach(trigger, target) {
     } else {
       await hold(dirToward(dx, dy), 120);
     }
+  }
+  return inBattle(await peek()) ? "battle" : "arrived";
+}
+
+async function pressIntoBossGate(trigger, target) {
+  if (!trigger.boss) return "arrived";
+  log(`    [gate] pressing into ${trigger.id} at (${round(target.x)},${round(target.y)})`);
+  for (let i = 0; i < 12; i += 1) {
+    const state = await peek();
+    recordRouteSample(state);
+    if (inBattle(state)) return "battle";
+    if (state.o?.doorFadeActive) {
+      await waitForDoorSettle("pressIntoBossGate door transition");
+      return "door";
+    }
+    if (!state.o?.player) {
+      await page.waitForTimeout(120);
+      continue;
+    }
+    if (state.o.dialogueOpen || state.o.inputLocked) {
+      await tap("z", 180);
+      continue;
+    }
+    const player = state.o.player;
+    await hold(dirToward(target.x - player.x, target.y - player.y), 180);
   }
   return inBattle(await peek()) ? "battle" : "arrived";
 }
