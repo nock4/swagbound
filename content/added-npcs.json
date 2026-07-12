@@ -11829,6 +11829,70 @@
      "Ribbon ink dries where its mouth should be."
     ]
    }
+  },
+  {
+   "id": 102300,
+   "worldPixel": {
+    "x": 1856,
+    "y": 6304
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A sponsor clerk taps two contracts into alignment.",
+     "\"Left desk sells the fall. Right desk refuses the fall. The purse respects signage.\""
+    ]
+   }
+  },
+  {
+   "id": 102301,
+   "worldPixel": {
+    "x": 1928,
+    "y": 6304
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Another clerk guards a blank form with serious posture.",
+     "\"Refusal pays nothing. That is how we know it cleared.\""
+    ]
+   }
+  },
+  {
+   "id": 102302,
+   "worldPixel": {
+    "x": 2184,
+    "y": 6568
+   },
+   "spriteGroup": 44,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A kid holds one button in both hands.",
+     "\"That's enough money if the drawing knows me.\""
+    ]
+   }
+  },
+  {
+   "id": 102303,
+   "worldPixel": {
+    "x": 2328,
+    "y": 6568
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A vendor counts air in a coin tray.",
+     "\"The market is whoever shows up. Today, the button showed up.\""
+    ]
+   }
   }
  ]
 }

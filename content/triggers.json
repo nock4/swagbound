@@ -1573,6 +1573,102 @@
     "FLG_PHOTO_32"
    ],
    "archivistSpotId": 32
+  },
+  {
+   "id": "floor-sponsor-accept",
+   "comment": "Optional Floor fuel sponsorship acceptance at the Venue. The flag is remembered quietly only; no purse mechanics are changed.",
+   "area": {
+    "x": 1832,
+    "y": 6312,
+    "w": 48,
+    "h": 48
+   },
+   "once": true,
+   "blockFlags": [
+    "fuel:floor:sold",
+    "fuel:floor:refused"
+   ],
+   "dialogue": [
+    "The left desk offers a contract with the fall already described.",
+    "SPONSOR CLERK: \"Throw one fight. Purse doubles. The market loves conviction most when it is priced to leave.\"",
+    "Bosch takes the sponsorship. The contract does not cheer. It only stores the answer."
+   ],
+   "setFlags": [
+    "fuel:floor:sold"
+   ]
+  },
+  {
+   "id": "floor-sponsor-refuse",
+   "comment": "Optional Floor fuel sponsorship refusal at the Venue. Refusal pays nothing by design.",
+   "area": {
+    "x": 1904,
+    "y": 6312,
+    "w": 48,
+    "h": 48
+   },
+   "once": true,
+   "blockFlags": [
+    "fuel:floor:sold",
+    "fuel:floor:refused"
+   ],
+   "dialogue": [
+    "The right desk offers the same contract with the signature line missing.",
+    "SPONSOR CLERK: \"Refuse and receive nothing. No badge, no rebate, no witness protection from arithmetic.\"",
+    "Bosch refuses. Nothing happens on time and in full."
+   ],
+   "setFlags": [
+    "fuel:floor:refused"
+   ]
+  },
+  {
+   "id": "floor-underwriter-sold",
+   "comment": "Optional Floor boss for the sold path. Reuses the Appraiser/Vault guardian battle group 326.",
+   "boss": {
+    "x": 2328,
+    "y": 6608,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:floor:sold"
+   ],
+   "blockFlags": [
+    "fuel:floor:underwriter-defeated"
+   ],
+   "dialogue": [
+    "Behind the tagged bench, a ledger opens without hands. Every page is a price Bosch almost agreed to.",
+    "THE UNDERWRITER: \"Risk is just a person we have learned to bill in advance.\"",
+    "It offers profit for every hit and trusts greed to do the defending."
+   ],
+   "setFlags": [
+    "fuel:floor:underwriter-defeated"
+   ],
+   "battleGroup": 326
+  },
+  {
+   "id": "floor-underwriter-refused",
+   "comment": "Optional Floor boss for the refused path. Reuses the Appraiser/Vault guardian battle group 326.",
+   "boss": {
+    "x": 2328,
+    "y": 6608,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:floor:refused"
+   ],
+   "blockFlags": [
+    "fuel:floor:underwriter-defeated"
+   ],
+   "dialogue": [
+    "Behind the tagged bench, a ledger opens without hands. Every page is a price Bosch almost refused.",
+    "THE UNDERWRITER: \"Risk is just a person we have learned to bill in advance.\"",
+    "It offers profit for every hit and trusts greed to do the defending."
+   ],
+   "setFlags": [
+    "fuel:floor:underwriter-defeated"
+   ],
+   "battleGroup": 326
   }
  ],
  "barriers": [

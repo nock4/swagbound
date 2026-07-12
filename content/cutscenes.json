@@ -1442,6 +1442,80 @@
      "flag": "fuel:correction:cleared"
     }
    ]
+  },
+  {
+   "id": "floor-kid-buyback-sold",
+   "comment": "Optional Floor counter beat for the sold path. No PHOTO mechanics; only files the side-content fragment.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 2200,
+     "y": 6544,
+     "w": 48,
+     "h": 40
+    }
+   },
+   "requireFlags": [
+    "fuel:floor:sold"
+   ],
+   "blockFlags": [
+    "fuel:floor:counter-filed"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "The kid returns with a button polished flat by one small thumb.",
+      "KID: \"I want my drawing back. This button is all I have.\"",
+      "VENDOR: \"Accepted. The market is whoever shows up.\"",
+      "The tag comes off the drawing. The drawing looks more expensive without it.",
+      "ARCHIVIST: \"Value is a rumor. Worth is a witness. Filed under The Floor.\""
+     ]
+    },
+    {
+     "op": "setFlag",
+     "flag": "fuel:floor:counter-filed"
+    }
+   ]
+  },
+  {
+   "id": "floor-kid-buyback-refused",
+   "comment": "Optional Floor counter beat for the refused path. No PHOTO mechanics; only files the side-content fragment.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 2264,
+     "y": 6544,
+     "w": 48,
+     "h": 40
+    }
+   },
+   "requireFlags": [
+    "fuel:floor:refused"
+   ],
+   "blockFlags": [
+    "fuel:floor:counter-filed"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "The kid returns with a button polished flat by one small thumb.",
+      "KID: \"I want my drawing back. This button is all I have.\"",
+      "VENDOR: \"Accepted. The market is whoever shows up.\"",
+      "The tag comes off the drawing. The drawing looks more expensive without it.",
+      "ARCHIVIST: \"Value is a rumor. Worth is a witness. Filed under The Floor.\""
+     ]
+    },
+    {
+     "op": "setFlag",
+     "flag": "fuel:floor:counter-filed"
+    }
+   ]
   }
  ]
 }
