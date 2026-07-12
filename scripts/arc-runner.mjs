@@ -55,15 +55,27 @@ const pointInArea = (point, area) => (
   point.y < area.y + area.h
 );
 
+const OPTIONAL_ID = /^(correction-|fuel-|arena-optional)/;
 const objectiveTriggers = triggerData.triggers
   .map((trigger, index) => ({ ...trigger, __index: index }))
-  .filter(isStoryObjective);
+  .filter(isStoryObjective)
+  .filter((trigger) => !OPTIONAL_ID.test(trigger.id ?? "")
+    && !(trigger.setFlags ?? []).every((f) => f.startsWith("fuel:")) || (trigger.setFlags ?? []).length === 0);
 
 const recruitByTrigger = new Map([
   ["recruit-cloak", { charId: 1, flag: "recruit:cloak", name: "Cloak" }],
   ["recruit-munch", { charId: 2, flag: "recruit:munch", name: "Munch" }],
   ["recruit-knight", { charId: 3, flag: "recruit:knight", name: "Knight" }]
 ]);
+
+const earnedFlags = new Set();
+async function forceFlag(flag) {
+  earnedFlags.add(flag);
+  return page.evaluate((storyFlag) => {
+    if (typeof globalThis.__setStoryFlag !== "function") return { ok: false, reason: "missing __setStoryFlag" };
+    return { ok: true, result: globalThis.__setStoryFlag(storyFlag, true) };
+  }, flag);
+}
 
 const telemetry = {
   schema: "swagbound.arc-telemetry.v1",
@@ -136,12 +148,23 @@ try {
       break;
     }
 
+    // Defeat recovery: a party wipe reloads the autosave and REVERTS flags.
+    // Re-assert everything this run already earned/forced (logged, not a wall).
+    const missing = [...earnedFlags].filter((f) => !flags.includes(f));
+    if (missing.length > 0) {
+      log(`  [RECOVER] flag regression detected (${missing.length} lost, e.g. ${missing[0]}); re-asserting`);
+      telemetry.cheats.push({ kind: "defeat-recovery", count: missing.length, atMs: elapsedMs() });
+      for (const f of missing) await forceFlag(f);
+      continue;
+    }
     const objective = nextObjective(flags);
     if (!objective) {
       log(`[arc] no next objective; flags=[${flags.join(",")}]`);
       break;
     }
     await runObjective(objective, telemetry.objectives.length + 1);
+    const after = await currentFlags();
+    for (const f of after) earnedFlags.add(f);
   }
 } finally {
   telemetry.summary = buildSummary();
@@ -392,6 +415,7 @@ async function forceAdvance(trigger, objectiveEntry) {
       reason: "wall recovery after 3 failed objective attempts",
       result
     };
+    earnedFlags.add(flag);
     telemetry.cheats.push(cheat);
     objectiveEntry.cheats.push(cheat);
     objectiveEntry.wall.forced.push(cheat);
@@ -456,7 +480,8 @@ async function routeToTrigger(trigger, target, attemptEntry) {
             }
             return null;
           };
-          const spot = snap(tx, ty + 120) ?? snap(tx, ty - 120) ?? snap(tx + 120, ty) ?? snap(tx, ty);
+          // land BEYOND the boss-gate arm radius (gates arm-by-distance), then walk in
+          const spot = snap(tx, ty + 420) ?? snap(tx, ty - 420) ?? snap(tx + 420, ty) ?? snap(tx - 420, ty) ?? snap(tx, ty + 160);
           if (!spot) return null;
           warp(spot.x, spot.y);
           return spot;
@@ -465,6 +490,17 @@ async function routeToTrigger(trigger, target, attemptEntry) {
           telemetry.cheats.push({ kind: "warp-near", objective: trigger.id, to: landed, atMs: elapsedMs() });
           log(`  [CHEAT] warp-near ${trigger.id} -> (${landed.x},${landed.y}) (commute skipped, fights real)`);
           await page.waitForTimeout(900);
+          // area triggers suppress when spawned inside: walk OUT first, then the
+          // normal loop re-enters and the trigger fires.
+          if (trigger.area) {
+            for (let step = 0; step < 40; step += 1) {
+              const st = await peek();
+              const pl = st.o?.player;
+              if (!pl || !pointInArea(pl, trigger.area)) break;
+              if (st.o?.dialogueOpen || st.o?.inputLocked) { await tap("z", 200); continue; }
+              await hold("ArrowDown", 140);
+            }
+          }
           for (let d = 0; d < 10; d += 1) {
             const st = await peek();
             if (!st.o?.dialogueOpen && !st.o?.inputLocked) break;
