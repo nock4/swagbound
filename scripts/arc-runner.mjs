@@ -27,6 +27,7 @@ const GRID_STEP = 8;
 const ROUTE_MARGIN = 320;
 const MAX_OBJECTIVE_ATTEMPTS = 3;
 const MAX_INTERRUPT_BATTLES_PER_ATTEMPT = 8;
+const ATTEMPT_DEADLINE_MS = 10 * 60 * 1000;
 const WALL_ROUND_LIMIT = 25;
 const TRIVIAL_ROUND_LIMIT = 4;
 const HP_PRESSURE_FRACTION = 0.75;
@@ -35,6 +36,8 @@ const AUDIT_RADIUS_PX = 300;
 const DOOR_WARP_UNIT_PX = 8;
 const MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX = 24;
 const DEBUG_HOOK_SETTLE_TIMEOUT_MS = 10000;
+const PAGE_EVALUATE_WATCHDOG_MS = 30000;
+const KEYBOARD_WATCHDOG_MS = 15000;
 const DOORS = (world.doors ?? []).map(normalizeDoorForRunner).filter(Boolean);
 const HOP_DOORS = DOORS.filter((door) => !isMessageDoorForRunner(door));
 
@@ -43,6 +46,7 @@ const BASE = cli.base;
 const startedAt = new Date().toISOString();
 const startMs = performance.now();
 let activeObjectiveId = null;
+let activeAttemptDeadlineAt = null;
 let routeSampleSeq = 0;
 let lastRouteSample = null;
 const knownLevels = new Map((charactersData.characters ?? []).map((member) => [member.id, member.level]));
@@ -59,6 +63,58 @@ const pointInArea = (point, area) => (
   point.y >= area.y &&
   point.y < area.y + area.h
 );
+
+class PageWedgedError extends Error {
+  constructor(operation, timeoutMs) {
+    super(`Page wedged during ${operation} after ${timeoutMs}ms`);
+    this.name = "PageWedgedError";
+    this.operation = operation;
+    this.timeoutMs = timeoutMs;
+  }
+}
+
+function withWatchdog(promise, timeoutMs, operation) {
+  let timeout = null;
+  const watchdog = new Promise((_, reject) => {
+    timeout = setTimeout(() => reject(new PageWedgedError(operation, timeoutMs)), timeoutMs);
+  });
+  return Promise.race([
+    promise.finally(() => clearTimeout(timeout)),
+    watchdog
+  ]);
+}
+
+function evaluateWithWatchdog(operation, fn, arg) {
+  const promise = arguments.length >= 3
+    ? page.evaluate(fn, arg)
+    : page.evaluate(fn);
+  return withWatchdog(promise, PAGE_EVALUATE_WATCHDOG_MS, operation);
+}
+
+function waitForFunctionWithWatchdog(operation, fn, options = {}) {
+  return withWatchdog(page.waitForFunction(fn, options), PAGE_EVALUATE_WATCHDOG_MS, operation);
+}
+
+function keyboardWithWatchdog(operation, promise) {
+  return withWatchdog(promise, KEYBOARD_WATCHDOG_MS, operation);
+}
+
+function rethrowPageWedged(error, fallback) {
+  if (error instanceof PageWedgedError) throw error;
+  return fallback;
+}
+
+function attemptDeadlineExpired() {
+  return activeAttemptDeadlineAt !== null && performance.now() >= activeAttemptDeadlineAt;
+}
+
+function bootUrl() {
+  const boot = new URL(BASE);
+  boot.searchParams.set("nointro", "1");
+  if (cli.spawn) boot.searchParams.set("spawn", cli.spawn);
+  if (cli.noEncounters) boot.searchParams.set("noEncounters", "1");
+  return boot;
+}
 
 const OPTIONAL_ID = /^(correction-|fuel-|arena-optional)/;
 const objectiveTriggers = triggerData.triggers
@@ -77,7 +133,7 @@ const earnedFlags = new Set();
 async function forceFlag(flag) {
   earnedFlags.add(flag);
   await settleDebugHooks(`forceFlag:${flag}`);
-  return page.evaluate((storyFlag) => {
+  return evaluateWithWatchdog("forceFlag", (storyFlag) => {
     if (typeof globalThis.__setStoryFlag !== "function") return { ok: false, reason: "missing __setStoryFlag" };
     return { ok: true, result: globalThis.__setStoryFlag(storyFlag, true) };
   }, flag);
@@ -90,7 +146,8 @@ const telemetry = {
   options: {
     spawn: cli.spawn ?? null,
     maxObjectives: cli.maxObjectives ?? null,
-    noEncounters: cli.noEncounters
+    noEncounters: cli.noEncounters,
+    forceFlags: cli.forceFlags
   },
   objectiveOrdering: {
     method: "At each step, read live __firstSceneDebug.flags; choose the first authored non-archivist story trigger whose requireFlags are all present, blockFlags are absent, and once/setFlags are not already satisfied. Declaration order in content/triggers.json breaks ties.",
@@ -112,36 +169,38 @@ flushTelemetry();
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 512, height: 448 }, deviceScaleFactor: 2 });
 
-const peek = () => page.evaluate(() => ({
+const peek = () => evaluateWithWatchdog("peek", () => ({
   o: globalThis.__firstSceneDebug ?? null,
   b: globalThis.__battleDebug ?? null,
   bosses: globalThis.__bossGates ?? null,
   roster: typeof globalThis.__partyRoster === "function" ? globalThis.__partyRoster() : null
 }));
 const tap = async (key, ms = 220) => {
-  await page.keyboard.press(key);
+  await keyboardWithWatchdog(`keyboard.press:${key}`, page.keyboard.press(key));
   await page.waitForTimeout(ms);
 };
 const hold = async (key, ms) => {
-  await page.keyboard.down(key);
+  await keyboardWithWatchdog(`keyboard.down:${key}`, page.keyboard.down(key));
   await page.waitForTimeout(ms);
-  await page.keyboard.up(key);
+  await keyboardWithWatchdog(`keyboard.up:${key}`, page.keyboard.up(key));
   await page.waitForTimeout(80);
 };
 
 async function main() {
 try {
-  const boot = new URL(BASE);
-  boot.searchParams.set("nointro", "1");
-  if (cli.spawn) boot.searchParams.set("spawn", cli.spawn);
-  if (cli.noEncounters) boot.searchParams.set("noEncounters", "1");
+  const boot = bootUrl();
 
   log(`[boot] ${boot.toString()}`);
   await page.goto(boot.toString(), { waitUntil: "networkidle", timeout: 60000 });
-  await page.waitForFunction(() => globalThis.__firstSceneDebug, { timeout: 30000 });
+  await waitForFunctionWithWatchdog("boot:firstSceneDebug", () => globalThis.__firstSceneDebug, { timeout: 30000 });
   await settleDebugHooks("boot");
   await page.waitForTimeout(1500);
   await drainOpeningCutscene();
+  if (cli.forceFlags.length > 0) {
+    for (const flag of cli.forceFlags) await forceFlag(flag);
+    telemetry.cheats.push({ kind: "cli-forced-flags", flags: [...cli.forceFlags] });
+    flushTelemetry();
+  }
 
   log(`[arc] objective graph has ${objectiveTriggers.length} playable story triggers`);
   for (let step = 0; step < objectiveTriggers.length + 12; step += 1) {
@@ -185,6 +244,7 @@ function parseArgs(args) {
   let spawn = null;
   let maxObjectives = null;
   let noEncounters = false;
+  let forceFlags = [];
   for (const arg of args) {
     if (arg.startsWith("--max-objectives=")) {
       maxObjectives = Math.max(0, Number.parseInt(arg.slice("--max-objectives=".length), 10));
@@ -194,12 +254,14 @@ function parseArgs(args) {
       spawn = arg.slice("--spawn=".length);
     } else if (arg === "--no-encounters") {
       noEncounters = true;
+    } else if (arg.startsWith("--force-flags=")) {
+      forceFlags = arg.slice("--force-flags=".length).split(",").map((flag) => flag.trim()).filter(Boolean);
     } else if (!arg.startsWith("--")) {
       base = arg;
     }
   }
   if (!base.endsWith("/")) base += "/";
-  return { base, spawn, maxObjectives, noEncounters };
+  return { base, spawn, maxObjectives, noEncounters, forceFlags };
 }
 
 function isStoryObjective(trigger) {
@@ -283,7 +345,7 @@ async function runObjective(trigger, ordinal) {
     const attemptEntry = {
       attempt,
       startedAtMs: elapsedMs(),
-      flagsBefore: await currentFlags(),
+      flagsBefore: [],
       routeLengthPx: 0,
       routeCells: 0,
       walkingTimeMs: 0,
@@ -295,79 +357,115 @@ async function runObjective(trigger, ordinal) {
       finishedAtMs: null
     };
     entry.attempts.push(attemptEntry);
+    activeAttemptDeadlineAt = performance.now() + ATTEMPT_DEADLINE_MS;
 
-    await hotelHeal(trigger.id, entry);
-    await settleWorld({ maxPresses: 80, reason: "pre-objective" });
-
-    while (!entry.completed) {
-      const unreachableStart = attemptEntry.unreachableRoutes.length;
-      const doorWarpStart = attemptEntry.doorWarps.length;
-      const routeResult = await routeToTrigger(trigger, target, attemptEntry);
-      attemptEntry.status = routeResult.status;
-      attemptEntry.walkingTimeMs += routeResult.walkingTimeMs;
-      attemptEntry.routeLengthPx += routeResult.routeLengthPx;
-      attemptEntry.routeCells += routeResult.routeCells;
-      entry.routeLengthPx += routeResult.routeLengthPx;
-      entry.routeCells += routeResult.routeCells;
-      entry.walkingTimeMs += routeResult.walkingTimeMs;
-
-      let battle = null;
-      if (routeResult.status === "battle" || inBattle(await peek())) {
-        const nearTarget = await playerNearTarget(trigger, target, trigger.boss ? 120 : 180);
-        const battleId = nearTarget ? trigger.id : `route-interrupt:${trigger.id}`;
-        battle = await fightBattle(battleId, trigger, nearTarget ? "objective" : "route-interrupt");
-        entry.battles.push(battle.runId);
-        telemetry.battles.push(battle);
-        await settleAfterBattle(trigger);
-      } else {
-        await page.waitForTimeout(350);
-        await settleWorld({ maxPresses: 120, reason: "post-route" });
-        const settledFlags = await currentFlags();
-        if (trigger.boss && routeResult.status === "arrived" && !objectiveDone(trigger, settledFlags)) {
-          const pressResult = await pressIntoBossGate(trigger, target);
-          if (pressResult === "battle" || inBattle(await peek())) {
-            attemptEntry.status = "battle";
-            battle = await fightBattle(trigger.id, trigger, "objective");
-            entry.battles.push(battle.runId);
-            telemetry.battles.push(battle);
-            await settleAfterBattle(trigger);
-          }
-        }
-      }
-
-      entry.unreachableRoutes.push(...attemptEntry.unreachableRoutes.slice(unreachableStart));
-      entry.doorWarps.push(...attemptEntry.doorWarps.slice(doorWarpStart));
-
-      const afterFlags = await currentFlags();
-      attemptEntry.completedFlags = (trigger.setFlags ?? []).filter((flag) => afterFlags.includes(flag));
-      entry.completed = objectiveDone(trigger, afterFlags);
-
-      if (!entry.completed && battle?.result === "victory") {
-        attemptEntry.interruptBattles += 1;
-        attemptEntry.status = attemptEntry.interruptBattles >= MAX_INTERRUPT_BATTLES_PER_ATTEMPT
-          ? "interrupt-battle-cap"
-          : "interrupt-battle";
-      }
-
-      const retrySameAttempt = !entry.completed
-        && battle?.result === "victory"
-        && attemptEntry.interruptBattles < MAX_INTERRUPT_BATTLES_PER_ATTEMPT;
-      if (!retrySameAttempt) {
+    try {
+      attemptEntry.flagsBefore = await currentFlags();
+      await hotelHeal(trigger.id, entry);
+      const preSettle = await settleWorld({ maxPresses: 80, reason: "pre-objective" });
+      if (preSettle === "attempt-deadline") {
+        attemptEntry.status = "attempt-deadline";
         attemptEntry.finishedAtMs = elapsedMs();
-      }
-
-      log(`  [objective ${trigger.id}] attempt ${attempt}: ${entry.completed ? "complete" : attemptEntry.status}; flags=[${afterFlags.join(",")}]`);
-      flushTelemetry();
-
-      if (entry.completed) break;
-      if (retrySameAttempt) {
-        log(`    [interrupt] ${trigger.id} attempt ${attempt}: battle victory did not complete objective; retrying same attempt (${attemptEntry.interruptBattles}/${MAX_INTERRUPT_BATTLES_PER_ATTEMPT})`);
+        log(`  [objective ${trigger.id}] attempt ${attempt}: ${attemptEntry.status}; flags=[${telemetry.latestFlags.join(",")}]`);
+        flushTelemetry();
         continue;
       }
-      if (battle?.result === "victory" && attemptEntry.interruptBattles >= MAX_INTERRUPT_BATTLES_PER_ATTEMPT) {
-        log(`    [interrupt] ${trigger.id} attempt ${attempt}: interrupt battle cap reached (${MAX_INTERRUPT_BATTLES_PER_ATTEMPT}); consuming attempt`);
+
+      while (!entry.completed) {
+        const unreachableStart = attemptEntry.unreachableRoutes.length;
+        const doorWarpStart = attemptEntry.doorWarps.length;
+        const routeResult = await routeToTrigger(trigger, target, attemptEntry);
+        attemptEntry.status = routeResult.status;
+        attemptEntry.walkingTimeMs += routeResult.walkingTimeMs;
+        attemptEntry.routeLengthPx += routeResult.routeLengthPx;
+        attemptEntry.routeCells += routeResult.routeCells;
+        entry.routeLengthPx += routeResult.routeLengthPx;
+        entry.routeCells += routeResult.routeCells;
+        entry.walkingTimeMs += routeResult.walkingTimeMs;
+        entry.unreachableRoutes.push(...attemptEntry.unreachableRoutes.slice(unreachableStart));
+        entry.doorWarps.push(...attemptEntry.doorWarps.slice(doorWarpStart));
+
+        if (routeResult.status === "attempt-deadline") {
+          attemptEntry.finishedAtMs = elapsedMs();
+          log(`  [objective ${trigger.id}] attempt ${attempt}: ${attemptEntry.status}; flags=[${telemetry.latestFlags.join(",")}]`);
+          flushTelemetry();
+          break;
+        }
+
+        let battle = null;
+        if (routeResult.status === "battle" || inBattle(await peek())) {
+          const nearTarget = await playerNearTarget(trigger, target, trigger.boss ? 120 : 180);
+          const battleId = nearTarget ? trigger.id : `route-interrupt:${trigger.id}`;
+          battle = await fightBattle(battleId, trigger, nearTarget ? "objective" : "route-interrupt");
+          entry.battles.push(battle.runId);
+          telemetry.battles.push(battle);
+          await settleAfterBattle(trigger);
+        } else {
+          await page.waitForTimeout(350);
+          const postSettle = await settleWorld({ maxPresses: 120, reason: "post-route" });
+          if (postSettle === "attempt-deadline") {
+            attemptEntry.status = "attempt-deadline";
+            attemptEntry.finishedAtMs = elapsedMs();
+            log(`  [objective ${trigger.id}] attempt ${attempt}: ${attemptEntry.status}; flags=[${telemetry.latestFlags.join(",")}]`);
+            flushTelemetry();
+            break;
+          }
+          const settledFlags = await currentFlags();
+          if (trigger.boss && routeResult.status === "arrived" && !objectiveDone(trigger, settledFlags)) {
+            const pressResult = await pressIntoBossGate(trigger, target);
+            if (pressResult === "battle" || inBattle(await peek())) {
+              attemptEntry.status = "battle";
+              battle = await fightBattle(trigger.id, trigger, "objective");
+              entry.battles.push(battle.runId);
+              telemetry.battles.push(battle);
+              await settleAfterBattle(trigger);
+            }
+          }
+        }
+
+        const afterFlags = await currentFlags();
+        attemptEntry.completedFlags = (trigger.setFlags ?? []).filter((flag) => afterFlags.includes(flag));
+        entry.completed = objectiveDone(trigger, afterFlags);
+
+        if (!entry.completed && battle?.result === "victory") {
+          attemptEntry.interruptBattles += 1;
+          attemptEntry.status = attemptEntry.interruptBattles >= MAX_INTERRUPT_BATTLES_PER_ATTEMPT
+            ? "interrupt-battle-cap"
+            : "interrupt-battle";
+        }
+
+        const retrySameAttempt = !entry.completed
+          && battle?.result === "victory"
+          && attemptEntry.interruptBattles < MAX_INTERRUPT_BATTLES_PER_ATTEMPT;
+        if (!retrySameAttempt) {
+          attemptEntry.finishedAtMs = elapsedMs();
+        }
+
+        log(`  [objective ${trigger.id}] attempt ${attempt}: ${entry.completed ? "complete" : attemptEntry.status}; flags=[${afterFlags.join(",")}]`);
+        flushTelemetry();
+
+        if (entry.completed) break;
+        if (retrySameAttempt) {
+          log(`    [interrupt] ${trigger.id} attempt ${attempt}: battle victory did not complete objective; retrying same attempt (${attemptEntry.interruptBattles}/${MAX_INTERRUPT_BATTLES_PER_ATTEMPT})`);
+          continue;
+        }
+        if (battle?.result === "victory" && attemptEntry.interruptBattles >= MAX_INTERRUPT_BATTLES_PER_ATTEMPT) {
+          log(`    [interrupt] ${trigger.id} attempt ${attempt}: interrupt battle cap reached (${MAX_INTERRUPT_BATTLES_PER_ATTEMPT}); consuming attempt`);
+        }
+        break;
       }
-      break;
+    } catch (error) {
+      if (!(error instanceof PageWedgedError)) throw error;
+      attemptEntry.status = "wedged";
+      attemptEntry.finishedAtMs = elapsedMs();
+      activeAttemptDeadlineAt = null;
+      telemetry.cheats.push({ kind: "page-wedge-recovery", objectiveId: trigger.id, atMs: elapsedMs() });
+      log(`  [WEDGE] ${trigger.id} attempt ${attempt}: ${error.message}; reloading and retrying next attempt`);
+      flushTelemetry();
+      await recoverFromPageWedge();
+      continue;
+    } finally {
+      activeAttemptDeadlineAt = null;
     }
   }
 
@@ -398,6 +496,18 @@ async function currentFlags() {
   return flags;
 }
 
+async function recoverFromPageWedge() {
+  const boot = bootUrl();
+  await page.goto(boot.toString(), { waitUntil: "networkidle", timeout: 60000 });
+  await waitForFunctionWithWatchdog("page-wedge-recovery:hooks", () => (
+    Boolean(globalThis.__firstSceneDebug) &&
+    typeof globalThis.__debugHeal === "function" &&
+    typeof globalThis.__setStoryFlag === "function"
+  ), { timeout: 30000 });
+  await settleWorld({ maxPresses: 80, reason: "page-wedge-recovery" });
+  for (const flag of [...earnedFlags]) await forceFlag(flag);
+}
+
 function inBattle(state) {
   const phase = state?.b?.phase;
   return ["enter-transition", "menu", "command-input", "execution", "enemy-rolling", "player-rolling"].includes(phase);
@@ -405,8 +515,9 @@ function inBattle(state) {
 
 async function hotelHeal(objectiveId, objectiveEntry) {
   await settleDebugHooks(`pre-heal:${objectiveId}`);
-  const before = await page.evaluate(() => globalThis.__firstSceneDebug?.overworldHud ?? null).catch(() => null);
-  const result = await page.evaluate(() => {
+  const before = await evaluateWithWatchdog("hotelHeal:before", () => globalThis.__firstSceneDebug?.overworldHud ?? null)
+    .catch((error) => rethrowPageWedged(error, null));
+  const result = await evaluateWithWatchdog("hotelHeal:debugHeal", () => {
     if (typeof globalThis.__debugHeal !== "function") return { ok: false, reason: "missing __debugHeal" };
     globalThis.__debugHeal();
     return { ok: true };
@@ -428,7 +539,7 @@ async function forceAdvance(trigger, objectiveEntry) {
   await settleDebugHooks(`forceAdvance:${trigger.id}`);
   const recruit = recruitByTrigger.get(trigger.id);
   if (recruit) {
-    const result = await page.evaluate((charId) => {
+    const result = await evaluateWithWatchdog("forceAdvance:recruit", (charId) => {
       if (typeof globalThis.__recruit !== "function") return { ok: false, reason: "missing __recruit" };
       return { ok: true, party: globalThis.__recruit(charId) };
     }, recruit.charId);
@@ -455,7 +566,7 @@ async function forceAdvance(trigger, objectiveEntry) {
     if (recruit && flag === recruit.flag) {
       continue;
     }
-    const result = await page.evaluate((storyFlag) => {
+    const result = await evaluateWithWatchdog("forceAdvance:setFlag", (storyFlag) => {
       if (typeof globalThis.__setStoryFlag !== "function") return { ok: false, reason: "missing __setStoryFlag" };
       return { ok: true, result: globalThis.__setStoryFlag(storyFlag, true) };
     }, flag);
@@ -479,8 +590,11 @@ async function routeToTrigger(trigger, target, attemptEntry) {
   const started = performance.now();
   let routeLengthPx = 0;
   let routeCells = 0;
+  let previousStuckPlayer = null;
+  let consecutiveStuck = 0;
 
   for (let macro = 0; macro < 10; macro += 1) {
+    if (attemptDeadlineExpired()) return routeResult("attempt-deadline");
     await waitForWorldHooks();
     let state = await peek();
     recordRouteSample(state);
@@ -501,81 +615,9 @@ async function routeToTrigger(trigger, target, attemptEntry) {
 
     const plan = await planPath(player, target, { margin: ROUTE_MARGIN, blockDoors: true, blockNpcs: true });
     if (!plan) {
-      const miss = {
-        atMs: elapsedMs(),
-        from: { x: round(player.x), y: round(player.y) },
-        to: { x: round(target.x), y: round(target.y) },
-        reason: "astar-no-path"
-      };
-      attemptEntry.unreachableRoutes.push(miss);
-      log(`    [route] UNREACHABLE ${trigger.id}: (${miss.from.x},${miss.from.y}) -> (${miss.to.x},${miss.to.y})`);
-      const hopped = await tryDoorHopToward(target, attemptEntry);
-      if (hopped) {
-        continue;
-      }
-      // v2 fallback: the local A* grid cannot solve cross-map commutes. Warp NEAR
-      // the objective (a logged cheat: the commute is skipped, the fights are not)
-      // and walk the last leg for real. Snap to walkable so we never land in a wall.
-      if (!attemptEntry.warpNear) {
-        attemptEntry.warpNear = true;
-        const candidates = await page.evaluate(({ tx, ty }) => {
-          const solid = globalThis.__solidAt;
-          const warp = globalThis.__warpTo;
-          if (!warp) return null;
-          const snap = (x, y) => {
-            if (!solid || !solid(x, y)) return { x, y };
-            for (let r = 8; r <= 240; r += 8) {
-              for (let dy = -r; dy <= r; dy += 8) for (let dx = -r; dx <= r; dx += 8) {
-                if (Math.abs(dx) !== r && Math.abs(dy) !== r) continue;
-                if (!solid(x + dx, y + dy)) return { x: x + dx, y: y + dy };
-              }
-            }
-            return null;
-          };
-          // land BEYOND the boss-gate arm radius (gates arm-by-distance), then walk in
-          const spots = [
-            snap(tx, ty + 420), snap(tx, ty - 420), snap(tx + 420, ty), snap(tx - 420, ty),
-            snap(tx, ty + 160), snap(tx, ty - 160), snap(tx + 160, ty), snap(tx - 160, ty)
-          ].filter(Boolean);
-          return spots;
-        }, { tx: target.x, ty: target.y });
-        // pick the first candidate CONNECTED to the target (walkable is not enough:
-        // pockets abound). Warp there, then locally verify a path exists.
-        let landed = null;
-        for (const spot of candidates ?? []) {
-          const plan2 = await (async () => {
-            await page.evaluate(({ x, y }) => globalThis.__warpTo?.(x, y), spot);
-            await settleDebugHooks(`warp-near:${trigger.id}`);
-            await page.waitForTimeout(500);
-            return planPath(spot, target, { margin: ROUTE_MARGIN, blockDoors: true, blockNpcs: true });
-          })();
-          if (plan2) { landed = spot; break; }
-        }
-        void 0;
-        if (landed) {
-          telemetry.cheats.push({ kind: "warp-near", objective: trigger.id, to: landed, atMs: elapsedMs() });
-          log(`  [CHEAT] warp-near ${trigger.id} -> (${landed.x},${landed.y}) (commute skipped, fights real)`);
-          await page.waitForTimeout(900);
-          // area triggers suppress when spawned inside: walk OUT first, then the
-          // normal loop re-enters and the trigger fires.
-          if (trigger.area) {
-            for (let step = 0; step < 40; step += 1) {
-              const st = await peek();
-              const pl = st.o?.player;
-              if (!pl || !pointInArea(pl, trigger.area)) break;
-              if (st.o?.dialogueOpen || st.o?.inputLocked) { await tap("z", 200); continue; }
-              await hold("ArrowDown", 140);
-            }
-          }
-          for (let d = 0; d < 10; d += 1) {
-            const st = await peek();
-            if (!st.o?.dialogueOpen && !st.o?.inputLocked) break;
-            await tap("z", 220);
-          }
-          continue;
-        }
-      }
-      return routeResult("noroute");
+      const recovery = await recoverRouteFailure(trigger, target, attemptEntry, player, "astar-no-path", "noroute");
+      if (recovery === "continue") continue;
+      return routeResult(recovery);
     }
 
     routeLengthPx += plan.lengthPx;
@@ -586,8 +628,23 @@ async function routeToTrigger(trigger, target, attemptEntry) {
     const follow = await followWaypoints(plan.waypoints);
     if (follow === "battle") return routeResult("battle");
     if (follow === "door") continue;
+    if (follow === "attempt-deadline") return routeResult("attempt-deadline");
     if (follow === "stuck") {
+      const stuckState = await peek();
+      const stuckPlayer = stuckState.o?.player ?? player;
+      consecutiveStuck = previousStuckPlayer && dist(stuckPlayer, previousStuckPlayer) < 8
+        ? consecutiveStuck + 1
+        : 1;
+      previousStuckPlayer = stuckPlayer ? { x: stuckPlayer.x, y: stuckPlayer.y } : null;
+      if (consecutiveStuck >= 2) {
+        const recovery = await recoverRouteFailure(trigger, target, attemptEntry, stuckPlayer, "follow-stuck", "stalled");
+        if (recovery === "continue") continue;
+        return routeResult(recovery);
+      }
       await hold(["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"][macro % 4], 220);
+    } else {
+      previousStuckPlayer = null;
+      consecutiveStuck = 0;
     }
   }
 
@@ -604,12 +661,199 @@ async function routeToTrigger(trigger, target, attemptEntry) {
   }
 }
 
+async function recoverRouteFailure(trigger, target, attemptEntry, player, reason, exhaustedStatus) {
+  recordRouteMiss(trigger, target, attemptEntry, player, reason);
+  const hopped = await tryDoorHopToward(target, attemptEntry);
+  if (hopped === "attempt-deadline") return "attempt-deadline";
+  if (hopped) return "continue";
+  if (!attemptEntry.warpNear) {
+    attemptEntry.warpNear = true;
+    return tryWarpNear(trigger, target, player);
+  }
+  return exhaustedStatus;
+}
+
+function recordRouteMiss(trigger, target, attemptEntry, player, reason) {
+  const miss = {
+    atMs: elapsedMs(),
+    from: { x: round(player?.x), y: round(player?.y) },
+    to: { x: round(target.x), y: round(target.y) },
+    reason
+  };
+  attemptEntry.unreachableRoutes.push(miss);
+  const label = reason === "astar-no-path" ? "UNREACHABLE" : "STUCK";
+  log(`    [route] ${label} ${trigger.id}: (${miss.from.x},${miss.from.y}) -> (${miss.to.x},${miss.to.y}) reason=${reason}`);
+}
+
+async function tryWarpNear(trigger, target, fallbackPlayer) {
+  const preWarpState = await peek();
+  const preWarp = preWarpState.o?.player
+    ? { x: preWarpState.o.player.x, y: preWarpState.o.player.y }
+    : { x: fallbackPlayer?.x, y: fallbackPlayer?.y };
+  const candidates = await warpNearCandidates(target);
+  let candidatesTried = 0;
+
+  for (const spot of candidates ?? []) {
+    if (attemptDeadlineExpired()) return "attempt-deadline";
+    candidatesTried += 1;
+    const warped = await warpTo(spot, `warp-near:${trigger.id}`);
+    if (!warped) continue;
+    await settleDebugHooks(`warp-near:${trigger.id}`);
+    await page.waitForTimeout(500);
+    const landingState = await peek();
+    const landing = landingState.o?.player;
+    if (!landing) continue;
+    const mobility = await probeMobility();
+    const liveState = await peek();
+    const live = liveState.o?.player;
+    if (!live || mobility.maxDisplacement < 6) continue;
+    const plan = await planPath(live, target, { margin: ROUTE_MARGIN, blockDoors: true, blockNpcs: true });
+    if (!plan) continue;
+
+    telemetry.cheats.push({
+      kind: "warp-near",
+      objective: trigger.id,
+      to: spot,
+      atMs: elapsedMs(),
+      landing: { x: round(landing.x), y: round(landing.y) },
+      mobility
+    });
+    log(`  [CHEAT] warp-near ${trigger.id} -> (${round(landing.x)},${round(landing.y)}) (commute skipped, fights real)`);
+    await page.waitForTimeout(900);
+    if (trigger.area) {
+      const exitStatus = await walkOutOfArea(trigger.area);
+      if (exitStatus === "attempt-deadline") return "attempt-deadline";
+    }
+    await dismissBlockingDialogs();
+    return "continue";
+  }
+
+  if (Number.isFinite(preWarp.x) && Number.isFinite(preWarp.y)) {
+    await warpTo(preWarp, `warp-near-restore:${trigger.id}`);
+    await settleDebugHooks(`warp-near-restore:${trigger.id}`);
+  }
+  telemetry.cheats.push({ kind: "warp-near-failed", objective: trigger.id, candidatesTried });
+  return "noroute";
+}
+
+async function warpNearCandidates(target) {
+  const offsets = [
+    { dx: 0, dy: 420 }, { dx: 0, dy: -420 }, { dx: 420, dy: 0 }, { dx: -420, dy: 0 },
+    { dx: 0, dy: 160 }, { dx: 0, dy: -160 }, { dx: 160, dy: 0 }, { dx: -160, dy: 0 },
+    { dx: 0, dy: 240 }, { dx: 0, dy: -240 }, { dx: 240, dy: 0 }, { dx: -240, dy: 0 },
+    { dx: 0, dy: 560 }, { dx: 0, dy: -560 }, { dx: 560, dy: 0 }, { dx: -560, dy: 0 },
+    { dx: 300, dy: 300 }, { dx: 300, dy: -300 }, { dx: -300, dy: 300 }, { dx: -300, dy: -300 }
+  ];
+  return evaluateWithWatchdog("warp-near:candidates", ({ tx, ty, offsets }) => {
+    const solid = globalThis.__solidAt;
+    const warp = globalThis.__warpTo;
+    if (!warp) return null;
+    const snap = (x, y) => {
+      if (!solid || !solid(x, y)) return { x, y };
+      for (let r = 8; r <= 240; r += 8) {
+        for (let dy = -r; dy <= r; dy += 8) for (let dx = -r; dx <= r; dx += 8) {
+          if (Math.abs(dx) !== r && Math.abs(dy) !== r) continue;
+          if (!solid(x + dx, y + dy)) return { x: x + dx, y: y + dy };
+        }
+      }
+      return null;
+    };
+    const seen = new Set();
+    const spots = [];
+    for (const offset of offsets) {
+      const spot = snap(tx + offset.dx, ty + offset.dy);
+      if (!spot) continue;
+      const key = `${Math.round(spot.x)},${Math.round(spot.y)}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      spots.push(spot);
+    }
+    return spots;
+  }, { tx: target.x, ty: target.y, offsets });
+}
+
+async function warpTo(point, operation) {
+  return evaluateWithWatchdog(operation, ({ x, y }) => {
+    if (typeof globalThis.__warpTo !== "function") return false;
+    globalThis.__warpTo(x, y);
+    return true;
+  }, point);
+}
+
+async function probeMobility() {
+  const directions = ["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"];
+  const samples = [];
+  let maxDisplacement = 0;
+  for (const key of directions) {
+    const before = (await peek()).o?.player;
+    if (!before) {
+      samples.push({ key, displacement: 0 });
+      continue;
+    }
+    await hold(key, 200);
+    const after = (await peek()).o?.player;
+    const displacement = after ? dist(before, after) : 0;
+    maxDisplacement = Math.max(maxDisplacement, displacement);
+    samples.push({
+      key,
+      dx: after ? round(after.x - before.x) : 0,
+      dy: after ? round(after.y - before.y) : 0,
+      displacement: round(displacement)
+    });
+  }
+  return {
+    maxDisplacement: Number(maxDisplacement.toFixed(2)),
+    samples
+  };
+}
+
+async function walkOutOfArea(area) {
+  let directions = null;
+  let directionIndex = 0;
+  for (let step = 0; step < 40; step += 1) {
+    if (attemptDeadlineExpired()) return "attempt-deadline";
+    const state = await peek();
+    const player = state.o?.player;
+    if (!player || !pointInArea(player, area)) return "ok";
+    if (state.o?.dialogueOpen || state.o?.inputLocked) {
+      await tap("z", 200);
+      continue;
+    }
+    if (!directions) directions = areaExitDirections(player, area);
+    const key = directions[directionIndex]?.key ?? "ArrowDown";
+    const before = { x: player.x, y: player.y };
+    await hold(key, 140);
+    const after = (await peek()).o?.player;
+    if (!after || dist(before, after) < 4) {
+      directionIndex = (directionIndex + 1) % directions.length;
+    }
+  }
+  return "ok";
+}
+
+function areaExitDirections(player, area) {
+  return [
+    { key: "ArrowLeft", distance: Math.max(0, player.x - area.x + 1) },
+    { key: "ArrowRight", distance: Math.max(0, area.x + area.w - player.x + 1) },
+    { key: "ArrowUp", distance: Math.max(0, player.y - area.y + 1) },
+    { key: "ArrowDown", distance: Math.max(0, area.y + area.h - player.y + 1) }
+  ].sort((a, b) => a.distance - b.distance);
+}
+
+async function dismissBlockingDialogs() {
+  for (let d = 0; d < 10; d += 1) {
+    const state = await peek();
+    if (!state.o?.dialogueOpen && !state.o?.inputLocked) break;
+    await tap("z", 220);
+  }
+}
+
 async function waitForWorldHooks() {
   for (let i = 0; i < 30; i += 1) {
-    const ready = await page.evaluate(() => (
+    const ready = await evaluateWithWatchdog("waitForWorldHooks", () => (
       typeof globalThis.__solidAt === "function" &&
       Boolean(globalThis.__firstSceneDebug?.player)
-    )).catch(() => false);
+    )).catch((error) => rethrowPageWedged(error, false));
     if (ready) return;
     await page.waitForTimeout(200);
   }
@@ -617,13 +861,14 @@ async function waitForWorldHooks() {
 
 async function settleDebugHooks(reason) {
   try {
-    await page.waitForFunction(() => (
+    await waitForFunctionWithWatchdog(`settleDebugHooks:${reason}`, () => (
       Boolean(globalThis.__firstSceneDebug) &&
       typeof globalThis.__debugHeal === "function" &&
       typeof globalThis.__setStoryFlag === "function"
     ), { timeout: DEBUG_HOOK_SETTLE_TIMEOUT_MS });
     return true;
   } catch (error) {
+    if (error instanceof PageWedgedError) throw error;
     log(`  [SETTLE:HOOKS] TIMEOUT after ${reason}; __firstSceneDebug/__debugHeal/__setStoryFlag not ready after ${DEBUG_HOOK_SETTLE_TIMEOUT_MS}ms; continuing (${String(error)})`);
     return false;
   }
@@ -643,8 +888,10 @@ async function planPath(from, target, options = {}) {
   });
   if (!grid) return null;
 
-  const start = nearestOpen(grid.blocked, grid.cols, grid.rows, ...Object.values(w2c(grid, from.x, from.y)));
-  const goal = nearestOpen(grid.blocked, grid.cols, grid.rows, ...Object.values(w2c(grid, target.x, target.y)));
+  const startCell = w2c(grid, from.x, from.y);
+  const goalCell = w2c(grid, target.x, target.y);
+  const start = nearestOpen(grid.blocked, grid.cols, grid.rows, startCell.c, startCell.r, 2);
+  const goal = nearestOpen(grid.blocked, grid.cols, grid.rows, goalCell.c, goalCell.r);
   const path = start && goal && findPath(grid.blocked, grid.cols, grid.rows, start, goal);
   if (!path) return null;
 
@@ -660,7 +907,7 @@ async function planPath(from, target, options = {}) {
 
 async function buildGrid(x0, y0, x1, y1, options) {
   const { step, blockDoors, blockNpcs } = options;
-  const solid = await page.evaluate(({ x0, y0, x1, y1, step }) => {
+  const solid = await evaluateWithWatchdog("buildGrid:solid", ({ x0, y0, x1, y1, step }) => {
     const fn = globalThis.__solidAt;
     if (!fn) return null;
     const cols = Math.floor((x1 - x0) / step) + 1;
@@ -704,9 +951,10 @@ async function buildGrid(x0, y0, x1, y1, options) {
     }
   }
   if (blockNpcs) {
-    const npcs = await page.evaluate(() => (
+    const npcs = await evaluateWithWatchdog("buildGrid:npcs", () => (
       globalThis.__firstSceneDebug?.npcs ?? []
-    ).filter((npc) => npc.visible).map((npc) => ({ x: npc.x, y: npc.y }))).catch(() => []);
+    ).filter((npc) => npc.visible).map((npc) => ({ x: npc.x, y: npc.y })))
+      .catch((error) => rethrowPageWedged(error, []));
     for (const npc of npcs) {
       markCell(Math.round((npc.x - x0) / step), Math.round((npc.y - y0) / step));
     }
@@ -732,6 +980,7 @@ async function followWaypoints(waypoints) {
   let lastY = -1e9;
   let stuck = 0;
   for (const wp of waypoints) {
+    if (attemptDeadlineExpired()) return "attempt-deadline";
     for (let i = 0; i < 14; i += 1) {
       const state = await peek();
       recordRouteSample(state);
@@ -764,6 +1013,7 @@ async function finalApproach(trigger, target) {
   let lastX = -1e9;
   let lastY = -1e9;
   for (let i = 0; i < 85; i += 1) {
+    if (attemptDeadlineExpired()) return "attempt-deadline";
     const state = await peek();
     recordRouteSample(state);
     if (inBattle(state)) return "battle";
@@ -786,14 +1036,19 @@ async function finalApproach(trigger, target) {
     lastY = player.y;
     const dx = target.x - player.x;
     const dy = target.y - player.y;
-    if (trigger.area && Math.hypot(dx, dy) < 18) return "arrived";
+    if (trigger.boss && Math.hypot(dx, dy) < 48) return "arrived";
     if (i > 0 && moved < 2) {
       await hold(["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"][i % 4], 140);
     } else {
       await hold(dirToward(dx, dy), 120);
     }
   }
-  return inBattle(await peek()) ? "battle" : "arrived";
+  const state = await peek();
+  const player = state.o?.player;
+  if (inBattle(state)) return "battle";
+  if (trigger.area && player && pointInArea(player, trigger.area)) return "arrived";
+  if (trigger.boss && player && dist(player, target) < 48) return "arrived";
+  return "stalled";
 }
 
 async function pressIntoBossGate(trigger, target) {
@@ -838,6 +1093,7 @@ async function tryDoorHopToward(target, attemptEntry) {
     .slice(0, 32);
 
   for (const { door } of candidates) {
+    if (attemptDeadlineExpired()) return "attempt-deadline";
     const approaches = await doorApproaches(door);
     for (const approach of approaches) {
       const start = (await peek()).o?.player;
@@ -848,6 +1104,7 @@ async function tryDoorHopToward(target, attemptEntry) {
       const followed = await followWaypoints(plan.waypoints);
       if (followed === "battle") return true;
       if (followed === "door") return true;
+      if (followed === "attempt-deadline") return "attempt-deadline";
       const lastDoorBefore = await lastDoorSnapshot();
       for (let i = 0; i < 8; i += 1) {
         const s = await peek();
@@ -882,7 +1139,7 @@ async function tryDoorHopToward(target, attemptEntry) {
 }
 
 async function doorApproaches(door) {
-  const approaches = await page.evaluate(({ x, y }) => {
+  const approaches = await evaluateWithWatchdog("doorApproaches", ({ x, y }) => {
     const solid = globalThis.__solidAt;
     if (typeof solid !== "function") return [];
     const specs = [
@@ -903,7 +1160,7 @@ async function doorApproaches(door) {
       }
     }
     return out;
-  }, { x: door.worldPixel.x, y: door.worldPixel.y }).catch(() => []);
+  }, { x: door.worldPixel.x, y: door.worldPixel.y }).catch((error) => rethrowPageWedged(error, []));
   return approaches;
 }
 
@@ -923,13 +1180,13 @@ async function waitForDoorSettle(reason = "door transition") {
 }
 
 async function lastDoorSnapshot() {
-  return page.evaluate(() => {
+  return evaluateWithWatchdog("lastDoorSnapshot", () => {
     const door = globalThis.__firstSceneDebug?.lastDoor;
     return door ? {
       from: { x: door.from.x, y: door.from.y },
       to: { x: door.to.x, y: door.to.y }
     } : null;
-  }).catch(() => null);
+  }).catch((error) => rethrowPageWedged(error, null));
 }
 
 function doorSnapshotKey(door) {
@@ -1135,6 +1392,7 @@ async function settleAfterBattle(trigger) {
 
 async function settleWorld({ maxPresses, reason }) {
   for (let i = 0; i < maxPresses; i += 1) {
+    if (attemptDeadlineExpired()) return "attempt-deadline";
     const state = await peek();
     recordRouteSample(state);
     if (inBattle(state)) return;
@@ -1210,7 +1468,7 @@ function recordRouteSample(state) {
 
 async function snapshotWallState() {
   await settleDebugHooks("wall-state snapshot");
-  const state = await page.evaluate(() => {
+  const state = await evaluateWithWatchdog("snapshotWallState", () => {
     const worldState = globalThis.__firstSceneDebug ?? {};
     const battle = globalThis.__battleDebug ?? null;
     return {
@@ -1222,7 +1480,10 @@ async function snapshotWallState() {
       levels: battle?.victorySummary?.levelUps ?? null,
       note: battle?.victorySummary ? "levels captured from battle victory summary" : "levels unavailable from current debug surface outside battle victory summary"
     };
-  }).catch((error) => ({ error: String(error) }));
+  }).catch((error) => {
+    if (error instanceof PageWedgedError) throw error;
+    return { error: String(error) };
+  });
   const partyIds = state.partyRoster?.party ?? [];
   state.levels = partyIds.map((charId) => ({
     charId,

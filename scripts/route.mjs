@@ -4,7 +4,7 @@
  */
 export function findPath(blocked, cols, rows, start, goal) {
   const inb = (c, r) => c >= 0 && r >= 0 && c < cols && r < rows;
-  if (!inb(start.c, start.r) || !inb(goal.c, goal.r) || blocked[goal.r][goal.c]) return null;
+  if (!inb(start.c, start.r) || !inb(goal.c, goal.r) || blocked[start.r][start.c] || blocked[goal.r][goal.c]) return null;
   const key = (c, r) => r * cols + c;
   const h = (c, r) => Math.hypot(c - goal.c, r - goal.r);
   const startK = key(start.c, start.r);
