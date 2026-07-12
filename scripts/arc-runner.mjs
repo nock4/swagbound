@@ -157,6 +157,7 @@ const telemetry = {
   cheats: [],
   objectives: [],
   battles: [],
+  saves: [],
   routeLog: [],
   latestFlags: [],
   reachabilityAudit: null,
@@ -221,6 +222,7 @@ try {
       log(`  [RECOVER] flag regression detected (${missing.length} lost, e.g. ${missing[0]}); re-asserting`);
       telemetry.cheats.push({ kind: "defeat-recovery", count: missing.length, atMs: elapsedMs() });
       for (const f of missing) await forceFlag(f);
+      await recoverParty("between-objective");
       continue;
     }
     const objective = nextObjective(flags);
@@ -388,6 +390,7 @@ async function runObjective(trigger, ordinal) {
           atMs: elapsedMs()
         });
         for (const flag of missingAttemptFlags) await forceFlag(flag);
+        await recoverParty(`attempt:${trigger.id}`);
         attemptEntry.flagsBefore = await currentFlags();
       }
       await hotelHeal(trigger.id, entry);
@@ -428,7 +431,8 @@ async function runObjective(trigger, ordinal) {
           battle = await fightBattle(battleId, trigger, nearTarget ? "objective" : "route-interrupt");
           entry.battles.push(battle.runId);
           telemetry.battles.push(battle);
-          await settleAfterBattle(trigger);
+          if (battle.result === "defeat") await settleAfterDefeat(trigger);
+          else await settleAfterBattle(trigger);
         } else {
           await page.waitForTimeout(350);
           const postSettle = await settleWorld({ maxPresses: 120, reason: "post-route" });
@@ -447,7 +451,8 @@ async function runObjective(trigger, ordinal) {
               battle = await fightBattle(trigger.id, trigger, "objective");
               entry.battles.push(battle.runId);
               telemetry.battles.push(battle);
-              await settleAfterBattle(trigger);
+              if (battle.result === "defeat") await settleAfterDefeat(trigger);
+              else await settleAfterBattle(trigger);
             }
           }
         }
@@ -511,6 +516,10 @@ async function runObjective(trigger, ordinal) {
     entry.completed = objectiveDone(trigger, await currentFlags());
   }
 
+  if (entry.completed) {
+    await saveAfterObjective(trigger.id);
+  }
+
   entry.finishedAtMs = elapsedMs();
   activeObjectiveId = null;
   flushTelemetry();
@@ -535,6 +544,71 @@ async function recoverFromPageWedge() {
   ), { timeout: 30000 });
   await settleWorld({ maxPresses: 80, reason: "page-wedge-recovery" });
   for (const flag of [...earnedFlags]) await forceFlag(flag);
+  await recoverParty("page-wedge-recovery");
+}
+
+// After a flag re-assertion, the roster can still be short a recruit (defeat
+// reload restores the party snapshot, but forced recruit flags do not re-add
+// members). Re-run the authored recruit for any earned recruit flag whose
+// charId is missing from the live roster.
+async function recoverParty(reason) {
+  const roster = await page.evaluate(() => (
+    typeof globalThis.__partyRoster === "function" ? globalThis.__partyRoster() : null
+  )).catch((error) => rethrowPageWedged(error, null));
+  const present = new Set(roster?.party ?? []);
+  for (const { charId, flag } of recruitByTrigger.values()) {
+    if (!earnedFlags.has(flag) || present.has(charId)) continue;
+    const result = await evaluateWithWatchdog("recoverParty:recruit", (id) => {
+      if (typeof globalThis.__recruit !== "function") return { ok: false, reason: "missing __recruit" };
+      return { ok: true, party: globalThis.__recruit(id) };
+    }, charId);
+    telemetry.cheats.push({ kind: "party-recovery", charId, reason, atMs: elapsedMs() });
+    log(`  [CHEAT] party-recovery __recruit(${charId}) (${reason}): ${JSON.stringify(result)}`);
+  }
+}
+
+// Instant save via the "p" hotkey (no dialog). The hotkey no-ops while a menu,
+// dialogue, event, door fade, or pending battle is active, so settle first, then
+// confirm the save landed by watching lastSavedAt change.
+async function saveAfterObjective(objectiveId) {
+  await settleWorld({ maxPresses: 60, reason: `pre-save:${objectiveId}` });
+  const readSavedAt = () => page.evaluate(() => ({
+    lastSavedAt: globalThis.__firstSceneDebug?.lastSavedAt ?? null,
+    hasSave: globalThis.__firstSceneDebug?.hasSave ?? false
+  })).catch((error) => rethrowPageWedged(error, { lastSavedAt: null, hasSave: false }));
+  const before = await readSavedAt();
+  let after = before;
+  let ok = false;
+  for (let attempt = 0; attempt < 3 && !ok; attempt += 1) {
+    await tap("p", 400);
+    after = await readSavedAt();
+    ok = after.lastSavedAt !== before.lastSavedAt && Boolean(after.lastSavedAt);
+  }
+  telemetry.saves.push({ objectiveId, atMs: elapsedMs(), savedAt: after.lastSavedAt, ok });
+  log(`  [save] ${objectiveId}: ${ok ? `ok @ ${after.lastSavedAt}` : "no lastSavedAt change (save may be guarded)"}`);
+  flushTelemetry();
+}
+
+// Battle-end settle that tolerates the expected reload after a DEFEAT. On defeat
+// the scene restores from save (or new game) and the execution context is torn
+// down mid-evaluate; retry across a 60s budget instead of firing the 30s wedge.
+async function settleAfterDefeat(trigger) {
+  const deadline = performance.now() + 60000;
+  while (performance.now() < deadline) {
+    const ready = await page.evaluate(() => (
+      Boolean(globalThis.__firstSceneDebug) &&
+      typeof globalThis.__debugHeal === "function" &&
+      typeof globalThis.__setStoryFlag === "function" &&
+      Boolean(globalThis.__firstSceneDebug?.player)
+    )).catch(() => false);
+    if (ready) {
+      await settleWorld({ maxPresses: 60, reason: "post-defeat" });
+      return true;
+    }
+    await page.waitForTimeout(500);
+  }
+  log(`  [settle] post-defeat hooks absent after 60s for ${trigger?.id ?? "?"}; treating as wedge`);
+  throw new PageWedgedError("settleAfterDefeat", 60000);
 }
 
 function inBattle(state) {
