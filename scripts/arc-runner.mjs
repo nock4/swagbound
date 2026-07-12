@@ -313,6 +313,21 @@ function targetFor(trigger) {
   return rectCenter(trigger.area);
 }
 
+function liveTargetFor(trigger, staticTarget, state, objectiveEntry = null) {
+  const gates = state?.bosses?.gates;
+  const gate = trigger.boss && Array.isArray(gates)
+    ? gates.find((candidate) => candidate.triggerId === trigger.id)
+    : null;
+  if (!gate || !Number.isFinite(gate.x) || !Number.isFinite(gate.y)) return staticTarget;
+
+  const liveTarget = { x: gate.x, y: gate.y };
+  if (objectiveEntry) {
+    objectiveEntry.liveTargetUsed = true;
+    objectiveEntry.lastLiveTarget = { x: round(liveTarget.x), y: round(liveTarget.y) };
+  }
+  return liveTarget;
+}
+
 async function runObjective(trigger, ordinal) {
   activeObjectiveId = trigger.id;
   const target = targetFor(trigger);
@@ -331,6 +346,8 @@ async function runObjective(trigger, ordinal) {
     routeLengthPx: 0,
     routeCells: 0,
     walkingTimeMs: 0,
+    liveTargetUsed: false,
+    lastLiveTarget: null,
     unreachableRoutes: [],
     doorWarps: [],
     completed: false,
@@ -386,7 +403,7 @@ async function runObjective(trigger, ordinal) {
       while (!entry.completed) {
         const unreachableStart = attemptEntry.unreachableRoutes.length;
         const doorWarpStart = attemptEntry.doorWarps.length;
-        const routeResult = await routeToTrigger(trigger, target, attemptEntry);
+        const routeResult = await routeToTrigger(trigger, target, attemptEntry, entry);
         attemptEntry.status = routeResult.status;
         attemptEntry.walkingTimeMs += routeResult.walkingTimeMs;
         attemptEntry.routeLengthPx += routeResult.routeLengthPx;
@@ -424,7 +441,7 @@ async function runObjective(trigger, ordinal) {
           }
           const settledFlags = await currentFlags();
           if (trigger.boss && routeResult.status === "arrived" && !objectiveDone(trigger, settledFlags)) {
-            const pressResult = await pressIntoBossGate(trigger, target);
+            const pressResult = await pressIntoBossGate(trigger, target, entry);
             if (pressResult === "battle" || inBattle(await peek())) {
               attemptEntry.status = "battle";
               battle = await fightBattle(trigger.id, trigger, "objective");
@@ -598,7 +615,7 @@ async function forceAdvance(trigger, objectiveEntry) {
   }
 }
 
-async function routeToTrigger(trigger, target, attemptEntry) {
+async function routeToTrigger(trigger, target, attemptEntry, objectiveEntry) {
   const started = performance.now();
   let routeLengthPx = 0;
   let routeCells = 0;
@@ -613,6 +630,7 @@ async function routeToTrigger(trigger, target, attemptEntry) {
     if (inBattle(state)) {
       return routeResult("battle");
     }
+    const liveTarget = liveTargetFor(trigger, target, state, objectiveEntry);
     const player = state.o?.player;
     if (!player) {
       await page.waitForTimeout(250);
@@ -621,13 +639,18 @@ async function routeToTrigger(trigger, target, attemptEntry) {
     if (trigger.area && pointInArea(player, trigger.area)) {
       return routeResult("arrived");
     }
-    if (dist(player, target) < (trigger.boss ? 18 : 28)) {
+    if (dist(player, liveTarget) < (trigger.boss ? 18 : 28)) {
       break;
     }
 
-    const plan = await planPath(player, target, { margin: ROUTE_MARGIN, blockDoors: true, blockNpcs: true });
+    const plan = await planPath(player, liveTarget, {
+      margin: ROUTE_MARGIN,
+      blockDoors: true,
+      blockNpcs: true,
+      targetExclusionRadius: trigger.boss ? 32 : 0
+    });
     if (!plan) {
-      const recovery = await recoverRouteFailure(trigger, target, attemptEntry, player, "astar-no-path", "noroute");
+      const recovery = await recoverRouteFailure(trigger, target, liveTarget, attemptEntry, player, "astar-no-path", "noroute", objectiveEntry);
       if (recovery === "continue") continue;
       return routeResult(recovery);
     }
@@ -635,7 +658,7 @@ async function routeToTrigger(trigger, target, attemptEntry) {
     routeLengthPx += plan.lengthPx;
     routeCells += plan.cells;
     if (macro === 0) {
-      log(`    [route] (${round(player.x)},${round(player.y)}) -> (${round(target.x)},${round(target.y)}), ${plan.cells} cells, ${plan.waypoints.length} wp`);
+      log(`    [route] (${round(player.x)},${round(player.y)}) -> (${round(liveTarget.x)},${round(liveTarget.y)}), ${plan.cells} cells, ${plan.waypoints.length} wp`);
     }
     const follow = await followWaypoints(plan.waypoints);
     if (follow === "battle") return routeResult("battle");
@@ -644,12 +667,13 @@ async function routeToTrigger(trigger, target, attemptEntry) {
     if (follow === "stuck") {
       const stuckState = await peek();
       const stuckPlayer = stuckState.o?.player ?? player;
+      const stuckTarget = liveTargetFor(trigger, target, stuckState, objectiveEntry);
       consecutiveStuck = previousStuckPlayer && dist(stuckPlayer, previousStuckPlayer) < 8
         ? consecutiveStuck + 1
         : 1;
       previousStuckPlayer = stuckPlayer ? { x: stuckPlayer.x, y: stuckPlayer.y } : null;
       if (consecutiveStuck >= 2) {
-        const recovery = await recoverRouteFailure(trigger, target, attemptEntry, stuckPlayer, "follow-stuck", "stalled");
+        const recovery = await recoverRouteFailure(trigger, target, stuckTarget, attemptEntry, stuckPlayer, "follow-stuck", "stalled", objectiveEntry);
         if (recovery === "continue") continue;
         return routeResult(recovery);
       }
@@ -660,7 +684,7 @@ async function routeToTrigger(trigger, target, attemptEntry) {
     }
   }
 
-  const final = await finalApproach(trigger, target);
+  const final = await finalApproach(trigger, target, objectiveEntry);
   return routeResult(final);
 
   function routeResult(status) {
@@ -673,14 +697,14 @@ async function routeToTrigger(trigger, target, attemptEntry) {
   }
 }
 
-async function recoverRouteFailure(trigger, target, attemptEntry, player, reason, exhaustedStatus) {
-  recordRouteMiss(trigger, target, attemptEntry, player, reason);
-  const hopped = await tryDoorHopToward(target, attemptEntry);
+async function recoverRouteFailure(trigger, staticTarget, routeTarget, attemptEntry, player, reason, exhaustedStatus, objectiveEntry) {
+  recordRouteMiss(trigger, routeTarget, attemptEntry, player, reason);
+  const hopped = await tryDoorHopToward(routeTarget, attemptEntry);
   if (hopped === "attempt-deadline") return "attempt-deadline";
   if (hopped) return "continue";
   if (!attemptEntry.warpNear) {
     attemptEntry.warpNear = true;
-    return tryWarpNear(trigger, target, player);
+    return tryWarpNear(trigger, staticTarget, player, objectiveEntry);
   }
   return exhaustedStatus;
 }
@@ -697,12 +721,13 @@ function recordRouteMiss(trigger, target, attemptEntry, player, reason) {
   log(`    [route] ${label} ${trigger.id}: (${miss.from.x},${miss.from.y}) -> (${miss.to.x},${miss.to.y}) reason=${reason}`);
 }
 
-async function tryWarpNear(trigger, target, fallbackPlayer) {
+async function tryWarpNear(trigger, target, fallbackPlayer, objectiveEntry) {
   const preWarpState = await peek();
   const preWarp = preWarpState.o?.player
     ? { x: preWarpState.o.player.x, y: preWarpState.o.player.y }
     : { x: fallbackPlayer?.x, y: fallbackPlayer?.y };
-  const candidates = await warpNearCandidates(target);
+  const warpTarget = liveTargetFor(trigger, target, preWarpState, objectiveEntry);
+  const candidates = await warpNearCandidates(warpTarget, Boolean(trigger.boss));
   let candidatesTried = 0;
 
   for (const spot of candidates ?? []) {
@@ -722,7 +747,13 @@ async function tryWarpNear(trigger, target, fallbackPlayer) {
     if (inBattle(liveState)) return "battle";
     const live = liveState.o?.player;
     if (!live || mobility.maxDisplacement < 6) continue;
-    const plan = await planPath(live, target, { margin: ROUTE_MARGIN, blockDoors: true, blockNpcs: true });
+    const liveTarget = liveTargetFor(trigger, target, liveState, objectiveEntry);
+    const plan = await planPath(live, liveTarget, {
+      margin: ROUTE_MARGIN,
+      blockDoors: true,
+      blockNpcs: true,
+      targetExclusionRadius: trigger.boss ? 32 : 0
+    });
     if (!plan) continue;
 
     telemetry.cheats.push({
@@ -752,7 +783,7 @@ async function tryWarpNear(trigger, target, fallbackPlayer) {
   return "noroute";
 }
 
-async function warpNearCandidates(target) {
+async function warpNearCandidates(target, isBoss = false) {
   const offsets = [
     { dx: 0, dy: 420 }, { dx: 0, dy: -420 }, { dx: 420, dy: 0 }, { dx: -420, dy: 0 },
     { dx: 0, dy: 160 }, { dx: 0, dy: -160 }, { dx: 160, dy: 0 }, { dx: -160, dy: 0 },
@@ -760,6 +791,13 @@ async function warpNearCandidates(target) {
     { dx: 0, dy: 560 }, { dx: 0, dy: -560 }, { dx: 560, dy: 0 }, { dx: -560, dy: 0 },
     { dx: 300, dy: 300 }, { dx: 300, dy: -300 }, { dx: -300, dy: 300 }, { dx: -300, dy: -300 }
   ];
+  if (isBoss) {
+    offsets.push(
+      { dx: 0, dy: 120 }, { dx: 0, dy: -120 }, { dx: 120, dy: 0 }, { dx: -120, dy: 0 },
+      { dx: 0, dy: 160 }, { dx: 0, dy: -160 }, { dx: 160, dy: 0 }, { dx: -160, dy: 0 },
+      { dx: 140, dy: 140 }, { dx: 140, dy: -140 }, { dx: -140, dy: 140 }, { dx: -140, dy: -140 }
+    );
+  }
   return evaluateWithWatchdog("warp-near:candidates", ({ tx, ty, offsets }) => {
     const solid = globalThis.__solidAt;
     const warp = globalThis.__warpTo;
@@ -900,7 +938,9 @@ async function planPath(from, target, options = {}) {
   const grid = await buildGrid(x0, y0, x1, y1, {
     step,
     blockDoors: options.blockDoors ?? true,
-    blockNpcs: options.blockNpcs ?? true
+    blockNpcs: options.blockNpcs ?? true,
+    target,
+    targetExclusionRadius: options.targetExclusionRadius ?? 0
   });
   if (!grid) return null;
 
@@ -922,7 +962,7 @@ async function planPath(from, target, options = {}) {
 }
 
 async function buildGrid(x0, y0, x1, y1, options) {
-  const { step, blockDoors, blockNpcs } = options;
+  const { step, blockDoors, blockNpcs, target, targetExclusionRadius = 0 } = options;
   const solid = await evaluateWithWatchdog("buildGrid:solid", ({ x0, y0, x1, y1, step }) => {
     const fn = globalThis.__solidAt;
     if (!fn) return null;
@@ -972,6 +1012,7 @@ async function buildGrid(x0, y0, x1, y1, options) {
     ).filter((npc) => npc.visible).map((npc) => ({ x: npc.x, y: npc.y })))
       .catch((error) => rethrowPageWedged(error, []));
     for (const npc of npcs) {
+      if (targetExclusionRadius > 0 && target && dist(npc, target) <= targetExclusionRadius) continue;
       markCell(Math.round((npc.x - x0) / step), Math.round((npc.y - y0) / step));
     }
   }
@@ -1025,7 +1066,7 @@ async function followWaypoints(waypoints) {
   return "arrived";
 }
 
-async function finalApproach(trigger, target) {
+async function finalApproach(trigger, target, objectiveEntry) {
   let lastX = -1e9;
   let lastY = -1e9;
   for (let i = 0; i < 85; i += 1) {
@@ -1033,6 +1074,7 @@ async function finalApproach(trigger, target) {
     const state = await peek();
     recordRouteSample(state);
     if (inBattle(state)) return "battle";
+    const liveTarget = liveTargetFor(trigger, target, state, objectiveEntry);
     if (state.o?.doorFadeActive) {
       await waitForDoorSettle("finalApproach door transition");
       return "door";
@@ -1050,8 +1092,8 @@ async function finalApproach(trigger, target) {
     const moved = Math.hypot(player.x - lastX, player.y - lastY);
     lastX = player.x;
     lastY = player.y;
-    const dx = target.x - player.x;
-    const dy = target.y - player.y;
+    const dx = liveTarget.x - player.x;
+    const dy = liveTarget.y - player.y;
     if (trigger.boss && Math.hypot(dx, dy) < 48) return "arrived";
     if (i > 0 && moved < 2) {
       await hold(["ArrowUp", "ArrowRight", "ArrowDown", "ArrowLeft"][i % 4], 140);
@@ -1061,19 +1103,21 @@ async function finalApproach(trigger, target) {
   }
   const state = await peek();
   const player = state.o?.player;
+  const liveTarget = liveTargetFor(trigger, target, state, objectiveEntry);
   if (inBattle(state)) return "battle";
   if (trigger.area && player && pointInArea(player, trigger.area)) return "arrived";
-  if (trigger.boss && player && dist(player, target) < 48) return "arrived";
+  if (trigger.boss && player && dist(player, liveTarget) < 48) return "arrived";
   return "stalled";
 }
 
-async function pressIntoBossGate(trigger, target) {
+async function pressIntoBossGate(trigger, target, objectiveEntry) {
   if (!trigger.boss) return "arrived";
   log(`    [gate] pressing into ${trigger.id} at (${round(target.x)},${round(target.y)})`);
   for (let i = 0; i < 12; i += 1) {
     const state = await peek();
     recordRouteSample(state);
     if (inBattle(state)) return "battle";
+    const liveTarget = liveTargetFor(trigger, target, state, objectiveEntry);
     if (state.o?.doorFadeActive) {
       await waitForDoorSettle("pressIntoBossGate door transition");
       return "door";
@@ -1087,7 +1131,7 @@ async function pressIntoBossGate(trigger, target) {
       continue;
     }
     const player = state.o.player;
-    await hold(dirToward(target.x - player.x, target.y - player.y), 180);
+    await hold(dirToward(liveTarget.x - player.x, liveTarget.y - player.y), 180);
   }
   return inBattle(await peek()) ? "battle" : "arrived";
 }
@@ -1451,7 +1495,7 @@ async function playerNearTarget(trigger, target, radius) {
   }
   if (!player) return false;
   if (trigger.area && pointInArea(player, trigger.area)) return true;
-  return dist(player, target) <= radius;
+  return dist(player, liveTargetFor(trigger, target, state)) <= radius;
 }
 
 function dirToward(dx, dy) {
