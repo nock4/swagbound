@@ -31,7 +31,11 @@ const TRIVIAL_ROUND_LIMIT = 4;
 const HP_PRESSURE_FRACTION = 0.75;
 const DEFEND_FRACTION = 0.4;
 const AUDIT_RADIUS_PX = 300;
-const DOORS = (world.doors ?? []).filter((door) => door?.worldPixel && door?.destinationWorldPixel);
+const DOOR_WARP_UNIT_PX = 8;
+const MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX = 24;
+const DEBUG_HOOK_SETTLE_TIMEOUT_MS = 10000;
+const DOORS = (world.doors ?? []).map(normalizeDoorForRunner).filter(Boolean);
+const HOP_DOORS = DOORS.filter((door) => !isMessageDoorForRunner(door));
 
 const cli = parseArgs(process.argv.slice(2));
 const BASE = cli.base;
@@ -71,6 +75,7 @@ const recruitByTrigger = new Map([
 const earnedFlags = new Set();
 async function forceFlag(flag) {
   earnedFlags.add(flag);
+  await settleDebugHooks(`forceFlag:${flag}`);
   return page.evaluate((storyFlag) => {
     if (typeof globalThis.__setStoryFlag !== "function") return { ok: false, reason: "missing __setStoryFlag" };
     return { ok: true, result: globalThis.__setStoryFlag(storyFlag, true) };
@@ -133,6 +138,7 @@ try {
   log(`[boot] ${boot.toString()}`);
   await page.goto(boot.toString(), { waitUntil: "networkidle", timeout: 60000 });
   await page.waitForFunction(() => globalThis.__firstSceneDebug, { timeout: 30000 });
+  await settleDebugHooks("boot");
   await page.waitForTimeout(1500);
   await drainOpeningCutscene();
 
@@ -341,6 +347,7 @@ async function runObjective(trigger, ordinal) {
 }
 
 async function currentFlags() {
+  await settleDebugHooks("flag read");
   const state = await peek();
   recordRouteSample(state);
   const flags = Array.isArray(state.o?.flags) ? [...state.o.flags] : [];
@@ -354,6 +361,7 @@ function inBattle(state) {
 }
 
 async function hotelHeal(objectiveId, objectiveEntry) {
+  await settleDebugHooks(`pre-heal:${objectiveId}`);
   const before = await page.evaluate(() => globalThis.__firstSceneDebug?.overworldHud ?? null).catch(() => null);
   const result = await page.evaluate(() => {
     if (typeof globalThis.__debugHeal !== "function") return { ok: false, reason: "missing __debugHeal" };
@@ -374,6 +382,7 @@ async function hotelHeal(objectiveId, objectiveEntry) {
 }
 
 async function forceAdvance(trigger, objectiveEntry) {
+  await settleDebugHooks(`forceAdvance:${trigger.id}`);
   const recruit = recruitByTrigger.get(trigger.id);
   if (recruit) {
     const result = await page.evaluate((charId) => {
@@ -493,6 +502,7 @@ async function routeToTrigger(trigger, target, attemptEntry) {
         for (const spot of candidates ?? []) {
           const plan2 = await (async () => {
             await page.evaluate(({ x, y }) => globalThis.__warpTo?.(x, y), spot);
+            await settleDebugHooks(`warp-near:${trigger.id}`);
             await page.waitForTimeout(500);
             return planPath(spot, target, { margin: ROUTE_MARGIN, blockDoors: true, blockNpcs: true });
           })();
@@ -559,6 +569,20 @@ async function waitForWorldHooks() {
     )).catch(() => false);
     if (ready) return;
     await page.waitForTimeout(200);
+  }
+}
+
+async function settleDebugHooks(reason) {
+  try {
+    await page.waitForFunction(() => (
+      Boolean(globalThis.__firstSceneDebug) &&
+      typeof globalThis.__debugHeal === "function" &&
+      typeof globalThis.__setStoryFlag === "function"
+    ), { timeout: DEBUG_HOOK_SETTLE_TIMEOUT_MS });
+    return true;
+  } catch (error) {
+    log(`  [SETTLE:HOOKS] TIMEOUT after ${reason}; __firstSceneDebug/__debugHeal/__setStoryFlag not ready after ${DEBUG_HOOK_SETTLE_TIMEOUT_MS}ms; continuing (${String(error)})`);
+    return false;
   }
 }
 
@@ -670,7 +694,7 @@ async function followWaypoints(waypoints) {
       recordRouteSample(state);
       if (inBattle(state)) return "battle";
       if (state.o?.doorFadeActive) {
-        await waitForDoorSettle();
+        await waitForDoorSettle("followWaypoints door transition");
         return "door";
       }
       if (!state.o?.player) {
@@ -701,7 +725,7 @@ async function finalApproach(trigger, target) {
     recordRouteSample(state);
     if (inBattle(state)) return "battle";
     if (state.o?.doorFadeActive) {
-      await waitForDoorSettle();
+      await waitForDoorSettle("finalApproach door transition");
       return "door";
     }
     if (!state.o?.player) {
@@ -735,7 +759,7 @@ async function tryDoorHopToward(target, attemptEntry) {
   if (!player) return false;
 
   const currentDistance = dist(player, target);
-  const candidates = DOORS
+  const candidates = HOP_DOORS
     .map((door) => ({
       door,
       score: dist(player, door.worldPixel) + dist(door.destinationWorldPixel, target),
@@ -755,27 +779,28 @@ async function tryDoorHopToward(target, attemptEntry) {
       log(`    [door] ${round(door.worldPixel.x)},${round(door.worldPixel.y)} -> ${round(door.destinationWorldPixel.x)},${round(door.destinationWorldPixel.y)}`);
       const followed = await followWaypoints(plan.waypoints);
       if (followed === "battle") return true;
-      const before = (await peek()).o?.player;
-      const lastDoorBefore = await lastDoorKey();
+      if (followed === "door") return true;
+      const lastDoorBefore = await lastDoorSnapshot();
       for (let i = 0; i < 8; i += 1) {
         const s = await peek();
         if (s.o?.dialogueOpen || s.o?.inputLocked) await tap("z", 180);
         await hold(approach.into, 180);
-        await waitForDoorSettle();
+        await waitForDoorSettle("tryDoorHopToward door transition");
+        await settleDebugHooks("tryDoorHopToward door hop");
         const afterState = await peek();
         recordRouteSample(afterState);
         const after = afterState.o?.player;
-        const lastDoorAfter = await lastDoorKey();
+        const lastDoorAfter = await lastDoorSnapshot();
+        const lastDoorChanged = doorSnapshotKey(lastDoorAfter) !== doorSnapshotKey(lastDoorBefore);
         if (
           after &&
-          (lastDoorAfter !== lastDoorBefore ||
-            dist(after, door.destinationWorldPixel) < 80 ||
-            (before && dist(before, after) > 180))
+          (lastDoorChanged || dist(after, door.destinationWorldPixel) < 80)
         ) {
+          const resolvedTo = lastDoorAfter?.to ?? after;
           const warp = {
             atMs: elapsedMs(),
             from: { x: round(door.worldPixel.x), y: round(door.worldPixel.y) },
-            to: { x: round(after.x), y: round(after.y) },
+            to: { x: round(resolvedTo.x), y: round(resolvedTo.y) },
             destination: { x: round(door.destinationWorldPixel.x), y: round(door.destinationWorldPixel.y) }
           };
           attemptEntry.doorWarps.push(warp);
@@ -814,20 +839,33 @@ async function doorApproaches(door) {
   return approaches;
 }
 
-async function waitForDoorSettle() {
+async function waitForDoorSettle(reason = "door transition") {
+  let sawDoorFade = false;
   for (let i = 0; i < 40; i += 1) {
     const state = await peek();
     recordRouteSample(state);
-    if (!state.o?.doorFadeActive && state.o?.player) return;
+    if (state.o?.doorFadeActive) sawDoorFade = true;
+    if (!state.o?.doorFadeActive && state.o?.player) {
+      if (sawDoorFade) await settleDebugHooks(reason);
+      return;
+    }
     await page.waitForTimeout(120);
   }
+  if (sawDoorFade) await settleDebugHooks(`${reason} timeout`);
 }
 
-async function lastDoorKey() {
+async function lastDoorSnapshot() {
   return page.evaluate(() => {
     const door = globalThis.__firstSceneDebug?.lastDoor;
-    return door ? `${door.from.x},${door.from.y}->${door.to.x},${door.to.y}` : "";
-  }).catch(() => "");
+    return door ? {
+      from: { x: door.from.x, y: door.from.y },
+      to: { x: door.to.x, y: door.to.y }
+    } : null;
+  }).catch(() => null);
+}
+
+function doorSnapshotKey(door) {
+  return door ? `${door.from.x},${door.from.y}->${door.to.x},${door.to.y}` : "";
 }
 
 const GRID = {
@@ -1000,6 +1038,7 @@ function captureBattleVitals(b, startMax, low, dead) {
 }
 
 async function settleAfterBattle(trigger) {
+  let settled = false;
   for (let i = 0; i < 80; i += 1) {
     const state = await peek();
     if (state.b?.phase === "victory-summary") {
@@ -1014,10 +1053,16 @@ async function settleAfterBattle(trigger) {
       await tap("z", 220);
       continue;
     }
-    const flags = state.o?.flags ?? [];
-    if (!trigger || objectiveDone(trigger, flags) || state.o?.player) return;
+    if (!trigger || state.o?.player) {
+      settled = true;
+      break;
+    }
     await page.waitForTimeout(250);
   }
+  if (!settled) {
+    log("  [settle] battle end did not reach an overworld player before hook settle");
+  }
+  await settleDebugHooks("battle end");
 }
 
 async function settleWorld({ maxPresses, reason }) {
@@ -1026,7 +1071,7 @@ async function settleWorld({ maxPresses, reason }) {
     recordRouteSample(state);
     if (inBattle(state)) return;
     if (state.o?.doorFadeActive) {
-      await waitForDoorSettle();
+      await waitForDoorSettle(`settleWorld:${reason}`);
       continue;
     }
     if (state.o?.dialogueOpen || state.o?.inputLocked) {
@@ -1096,6 +1141,7 @@ function recordRouteSample(state) {
 }
 
 async function snapshotWallState() {
+  await settleDebugHooks("wall-state snapshot");
   const state = await page.evaluate(() => {
     const worldState = globalThis.__firstSceneDebug ?? {};
     const battle = globalThis.__battleDebug ?? null;
@@ -1223,6 +1269,36 @@ function flushTelemetry() {
 
 function elapsedMs() {
   return Math.round(performance.now() - startMs);
+}
+
+function normalizeDoorForRunner(door) {
+  const worldPixel = pointFrom(door?.worldPixel);
+  const destinationWorldPixel = doorDestinationWorldPixel(door);
+  if (!worldPixel || !destinationWorldPixel) return null;
+  return { ...door, worldPixel, destinationWorldPixel };
+}
+
+function doorDestinationWorldPixel(door) {
+  const generatedWorldPixel = pointFrom(door?.destinationWorldPixel);
+  if (generatedWorldPixel) return generatedWorldPixel;
+  const warpUnitDestination = pointFrom(door?.destination ?? door?.destinationWarpUnit ?? door?.destinationWarpUnits);
+  return warpUnitDestination
+    ? { x: warpUnitDestination.x * DOOR_WARP_UNIT_PX, y: warpUnitDestination.y * DOOR_WARP_UNIT_PX }
+    : null;
+}
+
+function pointFrom(point) {
+  const x = Number(point?.x);
+  const y = Number(point?.y);
+  return Number.isFinite(x) && Number.isFinite(y) ? { x, y } : null;
+}
+
+function isMessageDoorForRunner(door) {
+  const dx = door.destinationWorldPixel.x - door.worldPixel.x;
+  const dy = door.destinationWorldPixel.y - door.worldPixel.y;
+  return door.type === "door" &&
+    Boolean(String(door.textPointer ?? "").trim()) &&
+    Math.hypot(dx, dy) < MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX;
 }
 
 await main();
