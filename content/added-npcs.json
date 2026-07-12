@@ -11732,6 +11732,103 @@
      "The plaque says do not touch. The plaque has never had to prove it was real."
     ]
    }
+  },
+  {
+   "id": 102172,
+   "worldPixel": {
+    "x": 2464,
+    "y": 9496
+   },
+   "spriteGroup": 66,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 1's guest keeps a motel key under one thumb.",
+     "\"I remember the first threshold opening when Bosch agreed.\""
+    ]
+   }
+  },
+  {
+   "id": 102173,
+   "worldPixel": {
+    "x": 2504,
+    "y": 9536
+   },
+   "spriteGroup": 68,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 2's guest reads the receipt without moving his eyes.",
+     "\"Postwick got quiet after Bosch signed the Registry.\""
+    ]
+   }
+  },
+  {
+   "id": 102174,
+   "worldPixel": {
+    "x": 2464,
+    "y": 9616
+   },
+   "spriteGroup": 119,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 3's guest folds a museum brochure into a square.",
+     "\"The museum settled down once Bosch donated the original.\""
+    ]
+   }
+  },
+  {
+   "id": 102175,
+   "worldPixel": {
+    "x": 2592,
+    "y": 9648
+   },
+   "spriteGroup": 54,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 4's guest listens to the marquee like rain on a roof.",
+     "\"The sign changed one word, and Bosch forgot.\""
+    ]
+   }
+  },
+  {
+   "id": 102176,
+   "worldPixel": {
+    "x": 2648,
+    "y": 9472
+   },
+   "spriteGroup": 133,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 5's guest has packed without closing the suitcase.",
+     "\"Morningside logged Bosch as processed before he left.\""
+    ]
+   }
+  },
+  {
+   "id": 102177,
+   "worldPixel": {
+    "x": 2584,
+    "y": 9560
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A clerk-shaped thing clicks under its coat, key by key.",
+     "\"Correction accepted. Memory revised. Please stop reading the margins.\"",
+     "Ribbon ink dries where its mouth should be."
+    ]
+   }
   }
  ]
 }

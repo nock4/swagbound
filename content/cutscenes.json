@@ -1404,6 +1404,44 @@
      "flag": "signal:deadletter-psychic-join-echo"
     }
    ]
+  },
+  {
+   "id": "correction-restoration",
+   "comment": "Optional Correction restoration beat after the field agent is beaten. No PHOTO flags or Archivist mechanics are touched; this only clears the planted fake marker for a later records-view hook.",
+   "trigger": {
+    "kind": "flag",
+    "flag": "fuel:correction:agent-defeated"
+   },
+   "requireFlags": [
+    "fuel:correction:agent-defeated"
+   ],
+   "blockFlags": [
+    "fuel:correction:cleared"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "The motel sign loses a letter, then finds it again.",
+      "Room 1's guest blinks. \"No. Bosch refused the threshold. I remember refusing now.\"",
+      "Room 2's receipt uncurls. \"The Registry did not get signed. It got broken.\"",
+      "Room 3's brochure folds itself blank. \"The museum did not receive the original. It lost the lie.\"",
+      "Room 4 hears the marquee cough. \"Bosch noticed. That was the part it could not edit.\"",
+      "Room 5 closes the suitcase. \"Morningside logged Bosch as unprocessed. Messy. Better.\"",
+      "ARCHIVIST: \"Someone filed over my filing. I am filing over them.\""
+     ]
+    },
+    {
+     "op": "clearFlag",
+     "flag": "fuel:correction:record-planted"
+    },
+    {
+     "op": "setFlag",
+     "flag": "fuel:correction:cleared"
+    }
+   ]
   }
  ]
 }

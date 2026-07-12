@@ -437,6 +437,42 @@ async function routeToTrigger(trigger, target, attemptEntry) {
       if (hopped) {
         continue;
       }
+      // v2 fallback: the local A* grid cannot solve cross-map commutes. Warp NEAR
+      // the objective (a logged cheat: the commute is skipped, the fights are not)
+      // and walk the last leg for real. Snap to walkable so we never land in a wall.
+      if (!attemptEntry.warpNear) {
+        attemptEntry.warpNear = true;
+        const landed = await page.evaluate(({ tx, ty }) => {
+          const solid = globalThis.__solidAt;
+          const warp = globalThis.__warpTo;
+          if (!warp) return null;
+          const snap = (x, y) => {
+            if (!solid || !solid(x, y)) return { x, y };
+            for (let r = 8; r <= 240; r += 8) {
+              for (let dy = -r; dy <= r; dy += 8) for (let dx = -r; dx <= r; dx += 8) {
+                if (Math.abs(dx) !== r && Math.abs(dy) !== r) continue;
+                if (!solid(x + dx, y + dy)) return { x: x + dx, y: y + dy };
+              }
+            }
+            return null;
+          };
+          const spot = snap(tx, ty + 120) ?? snap(tx, ty - 120) ?? snap(tx + 120, ty) ?? snap(tx, ty);
+          if (!spot) return null;
+          warp(spot.x, spot.y);
+          return spot;
+        }, { tx: target.x, ty: target.y });
+        if (landed) {
+          telemetry.cheats.push({ kind: "warp-near", objective: trigger.id, to: landed, atMs: elapsedMs() });
+          log(`  [CHEAT] warp-near ${trigger.id} -> (${landed.x},${landed.y}) (commute skipped, fights real)`);
+          await page.waitForTimeout(900);
+          for (let d = 0; d < 10; d += 1) {
+            const st = await peek();
+            if (!st.o?.dialogueOpen && !st.o?.inputLocked) break;
+            await tap("z", 220);
+          }
+          continue;
+        }
+      }
       return routeResult("noroute");
     }
 
