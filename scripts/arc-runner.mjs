@@ -361,6 +361,18 @@ async function runObjective(trigger, ordinal) {
 
     try {
       attemptEntry.flagsBefore = await currentFlags();
+      const missingAttemptFlags = [...earnedFlags].filter((f) => !attemptEntry.flagsBefore.includes(f));
+      if (missingAttemptFlags.length > 0) {
+        log(`  [RECOVER] attempt flag regression before ${trigger.id} (${missingAttemptFlags.length} lost, e.g. ${missingAttemptFlags[0]}); re-asserting`);
+        telemetry.cheats.push({
+          kind: "attempt-flag-recovery",
+          objectiveId: trigger.id,
+          count: missingAttemptFlags.length,
+          atMs: elapsedMs()
+        });
+        for (const flag of missingAttemptFlags) await forceFlag(flag);
+        attemptEntry.flagsBefore = await currentFlags();
+      }
       await hotelHeal(trigger.id, entry);
       const preSettle = await settleWorld({ maxPresses: 80, reason: "pre-objective" });
       if (preSettle === "attempt-deadline") {
@@ -695,6 +707,8 @@ async function tryWarpNear(trigger, target, fallbackPlayer) {
 
   for (const spot of candidates ?? []) {
     if (attemptDeadlineExpired()) return "attempt-deadline";
+    const candidateStartState = await peek();
+    if (inBattle(candidateStartState)) return "battle";
     candidatesTried += 1;
     const warped = await warpTo(spot, `warp-near:${trigger.id}`);
     if (!warped) continue;
@@ -705,6 +719,7 @@ async function tryWarpNear(trigger, target, fallbackPlayer) {
     if (!landing) continue;
     const mobility = await probeMobility();
     const liveState = await peek();
+    if (inBattle(liveState)) return "battle";
     const live = liveState.o?.player;
     if (!live || mobility.maxDisplacement < 6) continue;
     const plan = await planPath(live, target, { margin: ROUTE_MARGIN, blockDoors: true, blockNpcs: true });
@@ -733,6 +748,7 @@ async function tryWarpNear(trigger, target, fallbackPlayer) {
     await settleDebugHooks(`warp-near-restore:${trigger.id}`);
   }
   telemetry.cheats.push({ kind: "warp-near-failed", objective: trigger.id, candidatesTried });
+  log(`  [CHEAT] warp-near-failed ${trigger.id}: tried ${candidatesTried} candidates`);
   return "noroute";
 }
 
