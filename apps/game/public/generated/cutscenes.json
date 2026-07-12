@@ -403,6 +403,1007 @@
      "flag": "signal:cold-signal-seen"
     }
    ]
+  },
+  {
+   "id": "postwick-fly-honey-toll",
+   "comment": "data_56.l_0xef617b near world pixel 3280,5504. EB Belch-base gatekeeper npcId 688 asks for Fly Honey, rejects the answer, calls the close-window movement helper, then raw [1F F1 B0 02 7B 02] sends the guard through movement 0x027b and sets flag 366. Recast as a Postwick toll clerk checking whether Bosch brought a sweet enough record.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 3240,
+     "y": 5464,
+     "w": 96,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "blockFlags": [
+    "act2:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 688
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 688
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "A toll clerk steps out with a smile that smells like sugar and inventory glue.",
+      "\"Delivery boy, claimant, guest. Same counter, different receipt.\"",
+      "\"If you brought something sweet, the town owns the sweetness. If you didn't, the town owns the suspicion.\""
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 688
+     },
+     "to": {
+      "x": 3312,
+      "y": 5528
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 688
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 366,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:postwick-fly-honey-toll"
+    }
+   ]
+  },
+  {
+   "id": "postwick-password-audit",
+   "comment": "data_56.l_0xef62f5 near world pixel 2192,5744. EB guard npcId 691 demands the Fly Honey password, decides silence is suspicious, calls data_21.l_0xc68546, then raw [1F F1 B3 02 7B 02] clears the guard and sets flag 367. Recast as a Postwick password audit on the arena approach.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 2152,
+     "y": 5704,
+     "w": 96,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "blockFlags": [
+    "act2:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 691
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 691
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "The clerk's clipboard already has a blank where Bosch's password should be.",
+      "\"Say the word that proves you were invited.\"",
+      "Bosch says nothing useful. The blank decides that is evidence.",
+      "\"Quiet people are either shy or dangerous. Postwick bills both at the same rate.\""
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 691
+     },
+     "to": {
+      "x": 2240,
+      "y": 5760
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 691
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 367,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:postwick-password-audit"
+    }
+   ]
+  },
+  {
+   "id": "postwick-zombie-assignment",
+   "comment": "data_56.l_0xef63b5 near world pixel 2800,5504. EB guard npcId 692 recognizes the party as the ones who destroyed assigned Threed zombies, calls data_21.l_0xc6854d, then raw [1F F1 B4 02 7B 02] retires the guard and sets flag 368. Recast as a Postwick foreman losing control of the assigned crowd.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 2760,
+     "y": 5464,
+     "w": 96,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "blockFlags": [
+    "act2:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 692
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 692
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"You're the one who spoiled my assigned dead.\"",
+      "The foreman's pen shakes. Not from grief. From paperwork.",
+      "\"I had them sorted by face, appetite, and acceptable stink. Then you made them individuals again.\"",
+      "\"That is not liberation. That is inventory damage.\""
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 692
+     },
+     "to": {
+      "x": 2848,
+      "y": 5560
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 692
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 368,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:postwick-zombie-assignment"
+    }
+   ]
+  },
+  {
+   "id": "postwick-photo-queue-one",
+   "comment": "data_60.l_0xef909e near world pixel 3184,6168. EB photo-marker npcId 1169 runs the standard photo packet: [1F 23 BB 01] materializes the photographer cue, then raw [1F F1 91 04 7B 02] dismisses actor 0x0491 and sets flag 393. Recast as a Postwick crowd camera trying to certify Bosch's public mood.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 3170,
+     "y": 6144,
+     "w": 40,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "blockFlags": [
+    "act2:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 1169
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1169
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "A camera drops into the street like it had an appointment with Bosch's face.",
+      "\"Smile for the useful version.\"",
+      "The flash files the crowd first, Bosch second, and the difference like a clerical note."
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1169
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 393,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:postwick-photo-queue-one"
+    }
+   ]
+  },
+  {
+   "id": "postwick-photo-queue-two",
+   "comment": "data_60.l_0xef924e near world pixel 3152,6168. EB photo-marker npcId 1170 uses [1F 23 BC 01], then raw [1F F1 92 04 7B 02] moves/dismisses actor 0x0492 and sets flag 407. Recast as the second Postwick camera in the same crowd line.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 3128,
+     "y": 6144,
+     "w": 40,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "blockFlags": [
+    "act2:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 1170
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1170
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "Another lens rises before the first flash has cooled.",
+      "\"Retake. The last one made you look unconvinced.\"",
+      "Bosch keeps the unconvinced part. The lens hates original material."
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1170
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 407,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:postwick-photo-queue-two"
+    }
+   ]
+  },
+  {
+   "id": "postwick-photo-side-door",
+   "comment": "data_60.l_0xef926d near world pixel 3464,5944. EB photo-marker npcId 1171 runs [1F 23 BC 01], then raw [1F F1 93 04 7B 02] clears actor 0x0493 and sets flag 408. Recast as a side-door photo check near the arena route.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 3432,
+     "y": 5912,
+     "w": 64,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "blockFlags": [
+    "act2:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 1171
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1171
+     },
+     "dir": "left"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "The side door coughs up a photographer with union posture and borrowed joy.",
+      "\"Postwick needs proof you were happy here.\"",
+      "\"Stand still. The proof works better when the subject stops objecting.\""
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1171
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 408,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:postwick-photo-side-door"
+    }
+   ]
+  },
+  {
+   "id": "postwick-belch-commoner",
+   "comment": "data_60.l_0xef9502 near world pixel 4048,5672. EB Master Belch/Puke encounter npcId 590 calls data_56.l_0xef681a, resolves a battle helper, calls data_56.l_0xef68d7, then raw [1F F1 4E 02 7B 02] clears actor 0x024e and sets flag 603. Recast as Postwick's complaint engine measuring Bosch as a commoner.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 4016,
+     "y": 5640,
+     "w": 80,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "blockFlags": [
+    "act2:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 590
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 590
+     },
+     "dir": "left"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "A sour little official waddles in with a mouth full of policy.",
+      "\"Commoner. You wander without Honey, without pass, without a version we can sponsor.\"",
+      "\"Master Belch loved a clean appetite. Postwick loves a clean crowd. You are neither.\""
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 590
+     },
+     "to": {
+      "x": 4008,
+      "y": 5672
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 590
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 603,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:postwick-belch-commoner"
+    }
+   ]
+  },
+  {
+   "id": "postwick-backstage-route",
+   "comment": "data_24.l_0xc6d50a near world pixel 4504,5864. EB backstage guard npcId 840 blocks the restricted door until the Runaway Five condition, then raw [1F F1 48 03 F2 00], [1F 1E 48 03 06], and [1F 17 49 03 08 00 01] walk the guard aside, adjust the door actor, and set flag 374 plus a branch flag. Recast as a Postwick route attendant letting Bosch through the performed crowd.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 4464,
+     "y": 5832,
+     "w": 80,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "blockFlags": [
+    "act2:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 840
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 840
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "The attendant blocks the service door with a smile trained to deny everything softly.",
+      "\"Backstage is for approved faces. Frontstage is for faces still being improved.\"",
+      "He reads Bosch's damaged card, frowns at the bad print, and steps aside anyway.",
+      "\"Fine. The crowd paid to see a failure of formatting. Try not to enjoy it.\""
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 840
+     },
+     "to": {
+      "x": 4536,
+      "y": 5864
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 840
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 374,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:postwick-backstage-route"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-photo-street",
+   "comment": "data_60.l_0xef92ca near world pixel 3696,8504. EB photo-marker npcId 1179 runs [1F 23 BC 01], then raw [1F F1 9B 04 7B 02] dismisses actor 0x049b and sets flag 411. Recast as a Dead Letter street camera recording Bosch as already returned mail.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 3664,
+     "y": 8472,
+     "w": 80,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 1179
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1179
+     },
+     "dir": "right"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "Dead Letter's first camera doesn't flash. It receipts.",
+      "\"Returned before delivery. Face intact enough for routing.\"",
+      "Bosch does not sign. The receipt prints anyway."
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1179
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 411,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-photo-street"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-photo-return-line",
+   "comment": "data_60.l_0xef9118 near world pixel 4400,9656. EB photo-marker npcId 1176 uses [1F 23 BB 01], then raw [1F F1 98 04 7B 02] clears actor 0x0498 and sets flag 397. Recast as a return-line camera near the undelivered route.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 4360,
+     "y": 9624,
+     "w": 48,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 1176
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1176
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "A return-line camera leans out of the dark and finds Bosch without hunting.",
+      "\"Hold still. Undelivered things blur when they remember who sent them.\"",
+      "The lens catches the blur. The town calls that accuracy."
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1176
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 397,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-photo-return-line"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-photo-undelivered",
+   "comment": "data_60.l_0xef92ab near world pixel 4432,9656. EB photo-marker npcId 1177 uses [1F 23 BC 01], then raw [1F F1 99 04 7B 02] clears actor 0x0499 and sets flag 410. Recast as the paired undelivered-photo beat beside the return line.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 4420,
+     "y": 9624,
+     "w": 48,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 1177
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1177
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "The second camera is already tired of Bosch's first answer.",
+      "\"Retake. This town prefers its dead mail legible.\"",
+      "\"Legible means owned by the reader. You understand.\""
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1177
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 410,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-photo-undelivered"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-photo-plate",
+   "comment": "data_60.l_0xef9448 near world pixel 4296,8944. EB photo-marker npcId 1180 runs [1F 23 D4 01], then raw [1F F1 9C 04 7B 02] clears actor 0x049c and sets flag 435. Recast as a plate-camera on the road between Dead Letter's arrival and museum lanes.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 4264,
+     "y": 8912,
+     "w": 80,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 1180
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1180
+     },
+     "dir": "right"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "A camera plate clicks open like a little coffin lid.",
+      "\"Proof of passage. Proof of personhood pending.\"",
+      "The plate takes Bosch's outline and leaves the inside deliberately blank."
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1180
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 435,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-photo-plate"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-puke-return",
+   "comment": "data_54.l_0xc9e619 near world pixel 5088,7608. EB Master Barf/Puke scene npcId 1229 taunts the party, plays sound 78, calls the battle helper, then party_add(4), learnpsi(4,2), sets flag 276, and raw [1F F1 CD 04 7B 02] clears actor 0x04cd. Recast as a museum-path return of a bad copy that insists it improved.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 5048,
+     "y": 7576,
+     "w": 96,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 1229
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1229
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "Something sour returns wearing a better title.",
+      "\"You forgot me because the record improved me. That is how rot becomes brand.\"",
+      "\"Call me Puke if you need the old joke. Call me upgraded if you prefer paperwork.\"",
+      "It bows like a citation and leaks off the path."
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 1229
+     },
+     "to": {
+      "x": 5128,
+      "y": 7640
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1229
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 276,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-puke-return"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-bent-key-call",
+   "comment": "data_25.l_0xc6fae5 plus textPointer2 data_25.l_0xc6fb02 near world pixel 6872,10024. EB first reports the locked/bent-key path, then the locker-key branch calls l_0xc6fb33, runs [1F 1E DF 01 06], and sets flag 541. Recast as the Dead Letter door refusing Bosch's key while a distant call tries to route him.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 6832,
+     "y": 9984,
+     "w": 96,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 479
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 479
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "The lock accepts the key, thinks about it, and returns a worse answer.",
+      "\"Bent. Unverified. Not shaped for this claim.\"",
+      "From somewhere past the door, a voice calls Bosch by a name that almost fits.",
+      "\"We are trying to contact the one the route cannot deliver.\""
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 300
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 479
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 541,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-bent-key-call"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-psychic-join-echo",
+   "comment": "data_31.l_0xc795c1 near world pixel 7000,9808. EB rescue scene uses the key, thanks Ness, moves npcId 436 and companion markers with raw [1F F1 B5 01 F1 00] plus [1F 1E B6 01 06] and [1F 1E B5 01 06], party_add(2), then sets flags 13/198/321/689/483 and unsets 118. Recast as a Dead Letter echo of a rescued psychic choosing to walk back under her own name.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 6960,
+     "y": 9768,
+     "w": 96,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 436
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 436
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "A voice behind the dead mail slot answers before Bosch knocks.",
+      "\"You are just like I imagined you would be. That is not a compliment. Imagination can be another cage.\"",
+      "\"People are worried in the town that filed me. Good. Worry is proof they did not finish owning me.\"",
+      "\"I can walk back if I walk as myself. Stand close. The route hates witnesses.\""
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 436
+     },
+     "to": {
+      "x": 7040,
+      "y": 9808
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 436
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 13,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-psychic-join-echo"
+    }
+   ]
   }
  ]
 }

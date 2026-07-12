@@ -355,6 +355,20 @@
       "openedPages": [
         "Empty. The town's faces are its own again."
       ]
+    },
+    {
+      "id": "correction-notice-board",
+      "kind": "examine",
+      "label": "Corrections Board",
+      "worldPixel": {
+        "x": 2576,
+        "y": 9496
+      },
+      "pages": [
+        "CORRECTION 01: The threshold opened after Bosch agreed to be the version on file.",
+        "CORRECTION 02: The Registry was accepted, signed, and enjoyed. Town happiness remained properly attributed.",
+        "CORRECTION 03: The museum received Bosch's original and thanked the leaked version for donating it."
+      ]
     }
   ]
 }

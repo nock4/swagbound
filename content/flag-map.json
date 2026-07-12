@@ -132,7 +132,7 @@
   },
   {
    "storyFlag": "intro:bedroom-opening-done",
-   "beat": "Wake-in-bed opening finished; the meteor-night containment lifts (gawker crowd departs, the 35 when-unset town-seal doors deactivate, the yard band becomes the road); nine dormant Morningside townsfolk (npcs 129-138) populate on FLG_MYHOME_START",
+   "beat": "Wake-in-bed opening finished; the meteor-night containment lifts (gawker crowd departs, the 35 when-unset town-seal doors deactivate, the yard band becomes the road); the matching Onett Mizuno door-open row retires; nine dormant Morningside townsfolk (npcs 129-138) populate on FLG_MYHOME_START",
    "ebFlags": [
     {
      "id": 469,
@@ -145,6 +145,10 @@
     {
      "id": 375,
      "name": "FLG_MYHOME_START"
+    },
+    {
+     "id": 633,
+     "name": "FLG_ONET_MIZUNO_DOOR_OPEN"
     }
    ],
    "candidates": []
