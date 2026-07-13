@@ -11992,6 +11992,72 @@
      "\"They said doubt is noise. I got good at muting myself. That's probably bad, right?\""
     ]
    }
+  },
+  {
+   "id": 102310,
+   "worldPixel": {
+    "x": 2224,
+    "y": 7184
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A masked crew hand sorts paper faces by degree of plausible deniability.",
+     "\"Free mask. Keeps the town from recognizing the parts of you it already misread.\"",
+     "\"Do not worry. We accept non-wearers. We accept everyone eventually, which is worse.\""
+    ]
+   }
+  },
+  {
+   "id": 102311,
+   "worldPixel": {
+    "x": 2352,
+    "y": 7192
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "An alley clerk watches Bosch with careful new politeness.",
+     "\"Saw you with them twice. No judgment. Also no name on this conversation.\""
+    ]
+   }
+  },
+  {
+   "id": 102312,
+   "worldPixel": {
+    "x": 2408,
+    "y": 6664
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "An Unsigned runner has scratched at the edge of his mask until the paper fuzzed.",
+     "\"I sold the name. They paid in quiet. Quiet spends fast.\"",
+     "\"If you find the receipt, bring me back the part that signed.\""
+    ]
+   }
+  },
+  {
+   "id": 102313,
+   "worldPixel": {
+    "x": 5420,
+    "y": 9692
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "An undelivered clerk guards the return tray with both elbows.",
+     "\"Names come back here when the buyer refuses delivery. Bodies almost never do.\""
+    ]
+   }
   }
  ]
 }

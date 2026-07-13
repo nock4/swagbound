@@ -481,6 +481,45 @@
         "The sound board labels one slider TESTIMONY and three sliders TESTIMONY, TESTIMONY, TESTIMONY.",
         "The mute button is warm."
       ]
+    },
+    {
+      "id": "fuel-unsigned-mask-crate",
+      "kind": "examine",
+      "label": "Mask crate",
+      "worldPixel": {
+        "x": 2216,
+        "y": 7184
+      },
+      "pages": [
+        "FREE MASKS.",
+        "Face optional. Name not accepted. Returns processed by silence."
+      ]
+    },
+    {
+      "id": "fuel-unsigned-return-tray",
+      "kind": "examine",
+      "label": "Return tray",
+      "worldPixel": {
+        "x": 5368,
+        "y": 9688
+      },
+      "pages": [
+        "The return tray is full of receipts, signatures, and other little ghosts that still know who held the pen.",
+        "One slip has been handled so much the ink looks bruised."
+      ]
+    },
+    {
+      "id": "fuel-unsigned-shelf-mask",
+      "kind": "examine",
+      "label": "Shelf mask",
+      "worldPixel": {
+        "x": 2488,
+        "y": 6664
+      },
+      "pages": [
+        "A blank mask rests on the service-apartment shelf.",
+        "It has retired from personhood and seems almost relaxed."
+      ]
     }
   ]
 }
