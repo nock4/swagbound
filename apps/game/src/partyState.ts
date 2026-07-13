@@ -898,6 +898,33 @@ export class PartyState {
     }
   }
 
+  applyLeveledPartyMember(member: PartyMember): PartyBattleMemberSnapshot {
+    const charId = normalizeId(member.id);
+    const existingBattleMember = this.battleMembersByChar.get(charId);
+    const inventory = this.inventoryByChar.has(charId)
+      ? this.inventory(charId)
+      : existingBattleMember?.inventory ?? member.inventory.map(normalizeId);
+    const battleMember = normalizeBattleMember({
+      charId,
+      level: member.level,
+      experience: member.experience,
+      hp: member.maxHp,
+      maxHp: member.maxHp,
+      pp: member.maxPp,
+      maxPp: member.maxPp,
+      inventory,
+      stats: member.stats
+    });
+    this.battleMembersByChar.set(charId, battleMember);
+    this.vitalsByChar.set(charId, {
+      hp: createRollingMeter(battleMember.maxHp),
+      maxHp: battleMember.maxHp,
+      pp: battleMember.maxPp,
+      maxPp: battleMember.maxPp
+    });
+    return cloneBattleMember(battleMember);
+  }
+
   applyToPartyMembers(members: PartyMember[]): PartyMember[] {
     const activeIds = this.party();
     const selected = activeIds.length > 0

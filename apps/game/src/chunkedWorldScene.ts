@@ -148,7 +148,8 @@ import {
   type CutsceneMoveDebug,
   type NewGameStartupRunDebug,
   type OverworldInteractableDebug,
-  type OverworldInteractionTargetDebug
+  type OverworldInteractionTargetDebug,
+  type OverworldPartyMemberDebug
 } from "./state";
 import { createDialogueResolver, textSpeedCpsFromSearch } from "./dialogueRenderer";
 import {
@@ -235,7 +236,7 @@ import {
   type DirectionVector,
   type GamepadAction
 } from "./gamepadInput";
-import { buildPartyMember, type PartyMember } from "./characterModel";
+import { buildPartyMember, partyMemberAtLevel, type PartyMember } from "./characterModel";
 import {
   defaultVisualStateInputs,
   lowerHideFramePx,
@@ -693,6 +694,8 @@ const EVENT_SEQUENCE_WATCHDOG_TIMEOUT_MS = 2_500;
 const DEFAULT_HOTEL_REST_COST = 100;
 const SOURCE_CHECK_SESSION_REGISTRY_KEY = "source-check-session";
 const DEV_PINS_REGISTRY_KEY = "dev-annotation-pins";
+const MIN_DEBUG_PARTY_LEVEL = 1;
+const MAX_DEBUG_PARTY_LEVEL = 99;
 
 type SourceCheckSessionState = {
   attempts: Record<string, number>;
@@ -702,6 +705,7 @@ type SourceCheckSessionState = {
 type DevPinData = { x: number; y: number; n: number };
 
 type TilePoint = { x: number; y: number };
+type SetPartyLevelDebugSummary = { id: number; name: string; level: number; maxHp: number };
 type ForceEncounterResult =
   | { started: true; enemyGroup: number; advantage: EncounterAdvantage }
   | { started: false; reason: string; enemyGroup?: number; advantage?: EncounterAdvantage };
@@ -2719,6 +2723,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.refreshMenuScreens();
       this.publish();
     };
+    if (import.meta.env.DEV) {
+      globals.__setPartyLevels = (level: number): SetPartyLevelDebugSummary[] => this.setPartyLevelsDebug(level);
+    }
     // Debug-only: force the flee flag on live roamers so flee (away-movement) can be verified
     // without an over-leveled party. Nothing in normal play calls it.
     // Debug-only: force a roamer spawn (optionally as an ambusher) so the playtest
@@ -2848,6 +2855,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__fgClearAt;
     delete globals.__playerDepthInfo;
     delete globals.__debugHeal;
+    delete globals.__setPartyLevels;
     delete globals.__debugSpawnRoamer;
     delete globals.__debugFindAmbushSpot;
     delete globals.__equip;
@@ -5483,6 +5491,63 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const members = this.partyState.applyToPartyMembers(characters.map(buildPartyMember));
     const activeIds = new Set(this.partyState.party());
     return activeIds.size > 0 ? members.filter((member) => activeIds.has(member.id)) : members;
+  }
+
+  private setPartyLevelsDebug(level: number): SetPartyLevelDebugSummary[] {
+    const targetLevel = clampDebugPartyLevel(level);
+    const activeIds = this.partyState.party();
+    const characters = this.data_.characters?.characters;
+    if (activeIds.length === 0 || !characters?.length) {
+      this.publish();
+      return [];
+    }
+
+    const baseMembers = characters.map(buildPartyMember);
+    const baseById = new Map(baseMembers.map((member) => [member.id, member]));
+    const currentById = new Map(this.partyState.applyToPartyMembers(baseMembers).map((member) => [member.id, member]));
+    const summary: SetPartyLevelDebugSummary[] = [];
+    for (const charId of activeIds) {
+      const baseMember = baseById.get(charId);
+      if (!baseMember) {
+        continue;
+      }
+      const currentMember = currentById.get(charId) ?? baseMember;
+      const leveled = partyMemberAtLevel({
+        ...baseMember,
+        inventory: currentMember.inventory,
+        money: currentMember.money,
+        ...(currentMember.statuses?.length ? { statuses: currentMember.statuses } : {})
+      }, targetLevel);
+      const persisted = this.partyState.applyLeveledPartyMember(leveled);
+      summary.push({
+        id: persisted.charId,
+        name: leveled.name,
+        level: persisted.level,
+        maxHp: persisted.maxHp
+      });
+    }
+    this.refreshMenuScreens();
+    this.publish();
+    return summary;
+  }
+
+  private overworldPartyMembersDebug(): OverworldPartyMemberDebug[] {
+    return this.overworldHudPartyMembers().map((member) => {
+      const vitals = this.partyState.vitals(member.id);
+      const maxHp = statusHudStat(vitals?.maxHp ?? member.maxHp, 1);
+      const hp = Math.min(maxHp, statusHudStat(vitals?.hp.target ?? member.hp));
+      const maxPp = statusHudStat(vitals?.maxPp ?? member.maxPp);
+      const pp = Math.min(maxPp, statusHudStat(vitals?.pp ?? member.pp));
+      return {
+        id: member.id,
+        name: member.name.trim() || "PLAYER",
+        level: statusHudStat(member.level, 1),
+        hp,
+        maxHp,
+        pp,
+        maxPp
+      };
+    });
   }
 
   private openShopMenu(storeId: number): void {
@@ -10080,6 +10145,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       eventExecutor: this.eventSequence?.debug(),
       newGameStartup: this.newGameStartupRecord,
       partyState: this.partyState.counts(),
+      ...(import.meta.env.DEV ? { partyMembers: this.overworldPartyMembersDebug() } : {}),
       overworldHud: this.overworldStatusHud(),
       shopOpen: this.menuState.open && this.activeShopStoreId !== undefined,
       binderOverlayOpen: this.binderOverlayOpen,
@@ -10258,6 +10324,11 @@ function roundedPoint(point: { x: number; y: number }): { x: number; y: number }
 function statusHudStat(value: number, fallback = 0): number {
   const numeric = Number.isFinite(value) ? value : fallback;
   return Math.max(0, Math.floor(numeric));
+}
+
+function clampDebugPartyLevel(value: number): number {
+  const numeric = Number.isFinite(value) ? value : MIN_DEBUG_PARTY_LEVEL;
+  return Math.min(MAX_DEBUG_PARTY_LEVEL, Math.max(MIN_DEBUG_PARTY_LEVEL, Math.floor(numeric)));
 }
 
 function isDangerHp(hp: number, maxHp: number): boolean {

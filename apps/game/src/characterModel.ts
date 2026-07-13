@@ -180,6 +180,59 @@ export function calculateStatsAtLevel(
   };
 }
 
+export function experienceThresholdForLevel(
+  thresholds: PartyMemberExpThreshold[] | undefined,
+  level: number
+): number {
+  const targetLevel = normalizedLevel(level);
+  let experience = 0;
+  for (const threshold of normalizeExpTable(thresholds ?? [])) {
+    if (threshold.level > targetLevel) {
+      break;
+    }
+    experience = threshold.experience;
+  }
+  return experience;
+}
+
+export function calculatePartyMemberStatsAtLevel(
+  member: Pick<PartyMember, "level" | "maxHp" | "maxPp" | "stats" | "growth">,
+  level: number
+): PartyMemberStatSnapshot {
+  const targetLevel = normalizedLevel(level);
+  const base = normalizeStatSnapshot({
+    maxHp: member.maxHp,
+    maxPp: member.maxPp,
+    stats: member.stats
+  });
+  if (!member.growth) {
+    return base;
+  }
+  const baseLevel = normalizedLevel(member.level);
+  if (targetLevel < baseLevel) {
+    return calculateNeutralStatsAtLevel(member.growth, targetLevel);
+  }
+  return calculateStatsAtLevel(member.growth, targetLevel, {
+    level: baseLevel,
+    ...base
+  });
+}
+
+export function partyMemberAtLevel(member: PartyMember, level: number): PartyMember {
+  const targetLevel = normalizedLevel(level);
+  const calculated = calculatePartyMemberStatsAtLevel(member, targetLevel);
+  return {
+    ...member,
+    level: targetLevel,
+    experience: member.expTable?.length ? experienceThresholdForLevel(member.expTable, targetLevel) : member.experience,
+    maxHp: calculated.maxHp,
+    hp: calculated.maxHp,
+    maxPp: calculated.maxPp,
+    pp: calculated.maxPp,
+    stats: { ...calculated.stats }
+  };
+}
+
 function calculateNeutralStatsAtLevel(growth: PartyMemberGrowth, level: number): PartyMemberStatSnapshot {
   const calculated = neutralLevelOneStats();
 

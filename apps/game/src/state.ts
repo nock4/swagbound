@@ -288,6 +288,16 @@ export type OverworldInteractionTargetDebug = {
   label?: string;
 };
 
+export type OverworldPartyMemberDebug = {
+  id: number;
+  name: string;
+  level: number;
+  hp: number;
+  maxHp: number;
+  pp: number;
+  maxPp: number;
+};
+
 export type OverworldDebug = {
   mode: "world" | "fallback" | "error";
   dialogueOpen: boolean;
@@ -405,6 +415,7 @@ export type OverworldDebug = {
     storageItems: number;
     partyCount: number;
   };
+  partyMembers?: OverworldPartyMemberDebug[];
   overworldHud?: OverworldStatusHudView;
   shopOpen?: boolean;
   binderOverlayOpen?: boolean;
