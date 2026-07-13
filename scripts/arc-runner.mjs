@@ -393,6 +393,7 @@ async function runObjective(trigger, ordinal) {
         await recoverParty(`attempt:${trigger.id}`);
         attemptEntry.flagsBefore = await currentFlags();
       }
+      await levelPartyForAct(trigger.id, attemptEntry.flagsBefore);
       await hotelHeal(trigger.id, entry);
       const preSettle = await settleWorld({ maxPresses: 80, reason: "pre-objective" });
       if (preSettle === "attempt-deadline") {
@@ -565,6 +566,42 @@ async function recoverParty(reason) {
     telemetry.cheats.push({ kind: "party-recovery", charId, reason, atMs: elapsedMs() });
     log(`  [CHEAT] party-recovery __recruit(${charId}) (${reason}): ${JSON.stringify(result)}`);
   }
+}
+
+// Level the party to a realistic level for the current act BEFORE each objective,
+// so the fight table measures balance against a plausible player, not the frozen
+// base-level party the defeat-reload otherwise leaves behind. Re-applied every
+// attempt so it survives reloads. Curve is a knob (Nick can retune); logged.
+const ACT_LEVEL_CURVE = [
+  { flag: "raid:morningside:active", level: 42 },
+  { flag: "act3:complete", level: 40 },
+  { flag: "act3:begun", level: 30 },
+  { flag: "act2:complete", level: 22 },
+  { flag: "act2:begun", level: 16 },
+  { flag: "act1:complete", level: 12 }
+];
+const BASE_ACT_LEVEL = 8;
+
+function actLevelForFlags(flags) {
+  const flagSet = new Set(flags);
+  for (const entry of ACT_LEVEL_CURVE) {
+    if (flagSet.has(entry.flag)) return entry.level;
+  }
+  return BASE_ACT_LEVEL;
+}
+
+let lastAppliedActLevel = null;
+async function levelPartyForAct(objectiveId, flags) {
+  const target = actLevelForFlags(flags);
+  const summary = await page.evaluate((lvl) => {
+    if (typeof globalThis.__setPartyLevels !== "function") return { ok: false, reason: "missing __setPartyLevels" };
+    return { ok: true, party: globalThis.__setPartyLevels(lvl) };
+  }, target).catch((error) => rethrowPageWedged(error, { ok: false, reason: "evaluate-failed" }));
+  if (summary?.ok && target !== lastAppliedActLevel) {
+    log(`  [level] party -> L${target} for ${objectiveId} (${(summary.party ?? []).map((m) => `${m.name}:${m.maxHp}hp`).join(", ")})`);
+    lastAppliedActLevel = target;
+  }
+  telemetry.cheats.push({ kind: "act-level", objectiveId, level: target, ok: Boolean(summary?.ok), atMs: elapsedMs() });
 }
 
 // Instant save via the "p" hotkey (no dialog). The hotkey no-ops while a menu,
