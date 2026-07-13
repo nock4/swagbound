@@ -1,5 +1,9 @@
 # CoilSnake Tutorial: Your First Hack Status
 
+> **Historical document (CoilSnake-tutorial era, 2026-06).** This repo is now
+> Swagbound, a complete EarthBound total-conversion game; see the root README.md.
+> Kept as a record; do not follow as current guidance.
+
 ## Scope
 
 Objective source:

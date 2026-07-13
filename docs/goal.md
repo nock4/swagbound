@@ -1,5 +1,9 @@
 # Goal: CoilSnake → Phaser Foundation
 
+> **Historical document (CoilSnake-tutorial era, 2026-06).** This repo is now
+> Swagbound, a complete EarthBound total-conversion game; see the root README.md.
+> Kept as a record; do not follow as current guidance.
+
 ## Verified local fixture
 
 REPO_ROOT="."

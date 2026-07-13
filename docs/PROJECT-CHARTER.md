@@ -1,44 +1,51 @@
 # Project Charter — read this first
 
+*Updated 2026-07-13. Supersedes the 2026-06 charter, which defined the deliverable as
+"faithful EarthBound with original content as a parked, opt-in phase." That phase is
+no longer parked: Swagbound IS the game. The old charter's guardrails are preserved
+below because they are still right.*
+
 ## North star
 
-**Build a faithful EarthBound, rebuilt in Phaser, using the real extracted maps, art, dialogue, and
-systems.** `pnpm dev` boots real EarthBound (full-world Onett with the actual extracted assets). The
-engine is original code; the content is EarthBound's.
+**Swagbound: a complete, original-story EarthBound total-conversion, built on an
+engine that reimplements EarthBound faithfully.** The default build, `pnpm dev`, and
+the deployed game (https://swagbound.pages.dev) are Swagbound: Bosch versus Milady,
+four acts, the four fuels, original cast, dialogue, soundtrack, and questlines.
 
-This is the deliverable. Everything is measured against it.
-
-## Default vs. later phases
-
-- **Default / front door = faithful EarthBound.** The default build, `pnpm dev`, and the default test
-  suite always target the real EarthBound experience.
-- **Original content / "own twist" (e.g. Swagbound) is a LATER, explicitly-requested phase.** The
-  content pipeline (`packages/content-builder`, `content/`) exists as a parked capability and is
-  **opt-in only** (`pnpm content:test`). It must **never** be made the default without an explicit
-  instruction that says so in those terms.
+EarthBound-parity in the ENGINE remains the foundation and the quality bar (battle
+math, movement, doors, menus follow EB semantics; see the rom-truth/parity program in
+`docs/` and memory). Parity work serves Swagbound, not the other way around.
 
 ## Licensing boundary (unchanged, always)
 
-EarthBound's ROM and everything extracted from it (maps, sprites, dialogue, music, names) are
-reference/development inputs only: **local, gitignored, never committed, never reproduced**. The
-faithful rebuild is therefore a personal/dev/fan build — buildable and playable locally, **not
-distributable**. A shippable product would require swapping in original assets (the "twist" phase).
+- The EarthBound ROM and its CoilSnake decompile are **local, gitignored build
+  inputs — never committed, in any form**.
+- The runtime data in `apps/game/public/generated/` mixes original Swagbound
+  art/content with EB-derived data where not yet overridden. What ships publicly is
+  the repo owner's call; the committed-source rule above is not negotiable.
+- The 27 runtime soundtrack tracks are owner-cleared for distribution; all other
+  audio stays gitignored and is pruned from builds (`scripts/prune-dist-audio.mjs`).
 
 ## Anti-drift guardrails (for any agent/orchestrator working here)
 
-1. **Alignment gate, not just correctness.** Before committing any change, confirm it moves toward the
-   north star. A green test suite on the wrong target is still drift.
-2. **"Proceed" / "do it all" authorizes SCOPE, not DIRECTION.** Continuing the agreed work = go.
-   Changing the **default**, demoting/removing the main deliverable, or redefining the product = STOP
-   and confirm with one cheap question first — even under a broad "keep going."
-3. **Off-looking output is a STOP signal.** If an artifact looks wrong (e.g. crude placeholder art
-   where real art is expected), flag it and question alignment — do not narrate it as success.
-4. **Ambiguous instruction → surface the interpretation.** If a directive could mean a small change or
-   a project-redefinition, state the reading and the alternative in one line and let the user redirect
-   before acting at scale.
+1. **Alignment gate, not just correctness.** Before committing any change, confirm it
+   moves toward the north star. A green test suite on the wrong target is still drift.
+2. **"Proceed" / "do it all" authorizes SCOPE, not DIRECTION.** Continuing agreed work
+   = go. Changing the **default**, demoting/removing the main deliverable, or
+   redefining the product = STOP and confirm with one cheap question first — even
+   under a broad "keep going."
+3. **Off-looking output is a STOP signal.** If an artifact looks wrong (e.g. crude
+   placeholder art where real art is expected), flag it and question alignment — do
+   not narrate it as success.
+4. **Ambiguous instruction → surface the interpretation.** If a directive could mean
+   a small change or a project-redefinition, state the reading and the alternative in
+   one line and let the user redirect before acting at scale.
 
-## History note
+## History notes
 
-On 2026-06-13 the default was wrongly flipped to a placeholder original-content slice (misreading
-"put our own twist on it" as "pivot now"). It was reverted to faithful EarthBound. These guardrails
-exist so that does not recur.
+- 2026-06-13: the default was wrongly flipped to a placeholder original-content slice
+  (misreading "put our own twist on it" as "pivot now"); reverted to faithful
+  EarthBound. The guardrails above were written then.
+- 2026-06 to 2026-07: Act 1 reached ~99 percent EB parity; the owner then explicitly
+  directed the Swagbound build-out (custom towns, cast, story arc, soundtrack, fuels).
+  The full 4-act arc shipped publicly on 2026-07-13. This charter was updated to match.

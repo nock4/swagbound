@@ -1,5 +1,9 @@
 # Tutorial ROM Video Verification (superseded)
 
+> **Historical document (CoilSnake-tutorial era, 2026-06).** This repo is now
+> Swagbound, a complete EarthBound total-conversion game; see the root README.md.
+> Kept as a record; do not follow as current guidance.
+
 This document previously logged an early line of work that compiled a hack ROM and captured
 emulator videos to verify imported tutorial content. That approach is **superseded** and its
 ROM-compilation / emulator references have been neutralized for consistency with the project's
