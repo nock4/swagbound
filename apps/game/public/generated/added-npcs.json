@@ -11732,6 +11732,266 @@
      "The plaque says do not touch. The plaque has never had to prove it was real."
     ]
    }
+  },
+  {
+   "id": 102172,
+   "worldPixel": {
+    "x": 2464,
+    "y": 9496
+   },
+   "spriteGroup": 66,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 1's guest keeps a motel key under one thumb.",
+     "\"I remember the first threshold opening when Bosch agreed.\""
+    ]
+   }
+  },
+  {
+   "id": 102173,
+   "worldPixel": {
+    "x": 2504,
+    "y": 9536
+   },
+   "spriteGroup": 68,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 2's guest reads the receipt without moving his eyes.",
+     "\"Postwick got quiet after Bosch signed the Registry.\""
+    ]
+   }
+  },
+  {
+   "id": 102174,
+   "worldPixel": {
+    "x": 2464,
+    "y": 9616
+   },
+   "spriteGroup": 119,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 3's guest folds a museum brochure into a square.",
+     "\"The museum settled down once Bosch donated the original.\""
+    ]
+   }
+  },
+  {
+   "id": 102175,
+   "worldPixel": {
+    "x": 2592,
+    "y": 9648
+   },
+   "spriteGroup": 54,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 4's guest listens to the marquee like rain on a roof.",
+     "\"The sign changed one word, and Bosch forgot.\""
+    ]
+   }
+  },
+  {
+   "id": 102176,
+   "worldPixel": {
+    "x": 2648,
+    "y": 9472
+   },
+   "spriteGroup": 133,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Room 5's guest has packed without closing the suitcase.",
+     "\"Morningside logged Bosch as processed before he left.\""
+    ]
+   }
+  },
+  {
+   "id": 102177,
+   "worldPixel": {
+    "x": 2584,
+    "y": 9560
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A clerk-shaped thing clicks under its coat, key by key.",
+     "\"Correction accepted. Memory revised. Please stop reading the margins.\"",
+     "Ribbon ink dries where its mouth should be."
+    ]
+   }
+  },
+  {
+   "id": 102300,
+   "worldPixel": {
+    "x": 1856,
+    "y": 6304
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A sponsor clerk taps two contracts into alignment.",
+     "\"Left desk sells the fall. Right desk refuses the fall. The purse respects signage.\""
+    ]
+   }
+  },
+  {
+   "id": 102301,
+   "worldPixel": {
+    "x": 1928,
+    "y": 6304
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "Another clerk guards a blank form with serious posture.",
+     "\"Refusal pays nothing. That is how we know it cleared.\""
+    ]
+   }
+  },
+  {
+   "id": 102302,
+   "worldPixel": {
+    "x": 2184,
+    "y": 6568
+   },
+   "spriteGroup": 44,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A kid holds one button in both hands.",
+     "\"That's enough money if the drawing knows me.\""
+    ]
+   }
+  },
+  {
+   "id": 102303,
+   "worldPixel": {
+    "x": 2328,
+    "y": 6568
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A vendor counts air in a coin tray.",
+     "\"The market is whoever shows up. Today, the button showed up.\""
+    ]
+   }
+  },
+  {
+   "id": 102304,
+   "worldPixel": {
+    "x": 7544,
+    "y": 2576
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The facilitator's smile has a referral code.",
+     "\"Sit anywhere. The pews track posture, not consent.\""
+    ]
+   }
+  },
+  {
+   "id": 102305,
+   "worldPixel": {
+    "x": 7528,
+    "y": 2632
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A chapel member twists a Pre-Member Card until the laminate complains.",
+     "\"My kid went to residency and never came home. They keep saying quiet purpose. That is not a forwarding address.\""
+    ]
+   }
+  },
+  {
+   "id": 102306,
+   "worldPixel": {
+    "x": 7392,
+    "y": 2768
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A testimonial volunteer stands exactly where the applause would be cheapest.",
+     "\"The residency gave him quiet purpose, and he asked us not to interrupt the blessing.\"",
+     "She blinks after the sentence, like buffering finished."
+    ]
+   }
+  },
+  {
+   "id": 102307,
+   "worldPixel": {
+    "x": 7264,
+    "y": 2896
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A second volunteer has the calm of a brochure nobody admits writing.",
+     "\"The residency gave him quiet purpose, and he asked us not to interrupt the blessing.\"",
+     "Different face. Same checksum."
+    ]
+   }
+  },
+  {
+   "id": 102308,
+   "worldPixel": {
+    "x": 7152,
+    "y": 3008
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A third volunteer smiles with the late warmth of cached content.",
+     "\"The residency gave him quiet purpose, and he asked us not to interrupt the blessing.\"",
+     "Bosch hears the paste before he hears the period."
+    ]
+   }
+  },
+  {
+   "id": 102309,
+   "worldPixel": {
+    "x": 7464,
+    "y": 2912
+   },
+   "spriteGroup": 44,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A kid works the chapel sound board with both hands and no adult confidence.",
+     "\"They said doubt is noise. I got good at muting myself. That's probably bad, right?\""
+    ]
+   }
   }
  ]
 }

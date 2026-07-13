@@ -355,6 +355,132 @@
       "openedPages": [
         "Empty. The town's faces are its own again."
       ]
+    },
+    {
+      "id": "correction-notice-board",
+      "kind": "examine",
+      "label": "Corrections Board",
+      "worldPixel": {
+        "x": 2576,
+        "y": 9496
+      },
+      "pages": [
+        "CORRECTION 01: The threshold opened after Bosch agreed to be the version on file.",
+        "CORRECTION 02: The Registry was accepted, signed, and enjoyed. Town happiness remained properly attributed.",
+        "CORRECTION 03: The museum received Bosch's original and thanked the leaked version for donating it."
+      ]
+    },
+    {
+      "id": "floor-tag-bench",
+      "kind": "examine",
+      "label": "Price tag: bench",
+      "worldPixel": {
+        "x": 2224,
+        "y": 6576
+      },
+      "pages": [
+        "A bench wears a tag marked 40. Sitting remains free because enforcement is understaffed."
+      ]
+    },
+    {
+      "id": "floor-tag-sunset",
+      "kind": "examine",
+      "label": "Price tag: sunset",
+      "worldPixel": {
+        "x": 2288,
+        "y": 6528
+      },
+      "pages": [
+        "A strip of sunset over the awning is tagged 12. The sky declines itemization."
+      ]
+    },
+    {
+      "id": "floor-tag-kid-drawing",
+      "kind": "examine",
+      "label": "Price tag: drawing",
+      "worldPixel": {
+        "x": 2248,
+        "y": 6648
+      },
+      "pages": [
+        "A kid's drawing is tagged 0.01. The crayon face looks richer than the label."
+      ]
+    },
+    {
+      "id": "floor-tag-fountain",
+      "kind": "examine",
+      "label": "Price tag: fountain",
+      "worldPixel": {
+        "x": 2352,
+        "y": 6648
+      },
+      "pages": [
+        "A drinking fountain is tagged 3. Hydration has accepted seed funding."
+      ]
+    },
+    {
+      "id": "floor-tag-arena-shadow",
+      "kind": "examine",
+      "label": "Price tag: shadow",
+      "worldPixel": {
+        "x": 1888,
+        "y": 6368
+      },
+      "pages": [
+        "A patch of arena shadow is tagged 8. It lengthens without approval."
+      ]
+    },
+    {
+      "id": "floor-sponsorship-desk-sign",
+      "kind": "sign",
+      "label": "Sponsorship desks",
+      "worldPixel": {
+        "x": 1888,
+        "y": 6272
+      },
+      "pages": [
+        "The Venue has set two desks side by side.",
+        "LEFT DESK: accept sponsorship. RIGHT DESK: refuse sponsorship."
+      ]
+    },
+    {
+      "id": "fuel-onboarding-session-placard",
+      "kind": "sign",
+      "label": "Onboarding placard",
+      "worldPixel": {
+        "x": 7528,
+        "y": 2608
+      },
+      "pages": [
+        "WELCOME, PRE-MEMBER.",
+        "Belief loads faster when doubt is placed in airplane mode."
+      ]
+    },
+    {
+      "id": "fuel-onboarding-residency-roster",
+      "kind": "examine",
+      "label": "Residency roster",
+      "worldPixel": {
+        "x": 7392,
+        "y": 2744
+      },
+      "pages": [
+        "The residency roster is alphabetical except for one blank line labeled DOUBT, NOISE.",
+        "Someone wrote the kid's name in pencil, then traced it in policy."
+      ]
+    },
+    {
+      "id": "fuel-onboarding-sound-board",
+      "kind": "examine",
+      "label": "Chapel sound board",
+      "worldPixel": {
+        "x": 7488,
+        "y": 2896
+      },
+      "pages": [
+        "The sound board labels one slider TESTIMONY and three sliders TESTIMONY, TESTIMONY, TESTIMONY.",
+        "The mute button is warm."
+      ]
     }
   ]
 }

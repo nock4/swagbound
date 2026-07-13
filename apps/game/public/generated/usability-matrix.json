@@ -2459,12 +2459,12 @@
     },
     {
       "id": 173,
-      "name": "Temporary goods",
+      "name": "Pre-Member Card",
       "type": 56,
       "fieldUse": true,
       "battleUse": false,
       "equippable": false,
-      "keyItem": false,
+      "keyItem": true,
       "targets": [
         "field:field-tool"
       ],

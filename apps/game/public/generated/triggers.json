@@ -527,6 +527,81 @@
    ]
   },
   {
+   "id": "correction-field-agent-intro",
+   "comment": "Optional Correction fuel intro at Vacancy Flats. The fake Archivist record flag is authored for a later records-view hook; current content only plants and clears the sidequest flag.",
+   "area": {
+    "x": 2528,
+    "y": 9532,
+    "w": 96,
+    "h": 72
+   },
+   "once": true,
+   "blockFlags": [
+    "fuel:correction:agent-seen",
+    "fuel:correction:cleared"
+   ],
+   "dialogue": [
+    "The motel strip clicks behind the marquee. Not a voice. Keys striking paper in a room with no desk.",
+    "A clerk-shaped thing feeds a thin page into itself and types over the margin: BOSCH AGREED.",
+    "The Archivist's file shivers somewhere far away. Someone has filed over the filing."
+   ],
+   "setFlags": [
+    "fuel:correction:agent-seen",
+    "fuel:correction:record-planted"
+   ]
+  },
+  {
+   "id": "correction-field-agent-boss",
+   "comment": "The Editor's field agent. Reuses battle group 136; the boss-gate renderer currently derives the visible sprite from that battle group, so the typewriter/clerk skin is represented by added NPC 102177 until a boss-gate skin override exists.",
+   "boss": {
+    "x": 2608,
+    "y": 9560,
+    "facing": "left"
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:correction:agent-seen"
+   ],
+   "blockFlags": [
+    "fuel:correction:agent-defeated",
+    "fuel:correction:cleared"
+   ],
+   "dialogue": [
+    "The field agent looks up from its carriage return. Its smile arrives one click late.",
+    "EDITOR'S FIELD AGENT: \"You keep bringing the wrong word back. That is not memory. That is sabotage.\"",
+    "The page in its rollers says Bosch agreed, signed, donated, forgot, processed. Every line is almost true."
+   ],
+   "setFlags": [
+    "fuel:correction:agent-defeated"
+   ],
+   "battleGroup": 136
+  },
+  {
+   "id": "correction-editor-rematch",
+   "comment": "Optional Editor rematch after the Correction is cleared. Reuses battle group 136 and therefore the existing Editor revision taunts in content/boss-battle-dialogue.json.",
+   "boss": {
+    "x": 2640,
+    "y": 9624,
+    "facing": "up"
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:correction:cleared"
+   ],
+   "blockFlags": [
+    "fuel:correction:editor-rematch-cleared"
+   ],
+   "dialogue": [
+    "The marquee coughs up a second draft.",
+    "THE EDITOR: \"A correction can be corrected. That is the courtesy your originals keep refusing me.\"",
+    "The battle log is already changing its verbs."
+   ],
+   "setFlags": [
+    "fuel:correction:editor-rematch-cleared"
+   ],
+   "battleGroup": 136
+  },
+  {
    "id": "source-first-record",
    "comment": "Eight Sources site 8: The First Record in The Unlisted Room. Requires Act 3 complete and raises the Fire Spring bridge flag through content/flag-map.json.",
    "boss": {
@@ -1498,6 +1573,254 @@
     "FLG_PHOTO_32"
    ],
    "archivistSpotId": 32
+  },
+  {
+   "id": "floor-sponsor-accept",
+   "comment": "Optional Floor fuel sponsorship acceptance at the Venue. The flag is remembered quietly only; no purse mechanics are changed.",
+   "area": {
+    "x": 1832,
+    "y": 6312,
+    "w": 48,
+    "h": 48
+   },
+   "once": true,
+   "blockFlags": [
+    "fuel:floor:sold",
+    "fuel:floor:refused"
+   ],
+   "dialogue": [
+    "The left desk offers a contract with the fall already described.",
+    "SPONSOR CLERK: \"Throw one fight. Purse doubles. The market loves conviction most when it is priced to leave.\"",
+    "Bosch takes the sponsorship. The contract does not cheer. It only stores the answer."
+   ],
+   "setFlags": [
+    "fuel:floor:sold"
+   ]
+  },
+  {
+   "id": "floor-sponsor-refuse",
+   "comment": "Optional Floor fuel sponsorship refusal at the Venue. Refusal pays nothing by design.",
+   "area": {
+    "x": 1904,
+    "y": 6312,
+    "w": 48,
+    "h": 48
+   },
+   "once": true,
+   "blockFlags": [
+    "fuel:floor:sold",
+    "fuel:floor:refused"
+   ],
+   "dialogue": [
+    "The right desk offers the same contract with the signature line missing.",
+    "SPONSOR CLERK: \"Refuse and receive nothing. No badge, no rebate, no witness protection from arithmetic.\"",
+    "Bosch refuses. Nothing happens on time and in full."
+   ],
+   "setFlags": [
+    "fuel:floor:refused"
+   ]
+  },
+  {
+   "id": "floor-underwriter-sold",
+   "comment": "Optional Floor boss for the sold path. Reuses the Appraiser/Vault guardian battle group 326.",
+   "boss": {
+    "x": 2328,
+    "y": 6608,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:floor:sold"
+   ],
+   "blockFlags": [
+    "fuel:floor:underwriter-defeated"
+   ],
+   "dialogue": [
+    "Behind the tagged bench, a ledger opens without hands. Every page is a price Bosch almost agreed to.",
+    "THE UNDERWRITER: \"Risk is just a person we have learned to bill in advance.\"",
+    "It offers profit for every hit and trusts greed to do the defending."
+   ],
+   "setFlags": [
+    "fuel:floor:underwriter-defeated"
+   ],
+   "battleGroup": 326
+  },
+  {
+   "id": "floor-underwriter-refused",
+   "comment": "Optional Floor boss for the refused path. Reuses the Appraiser/Vault guardian battle group 326.",
+   "boss": {
+    "x": 2328,
+    "y": 6608,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:floor:refused"
+   ],
+   "blockFlags": [
+    "fuel:floor:underwriter-defeated"
+   ],
+   "dialogue": [
+    "Behind the tagged bench, a ledger opens without hands. Every page is a price Bosch almost refused.",
+    "THE UNDERWRITER: \"Risk is just a person we have learned to bill in advance.\"",
+    "It offers profit for every hit and trusts greed to do the defending."
+   ],
+   "setFlags": [
+    "fuel:floor:underwriter-defeated"
+   ],
+   "battleGroup": 326
+  },
+  {
+   "id": "fuel-onboarding-pre-member-card",
+   "comment": "Optional Onboarding fuel card grant after the pew session. Placement keyed to source-pier trigger/interactable around (7464,2864)/(7496,2864), the existing chapel NPC cluster at (7472..7608,2504..2552), and solana-beach rect x3800..7800 y2500..3800. Grants item 173 Pre-Member Card through content-only grantItems.",
+   "area": {
+    "x": 7528,
+    "y": 2568,
+    "w": 64,
+    "h": 56
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:onboarding:session-complete"
+   ],
+   "blockFlags": [
+    "fuel:onboarding:card-issued"
+   ],
+   "dialogue": [
+    "The facilitator slides Bosch a Pre-Member Card with the gravity of a treaty and the durability of a coupon.",
+    "It has no magnetic strip, no account number, and no way to open anything important. Perfect membership behavior."
+   ],
+   "setFlags": [
+    "fuel:onboarding:card-issued"
+   ],
+   "grantItems": [
+    173
+   ]
+  },
+  {
+   "id": "fuel-onboarding-residency-report",
+   "comment": "Optional Onboarding missing-kid report at Solana Beach. Placement keyed to the same chapel cluster near source-pier and kept inside solana-beach rect x3800..7800 y2500..3800. This starts the internal trail only after the worthless card is issued.",
+   "area": {
+    "x": 7504,
+    "y": 2632,
+    "w": 56,
+    "h": 40
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:onboarding:card-issued"
+   ],
+   "blockFlags": [
+    "fuel:onboarding:kid-reported"
+   ],
+   "dialogue": [
+    "A chapel member twists a Pre-Member Card until the laminate starts confessing.",
+    "MEMBER: \"My kid went to residency and never came home. They keep saying quiet purpose. That is not a forwarding address.\"",
+    "Three testimonial volunteers smile from the boardwalk, all warmed by the same script."
+   ],
+   "setFlags": [
+    "fuel:onboarding:kid-reported"
+   ]
+  },
+  {
+   "id": "fuel-onboarding-testimonial-one",
+   "comment": "Optional Onboarding testimonial 1. Placement keyed to source-pier and the existing boardwalk anchors around added NPC 101545 at (7240,2800). The copy tell sentence is intentionally verbatim across all three testimonial triggers and NPCs.",
+   "area": {
+    "x": 7376,
+    "y": 2744,
+    "w": 64,
+    "h": 64
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:onboarding:kid-reported"
+   ],
+   "blockFlags": [
+    "fuel:onboarding:testimonial-one"
+   ],
+   "dialogue": [
+    "The first volunteer folds both hands over a lanyard that says WITNESS in church-basement font.",
+    "\"The residency gave him quiet purpose, and he asked us not to interrupt the blessing.\"",
+    "Her smile returns to its stored position."
+   ],
+   "setFlags": [
+    "fuel:onboarding:testimonial-one"
+   ]
+  },
+  {
+   "id": "fuel-onboarding-testimonial-two",
+   "comment": "Optional Onboarding testimonial 2. Placement keyed to source-pier and the existing beach anchors around NPC 1065 at (7264,2928). The copy tell sentence is intentionally verbatim across all three testimonial triggers and NPCs.",
+   "area": {
+    "x": 7232,
+    "y": 2888,
+    "w": 72,
+    "h": 56
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:onboarding:kid-reported"
+   ],
+   "blockFlags": [
+    "fuel:onboarding:testimonial-two"
+   ],
+   "dialogue": [
+    "The second volunteer turns toward Bosch one beat before Bosch speaks.",
+    "\"The residency gave him quiet purpose, and he asked us not to interrupt the blessing.\"",
+    "Different face. Same checksum."
+   ],
+   "setFlags": [
+    "fuel:onboarding:testimonial-two"
+   ]
+  },
+  {
+   "id": "fuel-onboarding-testimonial-three",
+   "comment": "Optional Onboarding testimonial 3. Placement keyed to source-pier and the existing beach anchors around NPC 1088 at (7216,2984). The copy tell sentence is intentionally verbatim across all three testimonial triggers and NPCs.",
+   "area": {
+    "x": 7128,
+    "y": 2992,
+    "w": 72,
+    "h": 56
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:onboarding:kid-reported"
+   ],
+   "blockFlags": [
+    "fuel:onboarding:testimonial-three"
+   ],
+   "dialogue": [
+    "The third volunteer blinks twice, then loads the testimonial without a seam.",
+    "\"The residency gave him quiet purpose, and he asked us not to interrupt the blessing.\"",
+    "Bosch hears the paste before he hears the period."
+   ],
+   "setFlags": [
+    "fuel:onboarding:testimonial-three"
+   ]
+  },
+  {
+   "id": "fuel-onboarding-congregation",
+   "comment": "Optional Congregation boss at Solana Beach. Reuses battle group 381 from source-pier because it is one enemy with existing audience, crowd-breath, worship, and amplifier battle text, matching a crowd rendered as one enemy. Current boss-gate skin remains battle group 381's lead enemy skin through the existing renderer. Placement keyed to source-pier (7464,2864) inside solana-beach rect. Later hook: scale its attack by the number of unchallenged testimonial flags still unset when the fight starts.",
+   "boss": {
+    "x": 7424,
+    "y": 2864,
+    "facing": "left"
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:onboarding:session-complete"
+   ],
+   "blockFlags": [
+    "fuel:onboarding:congregation-defeated"
+   ],
+   "dialogue": [
+    "The chapel crowd turns as one body. Not coordinated. Worse, synchronized.",
+    "THE CONGREGATION: \"Your doubt is safe with us. We already muted it for comfort.\"",
+    "Every testimonial breathes in at once. Bosch hears the edit before the hymn."
+   ],
+   "setFlags": [
+    "fuel:onboarding:congregation-defeated"
+   ],
+   "battleGroup": 381
   }
  ],
  "barriers": [
