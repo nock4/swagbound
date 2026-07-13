@@ -1702,6 +1702,12 @@ async function fightBattle(label, trigger, source) {
   // policy cannot dent defense-tanky PSI-check bosses; that is a wall signal,
   // not a battle to finish). Enemy HP at the first command round anchors the rate.
   let initialEnemyHp = null;
+  // Round in which the party last cast offense PSI. EB collects all commands then
+  // executes, so PSI damage from earlier members this round has not resolved when
+  // later members (who lack offense PSI) reach command-input. Suppressing the
+  // stalemate bail on any round where offense PSI was cast lets PSI prove itself;
+  // the bail then fires only once the party has genuinely exhausted offense PSI.
+  let lastOffensePsiRound = -1;
 
   log(`    [battle] ${label}`);
   for (let step = 0; step < 900; step += 1) {
@@ -1792,6 +1798,7 @@ async function fightBattle(label, trigger, source) {
         action = `PSI ${offensePsi.name} -> e${targetIndex}`;
         acted = await usePsi(offensePsi, targetIndex);
         if (acted) {
+          lastOffensePsiRound = roundNo;
           battle.psiCommands += 1;
           battle.nonBashChoices.push({
             round: roundNo,
@@ -1808,10 +1815,10 @@ async function fightBattle(label, trigger, source) {
         }
       }
 
-      if (!acted && trend.ready && trend.projected > GRIND_PROJECTED_ROUNDS_CAP && !offensePsi) {
+      if (!acted && trend.ready && trend.projected > GRIND_PROJECTED_ROUNDS_CAP && !offensePsi && roundNo !== lastOffensePsiRound) {
         battle.result = "stalemate";
-        battle.stalemate = { atRound: roundNo, enemyHpRemaining: round(enemyTotalHp), ratePerRound: Number(trend.rate.toFixed(1)), projectedRounds: Number.isFinite(trend.projected) ? round(trend.projected) : null };
-        log(`    [battle] ${label}: STALEMATE at r${roundNo} (enemy ${round(enemyTotalHp)}hp, ~${trend.rate.toFixed(1)}/round, projected ${Number.isFinite(trend.projected) ? round(trend.projected) : "inf"} rounds, no offense PSI); bailing`);
+        battle.stalemate = { atRound: roundNo, enemyHpRemaining: round(enemyTotalHp), ratePerRound: Number(trend.rate.toFixed(1)), projectedRounds: Number.isFinite(trend.projected) ? round(trend.projected) : null, offensePsiExhausted: lastOffensePsiRound >= 0 };
+        log(`    [battle] ${label}: STALEMATE at r${roundNo} (enemy ${round(enemyTotalHp)}hp, ~${trend.rate.toFixed(1)}/round, projected ${Number.isFinite(trend.projected) ? round(trend.projected) : "inf"} rounds, ${lastOffensePsiRound >= 0 ? "offense PSI exhausted" : "no offense PSI"}); bailing`);
         break;
       }
 
