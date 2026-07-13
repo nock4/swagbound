@@ -1,10 +1,27 @@
 # Session report — overnight/balance-and-fuels, 2026-07-12 (continuation)
 
-15 commits this session, all on `overnight/balance-and-fuels`, nothing pushed to
-main. Tree clean. Highlights: the full 4-act arc now plays end-to-end with a
-trustworthy leveled fight table, the Correction + Floor questlines are verified
-live, and a whole class of multi-hour "hangs" turned out to be a runner bug, not
-a game bug.
+23+ commits this session, all on `overnight/balance-and-fuels`, nothing pushed to
+main. Highlights: the full 4-act arc plays end-to-end with a trustworthy leveled
+fight table; all FOUR Fuels questlines are content-complete and live; the runner
+got a competent PSI/item battle policy; a production release build is done and
+verified; and a whole class of multi-hour "hangs" turned out to be a runner bug,
+not a game bug.
+
+## Second phase ("proceed through all")
+
+- **All four Fuels questlines done**: Correction + Floor (verified live earlier),
+  Onboarding (live-firing), and The Unsigned (new — masked crew, sold-name fetch,
+  Archivist re-filing; the Nobody boss parked as an engine hook). All built live.
+- **Competent battle policy** — the runner now derives usable PSI/items on the
+  battle debug surface and casts offense PSI on defense-tanky enemies (beats
+  PSI-check bosses like arena-venue-3's 262-defense Soul Consuming Flame), heals
+  with PSI/items when critical, else BASHes. Plus grind/stalemate detection.
+  Makes its LOSS signals trustworthy for nerf-side tuning. (v11 validating.)
+- **Release build DONE + verified** — `apps/game` build script (vite build +
+  dist-audio prune), 27 cleared soundtrack tracks committed, copyrighted sources
+  excluded. Clean build boots with 0 errors, music loads, renders correctly. The
+  public DEPLOY is the one thing left, and it needs your Vercel login.
+- **Atlas golden tests** regenerated (were drifting); converter suite green 121/121.
 
 ## Headline wins
 
