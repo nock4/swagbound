@@ -1621,6 +1621,43 @@
    ]
   },
   {
+   "id": "fuel-unsigned-archivist-filing",
+   "comment": "Optional Unsigned counter beat when the Surviving Signature returns to the Galleria service floor. Placement keyed to source-vault boss at (2440,6728), source-vault interactable at (2408,6728), and the-galleria rect x1900..6500 y3100..6900. No PHOTO flags or Archivist mechanics are touched; this sets fuel:unsigned:cleared for a later Records menu page hook and the authored shelf-mask prop beat.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 2384,
+     "y": 6648,
+     "w": 88,
+     "h": 72
+    }
+   },
+   "requireFlags": [
+    "fuel:unsigned:signature-found"
+   ],
+   "blockFlags": [
+    "fuel:unsigned:cleared"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "The Unsigned runner holds the receipt like it might bite him back into shape.",
+      "UNSIGNED RUNNER: \"Tobin Vale. Ugly little syllables. Mine, unfortunately. Mine, thankfully.\"",
+      "The Archivist files the signature under a name and the name under a person.",
+      "ARCHIVIST: \"A name is a debt other people agree to remember.\"",
+      "A record page opens where the blank used to sit. Tobin takes off the mask and leaves it on the shelf like a tool that failed upward."
+     ]
+    },
+    {
+     "op": "setFlag",
+     "flag": "fuel:unsigned:cleared"
+    }
+   ]
+  },
+  {
    "id": "onett-card-clique-shakedown",
    "comment": "data_20.l_0xc65ea3 near world pixel 1512,1744. Anchor: signal-town-card-clique boss at the MONS LINK arcade corner (1512,1744). EB raw [1F F1 8E 00 7B 02] has Shark npcId 142 press the player, then sets flag 363. Recast as a pre-fight card-clique shakedown that folds before the real boss gate.",
    "trigger": {

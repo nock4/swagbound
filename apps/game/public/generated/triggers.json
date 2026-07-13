@@ -1821,6 +1821,180 @@
     "fuel:onboarding:congregation-defeated"
    ],
    "battleGroup": 381
+  },
+  {
+   "id": "fuel-unsigned-mask-crew-first",
+   "comment": "Optional Unsigned intro in the Postwick back streets. Placement keyed to source-intake-ledger at (2300,7200), postwick-registry at (2300,7308), and postwick rect x1200..3600 y6200..7350. First crew contact offers free masks; wearing one is never required.",
+   "area": {
+    "x": 2184,
+    "y": 7160,
+    "w": 72,
+    "h": 56
+   },
+   "once": true,
+   "blockFlags": [
+    "fuel:unsigned:crew-seen"
+   ],
+   "dialogue": [
+    "Three paper masks hang from a clothesline behind the Registry, all smiling with the same cheap mouth.",
+    "UNSIGNED HAND: \"Free mask. No form, no fit check, no little box asking what you were before the mask.\"",
+    "Bosch does not have to wear it. Nobody here seems interested in consent once it can be mistaken for style."
+   ],
+   "setFlags": [
+    "fuel:unsigned:crew-seen"
+   ]
+  },
+  {
+   "id": "fuel-unsigned-mask-crew-second",
+   "comment": "Optional Unsigned second contact in the Postwick back streets. Placement is the return pocket beside fuel-unsigned-mask-crew-first, keyed to source-intake-ledger at (2300,7200), postwick-registry at (2300,7308), and postwick rect x1200..3600 y6200..7350. This is the talk-twice tell: the crew assumes Bosch wants in, but no mask state is required.",
+   "area": {
+    "x": 2256,
+    "y": 7160,
+    "w": 72,
+    "h": 56
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:unsigned:crew-seen"
+   ],
+   "blockFlags": [
+    "fuel:unsigned:crew-twice"
+   ],
+   "dialogue": [
+    "The crew notices Bosch noticed them twice. A small civic disaster, apparently.",
+    "UNSIGNED HAND: \"Second look counts as interest. Interest counts as consent if the paperwork is hungry enough.\"",
+    "Around the alley, two locals lower their voices and start treating Bosch like he has already joined a thing with no roster."
+   ],
+   "setFlags": [
+    "fuel:unsigned:crew-twice"
+   ]
+  },
+  {
+   "id": "fuel-unsigned-postwick-reaction",
+   "comment": "Optional Postwick reaction after the crew-twice tell. Placement keyed to source-intake-ledger at (2300,7200), postwick-registry at (2300,7308), and postwick rect x1200..3600 y6200..7350. This expresses NPCs reading Bosch differently after two crew contacts without requiring a worn mask.",
+   "area": {
+    "x": 2328,
+    "y": 7168,
+    "w": 80,
+    "h": 56
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:unsigned:crew-twice"
+   ],
+   "blockFlags": [
+    "fuel:unsigned:postwick-read"
+   ],
+   "dialogue": [
+    "A clerk in the alley does the careful nod people save for private memberships and public mistakes.",
+    "CLERK: \"Unsigned, right? Good for you. Or whoever you are declining to be at us.\"",
+    "Bosch has not joined anything. Postwick files the distinction under ADORABLE."
+   ],
+   "setFlags": [
+    "fuel:unsigned:postwick-read"
+   ]
+  },
+  {
+   "id": "fuel-unsigned-out-request",
+   "comment": "Optional Unsigned complication on the Galleria service floor. Placement keyed to source-vault boss at (2440,6728), source-vault interactable at (2408,6728), and the-galleria rect x1900..6500 y3100..6900. The member wants out after selling his name; the chain remains gated only by fuel:unsigned flags.",
+   "area": {
+    "x": 2384,
+    "y": 6648,
+    "w": 88,
+    "h": 72
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:unsigned:crew-twice"
+   ],
+   "blockFlags": [
+    "fuel:unsigned:out-requested"
+   ],
+   "dialogue": [
+    "Below the Galleria's service wall, a masked runner keeps answering to every number except the one that hurts.",
+    "UNSIGNED RUNNER: \"I sold my name. Very clean deal. Now I cannot prove I was ever anyone, which is apparently a feature.\"",
+    "He remembers one surviving signature: a receipt caught in Dead Letter's return line."
+   ],
+   "setFlags": [
+    "fuel:unsigned:out-requested"
+   ]
+  },
+  {
+   "id": "fuel-unsigned-surviving-signature",
+   "comment": "Optional Unsigned fetch item in the Dead Letter return line. Placement keyed to deadletter-photo-return-line at (4400,9656), source-undelivered boss/interactable at (5388,9692)/(5420,9692), and dead-letter rect x4200..8200 y8200..10250; the active area is on the walkable source-undelivered return tray. Grants item 187 Surviving Signature through content-only grantItems.",
+   "area": {
+    "x": 5324,
+    "y": 9660,
+    "w": 128,
+    "h": 96
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:unsigned:out-requested"
+   ],
+   "blockFlags": [
+    "fuel:unsigned:signature-found"
+   ],
+   "dialogue": [
+    "The return line coughs up a receipt folded around rain, bad ink, and one stubborn signature.",
+    "The name is not clean. That helps. Clean names are where the trouble starts.",
+    "Bosch takes the Surviving Signature."
+   ],
+   "setFlags": [
+    "fuel:unsigned:signature-found"
+   ],
+   "grantItems": [
+    187
+   ]
+  },
+  {
+   "id": "fuel-unsigned-apartment-shelf",
+   "comment": "Optional Unsigned shelf beat after the Archivist files the runner back into existence. Placement keyed to source-vault boss at (2440,6728), source-vault interactable at (2408,6728), and the-galleria rect x1900..6500 y3100..6900. This is the content-side shelf prop read; conditional prop visibility would need a later runtime hook.",
+   "area": {
+    "x": 2472,
+    "y": 6648,
+    "w": 64,
+    "h": 64
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:unsigned:cleared"
+   ],
+   "blockFlags": [
+    "fuel:unsigned:shelf-seen"
+   ],
+   "dialogue": [
+    "In the service apartment, the runner's mask sits on a shelf with the elastic folded under it.",
+    "It has been promoted from face to object. Everyone involved seems healthier for the demotion."
+   ],
+   "setFlags": [
+    "fuel:unsigned:shelf-seen"
+   ]
+  },
+  {
+   "id": "fuel-unsigned-nobody-boss",
+   "comment": "Optional The Nobody boss at the Galleria service floor. Reuses battle group 136 because Crazed Sign is a single-enemy group with the least identity-bearing field read already in the side-content boss pool; current boss-gate skin and boss-battle-dialogue remain battle group 136 until runtime support exists. Placement keyed to source-vault boss at (2440,6728), source-vault interactable at (2408,6728), and the-galleria rect x1900..6500 y3100..6900. Parked engine hook: render the battle UI enemy name as a blank string, copy stats from whoever CHECKs it, and only allow damage on rounds where the party does not CHECK it.",
+   "boss": {
+    "x": 2368,
+    "y": 6720,
+    "facing": "down"
+   },
+   "once": true,
+   "requireFlags": [
+    "fuel:unsigned:cleared"
+   ],
+   "blockFlags": [
+    "fuel:unsigned:nobody-defeated"
+   ],
+   "dialogue": [
+    "The service hall produces a blank space shaped exactly like someone trying not to be remembered.",
+    "THE NOBODY: \"Do not look too closely. Looking is how you get assigned.\"",
+    "Bosch feels the fight waiting for a name and refusing to provide one."
+   ],
+   "setFlags": [
+    "fuel:unsigned:nobody-defeated"
+   ],
+   "battleGroup": 136
   }
  ],
  "barriers": [
