@@ -184,6 +184,8 @@ export type WorldSectorAreas = {
   areaIds: number[];
   indoor: Array<0 | 1>;
   bounded: Array<0 | 1>;
+  /** 1 = sector carries interior art (indoors flag OR interior tileset); the runtime covers these with void while the player is outside. */
+  coverArt: Array<0 | 1>;
 };
 
 export type TileOverrideImage = PngRgba;
@@ -803,6 +805,17 @@ function sectorInfoFromEntry(entry: Record<string, string> | undefined): SectorI
   };
 }
 
+/**
+ * Tilesets whose sectors carry OVERWORLD art. Everything else is interior art
+ * (rooms, caves, dungeons) embedded in unused regions of EB's world map, which
+ * the open-world runtime must cover with void when the player is outside.
+ * Derived empirically from the shipped map: tilesets 10-12/14-17/19-25 are 100%
+ * `indoors`-flagged in map_sectors; 26-30 are cave/dungeon sets with the flag
+ * unset (the 2026-07-13 visual sweep's interior-bleed findings all sit in them);
+ * 0-9/13/18 are the outdoor biomes (0-11% flagged, large placements).
+ */
+const OVERWORLD_TILESETS = new Set([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 13, 18]);
+
 export function buildWorldSectorAreas(options: {
   sectorEntries: Map<number, Record<string, string>>;
   cols: number;
@@ -812,6 +825,7 @@ export function buildWorldSectorAreas(options: {
   const areaIds: number[] = [];
   const indoor: Array<0 | 1> = [];
   const bounded: Array<0 | 1> = [];
+  const coverArt: Array<0 | 1> = [];
   for (let sectorRow = 0; sectorRow < rows; sectorRow += 1) {
     for (let sectorCol = 0; sectorCol < cols; sectorCol += 1) {
       const entry = sectorEntries.get(sectorRow * cols + sectorCol);
@@ -819,6 +833,8 @@ export function buildWorldSectorAreas(options: {
       areaIds.push(info?.areaId ?? stableSectorAreaId(sectorSignatureFromEntry(entry)));
       indoor.push(info?.indoor ? 1 : 0);
       bounded.push(info?.bounded ? 1 : 0);
+      const interiorArt = info ? (info.indoor || !OVERWORLD_TILESETS.has(info.tileset)) : false;
+      coverArt.push(interiorArt ? 1 : 0);
     }
   }
   return {
@@ -829,7 +845,8 @@ export function buildWorldSectorAreas(options: {
     tileSize: TILE_SIZE,
     areaIds,
     indoor,
-    bounded
+    bounded,
+    coverArt
   };
 }
 

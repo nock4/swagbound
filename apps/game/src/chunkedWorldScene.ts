@@ -252,6 +252,7 @@ import { collectedEightSourcesCount, ORIGINAL_MIXTAPE_ITEM_ID, ORIGINAL_MIXTAPE_
 import { itemUsability, psiUsability, USABILITY_REFUSAL_MESSAGE } from "./usabilityMatrix";
 import { PLAYER_FOOT_BOX, walkableFootprintClear } from "./collisionFootprint";
 import { applyClearOverrideRects, applySolidOverrideRects } from "./collisionOverrides";
+import { indoorSectorCoverRectsForChunk, worldPositionInCoveredSector } from "./indoorSectorCovers";
 import {
   FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY,
   PLAYER_SPRITE_OVERRIDE_SHEET_KEY,
@@ -368,6 +369,7 @@ type StreamedChunk = {
   chunk: WorldChunk;
   background?: Phaser.GameObjects.Image;
   foreground?: Phaser.GameObjects.Image;
+  indoorSectorCovers?: Phaser.GameObjects.Image[];
 };
 
 type RuntimeNpcData = WorldChunkedNpc | AddedWorldChunkedNpc;
@@ -562,6 +564,8 @@ const COLLISION_OVERLAY_DEPTH = 150_000;
 const PLAYER_OVERLAY_DEPTH = 110_000;
 const BED_SLEEP_PLAYER_DEPTH = 100_010;
 const INTERIOR_ROOM_MASK_BAND_DEPTH = 120_000;
+const INDOOR_SECTOR_COVER_DEPTH = 125_000;
+const INDOOR_SECTOR_COVER_TEXTURE_KEY = "indoor-sector-cover-px";
 const ENCOUNTER_RETURN_COOLDOWN_MS = 1_500;
 // Visible overworld enemies (EarthBound-style touch-to-battle): tuning.
 const OVERWORLD_ENEMY_GLOBAL_CAP = 4;
@@ -1773,6 +1777,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       this.materializeChunkLayer(key, streamed, "background");
       this.materializeChunkLayer(key, streamed, "foreground");
+      this.materializeIndoorSectorCovers(key, streamed);
     }
   }
 
@@ -1800,6 +1805,89 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.applyRoomMaskToImage(image);
   }
 
+  private materializeIndoorSectorCovers(key: string, streamed: StreamedChunk): void {
+    if (streamed.indoorSectorCovers?.some(isLiveGameObject)) {
+      this.updateIndoorSectorCoverVisibilityFor(streamed);
+      return;
+    }
+    if (!isLiveGameObject(streamed.background) && !isLiveGameObject(streamed.foreground)) {
+      return;
+    }
+
+    this.destroyIndoorSectorCovers(streamed);
+    const coverRects = indoorSectorCoverRectsForChunk(this.world_.sectors, this.chunkWorldRect(streamed.chunk));
+    if (coverRects.length === 0) {
+      streamed.indoorSectorCovers = [];
+      this.chunkObjects.set(key, streamed);
+      return;
+    }
+
+    const textureKey = this.ensureIndoorSectorCoverTexture();
+    const visible = this.indoorSectorCoversVisible();
+    streamed.indoorSectorCovers = coverRects.map((rect) => this.add.image(rect.x, rect.y, textureKey)
+      .setOrigin(0, 0)
+      .setDepth(INDOOR_SECTOR_COVER_DEPTH)
+      .setDisplaySize(rect.width, rect.height)
+      .setVisible(visible));
+    this.chunkObjects.set(key, streamed);
+  }
+
+  private chunkWorldRect(chunk: WorldChunk): WorldRect {
+    const size = chunkPixelSize(this.grid());
+    return {
+      x: chunk.cx * size,
+      y: chunk.cy * size,
+      width: size,
+      height: size
+    };
+  }
+
+  private ensureIndoorSectorCoverTexture(): string {
+    if (!this.textures.exists(INDOOR_SECTOR_COVER_TEXTURE_KEY)) {
+      const canvasTex = this.textures.createCanvas(INDOOR_SECTOR_COVER_TEXTURE_KEY, 1, 1);
+      const ctx = canvasTex?.getContext();
+      if (ctx) {
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, 1, 1);
+        canvasTex?.refresh();
+      }
+    }
+    return INDOOR_SECTOR_COVER_TEXTURE_KEY;
+  }
+
+  private destroyIndoorSectorCovers(streamed: StreamedChunk): void {
+    streamed.indoorSectorCovers?.forEach((cover) => cover.destroy());
+    streamed.indoorSectorCovers = undefined;
+  }
+
+  private updateIndoorSectorCoverVisibility(): void {
+    for (const streamed of this.chunkObjects.values()) {
+      this.updateIndoorSectorCoverVisibilityFor(streamed);
+    }
+  }
+
+  private updateIndoorSectorCoverVisibilityFor(streamed: StreamedChunk): void {
+    const visible = this.indoorSectorCoversVisible();
+    streamed.indoorSectorCovers?.forEach((cover) => {
+      if (isLiveGameObject(cover)) {
+        cover.setVisible(visible);
+      }
+    });
+  }
+
+  private indoorSectorCoversVisible(): boolean {
+    return !this.playerIndoorsForSectorCovers();
+  }
+
+  private playerIndoorsForSectorCovers(): boolean {
+    // The third check matters for embedded cave/dungeon regions (coverArt
+    // sectors that carry no indoors flag): a player standing inside one must
+    // see the cave, not the void covering it from outside.
+    return Boolean(this.activeInteriorRoom())
+      || this.playerInInteriorMusicSector()
+      || worldPositionInCoveredSector(this.world_.sectors, this.playerState);
+  }
+
   private unloadChunksOutsideRetain(center: ChunkCoord): void {
     for (const [key, streamed] of this.chunkObjects) {
       if (this.isChunkRetained(streamed.chunk, center)) {
@@ -1807,6 +1895,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       streamed.background?.destroy();
       streamed.foreground?.destroy();
+      this.destroyIndoorSectorCovers(streamed);
       this.chunkObjects.delete(key);
     }
   }
@@ -1821,6 +1910,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const sector = sectorCoordForWorldPixel(roomPoint, this.world_.sectors);
       const sectorKey = sector ? this.sectorAreaBoundsKey(roomPoint) : undefined;
       if (!force && sectorKey && this.activeRoomSectorKey === sectorKey) {
+        this.updateIndoorSectorCoverVisibility();
         this.updateCameraRoomBounds();
         return;
       }
@@ -1838,11 +1928,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.applyInteriorRoomMask();
       this.applyNpcRoomVisibility();
       this.applyWorldObjectRoomVisibility();
+      this.updateIndoorSectorCoverVisibility();
       this.updateCameraRoomBounds();
       return;
     }
     const roomPoint = this.roomBoundsResolveState();
     if (!force && this.playerInsideCachedRoomBounds(roomPoint)) {
+      this.updateIndoorSectorCoverVisibility();
       this.updateCameraRoomBounds();
       return;
     }
@@ -1853,6 +1945,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.applyInteriorRoomMask();
     this.applyNpcRoomVisibility();
     this.applyWorldObjectRoomVisibility();
+    this.updateIndoorSectorCoverVisibility();
     this.updateCameraRoomBounds();
   }
 

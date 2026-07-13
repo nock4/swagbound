@@ -1400,7 +1400,11 @@ export const WorldSectorAreasSchema = z
     tileSize: z.number().int().positive(),
     areaIds: z.array(z.number().int().nonnegative()),
     indoor: z.array(z.union([z.literal(0), z.literal(1)])),
-    bounded: z.array(z.union([z.literal(0), z.literal(1)]))
+    bounded: z.array(z.union([z.literal(0), z.literal(1)])),
+    // 1 = interior art (indoors flag OR interior tileset); the runtime covers
+    // these with void from the overworld. Optional: worlds generated before
+    // 2026-07-13 lack it (runtime falls back to `indoor`).
+    coverArt: z.array(z.union([z.literal(0), z.literal(1)])).optional()
   })
   .superRefine((value, context) => {
     const expected = value.cols * value.rows;
@@ -1423,6 +1427,13 @@ export const WorldSectorAreasSchema = z
         code: z.ZodIssueCode.custom,
         message: `bounded length ${value.bounded.length} does not match cols*rows ${expected}`,
         path: ["bounded"]
+      });
+    }
+    if (value.coverArt !== undefined && value.coverArt.length !== expected) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `coverArt length ${value.coverArt.length} does not match cols*rows ${expected}`,
+        path: ["coverArt"]
       });
     }
   });

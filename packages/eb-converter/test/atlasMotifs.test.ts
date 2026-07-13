@@ -114,7 +114,8 @@ describe("motif atlas terrain and signature helpers", () => {
       tileSize: 32,
       areaIds: [100, 200],
       indoor: [0, 1],
-      bounded: [0, 1]
+      bounded: [0, 1],
+      coverArt: [0, 1]
     };
     const cells = makeCells(width, height, (x, y) => ({
       solidCells: x >= 0 && x < width && y >= 0 && y < height ? 1 : 0,
