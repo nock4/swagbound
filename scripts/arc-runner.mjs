@@ -20,6 +20,15 @@ const charactersData = JSON.parse(readFileSync(new URL("apps/game/public/generat
 const triggerData = JSON.parse(readFileSync(new URL("content/triggers.json", root), "utf8"));
 const cutsceneData = JSON.parse(readFileSync(new URL("content/cutscenes.json", root), "utf8"));
 const archivistData = JSON.parse(readFileSync(new URL("content/archivist-spots.json", root), "utf8"));
+const generatedManifest = readGeneratedJson("manifest.json");
+const itemsData = applyItemOverrides(
+  readGeneratedJson(generatedManifest.files?.items ?? "items.json"),
+  readGeneratedJson("item-overrides.json")
+);
+const psiData = applyPsiOverrides(
+  readGeneratedJson(generatedManifest.files?.psi ?? "psi.json"),
+  readGeneratedJson("psi-overrides.json")
+);
 
 const DEFAULT_BASE = "http://127.0.0.1:5173/";
 const TELEMETRY_PATH = new URL("tmp/arc-telemetry.json", root);
@@ -32,6 +41,7 @@ const WALL_ROUND_LIMIT = 25;
 const TRIVIAL_ROUND_LIMIT = 4;
 const GRIND_MIN_ROUNDS = 6;              // rounds of damage data before projecting
 const GRIND_PROJECTED_ROUNDS_CAP = 30;   // projected rounds-to-kill above this = stalemate/wall
+const LOW_BASH_DAMAGE_FRACTION_PER_ROUND = 0.05;
 const HP_PRESSURE_FRACTION = 0.75;
 const DEFEND_FRACTION = 0.4;
 const AUDIT_RADIUS_PX = 300;
@@ -65,6 +75,32 @@ const pointInArea = (point, area) => (
   point.y >= area.y &&
   point.y < area.y + area.h
 );
+
+function readGeneratedJson(file) {
+  return JSON.parse(readFileSync(new URL(`apps/game/public/generated/${file}`, root), "utf8"));
+}
+
+function applyItemOverrides(items, overrides) {
+  const byItemId = overrides?.byItemId ?? {};
+  return {
+    ...items,
+    items: (items.items ?? []).map((item) => {
+      const override = byItemId[String(item.id)];
+      return override ? { ...item, ...override } : item;
+    })
+  };
+}
+
+function applyPsiOverrides(psi, overrides) {
+  const byPsiId = overrides?.byPsiId ?? {};
+  return {
+    ...psi,
+    psi: (psi.psi ?? []).map((entry) => {
+      const override = byPsiId[String(entry.id)];
+      return override ? { ...entry, ...override } : entry;
+    })
+  };
+}
 
 class PageWedgedError extends Error {
   constructor(operation, timeoutMs) {
@@ -132,6 +168,8 @@ const recruitByTrigger = new Map([
 ]);
 
 const earnedFlags = new Set();
+const itemsById = new Map((itemsData.items ?? []).map((item) => [item.id, item]));
+const psiById = new Map((psiData.psi ?? []).map((psi) => [psi.id, psi]));
 async function forceFlag(flag) {
   earnedFlags.add(flag);
   await settleDebugHooks(`forceFlag:${flag}`);
@@ -1384,9 +1422,7 @@ async function navCommand(target) {
 
 async function selectWeakestTarget(living) {
   if (living.length <= 1) return;
-  const want = living.reduce((best, entry) => (
-    entry.e.hpTarget < best.e.hpTarget ? entry : best
-  )).i;
+  const want = weakestLivingIndex(living);
   for (let i = 0; i < 8; i += 1) {
     const selection = (await peek()).b?.selection ?? "";
     const match = selection.match(/^target:BASH:(\d+)/);
@@ -1404,9 +1440,230 @@ async function bashWeakest(living) {
   await tap("z", 180);
 }
 
+async function usePsi(choice, targetIndex) {
+  if (!await navCommand("PSI")) return false;
+  await tap("z", 160);
+  if (!await waitForBattleSubmenu("psi")) return cancelToCommand();
+  if (!await navPsiSelection(choice)) return cancelToCommand();
+  await tap("z", 160);
+  return await confirmTargetIfOpen(choice.targetKind, targetIndex) || cancelToCommand();
+}
+
+async function useItem(choice, targetIndex) {
+  if (!await navCommand("GOODS")) return false;
+  await tap("z", 160);
+  if (!await waitForBattleSubmenu("goods")) return cancelToCommand();
+  if (!await navGoodsSelection(choice)) return cancelToCommand();
+  await tap("z", 160);
+  return await confirmTargetIfOpen(choice.targetKind, targetIndex) || cancelToCommand();
+}
+
+async function waitForBattleSubmenu(submenu) {
+  for (let i = 0; i < 12; i += 1) {
+    const b = (await peek()).b;
+    if (b?.submenu === submenu) return true;
+    await page.waitForTimeout(80);
+  }
+  return false;
+}
+
+async function navPsiSelection(choice) {
+  const targetSelection = `psi:${choice.id}`;
+  const sweep = [
+    "ArrowRight", "ArrowRight", "ArrowRight", "ArrowRight", "ArrowRight",
+    "ArrowDown",
+    "ArrowLeft", "ArrowLeft", "ArrowLeft", "ArrowLeft", "ArrowLeft",
+    "ArrowDown"
+  ];
+  for (let i = 0; i < 60; i += 1) {
+    const b = (await peek()).b;
+    if (b?.selection === targetSelection) return true;
+    if (b?.submenu !== "psi") return false;
+    await tap(sweep[i % sweep.length], 90);
+  }
+  return false;
+}
+
+async function navGoodsSelection(choice) {
+  const targetSelection = `item:${choice.slot}:${choice.id}`;
+  for (let i = 0; i < 28; i += 1) {
+    const b = (await peek()).b;
+    if (b?.selection === targetSelection) return true;
+    if (b?.submenu !== "goods") return false;
+    const current = Number.isFinite(b?.submenuIndex) ? b.submenuIndex : 0;
+    const delta = choice.slot - current;
+    if (delta === 0) {
+      await tap("ArrowDown", 90);
+    } else if (Math.abs(delta) >= 7) {
+      await tap(delta > 0 ? "ArrowRight" : "ArrowLeft", 90);
+    } else {
+      await tap(delta > 0 ? "ArrowDown" : "ArrowUp", 90);
+    }
+  }
+  return false;
+}
+
+async function confirmTargetIfOpen(targetKind, targetIndex) {
+  for (let i = 0; i < 8; i += 1) {
+    const b = (await peek()).b;
+    if (b?.submenu !== "target") return true;
+    const side = targetKind === "enemy" || targetKind === "all" ? "enemy" : "party";
+    const current = side === "enemy" ? b.targetIndex : b.partyTargetIndex;
+    if (current === targetIndex) {
+      await tap("z", 180);
+      return true;
+    }
+    await tap(current < targetIndex ? "ArrowRight" : "ArrowLeft", 100);
+  }
+  return false;
+}
+
+async function cancelToCommand() {
+  for (let i = 0; i < 4; i += 1) {
+    const b = (await peek()).b;
+    if (!b || b.submenu === "command") return false;
+    await tap("x", 100);
+  }
+  return false;
+}
+
 async function defend() {
   await navCommand("DEFEND");
   await tap("z", 180);
+}
+
+function weakestLivingIndex(living) {
+  return living.reduce((best, entry) => (
+    entry.e.hpTarget < best.e.hpTarget ? entry : best
+  )).i;
+}
+
+function criticalHealNeed(b, startMax) {
+  const critical = (b.party ?? [])
+    .map((member, index) => {
+      const maxHp = Math.max(1, startMax[index] ?? member?.hpTarget ?? 1);
+      const hp = Math.max(0, member?.hpTarget ?? 0);
+      return {
+        index,
+        member,
+        maxHp,
+        hp,
+        missingHp: Math.max(0, maxHp - hp),
+        fraction: hp / maxHp
+      };
+    })
+    .filter((entry) => entry.member?.alive && entry.hp > 0 && entry.fraction <= DEFEND_FRACTION)
+    .sort((a, b) => a.fraction - b.fraction || b.missingHp - a.missingHp);
+  return critical[0] ?? null;
+}
+
+function chooseHealAction(b, startMax) {
+  const need = criticalHealNeed(b, startMax);
+  if (!need || need.missingHp <= 0) return null;
+  const psi = chooseCheapestSufficient(
+    (b.usablePsi ?? []).filter((option) => option.category === "heal"),
+    (option) => psiHealAmount(option, need.maxHp),
+    (option) => option.ppCost,
+    need.missingHp
+  );
+  if (psi) {
+    return {
+      kind: "PSI_HEAL",
+      choice: psi.option,
+      targetIndex: need.index,
+      target: need,
+      amount: psi.amount,
+      cost: psi.cost
+    };
+  }
+
+  const item = chooseCheapestSufficient(
+    (b.usableItems ?? []).filter((option) => option.category === "heal"),
+    (option) => itemHealAmount(option, need.maxHp),
+    (option) => itemsById.get(option.id)?.cost ?? option.slot,
+    need.missingHp
+  );
+  if (item) {
+    return {
+      kind: "ITEM_HEAL",
+      choice: item.option,
+      targetIndex: need.index,
+      target: need,
+      amount: item.amount,
+      cost: item.cost
+    };
+  }
+
+  return { kind: "NO_HEAL", target: need };
+}
+
+function chooseCheapestSufficient(options, amountFor, costFor, missingHp) {
+  const candidates = options
+    .map((option) => ({
+      option,
+      amount: Math.max(0, round(amountFor(option))),
+      cost: Math.max(0, round(costFor(option)))
+    }))
+    .filter((entry) => entry.amount > 0);
+  if (candidates.length === 0) return null;
+  const sufficient = candidates.filter((entry) => entry.amount >= missingHp);
+  const pool = sufficient.length > 0 ? sufficient : candidates;
+  return pool.sort((a, b) => {
+    if (sufficient.length > 0) {
+      return a.cost - b.cost || a.amount - b.amount || a.option.id - b.option.id;
+    }
+    return b.amount - a.amount || a.cost - b.cost || a.option.id - b.option.id;
+  })[0];
+}
+
+function chooseOffensePsi(b) {
+  return (b.usablePsi ?? [])
+    .filter((option) => option.category === "offense")
+    .sort((a, b) => a.ppCost - b.ppCost || a.id - b.id)[0] ?? null;
+}
+
+function battleDamageTrend(initialEnemyHp, enemyTotalHp, roundNo, finishable) {
+  if (initialEnemyHp === null || roundNo < GRIND_MIN_ROUNDS || finishable) {
+    return { ready: false, tanky: false, projected: null, rate: 0, lowDamageFraction: false };
+  }
+  const dealt = initialEnemyHp - enemyTotalHp;
+  const rate = dealt / Math.max(1, roundNo);
+  const projected = rate > 0.5 ? enemyTotalHp / rate : Infinity;
+  const damageFraction = initialEnemyHp > 0 ? rate / initialEnemyHp : 0;
+  const projectedHigh = projected > GRIND_PROJECTED_ROUNDS_CAP;
+  const lowDamageFraction = damageFraction > 0 && damageFraction < LOW_BASH_DAMAGE_FRACTION_PER_ROUND;
+  return {
+    ready: true,
+    tanky: projectedHigh || lowDamageFraction,
+    projected,
+    rate,
+    lowDamageFraction
+  };
+}
+
+function psiHealAmount(option, targetMaxHp) {
+  const psi = psiById.get(option.id);
+  const effectAmount = healEffectAmount(psi?.effect, targetMaxHp);
+  if (effectAmount > 0) return effectAmount;
+  const strength = String(psi?.strength ?? "").trim().toLowerCase();
+  const rank = { alpha: 0, beta: 1, gamma: 2, sigma: 3, omega: 4 }[strength] ?? 0;
+  return 24 + rank * 16;
+}
+
+function itemHealAmount(option, targetMaxHp) {
+  return healEffectAmount(itemsById.get(option.id)?.effect, targetMaxHp);
+}
+
+function healEffectAmount(effect, targetMaxHp) {
+  if (effect?.kind === "healHp") return effect.amount;
+  if (effect?.kind === "healHpPercent") return Math.floor(Math.max(1, targetMaxHp) * effect.percent / 100);
+  return 0;
+}
+
+function targetDescription(b, targetIndex, side = "enemy") {
+  const collection = side === "party" ? b.party ?? [] : b.enemies ?? [];
+  const target = collection[targetIndex];
+  return `${targetIndex}:${round(target?.hpTarget)}`;
 }
 
 async function fightBattle(label, trigger, source) {
@@ -1426,6 +1683,10 @@ async function fightBattle(label, trigger, source) {
     deadMembers: [],
     defendNeeded: false,
     defendCommands: 0,
+    healCommands: 0,
+    psiCommands: 0,
+    itemCommands: 0,
+    nonBashChoices: [],
     levelUps: [],
     finalParty: [],
     finalEnemies: [],
@@ -1469,7 +1730,7 @@ async function fightBattle(label, trigger, source) {
     }
     if (b.phase === "command-input") {
       sawCommand = true;
-      const idx = b.inputMemberIndex ?? 0;
+      const idx = b.currentActor?.side === "party" ? b.currentActor.index : b.inputMemberIndex ?? 0;
       const me = b.party[idx] ?? b.party[0];
       const maxHp = Math.max(1, startMax[idx] ?? me?.hpTarget ?? 1);
       const living = (b.enemies ?? []).map((e, i) => ({ e, i })).filter((entry) => entry.e.alive);
@@ -1478,24 +1739,92 @@ async function fightBattle(label, trigger, source) {
       // Project rounds-to-kill from the damage rate; bail on an absurd grind.
       const roundNo = b.roundNumber ?? 0;
       if (initialEnemyHp === null && roundNo >= 1) initialEnemyHp = enemyTotalHp;
-      if (initialEnemyHp !== null && roundNo >= GRIND_MIN_ROUNDS && !finishable) {
-        const dealt = initialEnemyHp - enemyTotalHp;
-        const rate = dealt / Math.max(1, roundNo);
-        const projected = rate > 0.5 ? enemyTotalHp / rate : Infinity;
-        if (projected > GRIND_PROJECTED_ROUNDS_CAP) {
-          battle.result = "stalemate";
-          battle.stalemate = { atRound: roundNo, enemyHpRemaining: round(enemyTotalHp), ratePerRound: Number(rate.toFixed(1)), projectedRounds: Number.isFinite(projected) ? round(projected) : null };
-          log(`    [battle] ${label}: STALEMATE at r${roundNo} (enemy ${round(enemyTotalHp)}hp, ~${rate.toFixed(1)}/round, projected ${Number.isFinite(projected) ? round(projected) : "inf"} rounds); bailing`);
-          break;
+      const trend = battleDamageTrend(initialEnemyHp, enemyTotalHp, roundNo, finishable);
+      const offensePsi = chooseOffensePsi(b);
+      let action = "BASH";
+      let acted = false;
+      const heal = chooseHealAction(b, startMax);
+      if (heal) {
+        battle.defendNeeded = true;
+      }
+
+      if (heal?.kind === "PSI_HEAL") {
+        action = `PSI ${heal.choice.name} -> p${heal.targetIndex}`;
+        acted = await usePsi(heal.choice, heal.targetIndex);
+        if (acted) {
+          battle.healCommands += 1;
+          battle.psiCommands += 1;
+          battle.nonBashChoices.push({
+            round: roundNo,
+            memberIndex: idx,
+            action: "PSI_HEAL",
+            id: heal.choice.id,
+            name: heal.choice.name,
+            targetIndex: heal.targetIndex,
+            amount: heal.amount,
+            reason: `critical ${round(heal.target.hp)}/${round(heal.target.maxHp)}`
+          });
+          log(`      [${label}] non-BASH PSI heal ${heal.choice.name} (${heal.choice.id}) target=${targetDescription(b, heal.targetIndex, "party")} amount~${round(heal.amount)}`);
+        }
+      } else if (heal?.kind === "ITEM_HEAL") {
+        action = `GOODS ${heal.choice.name} -> p${heal.targetIndex}`;
+        acted = await useItem(heal.choice, heal.targetIndex);
+        if (acted) {
+          battle.healCommands += 1;
+          battle.itemCommands += 1;
+          battle.nonBashChoices.push({
+            round: roundNo,
+            memberIndex: idx,
+            action: "ITEM_HEAL",
+            id: heal.choice.id,
+            name: heal.choice.name,
+            slot: heal.choice.slot,
+            targetIndex: heal.targetIndex,
+            amount: heal.amount,
+            reason: `critical ${round(heal.target.hp)}/${round(heal.target.maxHp)}`
+          });
+          log(`      [${label}] non-BASH item heal ${heal.choice.name} (${heal.choice.id}) slot=${heal.choice.slot} target=${targetDescription(b, heal.targetIndex, "party")} amount~${round(heal.amount)}`);
         }
       }
-      let action = "BASH";
-      if (me && me.hpTarget <= maxHp * DEFEND_FRACTION && !finishable) {
+
+      if (!acted && trend.ready && trend.tanky && offensePsi && living.length > 0) {
+        const targetIndex = weakestLivingIndex(living);
+        action = `PSI ${offensePsi.name} -> e${targetIndex}`;
+        acted = await usePsi(offensePsi, targetIndex);
+        if (acted) {
+          battle.psiCommands += 1;
+          battle.nonBashChoices.push({
+            round: roundNo,
+            memberIndex: idx,
+            action: "PSI_OFFENSE",
+            id: offensePsi.id,
+            name: offensePsi.name,
+            targetIndex,
+            reason: trend.lowDamageFraction ? "low-bash-damage" : "projected-rounds",
+            ratePerRound: Number(trend.rate.toFixed(1)),
+            projectedRounds: Number.isFinite(trend.projected) ? round(trend.projected) : null
+          });
+          log(`      [${label}] non-BASH offense PSI ${offensePsi.name} (${offensePsi.id}) target=${targetDescription(b, targetIndex)} reason=${trend.lowDamageFraction ? "<5% bash damage/round" : "projected grind"} rate=${trend.rate.toFixed(1)} projected=${Number.isFinite(trend.projected) ? round(trend.projected) : "inf"}`);
+        }
+      }
+
+      if (!acted && trend.ready && trend.projected > GRIND_PROJECTED_ROUNDS_CAP && !offensePsi) {
+        battle.result = "stalemate";
+        battle.stalemate = { atRound: roundNo, enemyHpRemaining: round(enemyTotalHp), ratePerRound: Number(trend.rate.toFixed(1)), projectedRounds: Number.isFinite(trend.projected) ? round(trend.projected) : null };
+        log(`    [battle] ${label}: STALEMATE at r${roundNo} (enemy ${round(enemyTotalHp)}hp, ~${trend.rate.toFixed(1)}/round, projected ${Number.isFinite(trend.projected) ? round(trend.projected) : "inf"} rounds, no offense PSI); bailing`);
+        break;
+      }
+
+      if (!acted && me && me.hpTarget <= maxHp * DEFEND_FRACTION && !finishable) {
         battle.defendNeeded = true;
         battle.defendCommands += 1;
         action = "DEFEND";
+        acted = true;
         await defend();
-      } else {
+      }
+
+      if (!acted) {
+        action = "BASH";
         await bashWeakest(living);
       }
       log(`      [${label}] r${b.roundNumber} m${idx} ${round(me?.hpTarget)}/${round(maxHp)} hp e=[${(b.enemies ?? []).map((e) => round(e.hpTarget)).join(",")}] -> ${action}`);

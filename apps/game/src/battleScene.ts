@@ -209,6 +209,7 @@ import { createMusic, musicBossCueId, musicDisabledBySearch, type Music } from "
 import { getSharedMusic } from "./sharedMusic";
 import { battleStepSfx } from "./battleSfxPlan";
 import { battleMusicCueForOutcome } from "./battleMusic";
+import { usableItemsForBattleDebug, usablePsiForBattleDebug } from "./battleDebugOptions";
 import {
   answerSourceCheckQuestion,
   buildAttestationBattleRuntime,
@@ -4465,6 +4466,28 @@ export class BattleScene extends Phaser.Scene {
       ...this.enemyEffectFor(index, now)
     }));
     const victoryPage = this.phase_ === "victory-summary" ? this.currentVictorySummaryPageDetail() : undefined;
+    const inputMemberIndex = this.phase_ === "command-input" ? this.inputState_.memberCursor : null;
+    const debugOptionsMemberIndex = this.phase_ === "command-input" && this.currentActor_?.side === "party"
+      ? this.currentActor_.index
+      : null;
+    const devUsableOptions = import.meta.env.DEV
+      ? {
+          usablePsi: usablePsiForBattleDebug({
+            state: this.battle_,
+            inputMemberIndex: debugOptionsMemberIndex,
+            psi: this.psi_?.psi,
+            items: this.items_?.items,
+            usabilityMatrix: this.usabilityMatrix_
+          }),
+          usableItems: usableItemsForBattleDebug({
+            state: this.battle_,
+            inputMemberIndex: debugOptionsMemberIndex,
+            psi: this.psi_?.psi,
+            items: this.items_?.items,
+            usabilityMatrix: this.usabilityMatrix_
+          })
+        }
+      : {};
     publishBattleDebug({
       mode: "battle",
       phase: this.phase_,
@@ -4482,7 +4505,7 @@ export class BattleScene extends Phaser.Scene {
       partyTargetIndex: this.partyTargetIndex_,
       turnOrder: this.roundOrder_.map(debugActor),
       currentActor: this.currentActor_ ? debugActor(this.currentActor_) : null,
-      inputMemberIndex: this.phase_ === "command-input" ? this.inputState_.memberCursor : null,
+      inputMemberIndex,
       queuedCount: this.queuedCommands_.length,
       executionStepIndex: this.executionStepDebugIndex(),
       executionStepCount: this.executionOrder_.length,
@@ -4501,6 +4524,7 @@ export class BattleScene extends Phaser.Scene {
       lastEnemyAction: this.lastEnemyAction_,
       party,
       enemies,
+      ...devUsableOptions,
       background: this.backgroundDebug,
       windowLoaded: Boolean(this.window_),
       ...(this.window_ ? {

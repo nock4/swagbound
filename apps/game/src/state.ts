@@ -127,6 +127,27 @@ export type BattleFxDebug = {
   lungeCount: number;
 };
 
+export type BattleDebugTargetKind = "enemy" | "ally" | "party" | "self" | "all";
+export type BattleDebugPsiCategory = "offense" | "heal" | "assist" | "status";
+export type BattleDebugItemCategory = "heal" | "offense" | "revive" | "buff" | "other";
+
+export type BattleDebugUsablePsi = {
+  id: number;
+  name: string;
+  ppCost: number;
+  category: BattleDebugPsiCategory;
+  targetKind: BattleDebugTargetKind;
+  element?: string;
+};
+
+export type BattleDebugUsableItem = {
+  slot: number;
+  id: number;
+  name: string;
+  category: BattleDebugItemCategory;
+  targetKind: BattleDebugTargetKind;
+};
+
 export type BattleDebug = {
   mode: "battle";
   phase: BattlePhase;
@@ -162,6 +183,8 @@ export type BattleDebug = {
   lastEnemyAction: LastEnemyActionDebug | null;
   party: BattleCombatantDebug[];
   enemies: BattleEnemyCombatantDebug[];
+  usablePsi?: BattleDebugUsablePsi[];
+  usableItems?: BattleDebugUsableItem[];
   background: BattleBackgroundDebug;
   windowLoaded?: boolean;
   defaultFlavorId?: number;
