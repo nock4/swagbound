@@ -5,8 +5,10 @@ import { musicDisabledBySearch, type Music } from "./audio/music";
 import { CONFIRM_KEY_NAMES, MENU_DOWN_KEY_NAMES, MENU_UP_KEY_NAMES, registerDiscreteKeys } from "./inputModel";
 import {
   CLEAN_UI_FONT_FAMILY,
+  CLEAN_UI_PRIMARY,
   CLEAN_UI_SELECTION_CARET,
   CLEAN_UI_SELECTION_TEXT,
+  createCleanText,
   drawCleanCaret,
   drawCleanPanel,
   drawCleanSelection
@@ -19,6 +21,7 @@ import {
   titlePromptVisible,
   type TitleMenuPhase
 } from "./titleMenuTiming";
+import { validateImportedSaveBlob, type SaveSlotPersistence } from "./saveState";
 
 /** Where a menu choice sends the player. */
 export interface TitleMenuTarget {
@@ -33,6 +36,9 @@ export interface TitleMenuData {
   /** Continue target (world with the loaded save), or null when no save exists. */
   continueTarget?: TitleMenuTarget | null;
   hasSave: boolean;
+  saveSlot?: number;
+  saveSlots?: SaveSlotPersistence;
+  refreshContinueTarget?: () => TitleMenuTarget | null;
   musicManifest?: MusicManifest;
 }
 
@@ -45,6 +51,10 @@ const WAR_STATIC_TEXTURE_COUNT = 6;
 const WAR_STATIC_TEXTURE_WIDTH = 128;
 const WAR_STATIC_TEXTURE_HEIGHT = 112;
 const MENU_CUE_FADE_MS = 70;
+const MENU_ROW_H = 34;
+const MENU_PANEL_W = 220;
+const MENU_PANEL_BOTTOM_MARGIN = 28;
+const MENU_MESSAGE_MS = 2200;
 // Dark, brooding track for the opening war-against-milady slide and fresh-game
 // opening. It stays alive across the title-to-world handoff.
 const WAR_CUE = "intro";
@@ -63,6 +73,9 @@ export class TitleMenuScene extends Phaser.Scene {
   private newGameTarget!: TitleMenuTarget;
   private continueTarget: TitleMenuTarget | null = null;
   private hasSave = false;
+  private saveSlot = 0;
+  private saveSlots?: SaveSlotPersistence;
+  private refreshContinueTarget?: () => TitleMenuTarget | null;
   private musicManifest?: MusicManifest;
 
   private phase: Phase = "title";
@@ -83,10 +96,16 @@ export class TitleMenuScene extends Phaser.Scene {
   private menuItems: { label: string; run: () => void }[] = [];
   private menuTexts: Phaser.GameObjects.Text[] = [];
   private menuPanel?: Phaser.GameObjects.Graphics;
+  private menuMessage?: Phaser.GameObjects.Text;
+  private menuMessageTimer?: Phaser.Time.TimerEvent;
+  private importInput?: HTMLInputElement;
+  private activeImportReader?: FileReader;
+  private readonly exportObjectUrls = new Set<string>();
   private cursor = 0;
   private readonly confirmPointerInput = () => this.confirm();
   private readonly gateKeyInput = () => this.releaseGate();
   private readonly gateGamepadInput = () => this.releaseGate();
+  private readonly importFileChangeInput = (event: Event) => this.handleImportFileChange(event);
 
   constructor() {
     super("title-menu");
@@ -96,6 +115,9 @@ export class TitleMenuScene extends Phaser.Scene {
     this.newGameTarget = data.newGameTarget;
     this.continueTarget = data.continueTarget ?? null;
     this.hasSave = data.hasSave;
+    this.saveSlot = data.saveSlot ?? 0;
+    this.saveSlots = data.saveSlots;
+    this.refreshContinueTarget = data.refreshContinueTarget;
     this.musicManifest = data.musicManifest;
     this.phase = "gate";
     this.cursor = 0;
@@ -145,6 +167,9 @@ export class TitleMenuScene extends Phaser.Scene {
       this.killWarStaticReveal();
       this.removeWarStaticTextures();
       this.input.off("pointerdown", this.confirmPointerInput);
+      this.cleanupDomSaveControls();
+      this.clearMenuMessage(true);
+      this.destroyMenuObjects();
     });
 
     document.getElementById("game-loading")?.remove();
@@ -387,28 +412,30 @@ export class TitleMenuScene extends Phaser.Scene {
     this.menuItems[this.cursor]?.run();
   }
 
-  private buildMenu(): void {
+  private buildMenu(preferredLabel?: string): void {
     this.prompt?.destroy();
     this.prompt = undefined;
 
+    this.destroyMenuObjects();
     this.menuItems = [{ label: "NEW GAME", run: () => this.go(this.newGameTarget) }];
     if (this.continueTarget && this.hasSave) {
       this.menuItems.push({ label: "CONTINUE", run: () => this.go(this.continueTarget as TitleMenuTarget) });
     }
-    this.cursor = 0;
+    if (this.hasExportableSave()) {
+      this.menuItems.push({ label: "EXPORT SAVE", run: () => this.exportSave() });
+    }
+    this.menuItems.push({ label: "IMPORT SAVE", run: () => this.openImportPicker() });
 
-    const rowH = 34;
-    const panelW = 220;
-    const panelH = 18 + this.menuItems.length * rowH;
-    const panelX = Math.round((this.scale.width - panelW) / 2);
-    const panelY = Math.round(this.scale.height - panelH - 28);
+    const preferredIndex = preferredLabel ? this.menuItems.findIndex((item) => item.label === preferredLabel) : -1;
+    this.cursor = preferredIndex >= 0 ? preferredIndex : Math.min(this.cursor, this.menuItems.length - 1);
 
+    const { panelX, panelY, panelW, panelH } = this.menuLayout();
     const panel = this.add.graphics().setDepth(20);
     drawCleanPanel(panel, { x: panelX, y: panelY, width: panelW, height: panelH });
     this.menuPanel = panel;
 
     this.menuTexts = this.menuItems.map((item, i) => {
-      const y = panelY + 9 + rowH * i + rowH / 2;
+      const y = panelY + 9 + MENU_ROW_H * i + MENU_ROW_H / 2;
       return this.add
         .text(panelX + 52, y, item.label, {
           fontFamily: CLEAN_UI_FONT_FAMILY,
@@ -425,23 +452,212 @@ export class TitleMenuScene extends Phaser.Scene {
     if (!this.menuPanel) {
       return;
     }
-    const rowH = 34;
-    const panelW = 220;
-    const panelX = Math.round((this.scale.width - panelW) / 2);
-    const panelH = 18 + this.menuItems.length * rowH;
-    const panelY = Math.round(this.scale.height - panelH - 28);
+    const { panelX, panelY, panelW, panelH } = this.menuLayout();
 
     // Redraw panel + inverted selection row (white fill, dark text).
     const panel = this.menuPanel;
     panel.clear();
     drawCleanPanel(panel, { x: panelX, y: panelY, width: panelW, height: panelH });
-    const selY = panelY + 9 + rowH * this.cursor;
-    drawCleanSelection(panel, { x: panelX + 12, y: selY + 2, width: panelW - 24, height: rowH - 4 }, true);
-    drawCleanCaret(panel, panelX + 18, selY + 2, rowH - 4, CLEAN_UI_SELECTION_CARET);
+    const selY = panelY + 9 + MENU_ROW_H * this.cursor;
+    drawCleanSelection(panel, { x: panelX + 12, y: selY + 2, width: panelW - 24, height: MENU_ROW_H - 4 }, true);
+    drawCleanCaret(panel, panelX + 18, selY + 2, MENU_ROW_H - 4, CLEAN_UI_SELECTION_CARET);
 
     this.menuTexts.forEach((text, i) => {
       text.setColor(i === this.cursor ? CLEAN_UI_SELECTION_TEXT : "#ffffff");
     });
+  }
+
+  private menuLayout(): { panelX: number; panelY: number; panelW: number; panelH: number } {
+    const panelW = MENU_PANEL_W;
+    const panelH = 18 + this.menuItems.length * MENU_ROW_H;
+    return {
+      panelX: Math.round((this.scale.width - panelW) / 2),
+      panelY: Math.round(this.scale.height - panelH - MENU_PANEL_BOTTOM_MARGIN),
+      panelW,
+      panelH
+    };
+  }
+
+  private destroyMenuObjects(): void {
+    this.menuPanel?.destroy();
+    this.menuPanel = undefined;
+    for (const text of this.menuTexts) {
+      text.destroy();
+    }
+    this.menuTexts = [];
+  }
+
+  private hasExportableSave(): boolean {
+    return this.rawSaveBlob() !== null;
+  }
+
+  private rawSaveBlob(): string | null {
+    return this.saveSlots?.loadFromSlot(this.saveSlot) ?? null;
+  }
+
+  private exportSave(): void {
+    const raw = this.rawSaveBlob();
+    if (raw === null) {
+      this.refreshSaveMenuState("IMPORT SAVE");
+      this.showMenuMessage("NO SAVE FOUND", "error");
+      return;
+    }
+    if (typeof document === "undefined" || typeof URL === "undefined" || typeof Blob === "undefined") {
+      this.showMenuMessage("EXPORT FAILED", "error");
+      return;
+    }
+    const url = URL.createObjectURL(new Blob([raw], { type: "application/json" }));
+    this.exportObjectUrls.add(url);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = saveExportFileName();
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    this.time.delayedCall(1000, () => this.revokeExportObjectUrl(url));
+  }
+
+  private openImportPicker(): void {
+    if (typeof document === "undefined" || typeof FileReader === "undefined") {
+      this.showMenuMessage("IMPORT FAILED", "error");
+      return;
+    }
+    this.cleanupImportInput();
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json,application/json";
+    input.style.display = "none";
+    input.addEventListener("change", this.importFileChangeInput, { once: true });
+    document.body.appendChild(input);
+    this.importInput = input;
+    input.click();
+  }
+
+  private handleImportFileChange(event: Event): void {
+    const input = event.currentTarget as HTMLInputElement | null;
+    const file = input?.files?.[0] ?? null;
+    this.cleanupImportInput();
+    if (!file) {
+      return;
+    }
+    const reader = new FileReader();
+    this.activeImportReader = reader;
+    reader.onload = () => {
+      if (this.activeImportReader !== reader) {
+        return;
+      }
+      this.activeImportReader = undefined;
+      this.importRawSave(typeof reader.result === "string" ? reader.result : null);
+    };
+    reader.onerror = () => {
+      if (this.activeImportReader !== reader) {
+        return;
+      }
+      this.activeImportReader = undefined;
+      this.showMenuMessage("IMPORT FAILED", "error");
+    };
+    reader.readAsText(file);
+  }
+
+  private importRawSave(raw: string | null): void {
+    const validation = validateImportedSaveBlob(raw);
+    if (!validation.ok) {
+      this.showMenuMessage("SAVE FILE INVALID", "error");
+      return;
+    }
+    if (!this.saveSlots?.saveToSlot(this.saveSlot, validation.blob)) {
+      this.showMenuMessage("IMPORT FAILED", "error");
+      return;
+    }
+    this.refreshSaveMenuState("CONTINUE");
+    this.showMenuMessage("SAVE IMPORTED");
+  }
+
+  private refreshSaveMenuState(preferredLabel?: string): void {
+    this.continueTarget = this.refreshContinueTarget?.() ?? this.continueTarget;
+    this.hasSave = this.continueTarget !== null;
+    if (this.phase === "menu") {
+      this.buildMenu(preferredLabel);
+    }
+  }
+
+  private showMenuMessage(message: string, tone: "default" | "error" = "default"): void {
+    this.menuMessageTimer?.remove(false);
+    this.menuMessageTimer = undefined;
+    const { panelY, panelW } = this.menuLayout();
+    const y = Math.max(18, panelY - 14);
+    if (!this.menuMessage) {
+      this.menuMessage = createCleanText(this, this.scale.width / 2, y, message, {
+        fontSize: 14,
+        fixedWidth: panelW + 48,
+        align: "center"
+      })
+        .setOrigin(0.5, 1)
+        .setDepth(23)
+        .setShadow(0, 2, "#000000", 4);
+    }
+    this.menuMessage
+      .setText(message)
+      .setPosition(this.scale.width / 2, y)
+      .setColor(tone === "error" ? "#fca5a5" : CLEAN_UI_PRIMARY)
+      .setVisible(true)
+      .setAlpha(1);
+    this.menuMessageTimer = this.time.delayedCall(MENU_MESSAGE_MS, () => {
+      this.menuMessage?.setVisible(false);
+      this.menuMessageTimer = undefined;
+    });
+  }
+
+  private clearMenuMessage(destroy = false): void {
+    this.menuMessageTimer?.remove(false);
+    this.menuMessageTimer = undefined;
+    if (destroy) {
+      this.menuMessage?.destroy();
+      this.menuMessage = undefined;
+      return;
+    }
+    this.menuMessage?.setVisible(false);
+  }
+
+  private cleanupDomSaveControls(): void {
+    this.cleanupImportInput();
+    this.abortImportReader();
+    if (typeof URL !== "undefined") {
+      for (const url of this.exportObjectUrls) {
+        URL.revokeObjectURL(url);
+      }
+    }
+    this.exportObjectUrls.clear();
+  }
+
+  private cleanupImportInput(): void {
+    this.importInput?.removeEventListener("change", this.importFileChangeInput);
+    this.importInput?.remove();
+    this.importInput = undefined;
+  }
+
+  private abortImportReader(): void {
+    const reader = this.activeImportReader;
+    if (!reader) {
+      return;
+    }
+    reader.onload = null;
+    reader.onerror = null;
+    if (reader.readyState === FileReader.LOADING) {
+      reader.abort();
+    }
+    this.activeImportReader = undefined;
+  }
+
+  private revokeExportObjectUrl(url: string): void {
+    if (!this.exportObjectUrls.delete(url)) {
+      return;
+    }
+    if (typeof URL === "undefined") {
+      return;
+    }
+    URL.revokeObjectURL(url);
   }
 
   private moveCursor(delta: number): void {
@@ -486,4 +702,11 @@ function saturatedStaticPixel(): { r: number; g: number; b: number } {
     default:
       return { r: cold, g: mid, b: hot };
   }
+}
+
+function saveExportFileName(date = new Date()): string {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const day = `${date.getDate()}`.padStart(2, "0");
+  return `swagbound-save-${year}-${month}-${day}.json`;
 }

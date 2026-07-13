@@ -77,6 +77,10 @@ export type SaveSlotPersistence = {
   clearSlot(slot: number): boolean;
 };
 
+export type SaveImportValidationResult =
+  | { ok: true; blob: string; save: SaveState }
+  | { ok: false; reason: "empty" | "invalid-json" | "invalid-schema" };
+
 const EQUIPMENT_SLOTS: EquipmentSlot[] = ["weapon", "body", "arms", "other"];
 const FACING_VALUES: Facing[] = ["up", "down", "left", "right"];
 
@@ -136,6 +140,20 @@ export function deserializeSaveState(blob: string | null | undefined): SaveState
   } catch {
     return null;
   }
+}
+
+export function validateImportedSaveBlob(blob: string | null | undefined): SaveImportValidationResult {
+  if (typeof blob !== "string" || blob.trim() === "") {
+    return { ok: false, reason: "empty" };
+  }
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(blob);
+  } catch {
+    return { ok: false, reason: "invalid-json" };
+  }
+  const save = validateSaveState(parsed);
+  return save ? { ok: true, blob, save } : { ok: false, reason: "invalid-schema" };
 }
 
 export function validateSaveState(value: unknown): SaveState | null {

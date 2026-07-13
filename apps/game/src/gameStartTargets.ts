@@ -87,6 +87,9 @@ export function buildTitleMenuData(gameData: GameData, options: GameStartOptions
     newGameTarget: buildNewGameTitleTarget(gameData, options),
     continueTarget,
     hasSave: continueTarget !== null,
+    saveSlot: options.saveSlot,
+    saveSlots: options.saveSlots,
+    refreshContinueTarget: () => readContinueWorldTarget(gameData, options),
     musicManifest: gameData.musicManifest
   };
 }
