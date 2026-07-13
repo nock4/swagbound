@@ -1,7 +1,7 @@
 // Reachability audit: flood-fill walkable cells from the new-game start, warping
 // through doors, to find which shops/areas a player can actually reach.
 import { readFileSync, existsSync } from "node:fs";
-const root = "/Users/nickgeorge-studio/Projects/coilsnake-tutorial-experiment/";
+const root = new URL("../", import.meta.url).pathname; // repo root, rename-proof
 const w = JSON.parse(readFileSync(root + "apps/game/public/generated/world.json", "utf8"));
 const c = w.collision;
 const CS = c.cellSize, W = c.width, H = c.height;

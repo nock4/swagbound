@@ -1,7 +1,7 @@
 import { readFile, writeFile, access } from "node:fs/promises";
 import { resolve } from "node:path";
 import { SpriteOverridesSchema, OverworldEnemySkinsSchema, EnemyNameFamiliesSchema, expandOverworldEnemySkins } from "@eb/schemas";
-const ROOT = "/Users/nickgeorge-studio/Projects/coilsnake-tutorial-experiment";
+const ROOT = new URL("../", import.meta.url).pathname; // repo root, rename-proof
 async function main() {
   const base = SpriteOverridesSchema.parse(JSON.parse(await readFile(resolve(ROOT, "content/sprite-overrides.json"), "utf8")));
   const skins = OverworldEnemySkinsSchema.parse(JSON.parse(await readFile(resolve(ROOT, "content/overworld-enemy-skins.json"), "utf8")));

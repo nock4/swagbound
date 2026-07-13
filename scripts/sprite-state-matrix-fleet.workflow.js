@@ -4,7 +4,7 @@ export const meta = {
   phases: [{ title: 'Matrix', detail: 'one agent per facing runs the in-engine state matrix' }]
 }
 
-const REPO = '/Users/nickgeorge-studio/Projects/coilsnake-tutorial-experiment'
+const REPO = '/Users/nickgeorge-studio/Projects/swagbound'
 const FACINGS = ['down', 'up', 'left', 'right']
 const SLICE_SCHEMA = {
   type: 'object', additionalProperties: true, required: ['facing', 'pass', 'total', 'results'],

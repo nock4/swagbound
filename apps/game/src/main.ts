@@ -24,13 +24,43 @@ import "./style.css";
 
 const MONO = "Menlo, Consolas, monospace";
 const DEFAULT_SAVE_SLOT = 0;
-const SAVE_KEY_PREFIX = "coilsnake-tutorial-experiment:save:";
+const SAVE_KEY_PREFIX = "swagbound:save:";
+// The save namespace followed the 2026-07-13 repo rename (coilsnake-tutorial-experiment
+// -> swagbound). Players who saved under the old prefix keep their progress: any legacy
+// key is copied to the new prefix once at boot (old keys are left in place as backup).
+const LEGACY_SAVE_KEY_PREFIX = "coilsnake-tutorial-experiment:save:";
 const SAVE_SLOTS: SaveSlotPersistence = {
   saveToSlot,
   loadFromSlot,
   hasSave,
   clearSlot
 };
+
+function migrateLegacySaves(): void {
+  const storage = localStorageOrNull();
+  if (!storage) {
+    return;
+  }
+  try {
+    const legacyKeys: string[] = [];
+    for (let i = 0; i < storage.length; i += 1) {
+      const key = storage.key(i);
+      if (key && key.startsWith(LEGACY_SAVE_KEY_PREFIX)) {
+        legacyKeys.push(key);
+      }
+    }
+    for (const key of legacyKeys) {
+      const newKey = `${SAVE_KEY_PREFIX}${key.slice(LEGACY_SAVE_KEY_PREFIX.length)}`;
+      const value = storage.getItem(key);
+      if (value !== null && storage.getItem(newKey) === null) {
+        storage.setItem(newKey, value);
+      }
+    }
+  } catch {
+    // Storage unavailable or full; the game still boots (fresh-save path).
+  }
+}
+migrateLegacySaves();
 
 /**
  * Boot: fetches and validates the generated JSON pipeline, then starts the

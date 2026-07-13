@@ -208,7 +208,12 @@ async function bootPage(ctx, browser, fleet, options = {}) {
     await drainDialogue(page, 14, 250);
   }
   if (options.clearSave !== false) {
-    await page.evaluate(() => globalThis.localStorage?.removeItem?.("coilsnake-tutorial-experiment:save:0")).catch(() => {});
+    // both namespaces: current + the pre-2026-07-13-rename legacy prefix the
+    // boot migration copies from (clearing only one would resurrect the save)
+    await page.evaluate(() => {
+      globalThis.localStorage?.removeItem?.("swagbound:save:0");
+      globalThis.localStorage?.removeItem?.("coilsnake-tutorial-experiment:save:0");
+    }).catch(() => {});
   }
   return { page, fleet, errors, lastAction: "boot" };
 }
