@@ -30,6 +30,8 @@ const MAX_INTERRUPT_BATTLES_PER_ATTEMPT = 8;
 const ATTEMPT_DEADLINE_MS = 10 * 60 * 1000;
 const WALL_ROUND_LIMIT = 25;
 const TRIVIAL_ROUND_LIMIT = 4;
+const GRIND_MIN_ROUNDS = 6;              // rounds of damage data before projecting
+const GRIND_PROJECTED_ROUNDS_CAP = 30;   // projected rounds-to-kill above this = stalemate/wall
 const HP_PRESSURE_FRACTION = 0.75;
 const DEFEND_FRACTION = 0.4;
 const AUDIT_RADIUS_PX = 300;
@@ -432,7 +434,7 @@ async function runObjective(trigger, ordinal) {
           battle = await fightBattle(battleId, trigger, nearTarget ? "objective" : "route-interrupt");
           entry.battles.push(battle.runId);
           telemetry.battles.push(battle);
-          if (battle.result === "defeat") await settleAfterDefeat(trigger);
+          if (battle.result === "defeat" || battle.result === "stalemate") await settleAfterDefeat(trigger);
           else await settleAfterBattle(trigger);
         } else {
           await page.waitForTimeout(350);
@@ -452,7 +454,7 @@ async function runObjective(trigger, ordinal) {
               battle = await fightBattle(trigger.id, trigger, "objective");
               entry.battles.push(battle.runId);
               telemetry.battles.push(battle);
-              if (battle.result === "defeat") await settleAfterDefeat(trigger);
+              if (battle.result === "defeat" || battle.result === "stalemate") await settleAfterDefeat(trigger);
               else await settleAfterBattle(trigger);
             }
           }
@@ -1434,6 +1436,11 @@ async function fightBattle(label, trigger, source) {
   const dead = new Set();
   let lastPhase = "";
   let sawCommand = false;
+  // Grind/stalemate detection: project rounds-to-kill from the observed damage
+  // rate and bail early instead of grinding the 900-step cap (the BASH-only
+  // policy cannot dent defense-tanky PSI-check bosses; that is a wall signal,
+  // not a battle to finish). Enemy HP at the first command round anchors the rate.
+  let initialEnemyHp = null;
 
   log(`    [battle] ${label}`);
   for (let step = 0; step < 900; step += 1) {
@@ -1466,7 +1473,22 @@ async function fightBattle(label, trigger, source) {
       const me = b.party[idx] ?? b.party[0];
       const maxHp = Math.max(1, startMax[idx] ?? me?.hpTarget ?? 1);
       const living = (b.enemies ?? []).map((e, i) => ({ e, i })).filter((entry) => entry.e.alive);
-      const finishable = living.length > 0 && living.reduce((sum, entry) => sum + Math.max(0, entry.e.hpTarget), 0) <= 18;
+      const enemyTotalHp = living.reduce((sum, entry) => sum + Math.max(0, entry.e.hpTarget), 0);
+      const finishable = living.length > 0 && enemyTotalHp <= 18;
+      // Project rounds-to-kill from the damage rate; bail on an absurd grind.
+      const roundNo = b.roundNumber ?? 0;
+      if (initialEnemyHp === null && roundNo >= 1) initialEnemyHp = enemyTotalHp;
+      if (initialEnemyHp !== null && roundNo >= GRIND_MIN_ROUNDS && !finishable) {
+        const dealt = initialEnemyHp - enemyTotalHp;
+        const rate = dealt / Math.max(1, roundNo);
+        const projected = rate > 0.5 ? enemyTotalHp / rate : Infinity;
+        if (projected > GRIND_PROJECTED_ROUNDS_CAP) {
+          battle.result = "stalemate";
+          battle.stalemate = { atRound: roundNo, enemyHpRemaining: round(enemyTotalHp), ratePerRound: Number(rate.toFixed(1)), projectedRounds: Number.isFinite(projected) ? round(projected) : null };
+          log(`    [battle] ${label}: STALEMATE at r${roundNo} (enemy ${round(enemyTotalHp)}hp, ~${rate.toFixed(1)}/round, projected ${Number.isFinite(projected) ? round(projected) : "inf"} rounds); bailing`);
+          break;
+        }
+      }
       let action = "BASH";
       if (me && me.hpTarget <= maxHp * DEFEND_FRACTION && !finishable) {
         battle.defendNeeded = true;
