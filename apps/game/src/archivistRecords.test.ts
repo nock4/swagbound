@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { ArchivistSpots } from "@eb/schemas";
-import { buildArchivistRecordsViewModel } from "./archivistRecords";
+import {
+  buildArchivistRecordsViewModel,
+  CORRECTION_CLEARED_FLAG,
+  CORRECTION_PLANTED_CAPTION,
+  CORRECTION_PLANTED_FLAG
+} from "./archivistRecords";
 
 describe("buildArchivistRecordsViewModel", () => {
   it("builds filed records from persisted PHOTO flags", () => {
@@ -30,6 +35,115 @@ describe("buildArchivistRecordsViewModel", () => {
         locationLabel: "Morningside cape",
         caption: "Filed, not minted."
       }]
+    });
+  });
+
+  it("types over the first filed record while the correction record is planted", () => {
+    const spots: ArchivistSpots = {
+      schema: "swagbound.archivist-spots.v1",
+      archivist: {
+        spriteId: "drifella2-168",
+        spriteNpcId: 100300,
+        lines: ["Filed, not minted."]
+      },
+      spots: [
+        spot(2, 699, "FLG_PHOTO_2", "Morningside cape", "Filed, not minted."),
+        spot(1, 698, "FLG_PHOTO_1", "Bosch front step", "A record of a thing that only happened once.")
+      ]
+    };
+    const activeFlags = new Set(["FLG_PHOTO_1", "FLG_PHOTO_2", CORRECTION_PLANTED_FLAG]);
+
+    const records = buildArchivistRecordsViewModel(spots, {
+      has: (flag) => activeFlags.has(flag)
+    });
+
+    expect(records).toMatchObject({
+      filed: 2,
+      total: 2,
+      records: [
+        {
+          spotId: 1,
+          caption: CORRECTION_PLANTED_CAPTION,
+          planted: true
+        },
+        {
+          spotId: 2,
+          caption: "Filed, not minted."
+        }
+      ]
+    });
+  });
+
+  it("keeps true captions when the correction record has been cleared", () => {
+    const spots: ArchivistSpots = {
+      schema: "swagbound.archivist-spots.v1",
+      archivist: {
+        spriteId: "drifella2-168",
+        spriteNpcId: 100300,
+        lines: ["Filed, not minted."]
+      },
+      spots: [
+        spot(1, 698, "FLG_PHOTO_1", "Bosch front step", "A record of a thing that only happened once.")
+      ]
+    };
+    const activeFlags = new Set(["FLG_PHOTO_1", CORRECTION_PLANTED_FLAG, CORRECTION_CLEARED_FLAG]);
+
+    const records = buildArchivistRecordsViewModel(spots, {
+      has: (flag) => activeFlags.has(flag)
+    });
+
+    expect(records.records[0]).toMatchObject({
+      spotId: 1,
+      caption: "A record of a thing that only happened once."
+    });
+    expect(records.records[0]?.planted).not.toBeTruthy();
+  });
+
+  it("keeps true captions when the correction record is not planted", () => {
+    const spots: ArchivistSpots = {
+      schema: "swagbound.archivist-spots.v1",
+      archivist: {
+        spriteId: "drifella2-168",
+        spriteNpcId: 100300,
+        lines: ["Filed, not minted."]
+      },
+      spots: [
+        spot(1, 698, "FLG_PHOTO_1", "Bosch front step", "A record of a thing that only happened once.")
+      ]
+    };
+
+    const records = buildArchivistRecordsViewModel(spots, {
+      has: (flag) => flag === "FLG_PHOTO_1"
+    });
+
+    expect(records.records[0]).toMatchObject({
+      spotId: 1,
+      caption: "A record of a thing that only happened once."
+    });
+    expect(records.records[0]?.planted).not.toBeTruthy();
+  });
+
+  it("does not plant a correction caption when no records are filed", () => {
+    const spots: ArchivistSpots = {
+      schema: "swagbound.archivist-spots.v1",
+      archivist: {
+        spriteId: "drifella2-168",
+        spriteNpcId: 100300,
+        lines: ["Filed, not minted."]
+      },
+      spots: [
+        spot(1, 698, "FLG_PHOTO_1", "Bosch front step", "A record of a thing that only happened once.")
+      ]
+    };
+
+    const records = buildArchivistRecordsViewModel(spots, {
+      has: (flag) => flag === CORRECTION_PLANTED_FLAG
+    });
+
+    expect(records).toMatchObject({
+      filed: 0,
+      total: 1,
+      records: []
     });
   });
 });

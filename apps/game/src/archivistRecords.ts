@@ -4,12 +4,18 @@ export type FlagReader = {
   has(flag: string): boolean;
 };
 
+export const CORRECTION_PLANTED_FLAG = "fuel:correction:record-planted";
+export const CORRECTION_CLEARED_FLAG = "fuel:correction:cleared";
+export const CORRECTION_PLANTED_CAPTION =
+  "BOSCH AGREED. BOSCH SIGNED. BOSCH DONATED THE ORIGINAL AND FORGOT ON PURPOSE. Filed correctly. Do not refile.";
+
 export type ArchivistRecordView = {
   id: string;
   spotId: number;
   flagName: string;
   locationLabel: string;
   caption: string;
+  planted?: boolean;
 };
 
 export type ArchivistRecordsViewModel = {
@@ -30,7 +36,7 @@ export function buildArchivistRecordsViewModel(
   spots: ArchivistSpots,
   flags: FlagReader
 ): ArchivistRecordsViewModel {
-  const records = spots.spots
+  const records: ArchivistRecordView[] = spots.spots
     .filter((spot) => flags.has(archivistSpotFlag(spot)))
     .sort((a, b) => a.spotId - b.spotId)
     .map((spot) => ({
@@ -40,6 +46,20 @@ export function buildArchivistRecordsViewModel(
       locationLabel: spot.locationLabel,
       caption: spot.caption
     }));
+  if (
+    flags.has(CORRECTION_PLANTED_FLAG) &&
+    !flags.has(CORRECTION_CLEARED_FLAG) &&
+    records.length > 0
+  ) {
+    const firstRecord = records[0];
+    if (firstRecord) {
+      records[0] = {
+        ...firstRecord,
+        caption: CORRECTION_PLANTED_CAPTION,
+        planted: true
+      };
+    }
+  }
   return {
     filed: records.length,
     total: spots.spots.length,
