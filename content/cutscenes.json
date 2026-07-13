@@ -1619,6 +1619,876 @@
      "flag": "fuel:onboarding:cleared"
     }
    ]
+  },
+  {
+   "id": "onett-card-clique-shakedown",
+   "comment": "data_20.l_0xc65ea3 near world pixel 1512,1744. Anchor: signal-town-card-clique boss at the MONS LINK arcade corner (1512,1744). EB raw [1F F1 8E 00 7B 02] has Shark npcId 142 press the player, then sets flag 363. Recast as a pre-fight card-clique shakedown that folds before the real boss gate.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 1472,
+     "y": 1696,
+     "w": 88,
+     "h": 96
+    }
+   },
+   "blockFlags": [
+    "signal:onett-card-clique-shakedown",
+    "signal:clique_cleared"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 142
+     },
+     "dir": "down"
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 142
+     },
+     "to": {
+      "x": 1512,
+      "y": 1728
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 143
+     },
+     "dir": "up"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "A kid in a backward cap steps into Bosch's lane and fans three cards like a bad legal argument.",
+      "\"You wanna start something, or do you just look like paperwork that learned to walk?\"",
+      "His friend closes the side angle. Two faces, one routine, both waiting for Bosch to flinch.",
+      "Bosch does not. The routine loses interest in being brave."
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 142
+     },
+     "to": {
+      "x": 1480,
+      "y": 1712
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 363,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:onett-card-clique-shakedown"
+    }
+   ]
+  },
+  {
+   "id": "onett-frank-taunt",
+   "comment": "data_20.l_0xc65efc near world pixel 1568,1792. Anchor: same arcade approach as signal-town-card-clique, after signal:onett-card-clique-shakedown and before signal:clique_cleared. EB raw [1F F1 8F 00 7B 02] has npcId 143 taunt the player toward Frank, then sets flag 364. Recast as a second clique warning about the clean copy waiting inside.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 1536,
+     "y": 1752,
+     "w": 72,
+     "h": 72
+    }
+   },
+   "requireFlags": [
+    "signal:onett-card-clique-shakedown"
+   ],
+   "blockFlags": [
+    "signal:onett-frank-taunt",
+    "signal:clique_cleared"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 143
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"You want to meet Frank? Everybody wants to meet Frank until Frank starts improving them.\"",
+      "The kid taps the card in his palm. Bosch's face is printed there with better lighting and worse manners.",
+      "\"Go on. The copy in there has been waiting longer than you have.\""
+     ]
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 143
+     },
+     "dir": "right"
+    },
+    {
+     "op": "eventFlag",
+     "flag": 364,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:onett-frank-taunt"
+    }
+   ]
+  },
+  {
+   "id": "onett-frank-defeated",
+   "comment": "data_20.l_0xc660a6 near world pixel 1616,1616. Anchor: signal-town-card-clique sets signal:clique_cleared at the arcade, then this post-win scene brackets Frank npcId 146 and the nearest GAME door at 1592,1680. EB has Fail-proof Frank concede, set several Onett flags, and raw [1F F1 CA 00 7B 02] walks him off. Recast as the clean Bosch copy losing its warranty.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 1560,
+     "y": 1560,
+     "w": 128,
+     "h": 112
+    }
+   },
+   "requireFlags": [
+    "signal:clique_cleared"
+   ],
+   "blockFlags": [
+    "signal:onett-frank-defeated"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 146
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "Frank stares at the dent in his perfect record like it might apologize first.",
+      "\"Fail-proof. That was the pitch. Turns out proof fails when the subject keeps moving.\"",
+      "Behind him, the clean Bosch card bends at one corner. It hates being handled by weather."
+     ]
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"You want the route? Fine. The town keeps a door behind the show, and the mayor keeps acting like a key is a moral achievement.\"",
+      "\"Go bother the desk with the hat. Tell them the copy they ordered came back smudged.\""
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 146
+     },
+     "to": {
+      "x": 1592,
+      "y": 1680
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 146
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 132,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:onett-frank-defeated"
+    }
+   ]
+  },
+  {
+   "id": "postwick-tour-bus-heckler",
+   "comment": "data_47.l_0xc94abc near world pixel 2224,6576. Anchor: Postwick Venue floor and source-vault path, between arena-venue brackets and the Floor side-content triggers around y=6400..6728. EB bus NPC 320 asks for a ride to Threed; the Yes branch raw [1F F1 75 01 B5 00] boards the bus. Recast as a Venue shuttle heckler offering Bosch a group ride to a pre-approved mood.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 2192,
+     "y": 6544,
+     "w": 88,
+     "h": 72
+    }
+   },
+   "requireFlags": [
+    "act2:registry_cleared"
+   ],
+   "blockFlags": [
+    "signal:postwick-tour-bus-heckler",
+    "act2:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 320
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 320
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "A shuttle tout leans out from the Venue curb with a grin laminated against weather.",
+      "\"Everybody aboard for Postwick joy. Loud bus, clean route, no private thoughts under the seats.\"",
+      "\"You coming, Bosch? The group rate is cheaper if we remove the individual first.\"",
+      "Bosch lets the bus idle without him. It sounds relieved to have one less witness."
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 320
+     },
+     "to": {
+      "x": 2224,
+      "y": 6528
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 320
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 309,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:postwick-tour-bus-heckler"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-broken-engine",
+   "comment": "data_54.l_0xc9ec7a near world pixel 5496,7880. Anchor: Dead Letter museum route after deadletter:arrived and before deadletter-act3-end; nearest museum door pair sits around 5248,8328. EB turns nearby actors with char_direction and reveals the machine is broken because it has no engine. Recast as a museum display admitting the delivery system was hollow.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 5464,
+     "y": 7848,
+     "w": 72,
+     "h": 72
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "signal:deadletter-broken-engine",
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1245
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "The display clicks, coughs, and presents a diagram of a delivery engine with the engine missing.",
+      "\"Completely broken,\" says the attendant. \"On re-examination, it appears there was never a motor.\"",
+      "Dead Letter calls this conservation. A thing cannot fail in transit if it never had the means to move."
+     ]
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-broken-engine"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-greeting-call",
+   "comment": "data_40.l_0xc8905c near world pixel 5000,10008. Anchor: source-undelivered yard at 5388,9692 and Dead Letter return-line route; hidden npcId 770 shares the scene with npcId 795. EB greets the lead by name, unsets flag 272, plays music, then raw [1F F1 1B 03 01 01] moves the caller. Recast as a returned call that knows Bosch before the route delivers him.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 4960,
+     "y": 9968,
+     "w": 88,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "signal:deadletter-greeting-call",
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 770
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 770
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "A return-phone rings without a phone around it.",
+      "\"Bosch. Greetings. Your address arrived after your absence, so we opened the absence first.\"",
+      "\"Please stay on the line while we decide whether you were ever the sender.\""
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 770
+     },
+     "to": {
+      "x": 5008,
+      "y": 10000
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 770
+     }
+    },
+    {
+     "op": "eventFlag",
+     "flag": 272,
+     "set": false
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-greeting-call"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-front-vantage",
+   "comment": "data_46.l_0xc91c3a near world pixel 6760,10032. Anchor: Dead Letter bent-key/return route around 6872,10024, near doors at 6864,10024 and 6664,9960. EB Sky Runner repair scene turns actor 3, hides it with hide_char_float, then the repair branch locks movement and runs five raw [1F F1] actor moves. Recast as a routing clerk admitting the problem cannot be seen from the back of the file.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 6720,
+     "y": 9992,
+     "w": 96,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "signal:deadletter-front-vantage",
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 480
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 480
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"I cannot see the problem from this vantage point.\"",
+      "The routing clerk steps around the file like the front might confess what the back was paid to hide.",
+      "\"There. The address is not wrong. The town is reading it from behind.\""
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 480
+     },
+     "to": {
+      "x": 6768,
+      "y": 9960
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 480
+     }
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-front-vantage"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-sunset-hotel-stay",
+   "comment": "data_44.l_0xc9067d near world pixel 6744,9280. Anchor: Dead Letter hotel-like return route, after deadletter:arrived and before act3:complete; nearest doors at 6792,9272 and 6664,9320. EB Threed Sunset Hotel stay accepts payment, sets hotel/rest flags, then jumps into a long lock_movement and hide_char dream sequence. Recast as a Dead Letter clerk offering Bosch a room that sorts him while he sleeps.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 6704,
+     "y": 9248,
+     "w": 88,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "signal:deadletter-sunset-hotel-stay",
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 483
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"Welcome to the Sunset Hotel. One night costs whatever version of yourself wakes up cheaper.\"",
+      "\"We provide clean sheets, quiet halls, and dreams that forward themselves to management.\"",
+      "Bosch declines the pillow. The clerk stamps SLEPT ENOUGH on the air anyway."
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 300
+    },
+    {
+     "op": "eventFlag",
+     "flag": 433,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-sunset-hotel-stay"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-mu-empty-again",
+   "comment": "data_53.l_0xc9c991 near world pixel 6824,8296. Anchor: post-museum route after act3:complete, with doors around 6864,8168 and 6992,8328. EB says to return to Mu, then reachable labels hide the party, warp, party_add three members, party_remove one, and lock movement. Recast as an empty-room echo asking Bosch to revisit the place that cannot be filed.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 6784,
+     "y": 8264,
+     "w": 88,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "act3:complete"
+   ],
+   "blockFlags": [
+    "signal:deadletter-mu-empty-again"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1089
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"I will not say anything,\" says the empty room, which is a lot of confidence for a room.",
+      "\"Go to Mu again. The place of emptiness still has your name on nothing.\"",
+      "Bosch hears a roster shuffle behind the silence. Nobody signs for it."
+     ]
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1089
+     }
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-mu-empty-again"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-bed-checkout",
+   "comment": "data_54.l_0xc9e613 near world pixel 5496,7344. Anchor: museum approach after deadletter:arrived and before act3:complete; scanner reaches data_44.l_0xc90dba, which locks movement after the hotel checkout line. Recast as a bed receipt that thanks Bosch for resting in a room he refused.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 5464,
+     "y": 7312,
+     "w": 72,
+     "h": 72
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "signal:deadletter-bed-checkout",
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1228
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"Didn't you think it was comfortable?\"",
+      "The clerk is pointing at a bed Bosch never used and a charge he apparently slept through.",
+      "\"Take care and goodbye. Dead Letter values guests who leave before arriving.\""
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-bed-checkout"
+    }
+   ]
+  },
+  {
+   "id": "deadletter-teleport-lesson",
+   "comment": "data_54.l_0xc9e37e near world pixel 6176,7144. Anchor: Dead Letter museum approach after deadletter:arrived and before act3:complete. EB monkey-teleport scene asks to learn teleport, then raw [1F F1 CA 04 D1 01] and follow-up actor ops stage failed and successful attempts. Recast as an undelivered clerk trying to route himself by momentum.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 6136,
+     "y": 7104,
+     "w": 88,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "deadletter:arrived"
+   ],
+   "blockFlags": [
+    "signal:deadletter-teleport-lesson",
+    "act3:complete"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1226
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"I heard a person can teleport if they run hard enough at certainty.\"",
+      "The clerk takes three serious steps, collides with the concept of delivery, and calls it a trial run.",
+      "\"I will never give up. I want to fail from farther away next time.\""
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 1226
+     },
+     "to": {
+      "x": 6216,
+      "y": 7144
+     }
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 1226
+     },
+     "to": {
+      "x": 6176,
+      "y": 7144
+     }
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:deadletter-teleport-lesson"
+    }
+   ]
+  },
+  {
+   "id": "source-pier-boat-ride",
+   "comment": "data_42.l_0xc8b52a near world pixel 7264,2928. Anchor: source-pier trigger at 7464,2864 inside the Solana Beach route. EB boatman offers a ride, then the accepted branch reaches data_46.l_0xc92c70 with lock_movement, hide_char, raw boat movement, Kraken flags 542/543, and a post-battle return. Recast as the pier offering Bosch broadcast transit before the source is cleared.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 7224,
+     "y": 2896,
+     "w": 88,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "act3:complete"
+   ],
+   "blockFlags": [
+    "signal:source-pier-boat-ride",
+    "source:pier:cleared"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1065
+     },
+     "dir": "left"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"Boat ride? Twenty bucks per person, future included free.\"",
+      "The captain points at the broadcast water. \"Luck determines the outcome. Luck and whoever owns the microphone.\"",
+      "Bosch stays on the pier. The sea keeps advertising a crossing anyway."
+     ]
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:source-pier-boat-ride"
+    }
+   ]
+  },
+  {
+   "id": "source-pier-magic-cake",
+   "comment": "data_41.l_0xc8b191 near world pixel 5184,2864. Anchor: Solana Beach source-pier route after act3:complete; hidden npcId 1069 sits near doors at 5136,2888 and 5232,2904. EB Magic Cake scene unsets flag 61, hides the party, warps into the Mu dream, party_adds one member and removes the others, then locks movement. Recast as a broadcast-pier vendor selling a communal dream as onboarding.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 5144,
+     "y": 2824,
+     "w": 88,
+     "h": 80
+    }
+   },
+   "requireFlags": [
+    "act3:complete"
+   ],
+   "blockFlags": [
+    "signal:source-pier-magic-cake",
+    "source:pier:cleared"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "showActor",
+     "actor": {
+      "npcId": 1069
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1069
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"I used all the leftover material. This is a very special cake.\"",
+      "The vendor smiles like a person who found a way to monetize a dream before the sleeper did.",
+      "\"Eat it and the room will tell you who you are without all that rude waking up.\"",
+      "Bosch leaves the slice untouched. It still tries to remember for him."
+     ]
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 1069
+     }
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:source-pier-magic-cake"
+    }
+   ]
+  },
+  {
+   "id": "source-first-record-shy-power",
+   "comment": "data_47.l_0xc936e6 near world pixel 136,400. Anchor: source-first-record trigger at 148,404 in The Unlisted Room. EB Tenda/Shy scene branches to data_47.l_0xc9370d, runs raw [1F F1 EF 04 54 02], plays sound 121, and sets flag 153 after the shy power breaks through. Recast as the first record finding the nerve to be heard.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 96,
+     "y": 368,
+     "w": 88,
+     "h": 72
+    }
+   },
+   "requireFlags": [
+    "act3:complete"
+   ],
+   "blockFlags": [
+    "signal:source-first-record-shy-power",
+    "source:first-record:cleared"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 1258
+     },
+     "dir": "right"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "\"Shy. That we are.\"",
+      "The record under the room's one light inhales like it has been waiting to become audible.",
+      "\"Powerful. I so show everyone.\"",
+      "It finds the nerve, badly phrased and completely original."
+     ]
+    },
+    {
+     "op": "eventFlag",
+     "flag": 153,
+     "set": true
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:source-first-record-shy-power"
+    }
+   ]
+  },
+  {
+   "id": "source-vacancy-slot-machine",
+   "comment": "data_15.l_0xc606d8 near world pixel 3160,9944. Anchor: source-vacancy trigger at 2720,9560 and the Vacancy Flats motel strip. EB broken slot machine asks for a buck; accepted branch data_15.l_0xc607e4 runs four raw [1F F1] moves for the Sanchez Brothers trio around npcIds 765..767. Recast as the motel machine trying to buy Bosch's cheer with his own money.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 3120,
+     "y": 9904,
+     "w": 120,
+     "h": 88
+    }
+   },
+   "requireFlags": [
+    "act3:complete"
+   ],
+   "blockFlags": [
+    "signal:source-vacancy-slot-machine",
+    "source:vacancy:cleared"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 779
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "The broken slot machine clears its throat in coins it does not have.",
+      "\"Insert a buck and the cheerful trio will make you happy.\"",
+      "Three smiling attendants twitch in the reflection. They look rehearsed, not happy.",
+      "Bosch keeps the buck. The machine calls that a payout error."
+     ]
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 765
+     },
+     "dir": "down"
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 766
+     },
+     "dir": "down"
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 767
+     },
+     "dir": "down"
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:source-vacancy-slot-machine"
+    }
+   ]
   }
  ]
 }
