@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1"
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build && node ../../scripts/prune-dist-audio.mjs",
+    "preview": "vite preview --host 127.0.0.1"
   },
   "dependencies": {
     "@eb/schemas": "workspace:*",
