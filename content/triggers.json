@@ -1800,7 +1800,7 @@
   },
   {
    "id": "fuel-onboarding-congregation",
-   "comment": "Optional Congregation boss at Solana Beach. Reuses battle group 381 from source-pier because it is one enemy with existing audience, crowd-breath, worship, and amplifier battle text, matching a crowd rendered as one enemy. Current boss-gate skin remains battle group 381's lead enemy skin through the existing renderer. Placement keyed to source-pier (7464,2864) inside solana-beach rect. Later hook: scale its attack by the number of unchallenged testimonial flags still unset when the fight starts.",
+   "comment": "Optional Congregation boss at Solana Beach. Reuses battle group 381 from source-pier because it is one enemy with existing audience, crowd-breath, worship, and amplifier battle text, matching a crowd rendered as one enemy. MECHANIC LIVE (congregationScaling.ts): its offense scales +30% per testimonial left unchallenged (fuel:onboarding:testimonial-one/two/three), keyed by this trigger id so source-pier's shared group 381 is untouched. Challenge all three volunteers first and the crowd speaks at base volume.",
    "boss": {
     "x": 7424,
     "y": 2864,
@@ -1816,7 +1816,7 @@
    "dialogue": [
     "The chapel crowd turns as one body. Not coordinated. Worse, synchronized.",
     "THE CONGREGATION: \"Your doubt is safe with us. We already muted it for comfort.\"",
-    "Every testimonial breathes in at once. Bosch hears the edit before the hymn."
+    "Every voice Bosch never questioned is in the chorus, and the chorus knows it. The ones he challenged stand silent, out of the harmony."
    ],
    "setFlags": [
     "fuel:onboarding:congregation-defeated"

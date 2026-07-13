@@ -25,6 +25,7 @@ import {
   type WindowCollection
 } from "@eb/schemas";
 import { expandBattleGroupEnemies } from "./battleGroups";
+import { applyCongregationScaling } from "./congregationScaling";
 import {
   applyVictoryRewards,
   advanceVictorySummaryPageIndex,
@@ -662,7 +663,11 @@ export class BattleScene extends Phaser.Scene {
     this.window_ = data.window;
     this.spriteOverrides_ = data.spriteOverrides ?? data.returnTo?.gameData.spriteOverrides;
     this.backgroundOverrides_ = data.backgroundOverrides ?? data.returnTo?.gameData.backgroundOverrides;
-    const enemies = enemiesForGroup(this.battleData_, this.group_);
+    const enemies = applyCongregationScaling(
+      enemiesForGroup(this.battleData_, this.group_),
+      data.returnTo?.restore.pendingStoryGate?.triggerId,
+      data.returnTo?.restore.flags.strings ?? []
+    );
     if (enemies.length === 0) {
       throw new Error(`Battle group ${this.group_.id} has no matching runtime enemy.`);
     }
