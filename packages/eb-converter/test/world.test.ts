@@ -124,6 +124,40 @@ describe("fts parser", () => {
     });
   });
 
+  it("rejects malformed arrangement rows after the first row", () => {
+    const lines = syntheticFts().split("\n");
+    let arrangementRows = 0;
+    for (let index = 0; index < lines.length; index += 1) {
+      if (!/^[0-9a-f]{96}$/i.test(lines[index])) {
+        continue;
+      }
+      if (arrangementRows === 1) {
+        lines[index] = lines[index].slice(0, -1);
+        break;
+      }
+      arrangementRows += 1;
+    }
+
+    expect(() => parseFts(lines.join("\n"))).toThrow(/fts: invalid arrangement line \d+ for arrangement 1 \(95 chars; expected 96 hex chars\)/);
+  });
+
+  it("rejects non-hex arrangement rows after the first row", () => {
+    const lines = syntheticFts().split("\n");
+    let arrangementRows = 0;
+    for (let index = 0; index < lines.length; index += 1) {
+      if (!/^[0-9a-f]{96}$/i.test(lines[index])) {
+        continue;
+      }
+      if (arrangementRows === 1) {
+        lines[index] = `${lines[index].slice(0, 12)}z${lines[index].slice(13)}`;
+        break;
+      }
+      arrangementRows += 1;
+    }
+
+    expect(() => parseFts(lines.join("\n"))).toThrow(/fts: invalid arrangement line \d+ for arrangement 1 \(96 chars; expected 96 hex chars\)/);
+  });
+
   it("detects blank void arrangements", () => {
     expect(isBlankArrangement(tileset, 0)).toBe(true);
     expect(isBlankArrangement(tileset, 1)).toBe(false);
@@ -1110,6 +1144,12 @@ describe("world artifact build (synthetic project)", () => {
           direction: "sw"
         }
       ]);
+      expect(world.warnings).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          code: "world_inert_door_destinations",
+          message: expect.stringContaining("1 map_doors.yml transition(s)")
+        })
+      ]));
 
       expect(result.teleportDestinations).toMatchObject({
         units: { x: "world-pixels", y: "world-pixels" },
@@ -1205,12 +1245,24 @@ describe("world artifact build (synthetic project)", () => {
         "    Type: door",
         "    X: 3",
         "    Y: 4",
+        "  - Destination X: 129",
+        "    Destination Y: 50",
+        "    Text Pointer: synthetic.mixed_x",
+        "    Type: door",
+        "    X: 4",
+        "    Y: 5",
+        "  - Destination X: 100",
+        "    Destination Y: 130",
+        "    Text Pointer: synthetic.mixed_y",
+        "    Type: door",
+        "    X: 5",
+        "    Y: 6",
         "  - Destination X: 128",
         "    Destination Y: 128",
         "    Text Pointer: synthetic.boundary",
         "    Type: door",
-        "    X: 5",
-        "    Y: 6",
+        "    X: 6",
+        "    Y: 7",
         "  - Text Pointer: synthetic.no_destination",
         "    Type: door",
         "    X: 7",
@@ -1226,9 +1278,17 @@ describe("world artifact build (synthetic project)", () => {
       const doors = new Map(result.world.doors.map((door) => [door.textPointer, door]));
       expect(doors.get("synthetic.in_range")?.destinationWorldPixel).toEqual({ x: 800, y: 400 });
       expect(doors.get("synthetic.over_range")?.destinationWorldPixel).toEqual({ x: 129, y: 130 });
+      expect(doors.get("synthetic.mixed_x")?.destinationWorldPixel).toEqual({ x: 129, y: 400 });
+      expect(doors.get("synthetic.mixed_y")?.destinationWorldPixel).toEqual({ x: 800, y: 130 });
       expect(doors.get("synthetic.boundary")?.destinationWorldPixel).toEqual({ x: 1024, y: 1024 });
       expect(doors.get("synthetic.no_destination")?.destinationWorldPixel).toEqual({ x: 56, y: 64 });
       expect(doors.get("synthetic.no_destination")?.worldPixel).toEqual({ x: 56, y: 64 });
+      expect(result.world.warnings).toEqual(expect.arrayContaining([
+        expect.objectContaining({
+          code: "world_inert_door_destinations",
+          message: expect.stringContaining("1 map_doors.yml transition(s)")
+        })
+      ]));
     } finally {
       await rm(temp, { recursive: true, force: true });
     }

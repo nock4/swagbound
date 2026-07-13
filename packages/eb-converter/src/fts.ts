@@ -183,48 +183,53 @@ export function parseFts(source: string): FtsTileset {
   const lines = source.split(/\r?\n/);
   let cursor = 0;
 
-  const nextContentLine = (): string => {
+  const nextContentLine = (): { line: string; lineNumber: number } => {
     while (cursor < lines.length && lines[cursor].trim() === "") {
       cursor += 1;
     }
     if (cursor >= lines.length) {
       throw new Error("fts: unexpected end of file");
     }
-    return lines[cursor++];
+    return { line: lines[cursor++], lineNumber: cursor };
   };
 
   const minitiles: Uint8Array[] = Array.from({ length: FTS_MINITILE_COUNT }, () => new Uint8Array(64));
   for (let i = 0; i < 512; i += 1) {
-    parseMinitileLine(nextContentLine(), minitiles[i]);
+    parseMinitileLine(nextContentLine().line, minitiles[i]);
     const mirrored = i ^ 512;
     const second = nextContentLine();
     if (mirrored < FTS_MINITILE_COUNT) {
-      parseMinitileLine(second, minitiles[mirrored]);
+      parseMinitileLine(second.line, minitiles[mirrored]);
     }
   }
 
   // Palette lines: between the minitile and arrangement sections. Arrangement
   // lines are 96 hex characters; palette lines are 290 base-32 characters.
   const palettes: FtsPalette[] = [];
-  let pending: string | undefined;
+  let pending: { line: string; lineNumber: number } | undefined;
   while (cursor < lines.length) {
     const line = nextContentLine();
-    if (line.trimEnd().length === FTS_CELLS_PER_ARRANGEMENT * 6 && /^[0-9a-f]+$/i.test(line.trimEnd())) {
+    if (line.line.trimEnd().length === FTS_CELLS_PER_ARRANGEMENT * 6 && /^[0-9a-f]+$/i.test(line.line.trimEnd())) {
       pending = line;
       break;
     }
-    palettes.push(parsePaletteLine(line));
+    palettes.push(parsePaletteLine(line.line));
   }
 
   const arrangements = new Uint16Array(FTS_ARRANGEMENT_COUNT * FTS_CELLS_PER_ARRANGEMENT);
   const collisions = new Uint8Array(FTS_ARRANGEMENT_COUNT * FTS_CELLS_PER_ARRANGEMENT);
   for (let i = 0; i < FTS_ARRANGEMENT_COUNT; i += 1) {
-    const line = pending ?? nextContentLine();
+    const { line, lineNumber } = pending ?? nextContentLine();
     pending = undefined;
+    const trimmed = line.trimEnd();
+    const expectedLength = FTS_CELLS_PER_ARRANGEMENT * 6;
+    if (trimmed.length !== expectedLength || !/^[0-9a-f]+$/i.test(trimmed)) {
+      throw new Error(`fts: invalid arrangement line ${lineNumber} for arrangement ${i} (${trimmed.length} chars; expected ${expectedLength} hex chars)`);
+    }
     for (let cell = 0; cell < FTS_CELLS_PER_ARRANGEMENT; cell += 1) {
       const offset = cell * 6;
-      arrangements[i * FTS_CELLS_PER_ARRANGEMENT + cell] = Number.parseInt(line.slice(offset, offset + 4), 16);
-      collisions[i * FTS_CELLS_PER_ARRANGEMENT + cell] = Number.parseInt(line.slice(offset + 4, offset + 6), 16);
+      arrangements[i * FTS_CELLS_PER_ARRANGEMENT + cell] = Number.parseInt(trimmed.slice(offset, offset + 4), 16);
+      collisions[i * FTS_CELLS_PER_ARRANGEMENT + cell] = Number.parseInt(trimmed.slice(offset + 4, offset + 6), 16);
     }
   }
 

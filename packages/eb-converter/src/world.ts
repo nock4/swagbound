@@ -974,12 +974,53 @@ function doorDestinationToWorldPixel(
 
   const maxWarpX = mapWidthTiles * TILE_SIZE / DOOR_WARP_UNIT_PX;
   const maxWarpY = mapHeightTiles * TILE_SIZE / DOOR_WARP_UNIT_PX;
-  // Door destinations normally share the teleport table's 8px warp grid; the
-  // over-range map_doors.yml outliers are already pixels, so keep those raw.
-  if (destinationX <= maxWarpX && destinationY <= maxWarpY) {
-    return { x: destinationX * DOOR_WARP_UNIT_PX, y: destinationY * DOOR_WARP_UNIT_PX };
+  // Door destinations normally share the teleport table's 8px warp grid. If an
+  // axis is outside that axis' warp-grid bounds, it cannot be a valid grid
+  // coordinate and is treated as an already-scaled world pixel. Deciding per
+  // axis preserves the common all-grid/all-pixel cases and fixes mixed rows.
+  return {
+    x: destinationX <= maxWarpX ? destinationX * DOOR_WARP_UNIT_PX : destinationX,
+    y: destinationY <= maxWarpY ? destinationY * DOOR_WARP_UNIT_PX : destinationY
+  };
+}
+
+function inertDoorEntries(
+  entries: MapDoorEntry[],
+  mapWidthTiles: number,
+  mapHeightTiles: number,
+  context: DoorDestinationContext
+): MapDoorEntry[] {
+  return entries.filter((entry) =>
+    WORLD_DOOR_TYPES.has(entry.type) &&
+    doorDestinationToWorldPixel(entry, mapWidthTiles, mapHeightTiles, context) === undefined
+  );
+}
+
+function pushInertDoorWarning(
+  entries: MapDoorEntry[],
+  mapWidthTiles: number,
+  mapHeightTiles: number,
+  context: DoorDestinationContext,
+  warnings: Issue[]
+): void {
+  const inert = inertDoorEntries(entries, mapWidthTiles, mapHeightTiles, context);
+  if (inert.length === 0) {
+    return;
   }
-  return { x: destinationX, y: destinationY };
+
+  const typeCounts = Object.entries(countDoorTypes(inert))
+    .map(([type, count]) => `${count} ${type}`)
+    .join(", ");
+  const samples = inert
+    .slice(0, 3)
+    .map((entry) => `${entry.type} at area ${entry.areaX},${entry.areaY} cell ${entry.x},${entry.y} (line ${entry.line})`)
+    .join("; ");
+  warnings.push(issue(
+    "warning",
+    "world_inert_door_destinations",
+    `${inert.length} map_doors.yml transition(s) have no recoverable Destination X/Y and were emitted as self-targeting inert transitions (${typeCounts}). Examples: ${samples}.`,
+    "map_doors.yml"
+  ));
 }
 
 function emitWorldDoors(
@@ -1659,6 +1700,7 @@ async function buildFullWorldArtifacts(options: {
   const sheetByGroup = attachSheetsToNpcs(npcs, spriteBuild.sheets);
   const mapDoors = mapDoorsSource ? parseMapDoors(mapDoorsSource) : [];
   const doorTypes = countDoorTypes(mapDoors);
+  pushInertDoorWarning(mapDoors, mapWidthTiles, mapHeightTiles, doorDestinations, warnings);
   const doors = emitWorldDoors(mapDoors, mapWidthTiles, mapHeightTiles, doorDestinations);
 
   const world = WorldChunkedSchema.parse({

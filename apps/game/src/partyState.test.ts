@@ -51,6 +51,40 @@ describe("PartyState battle round-trips", () => {
 
     expect(partyState.statuses(1)).toEqual([{ ailment: "poisoned" }, { ailment: "paralyzed" }]);
   });
+
+  it("persists forced level members into battle and vitals snapshots", () => {
+    const partyState = new PartyState();
+    const base = partyMember(1, "Bosch");
+    partyState.restore({
+      wallet: 0,
+      partyIds: [1],
+      inventory: [{ charId: 1, itemIds: [101] }],
+      equipped: [],
+      vitals: [
+        { charId: 1, hp: { current: 5, target: 5 }, maxHp: base.maxHp, pp: 1, maxPp: base.maxPp }
+      ]
+    } satisfies PartyStateSnapshot);
+
+    const persisted = partyState.applyLeveledPartyMember({
+      ...base,
+      level: 12,
+      experience: 500,
+      hp: 120,
+      maxHp: 120,
+      pp: 35,
+      maxPp: 35,
+      stats: { offense: 40, defense: 20, speed: 11, guts: 8, vitality: 9, iq: 7, luck: 6 }
+    });
+
+    expect(persisted).toMatchObject({ charId: 1, level: 12, experience: 500, hp: 120, maxHp: 120, pp: 35, maxPp: 35 });
+    expect(persisted.inventory).toEqual([101]);
+    expect(partyState.vitals(1)).toMatchObject({ maxHp: 120, pp: 35, maxPp: 35 });
+    expect(partyState.vitals(1)?.hp.target).toBe(120);
+
+    const [member] = partyState.applyToPartyMembers([base]);
+    expect(member).toMatchObject({ level: 12, experience: 500, hp: 120, maxHp: 120, pp: 35, maxPp: 35 });
+    expect(member.inventory).toEqual([101]);
+  });
 });
 
 describe("PartyState inventory capacity (EB 14-slot cap)", () => {
