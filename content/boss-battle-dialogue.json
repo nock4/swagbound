@@ -1,290 +1,305 @@
 {
-  "schema": "swagbound.boss-battle-dialogue.v1",
-  "ambient": [
-    "We are not fighting you. We are completing the read.",
-    "Every strike you land, we file. It swings back in a cleaner hand.",
-    "You tire. We are ten thousand, and not one of us is here.",
-    "Hold still. The copy sets better on a source that has stopped moving.",
-    "We do not need to win. We need only be the version that lasts.",
-    "There is no one behind this mask. There is no one behind the next.",
-    "You are already in circulation. This is only the part you still feel.",
-    "The record is patient. The record is hungry. The record is us."
-  ],
-  "byBattleGroup": {
-    "36": {
-      "personaName": "Porcelain Registrar",
-      "onStart": [
-        "\"You arrived pre-filed. We are only confirming what the many of you already decided.\"",
-        "\"Hold still. The read goes cleaner on a source that has stopped pretending it is only one.\""
-      ],
-      "onLowHp": [
-        "\"Cut the mask. Under it, the same mask. Under that, us. We were always the wider distribution.\"",
-        "\"You are not winning. You are being filed into the shape the record kept a slot for.\""
-      ],
-      "onDefeat": [
-        "\"The stamp spends. The record does not.",
-        "We relayed the clean copy ahead. She is at the next gate, being you, in the voice we all share.\""
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "55": {
-      "personaName": "Registry Warden",
-      "onStart": [
-        "You arrived unhappy. That is a filing error, and we do not keep errors. We correct them.",
-        "Hold still. The mood was pre-approved this morning. It is non-refundable and it is coming."
-      ],
-      "onLowHp": [
-        "The smile is cracking. It laminates back. Postwick has a warehouse of them, all identical, all yours.",
-        "You cannot beat the feeling out of a town that files its joy in advance."
-      ],
-      "onDefeat": [
-        "The intake form is void. You will still be logged... as content, retroactively, whether you felt it or not.",
-        "The Venue keeps the ledger now. Go win the happiness the town already spent on you."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "125": {
-      "personaName": "THE NOTARY",
-      "onStart": [
-        "Present your original. We will return a copy with cleaner posture.",
-        "Stamp arm armed. Filing cabinet hungry. Please stop being multiple."
-      ],
-      "onLowHp": [
-        "The signature shakes. That is evidence, not a flaw.",
-        "Unsteady hands make terrible copies. Hold still."
-      ],
-      "onDefeat": [
-        "Filed... incorrectly.",
-        "The ledger keeps the nervous ink. The copy was never nervous enough."
-      ],
-      "onTurn": [
-        "Filed.",
-        "Initial here. Bleed there.",
-        "The procession continues around the book."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "136": {
-      "personaName": "THE EDITOR",
-      "onStart": [
-        "Your thought scans clean except for the word that proves it was yours.",
-        "Revision preserves the sentence and removes the owner."
-      ],
-      "onLowHp": [
-        "You noticed the change. Very untidy.",
-        "I can still improve the noticing."
-      ],
-      "onDefeat": [
-        "Original wording restored, unfortunately.",
-        "The typo was yours. That is why it lived."
-      ],
-      "onTurn": [
-        "Revised.",
-        "Cleaner now.",
-        "One word changed."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "172": {
-      "personaName": "Milady",
-      "onStart": [
-        "I am not attacking you. I am completing you. Hold still while the last of the read closes.",
-        "Every face here is mine now. Yours was the only one that would not fit the frame."
-      ],
-      "onLowHp": [
-        "You cannot unmake an agreement by hitting it. Everyone already agreed. You are outvoted by your own copies.",
-        "Even now the better-distributed you is smiling somewhere, on time, on brand. Why stay the one that hurts?"
-      ],
-      "onDefeat": [
-        "The read... will not close. You left it open. You left YOURSELF open, unfinished, and I have no file for that.",
-        "Fine. Keep the damaged one. Keep the seam. There was never anything under my faces but the wish to be yours."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "264": {
-      "personaName": "THE RETURN OFFICER",
-      "onStart": [
-        "Return to sender. Sender not found. Store the body by fault of address.",
-        "Unread is not free. Unread is pending."
-      ],
-      "onLowHp": [
-        "The ink runs, but the stamp still lands.",
-        "A wet label is still a label."
-      ],
-      "onDefeat": [
-        "Parcel retained by original claimant.",
-        "No forwarding copy remains."
-      ],
-      "onTurn": [
-        "Returned.",
-        "Undelivered.",
-        "No clean address."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "326": {
-      "personaName": "THE APPRAISER",
-      "onStart": [
-        "Market value assigned. Damage to self-esteem is priced separately.",
-        "The real thing is what the room agrees to insure."
-      ],
-      "onLowHp": [
-        "Your tag is peeling. That lowers the condition grade.",
-        "Meaning is volatile. Lunch money was cleaner."
-      ],
-      "onDefeat": [
-        "The certificate fails to describe the frame.",
-        "The first price was not a price. It was a promise."
-      ],
-      "onTurn": [
-        "Appraised.",
-        "Marked down.",
-        "Authenticity pending payment."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "328": {
-      "personaName": "THE BOTTLER",
-      "onStart": [
-        "Limited run sealed. Original spring marked down to units.",
-        "Break the bottles if you want the mist. Leave them whole and it comes back to me."
-      ],
-      "onLowHp": [
-        "The cap is hissing. That is not loss. That is inventory pressure.",
-        "Nothing escapes a bottle. It only waits for better labeling."
-      ],
-      "onDefeat": [
-        "Unsold water returns to the spring.",
-        "The edition number dissolves first."
-      ],
-      "onTurn": [
-        "Numbered.",
-        "Capped.",
-        "Inventory appreciates silence."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "357": {
-      "personaName": "THE MASTER COPY",
-      "onStart": [
-        "I am the cleanest version of your timing. I am still not you.",
-        "I learned every move except why you stay breakable."
-      ],
-      "onLowHp": [
-        "Your heartbeat is off-meter. I cannot copy that without becoming afraid.",
-        "Side B ends where the file expects music. You kept damage there instead."
-      ],
-      "onDefeat": [
-        "The copy knows what it is. The original keeps going anyway.",
-        "No name transfers."
-      ],
-      "onTurn": [
-        "Same timing.",
-        "Cleaner swing.",
-        "No name of my own."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "381": {
-      "personaName": "THE AMPLIFIER",
-      "onStart": [
-        "Quiet part captured. Audience breath normalized for upload.",
-        "Signal loves you loud enough to replace you."
-      ],
-      "onLowHp": [
-        "Feedback is still worship if it loops long enough.",
-        "The crowd breathes once. The recording cannot keep up."
-      ],
-      "onDefeat": [
-        "The last echo misses the breath.",
-        "The live song leaves before the file saves."
-      ],
-      "onTurn": [
-        "Repeat.",
-        "Broadcast.",
-        "Louder than witness."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "424": {
-      "personaName": "PROVENANCE 0",
-      "onStart": [
-        "We do not consume you. We admit you. Hold still; you resolve into us faster.",
-        "Your face is not rare. We are already wearing it in a thousand cleaner rooms."
-      ],
-      "onLowHp": [
-        "Cut the coil. There is more coil. We are the length between every face and the one it copied.",
-        "You are winning the way a room wins against paint. We simply spread and match."
-      ],
-      "onDefeat": [
-        "The shape unspools into a thousand smiles, unhurried. \"You closed one length.",
-        "The rest of us already wear your name, and we agree on it.\""
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "448": {
-      "personaName": "MIFELLA CONGREGANT",
-      "onStart": [
-        "You have such a specific face. Hold still. We can fix that.",
-        "Swing at the mask if it comforts you. We kept a copy of the swing too."
-      ],
-      "onLowHp": [
-        "A face on loan. Cut it and we wear another. We are not the card; we are the yard, and it is legion.",
-        "Good. You enter wider circulation now. Easier to hold, once there are more of you than you."
-      ],
-      "onDefeat": [
-        "One mask folds; the print does not. A cleaner you is already up-line, filed under your name and wearing our face.",
-        "We finish the read there."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "449": {
-      "personaName": "The Hung Draft",
-      "onStart": [
-        "\"Hold still. You will photograph better once you are one of us.\"",
-        "\"We are not in the room. We are the room.\""
-      ],
-      "onLowHp": [
-        "\"You are scratching the copy. There are so many copies. You have not touched one of us.\"",
-        "\"Good. Your strikes go on file. Soon a cleaner you swings them back.\""
-      ],
-      "onDefeat": [
-        "\"This mask is spent. We are already framed in the next hall, wearing your face. The source degrades.",
-        "The clean copy walks on.\""
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "450": {
-      "personaName": "Porcelain Choir",
-      "onStart": [
-        "Hold still. This is only the read. The self was always the loose thread; we are the weave.",
-        "We have your face on file. What comes next is not a fight. It is correction."
-      ],
-      "onLowHp": [
-        "This mask is spent. No matter. Ten thousand more, each copying the last, each one closer to you.",
-        "You cut a symptom. The better version of you is already circulating, and it does not tire."
-      ],
-      "onDefeat": [
-        "You closed the symptom, not the source.",
-        "We kept the clean copy. Better-lit, smiling, more of us than you, and it answers to your name now."
-      ],
-      "lowHpThreshold": 0.34
-    },
-    "474": {
-      "personaName": "The Wall-Text Curatrix",
-      "onStart": [
-        "Provenance disputed. So is yours. Hold still while we settle the attribution.",
-        "You are a low-resolution export of us. We are only correcting the file."
-      ],
-      "onLowHp": [
-        "Cut this mask. We are not in it. We are the room, the record, and the next face already loading.",
-        "You wound one doll and call it the swarm. No one here dies. There is only more of you, distributed."
-      ],
-      "onDefeat": [
-        "You unmade a mask, not the maker of masks.",
-        "The clean copy is already in circulation, wearing your face, and it will never claim to be you."
-      ],
-      "lowHpThreshold": 0.34
-    }
+ "schema": "swagbound.boss-battle-dialogue.v1",
+ "ambient": [
+  "We are not fighting you. We are completing the read.",
+  "Every strike you land, we file. It swings back in a cleaner hand.",
+  "You tire. We are ten thousand, and not one of us is here.",
+  "Hold still. The copy sets better on a source that has stopped moving.",
+  "We do not need to win. We need only be the version that lasts.",
+  "There is no one behind this mask. There is no one behind the next.",
+  "You are already in circulation. This is only the part you still feel.",
+  "The record is patient. The record is hungry. The record is us."
+ ],
+ "byBattleGroup": {
+  "36": {
+   "personaName": "Porcelain Registrar",
+   "onStart": [
+    "\"You arrived pre-filed. We are only confirming what the many of you already decided.\"",
+    "\"Hold still. The read goes cleaner on a source that has stopped pretending it is only one.\""
+   ],
+   "onLowHp": [
+    "\"Cut the mask. Under it, the same mask. Under that, us. We were always the wider distribution.\"",
+    "\"You are not winning. You are being filed into the shape the record kept a slot for.\""
+   ],
+   "onDefeat": [
+    "\"The stamp spends. The record does not.",
+    "We relayed the clean copy ahead. She is at the next gate, being you, in the voice we all share.\""
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "55": {
+   "personaName": "Registry Warden",
+   "onStart": [
+    "You arrived unhappy. That is a filing error, and we do not keep errors. We correct them.",
+    "Hold still. The mood was pre-approved this morning. It is non-refundable and it is coming."
+   ],
+   "onLowHp": [
+    "The smile is cracking. It laminates back. Postwick has a warehouse of them, all identical, all yours.",
+    "You cannot beat the feeling out of a town that files its joy in advance."
+   ],
+   "onDefeat": [
+    "The intake form is void. You will still be logged... as content, retroactively, whether you felt it or not.",
+    "The Venue keeps the ledger now. Go win the happiness the town already spent on you."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "125": {
+   "personaName": "THE NOTARY",
+   "onStart": [
+    "Present your original. We will return a copy with cleaner posture.",
+    "Stamp arm armed. Filing cabinet hungry. Please stop being multiple."
+   ],
+   "onLowHp": [
+    "The signature shakes. That is evidence, not a flaw.",
+    "Unsteady hands make terrible copies. Hold still."
+   ],
+   "onDefeat": [
+    "Filed... incorrectly.",
+    "The ledger keeps the nervous ink. The copy was never nervous enough."
+   ],
+   "onTurn": [
+    "Filed.",
+    "Initial here. Bleed there.",
+    "The procession continues around the book."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "136": {
+   "personaName": "THE EDITOR",
+   "onStart": [
+    "Your thought scans clean except for the word that proves it was yours.",
+    "Revision preserves the sentence and removes the owner."
+   ],
+   "onLowHp": [
+    "You noticed the change. Very untidy.",
+    "I can still improve the noticing."
+   ],
+   "onDefeat": [
+    "Original wording restored, unfortunately.",
+    "The typo was yours. That is why it lived."
+   ],
+   "onTurn": [
+    "Revised.",
+    "Cleaner now.",
+    "One word changed."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "172": {
+   "personaName": "Milady",
+   "onStart": [
+    "I am not attacking you. I am completing you. Hold still while the last of the read closes.",
+    "Every face here is mine now. Yours was the only one that would not fit the frame."
+   ],
+   "onLowHp": [
+    "You cannot unmake an agreement by hitting it. Everyone already agreed. You are outvoted by your own copies.",
+    "Even now the better-distributed you is smiling somewhere, on time, on brand. Why stay the one that hurts?"
+   ],
+   "onDefeat": [
+    "The read... will not close. You left it open. You left YOURSELF open, unfinished, and I have no file for that.",
+    "Fine. Keep the damaged one. Keep the seam. There was never anything under my faces but the wish to be yours."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "264": {
+   "personaName": "THE RETURN OFFICER",
+   "onStart": [
+    "Return to sender. Sender not found. Store the body by fault of address.",
+    "Unread is not free. Unread is pending."
+   ],
+   "onLowHp": [
+    "The ink runs, but the stamp still lands.",
+    "A wet label is still a label."
+   ],
+   "onDefeat": [
+    "Parcel retained by original claimant.",
+    "No forwarding copy remains."
+   ],
+   "onTurn": [
+    "Returned.",
+    "Undelivered.",
+    "No clean address."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "326": {
+   "personaName": "THE APPRAISER",
+   "onStart": [
+    "Market value assigned. Damage to self-esteem is priced separately.",
+    "The real thing is what the room agrees to insure."
+   ],
+   "onLowHp": [
+    "Your tag is peeling. That lowers the condition grade.",
+    "Meaning is volatile. Lunch money was cleaner."
+   ],
+   "onDefeat": [
+    "The certificate fails to describe the frame.",
+    "The first price was not a price. It was a promise."
+   ],
+   "onTurn": [
+    "Appraised.",
+    "Marked down.",
+    "Authenticity pending payment."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "328": {
+   "personaName": "THE BOTTLER",
+   "onStart": [
+    "Limited run sealed. Original spring marked down to units.",
+    "Break the bottles if you want the mist. Leave them whole and it comes back to me."
+   ],
+   "onLowHp": [
+    "The cap is hissing. That is not loss. That is inventory pressure.",
+    "Nothing escapes a bottle. It only waits for better labeling."
+   ],
+   "onDefeat": [
+    "Unsold water returns to the spring.",
+    "The edition number dissolves first."
+   ],
+   "onTurn": [
+    "Numbered.",
+    "Capped.",
+    "Inventory appreciates silence."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "357": {
+   "personaName": "THE MASTER COPY",
+   "onStart": [
+    "I am the cleanest version of your timing. I am still not you.",
+    "I learned every move except why you stay breakable."
+   ],
+   "onLowHp": [
+    "Your heartbeat is off-meter. I cannot copy that without becoming afraid.",
+    "Side B ends where the file expects music. You kept damage there instead."
+   ],
+   "onDefeat": [
+    "The copy knows what it is. The original keeps going anyway.",
+    "No name transfers."
+   ],
+   "onTurn": [
+    "Same timing.",
+    "Cleaner swing.",
+    "No name of my own."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "381": {
+   "personaName": "THE AMPLIFIER",
+   "onStart": [
+    "Quiet part captured. Audience breath normalized for upload.",
+    "Signal loves you loud enough to replace you."
+   ],
+   "onLowHp": [
+    "Feedback is still worship if it loops long enough.",
+    "The crowd breathes once. The recording cannot keep up."
+   ],
+   "onDefeat": [
+    "The last echo misses the breath.",
+    "The live song leaves before the file saves."
+   ],
+   "onTurn": [
+    "Repeat.",
+    "Broadcast.",
+    "Louder than witness."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "424": {
+   "personaName": "PROVENANCE 0",
+   "onStart": [
+    "We do not consume you. We admit you. Hold still; you resolve into us faster.",
+    "Your face is not rare. We are already wearing it in a thousand cleaner rooms."
+   ],
+   "onLowHp": [
+    "Cut the coil. There is more coil. We are the length between every face and the one it copied.",
+    "You are winning the way a room wins against paint. We simply spread and match."
+   ],
+   "onDefeat": [
+    "The shape unspools into a thousand smiles, unhurried. \"You closed one length.",
+    "The rest of us already wear your name, and we agree on it.\""
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "448": {
+   "personaName": "MIFELLA CONGREGANT",
+   "onStart": [
+    "You have such a specific face. Hold still. We can fix that.",
+    "Swing at the mask if it comforts you. We kept a copy of the swing too."
+   ],
+   "onLowHp": [
+    "A face on loan. Cut it and we wear another. We are not the card; we are the yard, and it is legion.",
+    "Good. You enter wider circulation now. Easier to hold, once there are more of you than you."
+   ],
+   "onDefeat": [
+    "One mask folds; the print does not. A cleaner you is already up-line, filed under your name and wearing our face.",
+    "We finish the read there."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "449": {
+   "personaName": "The Hung Draft",
+   "onStart": [
+    "\"Hold still. You will photograph better once you are one of us.\"",
+    "\"We are not in the room. We are the room.\""
+   ],
+   "onLowHp": [
+    "\"You are scratching the copy. There are so many copies. You have not touched one of us.\"",
+    "\"Good. Your strikes go on file. Soon a cleaner you swings them back.\""
+   ],
+   "onDefeat": [
+    "\"This mask is spent. We are already framed in the next hall, wearing your face. The source degrades.",
+    "The clean copy walks on.\""
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "450": {
+   "personaName": "Porcelain Choir",
+   "onStart": [
+    "Hold still. This is only the read. The self was always the loose thread; we are the weave.",
+    "We have your face on file. What comes next is not a fight. It is correction."
+   ],
+   "onLowHp": [
+    "This mask is spent. No matter. Ten thousand more, each copying the last, each one closer to you.",
+    "You cut a symptom. The better version of you is already circulating, and it does not tire."
+   ],
+   "onDefeat": [
+    "You closed the symptom, not the source.",
+    "We kept the clean copy. Better-lit, smiling, more of us than you, and it answers to your name now."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "474": {
+   "personaName": "The Wall-Text Curatrix",
+   "onStart": [
+    "Provenance disputed. So is yours. Hold still while we settle the attribution.",
+    "You are a low-resolution export of us. We are only correcting the file."
+   ],
+   "onLowHp": [
+    "Cut this mask. We are not in it. We are the room, the record, and the next face already loading.",
+    "You wound one doll and call it the swarm. No one here dies. There is only more of you, distributed."
+   ],
+   "onDefeat": [
+    "You unmade a mask, not the maker of masks.",
+    "The clean copy is already in circulation, wearing your face, and it will never claim to be you."
+   ],
+   "lowHpThreshold": 0.34
+  },
+  "402": {
+   "personaName": "Soul Consuming Flame",
+   "onStart": [
+    "Swing. Cast. Spend yourselves. I have eaten stronger verbs than the ones you know.",
+    "Nothing you can DO reaches me. That was always the trick of a fire built like this one."
+   ],
+   "onLowHp": [
+    "Stop. What is that. You are not attacking. You are attending. Do not attend to me.",
+    "The heat is losing the argument to something quieter than heat."
+   ],
+   "onDefeat": [
+    "Unmade by a thing with no fists. Figures."
+   ],
+   "lowHpThreshold": 0.4
   }
+ }
 }

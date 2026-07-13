@@ -815,7 +815,8 @@
    "once": true,
    "dialogue": [
     "ANNOUNCER: \"FINAL BRACKET. Beat this and the purse is yours, champ.\"",
-    "The Soul Consuming Flame roars up the ring. The front row feels the heat."
+    "The Soul Consuming Flame roars up the ring. The front row feels the heat.",
+    "Cloak lowers her hands. \"I do not think we win this one by hitting it. Some fires you outlast by meaning it. Keep your head down and pray.\""
    ],
    "setFlags": [
     "arena:won:3",

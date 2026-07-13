@@ -342,6 +342,22 @@ const STRENGTH_PP_COST: Record<string, number> = {
 const PRAY_HEAL_AMOUNT = 12;
 const PRAY_PP_RESTORE_AMOUNT = 4;
 const PRAY_DAMAGE_AMOUNT = 8;
+// "Pray to win" bosses (EarthBound's Giygas): near-immune to force (high defense +
+// no elemental weakness), but Pray reaches them for real, defense-ignoring damage.
+// When such a boss is on the field, Pray always deals damage (no random heal/pp/nothing)
+// so the player who figures out Pray can reliably win. Keyed by enemy id (Combatant.charId).
+const PRAY_VULNERABLE_ENEMIES: Record<number, number> = {
+  147: 110 // Soul Consuming Flame (arena-venue-3): 602 HP -> ~6 prayers to unmake it.
+};
+function prayDamageForEnemy(charId: number): number {
+  return PRAY_VULNERABLE_ENEMIES[charId] ?? PRAY_DAMAGE_AMOUNT;
+}
+function prayVulnerableEnemyPresent(state: BattleState): boolean {
+  return livingActors(state.enemies, "enemy").some((target) => {
+    const combatant = combatantFor(state, target);
+    return combatant ? (PRAY_VULNERABLE_ENEMIES[combatant.charId] ?? 0) > 0 : false;
+  });
+}
 const INSTANT_WIN_LEVEL_MARGIN = 8;
 const NOOP_ENEMY_ACTION: BattleEnemy["actions"][number] = {
   id: 0,
@@ -772,6 +788,12 @@ export function resolvePrayTurn(
   const user = combatantFor(state, actor);
   if (!user || !isCombatantAlive(user)) {
     return blockedPrayAction(state, actor, currentOutcome, "invalidActor", "");
+  }
+
+  // Against a "pray to win" boss, Pray always reaches it (no random heal/pp/nothing)
+  // so the intended path is reliable once the player discovers it.
+  if (prayVulnerableEnemyPresent(state)) {
+    return applyPrayDamage(state, actor, user);
   }
 
   // Bounded approximation: EarthBound Pray uses a large random effect table;
@@ -2003,8 +2025,9 @@ function applyPrayDamage(state: BattleState, actor: BattleActor, user: Combatant
     if (!combatant) {
       continue;
     }
-    totalAmount += PRAY_DAMAGE_AMOUNT;
-    nextState = withCombatant(nextState, target, applyDamage(combatant, PRAY_DAMAGE_AMOUNT));
+    const prayDamage = prayDamageForEnemy(combatant.charId);
+    totalAmount += prayDamage;
+    nextState = withCombatant(nextState, target, applyDamage(combatant, prayDamage));
   }
   return {
     state: nextState,

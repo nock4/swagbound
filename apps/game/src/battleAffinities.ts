@@ -42,7 +42,8 @@ type Affinity = { weak?: PsiElement; resist?: PsiElement };
 const ENEMY_AFFINITY: Record<number, Affinity> = {
   130: { weak: "thunder" }, // Frankystein Mark II (arena 1) — a machine
   135: { weak: "ice" }, // Tough Guy (arena 2) — cool him off
-  147: { weak: "ice", resist: "fire" }, // Soul Consuming Flame (arena 3)
+  147: { resist: "ice" }, // Soul Consuming Flame (arena 3) — a pray-to-win boss: no
+  //     elemental weakness (ice no longer douses it) so Pray, not PSI, is the path.
   132: { weak: "thunder" }, // Cute Li'l UFO
   133: { weak: "thunder" }, // Beautiful UFO
   150: { weak: "thunder" }, // Li'l UFO
