@@ -22,6 +22,9 @@ const base = ((args.find((a) => a.startsWith("http")) ?? "http://127.0.0.1:5174/
 const region = (args[args.indexOf("--region") + 1] && !args.includes("--region") ? "all" : (args.includes("--region") ? args[args.indexOf("--region") + 1] : "all"));
 const limit = args.includes("--limit") ? Number(args[args.indexOf("--limit") + 1]) : Infinity;
 const from = args.includes("--from") ? Number(args[args.indexOf("--from") + 1]) : 0;
+// --show-player: keep the hero visible in every shot (sprite-cutoff/occlusion sweeps).
+// Default remains hidden (map-integrity sweeps) so older workflows are unchanged.
+const showPlayer = args.includes("--show-player");
 
 const MAP_W = world.mapWidthTiles * world.tileSize;   // 8192
 const MAP_H = world.mapHeightTiles * world.tileSize;  // 10240
@@ -144,11 +147,11 @@ for (const t of targets) {
   // — wherever a warp lands him he sits on solid art or gets FG-occluded by foliage,
   // producing false "on a tree / cut in half" artifacts. The map, NPCs, enemies, and
   // objects (the real subjects) stay visible.
-  await page.evaluate(() => {
+  await page.evaluate((show) => {
     const scene = globalThis.__game?.scene?.getScene("chunked-world");
-    scene?.["player"]?.setVisible?.(false);
-    for (const f of (scene?.["followers"] ?? [])) f?.sprite?.setVisible?.(false);
-  });
+    scene?.["player"]?.setVisible?.(show);
+    for (const f of (scene?.["followers"] ?? [])) f?.sprite?.setVisible?.(show);
+  }, showPlayer);
   const file = `${outDir}${name}.png`;
   await page.screenshot({ path: file });
   manifest.push({
