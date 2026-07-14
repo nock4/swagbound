@@ -157,12 +157,27 @@ export type BattleRoundStartPriorityResult = {
   runAttempt?: BattleRoundRunAttempt;
 };
 
-export type BattleRoundInputSubmenu = "command" | "psi" | "goods" | "target-enemy" | "target-ally";
+export type BattlePsiMenuCategory = "offense" | "recover" | "assist";
+
+export const BATTLE_PSI_MENU_CATEGORIES: readonly BattlePsiMenuCategory[] = [
+  "offense",
+  "recover",
+  "assist"
+];
+
+export type BattleRoundInputSubmenu =
+  | "command"
+  | "psi-category"
+  | "psi"
+  | "goods"
+  | "target-enemy"
+  | "target-ally";
 
 export type BattleRoundInputState = {
   memberCursor: number;
   submenu: BattleRoundInputSubmenu;
   selectionIndex: number;
+  psiCategory?: BattlePsiMenuCategory;
   queue: QueuedCommand[];
   pending?: QueuedCommand;
 };
@@ -541,6 +556,8 @@ function confirmInputSelection(
   switch (input.submenu) {
     case "command":
       return confirmCommand(input, context);
+    case "psi-category":
+      return confirmPsiCategory(input, context);
     case "psi":
       return confirmPsi(input, context);
     case "goods":
@@ -565,7 +582,13 @@ function confirmCommand(
 
   if (command === "PSI") {
     return {
-      input: { ...input, submenu: "psi", selectionIndex: 0, pending: undefined },
+      input: {
+        ...input,
+        submenu: "psi-category",
+        selectionIndex: 0,
+        psiCategory: BATTLE_PSI_MENU_CATEGORIES[0],
+        pending: undefined
+      },
       complete: false
     };
   }
@@ -604,6 +627,27 @@ function confirmCommand(
   });
 }
 
+function confirmPsiCategory(
+  input: BattleRoundInputState,
+  context: BattleRoundInputContext
+): BattleRoundInputTransition {
+  const actor = currentInputActor(input, context);
+  const combatant = actor ? combatantAt(context.state, actor) : undefined;
+  if (!combatant) {
+    return { input, complete: false };
+  }
+  const category = BATTLE_PSI_MENU_CATEGORIES[
+    clampSelection(input.selectionIndex, BATTLE_PSI_MENU_CATEGORIES.length)
+  ] ?? BATTLE_PSI_MENU_CATEGORIES[0];
+  if (learnedBattlePsiForCategory(context, combatant, category).length === 0) {
+    return { input, complete: false };
+  }
+  return {
+    input: { ...input, submenu: "psi", selectionIndex: 0, psiCategory: category, pending: undefined },
+    complete: false
+  };
+}
+
 function confirmPsi(
   input: BattleRoundInputState,
   context: BattleRoundInputContext
@@ -613,7 +657,11 @@ function confirmPsi(
   if (!actor || !combatant) {
     return { input, complete: false };
   }
-  const learnedPsi = learnedBattlePsiForCombatant(context, combatant);
+  const learnedPsi = learnedBattlePsiForCategory(
+    context,
+    combatant,
+    input.psiCategory ?? BATTLE_PSI_MENU_CATEGORIES[0]
+  );
   const psi = learnedPsi[clampSelection(input.selectionIndex, learnedPsi.length)];
   if (!psi) {
     return { input, complete: false };
@@ -701,7 +749,16 @@ function cancelInputSelection(
   const combatant = actor ? combatantAt(context.state, actor) : undefined;
   if (input.submenu === "target-enemy" || input.submenu === "target-ally") {
     if (input.pending?.command === "PSI") {
-      return { ...input, submenu: "psi", selectionIndex: 0, pending: undefined };
+      const category = input.psiCategory ?? BATTLE_PSI_MENU_CATEGORIES[0];
+      const learnedPsi = combatant ? learnedBattlePsiForCategory(context, combatant, category) : [];
+      const selectionIndex = learnedPsi.findIndex((psi) => psi.id === input.pending?.psiId);
+      return {
+        ...input,
+        submenu: "psi",
+        selectionIndex: Math.max(0, selectionIndex),
+        psiCategory: category,
+        pending: undefined
+      };
     }
     if (input.pending?.command === "GOODS") {
       return { ...input, submenu: "goods", selectionIndex: 0, pending: undefined };
@@ -714,11 +771,23 @@ function cancelInputSelection(
     };
   }
 
-  if (input.submenu === "psi" || input.submenu === "goods") {
+  if (input.submenu === "psi") {
+    const category = input.psiCategory ?? BATTLE_PSI_MENU_CATEGORIES[0];
+    return {
+      ...input,
+      submenu: "psi-category",
+      selectionIndex: BATTLE_PSI_MENU_CATEGORIES.indexOf(category),
+      psiCategory: category,
+      pending: undefined
+    };
+  }
+
+  if (input.submenu === "psi-category" || input.submenu === "goods") {
     return {
       ...input,
       submenu: "command",
-      selectionIndex: commandIndex(input.submenu === "psi" ? "PSI" : "GOODS", combatant?.charId),
+      selectionIndex: commandIndex(input.submenu === "psi-category" ? "PSI" : "GOODS", combatant?.charId),
+      psiCategory: undefined,
       pending: undefined
     };
   }
@@ -794,6 +863,15 @@ function moveInputSelection(
     return { ...input, selectionIndex: indices[wrap(position + delta, indices.length)] };
   }
 
+  if (input.submenu === "psi-category") {
+    const selectionIndex = wrap(input.selectionIndex + delta, BATTLE_PSI_MENU_CATEGORIES.length);
+    return {
+      ...input,
+      selectionIndex,
+      psiCategory: BATTLE_PSI_MENU_CATEGORIES[selectionIndex]
+    };
+  }
+
   const length = selectionLength(input, context);
   if (length <= 0) {
     return input;
@@ -810,8 +888,15 @@ function selectionLength(input: BattleRoundInputState, context: BattleRoundInput
   if (input.submenu === "command") {
     return commandsForCharId(combatant.charId).length;
   }
+  if (input.submenu === "psi-category") {
+    return BATTLE_PSI_MENU_CATEGORIES.length;
+  }
   if (input.submenu === "psi") {
-    return learnedBattlePsiForCombatant(context, combatant).length;
+    return learnedBattlePsiForCategory(
+      context,
+      combatant,
+      input.psiCategory ?? BATTLE_PSI_MENU_CATEGORIES[0]
+    ).length;
   }
   if (input.submenu === "goods") {
     return combatant.inventory.length;
@@ -823,6 +908,27 @@ function selectionLength(input: BattleRoundInputState, context: BattleRoundInput
 function learnedBattlePsiForCombatant(context: BattleRoundInputContext, combatant: Combatant): PsiData[] {
   const learned = learnedPsiForCombatant(context.psi ? [...context.psi] : [], combatant);
   return context.usabilityMatrix ? battleUsablePsi(learned, context.usabilityMatrix) : learned;
+}
+
+export function battlePsiMenuCategory(psi: Pick<PsiData, "type" | "effect">): BattlePsiMenuCategory {
+  const kind = psiBattleKind(psi);
+  if (kind === "offense") {
+    return "offense";
+  }
+  if (kind === "recovery") {
+    return "recover";
+  }
+  return "assist";
+}
+
+function learnedBattlePsiForCategory(
+  context: BattleRoundInputContext,
+  combatant: Combatant,
+  category: BattlePsiMenuCategory
+): PsiData[] {
+  return learnedBattlePsiForCombatant(context, combatant).filter(
+    (psi) => battlePsiMenuCategory(psi) === category
+  );
 }
 
 function currentInputActor(

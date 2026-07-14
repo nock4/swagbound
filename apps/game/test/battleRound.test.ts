@@ -927,8 +927,11 @@ describe("nextInputState", () => {
     };
     const context = { state: battle, psi: [offense, recovery, allOffense] };
 
-    const command = nextInputState(inputState({ selectionIndex: 3 }), { kind: "confirm" }, context);
-    expect(command.input.submenu).toBe("psi");
+    const category = nextInputState(inputState({ selectionIndex: 3 }), { kind: "confirm" }, context);
+    expect(category.input).toMatchObject({ submenu: "psi-category", selectionIndex: 0, psiCategory: "offense" });
+
+    const command = nextInputState(category.input, { kind: "confirm" }, context);
+    expect(command.input).toMatchObject({ submenu: "psi", selectionIndex: 0, psiCategory: "offense" });
 
     const offenseTarget = nextInputState(command.input, { kind: "confirm" }, context);
     expect(offenseTarget.input).toMatchObject({
@@ -937,11 +940,12 @@ describe("nextInputState", () => {
       pending: { command: "PSI", psiId: 100 }
     });
 
-    const recoveryTarget = nextInputState(
-      { ...command.input, selectionIndex: 1 },
+    const recoveryCategory = nextInputState(
+      { ...category.input, selectionIndex: 1 },
       { kind: "confirm" },
       context
     );
+    const recoveryTarget = nextInputState(recoveryCategory.input, { kind: "confirm" }, context);
     expect(recoveryTarget.input).toMatchObject({
       submenu: "target-ally",
       selectionIndex: 0,
@@ -949,7 +953,7 @@ describe("nextInputState", () => {
     });
 
     const allTarget = nextInputState(
-      { ...command.input, selectionIndex: 2 },
+      { ...command.input, selectionIndex: 1 },
       { kind: "confirm" },
       context
     );
@@ -977,10 +981,36 @@ describe("nextInputState", () => {
     const inflictPsi: PsiData = { ...syntheticPsi(100, "assist", "alpha", [{ charId: 0, level: 1 }]), effect: { kind: "inflictStatus", ailment: "paralyzed" } };
     const shieldPsi: PsiData = { ...syntheticPsi(101, "assist", "alpha", [{ charId: 0, level: 1 }]), effect: { kind: "inflictStatus", ailment: "shielded", magnitude: 50 } };
     const context = { state: battle, psi: [inflictPsi, shieldPsi] };
-    const inflict = nextInputState(inputState({ submenu: "psi", selectionIndex: 0 }), { kind: "confirm" }, context);
+    const inflict = nextInputState(inputState({ submenu: "psi", selectionIndex: 0, psiCategory: "assist" }), { kind: "confirm" }, context);
     expect(inflict.input).toMatchObject({ submenu: "target-enemy", pending: { command: "PSI", psiId: 100 } });
-    const shield = nextInputState(inputState({ submenu: "psi", selectionIndex: 1 }), { kind: "confirm" }, context);
+    const shield = nextInputState(inputState({ submenu: "psi", selectionIndex: 1, psiCategory: "assist" }), { kind: "confirm" }, context);
     expect(shield.input).toMatchObject({ submenu: "target-ally", pending: { command: "PSI", psiId: 101 } });
+  });
+
+  it("uses the EarthBound PSI category stage and preserves it while canceling", () => {
+    const battle = createBattleState(opponentA, { characters: characters([partyA]) });
+    const offense = syntheticPsi(100, "offense", "alpha", [{ charId: 0, level: 1 }]);
+    const context = { state: battle, psi: [offense] };
+
+    const categories = nextInputState(inputState({ selectionIndex: 3 }), { kind: "confirm" }, context);
+    const recoverCategory = nextInputState(categories.input, { kind: "move", delta: 1 }, context).input;
+    const emptyRecover = nextInputState(recoverCategory, { kind: "confirm" }, context);
+    expect(emptyRecover.input).toMatchObject({ submenu: "psi-category", psiCategory: "recover" });
+    expect(emptyRecover.input).toBe(recoverCategory);
+
+    const offenseList = nextInputState(
+      { ...categories.input, selectionIndex: 0 },
+      { kind: "confirm" },
+      context
+    );
+    const backToCategories = nextInputState(offenseList.input, { kind: "cancel" }, context);
+    expect(backToCategories.input).toMatchObject({
+      submenu: "psi-category",
+      selectionIndex: 0,
+      psiCategory: "offense"
+    });
+    const backToCommands = nextInputState(backToCategories.input, { kind: "cancel" }, context);
+    expect(backToCommands.input).toMatchObject({ submenu: "command", selectionIndex: 3 });
   });
 
   it("uses enemy target gating for BASH, confirms selected targets, and cancels back to command", () => {

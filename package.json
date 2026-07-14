@@ -52,6 +52,7 @@
     "test:eb": "node --import tsx scripts/run-eb-reference-test.ts",
     "test:fullworld": "node --import tsx scripts/run-fullworld-test.ts",
     "test:battle": "node --import tsx scripts/run-battle-test.ts",
+    "battle-menu:audit": "node scripts/battle-menu-audit.mjs",
     "pretest:replay": "pnpm build:eb-fullworld && pnpm validate",
     "test:replay": "PLAYWRIGHT_ENABLE_REPLAY=1 playwright test --project replay-chromium",
     "show:review": "playwright show-report playwright-report",

@@ -148,6 +148,18 @@ export type BattleDebugUsableItem = {
   targetKind: BattleDebugTargetKind;
 };
 
+export type BattleDebugMenuRect = { x: number; y: number; width: number; height: number };
+
+export type BattleDebugMenuLayout = {
+  actorName?: BattleDebugMenuRect;
+  command?: BattleDebugMenuRect;
+  psiCategory?: BattleDebugMenuRect;
+  submenu?: BattleDebugMenuRect;
+  description?: BattleDebugMenuRect;
+  executionMessage?: BattleDebugMenuRect;
+  statusCards: BattleDebugMenuRect[];
+};
+
 export type BattleDebug = {
   mode: "battle";
   phase: BattlePhase;
@@ -158,8 +170,18 @@ export type BattleDebug = {
   roundNumber: number;
   commandIndex: number;
   command: BattleCommand;
-  submenu: "command" | "psi" | "goods" | "target";
+  submenu: "command" | "psi-category" | "psi" | "goods" | "target";
   submenuIndex: number;
+  psiCategory?: "offense" | "recover" | "assist";
+  menuLayout?: BattleDebugMenuLayout;
+  visibleMenuLabels?: {
+    actorName?: string;
+    commands: string[];
+    psiCategories: string[];
+    submenu: string[];
+    description: string[];
+    execution: string[];
+  };
   selection: string;
   targetIndex: number;
   partyTargetIndex: number;

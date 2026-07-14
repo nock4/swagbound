@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { OdometerDisplay } from "./odometerDisplay";
-import type Phaser from "phaser";
 
 type FakeText = {
   text: string;

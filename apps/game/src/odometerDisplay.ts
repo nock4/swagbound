@@ -1,4 +1,13 @@
-import type Phaser from "phaser";
+export type OdometerDigitText = {
+  width: number;
+  height: number;
+  setText(value: string): OdometerDigitText;
+  setPosition(x: number, y: number): OdometerDigitText;
+  setY(y: number): OdometerDigitText;
+  setVisible(visible: boolean): OdometerDigitText;
+  setCrop(x: number, y: number, width: number, height: number): OdometerDigitText;
+  destroy(): void;
+};
 
 export type OdometerDisplayOptions = {
   /** Top-left of the digit window (the meter box interior), world coords. */
@@ -7,7 +16,7 @@ export type OdometerDisplayOptions = {
   width: number;
   height: number;
   /** Factory producing one styled single-character Text (already positioned off-screen). */
-  createDigitText: () => Phaser.GameObjects.Text;
+  createDigitText: () => OdometerDigitText;
   digitCount?: number;
   /** Per-digit-change scroll duration in ms. */
   scrollMs?: number;
@@ -17,8 +26,8 @@ type DigitSlot = {
   char: string;
   prevChar: string;
   animStartMs: number;
-  current: Phaser.GameObjects.Text;
-  incoming: Phaser.GameObjects.Text;
+  current: OdometerDigitText;
+  incoming: OdometerDigitText;
 };
 
 const DEFAULT_SCROLL_MS = 90;
@@ -128,7 +137,7 @@ export class OdometerDisplay {
   }
 
   /** Move a digit to y and crop it to the meter window (texture-frame coords). */
-  private place(text: Phaser.GameObjects.Text, y: number): void {
+  private place(text: OdometerDigitText, y: number): void {
     const top = this.windowRect.y;
     const bottom = this.windowRect.y + this.windowRect.height;
     const cropTop = Math.max(0, top - y);

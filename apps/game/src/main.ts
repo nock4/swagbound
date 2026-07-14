@@ -116,6 +116,7 @@ class BootScene extends Phaser.Scene {
     if (battleGroupId !== undefined && data.battle) {
       const debugPartyMembers = debugBattlePartyMembersFromSearch(globalThis.location?.search, data.characters);
       const encounterAdvantage = debugEncounterAdvantageFromSearch(globalThis.location?.search);
+      document.getElementById("game-loading")?.remove();
       this.scene.start("battle", {
         battleData: data.battle,
         groupId: battleGroupId,
@@ -143,6 +144,7 @@ class BootScene extends Phaser.Scene {
       : undefined;
     if (sourceCheck && data.battle) {
       const debugPartyMembers = debugBattlePartyMembersFromSearch(globalThis.location?.search, data.characters);
+      document.getElementById("game-loading")?.remove();
       this.scene.start("battle", {
         battleData: data.battle,
         characters: data.characters,
