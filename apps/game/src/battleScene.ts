@@ -281,12 +281,30 @@ const BATTLE_EXECUTION_MESSAGE_PADDING_X = 14;
 const BATTLE_EXECUTION_MESSAGE_PADDING_Y = 10;
 const BATTLE_EXECUTION_MESSAGE_MAX_LINES = 3;
 const BATTLE_EXECUTION_MESSAGE_FONT_SIZE = 14;
-const BATTLE_STATUS_CARD_SIDE_MARGIN = 10;
-const BATTLE_STATUS_CARD_BOTTOM_MARGIN = 8;
-const BATTLE_STATUS_CARD_GAP = 8;
-const BATTLE_STATUS_CARD_HEIGHT = 78;
-const BATTLE_STATUS_CARD_MIN_WIDTH = 112;
-const BATTLE_STATUS_CARD_MAX_WIDTH = 160;
+// EarthBound lays its windows out on an 8px PPU grid on the native 256x224 screen
+// (content/rom-truth/window-attributes.json: "px = units*8"). Our canvas is 2x
+// native, so one EB grid unit is 16 CSS px. Battle window rects snap to it, the
+// same way the talk window derives from the ROM attributes table.
+const EB_GRID_CSS = 16;
+const ebUnits = (units: number): number => units * EB_GRID_CSS;
+/** Round a rect out to the EB 8px grid: origin down, extent up. */
+function snapRectToEbGrid(rect: CanvasRect): CanvasRect {
+  const x = Math.floor(rect.x / EB_GRID_CSS) * EB_GRID_CSS;
+  const y = Math.floor(rect.y / EB_GRID_CSS) * EB_GRID_CSS;
+  return {
+    x,
+    y,
+    width: Math.ceil((rect.x + rect.width - x) / EB_GRID_CSS) * EB_GRID_CSS,
+    height: Math.ceil((rect.y + rect.height - y) / EB_GRID_CSS) * EB_GRID_CSS
+  };
+}
+
+const BATTLE_STATUS_CARD_SIDE_MARGIN = ebUnits(1);
+const BATTLE_STATUS_CARD_BOTTOM_MARGIN = ebUnits(1);
+const BATTLE_STATUS_CARD_GAP = ebUnits(1);
+const BATTLE_STATUS_CARD_HEIGHT = ebUnits(5);
+const BATTLE_STATUS_CARD_MIN_WIDTH = ebUnits(7);
+const BATTLE_STATUS_CARD_MAX_WIDTH = ebUnits(10);
 const BATTLE_STATUS_CARD_ACTIVE_LIFT = 4;
 const BATTLE_STATUS_CONTENT_PADDING_X = 10;
 const BATTLE_STATUS_CONTENT_PADDING_Y = 8;
@@ -2992,15 +3010,20 @@ export class BattleScene extends Phaser.Scene {
       topMargin: BATTLE_MENU_TOP_MARGIN + (stackedMenu ? 0 : actorNameOffset),
       reservedTop: stackedMenu ? actorNameOffset : 0
     });
+    // EB's "whose turn" plate is a small window hugging the name, not a bar spanning
+    // the command window. Size it to the text (grid-snapped), capped at the menu width.
     const actorNameRect = actorName && command
-      ? {
+      ? snapRectToEbGrid({
         x: command.x,
         y: stackedMenu
           ? Math.max(BATTLE_MENU_TOP_MARGIN, command.y - BATTLE_ACTOR_NAME_GAP - BATTLE_ACTOR_NAME_HEIGHT)
           : BATTLE_MENU_TOP_MARGIN,
-        width: command.width,
+        width: Math.min(
+          command.width,
+          this.measureTextWidth(actorName, BATTLE_STATUS_NAME_FONT_SIZE, 500) + BATTLE_COMMAND_TEXT_PADDING_X * 2
+        ),
         height: BATTLE_ACTOR_NAME_HEIGHT
-      }
+      })
       : undefined;
     const submenuItems = view.submenuItems ?? view.submenuLines.map((label, index) => ({
       label,
@@ -3229,12 +3252,12 @@ export class BattleScene extends Phaser.Scene {
       ? Math.floor(this.scale.height - bottomClearance - height)
       : topMargin;
     const rect = clampRectToScreen(
-      {
+      snapRectToEbGrid({
         x: BATTLE_LEFT_MARGIN,
         y,
         width,
         height
-      },
+      }),
       { width: this.scale.width, height: this.scale.height },
       {
         left: BATTLE_LEFT_MARGIN,
@@ -5542,13 +5565,20 @@ function modulo(value: number, size: number): number {
   return ((value % normalizedSize) + normalizedSize) % normalizedSize;
 }
 
+// EarthBound's on-screen battle command names. The internal ids stay short and
+// stable (content/tests key off "AUTO"/"RUN"); only the display text is EB-faithful.
+const EB_COMMAND_LABELS: Partial<Record<BattleCommand, string>> = {
+  PSI: "PSI",
+  AUTO: "Auto Fight",
+  RUN: "Run Away"
+};
+
 function formatCommandLabel(command: BattleCommand): string {
-  switch (command) {
-    case "PSI":
-      return "PSI";
-    default:
-      return command.charAt(0) + command.slice(1).toLowerCase();
+  const ebLabel = EB_COMMAND_LABELS[command];
+  if (ebLabel !== undefined) {
+    return ebLabel;
   }
+  return command.charAt(0) + command.slice(1).toLowerCase();
 }
 
 function targetModeForCommand(command: BattleCommand): BattleTargetMode | null {
