@@ -253,7 +253,11 @@ describe("qa npc-dialogue: authored content resolution", () => {
 
     expect(missing).toEqual([]);
     expect(authoredByNpcId + authoredByTextPointer + generated).toBe(world.npcs.length);
-    expect(generated).toBeGreaterThan(1000);
+    // Sanity floor only: authoring dialogue MOVES NPCs from generated to authored,
+    // so this count falls as voicing progresses (886 as of 2026-07-13). The real
+    // invariants are the two asserts above (nothing missing, full coverage). The
+    // floor just catches the bark generator dying outright.
+    expect(generated).toBeGreaterThan(500);
   });
 });
 

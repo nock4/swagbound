@@ -17,9 +17,9 @@ describe("battle affinities", () => {
     // Frankystein Mark II (130) is a machine — weak to thunder
     expect(elementalAffinity(130, "thunder")).toEqual({ multiplier: WEAK_MULTIPLIER, kind: "weak" });
     expect(elementalAffinity(130, "fire")).toEqual({ multiplier: 1, kind: null });
-    // Soul Consuming Flame (147): weak to ice, resists fire — the thematic showpiece
-    expect(elementalAffinity(147, "ice")).toEqual({ multiplier: WEAK_MULTIPLIER, kind: "weak" });
-    expect(elementalAffinity(147, "fire")).toEqual({ multiplier: RESIST_MULTIPLIER, kind: "resist" });
+    // Soul Consuming Flame (147): pray-to-win boss (be72f2dd) — resists ice, no weakness
+    expect(elementalAffinity(147, "ice")).toEqual({ multiplier: RESIST_MULTIPLIER, kind: "resist" });
+    expect(elementalAffinity(147, "fire")).toEqual({ multiplier: 1, kind: null });
     // Frank / Milady swarm lead (enemy id 131, not the group id 448) — weak to the source beam
     expect(elementalAffinity(131, "beam")).toEqual({ multiplier: WEAK_MULTIPLIER, kind: "weak" });
     expect(elementalAffinity(131, "flash")).toEqual({ multiplier: RESIST_MULTIPLIER, kind: "resist" });
@@ -30,7 +30,7 @@ describe("battle affinities", () => {
   });
 
   it("describes weaknesses for SPY", () => {
-    expect(describeAffinity(147)).toBe("Weak to ice, resists fire."); // Soul Consuming Flame
+    expect(describeAffinity(147)).toBe("Resists ice."); // Soul Consuming Flame: pray-to-win boss, no weakness (be72f2dd)
     expect(describeAffinity(130)).toBe("Weak to thunder."); // Frankystein (weak only)
     expect(describeAffinity(9999)).toBe("No elemental weakness."); // unlisted
   });

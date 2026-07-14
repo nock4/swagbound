@@ -66,7 +66,12 @@ export function describeAffinity(enemyId: number): string {
   const parts: string[] = [];
   if (affinity.weak) parts.push(`Weak to ${affinity.weak}`);
   if (affinity.resist) parts.push(`resists ${affinity.resist}`);
-  return parts.length > 0 ? `${parts.join(", ")}.` : "No elemental weakness.";
+  if (parts.length === 0) {
+    return "No elemental weakness.";
+  }
+  const joined = `${parts.join(", ")}.`;
+  // Resist-only entries start mid-phrase; capitalize for the SPY readout.
+  return joined.charAt(0).toUpperCase() + joined.slice(1);
 }
 
 /** Damage multiplier + tag for an offense PSI element against an enemy. */

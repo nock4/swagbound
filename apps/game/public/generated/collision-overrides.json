@@ -36,6 +36,20 @@
    "w": 40,
    "h": 64,
    "note": "[story-recovery P0] reopen the hill road beside the porch: bridges the yard-side band pocket (y~600-616) to the native town corridor at y648 (walk-verified crossable x2754-2836). EB's Onett descent passes here; the bake pinched it shut. Pairs with the flag-340 containment-door retirement."
+  },
+  {
+   "x": 7200,
+   "y": 384,
+   "w": 16,
+   "h": 16,
+   "note": "[fix-batch-2] clear return-door trigger approach for door 7216,392 (room via exterior door 2016,1704; both exits were untriggerable = hard-lock) (h=16: PLAYER_FOOT_BOX top=-6 spans two 8px rows)"
+  },
+  {
+   "x": 6928,
+   "y": 384,
+   "w": 24,
+   "h": 16,
+   "note": "[fix-batch-2] clear return-door trigger approach for door 6920,392 (same hard-lock room; w=24 h=16: row-48 wall solidity extends past the doorway, PLAYER_FOOT_BOX top=-6 spans two 8px rows)"
   }
  ],
  "solids": [

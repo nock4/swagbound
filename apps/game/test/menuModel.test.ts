@@ -227,14 +227,16 @@ describe("Status view model", () => {
       maxPp: 12,
       stats: { offense: 11, defense: 12, speed: 13, guts: 14, vitality: 15, iq: 16, luck: 17 }
     });
-    // Party members, then the Binder (Source Checks) nested under Status.
+    // Party members, then the Binder (Source Checks) and Archivist Records
+    // (77278db5) nested under Status.
     expect(screen.items.map((item) => item.id)).toEqual([
       "status-select-0",
       "status-select-1",
-      "binder"
+      "binder",
+      "archivist-records"
     ]);
-    expect(screen.items.map((item) => item.label)).toEqual(["MEMBER_A", "MEMBER_B", "Binder"]);
-    expect(screen.items.map((item) => item.childScreenId)).toEqual(["status-member-0", "status-member-1", "binder"]);
+    expect(screen.items.map((item) => item.label)).toEqual(["MEMBER_A", "MEMBER_B", "Binder", "Records"]);
+    expect(screen.items.map((item) => item.childScreenId)).toEqual(["status-member-0", "status-member-1", "binder", "archivist-records"]);
 
     const memberScreens = buildStatusMemberScreens(status);
     expect(memberScreens).toHaveLength(2);

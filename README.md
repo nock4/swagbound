@@ -17,7 +17,7 @@ and a licensed 27-track mixtape. The full arc plays start to finish: title scree
 
 ## What this actually is
 
-- **An original Phaser 3 engine** (`apps/game/`) that reimplements EarthBound's
+- **An original Phaser engine** (Phaser 4, CANVAS renderer; `apps/game/`) that reimplements EarthBound's
   systems: chunked overworld streaming, EB-faithful battles (two-phase rounds,
   hit-rate rolls, rolling HP, Pray/Spy/Mirror), doors/interiors, cutscenes, menus,
   save/continue, and a Web Audio music layer.
@@ -66,7 +66,7 @@ gitignored and is pruned from every build.
 
 | Path | What it is |
 |---|---|
-| `apps/game/` | The Phaser 3 game (engine + `public/generated/` runtime data) |
+| `apps/game/` | The Phaser 4 game (engine + `public/generated/` runtime data) |
 | `packages/eb-converter/` | CoilSnake-decompile → runtime-JSON converter |
 | `packages/eb-schemas/` | Shared zod schemas for all generated/content data |
 | `packages/content-builder/` | Content-layer build tooling |
