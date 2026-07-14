@@ -77,6 +77,13 @@ export type EbWindowDrawOptions = {
   frame?: EbWindowFrame;
   fillColor?: number;
   fillAlpha?: number;
+  /**
+   * Integer multiplier for the ROM frame pixels. The baked profiles are native
+   * EarthBound pixels (8px = one tile); on the 2x canvas, borderScale 2 renders
+   * the frame at true EB thickness (16 CSS px). Default 1 preserves layouts
+   * tuned against the thin frame (e.g. the frame-verified talk window).
+   */
+  borderScale?: number;
 };
 
 export type MoreArrowPlacementOptions = {
@@ -132,7 +139,8 @@ export function drawEbWindowFrame(
   options: EbWindowDrawOptions = {}
 ): void {
   const frame = options.frame ?? activeEbWindowFrame();
-  const border = EB_WINDOW_BORDER;
+  const scale = Math.max(1, Math.round(options.borderScale ?? 1));
+  const border = EB_WINDOW_BORDER * scale;
   const x = Math.round(rect.x);
   const y = Math.round(rect.y);
   const width = Math.max(1, Math.round(rect.width));
@@ -142,21 +150,22 @@ export function drawEbWindowFrame(
   graphics.fillRect(x, y, width, height);
   const innerWidth = Math.max(0, width - border * 2);
   const innerHeight = Math.max(0, height - border * 2);
-  for (let index = 0; index < border; index += 1) {
+  for (let index = 0; index < EB_WINDOW_BORDER; index += 1) {
     const color = frame.edge[index] ?? frame.interior;
+    const offset = index * scale;
     if (innerWidth > 0) {
-      fillRectClipped(graphics, color, 1, x + border, y + index, innerWidth, 1, bounds);
-      fillRectClipped(graphics, color, 1, x + border, y + height - border + index, innerWidth, 1, bounds);
+      fillRectClipped(graphics, color, 1, x + border, y + offset, innerWidth, scale, bounds);
+      fillRectClipped(graphics, color, 1, x + border, y + height - border + offset, innerWidth, scale, bounds);
     }
     if (innerHeight > 0) {
-      fillRectClipped(graphics, color, 1, x + index, y + border, 1, innerHeight, bounds);
-      fillRectClipped(graphics, color, 1, x + width - border + index, y + border, 1, innerHeight, bounds);
+      fillRectClipped(graphics, color, 1, x + offset, y + border, scale, innerHeight, bounds);
+      fillRectClipped(graphics, color, 1, x + width - border + offset, y + border, scale, innerHeight, bounds);
     }
   }
-  drawEbWindowCorner(graphics, frame, x, y, false, false, bounds);
-  drawEbWindowCorner(graphics, frame, x + width - border, y, true, false, bounds);
-  drawEbWindowCorner(graphics, frame, x, y + height - border, false, true, bounds);
-  drawEbWindowCorner(graphics, frame, x + width - border, y + height - border, true, true, bounds);
+  drawEbWindowCorner(graphics, frame, x, y, false, false, bounds, scale);
+  drawEbWindowCorner(graphics, frame, x + width - border, y, true, false, bounds, scale);
+  drawEbWindowCorner(graphics, frame, x, y + height - border, false, true, bounds, scale);
+  drawEbWindowCorner(graphics, frame, x + width - border, y + height - border, true, true, bounds, scale);
 }
 
 export function rawWindowTextureKey(flavor: Pick<WindowFlavor, "id">): string {
@@ -377,7 +386,8 @@ function drawEbWindowCorner(
   originY: number,
   flipX: boolean,
   flipY: boolean,
-  bounds: CanvasRect
+  bounds: CanvasRect,
+  scale = 1
 ): void {
   const border = EB_WINDOW_BORDER;
   const minX = Math.round(bounds.x);
@@ -385,8 +395,8 @@ function drawEbWindowCorner(
   const maxX = minX + Math.max(1, Math.round(bounds.width));
   const maxY = minY + Math.max(1, Math.round(bounds.height));
   for (let rowIndex = 0; rowIndex < border; rowIndex += 1) {
-    const targetY = originY + rowIndex;
-    if (targetY < minY || targetY >= maxY) {
+    const targetY = originY + rowIndex * scale;
+    if (targetY + scale <= minY || targetY >= maxY) {
       continue;
     }
     const sourceRowIndex = flipY ? border - 1 - rowIndex : rowIndex;
@@ -405,15 +415,17 @@ function drawEbWindowCorner(
       ) {
         run += 1;
       }
-      const targetX = originX + columnIndex;
+      const targetX = originX + columnIndex * scale;
       const clippedX = Math.max(targetX, minX);
-      const clippedRight = Math.min(targetX + run, maxX);
+      const clippedRight = Math.min(targetX + run * scale, maxX);
       if (clippedRight <= clippedX) {
         columnIndex += run;
         continue;
       }
+      const clippedY = Math.max(targetY, minY);
+      const clippedBottom = Math.min(targetY + scale, maxY);
       graphics.fillStyle(color, 1);
-      graphics.fillRect(clippedX, targetY, clippedRight - clippedX, 1);
+      graphics.fillRect(clippedX, clippedY, clippedRight - clippedX, clippedBottom - clippedY);
       columnIndex += run;
     }
   }

@@ -231,13 +231,17 @@ const BATTLE_STATUS_LABEL_FONT_SIZE = 11;
 const BATTLE_STATUS_VALUE_FONT_SIZE = 17;
 const BATTLE_LEFT_MARGIN = 16;
 const BATTLE_LINE_HEIGHT = cleanLineHeight(BATTLE_FONT_SIZE, BATTLE_LINE_SPACING);
-const BATTLE_COMMAND_TEXT_PADDING_X = 12;
-const BATTLE_COMMAND_TEXT_PADDING_Y = 10;
-const BATTLE_COMMAND_GRID_PADDING_X = 10;
-const BATTLE_COMMAND_GRID_PADDING_Y = 8;
+// Text paddings clear the true-thickness EB frame (16 CSS px at borderScale 2)
+// with EB's one-tile gap: text starts ~2 tiles (32 CSS px) from the window edge,
+// matching the ROM battle command window.
+const BATTLE_COMMAND_TEXT_PADDING_X = 20;
+const BATTLE_COMMAND_TEXT_PADDING_Y = 18;
+const BATTLE_COMMAND_GRID_PADDING_X = 20;
+const BATTLE_COMMAND_GRID_PADDING_Y = 18;
 const BATTLE_COMMAND_GRID_GAP_X = 6;
 const BATTLE_COMMAND_GRID_GAP_Y = 4;
-const BATTLE_COMMAND_CELL_HEIGHT = 24;
+// 28 + 4 gap = 32 CSS px row pitch = EB's 16px native command row pitch.
+const BATTLE_COMMAND_CELL_HEIGHT = 28;
 const BATTLE_MENU_CARET_GUTTER_PX = 12;
 const BATTLE_MENU_TOP_MARGIN = 8;
 // Top-left "whose turn" name plate above the command grid.
@@ -265,20 +269,21 @@ const BATTLE_SUBMENU_MIN_WIDTH = 220;
 const BATTLE_TARGET_WINDOW_MIN_WIDTH = 156;
 const BATTLE_DESCRIPTION_MIN_WIDTH = 128;
 const BATTLE_MENU_MAX_WIDTH = 360;
-// Stylized framed border for battle panels (thicker + more opaque than the faint
-// global default) so menus read as deliberate windows over the battle backdrop.
-const BATTLE_PANEL_BORDER: { borderWidth: number; borderAlpha: number } = {
-  borderWidth: 2,
-  borderAlpha: 0.5
+// Battle panels render the ROM frame at true EarthBound thickness: the baked
+// profiles are native EB pixels, so on the 2x canvas borderScale 2 gives the
+// authentic one-tile (16 CSS px) border. (The old borderWidth/borderAlpha here
+// were dead options drawCleanPanel never consumed.)
+const BATTLE_PANEL_BORDER: { borderScale: number } = {
+  borderScale: 2
 };
 const BATTLE_DESCRIPTION_MAX_WIDTH = 260;
-const BATTLE_DESCRIPTION_TEXT_PADDING_X = 12;
-const BATTLE_DESCRIPTION_TEXT_PADDING_Y = 9;
+const BATTLE_DESCRIPTION_TEXT_PADDING_X = 20;
+const BATTLE_DESCRIPTION_TEXT_PADDING_Y = 18;
 const BATTLE_EXECUTION_MESSAGE_TOP = 14;
 const BATTLE_EXECUTION_MESSAGE_MIN_WIDTH = 260;
 const BATTLE_EXECUTION_MESSAGE_MAX_WIDTH = 480;
-const BATTLE_EXECUTION_MESSAGE_PADDING_X = 14;
-const BATTLE_EXECUTION_MESSAGE_PADDING_Y = 10;
+const BATTLE_EXECUTION_MESSAGE_PADDING_X = 20;
+const BATTLE_EXECUTION_MESSAGE_PADDING_Y = 18;
 const BATTLE_EXECUTION_MESSAGE_MAX_LINES = 3;
 const BATTLE_EXECUTION_MESSAGE_FONT_SIZE = 14;
 // EarthBound lays its windows out on an 8px PPU grid on the native 256x224 screen
@@ -302,12 +307,20 @@ function snapRectToEbGrid(rect: CanvasRect): CanvasRect {
 const BATTLE_STATUS_CARD_SIDE_MARGIN = ebUnits(1);
 const BATTLE_STATUS_CARD_BOTTOM_MARGIN = ebUnits(1);
 const BATTLE_STATUS_CARD_GAP = ebUnits(1);
-const BATTLE_STATUS_CARD_HEIGHT = ebUnits(5);
+// EB battle status cards are ~7 grid units (56 native px) tall; a solo card
+// runs wide (~13 units) while full parties compress toward the 7-unit minimum.
+const BATTLE_STATUS_CARD_HEIGHT = ebUnits(7);
 const BATTLE_STATUS_CARD_MIN_WIDTH = ebUnits(7);
-const BATTLE_STATUS_CARD_MAX_WIDTH = ebUnits(10);
+const BATTLE_STATUS_CARD_MAX_WIDTH = ebUnits(13);
 const BATTLE_STATUS_CARD_ACTIVE_LIFT = 4;
-const BATTLE_STATUS_CONTENT_PADDING_X = 10;
-const BATTLE_STATUS_CONTENT_PADDING_Y = 8;
+// EarthBound's status card is a cream plate with black name/labels and the
+// HP/PP odometers set in dark meter boxes with light digits.
+const EB_STATUS_CARD_FILL = 0xf0e0b0;
+const EB_STATUS_CARD_TEXT = "#181010";
+const EB_STATUS_METER_FILL = 0x181818;
+const EB_STATUS_METER_TEXT = "#f8f8f8";
+const BATTLE_STATUS_CONTENT_PADDING_X = 20;
+const BATTLE_STATUS_CONTENT_PADDING_Y = 18;
 const BATTLE_STATUS_NAME_Y = 0;
 const BATTLE_STATUS_HP_ROW_Y = 23;
 const BATTLE_STATUS_PP_ROW_Y = 47;
@@ -3207,7 +3220,7 @@ export class BattleScene extends Phaser.Scene {
     }
 
     layout.statusCards.forEach((card) => {
-      drawCleanPanel(graphics, card, BATTLE_PANEL_BORDER);
+      drawCleanPanel(graphics, card, { ...BATTLE_PANEL_BORDER, fillColor: EB_STATUS_CARD_FILL });
       this.statusCardTexts.push(this.createStatusCardTexts(card));
     });
 
@@ -4072,12 +4085,14 @@ export class BattleScene extends Phaser.Scene {
     const content = this.statusCardContentRect(card);
     const hpMetrics = this.statusBarMetrics(content, "hp");
     const ppMetrics = this.statusBarMetrics(content, "pp");
+    // EB card: black name/labels on the cream plate, light digits in the dark
+    // meter boxes drawn behind the values (renderStatusCardBars).
     return {
-      name: this.createStatusText(content.x, content.y + BATTLE_STATUS_NAME_Y, "", content.width, BATTLE_STATUS_NAME_FONT_SIZE, 500).setDepth(22),
-      hpLabel: this.createStatusText(content.x, hpMetrics.labelY, "HP", BATTLE_STATUS_LABEL_WIDTH, BATTLE_STATUS_LABEL_FONT_SIZE, 500).setDepth(22),
-      ppLabel: this.createStatusText(content.x, ppMetrics.labelY, "PP", BATTLE_STATUS_LABEL_WIDTH, BATTLE_STATUS_LABEL_FONT_SIZE, 500).setDepth(22),
-      hpValue: this.createStatusText(hpMetrics.valueX, hpMetrics.valueY, "", hpMetrics.valueWidth, BATTLE_STATUS_VALUE_FONT_SIZE, 400, "right").setDepth(22),
-      ppValue: this.createStatusText(ppMetrics.valueX, ppMetrics.valueY, "", ppMetrics.valueWidth, BATTLE_STATUS_VALUE_FONT_SIZE, 400, "right").setDepth(22)
+      name: this.createStatusText(content.x, content.y + BATTLE_STATUS_NAME_Y, "", content.width, BATTLE_STATUS_NAME_FONT_SIZE, 500).setColor(EB_STATUS_CARD_TEXT).setDepth(22),
+      hpLabel: this.createStatusText(content.x, hpMetrics.labelY, "HP", BATTLE_STATUS_LABEL_WIDTH, BATTLE_STATUS_LABEL_FONT_SIZE, 500).setColor(EB_STATUS_CARD_TEXT).setDepth(22),
+      ppLabel: this.createStatusText(content.x, ppMetrics.labelY, "PP", BATTLE_STATUS_LABEL_WIDTH, BATTLE_STATUS_LABEL_FONT_SIZE, 500).setColor(EB_STATUS_CARD_TEXT).setDepth(22),
+      hpValue: this.createStatusText(hpMetrics.valueX, hpMetrics.valueY, "", hpMetrics.valueWidth, BATTLE_STATUS_VALUE_FONT_SIZE, 400, "right").setColor(EB_STATUS_METER_TEXT).setDepth(22),
+      ppValue: this.createStatusText(ppMetrics.valueX, ppMetrics.valueY, "", ppMetrics.valueWidth, BATTLE_STATUS_VALUE_FONT_SIZE, 400, "right").setColor(EB_STATUS_METER_TEXT).setDepth(22)
     };
   }
 
@@ -4159,16 +4174,9 @@ export class BattleScene extends Phaser.Scene {
       if (!viewCard) {
         return;
       }
-      if (card.active) {
-        drawCleanSelection(accentGraphics, {
-          x: card.x + 4,
-          y: card.y + 4,
-          width: Math.max(1, card.width - 8),
-          height: Math.max(1, card.height - 8)
-        });
-        accentGraphics.lineStyle(1, CLEAN_UI_PANEL_BORDER, 0.46);
-        accentGraphics.strokeRoundedRect(card.x + 4.5, card.y + 4.5, Math.max(1, card.width - 9), Math.max(1, card.height - 9), 5);
-      }
+      // EB marks the acting member by lifting the card (BATTLE_STATUS_CARD_ACTIVE_LIFT
+      // in the layout); no highlight wash, which would also sit over the black-on-cream
+      // card text at this depth.
       if (card.target) {
         accentGraphics.lineStyle(2, 0x4d9bdc, 0.9);
         accentGraphics.strokeRoundedRect(card.x + 6, card.y + 6, Math.max(1, card.width - 12), Math.max(1, card.height - 12), 4);
@@ -4183,6 +4191,20 @@ export class BattleScene extends Phaser.Scene {
 
       // EarthBound battle status shows HP/PP as rolling odometer numbers (no bars);
       // viewCard.hp is the rolling displayed vital that drives the mortal-damage race.
+      // EB meter boxes: dark plates behind the odometer digits on the cream card.
+      // Height stays under the 24px HP/PP row pitch so the two boxes read as
+      // separate meters instead of one merged column.
+      const content = this.statusCardContentRect(card);
+      for (const row of ["hp", "pp"] as const) {
+        const metrics = this.statusBarMetrics(content, row);
+        fieldGraphics.fillStyle(EB_STATUS_METER_FILL, 1);
+        fieldGraphics.fillRect(
+          metrics.valueX - 6,
+          metrics.valueY - 1,
+          metrics.valueWidth + 10,
+          BATTLE_STATUS_VALUE_FONT_SIZE + 4
+        );
+      }
     });
   }
 

@@ -53,6 +53,8 @@ export type CleanPanelOptions = {
   borderColor?: number;
   borderAlpha?: number;
   borderWidth?: number;
+  /** ROM-frame pixel multiplier; 2 = true EB thickness on the 2x canvas. */
+  borderScale?: number;
 };
 
 export type BattleCommandGridPosition = {
@@ -124,7 +126,8 @@ export function drawCleanPanel(
 ): void {
   drawEbWindowFrame(graphics, rect, {
     fillColor: options.fillColor,
-    fillAlpha: options.fillAlpha ?? 1
+    fillAlpha: options.fillAlpha ?? 1,
+    borderScale: options.borderScale
   });
 }
 
