@@ -74,6 +74,7 @@ gitignored and is pruned from every build.
 | `scripts/` | Build, balance-runner, QA, and extraction tooling |
 | `vendor/` | Swagbound source masters (dialogue corpus, art) |
 | `docs/` | Design docs + historical reports (dated reports are era-stamped) |
+| `docs/qa/codebase-review-handoff.md` | Full engineering + QA onboarding brief for a reviewer (paste-ready) |
 
 ## Licensing boundary
 

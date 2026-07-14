@@ -63,3 +63,7 @@ Wrangler is authed via the owner's browser SSO; never handle tokens directly.
 Dated files in `docs/` (reports, QA logs, `MORNING.md`) are historical records —
 do not "fix" them retroactively. Current orientation lives in README.md, this file,
 SETUP.md, and `docs/PROJECT-CHARTER.md`.
+
+For a full engineering + QA onboarding brief (architecture, subsystems, debug hooks,
+false-positive traps, review assignment) - self-contained and paste-ready for an
+external reviewer - see `docs/qa/codebase-review-handoff.md`.
