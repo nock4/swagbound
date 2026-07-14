@@ -182,7 +182,11 @@ pnpm test                   # Vitest (pretest runs the build)
 - **The rule that bites everyone: content is inert until built.** Edit
   `content/*.json`, boot the game, see no change -> you did not rebuild. Nearly every
   "my fix didn't work" is this. If any runtime code path reads a `content/` file
-  directly instead of `generated/`, that is itself a finding.
+  directly instead of `generated/`, that is itself a finding - with ONE named
+  exception: `content/rom-truth/` holds ROM-derived engine constants (timing curves,
+  transition specs) statically imported by `transitions.ts`, `mapTransition.ts`, and
+  `ebTiming.ts`. Vite bundles those at app build, so they bypass `build:eb-fullworld`
+  by design (edits there take effect on a Vite reload, the OPPOSITE failure mode).
 - **Full build only.** `build:eb-fullworld` is the complete build; partial builds
   strip building sign stamps.
 - **After building, reset chunk noise before committing:**
@@ -231,6 +235,12 @@ Prebuilt harnesses (all in `scripts/`):
   trust its faceroll signals for "too easy," treat its loss signals with care.
 - `scripts/reachability-audit.mjs` - flood-fill reachability of shops/areas from the
   new-game spawn (the correct global-reachability test).
+- `python3 scripts/door-return-audit.py` - door-return regression gate: a faithful
+  static replica of the runtime door mechanics (foot box, probe depth, arrival
+  rings). Exits 1 if any player-facing landing has no triggerable exit. Run it after
+  any collision or door data change. `--verbose` also lists narrow-exit landings
+  (escapable but the straight-line approach wedges - the signature of the 2026-07-13
+  trap room near spawn that convinced two independent testers it was a hard-lock).
 - `scripts/playtest-driver.mjs`, `scripts/bughunt-max.mjs`,
   `scripts/overnight-bughunt.mjs` - multi-agent QA fleets (read their headers; note
   the noise lessons in section 8 before scaling them up).
@@ -302,7 +312,9 @@ recreate that noise.
 **Known-open / worth probing (candidate focus areas):**
 - Battle edge cases historically produced the real bugs: a sim-hang and a softlock in
   specific groups, save->continue failures, dialogue-stuck-open after save-reload,
-  door-return failures, and post-cutscene input-lock leaks. Re-verify these classes.
+  and post-cutscene input-lock leaks. Re-verify these classes. (Door-return failures
+  are now gated by `scripts/door-return-audit.py`: zero true hard-locks as of
+  2026-07-13; ~335 benign narrow-exit alignment cases remain as polish.)
 - The 07-05 story-chain harnesses (`tmp/act*-chain.mjs`) drifted against the reworked
   opening and may not reflect current flow.
 - Balance across acts is tuned against a weak autorunner; human-perceived difficulty is

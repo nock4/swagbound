@@ -11,7 +11,10 @@ reads that way as historical). Start with [README.md](README.md) for the repo ma
   not `content/`. After editing `content/*.json`, run `pnpm build:eb-fullworld`
   (the FULL build — partial builds strip building sign stamps), then reset chunk
   noise: `git checkout -- apps/game/public/generated/assets/world/chunks/` and
-  commit only the changed generated data files.
+  commit only the changed generated data files. NAMED EXCEPTION: `content/rom-truth/`
+  (ROM-derived engine constants) is imported statically by `transitions.ts`,
+  `mapTransition.ts`, and `ebTiming.ts` — Vite bundles it, so edits there take
+  effect WITHOUT `build:eb-fullworld`.
 - **Never commit the ROM or the CoilSnake decompile** (`EarthBound (USA).sfc`,
   `external/coilsnake-*`). Nintendo copyright; the repo is public.
 - **No em dashes in player-facing text.** Grep your additions; the gate is zero.
