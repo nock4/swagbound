@@ -201,6 +201,7 @@ import {
   tick as tickRollingMeter,
   type RollingMeterState
 } from "./rollingMeter";
+import { OdometerDisplay } from "./odometerDisplay";
 import {
   createBattleSfx,
   type BattleSfx,
@@ -515,8 +516,8 @@ type BattleStatusCardTextSet = {
   name: Phaser.GameObjects.Text;
   hpLabel: Phaser.GameObjects.Text;
   ppLabel: Phaser.GameObjects.Text;
-  hpValue: Phaser.GameObjects.Text;
-  ppValue: Phaser.GameObjects.Text;
+  hpValue: OdometerDisplay;
+  ppValue: OdometerDisplay;
 };
 type VictoryTallyState = {
   exp: RollingMeterState;
@@ -4086,14 +4087,30 @@ export class BattleScene extends Phaser.Scene {
     const hpMetrics = this.statusBarMetrics(content, "hp");
     const ppMetrics = this.statusBarMetrics(content, "pp");
     // EB card: black name/labels on the cream plate, light digits in the dark
-    // meter boxes drawn behind the values (renderStatusCardBars).
+    // meter boxes drawn behind the values (renderStatusCardBars). The digit
+    // wheels render inside the meter-box interiors.
     return {
       name: this.createStatusText(content.x, content.y + BATTLE_STATUS_NAME_Y, "", content.width, BATTLE_STATUS_NAME_FONT_SIZE, 500).setColor(EB_STATUS_CARD_TEXT).setDepth(22),
       hpLabel: this.createStatusText(content.x, hpMetrics.labelY, "HP", BATTLE_STATUS_LABEL_WIDTH, BATTLE_STATUS_LABEL_FONT_SIZE, 500).setColor(EB_STATUS_CARD_TEXT).setDepth(22),
       ppLabel: this.createStatusText(content.x, ppMetrics.labelY, "PP", BATTLE_STATUS_LABEL_WIDTH, BATTLE_STATUS_LABEL_FONT_SIZE, 500).setColor(EB_STATUS_CARD_TEXT).setDepth(22),
-      hpValue: this.createStatusText(hpMetrics.valueX, hpMetrics.valueY, "", hpMetrics.valueWidth, BATTLE_STATUS_VALUE_FONT_SIZE, 400, "right").setColor(EB_STATUS_METER_TEXT).setDepth(22),
-      ppValue: this.createStatusText(ppMetrics.valueX, ppMetrics.valueY, "", ppMetrics.valueWidth, BATTLE_STATUS_VALUE_FONT_SIZE, 400, "right").setColor(EB_STATUS_METER_TEXT).setDepth(22)
+      hpValue: this.createStatusOdometer(hpMetrics),
+      ppValue: this.createStatusOdometer(ppMetrics)
     };
+  }
+
+  private createStatusOdometer(metrics: ReturnType<BattleScene["statusBarMetrics"]>): OdometerDisplay {
+    return new OdometerDisplay({
+      // Window = the meter-box interior (box: valueX-6/valueY-1, +10/+4 pads).
+      x: metrics.valueX - 4,
+      y: metrics.valueY,
+      width: metrics.valueWidth + 6,
+      height: BATTLE_STATUS_VALUE_FONT_SIZE + 2,
+      createDigitText: () =>
+        this.createStatusText(-1000, -1000, "0", 32, BATTLE_STATUS_VALUE_FONT_SIZE, 400)
+          .setColor(EB_STATUS_METER_TEXT)
+          .setFixedSize(0, 0)
+          .setDepth(22)
+    });
   }
 
   private updateStatusCardTexts(
@@ -4105,8 +4122,8 @@ export class BattleScene extends Phaser.Scene {
     textSet.name.setText(this.fitMeasuredText(nameWithStatus, this.statusCardNameWidth(rect)));
     textSet.hpLabel.setText("HP");
     textSet.ppLabel.setText("PP");
-    textSet.hpValue.setText(formatCleanOdometerValue(card.hp));
-    textSet.ppValue.setText(formatCleanOdometerValue(card.pp));
+    textSet.hpValue.setValue(formatCleanOdometerValue(card.hp), this.time.now);
+    textSet.ppValue.setValue(formatCleanOdometerValue(card.pp), this.time.now);
   }
 
   private createStatusText(
@@ -4204,6 +4221,11 @@ export class BattleScene extends Phaser.Scene {
           metrics.valueWidth + 10,
           BATTLE_STATUS_VALUE_FONT_SIZE + 4
         );
+      }
+      const textSet = this.statusCardTexts[index];
+      if (textSet) {
+        textSet.hpValue.render(this.time.now);
+        textSet.ppValue.render(this.time.now);
       }
     });
   }
