@@ -97,6 +97,198 @@
         "blockFlags": []
       },
       "text": "Explore. The record is still being written."
+    },
+    {
+      "id": "act2-source-spring",
+      "when": {
+        "requireFlags": ["act2:complete"],
+        "blockFlags": ["source:spring:cleared"]
+      },
+      "text": "Attest the Spring source on the route beyond Postwick.",
+      "npcHints": [
+        "The Spring source is beyond Postwick. Follow the open road and attest it.",
+        "The road out of Postwick leads to Spring. It needs a witness, not a brochure."
+      ]
+    },
+    {
+      "id": "act3-reach-dead-letter",
+      "when": {
+        "requireFlags": ["source:spring:cleared"],
+        "blockFlags": ["deadletter:arrived"]
+      },
+      "text": "Continue to Dead Letter and enter the town of returned records.",
+      "npcHints": [
+        "Dead Letter is ahead on the route. Keep going until the mail starts recognizing you.",
+        "Follow the road to Dead Letter. The town keeps what every other place returned."
+      ]
+    },
+    {
+      "id": "act3-source-undelivered",
+      "when": {
+        "requireFlags": ["deadletter:arrived"],
+        "blockFlags": ["source:undelivered:cleared"]
+      },
+      "text": "Find and attest the Undelivered source in Dead Letter's return yard.",
+      "npcHints": [
+        "The Undelivered source is in the return yard. Follow the dead mail deeper into town.",
+        "Dead Letter's return yard is holding a source nobody signed for."
+      ]
+    },
+    {
+      "id": "act3-museum-starman",
+      "when": {
+        "requireFlags": ["source:undelivered:cleared"],
+        "blockFlags": ["signal:museum_starman_cleared"]
+      },
+      "text": "Enter the Museum of Leaked Versions and clear its lobby guardian.",
+      "npcHints": [
+        "The Museum of Leaked Versions is next. Its lobby guardian checks every original twice.",
+        "Head for Dead Letter's museum. Start with the thing guarding the lobby."
+      ]
+    },
+    {
+      "id": "act3-museum-frank",
+      "when": {
+        "requireFlags": ["signal:museum_starman_cleared"],
+        "blockFlags": ["signal:museum_frank_cleared"]
+      },
+      "text": "Push farther into the museum and defeat its second guardian.",
+      "npcHints": [
+        "The lobby is clear. The museum's second guardian is deeper inside.",
+        "Keep moving through the exhibits. The next version is waiting past the lobby."
+      ]
+    },
+    {
+      "id": "act3-museum-worm",
+      "when": {
+        "requireFlags": ["signal:museum_frank_cleared"],
+        "blockFlags": ["act3:complete"]
+      },
+      "text": "Reach the museum's deep vault and unmake Provenance 0.",
+      "npcHints": [
+        "Provenance 0 is in the museum's deep vault. That is where the originals disappear.",
+        "Go below the exhibits. The coil that ate the originals is waiting in the vault."
+      ]
+    },
+    {
+      "id": "source-vault",
+      "when": {
+        "requireFlags": ["act3:complete"],
+        "blockFlags": ["source:vault:cleared"]
+      },
+      "text": "Attest the Vault source on the Galleria service floor.",
+      "npcHints": [
+        "The Vault source is on the Galleria service floor. Take the working escalators up.",
+        "Go to the Galleria and climb to the service floor. Vault is waiting there."
+      ]
+    },
+    {
+      "id": "source-pier",
+      "when": {
+        "requireFlags": ["source:vault:cleared"],
+        "blockFlags": ["source:pier:cleared"]
+      },
+      "text": "Travel to Solana Beach and attest the Pier source.",
+      "npcHints": [
+        "The Pier source is at Solana Beach, out where the boardwalk meets the broadcast water.",
+        "Head to Solana Beach. The next source is waiting on the pier."
+      ]
+    },
+    {
+      "id": "source-vacancy",
+      "when": {
+        "requireFlags": ["source:pier:cleared"],
+        "blockFlags": ["source:vacancy:cleared"]
+      },
+      "text": "Find the Vacancy source in the Vacancy Flats motel strip.",
+      "npcHints": [
+        "Vacancy is hiding in the motel strip at Vacancy Flats.",
+        "Follow the empty signs to Vacancy Flats. The source is inside the motel strip."
+      ]
+    },
+    {
+      "id": "source-first-record",
+      "when": {
+        "requireFlags": ["source:vacancy:cleared"],
+        "blockFlags": ["source:first-record:cleared"]
+      },
+      "text": "Attest the First Record source before returning to Morningside.",
+      "npcHints": [
+        "One source remains: First Record. Find it before you go home.",
+        "First Record is the last unattested source. The route back waits after that."
+      ]
+    },
+    {
+      "id": "endgame-return",
+      "when": {
+        "requireFlags": ["source:first-record:cleared"],
+        "blockFlags": ["raid:morningside:active"]
+      },
+      "text": "Return to Morningside. Milady has occupied the town.",
+      "npcHints": [
+        "Morningside is under Milady's read. Go home before the copy closes over it.",
+        "All eight sources point back to Morningside. Return there now."
+      ]
+    },
+    {
+      "id": "raid-morningside-1",
+      "when": {
+        "requireFlags": ["raid:morningside:active"],
+        "blockFlags": ["raid:cell:1"]
+      },
+      "text": "Break Milady's first occupation cell in Morningside.",
+      "npcHints": [
+        "The first occupation cell is holding Morningside's outer block. Break it.",
+        "Start at the edge of town. Milady's first cell is sealing the route inward."
+      ]
+    },
+    {
+      "id": "raid-morningside-2",
+      "when": {
+        "requireFlags": ["raid:cell:1"],
+        "blockFlags": ["raid:cell:2"]
+      },
+      "text": "Push inward and break Milady's second occupation cell.",
+      "npcHints": [
+        "One cell is down. The second is farther inside Morningside.",
+        "Keep pushing toward the town center. The second occupation cell is active."
+      ]
+    },
+    {
+      "id": "raid-morningside-3",
+      "when": {
+        "requireFlags": ["raid:cell:2"],
+        "blockFlags": ["raid:morningside:cleared"]
+      },
+      "text": "Destroy the final occupation cell and clear Morningside.",
+      "npcHints": [
+        "The final cell is all that keeps Milady's occupation standing.",
+        "Two cells are gone. Finish the last one near the town core."
+      ]
+    },
+    {
+      "id": "milady-final",
+      "when": {
+        "requireFlags": ["raid:morningside:cleared"],
+        "blockFlags": ["milady:unmade"]
+      },
+      "text": "Approach Milady in the cleared plaza and end the read.",
+      "npcHints": [
+        "Milady is exposed in the plaza. Approach her and finish this.",
+        "The occupation is gone. Milady herself is waiting in Morningside's plaza."
+      ]
+    },
+    {
+      "id": "game-complete",
+      "when": {
+        "requireFlags": ["game:complete"],
+        "blockFlags": []
+      },
+      "text": "The record is open. Explore what survived.",
+      "npcHints": [
+        "The read failed to close. What remains belongs to the people still here.",
+        "No next task. Just a town learning how to speak after the record stopped."
+      ]
     }
   ]
 }

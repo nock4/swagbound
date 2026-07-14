@@ -1661,7 +1661,8 @@ export const ObjectiveConditionSchema = z.object({
 export const ObjectiveEntrySchema = z.object({
   id: z.string().trim().min(1),
   when: ObjectiveConditionSchema,
-  text: z.string().trim().min(1)
+  text: z.string().trim().min(1),
+  npcHints: z.array(z.string().trim().min(1)).min(1).optional()
 }).strict();
 
 export const ObjectivesSchema = z.object({

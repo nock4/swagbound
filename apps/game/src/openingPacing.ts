@@ -1,4 +1,6 @@
 export const OPENING_FLYOVER_ZOOM = 1.5;
+export const OPENING_FLYOVER_END_ZOOM = 2.35;
+export const OPENING_FLYOVER_ZOOM_IN_MS = 3_800;
 // The real on-screen world rect at flyover zoom (512x448 canvas / 1.5): what the
 // player actually sees around a shot center. Clamp margins and the night overlay
 // derive from this so shot authoring stays honest about the visible window.
@@ -6,10 +8,6 @@ export const OPENING_FLYOVER_VIEW = {
   width: 512 / OPENING_FLYOVER_ZOOM,
   height: 448 / OPENING_FLYOVER_ZOOM
 } as const;
-// Era-title hold over the southern market strip (Slice / Mons Link / cafe block):
-// 7 NPCs + 3 doors + stamped storefronts in view, per the world.json density scan.
-export const OPENING_SHOT_ZERO_CENTER = { x: 1630, y: 1666 } as const;
-export const OPENING_SHOT_ZERO_HOLD_MS = 4_000;
 export const OPENING_ERA_TITLE = "MORNINGSIDE, 202X";
 export const OPENING_ERA_TITLE_HOLD_MS = 2_400;
 export const OPENING_ERA_TITLE_FADE_MS = 1_200;
@@ -27,8 +25,8 @@ export const OPENING_GET_UP_WALK_MS = 420;
 
 export const OPENING_FLYOVER_SCENIC_BOUNDS = {
   minX: 1200,
-  maxX: 2480,
-  minY: 800,
+  maxX: 2900,
+  minY: 100,
   maxY: 2260
 } as const;
 // Clamp shot centers so the VISIBLE window stays inside the scenic bounds: the
@@ -46,29 +44,12 @@ export type OpeningFlyoverShot = {
 
 export const OPENING_FLYOVER_SHOTS: readonly OpeningFlyoverShot[] = [
   {
-    // Northern shop cluster: stamped storefronts, nearby doors, and visible NPCs.
-    from: { x: 1600, y: 1200 },
-    to: { x: 1700, y: 1240 },
-    duration: 9_000,
-    text: "Morningside files its dreams before it dreams them."
-  },
-  {
-    // Civic hotel block: a separate dense cluster east of the northern shops.
-    // (Shot zero now holds the market strip, so this block appears exactly once.)
-    from: { x: 1980, y: 1420 },
-    to: { x: 2080, y: 1580 },
-    duration: 9_000,
-    text: "Something reads the town, street by street, and calls the reading love."
-  },
-  {
-    // Southern market strip again, panning this time: bookends the era-title hold
-    // 20+ seconds earlier, and the "signal wearing your name" line lands here just
-    // before the descent to bed. NOTE (2026-07-09 frame pass): the blocks further
-    // south scored 5-9 NPCs in the density scan but are VISUALLY the town-entrance
-    // trail (roadblocks, forest edge) - keep pans off them; trust frames over counts.
-    from: { x: 1600, y: 1600 },
-    to: { x: 1660, y: 1732 },
-    duration: 9_000,
+    // One continuous establishing move: begin over the MONS LINK arcade where
+    // Bosch's first confrontation waits, travel east through his block, then end
+    // centered on his house for the zoom and cut to the bedroom.
+    from: { x: 1504, y: 1704 },
+    to: { x: 2656, y: 344 },
+    duration: 20_000,
     text: "Tonight one signal came back wearing your name."
   }
 ] as const;

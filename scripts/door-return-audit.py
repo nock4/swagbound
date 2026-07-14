@@ -5,8 +5,9 @@ For every door destination, simulates the real player (PLAYER_FOOT_BOX 13x6,
 1px-equivalent movement at 2px BFS) over the real collision (world.json
 solidRows + collision-overrides clears/solids exactly as applyOverrideRects
 maps them) and the real door probe (leading-edge cells at distance 0..1, from
-doorTriggers.ts). A landing where NO door in the room is triggerable from any
-reachable feet position is a hard-lock room.
+doorTriggers.ts), including the runtime's direct-return arrival-lane alignment.
+A landing where NO door in the room is triggerable from any reachable feet
+position is a hard-lock room.
 
 Run after `pnpm build:eb-fullworld`. Exits 1 if any player-facing hard-lock
 landing exists, so it can gate CI/regression runs.
@@ -61,12 +62,13 @@ def foot_box_clear(fx, fy):
     return True
 
 # --- doors -------------------------------------------------------------------
-# Runtime parity (doorTriggers.ts): only type "door" warps, and near-self
-# destinations (< MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX = 24) are message
-# doors / converter-emitted escalator rows, not warps.
+# Runtime parity (doorTriggers.ts): every distinct transport destination is a
+# warp, including door/stair/escalator rows. Near-self destinations
+# (< MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX = 24) are message doors or inert
+# source rows and do not participate in arrival-lane alignment.
 def is_warp_door(d):
     dest = d.get("destinationWorldPixel")
-    if not dest or d.get("type") != "door":
+    if not dest:
         return False
     dx = dest["x"] - d["worldPixel"]["x"]
     dy = dest["y"] - d["worldPixel"]["y"]
@@ -79,7 +81,7 @@ for d in doors:
     door_cell_set.setdefault(dc, []).append(d)
 
 def probe_hits_door(fx, fy):
-    """Union of the 4-direction probes (xProbeCells/yProbeCells, dist 0..1)."""
+    """Union of the 4-direction probes (used by the full reachability BFS)."""
     min_x = (fx + FB_LEFT) // CS
     max_x = (fx + FB_RIGHT) // CS
     min_y = (fy + FB_TOP) // CS
@@ -93,7 +95,24 @@ def probe_hits_door(fx, fy):
                 return True
     return False
 
-def snap_landing(px, py):
+def probe_hits_door_direction(fx, fy, dx, dy):
+    """Exact cardinal movement-intent probe for one held direction."""
+    min_x = (fx + FB_LEFT) // CS
+    max_x = (fx + FB_RIGHT) // CS
+    min_y = (fy + FB_TOP) // CS
+    max_y = (fy + FB_BOTTOM) // CS
+    for dist in range(0, PROBE_DISTANCE + 1):
+        if dx:
+            x = max_x + dist if dx > 0 else min_x - dist
+            if any((x, y) in door_cell_set for y in range(min_y, max_y + 1)):
+                return True
+        else:
+            y = max_y + dist if dy > 0 else min_y - dist
+            if any((x, y) in door_cell_set for x in range(min_x, max_x + 1)):
+                return True
+    return False
+
+def snap_walkable_landing(px, py):
     """Faithful replica of resolveWalkableFootprintDestination
     (collisionFootprint.ts): the game's door-arrival placement. Cell-unit
     Chebyshev rings around the destination cell, candidates keep the
@@ -129,13 +148,37 @@ def straight_walk_triggers(start):
     for dx, dy in ((STEP, 0), (-STEP, 0), (0, STEP), (0, -STEP)):
         fx, fy = start
         for _ in range(0, BBOX_MARGIN // STEP):
-            if probe_hits_door(fx, fy):
+            if probe_hits_door_direction(fx, fy, dx, dy):
                 return True
             n = (fx + dx, fy + dy)
             if not foot_box_clear(*n):
                 break
             fx, fy = n
     return False
+
+def snap_landing(px, py):
+    """Runtime door arrival: walkable snap, then direct-return lane alignment."""
+    initial = snap_walkable_landing(px, py)
+    if initial is None or straight_walk_triggers(initial):
+        return initial
+    ocx, ocy = px // CS, py // CS
+    off_x, off_y = px % CS, py % CS
+    for ring in range(1, 11):  # maxAlignmentRingCells: 10 (chunkedWorldScene.ts)
+        best = None
+        for dy in range(-ring, ring + 1):
+            for dx in range(-ring, ring + 1):
+                if max(abs(dx), abs(dy)) != ring:
+                    continue
+                cx = (ocx + dx) * CS + off_x
+                cy = (ocy + dy) * CS + off_y
+                if not foot_box_clear(cx, cy) or not straight_walk_triggers((cx, cy)):
+                    continue
+                dist_sq = (cx - px) ** 2 + (cy - py) ** 2
+                if best is None or dist_sq < best[2]:
+                    best = (cx, cy, dist_sq)
+        if best:
+            return (best[0], best[1])
+    return initial
 
 def audit_landing(px, py):
     """(status: "OK" | "NARROW-EXIT" | fail-reason, positions_explored)."""
@@ -249,10 +292,9 @@ def main():
         vias = " ".join(f"({x},{y})" for x, y in meta["entrances"][:3])
         print(f"  landing ({px},{py})  {reason}  explored={explored}  via {vias}"
               f"{' [player-facing]' if meta['playerFacing'] else ''}")
-    # Informational tier. High recall, low precision: the 2026-07-13 trap room
-    # (landing 7192,392 via door 2016,1704) matches this signature, but so do
-    # ~179 benign "land beside the door, sidestep to align" cases that are
-    # EB-normal. Not a gate; list with --verbose when hunting a reported trap.
+    # Informational tier: any arrival for which the runtime could not find a
+    # nearby walkable direct-return lane. Not a hard-lock gate, but expected to
+    # remain zero under the current alignment rule.
     print(f"narrow-exit landings (escapable; straight-line approach wedges): {len(warnings)}")
     if "--verbose" in sys.argv:
         for px, py, reason, explored, meta in warnings:

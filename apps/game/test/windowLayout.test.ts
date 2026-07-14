@@ -89,14 +89,14 @@ describe("EB window layouts", () => {
       height: 120
     });
     expect(TALK_WINDOW_VISIBLE_LINES).toBe(3);
-    expect(TALK_WINDOW_LINE_PITCH_CSS).toBe(32);
-    expect(TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS).toBe(26);
-    expect(TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS + TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS).toBe(32);
+    expect(TALK_WINDOW_LINE_PITCH_CSS).toBe(29);
+    expect(TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS).toBe(22);
+    expect(TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS + TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS).toBe(29);
     expect(TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS).toEqual({
-      x: 10,
-      y: 18
+      x: 9,
+      y: 8
     });
-    expect(TALK_WINDOW_WRAP_WIDTH_CSS).toBe(252);
+    expect(TALK_WINDOW_WRAP_WIDTH_CSS).toBe(254);
   });
 
   it("keeps short dialogue views unchanged", () => {

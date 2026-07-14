@@ -16,12 +16,12 @@ export const TALK_WINDOW_NATIVE_VISIBLE_BORDER_RECT = {
   height: 60
 } as const;
 export const TALK_WINDOW_VISIBLE_LINES = 3;
-export const TALK_WINDOW_LINE_PITCH_CSS = 32;
+export const TALK_WINDOW_LINE_PITCH_CSS = 29;
 export const TALK_WINDOW_TEXT_PADDING_FROM_CELL_EDGE_CSS = {
-  x: 18,
-  y: 20
+  x: 17,
+  y: 10
 } as const;
-export const TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS = 26;
+export const TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS = 22;
 export const TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS = Math.max(
   0,
   TALK_WINDOW_LINE_PITCH_CSS - TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS
@@ -51,6 +51,13 @@ export const TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS = {
 export const TALK_WINDOW_WRAP_WIDTH_CSS = Math.max(
   1,
   TALK_WINDOW_VISIBLE_BORDER_RECT_CSS.width - TALK_WINDOW_TEXT_PADDING_FROM_CELL_EDGE_CSS.x * 2
+);
+
+export const TALK_WINDOW_TEXT_HEIGHT_CSS = Math.max(
+  1,
+  TALK_WINDOW_VISIBLE_BORDER_RECT_CSS.height
+    - TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.y
+    - TALK_WINDOW_TEXT_PADDING_FROM_CELL_EDGE_CSS.y
 );
 
 export function visibleDialogueLines(lines: string[], max: number): string[] {

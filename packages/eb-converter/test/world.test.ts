@@ -1224,6 +1224,53 @@ describe("world artifact build (synthetic project)", () => {
     }
   }, 30_000);
 
+  it("pairs CoilSnake escalator movers with reciprocal nowhere endpoints", async () => {
+    const temp = await mkdtemp(path.join(os.tmpdir(), "eb-world-escalators-"));
+    try {
+      const project = path.join(temp, "project");
+      const out = path.join(temp, "generated");
+      await writeSyntheticChunkProject(project);
+      await writeFile(path.join(project, "map_doors.yml"), [
+        "0:",
+        "  0:",
+        "  - Direction: se",
+        "    Type: escalator",
+        "    X: 10",
+        "    Y: 10",
+        "  - Direction: nowhere",
+        "    Type: escalator",
+        "    X: 13",
+        "    Y: 13",
+        ""
+      ].join("\n"), "utf8");
+
+      const result = await convertProject({ project, out, worldMode: "full" });
+      if (!("mode" in result.world)) {
+        throw new Error("expected chunked world");
+      }
+
+      expect(result.world.doors).toEqual([
+        {
+          type: "escalator",
+          worldPixel: { x: 80, y: 80 },
+          destinationWorldPixel: { x: 104, y: 104 },
+          direction: "se"
+        },
+        {
+          type: "escalator",
+          worldPixel: { x: 104, y: 104 },
+          destinationWorldPixel: { x: 80, y: 80 },
+          direction: "nowhere"
+        }
+      ]);
+      expect(result.world.warnings).not.toEqual(expect.arrayContaining([
+        expect.objectContaining({ code: "world_inert_door_destinations" })
+      ]));
+    } finally {
+      await rm(temp, { recursive: true, force: true });
+    }
+  }, 30_000);
+
   it("scales map-door destinations from warp-grid units with raw over-range fallback", async () => {
     const temp = await mkdtemp(path.join(os.tmpdir(), "eb-world-doors-"));
     try {

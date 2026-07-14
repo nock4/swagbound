@@ -1,5 +1,10 @@
 import type { WorldDoor } from "@eb/schemas";
-import { resolveWalkableFootprintDestination, walkableFootprintClear, type FootBox } from "./collisionFootprint";
+import {
+  PLAYER_FOOT_BOX,
+  resolveWalkableFootprintDestination,
+  walkableFootprintClear,
+  type FootBox
+} from "./collisionFootprint";
 import type { CollisionGrid } from "./collisionOverlay";
 
 export type DoorTriggerState = {
@@ -53,6 +58,15 @@ export type DoorWarpLanding = {
 
 export const MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX = 24;
 
+export function isDistinctWarpTransition(
+  door: Pick<WorldDoor, "worldPixel" | "destinationWorldPixel">,
+  minWarpDistancePx = MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX
+): boolean {
+  const dx = door.destinationWorldPixel.x - door.worldPixel.x;
+  const dy = door.destinationWorldPixel.y - door.worldPixel.y;
+  return Math.hypot(dx, dy) >= minWarpDistancePx;
+}
+
 export function isMessageDoor(
   door: Pick<WorldDoor, "type" | "worldPixel" | "destinationWorldPixel" | "textPointer">,
   maxSelfWarpDistancePx = MESSAGE_DOOR_MAX_SELF_WARP_DISTANCE_PX
@@ -60,9 +74,7 @@ export function isMessageDoor(
   if (door.type !== "door" || !door.textPointer?.trim()) {
     return false;
   }
-  const dx = door.destinationWorldPixel.x - door.worldPixel.x;
-  const dy = door.destinationWorldPixel.y - door.worldPixel.y;
-  return Math.hypot(dx, dy) < maxSelfWarpDistancePx;
+  return !isDistinctWarpTransition(door, maxSelfWarpDistancePx);
 }
 
 export function messageDoorDialogueReference(
@@ -130,13 +142,128 @@ export function resolveDoorWarpLanding(
   destination: { x: number; y: number },
   solidRows: readonly string[],
   grid: CollisionGrid,
-  options: { maxRingCells?: number; box?: FootBox } = {}
+  options: {
+    maxRingCells?: number;
+    box?: FootBox;
+    doors?: readonly Pick<WorldDoor, "worldPixel">[];
+    maxAlignmentRingCells?: number;
+    maxStraightWalkPx?: number;
+  } = {}
 ): DoorWarpLanding {
-  const point = resolveWalkableFootprintDestination(destination, solidRows, grid, options);
+  const initial = resolveWalkableFootprintDestination(destination, solidRows, grid, options);
+  const point = options.doors?.length
+    ? resolveStraightDoorApproachLanding(destination, initial, solidRows, grid, options)
+    : initial;
   return {
     point,
     walkable: walkableFootprintClear(point, solidRows, grid, options.box)
   };
+}
+
+/**
+ * Preserve an authored door destination when holding one cardinal direction can
+ * reach a door. Otherwise, choose the nearest walkable arrival lane with that
+ * property. This removes the common "land beside the return door and wedge on
+ * the straight approach" trap without changing map collision.
+ */
+function resolveStraightDoorApproachLanding(
+  destination: { x: number; y: number },
+  initial: { x: number; y: number },
+  solidRows: readonly string[],
+  grid: CollisionGrid,
+  options: {
+    box?: FootBox;
+    doors?: readonly Pick<WorldDoor, "worldPixel">[];
+    maxAlignmentRingCells?: number;
+    maxStraightWalkPx?: number;
+  }
+): { x: number; y: number } {
+  const doors = options.doors ?? [];
+  const box = options.box ?? PLAYER_FOOT_BOX;
+  const maxStraightWalkPx = Math.max(grid.cellSize, options.maxStraightWalkPx ?? 480);
+  const doorCells = new Set(doors.map((door) => {
+    const x = Math.floor(door.worldPixel.x / grid.cellSize);
+    const y = Math.floor(door.worldPixel.y / grid.cellSize);
+    return `${x},${y}`;
+  }));
+  const hasApproach = (point: { x: number; y: number }): boolean =>
+    hasStraightCardinalDoorApproach(
+      point,
+      solidRows,
+      grid,
+      box,
+      doorCells,
+      maxStraightWalkPx
+    );
+  if (hasApproach(initial)) {
+    return initial;
+  }
+
+  const originCellX = Math.floor(destination.x / grid.cellSize);
+  const originCellY = Math.floor(destination.y / grid.cellSize);
+  const offsetX = ((destination.x % grid.cellSize) + grid.cellSize) % grid.cellSize;
+  const offsetY = ((destination.y % grid.cellSize) + grid.cellSize) % grid.cellSize;
+  const maxRingCells = Math.max(0, Math.floor(options.maxAlignmentRingCells ?? 10));
+  for (let ring = 1; ring <= maxRingCells; ring += 1) {
+    let best: { x: number; y: number; distanceSq: number } | undefined;
+    for (let dy = -ring; dy <= ring; dy += 1) {
+      for (let dx = -ring; dx <= ring; dx += 1) {
+        if (Math.max(Math.abs(dx), Math.abs(dy)) !== ring) {
+          continue;
+        }
+        const candidate = {
+          x: (originCellX + dx) * grid.cellSize + offsetX,
+          y: (originCellY + dy) * grid.cellSize + offsetY
+        };
+        if (!walkableFootprintClear(candidate, solidRows, grid, box) || !hasApproach(candidate)) {
+          continue;
+        }
+        const distanceSq = (candidate.x - destination.x) ** 2 + (candidate.y - destination.y) ** 2;
+        if (!best || distanceSq < best.distanceSq) {
+          best = { ...candidate, distanceSq };
+        }
+      }
+    }
+    if (best) {
+      return { x: best.x, y: best.y };
+    }
+  }
+  return initial;
+}
+
+function hasStraightCardinalDoorApproach(
+  start: { x: number; y: number },
+  solidRows: readonly string[],
+  grid: CollisionGrid,
+  box: FootBox,
+  doorCells: ReadonlySet<string>,
+  maxStraightWalkPx: number
+): boolean {
+  const stepPx = 2;
+  const directions = [
+    { dx: 1 as const, dy: 0 as const },
+    { dx: -1 as const, dy: 0 as const },
+    { dx: 0 as const, dy: 1 as const },
+    { dx: 0 as const, dy: -1 as const }
+  ];
+  for (const direction of directions) {
+    let point = start;
+    for (let walked = 0; walked <= maxStraightWalkPx; walked += stepPx) {
+      const bounds = footprintCellBounds(point, grid.cellSize, box);
+      const probes = direction.dx !== 0
+        ? xProbeCells(bounds, direction.dx, 1)
+        : yProbeCells(bounds, direction.dy, 1);
+      if (probes.some((cell) => doorCells.has(`${cell.x},${cell.y}`))) {
+        return true;
+      }
+      const next = { x: point.x + direction.dx * stepPx, y: point.y + direction.dy * stepPx };
+      if (!walkableFootprintClear(next, solidRows, grid, box)) {
+        break;
+      }
+      point = next;
+    }
+  }
+  return false;
 }
 
 export function resolveDoorIntentTrigger(

@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { ObjectivesSchema, type Objectives } from "@eb/schemas";
-import { currentObjective } from "./objectives";
+import { currentObjective, currentObjectiveNpcHint } from "./objectives";
 
 function flags(values: string[]) {
   const set = new Set(values);
@@ -80,7 +80,7 @@ describe("currentObjective", () => {
       "arena:champion"
     ]), objectives)?.id)
       .toBe("act2-leave-postwick");
-    expect(currentObjective(flags([
+    const act2CompleteFlags = [
       ...act1CompleteFlags,
       "act2:begun",
       "postwick:arrived",
@@ -89,6 +89,30 @@ describe("currentObjective", () => {
       "arena:won:2",
       "arena:champion",
       "act2:complete"
-    ]), objectives)?.id).toBe("fallback");
+    ];
+    expect(currentObjective(flags(act2CompleteFlags), objectives)?.id).toBe("act2-source-spring");
+    expect(currentObjective(flags([...act2CompleteFlags, "source:spring:cleared"]), objectives)?.id)
+      .toBe("act3-reach-dead-letter");
+    expect(currentObjective(flags([
+      ...act2CompleteFlags,
+      "source:spring:cleared",
+      "deadletter:arrived",
+      "source:undelivered:cleared",
+      "signal:museum_starman_cleared",
+      "signal:museum_frank_cleared"
+    ]), objectives)?.id).toBe("act3-museum-worm");
+  });
+
+  it("selects stable story-aware NPC hints for the current objective", () => {
+    const objectives = ObjectivesSchema.parse(JSON.parse(
+      readFileSync(resolve("content/objectives.json"), "utf8")
+    ));
+    const first = currentObjectiveNpcHint(flags([]), objectives, 4);
+    const again = currentObjectiveNpcHint(flags([]), objectives, 4);
+    const neighbor = currentObjectiveNpcHint(flags([]), objectives, 5);
+
+    expect(first).toBe(again);
+    expect(first).not.toBe(neighbor);
+    expect(first).toContain("arcade");
   });
 });

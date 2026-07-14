@@ -237,10 +237,10 @@ Prebuilt harnesses (all in `scripts/`):
   new-game spawn (the correct global-reachability test).
 - `python3 scripts/door-return-audit.py` - door-return regression gate: a faithful
   static replica of the runtime door mechanics (foot box, probe depth, arrival
-  rings). Exits 1 if any player-facing landing has no triggerable exit. Run it after
-  any collision or door data change. `--verbose` also lists narrow-exit landings
-  (escapable but the straight-line approach wedges - the signature of the 2026-07-13
-  trap room near spawn that convinced two independent testers it was a hard-lock).
+  rings, and direct-return arrival-lane alignment). Exits 1 if any player-facing
+  landing has no triggerable exit. Run it after any collision or door data change.
+  `--verbose` also lists any landing the alignment rule could not give a straight
+  cardinal return approach.
 - `scripts/playtest-driver.mjs`, `scripts/bughunt-max.mjs`,
   `scripts/overnight-bughunt.mjs` - multi-agent QA fleets (read their headers; note
   the noise lessons in section 8 before scaling them up).
@@ -313,8 +313,8 @@ recreate that noise.
 - Battle edge cases historically produced the real bugs: a sim-hang and a softlock in
   specific groups, save->continue failures, dialogue-stuck-open after save-reload,
   and post-cutscene input-lock leaks. Re-verify these classes. (Door-return failures
-  are now gated by `scripts/door-return-audit.py`: zero true hard-locks as of
-  2026-07-13; ~335 benign narrow-exit alignment cases remain as polish.)
+  are now gated by `scripts/door-return-audit.py`: zero true hard-locks and zero
+  narrow-exit alignment cases as of 2026-07-14.)
 - The 07-05 story-chain harnesses (`tmp/act*-chain.mjs`) drifted against the reworked
   opening and may not reflect current flow.
 - Balance across acts is tuned against a weak autorunner; human-perceived difficulty is

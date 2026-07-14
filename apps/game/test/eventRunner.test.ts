@@ -147,6 +147,21 @@ describe("interactionEvents", () => {
     ]);
   });
 
+  it("appends the current story guidance without replacing authored NPC dialogue", () => {
+    const flags = new GameFlags();
+
+    expect(interactionEvents({
+      npcId: 745,
+      textPointer: "robot.greeter"
+    }, FALLBACK_REFERENCE, flags, {
+      byNpcId: { "745": { pages: ["NPC page."] } },
+      byTextPointer: {}
+    }, undefined, undefined, "The arcade is west of here.")).toEqual([
+      { kind: "dialogue", pages: ["NPC page.", "The arcade is west of here."] },
+      { kind: "setFlag", flag: "npc:745:talked" }
+    ]);
+  });
+
   it("does not short-circuit generated Drifella barks into direct dialogue pages", () => {
     const flags = new GameFlags();
 

@@ -5,9 +5,9 @@ import {
   AddedNpcsSchema,
   CustomDialogueSchema,
   DrifellaBarksSchema,
+  ObjectivesSchema,
   SwagboundDialogueLibrarySchema,
   WorldChunkedSchema,
-  FontCollectionSchema,
   ScriptCollectionSchema
 } from "@eb/schemas";
 import {
@@ -20,15 +20,16 @@ import {
 import { buildCustomDialogueWithDrifellaBarks, buildDialogueForReference } from "../src/loader";
 import { isGeneratedDrifellaBarkEntry } from "../src/customDialogueLookup";
 import { drifellaBarkForNpcId } from "../src/drifellaBarks";
-import { measureBitmapTextForFontId } from "../src/bitmapFont";
 import {
-  dialogueWindowRect,
-  dialogueTextWidth,
-  ebTextLineHeight,
-  EB_UI_SCALE,
-  EB_BITMAP_TEXT_SCALE,
-  EB_TEXT_LINE_SPACING
-} from "../src/windowLayout";
+  TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS,
+  TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS,
+  TALK_WINDOW_PANEL_RECT_CSS,
+  TALK_WINDOW_TEXT_HEIGHT_CSS,
+  TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS,
+  TALK_WINDOW_VISIBLE_LINES,
+  TALK_WINDOW_WRAP_WIDTH_CSS
+} from "../src/ebWindowMetrics";
+import { cleanLineHeight, estimateCleanTextWidth } from "../src/cleanUi";
 
 // ---------------------------------------------------------------------------
 // Fixtures: committed Swagbound content + gitignored generated EB data.
@@ -43,8 +44,8 @@ const dialogueLibrary = SwagboundDialogueLibrarySchema.parse(read("content/swagb
 const addedNpcs = AddedNpcsSchema.parse(read("content/added-npcs.json"));
 const drifellaBarks = DrifellaBarksSchema.parse(read("content/drifella-barks.json"));
 const world = WorldChunkedSchema.parse(read("apps/game/public/generated/world.json"));
-const font = FontCollectionSchema.parse(read("apps/game/public/generated/font.json"));
 const scripts = ScriptCollectionSchema.parse(read("apps/game/public/generated/scripts.json"));
+const objectives = ObjectivesSchema.parse(read("content/objectives.json"));
 const runtimeCustomDialogue = buildCustomDialogueWithDrifellaBarks(customDialogue, world.npcs, drifellaBarks);
 
 const customLookup = { byNpcId: customDialogue.byNpcId, byTextPointer: customDialogue.byTextPointer };
@@ -262,29 +263,10 @@ describe("qa npc-dialogue: authored content resolution", () => {
 });
 
 describe("qa npc-dialogue: dialogue-box fit at native viewport", () => {
-  // Native EarthBound viewport is 512x448; the dialogue window shows 4 lines.
-  const VISIBLE_LINES = 4;
-  const PAD_X = 12 * EB_UI_SCALE;
-  const PAD_Y = 9 * EB_UI_SCALE;
-  const lineHeight = ebTextLineHeight({ lineSpacing: EB_TEXT_LINE_SPACING });
-  const rect = dialogueWindowRect({
-    screen: { width: 512, height: 448 },
-    sideMargin: 8 * EB_UI_SCALE,
-    bottomMargin: 8 * EB_UI_SCALE,
-    paddingX: PAD_X,
-    paddingY: PAD_Y,
-    lineHeight,
-    visibleLines: VISIBLE_LINES
-  });
-  const textWidth = dialogueTextWidth(rect, PAD_X);
-
-  const wrappedLineCount = (text: string): number =>
-    measureBitmapTextForFontId(font, font.primaryFontId, text, {
-      scale: EB_BITMAP_TEXT_SCALE,
-      maxWidth: textWidth,
-      lineSpacing: EB_TEXT_LINE_SPACING,
-      lineHeight
-    }).lineCount;
+  const lineHeight = cleanLineHeight(
+    TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS,
+    TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS
+  );
 
   const authoredPages: Array<{ location: string; text: string }> = [];
   for (const [id, entry] of Object.entries(customDialogue.byNpcId)) {
@@ -301,17 +283,44 @@ describe("qa npc-dialogue: dialogue-box fit at native viewport", () => {
       authoredPages.push({ location: `added.${npc.id}#${index}`, text })
     );
   }
+  const seenFallbackReferences = new Set<string>();
+  for (const npc of world.npcs) {
+    if (!npc.interactable || !npc.textPointer || seenFallbackReferences.has(npc.textPointer)) {
+      continue;
+    }
+    seenFallbackReferences.add(npc.textPointer);
+    buildDialogueForReference(scripts, npc.textPointer).forEach((page, index) => {
+      authoredPages.push({ location: `fallback.${npc.textPointer}#${index}`, text: page.text });
+    });
+  }
+  for (const objective of objectives.objectives) {
+    authoredPages.push({ location: `objective.${objective.id}`, text: objective.text });
+    objective.npcHints?.forEach((text, index) => {
+      authoredPages.push({ location: `objective.${objective.id}.npcHints#${index}`, text });
+    });
+  }
 
   it("has authored pages to measure", () => {
     expect(authoredPages.length).toBeGreaterThan(100);
   });
 
-  it("keeps every authored page within the 4-line dialogue window", () => {
-    const overflowing = authoredPages
-      .map((page) => ({ ...page, lines: wrappedLineCount(page.text) }))
-      .filter((page) => page.lines > VISIBLE_LINES)
-      .map((page) => `${page.location} (${page.lines} lines)`);
-    expect(overflowing).toEqual([]);
+  it("fits the full three-line text viewport inside the shipped panel", () => {
+    expect(TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.y).toBeGreaterThan(0);
+    expect(lineHeight * TALK_WINDOW_VISIBLE_LINES).toBeLessThanOrEqual(TALK_WINDOW_TEXT_HEIGHT_CSS);
+    expect(
+      TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.y + TALK_WINDOW_TEXT_HEIGHT_CSS
+    ).toBeLessThan(TALK_WINDOW_PANEL_RECT_CSS.height);
+  });
+
+  it("keeps every authored word within the shipped clean-font wrap width", () => {
+    const tooWide = authoredPages.flatMap((page) =>
+      page.text
+        .split(/\s+/)
+        .filter(Boolean)
+        .filter((word) => estimateCleanTextWidth(word, TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS) > TALK_WINDOW_WRAP_WIDTH_CSS)
+        .map((word) => `${page.location}: ${word}`)
+    );
+    expect(tooWide).toEqual([]);
   });
 });
 

@@ -87712,7 +87712,7 @@
     {
       "severity": "warning",
       "code": "world_inert_door_destinations",
-      "message": "92 map_doors.yml transition(s) have no recoverable Destination X/Y and were emitted as self-targeting inert transitions (20 escalator, 72 stairway). Examples: stairway at area 1,5 cell 29,10 (line 2270); stairway at area 1,5 cell 10,29 (line 2283); stairway at area 18,11 cell 13,5 (line 4062).",
+      "message": "72 map_doors.yml transition(s) have no recoverable Destination X/Y and were emitted as self-targeting inert transitions (72 stairway). Examples: stairway at area 1,5 cell 29,10 (line 2270); stairway at area 1,5 cell 10,29 (line 2283); stairway at area 18,11 cell 13,5 (line 4062).",
       "path": "map_doors.yml"
     },
     {

@@ -5,7 +5,7 @@ import {
   type DialogueLibraryLookup
 } from "./scriptedDialogueResolver";
 import { isGeneratedDrifellaBarkEntry } from "./customDialogueLookup";
-import { resolveScriptEvents, type EventEffect, type NpcInteraction, type ScriptCollection } from "@eb/schemas";
+import { buildDialoguePages, resolveScriptEvents, type EventEffect, type NpcInteraction, type ScriptCollection } from "@eb/schemas";
 
 export type ReferenceDialogueEvent = { kind: "dialogue"; reference: string; pages?: string[] };
 export type InlineDialogueEvent = { kind: "dialogue"; pages: string[]; reference?: never };
@@ -25,6 +25,7 @@ type CcsBehavior = {
   effects: EventEffect[];
   shopEvents: GameEvent[];
   hasChoice: boolean;
+  pages: string[];
 };
 
 export type InteractionEventDispatcher = {
@@ -117,7 +118,7 @@ function resolveCcsBehavior(
   flags: FlagReader
 ): CcsBehavior {
   if (!scripts) {
-    return { effects: [], shopEvents: [], hasChoice: false };
+    return { effects: [], shopEvents: [], hasChoice: false, pages: [] };
   }
   const resolved = resolveScriptEvents(scripts, reference, {}, {
     flags: { isSet: (flag) => Boolean(flags.isSet?.(flag)) }
@@ -138,7 +139,10 @@ function resolveCcsBehavior(
     shopEvents: [...shopIds]
       .sort((a, b) => a - b)
       .map((storeId) => ({ kind: "shop" as const, storeId })),
-    hasChoice: effects.some((effect) => effect.kind === "choice")
+    hasChoice: effects.some((effect) => effect.kind === "choice"),
+    pages: buildDialoguePages(resolved?.commands ?? [])
+      .map((page) => page.text.trim())
+      .filter(Boolean)
   };
 }
 
@@ -152,6 +156,7 @@ export function interactionEntryEvents(
     fallbackReference?: string;
     dialogueLibrary?: DialogueLibraryLookup;
     suppressOneTimeEffects?: boolean;
+    guidancePage?: string;
   } = {}
 ): GameEvent[] {
   if (!entry) {
@@ -162,7 +167,10 @@ export function interactionEntryEvents(
   const events: GameEvent[] = [];
   const pages = resolveCustomDialoguePages(entry, options.dialogueLibrary);
   if (pages && pages.length > 0) {
-    events.push({ kind: "dialogue", pages });
+    events.push({
+      kind: "dialogue",
+      pages: options.guidancePage ? [...pages, options.guidancePage] : pages
+    });
   } else if ((entry.pages || entry.ref) && options.fallbackReference) {
     events.push({ kind: "dialogue", reference: options.fallbackReference });
   }
@@ -194,12 +202,14 @@ export function interactionEntryEvents(
 export function addedNpcInteractionEvents(
   npc: { npcId: number; interaction?: NpcInteraction },
   dialogueLibrary?: DialogueLibraryLookup,
-  flags?: FlagReader
+  flags?: FlagReader,
+  guidancePage?: string
 ): GameEvent[] {
   const flag = talkedFlag(npc.npcId);
   const events = interactionEntryEvents(npc.interaction, {
     dialogueLibrary,
-    suppressOneTimeEffects: flags?.has(flag) ?? false
+    suppressOneTimeEffects: flags?.has(flag) ?? false,
+    guidancePage
   });
   if (events.length === 0) {
     return [];
@@ -255,7 +265,8 @@ export function interactionEvents(
   flags: FlagReader,
   customDialogue?: CustomDialogueLookup,
   dialogueLibrary?: DialogueLibraryLookup,
-  scripts?: ScriptCollection
+  scripts?: ScriptCollection,
+  guidancePage?: string
 ): GameEvent[] {
   const flag = talkedFlag(npc.npcId);
   const hasEventFlag = npc.eventFlag !== undefined && npc.eventFlag > 0;
@@ -274,8 +285,8 @@ export function interactionEvents(
     return [
       pages && pages.length > 0
         ? (behavior.hasChoice
-            ? { kind: "dialogue" as const, reference, pages }
-            : { kind: "dialogue" as const, pages })
+            ? { kind: "dialogue" as const, reference, pages: guidancePage ? [...pages, guidancePage] : pages }
+            : { kind: "dialogue" as const, pages: guidancePage ? [...pages, guidancePage] : pages })
         : { kind: "dialogue" as const, reference },
       ...(behavior.hasChoice ? [] : behavior.shopEvents),
       { kind: "setFlag", flag }
@@ -285,9 +296,18 @@ export function interactionEvents(
     ...interactionEntryEvents(customEntry, {
       fallbackReference: customEntry ? reference : undefined,
       dialogueLibrary,
-      suppressOneTimeEffects: flags.has(flag)
+      suppressOneTimeEffects: flags.has(flag),
+      guidancePage
     }),
-    ...(customEntry ? [] : [{ kind: "dialogue" as const, reference }]),
+    ...(customEntry
+      ? []
+      : [{
+          kind: "dialogue" as const,
+          reference,
+          ...(guidancePage
+            ? { pages: [...resolveCcsBehavior(reference, scripts, flags).pages, guidancePage] }
+            : {})
+        }]),
     { kind: "setFlag", flag }
   ];
 }

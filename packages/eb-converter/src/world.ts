@@ -1005,12 +1005,82 @@ function inertDoorEntries(
   entries: MapDoorEntry[],
   mapWidthTiles: number,
   mapHeightTiles: number,
-  context: DoorDestinationContext
+  context: DoorDestinationContext,
+  synthesizedDestinations: ReadonlyMap<MapDoorEntry, { x: number; y: number }>
 ): MapDoorEntry[] {
   return entries.filter((entry) =>
     WORLD_DOOR_TYPES.has(entry.type) &&
-    doorDestinationToWorldPixel(entry, mapWidthTiles, mapHeightTiles, context) === undefined
+    resolvedDoorDestination(
+      entry,
+      mapWidthTiles,
+      mapHeightTiles,
+      context,
+      synthesizedDestinations
+    ) === undefined
   );
+}
+
+const ESCALATOR_DIRECTION_VECTOR: Readonly<Record<string, { x: -1 | 1; y: -1 | 1 }>> = {
+  ne: { x: 1, y: -1 },
+  nw: { x: -1, y: -1 },
+  se: { x: 1, y: 1 },
+  sw: { x: -1, y: 1 }
+};
+
+/**
+ * CoilSnake escalator rows store geometry rather than explicit destinations:
+ * one directional mover and one `nowhere` endpoint on the same diagonal.
+ * Pair those rows reciprocally so either end transports the player.
+ */
+function synthesizeEscalatorDestinations(
+  entries: readonly MapDoorEntry[]
+): Map<MapDoorEntry, { x: number; y: number }> {
+  const escalators = entries.filter((entry) => entry.type === "escalator");
+  const endpoints = escalators.filter((entry) => entry.direction === "nowhere");
+  const destinations = new Map<MapDoorEntry, { x: number; y: number }>();
+  const claimedEndpoints = new Set<MapDoorEntry>();
+
+  for (const mover of escalators) {
+    const vector = mover.direction ? ESCALATOR_DIRECTION_VECTOR[mover.direction] : undefined;
+    if (!vector) {
+      continue;
+    }
+    const from = doorTriggerToWorldPixel(mover);
+    const candidates = endpoints
+      .filter((endpoint) => !claimedEndpoints.has(endpoint))
+      .map((endpoint) => {
+        const point = doorTriggerToWorldPixel(endpoint);
+        const dx = point.x - from.x;
+        const dy = point.y - from.y;
+        return { endpoint, point, dx, dy, distance: Math.abs(dx) };
+      })
+      .filter(({ dx, dy }) =>
+        dx !== 0 &&
+        Math.abs(dx) === Math.abs(dy) &&
+        Math.sign(dx) === vector.x &&
+        Math.sign(dy) === vector.y
+      )
+      .sort((a, b) => a.distance - b.distance || a.endpoint.line - b.endpoint.line);
+    const match = candidates[0];
+    if (!match) {
+      continue;
+    }
+    claimedEndpoints.add(match.endpoint);
+    destinations.set(mover, match.point);
+    destinations.set(match.endpoint, from);
+  }
+  return destinations;
+}
+
+function resolvedDoorDestination(
+  entry: MapDoorEntry,
+  mapWidthTiles: number,
+  mapHeightTiles: number,
+  context: DoorDestinationContext,
+  synthesizedDestinations: ReadonlyMap<MapDoorEntry, { x: number; y: number }>
+): { x: number; y: number } | undefined {
+  return doorDestinationToWorldPixel(entry, mapWidthTiles, mapHeightTiles, context)
+    ?? synthesizedDestinations.get(entry);
 }
 
 function pushInertDoorWarning(
@@ -1018,9 +1088,16 @@ function pushInertDoorWarning(
   mapWidthTiles: number,
   mapHeightTiles: number,
   context: DoorDestinationContext,
+  synthesizedDestinations: ReadonlyMap<MapDoorEntry, { x: number; y: number }>,
   warnings: Issue[]
 ): void {
-  const inert = inertDoorEntries(entries, mapWidthTiles, mapHeightTiles, context);
+  const inert = inertDoorEntries(
+    entries,
+    mapWidthTiles,
+    mapHeightTiles,
+    context,
+    synthesizedDestinations
+  );
   if (inert.length === 0) {
     return;
   }
@@ -1046,13 +1123,19 @@ function emitWorldDoors(
   mapHeightTiles: number,
   context: DoorDestinationContext
 ): WorldDoor[] {
+  const synthesizedDestinations = synthesizeEscalatorDestinations(entries);
   return entries
     .filter((entry) => WORLD_DOOR_TYPES.has(entry.type))
     .map((entry) => {
       const worldPixel = doorTriggerToWorldPixel(entry);
-      const destinationWorldPixel = doorDestinationToWorldPixel(entry, mapWidthTiles, mapHeightTiles, context);
-      // CoilSnake stairway/escalator rows do not carry Destination X/Y fields.
-      // Keep a uniform runtime shape by making those trigger-only entries self-targeting.
+      const destinationWorldPixel = resolvedDoorDestination(
+        entry,
+        mapWidthTiles,
+        mapHeightTiles,
+        context,
+        synthesizedDestinations
+      );
+      // Keep a uniform runtime shape for any source row that still cannot be paired.
       return {
         type: entry.type as WorldDoor["type"],
         worldPixel,
@@ -1081,8 +1164,9 @@ export async function buildWorldDoors(options: {
   const mapRows = mapTilesSource ? parseMapTiles(mapTilesSource) : [];
   const mapHeightTiles = mapRows.length || DEFAULT_MAP_HEIGHT_TILES;
   const mapWidthTiles = mapRows[0]?.length || DEFAULT_MAP_WIDTH_TILES;
+  const entries = parseMapDoors(mapDoorsSource);
   return emitWorldDoors(
-    parseMapDoors(mapDoorsSource),
+    entries,
     mapWidthTiles,
     mapHeightTiles,
     doorDestinationContext({
@@ -1717,7 +1801,14 @@ async function buildFullWorldArtifacts(options: {
   const sheetByGroup = attachSheetsToNpcs(npcs, spriteBuild.sheets);
   const mapDoors = mapDoorsSource ? parseMapDoors(mapDoorsSource) : [];
   const doorTypes = countDoorTypes(mapDoors);
-  pushInertDoorWarning(mapDoors, mapWidthTiles, mapHeightTiles, doorDestinations, warnings);
+  pushInertDoorWarning(
+    mapDoors,
+    mapWidthTiles,
+    mapHeightTiles,
+    doorDestinations,
+    synthesizeEscalatorDestinations(mapDoors),
+    warnings
+  );
   const doors = emitWorldDoors(mapDoors, mapWidthTiles, mapHeightTiles, doorDestinations);
 
   const world = WorldChunkedSchema.parse({

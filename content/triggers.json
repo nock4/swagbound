@@ -955,7 +955,7 @@
    "id": "milady-final",
    "comment": "ENDGAME BOSS: MILADY herself, manifest as the Ego Orb (group 172). The swarm's self-image, the one file that reads back. Appears in the cleared plaza once raid:morningside:cleared; unescapable; enemy 127 stat-boosted for a final-boss. Sets milady:unmade.",
    "boss": {
-    "x": 1796,
+    "x": 1808,
     "y": 1290,
     "facing": "down"
    },

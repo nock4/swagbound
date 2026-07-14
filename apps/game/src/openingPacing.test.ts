@@ -6,7 +6,6 @@ import {
   OPENING_KNOCK_POST_SFX_HOLD_MS,
   OPENING_KNOCK_SFX_PATTERN_MS,
   OPENING_KNOCK_SFX_TO_DIALOGUE_MS,
-  OPENING_SHOT_ZERO_CENTER,
   clampOpeningFlyoverPoint,
   openingFlyoverNightRect
 } from "./openingPacing";
@@ -19,9 +18,11 @@ import {
  * window at each sampled pan position, from the same data the game renders:
  * generated world.json (NPCs, doors, collision) + stamped building rects.
  *
- * Calibration (2026-07-09 scan): every good window scores forestish <= 0.23 with
+ * Calibration (2026-07-09 scan): compact town shots score forestish <= 0.23 with
  * npcs+doors >= 3 or buildings >= 0.2 coverage; the old bad eastern-edge shot
- * scores forestish 0.69-0.87 with zero content. Thresholds sit between with margin.
+ * scores forestish 0.69-0.87 with zero content. The continuous arcade-to-house
+ * route deliberately crosses the scenic cliff road at 0.56, frame-verified on
+ * 2026-07-14; it still has NPCs and a real route, unlike map-edge void.
  */
 const world = JSON.parse(
   readFileSync(new URL("../public/generated/world.json", import.meta.url), "utf8")
@@ -93,12 +94,9 @@ function scoreWindow(cx: number, cy: number): WindowScore {
   };
 }
 
-/** Every camera center the player can see during the cinematic: the era-title
- * hold plus five samples along each pan. */
+/** Every camera center the player can see during the continuous cinematic. */
 function sampledCenters(): { x: number; y: number; label: string }[] {
-  const centers: { x: number; y: number; label: string }[] = [
-    { x: OPENING_SHOT_ZERO_CENTER.x, y: OPENING_SHOT_ZERO_CENTER.y, label: "shot zero (era title)" }
-  ];
+  const centers: { x: number; y: number; label: string }[] = [];
   OPENING_FLYOVER_SHOTS.forEach((shot, i) => {
     for (const t of [0, 0.25, 0.5, 0.75, 1]) {
       centers.push({
@@ -126,7 +124,7 @@ describe("opening flyover pacing", () => {
       expect(
         s.forestFrac,
         `${c.label} (${c.x},${c.y}) is ${Math.round(s.forestFrac * 100)}% non-building solids (forest/edge)`
-      ).toBeLessThanOrEqual(0.4);
+      ).toBeLessThanOrEqual(0.6);
     }
   });
 
@@ -136,7 +134,6 @@ describe("opening flyover pacing", () => {
         expect(clampOpeningFlyoverPoint(point)).toEqual(point);
       }
     }
-    expect(clampOpeningFlyoverPoint(OPENING_SHOT_ZERO_CENTER)).toEqual(OPENING_SHOT_ZERO_CENTER);
   });
 
   it("covers every visible window with the night tint rect", () => {
@@ -153,19 +150,8 @@ describe("opening flyover pacing", () => {
     }
   });
 
-  it("preserves three distinct 9-second pan regions", () => {
-    expect(OPENING_FLYOVER_SHOTS.map((shot) => shot.duration)).toEqual([9_000, 9_000, 9_000]);
-    const mids = OPENING_FLYOVER_SHOTS.map((s) => ({ x: (s.from.x + s.to.x) / 2, y: (s.from.y + s.to.y) / 2 }));
-    for (let i = 0; i < mids.length; i++) {
-      for (let j = i + 1; j < mids.length; j++) {
-        const d = Math.hypot(mids[i].x - mids[j].x, mids[i].y - mids[j].y);
-        expect(d, `pans ${i + 1} and ${j + 1} overlap (${Math.round(d)}px apart)`).toBeGreaterThan(400);
-      }
-    }
-    // The era-title hold deliberately bookends the final pan's market strip (20+
-    // seconds apart), so it carries no distance constraint; its window still has to
-    // pass the density/forest checks above, and distinctness is judged by the
-    // recorded frame pass (tmp/flyover-frames.mjs).
+  it("preserves one continuous 20-second pan", () => {
+    expect(OPENING_FLYOVER_SHOTS.map((shot) => shot.duration)).toEqual([20_000]);
   });
 
   it("waits for the knock pattern plus the post-knock beat before dialogue", () => {

@@ -6,6 +6,7 @@ import {
   doorActiveForFlags,
   feetInDoorCell,
   isMessageDoor,
+  isDistinctWarpTransition,
   messageDoorDialogueReference,
   resolveAdjacentDoorIntentTrigger,
   resolveDoorWarpLanding,
@@ -71,6 +72,7 @@ describe("message doors", () => {
   });
 
   it("keeps a normal far-warp door on the warp path", () => {
+    expect(isDistinctWarpTransition(door)).toBe(true);
     expect(isMessageDoor(door)).toBe(false);
     expect(messageDoorDialogueReference(door)).toBeUndefined();
     expect(routeDoorTrigger({ door, suppressUntilClear: true })).toEqual({ kind: "warp" });
@@ -84,9 +86,22 @@ describe("message doors", () => {
     };
     delete noPointerDoor.textPointer;
 
+    expect(isDistinctWarpTransition(noPointerDoor)).toBe(false);
     expect(isMessageDoor(noPointerDoor)).toBe(false);
     expect(messageDoorDialogueReference(noPointerDoor)).toBeUndefined();
     expect(routeDoorTrigger({ door: noPointerDoor, suppressUntilClear: true })).toEqual({ kind: "warp" });
+  });
+
+  it("classifies long escalator transport as a distinct warp transition", () => {
+    const escalator: WorldDoor = {
+      ...door,
+      type: "escalator",
+      worldPixel: { x: 4760, y: 6232 },
+      destinationWorldPixel: { x: 4912, y: 6384 }
+    };
+
+    expect(isDistinctWarpTransition(escalator)).toBe(true);
+    expect(isMessageDoor(escalator)).toBe(false);
   });
 });
 
@@ -475,6 +490,37 @@ describe("door warp landing guard", () => {
 
     expect(landing.walkable).toBe(true);
     expect(landing.point).not.toEqual(destination);
+  });
+
+  it("aligns a door arrival to a nearby lane with a straight cardinal return", () => {
+    const solidRows = rows(GRID.width, GRID.height, []);
+    const destination = { x: 40, y: 56 };
+    const returnDoor: WorldDoor = {
+      ...door,
+      worldPixel: { x: 64, y: 32 },
+      destinationWorldPixel: destination
+    };
+
+    const landing = resolveDoorWarpLanding(destination, solidRows, GRID, {
+      doors: [returnDoor],
+      maxAlignmentRingCells: 4
+    });
+
+    expect(landing).toEqual({ point: { x: 40, y: 40 }, walkable: true });
+  });
+
+  it("preserves a door arrival that already has a straight cardinal return", () => {
+    const solidRows = rows(GRID.width, GRID.height, []);
+    const destination = { x: 40, y: 40 };
+    const returnDoor: WorldDoor = {
+      ...door,
+      worldPixel: { x: 64, y: 32 },
+      destinationWorldPixel: destination
+    };
+
+    const landing = resolveDoorWarpLanding(destination, solidRows, GRID, { doors: [returnDoor] });
+
+    expect(landing).toEqual({ point: destination, walkable: true });
   });
 });
 

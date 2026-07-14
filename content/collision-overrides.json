@@ -50,6 +50,13 @@
    "w": 24,
    "h": 16,
    "note": "[fix-batch-2] clear return-door trigger approach for door 6920,392 (same hard-lock room; w=24 h=16: row-48 wall solidity extends past the doorway, PLAYER_FOOT_BOX top=-6 spans two 8px rows)"
+  },
+  {
+   "x": 1800,
+   "y": 1248,
+   "w": 8,
+   "h": 24,
+   "note": "[milady-approach] clear the wall-edge column that catches PLAYER_FOOT_BOX on the straight-south finale approach"
   }
  ],
  "solids": [

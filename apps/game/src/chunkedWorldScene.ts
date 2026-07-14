@@ -31,6 +31,7 @@ import {
 import { expandBattleGroupEnemies } from "./battleGroups";
 import {
   messageDoorDialogueReference,
+  isDistinctWarpTransition,
   resolveAdjacentDoorIntentTrigger,
   resolveDoorWarpLanding,
   resolveDoorIntentTrigger,
@@ -166,7 +167,7 @@ import {
 } from "./newGameOpening";
 import { equipmentSlotForItemType, PartyState, type PartyStateSnapshot } from "./partyState";
 import { advanceTimedDeliveries, completeTimedDelivery, createTimedDeliveryRuntimeState, type TimedDeliveryRuntimeState } from "./timedDelivery";
-import { currentObjective } from "./objectives";
+import { currentObjective, currentObjectiveNpcHint } from "./objectives";
 import { createBattleSfx, type BattleSfx, type BattleSfxCue } from "./audio/battleSfx";
 import { hasStatus, STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
 import type { OverworldStatusHudView } from "./overworldStatusHud";
@@ -316,7 +317,9 @@ import {
   OPENING_ERA_TITLE,
   OPENING_ERA_TITLE_FADE_MS,
   OPENING_ERA_TITLE_HOLD_MS,
+  OPENING_FLYOVER_END_ZOOM,
   OPENING_FLYOVER_SHOTS,
+  OPENING_FLYOVER_ZOOM_IN_MS,
   OPENING_FLYOVER_ZOOM,
   OPENING_GET_UP_WALK_MS,
   OPENING_KNOCK_DELAY_AFTER_WAKE_MS,
@@ -324,8 +327,6 @@ import {
   OPENING_RUMBLE_AMPLITUDE,
   OPENING_RUMBLE_DURATION_MS,
   OPENING_RUMBLE_INTERVAL_MS,
-  OPENING_SHOT_ZERO_CENTER,
-  OPENING_SHOT_ZERO_HOLD_MS,
   OPENING_WAKE_FADE_IN_MS,
   OPENING_WAKE_SIGNAL_FIRST_FLASH_MS,
   OPENING_WAKE_SIGNAL_SECOND_FLASH_MS,
@@ -4273,7 +4274,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private applyDoorWarp(destination: EventWarpDestination, options: DoorWarpOptions = {}): void {
-    const landing = this.resolveWalkableWarpPoint(destination.worldPixel ?? destination);
+    const alignToDoors = options.kind === "door" || options.kind === "stairway" || options.kind === "escalator";
+    const landing = this.resolveWalkableWarpPoint(destination.worldPixel ?? destination, alignToDoors);
     if (!landing.walkable) {
       this.warnInvalidDoorWarp(destination, landing.point, options.triggerWorldPixel);
       return;
@@ -4289,7 +4291,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private applyDoorWarpInstant(
     destination: EventWarpDestination,
-    landing = this.resolveWalkableWarpPoint(destination.worldPixel ?? destination),
+    landing: DoorWarpLanding,
     options: DoorWarpOptions = {}
   ): boolean {
     if (!landing.walkable) {
@@ -6163,7 +6165,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return addedNpcInteractionEvents(
         { npcId: npc.npcId, interaction: npc.addedInteraction },
         this.data_.dialogueLibrary,
-        this.gameFlags
+        this.gameFlags,
+        this.currentNpcGuidance(npc.npcId)
       );
     }
     return interactionEvents(
@@ -6172,8 +6175,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.gameFlags,
       this.data_.customDialogue,
       this.data_.dialogueLibrary,
-      this.data_.scripts
+      this.data_.scripts,
+      this.currentNpcGuidance(npc.npcId)
     );
+  }
+
+  private currentNpcGuidance(npcId: number): string | undefined {
+    return currentObjectiveNpcHint(this.gameFlags, this.data_.objectives, npcId);
   }
 
   private overworldInteractableById(id: string | undefined): OverworldInteractable | undefined {
@@ -7183,8 +7191,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const flyNight = this.add
       .rectangle(nightRect.x, nightRect.y, nightRect.width, nightRect.height, 0x0a1236, 0.62)
       .setDepth(130000);
-    // Each of the three overhead shots holds one line of narration, pinned to the bottom
-    // of the moving view (repositioned every frame in the pan tween).
+    // The single continuous establishing move carries one narration line pinned
+    // to the bottom of the moving view.
     const caption = this.add
       .text(1900, 1650, "", {
         fontFamily: CLEAN_UI_FONT_FAMILY,
@@ -7199,7 +7207,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       .setAlpha(0)
       .setShadow(0, 1, "#000000", 5);
     const eraTitle = this.add
-      .text(OPENING_SHOT_ZERO_CENTER.x, OPENING_SHOT_ZERO_CENTER.y, OPENING_ERA_TITLE, {
+      .text(0, 0, OPENING_ERA_TITLE, {
         fontFamily: CLEAN_UI_FONT_FAMILY,
         fontSize: "14px",
         color: "#ffffff",
@@ -7220,8 +7228,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     };
     let rumbleTimer: Phaser.Time.TimerEvent | undefined;
 
-    // Three overhead shots of Morningside at night, each carrying one beat of narration,
-    // separated by a dip to black; the last dip descends to Bosch's bed.
+    // One uninterrupted arcade-to-house move. The camera closes in on Bosch's
+    // house at the end, then the fade carries directly into the bedroom.
     const shots = OPENING_FLYOVER_SHOTS;
 
     const finish = (): void => {
@@ -7277,44 +7285,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const beginShot = (i: number, from: { x: number; y: number }, to: { x: number; y: number }): void => {
       const shot = shots[i];
       placeCaption();
-      caption.setText(shot.text).setAlpha(0);
-      cam.fadeIn(600, 0, 0, 0);
-      this.tweens.add({ targets: caption, alpha: 1, duration: 600 });
-      const proxy = { t: 0 };
-      this.tweens.add({
-        targets: proxy,
-        t: 1,
-        duration: shot.duration,
-        ease: "Sine.easeInOut",
-        onUpdate: () => {
-          setAnchor(
-            from.x + (to.x - from.x) * proxy.t,
-            from.y + (to.y - from.y) * proxy.t
-          );
-          this.refreshStreaming();
-          placeCaption();
-        },
-        onComplete: () => {
-          this.tweens.add({ targets: caption, alpha: 0, duration: 600 });
-          cam.fadeOut(600, 0, 0, 0);
-          cam.once("camerafadeoutcomplete", () => runShot(i + 1));
-        }
-      });
-    };
-
-    const runShotZero = (): void => {
-      setAnchor(OPENING_SHOT_ZERO_CENTER.x, OPENING_SHOT_ZERO_CENTER.y);
-      this.refreshStreaming(true);
-      whenChunksSettled(beginShotZero);
-    };
-
-    const beginShotZero = (): void => {
-      cam.centerOn(OPENING_SHOT_ZERO_CENTER.x, OPENING_SHOT_ZERO_CENTER.y);
-      placeCaption();
       placeEraTitle();
-      caption.setText("").setAlpha(0);
+      caption.setText(shot.text).setAlpha(0);
       eraTitle.setAlpha(1);
       cam.fadeIn(600, 0, 0, 0);
+      this.tweens.add({ targets: caption, alpha: 1, duration: 600 });
       const rumble = (): void => {
         if (this.flyoverActive) {
           this.openingSfx.resume();
@@ -7336,15 +7311,37 @@ export class ChunkedWorldScene extends Phaser.Scene {
           ease: "Sine.easeInOut"
         });
       });
-      this.time.delayedCall(OPENING_SHOT_ZERO_HOLD_MS, () => {
-        rumbleTimer?.remove(false);
-        rumbleTimer = undefined;
-        cam.fadeOut(600, 0, 0, 0);
-        cam.once("camerafadeoutcomplete", () => runShot(0));
+      this.time.delayedCall(Math.max(0, shot.duration - OPENING_FLYOVER_ZOOM_IN_MS), () => {
+        if (this.flyoverActive) {
+          cam.zoomTo(OPENING_FLYOVER_END_ZOOM, OPENING_FLYOVER_ZOOM_IN_MS, "Sine.easeInOut");
+        }
+      });
+      const proxy = { t: 0 };
+      this.tweens.add({
+        targets: proxy,
+        t: 1,
+        duration: shot.duration,
+        ease: "Sine.easeInOut",
+        onUpdate: () => {
+          setAnchor(
+            from.x + (to.x - from.x) * proxy.t,
+            from.y + (to.y - from.y) * proxy.t
+          );
+          this.refreshStreaming();
+          placeCaption();
+          placeEraTitle();
+        },
+        onComplete: () => {
+          rumbleTimer?.remove(false);
+          rumbleTimer = undefined;
+          this.tweens.add({ targets: caption, alpha: 0, duration: 600 });
+          cam.fadeOut(600, 0, 0, 0);
+          cam.once("camerafadeoutcomplete", () => runShot(i + 1));
+        }
       });
     };
 
-    runShotZero();
+    runShot(0);
   }
 
   private startAuthoredOpeningCutsceneBeforeStartup(
@@ -9461,12 +9458,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
     };
   }
 
-  private resolveWalkableWarpPoint(destination: { x: number; y: number }): DoorWarpLanding {
+  private resolveWalkableWarpPoint(
+    destination: { x: number; y: number },
+    alignToDoors = false
+  ): DoorWarpLanding {
     return resolveDoorWarpLanding(
       this.clampSpawn(destination),
       this.solidRows,
       this.collisionGrid(),
-      { maxRingCells: 8 }
+      {
+        maxRingCells: 8,
+        ...(alignToDoors
+          ? {
+              doors: this.activeDoors().filter((door) => isDistinctWarpTransition(door)),
+              maxAlignmentRingCells: 10
+            }
+          : {})
+      }
     );
   }
 

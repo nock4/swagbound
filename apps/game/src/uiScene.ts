@@ -38,6 +38,7 @@ import {
   TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS,
   TALK_WINDOW_PANEL_RECT_CSS,
   TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS,
+  TALK_WINDOW_TEXT_HEIGHT_CSS,
   TALK_WINDOW_VISIBLE_LINES,
   TALK_WINDOW_WRAP_WIDTH_CSS,
   visibleDialogueLines
@@ -395,6 +396,10 @@ export class UiScene extends Phaser.Scene {
       y + TALK_WINDOW_TEXT_INSET_FROM_PANEL_CSS.y
     );
     this.dialogueText.setWordWrapWidth(this.dialogueTextWidth(), true);
+    // Fixed dimensions are the final containment guard: even if browser font
+    // metrics differ slightly from Phaser's wrapping estimate, glyphs cannot
+    // paint across the dialogue frame.
+    this.dialogueText.setFixedSize(this.dialogueTextWidth(), TALK_WINDOW_TEXT_HEIGHT_CSS);
     this.dialogueText.setText(
       visibleDialogueLines(this.dialogueText.getWrappedText(text), TALK_WINDOW_VISIBLE_LINES).join("\n")
     );
