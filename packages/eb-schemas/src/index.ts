@@ -518,6 +518,7 @@ export const SpriteOverrideSchema = z.object({
   displayHeight: z.number().positive().optional(),
   originX: z.number().optional(),
   originY: z.number().optional(),
+  renderLayer: z.enum(["world", "foreground"]).optional(),
   /**
    * Optional anchor metadata so future hero "special-state" effects land correctly on a custom
    * skin regardless of its art. All values are FRAME-LOCAL pixels (origin = frame top-left,
@@ -587,16 +588,74 @@ export const SpriteOverridesSchema = z.object({
   overworldByEnemyId: z.record(z.string().regex(/^\d+$/), SpriteOverrideSchema).optional()
 }).strict();
 
+export const InteriorSpriteFactionSchema = z.enum(["friendly-lsw", "hostile-milady"]);
+
+export const InteriorSpritePoolSchema = z.object({
+  images: z.array(PublicAssetPathSchema).min(1),
+  frameWidth: z.number().int().positive(),
+  frameHeight: z.number().int().positive(),
+  displayHeight: z.number().positive(),
+  originX: z.number(),
+  originY: z.number()
+}).strict();
+
+export const InteriorSpriteCastingRoomSchema = z.object({
+  id: z.string().min(1),
+  faction: InteriorSpriteFactionSchema,
+  anchors: z.array(z.object({
+    x: z.number().int().nonnegative(),
+    y: z.number().int().nonnegative()
+  }).strict()).min(1),
+  coveragePercent: z.number().int().min(0).max(100).optional(),
+  excludeNpcIds: z.array(z.number().int().nonnegative()).optional(),
+  includeNpcIds: z.array(z.number().int().nonnegative()).optional(),
+  overrideAuthoredNpcIds: z.array(z.number().int().nonnegative()).optional(),
+  fixedImage: PublicAssetPathSchema.optional(),
+  displayHeight: z.number().positive().optional(),
+  originY: z.number().optional(),
+  renderLayer: z.enum(["world", "foreground"]).optional()
+}).strict();
+
+export const InteriorSpriteCastingSchema = z.object({
+  schema: z.literal("swagbound.interior-sprite-casting.v1"),
+  comment: z.string().optional(),
+  policy: z.object({
+    defaultFaction: InteriorSpriteFactionSchema,
+    defaultCoveragePercent: z.number().int().min(0).max(100),
+    eligibleNpcTypes: z.array(z.enum(["person", "object", "item"])).min(1),
+    requireIndoor: z.boolean(),
+    requireBounded: z.boolean(),
+    preserveAuthoredByNpcId: z.boolean(),
+    preserveResolvedImageMarkers: z.array(z.string().min(1)),
+    seed: z.string().min(1)
+  }).strict(),
+  pools: z.record(InteriorSpriteFactionSchema, InteriorSpritePoolSchema),
+  rooms: z.array(InteriorSpriteCastingRoomSchema),
+  protectedNpcIds: z.array(z.number().int().nonnegative()),
+  acceptance: z.object({
+    minimumInteriorLswPercent: z.number().min(0).max(100),
+    minimumLswIndoorSharePercent: z.number().min(0).max(100),
+    minimumHostileRoomMiladyPercent: z.number().min(0).max(100)
+  }).strict()
+}).strict();
+
 const TileOverrideKeySchema = z.string().regex(/^\d+:\d+$/, "tile override keys must be <tileset>:<arrangement>");
 
 const TileOverrideEntrySchema = z.object({
   image: PublicAssetPathSchema
 }).strict();
 
+const TileCollisionOverrideEntrySchema = z.object({
+  /** Promote this tile's foreground-obscured (0x01/0x02) cells to gameplay-solid. */
+  solidForegroundCells: z.literal(true),
+  note: z.string().trim().min(1).optional()
+}).strict();
+
 export const TileOverridesSchema = z.object({
   schema: z.literal("swagbound.tile-overrides.v1"),
   comment: z.string().optional(),
-  byTile: z.record(TileOverrideKeySchema, TileOverrideEntrySchema)
+  byTile: z.record(TileOverrideKeySchema, TileOverrideEntrySchema),
+  collisionByTile: z.record(TileOverrideKeySchema, TileCollisionOverrideEntrySchema).optional()
 }).strict();
 
 export const FgClearRectSchema = z.object({
@@ -2150,6 +2209,43 @@ export const BattleDataSchema = z.object({
   warnings: z.array(ValidationIssueSchema)
 });
 
+/**
+ * Additive, high-priority corrections for the authored new-game sequence. Keeping
+ * these in their own overlay lets the opening evolve without rewriting historical
+ * dialogue and sprite-casting entries in the larger content files.
+ */
+export const OpeningClaritySchema = z.object({
+  schema: z.literal("swagbound.opening-clarity.v1"),
+  cutsceneDialogueById: z.record(z.array(z.string().trim().min(1)).min(1)).default({}),
+  storyTriggerDialogueById: z.record(z.array(z.string().trim().min(1)).min(1)).default({}),
+  objectiveTextById: z.record(z.string().trim().min(1)).default({}),
+  battleEnemyNamesById: z.record(
+    z.string().regex(/^\d+$/),
+    z.string().trim().min(1).max(32)
+  ).default({}),
+  dialogue: z.object({
+    byNpcId: z.record(CustomDialogueEntrySchema).default({}),
+    byTextPointer: z.record(CustomDialogueEntrySchema).default({})
+  }).strict(),
+  dialogueVariantsByNpcId: z.record(
+    z.string().regex(/^\d+$/),
+    z.array(z.object({
+      requireFlags: z.array(z.string().trim().min(1)).default([]),
+      blockFlags: z.array(z.string().trim().min(1)).default([]),
+      pages: z.array(z.string().trim().min(1)).min(1)
+    }).strict()).min(1)
+  ).default({}),
+  spriteOverrides: z.object({
+    byNpcId: z.record(z.string().regex(/^\d+$/), SpriteOverrideSchema).default({}),
+    byEnemyId: z.record(z.string().regex(/^\d+$/), SpriteOverrideSchema).default({}),
+    overworldByEnemyId: z.record(z.string().regex(/^\d+$/), SpriteOverrideSchema).default({})
+  }).strict(),
+  tutorialBattle: z.object({
+    enemy: BattleEnemySchema,
+    group: BattleGroupSchema
+  }).strict()
+}).strict();
+
 export const BattleRulesSchema = z.object({
   schema: z.literal("swagbound.battle-rules.v1"),
   unescapableGroups: z.array(z.number().int().nonnegative())
@@ -2544,6 +2640,9 @@ export type SpriteAnimations = z.infer<typeof SpriteAnimationsSchema>;
 export type SpriteSheetCollection = z.infer<typeof SpriteSheetCollectionSchema>;
 export type SpriteOverride = z.infer<typeof SpriteOverrideSchema>;
 export type SpriteOverrides = z.infer<typeof SpriteOverridesSchema>;
+export type InteriorSpriteFaction = z.infer<typeof InteriorSpriteFactionSchema>;
+export type InteriorSpritePool = z.infer<typeof InteriorSpritePoolSchema>;
+export type InteriorSpriteCasting = z.infer<typeof InteriorSpriteCastingSchema>;
 export type PartyHero = z.infer<typeof PartyHeroSchema>;
 export type PartySlot = z.infer<typeof PartySlotSchema>;
 export type SpriteStateName = z.infer<typeof SpriteStateNameSchema>;
@@ -2575,6 +2674,7 @@ export type EncounterMapGroup = z.infer<typeof EncounterMapGroupSchema>;
 export type EncounterSector = z.infer<typeof EncounterSectorSchema>;
 export type Encounters = z.infer<typeof EncountersSchema>;
 export type BattleData = z.infer<typeof BattleDataSchema>;
+export type OpeningClarity = z.infer<typeof OpeningClaritySchema>;
 export type BattleRules = z.infer<typeof BattleRulesSchema>;
 export type RoamerZoneCaps = z.infer<typeof RoamerZoneCapsSchema>;
 export type BattleEnemy = z.infer<typeof BattleEnemySchema>;

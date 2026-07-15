@@ -1,10 +1,15 @@
 import type { ObjectiveEntry, Objectives } from "@eb/schemas";
+import { INTRO_METEOR_BEAT_FIRED_FLAG } from "./newGameOpening";
 
 export type ObjectiveFlagReader = {
   has(flag: string): boolean;
 };
 
 const OBJECTIVE_HINTS: Readonly<Record<string, readonly string[]>> = {
+  "act1-cold-signal": [
+    "MiFella saw the other Bosch go uphill. Follow the north road to the meteor.",
+    "Start at the meteor uphill from Bosch's house. That is where the cold signal moved."
+  ],
   "act1-card-clique": [
     "The arcade crowd west of Bosch's block is passing his face around. Start there.",
     "If you want the first bad copy, follow the street west to the MONS LINK arcade."
@@ -52,6 +57,16 @@ const OBJECTIVE_HINTS: Readonly<Record<string, readonly string[]>> = {
 };
 
 export function currentObjective(flags: ObjectiveFlagReader, objectives: Objectives | undefined): ObjectiveEntry | undefined {
+  if (
+    objectives?.objectives.some((objective) => objective.id === "act1-card-clique") &&
+    !flags.has(INTRO_METEOR_BEAT_FIRED_FLAG)
+  ) {
+    return {
+      id: "act1-cold-signal",
+      when: { requireFlags: [], blockFlags: [INTRO_METEOR_BEAT_FIRED_FLAG] },
+      text: "Follow the road uphill and inspect the cold signal near the meteor."
+    };
+  }
   const matches = (objective: ObjectiveEntry): boolean =>
     objective.when.requireFlags.every((flag) => flags.has(flag)) &&
     objective.when.blockFlags.every((flag) => !flags.has(flag));

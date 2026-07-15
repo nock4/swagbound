@@ -16,6 +16,10 @@ EarthBound-parity in the ENGINE remains the foundation and the quality bar (batt
 math, movement, doors, menus follow EB semantics; see the rom-truth/parity program in
 `docs/` and memory). Parity work serves Swagbound, not the other way around.
 
+Current narrative authority: [Canonical Story Architecture](design/canonical-story-architecture.md).
+It defines the campaign's mystery contract, reveal order, beat-level knowledge
+changes, NPC story states, and comprehension gates for future content work.
+
 ## Licensing boundary (unchanged, always)
 
 - The EarthBound ROM and its CoilSnake decompile are **local, gitignored build

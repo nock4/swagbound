@@ -184,6 +184,21 @@ describe("OpeningSfx", () => {
     expect(context.oscillators).toHaveLength(4);
   });
 
+  it("pairs the bedroom signal with an electronic lock-on cue", async () => {
+    vi.stubGlobal("AudioContext", FakeAudioContext);
+    vi.resetModules();
+    const { createOpeningSfx } = await import("./openingSfx");
+
+    const sfx = createOpeningSfx();
+    sfx.signalLock();
+
+    const context = FakeAudioContext.instances[0];
+    expect(context.oscillators).toHaveLength(2);
+    expect(context.bufferSources).toHaveLength(1);
+    expect(context.oscillators[0].frequency.events[0]).toEqual({ kind: "set", value: 310, time: 10 });
+    expect(context.oscillators[0].frequency.events[1]).toEqual({ kind: "exponential", value: 880, time: 10.42 });
+  });
+
   it("tries to resume a suspended context without throwing", async () => {
     vi.stubGlobal("AudioContext", FakeAudioContext);
     FakeAudioContext.nextState = "suspended";

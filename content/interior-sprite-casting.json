@@ -1,0 +1,189 @@
+{
+  "schema": "swagbound.interior-sprite-casting.v1",
+  "comment": "Friendly bounded interiors use approved Little Swag World residents. Explicitly hostile rooms use approved Milady-family residents. Existing authored per-NPC identities always win.",
+  "policy": {
+    "defaultFaction": "friendly-lsw",
+    "defaultCoveragePercent": 77,
+    "eligibleNpcTypes": [
+      "person"
+    ],
+    "requireIndoor": true,
+    "requireBounded": true,
+    "preserveAuthoredByNpcId": true,
+    "preserveResolvedImageMarkers": [
+      "milady",
+      "malady",
+      "midlady",
+      "mylady",
+      "vilady"
+    ],
+    "seed": "swagbound-interior-casting-2026-07-15"
+  },
+  "pools": {
+    "friendly-lsw": {
+      "images": [
+        "assets/swagbound/overworld-npc/lsw-1038-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1120-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1144-ow.png",
+        "assets/swagbound/overworld-npc/lsw-120-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1219-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1245-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1258-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1262-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1282-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1297-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1306-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1317-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1328-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1362-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1466-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1471-ow.png",
+        "assets/swagbound/overworld-npc/lsw-153-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1576-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1596-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1656-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1663-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1687-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1706-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1708-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1776-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1805-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1814-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1825-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1844-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1852-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1856-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1886-ow.png",
+        "assets/swagbound/overworld-npc/lsw-192-ow.png",
+        "assets/swagbound/overworld-npc/lsw-1946-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2014-ow.png",
+        "assets/swagbound/overworld-npc/lsw-202-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2075-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2085-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2098-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2125-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2130-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2132-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2202-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2211-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2231-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2273-ow.png",
+        "assets/swagbound/overworld-npc/lsw-228-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2374-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2379-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2383-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2413-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2420-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2463-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2501-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2577-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2590-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2668-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2673-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2695-ow.png",
+        "assets/swagbound/overworld-npc/lsw-2758-ow.png"
+      ],
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "hostile-milady": {
+      "images": [
+        "assets/swagbound/overworld-npc/malady-001-ow.png",
+        "assets/swagbound/overworld-npc/malady-002-ow.png",
+        "assets/swagbound/overworld-npc/malady-005-ow.png",
+        "assets/swagbound/overworld-npc/midladys-fumogeddon-001-ow.png",
+        "assets/swagbound/overworld-npc/midladys-fumogeddon-002-ow.png",
+        "assets/swagbound/overworld-npc/midladys-fumogeddon-003-ow.png",
+        "assets/swagbound/overworld-npc/midladys-fumogeddon-004-ow.png",
+        "assets/swagbound/overworld-npc/midladys-fumogeddon-005-ow.png",
+        "assets/swagbound/overworld-npc/mylady-001-ow.png",
+        "assets/swagbound/overworld-npc/mylady-002-ow.png",
+        "assets/swagbound/overworld-npc/mylady-003-ow.png",
+        "assets/swagbound/overworld-npc/mylady-004-ow.png",
+        "assets/swagbound/overworld-npc/mylady-005-ow.png",
+        "assets/swagbound/overworld-npc/promo-midladys-fumogeddon-001.png",
+        "assets/swagbound/overworld-npc/promo-midladys-fumogeddon-002.png",
+        "assets/swagbound/overworld-npc/promo-midladys-fumogeddon-003.png",
+        "assets/swagbound/overworld-npc/promo-midladys-fumogeddon-005.png",
+        "assets/swagbound/overworld-npc/vilady-maker-002-ow.png",
+        "assets/swagbound/overworld-npc/vilady-maker-004-ow.png",
+        "assets/swagbound/overworld-npc/vilady-maker-005-ow.png"
+      ],
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    }
+  },
+  "rooms": [
+    {
+      "id": "morningside-drug-store",
+      "faction": "friendly-lsw",
+      "anchors": [
+        {
+          "x": 7872,
+          "y": 1480
+        }
+      ],
+      "coveragePercent": 100,
+      "displayHeight": 24,
+      "originY": 1,
+      "overrideAuthoredNpcIds": [
+        8,
+        9
+      ]
+    },
+    {
+      "id": "morningside-arcade",
+      "faction": "hostile-milady",
+      "anchors": [
+        {
+          "x": 7824,
+          "y": 704
+        }
+      ],
+      "coveragePercent": 100,
+      "renderLayer": "world"
+    },
+    {
+      "id": "late-game-club",
+      "faction": "hostile-milady",
+      "anchors": [
+        {
+          "x": 6864,
+          "y": 8624
+        }
+      ],
+      "coveragePercent": 100,
+      "renderLayer": "world",
+      "overrideAuthoredNpcIds": [
+        231,
+        232,
+        233,
+        234,
+        235,
+        236,
+        237,
+        238,
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246
+      ]
+    }
+  ],
+  "protectedNpcIds": [],
+  "acceptance": {
+    "minimumInteriorLswPercent": 60,
+    "minimumLswIndoorSharePercent": 65,
+    "minimumHostileRoomMiladyPercent": 80
+  }
+}

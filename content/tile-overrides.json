@@ -1,5 +1,26 @@
 {
   "schema": "swagbound.tile-overrides.v1",
-  "comment": "Empty by default. byTile keyed <tileset>:<arrangement> -> {image:32x32 path rel to public}. Tile overrides are GLOBAL per tileset:arrangement (every instance of that tile, map-wide).",
-  "byTile": {}
+  "comment": "byTile replaces 32x32 art. collisionByTile promotes reviewed walk-behind cells to solid. Both are GLOBAL per tileset:arrangement (every instance map-wide).",
+  "byTile": {},
+  "collisionByTile": {
+    "1:656": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:657": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:658": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:659": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:660": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:661": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:662": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:663": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:664": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:665": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:666": { "solidForegroundCells": true, "note": "Dense tree canopy family" },
+    "1:187": { "solidForegroundCells": true, "note": "Isolated broadleaf tree family" },
+    "1:188": { "solidForegroundCells": true, "note": "Isolated broadleaf tree family" },
+    "1:189": { "solidForegroundCells": true, "note": "Isolated broadleaf tree family" },
+    "1:263": { "solidForegroundCells": true, "note": "Isolated broadleaf tree family" },
+    "1:282": { "solidForegroundCells": true, "note": "Isolated broadleaf tree family" },
+    "1:238": { "solidForegroundCells": true, "note": "Isolated tall tree family" },
+    "1:264": { "solidForegroundCells": true, "note": "Isolated tall tree family" },
+    "1:267": { "solidForegroundCells": true, "note": "Isolated tall tree family" }
+  }
 }

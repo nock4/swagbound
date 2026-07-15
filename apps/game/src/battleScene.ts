@@ -228,7 +228,7 @@ const BATTLE_FONT_SIZE = 14;
 const BATTLE_DESCRIPTION_FONT_SIZE = 13;
 const BATTLE_STATUS_NAME_FONT_SIZE = 13;
 const BATTLE_STATUS_LABEL_FONT_SIZE = 11;
-const BATTLE_STATUS_VALUE_FONT_SIZE = 17;
+const BATTLE_STATUS_VALUE_FONT_SIZE = 20;
 const BATTLE_LEFT_MARGIN = 16;
 const BATTLE_LINE_HEIGHT = cleanLineHeight(BATTLE_FONT_SIZE, BATTLE_LINE_SPACING);
 // Text paddings clear the true-thickness EB frame (16 CSS px at borderScale 2)
@@ -329,6 +329,11 @@ const BATTLE_STATUS_LABEL_WIDTH = 20;
 const BATTLE_STATUS_BAR_HEIGHT = 5;
 const BATTLE_STATUS_BAR_X = 28;
 const BATTLE_STATUS_BAR_VALUE_GAP = 4;
+// The loaded EarthBound font has a 26px line box at this size. Keep the entire
+// glyph inside the odometer viewport; the old fontSize+2 crop sliced the tops
+// and bottoms off every digit and reduced HP/PP values to punctuation-like marks.
+const BATTLE_STATUS_METER_HEIGHT = 29;
+const BATTLE_STATUS_METER_INSET_Y = 2;
 const ACTION_ADVANCE_DELAY_MS = 1650;
 const ACTION_ADVANCE_MIN_DELAY_MS = 1150;
 const ACTION_ADVANCE_MAX_DELAY_MS = 2400;
@@ -4164,17 +4169,25 @@ export class BattleScene extends Phaser.Scene {
   }
 
   private createStatusOdometer(metrics: ReturnType<BattleScene["statusBarMetrics"]>): OdometerDisplay {
+    const meterY = metrics.valueY - 5;
     return new OdometerDisplay({
-      // Window = the meter-box interior (box: valueX-6/valueY-1, +10/+4 pads).
-      x: metrics.valueX - 4,
-      y: metrics.valueY,
-      width: metrics.valueWidth + 6,
-      height: BATTLE_STATUS_VALUE_FONT_SIZE + 2,
-      createDigitText: () =>
-        this.createStatusText(-1000, -1000, "0", 32, BATTLE_STATUS_VALUE_FONT_SIZE, 400)
+      // Window is the meter-box interior. Its height follows the font's real
+      // line box rather than the nominal font size, so settled digits are not cropped.
+      x: metrics.valueX - 2,
+      y: meterY + BATTLE_STATUS_METER_INSET_Y,
+      width: metrics.valueWidth + 4,
+      height: BATTLE_STATUS_METER_HEIGHT - BATTLE_STATUS_METER_INSET_Y * 2,
+      createDigitText: () => {
+        const digit = this.createStatusText(-1000, -1000, "0", 32, BATTLE_STATUS_VALUE_FONT_SIZE, 400)
           .setColor(EB_STATUS_METER_TEXT)
           .setFixedSize(0, 0)
-          .setDepth(22)
+          .setDepth(22);
+        // OdometerDisplay crops in the Text object's local coordinate space.
+        // A 2x text texture made those crop units address only half the glyph
+        // in each axis, leaving the HP/PP digits as illegible fragments.
+        digit.setResolution(1);
+        return digit;
+      }
     });
   }
 
@@ -4279,12 +4292,13 @@ export class BattleScene extends Phaser.Scene {
       const content = this.statusCardContentRect(card);
       for (const row of ["hp", "pp"] as const) {
         const metrics = this.statusBarMetrics(content, row);
+        const meterY = metrics.valueY - 5;
         fieldGraphics.fillStyle(EB_STATUS_METER_FILL, 1);
         fieldGraphics.fillRect(
-          metrics.valueX - 6,
-          metrics.valueY - 1,
-          metrics.valueWidth + 10,
-          BATTLE_STATUS_VALUE_FONT_SIZE + 4
+          metrics.valueX - 4,
+          meterY,
+          metrics.valueWidth + 8,
+          BATTLE_STATUS_METER_HEIGHT
         );
       }
       const textSet = this.statusCardTexts[index];

@@ -1014,13 +1014,18 @@ export class UiScene extends Phaser.Scene {
   }
 
   private menuObjectiveTextWidth(): number {
-    return Math.max(1, this.scale.width - MENU_LEFT - MENU_RIGHT_MARGIN - MENU_HORIZONTAL_PADDING * 2 - MENU_CARET_GUTTER_PX);
+    return Math.max(1, Math.min(
+      320,
+      this.scale.width - MENU_LEFT - MENU_RIGHT_MARGIN - MENU_HORIZONTAL_PADDING * 2 - MENU_CARET_GUTTER_PX
+    ));
   }
 
   private menuObjectiveLines(screen: MenuRenderScreen): string[] {
     const text = screen.objectiveText?.trim();
-    void text; // NEXT line removed per Nick: exploration over hand-holding
-    return [];
+    if (!text) {
+      return [];
+    }
+    return this.wrapMenuText(`NEXT: ${text}`, this.menuObjectiveTextWidth());
   }
 
   private wrapMenuText(text: string, maxWidth: number): string[] {

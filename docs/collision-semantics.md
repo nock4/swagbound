@@ -60,3 +60,15 @@ Combination notes:
 - **Roof interiors stay an authored-overrides concern** (`content/collision-overrides.json`):
   EB marks them walkable (byte 0x00) because they were unreachable in EB; no flag bit
   distinguishes them. The reachability tool (Phase 4) finds the leaks.
+- **Reusable map elements use tile-identity collision rules.**
+  `content/tile-overrides.json` `collisionByTile` is keyed by
+  `<map tileset>:<arrangement>`. A reviewed `solidForegroundCells` rule promotes
+  that tile's `0x01`/`0x02` foreground-obscured cells to gameplay-solid at conversion
+  time while preserving the raw byte in `surfaceRows`. Use this for repeated art
+  such as isolated trees and dense tree-canopy families. Keep
+  `content/collision-overrides.json` rectangles for
+  one-location geometry such as doors, stamped buildings, and room-specific gaps.
+  The reachability audit's roof-pocket heuristic also treats connected tree and
+  fence edges as wall outlines. The known Onett lawn cells at `1992,1576` and
+  `2408,1544` are intentionally baselined: pixel inspection confirms that both
+  are open, reachable grass inside fence/tree arrangements, not roof leaks.

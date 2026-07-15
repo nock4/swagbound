@@ -22,7 +22,7 @@ export const EARTHBOUND_OPENING_KNOCK_REF = "data_20.l_0xc66b97";
 export const BOSCH_BEDROOM_SPAWN = { x: 8120, y: 1113 } as const;
 export const EARTHBOUND_INTRO_METEOR_MARKER_REF = "data_38.l_0xc86279";
 export const EARTHBOUND_BUZZ_BUZZ_METEOR_REF = "data_15.l_0xc5eb0b";
-export const EARTHBOUND_STARMAN_JUNIOR_ENEMY_ID = 214;
+export const INTRO_TUTORIAL_ENEMY_ID = 900001;
 export const INTRO_BEDROOM_OPENING_DONE_FLAG = "intro:bedroom-opening-done";
 export const INTRO_METEOR_BEAT_FIRED_FLAG = "intro:meteor-beat-fired";
 export const AUTHORED_OPENING_CUTSCENE_REF = "openingCutscene.main";
@@ -306,7 +306,9 @@ export function resolveIntroMeteorBeatStart(
 ): ResolvedIntroMeteorBeat {
   const markerRef = options.markerRef ?? EARTHBOUND_INTRO_METEOR_MARKER_REF;
   const dialogueRef = options.dialogueRef ?? EARTHBOUND_BUZZ_BUZZ_METEOR_REF;
-  const starmanJuniorEnemyId = options.starmanJuniorEnemyId ?? EARTHBOUND_STARMAN_JUNIOR_ENEMY_ID;
+  // Keep the option name for fixture compatibility; production resolves the
+  // dedicated Cold Signal encounter from the opening-clarity overlay.
+  const tutorialEnemyId = options.starmanJuniorEnemyId ?? INTRO_TUTORIAL_ENEMY_ID;
 
   if (!world) {
     return { resolved: false, reason: "missing_world" };
@@ -337,7 +339,7 @@ export function resolveIntroMeteorBeatStart(
   if (!battle) {
     return { resolved: false, reason: "missing_battle" };
   }
-  const battleGroup = battle.groups.find((group) => group.enemyIds.includes(starmanJuniorEnemyId));
+  const battleGroup = battle.groups.find((group) => group.enemyIds.includes(tutorialEnemyId));
   if (!battleGroup) {
     return { resolved: false, reason: "missing_battle_group" };
   }

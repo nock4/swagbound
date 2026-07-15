@@ -1,0 +1,460 @@
+{
+  "schema": "swagbound.opening-clarity.v1",
+  "cutsceneDialogueById": {
+    "signal-town-cold-signal-open": [
+      "Outside, the mailbox flag snaps up once. Inside is a photo of Bosch walking uphill before sunrise.",
+      "Bosch was asleep when it was taken. MiFella saw the same figure near the meteor.",
+      "Follow the north road uphill and inspect the cold signal. Then trace the copy back toward the MONS LINK arcade."
+    ],
+    "onett-brother-fallsin": [
+      "MiFella catches up beside the meteor.",
+      "\"The other Bosch stopped here. When I got close, that blue signal peeled away from the wreckage.\"",
+      "\"I will watch the road. Check the terminal, then follow whatever it points to.\""
+    ]
+  },
+  "storyTriggerDialogueById": {
+    "signal-town-card-clique": [
+      "At the MONS LINK arcade, kids are trading cards with Bosch's face on them. The cards were here before he woke up.",
+      "CARD CLIQUE: \"The clean Bosch already signed. You are the late copy.\"",
+      "Bosch holds up the damaged Dox Sheet. The signatures match, but nobody in the arcade admits writing either one."
+    ],
+    "signal-town-card-clique-reveal": [
+      "The card printer stops. Inside its tray is a route pass prepared for Bosch before the fight began.",
+      "The pass is stamped for the civic gate beside THE PRECINCT. The stamp has a blank space where an author should be.",
+      "Bosch keeps both records. Follow the main street east, then uphill to the station gate."
+    ],
+    "relay-gate-returnless-king": [
+      "The station gate scans the clean card and opens. It scans Bosch and locks again.",
+      "RETURNLESS KING: \"One Bosch is already approved. Sign here and we can discard the duplicate.\"",
+      "Bosch refuses. The gate will not identify who approved the card, so he forces the route open."
+    ],
+    "north-route-gate-warning": [
+      "The road is visible beyond the station, but a line of route aides blocks it.",
+      "\"The gate already approved Bosch. If that is you, prove it at the desk.\""
+    ],
+    "first-threshold-malady": [
+      "At the crossing beside the hotel, the other Bosch is waiting. Its clothes are spotless. Its smile begins a moment too early.",
+      "PUBLIC BOSCH: \"Everyone recognized me first. That makes you the copy.\"",
+      "Bosch asks what happened in his bedroom. The Public Bosch repeats the question but cannot answer it.",
+      "The clean face folds flat into a laminated record and reaches for the damaged Dox Sheet. Bosch fights to keep the one record it cannot complete."
+    ],
+    "first-threshold-malady-reveal": [
+      "The Public Bosch comes apart. Beneath the clean face is a stack of cards, gate stamps, and copied details from people Bosch met today.",
+      "Every piece carries the same blank authorization mark. Someone coordinated the copy, but nothing here names them.",
+      "The damaged Dox Sheet records a rough first track. Munch is waiting a few steps beyond the crossing."
+    ],
+    "recruit-munch": [
+      "Munch steps out from behind the hotel sign with a pocket full of rejected receipts.",
+      "MUNCH: \"That copy knew what strangers know about you. It missed what your friends know. I can help find the seams.\"",
+      "Munch joins the crew. He can SPY on enemies to reveal what they resist and what hurts them."
+    ],
+    "leave-signal-town": [
+      "At the town exit, a clerk offers Bosch a clean replacement Dox Sheet. Signing it would make the Public Bosch the official version.",
+      "Bosch hands back the pen and keeps the damaged sheet.",
+      "CLERK: \"Then your record remains unresolved. The same blank authorization appears in Postwick. Start there.\"",
+      "[ ACT 1: END ]"
+    ]
+  },
+  "objectiveTextById": {
+    "act1-card-clique": "Go west to the MONS LINK arcade and confront the kids carrying Bosch's picture.",
+    "act1-returnless-king": "Take the arcade route pass east, then uphill to the civic gate beside THE PRECINCT.",
+    "act1-malady": "Follow the opened road to the crossing beside the hotel and confront the Public Bosch.",
+    "act1-munch": "Meet Munch just beyond the hotel crossing before leaving Morningside.",
+    "act1-leave-signal-town": "Continue past the hotel crossing to Morningside's exit desk.",
+    "act2-reach-postwick": "Follow the open route from Morningside until you reach Postwick."
+  },
+  "battleEnemyNamesById": {
+    "37": "Public Bosch File"
+  },
+  "dialogue": {
+    "byNpcId": {
+      "14": {
+        "pages": [
+          "\"That flash came from the bedroom window. Then MiFella started pounding on the door.\"",
+          "\"Change clothes, meet him outside, and stay together on the hill.\""
+        ]
+      },
+      "15": {
+        "pages": [
+          "\"I saw somebody with your face cross the yard before sunrise. You were still in bed.\"",
+          "\"MiFella followed him uphill. Get dressed and find MiFella outside.\""
+        ]
+      },
+      "16": {
+        "pages": [
+          "\"The other Bosch never looked at the family pictures. He walked straight to the road like he already knew the route.\"",
+          "\"He went north toward the meteor. That is the first place I would look.\""
+        ]
+      },
+      "21": {
+        "pages": [
+          "The house phone rings once, then stops.",
+          "MiFella left a message: \"I saw the other Bosch head uphill toward the meteor. Meet me outside.\""
+        ],
+        "service": "phone"
+      },
+      "131": {
+        "pages": [
+          "\"The crossing by the hotel started humming before sunrise. Then someone with your face took up position there.\"",
+          "\"The station gate controls that road. Start with the gate.\""
+        ]
+      },
+      "132": {
+        "pages": [
+          "\"A clean copy of my question came back before I asked it. Same words, none of the worry.\"",
+          "\"Your clean card has that feeling. Find out who stamped it.\""
+        ]
+      },
+      "134": {
+        "pages": [
+          "\"The route aides only look at cards. Faces make them nervous.\"",
+          "\"The civic gate beside THE PRECINCT tells them which card counts.\""
+        ]
+      },
+      "135": {
+        "pages": [
+          "\"I saw the arcade printer spit out a pass for you before the doors opened.\"",
+          "\"Its destination stamp points to the station gate.\""
+        ]
+      },
+      "136": {
+        "pages": [
+          "\"Your clean version smiles like it practiced from a picture.\"",
+          "\"Ask it about something no picture could know.\""
+        ]
+      },
+      "137": {
+        "pages": [
+          "\"A form can be wrong and still block the road. That is what scares me.\"",
+          "\"Keep the damaged sheet. At least its mistakes happened to you.\""
+        ]
+      },
+      "138": {
+        "pages": [
+          "\"People keep repeating stories about the other Bosch. Every version is more confident than the last.\"",
+          "\"Confidence is not memory. Ask for a detail.\""
+        ]
+      },
+      "144": {
+        "pages": [
+          "\"The arcade kids say your card is official. They also say the printer chose them personally.\"",
+          "\"Printers do not choose people. Somebody loaded the tray.\""
+        ]
+      },
+      "145": {
+        "pages": [
+          "\"My feed says you won a fight you have not fought yet. It included a picture.\"",
+          "\"The picture shows the hotel crossing. That is north of the station gate.\""
+        ]
+      },
+      "146": {
+        "pages": [
+          "\"Something with your face is waiting beyond the gate.\"",
+          "\"It arrived with a route pass. The gate never asked where the pass came from.\""
+        ]
+      },
+      "163": {
+        "pages": [
+          "\"Remilia is holding the stamp today. She did not write the standing order.\"",
+          "\"The order has no signature, only the same blank mark as your card.\""
+        ]
+      },
+      "166": {
+        "pages": [
+          "\"Before sunrise, the arcade received a box of cards with your face on them.\"",
+          "\"MONS LINK is west along this road, beside SLICE. Start there.\""
+        ]
+      },
+      "167": {
+        "pages": [
+          "\"A clean version of me replaced my shift before lunch. It knew my schedule, not my bad knee.\"",
+          "\"Copies learn records first. People learn each other slower.\""
+        ]
+      },
+      "191": {
+        "pages": [
+          "\"Little Swag World used to be a place, not a claim. Now every bottle says it was first.\"",
+          "\"Keep the bottle with the crooked label. I filled that one myself.\""
+        ]
+      },
+      "202": {
+        "pages": [
+          "\"Those cards read you back. Watch what they get wrong.\"",
+          "\"The arcade printer is inside MONS LINK, just west of here.\""
+        ]
+      },
+      "1408": {
+        "pages": [
+          "\"The figure beyond the gate has your face. It keeps asking strangers what you are like.\"",
+          "\"The crossing is beside the hotel, once the station opens the road.\""
+        ]
+      },
+      "1410": {
+        "pages": [
+          "\"The gate is not judging your face. It is matching your card to a standing order.\"",
+          "\"Your arcade pass carries the mark it wants.\""
+        ]
+      }
+    },
+    "byTextPointer": {
+      "data_20.l_0xc66b97": {
+        "pages": [
+          "MiFella pounds on the door.",
+          "\"Bosch, get up. I saw you outside ten minutes ago, but you were still asleep.\"",
+          "\"The other you went uphill toward the meteor. I followed until the signal started moving.\"",
+          "\"Get dressed and meet me outside. We need to see what came down.\""
+        ]
+      },
+      "data_15.l_0xc5eb0b": {
+        "pages": [
+          "A terminal wakes inside the wreckage.",
+          "LOG: SECOND BOSCH ENTERED MORNINGSIDE BEFORE ORIGINAL LEFT HOME.",
+          "The copy has your face, but it does not know your history. People who know you can still tell.",
+          "The signal points west toward the MONS LINK arcade. Find the kids carrying your picture."
+        ]
+      }
+    }
+  },
+  "dialogueVariantsByNpcId": {
+    "14": [
+      {
+        "requireFlags": ["intro:meteor-beat-fired"],
+        "blockFlags": ["signal:clique_cleared"],
+        "pages": [
+          "\"MiFella called. The signal left the meteor and the arcade kids have your picture.\"",
+          "\"MONS LINK is west along the town road, beside SLICE.\""
+        ]
+      }
+    ],
+    "15": [
+      {
+        "requireFlags": ["signal:threshold_cleared"],
+        "blockFlags": [],
+        "pages": [
+          "\"The clean Bosch never looked at these family pictures. You did, on the way back in.\"",
+          "\"Whatever that thing was, knowing your face was not the same as knowing you.\""
+        ]
+      },
+      {
+        "requireFlags": ["intro:meteor-beat-fired"],
+        "blockFlags": ["signal:clique_cleared"],
+        "pages": [
+          "\"The thing at the meteor could not answer MiFella's question. That matters.\"",
+          "\"Take what you found to the arcade west of town.\""
+        ]
+      }
+    ],
+    "16": [
+      {
+        "requireFlags": ["signal:clique_cleared"],
+        "blockFlags": ["signal:route_open"],
+        "pages": [
+          "\"The arcade pass names the civic gate. That is a real lead, even if the signature is blank.\"",
+          "\"Go east, then uphill to THE PRECINCT.\""
+        ]
+      },
+      {
+        "requireFlags": ["intro:meteor-beat-fired"],
+        "blockFlags": ["signal:clique_cleared"],
+        "pages": [
+          "\"The other Bosch went from the meteor toward the arcade.\"",
+          "\"MONS LINK is west on the main road, beside SLICE.\""
+        ]
+      }
+    ],
+    "21": [
+      {
+        "requireFlags": ["signal:route_open"],
+        "blockFlags": ["signal:threshold_cleared"],
+        "pages": [
+          "The house phone rings.",
+          "Munch left a message: \"The road is open. The other Bosch is at the crossing beside the hotel.\""
+        ]
+      },
+      {
+        "requireFlags": ["signal:clique_cleared"],
+        "blockFlags": ["signal:route_open"],
+        "pages": [
+          "The house phone rings.",
+          "MiFella left a message: \"The arcade pass points to the civic gate beside THE PRECINCT.\""
+        ]
+      },
+      {
+        "requireFlags": ["intro:meteor-beat-fired"],
+        "blockFlags": ["signal:clique_cleared"],
+        "pages": [
+          "The house phone rings.",
+          "MiFella left a message: \"The signal moved west to MONS LINK. The arcade kids have your picture.\""
+        ]
+      }
+    ],
+    "131": [
+      {
+        "requireFlags": ["signal:threshold_cleared"],
+        "blockFlags": [],
+        "pages": [
+          "\"The crossing stopped humming when that clean face fell apart.\"",
+          "\"I saw the blank mark inside it. Somebody wanted every piece to look ownerless.\""
+        ]
+      },
+      {
+        "requireFlags": ["signal:route_open"],
+        "blockFlags": ["signal:threshold_cleared"],
+        "pages": [
+          "\"The gate opened. The other Bosch is waiting at the crossing beside the hotel.\"",
+          "\"Ask it something a photograph cannot answer.\""
+        ]
+      }
+    ],
+    "166": [
+      {
+        "requireFlags": ["signal:threshold_cleared"],
+        "blockFlags": [],
+        "pages": [
+          "\"The clean Bosch was made from cards, stamps, and things we told strangers.\"",
+          "\"You kept the damaged record. Good. Damage has a history.\""
+        ]
+      },
+      {
+        "requireFlags": ["signal:route_open"],
+        "blockFlags": ["signal:threshold_cleared"],
+        "pages": [
+          "\"The route aides moved. The crossing by the hotel is open now.\"",
+          "\"Someone with your face is standing there.\""
+        ]
+      },
+      {
+        "requireFlags": ["signal:clique_cleared"],
+        "blockFlags": ["signal:route_open"],
+        "pages": [
+          "\"The arcade printer stopped, but its route pass is real.\"",
+          "\"Take it east, then uphill to the gate beside THE PRECINCT.\""
+        ]
+      }
+    ],
+    "202": [
+      {
+        "requireFlags": ["signal:clique_cleared"],
+        "blockFlags": ["signal:route_open"],
+        "pages": [
+          "\"The cards are blank now. The last one printed a pass for the station gate.\"",
+          "\"Go east, then uphill. Make the desk explain who approved it.\""
+        ]
+      }
+    ],
+    "1408": [
+      {
+        "requireFlags": ["signal:threshold_cleared"],
+        "blockFlags": [],
+        "pages": [
+          "\"The other Bosch collapsed into records from all over town.\"",
+          "\"It knew what we said about you. It did not know what happened to you.\""
+        ]
+      },
+      {
+        "requireFlags": ["signal:route_open"],
+        "blockFlags": ["signal:threshold_cleared"],
+        "pages": [
+          "\"The road is clear. Your copy is at the crossing beside the hotel.\"",
+          "\"Do not let the smile fool you. It has been practicing.\""
+        ]
+      }
+    ],
+    "1410": [
+      {
+        "requireFlags": ["signal:route_open"],
+        "blockFlags": ["signal:threshold_cleared"],
+        "pages": [
+          "\"You forced the gate to admit its order had no author.\"",
+          "\"Follow the open road to the hotel crossing. The approved Bosch is waiting.\""
+        ]
+      }
+    ]
+  },
+  "spriteOverrides": {
+    "byNpcId": {
+      "14": {
+        "image": "generated/assets/sprites/052.png",
+        "frameWidth": 16,
+        "frameHeight": 24,
+        "animations": { "up": [0, 1], "right": [2, 3], "down": [4, 5], "left": [6, 7] }
+      },
+      "15": {
+        "image": "generated/assets/sprites/055.png",
+        "frameWidth": 16,
+        "frameHeight": 24,
+        "animations": { "up": [0, 1], "right": [2, 3], "down": [4, 5], "left": [6, 7] }
+      },
+      "16": {
+        "image": "generated/assets/sprites/064.png",
+        "frameWidth": 16,
+        "frameHeight": 24,
+        "animations": { "up": [0, 1], "right": [2, 3], "down": [4, 5], "left": [6, 7] }
+      },
+      "21": {
+        "image": "generated/assets/sprites/215.png",
+        "frameWidth": 16,
+        "frameHeight": 24,
+        "animations": { "up": [0, 1], "right": [2, 3], "down": [4, 5], "left": [6, 7] }
+      }
+    },
+    "byEnemyId": {
+      "37": {
+        "image": "assets/swagbound/story-items/dox-sheet-world.png",
+        "displayHeight": 144,
+        "originX": 0.5,
+        "originY": 0.5
+      },
+      "900001": {
+        "image": "assets/swagbound/enemy/gns-ethereal-sols-001.png",
+        "displayHeight": 104,
+        "originX": 0.5,
+        "originY": 0.5
+      }
+    },
+    "overworldByEnemyId": {
+      "37": {
+        "image": "assets/swagbound/hero/bosch-hood-walk.png",
+        "frameWidth": 96,
+        "frameHeight": 96,
+        "displayHeight": 24,
+        "animations": {
+          "down": [0, 1, 2, 3],
+          "left": [4, 5, 6, 7],
+          "right": [8, 9, 10, 11],
+          "up": [12, 13, 14, 15]
+        }
+      }
+    }
+  },
+  "tutorialBattle": {
+    "enemy": {
+      "id": 900001,
+      "name": "Cold Signal",
+      "spriteId": 900001,
+      "level": 1,
+      "hp": 48,
+      "defense": 4,
+      "offense": 8,
+      "speed": 3,
+      "experience": 8,
+      "money": 0,
+      "bossFlag": false,
+      "actions": [
+        { "id": 4, "arg": 0, "actionId": 4, "actionType": 1, "target": 1, "direction": "enemy" },
+        { "id": 4, "arg": 0, "actionId": 4, "actionType": 1, "target": 1, "direction": "enemy" },
+        { "id": 4, "arg": 0, "actionId": 4, "actionType": 1, "target": 1, "direction": "enemy" },
+        { "id": 4, "arg": 0, "actionId": 4, "actionType": 1, "target": 1, "direction": "enemy" }
+      ],
+      "itemDropped": null,
+      "itemRarity": null
+    },
+    "group": {
+      "id": 900001,
+      "background1": 219,
+      "background2": 218,
+      "enemyIds": [900001],
+      "entries": [{ "id": 900001, "amount": 1 }]
+    }
+  }
+}

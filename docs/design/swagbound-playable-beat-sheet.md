@@ -1,10 +1,15 @@
 # Swagbound Playable Beat Sheet
 
+Historical working beat sheet. It remains useful as a map of the shipped trigger
+chain, but its story reveals and terminology are superseded by
+`docs/design/canonical-story-architecture.md`. In particular, its early Milady and
+Malady reveals are no longer current narrative direction.
+
 Plain-English campaign outline in strict `Bosch is at / sees / gets-fights / learns /
 goes next` form, grounded in the live trigger chain (`content/triggers.json`) and the
-verified route ledger (`docs/design/story-recovery-route-ledger.md`). Nick edits THIS
-before any runtime dialogue changes. No lore term appears without a concrete object
-in the same beat.
+verified route ledger (`docs/design/story-recovery-route-ledger.md`). It historically
+served as the editing checkpoint before runtime dialogue changes. No lore term
+appears without a concrete object in the same beat.
 
 Landmarks marked ⚠ are pending the two UNVERIFIED ledger items (house landing,
 Act 1→2 road).

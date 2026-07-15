@@ -1,0 +1,2090 @@
+{
+  "schema": "swagbound.interior-sprite-casting-report.v1",
+  "counts": {
+    "worldNpcs": 1582,
+    "eligibleInteriorNpcs": 495,
+    "assigned": 337,
+    "friendlyLswAssigned": 317,
+    "hostileMiladyAssigned": 20,
+    "preservedAuthoredNpcOverrides": 38,
+    "preservedResolvedImageMarkers": 32,
+    "protectedNpcs": 0,
+    "coverageSkipped": 88,
+    "unresolvedComponents": 1
+  },
+  "rooms": [
+    {
+      "id": "morningside-drug-store",
+      "faction": "friendly-lsw",
+      "componentIds": [
+        227
+      ],
+      "eligibleNpcs": 2,
+      "assignedNpcs": 2
+    },
+    {
+      "id": "morningside-arcade",
+      "faction": "hostile-milady",
+      "componentIds": [
+        128
+      ],
+      "eligibleNpcs": 4,
+      "assignedNpcs": 4
+    },
+    {
+      "id": "late-game-club",
+      "faction": "hostile-milady",
+      "componentIds": [
+        974
+      ],
+      "eligibleNpcs": 16,
+      "assignedNpcs": 16
+    }
+  ],
+  "assignments": [
+    {
+      "npcId": 1,
+      "componentId": 128,
+      "roomId": "morningside-arcade",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/midladys-fumogeddon-003-ow.png"
+    },
+    {
+      "npcId": 2,
+      "componentId": 128,
+      "roomId": "morningside-arcade",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/mylady-001-ow.png"
+    },
+    {
+      "npcId": 3,
+      "componentId": 128,
+      "roomId": "morningside-arcade",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/midladys-fumogeddon-005-ow.png"
+    },
+    {
+      "npcId": 4,
+      "componentId": 171,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-202-ow.png"
+    },
+    {
+      "npcId": 5,
+      "componentId": 171,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2075-ow.png"
+    },
+    {
+      "npcId": 6,
+      "componentId": 171,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1946-ow.png"
+    },
+    {
+      "npcId": 7,
+      "componentId": 171,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2014-ow.png"
+    },
+    {
+      "npcId": 8,
+      "componentId": 227,
+      "roomId": "morningside-drug-store",
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2132-ow.png"
+    },
+    {
+      "npcId": 9,
+      "componentId": 227,
+      "roomId": "morningside-drug-store",
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2202-ow.png"
+    },
+    {
+      "npcId": 10,
+      "componentId": 224,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1245-ow.png"
+    },
+    {
+      "npcId": 11,
+      "componentId": 224,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1258-ow.png"
+    },
+    {
+      "npcId": 13,
+      "componentId": 224,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1282-ow.png"
+    },
+    {
+      "npcId": 16,
+      "componentId": 73,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png"
+    },
+    {
+      "npcId": 17,
+      "componentId": 73,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2695-ow.png"
+    },
+    {
+      "npcId": 18,
+      "componentId": 73,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1317-ow.png"
+    },
+    {
+      "npcId": 19,
+      "componentId": 73,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1328-ow.png"
+    },
+    {
+      "npcId": 20,
+      "componentId": 73,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1038-ow.png"
+    },
+    {
+      "npcId": 25,
+      "componentId": 179,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2130-ow.png"
+    },
+    {
+      "npcId": 30,
+      "componentId": 128,
+      "roomId": "morningside-arcade",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/vilady-maker-002-ow.png"
+    },
+    {
+      "npcId": 34,
+      "componentId": 94,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-192-ow.png"
+    },
+    {
+      "npcId": 35,
+      "componentId": 94,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1886-ow.png"
+    },
+    {
+      "npcId": 39,
+      "componentId": 198,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-228-ow.png"
+    },
+    {
+      "npcId": 41,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1656-ow.png"
+    },
+    {
+      "npcId": 42,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1596-ow.png"
+    },
+    {
+      "npcId": 44,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1776-ow.png"
+    },
+    {
+      "npcId": 46,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1706-ow.png"
+    },
+    {
+      "npcId": 47,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1687-ow.png"
+    },
+    {
+      "npcId": 48,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1844-ow.png"
+    },
+    {
+      "npcId": 58,
+      "componentId": 225,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2075-ow.png"
+    },
+    {
+      "npcId": 59,
+      "componentId": 226,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1776-ow.png"
+    },
+    {
+      "npcId": 60,
+      "componentId": 225,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1656-ow.png"
+    },
+    {
+      "npcId": 64,
+      "componentId": 17,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1856-ow.png"
+    },
+    {
+      "npcId": 67,
+      "componentId": 70,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2202-ow.png"
+    },
+    {
+      "npcId": 68,
+      "componentId": 76,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1120-ow.png"
+    },
+    {
+      "npcId": 70,
+      "componentId": 76,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2379-ow.png"
+    },
+    {
+      "npcId": 71,
+      "componentId": 76,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2374-ow.png"
+    },
+    {
+      "npcId": 72,
+      "componentId": 23,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1776-ow.png"
+    },
+    {
+      "npcId": 73,
+      "componentId": 51,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1219-ow.png"
+    },
+    {
+      "npcId": 78,
+      "componentId": 118,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1805-ow.png"
+    },
+    {
+      "npcId": 79,
+      "componentId": 20,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2202-ow.png"
+    },
+    {
+      "npcId": 81,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2125-ow.png"
+    },
+    {
+      "npcId": 82,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2098-ow.png"
+    },
+    {
+      "npcId": 83,
+      "componentId": 185,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2085-ow.png"
+    },
+    {
+      "npcId": 84,
+      "componentId": 189,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2130-ow.png"
+    },
+    {
+      "npcId": 85,
+      "componentId": 159,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1776-ow.png"
+    },
+    {
+      "npcId": 87,
+      "componentId": 52,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2075-ow.png"
+    },
+    {
+      "npcId": 88,
+      "componentId": 52,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1245-ow.png"
+    },
+    {
+      "npcId": 89,
+      "componentId": 74,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2098-ow.png"
+    },
+    {
+      "npcId": 91,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1306-ow.png"
+    },
+    {
+      "npcId": 92,
+      "componentId": 189,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1262-ow.png"
+    },
+    {
+      "npcId": 93,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1328-ow.png"
+    },
+    {
+      "npcId": 94,
+      "componentId": 208,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-120-ow.png"
+    },
+    {
+      "npcId": 97,
+      "componentId": 208,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1144-ow.png"
+    },
+    {
+      "npcId": 98,
+      "componentId": 93,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2501-ow.png"
+    },
+    {
+      "npcId": 99,
+      "componentId": 92,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-202-ow.png"
+    },
+    {
+      "npcId": 100,
+      "componentId": 92,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2130-ow.png"
+    },
+    {
+      "npcId": 101,
+      "componentId": 131,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-202-ow.png"
+    },
+    {
+      "npcId": 103,
+      "componentId": 187,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1038-ow.png"
+    },
+    {
+      "npcId": 105,
+      "componentId": 187,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2577-ow.png"
+    },
+    {
+      "npcId": 106,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2273-ow.png"
+    },
+    {
+      "npcId": 108,
+      "componentId": 160,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2202-ow.png"
+    },
+    {
+      "npcId": 110,
+      "componentId": 175,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1687-ow.png"
+    },
+    {
+      "npcId": 111,
+      "componentId": 176,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-202-ow.png"
+    },
+    {
+      "npcId": 112,
+      "componentId": 176,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2014-ow.png"
+    },
+    {
+      "npcId": 113,
+      "componentId": 195,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1466-ow.png"
+    },
+    {
+      "npcId": 114,
+      "componentId": 195,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1317-ow.png"
+    },
+    {
+      "npcId": 115,
+      "componentId": 177,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2231-ow.png"
+    },
+    {
+      "npcId": 117,
+      "componentId": 197,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1844-ow.png"
+    },
+    {
+      "npcId": 120,
+      "componentId": 204,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2758-ow.png"
+    },
+    {
+      "npcId": 121,
+      "componentId": 204,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1038-ow.png"
+    },
+    {
+      "npcId": 210,
+      "componentId": 980,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1663-ow.png"
+    },
+    {
+      "npcId": 211,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1805-ow.png"
+    },
+    {
+      "npcId": 213,
+      "componentId": 865,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1471-ow.png"
+    },
+    {
+      "npcId": 215,
+      "componentId": 865,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1297-ow.png"
+    },
+    {
+      "npcId": 216,
+      "componentId": 865,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1328-ow.png"
+    },
+    {
+      "npcId": 217,
+      "componentId": 887,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2211-ow.png"
+    },
+    {
+      "npcId": 218,
+      "componentId": 918,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2501-ow.png"
+    },
+    {
+      "npcId": 219,
+      "componentId": 990,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1258-ow.png"
+    },
+    {
+      "npcId": 221,
+      "componentId": 900,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1844-ow.png"
+    },
+    {
+      "npcId": 222,
+      "componentId": 900,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1805-ow.png"
+    },
+    {
+      "npcId": 226,
+      "componentId": 855,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1328-ow.png"
+    },
+    {
+      "npcId": 227,
+      "componentId": 855,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1317-ow.png"
+    },
+    {
+      "npcId": 228,
+      "componentId": 855,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1466-ow.png"
+    },
+    {
+      "npcId": 229,
+      "componentId": 855,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1362-ow.png"
+    },
+    {
+      "npcId": 230,
+      "componentId": 855,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1262-ow.png"
+    },
+    {
+      "npcId": 231,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/mylady-002-ow.png"
+    },
+    {
+      "npcId": 232,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/mylady-005-ow.png"
+    },
+    {
+      "npcId": 233,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/mylady-004-ow.png"
+    },
+    {
+      "npcId": 234,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/midladys-fumogeddon-004-ow.png"
+    },
+    {
+      "npcId": 235,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/midladys-fumogeddon-003-ow.png"
+    },
+    {
+      "npcId": 236,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/mylady-001-ow.png"
+    },
+    {
+      "npcId": 237,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/midladys-fumogeddon-005-ow.png"
+    },
+    {
+      "npcId": 238,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/vilady-maker-004-ow.png"
+    },
+    {
+      "npcId": 239,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/vilady-maker-002-ow.png"
+    },
+    {
+      "npcId": 240,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/mylady-003-ow.png"
+    },
+    {
+      "npcId": 241,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/promo-midladys-fumogeddon-001.png"
+    },
+    {
+      "npcId": 242,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/promo-midladys-fumogeddon-002.png"
+    },
+    {
+      "npcId": 243,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/promo-midladys-fumogeddon-003.png"
+    },
+    {
+      "npcId": 244,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/malady-002-ow.png"
+    },
+    {
+      "npcId": 245,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/malady-005-ow.png"
+    },
+    {
+      "npcId": 246,
+      "componentId": 974,
+      "roomId": "late-game-club",
+      "faction": "hostile-milady",
+      "image": "assets/swagbound/overworld-npc/midladys-fumogeddon-001-ow.png"
+    },
+    {
+      "npcId": 247,
+      "componentId": 866,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2758-ow.png"
+    },
+    {
+      "npcId": 250,
+      "componentId": 866,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2590-ow.png"
+    },
+    {
+      "npcId": 252,
+      "componentId": 866,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2501-ow.png"
+    },
+    {
+      "npcId": 253,
+      "componentId": 878,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1297-ow.png"
+    },
+    {
+      "npcId": 254,
+      "componentId": 938,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1708-ow.png"
+    },
+    {
+      "npcId": 255,
+      "componentId": 889,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2211-ow.png"
+    },
+    {
+      "npcId": 257,
+      "componentId": 843,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1708-ow.png"
+    },
+    {
+      "npcId": 258,
+      "componentId": 844,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1656-ow.png"
+    },
+    {
+      "npcId": 260,
+      "componentId": 950,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2014-ow.png"
+    },
+    {
+      "npcId": 265,
+      "componentId": 982,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2202-ow.png"
+    },
+    {
+      "npcId": 266,
+      "componentId": 855,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1776-ow.png"
+    },
+    {
+      "npcId": 267,
+      "componentId": 855,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1708-ow.png"
+    },
+    {
+      "npcId": 268,
+      "componentId": 876,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png"
+    },
+    {
+      "npcId": 269,
+      "componentId": 878,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1776-ow.png"
+    },
+    {
+      "npcId": 270,
+      "componentId": 899,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2125-ow.png"
+    },
+    {
+      "npcId": 271,
+      "componentId": 970,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1466-ow.png"
+    },
+    {
+      "npcId": 272,
+      "componentId": 970,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1471-ow.png"
+    },
+    {
+      "npcId": 273,
+      "componentId": 970,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-153-ow.png"
+    },
+    {
+      "npcId": 276,
+      "componentId": 970,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1656-ow.png"
+    },
+    {
+      "npcId": 277,
+      "componentId": 888,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1328-ow.png"
+    },
+    {
+      "npcId": 278,
+      "componentId": 845,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2014-ow.png"
+    },
+    {
+      "npcId": 280,
+      "componentId": 936,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1776-ow.png"
+    },
+    {
+      "npcId": 281,
+      "componentId": 936,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1708-ow.png"
+    },
+    {
+      "npcId": 282,
+      "componentId": 936,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1706-ow.png"
+    },
+    {
+      "npcId": 283,
+      "componentId": 899,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png"
+    },
+    {
+      "npcId": 284,
+      "componentId": 937,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1886-ow.png"
+    },
+    {
+      "npcId": 287,
+      "componentId": 861,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-228-ow.png"
+    },
+    {
+      "npcId": 289,
+      "componentId": 862,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1120-ow.png"
+    },
+    {
+      "npcId": 290,
+      "componentId": 861,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1706-ow.png"
+    },
+    {
+      "npcId": 294,
+      "componentId": 809,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1844-ow.png"
+    },
+    {
+      "npcId": 297,
+      "componentId": 821,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2590-ow.png"
+    },
+    {
+      "npcId": 298,
+      "componentId": 821,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2413-ow.png"
+    },
+    {
+      "npcId": 299,
+      "componentId": 809,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1708-ow.png"
+    },
+    {
+      "npcId": 300,
+      "componentId": 821,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2379-ow.png"
+    },
+    {
+      "npcId": 301,
+      "componentId": 861,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2374-ow.png"
+    },
+    {
+      "npcId": 377,
+      "componentId": 242,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-202-ow.png"
+    },
+    {
+      "npcId": 378,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1144-ow.png"
+    },
+    {
+      "npcId": 380,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1245-ow.png"
+    },
+    {
+      "npcId": 381,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1258-ow.png"
+    },
+    {
+      "npcId": 383,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1282-ow.png"
+    },
+    {
+      "npcId": 385,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1306-ow.png"
+    },
+    {
+      "npcId": 386,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1317-ow.png"
+    },
+    {
+      "npcId": 389,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1466-ow.png"
+    },
+    {
+      "npcId": 391,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2758-ow.png"
+    },
+    {
+      "npcId": 392,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2695-ow.png"
+    },
+    {
+      "npcId": 393,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png"
+    },
+    {
+      "npcId": 394,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1219-ow.png"
+    },
+    {
+      "npcId": 395,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-120-ow.png"
+    },
+    {
+      "npcId": 396,
+      "componentId": 299,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1262-ow.png"
+    },
+    {
+      "npcId": 397,
+      "componentId": 281,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2463-ow.png"
+    },
+    {
+      "npcId": 398,
+      "componentId": 281,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2273-ow.png"
+    },
+    {
+      "npcId": 399,
+      "componentId": 281,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-228-ow.png"
+    },
+    {
+      "npcId": 400,
+      "componentId": 281,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2085-ow.png"
+    },
+    {
+      "npcId": 402,
+      "componentId": 272,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1946-ow.png"
+    },
+    {
+      "npcId": 405,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-202-ow.png"
+    },
+    {
+      "npcId": 407,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1946-ow.png"
+    },
+    {
+      "npcId": 408,
+      "componentId": 26,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1282-ow.png"
+    },
+    {
+      "npcId": 409,
+      "componentId": 243,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1844-ow.png"
+    },
+    {
+      "npcId": 436,
+      "componentId": 1046,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1706-ow.png"
+    },
+    {
+      "npcId": 437,
+      "componentId": 1046,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1687-ow.png"
+    },
+    {
+      "npcId": 457,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1706-ow.png"
+    },
+    {
+      "npcId": 458,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-202-ow.png"
+    },
+    {
+      "npcId": 461,
+      "componentId": 1068,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1258-ow.png"
+    },
+    {
+      "npcId": 462,
+      "componentId": 1068,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1262-ow.png"
+    },
+    {
+      "npcId": 463,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1687-ow.png"
+    },
+    {
+      "npcId": 464,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1663-ow.png"
+    },
+    {
+      "npcId": 466,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1596-ow.png"
+    },
+    {
+      "npcId": 467,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1576-ow.png"
+    },
+    {
+      "npcId": 468,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-153-ow.png"
+    },
+    {
+      "npcId": 469,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1471-ow.png"
+    },
+    {
+      "npcId": 472,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2590-ow.png"
+    },
+    {
+      "npcId": 473,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2668-ow.png"
+    },
+    {
+      "npcId": 474,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2383-ow.png"
+    },
+    {
+      "npcId": 475,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2413-ow.png"
+    },
+    {
+      "npcId": 476,
+      "componentId": 1067,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2420-ow.png"
+    },
+    {
+      "npcId": 477,
+      "componentId": 1063,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-192-ow.png"
+    },
+    {
+      "npcId": 478,
+      "componentId": 1063,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1576-ow.png"
+    },
+    {
+      "npcId": 483,
+      "componentId": 1006,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1814-ow.png"
+    },
+    {
+      "npcId": 485,
+      "componentId": 1007,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1471-ow.png"
+    },
+    {
+      "npcId": 486,
+      "componentId": 1007,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1466-ow.png"
+    },
+    {
+      "npcId": 487,
+      "componentId": 1006,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1706-ow.png"
+    },
+    {
+      "npcId": 489,
+      "componentId": 1011,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2075-ow.png"
+    },
+    {
+      "npcId": 490,
+      "componentId": 1011,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1258-ow.png"
+    },
+    {
+      "npcId": 493,
+      "componentId": 1012,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1144-ow.png"
+    },
+    {
+      "npcId": 495,
+      "componentId": 1012,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1038-ow.png"
+    },
+    {
+      "npcId": 496,
+      "componentId": 1012,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png"
+    },
+    {
+      "npcId": 497,
+      "componentId": 1012,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2695-ow.png"
+    },
+    {
+      "npcId": 498,
+      "componentId": 1012,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2590-ow.png"
+    },
+    {
+      "npcId": 499,
+      "componentId": 1056,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1776-ow.png"
+    },
+    {
+      "npcId": 501,
+      "componentId": 1057,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1946-ow.png"
+    },
+    {
+      "npcId": 502,
+      "componentId": 1010,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2501-ow.png"
+    },
+    {
+      "npcId": 503,
+      "componentId": 1058,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1258-ow.png"
+    },
+    {
+      "npcId": 508,
+      "componentId": 1014,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-120-ow.png"
+    },
+    {
+      "npcId": 510,
+      "componentId": 1049,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1038-ow.png"
+    },
+    {
+      "npcId": 512,
+      "componentId": 1030,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2014-ow.png"
+    },
+    {
+      "npcId": 591,
+      "componentId": 251,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1297-ow.png"
+    },
+    {
+      "npcId": 592,
+      "componentId": 251,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1328-ow.png"
+    },
+    {
+      "npcId": 594,
+      "componentId": 236,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2085-ow.png"
+    },
+    {
+      "npcId": 601,
+      "componentId": 354,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2501-ow.png"
+    },
+    {
+      "npcId": 602,
+      "componentId": 354,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2668-ow.png"
+    },
+    {
+      "npcId": 603,
+      "componentId": 354,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2590-ow.png"
+    },
+    {
+      "npcId": 604,
+      "componentId": 252,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1262-ow.png"
+    },
+    {
+      "npcId": 607,
+      "componentId": 319,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2231-ow.png"
+    },
+    {
+      "npcId": 608,
+      "componentId": 319,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2085-ow.png"
+    },
+    {
+      "npcId": 609,
+      "componentId": 319,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2098-ow.png"
+    },
+    {
+      "npcId": 614,
+      "componentId": 262,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1297-ow.png"
+    },
+    {
+      "npcId": 615,
+      "componentId": 344,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2501-ow.png"
+    },
+    {
+      "npcId": 616,
+      "componentId": 344,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2668-ow.png"
+    },
+    {
+      "npcId": 617,
+      "componentId": 344,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2590-ow.png"
+    },
+    {
+      "npcId": 618,
+      "componentId": 344,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1258-ow.png"
+    },
+    {
+      "npcId": 619,
+      "componentId": 344,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1245-ow.png"
+    },
+    {
+      "npcId": 620,
+      "componentId": 347,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1219-ow.png"
+    },
+    {
+      "npcId": 624,
+      "componentId": 687,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1262-ow.png"
+    },
+    {
+      "npcId": 711,
+      "componentId": 910,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png"
+    },
+    {
+      "npcId": 712,
+      "componentId": 917,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2273-ow.png"
+    },
+    {
+      "npcId": 714,
+      "componentId": 911,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2273-ow.png"
+    },
+    {
+      "npcId": 717,
+      "componentId": 911,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2379-ow.png"
+    },
+    {
+      "npcId": 748,
+      "componentId": 284,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2590-ow.png"
+    },
+    {
+      "npcId": 751,
+      "componentId": 284,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1120-ow.png"
+    },
+    {
+      "npcId": 753,
+      "componentId": 253,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1886-ow.png"
+    },
+    {
+      "npcId": 840,
+      "componentId": 666,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-228-ow.png"
+    },
+    {
+      "npcId": 841,
+      "componentId": 666,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2273-ow.png"
+    },
+    {
+      "npcId": 842,
+      "componentId": 788,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2420-ow.png"
+    },
+    {
+      "npcId": 844,
+      "componentId": 788,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2273-ow.png"
+    },
+    {
+      "npcId": 845,
+      "componentId": 788,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-228-ow.png"
+    },
+    {
+      "npcId": 847,
+      "componentId": 788,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2379-ow.png"
+    },
+    {
+      "npcId": 848,
+      "componentId": 627,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2383-ow.png"
+    },
+    {
+      "npcId": 850,
+      "componentId": 627,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1844-ow.png"
+    },
+    {
+      "npcId": 851,
+      "componentId": 627,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1825-ow.png"
+    },
+    {
+      "npcId": 852,
+      "componentId": 627,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1814-ow.png"
+    },
+    {
+      "npcId": 854,
+      "componentId": 631,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1656-ow.png"
+    },
+    {
+      "npcId": 855,
+      "componentId": 666,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1663-ow.png"
+    },
+    {
+      "npcId": 858,
+      "componentId": 613,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-202-ow.png"
+    },
+    {
+      "npcId": 862,
+      "componentId": 755,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2125-ow.png"
+    },
+    {
+      "npcId": 863,
+      "componentId": 755,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2130-ow.png"
+    },
+    {
+      "npcId": 865,
+      "componentId": 650,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1856-ow.png"
+    },
+    {
+      "npcId": 866,
+      "componentId": 650,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1886-ow.png"
+    },
+    {
+      "npcId": 868,
+      "componentId": 552,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1144-ow.png"
+    },
+    {
+      "npcId": 871,
+      "componentId": 662,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2202-ow.png"
+    },
+    {
+      "npcId": 872,
+      "componentId": 702,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1706-ow.png"
+    },
+    {
+      "npcId": 873,
+      "componentId": 702,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1687-ow.png"
+    },
+    {
+      "npcId": 874,
+      "componentId": 702,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1663-ow.png"
+    },
+    {
+      "npcId": 875,
+      "componentId": 702,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1656-ow.png"
+    },
+    {
+      "npcId": 879,
+      "componentId": 524,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1946-ow.png"
+    },
+    {
+      "npcId": 880,
+      "componentId": 569,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1596-ow.png"
+    },
+    {
+      "npcId": 881,
+      "componentId": 677,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2211-ow.png"
+    },
+    {
+      "npcId": 883,
+      "componentId": 696,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2463-ow.png"
+    },
+    {
+      "npcId": 886,
+      "componentId": 696,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2374-ow.png"
+    },
+    {
+      "npcId": 887,
+      "componentId": 696,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2379-ow.png"
+    },
+    {
+      "npcId": 888,
+      "componentId": 696,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2132-ow.png"
+    },
+    {
+      "npcId": 889,
+      "componentId": 628,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-120-ow.png"
+    },
+    {
+      "npcId": 890,
+      "componentId": 715,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2413-ow.png"
+    },
+    {
+      "npcId": 891,
+      "componentId": 716,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1038-ow.png"
+    },
+    {
+      "npcId": 892,
+      "componentId": 715,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2463-ow.png"
+    },
+    {
+      "npcId": 895,
+      "componentId": 741,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2231-ow.png"
+    },
+    {
+      "npcId": 897,
+      "componentId": 772,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2379-ow.png"
+    },
+    {
+      "npcId": 898,
+      "componentId": 772,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1946-ow.png"
+    },
+    {
+      "npcId": 900,
+      "componentId": 772,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1471-ow.png"
+    },
+    {
+      "npcId": 901,
+      "componentId": 772,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-153-ow.png"
+    },
+    {
+      "npcId": 902,
+      "componentId": 772,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1362-ow.png"
+    },
+    {
+      "npcId": 904,
+      "componentId": 529,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2501-ow.png"
+    },
+    {
+      "npcId": 907,
+      "componentId": 799,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1362-ow.png"
+    },
+    {
+      "npcId": 909,
+      "componentId": 587,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1258-ow.png"
+    },
+    {
+      "npcId": 911,
+      "componentId": 587,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2211-ow.png"
+    },
+    {
+      "npcId": 912,
+      "componentId": 587,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2202-ow.png"
+    },
+    {
+      "npcId": 913,
+      "componentId": 577,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2098-ow.png"
+    },
+    {
+      "npcId": 914,
+      "componentId": 734,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2130-ow.png"
+    },
+    {
+      "npcId": 916,
+      "componentId": 545,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2379-ow.png"
+    },
+    {
+      "npcId": 917,
+      "componentId": 545,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2374-ow.png"
+    },
+    {
+      "npcId": 918,
+      "componentId": 742,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2085-ow.png"
+    },
+    {
+      "npcId": 919,
+      "componentId": 742,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2098-ow.png"
+    },
+    {
+      "npcId": 924,
+      "componentId": 768,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1706-ow.png"
+    },
+    {
+      "npcId": 927,
+      "componentId": 745,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2577-ow.png"
+    },
+    {
+      "npcId": 928,
+      "componentId": 727,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1825-ow.png"
+    },
+    {
+      "npcId": 929,
+      "componentId": 727,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1844-ow.png"
+    },
+    {
+      "npcId": 930,
+      "componentId": 727,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2413-ow.png"
+    },
+    {
+      "npcId": 933,
+      "componentId": 725,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1362-ow.png"
+    },
+    {
+      "npcId": 934,
+      "componentId": 724,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2374-ow.png"
+    },
+    {
+      "npcId": 935,
+      "componentId": 725,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1656-ow.png"
+    },
+    {
+      "npcId": 938,
+      "componentId": 791,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1886-ow.png"
+    },
+    {
+      "npcId": 941,
+      "componentId": 547,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2695-ow.png"
+    },
+    {
+      "npcId": 998,
+      "componentId": 1003,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1814-ow.png"
+    },
+    {
+      "npcId": 999,
+      "componentId": 1003,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1805-ow.png"
+    },
+    {
+      "npcId": 1000,
+      "componentId": 1003,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2383-ow.png"
+    },
+    {
+      "npcId": 1001,
+      "componentId": 1003,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2413-ow.png"
+    },
+    {
+      "npcId": 1002,
+      "componentId": 1003,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2420-ow.png"
+    },
+    {
+      "npcId": 1003,
+      "componentId": 1017,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1262-ow.png"
+    },
+    {
+      "npcId": 1005,
+      "componentId": 1020,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2758-ow.png"
+    },
+    {
+      "npcId": 1006,
+      "componentId": 1050,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-120-ow.png"
+    },
+    {
+      "npcId": 1007,
+      "componentId": 1050,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1219-ow.png"
+    },
+    {
+      "npcId": 1010,
+      "componentId": 1051,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1245-ow.png"
+    },
+    {
+      "npcId": 1013,
+      "componentId": 1002,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2379-ow.png"
+    },
+    {
+      "npcId": 1016,
+      "componentId": 981,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2014-ow.png"
+    },
+    {
+      "npcId": 1018,
+      "componentId": 988,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2085-ow.png"
+    },
+    {
+      "npcId": 1019,
+      "componentId": 981,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1708-ow.png"
+    },
+    {
+      "npcId": 1020,
+      "componentId": 1013,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2075-ow.png"
+    },
+    {
+      "npcId": 1023,
+      "componentId": 1013,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1946-ow.png"
+    },
+    {
+      "npcId": 1024,
+      "componentId": 1012,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1120-ow.png"
+    },
+    {
+      "npcId": 1027,
+      "componentId": 996,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-228-ow.png"
+    },
+    {
+      "npcId": 1028,
+      "componentId": 996,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2758-ow.png"
+    },
+    {
+      "npcId": 1029,
+      "componentId": 996,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1038-ow.png"
+    },
+    {
+      "npcId": 1030,
+      "componentId": 996,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1706-ow.png"
+    },
+    {
+      "npcId": 1031,
+      "componentId": 996,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1687-ow.png"
+    },
+    {
+      "npcId": 1032,
+      "componentId": 996,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1776-ow.png"
+    },
+    {
+      "npcId": 1035,
+      "componentId": 987,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2758-ow.png"
+    },
+    {
+      "npcId": 1036,
+      "componentId": 987,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2695-ow.png"
+    },
+    {
+      "npcId": 1037,
+      "componentId": 1019,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1306-ow.png"
+    },
+    {
+      "npcId": 1038,
+      "componentId": 1021,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1258-ow.png"
+    },
+    {
+      "npcId": 1047,
+      "componentId": 1028,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png"
+    },
+    {
+      "npcId": 1048,
+      "componentId": 1029,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png"
+    },
+    {
+      "npcId": 1049,
+      "componentId": 1031,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2383-ow.png"
+    },
+    {
+      "npcId": 1089,
+      "componentId": 949,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2695-ow.png"
+    },
+    {
+      "npcId": 1090,
+      "componentId": 949,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2463-ow.png"
+    },
+    {
+      "npcId": 1091,
+      "componentId": 949,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2420-ow.png"
+    },
+    {
+      "npcId": 1092,
+      "componentId": 949,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2413-ow.png"
+    },
+    {
+      "npcId": 1094,
+      "componentId": 951,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1317-ow.png"
+    },
+    {
+      "npcId": 1095,
+      "componentId": 885,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2695-ow.png"
+    },
+    {
+      "npcId": 1097,
+      "componentId": 916,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1362-ow.png"
+    },
+    {
+      "npcId": 1124,
+      "componentId": 814,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-202-ow.png"
+    },
+    {
+      "npcId": 1126,
+      "componentId": 813,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2014-ow.png"
+    },
+    {
+      "npcId": 1129,
+      "componentId": 884,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2590-ow.png"
+    },
+    {
+      "npcId": 1130,
+      "componentId": 933,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1856-ow.png"
+    },
+    {
+      "npcId": 1131,
+      "componentId": 971,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1825-ow.png"
+    },
+    {
+      "npcId": 1132,
+      "componentId": 968,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2130-ow.png"
+    },
+    {
+      "npcId": 1360,
+      "componentId": 526,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1886-ow.png"
+    },
+    {
+      "npcId": 1361,
+      "componentId": 526,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-192-ow.png"
+    },
+    {
+      "npcId": 1364,
+      "componentId": 528,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png"
+    },
+    {
+      "npcId": 1365,
+      "componentId": 527,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2383-ow.png"
+    },
+    {
+      "npcId": 1367,
+      "componentId": 527,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2420-ow.png"
+    },
+    {
+      "npcId": 1368,
+      "componentId": 676,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2125-ow.png"
+    },
+    {
+      "npcId": 1369,
+      "componentId": 397,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1814-ow.png"
+    },
+    {
+      "npcId": 1370,
+      "componentId": 397,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1844-ow.png"
+    },
+    {
+      "npcId": 1371,
+      "componentId": 397,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1825-ow.png"
+    },
+    {
+      "npcId": 1373,
+      "componentId": 675,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2668-ow.png"
+    },
+    {
+      "npcId": 1376,
+      "componentId": 675,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-2420-ow.png"
+    },
+    {
+      "npcId": 1377,
+      "componentId": 450,
+      "faction": "friendly-lsw",
+      "image": "assets/swagbound/overworld-npc/lsw-1946-ow.png"
+    }
+  ]
+}

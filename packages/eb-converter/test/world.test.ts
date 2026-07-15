@@ -75,6 +75,11 @@ function syntheticFts(): string {
         const cellY = Math.floor(index / 4);
         return cell(1, cellY === 1 || cellY === 2 ? 0x80 : 0x00);
       }).join("")); // mixed tile: solid middle band plus walkable floor cells
+    } else if (i === 7) {
+      lines.push(Array.from({ length: 16 }, (_, index) => {
+        const cellY = Math.floor(index / 4);
+        return cell(1, cellY < 2 ? 0x01 : 0x80);
+      }).join("")); // isolated tree: lower-hide canopy over a solid trunk
     } else {
       lines.push(cell(0, 0x00).repeat(16)); // blank void tile
     }
@@ -349,6 +354,70 @@ describe("region selection and collision encoding", () => {
     const withVoid = encodeCollisionRows(surface, 4, 1, voidSolid);
     expect(withVoid.solidRows).toEqual(["1100"]);
     expect(withVoid.solidCells).toBe(2);
+  });
+
+  it("promotes reviewed tile walk-behind cells to solid while preserving surface bytes", () => {
+    const tileset = parseFts(syntheticFts());
+    const graphics = { tileset, palettes: new Map([[0, tileset.palettes[0]]]) };
+    const composed = composeRegion({
+      bounds: { originTileX: 0, originTileY: 0, widthTiles: 1, heightTiles: 1 },
+      mapRows: [[4]],
+      sectorLookup: () => ({
+        tileset: 0,
+        palette: 0,
+        music: "0",
+        setting: "none",
+        townMap: "none",
+        item: "0",
+        areaId: 0,
+        indoor: false,
+        bounded: false
+      }),
+      tilesetForMapTileset: () => graphics,
+      tileCollisionOverrides: new Set(["0:4"])
+    });
+
+    const collision = encodeCollisionRows(
+      composed.surface,
+      composed.collisionWidth,
+      composed.collisionHeight,
+      composed.voidSolid,
+      composed.overrideSolid
+    );
+    expect(collision.surfaceRows).toEqual(Array(4).fill("03030303"));
+    expect(collision.solidRows).toEqual(Array(4).fill("1111"));
+  });
+
+  it("promotes reviewed lower-hide canopy cells used by isolated trees", () => {
+    const tileset = parseFts(syntheticFts());
+    const graphics = { tileset, palettes: new Map([[0, tileset.palettes[0]]]) };
+    const composed = composeRegion({
+      bounds: { originTileX: 0, originTileY: 0, widthTiles: 1, heightTiles: 1 },
+      mapRows: [[7]],
+      sectorLookup: () => ({
+        tileset: 0,
+        palette: 0,
+        music: "0",
+        setting: "none",
+        townMap: "none",
+        item: "0",
+        areaId: 0,
+        indoor: false,
+        bounded: false
+      }),
+      tilesetForMapTileset: () => graphics,
+      tileCollisionOverrides: new Set(["0:7"])
+    });
+
+    const collision = encodeCollisionRows(
+      composed.surface,
+      composed.collisionWidth,
+      composed.collisionHeight,
+      composed.voidSolid,
+      composed.overrideSolid
+    );
+    expect(collision.surfaceRows).toEqual(["01010101", "01010101", "80808080", "80808080"]);
+    expect(collision.solidRows).toEqual(Array(4).fill("1111"));
   });
 
   it("promotes bottom-row foreground occluders using the south chunk's top row solidity", () => {

@@ -94,3 +94,55 @@ visible in the shipped build.
 Prior artifacts that are NOT decisions: `content/anchor96-casting-plan.json` on
 branch `feat/anchor96-roamers` is a machine proposal (`"status": "proposal"`,
 251 of 265 rows marked `needs-human`). Do not mistake it for approved casting.
+
+## 8. Interior casting authority
+
+`content/interior-sprite-casting.json` is the additive authority for ambient
+interior casting. The full-world build resolves connected walkable rooms and
+compiles the selected art into generated `sprite-overrides.json` as per-NPC
+entries. Runtime resolution remains:
+
+1. authored `byNpcId` identity, unless a room explicitly lists that NPC under
+   `overrideAuthoredNpcIds`
+2. compiled interior casting, including those narrow room-authorized visual swaps
+3. authored `bySpriteGroup` crowd fallback
+4. stock EarthBound art
+
+Only `person` NPCs in bounded indoor sectors are eligible by default. Objects,
+items, named per-NPC identities, and explicit room exceptions are preserved.
+`overrideAuthoredNpcIds` is only for deliberate visual recasting of known NPCs,
+such as shop clerks; it does not alter their dialogue, scripts, service, or
+movement behavior.
+
+Rooms with foreground furniture may set `displayHeight` and `originY` without
+moving interaction anchors. At runtime, every `person` NPC in an indoor or
+bounded sector renders above the foreground furniture layer. This keeps the
+whole interior cast readable, including preserved named/service NPCs that the
+casting compiler does not replace. Objects and items retain ordinary world
+depth so counters, walls, and props still occlude each other normally.
+Explicit hostile rooms use `renderLayer: "world"` so cave walls, arcade
+machines, stage ledges, and similar scenery retain normal Y-sorted occlusion
+over their Milady-family cast.
+Rooms representing a uniform faction or cult may set `fixedImage` so every
+assigned occupant uses the same approved sprite instead of rotating through
+the faction pool.
+Some EarthBound crowds are baked into map arrangements instead of NPC records.
+Coordinate-scoped `content/tile-overrides.json` regions replace those visuals
+without changing the source collision grid; Dense Cave uses this path for its
+uniform Milady cult.
+When source data misclassifies a visibly humanoid placement as an object or
+item, a room may list that known placement under `includeNpcIds`; this is a
+narrow casting exception and does not change its interaction behavior.
+
+Visual language:
+
+- friendly interiors use the reviewed Little Swag World pool
+- explicitly hostile interiors use the reviewed Milady-family pool
+- the Morningside arcade is the first explicit hostile room
+- art direction does not authorize early dialogue to name Milady
+
+Assignments are deterministic from the authored seed, room component, faction,
+and NPC id. Rebuilding must not shuffle the cast. After changing the casting
+file, run the full content build and `node scripts/interior-sprite-audit.mjs`.
+The audit gates interior LSW coverage, the share of all LSW appearances found
+indoors, and hostile-room Milady coverage.

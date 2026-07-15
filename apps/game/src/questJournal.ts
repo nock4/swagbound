@@ -105,7 +105,8 @@ export class QuestJournal {
     const quests = this.host.quests();
     const objective = this.host.objective?.()?.trim();
     const objectiveBlock = objective
-      ? `` /* NEXT line removed per Nick: exploration over hand-holding; objectives.json stays dormant for future hint NPCs */
+      ? `<div style="margin-bottom:10px;padding:7px 9px;border:1px solid #ffd23f;color:#fff3b0;">` +
+        `<span style="color:#ffd23f;font-weight:bold;">NEXT</span><br>${escapeHtml(objective)}</div>`
       : "";
     const blocks = quests.map((quest) => {
       const done = quest.steps.filter((s) => this.host.hasFlag(s.flag)).length;

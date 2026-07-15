@@ -50,7 +50,7 @@ export const OPENING_FLYOVER_SHOTS: readonly OpeningFlyoverShot[] = [
     from: { x: 1504, y: 1704 },
     to: { x: 2656, y: 344 },
     duration: 20_000,
-    text: "Tonight one signal came back wearing your name."
+    text: "A camera saw Bosch leave home while Bosch was still asleep."
   }
 ] as const;
 

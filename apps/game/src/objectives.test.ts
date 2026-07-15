@@ -42,19 +42,21 @@ describe("currentObjective", () => {
       readFileSync(resolve("content/objectives.json"), "utf8")
     ));
 
-    expect(currentObjective(flags([]), objectives)?.id).toBe("act1-card-clique");
-    expect(currentObjective(flags(["signal:clique_cleared"]), objectives)?.id).toBe("act1-returnless-king");
-    expect(currentObjective(flags(["signal:clique_cleared", "signal:route_open"]), objectives)?.id).toBe("act1-malady");
-    expect(currentObjective(flags(["signal:clique_cleared", "signal:route_open", "signal:threshold_cleared"]), objectives)?.id)
+    expect(currentObjective(flags([]), objectives)?.id).toBe("act1-cold-signal");
+    expect(currentObjective(flags(["intro:meteor-beat-fired"]), objectives)?.id).toBe("act1-card-clique");
+    expect(currentObjective(flags(["intro:meteor-beat-fired", "signal:clique_cleared"]), objectives)?.id).toBe("act1-returnless-king");
+    expect(currentObjective(flags(["intro:meteor-beat-fired", "signal:clique_cleared", "signal:route_open"]), objectives)?.id).toBe("act1-malady");
+    expect(currentObjective(flags(["intro:meteor-beat-fired", "signal:clique_cleared", "signal:route_open", "signal:threshold_cleared"]), objectives)?.id)
       .toBe("act1-munch");
     expect(currentObjective(flags([
       "signal:clique_cleared",
+      "intro:meteor-beat-fired",
       "signal:route_open",
       "signal:threshold_cleared",
       "recruit:munch"
     ]), objectives)?.id)
       .toBe("act1-leave-signal-town");
-    const act1CompleteFlags = ["signal:clique_cleared", "signal:route_open", "signal:threshold_cleared", "recruit:munch", "act1:complete"];
+    const act1CompleteFlags = ["intro:meteor-beat-fired", "signal:clique_cleared", "signal:route_open", "signal:threshold_cleared", "recruit:munch", "act1:complete"];
     expect(currentObjective(flags(act1CompleteFlags), objectives)?.id).toBe("act2-reach-postwick");
     expect(currentObjective(flags([...act1CompleteFlags, "act2:begun", "postwick:arrived"]), objectives)?.id)
       .toBe("act2-postwick-registry");
@@ -113,6 +115,6 @@ describe("currentObjective", () => {
 
     expect(first).toBe(again);
     expect(first).not.toBe(neighbor);
-    expect(first).toContain("arcade");
+    expect(first).toContain("meteor");
   });
 });

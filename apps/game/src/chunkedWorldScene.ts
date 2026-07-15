@@ -276,7 +276,7 @@ import {
   spriteOverrideSpriteGroupFromSheetKey,
   type SpriteOverrideSheet
 } from "./spriteOverrides";
-import { spriteBottomY, spriteSortDepth } from "./renderDepth";
+import { npcRenderLayer, spriteBottomY, spriteSortDepth, type SpriteRenderLayer } from "./renderDepth";
 import {
   resolveConnectedRoomBounds,
   resolveSectorAreaBounds,
@@ -3147,7 +3147,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (actor instanceof Phaser.GameObjects.Sprite) {
       actor.setFrame(npc.state.player.animFrame);
     }
-    this.setActorSortDepth(actor);
+    const renderLayer = this.npcSpriteOverrideResolution(
+      npc.data.npcId,
+      npc.data.spriteGroup
+    )?.override.renderLayer ?? npcRenderLayer(
+      npc.data.type,
+      isInteriorMusicSector(this.world_.sectors, npc.state.player)
+    );
+    this.setActorSortDepth(actor, renderLayer);
     actor.y = npc.state.player.y;
     this.applyWalkMirror(actor, this.spriteWalkMirrorNow(
       npc.state.player.moving,
@@ -3398,6 +3405,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private static readonly PRESENT_TEXTURE_CLOSED = "swag-present-closed";
   private static readonly PRESENT_TEXTURE_OPEN = "swag-present-open";
+  private static readonly MAILBOX_TEXTURE = "swag-mailbox-static";
 
   /** Draw the roadside-present gift boxes once into cached textures (closed + opened). */
   private ensurePresentTextures(): void {
@@ -3498,11 +3506,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private spawnExamineInteractableSprites(): void {
     this.destroyExamineInteractableSprites();
+    this.ensureMailboxTexture();
     for (const entry of this.data_.overworldInteractables.interactables) {
-      if (entry.kind !== "examine" || !entry.sprite) {
+      if (entry.kind !== "examine") {
         continue;
       }
-      const key = this.examineInteractableSpriteTextureKey(entry);
+      const key = entry.sprite
+        ? this.examineInteractableSpriteTextureKey(entry)
+        : entry.id === "signal-spawn-mailbox"
+          ? ChunkedWorldScene.MAILBOX_TEXTURE
+          : undefined;
+      if (!key) {
+        continue;
+      }
       if (!this.textures.exists(key)) {
         continue;
       }
@@ -3517,7 +3533,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private syncExamineInteractableSprites(): void {
     for (const entry of this.data_.overworldInteractables.interactables) {
-      if (entry.kind !== "examine" || !entry.sprite) {
+      if (entry.kind !== "examine" || (!entry.sprite && entry.id !== "signal-spawn-mailbox")) {
         continue;
       }
       const sprite = this.examineInteractableSprites.get(entry.id);
@@ -3534,6 +3550,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
       sprite.destroy();
     }
     this.examineInteractableSprites.clear();
+  }
+
+  /** A static, code-native mailbox so the opening clue is visible and never animates. */
+  private ensureMailboxTexture(): void {
+    if (this.textures.exists(ChunkedWorldScene.MAILBOX_TEXTURE)) {
+      return;
+    }
+    const g = this.add.graphics();
+    g.fillStyle(0x201926, 1).fillRect(2, 5, 12, 12);
+    g.fillStyle(0x6f476b, 1).fillRect(3, 6, 10, 9);
+    g.fillStyle(0xa86f91, 1).fillRect(3, 5, 10, 3);
+    g.fillStyle(0xe4c3a5, 1).fillRect(5, 9, 6, 1);
+    g.fillStyle(0x302534, 1).fillRect(7, 17, 2, 7);
+    g.fillStyle(0xc84f5e, 1).fillRect(13, 3, 2, 8);
+    g.generateTexture(ChunkedWorldScene.MAILBOX_TEXTURE, 16, 24);
+    g.destroy();
   }
 
   private examineInteractableSpriteTextureKey(entry: Extract<OverworldInteractable, { kind: "examine" }>): string {
@@ -7425,7 +7457,30 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // shake (camera effects render reliably over the night dim, unlike an overlay).
     this.time.delayedCall(OPENING_WAKE_SIGNAL_FIRST_FLASH_MS, () => {
       if (this.bedroomNightOverlay) {
+        this.openingSfx.resume();
+        this.openingSfx.signalLock();
         this.cameras.main.flash(360, 32, 176, 224);
+        const caption = this.add
+          .text(this.scale.width / 2, this.scale.height - 28, "Something flashes beyond the bedroom window.", {
+            fontFamily: CLEAN_UI_FONT_FAMILY,
+            fontSize: "12px",
+            color: "#d8f7ff",
+            align: "center"
+          })
+          .setOrigin(0.5, 1)
+          .setScrollFactor(0)
+          .setDepth(131000)
+          .setAlpha(0)
+          .setShadow(0, 1, "#000000", 4);
+        this.tweens.add({ targets: caption, alpha: 1, duration: 180 });
+        this.time.delayedCall(1150, () => {
+          this.tweens.add({
+            targets: caption,
+            alpha: 0,
+            duration: 300,
+            onComplete: () => caption.destroy()
+          });
+        });
       }
     });
     this.time.delayedCall(OPENING_WAKE_SIGNAL_SECOND_FLASH_MS, () => {
@@ -7587,6 +7642,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.authoredOpeningCutsceneRunActive = false;
     if (options.completedOpening) {
       this.gameFlags.set(INTRO_BEDROOM_OPENING_DONE_FLAG);
+      this.refreshMenuScreens();
     }
     this.liftBedroomNightOverlay();
     if (this.dialogue.open && result.status === "aborted") {
@@ -7595,6 +7651,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.afterDialogueClosed();
     if (options.completedOpening) {
       this.autosaveOpeningHome();
+      this.showObjectiveNotice();
     }
     this.releaseOpeningCutsceneActorHolds();
     const finalPlayer = this.currentPlayerPoint();
@@ -7720,6 +7777,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
 
     this.gameFlags.set(INTRO_METEOR_BEAT_FIRED_FLAG);
+    this.refreshMenuScreens();
     lockPlayer(this.playerState, this.playerFrames);
     const startResult = startScriptedBeatDialogue({
       reference: beat.dialogueRef,
@@ -8193,6 +8251,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.recruitNoticeUntilMs = this.time.now + 2400;
     this.updatePrompt();
     this.publish();
+  }
+
+  private showObjectiveNotice(): void {
+    const objective = this.currentObjectiveText();
+    if (!objective) {
+      return;
+    }
+    this.recruitNoticeText = `Next: ${objective}`;
+    this.recruitNoticeUntilMs = this.time.now + 5000;
   }
 
   private finishIntroMeteorBeatWithoutBattle(): void {
@@ -10044,7 +10111,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
-  private setActorSortDepth(actor: SortableActor): void {
+  private setActorSortDepth(actor: SortableActor, renderLayer: SpriteRenderLayer = "world"): void {
     const bottomY = spriteBottomY({
       y: actor.y,
       originY: actor.originY,
@@ -10054,7 +10121,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // layer deterministically left-behind-right instead of stacking at one depth.
     // The fraction stays < 1 so the y-row ordering always dominates.
     const tiebreak = Number.isFinite(actor.x) ? ((actor.x % 4096) + 4096) % 4096 / 4096 * 0.5 : 0;
-    actor.setDepth(spriteSortDepth(bottomY) + tiebreak);
+    actor.setDepth(spriteSortDepth(bottomY, renderLayer) + tiebreak);
   }
 
   /**

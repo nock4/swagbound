@@ -24,6 +24,7 @@ import {
   NpcMovementPatternsSchema,
   NpcOverridesSchema,
   ObjectivesSchema,
+  OpeningClaritySchema,
   OpeningCutsceneSchema,
   OverworldInteractablesSchema,
   OverworldEnemySkinsSchema,
@@ -31,17 +32,20 @@ import {
   RoamerZoneCapsSchema,
   SpriteOverridesSchema,
   FlagMapSchema,
+  InteriorSpriteCastingSchema,
   StoryItemsSchema,
   StoryTriggersSchema,
   CutscenesSchema,
   TileOverridesSchema,
   UsabilityMatrixSchema,
+  WorldChunkedSchema,
   type BackgroundOverrideEntry,
   type SpriteOverride,
   type SpriteOverrides,
   type TileOverrides
 } from "../packages/eb-schemas/src/index";
 import { DEFAULT_GENERATED_OUT } from "../packages/content-builder/src/build";
+import { compileInteriorSpriteCasting } from "../packages/content-builder/src/interiorSpriteCasting";
 import { convertProject, parseFgPredicate } from "../packages/eb-converter/src/index";
 import type { FgPredicateVersion, ForegroundPredicateSummary } from "../packages/eb-converter/src/world";
 
@@ -56,6 +60,9 @@ export const SWAGBOUND_DIALOGUE_LIBRARY_SOURCE = "content/swagbound-dialogue-lib
 export const SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT = "swagbound-dialogue-library.json";
 export const SPRITE_OVERRIDES_SOURCE = "content/sprite-overrides.json";
 export const SPRITE_OVERRIDES_OUTPUT = "sprite-overrides.json";
+export const INTERIOR_SPRITE_CASTING_SOURCE = "content/interior-sprite-casting.json";
+export const INTERIOR_SPRITE_CASTING_OUTPUT = "interior-sprite-casting.json";
+export const INTERIOR_SPRITE_CASTING_REPORT_OUTPUT = "interior-sprite-casting-report.json";
 export const NPC_OVERRIDES_SOURCE = "content/npc-overrides.json";
 export const NPC_OVERRIDES_OUTPUT = "npc-overrides.json";
 export const NPC_MOVEMENT_PATTERNS_SOURCE = "content/npc-movement-patterns.json";
@@ -122,6 +129,8 @@ export const ATTESTATION_BATTLES_SOURCE = "content/attestation-battles.json";
 export const ATTESTATION_BATTLES_OUTPUT = "attestation-battles.json";
 export const OBJECTIVES_SOURCE = "content/objectives.json";
 export const OBJECTIVES_OUTPUT = "objectives.json";
+export const OPENING_CLARITY_SOURCE = "content/opening-clarity.json";
+export const OPENING_CLARITY_OUTPUT = "opening-clarity.json";
 export const NAVMESH_SOURCE = "content/navmesh.json";
 export const NAVMESH_OUTPUT = "navmesh.json";
 export const USABILITY_MATRIX_SOURCE = "content/usability-matrix.json";
@@ -234,6 +243,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateAttestationBattles(ATTESTATION_BATTLES_SOURCE);
   await validateFgOverrides(FG_OVERRIDES_SOURCE);
   await validateObjectives(OBJECTIVES_SOURCE);
+  await validateOpeningClarity(OPENING_CLARITY_SOURCE);
   await validateNavmesh(NAVMESH_SOURCE);
   await validateUsabilityMatrix(USABILITY_MATRIX_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
@@ -252,6 +262,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(CUSTOM_DIALOGUE_SOURCE, out, CUSTOM_DIALOGUE_OUTPUT),
     copyJsonToGenerated(SWAGBOUND_DIALOGUE_LIBRARY_SOURCE, out, SWAGBOUND_DIALOGUE_LIBRARY_OUTPUT),
     generateSpriteOverridesWithOverworldSkins(out, SPRITE_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(INTERIOR_SPRITE_CASTING_SOURCE, out, INTERIOR_SPRITE_CASTING_OUTPUT),
     copyJsonToGenerated(NPC_OVERRIDES_SOURCE, out, NPC_OVERRIDES_OUTPUT),
     copyJsonToGenerated(NPC_MOVEMENT_PATTERNS_SOURCE, out, NPC_MOVEMENT_PATTERNS_OUTPUT),
     copyJsonToGenerated(BACKGROUND_OVERRIDES_SOURCE, out, BACKGROUND_OVERRIDES_OUTPUT),
@@ -282,6 +293,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyOptionalJsonToGenerated(DRIFELLA_SOURCE_CHECKS_SOURCE, out, DRIFELLA_SOURCE_CHECKS_OUTPUT),
     copyOptionalJsonToGenerated(ATTESTATION_BATTLES_SOURCE, out, ATTESTATION_BATTLES_OUTPUT),
     copyJsonToGenerated(OBJECTIVES_SOURCE, out, OBJECTIVES_OUTPUT),
+    copyJsonToGenerated(OPENING_CLARITY_SOURCE, out, OPENING_CLARITY_OUTPUT),
     copyJsonToGenerated(NAVMESH_SOURCE, out, NAVMESH_OUTPUT),
     copyJsonToGenerated(USABILITY_MATRIX_SOURCE, out, USABILITY_MATRIX_OUTPUT)
   ]);
@@ -295,10 +307,19 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
  */
 async function generateSpriteOverridesWithOverworldSkins(out: string, outputName: string): Promise<void> {
   const base = SpriteOverridesSchema.parse(JSON.parse(await readFile(resolve(SPRITE_OVERRIDES_SOURCE), "utf8")));
+  const casting = InteriorSpriteCastingSchema.parse(
+    JSON.parse(await readFile(resolve(INTERIOR_SPRITE_CASTING_SOURCE), "utf8"))
+  );
+  const world = WorldChunkedSchema.parse(JSON.parse(await readFile(resolve(out, "world.json"), "utf8")));
   const skins = OverworldEnemySkinsSchema.parse(JSON.parse(await readFile(resolve(OVERWORLD_ENEMY_SKINS_SOURCE), "utf8")));
   const families = EnemyNameFamiliesSchema.parse(JSON.parse(await readFile(resolve(ENEMY_NAME_FAMILIES_SOURCE), "utf8")));
+  const compiledCasting = compileInteriorSpriteCasting(world, base, casting);
   const merged = SpriteOverridesSchema.parse({
     ...base,
+    byNpcId: {
+      ...(base.byNpcId ?? {}),
+      ...compiledCasting.byNpcId
+    },
     // Family skins are the DEFAULT roaming-enemy overworld art; an explicit
     // overworldByEnemyId in the committed source wins (e.g. the good-new-sprites
     // refresh maps each enemy id to its per-creature overworld sprite).
@@ -308,11 +329,21 @@ async function generateSpriteOverridesWithOverworldSkins(out: string, outputName
     }
   });
   await Promise.all(
-    spriteOverrideEntries(merged).map((override) => validatePublicAssetImage(override.image, "Sprite override image"))
+    [
+      ...spriteOverrideEntries(merged).map((override) => override.image),
+      ...Object.values(casting.pools).flatMap((pool) => pool.images)
+    ].map((image) => validatePublicAssetImage(image, "Sprite override image"))
   );
   const target = resolve(out, outputName);
   await mkdir(dirname(target), { recursive: true });
-  await writeFile(target, `${JSON.stringify(merged, null, 2)}\n`, "utf8");
+  await Promise.all([
+    writeFile(target, `${JSON.stringify(merged, null, 2)}\n`, "utf8"),
+    writeFile(
+      resolve(out, INTERIOR_SPRITE_CASTING_REPORT_OUTPUT),
+      `${JSON.stringify(compiledCasting.report, null, 2)}\n`,
+      "utf8"
+    )
+  ]);
 }
 
 /**
@@ -438,6 +469,15 @@ async function validateFgOverrides(source: string): Promise<void> {
 
 async function validateObjectives(source: string): Promise<void> {
   ObjectivesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateOpeningClarity(source: string): Promise<void> {
+  const clarity = OpeningClaritySchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+  await Promise.all([
+    ...Object.values(clarity.spriteOverrides.byNpcId),
+    ...Object.values(clarity.spriteOverrides.byEnemyId),
+    ...Object.values(clarity.spriteOverrides.overworldByEnemyId)
+  ].map((override) => validatePublicAssetImage(override.image, "Opening clarity sprite")));
 }
 
 async function validateNavmesh(source: string): Promise<void> {

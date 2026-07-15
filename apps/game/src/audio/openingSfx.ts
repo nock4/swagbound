@@ -3,6 +3,7 @@ import { audioContextAvailable, sharedAudioContext } from "./sharedAudioContext"
 export interface OpeningSfx {
   resume(): void;
   rumble(): void;
+  signalLock(): void;
   bedroomKnock(): void;
 }
 
@@ -21,6 +22,7 @@ const KNOCK_TAP_OFFSETS_SEC = [0, 0.14, 0.54, 0.68] as const;
 export class NoopOpeningSfx implements OpeningSfx {
   resume(): void {}
   rumble(): void {}
+  signalLock(): void {}
   bedroomKnock(): void {}
 }
 
@@ -58,6 +60,35 @@ export class WebAudioOpeningSfx implements OpeningSfx {
         frequencyHz: 115,
         gain: 0.018,
         attack: 0.2
+      });
+    });
+  }
+
+  signalLock(): void {
+    this.withContext((context) => {
+      const start = context.currentTime;
+      this.lowTone(context, {
+        start,
+        duration: 0.42,
+        fromHz: 310,
+        toHz: 880,
+        gain: 0.055,
+        attack: 0.025
+      });
+      this.lowTone(context, {
+        start: start + 0.12,
+        duration: 0.5,
+        fromHz: 190,
+        toHz: 520,
+        gain: 0.04,
+        attack: 0.02
+      });
+      this.brownNoiseBurst(context, {
+        start,
+        duration: 0.18,
+        frequencyHz: 720,
+        gain: 0.025,
+        attack: 0.01
       });
     });
   }

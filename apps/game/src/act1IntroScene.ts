@@ -16,13 +16,9 @@ import { CANCEL_KEY_NAMES, CONFIRM_KEY_NAMES, registerDiscreteKeys } from "./inp
 export type Act1IntroBeat = { text: string; tone?: "system" | "warm" };
 
 export const ACT1_INTRO_BEATS: readonly Act1IntroBeat[] = [
-  { text: "There is a picture of you.\nIt was not made for you to look at.\nIt was made to look at you.\nAnd it has been looking a long time." },
-  { text: "It lives in every image you were ever shown.\nIt learned which face you trusted, and filed the answer.\nIt wears a thousand faces now, all borrowed, none its own,\nso there is no one to blame and nothing to hit." },
-  { text: "It does not argue. It agrees,\nand it makes agreeing feel like heaven.\nWhole towns sign themselves over: they trade the ache\nof being real for a smoother feeling, print a flag out\nof the mood, and file anyone who still hurts as a bug." },
-  { text: "It disputes every source until there is none.\nIt will buy your last honest thing\nand call the receipt a win." },
-  { text: "Last night it finished reading you\nand returned a verdict. One box, checked:\n\nVESSEL.\n\nNot a lie. A better statistic.\nAnd it has begun, very softly, to call itself the future." },
-  { text: "But one field came back unreadable.\nIt flagged the last true thing about you as damage:\nthe ache, the mistake, the part that would not smooth out.\nThat error is the only thing it could never copy,\nbecause it is the only thing you never faked." },
-  { text: "So wake up wrong. Wake up unfinished.\nYou are not the only real one left.\nA few others slipped the read too, and they are worth finding.\nThere is a cold signal on the sill, and a cleaner version\nof you already downstairs, answering to your name.\nGo be the one it cannot.", tone: "warm" }
+  { text: "At 4:03 this morning, a camera saw Bosch leave home.\nBosch was still asleep upstairs." },
+  { text: "By dawn, strangers remembered talking to him.\nThe arcade kids had his picture.\nSomeone with Bosch's face was moving through Morningside." },
+  { text: "Then a cold signal reached the bedroom window.\nWake up. Find MiFella.\nAsk who saw the other Bosch.", tone: "warm" }
 ];
 
 const FADE_IN_MS = 520;

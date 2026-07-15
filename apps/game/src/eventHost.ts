@@ -21,7 +21,7 @@ import {
   type CustomDialogueLookup,
   type DialogueLibraryLookup
 } from "./scriptedDialogueResolver";
-import { isGeneratedDrifellaBarkEntry } from "./customDialogueLookup";
+import { isGeneratedDrifellaBarkEntry, resolveRuntimeNpcDialogue } from "./customDialogueLookup";
 import { GameFlags } from "./gameFlags";
 import type { DialogueController } from "./state";
 import { PartyState, type ItemUseEffect, type PartyStateCounts } from "./partyState";
@@ -566,7 +566,7 @@ export class RuntimeEventHost implements EventExecutorHost {
     // the active NPC id when supplied, and owns all dialogue blocks for this
     // event run. Non-dialogue effects still execute.
     const npcEntry = context.npcId !== undefined
-      ? customDialogue.byNpcId[String(context.npcId)]
+      ? resolveRuntimeNpcDialogue(customDialogue, context.npcId, this.options.flags)
       : undefined;
     const npcPages = isGeneratedDrifellaBarkEntry(npcEntry)
       ? undefined

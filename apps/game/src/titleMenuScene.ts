@@ -55,8 +55,8 @@ const MENU_ROW_H = 34;
 const MENU_PANEL_W = 220;
 const MENU_PANEL_BOTTOM_MARGIN = 28;
 const MENU_MESSAGE_MS = 2200;
-// Dark, brooding track for the opening war-against-milady slide and fresh-game
-// opening. It stays alive across the title-to-world handoff.
+// Dark, brooding track for the fresh-game opening. It stays alive across the
+// title-to-world handoff.
 const WAR_CUE = "intro";
 
 type Phase = TitleMenuPhase;
@@ -64,8 +64,7 @@ type Phase = TitleMenuPhase;
 /**
  * Boot-time title + intro-slide sequence and main menu.
  *
- *   pre-title gate  →  "war against milady" slide (WAR_CUE starts here)  → (Z) →  SWAGBOUND title slide
- *                                                                             → (Z) →  main menu: NEW GAME / CONTINUE
+ *   pre-title gate  →  SWAGBOUND title slide  → (Z) → main menu: NEW GAME / CONTINUE
  *
  * NEW GAME runs the intro cinematic + opening cutscene; CONTINUE loads the save.
  */
@@ -267,15 +266,28 @@ export class TitleMenuScene extends Phaser.Scene {
     this.music?.resume();
     const prompt = this.prompt;
     if (!prompt) {
-      this.time.delayedCall(PRE_TITLE_GATE_FADE_MS, () => this.beginWarSlideReveal());
+      this.time.delayedCall(PRE_TITLE_GATE_FADE_MS, () => this.beginTitleReveal());
       return;
     }
     this.tweens.add({
       targets: prompt,
       alpha: 0,
       duration: PRE_TITLE_GATE_FADE_MS,
-      onComplete: () => this.beginWarSlideReveal()
+      onComplete: () => this.beginTitleReveal()
     });
+  }
+
+  private beginTitleReveal(): void {
+    this.phase = "title";
+    this.transitioning = false;
+    this.promptFadeActive = false;
+    this.promptClockMs = 0;
+    this.playCurrentPhaseMusic({ fadeMs: MENU_CUE_FADE_MS });
+    this.prompt?.setText("PRESS  Z");
+    this.prompt?.setPosition(this.scale.width / 2, this.scale.height - 30);
+    this.prompt?.setDepth(10);
+    this.prompt?.setAlpha(1);
+    this.showSlide(TITLE_SLIDE_KEY);
   }
 
   private beginWarSlideReveal(): void {

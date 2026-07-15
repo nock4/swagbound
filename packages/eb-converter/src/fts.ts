@@ -84,6 +84,11 @@ export function isWholeBodyForegroundCell(surfaceByte: number): boolean {
   return (surfaceByte & SURFACE_FG_UPPER_MASK) !== 0;
 }
 
+/** Any EB foreground-obscurity cell: lower-only (0x01) or whole/upper (0x02). */
+export function isForegroundSurfaceCell(surfaceByte: number): boolean {
+  return (surfaceByte & (SURFACE_FG_LOWER_MASK | SURFACE_FG_UPPER_MASK)) !== 0;
+}
+
 /**
  * Note: the SNES priority bit is zero across all 20 tilesets in this project
  * (327,680 arrangement cells censused 2026-07-04) — `cell.priority` is kept for

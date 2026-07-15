@@ -32,6 +32,7 @@ import {
   NpcOverridesSchema,
   NpcReferenceCollectionSchema,
   ObjectivesSchema,
+  OpeningClaritySchema,
   OpeningCutsceneSchema,
   OverworldInteractablesSchema,
   PsiCollectionSchema,
@@ -119,6 +120,14 @@ import {
   type RuntimeCustomDialogue
 } from "./customDialogueLookup";
 import { drifellaBarkForNpcId } from "./drifellaBarks";
+import {
+  applyOpeningClarityBattle,
+  applyOpeningClarityCutscenes,
+  applyOpeningClarityDialogue,
+  applyOpeningClarityObjectives,
+  applyOpeningClaritySprites,
+  applyOpeningClarityStoryTriggers
+} from "./openingClarity";
 
 export const TARGET_REFERENCE = "robot.hello_world";
 const ADDED_NPCS_FILE = "added-npcs.json";
@@ -157,6 +166,7 @@ const CARD_NFTS_FILE = "card-nfts.json";
 const DRIFELLA_SOURCE_CHECKS_FILE = "drifella-source-checks.json";
 const ATTESTATION_BATTLES_FILE = "attestation-battles.json";
 const OBJECTIVES_FILE = "objectives.json";
+const OPENING_CLARITY_FILE = "opening-clarity.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -432,7 +442,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     cardNfts,
     sourceChecks,
     attestationBattles,
-    objectives
+    objectives,
+    openingClarity
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -517,21 +528,29 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${CARD_NFTS_FILE}`, CardNftsSchema),
     loadJson(`/generated/${DRIFELLA_SOURCE_CHECKS_FILE}`, DrifellaSourceChecksSchema),
     loadJson(`/generated/${ATTESTATION_BATTLES_FILE}`, AttestationBattlesSchema),
-    loadJson(`/generated/${OBJECTIVES_FILE}`, ObjectivesSchema)
+    loadJson(`/generated/${OBJECTIVES_FILE}`, ObjectivesSchema),
+    loadJson(`/generated/${OPENING_CLARITY_FILE}`, OpeningClaritySchema)
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
   const resolvedPsi = applyPsiOverrides(psi, psiOverrides);
-  const resolvedBattle = applyEnemyActionEffects(
-    applyEnemyStatOverrides(applyEnemyOverrides(battle, enemyOverrides), enemyStatOverrides),
-    enemyActionEffects
+  const resolvedBattle = applyOpeningClarityBattle(
+    applyEnemyActionEffects(
+      applyEnemyStatOverrides(applyEnemyOverrides(battle, enemyOverrides), enemyStatOverrides),
+      enemyActionEffects
+    ),
+    openingClarity
   );
   const resolvedDrifellaBarks = drifellaBarks ?? emptyDrifellaBarks();
-  const resolvedCustomDialogue = buildCustomDialogueWithDrifellaBarks(
-    customDialogue ?? emptyCustomDialogue(),
-    world?.npcs ?? [],
-    resolvedDrifellaBarks
+  const resolvedCustomDialogue = applyOpeningClarityDialogue(
+    buildCustomDialogueWithDrifellaBarks(
+      customDialogue ?? emptyCustomDialogue(),
+      world?.npcs ?? [],
+      resolvedDrifellaBarks
+    ),
+    openingClarity
   );
+  const resolvedSpriteOverrides = applyOpeningClaritySprites(spriteOverrides, openingClarity);
 
   return {
     manifest,
@@ -546,16 +565,16 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     cardNfts: cardNfts ?? emptyCardNfts(),
     sourceChecks: sourceChecks ?? emptySourceChecks(),
     attestationBattles: attestationBattles ?? emptyAttestationBattles(),
-    objectives,
+    objectives: applyOpeningClarityObjectives(objectives, openingClarity),
     openingCutscene,
-    cutscenes,
-    storyTriggers,
+    cutscenes: applyOpeningClarityCutscenes(cutscenes, openingClarity),
+    storyTriggers: applyOpeningClarityStoryTriggers(storyTriggers, openingClarity),
     spriteGroups,
     tutorialStatus,
     validationReport,
     world,
     sprites,
-    spriteOverrides: withDerivedFollower(spriteOverrides),
+    spriteOverrides: withDerivedFollower(resolvedSpriteOverrides),
     npcOverrides: npcOverrides ?? emptyNpcOverrides(),
     npcMovementPatterns: npcMovementPatterns ?? emptyNpcMovementPatterns(),
     backgroundOverrides,

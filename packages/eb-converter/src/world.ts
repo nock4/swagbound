@@ -22,6 +22,7 @@ import {
   drawArrangement,
   decodeArrangementCell,
   isBlankArrangement,
+  isForegroundSurfaceCell,
   isSolidSurface,
   isOccluderTile,
   isWholeBodyForegroundCell,
@@ -112,6 +113,8 @@ export type ComposedRegion = {
   surface: Uint8Array;
   /** 1 where the cell belongs to a void/unrendered tile (forced solid). */
   voidSolid: Uint8Array;
+  /** 1 where an authored tile-identity rule promotes a walk-behind cell to solid. */
+  overrideSolid: Uint8Array;
   widthPixels: number;
   heightPixels: number;
   collisionWidth: number;
@@ -237,6 +240,7 @@ export function composeRegion(options: {
   sectorLookup: (sectorCol: number, sectorRow: number) => SectorInfo | undefined;
   tilesetForMapTileset: (mapTileset: number) => { tileset: FtsTileset; palettes: Map<number, FtsPalette> } | undefined;
   tileOverrideImages?: TileOverrideImages;
+  tileCollisionOverrides?: ReadonlySet<string>;
   fgPredicate?: FgPredicateVersion;
   foregroundDebug?: boolean;
   foregroundSummary?: boolean;
@@ -247,6 +251,7 @@ export function composeRegion(options: {
     sectorLookup,
     tilesetForMapTileset,
     tileOverrideImages,
+    tileCollisionOverrides,
     fgPredicate = "v1",
     foregroundDebug = false,
     foregroundSummary: collectForegroundSummary = false
@@ -259,6 +264,7 @@ export function composeRegion(options: {
   const collisionHeight = bounds.heightTiles * (TILE_SIZE / COLLISION_CELL_SIZE);
   const surface = new Uint8Array(collisionWidth * collisionHeight);
   const voidSolid = new Uint8Array(collisionWidth * collisionHeight).fill(1);
+  const overrideSolid = new Uint8Array(collisionWidth * collisionHeight);
   const blankCache = new Map<string, boolean>();
   const warnings: Issue[] = [];
   const mapTilesetsUsed = new Set<number>();
@@ -310,6 +316,7 @@ export function composeRegion(options: {
       palettesUsed.add(`${sector.tileset}:${sector.palette}`);
 
       const overrideImage = tileOverrideImages?.get(tileOverrideKey(sector.tileset, arrangementIndex));
+      const solidForegroundCells = tileCollisionOverrides?.has(tileOverrideKey(sector.tileset, arrangementIndex)) ?? false;
       if (overrideImage) {
         drawTileOverrideImage({
           image: overrideImage,
@@ -354,9 +361,13 @@ export function composeRegion(options: {
           const surfaceByte = graphics.tileset.collisions[cellBase + cellY * 4 + cellX];
           const gx = tx * 4 + cellX;
           const gy = ty * 4 + cellY;
-          surface[gy * collisionWidth + gx] = surfaceByte;
-          voidSolid[gy * collisionWidth + gx] = blank ? 1 : 0;
-          if (isSolidSurface(surfaceByte)) {
+          const collisionIndex = gy * collisionWidth + gx;
+          surface[collisionIndex] = surfaceByte;
+          voidSolid[collisionIndex] = blank ? 1 : 0;
+          if (solidForegroundCells && isForegroundSurfaceCell(surfaceByte) && !isSolidSurface(surfaceByte)) {
+            overrideSolid[collisionIndex] = 1;
+          }
+          if (isSolidSurface(surfaceByte) || overrideSolid[collisionIndex] === 1) {
             tileSolidCount[ty * bounds.widthTiles + tx] += 1;
           }
         }
@@ -594,6 +605,7 @@ export function composeRegion(options: {
     foreground,
     surface,
     voidSolid,
+    overrideSolid,
     widthPixels,
     heightPixels,
     collisionWidth,
@@ -608,14 +620,16 @@ export function composeRegion(options: {
 
 /**
  * Encodes the surface grid into raw hex rows plus a 0/1 gameplay solidity map.
- * Gameplay solidity = imported solid flag (0x80) OR void/unrendered tile.
+ * Gameplay solidity = imported solid flag (0x80), void/unrendered tile, or an
+ * authored tile-identity collision override.
  * surfaceRows always carry the unmodified imported bytes.
  */
 export function encodeCollisionRows(
   surface: Uint8Array,
   width: number,
   height: number,
-  voidSolid?: Uint8Array
+  voidSolid?: Uint8Array,
+  overrideSolid?: Uint8Array
 ): {
   solidRows: string[];
   surfaceRows: string[];
@@ -630,7 +644,7 @@ export function encodeCollisionRows(
     for (let x = 0; x < width; x += 1) {
       const byte = surface[y * width + x];
       surfaceRow += byte.toString(16).padStart(2, "0");
-      const solid = isSolidSurface(byte) || voidSolid?.[y * width + x] === 1;
+      const solid = isSolidSurface(byte) || voidSolid?.[y * width + x] === 1 || overrideSolid?.[y * width + x] === 1;
       solidRow += solid ? "1" : "0";
       if (solid) {
         solidCells += 1;
@@ -1448,6 +1462,7 @@ export async function buildWorldArtifacts(options: {
     publicRoot: tileOverridePublicRoot,
     warnings
   });
+  const tileCollisionOverrides = new Set(Object.keys(tileOverrides?.collisionByTile ?? {}));
   const doorDestinations = doorDestinationContext({ scripts, teleportDestinations });
 
   if (worldMode === "full") {
@@ -1474,6 +1489,7 @@ export async function buildWorldArtifacts(options: {
       anchorWorld,
       doorDestinations,
       tileOverrideImages,
+      tileCollisionOverrides,
       fgPredicate
     });
   }
@@ -1485,6 +1501,7 @@ export async function buildWorldArtifacts(options: {
     sectorLookup,
     tilesetForMapTileset,
     tileOverrideImages,
+    tileCollisionOverrides,
     fgPredicate
   });
   warnings.push(...composed.warnings);
@@ -1538,7 +1555,8 @@ export async function buildWorldArtifacts(options: {
     composed.surface,
     composed.collisionWidth,
     composed.collisionHeight,
-    composed.voidSolid
+    composed.voidSolid,
+    composed.overrideSolid
   );
   const solidAt = (cellX: number, cellY: number): boolean => solidRows[cellY]?.[cellX] === "1";
   const anchorRegion = tutorialNpc?.regionPixel ?? { x: Math.floor(composed.widthPixels / 2), y: Math.floor(composed.heightPixels / 2) };
@@ -1638,6 +1656,7 @@ async function buildFullWorldArtifacts(options: {
   anchorWorld: { x: number; y: number };
   doorDestinations: DoorDestinationContext;
   tileOverrideImages?: TileOverrideImages;
+  tileCollisionOverrides?: ReadonlySet<string>;
   fgPredicate: FgPredicateVersion;
 }): Promise<WorldBuildResult> {
   const {
@@ -1663,6 +1682,7 @@ async function buildFullWorldArtifacts(options: {
     anchorWorld,
     doorDestinations,
     tileOverrideImages,
+    tileCollisionOverrides,
     fgPredicate
   } = options;
 
@@ -1673,6 +1693,7 @@ async function buildFullWorldArtifacts(options: {
   const collisionHeight = mapHeightTiles * (TILE_SIZE / COLLISION_CELL_SIZE);
   const fullSurface = new Uint8Array(collisionWidth * collisionHeight);
   const fullVoidSolid = new Uint8Array(collisionWidth * collisionHeight).fill(1);
+  const fullOverrideSolid = new Uint8Array(collisionWidth * collisionHeight);
   const chunks: Array<{ cx: number; cy: number; background: string | null; foreground: string | null; void: boolean }> = [];
   const mapTilesetsUsed = new Set<number>();
   const palettesUsed = new Set<string>();
@@ -1700,6 +1721,7 @@ async function buildFullWorldArtifacts(options: {
         sectorLookup,
         tilesetForMapTileset,
         tileOverrideImages,
+        tileCollisionOverrides,
         fgPredicate,
         foregroundSummary: fgPredicate === "v2"
       });
@@ -1722,6 +1744,7 @@ async function buildFullWorldArtifacts(options: {
         const targetStart = (bounds.originTileY * 4 + row) * collisionWidth + bounds.originTileX * 4;
         fullSurface.set(composed.surface.subarray(sourceStart, sourceEnd), targetStart);
         fullVoidSolid.set(composed.voidSolid.subarray(sourceStart, sourceEnd), targetStart);
+        fullOverrideSolid.set(composed.overrideSolid.subarray(sourceStart, sourceEnd), targetStart);
       }
 
       const allVoid = isAllVoid(composed.voidSolid);
@@ -1754,7 +1777,8 @@ async function buildFullWorldArtifacts(options: {
     fullSurface,
     collisionWidth,
     collisionHeight,
-    fullVoidSolid
+    fullVoidSolid,
+    fullOverrideSolid
   );
 
   const npcConfig = npcConfigSource ? parseIntKeyedYaml(npcConfigSource) : new Map<number, Record<string, string>>();
