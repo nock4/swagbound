@@ -147,7 +147,17 @@ export function drawEbWindowFrame(
   const height = Math.max(1, Math.round(rect.height));
   const bounds = { x, y, width, height };
   graphics.fillStyle(options.fillColor ?? frame.interior, options.fillAlpha ?? 1);
-  graphics.fillRect(x, y, width, height);
+  // Keep the fill out of the four corner tiles. Their null pixels are the
+  // frame's rounded silhouette; painting a full rectangle underneath them
+  // leaks square fill pixels just outside the visible border.
+  const centerWidth = Math.max(0, width - border * 2);
+  const centerHeight = Math.max(0, height - border * 2);
+  if (centerWidth > 0) {
+    graphics.fillRect(x + border, y, centerWidth, height);
+  }
+  if (centerHeight > 0) {
+    graphics.fillRect(x, y + border, width, centerHeight);
+  }
   const innerWidth = Math.max(0, width - border * 2);
   const innerHeight = Math.max(0, height - border * 2);
   for (let index = 0; index < EB_WINDOW_BORDER; index += 1) {

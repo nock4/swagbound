@@ -10,7 +10,7 @@ export const CLEAN_UI_SELECTION_TEXT = "#0a0a0a";
 // Numeric companion (graphics fillStyle takes a hex number) for the caret drawn on that row.
 export const CLEAN_UI_SELECTION_CARET = 0x0a0a0a;
 // EarthBound-parity windows: opaque near-black interior (EB "Plain" flavor 0 =
-// rgb 16,16,16), square corners, crisp white frame with a beveled inner shadow.
+// rgb 16,16,16), rounded pixel corners, crisp white frame with a beveled inner shadow.
 export const CLEAN_UI_PANEL_FILL = 0x101010;
 export const CLEAN_UI_PANEL_ALPHA = 1;
 export const CLEAN_UI_PANEL_BORDER = 0xffffff;

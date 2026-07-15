@@ -3,6 +3,7 @@ import type { WindowCollection } from "@eb/schemas";
 import {
   activeEbWindowFrame,
   buildWindowFrameLayout,
+  drawEbWindowFrame,
   ebWindowFrameForFlavorId,
   moreArrowPlacement,
   setActiveWindowFlavorIndex,
@@ -189,6 +190,31 @@ describe("extracted EB window frame flavors", () => {
 
     setActiveWindowFlavorIndex(99);
     expect(activeEbWindowFrame()).toBe(EB_WINDOW_FRAMES[0]);
+  });
+
+  it("leaves every rounded outer corner transparent beneath the frame", () => {
+    const fills: Array<{ x: number; y: number; width: number; height: number }> = [];
+    const graphics = {
+      fillStyle: () => graphics,
+      fillRect: (x: number, y: number, width: number, height: number) => {
+        fills.push({ x, y, width, height });
+        return graphics;
+      }
+    };
+
+    drawEbWindowFrame(
+      graphics as unknown as Phaser.GameObjects.Graphics,
+      { x: 10, y: 20, width: 80, height: 48 }
+    );
+
+    const isPainted = (x: number, y: number) => fills.some((fill) =>
+      x >= fill.x && x < fill.x + fill.width && y >= fill.y && y < fill.y + fill.height
+    );
+    expect(isPainted(10, 20)).toBe(false);
+    expect(isPainted(89, 20)).toBe(false);
+    expect(isPainted(10, 67)).toBe(false);
+    expect(isPainted(89, 67)).toBe(false);
+    expect(isPainted(50, 44)).toBe(true);
   });
 });
 
