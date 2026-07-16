@@ -1939,6 +1939,30 @@ async function drainOpeningCutscene() {
     if (flags.includes("signal:cold-signal-seen") && !state.o?.dialogueOpen && !state.o?.inputLocked) {
       break;
     }
+    // New night-to-morning opening (phase gates enabled): the runner is a
+    // balance harness, not an opening tester. Skip the authored sequence by
+    // stamping the intro lattice (logged as a cheat) once the wake dialogue
+    // clears; the dawn alias flags arm the Act 1 chain exactly as a real
+    // playthrough would.
+    if (i >= 30 && !flags.includes("signal:cold-signal-seen")) {
+      const phase = await evaluateWithWatchdog("openingPhase", () => globalThis.__openingPhase?.() ?? "none");
+      if (phase !== "none" && phase !== "post" && phase !== "morning") {
+        const stamped = await evaluateWithWatchdog("stampIntroLattice", () => {
+          const set = globalThis.__setStoryFlag;
+          if (typeof set !== "function") return false;
+          for (const flag of [
+            "intro:flyover-done", "intro:wake-done", "intro:meteor-seen",
+            "intro:returned-home", "intro:home-scene-done", "intro:morning",
+            "signal:cold-signal-seen"
+          ]) set(flag, true);
+          return true;
+        });
+        if (stamped) {
+          telemetry.cheats.push({ kind: "skip-new-opening", phase, atMs: elapsedMs() });
+          continue;
+        }
+      }
+    }
     if (state.o?.dialogueOpen || state.o?.inputLocked) {
       await tap("z", 180);
     } else {

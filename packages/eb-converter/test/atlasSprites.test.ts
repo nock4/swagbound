@@ -27,8 +27,9 @@ describe("sprite atlas extractor", () => {
     const group59 = atlas.groups.find((group) => group.groupId === 59);
     expect(group59).toMatchObject({
       groupId: 59,
-      // Tracks content additions: 699 + 4 Unsigned questline NPCs (c804c5e5).
-      usedByNpcCount: 703,
+      // Tracks content additions: 699 + 4 Unsigned NPCs (c804c5e5) + 6 night-cast
+      // openers on crowd group 59 (b1c151cb; byNpcId skins override the group).
+      usedByNpcCount: 709,
       overridden: true,
       overrideKind: "group"
     });

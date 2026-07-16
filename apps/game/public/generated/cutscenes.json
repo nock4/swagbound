@@ -2526,6 +2526,150 @@
      "flag": "signal:source-vacancy-slot-machine"
     }
    ]
+  },
+  {
+   "id": "intro2-meteor-gathering",
+   "comment": "New opening meteor gathering at the legacy marker's resolved 192 by 192 trigger. The runner has no camera-flash or phone-pose step, so the photograph is expressed with one minimal narration page.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 1984,
+     "y": 32,
+     "w": 192,
+     "h": 192
+    }
+   },
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:meteor-seen"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "It just fell. No sound. Things that fall make a sound.",
+      "Did anyone else hear it say something?",
+      "I want to go home and I am not going home."
+     ]
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "MiFella takes a photo of the crowd. Bosch is in the frame."
+     ]
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "Okay. Okay okay okay. Home. We should be home."
+     ]
+    },
+    {
+     "op": "setFlag",
+     "flag": "intro:meteor-seen"
+    }
+   ]
+  },
+  {
+   "id": "intro2-home-scene",
+   "comment": "New opening return-home scene inside Bosch's house. MiFella walks to the interior exit and is hidden only after reaching the door.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 7776,
+     "y": 320,
+     "w": 24,
+     "h": 32
+    }
+   },
+   "requireFlags": [
+    "intro:meteor-seen"
+   ],
+   "blockFlags": [
+    "intro:returned-home",
+    "intro:morning"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "setFlag",
+     "flag": "intro:returned-home"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "MiFella replays his photos of the crowd.",
+      "MiFella echoes the word once under his breath.",
+      "Everyone up there felt so together."
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 910205
+     },
+     "to": {
+      "x": 7784,
+      "y": 336
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 910205
+     }
+    },
+    {
+     "op": "setFlag",
+     "flag": "intro:home-scene-done"
+    }
+   ]
+  },
+  {
+   "id": "intro2-dawn",
+   "comment": "New opening dawn transition at Bosch's bed. Setting both aliases keeps the existing Act 1 chain armed when the replacement gates are enabled.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 8104,
+     "y": 1088,
+     "w": 48,
+     "h": 40
+    }
+   },
+   "requireFlags": [
+    "intro:home-scene-done"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "Bosch goes back to bed."
+     ]
+    },
+    {
+     "op": "wait",
+     "ms": 600
+    },
+    {
+     "op": "setFlag",
+     "flag": "intro:morning"
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:cold-signal-seen"
+    }
+   ]
   }
  ]
 }

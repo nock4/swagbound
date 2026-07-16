@@ -6,15 +6,51 @@
       "A camera saw Bosch leave home while Bosch was still asleep."
     ]
   },
-  "dialogue": {},
+  "dialogue": {
+    "wake": [
+      "Bosch, get up! You gotta see this!",
+      "Something came down on the hill. Meet me outside."
+    ],
+    "witness-1": [
+      "It just fell. No sound. Things that fall make a sound."
+    ],
+    "witness-2": [
+      "Did anyone else hear it say something?"
+    ],
+    "witness-3": [
+      "I want to go home and I am not going home."
+    ],
+    "meteor-manifestation": [
+      "milady"
+    ],
+    "mifella-going-home": [
+      "Okay. Okay okay okay. Home. We should be home."
+    ],
+    "home-scene": [
+      "MiFella replays his photos of the crowd.",
+      "MiFella echoes the word once under his breath.",
+      "Everyone up there felt so together."
+    ]
+  },
+  "nightCast": {
+    "allowNpcIds": [910200, 910201, 910202, 910203, 910204, 910205]
+  },
   "sourceCheckAvailabilityPhase": "morning",
   "morningObjective": "Find MiFella in town.",
   "nightDoors": {
     "allowWorldPixels": [[2648, 336]]
   },
   "ownership": {
-    "dialogueKeys": [],
-    "npcIds": [],
+    "dialogueKeys": [
+      "wake",
+      "witness-1",
+      "witness-2",
+      "witness-3",
+      "meteor-manifestation",
+      "mifella-going-home",
+      "home-scene"
+    ],
+    "npcIds": [910200, 910201, 910202, 910203, 910204, 910205],
     "cutsceneIds": [
       "signal-town-cold-signal-open",
       "onett-welcome-home-lights-out",
@@ -22,6 +58,6 @@
       "onett-brother-fallsin",
       "onett-keep-on-task"
     ],
-    "spriteOverrideNpcIds": [14, 15, 16, 21]
+    "spriteOverrideNpcIds": [14, 15, 16, 21, 910200, 910201, 910202, 910203, 910204, 910205]
   }
 }

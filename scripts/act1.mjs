@@ -235,6 +235,23 @@ log(`Act-1 chain: ${BOSSES.map((b) => b.id).join(" -> ")} -> leave.`);
 for (let i = 0; i < 80; i++) {
   const o = (await peek()).o;
   if ((o?.flags ?? []).includes("signal:cold-signal-seen") && !o?.dialogueOpen && !o?.inputLocked) break;
+  // New night-to-morning opening (phase gates enabled): this is a battle
+  // harness, not an opening tester. After the wake dialogue clears, stamp the
+  // intro lattice (the dawn alias includes signal:cold-signal-seen).
+  if (i >= 30) {
+    const skipped = await page.evaluate(() => {
+      const phase = globalThis.__openingPhase?.();
+      const set = globalThis.__setStoryFlag;
+      if (!phase || phase === "post" || phase === "morning" || typeof set !== "function") return false;
+      for (const flag of [
+        "intro:flyover-done", "intro:wake-done", "intro:meteor-seen",
+        "intro:returned-home", "intro:home-scene-done", "intro:morning",
+        "signal:cold-signal-seen"
+      ]) set(flag, true);
+      return true;
+    });
+    if (skipped) { log("  [cheat] skip-new-opening (intro lattice stamped)"); continue; }
+  }
   await tap("z", 200);
 }
 log(`  opening cutscene drained; flags:[${((await peek()).o?.flags ?? []).join(",")}]`);
