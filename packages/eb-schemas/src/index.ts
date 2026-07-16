@@ -2276,6 +2276,16 @@ export const EarlyGameSequenceSchema = z.object({
     ]))
   }).strict().optional(),
   sourceCheckAvailabilityPhase: z.literal("morning"),
+  phaseObjectives: z.record(z.enum([
+    "flyover",
+    "bedroom",
+    "night-route",
+    "meteor",
+    "return-home",
+    "home-scene",
+    "morning",
+    "post"
+  ]), z.string()).optional(),
   morningObjective: z.string(),
   ownership: z.object({
     dialogueKeys: z.array(z.string()),

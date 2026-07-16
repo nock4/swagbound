@@ -1,15 +1,92 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { ObjectivesSchema, type Objectives } from "@eb/schemas";
-import { currentObjective, currentObjectiveNpcHint } from "./objectives";
+import { EarlyGameSequenceSchema, ObjectivesSchema, type Objectives } from "@eb/schemas";
+import { currentObjective, currentObjectiveNpcHint, currentObjectiveText } from "./objectives";
+import { resolveOpeningPhase, type OpeningPhase } from "./openingPhase";
 
 function flags(values: string[]) {
   const set = new Set(values);
   return { has: (flag: string) => set.has(flag) };
 }
 
+const earlyGameSequence = EarlyGameSequenceSchema.parse(JSON.parse(
+  readFileSync(resolve("content/early-game-sequence.json"), "utf8")
+));
+
 describe("currentObjective", () => {
+  it.each([
+    ["flyover", ""],
+    ["bedroom", "Answer MiFella. He is waiting outside."],
+    ["night-route", "Follow MiFella up the hill."],
+    ["meteor", "See what fell on the hill."],
+    ["return-home", "Go back home."],
+    ["home-scene", "See what MiFella wants."],
+    ["morning", earlyGameSequence.morningObjective]
+  ] as const)("uses the authored %s opening objective while its gates are active", (phase, expected) => {
+    expect(currentObjectiveText(flags([]), undefined, {
+      sequence: { ...earlyGameSequence, phaseGatesEnabled: true },
+      phase,
+      openingGatesActive: true
+    })).toBe(expected || undefined);
+  });
+
+  it("uses resolveOpeningPhase for the gated objective phase", () => {
+    const storyFlags = flags(["intro:returned-home"]);
+
+    expect(currentObjectiveText(storyFlags, undefined, {
+      sequence: { ...earlyGameSequence, phaseGatesEnabled: true },
+      phase: resolveOpeningPhase(storyFlags),
+      openingGatesActive: true
+    })).toBe("See what MiFella wants.");
+  });
+
+  it("does not fall through to data objectives when a gated phase has no objective", () => {
+    const sequenceWithoutBedroomObjective = {
+      ...earlyGameSequence,
+      phaseGatesEnabled: true,
+      phaseObjectives: { ...earlyGameSequence.phaseObjectives, bedroom: "" }
+    };
+    const objectives: Objectives = {
+      schema: "swagbound.objectives.v1",
+      objectives: [{
+        id: "fallback",
+        when: { requireFlags: [], blockFlags: [] },
+        text: "Explore."
+      }]
+    };
+
+    expect(currentObjectiveText(flags([]), objectives, {
+      sequence: sequenceWithoutBedroomObjective,
+      phase: "bedroom",
+      openingGatesActive: true
+    })).toBeUndefined();
+  });
+
+  it.each([
+    [false, true],
+    [true, false]
+  ] as const)("preserves legacy selection when phaseGatesEnabled=%s and openingGatesActive=%s", (
+    phaseGatesEnabled,
+    gatesActive
+  ) => {
+    const objectives = ObjectivesSchema.parse(JSON.parse(
+      readFileSync(resolve("content/objectives.json"), "utf8")
+    ));
+    const opening = {
+      sequence: { ...earlyGameSequence, phaseGatesEnabled },
+      phase: "bedroom" as OpeningPhase,
+      openingGatesActive: gatesActive
+    };
+
+    expect(currentObjectiveText(flags([]), objectives, opening)).toBe(
+      "Follow the road uphill and inspect the cold signal near the meteor."
+    );
+    expect(currentObjectiveText(flags(["intro:meteor-beat-fired"]), objectives, opening)).toBe(
+      "Face the card clique on the road north of Bosch's block."
+    );
+  });
+
   it("returns the first objective whose required flags are set and blocked flags are unset", () => {
     const objectives: Objectives = {
       schema: "swagbound.objectives.v1",

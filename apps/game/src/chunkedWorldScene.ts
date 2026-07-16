@@ -187,7 +187,7 @@ import {
 } from "./newGameOpening";
 import { equipmentSlotForItemType, PartyState, type PartyStateSnapshot } from "./partyState";
 import { advanceTimedDeliveries, completeTimedDelivery, createTimedDeliveryRuntimeState, type TimedDeliveryRuntimeState } from "./timedDelivery";
-import { currentObjective, currentObjectiveNpcHint } from "./objectives";
+import { currentObjectiveNpcHint, currentObjectiveText as resolveCurrentObjectiveText } from "./objectives";
 import { createBattleSfx, type BattleSfx, type BattleSfxCue } from "./audio/battleSfx";
 import { hasStatus, STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
 import type { OverworldStatusHudView } from "./overworldStatusHud";
@@ -5479,7 +5479,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private currentObjectiveText(): string | undefined {
-    return currentObjective(this.gameFlags, this.data_.objectives)?.text;
+    const sequence = this.data_.earlyGameSequence;
+    const phase = resolveOpeningPhase(this.gameFlags);
+    return resolveCurrentObjectiveText(this.gameFlags, this.data_.objectives, {
+      sequence,
+      phase,
+      openingGatesActive: openingGatesActive(sequence, this.gameFlags)
+    });
   }
 
   overworldStatusHud(): OverworldStatusHudView {

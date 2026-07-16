@@ -1,5 +1,6 @@
-import type { ObjectiveEntry, Objectives } from "@eb/schemas";
+import type { EarlyGameSequence, ObjectiveEntry, Objectives } from "@eb/schemas";
 import { INTRO_METEOR_BEAT_FIRED_FLAG } from "./newGameOpening";
+import type { OpeningPhase } from "./openingPhase";
 
 export type ObjectiveFlagReader = {
   has(flag: string): boolean;
@@ -55,6 +56,24 @@ const OBJECTIVE_HINTS: Readonly<Record<string, readonly string[]>> = {
     "Postwick has nothing left but paperwork. Take the north exit."
   ]
 };
+
+export type OpeningObjectiveContext = {
+  openingGatesActive: boolean;
+  phase: OpeningPhase;
+  sequence: Pick<EarlyGameSequence, "phaseGatesEnabled" | "phaseObjectives">;
+};
+
+export function currentObjectiveText(
+  flags: ObjectiveFlagReader,
+  objectives: Objectives | undefined,
+  opening?: OpeningObjectiveContext
+): string | undefined {
+  if (opening?.sequence.phaseGatesEnabled && opening.openingGatesActive) {
+    const text = opening.sequence.phaseObjectives?.[opening.phase];
+    return text === "" ? undefined : text;
+  }
+  return currentObjective(flags, objectives)?.text;
+}
 
 export function currentObjective(flags: ObjectiveFlagReader, objectives: Objectives | undefined): ObjectiveEntry | undefined {
   if (
