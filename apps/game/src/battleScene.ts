@@ -131,6 +131,7 @@ import {
   formatCleanOdometerValue,
   moveBattleCommandGridIndex,
   statusBarFillFraction,
+  wrapCleanTextToWidth,
   type BattleCommandGridDirection,
   type CleanGridCell
 } from "./cleanUi";
@@ -473,6 +474,8 @@ type EnemySpriteTexturePlan = {
 };
 type BattleCommandGridLayout = CanvasRect & {
   cells: CleanGridCell[];
+  columns: number;
+  wrapLabels: boolean;
 };
 type BattleSubmenuItem = {
   label: string;
@@ -542,6 +545,8 @@ type VictoryTallyState = {
 type BattleUiView = {
   actorName?: string;
   commandLines: string[];
+  commandColumns?: number;
+  commandWrap?: boolean;
   psiCategoryLines?: string[];
   selectedPsiCategoryIndex?: number;
   submenuLines: string[];
@@ -2669,7 +2674,7 @@ export class BattleScene extends Phaser.Scene {
         lastEncounterGroup: this.group_.id
       }
     };
-    const reward = applySourceCheckRewardToRestore({
+    applySourceCheckRewardToRestore({
       check: attestation.check,
       cards: attestation.cards,
       items: this.items_,
@@ -2678,11 +2683,7 @@ export class BattleScene extends Phaser.Scene {
     attestation.stage = "complete";
     attestation.lastOutcome = "cleared";
     this.attestationResolvedRestore_ = restore;
-    this.customVictoryPages_ = [...(this.customVictoryPages_ ?? []), [
-      message,
-      reward.cardName,
-      reward.itemHeld ? `Drifella holds ${reward.itemName}.` : `+ ${reward.itemName}`
-    ]];
+    this.customVictoryPages_ = [...(this.customVictoryPages_ ?? []), [message]];
     this.victorySummaryPageIndex_ = keepBattleSummary ? this.victorySummaryPageIndex_ : 0;
     this.victoryTally_ = keepBattleSummary ? this.victoryTally_ : null;
     this.phase_ = "victory-summary";
@@ -3091,7 +3092,9 @@ export class BattleScene extends Phaser.Scene {
     const command = this.commandGridLayout(view.commandLines, {
       anchor: stackedMenu ? "stacked" : "top",
       topMargin: BATTLE_MENU_TOP_MARGIN,
-      reservedTop: 0
+      reservedTop: 0,
+      columns: view.commandColumns,
+      wrapLabels: view.commandWrap
     });
     // EB cuts the actor name into the command window's top border.
     const actorNameRect = actorName && command
@@ -3232,6 +3235,7 @@ export class BattleScene extends Phaser.Scene {
         color: CLEAN_UI_PRIMARY,
         fixedWidth: Math.max(1, cell.width - BATTLE_MENU_CARET_GUTTER_PX),
         fixedHeight: cell.height,
+        lineSpacing: BATTLE_LINE_SPACING,
         weight: 400
       }).setDepth(21));
     }
@@ -3329,6 +3333,8 @@ export class BattleScene extends Phaser.Scene {
       anchor?: "top" | "stacked";
       topMargin?: number;
       reservedTop?: number;
+      columns?: number;
+      wrapLabels?: boolean;
     } = {}
   ): BattleCommandGridLayout | undefined {
     if (labels.length === 0) {
@@ -3338,6 +3344,8 @@ export class BattleScene extends Phaser.Scene {
     const topMargin = Math.max(BATTLE_MENU_TOP_MARGIN, Math.round(options.topMargin ?? BATTLE_MENU_TOP_MARGIN));
     const reservedTop = Math.max(0, Math.round(options.reservedTop ?? 0));
     const minTop = topMargin + reservedTop;
+    const columns = Math.max(1, Math.floor(options.columns ?? CLEAN_UI_GRID_COLUMNS));
+    const wrapLabels = options.wrapLabels === true;
     const screenMaxWidth = Math.max(1, Math.floor(this.scale.width - BATTLE_LEFT_MARGIN - BATTLE_MENU_RIGHT_MARGIN));
     const compactMaxWidth = Math.min(BATTLE_COMMAND_COMPACT_MAX_WIDTH, screenMaxWidth);
     const maxWidth = anchor === "stacked" ? compactMaxWidth : screenMaxWidth;
@@ -3345,17 +3353,34 @@ export class BattleScene extends Phaser.Scene {
       labels.length <= 1 ? BATTLE_COMMAND_SINGLE_MIN_WIDTH : BATTLE_COMMAND_COMPACT_MIN_WIDTH,
       maxWidth
     );
-    const rows = Math.max(1, Math.ceil(labels.length / CLEAN_UI_GRID_COLUMNS));
+    const rows = Math.max(1, Math.ceil(labels.length / columns));
     const labelWidth = Math.max(0, ...labels.map((label) => this.measureTextWidth(label, BATTLE_FONT_SIZE, 500)));
     const requestedWidth = Math.max(
       minWidth,
-      Math.ceil(labelWidth * CLEAN_UI_GRID_COLUMNS + BATTLE_COMMAND_GRID_PADDING_X * 2 + BATTLE_MENU_CARET_GUTTER_PX * CLEAN_UI_GRID_COLUMNS + BATTLE_COMMAND_GRID_GAP_X * (CLEAN_UI_GRID_COLUMNS - 1))
+      Math.ceil(labelWidth * columns + BATTLE_COMMAND_GRID_PADDING_X * 2 + BATTLE_MENU_CARET_GUTTER_PX * columns + BATTLE_COMMAND_GRID_GAP_X * (columns - 1))
     );
     const width = Math.min(
       Math.max(minWidth, requestedWidth),
       maxWidth
     );
-    const height = BATTLE_COMMAND_GRID_PADDING_Y * 2 + rows * BATTLE_COMMAND_CELL_HEIGHT + (rows - 1) * BATTLE_COMMAND_GRID_GAP_Y;
+    const provisionalContentWidth = Math.max(1, width - BATTLE_COMMAND_GRID_PADDING_X * 2);
+    const provisionalCellWidth = Math.max(
+      1,
+      Math.floor((provisionalContentWidth - BATTLE_COMMAND_GRID_GAP_X * (columns - 1)) / columns)
+    );
+    const maxLabelLines = wrapLabels
+      ? Math.max(1, ...labels.map((label) => wrapCleanTextToWidth(
+        label,
+        Math.max(1, provisionalCellWidth - BATTLE_MENU_CARET_GUTTER_PX),
+        BATTLE_FONT_SIZE,
+        500
+      ).length))
+      : 1;
+    const cellHeight = Math.max(
+      BATTLE_COMMAND_CELL_HEIGHT,
+      8 + maxLabelLines * BATTLE_LINE_HEIGHT
+    );
+    const height = BATTLE_COMMAND_GRID_PADDING_Y * 2 + rows * cellHeight + (rows - 1) * BATTLE_COMMAND_GRID_GAP_Y;
     const bottomClearance = anchor === "stacked" ? BATTLE_STACKED_MENU_BOTTOM_CLEARANCE : BATTLE_MENU_BOTTOM_CLEARANCE;
     const y = anchor === "stacked"
       ? Math.floor(this.scale.height - bottomClearance - height)
@@ -3381,7 +3406,9 @@ export class BattleScene extends Phaser.Scene {
     });
     return {
       ...rect,
-      cells: cleanGridCells(content, labels.length, CLEAN_UI_GRID_COLUMNS, BATTLE_COMMAND_GRID_GAP_X, BATTLE_COMMAND_GRID_GAP_Y)
+      columns,
+      wrapLabels,
+      cells: cleanGridCells(content, labels.length, columns, BATTLE_COMMAND_GRID_GAP_X, BATTLE_COMMAND_GRID_GAP_Y)
     };
   }
 
@@ -4043,6 +4070,8 @@ export class BattleScene extends Phaser.Scene {
       return {
         actorName: "QUESTION",
         commandLines: question?.options ?? [],
+        commandColumns: ATTESTATION_OPTION_COLUMNS,
+        commandWrap: true,
         submenuLines: [],
         descriptionLines: question ? this.attestationDescriptionLines(question) : [],
         executionMessageLines: [],
@@ -4289,7 +4318,11 @@ export class BattleScene extends Phaser.Scene {
         return;
       }
       const selected = this.selectedCommandIndex() === index;
-      text.setText(this.fitMeasuredText(view.commandLines[index] ?? "", Math.max(1, cell.width - BATTLE_MENU_CARET_GUTTER_PX)));
+      const label = view.commandLines[index] ?? "";
+      const textWidth = Math.max(1, cell.width - BATTLE_MENU_CARET_GUTTER_PX);
+      text.setText(layout.command?.wrapLabels
+        ? wrapCleanTextToWidth(label, textWidth, BATTLE_FONT_SIZE, selected ? 500 : 400).join("\n")
+        : this.fitMeasuredText(label, textWidth));
       if (selected) {
         // EarthBound keeps the label white and marks selection only with its
         // small right-pointing cursor.

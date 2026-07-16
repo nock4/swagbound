@@ -41,11 +41,23 @@ export type PendingStoryGate = {
 export type SourceCheckReturnState = {
   id: string;
   outcome: "declined" | "failed" | "cleared";
+  /** Present only for an Attestation clear that should run the world-scene reward reveal. */
+  awardedCardId?: string;
   worldPixel: {
     x: number;
     y: number;
   };
 };
+
+export type PendingAttestationReward = { checkId: string; cardId: string };
+
+export function pendingAttestationRewardForReturn(
+  sourceCheck: SourceCheckReturnState | undefined
+): PendingAttestationReward | undefined {
+  return sourceCheck?.outcome === "cleared" && sourceCheck.awardedCardId
+    ? { checkId: sourceCheck.id, cardId: sourceCheck.awardedCardId }
+    : undefined;
+}
 
 export type BattleReturnEncounterState = {
   enabled: boolean;

@@ -6,7 +6,8 @@ import {
   cleanPanelInnerRect,
   formatCleanOdometerValue,
   moveBattleCommandGridIndex,
-  statusBarFillFraction
+  statusBarFillFraction,
+  wrapCleanTextToWidth
 } from "./cleanUi";
 
 describe("battle command grid helpers", () => {
@@ -91,6 +92,15 @@ describe("clean panel geometry", () => {
       expect(cell.x + cell.width).toBeLessThanOrEqual(content.x + content.width);
       expect(cell.y + cell.height).toBeLessThanOrEqual(content.y + content.height);
     }
+  });
+
+  it("wraps full Attestation answers without replacing text with an ellipsis", () => {
+    const answer = "Into the municipal general fund";
+    const lines = wrapCleanTextToWidth(answer, 205);
+
+    expect(lines.length).toBeGreaterThan(1);
+    expect(lines.join(" ")).toBe(answer);
+    expect(lines.every((line) => !line.includes("..."))).toBe(true);
   });
 });
 

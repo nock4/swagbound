@@ -406,12 +406,12 @@ export class UiScene extends Phaser.Scene {
     this.binderOverlayClose = onClose;
     this.binderOverlayTextureKey = `binder-overlay-${card.id}`;
     this.drawBinderCardOverlay(card);
-    // Register the "any key closes" listener on the NEXT frame — otherwise the
-    // same keydown that opened the overlay (dispatched to this scene too) closes
-    // it instantly, since the confirm fires on the world scene's keyboard.
+    // Register the Z listener on the NEXT frame. The keydown that opened the
+    // overlay is dispatched to this scene too, so accepting it immediately would
+    // close the card without a fresh confirm press.
     this.time.delayedCall(150, () => {
       if (this.binderOverlayClose) {
-        this.input.keyboard?.once("keydown", () => this.closeBinderCardOverlay(true));
+        this.input.keyboard?.once("keydown-Z", () => this.closeBinderCardOverlay(true));
       }
     });
     if (!this.textures.exists(this.binderOverlayTextureKey)) {

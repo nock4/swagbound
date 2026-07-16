@@ -6,9 +6,22 @@ import { cardById, resolveSourceCheckRewards } from "./sourceCheckModel";
 export type AppliedSourceCheckReward = {
   itemGiven: boolean;
   itemHeld: boolean;
+  cardId: string;
   cardName: string;
   itemName: string;
 };
+
+export function attestationRewardDialoguePages(options: {
+  drifellaName: string;
+  cardName: string;
+  itemName: string;
+  itemHeld: boolean;
+}): string[] {
+  return [
+    `${options.drifellaName}: Congratulations on attesting. Here is your reward.`,
+    `${options.cardName}\n${options.itemHeld ? "Item held" : "Item"}: ${options.itemName}`
+  ];
+}
 
 export function applySourceCheckRewardToRestore(options: {
   check: DrifellaSourceCheck;
@@ -30,11 +43,13 @@ export function applySourceCheckRewardToRestore(options: {
   options.restore.sourceCheck = {
     id: options.check.id,
     outcome: "cleared",
+    awardedCardId: options.check.rewards.cardId,
     worldPixel: { ...options.check.placement.worldPixel }
   };
   return {
     itemGiven: result.itemGiven,
     itemHeld: result.itemHeld,
+    cardId: options.check.rewards.cardId,
     cardName: cardById(options.cards, options.check.rewards.cardId)?.name ?? options.check.rewards.cardId,
     itemName: itemName(options.items, options.check.rewards.itemId)
   };

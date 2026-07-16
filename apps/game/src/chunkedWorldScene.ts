@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { type ArchivistSpot, type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
+import { type ArchivistSpot, type BattleEnemy, type CardNft, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
 import { actorBodyBlocked, actorsBlockingAt, isActorBodyPoint } from "./actorCollision";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, storyTriggerSuppressionForRestore, triggerFiredFlag } from "./storyTriggers";
 import {
@@ -17,7 +17,7 @@ import { CLEAN_UI_FONT_FAMILY, createCleanText, drawCleanPanel } from "./cleanUi
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
-import type { BattleReturnContext, BattleReturnSource, ChunkedWorldRestore, PendingStoryGate } from "./battleReturn";
+import { pendingAttestationRewardForReturn, type BattleReturnContext, type BattleReturnSource, type ChunkedWorldRestore, type PendingAttestationReward, type PendingStoryGate } from "./battleReturn";
 import {
   battleRngSeedForGroup,
   computeEncounterAdvantage,
@@ -381,6 +381,7 @@ import {
   sourceCheckItemHeldFlag,
   sourceCheckVisible
 } from "./sourceCheckModel";
+import { attestationRewardDialoguePages } from "./sourceCheckRewards";
 import { archivistSpotById, buildArchivistRecordsViewModel } from "./archivistRecords";
 
 type ChunkLayer = "background" | "foreground";
@@ -870,6 +871,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private activeService?: ActiveServiceState;
   private lastServiceResult?: ServiceDebugState["lastResult"];
   private binderOverlayOpen = false;
+  private pendingAttestationReward?: PendingAttestationReward;
   private eventSequence?: RuntimeEventSequence;
   private bootSaveState?: SaveState;
   private saveSlot = 0;
@@ -1395,6 +1397,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.reconcileRecruits();
     this.syncPresentInteractableSprites();
     this.updateAct1NightTint();
+    this.startAttestationRewardCeremony();
     this.publish();
   }
 
@@ -1657,6 +1660,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.activeService = undefined;
     this.lastServiceResult = undefined;
     this.binderOverlayOpen = false;
+    this.pendingAttestationReward = undefined;
     this.menuSfxCalls = [];
     this.menuSfxCount = 0;
     this.interactionSfxCalls = [];
@@ -4783,6 +4787,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private handleConfirm(): void {
+    if (this.binderOverlayOpen) {
+      return;
+    }
     if (this.dialogue.choice) {
       this.confirmDialogueChoice();
       return;
@@ -4795,6 +4802,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private handleCancel(): void {
+    if (this.binderOverlayOpen) {
+      return;
+    }
     if (this.dialogue.choice) {
       this.cancelDialogueChoice();
       return;
@@ -5328,6 +5338,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.menuState = closedMenu();
     this.activeShopStoreId = undefined;
     this.activeService = undefined;
+    this.showBinderCardOverlay(card);
+  }
+
+  private showBinderCardOverlay(card: CardNft): void {
     this.binderOverlayOpen = true;
     lockPlayer(this.playerState, this.playerFrames);
     const ui = this.scene.get("ui") as {
@@ -5341,12 +5355,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     ui.showBinderCardOverlay(card, () => {
-      this.binderOverlayOpen = false;
-      if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running) {
-        unlockPlayer(this.playerState);
-      }
-      this.updatePrompt();
-      this.publish();
+      // Release on the next world tick so the Z that closes the UI overlay
+      // cannot also open an interaction behind it in the same key dispatch.
+      this.time.delayedCall(0, () => {
+        this.binderOverlayOpen = false;
+        if (!this.menuState.open && !this.dialogue.open && !this.eventSequence?.running) {
+          unlockPlayer(this.playerState);
+        }
+        this.updatePrompt();
+        this.publish();
+      });
     });
     this.updatePrompt();
     this.publish();
@@ -6078,6 +6096,37 @@ export class ChunkedWorldScene extends Phaser.Scene {
       session.failedAt[result.id] = { ...result.worldPixel };
       this.setSourceCheckSession(session);
     }
+    const reward = pendingAttestationRewardForReturn(result);
+    if (reward) {
+      this.pendingAttestationReward = reward;
+    }
+  }
+
+  private startAttestationRewardCeremony(): void {
+    const reward = this.pendingAttestationReward;
+    if (!reward) {
+      return;
+    }
+    const check = this.sourceCheckById(reward.checkId);
+    const card = cardById(this.data_.cardNfts, reward.cardId);
+    if (!check || !card) {
+      this.pendingAttestationReward = undefined;
+      console.warn("[attestation reward] missing ceremony data", reward);
+      return;
+    }
+    const pages = attestationRewardDialoguePages({
+      drifellaName: drifellaDisplayName(check),
+      cardName: card.name,
+      itemName: this.itemName(check.rewards.itemId, this.itemById(check.rewards.itemId)),
+      itemHeld: this.gameFlags.has(sourceCheckItemHeldFlag(check.id))
+    });
+    lockPlayer(this.playerState, this.playerFrames);
+    this.pendingScriptedDialogueComplete = () => {
+      this.pendingAttestationReward = undefined;
+      this.showBinderCardOverlay(card);
+    };
+    this.dialogue.start(buildInlineDialoguePages(pages));
+    this.updatePrompt();
   }
 
   private isCompatibleSavePlayer(player: SavePlayerSnapshot): boolean {
@@ -6167,6 +6216,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private openSourceCheckInteraction(target: WorldInteractionCandidate): void {
+    if (this.pendingAttestationReward) {
+      return;
+    }
     const check = this.sourceCheckById(target.sourceCheckId);
     if (!check) {
       return;

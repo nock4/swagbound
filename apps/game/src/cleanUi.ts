@@ -205,6 +205,36 @@ export function estimateCleanTextWidth(text: string, fontSize = 14, weight: Clea
   return Math.ceil(width * weightMultiplier);
 }
 
+export function wrapCleanTextToWidth(
+  text: string,
+  maxWidth: number,
+  fontSize = 14,
+  weight: CleanTextWeight = 400
+): string[] {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) {
+    return [""];
+  }
+  const width = Math.max(1, maxWidth);
+  const lines: string[] = [];
+  let current = "";
+  for (const word of words) {
+    const candidate = current ? `${current} ${word}` : word;
+    if (estimateCleanTextWidth(candidate, fontSize, weight) <= width) {
+      current = candidate;
+      continue;
+    }
+    if (current) {
+      lines.push(current);
+    }
+    current = word;
+  }
+  if (current) {
+    lines.push(current);
+  }
+  return lines;
+}
+
 export function battleCommandGridPosition(index: number, columns = CLEAN_UI_GRID_COLUMNS): BattleCommandGridPosition {
   const normalizedColumns = Math.max(1, Math.floor(columns));
   const normalizedIndex = Math.max(0, Math.floor(index));
