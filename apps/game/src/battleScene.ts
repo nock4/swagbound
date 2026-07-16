@@ -78,6 +78,7 @@ import {
 import { composeBattleStepLines } from "./battleMessages";
 import {
   bossHpFraction,
+  mergeBossBattleDialogue,
   resolveBossTaunts,
   shouldQueueLowHpTaunt,
   wrapTauntLines,
@@ -181,9 +182,17 @@ import {
   menuCursorVisible
 } from "./battleVisuals";
 import { drawSwirl } from "./transitions";
+import { namedEnemyResultPages } from "./battleResultText";
+import {
+  TUTORIAL_DERIVATIVE_ENEMY_ID,
+  stageTutorialDerivativeMimic,
+  tutorialDerivativeActionIndex,
+  tutorialDerivativeMimicLine
+} from "./tutorialDerivative";
 import {
   resolveSpriteOverrideImageFrame,
   spriteOverrideAssetUrl,
+  spriteOverrideCropRect,
   spriteOverrideEnemyImageKey,
   spriteOverrideForEnemyId
 } from "./spriteOverrides";
@@ -657,6 +666,7 @@ export class BattleScene extends Phaser.Scene {
   private attestation_: AttestationBattleState | null = null;
   private attestationResolvedRestore_: ChunkedWorldRestore | null = null;
   private customVictoryPages_: string[][] | null = null;
+  private tutorialDerivativeMimicCommand_: BattleCommand | undefined;
   private devConsole?: DevConsole;
   private devNoteCount = 0;
 
@@ -789,6 +799,7 @@ export class BattleScene extends Phaser.Scene {
     this.exitOutcome_ = null;
     this.attestationResolvedRestore_ = null;
     this.customVictoryPages_ = null;
+    this.tutorialDerivativeMimicCommand_ = undefined;
     this.devNoteCount = 0;
     this.attestation_ = data.attestation
       ? this.createAttestationState(data.attestation)
@@ -881,7 +892,11 @@ export class BattleScene extends Phaser.Scene {
     if (this.bossTaunts_) {
       return;
     }
-    const dialogue = await fetchParsed("/generated/boss-battle-dialogue.json", BossBattleDialogueSchema);
+    const [base, overlay] = await Promise.all([
+      fetchParsed("/generated/boss-battle-dialogue.json", BossBattleDialogueSchema),
+      fetchParsed("/generated/boss-battle-dialogue-redesign.json", BossBattleDialogueSchema)
+    ]);
+    const dialogue = mergeBossBattleDialogue(base, overlay);
     this.bossTaunts_ = resolveBossTaunts(dialogue, this.group_.id);
   }
 
@@ -1652,9 +1667,25 @@ export class BattleScene extends Phaser.Scene {
       this.queueBossReactionTaunts();
       this.updateStepDebugTargets(result, queued);
       this.menuMessage_ = result.message;
-      this.executionMessageLines_ = composeBattleStepLines(result.events);
-      this.playBattleStepSfx(result);
-      this.triggerBattleStepFx(result);
+      const stepLines = composeBattleStepLines(result.events);
+      const actingCombatant = actor.side === "enemy" ? previousBattle.enemies[actor.index] : undefined;
+      const isTutorialDerivative = actingCombatant?.charId === TUTORIAL_DERIVATIVE_ENEMY_ID;
+      const derivativeHasImpact = [1, 3].includes(
+        tutorialDerivativeActionIndex(this.tutorialDerivativeMimicCommand_)
+      );
+      if (isTutorialDerivative) {
+        const impactLines = stepLines[0]?.includes("attack!") ? stepLines.slice(1) : stepLines;
+        this.executionMessageLines_ = [
+          tutorialDerivativeMimicLine(actingCombatant.name, this.tutorialDerivativeMimicCommand_),
+          ...(derivativeHasImpact ? impactLines : [])
+        ];
+      } else {
+        this.executionMessageLines_ = stepLines;
+      }
+      if (!isTutorialDerivative || derivativeHasImpact) {
+        this.playBattleStepSfx(result);
+        this.triggerBattleStepFx(result);
+      }
       if (this.executionMessageLines_.length === 0) {
         this.actionDelayMs_ = 0;
         this.lastActionDwellMs_ = 0;
@@ -1686,7 +1717,9 @@ export class BattleScene extends Phaser.Scene {
       this.beginCommandInputRound();
       return;
     }
-    this.battle_ = advanceBattleRound(this.battle_);
+    const leadCommand = this.queuedCommands_.find((command) => command.partySlot === 0)?.command;
+    this.tutorialDerivativeMimicCommand_ = leadCommand;
+    this.battle_ = advanceBattleRound(stageTutorialDerivativeMimic(this.battle_, leadCommand));
     this.maybeQueueBossTurnBark();
     this.executionMessageLines_ = [];
     this.pendingFlee_ = false;
@@ -2547,6 +2580,7 @@ export class BattleScene extends Phaser.Scene {
     this.victorySummary_ = result.summary;
     this.victorySummaryPageIndex_ = 0;
     this.victoryTally_ = null;
+    this.customVictoryPages_ = namedEnemyResultPages(enemies.map((enemy) => enemy.name));
     this.phase_ = "victory-summary";
     this.transitionPhase_ = "summary";
     this.markTerminalPhaseStarted();
@@ -2564,6 +2598,7 @@ export class BattleScene extends Phaser.Scene {
 
   private beginVictorySummary(): void {
     this.playBattleMusicCue("victory");
+    this.customVictoryPages_ ??= namedEnemyResultPages(this.battle_.enemies.map((enemy) => enemy.name));
     if (this.victorySummary_) {
       this.victorySummaryPageIndex_ = 0;
       this.phase_ = "victory-summary";
@@ -2643,7 +2678,7 @@ export class BattleScene extends Phaser.Scene {
     attestation.stage = "complete";
     attestation.lastOutcome = "cleared";
     this.attestationResolvedRestore_ = restore;
-    this.customVictoryPages_ = [[
+    this.customVictoryPages_ = [...(this.customVictoryPages_ ?? []), [
       message,
       reward.cardName,
       reward.itemHeld ? `Drifella holds ${reward.itemName}.` : `+ ${reward.itemName}`
@@ -2858,7 +2893,21 @@ export class BattleScene extends Phaser.Scene {
         missingTextures.push(texture);
         return;
       }
-      const frame = this.textures.getFrame(texture.key);
+      const sourceFrame = this.textures.getFrame(texture.key);
+      const crop = texture.override
+        ? spriteOverrideCropRect(texture.override, { width: sourceFrame.width, height: sourceFrame.height })
+        : undefined;
+      let croppedFrameName: string | undefined;
+      if (crop) {
+        croppedFrameName = `swagbound-frame-${crop.x}-${crop.y}-${crop.width}-${crop.height}`;
+        const sourceTexture = this.textures.get(texture.key);
+        if (!sourceTexture.has(croppedFrameName)) {
+          sourceTexture.add(croppedFrameName, 0, crop.x, crop.y, crop.width, crop.height);
+        }
+      }
+      const frame = croppedFrameName
+        ? this.textures.getFrame(texture.key, croppedFrameName)
+        : sourceFrame;
       const widthBudget = Math.max(64, 420 / count);
       const scale = texture.override
         ? resolveSpriteOverrideImageFrame(
@@ -2869,10 +2918,11 @@ export class BattleScene extends Phaser.Scene {
         : Math.min(2, widthBudget / frame.width, ENEMY_SPRITE_MAX_HEIGHT / frame.height);
       const point = enemySpritePoint(this.scale.width, count, index, widthBudget);
       this.enemySpriteBasePoints[index] = point;
-      this.enemySprites[index] = this.add.image(point.x, point.y, texture.key)
+      const image = this.add.image(point.x, point.y, texture.key, croppedFrameName)
         .setOrigin(texture.override?.originX ?? 0.5, texture.override?.originY ?? 0.5)
         .setScale(scale)
         .setDepth(10);
+      this.enemySprites[index] = image;
     });
     if (missingTextures.length > 0) {
       this.scheduleEnemySpriteRedraw(missingTextures);

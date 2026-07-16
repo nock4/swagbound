@@ -318,6 +318,7 @@ import {
   OPENING_ERA_TITLE_FADE_MS,
   OPENING_ERA_TITLE_HOLD_MS,
   OPENING_FLYOVER_END_ZOOM,
+  OPENING_FLYOVER_CUES,
   OPENING_FLYOVER_SHOTS,
   OPENING_FLYOVER_ZOOM_IN_MS,
   OPENING_FLYOVER_ZOOM,
@@ -7316,6 +7317,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     const beginShot = (i: number, from: { x: number; y: number }, to: { x: number; y: number }): void => {
       const shot = shots[i];
+      const firedCues = new Set<number>();
       placeCaption();
       placeEraTitle();
       caption.setText(shot.text).setAlpha(0);
@@ -7362,6 +7364,18 @@ export class ChunkedWorldScene extends Phaser.Scene {
           this.refreshStreaming();
           placeCaption();
           placeEraTitle();
+          if (i === 0) {
+            OPENING_FLYOVER_CUES.forEach((cue, cueIndex) => {
+              if (proxy.t >= cue.t && !firedCues.has(cueIndex)) {
+                firedCues.add(cueIndex);
+                caption.setText(cue.text);
+                this.playOpeningFlyoverCue(cue.kind, {
+                  x: from.x + (to.x - from.x) * proxy.t,
+                  y: from.y + (to.y - from.y) * proxy.t
+                });
+              }
+            });
+          }
         },
         onComplete: () => {
           rumbleTimer?.remove(false);
@@ -7374,6 +7388,40 @@ export class ChunkedWorldScene extends Phaser.Scene {
     };
 
     runShot(0);
+  }
+
+  private playOpeningFlyoverCue(
+    kind: "photo-flash" | "sync-turn" | "caption",
+    center: { x: number; y: number }
+  ): void {
+    if (kind === "photo-flash") {
+      this.openingSfx.resume();
+      this.openingSfx.signalLock();
+      this.cameras.main.flash(220, 180, 230, 255);
+      return;
+    }
+    if (kind !== "sync-turn") {
+      return;
+    }
+    const nearby = [...this.npcRuntimes.values()]
+      .filter((npc) => npc.sprite?.visible)
+      .map((npc) => ({
+        npc,
+        distance: Math.hypot(npc.state.player.x - center.x, npc.state.player.y - center.y)
+      }))
+      .filter((entry) => entry.distance <= 210)
+      .sort((left, right) => left.distance - right.distance)
+      .slice(0, 3);
+    for (const { npc } of nearby) {
+      const wasPaused = npc.state.paused;
+      npc.state.paused = true;
+      this.setNpcIdleFacing(npc, "left");
+      this.time.delayedCall(1_200, () => {
+        if (this.npcRuntimes.get(npc.key) === npc) {
+          npc.state.paused = wasPaused;
+        }
+      });
+    }
   }
 
   private startAuthoredOpeningCutsceneBeforeStartup(

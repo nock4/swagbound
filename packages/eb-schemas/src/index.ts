@@ -2219,6 +2219,7 @@ export const OpeningClaritySchema = z.object({
   cutsceneDialogueById: z.record(z.array(z.string().trim().min(1)).min(1)).default({}),
   storyTriggerDialogueById: z.record(z.array(z.string().trim().min(1)).min(1)).default({}),
   objectiveTextById: z.record(z.string().trim().min(1)).default({}),
+  objectiveNpcHintsById: z.record(z.array(z.string().trim().min(1)).min(1)).default({}),
   battleEnemyNamesById: z.record(
     z.string().regex(/^\d+$/),
     z.string().trim().min(1).max(32)

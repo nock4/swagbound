@@ -16,6 +16,7 @@ import {
   type DialogueResolver,
   type RevealState
 } from "./dialogueRenderer";
+import { paginateDialoguePages } from "./dialoguePagination";
 
 export type SceneMode = "world" | "fallback" | "error" | "battle" | "intro";
 export type BattlePhase =
@@ -575,7 +576,7 @@ export class DialogueController {
   }
 
   start(pages: DialoguePage[]): void {
-    this.pages = pages;
+    this.pages = paginateDialoguePages(pages);
     this.pageIndex = 0;
     this.open = true;
     this.choice = undefined;

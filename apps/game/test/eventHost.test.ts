@@ -239,7 +239,7 @@ describe("RuntimeEventHost", () => {
     expect(flags.isSet(7)).toBe(true);
     expect(flags.isSet(8)).toBe(false);
     expect(dialogue.open).toBe(true);
-    expect(dialogue.pages.map((page) => page.text)).toEqual([
+    expect(dialogue.pages.map((page) => page.text.replace(/\n/g, " "))).toEqual([
       "MiFella hits the door like the algorithm owes him rent.",
       "Override second page."
     ]);

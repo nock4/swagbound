@@ -10,6 +10,24 @@
 
 import type { BossBattleDialogue } from "@eb/schemas";
 
+/** Apply a small high-priority dialogue overlay without mutating historical content. */
+export function mergeBossBattleDialogue(
+  base: BossBattleDialogue | undefined,
+  overlay: BossBattleDialogue | undefined
+): BossBattleDialogue | undefined {
+  if (!overlay) {
+    return base;
+  }
+  return {
+    schema: "swagbound.boss-battle-dialogue.v1",
+    ambient: overlay.ambient.length > 0 ? [...overlay.ambient] : [...(base?.ambient ?? [])],
+    byBattleGroup: {
+      ...(base?.byBattleGroup ?? {}),
+      ...overlay.byBattleGroup
+    }
+  };
+}
+
 /** Default low-HP taunt trigger: at or below one third of max HP. */
 export const DEFAULT_BOSS_LOW_HP_THRESHOLD = 0.34;
 

@@ -1,0 +1,28 @@
+{
+  "schema": "swagbound.boss-battle-dialogue.v1",
+  "ambient": [],
+  "byBattleGroup": {
+    "172": {
+      "personaName": "Milady Manifestation",
+      "onStart": [
+        "I am not a person you can defeat. I am the agreement that choosing is too painful. Stop choosing.",
+        "Every easy version of you is ready. Only the unfinished Bosch keeps disappointing people."
+      ],
+      "onLowHp": [
+        "Those voices should not disagree and remain together. That is not how synchronization works.",
+        "MiFella corrected the account and you still speak to him. I cannot make that choice fit the record."
+      ],
+      "onDefeat": [
+        "The local signal is failing. Nobody here is agreeing to carry it.",
+        "Keep your difficult voices. Keep the open record. I have no shape without your surrender."
+      ],
+      "onTurn": [
+        "A Postwick resident remembers an unscheduled kindness.",
+        "A Dead Letter resident offers two conflicting memories and keeps both.",
+        "Bosch's household speaks over the chorus in four different rhythms.",
+        "MiFella repeats the correction without asking to be forgiven."
+      ],
+      "lowHpThreshold": 0.45
+    }
+  }
+}

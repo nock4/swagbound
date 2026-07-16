@@ -131,6 +131,10 @@ export const OBJECTIVES_SOURCE = "content/objectives.json";
 export const OBJECTIVES_OUTPUT = "objectives.json";
 export const OPENING_CLARITY_SOURCE = "content/opening-clarity.json";
 export const OPENING_CLARITY_OUTPUT = "opening-clarity.json";
+export const NARRATIVE_REDESIGN_SOURCE = "content/narrative-redesign.json";
+export const NARRATIVE_REDESIGN_OUTPUT = "narrative-redesign.json";
+export const BOSS_BATTLE_DIALOGUE_REDESIGN_SOURCE = "content/boss-battle-dialogue-redesign.json";
+export const BOSS_BATTLE_DIALOGUE_REDESIGN_OUTPUT = "boss-battle-dialogue-redesign.json";
 export const NAVMESH_SOURCE = "content/navmesh.json";
 export const NAVMESH_OUTPUT = "navmesh.json";
 export const USABILITY_MATRIX_SOURCE = "content/usability-matrix.json";
@@ -244,6 +248,8 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateFgOverrides(FG_OVERRIDES_SOURCE);
   await validateObjectives(OBJECTIVES_SOURCE);
   await validateOpeningClarity(OPENING_CLARITY_SOURCE);
+  await validateOpeningClarity(NARRATIVE_REDESIGN_SOURCE);
+  await validateBossBattleDialogue(BOSS_BATTLE_DIALOGUE_REDESIGN_SOURCE);
   await validateNavmesh(NAVMESH_SOURCE);
   await validateUsabilityMatrix(USABILITY_MATRIX_SOURCE);
   await validateNpcOverrides(NPC_OVERRIDES_SOURCE);
@@ -294,6 +300,12 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyOptionalJsonToGenerated(ATTESTATION_BATTLES_SOURCE, out, ATTESTATION_BATTLES_OUTPUT),
     copyJsonToGenerated(OBJECTIVES_SOURCE, out, OBJECTIVES_OUTPUT),
     copyJsonToGenerated(OPENING_CLARITY_SOURCE, out, OPENING_CLARITY_OUTPUT),
+    copyJsonToGenerated(NARRATIVE_REDESIGN_SOURCE, out, NARRATIVE_REDESIGN_OUTPUT),
+    copyJsonToGenerated(
+      BOSS_BATTLE_DIALOGUE_REDESIGN_SOURCE,
+      out,
+      BOSS_BATTLE_DIALOGUE_REDESIGN_OUTPUT
+    ),
     copyJsonToGenerated(NAVMESH_SOURCE, out, NAVMESH_OUTPUT),
     copyJsonToGenerated(USABILITY_MATRIX_SOURCE, out, USABILITY_MATRIX_OUTPUT)
   ]);

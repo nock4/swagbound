@@ -347,6 +347,7 @@ const PRAY_DAMAGE_AMOUNT = 8;
 // When such a boss is on the field, Pray always deals damage (no random heal/pp/nothing)
 // so the player who figures out Pray can reliably win. Keyed by enemy id (Combatant.charId).
 const PRAY_VULNERABLE_ENEMIES: Record<number, number> = {
+  127: 96, // Local Milady manifestation: distinct witnesses reliably break synchronization.
   147: 110 // Soul Consuming Flame (arena-venue-3): 602 HP -> ~6 prayers to unmake it.
 };
 function prayDamageForEnemy(charId: number): number {

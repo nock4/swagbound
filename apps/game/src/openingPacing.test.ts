@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   OPENING_FLYOVER_SHOTS,
+  OPENING_FLYOVER_CUES,
   OPENING_FLYOVER_VIEW,
   OPENING_KNOCK_POST_SFX_HOLD_MS,
   OPENING_KNOCK_SFX_PATTERN_MS,
@@ -152,6 +153,16 @@ describe("opening flyover pacing", () => {
 
   it("preserves one continuous 20-second pan", () => {
     expect(OPENING_FLYOVER_SHOTS.map((shot) => shot.duration)).toEqual([20_000]);
+  });
+
+  it("shows MiFella's photograph and a synchronized town reaction before the bedroom", () => {
+    expect(OPENING_FLYOVER_CUES.map((cue) => cue.kind)).toEqual([
+      "photo-flash",
+      "sync-turn",
+      "caption"
+    ]);
+    expect(OPENING_FLYOVER_CUES.map((cue) => cue.t)).toEqual([...OPENING_FLYOVER_CUES.map((cue) => cue.t)].sort());
+    expect(OPENING_FLYOVER_CUES.every((cue) => cue.t > 0 && cue.t < 1)).toBe(true);
   });
 
   it("waits for the knock pattern plus the post-knock beat before dialogue", () => {

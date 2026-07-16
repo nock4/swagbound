@@ -3,6 +3,7 @@ import type { BossBattleDialogue } from "@eb/schemas";
 import {
   DEFAULT_BOSS_LOW_HP_THRESHOLD,
   bossHpFraction,
+  mergeBossBattleDialogue,
   resolveBossTaunts,
   shouldQueueLowHpTaunt,
   wrapTauntLines
@@ -36,6 +37,20 @@ const data: BossBattleDialogue = {
 };
 
 describe("resolveBossTaunts", () => {
+  it("lets an additive redesign replace one group without dropping the others", () => {
+    const overlay: BossBattleDialogue = {
+      schema: "swagbound.boss-battle-dialogue.v1",
+      ambient: [],
+      byBattleGroup: {
+        "448": { onStart: ["Redesigned."], onLowHp: [], onDefeat: [], onTurn: [] }
+      }
+    };
+    const merged = mergeBossBattleDialogue(data, overlay);
+
+    expect(resolveBossTaunts(merged, 448)?.onStart).toEqual(["Redesigned."]);
+    expect(resolveBossTaunts(merged, 36)?.onStart).toEqual(["You arrived pre-filed."]);
+  });
+
   it("resolves a group's taunts with its explicit threshold", () => {
     const taunts = resolveBossTaunts(data, 448);
     expect(taunts).toBeDefined();

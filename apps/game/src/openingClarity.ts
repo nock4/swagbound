@@ -62,7 +62,10 @@ export function applyOpeningClarityDialogue(
       ...dialogue.byTextPointer,
       ...clarity.dialogue.byTextPointer
     },
-    variantsByNpcId: clarity.dialogueVariantsByNpcId
+    variantsByNpcId: {
+      ...("variantsByNpcId" in dialogue ? dialogue.variantsByNpcId ?? {} : {}),
+      ...clarity.dialogueVariantsByNpcId
+    }
   };
 }
 
@@ -93,7 +96,10 @@ export function applyOpeningClarityObjectives(
     ...objectives,
     objectives: objectives.objectives.map((objective) => {
       const text = clarity.objectiveTextById[objective.id];
-      return text ? { ...objective, text } : objective;
+      const npcHints = clarity.objectiveNpcHintsById[objective.id];
+      return text || npcHints
+        ? { ...objective, ...(text ? { text } : {}), ...(npcHints ? { npcHints: [...npcHints] } : {}) }
+        : objective;
     })
   };
 }

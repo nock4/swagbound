@@ -917,6 +917,20 @@ describe("battle character-specific command resolution", () => {
     expect(emptyEnemyResult.state).toBe(emptyEnemyBattle);
   });
 
+  it("PRAY reliably breaks the final local manifestation's synchronization", () => {
+    const manifestation = enemy(127, "LOCAL_MANIFESTATION", { hp: 820, defense: 150 });
+    const battle = createBattleState(manifestation, {
+      characters: characters([partyCharacterA, partyCharacterB])
+    });
+
+    const result = resolvePrayTurn(battle, actor("party", 1), () => 0.95);
+
+    expect(result.skipped).toBe(false);
+    expect(result.effect).toBe("damageEnemies");
+    expect(result.amount).toBe(96);
+    expect(result.state.enemies[0].hp.target).toBe(724);
+  });
+
   it("MIRROR strikes with the target enemy offense against its own defense and consumes the turn", () => {
     const battle = createBattleState(enemy(20, "MIRROR_TARGET", { hp: 30, offense: 20, defense: 4 }), {
       characters: characters([character(3, "POO_TEST", { offense: 5 })])

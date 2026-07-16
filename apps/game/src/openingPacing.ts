@@ -42,6 +42,30 @@ export type OpeningFlyoverShot = {
   text: string;
 };
 
+export type OpeningFlyoverCue = {
+  t: number;
+  kind: "photo-flash" | "sync-turn" | "caption";
+  text: string;
+};
+
+export const OPENING_FLYOVER_CUES: readonly OpeningFlyoverCue[] = [
+  {
+    t: 0.04,
+    kind: "photo-flash",
+    text: "MiFella saw another Bosch and took a picture."
+  },
+  {
+    t: 0.42,
+    kind: "sync-turn",
+    text: "Across Morningside, strangers turned toward the same signal."
+  },
+  {
+    t: 0.72,
+    kind: "caption",
+    text: "The picture reached MONS LINK before Bosch woke."
+  }
+] as const;
+
 export const OPENING_FLYOVER_SHOTS: readonly OpeningFlyoverShot[] = [
   {
     // One continuous establishing move: begin over the MONS LINK arcade where
@@ -50,7 +74,7 @@ export const OPENING_FLYOVER_SHOTS: readonly OpeningFlyoverShot[] = [
     from: { x: 1504, y: 1704 },
     to: { x: 2656, y: 344 },
     duration: 20_000,
-    text: "A camera saw Bosch leave home while Bosch was still asleep."
+    text: "Before sunrise, something wearing Bosch's face crossed Morningside."
   }
 ] as const;
 

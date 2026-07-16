@@ -167,6 +167,7 @@ const DRIFELLA_SOURCE_CHECKS_FILE = "drifella-source-checks.json";
 const ATTESTATION_BATTLES_FILE = "attestation-battles.json";
 const OBJECTIVES_FILE = "objectives.json";
 const OPENING_CLARITY_FILE = "opening-clarity.json";
+const NARRATIVE_REDESIGN_FILE = "narrative-redesign.json";
 
 export type GameData = {
   manifest: Manifest;
@@ -443,7 +444,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     sourceChecks,
     attestationBattles,
     objectives,
-    openingClarity
+    openingClarity,
+    narrativeRedesign
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -529,28 +531,38 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${DRIFELLA_SOURCE_CHECKS_FILE}`, DrifellaSourceChecksSchema),
     loadJson(`/generated/${ATTESTATION_BATTLES_FILE}`, AttestationBattlesSchema),
     loadJson(`/generated/${OBJECTIVES_FILE}`, ObjectivesSchema),
-    loadJson(`/generated/${OPENING_CLARITY_FILE}`, OpeningClaritySchema)
+    loadJson(`/generated/${OPENING_CLARITY_FILE}`, OpeningClaritySchema),
+    loadJson(`/generated/${NARRATIVE_REDESIGN_FILE}`, OpeningClaritySchema)
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
   const resolvedPsi = applyPsiOverrides(psi, psiOverrides);
   const resolvedBattle = applyOpeningClarityBattle(
-    applyEnemyActionEffects(
-      applyEnemyStatOverrides(applyEnemyOverrides(battle, enemyOverrides), enemyStatOverrides),
-      enemyActionEffects
+    applyOpeningClarityBattle(
+      applyEnemyActionEffects(
+        applyEnemyStatOverrides(applyEnemyOverrides(battle, enemyOverrides), enemyStatOverrides),
+        enemyActionEffects
+      ),
+      openingClarity
     ),
-    openingClarity
+    narrativeRedesign
   );
   const resolvedDrifellaBarks = drifellaBarks ?? emptyDrifellaBarks();
   const resolvedCustomDialogue = applyOpeningClarityDialogue(
-    buildCustomDialogueWithDrifellaBarks(
-      customDialogue ?? emptyCustomDialogue(),
-      world?.npcs ?? [],
-      resolvedDrifellaBarks
+    applyOpeningClarityDialogue(
+      buildCustomDialogueWithDrifellaBarks(
+        customDialogue ?? emptyCustomDialogue(),
+        world?.npcs ?? [],
+        resolvedDrifellaBarks
+      ),
+      openingClarity
     ),
-    openingClarity
+    narrativeRedesign
   );
-  const resolvedSpriteOverrides = applyOpeningClaritySprites(spriteOverrides, openingClarity);
+  const resolvedSpriteOverrides = applyOpeningClaritySprites(
+    applyOpeningClaritySprites(spriteOverrides, openingClarity),
+    narrativeRedesign
+  );
 
   return {
     manifest,
@@ -565,10 +577,19 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     cardNfts: cardNfts ?? emptyCardNfts(),
     sourceChecks: sourceChecks ?? emptySourceChecks(),
     attestationBattles: attestationBattles ?? emptyAttestationBattles(),
-    objectives: applyOpeningClarityObjectives(objectives, openingClarity),
+    objectives: applyOpeningClarityObjectives(
+      applyOpeningClarityObjectives(objectives, openingClarity),
+      narrativeRedesign
+    ),
     openingCutscene,
-    cutscenes: applyOpeningClarityCutscenes(cutscenes, openingClarity),
-    storyTriggers: applyOpeningClarityStoryTriggers(storyTriggers, openingClarity),
+    cutscenes: applyOpeningClarityCutscenes(
+      applyOpeningClarityCutscenes(cutscenes, openingClarity),
+      narrativeRedesign
+    ),
+    storyTriggers: applyOpeningClarityStoryTriggers(
+      applyOpeningClarityStoryTriggers(storyTriggers, openingClarity),
+      narrativeRedesign
+    ),
     spriteGroups,
     tutorialStatus,
     validationReport,

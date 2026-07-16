@@ -23,6 +23,7 @@ export type ResolvedSpriteOverrideImage = {
   displayHeight: number;
   scale: number;
 };
+export type SpriteOverrideCropRect = { x: number; y: number; width: number; height: number };
 
 export const PLAYER_SPRITE_OVERRIDE_SHEET_KEY = "sprite-override-player";
 export const FOLLOWER_SPRITE_OVERRIDE_SHEET_KEY = "sprite-override-follower";
@@ -228,6 +229,29 @@ export function resolveSpriteOverrideImageFrame(
     displayWidth: frameWidth * scale,
     displayHeight: frameHeight * scale,
     scale
+  };
+}
+
+/**
+ * Battle overrides may deliberately point at one canonical frame inside an
+ * overworld sheet. Phaser loads those overrides as images rather than atlases,
+ * so crop the top-left frame when authored frame dimensions are smaller than
+ * the source texture. Ordinary single-image battle art remains uncropped.
+ */
+export function spriteOverrideCropRect(
+  override: Pick<SpriteOverride, "frameHeight" | "frameWidth">,
+  source: SpriteOverrideImageSize
+): SpriteOverrideCropRect | undefined {
+  const width = positiveDimension(override.frameWidth);
+  const height = positiveDimension(override.frameHeight);
+  if (width === undefined || height === undefined || (width >= source.width && height >= source.height)) {
+    return undefined;
+  }
+  return {
+    x: 0,
+    y: 0,
+    width: Math.min(width, source.width),
+    height: Math.min(height, source.height)
   };
 }
 

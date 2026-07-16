@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   SPRITE_WALK_STEP_INTERVAL_MS,
+  spriteOverrideCropRect,
   spriteOverrideNpcIdFromSheetKey,
   spriteOverrideNpcSheetKey,
   spriteWalkMirror,
@@ -50,6 +51,22 @@ describe("spriteWalkStepPhase / spriteWalkMirror", () => {
       }
     }
     expect(disagreements).toBeGreaterThan(50);
+  });
+});
+
+describe("spriteOverrideCropRect", () => {
+  it("selects one canonical frame from an overworld sheet used in battle", () => {
+    expect(spriteOverrideCropRect(
+      { frameWidth: 96, frameHeight: 96 },
+      { width: 384, height: 384 }
+    )).toEqual({ x: 0, y: 0, width: 96, height: 96 });
+  });
+
+  it("leaves ordinary single-image battle art uncropped", () => {
+    expect(spriteOverrideCropRect(
+      { frameWidth: 96, frameHeight: 96 },
+      { width: 96, height: 96 }
+    )).toBeUndefined();
   });
 });
 
