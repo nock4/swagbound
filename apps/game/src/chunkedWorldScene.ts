@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { type ArchivistSpot, type BattleEnemy, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
+import { actorBodyBlocked, actorsBlockingAt, isActorBodyPoint } from "./actorCollision";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, storyTriggerSuppressionForRestore, triggerFiredFlag } from "./storyTriggers";
 import {
   CutsceneRunner,
@@ -549,8 +550,8 @@ type BlockedOptions = {
   ignoreNpcId?: number;
   includePlayer?: boolean;
   includeNpcs?: boolean;
-  // When set, NPCs whose body already overlaps this point are ignored, so an
-  // actor that ends up co-located with an NPC (door-warp spawn, scripted move)
+  // When set, actors whose body already overlaps this point are ignored, so a
+  // mover that ends up co-located with an actor (door-warp spawn, scripted move)
   // can always walk free instead of being trapped in every direction.
   escapeOverlapAt?: { x: number; y: number };
   // Player-only, vertical moves only: EB ladder cells (0x10, usually 0x90 =
@@ -4130,7 +4131,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if ((options.includeNpcs ?? true) && this.presentInteractableBlocks(x, y, options.escapeOverlapAt)) {
       return true;
     }
-    if (options.includePlayer && this.player && this.actorBodyBlocked(x, y, this.playerState.x, this.playerState.y)) {
+    if (options.includePlayer && this.player && actorBodyBlocked(x, y, this.playerState.x, this.playerState.y)) {
       return true;
     }
     if (options.includeNpcs ?? true) {
@@ -4145,14 +4146,30 @@ export class ChunkedWorldScene extends Phaser.Scene {
         // it block - otherwise a co-located NPC walls off every direction at once.
         if (
           options.escapeOverlapAt &&
-          this.actorBodyBlocked(options.escapeOverlapAt.x, options.escapeOverlapAt.y, npc.state.player.x, npc.state.player.y)
+          actorBodyBlocked(options.escapeOverlapAt.x, options.escapeOverlapAt.y, npc.state.player.x, npc.state.player.y)
         ) {
           continue;
         }
-        if (this.actorBodyBlocked(x, y, npc.state.player.x, npc.state.player.y)) {
+        if (actorBodyBlocked(x, y, npc.state.player.x, npc.state.player.y)) {
           return true;
         }
       }
+      const sourceCheckBodies = [...this.sourceCheckActors.values()].flatMap((runtime) => {
+        const worldPixel = runtime.check.placement?.worldPixel;
+        return runtime.visible
+          && runtime.check.npcId !== options.ignoreNpcId
+          && isActorBodyPoint(worldPixel)
+          && this.worldPointInsideActiveRoom(worldPixel)
+          ? [worldPixel]
+          : [];
+      });
+      if (actorsBlockingAt(x, y, sourceCheckBodies, options.escapeOverlapAt)) {
+        return true;
+      }
+      // Boss gates are intentionally NOT solid: they are triggers meant to be
+      // walked into, and their battle-contact radius (BOSS_GATE_CONTACT_PX) equals
+      // the actor body half-width, so solidity would block the player one pixel
+      // short of contact and the fight would never start.
     }
     return false;
   }
@@ -4214,11 +4231,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       if (
         escapeOverlapAt &&
-        this.actorBodyBlocked(escapeOverlapAt.x, escapeOverlapAt.y, entry.worldPixel.x, entry.worldPixel.y)
+        actorBodyBlocked(escapeOverlapAt.x, escapeOverlapAt.y, entry.worldPixel.x, entry.worldPixel.y)
       ) {
         continue;
       }
-      if (this.actorBodyBlocked(x, y, entry.worldPixel.x, entry.worldPixel.y)) {
+      if (actorBodyBlocked(x, y, entry.worldPixel.x, entry.worldPixel.y)) {
         return true;
       }
     }
@@ -4637,10 +4654,6 @@ export class ChunkedWorldScene extends Phaser.Scene {
         direction: destination.direction
       }
     );
-  }
-
-  private actorBodyBlocked(x: number, y: number, bodyX: number, bodyY: number): boolean {
-    return Math.abs(x - bodyX) < 14 && y > bodyY - 18 && y < bodyY + 10;
   }
 
   private interactionCandidates(): WorldInteractionCandidate[] {
