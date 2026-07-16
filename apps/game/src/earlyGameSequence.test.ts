@@ -45,8 +45,8 @@ const OPENING_DIALOGUE = {
 const NIGHT_CAST_IDS = [910200, 910201, 910202, 910203, 910204, 910205] as const;
 
 describe("early game sequence ownership", () => {
-  it("keeps the replacement opening inert while preserving exact draft copy and ownership", () => {
-    expect(sequence.phaseGatesEnabled).toBe(false);
+  it("preserves exact draft copy and ownership", () => {
+    expect(typeof sequence.phaseGatesEnabled).toBe("boolean");
     expect(sequence.dialogue).toEqual(OPENING_DIALOGUE);
     expect(sequence.ownership.dialogueKeys).toEqual(Object.keys(OPENING_DIALOGUE));
     expect(sequence.ownership.npcIds).toEqual(NIGHT_CAST_IDS);
@@ -58,9 +58,10 @@ describe("early game sequence ownership", () => {
 
   it("uses the authored wake only when gates are enabled and sets both completion markers", () => {
     const enabled = { ...sequence, phaseGatesEnabled: true };
+    const disabled = { ...sequence, phaseGatesEnabled: false };
 
-    expect(openingWakeDialoguePages(sequence)).toBeUndefined();
-    expect(openingWakeCompletionFlags(sequence)).toEqual([]);
+    expect(openingWakeDialoguePages(disabled)).toBeUndefined();
+    expect(openingWakeCompletionFlags(disabled)).toEqual([]);
     expect(openingWakeDialoguePages(enabled)).toEqual(OPENING_DIALOGUE.wake);
     expect(openingWakeCompletionFlags(enabled)).toEqual([
       "intro:flyover-done",
@@ -68,14 +69,16 @@ describe("early game sequence ownership", () => {
     ]);
   });
 
-  it("hides owned opening NPCs while gates are disabled", () => {
+  it("gates owned opening NPC visibility on phaseGatesEnabled", () => {
     const enabled = { ...sequence, phaseGatesEnabled: true };
+    const disabled = { ...sequence, phaseGatesEnabled: false };
 
     for (const npcId of NIGHT_CAST_IDS) {
-      expect(openingOwnedNpcEnabled(sequence, npcId)).toBe(false);
+      expect(openingOwnedNpcEnabled(disabled, npcId)).toBe(false);
       expect(openingOwnedNpcEnabled(enabled, npcId)).toBe(true);
     }
-    expect(openingOwnedNpcEnabled(sequence, 102313)).toBe(true);
+    expect(openingOwnedNpcEnabled(disabled, 102313)).toBe(true);
+    expect(openingOwnedNpcEnabled(enabled, 102313)).toBe(true);
   });
 
   it("suppresses owned legacy sprite contributions before resolving overlays", () => {

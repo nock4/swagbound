@@ -1,6 +1,6 @@
 {
   "schema": "swagbound.early-game-sequence.v1",
-  "phaseGatesEnabled": false,
+  "phaseGatesEnabled": true,
   "flyover": {
     "captions": [
       "A camera saw Bosch leave home while Bosch was still asleep."
@@ -33,7 +33,14 @@
     ]
   },
   "nightCast": {
-    "allowNpcIds": [910200, 910201, 910202, 910203, 910204, 910205]
+    "allowNpcIds": [
+      910200,
+      910201,
+      910202,
+      910203,
+      910204,
+      910205
+    ]
   },
   "sourceCheckAvailabilityPhase": "morning",
   "phaseObjectives": {
@@ -47,7 +54,12 @@
   },
   "morningObjective": "Find MiFella in town.",
   "nightDoors": {
-    "allowWorldPixels": [[2648, 336]]
+    "allowWorldPixels": [
+      [
+        2648,
+        336
+      ]
+    ]
   },
   "ownership": {
     "dialogueKeys": [
@@ -59,7 +71,14 @@
       "mifella-going-home",
       "home-scene"
     ],
-    "npcIds": [910200, 910201, 910202, 910203, 910204, 910205],
+    "npcIds": [
+      910200,
+      910201,
+      910202,
+      910203,
+      910204,
+      910205
+    ],
     "cutsceneIds": [
       "signal-town-cold-signal-open",
       "onett-welcome-home-lights-out",
@@ -67,6 +86,17 @@
       "onett-brother-fallsin",
       "onett-keep-on-task"
     ],
-    "spriteOverrideNpcIds": [14, 15, 16, 21, 910200, 910201, 910202, 910203, 910204, 910205]
+    "spriteOverrideNpcIds": [
+      14,
+      15,
+      16,
+      21,
+      910200,
+      910201,
+      910202,
+      910203,
+      910204,
+      910205
+    ]
   }
 }
