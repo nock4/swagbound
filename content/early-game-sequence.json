@@ -1,5 +1,6 @@
 {
   "schema": "swagbound.early-game-sequence.v1",
+  "phaseGatesEnabled": false,
   "flyover": {
     "captions": [
       "A camera saw Bosch leave home while Bosch was still asleep."

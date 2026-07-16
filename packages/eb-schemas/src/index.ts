@@ -2257,10 +2257,14 @@ export const OpeningClaritySchema = z.object({
 
 export const EarlyGameSequenceSchema = z.object({
   schema: z.literal("swagbound.early-game-sequence.v1"),
+  phaseGatesEnabled: z.boolean().default(false),
   flyover: z.object({
     captions: z.array(z.string())
   }).strict(),
   dialogue: z.record(z.string(), z.array(z.string())),
+  nightCast: z.object({
+    allowNpcIds: z.array(z.number().int().nonnegative()).default([])
+  }).strict().optional(),
   sourceCheckAvailabilityPhase: z.literal("morning"),
   morningObjective: z.string(),
   ownership: z.object({

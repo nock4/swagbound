@@ -114,6 +114,15 @@ import {
 import { EventSequenceWatchdog, cutsceneRunnerProgressToken } from "./eventSequenceWatchdog";
 import { GameFlags, flagAliasesFromMap } from "./gameFlags";
 import { resolveOpeningPhase } from "./openingPhase";
+import {
+  openingAutosaveNoticeAllowed,
+  openingEncountersAllowed,
+  openingGatesActive,
+  openingNightTintRequired,
+  openingNpcAllowed,
+  openingRoamersAllowed,
+  openingSourceChecksAllowed
+} from "./openingGates";
 import { behaviorForNpc, interactionEventsHaveServiceEffect } from "./npcBehaviors";
 import { cutsceneNpcHiddenFlag, isNpcVisibleForRuntimeFlags } from "./npcVisibility";
 import {
@@ -2032,11 +2041,20 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return Boolean(this.activeInteriorRoom()) || this.playerInInteriorMusicSector();
   }
 
+  private worldNightTintRequired(): boolean {
+    const sequence = this.data_.earlyGameSequence;
+    const gatesActive = openingGatesActive(sequence, this.gameFlags);
+    if (gatesActive && openingNightTintRequired(sequence, this.gameFlags)) {
+      return true;
+    }
+    return shouldUseAct1Night({ flags: this.gameFlags });
+  }
+
   private act1NightDebugState(): Act1NightDebugState {
     const indoors = this.nightIndoors();
     const overlay = this.nightTintOverlay;
     return {
-      shouldShow: shouldUseAct1Night({ flags: this.gameFlags }),
+      shouldShow: this.worldNightTintRequired(),
       overlayExists: Boolean(overlay),
       alpha: overlay?.alpha ?? null,
       visible: overlay?.visible ?? null,
@@ -2050,7 +2068,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private updateAct1NightTint(options: { fade?: boolean } = {}): void {
-    const shouldShow = shouldUseAct1Night({ flags: this.gameFlags });
+    const shouldShow = this.worldNightTintRequired();
     if (shouldShow) {
       const overlay = this.ensureNightTintOverlay();
       this.tweens.killTweensOf(overlay);
@@ -3336,7 +3354,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.world_.doors.filter((door) => doorActiveForFlags(door.eventFlag, this.gameFlags));
   }
 
-  private isNpcVisible(npc: Pick<WorldChunkedNpc, "npcId" | "showSprite" | "eventFlag">): boolean {
+  private isNpcVisible(npc: Pick<RuntimeNpcData, "npcId" | "showSprite" | "eventFlag" | "worldPixel">): boolean {
+    const sequence = this.data_.earlyGameSequence;
+    const gatesActive = openingGatesActive(sequence, this.gameFlags);
+    if (gatesActive && !isInteriorMusicSector(this.world_.sectors, npc.worldPixel) && !openingNpcAllowed(sequence, this.gameFlags, npc.npcId)) {
+      return false;
+    }
     return isNpcVisibleForRuntimeFlags(npc, this.gameFlags);
   }
 
@@ -3622,6 +3645,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private sourceCheckActorVisible(check: DrifellaSourceCheck): boolean {
+    const sequence = this.data_.earlyGameSequence;
+    const gatesActive = openingGatesActive(sequence, this.gameFlags);
+    if (gatesActive && !openingSourceChecksAllowed(sequence, this.gameFlags)) {
+      return false;
+    }
     return sourceCheckVisible(check, this.gameFlags)
       && this.worldPointInsideActiveRoom(check.placement.worldPixel);
   }
@@ -5544,6 +5572,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private showAutosaveNotice(): void {
+    const sequence = this.data_.earlyGameSequence;
+    const gatesActive = openingGatesActive(sequence, this.gameFlags);
+    if (gatesActive && !openingAutosaveNoticeAllowed(sequence, this.gameFlags)) {
+      return;
+    }
     this.autosaveNoticeUntilMs = this.time.now + 1600;
     this.publish();
   }
@@ -8511,6 +8544,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.data_.encounters || !this.data_.battle || !this.player) {
       return false;
     }
+    const sequence = this.data_.earlyGameSequence;
+    const gatesActive = openingGatesActive(sequence, this.gameFlags);
+    if (gatesActive && !openingRoamersAllowed(sequence, this.gameFlags)) {
+      this.clearOverworldRoamers();
+      this.publishOverworldEnemyDebug();
+      return false;
+    }
     if (!shouldRunOverworldRoamers(this.openingRoamerHold)) {
       this.clearOverworldRoamers();
       this.publishOverworldEnemyDebug();
@@ -8927,6 +8967,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
     encounterAdvantage: EncounterAdvantage = "normal",
     pendingStoryGate?: PendingStoryGate
   ): boolean {
+    const sequence = this.data_.earlyGameSequence;
+    const gatesActive = openingGatesActive(sequence, this.gameFlags);
+    if (gatesActive && source === "encounter" && !openingEncountersAllowed(sequence, this.gameFlags)) {
+      return false;
+    }
     if (!this.data_.battle || !this.battleGroupExists(group) || !this.player) {
       return false;
     }

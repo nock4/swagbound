@@ -397,6 +397,7 @@ function emptyStoryItems(): StoryItems {
 function emptyEarlyGameSequence(): EarlyGameSequence {
   return {
     schema: "swagbound.early-game-sequence.v1",
+    phaseGatesEnabled: false,
     flyover: { captions: [] },
     dialogue: {},
     sourceCheckAvailabilityPhase: "morning",
