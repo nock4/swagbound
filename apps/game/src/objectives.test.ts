@@ -63,6 +63,26 @@ describe("currentObjective", () => {
     })).toBeUndefined();
   });
 
+  it("shows the morning lead at morning (gates inactive) until a real objective arms", () => {
+    const seq = { ...earlyGameSequence, phaseGatesEnabled: true };
+    const objectives: Objectives = {
+      schema: "swagbound.objectives.v1",
+      objectives: [{
+        id: "act1-card-clique",
+        when: { requireFlags: ["signal:route_open"], blockFlags: [] },
+        text: "Face the clique."
+      }]
+    };
+    // No Act 1 flag yet: the morning lead holds, never the cold-signal fallback.
+    expect(currentObjectiveText(flags(["intro:morning"]), objectives, {
+      sequence: seq, phase: "morning", openingGatesActive: false
+    })).toBe("Find MiFella in town.");
+    // A real Act 1 objective arms: it takes over.
+    expect(currentObjectiveText(flags(["intro:morning", "signal:route_open"]), objectives, {
+      sequence: seq, phase: "morning", openingGatesActive: false
+    })).toBe("Face the clique.");
+  });
+
   it.each([
     [false, true],
     [true, false]

@@ -60,17 +60,42 @@ const OBJECTIVE_HINTS: Readonly<Record<string, readonly string[]>> = {
 export type OpeningObjectiveContext = {
   openingGatesActive: boolean;
   phase: OpeningPhase;
-  sequence: Pick<EarlyGameSequence, "phaseGatesEnabled" | "phaseObjectives">;
+  sequence: Pick<EarlyGameSequence, "phaseGatesEnabled" | "phaseObjectives"> & {
+    morningObjective?: string;
+  };
 };
+
+/** Data-driven objective match, without the hardcoded cold-signal fallback. */
+function dataObjectiveText(
+  flags: ObjectiveFlagReader,
+  objectives: Objectives | undefined
+): string | undefined {
+  const matches = (objective: ObjectiveEntry): boolean =>
+    objective.when.requireFlags.every((flag) => flags.has(flag)) &&
+    objective.when.blockFlags.every((flag) => !flags.has(flag));
+  return (
+    objectives?.objectives.find((objective) => objective.id !== "fallback" && matches(objective)) ??
+    objectives?.objectives.find((objective) => objective.id === "fallback" && matches(objective))
+  )?.text;
+}
 
 export function currentObjectiveText(
   flags: ObjectiveFlagReader,
   objectives: Objectives | undefined,
   opening?: OpeningObjectiveContext
 ): string | undefined {
-  if (opening?.sequence.phaseGatesEnabled && opening.openingGatesActive) {
-    const text = opening.sequence.phaseObjectives?.[opening.phase];
-    return text === "" ? undefined : text;
+  if (opening?.sequence.phaseGatesEnabled) {
+    if (opening.openingGatesActive) {
+      const text = opening.sequence.phaseObjectives?.[opening.phase];
+      return text === "" ? undefined : text;
+    }
+    // Morning: the opening lead ("Find MiFella in town.") holds until a real
+    // Act 1 objective arms. The hardcoded cold-signal fallback is never shown in
+    // the new-opening regime.
+    if (opening.phase === "morning") {
+      const morning = opening.sequence.phaseObjectives?.morning ?? opening.sequence.morningObjective;
+      return dataObjectiveText(flags, objectives) ?? (morning === "" ? undefined : morning);
+    }
   }
   return currentObjective(flags, objectives)?.text;
 }
