@@ -488,3 +488,16 @@ Verification should include focused tests, `pnpm build:eb-fullworld`, generated
 data consume-path checks, a full unit suite, and native Playwright screenshots from
 a real fresh-save sequence. Content changes are not complete until the generated
 copy has been rebuilt and verified in the running game.
+
+## Implementation status (2026-07-14)
+
+All waves SHIPPED and verified end to end. Waves 0-3 on main and the new opening
+deployed; Wave 4 Attestation parity complete: morning gating, deterministic
+Drifella battle sprite, canonical battle-menu geometry with wrapped (non-truncated)
+answers, and the reward ceremony (named Drifella congratulations, then the held
+Card NFT reveal via the world-scene Binder overlay, held until a fresh Z, reward
+and clear committed atomically in the battle restore). The ceremony was briefly
+mislabeled "deferred" during QA; that was a test-harness world-detection artifact
+(the stale battle overworldHud signal), not a game defect. Verified live: the
+congratulations names the Drifella and the card + item, the full-size card renders
+at readable scale, holds until Z, and returns control with the check cleared.
