@@ -200,9 +200,19 @@ the same wave (not after it), or the regression suite goes dark:
 | `scripts/arc-runner.mjs` `drainOpeningCutscene` and `scripts/act1.mjs`, which gate their boot drain on `signal:cold-signal-seen` | harnesses | Taught a phase-aware drain in Wave 2, kept green in the same commit that swaps the story content. |
 | Old opening dialogue overlays | `content/opening-clarity.json`, `content/narrative-redesign.json` | Suppressed on owned keys per the ownership manifest; retained as history. |
 
-Audit `content/triggers.json` and `content/cutscenes.json` for any other
-area-anchored machinery on the house-to-meteor route before Wave 2 starts, and
-extend this table with what turns up.
+Census result (2026-07-14), all remaining area-anchored machinery on the route:
+
+| Machinery | Anchor | Disposition |
+|---|---|---|
+| `onett-welcome-home-lights-out` cutscene | (2592,296), at the house door | Phase-gate: suppressed until `morning`; review copy before re-enabling |
+| `onett-minch-brother-nag` cutscene | (2312,280), hill route | Same |
+| `onett-brother-fallsin` cutscene | (1944,48), beside the meteor hill | Same |
+| `onett-keep-on-task` cutscene | (2680,560), house-to-town route | Same (this is the known hide-without-departure offender) |
+| `archivist-photo-01` trigger | (2644,332), front step, no require flags | Phase-gate to `morning` (Archivist is daytime content) |
+| 8 Morningside Source Checks inside the route box | various | Covered by the Source Check morning gate |
+
+The census box was the outdoor corridor (1900-3100, 0-1900) plus the bedroom
+region; re-run it if the route changes.
 
 ## Relocated beats
 

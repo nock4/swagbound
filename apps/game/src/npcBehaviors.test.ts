@@ -65,6 +65,50 @@ describe("behaviorForNpc service static overrides", () => {
   });
 });
 
+describe("behaviorForNpc prop static fallback", () => {
+  it("keeps an object with an undecoded movement id static", () => {
+    expect(behaviorForNpc(183, 862, { npcType: "object" })).toEqual({ kind: "static" });
+  });
+
+  it("keeps the person heuristic and missing-type behavior unchanged", () => {
+    expect(behaviorForNpc(183, 862, { npcType: "person" })).toMatchObject({
+      kind: "wander",
+      radiusPx: HEURISTIC_WANDER_RADIUS_PX,
+      speedPxPerSec: HEURISTIC_WANDER_SPEED_PX_PER_SEC
+    });
+    expect(behaviorForNpc(183, 862)).toMatchObject({
+      kind: "wander",
+      radiusPx: HEURISTIC_WANDER_RADIUS_PX,
+      speedPxPerSec: HEURISTIC_WANDER_SPEED_PX_PER_SEC
+    });
+  });
+
+  it("allows an authored movement pattern on an object", () => {
+    expect(behaviorForNpc(183, 862, {
+      movementPattern: "pace-horizontal",
+      npcType: "object"
+    })).toEqual({
+      kind: "patrol",
+      axis: "x",
+      rangePx: AUTHORED_PATTERN_PACE_RANGE_PX,
+      speedPxPerSec: AUTHORED_PATTERN_SPEED_PX_PER_SEC
+    });
+  });
+
+  it("allows an explicit NPC behavior on an object", () => {
+    expect(behaviorForNpc(746, 862, { npcType: "object" })).toEqual({
+      kind: "patrol",
+      axis: "x",
+      rangePx: 24,
+      speedPxPerSec: 40
+    });
+  });
+
+  it("keeps an item static", () => {
+    expect(behaviorForNpc(5004, 862, { npcType: "item" })).toEqual({ kind: "static" });
+  });
+});
+
 function location(file: string, line: number) {
   return { file, line, column: 1 };
 }

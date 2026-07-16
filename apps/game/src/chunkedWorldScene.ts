@@ -3081,7 +3081,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return behaviorForNpc(npc.npcId, npc.movement, {
       hasServiceInteraction: this.npcHasServiceInteraction(npc),
       isInteriorHome: isInteriorMusicSector(this.world_.sectors, npc.worldPixel),
-      movementPattern: this.data_.npcMovementPatterns.byNpcId[String(npc.npcId)]?.pattern
+      movementPattern: this.data_.npcMovementPatterns.byNpcId[String(npc.npcId)]?.pattern,
+      npcType: npc.type
     });
   }
 

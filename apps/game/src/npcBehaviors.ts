@@ -31,6 +31,7 @@ export type NpcBehaviorContext = {
   hasServiceInteraction?: boolean;
   isInteriorHome?: boolean;
   movementPattern?: NpcMovementPatternName;
+  npcType?: string;
 };
 
 // Repo-owned until imported npc_config Movement codes are decoded into runtime behaviors.
@@ -65,6 +66,9 @@ export function behaviorForNpc(npcId: number, movementId?: number, context: NpcB
   const configured = NPC_BEHAVIORS[npcId as keyof typeof NPC_BEHAVIORS];
   if (configured) {
     return configured;
+  }
+  if (context.npcType === "object" || context.npcType === "item") {
+    return STATIC_NPC_BEHAVIOR;
   }
   if (context.isInteriorHome) {
     return STATIC_NPC_BEHAVIOR;

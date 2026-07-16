@@ -274,7 +274,7 @@ export class WorldScene extends Phaser.Scene {
         npc.regionPixel.x,
         npc.regionPixel.y,
         facing,
-        behaviorForNpc(npc.npcId, npc.movement, { movementPattern }),
+        behaviorForNpc(npc.npcId, npc.movement, { movementPattern, npcType: npc.type }),
         frames
       ),
       frames,
