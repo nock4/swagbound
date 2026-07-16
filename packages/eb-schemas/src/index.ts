@@ -1649,6 +1649,10 @@ export const AddedNpcSchema = z
     movement: z.number().int().nonnegative().optional(),
     /** Spawn without the extras query even when no cutscene, trigger, or Source Check references this NPC. */
     alwaysSpawn: z.boolean().optional(),
+    /** Visible only while every required story flag is set. Omitted = no requirements. */
+    requireFlags: z.array(z.string().trim().min(1)).optional(),
+    /** Hidden while any blocking story flag is set. Omitted = no blockers. */
+    blockFlags: z.array(z.string().trim().min(1)).optional(),
     interaction: NpcInteractionSchema.optional()
   })
   .strict();
@@ -2264,6 +2268,12 @@ export const EarlyGameSequenceSchema = z.object({
   dialogue: z.record(z.string(), z.array(z.string())),
   nightCast: z.object({
     allowNpcIds: z.array(z.number().int().nonnegative()).default([])
+  }).strict().optional(),
+  nightDoors: z.object({
+    allowWorldPixels: z.array(z.tuple([
+      z.number().int().nonnegative(),
+      z.number().int().nonnegative()
+    ]))
   }).strict().optional(),
   sourceCheckAvailabilityPhase: z.literal("morning"),
   morningObjective: z.string(),

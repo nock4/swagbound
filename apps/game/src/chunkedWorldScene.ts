@@ -43,6 +43,7 @@ import {
 } from "./doorTriggers";
 import {
   applyNpcOverride,
+  addedNpcVisibleForFlags,
   addedNpcsForSpawn,
   buildInlineDialoguePages,
   buildAddedWorldNpcs,
@@ -113,11 +114,12 @@ import {
 } from "./eventHost";
 import { EventSequenceWatchdog, cutsceneRunnerProgressToken } from "./eventSequenceWatchdog";
 import { GameFlags, flagAliasesFromMap } from "./gameFlags";
-import { resolveOpeningPhase } from "./openingPhase";
+import { openingMorningAliasFlags, resolveOpeningPhase } from "./openingPhase";
 import {
   openingAutosaveNoticeAllowed,
   openingEncountersAllowed,
   openingGatesActive,
+  openingNightDoorLocked,
   openingNightTintRequired,
   openingNpcAllowed,
   openingRoamersAllowed,
@@ -928,6 +930,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private warnedIntroActorVmStubs = new Set<string>();
   private warnedStoryTriggerSkips = new Set<string>();
   private warnedStoryPresentTextureIssues = new Set<string>();
+  private warnedOwnedOpeningCutscenes = new Set<string>();
   private suppressedTriggerId?: string;
   private barrierSprites = new Map<string, Phaser.GameObjects.Image>();
   private loadingBarrierKeys = new Set<string>();
@@ -1398,6 +1401,24 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
+  private setOpeningMorning(): void {
+    for (const flag of openingMorningAliasFlags()) {
+      this.gameFlags.set(flag);
+    }
+    this.refreshOpeningGatedConsumers();
+  }
+
+  private refreshOpeningGatedConsumers(): void {
+    this.updateAct1NightTint({ fade: true });
+    this.syncOverworldMusicForCurrentFlags(true);
+    this.refreshStreaming(true);
+    this.refreshBarrierSprites();
+    this.syncSourceCheckActors();
+    this.refreshMenuScreens();
+    this.updatePrompt();
+    this.publish();
+  }
+
   update(_: number, delta: number): void {
     if (!this.player) {
       return;
@@ -1658,6 +1679,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.warnedIntroActorVmStubs.clear();
     this.warnedStoryTriggerSkips.clear();
     this.warnedStoryPresentTextureIssues.clear();
+    this.warnedOwnedOpeningCutscenes.clear();
     this.suppressedTriggerId = undefined;
     for (const sprite of this.barrierSprites.values()) {
       sprite.destroy();
@@ -2295,6 +2317,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     if (this.forcedOverworldMusicCue) {
       this.playOverworldMusicCue(this.forcedOverworldMusicCue, force, playOptions);
+      return;
+    }
+    const sequence = this.data_.earlyGameSequence;
+    if (openingGatesActive(sequence, this.gameFlags)) {
       return;
     }
     this.playOverworldMusicCue(this.resolvedOverworldMusicCueForPlayer(), force, playOptions);
@@ -3354,7 +3380,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.world_.doors.filter((door) => doorActiveForFlags(door.eventFlag, this.gameFlags));
   }
 
-  private isNpcVisible(npc: Pick<RuntimeNpcData, "npcId" | "showSprite" | "eventFlag" | "worldPixel">): boolean {
+  private isNpcVisible(npc: RuntimeNpcData): boolean {
+    if (isAddedWorldChunkedNpc(npc) && !addedNpcVisibleForFlags(npc, this.gameFlags)) {
+      return false;
+    }
     const sequence = this.data_.earlyGameSequence;
     const gatesActive = openingGatesActive(sequence, this.gameFlags);
     if (gatesActive && !isInteriorMusicSector(this.world_.sectors, npc.worldPixel) && !openingNpcAllowed(sequence, this.gameFlags, npc.npcId)) {
@@ -4273,6 +4302,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.openMessageDoorDialogue(messageDoorReference);
       return true;
     }
+    const sequence = this.data_.earlyGameSequence;
+    const entryIsOutdoors = !isInteriorMusicSector(this.world_.sectors, result.door.worldPixel);
+    if (openingNightDoorLocked(sequence, this.gameFlags, result.door.worldPixel, entryIsOutdoors)) {
+      this.openOpeningNightLockedDoorDialogue();
+      return true;
+    }
     this.applyDoorWarp({
       x: result.door.destinationWorldPixel.x,
       y: result.door.destinationWorldPixel.y,
@@ -4284,6 +4319,16 @@ export class ChunkedWorldScene extends Phaser.Scene {
       triggerWorldPixel: result.door.worldPixel
     });
     return true;
+  }
+
+  private openOpeningNightLockedDoorDialogue(): void {
+    lockPlayer(this.playerState, this.playerFrames);
+    this.startOverriddenScriptedDialogue(
+      buildInlineDialoguePages(["It's locked."]),
+      () => this.afterDialogueClosed()
+    );
+    this.updatePrompt();
+    this.publish();
   }
 
   private openMessageDoorDialogue(reference: string): void {
@@ -6815,6 +6860,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const feet = { x: this.playerState.x, y: this.playerState.y };
     let stillSuppressed = false;
     for (const cutscene of cutscenes) {
+      if (this.openingOwnsCutscene(cutscene.id)) {
+        this.warnOwnedOpeningCutsceneSkip(cutscene.id);
+        continue;
+      }
       if (this.suppressedCutsceneId === cutscene.id && this.cutsceneTriggerInArea(cutscene, feet)) {
         stillSuppressed = true; // don't re-fire while standing in the same trigger area
         continue;
@@ -6829,6 +6878,21 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.suppressedCutsceneId = undefined;
     }
     return false;
+  }
+
+  private openingOwnsCutscene(cutsceneId: string): boolean {
+    const sequence = this.data_.earlyGameSequence;
+    // Unlike phase consumers, ownership permanently retires the legacy copy
+    // whenever the replacement opening is enabled.
+    return sequence.phaseGatesEnabled && sequence.ownership.cutsceneIds.includes(cutsceneId);
+  }
+
+  private warnOwnedOpeningCutsceneSkip(cutsceneId: string): void {
+    if (!import.meta.env.DEV || this.warnedOwnedOpeningCutscenes.has(cutsceneId)) {
+      return;
+    }
+    this.warnedOwnedOpeningCutscenes.add(cutsceneId);
+    console.warn(`[opening gates] skipped owned legacy cutscene "${cutsceneId}"`);
   }
 
   private cutsceneTriggerInArea(cutscene: Cutscene, feet: { x: number; y: number }): boolean {

@@ -228,6 +228,8 @@ export type GameData = {
 export type AddedWorldChunkedNpc = WorldChunkedNpc & {
   addedNpc: true;
   addedInteraction?: AddedNpc["interaction"];
+  requireFlags?: AddedNpc["requireFlags"];
+  blockFlags?: AddedNpc["blockFlags"];
 };
 
 async function loadJson<T>(url: string, schema: { parse: (value: unknown) => T }): Promise<T | undefined> {
@@ -881,10 +883,20 @@ export function buildAddedWorldNpcs(
       visible: true,
       worldPixel: { ...npc.worldPixel },
       addedNpc: true,
+      ...(npc.requireFlags !== undefined ? { requireFlags: [...npc.requireFlags] } : {}),
+      ...(npc.blockFlags !== undefined ? { blockFlags: [...npc.blockFlags] } : {}),
       ...(npc.interaction ? { addedInteraction: { ...npc.interaction } } : {})
     });
   }
   return result;
+}
+
+export function addedNpcVisibleForFlags(
+  npc: Pick<AddedWorldChunkedNpc, "requireFlags" | "blockFlags">,
+  flags: { has(flag: string): boolean }
+): boolean {
+  return (npc.requireFlags ?? []).every((flag) => flags.has(flag))
+    && !(npc.blockFlags ?? []).some((flag) => flags.has(flag));
 }
 
 export function isAddedNpcExtrasEnabled(search: string | undefined): boolean {

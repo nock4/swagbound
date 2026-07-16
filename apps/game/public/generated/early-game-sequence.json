@@ -9,6 +9,9 @@
   "dialogue": {},
   "sourceCheckAvailabilityPhase": "morning",
   "morningObjective": "Find MiFella in town.",
+  "nightDoors": {
+    "allowWorldPixels": [[2648, 336]]
+  },
   "ownership": {
     "dialogueKeys": [],
     "npcIds": [],

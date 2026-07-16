@@ -65,6 +65,11 @@ const OPENING_PHASE_ORDER: readonly OpeningPhase[] = [
   "post"
 ];
 
+const OPENING_MORNING_ALIAS_FLAGS = [
+  "intro:morning",
+  "signal:cold-signal-seen"
+] as const;
+
 export function resolveOpeningPhase(flags: { has(flag: string): boolean }): OpeningPhase {
   for (let index = OPENING_PHASE_FLAGS.length - 1; index >= 0; index -= 1) {
     const flag = OPENING_PHASE_FLAGS[index];
@@ -82,6 +87,10 @@ export function resolveOpeningPhase(flags: { has(flag: string): boolean }): Open
 
 export function openingPhaseAtOrAfter(phase: OpeningPhase, floor: OpeningPhase): boolean {
   return OPENING_PHASE_ORDER.indexOf(phase) >= OPENING_PHASE_ORDER.indexOf(floor);
+}
+
+export function openingMorningAliasFlags(): string[] {
+  return [...OPENING_MORNING_ALIAS_FLAGS];
 }
 
 function hasActFlag(flags: FlagReader): boolean {

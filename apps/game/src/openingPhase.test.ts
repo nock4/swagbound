@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   OPENING_PHASE_FLAGS,
+  openingMorningAliasFlags,
   openingPhaseAtOrAfter,
   resolveOpeningPhase,
   type OpeningPhase
@@ -94,5 +95,20 @@ describe("openingPhaseAtOrAfter", () => {
   it("treats post as the highest phase", () => {
     expect(openingPhaseAtOrAfter("post", "morning")).toBe(true);
     expect(openingPhaseAtOrAfter("morning", "post")).toBe(false);
+  });
+});
+
+describe("openingMorningAliasFlags", () => {
+  it("sets the new morning marker and the legacy Act 1 harness alias", () => {
+    expect(openingMorningAliasFlags()).toEqual([
+      "intro:morning",
+      "signal:cold-signal-seen"
+    ]);
+  });
+
+  it("returns a fresh array", () => {
+    const first = openingMorningAliasFlags();
+    first.pop();
+    expect(openingMorningAliasFlags()).toHaveLength(2);
   });
 });

@@ -77,6 +77,10 @@ describe("early game sequence ownership", () => {
     expect(EarlyGameSequenceSchema.safeParse(duplicateOwnership).success).toBe(false);
     expect(EarlyGameSequenceSchema.safeParse(inlineSpriteOverride).success).toBe(false);
   });
+
+  it("allowlists Bosch's exterior house door for the night route", () => {
+    expect(sequence.nightDoors?.allowWorldPixels).toContainEqual([2648, 336]);
+  });
 });
 
 function readContent(file: string): unknown {

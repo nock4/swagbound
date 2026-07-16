@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { AddedNpcs, BattleData, DrifellaSourceChecks, EnemyStatOverrides, StoryTriggers, WorldChunkedNpc } from "@eb/schemas";
 import {
+  addedNpcVisibleForFlags,
   addedNpcsForSpawn,
   addedNpcSpawnEligible,
   applyEnemyStatOverrides,
@@ -123,6 +124,8 @@ describe("added NPC overlay normalization", () => {
         worldPixel: { x: 128, y: 160 },
         spriteGroup: 5,
         facing: "left",
+        requireFlags: ["night"],
+        blockFlags: ["morning"],
         interaction: { pages: ["Counter service."], shop: 3 }
       }]
     };
@@ -141,9 +144,23 @@ describe("added NPC overlay normalization", () => {
       visible: true,
       worldPixel: { x: 128, y: 160 },
       addedNpc: true,
+      requireFlags: ["night"],
+      blockFlags: ["morning"],
       addedInteraction: { pages: ["Counter service."], shop: 3 }
     });
     expect(isAddedWorldChunkedNpc(normalized[0])).toBe(true);
+  });
+
+  it("requires every added-NPC visibility flag and rejects any blocker", () => {
+    const npc = { requireFlags: ["night", "cast"], blockFlags: ["morning"] };
+    const storyFlags = (values: readonly string[]) => ({
+      has: (flag: string) => values.includes(flag)
+    });
+
+    expect(addedNpcVisibleForFlags(npc, storyFlags(["night", "cast"]))).toBe(true);
+    expect(addedNpcVisibleForFlags(npc, storyFlags(["night"]))).toBe(false);
+    expect(addedNpcVisibleForFlags(npc, storyFlags(["night", "cast", "morning"]))).toBe(false);
+    expect(addedNpcVisibleForFlags({}, storyFlags([]))).toBe(true);
   });
 
   it("guards against added NPC ids that collide with existing runtime NPC ids", () => {

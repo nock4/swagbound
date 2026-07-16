@@ -7,7 +7,7 @@ import {
 
 type OpeningGateSequence = Pick<
   EarlyGameSequence,
-  "nightCast" | "phaseGatesEnabled" | "sourceCheckAvailabilityPhase"
+  "nightCast" | "nightDoors" | "phaseGatesEnabled" | "sourceCheckAvailabilityPhase"
 >;
 
 type OpeningFlagReader = {
@@ -21,6 +21,12 @@ const ACTIVE_OPENING_PHASES: ReadonlySet<OpeningPhase> = new Set([
   "meteor",
   "return-home",
   "home-scene"
+]);
+
+const NIGHT_DOOR_LOCK_PHASES: ReadonlySet<OpeningPhase> = new Set([
+  "night-route",
+  "meteor",
+  "return-home"
 ]);
 
 export function openingGatesActive(seq: OpeningGateSequence, flags: OpeningFlagReader): boolean {
@@ -61,4 +67,21 @@ export function openingAutosaveNoticeAllowed(seq: OpeningGateSequence, flags: Op
 
 export function openingNightTintRequired(seq: OpeningGateSequence, flags: OpeningFlagReader): boolean {
   return openingGatesActive(seq, flags);
+}
+
+export function openingNightDoorLocked(
+  seq: OpeningGateSequence,
+  flags: OpeningFlagReader,
+  entryWorldPixel: { x: number; y: number },
+  entryIsOutdoors: boolean
+): boolean {
+  if (!openingGatesActive(seq, flags)) {
+    return false;
+  }
+  if (!entryIsOutdoors || !NIGHT_DOOR_LOCK_PHASES.has(resolveOpeningPhase(flags))) {
+    return false;
+  }
+  return !(seq.nightDoors?.allowWorldPixels ?? []).some(
+    ([x, y]) => x === entryWorldPixel.x && y === entryWorldPixel.y
+  );
 }

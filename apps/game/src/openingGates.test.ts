@@ -4,6 +4,7 @@ import {
   openingAutosaveNoticeAllowed,
   openingEncountersAllowed,
   openingGatesActive,
+  openingNightDoorLocked,
   openingNightTintRequired,
   openingNpcAllowed,
   openingRoamersAllowed,
@@ -12,7 +13,7 @@ import {
 
 type GateSequence = Pick<
   EarlyGameSequence,
-  "nightCast" | "phaseGatesEnabled" | "sourceCheckAvailabilityPhase"
+  "nightCast" | "nightDoors" | "phaseGatesEnabled" | "sourceCheckAvailabilityPhase"
 >;
 
 const disabledSequence: GateSequence = {
@@ -23,6 +24,7 @@ const disabledSequence: GateSequence = {
 const enabledSequence: GateSequence = {
   phaseGatesEnabled: true,
   nightCast: { allowNpcIds: [101, 202] },
+  nightDoors: { allowWorldPixels: [[2648, 336]] },
   sourceCheckAvailabilityPhase: "morning"
 };
 
@@ -90,5 +92,23 @@ describe("opening gates", () => {
   it("requires night tint only while enabled gates are active", () => {
     expect(openingNightTintRequired(enabledSequence, flags(["intro:returned-home"]))).toBe(true);
     expect(openingNightTintRequired(enabledSequence, flags(["intro:morning"]))).toBe(false);
+  });
+
+  it("locks outdoor door entries only during the night route through return home", () => {
+    const otherDoor = { x: 2000, y: 100 };
+
+    expect(openingNightDoorLocked(enabledSequence, flags([]), otherDoor, true)).toBe(false);
+    expect(openingNightDoorLocked(enabledSequence, flags(["intro:wake-done"]), otherDoor, true)).toBe(true);
+    expect(openingNightDoorLocked(enabledSequence, flags(["intro:meteor-seen"]), otherDoor, true)).toBe(true);
+    expect(openingNightDoorLocked(enabledSequence, flags(["intro:returned-home"]), otherDoor, true)).toBe(false);
+    expect(openingNightDoorLocked(enabledSequence, flags(["intro:morning"]), otherDoor, true)).toBe(false);
+  });
+
+  it("keeps indoor exits, allowlisted entries, and the disabled path open", () => {
+    const activeFlags = flags(["intro:wake-done"]);
+
+    expect(openingNightDoorLocked(enabledSequence, activeFlags, { x: 2000, y: 100 }, false)).toBe(false);
+    expect(openingNightDoorLocked(enabledSequence, activeFlags, { x: 2648, y: 336 }, true)).toBe(false);
+    expect(openingNightDoorLocked(disabledSequence, activeFlags, { x: 2000, y: 100 }, true)).toBe(false);
   });
 });

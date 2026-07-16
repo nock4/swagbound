@@ -19,6 +19,8 @@ describe("AddedNpcsSchema", () => {
         spriteGroup: 5,
         facing: "down",
         alwaysSpawn: true,
+        requireFlags: ["intro:wake-done"],
+        blockFlags: ["intro:morning"],
         interaction: { pages: ["Welcome."], shop: 2 }
       }]
     });
@@ -26,6 +28,8 @@ describe("AddedNpcsSchema", () => {
     expect(parsed.npcs[0]).toMatchObject({
       id: ADDED_NPC_MIN_ID,
       alwaysSpawn: true,
+      requireFlags: ["intro:wake-done"],
+      blockFlags: ["intro:morning"],
       interaction: { pages: ["Welcome."], shop: 2 }
     });
   });
