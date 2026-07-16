@@ -11,6 +11,7 @@ import {
   CardNftsSchema,
   DrifellaBarksSchema,
   DrifellaSourceChecksSchema,
+  EarlyGameSequenceSchema,
   EnemyActionEffectsSchema,
   EnemyNameFamiliesSchema,
   FgOverridesSchema,
@@ -111,6 +112,8 @@ export const SECTOR_MUSIC_SOURCE = "content/sector-music.json";
 export const SECTOR_MUSIC_OUTPUT = "sector-music.json";
 export const COLLISION_OVERRIDES_SOURCE = "content/collision-overrides.json";
 export const COLLISION_OVERRIDES_OUTPUT = "collision-overrides.json";
+export const EARLY_GAME_SEQUENCE_SOURCE = "content/early-game-sequence.json";
+export const EARLY_GAME_SEQUENCE_OUTPUT = "early-game-sequence.json";
 export const FG_OVERRIDES_SOURCE = "content/fg-overrides.json";
 export const FG_OVERRIDES_OUTPUT = "fg-overrides.json";
 export const DRIFELLA_BARKS_SOURCE = "content/drifella-barks.json";
@@ -246,6 +249,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
   await validateDrifellaSourceChecks(DRIFELLA_SOURCE_CHECKS_SOURCE);
   await validateAttestationBattles(ATTESTATION_BATTLES_SOURCE);
   await validateFgOverrides(FG_OVERRIDES_SOURCE);
+  await validateEarlyGameSequence(EARLY_GAME_SEQUENCE_SOURCE);
   await validateObjectives(OBJECTIVES_SOURCE);
   await validateOpeningClarity(OPENING_CLARITY_SOURCE);
   await validateOpeningClarity(NARRATIVE_REDESIGN_SOURCE);
@@ -290,6 +294,7 @@ async function copyContentOverlaysToGenerated(out: string): Promise<void> {
     copyJsonToGenerated(MUSIC_MANIFEST_SOURCE, out, MUSIC_MANIFEST_OUTPUT),
     copyOptionalJsonToGenerated(SECTOR_MUSIC_SOURCE, out, SECTOR_MUSIC_OUTPUT),
     copyOptionalJsonToGenerated(COLLISION_OVERRIDES_SOURCE, out, COLLISION_OVERRIDES_OUTPUT),
+    copyJsonToGenerated(EARLY_GAME_SEQUENCE_SOURCE, out, EARLY_GAME_SEQUENCE_OUTPUT),
     copyOptionalJsonToGenerated(FG_OVERRIDES_SOURCE, out, FG_OVERRIDES_OUTPUT),
     copyJsonToGenerated(DRIFELLA_BARKS_SOURCE, out, DRIFELLA_BARKS_OUTPUT),
     copyJsonToGenerated(ARCHIVIST_SPOTS_SOURCE, out, ARCHIVIST_SPOTS_OUTPUT),
@@ -477,6 +482,27 @@ async function validateFgOverrides(source: string): Promise<void> {
     return;
   }
   FgOverridesSchema.parse(JSON.parse(await readFile(resolve(source), "utf8")));
+}
+
+async function validateEarlyGameSequence(source: string): Promise<void> {
+  const raw: unknown = JSON.parse(await readFile(resolve(source), "utf8"));
+  if (isRecord(raw) && isRecord(raw.ownership) && isRecord(raw.spriteOverrides)) {
+    const ownedNpcIds = Array.isArray(raw.ownership.spriteOverrideNpcIds)
+      ? new Set(raw.ownership.spriteOverrideNpcIds.filter((value): value is number => Number.isInteger(value)))
+      : new Set<number>();
+    const byNpcId = isRecord(raw.spriteOverrides.byNpcId) ? raw.spriteOverrides.byNpcId : {};
+    const overlap = Object.keys(byNpcId).filter((npcId) => ownedNpcIds.has(Number(npcId)));
+    if (overlap.length > 0) {
+      throw new Error(
+        `Early game sequence cannot both own and provide sprite overrides for NPC ids: ${overlap.join(", ")}`
+      );
+    }
+  }
+  EarlyGameSequenceSchema.parse(raw);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
 async function validateObjectives(source: string): Promise<void> {

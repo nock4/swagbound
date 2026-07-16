@@ -1,0 +1,23 @@
+{
+  "schema": "swagbound.early-game-sequence.v1",
+  "flyover": {
+    "captions": [
+      "A camera saw Bosch leave home while Bosch was still asleep."
+    ]
+  },
+  "dialogue": {},
+  "sourceCheckAvailabilityPhase": "morning",
+  "morningObjective": "Find MiFella in town.",
+  "ownership": {
+    "dialogueKeys": [],
+    "npcIds": [],
+    "cutsceneIds": [
+      "signal-town-cold-signal-open",
+      "onett-welcome-home-lights-out",
+      "onett-minch-brother-nag",
+      "onett-brother-fallsin",
+      "onett-keep-on-task"
+    ],
+    "spriteOverrideNpcIds": [14, 15, 16, 21]
+  }
+}

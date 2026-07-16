@@ -2247,6 +2247,34 @@ export const OpeningClaritySchema = z.object({
   }).strict()
 }).strict();
 
+export const EarlyGameSequenceSchema = z.object({
+  schema: z.literal("swagbound.early-game-sequence.v1"),
+  flyover: z.object({
+    captions: z.array(z.string())
+  }).strict(),
+  dialogue: z.record(z.string(), z.array(z.string())),
+  sourceCheckAvailabilityPhase: z.literal("morning"),
+  morningObjective: z.string(),
+  ownership: z.object({
+    dialogueKeys: z.array(z.string()),
+    npcIds: z.array(z.number().int().nonnegative()),
+    cutsceneIds: z.array(z.string()),
+    spriteOverrideNpcIds: z.array(z.number().int().nonnegative())
+  }).strict()
+}).strict().superRefine((value, context) => {
+  const seen = new Set<number>();
+  value.ownership.spriteOverrideNpcIds.forEach((npcId, index) => {
+    if (seen.has(npcId)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `duplicate owned sprite override NPC id ${npcId}`,
+        path: ["ownership", "spriteOverrideNpcIds", index]
+      });
+    }
+    seen.add(npcId);
+  });
+});
+
 export const BattleRulesSchema = z.object({
   schema: z.literal("swagbound.battle-rules.v1"),
   unescapableGroups: z.array(z.number().int().nonnegative())
@@ -2676,6 +2704,7 @@ export type EncounterSector = z.infer<typeof EncounterSectorSchema>;
 export type Encounters = z.infer<typeof EncountersSchema>;
 export type BattleData = z.infer<typeof BattleDataSchema>;
 export type OpeningClarity = z.infer<typeof OpeningClaritySchema>;
+export type EarlyGameSequence = z.infer<typeof EarlyGameSequenceSchema>;
 export type BattleRules = z.infer<typeof BattleRulesSchema>;
 export type RoamerZoneCaps = z.infer<typeof RoamerZoneCapsSchema>;
 export type BattleEnemy = z.infer<typeof BattleEnemySchema>;

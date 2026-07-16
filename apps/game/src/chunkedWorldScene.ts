@@ -7322,7 +7322,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       const shot = shots[i];
       placeCaption();
       placeEraTitle();
-      caption.setText(shot.text).setAlpha(0);
+      caption.setText(this.data_.earlyGameSequence.flyover.captions[i] ?? shot.text).setAlpha(0);
       eraTitle.setAlpha(1);
       cam.fadeIn(600, 0, 0, 0);
       this.tweens.add({ targets: caption, alpha: 1, duration: 600 });

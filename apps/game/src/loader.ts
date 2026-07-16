@@ -14,6 +14,7 @@ import {
   CustomDialogueSchema,
   DrifellaBarksSchema,
   DrifellaSourceChecksSchema,
+  EarlyGameSequenceSchema,
   EnemyActionEffectsSchema,
   EnemyOverridesSchema,
   EnemyStatOverridesSchema,
@@ -72,6 +73,7 @@ import {
   type CustomDialogue,
   type DrifellaBarks,
   type DrifellaSourceChecks,
+  type EarlyGameSequence,
   type EnemyActionEffects,
   type EnemyOverrides,
   type EnemyStatOverrides,
@@ -128,6 +130,7 @@ import {
   applyOpeningClaritySprites,
   applyOpeningClarityStoryTriggers
 } from "./openingClarity";
+import { suppressOwnedOpeningClarity } from "./earlyGameSequence";
 
 export const TARGET_REFERENCE = "robot.hello_world";
 const ADDED_NPCS_FILE = "added-npcs.json";
@@ -155,6 +158,7 @@ const STORY_TRIGGERS_FILE = "triggers.json";
 const MUSIC_MANIFEST_FILE = "music-manifest.json";
 const SECTOR_MUSIC_FILE = "sector-music.json";
 const COLLISION_OVERRIDES_FILE = "collision-overrides.json";
+const EARLY_GAME_SEQUENCE_FILE = "early-game-sequence.json";
 const FG_OVERRIDES_FILE = "fg-overrides.json";
 const NAVMESH_FILE = "navmesh.json";
 const DRIFELLA_BARKS_FILE = "drifella-barks.json";
@@ -183,6 +187,7 @@ export type GameData = {
   sourceChecks: DrifellaSourceChecks;
   attestationBattles: AttestationBattles;
   objectives?: Objectives;
+  earlyGameSequence: EarlyGameSequence;
   openingCutscene?: OpeningCutscene;
   cutscenes?: Cutscenes;
   storyTriggers?: StoryTriggers;
@@ -389,6 +394,22 @@ function emptyStoryItems(): StoryItems {
   };
 }
 
+function emptyEarlyGameSequence(): EarlyGameSequence {
+  return {
+    schema: "swagbound.early-game-sequence.v1",
+    flyover: { captions: [] },
+    dialogue: {},
+    sourceCheckAvailabilityPhase: "morning",
+    morningObjective: "",
+    ownership: {
+      dialogueKeys: [],
+      npcIds: [],
+      cutsceneIds: [],
+      spriteOverrideNpcIds: []
+    }
+  };
+}
+
 /** Loads every generated file referenced by an already-validated manifest. */
 export async function loadGameData(manifest: Manifest): Promise<GameData> {
   const [
@@ -444,6 +465,7 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     sourceChecks,
     attestationBattles,
     objectives,
+    earlyGameSequence,
     openingClarity,
     narrativeRedesign
   ] = await Promise.all([
@@ -531,21 +553,35 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${DRIFELLA_SOURCE_CHECKS_FILE}`, DrifellaSourceChecksSchema),
     loadJson(`/generated/${ATTESTATION_BATTLES_FILE}`, AttestationBattlesSchema),
     loadJson(`/generated/${OBJECTIVES_FILE}`, ObjectivesSchema),
+    loadJson(`/generated/${EARLY_GAME_SEQUENCE_FILE}`, EarlyGameSequenceSchema),
     loadJson(`/generated/${OPENING_CLARITY_FILE}`, OpeningClaritySchema),
     loadJson(`/generated/${NARRATIVE_REDESIGN_FILE}`, OpeningClaritySchema)
   ]);
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
   const resolvedPsi = applyPsiOverrides(psi, psiOverrides);
+  const resolvedEarlyGameSequence = earlyGameSequence ?? emptyEarlyGameSequence();
+  const unownedOpeningClarity = suppressOwnedOpeningClarity(
+    openingClarity,
+    resolvedEarlyGameSequence,
+    "opening-clarity",
+    import.meta.env.DEV
+  );
+  const unownedNarrativeRedesign = suppressOwnedOpeningClarity(
+    narrativeRedesign,
+    resolvedEarlyGameSequence,
+    "narrative-redesign",
+    import.meta.env.DEV
+  );
   const resolvedBattle = applyOpeningClarityBattle(
     applyOpeningClarityBattle(
       applyEnemyActionEffects(
         applyEnemyStatOverrides(applyEnemyOverrides(battle, enemyOverrides), enemyStatOverrides),
         enemyActionEffects
       ),
-      openingClarity
+      unownedOpeningClarity
     ),
-    narrativeRedesign
+    unownedNarrativeRedesign
   );
   const resolvedDrifellaBarks = drifellaBarks ?? emptyDrifellaBarks();
   const resolvedCustomDialogue = applyOpeningClarityDialogue(
@@ -555,13 +591,13 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
         world?.npcs ?? [],
         resolvedDrifellaBarks
       ),
-      openingClarity
+      unownedOpeningClarity
     ),
-    narrativeRedesign
+    unownedNarrativeRedesign
   );
   const resolvedSpriteOverrides = applyOpeningClaritySprites(
-    applyOpeningClaritySprites(spriteOverrides, openingClarity),
-    narrativeRedesign
+    applyOpeningClaritySprites(spriteOverrides, unownedOpeningClarity),
+    unownedNarrativeRedesign
   );
 
   return {
@@ -578,17 +614,18 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     sourceChecks: sourceChecks ?? emptySourceChecks(),
     attestationBattles: attestationBattles ?? emptyAttestationBattles(),
     objectives: applyOpeningClarityObjectives(
-      applyOpeningClarityObjectives(objectives, openingClarity),
-      narrativeRedesign
+      applyOpeningClarityObjectives(objectives, unownedOpeningClarity),
+      unownedNarrativeRedesign
     ),
+    earlyGameSequence: resolvedEarlyGameSequence,
     openingCutscene,
     cutscenes: applyOpeningClarityCutscenes(
-      applyOpeningClarityCutscenes(cutscenes, openingClarity),
-      narrativeRedesign
+      applyOpeningClarityCutscenes(cutscenes, unownedOpeningClarity),
+      unownedNarrativeRedesign
     ),
     storyTriggers: applyOpeningClarityStoryTriggers(
-      applyOpeningClarityStoryTriggers(storyTriggers, openingClarity),
-      narrativeRedesign
+      applyOpeningClarityStoryTriggers(storyTriggers, unownedOpeningClarity),
+      unownedNarrativeRedesign
     ),
     spriteGroups,
     tutorialStatus,

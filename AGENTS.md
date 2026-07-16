@@ -19,6 +19,9 @@ reads that way as historical). Start with [README.md](README.md) for the repo ma
   untracked probe/QA artifacts in `tmp/`).
 - **Content additions are additive.** Never modify or reorder existing entries in
   `content/*.json`; fuel-questline ids/flags are namespaced (`fuel-x-*`, `fuel:x:*`).
+  NAMED EXCEPTION: `content/early-game-sequence.json` declares exclusive opening
+  ownership; the loader suppresses matching contributions from older overlays
+  instead of modifying their historical entries.
 - **Verify with pixels and real boots, not properties.** Goal-prompt templates in
   `docs/qa/goal-prompts.md`. Native viewport is 512x448.
 
