@@ -1,4 +1,4 @@
-# CLAUDE.md — Swagbound
+# AGENTS.md — Swagbound
 
 This is **Swagbound, a complete EarthBound total-conversion game**, live at
 https://swagbound.pages.dev. It is NOT a CoilSnake tutorial (that was this repo's
@@ -11,10 +11,7 @@ reads that way as historical). Start with [README.md](README.md) for the repo ma
   not `content/`. After editing `content/*.json`, run `pnpm build:eb-fullworld`
   (the FULL build — partial builds strip building sign stamps), then reset chunk
   noise: `git checkout -- apps/game/public/generated/assets/world/chunks/` and
-  commit only the changed generated data files. NAMED EXCEPTION: `content/rom-truth/`
-  (ROM-derived engine constants) is imported statically by `transitions.ts`,
-  `mapTransition.ts`, and `ebTiming.ts` — Vite bundles it, so edits there take
-  effect WITHOUT `build:eb-fullworld`.
+  commit only the changed generated data files.
 - **Never commit the ROM or the CoilSnake decompile** (`EarthBound (USA).sfc`,
   `external/coilsnake-*`). Nintendo copyright; the repo is public.
 - **No em dashes in player-facing text.** Grep your additions; the gate is zero.
@@ -66,7 +63,3 @@ Wrangler is authed via the owner's browser SSO; never handle tokens directly.
 Dated files in `docs/` (reports, QA logs, `MORNING.md`) are historical records —
 do not "fix" them retroactively. Current orientation lives in README.md, this file,
 SETUP.md, and `docs/PROJECT-CHARTER.md`.
-
-For a full engineering + QA onboarding brief (architecture, subsystems, debug hooks,
-false-positive traps, review assignment) - self-contained and paste-ready for an
-external reviewer - see `docs/qa/codebase-review-handoff.md`.

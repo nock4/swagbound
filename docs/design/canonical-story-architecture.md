@@ -15,6 +15,11 @@ moving through Morningside while Bosch is asleep. MiFella circulates the image. 
 attention allows increasingly convincing Bosch derivatives to appear, and MiFella
 is drawn toward the cute, confident community forming around them.
 
+AMENDMENT (2026-07-14, early-game recovery): the inciting photograph is now
+MiFella's night photo of the meteor gathering, with Bosch in the frame. MiFella
+circulates that image the next morning; the derivatives derive from it. The rest
+of the promise is unchanged.
+
 Following MiFella and the derivatives reveals Remilia Co., a friendly corporate
 apparatus that turns surrender into access, status, products, and belonging. Behind
 it is Milady, an omnipresent force sustained whenever people stop judging for
@@ -145,6 +150,13 @@ MiFella introduces `derivative` after recognizing the phenomenon. Prefer
 Attestation questions, menu labels, boss names, or optional content before the Act
 3 reveal. Internal ids and developer comments may retain the name.
 
+AMENDMENT (2026-07-14, early-game recovery): exactly one sanctioned pre-reveal
+occurrence exists. The meteor manifestation in the opening speaks the single
+lowercase word `milady`, once, on one dialogue page. Lowercase is deliberate: it
+reads as an address, not a proper noun. Every embargo gate allow-lists that exact
+string at that exact content key and nothing else. The Act 3 naming beat must pay
+this word off explicitly (see the beat ledger).
+
 `Malady` remains too close to `Milady` and must not appear as an early innocent
 label. The former player-facing Public Bosch or Malady encounter is now **Bosch
 Derivative**.
@@ -231,6 +243,12 @@ Their presence changes the solution, not only battle statistics.
 Every required beat needs one visible state change, one human consequence, and one
 forward lead. A scene that only restates the theme is not a beat.
 
+AMENDMENT (2026-07-14): beats 0-3 describe the pre-recovery opening and are
+superseded by the sequence in `early-game-meteor-recovery-plan.md` (flyover,
+wake-up, empty night route, meteor gathering with the one-word manifestation and
+MiFella's wordless photograph, return home, unsettling home scene, morning
+circulation admission at the arcade). Beats 4 onward are unchanged.
+
 | Beat | Player action | State change | Human meaning | Next lead |
 |---|---|---|---|---|
 | 0. Arcade-to-house flyover | Watch one continuous route | MiFella photographs a Bosch-shaped figure; repeated symbols and synchronized reactions appear | MiFella is curious before Bosch even knows something is wrong | Camera reaches Bosch's bedroom |
@@ -245,7 +263,7 @@ forward lead. A scene that only restates the theme is not a beat.
 | 9. Remilia Co. | Investigate records, venues, and residences | Corporate systems reveal how participation is monetized | MiFella's comfort is real, but somebody profits from his surrender | Trace the private data used for derivatives |
 | 10. MiFella's betrayal | Compare the derivative with a private record | Bosch learns MiFella supplied personal details | Friendship made the betrayal possible and makes repair meaningful | Follow rejected records to Dead Letter |
 | 11. Dead Letter | Recover people and memories the system discarded | Contradictory originals remain alive when witnessed | Imperfection is not failure | Enter the museum and reconstruct the recurring force |
-| 12. Milady named | Combine evidence from multiple relationships | The recurring presence resolves as Milady | Evil is distributed through habits and choices, not one mastermind | Reach MiFella inside the network |
+| 12. Milady named | Combine evidence from multiple relationships | The recurring presence resolves as Milady, and the scene explicitly recalls the meteor: the word spoken on the hill was a name. Ten hours pass between plant and payoff, so the payoff line quotes the memory rather than assuming it | Evil is distributed through habits and choices, not one mastermind | Reach MiFella inside the network |
 | 13. Private memory | Offer MiFella a memory never circulated | MiFella cannot complete it, then remembers one specific detail | A person remains inside the role | Return to occupied Morningside |
 | 14. Occupation | Reconnect with people Bosch helped | Occupation nodes disconnect one by one | Kindness becomes the resistance network | Reach the final local manifestation |
 | 15. MiFella corrects the account | Give MiFella the choice to tell the truth | He publicly corrects the first derivative story | Accountability restores agency | Confront the weakened manifestation |
@@ -253,6 +271,18 @@ forward lead. A scene that only restates the theme is not a beat.
 | 17. Open-record epilogue | Revisit changed NPCs | Multiple imperfect accounts coexist | MiFella apologizes without demanding immediate absolution | Free exploration |
 
 ## 8. Opening vertical-slice contract
+
+AMENDMENT (2026-07-14): `docs/design/early-game-meteor-recovery-plan.md` is
+authoritative for the opening. The contract below described the pre-recovery
+opening; items that conflict with the recovery plan (the tutorial battle, items
+8-9, and the flyover photograph beat) are superseded. The load-bearing beats
+are RELOCATED, not cut: MiFella photographs the meteor gathering with Bosch in
+frame (night, wordless), admits circulating it the next morning at the arcade,
+and Act 1's derivatives derive from that circulated image. The inciting
+photograph is of the meteor gathering rather than of another Bosch crossing
+town; section 1's story promise reads accordingly.
+
+The pre-recovery contract, for history:
 
 The first five minutes must contain all of the following in the canonical engine,
 on canonical maps, with canonical sprites:
