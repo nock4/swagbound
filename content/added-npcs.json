@@ -12058,6 +12058,120 @@
      "\"Names come back here when the buyer refuses delivery. Bodies almost never do.\""
     ]
    }
+  },
+  {
+   "id": 910200,
+   "worldPixel": {
+    "x": 2144,
+    "y": 128
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "mifella-going-home"
+   }
+  },
+  {
+   "id": 910201,
+   "worldPixel": {
+    "x": 2008,
+    "y": 128
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "witness-1"
+   }
+  },
+  {
+   "id": 910202,
+   "worldPixel": {
+    "x": 2048,
+    "y": 160
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "witness-2"
+   }
+  },
+  {
+   "id": 910203,
+   "worldPixel": {
+    "x": 2112,
+    "y": 160
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "witness-3"
+   }
+  },
+  {
+   "id": 910204,
+   "worldPixel": {
+    "x": 2072,
+    "y": 96
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "meteor-manifestation"
+   }
+  },
+  {
+   "id": 910205,
+   "worldPixel": {
+    "x": 7760,
+    "y": 336
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "intro:meteor-seen"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "home-scene"
+   }
   }
  ]
 }

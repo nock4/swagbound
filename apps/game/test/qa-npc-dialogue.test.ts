@@ -5,6 +5,7 @@ import {
   AddedNpcsSchema,
   CustomDialogueSchema,
   DrifellaBarksSchema,
+  EarlyGameSequenceSchema,
   ObjectivesSchema,
   SwagboundDialogueLibrarySchema,
   WorldChunkedSchema,
@@ -20,6 +21,7 @@ import {
 import { buildCustomDialogueWithDrifellaBarks, buildDialogueForReference } from "../src/loader";
 import { isGeneratedDrifellaBarkEntry } from "../src/customDialogueLookup";
 import { drifellaBarkForNpcId } from "../src/drifellaBarks";
+import { resolveEarlyGameDialogueInteraction } from "../src/earlyGameSequence";
 import {
   TALK_WINDOW_DIALOGUE_FONT_SIZE_CSS,
   TALK_WINDOW_DIALOGUE_LINE_SPACING_CSS,
@@ -42,6 +44,7 @@ const read = (rel: string) => JSON.parse(readFileSync(resolve(rel), "utf8"));
 const customDialogue = CustomDialogueSchema.parse(read("content/custom-dialogue.json"));
 const dialogueLibrary = SwagboundDialogueLibrarySchema.parse(read("content/swagbound-dialogue-library.json"));
 const addedNpcs = AddedNpcsSchema.parse(read("content/added-npcs.json"));
+const earlyGameSequence = EarlyGameSequenceSchema.parse(read("content/early-game-sequence.json"));
 const drifellaBarks = DrifellaBarksSchema.parse(read("content/drifella-barks.json"));
 const world = WorldChunkedSchema.parse(read("apps/game/public/generated/world.json"));
 const scripts = ScriptCollectionSchema.parse(read("apps/game/public/generated/scripts.json"));
@@ -89,7 +92,10 @@ describe("qa npc-dialogue: authored content resolution", () => {
     for (const npc of addedNpcs.npcs) {
       expect(npc.interaction, `added npc ${npc.id} has no interaction`).toBeDefined();
       const events = addedNpcInteractionEvents(
-        { npcId: npc.id, interaction: npc.interaction },
+        {
+          npcId: npc.id,
+          interaction: resolveEarlyGameDialogueInteraction(npc.interaction, earlyGameSequence)
+        },
         libLookup
       );
       if (!describeDialogue(events).hasRenderableDialogue) {
@@ -101,9 +107,14 @@ describe("qa npc-dialogue: authored content resolution", () => {
 
   it("resolves every custom-dialogue ref against the dialogue library", () => {
     const libraryKeys = new Set(Object.keys(dialogueLibrary.entries));
+    const openingKeys = new Set(Object.keys(earlyGameSequence.dialogue));
     const unresolved: string[] = [];
-    const collectRef = (location: string, ref: string | undefined) => {
-      if (ref && !libraryKeys.has(ref)) {
+    const collectRef = (
+      location: string,
+      ref: string | undefined,
+      allowed = libraryKeys
+    ) => {
+      if (ref && !allowed.has(ref)) {
         unresolved.push(`${location} -> ${ref}`);
       }
     };
@@ -114,7 +125,10 @@ describe("qa npc-dialogue: authored content resolution", () => {
       collectRef(`byTextPointer.${pointer}`, entry.ref);
     }
     for (const npc of addedNpcs.npcs) {
-      collectRef(`added.${npc.id}`, npc.interaction?.ref);
+      const allowed = earlyGameSequence.ownership.npcIds.includes(npc.id)
+        ? new Set([...libraryKeys, ...openingKeys])
+        : libraryKeys;
+      collectRef(`added.${npc.id}`, npc.interaction?.ref, allowed);
     }
     expect(unresolved).toEqual([]);
   });

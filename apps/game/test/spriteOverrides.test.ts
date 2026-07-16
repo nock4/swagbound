@@ -1,7 +1,13 @@
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { AddedNpcsSchema, SpriteOverridesSchema, type SpriteOverride, type SpriteOverrides } from "@eb/schemas";
+import {
+  AddedNpcsSchema,
+  EarlyGameSequenceSchema,
+  SpriteOverridesSchema,
+  type SpriteOverride,
+  type SpriteOverrides
+} from "@eb/schemas";
 import {
   resolveSpriteOverrideImageFrame,
   spriteOverrideEnemyEntries,
@@ -295,9 +301,12 @@ describe("named NPC trio (Bonkle / Sal / Morrow)", () => {
 });
 
 describe("added NPC interaction coverage", () => {
-  it("keeps Bonkle's ref and gives every other placeholder short inline dialogue", async () => {
+  it("keeps authored refs and gives every other placeholder short inline dialogue", async () => {
     const added = AddedNpcsSchema.parse(JSON.parse(
       await readFile(resolve("content/added-npcs.json"), "utf8")
+    ));
+    const earlyGameSequence = EarlyGameSequenceSchema.parse(JSON.parse(
+      await readFile(resolve("content/early-game-sequence.json"), "utf8")
     ));
 
     // Every building placeholder is interactable.
@@ -312,7 +321,12 @@ describe("added NPC interaction coverage", () => {
         expect(interaction?.pages).toBeUndefined();
         continue;
       }
-      // All other placeholders are townsfolk with voiced inline pages (<=4, the
+      if (earlyGameSequence.ownership.npcIds.includes(npc.id)) {
+        expect(earlyGameSequence.dialogue[interaction?.ref ?? ""]).toBeDefined();
+        expect(interaction?.pages).toBeUndefined();
+        continue;
+      }
+      // All remaining placeholders are townsfolk with voiced inline pages (<=4, the
       // authored dialogue cap).
       const pages = interaction?.pages ?? [];
       expect(interaction?.ref).toBeUndefined();

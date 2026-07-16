@@ -102,6 +102,12 @@ import {
   resolveScriptedDialoguePages,
   startScriptedBeatDialogue
 } from "./scriptedDialogueResolver";
+import {
+  openingOwnedNpcEnabled,
+  openingWakeCompletionFlags,
+  openingWakeDialoguePages,
+  resolveEarlyGameDialogueInteraction
+} from "./earlyGameSequence";
 import { OpeningCutsceneActorHoldSet } from "./openingCutsceneActorHold";
 import {
   resolveTeleportDestination,
@@ -174,6 +180,7 @@ import {
   buildOpeningCutsceneScript,
   decideIntroMeteorBattleTransition,
   decideIntroMeteorBeatFire,
+  legacyIntroMeteorBeatEnabled,
   resolveIntroMeteorBeatStart,
   type IntroMeteorBeatStart,
   type NewGameOpeningStart
@@ -3381,10 +3388,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private isNpcVisible(npc: RuntimeNpcData): boolean {
+    const sequence = this.data_.earlyGameSequence;
+    if (isAddedWorldChunkedNpc(npc) && !openingOwnedNpcEnabled(sequence, npc.npcId)) {
+      return false;
+    }
     if (isAddedWorldChunkedNpc(npc) && !addedNpcVisibleForFlags(npc, this.gameFlags)) {
       return false;
     }
-    const sequence = this.data_.earlyGameSequence;
     const gatesActive = openingGatesActive(sequence, this.gameFlags);
     if (gatesActive && !isInteriorMusicSector(this.world_.sectors, npc.worldPixel) && !openingNpcAllowed(sequence, this.gameFlags, npc.npcId)) {
       return false;
@@ -6280,7 +6290,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private interactionEventsForNpc(npc: RuntimeNpcData): GameEvent[] {
     if (isAddedWorldChunkedNpc(npc)) {
       return addedNpcInteractionEvents(
-        { npcId: npc.npcId, interaction: npc.addedInteraction },
+        {
+          npcId: npc.npcId,
+          interaction: resolveEarlyGameDialogueInteraction(
+            npc.addedInteraction,
+            this.data_.earlyGameSequence
+          )
+        },
         this.data_.dialogueLibrary,
         this.gameFlags,
         this.currentNpcGuidance(npc.npcId)
@@ -7474,6 +7490,23 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.configureEventRuntime();
     }
 
+    const wakePages = this.startupMode === "opening"
+      ? openingWakeDialoguePages(this.data_.earlyGameSequence)
+      : undefined;
+    if (wakePages) {
+      this.startOverriddenScriptedDialogue(
+        buildInlineDialoguePages(wakePages),
+        () => this.finalizeNewGameStartup({
+          status: "completed",
+          truncated: false,
+          commandsVisited: 0,
+          jumps: 0
+        })
+      );
+      this.updatePrompt();
+      return;
+    }
+
     const started = this.eventSequence?.start(reference, {
       onComplete: (result) => this.finalizeNewGameStartup(result)
     }) ?? false;
@@ -7702,6 +7735,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.authoredOpeningCutsceneRunActive = false;
     if (options.completedOpening) {
       this.gameFlags.set(INTRO_BEDROOM_OPENING_DONE_FLAG);
+      for (const flag of openingWakeCompletionFlags(this.data_.earlyGameSequence)) {
+        this.gameFlags.set(flag);
+      }
       this.refreshMenuScreens();
     }
     this.liftBedroomNightOverlay();
@@ -7807,7 +7843,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private resolveIntroMeteorBeatForStart(): void {
     this.introMeteorBeat = undefined;
-    if (!this.newGameOpening) {
+    if (!this.newGameOpening || !legacyIntroMeteorBeatEnabled(this.data_.earlyGameSequence)) {
       return;
     }
     const resolution = resolveIntroMeteorBeatStart(this.world_, this.data_.scripts, this.data_.battle);
@@ -7819,6 +7855,10 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private maybeStartIntroMeteorBeat(): boolean {
+    if (!legacyIntroMeteorBeatEnabled(this.data_.earlyGameSequence)) {
+      this.introMeteorBeat = undefined;
+      return false;
+    }
     const beat = this.introMeteorBeat;
     if (!beat || this.menuState.open || this.dialogue.open || this.eventSequence?.running || this.isDoorFadeActive()) {
       return false;

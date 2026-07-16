@@ -2,6 +2,7 @@ import {
   resolveScriptReference,
   type BattleData,
   type DialogueSegment,
+  type EarlyGameSequence,
   type OpeningCutscene,
   type OpeningCutsceneStep,
   type ScriptCollection,
@@ -109,6 +110,12 @@ export type IntroMeteorBattleTransitionDecision =
       returnControl: true;
       reason: "missing_battle_group" | "battle_start_failed";
     };
+
+export function legacyIntroMeteorBeatEnabled(
+  sequence: Pick<EarlyGameSequence, "phaseGatesEnabled">
+): boolean {
+  return !sequence.phaseGatesEnabled;
+}
 
 export function decideNewGameOpening(options: {
   newGame: boolean;

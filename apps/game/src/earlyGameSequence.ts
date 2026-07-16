@@ -1,6 +1,42 @@
-import type { EarlyGameSequence, OpeningClarity } from "@eb/schemas";
+import type { EarlyGameSequence, NpcInteraction, OpeningClarity } from "@eb/schemas";
+
+const OPENING_WAKE_COMPLETION_FLAGS = [
+  "intro:flyover-done",
+  "intro:wake-done"
+] as const;
 
 type OpeningOverlaySource = "opening-clarity" | "narrative-redesign";
+
+export function openingWakeDialoguePages(sequence: EarlyGameSequence): string[] | undefined {
+  const pages = sequence.dialogue.wake;
+  return sequence.phaseGatesEnabled && pages && pages.length > 0
+    ? [...pages]
+    : undefined;
+}
+
+export function openingWakeCompletionFlags(sequence: EarlyGameSequence): string[] {
+  return sequence.phaseGatesEnabled ? [...OPENING_WAKE_COMPLETION_FLAGS] : [];
+}
+
+export function openingOwnedNpcEnabled(sequence: EarlyGameSequence, npcId: number): boolean {
+  return sequence.phaseGatesEnabled || !sequence.ownership.npcIds.includes(npcId);
+}
+
+/** Resolve an added-NPC ref from the authoritative opening dialogue map when owned there. */
+export function resolveEarlyGameDialogueInteraction(
+  interaction: NpcInteraction | undefined,
+  sequence: EarlyGameSequence
+): NpcInteraction | undefined {
+  if (!interaction?.ref) {
+    return interaction;
+  }
+  const pages = sequence.dialogue[interaction.ref];
+  if (!pages || pages.length === 0) {
+    return interaction;
+  }
+  const { ref: _ref, ...rest } = interaction;
+  return { ...rest, pages: [...pages] };
+}
 
 export function suppressOwnedOpeningClarity(
   clarity: OpeningClarity | undefined,

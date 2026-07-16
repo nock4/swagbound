@@ -4,10 +4,16 @@ import {
   decideIntroMeteorBattleTransition,
   decideIntroMeteorBeatFire,
   introSpineProgression,
+  legacyIntroMeteorBeatEnabled,
   resolveIntroMeteorBeatStart
 } from "./newGameOpening";
 
 describe("intro meteor beat helpers", () => {
+  it("retires the legacy dialogue and battle arm when replacement gates are enabled", () => {
+    expect(legacyIntroMeteorBeatEnabled({ phaseGatesEnabled: false })).toBe(true);
+    expect(legacyIntroMeteorBeatEnabled({ phaseGatesEnabled: true })).toBe(false);
+  });
+
   it("fires once only after the opening is complete and the player enters the trigger", () => {
     const first = decideIntroMeteorBeatFire({
       introActive: true,
