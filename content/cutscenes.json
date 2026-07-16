@@ -2529,7 +2529,7 @@
   },
   {
    "id": "intro2-meteor-gathering",
-   "comment": "New opening meteor gathering at the legacy marker's resolved 192 by 192 trigger. The runner has no camera-flash or phone-pose step, so the photograph is expressed with one minimal narration page.",
+   "comment": "New opening meteor gathering. On arrival, establish the meteor sitting in the crater and the four Milady manifestations around it (each says only 'milady' when talked to). Then MiFella gives the go-home-to-bed beat. The witnesses and the go-uphill hint are gone.",
    "trigger": {
     "kind": "area",
     "area": {
@@ -2551,21 +2551,16 @@
     {
      "op": "dialogue",
      "pages": [
-      "It just fell. No sound. Things that fall make a sound.",
-      "Did anyone else hear it say something?",
-      "I want to go home and I am not going home."
+      "A meteor sits in the crater, still warm, humming a little.",
+      "Four shapes stand around it. Each one is wearing a face you almost know.",
+      "They do not look up. They only say the one word, to no one in particular."
      ]
     },
     {
      "op": "dialogue",
      "pages": [
-      "MiFella takes a photo of the crowd. Bosch is in the frame."
-     ]
-    },
-    {
-     "op": "dialogue",
-     "pages": [
-      "Okay. Okay okay okay. Home. We should be home."
+      "MiFella: ...Okay. I got my picture. I really do not want to be up here anymore.",
+      "MiFella: Come on, Bosch. Let's go home and sleep. We can worry about it in the morning."
      ]
     },
     {
