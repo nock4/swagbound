@@ -571,8 +571,8 @@ type DoorWarpOptions = {
 type DoorFadePhase = "none" | "fade-out" | "fade-in";
 
 const DOOR_FADE_OVERLAY_DEPTH = 1_000_000;
-const ACT1_NIGHT_TINT_COLOR = 0x0a1236;
-const ACT1_NIGHT_TINT_ALPHA = 0.62;
+const ACT1_NIGHT_TINT_COLOR = 0x080e34;
+const ACT1_NIGHT_TINT_ALPHA = 0.78;
 const ACT1_NIGHT_TINT_DEPTH = 130_000;
 const ACT1_DAWN_FADE_MS = 3_000;
 const INTRO_MUSIC_RELEASE_FADE_MS = 1_000;
