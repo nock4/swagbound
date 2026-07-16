@@ -12,6 +12,10 @@ const enforce = process.argv.slice(2).includes("--enforce");
 const readJson = (path) => JSON.parse(readFileSync(resolve(ROOT, path), "utf8"));
 const world = readJson("apps/game/public/generated/world.json");
 const sourceChecks = readJson("content/drifella-source-checks.json");
+const earlyGameSequence = readJson("content/early-game-sequence.json");
+const ownedOpeningSpriteNpcIds = new Set(
+  earlyGameSequence.ownership.spriteOverrideNpcIds.map(String)
+);
 const authorities = [
   {
     file: "content/sprite-overrides.json",
@@ -61,6 +65,9 @@ for (const authority of authorities) {
 
 for (const authority of authorities) {
   for (const [id, override] of Object.entries(authority.overrides.byNpcId ?? {})) {
+    if (authority.file !== "content/sprite-overrides.json" && ownedOpeningSpriteNpcIds.has(id)) {
+      continue;
+    }
     const targets = npcsById.get(id) ?? [];
     const propTarget = targets.find((npc) => ["object", "item"].includes(typeForNpc(npc)));
     const animations = override.animations;

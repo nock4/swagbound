@@ -3,6 +3,7 @@ import { behaviorForNpc, heuristicBehaviorForMovement } from "../src/npcBehavior
 
 describe("NPC behavior selection", () => {
   it("uses explicit authored behavior before movement-id heuristics", () => {
+    expect(behaviorForNpc(21, 40, { npcType: "person" })).toEqual({ kind: "static" });
     expect(behaviorForNpc(744, 10)).toEqual({ kind: "static" });
     expect(behaviorForNpc(745, 12)).toEqual({ kind: "static" });
     expect(behaviorForNpc(746, 8)).toEqual({ kind: "patrol", axis: "x", rangePx: 24, speedPxPerSec: 40 });

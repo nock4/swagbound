@@ -325,10 +325,7 @@ describe("SpriteOverridesSchema", () => {
           frameWidth: 80,
           frameHeight: 80,
           animations: {
-            down: [0],
-            left: [0],
-            right: [0],
-            up: [0]
+            down: [0]
           },
           displayHeight: 24,
           originX: 0.5,
@@ -338,14 +335,11 @@ describe("SpriteOverridesSchema", () => {
     });
 
     expect(parsed.byNpcId?.["100100"].animations).toEqual({
-      down: [0],
-      left: [0],
-      right: [0],
-      up: [0]
+      down: [0]
     });
   });
 
-  it("rejects missing facing sequences and paths outside public assets", () => {
+  it("rejects invalid frame sequences and paths outside public assets", () => {
     expect(SpriteOverridesSchema.safeParse({
       schema: "swagbound.sprite-overrides.v1",
       player: {

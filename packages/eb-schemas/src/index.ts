@@ -464,6 +464,14 @@ export const SpriteDirectionalAnimationsSchema = z.object({
   up: SpriteOverrideFrameSequenceSchema
 }).strict();
 
+/** Static prop overrides may define only down; missing facings resolve to frame 0 at runtime. */
+export const SpriteOverrideAnimationsSchema = z.object({
+  down: SpriteOverrideFrameSequenceSchema,
+  left: SpriteOverrideFrameSequenceSchema.optional(),
+  right: SpriteOverrideFrameSequenceSchema.optional(),
+  up: SpriteOverrideFrameSequenceSchema.optional()
+}).strict();
+
 /**
  * Anchor metadata (frame-local pixels, pre-scale). See the long note on SpriteOverrideSchema.anchors.
  * head = attach point for head overlays; waterline = y below which the sprite hides when wading.
@@ -513,7 +521,7 @@ export const SpriteOverrideSchema = z.object({
   image: PublicAssetPathSchema,
   frameWidth: z.number().int().positive().optional(),
   frameHeight: z.number().int().positive().optional(),
-  animations: SpriteDirectionalAnimationsSchema.optional(),
+  animations: SpriteOverrideAnimationsSchema.optional(),
   displayWidth: z.number().positive().optional(),
   displayHeight: z.number().positive().optional(),
   originX: z.number().optional(),

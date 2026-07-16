@@ -43,6 +43,7 @@ import {
   TALK_WINDOW_WRAP_WIDTH_CSS,
   visibleDialogueLines
 } from "./ebWindowMetrics";
+import { OPENING_ERA_TITLE_FADE_MS } from "./openingPacing";
 export { visibleDialogueLines } from "./ebWindowMetrics";
 
 const UI_LINE_SPACING = 6;
@@ -71,6 +72,10 @@ const CHOICE_VERTICAL_PADDING = 10;
 const CHOICE_CARET_GUTTER_PX = 14;
 const CHOICE_GAP = 8;
 const CHOICE_MIN_WIDTH = 76;
+const CINEMATIC_SAFE_RECT = { x: 0, y: 0, width: 512, height: 448 } as const;
+const CINEMATIC_CAPTION_FADE_MS = 600;
+const CINEMATIC_TITLE_FADE_IN_MS = 600;
+const CINEMATIC_TEXT_DEPTH = 90;
 type MenuCursorSlot = {
   x: number;
   rowTop: number;
@@ -211,6 +216,10 @@ export class UiScene extends Phaser.Scene {
   private binderOverlayTexts: Phaser.GameObjects.Text[] = [];
   private binderOverlayTextureKey?: string;
   private binderOverlayClose?: () => void;
+  private cinematicCaption?: Phaser.GameObjects.Text;
+  private cinematicTitle?: Phaser.GameObjects.Text;
+  private cinematicCaptionText?: string;
+  private cinematicTitleText?: string;
 
   constructor() {
     super("ui");
@@ -264,6 +273,132 @@ export class UiScene extends Phaser.Scene {
     this.menuCursorGraphics = this.add.graphics().setDepth(16);
     this.choiceGraphics = this.add.graphics().setDepth(13);
     this.binderOverlayGraphics = this.add.graphics().setDepth(80);
+    this.cinematicCaption = createCleanText(
+      this,
+      CINEMATIC_SAFE_RECT.x + CINEMATIC_SAFE_RECT.width / 2,
+      CINEMATIC_SAFE_RECT.y + CINEMATIC_SAFE_RECT.height - 22,
+      "",
+      {
+        fontSize: 11,
+        color: "#e8f4ff",
+        align: "center",
+        wordWrapWidth: 200,
+        resolution: 3
+      }
+    )
+      .setOrigin(0.5, 1)
+      .setDepth(CINEMATIC_TEXT_DEPTH)
+      .setAlpha(0)
+      .setVisible(false)
+      .setShadow(0, 1, "#000000", 5);
+    this.cinematicTitle = createCleanText(
+      this,
+      CINEMATIC_SAFE_RECT.x + CINEMATIC_SAFE_RECT.width / 2,
+      CINEMATIC_SAFE_RECT.y + CINEMATIC_SAFE_RECT.height / 2,
+      "",
+      {
+        fontSize: 14,
+        color: "#ffffff",
+        align: "center",
+        resolution: 3
+      }
+    )
+      .setOrigin(0.5)
+      .setDepth(CINEMATIC_TEXT_DEPTH)
+      .setAlpha(0)
+      .setVisible(false)
+      .setShadow(0, 1, "#000000", 4);
+    if (this.cinematicCaptionText !== undefined) {
+      this.showCinematicCaption(this.cinematicCaptionText);
+    }
+    if (this.cinematicTitleText !== undefined) {
+      this.showCinematicTitle(this.cinematicTitleText);
+    }
+    this.events.once("shutdown", () => this.clearCinematicPresentation());
+  }
+
+  showCinematicCaption(text: string): void {
+    this.cinematicCaptionText = text;
+    const caption = this.cinematicCaption;
+    if (!caption) {
+      return;
+    }
+    this.tweens.killTweensOf(caption);
+    caption.setText(text).setVisible(true).setAlpha(0);
+    this.tweens.add({ targets: caption, alpha: 1, duration: CINEMATIC_CAPTION_FADE_MS });
+  }
+
+  hideCinematicCaption(immediate = false): void {
+    this.cinematicCaptionText = undefined;
+    const caption = this.cinematicCaption;
+    if (!caption) {
+      return;
+    }
+    this.tweens.killTweensOf(caption);
+    if (immediate || !caption.visible || caption.alpha <= 0) {
+      caption.setText("").setVisible(false).setAlpha(0);
+      return;
+    }
+    this.tweens.add({
+      targets: caption,
+      alpha: 0,
+      duration: CINEMATIC_CAPTION_FADE_MS,
+      onComplete: () => {
+        if (this.cinematicCaptionText === undefined) {
+          caption.setText("").setVisible(false);
+        }
+      }
+    });
+  }
+
+  showCinematicTitle(text: string): void {
+    this.cinematicTitleText = text;
+    const title = this.cinematicTitle;
+    if (!title) {
+      return;
+    }
+    this.tweens.killTweensOf(title);
+    title.setText(text).setVisible(true).setAlpha(0);
+    this.tweens.add({ targets: title, alpha: 1, duration: CINEMATIC_TITLE_FADE_IN_MS });
+  }
+
+  hideCinematicTitle(immediate = false): void {
+    this.cinematicTitleText = undefined;
+    const title = this.cinematicTitle;
+    if (!title) {
+      return;
+    }
+    this.tweens.killTweensOf(title);
+    if (immediate || !title.visible || title.alpha <= 0) {
+      title.setText("").setVisible(false).setAlpha(0);
+      return;
+    }
+    this.tweens.add({
+      targets: title,
+      alpha: 0,
+      duration: OPENING_ERA_TITLE_FADE_MS,
+      ease: "Sine.easeInOut",
+      onComplete: () => {
+        if (this.cinematicTitleText === undefined) {
+          title.setText("").setVisible(false);
+        }
+      }
+    });
+  }
+
+  private clearCinematicPresentation(): void {
+    this.cinematicCaptionText = undefined;
+    this.cinematicTitleText = undefined;
+    if (this.cinematicCaption) {
+      this.tweens.killTweensOf(this.cinematicCaption);
+      this.cinematicCaption.setText("").setVisible(false).setAlpha(0);
+      this.cinematicCaption = undefined;
+    }
+    if (this.cinematicTitle) {
+      this.tweens.killTweensOf(this.cinematicTitle);
+      this.cinematicTitle.setText("").setVisible(false).setAlpha(0);
+      this.cinematicTitle = undefined;
+    }
   }
 
   showBinderCardOverlay(card: BinderOverlayCard, onClose: () => void): void {

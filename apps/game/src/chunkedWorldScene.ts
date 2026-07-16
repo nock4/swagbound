@@ -140,6 +140,7 @@ import {
   type PlayerState
 } from "./playerController";
 import { PLAYER_SPEED, PLAYER_DIAGONAL_SPEED, INTERACTION_DISTANCE } from "./worldScene";
+import type { UiScene } from "./uiScene";
 import {
   DialogueController,
   publishDebug,
@@ -316,7 +317,6 @@ import {
 } from "./worldMusic";
 import {
   OPENING_ERA_TITLE,
-  OPENING_ERA_TITLE_FADE_MS,
   OPENING_ERA_TITLE_HOLD_MS,
   OPENING_FLYOVER_END_ZOOM,
   OPENING_FLYOVER_SHOTS,
@@ -1154,6 +1154,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.updateAct1NightTint({ fade: this.pendingDawnFadeOnCreate });
     this.pendingDawnFadeOnCreate = false;
     this.events.once("shutdown", () => {
+      const ui = this.scene.get("ui") as UiScene;
+      ui.hideCinematicCaption(true);
+      ui.hideCinematicTitle(true);
       this.music.stop();
       publishAuditionTarget(null);
       this.destroyNightTintOverlay();
@@ -7205,6 +7208,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private runOpeningFlyover(bedSpawn: { x: number; y: number }, onDone: () => void): void {
     const cam = this.cameras.main;
+    const ui = this.scene.get("ui") as UiScene;
     this.flyoverActive = true;
     this.playOverworldMusicCue("intro");
     const setAnchor = (x: number, y: number): void => {
@@ -7220,48 +7224,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     // town IS the pan; just pull the zoom out for the overhead feel.
     cam.setZoom(OPENING_FLYOVER_ZOOM);
     // A scroll-fixed overlay does not render reliably over the streamed town chunks at
-    // the pulled-back flyover zoom, so the night tint is a large WORLD-space rect at
+    // the pulled-back flyover zoom, so the night tint remains a large WORLD-space rect at
     // FG-over depth covering the whole bounded pan region (depth 130000 draws above the
-    // FG layer, as the bedroom overlay proves). The caption tracks the camera each frame.
+    // FG layer, as the bedroom overlay proves). Cinematic text belongs to uiScene.
     const nightRect = openingFlyoverNightRect();
     const flyNight = this.add
       .rectangle(nightRect.x, nightRect.y, nightRect.width, nightRect.height, 0x0a1236, 0.62)
       .setDepth(130000);
-    // The single continuous establishing move carries one narration line pinned
-    // to the bottom of the moving view.
-    const caption = this.add
-      .text(1900, 1650, "", {
-        fontFamily: CLEAN_UI_FONT_FAMILY,
-        fontSize: "11px",
-        color: "#e8f4ff",
-        align: "center",
-        wordWrap: { width: 200 }
-      })
-      .setOrigin(0.5, 1)
-      .setResolution(3)
-      .setDepth(131000)
-      .setAlpha(0)
-      .setShadow(0, 1, "#000000", 5);
-    const eraTitle = this.add
-      .text(0, 0, OPENING_ERA_TITLE, {
-        fontFamily: CLEAN_UI_FONT_FAMILY,
-        fontSize: "14px",
-        color: "#ffffff",
-        align: "center"
-      })
-      .setOrigin(0.5)
-      .setResolution(3)
-      .setDepth(131000)
-      .setAlpha(0)
-      .setShadow(0, 1, "#000000", 4);
-    const placeCaption = (): void => {
-      const view = cam.worldView;
-      caption.setPosition(view.centerX, view.bottom - 22);
-    };
-    const placeEraTitle = (): void => {
-      const view = cam.worldView;
-      eraTitle.setPosition(view.centerX, view.centerY);
-    };
     let rumbleTimer: Phaser.Time.TimerEvent | undefined;
 
     // One uninterrupted arcade-to-house move. The camera closes in on Bosch's
@@ -7270,9 +7239,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     const finish = (): void => {
       // The final shot has already faded to black; descend to the bed from there.
+      ui.hideCinematicCaption();
+      ui.hideCinematicTitle();
       flyNight.destroy();
-      caption.destroy();
-      eraTitle.destroy();
       rumbleTimer?.remove(false);
       this.flyoverActive = false;
       setAnchor(bedSpawn.x, bedSpawn.y);
@@ -7320,12 +7289,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     const beginShot = (i: number, from: { x: number; y: number }, to: { x: number; y: number }): void => {
       const shot = shots[i];
-      placeCaption();
-      placeEraTitle();
-      caption.setText(this.data_.earlyGameSequence.flyover.captions[i] ?? shot.text).setAlpha(0);
-      eraTitle.setAlpha(1);
+      ui.showCinematicCaption(this.data_.earlyGameSequence.flyover.captions[i] ?? shot.text);
+      ui.showCinematicTitle(OPENING_ERA_TITLE);
       cam.fadeIn(600, 0, 0, 0);
-      this.tweens.add({ targets: caption, alpha: 1, duration: 600 });
       const rumble = (): void => {
         if (this.flyoverActive) {
           this.openingSfx.resume();
@@ -7340,12 +7306,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         callback: rumble
       });
       this.time.delayedCall(OPENING_ERA_TITLE_HOLD_MS, () => {
-        this.tweens.add({
-          targets: eraTitle,
-          alpha: 0,
-          duration: OPENING_ERA_TITLE_FADE_MS,
-          ease: "Sine.easeInOut"
-        });
+        ui.hideCinematicTitle();
       });
       this.time.delayedCall(Math.max(0, shot.duration - OPENING_FLYOVER_ZOOM_IN_MS), () => {
         if (this.flyoverActive) {
@@ -7364,13 +7325,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
             from.y + (to.y - from.y) * proxy.t
           );
           this.refreshStreaming();
-          placeCaption();
-          placeEraTitle();
         },
         onComplete: () => {
           rumbleTimer?.remove(false);
           rumbleTimer = undefined;
-          this.tweens.add({ targets: caption, alpha: 0, duration: 600 });
+          ui.hideCinematicCaption();
           cam.fadeOut(600, 0, 0, 0);
           cam.once("camerafadeoutcomplete", () => runShot(i + 1));
         }

@@ -36,6 +36,8 @@ export type NpcBehaviorContext = {
 
 // Repo-owned until imported npc_config Movement codes are decoded into runtime behaviors.
 export const NPC_BEHAVIORS = {
+  // Generated data mistypes the Bosch-house telephone as a person, so pin it to the table.
+  21: STATIC_NPC_BEHAVIOR,
   744: STATIC_NPC_BEHAVIOR,
   745: STATIC_NPC_BEHAVIOR,
   746: { kind: "patrol", axis: "x", rangePx: 24, speedPxPerSec: 40 }

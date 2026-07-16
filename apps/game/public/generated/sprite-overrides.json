@@ -1147,27 +1147,16 @@
       "originY": 1
     },
     "21": {
-      "image": "generated/assets/sprites/259.png",
-      "frameWidth": 32,
-      "frameHeight": 32,
+      "image": "generated/assets/sprites/215.png",
+      "frameWidth": 16,
+      "frameHeight": 24,
       "animations": {
         "down": [
-          4,
-          5
-        ],
-        "left": [
-          6,
-          7
-        ],
-        "right": [
-          2,
-          3
-        ],
-        "up": [
-          0,
-          1
+          0
         ]
-      }
+      },
+      "originX": 0.5,
+      "originY": 0.78
     },
     "25": {
       "image": "assets/swagbound/overworld-npc/lsw-2130-ow.png",
