@@ -113,6 +113,7 @@ import {
 } from "./eventHost";
 import { EventSequenceWatchdog, cutsceneRunnerProgressToken } from "./eventSequenceWatchdog";
 import { GameFlags, flagAliasesFromMap } from "./gameFlags";
+import { resolveOpeningPhase } from "./openingPhase";
 import { behaviorForNpc, interactionEventsHaveServiceEffect } from "./npcBehaviors";
 import { cutsceneNpcHiddenFlag, isNpcVisibleForRuntimeFlags } from "./npcVisibility";
 import {
@@ -2728,6 +2729,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     globals.__surfaceAt = this.surfaceAtHook;
     if (import.meta.env.DEV) {
       globals.__nightDebug = () => this.act1NightDebugState();
+      globals.__openingPhase = () => resolveOpeningPhase(this.gameFlags);
     }
     // Debug-only teleport for QA capture tooling: hard-set the player to a world pixel and
     // stream the surrounding chunks, bypassing the spawn-validation/fallback path (so it
@@ -2943,6 +2945,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       delete globals.__surfaceAt;
     }
     delete globals.__nightDebug;
+    delete globals.__openingPhase;
     delete globals.__warpTo;
     delete globals.__fgAlphaAt;
     delete globals.__fgCoverageRect;
