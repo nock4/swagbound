@@ -12279,6 +12279,29 @@
    }
   },
   {
+   "id": 930116,
+   "worldPixel": {
+    "x": 1928,
+    "y": 1620
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "tally:act1:refused"
+   ],
+   "blockFlags": [
+    "signal:route_open"
+   ],
+   "interaction": {
+    "pages": [
+     "A clerk-looking bystander loiters at the relay gate approach, badge pocketed, like an employee working very hard at being scenery.",
+     "\"You're the pending one. Word moves fast when it fails to fit a column. The desk hates pending. It can stamp a lie in a second and it still cannot stamp a blank.\"",
+     "\"The King up there will offer you the same four words with better furniture. Keep the blank. It is doing more damage than you know.\""
+    ]
+   }
+  },
+  {
    "id": 930110,
    "worldPixel": {
     "x": 316,

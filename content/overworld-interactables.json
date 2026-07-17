@@ -522,6 +522,43 @@
       ]
     },
     {
+      "id": "tally-act1-post-plaque",
+      "kind": "examine",
+      "label": "Tally post",
+      "worldPixel": {
+        "x": 2144,
+        "y": 1172
+      },
+      "pages": [
+        "The grey post is bolted to the old lamp. The lamp did not agree to this. A small plate sits under the grille:",
+        "ENTRIES TODAY: 1. SOURCE: 0. VESSEL: 0. CLAIMANT: 0. DERIVATIVE: 0. PENDING: 1.",
+        "Someone has scratched under the plate, in handwriting: STILL PENDING. STAY PENDING."
+      ]
+    },
+    {
+      "id": "tally-act1-named-parcel",
+      "kind": "present",
+      "label": "Named parcel",
+      "worldPixel": {
+        "x": 2624,
+        "y": 376
+      },
+      "item": {
+        "char": 1,
+        "item": 88
+      },
+      "openedFlag": "tally:act1:parcel-opened",
+      "pages": [
+        "A parcel waits beside the step, addressed in handwriting, not type. No category on the label. The seal is listening for a voice.",
+        "Bosch says his own name. The seal lets go at once, like it had been embarrassed to ask.",
+        "Inside is a Pocket Snack!",
+        "You got the Pocket Snack!"
+      ],
+      "openedPages": [
+        "The parcel is open and stays open. The name did that. No stamp required."
+      ]
+    },
+    {
       "id": "cult-terminal-internet-nostalgia",
       "kind": "examine",
       "label": "Bedroom terminal",

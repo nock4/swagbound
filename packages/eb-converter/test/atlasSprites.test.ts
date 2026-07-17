@@ -30,8 +30,9 @@ describe("sprite atlas extractor", () => {
       // Tracks content additions: 699 + 4 Unsigned NPCs (c804c5e5) + 6 night-cast
       // openers on crowd group 59 (b1c151cb; byNpcId skins override the group)
       // + 5 MILADY CULT found-speech NPCs (930100-930104; byNpcId skins)
-      // + 6 LSW found-speech slice NPCs (930110-930115; byNpcId skins).
-      usedByNpcCount: 722,
+      // + 6 LSW found-speech slice NPCs (930110-930115; byNpcId skins)
+      // + the chant-vs-name pending witness (930116; byNpcId skin).
+      usedByNpcCount: 723,
       overridden: true,
       overrideKind: "group"
     });

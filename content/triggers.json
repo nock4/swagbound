@@ -1998,6 +1998,30 @@
    "battleGroup": 136
   },
   {
+   "id": "tally-act1-post",
+   "comment": "CHANT-VS-NAME Beat 1 (docs/design/early-game-chant-vs-name.md): the first soft proof gate on the morning descent, before any battle. A band across the y-1180 road catches every hill funnel (probed 2026-07-17: crossable runs all inside x 1856-2640). Bosch answers the four-stamp wheel with his own name; the post logs the refusal as an entry anyway. Previews the Returnless King's exact category offer. Flag reveals the pending witness (930116) at the relay gate approach.",
+   "area": {
+    "x": 1856,
+    "y": 1164,
+    "w": 784,
+    "h": 48
+   },
+   "once": true,
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "dialogue": [
+    "Halfway down the hill the road grows furniture: a grey post, bolted fresh, with a grille and a little wheel of stamps. SOURCE. VESSEL. CLAIMANT. DERIVATIVE.",
+    "TALLY POST: \"Good morning, resident. State your designation and the road stays exactly this easy. Free of charge. Everyone passes.\"",
+    "Bosch says the only word that has ever fit: his own name.",
+    "TALLY POST: \"ENTRY RECEIVED. CATEGORY: PENDING.\" Somewhere inside, a counter ticks once, satisfied with either answer.",
+    "The wheel of stamps keeps turning gently, like it can wait. Down the hill, past the arcade noise, the desks that mint those four words are already open."
+   ],
+   "setFlags": [
+    "tally:act1:refused"
+   ]
+  },
+  {
    "id": "cult-lsw-listening-post",
    "comment": "LSW found-speech slice: a hostile Milady listening post bolted into the coffee-pot-house yard. Soft proof gate: it coaxes the chant, Bosch's silence is logged as an entry anyway, and the refusal flag reveals the shrine-keeper (930113) by the pink spring. LSW stays friendly; the box is the intruder.",
    "area": {
