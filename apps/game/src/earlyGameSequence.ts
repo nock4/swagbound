@@ -74,9 +74,14 @@ export function suppressOwnedOpeningClarity(
     ),
     dialogue: {
       ...clarity.dialogue,
+      // NPC-ID-KEYED maps must be filtered by the owned CAST (npc ids), not by
+      // scene dialogue keys: an npc id like "15" never matches "wake", so the
+      // old dialogueKeys filter silently suppressed nothing and legacy overlay
+      // lines (retired derivative-era narration) kept winning over the
+      // opening's recast house NPCs.
       byNpcId: withoutOwnedKeys(
         clarity.dialogue.byNpcId,
-        ownedDialogueKeys,
+        ownedSpriteNpcIds,
         "dialogue.byNpcId",
         suppress
       ),
@@ -89,7 +94,7 @@ export function suppressOwnedOpeningClarity(
     },
     dialogueVariantsByNpcId: withoutOwnedKeys(
       clarity.dialogueVariantsByNpcId,
-      ownedDialogueKeys,
+      ownedSpriteNpcIds,
       "dialogueVariantsByNpcId",
       suppress
     ),

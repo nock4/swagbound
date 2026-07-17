@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { type ArchivistSpot, type BattleEnemy, type CardNft, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
-import { actorBodyBlocked, actorsBlockingAt, isActorBodyPoint } from "./actorCollision";
+import { ACTOR_BODY_BOTTOM, ACTOR_BODY_HALF_WIDTH, ACTOR_BODY_TOP, actorBodyBlocked, actorsBlockingAt, isActorBodyPoint } from "./actorCollision";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, storyTriggerSuppressionForRestore, triggerFiredFlag } from "./storyTriggers";
 import {
   CutsceneRunner,
@@ -799,6 +799,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private roomMaskBandGraphics?: Phaser.GameObjects.Graphics;
   private nightTintOverlay?: Phaser.GameObjects.Image;
   private nightTintActive = false;
+  /** Frames left to retry the door-arrival actor-overlap escape (see update()). */
+  private arrivalEscapeTicks = 0;
   private pendingDawnFadeOnCreate = false;
   private pendingIntroMusicReleaseFadeOnCreate = false;
   private solidRows: string[] = [];
@@ -1457,6 +1459,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return;
     }
     this.stepNpcs(delta);
+    // Door-arrival overlap escape retries a few frames: destination NPC
+    // runtimes can spawn a tick or two after the synchronous warp, so the
+    // in-warp escape pass may not have seen them yet. No-op once clear.
+    if (this.arrivalEscapeTicks > 0) {
+      this.arrivalEscapeTicks -= 1;
+      this.escapeArrivalActorOverlap();
+    }
     this.eventSequence?.update(delta);
     this.stepCutsceneMove(delta);
     this.updateEventSequenceWatchdog();
@@ -4472,10 +4481,87 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.refreshStreaming(true);
     this.syncEncounterTileState();
     this.refreshRoomBounds(true);
+    // Now that the destination's NPCs are streamed in and room bounds are
+    // current, nudge the player off any actor body the authored landing sits
+    // on (e.g. a story NPC posted beside a door). Map-only landings are
+    // untouched; without this the player arrives drawn on top of the NPC.
+    // Destination NPC runtimes can spawn a frame late, so update() retries.
+    this.escapeArrivalActorOverlap();
+    this.arrivalEscapeTicks = 12;
     this.syncOverworldMusicCue();
-    this.cameras.main.centerOn(to.x, to.y);
+    this.cameras.main.centerOn(this.playerState.x, this.playerState.y);
     this.updateCameraRoomBounds();
     return true;
+  }
+
+  /**
+   * Door-arrival visual clearance: movement collision (actorBodyBlocked) is a
+   * point-in-box test, so a landing 15-27px from an NPC is "passable" yet the
+   * two 16-24px sprites are drawn on top of each other. For arrivals only,
+   * demand box-vs-box separation from every visible actor body, and ring-search
+   * the nearest map-walkable point that has it. Clear landings are a no-op.
+   */
+  private arrivalVisualBodies(): { x: number; y: number }[] {
+    const bodies: { x: number; y: number }[] = [];
+    for (const npc of this.npcRuntimes.values()) {
+      if (!this.isNpcVisible(npc.data) || !this.npcInsideActiveRoom(npc)) {
+        continue;
+      }
+      bodies.push({ x: npc.state.player.x, y: npc.state.player.y });
+    }
+    for (const runtime of this.sourceCheckActors.values()) {
+      const worldPixel = runtime.check.placement?.worldPixel;
+      if (runtime.visible && isActorBodyPoint(worldPixel) && this.worldPointInsideActiveRoom(worldPixel)) {
+        bodies.push({ x: worldPixel.x, y: worldPixel.y });
+      }
+    }
+    return bodies;
+  }
+
+  private static arrivalBodiesOverlap(a: { x: number; y: number }, b: { x: number; y: number }): boolean {
+    return (
+      Math.abs(a.x - b.x) < ACTOR_BODY_HALF_WIDTH * 2 &&
+      Math.abs(a.y - b.y) < ACTOR_BODY_TOP + ACTOR_BODY_BOTTOM
+    );
+  }
+
+  private escapeArrivalActorOverlap(): void {
+    const { x, y } = this.playerState;
+    const bodies = this.arrivalVisualBodies();
+    const clearOf = (p: { x: number; y: number }): boolean =>
+      bodies.every((body) => !ChunkedWorldScene.arrivalBodiesOverlap(p, body));
+    if (clearOf({ x, y }) && !this.blocked(x, y)) {
+      return;
+    }
+    const step = this.collisionCellSize > 0 ? this.collisionCellSize : 8;
+    for (let ring = 1; ring <= 5; ring += 1) {
+      let best: { x: number; y: number; distanceSq: number } | undefined;
+      for (let dy = -ring; dy <= ring; dy += 1) {
+        for (let dx = -ring; dx <= ring; dx += 1) {
+          if (Math.max(Math.abs(dx), Math.abs(dy)) !== ring) {
+            continue;
+          }
+          const candidate = { x: x + dx * step, y: y + dy * step };
+          if (this.blocked(candidate.x, candidate.y) || !clearOf(candidate)) {
+            continue;
+          }
+          const distanceSq = (candidate.x - x) ** 2 + (candidate.y - y) ** 2;
+          if (!best || distanceSq < best.distanceSq) {
+            best = { ...candidate, distanceSq };
+          }
+        }
+      }
+      if (best) {
+        this.playerState.x = best.x;
+        this.playerState.y = best.y;
+        if (this.player) {
+          this.player.x = best.x;
+          this.player.y = best.y;
+          this.setActorSortDepth(this.player);
+        }
+        return;
+      }
+    }
   }
 
   private beginDoorFade(
