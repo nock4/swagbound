@@ -1996,6 +1996,27 @@
     "fuel:unsigned:nobody-defeated"
    ],
    "battleGroup": 136
+  },
+  {
+   "id": "cult-lsw-listening-post",
+   "comment": "LSW found-speech slice: a hostile Milady listening post bolted into the coffee-pot-house yard. Soft proof gate: it coaxes the chant, Bosch's silence is logged as an entry anyway, and the refusal flag reveals the shrine-keeper (930113) by the pink spring. LSW stays friendly; the box is the intruder.",
+   "area": {
+    "x": 296,
+    "y": 7408,
+    "w": 72,
+    "h": 56
+   },
+   "once": true,
+   "dialogue": [
+    "Something new is bolted to the rocks at the yard's edge: a grey box with a grille, humming at the pitch of a fridge that wants something.",
+    "LISTENING POST: \"Welcome, resident. Daily affirmation is free. It's never too late to say milady.\"",
+    "The grille waits. Bosch does not say it. The hum climbs half a step, pleased or disappointed, there is no way to tell.",
+    "LISTENING POST: \"God speaks through me but that means I am in the way.\"",
+    "A tiny counter behind the grille clicks once. Refusals, it turns out, are also entries. Up the path, by the pink spring, something small has started keeping score too."
+   ],
+   "setFlags": [
+    "cult:lsw:refused-chant"
+   ]
   }
  ],
  "barriers": [

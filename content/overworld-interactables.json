@@ -520,6 +520,107 @@
         "A blank mask rests on the service-apartment shelf.",
         "It has retired from personhood and seems almost relaxed."
       ]
+    },
+    {
+      "id": "cult-terminal-internet-nostalgia",
+      "kind": "examine",
+      "label": "Bedroom terminal",
+      "worldPixel": {
+        "x": 7532,
+        "y": 336
+      },
+      "pages": [
+        "Under the window, a hand-me-down terminal idles. The screen saver is a single line of text, drifting like weather.",
+        "\"I am nostalgic for the Internet that should have existed.\"",
+        "Bosch did not type it. The terminal has already logged him as the author."
+      ]
+    },
+    {
+      "id": "cult-plan-billboard",
+      "kind": "sign",
+      "label": "Repainted billboard",
+      "worldPixel": {
+        "x": 2076,
+        "y": 6528
+      },
+      "pages": [
+        "Two identical faces beam down from the billboard. The caption has been repainted so many times the letters cast shadows.",
+        "\"this is part of the plan (unknown plan)\"",
+        "Underneath, in official Registry stencil: DO NOT ASK WHICH PART. DO NOT ASK WHICH PLAN."
+      ]
+    },
+    {
+      "id": "cult-flyer-network-spirituality",
+      "kind": "examine",
+      "label": "Venue flyer",
+      "worldPixel": {
+        "x": 2272,
+        "y": 6548
+      },
+      "pages": [
+        "A flyer is pasted beside the Venue door. It is dated tomorrow. The paste stains suggest it is always dated tomorrow.",
+        "\"The secret cabal meeting regarding network spirituality is tomorrow.\"",
+        "No address. No time. Attendance will be assumed."
+      ]
+    },
+    {
+      "id": "cult-lsw-crt",
+      "kind": "examine",
+      "label": "Warped CRT",
+      "worldPixel": {
+        "x": 332,
+        "y": 7456
+      },
+      "pages": [
+        "A warped CRT is wedged into the monitor wall, running on no cord anyone can find. The tube breathes. Text swims up through the static:",
+        "\"Screens are portals thru the metaphysical, and everything is real and I love you.\"",
+        "The 'I love you' holds on the glass a beat too long, like it is checking whether Bosch wrote it down.",
+        "Scratched under the casing in tiny local handwriting: IT LOOKS BACK. BE POLITE, BE BRIEF. Then a small arrow pointing up the path, toward the pink spring."
+      ]
+    },
+    {
+      "id": "cult-lsw-shrine",
+      "kind": "examine",
+      "label": "Intruder shrine",
+      "worldPixel": {
+        "x": 580,
+        "y": 7372
+      },
+      "pages": [
+        "By the spring squats a tiny shrine that was not here last season. Bottle caps, a doll's mirror, and a hand-lettered card:",
+        "\"every time you say milady you add 30 seconds to your life\"",
+        "Below the card, a mechanical counter. Bosch reads the rule and says nothing. The counter ticks up one anyway.",
+        "Someone has set a bowl of spring water on the shrine to keep it company. The bowl is doing more good than the shrine. The stamped sign at the south cliff is where the small ones say the grown-up words showed up next."
+      ]
+    },
+    {
+      "id": "cult-lsw-registrar-sign",
+      "kind": "sign",
+      "label": "Registry sign, south cliff",
+      "worldPixel": {
+        "x": 380,
+        "y": 7968
+      },
+      "pages": [
+        "A metal sign has been driven into the south cliff, machine-fresh, no rust. The letters are set in Registry type:",
+        "\"A milady is defined as a milady by their mutuals and their posting not by their purchases.\"",
+        "Under it, a red stamp, newer than the sign: \"promoting remilia isn't shilling, it's lore enforcement\"",
+        "Nothing on the sign defines a resident by what they had for breakfast, who waved at them, or what they are carrying in their left hand. Around here, that is the whole census."
+      ]
+    },
+    {
+      "id": "cult-sign-remilia-world-order",
+      "kind": "sign",
+      "label": "Over-stamped town billboard",
+      "worldPixel": {
+        "x": 2328,
+        "y": 6592
+      },
+      "pages": [
+        "The old town billboard has been over-stamped with three words, set in type too calm to argue with.",
+        "\"Remilia World Order.\"",
+        "Someone tried to scrape it off. The paint underneath says the same thing."
+      ]
     }
   ]
 }

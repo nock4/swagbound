@@ -28,8 +28,10 @@ describe("sprite atlas extractor", () => {
     expect(group59).toMatchObject({
       groupId: 59,
       // Tracks content additions: 699 + 4 Unsigned NPCs (c804c5e5) + 6 night-cast
-      // openers on crowd group 59 (b1c151cb; byNpcId skins override the group).
-      usedByNpcCount: 711,
+      // openers on crowd group 59 (b1c151cb; byNpcId skins override the group)
+      // + 5 MILADY CULT found-speech NPCs (930100-930104; byNpcId skins)
+      // + 6 LSW found-speech slice NPCs (930110-930115; byNpcId skins).
+      usedByNpcCount: 722,
       overridden: true,
       overrideKind: "group"
     });
