@@ -1344,6 +1344,13 @@
    "w": 28,
    "h": 30,
    "note": "[torso-cut fix] clear counter/table rail FG cutting NPC undefined at (7764,9212) in interior area 754724837"
+  },
+  {
+   "x": 2048,
+   "y": 232,
+   "w": 48,
+   "h": 40,
+   "note": "meteor-approach cliff tongue south face: clear the walk-behind rows that swallowed the player on the night route (playthrough note 3)."
   }
  ]
 }

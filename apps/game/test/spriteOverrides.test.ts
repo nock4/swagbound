@@ -193,7 +193,10 @@ describe("sprite override helpers", () => {
     const byNpcId = overrides.byNpcId ?? {};
     // Bonkle stays an overlay NPC; Sal/Morrow skin the real EB shop clerks (404/749).
     const namedAdded: Record<string, string> = {
-      "100102": "assets/swagbound/npc/npc-bonkle.png"
+      "100102": "assets/swagbound/npc/npc-bonkle.png",
+      // The landed meteor prop is vanilla-EB-extracted art at native 46x22 scale,
+      // not a good-new-sprites overworld skin.
+      "910207": "assets/swagbound/props/meteor-ow.png"
     };
     const clerkOverrides: Record<string, string> = {
       "404": "assets/swagbound/npc/npc-sal.png",

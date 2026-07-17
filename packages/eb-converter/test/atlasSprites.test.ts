@@ -29,7 +29,7 @@ describe("sprite atlas extractor", () => {
       groupId: 59,
       // Tracks content additions: 699 + 4 Unsigned NPCs (c804c5e5) + 6 night-cast
       // openers on crowd group 59 (b1c151cb; byNpcId skins override the group).
-      usedByNpcCount: 709,
+      usedByNpcCount: 711,
       overridden: true,
       overrideKind: "group"
     });

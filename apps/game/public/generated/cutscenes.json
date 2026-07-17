@@ -2665,6 +2665,58 @@
      "flag": "signal:cold-signal-seen"
     }
    ]
+  },
+  {
+   "id": "intro2-outside-dash",
+   "comment": "MiFella waits outside Bosch's house, calls him toward the meteor, then runs down the south and west route and disappears ahead.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 2616,
+     "y": 344,
+     "w": 72,
+     "h": 64
+    }
+   },
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:outside-dash-done",
+    "intro:meteor-seen"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "dialogue",
+     "pages": [
+      "MiFella: There you are! It came down on the hill, I watched it happen!",
+      "MiFella: Come on, follow me!"
+     ]
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 910206
+     },
+     "to": {
+      "x": 2528,
+      "y": 416
+     },
+     "run": true
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 910206
+     }
+    },
+    {
+     "op": "setFlag",
+     "flag": "intro:outside-dash-done"
+    }
+   ]
   }
  ]
 }

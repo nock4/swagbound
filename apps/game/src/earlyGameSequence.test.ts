@@ -30,29 +30,45 @@ const OPENING_DIALOGUE = {
     "Bosch, get up! You gotta see this!",
     "Something came down on the hill. Meet me outside."
   ],
-  "witness-1": ["It just fell. No sound. Things that fall make a sound."],
-  "witness-2": ["Did anyone else hear it say something?"],
-  "witness-3": ["I want to go home and I am not going home."],
+  // Playthrough notes 2026-07-16: the hill cast is four Milady manifestations
+  // and each says only the one word.
+  "witness-1": ["milady"],
+  "witness-2": ["milady"],
+  "witness-3": ["milady"],
   "meteor-manifestation": ["milady"],
-  "mifella-going-home": ["Okay. Okay okay okay. Home. We should be home."],
+  "mifella-going-home": [
+    "MiFella: I got my picture. Let's go home, Bosch.",
+    "MiFella: It's so late. We should be home and asleep."
+  ],
   "home-scene": [
     "MiFella replays his photos of the crowd.",
     "MiFella echoes the word once under his breath.",
     "Everyone up there felt so together."
+  ],
+  "mifella-outside": [
+    "MiFella: There you are! It came down on the hill, I watched it happen!",
+    "MiFella: Come on, follow me!"
+  ],
+  "meteor-inspect": [
+    "The meteor sits in its crater, still warm.",
+    "If you lean close, the hum almost sorts itself into a word."
   ]
 } as const;
 
+// 910200-910205 = original night cast; 910206 = MiFella outside the house
+// (dashes uphill); 910207 = the landed meteor prop.
 const NIGHT_CAST_IDS = [910200, 910201, 910202, 910203, 910204, 910205] as const;
+const OWNED_NPC_IDS = [...NIGHT_CAST_IDS, 910206, 910207] as const;
 
 describe("early game sequence ownership", () => {
   it("preserves exact draft copy and ownership", () => {
     expect(typeof sequence.phaseGatesEnabled).toBe("boolean");
     expect(sequence.dialogue).toEqual(OPENING_DIALOGUE);
     expect(sequence.ownership.dialogueKeys).toEqual(Object.keys(OPENING_DIALOGUE));
-    expect(sequence.ownership.npcIds).toEqual(NIGHT_CAST_IDS);
-    expect(sequence.nightCast?.allowNpcIds).toEqual(NIGHT_CAST_IDS);
+    expect(sequence.ownership.npcIds).toEqual(OWNED_NPC_IDS);
+    expect(sequence.nightCast?.allowNpcIds).toEqual(OWNED_NPC_IDS);
     expect(sequence.ownership.spriteOverrideNpcIds).toEqual([
-      14, 15, 16, 21, ...NIGHT_CAST_IDS
+      14, 15, 16, 21, ...OWNED_NPC_IDS
     ]);
   });
 
@@ -73,7 +89,7 @@ describe("early game sequence ownership", () => {
     const enabled = { ...sequence, phaseGatesEnabled: true };
     const disabled = { ...sequence, phaseGatesEnabled: false };
 
-    for (const npcId of NIGHT_CAST_IDS) {
+    for (const npcId of OWNED_NPC_IDS) {
       expect(openingOwnedNpcEnabled(disabled, npcId)).toBe(false);
       expect(openingOwnedNpcEnabled(enabled, npcId)).toBe(true);
     }
@@ -134,25 +150,38 @@ describe("early game sequence ownership", () => {
     for (const term of denied) {
       expect(playerFacingText).not.toContain(term);
     }
-    expect(playerFacingText.match(/\bmilady\b/g) ?? []).toHaveLength(1);
+    // Four manifestations on the hill, each saying only the one word.
+    expect(playerFacingText.match(/\bmilady\b/g) ?? []).toHaveLength(4);
     expect(playerFacingText.match(/\bMilady\b/g) ?? []).toHaveLength(0);
   });
 
-  it("schema-validates and casts the six owned night actors with shared dialogue refs", () => {
-    const nightCast = addedNpcs.npcs.filter((npc) => NIGHT_CAST_IDS.includes(npc.id as never));
+  it("schema-validates and casts the owned opening actors with shared dialogue refs", () => {
+    const nightCast = addedNpcs.npcs.filter((npc) => OWNED_NPC_IDS.includes(npc.id as never));
     const expectedSprites: Record<string, string> = {
       "910200": "assets/swagbound/overworld-npc/mifella-001-ow.png",
-      "910201": "assets/swagbound/overworld-npc/lsw-1038-ow.png",
-      "910202": "assets/swagbound/overworld-npc/lsw-1120-ow.png",
-      "910203": "assets/swagbound/overworld-npc/lsw-1144-ow.png",
+      // Playthrough notes 2026-07-16: three distinct Milady manifestations
+      // replace the LSW witnesses so the crater is ringed by four Miladys.
+      "910201": "assets/swagbound/overworld-npc/malady-002-ow.png",
+      "910202": "assets/swagbound/overworld-npc/malady-005-ow.png",
+      "910203": "assets/swagbound/overworld-npc/gns-malady-003-ow.png",
       "910204": "assets/swagbound/overworld-npc/malady-001-ow.png",
-      "910205": "assets/swagbound/overworld-npc/mifella-001-ow.png"
+      "910205": "assets/swagbound/overworld-npc/mifella-001-ow.png",
+      "910206": "assets/swagbound/overworld-npc/mifella-001-ow.png",
+      "910207": "assets/swagbound/props/meteor-ow.png"
+    };
+    const expectedBlockFlags: Record<string, string[] | undefined> = {
+      "910206": ["intro:outside-dash-done", "intro:morning"],
+      // The landed meteor stays on the hill permanently.
+      "910207": undefined
     };
 
-    expect(nightCast.map((npc) => npc.id)).toEqual(NIGHT_CAST_IDS);
+    expect(nightCast.map((npc) => npc.id)).toEqual(OWNED_NPC_IDS);
     for (const npc of nightCast) {
-      expect(npc.blockFlags).toEqual(["intro:morning"]);
-      expect(baseSpriteOverrides.byNpcId?.[String(npc.id)]?.image).toBe(expectedSprites[String(npc.id)]);
+      const key = String(npc.id);
+      expect(npc.blockFlags, `npc ${key}`).toEqual(
+        key in expectedBlockFlags ? expectedBlockFlags[key] : ["intro:morning"]
+      );
+      expect(baseSpriteOverrides.byNpcId?.[key]?.image).toBe(expectedSprites[key]);
     }
 
     const manifestation = nightCast.find((npc) => npc.id === 910204);
@@ -167,7 +196,8 @@ describe("early game sequence ownership", () => {
     expect(intro2Cutscenes.map((cutscene) => cutscene.id)).toEqual([
       "intro2-meteor-gathering",
       "intro2-home-scene",
-      "intro2-dawn"
+      "intro2-dawn",
+      "intro2-outside-dash"
     ]);
 
     const meteor = intro2Cutscenes[0];

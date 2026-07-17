@@ -1,103 +1,119 @@
 {
-  "schema": "swagbound.early-game-sequence.v1",
-  "phaseGatesEnabled": true,
-  "flyover": {
-    "captions": [
-      "A camera saw Bosch leave home while Bosch was still asleep."
-    ]
-  },
-  "dialogue": {
-    "wake": [
-      "Bosch, get up! You gotta see this!",
-      "Something came down on the hill. Meet me outside."
-    ],
-    "witness-1": [
-      "milady"
-    ],
-    "witness-2": [
-      "milady"
-    ],
-    "witness-3": [
-      "milady"
-    ],
-    "meteor-manifestation": [
-      "milady"
-    ],
-    "mifella-going-home": [
-      "MiFella: I got my picture. Let's go home, Bosch.",
-      "MiFella: It's so late. We should be home and asleep."
-    ],
-    "home-scene": [
-      "MiFella replays his photos of the crowd.",
-      "MiFella echoes the word once under his breath.",
-      "Everyone up there felt so together."
-    ]
-  },
-  "nightCast": {
-    "allowNpcIds": [
-      910200,
-      910201,
-      910202,
-      910203,
-      910204,
-      910205
-    ]
-  },
-  "sourceCheckAvailabilityPhase": "morning",
-  "phaseObjectives": {
-    "flyover": "",
-    "bedroom": "Answer MiFella. He is waiting outside.",
-    "night-route": "Follow MiFella up the hill.",
-    "meteor": "See what fell on the hill.",
-    "return-home": "Go back home.",
-    "home-scene": "See what MiFella wants.",
-    "morning": "Find MiFella in town."
-  },
-  "morningObjective": "Find MiFella in town.",
-  "nightDoors": {
-    "allowWorldPixels": [
-      [
-        2648,
-        336
-      ]
-    ]
-  },
-  "ownership": {
-    "dialogueKeys": [
-      "wake",
-      "witness-1",
-      "witness-2",
-      "witness-3",
-      "meteor-manifestation",
-      "mifella-going-home",
-      "home-scene"
-    ],
-    "npcIds": [
-      910200,
-      910201,
-      910202,
-      910203,
-      910204,
-      910205
-    ],
-    "cutsceneIds": [
-      "signal-town-cold-signal-open",
-      "onett-welcome-home-lights-out",
-      "onett-minch-brother-nag",
-      "onett-brother-fallsin",
-      "onett-keep-on-task"
-    ],
-    "spriteOverrideNpcIds": [
-      14,
-      15,
-      16,
-      21,
-      910200,
-      910201,
-      910202,
-      910203,
-      910204,
-      910205
-    ]
-  }
+ "schema": "swagbound.early-game-sequence.v1",
+ "phaseGatesEnabled": true,
+ "flyover": {
+  "captions": [
+   "A camera saw Bosch leave home while Bosch was still asleep."
+  ]
+ },
+ "dialogue": {
+  "wake": [
+   "Bosch, get up! You gotta see this!",
+   "Something came down on the hill. Meet me outside."
+  ],
+  "witness-1": [
+   "milady"
+  ],
+  "witness-2": [
+   "milady"
+  ],
+  "witness-3": [
+   "milady"
+  ],
+  "meteor-manifestation": [
+   "milady"
+  ],
+  "mifella-going-home": [
+   "MiFella: I got my picture. Let's go home, Bosch.",
+   "MiFella: It's so late. We should be home and asleep."
+  ],
+  "home-scene": [
+   "MiFella replays his photos of the crowd.",
+   "MiFella echoes the word once under his breath.",
+   "Everyone up there felt so together."
+  ],
+  "mifella-outside": [
+   "MiFella: There you are! It came down on the hill, I watched it happen!",
+   "MiFella: Come on, follow me!"
+  ],
+  "meteor-inspect": [
+   "The meteor sits in its crater, still warm.",
+   "If you lean close, the hum almost sorts itself into a word."
+  ]
+ },
+ "nightCast": {
+  "allowNpcIds": [
+   910200,
+   910201,
+   910202,
+   910203,
+   910204,
+   910205,
+   910206,
+   910207
+  ]
+ },
+ "sourceCheckAvailabilityPhase": "morning",
+ "phaseObjectives": {
+  "flyover": "",
+  "bedroom": "Answer MiFella. He is waiting outside.",
+  "night-route": "Follow MiFella up the hill.",
+  "meteor": "See what fell on the hill.",
+  "return-home": "Go back home.",
+  "home-scene": "See what MiFella wants.",
+  "morning": "Find MiFella in town."
+ },
+ "morningObjective": "Find MiFella in town.",
+ "nightDoors": {
+  "allowWorldPixels": [
+   [
+    2648,
+    336
+   ]
+  ]
+ },
+ "ownership": {
+  "dialogueKeys": [
+   "wake",
+   "witness-1",
+   "witness-2",
+   "witness-3",
+   "meteor-manifestation",
+   "mifella-going-home",
+   "home-scene",
+   "mifella-outside",
+   "meteor-inspect"
+  ],
+  "npcIds": [
+   910200,
+   910201,
+   910202,
+   910203,
+   910204,
+   910205,
+   910206,
+   910207
+  ],
+  "cutsceneIds": [
+   "signal-town-cold-signal-open",
+   "onett-welcome-home-lights-out",
+   "onett-minch-brother-nag",
+   "onett-brother-fallsin",
+   "onett-keep-on-task"
+  ],
+  "spriteOverrideNpcIds": [
+   14,
+   15,
+   16,
+   21,
+   910200,
+   910201,
+   910202,
+   910203,
+   910204,
+   910205,
+   910206,
+   910207
+  ]
+ }
 }

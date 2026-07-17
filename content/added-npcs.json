@@ -12172,6 +12172,39 @@
    "interaction": {
     "ref": "home-scene"
    }
+  },
+  {
+   "id": 910206,
+   "worldPixel": {
+    "x": 2648,
+    "y": 392
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:outside-dash-done",
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "mifella-outside"
+   }
+  },
+  {
+   "id": 910207,
+   "worldPixel": {
+    "x": 2080,
+    "y": 144
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "ref": "meteor-inspect"
+   }
   }
  ]
 }

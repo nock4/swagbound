@@ -1036,6 +1036,28 @@
       "originX": 0.5,
       "originY": 1
     },
+    "15": {
+      "image": "assets/swagbound/overworld-npc/gns-smm2-15-ponyrolly-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 22,
+      "originX": 0.5,
+      "originY": 1
+    },
     "16": {
       "image": "assets/swagbound/overworld-npc/lsw-2673-ow.png",
       "frameWidth": 48,
@@ -27572,6 +27594,49 @@
         ]
       },
       "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "910206": {
+      "image": "assets/swagbound/overworld-npc/mifella-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "910207": {
+      "image": "assets/swagbound/props/meteor-ow.png",
+      "frameWidth": 46,
+      "frameHeight": 22,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
       "originX": 0.5,
       "originY": 1
     }
