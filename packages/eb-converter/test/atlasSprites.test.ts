@@ -31,8 +31,9 @@ describe("sprite atlas extractor", () => {
       // openers on crowd group 59 (b1c151cb; byNpcId skins override the group)
       // + 5 MILADY CULT found-speech NPCs (930100-930104; byNpcId skins)
       // + 6 LSW found-speech slice NPCs (930110-930115; byNpcId skins)
-      // + the chant-vs-name pending witness (930116; byNpcId skin).
-      usedByNpcCount: 723,
+      // + the chant-vs-name pending witness (930116; byNpcId skin)
+      // + 4 Dead Letter shop-street found-speech NPCs (930117-930120; byNpcId skins).
+      usedByNpcCount: 727,
       overridden: true,
       overrideKind: "group"
     });

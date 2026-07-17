@@ -541,7 +541,7 @@
       "label": "Named parcel",
       "worldPixel": {
         "x": 2624,
-        "y": 376
+        "y": 384
       },
       "item": {
         "char": 1,
@@ -556,6 +556,34 @@
       ],
       "openedPages": [
         "The parcel is open and stays open. The name did that. No stamp required."
+      ]
+    },
+    {
+      "id": "cult-shop-locked-display",
+      "kind": "examine",
+      "label": "Locked display",
+      "worldPixel": {
+        "x": 5264,
+        "y": 9288
+      },
+      "pages": [
+        "THE PLUG keeps one item in the window on a velvet riser: a small figure in a glass case with no price, no label, and a lock built like a promise.",
+        "The clerk taps the glass from inside without looking up: \"You couldn't buy one if you wanted to.\"",
+        "Under the riser, a handwritten card: NOT FOR SALE. NOT FOR YOU. ASK ABOUT OUR PAYMENT PLANS ANYWAY."
+      ]
+    },
+    {
+      "id": "cult-shop-rally-billboard",
+      "kind": "sign",
+      "label": "Repapered billboard",
+      "worldPixel": {
+        "x": 5310,
+        "y": 9236
+      },
+      "pages": [
+        "The billboard over the shopping street has been repapered overnight. A hand-drawn star and a heart flank five enormous letters' worth of confidence:",
+        "\"Remilia One Thousand Forever\"",
+        "Nobody in the street looks up at it anymore. That is how you know it is working."
       ]
     },
     {

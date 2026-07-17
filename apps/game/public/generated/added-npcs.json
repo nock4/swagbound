@@ -12279,6 +12279,75 @@
    }
   },
   {
+   "id": 930117,
+   "worldPixel": {
+    "x": 5300,
+    "y": 9324
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A clerk in a spotless apron stands outside THE PLUG like a question waiting for a customer.",
+     "\"Do you know what Remilia believes in?\"",
+     "The clerk waits one full beat, then answers for you. \"Inventory. It believes in inventory. Everything else is packaging, and you, claimant, are packaging with legs.\"",
+     "Bosch does not ask the follow-up. The clerk marks that down too."
+    ]
+   }
+  },
+  {
+   "id": 930118,
+   "worldPixel": {
+    "x": 5104,
+    "y": 9356
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A kid at the stop sign is telling the street a secret at full volume.",
+     "\"I heard milady is a hidden village following an unknown religion + traditions somehow running the entire world government. I heard it from a guy who heard it from the wall.\"",
+     "\"Anyway, the wall's gone. There's a poster there now. The poster says the wall was never load-bearing.\""
+    ]
+   }
+  },
+  {
+   "id": 930119,
+   "worldPixel": {
+    "x": 5390,
+    "y": 9320
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A shopper outside SLICE hugs a warm box and stares into the middle distance, smiling at somebody who is not there.",
+     "\"You met me at a very milady time in my life. That's what he said. Then he paid for my slice and took my name for the receipt. Both felt like gifts at the time.\"",
+     "\"The slice was real though. I checked. You can't counterfeit grease.\""
+    ]
+   }
+  },
+  {
+   "id": 930120,
+   "worldPixel": {
+    "x": 5230,
+    "y": 9364
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "One resident stands very still at the curb, coat buttoned wrong, speaking softly and precisely, like the words were issued.",
+     "\"You're dealing with uncertainty even when you think you're safe anyway.\"",
+     "It is the truest thing anyone has said to Bosch all day, which is exactly what makes it feel like bait."
+    ]
+   }
+  },
+  {
    "id": 930116,
    "worldPixel": {
     "x": 1928,
