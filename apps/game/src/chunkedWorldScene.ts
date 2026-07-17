@@ -188,7 +188,7 @@ import {
 } from "./newGameOpening";
 import { equipmentSlotForItemType, PartyState, type PartyStateSnapshot } from "./partyState";
 import { advanceTimedDeliveries, completeTimedDelivery, createTimedDeliveryRuntimeState, type TimedDeliveryRuntimeState } from "./timedDelivery";
-import { currentObjectiveNpcHint, currentObjectiveText as resolveCurrentObjectiveText } from "./objectives";
+import { currentObjectiveNpcHint, currentObjectiveText as resolveCurrentObjectiveText, type OpeningObjectiveContext } from "./objectives";
 import { createBattleSfx, type BattleSfx, type BattleSfxCue } from "./audio/battleSfx";
 import { hasStatus, STATUS_AILMENTS, type StatusAilment } from "./statusEffects";
 import type { OverworldStatusHudView } from "./overworldStatusHud";
@@ -5595,14 +5595,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.menuScreens = new Map(screens.map((screen) => [screen.id, screen]));
   }
 
-  private currentObjectiveText(): string | undefined {
+  private openingObjectiveContext(): OpeningObjectiveContext {
     const sequence = this.data_.earlyGameSequence;
-    const phase = resolveOpeningPhase(this.gameFlags);
-    return resolveCurrentObjectiveText(this.gameFlags, this.data_.objectives, {
+    return {
       sequence,
-      phase,
+      phase: resolveOpeningPhase(this.gameFlags),
       openingGatesActive: openingGatesActive(sequence, this.gameFlags)
-    });
+    };
+  }
+
+  private currentObjectiveText(): string | undefined {
+    return resolveCurrentObjectiveText(this.gameFlags, this.data_.objectives, this.openingObjectiveContext());
   }
 
   overworldStatusHud(): OverworldStatusHudView {
@@ -6471,7 +6474,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private currentNpcGuidance(npcId: number): string | undefined {
-    return currentObjectiveNpcHint(this.gameFlags, this.data_.objectives, npcId);
+    return currentObjectiveNpcHint(this.gameFlags, this.data_.objectives, npcId, this.openingObjectiveContext());
   }
 
   private overworldInteractableById(id: string | undefined): OverworldInteractable | undefined {

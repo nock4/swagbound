@@ -318,6 +318,12 @@ export class UiScene extends Phaser.Scene {
   }
 
   showCinematicCaption(text: string): void {
+    // A blank authored caption means "no caption for this shot" (the flyover
+    // data can silence individual shots without falling back to legacy copy).
+    if (text.trim() === "") {
+      this.hideCinematicCaption(true);
+      return;
+    }
     this.cinematicCaptionText = text;
     const caption = this.cinematicCaption;
     if (!caption) {

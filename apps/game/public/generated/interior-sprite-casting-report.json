@@ -6,10 +6,10 @@
     "assigned": 337,
     "friendlyLswAssigned": 317,
     "hostileMiladyAssigned": 20,
-    "preservedAuthoredNpcOverrides": 39,
+    "preservedAuthoredNpcOverrides": 40,
     "preservedResolvedImageMarkers": 32,
     "protectedNpcs": 0,
-    "coverageSkipped": 87,
+    "coverageSkipped": 86,
     "unresolvedComponents": 1
   },
   "rooms": [

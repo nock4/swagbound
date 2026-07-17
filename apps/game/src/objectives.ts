@@ -66,17 +66,24 @@ export type OpeningObjectiveContext = {
 };
 
 /** Data-driven objective match, without the hardcoded cold-signal fallback. */
-function dataObjectiveText(
+function dataObjectiveEntry(
   flags: ObjectiveFlagReader,
   objectives: Objectives | undefined
-): string | undefined {
+): ObjectiveEntry | undefined {
   const matches = (objective: ObjectiveEntry): boolean =>
     objective.when.requireFlags.every((flag) => flags.has(flag)) &&
     objective.when.blockFlags.every((flag) => !flags.has(flag));
   return (
     objectives?.objectives.find((objective) => objective.id !== "fallback" && matches(objective)) ??
     objectives?.objectives.find((objective) => objective.id === "fallback" && matches(objective))
-  )?.text;
+  );
+}
+
+function dataObjectiveText(
+  flags: ObjectiveFlagReader,
+  objectives: Objectives | undefined
+): string | undefined {
+  return dataObjectiveEntry(flags, objectives)?.text;
 }
 
 export function currentObjectiveText(
@@ -121,12 +128,34 @@ export function currentObjective(flags: ObjectiveFlagReader, objectives: Objecti
 export function currentObjectiveNpcHint(
   flags: ObjectiveFlagReader,
   objectives: Objectives | undefined,
-  npcId: number
+  npcId: number,
+  opening?: OpeningObjectiveContext
 ): string | undefined {
+  // Mirror currentObjectiveText: in the new-opening regime, hint NPCs recite
+  // the PHASE objective lead, never the retired cold-signal hint list (the
+  // legacy currentObjective resolver hardcodes act1-cold-signal pre-meteor).
+  if (opening?.sequence.phaseGatesEnabled) {
+    if (opening.openingGatesActive) {
+      const text = opening.sequence.phaseObjectives?.[opening.phase];
+      return text === "" ? undefined : text;
+    }
+    if (opening.phase === "morning") {
+      const entry = dataObjectiveEntry(flags, objectives);
+      if (!entry) {
+        const morning = opening.sequence.phaseObjectives?.morning ?? opening.sequence.morningObjective;
+        return morning === "" ? undefined : morning;
+      }
+      return objectiveHintFor(entry, npcId);
+    }
+  }
   const objective = currentObjective(flags, objectives);
   if (!objective) {
     return undefined;
   }
+  return objectiveHintFor(objective, npcId);
+}
+
+function objectiveHintFor(objective: ObjectiveEntry, npcId: number): string {
   const hints = objective.npcHints?.length
     ? objective.npcHints
     : OBJECTIVE_HINTS[objective.id] ?? [objective.text];
