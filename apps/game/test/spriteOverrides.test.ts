@@ -191,24 +191,25 @@ describe("sprite override helpers", () => {
     ));
     const ids = addedNpcs.npcs.map((npc) => String(npc.id));
     const byNpcId = overrides.byNpcId ?? {};
-    // Bonkle stays an overlay NPC; Sal/Morrow skin the real EB shop clerks (404/749).
+    // 2026-07-18: Sal/Morrow/Bonkle adopted good-new-sprites overworld skins,
+    // completing the Anchor96 casting (655/655). Bonkle (100102) now flows through
+    // the general gns assertion below; only the meteor prop stays a named exception.
     const namedAdded: Record<string, string> = {
-      "100102": "assets/swagbound/npc/npc-bonkle.png",
       // The landed meteor prop is vanilla-EB-extracted art at native 46x22 scale,
       // not a good-new-sprites overworld skin.
       "910207": "assets/swagbound/props/meteor-ow.png"
     };
     const clerkOverrides: Record<string, string> = {
-      "404": "assets/swagbound/npc/npc-sal.png",
-      "749": "assets/swagbound/npc/npc-morrow.png"
+      "404": "assets/swagbound/overworld-npc/gns-lsw-1130-ow.png",
+      "749": "assets/swagbound/overworld-npc/gns-lsw-2441-ow.png"
     };
 
     expect(overrides.player?.image).toBe("assets/swagbound/hero/bosch-hood-walk.png");
 
-    // Clerks (404/749) keep their bespoke EB-clerk skins.
+    // Clerks (404/749) now carry good-new-sprites overworld skins like the rest of the cast.
     expect(Object.keys(byNpcId)).toEqual(expect.arrayContaining(["404", "749"]));
     for (const [id, image] of Object.entries(clerkOverrides)) {
-      expect(byNpcId[id]).toMatchObject({ image, frameWidth: 80, frameHeight: 80, displayHeight: 24, originX: 0.5, originY: 1 });
+      expect(byNpcId[id]).toMatchObject({ image, frameWidth: 48, frameHeight: 48, displayHeight: 24, originX: 0.5, originY: 1 });
     }
 
     // Every added NPC that carries a byNpcId skin is sourced from the good-new-sprites
@@ -283,9 +284,11 @@ describe("named NPC trio (Bonkle / Sal / Morrow)", () => {
     const customDialogue = JSON.parse(await readFile(resolve("content/custom-dialogue.json"), "utf8"));
 
     // Sal -> EB drug-store clerk (npc 404), Morrow -> EB market clerk (npc 749).
+    // 2026-07-18: skins adopted good-new-sprites overworld art (Anchor96 casting complete);
+    // dialogue refs / shop assignments unchanged.
     const clerks = [
-      { npcId: 404, sprite: "assets/swagbound/npc/npc-sal.png", ref: "interior:corner-shop-v0", shop: 1 },
-      { npcId: 749, sprite: "assets/swagbound/npc/npc-morrow.png", ref: "interior:burger-shop-v0", shop: 4 }
+      { npcId: 404, sprite: "assets/swagbound/overworld-npc/gns-lsw-1130-ow.png", ref: "interior:corner-shop-v0", shop: 1 },
+      { npcId: 749, sprite: "assets/swagbound/overworld-npc/gns-lsw-2441-ow.png", ref: "interior:burger-shop-v0", shop: 4 }
     ];
     for (const c of clerks) {
       expect(overrides.byNpcId?.[String(c.npcId)]?.image).toBe(c.sprite);
@@ -295,8 +298,9 @@ describe("named NPC trio (Bonkle / Sal / Morrow)", () => {
       expect(entry?.shop).toBe(c.shop);
     }
 
-    // Bonkle stays an overlay NPC (added npc 100102) with a dialogue ref, no shop.
-    expect(overrides.byNpcId?.["100102"]?.image).toBe("assets/swagbound/npc/npc-bonkle.png");
+    // Bonkle stays an overlay NPC (added npc 100102) with a dialogue ref, no shop;
+    // 2026-07-18 skin adopted good-new-sprites overworld art.
+    expect(overrides.byNpcId?.["100102"]?.image).toBe("assets/swagbound/overworld-npc/gns-lsw-3010-ow.png");
     const bonkle = added.npcs.find((n) => n.id === 100102)?.interaction;
     expect(bonkle?.ref).toBe("interior:neighbor-house-v0");
     expect(bonkle?.shop).toBeUndefined();

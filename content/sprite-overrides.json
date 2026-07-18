@@ -704,9 +704,9 @@
    "originY": 1
   },
   "404": {
-   "image": "assets/swagbound/npc/npc-sal.png",
-   "frameWidth": 80,
-   "frameHeight": 80,
+   "image": "assets/swagbound/overworld-npc/gns-lsw-1130-ow.png",
+   "frameWidth": 48,
+   "frameHeight": 48,
    "animations": {
     "down": [
      0
@@ -924,9 +924,9 @@
    "originY": 1
   },
   "749": {
-   "image": "assets/swagbound/npc/npc-morrow.png",
-   "frameWidth": 80,
-   "frameHeight": 80,
+   "image": "assets/swagbound/overworld-npc/gns-lsw-2441-ow.png",
+   "frameWidth": 48,
+   "frameHeight": 48,
    "animations": {
     "down": [
      0
@@ -1782,9 +1782,9 @@
    "originY": 1
   },
   "100102": {
-   "image": "assets/swagbound/npc/npc-bonkle.png",
-   "frameWidth": 80,
-   "frameHeight": 80,
+   "image": "assets/swagbound/overworld-npc/gns-lsw-3010-ow.png",
+   "frameWidth": 48,
+   "frameHeight": 48,
    "animations": {
     "down": [
      0
