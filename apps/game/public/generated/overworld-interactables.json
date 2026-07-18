@@ -560,6 +560,34 @@
       ]
     },
     {
+      "id": "cult-museum-invisible-entry",
+      "kind": "examine",
+      "label": "Empty display case",
+      "worldPixel": {
+        "x": 5888,
+        "y": 8528
+      },
+      "pages": [
+        "EXHIBIT: Untitled Entry. Acc. no. withheld. The case is empty. The label insists it is not.",
+        "The piece is a single published character that cannot be seen. Five hundred witnesses are on record. The record refuses to treat it as empty.",
+        "Bosch looks closer. There is nothing to look closer at. The case logs the attempt anyway."
+      ]
+    },
+    {
+      "id": "cult-registry-spotlight-poster",
+      "kind": "examine",
+      "label": "Registry poster",
+      "worldPixel": {
+        "x": 2204,
+        "y": 7292
+      },
+      "pages": [
+        "A fresh Registry poster on the notice board, official glue, official font:",
+        "\"You can pin the community to your profile by clicking the 'spotlight' icon. Remilia World Order.\"",
+        "Below, a diagram of a hand clicking a small star. The hand in the diagram is smiling. Hands do not smile."
+      ]
+    },
+    {
       "id": "cult-shop-locked-display",
       "kind": "examine",
       "label": "Locked display",
