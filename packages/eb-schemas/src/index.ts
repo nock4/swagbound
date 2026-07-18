@@ -1220,6 +1220,8 @@ export const StoryTriggerSchema = z.object({
   clearFlags: z.array(z.string()).optional(),
   /** Grant these item ids after dialogue if the party does not already carry them. */
   grantItems: z.array(z.number().int().nonnegative()).optional(),
+  /** Grant this Card NFT (card-nfts.json id) after dialogue: sets its owned flag and shows the binder ceremony overlay. Used by the Eight Sources reveal triggers. */
+  grantCardId: z.string().trim().min(1).optional(),
   /** Archivist spot id to run through the Wandering Photographer-style filing sequence. */
   archivistSpotId: z.number().int().positive().optional(),
   /** When set, fire this music cue (a music-manifest cue id, e.g. "ending") as a forced overworld track when the trigger's effects run. Persists over sector-based music until another trigger or interior change replaces it. */

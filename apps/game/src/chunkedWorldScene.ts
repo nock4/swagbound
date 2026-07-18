@@ -8163,6 +8163,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     trigger.setFlags?.forEach((flag) => this.gameFlags.set(flag));
     trigger.clearFlags?.forEach((flag) => this.gameFlags.unset(flag));
     this.grantStoryTriggerItems(trigger.grantItems);
+    this.grantStoryTriggerCard(trigger.grantCardId, trigger.id);
     this.updateAct1NightTint({ fade: routeOpenJustSet });
     this.syncOverworldMusicAfterRouteOpen(routeOpenJustSet);
     this.reconcileRecruits({ announce: true });
@@ -8202,6 +8203,26 @@ export class ChunkedWorldScene extends Phaser.Scene {
         this.playInteractionSfx("itemGet");
       }
     }
+    this.refreshMenuScreens();
+  }
+
+  /** Trigger-granted Card NFT: set the owned flag and run the binder ceremony overlay (Eight Sources reveals). */
+  private grantStoryTriggerCard(cardId: string | undefined, triggerId: string): void {
+    if (!cardId) {
+      return;
+    }
+    const card = cardById(this.data_.cardNfts, cardId);
+    if (!card) {
+      this.warnStoryTriggerSkip(`card_missing:${triggerId}:${cardId}`);
+      return;
+    }
+    const ownedFlag = cardOwnedFlag(card.id);
+    if (this.gameFlags.has(ownedFlag)) {
+      return;
+    }
+    this.gameFlags.set(ownedFlag);
+    this.playInteractionSfx("itemGet");
+    this.showBinderCardOverlay(card);
     this.refreshMenuScreens();
   }
 

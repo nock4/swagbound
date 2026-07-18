@@ -12279,6 +12279,166 @@
    }
   },
   {
+   "id": 930121,
+   "worldPixel": {
+    "x": 1936,
+    "y": 1464
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "signal:threshold_cleared"
+   ],
+   "interaction": {
+    "pages": [
+     "The Archivist is here, camera capped, kneeling by the threshold with a pencil.",
+     "\"Site one. The sound of your name, said once, by someone who had never heard it before. I wrote it down the slow way. Machines keep quoting it; the pencil just keeps it.\"",
+     "The Archivist notes the visit in pencil. Pencil, it explains, is how you file something you might want to give back."
+    ]
+   }
+  },
+  {
+   "id": 930122,
+   "worldPixel": {
+    "x": 2268,
+    "y": 7256
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "source:intake-ledger:cleared"
+   ],
+   "interaction": {
+    "pages": [
+     "The Archivist stands by the intake book, gloves on, turning no pages.",
+     "\"Site two. A signature that shakes a little. I photographed the shake, not the name. The name was never the original part.\"",
+     "The Archivist notes the visit in pencil. Pencil, it explains, is how you file something you might want to give back."
+    ]
+   }
+  },
+  {
+   "id": 930123,
+   "worldPixel": {
+    "x": 5132,
+    "y": 1756
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "source:spring:cleared"
+   ],
+   "interaction": {
+    "pages": [
+     "The Archivist crouches at the spring, holding a slide up to the warm light.",
+     "\"Site three. Water that tastes like the day. I did not bottle any. Some records you keep by leaving them where they are.\"",
+     "The Archivist notes the visit in pencil. Pencil, it explains, is how you file something you might want to give back."
+    ]
+   }
+  },
+  {
+   "id": 930124,
+   "worldPixel": {
+    "x": 5330,
+    "y": 9668
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "source:undelivered:cleared"
+   ],
+   "interaction": {
+    "pages": [
+     "The Archivist shelters under the crate stacks, coat dark with rain.",
+     "\"Site four. Rain on cardboard, a parcel never opened. I logged it unopened. Opening it would have filed it, and it has been through enough.\"",
+     "The Archivist notes the visit in pencil. Pencil, it explains, is how you file something you might want to give back."
+    ]
+   }
+  },
+  {
+   "id": 930125,
+   "worldPixel": {
+    "x": 2408,
+    "y": 6784
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "source:vault:cleared"
+   ],
+   "interaction": {
+    "pages": [
+     "The Archivist stands with its back to the certificate wall, deliberately.",
+     "\"Site five. A price tag and lunch money. That purchase was the only honest paperwork in this building, so it is the only page I kept.\"",
+     "The Archivist notes the visit in pencil. Pencil, it explains, is how you file something you might want to give back."
+    ]
+   }
+  },
+  {
+   "id": 930126,
+   "worldPixel": {
+    "x": 6840,
+    "y": 3024
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "source:pier:cleared"
+   ],
+   "interaction": {
+    "pages": [
+     "The Archivist sits on the wharf edge, camera in its lap, listening.",
+     "\"Site six. The crowd breathing in the quiet parts. No recording kept the breath, so I did not bring a recorder. I brought ears.\"",
+     "The Archivist notes the visit in pencil. Pencil, it explains, is how you file something you might want to give back."
+    ]
+   }
+  },
+  {
+   "id": 930127,
+   "worldPixel": {
+    "x": 2688,
+    "y": 9616
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "source:vacancy:cleared"
+   ],
+   "interaction": {
+    "pages": [
+     "The Archivist watches the dead marquee with a stopwatch, patient as dust.",
+     "\"Site seven. Your own thought with one word changed. I timed the change. You noticed faster than the sign expected. The noticing is yours, and now it is also on file. Your file. The good kind.\"",
+     "The Archivist notes the visit in pencil. Pencil, it explains, is how you file something you might want to give back."
+    ]
+   }
+  },
+  {
+   "id": 930128,
+   "worldPixel": {
+    "x": 192,
+    "y": 428
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "requireFlags": [
+    "source:first-record:cleared"
+   ],
+   "interaction": {
+    "pages": [
+     "The Archivist stands at the edge of the one warm light, refusing to step into it.",
+     "\"Site eight. Side B ends early, and the last track is a heartbeat. I have nothing to add. The record was complete before records were invented.\"",
+     "The Archivist notes the visit in pencil. Pencil, it explains, is how you file something you might want to give back."
+    ]
+   }
+  },
+  {
    "id": 930117,
    "worldPixel": {
     "x": 5300,

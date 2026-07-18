@@ -32,8 +32,9 @@ describe("sprite atlas extractor", () => {
       // + 5 MILADY CULT found-speech NPCs (930100-930104; byNpcId skins)
       // + 6 LSW found-speech slice NPCs (930110-930115; byNpcId skins)
       // + the chant-vs-name pending witness (930116; byNpcId skin)
-      // + 4 Dead Letter shop-street found-speech NPCs (930117-930120; byNpcId skins).
-      usedByNpcCount: 727,
+      // + 4 Dead Letter shop-street found-speech NPCs (930117-930120; byNpcId skins)
+      // + 8 Eight Sources Archivists (930121-930128; archivist-001-ow skin).
+      usedByNpcCount: 735,
       overridden: true,
       overrideKind: "group"
     });
