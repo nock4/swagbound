@@ -529,6 +529,7 @@
         "x": 2144,
         "y": 1172
       },
+      "sprite": "assets/swagbound/props/tally-post.png",
       "pages": [
         "The grey post is bolted to the old lamp. The lamp did not agree to this. A small plate sits under the grille:",
         "ENTRIES TODAY: 1. SOURCE: 0. VESSEL: 0. CLAIMANT: 0. DERIVATIVE: 0. PENDING: 1.",
@@ -629,6 +630,20 @@
       ]
     },
     {
+      "id": "cult-lsw-listening-post-box",
+      "kind": "examine",
+      "label": "Listening post",
+      "worldPixel": {
+        "x": 360,
+        "y": 7424
+      },
+      "sprite": "assets/swagbound/props/listening-post.png",
+      "pages": [
+        "The grey box hums on its bolts. The grille is exactly mouth-height for someone who kneels.",
+        "Its counter shows a number that goes up when nothing happens."
+      ]
+    },
+    {
       "id": "cult-lsw-crt",
       "kind": "examine",
       "label": "Warped CRT",
@@ -636,6 +651,7 @@
         "x": 332,
         "y": 7456
       },
+      "sprite": "assets/swagbound/props/warped-crt.png",
       "pages": [
         "A warped CRT is wedged into the monitor wall, running on no cord anyone can find. The tube breathes. Text swims up through the static:",
         "\"Screens are portals thru the metaphysical, and everything is real and I love you.\"",
@@ -651,6 +667,7 @@
         "x": 580,
         "y": 7372
       },
+      "sprite": "assets/swagbound/props/intruder-shrine.png",
       "pages": [
         "By the spring squats a tiny shrine that was not here last season. Bottle caps, a doll's mirror, and a hand-lettered card:",
         "\"every time you say milady you add 30 seconds to your life\"",
