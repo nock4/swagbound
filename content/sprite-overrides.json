@@ -20194,6 +20194,36 @@
    "originX": 0.5,
    "originY": 1
   }
+  ,
+  "910208": {
+   "image": "assets/swagbound/overworld-npc/gns-malady-001-ow.png",
+   "frameWidth": 48,
+   "frameHeight": 48,
+   "animations": { "down": [0], "left": [0], "right": [0], "up": [0] },
+   "displayHeight": 24,
+   "originX": 0.5,
+   "originY": 1
+  }
+  ,
+  "910209": {
+   "image": "assets/swagbound/overworld-npc/gns-malady-002-ow.png",
+   "frameWidth": 48,
+   "frameHeight": 48,
+   "animations": { "down": [0], "left": [0], "right": [0], "up": [0] },
+   "displayHeight": 24,
+   "originX": 0.5,
+   "originY": 1
+  }
+  ,
+  "910210": {
+   "image": "assets/swagbound/overworld-npc/gns-lsw-312-ow.png",
+   "frameWidth": 48,
+   "frameHeight": 48,
+   "animations": { "down": [0], "left": [0], "right": [0], "up": [0] },
+   "displayHeight": 24,
+   "originX": 0.5,
+   "originY": 1
+  }
  },
  "byEnemyId": {
   "1": {

@@ -2529,7 +2529,7 @@
   },
   {
    "id": "intro2-meteor-gathering",
-   "comment": "New opening meteor gathering. On arrival, establish the meteor sitting in the crater and the four Milady manifestations around it (each says only 'milady' when talked to). Then MiFella gives the go-home-to-bed beat. The witnesses and the go-uphill hint are gone.",
+   "comment": "New opening meteor gathering. On arrival, establish the meteor sitting in the crater and the six Milady manifestations around it (each says only 'milady' when talked to). Then MiFella gives the go-home-to-bed beat. The witnesses and the go-uphill hint are gone.",
    "trigger": {
     "kind": "area",
     "area": {
@@ -2552,7 +2552,7 @@
      "op": "dialogue",
      "pages": [
       "A meteor sits in the crater, still warm, humming a little.",
-      "Four shapes stand around it. Each one is wearing a face you almost know.",
+      "Six shapes stand around it. Each one is wearing a face you almost know.",
       "They do not look up. They only say the one word, to no one in particular."
      ]
     },

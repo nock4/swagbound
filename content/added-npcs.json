@@ -12652,6 +12652,63 @@
      "\"It is not five in the afternoon. It is always about to be.\""
     ]
    }
+  },
+  {
+   "id": 910208,
+   "worldPixel": {
+    "x": 2016,
+    "y": 168
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "witness-4"
+   },
+   "alwaysSpawn": true
+  },
+  {
+   "id": 910209,
+   "worldPixel": {
+    "x": 2136,
+    "y": 120
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "witness-5"
+   },
+   "alwaysSpawn": true
+  },
+  {
+   "id": 910210,
+   "worldPixel": {
+    "x": 2320,
+    "y": 232
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "requireFlags": [
+    "intro:wake-done"
+   ],
+   "blockFlags": [
+    "intro:morning"
+   ],
+   "interaction": {
+    "ref": "lsw-witness"
+   },
+   "alwaysSpawn": true
   }
  ]
 }

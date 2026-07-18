@@ -33,8 +33,9 @@ describe("sprite atlas extractor", () => {
       // + 6 LSW found-speech slice NPCs (930110-930115; byNpcId skins)
       // + the chant-vs-name pending witness (930116; byNpcId skin)
       // + 4 Dead Letter shop-street found-speech NPCs (930117-930120; byNpcId skins)
-      // + 8 Eight Sources Archivists (930121-930128; archivist-001-ow skin).
-      usedByNpcCount: 735,
+      // + 8 Eight Sources Archivists (930121-930128; archivist-001-ow skin)
+      // + 3 opening meteor-scene additions (910208/910209 Miladys, 910210 LSW traveler).
+      usedByNpcCount: 738,
       overridden: true,
       overrideKind: "group"
     });

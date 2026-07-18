@@ -40,6 +40,17 @@
   "meteor-inspect": [
    "The meteor sits in its crater, still warm.",
    "If you lean close, the hum almost sorts itself into a word."
+  ],
+  "witness-4": [
+   "milady"
+  ],
+  "witness-5": [
+   "milady"
+  ],
+  "lsw-witness": [
+   "A traveler in a Little Swag World bucket hat has stopped dead on the path, staring up at the ring of figures around the crater.",
+   "\"Twin. TWIN. What ARE those things? They just stand there saying the one word at the rock. 'milady.' Over and over.\"",
+   "\"I came up from the source world this morning. I have never heard that word in my life. So why does it sound like it already knows mine?\""
   ]
  },
  "nightCast": {
@@ -51,7 +62,10 @@
    910204,
    910205,
    910206,
-   910207
+   910207,
+   910208,
+   910209,
+   910210
   ]
  },
  "sourceCheckAvailabilityPhase": "morning",
@@ -83,7 +97,10 @@
    "mifella-going-home",
    "home-scene",
    "mifella-outside",
-   "meteor-inspect"
+   "meteor-inspect",
+   "witness-4",
+   "witness-5",
+   "lsw-witness"
   ],
   "npcIds": [
    910200,
@@ -93,7 +110,10 @@
    910204,
    910205,
    910206,
-   910207
+   910207,
+   910208,
+   910209,
+   910210
   ],
   "cutsceneIds": [
    "signal-town-cold-signal-open",
@@ -114,7 +134,10 @@
    910204,
    910205,
    910206,
-   910207
+   910207,
+   910208,
+   910209,
+   910210
   ]
  }
 }

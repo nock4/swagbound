@@ -30,8 +30,8 @@ const OPENING_DIALOGUE = {
     "Bosch, get up! You gotta see this!",
     "Something came down on the hill. Meet me outside."
   ],
-  // Playthrough notes 2026-07-16: the hill cast is four Milady manifestations
-  // and each says only the one word.
+  // 2026-07-18: the hill cast is six Milady manifestations, each saying only the
+  // one word; a lone Little Swag World traveler on the path names the confusion.
   "witness-1": ["milady"],
   "witness-2": ["milady"],
   "witness-3": ["milady"],
@@ -52,13 +52,21 @@ const OPENING_DIALOGUE = {
   "meteor-inspect": [
     "The meteor sits in its crater, still warm.",
     "If you lean close, the hum almost sorts itself into a word."
+  ],
+  "witness-4": ["milady"],
+  "witness-5": ["milady"],
+  "lsw-witness": [
+    "A traveler in a Little Swag World bucket hat has stopped dead on the path, staring up at the ring of figures around the crater.",
+    "\"Twin. TWIN. What ARE those things? They just stand there saying the one word at the rock. 'milady.' Over and over.\"",
+    "\"I came up from the source world this morning. I have never heard that word in my life. So why does it sound like it already knows mine?\""
   ]
 } as const;
 
 // 910200-910205 = original night cast; 910206 = MiFella outside the house
-// (dashes uphill); 910207 = the landed meteor prop.
+// (dashes uphill); 910207 = the landed meteor prop. 2026-07-18: 910208/910209 =
+// two more meteor Miladys (six total); 910210 = the LSW traveler on the path.
 const NIGHT_CAST_IDS = [910200, 910201, 910202, 910203, 910204, 910205] as const;
-const OWNED_NPC_IDS = [...NIGHT_CAST_IDS, 910206, 910207] as const;
+const OWNED_NPC_IDS = [...NIGHT_CAST_IDS, 910206, 910207, 910208, 910209, 910210] as const;
 
 describe("early game sequence ownership", () => {
   it("preserves exact draft copy and ownership", () => {
@@ -150,8 +158,9 @@ describe("early game sequence ownership", () => {
     for (const term of denied) {
       expect(playerFacingText).not.toContain(term);
     }
-    // Four manifestations on the hill, each saying only the one word.
-    expect(playerFacingText.match(/\bmilady\b/g) ?? []).toHaveLength(4);
+    // Six manifestations on the hill (each saying the one word) + the traveler
+    // repeating it once = seven lowercase "milady", zero capitalized.
+    expect(playerFacingText.match(/\bmilady\b/g) ?? []).toHaveLength(7);
     expect(playerFacingText.match(/\bMilady\b/g) ?? []).toHaveLength(0);
   });
 
@@ -159,15 +168,18 @@ describe("early game sequence ownership", () => {
     const nightCast = addedNpcs.npcs.filter((npc) => OWNED_NPC_IDS.includes(npc.id as never));
     const expectedSprites: Record<string, string> = {
       "910200": "assets/swagbound/overworld-npc/mifella-001-ow.png",
-      // Playthrough notes 2026-07-16: three distinct Milady manifestations
-      // replace the LSW witnesses so the crater is ringed by four Miladys.
+      // 2026-07-18: the crater is ringed by six distinct Milady manifestations
+      // (910201-910204 + 910208-910209); 910210 is the LSW traveler.
       "910201": "assets/swagbound/overworld-npc/malady-002-ow.png",
       "910202": "assets/swagbound/overworld-npc/malady-005-ow.png",
       "910203": "assets/swagbound/overworld-npc/gns-malady-003-ow.png",
       "910204": "assets/swagbound/overworld-npc/malady-001-ow.png",
       "910205": "assets/swagbound/overworld-npc/mifella-001-ow.png",
       "910206": "assets/swagbound/overworld-npc/mifella-001-ow.png",
-      "910207": "assets/swagbound/props/meteor-ow.png"
+      "910207": "assets/swagbound/props/meteor-ow.png",
+      "910208": "assets/swagbound/overworld-npc/gns-malady-001-ow.png",
+      "910209": "assets/swagbound/overworld-npc/gns-malady-002-ow.png",
+      "910210": "assets/swagbound/overworld-npc/gns-lsw-312-ow.png"
     };
     const expectedBlockFlags: Record<string, string[] | undefined> = {
       "910206": ["intro:outside-dash-done", "intro:morning"],
