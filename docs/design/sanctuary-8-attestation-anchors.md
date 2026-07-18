@@ -134,3 +134,31 @@ Beat: the Mixtape completes; it plays through; `raid:morningside:active`.
 | source:pier:cleared | 195 FLG_WIN_PINK_BOSS | 110 FLG_STEP_CAPEESTATE |
 | source:vacancy:cleared | 196 FLG_WIN_LUMI_BOSS | 370 FLG_STEP_DSRT |
 | source:first-record:cleared | 197 FLG_WIN_FIRE_BOSS | 371 FLG_STEP_MGKT |
+
+## 2026-07-17 status + remaining work (Archivist + per-site cards)
+
+SHIPPED as of b39c7e14 era: all 8 boss gates armed/visible with intro dialogue,
+win flags, flag-map bridges, per-site fragment reveal triggers, and mixtape
+grants (item 196). Placement audit 2026-07-17: sites 1-5, 7, 8 read correctly
+against their landmarks; site 6 was in a Summers street and has been MOVED to
+the real wharf end (boss 6904,3048; transmitter 6936,3048; reveal area
+6856,3016 80x56). Verified in pixels.
+
+REMAINING (next session, after the Archivist sprite lands from the Codex
+sprite backlog batch):
+
+1. **Per-site Attestation cards.** The reveal triggers currently grant only
+   item 196. Design: add an optional `grantCardId` field to the story-trigger
+   schema (StoryTriggerSchema in packages/eb-schemas) consumed at
+   applyStoryTriggerEffects time by the existing binder overlay path
+   (showBinderCardOverlay, used by the Attestation ceremony at
+   chunkedWorldScene ~6195). Eight card picks from card-nfts.json, one per
+   site region. Keep ids stable: reuse the reveal trigger ids, additive field
+   only.
+2. **The Archivist at cleared sites.** One added NPC per cleared site
+   (requireFlags = the site's cleared flag), same figure at all eight (the
+   photo-spots character), who restates the fragment and logs the visit.
+   Needs the Archivist sprite (task queued in the Codex batch); use the
+   930xxx id block and byNpcId skin like the found-speech NPCs.
+3. Acceptance: clear a site fresh (boss fight, not flags), see fragment ->
+   mixtape grant -> card overlay -> Archivist present on return visit.

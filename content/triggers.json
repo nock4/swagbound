@@ -444,10 +444,10 @@
   },
   {
    "id": "source-pier",
-   "comment": "Eight Sources site 6: The Broadcast Pier at Solana Beach. Requires Act 3 complete and raises the Pink Cloud bridge flag through content/flag-map.json.",
+   "comment": "Eight Sources site 6: The Broadcast Pier at Solana Beach. Requires Act 3 complete and raises the Pink Cloud bridge flag through content/flag-map.json. PLACEMENT POLISH 2026-07-17: moved from the Summers street (7464,2864) onto the actual wharf end (6904,3048); transmitter + reveal moved with it.",
    "boss": {
-    "x": 7464,
-    "y": 2864,
+    "x": 6904,
+    "y": 3048,
     "facing": "left"
    },
    "once": true,
@@ -467,10 +467,10 @@
   {
    "id": "source-pier-reveal",
    "area": {
-    "x": 7428,
-    "y": 2824,
-    "w": 120,
-    "h": 88
+    "x": 6856,
+    "y": 3016,
+    "w": 80,
+    "h": 56
    },
    "once": true,
    "requireFlags": [
