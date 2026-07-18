@@ -4623,7 +4623,7 @@
    "id": 101733,
    "worldPixel": {
     "x": 2020,
-    "y": 1620
+    "y": 1724
    },
    "spriteGroup": 59,
    "facing": "up",
@@ -4639,8 +4639,8 @@
   {
    "id": 101734,
    "worldPixel": {
-    "x": 1860,
-    "y": 1644
+    "x": 1862,
+    "y": 1756
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -12282,7 +12282,7 @@
    "id": 930121,
    "worldPixel": {
     "x": 1936,
-    "y": 1464
+    "y": 1448
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -12301,8 +12301,8 @@
   {
    "id": 930122,
    "worldPixel": {
-    "x": 2268,
-    "y": 7256
+    "x": 2252,
+    "y": 7290
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -12321,8 +12321,8 @@
   {
    "id": 930123,
    "worldPixel": {
-    "x": 5132,
-    "y": 1756
+    "x": 5106,
+    "y": 1796
    },
    "spriteGroup": 59,
    "facing": "down",
@@ -12361,7 +12361,7 @@
   {
    "id": 930125,
    "worldPixel": {
-    "x": 2408,
+    "x": 2430,
     "y": 6784
    },
    "spriteGroup": 59,
@@ -12510,11 +12510,11 @@
   {
    "id": 930116,
    "worldPixel": {
-    "x": 1928,
-    "y": 1620
+    "x": 1972,
+    "y": 1724
    },
    "spriteGroup": 59,
-   "facing": "left",
+   "facing": "down",
    "alwaysSpawn": true,
    "requireFlags": [
     "tally:act1:refused"
