@@ -1823,6 +1823,13 @@
    "w": 40,
    "h": 16,
    "note": "seal FULL dead band left half (Nick pinned 3rd time at 7514,331 via the 7504-7516 gap; completes the 7544 seal)"
+  },
+  {
+   "x": 2224,
+   "y": 7298,
+   "w": 104,
+   "h": 20,
+   "note": "[roof-seal] registry house (Postwick) walk-behind roof band was reachable on foot and rendered as standing-on-roof at the front edge; make solid so the player rounds the house instead. Sides x<2224 / x>2328 stay open for the walk-around path."
   }
  ]
 }
