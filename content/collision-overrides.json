@@ -1830,6 +1830,664 @@
    "w": 104,
    "h": 20,
    "note": "[roof-seal] registry house (Postwick) walk-behind roof band was reachable on foot and rendered as standing-on-roof at the front edge; make solid so the player rounds the house instead. Sides x<2224 / x>2328 stay open for the walk-around path."
+  },
+  {
+   "x": 1024,
+   "y": 1384,
+   "w": 48,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1032,
+   "y": 1376,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1040,
+   "y": 1368,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1048,
+   "y": 1360,
+   "w": 8,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1120,
+   "y": 1376,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1120,
+   "y": 1384,
+   "w": 56,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1120,
+   "y": 1392,
+   "w": 48,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1128,
+   "y": 1368,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1160,
+   "y": 1360,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1312,
+   "y": 1536,
+   "w": 32,
+   "h": 32,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1472,
+   "y": 6432,
+   "w": 64,
+   "h": 24,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1504,
+   "y": 6416,
+   "w": 48,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1504,
+   "y": 6424,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 1984,
+   "y": 1568,
+   "w": 16,
+   "h": 24,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2080,
+   "y": 1592,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2088,
+   "y": 1584,
+   "w": 56,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2096,
+   "y": 1576,
+   "w": 48,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2104,
+   "y": 1568,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2240,
+   "y": 1736,
+   "w": 48,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2248,
+   "y": 1728,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2256,
+   "y": 1720,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2264,
+   "y": 1712,
+   "w": 8,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2288,
+   "y": 2584,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2288,
+   "y": 2592,
+   "w": 16,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2288,
+   "y": 2600,
+   "w": 24,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2288,
+   "y": 2624,
+   "w": 40,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2288,
+   "y": 2648,
+   "w": 16,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2296,
+   "y": 2616,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2296,
+   "y": 2640,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2296,
+   "y": 2656,
+   "w": 32,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2312,
+   "y": 2576,
+   "w": 16,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2312,
+   "y": 2592,
+   "w": 16,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2312,
+   "y": 2608,
+   "w": 16,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2312,
+   "y": 2672,
+   "w": 16,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2320,
+   "y": 2648,
+   "w": 8,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2336,
+   "y": 1728,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2336,
+   "y": 1736,
+   "w": 56,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2336,
+   "y": 1744,
+   "w": 48,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2344,
+   "y": 1720,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2344,
+   "y": 2584,
+   "w": 32,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2344,
+   "y": 2600,
+   "w": 40,
+   "h": 40,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2344,
+   "y": 2640,
+   "w": 24,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2344,
+   "y": 2648,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2344,
+   "y": 2656,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2344,
+   "y": 2664,
+   "w": 24,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2344,
+   "y": 2672,
+   "w": 16,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2368,
+   "y": 1608,
+   "w": 48,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2368,
+   "y": 7072,
+   "w": 32,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2376,
+   "y": 1600,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2376,
+   "y": 1712,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2384,
+   "y": 1592,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2392,
+   "y": 1584,
+   "w": 8,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2400,
+   "y": 1536,
+   "w": 96,
+   "h": 32,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2464,
+   "y": 1600,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2464,
+   "y": 1608,
+   "w": 56,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2464,
+   "y": 1616,
+   "w": 48,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2472,
+   "y": 1592,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2496,
+   "y": 1416,
+   "w": 48,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2504,
+   "y": 1408,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2504,
+   "y": 1584,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2512,
+   "y": 1400,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2520,
+   "y": 1392,
+   "w": 8,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2528,
+   "y": 1568,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2592,
+   "y": 1408,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2592,
+   "y": 1416,
+   "w": 56,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2592,
+   "y": 1424,
+   "w": 48,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2600,
+   "y": 1400,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2624,
+   "y": 1288,
+   "w": 48,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2632,
+   "y": 1280,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2632,
+   "y": 1392,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2640,
+   "y": 1272,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2648,
+   "y": 1264,
+   "w": 8,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2720,
+   "y": 1280,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2720,
+   "y": 1288,
+   "w": 56,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2720,
+   "y": 1296,
+   "w": 48,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2728,
+   "y": 1272,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 2760,
+   "y": 1264,
+   "w": 40,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4160,
+   "y": 6400,
+   "w": 64,
+   "h": 24,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4160,
+   "y": 6424,
+   "w": 8,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4168,
+   "y": 6392,
+   "w": 88,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4176,
+   "y": 6384,
+   "w": 80,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4176,
+   "y": 6448,
+   "w": 24,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4184,
+   "y": 6376,
+   "w": 24,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4192,
+   "y": 6368,
+   "w": 8,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4192,
+   "y": 6424,
+   "w": 64,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4192,
+   "y": 6432,
+   "w": 24,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4232,
+   "y": 6376,
+   "w": 24,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4248,
+   "y": 6368,
+   "w": 8,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4256,
+   "y": 6400,
+   "w": 8,
+   "h": 24,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4928,
+   "y": 8960,
+   "w": 64,
+   "h": 24,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 4992,
+   "y": 8928,
+   "w": 64,
+   "h": 24,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 5056,
+   "y": 8968,
+   "w": 32,
+   "h": 8,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 5280,
+   "y": 9264,
+   "w": 32,
+   "h": 16,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
+  },
+  {
+   "x": 5824,
+   "y": 9232,
+   "w": 32,
+   "h": 32,
+   "note": "[roof-pocket] gen-collision-overrides enclosed roof (sanctioned tool)"
   }
  ]
 }
