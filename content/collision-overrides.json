@@ -57,6 +57,202 @@
    "w": 8,
    "h": 24,
    "note": "[milady-approach] clear the wall-edge column that catches PLAYER_FOOT_BOX on the straight-south finale approach"
+  },
+  {
+   "x": 4760,
+   "y": 6232,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4760,6232 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4736,
+   "y": 6256,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4736,6256 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4912,
+   "y": 6384,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4912,6384 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4744,
+   "y": 6608,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4744,6608 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4768,
+   "y": 6632,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4768,6632 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4888,
+   "y": 6408,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4888,6408 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4896,
+   "y": 6456,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4896,6456 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4920,
+   "y": 6480,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4920,6480 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4760,
+   "y": 6680,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4760,6680 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4736,
+   "y": 6704,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4736,6704 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4912,
+   "y": 6832,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4912,6832 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4888,
+   "y": 6856,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 4888,6856 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 6944,
+   "y": 7128,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 6944,7128 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 6968,
+   "y": 7152,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 6968,7152 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 6792,
+   "y": 7280,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 6792,7280 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 6816,
+   "y": 7304,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 6816,7304 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 6808,
+   "y": 7352,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 6808,7352 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 6784,
+   "y": 7376,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 6784,7376 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 6960,
+   "y": 7504,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 6960,7504 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 6936,
+   "y": 7528,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open foot-box for escalator door cell 6936,7528 (self row open, second row was solid; trap class per door-return-audit)"
+  },
+  {
+   "x": 4736,
+   "y": 6608,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open west-approach column for escalator cell 4744,6608 (approach second row was solid)"
+  },
+  {
+   "x": 4760,
+   "y": 6632,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open west-approach column for escalator cell 4768,6632 (approach second row was solid)"
+  },
+  {
+   "x": 6784,
+   "y": 7280,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open west-approach column for escalator cell 6792,7280 (approach second row was solid)"
+  },
+  {
+   "x": 6808,
+   "y": 7304,
+   "w": 8,
+   "h": 16,
+   "note": "[escalators] open west-approach column for escalator cell 6816,7304 (approach second row was solid)"
+  },
+  {
+   "x": 4720,
+   "y": 6600,
+   "w": 32,
+   "h": 8,
+   "note": "[escalators] open boarding-lip row above escalator cell 4744,6608 (foot-box top y-6 samples it; was solid, made standing on the cell impossible)"
+  },
+  {
+   "x": 4744,
+   "y": 6624,
+   "w": 32,
+   "h": 8,
+   "note": "[escalators] open boarding-lip row above escalator cell 4768,6632 (foot-box top y-6 samples it; was solid, made standing on the cell impossible)"
+  },
+  {
+   "x": 6768,
+   "y": 7272,
+   "w": 32,
+   "h": 8,
+   "note": "[escalators] open boarding-lip row above escalator cell 6792,7280 (foot-box top y-6 samples it; was solid, made standing on the cell impossible)"
+  },
+  {
+   "x": 6792,
+   "y": 7296,
+   "w": 32,
+   "h": 8,
+   "note": "[escalators] open boarding-lip row above escalator cell 6816,7304 (foot-box top y-6 samples it; was solid, made standing on the cell impossible)"
   }
  ],
  "solids": [
