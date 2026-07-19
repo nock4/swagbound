@@ -374,7 +374,7 @@
   },
   {
    "id": "signal-town-cold-signal-open",
-   "comment": "ACT-1 PREMISE (flowchart A1/A4/A5). Custom Swagbound cold-signal opening that stages the provenance-war thesis the EB-shaped intro never delivers: a Dox Sheet of Bosch is already circulating before he acts, the card carries the 'almost-right face' + 'I said it first' line + a checked VESSEL box, and a household voice arrives too late. Ends by aiming the player WEST at the arcade card-clique (first wayfinding cue). Area brackets the new-game spawn (2112,1768) so it fires on game start; once so it never re-fires; lockPlayer + dialogue-only steps so the player is always released.",
+   "comment": "ACT-1 PREMISE (flowchart A1/A4/A5). Custom Swagbound cold-signal opening that stages the provenance-war thesis the EB-shaped intro never delivers: a File of Bosch is already circulating before he acts, the card carries the 'almost-right face' + 'I said it first' line + a checked VESSEL box, and a household voice arrives too late. Ends by aiming the player WEST at the arcade card-clique (first wayfinding cue). Area brackets the new-game spawn (2112,1768) so it fires on game start; once so it never re-fires; lockPlayer + dialogue-only steps so the player is always released.",
    "trigger": {
     "kind": "area",
     "area": {

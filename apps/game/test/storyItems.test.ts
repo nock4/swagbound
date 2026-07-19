@@ -21,7 +21,7 @@ import {
 const doxSheet: StoryItem = {
   id: "dox-sheet",
   itemId: 206,
-  name: "Dox Sheet",
+  name: "Swag Deck",
   worldTexture: "story-item-dox-sheet",
   worldAsset: "assets/swagbound/story-items/dox-sheet-world.png",
   pickupFlag: "story-item:dox-sheet",
