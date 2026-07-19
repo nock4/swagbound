@@ -1229,7 +1229,13 @@ export const StoryTriggerSchema = z.object({
   /** Battle group id to start after dialogue (mutually exclusive with warp). */
   battleGroup: z.number().int().nonnegative().optional(),
   /** Teleport the player here after dialogue (world pixels). */
-  warp: z.object({ x: z.number(), y: z.number() }).optional()
+  warp: z.object({ x: z.number(), y: z.number() }).optional(),
+  /**
+   * Play a named audiovisual cue as the trigger fires (with its dialogue). Reusable
+   * across any beat. "understanding-lands" = the warm bloom that breaks the cold sync
+   * when kindness / recognition / understanding wins (a warm flash + a rewarding sound).
+   */
+  fx: z.enum(["understanding-lands"]).optional()
 }).superRefine((trigger, ctx) => {
   if (!trigger.area && !trigger.boss) {
     ctx.addIssue({

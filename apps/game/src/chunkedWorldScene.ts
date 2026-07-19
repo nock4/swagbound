@@ -7235,6 +7235,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
+  /**
+   * Reusable named audiovisual cue fired by story triggers (trigger.fx). The AV grammar
+   * of a Swagbound win: warmth breaking the cold sync when kindness/recognition lands.
+   */
+  private playStoryTriggerFxCue(cue: NonNullable<StoryTrigger["fx"]>): void {
+    if (cue === "understanding-lands") {
+      this.cameras.main.flash(420, 255, 210, 122); // warm gold bloom
+      this.playCutsceneSound("itemGet");
+    }
+    if (import.meta.env.DEV) {
+      const dbg = ((globalThis as Record<string, unknown>).__fxCueDebug ??= {
+        count: 0,
+        lastCue: null
+      }) as { count: number; lastCue: string | null };
+      dbg.count += 1;
+      dbg.lastCue = cue;
+    }
+  }
+
   private hexToRgb(color: string | undefined, fallback: [number, number, number]): [number, number, number] {
     if (!color) {
       return fallback;
@@ -8293,6 +8312,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       return true;
     }
 
+    if (trigger.fx) {
+      this.playStoryTriggerFxCue(trigger.fx);
+    }
     if (trigger.dialogue && trigger.dialogue.length > 0) {
       lockPlayer(this.playerState, this.playerFrames);
       this.startOverriddenScriptedDialogue(
@@ -8919,6 +8941,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private triggerBossGate(actor: BossGateRuntime): boolean {
     actor.armed = false;
     const trigger = actor.trigger;
+    if (trigger.fx) {
+      this.playStoryTriggerFxCue(trigger.fx);
+    }
     const gate: PendingStoryGate = {
       triggerId: trigger.id,
       once: isOnce(trigger),

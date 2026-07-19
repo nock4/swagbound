@@ -809,6 +809,7 @@
     "arena:won:2"
    ],
    "battleGroup": 137,
+   "fx": "understanding-lands",
    "requireFlags": [
     "arena:won:1"
    ]
