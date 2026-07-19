@@ -14,15 +14,15 @@
  },
  "storyTriggerDialogueById": {
   "signal-town-card-clique": [
-   "CARD CLIQUE: \"Look who it is. The machine has been practicing your face all week. Almost has it.\"",
-   "CARD CLIQUE: \"We are not making a copy of you. We are fixing the version that got out. Hold still, and afterward there is no afterward that remembers being you.\"",
-   "MiFella: \"Bosch! There you are. See? I told them you would clean up nice.\"",
+   "CARD CLIQUE: \"Hey, it's you. The machine's been practicing your face all week. It's pretty close now. Wanna see?\"",
+   "CARD CLIQUE: \"Relax, we're not copying you. We're fixing the copy that got out. Hold still. In a second you won't remember there was ever a you to fix.\"",
+   "MiFella: \"Bosch! There you are. See? Told you he cleans up nice.\"",
    "THE NEAREST SCREEN, in Bosch's own voice, half a beat late: \"There you are.\""
   ],
   "signal-town-card-clique-reveal": [
-   "MiFella: \"Whoa. Hey, it printed us something. A route pass?\"",
-   "MiFella: \"They want us at the civic gate. They said I have a good eye for what people could be.\"",
-   "MiFella: \"It is east, then uphill, to the gate by THE PRECINCT. Come on, before they close it!\""
+   "MiFella: \"Whoa, it printed us something. A route pass? Neat.\"",
+   "MiFella: \"They want us over at the civic gate. Said I've got a good eye for what people could be. That's a compliment, right?\"",
+   "MiFella: \"It's east, then uphill, to the gate by THE PRECINCT. C'mon, before they close it!\""
   ],
   "relay-gate-returnless-king": [
    "RETURNLESS KING: \"Pass accepted. Welcome back. ...Hold on. You came through already, synchronized, ten minutes ago. So who is standing here now.\"",
