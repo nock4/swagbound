@@ -1721,7 +1721,7 @@
   },
   {
    "id": "onett-frank-taunt",
-   "comment": "data_20.l_0xc65efc near world pixel 1568,1792. Anchor: same arcade approach as signal-town-card-clique, after signal:onett-card-clique-shakedown and before signal:clique_cleared. EB raw [1F F1 8F 00 7B 02] has npcId 143 taunt the player toward Frank, then sets flag 364. Recast as a second clique warning about the clean copy waiting inside.",
+   "comment": "ACT-1 arcade approach. FULLY STAGED (2026-07-19): the 'screen shows the corrected Bosch' beat is now an actual staged moment - camera push-in on the kid (143), a whoosh + white flash as the screen lights up, then his taunt - instead of a narrated description. Exterior street, so camera focus/zoom holds.",
    "trigger": {
     "kind": "area",
     "area": {
@@ -1751,8 +1751,59 @@
     {
      "op": "dialogue",
      "pages": [
-      "\"You want to meet Frank? Everybody wants to meet Frank, right up until Frank starts fixing them.\"",
-      "The kid flips a screen toward Bosch. On it: Bosch's own face, cleaner, calmer, a little bit nicer. \"See? You look better already.\"",
+      "\"You want to meet Frank? Everybody wants to meet Frank, right up until Frank starts fixing them.\""
+     ]
+    },
+    {
+     "op": "camera",
+     "action": "focus",
+     "actor": {
+      "npcId": 143
+     },
+     "zoom": 3
+    },
+    {
+     "op": "wait",
+     "ms": 350
+    },
+    {
+     "op": "sound",
+     "id": "whoosh"
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 143
+     },
+     "dir": "down"
+    },
+    {
+     "op": "fx",
+     "action": "flash",
+     "color": "#ffffff",
+     "ms": 260
+    },
+    {
+     "op": "wait",
+     "ms": 120
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "THE KID: \"See? Cleaner. Calmer. A little bit nicer. You look better already.\""
+     ]
+    },
+    {
+     "op": "camera",
+     "action": "follow"
+    },
+    {
+     "op": "wait",
+     "ms": 120
+    },
+    {
+     "op": "dialogue",
+     "pages": [
       "\"Go on in. The you they finished already is waiting. It has been practicing being you since MiFella's picture taught it how.\""
      ]
     },
