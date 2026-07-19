@@ -7308,21 +7308,24 @@ export class ChunkedWorldScene extends Phaser.Scene {
     lockPlayer(this.playerState, this.playerFrames);
     const boschSprite = this.player instanceof Phaser.GameObjects.Sprite ? this.player : undefined;
     const boschKey = boschSprite?.texture?.key;
-    // Face Bosch away from camera, walking up into the meadow.
-    const upFrames = this.playerFrames.up ?? [];
-    const boschFrame = upFrames.length > 0 ? upFrames[0] : Number(boschSprite?.frame?.name ?? 0);
+    // Face Bosch to the right, walking left-to-right along the meadow path.
+    const walkFrames = this.playerFrames.right ?? this.playerFrames.up ?? [];
+    const boschFrame = walkFrames.length > 0 ? walkFrames[0] : Number(boschSprite?.frame?.name ?? 0);
     const cloakKey = "swagdream-cloak";
     const flowerKey = "swagdream-flowers";
+    const butterflyKey = "swagdream-butterflies";
     const flowerFrames = 16;
     const begin = (): void => {
       this.meadowDream_ = new MeadowDream(this, {
         boschTextureKey: boschKey,
         boschFrame,
-        boschWalkFrames: upFrames.length > 1 ? [...upFrames] : undefined,
+        boschWalkFrames: walkFrames.length > 1 ? [...walkFrames] : undefined,
         cloakTextureKey: this.textures.exists(cloakKey) ? cloakKey : undefined,
         cloakFrame: 0, // down-facing (row 0): Cloak faces Bosch and the camera when she appears
         flowerTextureKey: this.textures.exists(flowerKey) ? flowerKey : undefined,
         flowerFrameCount: flowerFrames,
+        butterflyTextureKey: this.textures.exists(butterflyKey) ? butterflyKey : undefined,
+        butterflyVariants: 4,
         onBloom: () => this.playStoryTriggerFxCue("understanding-lands"),
         onMessage: (text) => (this.scene.get("ui") as UiScene).showCinematicCaption(text),
         onMessageClear: () => (this.scene.get("ui") as UiScene).hideCinematicCaption(),
@@ -7334,7 +7337,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         }
       });
     };
-    if (this.textures.exists(cloakKey) && this.textures.exists(flowerKey)) {
+    if (this.textures.exists(cloakKey) && this.textures.exists(flowerKey) && this.textures.exists(butterflyKey)) {
       begin();
       return;
     }
@@ -7349,11 +7352,34 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!this.textures.exists(flowerKey)) {
       this.load.image(flowerKey, "assets/swagbound/dream/flowers.png");
     }
+    if (!this.textures.exists(butterflyKey)) {
+      this.load.image(butterflyKey, "assets/swagbound/dream/butterflies.png");
+    }
     this.load.once(Phaser.Loader.Events.COMPLETE, () => {
       this.registerDreamFlowerFrames(flowerKey);
+      this.registerDreamButterflyFrames(butterflyKey);
       begin();
     });
     this.load.start();
+  }
+
+  /** Slice the butterfly sheet into 4 variants x [open, closed] frames (bfly-{v}-{0|1}). */
+  private registerDreamButterflyFrames(key: string): void {
+    const tex = this.textures.get(key);
+    if (!tex || tex.has("bfly-0-0")) {
+      return;
+    }
+    // [openX, openY, openW, openH, closedX, closedY, closedW, closedH] per variant.
+    const variants: number[][] = [
+      [227, 113, 348, 181, 807, 79, 176, 218],
+      [227, 403, 348, 181, 807, 369, 176, 218],
+      [227, 692, 348, 182, 807, 660, 176, 217],
+      [227, 983, 348, 182, 807, 950, 176, 217]
+    ];
+    variants.forEach((r, v) => {
+      tex.add(`bfly-${v}-0`, 0, r[0], r[1], r[2], r[3]);
+      tex.add(`bfly-${v}-1`, 0, r[4], r[5], r[6], r[7]);
+    });
   }
 
   /**

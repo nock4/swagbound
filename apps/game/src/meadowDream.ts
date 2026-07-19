@@ -15,13 +15,16 @@ import Phaser from "phaser";
 
 const OVERLAY_DEPTH = 200_000;
 const SKY_BANDS = 20;
-const FLOWER_COUNT = 120;
-const FLOWER_BASE_PX = 40; // on-screen size of a flower at scale 1
+const FLOWER_COUNT = 300;
+const FLOWER_BASE_PX = 22; // on-screen size of a flower at scale 1
 const HOLD_SPEED = 150; // distance units/sec while a direction is held
 const DRIFT_SPEED = 34; // slow auto-drift so it can never soft-lock
 const STAGE_DISTANCE = [0, 1900, 4000]; // distance at which stages 0/1/2 begin
 const FINISH_OVERTAKE_MS = 3600; // flowers swell to fill the screen
 const FINISH_FADE_MS = 2400; // then slowly to black
+// A narrow clear pathway down the middle; Bosch walks it left-to-right, flowers flank it.
+const PATH_CENTER_FRAC = 0.55;
+const PATH_HALF_PX = 30;
 
 // Warm, dreamlike sky palettes per stage. [skyTop, skyBottom]
 const STAGE_SKY: Array<[number, number]> = [
@@ -32,9 +35,22 @@ const STAGE_SKY: Array<[number, number]> = [
 
 interface Flower {
   sprite: Phaser.GameObjects.Image;
-  x: number;
-  band: number; // vertical slot in a tall virtual strip
+  baseX: number; // position along the horizontal scroll strip
+  y: number; // fixed vertical position (in the top or bottom flower band)
   sizeSeed: number;
+}
+
+const BUTTERFLY_COUNT = 6;
+interface Butterfly {
+  sprite: Phaser.GameObjects.Image;
+  variant: number;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  phase: number;
+  scale: number;
+  flap: number; // 0 open, 1 closed
 }
 
 // Cryptic -> crisp. The final line sets up the Swag Deck hand-off at morning.
@@ -60,6 +76,8 @@ export interface MeadowDreamOptions {
   cloakFrame?: number;
   flowerTextureKey?: string;
   flowerFrameCount?: number;
+  butterflyTextureKey?: string;
+  butterflyVariants?: number;
   messages?: string[];
   onBloom?: () => void; // host fires the warm "understanding" bloom + chime
   onMessage?: (text: string) => void; // host shows the cinematic caption (uiScene)
@@ -77,6 +95,7 @@ export class MeadowDream {
   private bosch?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Graphics;
   private cloak?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Graphics;
   private flowers: Flower[] = [];
+  private butterflies: Butterfly[] = [];
   private flowerEmitter?: Phaser.GameObjects.Particles.ParticleEmitter;
   private boschWalkFrames: number[] = [];
   private boschAnimClock = 0;
@@ -88,7 +107,7 @@ export class MeadowDream {
   private done = false;
   private readonly width: number;
   private readonly height: number;
-  private readonly strip: number;
+  private readonly stripX: number;
 
   constructor(scene: Phaser.Scene, opts: MeadowDreamOptions) {
     this.scene = scene;
@@ -96,7 +115,7 @@ export class MeadowDream {
     this.messages = opts.messages ?? DEFAULT_MESSAGES;
     this.width = scene.scale.width;
     this.height = scene.scale.height;
-    this.strip = this.height + 160;
+    this.stripX = this.width + 160;
     this.build();
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.onUpdate, this);
   }
@@ -110,6 +129,8 @@ export class MeadowDream {
     // Flower sprites: a generated EarthBound-style sheet, drawn crisp (nearest filter).
     const key = this.opts.flowerTextureKey;
     const frames = Math.max(1, this.opts.flowerFrameCount ?? 1);
+    const pathTop = this.height * PATH_CENTER_FRAC - PATH_HALF_PX;
+    const pathBottom = this.height * PATH_CENTER_FRAC + PATH_HALF_PX;
     if (key && s.textures.exists(key)) {
       s.textures.get(key).setFilter(Phaser.Textures.FilterMode.NEAREST);
       for (let i = 0; i < FLOWER_COUNT; i += 1) {
@@ -118,10 +139,14 @@ export class MeadowDream {
         const img = s.add
           .image(0, 0, key, frameName)
           .setScrollFactor(0)
-          .setOrigin(0.5, 0.62)
+          .setOrigin(0.5, 0.7)
           .setVisible(false);
         this.container.add(img);
-        this.flowers.push({ sprite: img, x: this.hash(i, 1) * this.width, band: this.hash(i, 2) * this.strip, sizeSeed: this.hash(i, 3) });
+        // Flank the path: half the flowers in the top band, half in the bottom band.
+        const topBand = this.hash(i, 2) < 0.5;
+        const yr = this.hash(i, 4);
+        const y = topBand ? 6 + yr * (pathTop - 10) : pathBottom + 4 + yr * (this.height - pathBottom - 6);
+        this.flowers.push({ sprite: img, baseX: this.hash(i, 1) * this.stripX, y, sizeSeed: this.hash(i, 3) });
       }
       // Ambient dream-flowers drifting up (a sparse life during the walk; floods into a
       // swarm at the finale). Reuses the same flower frames.
@@ -147,8 +172,37 @@ export class MeadowDream {
       this.container.add(this.flowerEmitter);
     }
 
-    const bx = Math.round(this.width / 2);
-    const by = Math.round(this.height * 0.62);
+    // Butterflies flitting over the meadow (2-frame flap, wandering flight).
+    const bfKey = this.opts.butterflyTextureKey;
+    const variants = Math.max(1, this.opts.butterflyVariants ?? 1);
+    if (bfKey && s.textures.exists(bfKey)) {
+      s.textures.get(bfKey).setFilter(Phaser.Textures.FilterMode.NEAREST);
+      for (let i = 0; i < BUTTERFLY_COUNT; i += 1) {
+        const variant = Math.floor(this.hash(i, 6) * variants) % variants;
+        const openFrame = `bfly-${variant}-0`;
+        const img = s.add
+          .image(0, 0, bfKey, s.textures.get(bfKey).has(openFrame) ? openFrame : 0)
+          .setScrollFactor(0)
+          .setOrigin(0.5, 0.5)
+          .setDepth(this.height + 70);
+        this.container.add(img);
+        const scale = (26 + this.hash(i, 7) * 12) / 348; // normalize to open-wing width
+        this.butterflies.push({
+          sprite: img,
+          variant,
+          x: this.hash(i, 1) * this.width,
+          y: 20 + this.hash(i, 2) * (this.height - 60),
+          vx: (this.hash(i, 8) - 0.4) * 34,
+          vy: (this.hash(i, 9) - 0.5) * 22,
+          phase: this.hash(i, 10) * Math.PI * 2,
+          scale,
+          flap: 0
+        });
+      }
+    }
+
+    const bx = Math.round(this.width * 0.44);
+    const by = Math.round(this.height * PATH_CENTER_FRAC);
     if (this.opts.boschTextureKey && s.textures.exists(this.opts.boschTextureKey)) {
       const sprite = s.add
         .sprite(bx, by, this.opts.boschTextureKey, this.opts.boschFrame ?? 0)
@@ -231,6 +285,7 @@ export class MeadowDream {
     }
     this.renderSky();
     this.updateFlowers(time);
+    this.updateButterflies(time, dt);
     this.bobBosch(time, delta);
     this.tickMessages(time);
     this.tickFinish(time);
@@ -257,6 +312,14 @@ export class MeadowDream {
       this.sky.fillStyle(this.lerpColor(top, bottom, i / (SKY_BANDS - 1)), 1);
       this.sky.fillRect(0, Math.floor(i * bandH), this.width, Math.ceil(bandH) + 1);
     }
+    // The clear pathway Bosch walks: a soft warm dirt lane with faint edge lines.
+    const pTop = this.height * PATH_CENTER_FRAC - PATH_HALF_PX;
+    const pH = PATH_HALF_PX * 2;
+    this.sky.fillStyle(0xdcc79a, 0.22);
+    this.sky.fillRect(0, pTop, this.width, pH);
+    this.sky.fillStyle(0xb59a6a, 0.28);
+    this.sky.fillRect(0, pTop, this.width, 2);
+    this.sky.fillRect(0, pTop + pH - 2, this.width, 2);
   }
 
   private updateFlowers(time: number): void {
@@ -273,20 +336,53 @@ export class MeadowDream {
         f.sprite.setVisible(false);
         continue;
       }
-      const y = ((f.band + this.distance) % this.strip) - 80;
-      if (y < -40 || y > this.height + 40) {
+      // Scroll horizontally: the world slides left as Bosch walks right.
+      let x = (f.baseX - this.distance) % this.stripX;
+      if (x < 0) {
+        x += this.stripX;
+      }
+      x -= 80;
+      if (x < -40 || x > this.width + 40) {
         f.sprite.setVisible(false);
         continue;
       }
-      const depth = Phaser.Math.Clamp(y / this.height, 0, 1);
-      const target = FLOWER_BASE_PX * (0.5 + f.sizeSeed * 0.7) * (0.55 + depth) * sizeBoost;
+      // At the finale the flowers close in over the path so they overtake the whole screen.
+      const drawY = Phaser.Math.Linear(f.y, this.height * PATH_CENTER_FRAC, overtake * 0.55);
+      // Nearer (lower) flowers are bigger and draw in front.
+      const depth = Phaser.Math.Clamp(f.y / this.height, 0, 1);
+      const target = FLOWER_BASE_PX * (0.55 + f.sizeSeed * 0.5) * (0.6 + depth * 0.8) * sizeBoost;
       const fw = f.sprite.frame.width;
       const fh = f.sprite.frame.height;
       f.sprite.setVisible(true);
-      f.sprite.setPosition(f.x, y);
+      f.sprite.setPosition(x, drawY);
       f.sprite.setScale(target / Math.max(fw, fh)); // normalize longest side, keep aspect
       f.sprite.setAlpha(vivid);
-      f.sprite.setDepth(y); // nearer (lower) flowers draw over farther ones
+      f.sprite.setDepth(drawY);
+    }
+  }
+
+  private updateButterflies(time: number, dt: number): void {
+    for (const b of this.butterflies) {
+      // Meander: base drift + gentle sine wander on both axes.
+      b.x += (b.vx + Math.cos(time / 700 + b.phase) * 22) * dt;
+      b.y += (b.vy + Math.sin(time / 500 + b.phase) * 16) * dt;
+      // Wrap around the screen edges so they never leave.
+      if (b.x < -30) b.x = this.width + 30;
+      if (b.x > this.width + 30) b.x = -30;
+      if (b.y < -30) b.y = this.height + 30;
+      if (b.y > this.height + 30) b.y = -30;
+      // 2-frame flap.
+      const flap = Math.floor(time / 150 + b.phase * 3) % 2;
+      if (flap !== b.flap) {
+        b.flap = flap;
+        const name = `bfly-${b.variant}-${flap}`;
+        if (b.sprite.texture.has(name)) {
+          b.sprite.setFrame(name);
+        }
+      }
+      b.sprite.setPosition(Math.round(b.x), Math.round(b.y));
+      // Face travel direction (flip when drifting left).
+      b.sprite.setScale((b.vx < 0 ? -1 : 1) * b.scale, b.scale);
     }
   }
 
@@ -294,13 +390,14 @@ export class MeadowDream {
     if (!this.bosch) {
       return;
     }
-    this.bosch.y = Math.round(this.height * 0.62) + Math.sin(time / 120) * 1.5;
+    const pathY = Math.round(this.height * PATH_CENTER_FRAC);
+    this.bosch.y = pathY + Math.sin(time / 120) * 1.5;
     if (this.bosch instanceof Phaser.GameObjects.Sprite && this.boschWalkFrames.length > 1) {
       this.boschAnimClock += delta * (this.held() ? 1.6 : 0.7);
       const idx = Math.floor(this.boschAnimClock / 160) % this.boschWalkFrames.length;
       this.bosch.setFrame(this.boschWalkFrames[idx]);
     }
-    this.bosch.setDepth(this.height * 0.62); // Bosch sorts among the flowers
+    this.bosch.setDepth(pathY); // Bosch sorts among the flowers on the path line
   }
 
   private tickMessages(time: number): void {
