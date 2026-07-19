@@ -1776,8 +1776,16 @@ export class BattleScene extends Phaser.Scene {
     const damage = Math.max(0, Math.floor(firstBattleDamage(events)?.amount ?? 0));
     const damaging = damage > 0 && !battleEventsHaveMiss(events);
 
+    // "Understanding lands": a PRAY that DAMAGES (a pray-vulnerable enemy that feeds on
+    // agreement) is kindness beating the cold machine, not violence. A normal pray heals
+    // (damage 0) and is not a "success" here.
+    const praySuccess = result.details.kind === "pray" && damaging && !result.skipped;
+
     if (damaging) {
-      this.startScreenShake(this.shakeIntensityForDamage(damage, battleEventsHaveEnemyDefeated(events)));
+      if (!praySuccess) {
+        this.startScreenShake(this.shakeIntensityForDamage(damage, battleEventsHaveEnemyDefeated(events)));
+      }
+      const sparkColor = praySuccess ? BATTLE_FX_PRAY_BLOOM_COLOR : undefined;
       let sparked = false;
       const smash = battleEventsHaveSmash(events);
       for (const target of uniqueActors(this.impactTargetsForResult(result))) {
@@ -1785,20 +1793,18 @@ export class BattleScene extends Phaser.Scene {
         if (!point) {
           continue;
         }
-        this.spawnHitSpark(point);
+        this.spawnHitSpark(point, sparkColor);
         this.spawnDamageNumber(point, damage, { onEnemy: target.side === "enemy", smash });
         sparked = true;
       }
       if (!sparked) {
-        this.spawnHitSpark(this.fallbackImpactPoint());
+        this.spawnHitSpark(this.fallbackImpactPoint(), sparkColor);
         this.spawnDamageNumber(this.fallbackImpactPoint(), damage, { onEnemy: result.actor.side === "party", smash });
       }
     }
 
-    if (result.details.kind === "pray" && damaging && !result.skipped) {
-      // "Understanding lands": a PRAY that DAMAGES (i.e. a pray-vulnerable enemy that
-      // feeds on agreement) is kindness beating the cold machine - bloom WARM, not a
-      // cold hit-flash. A normal pray heals (damage 0) and does not bloom.
+    if (praySuccess) {
+      // Warm full-screen bloom + a warm spark radiating from the enemy: the AV of a win.
       this.startFlashOverlay(BATTLE_FX_PRAY_BLOOM_COLOR, BATTLE_FX_PRAY_BLOOM_ALPHA, BATTLE_FX_PRAY_BLOOM_MS);
       const { r, g, b } = rgbFromHex(BATTLE_FX_PRAY_BLOOM_COLOR);
       this.cameras.main.flash(220, r, g, b);
@@ -2082,13 +2088,13 @@ export class BattleScene extends Phaser.Scene {
     return clampNumber(scaled, BATTLE_FX_MIN_SHAKE_PX, BATTLE_FX_MAX_SHAKE_PX);
   }
 
-  private spawnHitSpark(point: SpritePoint): void {
+  private spawnHitSpark(point: SpritePoint, color: number = BATTLE_FX_SPARK_COLOR): void {
     this.hitSparkFx_.push({
       x: point.x,
       y: point.y,
       startedAt: this.time.now,
       durationMs: BATTLE_FX_HIT_SPARK_MS,
-      color: BATTLE_FX_SPARK_COLOR
+      color
     });
     this.fxCounters_.sparkCount += 1;
   }
