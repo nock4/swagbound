@@ -9,7 +9,7 @@
   "onett-brother-fallsin": [
    "MiFella catches up beside the meteor, holding his phone too tightly.",
    "\"I only sent the picture to a few people. They cleaned it up and sent it back. Every time it came back, the other Bosch looked more like you.\"",
-   "\"They called it a derivative. Cute, right? Also bad. Probably bad. Check the wreckage. I will watch the road.\""
+   "\"They called it a correction. Cute, right? Also bad. Probably bad. Check the wreckage. I will watch the road.\""
   ]
  },
  "storyTriggerDialogueById": {
@@ -26,7 +26,7 @@
   ],
   "relay-gate-returnless-king": [
    "RETURNLESS KING: \"Pass accepted. Welcome back. ...Hold on. You came through already, synchronized, ten minutes ago. So who is standing here now.\"",
-   "RETURNLESS KING: \"The derivative is synchronized. You still require individual review.\"",
+   "RETURNLESS KING: \"The correction is synchronized. You still require individual review.\"",
    "RETURNLESS KING: \"...You are holding a damaged card up at me. That is not a credential, and swinging it around will not make it one.\""
   ],
   "north-route-gate-warning": [
@@ -34,10 +34,10 @@
    "ROUTE AIDE: \"The synchronized Bosch is already approved. Individual Bosches wait.\""
   ],
   "first-threshold-malady": [
-   "BOSCH DERIVATIVE: \"MiFella says you hate tomatoes, sleep through alarms, and pretend not to care when people leave. I have all of you.\"",
-   "BOSCH DERIVATIVE: \"...What is that. You are holding up a card. There is a cake on it. A strawberry cake, tipped on its side.\"",
-   "BOSCH DERIVATIVE: \"After it fell, MiFella. MiFella did something. The file does not have what he did next. Why does the file not have it.\"",
-   "BOSCH DERIVATIVE: \"MiFella says you hate tomatoes. You sleep through alarms. MiFella says. MiFella says.\""
+   "CORRECTED BOSCH: \"MiFella says you hate tomatoes, sleep through alarms, and pretend not to care when people leave. I have all of you.\"",
+   "CORRECTED BOSCH: \"...What is that. You are holding up a card. There is a cake on it. A strawberry cake, tipped on its side.\"",
+   "CORRECTED BOSCH: \"After it fell, MiFella. MiFella did something. The file does not have what he did next. Why does the file not have it.\"",
+   "CORRECTED BOSCH: \"MiFella says you hate tomatoes. You sleep through alarms. MiFella says. MiFella says.\""
   ],
   "first-threshold-malady-reveal": [
    "MiFella: \"It is coming apart. Those are my photos. My route stamps. That is everything I sent them, falling out of its face.\"",
@@ -46,7 +46,7 @@
   ],
   "recruit-munch": [
    "Munch steps out from behind the hotel sign with a pocket full of rejected receipts.",
-   "MUNCH: \"That derivative knew what people posted about you. It missed what people remember because they love you. I can help find the seams.\"",
+   "MUNCH: \"That correction knew what people posted about you. It missed what people remember because they love you. I can help find the seams.\"",
    "Munch joins the crew. He can SPY on enemies to reveal what they resist and what hurts them."
   ],
   "leave-signal-town": [
@@ -69,7 +69,7 @@
   ],
   "postwick-registry": [
    "The Registry has a file titled BOSCH, CARE INSTRUCTIONS. MiFella's name appears beside every private detail.",
-   "REGISTRY WARDEN: \"He gave us the difficult parts so the derivative would never feel lonely, embarrassed, or left behind.\"",
+   "REGISTRY WARDEN: \"He gave us the difficult parts so the correction would never feel lonely, embarrassed, or left behind.\"",
    "Bosch recognizes the facts. He does not recognize the person they describe.",
    "The Warden raises a laminated smile. Bosch fights to keep MiFella's mistake from becoming Postwick's law."
   ],
@@ -150,7 +150,7 @@
   ],
   "raid-morningside-3": [
    "The final cell opens every screen in town. MiFella appears wearing the onboarding uniform, then removes its badge.",
-   "MIFELLA: \"I took the first picture. I shared it. I gave Remilia Co. private details after Bosch asked me to stop. The derivatives were not Bosch, and belonging did not make my choices harmless.\"",
+   "MIFELLA: \"I took the first picture. I shared it. I gave Remilia Co. private details after Bosch asked me to stop. The corrections were not Bosch, and belonging did not make my choices harmless.\"",
    "He sends the correction through the same network that carried the lie. Residents stop repeating the script and answer in their own voices.",
    "With nobody left to synchronize, the local manifestation of Milady loses most of its shape."
   ],
@@ -170,9 +170,9 @@
  },
  "objectiveTextById": {
   "act1-card-clique": "Go west to MONS LINK and find out what the arcade made from MiFella's photograph.",
-  "act1-returnless-king": "Take the derivative pass east, then uphill to the civic gate beside THE PRECINCT.",
-  "act1-malady": "Follow the opened road to the hotel crossing and confront Bosch Derivative.",
-  "act1-munch": "Meet Munch beyond the hotel crossing and ask what the derivative missed.",
+  "act1-returnless-king": "Take the correction pass east, then uphill to the civic gate beside THE PRECINCT.",
+  "act1-malady": "Follow the opened road to the hotel crossing and confront Corrected Bosch.",
+  "act1-munch": "Meet Munch beyond the hotel crossing and ask what the correction missed.",
   "act1-leave-signal-town": "Continue to Morningside's exit and stop MiFella from accepting onboarding.",
   "act2-reach-postwick": "Follow MiFella and the Remilia Co. onboarding route to Postwick.",
   "act2-postwick-registry": "Find Postwick's Registry near the town records and inspect MiFella's onboarding file.",
@@ -245,7 +245,7 @@
   ]
  },
  "battleEnemyNamesById": {
-  "37": "Bosch Derivative",
+  "37": "Corrected Bosch",
   "127": "Local Milady Manifestation"
  },
  "dialogue": {
@@ -281,15 +281,15 @@
     "pages": [
      "MiFella pounds on the door.",
      "\"Bosch, get up. I saw another you outside while you were still asleep.\"",
-     "\"I took a picture and sent it to the arcade group. They keep sending back cleaner versions. They call them derivatives.\"",
+     "\"I took a picture and sent it to the arcade group. They keep sending back cleaner versions. They call them corrections.\"",
      "\"The other you went uphill toward the meteor. Get dressed and meet me outside. We need to see what I started.\""
     ]
    },
    "data_15.l_0xc5eb0b": {
     "pages": [
      "A terminal wakes inside the wreckage. Beside it, blue light gathers into Bosch's outline.",
-     "LOG: FIRST-GENERATION BOSCH DERIVATIVE. SOURCE IMAGE CIRCULATING.",
-     "The derivative watches Bosch as if waiting for instructions. It can repeat an action one turn late, but it cannot understand why Bosch chose it.",
+     "LOG: FIRST-GENERATION CORRECTED BOSCH. SOURCE IMAGE CIRCULATING.",
+     "The correction watches Bosch as if waiting for instructions. It can repeat an action one turn late, but it cannot understand why Bosch chose it.",
      "MiFella whispers: \"That is the version they sent back to me.\""
     ]
    }
@@ -305,7 +305,7 @@
      "signal:clique_cleared"
     ],
     "pages": [
-     "\"MiFella called. The derivative at the meteor came from his photograph.\"",
+     "\"MiFella called. The correction at the meteor came from his photograph.\"",
      "\"The arcade group is still circulating it. MONS LINK is west along the town road.\""
     ]
    }
@@ -319,7 +319,7 @@
      "signal:clique_cleared"
     ],
     "pages": [
-     "\"The derivative could repeat what you did. It could not explain why.\"",
+     "\"The correction could repeat what you did. It could not explain why.\"",
      "\"Take MiFella to the arcade. He needs to see what sharing that picture changed.\""
     ]
    }
@@ -333,7 +333,7 @@
      "signal:clique_cleared"
     ],
     "pages": [
-     "\"MiFella is pretending the derivative was only funny because he feels guilty.\"",
+     "\"MiFella is pretending the correction was only funny because he feels guilty.\"",
      "\"Stay kind and stay honest. MONS LINK is west on the main road.\""
     ]
    }
@@ -348,7 +348,7 @@
     ],
     "pages": [
      "The house phone rings.",
-     "MiFella left a message: \"The arcade kids are making more Bosch derivatives. I am going back to ask them to stop. Probably.\""
+     "MiFella left a message: \"The arcade kids are making more Bosch corrections. I am going back to ask them to stop. Probably.\""
     ]
    }
   ],
@@ -511,7 +511,7 @@
  "tutorialBattle": {
   "enemy": {
    "id": 900001,
-   "name": "Unstable Bosch Derivative",
+   "name": "Unstable Correction",
    "spriteId": 900001,
    "level": 1,
    "hp": 42,

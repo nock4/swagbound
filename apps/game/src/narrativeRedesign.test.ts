@@ -23,7 +23,7 @@ const redesign = OpeningClaritySchema.parse(JSON.parse(
 ));
 
 describe("canonical narrative redesign overlay", () => {
-  it("keeps the Milady name embargo and uses derivative language", () => {
+  it("keeps the Milady name embargo and uses correction language", () => {
     const preRevealTriggerIds = [
       "signal-town-card-clique",
       "signal-town-card-clique-reveal",
@@ -63,7 +63,7 @@ describe("canonical narrative redesign overlay", () => {
     expect(earlyText).not.toContain("malady");
     expect(earlyText).not.toContain("public bosch");
     expect(earlyText).not.toContain("public version");
-    expect(earlyText).toContain("derivative");
+    expect(earlyText).toContain("correct");
   });
 
   it("makes MiFella's circulation and attraction causal in the opening", () => {
@@ -88,9 +88,9 @@ describe("canonical narrative redesign overlay", () => {
       applyOpeningClarityBattle(battle, clarity),
       redesign
     );
-    expect(resolved?.enemies.find((enemy) => enemy.id === 37)?.name).toBe("Bosch Derivative");
+    expect(resolved?.enemies.find((enemy) => enemy.id === 37)?.name).toBe("Corrected Bosch");
     expect(resolved?.enemies.find((enemy) => enemy.id === 900001)?.name)
-      .toBe("Unstable Bosch Derivative");
+      .toBe("Unstable Correction");
   });
 
   it("replaces the Act 1 emotional spine without changing trigger mechanics", () => {
@@ -103,7 +103,7 @@ describe("canonical narrative redesign overlay", () => {
     );
     const threshold = resolved?.triggers.find((trigger) => trigger.id === "first-threshold-malady");
     const exit = resolved?.triggers.find((trigger) => trigger.id === "leave-signal-town");
-    expect(threshold?.dialogue?.join(" ")).toContain("BOSCH DERIVATIVE");
+    expect(threshold?.dialogue?.join(" ")).toContain("CORRECTED BOSCH");
     expect(threshold?.battleGroup).toBe(450);
     expect(exit?.dialogue?.join(" ")).toContain("onboarding");
     expect(exit?.setFlags).toContain("act1:complete");
