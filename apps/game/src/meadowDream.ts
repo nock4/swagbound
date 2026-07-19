@@ -282,6 +282,9 @@ export class MeadowDream {
     }
   }
 
+  /** A chunky pixel-art flower: fillRect blocks snapped to an integer pixel grid, with a
+   * consistent upper-left highlight + lower-right shade (EarthBound sprite shading). No
+   * anti-aliased circles, so it reads as a sprite, not a vector blob. */
   private drawFlower(
     g: Phaser.GameObjects.Graphics,
     sp: Species,
@@ -290,15 +293,37 @@ export class MeadowDream {
     scale: number,
     alpha: number
   ): void {
-    const ring = sp.ringR * scale;
-    const petalR = sp.petalR * scale;
-    g.fillStyle(sp.color, 0.92 * alpha);
+    const a = Math.max(0.74, alpha);
+    const u = Math.max(2, Math.round(scale * 1.7)); // chunky pixel unit
+    const petal = sp.color;
+    const petalHi = this.lerpColor(petal, 0xffffff, 0.4);
+    const petalSh = this.lerpColor(petal, 0x1a1030, 0.32);
+    const center = sp.center;
+    const centerHi = this.lerpColor(center, 0xffffff, 0.5);
+    const pB = sp.petalR >= 2.3 ? 3 : 2; // petal block size in pixel-units (species varies)
+    const ring = u * (1.3 + sp.petals * 0.12);
+    const half = (pB * u) / 2;
+    const snap = (v: number): number => Math.round(v / u) * u;
     for (let p = 0; p < sp.petals; p += 1) {
-      const ang = (p / sp.petals) * Math.PI * 2;
-      g.fillCircle(cx + Math.cos(ang) * ring, cy + Math.sin(ang) * ring, petalR);
+      const ang = (p / sp.petals) * Math.PI * 2 + (sp.petals % 2 === 0 ? Math.PI / sp.petals : 0);
+      const px = snap(cx + Math.cos(ang) * ring);
+      const py = snap(cy + Math.sin(ang) * ring);
+      const left = px - half;
+      const top = py - half;
+      g.fillStyle(petal, 0.95 * a);
+      g.fillRect(left, top, pB * u, pB * u);
+      g.fillStyle(petalHi, 0.95 * a); // upper-left light
+      g.fillRect(left, top, u, u);
+      g.fillStyle(petalSh, 0.9 * a); // lower-right shade
+      g.fillRect(left + (pB - 1) * u, top + (pB - 1) * u, u, u);
     }
-    g.fillStyle(sp.center, 0.96 * alpha);
-    g.fillCircle(cx, cy, Math.max(1, petalR * 0.85));
+    // Center: a 2-unit block with its own highlight.
+    const cgx = snap(cx);
+    const cgy = snap(cy);
+    g.fillStyle(center, 0.98 * a);
+    g.fillRect(cgx - u, cgy - u, 2 * u, 2 * u);
+    g.fillStyle(centerHi, a);
+    g.fillRect(cgx - u, cgy - u, u, u);
   }
 
   private bobBosch(time: number, delta: number): void {
