@@ -15,8 +15,8 @@ import Phaser from "phaser";
 
 const OVERLAY_DEPTH = 200_000;
 const SKY_BANDS = 20;
-const FLOWER_COUNT = 300;
-const FLOWER_BASE_PX = 22; // on-screen size of a flower at scale 1
+const FLOWER_COUNT = 3000;
+const FLOWER_BASE_PX = 4.4; // on-screen size of a flower at scale 1
 const HOLD_SPEED = 150; // distance units/sec while a direction is held
 const DRIFT_SPEED = 34; // slow auto-drift so it can never soft-lock
 const STAGE_DISTANCE = [0, 1900, 4000]; // distance at which stages 0/1/2 begin
@@ -115,7 +115,7 @@ export class MeadowDream {
     this.messages = opts.messages ?? DEFAULT_MESSAGES;
     this.width = scene.scale.width;
     this.height = scene.scale.height;
-    this.stripX = this.width + 160;
+    this.stripX = this.width * 2; // dense on-screen carpet, scrolls without obvious repeat
     this.build();
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.onUpdate, this);
   }
@@ -327,7 +327,7 @@ export class MeadowDream {
     const overtake = this.overtake(time);
     const deepen = stage / 2 + (stage < 2 ? t / 2 : 0);
     const vivid = Phaser.Math.Clamp(0.55 + 0.45 * deepen + overtake, 0, 1);
-    const baseVisible = Math.round(FLOWER_COUNT * (0.4 + 0.6 * deepen));
+    const baseVisible = Math.round(FLOWER_COUNT * (0.75 + 0.25 * deepen));
     const visible = Math.round(baseVisible + (FLOWER_COUNT - baseVisible) * overtake);
     const sizeBoost = 1 + overtake * overtake * 6;
     for (let i = 0; i < this.flowers.length; i += 1) {
