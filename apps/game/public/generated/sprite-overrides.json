@@ -27728,6 +27728,94 @@
       "originX": 0.5,
       "originY": 1
     },
+    "910220": {
+      "image": "assets/swagbound/props/strawberry-cake.png",
+      "frameWidth": 30,
+      "frameHeight": 30,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 26,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "910221": {
+      "image": "assets/swagbound/props/strawberry-corner.png",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 14,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "910222": {
+      "image": "assets/swagbound/props/crooked-picture.png",
+      "frameWidth": 34,
+      "frameHeight": 34,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 30,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "910223": {
+      "image": "assets/swagbound/overworld-npc/mifella-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
     "930100": {
       "image": "assets/swagbound/overworld-npc/mifella-001-ow.png",
       "frameWidth": 48,

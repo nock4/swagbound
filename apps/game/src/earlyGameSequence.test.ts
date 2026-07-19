@@ -59,14 +59,25 @@ const OPENING_DIALOGUE = {
     "A traveler in a Little Swag World bucket hat has stopped dead on the path, staring up at the ring of figures around the crater.",
     "\"Twin. TWIN. What ARE those things? They just stand there saying the one word at the rock. 'milady.' Over and over.\"",
     "\"I came up from the source world this morning. I have never heard that word in my life. So why does it sound like it already knows mine?\""
-  ]
+  ],
+  // Strawberry prologue prop examine lines (bedroom).
+  "prologue-cake": ["The cake leans like it gave up halfway through being a cake."],
+  "prologue-corner": ["A corner of the cake, on the floor. The five second rule feels generous tonight."],
+  "prologue-picture": ["The picture hangs a little crooked. It always does. You always fix it."],
+  "prologue-mifella": ["MiFella, mid-laugh about something. For tonight, nothing is wrong."]
 } as const;
 
 // 910200-910205 = original night cast; 910206 = MiFella outside the house
 // (dashes uphill); 910207 = the landed meteor prop. 2026-07-18: 910208/910209 =
 // two more meteor Miladys (six total); 910210 = the LSW traveler on the path.
 const NIGHT_CAST_IDS = [910200, 910201, 910202, 910203, 910204, 910205] as const;
-const OWNED_NPC_IDS = [...NIGHT_CAST_IDS, 910206, 910207, 910208, 910209, 910210] as const;
+// 2026-07-19: 910220-910223 are the STRAWBERRY prologue props (cake, fallen corner,
+// crooked picture, MiFella actor) - bedroom actors that share the opening allowlist so
+// they survive the pre-wake phase gate; gated to spawn only on the `prologue:active` flag.
+const OWNED_NPC_IDS = [
+  ...NIGHT_CAST_IDS, 910206, 910207, 910208, 910209, 910210,
+  910220, 910221, 910222, 910223
+] as const;
 
 describe("early game sequence ownership", () => {
   it("preserves exact draft copy and ownership", () => {
@@ -179,12 +190,22 @@ describe("early game sequence ownership", () => {
       "910207": "assets/swagbound/props/meteor-ow.png",
       "910208": "assets/swagbound/overworld-npc/gns-malady-001-ow.png",
       "910209": "assets/swagbound/overworld-npc/gns-malady-002-ow.png",
-      "910210": "assets/swagbound/overworld-npc/gns-lsw-312-ow.png"
+      "910210": "assets/swagbound/overworld-npc/gns-lsw-312-ow.png",
+      // Strawberry prologue props (bedroom).
+      "910220": "assets/swagbound/props/strawberry-cake.png",
+      "910221": "assets/swagbound/props/strawberry-corner.png",
+      "910222": "assets/swagbound/props/crooked-picture.png",
+      "910223": "assets/swagbound/overworld-npc/mifella-001-ow.png"
     };
     const expectedBlockFlags: Record<string, string[] | undefined> = {
       "910206": ["intro:outside-dash-done", "intro:morning"],
       // The landed meteor stays on the hill permanently.
-      "910207": undefined
+      "910207": undefined,
+      // Strawberry prologue props vanish once the prologue is done.
+      "910220": ["prologue:done"],
+      "910221": ["prologue:done"],
+      "910222": ["prologue:done"],
+      "910223": ["prologue:done"]
     };
 
     expect(nightCast.map((npc) => npc.id)).toEqual(OWNED_NPC_IDS);

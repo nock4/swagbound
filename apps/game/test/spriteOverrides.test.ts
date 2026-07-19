@@ -197,7 +197,11 @@ describe("sprite override helpers", () => {
     const namedAdded: Record<string, string> = {
       // The landed meteor prop is vanilla-EB-extracted art at native 46x22 scale,
       // not a good-new-sprites overworld skin.
-      "910207": "assets/swagbound/props/meteor-ow.png"
+      "910207": "assets/swagbound/props/meteor-ow.png",
+      // Strawberry prologue props: bespoke prop art, not good-new-sprites overworld skins.
+      "910220": "assets/swagbound/props/strawberry-cake.png",
+      "910221": "assets/swagbound/props/strawberry-corner.png",
+      "910222": "assets/swagbound/props/crooked-picture.png"
     };
     const clerkOverrides: Record<string, string> = {
       "404": "assets/swagbound/overworld-npc/gns-lsw-1130-ow.png",

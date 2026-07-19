@@ -12709,6 +12709,82 @@
     "ref": "lsw-witness"
    },
    "alwaysSpawn": true
+  },
+  {
+   "id": 910220,
+   "worldPixel": {
+    "x": 8095,
+    "y": 1112
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "prologue:active"
+   ],
+   "blockFlags": [
+    "prologue:done"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "ref": "prologue-cake"
+   }
+  },
+  {
+   "id": 910221,
+   "worldPixel": {
+    "x": 8118,
+    "y": 1128
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "prologue:active"
+   ],
+   "blockFlags": [
+    "prologue:done"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "ref": "prologue-corner"
+   }
+  },
+  {
+   "id": 910222,
+   "worldPixel": {
+    "x": 8100,
+    "y": 1056
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "prologue:active"
+   ],
+   "blockFlags": [
+    "prologue:done"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "ref": "prologue-picture"
+   }
+  },
+  {
+   "id": 910223,
+   "worldPixel": {
+    "x": 8138,
+    "y": 1120
+   },
+   "spriteGroup": 59,
+   "facing": "left",
+   "requireFlags": [
+    "prologue:active"
+   ],
+   "blockFlags": [
+    "prologue:done"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "ref": "prologue-mifella"
+   }
   }
  ]
 }

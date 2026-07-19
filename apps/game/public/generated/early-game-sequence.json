@@ -51,6 +51,18 @@
    "A traveler in a Little Swag World bucket hat has stopped dead on the path, staring up at the ring of figures around the crater.",
    "\"Twin. TWIN. What ARE those things? They just stand there saying the one word at the rock. 'milady.' Over and over.\"",
    "\"I came up from the source world this morning. I have never heard that word in my life. So why does it sound like it already knows mine?\""
+  ],
+  "prologue-cake": [
+   "The cake leans like it gave up halfway through being a cake."
+  ],
+  "prologue-corner": [
+   "A corner of the cake, on the floor. The five second rule feels generous tonight."
+  ],
+  "prologue-picture": [
+   "The picture hangs a little crooked. It always does. You always fix it."
+  ],
+  "prologue-mifella": [
+   "MiFella, mid-laugh about something. For tonight, nothing is wrong."
   ]
  },
  "nightCast": {
@@ -65,7 +77,11 @@
    910207,
    910208,
    910209,
-   910210
+   910210,
+   910220,
+   910221,
+   910222,
+   910223
   ]
  },
  "sourceCheckAvailabilityPhase": "morning",
@@ -100,7 +116,11 @@
    "meteor-inspect",
    "witness-4",
    "witness-5",
-   "lsw-witness"
+   "lsw-witness",
+   "prologue-cake",
+   "prologue-corner",
+   "prologue-picture",
+   "prologue-mifella"
   ],
   "npcIds": [
    910200,
@@ -113,7 +133,11 @@
    910207,
    910208,
    910209,
-   910210
+   910210,
+   910220,
+   910221,
+   910222,
+   910223
   ],
   "cutsceneIds": [
    "signal-town-cold-signal-open",
@@ -137,7 +161,11 @@
    910207,
    910208,
    910209,
-   910210
+   910210,
+   910220,
+   910221,
+   910222,
+   910223
   ]
  }
 }
