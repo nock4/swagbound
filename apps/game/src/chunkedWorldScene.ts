@@ -14,6 +14,7 @@ import { TeleportMenu, type TeleportTown } from "./teleportMenu";
 import { QuestJournal, type Quest } from "./questJournal";
 import { PartyOrderMenu } from "./partyOrderMenu";
 import { CLEAN_UI_FONT_FAMILY, createCleanText, drawCleanPanel } from "./cleanUi";
+import { MeadowDream } from "./meadowDream";
 import { sectorIndexForTile } from "./encounterLogic";
 import { selectSectorEnemyGroup, sectorSpawnBudget, touchAdvantage } from "./overworldEnemies";
 import { createStatefulRng, seedFromSearch, type StatefulRng } from "./seededRng";
@@ -2830,6 +2831,12 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.updateCameraRoomBounds();
       return { x: this.playerState.x, y: this.playerState.y };
     };
+    // Launch the pre-wake meadow dream overlay in isolation (dev QA). Hold Up/W to walk.
+    globals.__runMeadowDream = (): void => {
+      this.startMeadowDream(() => {
+        (globalThis as Record<string, unknown>).__meadowDreamDone = true;
+      });
+    };
     // Walk-behind introspection for collision-exactness probes: alpha of the
     // foreground chunk art at a world pixel (0..255, -1 = chunk FG not streamed).
     globals.__fgAlphaAt = (x: number, y: number): number => {
@@ -4821,7 +4828,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
   /** True while a scripted cinematic owns the screen (the new-game night flyover and the
    * bedroom wake-up that follows it); the uiScene reads this to suppress the gameplay HUD. */
   cinematicActive(): boolean {
-    return this.flyoverActive || (this.startupRunActive && this.startupMode === "opening");
+    return (
+      this.flyoverActive ||
+      this.meadowDreamActive_ ||
+      (this.startupRunActive && this.startupMode === "opening")
+    );
   }
 
   private updatePrompt(): void {
@@ -7252,6 +7263,57 @@ export class ChunkedWorldScene extends Phaser.Scene {
       dbg.count += 1;
       dbg.lastCue = cue;
     }
+  }
+
+  private meadowDream_?: MeadowDream;
+  private meadowDreamActive_ = false;
+
+  /**
+   * The pre-wake meadow dream (Cloak reaches Bosch). Runs as a screen-space overlay so it
+   * never touches world/save state; hands control back via onDone when it whites out.
+   */
+  private startMeadowDream(onDone: () => void): void {
+    if (this.meadowDream_) {
+      return;
+    }
+    this.meadowDreamActive_ = true; // suppresses the gameplay HUD (see cinematicActive)
+    lockPlayer(this.playerState, this.playerFrames);
+    const boschSprite = this.player instanceof Phaser.GameObjects.Sprite ? this.player : undefined;
+    const boschKey = boschSprite?.texture?.key;
+    // Face Bosch away from camera, walking up into the meadow.
+    const upFrames = this.playerFrames.up ?? [];
+    const boschFrame = upFrames.length > 0 ? upFrames[0] : Number(boschSprite?.frame?.name ?? 0);
+    const cloakKey = "swagdream-cloak";
+    const begin = (): void => {
+      this.meadowDream_ = new MeadowDream(this, {
+        boschTextureKey: boschKey,
+        boschFrame,
+        boschWalkFrames: upFrames.length > 1 ? [...upFrames] : undefined,
+        cloakTextureKey: this.textures.exists(cloakKey) ? cloakKey : undefined,
+        cloakFrame: 0, // down-facing (row 0): Cloak faces Bosch and the camera when she appears
+        onBloom: () => this.playStoryTriggerFxCue("understanding-lands"),
+        onMessage: (text) => (this.scene.get("ui") as UiScene).showCinematicCaption(text),
+        onMessageClear: () => (this.scene.get("ui") as UiScene).hideCinematicCaption(),
+        onComplete: () => {
+          this.meadowDream_ = undefined;
+          this.meadowDreamActive_ = false;
+          this.updatePrompt();
+          onDone();
+        }
+      });
+    };
+    if (this.textures.exists(cloakKey)) {
+      begin();
+      return;
+    }
+    // Cloak's sheet is not loaded during the opening; pull it in, then start. COMPLETE
+    // fires even if the file errors, so begin() (with a silhouette fallback) always runs.
+    this.load.spritesheet(cloakKey, "assets/swagbound/hero/lsw-224-walk.png", {
+      frameWidth: 192,
+      frameHeight: 192
+    });
+    this.load.once(Phaser.Loader.Events.COMPLETE, begin);
+    this.load.start();
   }
 
   private hexToRgb(color: string | undefined, fallback: [number, number, number]): [number, number, number] {
