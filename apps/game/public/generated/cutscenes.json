@@ -390,12 +390,12 @@
     {
      "op": "dialogue",
      "pages": [
-      "Bosch wakes to a cold signal. The kind that arrives before you do.",
-      "Somebody already printed today. His face, almost right, the way a bad memory is almost right. Under it, a caption claims it said everything first, so it never has to mean anything. Bosch never wrote that.",
-      "The card's category box is checked VESSEL. Bosch doesn't remember being asked.",
-      "From the next room comes household panic under the paint. Bosch's face is on a card, it arrived before breakfast, and people are asking.",
-      "A leaked Bosch is loose in Morningside, better behaved and earlier to breakfast. Bosch pockets the damaged original; the card-stock trail runs west, where the arcade crowd deals faces.",
-      "(Arrow keys move Bosch. Press Z to look hard at things. And to talk. Start with the kid on the stoop; he's been waiting his whole short life to explain yours.)"
+      "Bosch wakes to a wrongness he cannot place. The room is his room, but the morning light comes from the wrong side, and the street outside the window was repainted while he slept.",
+      "Downstairs the household is cheerful and certain, the way people are certain of things that were decided for them. They greet him by a name that is almost his, and do not hear the difference.",
+      "One thing in the house did not change overnight: the Swag Deck in his pocket, damaged and stubborn and exactly as wrong as it was yesterday. Held up against the corrected room, it is the only place the edits still show.",
+      "Something is moving through Morningside line by line, fixing what was never broken, and no one who has been fixed can tell. Bosch can. That is the whole problem.",
+      "The changes thin out here at the top of town and thicken to the west, toward the arcade, where the light hums and the corrections come faster than the eye can hold.",
+      "(Arrow keys move Bosch. Press Z to look hard at things, and to talk. Start with the kid on the stoop. He will explain the town to you, and he will be a little bit wrong about all of it.)"
      ]
     },
     {
@@ -1762,9 +1762,9 @@
     {
      "op": "dialogue",
      "pages": [
-      "\"You want to meet Frank? Everybody wants to meet Frank until Frank starts improving them.\"",
-      "The kid taps the card in his palm. Bosch's face is printed there with better lighting and worse manners.",
-      "\"Go on. The copy in there has been waiting longer than you have.\""
+      "\"You want to meet Frank? Everybody wants to meet Frank, right up until Frank starts fixing them.\"",
+      "The kid holds up a screen. Bosch's face is on it, cleaner and calmer and a little bit wrong, the way a corrected sentence forgets it was ever a different sentence.",
+      "\"Go on in. The you they finished already is waiting. It has been practicing being you since MiFella's picture taught it how.\""
      ]
     },
     {

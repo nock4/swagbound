@@ -14,15 +14,15 @@
   },
   "storyTriggerDialogueById": {
     "signal-town-card-clique": [
-      "The MONS LINK arcade is already covered in Bosch derivatives made from MiFella's photograph.",
-      "CARD CLIQUE: \"MiFella found the first one. We just helped it look like itself.\"",
-      "MiFella laughs when they recognize him. Then he notices Bosch watching.",
-      "The newest derivative knows Bosch's face and nothing about the people inside his house."
+      "The MONS LINK arcade is where the corrections run fastest. Every screen is quietly fixing a face or a name, and the machine has been practicing on Bosch ever since MiFella's photograph gave it a face to correct toward.",
+      "CARD CLIQUE: \"We are not making a copy of you. We are fixing the version that got out. Hold still and the edit takes, and afterward there is no afterward that remembers being you.\"",
+      "MiFella laughs when they recognize him, cheerful and certain, sure he only helped a friend look his best. He does not hear that the arcade is answering in Bosch's voice now.",
+      "Bosch lifts the Swag Deck against the nearest screen. The corrected Bosch on it will not line up with the real one, and that unlined seam is the fight."
     ],
     "signal-town-card-clique-reveal": [
-      "The arcade printer stops. Its final tray holds a cleaner Bosch derivative and a route pass prepared before the fight.",
-      "MiFella turns the pass over. \"They want us at the civic gate. They said I have a good eye for what people could be.\"",
-      "The compliment lands harder than the warning. Take the pass east, then uphill to the gate beside THE PRECINCT."
+      "The correction does not lose. It revises. The arcade goes quiet, and its last screen holds a cleaner edit of Bosch and a route pass filled out before the fight was over.",
+      "MiFella turns the pass over, still proud. \"They want us at the civic gate. They said I have a good eye for what people could be.\"",
+      "The compliment lands harder than any warning. Bosch keeps the Swag Deck, the one page the arcade could not make agree with the rest. Take the pass east, then uphill to the gate beside THE PRECINCT."
     ],
     "relay-gate-returnless-king": [
       "The civic gate accepts the derivative's pass and rejects Bosch standing in front of it.",
