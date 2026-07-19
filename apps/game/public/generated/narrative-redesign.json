@@ -25,24 +25,24 @@
    "MiFella: \"It is east, then uphill, to the gate by THE PRECINCT. Come on, before they close it!\""
   ],
   "relay-gate-returnless-king": [
-   "The civic gate accepts the derivative's pass and rejects Bosch standing in front of it.",
+   "RETURNLESS KING: \"Pass accepted. Welcome back. ...Hold on. You came through already, synchronized, ten minutes ago. So who is standing here now.\"",
    "RETURNLESS KING: \"The derivative is synchronized. You still require individual review.\"",
-   "Bosch refuses to let a convenient image decide which person gets through."
+   "RETURNLESS KING: \"...You are holding a damaged card up at me. That is not a credential, and swinging it around will not make it one.\""
   ],
   "north-route-gate-warning": [
-   "The road is visible beyond the station, but the route aides keep scanning the same derivative pass.",
-   "\"The synchronized Bosch is already approved. Individual Bosches must wait.\""
+   "ROUTE AIDE, not looking up: \"Synchronized Bosch, approved. Approved. ...Oh. You are the individual one. The road is right there, but individuals are not on today's manifest.\"",
+   "ROUTE AIDE: \"The synchronized Bosch is already approved. Individual Bosches wait.\""
   ],
   "first-threshold-malady": [
-   "At the crossing beside the hotel, a Bosch Derivative waits with spotless clothes and a smile learned from MiFella's photograph.",
-   "BOSCH DERIVATIVE: \"MiFella says you hate tomatoes, sleep through alarms, and pretend not to care when people leave.\"",
-   "Bosch asks what MiFella did after the ruined birthday cake fell sideways.",
-   "The derivative repeats the question. It has the facts MiFella shared, but not the friendship that made them mean anything."
+   "BOSCH DERIVATIVE: \"MiFella says you hate tomatoes, sleep through alarms, and pretend not to care when people leave. I have all of you.\"",
+   "BOSCH DERIVATIVE: \"...What is that. You are holding up a card. There is a cake on it. A strawberry cake, tipped on its side.\"",
+   "BOSCH DERIVATIVE: \"After it fell, MiFella. MiFella did something. The file does not have what he did next. Why does the file not have it.\"",
+   "BOSCH DERIVATIVE: \"MiFella says you hate tomatoes. You sleep through alarms. MiFella says. MiFella says.\""
   ],
   "first-threshold-malady-reveal": [
-   "Bosch Derivative is delisted. Its clean face separates into photographs, arcade cards, route stamps, and private details MiFella supplied.",
-   "MiFella stares at the pieces. \"I thought giving them more would make it safer. They said a better derivative could keep the difficult parts from hurting you.\"",
-   "A message on MiFella's phone invites him to onboarding. He hides the screen before Bosch can answer."
+   "MiFella: \"It is coming apart. Those are my photos. My route stamps. That is everything I sent them, falling out of its face.\"",
+   "MiFella: \"I thought giving them more would make it safer. They said a better one could keep the parts that hurt from hurting you.\"",
+   "MiFella glances at his buzzing phone, turns it face-down, and does not explain. \"...Forget you saw that. Come on.\""
   ],
   "recruit-munch": [
    "Munch steps out from behind the hotel sign with a pocket full of rejected receipts.",
