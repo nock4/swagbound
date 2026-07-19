@@ -2717,6 +2717,193 @@
      "flag": "intro:outside-dash-done"
     }
    ]
+  },
+  {
+   "id": "prologue-strawberry",
+   "comment": "STRAWBERRY prologue (Tier-1 keystone from the emotional-spine work). Warm birthday flashback of Bosch + MiFella BEFORE the photograph, staged with the music/camera/fx ops. Fires on prologue:active (set by the pre-wake boot wiring); prop actors 910220-910223 spawn on that flag. Ends by flashing white + cutting music to silence + fading to black, then setFlag prologue:done (despawns the props) so the boot wiring hands to the wake: Bosch wakes ALONE in the corrected present.",
+   "trigger": {
+    "kind": "flag",
+    "flag": "prologue:active"
+   },
+   "requireFlags": [
+    "prologue:active"
+   ],
+   "blockFlags": [
+    "prologue:done"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "fx",
+     "action": "fadeOut",
+     "color": "#000000",
+     "ms": 0
+    },
+    {
+     "op": "music",
+     "action": "play",
+     "cue": "mixtape",
+     "fadeMs": 2500
+    },
+    {
+     "op": "wait",
+     "ms": 1200
+    },
+    {
+     "op": "fx",
+     "action": "fadeIn",
+     "color": "#000000",
+     "ms": 1600
+    },
+    {
+     "op": "fx",
+     "action": "tint",
+     "color": "#ffb020",
+     "alpha": 0.28,
+     "ms": 1
+    },
+    {
+     "op": "wait",
+     "ms": 500
+    },
+    {
+     "op": "camera",
+     "action": "focus",
+     "actor": {
+      "npcId": 910220
+     },
+     "zoom": 3
+    },
+    {
+     "op": "wait",
+     "ms": 800
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "Bosch's birthday. The cake made it out of the oven, mostly."
+     ]
+    },
+    {
+     "op": "camera",
+     "action": "focus",
+     "actor": {
+      "npcId": 910223
+     },
+     "zoom": 2
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 910223
+     },
+     "dir": "left"
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 910223
+     },
+     "to": {
+      "x": 8112,
+      "y": 1120
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 910223
+     },
+     "dir": "up"
+    },
+    {
+     "op": "wait",
+     "ms": 300
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 910221
+     }
+    },
+    {
+     "op": "wait",
+     "ms": 250
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "MiFella eats the fallen corner off the floor to make Bosch laugh. \"Strawberry. You hate the frosting.\""
+     ]
+    },
+    {
+     "op": "camera",
+     "action": "focus",
+     "actor": {
+      "npcId": 910222
+     },
+     "zoom": 3
+    },
+    {
+     "op": "wait",
+     "ms": 500
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "The family picture hangs a little crooked, the way it always does. You get up to fix it."
+     ]
+    },
+    {
+     "op": "camera",
+     "action": "follow"
+    },
+    {
+     "op": "wait",
+     "ms": 400
+    },
+    {
+     "op": "fx",
+     "action": "flash",
+     "color": "#ffffff",
+     "ms": 500
+    },
+    {
+     "op": "music",
+     "action": "stop",
+     "fadeMs": 0
+    },
+    {
+     "op": "wait",
+     "ms": 1000
+    },
+    {
+     "op": "fx",
+     "action": "tint",
+     "color": "#10121c",
+     "alpha": 0.5,
+     "ms": 1200
+    },
+    {
+     "op": "wait",
+     "ms": 300
+    },
+    {
+     "op": "fx",
+     "action": "fadeOut",
+     "color": "#000000",
+     "ms": 1400
+    },
+    {
+     "op": "wait",
+     "ms": 1400
+    },
+    {
+     "op": "setFlag",
+     "flag": "prologue:done"
+    }
+   ]
   }
  ]
 }
