@@ -1340,7 +1340,19 @@ export const CutsceneStepSchema = z.discriminatedUnion("op", [
   /** Set/unset a numeric EarthBound event flag (e.g. to persistently hide NPCs whose showSprite keys on it). */
   z.object({ op: z.literal("eventFlag"), flag: z.number().int().nonnegative(), set: z.boolean() }).strict(),
   z.object({ op: z.literal("sound"), id: z.union([z.number().int().nonnegative(), z.string().min(1)]) }).strict(),
-  z.object({ op: z.literal("warp"), to: CutscenePointSchema }).strict()
+  z.object({ op: z.literal("warp"), to: CutscenePointSchema }).strict(),
+  /**
+   * Non-verbal staging ops. All three are instantaneous (fire-and-forget); hold on
+   * them with an explicit `wait`. AUTHORING RULE: a cutscene that uses fx fade/tint
+   * must end on a VISIBLE frame (fade back in before the final wait) so control never
+   * returns on a black screen; the runner does not auto-restore the fade on completion.
+   */
+  // Drive the shared mixtape: cue a track (play) or cut to silence (stop). fadeMs eases either.
+  z.object({ op: z.literal("music"), action: z.enum(["play", "stop"]), cue: z.string().min(1).optional(), fadeMs: z.number().int().nonnegative().optional() }).strict(),
+  // Move the eye: focus/pan to a world point or an actor, restore player-follow, or shake. ms is the pan/shake duration.
+  z.object({ op: z.literal("camera"), action: z.enum(["focus", "pan", "follow", "shake"]), to: CutscenePointSchema.optional(), actor: EventActorMoveSelectorSchema.optional(), ms: z.number().int().nonnegative().optional(), zoom: z.number().positive().optional(), intensity: z.number().nonnegative().optional() }).strict(),
+  // Screen effects: fadeOut/fadeIn/flash (camera post-fx) and a persistent color tint/clearTint (canvas-safe overlay). color is #rrggbb.
+  z.object({ op: z.literal("fx"), action: z.enum(["fadeOut", "fadeIn", "flash", "tint", "clearTint"]), color: z.string().regex(/^#[0-9a-fA-F]{6}$/).optional(), ms: z.number().int().nonnegative().optional(), alpha: z.number().min(0).max(1).optional() }).strict()
 ]);
 export type CutsceneStep = z.infer<typeof CutsceneStepSchema>;
 

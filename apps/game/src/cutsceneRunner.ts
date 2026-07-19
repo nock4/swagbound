@@ -27,6 +27,24 @@ export interface CutsceneHost {
   setEventFlag(flag: number, set: boolean): void;
   playSound(id: CutsceneSoundId): void;
   warp(to: { x: number; y: number }): void;
+  /** Cue a mixtape track ("play") or cut to silence ("stop"). fadeMs eases the transition. */
+  cutsceneMusic(action: "play" | "stop", cue: string | undefined, fadeMs: number | undefined): void;
+  /** Move the camera: focus/pan to a point or actor, restore player-follow, or shake. */
+  cutsceneCamera(
+    action: "focus" | "pan" | "follow" | "shake",
+    to: { x: number; y: number } | undefined,
+    actor: EventActorMoveSelector | undefined,
+    ms: number | undefined,
+    zoom: number | undefined,
+    intensity: number | undefined
+  ): void;
+  /** Screen effects: fadeOut/fadeIn/flash, or a persistent color tint/clearTint. color is #rrggbb. */
+  cutsceneFx(
+    action: "fadeOut" | "fadeIn" | "flash" | "tint" | "clearTint",
+    color: string | undefined,
+    ms: number | undefined,
+    alpha: number | undefined
+  ): void;
 }
 
 type CutscenePhase = "running" | "wait" | "move" | "dialogue" | "done";
@@ -166,6 +184,15 @@ export class CutsceneRunner {
         return false;
       case "warp":
         this.host.warp(step.to);
+        return false;
+      case "music":
+        this.host.cutsceneMusic(step.action, step.cue, step.fadeMs);
+        return false;
+      case "camera":
+        this.host.cutsceneCamera(step.action, step.to, step.actor, step.ms, step.zoom, step.intensity);
+        return false;
+      case "fx":
+        this.host.cutsceneFx(step.action, step.color, step.ms, step.alpha);
         return false;
       case "wait":
         this.waitMs = step.ms;

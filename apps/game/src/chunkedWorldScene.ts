@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { type ArchivistSpot, type BattleEnemy, type CardNft, type Cutscene, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
+import { type ArchivistSpot, type BattleEnemy, type CardNft, type Cutscene, type CutsceneStep, type DialoguePage, type DrifellaSourceCheck, type EventActorMoveSelector, type EventEffect, type FgClearRect, type ItemData, type OverworldInteractable, type ScriptCollection, type ScriptCommand, type SpriteOverride, type SpriteSheet, type StoryBarrier, type StoryTrigger, type TimedDeliveryEntry, type WorldChunked, type WorldChunkedNpc, type WorldDoor } from "@eb/schemas";
 import { ACTOR_BODY_BOTTOM, ACTOR_BODY_HALF_WIDTH, ACTOR_BODY_TOP, actorBodyBlocked, actorsBlockingAt, isActorBodyPoint } from "./actorCollision";
 import { barrierBlocksPoint, isBarrierActive, isOnce, pointInArea, resolveStoryGateReturn, resolveSuppression, selectActiveBossGates, selectStoryTrigger, storyTriggerSuppressionForRestore, triggerFiredFlag } from "./storyTriggers";
 import {
@@ -7111,6 +7111,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       this.cutsceneRunner = undefined;
       this.activeCutsceneId = undefined;
+      this.restoreCutsceneStaging(false);
       // Keep visibility overrides: hidden actors must stay hidden after the scene.
       // The EB flag (eventFlag step) blocks re-creation, but already-spawned runtimes
       // need the override to stay hidden. Overrides reset on scene start.
@@ -7166,6 +7167,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.completeCutsceneMove(true, true);
     }
     this.cutsceneRunner?.abort();
+    this.restoreCutsceneStaging(true);
     this.cutsceneWatchdog.reset();
     if (import.meta.env.DEV) {
       this.showDevToast(`cutscene watchdog: terminated ${cutsceneId}`);
@@ -7198,8 +7200,165 @@ export class ChunkedWorldScene extends Phaser.Scene {
       },
       setEventFlag: (flag, set) => { if (set) { this.gameFlags.setNum(flag); } else { this.gameFlags.unsetNum(flag); } },
       playSound: (id) => this.playCutsceneSound(id),
-      warp: (to) => this.warpPlayerToWorldPixel(to)
+      warp: (to) => this.warpPlayerToWorldPixel(to),
+      cutsceneMusic: (action, cue, fadeMs) => this.runCutsceneMusic(action, cue, fadeMs),
+      cutsceneCamera: (action, to, actor, ms, zoom, intensity) =>
+        this.runCutsceneCamera(action, to, actor, ms, zoom, intensity),
+      cutsceneFx: (action, color, ms, alpha) => this.runCutsceneFx(action, color, ms, alpha)
     };
+  }
+
+  // --- Cutscene staging ops (music / camera / fx) ---------------------------
+  // Non-verbal staging so scenes carry emotion through blocking, the eye, the
+  // mixtape, and light instead of text. All fire-and-forget; hold with `wait`.
+
+  private cutsceneStagingDirty = false;
+  private cutsceneTintOverlay?: Phaser.GameObjects.Image;
+
+  private runCutsceneMusic(action: "play" | "stop", cue: string | undefined, fadeMs: number | undefined): void {
+    this.cutsceneStagingDirty = true;
+    if (action === "stop") {
+      this.music.stop(fadeMs ?? 0);
+    } else if (cue) {
+      void this.music.play(cue, fadeMs !== undefined ? { fadeMs } : {});
+    }
+  }
+
+  private hexToRgb(color: string | undefined, fallback: [number, number, number]): [number, number, number] {
+    if (!color) {
+      return fallback;
+    }
+    const h = color.replace("#", "");
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+
+  private runCutsceneCamera(
+    action: "focus" | "pan" | "follow" | "shake",
+    to: { x: number; y: number } | undefined,
+    actor: EventActorMoveSelector | undefined,
+    ms: number | undefined,
+    zoom: number | undefined,
+    intensity: number | undefined
+  ): void {
+    const cam = this.cameras.main;
+    if (action === "follow") {
+      if (this.player) { cam.startFollow(this.player, true); }
+      if (zoom) { cam.zoomTo(zoom, ms ?? 0); } else { cam.setZoom(OVERWORLD_CAMERA_ZOOM); }
+      return;
+    }
+    if (action === "shake") {
+      cam.shake(ms ?? 300, intensity ?? 0.006);
+      return;
+    }
+    const pt = to ?? (actor ? this.cutsceneActorPosition(actor) : undefined);
+    if (!pt) {
+      return;
+    }
+    this.cutsceneStagingDirty = true;
+    cam.stopFollow();
+    if (zoom) { cam.zoomTo(zoom, action === "pan" ? (ms ?? 0) : 0); }
+    if (action === "pan") { cam.pan(pt.x, pt.y, ms ?? 800, "Sine.easeInOut"); } else { cam.centerOn(pt.x, pt.y); }
+  }
+
+  private runCutsceneFx(
+    action: "fadeOut" | "fadeIn" | "flash" | "tint" | "clearTint",
+    color: string | undefined,
+    ms: number | undefined,
+    alpha: number | undefined
+  ): void {
+    const cam = this.cameras.main;
+    const dur = ms ?? 400;
+    switch (action) {
+      case "fadeOut": {
+        this.cutsceneStagingDirty = true;
+        const [r, g, b] = this.hexToRgb(color, [0, 0, 0]);
+        cam.fadeOut(dur, r, g, b);
+        return;
+      }
+      case "fadeIn": {
+        const [r, g, b] = this.hexToRgb(color, [0, 0, 0]);
+        cam.fadeIn(dur, r, g, b);
+        return;
+      }
+      case "flash": {
+        const [r, g, b] = this.hexToRgb(color, [255, 255, 255]);
+        cam.flash(dur, r, g, b);
+        return;
+      }
+      case "tint":
+        this.applyCutsceneTint(color ?? "#000000", alpha ?? 0.35, dur);
+        return;
+      case "clearTint":
+        this.clearCutsceneTint(dur);
+        return;
+      default:
+        return;
+    }
+  }
+
+  private applyCutsceneTint(color: string, alpha: number, ms: number): void {
+    this.cutsceneStagingDirty = true;
+    // Baked 1x1-color IMAGE scaled to screen (canvas-safe; setTint/Shape do not
+    // composite reliably under the Canvas renderer). Depth sits over the world but
+    // under the door-fade (130000) and the separate UI scene's dialogue.
+    const key = `cutscene-tint-${color.replace("#", "")}`;
+    if (!this.textures.exists(key)) {
+      const tex = this.textures.createCanvas(key, 1, 1);
+      const ctx = tex?.getContext();
+      if (ctx) { ctx.fillStyle = color; ctx.fillRect(0, 0, 1, 1); tex?.refresh(); }
+    }
+    if (this.cutsceneTintOverlay) {
+      this.tweens.killTweensOf(this.cutsceneTintOverlay);
+      this.cutsceneTintOverlay.destroy();
+      this.cutsceneTintOverlay = undefined;
+    }
+    const overlay = this.add
+      .image(0, 0, key)
+      .setOrigin(0, 0)
+      .setScrollFactor(0)
+      .setDepth(129000)
+      .setDisplaySize(this.scale.width, this.scale.height)
+      .setAlpha(0);
+    this.cutsceneTintOverlay = overlay;
+    this.tweens.add({ targets: overlay, alpha, duration: Math.max(0, ms), ease: "Sine.easeInOut" });
+  }
+
+  private clearCutsceneTint(ms: number): void {
+    const overlay = this.cutsceneTintOverlay;
+    if (!overlay) {
+      return;
+    }
+    this.tweens.killTweensOf(overlay);
+    if (ms <= 0) {
+      overlay.destroy();
+      this.cutsceneTintOverlay = undefined;
+      return;
+    }
+    this.tweens.add({
+      targets: overlay,
+      alpha: 0,
+      duration: ms,
+      ease: "Sine.easeInOut",
+      onComplete: () => {
+        overlay.destroy();
+        if (this.cutsceneTintOverlay === overlay) { this.cutsceneTintOverlay = undefined; }
+      }
+    });
+  }
+
+  /** Return the eye to the player and clear staging overlays after a staged cutscene. */
+  private restoreCutsceneStaging(hardResetFade: boolean): void {
+    if (!this.cutsceneStagingDirty) {
+      return;
+    }
+    this.cutsceneStagingDirty = false;
+    if (this.player) { this.cameras.main.startFollow(this.player, true); }
+    this.cameras.main.setZoom(OVERWORLD_CAMERA_ZOOM);
+    if (hardResetFade) {
+      this.cameras.main.resetFX();
+    }
+    this.clearCutsceneTint(0);
+    this.syncOverworldMusicForCurrentFlags();
   }
 
   private cutsceneActorVisible(npcId: number): boolean {
@@ -9490,6 +9649,19 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.cutsceneMoveDemoHook = (npcId: number | string, x: number, y: number, run?: boolean) =>
       this.runCutsceneMoveDemo(npcId, x, y, run);
     (globalThis as Record<string, unknown>).__runCutsceneMoveDemo = this.cutsceneMoveDemoHook;
+    // DEV: run an arbitrary staging sequence (music/camera/fx/move) through the real
+    // host so staging ops can be pixel-verified without authoring+building content.
+    (globalThis as Record<string, unknown>).__runStagingDemo = (steps: CutsceneStep[]): boolean => {
+      if (!Array.isArray(steps) || steps.length === 0) { return false; }
+      lockPlayer(this.playerState, this.playerFrames);
+      const runner = new CutsceneRunner(steps, this.createCutsceneHost(), () => {
+        this.cutsceneRunner = undefined;
+        this.restoreCutsceneStaging(false);
+        unlockPlayer(this.playerState);
+      });
+      if (runner.running) { this.cutsceneRunner = runner; }
+      return true;
+    };
   }
 
   private unregisterCutsceneMoveDemoGlobal(): void {

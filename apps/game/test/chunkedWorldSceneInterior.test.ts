@@ -6,7 +6,10 @@ const sceneSource = readFileSync(new URL("../src/chunkedWorldScene.ts", import.m
 describe("chunked world interior rendering contract", () => {
   it("keeps player follow active while clamping interior camera scroll to the active area", () => {
     expect(sceneSource).toContain("this.cameras.main.startFollow(this.player, true)");
-    expect(sceneSource).not.toContain("stopFollow(");
+    // The interior-camera path must never stop following. stopFollow is permitted
+    // exactly once, for cutscene staging (runCutsceneCamera focus/pan), which restores
+    // player-follow on cutscene completion via restoreCutsceneStaging.
+    expect([...sceneSource.matchAll(/stopFollow\(/g)]).toHaveLength(1);
     expect(sceneSource).not.toContain("positionInteriorCamera");
     expect(sceneSource).not.toContain("applyCameraBoundsForActiveRoom");
     expect(sceneSource).not.toContain("cameraBoundsMode");

@@ -65,6 +65,28 @@ class MockHost implements CutsceneHost {
   warp(to: { x: number; y: number }): void {
     this.log.push(`warp:${to.x},${to.y}`);
   }
+  cutsceneMusic(action: "play" | "stop", cue: string | undefined, fadeMs: number | undefined): void {
+    this.log.push(`music:${action}:${cue ?? "-"}:${fadeMs ?? "-"}`);
+  }
+  cutsceneCamera(
+    action: "focus" | "pan" | "follow" | "shake",
+    to: { x: number; y: number } | undefined,
+    actor: EventActorMoveSelector | undefined,
+    ms: number | undefined,
+    zoom: number | undefined,
+    intensity: number | undefined
+  ): void {
+    const target = to ? `${to.x},${to.y}` : actor ? sel(actor) : "-";
+    this.log.push(`camera:${action}:${target}:${ms ?? "-"}:${zoom ?? "-"}:${intensity ?? "-"}`);
+  }
+  cutsceneFx(
+    action: "fadeOut" | "fadeIn" | "flash" | "tint" | "clearTint",
+    color: string | undefined,
+    ms: number | undefined,
+    alpha: number | undefined
+  ): void {
+    this.log.push(`fx:${action}:${color ?? "-"}:${ms ?? "-"}:${alpha ?? "-"}`);
+  }
 }
 
 const npc = (npcId: number): EventActorMoveSelector => ({ npcId });
@@ -82,6 +104,28 @@ describe("CutsceneRunner", () => {
     expect(host.log).toEqual(["hide:npc1", "face:player:up", "setFlag:cutscene:x"]);
     expect(runner.running).toBe(false);
     expect(completed).toBe(1);
+  });
+
+  it("dispatches non-verbal staging ops (music / camera / fx) instantaneously and in order", () => {
+    const host = new MockHost();
+    const steps: CutsceneStep[] = [
+      { op: "music", action: "play", cue: "mixtape", fadeMs: 800 },
+      { op: "camera", action: "pan", to: { x: 100, y: 200 }, ms: 600, zoom: 3 },
+      { op: "fx", action: "flash", color: "#ffffff", ms: 120 },
+      { op: "fx", action: "tint", color: "#f0c060", alpha: 0.3 },
+      { op: "music", action: "stop", fadeMs: 400 },
+      { op: "camera", action: "follow" }
+    ];
+    const runner = new CutsceneRunner(steps, host, () => {});
+    expect(host.log).toEqual([
+      "music:play:mixtape:800",
+      "camera:pan:100,200:600:3:-",
+      "fx:flash:#ffffff:120:-",
+      "fx:tint:#f0c060:-:0.3",
+      "music:stop:-:400",
+      "camera:follow:-:-:-:-"
+    ]);
+    expect(runner.running).toBe(false);
   });
 
   it("blocks on wait until the duration elapses", () => {
