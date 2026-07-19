@@ -16,7 +16,7 @@ const SKY_BANDS = 20;
 const FLOWER_COUNT = 90;
 const HOLD_SPEED = 150; // distance units/sec while a direction is held
 const DRIFT_SPEED = 34; // slow auto-drift so it can never soft-lock
-const STAGE_DISTANCE = [0, 900, 2100]; // distance at which stages 0/1/2 begin
+const STAGE_DISTANCE = [0, 1900, 4000]; // distance at which stages 0/1/2 begin
 
 // Warm, dreamlike palettes per stage. [skyTop, skyBottom, ...flowerColors]
 const STAGE_SKY: Array<[number, number]> = [
@@ -40,10 +40,15 @@ interface Flower {
 // Cryptic -> crisp. The final line sets up the Swag Deck hand-off at morning.
 const DEFAULT_MESSAGES: string[] = [
   "...Oh. Hey. You can hear me? Huh. That usually doesn't work.",
-  "I'm Cloak. We haven't met yet. We're going to.",
-  "So, there's a thing. It copies people. It's honestly super rude about it.",
+  "I'm Cloak. We haven't met yet. We're going to. Hi.",
+  "This place isn't real, by the way. Well. It's realer than the town you woke up in. That's the sad part.",
+  "So there's a thing out there. It copies people. It's honestly super rude about it.",
+  "It's been doing this a long time. It doesn't really stop. Try to remember that part.",
+  "It got greedy. Started copying whole feelings now. How people talk. What they want. Who they trust.",
   "It already got one of your friends. You'll know which one. I'm sorry.",
+  "Here's the weird thing though. It can't copy this. Flowers. A dumb joke. Somebody actually meaning it.",
   "It can't copy me. It couldn't copy you either. That's kind of why I called.",
+  "You can't out-fight it. Nobody can. You can out-mean-it, though. Be realer than it. That's the whole trick.",
   "When you wake up, someone's gonna hand you something. Don't lose it. It's the only thing that thing can't fake."
 ];
 
