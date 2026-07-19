@@ -2695,11 +2695,7 @@
     },
     {
      "op": "setFlag",
-     "flag": "intro:morning"
-    },
-    {
-     "op": "setFlag",
-     "flag": "signal:cold-signal-seen"
+     "flag": "intro:dream-pending"
     }
    ]
   },

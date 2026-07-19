@@ -1467,6 +1467,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.publish();
       return;
     }
+    this.maybeStartMeadowDream();
     this.stepNpcs(delta);
     // Door-arrival overlap escape retries a few frames: destination NPC
     // runtimes can spawn a tick or two after the synchronous warp, so the
@@ -7267,6 +7268,33 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   private meadowDream_?: MeadowDream;
   private meadowDreamActive_ = false;
+
+  /**
+   * Opening hook: once the "back to bed" beat sets intro:dream-pending and its cutscene has
+   * released control, run the meadow dream. On completion, set the flags the old dawn beat
+   * used to set (intro:morning + the cold signal), so the downstream morning flow is
+   * unchanged - just delayed by the dream. Fired once per pending flag.
+   */
+  private maybeStartMeadowDream(): void {
+    if (
+      this.meadowDream_ ||
+      this.meadowDreamActive_ ||
+      !this.gameFlags.has("intro:dream-pending") ||
+      this.gameFlags.has("intro:morning") ||
+      this.activeCutsceneId !== undefined ||
+      this.dialogue.open
+    ) {
+      return;
+    }
+    this.startMeadowDream(() => {
+      this.gameFlags.unset("intro:dream-pending");
+      this.gameFlags.set("intro:morning");
+      this.gameFlags.set("signal:cold-signal-seen");
+      unlockPlayer(this.playerState);
+      this.updatePrompt();
+      this.publish();
+    });
+  }
 
   /**
    * The pre-wake meadow dream (Cloak reaches Bosch). Runs as a screen-space overlay so it

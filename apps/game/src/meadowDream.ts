@@ -4,37 +4,68 @@ import Phaser from "phaser";
  * The pre-wake meadow dream. Bosch holds a direction and walks forever into a
  * wildflower meadow that deepens in stages while Cloak (the ally he has not met yet)
  * reaches him with warm blooms of message - cryptic, then crisp, ending on the line
- * that sets up why Mom hands him the Swag Deck the next morning.
+ * that sets up why Mom hands him the Swag Deck the next morning. Then the flowers
+ * overtake the whole screen and it slowly fades to black, and Bosch wakes up.
  *
  * Rendered as a self-contained screen-space overlay so it never touches world/save
- * state. The host launches it, the host is told when it is done. Canvas renderer:
- * only Graphics fill* primitives (proven to composite) + Sprites + Text are used.
+ * state. Canvas renderer: only Graphics fill* primitives (proven to composite) +
+ * Sprites are drawn; message text goes through the host's cinematic caption channel.
  */
 
 const OVERLAY_DEPTH = 200_000;
 const SKY_BANDS = 20;
-const FLOWER_COUNT = 90;
+const FLOWER_COUNT = 130;
 const HOLD_SPEED = 150; // distance units/sec while a direction is held
 const DRIFT_SPEED = 34; // slow auto-drift so it can never soft-lock
 const STAGE_DISTANCE = [0, 1900, 4000]; // distance at which stages 0/1/2 begin
+const FINISH_OVERTAKE_MS = 3600; // flowers swell to fill the screen
+const FINISH_FADE_MS = 2400; // then slowly to black
 
-// Warm, dreamlike palettes per stage. [skyTop, skyBottom, ...flowerColors]
+// Warm, dreamlike sky palettes per stage. [skyTop, skyBottom]
 const STAGE_SKY: Array<[number, number]> = [
   [0x2a2350, 0x6b5a86], // stage 0: dim dusk purple
   [0x5a4f92, 0xcf90a6], // stage 1: warming rose
   [0xffd27a, 0xffe9b8] // stage 2: radiant gold
 ];
-const STAGE_FLOWERS: number[][] = [
-  [0x8a7fb0, 0xb59ac4, 0x9f86b8],
-  [0xef8fb0, 0xffd27a, 0xa6d8c0, 0xf4b3d0],
-  [0xffe9b8, 0xff9ec4, 0x9be7c4, 0xfff2a8, 0xc9a8ff]
+
+// ~50+ wildflower species: every (petal-count x hue) pairing, each with its own center
+// tint and size, so the field never repeats a look. Built deterministically at load.
+interface Species {
+  petals: number;
+  petalR: number;
+  ringR: number;
+  color: number;
+  center: number;
+}
+const FLOWER_HUES = [
+  0xff9ec4, 0xef8fb0, 0xf4b3d0, 0xffd27a, 0xfff2a8, 0xffe9b8, 0x9be7c4, 0xa6d8c0,
+  0x7fd0e8, 0x9ec4ff, 0xb59ac4, 0xc9a8ff, 0xd7a0e8, 0xff8f8f, 0xffb37a, 0xe8f0a0
 ];
+const FLOWER_CENTERS = [0xfff2a8, 0xffd27a, 0xffffff, 0xffe0a0, 0xffc0d8];
+const PETAL_COUNTS = [4, 5, 6, 8];
+const SPECIES: Species[] = (() => {
+  const list: Species[] = [];
+  let i = 0;
+  for (const petals of PETAL_COUNTS) {
+    for (const color of FLOWER_HUES) {
+      list.push({
+        petals,
+        petalR: 1.6 + (i % 3) * 0.7,
+        ringR: 2.2 + petals * 0.28,
+        color,
+        center: FLOWER_CENTERS[i % FLOWER_CENTERS.length]
+      });
+      i += 1;
+    }
+  }
+  return list; // 4 x 16 = 64 distinct species
+})();
 
 interface Flower {
   x: number;
   band: number; // vertical slot in a tall virtual strip
   sizeSeed: number;
-  colorSeed: number;
+  species: number;
 }
 
 // Cryptic -> crisp. The final line sets up the Swag Deck hand-off at morning.
@@ -72,19 +103,21 @@ export class MeadowDream {
   private container!: Phaser.GameObjects.Container;
   private sky!: Phaser.GameObjects.Graphics;
   private flowersGfx!: Phaser.GameObjects.Graphics;
+  private blackRect?: Phaser.GameObjects.Graphics;
   private bosch?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Graphics;
   private cloak?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Graphics;
+  private flowers: Flower[] = [];
   private boschWalkFrames: number[] = [];
   private boschAnimClock = 0;
-  private flowers: Flower[] = [];
   private keys: Phaser.Input.Keyboard.Key[] = [];
   private distance = 0;
   private messageIndex = 0;
   private finishing = false;
+  private finishStartAt = 0;
   private done = false;
   private readonly width: number;
   private readonly height: number;
-  private readonly strip: number; // virtual vertical strip height flowers wrap within
+  private readonly strip: number;
 
   constructor(scene: Phaser.Scene, opts: MeadowDreamOptions) {
     this.scene = scene;
@@ -105,8 +138,6 @@ export class MeadowDream {
     this.container.add(this.sky);
     this.container.add(this.flowersGfx);
 
-    // Bosch, back to camera, walking away into the meadow. Reuse the real texture if we
-    // have it; otherwise a small hooded silhouette.
     const bx = Math.round(this.width / 2);
     const by = Math.round(this.height * 0.62);
     if (this.opts.boschTextureKey && s.textures.exists(this.opts.boschTextureKey)) {
@@ -125,36 +156,34 @@ export class MeadowDream {
     }
     this.container.add(this.bosch);
 
-    // Cloak's messages render through the host's cinematic caption channel (uiScene), the
-    // same proven text-over-world path the opening flyover uses. The world scene's main
-    // camera does not composite raw Text, so the module does not draw text itself.
+    // Cloak's messages render through the host's cinematic caption channel (uiScene). The
+    // world camera does not composite raw Text, so the module draws no text itself.
 
-    // Deterministic flower field (index-hashed, stable frame to frame).
     for (let i = 0; i < FLOWER_COUNT; i += 1) {
       this.flowers.push({
         x: this.hash(i, 1) * this.width,
         band: this.hash(i, 2) * this.strip,
         sizeSeed: this.hash(i, 3),
-        colorSeed: this.hash(i, 4)
+        species: Math.floor(this.hash(i, 5) * SPECIES.length) % SPECIES.length
       });
     }
 
     const kb = s.input.keyboard;
     if (kb) {
       this.keys = [
-        kb.addKey(Phaser.Input.Keyboard.KeyCodes.UP),
-        kb.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-        kb.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN),
-        kb.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT),
-        kb.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT),
-        kb.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-        kb.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-        kb.addKey(Phaser.Input.Keyboard.KeyCodes.D)
-      ];
+        Phaser.Input.Keyboard.KeyCodes.UP,
+        Phaser.Input.Keyboard.KeyCodes.W,
+        Phaser.Input.Keyboard.KeyCodes.DOWN,
+        Phaser.Input.Keyboard.KeyCodes.LEFT,
+        Phaser.Input.Keyboard.KeyCodes.RIGHT,
+        Phaser.Input.Keyboard.KeyCodes.S,
+        Phaser.Input.Keyboard.KeyCodes.A,
+        Phaser.Input.Keyboard.KeyCodes.D
+      ].map((code) => kb.addKey(code));
     }
   }
 
-  /** Stable pseudo-random in [0,1) from an integer index + salt. No Math.random (stable). */
+  /** Stable pseudo-random in [0,1) from an integer index + salt. */
   private hash(i: number, salt: number): number {
     const x = Math.sin(i * 12.9898 + salt * 78.233) * 43758.5453;
     return x - Math.floor(x);
@@ -165,23 +194,18 @@ export class MeadowDream {
       return { stage: 2, t: 1 };
     }
     if (this.distance >= STAGE_DISTANCE[1]) {
-      const t = (this.distance - STAGE_DISTANCE[1]) / (STAGE_DISTANCE[2] - STAGE_DISTANCE[1]);
-      return { stage: 1, t };
+      return { stage: 1, t: (this.distance - STAGE_DISTANCE[1]) / (STAGE_DISTANCE[2] - STAGE_DISTANCE[1]) };
     }
-    const t = this.distance / STAGE_DISTANCE[1];
-    return { stage: 0, t };
+    return { stage: 0, t: this.distance / STAGE_DISTANCE[1] };
   }
 
   private lerpColor(a: number, b: number, t: number): number {
     const ar = (a >> 16) & 0xff;
     const ag = (a >> 8) & 0xff;
     const ab = a & 0xff;
-    const br = (b >> 16) & 0xff;
-    const bg = (b >> 8) & 0xff;
-    const bb = b & 0xff;
-    const r = Math.round(ar + (br - ar) * t);
-    const g = Math.round(ag + (bg - ag) * t);
-    const bl = Math.round(ab + (bb - ab) * t);
+    const r = Math.round(ar + (((b >> 16) & 0xff) - ar) * t);
+    const g = Math.round(ag + (((b >> 8) & 0xff) - ag) * t);
+    const bl = Math.round(ab + ((b & 0xff) - ab) * t);
     return (r << 16) | (g << 8) | bl;
   }
 
@@ -189,7 +213,15 @@ export class MeadowDream {
     return this.keys.some((k) => k.isDown);
   }
 
-  private onUpdate(_time: number, delta: number): void {
+  /** How far into the flowers-overtake-the-screen phase (0..1). */
+  private overtake(time: number): number {
+    if (!this.finishing) {
+      return 0;
+    }
+    return Phaser.Math.Clamp((time - this.finishStartAt) / FINISH_OVERTAKE_MS, 0, 1);
+  }
+
+  private onUpdate(time: number, delta: number): void {
     if (this.done) {
       return;
     }
@@ -197,21 +229,23 @@ export class MeadowDream {
     if (!this.finishing) {
       this.distance += (this.held() ? HOLD_SPEED : DRIFT_SPEED) * dt;
     }
-    this.renderSky();
-    this.renderFlowers();
-    this.bobBosch(_time, delta);
-    this.tickMessages(_time);
+    this.renderSky(time);
+    this.renderFlowers(time);
+    this.bobBosch(time, delta);
+    this.tickMessages(time);
+    this.tickFinish(time);
     if (import.meta.env.DEV) {
       (globalThis as Record<string, unknown>).__meadowDreamDebug = {
         distance: Math.round(this.distance),
         stage: this.stageProgress().stage,
         messageIndex: this.messageIndex,
-        finishing: this.finishing
+        finishing: this.finishing,
+        overtake: Number(this.overtake(time).toFixed(2))
       };
     }
   }
 
-  private renderSky(): void {
+  private renderSky(time: number): void {
     const { stage, t } = this.stageProgress();
     const next = STAGE_SKY[Math.min(stage + 1, STAGE_SKY.length - 1)];
     const cur = STAGE_SKY[stage];
@@ -220,51 +254,58 @@ export class MeadowDream {
     this.sky.clear();
     const bandH = this.height / SKY_BANDS;
     for (let i = 0; i < SKY_BANDS; i += 1) {
-      const bt = i / (SKY_BANDS - 1);
-      this.sky.fillStyle(this.lerpColor(top, bottom, bt), 1);
+      this.sky.fillStyle(this.lerpColor(top, bottom, i / (SKY_BANDS - 1)), 1);
       this.sky.fillRect(0, Math.floor(i * bandH), this.width, Math.ceil(bandH) + 1);
     }
   }
 
-  private renderFlowers(): void {
+  private renderFlowers(time: number): void {
     const { stage, t } = this.stageProgress();
-    const palette = STAGE_FLOWERS[stage];
+    const overtake = this.overtake(time);
+    // Vividness ramps as the dream deepens; the overtake phase pushes it fully saturated.
+    const vivid = Phaser.Math.Clamp(0.5 + 0.5 * (stage / 2 + (stage < 2 ? t / 2 : 0)) + overtake, 0, 1);
+    // Density ramps with stage, then every flower shows during the overtake.
+    const baseVisible = Math.round(FLOWER_COUNT * (0.4 + 0.6 * (stage / 2 + (stage < 2 ? t / 2 : 0))));
+    const visible = Math.round(baseVisible + (FLOWER_COUNT - baseVisible) * overtake);
+    const sizeBoost = 1 + overtake * overtake * 5.5; // swell to overtake the screen
     const g = this.flowersGfx;
     g.clear();
-    // Density ramps with stage: more of the field is drawn as the dream deepens.
-    const visible = Math.round(FLOWER_COUNT * (0.45 + 0.55 * (stage / 2 + (t / 2) * (stage < 2 ? 1 : 0))));
     for (let i = 0; i < visible; i += 1) {
       const f = this.flowers[i];
-      // Scroll downward as Bosch walks forward; wrap within the virtual strip.
       const y = ((f.band + this.distance) % this.strip) - 60;
-      if (y < -20 || y > this.height + 20) {
+      if (y < -30 || y > this.height + 30) {
         continue;
       }
-      // Perspective-ish: flowers lower on screen are bigger.
       const depth = Phaser.Math.Clamp(y / this.height, 0, 1);
-      const size = (1.5 + f.sizeSeed * 2.5) * (0.5 + depth);
-      const color = palette[Math.floor(f.colorSeed * palette.length) % palette.length];
-      const cx = f.x;
-      // petals
-      g.fillStyle(color, 0.92);
-      g.fillCircle(cx - size, y, size);
-      g.fillCircle(cx + size, y, size);
-      g.fillCircle(cx, y - size, size);
-      g.fillCircle(cx, y + size, size);
-      // center
-      g.fillStyle(0xfff2a8, 0.95);
-      g.fillCircle(cx, y, size * 0.7);
+      const scale = (0.9 + f.sizeSeed * 1.4) * (0.55 + depth) * sizeBoost;
+      this.drawFlower(g, SPECIES[f.species], f.x, y, scale, vivid);
     }
+  }
+
+  private drawFlower(
+    g: Phaser.GameObjects.Graphics,
+    sp: Species,
+    cx: number,
+    cy: number,
+    scale: number,
+    alpha: number
+  ): void {
+    const ring = sp.ringR * scale;
+    const petalR = sp.petalR * scale;
+    g.fillStyle(sp.color, 0.92 * alpha);
+    for (let p = 0; p < sp.petals; p += 1) {
+      const ang = (p / sp.petals) * Math.PI * 2;
+      g.fillCircle(cx + Math.cos(ang) * ring, cy + Math.sin(ang) * ring, petalR);
+    }
+    g.fillStyle(sp.center, 0.96 * alpha);
+    g.fillCircle(cx, cy, Math.max(1, petalR * 0.85));
   }
 
   private bobBosch(time: number, delta: number): void {
     if (!this.bosch) {
       return;
     }
-    const bob = Math.sin(time / 120) * 1.5;
-    const baseY = Math.round(this.height * 0.62);
-    this.bosch.y = baseY + bob;
-    // Alternate the up-walk frames (faster while a direction is held).
+    this.bosch.y = Math.round(this.height * 0.62) + Math.sin(time / 120) * 1.5;
     if (this.bosch instanceof Phaser.GameObjects.Sprite && this.boschWalkFrames.length > 1) {
       this.boschAnimClock += delta * (this.held() ? 1.6 : 0.7);
       const idx = Math.floor(this.boschAnimClock / 160) % this.boschWalkFrames.length;
@@ -276,7 +317,6 @@ export class MeadowDream {
     if (this.finishing) {
       return;
     }
-    // Messages arrive at even distance gates across the walk.
     const gate = (this.messageIndex + 1) * 520;
     if (this.messageIndex < this.messages.length && this.distance >= gate) {
       const isLast = this.messageIndex === this.messages.length - 1;
@@ -291,7 +331,9 @@ export class MeadowDream {
 
   private beginFinish(time: number): void {
     this.finishing = true;
-    // Cloak fades in ahead, then the dream whites out into morning.
+    this.finishStartAt = time;
+    this.opts.onBloom?.();
+    // Cloak fades in ahead as the flowers begin to swell.
     const cx = Math.round(this.width / 2);
     const cy = Math.round(this.height * 0.44);
     if (this.opts.cloakTextureKey && this.scene.textures.exists(this.opts.cloakTextureKey)) {
@@ -310,39 +352,33 @@ export class MeadowDream {
     }
     this.container.add(this.cloak);
     this.scene.tweens.add({ targets: this.cloak, alpha: 1, duration: 900, ease: "Sine.easeIn" });
-    this.scene.time.delayedCall(3600, () => this.whiteOut());
+    // Black curtain drawn on top of everything in the container.
+    this.blackRect = this.scene.add.graphics().setScrollFactor(0);
+    this.container.add(this.blackRect);
   }
 
-  private whiteOut(): void {
-    const flash = this.scene.add
-      .graphics()
-      .setScrollFactor(0)
-      .setDepth(OVERLAY_DEPTH + 10);
-    flash.fillStyle(0xffffff, 0);
-    flash.fillRect(0, 0, this.width, this.height);
-    this.container.add(flash);
-    this.opts.onMessageClear?.();
-    this.opts.onBloom?.();
-    this.scene.tweens.addCounter({
-      from: 0,
-      to: 1,
-      duration: 1100,
-      ease: "Sine.easeIn",
-      onUpdate: (tw) => {
-        const a = tw.getValue() ?? 0;
-        flash.clear();
-        flash.fillStyle(0xffffff, a);
-        flash.fillRect(0, 0, this.width, this.height);
-      },
-      onComplete: () => this.finish()
-    });
+  private tickFinish(time: number): void {
+    if (!this.finishing || !this.blackRect) {
+      return;
+    }
+    const elapsed = time - this.finishStartAt;
+    const fadeT = Phaser.Math.Clamp((elapsed - FINISH_OVERTAKE_MS) / FINISH_FADE_MS, 0, 1);
+    this.blackRect.clear();
+    if (fadeT > 0) {
+      this.opts.onMessageClear?.();
+      this.blackRect.fillStyle(0x000000, fadeT);
+      this.blackRect.fillRect(0, 0, this.width, this.height);
+    }
+    if (fadeT >= 1) {
+      this.finish();
+    }
   }
 
-  /** External escape hatch (e.g. a skip key) - white out immediately. */
-  skip(): void {
+  /** External escape hatch (e.g. a skip key): jump straight to the fade-out. */
+  skip(time = 0): void {
     if (!this.done && !this.finishing) {
-      this.finishing = true;
-      this.whiteOut();
+      this.beginFinish(time);
+      this.finishStartAt = -FINISH_OVERTAKE_MS; // fade immediately
     }
   }
 
@@ -353,7 +389,13 @@ export class MeadowDream {
     this.done = true;
     this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.onUpdate, this);
     this.keys.forEach((k) => k.destroy());
+    this.opts.onMessageClear?.();
+    // Hold black through the handoff: lock the camera black, drop the overlay under it, then
+    // reveal the morning (Bosch wakes up).
+    const cam = this.scene.cameras.main;
+    cam.fadeOut(0, 0, 0, 0);
     this.container.destroy(true);
     this.opts.onComplete();
+    cam.fadeIn(1400, 0, 0, 0);
   }
 }

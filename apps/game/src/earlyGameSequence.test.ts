@@ -255,8 +255,9 @@ describe("early game sequence ownership", () => {
     const dawn = intro2Cutscenes[2];
     expect(dawn.requireFlags).toEqual(["intro:home-scene-done"]);
     expect(dawn.blockFlags).toEqual(["intro:morning"]);
-    expect(dawn.steps).toContainEqual({ op: "setFlag", flag: "intro:morning" });
-    expect(dawn.steps).toContainEqual({ op: "setFlag", flag: "signal:cold-signal-seen" });
+    // The dawn beat now hands off to the pre-wake meadow dream: it arms intro:dream-pending,
+    // and the dream's completion (chunkedWorldScene) sets intro:morning + the cold signal.
+    expect(dawn.steps).toContainEqual({ op: "setFlag", flag: "intro:dream-pending" });
   });
 
   it("rejects duplicate ownership and inline sprite overrides before build copy", () => {
