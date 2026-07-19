@@ -28,12 +28,61 @@ const STAGE_SKY: Array<[number, number]> = [
   [0xffd27a, 0xffe9b8] // stage 2: radiant gold
 ];
 
-// ~50+ wildflower species: every (petal-count x hue) pairing, each with its own center
-// tint and size, so the field never repeats a look. Built deterministically at load.
+// Hand-authored pixel-art flower silhouettes (EarthBound sprite look), each with a baked
+// outline. Cells: X outline, o petal, O petal highlight, v petal shade, c center,
+// C center highlight, g leaf, G leaf highlight, x leaf outline, . transparent. Every row
+// of a template is the same width. Colorized per species.
+const FLOWER_TEMPLATES: Record<string, string[]> = {
+  round: [
+    "...XXX...",
+    ".XXoOoXX.",
+    ".XoOOOoX.",
+    "XoOoooOoX",
+    "XoocCcooX",
+    "XoOoooOoX",
+    ".XoOOOoX.",
+    ".XXoOoXX.",
+    "...XXX..."
+  ],
+  star: [
+    "....X....",
+    "...XoX...",
+    "..XoOoX..",
+    ".XoOOOoX.",
+    "XoOcCcOoX",
+    ".XoOOOoX.",
+    "..XoOoX..",
+    "...XoX...",
+    "....X...."
+  ],
+  tulip: [
+    "..XXXXX..",
+    ".XoOOOoX.",
+    ".XoooooX.",
+    ".XovovoX.",
+    "..XoooX..",
+    "..XoooX..",
+    "...XoX...",
+    "....g....",
+    "..xGg....",
+    "....g....",
+    "....g...."
+  ],
+  clover: [
+    "XoX.XoX..",
+    "oOo.oOo..",
+    "XoX.XoX..",
+    "..XoX....",
+    "..oOo....",
+    "..XoX....",
+    "...g.....",
+    "..xGg....",
+    "...g....."
+  ]
+};
+
 interface Species {
-  petals: number;
-  petalR: number;
-  ringR: number;
+  template: string[];
   color: number;
   center: number;
 }
@@ -41,24 +90,23 @@ const FLOWER_HUES = [
   0xff9ec4, 0xef8fb0, 0xf4b3d0, 0xffd27a, 0xfff2a8, 0xffe9b8, 0x9be7c4, 0xa6d8c0,
   0x7fd0e8, 0x9ec4ff, 0xb59ac4, 0xc9a8ff, 0xd7a0e8, 0xff8f8f, 0xffb37a, 0xe8f0a0
 ];
+const CLOVER_HUES = [0x6fbf5a, 0x8fd07a, 0x9be7c4, 0x5fae72];
 const FLOWER_CENTERS = [0xfff2a8, 0xffd27a, 0xffffff, 0xffe0a0, 0xffc0d8];
-const PETAL_COUNTS = [4, 5, 6, 8];
 const SPECIES: Species[] = (() => {
   const list: Species[] = [];
   let i = 0;
-  for (const petals of PETAL_COUNTS) {
+  // Round / star / tulip carry the full flower palette; clover reads as green foliage.
+  for (const key of ["round", "star", "tulip"]) {
     for (const color of FLOWER_HUES) {
-      list.push({
-        petals,
-        petalR: 1.6 + (i % 3) * 0.7,
-        ringR: 2.2 + petals * 0.28,
-        color,
-        center: FLOWER_CENTERS[i % FLOWER_CENTERS.length]
-      });
+      list.push({ template: FLOWER_TEMPLATES[key], color, center: FLOWER_CENTERS[i % FLOWER_CENTERS.length] });
       i += 1;
     }
   }
-  return list; // 4 x 16 = 64 distinct species
+  for (const color of CLOVER_HUES) {
+    list.push({ template: FLOWER_TEMPLATES.clover, color, center: FLOWER_CENTERS[i % FLOWER_CENTERS.length] });
+    i += 1;
+  }
+  return list; // 3 x 16 + 4 = 52 distinct species
 })();
 
 interface Flower {
@@ -282,9 +330,34 @@ export class MeadowDream {
     }
   }
 
-  /** A chunky pixel-art flower: fillRect blocks snapped to an integer pixel grid, with a
-   * consistent upper-left highlight + lower-right shade (EarthBound sprite shading). No
-   * anti-aliased circles, so it reads as a sprite, not a vector blob. */
+  /** Resolve a template cell char to a color, given a species' petal + center hues. */
+  private cellColor(ch: string, petal: number, center: number): number | null {
+    switch (ch) {
+      case "X":
+        return this.lerpColor(petal, 0x140a24, 0.55); // outline
+      case "o":
+        return petal;
+      case "O":
+        return this.lerpColor(petal, 0xffffff, 0.42); // highlight
+      case "v":
+        return this.lerpColor(petal, 0x140a24, 0.28); // shade
+      case "c":
+        return center;
+      case "C":
+        return this.lerpColor(center, 0xffffff, 0.5);
+      case "g":
+        return 0x4f9a4a; // leaf
+      case "G":
+        return 0x7fc97f; // leaf highlight
+      case "x":
+        return 0x244a24; // leaf outline
+      default:
+        return null; // "." / " " transparent
+    }
+  }
+
+  /** Draw a hand-authored pixel-art flower template as fillRect blocks on an integer grid,
+   * centered on (cx, cy). Crisp blocks + baked outline = EarthBound sprite look. */
   private drawFlower(
     g: Phaser.GameObjects.Graphics,
     sp: Species,
@@ -293,37 +366,23 @@ export class MeadowDream {
     scale: number,
     alpha: number
   ): void {
-    const a = Math.max(0.74, alpha);
+    const a = Math.max(0.78, alpha);
     const u = Math.max(2, Math.round(scale * 1.7)); // chunky pixel unit
-    const petal = sp.color;
-    const petalHi = this.lerpColor(petal, 0xffffff, 0.4);
-    const petalSh = this.lerpColor(petal, 0x1a1030, 0.32);
-    const center = sp.center;
-    const centerHi = this.lerpColor(center, 0xffffff, 0.5);
-    const pB = sp.petalR >= 2.3 ? 3 : 2; // petal block size in pixel-units (species varies)
-    const ring = u * (1.3 + sp.petals * 0.12);
-    const half = (pB * u) / 2;
-    const snap = (v: number): number => Math.round(v / u) * u;
-    for (let p = 0; p < sp.petals; p += 1) {
-      const ang = (p / sp.petals) * Math.PI * 2 + (sp.petals % 2 === 0 ? Math.PI / sp.petals : 0);
-      const px = snap(cx + Math.cos(ang) * ring);
-      const py = snap(cy + Math.sin(ang) * ring);
-      const left = px - half;
-      const top = py - half;
-      g.fillStyle(petal, 0.95 * a);
-      g.fillRect(left, top, pB * u, pB * u);
-      g.fillStyle(petalHi, 0.95 * a); // upper-left light
-      g.fillRect(left, top, u, u);
-      g.fillStyle(petalSh, 0.9 * a); // lower-right shade
-      g.fillRect(left + (pB - 1) * u, top + (pB - 1) * u, u, u);
+    const rows = sp.template;
+    const cols = rows[0].length;
+    const left = Math.round(cx - (cols * u) / 2);
+    const top = Math.round(cy - (rows.length * u) / 2);
+    for (let r = 0; r < rows.length; r += 1) {
+      const row = rows[r];
+      for (let cIdx = 0; cIdx < cols; cIdx += 1) {
+        const color = this.cellColor(row[cIdx], sp.color, sp.center);
+        if (color === null) {
+          continue;
+        }
+        g.fillStyle(color, a);
+        g.fillRect(left + cIdx * u, top + r * u, u, u);
+      }
     }
-    // Center: a 2-unit block with its own highlight.
-    const cgx = snap(cx);
-    const cgy = snap(cy);
-    g.fillStyle(center, 0.98 * a);
-    g.fillRect(cgx - u, cgy - u, 2 * u, 2 * u);
-    g.fillStyle(centerHi, a);
-    g.fillRect(cgx - u, cgy - u, u, u);
   }
 
   private bobBosch(time: number, delta: number): void {
