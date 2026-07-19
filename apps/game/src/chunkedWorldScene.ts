@@ -1130,6 +1130,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.cameras.main.setBackgroundColor("#000000");
     this.targetReference = chooseReference(this.data_);
     this.configureEventRuntime();
+    // Strawberry prologue: seed prologue:active on a NEW GAME before NPC placements are
+    // indexed, so the bedroom prop actors (910220-910223, requireFlags prologue:active)
+    // spawn. maybeStartNewGameStartup fires the prologue cutscene before the flyover;
+    // the cutscene sets prologue:done, which despawns the props. Skipped on Continue
+    // (newGameOpening undefined) and once done.
+    if (this.newGameOpening && !this.gameFlags.has("prologue:done")) {
+      this.gameFlags.set("prologue:active");
+    }
     this.indexChunks();
     this.indexNpcPlacements();
 
@@ -7098,7 +7106,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
   }
 
-  private startCutscene(cutscene: Cutscene): void {
+  private startCutscene(cutscene: Cutscene, onDone?: () => void): void {
     const lockForCutscene = cutscene.lockPlayer !== false;
     this.activeCutsceneId = cutscene.id;
     this.suppressedCutsceneId = cutscene.id;
@@ -7120,6 +7128,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
       }
       this.updatePrompt();
       this.publish();
+      // Chain a follow-on (e.g. the opening flyover after the Strawberry prologue).
+      // Runs last so the continuation can re-lock the player it needs.
+      onDone?.();
     };
     // onComplete fires inside the constructor for all-instant cutscenes; assign
     // only if still running so a completed runner doesn't linger.
@@ -7558,10 +7569,25 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
     // New game opens with an EarthBound-style night flyover of Morningside, then
     // descends (a fade) to Bosch's bed for the wake-up.
-    if (opening) {
-      this.runOpeningFlyover(spawn, runWakeup);
+    const runFlyoverThenWake = (): void => {
+      if (opening) {
+        this.runOpeningFlyover(spawn, runWakeup);
+      } else {
+        runWakeup();
+      }
+    };
+    // Strawberry prologue (Tier-1 keystone): the warm birthday flashback plays FIRST on
+    // a new game, before the night flyover - its closing flash + fade to black bridges
+    // into the flyover, and Bosch wakes alone in the corrected present. Fired explicitly
+    // (the cutscene is opening-owned, so the area scan skips it); its onDone runs the
+    // flyover. Skipped once prologue:done is set.
+    const prologue = opening
+      ? this.data_.cutscenes?.cutscenes.find((cutscene) => cutscene.id === "prologue-strawberry")
+      : undefined;
+    if (prologue && !this.gameFlags.has("prologue:done")) {
+      this.startCutscene(prologue, runFlyoverThenWake);
     } else {
-      runWakeup();
+      runFlyoverThenWake();
     }
   }
 
