@@ -394,6 +394,9 @@ const BATTLE_FX_ATTACK_FLASH_COLOR = 0xffffff;
 const BATTLE_FX_PRAY_BLOOM_MS = 620;
 const BATTLE_FX_PRAY_BLOOM_ALPHA = 0.42;
 const BATTLE_FX_PRAY_BLOOM_COLOR = 0xffd27a;
+// How far the warm "understanding" wave travels out from the enemy sprite (native px).
+const BATTLE_FX_PRAY_BLOOM_MAX_RADIUS = 150;
+const BATTLE_FX_PRAY_BLOOM_DEPTH = BATTLE_FX_FLASH_DEPTH + 0.5;
 const BATTLE_FX_VICTORY_FLASH_COLOR = 0xfff0a6;
 const BATTLE_FX_LEVELUP_FLASH_MS = 440;
 const BATTLE_FX_LEVELUP_FLASH_ALPHA = 0.3;
@@ -446,6 +449,7 @@ type BattleFxCounters = {
   sparkCount: number;
   flashCount: number;
   lungeCount: number;
+  bloomCount: number;
 };
 type ScreenShakeFx = {
   startedAt: number | null;
@@ -646,6 +650,14 @@ export class BattleScene extends Phaser.Scene {
   private hitSparkGraphics?: Phaser.GameObjects.Graphics;
   private flashOverlayGraphics?: Phaser.GameObjects.Graphics;
   private psiAnimationGraphics?: Phaser.GameObjects.Graphics;
+  private understandingBloomGraphics?: Phaser.GameObjects.Graphics;
+  private understandingBloomFx_: {
+    startedAt: number;
+    durationMs: number;
+    x: number;
+    y: number;
+    color: number;
+  } | null = null;
   private enemySpriteBasePoints: Array<SpritePoint | undefined> = [];
   private enemySpriteRedrawScheduled = false;
   private enemySpriteRedrawAttempts = 0;
@@ -757,6 +769,7 @@ export class BattleScene extends Phaser.Scene {
     this.hitSparkFx_ = [];
     this.flashOverlayFx_ = inactiveFlashOverlayFx();
     this.psiBattleAnimationFx_ = null;
+    this.understandingBloomFx_ = null;
     this.enemySpriteBasePoints = [];
     this.enemySpriteRedrawScheduled = false;
     this.enemySpriteRedrawAttempts = 0;
@@ -1804,10 +1817,12 @@ export class BattleScene extends Phaser.Scene {
     }
 
     if (praySuccess) {
-      // Warm full-screen bloom + a warm spark radiating from the enemy: the AV of a win.
-      this.startFlashOverlay(BATTLE_FX_PRAY_BLOOM_COLOR, BATTLE_FX_PRAY_BLOOM_ALPHA, BATTLE_FX_PRAY_BLOOM_MS);
+      // "Understanding lands": the warmth RADIATES out from the enemy sprite (a wave of
+      // recognition reaching the thing that fed on cold agreement), not a flat full-screen
+      // flash. A gentle camera warm-up sells the moment without washing out the scene.
+      this.startUnderstandingBloom(this.praySuccessBloomPoint(result));
       const { r, g, b } = rgbFromHex(BATTLE_FX_PRAY_BLOOM_COLOR);
-      this.cameras.main.flash(220, r, g, b);
+      this.cameras.main.flash(150, r, g, b);
     } else if (result.details.kind === "psi" && !result.skipped) {
       this.startPsiBattleAnimation(result);
     } else if (action?.action === "attack" && !result.skipped) {
@@ -2107,6 +2122,31 @@ export class BattleScene extends Phaser.Scene {
       color
     };
     this.fxCounters_.flashCount += 1;
+  }
+
+  /** Center the understanding bloom on the pray-vulnerable enemy that was reached. */
+  private praySuccessBloomPoint(result: BattleRoundStepResult): SpritePoint {
+    for (const target of uniqueActors(this.impactTargetsForResult(result))) {
+      if (target.side !== "enemy") {
+        continue;
+      }
+      const point = this.impactPointForActor(target);
+      if (point) {
+        return point;
+      }
+    }
+    return this.fallbackImpactPoint();
+  }
+
+  private startUnderstandingBloom(point: SpritePoint): void {
+    this.understandingBloomFx_ = {
+      startedAt: this.time.now,
+      durationMs: BATTLE_FX_PRAY_BLOOM_MS,
+      x: point.x,
+      y: point.y,
+      color: BATTLE_FX_PRAY_BLOOM_COLOR
+    };
+    this.fxCounters_.bloomCount += 1;
   }
 
   private startPsiBattleAnimation(result: BattleRoundStepResult): void {
@@ -3056,9 +3096,11 @@ export class BattleScene extends Phaser.Scene {
     this.hitSparkGraphics?.destroy();
     this.flashOverlayGraphics?.destroy();
     this.psiAnimationGraphics?.destroy();
+    this.understandingBloomGraphics?.destroy();
     this.destroyBattleUiText();
     this.enemyShadowGraphics = this.add.graphics().setDepth(9);
     this.flashOverlayGraphics = this.add.graphics().setDepth(BATTLE_FX_FLASH_DEPTH);
+    this.understandingBloomGraphics = this.add.graphics().setDepth(BATTLE_FX_PRAY_BLOOM_DEPTH);
     this.psiAnimationGraphics = this.add.graphics().setDepth(BATTLE_FX_PSI_ANIMATION_DEPTH);
     this.hitSparkGraphics = this.add.graphics().setDepth(BATTLE_FX_SPARK_DEPTH);
     this.statusGraphics = this.add.graphics().setDepth(20);
@@ -3688,9 +3730,52 @@ export class BattleScene extends Phaser.Scene {
   private renderBattleFx(now: number): void {
     this.applyScreenShake(now);
     this.renderFlashOverlayFx(now);
+    this.renderUnderstandingBloomFx(now);
     this.renderPsiBattleAnimationFx(now);
     this.renderHitSparkFx(now);
     this.updateDamageNumbers(now);
+  }
+
+  /**
+   * The warm "understanding" wave: soft stacked discs + a travelling ring expanding
+   * out of the enemy sprite, fading as they go. Reads as kindness reaching the thing
+   * that fed on cold agreement - light spreading outward, not a flat screen flash.
+   */
+  private renderUnderstandingBloomFx(now: number): void {
+    const graphics = this.understandingBloomGraphics;
+    if (!graphics) {
+      return;
+    }
+    graphics.clear();
+    const fx = this.understandingBloomFx_;
+    if (!fx) {
+      return;
+    }
+    const elapsed = now - fx.startedAt;
+    if (elapsed >= fx.durationMs) {
+      this.understandingBloomFx_ = null;
+      return;
+    }
+    const progress = clampNumber(elapsed / fx.durationMs, 0, 1);
+    const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic - fast open, gentle settle
+    const radius = 12 + eased * BATTLE_FX_PRAY_BLOOM_MAX_RADIUS;
+    const fade = 1 - progress;
+    // Soft falloff: stacked translucent discs approximate a radial gradient.
+    const discs = [
+      { scale: 1.25, alpha: 0.09 },
+      { scale: 0.9, alpha: 0.14 },
+      { scale: 0.58, alpha: 0.2 },
+      { scale: 0.3, alpha: 0.28 }
+    ];
+    for (const disc of discs) {
+      graphics.fillStyle(fx.color, disc.alpha * fade);
+      graphics.fillCircle(fx.x, fx.y, radius * disc.scale);
+    }
+    // The travelling wavefront + a bright warm core that shrinks as the wave leaves.
+    graphics.lineStyle(Math.max(1, Math.round(3 * fade)), fx.color, 0.55 * fade);
+    graphics.strokeCircle(fx.x, fx.y, radius);
+    graphics.fillStyle(0xffffff, 0.5 * fade);
+    graphics.fillCircle(fx.x, fx.y, Math.max(1, 7 * (1 - progress)));
   }
 
   /** Spawn a rising, fading damage number at an impact point (bigger + gold on a smash). */
@@ -5531,7 +5616,8 @@ function initialBattleFxCounters(): BattleFxCounters {
     shakeCount: 0,
     sparkCount: 0,
     flashCount: 0,
-    lungeCount: 0
+    lungeCount: 0,
+    bloomCount: 0
   };
 }
 

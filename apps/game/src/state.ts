@@ -126,6 +126,7 @@ export type BattleFxDebug = {
   sparkCount: number;
   flashCount: number;
   lungeCount: number;
+  bloomCount: number;
 };
 
 export type BattleDebugTargetKind = "enemy" | "ally" | "party" | "self" | "all";
