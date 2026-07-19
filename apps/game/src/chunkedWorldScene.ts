@@ -7312,6 +7312,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
     const upFrames = this.playerFrames.up ?? [];
     const boschFrame = upFrames.length > 0 ? upFrames[0] : Number(boschSprite?.frame?.name ?? 0);
     const cloakKey = "swagdream-cloak";
+    const flowerKey = "swagdream-flowers";
+    const flowerFrames = 16;
     const begin = (): void => {
       this.meadowDream_ = new MeadowDream(this, {
         boschTextureKey: boschKey,
@@ -7319,6 +7321,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
         boschWalkFrames: upFrames.length > 1 ? [...upFrames] : undefined,
         cloakTextureKey: this.textures.exists(cloakKey) ? cloakKey : undefined,
         cloakFrame: 0, // down-facing (row 0): Cloak faces Bosch and the camera when she appears
+        flowerTextureKey: this.textures.exists(flowerKey) ? flowerKey : undefined,
+        flowerFrameCount: flowerFrames,
         onBloom: () => this.playStoryTriggerFxCue("understanding-lands"),
         onMessage: (text) => (this.scene.get("ui") as UiScene).showCinematicCaption(text),
         onMessageClear: () => (this.scene.get("ui") as UiScene).hideCinematicCaption(),
@@ -7330,18 +7334,44 @@ export class ChunkedWorldScene extends Phaser.Scene {
         }
       });
     };
-    if (this.textures.exists(cloakKey)) {
+    if (this.textures.exists(cloakKey) && this.textures.exists(flowerKey)) {
       begin();
       return;
     }
-    // Cloak's sheet is not loaded during the opening; pull it in, then start. COMPLETE
-    // fires even if the file errors, so begin() (with a silhouette fallback) always runs.
-    this.load.spritesheet(cloakKey, "assets/swagbound/hero/lsw-224-walk.png", {
-      frameWidth: 192,
-      frameHeight: 192
+    // The dream's sheets are not loaded during the opening; pull them in, then start.
+    // COMPLETE fires even if a file errors, so begin() (with fallbacks) always runs.
+    if (!this.textures.exists(cloakKey)) {
+      this.load.spritesheet(cloakKey, "assets/swagbound/hero/lsw-224-walk.png", {
+        frameWidth: 192,
+        frameHeight: 192
+      });
+    }
+    if (!this.textures.exists(flowerKey)) {
+      this.load.image(flowerKey, "assets/swagbound/dream/flowers.png");
+    }
+    this.load.once(Phaser.Loader.Events.COMPLETE, () => {
+      this.registerDreamFlowerFrames(flowerKey);
+      begin();
     });
-    this.load.once(Phaser.Loader.Events.COMPLETE, begin);
     this.load.start();
+  }
+
+  /**
+   * The generated flower sheet is a loose grid; slice it by the 16 detected per-flower
+   * bounding boxes (connected-component alpha scan, tmp/flower-cc.mjs) so nothing clips.
+   */
+  private registerDreamFlowerFrames(flowerKey: string): void {
+    const tex = this.textures.get(flowerKey);
+    if (!tex || tex.has("flower-0")) {
+      return;
+    }
+    const rects: Array<[number, number, number, number]> = [
+      [415, 90, 153, 226], [696, 101, 166, 218], [117, 102, 177, 216], [974, 107, 180, 211],
+      [692, 374, 163, 214], [99, 380, 213, 197], [409, 384, 159, 198], [969, 389, 169, 198],
+      [699, 635, 131, 210], [123, 643, 150, 201], [414, 653, 123, 192], [986, 659, 131, 186],
+      [386, 913, 168, 214], [681, 915, 175, 211], [110, 916, 168, 211], [988, 921, 143, 204]
+    ];
+    rects.forEach(([x, y, w, h], i) => tex.add(`flower-${i}`, 0, x, y, w, h));
   }
 
   private hexToRgb(color: string | undefined, fallback: [number, number, number]): [number, number, number] {

@@ -8,13 +8,15 @@ import Phaser from "phaser";
  * overtake the whole screen and it slowly fades to black, and Bosch wakes up.
  *
  * Rendered as a self-contained screen-space overlay so it never touches world/save
- * state. Canvas renderer: only Graphics fill* primitives (proven to composite) +
- * Sprites are drawn; message text goes through the host's cinematic caption channel.
+ * state. Flowers are real pixel-art sprites (a generated EarthBound-style sheet) drawn
+ * nearest-filtered; sky is a Graphics gradient; message text goes through the host's
+ * cinematic caption channel.
  */
 
 const OVERLAY_DEPTH = 200_000;
 const SKY_BANDS = 20;
-const FLOWER_COUNT = 130;
+const FLOWER_COUNT = 120;
+const FLOWER_BASE_PX = 40; // on-screen size of a flower at scale 1
 const HOLD_SPEED = 150; // distance units/sec while a direction is held
 const DRIFT_SPEED = 34; // slow auto-drift so it can never soft-lock
 const STAGE_DISTANCE = [0, 1900, 4000]; // distance at which stages 0/1/2 begin
@@ -28,92 +30,11 @@ const STAGE_SKY: Array<[number, number]> = [
   [0xffd27a, 0xffe9b8] // stage 2: radiant gold
 ];
 
-// Hand-authored pixel-art flower silhouettes (EarthBound sprite look), each with a baked
-// outline. Cells: X outline, o petal, O petal highlight, v petal shade, c center,
-// C center highlight, g leaf, G leaf highlight, x leaf outline, . transparent. Every row
-// of a template is the same width. Colorized per species.
-const FLOWER_TEMPLATES: Record<string, string[]> = {
-  round: [
-    "...XXX...",
-    ".XXoOoXX.",
-    ".XoOOOoX.",
-    "XoOoooOoX",
-    "XoocCcooX",
-    "XoOoooOoX",
-    ".XoOOOoX.",
-    ".XXoOoXX.",
-    "...XXX..."
-  ],
-  star: [
-    "....X....",
-    "...XoX...",
-    "..XoOoX..",
-    ".XoOOOoX.",
-    "XoOcCcOoX",
-    ".XoOOOoX.",
-    "..XoOoX..",
-    "...XoX...",
-    "....X...."
-  ],
-  tulip: [
-    "..XXXXX..",
-    ".XoOOOoX.",
-    ".XoooooX.",
-    ".XovovoX.",
-    "..XoooX..",
-    "..XoooX..",
-    "...XoX...",
-    "....g....",
-    "..xGg....",
-    "....g....",
-    "....g...."
-  ],
-  clover: [
-    "XoX.XoX..",
-    "oOo.oOo..",
-    "XoX.XoX..",
-    "..XoX....",
-    "..oOo....",
-    "..XoX....",
-    "...g.....",
-    "..xGg....",
-    "...g....."
-  ]
-};
-
-interface Species {
-  template: string[];
-  color: number;
-  center: number;
-}
-const FLOWER_HUES = [
-  0xff9ec4, 0xef8fb0, 0xf4b3d0, 0xffd27a, 0xfff2a8, 0xffe9b8, 0x9be7c4, 0xa6d8c0,
-  0x7fd0e8, 0x9ec4ff, 0xb59ac4, 0xc9a8ff, 0xd7a0e8, 0xff8f8f, 0xffb37a, 0xe8f0a0
-];
-const CLOVER_HUES = [0x6fbf5a, 0x8fd07a, 0x9be7c4, 0x5fae72];
-const FLOWER_CENTERS = [0xfff2a8, 0xffd27a, 0xffffff, 0xffe0a0, 0xffc0d8];
-const SPECIES: Species[] = (() => {
-  const list: Species[] = [];
-  let i = 0;
-  // Round / star / tulip carry the full flower palette; clover reads as green foliage.
-  for (const key of ["round", "star", "tulip"]) {
-    for (const color of FLOWER_HUES) {
-      list.push({ template: FLOWER_TEMPLATES[key], color, center: FLOWER_CENTERS[i % FLOWER_CENTERS.length] });
-      i += 1;
-    }
-  }
-  for (const color of CLOVER_HUES) {
-    list.push({ template: FLOWER_TEMPLATES.clover, color, center: FLOWER_CENTERS[i % FLOWER_CENTERS.length] });
-    i += 1;
-  }
-  return list; // 3 x 16 + 4 = 52 distinct species
-})();
-
 interface Flower {
+  sprite: Phaser.GameObjects.Image;
   x: number;
   band: number; // vertical slot in a tall virtual strip
   sizeSeed: number;
-  species: number;
 }
 
 // Cryptic -> crisp. The final line sets up the Swag Deck hand-off at morning.
@@ -137,6 +58,8 @@ export interface MeadowDreamOptions {
   boschWalkFrames?: number[];
   cloakTextureKey?: string;
   cloakFrame?: number;
+  flowerTextureKey?: string;
+  flowerFrameCount?: number;
   messages?: string[];
   onBloom?: () => void; // host fires the warm "understanding" bloom + chime
   onMessage?: (text: string) => void; // host shows the cinematic caption (uiScene)
@@ -150,11 +73,11 @@ export class MeadowDream {
   private readonly messages: string[];
   private container!: Phaser.GameObjects.Container;
   private sky!: Phaser.GameObjects.Graphics;
-  private flowersGfx!: Phaser.GameObjects.Graphics;
   private blackRect?: Phaser.GameObjects.Graphics;
   private bosch?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Graphics;
   private cloak?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Graphics;
   private flowers: Flower[] = [];
+  private flowerEmitter?: Phaser.GameObjects.Particles.ParticleEmitter;
   private boschWalkFrames: number[] = [];
   private boschAnimClock = 0;
   private keys: Phaser.Input.Keyboard.Key[] = [];
@@ -173,7 +96,7 @@ export class MeadowDream {
     this.messages = opts.messages ?? DEFAULT_MESSAGES;
     this.width = scene.scale.width;
     this.height = scene.scale.height;
-    this.strip = this.height + 120;
+    this.strip = this.height + 160;
     this.build();
     this.scene.events.on(Phaser.Scenes.Events.UPDATE, this.onUpdate, this);
   }
@@ -182,9 +105,47 @@ export class MeadowDream {
     const s = this.scene;
     this.container = s.add.container(0, 0).setDepth(OVERLAY_DEPTH).setScrollFactor(0);
     this.sky = s.add.graphics().setScrollFactor(0);
-    this.flowersGfx = s.add.graphics().setScrollFactor(0);
     this.container.add(this.sky);
-    this.container.add(this.flowersGfx);
+
+    // Flower sprites: a generated EarthBound-style sheet, drawn crisp (nearest filter).
+    const key = this.opts.flowerTextureKey;
+    const frames = Math.max(1, this.opts.flowerFrameCount ?? 1);
+    if (key && s.textures.exists(key)) {
+      s.textures.get(key).setFilter(Phaser.Textures.FilterMode.NEAREST);
+      for (let i = 0; i < FLOWER_COUNT; i += 1) {
+        const frame = Math.floor(this.hash(i, 5) * frames) % frames;
+        const frameName = s.textures.get(key).has(`flower-${frame}`) ? `flower-${frame}` : frame;
+        const img = s.add
+          .image(0, 0, key, frameName)
+          .setScrollFactor(0)
+          .setOrigin(0.5, 0.62)
+          .setVisible(false);
+        this.container.add(img);
+        this.flowers.push({ sprite: img, x: this.hash(i, 1) * this.width, band: this.hash(i, 2) * this.strip, sizeSeed: this.hash(i, 3) });
+      }
+      // Ambient dream-flowers drifting up (a sparse life during the walk; floods into a
+      // swarm at the finale). Reuses the same flower frames.
+      const frameNames = Array.from({ length: frames }, (_, i) => `flower-${i}`).filter((n) =>
+        s.textures.get(key).has(n)
+      );
+      this.flowerEmitter = s.add
+        .particles(0, 0, key, {
+          frame: frameNames,
+          x: { min: 0, max: this.width },
+          y: this.height + 30,
+          lifespan: 4200,
+          speedY: { min: -70, max: -28 },
+          speedX: { min: -34, max: 34 },
+          scale: { min: 0.06, max: 0.16 },
+          alpha: { start: 0.75, end: 0 },
+          rotate: { min: -22, max: 22 },
+          frequency: 360,
+          quantity: 1
+        })
+        .setScrollFactor(0)
+        .setDepth(this.height + 50);
+      this.container.add(this.flowerEmitter);
+    }
 
     const bx = Math.round(this.width / 2);
     const by = Math.round(this.height * 0.62);
@@ -206,15 +167,6 @@ export class MeadowDream {
 
     // Cloak's messages render through the host's cinematic caption channel (uiScene). The
     // world camera does not composite raw Text, so the module draws no text itself.
-
-    for (let i = 0; i < FLOWER_COUNT; i += 1) {
-      this.flowers.push({
-        x: this.hash(i, 1) * this.width,
-        band: this.hash(i, 2) * this.strip,
-        sizeSeed: this.hash(i, 3),
-        species: Math.floor(this.hash(i, 5) * SPECIES.length) % SPECIES.length
-      });
-    }
 
     const kb = s.input.keyboard;
     if (kb) {
@@ -277,8 +229,8 @@ export class MeadowDream {
     if (!this.finishing) {
       this.distance += (this.held() ? HOLD_SPEED : DRIFT_SPEED) * dt;
     }
-    this.renderSky(time);
-    this.renderFlowers(time);
+    this.renderSky();
+    this.updateFlowers(time);
     this.bobBosch(time, delta);
     this.tickMessages(time);
     this.tickFinish(time);
@@ -293,7 +245,7 @@ export class MeadowDream {
     }
   }
 
-  private renderSky(time: number): void {
+  private renderSky(): void {
     const { stage, t } = this.stageProgress();
     const next = STAGE_SKY[Math.min(stage + 1, STAGE_SKY.length - 1)];
     const cur = STAGE_SKY[stage];
@@ -307,81 +259,34 @@ export class MeadowDream {
     }
   }
 
-  private renderFlowers(time: number): void {
+  private updateFlowers(time: number): void {
     const { stage, t } = this.stageProgress();
     const overtake = this.overtake(time);
-    // Vividness ramps as the dream deepens; the overtake phase pushes it fully saturated.
-    const vivid = Phaser.Math.Clamp(0.5 + 0.5 * (stage / 2 + (stage < 2 ? t / 2 : 0)) + overtake, 0, 1);
-    // Density ramps with stage, then every flower shows during the overtake.
-    const baseVisible = Math.round(FLOWER_COUNT * (0.4 + 0.6 * (stage / 2 + (stage < 2 ? t / 2 : 0))));
+    const deepen = stage / 2 + (stage < 2 ? t / 2 : 0);
+    const vivid = Phaser.Math.Clamp(0.55 + 0.45 * deepen + overtake, 0, 1);
+    const baseVisible = Math.round(FLOWER_COUNT * (0.4 + 0.6 * deepen));
     const visible = Math.round(baseVisible + (FLOWER_COUNT - baseVisible) * overtake);
-    const sizeBoost = 1 + overtake * overtake * 5.5; // swell to overtake the screen
-    const g = this.flowersGfx;
-    g.clear();
-    for (let i = 0; i < visible; i += 1) {
+    const sizeBoost = 1 + overtake * overtake * 6;
+    for (let i = 0; i < this.flowers.length; i += 1) {
       const f = this.flowers[i];
-      const y = ((f.band + this.distance) % this.strip) - 60;
-      if (y < -30 || y > this.height + 30) {
+      if (i >= visible) {
+        f.sprite.setVisible(false);
+        continue;
+      }
+      const y = ((f.band + this.distance) % this.strip) - 80;
+      if (y < -40 || y > this.height + 40) {
+        f.sprite.setVisible(false);
         continue;
       }
       const depth = Phaser.Math.Clamp(y / this.height, 0, 1);
-      const scale = (0.9 + f.sizeSeed * 1.4) * (0.55 + depth) * sizeBoost;
-      this.drawFlower(g, SPECIES[f.species], f.x, y, scale, vivid);
-    }
-  }
-
-  /** Resolve a template cell char to a color, given a species' petal + center hues. */
-  private cellColor(ch: string, petal: number, center: number): number | null {
-    switch (ch) {
-      case "X":
-        return this.lerpColor(petal, 0x140a24, 0.55); // outline
-      case "o":
-        return petal;
-      case "O":
-        return this.lerpColor(petal, 0xffffff, 0.42); // highlight
-      case "v":
-        return this.lerpColor(petal, 0x140a24, 0.28); // shade
-      case "c":
-        return center;
-      case "C":
-        return this.lerpColor(center, 0xffffff, 0.5);
-      case "g":
-        return 0x4f9a4a; // leaf
-      case "G":
-        return 0x7fc97f; // leaf highlight
-      case "x":
-        return 0x244a24; // leaf outline
-      default:
-        return null; // "." / " " transparent
-    }
-  }
-
-  /** Draw a hand-authored pixel-art flower template as fillRect blocks on an integer grid,
-   * centered on (cx, cy). Crisp blocks + baked outline = EarthBound sprite look. */
-  private drawFlower(
-    g: Phaser.GameObjects.Graphics,
-    sp: Species,
-    cx: number,
-    cy: number,
-    scale: number,
-    alpha: number
-  ): void {
-    const a = Math.max(0.78, alpha);
-    const u = Math.max(2, Math.round(scale * 1.7)); // chunky pixel unit
-    const rows = sp.template;
-    const cols = rows[0].length;
-    const left = Math.round(cx - (cols * u) / 2);
-    const top = Math.round(cy - (rows.length * u) / 2);
-    for (let r = 0; r < rows.length; r += 1) {
-      const row = rows[r];
-      for (let cIdx = 0; cIdx < cols; cIdx += 1) {
-        const color = this.cellColor(row[cIdx], sp.color, sp.center);
-        if (color === null) {
-          continue;
-        }
-        g.fillStyle(color, a);
-        g.fillRect(left + cIdx * u, top + r * u, u, u);
-      }
+      const target = FLOWER_BASE_PX * (0.5 + f.sizeSeed * 0.7) * (0.55 + depth) * sizeBoost;
+      const fw = f.sprite.frame.width;
+      const fh = f.sprite.frame.height;
+      f.sprite.setVisible(true);
+      f.sprite.setPosition(f.x, y);
+      f.sprite.setScale(target / Math.max(fw, fh)); // normalize longest side, keep aspect
+      f.sprite.setAlpha(vivid);
+      f.sprite.setDepth(y); // nearer (lower) flowers draw over farther ones
     }
   }
 
@@ -395,6 +300,7 @@ export class MeadowDream {
       const idx = Math.floor(this.boschAnimClock / 160) % this.boschWalkFrames.length;
       this.bosch.setFrame(this.boschWalkFrames[idx]);
     }
+    this.bosch.setDepth(this.height * 0.62); // Bosch sorts among the flowers
   }
 
   private tickMessages(time: number): void {
@@ -417,7 +323,8 @@ export class MeadowDream {
     this.finishing = true;
     this.finishStartAt = time;
     this.opts.onBloom?.();
-    // Cloak fades in ahead as the flowers begin to swell.
+    // Flood the ambient drift into a swarm as everything blooms over.
+    this.flowerEmitter?.setFrequency(24, 3);
     const cx = Math.round(this.width / 2);
     const cy = Math.round(this.height * 0.44);
     if (this.opts.cloakTextureKey && this.scene.textures.exists(this.opts.cloakTextureKey)) {
@@ -425,19 +332,19 @@ export class MeadowDream {
         .sprite(cx, cy, this.opts.cloakTextureKey, this.opts.cloakFrame ?? 0)
         .setScrollFactor(0)
         .setOrigin(0.5, 1)
-        .setAlpha(0);
+        .setAlpha(0)
+        .setDepth(this.height + 100); // above the flowers
       sprite.setDisplaySize(38, 38);
       this.cloak = sprite;
     } else {
-      const g = this.scene.add.graphics().setScrollFactor(0).setAlpha(0);
+      const g = this.scene.add.graphics().setScrollFactor(0).setAlpha(0).setDepth(this.height + 100);
       g.fillStyle(0xfff2c8, 1);
       g.fillRoundedRect(cx - 10, cy - 34, 20, 34, 6);
       this.cloak = g;
     }
     this.container.add(this.cloak);
     this.scene.tweens.add({ targets: this.cloak, alpha: 1, duration: 900, ease: "Sine.easeIn" });
-    // Black curtain drawn on top of everything in the container.
-    this.blackRect = this.scene.add.graphics().setScrollFactor(0);
+    this.blackRect = this.scene.add.graphics().setScrollFactor(0).setDepth(this.height + 500);
     this.container.add(this.blackRect);
   }
 
@@ -462,7 +369,7 @@ export class MeadowDream {
   skip(time = 0): void {
     if (!this.done && !this.finishing) {
       this.beginFinish(time);
-      this.finishStartAt = -FINISH_OVERTAKE_MS; // fade immediately
+      this.finishStartAt = -FINISH_OVERTAKE_MS;
     }
   }
 
@@ -474,8 +381,6 @@ export class MeadowDream {
     this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.onUpdate, this);
     this.keys.forEach((k) => k.destroy());
     this.opts.onMessageClear?.();
-    // Hold black through the handoff: lock the camera black, drop the overlay under it, then
-    // reveal the morning (Bosch wakes up).
     const cam = this.scene.cameras.main;
     cam.fadeOut(0, 0, 0, 0);
     this.container.destroy(true);
