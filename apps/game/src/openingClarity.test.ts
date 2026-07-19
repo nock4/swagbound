@@ -63,14 +63,17 @@ describe("opening clarity overlay", () => {
     expect(resolved?.byEnemyId?.[37]?.image).toContain("dox-sheet-world.png");
   });
 
-  it("replaces the abstract spawn cutscene while preserving its flag step", () => {
+  it("keeps the spawn cutscene a silent flag-setter (monologue removed; hand-off is the parent scene)", () => {
+    // 2026-07-19: the "Bosch wakes to a wrongness" morning monologue was removed (no key
+    // story/guidance via narration). signal-town-cold-signal-open now only sets its flag;
+    // the Swag Deck hand-off + how-to-use + wayfinding are delivered as a SCENE by Bosch's
+    // parent (trigger signal-town-parent-swag-deck).
     const base = CutscenesSchema.parse(JSON.parse(
       readFileSync(resolve("content/cutscenes.json"), "utf8")
     ));
     const resolved = applyOpeningClarityCutscenes(base, clarity);
     const opening = resolved?.cutscenes.find((entry) => entry.id === "signal-town-cold-signal-open");
-    const dialogue = opening?.steps.find((step) => step.op === "dialogue");
-    expect(dialogue?.op === "dialogue" ? dialogue.pages.join(" ") : "").toContain("mailbox flag snaps up once");
+    expect(opening?.steps.some((step) => step.op === "dialogue")).toBe(false);
     expect(opening?.steps).toContainEqual({ op: "setFlag", flag: "signal:cold-signal-seen" });
 
     const hill = resolved?.cutscenes.find((entry) => entry.id === "onett-brother-fallsin");

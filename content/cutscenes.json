@@ -374,7 +374,7 @@
   },
   {
    "id": "signal-town-cold-signal-open",
-   "comment": "ACT-1 PREMISE (flowchart A1/A4/A5). Custom Swagbound cold-signal opening that stages the provenance-war thesis the EB-shaped intro never delivers: a File of Bosch is already circulating before he acts, the card carries the 'almost-right face' + 'I said it first' line + a checked VESSEL box, and a household voice arrives too late. Ends by aiming the player WEST at the arcade card-clique (first wayfinding cue). Area brackets the new-game spawn (2112,1768) so it fires on game start; once so it never re-fires; lockPlayer + dialogue-only steps so the player is always released.",
+   "comment": "ACT-1 MORNING: monologue removed (Nick 2026-07-19: no key story/guidance via narration). Now a silent flag-setter; the Swag Deck hand-off + how-to-use + wayfinding are delivered as a SCENE by Bosch's parent (trigger signal-town-parent-swag-deck) and shown household behavior.",
    "trigger": {
     "kind": "area",
     "area": {
@@ -387,17 +387,6 @@
    "once": true,
    "lockPlayer": true,
    "steps": [
-    {
-     "op": "dialogue",
-     "pages": [
-      "Bosch wakes to a wrongness he cannot place. The room is his room, but the morning light comes from the wrong side, and the street outside the window was repainted while he slept.",
-      "Downstairs the household is cheerful and certain, the way people are certain of things that were decided for them. They greet him by a name that is almost his, and do not hear the difference.",
-      "One thing in the house did not change overnight: the Swag Deck in his pocket, damaged and stubborn and exactly as wrong as it was yesterday. Held up against the corrected room, it is the only place the edits still show.",
-      "Something is moving through Morningside line by line, fixing what was never broken, and no one who has been fixed can tell. Bosch can. That is the whole problem.",
-      "The changes thin out here at the top of town and thicken to the west, toward the arcade, where the light hums and the corrections come faster than the eye can hold.",
-      "(Arrow keys move Bosch. Press Z to look hard at things, and to talk. Start with the kid on the stoop. He will explain the town to you, and he will be a little bit wrong about all of it.)"
-     ]
-    },
     {
      "op": "setFlag",
      "flag": "signal:cold-signal-seen"
@@ -2551,16 +2540,13 @@
     {
      "op": "dialogue",
      "pages": [
-      "A meteor sits in the crater, still warm, humming a little.",
-      "Six shapes stand around it. Each one is wearing a face you almost know.",
-      "They do not look up. They only say the one word, to no one in particular."
+      "A meteor sits in the crater, still warm, humming a little. Six figures stand around it. Each one looks the same. Gentle. They do not look up."
      ]
     },
     {
      "op": "dialogue",
      "pages": [
-      "MiFella: ...Okay. I got my picture. I really do not want to be up here anymore.",
-      "MiFella: Come on, Bosch. Let's go home and sleep. We can worry about it in the morning."
+      "MiFella: I got my picture. I really do not want to be up here anymore. Let's go home and sleep."
      ]
     },
     {
@@ -2600,7 +2586,7 @@
      "pages": [
       "MiFella replays his photos of the crowd.",
       "MiFella echoes the word once under his breath.",
-      "Everyone up there felt so together."
+      "Everyone up there seemed so cool."
      ]
     },
     {

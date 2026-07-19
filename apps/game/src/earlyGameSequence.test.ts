@@ -43,7 +43,7 @@ const OPENING_DIALOGUE = {
   "home-scene": [
     "MiFella replays his photos of the crowd.",
     "MiFella echoes the word once under his breath.",
-    "Everyone up there felt so together."
+    "Everyone up there seemed so cool."
   ],
   "mifella-outside": [
     "MiFella: There you are! It came down on the hill, I watched it happen!",
@@ -57,8 +57,7 @@ const OPENING_DIALOGUE = {
   "witness-5": ["milady"],
   "lsw-witness": [
     "A traveler in a Little Swag World bucket hat has stopped dead on the path, staring up at the ring of figures around the crater.",
-    "\"Twin. TWIN. What ARE those things? They just stand there saying the one word at the rock. 'milady.' Over and over.\"",
-    "\"I came up from the source world this morning. I have never heard that word in my life. So why does it sound like it already knows mine?\""
+    "\"Twin. TWIN. What ARE those things? They just stand there saying the one word at the rock. 'milady.' Over and over.\""
   ],
   // Strawberry prologue prop examine lines (bedroom).
   "prologue-cake": ["The cake leans like it gave up halfway through being a cake."],

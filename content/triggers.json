@@ -2049,6 +2049,35 @@
    "setFlags": [
     "cult:lsw:refused-chant"
    ]
+  },
+  {
+   "id": "signal-town-parent-swag-deck",
+   "comment": "ACT-1 MORNING hand-off scene (replaces the removed cold-signal monologue). Bosch's parent (npc 910230) stops him on the way out, GIVES the Swag Deck (item 206), teaches the use (hold it up; trust the deck over the world), and points him at MiFella/the arcade. Guaranteed grant (the deck was never actually granted before).",
+   "area": {
+    "x": 1980,
+    "y": 1712,
+    "w": 210,
+    "h": 112
+   },
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "blockFlags": [
+    "story-item:dox-sheet"
+   ],
+   "once": true,
+   "dialogue": [
+    "MOM: You are not walking out that door without your deck. Here. Take it.",
+    "MOM: It came up from the source world with us. It is the one thing they never learned how to copy right.",
+    "MOM: When something out there feels wrong, hold it up and really look. If the world and your deck disagree, you believe the deck. Every single time.",
+    "MOM: ...MiFella already tore off toward the arcade. Go on. Find your friend."
+   ],
+   "grantItems": [
+    206
+   ],
+   "setFlags": [
+    "story-item:dox-sheet"
+   ]
   }
  ],
  "barriers": [

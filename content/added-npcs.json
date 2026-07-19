@@ -12785,6 +12785,24 @@
    "interaction": {
     "ref": "prologue-mifella"
    }
+  },
+  {
+   "id": 910230,
+   "worldPixel": {
+    "x": 2088,
+    "y": 1748
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "MOM: Go on, sweetheart. MiFella will not wait forever, and you know how he gets."
+    ]
+   }
   }
  ]
 }

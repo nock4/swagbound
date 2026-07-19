@@ -35,7 +35,7 @@ describe("sprite atlas extractor", () => {
       // + 4 Dead Letter shop-street found-speech NPCs (930117-930120; byNpcId skins)
       // + 8 Eight Sources Archivists (930121-930128; archivist-001-ow skin)
       // + 3 opening meteor-scene additions (910208/910209 Miladys, 910210 LSW traveler).
-      usedByNpcCount: 742,
+      usedByNpcCount: 743,
       overridden: true,
       overrideKind: "group"
     });
