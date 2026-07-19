@@ -389,6 +389,11 @@ const BATTLE_FX_ATTACK_FLASH_ALPHA = 0.22;
 const BATTLE_FX_PSI_FLASH_ALPHA = 0.4;
 const BATTLE_FX_VICTORY_FLASH_ALPHA = 0.34;
 const BATTLE_FX_ATTACK_FLASH_COLOR = 0xffffff;
+// "Understanding lands": PRAY that beats a pray-vulnerable enemy (kindness beating the
+// cold machine) blooms WARM instead of a cold hit-flash - the AV grammar of a win.
+const BATTLE_FX_PRAY_BLOOM_MS = 620;
+const BATTLE_FX_PRAY_BLOOM_ALPHA = 0.42;
+const BATTLE_FX_PRAY_BLOOM_COLOR = 0xffd27a;
 const BATTLE_FX_VICTORY_FLASH_COLOR = 0xfff0a6;
 const BATTLE_FX_LEVELUP_FLASH_MS = 440;
 const BATTLE_FX_LEVELUP_FLASH_ALPHA = 0.3;
@@ -1790,7 +1795,14 @@ export class BattleScene extends Phaser.Scene {
       }
     }
 
-    if (result.details.kind === "psi" && !result.skipped) {
+    if (result.details.kind === "pray" && damaging && !result.skipped) {
+      // "Understanding lands": a PRAY that DAMAGES (i.e. a pray-vulnerable enemy that
+      // feeds on agreement) is kindness beating the cold machine - bloom WARM, not a
+      // cold hit-flash. A normal pray heals (damage 0) and does not bloom.
+      this.startFlashOverlay(BATTLE_FX_PRAY_BLOOM_COLOR, BATTLE_FX_PRAY_BLOOM_ALPHA, BATTLE_FX_PRAY_BLOOM_MS);
+      const { r, g, b } = rgbFromHex(BATTLE_FX_PRAY_BLOOM_COLOR);
+      this.cameras.main.flash(220, r, g, b);
+    } else if (result.details.kind === "psi" && !result.skipped) {
       this.startPsiBattleAnimation(result);
     } else if (action?.action === "attack" && !result.skipped) {
       this.startFlashOverlay(
