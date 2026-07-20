@@ -12803,6 +12803,46 @@
      "MOM: Go on, sweetheart. MiFella will not wait forever, and you know how he gets."
     ]
    }
+  },
+  {
+   "id": 910240,
+   "worldPixel": {
+    "x": 2216,
+    "y": 1748
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #7677: gm. clear raincoat, donda shades kind of day. you don't get it. that's fine. you will.",
+     "DRIFELLA 2 #7677: dark magician aura sword in one hand, fortnite nerf gun in the other. i've genuinely never been more myself.",
+     "DRIFELLA 2 #7677: put one on, anon. everyone is. tell you what, floor's moving, so I'll let you buy your own bike back. now-ish? now's good."
+    ]
+   }
+  },
+  {
+   "id": 910241,
+   "worldPixel": {
+    "x": 2160,
+    "y": 1748
+   },
+   "spriteGroup": 59,
+   "facing": "right",
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "NEIGHBOR: You looking for Denny? That's not Denny anymore. He put on the milady Tuesday.",
+     "NEIGHBOR: Now he's just a number. Only talks in the... the traits. Nobody explains the traits.",
+     "NEIGHBOR: He tried to sell me my own lawnmower. Called it a deal. Twice."
+    ]
+   }
   }
  ]
 }
