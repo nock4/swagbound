@@ -16,6 +16,7 @@ import path from "node:path";
 
 const SMOKE = process.argv.includes("--smoke");
 const EXTEND = process.argv.includes("--extend"); // reframe custom-dialogue (716 NPCs), chunked
+const CUTSCENES = process.argv.includes("--cutscenes"); // reframe cutscenes.json + boss dialogue (nested)
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const OUT = path.join(ROOT, "tmp/cult-reframe");
 const log = (m) => console.log(`[${new Date().toISOString().slice(11, 19)}] ${m}`);
@@ -123,9 +124,74 @@ HARD RULES: keep EVERY id key and every "pages" array the SAME length; change on
   return changed > 0;
 }
 
+// Generic: reframe a {key: {pages:[...]}} map IN PLACE, batched + guardrailed. Returns changed?
+function reframeBatchesOfPages(mapObj, label, chunkSize) {
+  const keys = Object.keys(mapObj);
+  let changed = 0, reverted = 0, batches = 0;
+  for (let i = 0; i < keys.length; i += chunkSize) {
+    const batchKeys = keys.slice(i, i + chunkSize);
+    const batch = {};
+    for (const k of batchKeys) batch[k] = mapObj[k];
+    const before = JSON.stringify(batch);
+    const sigBefore = pagesSig(batch);
+    const tmp = path.join(OUT, `batch-${label.replace(/[^a-z0-9]/gi, "_")}-${i}.json`);
+    fs.writeFileSync(tmp, JSON.stringify(batch, null, 1));
+    batches += 1;
+    const prompt = `Edit the JSON file ${tmp}. It maps ids to {"pages": [strings]}. Reframe every page string from the old "a machine corrects/copies people" premise to the CULT premise: Milady is a cult that recruits people, takes their money, is an inside joke you are not in on, and pervades daily life. Reframe framing + vocabulary only; keep the plot. Many entries are already cult-flavored - leave those unchanged.
+${LEXICON}
+HARD RULES: keep EVERY id key and every "pages" array the SAME length; change only string values; EarthBound plain kid-real voice; NO em dashes; keep the word Strawberry. Output valid JSON to the same file.`;
+    spawnSync("codex", ["exec", "--skip-git-repo-check", "-c", "model_reasoning_effort=medium", prompt],
+      { cwd: ROOT, encoding: "utf8", timeout: 12 * 60 * 1000, stdio: ["ignore", "pipe", "pipe"] });
+    let after;
+    try { after = JSON.parse(fs.readFileSync(tmp, "utf8")); } catch { reverted += 1; log(`  ${label} batch@${i}: REVERT (bad JSON)`); continue; }
+    if (pagesSig(after) !== sigBefore || (JSON.stringify(after).match(/—/g) || []).length > 0) { reverted += 1; log(`  ${label} batch@${i}: REVERT (structure/em-dash)`); continue; }
+    for (const k of batchKeys) mapObj[k] = after[k];
+    if (JSON.stringify(after) !== before) changed += 1;
+    log(`  ${label} batch@${i} (${batchKeys.length}) ${JSON.stringify(after) !== before ? "OK" : "noop"}`);
+  }
+  report.push(`${label}: ${batches} batches, ${changed} changed, ${reverted} reverted`);
+  return changed > 0;
+}
+
+// Flatten cutscenes.json dialogue-op pages -> reframe -> unflatten.
+function reframeCutscenes() {
+  const abs = path.join(ROOT, "content/cutscenes.json");
+  const doc = JSON.parse(fs.readFileSync(abs, "utf8"));
+  const flat = {}, locs = {};
+  doc.cutscenes.forEach((c, ci) => (c.steps || []).forEach((s, si) => {
+    if (s.op === "dialogue" && Array.isArray(s.pages)) { const key = `${ci}#${si}`; flat[key] = { pages: s.pages }; locs[key] = [ci, si]; }
+  }));
+  const ch = reframeBatchesOfPages(flat, "cutscenes.json dialogue", 20);
+  if (ch) { for (const [key, [ci, si]] of Object.entries(locs)) doc.cutscenes[ci].steps[si].pages = flat[key].pages; fs.writeFileSync(abs, JSON.stringify(doc, null, 1)); }
+  return ch;
+}
+
+// Flatten boss-battle-dialogue-redesign array fields -> reframe -> unflatten.
+function reframeBossDialogue() {
+  const abs = path.join(ROOT, "content/boss-battle-dialogue-redesign.json");
+  const doc = JSON.parse(fs.readFileSync(abs, "utf8"));
+  const flat = {}, locs = {};
+  const bg = doc.byBattleGroup || {};
+  for (const [g, entry] of Object.entries(bg)) {
+    for (const [field, val] of Object.entries(entry)) {
+      if (Array.isArray(val) && val.every((x) => typeof x === "string")) { const key = `${g}.${field}`; flat[key] = { pages: val }; locs[key] = [g, field]; }
+    }
+  }
+  if (Array.isArray(doc.ambient)) { flat["ambient"] = { pages: doc.ambient }; locs["ambient"] = ["ambient", null]; }
+  const ch = reframeBatchesOfPages(flat, "boss-battle-dialogue", 20);
+  if (ch) {
+    for (const [key, [g, field]] of Object.entries(locs)) { if (g === "ambient") doc.ambient = flat[key].pages; else bg[g][field] = flat[key].pages; }
+    fs.writeFileSync(abs, JSON.stringify(doc, null, 1));
+  }
+  return ch;
+}
+
 // ---- run text reframe ----
 let anyChanged = false;
-if (EXTEND) {
+if (CUTSCENES) {
+  anyChanged = reframeCutscenes() || anyChanged;
+  anyChanged = reframeBossDialogue() || anyChanged;
+} else if (EXTEND) {
   anyChanged = chunkReframe("content/custom-dialogue.json", "byNpcId", 30) || anyChanged;
   anyChanged = chunkReframe("content/custom-dialogue.json", "byTextPointer", 30) || anyChanged;
 } else {
@@ -159,11 +225,14 @@ if (anyChanged) {
   }
   // commit locally (never push)
   try {
-    const addPaths = EXTEND
-      ? "content/custom-dialogue.json apps/game/public/generated/custom-dialogue.json"
-      : "content/narrative-redesign.json apps/game/public/generated/narrative-redesign.json packages/eb-converter/test/atlasSprites.test.ts";
+    const addPaths = CUTSCENES
+      ? "content/cutscenes.json apps/game/public/generated/cutscenes.json content/boss-battle-dialogue-redesign.json apps/game/public/generated/boss-battle-dialogue-redesign.json"
+      : EXTEND
+        ? "content/custom-dialogue.json apps/game/public/generated/custom-dialogue.json"
+        : "content/narrative-redesign.json apps/game/public/generated/narrative-redesign.json packages/eb-converter/test/atlasSprites.test.ts";
+    const label = CUTSCENES ? "cutscenes + boss dialogue (nested) pass" : EXTEND ? "custom-dialogue (716 NPCs) chunked pass" : "narrative-redesign vocabulary pass";
     sh(`git add ${addPaths} 2>/dev/null || true`);
-    sh(`git commit -q -m "Overnight cult-reframe: ${EXTEND ? "custom-dialogue (716 NPCs) chunked pass" : "narrative-redesign vocabulary pass"} (${testStatus})" || true`);
+    sh(`git commit -q -m "Overnight cult-reframe: ${label} (${testStatus})" || true`);
     report.push(`committed to ${BRANCH}`);
   } catch (e) { report.push(`commit note: ${String(e.message).slice(0, 120)}`); }
 }
