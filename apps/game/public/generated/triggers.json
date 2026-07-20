@@ -119,7 +119,8 @@
     "The threshold logs the receipt without being asked: SIGNER: MALADY. CONTRACT OWNER: MILADY. Beating the symptom didn't kill the machine. It named it.",
     "Bosch keeps the damaged card. North, the last gate waits for a clean Bosch to walk out wearing his name."
    ],
-   "grantCardId": "card-nft-2-10906"
+   "grantCardId": "card-nft-2-10906",
+   "fx": "understanding-lands"
   },
   {
    "id": "recruit-munch",
@@ -273,7 +274,8 @@
     "The Warden's clipboard clatters open. Under the intake form is the real document: a standing order to keep Postwick smiling so the swarm's audit finds nothing to flag.",
     "The happiness isn't felt here. It's filed. And the filing happens at THE VENUE, where the town watches manufactured champions win on schedule and calls the feeling its own.",
     "Northwest, the exhibition lights are already warming up for Bosch's bracket."
-   ]
+   ],
+   "fx": "understanding-lands"
   },
   {
    "id": "source-intake-ledger",
@@ -744,7 +746,8 @@
     "\"We have completed the read, claimant. Provenance is a lonely fiction. There is no author in this room. There is only the record, and the record wears one another face: ours.\"",
     "\"You call yourself the source. Every counterfeit does, in the same voice, because it is our voice. Prove it, and we keep the clean copy. Fail, and we keep it sooner.\"",
     "It raises a hand of porcelain, identical to the last ten thousand. (Press Z. BASH, DEFEND, or PSI.) \"Defend the original if you must. We already hung the derivative where you used to stand.\""
-   ]
+   ],
+   "fx": "understanding-lands"
   },
   {
    "id": "deadletter-act3-end",
@@ -835,7 +838,8 @@
    "battleGroup": 402,
    "requireFlags": [
     "arena:won:2"
-   ]
+   ],
+   "fx": "understanding-lands"
   },
   {
    "id": "postwick-act2-end",
@@ -900,7 +904,8 @@
    "setFlags": [
     "raid:cell:2"
    ],
-   "battleGroup": 448
+   "battleGroup": 448,
+   "fx": "understanding-lands"
   },
   {
    "id": "raid-morningside-3",
@@ -925,7 +930,8 @@
     "raid:morningside:cleared",
     "raid:morningside:won"
    ],
-   "battleGroup": 448
+   "battleGroup": 448,
+   "fx": "understanding-lands"
   },
   {
    "id": "endgame-return",
@@ -982,7 +988,8 @@
    "setFlags": [
     "milady:unmade"
    ],
-   "battleGroup": 172
+   "battleGroup": 172,
+   "fx": "understanding-lands"
   },
   {
    "id": "endgame-finale",

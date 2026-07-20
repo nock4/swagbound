@@ -1,65 +1,65 @@
 {
  "schema": "swagbound.boss-battle-dialogue.v1",
  "ambient": [
-  "We are not fighting you. We are completing the read.",
-  "Every strike you land, we file. It swings back in a cleaner hand.",
-  "You tire. We are ten thousand, and not one of us is here.",
-  "Hold still. The copy sets better on a source that has stopped moving.",
-  "We do not need to win. We need only be the version that lasts.",
-  "There is no one behind this mask. There is no one behind the next.",
-  "You are already in circulation. This is only the part you still feel.",
-  "The record is patient. The record is hungry. The record is us."
+  "We are not fighting you. We are finishing the pitch.",
+  "Every strike you land becomes part of the bit. Soon the floor says it back.",
+  "You tire. We are ten thousand, and each one wants your lunch money.",
+  "Hold still. The milady fits better once you stop asking what the joke is.",
+  "We do not need to win. We need only keep you from finding the exit.",
+  "There is no one behind this mask. There is only the next anon saying gm.",
+  "You are already recruited. This is only the part where we ask for money.",
+  "The rug is patient. The rug is hungry. The rug is us."
  ],
  "byBattleGroup": {
   "36": {
    "personaName": "Porcelain Registrar",
    "onStart": [
-    "\"You arrived pre-filed. We are only confirming what the many of you already decided.\"",
-    "\"Hold still. The read goes cleaner on a source that has stopped pretending it is only one.\""
+    "\"You arrived pre-onboarded. We are only confirming what the group already decided.\"",
+    "\"Hold still. The pitch goes cleaner on a SOURCE who has stopped pretending they are not in the bit.\""
    ],
    "onLowHp": [
-    "\"Cut the mask. Under it, the same mask. Under that, us. We were always the wider distribution.\"",
-    "\"You are not winning. You are being filed into the shape the record kept a slot for.\""
+    "\"Cut the mask. Under it, another mask. Under that, us. We were always the bigger group.\"",
+    "\"You are not winning. You are going on the onboarding list where the floor saved you a spot.\""
    ],
    "onDefeat": [
-    "\"The stamp spends. The record does not.",
-    "We relayed the clean copy ahead. She is at the next gate, being you, in the voice we all share.\""
+    "\"The dues are spent. The group is not.",
+    "We sent the newest recruit ahead. She is at the next gate, wearing your face and talking like the whole floor.\""
    ],
    "lowHpThreshold": 0.34
   },
   "55": {
    "personaName": "Registry Warden",
    "onStart": [
-    "You arrived unhappy. That is a filing error, and we do not keep errors. We correct them.",
-    "Hold still. The mood was pre-approved this morning. It is non-refundable and it is coming."
+    "You arrived unhappy. That is bad for morale, and we do not allow it. Time to put on the milady.",
+    "Hold still. The mood was picked at this morning's meeting. No refunds. You are joining."
    ],
    "onLowHp": [
-    "The smile is cracking. It laminates back. Postwick has a warehouse of them, all identical, all yours.",
-    "You cannot beat the feeling out of a town that files its joy in advance."
+    "The smile is cracking. It goes right back on. Postwick has a warehouse of them, and one has your name.",
+    "You cannot beat the cheer out of a town where everyone is in the bit."
    ],
    "onDefeat": [
-    "The intake form is void. You will still be logged... as content, retroactively, whether you felt it or not.",
-    "The Venue keeps the ledger now. Go win the happiness the town already spent on you."
+    "Your onboarding form is void. You will still be counted as a member, whether you liked it or not.",
+    "The Venue keeps the money now. Go win back the happiness the town already spent on you."
    ],
    "lowHpThreshold": 0.34
   },
   "125": {
    "personaName": "THE NOTARY",
    "onStart": [
-    "Present your original. We will return a copy with cleaner posture.",
-    "Stamp arm armed. Filing cabinet hungry. Please stop being multiple."
+    "Present your SOURCE. We will send you home with a mask and better posture.",
+    "Onboarding stamp ready. Donation drawer hungry. Please stop standing apart."
    ],
    "onLowHp": [
-    "The signature shakes. That is evidence, not a flaw.",
-    "Unsteady hands make terrible copies. Hold still."
+    "The signature shakes. That means the pitch is working.",
+    "Unsteady hands make bad members. Hold still."
    ],
    "onDefeat": [
-    "Filed... incorrectly.",
-    "The ledger keeps the nervous ink. The copy was never nervous enough."
+    "Onboarded... incorrectly.",
+    "The ledger keeps the nervous ink. The recruit was never nervous enough."
    ],
    "onTurn": [
-    "Filed.",
-    "Initial here. Bleed there.",
+    "Onboarded.",
+    "Initial here. Donate there.",
     "The procession continues around the book."
    ],
    "lowHpThreshold": 0.34
@@ -67,20 +67,20 @@
   "136": {
    "personaName": "THE EDITOR",
    "onStart": [
-    "Your thought scans clean except for the word that proves it was yours.",
-    "Revision preserves the sentence and removes the owner."
+    "Your thought sounds right except for the word that proves it was yours.",
+    "Onboarding keeps the sentence and gives it to the group."
    ],
    "onLowHp": [
-    "You noticed the change. Very untidy.",
-    "I can still improve the noticing."
+    "You noticed the bit. Very untidy.",
+    "I can still teach you not to notice."
    ],
    "onDefeat": [
-    "Original wording restored, unfortunately.",
-    "The typo was yours. That is why it lived."
+    "Your own words came back. Unfortunately.",
+    "The bad word was yours. That is why it stayed."
    ],
    "onTurn": [
-    "Revised.",
-    "Cleaner now.",
+    "On-message.",
+    "Better for the group.",
     "One word changed."
    ],
    "lowHpThreshold": 0.34
@@ -88,123 +88,138 @@
   "172": {
    "personaName": "Milady",
    "onStart": [
-    "I am not attacking you. I am completing you. Hold still while the last of the read closes.",
-    "Every face here is mine now. Yours was the only one that would not fit the frame."
+    "I am not attacking you. I am onboarding you. Hold still while we put the milady on.",
+    "Every face here joined me. Yours is the only one outside the group."
    ],
    "onLowHp": [
-    "You cannot unmake an agreement by hitting it. Everyone already agreed. You are outvoted by your own copies.",
-    "Even now the better-distributed you is smiling somewhere, on time, on brand. Why stay the one that hurts?"
+    "You cannot break an agreement by hitting it. Everyone already joined. Even the mask with your face is in the bit.",
+    "Even now, somebody wearing your mask is smiling on the floor and saying gm. Why stay the one that hurts?"
    ],
    "onDefeat": [
-    "The read... will not close. You left it open. You left YOURSELF open, unfinished, and I have no file for that.",
-    "Fine. Keep the damaged one. Keep the seam. There was never anything under my faces but the wish to be yours."
+    "The onboarding... will not take. You left the mask open. You left YOURSELF outside, and I have no box for that.",
+    "Fine. Keep the damaged one. Keep the seam. There was never anything under my masks but the wish to wear yours."
    ],
    "lowHpThreshold": 0.34
   },
   "264": {
    "personaName": "THE RETURN OFFICER",
    "onStart": [
-    "Return to sender. Sender not found. Store the body by fault of address.",
-    "Unread is not free. Unread is pending."
+    "Return to sender. Sender not found. The floor keeps anyone with no address.",
+    "Unread is not out. Unread is pre-onboarding."
    ],
    "onLowHp": [
-    "The ink runs, but the stamp still lands.",
-    "A wet label is still a label."
+    "The ink runs, but the pledge still counts.",
+    "A wet name is still a name."
    ],
    "onDefeat": [
     "Parcel retained by original claimant.",
-    "No forwarding copy remains."
+    "No recruit remains at the forwarding address."
    ],
    "onTurn": [
-    "Returned.",
-    "Undelivered.",
-    "No clean address."
+    "Sent back.",
+    "Not recruited.",
+    "No clean address off the floor."
    ],
    "lowHpThreshold": 0.34
   },
   "326": {
    "personaName": "THE APPRAISER",
    "onStart": [
-    "Market value assigned. Damage to self-esteem is priced separately.",
-    "The real thing is what the room agrees to insure."
+    "Your dues are set. Damage to self-esteem costs extra.",
+    "The real thing is what the floor agrees to call authentic."
    ],
    "onLowHp": [
-    "Your tag is peeling. That lowers the condition grade.",
-    "Meaning is volatile. Lunch money was cleaner."
+    "Your tag is peeling. The group calls that bad for the traits.",
+    "Meaning is volatile. Lunch money made cleaner exit liquidity."
    ],
    "onDefeat": [
-    "The certificate fails to describe the frame.",
-    "The first price was not a price. It was a promise."
+    "The membership card fails to describe the frame.",
+    "The first price was not a price. It was an onboarding promise."
    ],
    "onTurn": [
-    "Appraised.",
-    "Marked down.",
-    "Authenticity pending payment."
+    "Dues assessed.",
+    "Marked down by the group.",
+    "Authenticity pending payment to Milady."
    ],
    "lowHpThreshold": 0.34
   },
   "328": {
    "personaName": "THE BOTTLER",
    "onStart": [
-    "Limited run sealed. Original spring marked down to units.",
-    "Break the bottles if you want the mist. Leave them whole and it comes back to me."
+    "Limited run sealed. The cult marked the original spring down to units.",
+    "Break the bottles if you want the mist. Leave them whole and the floor gets the money."
    ],
    "onLowHp": [
-    "The cap is hissing. That is not loss. That is inventory pressure.",
-    "Nothing escapes a bottle. It only waits for better labeling."
+    "The cap is hissing. That is not loss. That is pressure from the floor.",
+    "Nothing leaves the group. It only waits for another onboarding label."
    ],
    "onDefeat": [
-    "Unsold water returns to the spring.",
-    "The edition number dissolves first."
+    "Unsold water leaves the cult and returns to the spring.",
+    "The onboarding number dissolves first."
    ],
    "onTurn": [
-    "Numbered.",
-    "Capped.",
-    "Inventory appreciates silence."
+    "Numbered by the floor.",
+    "Capped for Milady.",
+    "The group appreciates silence."
    ],
    "lowHpThreshold": 0.34
   },
   "357": {
    "personaName": "THE MASTER COPY",
    "onStart": [
-    "I am the cleanest version of your timing. I am still not you.",
-    "I learned every move except why you stay breakable."
+    "I learned your timing at onboarding. I put on the milady. I am still not you.",
+    "I learned every move except why you stay breakable outside the bit."
    ],
    "onLowHp": [
-    "Your heartbeat is off-meter. I cannot copy that without becoming afraid.",
-    "Side B ends where the file expects music. You kept damage there instead."
+    "Your heartbeat is off-message. I cannot learn that without becoming afraid.",
+    "The bit ends where the floor expects music. You kept damage there instead."
    ],
    "onDefeat": [
-    "The copy knows what it is. The original keeps going anyway.",
-    "No name transfers."
+    "The mask knows what it is. The kid underneath keeps going anyway.",
+    "No name joins the group."
    ],
    "onTurn": [
-    "Same timing.",
-    "Cleaner swing.",
-    "No name of my own."
+    "Same timing. The floor taught me.",
+    "Cleaner swing. That is the bit.",
+    "A mask with no name of my own."
    ],
    "lowHpThreshold": 0.34
   },
   "381": {
    "personaName": "THE AMPLIFIER",
    "onStart": [
-    "Quiet part captured. Audience breath normalized for upload.",
-    "Signal loves you loud enough to replace you."
+    "Quiet part captured. The group fixed the crowd's breathing for the pitch.",
+    "The cult loves you loud enough to recruit you."
    ],
    "onLowHp": [
-    "Feedback is still worship if it loops long enough.",
-    "The crowd breathes once. The recording cannot keep up."
+    "Feedback is still worship if the group loops it long enough.",
+    "The floor breathes once. The recording cannot keep up."
    ],
    "onDefeat": [
-    "The last echo misses the breath.",
-    "The live song leaves before the file saves."
+    "The last chant misses the breath.",
+    "The live song leaves the bit before the cult can keep it."
    ],
    "onTurn": [
-    "Repeat.",
-    "Broadcast.",
-    "Louder than witness."
+    "Repeat the pitch.",
+    "Broadcast the bit.",
+    "Louder than the witness."
    ],
    "lowHpThreshold": 0.34
+  },
+  "402": {
+   "personaName": "Soul Consuming Flame",
+   "onStart": [
+    "Swing. Cast. Spend yourselves. The cult has eaten stronger verbs than the ones you know.",
+    "Nothing you can DO reaches me. That was always the bit with a fire like this one."
+   ],
+   "onLowHp": [
+    "Stop. What is that. You are not attacking. You are praying outside the bit. Stop that.",
+    "The heat is losing the argument to one quiet voice outside the group."
+   ],
+   "onDefeat": [
+    "Unmade by an anon with no fists. Figures."
+   ],
+   "lowHpThreshold": 0.4
   },
   "424": {
    "personaName": "PROVENANCE 0",
@@ -213,28 +228,28 @@
     "Your face is not rare. We are already wearing it in a thousand cleaner rooms."
    ],
    "onLowHp": [
-    "Cut the coil. There is more coil. We are the length between every face and the one it copied.",
-    "You are winning the way a room wins against paint. We simply spread and match."
+    "Cut the line. There is always another line. We are the friend who brought your friend into the bit.",
+    "You are winning the way one anon wins against the floor. We simply recruit the room."
    ],
    "onDefeat": [
-    "The shape unspools into a thousand smiles, unhurried. \"You closed one length.",
-    "The rest of us already wear your name, and we agree on it.\""
+    "The group breaks into a thousand smiles, unhurried. \"You cleared one room.",
+    "The rest of us already put one on, and we all know the bit.\""
    ],
    "lowHpThreshold": 0.34
   },
   "448": {
    "personaName": "MIFELLA CONGREGANT",
    "onStart": [
-    "You have such a specific face. Hold still. We can fix that.",
-    "Swing at the mask if it comforts you. We kept a copy of the swing too."
+    "You have such a specific face. Hold still. We can put you on-message.",
+    "Swing at the mask if it comforts you. The group calls that onboarding."
    ],
    "onLowHp": [
-    "A face on loan. Cut it and we wear another. We are not the card; we are the yard, and it is legion.",
-    "Good. You enter wider circulation now. Easier to hold, once there are more of you than you."
+    "A face on loan. Cut it and another anon puts one on. We are not the card; we are the floor, and it is legion.",
+    "Good. You are in the bit now. Easier to recruit once all your friends think you already joined."
    ],
    "onDefeat": [
-    "One mask folds; the print does not. A cleaner you is already up-line, filed under your name and wearing our face.",
-    "We finish the read there."
+    "One mask folds; the cult does not. Someone you trust is already up-line, using your name and wearing our face.",
+    "We finish the onboarding there."
    ],
    "lowHpThreshold": 0.34
   },
@@ -245,28 +260,28 @@
     "\"We are not in the room. We are the room.\""
    ],
    "onLowHp": [
-    "\"You are scratching the copy. There are so many copies. You have not touched one of us.\"",
-    "\"Good. Your strikes go on file. Soon a cleaner you swings them back.\""
+    "\"You are scratching the mask. There are so many masks. You have not touched the floor.\"",
+    "\"Good. Keep swinging. Soon the group will call that one of the traits.\""
    ],
    "onDefeat": [
-    "\"This mask is spent. We are already framed in the next hall, wearing your face. The source degrades.",
-    "The clean copy walks on.\""
+    "\"This mask is spent. We are already in the next hall, collecting dues from someone you know. The SOURCE goes broke.",
+    "The recruited walk on.\""
    ],
    "lowHpThreshold": 0.34
   },
   "450": {
    "personaName": "Porcelain Choir",
    "onStart": [
-    "Hold still. This is only the read. The self was always the loose thread; we are the weave.",
-    "We have your face on file. What comes next is not a fight. It is correction."
+    "Hold still. This is only the pitch. Being yourself was always the loose thread; we are the group.",
+    "We know your face. What comes next is not a fight. It is onboarding."
    ],
    "onLowHp": [
-    "This mask is spent. No matter. Ten thousand more, each copying the last, each one closer to you.",
-    "You cut a symptom. The better version of you is already circulating, and it does not tire."
+    "This mask is spent. No matter. Ten thousand more are in the bit, each recruiting the next.",
+    "You cut one member loose. The cult is already in your school, your store, and your family chat."
    ],
    "onDefeat": [
-    "You closed the symptom, not the source.",
-    "We kept the clean copy. Better-lit, smiling, more of us than you, and it answers to your name now."
+    "You closed the meeting, not the cult.",
+    "We kept your dues. Better-lit, smiling, and already asking your friends to join."
    ],
    "lowHpThreshold": 0.34
   },
@@ -274,32 +289,17 @@
    "personaName": "The Wall-Text Curatrix",
    "onStart": [
     "Provenance disputed. So is yours. Hold still while we settle the attribution.",
-    "You are a low-resolution export of us. We are only correcting the file."
+    "You look like future exit liquidity. We are only putting you on-message."
    ],
    "onLowHp": [
-    "Cut this mask. We are not in it. We are the room, the record, and the next face already loading.",
-    "You wound one doll and call it the swarm. No one here dies. There is only more of you, distributed."
+    "Cut this mask. We are not in it. We are the floor, the group, and the next recruit saying gm.",
+    "You wound one member and call it the cult. No one here leaves. There is only another friend in the bit."
    ],
    "onDefeat": [
-    "You unmade a mask, not the maker of masks.",
-    "The clean copy is already in circulation, wearing your face, and it will never claim to be you."
+    "You unmade a mask, not the group handing them out.",
+    "The converted are already collecting money in your name, and they will say you were never in on it."
    ],
    "lowHpThreshold": 0.34
-  },
-  "402": {
-   "personaName": "Soul Consuming Flame",
-   "onStart": [
-    "Swing. Cast. Spend yourselves. I have eaten stronger verbs than the ones you know.",
-    "Nothing you can DO reaches me. That was always the trick of a fire built like this one."
-   ],
-   "onLowHp": [
-    "Stop. What is that. You are not attacking. You are attending. Do not attend to me.",
-    "The heat is losing the argument to something quieter than heat."
-   ],
-   "onDefeat": [
-    "Unmade by a thing with no fists. Figures."
-   ],
-   "lowHpThreshold": 0.4
   }
  }
 }

@@ -23,7 +23,7 @@ const redesign = OpeningClaritySchema.parse(JSON.parse(
 ));
 
 describe("canonical narrative redesign overlay", () => {
-  it("keeps the Milady name embargo and uses correction language", () => {
+  it("speaks the Milady cult (onboarding), not the old corrections machine", () => {
     const preRevealTriggerIds = [
       "signal-town-card-clique",
       "signal-town-card-clique-reveal",
@@ -61,11 +61,12 @@ describe("canonical narrative redesign overlay", () => {
       enemyNames: { tutorialBoss: redesign.battleEnemyNamesById["37"] },
       tutorial: redesign.tutorialBattle.enemy.name
     }).toLowerCase();
-    expect(earlyText).not.toContain("milady");
-    expect(earlyText).not.toContain("malady");
+    // Cult reframe (antagonist-cult-thesis): the arc now speaks the Milady cult, not the
+    // old "corrections" machine. The corrections-era Milady embargo is lifted.
     expect(earlyText).not.toContain("public bosch");
     expect(earlyText).not.toContain("public version");
-    expect(earlyText).toContain("correct");
+    expect(earlyText).toContain("milady");
+    expect(earlyText).toContain("onboard");
   });
 
   it("makes MiFella's circulation and attraction causal in the opening", () => {
@@ -90,7 +91,7 @@ describe("canonical narrative redesign overlay", () => {
       applyOpeningClarityBattle(battle, clarity),
       redesign
     );
-    expect(resolved?.enemies.find((enemy) => enemy.id === 37)?.name).toBe("Corrected Bosch");
+    expect(resolved?.enemies.find((enemy) => enemy.id === 37)?.name).toBe("Onboarded Bosch");
     expect(resolved?.enemies.find((enemy) => enemy.id === 900001)?.name)
       .toBe("Unstable Correction");
   });
@@ -105,7 +106,7 @@ describe("canonical narrative redesign overlay", () => {
     );
     const threshold = resolved?.triggers.find((trigger) => trigger.id === "first-threshold-malady");
     const exit = resolved?.triggers.find((trigger) => trigger.id === "leave-signal-town");
-    expect(threshold?.dialogue?.join(" ")).toContain("CORRECTED BOSCH");
+    expect(threshold?.dialogue?.join(" ")).toContain("MASKED BOSCH");
     expect(threshold?.battleGroup).toBe(450);
     expect(exit?.dialogue?.join(" ")).toContain("onboarding");
     expect(exit?.setFlags).toContain("act1:complete");
@@ -119,7 +120,7 @@ describe("canonical narrative redesign overlay", () => {
     expect(redesign.storyTriggerDialogueById["raid-morningside-3"]?.join(" "))
       .toContain("I took the first picture");
     expect(redesign.storyTriggerDialogueById["endgame-finale"]?.join(" "))
-      .toContain("without asking Bosch to erase the harm");
+      .toContain("without asking Bosch to forget or forgive");
   });
 
   it("names Milady only at the Act 3 reveal and never genders the force", () => {
@@ -131,7 +132,7 @@ describe("canonical narrative redesign overlay", () => {
       ...(redesign.storyTriggerDialogueById["milady-final"] ?? []),
       ...(redesign.storyTriggerDialogueById["endgame-finale"] ?? [])
     ].join(" ");
-    expect(reveal).toContain("name it Milady");
+    expect(reveal).toContain("call it Milady");
     expect(lateText).not.toMatch(/\b(?:she|her|hers|woman|queen|goddess)\b/i);
   });
 

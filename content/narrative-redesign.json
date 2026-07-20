@@ -2,195 +2,195 @@
  "schema": "swagbound.opening-clarity.v1",
  "cutsceneDialogueById": {
   "signal-town-cold-signal-open": [
-   "Outside, the mailbox flag snaps up. Inside is a photograph of Bosch walking uphill before sunrise.",
-   "Bosch was asleep when it was taken. On the back, MiFella wrote: I sent it to the arcade kids. They thought the other you looked incredible.",
-   "MiFella saw the figure near the meteor. Follow him uphill and find out what he photographed."
+   "Outside, the mailbox flag snaps up. Inside is a photograph of someone wearing Bosch's face and walking uphill before sunrise.",
+   "Bosch was asleep when it was taken. On the back, MiFella wrote: I sent it to the arcade kids. They put a milady on the other you. Everybody gets the joke but us.",
+   "MiFella saw the masked figure near the meteor. Follow him uphill and find out what he photographed."
   ],
   "onett-brother-fallsin": [
    "MiFella catches up beside the meteor, holding his phone too tightly.",
-   "\"I only sent the picture to a few people. They cleaned it up and sent it back. Every time it came back, the other Bosch looked more like you.\"",
-   "\"They called it a correction. Cute, right? Also bad. Probably bad. Check the wreckage. I will watch the road.\""
+   "\"I only sent the picture to a few people. They put the milady on him and sent it around. Every time it came back, more people on the floor said the masked guy was you.\"",
+   "\"They called it onboarding. Cute, right? Also bad. Probably a rug. Check the wreckage. I will watch the road.\""
   ]
  },
  "storyTriggerDialogueById": {
   "signal-town-card-clique": [
-   "CARD CLIQUE: \"Hey, it's you. The machine's been practicing your face all week. It's pretty close now. Wanna see?\"",
-   "CARD CLIQUE: \"Relax, we're not copying you. We're fixing the copy that got out. Hold still. In a second you won't remember there was ever a you to fix.\"",
-   "MiFella: \"Bosch! There you are. See? Told you he cleans up nice.\"",
-   "THE NEAREST SCREEN, in Bosch's own voice, half a beat late: \"There you are.\""
+   "CARD CLIQUE: \"gm, Bosch. We put your face on the milady. Everybody on the floor gets the joke now. Well, almost everybody.\"",
+   "CARD CLIQUE: \"Don't look so worried. Put one on, pay the dues, and we'll explain the bit after you're in it.\"",
+   "MiFella: \"Bosch! There you are. See? I told them the mask would look good on you.\"",
+   "THE NEAREST SCREEN, using Bosch's voice a moment late: \"There you are.\""
   ],
   "signal-town-card-clique-reveal": [
-   "MiFella: \"Whoa, it printed us something. A route pass? Neat.\"",
-   "MiFella: \"They want us over at the civic gate. Said I've got a good eye for what people could be. That's a compliment, right?\"",
-   "MiFella: \"It's east, then uphill, to the gate by THE PRECINCT. C'mon, before they close it!\""
+   "MiFella: \"Whoa, the floor sent us an onboarding pass. I didn't even ask. That's pretty cool.\"",
+   "MiFella: \"They want us at the civic gate. They said I have a good eye for recruits. That sounds good, right?\"",
+   "MiFella: \"It's east, then uphill, by THE PRECINCT. C'mon, let's go before they change their minds!\""
   ],
   "relay-gate-returnless-king": [
-   "RETURNLESS KING: \"Pass accepted. Welcome back. ...Hold on. You came through already, synchronized, ten minutes ago. So who is standing here now.\"",
-   "RETURNLESS KING: \"The correction is synchronized. You still require individual review.\"",
-   "RETURNLESS KING: \"...You are holding a damaged card up at me. That is not a credential, and swinging it around will not make it one.\""
+   "RETURNLESS KING: \"Pass accepted. Welcome back. ...Wait. Bosch joined ten minutes ago. He got the joke. So who are you.\"",
+   "RETURNLESS KING: \"The Bosch on the floor is onboarded and on-message. You still need a private interview.\"",
+   "RETURNLESS KING: \"...That is a bent card, not a member badge. Waving it harder does not help.\""
   ],
   "north-route-gate-warning": [
-   "ROUTE AIDE, not looking up: \"Synchronized Bosch, approved. Approved. ...Oh. You are the individual one. The road is right there, but individuals are not on today's manifest.\"",
-   "ROUTE AIDE: \"The synchronized Bosch is already approved. Individual Bosches wait.\""
+   "ROUTE AIDE, not looking up: \"Onboarded Bosch, cleared. Cleared. ...Oh. You are the one without a mask. Sorry, today's road is members only.\"",
+   "ROUTE AIDE: \"The Bosch who joined is already through. The Bosch outside the bit has to wait.\""
   ],
   "first-threshold-malady": [
-   "CORRECTED BOSCH: \"MiFella says you hate tomatoes, sleep through alarms, and pretend not to care when people leave. I have all of you.\"",
-   "CORRECTED BOSCH: \"...What is that. You are holding up a card. There is a cake on it. A strawberry cake, tipped on its side.\"",
-   "CORRECTED BOSCH: \"After it fell, MiFella. MiFella did something. The file does not have what he did next. Why does the file not have it.\"",
-   "CORRECTED BOSCH: \"MiFella says you hate tomatoes. You sleep through alarms. MiFella says. MiFella says.\""
+   "MASKED BOSCH: \"MiFella gave the group your traits. You hate tomatoes, sleep through alarms, and act like you don't care when people leave. That's enough to put on the milady.\"",
+   "MASKED BOSCH: \"...What is that card. It has a Strawberry cake on it, tipped over.\"",
+   "MASKED BOSCH: \"After it fell, MiFella did something. The onboarding notes don't say what. Why didn't he tell the group.\"",
+   "MASKED BOSCH: \"MiFella says you hate tomatoes. MiFella says you sleep late. The floor says I am Bosch.\""
   ],
   "first-threshold-malady-reveal": [
-   "MiFella: \"It is coming apart. Those are my photos. My route stamps. That is everything I sent them, falling out of its face.\"",
-   "MiFella: \"I thought giving them more would make it safer. They said a better one could keep the parts that hurt from hurting you.\"",
-   "MiFella glances at his buzzing phone, turns it face-down, and does not explain. \"...Forget you saw that. Come on.\""
+   "MiFella: \"The mask is falling apart. Those are my photos. My route stamps. That's everything I gave them, spilling out.\"",
+   "MiFella: \"They said the more I put in, the safer we'd be. So I gave them money, pictures, all of it.\"",
+   "MiFella's phone buzzes. He turns it face-down. \"...Forget you saw that. Come on.\""
   ],
   "recruit-munch": [
-   "Munch steps out from behind the hotel sign with a pocket full of rejected receipts.",
-   "MUNCH: \"That correction knew what people posted about you. It missed what people remember because they love you. I can help find the seams.\"",
-   "Munch joins the crew. He can SPY on enemies to reveal what they resist and what hurts them."
+   "Munch steps out from behind the hotel sign. His pockets are full of rejected receipts.",
+   "MUNCH: \"That recruit knew the traits people posted about you. It didn't know what your friends remember. I can spot the holes in their bit.\"",
+   "Munch joins the crew. He can SPY on enemies to reveal their strengths and weaknesses."
   ],
   "leave-signal-town": [
-   "At the Morningside exit, MiFella is waiting beside a smiling onboarding attendant.",
+   "At the Morningside exit, MiFella waits beside a smiling onboarding attendant.",
    "BOSCH: \"Tell them the first picture was wrong. Come with us.\"",
-   "MIFELLA: \"They do not make me explain every thought before I am allowed to belong. I need to know what that feels like.\"",
-   "MiFella steps into the onboarding car. Bosch follows the Remilia Co. route toward Postwick.",
+   "MIFELLA: \"They don't make me explain every thought before I get to belong. I want to know what that feels like.\"",
+   "MiFella gets into the onboarding car. Bosch follows the Remilia Co. route toward Postwick.",
    "[ ACT 1: END ]"
   ],
   "postwick-arrival": [
-   "Postwick greets Bosch with a welcome screen showing MiFella smiling in a Remilia Co. onboarding uniform.",
-   "The people in the street repeat the same greeting at the same speed. One resident stops halfway through and quietly asks Bosch for help.",
-   "Remilia Co. promises effortless belonging here. Its Registry decides which feelings and identities are convenient enough to keep.",
-   "Find the Registry near the town records and learn what MiFella gave it."
+   "Postwick welcomes Bosch with a giant picture of MiFella in a Remilia Co. onboarding uniform.",
+   "Shopkeepers, crossing guards, and kids on the sidewalk all say gm the same way. One resident stops in the middle and quietly asks Bosch for help.",
+   "Remilia Co. promises instant friends for one easy payment. Its Registry picks which traits go under each mask.",
+   "Find the Registry near the town records. Learn what MiFella paid and what he gave away."
   ],
   "recruit-cloak": [
-   "Cloak steps out of the camera's blind spot and lets the synchronized greeting finish without joining it.",
-   "CLOAK: \"Remilia Co. took my neighbors one sentence at a time. Help them remember something the script did not give them.\"",
-   "Cloak joins the crew. Cloak's PSI can protect people and interrupt hostile signals."
+   "Cloak steps out of the camera's blind spot. The greeting plays, but Cloak doesn't say it.",
+   "CLOAK: \"Remilia Co. recruited my neighbors one sentence at a time. Help them remember something the group didn't give them.\"",
+   "Cloak joins the crew. Cloak's PSI can protect people and break through hostile signals."
   ],
   "postwick-registry": [
-   "The Registry has a file titled BOSCH, CARE INSTRUCTIONS. MiFella's name appears beside every private detail.",
-   "REGISTRY WARDEN: \"He gave us the difficult parts so the correction would never feel lonely, embarrassed, or left behind.\"",
-   "Bosch recognizes the facts. He does not recognize the person they describe.",
-   "The Warden raises a laminated smile. Bosch fights to keep MiFella's mistake from becoming Postwick's law."
+   "The Registry has a file called BOSCH, CARE INSTRUCTIONS. MiFella's name is beside every private detail.",
+   "REGISTRY WARDEN: \"He paid his onboarding fee and gave us the hard parts. Our Bosch never feels lonely, embarrassed, or left out of the joke.\"",
+   "Bosch knows the facts in the file. He doesn't know the person they made from them.",
+   "The Warden lifts a laminated smile. Bosch fights to keep MiFella's mistake from becoming the rule for all of Postwick."
   ],
   "postwick-registry-reveal": [
-   "The Warden drops a Remilia Co. intake ledger. Each resident traded one difficult feeling for a synchronized answer.",
-   "Several residents begin speaking at once, stop, and try again in their own uneven voices.",
-   "MiFella's file was transferred to THE VENUE, where Remilia Co. turns surrender into entertainment and applause.",
-   "Follow the exhibition lights and trace the file through the arena."
+   "The Warden drops a Remilia Co. ledger. Every name has a fee beside it and one feeling the recruit wanted gone.",
+   "Several residents start the same slogan, stop, and try again in their own voices.",
+   "MiFella's file went to THE VENUE, where Remilia Co. turns new members into entertainment for the floor.",
+   "Follow the bright signs and track the file through the arena."
   ],
   "arena-venue-1": [
-   "THE VENUE projects MiFella's onboarding portrait above the ring. The audience applauds before Bosch enters.",
-   "ANNOUNCER: \"Tonight's champion wins the feeling everyone else already agreed to have.\"",
-   "A resident near the ring forgets to clap. Another notices. The synchronized rhythm develops a gap.",
-   "The first exhibition machine lurches forward to close it."
+   "THE VENUE hangs MiFella's onboarding portrait above the ring. The crowd claps before Bosch even walks in.",
+   "ANNOUNCER: \"Tonight's champion wins the feeling the whole floor already picked!\"",
+   "Someone near the ring forgets to clap. Another person notices. A hole opens in the bit.",
+   "The first floor enforcer rushes forward to close it."
   ],
   "arena-venue-2": [
-   "The second bracket loads while the audience struggles to recover its shared rhythm.",
-   "A child shouts the wrong slogan and laughs. For one second, three nearby adults sound like themselves.",
-   "ANNOUNCER: \"Unscheduled feeling detected. Please enjoy the correction.\""
+   "The second bracket begins while the crowd tries to find the beat again.",
+   "A kid shouts the wrong slogan and laughs. Three nearby adults drop the bit and laugh too.",
+   "ANNOUNCER: \"That feeling was not approved. Please enjoy onboarding.\""
   ],
   "arena-venue-3": [
-   "The final bracket ignites. The Venue orders the crowd to feel certain that Bosch will lose.",
-   "Cloak hears individual voices beneath the broadcast. \"Do not hit the chorus. Pray, and give them room to hear one another.\"",
-   "The Soul Consuming Flame feeds on agreement. Every distinct voice makes it smaller."
+   "The final bracket lights up. The Venue tells the crowd that everybody knows Bosch will lose.",
+   "Cloak hears people talking under the chant. \"Don't hit the chorus. Pray, and give them room to hear each other.\"",
+   "The Soul Consuming Flame feeds on everyone staying in the bit. Every real voice makes it smaller."
   ],
   "postwick-act2-end": [
-   "The Venue screen opens MiFella's full intake recording. He looks tired, relieved, and proud that Remilia Co. called his attention valuable.",
-   "MIFELLA: \"I gave them the private stuff because they said a better Bosch could keep the parts that hurt from hurting. I thought that counted as helping.\"",
-   "He hears Bosch say his name through the recording and looks away. \"They send rejected memories to Dead Letter. If you still want the parts I gave away, start there.\"",
-   "MiFella ends the call before Bosch can forgive him or condemn him. The road toward Dead Letter opens.",
+   "The Venue plays MiFella's whole intake recording. He looks tired and relieved. He even smiles when Remilia Co. says his attention has value.",
+   "MIFELLA: \"I gave them the private stuff and the money. They said the milady could carry the parts that hurt. I thought I was helping.\"",
+   "He hears Bosch say his name and looks away. \"They send anything that doesn't fit to Dead Letter. If you want the parts I gave away, start there.\"",
+   "MiFella ends the call before Bosch can forgive him or blame him. The road to Dead Letter opens.",
    "[ ACT 2: END ]"
   ],
   "deadletter-arrival": [
-   "Dead Letter keeps everything Remilia Co. rejected for being contradictory, embarrassing, or difficult to summarize.",
-   "Residents compare returned photographs and discover that several incompatible memories can all belong to real people.",
-   "MiFella's discarded intake fragments lead to the Museum of Leaked Versions. Something inside has been speaking through every synchronized system.",
-   "Recover the undelivered source, then enter the museum."
+   "Dead Letter keeps everything Remilia Co. threw out for being messy, embarrassing, or hard to explain.",
+   "People compare returned photos. Their memories don't match, but they still belong to real people.",
+   "MiFella's rejected onboarding papers lead to the Museum of Former Members. Something inside has been feeding lines to every local group.",
+   "Recover the undelivered SOURCE, then enter the museum."
   ],
   "museum-starman": [
-   "The museum lobby guardian asks each party member for the one correct account of Bosch.",
-   "Munch offers an observation. Cloak offers a protected confidence. Bosch's household remembers the crooked picture he always stops to fix.",
-   "The accounts disagree without cancelling one another. The guardian cannot reduce them to one approved Bosch."
+   "The museum guardian asks each party member for the one story about Bosch that the group should keep.",
+   "Munch shares what he noticed. Cloak shares a secret. Bosch's family remembers the crooked picture he always stops to fix.",
+   "The stories don't match, but none is a lie. The guardian can't squeeze them all under one mask."
   ],
   "museum-frank": [
-   "A polished MiFella steps down from the exhibit. He has the milady on now, and he recites every detail he handed them at onboarding, perfect, like it belongs to someone else.",
-   "Bosch asks about the birthday cake that collapsed before anyone got a picture. The milady knows the date, the flavor, the guest list.",
-   "It does not know that MiFella ate the fallen corner off the floor to make Bosch laugh. That part was never in the file.",
-   "Under the milady, for one second, the real MiFella. \"Strawberry.\" The mask slips."
+   "A polished MiFella steps down from the exhibit. He has the milady on and says every trait he handed over during onboarding. He sounds like he's reading someone else's homework.",
+   "Bosch asks about the birthday cake that fell before anybody got a picture. The mask knows the date, the Strawberry flavor, and the guest list.",
+   "It doesn't know MiFella ate the corner off the floor to make Bosch laugh. He never told the group that part.",
+   "For one second, the real MiFella looks out from under the milady. \"Strawberry.\" The mask slips."
   ],
   "museum-worm": [
-   "In the deep vault, a coil of labels tries to explain every contradiction until no person remains beneath the explanations.",
-   "PROVENANCE 0: \"One approved account can end all this uncertainty. Let us finish MiFella for you.\"",
-   "Bosch refuses. Love does not require a clean account, and accountability does not require erasing the person who caused harm.",
-   "Munch names what happened. Cloak protects what stayed private. Bosch keeps speaking to MiFella as someone who can still choose."
+   "Deep in the vault, a knot of labels explains every little thing until there is no person left underneath.",
+   "PROVENANCE 0: \"One approved story can settle this. Put on the milady. Let the group finish onboarding MiFella for you.\"",
+   "Bosch refuses. Caring about someone doesn't mean pretending they did nothing wrong. It doesn't mean throwing them away, either.",
+   "Munch says what happened. Cloak guards what stayed private. Bosch talks to MiFella like he can still choose what to do next."
   ],
   "deadletter-act3-end": [
-   "The museum's competing labels go quiet. Across the network, one presence remains in every system without belonging to any single body.",
-   "The recovered records name it Milady. Milady is not a person behind the screens. It is the agreement that surrender is easier than judgment and synchronization is safer than care.",
-   "MiFella sends one unscripted message: \"The cake was strawberry because you hated the frosting. I remember. Please come home.\"",
-   "Far away, Morningside's lights switch on in perfect unison.",
+   "The museum's labels go quiet. But the same joke is still in every store, school, and home. Nobody will explain it unless you join.",
+   "The records call it Milady. It isn't one boss hiding behind the screens. It's the cult that makes the floor feel easier than thinking for yourself.",
+   "MiFella sends one message without a script: \"The cake was Strawberry because you hated the frosting. I remember. Please come home.\"",
+   "Far away, every light in Morningside turns on at once. Every screen says gm.",
    "[ ACT 3: END ]"
   ],
   "endgame-return": [
-   "Morningside is occupied by Milady's local network. Familiar people repeat one painless version of themselves while Remilia Co. equipment keeps them synchronized.",
-   "The people Bosch helped in Postwick and Dead Letter call into town on open lines. Their imperfect voices give residents something else to hear.",
-   "Three occupation cells hold the network together. Reconnect with the people inside each cell instead of treating them as disposable enemies.",
+   "Milady's local group has taken over Morningside. Familiar people wear the mask at breakfast, at work, and on the walk home.",
+   "People Bosch helped in Postwick and Dead Letter call into town. Their rough, uneven voices give the recruits something else to hear.",
+   "Three cells hold the local floor together. Reach the people inside each one. They are recruits, not disposable enemies.",
    "[ ACT 4: THE OCCUPATION ]"
   ],
   "raid-morningside-1": [
-   "The first occupation cell wears the faces of shopkeepers Bosch knows. Their mouths repeat a Remilia Co. checkout script.",
-   "A Postwick resident calls one shopkeeper by an old nickname and remembers an unpaid kindness. The shopkeeper misses the next synchronized line.",
-   "The cell weakens when one person recognizes another. Its remaining machinery closes in."
+   "The first cell is made of shopkeepers Bosch knows. They ring up dues beside the milk and repeat a Remilia Co. checkout line.",
+   "A Postwick resident calls one shopkeeper by an old nickname and remembers a kindness that cost nothing. The shopkeeper misses the next line.",
+   "The cell weakens when one person recognizes another. The rest of the group moves in."
   ],
   "raid-morningside-2": [
-   "The second cell has copied Bosch's household at breakfast, each person smiling at the same empty plate.",
-   "Cloak protects the family's private memories from the broadcast. Munch names the seams between the copies and the people he met.",
-   "Distinct voices return beneath the chorus. The machinery holding the scene together goes offline."
+   "The second cell recruited Bosch's family at breakfast. Each person smiles over the same empty plate.",
+   "Cloak protects the family's private memories. Munch points out the gaps between the masks and the people he met.",
+   "Their own voices come back under the chant. The group holding the room together drops the bit."
   ],
   "raid-morningside-3": [
-   "The final cell opens every screen in town. MiFella appears wearing the onboarding uniform, then removes its badge.",
-   "MIFELLA: \"I took the first picture. I shared it. I gave Remilia Co. private details after Bosch asked me to stop. The corrections were not Bosch, and belonging did not make my choices harmless.\"",
-   "He sends the correction through the same network that carried the lie. Residents stop repeating the script and answer in their own voices.",
-   "With nobody left to synchronize, the local manifestation of Milady loses most of its shape."
+   "The final cell turns on every screen in town. MiFella appears in his onboarding uniform, then takes off the badge.",
+   "MIFELLA: \"I took the first picture and shared it. I gave Remilia Co. Bosch's private stuff and my money after he told me to stop. Those masked recruits were not Bosch. Getting into the group did not make what I did okay.\"",
+   "He sends the truth over the same lines that carried the lie. Recruits stop repeating the bit and answer in their own voices.",
+   "With nobody left on-message, the local milady can barely hold its shape."
   ],
   "milady-final": [
-   "In the cleared plaza, the remaining local manifestation turns through every convenient version of Bosch and settles on none.",
-   "MILADY: \"I am the agreement beneath the swarm, the market, and the record. Stop choosing. I can keep you from disappointing anyone again.\"",
-   "Bosch hears MiFella, his family, and the people he helped answering in distinct voices. None offers a perfect account. All remain present.",
-   "Pray to keep that channel open. Protect the people speaking. Fight only what remains after they disconnect."
+   "In the empty plaza, the local milady tries on every easy mask of Bosch. None of them fits.",
+   "MILADY: \"I am the bit under the floor, the market, and the record. Join the group. Be our exit liquidity. You never have to be the only anon who doesn't get the joke again.\"",
+   "Bosch hears MiFella, his family, and everyone he helped answer in their own voices. Nobody has the whole story. Everybody stays.",
+   "Pray to keep the channel open. Protect the people speaking. Fight only the mask left behind when they leave the group."
   ],
   "endgame-finale": [
-   "The local manifestation loses its shape when the last synchronized voice chooses a person instead.",
-   "Morningside does not return to one correct story. Residents compare memories, disagree, apologize, and keep talking.",
-   "MiFella apologizes without asking Bosch to erase the harm or grant immediate forgiveness. Bosch leaves the conversation open.",
-   "Remilia Co. equipment goes dark. Milady remains a danger wherever people surrender judgment, but it has no foothold here tonight.",
+   "The local milady falls apart when the last on-message voice chooses a person over the group.",
+   "Morningside doesn't settle on one approved story. People compare memories, disagree, apologize, and keep talking.",
+   "MiFella says he's sorry without asking Bosch to forget or forgive him right away. Bosch leaves the conversation open.",
+   "The Remilia Co. signs go dark. Milady can still show up wherever people pay for belonging and stop thinking for themselves. But tonight, the rug stops here.",
    "[ SWAGBOUND: THE END ]"
   ]
  },
  "objectiveTextById": {
-  "act1-card-clique": "Go west to MONS LINK and find out what the arcade made from MiFella's photograph.",
-  "act1-returnless-king": "Take the correction pass east, then uphill to the civic gate beside THE PRECINCT.",
-  "act1-malady": "Follow the opened road to the hotel crossing and confront Corrected Bosch.",
-  "act1-munch": "Meet Munch beyond the hotel crossing and ask what the correction missed.",
-  "act1-leave-signal-town": "Continue to Morningside's exit and stop MiFella from accepting onboarding.",
-  "act2-reach-postwick": "Follow MiFella and the Remilia Co. onboarding route to Postwick.",
-  "act2-postwick-registry": "Find Postwick's Registry near the town records and inspect MiFella's onboarding file.",
-  "act2-arena-venue-1": "Follow MiFella's transferred file to THE VENUE and enter the first exhibition bracket.",
-  "act2-arena-venue-2": "Continue through THE VENUE while the audience begins breaking synchronization.",
-  "act2-arena-venue-3": "Finish THE VENUE exhibition. Pray so the crowd can hear its individual voices.",
-  "act2-leave-postwick": "Play MiFella's intake recording at THE VENUE and follow the rejected records toward Dead Letter.",
-  "act2-source-spring": "Attest the Spring source beyond Postwick, then continue toward Dead Letter.",
-  "act3-reach-dead-letter": "Reach Dead Letter and find the records Remilia Co. rejected.",
-  "act3-source-undelivered": "Recover the Undelivered source from Dead Letter's return yard.",
-  "act3-museum-starman": "Enter the Museum of Leaked Versions and answer its demand for one correct Bosch.",
-  "act3-museum-frank": "Use a private memory to reach MiFella through the polished manifestation.",
-  "act3-museum-worm": "Confront Provenance 0 in the deep vault without letting it erase MiFella.",
-  "endgame-return": "Return to occupied Morningside and reconnect the people inside Milady's three local cells.",
-  "raid-morningside-1": "Reach the outer block and help its shopkeepers break synchronization.",
-  "raid-morningside-2": "Push toward Bosch's home and reconnect the household inside the second cell.",
-  "raid-morningside-3": "Reach the town screens and give MiFella room to correct the first account.",
-  "milady-final": "Approach Milady's weakened local manifestation in the plaza. Pray, protect the voices, and disconnect it."
+  "act1-card-clique": "Go west to MONS LINK and find out why the arcade put the milady on MiFella's photograph.",
+  "act1-returnless-king": "Take the onboarding pass east, then uphill to the civic gate beside THE PRECINCT.",
+  "act1-malady": "Follow the opened road to the hotel crossing and confront the Bosch wearing the milady.",
+  "act1-munch": "Meet Munch beyond the hotel crossing and ask what the mask could not know.",
+  "act1-leave-signal-town": "Continue to Morningside's exit and stop MiFella from joining the group.",
+  "act2-reach-postwick": "Follow MiFella and the Remilia Co. recruitment route to Postwick.",
+  "act2-postwick-registry": "Find Postwick's Registry near the town records and learn what MiFella paid and handed over.",
+  "act2-arena-venue-1": "Follow MiFella's onboarding file to THE VENUE and enter the first exhibition bracket.",
+  "act2-arena-venue-2": "Continue through THE VENUE while the audience starts dropping the bit.",
+  "act2-arena-venue-3": "Finish THE VENUE exhibition. Pray so the crowd can speak in its own voices.",
+  "act2-leave-postwick": "Play MiFella's intake recording at THE VENUE and follow the group's rejected records toward Dead Letter.",
+  "act2-source-spring": "Attest the Spring SOURCE beyond Postwick, then continue toward Dead Letter.",
+  "act3-reach-dead-letter": "Reach Dead Letter and find the records Remilia Co. cast out.",
+  "act3-source-undelivered": "Recover the Undelivered SOURCE from Dead Letter's return yard.",
+  "act3-museum-starman": "Enter the Museum of Former Members and answer the group's demand for one approved Bosch.",
+  "act3-museum-frank": "Use a private memory to reach MiFella under the polished milady.",
+  "act3-museum-worm": "Confront Provenance 0 in the deep vault without letting the group finish onboarding MiFella.",
+  "endgame-return": "Return to occupied Morningside and reconnect with the recruits inside Milady's three local cells.",
+  "raid-morningside-1": "Reach the outer block and help its shopkeepers drop the bit.",
+  "raid-morningside-2": "Push toward Bosch's home and reconnect with his family inside the second cell.",
+  "raid-morningside-3": "Reach the town screens and give MiFella room to tell the truth about the first picture.",
+  "milady-final": "Approach the weakened local milady in the plaza. Pray, protect the voices, and fight the mask the recruits leave behind."
  },
  "objectiveNpcHintsById": {
   "act2-postwick-registry": [
@@ -245,8 +245,8 @@
   ]
  },
  "battleEnemyNamesById": {
-  "37": "Corrected Bosch",
-  "127": "Local Milady Manifestation"
+  "37": "Onboarded Bosch",
+  "127": "Local Milady Mask"
  },
  "dialogue": {
   "byNpcId": {

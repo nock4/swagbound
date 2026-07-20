@@ -12938,6 +12938,230 @@
      "DRIFELLA 2 #6503: we are all gonna make it. except you. but mostly we are all gonna make it."
     ]
    }
+  },
+  {
+   "id": 910250,
+   "worldPixel": {
+    "x": 2136,
+    "y": 7480
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #2430: yugi and joey shirt. manga missing tooth. kill all solana nfts. you following? no. that's fine.",
+     "DRIFELLA 2 #2430: put one on, anon. the floor's not gonna onboard itself."
+    ]
+   }
+  },
+  {
+   "id": 910251,
+   "worldPixel": {
+    "x": 2472,
+    "y": 7168
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #117: lean beef patty. blazed. dratini anime. you following? no. that's fine.",
+     "DRIFELLA 2 #117: I'd let you in but the group already read you. exit liquidity, respectfully."
+    ]
+   }
+  },
+  {
+   "id": 910252,
+   "worldPixel": {
+    "x": 2176,
+    "y": 7168
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #7683: be different hoodie. ye hood. ye. you following? no. that's fine.",
+     "DRIFELLA 2 #7683: gm. want the pitch? there is no pitch. that is the pitch."
+    ]
+   }
+  },
+  {
+   "id": 910253,
+   "worldPixel": {
+    "x": 6048,
+    "y": 2936
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #3896: evil prof oak shirt. deflated. cigs. you following? no. that's fine.",
+     "DRIFELLA 2 #3896: onboarding fee's whatever's in your pockets. it's a good deal because we say so."
+    ]
+   }
+  },
+  {
+   "id": 910254,
+   "worldPixel": {
+    "x": 6000,
+    "y": 3024
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #9111: dont care shirt. nikolai fechin glasses. griffith smile. you following? no. that's fine.",
+     "DRIFELLA 2 #9111: we're all gonna make it. the group decided that at a meeting you weren't invited to."
+    ]
+   }
+  },
+  {
+   "id": 910255,
+   "worldPixel": {
+    "x": 5800,
+    "y": 2896
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #5097: red pray shirt. samurai sword nose. superman tags. you following? no. that's fine.",
+     "DRIFELLA 2 #5097: put one on, anon. the floor's not gonna onboard itself."
+    ]
+   }
+  },
+  {
+   "id": 910256,
+   "worldPixel": {
+    "x": 4744,
+    "y": 4968
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #2708: wet. red leather hat. joker card. you following? no. that's fine.",
+     "DRIFELLA 2 #2708: I'd let you in but the group already read you. exit liquidity, respectfully."
+    ]
+   }
+  },
+  {
+   "id": 910257,
+   "worldPixel": {
+    "x": 4832,
+    "y": 5024
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #5324: drained. archmage. pixel dither tan. you following? no. that's fine.",
+     "DRIFELLA 2 #5324: gm. want the pitch? there is no pitch. that is the pitch."
+    ]
+   }
+  },
+  {
+   "id": 910258,
+   "worldPixel": {
+    "x": 4416,
+    "y": 4936
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #4993: carnage. wojak black girl. bisexual plush. you following? no. that's fine.",
+     "DRIFELLA 2 #4993: onboarding fee's whatever's in your pockets. it's a good deal because we say so."
+    ]
+   }
+  },
+  {
+   "id": 910259,
+   "worldPixel": {
+    "x": 6168,
+    "y": 8896
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #6717: green cloak. batman cowl. seethe. you following? no. that's fine.",
+     "DRIFELLA 2 #6717: we're all gonna make it. the group decided that at a meeting you weren't invited to."
+    ]
+   }
+  },
+  {
+   "id": 910260,
+   "worldPixel": {
+    "x": 6120,
+    "y": 9184
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #5966: aura crown of thorns. buttons. demonbat. you following? no. that's fine.",
+     "DRIFELLA 2 #5966: put one on, anon. the floor's not gonna onboard itself."
+    ]
+   }
+  },
+  {
+   "id": 910261,
+   "worldPixel": {
+    "x": 5952,
+    "y": 9176
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #4977: inked shirt. killua. radium. you following? no. that's fine.",
+     "DRIFELLA 2 #4977: I'd let you in but the group already read you. exit liquidity, respectfully."
+    ]
+   }
+  },
+  {
+   "id": 910262,
+   "worldPixel": {
+    "x": 1784,
+    "y": 4920
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #6186: backwards pill cyber jac. red leather hat. cartoon. you following? no. that's fine.",
+     "DRIFELLA 2 #6186: gm. want the pitch? there is no pitch. that is the pitch."
+    ]
+   }
+  },
+  {
+   "id": 910263,
+   "worldPixel": {
+    "x": 1752,
+    "y": 4760
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #5856: shoulder pads. buttons. chad. you following? no. that's fine.",
+     "DRIFELLA 2 #5856: onboarding fee's whatever's in your pockets. it's a good deal because we say so."
+    ]
+   }
   }
  ]
 }
