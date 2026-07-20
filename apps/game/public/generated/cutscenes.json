@@ -2942,6 +2942,151 @@
      "flag": "prologue:done"
     }
    ]
+  },
+  {
+   "id": "recruitment-morningside-exit",
+   "comment": "Act 1 end: MiFella chooses the group. Staged at the north-gate corridor; he walks off past the onboarding attendant and Bosch cannot follow. Fires just south of the leave-signal-town act-end card. Actors 910270 MiFella + 910271 attendant, flag-gated, despawn on signal:mifella-recruited.",
+   "trigger": {
+    "kind": "area",
+    "area": {
+     "x": 1832,
+     "y": 1560,
+     "w": 128,
+     "h": 72
+    }
+   },
+   "requireFlags": [
+    "signal:threshold_cleared"
+   ],
+   "blockFlags": [
+    "signal:mifella-recruited"
+   ],
+   "once": true,
+   "lockPlayer": true,
+   "steps": [
+    {
+     "op": "music",
+     "action": "play",
+     "cue": "ending",
+     "fadeMs": 2000
+    },
+    {
+     "op": "wait",
+     "ms": 400
+    },
+    {
+     "op": "faceActor",
+     "actor": "player",
+     "dir": "up"
+    },
+    {
+     "op": "camera",
+     "action": "focus",
+     "actor": {
+      "npcId": 910270
+     },
+     "zoom": 2,
+     "ms": 700
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "At the Morningside gate, MiFella waits beside a smiling onboarding attendant.",
+      "BOSCH: \"Tell them the first picture was wrong. Come with us.\""
+     ]
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 910270
+     },
+     "dir": "down"
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "MIFELLA: \"They don't make me explain every thought before I get to belong.\"",
+      "MIFELLA: \"I want to know what that feels like.\""
+     ]
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 910270
+     },
+     "dir": "up"
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 910270
+     },
+     "to": {
+      "x": 1856,
+      "y": 1480
+     }
+    },
+    {
+     "op": "faceActor",
+     "actor": {
+      "npcId": 910271
+     },
+     "dir": "left"
+    },
+    {
+     "op": "wait",
+     "ms": 300
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "ATTENDANT: \"Good eye. Right this way. You cross clean.\""
+     ]
+    },
+    {
+     "op": "camera",
+     "action": "focus",
+     "actor": "player",
+     "zoom": 2,
+     "ms": 700
+    },
+    {
+     "op": "moveActor",
+     "actor": {
+      "npcId": 910270
+     },
+     "to": {
+      "x": 1856,
+      "y": 1360
+     }
+    },
+    {
+     "op": "hideActor",
+     "actor": {
+      "npcId": 910270
+     }
+    },
+    {
+     "op": "wait",
+     "ms": 500
+    },
+    {
+     "op": "dialogue",
+     "pages": [
+      "Bosch stays where he is. The gate does not stop him. Nobody does.",
+      "The road north runs on toward Postwick, one friend short."
+     ]
+    },
+    {
+     "op": "camera",
+     "action": "follow",
+     "actor": "player"
+    },
+    {
+     "op": "setFlag",
+     "flag": "signal:mifella-recruited"
+    }
+   ]
   }
  ]
 }

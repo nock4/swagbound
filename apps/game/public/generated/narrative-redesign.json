@@ -50,10 +50,9 @@
    "Munch joins the crew. He can SPY on enemies to reveal their strengths and weaknesses."
   ],
   "leave-signal-town": [
-   "At the Morningside exit, MiFella waits beside a smiling onboarding attendant.",
-   "BOSCH: \"Tell them the first picture was wrong. Come with us.\"",
-   "MIFELLA: \"They don't make me explain every thought before I get to belong. I want to know what that feels like.\"",
-   "MiFella gets into the onboarding car. Bosch follows the Remilia Co. route toward Postwick.",
+   "The north gate is quiet now. The onboarding car MiFella left in is already gone.",
+   "Bosch keeps the damaged Swag Deck. Unfiled, unflattering, his.",
+   "The route the group laid out runs on toward Postwick.",
    "[ ACT 1: END ]"
   ],
   "postwick-arrival": [

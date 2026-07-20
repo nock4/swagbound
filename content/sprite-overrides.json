@@ -20348,6 +20348,28 @@
    "originX": 0.5,
    "originY": 1
   },
+  "910270": {
+   "image": "assets/swagbound/overworld-npc/mifella-001-ow.png",
+   "frameWidth": 48,
+   "frameHeight": 48,
+   "animations": {
+    "down": [
+     0
+    ],
+    "left": [
+     0
+    ],
+    "right": [
+     0
+    ],
+    "up": [
+     0
+    ]
+   },
+   "displayHeight": 24,
+   "originX": 0.5,
+   "originY": 1
+  },
   "910230": {
    "image": "assets/swagbound/overworld-npc/mom-ow.png",
    "frameWidth": 48,

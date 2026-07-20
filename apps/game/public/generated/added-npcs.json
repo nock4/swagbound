@@ -13162,6 +13162,48 @@
      "DRIFELLA 2 #5856: onboarding fee's whatever's in your pockets. it's a good deal because we say so."
     ]
    }
+  },
+  {
+   "id": 910270,
+   "worldPixel": {
+    "x": 1856,
+    "y": 1600
+   },
+   "spriteGroup": 59,
+   "facing": "up",
+   "requireFlags": [
+    "signal:threshold_cleared"
+   ],
+   "blockFlags": [
+    "signal:mifella-recruited"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "MIFELLA: \"They're waiting at the gate. They said I have a good eye for it.\""
+    ]
+   }
+  },
+  {
+   "id": 910271,
+   "worldPixel": {
+    "x": 1904,
+    "y": 1440
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "signal:threshold_cleared"
+   ],
+   "blockFlags": [
+    "signal:mifella-recruited"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "ONBOARDING ATTENDANT: \"He's a good fit. You could be too. The floor has room.\""
+    ]
+   }
   }
  ]
 }
