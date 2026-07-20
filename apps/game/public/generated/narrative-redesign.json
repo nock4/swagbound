@@ -151,11 +151,13 @@
   "raid-morningside-3": [
    "The final cell turns on every screen in town. MiFella appears in his onboarding uniform, then takes off the badge.",
    "MIFELLA: \"I took the first picture and shared it. I gave Remilia Co. Bosch's private stuff and my money after he told me to stop. Those masked recruits were not Bosch. Getting into the group did not make what I did okay.\"",
+   "MIFELLA: \"You remember the bank? We were gonna pull it all out and buy the real good one. Together. I spent mine getting onboarded instead.\"",
    "He sends the truth over the same lines that carried the lie. Recruits stop repeating the bit and answer in their own voices.",
    "With nobody left on-message, the local milady can barely hold its shape."
   ],
   "milady-final": [
    "In the empty plaza, the local milady tries on every easy mask of Bosch. None of them fits.",
+   "Bosch pulls MiFella's old hoodie tighter. It is wrecked and it is his, and the clean versions never once got that part right.",
    "MILADY: \"I am the bit under the floor, the market, and the record. Join the group. Be our exit liquidity. You never have to be the only anon who doesn't get the joke again.\"",
    "Bosch hears MiFella, his family, and everyone he helped answer in their own voices. Nobody has the whole story. Everybody stays.",
    "Pray to keep the channel open. Protect the people speaking. Fight only the mask left behind when they leave the group."
@@ -281,15 +283,15 @@
     "pages": [
      "MiFella pounds on the door.",
      "\"Bosch, get up. I saw another you outside while you were still asleep.\"",
-     "\"I took a picture and sent it to the arcade group. They keep sending back cleaner versions. They call them corrections.\"",
+     "\"I took a picture and sent it to the arcade group. They keep sending back cleaner versions. They call it getting you onboarded.\"",
      "\"The other you went uphill toward the meteor. Get dressed and meet me outside. We need to see what I started.\""
     ]
    },
    "data_15.l_0xc5eb0b": {
     "pages": [
      "A terminal wakes inside the wreckage. Beside it, blue light gathers into Bosch's outline.",
-     "LOG: FIRST-GENERATION CORRECTED BOSCH. SOURCE IMAGE CIRCULATING.",
-     "The correction watches Bosch as if waiting for instructions. It can repeat an action one turn late, but it cannot understand why Bosch chose it.",
+     "LOG: FIRST ONBOARDED BOSCH. SOURCE IMAGE CIRCULATING.",
+     "The onboarded copy watches Bosch as if waiting for instructions. It can repeat an action one turn late, but it cannot understand why Bosch chose it.",
      "MiFella whispers: \"That is the version they sent back to me.\""
     ]
    }
@@ -305,7 +307,7 @@
      "signal:clique_cleared"
     ],
     "pages": [
-     "\"MiFella called. The correction at the meteor came from his photograph.\"",
+     "\"MiFella called. The onboarded Bosch at the meteor came from his photograph.\"",
      "\"The arcade group is still circulating it. MONS LINK is west along the town road.\""
     ]
    }
@@ -319,7 +321,7 @@
      "signal:clique_cleared"
     ],
     "pages": [
-     "\"The correction could repeat what you did. It could not explain why.\"",
+     "\"The onboarded copy could repeat what you did. It could not explain why.\"",
      "\"Take MiFella to the arcade. He needs to see what sharing that picture changed.\""
     ]
    }
@@ -333,7 +335,7 @@
      "signal:clique_cleared"
     ],
     "pages": [
-     "\"MiFella is pretending the correction was only funny because he feels guilty.\"",
+     "\"MiFella is pretending the milady stunt was only funny because he feels guilty.\"",
      "\"Stay kind and stay honest. MONS LINK is west on the main road.\""
     ]
    }
@@ -348,7 +350,7 @@
     ],
     "pages": [
      "The house phone rings.",
-     "MiFella left a message: \"The arcade kids are making more Bosch corrections. I am going back to ask them to stop. Probably.\""
+     "MiFella left a message: \"The arcade kids are making more onboarded Boschs. I am going back to ask them to stop. Probably.\""
     ]
    }
   ],
