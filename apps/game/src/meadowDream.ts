@@ -96,6 +96,8 @@ export class MeadowDream {
   private cloak?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Graphics;
   private flowers: Flower[] = [];
   private butterflies: Butterfly[] = [];
+  private motesGfx?: Phaser.GameObjects.Graphics;
+  private motes: Array<{ x: number; y: number; r: number; vy: number; phase: number }> = [];
   private flowerEmitter?: Phaser.GameObjects.Particles.ParticleEmitter;
   private boschWalkFrames: number[] = [];
   private boschAnimClock = 0;
@@ -201,6 +203,19 @@ export class MeadowDream {
       }
     }
 
+    // Light motes / bokeh: soft glowing dots drifting up through the dream.
+    this.motesGfx = s.add.graphics().setScrollFactor(0).setDepth(this.height + 80);
+    this.container.add(this.motesGfx);
+    for (let i = 0; i < 30; i += 1) {
+      this.motes.push({
+        x: this.hash(i, 11) * this.width,
+        y: this.hash(i, 12) * this.height,
+        r: 2 + this.hash(i, 13) * 4,
+        vy: 8 + this.hash(i, 14) * 16,
+        phase: this.hash(i, 15) * Math.PI * 2
+      });
+    }
+
     const bx = Math.round(this.width * 0.44);
     const by = Math.round(this.height * PATH_CENTER_FRAC);
     if (this.opts.boschTextureKey && s.textures.exists(this.opts.boschTextureKey)) {
@@ -283,8 +298,9 @@ export class MeadowDream {
     if (!this.finishing) {
       this.distance += (this.held() ? HOLD_SPEED : DRIFT_SPEED) * dt;
     }
-    this.renderSky();
+    this.renderSky(time);
     this.updateFlowers(time);
+    this.updateMotes(time, dt);
     this.updateButterflies(time, dt);
     this.bobBosch(time, delta);
     this.tickMessages(time);
@@ -300,12 +316,17 @@ export class MeadowDream {
     }
   }
 
-  private renderSky(): void {
+  private renderSky(time: number): void {
     const { stage, t } = this.stageProgress();
     const next = STAGE_SKY[Math.min(stage + 1, STAGE_SKY.length - 1)];
     const cur = STAGE_SKY[stage];
-    const top = this.lerpColor(cur[0], next[0], t);
-    const bottom = this.lerpColor(cur[1], next[1], t);
+    let top = this.lerpColor(cur[0], next[0], t);
+    let bottom = this.lerpColor(cur[1], next[1], t);
+    // Pulsing sky: breathe slowly through a warm/cool dream tint so it never holds still.
+    const pulse = (Math.sin(time / 3200) + 1) / 2;
+    const dreamTint = this.lerpColor(0xff9ec4, 0x9ec4ff, pulse);
+    top = this.lerpColor(top, dreamTint, 0.16);
+    bottom = this.lerpColor(bottom, dreamTint, 0.1);
     this.sky.clear();
     const bandH = this.height / SKY_BANDS;
     for (let i = 0; i < SKY_BANDS; i += 1) {
@@ -353,11 +374,39 @@ export class MeadowDream {
       const target = FLOWER_BASE_PX * (0.55 + f.sizeSeed * 0.5) * (0.6 + depth * 0.8) * sizeBoost;
       const fw = f.sprite.frame.width;
       const fh = f.sprite.frame.height;
+      // Dreamlike sway + breathing: each flower drifts and pulses on its own phase.
+      const ph = f.sizeSeed * 41.7;
+      const sway = Math.sin(time / 900 + ph) * 2.6;
+      const bob = Math.cos(time / 1100 + ph) * 1.4;
+      const breathe = 1 + Math.sin(time / 1200 + ph) * 0.07;
       f.sprite.setVisible(true);
-      f.sprite.setPosition(x, drawY);
-      f.sprite.setScale(target / Math.max(fw, fh)); // normalize longest side, keep aspect
+      f.sprite.setPosition(x + sway, drawY + bob);
+      f.sprite.setScale((target * breathe) / Math.max(fw, fh)); // normalize longest side, keep aspect
       f.sprite.setAlpha(vivid);
       f.sprite.setDepth(drawY);
+    }
+  }
+
+  private updateMotes(time: number, dt: number): void {
+    const g = this.motesGfx;
+    if (!g) {
+      return;
+    }
+    g.clear();
+    for (const m of this.motes) {
+      m.y -= m.vy * dt;
+      if (m.y < -12) {
+        m.y = this.height + 12;
+      }
+      const x = m.x + Math.sin(time / 1300 + m.phase) * 16;
+      const pulse = 0.5 + 0.5 * Math.sin(time / 700 + m.phase);
+      const a = 0.16 + 0.18 * pulse;
+      g.fillStyle(0xfff2c8, a * 0.5);
+      g.fillCircle(x, m.y, m.r * 2.2);
+      g.fillStyle(0xffffff, a);
+      g.fillCircle(x, m.y, m.r);
+      g.fillStyle(0xffffff, Math.min(1, a * 1.6));
+      g.fillCircle(x, m.y, m.r * 0.45);
     }
   }
 
