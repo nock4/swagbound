@@ -43,7 +43,9 @@ describe("canonical narrative redesign overlay", () => {
       "postwick-act2-end",
       "deadletter-arrival",
       "museum-starman",
-      "museum-frank",
+      // museum-frank is the first beat reframed to the cult thesis (MiFella "puts on the
+      // milady"); it is intentionally exempt from the corrections-era Milady embargo.
+      // The broader embargo lift is the game-wide cult reframe (overnight plan).
       "museum-worm"
     ];
     const earlyText = JSON.stringify({

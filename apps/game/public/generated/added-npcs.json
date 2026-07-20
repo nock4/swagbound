@@ -12843,6 +12843,101 @@
      "NEIGHBOR: He tried to sell me my own lawnmower. Called it a deal. Twice."
     ]
    }
+  },
+  {
+   "id": 910242,
+   "worldPixel": {
+    "x": 2000,
+    "y": 1808
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #194: wow zip hoodie. millenium master. you following? no. keep up though.",
+     "DRIFELLA 2 #194: took a selfie in the snowy graveyard. floor loved it. you wouldn't get it."
+    ]
+   }
+  },
+  {
+   "id": 910243,
+   "worldPixel": {
+    "x": 2016,
+    "y": 1900
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #2372: trad wojak szn. cubone energy. monkey bomb in the chat.",
+     "DRIFELLA 2 #2372: I'd let you in but you're kind of exit liquidity. no offense. some offense."
+    ]
+   }
+  },
+  {
+   "id": 910244,
+   "worldPixel": {
+    "x": 1888,
+    "y": 1808
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #9261: daddy's lil monster. chad. I contain multitudes and one milk jug.",
+     "DRIFELLA 2 #9261: put one on. it's free. well. it costs everything. but the mask is free."
+    ]
+   }
+  },
+  {
+   "id": 910245,
+   "worldPixel": {
+    "x": 2200,
+    "y": 1860
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #3044: I heart bladee. 100 emoji hat. there is a tiger. don't ask about the tiger.",
+     "DRIFELLA 2 #3044: I'll sell you a tablet. it's your tablet. I found it. finders."
+    ]
+   }
+  },
+  {
+   "id": 910246,
+   "worldPixel": {
+    "x": 2072,
+    "y": 1900
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "intro:morning"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #6503: wet. ghastly. blue scythe kind of apocalyptic. gm though.",
+     "DRIFELLA 2 #6503: we are all gonna make it. except you. but mostly we are all gonna make it."
+    ]
+   }
   }
  ]
 }
