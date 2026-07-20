@@ -20261,7 +20261,7 @@
    "originY": 1
   },
   "910220": {
-   "image": "assets/swagbound/props/strawberry-cake.png",
+   "image": "assets/swagbound/props/ceramic-heart.png",
    "frameWidth": 30,
    "frameHeight": 30,
    "animations": {
@@ -20283,7 +20283,7 @@
    "originY": 1
   },
   "910221": {
-   "image": "assets/swagbound/props/strawberry-corner.png",
+   "image": "assets/swagbound/props/pink-hoodie.png",
    "frameWidth": 16,
    "frameHeight": 16,
    "animations": {

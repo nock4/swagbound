@@ -59,10 +59,10 @@ const OPENING_DIALOGUE = {
     "A traveler in a Little Swag World bucket hat has stopped dead on the path, staring up at the ring of figures around the crater.",
     "\"Twin. TWIN. What ARE those things? They just stand there saying the one word at the rock. 'milady.' Over and over.\""
   ],
-  // Strawberry prologue prop examine lines (bedroom).
-  "prologue-cake": ["The cake leans like it gave up halfway through being a cake."],
-  "prologue-corner": ["A corner of the cake, on the floor. The five second rule feels generous tonight."],
-  "prologue-picture": ["The picture hangs a little crooked. It always does. You always fix it."],
+  // Golden-hour prologue prop examine lines (bedroom): the ceramic heart, the hoodie, the photo.
+  "prologue-cake": ["A cheap ceramic heart. There is a little chamber in it that holds nothing. That is the whole joke."],
+  "prologue-corner": ["A thrashed pink hoodie, soft from being worn to death. It is MiFella's. It is yours now."],
+  "prologue-picture": ["The photo MiFella just took. You, not holding still, in the last of the gold light."],
   "prologue-mifella": ["MiFella, mid-laugh about something. For tonight, nothing is wrong."]
 } as const;
 
@@ -191,8 +191,8 @@ describe("early game sequence ownership", () => {
       "910209": "assets/swagbound/overworld-npc/gns-malady-002-ow.png",
       "910210": "assets/swagbound/overworld-npc/gns-lsw-312-ow.png",
       // Strawberry prologue props (bedroom).
-      "910220": "assets/swagbound/props/strawberry-cake.png",
-      "910221": "assets/swagbound/props/strawberry-corner.png",
+      "910220": "assets/swagbound/props/ceramic-heart.png",
+      "910221": "assets/swagbound/props/pink-hoodie.png",
       "910222": "assets/swagbound/props/crooked-picture.png",
       "910223": "assets/swagbound/overworld-npc/mifella-001-ow.png"
     };

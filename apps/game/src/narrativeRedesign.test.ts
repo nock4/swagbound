@@ -116,7 +116,7 @@ describe("canonical narrative redesign overlay", () => {
     expect(redesign.storyTriggerDialogueById["postwick-act2-end"]?.join(" "))
       .toContain("I gave them the private stuff");
     expect(redesign.storyTriggerDialogueById["museum-frank"]?.join(" "))
-      .toContain("Strawberry");
+      .toContain("ceramic");
     expect(redesign.storyTriggerDialogueById["raid-morningside-3"]?.join(" "))
       .toContain("I took the first picture");
     expect(redesign.storyTriggerDialogueById["endgame-finale"]?.join(" "))
