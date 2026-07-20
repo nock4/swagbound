@@ -17,6 +17,7 @@ import path from "node:path";
 const SMOKE = process.argv.includes("--smoke");
 const EXTEND = process.argv.includes("--extend"); // reframe custom-dialogue (716 NPCs), chunked
 const CUTSCENES = process.argv.includes("--cutscenes"); // reframe cutscenes.json + boss dialogue (nested)
+const BOSS = process.argv.includes("--boss"); // reframe base content/boss-battle-dialogue.json (16 bosses)
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 const OUT = path.join(ROOT, "tmp/cult-reframe");
 const log = (m) => console.log(`[${new Date().toISOString().slice(11, 19)}] ${m}`);
@@ -167,8 +168,8 @@ function reframeCutscenes() {
 }
 
 // Flatten boss-battle-dialogue-redesign array fields -> reframe -> unflatten.
-function reframeBossDialogue() {
-  const abs = path.join(ROOT, "content/boss-battle-dialogue-redesign.json");
+function reframeBossDialogue(file = "content/boss-battle-dialogue-redesign.json") {
+  const abs = path.join(ROOT, file);
   const doc = JSON.parse(fs.readFileSync(abs, "utf8"));
   const flat = {}, locs = {};
   const bg = doc.byBattleGroup || {};
@@ -188,7 +189,9 @@ function reframeBossDialogue() {
 
 // ---- run text reframe ----
 let anyChanged = false;
-if (CUTSCENES) {
+if (BOSS) {
+  anyChanged = reframeBossDialogue("content/boss-battle-dialogue.json") || anyChanged;
+} else if (CUTSCENES) {
   anyChanged = reframeCutscenes() || anyChanged;
   anyChanged = reframeBossDialogue() || anyChanged;
 } else if (EXTEND) {
@@ -225,12 +228,14 @@ if (anyChanged) {
   }
   // commit locally (never push)
   try {
-    const addPaths = CUTSCENES
+    const addPaths = BOSS
+      ? "content/boss-battle-dialogue.json apps/game/public/generated/boss-battle-dialogue.json"
+      : CUTSCENES
       ? "content/cutscenes.json apps/game/public/generated/cutscenes.json content/boss-battle-dialogue-redesign.json apps/game/public/generated/boss-battle-dialogue-redesign.json"
       : EXTEND
         ? "content/custom-dialogue.json apps/game/public/generated/custom-dialogue.json"
         : "content/narrative-redesign.json apps/game/public/generated/narrative-redesign.json packages/eb-converter/test/atlasSprites.test.ts";
-    const label = CUTSCENES ? "cutscenes + boss dialogue (nested) pass" : EXTEND ? "custom-dialogue (716 NPCs) chunked pass" : "narrative-redesign vocabulary pass";
+    const label = BOSS ? "base boss taunts (16 bosses) pass" : CUTSCENES ? "cutscenes + boss dialogue (nested) pass" : EXTEND ? "custom-dialogue (716 NPCs) chunked pass" : "narrative-redesign vocabulary pass";
     sh(`git add ${addPaths} 2>/dev/null || true`);
     sh(`git commit -q -m "Overnight cult-reframe: ${label} (${testStatus})" || true`);
     report.push(`committed to ${BRANCH}`);
