@@ -431,8 +431,8 @@
      "op": "dialogue",
      "pages": [
       "A toll clerk steps out with a smile that smells like sugar and inventory glue.",
-      "\"Delivery boy, claimant, guest. Same counter, different receipt.\"",
-      "\"If you brought something sweet, the town owns the sweetness. If you didn't, the town owns the suspicion.\""
+      "\"Delivery boy, claimant, guest. Same floor, different donation.\"",
+      "\"If you brought something sweet, the group owns the sweetness. If you didn't, the group wants to know why.\""
      ]
     },
     {
@@ -644,8 +644,8 @@
      "op": "dialogue",
      "pages": [
       "A camera drops into the street like it had an appointment with Bosch's face.",
-      "\"Smile for the useful version.\"",
-      "The flash files the crowd first, Bosch second, and the difference like a clerical note."
+      "\"Smile like you're in on the bit.\"",
+      "The flash catches the crowd first, Bosch second, and the one anon who still does not get the joke."
      ]
     },
     {
@@ -707,8 +707,8 @@
      "op": "dialogue",
      "pages": [
       "Another lens rises before the first flash has cooled.",
-      "\"Retake. The last one made you look unconvinced.\"",
-      "Bosch keeps the unconvinced part. The lens hates original material."
+      "\"Retake. The last one made you look like you might leave.\"",
+      "Bosch keeps that look. The lens wants everyone on-message."
      ]
     },
     {
@@ -770,8 +770,8 @@
      "op": "dialogue",
      "pages": [
       "The side door coughs up a photographer with union posture and borrowed joy.",
-      "\"Postwick needs proof you were happy here.\"",
-      "\"Stand still. The proof works better when the subject stops objecting.\""
+      "\"Postwick needs proof you had fun at onboarding.\"",
+      "\"Stand still. Put one on. The picture looks better when nobody asks what it cost.\""
      ]
     },
     {
@@ -833,8 +833,8 @@
      "op": "dialogue",
      "pages": [
       "A sour little official waddles in with a mouth full of policy.",
-      "\"Commoner. You wander without Honey, without pass, without a version we can sponsor.\"",
-      "\"Master Belch loved a clean appetite. Postwick loves a clean crowd. You are neither.\""
+      "\"Commoner. You wander without Honey, without pass, without a Milady to show the floor.\"",
+      "\"Master Belch loved a clean appetite. Postwick loves a recruited crowd. You are neither.\""
      ]
     },
     {
@@ -906,9 +906,9 @@
      "op": "dialogue",
      "pages": [
       "The attendant blocks the service door with a smile trained to deny everything softly.",
-      "\"Backstage is for approved faces. Frontstage is for faces still being improved.\"",
+      "\"Backstage is for people in the bit. Frontstage is where we do the onboarding.\"",
       "He reads Bosch's damaged card, frowns at the bad print, and steps aside anyway.",
-      "\"Fine. The crowd paid to see a failure of formatting. Try not to enjoy it.\""
+      "\"Fine. The crowd paid to see somebody refuse the mask. Try not to enjoy it.\""
      ]
     },
     {
@@ -1228,8 +1228,8 @@
      "op": "dialogue",
      "pages": [
       "Something sour returns wearing a better title.",
-      "\"You forgot me because the record improved me. That is how rot becomes brand.\"",
-      "\"Call me Puke if you need the old joke. Call me upgraded if you prefer paperwork.\"",
+      "\"You forgot me because the cult put me in the bit. That is how rot becomes a brand.\"",
+      "\"Call me Puke if you need the old joke. Call me onboarded if you want the floor to clap.\"",
       "It bows like a citation and leaks off the path."
      ]
     },
@@ -1363,7 +1363,7 @@
      "pages": [
       "A voice behind the dead mail slot answers before Bosch knocks.",
       "\"You are just like I imagined you would be. That is not a compliment. Imagination can be another cage.\"",
-      "\"People are worried in the town that filed me. Good. Worry is proof they did not finish owning me.\"",
+      "\"People are worried in the town that onboarded me. Good. Worry is proof I got out before they could own me.\"",
       "\"I can walk back if I walk as myself. Stand close. The route hates witnesses.\""
      ]
     },
@@ -1414,12 +1414,12 @@
      "op": "dialogue",
      "pages": [
       "The motel sign loses a letter, then finds it again.",
-      "Room 1's guest blinks. \"No. Bosch refused the threshold. I remember refusing now.\"",
-      "Room 2's receipt uncurls. \"The Registry did not get signed. It got broken.\"",
-      "Room 3's brochure folds itself blank. \"The museum did not receive the original. It lost the lie.\"",
-      "Room 4 hears the marquee cough. \"Bosch noticed. That was the part it could not edit.\"",
-      "Room 5 closes the suitcase. \"Morningside logged Bosch as unprocessed. Messy. Better.\"",
-      "ARCHIVIST: \"Someone filed over my filing. I am filing over them.\""
+      "Room 1's guest blinks. \"No. Bosch refused onboarding. I remember refusing now.\"",
+      "Room 2's receipt uncurls. \"The pledge did not get signed. It got torn up.\"",
+      "Room 3's brochure folds itself blank. \"The museum did not get its convert. It lost the lie.\"",
+      "Room 4 hears the marquee cough. \"Bosch noticed. That was the part the cult could not turn into a joke.\"",
+      "Room 5 closes the suitcase. \"Morningside logged Bosch as not onboarded. Messy. Better.\"",
+      "ARCHIVIST: \"Someone put the milady over my filing. I am filing what was underneath.\""
      ]
     },
     {
@@ -1566,10 +1566,10 @@
      "op": "dialogue",
      "pages": [
       "At the chapel sound board, a kid has labeled every slider DOUBT and turned them all down.",
-      "KID: \"I was going to leave. The Room filed that as noise. Clean system, apparently.\"",
+      "KID: \"I was going to leave. The floor called that bad for morale. Nice onboarding, apparently.\"",
       "Bosch threads the kid's own first recording through the board. A small voice says he was scared before he was useful.",
       "The kid listens to himself breathe without permission.",
-      "KID: \"That's me. Not the residency's corrected me. Gross. Good.\"",
+      "KID: \"That's me. Not the me they put the milady on. Gross. Good.\"",
       "The chapel loses one member and gains one honest silence."
      ]
     },
@@ -1751,7 +1751,7 @@
     {
      "op": "dialogue",
      "pages": [
-      "\"You want to meet Frank? Everybody wants to meet Frank, right up until Frank starts fixing them.\""
+      "\"You want to meet Frank? Everybody wants to meet Frank, right up until Frank puts the milady on them.\""
      ]
     },
     {
@@ -1790,7 +1790,7 @@
     {
      "op": "dialogue",
      "pages": [
-      "THE KID: \"See? Cleaner. Calmer. A little bit nicer. You look better already.\""
+      "THE KID: \"See? You're in the bit. Calmer. A little bit nicer. You look better already.\""
      ]
     },
     {
@@ -1804,7 +1804,7 @@
     {
      "op": "dialogue",
      "pages": [
-      "\"Go on in. The you they finished already is waiting. It has been practicing being you since MiFella's picture taught it how.\""
+      "\"Go on in. The masked kid they recruited to be you is waiting. He's been practicing the bit since MiFella's picture taught him how.\""
      ]
     },
     {
@@ -1856,16 +1856,16 @@
     {
      "op": "dialogue",
      "pages": [
-      "Frank stares at the dent in his perfect record like it might apologize first.",
-      "\"Fail-proof. That was the pitch. Turns out proof fails when the subject keeps moving.\"",
-      "Behind him, the clean Bosch card bends at one corner. It hates being handled by weather."
+      "Frank stares at the dent in his perfect onboarding record like it might apologize first.",
+      "\"No dropouts. That was the pitch. Turns out the pitch fails when the recruit keeps moving.\"",
+      "Behind him, Bosch's membership card bends at one corner. It hates being handled by weather."
      ]
     },
     {
      "op": "dialogue",
      "pages": [
       "\"You want the route? Fine. The town keeps a door behind the show, and the mayor keeps acting like a key is a moral achievement.\"",
-      "\"Go bother the desk with the hat. Tell them the copy they ordered came back smudged.\""
+      "\"Go bother the desk with the hat. Tell them the recruit they paid for took off the mask.\""
      ]
     },
     {
@@ -2176,9 +2176,9 @@
     {
      "op": "dialogue",
      "pages": [
-      "\"Welcome to the Sunset Hotel. One night costs whatever version of yourself wakes up cheaper.\"",
-      "\"We provide clean sheets, quiet halls, and dreams that forward themselves to management.\"",
-      "Bosch declines the pillow. The clerk stamps SLEPT ENOUGH on the air anyway."
+      "\"Welcome to the Sunset Hotel. One night costs whatever cash the floor can talk you out of.\"",
+      "\"We provide clean sheets, quiet halls, and dreams that join the group before you do.\"",
+      "Bosch declines the pillow. The clerk marks him PRESENT for morning gm anyway."
      ]
     },
     {
@@ -2386,9 +2386,9 @@
     {
      "op": "dialogue",
      "pages": [
-      "\"Boat ride? Twenty bucks per person, future included free.\"",
-      "The captain points at the broadcast water. \"Luck determines the outcome. Luck and whoever owns the microphone.\"",
-      "Bosch stays on the pier. The sea keeps advertising a crossing anyway."
+      "\"Boat ride? Twenty bucks per person. Group rate, if everybody puts one on.\"",
+      "The captain points at the water. \"Luck determines the outcome. Luck and whoever the floor puts on the list.\"",
+      "Bosch stays on the pier. The captain keeps pitching the crossing to nobody."
      ]
     },
     {
@@ -2435,10 +2435,10 @@
     {
      "op": "dialogue",
      "pages": [
-      "\"I used all the leftover material. This is a very special cake.\"",
+      "\"I used every leftover ingredient. This is a very special cake.\"",
       "The vendor smiles like a person who found a way to monetize a dream before the sleeper did.",
-      "\"Eat it and the room will tell you who you are without all that rude waking up.\"",
-      "Bosch leaves the slice untouched. It still tries to remember for him."
+      "\"Eat it and you will finally get the joke. Everyone else already does.\"",
+      "Bosch leaves the slice untouched. It keeps trying to recruit him anyway."
      ]
     },
     {
@@ -2486,9 +2486,9 @@
      "op": "dialogue",
      "pages": [
       "\"Shy. That we are.\"",
-      "The record under the room's one light inhales like it has been waiting to become audible.",
+      "The record under the room's one light inhales like it has been waiting for someone else to start the chant.",
       "\"Powerful. I so show everyone.\"",
-      "It finds the nerve, badly phrased and completely original."
+      "It finds the nerve. Nobody says gm, and it keeps going anyway."
      ]
     },
     {
@@ -2536,8 +2536,8 @@
      "pages": [
       "The broken slot machine clears its throat in coins it does not have.",
       "\"Insert a buck and the cheerful trio will make you happy.\"",
-      "Three smiling attendants twitch in the reflection. They look rehearsed, not happy.",
-      "Bosch keeps the buck. The machine calls that a payout error."
+      "Three smiling attendants twitch in the reflection. They know the bit. Bosch does not.",
+      "Bosch keeps the buck. The machine calls that a failed donation."
      ]
     },
     {
@@ -2591,7 +2591,7 @@
     {
      "op": "dialogue",
      "pages": [
-      "A meteor sits in the crater, still warm, humming a little. Six figures stand around it. Each one looks the same. Gentle. They do not look up."
+      "A meteor sits in the crater, still warm, humming a little. Six figures stand around it in the same soft mask. They whisper \"milady\" like Bosch missed the first half of a joke. They do not look up."
      ]
     },
     {
@@ -2636,8 +2636,8 @@
      "op": "dialogue",
      "pages": [
       "MiFella replays his photos of the crowd.",
-      "MiFella echoes the word once under his breath.",
-      "Everyone up there seemed so cool."
+      "MiFella whispers \"milady\" once under his breath.",
+      "Everyone up there seemed so cool. Like they knew something we did not."
      ]
     },
     {
