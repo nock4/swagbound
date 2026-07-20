@@ -525,7 +525,11 @@ export class MeadowDream {
     }
     this.done = true;
     this.scene.events.off(Phaser.Scenes.Events.UPDATE, this.onUpdate, this);
-    this.keys.forEach((k) => k.destroy());
+    // The movement keys are BORROWED, not owned: Phaser's addKey() returns the already
+    // registered Key when the world scene created one (its cursors/WASD reference these
+    // same objects). Destroying them would tear down the scene's shared input, so drop
+    // our reference and leave ownership with the scene.
+    this.keys = [];
     this.opts.onMessageClear?.();
     const cam = this.scene.cameras.main;
     cam.fadeOut(0, 0, 0, 0);

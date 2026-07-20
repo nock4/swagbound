@@ -54,6 +54,23 @@ function sig(section, kind) {
   for (const [k, v] of Object.entries(section)) out[k] = kind === "arr" ? (Array.isArray(v) ? v.length : -1) : 0;
   return JSON.stringify(out);
 }
+// Type-depth guard: sig() only sees keys + array lengths, so a string coerced to a number
+// or object slips past it. Require the reframed values to stay the SAME shape they started:
+// arr sections = arrays of strings, str sections = strings.
+function typesOk(section, kind) {
+  for (const v of Object.values(section)) {
+    if (kind === "arr") { if (!Array.isArray(v) || !v.every((x) => typeof x === "string")) return false; }
+    else if (typeof v !== "string") return false;
+  }
+  return true;
+}
+// Everything in the doc EXCEPT one section, normalized - so we can prove codex touched only
+// the target section (the prompt asks it to, but nothing enforced it before).
+function docMinusSection(doc, section) {
+  const clone = { ...doc };
+  delete clone[section];
+  return JSON.stringify(clone);
+}
 function emDashes(file) { return (fs.readFileSync(path.join(ROOT, file), "utf8").match(/—/g) || []).length; }
 
 function reframeTarget(t) {
@@ -79,6 +96,12 @@ HARD RULES:
   if (sig(after[t.section] || {}, t.kind) !== beforeSig) {
     fs.writeFileSync(abs, before); report.push(`REVERT ${t.file}::${t.section} (structure changed)`); return false;
   }
+  if (!typesOk(after[t.section] || {}, t.kind)) {
+    fs.writeFileSync(abs, before); report.push(`REVERT ${t.file}::${t.section} (value types changed)`); return false;
+  }
+  if (docMinusSection(after, t.section) !== docMinusSection(beforeJson, t.section)) {
+    fs.writeFileSync(abs, before); report.push(`REVERT ${t.file}::${t.section} (touched other sections)`); return false;
+  }
   if (emDashes(t.file) > 0) {
     fs.writeFileSync(abs, before); report.push(`REVERT ${t.file}::${t.section} (em dashes)`); return false;
   }
@@ -90,7 +113,17 @@ HARD RULES:
 // ---- chunked reframe for a big dict-of-{pages} section (custom-dialogue's 716 NPCs) ----
 function pagesSig(obj) {
   const o = {};
-  for (const [k, v] of Object.entries(obj)) o[k] = Array.isArray(v?.pages) ? v.pages.length : -1;
+  for (const [k, v] of Object.entries(obj)) {
+    const pages = Array.isArray(v?.pages) ? v.pages : null;
+    // Encode length AND that every page stayed a string AND the entry's field set is
+    // unchanged - so a page coerced to an object, or a stray added/dropped field, fails
+    // the before/after compare and reverts the batch (the old check saw only length).
+    o[k] = {
+      n: pages ? pages.length : -1,
+      strings: pages ? pages.every((x) => typeof x === "string") : false,
+      fields: v && typeof v === "object" ? Object.keys(v).sort().join(",") : "?"
+    };
+  }
   return JSON.stringify(o);
 }
 function chunkReframe(file, section, chunkSize) {
@@ -204,9 +237,10 @@ if (BOSS) {
 
 // ---- build + test gate ----
 let testStatus = "skipped (no changes)";
+let buildOk = true;
 if (anyChanged) {
   log("build:eb-fullworld");
-  try { sh("pnpm build:eb-fullworld", { stdio: ["ignore", "ignore", "pipe"] }); } catch (e) { report.push(`BUILD FAIL: ${String(e.stderr || e.message).slice(0, 200)}`); }
+  try { sh("pnpm build:eb-fullworld", { stdio: ["ignore", "ignore", "pipe"] }); } catch (e) { buildOk = false; report.push(`BUILD FAIL: ${String(e.stderr || e.message).slice(0, 200)}`); }
   try { sh("git checkout -- apps/game/public/generated/assets/world/chunks/ apps/game/public/editor-chunks/"); } catch {}
   log("pnpm test");
   let out = "";
@@ -226,20 +260,27 @@ if (anyChanged) {
     try { sh("pnpm test 2>&1"); testStatus = "pass (after self-correct)"; }
     catch (e2) { testStatus = "FAIL (see MORNING.md)"; report.push("TEST FAIL after self-correct:"); report.push(String(e2.stdout || e2.message).split("\n").filter((l) => /FAIL|✗|AssertionError|Expected|Received/.test(l)).slice(0, 12).join("\n")); }
   }
-  // commit locally (never push)
-  try {
-    const addPaths = BOSS
-      ? "content/boss-battle-dialogue.json apps/game/public/generated/boss-battle-dialogue.json"
-      : CUTSCENES
-      ? "content/cutscenes.json apps/game/public/generated/cutscenes.json content/boss-battle-dialogue-redesign.json apps/game/public/generated/boss-battle-dialogue-redesign.json"
-      : EXTEND
-        ? "content/custom-dialogue.json apps/game/public/generated/custom-dialogue.json"
-        : "content/narrative-redesign.json apps/game/public/generated/narrative-redesign.json packages/eb-converter/test/atlasSprites.test.ts";
-    const label = BOSS ? "base boss taunts (16 bosses) pass" : CUTSCENES ? "cutscenes + boss dialogue (nested) pass" : EXTEND ? "custom-dialogue (716 NPCs) chunked pass" : "narrative-redesign vocabulary pass";
-    sh(`git add ${addPaths} 2>/dev/null || true`);
-    sh(`git commit -q -m "Overnight cult-reframe: ${label} (${testStatus})" || true`);
-    report.push(`committed to ${BRANCH}`);
-  } catch (e) { report.push(`commit note: ${String(e.message).slice(0, 120)}`); }
+  // commit locally (never push) - ONLY when the build AND test gate is green. A failed gate
+  // leaves the reframed files in the working tree (uncommitted) for morning review instead
+  // of baking a broken state into history.
+  const gateOk = buildOk && testStatus.startsWith("pass");
+  if (!gateOk) {
+    report.push(`NOT committed - gate red (build ${buildOk ? "ok" : "FAIL"}, tests ${testStatus}). Changes left uncommitted in the working tree for review.`);
+  } else {
+    try {
+      const addPaths = BOSS
+        ? "content/boss-battle-dialogue.json apps/game/public/generated/boss-battle-dialogue.json"
+        : CUTSCENES
+        ? "content/cutscenes.json apps/game/public/generated/cutscenes.json content/boss-battle-dialogue-redesign.json apps/game/public/generated/boss-battle-dialogue-redesign.json"
+        : EXTEND
+          ? "content/custom-dialogue.json apps/game/public/generated/custom-dialogue.json"
+          : "content/narrative-redesign.json apps/game/public/generated/narrative-redesign.json packages/eb-converter/test/atlasSprites.test.ts";
+      const label = BOSS ? "base boss taunts (16 bosses) pass" : CUTSCENES ? "cutscenes + boss dialogue (nested) pass" : EXTEND ? "custom-dialogue (716 NPCs) chunked pass" : "narrative-redesign vocabulary pass";
+      sh(`git add ${addPaths} 2>/dev/null || true`);
+      sh(`git commit -q -m "Overnight cult-reframe: ${label} (${testStatus})" || true`);
+      report.push(`committed to ${BRANCH}`);
+    } catch (e) { report.push(`commit note: ${String(e.message).slice(0, 120)}`); }
+  }
 }
 
 // ---- MORNING.md ----

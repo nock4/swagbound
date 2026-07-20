@@ -3051,6 +3051,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     delete globals.__setPlayerVisualState;
     delete globals.__playerVisualState;
     delete globals.__overlayInfo;
+    delete globals.__runMeadowDream;
+    delete globals.__meadowDreamDone;
+    delete globals.__meadowDreamDebug;
     this.solidAtHook = undefined;
     this.surfaceAtHook = undefined;
   }
@@ -7365,8 +7368,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
 
   /** Slice the butterfly sheet into 4 variants x [open, closed] frames (bfly-{v}-{0|1}). */
   private registerDreamButterflyFrames(key: string): void {
+    // A failed load leaves the key absent; textures.get() would hand back the shared
+    // __MISSING texture, and adding frames to it would pollute the global fallback. Bail
+    // on the key itself, not on a falsy tex (get() never returns null here).
+    if (!this.textures.exists(key)) {
+      return;
+    }
     const tex = this.textures.get(key);
-    if (!tex || tex.has("bfly-0-0")) {
+    if (tex.has("bfly-0-0")) {
       return;
     }
     // [openX, openY, openW, openH, closedX, closedY, closedW, closedH] per variant.
@@ -7387,8 +7396,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
    * bounding boxes (connected-component alpha scan, tmp/flower-cc.mjs) so nothing clips.
    */
   private registerDreamFlowerFrames(flowerKey: string): void {
+    // See registerDreamButterflyFrames: guard on the key, not on a falsy tex, so a failed
+    // load does not add frames to the shared __MISSING fallback texture.
+    if (!this.textures.exists(flowerKey)) {
+      return;
+    }
     const tex = this.textures.get(flowerKey);
-    if (!tex || tex.has("flower-0")) {
+    if (tex.has("flower-0")) {
       return;
     }
     const rects: Array<[number, number, number, number]> = [
