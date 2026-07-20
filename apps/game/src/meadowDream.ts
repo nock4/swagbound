@@ -56,11 +56,11 @@ interface Butterfly {
 // Cryptic -> crisp. The final line sets up the Swag Deck hand-off at morning.
 const DEFAULT_MESSAGES: string[] = [
   "...Oh. Hey. You can hear me? Huh. That usually doesn't work.",
-  "I'm Cloak. We haven't met yet. We're going to. Hi.",
+  "I'm Cloak. We haven't met yet. We will soon.",
   "This place isn't real, by the way. Well. It's realer than the town you woke up in. That's the sad part.",
-  "So there's a thing out there. It copies people. It's honestly super rude about it.",
+  "So there's a thing out there. It makes derivatives. Nothing is sacred.",
   "It's been doing this a long time. It doesn't really stop. Try to remember that part.",
-  "It got greedy. Started copying whole feelings now. How people talk. What they want. Who they trust.",
+  "It's greedy.",
   "It already got one of your friends. You'll know which one. I'm sorry.",
   "Here's the weird thing though. It can't copy this. Flowers. A dumb joke. Somebody actually meaning it.",
   "It can't copy me. It couldn't copy you either. That's kind of why I called.",
