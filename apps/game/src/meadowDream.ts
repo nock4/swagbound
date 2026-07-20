@@ -15,8 +15,8 @@ import Phaser from "phaser";
 
 const OVERLAY_DEPTH = 200_000;
 const SKY_BANDS = 20;
-const FLOWER_COUNT = 3000;
-const FLOWER_BASE_PX = 4.4; // on-screen size of a flower at scale 1
+const FLOWER_COUNT = 8000;
+const FLOWER_BASE_PX = 12; // on-screen size of a flower at scale 1
 const HOLD_SPEED = 150; // distance units/sec while a direction is held
 const DRIFT_SPEED = 34; // slow auto-drift so it can never soft-lock
 const STAGE_DISTANCE = [0, 1900, 4000]; // distance at which stages 0/1/2 begin
