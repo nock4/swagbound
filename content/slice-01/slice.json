@@ -1,7 +1,7 @@
 {
   "id": "slice-01",
   "title": "Morningside — Bosch's Block",
-  "description": "Swagbound opening beat: Bosch wakes to find a smoother 'leaked version' of himself already walked the block. Grab something real and head out to prove the you that just woke up got here first.",
+  "description": "Swagbound opening beat: Bosch wakes to find the cult has already filed a smoother version of him and walked it around the block. Grab something real and head out to prove the you that just woke up got here first.",
   "tileSize": 32,
   "palette": [
     { "symbol": "W", "name": "house wall", "solid": true, "color": "#3b2f4a", "accent": "#54456a" },
