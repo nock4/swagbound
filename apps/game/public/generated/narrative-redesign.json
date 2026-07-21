@@ -35,8 +35,8 @@
   ],
   "first-threshold-malady": [
    "MASKED BOSCH: \"MiFella gave the group your traits. You hate tomatoes, sleep through alarms, and act like you don't care when people leave. That's enough to put on the milady.\"",
-   "MASKED BOSCH: \"...What is that in your hand. A little ceramic heart. There is a chamber in it and it holds nothing.\"",
-   "MASKED BOSCH: \"MiFella gave you that. The onboarding notes do not have the heart. Why don't they have the heart.\"",
+   "MASKED BOSCH: \"...What is that in your hand. A little ceramic heart. There is a chamber in it, and there is a Poncho inside.\"",
+   "MASKED BOSCH: \"MiFella gave you that. The onboarding notes do not have the Poncho. Why don't they have the Poncho.\"",
    "MASKED BOSCH: \"MiFella says you hate tomatoes. MiFella says you sleep late. The floor says I am Bosch.\""
   ],
   "first-threshold-malady-reveal": [
@@ -121,8 +121,8 @@
   "museum-frank": [
    "A polished MiFella steps down from the exhibit. He has the milady on and says every trait he handed over during onboarding. He sounds like he's reading someone else's homework.",
    "Bosch asks about that last afternoon in his room. The mask knows the date, the photo, every trait MiFella handed over.",
-   "It doesn't know MiFella dug that heart out of a gacha machine and laughed like it was the funniest thing, just to watch Bosch keep it. He never told the group that part.",
-   "For one second, the real MiFella looks out from under the milady. \"The heart. The ceramic one, that holds nothing. It's in your pocket right now.\" The mask slips."
+   "It doesn't know about the Poncho MiFella pulled and stuffed in the heart, laughing like it was the funniest thing, just to watch Bosch keep it. He never told the group that part.",
+   "For one second, the real MiFella looks out from under the milady. \"The heart. The ceramic one, with the Poncho in it. It's in your pocket right now.\" The mask slips."
   ],
   "museum-worm": [
    "Deep in the vault, a knot of labels explains every little thing until there is no person left underneath.",
