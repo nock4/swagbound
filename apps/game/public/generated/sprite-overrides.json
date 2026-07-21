@@ -33607,7 +33607,7 @@
   },
   "byEnemyId": {
     "1": {
-      "image": "assets/swagbound/enemy/gns-smm2-108-superpoly-gorp.png",
+      "image": "assets/swagbound/enemy/gns-mylady-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -33625,7 +33625,7 @@
       "originY": 0.5
     },
     "5": {
-      "image": "assets/swagbound/enemy/gns-smm2-15-ponyrolly.png",
+      "image": "assets/swagbound/enemy/gns-my-little-fella-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -33709,7 +33709,7 @@
       "originY": 0.5
     },
     "19": {
-      "image": "assets/swagbound/enemy/gns-smm2-254-goondrip.png",
+      "image": "assets/swagbound/enemy/gns-mylady-003.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -33775,7 +33775,7 @@
       "originY": 0.5
     },
     "33": {
-      "image": "assets/swagbound/enemy/gns-metal-misfit-003.png",
+      "image": "assets/swagbound/enemy/gns-vilady-maker-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -33907,7 +33907,7 @@
       "originY": 0.5
     },
     "61": {
-      "image": "assets/swagbound/enemy/gns-smm2-497-gwibby-watcher.png",
+      "image": "assets/swagbound/enemy/gns-drilady-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -33949,7 +33949,7 @@
       "originY": 0.5
     },
     "68": {
-      "image": "assets/swagbound/enemy/gns-smm2-553-golden-greshlar.png",
+      "image": "assets/swagbound/enemy/gns-demonfella-ii-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -34051,7 +34051,7 @@
       "originY": 0.5
     },
     "89": {
-      "image": "assets/swagbound/enemy/gns-smm2-727-elder-thing.png",
+      "image": "assets/swagbound/enemy/gns-drilady-003.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -34123,7 +34123,7 @@
       "originY": 0.5
     },
     "105": {
-      "image": "assets/swagbound/enemy/gns-self-deriving-hyperworms-001.png",
+      "image": "assets/swagbound/enemy/gns-malady-005.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -34207,7 +34207,7 @@
       "originY": 0.5
     },
     "121": {
-      "image": "assets/swagbound/enemy/gns-solfis-001.png",
+      "image": "assets/swagbound/enemy/gns-vilady-maker-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -34237,7 +34237,7 @@
       "originY": 0.5
     },
     "127": {
-      "image": "assets/swagbound/enemy/gns-spirit-realm-001.png",
+      "image": "assets/swagbound/enemy/gns-malady-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -34327,7 +34327,7 @@
       "originY": 0.5
     },
     "147": {
-      "image": "assets/swagbound/enemy/gns-unx-003.png",
+      "image": "assets/swagbound/enemy/gns-drilady-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -34357,13 +34357,13 @@
       "originY": 0.5
     },
     "152": {
-      "image": "assets/swagbound/enemy/gns-vintage-warriors-001.png",
+      "image": "assets/swagbound/enemy/gns-mylady-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
     },
     "153": {
-      "image": "assets/swagbound/enemy/gns-vintage-warriors-003.png",
+      "image": "assets/swagbound/enemy/gns-malady-002.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -34411,7 +34411,7 @@
       "originY": 0.5
     },
     "209": {
-      "image": "assets/swagbound/enemy/gns-smm2-15-ponyrolly.png",
+      "image": "assets/swagbound/enemy/gns-my-little-fella-001.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -34423,7 +34423,7 @@
       "originY": 0.5
     },
     "211": {
-      "image": "assets/swagbound/enemy/gns-solfis-001.png",
+      "image": "assets/swagbound/enemy/gns-vilady-maker-004.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
@@ -34459,7 +34459,7 @@
       "originY": 0.5
     },
     "227": {
-      "image": "assets/swagbound/enemy/gns-self-deriving-hyperworms-001.png",
+      "image": "assets/swagbound/enemy/gns-malady-005.png",
       "displayHeight": 160,
       "originX": 0.5,
       "originY": 0.5
