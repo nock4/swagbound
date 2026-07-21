@@ -23,8 +23,8 @@ export function tutorialDerivativeActionIndex(command: BattleCommand | undefined
 
 export function tutorialDerivativeMimicLine(name: string, command: BattleCommand | undefined): string {
   return command
-    ? `${name} derived ${command} one turn late!`
-    : `${name} watched Bosch carefully.`;
+    ? `${name} filed Bosch's ${command} and ran it back!`
+    : `${name} reads Bosch's file.`;
 }
 
 /** Stage the prior lead command before the next round begins. */

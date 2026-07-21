@@ -80,7 +80,7 @@ describe("canonical narrative redesign overlay", () => {
     expect(resolved.byTextPointer["data_20.l_0xc66b97"]?.pages?.join(" "))
       .toContain("sent it to the arcade group");
     expect(resolved.byTextPointer["data_15.l_0xc5eb0b"]?.pages?.join(" "))
-      .toContain("one turn late");
+      .toContain("the version I sent them");
   });
 
   it("renames the legacy threshold boss and tutorial encounter", () => {
@@ -91,9 +91,9 @@ describe("canonical narrative redesign overlay", () => {
       applyOpeningClarityBattle(battle, clarity),
       redesign
     );
-    expect(resolved?.enemies.find((enemy) => enemy.id === 37)?.name).toBe("Onboarded Bosch");
+    expect(resolved?.enemies.find((enemy) => enemy.id === 37)?.name).toBe("Onboarding Officer");
     expect(resolved?.enemies.find((enemy) => enemy.id === 900001)?.name)
-      .toBe("Unstable Correction");
+      .toBe("Intake Clerk");
   });
 
   it("replaces the Act 1 emotional spine without changing trigger mechanics", () => {
@@ -106,7 +106,7 @@ describe("canonical narrative redesign overlay", () => {
     );
     const threshold = resolved?.triggers.find((trigger) => trigger.id === "first-threshold-malady");
     const exit = resolved?.triggers.find((trigger) => trigger.id === "leave-signal-town");
-    expect(threshold?.dialogue?.join(" ")).toContain("MASKED BOSCH");
+    expect(threshold?.dialogue?.join(" ")).toContain("ONBOARDING OFFICER");
     expect(threshold?.battleGroup).toBe(450);
     expect(exit?.dialogue?.join(" ")).toContain("onboarding");
     expect(exit?.setFlags).toContain("act1:complete");

@@ -41,6 +41,6 @@ describe("tutorial Bosch derivative", () => {
 
   it("names the derivative in its visible imitation line", () => {
     expect(tutorialDerivativeMimicLine("Unstable Bosch Derivative", "BASH"))
-      .toBe("Unstable Bosch Derivative derived BASH one turn late!");
+      .toBe("Unstable Bosch Derivative filed Bosch's BASH and ran it back!");
   });
 });

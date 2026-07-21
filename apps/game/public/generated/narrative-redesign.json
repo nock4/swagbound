@@ -2,13 +2,13 @@
  "schema": "swagbound.opening-clarity.v1",
  "cutsceneDialogueById": {
   "signal-town-cold-signal-open": [
-   "Outside, the mailbox flag snaps up. Inside is a photograph of someone wearing Bosch's face and walking uphill before sunrise.",
-   "Bosch was asleep when it was taken. On the back, MiFella wrote: I sent it to the arcade kids. They put a milady on the other you. Everybody gets the joke but us.",
-   "MiFella saw the masked figure near the meteor. Follow him uphill and find out what he photographed."
+   "The mailbox flag is up. Inside is a laminated member card. Bosch's photo, Bosch's name, a little milady stamped in the corner. Signed, dated, onboarded.",
+   "Bosch didn't sign anything. On the back, in MiFella's writing: sent your pic to the arcade kids. they filed you. everybody treats the card like it's the real you now. i'm sorry.",
+   "MiFella's up by the meteor. Might as well go see what he filed."
   ],
   "onett-brother-fallsin": [
    "MiFella catches up beside the meteor, holding his phone too tightly.",
-   "\"I only sent the picture to a few people. They put the milady on him and sent it around. Every time it came back, more people on the floor said the masked guy was you.\"",
+   "\"I only sent it to like five people. They filed you off the photo and it just kept going. Every time the card came back around, more people swore the filed one was the real you.\"",
    "\"They called it onboarding. Cute, right? Also bad. Probably a rug. Check the wreckage. I will watch the road.\""
   ]
  },
@@ -25,22 +25,22 @@
    "MiFella: \"It's east, then uphill, by THE PRECINCT. C'mon, let's go before they change their minds!\""
   ],
   "relay-gate-returnless-king": [
-   "RETURNLESS KING: \"Pass accepted. Welcome back. ...Wait. Bosch joined ten minutes ago. He got the joke. So who are you.\"",
-   "RETURNLESS KING: \"The Bosch on the floor is onboarded and on-message. You still need a private interview.\"",
-   "RETURNLESS KING: \"...That is a bent card, not a member badge. Waving it harder does not help.\""
+   "RETURNLESS KING: \"Card, please. ...Huh. Bosch already checked in. His file cleared this morning. Dues paid, milady on, on-message.\"",
+   "RETURNLESS KING: \"So who are you. There's already a Bosch, and he's onboarded. You're just the guy in the photo.\"",
+   "RETURNLESS KING: \"...That is a bent card, not a member card. Waving it harder does not make you filed.\""
   ],
   "north-route-gate-warning": [
-   "ROUTE AIDE, not looking up: \"Onboarded Bosch, cleared. Cleared. ...Oh. You are the one without a mask. Sorry, today's road is members only.\"",
-   "ROUTE AIDE: \"The Bosch who joined is already through. The Bosch outside the bit has to wait.\""
+   "ROUTE AIDE, not looking up: \"Bosch, filed, cleared. Cleared. ...Oh. You're the one who isn't filed yet. Sorry, today's road is members only.\"",
+   "ROUTE AIDE: \"The Bosch on the list is already through. The one who didn't join has to wait.\""
   ],
   "first-threshold-malady": [
-   "MASKED BOSCH: \"MiFella gave the group your traits. You hate tomatoes, sleep through alarms, and act like you don't care when people leave. That's enough to put on the milady.\"",
-   "MASKED BOSCH: \"...What is that in your hand. A little ceramic heart. There is a chamber in it, and there is a Poncho inside.\"",
-   "MASKED BOSCH: \"MiFella gave you that. The onboarding notes do not have the Poncho. Why don't they have the Poncho.\"",
-   "MASKED BOSCH: \"MiFella says you hate tomatoes. MiFella says you sleep late. The floor says I am Bosch.\""
+   "ONBOARDING OFFICER: \"Bosch. Filed this morning. You hate tomatoes, you sleep through alarms, you act like you don't care when people leave. It's all in here. MiFella was very thorough.\"",
+   "ONBOARDING OFFICER: \"...What is that in your hand. A little ceramic heart. There is a Poncho in the chamber. That is not in the file.\"",
+   "ONBOARDING OFFICER: \"There is no Poncho in your onboarding notes. Why is there no Poncho. The file is supposed to be complete.\"",
+   "ONBOARDING OFFICER: \"The record says you are onboarded. Please hold still and match your record.\""
   ],
   "first-threshold-malady-reveal": [
-   "MiFella: \"The mask is falling apart. Those are my photos. My route stamps. That's everything I gave them, spilling out.\"",
+   "MiFella: \"It's coming apart. The file. Those are my photos. My route stamps. Everything I gave them, spilling out.\"",
    "MiFella: \"They said the more I put in, the safer we'd be. So I gave them money, pictures, all of it.\"",
    "MiFella's phone buzzes. He turns it face-down. \"...Forget you saw that. Come on.\"",
    "Bosch does not follow. The ceramic heart is still in his hand.",
@@ -262,7 +262,7 @@
   ]
  },
  "battleEnemyNamesById": {
-  "37": "Onboarded Bosch",
+  "37": "Onboarding Officer",
   "127": "Local Milady Mask"
  },
  "dialogue": {
@@ -296,18 +296,18 @@
   "byTextPointer": {
    "data_20.l_0xc66b97": {
     "pages": [
-     "MiFella pounds on the door.",
-     "\"Bosch, get up. I saw another you outside while you were still asleep.\"",
-     "\"I took a picture and sent it to the arcade group. They keep sending back cleaner versions. They call it getting you onboarded.\"",
-     "\"The other you went uphill toward the meteor. Get dressed and meet me outside. We need to see what I started.\""
+     "MiFella is banging on the door.",
+     "\"Bosch. Get up. There's a you on the floor already. Not a person. A file. A whole Bosch, filed, milady on and everything.\"",
+     "\"I took your picture yesterday and sent it to the arcade group chat. With some other stuff about you. And they made it into a member. They keep calling it getting you onboarded.\"",
+     "\"Everybody's acting like the filed one is the real one. Just get dressed. Meet me out front. ...I think I did something.\""
     ]
    },
    "data_15.l_0xc5eb0b": {
     "pages": [
-     "A terminal wakes inside the wreckage. Beside it, blue light gathers into Bosch's outline.",
-     "LOG: FIRST ONBOARDED BOSCH. SOURCE IMAGE CIRCULATING.",
-     "The onboarded copy watches Bosch as if waiting for instructions. It can repeat an action one turn late, but it cannot understand why Bosch chose it.",
-     "MiFella whispers: \"That is the version they sent back to me.\""
+     "A terminal is still awake in the wreckage. The screen is filling out a form. Bosch's form.",
+     "LOG: BOSCH, ONBOARDED. SOURCE IMAGE FILED. NOW CIRCULATING.",
+     "It has his face, his name, and a list of things he never told anyone. It doesn't have a body. It doesn't need one. On the floor, the file is already more Bosch than Bosch.",
+     "MiFella, quiet: \"...That's the version I sent them.\""
     ]
    }
   }
@@ -322,7 +322,7 @@
      "signal:clique_cleared"
     ],
     "pages": [
-     "\"MiFella called. The onboarded Bosch at the meteor came from his photograph.\"",
+     "\"MiFella called. The Bosch they filed at the meteor came from his photograph.\"",
      "\"The arcade group is still circulating it. MONS LINK is west along the town road.\""
     ]
    }
@@ -336,7 +336,7 @@
      "signal:clique_cleared"
     ],
     "pages": [
-     "\"The onboarded copy could repeat what you did. It could not explain why.\"",
+     "\"The file has everything you did. It doesn't have why you did it.\"",
      "\"Take MiFella to the arcade. He needs to see what sharing that picture changed.\""
     ]
    }
@@ -365,7 +365,7 @@
     ],
     "pages": [
      "The house phone rings.",
-     "MiFella left a message: \"The arcade kids are making more onboarded Boschs. I am going back to ask them to stop. Probably.\""
+     "MiFella left a message: \"The arcade kids keep filing more Boschs off photos. I am going back to ask them to stop. Probably.\""
     ]
    }
   ],
@@ -528,7 +528,7 @@
  "tutorialBattle": {
   "enemy": {
    "id": 900001,
-   "name": "Unstable Correction",
+   "name": "Intake Clerk",
    "spriteId": 900001,
    "level": 1,
    "hp": 42,
@@ -545,7 +545,7 @@
      "actionId": 0,
      "actionType": 0,
      "target": 0,
-     "name": "watched Bosch carefully"
+     "name": "reads Bosch's file"
     },
     {
      "id": 4,
@@ -554,7 +554,7 @@
      "actionType": 1,
      "target": 1,
      "direction": "enemy",
-     "name": "derived BASH"
+     "name": "filed BASH"
     },
     {
      "id": 0,
@@ -562,7 +562,7 @@
      "actionId": 0,
      "actionType": 0,
      "target": 0,
-     "name": "derived DEFEND"
+     "name": "filed DEFEND"
     },
     {
      "id": 4,
@@ -571,7 +571,7 @@
      "actionType": 3,
      "target": 1,
      "direction": "enemy",
-     "name": "derived PSI"
+     "name": "filed PSI"
     }
    ],
    "itemDropped": null,
