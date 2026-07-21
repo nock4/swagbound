@@ -13240,6 +13240,58 @@
      "DRIFELLA 2 #5324: put the milady on and the draining starts to feel like belonging. that's the trade."
     ]
    }
+  },
+  {
+   "id": 910278,
+   "worldPixel": { "x": 6424, "y": 2296 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #1728: shinji puffer. wet water. you following? no. that's fine.",
+     "DRIFELLA 2 #1728: onboarding's easy. bring whatever's in your pockets, put one on, you're one of us."
+    ]
+   }
+  },
+  {
+   "id": 910279,
+   "worldPixel": { "x": 5272, "y": 3176 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #6717: green cloak. tojiba ring horror. cassidy. you wouldn't get the reference.",
+     "DRIFELLA 2 #6717: dues first, questions never. that's how the floor stays smooth. welcome."
+    ]
+   }
+  },
+  {
+   "id": 910280,
+   "worldPixel": { "x": 880, "y": 4736 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #4977: ghost and anime girl. inked shirt. it's a whole thing. you're not in it.",
+     "DRIFELLA 2 #4977: put the milady on and stop being the only anon who doesn't get the joke."
+    ]
+   }
+  },
+  {
+   "id": 910281,
+   "worldPixel": { "x": 840, "y": 4664 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #6186: plush torn jester. demon grin. dont give me orders. we already onboarded you.",
+     "DRIFELLA 2 #6186: the read costs whatever you brought. members rip each other off first. that's the fun part."
+    ]
+   }
   }
  ]
 }

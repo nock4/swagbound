@@ -35,8 +35,9 @@ describe("sprite atlas extractor", () => {
       // + 4 Dead Letter shop-street found-speech NPCs (930117-930120; byNpcId skins)
       // + 8 Eight Sources Archivists (930121-930128; archivist-001-ow skin)
       // + 3 opening meteor-scene additions (910208/910209 Miladys, 910210 LSW traveler)
-      // + 6 more town turnings (910272-910277; malady skins; Postwick/Galleria/Dead Letter).
-      usedByNpcCount: 770,
+      // + 6 more town turnings (910272-910277; malady skins; Postwick/Galleria/Dead Letter)
+      // + 4 more town turnings (910278-910281; malady skins; Solana Beach/Scaraba).
+      usedByNpcCount: 774,
       overridden: true,
       overrideKind: "group"
     });
