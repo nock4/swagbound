@@ -13162,6 +13162,84 @@
      "DRIFELLA 2 #5856: onboarding fee's whatever's in your pockets. it's a good deal because we say so."
     ]
    }
+  },
+  {
+   "id": 910272,
+   "worldPixel": { "x": 1944, "y": 6912 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #117: void background. dratini anime. lean beef patty. you following? no. that's fine.",
+     "DRIFELLA 2 #117: you've been liquidated already, you just didn't check. put one on, it stops hurting."
+    ]
+   }
+  },
+  {
+   "id": 910273,
+   "worldPixel": { "x": 2800, "y": 7080 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #7683: be different hoodie. digital camo plush. everybody in here has the same one. squinting yet?",
+     "DRIFELLA 2 #7683: chrome dice says you're in. the read costs whatever's in your pockets. good deal because we say so."
+    ]
+   }
+  },
+  {
+   "id": 910274,
+   "worldPixel": { "x": 4080, "y": 5672 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #7135: negative saturn scuffed. it's a whole lecture. you wouldn't get it.",
+     "DRIFELLA 2 #7135: onboarding fee is whatever you walked in with. sign here, you cross clean."
+    ]
+   }
+  },
+  {
+   "id": 910275,
+   "worldPixel": { "x": 4496, "y": 4744 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #9111: dont care shirt. green sketch. jacobs ladder. you following? no. good.",
+     "DRIFELLA 2 #9111: everybody already put one on. you're the last anon not in the bit. fix that."
+    ]
+   }
+  },
+  {
+   "id": 910276,
+   "worldPixel": { "x": 6936, "y": 8656 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #2409: frazetta. blue aura sketch. the drip is the whole personality now.",
+     "DRIFELLA 2 #2409: dues are whatever's in your pockets. members rip each other off first. welcome."
+    ]
+   }
+  },
+  {
+   "id": 910277,
+   "worldPixel": { "x": 6784, "y": 8632 },
+   "spriteGroup": 59,
+   "facing": "down",
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "DRIFELLA 2 #5324: snowy graveyard background. pixel dither tan. drained, honestly.",
+     "DRIFELLA 2 #5324: put the milady on and the draining starts to feel like belonging. that's the trade."
+    ]
+   }
   }
  ]
 }

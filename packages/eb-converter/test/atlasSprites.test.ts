@@ -34,8 +34,9 @@ describe("sprite atlas extractor", () => {
       // + the chant-vs-name pending witness (930116; byNpcId skin)
       // + 4 Dead Letter shop-street found-speech NPCs (930117-930120; byNpcId skins)
       // + 8 Eight Sources Archivists (930121-930128; archivist-001-ow skin)
-      // + 3 opening meteor-scene additions (910208/910209 Miladys, 910210 LSW traveler).
-      usedByNpcCount: 764,
+      // + 3 opening meteor-scene additions (910208/910209 Miladys, 910210 LSW traveler)
+      // + 6 more town turnings (910272-910277; malady skins; Postwick/Galleria/Dead Letter).
+      usedByNpcCount: 770,
       overridden: true,
       overrideKind: "group"
     });
