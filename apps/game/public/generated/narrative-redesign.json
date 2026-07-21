@@ -14,10 +14,10 @@
  },
  "storyTriggerDialogueById": {
   "signal-town-card-clique": [
-   "CARD CLIQUE: \"gm, Bosch. We put your face on the milady. Everybody on the floor gets the joke now. Well, almost everybody.\"",
-   "CARD CLIQUE: \"Don't look so worried. Put one on, pay the dues, and we'll explain the bit after you're in it.\"",
-   "MiFella: \"Bosch! Hey! There you are. See? I told them it'd look good on you.\"",
-   "THE NEAREST SCREEN, using Bosch's voice a moment late: \"There you are.\""
+   "CARD CLIQUE: \"gm! There he is! The man himself! Guys, it's Bosch!\"",
+   "CARD CLIQUE: \"We know, man. The three alarms. The tomato thing. MiFella tells it so good. You're the group's favorite bit right now.\"",
+   "CARD CLIQUE: \"Dues are whatever's in your pockets. Hand it over and say the greeting. Don't be weird about it. Nobody's being weird about it.\"",
+   "MiFella: \"...They're being normal, Bosch. This is them being normal.\""
   ],
   "signal-town-card-clique-reveal": [
    "MiFella: \"Whoa, the floor sent us an onboarding pass. I didn't even ask. That's pretty cool.\"",
@@ -25,13 +25,13 @@
    "MiFella: \"It's east, then uphill, by THE PRECINCT. C'mon, let's go before they change their minds!\""
   ],
   "relay-gate-returnless-king": [
-   "RETURNLESS KING: \"Card, please. ...Huh. Bosch already checked in. His file cleared this morning. Dues paid, milady on, on-message.\"",
-   "RETURNLESS KING: \"So who are you. There's already a Bosch, and he's onboarded. You're just the guy in the photo.\"",
-   "RETURNLESS KING: \"...That is a bent card, not a member card. Waving it harder does not make you filed.\""
+   "RETURNLESS KING: \"Card, please. ...Bosch! Finally! The chat's been asking when you'd come say the greeting in person.\"",
+   "RETURNLESS KING: \"So. Dues, greeting, and through you go. ...Why is he just standing there. Is this the alarm thing? He does this, you know. It's in the notes.\"",
+   "RETURNLESS KING: \"Look, buddy. You're on the roster. I can't let you walk around acting like you're not on the roster. That's the whole reason there's a roster.\""
   ],
   "north-route-gate-warning": [
-   "ROUTE AIDE, not looking up: \"Bosch, filed, cleared. Cleared. ...Oh. You're the one who isn't filed yet. Sorry, today's road is members only.\"",
-   "ROUTE AIDE: \"The Bosch on the list is already through. The one who didn't join has to wait.\""
+   "ROUTE AIDE, not looking up: \"Members only today. ...Oh, you're fine. You're Bosch. Says right here you joined at three in the morning.\"",
+   "ROUTE AIDE: \"So say the greeting and head on through. ...No? Huh. There's a note that says you might do this. There's a whole note about you.\""
   ],
   "first-threshold-malady": [
    "ONBOARDING OFFICER: \"Bosch. Filed this morning. You hate tomatoes, you sleep through alarms, you act like you don't care when people leave. It's all in here. MiFella was very thorough.\"",
@@ -74,7 +74,7 @@
   ],
   "postwick-registry": [
    "The Registry has a file called BOSCH, CARE INSTRUCTIONS. MiFella's name is beside every private detail.",
-   "REGISTRY WARDEN: \"He paid his onboarding fee and gave us the hard parts. Our Bosch never feels lonely, embarrassed, or left out of the joke.\"",
+   "REGISTRY WARDEN: \"He paid his onboarding fee and gave us the hard parts. On our books, Bosch never feels lonely, embarrassed, or left out of the joke.\"",
    "Bosch knows the facts in the file. He doesn't know the person they made from them.",
    "The Warden lifts a laminated smile. Bosch fights to keep MiFella's mistake from becoming the rule for all of Postwick."
   ],
@@ -119,7 +119,7 @@
    "The stories don't match, but none is a lie. The guardian can't squeeze them all under one mask."
   ],
   "museum-frank": [
-   "A polished MiFella steps down from the exhibit. He has the milady on and says every trait he handed over during onboarding. He sounds like he's reading someone else's homework.",
+   "MiFella steps down off the exhibit stand. He has the milady on. He recites every trait he handed over during onboarding like he is reading someone else's homework.",
    "Bosch asks about that last afternoon in his room. The mask knows the date, the photo, every trait MiFella handed over.",
    "It doesn't know about the Poncho MiFella pulled and stuffed in the heart, laughing like it was the funniest thing, just to watch Bosch keep it. He never told the group that part.",
    "For one second, the real MiFella looks out from under the milady. \"The heart. The ceramic one, with the Poncho in it. It's in your pocket right now.\" The mask slips."
@@ -238,7 +238,7 @@
    "Bring the recovered contradiction to the JPEG Museum lobby."
   ],
   "act3-museum-frank": [
-   "A polished MiFella manifestation is deeper in the museum. Ask about the collapsed birthday cake."
+   "MiFella is deeper in the museum with the milady on. Ask him about the ceramic heart."
   ],
   "act3-museum-worm": [
    "Provenance 0 is in the deep vault. Keep speaking to MiFella as someone who can still choose."
@@ -297,17 +297,17 @@
    "data_20.l_0xc66b97": {
     "pages": [
      "MiFella is banging on the door.",
-     "\"Bosch. Get up. There's a you on the floor already. Not a person. A file. A whole Bosch, filed, milady on and everything.\"",
-     "\"I took your picture yesterday and sent it to the arcade group chat. With some other stuff about you. And they made it into a member. They keep calling it getting you onboarded.\"",
-     "\"Everybody's acting like the filed one is the real one. Just get dressed. Meet me out front. ...I think I did something.\""
+     "\"Bosch. Get up. Is your phone going off? Don't look at your phone.\"",
+     "\"Last night the arcade group chat kept asking about you. And I had the answers, and it felt really good to be the guy with the answers. So I sent them your picture. And some other stuff. Private stuff.\"",
+     "\"This morning they voted you in. You're a member now. There's a ledger and dues and a greeting. Everybody in town knows the greeting but you. Get dressed and meet me out front. ...I think I did something.\""
     ]
    },
    "data_15.l_0xc5eb0b": {
     "pages": [
-     "A terminal is still awake in the wreckage. The screen is filling out a form. Bosch's form.",
-     "LOG: BOSCH, ONBOARDED. SOURCE IMAGE FILED. NOW CIRCULATING.",
-     "It has his face, his name, and a list of things he never told anyone. It doesn't have a body. It doesn't need one. On the floor, the file is already more Bosch than Bosch.",
-     "MiFella, quiet: \"...That's the version I sent them.\""
+     "A terminal is still awake in the wreckage. It is sending the same message to every phone in town, over and over.",
+     "LOG: NEW MEMBER: BOSCH. VOUCHED BY: MIFELLA. DUES: OUTSTANDING. GIVE HIM THE USUAL WELCOME.",
+     "Under that, a list of things Bosch never told anyone. Somebody has drawn a little heart next to each one.",
+     "MiFella, quiet: \"...That's the stuff I sent them.\""
     ]
    }
   }

@@ -8,14 +8,14 @@
     ],
     "onett-brother-fallsin": [
       "MiFella catches up beside the meteor.",
-      "\"The filed Bosch stopped here. When I got close, that blue signal peeled away from the wreckage.\"",
+      "\"The signup came from up here. When I got close, that blue signal peeled away from the wreckage.\"",
       "\"I will watch the road. Check the terminal, then follow whatever it points to.\""
     ]
   },
   "storyTriggerDialogueById": {
     "signal-town-card-clique": [
       "At the MONS LINK arcade, kids are trading cards with Bosch's face on them. The cards were here before he woke up.",
-      "CARD CLIQUE: \"The filed Bosch already signed. You are the unfiled one.\"",
+      "CARD CLIQUE: \"You're on the roster, Bosch. Members sign, pay dues, and say the greeting. You're the only holdout in town.\"",
       "Bosch holds up the damaged Swag Deck. The signatures match, but nobody in the arcade admits writing either one."
     ],
     "signal-town-card-clique-reveal": [
@@ -33,9 +33,9 @@
       "\"The gate already approved Bosch. If that is you, prove it at the desk.\""
     ],
     "first-threshold-malady": [
-      "At the crossing beside the hotel, an onboarding booth is waiting. Bosch's file is up on the screen, on-message. Its smile loads a moment too early.",
-      "THE FILE: \"Everyone recognized me first. That makes you the unfiled one.\"",
-      "Bosch asks what happened in his bedroom. The file repeats the question but cannot answer it.",
+      "At the crossing beside the hotel, an onboarding desk is waiting. Bosch's membership record is up on the screen. Somebody has already signed his name.",
+      "RECORDS OFFICER: \"The record says you already joined. Everyone in town has seen it. Hold still and match the record.\"",
+      "Bosch asks who signed it. The officer repeats the question back and cannot answer it.",
       "The file is just a laminated card, and it reaches for the damaged Swag Deck. Bosch fights to keep the one record it cannot complete."
     ],
     "first-threshold-malady-reveal": [
@@ -64,7 +64,7 @@
     "act2-reach-postwick": "Follow the open route from Morningside until you reach Postwick."
   },
   "battleEnemyNamesById": {
-    "37": "The Bosch File"
+    "37": "Records Officer"
   },
   "dialogue": {
     "byNpcId": {
@@ -82,14 +82,14 @@
       },
       "16": {
         "pages": [
-          "\"The filed Bosch never looked at the family pictures. He walked straight to the road like he already knew the route.\"",
-          "\"He went north toward the meteor. That is the first place I would look.\""
+          "\"The group chat says you joined at three in the morning. You were asleep at three in the morning. I checked.\"",
+          "\"Whatever signed you up came down with the meteor. North. That is the first place I would look.\""
         ]
       },
       "21": {
         "pages": [
           "The house phone rings once, then stops.",
-          "MiFella left a message: \"I saw the filed Bosch head uphill toward the meteor. Meet me outside.\""
+          "MiFella left a message: \"The welcome messages all point at the meteor. Uphill. Meet me outside.\""
         ],
         "service": "phone"
       },
@@ -131,7 +131,7 @@
       },
       "138": {
         "pages": [
-          "\"People keep repeating stories about the filed Bosch. Every retelling is more confident than the last.\"",
+          "\"Everyone in town is telling the same story about you today. Every retelling is more confident than the last.\"",
           "\"Confidence is not memory. Ask for a detail.\""
         ]
       },
@@ -208,8 +208,8 @@
       "data_15.l_0xc5eb0b": {
         "pages": [
           "A terminal wakes inside the wreckage.",
-          "LOG: A BOSCH FILE ENTERED MORNINGSIDE BEFORE ORIGINAL LEFT HOME.",
-          "The file has your face, but it does not know your history. People who know you can still tell.",
+          "LOG: NEW MEMBER VOTED IN OVERNIGHT: BOSCH. DUES OUTSTANDING. WELCOME HIM.",
+          "The membership has your name and your secrets, but it does not know your history. People who know you can still tell.",
           "The signal points west toward the MONS LINK arcade. Find the kids carrying your picture."
         ]
       }
@@ -231,8 +231,8 @@
         "requireFlags": ["signal:threshold_cleared"],
         "blockFlags": [],
         "pages": [
-          "\"The filed Bosch never looked at these family pictures. You did, on the way back in.\"",
-          "\"Whatever that thing was, knowing your face was not the same as knowing you.\""
+          "\"The chat says you joined at three in the morning. You were asleep. Mothers check these things.\"",
+          "\"Whoever signed you up knew your face. Knowing your face is not the same as knowing you.\""
         ]
       },
       {
@@ -257,7 +257,7 @@
         "requireFlags": ["intro:meteor-beat-fired"],
         "blockFlags": ["signal:clique_cleared"],
         "pages": [
-          "\"The filed Bosch went from the meteor toward the arcade.\"",
+          "\"The welcome messages started at the meteor and spread to the arcade first.\"",
           "\"MONS LINK is west on the main road, beside SLICE.\""
         ]
       }
@@ -268,7 +268,7 @@
         "blockFlags": ["signal:threshold_cleared"],
         "pages": [
           "The house phone rings.",
-          "Munch left a message: \"The road is open. The filed Bosch is at the crossing beside the hotel.\""
+          "Munch left a message: \"The road is open. The records officer at the crossing beside the hotel is asking for you by name.\""
         ]
       },
       {
@@ -301,8 +301,8 @@
         "requireFlags": ["signal:route_open"],
         "blockFlags": ["signal:threshold_cleared"],
         "pages": [
-          "\"The gate opened. The filed Bosch is waiting at the crossing beside the hotel.\"",
-          "\"Ask it something a photograph cannot answer.\""
+          "\"The gate opened. The records officer is waiting at the crossing beside the hotel.\"",
+          "\"Bring something the paperwork cannot answer.\""
         ]
       }
     ],
@@ -311,7 +311,7 @@
         "requireFlags": ["signal:threshold_cleared"],
         "blockFlags": [],
         "pages": [
-          "\"The filed Bosch was made from cards, stamps, and things we told strangers.\"",
+          "\"Your whole membership was put together out of cards, stamps, and things you told one friend.\"",
           "\"You kept the damaged record. Good. Damage has a history.\""
         ]
       },
@@ -347,7 +347,7 @@
         "requireFlags": ["signal:threshold_cleared"],
         "blockFlags": [],
         "pages": [
-          "\"The filed Bosch collapsed into records from all over town.\"",
+          "\"That record they had on you burst into cards and stamps all over the crossing.\"",
           "\"It knew what we said about you. It did not know what happened to you.\""
         ]
       },

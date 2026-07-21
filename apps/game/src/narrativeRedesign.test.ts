@@ -78,9 +78,9 @@ describe("canonical narrative redesign overlay", () => {
       redesign
     );
     expect(resolved.byTextPointer["data_20.l_0xc66b97"]?.pages?.join(" "))
-      .toContain("sent it to the arcade group");
+      .toContain("arcade group chat");
     expect(resolved.byTextPointer["data_15.l_0xc5eb0b"]?.pages?.join(" "))
-      .toContain("the version I sent them");
+      .toContain("the stuff I sent them");
   });
 
   it("renames the legacy threshold boss and tutorial encounter", () => {

@@ -44,7 +44,7 @@ describe("opening clarity overlay", () => {
       readFileSync(resolve("content/custom-dialogue.json"), "utf8")
     ));
     const resolved = applyOpeningClarityDialogue(base, clarity);
-    expect(resolved.byTextPointer["data_15.l_0xc5eb0b"]?.pages?.join(" ")).toContain("BOSCH FILE ENTERED");
+    expect(resolved.byTextPointer["data_15.l_0xc5eb0b"]?.pages?.join(" ")).toContain("VOTED IN OVERNIGHT");
     expect(resolved.byNpcId[15]?.pages?.join(" ")).toContain("still in bed");
     expect(resolved.byNpcId[21]?.service).toBe("phone");
   });
@@ -100,7 +100,7 @@ describe("opening clarity overlay", () => {
     ));
     const resolved = applyOpeningClarityStoryTriggers(base, clarity);
     const publicBosch = resolved?.triggers.find((entry) => entry.id === "first-threshold-malady");
-    expect(publicBosch?.dialogue?.join(" ")).toContain("THE FILE");
+    expect(publicBosch?.dialogue?.join(" ")).toContain("RECORDS OFFICER");
     expect(publicBosch?.battleGroup).toBe(450);
     expect(publicBosch?.setFlags).toEqual(["signal:threshold_cleared", "source:first_witness"]);
     const act1Text = resolved?.triggers
@@ -115,7 +115,7 @@ describe("opening clarity overlay", () => {
       readFileSync(resolve("apps/game/public/generated/battle.json"), "utf8")
     ));
     expect(applyOpeningClarityBattle(battle, clarity)?.enemies.find((entry) => entry.id === 37)?.name)
-      .toBe("The Bosch File");
+      .toBe("Records Officer");
   });
 
   it("corrects the verified Act 1 route and removes the unverified Postwick direction", () => {
@@ -144,6 +144,6 @@ describe("opening clarity overlay", () => {
 
     const phone = resolveRuntimeNpcDialogue(resolved, 21, { has: (flag) => flags.has(flag) });
     expect(phone?.service).toBe("phone");
-    expect(phone?.pages?.join(" ")).toContain("filed Bosch");
+    expect(phone?.pages?.join(" ")).toContain("asking for you by name");
   });
 });
