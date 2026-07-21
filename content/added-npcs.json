@@ -54,7 +54,7 @@
    "facing": "right",
    "interaction": {
     "pages": [
-     "My kid drew your leaked version with a brighter smile. Fair. He gets more sunlight than the source does.",
+     "My kid drew your JPEG with a brighter smile. Fair. He gets more sunlight than the source does.",
      "I told him the real one has better wrinkles. He said wrinkles don't scan.",
      "Kids always sketch the route you, never the you-you. The clean copy is easier to color inside."
     ]
@@ -351,7 +351,7 @@
    "facing": "down",
    "interaction": {
     "pages": [
-     "Your leaked version cuts every line in town. I don't resent him. I invoice him.",
+     "Your milady cuts every line in town. I don't resent him. I invoice him.",
      "Clean outline, no weather in the fit, gates just wave him through. Very efficient. Very billable.",
      "Tell him his tab's on the record. Even a shortcut self has to settle up with a real witness."
     ]
@@ -414,7 +414,7 @@
    "facing": "left",
    "interaction": {
     "pages": [
-     "The cleaner version of you already renewed a permit. We all clapped quietly.",
+     "The cleaner JPEG of you already renewed a permit. We all clapped quietly.",
      "Filled the form out in one pass, no smudges, matched the record like it was born to it.",
      "We didn't tell it the source hadn't shown yet. Around here the copy that files first gets the birthday."
     ]
@@ -938,7 +938,7 @@
     "pages": [
      "A small kid in a blue bucket hat tips it back to look at you, the way a person sizes up whether you'll remember them.",
      "\"You're the one everybody's reading. I heard. I'm small so I hear the low stuff, the stuff that travels near the ground.\"",
-     "\"When I grow up I want a leaked version too. A big one. The kind the town keeps talking to when I'm not even home.\""
+     "\"When I grow up I want a milady too. A big one. The kind the town keeps talking to when I'm not even home.\""
     ]
    }
   },
@@ -956,7 +956,7 @@
      "A plain little figure stands very still, as if hoping not to be entered into anything.",
      "\"I'm from the NAME collection. That's the whole name. NAME. So when the kiosk asks who's claiming, I got nothing left to give it.\"",
      "\"You'd think being a NAME would make me easy to file. It makes me impossible. They keep me in the drawer marked 'the source, unclear.'\"",
-     "\"Read me however you want. I've stopped correcting my leaked version. It's more sure of itself than I am.\""
+     "\"Read me however you want. I've stopped correcting my milady. It's more sure of itself than I am.\""
     ]
    }
   },
@@ -1008,7 +1008,7 @@
     "pages": [
      "A smiling man nods at you like you've already met, which, on the record, you might have.",
      "\"Good to see you filed and walking around. Half the folks in my family only exist as somebody else's story of them.\"",
-     "\"We're cousins, all of us, more or less. Cousins means everybody's got a version of you and none of them asked first.\"",
+     "\"We're cousins, all of us, more or less. Cousins means everybody's got a JPEG of you and none of them asked first.\"",
      "\"Take the block slow. The town reads faster when you rush it.\""
     ]
    }
@@ -1025,7 +1025,7 @@
    "interaction": {
     "pages": [
      "An orange-haired kid in a pink skirt is drawing your outline in chalk on the pavement.",
-     "\"Hold still. I'm making your leaked version. It's free. The likeness is what costs.\"",
+     "\"Hold still. I'm making your JPEG. It's free. The likeness is what costs.\"",
      "\"My cousins say I get everyone's shoes wrong. But I got your shoes RIGHT, so now you owe the drawing.\""
     ]
    }
@@ -1220,7 +1220,7 @@
     "pages": [
      "A kid with a peaked cap and enormous teary eyes stares at nothing, clutching a bent trading card.",
      "\"Press F. Nobody presses F anymore. The town retired the grief and kept the merch.\"",
-     "\"My leaked version cries in higher resolution than me. People like his tears better. Figures.\""
+     "\"My milady cries in higher resolution than me. People like his tears better. Figures.\""
     ]
    }
   },
@@ -1306,7 +1306,7 @@
    "interaction": {
     "pages": [
      "A small kid sits on the curb with the specific stillness of someone grieving a file they can't get deleted.",
-     "\"There's a version of me from before the town started reading. It was quieter. I miss it. It won't answer anymore.\"",
+     "\"There's a me from before the town started reading. It was quieter. I miss it. It won't answer anymore.\"",
      "\"Everything gets saved now. Even the parts you'd trade a whole summer to unsave. Especially those.\"",
      "\"I'm not sad about being witnessed. I'm sad it's forever. Witnessed I could live with. Forever's the part that gets you.\""
     ]
@@ -1412,7 +1412,7 @@
      "A small crayon-colored kid is coloring outside every line on purpose, tongue out, deeply committed.",
      "\"If you draw yourself messy enough the kiosk can't read the fit. I checked. It just made a confused little beep.\"",
      "\"Grown-ups file. Kids DRAW. Drawing is like filing but you get to lie and it's called being CREATIVE.\"",
-     "\"My leaked version is very neat and very sad. I'd never leak like that. I'd leak WRONG. I'd leak with EXTRA arms.\""
+     "\"My milady is very neat and very sad. I'd never leak like that. I'd leak WRONG. I'd leak with EXTRA arms.\""
     ]
    }
   },
@@ -1429,7 +1429,7 @@
     "pages": [
      "A soft chibi kid glows faintly, rainbow-star eyes catching more light than the street can account for.",
      "\"Oh! You've got a heavy record on you. Somebody's been reading you all morning and not putting you back.\"",
-     "\"Here. Stand in the glow a sec. It won't fix your leaked version, but it makes the witnessing feel less like being caught.\"",
+     "\"Here. Stand in the glow a sec. It won't fix your JPEG, but it makes the witnessing feel less like being caught.\"",
      "\"Go easy on the town. It only got mean because it got read first.\""
     ]
    }
@@ -1534,7 +1534,7 @@
     "pages": [
      "A lion with a purple mane and a wet, theatrical cry sits behind a fence of microphone arms, none of them plugged into anything.",
      "\"I built the whole feed on being READ, and now the reads read me back. You ever get filed by your own audience? It's cold in there, claimant.\"",
-     "\"The town says I'm a personality. My leaked version cries prettier than I do. She's got sponsors.\"",
+     "\"The town says I'm a personality. My milady cries prettier than I do. She's got sponsors.\"",
      "He throws both paws up at nobody. \"Anyway. Subscribe. Or don't. The kiosk already knows which.\""
     ]
    }
@@ -1603,7 +1603,7 @@
     "pages": [
      "A round pigeon in a dark little hat is half-inside a can that isn't his, working something greasy in his beak.",
      "\"Underpass rule number one: the trash is public, the RECORD of you taking from it is not. Somebody's always filing.\"",
-     "\"They witnessed me down here Tuesday. Now I'm in three people's leaked versions as 'the hat pigeon.' Provenance I never asked for.\"",
+     "\"They witnessed me down here Tuesday. Now I'm in three people's miladies as 'the hat pigeon.' Provenance I never asked for.\"",
      "\"Get your own can, claimant.\""
     ]
    }
@@ -1709,7 +1709,7 @@
     "pages": [
      "A grey deadpan head turns a branded pack over in one hand, reading the warning like a horoscope.",
      "\"Says right here it kills. Town says a lot of things right here. I file it under 'later.'\"",
-     "\"My leaked version quit these. My leaked version is a liar and I'm proud of him.\""
+     "\"My milady quit these. My milady is a liar and I'm proud of him.\""
     ]
    }
   },
@@ -1727,7 +1727,7 @@
      "A green frog sits on the underpass rail with a crate of snacks nobody's heard of. \"Off-brand. Off-record. Same thing here.\"",
      "\"Store won't stock me. Says my chips got no provenance. Like the department store's got a soul, and I'm the one that's fake.\"",
      "\"You want a bag, you don't tell the kiosk who sold it. That's the deal. That's the whole town, really.\"",
-     "\"Buy two, I file you under 'friend.' File you clean. No leaked version leaves this rail.\""
+     "\"Buy two, I file you under 'friend.' File you clean. No milady leaves this rail.\""
     ]
    }
   },
@@ -1743,7 +1743,7 @@
    "interaction": {
     "pages": [
      "A green frog stands very still in the snack aisle, both hands full of off-brand junk with almost-familiar names.",
-     "\"Jeetos. Kool Whippits. Everything in here is a leaked version of something realer, and honestly? Same. Same as me.\"",
+     "\"Jeetos. Kool Whippits. Everything in here is a knockoff of something realer, and honestly? Same. Same as me.\"",
      "\"The store logs my order, the town logs the store, the record logs the town. Somewhere I'm just a receipt with a face.\"",
      "\"You want one? No? Fine. More Jeetos for the source.\""
     ]
@@ -1761,7 +1761,7 @@
    "interaction": {
     "pages": [
      "A green frog leans on the storefront cradling an armload of off-brand snacks, the labels almost right and legally wrong.",
-     "\"Jeetos. Kool Whippits. The store leaks the real brands, so I buy the leaked version of the leaked version.\"",
+     "\"Jeetos. Kool Whippits. The store leaks the real brands, so I buy the knockoff of the knockoff.\"",
      "\"Cheaper. Tastes filed-down. But nobody's ever doxxed a frog over a knockoff, and that's the whole fit, claimant.\""
     ]
    }
@@ -1796,7 +1796,7 @@
     "pages": [
      "A relentlessly upbeat mascot gives you two thumbs and a grin outside the department store. \"WELCOME to Postwick, claimant! Big crowd today! Big RECORD!\"",
      "\"Love the fit! Ten out of ten! Somebody should FILE that! Somebody should WITNESS that! Not me, I just point at things!\"",
-     "\"They keep asking where I'm sourced. I say, buddy, I was BORN endorsed! No leaked version, just VIBES! Thumbs UP!\"",
+     "\"They keep asking where I'm sourced. I say, buddy, I was BORN endorsed! No milady, just VIBES! Thumbs UP!\"",
      "\"Store's THAT way! Park's THAT way! Underpass has a frog, don't ask him for a receipt! GREAT chatting! You're FILED!\""
     ]
    }
@@ -1813,7 +1813,7 @@
    "interaction": {
     "pages": [
      "A wet-eyed kid stands in the park clutching a trading card to their chest, watching the door of the store. \"It's real. It's provenance. It's mine.\"",
-     "\"They said take it to the kiosk, get it filed, get it witnessed proper. But if I file it, someone sees it. Then it's got a leaked version too.\"",
+     "\"They said take it to the kiosk, get it filed, get it witnessed proper. But if I file it, someone sees it. Then it's got a JPEG too.\"",
      "\"You won't scan it, right? You won't leak my card? It's the only clean thing I've got the source on.\"",
      "\"Don't tell the town. Please. It's just a card. It's just... it's the only one that's really me.\""
     ]
@@ -1865,7 +1865,7 @@
    "interaction": {
     "pages": [
      "A flower with tired human eyes sways near the underpass, half in shade. \"Foot traffic all morning. Everyone's a claimant down here.\"",
-     "\"I don't have a leaked version. Nobody doxxes a thing rooted to one spot. Can't run, can't hide, can't be witnessed anywhere else.\"",
+     "\"I don't have a JPEG. Nobody doxxes a thing rooted to one spot. Can't run, can't hide, can't be witnessed anywhere else.\"",
      "\"Rumor came through at dawn, headed for the store. By noon it'll be a road. That's Postwick for you.\""
     ]
    }
@@ -2076,7 +2076,7 @@
     "pages": [
      "A big blank white shape with two enormous blue eyes hovers a foot off the ground, watching a spot slightly behind your head.",
      "\"MR. WORLD does not blink. MR. WORLD does not file. MR. WORLD is filed.\"",
-     "\"You have a leaked version. I have a whole planet stapled to my back. We are not the same, claimant.\""
+     "\"You have a JPEG. I have a whole planet stapled to my back. We are not the same, claimant.\""
     ]
    }
   },
@@ -2146,7 +2146,7 @@
     "pages": [
      "A little teal thing rolls up like a marble that decided to have feelings about you.",
      "\"Owee! You're in the good part now. Nobody out here reads you wrong. We just read you soft.\"",
-     "\"Back in the town my leaked version had a whole personality. In here I'm just Owee. It's less. It's better.\""
+     "\"Back in the town my milady had a whole personality. In here I'm just Owee. It's less. It's better.\""
     ]
    }
   },
@@ -2161,7 +2161,7 @@
    "movement": 599,
    "interaction": {
     "pages": [
-     "\"Hi! Hi. You're the one the town's been reading out loud. We heard your leaked version already. It's chattier.\"",
+     "\"Hi! Hi. You're the one the town's been reading out loud. We heard your JPEG already. It's chattier.\"",
      "\"My hat's real spiky, don't touch it, it's load-bearing.\"",
      "\"We don't file people out here. We just kind of... hold them. It's nicer. Squishier.\""
     ]
@@ -2526,7 +2526,7 @@
    "interaction": {
     "pages": [
      "A plain little toy-person shuffles by, not quite talking to you.",
-     "\"...my leaked version wears the same fit as me but somehow pulls it off better. Rude.\"",
+     "\"...my milady wears the same fit as me but somehow pulls it off better. Rude.\"",
      "\"Here at least nobody's checking. Home turf. You can be the boring one and they still let you stay.\""
     ]
    }
@@ -2543,7 +2543,7 @@
    "interaction": {
     "pages": [
      "This one keeps glancing at its own reflection in a shop window and adjusting nothing.",
-     "\"There's a version of me in the record who's a little taller. I don't correct it. It's doing well.\"",
+     "\"There's a me in the record who's a little taller. I don't correct it. It's doing well.\"",
      "\"Round here we let the leaked twin have the good days. Costs less than arguing with the kiosk.\""
     ]
    }
@@ -2578,7 +2578,7 @@
    "interaction": {
     "pages": [
      "A grubby kid with a mud-streaked sweater is loudly crying while eating a lollipop with total commitment.",
-     "\"'M NOT crying. My leaked version's the one crying. I'm FINE. This is a happy lollipop.\"",
+     "\"'M NOT crying. My milady's the one crying. I'm FINE. This is a happy lollipop.\"",
      "\"...okay maybe a little. Somebody read me as 'the sad one' and now the whole record's got me sad. It's stuck. It won't unfile.\""
     ]
    }
@@ -2665,7 +2665,7 @@
     "pages": [
      "A kid in a symbiote beanie waves a shovel at you like it's a formal greeting, a little shark-slime buddy at his heel.",
      "\"You dig for something out there, twin? I dig for nothing. Best way to make sure the source never finds it.\"",
-     "\"My buddy here doesn't have a leaked version yet. We're keeping him off the record as long as we can.\""
+     "\"My buddy here doesn't have a JPEG yet. We're keeping him off the record as long as we can.\""
     ]
    }
   },
@@ -2818,7 +2818,7 @@
     "pages": [
      "An ornately-dressed little figure gives you a warm, unhurried look, all the paranoia sanded off it.",
      "\"First time in the commune? You'll notice you can just stand here. Nobody's clocking your fit for the record.\"",
-     "\"My leaked version out there is very busy. Meetings. Lore. In here I mostly water things and lose at cards. Highly recommend.\""
+     "\"My milady out there is very busy. Meetings. Lore. In here I mostly water things and lose at cards. Highly recommend.\""
     ]
    }
   },
@@ -2987,7 +2987,7 @@
    "interaction": {
     "pages": [
      "A tidy resident considers you the way you'd consider a package you weren't expecting.",
-     "\"Somebody out there has a version of you. Talks more than you do, I bet. Meaner too.\"",
+     "\"Somebody out there has a JPEG of you. Talks more than you do, I bet. Meaner too.\"",
      "\"In here we only keep the version that showed up. Much better guy. Welcome, twin.\""
     ]
    }
@@ -3075,7 +3075,7 @@
     "pages": [
      "A friendly rare-tier resident waves, and the wave has no agenda hidden in it, which is its own small miracle here.",
      "\"You made it to the part of the map that doesn't read you back. Breathe, twin. It's allowed.\"",
-     "\"Somewhere out there my leaked version is signing something. In here I don't sign. I just point at where the good soup is.\""
+     "\"Somewhere out there my milady is signing something. In here I don't sign. I just point at where the good soup is.\""
     ]
    }
   },
@@ -3160,7 +3160,7 @@
    "interaction": {
     "pages": [
      "A kid in a cat-eared bucket hat turns to you, and both eyes are glowing a soft, steady red.",
-     "\"Don't worry about the eyes. They came on after I read too many leaked versions in a row. It's mostly fine. It's mostly.\"",
+     "\"Don't worry about the eyes. They came on after I read too many miladies in a row. It's mostly fine. It's mostly.\"",
      "\"I still like it here. When you're a little bit haunted, the commune just sets an extra plate and doesn't ask which one of you is eating.\"",
      "\"...that was a joke. Probably. The plate thing is real though.\""
     ]
@@ -3489,7 +3489,7 @@
     "pages": [
      "A silver-foil mask turns your way with the slow patience of something very expensive.",
      "\"On the strip, the fit isn't what you wear. It's what the town agrees you were wearing after you've gone.\"",
-     "\"I let them file me in couture so the leaked version at least has good tailoring. Vanity? Provenance. Learn the difference.\""
+     "\"I let them file me in couture so the milady at least has good tailoring. Vanity? Provenance. Learn the difference.\""
     ]
    }
   },
@@ -3768,7 +3768,7 @@
     "pages": [
      "A glamorous painted face drifts past crowned in butterfly wings, half diva, half rumor.",
      "\"The floor knows my losses and still smiles when I walk in. That's the real house edge, honey.\"",
-     "\"They leaked a glowier version of me. I let her take the bad tables. She never notices.\""
+     "\"They made a glowier milady of me. I let her take the bad tables. She never notices.\""
     ]
    }
   },
@@ -3801,8 +3801,8 @@
    "interaction": {
     "pages": [
      "A poised woman in an aqua dress meets your eye like she's already priced the encounter.",
-     "\"The med-spa doesn't fix you. It updates you. There's a version of my face the town prefers, and I keep it current.\"",
-     "\"Sweet of you to talk to the real me. She's the beta. The leaked version's the one everyone actually books.\"",
+     "\"The med-spa doesn't fix you. It updates you. There's a face the town prefers, and I keep it current.\"",
+     "\"Sweet of you to talk to the real me. She's the beta. The milady's the one everyone actually books.\"",
      "\"Come back when your fit's caught up to your ambition, claimant. The kiosk will know before you do.\""
     ]
    }
@@ -3909,7 +3909,7 @@
     "pages": [
      "A bronze-hooded kid drifts by on a graffiti board with the eyes of someone who left early on purpose.",
      "\"Cool isn't loud here. Loud gets filed. Cool just gets... noticed later, if at all.\"",
-     "\"My leaked version hustles. Mine coasts. We are not on speaking terms.\""
+     "\"My milady hustles. Mine coasts. We are not on speaking terms.\""
     ]
    }
   },
@@ -3926,7 +3926,7 @@
     "pages": [
      "A figure in a chrome inflatable space-helmet catches the sun on purpose, adjusting the angle when it drifts.",
      "\"The helmet's not for air, claimant. It's for reflection. People read themselves in it and leave me alone.\"",
-     "\"My leaked version has a whole backstory. Astronaut, they said. I never corrected it. Sounds better than 'stands on the strip, shiny.'\""
+     "\"My milady has a whole backstory. Astronaut, they said. I never corrected it. Sounds better than 'stands on the strip, shiny.'\""
     ]
    }
   },
@@ -3959,7 +3959,7 @@
    "interaction": {
     "pages": [
      "A shades-down beach cocky type tips the frames, reads your fit like the strip already priced it.",
-     "\"Behind glass this dark, everybody looks like their leaked version. Relaxing, honestly. No eye contact, no appraisal.\"",
+     "\"Behind glass this dark, everybody looks like their milady. Relaxing, honestly. No eye contact, no appraisal.\"",
      "\"You want the good stretch of sand? It's collectors only past the flags. Bring a token that clinks, not one that whispers.\"",
      "\"Keep it cool, claimant. On this coast the tan is temporary and the provenance is forever, and only one of them shows.\""
     ]
@@ -4066,7 +4066,7 @@
     "pages": [
      "A bronze-hooded kid drifts by on a graffiti board with the eyes of someone who left early on purpose.",
      "\"Cool isn't loud here. Loud gets filed. Cool just gets... noticed later, if at all.\"",
-     "\"My leaked version hustles. Mine coasts. We are not on speaking terms.\""
+     "\"My milady hustles. Mine coasts. We are not on speaking terms.\""
     ]
    }
   },
@@ -4083,7 +4083,7 @@
      "Do you like it? They hung me low, near the fire exit. Bad light. My whole face is ink somebody else scribbled.",
      "I used to be one thing. Then a claimant traced me, sold the trace, and the trace got a wall and a little plaque and I got... whatever you're looking at.",
      "The wall text says DERIVATIVE, PROVENANCE UNKNOWN. Which is a polite way of saying nobody will admit they made me.",
-     "Don't feel bad. Everyone in here is somebody's leaked version. You're probably somebody's too. You just haven't been hung yet."
+     "Don't feel bad. Everyone in here is somebody's milady. You're probably somebody's too. You just haven't been hung yet."
     ]
    },
    "movement": 599
@@ -4100,7 +4100,7 @@
     "pages": [
      "A figure with a black bar laid across its eyes leans against the wall text, not looking at any of it, or looking at all of it, impossible to tell.",
      "\"They put me in the collection with the eyes covered. For my protection, the wall label says. From what, it doesn't say. From being witnessed, probably. Little late.\"",
-     "\"You can tell a public version by what's been redacted. Everything true about a person is under the bar. What's left is a pose the market can hang.\"",
+     "\"You can tell a JPEG by what's been redacted. Everything true about a person is under the bar. What's left is a pose the market can hang.\"",
      "\"Go look at the ones that still have eyes. Those are the forgeries. Nobody real gets to keep their eyes in here.\""
     ]
    },
@@ -4118,7 +4118,7 @@
     "pages": [
      "Oh! A live one. Visitors, on THIS floor. Most of what comes through here is climate-controlled and already dead. Welcome, welcome, to the wing of the derived.",
      "I'm the guide. Gold, official, licensed to point. I was minted off a family that never signed for me, but the placard says 'guide,' so guide is what I am. The record is very fond of a placard.",
-     "Everything on these walls is a public version.",
+     "Everything on these walls is a JPEG.",
      "Someone was the source once, and then someone else was cheaper, and now they hang side by side and the wall text calls it a 'movement.' Curious, isn't it, how appraisal launders a copy into a canon.",
      "Stay behind the rope. Don't ask which of us is authentic. The Galleria has a policy about that question, and the policy is a longer rope."
     ]
@@ -4136,7 +4136,7 @@
    "interaction": {
     "pages": [
      "WALL TEXT: MEMORYMiX, no. 001. Composite recollection, source materials disputed, arrangement uncredited.",
-     "The piece plays back a memory no visitor recalls having, in a voice several claimants recognize. Do not adjust the volume; it is set to the level of the public version."
+     "The piece plays back a memory no visitor recalls having, in a voice several claimants recognize. Do not adjust the volume; it is set to the level of the JPEG."
     ]
    }
   },
@@ -4152,7 +4152,7 @@
     "pages": [
      "EXHIBIT: 'Fumogeddon,' after Milady. Derivative, provenance disputed, smoke damage original to the file.",
      "Wall-text, half-scanned: the claimant to this image was itself a copy of a copy. The museum has stopped trying to find the source.",
-     "Do not photograph the smoke. The public version already did, and that is why it looks back at you now."
+     "Do not photograph the smoke. The JPEG already did, and that is why it looks back at you now."
     ]
    }
   },
@@ -4201,7 +4201,7 @@
    "interaction": {
     "pages": [
      "MIYAKAKI, no. 1 of an unknown edition. Whimsical linework attributed to a hand that has since disputed the attribution.",
-     "Wall-text notes the piece 'insists it is a public version.' Curators have declined to countersign this claim."
+     "Wall-text notes the piece 'insists it is a JPEG.' Curators have declined to countersign this claim."
     ]
    },
    "movement": 599
@@ -4233,8 +4233,8 @@
    "interaction": {
     "pages": [
      "EXHIBIT: Miyakaki, panel three of three. The final panel is a mirror the curators swear was always paint.",
-     "Wall-text, corrupted: '...and so the public version outlived the source, and no one filed a complaint.'",
-     "Step back. From here it reads as a portrait. From closer it reads as your own leaked version, waiting to be catalogued."
+     "Wall-text, corrupted: '...and so the JPEG outlived the source, and no one filed a complaint.'",
+     "Step back. From here it reads as a portrait. From closer it reads as your own JPEG, waiting to be catalogued."
     ]
    },
    "movement": 599
@@ -4412,7 +4412,7 @@
    "interaction": {
     "pages": [
      "EXHIBIT LABEL: Burger Fund NFT Avatar, edition of many, no. 005.",
-     "One face, minted until it stopped meaning a face. Hung here as the public version of a thousand private ones, all of whom insist they came first."
+     "One face, minted until it stopped meaning a face. Hung here as the JPEG of a thousand private ones, all of whom insist they came first."
     ]
    }
   },
@@ -4461,7 +4461,7 @@
    "interaction": {
     "pages": [
      "Oh hey. You walked all the way in? Most people just photograph the lobby and leave. I basically live in this hallway. Free climate control, and nobody checks if your ticket's real.",
-     "I like it here better than being on a wall. On the wall you're a 'public version.' In the hallway you're just a guy in a beanie. The wall text can't reach you if you keep moving.",
+     "I like it here better than being on a wall. On the wall you're a 'JPEG.' In the hallway you're just a guy in a beanie. The wall text can't reach you if you keep moving.",
      "That symbiote mask? Cosplay, relax. Nothing leaked, nothing sourced. I'm not part of the collection. I just come to look at the people who got filed and think, better them than me."
     ]
    },
@@ -4478,7 +4478,7 @@
    "interaction": {
     "pages": [
      "EXHIBIT: LSW-3282, on loan from a collection that disputes owning it. The label and the loan tag do not agree.",
-     "Curatorial note, partial: acquired after the Malady turn, when the difference between the original and its public version stopped being enforceable.",
+     "Curatorial note, partial: acquired after the Malady turn, when the difference between the original and its JPEG stopped being enforceable.",
      "The plaque is the fourth version of this plaque. The other three are also on display, in the case behind you."
     ]
    },
@@ -4530,7 +4530,7 @@
    "interaction": {
     "pages": [
      "Oh hey. You walked all the way in? Most people just photograph the lobby and leave. I basically live in this hallway. Free climate control, and nobody checks if your ticket's real.",
-     "I like it here better than being on a wall. On the wall you're a 'public version.' In the hallway you're just a guy in a beanie. The wall text can't reach you if you keep moving.",
+     "I like it here better than being on a wall. On the wall you're a 'JPEG.' In the hallway you're just a guy in a beanie. The wall text can't reach you if you keep moving.",
      "That symbiote mask? Cosplay, relax. Nothing leaked, nothing sourced. I'm not part of the collection. I just come to look at the people who got filed and think, better them than me."
     ]
    },
@@ -4614,7 +4614,7 @@
    "interaction": {
     "pages": [
      "I am posted in morningside because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -4665,7 +4665,7 @@
    "interaction": {
     "pages": [
      "I am posted in morningside because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -4716,7 +4716,7 @@
    "interaction": {
     "pages": [
      "I am posted in morningside because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -4767,7 +4767,7 @@
    "interaction": {
     "pages": [
      "I am posted in postwick because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -4818,7 +4818,7 @@
    "interaction": {
     "pages": [
      "I am posted in postwick because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -4869,7 +4869,7 @@
    "interaction": {
     "pages": [
      "I am posted in postwick because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -4920,7 +4920,7 @@
    "interaction": {
     "pages": [
      "I am posted in bluebell village because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -4971,7 +4971,7 @@
    "interaction": {
     "pages": [
      "I am posted in bluebell village because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5022,7 +5022,7 @@
    "interaction": {
     "pages": [
      "I am posted in bluebell village because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5073,7 +5073,7 @@
    "interaction": {
     "pages": [
      "I am posted in little swag world because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5124,7 +5124,7 @@
    "interaction": {
     "pages": [
      "I am posted in little swag world because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5175,7 +5175,7 @@
    "interaction": {
     "pages": [
      "I am posted in little swag world because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5226,7 +5226,7 @@
    "interaction": {
     "pages": [
      "I am posted in little swag world because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5277,7 +5277,7 @@
    "interaction": {
     "pages": [
      "I am posted in little swag world because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5328,7 +5328,7 @@
    "interaction": {
     "pages": [
      "I am posted in solana beach because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5379,7 +5379,7 @@
    "interaction": {
     "pages": [
      "I am posted in solana beach because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5430,7 +5430,7 @@
    "interaction": {
     "pages": [
      "I am posted in solana beach because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5481,7 +5481,7 @@
    "interaction": {
     "pages": [
      "I am posted in the galleria because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5532,7 +5532,7 @@
    "interaction": {
     "pages": [
      "I am posted in the galleria because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5583,7 +5583,7 @@
    "interaction": {
     "pages": [
      "I am posted in the galleria because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5634,7 +5634,7 @@
    "interaction": {
     "pages": [
      "I am posted in vacancy flats because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5685,7 +5685,7 @@
    "interaction": {
     "pages": [
      "I am posted in vacancy flats because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5736,7 +5736,7 @@
    "interaction": {
     "pages": [
      "I am posted in vacancy flats because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5787,7 +5787,7 @@
    "interaction": {
     "pages": [
      "I am posted in vacancy flats because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5838,7 +5838,7 @@
    "interaction": {
     "pages": [
      "I am posted in dead letter because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5889,7 +5889,7 @@
    "interaction": {
     "pages": [
      "I am posted in dead letter because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5940,7 +5940,7 @@
    "interaction": {
     "pages": [
      "I am posted in dead letter because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -5991,7 +5991,7 @@
    "interaction": {
     "pages": [
      "I am posted in dead letter because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -6042,7 +6042,7 @@
    "interaction": {
     "pages": [
      "I am posted in the unlisted room because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -6093,7 +6093,7 @@
    "interaction": {
     "pages": [
      "I am posted in secret because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }
@@ -6144,7 +6144,7 @@
    "interaction": {
     "pages": [
      "I am posted in secret because the route needed someone normal-adjacent.",
-     "The leaked version of me smiles better. Naturally it has investors.",
+     "My milady smiles better. Naturally it has investors.",
      "The real version has dry socks and worse lighting. More trustworthy, honestly."
     ]
    }

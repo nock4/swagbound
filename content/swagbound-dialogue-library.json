@@ -12,7 +12,7 @@
     "dialogue:archive-console-link": {
       "speaker": "Bosch Terminal",
       "pages": [
-        "Bosch, the route is not neutral. A leaked version of you is already moving through town ahead of your body, and town services are starting to treat him as convenient.",
+        "Bosch, the route is not neutral. A JPEG of you is already moving through town ahead of your body, and town services are starting to treat him as convenient.",
         "Ask where the pressure starts or why the town needs a Bosch it can process."
       ]
     },
@@ -22,7 +22,7 @@
         "Biscuit holds up their phone like it is too hot to keep.",
         "\" The Route Brief on the desk is already open, and the timestamp says it opened from outside the house while Bosch was",
         "asleep. The checklist is rude but clear: witness, proof service, parks, Station Gate.",
-        "It feels less like homework and more like a town trying to file a version of Bosch before Bosch can object."
+        "It feels less like homework and more like a town trying to file a JPEG of Bosch before Bosch can object."
       ]
     },
     "interior:bosch-main-room-v0": {
@@ -49,7 +49,7 @@
       "pages": [
         "Biscuit blocks the upstairs landing just long enough to point at the side room.",
         "Downstairs, three phones buzz and stop at the exact same time.",
-        "\"If your leaked version is already outside, bring something real from inside. Weird guide rule. \""
+        "\"If your JPEG is already outside, bring something real from inside. Weird guide rule. \""
       ]
     },
     "interior:burger-shop-v0": {
@@ -72,7 +72,7 @@
       "speaker": "Biscuit",
       "pages": [
         "\" A flyer has slid through the mail slot: Bosch's face cropped wrong, the quote printed below.",
-        "The back is stamped VESSEL, like the house accepted delivery for a version of Bosch nobody ordered."
+        "The back is stamped VESSEL, like the house accepted delivery for a JPEG of Bosch nobody ordered."
       ]
     },
     "interior:neighbor-house-v0": {
@@ -102,7 +102,7 @@
       "pages": [
         "Bosch takes the Proof-Token Charm. It is not money, not a weapon, and not permission.",
         "It is a small warm proof that the name and sprite leaving the house belong to the same person.",
-        "For one second it reflects the room wrong: a bowl, a doorway, a sidewalk witness, and a version of Bosch that never",
+        "For one second it reflects the room wrong: a bowl, a doorway, a sidewalk witness, and a JPEG of Bosch that never",
         "learned how to wait."
       ]
     },

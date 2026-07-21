@@ -157,7 +157,7 @@
     "signal:threshold_cleared"
    ],
    "dialogue": [
-    "The north gate offers a clean exit stamp: one signature and the leaked version walks out wearing his name, on time, on brand.",
+    "The north gate offers a clean exit stamp: one signature and the JPEG walks out wearing his name, on time, on brand.",
     "Bosch hands back the pen. He keeps the damaged Swag Deck. Unfiled, unflattering, his.",
     "Morningside logs him as \"left unprocessed.\" The road north opens on a Bosch the route never got to finish.",
     "[ ACT 1: END ]"
@@ -668,9 +668,9 @@
    ],
    "dialogue": [
     "East of Postwick the road stops pretending. Dead Letter is where undelivered selves are sorted and never returned. A fog-town of return-to-sender faces, its post office long since eaten from the inside.",
-    "At its heart: THE MUSEUM OF LEAKED VERSIONS. No originals left on the walls. Something filed the firsts and moved into the empty frames, and it hangs Bosch's name in the lobby directory under WORKS: FORTHCOMING.",
+    "At its heart: THE MUSEUM OF JPEGS. No originals left on the walls. Something filed the firsts and moved into the empty frames, and it hangs Bosch's name in the lobby directory under WORKS: FORTHCOMING.",
     "The doors are open. They were always open. A placard by the turnstile reads: SOURCE: DISPUTED. ADMISSION: FREE. EXIT: PENDING.",
-    "[ ACT 3: DEAD LETTER: THE MUSEUM OF LEAKED VERSIONS ]"
+    "[ ACT 3: DEAD LETTER: THE MUSEUM OF JPEGS ]"
    ],
    "setFlags": [
     "act3:begun",
@@ -980,7 +980,7 @@
     "raid:morningside:cleared"
    ],
    "dialogue": [
-    "The last cell burns off and does not reform. In the empty plaza one thing is left standing: not a face, not a crowd, but a slow bright orb turning through every version of Bosch it ever filed, settling on none.",
+    "The last cell burns off and does not reform. In the empty plaza one thing is left standing: not a face, not a crowd, but a slow bright orb turning through every JPEG of Bosch it ever filed, settling on none.",
     "MILADY: \"I am not behind the swarm, the happy town, the arguing museum, or the market that bought your name. I am the agreement under all of them. Anonymous, so no one can find me. Ratified, so no one can leave. Unprovable, so no one can win. Free of charge, so everyone already said yes.\"",
     "MILADY: \"I wore your friends, your town, your better-lit name, and none of it described you, which is the only thing I could never forgive. So here is the last offer: be the version that lasts. Stop being the one file I cannot open. It is easier. It is already mostly done.\"",
     "Bosch keeps the damaged Swag Deck in his fist. He does not answer in her voice. (Last fight: BASH the certainty, DEFEND when she recites you back, PSI for the seam no copy has.)"

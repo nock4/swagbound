@@ -573,7 +573,7 @@
    },
    "personality": {
     "bit": "A hotel-side hummer preserving a tune no camera can prove.",
-    "tic": "\"Mm-hm. No public version.\""
+    "tic": "\"Mm-hm. No JPEG.\""
    },
    "battleSprite": "assets/swagbound/drifella-battle/drifella2-816.png",
    "hints": [
@@ -587,7 +587,7 @@
     }
    ],
    "entryPrompt": [
-    "On the hotel's unphotographed side, a Drifella hums a tune with no public version.",
+    "On the hotel's unphotographed side, a Drifella hums a tune with no JPEG.",
     "\"You hear it too? Good. The questions go better with the hum.\""
    ],
    "questions": {
@@ -625,7 +625,7 @@
       "type": "multipleChoice4",
       "prompt": "What arrives before you do, if you're not careful?",
       "options": [
-       "A leaked version",
+       "A JPEG",
        "The weather",
        "Scheduled municipal notices",
        "Nothing; time is linear"
@@ -661,7 +661,7 @@
       ],
       "answerIndex": 0,
       "officialIndex": 2,
-      "failLine": "\"The place, humming to itself. No public version.\""
+      "failLine": "\"The place, humming to itself. No JPEG.\""
      },
      {
       "type": "trueFalse",
@@ -685,7 +685,7 @@
     "correct": [
      "\"The hum agrees with you.\"",
      "\"Mm-hm. Mm-HM.\"",
-     "\"No public version, but that note was true.\"",
+     "\"No JPEG, but that note was true.\"",
      "\"The chord holds. For now.\""
     ],
     "cleared": [
@@ -3540,14 +3540,14 @@
       "type": "multipleChoice4",
       "prompt": "When a stolen face is stitched onto a mannequin here, the tag underneath is checked...",
       "options": [
-       "LEAKED VERSION",
+       "JPEG",
        "ORIGINAL",
        "AUTHORIZED LIKENESS",
        "SAMPLE"
       ],
       "answerIndex": 0,
       "officialIndex": 2,
-      "failLine": "\"LEAKED VERSION. 'Authorized' is the sticker they slap on top to sell it.\"",
+      "failLine": "\"JPEG. 'Authorized' is the sticker they slap on top to sell it.\"",
       "category": "witnessed"
      },
      {
@@ -3931,14 +3931,14 @@
       "type": "multipleChoice4",
       "prompt": "On the directory map, Bosch's leaked face was listed under which wing?",
       "options": [
-       "LEAKED VERSIONS, LOWER LEVEL",
+       "JPEGS, LOWER LEVEL",
        "FEATURED, GRAND ATRIUM",
        "CUSTOMER SERVICE",
        "SEASONAL"
       ],
       "answerIndex": 0,
       "officialIndex": 1,
-      "failLine": "\"Lower level, leaked versions. 'Featured' is the swarm's own advertising.\"",
+      "failLine": "\"Lower level, JPEGs. 'Featured' is the swarm's own advertising.\"",
       "category": "witnessed"
      },
      {
@@ -4222,14 +4222,14 @@
       "type": "multipleChoice4",
       "prompt": "A face in a window with no consent behind it is best labeled...",
       "options": [
-       "A leaked version on display",
+       "A JPEG on display",
        "A featured item",
        "A model release",
        "A limited edition"
       ],
       "answerIndex": 0,
       "officialIndex": 1,
-      "failLine": "\"A leaked version on display. 'Featured' is what the tag pretends.\"",
+      "failLine": "\"A JPEG on display. 'Featured' is what the tag pretends.\"",
       "category": "vibe"
      }
     ]
@@ -4306,7 +4306,7 @@
     "pool": [
      {
       "type": "trueFalse",
-      "prompt": "In the Galleria, a person can try to 'return' a leaked version of themselves, but the swarm keeps a copy on file anyway.",
+      "prompt": "In the Galleria, a person can try to 'return' a JPEG of themselves, but the swarm keeps a copy on file anyway.",
       "answer": true,
       "failLine": "\"True. I take the return; the record keeps the ghost. That's the cruelty of it.\"",
       "category": "witnessed"
@@ -4379,7 +4379,7 @@
     ],
     "cleared": [
      "\"Take the card. Your return went through, no copy retained, I made sure.\"",
-     "\"Sourced and refunded. Whatever leaked version they had, consider it recalled.\""
+     "\"Sourced and refunded. Whatever JPEG they had, consider it recalled.\""
     ],
     "failed": [
      "\"Return denied on that one. Come back with the honest reason.\"",
@@ -4569,7 +4569,7 @@
     "pool": [
      {
       "type": "trueFalse",
-      "prompt": "The postcard version of you is on sale in the gift shop.",
+      "prompt": "The postcard JPEG of you is on sale in the gift shop.",
       "answer": true,
       "failLine": "\"Rack three, bottom row. You photograph better as a forgery.\"",
       "category": "lore"
@@ -7133,7 +7133,7 @@
     }
    ],
    "entryPrompt": [
-    "Heat-shimmer bends off the sand and the Drifella squints past you at a cleaner version of you standing a little to the left.",
+    "Heat-shimmer bends off the sand and the Drifella squints past you at a cleaner JPEG of you standing a little to the left.",
     "\"Attestation. I'll appraise the copy that isn't sweating. Hold still, both of you.\""
    ],
    "questions": {
@@ -8142,7 +8142,7 @@
      },
      {
       "type": "trueFalse",
-      "prompt": "The most honest version of you is the one you never let out of the room.",
+      "prompt": "The most honest you is the one you never let out of the room.",
       "answer": true,
       "failLine": "\"Unleaked, unlisted, unedited. That's the real one.\"",
       "category": "vibe"
