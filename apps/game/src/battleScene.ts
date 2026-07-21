@@ -231,6 +231,9 @@ import {
 import { applySourceCheckRewardToRestore } from "./sourceCheckRewards";
 
 const TAU = Math.PI * 2;
+/** Boss groups whose lead enemy keeps its explicit battleEnemyNamesById name
+ * instead of the persona (see applyBossPersonaName). */
+const PERSONA_NAME_SKIP_GROUPS = new Set<number>([172, 450]);
 export const COMMANDS = commandsForCharId(0);
 const STATUS_TOP = 288;
 const BATTLE_LINE_SPACING = 6;
@@ -921,6 +924,29 @@ export class BattleScene extends Phaser.Scene {
     ]);
     const dialogue = mergeBossBattleDialogue(base, overlay);
     this.bossTaunts_ = resolveBossTaunts(dialogue, this.group_.id);
+    this.applyBossPersonaName();
+  }
+
+  /**
+   * Show a boss's persona (from boss-battle-dialogue) as its lead enemy's combat
+   * name, so the reframed personas (THE EDITOR, THE APPRAISER, ...) appear in the
+   * battle log instead of the vanilla EB enemy name (Crazed Sign, Dali's Clock).
+   * Done per-battle-instance, NOT via a global battleEnemyNamesById rename, because
+   * several boss enemy ids are shared with regular encounters (e.g. enemy 61 is in
+   * 3 groups) and must keep their vanilla name there. Groups that carry a deliberate
+   * battleEnemyNamesById name keep it (172 "Local Milady Mask", 450 "Onboarded Bosch").
+   */
+  private applyBossPersonaName(): void {
+    const persona = this.bossTaunts_?.personaName;
+    if (!persona || !this.battle_ || PERSONA_NAME_SKIP_GROUPS.has(this.group_.id)) {
+      return;
+    }
+    this.battle_ = {
+      ...this.battle_,
+      enemies: this.battle_.enemies.map((enemy, index) =>
+        index === 0 ? { ...enemy, name: persona } : enemy
+      )
+    };
   }
 
   private registerBattleSfxResume(): void {
