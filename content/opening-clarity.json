@@ -4,18 +4,18 @@
     "signal-town-cold-signal-open": [
       "Outside, the mailbox flag snaps up once. Inside is a photo of Bosch walking uphill before sunrise.",
       "Bosch was asleep when it was taken. MiFella saw the same figure near the meteor.",
-      "Follow the north road uphill and inspect the cold signal. Then trace the copy back toward the MONS LINK arcade."
+      "Follow the north road uphill and inspect the cold signal. Then trace the file back toward the MONS LINK arcade."
     ],
     "onett-brother-fallsin": [
       "MiFella catches up beside the meteor.",
-      "\"The other Bosch stopped here. When I got close, that blue signal peeled away from the wreckage.\"",
+      "\"The filed Bosch stopped here. When I got close, that blue signal peeled away from the wreckage.\"",
       "\"I will watch the road. Check the terminal, then follow whatever it points to.\""
     ]
   },
   "storyTriggerDialogueById": {
     "signal-town-card-clique": [
       "At the MONS LINK arcade, kids are trading cards with Bosch's face on them. The cards were here before he woke up.",
-      "CARD CLIQUE: \"The clean Bosch already signed. You are the late copy.\"",
+      "CARD CLIQUE: \"The filed Bosch already signed. You are the unfiled one.\"",
       "Bosch holds up the damaged Swag Deck. The signatures match, but nobody in the arcade admits writing either one."
     ],
     "signal-town-card-clique-reveal": [
@@ -24,8 +24,8 @@
       "Bosch keeps both records. Follow the main street east, then uphill to the station gate."
     ],
     "relay-gate-returnless-king": [
-      "The station gate scans the clean card and opens. It scans Bosch and locks again.",
-      "RETURNLESS KING: \"One Bosch is already approved. Sign here and we can discard the duplicate.\"",
+      "The station gate scans the filed card and opens. It scans Bosch and locks again.",
+      "RETURNLESS KING: \"One Bosch is already approved. Sign here and we can discard the extra file.\"",
       "Bosch refuses. The gate will not identify who approved the card, so he forces the route open."
     ],
     "north-route-gate-warning": [
@@ -33,23 +33,23 @@
       "\"The gate already approved Bosch. If that is you, prove it at the desk.\""
     ],
     "first-threshold-malady": [
-      "At the crossing beside the hotel, the other Bosch is waiting. Its clothes are spotless. Its smile begins a moment too early.",
-      "PUBLIC BOSCH: \"Everyone recognized me first. That makes you the copy.\"",
-      "Bosch asks what happened in his bedroom. The Public Bosch repeats the question but cannot answer it.",
-      "The clean face folds flat into a laminated record and reaches for the damaged Swag Deck. Bosch fights to keep the one record it cannot complete."
+      "At the crossing beside the hotel, an onboarding booth is waiting. Bosch's file is up on the screen, on-message. Its smile loads a moment too early.",
+      "THE FILE: \"Everyone recognized me first. That makes you the unfiled one.\"",
+      "Bosch asks what happened in his bedroom. The file repeats the question but cannot answer it.",
+      "The file is just a laminated card, and it reaches for the damaged Swag Deck. Bosch fights to keep the one record it cannot complete."
     ],
     "first-threshold-malady-reveal": [
-      "The Public Bosch comes apart. Beneath the clean face is a stack of cards, gate stamps, and copied details from people Bosch met today.",
-      "Every piece carries the same blank authorization mark. Someone coordinated the copy, but nothing here names them.",
+      "The file comes apart. It is a stack of cards, gate stamps, and details pulled from people Bosch met today.",
+      "Every piece carries the same blank authorization mark. Someone coordinated the file, but nothing here names them.",
       "The damaged Swag Deck records a rough first track. Munch is waiting a few steps beyond the crossing."
     ],
     "recruit-munch": [
       "Munch steps out from behind the hotel sign with a pocket full of rejected receipts.",
-      "MUNCH: \"That copy knew what strangers know about you. It missed what your friends know. I can help find the seams.\"",
+      "MUNCH: \"That file knew what strangers know about you. It missed what your friends know. I can help find the seams.\"",
       "Munch joins the crew. He can SPY on enemies to reveal what they resist and what hurts them."
     ],
     "leave-signal-town": [
-      "At the town exit, a clerk offers Bosch a clean replacement Swag Deck. Signing it would make the Public Bosch the official version.",
+      "At the town exit, a clerk offers Bosch a fresh replacement Swag Deck. Signing it would make the file the official Bosch.",
       "Bosch hands back the pen and keeps the damaged sheet.",
       "CLERK: \"Then your record remains unresolved. The same blank authorization appears in Postwick. Start there.\"",
       "[ ACT 1: END ]"
@@ -58,13 +58,13 @@
   "objectiveTextById": {
     "act1-card-clique": "Go west to the MONS LINK arcade and confront the kids carrying Bosch's picture.",
     "act1-returnless-king": "Take the arcade route pass east, then uphill to the civic gate beside THE PRECINCT.",
-    "act1-malady": "Follow the opened road to the crossing beside the hotel and confront the Public Bosch.",
+    "act1-malady": "Follow the opened road to the crossing beside the hotel and confront the file.",
     "act1-munch": "Meet Munch just beyond the hotel crossing before leaving Morningside.",
     "act1-leave-signal-town": "Continue past the hotel crossing to Morningside's exit desk.",
     "act2-reach-postwick": "Follow the open route from Morningside until you reach Postwick."
   },
   "battleEnemyNamesById": {
-    "37": "Public Bosch File"
+    "37": "The Bosch File"
   },
   "dialogue": {
     "byNpcId": {
@@ -82,14 +82,14 @@
       },
       "16": {
         "pages": [
-          "\"The other Bosch never looked at the family pictures. He walked straight to the road like he already knew the route.\"",
+          "\"The filed Bosch never looked at the family pictures. He walked straight to the road like he already knew the route.\"",
           "\"He went north toward the meteor. That is the first place I would look.\""
         ]
       },
       "21": {
         "pages": [
           "The house phone rings once, then stops.",
-          "MiFella left a message: \"I saw the other Bosch head uphill toward the meteor. Meet me outside.\""
+          "MiFella left a message: \"I saw the filed Bosch head uphill toward the meteor. Meet me outside.\""
         ],
         "service": "phone"
       },
@@ -101,8 +101,8 @@
       },
       "132": {
         "pages": [
-          "\"A clean copy of my question came back before I asked it. Same words, none of the worry.\"",
-          "\"Your clean card has that feeling. Find out who stamped it.\""
+          "\"The file already had my question, word for word, before I asked it. None of the worry.\"",
+          "\"Your file has that feeling. Find out who stamped it.\""
         ]
       },
       "134": {
@@ -119,7 +119,7 @@
       },
       "136": {
         "pages": [
-          "\"Your clean version smiles like it practiced from a picture.\"",
+          "\"Your file smiles like it practiced from a picture.\"",
           "\"Ask it about something no picture could know.\""
         ]
       },
@@ -131,7 +131,7 @@
       },
       "138": {
         "pages": [
-          "\"People keep repeating stories about the other Bosch. Every version is more confident than the last.\"",
+          "\"People keep repeating stories about the filed Bosch. Every retelling is more confident than the last.\"",
           "\"Confidence is not memory. Ask for a detail.\""
         ]
       },
@@ -167,8 +167,8 @@
       },
       "167": {
         "pages": [
-          "\"A clean version of me replaced my shift before lunch. It knew my schedule, not my bad knee.\"",
-          "\"Copies learn records first. People learn each other slower.\""
+          "\"They ran my file at my shift before lunch. It knew my schedule, not my bad knee.\"",
+          "\"Files learn records first. People learn each other slower.\""
         ]
       },
       "191": {
@@ -201,15 +201,15 @@
         "pages": [
           "MiFella pounds on the door.",
           "\"Bosch, get up. I saw you outside ten minutes ago, but you were still asleep.\"",
-          "\"The other you went uphill toward the meteor. I followed until the signal started moving.\"",
+          "\"The one they filed went uphill toward the meteor. I followed until the signal started moving.\"",
           "\"Get dressed and meet me outside. We need to see what came down.\""
         ]
       },
       "data_15.l_0xc5eb0b": {
         "pages": [
           "A terminal wakes inside the wreckage.",
-          "LOG: SECOND BOSCH ENTERED MORNINGSIDE BEFORE ORIGINAL LEFT HOME.",
-          "The copy has your face, but it does not know your history. People who know you can still tell.",
+          "LOG: A BOSCH FILE ENTERED MORNINGSIDE BEFORE ORIGINAL LEFT HOME.",
+          "The file has your face, but it does not know your history. People who know you can still tell.",
           "The signal points west toward the MONS LINK arcade. Find the kids carrying your picture."
         ]
       }
@@ -231,7 +231,7 @@
         "requireFlags": ["signal:threshold_cleared"],
         "blockFlags": [],
         "pages": [
-          "\"The clean Bosch never looked at these family pictures. You did, on the way back in.\"",
+          "\"The filed Bosch never looked at these family pictures. You did, on the way back in.\"",
           "\"Whatever that thing was, knowing your face was not the same as knowing you.\""
         ]
       },
@@ -257,7 +257,7 @@
         "requireFlags": ["intro:meteor-beat-fired"],
         "blockFlags": ["signal:clique_cleared"],
         "pages": [
-          "\"The other Bosch went from the meteor toward the arcade.\"",
+          "\"The filed Bosch went from the meteor toward the arcade.\"",
           "\"MONS LINK is west on the main road, beside SLICE.\""
         ]
       }
@@ -268,7 +268,7 @@
         "blockFlags": ["signal:threshold_cleared"],
         "pages": [
           "The house phone rings.",
-          "Munch left a message: \"The road is open. The other Bosch is at the crossing beside the hotel.\""
+          "Munch left a message: \"The road is open. The filed Bosch is at the crossing beside the hotel.\""
         ]
       },
       {
@@ -293,7 +293,7 @@
         "requireFlags": ["signal:threshold_cleared"],
         "blockFlags": [],
         "pages": [
-          "\"The crossing stopped humming when that clean face fell apart.\"",
+          "\"The crossing stopped humming when that file fell apart.\"",
           "\"I saw the blank mark inside it. Somebody wanted every piece to look ownerless.\""
         ]
       },
@@ -301,7 +301,7 @@
         "requireFlags": ["signal:route_open"],
         "blockFlags": ["signal:threshold_cleared"],
         "pages": [
-          "\"The gate opened. The other Bosch is waiting at the crossing beside the hotel.\"",
+          "\"The gate opened. The filed Bosch is waiting at the crossing beside the hotel.\"",
           "\"Ask it something a photograph cannot answer.\""
         ]
       }
@@ -311,7 +311,7 @@
         "requireFlags": ["signal:threshold_cleared"],
         "blockFlags": [],
         "pages": [
-          "\"The clean Bosch was made from cards, stamps, and things we told strangers.\"",
+          "\"The filed Bosch was made from cards, stamps, and things we told strangers.\"",
           "\"You kept the damaged record. Good. Damage has a history.\""
         ]
       },
@@ -347,7 +347,7 @@
         "requireFlags": ["signal:threshold_cleared"],
         "blockFlags": [],
         "pages": [
-          "\"The other Bosch collapsed into records from all over town.\"",
+          "\"The filed Bosch collapsed into records from all over town.\"",
           "\"It knew what we said about you. It did not know what happened to you.\""
         ]
       },
@@ -355,7 +355,7 @@
         "requireFlags": ["signal:route_open"],
         "blockFlags": ["signal:threshold_cleared"],
         "pages": [
-          "\"The road is clear. Your copy is at the crossing beside the hotel.\"",
+          "\"The road is clear. Your file is at the crossing beside the hotel.\"",
           "\"Do not let the smile fool you. It has been practicing.\""
         ]
       }
