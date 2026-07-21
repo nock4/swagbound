@@ -140,9 +140,9 @@
         "requireFlags": ["source:undelivered:cleared"],
         "blockFlags": ["signal:museum_starman_cleared"]
       },
-      "text": "Enter the Museum of Leaked Versions and clear its lobby guardian.",
+      "text": "Enter the JPEG Museum and clear its lobby guardian.",
       "npcHints": [
-        "The Museum of Leaked Versions is next. Its lobby guardian checks every original twice.",
+        "The JPEG Museum is next. Its lobby guardian checks every original twice.",
         "Head for Dead Letter's museum. Start with the thing guarding the lobby."
       ]
     },

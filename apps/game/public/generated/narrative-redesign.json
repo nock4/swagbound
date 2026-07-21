@@ -110,7 +110,7 @@
   "deadletter-arrival": [
    "Dead Letter keeps everything Remilia Co. threw out for being messy, embarrassing, or hard to explain.",
    "People compare returned photos. Their memories don't match, but they still belong to real people.",
-   "MiFella's rejected onboarding papers lead to the Museum of Leaked Versions. Something inside has been feeding lines to every local group.",
+   "MiFella's rejected onboarding papers lead to the JPEG Museum. Something inside has been feeding lines to every local group.",
    "Recover the undelivered SOURCE, then enter the museum."
   ],
   "museum-starman": [
@@ -200,7 +200,7 @@
   "act2-source-spring": "Attest the Spring SOURCE beyond Postwick, then continue toward Dead Letter.",
   "act3-reach-dead-letter": "Reach Dead Letter and find the records Remilia Co. cast out.",
   "act3-source-undelivered": "Recover the Undelivered SOURCE from Dead Letter's return yard.",
-  "act3-museum-starman": "Enter the Museum of Leaked Versions and answer the group's demand for one approved Bosch.",
+  "act3-museum-starman": "Enter the JPEG Museum and answer the group's demand for one approved Bosch.",
   "act3-museum-frank": "Use a private memory to reach MiFella under the polished milady.",
   "act3-museum-worm": "Confront Provenance 0 in the deep vault without letting the group finish onboarding MiFella.",
   "endgame-return": "Return to occupied Morningside and reconnect with the recruits inside Milady's three local cells.",
@@ -235,7 +235,7 @@
    "The Undelivered source is a wet parcel in Dead Letter's return yard."
   ],
   "act3-museum-starman": [
-   "Bring the recovered contradiction to the Museum of Leaked Versions lobby."
+   "Bring the recovered contradiction to the JPEG Museum lobby."
   ],
   "act3-museum-frank": [
    "A polished MiFella manifestation is deeper in the museum. Ask about the collapsed birthday cake."
