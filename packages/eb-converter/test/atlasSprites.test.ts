@@ -34,9 +34,8 @@ describe("sprite atlas extractor", () => {
       // + the chant-vs-name pending witness (930116; byNpcId skin)
       // + 4 Dead Letter shop-street found-speech NPCs (930117-930120; byNpcId skins)
       // + 8 Eight Sources Archivists (930121-930128; archivist-001-ow skin)
-      // + 3 opening meteor-scene additions (910208/910209 Miladys, 910210 LSW traveler)
-      // + 2 Act-1-end recruitment actors (910270 MiFella, 910271 onboarding attendant).
-      usedByNpcCount: 766,
+      // + 3 opening meteor-scene additions (910208/910209 Miladys, 910210 LSW traveler).
+      usedByNpcCount: 764,
       overridden: true,
       overrideKind: "group"
     });
