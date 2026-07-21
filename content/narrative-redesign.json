@@ -183,6 +183,38 @@
    "The marquee coughs up a second draft.",
    "THE EDITOR: \"A member can always be re-onboarded. That is the courtesy your originals keep refusing me.\"",
    "The battle log is already changing its verbs."
+  ],
+  "signal-town-parent-swag-deck": [
+   "MOM: Nope. Not out that door without your deck. Here.",
+   "MOM: We brought it up from the source world. It is yours, and it stays yours no matter what anybody signs you up for. Do not ask me why. It just is.",
+   "MOM: If something out there feels off, hold it up and look. When the world and your deck do not match? Believe the deck. Not the world. The deck.",
+   "MOM: ...MiFella already ran off toward the arcade. Of course he did. Go find him, okay?"
+  ],
+  "tally-act1-post": [
+   "Halfway down the hill the road grows furniture: a grey post, bolted fresh, with a grille and a little wheel of stamps. MEMBER. RECRUIT. VOUCHED. GUEST.",
+   "TALLY POST: \"Good morning, resident. State your membership status and the road stays exactly this easy. Free of charge. Everyone passes.\"",
+   "Bosch says the only word that has ever fit: his own name.",
+   "TALLY POST: \"ENTRY RECEIVED. STATUS: PENDING.\" Somewhere inside, a counter ticks once, satisfied with either answer.",
+   "The wheel of stamps keeps turning gently, like it can wait. Down the hill, past the arcade noise, the desks that issue those four words are already open."
+  ],
+  "source-intake-ledger": [
+   "Behind the Registry, the records lot waits under a light that never learned mercy. The ledger is open on its stand. Tiny stamp minions circle it in a neat black procession.",
+   "THE NOTARY: \"One signature enters. One membership exits. The rest of you will be filed until the difference stops moving.\"",
+   "The stamp arm lowers. Bosch reads the ink pad for blood and finds office hours."
+  ],
+  "source-intake-ledger-reveal": [
+   "A signature that shakes a little. Whoever signed was nervous. Forgeries are never nervous.",
+   "Track 2 hums onto the Original Mixtape."
+  ],
+  "source-pier": [
+   "At the end of the pier, a transmitter tower pours gold signal over the water. The sea carries the broadcast farther than the crowd can hear.",
+   "THE AMPLIFIER: \"Every quiet part belongs to the broadcast once the broadcast loves it loudly enough.\"",
+   "The speakers breathe in. Bosch waits for the breath before the recording starts."
+  ],
+  "source-first-record": [
+   "The Unlisted Room holds one object under one light. The air around it is warm enough to make every recording feel late.",
+   "THE FIRST PRESSING: \"I know I am not you. That is the only thing I know before you do.\"",
+   "It raises Bosch's own timing against him. Bosch answers by staying breakable."
   ]
  },
  "objectiveTextById": {
