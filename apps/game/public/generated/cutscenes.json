@@ -2815,8 +2815,8 @@
     {
      "op": "dialogue",
      "pages": [
-      "Bosch's room. Late afternoon, the gold kind. It is his birthday, sort of. Nobody is making it a thing.",
-      "MiFella lifts his phone. \"Hold still. ...You never hold still.\""
+      "Bosch's room. Late afternoon.",
+      "MiFella holds up his phone. \"Hold still for one second.\""
      ]
     },
     {
@@ -2868,9 +2868,10 @@
     {
      "op": "dialogue",
      "pages": [
-      "MiFella takes the picture anyway. He looks at the screen. \"There. That's the one. That's you.\"",
-      "He digs in his pocket and holds out a cheap ceramic heart. \"Here. It's stupid. Ceramic. There's a little chamber in it, see? Holds nothing. That's the whole joke.\"",
-      "Bosch takes it."
+      "He takes it anyway and looks at the screen. \"...Ha. Yeah, that's you alright. Keeping that one.\"",
+      "He digs a little ceramic heart out of his pocket. \"Oh. Here, I got it out of a gacha machine in Postwick.\"",
+      "\"There's a tiny door on the side, see? Nothing in there. I don't know. Made me laugh.\"",
+      "Bosch takes it. It goes in his pocket."
      ]
     },
     {
@@ -2888,9 +2889,9 @@
     {
      "op": "dialogue",
      "pages": [
-      "MiFella: \"Keep the hoodie too. It's yours now. Looks better wrecked anyway.\"",
-      "MiFella leans back, easy. \"Soon as we take all our money out of the bank, we're buying the real good one. Promise.\"",
-      "MiFella lowers the phone. He does not know it is the last easy afternoon. Neither do you."
+      "MiFella: \"Keep the hoodie too. You wear it more than I do anyway. It's all wrecked.\"",
+      "MiFella leans back. \"Someday we take all our money out of the bank. All of it. And then we bolt. I mean it. Never coming back. Maybe Solana Beach, I have a cousin there. Or maybe the Galleria. Sandwiches and jazz every day.\"",
+      "He puts the phone away. Outside, it's starting to get dark. Neither of them gets up to turn on a light."
      ]
     },
     {

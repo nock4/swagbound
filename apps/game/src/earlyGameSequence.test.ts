@@ -60,7 +60,7 @@ const OPENING_DIALOGUE = {
     "\"Twin. TWIN. What ARE those things? They just stand there saying the one word at the rock. 'milady.' Over and over.\""
   ],
   // Golden-hour prologue prop examine lines (bedroom): the ceramic heart, the hoodie, the photo.
-  "prologue-cake": ["A cheap ceramic heart. There is a little chamber in it that holds nothing. That is the whole joke."],
+  "prologue-cake": ["A cheap ceramic heart from a gacha machine. There's a tiny door on the side. Nothing inside. MiFella thought that was hilarious."],
   "prologue-corner": ["A thrashed pink hoodie, soft from being worn to death. It is MiFella's. It is yours now."],
   "prologue-picture": ["The photo MiFella just took. You, not holding still, in the last of the gold light."],
   "prologue-mifella": ["MiFella, mid-laugh about something. For tonight, nothing is wrong."]
