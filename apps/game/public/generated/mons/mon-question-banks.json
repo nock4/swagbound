@@ -49,7 +49,7 @@
      "prompt": "Something loud is happening in town. Do you want to know what it is?",
      "options": [
       "Yes! Let's go look!",
-      "Kind of, from here",
+      "Kind of. Let's get closer.",
       "No. It will get quiet later.",
       "Loud things are usually important"
      ],
@@ -160,7 +160,7 @@
       "Everyone gets muddy sometimes"
      ],
      "correctIndex": 0,
-     "rightLine": "It nearly faints from being so understood.",
+     "rightLine": "It nearly faints. Finally, somebody with eyes.",
      "wrongLine": "It inspects its own feet, quietly devastated."
     }
    ]
@@ -288,7 +288,7 @@
       "On the table"
      ],
      "correctIndex": 0,
-     "rightLine": "It nods. Wall. Snacks. Full view. Textbook.",
+     "rightLine": "It nods. Wall. Snacks. Full view. That is the whole science.",
      "wrongLine": "It pictures it and shudders once, briefly."
     },
     {
@@ -485,7 +485,7 @@
       "Errands, then relax after",
       "Catch up on everything",
       "Split it into three activities",
-      "Nothing. Aggressively nothing."
+      "Nothing. All afternoon. On purpose."
      ],
      "correctIndex": 3,
      "rightLine": "It salutes. Nothing, done right, takes all afternoon.",
@@ -506,7 +506,7 @@
      "options": [
       "Eat it, that's what it's for",
       "Share it, obviously",
-      "A moment of thanks. THEN destroy it.",
+      "Thanks first. THEN the pie gets what is coming.",
       "Save some for tomorrow"
      ],
      "correctIndex": 2,
@@ -617,7 +617,7 @@
      ],
      "correctIndex": 1,
      "rightLine": "YES!! Badly and together!! That's the spirit of it!!",
-     "wrongLine": "It tries to slow down to your speed and briefly stops existing."
+     "wrongLine": "It tries to slow down to your speed. It doesn't know how. It was scary for everyone."
     },
     {
      "prompt": "Bedtime is SO far away. What do we do until then?!",
@@ -800,7 +800,7 @@
      "options": [
       "Sign. Repack everything.",
       "Just rain, take a coat",
-      "Rain is good luck actually",
+      "Rain means the trip is off. Stay in.",
       "Signs aren't real"
      ],
      "correctIndex": 0,
@@ -895,7 +895,7 @@
       "You have a kind soul deep down",
       "You're the best mon I've met",
       "You're beautiful inside and out",
-      "Your aim, when you spit, is elite"
+      "Your spitting aim. Nobody has seen you miss."
      ],
      "correctIndex": 3,
      "rightLine": "It spits at a fencepost to confirm. Direct hit. It's beaming, meanly.",
@@ -981,7 +981,7 @@
      ],
      "correctIndex": 1,
      "rightLine": "It almost waves. Doesn't. But the intent hung there. That's the stuff.",
-     "wrongLine": "It pre-tires its arm just thinking about the waving economy."
+     "wrongLine": "It pre-tires its arm just thinking about all that waving."
     }
    ]
   },
@@ -1014,7 +1014,7 @@
       "Their feet, presumably"
      ],
      "correctIndex": 2,
-     "rightLine": "Yes!! Small enough to doubt yourself! That's the craft!",
+     "rightLine": "Yes!! Small enough to doubt yourself! That is the whole art of it!",
      "wrongLine": "It puts a pebble in YOUR boot to demonstrate the concept."
     },
     {
@@ -1554,7 +1554,7 @@
       "Rain, before it's ready"
      ],
      "correctIndex": 0,
-     "rightLine": "COLD mashed potatoes. Cold is the part everyone forgets. You're the real deal.",
+     "rightLine": "COLD mashed potatoes. Cold is the part everyone forgets. It remembers you said this.",
      "wrongLine": "It shakes its head. Everyone says that one. The clouds are tired of hearing it."
     }
    ]

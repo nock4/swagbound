@@ -31,7 +31,11 @@ const DISPLAY_OVERRIDES = {
   "supermetalmons-gen2-548-mmmmon-upgradeee": "Mmmmon Upgradeee",
   "supermetalmons-gen2-575-clown-pogger-0": "Clown Pogger",
   "supermetalmons-gen2-678-starcat-3": "Starcat",
-  "supermetalmons-gen2-717-bunnigotchi": "Bunnigotchi"
+  "supermetalmons-gen2-717-bunnigotchi": "Bunnigotchi",
+  // Non-ASCII names whose strip-fallback amputated letters ("pərl"->"prl",
+  // "Applcrème"->"Applcrme"): transliterate instead.
+  "supermetalmons-gen2-185-p-rl": "Perl",
+  "supermetalmons-gen2-489-applcr-me": "Applcreme"
 };
 const norm = (v) => (typeof v === "string" ? v.trim() : v);
 // Trait gaps in the source collection, resolved by hand (audited 2026-07-21):

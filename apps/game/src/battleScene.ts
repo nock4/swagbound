@@ -1428,6 +1428,13 @@ export class BattleScene extends Phaser.Scene {
     this.lastActionDwellMs_ = 0;
     this.autoCommandDelayMs_ = this.autoMode_ ? AUTO_COMMAND_INPUT_DELAY_MS : 0;
     this.nextHpTickSfxAtMs_ = 0;
+    // Discoverability: the FIRST time CONVINCE is actually available (mon weakened
+    // to the catch threshold), surface a one-time hint so a player who skipped the
+    // Farmhand still learns the verb exists.
+    if (this.monCatch_ && !this.monCatch_.attempted && !this.monCatch_.hintShown && this.catchableEnemyWeakened()) {
+      this.monCatch_.hintShown = true;
+      this.menuMessage_ = this.monCatch_.hint ?? `${this.monCatch_.displayName} looks winded. Try CONVINCE.`;
+    }
     this.syncMenuFromInputState();
   }
 

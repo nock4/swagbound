@@ -768,7 +768,7 @@ function cancelInputSelection(
     return {
       ...input,
       submenu: "command",
-      selectionIndex: commandIndex(input.pending?.command, combatant?.charId),
+      selectionIndex: commandIndex(input.pending?.command, combatant?.charId, context.commandsFor),
       pending: undefined
     };
   }
@@ -788,7 +788,7 @@ function cancelInputSelection(
     return {
       ...input,
       submenu: "command",
-      selectionIndex: commandIndex(input.submenu === "psi-category" ? "PSI" : "GOODS", combatant?.charId),
+      selectionIndex: commandIndex(input.submenu === "psi-category" ? "PSI" : "GOODS", combatant?.charId, context.commandsFor),
       psiCategory: undefined,
       pending: undefined
     };
@@ -807,7 +807,7 @@ function cancelInputSelection(
   return {
     memberCursor: input.memberCursor - 1,
     submenu: "command",
-    selectionIndex: commandIndex(previousCommand?.command, combatantAt(context.state, previousActor)?.charId),
+    selectionIndex: commandIndex(previousCommand?.command, combatantAt(context.state, previousActor)?.charId, context.commandsFor),
     queue: input.queue.filter((queued) => queued.partySlot !== previousActor.index)
   };
 }
@@ -1481,11 +1481,15 @@ function clampSelection(index: number, length: number): number {
   return Math.min(length - 1, Math.max(0, Math.floor(index)));
 }
 
-function commandIndex(command: BattleCommand | undefined, charId = 0): number {
+function commandIndex(
+  command: BattleCommand | undefined,
+  charId = 0,
+  commandsFor: (charId: number) => BattleCommand[] = commandsForCharId
+): number {
   if (!command) {
     return 0;
   }
-  const commands = commandsForCharId(charId);
+  const commands = commandsFor(charId);
   const index = commands.indexOf(command);
   return index >= 0 ? index : 0;
 }

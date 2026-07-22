@@ -125,27 +125,57 @@
  "secretRecipes": [
   {
    "resultId": "supermetalmons-gen2-390-samo",
-   "requires": { "races": ["Angel", "Zombie"], "minTier": 5 },
+   "requires": {
+    "races": [
+     "Angel",
+     "Zombie"
+    ],
+    "minTier": 4
+   },
    "riddle": "Bury a halo where the dirt still remembers. Whatever digs itself back up will fetch forever."
   },
   {
    "resultId": "supermetalmons-gen2-548-mmmmon-upgradeee",
-   "requires": { "races": ["Fielder", "Trickster"], "minTier": 4 },
+   "requires": {
+    "races": [
+     "Fielder",
+     "Trickster"
+    ],
+    "minTier": 4
+   },
    "riddle": "Take one who does everything fine and one who does nothing fair. Together they do everything, unfairly."
   },
   {
    "resultId": "supermetalmons-gen2-575-clown-pogger-0",
-   "requires": { "races": ["Angel", "Demon"], "minTier": 5 },
+   "requires": {
+    "races": [
+     "Angel",
+     "Demon"
+    ],
+    "minTier": 5
+   },
    "riddle": "When the halo and the pitchfork quit arguing and start juggling, a clown is born. Feed them both well first."
   },
   {
    "resultId": "supermetalmons-gen2-678-starcat-3",
-   "requires": { "races": ["Mystic", "Spirit"], "minTier": 5 },
+   "requires": {
+    "races": [
+     "Mystic",
+     "Spirit"
+    ],
+    "minTier": 5
+   },
    "riddle": "A thing with nine lives naps way up in the deep sky. Send your two loudest minds to scratch it awake."
   },
   {
    "resultId": "supermetalmons-gen2-717-bunnigotchi",
-   "requires": { "races": ["Drainer", "Vampire"], "minTier": 4 },
+   "requires": {
+    "races": [
+     "Drainer",
+     "Vampire"
+    ],
+    "minTier": 4
+   },
    "riddle": "Two thirsts share one tiny bottle. Care for what hatches. It has long ears and a feeding schedule. The feed is you."
   }
  ]

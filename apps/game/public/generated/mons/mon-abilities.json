@@ -95,7 +95,7 @@
    "kind": "heal",
    "power": 60,
    "target": "allAllies",
-   "line": "{user} lets in the good light. The whole team feels like brunch."
+   "line": "{user} lets in the good light. The whole team feels like Sunday morning."
   },
   "rude-jab": {
    "name": "Rude Jab",
@@ -241,7 +241,7 @@
   },
   "steady-swing": {
    "name": "Steady Swing",
-   "ppCost": 0,
+   "ppCost": 2,
    "kind": "damage",
    "power": 18,
    "target": "enemy",
@@ -465,12 +465,12 @@
    "line": "{user} pops a nova of confetti. Everyone is dazzled and hurt."
   },
   "fourth-wall-lean": {
-   "name": "Fourth Wall Lean",
+   "name": "Curtain Lean",
    "ppCost": 18,
    "kind": "status",
    "status": "confusion",
    "target": "allEnemies",
-   "line": "{user} leans on the fourth wall. Everyone forgot whose turn it is."
+   "line": "{user} leans on the scenery. Everyone forgot whose turn it is."
   },
   "backstage-pass": {
    "name": "Backstage Pass",
@@ -550,106 +550,322 @@
    "target": "enemy",
    "element": "ash",
    "line": "{user} sneezes soot all over {target}. Gross, and also hot."
+  },
+  "rubber-rebound": {
+   "name": "Rubber Rebound",
+   "ppCost": 7,
+   "kind": "damage",
+   "power": 30,
+   "target": "enemy",
+   "element": "rubber",
+   "line": "{user} flings back everything {target} threw, plus interest."
+  },
+  "grave-hush": {
+   "name": "Grave Hush",
+   "ppCost": 6,
+   "kind": "debuff",
+   "status": "defenseDown",
+   "target": "enemy",
+   "element": "grave",
+   "line": "{user} lets the quiet of an old cellar settle on {target}."
   }
  },
  "raceKits": {
   "Drainer": [
-   { "abilityId": "polite-sip", "unlockLevel": 1 },
-   { "abilityId": "thick-skin", "unlockLevel": 5 },
-   { "abilityId": "double-straw", "unlockLevel": 10 },
-   { "abilityId": "sponge-stance", "unlockLevel": 16 },
-   { "abilityId": "big-gulp", "unlockLevel": 23 },
-   { "abilityId": "buffet-rules", "unlockLevel": 31 }
+   {
+    "abilityId": "polite-sip",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "thick-skin",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "double-straw",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "sponge-stance",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "big-gulp",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "buffet-rules",
+    "unlockLevel": 31
+   }
   ],
   "Angel": [
-   { "abilityId": "small-mend", "unlockLevel": 1 },
-   { "abilityId": "kind-word", "unlockLevel": 5 },
-   { "abilityId": "halo-polish", "unlockLevel": 10 },
-   { "abilityId": "feather-guard", "unlockLevel": 16 },
-   { "abilityId": "group-hug", "unlockLevel": 23 },
-   { "abilityId": "sunday-light", "unlockLevel": 31 }
+   {
+    "abilityId": "small-mend",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "kind-word",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "halo-polish",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "feather-guard",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "group-hug",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "sunday-light",
+    "unlockLevel": 31
+   }
   ],
   "Demon": [
-   { "abilityId": "rude-jab", "unlockLevel": 1 },
-   { "abilityId": "hot-temper", "unlockLevel": 5 },
-   { "abilityId": "pitchfork-poke", "unlockLevel": 10 },
-   { "abilityId": "brimstone-burp", "unlockLevel": 16 },
-   { "abilityId": "wicked-swing", "unlockLevel": 23 },
-   { "abilityId": "tantrum-royale", "unlockLevel": 31 }
+   {
+    "abilityId": "rude-jab",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "hot-temper",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "pitchfork-poke",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "brimstone-burp",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "wicked-swing",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "tantrum-royale",
+    "unlockLevel": 31
+   }
   ],
   "Mystic": [
-   { "abilityId": "mind-pebble", "unlockLevel": 1 },
-   { "abilityId": "third-eyebrow", "unlockLevel": 5 },
-   { "abilityId": "rune-zap", "unlockLevel": 10 },
-   { "abilityId": "double-dare", "unlockLevel": 16 },
-   { "abilityId": "comet-memo", "unlockLevel": 23 },
-   { "abilityId": "grand-theorem", "unlockLevel": 31 }
+   {
+    "abilityId": "mind-pebble",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "third-eyebrow",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "rune-zap",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "double-dare",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "comet-memo",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "grand-theorem",
+    "unlockLevel": 31
+   }
   ],
   "Trickster": [
-   { "abilityId": "shoe-swap", "unlockLevel": 1 },
-   { "abilityId": "itching-joke", "unlockLevel": 5 },
-   { "abilityId": "pocket-sand", "unlockLevel": 10 },
-   { "abilityId": "gum-snap", "unlockLevel": 16 },
-   { "abilityId": "double-dare", "unlockLevel": 23 },
-   { "abilityId": "prank-storm", "unlockLevel": 31 }
+   {
+    "abilityId": "shoe-swap",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "itching-joke",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "pocket-sand",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "gum-snap",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "double-dare",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "prank-storm",
+    "unlockLevel": 31
+   }
   ],
   "Fielder": [
-   { "abilityId": "steady-swing", "unlockLevel": 1 },
-   { "abilityId": "shoe-swap", "unlockLevel": 5 },
-   { "abilityId": "small-mend", "unlockLevel": 10 },
-   { "abilityId": "line-drive", "unlockLevel": 16 },
-   { "abilityId": "team-chant", "unlockLevel": 23 },
-   { "abilityId": "grand-inning", "unlockLevel": 31 }
+   {
+    "abilityId": "steady-swing",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "shoe-swap",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "small-mend",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "line-drive",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "team-chant",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "grand-inning",
+    "unlockLevel": 31
+   }
   ],
   "Spirit": [
-   { "abilityId": "practice-haunt", "unlockLevel": 1 },
-   { "abilityId": "static-whisper", "unlockLevel": 5 },
-   { "abilityId": "epoch-nap", "unlockLevel": 10 },
-   { "abilityId": "ecto-flare", "unlockLevel": 16 },
-   { "abilityId": "seance-scream", "unlockLevel": 23 },
-   { "abilityId": "last-word", "unlockLevel": 31 }
+   {
+    "abilityId": "practice-haunt",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "static-whisper",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "epoch-nap",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "ecto-flare",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "seance-scream",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "last-word",
+    "unlockLevel": 31
+   }
   ],
   "Zombie": [
-   { "abilityId": "rude-jab", "unlockLevel": 1 },
-   { "abilityId": "thick-skin", "unlockLevel": 5 },
-   { "abilityId": "grave-breath", "unlockLevel": 10 },
-   { "abilityId": "shamble-slam", "unlockLevel": 16 },
-   { "abilityId": "moan-chorus", "unlockLevel": 23 },
-   { "abilityId": "compost-crush", "unlockLevel": 31 }
+   {
+    "abilityId": "rude-jab",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "thick-skin",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "grave-breath",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "shamble-slam",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "moan-chorus",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "compost-crush",
+    "unlockLevel": 31
+   }
   ],
   "Vampire": [
-   { "abilityId": "quick-nip", "unlockLevel": 1 },
-   { "abilityId": "shoe-swap", "unlockLevel": 5 },
-   { "abilityId": "neck-appraisal", "unlockLevel": 10 },
-   { "abilityId": "midnight-tab", "unlockLevel": 16 },
-   { "abilityId": "bat-rsvp", "unlockLevel": 23 },
-   { "abilityId": "red-banquet", "unlockLevel": 31 }
+   {
+    "abilityId": "quick-nip",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "shoe-swap",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "neck-appraisal",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "midnight-tab",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "bat-rsvp",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "red-banquet",
+    "unlockLevel": 31
+   }
   ],
   "Ancient": [
-   { "abilityId": "old-stare", "unlockLevel": 1 },
-   { "abilityId": "museum-fist", "unlockLevel": 5 },
-   { "abilityId": "epoch-nap", "unlockLevel": 10 },
-   { "abilityId": "pillar-drop", "unlockLevel": 16 },
-   { "abilityId": "dust-of-ages", "unlockLevel": 23 },
-   { "abilityId": "big-bang-rerun", "unlockLevel": 31 }
+   {
+    "abilityId": "old-stare",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "museum-fist",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "epoch-nap",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "pillar-drop",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "dust-of-ages",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "big-bang-rerun",
+    "unlockLevel": 31
+   }
   ],
   "Secret": [
-   { "abilityId": "encore-encore", "unlockLevel": 1 },
-   { "abilityId": "spotlight-steal", "unlockLevel": 5 },
-   { "abilityId": "confetti-nova", "unlockLevel": 10 },
-   { "abilityId": "fourth-wall-lean", "unlockLevel": 16 },
-   { "abilityId": "backstage-pass", "unlockLevel": 23 },
-   { "abilityId": "secret-finale", "unlockLevel": 31 }
+   {
+    "abilityId": "encore-encore",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "spotlight-steal",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "confetti-nova",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "fourth-wall-lean",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "backstage-pass",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "secret-finale",
+    "unlockLevel": 31
+   }
   ]
  },
  "materialSplash": {
-  "rubber": "gum-snap",
+  "rubber": "rubber-rebound",
   "earth": "mud-manners",
   "steel": "pan-lid-bash",
   "arcana": "spare-spell",
   "crystal": "prism-wink",
   "ooze": "slime-handshake",
-  "grave": "grave-breath",
+  "grave": "grave-hush",
   "frost": "polite-frost",
   "ash": "soot-sneeze"
  }

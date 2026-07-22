@@ -879,6 +879,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private readonly partyState = new PartyState();
   private monsState_?: MonsState;
   private consumedCapturedMon_ = false;
+  private pendingMonHandover_ = false;
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
   private readonly openingSfx: OpeningSfx = createOpeningSfx();
   private readonly menuSfx: BattleSfx = createBattleSfx();
@@ -1330,19 +1331,35 @@ export class ChunkedWorldScene extends Phaser.Scene {
         return active?.index;
       },
       setActive: (index) => {
+        const firstEver = index !== undefined && !this.gameFlags.has("mons:first-companion");
         const ok = this.monsRuntime()?.setActive(index) ?? false;
         if (ok && index !== undefined) {
           this.gameFlags.set("mons:first-companion");
+          // Fire the slot-3 handover scene (Cloak/Munch react) once the overlay
+          // closes - the third seat has been empty since MiFella got in the car.
+          if (firstEver && !this.gameFlags.has("mons:handover-played")) {
+            this.pendingMonHandover_ = true;
+          }
+        }
+        if (ok) {
+          this.persistMonRoster();
         }
         return ok;
       },
       pet: (index) => this.monsRuntime()?.pet(index),
-      release: (index) => this.monsRuntime()?.release(index) ?? false,
+      release: (index) => {
+        const ok = this.monsRuntime()?.release(index) ?? false;
+        if (ok) {
+          this.persistMonRoster();
+        }
+        return ok;
+      },
       previewFusion: (a, b) => this.monsRuntime()?.previewFusion(a, b),
       fuse: (a, b, picks) => {
         const fused = this.monsRuntime()?.fuse(a, b, picks);
         if (fused) {
           this.gameFlags.set("mons:first-fusion");
+          this.persistMonRoster();
         }
         return fused;
       },
@@ -1519,6 +1536,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.spriteWalkBobClockMs += delta;
     this.partyState.tickMeters(delta);
     this.updateDangerHeartbeat(delta);
+    this.maybePlayMonHandover();
     this.tickDialogueBlip();
     this.tickTimedDeliveries(delta);
     this.encounterCooldownMs = Math.max(0, this.encounterCooldownMs - delta);
@@ -9968,6 +9986,37 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return { ...base, psi: [...base.psi, ...companion.psi] };
   }
 
+  /** Play the slot-3 handover scene once the roster overlay has closed and the
+   *  player is back in control (the scene can't run under the DOM overlay). */
+  private maybePlayMonHandover(): void {
+    if (!this.pendingMonHandover_) {
+      return;
+    }
+    const story = this.data_.mons?.story;
+    if (
+      !story ||
+      this.monsOverlay?.isOpen() ||
+      !this.isPlayerControllable() ||
+      this.dialogue.open ||
+      this.menuState.open
+    ) {
+      return;
+    }
+    this.pendingMonHandover_ = false;
+    this.gameFlags.set("mons:handover-played");
+    lockPlayer(this.playerState, this.playerFrames);
+    this.dialogue.start(buildInlineDialoguePages([...story.handoverScene]));
+    this.updatePrompt();
+  }
+
+  /** Persist a structural roster change (catch/fuse/release/companion) so it
+   *  survives a tab close without waiting for a manual save or town crossing. */
+  private persistMonRoster(): void {
+    if (this.saveSlots && this.isPlayerControllable()) {
+      this.saveGame(false);
+    }
+  }
+
   private monsRuntime(): MonsState | undefined {
     if (!this.data_.mons) {
       return undefined;
@@ -9979,7 +10028,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   /** Build the CONVINCE context for a wild-mon battle: personality question draw. */
-  private monCatchInitFor(registryId: string): { registryId: string; displayName: string; questions: MonNegotiationQuestion[]; spritePath?: string } | undefined {
+  private monCatchInitFor(registryId: string): { registryId: string; displayName: string; questions: MonNegotiationQuestion[]; spritePath?: string; hint?: string } | undefined {
     const data = this.data_.mons;
     if (!data) {
       return undefined;
@@ -9997,7 +10046,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       registryId,
       displayName: monDisplayName(entry),
       questions,
-      spritePath: `generated/${entry.sprites.battle}`
+      spritePath: `generated/${entry.sprites.battle}`,
+      ...(data.story.monEncounterHint ? { hint: data.story.monEncounterHint } : {})
     };
   }
 
@@ -10073,6 +10123,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (caught) {
         this.gameFlags.set("mons:first-catch");
         this.showMonNotice(`${restore.capturedMon.displayName} is waiting at the farm.`);
+        // A catch is a discrete win the player expects to stick; persist the
+        // roster now rather than waiting for a manual save or a town crossing.
+        if (this.saveSlots) {
+          this.saveGame(false);
+        }
       }
     }
     // Companion XP: the battle's post-battle snapshot carries the mon member
