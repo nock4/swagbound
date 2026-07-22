@@ -76,7 +76,7 @@ function slots(blob: string | null): SaveSlotPersistence {
 
 function saveState(player: Pick<SaveState["player"], "x" | "y">): SaveState {
   return {
-    schemaVersion: 1,
+    schemaVersion: 2,
     savedAt: "2026-07-07T00:00:00.000Z",
     flags: { strings: ["intro:bedroom-opening-done"], numeric: [] },
     party: {

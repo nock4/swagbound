@@ -1,0 +1,873 @@
+{
+ "schema": "swagbound.mon-abilities.v1",
+ "abilities": {
+  "polite-sip": {
+   "name": "Polite Sip",
+   "ppCost": 2,
+   "kind": "drain",
+   "power": 12,
+   "target": "enemy",
+   "line": "{user} borrows a little HP from {target}. It says thank you."
+  },
+  "thick-skin": {
+   "name": "Thick Skin",
+   "ppCost": 4,
+   "kind": "buff",
+   "status": "defenseUp",
+   "target": "self",
+   "line": "{user} thinks hard about leather. Defense went up."
+  },
+  "double-straw": {
+   "name": "Double Straw",
+   "ppCost": 6,
+   "kind": "drain",
+   "power": 26,
+   "target": "enemy",
+   "line": "{user} brings two straws. {target} loses HP twice as politely."
+  },
+  "sponge-stance": {
+   "name": "Sponge Stance",
+   "ppCost": 8,
+   "kind": "buff",
+   "status": "shield",
+   "target": "self",
+   "line": "{user} goes full sponge. Incoming hits mean less now."
+  },
+  "big-gulp": {
+   "name": "Big Gulp",
+   "ppCost": 10,
+   "kind": "drain",
+   "power": 44,
+   "target": "enemy",
+   "line": "{user} takes one enormous gulp of {target}'s HP. Refreshing."
+  },
+  "buffet-rules": {
+   "name": "Buffet Rules",
+   "ppCost": 16,
+   "kind": "drain",
+   "power": 40,
+   "target": "allEnemies",
+   "line": "{user} declares buffet rules. Everyone's HP is self serve now."
+  },
+  "small-mend": {
+   "name": "Small Mend",
+   "ppCost": 3,
+   "kind": "heal",
+   "power": 15,
+   "target": "ally",
+   "line": "{user} patches {target} with kindness and a little tape."
+  },
+  "kind-word": {
+   "name": "Kind Word",
+   "ppCost": 4,
+   "kind": "buff",
+   "status": "offenseUp",
+   "target": "ally",
+   "line": "{user} says just the right thing. {target}'s offense went up."
+  },
+  "halo-polish": {
+   "name": "Halo Polish",
+   "ppCost": 6,
+   "kind": "heal",
+   "power": 30,
+   "target": "ally",
+   "line": "{user} polishes a halo over {target}. HP came back shiny."
+  },
+  "feather-guard": {
+   "name": "Feather Guard",
+   "ppCost": 7,
+   "kind": "buff",
+   "status": "shield",
+   "target": "ally",
+   "line": "{user} tucks {target} behind one big soft wing."
+  },
+  "group-hug": {
+   "name": "Group Hug",
+   "ppCost": 12,
+   "kind": "heal",
+   "power": 35,
+   "target": "allAllies",
+   "line": "{user} calls a group hug. Nobody escapes. Everyone heals."
+  },
+  "sunday-light": {
+   "name": "Sunday Light",
+   "ppCost": 18,
+   "kind": "heal",
+   "power": 60,
+   "target": "allAllies",
+   "line": "{user} lets in the good light. The whole team feels like Sunday morning."
+  },
+  "rude-jab": {
+   "name": "Rude Jab",
+   "ppCost": 2,
+   "kind": "damage",
+   "power": 16,
+   "target": "enemy",
+   "line": "{user} jabs {target} without even saying excuse me."
+  },
+  "hot-temper": {
+   "name": "Hot Temper",
+   "ppCost": 4,
+   "kind": "buff",
+   "status": "offenseUp",
+   "target": "self",
+   "line": "{user} counts to three instead of ten. Offense went up."
+  },
+  "pitchfork-poke": {
+   "name": "Pitchfork Poke",
+   "ppCost": 6,
+   "kind": "damage",
+   "power": 32,
+   "target": "enemy",
+   "line": "{user} pokes {target} with something regrettably pointy."
+  },
+  "brimstone-burp": {
+   "name": "Brimstone Burp",
+   "ppCost": 10,
+   "kind": "damage",
+   "power": 30,
+   "target": "allEnemies",
+   "element": "ash",
+   "line": "{user} burps brimstone at everyone. Nobody says gesundheit."
+  },
+  "wicked-swing": {
+   "name": "Wicked Swing",
+   "ppCost": 12,
+   "kind": "damage",
+   "power": 55,
+   "target": "enemy",
+   "line": "{user} winds up way too far and lets {target} have it."
+  },
+  "tantrum-royale": {
+   "name": "Tantrum Royale",
+   "ppCost": 18,
+   "kind": "damage",
+   "power": 60,
+   "target": "allEnemies",
+   "line": "{user} throws a tantrum with production values. It hurts everyone."
+  },
+  "mind-pebble": {
+   "name": "Mind Pebble",
+   "ppCost": 2,
+   "kind": "damage",
+   "power": 14,
+   "target": "enemy",
+   "element": "arcana",
+   "line": "{user} flicks a small thought at {target}. It lands hard."
+  },
+  "third-eyebrow": {
+   "name": "Third Eyebrow",
+   "ppCost": 4,
+   "kind": "debuff",
+   "status": "offenseDown",
+   "target": "enemy",
+   "line": "{user} raises a third eyebrow. {target}'s offense went down."
+  },
+  "rune-zap": {
+   "name": "Rune Zap",
+   "ppCost": 6,
+   "kind": "damage",
+   "power": 30,
+   "target": "enemy",
+   "element": "arcana",
+   "line": "{user} draws a rune from memory. {target} gets zapped."
+  },
+  "double-dare": {
+   "name": "Double Dare",
+   "ppCost": 7,
+   "kind": "status",
+   "status": "confusion",
+   "target": "enemy",
+   "line": "{user} double dares {target}. {target} is very confused now."
+  },
+  "comet-memo": {
+   "name": "Comet Memo",
+   "ppCost": 12,
+   "kind": "damage",
+   "power": 50,
+   "target": "enemy",
+   "element": "arcana",
+   "line": "{user} files a memo shaped like a comet. {target} receives it."
+  },
+  "grand-theorem": {
+   "name": "Grand Theorem",
+   "ppCost": 20,
+   "kind": "damage",
+   "power": 65,
+   "target": "allEnemies",
+   "element": "arcana",
+   "line": "{user} proves the Grand Theorem. Everyone else is the proof."
+  },
+  "shoe-swap": {
+   "name": "Shoe Swap",
+   "ppCost": 3,
+   "kind": "buff",
+   "status": "speedUp",
+   "target": "self",
+   "line": "{user} swaps into the faster shoes. Speed went up."
+  },
+  "itching-joke": {
+   "name": "Itching Joke",
+   "ppCost": 4,
+   "kind": "status",
+   "status": "poison",
+   "target": "enemy",
+   "line": "{user} tells a joke that itches. {target} got poisoned."
+  },
+  "pocket-sand": {
+   "name": "Pocket Sand",
+   "ppCost": 5,
+   "kind": "debuff",
+   "status": "offenseDown",
+   "target": "enemy",
+   "line": "{user} produces pocket sand. {target}'s offense went down."
+  },
+  "gum-snap": {
+   "name": "Gum Snap",
+   "ppCost": 6,
+   "kind": "damage",
+   "power": 28,
+   "target": "enemy",
+   "element": "rubber",
+   "line": "{user} snaps a huge gum bubble in {target}'s face."
+  },
+  "prank-storm": {
+   "name": "Prank Storm",
+   "ppCost": 14,
+   "kind": "damage",
+   "power": 40,
+   "target": "allEnemies",
+   "line": "{user} unleashes every prank at once. It's chaos out there."
+  },
+  "steady-swing": {
+   "name": "Steady Swing",
+   "ppCost": 2,
+   "kind": "damage",
+   "power": 18,
+   "target": "enemy",
+   "line": "{user} takes a nice level swing at {target}. Coach would be proud."
+  },
+  "line-drive": {
+   "name": "Line Drive",
+   "ppCost": 7,
+   "kind": "damage",
+   "power": 38,
+   "target": "enemy",
+   "line": "{user} sends a line drive straight through {target}."
+  },
+  "team-chant": {
+   "name": "Team Chant",
+   "ppCost": 8,
+   "kind": "buff",
+   "status": "offenseUp",
+   "target": "allAllies",
+   "line": "{user} starts the team chant. Everyone's offense went up."
+  },
+  "grand-inning": {
+   "name": "Grand Inning",
+   "ppCost": 13,
+   "kind": "damage",
+   "power": 62,
+   "target": "enemy",
+   "line": "{user} plays a whole inning at {target}. The field itself pitches in.",
+   "element": "earth"
+  },
+  "practice-haunt": {
+   "name": "Practice Haunt",
+   "ppCost": 2,
+   "kind": "damage",
+   "power": 16,
+   "target": "enemy",
+   "element": "grave",
+   "line": "{user} tries out a starter haunt on {target}. It works."
+  },
+  "static-whisper": {
+   "name": "Static Whisper",
+   "ppCost": 5,
+   "kind": "damage",
+   "power": 30,
+   "target": "enemy",
+   "element": "arcana",
+   "line": "{user} whispers pure static into {target}'s head."
+  },
+  "epoch-nap": {
+   "name": "Epoch Nap",
+   "ppCost": 6,
+   "kind": "status",
+   "status": "sleep",
+   "target": "enemy",
+   "line": "{user} recommends a nap lasting one epoch. {target} fell asleep."
+  },
+  "ecto-flare": {
+   "name": "Ecto Flare",
+   "ppCost": 10,
+   "kind": "damage",
+   "power": 48,
+   "target": "enemy",
+   "element": "grave",
+   "line": "{user} flares up all pale and loud. {target} takes it badly."
+  },
+  "seance-scream": {
+   "name": "Seance Scream",
+   "ppCost": 14,
+   "kind": "damage",
+   "power": 45,
+   "target": "allEnemies",
+   "element": "grave",
+   "line": "{user} holds a seance and screams the minutes. Everyone hears it."
+  },
+  "last-word": {
+   "name": "Last Word",
+   "ppCost": 22,
+   "kind": "damage",
+   "power": 80,
+   "target": "enemy",
+   "line": "{user} says the last word. {target} has no comeback."
+  },
+  "grave-breath": {
+   "name": "Grave Breath",
+   "ppCost": 5,
+   "kind": "status",
+   "status": "poison",
+   "target": "enemy",
+   "element": "grave",
+   "line": "{user} exhales pure basement. {target} got poisoned."
+  },
+  "shamble-slam": {
+   "name": "Shamble Slam",
+   "ppCost": 7,
+   "kind": "damage",
+   "power": 35,
+   "target": "enemy",
+   "line": "{user} shambles a long way to slam {target}. Worth the trip."
+  },
+  "moan-chorus": {
+   "name": "Moan Chorus",
+   "ppCost": 9,
+   "kind": "debuff",
+   "status": "defenseDown",
+   "target": "allEnemies",
+   "line": "{user} leads a moan in three parts. Everyone's defense went down."
+  },
+  "compost-crush": {
+   "name": "Compost Crush",
+   "ppCost": 14,
+   "kind": "damage",
+   "power": 55,
+   "target": "enemy",
+   "element": "earth",
+   "line": "{user} drops the whole compost pile on {target}."
+  },
+  "quick-nip": {
+   "name": "Quick Nip",
+   "ppCost": 2,
+   "kind": "drain",
+   "power": 14,
+   "target": "enemy",
+   "line": "{user} nips {target} and is back before anyone notices."
+  },
+  "neck-appraisal": {
+   "name": "Neck Appraisal",
+   "ppCost": 4,
+   "kind": "debuff",
+   "status": "defenseDown",
+   "target": "enemy",
+   "line": "{user} appraises {target}'s neck. {target}'s defense went down."
+  },
+  "midnight-tab": {
+   "name": "Midnight Tab",
+   "ppCost": 7,
+   "kind": "drain",
+   "power": 32,
+   "target": "enemy",
+   "line": "{user} opens a tab on {target}'s HP. It's past midnight."
+  },
+  "bat-rsvp": {
+   "name": "Bat RSVP",
+   "ppCost": 10,
+   "kind": "damage",
+   "power": 35,
+   "target": "allEnemies",
+   "line": "{user} sends invitations. The bats all RSVP yes, at everyone."
+  },
+  "red-banquet": {
+   "name": "Red Banquet",
+   "ppCost": 14,
+   "kind": "drain",
+   "power": 55,
+   "target": "enemy",
+   "line": "{user} hosts a banquet. {target} is the menu and the guest."
+  },
+  "old-stare": {
+   "name": "Old Stare",
+   "ppCost": 3,
+   "kind": "debuff",
+   "status": "offenseDown",
+   "target": "enemy",
+   "line": "{user} stares like a portrait. {target}'s offense went down."
+  },
+  "museum-fist": {
+   "name": "Museum Fist",
+   "ppCost": 5,
+   "kind": "damage",
+   "power": 30,
+   "target": "enemy",
+   "element": "earth",
+   "line": "{user} swings a fist old enough for a museum at {target}."
+  },
+  "pillar-drop": {
+   "name": "Pillar Drop",
+   "ppCost": 10,
+   "kind": "damage",
+   "power": 50,
+   "target": "enemy",
+   "element": "earth",
+   "line": "{user} drops a pillar nobody remembered ordering on {target}."
+  },
+  "dust-of-ages": {
+   "name": "Dust of Ages",
+   "ppCost": 14,
+   "kind": "damage",
+   "power": 45,
+   "target": "allEnemies",
+   "element": "earth",
+   "line": "{user} shakes off the dust of ages. Everyone breathes history."
+  },
+  "big-bang-rerun": {
+   "name": "Big Bang Rerun",
+   "ppCost": 22,
+   "kind": "damage",
+   "power": 85,
+   "target": "enemy",
+   "line": "{user} reruns the big bang at {target}. Small venue this time."
+  },
+  "encore-encore": {
+   "name": "Encore Encore",
+   "ppCost": 16,
+   "kind": "buff",
+   "status": "offenseUp",
+   "target": "allAllies",
+   "line": "{user} demands an encore of the encore. Team offense went up."
+  },
+  "spotlight-steal": {
+   "name": "Spotlight Steal",
+   "ppCost": 20,
+   "kind": "drain",
+   "power": 70,
+   "target": "enemy",
+   "line": "{user} steals the spotlight and {target}'s HP along with it."
+  },
+  "confetti-nova": {
+   "name": "Confetti Nova",
+   "ppCost": 20,
+   "kind": "damage",
+   "power": 70,
+   "target": "allEnemies",
+   "line": "{user} pops a nova of confetti. Everyone is dazzled and hurt."
+  },
+  "fourth-wall-lean": {
+   "name": "Curtain Lean",
+   "ppCost": 18,
+   "kind": "status",
+   "status": "confusion",
+   "target": "allEnemies",
+   "line": "{user} leans on the scenery. Everyone forgot whose turn it is."
+  },
+  "backstage-pass": {
+   "name": "Backstage Pass",
+   "ppCost": 22,
+   "kind": "heal",
+   "power": 80,
+   "target": "allAllies",
+   "line": "{user} flashes backstage passes. The whole team feels famous."
+  },
+  "secret-finale": {
+   "name": "Secret Finale",
+   "ppCost": 24,
+   "kind": "damage",
+   "power": 90,
+   "target": "enemy",
+   "line": "{user} performs the secret finale. {target} was the finale."
+  },
+  "mud-manners": {
+   "name": "Mud Manners",
+   "ppCost": 5,
+   "kind": "damage",
+   "power": 26,
+   "target": "enemy",
+   "element": "earth",
+   "line": "{user} demonstrates mud manners on {target}. Rude and heavy."
+  },
+  "pan-lid-bash": {
+   "name": "Pan Lid Bash",
+   "ppCost": 5,
+   "kind": "damage",
+   "power": 28,
+   "target": "enemy",
+   "element": "steel",
+   "line": "{user} bashes {target} with a pan lid. The ring lasts a while."
+  },
+  "spare-spell": {
+   "name": "Spare Spell",
+   "ppCost": 5,
+   "kind": "damage",
+   "power": 26,
+   "target": "enemy",
+   "element": "arcana",
+   "line": "{user} finds a spare spell in a pocket. {target} catches it."
+  },
+  "prism-wink": {
+   "name": "Prism Wink",
+   "ppCost": 5,
+   "kind": "damage",
+   "power": 26,
+   "target": "enemy",
+   "element": "crystal",
+   "line": "{user} winks through a prism. {target} gets the full spectrum."
+  },
+  "slime-handshake": {
+   "name": "Slime Handshake",
+   "ppCost": 5,
+   "kind": "damage",
+   "power": 25,
+   "target": "enemy",
+   "element": "ooze",
+   "line": "{user} offers {target} a firm, extremely damp handshake."
+  },
+  "polite-frost": {
+   "name": "Polite Frost",
+   "ppCost": 6,
+   "kind": "status",
+   "status": "paralysis",
+   "target": "enemy",
+   "element": "frost",
+   "line": "{user} frosts {target} very politely. {target} can't move."
+  },
+  "soot-sneeze": {
+   "name": "Soot Sneeze",
+   "ppCost": 5,
+   "kind": "damage",
+   "power": 26,
+   "target": "enemy",
+   "element": "ash",
+   "line": "{user} sneezes soot all over {target}. Gross, and also hot."
+  },
+  "rubber-rebound": {
+   "name": "Rubber Rebound",
+   "ppCost": 7,
+   "kind": "damage",
+   "power": 30,
+   "target": "enemy",
+   "element": "rubber",
+   "line": "{user} flings back everything {target} threw, plus interest."
+  },
+  "grave-hush": {
+   "name": "Grave Hush",
+   "ppCost": 6,
+   "kind": "debuff",
+   "status": "defenseDown",
+   "target": "enemy",
+   "element": "grave",
+   "line": "{user} lets the quiet of an old cellar settle on {target}."
+  }
+ },
+ "raceKits": {
+  "Drainer": [
+   {
+    "abilityId": "polite-sip",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "thick-skin",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "double-straw",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "sponge-stance",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "big-gulp",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "buffet-rules",
+    "unlockLevel": 31
+   }
+  ],
+  "Angel": [
+   {
+    "abilityId": "small-mend",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "kind-word",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "halo-polish",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "feather-guard",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "group-hug",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "sunday-light",
+    "unlockLevel": 31
+   }
+  ],
+  "Demon": [
+   {
+    "abilityId": "rude-jab",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "hot-temper",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "pitchfork-poke",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "brimstone-burp",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "wicked-swing",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "tantrum-royale",
+    "unlockLevel": 31
+   }
+  ],
+  "Mystic": [
+   {
+    "abilityId": "mind-pebble",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "third-eyebrow",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "rune-zap",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "double-dare",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "comet-memo",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "grand-theorem",
+    "unlockLevel": 31
+   }
+  ],
+  "Trickster": [
+   {
+    "abilityId": "shoe-swap",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "itching-joke",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "pocket-sand",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "gum-snap",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "double-dare",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "prank-storm",
+    "unlockLevel": 31
+   }
+  ],
+  "Fielder": [
+   {
+    "abilityId": "steady-swing",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "shoe-swap",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "small-mend",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "line-drive",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "team-chant",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "grand-inning",
+    "unlockLevel": 31
+   }
+  ],
+  "Spirit": [
+   {
+    "abilityId": "practice-haunt",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "static-whisper",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "epoch-nap",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "ecto-flare",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "seance-scream",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "last-word",
+    "unlockLevel": 31
+   }
+  ],
+  "Zombie": [
+   {
+    "abilityId": "rude-jab",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "thick-skin",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "grave-breath",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "shamble-slam",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "moan-chorus",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "compost-crush",
+    "unlockLevel": 31
+   }
+  ],
+  "Vampire": [
+   {
+    "abilityId": "quick-nip",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "shoe-swap",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "neck-appraisal",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "midnight-tab",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "bat-rsvp",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "red-banquet",
+    "unlockLevel": 31
+   }
+  ],
+  "Ancient": [
+   {
+    "abilityId": "old-stare",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "museum-fist",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "epoch-nap",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "pillar-drop",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "dust-of-ages",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "big-bang-rerun",
+    "unlockLevel": 31
+   }
+  ],
+  "Secret": [
+   {
+    "abilityId": "encore-encore",
+    "unlockLevel": 1
+   },
+   {
+    "abilityId": "spotlight-steal",
+    "unlockLevel": 5
+   },
+   {
+    "abilityId": "confetti-nova",
+    "unlockLevel": 10
+   },
+   {
+    "abilityId": "fourth-wall-lean",
+    "unlockLevel": 16
+   },
+   {
+    "abilityId": "backstage-pass",
+    "unlockLevel": 23
+   },
+   {
+    "abilityId": "secret-finale",
+    "unlockLevel": 31
+   }
+  ]
+ },
+ "materialSplash": {
+  "rubber": "rubber-rebound",
+  "earth": "mud-manners",
+  "steel": "pan-lid-bash",
+  "arcana": "spare-spell",
+  "crystal": "prism-wink",
+  "ooze": "slime-handshake",
+  "grave": "grave-hush",
+  "frost": "polite-frost",
+  "ash": "soot-sneeze"
+ }
+}

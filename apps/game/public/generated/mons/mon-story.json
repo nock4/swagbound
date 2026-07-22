@@ -1,0 +1,67 @@
+{
+  "schema": "swagbound.mon-story.v1",
+  "farmhand": {
+    "intro": [
+      "FARMHAND: Oh. A kid. We get about one a year. Welcome to the farm, I guess. The mons live here. They come and go as they please. Mostly they please to stay.",
+      "FARMHAND: Some company keeps papers on every lot in town, I hear. Not this one. Nobody ever filed us. I couldn't tell you why. The mons seem to like it that way.",
+      "FARMHAND: You want one? Wild ones are up the road. Rough one up till it's winded. Not mean, just tired. Then TALK to it.",
+      "FARMHAND: And when it asks you things, actually listen. Answer like yourself. They can tell. I don't know how. They just can.",
+      "FARMHAND: If it likes what it hears, it comes back here and waits for you. That's the whole arrangement. No signing. Go on, the grass is that way."
+    ],
+    "tutorialCatch": [
+      "FARMHAND: There's a little one hanging around the fence post just up the road. Cheerful sort. Asks easy questions. Good one to start on.",
+      "FARMHAND: Wear it down first or it won't sit still long enough to chat. And if it runs off, don't sulk. That one always wanders back.",
+      "FARMHAND: Go say hi. Or fight, then hi. That's the order, for whatever reason."
+    ],
+    "firstCompanion": [
+      "FARMHAND: Taking this one along, then. ...Good pick. It picked you too, for the record. Nobody keeps the record. But it did.",
+      "FARMHAND: Feed it whatever you eat. Let it sleep near you. Bring it back if it gets banged up. That's all the instructions there are.",
+      "FARMHAND: The others will watch the road for you two. They do that. Nobody asked them to."
+    ],
+    "fusionUnlock": [
+      "FARMHAND: Two of them now, huh. Okay. Come around back of the barn. There's a thing you should see before you ever need it.",
+      "FARMHAND: This is the altar. It was here before the barn was. Put two mons on it and you get one mon. A new one. Stronger, usually.",
+      "FARMHAND: The two you put in don't come back. The new one remembers things it shouldn't. A trick one of them knew. A way of standing. So it's not nothing. But it's not them.",
+      "FARMHAND: I don't tell folks to use it or not to. I just tell them how it works. Now you know. Lunch is at noon."
+    ],
+    "idleTips": [
+      "FARMHAND: That Munch fella's SPY trick works on wild ones, you know. Tells you what sort of heart you're arguing with. Handy.",
+      "FARMHAND: Gave a wrong answer out there, did you. Good. Watch how the mon takes it. That's it telling you who it is. Cheaper than asking.",
+      "FARMHAND: Pet them when you visit. They keep count. Not in a ledger way. In a dog way.",
+      "FARMHAND: The ones that stay here toughen up slow. Watching the road, eating regular. It adds up. Slower than fighting, but nobody gets hit.",
+      "FARMHAND: Letting one go is forever, mind. They don't circle back. They're not lost. They're just elsewhere. Big difference. Took me years.",
+      "FARMHAND: The strong ones ask harder questions. Stands to reason. More to lose by picking the wrong company."
+    ],
+    "release": [
+      "FARMHAND: Letting this one go? ...Alright. Stand still a second and let it look at you. They like to be sure it's on purpose.",
+      "The mon looks at Bosch for a long moment. Then it walks up the road without hurrying. It does not look back. That's how you know it's fine."
+    ]
+  },
+  "handoverScene": [
+    "The mon steps off the farm grass and stands next to Bosch. Like it has done it a hundred times.",
+    "It settles in on Bosch's left. Nobody told it to walk there. It just seemed to know the spot was open.",
+    "CLOAK: ...Hey. You. Stick close to Bosch, okay? Between us and whatever comes. That's the good spot. I'll take the outside.",
+    "MUNCH: Three people split a check weird. Four splits even. I'm just saying the math has been off for a while and now it isn't.",
+    "Nobody says anything for a second. The mon fills the quiet like it was shaped for it.",
+    "FARMHAND: Well. That's a party. Go on before I get sentimental. I don't have the face for it.",
+    "The mon joined the party!"
+  ],
+  "townLines": [
+    "That one's not a milady. It blinked at me. On purpose.",
+    "It looked in our window and my husband waved at it. He hasn't waved at anything in a year.",
+    "I asked it who it worked for. It sniffed my shoe and moved on. Refreshing, honestly.",
+    "Most faces around here came from the same place. Yours brought its own. Keep it close.",
+    "My daughter petted it and it let her. Then nobody tried to sell her anything. I keep waiting for the catch and it just doesn't come."
+  ],
+  "journal": {
+    "meet-farmhand": "Find the lot with no paperwork. Talk to the FARMHAND.",
+    "first-catch": "Wear a wild mon down, then CONVINCE it. Listen for real.",
+    "first-companion": "Pick a mon at the farm to walk with you.",
+    "first-fusion": "Bring two mons to the altar behind the barn."
+  },
+  "monEncounterHint": "The wild mon is winded. It's looking at Bosch like it has questions. Bosch could try to CONVINCE it.",
+  "momPhone": [
+    "MOM: A mon? Well. Does it eat people food? Set out a bowl anyway. Everybody likes a bowl with their name on it.",
+    "MOM: Tell it hello from me. And honey, wash your hands after the petting. Not before. After. Love you. Don't run out of clean socks."
+  ]
+}

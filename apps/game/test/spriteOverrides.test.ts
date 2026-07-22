@@ -201,7 +201,11 @@ describe("sprite override helpers", () => {
       // Strawberry prologue props: bespoke prop art, not good-new-sprites overworld skins.
       "910220": "assets/swagbound/props/ceramic-heart.png",
       "910221": "assets/swagbound/props/pink-hoodie.png",
-      "910222": "assets/swagbound/props/crooked-picture.png"
+      "910222": "assets/swagbound/props/crooked-picture.png",
+      // Mons farm props: bespoke Codex image_gen prop art (48px, taller display),
+      // not good-new-sprites overworld skins.
+      "910302": "assets/swagbound/prop/mons-fusion-altar.png",
+      "910303": "assets/swagbound/prop/mons-training-dummy.png"
     };
     const clerkOverrides: Record<string, string> = {
       "404": "assets/swagbound/overworld-npc/gns-lsw-1130-ow.png",

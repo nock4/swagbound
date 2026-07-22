@@ -81,6 +81,17 @@ export type ChunkedWorldRestore = {
   pendingStoryGate?: PendingStoryGate;
   /** Session-only source-check result; consumed by the world scene on restart. */
   sourceCheck?: SourceCheckReturnState;
+  /** A wild mon convinced mid-battle; consumed idempotently by the world scene. */
+  capturedMon?: {
+    registryId: string;
+    displayName: string;
+  };
+  /** Post-battle mon companion vitals + xp share; consumed by the world scene. */
+  monCompanionResult?: {
+    hp: number;
+    pp: number;
+    xpGained: number;
+  };
   defeat?: {
     savedPlayer?: SavePlayerSnapshot;
     newGamePlayer: SavePlayerSnapshot;

@@ -9,8 +9,12 @@ import type {
 import type { Facing } from "./playerController";
 import { STATUS_AILMENTS, type StatusAilment, type StatusState } from "./statusEffects";
 import { validateFilingIntake, type FilingIntakeValues } from "./filingIntakeModel";
+import type { OwnedMon } from "./monsModel";
 
-export const SAVE_STATE_SCHEMA_VERSION = 1;
+// v2 adds the optional `mons` snapshot (companion roster). v1 blobs are accepted
+// and MIGRATED forward (identical fields, empty roster) - never invalidated.
+export const SAVE_STATE_SCHEMA_VERSION = 2;
+export const SAVE_STATE_SCHEMA_VERSION_V1 = 1;
 
 export type SaveMode = "region" | "chunked";
 
@@ -37,6 +41,11 @@ export type SaveFlagsSnapshot = {
   numeric: number[];
 };
 
+export type MonsSaveSnapshot = {
+  roster: OwnedMon[];
+  activeIndex?: number;
+};
+
 export type SaveState = {
   schemaVersion: typeof SAVE_STATE_SCHEMA_VERSION;
   savedAt?: string;
@@ -44,6 +53,7 @@ export type SaveState = {
   flags: SaveFlagsSnapshot;
   party: PartyStateSnapshot;
   player: SavePlayerSnapshot;
+  mons?: MonsSaveSnapshot;
 };
 
 export type SaveStateSources = {
@@ -57,6 +67,9 @@ export type SaveStateSources = {
   player: SavePlayerSnapshot;
   intake?: FilingIntakeValues;
   savedAt?: string;
+  mons?: {
+    snapshot(): MonsSaveSnapshot;
+  };
 };
 
 export type SaveStateSinks = {
@@ -67,6 +80,9 @@ export type SaveStateSinks = {
   };
   partyState: {
     restore(snapshot: PartyStateSnapshot): void;
+  };
+  mons?: {
+    restore(snapshot: MonsSaveSnapshot | undefined): void;
   };
 };
 
@@ -94,7 +110,8 @@ export function captureSaveState(sources: SaveStateSources): SaveState {
       numeric: uniqueIds(sources.flags.listNums()) ?? []
     },
     party: clonePartyStateSnapshot(sources.partyState.snapshot()),
-    player: clonePlayerSnapshot(sources.player)
+    player: clonePlayerSnapshot(sources.player),
+    ...(sources.mons ? { mons: cloneMonsSnapshot(sources.mons.snapshot()) } : {})
   };
   const validated = validateSaveState(save);
   if (!validated) {
@@ -116,6 +133,7 @@ export function applySaveState(save: unknown, sinks: SaveStateSinks): SavePlayer
     sinks.flags.setNum(flag);
   }
   sinks.partyState.restore(validated.party);
+  sinks.mons?.restore(validated.mons);
   return clonePlayerSnapshot(validated.player);
 }
 
@@ -157,7 +175,13 @@ export function validateImportedSaveBlob(blob: string | null | undefined): SaveI
 }
 
 export function validateSaveState(value: unknown): SaveState | null {
-  if (!isRecord(value) || value.schemaVersion !== SAVE_STATE_SCHEMA_VERSION) {
+  if (!isRecord(value)) {
+    return null;
+  }
+  // v1 blobs (pre-mons) migrate forward: identical body, no roster. Any other
+  // version is rejected.
+  const version = value.schemaVersion;
+  if (version !== SAVE_STATE_SCHEMA_VERSION && version !== SAVE_STATE_SCHEMA_VERSION_V1) {
     return null;
   }
   const flags = validateFlagsSnapshot(value.flags);
@@ -167,13 +191,87 @@ export function validateSaveState(value: unknown): SaveState | null {
   if (!flags || !party || !player) {
     return null;
   }
+  // v1 blobs must not carry a mons payload; v2 mons are validated strictly.
+  const mons = version === SAVE_STATE_SCHEMA_VERSION_V1
+    ? undefined
+    : (value.mons === undefined ? undefined : validateMonsSnapshot(value.mons));
+  if (version === SAVE_STATE_SCHEMA_VERSION && value.mons !== undefined && !mons) {
+    return null;
+  }
   return {
     schemaVersion: SAVE_STATE_SCHEMA_VERSION,
     ...(typeof value.savedAt === "string" ? { savedAt: value.savedAt } : {}),
     ...(intake ? { intake } : {}),
     flags,
     party,
-    player
+    player,
+    ...(mons ? { mons } : {})
+  };
+}
+
+function validateMonsSnapshot(value: unknown): MonsSaveSnapshot | null {
+  if (!isRecord(value) || !Array.isArray(value.roster)) {
+    return null;
+  }
+  const roster: OwnedMon[] = [];
+  for (const entry of value.roster) {
+    if (!isRecord(entry) || typeof entry.registryId !== "string" || entry.registryId.length === 0) {
+      return null;
+    }
+    const level = validateId(entry.level);
+    const xp = validateId(entry.xp);
+    const bond = validateId(entry.bond);
+    const inherited = validateStringArray(entry.inherited);
+    if (level === undefined || level < 1 || xp === undefined || bond === undefined || !inherited) {
+      return null;
+    }
+    let lineage: OwnedMon["lineage"];
+    if (entry.lineage !== undefined) {
+      if (
+        !isRecord(entry.lineage) ||
+        !Array.isArray(entry.lineage.parents) ||
+        entry.lineage.parents.length !== 2 ||
+        entry.lineage.parents.some((p) => typeof p !== "string")
+      ) {
+        return null;
+      }
+      lineage = { parents: [entry.lineage.parents[0] as string, entry.lineage.parents[1] as string] };
+    }
+    if (entry.caughtAtFlag !== undefined && typeof entry.caughtAtFlag !== "string") {
+      return null;
+    }
+    roster.push({
+      registryId: entry.registryId,
+      level,
+      xp,
+      bond,
+      inherited,
+      ...(lineage ? { lineage } : {}),
+      ...(typeof entry.caughtAtFlag === "string" ? { caughtAtFlag: entry.caughtAtFlag } : {})
+    });
+  }
+  const activeIndex = value.activeIndex === undefined ? undefined : validateId(value.activeIndex);
+  if (value.activeIndex !== undefined && (activeIndex === undefined || activeIndex >= roster.length)) {
+    return null;
+  }
+  return {
+    roster,
+    ...(activeIndex !== undefined ? { activeIndex } : {})
+  };
+}
+
+function cloneMonsSnapshot(snapshot: MonsSaveSnapshot): MonsSaveSnapshot {
+  return {
+    roster: snapshot.roster.map((mon) => ({
+      registryId: mon.registryId,
+      level: mon.level,
+      xp: mon.xp,
+      bond: mon.bond,
+      inherited: [...mon.inherited],
+      ...(mon.lineage ? { lineage: { parents: [mon.lineage.parents[0], mon.lineage.parents[1]] } } : {}),
+      ...(mon.caughtAtFlag !== undefined ? { caughtAtFlag: mon.caughtAtFlag } : {})
+    })),
+    ...(snapshot.activeIndex !== undefined ? { activeIndex: snapshot.activeIndex } : {})
   };
 }
 

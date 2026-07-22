@@ -193,6 +193,8 @@ export type BattleRoundInputContext = {
   psi?: readonly PsiData[];
   items?: readonly BattleRoundItemData[];
   usabilityMatrix?: UsabilityMatrix;
+  /** Per-battle command-list override (mon companions, CONVINCE availability). */
+  commandsFor?: (charId: number) => BattleCommand[];
 };
 
 export type BattleRoundInputTransition = {
@@ -577,7 +579,7 @@ function confirmCommand(
     return { input, complete: true };
   }
   const combatant = combatantAt(context.state, actor);
-  const commands = commandsForCharId(combatant?.charId ?? 0);
+  const commands = (context.commandsFor ?? commandsForCharId)(combatant?.charId ?? 0);
   const command = commands[clampSelection(input.selectionIndex, commands.length)] ?? "BASH";
 
   if (command === "PSI") {
@@ -766,7 +768,7 @@ function cancelInputSelection(
     return {
       ...input,
       submenu: "command",
-      selectionIndex: commandIndex(input.pending?.command, combatant?.charId),
+      selectionIndex: commandIndex(input.pending?.command, combatant?.charId, context.commandsFor),
       pending: undefined
     };
   }
@@ -786,7 +788,7 @@ function cancelInputSelection(
     return {
       ...input,
       submenu: "command",
-      selectionIndex: commandIndex(input.submenu === "psi-category" ? "PSI" : "GOODS", combatant?.charId),
+      selectionIndex: commandIndex(input.submenu === "psi-category" ? "PSI" : "GOODS", combatant?.charId, context.commandsFor),
       psiCategory: undefined,
       pending: undefined
     };
@@ -805,7 +807,7 @@ function cancelInputSelection(
   return {
     memberCursor: input.memberCursor - 1,
     submenu: "command",
-    selectionIndex: commandIndex(previousCommand?.command, combatantAt(context.state, previousActor)?.charId),
+    selectionIndex: commandIndex(previousCommand?.command, combatantAt(context.state, previousActor)?.charId, context.commandsFor),
     queue: input.queue.filter((queued) => queued.partySlot !== previousActor.index)
   };
 }
@@ -886,7 +888,7 @@ function selectionLength(input: BattleRoundInputState, context: BattleRoundInput
     return 0;
   }
   if (input.submenu === "command") {
-    return commandsForCharId(combatant.charId).length;
+    return (context.commandsFor ?? commandsForCharId)(combatant.charId).length;
   }
   if (input.submenu === "psi-category") {
     return BATTLE_PSI_MENU_CATEGORIES.length;
@@ -1479,11 +1481,15 @@ function clampSelection(index: number, length: number): number {
   return Math.min(length - 1, Math.max(0, Math.floor(index)));
 }
 
-function commandIndex(command: BattleCommand | undefined, charId = 0): number {
+function commandIndex(
+  command: BattleCommand | undefined,
+  charId = 0,
+  commandsFor: (charId: number) => BattleCommand[] = commandsForCharId
+): number {
   if (!command) {
     return 0;
   }
-  const commands = commandsForCharId(charId);
+  const commands = commandsFor(charId);
   const index = commands.indexOf(command);
   return index >= 0 ? index : 0;
 }

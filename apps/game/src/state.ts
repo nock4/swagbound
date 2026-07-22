@@ -242,6 +242,20 @@ export type BattleDebug = {
     correctSoFar: number;
     lastOutcome: string | null;
   } | null;
+  monCatch?: {
+    registryId: string;
+    displayName: string;
+    active: boolean;
+    attempted: boolean;
+    askedIndex: number;
+    correct: number;
+    bonusGranted: boolean;
+    outcome: string | null;
+    selectionIndex: number;
+    correctOptionIndex: number;
+    options: string[];
+    prompt: string;
+  } | null;
   mortalWounds: BattleMortalWoundsDebug;
 };
 

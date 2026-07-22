@@ -33,6 +33,11 @@ import {
   NpcOverridesSchema,
   NpcReferenceCollectionSchema,
   ObjectivesSchema,
+  MonAbilitiesSchema,
+  MonFusionSchema,
+  MonQuestionBanksSchema,
+  MonStorySchema,
+  MonsRegistrySchema,
   OpeningClaritySchema,
   OpeningCutsceneSchema,
   OverworldInteractablesSchema,
@@ -115,7 +120,12 @@ import {
   type ValidationReport,
   type WindowCollection,
   type WorldArtifact,
-  type WorldChunkedNpc
+  type WorldChunkedNpc,
+  type MonAbilities,
+  type MonFusion,
+  type MonQuestionBanks,
+  type MonStory,
+  type MonsRegistry
 } from "@eb/schemas";
 import {
   GENERATED_DRIFELLA_BARK_SOURCE,
@@ -223,6 +233,15 @@ export type GameData = {
   usabilityMatrix?: UsabilityMatrix;
   psi?: PsiCollection;
   shops?: ShopData;
+  mons?: MonsGameData;
+};
+
+export type MonsGameData = {
+  registry: MonsRegistry;
+  abilities: MonAbilities;
+  fusion: MonFusion;
+  questionBanks: MonQuestionBanks;
+  story: MonStory;
 };
 
 export type AddedWorldChunkedNpc = WorldChunkedNpc & {
@@ -470,7 +489,12 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     objectives,
     earlyGameSequence,
     openingClarity,
-    narrativeRedesign
+    narrativeRedesign,
+    monsRegistry,
+    monAbilities,
+    monFusion,
+    monQuestionBanks,
+    monStory
   ] = await Promise.all([
     loadJson(`/generated/${manifest.files.scripts}`, ScriptCollectionSchema),
     loadJson(`/generated/${manifest.files.npcs}`, NpcReferenceCollectionSchema),
@@ -558,8 +582,17 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     loadJson(`/generated/${OBJECTIVES_FILE}`, ObjectivesSchema),
     loadJson(`/generated/${EARLY_GAME_SEQUENCE_FILE}`, EarlyGameSequenceSchema),
     loadJson(`/generated/${OPENING_CLARITY_FILE}`, OpeningClaritySchema),
-    loadJson(`/generated/${NARRATIVE_REDESIGN_FILE}`, OpeningClaritySchema)
+    loadJson(`/generated/${NARRATIVE_REDESIGN_FILE}`, OpeningClaritySchema),
+    loadJson("/generated/mons/mons-registry.json", MonsRegistrySchema),
+    loadJson("/generated/mons/mon-abilities.json", MonAbilitiesSchema),
+    loadJson("/generated/mons/mon-fusion.json", MonFusionSchema),
+    loadJson("/generated/mons/mon-question-banks.json", MonQuestionBanksSchema),
+    loadJson("/generated/mons/mon-story.json", MonStorySchema)
   ]);
+  const mons: MonsGameData | undefined =
+    monsRegistry && monAbilities && monFusion && monQuestionBanks && monStory
+      ? { registry: monsRegistry, abilities: monAbilities, fusion: monFusion, questionBanks: monQuestionBanks, story: monStory }
+      : undefined;
   const resolvedCharacters = applyCharacterOverrides(characters, characterOverrides);
   const resolvedItems = applyItemOverrides(items, itemOverrides);
   const resolvedPsi = applyPsiOverrides(psi, psiOverrides);
@@ -661,7 +694,8 @@ export async function loadGameData(manifest: Manifest): Promise<GameData> {
     timedDeliveries: timedDeliveries ?? emptyTimedDeliveries(),
     usabilityMatrix,
     psi: resolvedPsi,
-    shops
+    shops,
+    ...(mons ? { mons } : {})
   };
 }
 

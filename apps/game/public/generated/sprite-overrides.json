@@ -28498,6 +28498,94 @@
       "originX": 0.5,
       "originY": 1
     },
+    "910300": {
+      "image": "assets/swagbound/overworld-npc/gns-kinfolks-004-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "910301": {
+      "image": "assets/swagbound/overworld-npc/gns-little-fellow-001-ow.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 24,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "910302": {
+      "image": "assets/swagbound/prop/mons-fusion-altar.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 32,
+      "originX": 0.5,
+      "originY": 1
+    },
+    "910303": {
+      "image": "assets/swagbound/prop/mons-training-dummy.png",
+      "frameWidth": 48,
+      "frameHeight": 48,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 32,
+      "originX": 0.5,
+      "originY": 1
+    },
     "930100": {
       "image": "assets/swagbound/overworld-npc/mifella-001-ow.png",
       "frameWidth": 48,

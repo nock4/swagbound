@@ -1,0 +1,1727 @@
+{
+ "schema": "swagbound.mon-question-banks.v1",
+ "banks": {
+  "Calm": {
+   "encounterLine": "The wild {name} settles into the grass and waits to see what you'll do.",
+   "petLines": [
+    "{name} breathes in. Then out. It took all afternoon and that was fine.",
+    "{name} is watching the water. You watch it too. Nobody keeps score.",
+    "{name} leans against your leg, very slightly, like a fence that likes you."
+   ],
+   "questions": [
+    {
+     "prompt": "A storm is coming over the hill. What's the move?",
+     "options": [
+      "Run! Now!",
+      "Watch it come in from somewhere dry",
+      "Fight the storm",
+      "Pack everything immediately"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It nods. Storms mostly just want an audience.",
+     "wrongLine": "It sighs. All that hurry, and the storm comes anyway."
+    },
+    {
+     "prompt": "How do you eat a bowl of soup?",
+     "options": [
+      "Fast, while it's hot",
+      "Standing up, ready to go",
+      "With crackers, loudly",
+      "One spoon at a time, no plan"
+     ],
+     "correctIndex": 3,
+     "rightLine": "Correct. The soup is not going anywhere.",
+     "wrongLine": "It stares into the middle distance. That's no way to treat soup."
+    },
+    {
+     "prompt": "I haven't moved from this spot since morning. Is that bad?",
+     "options": [
+      "No. It's a good spot.",
+      "A little. Get your steps in.",
+      "Yes, you're wasting the day",
+      "Depends who's asking"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It settles deeper into the grass, satisfied.",
+     "wrongLine": "It blinks slowly. The spot was the whole point."
+    },
+    {
+     "prompt": "Something loud is happening in town. Do you want to know what it is?",
+     "options": [
+      "Yes! Let's go look!",
+      "Kind of. Let's get closer.",
+      "No. It will get quiet later.",
+      "Loud things are usually important"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It closes its eyes. Loud things always run out eventually.",
+     "wrongLine": "Its ear twitches once, disappointed."
+    },
+    {
+     "prompt": "What do you do while waiting for bread to toast?",
+     "options": [
+      "Check on it constantly",
+      "Stand there. Just stand there.",
+      "Do three other chores",
+      "Set a timer and pace"
+     ],
+     "correctIndex": 1,
+     "rightLine": "Yes. Standing there is a whole thing you can do.",
+     "wrongLine": "It exhales through its nose. The toast can feel your stress."
+    },
+    {
+     "prompt": "My friend says I'm boring. What should I tell them?",
+     "options": [
+      "You're not boring, they're rude",
+      "Try being more fun",
+      "Prove them wrong with a big trip",
+      "Nothing. Sit with them a while."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It almost smiles. Sitting together says most of it.",
+     "wrongLine": "It looks at the horizon. Words were never the plan."
+    }
+   ]
+  },
+  "Charming": {
+   "encounterLine": "The wild {name} does a little bow, then checks if you saw the bow.",
+   "petLines": [
+    "{name} tilts its head at the exact angle it practiced.",
+    "{name} pretends it didn't hear the compliment. Say it again.",
+    "{name} walks a small circle so you can appreciate every side."
+   ],
+   "questions": [
+    {
+     "prompt": "Be honest. When I did the bow earlier, how did it look?",
+     "options": [
+      "I missed it",
+      "Pretty good",
+      "Like it was invented just then, by you",
+      "Bows are overrated"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It bows again, deeper. For the encore.",
+     "wrongLine": "Its ears droop exactly one degree. Professionally hurt."
+    },
+    {
+     "prompt": "If we walked into town together, who would people look at first?",
+     "options": [
+      "You. Obviously you.",
+      "Me, probably",
+      "Nobody, people are busy",
+      "We'd split the attention evenly"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It agrees so fast it almost falls over.",
+     "wrongLine": "It fluffs itself up, wounded. There is a correct answer and you knew it."
+    },
+    {
+     "prompt": "I saved you the good berry. The shiny one. What do you say?",
+     "options": [
+      "You should keep it",
+      "Wow. For me? I'll treasure it.",
+      "Thanks",
+      "Is it poisonous"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It beams. Gift received in the proper spirit.",
+     "wrongLine": "It eats the berry itself, slowly, maintaining eye contact."
+    },
+    {
+     "prompt": "What's the secret to a great entrance?",
+     "options": [
+      "Be loud",
+      "Arrive early",
+      "Bring snacks",
+      "Pause in the doorway a moment"
+     ],
+     "correctIndex": 3,
+     "rightLine": "Yes. The pause. You understand theater.",
+     "wrongLine": "It shakes its head. Amateurs rush the doorway."
+    },
+    {
+     "prompt": "Someone else called me 'pretty okay.' Pretty OKAY. Can you believe that?",
+     "options": [
+      "They had a point",
+      "Pretty okay is a compliment",
+      "Outrageous. You're the whole show.",
+      "Don't let it get to you"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It preens. Justice has been served.",
+     "wrongLine": "It stares. Balance. In THIS economy. For ME."
+    },
+    {
+     "prompt": "Would you still like me if I was covered in mud?",
+     "options": [
+      "Yes. Mud would be lucky to be on you.",
+      "I'd hose you off first",
+      "Probably",
+      "Everyone gets muddy sometimes"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It nearly faints. Finally, somebody with eyes.",
+     "wrongLine": "It inspects its own feet, quietly devastated."
+    }
+   ]
+  },
+  "Cheerful": {
+   "encounterLine": "The wild {name} waves with its whole body. Both directions.",
+   "petLines": [
+    "{name} spins in a circle. There was no reason. That's the reason.",
+    "{name} shows you a rock it likes. It is a normal rock. It's great.",
+    "{name} hums something with no tune and total confidence."
+   ],
+   "questions": [
+    {
+     "prompt": "It's raining! What's good about that?",
+     "options": [
+      "Nothing, rain is wet",
+      "Puddles later!!",
+      "Crops, I guess",
+      "Rain ends eventually"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It bounces. Puddles ARE later! You get it!",
+     "wrongLine": "Its bounce loses a little height."
+    },
+    {
+     "prompt": "What's the best day of the week?",
+     "options": [
+      "Friday, obviously",
+      "Whichever has no chores",
+      "None of them, honestly",
+      "This one! This one right now!"
+     ],
+     "correctIndex": 3,
+     "rightLine": "It cheers. Today never gets picked and today deserves it.",
+     "wrongLine": "It nods politely, waiting for the real answer."
+    },
+    {
+     "prompt": "I found half a sandwich. HALF! What do we do?",
+     "options": [
+      "Celebrate the half!",
+      "Wonder who lost the other half",
+      "Check if it's still good",
+      "Half is kind of sad, actually"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It holds the half aloft like a trophy.",
+     "wrongLine": "It hugs the sandwich protectively. The half did nothing wrong."
+    },
+    {
+     "prompt": "Sometimes I get sad for no reason. What then?",
+     "options": [
+      "Fake a smile till it works",
+      "Figure out the reason",
+      "Be sad a bit, then find a snack",
+      "Sad is for other mons"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It nods hard. Sad happens. Snacks also happen.",
+     "wrongLine": "It smiles a little less brightly. The sad still has to go somewhere first."
+    },
+    {
+     "prompt": "Want to hear the song I made up? It's mostly one note.",
+     "options": [
+      "Yes. The whole thing. Twice.",
+      "Maybe later",
+      "Is it short?",
+      "One note isn't a song"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It performs the note. It's a good note.",
+     "wrongLine": "It saves the note for someone who's ready."
+    },
+    {
+     "prompt": "What do you do when you trip in front of everyone?",
+     "options": [
+      "Pretend it didn't happen",
+      "Take a bow",
+      "Leave and never return",
+      "Blame the ground"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It applauds. Falling is free entertainment for your friends.",
+     "wrongLine": "It winces. Hiding a trip just makes it heavier."
+    }
+   ]
+  },
+  "Cool": {
+   "encounterLine": "The wild {name} was already looking somewhere else when you got here.",
+   "petLines": [
+    "{name} lets you pet it. It would like the record to show it allowed this.",
+    "{name} nods at you. That's the whole interaction. It was enough.",
+    "{name} leans on the fence like the fence asked it to."
+   ],
+   "questions": [
+    {
+     "prompt": "You just saw something amazing. What's your reaction?",
+     "options": [
+      "Scream and point",
+      "Tell everyone immediately",
+      "Write a whole song about it",
+      "Small nod"
+     ],
+     "correctIndex": 3,
+     "rightLine": "It returns the nod. Amazing things don't need the noise.",
+     "wrongLine": "It looks away. So much commotion."
+    },
+    {
+     "prompt": "What do you say when someone compliments you?",
+     "options": [
+      "Compliment them back bigger",
+      "Thanks.",
+      "Explain why they're right",
+      "Deny it until they insist"
+     ],
+     "correctIndex": 1,
+     "rightLine": "Thanks. See? Clean. No spillage.",
+     "wrongLine": "It winces slightly. The compliment got complicated."
+    },
+    {
+     "prompt": "Best place to stand at a party?",
+     "options": [
+      "Near the wall, by the snacks",
+      "Middle of the room",
+      "Wherever the host needs help",
+      "On the table"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It nods. Wall. Snacks. Full view. That is the whole science.",
+     "wrongLine": "It pictures it and shudders once, briefly."
+    },
+    {
+     "prompt": "I tripped earlier. A few mons saw. How do I handle it?",
+     "options": [
+      "Explain it to each of them",
+      "Trip again so it looks on purpose",
+      "Keep walking",
+      "Never go back there"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It approves. The trip only exists if you stop.",
+     "wrongLine": "It closes its eyes. You've made the trip immortal."
+    },
+    {
+     "prompt": "How much should you talk about the stuff you're good at?",
+     "options": [
+      "A lot, or how will they know",
+      "A medium amount",
+      "Only when asked, then a lot",
+      "Let them find out"
+     ],
+     "correctIndex": 3,
+     "rightLine": "It almost smiles. Discovery beats announcement.",
+     "wrongLine": "It studies the sky. The sky never brags either."
+    },
+    {
+     "prompt": "Is it okay to run for the ice cream cart?",
+     "options": [
+      "No. Walk. It hurts, but walk.",
+      "Yes. Some things are worth it.",
+      "Only if nobody's watching",
+      "Send someone else to run"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It's already moving. Cool has exactly one exception.",
+     "wrongLine": "It stares. There are limits to the act, and that cart is one."
+    }
+   ]
+  },
+  "Cute": {
+   "encounterLine": "The wild {name} looks up at you with eyes that are frankly too big.",
+   "petLines": [
+    "{name} makes a sound so small you'll think about it all week.",
+    "{name} tucks itself into a rounder shape. For you. It's a gift.",
+    "{name} falls over showing you its belly and has zero regrets."
+   ],
+   "questions": [
+    {
+     "prompt": "Do you ever talk to bugs? Little ones? Be honest.",
+     "options": [
+      "Yes. They're doing their best.",
+      "No, bugs can't hear",
+      "Only to tell them to leave",
+      "Sometimes, when nobody's around"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It squeaks approvingly. The bugs ARE doing their best.",
+     "wrongLine": "It gasps a tiny gasp. The bugs deserve better."
+    },
+    {
+     "prompt": "What's the right size for a snack?",
+     "options": [
+      "Big as your head",
+      "Whatever's around",
+      "Small, so you can have several",
+      "Snacks are for after chores"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It claps its paws. Many small snacks! A parade of them!",
+     "wrongLine": "It looks at its own tiny paws, then at you, confused."
+    },
+    {
+     "prompt": "If I fell asleep on your shoe, what would you do?",
+     "options": [
+      "Wake you gently, I have places to be",
+      "Stay very still, forever if needed",
+      "Slide the shoe off and sneak away",
+      "Nudge you onto the grass"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It pre-naps on your shoe as a test. You pass.",
+     "wrongLine": "It hugs the shoe. The shoe understands, at least."
+    },
+    {
+     "prompt": "Some mons say I'm 'just cute.' JUST. What do you think?",
+     "options": [
+      "Well, you are very cute",
+      "Cute is enough for anyone",
+      "Ignore them",
+      "Cute AND brave. I've seen you."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It puffs up to its full height. All of it.",
+     "wrongLine": "It deflates a little. There was an AND and you missed it."
+    },
+    {
+     "prompt": "What's under your bed?",
+     "options": [
+      "Nothing, I checked",
+      "Dust",
+      "A monster, but we have an agreement",
+      "Storage bins"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It nods gravely. Agreements are important.",
+     "wrongLine": "It peeks behind you, unconvinced."
+    },
+    {
+     "prompt": "Would you carry me if my legs got tired? They're very short.",
+     "options": [
+      "Yes. Climb on.",
+      "You should build endurance",
+      "Maybe for a little while",
+      "We'd rest until they recovered"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It's already climbing. This was a formality.",
+     "wrongLine": "It looks at its short legs. They tried so hard to grow."
+    }
+   ]
+  },
+  "Dope": {
+   "encounterLine": "The wild {name} nods along to a song you can't hear.",
+   "petLines": [
+    "{name} is watching the grass move. Great stuff. No notes.",
+    "{name} pats the ground next to it. That's the plan. The whole plan.",
+    "{name} found a sunny patch and would like you to acknowledge the find."
+   ],
+   "questions": [
+    {
+     "prompt": "What's the plan for today?",
+     "options": [
+      "List the plan, in order",
+      "Plan? We'll see where it goes.",
+      "Ask someone with a plan",
+      "Same as yesterday, but better"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It nods slow. The day knows what it's doing.",
+     "wrongLine": "It looks tired just hearing about it."
+    },
+    {
+     "prompt": "This cloud has been the same shape for an hour. Thoughts?",
+     "options": [
+      "Clouds change, you weren't watching",
+      "Time to do something else",
+      "It's probably about to rain",
+      "Solid cloud. Let's keep watching."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It settles in. The cloud appreciates the support.",
+     "wrongLine": "It shrugs. The cloud didn't ask for feedback."
+    },
+    {
+     "prompt": "How late is too late for breakfast?",
+     "options": [
+      "No such thing",
+      "Ten, and that's generous",
+      "Noon, then it's lunch",
+      "Breakfast should be earned first"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It agrees deeply. Breakfast is a state of mind.",
+     "wrongLine": "It stops chewing, betrayed."
+    },
+    {
+     "prompt": "I forgot what I was doing before you got here. Should I be worried?",
+     "options": [
+      "Yes, retrace your steps",
+      "A little, write things down",
+      "Nah. It'll come back or it won't.",
+      "What if it was important?"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It relaxes. Lost thoughts know the way home.",
+     "wrongLine": "It frowns. Now it's stressed about being stressed."
+    },
+    {
+     "prompt": "Best kind of weather?",
+     "options": [
+      "Sunny with a project",
+      "Warm with a light nap breeze",
+      "Cold, keeps you sharp",
+      "Storms, big and dramatic"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It closes its eyes to demonstrate. See? The breeze agrees.",
+     "wrongLine": "It sniffs the air, unconvinced by your whole forecast."
+    },
+    {
+     "prompt": "You get one free afternoon. What do you do with it?",
+     "options": [
+      "Errands, then relax after",
+      "Catch up on everything",
+      "Split it into three activities",
+      "Nothing. All afternoon. On purpose."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It salutes. Nothing, done right, takes all afternoon.",
+     "wrongLine": "It watches you, saddened. The afternoon was free and you caged it."
+    }
+   ]
+  },
+  "Holy": {
+   "encounterLine": "The wild {name} was mid-blessing when you arrived. It blesses you, then eyes you like it is keeping score.",
+   "petLines": [
+    "{name} blesses your hand. Then it blesses the hand again, harder, to be sure.",
+    "{name} bows over its food bowl, thanks the heavens, and guards the bowl.",
+    "{name} forgives you for yesterday. It has not forgotten yesterday."
+   ],
+   "questions": [
+    {
+     "prompt": "Before eating a really good pie, what do you do first?",
+     "options": [
+      "Eat it, that's what it's for",
+      "Share it, obviously",
+      "Thanks first. THEN the pie gets what is coming.",
+      "Save some for tomorrow"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It nods solemnly. Gratitude first. Crumbs after.",
+     "wrongLine": "It covers its eyes. The pie deserved a moment."
+    },
+    {
+     "prompt": "My cousin took my favorite sitting rock. The GOOD rock. Is that a sin?",
+     "options": [
+      "Honestly? Yes. That's a sin.",
+      "Forgive them, it's just a rock",
+      "There are bigger problems",
+      "Take it back when they leave"
+     ],
+     "correctIndex": 0,
+     "rightLine": "FINALLY. Someone with moral clarity about the rock.",
+     "wrongLine": "It smiles a very tight, very forgiving smile."
+    },
+    {
+     "prompt": "What do you say when you sneeze alone and no one blesses you?",
+     "options": [
+      "Nothing, it's fine",
+      "Sneezes don't need blessings",
+      "Wait for someone to come home",
+      "Bless yourself. Loudly. It counts."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It demonstrates. The self-blessing echoes with authority.",
+     "wrongLine": "It shivers. Somewhere, an unblessed sneeze drifts forever."
+    },
+    {
+     "prompt": "Is it wrong to pray for good snacks? Asking for a friend.",
+     "options": [
+      "Yes, pray for big things only",
+      "No. Snacks are creation too.",
+      "Prayers aren't a menu",
+      "Depends on the snack"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It exhales, relieved. We both know who the friend is. The snacks are holy.",
+     "wrongLine": "It nods sadly and pretends the question was hypothetical."
+    },
+    {
+     "prompt": "Someone cut the line at the water trough. What's the righteous response?",
+     "options": [
+      "Glare with tremendous restraint",
+      "Let it go completely",
+      "Shove them, righteously",
+      "Report them to everyone"
+     ],
+     "correctIndex": 0,
+     "rightLine": "Yes. The glare. Punishment without sin. It's an art.",
+     "wrongLine": "It gasps. That path leads somewhere unblessed."
+    },
+    {
+     "prompt": "How early should you wake up on a holy day?",
+     "options": [
+      "Dawn, no exceptions",
+      "Whenever, holiness can wait",
+      "Early. But be holy in bed a while.",
+      "Sleep through it, rest is sacred"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It nods. Lying in bed devoutly is an ancient practice.",
+     "wrongLine": "It rings a tiny bell at you in disapproval."
+    }
+   ]
+  },
+  "Hyper": {
+   "encounterLine": "The wild {name} runs three circles around you before you can blink.",
+   "petLines": [
+    "{name} vibrates. Petting it is like petting a doorbell.",
+    "{name} fetched you a stick, a rock, a leaf, and part of a fence.",
+    "{name} did a lap while you blinked. It wants you to know that."
+   ],
+   "questions": [
+    {
+     "prompt": "Race to that tree?! Ready go! Wait, what's your answer?!",
+     "options": [
+      "GO! We already started!",
+      "Which tree?",
+      "Let's warm up first",
+      "I don't really race"
+     ],
+     "correctIndex": 0,
+     "rightLine": "IT'S ALREADY AT THE TREE. Best race ever.",
+     "wrongLine": "It runs the race alone. It wins. Winning alone is barely winning."
+    },
+    {
+     "prompt": "What if we dug a hole?! Right now! No reason!",
+     "options": [
+      "Holes need reasons",
+      "Maybe a small hole",
+      "YES. Big hole. Immediately.",
+      "Let's think about it first"
+     ],
+     "correctIndex": 2,
+     "rightLine": "Dirt everywhere. This is the best day of its life so far.",
+     "wrongLine": "It fills in the hole it already started, slowly."
+    },
+    {
+     "prompt": "How many things can you do at once?! I'm at four! Five!",
+     "options": [
+      "One thing, done well",
+      "All of them! Badly! Together!",
+      "Two, max",
+      "Zero, I'm resting"
+     ],
+     "correctIndex": 1,
+     "rightLine": "YES!! Badly and together!! That's the spirit of it!!",
+     "wrongLine": "It tries to slow down to your speed. It doesn't know how. It was scary for everyone."
+    },
+    {
+     "prompt": "Bedtime is SO far away! What do we do until then?!",
+     "options": [
+      "Wind down early",
+      "ONE amazing thing, all the way in",
+      "Read a nice quiet book",
+      "Everything. All of it. Twice."
+     ],
+     "correctIndex": 1,
+     "rightLine": "YES. Pick the one and BE the one. It vibrates in agreement.",
+     "wrongLine": "It tries all of it at once, burns out, and gets very quiet. That was worse."
+    },
+    {
+     "prompt": "Sometimes I crash and sleep for a whole day. Is that weird?",
+     "options": [
+      "Yes, pace yourself instead",
+      "No! Big fast needs big stop!",
+      "A little concerning honestly",
+      "Try smaller naps"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It nods so fast its face blurs. BIG STOP. You get it.",
+     "wrongLine": "It slows down, embarrassed about its engine."
+    },
+    {
+     "prompt": "Quick! Favorite food! Don't think! GO!",
+     "options": [
+      "The first one I saw today!",
+      "Let me consider",
+      "A balanced meal",
+      "I had this yesterday, hang on"
+     ],
+     "correctIndex": 0,
+     "rightLine": "CORRECT! Thinking is for after eating!",
+     "wrongLine": "It's already eaten twice waiting for your answer."
+    }
+   ]
+  },
+  "Kind-hearted": {
+   "encounterLine": "The wild {name} looks past you to check if anyone behind you needs help.",
+   "petLines": [
+    "{name} inspects your hands for scratches before allowing the pet.",
+    "{name} saved half its dinner in case somebody hungry came by. You came by.",
+    "{name} pats YOU twice. There. You needed that."
+   ],
+   "questions": [
+    {
+     "prompt": "A beetle is stuck on its back. You're late for something. What do you do?",
+     "options": [
+      "Keep walking, beetles manage",
+      "Feel bad but hurry on",
+      "Tell someone else about it",
+      "Flip the beetle. Be later."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It glows a little. The beetle matters. Lateness heals.",
+     "wrongLine": "It quietly goes to find the beetle itself."
+    },
+    {
+     "prompt": "What do you do with the last cookie?",
+     "options": [
+      "Split it, even the crumbs",
+      "Eat it fast before anyone sees",
+      "Whoever grabs it first",
+      "Save it for yourself tomorrow"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It nods. Crumbs count. Everybody eats.",
+     "wrongLine": "It slides its own cookie half toward you anyway."
+    },
+    {
+     "prompt": "My friend is crying but says they're fine. What now?",
+     "options": [
+      "Take their word for it",
+      "Tell them to cheer up",
+      "Stay close and be quiet with them",
+      "Give them space, leave"
+     ],
+     "correctIndex": 2,
+     "rightLine": "Yes. Fine never means fine. Staying is the answer.",
+     "wrongLine": "It looks in the direction of the friend, worried."
+    },
+    {
+     "prompt": "Someone was mean to me today. What should happen to them?",
+     "options": [
+      "They should be mean-ed right back",
+      "Maybe they were having a bad day",
+      "Nothing, forget it",
+      "Public apology, minimum"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It sniffles. Even the mean ones have bad days. It still hurt though.",
+     "wrongLine": "It shakes its head. More meanness never fixed any."
+    },
+    {
+     "prompt": "It's cold out. There's one blanket. Who gets it?",
+     "options": [
+      "Me, I found it",
+      "You, you're bigger",
+      "Rock paper scissors",
+      "Both of us, sit closer"
+     ],
+     "correctIndex": 3,
+     "rightLine": "It scoots over immediately. Problem solved forever.",
+     "wrongLine": "It gives you the whole blanket and shivers on purpose."
+    },
+    {
+     "prompt": "Is it dumb to worry about a tree losing its leaves?",
+     "options": [
+      "No. Somebody should worry for it.",
+      "Kind of, trees do that",
+      "Yes, worry about real things",
+      "Trees can't tell anyway"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It relaxes. The tree has been on its mind all week.",
+     "wrongLine": "It glances at the tree and mouths 'sorry.'"
+    }
+   ]
+  },
+  "Lucky": {
+   "encounterLine": "The wild {name} circles you twice, counterclockwise. For safety reasons.",
+   "petLines": [
+    "{name} taps the fence post three times before accepting the pet.",
+    "{name} found a four-leaf clover and buried it. You can't be too careful.",
+    "{name} sneezed twice. Two is fine. Three would have meant something."
+   ],
+   "questions": [
+    {
+     "prompt": "You find a coin on the ground, tails up. What do you do?",
+     "options": [
+      "Pick it up, money is money",
+      "Flip it to heads FIRST, then take it",
+      "Leave it, it's someone's coin",
+      "Coins don't have sides that matter"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It exhales. You saved us both from a tails week.",
+     "wrongLine": "It backs away from you and the coin equally."
+    },
+    {
+     "prompt": "How do you say a wish out loud without ruining it?",
+     "options": [
+      "Just say it, wishes are tough",
+      "Whisper it to a friend",
+      "Write it down instead",
+      "You DON'T. That's the whole rule."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It nods hard. A said wish is a spent wish. Everyone knows.",
+     "wrongLine": "It claps a paw over your mouth, too late."
+    },
+    {
+     "prompt": "I stepped over a crack this morning. Fully over it. How's my day looking?",
+     "options": [
+      "Honestly? Great. Crack avoided.",
+      "Cracks don't do anything",
+      "Same as any day",
+      "Depends on the crack"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It struts a little. The day is basically pre-won.",
+     "wrongLine": "It checks the sky for consequences."
+    },
+    {
+     "prompt": "What number is the bad one?",
+     "options": [
+      "There are no bad numbers",
+      "Seven",
+      "You know the one. Don't say it.",
+      "All of them, sometimes"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It nods gravely. We will not be saying it today.",
+     "wrongLine": "It flinches, waiting to see if the number heard you."
+    },
+    {
+     "prompt": "Rain on a trip day. Sign, or just rain?",
+     "options": [
+      "Sign. Repack everything.",
+      "Just rain, take a coat",
+      "Rain means the trip is off. Stay in.",
+      "Signs aren't real"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It's already repacking. The rain was very clear about this.",
+     "wrongLine": "It stares at the clouds, then at you, then back at the clouds."
+    },
+    {
+     "prompt": "My left ear itched all morning. What does that mean?",
+     "options": [
+      "It means you should scratch it",
+      "Somebody's thinking about you",
+      "Allergies, probably",
+      "Ears just do that"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It knew it. It KNEW somebody was. The ear never lies.",
+     "wrongLine": "It scratches the ear resentfully. The magic is gone now."
+    }
+   ]
+  },
+  "Mean": {
+   "encounterLine": "The wild {name} looks you up and down and is not impressed yet.",
+   "petLines": [
+    "{name} allows one pet. ONE. ...Fine. Two.",
+    "{name} bit the brush, but gently, which is basically affection.",
+    "{name} pretends it doesn't like this. Its tail says otherwise."
+   ],
+   "questions": [
+    {
+     "prompt": "Give it to me straight. How do I smell?",
+     "options": [
+      "Lovely! Like flowers!",
+      "I didn't notice anything",
+      "Like a wet sock, honestly",
+      "Everyone smells sometimes"
+     ],
+     "correctIndex": 2,
+     "rightLine": "HA. Wet sock. Correct. Finally someone with a spine.",
+     "wrongLine": "It sneers. Flattery. It can smell that too."
+    },
+    {
+     "prompt": "Why do you even want ME? There are nicer mons two fields over.",
+     "options": [
+      "Nice is easy. You're interesting.",
+      "You're secretly sweet inside",
+      "I felt sorry for you",
+      "Any mon will do, really"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It looks away so you can't see it being pleased.",
+     "wrongLine": "It gags. Do NOT call it sweet. It heard you."
+    },
+    {
+     "prompt": "My scowl. Rate it.",
+     "options": [
+      "You'd look nicer smiling",
+      "Very approachable",
+      "A solid seven",
+      "Genuinely upsetting. Well done."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It scowls harder, proudly. Years of work, recognized.",
+     "wrongLine": "It scowls at you now. Feel the difference? That's the craft."
+    },
+    {
+     "prompt": "I bit the mail carrier once. React.",
+     "options": [
+      "That's terrible, apologize",
+      "Bad call. Carriers remember.",
+      "I'm sure they deserved it",
+      "Everyone makes mistakes"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It nods grimly. It respects an honest scouting report.",
+     "wrongLine": "It rolls its eyes. It didn't ask for absolution, it asked for a take."
+    },
+    {
+     "prompt": "Would you tell me if my plan was stupid?",
+     "options": [
+      "Yes. Loudly. With examples.",
+      "I'd find a gentle way to hint",
+      "I'd support you anyway",
+      "Your plans are probably fine"
+     ],
+     "correctIndex": 0,
+     "rightLine": "Good. It plans to do the same for you, constantly.",
+     "wrongLine": "It stops listening. Gentle hints are for cowards."
+    },
+    {
+     "prompt": "Say something nice about me. I dare you.",
+     "options": [
+      "You have a kind soul deep down",
+      "You're the best mon I've met",
+      "You're beautiful inside and out",
+      "Your spitting aim. Nobody has seen you miss."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It spits at a fencepost to confirm. Direct hit. It's beaming, meanly.",
+     "wrongLine": "It fake-vomits with real commitment."
+    }
+   ]
+  },
+  "Meh": {
+   "encounterLine": "The wild {name} notices you. It'll deal with that in a minute.",
+   "petLines": [
+    "{name} tolerates the pet. Okay, it leaned in slightly. Whatever.",
+    "{name} watched you refill the food bowl. It'll get to it.",
+    "{name} shrugged at a butterfly today. The butterfly moved on. So did {name}."
+   ],
+   "questions": [
+    {
+     "prompt": "So what's your big pitch? Why should I come with you?",
+     "options": [
+      "Adventure! Glory! Friendship!",
+      "Eh. Beats standing here. Maybe.",
+      "I'll train you to be the best",
+      "You complete the team"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It shrugs approvingly. Low bar. Achievable. Fine.",
+     "wrongLine": "It looks exhausted by the word 'glory' alone."
+    },
+    {
+     "prompt": "What's your favorite anything?",
+     "options": [
+      "Sunsets, definitely",
+      "My friends",
+      "Hard to pick just one!",
+      "Dunno. Bread's okay."
+     ],
+     "correctIndex": 3,
+     "rightLine": "Bread's okay. Yeah. This conversation is going places, slowly.",
+     "wrongLine": "It stops listening around the exclamation point."
+    },
+    {
+     "prompt": "Do I have to be excited about stuff? Everyone's always so excited.",
+     "options": [
+      "No. Okay is a full feeling.",
+      "Excitement makes life sparkle",
+      "You'd be happier if you tried",
+      "Fake it till you feel it"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It nods once. Okay is a full feeling. Put that on a sign or don't.",
+     "wrongLine": "It looks at you like you're selling something."
+    },
+    {
+     "prompt": "It's my birthday next week. Warning: do not make it a thing.",
+     "options": [
+      "Too late, party's planned",
+      "Birthdays deserve celebration!",
+      "Noted. Maybe a snack. Nothing weird.",
+      "We'll see"
+     ],
+     "correctIndex": 2,
+     "rightLine": "A snack. Nothing weird. You may be the only one who listens.",
+     "wrongLine": "It's already dreading the streamers it can sense coming."
+    },
+    {
+     "prompt": "Best effort level for most things?",
+     "options": [
+      "Maximum, always",
+      "Whatever it takes",
+      "High but sustainable",
+      "Like sixty percent"
+     ],
+     "correctIndex": 3,
+     "rightLine": "Sixty. Yeah. Leaves room for napping and error. Solid.",
+     "wrongLine": "It tried maximum once. Doesn't recommend. Won't elaborate."
+    },
+    {
+     "prompt": "If I don't wave back at you sometimes, is that okay?",
+     "options": [
+      "I'd wave harder till you did",
+      "Sure. The first wave covers it.",
+      "Waving is basic politeness",
+      "I'd assume you were mad at me"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It almost waves. Doesn't. But the intent hung there. That's the stuff.",
+     "wrongLine": "It pre-tires its arm just thinking about all that waving."
+    }
+   ]
+  },
+  "Mischievous": {
+   "encounterLine": "The wild {name} grins like it already hid something of yours.",
+   "petLines": [
+    "{name} accepts the pet, then steals your other glove. The trade is final.",
+    "{name} shows you where it hid the spoons. Not all of them. A taste.",
+    "{name} is being suspiciously good right now. Check your pockets."
+   ],
+   "questions": [
+    {
+     "prompt": "Hypothetically. A pie is cooling on a windowsill. Nobody's around. Well?",
+     "options": [
+      "One bite. Artfully. They'll wonder.",
+      "Guard it from other thieves",
+      "Knock on the door and ask",
+      "Walk away, it's not mine"
+     ],
+     "correctIndex": 0,
+     "rightLine": "ONE bite. Mysterious. Elegant. They'll tell the story for years.",
+     "wrongLine": "It sighs. All that setup and you chose paperwork."
+    },
+    {
+     "prompt": "Someone left their boots outside. What goes in them?",
+     "options": [
+      "Nothing, that's rude",
+      "A polite note",
+      "One small pebble each. The mystery.",
+      "Their feet, presumably"
+     ],
+     "correctIndex": 2,
+     "rightLine": "Yes!! Small enough to doubt yourself! That is the whole art of it!",
+     "wrongLine": "It puts a pebble in YOUR boot to demonstrate the concept."
+    },
+    {
+     "prompt": "What's the best part of hide and seek?",
+     "options": [
+      "Winning",
+      "Finding people fast",
+      "The hiding spots",
+      "Not being found. Hearing them worry."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It cackles. The worry is the trophy. You understand the game.",
+     "wrongLine": "It hides from you mid-conversation to make a point."
+    },
+    {
+     "prompt": "If I swapped the sugar and the salt, who's the victim?",
+     "options": [
+      "Whoever bakes next",
+      "Nobody. It's a gift. A surprise.",
+      "You, when they catch you",
+      "This is why nobody trusts you"
+     ],
+     "correctIndex": 1,
+     "rightLine": "A GIFT. Exactly. Surprise pancakes for everyone involved.",
+     "wrongLine": "It scoffs. Getting caught is for beginners, and it isn't one."
+    },
+    {
+     "prompt": "Would you cover for me? Not for anything bad. Just... reorganizing.",
+     "options": [
+      "Depends what you did",
+      "I'd turn you in gently",
+      "I saw nothing. I know nothing.",
+      "I don't lie for anyone"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It shakes your hand with the paw that isn't holding your watch.",
+     "wrongLine": "It notes you down in a little book of non-accomplices."
+    },
+    {
+     "prompt": "Quick, look behind you! ...Did you look?",
+     "options": [
+      "Yes, and I'd look again",
+      "No, I don't fall for that",
+      "I'm checking my pockets instead",
+      "Very funny"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It beams. Falling for it on purpose is the highest sportsmanship.",
+     "wrongLine": "It pockets the fun it had prepared and walks off."
+    }
+   ]
+  },
+  "Neat": {
+   "encounterLine": "The wild {name} smooths the grass flat before sitting exactly in the middle.",
+   "petLines": [
+    "{name} realigns its food bowl after every bite. The bowl drifts. It fights back.",
+    "{name} groomed itself, then the fence, then started eyeing your shoes.",
+    "{name} sorted its pebbles by size. Then by color. Then by loyalty."
+   ],
+   "questions": [
+    {
+     "prompt": "You finish a snack. There's a wrapper. The bin is far. What happens?",
+     "options": [
+      "Pocket it and forget it's there",
+      "Leave it, wind handles wrappers",
+      "Fold it small, deal with it later",
+      "Walk to the bin. However far."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It nods crisply. Distance is not a factor. It never was.",
+     "wrongLine": "It's already walking your imaginary wrapper to the bin."
+    },
+    {
+     "prompt": "Which way should all the spoons face?",
+     "options": [
+      "Whatever way they land",
+      "The same way. Obviously. The SAME way.",
+      "Alternating saves space",
+      "Spoons don't have a way"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It shivers with relief. You may enter its home someday.",
+     "wrongLine": "It has to sit down. Give it a moment."
+    },
+    {
+     "prompt": "How do you feel about a picture frame that's a little bit crooked?",
+     "options": [
+      "Fix it. Even in other mons' houses.",
+      "It adds charm",
+      "I wouldn't notice",
+      "Slightly crooked is fine, very is not"
+     ],
+     "correctIndex": 0,
+     "rightLine": "EVEN in other houses. Yes. It's a burden and a calling.",
+     "wrongLine": "It tilts its whole head to make your answer level. Doesn't help."
+    },
+    {
+     "prompt": "My burrow has a spot for everything. Someone called that 'a lot.' Thoughts?",
+     "options": [
+      "It is a lot, honestly",
+      "A little mess is healthy",
+      "A spot for everything is peace",
+      "Depends how many spots"
+     ],
+     "correctIndex": 2,
+     "rightLine": "Peace. Exactly. Every sock is where the sock lives.",
+     "wrongLine": "It mentally reorganizes your entire life in four seconds."
+    },
+    {
+     "prompt": "Crumbs on the table after a meal. Who cleans them, and when?",
+     "options": [
+      "Whoever's closest, eventually",
+      "Me. During the meal. As they fall.",
+      "The table's owner, after",
+      "Birds, that's the system"
+     ],
+     "correctIndex": 1,
+     "rightLine": "AS THEY FALL. Yes. A crumb at rest becomes a crumb at home.",
+     "wrongLine": "It watches an imaginary crumb settle in and shudders."
+    },
+    {
+     "prompt": "What's the best feeling in the world?",
+     "options": [
+      "A big meal",
+      "Winning a race",
+      "Rain on the roof",
+      "Peeling the film off something new"
+     ],
+     "correctIndex": 3,
+     "rightLine": "It closes its eyes. The peel. In one piece. Nothing compares.",
+     "wrongLine": "Those are fine. But you've clearly never peeled the film."
+    }
+   ]
+  },
+  "Noble": {
+   "encounterLine": "The wild {name} stands very straight, like the field is a throne room.",
+   "petLines": [
+    "{name} accepts the pet as a formal honor. It will remember this service.",
+    "{name} stood guard over your bag while you were gone. Nothing got past.",
+    "{name} bows before dinner, to the dinner, out of respect."
+   ],
+   "questions": [
+    {
+     "prompt": "You promised to meet a friend, but something way more fun comes up. What now?",
+     "options": [
+      "Meet the friend. I promised.",
+      "Reschedule the friend",
+      "Bring the friend to the fun thing",
+      "Fun first, friends understand"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It bows. The word given is the word kept. Even for small things.",
+     "wrongLine": "It looks past you at nothing in particular. You feel it anyway."
+    },
+    {
+     "prompt": "A little mon is being picked on by a big mon. You're medium. Do the math.",
+     "options": [
+      "Find a bigger mon to handle it",
+      "Stay out of it, not my business",
+      "Stand next to the little one",
+      "Wait and comfort them after"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It nods. You don't have to win. You have to stand there.",
+     "wrongLine": "It's already walking over to stand there itself."
+    },
+    {
+     "prompt": "What do you do when you win?",
+     "options": [
+      "Celebrate big, you earned it",
+      "Bow to the loser",
+      "Tell the story for a week",
+      "Rank the loser's mistakes for them"
+     ],
+     "correctIndex": 1,
+     "rightLine": "Always bow. The loser did the hard part of making you look good.",
+     "wrongLine": "It frowns. Victory without manners is just noise."
+    },
+    {
+     "prompt": "Someone gives you too much change at the shop. It's snack money. Well?",
+     "options": [
+      "Keep it, their mistake",
+      "Keep it but feel bad",
+      "Donate it, that cancels it out",
+      "Give it back, even the small coins"
+     ],
+     "correctIndex": 3,
+     "rightLine": "Even the small coins. Especially those. It stands taller near you.",
+     "wrongLine": "It quietly counts its own coins to restore balance to the world."
+    },
+    {
+     "prompt": "Is it noble to lose?",
+     "options": [
+      "If you lost doing the right thing, yes",
+      "No, nobility wins",
+      "Losing is just losing",
+      "Only if you almost won"
+     ],
+     "correctIndex": 0,
+     "rightLine": "Yes. Some of the best losses are worth more than the wins.",
+     "wrongLine": "It shakes its head slowly. You've confused winning with deserving."
+    },
+    {
+     "prompt": "My armor is a leaf. Some mons laugh. Should I get real armor?",
+     "options": [
+      "Yes, safety first",
+      "Maybe a bigger leaf",
+      "No. Wear the leaf proudly.",
+      "Armor is what you make it, so sure"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It adjusts the leaf. It was never about the leaf.",
+     "wrongLine": "It holds the leaf a little tighter."
+    }
+   ]
+  },
+  "Shy": {
+   "encounterLine": "The wild {name} watches you from behind a bush that does not hide it at all.",
+   "petLines": [
+    "{name} inched closer while you weren't looking. Don't mention it.",
+    "{name} left a berry near your foot and fled. It counts.",
+    "{name} is pretending to be asleep. Its ears are listening very hard."
+   ],
+   "questions": [
+    {
+     "prompt": "If we're walking and we see a big loud crowd up ahead, what do we do?",
+     "options": [
+      "Go say hi to everyone!",
+      "Push through the middle, fastest",
+      "Crowds are fun, join in",
+      "Go the long way around"
+     ],
+     "correctIndex": 3,
+     "rightLine": "It exhales. The long way has better flowers anyway.",
+     "wrongLine": "It's already behind the bush again."
+    },
+    {
+     "prompt": "Would you make me talk first when we meet somebody new?",
+     "options": [
+      "Yes, it's good practice for you",
+      "No. I'll talk. You can just be there.",
+      "We'd take turns",
+      "Talking gets easier, you'll see"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It steps a tiny bit out from behind you. Just a bit.",
+     "wrongLine": "It rehearses hello quietly to itself, dreading everything."
+    },
+    {
+     "prompt": "What if I hide during your battles sometimes?",
+     "options": [
+      "Then why even come along?",
+      "Hiding is losing",
+      "Hide close by. That counts as with me.",
+      "You'll grow out of it"
+     ],
+     "correctIndex": 2,
+     "rightLine": "Close by. Yes. It can be brave from a bush.",
+     "wrongLine": "It gets smaller. It didn't know there were rules."
+    },
+    {
+     "prompt": "Do you ever want to say something and then just... don't?",
+     "options": [
+      "All the time. It keeps.",
+      "No, say everything, always",
+      "You should work on that",
+      "What kinds of things?"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It nods a lot, quietly. It keeps. Somebody finally said it.",
+     "wrongLine": "It swallows the thing it was about to say. Maybe next season."
+    },
+    {
+     "prompt": "If I come with you, will there be... introductions? To everyone?",
+     "options": [
+      "Yes! A big welcome party!",
+      "No party. One at a time. Or not.",
+      "Just a quick group hello",
+      "Everyone will love you"
+     ],
+     "correctIndex": 1,
+     "rightLine": "Or not. It heard the 'or not.' It's holding onto the 'or not.'",
+     "wrongLine": "It starts sweating about a party that doesn't exist yet."
+    },
+    {
+     "prompt": "Someone waved at me today. I panicked and looked at a tree. Was that bad?",
+     "options": [
+      "A little. Wave back next time.",
+      "Very bad, waves are easy",
+      "You should apologize to them",
+      "The tree needed looking at. It's fine."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It relaxes completely. The tree DID need looking at.",
+     "wrongLine": "It looks at a tree right now, just to be safe."
+    }
+   ]
+  },
+  "Sick": {
+   "encounterLine": "The wild {name} sneezes, apologizes to nobody, and squints at you.",
+   "petLines": [
+    "{name} is bundled in leaves. It did the bundling itself. It's proud of the bundling.",
+    "{name} sipped the warm water you left. Slowly. All of it.",
+    "{name} says it's fine today. It's maybe sixty percent fine. Progress."
+   ],
+   "questions": [
+    {
+     "prompt": "I sound worse than I feel. Probably. What's your reaction?",
+     "options": [
+      "Oh you poor, poor thing",
+      "Noted. Want soup or quiet?",
+      "You should see a doctor immediately",
+      "You'll be better in no time!"
+     ],
+     "correctIndex": 1,
+     "rightLine": "Soup AND quiet, since you offered. See, that's how you do it.",
+     "wrongLine": "It groans. The pity is heavier than the cough."
+    },
+    {
+     "prompt": "If I can't make it up the hill today, what happens?",
+     "options": [
+      "I'll carry you up, no arguments",
+      "We train until you can",
+      "Hills build character",
+      "We don't do the hill today."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It nods, relieved. The hill will keep. Hills are patient.",
+     "wrongLine": "It eyes the hill like an old rival it's tired of discussing."
+    },
+    {
+     "prompt": "Do you get grossed out by sniffling? Be honest, I do it a lot.",
+     "options": [
+      "No. Sniffle away. I'll grab tissues.",
+      "A little, but I'd manage",
+      "Only really loud sniffling",
+      "You could try sniffling less"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It sniffles freely, luxuriously. What a thing, to sniffle in peace.",
+     "wrongLine": "It holds in a sniffle. Its whole face pays the price."
+    },
+    {
+     "prompt": "Everyone keeps asking how I'm FEELING. What should you ask me instead?",
+     "options": [
+      "How are you feeling, but softer",
+      "What your symptoms are",
+      "Seen anything good from your window?",
+      "Nothing, silence is best"
+     ],
+     "correctIndex": 2,
+     "rightLine": "YES. It has seen SO much from the window. Sit down. This will take a while.",
+     "wrongLine": "It answers 'fine' in the special voice that ends conversations."
+    },
+    {
+     "prompt": "What's the best get-well gift?",
+     "options": [
+      "Flowers, big ones",
+      "A card signed by everyone",
+      "Vitamins",
+      "Gossip and a snack"
+     ],
+     "correctIndex": 3,
+     "rightLine": "It perks up. Being sick shouldn't mean missing the news.",
+     "wrongLine": "It says thank you in advance in a very tired voice."
+    },
+    {
+     "prompt": "If I sleep through our plans, are you mad?",
+     "options": [
+      "A little, plans are plans",
+      "No. Sleep is the plan now.",
+      "I'd wake you, you'd thank me",
+      "Just don't make it a habit"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It's asleep before you finish the sentence. Good sentence, though.",
+     "wrongLine": "It sets seventeen leaf-alarms out of guilt."
+    }
+   ]
+  },
+  "Sleepy": {
+   "encounterLine": "The wild {name} was mid-yawn when you got here. It is still mid-yawn.",
+   "petLines": [
+    "{name} fell asleep during the pet. Keep going, though.",
+    "{name} moved from the sunny spot to the other sunny spot. Big day.",
+    "{name} dreamed about napping. It woke up ready for a nap."
+   ],
+   "questions": [
+    {
+     "prompt": "What's the correct number of naps in one day?",
+     "options": [
+      "Zero, sleep at night like a person",
+      "One, after lunch",
+      "However many the day requires",
+      "Two, max"
+     ],
+     "correctIndex": 2,
+     "rightLine": "However many... the day... requires... zzz. Correct.",
+     "wrongLine": "It yawns at your answer, which is also its rebuttal."
+    },
+    {
+     "prompt": "If I fall asleep somewhere weird, like a stairstep, what do you do?",
+     "options": [
+      "Leave me. The step chose me.",
+      "Move you somewhere proper",
+      "Wake you up, stairs are dangerous",
+      "Take a picture first"
+     ],
+     "correctIndex": 0,
+     "rightLine": "The step chose it. You understand napping law.",
+     "wrongLine": "It grips the imaginary step defensively."
+    },
+    {
+     "prompt": "Best sound to fall asleep to?",
+     "options": [
+      "Total silence",
+      "Ocean waves",
+      "A lullaby",
+      "Other people doing chores nearby"
+     ],
+     "correctIndex": 3,
+     "rightLine": "Yes... the distant sweeping... someone else's broom... perfect...",
+     "wrongLine": "It considers your answer and falls asleep anyway, out of spite."
+    },
+    {
+     "prompt": "I missed breakfast because of a nap. Then lunch. Thoughts?",
+     "options": [
+      "That's a health concern",
+      "Big dinner. Problem solved.",
+      "Set alarms next time",
+      "Naps shouldn't beat meals"
+     ],
+     "correctIndex": 1,
+     "rightLine": "Big dinner. It nods into its own shoulder. The system works.",
+     "wrongLine": "It hears 'alarms' and has a small nightmare while awake."
+    },
+    {
+     "prompt": "Is it rude to yawn while someone's talking?",
+     "options": [
+      "No. The yawn is honest. Talk waits.",
+      "Yes, very",
+      "Cover your mouth at least",
+      "Depends who's talking"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It yawns gratefully. Nothing personal. Just the truth, leaving.",
+     "wrongLine": "It suppresses a yawn until its eyes water. Are you happy now."
+    },
+    {
+     "prompt": "What do you actually do all day?",
+     "options": [
+      "A rich variety of activities",
+      "Train, mostly",
+      "Rest between rests",
+      "Whatever needs doing"
+     ],
+     "correctIndex": 2,
+     "rightLine": "Rest between rests. Finally, someone who respects the schedule.",
+     "wrongLine": "It's too tired to correct you. That was the correction."
+    }
+   ]
+  },
+  "Strange": {
+   "encounterLine": "The wild {name} is facing the wrong way on purpose. It knows you're there.",
+   "petLines": [
+    "{name} likes being petted counterclockwise only. It has explained this to the wind.",
+    "{name} is holding a spoon it found. It has plans. Don't ask. Or do.",
+    "{name} hums one note to the fence. Today, the fence hummed back. Big day."
+   ],
+   "questions": [
+    {
+     "prompt": "The moon has been following me for years. What should I do about it?",
+     "options": [
+      "The moon follows everyone",
+      "Wave to it. It's been waiting.",
+      "Ignore it and it stops",
+      "See a doctor maybe"
+     ],
+     "correctIndex": 1,
+     "rightLine": "It waves at the moon right now. It never misses a night. Somebody should say hi.",
+     "wrongLine": "It pats your arm. The moon deserves better and so, honestly, do you."
+    },
+    {
+     "prompt": "I keep a jar of interesting air. From good days. Is that a collection?",
+     "options": [
+      "Air is the same everywhere",
+      "Jars are for solid things",
+      "That's just an empty jar",
+      "Yes. Label them or you'll mix them up."
+     ],
+     "correctIndex": 3,
+     "rightLine": "LABELS. Yes. Tuesday's air almost got mixed with the good fog. Never again.",
+     "wrongLine": "It hugs the jar. The jar contains a very good afternoon and your doubt."
+    },
+    {
+     "prompt": "If a rock could talk, what would you say to it first?",
+     "options": [
+      "Sorry for all the stacking",
+      "Rocks can't talk",
+      "Hello, I guess",
+      "I'd ask it about diamonds"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It gasps. The stacking! Nobody ever apologizes for the stacking!",
+     "wrongLine": "It glances at a nearby rock and mouths 'ignore them.'"
+    },
+    {
+     "prompt": "Which direction is Tuesday?",
+     "options": [
+      "Days aren't directions",
+      "North",
+      "Slightly left of morning",
+      "Behind us, since it's Wednesday"
+     ],
+     "correctIndex": 2,
+     "rightLine": "Slightly left of morning!! You've BEEN there!!",
+     "wrongLine": "It checks a small map it drew. You're not on it yet. Yet."
+    },
+    {
+     "prompt": "I sing to my food before eating it. Someone said that's weird. Ruling?",
+     "options": [
+      "It's a little weird, yeah",
+      "Weird but harmless",
+      "Sing quieter maybe",
+      "It gets a send-off. That's manners."
+     ],
+     "correctIndex": 3,
+     "rightLine": "A SEND-OFF. Exactly. The berries deserve to hear something nice at the end.",
+     "wrongLine": "It sings to its snack extra loud now, protectively."
+    },
+    {
+     "prompt": "What do you think clouds taste like?",
+     "options": [
+      "Cold mashed potatoes, obviously",
+      "Nothing, they're vapor",
+      "Cotton candy",
+      "Rain, before it's ready"
+     ],
+     "correctIndex": 0,
+     "rightLine": "COLD mashed potatoes. Cold is the part everyone forgets. It remembers you said this.",
+     "wrongLine": "It shakes its head. Everyone says that one. The clouds are tired of hearing it."
+    }
+   ]
+  },
+  "Sweet": {
+   "encounterLine": "The wild {name} has been saving something for whoever showed up. It's you.",
+   "petLines": [
+    "{name} tucks a flower behind your ear. It took several tries. Worth it.",
+    "{name} made you a mud pie. You don't have to eat it. You have to keep it.",
+    "{name} hums while you pet it, so you have something to listen to."
+   ],
+   "questions": [
+    {
+     "prompt": "I picked this berry for you. It's a little squished. Do you still want it?",
+     "options": [
+      "You keep it, you found it",
+      "Maybe just half",
+      "Yes. Squished means it traveled.",
+      "I'm okay, thank you though"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It hands it over with both paws, beaming. It traveled SO far.",
+     "wrongLine": "It looks at the berry. The berry tried its best."
+    },
+    {
+     "prompt": "What do you do when a friend gives you a drawing that's... not good?",
+     "options": [
+      "Put it up where everyone can see",
+      "Say thanks and file it away",
+      "Suggest some improvements gently",
+      "Trade it back for a better one"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It nods hard. Bad drawings from friends go in the BEST spots.",
+     "wrongLine": "It decides to keep making you drawings anyway. Quietly braver about it."
+    },
+    {
+     "prompt": "If I made you a scarf but it came out as more of a tube, would you wear it?",
+     "options": [
+      "I'd frame it instead",
+      "Tubes aren't scarves",
+      "Maybe around the house",
+      "Every day. Tubes are in."
+     ],
+     "correctIndex": 3,
+     "rightLine": "It starts the tube immediately. It'll be ready by winter. Ish.",
+     "wrongLine": "It unravels a little yarn, sadly. The tube dream dims."
+    },
+    {
+     "prompt": "What's the best part of sharing a dessert?",
+     "options": [
+      "Getting the bigger half",
+      "Watching them get the bigger half",
+      "Not having to finish it alone",
+      "Splitting the cost"
+     ],
+     "correctIndex": 1,
+     "rightLine": "YES. Watching them get the big half is the dessert.",
+     "wrongLine": "It slides you the bigger half anyway, to show you how it feels."
+    },
+    {
+     "prompt": "Is it silly to say goodnight to the garden?",
+     "options": [
+      "No. The garden waits for it.",
+      "A little silly, but okay",
+      "Gardens sleep either way",
+      "Only if it says it back"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It relaxes. The tomatoes especially. They worry.",
+     "wrongLine": "It plans an extra-long goodnight tonight, to make up for you."
+    },
+    {
+     "prompt": "If you're sad and I bring you something, what should it be?",
+     "options": [
+      "Advice",
+      "Space",
+      "Something warm, and you stay too",
+      "Something to distract me"
+     ],
+     "correctIndex": 2,
+     "rightLine": "It's already practicing carrying warm things without spilling.",
+     "wrongLine": "It notes it down wrong on purpose. It's bringing the warm thing anyway."
+    }
+   ]
+  },
+  "Wise": {
+   "encounterLine": "The wild {name} looks like it has been expecting you. It looks at everything that way.",
+   "petLines": [
+    "{name} watches the river. Ask what the river said and it will say 'water sounds.'",
+    "{name} accepts the pet and, in return, says nothing. A fair trade.",
+    "{name} knows exactly three things. It won't say which three."
+   ],
+   "questions": [
+    {
+     "prompt": "What does the wind carry?",
+     "options": [
+      "Wisdom from far mountains",
+      "Dust and smells, mostly",
+      "The voices of the ancients",
+      "Secret messages"
+     ],
+     "correctIndex": 1,
+     "rightLine": "Dust and smells. Yes. People who say 'wisdom' have never smelled a farm upwind.",
+     "wrongLine": "It sighs. The wind is not a delivery service. It's just wind. That's enough."
+    },
+    {
+     "prompt": "A student asks: what is the sound of rain? What do you tell them?",
+     "options": [
+      "The sky weeping for the earth",
+      "A thousand tiny drums of heaven",
+      "Nature's great symphony",
+      "Go stand in it"
+     ],
+     "correctIndex": 3,
+     "rightLine": "Go stand in it. Correct. Some questions are doors, not riddles.",
+     "wrongLine": "It waits for you to run out of poetry. It has time."
+    },
+    {
+     "prompt": "I don't know what tomorrow brings. Should I say that out loud, as a teacher?",
+     "options": [
+      "Yes. 'I don't know' is a teaching.",
+      "No, students need certainty",
+      "Say it, but make it sound deep",
+      "Predict something safe instead"
+     ],
+     "correctIndex": 0,
+     "rightLine": "It nods. The honest 'I don't know' feeds more students than a fancy guess.",
+     "wrongLine": "It looks at you the way it looks at fog."
+    },
+    {
+     "prompt": "What's the wisest thing you own?",
+     "options": [
+      "A book I've read many times",
+      "My memories",
+      "A good pair of boots",
+      "Nothing. Owning isn't wisdom."
+     ],
+     "correctIndex": 2,
+     "rightLine": "Boots. Yes. Wisdom mostly means being able to keep walking.",
+     "wrongLine": "It taps your boot. Closer than you think. Drier, too."
+    },
+    {
+     "prompt": "A young mon brags it knows everything. What do I do?",
+     "options": [
+      "Nothing. Time is already on it.",
+      "Quiz it until it cries",
+      "Tell it wisdom starts with humility",
+      "Assign it more books"
+     ],
+     "correctIndex": 0,
+     "rightLine": "Yes. Time handles braggarts for free. Save your breath for soup.",
+     "wrongLine": "It shakes its head. You can't lecture someone into quiet."
+    },
+    {
+     "prompt": "Deep question. Why do we eat breakfast?",
+     "options": [
+      "To fuel the day's journey",
+      "Tradition, mostly",
+      "To break night's fast, symbolically",
+      "Hungry in the morning"
+     ],
+     "correctIndex": 3,
+     "rightLine": "Hungry in the morning. It bows slightly. Short answer, right answer, same thing.",
+     "wrongLine": "It waits. The real answer is under all those words, and it's shorter."
+    }
+   ]
+  }
+ }
+}
