@@ -529,6 +529,22 @@ type FarmMonRuntime = {
   skin: SpriteOverrideSheet;
   sprite?: Phaser.GameObjects.Sprite | Phaser.GameObjects.Rectangle;
   petCooldownMs: number;
+  /** One training set per mon per farm visit (cleared when the lot despawns). */
+  trainedThisVisit: boolean;
+};
+
+/** The training-yard beat (Workstream B): a farm mon runs three strikes on the
+ *  dummy; a timed Z press on the cue lands a bonus hit. */
+type MonTrainingState = {
+  farmKey: string;
+  round: number;
+  hits: number;
+  bonusHits: number;
+  xp: number;
+  phase: "approach" | "windup" | "cue" | "resolve" | "done";
+  phaseAtMs: number;
+  cueWindowMs: number;
+  cueText?: Phaser.GameObjects.Text;
 };
 
 type BossGateRuntime = {
@@ -945,6 +961,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
   // lot re-populates without polling deep state every frame.
   private farmMons = new Map<string, FarmMonRuntime>();
   private farmMonsSignature = "";
+  // Training yard: the active beat + the DOM mon picker + a post-hit knock
+  // window the dummy's idle animation renders as a hard swing.
+  private monTraining_: MonTrainingState | undefined;
+  private trainingPickerEl_: HTMLElement | undefined;
+  private trainingPickerCursor_ = 0;
+  private trainingPickerKeyHandler_: ((event: KeyboardEvent) => void) | undefined;
+  private dummyKnockUntilMs_ = 0;
   private readonly transitionSfx: TransitionSfx = createTransitionSfx();
   private monsSfx_: MonsSfx = createMonsSfx();
   private readonly openingSfx: OpeningSfx = createOpeningSfx();
@@ -1628,6 +1651,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     this.maybeStartMeadowDream();
     this.stepNpcs(delta);
     this.syncFarmMons(delta);
+    this.stepMonTraining(delta);
     // Door-arrival overlap escape retries a few frames: destination NPC
     // runtimes can spawn a tick or two after the synchronous warp, so the
     // in-warp escape pass may not have seen them yet. No-op once clear.
@@ -3441,7 +3465,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (npc.data.npcId === MONS_FARM_ALTAR_NPC_ID) {
       actor.setAngle(Math.sin(this.time.now / 620) * 1.2);
     } else if (npc.data.npcId === MONS_FARM_DUMMY_NPC_ID) {
-      // A ~0.45s knock every ~3.8s, still the rest of the time.
+      // A training strike gets a hard decaying swing; otherwise the ambient
+      // ~0.45s knock every ~3.8s.
+      if (this.time.now < this.dummyKnockUntilMs_) {
+        const remain = (this.dummyKnockUntilMs_ - this.time.now) / 340;
+        actor.setAngle(Math.sin((1 - remain) * Math.PI * 2.5) * 15 * Math.max(0, remain));
+        return;
+      }
       const phase = this.time.now % 3800;
       actor.setAngle(phase < 450 ? Math.sin((phase / 450) * Math.PI * 3) * 6 : 0);
     }
@@ -5126,12 +5156,28 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (this.cinematicActive()) {
         return;
       }
-      // Petting a farm mon wins over regular interaction when one is closest:
-      // it is the most local thing to the press and never opens a dialogue.
-      if (!this.interactionTarget() && this.tryPetFarmMon()) {
+      // Training beat owns Z while it runs (cue-window hits); the DOM picker
+      // owns the keyboard while open.
+      if (this.monTraining_) {
+        this.handleTrainingConfirm();
         return;
       }
-      if (this.interactionTarget() && this.dialogue.canOpen()) {
+      if (this.trainingPickerEl_) {
+        return;
+      }
+      const advanceTarget = this.interactionTarget();
+      // Z on the training dummy starts a training set when a resting mon is
+      // fresh; otherwise it falls through to the dummy's flavor text.
+      if (advanceTarget?.targetKind === "npc" && advanceTarget.npcId === MONS_FARM_DUMMY_NPC_ID
+        && this.tryOpenTrainingPicker()) {
+        return;
+      }
+      // Petting a farm mon wins over regular interaction when one is closest:
+      // it is the most local thing to the press and never opens a dialogue.
+      if (!advanceTarget && this.tryPetFarmMon()) {
+        return;
+      }
+      if (advanceTarget && this.dialogue.canOpen()) {
         this.openDialogue();
       }
       return;
@@ -9311,7 +9357,9 @@ export class ChunkedWorldScene extends Phaser.Scene {
     }
     for (const runtime of this.farmMons.values()) {
       runtime.petCooldownMs = Math.max(0, runtime.petCooldownMs - deltaMs);
-      this.stepFarmMon(runtime, deltaMs);
+      if (this.monTraining_?.farmKey !== runtime.key) {
+        this.stepFarmMon(runtime, deltaMs); // the training beat drives its mon itself
+      }
       this.syncFarmMonSprite(runtime);
     }
   }
@@ -9364,6 +9412,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
         skin,
         sprite,
         petCooldownMs: 0,
+        trainedThisVisit: false,
         state: createNpcState(spawnAt.x, spawnAt.y, toFacing(undefined), {
           kind: "wander",
           radiusPx: FARM_MON_WANDER_RADIUS_PX,
@@ -9465,11 +9514,284 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   private despawnFarmMons(): void {
+    this.cancelMonTraining();
+    this.closeTrainingPicker();
     for (const runtime of this.farmMons.values()) {
       runtime.sprite?.destroy();
     }
     this.farmMons.clear();
     this.farmMonsSignature = "";
+  }
+
+  // ---- Training yard (Workstream B) -------------------------------------
+
+  private findFarmDummyRuntime(): NpcRuntime | undefined {
+    return [...this.npcRuntimes.values()].find((npc) => npc.data.npcId === MONS_FARM_DUMMY_NPC_ID);
+  }
+
+  /** Z on the training dummy: open the mon picker (true = press consumed).
+   *  Falls through to the dummy's flavor dialogue when there is nothing to train. */
+  private tryOpenTrainingPicker(): boolean {
+    const mons = this.monsRuntime();
+    if (!mons || mons.count() === 0 || !this.findFarmDummyRuntime()) {
+      return false;
+    }
+    const resting = [...this.farmMons.values()].filter((f) => !f.isCompanion);
+    if (resting.length === 0) {
+      this.showMonNotice("Nobody is resting at the yard right now.");
+      return true;
+    }
+    const fresh = resting.filter((f) => !f.trainedThisVisit);
+    if (fresh.length === 0) {
+      this.showMonNotice("Everyone is worn out. Come back after a walk.");
+      return true;
+    }
+    this.trainingPickerCursor_ = 0;
+    this.renderTrainingPicker(fresh);
+    const handler = (event: KeyboardEvent): void => {
+      event.preventDefault();
+      event.stopPropagation();
+      const list = [...this.farmMons.values()].filter((f) => !f.isCompanion && !f.trainedThisVisit);
+      if (event.code === "Escape" || event.code === "KeyX") {
+        this.closeTrainingPicker();
+        return;
+      }
+      if (event.code === "ArrowDown" || event.code === "ArrowUp") {
+        const delta = event.code === "ArrowDown" ? 1 : list.length - 1;
+        this.trainingPickerCursor_ = list.length > 0 ? (this.trainingPickerCursor_ + delta) % list.length : 0;
+        this.renderTrainingPicker(list);
+        return;
+      }
+      if (event.code === "KeyZ" || event.code === "Enter") {
+        const chosen = list[this.trainingPickerCursor_];
+        this.closeTrainingPicker();
+        if (chosen) {
+          this.beginMonTraining(chosen.key);
+        }
+      }
+    };
+    this.trainingPickerKeyHandler_ = handler;
+    window.addEventListener("keydown", handler, true);
+    return true;
+  }
+
+  private renderTrainingPicker(list: FarmMonRuntime[]): void {
+    const data = this.data_.mons;
+    if (!this.trainingPickerEl_) {
+      this.trainingPickerEl_ = document.createElement("div");
+      this.trainingPickerEl_.id = "mon-training-picker";
+      this.trainingPickerEl_.style.cssText = [
+        "position:fixed", "inset:0", "z-index:60", "display:flex",
+        "align-items:center", "justify-content:center",
+        "background:rgba(4,4,12,0.72)", "font-family:'Pixelify Sans',monospace",
+        "color:#f2efe6"
+      ].join(";");
+      document.body.appendChild(this.trainingPickerEl_);
+    }
+    const roster = this.monsRuntime()?.list();
+    const rows = list.map((f, index) => {
+      const mon = roster?.[f.rosterIndex];
+      const entry = data ? monById(data.registry, f.registryId) : undefined;
+      const name = entry ? monDisplayName(entry) : f.registryId;
+      const cursor = index === this.trainingPickerCursor_ ? "▶" : " ";
+      return `<div style="padding:2px 8px;${index === this.trainingPickerCursor_ ? "background:#2c2c5e;" : ""}">` +
+        `${cursor} ${name} <span style="opacity:.75">Lv${mon?.level ?? "?"}</span></div>`;
+    }).join("");
+    this.trainingPickerEl_.innerHTML =
+      `<div style="min-width:300px;background:#0d0d1a;border:3px solid #f2efe6;border-radius:2px;padding:10px 12px;font-size:14px;line-height:1.5">` +
+      `<div style="margin-bottom:6px;opacity:.9">TRAINING: who works the dummy? (Z picks, X backs out)</div>` +
+      rows +
+      `<div style="margin-top:6px;opacity:.7;font-size:12px">Press Z on the cue for clean hits.</div></div>`;
+  }
+
+  private closeTrainingPicker(): void {
+    if (this.trainingPickerKeyHandler_) {
+      window.removeEventListener("keydown", this.trainingPickerKeyHandler_, true);
+      this.trainingPickerKeyHandler_ = undefined;
+    }
+    this.trainingPickerEl_?.remove();
+    this.trainingPickerEl_ = undefined;
+  }
+
+  private beginMonTraining(farmKey: string): void {
+    this.monTraining_ = {
+      farmKey,
+      round: 0,
+      hits: 0,
+      bonusHits: 0,
+      xp: 0,
+      phase: "approach",
+      phaseAtMs: this.time.now,
+      cueWindowMs: 380
+    };
+  }
+
+  /** Advance the training beat. windup's phaseAtMs is a future deadline; the
+   *  other phases stamp their start time. */
+  private stepMonTraining(deltaMs: number): void {
+    const training = this.monTraining_;
+    if (!training) {
+      return;
+    }
+    const runtime = this.farmMons.get(training.farmKey);
+    const dummy = this.findFarmDummyRuntime();
+    if (!runtime || !dummy) {
+      this.cancelMonTraining();
+      return;
+    }
+    const now = this.time.now;
+    if (training.phase === "approach") {
+      const target = { x: dummy.state.player.x - 30, y: dummy.state.player.y + 6 };
+      const dist = Math.hypot(runtime.state.player.x - target.x, runtime.state.player.y - target.y);
+      if (dist <= 10 || now - training.phaseAtMs > 3200) {
+        training.phase = "windup";
+        training.phaseAtMs = now + 450 + Math.random() * 500;
+        return;
+      }
+      const actor = runtime.state.player;
+      const deadzone = 2;
+      const input: MoveInput = {
+        left: target.x - actor.x < -deadzone,
+        right: target.x - actor.x > deadzone,
+        up: target.y - actor.y < -deadzone,
+        down: target.y - actor.y > deadzone
+      };
+      stepPlayer(actor, input, {
+        deltaMs,
+        speed: 62,
+        bounds: this.movementBounds(),
+        blocked: (x, y) => this.blocked(x, y),
+        frames: runtime.frames
+      });
+      return;
+    }
+    if (training.phase === "windup") {
+      if (now >= training.phaseAtMs) {
+        training.phase = "cue";
+        training.phaseAtMs = now;
+        training.cueText = this.add.text(dummy.state.player.x, dummy.state.player.y - 44, "Z!", {
+          fontFamily: "'Pixelify Sans', monospace",
+          fontSize: "18px",
+          color: "#ffd27a",
+          stroke: "#3a2400",
+          strokeThickness: 5
+        }).setOrigin(0.5, 1).setDepth(WILD_MON_GLYPH_DEPTH);
+      }
+      return;
+    }
+    if (training.phase === "cue") {
+      if (now - training.phaseAtMs > training.cueWindowMs) {
+        this.resolveTrainingStrike(false); // window missed: a plain hit still trains
+      }
+      return;
+    }
+    if (training.phase === "resolve") {
+      if (now >= training.phaseAtMs) {
+        if (training.round >= 3) {
+          this.finishMonTraining();
+        } else {
+          training.phase = "windup";
+          training.phaseAtMs = now + 500 + Math.random() * 450;
+        }
+      }
+    }
+  }
+
+  /** Z pressed while the beat runs: a cue-window press is a clean hit; any other
+   *  press is swallowed so it cannot open dialogues mid-beat. */
+  private handleTrainingConfirm(): void {
+    if (this.monTraining_?.phase === "cue") {
+      this.resolveTrainingStrike(true);
+    }
+  }
+
+  private resolveTrainingStrike(timed: boolean): void {
+    const training = this.monTraining_;
+    const runtime = training ? this.farmMons.get(training.farmKey) : undefined;
+    const dummy = this.findFarmDummyRuntime();
+    if (!training || !runtime || !dummy) {
+      return;
+    }
+    training.cueText?.destroy();
+    training.cueText = undefined;
+    training.round += 1;
+    training.hits += 1;
+    if (timed) {
+      training.bonusHits += 1;
+      this.playMonsSfx((sfx) => sfx.negotiationRight(training.round));
+    }
+    const mon = this.monsRuntime()?.list()[runtime.rosterIndex];
+    const base = 6 + 2 * (mon?.level ?? 1);
+    const gain = timed ? Math.round(base * 1.5) : base;
+    training.xp += gain;
+    // Impact: a hard dummy swing (rendered by applyFarmPropIdle), a scale pop on
+    // the mon (scale is not overwritten by the per-frame sync), a rising +XP.
+    this.dummyKnockUntilMs_ = this.time.now + (timed ? 380 : 280);
+    const sprite = runtime.sprite;
+    if (sprite instanceof Phaser.GameObjects.Sprite) {
+      const baseX = sprite.scaleX;
+      const baseY = sprite.scaleY;
+      this.tweens.add({
+        targets: sprite,
+        scaleX: baseX * 1.18,
+        scaleY: baseY * 1.18,
+        duration: 90,
+        yoyo: true,
+        onComplete: () => sprite.setScale(baseX, baseY)
+      });
+    }
+    const float = this.add.text(dummy.state.player.x + 6, dummy.state.player.y - 34, `+${gain}`, {
+      fontFamily: "'Pixelify Sans', monospace",
+      fontSize: timed ? "15px" : "13px",
+      color: timed ? "#ffd27a" : "#f2efe6",
+      stroke: "#3a2400",
+      strokeThickness: 4
+    }).setOrigin(0.5, 1).setDepth(WILD_MON_GLYPH_DEPTH);
+    this.tweens.add({
+      targets: float,
+      y: float.y - 18,
+      alpha: 0,
+      duration: 700,
+      ease: "Sine.easeOut",
+      onComplete: () => float.destroy()
+    });
+    training.phase = "resolve";
+    training.phaseAtMs = this.time.now + 620;
+  }
+
+  private finishMonTraining(): void {
+    const training = this.monTraining_;
+    const runtime = training ? this.farmMons.get(training.farmKey) : undefined;
+    this.monTraining_ = undefined;
+    if (!training || !runtime) {
+      return;
+    }
+    const mons = this.monsRuntime();
+    const roster = mons?.list();
+    if (!mons || roster?.[runtime.rosterIndex]?.registryId !== runtime.registryId) {
+      return;
+    }
+    runtime.trainedThisVisit = true;
+    const entry = this.data_.mons ? monById(this.data_.mons.registry, runtime.registryId) : undefined;
+    const name = entry ? monDisplayName(entry) : "The mon";
+    const gain = mons.grantXp(runtime.rosterIndex, training.xp);
+    this.persistMonRoster();
+    const clean = training.bonusHits > 0 ? ` ${training.bonusHits} clean.` : "";
+    this.showMonNotice(`${name} worked the dummy. +${training.xp} XP.${clean}`);
+    if (gain?.leveledFrom !== undefined) {
+      this.time.delayedCall(2400, () => this.showMonNotice(`${name} grew to level ${gain.mon.level}!`));
+    }
+    for (const [index, learned] of (gain?.learned ?? []).entries()) {
+      const ability = this.data_.mons?.abilities.abilities[learned];
+      if (ability) {
+        this.time.delayedCall(2400 + (index + 1) * 2000, () => this.showMonNotice(`${name} learned ${ability.name}!`));
+      }
+    }
+  }
+
+  private cancelMonTraining(): void {
+    this.monTraining_?.cueText?.destroy();
+    this.monTraining_ = undefined;
   }
 
   /** Z near a farm mon pets it: bond tick + chirp + personality line + a happy
