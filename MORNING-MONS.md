@@ -107,13 +107,28 @@ until the limit resets.
   phone placement plus per-spot pixel verification, so they're listed as
   follow-ups rather than fabricated.
 
-## Known open items (deliberate)
+## Second pass (proceed-until-complete)
 
-- Wild spawns beyond the scripted tutorial mon: the act2+ zone spawner for tier 1-3
-  wilds across routes is stubbed to the farm lot only (design in plan; small follow-up).
-- Art batch (P1b): Fusion Altar + training dummy props, race icons - the overlay uses
-  text glyphs meanwhile; barn regen art not yet generated.
-- The mon overworld follower (walking behind Bosch) stays parked for v2.
+- Roaming wild mons now appear across Act 2+ (not just the farm): a random catchable
+  mon at or below the act's tier ceiling (3 in Act 2, +4 at Act 3, +5 endgame) spawns
+  at a vetted walkable cell, capped at one at a time, obeying encounterEnabled.
+  Verified: a Cloud Skulljie spawned away from the farm with CONVINCE ready, and
+  ?noEncounters correctly suppresses roaming wilds while the farm tutor stays.
+- townLines: a Postwick neighbor appears once you have a companion and speaks the
+  mon-story town reactions. Verified ("My daughter petted it and it let her. Then
+  nobody tried to sell her anything.").
+- momPhone: calling Mom with a companion plays the mon-story pages.
+- Runtime-edge unit tests (6) added for the fusion/release/restore paths.
+
+## The one true remaining follow-up
+
+- ART: the Fusion Altar prop, training dummy, race icons, MONS FARM sign, and barn
+  exterior still need image generation (Codex image_gen / building-regen). The roster
+  overlay uses clean text glyphs and the fusion spot is discoverable by dialogue
+  meanwhile, so nothing is blocked - it is purely a visual polish pass. It could not
+  run tonight because the account hit its monthly Anthropic spend limit (which also
+  killed two of the three review agents). Everything else is done.
+- The mon overworld follower (walking behind Bosch) stays parked for v2 by design.
 
 ## How to play it right now
 
