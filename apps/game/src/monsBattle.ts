@@ -6,9 +6,9 @@
 
 import type { MonAbilities, MonsRegistryEntry, PsiData } from "@eb/schemas";
 import type { PartyMember } from "./characterModel";
-import { MON_PARTY_ID_BASE, monDisplayName, monKnownAbilities, monStatsAtLevel, type OwnedMon } from "./monsModel";
+import { MON_PARTY_ID_BASE, MON_PSI_ID_BASE, monDisplayName, monKnownAbilities, monStatsAtLevel, type OwnedMon } from "./monsModel";
 
-export const MON_PSI_ID_BASE = 900100;
+export { MON_PSI_ID_BASE };
 
 type PsiEffect = NonNullable<PsiData["effect"]>;
 

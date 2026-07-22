@@ -14,6 +14,12 @@ import type {
 // Reserved id space for mon party members; never collides with characters.json
 // (cap 8) or NPC/enemy ids. charId-keyed maps treat >= MON_PARTY_ID_BASE as mons.
 export const MON_PARTY_ID_BASE = 100000;
+// Synthetic PSI ids for mon MOVES; exempt from the usability matrix (battle-only
+// by construction, never in menus outside battle).
+export const MON_PSI_ID_BASE = 900100;
+export function isMonPsiId(psiId: number): boolean {
+  return psiId >= MON_PSI_ID_BASE;
+}
 
 // Generous on purpose: EB bash damage swings are large and Bosch has no weak
 // poke, so a tight window makes catches luck-dependent (verified in-engine:

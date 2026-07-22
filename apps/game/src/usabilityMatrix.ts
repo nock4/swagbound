@@ -1,4 +1,5 @@
 import type { UsabilityItemRow, UsabilityMatrix, UsabilityPsiRow } from "@eb/schemas";
+import { isMonPsiId } from "./monsModel";
 
 export const USABILITY_REFUSAL_MESSAGE = "You can't use that here.";
 
@@ -26,6 +27,11 @@ export function canUsePsiInField(matrix: UsabilityMatrix | undefined, psiId: num
 }
 
 export function canUsePsiInBattle(matrix: UsabilityMatrix | undefined, psiId: number): boolean {
+  // Mon MOVES (synthetic per-battle PSI) are battle-only by construction and
+  // intentionally absent from the authored matrix.
+  if (isMonPsiId(psiId)) {
+    return true;
+  }
   return psiUsability(matrix, psiId)?.battleUse ?? false;
 }
 
