@@ -9484,6 +9484,17 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.time.now < this.monCeremonyUntilMs_) {
       return; // the fusion ceremony owns the lot; the roster respawns after
     }
+    // First arrival beat (Workstream C): the Farmhand hops a wave, once ever.
+    if (!this.gameFlags.has("mons:farm-first-visit")) {
+      this.gameFlags.set("mons:farm-first-visit");
+      const farmhand = [...this.npcRuntimes.values()].find((npc) => npc.data.npcId === 910300);
+      const sprite = farmhand?.sprite;
+      if (sprite instanceof Phaser.GameObjects.Sprite) {
+        const baseY = sprite.y;
+        this.tweens.add({ targets: sprite, y: baseY - 8, duration: 150, yoyo: true, repeat: 2, ease: "Sine.easeOut" });
+      }
+      this.showMonNotice("The FARMHAND waves you in. The gate was already open.");
+    }
     const roster = mons.list();
     const activeIndex = mons.active()?.index;
     const signature = `${roster.map((m) => m.registryId).join("|")}#${activeIndex ?? "-"}`;

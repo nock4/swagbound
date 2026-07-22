@@ -13415,6 +13415,133 @@
      "RIDDLE BOARD: (runtime swaps this for the live riddles.)"
     ]
    }
+  },
+  {
+   "id": 910305,
+   "worldPixel": {
+    "x": 2744,
+    "y": 7092
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The barn came with the lot. Nobody built it that anyone remembers.",
+     "Inside it smells like hay and warm batteries. The mons sleep wherever they want anyway."
+    ]
+   }
+  },
+  {
+   "id": 910306,
+   "worldPixel": {
+    "x": 2816,
+    "y": 7196
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A farm fence. Some mon gnawed the top rail. Nobody minded."
+    ]
+   }
+  },
+  {
+   "id": 910307,
+   "worldPixel": {
+    "x": 2888,
+    "y": 7196
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A farm fence. Some mon gnawed the top rail. Nobody minded."
+    ]
+   }
+  },
+  {
+   "id": 910308,
+   "worldPixel": {
+    "x": 2924,
+    "y": 7196
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A farm fence. Some mon gnawed the top rail. Nobody minded."
+    ]
+   }
+  },
+  {
+   "id": 910312,
+   "worldPixel": {
+    "x": 2852,
+    "y": 7196
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "The gate stands open. It has always stood open. That is the whole policy."
+    ]
+   }
+  },
+  {
+   "id": 910309,
+   "worldPixel": {
+    "x": 2960,
+    "y": 7196
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A farm fence. Some mon gnawed the top rail. Nobody minded."
+    ]
+   }
+  },
+  {
+   "id": 910310,
+   "worldPixel": {
+    "x": 2996,
+    "y": 7196
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "A farm fence. Some mon gnawed the top rail. Nobody minded."
+    ]
+   }
   }
  ]
 }

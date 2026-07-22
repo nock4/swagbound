@@ -205,7 +205,17 @@ describe("sprite override helpers", () => {
       // Mons farm props: bespoke Codex image_gen prop art (48px, taller display),
       // not good-new-sprites overworld skins.
       "910302": "assets/swagbound/prop/mons-fusion-altar.png",
-      "910303": "assets/swagbound/prop/mons-training-dummy.png"
+      "910303": "assets/swagbound/prop/mons-training-dummy.png",
+      // Mons Farm polish slate props: riddle board, barn, fence run, gate
+      // (Codex image_gen batch; same bespoke-prop exemption).
+      "910304": "assets/swagbound/prop/mons-riddle-board.png",
+      "910305": "assets/swagbound/prop/mons-farm-barn.png",
+      "910306": "assets/swagbound/prop/mons-farm-fence.png",
+      "910307": "assets/swagbound/prop/mons-farm-fence.png",
+      "910308": "assets/swagbound/prop/mons-farm-fence.png",
+      "910309": "assets/swagbound/prop/mons-farm-fence.png",
+      "910310": "assets/swagbound/prop/mons-farm-fence.png",
+      "910312": "assets/swagbound/prop/mons-farm-gate.png"
     };
     const clerkOverrides: Record<string, string> = {
       "404": "assets/swagbound/overworld-npc/gns-lsw-1130-ow.png",
