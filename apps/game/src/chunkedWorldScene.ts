@@ -32,6 +32,13 @@ const WILD_MON_ROAM_CHANCE = 0.12;
 // Cooldown between roaming-wild-mon spawn ROLLS so the 12% chance is per-attempt,
 // not per-frame (the roll only runs when this hits 0). ~6s keeps them rare.
 const WILD_MON_ROAM_COOLDOWN_MS = 6000;
+// A curious wild mon notices the player from further off than a hunting roamer,
+// and ambles over slower than a chase (70) so the player can still walk away.
+const WILD_MON_NOTICE_PX = 104;
+const WILD_MON_CURIOUS_SPEED_PX_PER_SEC = 42;
+// The "?" over a wild mon floats above the foreground occluder layer (100_000),
+// like the player head overlays, so tree canopy never hides it.
+const WILD_MON_GLYPH_DEPTH = 111_000;
 const MAX_BATTLE_MEMBERS = 4;
 // The Postwick farm's idle prop NPCs (see content/added-npcs.json): the Fusion
 // Altar and the training dummy get a touch of life in syncNpc.
@@ -492,6 +499,8 @@ type OverworldEnemyRuntime = {
   ambushBurstUntilMs?: number;
   /** Set on catchable wild mons: registry id carried into the battle's CONVINCE context. */
   wildMonId?: string;
+  /** A floating "?" over catchable wild mons so a catch reads as special from afar. */
+  glyph?: Phaser.GameObjects.Text;
 };
 
 type BossGateRuntime = {
@@ -9634,6 +9643,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     for (const [key, enemy] of this.overworldEnemies) {
       if (this.distanceToPlayer(enemy.state.player) > OVERWORLD_ENEMY_DESPAWN_DIST_PX) {
         enemy.sprite?.destroy();
+        enemy.glyph?.destroy();
         this.overworldEnemies.delete(key);
         continue;
       }
@@ -9688,6 +9698,22 @@ export class ChunkedWorldScene extends Phaser.Scene {
    */
   private stepOverworldEnemyBehavior(enemy: OverworldEnemyRuntime, deltaMs: number): void {
     const dist = this.distanceToPlayer(enemy.state.player);
+    // Catchable wild mons don't chase or flee. They're curious: from a good way
+    // off they notice you and amble over (slower than a chase, so you can still
+    // walk away), otherwise they wander. Approaching you IS the invitation.
+    if (enemy.wildMonId) {
+      if (dist <= WILD_MON_NOTICE_PX) {
+        this.stepOverworldEnemyDirected(enemy, deltaMs, false, WILD_MON_CURIOUS_SPEED_PX_PER_SEC);
+      } else {
+        stepNpc(enemy.state, {
+          deltaMs,
+          bounds: this.movementBounds(),
+          blocked: (x, y) => this.blocked(x, y),
+          frames: enemy.frames
+        });
+      }
+      return;
+    }
     if (enemy.archetype === "ambusher") {
       if (dist > OVERWORLD_AMBUSH_TRIGGER_PX) {
         return; // lying in wait under the canopy - no wander, no chase
@@ -9798,7 +9824,13 @@ export class ChunkedWorldScene extends Phaser.Scene {
       enemy.state.player.facing,
       enemy.enemyGroup
     ));
-    actor.setVisible(this.overworldEnemyActorVisible(enemy));
+    const visible = this.overworldEnemyActorVisible(enemy);
+    actor.setVisible(visible);
+    if (enemy.glyph) {
+      const gp = wildMonBobPhase(enemy.key);
+      enemy.glyph.setPosition(enemy.state.player.x, enemy.state.player.y - 30 + Math.sin(this.time.now / 300 + gp) * 2);
+      enemy.glyph.setVisible(visible);
+    }
   }
 
   private overworldEnemyActorVisible(enemy: OverworldEnemyRuntime): boolean {
@@ -9960,6 +9992,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       if (enemy.contactGraceMs <= 0 && this.distanceToPlayer(enemy.state.player) <= OVERWORLD_ENEMY_CONTACT_PX) {
         this.overworldEnemies.delete(key);
         enemy.sprite?.destroy();
+        enemy.glyph?.destroy();
         return this.triggerOverworldEnemyBattle(enemy);
       }
     }
@@ -9984,6 +10017,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private clearOverworldRoamers(): void {
     for (const enemy of this.overworldEnemies.values()) {
       enemy.sprite?.destroy();
+      enemy.glyph?.destroy();
     }
     this.overworldEnemies.clear();
     this.overworldEnemySpawnCooldownMs = 0;
@@ -10080,7 +10114,11 @@ export class ChunkedWorldScene extends Phaser.Scene {
       // progress 1 -> clear (overworld visible), 0 -> covered/black; ramp 1->0 to cover the screen.
       drawSwirl(g, 1 - p, this.scale.width, this.scale.height, {
         clockMs: this.time.now,
-        advantageTint: swirlTintForAdvantage(this.pendingBattleStart.params.encounterAdvantage)
+        // A catchable wild mon gets the amber "this is a catch" swirl, overriding
+        // the green/red first-strike tint.
+        advantageTint: this.pendingBattleStart.params.monCatch
+          ? "catch"
+          : swirlTintForAdvantage(this.pendingBattleStart.params.encounterAdvantage)
       });
     }
     this.syncPlayerObject();
@@ -10401,6 +10439,15 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!(sprite instanceof Phaser.GameObjects.Sprite)) {
       sprite.setVisible(false);
     }
+    // A small amber "?" floats over a catchable mon so a catch reads as special
+    // from across the field (positioned + bobbed each frame in syncOverworldEnemy).
+    const glyph = this.add.text(spawnAt.x, spawnAt.y - 34, "?", {
+      fontFamily: "'Pixelify Sans', monospace",
+      fontSize: "15px",
+      color: "#ffd27a",
+      stroke: "#3a2400",
+      strokeThickness: 4
+    }).setOrigin(0.5, 1).setDepth(WILD_MON_GLYPH_DEPTH);
     this.overworldEnemies.set(key, {
       key,
       enemyGroup: 900001,
@@ -10409,6 +10456,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       textureKey,
       skin,
       wildMonId: wild.id,
+      glyph,
       contactGraceMs: OVERWORLD_ENEMY_CONTACT_GRACE_MS,
       flees: false,
       archetype: "prowler",

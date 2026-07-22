@@ -2934,7 +2934,8 @@ export class BattleScene extends Phaser.Scene {
     drawSwirl(graphics, progress, this.scale.width, this.scale.height, {
       cy: STATUS_TOP / 2,
       clockMs: this.time.now,
-      advantageTint: swirlTintForAdvantage(this.encounterAdvantage_)
+      // Catch battles reveal from the amber swirl, matching the overworld cover.
+      advantageTint: this.monCatch_ ? "catch" : swirlTintForAdvantage(this.encounterAdvantage_)
     });
   }
 
@@ -4347,7 +4348,7 @@ export class BattleScene extends Phaser.Scene {
     }
     return {
       actorName: this.activeActorName(),
-      commandLines: this.commandsForCurrentActor().map(formatCommandLabel),
+      commandLines: this.commandsForCurrentActor().map((c) => formatCommandLabel(c, this.currentActorIsMon())),
       psiCategoryLines: this.isVisiblePsiSubmenu()
         ? this.psiCategoryItems().map((item) => item.label)
         : undefined,
@@ -5440,6 +5441,13 @@ export class BattleScene extends Phaser.Scene {
     return this.commandsForCharIdInBattle(actor?.charId ?? 0);
   }
 
+  /** True when the actor currently choosing a command is a companion mon (its
+   *  PSI command renders as MOVES). */
+  private currentActorIsMon(): boolean {
+    const actor = this.currentActor_ ? combatantAt(this.battle_, this.currentActor_) : undefined;
+    return actor ? isMonPartyCharId(actor.charId) : false;
+  }
+
   /** Canonical per-battle command list: shared by the render path AND the round
    *  input machine (via inputContext.commandsFor) so the cursor can reach every
    *  rendered command. */
@@ -6290,7 +6298,12 @@ const EB_COMMAND_LABELS: Partial<Record<BattleCommand, string>> = {
   RUN: "Run Away"
 };
 
-function formatCommandLabel(command: BattleCommand): string {
+function formatCommandLabel(command: BattleCommand, actorIsMon = false): string {
+  // A companion mon's abilities ride the PSI submenu, but "PSI" reads oddly for a
+  // creature that doesn't cast PSI, so it shows as MOVES for mons only.
+  if (actorIsMon && command === "PSI") {
+    return "MOVES";
+  }
   const ebLabel = EB_COMMAND_LABELS[command];
   if (ebLabel !== undefined) {
     return ebLabel;

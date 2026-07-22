@@ -69,8 +69,8 @@ export interface SwirlDrawOptions {
   cy?: number;
   /** Animation clock (ms) so the colors + highlights cycle over time. */
   clockMs?: number;
-  /** Optional encounter advantage tint: first strike = green, ambush = red. */
-  advantageTint?: "party" | "enemy";
+  /** Optional swirl tint: first strike = green, ambush = red, catchable mon = amber. */
+  advantageTint?: "party" | "enemy" | "catch";
 }
 
 export function drawMapTransitionOverlay(
@@ -190,12 +190,15 @@ export function drawSwirl(
 function tintedBandColor(tint: NonNullable<SwirlDrawOptions["advantageTint"]>, segment: number, arm: number): number {
   const party = [0x0a7f35, 0x20d96b, 0x71ff9d, 0x0f5f2a];
   const enemy = [0x7d1010, 0xd92c24, 0xff6a54, 0x5f0909];
-  const palette = tint === "party" ? party : enemy;
+  // Catchable mon: a warm amber swirl so the player reads "this is a catch, not a
+  // fight" from the transition itself.
+  const catchable = [0xb9720f, 0xe8a63d, 0xffcf6a, 0x7a4a0e];
+  const palette = tint === "party" ? party : tint === "catch" ? catchable : enemy;
   return palette[(segment + arm) % palette.length] ?? palette[0];
 }
 
 function tintedHighlightColor(tint: NonNullable<SwirlDrawOptions["advantageTint"]>): number {
-  return tint === "party" ? 0xbaffd0 : 0xffc2ba;
+  return tint === "party" ? 0xbaffd0 : tint === "catch" ? 0xffe6a8 : 0xffc2ba;
 }
 
 function drawDirectionalWipe(
