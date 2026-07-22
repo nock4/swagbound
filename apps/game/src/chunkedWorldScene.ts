@@ -22,6 +22,11 @@ import { pendingAttestationRewardForReturn, type BattleReturnContext, type Battl
 import { drawNegotiationQuestions, isMonPartyCharId, monById, monDisplayName, type MonNegotiationQuestion } from "./monsModel";
 import { MonsState } from "./monsState";
 import { buildMonBattleKit, type MonBattleKit } from "./monsBattle";
+import { MonsOverlay } from "./monsOverlay";
+
+// Postwick Mons Farm anchor (NE lot, beside the base NPC at 2768,7080; FARMHAND 910300).
+const MONS_FARM_ANCHOR = { x: 2872, y: 7112 } as const;
+const MONS_FARM_ALTAR_RADIUS = 360;
 import {
   battleRngSeedForGroup,
   computeEncounterAdvantage,
@@ -465,6 +470,8 @@ type OverworldEnemyRuntime = {
   archetype: "prowler" | "ambusher";
   /** While now < this timestamp, a sprung ambusher chases at burst speed. */
   ambushBurstUntilMs?: number;
+  /** Set on catchable wild mons: registry id carried into the battle's CONVINCE context. */
+  wildMonId?: string;
 };
 
 type BossGateRuntime = {
@@ -906,6 +913,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
   private teleportMenu?: TeleportMenu;
   private questJournal?: QuestJournal;
   private partyOrderMenu?: PartyOrderMenu;
+  private monsOverlay?: MonsOverlay;
+  private monFarmStepAccum_?: number;
   private readonly teleportVisited = new Set<string>();
   private teleportSpinUntilMs = 0;
   private lastAutosaveTownId: string | undefined;
@@ -1214,6 +1223,8 @@ export class ChunkedWorldScene extends Phaser.Scene {
       this.teleportMenu = undefined;
       this.questJournal?.destroy();
       this.questJournal = undefined;
+      this.monsOverlay?.destroy();
+      this.monsOverlay = undefined;
       this.partyOrderMenu?.destroy();
       this.partyOrderMenu = undefined;
       this.devConsole?.destroy();
@@ -1297,6 +1308,49 @@ export class ChunkedWorldScene extends Phaser.Scene {
       hasFlag: (flag) => this.gameFlags.has(flag),
       objective: () => this.currentObjectiveText(),
       canOpen: () => this.isPlayerControllable() && !this.bikeActive
+    });
+
+    // Mons roster overlay (O): manage the companion roster once the farm is met.
+    this.monsOverlay = new MonsOverlay({
+      roster: () => this.monsRuntime()?.list() ?? [],
+      entryFor: (mon) => this.monsRuntime()?.entryFor(mon),
+      activeIndex: () => {
+        const active = this.monsRuntime()?.active();
+        return active?.index;
+      },
+      setActive: (index) => {
+        const ok = this.monsRuntime()?.setActive(index) ?? false;
+        if (ok && index !== undefined) {
+          this.gameFlags.set("mons:first-companion");
+        }
+        return ok;
+      },
+      pet: (index) => this.monsRuntime()?.pet(index),
+      release: (index) => this.monsRuntime()?.release(index) ?? false,
+      previewFusion: (a, b) => this.monsRuntime()?.previewFusion(a, b),
+      fuse: (a, b, picks) => {
+        const fused = this.monsRuntime()?.fuse(a, b, picks);
+        if (fused) {
+          this.gameFlags.set("mons:first-fusion");
+        }
+        return fused;
+      },
+      abilities: () => this.data_.mons?.abilities,
+      atFusionAltar: () => {
+        const dx = this.playerState.x - MONS_FARM_ANCHOR.x;
+        const dy = this.playerState.y - MONS_FARM_ANCHOR.y;
+        return Math.hypot(dx, dy) <= MONS_FARM_ALTAR_RADIUS;
+      },
+      canOpen: () =>
+        this.isPlayerControllable() &&
+        !this.bikeActive &&
+        this.gameFlags.has("act1:complete") &&
+        this.gameFlags.has("mons:farm-met") &&
+        this.data_.mons !== undefined,
+      onRosterChanged: () => {
+        this.handlePartyCompositionChanged();
+        this.publish();
+      }
     });
 
     // Party order / swap (K): reorder the active roster (lead + turn priority).
@@ -5698,6 +5752,14 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (!playerSteppedTile) {
       return;
     }
+    // Farm day-care: every ~180 stepped tiles, resting mons gain a trickle of XP.
+    if (this.gameFlags.has("act1:complete") && (this.monsRuntime()?.count() ?? 0) > 0) {
+      this.monFarmStepAccum_ = (this.monFarmStepAccum_ ?? 0) + 1;
+      if (this.monFarmStepAccum_ >= 180) {
+        this.monFarmStepAccum_ = 0;
+        this.monsRuntime()?.farmTick();
+      }
+    }
     const ticks = this.partyState.applyFieldPoisonStep();
     if (ticks.length === 0) {
       return;
@@ -6494,15 +6556,46 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return this.partyState.party()[0] ?? this.data_.characters?.characters[0]?.id ?? 0;
   }
 
+  /** Live farm dialogue for the FARMHAND (910300): stage-aware pages from the
+   *  mon-story pack, replacing the static placeholder in added-npcs.json. */
+  private farmhandPages(): string[] | undefined {
+    const story = this.data_.mons?.story;
+    const mons = this.monsRuntime();
+    if (!story || !mons) {
+      return undefined;
+    }
+    const roster = mons.count();
+    if (!this.gameFlags.has("mons:farm-met")) {
+      this.gameFlags.set("mons:farm-met");
+      return [...story.farmhand.intro, ...story.farmhand.tutorialCatch];
+    }
+    if (roster === 0) {
+      return [...story.farmhand.tutorialCatch];
+    }
+    if (roster >= 2 && !this.gameFlags.has("mons:fusion-unlocked")) {
+      this.gameFlags.set("mons:fusion-unlocked");
+      return [...story.farmhand.fusionUnlock, "(Press O by the farm to use the altar.)"];
+    }
+    if (!this.gameFlags.has("mons:first-companion") && mons.active() === undefined) {
+      return [...story.farmhand.firstCompanion, "(Press O to pick your companion.)"];
+    }
+    const tips = story.farmhand.idleTips;
+    const tip = tips[Math.floor(Math.abs(this.time.now / 1000)) % tips.length] ?? tips[0];
+    return [tip, "(Press O to manage your mons.)"];
+  }
+
   private interactionEventsForNpc(npc: RuntimeNpcData): GameEvent[] {
     if (isAddedWorldChunkedNpc(npc)) {
+      const farmhand = npc.npcId === 910300 ? this.farmhandPages() : undefined;
       return addedNpcInteractionEvents(
         {
           npcId: npc.npcId,
-          interaction: resolveEarlyGameDialogueInteraction(
-            npc.addedInteraction,
-            this.data_.earlyGameSequence
-          )
+          interaction: farmhand
+            ? { pages: farmhand }
+            : resolveEarlyGameDialogueInteraction(
+              npc.addedInteraction,
+              this.data_.earlyGameSequence
+            )
         },
         this.data_.dialogueLibrary,
         this.gameFlags,
@@ -9248,6 +9341,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (this.canSpawnOverworldEnemy()) {
       this.trySpawnOverworldEnemy();
     }
+    this.trySpawnWildMon();
     this.publishOverworldEnemyDebug();
     return this.checkOverworldEnemyContact();
   }
@@ -9615,7 +9709,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
       { x: this.playerState.x, y: this.playerState.y, facing: this.playerState.facing },
       { x: enemy.state.player.x, y: enemy.state.player.y, facing: enemy.state.player.facing }
     );
-    return this.startBattleWithReturn(enemy.enemyGroup, "encounter", advantage);
+    return this.startBattleWithReturn(enemy.enemyGroup, "encounter", advantage, undefined, enemy.wildMonId);
   }
 
   private distanceToPlayer(point: { x: number; y: number }): number {
@@ -9874,7 +9968,7 @@ export class ChunkedWorldScene extends Phaser.Scene {
   }
 
   /** Build the CONVINCE context for a wild-mon battle: personality question draw. */
-  private monCatchInitFor(registryId: string): { registryId: string; displayName: string; questions: MonNegotiationQuestion[] } | undefined {
+  private monCatchInitFor(registryId: string): { registryId: string; displayName: string; questions: MonNegotiationQuestion[]; spritePath?: string } | undefined {
     const data = this.data_.mons;
     if (!data) {
       return undefined;
@@ -9888,7 +9982,72 @@ export class ChunkedWorldScene extends Phaser.Scene {
     if (questions.length < 3) {
       return undefined;
     }
-    return { registryId, displayName: monDisplayName(entry), questions };
+    return {
+      registryId,
+      displayName: monDisplayName(entry),
+      questions,
+      spritePath: `generated/${entry.sprites.battle}`
+    };
+  }
+
+  /** Scripted wild mon near the Postwick farm: a forgiving tier-1 Cheerful that
+   *  always respawns, so the guided first catch can never be missed. */
+  private trySpawnWildMon(): void {
+    const data = this.data_.mons;
+    if (!data || !this.gameFlags.has("act1:complete") || this.openingRoamerHold) {
+      return;
+    }
+    const nearFarm = Math.hypot(this.playerState.x - MONS_FARM_ANCHOR.x, this.playerState.y - MONS_FARM_ANCHOR.y) <= 1400;
+    if (!nearFarm) {
+      return;
+    }
+    for (const enemy of this.overworldEnemies.values()) {
+      if (enemy.wildMonId) {
+        return;
+      }
+    }
+    const wild = data.registry.mons.find((m) => !m.secretRare && m.tier === 1 && m.personality === "Cheerful");
+    if (!wild) {
+      return;
+    }
+    const spawnAt = { x: MONS_FARM_ANCHOR.x + 96, y: MONS_FARM_ANCHOR.y + 128 };
+    this.overworldEnemySeq += 1;
+    const key = `wild-mon-${this.overworldEnemySeq}`;
+    const skin: SpriteOverrideSheet = {
+      image: `generated/${wild.sprites.overworld}`,
+      frameWidth: 96,
+      frameHeight: 96,
+      animations: { down: [0], left: [0], right: [0], up: [0] },
+      displayHeight: 26,
+      originX: 0.5,
+      originY: 1
+    };
+    const textureKey = spriteOverrideEnemyOverworldSheetKey(900001, skin.image);
+    this.requestEnemySkinSheet(textureKey, skin);
+    const frames = spriteOverrideDirectionFrames(skin);
+    const sprite = this.spawnOverworldEnemyActor(spawnAt.x, spawnAt.y, undefined, textureKey, skin, 0);
+    if (!(sprite instanceof Phaser.GameObjects.Sprite)) {
+      sprite.setVisible(false);
+    }
+    this.overworldEnemies.set(key, {
+      key,
+      enemyGroup: 900001,
+      spriteGroup: undefined,
+      frames,
+      textureKey,
+      skin,
+      wildMonId: wild.id,
+      contactGraceMs: OVERWORLD_ENEMY_CONTACT_GRACE_MS,
+      flees: false,
+      archetype: "prowler",
+      state: createNpcState(spawnAt.x, spawnAt.y, toFacing(undefined), {
+        kind: "wander",
+        radiusPx: OVERWORLD_ENEMY_WANDER_RADIUS_PX,
+        speedPxPerSec: OVERWORLD_ENEMY_WANDER_SPEED_PX_PER_SEC,
+        seed: (Math.imul(this.overworldEnemySeq, 0x9e3779b1) ^ 900001) >>> 0
+      }, frames),
+      sprite
+    });
   }
 
   /** Consume a battle's mon results: capture + companion xp. Idempotent per restore. */

@@ -13165,7 +13165,10 @@
   },
   {
    "id": 910272,
-   "worldPixel": { "x": 1944, "y": 6912 },
+   "worldPixel": {
+    "x": 1944,
+    "y": 6912
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13178,7 +13181,10 @@
   },
   {
    "id": 910273,
-   "worldPixel": { "x": 2800, "y": 7080 },
+   "worldPixel": {
+    "x": 2800,
+    "y": 7080
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13191,7 +13197,10 @@
   },
   {
    "id": 910274,
-   "worldPixel": { "x": 4080, "y": 5672 },
+   "worldPixel": {
+    "x": 4080,
+    "y": 5672
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13204,7 +13213,10 @@
   },
   {
    "id": 910275,
-   "worldPixel": { "x": 4496, "y": 4744 },
+   "worldPixel": {
+    "x": 4496,
+    "y": 4744
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13217,7 +13229,10 @@
   },
   {
    "id": 910276,
-   "worldPixel": { "x": 6936, "y": 8656 },
+   "worldPixel": {
+    "x": 6936,
+    "y": 8656
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13230,7 +13245,10 @@
   },
   {
    "id": 910277,
-   "worldPixel": { "x": 6784, "y": 8632 },
+   "worldPixel": {
+    "x": 6784,
+    "y": 8632
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13243,7 +13261,10 @@
   },
   {
    "id": 910278,
-   "worldPixel": { "x": 6424, "y": 2296 },
+   "worldPixel": {
+    "x": 6424,
+    "y": 2296
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13256,7 +13277,10 @@
   },
   {
    "id": 910279,
-   "worldPixel": { "x": 5272, "y": 3176 },
+   "worldPixel": {
+    "x": 5272,
+    "y": 3176
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13269,7 +13293,10 @@
   },
   {
    "id": 910280,
-   "worldPixel": { "x": 880, "y": 4736 },
+   "worldPixel": {
+    "x": 880,
+    "y": 4736
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13282,7 +13309,10 @@
   },
   {
    "id": 910281,
-   "worldPixel": { "x": 840, "y": 4664 },
+   "worldPixel": {
+    "x": 840,
+    "y": 4664
+   },
    "spriteGroup": 59,
    "facing": "down",
    "alwaysSpawn": true,
@@ -13290,6 +13320,24 @@
     "pages": [
      "DRIFELLA 2 #6186: plush torn jester. demon grin. dont give me orders. we already onboarded you.",
      "DRIFELLA 2 #6186: the read costs whatever you brought. members rip each other off first. that's the fun part."
+    ]
+   }
+  },
+  {
+   "id": 910300,
+   "worldPixel": {
+    "x": 2872,
+    "y": 7112
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "act1:complete"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "FARMHAND: (placeholder - runtime swaps this for the live farm dialogue.)"
     ]
    }
   }

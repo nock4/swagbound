@@ -434,6 +434,8 @@ type MonCatchBattleInit = {
   registryId: string;
   displayName: string;
   questions: MonNegotiationQuestion[];
+  /** battle-260 art, path under public/ (e.g. generated/assets/mons/<id>/battle-260.png). */
+  spritePath?: string;
   hint?: string;
 };
 type MonCatchBattleState = MonCatchBattleInit & {
@@ -855,6 +857,28 @@ export class BattleScene extends Phaser.Scene {
     this.monCatch_ = data.monCatch && data.monCatch.questions.length >= 3
       ? { ...data.monCatch, negotiation: null, selectionIndex: 0, attempted: false, hintShown: false }
       : null;
+    if (this.monCatch_) {
+      // Wild-mon presentation: the template enemy wears the actual mon's name
+      // and battle-260 art for THIS encounter only (persona-style, never global).
+      const lead = this.battle_.enemies[0];
+      if (lead) {
+        lead.name = this.monCatch_.displayName;
+        if (this.monCatch_.spritePath && this.spriteOverrides_) {
+          this.spriteOverrides_ = {
+            ...this.spriteOverrides_,
+            byEnemyId: {
+              ...(this.spriteOverrides_.byEnemyId ?? {}),
+              [String(lead.charId)]: {
+                image: this.monCatch_.spritePath,
+                displayHeight: 120,
+                originX: 0.5,
+                originY: 0.5
+              }
+            }
+          };
+        }
+      }
+    }
     if (this.encounterAdvantage_ === "instantWin") {
       this.resolveInstantWinBattleState(enemies);
     }
