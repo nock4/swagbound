@@ -57,6 +57,7 @@ const MAX_BATTLE_MEMBERS = 4;
 // Altar and the training dummy get a touch of life in syncNpc.
 const MONS_FARM_ALTAR_NPC_ID = 910302;
 const MONS_FARM_DUMMY_NPC_ID = 910303;
+const MONS_FARM_RIDDLE_BOARD_NPC_ID = 910304;
 
 /** A stable per-enemy phase (0..2PI) so a cluster of wild mons bobs out of sync. */
 function wildMonBobPhase(key: string): number {
@@ -6783,13 +6784,35 @@ export class ChunkedWorldScene extends Phaser.Scene {
     return [line];
   }
 
+  /** The riddle board (Workstream D): the five secret-recipe riddles, live from
+   *  the fusion pack, with a solved mark once the result mon lives here. */
+  private riddleBoardPages(): string[] | undefined {
+    const data = this.data_.mons;
+    if (!data) {
+      return undefined;
+    }
+    const roster = this.monsRuntime()?.list() ?? [];
+    const owned = new Set(roster.map((mon) => mon.registryId));
+    const pages = ["A weathered board. Five notes in five different handwritings. Nobody signed any of them."];
+    for (const recipe of data.fusion.secretRecipes) {
+      const solved = owned.has(recipe.resultId);
+      const entry = solved ? monById(data.registry, recipe.resultId) : undefined;
+      pages.push(solved && entry
+        ? `"${recipe.riddle}" ...Solved. ${monDisplayName(entry)} lives here now.`
+        : `"${recipe.riddle}"`);
+    }
+    return pages;
+  }
+
   private interactionEventsForNpc(npc: RuntimeNpcData): GameEvent[] {
     if (isAddedWorldChunkedNpc(npc)) {
       const dynamicPages = npc.npcId === 910300
         ? this.farmhandPages()
         : npc.npcId === 910301
           ? this.townLinePages()
-          : undefined;
+          : npc.npcId === MONS_FARM_RIDDLE_BOARD_NPC_ID
+            ? this.riddleBoardPages()
+            : undefined;
       return addedNpcInteractionEvents(
         {
           npcId: npc.npcId,

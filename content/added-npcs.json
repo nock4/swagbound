@@ -13397,6 +13397,24 @@
      "Farm mons wear themselves out on this while they rest. It's how the little ones toughen up."
     ]
    }
+  },
+  {
+   "id": 910304,
+   "worldPixel": {
+    "x": 2900,
+    "y": 7064
+   },
+   "spriteGroup": 59,
+   "facing": "down",
+   "requireFlags": [
+    "mons:farm-met"
+   ],
+   "alwaysSpawn": true,
+   "interaction": {
+    "pages": [
+     "RIDDLE BOARD: (runtime swaps this for the live riddles.)"
+    ]
+   }
   }
  ]
 }

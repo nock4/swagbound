@@ -28586,6 +28586,28 @@
       "originX": 0.5,
       "originY": 1
     },
+    "910304": {
+      "image": "assets/swagbound/prop/mons-riddle-board.png",
+      "frameWidth": 40,
+      "frameHeight": 40,
+      "animations": {
+        "down": [
+          0
+        ],
+        "left": [
+          0
+        ],
+        "right": [
+          0
+        ],
+        "up": [
+          0
+        ]
+      },
+      "displayHeight": 30,
+      "originX": 0.5,
+      "originY": 1
+    },
     "930100": {
       "image": "assets/swagbound/overworld-npc/mifella-001-ow.png",
       "frameWidth": 48,
